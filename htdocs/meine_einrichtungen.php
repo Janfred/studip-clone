@@ -115,6 +115,21 @@ IF ($my_inst_values["literatur"]) {
 
 } // Ende function print_institut_content
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");		 //hier werden die sessions initialisiert
+
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
+
+$cssSw=new cssClassSwitcher;                          					// Klasse für Zebra-Design
+$cssSw->hoverenabled = TRUE;
+$db=new DB_Seminar;
+
+// we are defintely not in an lexture or institute$SessSemName[0] = "";
+$SessSemName[0] = "";
+$SessSemName[1] = "";
+$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
+
 ?>
 
 <html>
@@ -126,32 +141,12 @@ IF ($my_inst_values["literatur"]) {
   <title>Stud.IP</title>
 	<link rel="stylesheet" href="style.css" type="text/css">
  </head>
-<body bgcolor="#ffffff">
+<body>
 
-
-<?
-
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");		 //hier werden die sessions initialisiert
-
-// -- hier muessen Seiten-Initialisierungen passieren --
-// -- wir sind jetzt definitiv in keinem Seminar, also... --
-
-$SessSemName[0] = "";
-$SessSemName[1] = "";
-$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
+<? echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   			//hier wird der "Kopf" nachgeladen
 include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
-
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
-$cssSw=new cssClassSwitcher;                                // Klasse für Zebra-Design
-?>
-<body>
-
-<?
-$db=new DB_Seminar;
 
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
@@ -215,39 +210,36 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
      get_my_inst_values($my_inst);
      $db->query("DROP TABLE loginfilenow_".$user->id);
 
- $c=1;
   foreach ($my_inst as $instid=>$values){
-	  if ($c % 2)
-			$class="steel1";
-		else
-			$class="steelgraulight";
-		$c++;
+
+		$cssSw->switchClass();
 
 		$lastVisit = $loginfilenow[$instid];
 
-		ECHO "<td class=\"$class\">&nbsp; </td>";
-		ECHO "<td class=\"$class\" ><a href=\"institut_main.php?auswahl=$instid\">";
+		ECHO "<tr ".$cssSw->getHover().">";
+		ECHO "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
+		ECHO "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
 		ECHO htmlReady($values["name"]);
 		print ("</a></td>");
 
 		IF ($loginfilenow[$instid]==0)
 			{
-			echo "<td class=$class  align=\"center\" nowrap>nicht besucht</td>";
+			echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>nicht besucht</td>";
 			}
 		ELSE
 			 {
-			 echo "<td class=\"$class\" align=\"center\" nowrap>", date("d.m.Y", $loginfilenow[$instid]),"</td>";
+			 echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap>", date("d.m.Y", $loginfilenow[$instid]),"</td>";
 			}
 
 // Inhalt
-		echo "<td class=\"$class\" align=\"left\" nowrap>";
+		echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
 		print_institut_content($instid, $values);
 		echo "</td>";
-		echo "<td class=\"$class\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin"))
-			echo "<td class=\"$class\"  align=center>&nbsp;</td>";
+			echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
 		else
-			printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Einrichtung austragen\" border=\"0\"></a></td>", $instid);
+			printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Einrichtung austragen\" border=\"0\"></a></td>", $instid);
 		 echo "</tr>\n";
 		}
 	echo "</table></td></tr>";

@@ -112,6 +112,22 @@ IF ($my_sem_values["literatur"]) {
 
 } // Ende function print_seminar_content
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");		 	//hier werden die sessions initialisiert
+
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 			// Klarnamen fuer den Veranstaltungsstatus
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 			// htmlReady fuer die Veranstaltungsnamen
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 			// Semester-Namen fuer Admins
+require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");		//Funktionen der Teilnehmerbegrenzung
+
+$cssSw=new cssClassSwitcher;                                					// Klasse für Zebra-Design
+$cssSw->hoverenabled = TRUE;
+$db=new DB_Seminar;
+
+// we are defintely not in an lexture or institute
+$SessSemName[0] = "";
+$SessSemName[1] = "";
+$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
+
 ?>
 
 <html>
@@ -125,32 +141,12 @@ IF ($my_sem_values["literatur"]) {
  </head>
 <body>
 
+<? echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 
-<?
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   				//hier wird der "Kopf" nachgeladen
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");		 //hier werden die sessions initialisiert
-
-// -- hier muessen Seiten-Initialisierungen passieren --
-// -- wir sind jetzt definitiv in keinem Seminar, also... --
-
-$SessSemName[0] = "";
-$SessSemName[1] = "";
-$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
-
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   			//hier wird der "Kopf" nachgeladen
 if (!$perm->have_perm("root"))
 	include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
-
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
-require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
-$cssSw=new cssClassSwitcher;                                // Klasse für Zebra-Design
-?>
-<body>
-
-<?
-$db=new DB_Seminar;
 
 //Ausgabe bei bindenden Veranstaltungen, loeschen nicht moeglich!
 if ($cmd=="no_kill") {
@@ -269,21 +265,17 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
      get_my_sem_values($my_sem);
      $db->query("DROP TABLE loginfilenow_".$user->id);
 
- $c=1;
   foreach ($my_sem as $semid=>$values){
-	  if ($c % 2)
-			$class="steel1";
-		else
-			$class="steelgraulight";
-		$c++;
+
+		$cssSw->switchClass();
 
 		$lastVisit = $loginfilenow[$semid];
 
-		ECHO "<tr><td class=gruppe";
+		ECHO "<tr ".$cssSw->getHover()."><td class=gruppe";
 		ECHO $values["gruppe"];
 		ECHO "><a href='gruppe.php'><img src='pictures/blank.gif' alt='Gruppe &auml;ndern' border=0 width=7 height=12></a></td>";
-		ECHO "<td class=\"$class\">&nbsp; </td>";
-		ECHO "<td class=\"$class\" ><a href=\"seminar_main.php?auswahl=$semid\">";
+		ECHO "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
+		ECHO "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 		if ($lastVisit <= $values["chdate"])
 			print ("<font color=\"red\">");
 		ECHO htmlReady($values["name"]);
@@ -293,24 +285,24 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 		IF ($loginfilenow[$semid]==0)
 			{
-			echo "<td class=$class  align=\"center\" nowrap>nicht besucht</td>";
+			echo "<td class=".$cssSw->getClass()."  align=\"center\" nowrap>nicht besucht</td>";
 			}
 		ELSE
 			 {
-			 echo "<td class=\"$class\" align=\"center\" nowrap>", date("d.m.Y", $loginfilenow[$semid]),"</td>";
+			 echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>", date("d.m.Y", $loginfilenow[$semid]),"</td>";
 			}
 
 // Inhalt
-		echo "<td class=\"$class\" align=\"left\" nowrap>";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 		print_seminar_content($semid, $values);
 		echo "</td>";
-		echo "<td class=\"$class\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
+		echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
-			echo "<td class=\"$class\"  align=center>&nbsp;</td>";
+			echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
 		elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-			printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" alt=\"Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.\" border=\"0\"></a></td>", $semid);
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" alt=\"Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.\" border=\"0\"></a></td>", $semid);
 		else
-			printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td>", $semid);			
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td>", $semid);			
 		 echo "</tr>\n";
 		}
 	echo "</table></td></tr>";
@@ -363,7 +355,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	
 	$cssSw->switchClass();
 	
-	printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
+	printf ("<tr ".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
 	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
 	printf ("<td width=\"64%%\" class=\"%s\">",$cssSw->getClass());
 	print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";

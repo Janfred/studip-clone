@@ -26,16 +26,18 @@ always a light red */
 $sem_browse_switch_headers=FALSE;
 
 //includes
-require_once "config.inc.php";
-require_once "config_tools_semester.inc.php"; 
-require_once "dates.inc.php";
-require_once "visual.inc.php";
-require_once "functions.php";
+require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 
 //init classes
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
+$cssSw=new cssClassSwitcher; // Klasse für Zebra-Design
+$cssSw->hoverenabled = TRUE;
 
 $sess->register("sem_browse_data");
 
@@ -441,6 +443,7 @@ switch ($sem_browse_data["group_by"]) {
 	break;
 }
 
+ob_start(); //Outputbuffering start
 
 //Anzeige des Suchergebnis (=Seminarebene)
 if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
@@ -478,6 +481,9 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 		printf ("<td class=\"steel1\" align=\"right\" colspan=%s>", ($sem_browse_data["extend"] == "yes") ? "2" : "1");
 		echo"<a href=\"", $PHP_SELF; if ($sem_browse_data["extend"]<>"yes") { echo "?extend=yes\"><img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=0>"; } else {echo "?extend=no\"><img src=\"pictures/buttons/normaleansicht-button.gif\" border=0>"; } echo "</a></font></td></form></tr>";
 		}
+	
+	ob_end_flush();
+	ob_start();
 
  	//init the cols
  	if ($db->num_rows()) {
@@ -538,7 +544,6 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 		echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden.</b></font>";
 	}
 	
-	$c=1;
 	$group=1;
 	while ($db->next_record()) {
 		//This isn't a very good workaround to avoid duplicate entries in the sort-by-Nachname Query. Someone should fix this...
@@ -549,11 +554,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 		$temp_sem_browse_lastid=$db->f("Seminar_id");
 		if ($db->f("Seminar_id")) { //Workaround end. :-)
 
-		if ($c % 2)
-	  		$class="steel1";
-		else
-			$class="steelgraulight"; 
-		$c++;
+		$cssSw->switchClass();		
 		
 		if ($group==8)
 			$group=1;
@@ -627,8 +628,8 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", ($sem_browse_switch_headers) ? $group_header_class : "1", ($sem_browse_data["extend"] == "yes") ? "7" : "4", $group_header_name);
 			
 	
-		echo"<tr><font size=-1>";
-		echo"<td class=\"$class\"><font size=-1><a href=\"", $target_url, "?", $target_id, "=", $db->f("Seminar_id"), "&send_from_search=true&send_from_search_page=$PHP_SELF\">", htmlReady($db->f("Name")), "</a></font></td>";
+		echo"<tr ".$cssSw->getHover()."><font size=-1>";
+		echo"<td class=\"".$cssSw->getClass()."\"><font size=-1><a href=\"", $target_url, "?", $target_id, "=", $db->f("Seminar_id"), "&send_from_search=true&send_from_search_page=$PHP_SELF\">", htmlReady($db->f("Name")), "</a></font></td>";
 		$temp_turnus_string=view_turnus($db->f("Seminar_id"), TRUE);
 		
 		
@@ -637,8 +638,8 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			$temp_turnus_string=substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
 			$temp_turnus_string.="...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
 		}
-		echo"<td class=\"$class\" align=center><font size=-1>".$temp_turnus_string."</font></td>";
-		echo"<td class=\"$class\" align=center><font size=-1><a href=\"institut_main.php?auswahl=",$db->f("Institut_id"),"\">".htmlReady($db->f("Institut")),"&nbsp;</font></td>";
+		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>".$temp_turnus_string."</font></td>";
+		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1><a href=\"institut_main.php?auswahl=",$db->f("Institut_id"),"\">".htmlReady($db->f("Institut")),"&nbsp;</font></td>";
 		if ($sem_browse_data["sortby"] == "Nachname") { // so it's easy
 			$dozname = "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname"))."</a>";
 			if ($dozname == "") $dozname = "- - -";
@@ -658,10 +659,10 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			}
 			if ($dozname == "") $dozname = "- - -";
 		}
-		echo"<td class=\"$class\" align=center><font size=-1>",$dozname,"&nbsp;</font></td>";
+		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$dozname,"&nbsp;</font></td>";
 		if ($sem_browse_data["extend"]=="yes")
 			{
-			echo "<td class=\"$class\" align=center><font size=-1>", $SEM_TYPE[$db->f("status")]["name"]." <br>(Kategorie ", $SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"],")</font></td>";
+			echo "<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>", $SEM_TYPE[$db->f("status")]["name"]." <br>(Kategorie ", $SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"],")</font></td>";
 			//Meinen Status ermitteln
 			$user_id = $auth->auth["uid"];
 			$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
@@ -673,29 +674,29 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			
 			//Ampel-Schaltung
 			if ($mein_status) { // wenn ich im Seminar schon drin bin, darf ich auf jeden Fall lesen
-				echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
+				echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
 			} else {
 				switch($db->f("Lesezugriff")){
 					case 0 : 
-						echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
 					break;
 					case 1 :
 						if ($perm->have_perm("autor"))
-							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
+							echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						else
-							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
+							echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 					break;
 					case 2 :
 						if ($perm->have_perm("autor"))
-							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
+							echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						else
-							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
+							echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 					break;
 					case 3:
 						if ($perm->have_perm("autor"))
-							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
+							echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
 						else
-							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
+							echo"<td class=\"".$cssSw->getClass()."\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 				}
 			}
 
@@ -725,7 +726,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 							echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
 				}
 			}
-			echo "<td class=\"$class\" align=\"center\"><font size=-1>";
+			echo "<td class=\"".$cssSw->getClass()."\" align=\"center\"><font size=-1>";
 			//Meinen Status ausgeben
 			if ($mein_status) {
 				echo $mein_status;
@@ -750,6 +751,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			echo"<a href=\"$PHP_SELF?level=b&id=".$sem_browse_data["oid"]."&oid=".$sem_browse_data["oid2"]."\">eine Ebene zur&uuml;ck</a>";
 	}
 	echo"</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
+	ob_end_flush();
 	}
 
 
