@@ -359,7 +359,7 @@ function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = htmlReady($what, $trim, FALSE);
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
-		$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), FALSE), FALSE, TRUE, $extern), $extern), $extern);
+		$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		$what = explode('ö', $what);
 		$i = 0;
 		foreach ($what as $w)
@@ -369,7 +369,7 @@ function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
 	}
 	
 	return symbol(smile(FixLinks(wiki_format(format(latex(htmlReady($what, $trim, FALSE),
-			$extern)), FALSE), FALSE, TRUE, $extern), $extern), $extern);
+			$extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 }
 
 
@@ -683,7 +683,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	$pattern = array(
-					"'((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*))'ie",
+					"'((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)*(/[^<\s]*[^\.\s<])*))'ie",
 					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 					);
 	$replace = array("preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
