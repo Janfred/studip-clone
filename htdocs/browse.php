@@ -86,7 +86,7 @@ Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registrie
 <blockquote>
 <br>
 
-<table class="blank" width="90%" cellpadding=2 cellspacing=1 border=0>
+<table class="blank" width="90%" cellpadding=2 cellspacing=0 border=0>
 <!-- form zur wahl der institute -->
 <form action="browse.php" method="POST">
 <tr>
@@ -299,7 +299,7 @@ if (isset($query)):
 					printf("<tr valign=middle align=left><td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("Vorname"));
 					printf("<td class=\"$class\"><font size=-1><a href=\"about.php?username=%s\"> &nbsp;%s</a></font></td>", $db->f("username"), $db->f("Nachname"));
 					if ($db->f("inst_perms") == "user")
-						printf("<tdclass=\"$class\"><font size=-1> &nbsp;Studierender &nbsp;</font></td>");
+						printf("<td class=\"$class\"><font size=-1> &nbsp;Studierender &nbsp;</font></td>");
 					else
 						($db->f("Funktion")) ? printf("<td class=\"$class\"><font size=-1> &nbsp;%s &nbsp;</font></td>", htmlReady($INST_FUNKTION[$db->f("Funktion")]["name"])) : printf("<td class=\"$class\"><font size=-1> &nbsp;keine Funktion &nbsp;</font></td>");
 					break;
