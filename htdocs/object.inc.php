@@ -33,6 +33,20 @@ function object_add_view ($object_id) {
 	return $views;
 }
 
+function object_switch_fav ($object_id) {
+	global $user;
+	$now = time();
+	$db=new DB_Seminar;
+	if (object_check_user($object_id,"fav") == "TRUE") { // gibt einen Eintrag, also aus Favoriten löschen...
+		$db->query("DELETE FROM object_user WHERE object_id='$object_id' AND user_id = '$user->id' AND flag = 'fav'");
+		$tmp = FALSE;
+	} else { // in die Favoriten aufgenommen...
+		$db->query("INSERT INTO object_user (object_id, user_id, flag, mkdate) values ('$object_id', '$user->id', 'fav', '$now')");
+		$tmp = TRUE;
+	}
+	return $tmp;
+}
+
 function object_check_user ($object_id, $flag) {
 	global $user;
 	$db=new DB_Seminar;

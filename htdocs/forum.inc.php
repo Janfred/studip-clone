@@ -515,9 +515,10 @@ function forum_print_toolbar ($id="") {
 				$tmp["viewcount"] = $indexvars["viewcount"]["name"];
 				$tmp["rating"] = $indexvars["rating"]["name"];
 				$tmp["score"] = $indexvars["score"]["name"];
-				$tmp["nachname"] = "Autor";
-				$tmp["root_name"] = "Thema";
-				$tmp["x.name"] = "Titel";
+				$tmp["fav"] = _("Favoriten");
+				$tmp["nachname"] = _("Autor");
+				$tmp["root_name"] = _("Thema");
+				$tmp["x.name"] = _("Titel");
 				while(list($key,$value) = each($tmp)) {
 					$print .= "<option value=\"$key\"";
 					if ($key == $forum["sort"]) $print.= " selected";
@@ -561,7 +562,7 @@ function forum_get_index ($forumposting) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars, $open;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -643,7 +644,15 @@ function printposting ($forumposting) {
   		if ($printindex=="" && ($forum["sort"]=="score" || $forum["indikator"]=="score")) $printindex="0";
   		if ($printindex!= "") $forumhead[] = "| <font color=\"$color\">$printindex</font> | ";
 		
-		if (!(have_sem_write_perm())) // Antwort-Pfeil
+		
+		// die Favoritenanzeige
+		
+		if ($forumposting["fav"]!="") $color = "color=\"#FF0000\"";
+		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$open&flatviewstartposting=".$forum["flatviewstartposting"]."\"><font $color>&nbsp;[!]&nbsp;</font></a>";
+		
+		// Antwort-Pfeil
+		
+		if (!(have_sem_write_perm())) 
 			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; 
   		
   		$zusatz = ForumParseZusatz($forumhead);
@@ -807,8 +816,10 @@ if ($db->num_rows() > 0) {  // Forum ist nicht leer
 $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.name AS root_name"
 	.", x.description, x.Seminar_id, y.topic_id AS root_id, username, x.user_id"
 	.", IFNULL(views,0) as viewcount, nachname, IFNULL(ROUND(AVG(rate),1),99) as rating"
+	.", object_user.object_id as fav"
 	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-x.mkdate)/604800)+1)) as score "
-	."FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id) , px_topics y "
+	."FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id) "
+	."LEFT OUTER JOIN object_user ON(object_user.object_id=x.topic_id AND object_user.user_id='$user->id' AND flag='fav') , px_topics y "
 	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar'".$addon." "
 	."GROUP by x.topic_id ORDER BY ".$forum["sort"]." ".$order;
 
@@ -859,7 +870,8 @@ while($db->next_record()){
 	$forumposting["viewcount"] = $db->f("viewcount");
 	$forumposting["rating"] = $db->f("rating");
 	$forumposting["score"] = $db->f("score");
-	
+	$forumposting["fav"] = $db->f("fav");
+		
 	$forumposting = printposting($forumposting);
 }
 
@@ -919,8 +931,10 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	$query .= ", count(*) as count, max(s.chdate) as last "
 	.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating "
 	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-t.mkdate)/604800)+1)) as score "
+	.", object_user.object_id as fav "
 	."FROM px_topics t LEFT JOIN px_topics s USING(root_id) "
-	."LEFT JOIN object_views ON(object_views.object_id=t.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=t.topic_id)"
+	."LEFT JOIN object_views ON(object_views.object_id=t.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=t.topic_id) "
+	."LEFT OUTER JOIN object_user ON(object_user.object_id=t.root_id AND object_user.user_id='$user->id' AND flag='fav') "
 	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' GROUP BY t.root_id  ORDER BY t.mkdate";
 	$db=new DB_Seminar;
 	$db->query($query);
@@ -967,6 +981,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 			$forumposting["viewcount"] = $db->f("viewcount");
 			$forumposting["rating"] = $db->f("rating");
 			$forumposting["score"] = $db->f("score");
+			$forumposting["fav"] = $db->f("fav");
 	
 			$forumposting = printposting($forumposting);
 		
@@ -1004,8 +1019,10 @@ function DisplayKids ($forumposting, $level=0) {
 		.", px_topics.mkdate, px_topics.chdate, description, root_id, username, px_topics.user_id"
 		.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating"
 		.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-px_topics.mkdate)/604800)+1)) as score "
+		.", object_user.object_id as fav"
 		." FROM px_topics LEFT JOIN auth_user_md5 USING(user_id)"
 		." LEFT JOIN object_views ON(object_views.object_id=topic_id) LEFT JOIN object_rate ON(object_rate.object_id=topic_id)"
+		." LEFT OUTER JOIN object_user ON(object_user.object_id=topic_id AND object_user.user_id='$user->id' AND flag='fav')"
 		." WHERE"
 		." parent_id = '$topic_id'"
 		." GROUP BY topic_id ORDER by px_topics.mkdate";
@@ -1028,6 +1045,7 @@ function DisplayKids ($forumposting, $level=0) {
 		$forumposting["viewcount"] = $db->f("viewcount");
 		$forumposting["rating"] = $db->f("rating");
 		$forumposting["score"] = $db->f("score");
+		$forumposting["fav"] = $db->f("fav");
 					
 		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class=\"blank\" nowrap valign=\"top\" ><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'>";
 

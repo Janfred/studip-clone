@@ -103,6 +103,7 @@ $view = $forum["view"];
 
 	include "links_openobject.inc.php";
 
+
 // Behandlung der Suche
 
 
@@ -362,6 +363,10 @@ if ($forumsend) {
 			);
 	} ELSE
 		include("forumsettings.inc.php");
+}
+
+if ($fav) {  // zu den Favoriten hinzufügen/entfernen
+	$fav = object_switch_fav($fav);
 }
 
 // Verzweigung zu den drei Anzeigemodi 
