@@ -37,7 +37,7 @@
 
 function object_set_visit_module($type){
 	global $SessSemName;
-	if (object_get_visit($SessSemName[1], $type, false, false) <= object_get_visit($SessSemName[1], $SessSemName['class'], false, false)){
+	if (object_get_visit($SessSemName[1], $type, false, false) < object_get_visit($SessSemName[1], $SessSemName['class'], false, false)){
 		object_set_visit($SessSemName[1], $type);
 	}
 }
@@ -130,6 +130,21 @@ function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '
 		return FALSE;
 }
 
+function object_kill_visits($user_id, $object_ids = false){
+	if ($user_id){
+		if ($object_ids){
+			if (!is_array($object_ids)){
+				$object_ids = array($object_ids);
+			}
+			$sql = "AND object_id IN('" . join("','", $object_ids) . "')";
+		}
+		
+		$db = new DB_Seminar("DELETE FROM object_user_visits WHERE user_id = '$user_id' " . $sql);
+		return $db->affected_rows();
+	} else {
+		return false;
+	}
+}
 
 function object_add_view ($object_id) {
 	global $object_cache;
