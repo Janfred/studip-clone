@@ -108,9 +108,7 @@
 				$progress_counter ++;
 				$event_id     = $event-> getId();
 				$event_title  = $event-> getTitle();
-				$event_sem_id = $event-> getSeminarId();
-
-				if ($event_sem_id)
+				if (method_exists($event, "getSemName"))
 					$event_sem_name = $event-> getSemName();
 				else
 					$event_sem_name = FALSE;
