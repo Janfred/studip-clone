@@ -22,13 +22,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //****************************************************************************
 
-require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . 'config.inc.php');
+require_once($ABSOLUTE_PATH_STUDIP . 'calendar_functions.inc.php');
 
 class Event {
 	
 	var $id;
 	var $properties = array();
-//	var $id;    	    // termin_id (String)
 	var $chng_flag = FALSE;   // Termin geaendert ? (boolean)
 
 	function Event ($properties) {
@@ -323,6 +323,49 @@ class Event {
 	function isDayEvent () {
 	
 		return FALSE;
+	}
+	
+	/**
+	* Returns the string representation of start- and end-time
+	*
+	* Without parameters it returns the short version:<br>
+	* 12:30 - 09:45<br>
+	* If $mod = 'LONG' it returns the long version:<br>
+	* Monday, 20.03.2004 12:30 - Tuesday, 21.03.2004 09:45<br>
+	* If $mod = 'SHORT_DAY' it returns the long version with
+	* short day names<br>
+	* Mo. 20.03.2004 12:30 - Tu. 21.03.2004 09:45
+	*
+	* @access public
+	* @param String $mod 'LONG', 'SHORT' or 'SHORT_DAY'
+	*/
+	function toStringDate ($mod = 'SHORT') {
+		
+		if ($mod == 'SHORT')
+			return strftime('%H:%M - ', $this->getStart()) . strftime('%H:%M', $this->getEnd());
+		
+		if ($mod == 'LONG') {
+			$string = wday($this->getStart())
+					. strftime(', %x %H:%M - ', $this->getStart());
+			if (date('zY', $this->getStart()) != date('zY', $this->getEnd())) {
+				$string .= wday($this->getEnd())
+						. strftime(', %x %H%M', $this->getEnd());
+			}
+			else
+				$string .= strftime('%H:%M', $this->getEnd());
+		}
+		else {
+			$string = wday($this->getStart(), 'SHORT')
+					. strftime('. %x %H:%M - ', $this->getStart());
+			if (date('zY', $this->getStart()) != date('zY', $this->getEnd())) {
+				$string .= wday($this->getEnd(), 'SHORT')
+						. strftime('. %x %H:%M', $this->getEnd());
+			}
+			else
+				$string .= strftime('%H:%M', $this->getEnd());
+		}
+		
+		return $string;
 	}
 	
 }
