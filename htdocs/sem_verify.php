@@ -1,7 +1,10 @@
 <?php
 /*
 sem_verify.php - Script zum Anmelden zu einem Seminar mit Ueberpruefung aller Rechte.
-Copyright (C) 2002 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2002 	André Noack <anoack@mcis.de>, 
+				Cornelis Kater <ckater@gwdg.de>, 
+				Stefan Suchi <suchi@gmx.de>, 
+				data-quest <info@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -50,6 +53,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	require_once "msg.inc.php";
 	require_once "functions.php";
+	require_once "admission.inc.php";
 	
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -327,7 +331,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							<?
 							page_close();
 							die;
-						} else { //Keine passenden Studeingaenge gefunden, abbruch
+						} else { //Keine passenden Studiengaenge gefunden, abbruch
 							$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
 							if ($db->num_rows() >=1) { //Es waren nur die falschen
 								parse_msg ("info§Sie belegen leider keinen passenden Studiengang, um an der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b> teilnehmen zu k&ouml;nnen.");
@@ -341,10 +345,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						}
 					}
 					if ($sem_verify_suggest_studg) { //User hat einen Studiengang angegeben oeder wir haben genau einen passenden gefunden, mit dem er jetzt rein will/kann
-						$db3->query("SELECT name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id LIKE '$id' AND admission_seminar_studiengang.studiengang_id = '$sem_verify_suggest_studg' "); //Nochmal die Daten des quotas fuer diese Veranstaltung
-						$db3->next_record();
-						if ($db2->f("admission_type") == 1) { //Variante Losverfahren
-							if (!$db2->f("admission_selection_take_place")) { //es wurde noch nicht gelost --> auf Warteposition ist admission_seminar_user
+						if ($db2->f("admission_selection_take_place") == 1) { //Variante Eintragen nach Lostermin oder Enddatum der Kontigentierrung. Wenn noch Platz ist fuellen wir einfach auf, ansonsten Warteliste
+							if (get_free_admission($id)) { //Wir koennen einfach eintragen, Platz ist noch
+							 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', admission_studiengang_id = '$sem_verify_suggest_studg', status='autor', gruppe='$group', mkdate='".time()."' ");
+								parse_msg ("msg§Sie wurden mit dem Status <b>autor</b> in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
+								echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zu der Veranstaltung</a>";
+								if ($send_from_search)
+					    				echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+								echo "<br	><br></td></tr></table>";
+								page_close();
+								die;
+							} else { //Auf die Warteliste
+								$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' ORDER BY position DESC");//letzte hoechste Position herausfinden
+								$db5->next_record();
+							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".($db5->f("position")+1)."'  ");
+								parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." auf die Warteliste gesetzt. <br /> Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r sie frei wird.");
+								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+								if ($send_from_search)
+					    				echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+								echo "<br	><br></td></tr></table>";
+								page_close();
+								die;
+							}
+						} else { //noch nicht gelost oder Enddatum, also Kontingentierung noch aktiv
+							$db3->query("SELECT name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id LIKE '$id' AND admission_seminar_studiengang.studiengang_id = '$sem_verify_suggest_studg' "); //Nochmal die Daten des quotas fuer diese Veranstaltung
+							$db3->next_record();
+							if ($db2->f("admission_type") == 1) { //Variante Losverfahren
 								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position heruasfinden
 								$db5->next_record();
 							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
@@ -355,32 +381,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								echo "<br	><br></td></tr></table>";
 								page_close();
 								die;
-							} else { //wurde schon gelost --> Verfahren wird wie chronologsich geregelt: Wenn noch Plaetze im Kontingent frei sind, wird sofort eingetragen, sonst Warteliste
-								$chrono_after_selection=TRUE;
-							}
-						}
-						if (($db2->f("admission_type") == 2) || ($chrono_after_selection)) { //Variante chronologisches Eintragen oder chronologisches Eintragen nach dem Losen
-							$db->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '$id' AND admission_studiengang_id = '$sem_verify_suggest_studg'"); //Wieviel user sind schon in diesem Kontingent eingetragen
-							if ($db->num_rows() < round ($db2->f("admission_turnout") * ($db3->f("quota") / 100))) {//noch Platz in dem Kontingent --> direkt in seminar_user
-							 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
-								parse_msg ("msg§Sie wurden mit dem Status <b>autor</b> in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
-								echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; Hier kommen Sie zu der Veranstaltung</a>";
-								if ($send_from_search)
-								    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
-								echo "<br><br></td></tr></table>";
-								page_close();
-								die;
-							} else { //kein Platz mehr im Kontingent --> auf Warteposition in admission_seminar_user
-								$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' ORDER BY position DESC");//letzte hoechste Position herausfinden
-								$db5->next_record();
-							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".($db5->f("position")+1)."'  ");
-								parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." in die Warteliste eingetragen. <br /> Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r sie frei wird.");
-								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
-								if ($send_from_search)
-						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
-								echo "<br	><br></td></tr></table>";
-								page_close();
-								die;
+							} else { //Variante Chronologisches Anmelden
+								$db->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '$id' AND admission_studiengang_id = '$sem_verify_suggest_studg'"); //Wieviel user sind schon in diesem Kontingent eingetragen
+								if ($db->num_rows() < round ($db2->f("admission_turnout") * ($db3->f("quota") / 100))) {//noch Platz in dem Kontingent --> direkt in seminar_user
+								 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
+									parse_msg ("msg§Sie wurden mit dem Status <b>autor</b> in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
+								echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zu der Veranstaltung</a>";
+									if ($send_from_search)
+									    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+									echo "<br><br></td></tr></table>";
+									page_close();
+									die;
+								} else { //kein Platz mehr im Kontingent --> auf Warteposition in admission_seminar_user
+									$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' ORDER BY position DESC");//letzte hoechste Position herausfinden
+									$db5->next_record();
+								 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".($db5->f("position")+1)."'  ");
+									parse_msg ("info§Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>$SeminarName</b>. Sie wurden jedoch auf Platz ".($db5->num_rows()+1)." auf die Warteliste gesetzt. <br /> Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r sie frei wird.");
+									echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+									if ($send_from_search)
+						    				echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+									echo "<br	><br></td></tr></table>";
+									page_close();
+									die;
+								}
 							}
 						}
 					} 
