@@ -270,7 +270,7 @@ if ($delete_id) {
 	$mutter = suche_kinder($delete_id);
 	$mutter = explode (";",$mutter);
 	$count = sizeof($mutter)-2;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$delete_id' AND Seminar_id ='$SessSemName[1]'");
+	$db->query("SELECT *, IFNULL(ROUND(AVG(rate),1),99) as rating FROM px_topics LEFT JOIN object_rate ON(object_rate.object_id=topic_id) WHERE topic_id='$delete_id' AND Seminar_id ='$SessSemName[1]' GROUP BY topic_id");
 	if ($db->num_rows()) { // wir sind im richtigen Seminar!
 		$db->next_record();
 		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
@@ -285,6 +285,7 @@ if ($delete_id) {
 			$forumposting["mkdate"] = $db->f("mkdate");
 			$forumposting["chdate"] = $db->f("chdate");
 			$forumposting["buttons"] = "no";
+			$forumposting["rating"] = $db->f("rating");
 			forum_draw_topicline();
 			if ($forumposting["id"] == $forumposting["rootid"])
 				$tmp_label = _("das untenstehende Thema");
