@@ -550,11 +550,11 @@ function createLabel(){
 		"selections_text_vote" => _("Ein neues Voting"),
 		"selections_text_test" => _("Einen neuen Test"),
 		"selections_text_middle" => _("in"),
-		"selections_button" => _("erstellen"),
+		"selections_button" => "erstellen",
 		"selections_tooltip" => _("Voting oder Test erstellen."),
 		"selections_selectrange_text" => _("Votings/Tests aus "),
 		"selections_allranges" => _("allen Bereichen"),
-		"selections_selectrange_button" => _("anzeigen"),
+		"selections_selectrange_button" => "anzeigen",
 		"selections_selectrange_tooltip" => _("Bereich der angezeigten Votings und Tests ausw&auml;hlen."),
 			
 		// labels for printSearchResults
@@ -570,7 +570,7 @@ function createLabel(){
 		
 		// labels for printSearch
 		"search_text" => _("Nach weiteren Bereichen suchen: "),
-		"search_button" => _("suchen"),
+		"search_button" => "suchen",
 		"search_tooltip" => _("Hier können Sie nach weiteren Bereichen suchen."),
 		
 		// labels for printVoteTable
@@ -601,26 +601,26 @@ function createLabel(){
 			"vis" => _("Diesen Eintrag f&uuml;r die User unsichtbar machen.")),
 
 		"status" => _("Status"),
-		"status_button_new" => _("start"),
+		"status_button_new" => "start",
 		"status_tooltip_new" => _("Diesen Eintrag jetzt starten."),
-		"status_button_active" => _("stop"),
+		"status_button_active" => "stop",
 		"status_tooltip_active" => _("Diesen Eintrag jetzt stoppen."),
-		"status_button_stopped" => _("fortsetzen"),
+		"status_button_stopped" => "fortsetzen",
 		"status_tooltip_stopped" => _("Diesen Eintrag jetzt fortsetzen."),
 
 		"restart_button" => _("zuruecksetzen"),	
 		"restart_tooltip" => _("Alle abgegebenen Stimmen l&ouml;schen."),		
 
 		"edit" => _("Bearbeiten"),
-		"edit_button" => _("bearbeiten"),
+		"edit_button" => "bearbeiten",
 		"edit_tooltip" => _("Diesen Eintrag bearbeiten."),
 
 		"makecopy" => "",
-		"makecopy_button" => _("kopieerstellen"),
+		"makecopy_button" => "kopieerstellen",
 		"makecopy_tooltip" => _("Diesen Eintrag jetzt als Kopie neu erstellen."),
 
 		"delete" => _("L&ouml;schen"),
-		"delete_button" => _("loeschen"),
+		"delete_button" => "loeschen",
 		"delete_tooltip" => _("Diesen Eintrag l&ouml;schen."),
 		"no_votes_message_new" => _("Keine nicht gestarteten Votings oder Tests vorhanden."),
 		"no_votes_message_active" => _("Keine laufenden Votings oder Tests vorhanden."),
