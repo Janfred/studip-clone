@@ -328,13 +328,13 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
 				<?
-				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>",($db->f("Ort")) ? $db->f("Ort") : "nicht angegeben");
+				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>", (getRoom($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) ? htmlReady(getRoom($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) : "nicht angegeben");
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
 				<?
 				if ($db->f("VeranstaltungsNummer"))
-					printf ("<font size=-1><b>Veranstaltungsnummer:</b></font><br /><font size=-1>%s</font>",$db->f("VeranstaltungsNummer"));
+					printf ("<font size=-1><b>Veranstaltungsnummer:</b></font><br /><font size=-1>%s</font>", htmlReady($db->f("VeranstaltungsNummer")));
 				else
 					print "&nbsp; ";
 				?>
