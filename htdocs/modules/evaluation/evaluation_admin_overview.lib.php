@@ -803,13 +803,15 @@ class EvalOverview {
 #   $rangeIDs[$currentRangeID] = array( "name" => $this->db->getRangename($currentRangeID) );
 
     foreach ($rangeIDs as $rangeID => $object) {
-   $option = new HTML ("option");
-   if ($currentRangeID == $rangeID)
-       $option->addAttr ("selected", "selected");
+      $option = new HTML ("option");
+      if ($currentRangeID == $rangeID)
+         $option->addAttr ("selected", "selected");
 
-   $option->addAttr ("value", $rangeID);
-   $option->addHTMLContent ($object["name"]);
-   $select->addContent ($option);
+      $option->addAttr ("value", $rangeID);
+      if (empty ($object["name"]))
+         $object["name"] = " ";
+      $option->addHTMLContent ($object["name"]);
+      $select->addContent ($option);
     }
     /* --------------------------------------------------------------------- */
 
