@@ -50,7 +50,7 @@ if(!$db->next_record())
 global $_fullname_sql;
 $query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
 $query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")];
-$query .= "AS fullname FROM dokumente d LEFT JOIN user_info USING (user_id) ";
+$query .= "AS fullname, username FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 $query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
 $query .= "Seminar_id='{$this->config->range_id}'";
 
@@ -82,6 +82,7 @@ if ($this->config->getValue("TableHeader", "width_pp") == "PERCENT")
 	$percent = "%";
 $alias_download = $this->config->getValue("Main", "aliases");
 $visible = $this->config->getValue("Main", "visible");
+setlocale(LC_TIME, $this->config->getValue("Main", "datelanguage"));
 
 $set_1 = $this->config->getAttributes("TableHeadrow", "th");
 $set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
@@ -127,6 +128,8 @@ if ($error_message) {
 	echo "</td></tr>\n</table>\n";
 }
 else {
+	$link_persondetails = $this->getModuleLink("Persondetails",
+			$this->config->getValue("Main", "config"), $this->config->getValue("Main", "srilink"));
 	
 	while($db->next_record()){
 	
@@ -198,16 +201,17 @@ else {
 			
 			"mkdate"      => sprintf("<font%s>%s</font>"
 												, $this->config->getAttributes("TableRow", "font")
-												, date("d.m.Y", $db->f("mkdate"))),
+												, strftime($this->config->getValue("Main", "dateformat"), $db->f("mkdate"))),
 			
 			"size"        => sprintf("<font%s>%s</font>"
 												, $this->config->getAttributes("TableRow", "font"),
 												$db->f("filesize") > 1048576 ? round($db->f("filesize") / 1048576, 1) . " MB"
 												: round($db->f("filesize") / 1024, 1) . " kB"),
 													
-			"fullname"    => sprintf("<font%s><a href=\"%s\"%s>%s</a></font>"
-												, $this->config->getAttributes("TableRow", "font")
-												, $this->config->getAttributes("TableRow", "font")
+			"fullname"    => sprintf("<font%s><a href=\"%s&username=%s\"%s>%s</a></font>"
+												, $this->config->getAttributes("Link", "font")
+												, $link_persondetails, $db->f("username")
+												, $this->config->getAttributes("Link", "a")
 												, htmlReady($db->f("fullname")))
 		);
 		
