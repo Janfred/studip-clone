@@ -1,4 +1,27 @@
 <?
+/**
+* DB-Functions for ILIAS-Connection.
+* 
+* In this file there are functions to fetch learning-module data from the database.
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		lernmodul_db_functions
+* @package		ELearning
+*/
+
+/**
+* Search for learning modules
+*
+* This function searches for learning modules according to the given keyword
+*
+* @access	public        
+* @param		string	keyword
+* @param		string	where to search
+* @return		string	returns array of string or false
+*/
 function search_modules($key, $area = 4)
 {
 	switch($area)
@@ -35,6 +58,16 @@ function search_modules($key, $area = 4)
 }
 
 
+/**
+* Get learning module data
+*
+* This function returns information about the learning module specified by the given IDs
+*
+* @access	public        
+* @param		string	ILIAS-Inst-ID
+* @param		string	ILIAS-learning-module-ID
+* @return		string	returns array of string or false
+*/
 function get_module_info($co_inst, $co_id)
 {
 	$ilias_db = New DB_Ilias;
@@ -60,6 +93,16 @@ function get_module_info($co_inst, $co_id)
 	return false;
 }
 
+/**
+* Get learning module author
+*
+* This function returns an array of the authors of the learning module specified by the given IDs
+*
+* @access	public        
+* @param		string	ILIAS-Inst-ID
+* @param		string	ILIAS-learning-module-ID
+* @return		string	returns array of string or false
+*/
 function get_module_author($co_inst, $co_id)
 {
 	$module_author = false;
@@ -81,6 +124,15 @@ function get_module_author($co_inst, $co_id)
 	return $module_author;
 }
 
+/**
+* Get learning modules belonging to user
+*
+* This function returns an array of the learning module that belong to the given Stud.IP-user-ID
+*
+* @access	public        
+* @param		string	Stud.IP-User-ID
+* @return		string	returns array of string or false
+*/
 function get_user_modules($studip_id)
 {
 	$mod_array = false;
@@ -128,6 +180,15 @@ function get_user_modules($studip_id)
 		return $mod_array;
 }
 
+/**
+* Get learning modules belonging to seminar
+*
+* This function returns an array of the learning module that belong to the given Stud.IP-Range-ID
+*
+* @access	public        
+* @param		string	Stud.IP-Seminar-ID
+* @return		string	returns array of string or false
+*/
 function get_seminar_modules($seminar_id)
 {
 	$mod_array = false;
@@ -147,6 +208,15 @@ function get_seminar_modules($seminar_id)
 		return $mod_array;
 }
 
+/**
+* Get all learning modules
+*
+* This function returns an array of all learning modules
+*
+* @access	public        
+* @param		string	array of learning-modules that will not be shown
+* @return		string	returns array of string or false
+*/
 function get_all_modules($hide_mod = false)
 {
 	$mod_array = false;

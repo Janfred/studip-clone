@@ -9,7 +9,7 @@
 * @version		$Id$
 * @access		public
 * @modulegroup		elearning_modules
-* @module		account_migration
+* @module		migration2studip
 * @package		ELearning
 */
 // +---------------------------------------------------------------------------+
@@ -53,9 +53,9 @@ function ilias_auth_user()
 }
 
 /**
-* ILIAS-user-authentification
+* checks ILIAS-user-authentification
 *
-* This function checks if the given password and unsername are correct.
+* This function checks if the given password and username are correct.
 *
 * @access	public        
 */

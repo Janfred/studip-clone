@@ -1,5 +1,39 @@
 <?
 /**
+* User-Functions for ILIAS-Connection.
+* 
+* In this file there are functions to edit, create and delete ILIAS-Useraccounts 
+* and to connect them with Stud.IP-Accounts.
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		lernmodul_user_functions
+* @package		ELearning
+*/
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// lernmodul_user_functions.php
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+/**
 * Gets ILIAS-Inst-ID
 *
 * This function gets the ILIAS-Installation-ID from the ILIAS-db.

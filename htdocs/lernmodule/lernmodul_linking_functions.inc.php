@@ -1,10 +1,40 @@
 <?
+/**
+* Linking-functions to conect Stud.IP-Pages to ILIAS-learning-modules.
+* 
+* This file contains several functions to create links and forms that refer to ILIAS-learning-modules.
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		lernmodul_linking_functions
+* @package		ELearning
+*/
+
+/**
+* Return link to ILIAS to create a new learning-module
+*
+* Returns a link to ILIAS to create a new learning-module
+*
+* @access	public        
+* @return		string	returns link-string
+*/
 function link_new_module()
 {
 	global $ABSOLUTE_PATH_ILIAS;
 	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=new" . get_ilias_logindata();
 }
 
+/**
+* Return links to ILIAS to start, edit or delete learning-modules
+*
+* Returns an array of links to ILIAS to start, edit or delete learning-modules
+*
+* @access	public        
+* @param		string	Array of learning-module-IDs
+* @return		string	Array of learning-module-data
+*/
 function get_module_linkdata($this_array, $perm_area = 0)
 {
 	global $auth, $perm;
@@ -54,6 +84,15 @@ function get_module_linkdata($this_array, $perm_area = 0)
 	return $data_str;
 }
 
+/**
+* Return links to ILIAS to start, edit or delete learning-modules that belong to the given seminar
+*
+* Returns an array of links to ILIAS to start, edit or delete learning-modules that belong to the given seminar
+*
+* @access	public        
+* @param		string	Seminar-ID
+* @return		string	Link-String or false
+*/
 function link_seminar_modules($seminar_id)
 {
 	$mod_array = get_seminar_modules($seminar_id);
@@ -70,18 +109,48 @@ function link_seminar_modules($seminar_id)
 		return false;
 }
 
+/**
+* Return link to ILIAS to start learning-module
+*
+* Returns a link to ILIAS to start the learning-module specified by the given IDs
+*
+* @access	public        
+* @param		string	ILIAS-Inst-ID
+* @param		string	ILIAS-learning-module-ID
+* @return		string	Link-String
+*/
 function link_use_module($co_inst, $co_id)
 {
 	global $ABSOLUTE_PATH_ILIAS;
 	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=use&co_id=$co_id&co_inst=$co_inst" . get_ilias_logindata();
 }
 
+/**
+* Return link to ILIAS to edit learning-module
+*
+* Returns a link to ILIAS to edit the learning-module specified by the given IDs
+*
+* @access	public        
+* @param		string	ILIAS-Inst-ID
+* @param		string	ILIAS-learning-module-ID
+* @return		string	Link-String
+*/
 function link_edit_module($co_inst, $co_id)
 {
 	global $ABSOLUTE_PATH_ILIAS;
 	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=edit&le=$co_id&le_inst=$co_inst" . get_ilias_logindata();
 }
 
+/**
+* Return link to ILIAS to delete learning-module
+*
+* Returns a link to ILIAS to delete the learning-module specified by the given IDs
+*
+* @access	public        
+* @param		string	ILIAS-Inst-ID
+* @param		string	ILIAS-learning-module-ID
+* @return		string	Link-String
+*/
 function link_delete_module($co_inst, $co_id)
 {
 	global $ABSOLUTE_PATH_ILIAS;
