@@ -58,7 +58,7 @@ xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
 xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
 xml_parse_into_struct($parser, $sri_matches[2], $xml_values, $xml_tags);
 
-$allowed_xml_tags = array("module", "range", "config", "sem");
+$allowed_xml_tags = array("module", "range", "config", "sem", "global");
 
 foreach ($allowed_xml_tags as $xml_tag) {
 	if ($xml_tags[$xml_tag]) {
@@ -110,9 +110,29 @@ elseif (!$config_id) {
 	if ($id = get_standard_config($range_id, $type))
 		$config_id = $id;
 	else {
-		// use default configuraion
+		// use default configuration
 		$default = "DEFAULT";
 		$config_id = "";
+	}
+}
+
+// if there is no global_id or global_name, take the DEFAULT global configuration
+if ($global_name) {
+	// check for valid configuration name and convert it into a config_id
+	if (!$global_id = get_config_by_name($range_id, $type, $config_name)) {
+		echo $sri_matches[1];
+		echo $EXTERN_ERROR_MESSAGE;
+		echo $sri_matches[3];
+		exit;
+	}
+}
+elseif (!$global_id) {
+	// check for standard configuration
+	if ($id = get_global_config($range_id))
+		$global_id = $id;
+	else {
+		// use no global configuration
+		$global_id = NULL;
 	}
 }
 
@@ -142,7 +162,7 @@ else {
 // all parameters ok, instantiate module and print data
 foreach ($EXTERN_MODULE_TYPES as $type) {
 	if ($type["module"] == $module_name)
-		$module_obj =& new ExternModule($range_id, $module_name, $config_id, $default);
+		$module_obj =& new ExternModule($range_id, $module_name, $config_id, $default, $global_id);
 }
 
 $args = $module_obj->getArgs();

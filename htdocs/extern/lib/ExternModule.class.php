@@ -312,6 +312,8 @@ class ExternModule {
 				$link .= "&range_id={$this->config->range_id}";
 			}
 		}
+		if ($this->config->global_id)
+			$link .= "&global_id=" . $this->config->global_id;
 		
 		return $link;
 	}

@@ -143,6 +143,8 @@ class ExternElementLinkIntern extends ExternElement {
 					$link .= "&" . $args["link_args"];
 			}
 		}
+		if ($this->config->global_id)
+			$link .= "&global_id=" . $this->config->global_id;
 		
 		// to set the color of the font in the style-attribute of the a-tag
 		if ($color = $this->config->getValue($this->name, "font_color_")) {

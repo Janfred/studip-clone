@@ -350,6 +350,10 @@ class ExternConfig {
 	function setGlobalConfig ($global_config, $registered_elements) {
 		$this->global_id = $global_config->getId();
 		
+		// the name of the global configuration has to be deleted to prevent
+		// overwriting the name of the main configuration
+		$global_config->config["Main"]["name"] = "";
+		
 		foreach ($registered_elements as $name => $element) {
 			if ((is_int($name) || !$name) && $this->config[$element]) {
 				foreach ($this->config[$element] as $attribute => $value) {
