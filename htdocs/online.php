@@ -163,8 +163,8 @@ ob_start();
 				$cssSw->switchClass();					
 				}
 			}
-		else
-			echo "\n<td class=\"steel1\" align=\"center\" colspan=6><font size=-1>Im Augenblick ist keiner ihrer Buddies online.</font></td></tr>";
+//		else
+//			echo "\n<tr><td class=\"steel1\" align=\"center\" colspan=6><font size=-1>Im Augenblick ist keiner ihrer Buddies online.</font></td></tr>";
 		if (sizeof($inactive_buddies)) {
 			echo "\n<tr><td colspan=6 class=\"steelgraudunkel\" align=\"center\"><font size=-1 color=\"white\"><b>Diese Buddies sind zur Zeit offline:</b></font></td></tr>";
 			reset ($inactive_buddies);
