@@ -62,7 +62,7 @@ function groupmail($range_id)
 
 
 function PrintAktualStatusgruppen ()
-{	global $SessSemName, $PHP_SELF;
+{	global $SessSemName, $PHP_SELF, $rechte;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$SessSemName[1]' ORDER BY position ASC");
@@ -76,7 +76,11 @@ function PrintAktualStatusgruppen ()
 			        <tr> ";
 		printf ("	        <td width=\"95%%\" class=\"topic\"><font size=\"-1\"><b>%s</b></font></td>",htmlReady($db->f("name")));
 		printf ("	   	<td width=\"5%%\"class=\"topic\" align=\"center\">");
-		printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
+		if ($rechte) {  // nicht alle duerfen Gruppenmails verschicken
+			printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
+		} else {
+			echo "&nbsp;";
+		}
 		printf ("	        </td>");
 		echo 	"</tr>";
 
