@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-05 17:27+0100\n"
+"POT-Creation-Date: 2003-03-06 17:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,58 +52,77 @@ msgstr ""
 msgid "<b>%s</b> ist in diesem Chat nicht bekannt."
 msgstr ""
 
-#: chat/chat_client.php:131 chat/chat_client.php:159 chat/chat_client.php:170
+#: chat/chat_client.php:131 chat/chat_client.php:165 chat/chat_client.php:176
 msgid "Fehler, falsche Kommandosyntax!"
 msgstr ""
 
-#: chat/chat_client.php:152
+#: chat/chat_client.php:158
 #, c-format
 msgid "%s wurde von %s aus dem Chat geworfen!"
 msgstr ""
 
-#: chat/chat_client.php:156
+#: chat/chat_client.php:162
 msgid "Kein Nutzer gefunden, der entfernt werden k&ouml;nnte."
 msgstr ""
 
-#: chat/chat_client.php:161
+#: chat/chat_client.php:167
 msgid "Sie d&uuml;rfen hier niemanden rauswerfen!"
 msgstr ""
 
-#: chat/chat_client.php:174
+#: chat/chat_client.php:181
 #, c-format
 msgid "Ihre SMS an <b>%s</b> wurde &uuml;bermittelt."
 msgstr ""
 
-#: chat/chat_client.php:176
+#: chat/chat_client.php:183
 msgid "Fehler, deine SMS konnte nicht &uuml;bermittelt werden!"
 msgstr ""
 
-#: chat/chat_client.php:186
+#: chat/chat_client.php:191
+#, c-format
+msgid "Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert."
+msgstr ""
+
+#: chat/chat_client.php:195
+#, c-format
+msgid ""
+"Der Passwortschutz f&uuml; diesen Chat wurde soeben von <b>%s</b> aufgehoben."
+msgstr ""
+
+#: chat/chat_client.php:199
+msgid "Dieser Chat ist nicht mit einem Passwort gesichert."
+msgstr ""
+
+#: chat/chat_client.php:202
+msgid "Sie d&uuml;rfen hier kein Passwort setzen!"
+msgstr ""
+
+#: chat/chat_client.php:213
 #, c-format
 msgid "Unbekanntes Kommando: <b>%s</b>"
 msgstr ""
 
-#: chat/chat_client.php:243
+#: chat/chat_client.php:270
 msgid "Sie mussten den Chat verlassen..."
 msgstr ""
 
-#: chat/chat_client.php:245
+#: chat/chat_client.php:272
 msgid "Hier</a> k&ouml;nnen sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
-#: chat/chat_client.php:253
+#: chat/chat_client.php:280
 msgid "<b>IDLE TIMOUT</b> - sie wurden aus dem Chat entfernt!<br>"
 msgstr ""
 
-#: chat/chat_client.php:256
+#: chat/chat_client.php:283
 msgid "Hier</a> k&oumlnnen sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
-#: chat/chat_client.php:283 chat/chat_input.php:99 chat/chat_nicklist.php:76
+#: chat/chat_client.php:310 chat/chat_input.php:99 chat/chat_nicklist.php:76
 msgid "Sie sind nicht in diesem Chat angemeldet!"
 msgstr ""
 
-#: chat/chat_client.php:289
+#: chat/chat_client.php:316
 #, c-format
 msgid "Hallo %s,<br> willkommen im Raum: %s"
 msgstr ""
@@ -173,17 +192,17 @@ msgstr ""
 msgid "diesem Nutzer eine private Botschaft senden"
 msgstr ""
 
-#: chat/ChatServer.class.php:126
+#: chat/ChatServer.class.php:128
 #, c-format
 msgid "%s hat den Chat betreten!"
 msgstr ""
 
-#: chat/ChatServer.class.php:151
+#: chat/ChatServer.class.php:153
 #, c-format
 msgid "%s hat den Chat verlassen!"
 msgstr ""
 
-#: chat/ChatServer.class.php:214
+#: chat/ChatServer.class.php:216
 #, c-format
 msgid "%s hat sich aus StudIP ausgeloggt!"
 msgstr ""
