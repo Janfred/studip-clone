@@ -23,6 +23,33 @@ require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 /*
+Die Funktion get_all_quota gibt die Anzahl der verbleibenden Plaetze fuer das Kontingent "alle" 
+unter Beruecksichtung der Berechnung fuer andere Kontingente (und der Rundungsfehler)
+zurueck..
+*/
+
+function get_all_quota($seminar_id) {
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+
+	//Daten holen 
+	$db->query("SELECT Seminar_id, Name, admission_turnout FROM seminare WHERE Seminar_id = '$seminar_id'");
+	$db->next_record();
+	
+	//Alle zugelassenen Studiengaenge auswaehlen um die genaue Platzzahl zu ermitteln
+	$db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' AND studiengang_id !='all' ");
+	$count=0;
+	while ($db2->next_record())
+		$count=$count+ round($db->f("admission_turnout") * ($db2->f("quota") / 100));
+	
+	$all_quota=$db->f("admission_turnout")-$count;
+	if ($all_quota <0)
+		$all_quota = 0;
+	
+	return $all_quota;
+}
+
+/*
 Die Funktion get_free_admission gibt die Anzahl an insgesamt freien Plaetzen zurueck. Dabei werden
 Rundungsfehler gegenueber der absoluten Platzanzahl beruecksichtigt.
 */
@@ -154,8 +181,13 @@ function check_admission ($send_message=TRUE) {
 			//Alle zugelassenen Studiengaenge einzeln auslosen
 			$db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '".$db->f("Seminar_id")."' ");
 			while ($db2->next_record()) {
+				//Wenn Kontingent "alle" bearbeitet wird, wird die Teilnehmerzahl aus den anderen Kontingenten gebildet
+				if ($db2->f("studiengang_id") == "all")
+					$tmp_admission_quota=get_all_quota($db->f("Seminar_id"));
+				else
+					$tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
 				//Losfunktion
-				$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' ORDER BY RAND() LIMIT ".round($db->f("admission_turnout") * ($db2->f("quota") / 100)));
+				$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' ORDER BY RAND() LIMIT ".$tmp_admission_quota);
 				//User aus admission_Seminar_user in seminar_user verschieben
 				while ($db3->next_record())   {
 					$group = select_group ($db->f("start_time"), $db3->f("user_id"));			
