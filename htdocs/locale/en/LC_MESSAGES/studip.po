@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-15 18:45+0200\n"
+"POT-Creation-Date: 2003-04-17 10:33+0200\n"
 "PO-Revision-Date: 2003-04-04 14:57+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -120,8 +120,9 @@ msgid "Mitarbeiter"
 msgstr "Staff member"
 
 #: extern/extern_config.inc.php:51
+#, fuzzy
 msgid ""
-"Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer "
+"Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer "
 "Einrichtung aus."
 msgstr "The module &quot;staff&quot; provides a staff index of an institute."
 
@@ -143,12 +144,11 @@ msgid "Veranstaltungen"
 msgstr "Courses"
 
 #: extern/extern_config.inc.php:57
+#, fuzzy
 msgid ""
-"Das Modul &quot;Veranstaltungs&uuml;bersicht&quot; gibt alle Veranstaltungen "
-"einer Einrichtung aus."
-msgstr ""
-"The module &quot;course overview&quot; provides all courses from an "
-"institute."
+"Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer "
+"Einrichtung aus."
+msgstr "The module &quot;News&quot; provides all news from an institute."
 
 #: extern/extern_config.inc.php:59
 msgid "Veranstaltungsdetails"
@@ -1353,22 +1353,26 @@ msgid "Eigenschaften der Überschrift und der Beschreibung einer News."
 msgstr "Properties of the heading and description for a news item."
 
 #: extern/elements/ExternElementContentNews.class.php:75
-msgid "Schriftformatierung News-Titel"
-msgstr "Formatting of news title font "
+#, fuzzy
+msgid "Schriftformatierung News-Titel (HTML-Tag &lt;font&gt;)"
+msgstr "Font formatting name"
 
 #: extern/elements/ExternElementContentNews.class.php:76
-msgid "Ausrichtung News-Titel"
+#, fuzzy
+msgid "Ausrichtung News-Titel (HTML-Tag &lt;div&gt;)"
 msgstr "New title arrangement"
 
-#: extern/elements/ExternElementContentNews.class.php:76
-msgid "Schriftformatierung News-Beschreibung"
-msgstr "Formatting of news description font."
-
 #: extern/elements/ExternElementContentNews.class.php:77
-msgid "Ausrichtung News-Beschreibung"
+#, fuzzy
+msgid "Schriftformatierung News-Beschreibung (HTML-Tag &lt;font&gt;)"
+msgstr "Font formatting name"
+
+#: extern/elements/ExternElementContentNews.class.php:78
+#, fuzzy
+msgid "Ausrichtung News-Beschreibung (HTML-Tag &lt;div&gt;)"
 msgstr "News description arrangement"
 
-#: extern/elements/ExternElementContentNews.class.php:81
+#: extern/elements/ExternElementContentNews.class.php:82
 #: extern/elements/ExternElementMainDownload.class.php:123
 #: extern/elements/ExternElementMainLecturedetails.class.php:111
 #: extern/elements/ExternElementMainLectures.class.php:193
@@ -1750,13 +1754,11 @@ msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:163
 #: extern/elements/ExternElementMainNews.class.php:153
-#: extern/elements/ExternElementMainPersons.class.php:167
 msgid "Keine Dateien:"
 msgstr "No files:"
 
 #: extern/elements/ExternElementMainDownload.class.php:164
 #: extern/elements/ExternElementMainNews.class.php:154
-#: extern/elements/ExternElementMainPersons.class.php:168
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum "
 "Download verfügbar sind."
@@ -14654,6 +14656,20 @@ msgstr "Open all sub-elements"
 msgid "Alle Unterelemente schließen"
 msgstr "Close all sub-elements"
 
+#: extern/extern_config.inc.php:51
+msgid ""
+"Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer "
+"Einrichtung aus."
+msgstr "The module &quot;staff&quot; provides a staff index of an institute."
+
+#: extern/elements/ExternElementContentNews.class.php:76
+msgid "Ausrichtung News-Titel"
+msgstr "New title arrangement"
+
+#: extern/elements/ExternElementContentNews.class.php:77
+msgid "Ausrichtung News-Beschreibung"
+msgstr "News description arrangement"
+
 #: extern/extern_config.inc.php:60
 msgid ""
 "Das Modul &quot;Veranstaltungsdetails&uot; gibt alle allgemeinen Daten einer "
@@ -14744,6 +14760,19 @@ msgid ""
 msgstr ""
 "The allocation of rooms %s has been sent to the resources administration."
 
+#~ msgid ""
+#~ "Das Modul &quot;Veranstaltungs&uuml;bersicht&quot; gibt alle "
+#~ "Veranstaltungen einer Einrichtung aus."
+#~ msgstr ""
+#~ "The module &quot;course overview&quot; provides all courses from an "
+#~ "institute."
+
+#~ msgid "Schriftformatierung News-Titel"
+#~ msgstr "Formatting of news title font "
+
+#~ msgid "Schriftformatierung News-Beschreibung"
+#~ msgstr "Formatting of news description font."
+
 #~ msgid "Veranstaltungs&uuml;bersicht"
 #~ msgstr "Course overview"
 
@@ -14787,12 +14816,6 @@ msgstr ""
 
 #~ msgid "Tabellenzelle Bild"
 #~ msgstr "Table cell picture"
-
-#, fuzzy
-#~ msgid ""
-#~ "Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer "
-#~ "Einrichtung aus."
-#~ msgstr "The module &quot;News&quot; provides all news from an institute."
 
 #~ msgid "Vorname Nachname"
 #~ msgstr "Forename Surname"
