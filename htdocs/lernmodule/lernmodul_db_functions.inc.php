@@ -11,8 +11,8 @@ function get_module_info($co_inst, $co_id)
 			" AND lerneinheit.inst = '$co_inst' ");
 	if ($ilias_db->next_record())
 	{
-		$module_info["title"] = $ilias_db -> f("title");
-		$module_info["description"] = $ilias_db -> f("description");
+		$module_info["title"] = htmlReady($ilias_db -> f("title"));
+		$module_info["description"] = htmlReady($ilias_db -> f("description"));
 		$ilias_db -> query("SELECT id FROM page WHERE lerneinheit='$co_id' AND le_inst='$co_inst' AND pg_typ = 'le'");
 		$module_info["pages"] = $ilias_db -> num_rows();
 		$ilias_db -> query("SELECT id FROM page WHERE lerneinheit='$co_id' AND le_inst='$co_inst' AND pg_typ = 'mc'");
