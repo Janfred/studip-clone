@@ -42,8 +42,6 @@ $cssSw->enableHover();
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 $cssSw->switchClass();
 
-include "links_openobject.inc.php";	
-
 // Beginn Funktionsteil
 
 // Hilfsfunktionen
