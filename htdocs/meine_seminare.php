@@ -683,9 +683,10 @@ if ( !$perm->have_perm("root")) {
 				echo "<td class=\"".$cssSw->getClass()."\" align=center><img width=\"19\" height=\"17\" src=\"pictures/blank.gif\" />&nbsp;</td>";
 				else
 				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\">&nbsp;</a></td>", $instid);
-				echo "</tr></table>\n";
+				echo "</tr>\n";
 			}
 		}
+		echo "</table>\n";
 	} else {
 	?>
 		<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
