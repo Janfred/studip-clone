@@ -1403,19 +1403,17 @@ function getPresenceTypeClause() {
 
 
 /**
-* Javascript für TerminEingabeHilfe
+* TerminEingabeHilfe
 *
-* Beim ersten Aufruf wird die benötigte js-Funktionen
-* und die HTML-TerminZeile zurückgegeben. Bei allen weiteren Aufrufen enthält
-* der Rückgabewert nur noch die HTML-TerminZeile.
+* Liefert HTML-Code für Grafik und popup window für Kalender
 *
-* @param	int	Werte von 1 bis 6, bestimmt welche Formularfeldnamen verwendet werden
-* @param	int	counter wenn mehrere TerminZeilen auf einer Seite
-* @param	string	ursprüngliche StartStunde (Wert für ESC Taste)
-* @param	string	ursprüngliche StartMinute (Wert für ESC Taste)
-* @param	string	ursprüngliche EndStunde (Wert für ESC Taste)
-* @param	string	ursprüngliche EndMinute (Wert für ESC Taste)
-* @return	string	JavaScriptCode und HTML-TerminZeile
+* @param	int	Werte von 1 bis 7, bestimmt welche Formularfeldnamen verwendet werden
+* @param	int	counter wenn mehrere TerminFelder auf einer Seite
+* @param	string	ursprüngliche StartStunde
+* @param	string	ursprüngliche StartMinute
+* @param	string	ursprüngliche EndStunde
+* @param	string	ursprüngliche EndMinute
+* @return	string	html-code für popup window
 *
 */
 function Termin_Eingabe_javascript ($t = 0, $n = 0, $ss = '', $sm = '', $es = '', $em = '') {
@@ -1430,7 +1428,7 @@ function Termin_Eingabe_javascript ($t = 0, $n = 0, $ss = '', $sm = '', $es = ''
 	$q = ($ss !== '')? "&ss={$ss}&sm={$sm}&es={$es}&em={$em}":'';
 	$txt .= "<a href=\"javascript:window.open('".$CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR. "/views/insert_date_popup.php?mcount={$km}&element_switch={$t}&c={$n}{$q}', 'kalender', 'dependent=yes, width=$kx, height=480');void(0);";
 	$txt .= '"><img src="pictures/edit_transparent.gif" border="0" align="middle" ';
-	$txt .= tooltip(_('Für Eingabehilfe zur einfacheren Terminwahl bitte hier klicken.'),TRUE,FALSE);
+	$txt .= tooltip(_('Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken.'),TRUE,FALSE);
 	$txt .= '></a>';
 
 	return  $txt;
