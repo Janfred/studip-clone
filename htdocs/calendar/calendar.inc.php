@@ -28,6 +28,8 @@ if(!$cmd && !$atime)
 $SessSemName[0] = "";
 $SessSemName[1] = "";
 
+setlocale ("LC_TIME","de_DE");
+
 require_once("config.inc.php"); //Daten laden
 require_once("visual.inc.php");
 require_once("functions.php");

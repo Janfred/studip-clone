@@ -40,28 +40,6 @@ class DbCalendarEvent extends CalendarEvent {
 			default:
 				die("Wrong parameter (".func_num_args().") count for DbCalendarEvent()");
 		}
-				
-		/*
-		// get event out of database...
-		if(func_num_args() == 1){
-			
-			global $user, $PERS_TERMIN_KAT, $TERMIN_TYP;
-			$this->user_id = $user->id;
-			
-			$id = func_get_arg(0);
-			$this->restore($id);
-			
-			// nur persoenliche Termin haben per default eine Farbe
-			// fuer Veranstaltungstermine muss eine Farbe explizit mit setColor() gesetzt werden
-			if($this->type == -1 || $this->type == -2)
-				$this->col = $PERS_TERMIN_KAT[$this->cat]["color"];
-		}
-		else{
-			// ...or it is a new event
-			CalendarEvent::CalendarEvent($start, $end, $txt, $exp, $cat, $prio, $loc, $id, $type);
-			$mkdate = time();
-			$chdate = $mkdate;
-		}*/
 	}
 	
 	// public

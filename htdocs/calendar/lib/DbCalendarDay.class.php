@@ -158,7 +158,7 @@ class DbCalendarDay extends CalendarDay{
 	// public
 	function bindSeminarEvents($sem_id = ""){
 		if($sem_id == "")
-			$query = sprintf("SELECT t.*, su.*, s.Name "
+			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 			       . "user_id = '%s' AND date_typ!=-1 AND date_typ!=-2 AND date BETWEEN %s AND %s"
@@ -166,11 +166,11 @@ class DbCalendarDay extends CalendarDay{
 		else if($sem_id != ""){
 			if(is_array($sem_id))
 				$sem_id = implode("','", $sem_id);
-			$query = sprintf("SELECT t.*, su.*, s.Name "
+			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-			       . "user_id = '%s' AND su.Seminar_id IN ('%s') AND date_typ!=-1"
-						 . " AND date_typ!=-2 AND date BETWEEN %s AND %s"
+			       . "user_id = '%s' AND range_id IN ('%s') AND date_typ!=-1 "
+						 . "AND date_typ!=-2 AND date BETWEEN %s AND %s"
 						 , $this->user_id, $sem_id, $this->getStart(), $this->getEnd());
 		}
 		else

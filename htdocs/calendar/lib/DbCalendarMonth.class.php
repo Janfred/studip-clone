@@ -110,7 +110,7 @@ class DbCalendarMonth extends DbCalendarYear{
 		$db = new DB_Seminar;
 		
 		if(func_num_args() == 0)
-			$query = sprintf("SELECT t.*, su.*, s.Name "
+			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 			       . "user_id = '%s' AND date BETWEEN %s AND %s"
@@ -118,7 +118,7 @@ class DbCalendarMonth extends DbCalendarYear{
 		else if(func_num_args() == 1 && $seminar_ids = func_get_arg(0)){
 			if(is_array($seminar_ids))
 				$seminar_ids = implode("','", $seminar_ids);
-			$query = sprintf("SELECT t.*, su.*, s.Name "
+			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 			       . "user_id = '%s' AND su.Seminar_id IN ('%s') AND date BETWEEN %s AND %s"
@@ -126,13 +126,11 @@ class DbCalendarMonth extends DbCalendarYear{
 		}
 		else
 			return FALSE;
-			
+		
 		$db->query($query);
 		
 		while($db->next_record()){
 			$adate = mktime(12,0,0,date("n",$db->f("date")),date("j",$db->f("date")),$this->year,0);
-		//	$repeat = $db->f("date").",,,,,,SINGLE,#";
-		//	$expire = 2114377200; //01.01.2037 00:00:00 Uhr
 			$this->apdays["$adate"]++;
 			$app =& new SeminarEvent($db->f("date"), $db->f("end_time"), $db->f("content"),
 				              $db->f("date_typ"), $db->f("raum"), $db->f("termin_id"), $db->f("range_id"),

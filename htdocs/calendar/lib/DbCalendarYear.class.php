@@ -47,13 +47,13 @@ class DbCalendarYear extends CalendarYear{
 	function bindSeminarEvents(){
 		// zeigt alle abonnierten Seminare an
 		if(func_num_args() == 0)
-			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
+			$query = sprintf("SELECT t.* FROM termine t LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
 			       . "user_id = '%s' AND date BETWEEN %s AND %s"
 						 , $this->user_id, $this->getStart(), $this->getEnd());
 		else if(func_num_args() == 1 && $seminar_ids = func_get_arg(0)){
 			if(is_array($seminar_ids))
 				$seminar_ids = implode("','", $seminar_ids);
-			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
+			$query = sprintf("SELECT t.* FROM termine t LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
 			       . "user_id = '%s' AND Seminar_id IN ('%s')"
 						 . " AND date BETWEEN %s AND %s"
 						 , $this->user_id, $seminar_ids, $this->getStart(), $this->getEnd());

@@ -159,23 +159,30 @@ echo "<tr><td class=\"blank\">&nbsp;";
 * @param int $day_timestamp unix timestamp of the day
 */
 function print_month_events ($month_obj, $max_events, $day_timestamp) {
+	global $PHP_SELF;
 	$count = 0;
 	while (($aterm = $month_obj->nextEvent($day_timestamp)) && $count < $max_events) {
-		if ($aterm->getType() == 1)
+		if ($aterm->getType() == 1 && $aterm->getTitle() == "Kein Titel") {
 			$html_title = fit_title($aterm->getSemName(),1,1,15);
-		else
+			$jscript_title = JSReady($aterm->getSemName());
+		}
+		else {
 			$html_title = fit_title($aterm->getTitle(),1,1,15);
-		$jscript_text = sprintf("'%s',CAPTION,'%s&nbsp;&nbsp;&nbsp;&nbsp;",
-			$aterm->getDescription() ? JSReady($aterm->getDescription()) : "Keine Beschreibung",
-				JSReady($aterm->getTitle()));
-		$jscript_text .= strftime("%H:%M-",$aterm->getStart());
-		$jscript_text .= strftime("%H:%M",$aterm->getEnd());
-		$jscript_text .= "',NOCLOSE,CSSOFF";
+			$jscript_title = JSReady($aterm->getTitle());
+		}
+		
+		$jscript_text = "'"
+									. ($aterm->getDescription() ? JSReady($aterm->getDescription()) : _("Keine Beschreibung"))
+									. "',CAPTION,'"
+									. strftime("%H:%M-",$aterm->getStart())
+									. strftime("%H:%M",$aterm->getEnd())
+									. "&nbsp; &nbsp; " . $jscript_title
+									. "',NOCLOSE,CSSOFF";
 			
 		printf("<br><a class=\"inday\" href=\"%s?cmd=edit&termin_id=%s&atime=%s\" ",
 			$PHP_SELF, $aterm->getId(), $day_timestamp);
-		printf("onmouseover=\"return overlib(%s);\" onmouseout=\"return nd();\">",
-			$jscript_text);
+		echo "onmouseover=\"return overlib($jscript_text);\" ";
+		echo "onmouseout=\"return nd();\">";
 		printf("<font color=\"%s\">%s</font></a>\n", $aterm->getColor(), $html_title);
 		$count++;
 	}

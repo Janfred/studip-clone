@@ -20,7 +20,7 @@ if($cmd != "changeview"){
 <?
 	}
 	else
-		echo '<tr><td class="blank" height="15" width="100%">&nbsp;</td></tr>';
+		echo "<tr><td class=\"blank\" width=\"100%\">&nbsp;</td></tr>";
 		
 	echo "</table>";
 }

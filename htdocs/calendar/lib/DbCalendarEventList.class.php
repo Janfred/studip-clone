@@ -94,8 +94,8 @@ class AppList{
 	// public
 	function bindSeminarEvents($sem_ids = ""){
 		if ($sem_ids == "")
-			$query = "SELECT termine.*, seminar_user.*, seminare.Name FROM seminar_user "
-						 . "LEFT JOIN seminare USING(Seminar_id) LEFT JOIN termine ON "
+			$query = "SELECT t.*, su.status, s.Name FROM seminar_user su "
+						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
 						 . "seminare.Seminar_id=range_id WHERE user_id = '" . $this->user_id
 						 . "' AND ((date BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . ") OR (end_time BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
@@ -103,7 +103,7 @@ class AppList{
 		else {
 			if (is_array($sem_ids))
 				$sem_ids = implode("','", $sem_ids);
-			$query = "SELECT t.*, su.*, s.Name FROM seminar_user su "
+			$query = "SELECT t.*, su.status , s.Name FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
 						 . "s.Seminar_id=range_id WHERE user_id = '" . $this->user_id
 						 . "' AND range_id IN ('$sem_ids') AND "

@@ -1,5 +1,6 @@
-<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="5">
-	
+
+<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0">
+	<tr><td class="blank" width="100%" valign="top">
 <?
 		
 if (!empty($err)) {
@@ -9,8 +10,10 @@ if (!empty($err)) {
 	my_info($error_message, "blank", 0);
 }
 
-echo "<tr>\n<td class=\"blank\" width=\"100%\" valign=\"top\">\n";
-echo "<table class=\"steel1\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">";
+//echo "<tr>\n<td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellspacing=\"5\" cellpadding=\"0\" align=\"center\">\n";
+echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
 
 if (isset($atermin) && $atermin->getSeminarId())
 	echo "<tr><td width=\"100%\" class=\"steel2\">";
@@ -25,7 +28,7 @@ $css_switcher->switchClass();
 
 echo "\n</td></tr>\n";
 echo "<form action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
-echo "<tr>\n<td width=\"80%\" valign=\"top\">\n";
+echo "<tr>\n<td class=\"steel1\" width=\"80%\" valign=\"top\">\n";
 echo "<table width=\"100%\" cellpadding=\"4\" cellspacing=\"0\" border=\"0\">\n";
 printf("<tr>\n<td class=\"%s\">\n", $css_switcher->getClass());
 
@@ -399,9 +402,9 @@ else {
 											array("kategorie" => "Information:",
 														"eintrag" => array(	
 														array("icon" => "pictures/ausruf_small.gif",
-																	"text" => "Dieser Termin geh&ouml;rt zur Veranstaltung:"),
-														array("text" => $link_to_seminar),
-														array("text" => "Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden."
+																	"text" => "Dieser Termin geh&ouml;rt zur Veranstaltung:<br><br>"
+																			. $link_to_seminar
+																			. "<br><br>Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden."
 																	)
 														)
 											),
@@ -416,7 +419,7 @@ else {
 										);
 ?>
 	</td></tr></table></td>
-			<td class="blank" align="center" rowspan="2" valign="top" width="20%">
+			<td class="blank" align="center" rowspan="1" valign="top" width="20%">
 				<table class="blank" cellspacing="0" cellpadding="0" border="0" valign="top">
 					<tr><td class="blank" align="center" valign="top">
 <?
@@ -424,7 +427,7 @@ else {
 ?>
 					</td></tr>
 				</table>
-			<tr><td class="steel1">
+			<tr><td class="blank">
 <?
 		echo "</td></tr>\n";
  	}
@@ -493,5 +496,6 @@ else {
 			echo '<input type="image" src="./pictures/buttons/loeschen-button.gif" border="0"></form></td></tr>';
 		}
 	}
-		echo '</table></td></tr></table><br />';
+		echo "</table></td></tr></table><br />\n";
+		echo "</td></tr></table>\n";
 ?>

@@ -286,11 +286,15 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 					
 					$tab[$zeile] .= sprintf(' style="background-color:%s">', $term[$zeile][$j]->getColor());
 					$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
+										
+					if ($term[$zeile][$j]->getType() == 1
+							&& $term[$zeile][$j]->getTitle() == "Kein Titel") {
+						$title_out = $term[$zeile][$j]->getSemName();
+					}
+					else
+						$title_out = $term[$zeile][$j]->getTitle();
+					
 					if($rows == 1){
-						if ($term[$zeile][$j]->getType() == 1)
-							$title_out = $term[$zeile][$j]->getSemName();
-						else
-							$title_out = $term[$zeile][$j]->getTitle();
 						$title = fit_title($title_out,$colsp[$zeile],$rows,$title_length - 6);
 						// calculating the correct height of the event-cell if the cell has 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
@@ -302,10 +306,6 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 						$tab[$zeile] .= "<td class=\"steel1\" align=\"right\">&nbsp;</td></tr>\n";
 					}
 					else{
-						if ($term[$zeile][$j]->getType() == 1)
-							$title_out = $term[$zeile][$j]->getSemName();
-						else
-							$title_out = $term[$zeile][$j]->getTitle();
 						$title = fit_title($title_out,$colsp[$zeile],$rows - 1,$title_length);
 						// calculating the correct height of the event-cell if the cell has _more_ than 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"

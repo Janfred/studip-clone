@@ -143,7 +143,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			
 			setlocale("LC_TIME", "ge");
 			$titel = substr(strftime("%a",$db->f("date")),0,2);
-			$titel .= date (" d.m.Y, H:i", $db->f("date"));
+			$titel .= date (". d.m.Y, H:i", $db->f("date"));
 			if ($db->f("date") <$db->f("end_time"))
 				$titel .= " - ".date ("H:i", $db->f("end_time"));
 			if ($db->f("content")) {
@@ -265,18 +265,19 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		while($termin = $list->nextEvent()){
 			$icon = '&nbsp;<img src="./pictures/termin-icon.gif" border="0" alt="Termin">';
 			
-			$zusatz = '';
+			$zusatz = "";
 			if($termin->getLocation())
-				$zusatz.= "<font size=-1>Raum: ".htmlReady($termin->getLocation())."&nbsp;</font>";
+				$zusatz.= "<font size=\"-1\">Raum: ".htmlReady($termin->getLocation())."&nbsp;</font>";
 				
-			$titel = '';
-			if($termin->getType() != "1")
-				$titel .= "</b>";
-			$titel .= date("d.m.Y, H:i", $termin->getStart());
+			$titel = "";
+			$titel = substr(strftime("%a", $termin->getStart()),0,2);
+			$titel .= date(". d.m.Y, H:i", $termin->getStart());
 			
 			if($termin->getStart() < $termin->getEnd()){
-				if($termin->getRepeat("duration") != "#")
-					$titel .= " - ".date("d.m.Y, H:i", $termin->getEnd());
+				if (date("Ymd", $termin->getStart()) < date("Ymd", $termin->getEnd())) {
+					$titel .= " - ".substr(strftime("%a", $termin->getEnd()),0,2);
+					$titel .= date(". d.m.Y, H:i", $termin->getEnd());
+				}
 				else
 					$titel .= " - ".date("H:i", $termin->getEnd());
 			}
@@ -369,25 +370,23 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 	
 	if($list->existEvent()){
 	
-		echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
+		echo "\n\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
 		echo "\n<tr><td>\n";
 		// Ausgabe der Kopfzeile
-		$colspan = 1;
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		$colspan++;
-		echo "\n<tr><td class=\"topic\" width=\"99%\">\n";
+		echo "\n<tr><td class=\"topic\" align=\"left\">\n";
 		echo "<img src=\"./pictures/meinetermine.gif\" border=\"0\" alt=\"";
 		echo "Termine. Klicken Sie rechts auf die Pfeile, um Termine in diesen Bereich zu bearbeiten. ";
 		echo "Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.";
 		echo "\" align=\"absmiddle\"><b>&nbsp;&nbsp;";
-		echo "Aktuelle Termine";
+		echo "Meine aktuellen Termine";
 		echo "</b></td>";
-		echo "\n<td align='right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine bearbeiten'></a>&nbsp;</td></tr>";
+		echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine bearbeiten'></a>&nbsp;</td></tr>";
 		echo "\n";
 
 		// Ausgabe der Daten
-		echo "\n<tr><td class=\"blank\" colspan=$colspan>";
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
+		echo "\n<tr><td class=\"blank\" colspan=\"2\">";
+//		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
 
 		while($termin = $list->nextEvent()){
 			$icon = '&nbsp;<img src="./pictures/termin-icon.gif" border="0" alt="Termin">';
@@ -401,20 +400,27 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 								. "&nbsp;</font></a>";
 			
 			$titel = "";
-			if(date("dmy", $termin->getStart()) == date("dmy", time()))
+			$length = 70;
+			if(date("Ymd", $termin->getStart()) == date("Ymd", time()))
 				$titel .= "Heute" . date(", H:i", $termin->getStart());
-			else
-				$titel .= date("d.m.Y, H:i", $termin->getStart());
+			else{
+				$titel .= substr(strftime("%a,", $termin->getStart()),0,2);
+				$titel .= date(". d.m.Y, H:i", $termin->getStart());
+				$length = 55;
+			}
 			
-			if(date("dmy", $termin->getStart()) != date("dmy", $termin->getEnd()))
-				$titel .= " - ".date("d.m.Y, H:i", $termin->getEnd());
+			if(date("Ymd", $termin->getStart()) != date("Ymd", $termin->getEnd())){
+				$titel .= " - ".substr(strftime("%a,",$termin->getEnd()),0,2);
+				$titel .= date(". d.m.Y, H:i", $termin->getEnd());
+				$length = 55;
+			}
 			else
 				$titel .= " - ".date("H:i", $termin->getEnd());
 			
 			if($termin->getType() == 1)
-				$titel .= ", " . htmlReady(mila($termin->getTitle(), 62)); //Beschneiden des Titels
+				$titel .= ", " . htmlReady(mila($termin->getTitle(), $length - 10)); //Beschneiden des Titels
 			else
-				$titel .= ", " . htmlReady(mila($termin->getTitle(), 72)); //Beschneiden des Titels
+				$titel .= ", " . htmlReady(mila($termin->getTitle(), $length)); //Beschneiden des Titels
 			
 			//Dokumente zaehlen
 			$num_docs = 0;
@@ -495,8 +501,8 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				echo "</tr></table>	";
 				}
 		}
-		echo "</td></tr></table></td></tr></table>";
-		echo "\n</tr></td>\n</table>";
+	//	echo "</td></tr></table>";
+		echo "\n</td></tr>\n</table>";
 		return TRUE;
 	}
 	
