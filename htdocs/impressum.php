@@ -275,23 +275,29 @@ if ($view=="statistik") {?>
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("News:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 			
-			$cssSw->switchClass();
-			$db->query("SELECT count(*) from vote WHERE type='vote'");
-			$db->next_record();
-			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Umfragen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			if ($GLOBALS['VOTE_ENABLE']) {
+				$cssSw->switchClass();
+				$db->query("SELECT count(*) from vote WHERE type='vote'");
+				$db->next_record();
+				$anzahl = $db->f(0);
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Umfragen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 			
-			$cssSw->switchClass();
-			$db->query("SELECT count(*) from vote WHERE type='test'");
-			$db->next_record();
-			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Tests:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
-	
-			$cssSw->switchClass();
-			$db->query("SELECT COUNT(DISTINCT keyword) as count from wiki");
-			$db->next_record();
-			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWeb Seiten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	
+				$cssSw->switchClass();
+				$db->query("SELECT count(*) from vote WHERE type='test'");
+				$db->next_record();
+				$anzahl = $db->f(0);
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Tests:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			}
+			
+			if ($GLOBALS['WIKI_ENABLE']) {
+				$cssSw->switchClass();
+				$db->query("SELECT COUNT(DISTINCT keyword) as count from wiki");
+				$db->next_record();
+				$anzahl = $db->f(0);
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWeb Seiten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			}
+			
+			echo "</blockquote></table></td></tr>";
 	}
 	
 if ($view=="history") {?>
