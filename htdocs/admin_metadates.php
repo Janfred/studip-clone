@@ -316,15 +316,15 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			foreach ($tmp_metadata_termin["turnus_data"] as $tmp_array) {
 				$metadata_termin["turnus_data"][]=$tmp_array;
 			}
-		}
-		
-		//check for changes to the old (saved) metadates (for each metadate)
-		foreach ($metadata_termin["turnus_data"] as $key => $val) {
-			if (($metadata_termin["turnus_data"][$key]["start_stunde"] != $term_metadata["original_turnus"][$key]["start_stunde"])
-				|| ($metadata_termin["turnus_data"][$key]["start_minute"] != $term_metadata["original_turnus"][$key]["start_minute"])
-				|| ($metadata_termin["turnus_data"][$key]["end_stunde"] != $term_metadata["original_turnus"][$key]["end_stunde"])
-				|| ($metadata_termin["turnus_data"][$key]["end_minute"] != $term_metadata["original_turnus"][$key]["end_minute"])) {
-			$metadates_changed[$key] = TRUE;
+				
+			//check for changes to the old (saved) metadates (for each metadate)
+			foreach ($metadata_termin["turnus_data"] as $key => $val) {
+				if (($metadata_termin["turnus_data"][$key]["start_stunde"] != $term_metadata["original_turnus"][$key]["start_stunde"])
+					|| ($metadata_termin["turnus_data"][$key]["start_minute"] != $term_metadata["original_turnus"][$key]["start_minute"])
+					|| ($metadata_termin["turnus_data"][$key]["end_stunde"] != $term_metadata["original_turnus"][$key]["end_stunde"])
+					|| ($metadata_termin["turnus_data"][$key]["end_minute"] != $term_metadata["original_turnus"][$key]["end_minute"])) {
+				$metadates_changed[$key] = TRUE;
+				}
 			}
 		}
 
@@ -368,7 +368,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
 			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"], TRUE, $update_resources);
 			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
-			if ($result) {
+			if ($result["changed"]) {
 				$errormsg.= sprintf ("msg§"._("%s Termine des Ablaufplans aktualisiert.")."§", $result["changed"]);
 			}
 		}
