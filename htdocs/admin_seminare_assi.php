@@ -1511,7 +1511,7 @@ elseif ((!$level) || ($level==1))
 									sprintf ("error§"._("Ihr Account wurde noch keiner Einrichtung zugeordnet. Bitte wenden Sie sich an den/die zust&auml;ndigeN AdministratorIn der Einrichtung oder einen der %sAdministratoren%s des Systems!")."§", "<a href=\"ansprechpartner.php\">", "</a>");
 							?>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Die Heimat-Einrichtung ist die Einrichtung, die offiziell f&uuml;r die Veranstaltung zuständig ist."), TRUE, TRUE) ?>
+								<? echo tooltip(_("Die Heimat-Einrichtung ist die Einrichtung, die offiziell für die Veranstaltung zuständig ist."), TRUE, TRUE) ?>
 							>
 							<font color="red" size=+2>*</font>
 						</td>
