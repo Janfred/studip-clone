@@ -22,17 +22,7 @@ if ($messaging_cmd=="change_view_insert") {
 	}
 
 if ($do_add_user_x)
-	$msging->add_buddy ($add_user, 0);
-
-if ($delete_user)
-	$msging->delete_buddy ($delete_user);
-	
-if (is_array($buddy_grp)) {
-	foreach ($buddy_grp as $key=>$value)  {
-		$my_buddies[$buddy_key[$key]]["group"] =$value;
-	}
-}
-
+	$msging->add_buddy ($add_user);
 
 //Anpassen der Ansicht
 function change_messaging_view() {
@@ -174,55 +164,6 @@ function change_messaging_view() {
 					?>
 					</td>
 				</tr>
-				<?
-				if (is_array($my_buddies)) {
-					//temp sort
-					foreach ($my_buddies as $key=>$val)
-						$tmp_buddies[$key]=array(group=>$val["group"], username=>$val["username"]);
-					sort ($tmp_buddies);
-				?>				
-				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Buddies:</b></blockquote>
-					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">
-				<?
-						echo "<table cellspacing=0 cellpadding=0 width=\"100%\" border=0 height=\"100%\" bgcolor=\"white\" border=0>\n";
-						echo "<tr><td class=\"".$cssSw->getClass() ."\" width=\"70%\">&nbsp; </td>";
-						for ($k=0; $k<8; $k++)
-							echo "<td class=\"gruppe".$k."\" width=\"1%\">&nbsp;</td>\n";
-						echo "<td class=\"".$cssSw->getClass() ."\" width=\"10%\" align=\"center\">&nbsp; </td>";
-						echo "</tr>";
-						$i=0;
-						foreach ($tmp_buddies as $a) {
-							$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname, username FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE username = '".$a["username"]."' ");
-							$db->next_record();
-
-							if ($i % 2)
-								$class="steelgraulight"; 
-							else
-								$class="steel1";
-							
-							echo "<tr><td class=\"$class\" width=\"70%\">";
-							echo "<input type=\"HIDDEN\" name=\"buddy_key[]\" value=\"".$db->f("username")."\"/> ";
-							echo "<a href=\"about.php?username=",$db->f("username"),"\">",$db->f("fullname"), "</a></td>\n";
-							for ($k=0; $k<8; $k++) {
-								echo "<td class=\"$class\" width=\"1%\"><input type=\"RADIO\" name=\"buddy_grp[$i]\" value=$k ";
-								if ($a["group"]==$k)
-									echo " checked";
-								echo " /></td>";
-								}
-							echo "<td class=\"$class\" width=\"10%\" align=\"center\"><a href=\"$PHP_SELF?view=Messaging&delete_user=",$db->f("username"),"\">&nbsp; <img src=\"pictures/trash.gif\" border=0></a></td>";
-							echo "</tr>\n";
-							$i++;
-							}
-						echo "</table>";
-					?>
-					</td>
-				</tr>
-				<?
-					}
-				?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>

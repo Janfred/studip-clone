@@ -51,7 +51,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	}
 
 if ($cmd=="add_user") {
-	$msging->add_buddy ($add_uname, 0);
+	$msging->add_buddy ($add_uname);
 }
 
 if ($cmd=="delete_user")

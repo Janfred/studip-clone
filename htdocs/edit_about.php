@@ -629,6 +629,7 @@ if ($cmd=="edit_leben")  {
 if ($cmd=="change_general") {
 	$my_about->db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='" . $my_about->auth_user["user_id"] ."'");
 	$_language = $forced_language;
+	$forum["jshover"]=$jshover; 
 }
 
 if ($my_about->logout_user)

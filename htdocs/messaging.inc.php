@@ -171,7 +171,7 @@ function delete_buddy ($username) {
 	}
 
 //Buddy zur Buddyliste hinzufuegen
-function add_buddy ($username, $group) {
+function add_buddy ($username) {
 		AddNewContact (get_userid($username));
 		AddBuddy($username);
 	}

@@ -32,7 +32,7 @@ function select_language($selected_language = "") {
 
 //Anpassen der Ansicht
 function change_general_view() {
-	global $PHP_SELF, $_language;
+	global $PHP_SELF, $_language, $auth, $forum;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;		
@@ -51,16 +51,29 @@ function change_general_view() {
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b><? echo _("Sprache:") ?></b></blockquote>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%"> 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%" colspan="2"> 
 					<?	    
 					select_language($_language);
 					?>
 					</td>
 				</tr>
+				
+				<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" width="20%"><blockquote><b><?print _("Java-Script Hovereffekte");?></b></td><td  width="20%" class="<? echo $cssSw->getClass() ?>">
+				<?
+				IF ($auth->auth["jscript"]) {
+					echo "<input type=CHECKBOX name='jshover' value=1";
+					IF($forum["jshover"]==1) 
+					    echo " checked";
+					echo ">";
+				} else
+					echo _("Sie müssen in Ihrem Browser Javascript aktivieren um dieses Feature nutzen zu können.");
+				?>
+				</td><td   width="60%" class="<? echo $cssSw->getClass() ?>"><br><font size="2"><?print _("Mit dieser Funktion können sie durch reines Überfahren bestimmer Icons im System (Forum, Addresbuch) den entsprechenden Beitrag lesen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch größere Informationsmengen arbeiten. Da jedoch die Ladezeit der Seite erheblich ansteigt, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens eine ISDN Verbindung haben.");?></font><br><br></td></tr>								
+				
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>	&nbsp; 				
+					<td class="<? echo $cssSw->getClass() ?>" width="80%" colspan="2"><br>	&nbsp; 				
 	<?
 	echo "<font size=\"-1\"><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=" . _("&Auml;nderungen &uuml;bernehmen") . "></font>&nbsp;"; 
 	echo "<input type=\"HIDDEN\" name=\"view\" value=\"allgemein\">\n";
