@@ -46,7 +46,8 @@ class ExternElementPersondetailsHeader extends ExternElement {
 				"picturetd_width", "picturetd_align", "picturetd_valign", "picturetd_bgcolor",
 				"picturetd_class", "picturetd_style", "contacttd_width", "contacttd_align",
 				"contacttd_valign", "contacttd_bgcolor", "contacttd_class", "contacttd_style",
-				"font_face", "font_size", "font_color", "font_class", "font_style");
+				"font_face", "font_size", "font_color", "font_class", "font_style", "img_align",
+				"img_border", "img_width", "img_height");
 	
 	/**
 	* Constructor
