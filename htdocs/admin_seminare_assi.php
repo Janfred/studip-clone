@@ -455,17 +455,21 @@ if ($form == 4) {
 
 		//Property Requests
 		if ($sem_create_data["resRequest"]->getCategoryId()) {
-			foreach ($sem_create_data["resRequest"]->getAvailableProperties() as $key=>$val) {
-				if ($val["system"] == 2) { //it's the property for the seat/room-size! 
-					if ($seats_are_admission_turnout)
-						$sem_create_data["resRequest"]->setPropertyState($key, $sem_create_data["sem_turnout"]);
-					elseif (!$send_room_type_x)
+			$availableProperties = $sem_create_data["resRequest"]->getAvailableProperties();
+			if (is_array($availableProperties)) {
+				foreach ($sem_create_data["resRequest"]->getAvailableProperties() as $key=>$val) {
+					if ($val["system"] == 2) { //it's the property for the seat/room-size! 
+						if ($seats_are_admission_turnout)
+							$sem_create_data["resRequest"]->setPropertyState($key, $sem_create_data["sem_turnout"]);
+						elseif (!$send_room_type_x)
+							$sem_create_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+					} else {
 						$sem_create_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
-				} else {
-					$sem_create_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+					}
 				}
 			}
 		}
+
 	}
 
 	if ($sem_create_data["term_art"]==0) {
@@ -926,33 +930,11 @@ if (($form == 4) && ($jump_next_x)) {
 		}
 	}
 	
-	//create overlap array
-	if (is_array($checkResult)) {
-		$overlaps_detected=FALSE;
-		foreach ($checkResult as $key=>$val)
-			if ($val["overlap_assigns"] == TRUE)
-					$overlaps_detected[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
+	//generate bad messages
+	if ($RESOURCES_ENABLE) {
+		$errormsg.=getFormattedResult($checkResult);
 	}
-	
-	//generate bad msg if overlaps exists
-	if ($overlaps_detected) {
-		$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
-		$i=0;
-		foreach ($overlaps_detected as $val) {
-			$resObj =& ResourceObject::Factory($val["resource_id"]);
-			$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
-			//show the first overlap
-			list(, $val2) = each($val["overlap_assigns"]);
-			$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-			if (sizeof($val) >1)
-				$errormsg.=", ... ("._("und weitere").")";
-			$errormsg.= ", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
-			$i++;
-		}
-		$errormsg.="</font>§";
-		unset($overlaps_detected);		
-	}
-	
+		
 	if (!$errormsg)
 		$level=5;
 	else
@@ -2512,7 +2494,7 @@ if ($level == 4) {
 							print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden, buchen Sie konkrete R&auml;ume oder stellen sie Raumw&uuml;nsche an die zentrale Raumverwaltung.")."<br><br>";
 						else
 							print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder stellen Sie Raumw&uuml;nsche an die zentrale Raumverwaltung.")."<br><br>";					
-					} elseif ($resList->roomsExist()
+					} elseif ($resList->roomsExist())
 						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder buchen Sie konkrete R&auml;ume.")."<br><br>";
 				} else
 					print _("Bitte geben Sie hier die, welche Angaben zu R&auml;umen gemacht werden.")."<br><br>";

@@ -417,53 +417,10 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 
 }  // end if ($kill_x)
 
-//If resource-management activ, update the assigned reources and do the overlap checks.... not so easy!
+//result from the resource management
 if (($RESOURCES_ENABLE) && ($resources_result)) {
-	$overlaps_detected=FALSE;
-	foreach ($resources_result as $key=>$val)
-		if ($val["overlap_assigns"] == TRUE)
-			$overlaps_detected[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
-
-	//create bad msg
-	if ($overlaps_detected) {
-		$result.="error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
-		$i=0;
-		foreach ($overlaps_detected as $val) {
-			$resObj =& ResourceObject::Factory($val["resource_id"]);
-			$result.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
-			//show the first overlap
-			list(, $val2) = each($val["overlap_assigns"]);
-			$result.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-			if (sizeof($val["overlap_assigns"]) >1)
-				$result.=", ... ("._("und weitere").")";
-			$result.=", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
-			$i++;
-		}
-		$result.="</font>§";
+	$result.=getFormattedResult($resources_result, "booth");
 	}
-	//create good msg
-	$i=0;
-	foreach ($resources_result as $key=>$val)
-		if (!is_array($val["overlap_assigns"]))
-			$rooms_id[$val["resource_id"]]=TRUE;
-			
-	if (is_array($rooms_id))
-		foreach ($rooms_id as $key=>$val) {
-			if ($key) {	
-				$resObj =& ResourceObject::Factory($key);			
-				if ($i)
-					$rooms_booked.=", ";
-				$rooms_booked.= $resObj->getFormattedLink();
-				$i++;
-			}
-		}
-		
-	if ($rooms_booked) 
-		if ($i == 1)
-			$result.= sprintf ("msg§"._("Die Belegung des Raumes %s wurde in die Ressourcenverwaltung &uuml;bernommen.")."§", $rooms_booked);
-		elseif ($i)
-			$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung &uuml;bernommen.")."§", $rooms_booked);
-}
 	
 
 //Bereich wurde ausgewaehlt (aus linksadmin) oder wir kommen aus dem Seminar Assistenten

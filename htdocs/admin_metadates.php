@@ -437,7 +437,6 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$overlaps_detected=FALSE;
 				foreach ($updateResult as $key=>$val)
 					if ($val["overlap_assigns"] == TRUE) {
-						$overlaps_detected[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
 						list($key2, $val2) = each($val["overlap_assigns"]);
 						$begin = $val2["begin"];
 						$end = $val2["end"];
@@ -462,46 +461,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 					$db->query($query);
 				}
 			}
-			//create bad msg
-			if ($overlaps_detected) {
-				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
-				$i=0;
-				foreach ($overlaps_detected as $val) {
-					$resObj =& ResourceObject::Factory($val["resource_id"]);
-					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
-					//show the first overlap
-					list(, $val2) = each($val["overlap_assigns"]);
-					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-					if (sizeof($val["overlap_assigns"]) >1)
-						$errormsg.=", ... ("._("und weitere").")";
-					$errormsg.= ", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
-					$i++;
-				}
-				$errormsg.="</font>§";
-			}
-			//create good msg
-			$i=0;
-			foreach ($updateResult as $key=>$val)
-				if (!is_array($val["overlap_assigns"]))
-					$rooms_id[$val["resource_id"]]=TRUE;
-			
-			if (is_array($rooms_id))
-				foreach ($rooms_id as $key=>$val) {
-					if ($key) {
-						$resObj =& ResourceObject::Factory($key);
-						if ($i)
-							$rooms_booked.=", ";
-						$rooms_booked.=$resObj->getFormattedLink();
-						$i++;
-					}
-				}
-
-			if ($rooms_booked)
-				if ($i == 1)
-					$errormsg.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen oder aktualisiert.")."§", $rooms_booked);
-				elseif ($i)
-					$errormsg.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen oder aktualisiert.")."§", $rooms_booked);
- 		}
+			//produce the messages from result
+			$errormsg.=getFormattedResult($updateResult, "booth");
+		}
  		
  		//reopen a request or send user to admin_room_requests, if no request exists
  		if (($RESOURCES_ENABLE) && ($RESOURCES_ALLOW_ROOM_REQUESTS) && ($change_metadates_open_request)) {
