@@ -919,8 +919,8 @@ elseif ($auth->auth["perm"]=="admin") {
 		<?
 	
 		while ($db->next_record()){
-		$my_sem[$db->f("Seminar_id")]=array('visitdate' => $db->f('visitdate'), institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),
-			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules"),$db->f("status")));
+		$my_sem[$db->f("Seminar_id")]=array('visitdate' => $db->f('visitdate'), 'institut'=>$db->f("Institut"),'teilnehmer'=>$db->f("teilnehmer"),'name'=>$db->f("Name"),'status'=>$db->f("status"),'chdate'=>$db->f("chdate"),
+			'start_time'=>$db->f("start_time"), 'binding'=>$db->f("admission_binding"),'visible' => $db->f('visible'), 'modules'=>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules"),$db->f("status")));
 		}
 		get_my_obj_values(&$my_sem);
 		$cssSw->enableHover();
@@ -937,8 +937,12 @@ elseif ($auth->auth["perm"]=="admin") {
 			echo htmlReady($values["name"]);
 			echo " (" . get_sem_name($values["start_time"]) .")";
 			if ($lastVisit <= $values["chdate"])
-				print ("</font>");
-			print ("</a></td>");
+				echo "</font>";
+			echo "</a>";
+			if ($values["visible"] == 0) {
+					echo "<font size=-1>&nbsp;"._("(versteckt)")."</font>";
+				}
+			echo "</td>";
 	
 			echo "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
 			// Dozenten
