@@ -87,14 +87,39 @@ if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS && $form <7) {
 //Registrieren der Sessionvariablen
 $sess->register("sem_create_data");
 $sess->register("links_admin_data");
+
+// Kopieren einer vorhandenen Veranstaltung
+//
 if (isset($cmd) && ($cmd=="do_copy")) {
-	$sql = "SELECT * FROM seminare WHERE Seminar_id = '".$cp_id."'";
-	if (!$db->query($sql)) {
-		echo "Fehler!!";
-		die;
+
+	$sem_create_data = ''; // Zur Sicherheit: erstmal leeren
+
+	// Einträge in generischen Datenfelder auslesen und zuweisen
+	$sql = "SELECT * FROM datafields_entries WHERE range_id = '$cp_id'";
+	$db->query($sql);
+	while ($db->next_record()) {
+		$s_d_fields[$db->f("datafield_id")] = $db->f("content");
 	}
+	$sem_create_data["sem_datafields"] = $s_d_fields;
+
+	// Beteiligte Einrichtungen finden und zuweisen
+	$sql = "SELECT institut_id FROM seminar_inst WHERE seminar_id = '$cp_id'";
+	$db->query($sql);
+	while ($db->next_record()) {
+		$sem_bet_inst[] = $db->f("institut_id");
+	}
+	$sem_create_data["sem_bet_inst"] = $sem_bet_inst;
+
+	// Veranstaltungsgrunddaten finden
+	$sql = "SELECT * FROM seminare WHERE Seminar_id = '$cp_id'";
+	$db->query($sql);
 	$db->next_record();
-	
+
+	// Keine Vorbesprechungstermine kopieren
+	$sem_create_data["sem_vor_end_termin"] = -1;
+	$sem_create_data["sem_vor_termin"] = -1;
+
+	// Termine
 	$serialized_metadata = $db->f("metadata_dates");
 	$data = unserialize($serialized_metadata);
 	$term_turnus = $data["turnus_data"];
@@ -103,7 +128,7 @@ if (isset($cmd) && ($cmd=="do_copy")) {
 	$sem_create_data["sem_start_termin"] = $data["start_termin"];	
 	$sem_create_data["turnus_count"] = count($term_turnus);
 	$sem_create_data["term_art"] = $data["art"];
-	
+
 	for ($i=0;$i<$sem_create_data["turnus_count"];$i++) {
 		$sem_create_data["term_turnus_start_stunde"][$i] = $term_turnus[$i]["start_stunde"];
 		$sem_create_data["term_turnus_start_minute"][$i] = $term_turnus[$i]["start_minute"];
@@ -113,6 +138,8 @@ if (isset($cmd) && ($cmd=="do_copy")) {
 		$sem_create_data["term_turnus_room"][$i] = $term_turnus[$i]["room"];
 		$sem_create_data["term_turnus_date"][$i] = $term_turnus[$i]["day"];
 	}
+
+	// Sonstiges
 	$sem_create_data["sem_id"] = $db->f("Seminar_id");
 	$sem_create_data["sem_nummer"] = $db->f("VeranstaltungsNummer"); 
 	$sem_create_data["sem_inst_id"] = $db->f("Institut_id"); 
@@ -145,7 +172,12 @@ if (isset($cmd) && ($cmd=="do_copy")) {
 	$sem_create_data["timestamp"] = time(); // wichtig, da sonst beim ersten Aufruf sofort sem_create_data resetted wird!
 	// eintragen der sem_tree_ids
 	$sem_create_data["sem_bereich"] = get_seminar_sem_tree_entries($cp_id);
+
+	// Dozenten und Tutoren eintragen
 	$sem_create_data["sem_doz"] = get_seminar_dozent($cp_id);
+	if (!$sem_create_data["sem_tut"] = get_seminar_tutor($cp_id)) {
+		unset($sem_create_data["sem_tut"]);
+	}	
 }
 
 //Assi-Modus an und gesetztes Object loeschen solange keine Veranstaltung angelegt
