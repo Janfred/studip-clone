@@ -81,15 +81,15 @@ class DbCalendarWeek{
 		return $serialized;
 	}
 	
-	function bindSeminarTermine(){
+	function bindSeminarEvents(){
 		if(func_num_args() == 1){
 			$arg = func_get_arg(0);
 			for($i = 0;$i < $this->type;$i++)
-				$ret = $this->wdays[$i]->bindSeminarTermine($arg);
+				$ret = $this->wdays[$i]->bindSeminarEvents($arg);
 		}
 		else
 			for($i = 0;$i < $this->type;$i++)
-				$ret = $this->wdays[$i]->bindSeminarTermine();
+				$ret = $this->wdays[$i]->bindSeminarEvents();
 		return $ret;
 	}
 	

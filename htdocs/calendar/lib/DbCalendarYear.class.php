@@ -44,7 +44,7 @@ class DbCalendarYear extends CalendarYear{
 		year_restore($this);
 	}
 	
-	function bindSeminarTermine(){
+	function bindSeminarEvents(){
 		// zeigt alle abonnierten Seminare an
 		if(func_num_args() == 0)
 			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
@@ -75,7 +75,7 @@ class DbCalendarYear extends CalendarYear{
 	}
 	
 	// public
-	function existTermin($tmstamp){
+	function existEvent($tmstamp){
 		$adate = mktime(12,0,0,date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp),0);
 		if(empty($this->apdays["$adate"]))
 			return FALSE;
@@ -84,7 +84,7 @@ class DbCalendarYear extends CalendarYear{
 	
 	// Anzahl von Terminen an einem bestimmten Tag
 	// public
-	function numberOfApps($tmstamp){
+	function numberOfEvents($tmstamp){
 		$adate = mktime(12,0,0,date("n", $tmstamp),date("j", $tmstamp),date("Y", $tmstamp),0);
 		return $this->apdays[$adate];
 	}

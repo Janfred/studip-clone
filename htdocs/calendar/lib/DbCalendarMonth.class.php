@@ -84,7 +84,7 @@ class DbCalendarMonth extends DbCalendarYear{
 	}
 	
 	// public
-	function nextTermin($tmstamp){
+	function nextEvent($tmstamp){
 		$adate = mktime(12,0,0,date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp),0);
 		if($this->apps["$adate"]){
 			if(!isset($this->arr_pntr["$adate"]))
@@ -102,7 +102,7 @@ class DbCalendarMonth extends DbCalendarYear{
 		$this->arr_pntr["$adate"] = $pos;
 	}
 
-	function bindSeminarTermine(){
+	function bindSeminarEvents(){
 		// 6 Tage zusätzlich (angezeigte Tage des vorigen und des nächsten Monats)
 		$end = $this->getEnd() + 518400;
 		$start = $this->getStart() - 518400;

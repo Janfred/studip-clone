@@ -383,7 +383,7 @@ if($cmd == "showday"){
 	
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
 	$aday = new DbCalendarDay($atime);
-	$aday->bindSeminarTermine($bind_seminare);
+	$aday->bindSeminarEvents($bind_seminare);
 	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"], TRUE, TRUE, FALSE, 70, 20, 3, 1);
 	
 	include($RELATIVE_PATH_CALENDAR . "/views/day.inc.php");
@@ -416,7 +416,7 @@ if($cmd == "showweek"){
 	
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
 	$aweek = new DbCalendarWeek($atime, $calendar_user_control_data["type_week"]);
-	$aweek->bindSeminarTermine($bind_seminare);
+	$aweek->bindSeminarEvents($bind_seminare);
 	$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data["step_week"]
 												, FALSE, $calendar_user_control_data["link_edit"]);
 	$rowspan = ceil(3600 / $calendar_user_control_data["step_week"]);
@@ -446,7 +446,7 @@ if($cmd == "showmonth"){
 	
 	$amonth = new DbCalendarMonth($atime);
 	$calendar_sess_forms_data["bind_seminare"] = "";
-	$amonth->bindSeminarTermine($bind_seminare);
+	$amonth->bindSeminarEvents($bind_seminare);
 	$amonth->sort();
 	
 	if($mod == "compact" || $mod == "nokw"){
@@ -471,7 +471,7 @@ if($cmd == "showyear"){
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
 	
 	$ayear = new DbCalendarYear($atime);
-	$ayear->bindSeminarTermine($bind_seminare);
+	$ayear->bindSeminarEvents($bind_seminare);
 	
 	include($RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
 

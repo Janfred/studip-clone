@@ -46,7 +46,8 @@ class CalendarEvent{
 	var $mkd = -1;    // Erstellungsdatum (int) wird ueberschrieben, falls Termin aus DB geholt wird
 	
 	// Konstruktor
-	function CalendarEvent($start = "", $end = "", $txt = "", $exp = "", $cat = "", $prio = 1, $loc = "", $id = "", $type = -2){
+	function CalendarEvent($start = "", $end = "", $title = "", $expire = "", $category = "",
+												 $priority = 1, $location = "", $id = "", $type = -2){
 		global $user, $PERS_TERMIN_KAT, $TERMIN_TYP;
 		$this->user_id = $user->id;
 		if(func_num_args() == 10){
@@ -67,12 +68,12 @@ class CalendarEvent{
 				$id = md5(uniqid("Studip_Calendar"));
 			$this->id = $id;
 			$this->start = $start;
-			$this->setTitle($txt);
+			$this->setTitle($title);
 			$this->setEnd($end);
-			$this->setExpire($exp);
+			$this->setExpire($expire);
 			$this->setRepeat("SINGLE");
-			$this->prio = $prio;
-			$this->setLocation($loc);
+			$this->prio = $priority;
+			$this->setLocation($location);
 			if(empty($type))
 				// privater Termin als Standard
 				$type = -2; 
@@ -80,7 +81,7 @@ class CalendarEvent{
 			
 			// handelt es sich um einen Veranstaltungs-Termin ist die Kategorie gleich dem Typ
 			if($this->type == -1 || $this->type == -2)
-				$this->cat = $cat;
+				$this->cat = $category;
 			else if($TERMIN_TYP[$this->type]["ebene"] == "sem")
 				$this->cat = $this->type;
 				
@@ -199,8 +200,8 @@ class CalendarEvent{
 	}
 	
 	// public
-	function setLocation($loc){
-		$this->loc = $loc;
+	function setLocation($location){
+		$this->loc = $location;
 		$this->chng_flag = TRUE;
 	}
 	
@@ -222,9 +223,9 @@ class CalendarEvent{
 		return $this->prio;
 	}
 	
-	function setPriority($prio){
-		if($prio < 6 && $prio > 0){
-			$this->prio = $prio;
+	function setPriority($priority){
+		if($priority < 6 && $priority > 0){
+			$this->prio = $priority;
 			$this->chng_flag = TRUE;
 		}
 	}
@@ -241,9 +242,9 @@ class CalendarEvent{
 	}
 	
 	// public
-	function setTitle($txt = ""){
-		if($txt)
-			$this->txt = $txt;
+	function setTitle($title = ""){
+		if($title)
+			$this->txt = $title;
 		else
 			$this->txt = "Kein Titel";
 		$this->chng_flag = TRUE;
@@ -437,8 +438,8 @@ class CalendarEvent{
 	}
 	
 	// public
-	function setCategory($cat){
-		$this->cat = $cat;
+	function setCategory($category){
+		$this->cat = $category;
 		$this->chng_flag = TRUE;
 	}
 	

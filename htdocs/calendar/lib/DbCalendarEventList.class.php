@@ -75,16 +75,16 @@ class AppList{
 	}
 	
 	// public
-	function numberOfApps(){
+	function numberOfEvents(){
 		return sizeof($this->apps);
 	}
 	
-	function existTermin(){
+	function existEvent(){
 		return sizeof($this->apps) > 0 ? TRUE : FALSE;
 	}
 	
 	// public
-	function nextTermin(){
+	function nextEvent(){
 		if(list(,$ret) = each($this->apps));
 			return $ret;
 		return FALSE;

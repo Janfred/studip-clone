@@ -38,7 +38,7 @@
 					else
 						echo "<td" . $weekend . ">";
 					
-					if($apps = $ayear->numberOfApps($aday))
+					if($apps = $ayear->numberOfEvents($aday))
 						echo '<table width="100%" cellspacing=0 cellpadding=0><tr><td' . $weekend . '>';
 						
 					// noch wird nicht nach Wichtigkeit bestimmter Feiertage unterschieden

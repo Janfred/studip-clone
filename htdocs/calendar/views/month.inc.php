@@ -68,7 +68,7 @@
 				if($hday["name"] != "")
 					echo '<br><font class="inday">' . $hday["name"] . '</font>';
 				$count = 0;
-				while(($aterm = $amonth->nextTermin($i)) && $count < $max_apps){
+				while(($aterm = $amonth->nextEvent($i)) && $count < $max_apps){
 					$html_txt = fit_title($aterm->getTitle(),1,1,15);
 					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitle())."',NOCLOSE,CSSOFF";
 					echo '<br><a class="inday" href="'.$PHP_SELF.'?cmd=edit&termin_id='.$aterm->getId().'" onmouseover="return overlib('.$jscript_txt
@@ -106,7 +106,7 @@
 				}
 				
 				$count = 0;
-				while(($aterm = $amonth->nextTermin($i)) && $count < $max_apps){
+				while(($aterm = $amonth->nextEvent($i)) && $count < $max_apps){
 					$html_txt = fit_title($aterm->getTitle(),1,1,15);
 					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitle()).'&nbsp;&nbsp;&nbsp;&nbsp;'.strftime("%H:%M-",$aterm->getStart()).strftime("%H:%M",$aterm->getEnd())."',NOCLOSE,CSSOFF";
 					echo '<br><a class="inday" href="'.$PHP_SELF.'?cmd=edit&termin_id='.$aterm->getId().'&atime='.$i.'" onmouseover="return overlib('.$jscript_txt

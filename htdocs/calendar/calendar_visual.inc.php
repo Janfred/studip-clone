@@ -25,8 +25,8 @@ function monthUpDown(&$month_obj, $i, $step, $max_step){
 	if($atime == $i){
 	$spacer = TRUE;
 	$up = FALSE;
-	$a = $month_obj->numberOfApps($i) - $step - $max_step;
-	if($month_obj->numberOfApps($i) > $max_step && $step >= $max_step)
+	$a = $month_obj->numberOfEvents($i) - $step - $max_step;
+	if($month_obj->numberOfEvents($i) > $max_step && $step >= $max_step)
 		$up = TRUE;
 	if($a + $max_step > $max_step){
 		if($up)
@@ -43,9 +43,9 @@ function monthUpDown(&$month_obj, $i, $step, $max_step){
 		$month_obj->setPointer($atime, $step);
 	}
 	}
-	else if($month_obj->numberOfApps($i) > $max_step){
+	else if($month_obj->numberOfEvents($i) > $max_step){
 		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-		echo '<a href="'.$PHP_SELF.'?cmd=showmonth&atime='.$i.'&step='.($max_step).'"><img src="./pictures/forumrotrunt.gif" alt="noch '.($month_obj->numberOfApps($i) - $max_step).' Termine danach" border="0"></a>';
+		echo '<a href="'.$PHP_SELF.'?cmd=showmonth&atime='.$i.'&step='.($max_step).'"><img src="./pictures/forumrotrunt.gif" alt="noch '.($month_obj->numberOfEvents($i) - $max_step).' Termine danach" border="0"></a>';
 	}
 }
 

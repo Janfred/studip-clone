@@ -31,7 +31,7 @@ require_once($RELATIVE_PATH_CALENDAR . "/lib/driver/$CALENDAR_DRIVER/day_driver.
 class DbCalendarDay extends CalendarDay{
 
 	var $app;         	// Termine (Object[])
-	var $app_del;       // Termine, die gelöscht werden (Object[])
+	var $app_del;       // Termine, die geloescht werden (Object[])
 	var $arr_pntr;    	// "private" function getTermin
 	var $user_id;       // User-ID aus PphLib (String)
 	
@@ -48,7 +48,7 @@ class DbCalendarDay extends CalendarDay{
 	// Anzahl von Terminen innerhalb eines bestimmten Zeitabschnitts
 	// default one day
 	// public
-	function numberOfApps($start = 0, $end = 86400){
+	function numberOfEvents($start = 0, $end = 86400){
 		$i = 0;
 		$count = 0;
 		while($aterm = $this->app[$i]){
@@ -71,18 +71,18 @@ class DbCalendarDay extends CalendarDay{
 		return ($count);
 	}
 	
-	// Termin hinzufügen
+	// Termin hinzufuegen
 	// Der Termin wird gleich richtig einsortiert
 	// public
-	function addTermin($term){
+	function addEvent($term){
 		$this->app[] = $term;
 		$this->sort();
 	//	return TRUE;
 	}
 	
-	// Termin löschen
+	// Termin loeschen
 	// public
-	function delTermin($id){
+	function delEvent($id){
 		for($i = 0;$i < sizeof($this->app);$i++)
 			if($id != $this->app[$i]->getId())
 				$app_bck[] = $this->app[$i];
@@ -96,9 +96,9 @@ class DbCalendarDay extends CalendarDay{
 		return TRUE;
 	}
 	
-	// ersetzt vorhandenen Termin mit übergebenen Termin, wenn ID gleich
+	// ersetzt vorhandenen Termin mit uebergebenen Termin, wenn ID gleich
 	// public
-	function replaceTermin($term){
+	function replaceEvent($term){
 		for($i = 0;$i < sizeof($this->app);$i++)
 			if($this->app[$i]->getId() == $term->getId()){
 				$this->app[$i] = $term;
@@ -111,7 +111,7 @@ class DbCalendarDay extends CalendarDay{
 	// Abrufen der Termine innerhalb eines best. Zeitraums
 	// default 1 hour
 	// public
-	function nextTermin($start = -1, $step = 3600){
+	function nextEvent($start = -1, $step = 3600){
 		if($start < 0)
 			$start = $this->start;
 		while($this->arr_pntr < sizeof($this->app)){
@@ -132,7 +132,7 @@ class DbCalendarDay extends CalendarDay{
 	}
 	
 	// public
-	function existTermin(){
+	function existEvent(){
 		if(sizeof($this->app) > 0)
 			return TRUE;
 		return FALSE;
@@ -140,7 +140,7 @@ class DbCalendarDay extends CalendarDay{
 
 	// Wiederholungstermine, die in der Vergangenheit angelegt wurden belegen in
 	// app[] die ersten Positionen und werden hier in den "Tagesablauf" einsortiert
-	// Termine, die sich über die Tagesgrenzen erstrecken, muessen anhand ihrer
+	// Termine, die sich ueber die Tagesgrenzen erstrecken, muessen anhand ihrer
 	// "absoluten" Anfangszeit einsortiert werden.
 	// private
 	function sort(){
@@ -155,7 +155,7 @@ class DbCalendarDay extends CalendarDay{
 	}
 	
 	// public
-	function bindSeminarTermine(){
+	function bindSeminarEvents(){
 		if(func_num_args() == 0)
 			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user s ON Seminar_id=range_id WHERE "
 			       . "user_id = '%s' AND date BETWEEN %s AND %s"
