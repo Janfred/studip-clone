@@ -77,11 +77,13 @@ class SemBrowse {
 			$this->sem_number = false;
 		}
 		
+		$sem_status = (is_array($this->sem_browse_data['sem_status'])) ? $this->sem_browse_data['sem_status'] : false;
+
 		if ($this->sem_browse_data['level'] == "vv"){
 			if (!$this->sem_browse_data['start_item_id']){
 				$this->sem_browse_data['start_item_id'] = "root";
 			}
-			$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"], $this->sem_number, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
+			$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"], $this->sem_number, $sem_status, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
 			$this->sem_browse_data['cmd'] = "qs";
 			if ($_REQUEST['cmd'] != "show_sem_range" && $level_change && !$this->search_obj->search_button_clicked ){
 				$this->get_sem_range($this->sem_browse_data["start_item_id"], false);
@@ -95,7 +97,6 @@ class SemBrowse {
 			if (!$this->sem_browse_data['start_item_id']){
 				$this->sem_browse_data['start_item_id'] = "root";
 			}
-			$sem_status = (is_array($this->sem_browse_data['sem_status'])) ? $this->sem_browse_data['sem_status'] : false;
 			$this->range_tree = new StudipSemRangeTreeViewSimple($sem_browse_data["start_item_id"],$this->sem_number,$sem_status, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
 			$this->sem_browse_data['cmd'] = "qs";
 			if ($_REQUEST['cmd'] != "show_sem_range_tree" && $level_change && !$this->search_obj->search_button_clicked ){
@@ -150,9 +151,24 @@ class SemBrowse {
 		
 	}
 	
+	function show_class(){
+		if ($this->sem_browse_data['show_class'] == 'all'){
+			return true;
+		}
+		if (!is_array($this->classes_show_class)){
+			$this->classes_show_class = array();
+			foreach ($GLOBALS['SEM_CLASS'] as $sem_class_key => $sem_class){
+				if ($sem_class['bereiche']){
+					$this->classes_show_class[] = $sem_class_key;
+				}
+			}
+		}
+		return in_array($this->sem_browse_data['show_class'], $this->classes_show_class);
+	}
+	
 	function get_sem_class(){
 		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE "
-							. ((!is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')) ? "seminare.visible=1 AND" : "" ) 
+							. (!(is_object($GLOBALS['perm'] && $GLOBALS['perm']->have_perm('root'))) ? "seminare.visible=1 AND" : "" ) 
 							. " seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
 		$snap = new DbSnapshot($db);
 		$sem_ids = $snap->getRows("Seminar_id");
@@ -255,7 +271,7 @@ class SemBrowse {
 		echo "<td class=\"steel1\" align=\"left\" width=\"35%\">";
 		echo $this->search_obj->getSearchField("combination",array('style' => 'width:*;font-size:10pt;'));
 		echo "</td></tr>\n";
-		if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class'] == "all") {
+		if ($this->show_class()) {
 			echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">" . _("Bereich:") . " </td>";
 			echo "<td class=\"steel1\" align=\"left\" width\"35%\">";
 			echo $this->search_obj->getSearchField("scope");
@@ -290,12 +306,12 @@ class SemBrowse {
 			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\">";
 			if (($this->show_result && count($this->sem_browse_data['search_result'])) || $this->sem_browse_data['cmd'] == "xts") {
 				printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
-				if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
+				if ($this->show_class()){
 					printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&sset=0\">","</a>");
 				}
 			} else {
 				printf ("<table align=\"center\" cellspacing=\"10\"><tr><td nowrap align=\"center\"><a href=\"%s?level=ev&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"./pictures/institute.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche in Einrichtungen"), $_language_path, tooltip(_("Suche im Einrichtungsverzeichnis")));
-				if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
+				if ($this->show_class()){
 					printf ("<td nowrap align=\"center\"><a href=\"%s?level=vv&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"./pictures/kommentar.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche im Vorlesungsverzeichnis"), $_language_path,tooltip(_("Suche im Vorlesungsverzeichnis")));
 				}
 				printf ("</tr></table>");
