@@ -46,6 +46,8 @@ class StudipLitListViewAdmin extends TreeView{
 	
 	var $clip_board;
 	
+	var $format_info;
+	
 	
 	/**
 	* constructor
@@ -55,6 +57,31 @@ class StudipLitListViewAdmin extends TreeView{
 	*/
 	function StudipLitListViewAdmin($range_id){
 		$this->use_aging = true;
+		$this->format_info = _("Felder müssen in geschweiften Klammern (z.B. {dc_title}) angegeben werden.\n")
+							. _("Felder und Text, der zwischen senkrechten Strichen steht, wird nur angezeigt, wenn das angegebene Feld nicht leer ist. (z.B. |Anmerkung: {note}|)\n")
+							. _("Folgende Felder können angezeigt werden:\n")
+							. _("Titel - dc_title\n")
+							. _("Verfasser oder Urheber - dc_creator\n")
+							. _("Thema und Stichwörter - dc_subject\n")
+							. _("Inhaltliche Beschreibung - dc_description\n")
+							. _("Verleger, Herausgeber - dc_publisher\n")
+							. _("Weitere beteiligten Personen und Körperschaften - dc_contributor\n") 
+							. _("Datum - dc_date\n") 
+							. _("Ressourcenart - dc_type\n") 
+							. _("Format - dc_format\n")
+							. _("Ressourcen-Identifikation - dc_identifier\n")
+							. _("Quelle - dc_source\n")
+							. _("Sprache - dc_language\n")
+							. _("Beziehung zu anderen Ressourcen - dc_relation\n")
+							. _("Räumliche und zeitliche Maßangaben - dc_coverage\n")
+							. _("Rechtliche Bedingungen - dc_rights\n") 
+							. _("Zugriffsnummer - accession_number\n")
+							. _("Jahr - year\n")
+							. _("alle Autoren - authors\n")
+							. _("Herausgeber mit Jahr - published\n")
+							. _("Anmerkung - note\n")
+							. _("link in externes Bibliothekssystem - external_link\n");
+
 		parent::TreeView("StudipLitList", $range_id); //calling the baseclass constructor 
 		$this->clip_board =& StudipLitClipBoard::GetInstance();
 	}
@@ -459,7 +486,9 @@ class StudipLitListViewAdmin extends TreeView{
 			
 			$edit_name = "format";
 			$rows = 2;
-			$content .= "\n<tr><td class=\"steelgraulight\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\" ><b>". _("Formatierung der Liste bearbeiten:") . "</b></td></tr>";
+			$content .= "\n<tr><td class=\"steelgraulight\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\" ><b>". _("Formatierung der Liste bearbeiten:") . "</b>"
+					. "&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\""
+					. tooltip($this->format_info, TRUE, TRUE) . " align=\"absmiddle\"></td></tr>";
 			$content .= "<tr><td class=\"steel1\" align=\"center\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\"><textarea name=\"edit_{$edit_name}\" style=\"width:100%\" rows=\"$rows\">" . $this->tree->tree_data[$this->edit_item_id][$edit_name]
 				. "</textarea></td></tr>";
 			$content .= "\n<tr><td class=\"steelgraulight\" style=\"font-size:10pt;border-bottom: 1px solid black;;border-left: 1px solid black;border-right: 1px solid black;\" >
