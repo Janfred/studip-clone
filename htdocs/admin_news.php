@@ -488,11 +488,11 @@ class studip_news {
 		$output="";
 		$output[0]="\n<tr><th width=\"90%\" align=\"left\">";
 		switch ($type) {
-			case "sem" : $output[0].="Veranstaltungen";break;
-			case "inst" : $output[0].= "Einrichtungen"; $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id!=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
-			case "fak" : $output[0].= "Fakult&auml;ten"; $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
+			case "sem" : $output[0].= _("Veranstaltungen");break;
+			case "inst" : $output[0].= _("Einrichtungen"); $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id!=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
+			case "fak" : $output[0].= _("Fakult&auml;ten"); $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
 		}
-		$output[0].= "</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
+		$output[0].= "</th><th align=\"center\" width=\"10%\">" . _("Anzeigen ?") . "</th></tr>";
 		$not_in="";
 		reset($this->range_detail);
 		while (list ($range,$details) = each ($this->range_detail)) {
@@ -503,7 +503,7 @@ class studip_news {
 				if ($this->news_perm[$range]["perm"] OR $auth->auth["perm"]=="root") {
 					$output[1].="<input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\" checked></td></tr>";
 				} else {
-					$output[1].="Ja<input type=\"HIDDEN\" name=\"add_range[]\" value=\"$range\"></td></tr>";
+					$output[1].=_("Ja") . "<input type=\"HIDDEN\" name=\"add_range[]\" value=\"$range\"></td></tr>";
 				}
 				if ($not_in)
 					$not_in=$not_in.",";
