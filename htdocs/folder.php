@@ -259,7 +259,7 @@ if ($close) {
 		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"]);
 		while ($db->next_record()) {
 			//und einzelne Termine	
-			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE);
+			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"]);
 			}
 		}
 	
@@ -267,7 +267,7 @@ if ($close) {
 	else {
 		?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><?
 		//Seminar...
-		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE);		
+		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE, $folder_system_data["refresh"]);		
 		while ($db->next_record()) {
 			//und einzelne Termine	
 			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE);
