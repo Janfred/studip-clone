@@ -303,7 +303,7 @@ function print_snd_message($psm) {
 	}
 
 	$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($psm['message_subject']))."</a></a>";
-	$message_hovericon['titel'] = htmlready(stripslashes($psm['message_subject']));
+	$message_hovericon['titel'] = quotes_decode(stripslashes($psm['message_subject']));
 
 	// (hover) icon 
 	$message_hovericon['openclose'] = $open;
@@ -388,7 +388,7 @@ function print_rec_message($prm) {
 	$zusatz .= "</font>";
 
 	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($prm['message_subject']))."</a></a>";
-	$message_hovericon['titel'] = htmlready(stripslashes($prm['message_subject']));
+	$message_hovericon['titel'] = quotes_decode(stripslashes($prm['message_subject']));
 	
 	$content = quotes_decode(formatReady($prm['message']));
 
