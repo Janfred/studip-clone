@@ -108,7 +108,7 @@ if ($topic_id AND !$update) {
 }
 
 //Titel-Zeile
-if (!$forumsend=="anpassen") {
+if ($forumsend <> "anpassen") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
 	echo "<tr><td class=\"topic\" width=\"95%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"5%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp; </td></tr>\n";
