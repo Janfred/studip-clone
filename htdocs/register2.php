@@ -38,19 +38,19 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 ?>
 <table width ="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
-	<td class="topic"><b>&nbsp;Herzlich Willkommen</b>
+	<td class="topic"><b>&nbsp;<?=_("Herzlich Willkommen")?></b>
 	</td>
 </tr>
 
 <tr>
 	<td class="blank">&nbsp;
 		<blockquote>
-		Ihre Registrierung wurde erfolgreich vorgenommen.<br><br>
-		Das System wird Ihnen zur Best&auml;tigung eine Email zusenden.<br>
-		Bitte rufen Sie die Email ab und folgen Sie den Anweisungen, um Schreibrechte im System zu bekommen.<br>
+		<?=_("Ihre Registrierung wurde erfolgreich vorgenommen.")?><br><br>
+		<?=_("Das System wird Ihnen zur Best&auml;tigung eine E-Mail zusenden.")?><br>
+		<?=_("Bitte rufen Sie die E-Mail ab und folgen Sie den Anweisungen, um Schreibrechte im System zu bekommen.")?><br>
 		<br>
-		<a href="index.php">Hier</a> geht es wieder zur Startseite.<br>
-		<br>
+		<? printf(_("%sHier%s geht es wieder zur Startseite."), "<a href=\"index.php\">", "</a>");?>
+		<br><br>
 		</blockquote>
 	</td>
 </tr>	

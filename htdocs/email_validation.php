@@ -42,14 +42,14 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;Best&auml;tigung der Email-Adresse</b></td>
+	<td class="topic" colspan=2><b>&nbsp;<?=_("Best&auml;tigung der Email-Adresse")?></b></td>
 </tr>
 <tr><td class="blank" colspan=2 width="100%">&nbsp;</td></tr>
 
 <?
 	if ($perm->have_perm("autor")) {
-		my_error("<b>Sie haben schon den Status \"".$auth->auth["perm"]."\" im System. Eine Aktivierung des Accounts ist nicht mehr n&ouml;tig, um Schreibrechte zu bekommen</b>\n");
-		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><a href=\"index.php\">&nbsp;zur&uuml;ck zur Startseite<br><br>\n</a>";
+		my_error(sprintf(_("Sie haben schon den Status <b>%s</b> im System. Eine Aktivierung des Accounts ist nicht mehr n&ouml;tig, um Schreibrechte zu bekommen"), $auth->auth["perm"]) . "\n");
+		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><a href=\"index.php\">&nbsp;" . _("zur&uuml;ck zur Startseite") . "</a><br><br>\n";
 		print "</td></tr></table>";
 		page_close();
 		die;
@@ -58,8 +58,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 //	So, wer bis hier hin gekommen ist gehoert zur Zielgruppe...
 
 	if (!isset($secret) || $secret == "") {   // Volltrottel (oder abuse)
-		my_error("<b>Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>\nin die Zeile \"Location\" oder \"URL\" Ihres Browsers kopieren.</b>\n");
-		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
+		my_error(_("Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>in die Zeile <b>Location</b> oder <b>URL</b> Ihres Browsers kopieren.") . "\n");
+		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;" . _("Versuchen Sie es noch einmal!") . "</b><br><br>\n";
 		print "</td></tr></table>";
 		page_close();
 		die;
@@ -69,10 +69,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	// hier wird noch mal berechnet, welches secret in der Bestaetigungsmail uebergeben wurde
 
 	if ($secret != $hash) {   // abuse (oder Volltrottel)
-		my_error("<b>Der &uuml;bergebene \"Secret-Code\" ist nicht korrekt.</b>\n");
-		my_info("Sie m&uuml;ssen unter dem Benutzernamen eingeloggt sein,<br>\nf&uuml;r den Sie die Best&auml;tigungsmail erhalten haben.\n");
-		my_info("Und Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>\nin die Zeile \"Location\" oder \"URL\" Ihres Browsers kopieren.\n");
-		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;Versuchen Sie es noch einmal!</b><br><br>\n";
+		my_error(_("Der &uuml;bergebene <b>Secret-Code</b> ist nicht korrekt.") . "\n");
+		my_info(_("Sie m&uuml;ssen unter dem Benutzernamen eingeloggt sein,<br>f&uuml;r den Sie die Best&auml;tigungsmail erhalten haben.") . "\n");
+		my_info(_("Und Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>in die Zeile <b>Location</b> oder <b>URL</b> Ihres Browsers kopieren.") . "\n");
+		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;" . _("Versuchen Sie es noch einmal!") . "</b><br><br>\n";
 		print "</td></tr></table>";
     // Mail an abuse
 		$smtp=new studip_smtp_class;
@@ -98,8 +98,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	     break;
 	   }
 
-		my_msg("<b>Ihr Status wurde erfolgreich auf \"autor\" gesetzt.<br>\nDamit d&uuml;rfen Sie in den meisten Veranstaltungen schreiben,<br>\nf&uuml;r die Sie sich anmelden.</b>\n");
-		my_info("Einige Veranstaltungen erfordern allerdings bei der Anmeldung<br>\ndie Eingabe eines Passwortes.<br>Dieses Passwort erfahren Sie von dem Dozenten der Veranstaltung.\n");
+		my_msg(_("Ihr Status wurde erfolgreich auf <b>autor</b> gesetzt.<br>Damit d&uuml;rfen Sie in den meisten Veranstaltungen schreiben,<br>f&uuml;r die Sie sich anmelden.") . "\n");
+		my_info(_("Einige Veranstaltungen erfordern allerdings bei der Anmeldung<br>die Eingabe eines Passwortes.<br>Dieses Passwort erfahren Sie von dem Dozenten der Veranstaltung.") . "\n");
 
 		// Auto-Eintrag in Boards
 		if (is_array($AUTO_INSERT_SEM)){
@@ -114,18 +114,18 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 							$db2->next_record();
 							if ($db2->f("status") == "user") { // wir können ihn hochstufen
 								$db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$a' AND user_id='$user->id'");	
-								my_msg("Ihnen wurden Schreibrechte in Veranstaltung \"" . $db->f("Name") . "\" erteilt.\n");
+								my_msg(sprintf(_("Ihnen wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt."), $db->f("Name")) . "\n");
 							}
 						} else {  // Benutzer ist noch nicht eingetragen
 							$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$user->id', 'autor', '0')");
-							my_msg("Sie wurden automatisch in die Veranstaltung \"" . $db->f("Name") . "\" eingetragen.\n");
+							my_msg(sprintf(_("Sie wurden automatisch in die Veranstaltung <b>%s</b> eingetragen."), $db->f("Name")) . "\n");
 						}
 					}
 				}
 			}
 		}
 		$auth->logout();	// einen Logout durchführen, um erneuten Login zu erzwingen
-		my_info("Die Status-&Auml;nderung wird erst nach einem erneuten <a href=\"index.php?again=yes\"><b>Login</b></a> wirksam!<br>\nDeshalb wurden Sie jetzt automatisch ausgeloggt.\n");
+		my_info(sprintf(_("Die Status-&Auml;nderung wird erst nach einem erneuten %sLogin%s wirksam!<br>Deshalb wurden Sie jetzt automatisch ausgeloggt."), "<a href=\"index.php?again=yes\"><b>", "</b></a>") . "\n");
 		print "";
 	} else {
 		; // hier sollten wir nie hinkommen
