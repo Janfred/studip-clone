@@ -131,14 +131,13 @@ while ( is_array($HTTP_POST_VARS)
 		$Fakultaet = $db2->f("Fakultaets_id");
 	}
     ## Update Institut information.
-    $query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type' where Institut_id = '$i_id'";
+    $query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type' ,chdate=".time()." where Institut_id = '$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
       	$msg="error§<b>Datenbankoperation gescheitert: $query</b>";
       	break;
      	}
-    else 
-    	$db->query("UPDATE Institute SET chdate='".time()."'");     
+    
     
     $msg="msg§<b>Die Daten der Einrichtung \"".htmlReady(stripslashes($Name))."\" wurden ver&auml;ndert.</b>";
   break;
