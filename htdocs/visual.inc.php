@@ -253,7 +253,7 @@ function latex($text) {
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH;
 
 	if ($LATEXRENDER_ENABLE) {
-	    require_once($ABSOLUTE_PATH_STUDIP."/class.latexrender.php");
+	    require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
     	$latex = new LatexRender($ABSOLUTE_PATH_STUDIP."/".$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP."/".$TEXCACHE_PATH);
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
