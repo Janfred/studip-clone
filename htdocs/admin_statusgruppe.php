@@ -233,10 +233,10 @@ function PrintAktualMembers ($range_id)
 	$bereitszugeordnet = GetAllSelected($range_id);
 	if (get_object_type($range_id) == "sem") {
 		echo "<font size=\"-1\">&nbsp; TeilnehmerInnen der Veranstaltung</font><br>";
-		$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
+		$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	} else {
 		echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Einrichtung</font><br>";
-		$query = "SELECT user_inst.user_id, username, Nachname, Vorname, inst_perms AS perms FROM auth_user_md5 LEFT JOIN user_inst USING(user_id)  WHERE Institut_id = '$range_id' AND inst_perms != 'user' AND inst_perms != 'admin' ORDER BY Nachname ASC";
+		$query = "SELECT user_inst.user_id, username, Nachname, Vorname, inst_perms AS perms FROM user_inst LEFT JOIN auth_user_md5 USING(user_id)  WHERE Institut_id = '$range_id' AND inst_perms != 'user' AND inst_perms != 'admin' ORDER BY Nachname ASC";
 	}
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
