@@ -310,6 +310,22 @@ function form($refresh = FALSE) {
 	return $print;
 	}
 
+//kill the forbidden characters, shorten filename to 31 Characters
+function prepareFilename($filename) {
+	$bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?");
+	$replacements = array ("", "", "", "'", "", "", "", "", "", "");
+	
+	$filename=str_replace($bad_characters, $replacements, $filename);
+	
+	if ($filename{0} == ".")
+		$filename = substr($filename, 1, strlen($filename));
+	
+	
+	$ext = getFileExtension ($filename);
+	$filename = substr(substr($filename, 0, strrpos($filename,$ext)-1), 0, (30 - strlen($ext))).".".$ext;
+	return ($filename);
+}
+
 //Diese Funktion dient zur Abfrage der Dateierweiterung
 function getFileExtension($str) {
 	$i = strrpos($str,".");

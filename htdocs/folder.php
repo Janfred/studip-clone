@@ -31,10 +31,16 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 $sess->register("folder_system_data");
+$db=new DB_Seminar;
+$db2=new DB_Seminar;
 
 if ($folderzip) {
 	$zip_file_id = createFolderZip($folderzip);
-	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=Ordner.zip");
+	$query = sprintf ("SELECT name FROM folder WHERE folder_id = '%s' ", $folderzip);
+	$db->query($query);
+	$db->next_record();
+	$zip_name = prepareFilename(_("Dateiordner ").$db->f("name"));
+	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name.zip");
 	page_close();
 	die;
 }
@@ -42,7 +48,8 @@ if ($folderzip) {
 if ($download_selected_x) {
 	if (is_array($download_ids)) {
 		$zip_file_id = createSelectedZip($download_ids);
-		header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=SelectedOrdner.zip");
+		$zip_name = prepareFilename($SessSemName[0]." - "._("Dokumente"));
+		header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name");
 		page_close();
 		die;
 	}
@@ -74,8 +81,6 @@ checkObjectModule("documents");
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
 
 //Wenn nicht Rechte und Operation uebermittelt: Ist das mein Dokument?
 if ((!$rechte) && strpos($open, "_")) {
