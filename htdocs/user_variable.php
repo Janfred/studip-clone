@@ -52,7 +52,7 @@ while ($db->next_record()) {
 			$owner_id = $db->f("sid");
 			$hash_secret = "kdfhfdfdfgz";
 			$contact_id=md5(uniqid($hash_secret));
-			$query = "INSERT INTO contact (contact_id,owner_id,user_id) values ('$contact_id', '$owner_id', '$user_id')";
+			$query = "INSERT INTO contact (contact_id,owner_id,user_id,buddy) values ('$contact_id', '$owner_id', '$user_id', '1')";
 			$db2=new DB_Seminar;
 			$db2->query ($query);
 			IF  ($db2->affected_rows() > 0) {
