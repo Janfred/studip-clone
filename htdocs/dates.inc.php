@@ -55,7 +55,6 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 		if (func_num_args()==6)
 			$return_mode=func_get_arg(1);
 	}
-
 	//Regelmaessige Termine. also Turnus aus Metadaten
 	if ($term_data["art"]==0)
 		{
@@ -115,14 +114,18 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 			}
 		}
 	//Unregelmaessige Termine, also konkrete Termine aus Termintabelle
-	else
-		{
+	else {
 		$db2->query("SELECT date, end_time FROM termine WHERE date_typ='1' AND range_id='$seminar_id' ORDER BY date");
 		$db2->next_record();
-		if ($db->affected_rows())
+		if ($db->affected_rows()) {
 			$return_string=date ("d.m.Y, G:i", $db2->f("date"))." - ".date ("G:i",  $db2->f("end_time"));
 			$return_int=$db2->f("date");
+		} else {
+			$return_string.="nicht angegeben";
+			$return_int=-1;
+		
 		}
+	}
 
 	if ($return_mode)
 		return $return_int;	
