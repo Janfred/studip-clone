@@ -48,7 +48,7 @@ $SOFTWARE_VERSION="0.9.1 internal";
     // der Name wird in der local.inc festgelegt
 $UNI_URL = "http://www.studip.de";
 $UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
-$UNI_CONTACT = "info@studip.de";
+$UNI_CONTACT = "<please insert your generel contact mail-adress here>";
 $UNI_INFO = "Stud.IP 0.9 - Studienbegleitender Internetsupport von Präsenzlehre"; 
 
 //die IDs der Veranstaltungen, die beim Hochstufen auf autor eingetragen werden
