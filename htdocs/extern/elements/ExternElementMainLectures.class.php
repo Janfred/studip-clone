@@ -34,15 +34,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElementMain.class.php");
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN, $RELATIVE_PATH_CALENDAR;
+require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternElementMain.class.php");
+require_once($ABSOLUTE_PATH_STUDIP."dates.inc.php");
 
 class ExternElementMainLectures extends ExternElementMain {
 
-	var $attributes = array("name", "grouping", "semrange", "allseminars", "rangepathlevel",
-			"addinfo", "time", "lecturer", "semclasses", "textlectures", "textgrouping",
-			"textnogroups", "aliasesgrouping", "wholesite", "nameformat", "language", "urlcss",
-			"title");
+	var $attributes = array("name", "grouping", "semrange", "semstart", "semswitch",
+			"allseminars", "rangepathlevel", "addinfo", "time", "lecturer", "semclasses",
+			"textlectures", "textgrouping", "textnogroups", "aliasesgrouping", "wholesite",
+			"nameformat", "language", "urlcss", "title");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -62,7 +63,9 @@ class ExternElementMainLectures extends ExternElementMain {
 		$config = array(
 			"name" => "",
 			"grouping" => "3",
-			"semrange" => "three",
+			"semstart" => "current",
+			"semrange" => "1",
+			"semswitch" => "0",
 			"allseminars" => "",
 			"rangepathlevel" => "1",
 			"addinfo" => "1",
@@ -89,6 +92,7 @@ class ExternElementMainLectures extends ExternElementMain {
 	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
+		global $SEMESTER, $SEM_CLASS;
 		
 		$out = "";
 		$table = "";
@@ -114,11 +118,45 @@ class ExternElementMainLectures extends ExternElementMain {
 				_("Typ"), _("Einrichtung"));
 		$table = $edit_form->editOptionGeneric("grouping", $title, $info, $values, $names);
 		
-		$title = _("Semesterumfang:");
-		$info = _("Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden sollen.");
-		$names = array(_("nur aktuelles"), _("vorheriges, aktuelles, n&auml;chstes"), _("alle"));
-		$values = array("current", "three", "all");
-		$table .= $edit_form->editRadioGeneric("semrange", $title, $info, $values, $names);
+		$title = _("Startsemester:");
+		$info = _("Geben Sie das erste anzuzeigende Semester an. Die Angaben \"vorheriges\", \"aktuelles\" und \"nächstes\" beziehen sich immer auf das laufende Semester und werden automatisch angepasst.");
+		$current_sem = get_sem_num_sem_browse();
+		if ($current_sem === FALSE) {
+			$names = array(_("aktuelles"), _("n&auml;chstes"));
+			$values = array("current", "next");
+		}
+		else if ($current === TRUE) {
+			$names = array(_("vorheriges"), _("aktuelles"));
+			$values = array("previous", "current");
+		}
+		else {
+			$names = array(_("vorheriges"), _("aktuelles"), "n&auml;chstes");
+			$values = array("previous", "current", "next");
+		}
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $sem["name"];
+			$values[] = $sem_num;
+		}
+		$table .= $edit_form->editOptionGeneric("semstart", $title, $info, $values, $names);
+		
+		$title = _("Anzahl der anzuzeigenden Semester:");
+		$info = _("Geben Sie an, wieviele Semester angezeigt werden sollen.");
+		$names = array();
+		$values = array();
+		$i = 1;
+		foreach ($SEMESTER as $sem_num => $sem) {
+			$names[] = $i++;
+			$values[] = $sem_num;
+		}
+		$table .= $edit_form->editOptionGeneric("semrange", $title, $info, $values, $names);
+		
+		$title = _("Umschalten des aktuellen Semesters:");
+		$info = _("Geben Sie an, wieviele Wochen vor Semesterende auf das nächste Semester umgeschaltet werden soll.");
+		$names = array(_("am Semesterende"), _("1 Woche vor Semesterende"));
+		for ($i = 2; $i < 13; $i++)
+			$names[] = sprintf(_("%s Wochen vor Semesterende"), $i);
+		$values = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+		$table .= $edit_form->editOptionGeneric("semswitch", $title, $info, $values, $names);
 		
 		$title = _("Veranstaltungen beteiligter Institute anzeigen:");
 		$info = _("Wählen Sie diese Option, um Veranstaltungen anzuzeigen, bei denen diese Einrichtung als beteiligtes Institut eingetragen ist.");
@@ -129,8 +167,7 @@ class ExternElementMainLectures extends ExternElementMain {
 		$title = _("Bereichspfad ab Ebene:");
 		$info = _("Wählen Sie, ab welcher Ebene der Bereichspfad ausgegeben werden soll.");
 		$values = array("1", "2", "3", "4", "5");
-		$names = array("1", "2", "3", "4", "5");
-		$table .= $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $names);
+		$table .= $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $values);
 		
 		$title = _("Anzahl Veranstaltungen/Gruppierung anzeigen:");
 		$info = _("Wählen Sie diese Option, wenn die Anzahl der Veranstaltungen und die gewählte Gruppierungsart angezeigt werden sollen.");
@@ -155,12 +192,10 @@ class ExternElementMainLectures extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Ausgabe bestimmter Veranstaltungsklassen"));
 		
-		$table = "";
 		unset($names);
 		unset($values);
 		$info = _("Wählen Sie die anzuzeigenden Veranstaltungsklassen aus.");
-		
-		foreach ($GLOBALS["SEM_CLASS"] as $key => $class) {
+		foreach ($SEM_CLASS as $key => $class) {
 			$values[] = $key;
 			$names[] = $class["name"];
 		}
@@ -232,7 +267,7 @@ class ExternElementMainLectures extends ExternElementMain {
 	
 	function checkValue ($attribute, $value) {
 		if ($attribute == "allseminars") {
-			// This is especially for checkbox-values. If there is no checkbox
+			// This is necessary for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
 			// variable to 0.
 			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {

@@ -1,7 +1,7 @@
 <?
-global $ABSOLUTE_PATH_STUDIP;
-global $RELATIVE_PATH_CALENDAR;
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemBrowse.class.php");
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
+require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/SemBrowse.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
 
 class ExternSemBrowse extends SemBrowse {
 	
@@ -33,35 +33,34 @@ class ExternSemBrowse extends SemBrowse {
 			}
 		}
 		
-		// current semester
-		$now = time();
-		foreach ($SEMESTER as $key => $sem) {
-			if ($sem["beginn"] >= $now)
+		$switch_time = mktime(0, 0, 0, date("m"),
+				date("d") + 7 * $this->config->getValue("Main", "semswitch"), date("Y"));
+		// get current semester
+		$current_sem = get_sem_num($switch_time);
+		
+		
+		switch ($this->config->getValue("Main", "semstart")) {
+			case "previous" :
+				if (isset($SEMESTER[$current_sem - 1]))
+					$current_sem--;
 				break;
+			case "next" :
+				if (isset($SEMESTER[$current_sem + 1]))
+					$current_sem++;
+				break;
+			case "current" :
+				break;
+			default :
+				if (isset($SEMESTER[$this->config->getValue("Main", "semstart")]))
+					$current_sem = $this->config->getValue("Main", "semstart");
 		}
-		$key--;
-		$semrange = $this->config->getValue("Main", "semrange");
-		switch ($semrange) {
-			case "current":
-			$this->sem_number[0] = $key;
-			break;
-			case "three":
-			if ($key == 1){
-				$this->sem_number[0] = 2;
-				$this->sem_number[1] = 1;
-			} elseif($key == count($SEMESTER)-1) {
-				$this->sem_number[0] = $key;
-				$this->sem_number[1] = $key-1;
-			} else {
-				$this->sem_number[0] = $key+1;
-				$this->sem_number[1] = $key;
-				$this->sem_number[2] = $key-1;
-			}
-			break;
-			case "all":
-			$this->sem_number = false;
-			break;
-		}
+		
+		$last_sem = $current_sem + $this->config->getValue("Main", "semrange") - 1;
+		if (!isset($SEMESTER[$last_sem]))
+			$last_sem = sizeof($SEMESTER);
+		
+		for ($i = $last_sem; $i >= $current_sem; $i--)
+			$this->sem_number[] = $i;
 		
 		$semclasses = $this->config->getValue("Main", "semclasses");
 		foreach ($SEM_TYPE as $key => $type) {
@@ -70,7 +69,6 @@ class ExternSemBrowse extends SemBrowse {
 		}
 		
 		$this->get_sem_range_tree($start_item_id, true);
-				
 	}
 	
 	function print_result () {
@@ -90,14 +88,14 @@ class ExternSemBrowse extends SemBrowse {
 				} else {
 					$the_tree =& $this->sem_tree->tree;
 				}
-			$the_tree->buildIndex();
+				$the_tree->buildIndex();
 			}
 			
-			if (!$this->config->getValue("Main", "allseminars")){
-				$sem_inst_query = " AND seminar_inst.Institut_id='{$this->config->range_id}' ";
+			if (!$this->config->getValue("Main", "allseminars")) {
+				$sem_inst_query = " AND seminare.Institut_id='{$this->config->range_id}' ";
 			}
 			
-			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name, seminare.metadata_dates 
+			$query = "SELECT seminare.Seminar_id, seminare.status, seminare.Name, seminare.metadata_dates 
 				, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
 				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
@@ -105,9 +103,10 @@ class ExternSemBrowse extends SemBrowse {
 				LEFT JOIN auth_user_md5 USING (user_id) 
 				LEFT JOIN user_info USING (user_id) 
 				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
-				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id $sem_inst_query) 
+				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN Institute USING (Institut_id) 
-				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
+				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result']))
+				 . "') $sem_inst_query";
 			
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
@@ -118,6 +117,7 @@ class ExternSemBrowse extends SemBrowse {
 			}
 			$group_by_data = $snap->getGroupedResult($group_field, $data_fields);
 			$sem_data = $snap->getGroupedResult("Seminar_id");
+			
 			if ($this->sem_browse_data['group_by'] == 0){
 				$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
 				foreach ($group_by_duration as $sem_number_end => $detail){
