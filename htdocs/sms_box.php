@@ -61,7 +61,7 @@ function set_read($message_id) {
 // print_snd_message
 
 function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_data_view) {
-	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF, $msging;	
 	//Kopfzeile erstellen
 	$icon = "&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
 	if ($cmd == "select_all") {
@@ -145,7 +145,7 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 // print_rec_message
 
 function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullname, $sms_data_open, $read) {
-	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF, $msging;	
 
 	$uname_snd = get_username($user_id_snd);
 
