@@ -34,6 +34,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTree.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipRangeTree.class.php");
 
 /**
 * This function creates the header line for studip-objects
@@ -729,6 +731,30 @@ function TrackAccess ($id) {
 			$db->query ("UPDATE dokumente SET downloads = '$newcount' WHERE dokument_id = '$id'");
 			break;
 	}
+}
+
+function get_sem_tree_path($seminar_id,$delimeter = ">"){
+	$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+	$view = new DbView();
+	$ret = null;
+	$view->params[0] = $seminar_id;
+	$rs = $view->get_query("view:SEMINAR_SEM_TREE_GET_IDS");
+	while ($rs->next_record()){
+		$ret[$rs->f('sem_tree_id')] = $the_tree->getShortPath($rs->f('sem_tree_id'),$delimeter);
+	}
+	return $ret;
+}
+
+function get_range_tree_path($institut_id,$delimeter = ">"){
+	$the_tree =& TreeAbstract::GetInstance("StudipRangeTree");
+	$view = new DbView();
+	$ret = null;
+	$view->params[0] = $institut_id;
+	$rs = $view->get_query("view:TREE_ITEMS_OBJECT");
+	while ($rs->next_record()){
+		$ret[$rs->f('item_id')] = $the_tree->getShortPath($rs->f('item_id'),$delimeter);
+	}
+	return $ret;
 }
 
 ?>
