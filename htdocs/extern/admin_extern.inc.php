@@ -52,11 +52,9 @@ require_once($ABSOLUTE_PATH_STUDIP . "language.inc.php");
 
 include($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  //Linkleiste fuer admins
 
-?>
-<table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width="100%">
-<tr valign="top" align="middle">
-	<td class="topic" align="left" width="100%">&nbsp;<b>
-<?
+echo "<table border=\"0\" class=\"blank\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
+echo "<tr valign=\"top\" align=\"center\">\n";
+echo "<td class=\"topic\" align=\"left\" colspan=\"2\">&nbsp;<b>\n";
 echo getHeaderLine($range_id) . " - ";
 echo _("Verwaltung der externen Anzeigemodule");
 foreach ($EXTERN_MODULE_TYPES as $key => $type) {
@@ -65,13 +63,11 @@ foreach ($EXTERN_MODULE_TYPES as $key => $type) {
 		break;
 	}
 }
-echo "</b></td>";
-?>
-</tr>
-<tr><td class="blank" width="100%">&nbsp;</td></tr>
-<tr><td class="blank" width="100%" align="center" valign="top">
-	<table class="blank" border="0" width="98%" align="center" cellspacing="0" cellpadding="0">	
-<?
+echo "</b></td></tr>";
+echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
+echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\">\n";
+echo "<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">\n";
+echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 
 if ($com == "delete_sec") {
 	$config = get_configuration($range_id, $config_id);
@@ -84,7 +80,7 @@ if ($com == "delete_sec") {
 	$message .= "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">";
 	$message .= "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
 	$message .= "pictures/buttons/nein-button.gif\" border=\"0\"></a>";
-	my_info($message);
+	my_info($message, "blank", 1);
 	print_footer();
 	exit;
 }
@@ -124,27 +120,25 @@ if ($com == "new" || $com == "edit" || $com == "open" ||
 // So it's better to use different commands to do the same job.
 if ($com == "set_default" || $com == "unset_default") {
 	if (!set_default_config($range_id, $config_id)) {
-		die("Fehler!");
+		exit;
 	}
 }
 
 if ($com == "delete") {
 	if (!delete_config($range_id, $config_id)) {
-		die ("$range_id<br>Fehler");
+		exit;
 	}
 }
 
-echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
 echo "<table class=\"blank\" border=\"0\" width=\"95%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
-echo "<td class=\"blank\" colspan=\"0\">\n<blockquote>";
+echo "<tr><td class=\"blank\" colspan=\"0\">\n<blockquote>";
 echo _("Übersicht über alle angelegten Konfigurationen.");
 echo "</blockquote>\n</td></tr>\n";
 echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
 echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
 
 echo "<tr><td class=\"blank\">\n";
-echo "<blockquote><font size=\"2\">";
 
 $configurations = get_all_configurations($range_id);
 
@@ -160,15 +154,20 @@ foreach ($EXTERN_MODULE_TYPES as $module_types) {
 
 if ($choose_module_form != "") {
 	echo "<form method=\"post\" action=\"$PHP_SELF?com=new\">\n";
+	echo "<blockquote><font size=\"2\">";
 	$choose_module_form = "<select name=\"mod\">\n$choose_module_form</select>\n";
 	printf(_("Neue Konfiguration f&uuml;r Modul %s anlegen."), $choose_module_form);
-	echo "&nbsp; <input type=\"image\" " . makeButton("neuanlegen", "src") . "\">";
+	echo "&nbsp; <input type=\"image\" " . makeButton("neuanlegen", "src") . " border=\"0\" align=\"absmiddle\">";
+	echo "</font></blockquote>\n";
 	echo "</form>\n";
 }
-else
+else {
+	echo "<blockquote><font size=\"2\">";
 	echo _("Sie haben bereits für alle Module die maximale Anzahl von Konfigurationen angelegt. Um eine neue Konfiguration anzulegen, m&uuml;ssen Sie erst eine bestehende im gew&uuml;nschten Modul l&ouml;schen.");
+	echo "</font></blockquote>\n";
+}
 
-echo "</font></blockquote>\n</td></tr>\n";
+echo "</td></tr>\n";
 echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
 
 if (!$have_config) {
@@ -177,25 +176,25 @@ if (!$have_config) {
 	echo "</font>\n</blockquote>\n</td></tr>\n";
 }
 else {
-	echo "<tr><td class=\"". $css_switcher->getHeaderClass() . "\" height=\"20\" valign=\"bottom\">\n";
+	echo "<tr><td height=\"20\" class=\"". $css_switcher->getHeaderClass() . "\" valign=\"bottom\">\n";
 	echo "<font size=\"2\"><b>&nbsp;";
 	echo _("Angelegte Konfigurationen");
 	echo "</b></font>\n</td></tr>\n";
 	$css_switcher->switchClass();
 	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
 	echo "<tr><td" . $css_switcher->getFullClass() . " valign=\"top\">\n";
-	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
+	echo "<table width=\"90%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
 	echo "<tr><td" . $css_switcher->getFullClass();
-	echo " width=\"22\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>\n";
-	echo "<td" . $css_switcher->getFullClass() . " width=\"100%\">\n";
+	echo ">&nbsp;&nbsp;&nbsp;&nbsp;</td>\n";
+	echo "<td" . $css_switcher->getFullClass() . ">\n";
 	
 	$css_switcher_2 =& new CssClassSwitcher("", "topic");
 
 	foreach ($EXTERN_MODULE_TYPES as $module_type) {
 		if ($configurations[$module_type["module"]]) {
 			$css_switcher_2->switchClass();
-			echo "<table width=\"90%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\" width=\"100%\">";
+			echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
+			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\">";
 			echo "<font size=\"2\"><b>&nbsp; ";
 		
 			if ($configurations[$module_type["module"]][$config_id])
@@ -205,7 +204,7 @@ else {
 				echo "</a>\n";;
 			
 			echo "</b></font>\n</td></tr>\n";
-			echo "<tr><td style=\"border-style:solid; border-width:1px; border-color:#000000;\">\n";
+			echo "<tr><td width=\"100%\" style=\"border-style:solid; border-width:1px; border-color:#000000;\">\n";
 			
 			echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">\n";
 			$css_switcher_2->resetClass();
@@ -244,7 +243,7 @@ else {
 				$tooltip = _("Konfiguration löschen");
 				echo "pictures/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
-				echo "nowrap=\"nowrap\">\n";
+				echo ">\n";
 				echo "<a href=\"$PHP_SELF?com=edit&mod=" . $module_type["module"];
 				echo "&config_id=" . $configuration["id"] . "\"><img ";
 				echo makeButton("bearbeiten", "src") . " border=\"0\"";
@@ -256,19 +255,20 @@ else {
 			echo "</table>\n";
 			echo "</td></tr>\n";
 			$css_switcher_2->switchClass();
-			echo "<td" . $css_switcher_2->getFullClass() . ">&nbsp;</td></tr>";
+			echo "<tr><td" . $css_switcher_2->getFullClass() . ">&nbsp;</td></tr>";
 			echo "</table>\n";
 		}
 		
 	}
 	echo "</td></tr>\n";
 	echo "</table>\n";
-	echo "<tr><td" . $css_switcher->getFullClass() . " colspan=\"2\">&nbsp;</td></tr>\n";
+	echo "</td></tr><tr><td" . $css_switcher->getFullClass() . " colspan=\"2\">&nbsp;</td></tr>\n";
 }
-
-echo "</td></tr></table>\n</td>\n";
-echo "<td class=\"blank\" width=\"1%\" valign=\"top\">\n";
-
+echo "</table></td></tr>\n";
+echo "</table>\n</td>\n";
+echo "<td class=\"blank\" width=\"10%\" valign=\"top\">\n";
+echo "<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">\n";
+echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 $info_max_configs = sprintf(_("Sie können pro Modul maximal %s Konfigurationen anlegen."),
 		$EXTERN_MAX_CONFIGURATIONS);
 

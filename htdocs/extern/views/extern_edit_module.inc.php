@@ -38,10 +38,8 @@
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_EXTERN/lib/ExternModule.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "msg.inc.php");
 
-echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-echo "<table class=\"blank\" border=\"0\" width=\"95%\" ";
+echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
-
 // it's forbidden to use the command "new" with a given config_id
 if ($com == "new")
 	$config_id = "";
@@ -60,7 +58,7 @@ if ($com == "new") {
 				echo "<tr><td class=\"blank\" align=\"center\">\n";
 				echo "<a href=\"$PHP_SELF??list=TRUE&view=extern_inst\">";
 				echo makeButton("zurueck");
-				echo "</a>\n</td></tr>\n";
+				echo "</a>\n</td></tr>\n</table>\n";
 				print_footer();
 				page_close();
 				exit;
@@ -93,7 +91,7 @@ foreach ($elements as $element) {
 		$edit_open = array("$edit" => ($com != "close"));
 }
 if ($com == "new" || $com == "edit" || $com == "open" || $com == "close") {
-	echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
+	echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 	$module->printoutEdit($edit_open, $HTTP_POST_VARS, "", $edit);
 }
 
@@ -106,7 +104,7 @@ if ($com == "store") {
 			$message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"),
 					"<font color=\"#ff0000\" size=\"+1\"><b>*</b></font>");
 			my_info($message);
-			echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
+			echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 			$module->printoutEdit($edit_open, $HTTP_POST_VARS,
 					$faulty_values, $edit);
 			$fault = TRUE;
@@ -122,20 +120,20 @@ if ($com == "store") {
 					$module->config->config_name, $HTTP_POST_VARS["Main_name"])) {
 				$message = _("Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.");
 				my_error($message, "blank", 1);
-				echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
+				echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 				$module->printoutEdit($edit_open, "$HTTP_POST_VARS", "", $edit);
 			}
 			$module->store($edit, $HTTP_POST_VARS);
 			$message = _("Die eingegebenen Werte wurden übernommen und der Name der Konfiguration geändert.");
 			my_msg($message, "blank", 1);
-			echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
+			echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 			$module->printoutEdit($edit_open, "", "", $edit);
 		}
 		else {
 			$module->store($edit, $HTTP_POST_VARS);
 			$message = _("Die eingegebenen Werte wurden übernommen.");
 			my_msg($message, "blank", 1);
-			echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
+			echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 			$module->printoutEdit($edit_open, "", "", $edit);
 		}
 	}
@@ -147,10 +145,12 @@ if (!$edit_open[$edit]) {
 	echo "<tr><td class=\"blank\" align=\"center\">";
 	echo "<a href=\"{$GLOBALS['PHP_SELF']}?list=TRUE&view=extern_inst\">";
 	echo "<img " . makeButton("zurueck", "src");
-	echo " border=\"0\" valign=\"absmiddle\"></a>\n</td></tr>\n";
+	echo " border=\"0\" align=\"absmiddle\"></a>\n</td></tr>\n";
 }
-echo "</table>\n<td class=\"blank\" width=\"1%\" valign=\"top\">\n";
-
+echo "</table></td></tr></table>\n</td>\n<td width=\"10%\" class=\"blank\" valign=\"top\">\n";
+echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
+echo "align=\"left\" cellspacing=\"0\" cellpadding=\"5\">\n";
+echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 $info_edit_element = _("Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den &quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements.");
 $info_preview = _("Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:");
 $info_preview .= "<br>&nbsp;<div align=\"center\">";
@@ -176,5 +176,4 @@ $info_content = array(
 								)));
 
 print_infobox($info_content, "pictures/einrichtungen.jpg");
-
 ?>
