@@ -86,16 +86,11 @@ function GetPresetGroups ($view, $veranstaltung_class)
 	echo "</select>";
 }
 
-
 function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="")
 { global $HTTP_POST_VARS;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
-//			echo $key."<br>";
 		}
-//		echo $statusgruppe_id;
-//		echo "hallo";
-//		echo $AktualMembers[0];
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$mkdate = time();
@@ -272,13 +267,7 @@ function PrintInstitutMembers ($range_id)
 
 // Ende Funktionen
 
-
-		while (list($key, $val) = each ($HTTP_POST_VARS)) {
-//			$statusgruppe_id = substr($key, 0, -2);
-			echo $key."<br>";
-		}
-		reset($HTTP_POST_VARS);
-
+	reset($HTTP_POST_VARS);
 
 // Abfrage der Formulare und Aktionen
 
@@ -356,11 +345,7 @@ function PrintInstitutMembers ($range_id)
 
 	$tmp_name=$db->f("Name");
 
-
-
 // Beginn Darstellungsteil
-
-
 
 // Anfang Edit-Bereich
 
