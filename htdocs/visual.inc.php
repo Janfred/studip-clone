@@ -570,42 +570,50 @@ array  ("kategorie" => "Aktionen:",
 
 function print_infobox ($content, $picture="") {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
-$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
-IF ($picture!="") {
-	$print .= "<tr>
-				<td class=\"blank\" width=\"100%\" align=\"right\">
-					<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$picture."\">
-				</td>
-			</tr>";
-		}
-	$print .= "<tr>
-				<td class=\"angemeldet\" width=\"100%\">
-					<table background=\"".$CANONICAL_RELATIVE_PATH_STUDIP."pictures/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
-for ($i = 0; $i < count($content); $i++) { $print .= "
-						<tr>
-							<td class=\"blank\" width=\"100%\" colspan=\"2\">
-								<font size=\"-1\"><b>".$content[$i]["kategorie"]."</b></font>
-								<br>
-							</td>
-						</tr>";
-	for ($j = 0; $j < count($content[$i]["eintrag"]); $j++) { $print .= "
-						<tr>
-							<td class=\"blank\" width=\"1%\" align=\"center\" valign=\"top\">
-								<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$content[$i]["eintrag"][$j]["icon"]."\">
-							</td>
-							<td class=\"blank\" width=\"99%\">
-								<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>
-							</td>
-						</tr>";
+	
+	$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
+	
+	if ($picture) {
+		$print .= "<tr>
+					<td class=\"blank\" width=\"100%\" align=\"right\">
+						<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$picture."\">
+					</td>
+				</tr>";
 	}
-}
-$print .= "
-					</table>
-				</td>
-			</tr>
-		</table>";
-
-echo $print;
+	
+	$print .= "<tr>
+					<td class=\"angemeldet\" width=\"100%\">
+						<table background=\"".$CANONICAL_RELATIVE_PATH_STUDIP."pictures/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
+						
+	for ($i = 0; $i < count($content); $i++)
+		if ($content[$i]) { 
+			$print .= "
+							<tr>
+								<td class=\"blank\" width=\"100%\" colspan=\"2\">
+									<font size=\"-1\"><b>".$content[$i]["kategorie"]."</b></font>
+									<br>
+								</td>
+							</tr>";
+			for ($j = 0; $j < count($content[$i]["eintrag"]); $j++)  {
+				$print .= "
+							<tr>
+								<td class=\"blank\" width=\"1%\" align=\"center\" valign=\"top\">
+									<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$content[$i]["eintrag"][$j]["icon"]."\">
+								</td>
+								<td class=\"blank\" width=\"99%\">
+									<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>
+								</td>
+							</tr>";
+			}
+		}
+	
+	$print .= "
+						</table>
+					</td>
+				</tr>
+			</table>";
+	
+	echo $print;
 }
 
 /**
