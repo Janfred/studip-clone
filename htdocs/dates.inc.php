@@ -907,7 +907,7 @@ Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
-function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id=0) {
+function delete_date ($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $sem_id=0) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
 	
 	if ($RESOURCES_ENABLE) {
@@ -919,8 +919,11 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 	$db3 = new DB_Seminar;	
 
 	## Eventuell rekursiv Postings loeschen
-	if ($topic_id) {
-		delete_topic($topic_id,$count);
+	if ($topic_delete) {
+		$db->query("SELECT topic_id FROM termine WHERE termin_id ='$termin_id'");
+		if ($db->next_record()) {
+			delete_topic($db->f("topic_id"),$count);
+		}
 	}
 	
 	if (!$folder_move) {
