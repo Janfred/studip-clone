@@ -24,9 +24,10 @@ $perm->check("user");
 
 ob_start(); //Outputbuffering für maximal Performance
 
-function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $type = false, $add_fields = false, $add_on = false){
+function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $type = false, $add_fields = false, $add_on = false, $object_field = false){
 	
 	$type = ($type) ? $type : "sem','inst";
+	$object_field = ($object_field) ? $object_field : "my.object_id";
 	$on_clause = " ON(my.object_id=a.{$range_field} $add_on) ";
 	if (strpos($table_name,'{ON_CLAUSE}') !== false){
 		$table_name = str_replace('{ON_CLAUSE}', $on_clause, $table_name);
@@ -34,7 +35,7 @@ function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $ty
 		$table_name .= $on_clause;
 	}
 	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " my.object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue 
-	FROM myobj_".$GLOBALS['user']->id." my LEFT JOIN object_user_visits b ON (b.object_id = my.object_id AND b.user_id = '".$GLOBALS['user']->id."' AND b.type IN ('$type')) INNER JOIN $table_name 
+	FROM myobj_".$GLOBALS['user']->id." my LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '".$GLOBALS['user']->id."' AND b.type IN ('$type')) INNER JOIN $table_name 
 	GROUP BY my.object_id";
 	
 }
@@ -66,7 +67,7 @@ function get_my_obj_values(&$my_obj) {
 
 	//News
 	
-	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw USING(news_id)','range_id','(IF(date < UNIX_TIMESTAMP(),range_id,NULL))',"(date > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')"));
+	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw USING(news_id)','range_id','(IF(date < UNIX_TIMESTAMP(),range_id,NULL))',"(date > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')",'news',false,false,'nw.news_id'));
 	while($db2->next_record()) {
 		$my_obj[$db2->f("object_id")]["neuenews"]=$db2->f("neue");
 		$my_obj[$db2->f("object_id")]["news"]=$db2->f("count");
@@ -113,15 +114,15 @@ function get_my_obj_values(&$my_obj) {
 	
 	//Umfragen
 	if ($GLOBALS['VOTE_ENABLE']) {
-		$db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate,0) AND a.author_id !='$user_id')",
-									false, false , " AND a.state IN('active','stopvis')"));
+		$db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate,0) AND a.author_id !='$user_id' AND a.state != 'stopvis')",
+									'vote', false , " AND a.state IN('active','stopvis')",'vote_id'));
 		while($db2->next_record()) {
 				$my_obj[$db2->f("object_id")]["neuevotes"] = $db2->f("neue");
 				$my_obj[$db2->f("object_id")]["votes"] = $db2->f("count");
 		}
 		
 		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate IS NOT NULL AND (d.stopdate > UNIX_TIMESTAMP() OR d.stopdate IS NULL) )',
-									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id')"));
+									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id')",'eval',false,false,'d.eval_id'));
 		while($db2->next_record()) {
 				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
 				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
