@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	//Defaults, die fuer DAUS (<admin) gesetzt werden
 	$default_description="Bitte geben Sie hier nur optionale Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.";
-	$default_titel="Kurztitel, bitte ausfllen";
+	$default_titel="Kurztitel, bitte ausfüllen";
 	if ((!$perm->have_perm ("admin")) && (!$perm->have_perm ("root"))) {
 		$temp_default[1]="tt";
 		$temp_default[2]="mm";
