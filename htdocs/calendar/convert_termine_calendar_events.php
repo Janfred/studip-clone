@@ -97,13 +97,13 @@ while ($db_read->next_record()) {
 					$uid,
 					$db_read->f("date"),
 					$db_read->f("end_time"),
-					$db_read->f("content"),
-					$db_read->f("description"),
+					addslashes($db_read->f("content")),
+					addslashes($db_read->f("description")),
 					$class,
 					$categories,
 					(int) $category_intern,
 					$priority,
-					$db_read->f("raum"),
+					addslashes($db_read->f("raum")),
 					$rep["ts"],
 					(int) $rep["linterval"],
 					(int) $rep["sinterval"],
@@ -120,9 +120,9 @@ while ($db_read->next_record()) {
 	
 	$db_write->query($query);
 	if ($db_write->affected_rows()) {
-//		$query = "DELETE FROM termine WHERE termin_id = '" . $db_read->f("termin_id") . "'";
+		$query = "DELETE FROM termine WHERE termin_id = '" . $db_read->f("termin_id") . "'";
 	
-//		$db_write->query($query);
+		$db_write->query($query);
 	
 		$count++;
 		
