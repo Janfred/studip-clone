@@ -1,126 +1,140 @@
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="5">
 	
 <?
-//echo '<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">';
 		
-if(!empty($err)){
-	$error_sign = "<font color='FF0000' size='+2'><b>&nbsp;*&nbsp;</b></font>";
-	$error_message = "Bitte korrigieren Sie die mit $error_sign gekennzeichneten Felder.".$err_message;
+if (!empty($err)) {
+	$error_sign = "<font color=\"#FF0000\" size=\"+2\"><b>&nbsp;*&nbsp;</b></font>";
+	$error_message = sprintf("Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s",
+		$error_sign, $err_message);
 	my_info($error_message, "blank", 0);
 }
-?>
 
-<tr>
-	<td class="blank" width="100%">
-		<table width="99%" border="0" cellspacing="0" cellpadding="0" align="center">
-			<tr><td width="100%" colspan="2" class="steel2">
-<?
+echo "<tr>\n<td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+echo "<table class=\"steel1\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">";
+
+if (isset($atermin) && $atermin->getSeminarId())
+	echo "<tr><td width=\"100%\" class=\"steel2\">";
+else
+	echo "<tr><td width=\"100%\" colspan=\"2\" class=\"steel2\">";
+
 
 echo $edit_mode_out;
 
 $css_switcher = new cssClassSwitcher();
 $css_switcher->switchClass();
 
-?>
-			</td></tr>
-			<form action="<? echo $PHP_SELF; ?>?cmd=edit" method=post>
-			<tr>
-				<td width="80%" valign="top">
-				<table width="100%" cellpadding="4" cellspacing="0" border="0">
-				<tr>
-				 <td class="<? echo $css_switcher->getClass(); ?>">
-					<p>
-						<table border="0" cellspacing="2" cellpadding="2">
-							<tr valign="bottom">
-								<td><b>Beginn: </b></td>
-								<td>am <input type="text" name="start_day" size="2" maxlength="2" value="<? echo $start_day; ?>">
-								.&nbsp;<input type="text" name="start_month" size="2" maxlength="2" value="<? echo $start_month; ?>">
-								.&nbsp;<input type="text" name="start_year" size="4" maxlength="4" value="<? echo $start_year; ?>">&nbsp;um&nbsp;<select name="start_h" size="1">
-<?
-		for($i = 0;$i <= 23;$i++){
-			echo "<option";
-			if($i == $start_h)
-				echo " selected";
-			echo ">$i";
-		}
+echo "\n</td></tr>\n";
+echo "<form action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
+echo "<tr>\n<td width=\"80%\" valign=\"top\">\n";
+echo "<table width=\"100%\" cellpadding=\"4\" cellspacing=\"0\" border=\"0\">\n";
+printf("<tr>\n<td class=\"%s\">\n", $css_switcher->getClass());
+
+echo "<p>\n<table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">\n";
+echo "<tr valign=\"bottom\">\n";
+printf("<td><b>%s </b></td>", "Beginn:");
+echo "<td>am <input type=\"text\" name=\"start_day\" size=\"2\" maxlength=\"2\" value=\"$start_day\">";
+echo ".&nbsp;<input type=\"text\" name=\"start_month\" size=\"2\" maxlength=\"2\" value=\"$start_month\">";
+printf(".&nbsp;<input type=\"text\" name=\"start_year\" size=\"4\" maxlength=\"4\" value=\"%s\">&nbsp;%s&nbsp;<select name=\"start_h\" size=\"1\">",
+	$start_year, "um");
+
+for($i = 0;$i <= 23;$i++){
+	echo "<option";
+	if($i == $start_h)
+		echo " selected";
+	if($i < 10)
+		echo ">0$i";
+	else
+		echo ">$i";
+}
 		
-		echo "</select>&nbsp;:&nbsp;<select name=\"start_m\" size=\"1\">";
+echo "</select>&nbsp;:&nbsp;<select name=\"start_m\" size=\"1\">";
+
+for($i = 0;$i <= 55;$i += 5){
+	echo "<option";
+	if($i == $start_m)
+		echo " selected";
+	if($i < 10)
+		echo ">0$i";
+	else
+		echo ">$i";
+}
+
+printf("</select> %s%s</td>", "Uhr", $err["start_time"] ? $error_sign : "");
+echo "</tr><tr valign=\"bottom\">";
+printf("<td><b>%s </b></td>", "Ende:");
+echo "<td>am <input type=\"text\" name=\"end_day\" size=\"2\" maxlength=\"2\" value=\"$end_day\">";
+echo ".&nbsp;<input type=\"text\" name=\"end_month\" size=\"2\" maxlength=\"2\" value=\"$end_month\">";
+printf(".&nbsp;<input type=\"text\" name=\"end_year\" size=\"4\" maxlength=\"4\" value=\"%s\">&nbsp;%s&nbsp;<select name=\"end_h\" size=\"1\">",
+	$end_year, "um");
+
+for($i = 0;$i <= 23;$i++){
+	echo "<option";
+	if($i == $end_h)
+		echo " selected";
+	if($i < 10)
+		echo ">0$i";
+	else
+		echo ">$i";
+}
+
+echo "</select>&nbsp;:&nbsp;<select name=\"end_m\" size=\"1\">";
+
+for($i = 0;$i <= 55;$i += 5){
+	echo "<option";
+	if($i == $end_m)
+		echo " selected";
+	if($i < 10)
+		echo ">0$i";
+	else
+		echo ">$i";
+}
+
+printf("</select> %s%s</td>", "Uhr", $err["end_time"] ? $error_sign : "");
+echo "\n</tr>\n</table>\n</p>\n</td>\n</tr>\n";
+
+$css_switcher->switchClass();
+printf("<tr><td class=\"%s\">", $css_switcher->getClass());
+echo "<p>\n<table border=\"0\" width=\"100%%\" cellpadding=\"2\" cellspacing=\"2\">";
+printf("<tr><td width=\"15%%\"><b>%s </b></td>", "Termin:");
+printf("<td width=\"85%%\"><input type=\"text\" name=\"txt\" size=\"50\" maxlength=\"255\" value=\"%s\"></input>",
+	$txt);
+printf("%s</td>\n", $err["titel"] ? $error_sign : "");
+echo"</tr><tr>\n";
+printf("<td width=\"15%%\"><b>%s </b></td>", "Beschreibung:");
+echo "<td width=\"85%\"><textarea name=\"content\" cols=\"48\" rows=\"5\" wrap=\"virtual\">";
+echo $content;
+echo "</textarea></td>\n";
+echo "</tr>\n</table>\n</p>\n</td>\n</tr>\n<tr>";
+
+$css_switcher->switchClass();
+printf("<td class=\"%s\">", $css_switcher->getClass());
+echo "\n<p>\n";
+echo "<table border=\"0\" width=\"";
+if (isset($atermin) && $atermin->getSeminarId())
+	echo "<table border=\"0\" width=\"50%\" cellpadding=\"2\" cellspacing=\"2\">";
+else
+	echo "<table border=\"0\" width=\"80%\" cellpadding=\"2\" cellspacing=\"2\">";
+echo "<tr>\n<td>\n";
+printf("<b>%s </b>", "Kategorie:");
+echo "\n</td><td>\n";
+echo "<select name=\"cat\" size=\"1\">\n";
+
+if (isset($atermin) && $atermin->getSeminarId()) {
+	if (!isset($cat))
+		$cat = 1;
+	printf("<option value=\"%s\" selected>%s", $cat, $TERMIN_TYP[$cat]["name"]);
+}
+else {
+	if (!isset($cat))
+		$cat = 1;
+	for ($i = 1;$i < sizeof($PERS_TERMIN_KAT);$i++) {
+		printf("<option value=\"%s\"", $i);
+		if($cat == $i)
+			echo " selected";
+		printf(">%s\n", $PERS_TERMIN_KAT[$i]["name"]);
+	}
+}
 		
-		for($i = 0;$i <= 55;$i += 5){
-			echo "<option";
-			if($i == $start_m)
-				echo " selected";
-			echo ">$i";
-		}
-?>	
-								</select> Uhr<? echo $err["start_time"]?$error_sign:""; ?></td>
-							</tr><tr valign="bottom">
-								<td><b>Ende: </b></td>
-								<td>am <input type="text" name="end_day" size="2" maxlength="2" value="<? echo $end_day; ?>">
-								.&nbsp;<input type="text" name="end_month" size="2" maxlength="2" value="<? echo $end_month; ?>">
-								.&nbsp;<input type="text" name="end_year" size="4" maxlength="4" value="<? echo $end_year; ?>">&nbsp;um&nbsp;<select name="end_h" size="1">
-<?
-		for($i = 0;$i <= 23;$i++){
-			echo "<option";
-			if($i == $end_h)
-				echo " selected";
-			echo ">$i";
-		}
-		
-		echo "</select>&nbsp;:&nbsp;<select name=\"end_m\" size=\"1\">";
-		
-		for($i = 0;$i <= 55;$i += 5){
-			echo "<option";
-			if($i == $end_m)
-				echo " selected";
-			echo ">$i";
-		}
-?>
-								</select> Uhr<? echo $err["end_time"]?$error_sign:""; ?></td>
-							</tr>
-						</table>
-					</p>
-				</td>
-			</tr>
-			<tr><? $css_switcher->switchClass(); ?>
-				<td class="<? echo $css_switcher->getClass(); ?>">
-					<p>
-						<table border="0" width="100%" cellpadding="2" cellspacing="2">
-							<tr><td width="15%"><b>Termin: </b></td>
-								<td width="85%"><input type="text" name="txt" size="50" maxlength="255" value="<? echo $txt; ?>"></input><? echo $err["titel"]?$error_sign:""; ?></td>
-							</tr><tr>
-								<td width="15%"><b>Beschreibung: </b></td>
-								<td width="85%"><textarea name="content" cols="55" rows="5" wrap="virtual"><? echo $content; ?></textarea></td>
-							</tr>
-						</table>
-					</p>
-				</td>
-			</tr>
-			<tr><? $css_switcher->switchClass(); ?>
-				<td class="<? echo $css_switcher->getClass(); ?>">
-					<p>
-						<table border="0" width="<? if(isset($atermin) && $atermin->getSeminarId()) echo "50%"; else echo "80%"; ?>" cellpadding="2" cellspacing="2">
-							<tr>
-								<td>
-									<b>Kategorie: </b>
-								</td><td>
-									<select name="cat" size="1">
-									<?
-										if(isset($atermin) && $atermin->getSeminarId()){
-											if(!isset($cat))
-												$cat = 1;
-											echo '<option value="'.$cat.'" selected>'.$TERMIN_TYP[$cat]["name"];
-										}
-										else{
-											if(!isset($cat))
-												$cat = 1;
-											for($i = 1;$i < sizeof($PERS_TERMIN_KAT);$i++){
-												echo '<option value="'.$i.'"';
-												if($cat == $i)
-													echo " selected";
-												echo ">".$PERS_TERMIN_KAT[$i]["name"]."\n";
-											}
-										}
 									?>
 									</select>
 								</td>
@@ -231,8 +245,8 @@ $css_switcher->switchClass();
 									<option value="5"<? if($wday_m == 5) echo " selected"; ?>>Freitag
 									<option value="6"<? if($wday_m == 6) echo " selected"; ?>>Samstag
 									<option value="7"<? if($wday_m == 7) echo " selected"; ?>>Sonntag
-								</select>&nbsp;alle&nbsp;</td>
-							<td><input type="text" name="lintervall_m2" size="3" maxlength="3" value="<? echo $lintervall_m2?$lintervall_m2:1; ?>"><? echo $err["lintervall_m2"]?$error_sign:""; ?>&nbsp;Monate</td>
+								</select></td>
+							<td>&nbsp;alle&nbsp;<input type="text" name="lintervall_m2" size="3" maxlength="3" value="<? echo $lintervall_m2?$lintervall_m2:1; ?>"><? echo $err["lintervall_m2"]?$error_sign:""; ?>&nbsp;Monate</td>
 						</tr>
 					</table>
 				</p>
@@ -343,30 +357,56 @@ $css_switcher->switchClass();
 	}
 ?>
 </table>
-	</td><td width="20%" valign="top" class="steel1">
-		<table width="100%" border="0" cellspacing="2" cellpadding="2">
+	
 <?
 	if(isset($atermin) && $atermin->getSeminarId()){
-		$db = new DB_Seminar;
-		$query = "SELECT name FROM seminare WHERE Seminar_id=\"".$atermin->getSeminarId()."\"";
+		$db = new DB_Seminar();
+		$query = "SELECT name FROM seminare WHERE Seminar_id='".$atermin->getSeminarId()."'";
 		$db->query($query);
 		$db->next_record();
+		$link_to_seminar = "<a href=\"" . $CANONICAL_RELATIVE_PATH_STUDIP
+											. "seminar_main.php?auswahl=" . $atermin->getSeminarId()
+											. "\">" . htmlReady($db->f("name")) . "</a>";
+		$info_content = array(	
+											array("kategorie" => "Information:",
+														"eintrag" => array(	
+														array("icon" => "pictures/ausruf_small.gif",
+																	"text" => "Dieser Termin geh&ouml;rt zur Veranstaltung:"),
+														array("text" => $link_to_seminar),
+														array("text" => "Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden."
+																	)
+														)
+											),
+											array("kategorie" => "Aktion:",
+		   											"eintrag" => array(	
+														array (	"icon" => "pictures/meinesem.gif",
+																		"text" => "<a href=\"$PHP_SELF?cmd=bind\">W&auml;hlen</a> Sie aus, welche Veranstaltungstermine "
+																							. "automatisch in Ihrem Terminkalender angezeigt werden sollen."
+																	)
+														)
+											)
+										);
 ?>
-			<tr><td class="steel1" align="center"><b>Veranstaltungstermin<br>&nbsp;<b></td></tr>
+	</td></tr></table></td>
+			<td class="blank" align="center" rowspan="2" valign="top" width="20%">
+				<table class="blank" cellspacing="0" cellpadding="0" border="0" valign="top">
+					<tr><td class="blank" align="center" valign="top">
+<?
+						print_infobox($info_content, "pictures/dates.jpg");
+?>
+					</td></tr>
+				</table>
 			<tr><td class="steel1">
-				Dieser Termin geh&ouml;rt zur Veranstaltung:
-				<blockquote>
-					<a href="./seminar_main.php?auswahl=<? echo $atermin->getSeminarId().'">'.fit_title($db->f("name"), 1, 1, 120, "...", FALSE); ?></a>
-				</blockquote>
-				<p>Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden.</p>
 <?
 		$permission = get_perm($atermin->getSeminarId());
 		if($permission == "tutor" || $permission == "dozent")
-			echo 'Um diesen Termin zu bearbeiten, wechseln Sie bitte in die <a href="./admin_dates.php?range_id='.$atermin->getSeminarId().'&ebene=sem">Terminverwaltung</a>.';
+			echo 'Um diesen Termin zu bearbeiten, wechseln Sie bitte in die <a href="./admin_dates.php?range_id='.$atermin->getSeminarId().'&ebene=sem&manuel_edit=yes&show_id='.$atermin->getId().'">Terminverwaltung</a>.';
 		echo "</td></tr>\n";
  	}
 	else{
 ?>
+	</td><td width="20%" valign="top" class="steel1">
+		<table width="100%" border="0" cellspacing="2" cellpadding="2">
 			<tr><td class="steel1" align="center"><b>Wiederholung</b></td></tr>
 			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "SINGLE" || $mod == "SINGLE")
@@ -376,27 +416,27 @@ $css_switcher->switchClass();
 			</td></tr>
 			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "DAYLY" || $mod == "DAYLY")
-					echo '<input type="image" name="mod_d" src="./pictures/buttons/jedentag2-button.gif" border="0">';
+					echo '<input type="image" name="mod_d" src="./pictures/buttons/taeglich2-button.gif" border="0">';
 				 else
-					echo '<input type="image" name="mod_d" src="./pictures/buttons/jedentag-button.gif" border="0">'; ?>
+					echo '<input type="image" name="mod_d" src="./pictures/buttons/taeglich-button.gif" border="0">'; ?>
 			</td></tr>
 			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "WEEKLY" || $mod == "WEEKLY")
-					echo '<input type="image" name="mod_w" src="./pictures/buttons/jedewoche2-button.gif" border="0">';
+					echo '<input type="image" name="mod_w" src="./pictures/buttons/woechentlich2-button.gif" border="0">';
 				 else
-					echo '<input type="image" name="mod_w" src="./pictures/buttons/jedewoche-button.gif" border="0">'; ?>
+					echo '<input type="image" name="mod_w" src="./pictures/buttons/woechentlich-button.gif" border="0">'; ?>
 			</td></tr>
 			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "MONTHLY" || $mod == "MONTHLY")
-					echo '<input type="image" name="mod_m" src="./pictures/buttons/jedenmonat2-button.gif" border="0">';
+					echo '<input type="image" name="mod_m" src="./pictures/buttons/monatlich2-button.gif" border="0">';
 				 else
-					echo '<input type="image" name="mod_m" src="./pictures/buttons/jedenmonat-button.gif" border="0">'; ?>
+					echo '<input type="image" name="mod_m" src="./pictures/buttons/monatlich-button.gif" border="0">'; ?>
 			</td></tr>
 			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "YEARLY" || $mod == "YEARLY")
-					echo '<input type="image" name="mod_y" src="./pictures/buttons/jedesjahr2-button.gif" border="0">';
+					echo '<input type="image" name="mod_y" src="./pictures/buttons/jaehrlich2-button.gif" border="0">';
 				 else
-					echo '<input type="image" name="mod_y" src="./pictures/buttons/jedesjahr-button.gif" border="0">'; ?>
+					echo '<input type="image" name="mod_y" src="./pictures/buttons/jaehrlich-button.gif" border="0">'; ?>
 			</td></tr>
 			<tr><td class="steel1"><br>&nbsp;<br></td></tr>
 <?
