@@ -48,24 +48,23 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 if (isset($auswahl) && $auswahl!="") {
 	//just opened Einrichtung... here follows the init
-	openInst ($auswahl);
+	openInst($auswahl);
 } else {
 	$auswahl=$SessSemName[1];
 }
 	
 
-if ($SessSemName[1] =="")
-	{
+if ($SessSemName[1] =="") {
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	parse_window ("error§Sie haben keine Einrichtung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Einrichtung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+	parse_window ("error§Die aufgerufene Einrichtung existiert nicht!<br /><font size=-1 color=black>Der Autor der aufrufenden Seite hat keine Einrichtung gew&auml;hlt oder die angegebene Einrichtung existiert nicht mehr.<br /></font>", "§",
 				"Keine Einrichtung gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+				"&nbsp;Bitte informieren Sie den zust&auml;ndigen Webmaster.");
 	die;
-	}
-else 
-	{
+
+} else {
+
 	switch ($target) {
 		case "folder.php":
 			header("Location: folder.php?cmd=tree");

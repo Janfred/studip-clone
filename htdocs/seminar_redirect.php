@@ -22,6 +22,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 // wichtiger Teil aus seminar_open.php
 	
@@ -46,46 +47,24 @@ require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
 
 if (isset($auswahl) && $auswahl!="") {
-	// dieses Seminar wurde gerade eben betreten
-	$SessionSeminar="$auswahl";
-	$db=new DB_Seminar;
-	$db->query ("SELECT Institut_id, Name, Seminar_id, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$auswahl'");
-	if ($db->next_record()) {
-		$SessSemName[0] = $db->f("Name");
-		$SessSemName[1] = $db->f("Seminar_id");
-		$SessSemName[3] = $db->f("Untertitel");
-		$SessSemName[4] = $db->f("start_time");
-		$SessSemName[5] = $db->f("Institut_id");
-		$SessSemName["art_generic"]="Veranstaltung";
-		$SessSemName["class"]="sem";
-		$SessSemName["art_num"]=$db->f("status");		 //numerisch die Typnummer
-		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
-			$SessSemName["art"] = "Veranstaltung";
-		else
-			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
-		$nr = $db->f("Seminar_id");
-		$loginfilelast["$nr"] = $loginfilenow["$nr"];
-		$loginfilenow["$nr"] = time();
-	} else {
-		$SessSemName[1]="";
-	}
+	//just opened Veranstaltung... here follows the init
+	openSem($auswahl);
 }	else {
 		$auswahl=$SessSemName[1];
 }
 	
 
-if ($SessSemName[1] =="")
-	{
+if ($SessSemName[1] =="") {
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+	parse_window ("error§Die aufgerufene Veranstaltung existiert nicht!<br /><font size=-1 color=black>Der Autor der aufrufenden Seite hat keine Veranstaltung gew&auml;hlt oder die angegebene Veranstaltung existiert nicht mehr.<br /></font>", "§",
 				"Keine Veranstaltung gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+				"&nbsp;Bitte informieren Sie den zust&auml;ndigen Webmaster.");
 	die;
-	}
-else 
-	{
+
+} else {
+
 	switch ($target) {
 		case "folder.php":
 			header("Location: folder.php?cmd=tree");
@@ -103,4 +82,4 @@ else
 	}
 	page_close();
 	die;
-	}
+}
