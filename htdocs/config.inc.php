@@ -273,44 +273,17 @@ $INST_TYPE[6]=array("name"=>"Seminar", "en"=>"Seminar");
 
 
 //define the presets of statusgroups for Veranstaltungen (refers to the key of the $SEM_CLASS array)
-$SEM_STATUS_GROUPS["default"] = array (	array ("name"=>"DozentInnen", "en"=>""),				//the default. Don't delete this entry!
-										array ("name"=>"TutorInnen", "en"=>""),
-										array ("name"=>"AutorInnen", "en"=>""),
-										array ("name"=>"LeserInnen", "en"=>""),
-										array ("name"=>"sonstige", "en"=>"")
-									);
-$SEM_STATUS_GROUPS["3"] = array (	array ("name"=>"Organisatoren", "en"=>""),				//Class Organisation
-										array ("name"=>"Mitglieder", "en"=>""),
-										array ("name"=>"Ausschu&szlig;mitglieder", "en"=>""),
-										array ("name"=>"sonstige", "en"=>""),
-									);
-$SEM_STATUS_GROUPS["4"] = array (	array ("name"=>"Moderatoren des Forums", "en"=>""),		//Class Community
-										array ("name"=>"Mitglieder", "en"=>""),
-										array ("name"=>"sonstige", "en"=>""),
-									);
-$SEM_STATUS_GROUPS["5"] = array (	array ("name"=>"ArbeitsgruppenleiterIn", "en"=>""),			//Class Arbeitsgruppen
-										array ("name"=>"Arbeitsgruppenmitglieder", "en"=>""),
-										array ("name"=>"sonstige", "en"=>""),
-									);
+$SEM_STATUS_GROUPS["default"] = array ("DozentInnen", "TutorInnen", "AutorInnen", "LeserInnen", "sonstige"); 	//the default. Don't delete this entry!
+$SEM_STATUS_GROUPS["3"] = array ("Organisatoren", "Mitglieder", "Ausschu&szlig;mitglieder", "sonstige");
+$SEM_STATUS_GROUPS["4"] = array ("Moderatoren des Forums","Mitglieder", "sonstige");
+$SEM_STATUS_GROUPS["5"] = array ("ArbeitsgruppenleiterIn", "Arbeitsgruppenmitglieder", "sonstige");
 //you can add more specifig presets for the different classes 
 
 
 //define the presets of statusgroups for Einrichtungen (refers to the key of the $INST_TYPE array)
-$INST_STATUS_GROUPS["default"] = array (	array ("name"=>"DirektorIn", "en"=>"Principal"),			//the default. Don't delete this entry!
-										array ("name"=>"HochschullehrerIn", "en"=>"Lecturer"),
-										array ("name"=>"Lehrbeauftragte", "en"=>"Lecturers from other institutes"),
-										array ("name"=>"Zweitmitglied", "en"=>"Teaching assistant"),
-										array ("name"=>"wiss. Hilfskraft", "en"=>"Teaching assistants"),
-										array ("name"=>"wiss. Mitarbeiter", "en"=>"Scientific assistants"),
-										array ("name"=>"stud. Hilfskraft", "en"=>"Student assistants"),
-										array ("name"=>"StudentIn", "en"=>"Students"),										
-										array ("name"=>"StudentIn", "en"=>"Students"),										
-										array ("name"=>"StudentIn", "en"=>"Students"),										
-										array ("name"=>"techn. MitarbeiterIn", "en"=>"Technical assistant"),										
-										array ("name"=>"Sekretariat / Verwaltung", "en"=>"Secretariate"),
-										array ("name"=>"stud. VertreterIn", "en"=>"Collegiate representatives"),
-										array ("name"=>"StudentIn", "en"=>"Students"),										
-									);
+$INST_STATUS_GROUPS["default"] = array ("DirektorIn", "HochschullehrerIn", "Lehrbeauftragte", "Zweitmitglied", "wiss. Hilfskraft","wiss. Mitarbeiter",
+									"stud. Hilfskraft", "StudentIn", "StudentIn", "StudentIn", "techn. MitarbeiterIn", "Sekretariat / Verwaltung", 
+									"stud. VertreterIn", "StudentIn");
 //you can add more specifig presets for the different types 
 
 
