@@ -182,7 +182,7 @@ function PrintSearchResults ($search_exp)
 		if (!$db->num_rows()) {
 			echo "&nbsp; keine Treffer&nbsp; ";
 		} else {
-			echo "&nbsp; <select name=\"Freesearch[]\" size=\"10\" multiple>";
+			echo "&nbsp; <select name=\"Freesearch[]\" size=\"4\" multiple>";
 			while ($db->next_record()) {
 				printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
 			}
