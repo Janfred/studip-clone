@@ -44,8 +44,10 @@ IF ($cmd=="kill") {
 	}
 
 // Angabe der eigenen Werte (immer)
+$db->query("SELECT score, geschlecht AS gender FROM user_info WHERE user_id = '$user_id'");
+$db->next_record();
 echo "<br><br><b>" . _("Ihr Score:") . "&nbsp; ".$score."</b>";
-echo "<br><b>" . _("Ihr Titel") . "</b> ;-)&nbsp; <b>".gettitel($score)."</b>";
+echo "<br><b>" . _("Ihr Titel") . "</b> ;-)&nbsp; <b>".gettitel($score, $db->f("gender"))."</b>";
 echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert hier ver&ouml;ffentlichen") . "</a>";
 ?>
 
@@ -63,8 +65,7 @@ echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert hier ver&ouml;f
 // Liste aller die mutig (oder eitel?) genug sind
 
 $rang = 1;
-$db=new DB_Seminar;
-$db->query("SELECT a.user_id,username,score, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 ORDER BY score DESC");
+$db->query("SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 ORDER BY score DESC");
 if ($db->num_rows()) {
 	echo "<table width=\"99%\" align=\"center\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 	while ($db->next_record()) {
@@ -75,7 +76,7 @@ if ($db->num_rows()) {
 		}
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
 		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("fullname")."</a></td>"
-		."<td class=\"".$cssSw->getClass()."\" width=\"30%\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\">".gettitel($db->f("score"))
+		."<td class=\"".$cssSw->getClass()."\" width=\"30%\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\">".gettitel($db->f("score"), $db->f("geschlecht"))
 		.$kill
 		."</td></tr>\n";
 		$rang++;

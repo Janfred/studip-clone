@@ -223,13 +223,13 @@ if ($username==$auth->auth["uname"]) {
 
 /// Die Anzeige der Stud.Ip-Score
 
-IF ($username==$auth->auth["uname"])
-echo "<br /><br />&nbsp; <a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . ">" . _("Ihr Stud.IP-Score:") . " ".getscore()."<br>&nbsp; " . _("Ihr Rang:") . " ".gettitel(getscore())."</a>";
+if ($username==$auth->auth["uname"])
+	echo "<br /><br />&nbsp; <a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . ">" . _("Ihr Stud.IP-Score:") . " ".getscore()."<br>&nbsp; " . _("Ihr Rang:") . " ".gettitel(getscore(), $db->f("geschlecht"))."</a>";
 else {
-	$db2->query("SELECT score FROM user_info WHERE score > 0  AND user_id = '$user_id'");
+	$db2->query("SELECT score, geschlecht FROM user_info WHERE score > 0  AND user_id = '$user_id'");
 	if ($db2->num_rows()) {
 		while ($db2->next_record())
-			echo "<br /><br />&nbsp; <a href='score.php'>" . _("Stud.IP-Score:") . " ".$db->f("score")."<br>&nbsp; " . _("Rang:") . " ".gettitel($db->f("score"))."</a>";
+			echo "<br /><br />&nbsp; <a href='score.php'>" . _("Stud.IP-Score:") . " ".$db2->f("score")."<br>&nbsp; " . _("Rang:") . " ".gettitel($db2->f("score"), $db2->f("geschlecht"))."</a>";
 	}
 }
 
