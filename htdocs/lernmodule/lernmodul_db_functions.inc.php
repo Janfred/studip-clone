@@ -73,6 +73,7 @@ function get_user_modules($studip_id)
 			" WHERE meta.status='final' ".
 			" AND lerneinheit.public = 'y' ".
 			" AND meta.typ = 'le' ".
+			" AND lerneinheit.deleted='0000-00-00 00:00:00'".
 			" AND ((meta_author.author_local_id = '$ilias_user_id') ".
 			" OR (meta_contrib.contrib_local_id = '$ilias_user_id'))"
 			);
@@ -118,6 +119,7 @@ function get_all_modules($hide_mod = false)
 			" WHERE meta.status='final' ".
 			" AND public = 'y' ".
 			" AND meta.typ = 'le' " .
+			" AND lerneinheit.deleted='0000-00-00 00:00:00'".
 			" AND lerneinheit.id = meta.id ".
 			" AND lerneinheit.inst = meta.inst ");
 	while ($ilias_db->next_record())
