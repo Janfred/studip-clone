@@ -712,11 +712,6 @@ while ($db->next_record()) {
 			?>
 			<font size=-1>Veranstaltung<br /><a href="adminarea_start.php?select_sem_id=<? echo $seminar_id ?>"><img src="pictures/buttons/auswaehlen-button.gif" border=0></a></font> 
 			<?
-			if ($perm->have_perm("admin")) {
-				?>
-				<a href="admin_seminare1.php?&s_id=<? echo $seminar_id ?>&s_command=kill">&nbsp;<img src="pictures/buttons/archivieren-button.gif" border=0></a></font> 
-				<?
-				}
 			break;
 			case "admin_dates.php": 
 			?>
