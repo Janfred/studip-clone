@@ -280,25 +280,25 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 	if($title_rear == "")
 	$title_rear = $title_rear_chooser;
 	$query = "";
-	if (!StudipAuthAbstract::CheckField("user_info.privatnr", $auth->auth['auth_plugin'])){
+	if (!StudipAuthAbstract::CheckField("user_info.privatnr", $this->auth_user['auth_plugin'])){
 		$query .= "privatnr='$telefon',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.privadr", $auth->auth['auth_plugin'])){
+	if (!StudipAuthAbstract::CheckField("user_info.privadr", $this->auth_user['auth_plugin'])){
 		$query .= "privadr='$anschrift',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.Home", $auth->auth['auth_plugin'])){
+	if (!StudipAuthAbstract::CheckField("user_info.Home", $this->auth_user['auth_plugin'])){
 		$query .= "Home='$home',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.hobby", $auth->auth['auth_plugin'])){
+	if (!StudipAuthAbstract::CheckField("user_info.hobby", $this->auth_user['auth_plugin'])){
 		$query .= "hobby='$hobby',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.geschlecht", $auth->auth['auth_plugin'])){
+	if (!StudipAuthAbstract::CheckField("user_info.geschlecht", $this->auth_user['auth_plugin'])){
 		$query .= "geschlecht='$geschlecht',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.title_front", $auth->auth['auth_plugin'])){
+	if (!StudipAuthAbstract::CheckField("user_info.title_front", $this->auth_user['auth_plugin'])){
 		$query .= "title_front='$title_front',";
 	}
-	if (!StudipAuthAbstract::CheckField("user_info.title_rear", $auth->auth['auth_plugin'])){
+	if (!StudipAuthAbstract::CheckField("user_info.title_rear", $this->auth_user['auth_plugin'])){
 		$query .= "title_rear='$title_rear',";
 	}
 	if ($query != "") {
@@ -323,7 +323,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 		$validator=new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
 		$validator->timeout=10;
 		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $auth->auth['auth_plugin']) && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
+		if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin']) && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
 			// auf doppelte Vergabe wird weiter unten getestet.
 			if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
 				if (!$validator->ValidatePassword($password)) {
@@ -342,7 +342,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 			$this->msg=$this->msg . "msg§" . _("Ihr Passwort wurde ge&auml;ndert!") . "§";
 		}
 		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $auth->auth['auth_plugin']) && $vorname!=$this->auth_user["Vorname"]) { //Vornamen verändert ?
+		if (!StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $this->auth_user['auth_plugin']) && $vorname!=$this->auth_user["Vorname"]) { //Vornamen verändert ?
 			if (!$validator->ValidateName($vorname)) {
 				$this->msg=$this->msg . "error§" . _("Der Vorname fehlt oder ist unsinnig!") . "§";
 				return false;
@@ -351,7 +351,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 			$this->msg=$this->msg . "msg§" . _("Ihr Vorname wurde ge&auml;ndert!") . "§";
 		}
 		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $auth->auth['auth_plugin']) && $nachname!=$this->auth_user["Nachname"]) { //Namen verändert ?
+		if (!StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $this->auth_user['auth_plugin']) && $nachname!=$this->auth_user["Nachname"]) { //Namen verändert ?
 			if (!$validator->ValidateName($nachname)) {
 				$this->msg=$this->msg . "error§" . _("Der Nachname fehlt oder ist unsinnig!") . "§";
 				return false;      
@@ -360,7 +360,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 			$this->msg=$this->msg . "msg§" . _("Ihr Nachname wurde ge&auml;ndert!") . "§";
 		}
 		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.username", $auth->auth['auth_plugin']) && $this->auth_user["username"] != $new_username) {
+		if (!StudipAuthAbstract::CheckField("auth_user_md5.username", $this->auth_user['auth_plugin']) && $this->auth_user["username"] != $new_username) {
 			if (!$validator->ValidateUsername($new_username)) {
 				$this->msg=$this->msg . "error§" . _("Der gewählte Username ist nicht lang genug!") . "§";
 				return false;
@@ -380,7 +380,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 			$this->logout_user = TRUE;
 		}
 		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.Email", $auth->auth['auth_plugin']) && $this->auth_user["Email"] != $email) {  //email wurde geändert!
+		if (!StudipAuthAbstract::CheckField("auth_user_md5.Email", $this->auth_user['auth_plugin']) && $this->auth_user["Email"] != $email) {  //email wurde geändert!
 			$smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
 			$REMOTE_ADDR=getenv("REMOTE_ADDR");
 			$Zeit=date("H:i:s, d.m.Y",time());
@@ -411,7 +411,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 				$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
 				return false;
 			}
-			if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $auth->auth['auth_plugin'])){
+			if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
 				//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
 				$newpass=$this->generate_password(6);
 				$hashpass=md5($newpass);
@@ -898,12 +898,12 @@ if ($view=="Daten") {
 	//persönliche Daten...
 	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
 	echo "<br><font size=-1>" . sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), "</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>") . "</font><br>";
-	if ($auth->auth['auth_plugin']){
-		echo "<font size=\"-1\">" . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$auth->auth['auth_plugin']) . "</font>";
+	if ($my_about->auth_user['auth_plugin']){
+		echo "<font size=\"-1\">" . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
 	}
 	echo "<br><br></td></tr>\n<tr><td class=blank><table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>";
 	//Keine JavaScript überprüfung bei adminzugriff
-	if ($my_about->check=="user" && $auth->auth["jscript"] && !$auth->auth['auth_plugin']) {
+	if ($my_about->check=="user" && $auth->auth["jscript"] && !$my_about->auth_user['auth_plugin']) {
 		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
 	} else {
 		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
@@ -911,7 +911,7 @@ if ($view=="Daten") {
 
 	if ($my_about->check=="user") {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.username", $auth->auth['auth_plugin'])) {
+		if (StudipAuthAbstract::CheckField("auth_user_md5.username", $my_about->auth_user['auth_plugin'])) {
 			echo "&nbsp; ".$my_about->auth_user["username"];
 		} else {
 			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
@@ -919,7 +919,7 @@ if ($view=="Daten") {
 		echo "</td></tr>\n";
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </td>";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.password", $auth->auth['auth_plugin'])) {
+		if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
 			echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" width=\"80%\" align=\"left\">&nbsp; *****";
 		} else {
 			echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
@@ -927,13 +927,13 @@ if ($view=="Daten") {
 		echo "</td></tr>\n";
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $auth->auth['auth_plugin'])) {
+		if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $my_about->auth_user['auth_plugin'])) {
 			echo "&nbsp; " . $my_about->auth_user["Vorname"];
 		} else {
 			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
 		}
 		echo "</td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; " . _("Nachname:") . "</font><br />";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $auth->auth['auth_plugin'])) {
+		if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $my_about->auth_user['auth_plugin'])) {
 			echo "&nbsp; " . $my_about->auth_user["Nachname"];
 		} else {
 			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
@@ -942,7 +942,7 @@ if ($view=="Daten") {
 		
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $auth->auth['auth_plugin'])) {
+		if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $my_about->auth_user['auth_plugin'])) {
 			echo "&nbsp; " . $my_about->auth_user["Email"];
 		} else {
 			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
@@ -961,7 +961,7 @@ if ($view=="Daten") {
 	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Titel:") . " </td>";
-	if (StudipAuthAbstract::CheckField("user_info.title_front", $auth->auth['auth_plugin'])) {
+	if (StudipAuthAbstract::CheckField("user_info.title_front", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" width=\"80%\" colspan=\"2\" align=\"left\">&nbsp;" .  $my_about->user_info['title_front'] . "</td></tr>";
 	} else {
 		echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
@@ -978,7 +978,7 @@ if ($view=="Daten") {
 	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\" nowrap><blockquote><b>" . _("Titel nachgest.:") . " </td>";
-	if (StudipAuthAbstract::CheckField("user_info.title_rear", $auth->auth['auth_plugin'])) {
+	if (StudipAuthAbstract::CheckField("user_info.title_rear", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" width=\"80%\" colspan=\"2\" align=\"left\">&nbsp;" .  $my_about->user_info['title_rear'] . "</td></tr>";
 	} else {
 		echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
@@ -995,7 +995,7 @@ if ($view=="Daten") {
 	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Geschlecht:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>";
-	if (StudipAuthAbstract::CheckField("user_info.geschlecht", $auth->auth['auth_plugin'])) {
+	if (StudipAuthAbstract::CheckField("user_info.geschlecht", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . (!$my_about->user_info["geschlecht"] ? _("m&auml;nnlich") : _("weiblich"));
 	} else {
 		echo "&nbsp; " . _("m&auml;nnlich") . "&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=\"0\" ";
@@ -1013,7 +1013,7 @@ if ($view=="Daten") {
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Freiwillige Angaben") . "</b></td></tr>\n";
 	 $cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Telefon:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.privatnr", $auth->auth['auth_plugin'])) {
+	if (StudipAuthAbstract::CheckField("user_info.privatnr", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["privatnr"]);
 	} else {
 		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"telefon\" value=\"".htmlReady($my_about->user_info["privatnr"])."\">";
@@ -1021,7 +1021,7 @@ if ($view=="Daten") {
 	echo "</td></tr>\n";
 	 $cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Anschrift:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.privadr", $auth->auth['auth_plugin'])) {
+	if (StudipAuthAbstract::CheckField("user_info.privadr", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["privadr"]);
 	} else {
 		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\">";
@@ -1029,7 +1029,7 @@ if ($view=="Daten") {
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.Home", $auth->auth['auth_plugin'])) {
+	if (StudipAuthAbstract::CheckField("user_info.Home", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["Home"]);
 	} else {
 		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\">";
@@ -1038,7 +1038,7 @@ if ($view=="Daten") {
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Hobbies:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.hobby", $auth->auth['auth_plugin'])) {
+	if (StudipAuthAbstract::CheckField("user_info.hobby", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["hobby"]);
 	} else {
 		echo "&nbsp; <textarea  name=\"hobby\"  style=\"width: 50%\" cols=".round($max_col*0.5)." rows=4 maxlength=250 wrap=virtual >".htmlReady($my_about->user_info["hobby"])."</textarea>";

@@ -228,12 +228,15 @@ while ( is_array($HTTP_POST_VARS)
 			$run = FALSE;
 		}
 			
-		
-		$username = trim($username);
-		$Vorname = trim($Vorname);
-		$Nachname = trim($Nachname);
-		$Email = trim($Email);
-		
+		$db->query("select * from auth_user_md5 where user_id='$u_id'");
+		$db->next_record();
+			
+		$username = isset($username) ? trim($username) : $db->f("username");
+		$Vorname = isset($Vorname) ? trim($Vorname) : addslashes($db->f("Vorname"));
+		$Nachname = isset($Nachname) ? trim($Nachname) : addslashes($db->f("Nachname"));
+		$Email = isset($Email) ? trim($Email) : addslashes($db->f("Email"));
+		$permlist = isset($perms) ? addslashes(implode($perms,",")) : addslashes($db->f("perms"));
+			
 		// Do we have all necessary data?
 		if (empty($username) || empty($perms) || empty ($Email)) {
 			$msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>E-Mail</b> an!") . "§";
@@ -255,7 +258,6 @@ while ( is_array($HTTP_POST_VARS)
 		
 		if ($run) { // E-Mail erreichbar
 			// Update user information.
-			$permlist = addslashes(implode($perms,","));
 			if (!$title_front)
 				$title_front = $title_front_chooser;
 			if (!$title_rear)
@@ -435,10 +437,11 @@ while ( is_array($HTTP_POST_VARS)
 	case "u_kill_x":
 	
 		$run = TRUE;
+		$db->query("select perms,username from auth_user_md5 where user_id='$u_id'");
+		$db->next_record();
+		$username = $db->f("username");
 		// Do we have permission to do so?
 		if (!$perm->have_perm("root")) {
-			$db->query("select * from auth_user_md5 where user_id='$u_id'");
-			$db->next_record();
 			if ($db->f("perms") == "root") {
 				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu l&ouml;schen.") . "§";
 				$run = FALSE;
@@ -645,7 +648,7 @@ while ( is_array($HTTP_POST_VARS)
 
 	// einzelnen Benutzer anzeigen
 if (isset($details)) {
-	if ($details=="") { // neuen Benutzer anlegen
+	if ($details=="" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
 		?>
 		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 		<tr valign=top align=middle>
@@ -737,22 +740,60 @@ if (isset($details)) {
 			<form name="edit" method="post" action="<?php echo $PHP_SELF ?>">
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Benutzername:")?></b></td>
-					<td class="steel1">&nbsp;<input type="text" name="username" size=24 maxlength=63 value="<?php $db->p("username") ?>"></td>
+					<td class="steel1">&nbsp;
+					<?
+					if (StudipAuthAbstract::CheckField("auth_user_md5.username", $db->f('auth_plugin'))) {
+						echo $db->f("username");
+					} else {
+					?><input type="text" name="username" size=24 maxlength=63 value="<?php $db->p("username") ?>"><?
+					}
+					?>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("globaler Status:")?>&nbsp;</b></td>
-					<td class="steel1">&nbsp;<? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
+					<td class="steel1">&nbsp;
+					<?
+					if (StudipAuthAbstract::CheckField("auth_user_md5.perms", $db->f('auth_plugin'))) {
+						echo $db->f("perms");
+					} else {
+						print $perm->perm_sel("perms", $db->f("perms"));
+					}
+					?>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Vorname:")?></b></td>
-					<td class="steel1">&nbsp;<input type="text" name="Vorname" size=24 maxlength=63 value="<?php $db->p("Vorname") ?>"></td>
+					<td class="steel1">&nbsp;
+					<?
+					if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $db->f('auth_plugin'))) {
+						echo $db->f("Vorname");
+					} else {
+						?><input type="text" name="Vorname" size=24 maxlength=63 value="<?php $db->p("Vorname") ?>"><?
+					}
+					?>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Nachname:")?></b></td>
-					<td class="steel1">&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value="<?php $db->p("Nachname") ?>"></td>
+					<td class="steel1">&nbsp;
+					<?
+					if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $db->f('auth_plugin'))) {
+						echo $db->f("Nachname");
+					} else {
+						?><input type="text" name="Nachname" size=24 maxlength=63 value="<?php $db->p("Nachname") ?>"><?
+					}
+					?>
+					</td>
 				</tr>
 				<td class="steel1"><b>&nbsp;<?=_("Titel:")?></b>
-				</td><td class="steel1" align="right"><select name="title_front_chooser" onChange="document.edit.title_front.value=document.edit.title_front_chooser.options[document.edit.title_front_chooser.selectedIndex].text;">
+				</td><td class="steel1" align="right">
+				<?
+				if (StudipAuthAbstract::CheckField("user_info.title_front", $db->f('auth_plugin'))) {
+						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . $db->f("title_front");
+				} else {
+				?>	
+				<select name="title_front_chooser" onChange="document.edit.title_front.value=document.edit.title_front_chooser.options[document.edit.title_front_chooser.selectedIndex].text;">
 				<?
 				 for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
 					 echo "\n<option";
@@ -762,11 +803,21 @@ if (isset($details)) {
 				}
 				?>
 				</select></td>
-				<td class="steel1">&nbsp;<input type="text" name="title_front" value="<?=$db->f("title_front")?>" size=24 maxlength=63></td>
+				<td class="steel1">&nbsp;<input type="text" name="title_front" value="<?=$db->f("title_front")?>" size=24 maxlength=63>
+				<?
+				}
+				?>
+				</td>
 				</tr>
 				<tr>
 				<td class="steel1"><b>&nbsp;<?=_("Titel nachgest.:")?></b>
-				</td><td class="steel1" align="right"><select name="title_rear_chooser" onChange="document.edit.title_rear.value=document.edit.title_rear_chooser.options[document.edit.title_rear_chooser.selectedIndex].text;">
+				</td><td class="steel1" align="right">
+				<?
+				if (StudipAuthAbstract::CheckField("user_info.title_rear", $db->f('auth_plugin'))) {
+						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . $db->f("title_rear");
+				} else {
+				?>	
+				<select name="title_rear_chooser" onChange="document.edit.title_rear.value=document.edit.title_rear_chooser.options[document.edit.title_rear_chooser.selectedIndex].text;">
 				<?
 				 for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
 					 echo "\n<option";
@@ -776,16 +827,39 @@ if (isset($details)) {
 				}
 				?>
 				</select></td>
-				<td class="steel1">&nbsp;<input type="text" name="title_rear" value="<?=$db->f("title_rear")?>" size=24 maxlength=63></td>
+				<td class="steel1">&nbsp;<input type="text" name="title_rear" value="<?=$db->f("title_rear")?>" size=24 maxlength=63>
+				<?
+				}
+				?>
+				</td>
 				</tr>
 				<tr>
 				<td colspan="2" class="steel1"><b>&nbsp;<?=_("Geschlecht:")?></b></td>
-				<td class="steel1">&nbsp;<input type="RADIO" <? if (!$db->f("geschlecht")) echo "checked";?> name="geschlecht" value="0"><?=_("m&auml;nnlich")?>&nbsp;
-				<input type="RADIO" <? if ($db->f("geschlecht")) echo "checked";?> name="geschlecht" value="1"><?=_("weiblich")?></td>
+				<td class="steel1">&nbsp;
+				<?
+				if (StudipAuthAbstract::CheckField("user_info.geschlecht", $db->f('auth_plugin'))) {
+					echo "&nbsp;" . (!$db->f("geschlecht") ? _("m&auml;nnlich") : _("weiblich"));
+				} else {
+				?>
+				<input type="RADIO" <? if (!$db->f("geschlecht")) echo "checked";?> name="geschlecht" value="0"><?=_("m&auml;nnlich")?>&nbsp;
+				<input type="RADIO" <? if ($db->f("geschlecht")) echo "checked";?> name="geschlecht" value="1"><?=_("weiblich")?>
+				<?
+				}
+				?>
+				</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("E-Mail:")?></b></td>
-					<td class="steel1">&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="<?php $db->p("Email") ?>">&nbsp;</td>
+					<td class="steel1">&nbsp;
+					<?
+					if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $db->f('auth_plugin'))) {
+						echo $db->f("Email");
+					} else {
+					?><input type="text" name="Email" size=48 maxlength=63 value="<?php $db->p("Email") ?>">&nbsp;
+					<?
+					}
+					?>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("inaktiv seit:")?></b></td>
@@ -794,6 +868,10 @@ if (isset($details)) {
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("registriert seit:")?></b></td>
 					<td class="steel1">&nbsp;<? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo _("unbekannt"); ?></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Authentifizierung:")?></b></td>
+					<td class="steel1">&nbsp;<?=($db->f("auth_plugin") ? $db->f("auth_plugin") : "Standard")?></td>
 				</tr>
 				
 				<td class="steel1" colspan=3 align=center>&nbsp;
@@ -812,7 +890,13 @@ if (isset($details)) {
 					$db2->f("admin_ok") ) {
 					?>
 					<input type="IMAGE" name="u_edit" <?=makeButton("uebernehmen", "src")?> value=" <?=_("Ver&auml;ndern")?> ">&nbsp;
-					<input type="IMAGE" name="u_pass" <?=makeButton("neuespasswort", "src")?> value=" <?=_("Passwort neu setzen")?> ">&nbsp;
+					<?
+					if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $db->f('auth_plugin'))) {
+						?>
+						<input type="IMAGE" name="u_pass" <?=makeButton("neuespasswort", "src")?> value=" <?=_("Passwort neu setzen")?> ">&nbsp;
+						<?
+					}
+					?>
 					<input type="IMAGE" name="u_kill" <?=makeButton("loeschen", "src")?> value=" <?=_("L&ouml;schen")?> ">&nbsp;
 					<?
 		 		}
@@ -878,10 +962,12 @@ if (isset($details)) {
 	?>
 
 	<tr><td class="blank" colspan=2>
-	
-	<p><b><a href="<? echo $PHP_SELF . "?details="?>">&nbsp;<?=_("Neuen Benutzer-Account anlegen")?></a></b></p>
-
 	<?
+	if (in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])){
+		?><p><b><a href="<? echo $PHP_SELF . "?details="?>">&nbsp;<?=_("Neuen Benutzer-Account anlegen")?></a></b></p><?
+	} else {
+		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
+	}
 	unset($msg);
 	include ("pers_browse.inc.php");
 	print "<br>\n";
@@ -924,7 +1010,8 @@ if (isset($details)) {
 				<th align="left"><a href="new_user_md5.php?sortby=Nachname"><?=_("Nachname")?></a></th>
 				<th align="left"><a href="new_user_md5.php?sortby=Email"><?=_("E-Mail")?></a></th>
 				<th><a href="new_user_md5.php?sortby=changed"><?=_("inaktiv")?></a></th>
-				<th><a href="new_user_md5.php?sortby=mkdate"><?=_("registriert seit")?></a></th>				
+				<th><a href="new_user_md5.php?sortby=mkdate"><?=_("registriert seit")?></a></th>
+				<th><a href="new_user_md5.php?sortby=auth_plugin"><?=_("Authentifizierung")?></a></th>
 			 </tr>
 			<?	
 
@@ -944,6 +1031,7 @@ if (isset($details)) {
 					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Email")?></td>
 					<td class="<? echo $cssSw->getClass() ?>" align="center"><?php echo $inactive ?></td>
 					<td class="<? echo $cssSw->getClass() ?>" align="center"><? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo _("unbekannt"); ?></td>
+					<td class="<? echo $cssSw->getClass() ?>" align="center"><?=($db->f("auth_plugin") ? $db->f("auth_plugin") : "Standard")?></td>
 				</tr>
 				<?
 			endwhile;
