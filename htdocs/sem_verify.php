@@ -609,7 +609,7 @@ $db6=new DB_Seminar;
 							} else { //Auf die Warteliste
 								$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' AND status != 'accepted' ORDER BY position DESC");//letzte hoechste Position herausfinden
 								$db5->next_record();
-								$positions=$db5->f("position")+1;
+								$position=$db5->f("position")+1;
 							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".$position."'  ");
 								parse_msg (sprintf("info§"._("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b>. Sie wurden jedoch auf Platz %s der Warteliste gesetzt.")." <br /> "._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird."), $SeminarName, $position));
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
