@@ -37,6 +37,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbView.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/dbviews/sem_tree.view.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/guestbook.inc.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 	
@@ -74,6 +75,7 @@ $msging=new messaging;
 if ($cmd=="add_user")
 	$msging->add_buddy ($add_uname, 0);
 
+
 //Auf und Zuklappen Termine
 if ($dopen)
 	$about_data["dopen"]=$dopen;
@@ -104,6 +106,15 @@ if (!$db->nf()) {
 	die;
 } else
 	$user_id=$db->f("user_id");
+
+
+
+//Guestbook actions
+if ($guestbook)
+	actions_guestbook($guestbook);
+if ($deletepost)
+	delete_post_guestbook($user_id, $deletepost);
+
 	
 $DataFields = new DataFields($user_id);
 
@@ -249,6 +260,8 @@ echo "</tr></table><br>\n";
 if (show_news($user_id, $show_admin, 0, $about_data["nopen"]))
 	echo "<br>";
 
+
+
 // alle persoenlichen Termine anzeigen, aber keine privaten
 $temp_user_perm = get_global_perm($user_id);
 if ($temp_user_perm != "root" && $temp_user_perm != "admin") {
@@ -267,6 +280,12 @@ if ($GLOBALS['CHAT_ENABLE']){
 // include and show votes and tests
 if ($GLOBALS['VOTE_ENABLE']) {
 	show_votes ($username, $auth->auth["uid"], $perm, YES);
+}
+
+// show Guestbook
+if (($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) || check_guestbook($user_id)==TRUE) {
+	print_guestbook($user_id);
+	echo "<br>";	
 }
 
 
