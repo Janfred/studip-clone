@@ -43,7 +43,7 @@ $perm->check("user");
 
 //chat eingeschaltet?
 if (!$CHAT_ENABLE) {
-	page_close();
+	//page_close();
 	die;
 }
 
@@ -254,7 +254,7 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 	?><table width="100%"><tr><?
 	my_error("Du bist nicht in diesem Chat angemeldet!","chat",1,false);
 	?></tr></table></body></html><?
-	page_close();
+	//page_close();
 	die;
 }
 echo "\n<b>Hallo ".fullNick($user->id).",<br> willkommen im Raum: "
@@ -270,13 +270,12 @@ foreach($sess->pt as $key){
 foreach($user->pt as $key){
 	unset($$key);
 }
-page_close();
+//page_close();
 
 //shutdown funktion, wird automatisch bei skriptende aufgerufen
 function chatLogout(){
 	global $userid,$chatid,$chatServer;
 	$chatServer->removeUser($userid,$chatid);
-	die;
 }
 ?>
 
