@@ -22,83 +22,93 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //****************************************************************************
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CALENDAR_DRIVER;
+
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
 		. "/lib/CalendarEvent.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
 		. "/lib/SeminarEvent.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
 		. "/lib/calendar_misc_func.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
-		. "/lib/driver/{$GLOBALS['CALENDAR_DRIVER']}/list_driver.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
+		. "/lib/driver/$CALENDAR_DRIVER/list_driver.inc.php");
 
-class AppList{
+class DbCalendarEventList {
 
-	var $start;      // Startzeit als Unix-Timestamp (int)
-	var $end;        // Endzeit als Unix-Timestamp (int)
-	var $ts;         // der "genormte" Timestamp s.o. (int)
-	var $apps;       // Termine (Object[])
-	var $r_id;       // range_id (String)
-	var $show_pr;    // Private Termine anzeigen ? (boolean)
-	var $user_id;    // User-ID aus PhpLib (String)
+	var $start;           // Startzeit als Unix-Timestamp (int)
+	var $end;             // Endzeit als Unix-Timestamp (int)
+	var $ts;              // der "genormte" Timestamp s.o. (int)
+	var $events;          // Termine (Object[])
+	var $show_private;    // Private Termine anzeigen ? (boolean)
+	var $user_id;         // User-ID aus PhpLib (String)
+	var $range_id;
 	
 	// Konstruktor
 	// bei Aufruf ohne Parameter: Termine von jetzt bis jetzt + 14 Tage
-	function AppList($range_id, $show_private = FALSE, $start = -1, $end = -1, $sort = TRUE){
+	function DbCalendarEventList ($range_id, $start = -1, $end = -1, $sort = TRUE) {
 		global $user;
-		if($start == -1)
+		
+		if ($start == -1)
 			$start = time();
-		if($end == -1)
-			$end = mktime(23,59,59,date("n", $start),date("j", $start) + 7,date("Y", $start));
+		if ($end == -1)
+			$end = mktime(23, 59, 59, date("n", $start), date("j", $start) + 7, date("Y", $start));
 		
 		$this->start = $start;
 		$this->end = $end;
-		$this->ts = mktime(12,0,0,date("n", $this->start),date("j", $this->start),date("Y", $this->start),0);
-		$this->r_id = $range_id;
-		$this->show_pr = $show_private;
+		$this->ts = mktime(12, 0, 0, date("n", $this->start), date("j", $this->start), date("Y", $this->start), 0);
+		if ($range_id == $user->id)
+			$this->show_private = TRUE;
+		else
+			$this->show_private = FALSE;
 		$this->user_id = $user->id;
+		$this->range_id = $range_id;
 		$this->restore();
-		if($sort)
+		if ($sort)
 			$this->sort();
 	}
 	
 	// public
-	function getStart(){
+	function getStart () {
 		return $this->start;
 	}
 	
 	// public
-	function getEnd(){
+	function getEnd () {
 		return $this->end;
 	}
 	
 	// Persönliche Termine und Seminartermine werden gemischt. Es muss also
 	// nicht mehr nachtraeglich sortiert werden.
 	// private
-	function restore(){
+	function restore () {
 		list_restore($this);
 	}
 	
 	// public
-	function numberOfEvents(){
-		return sizeof($this->apps);
+	function numberOfEvents () {
+		return sizeof($this->events);
 	}
 	
-	function existEvent(){
-		return sizeof($this->apps) > 0 ? TRUE : FALSE;
+	function existEvent () {
+		return sizeof($this->events) > 0 ? TRUE : FALSE;
 	}
 	
 	// public
-	function nextEvent(){
-		if(list(,$ret) = each($this->apps));
+	function nextEvent() {
+		if(list(,$ret) = each($this->events));
 			return $ret;
 		return FALSE;
 	}
 	
 	// public
-	function bindSeminarEvents($sem_ids = ""){
+	function bindSeminarEvents ($sem_ids = "") {
+	
+		if ($this->range_id != $this->user_id)
+			return FALSE;
+			
 		if ($sem_ids == "")
-			$query = "SELECT t.*, su.status, s.Name FROM seminar_user su "
+			$query = "SELECT su.status, su.gruppe, s.Name, t.* FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
 						 . "s.Seminar_id=range_id WHERE user_id = '" . $this->user_id
 						 . "' AND ((date BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
@@ -107,7 +117,7 @@ class AppList{
 		else {
 			if (is_array($sem_ids))
 				$sem_ids = implode("','", $sem_ids);
-			$query = "SELECT t.*, su.status , s.Name FROM seminar_user su "
+			$query = "SELECT su.status, su.gruppe, s.Name, t.* FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
 						 . "s.Seminar_id=range_id WHERE user_id = '" . $this->user_id
 						 . "' AND range_id IN ('$sem_ids') AND "
@@ -115,19 +125,28 @@ class AppList{
 						 . ") OR (end_time BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . "))";
 		}
-			
-		$db = new DB_Seminar;	
+		$db =& new DB_Seminar();	
 		$db->query($query);
 		
-		if($db->num_rows() != 0){
-			while($db->next_record()){
-				$app =& new SeminarEvent($db->f("date"), $db->f("end_time"), $db->f("content"),
-				              $db->f("date_typ"), $db->f("raum"), $db->f("termin_id"), $db->f("range_id"),
-											$db->f("mkdate"), $db->f("chdate"));
-				$app->setDescription($db->f("description"));
-				$app->setWritePermission($db->f("status") == "tutor" || $db->f("status") == "dozent");
-				$app->setSemName($db->f("Name"));
-				$this->apps[] = $app;
+		if ($db->num_rows() != 0) {
+			while ($db->next_record()) {
+				$event =& new SeminarEvent($db->f('termin_id'), array(
+						'DTSTART'       => $db->f('date'),
+						'DTEND'         => $db->f('end_time'),
+						'SUMMARY'       => $db->f('content'),
+						'CATEGORIES'    => $db->f('date_typ'),
+						'LOCATION'      => $db->f('raum'),
+						'DESCRIPTION'   => $db->f('description'),
+						'CLASS'         => 'PRIVATE',
+						'SEMNAME'       => $db->f('Name'),
+						'UID'           => SeminarEvent::getUid($db->f('termin_id')),
+						'DTSTAMP'       => $db->f('mkdate'),
+						'LAST-MODIFIED' => $db->f('chdate')),
+						$db->f('range_id'));
+						
+				$event->setWritePermission($db->f('status') == 'tutor' || $db->f('status') == 'dozent');
+				$event->setColor($db->f('gruppe'));
+				$this->events[] = $event;
 			}
 			$this->sort();
 			return TRUE;
@@ -135,9 +154,13 @@ class AppList{
 		return FALSE;
 	}
 	
-	function sort(){
-		if($this->apps)
-			usort($this->apps,"cmp_list");
+	function sort () {
+		if ($this->events)
+			usort($this->events, "cmp_list");
+	}
+	
+	function &getAllEvents () {
+		return $this->events;
 	}
 	
 } // class DbCalendarEventList 

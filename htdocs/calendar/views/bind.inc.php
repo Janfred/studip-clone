@@ -38,6 +38,23 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+require("$ABSOLUTE_PATH_STUDIP/header.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+
+// alle vom user abonnierten Seminare
+$db =& new DB_Seminar;
+if(!isset($sortby))
+	$sortby = "seminar_user.gruppe, seminare.Name";
+
+if($order == 'ASC')
+	$order = 'DESC';
+else
+	$order = 'ASC';
+$query = "SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, count(termin_id) as count "
+			 . "FROM seminar_user LEFT JOIN seminare USING (Seminar_id) LEFT JOIN termine ON range_id=seminare.Seminar_id WHERE seminar_user.user_id = '"
+			 . $user->id."' GROUP BY Seminar_id ORDER BY $sortby $order";
+$db->query($query);
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"90%\">\n";

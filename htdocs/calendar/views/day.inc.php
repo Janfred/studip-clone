@@ -38,6 +38,10 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+require("$ABSOLUTE_PATH_STUDIP/header.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"50%\">\n";
@@ -47,7 +51,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr
 echo "<th width=\"10%\" height=\"40\"><a href=\"$PHP_SELF?cmd=showday&atime=";
 echo $atime - 86400 . "\">\n";
 $tooltip = tooltip(_("zurück"));
-echo "<img border=\"0\" src=\"./pictures/forumrotlinks.gif\"$tooltip></a></th>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_previous.gif\"$tooltip></a></th>\n";
 echo "<th width=\"80%\" class=\"cal\"><b>\n";
 
 echo $aday->toString("LONG") . ", " . $aday->getDate();
@@ -59,7 +63,7 @@ echo "</b></th>\n";
 echo "<th width=\"10%\"><a href=\"$PHP_SELF?cmd=showday&atime=";
 echo $atime + 86400 . "\">\n";
 $tooltip = tooltip(_("vor"));
-echo "<img border=\"0\" src=\"./pictures/forumrot.gif\"$tooltip></a></th>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\"$tooltip></a></th>\n";
 echo "</tr>\n";
 
 if ($st > 0) {

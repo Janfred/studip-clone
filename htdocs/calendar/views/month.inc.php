@@ -38,6 +38,14 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+
+echo '<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
+echo "<script language=\"JavaScript\" src=\"overlib.js\"></script>\n";
+
+require("$ABSOLUTE_PATH_STUDIP/header.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
@@ -51,14 +59,14 @@ echo "<tr>\n";
 printf("<th>&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getStart() - 1);
 $tooltip = tooltip(_("zurück"));
-echo "<img border=\"0\" src=\"./pictures/forumrotlinks.gif\" $tooltip></a>&nbsp;</th>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_previous.gif\" $tooltip></a>&nbsp;</th>\n";
 printf("<th colspan=%s class=\"cal\">\n", $mod == "nokw" ? "5" : "6");
 echo htmlentities(strftime("%B ", $amonth->getStart()), ENT_QUOTES) . $amonth->getYear();
 echo "</th>\n";
 printf("<th>&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getEnd() + 1);
 $tooltip = tooltip(_("vor"));
-echo "<img border=\"0\" src=\"./pictures/forumrot.gif\" $tooltip></a>&nbsp;</th>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\" $tooltip></a>&nbsp;</th>\n";
 echo "</tr>\n<tr>\n";
 
 $weekdays_german = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
@@ -106,10 +114,12 @@ for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 	else
 		$max_apps = 5;
 	
+	// week column
 	if ($j % 7 == 0)
 		echo "<tr>\n";
 	echo "<td class=\"{$style}month\" valign=\"top\" width=\"$width\" height=\"$height\">&nbsp;";
 	
+	// sunday column
 	if (($j + 1) % 7 == 0) {
 		echo "<a class=\"{$style}sday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>\n";
 		month_up_down($amonth, $i, $step, $max_apps);
@@ -129,6 +139,7 @@ for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 		echo "</tr>\n";
 	}
 	else{
+		// other days columns
 		// unterschiedliche Darstellung je nach Art des Tages (Rang des Feiertages)
 		switch ($hday["col"]) {
 			case 1:
@@ -179,13 +190,15 @@ function print_month_events ($month_obj, $max_events, $day_timestamp) {
 	global $PHP_SELF;
 	$count = 0;
 	while (($aterm = $month_obj->nextEvent($day_timestamp)) && $count < $max_events) {
-		if ($aterm->getType() == 1 && $aterm->getTitle() == "Kein Titel") {
-			$html_title = fit_title($aterm->getSemName(),1,1,15);
+		if (get_class($aterm) == "seminarevent") {
+			$html_title = fit_title($aterm->getSemName(), 1, 1, 15);
 			$jscript_title = JSReady($aterm->getSemName());
+			$ev_type = "&evtype=sem";
 		}
 		else {
-			$html_title = fit_title($aterm->getTitle(),1,1,15);
+			$html_title = fit_title($aterm->getTitle(), 1, 1, 15);
 			$jscript_title = JSReady($aterm->getTitle());
+			$ev_type = "";
 		}
 		
 		$jscript_text = "'"
@@ -196,8 +209,8 @@ function print_month_events ($month_obj, $max_events, $day_timestamp) {
 									. "&nbsp; &nbsp; " . $jscript_title
 									. "',NOCLOSE,CSSOFF";
 			
-		printf("<br><a class=\"inday\" href=\"%s?cmd=edit&termin_id=%s&atime=%s\" ",
-			$PHP_SELF, $aterm->getId(), $day_timestamp);
+		printf("<br><a class=\"inday\" href=\"%s?cmd=edit&termin_id=%s&atime=%s%s\" ",
+			$PHP_SELF, $aterm->getId(), $day_timestamp, $ev_type);
 		echo "onmouseover=\"return overlib($jscript_text);\" ";
 		echo "onmouseout=\"return nd();\">";
 		printf("<font color=\"%s\">%s</font></a>\n", $aterm->getColor(), $html_title);

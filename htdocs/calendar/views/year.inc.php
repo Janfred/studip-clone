@@ -38,6 +38,10 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+require("$ABSOLUTE_PATH_STUDIP/header.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
@@ -46,13 +50,13 @@ echo "<tr><td class=\"blank\">\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><th align=\"center\" width=\"10%\">\n";
 echo "<a href=\"$PHP_SELF?cmd=showyear&atime=" . ($ayear->getStart() - 1) . "\">";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotlinks.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\" ";
 echo tooltip(_("zurück")) . ">&nbsp;</a></th>\n";
 echo "<th class=\"cal\" align=\"center\" width=\"80%\">\n";
 echo "<font size=\"+2\"><b>" . $ayear->getYear() . "</b></font></th>\n";
 echo "<th align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showyear&atime=";
 echo ($ayear->getEnd() + 1) . "\">\n";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrot.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\" ";
 echo tooltip(_("vor")) . ">&nbsp;</a></th>\n";
 echo "</tr></table>\n</td></tr>\n";
 echo "<tr><td class=\"blank\"><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n";

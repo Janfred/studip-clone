@@ -75,11 +75,11 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 	// Die Generierung der Tabellenansicht erfolgt mit Hilfe "geklonter" Termine,
 	// da die Anfangs- und Endzeiten zur korrekten Darstellung evtl. angepasst
 	// werden muessen
-	for ($i = 0;$i < sizeof($day_obj->app);$i++) {
-		if (($day_obj->app[$i]->getEnd() > $day_obj->getStart() + $start)
-				&& ($day_obj->app[$i]->getStart() < $day_obj->getStart() + $end + 3600)) {
+	for ($i = 0;$i < sizeof($day_obj->events);$i++) {
+		if (($day_obj->events[$i]->getEnd() > $day_obj->getStart() + $start)
+				&& ($day_obj->events[$i]->getStart() < $day_obj->getStart() + $end + 3600)) {
 			
-			$cloned_event = $day_obj->app[$i]->clone();
+			$cloned_event = $day_obj->events[$i];
 			$end_corr = $cloned_event->getEnd() % $step;
 			if ($end_corr > 0) {
 				$end_corr = $cloned_event->getEnd() + ($step - $end_corr);
@@ -90,7 +90,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			if ($cloned_event->getEnd() > ($day_obj->getStart() + $end + 3600))
 				$cloned_event->setEnd($day_obj->getStart() + $end + 3600);
 				
-			if ($day_obj->app[$i]->isDayEvent())
+			if ($day_obj->events[$i]->isDayEvent())
 				$tmp_day_event[] = $cloned_event;
 			else
 				$tmp_event[] = $cloned_event;
@@ -189,8 +189,9 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		reset($tmp_day_event);
 		foreach ($tmp_day_event as $day_event) {
 			$title = fit_title($day_event->getTitle(), 1, 1, $title_length);
-			$title_str = sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%s\">"
-													, $day_event->getId(), $day_event->getStart());
+			$title_str = sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%s%s\">"
+													, $day_event->getId(), $day_event->getStart()
+													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
 			$title_str .= "<font class=\"inday\">$title</font></a>";
 			$day_event_row[0] .= "<tr><td style=\"border-style:solid; border-width:2px; border-color:";
 			$day_event_row[0] .= $day_event->getColor() . ";\">";
@@ -344,10 +345,11 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$title = fit_title($title_out, $colsp[$zeile], $rows, $title_length - 6);
 						// calculate the correct height of the event-cell if the cell has 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
-													, $height_event - $padding);
-						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d\">"
+													, $height_event - $padding-2);
+						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
 													, $term[$zeile][$j]->getId()
-													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400));
+													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
+													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
 						$tab[$zeile] .= "<font class=\"inday\">$title</font></a></td>\n";
 					//	$tab[$zeile] .= "<td class=\"steel1\" align=\"right\">&nbsp;</td></tr>\n";
 					}
@@ -356,9 +358,10 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						// calculate the correct height of the event-cell if the cell has _more_ than 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
 													, ($height_event * ($rows - 1) + $spacing * ($rows - 1) - (2 * $padding)));
-						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d\">"
+						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
 													, $term[$zeile][$j]->getId()
-													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400));
+													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
+													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
 						$tab[$zeile] .= "<font class=\"inday\">$title</font></a></td></tr>\n";
 					//	$tab[$zeile] .= "<tr><td height=\"$height_event\" class=\"steel1\" align=\"right\">";
 					//	$tab[$zeile] .= "&nbsp;</td></tr>\n";
@@ -379,7 +382,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				}
 				
 				elseif ($term[$zeile][$j] == "#") {
-					$csp = $link_edit_column;
+					$csp = $link_edit_column - 1;
 					while ($term[$zeile][$j] == "#") {
 						$csp += $cspan;
 						$j++;
@@ -516,8 +519,8 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 			
 		if ($tab_arr[$i]["max_columns"] > 1)
 			$tab[0] .= " colspan=\"{$tab_arr[$i]["max_columns"]}\"";
-		$tab[0] .= "><a href=\"$PHP_SELF?cmd=showday&atime=$dtime\">";
-		$tab[0] .= wday($dtime, "SHORT") . " " . date("d", $dtime) . "</a></th>\n";
+		$tab[0] .= "><a href=\"$PHP_SELF?cmd=showday&atime=$dtime\"><font size=\"-1\">";
+		$tab[0] .= wday($dtime, "SHORT") . " " . date("d", $dtime) . "</font></a></th>\n";
 	}
 	if ($compact)
 		$tab[0] = "<tr>{$tab[0]}</tr>\n";
@@ -565,60 +568,63 @@ function jumpTo ($month, $day, $year, $colsp = 1) {
 	echo ">&nbsp;</td></tr>\n";
 }
 
-// verwendet variable Parameterliste
-function includeMonth () {
+function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	global $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
-	global $imt;
-	$ptime = func_get_arg(0);
+	global $imt, $atime;
+	
 	if ($imt)
-		$atime = $imt;
+		$xtime = $imt;
 	else
-		$atime = $ptime;
-	switch (func_num_args()) {
-		case 4 :
-			$js_include = " " . func_get_arg(3);
-		case 3 :
-			$arg = func_get_arg(2);
-			if($arg == "NOKW")
-				$mod = "NOKW";
-			else
-				$js_include = $arg;
-		case 2 :
-			$href = func_get_arg(1);
-	}
+		$xtime = $ptime;
+	
+	$js_include = " " . $js_include;		
 		
-	$amonth = new CalendarMonth($atime);
-	$now = mktime(12,0,0,date("n", time()), date("j", time()), date("Y", time()));
+	$amonth = new CalendarMonth($xtime);
+	$now = mktime(12, 0, 0, date("n", time()), date("j", time()), date("Y", time()), 0);
 	$width = "25";
 	$height = "25";
 
 	$ret = "<table class=\"blank\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\">";
 	$ret .= "<tr><th>";
 	$ret .= "<table border=\"0\" cellspacing=\"1\" cellpadding=\"1\">";
-	$ret .= "<tr>";
-	$ret .= sprintf("<th valign=\"top\"><a href=\"%s%s&imt=%s\">",
-						$href, $ptime, ($amonth->getStart()-1));
-	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotlinks.gif\" ";
-	$ret .= tooltip(_("zurück")) . "></a></th>";
+	$ret .= "<tr>\n";
+	
+	// navigation arrows left
+	$ret .= "<th valign=\"top\">\n<a href=\"$href$ptime&imt=";
+	$ret .= mktime(0, 0, -1, $amonth->mon, 15, $amonth->year - 1) . "\">";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_double.gif\" ";
+	$ret .= tooltip(_("vorheriges Jahr")) . "></a>";
+	$ret .= "<font size=\"-2\">&nbsp;</font><a href=\"$href$ptime&imt=" . ($amonth->getStart() - 1) . "\">";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_small.gif\" ";
+	$ret .= tooltip(_("vorherige Woche")) . "></a>\n</th>\n";
+	
+	// month and year
 	$ret .= "<th class=\"cal\" colspan=\"";
-	if ($mod == "nokw")
+	if ($mod == "NOKW")
 		$ret .= "5";
 	else
 		$ret .= "6";
 	$ret .= "\" align=\"center\">";
 	$ret .= sprintf("%s %s</th>\n",
 			htmlentities(strftime("%B", $amonth->getStart()), ENT_QUOTES), $amonth->getYear());
-	$ret .= sprintf("<th valign=\"top\"><a href=\"%s%s&imt=%s\">",
-						$href, $ptime, ($amonth->getEnd()+1));
-	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrot.gif\" ";
-	$ret .= tooltip(_("vor")) . "></a></th>";
+	
+	// navigation arrows right
+	$ret .= "<th valign=\"top\"><a href=\"$href$ptime&imt=" . ($amonth->getEnd() + 1) . "\">";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_small.gif\" ";
+	$ret .= tooltip(_("nächste Woche")) . "></a>";
+	$ret .= "<font size=\"-2\">&nbsp;</font><a href=\"$href$ptime&imt=";
+	$ret .= (mktime(0, 0, 1, $amonth->mon, 1, $amonth->year + 1)) . "\">";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_double.gif\" ";
+	$ret .= tooltip(_("nächstes Jahr")) . "></a>\n</th>";
 	$ret .= "</tr>\n";
+	
+	// weekdays
 	$ret .= "<tr>\n";
 	$day_names_german = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
 	foreach ($day_names_german as $day_name_german)
 		$ret .= "<th class=\"inccal\" width=\"$width\">" . wday("", "SHORT", $day_name_german) . "</th>\n";
-	if ($mod != "nokw")
+	if ($mod != "NOKW")
 		$ret .= "<th class=\"inccal\" width=\"$width\">&nbsp;</th>";
 	$ret .= "</tr>\n</table></th></tr>\n<tr><td class=\"blank\">";
 	$ret .= "<table class=\"blank\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">";
@@ -635,13 +641,13 @@ function includeMonth () {
 	// Ist erforderlich, um den Maerz richtig darzustellen
 	// Ursache ist die Sommer-/Winterzeit-Umstellung
 	$cor = 0;
-	if ($amonth->getValue() == 3)
+	if ($amonth->mon == 3)
 		$cor = 1;
 		
-	$last_day = ((42 - ($adow + date("t",$amonth->getStart()))) % 7 + $cor) * 86400
+	$last_day = ((42 - ($adow + date("t", $amonth->getStart()))) % 7 + $cor) * 86400
 	 	        + $amonth->getEnd() - 43199;
 						
-	for ($i = $first_day, $j = 0;$i <= $last_day;$i += 86400, $j++) {
+	for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 		$aday = date("j", $i);
 		// Tage des vorangehenden und des nachfolgenden Monats erhalten andere
 		// style-sheets
@@ -656,21 +662,19 @@ function includeMonth () {
 			$ret .= "<tr>";
 		if ($now == $i)
 			$ret .= "<td class=\"current\" ";
-		elseif (abs($atime - $i) < 3601)
+		elseif (abs($atime - $i) < 1000)
 			$ret .= "<td class=\"month\" ";
 		else
 			$ret .= "<td class=\"steel1\"";
-		$ret .= sprintf("align=\"center\" width=\"%s\" height=\"%s\">", $width, $height);
+		$ret .= "align=\"center\" width=\"$width\" height=\"$height\">";
 		
 		if (($j + 1) % 7 == 0) {
-			$ret .= sprintf("<a class=\"%ssdaymin\" href=\"%s%s\"%s>%s</a>",
-								$style, $href, $i, $js_include, $aday);
+			$ret .= "<a class=\"{$style}sdaymin\" href=\"$href$i\"$js_include>$aday</a>";
 			$ret .= "</td>";
-			if ($mod != "nokw") {
-				$ret .= sprintf("<td class=\"steel1\" align=\"center\" width=\"%s\" height=\"%s\">",
-									$width, $height);
+			if ($mod != "NOKW") {
+				$ret .= "<td class=\"steel1\" align=\"center\" width=\"$width\" height=\"$height\">";
 				$ret .= "<a href=\"./calendar.php?cmd=showweek&atime=$i\">";
-				$ret .= sprintf("<font class=\"kwmin\">%s</font></a></td>", strftime("%V", $i));
+				$ret .= "<font class=\"kwmin\">" . strftime("%V", $i) . "</font></a></td>";
 			}
 			$ret .= "</tr>\n";
 		}
@@ -679,13 +683,13 @@ function includeMonth () {
 			switch ($hday["col"]) {
 				case 1:
 				case 2:
-					$ret .= sprintf('<a class="%shdaymin" href="%s%s"%s>%s</a>', $style, $href, $i, $js_include, $aday);
+					$ret .= "<a class=\"{$style}hdaymin\" href=\"$href$i\"$js_include>$aday</a>";
 					break;
 				case 3;
-					$ret .= sprintf('<a class="%shdaymin" href="%s%s"%s>%s</a>', $style, $href, $i, $js_include, $aday);
+					$ret .= "<a class=\"{$style}hdaymin\" href=\"$href$i\"$js_include>$aday</a>";
 					break;
 				default:
-					$ret .= sprintf('<a class="%sdaymin" href="%s%s"%s>%s</a>', $style, $href, $i, $js_include, $aday);
+					$ret .= "<a class=\"{$style}daymin\" href=\"$href$i\"$js_include>$aday</a>";
 			}
 			$ret .= "</td>";	
 		}

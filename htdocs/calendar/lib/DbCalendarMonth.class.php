@@ -30,49 +30,51 @@ require_once($RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/driver/$CALENDAR_DRIVER/month_driver.inc.php");
 
-class DbCalendarMonth extends DbCalendarYear{
+class DbCalendarMonth extends DbCalendarYear {
 
 	var $month;        // Monat (Object)
-	var $apps;         // Object[][]
+	var $events;       // Object[][]
+	var $appdays;
 	var $arr_pntr;     // Array-Pointer (int)
 	
 	// Konstruktor
-	function DbCalendarMonth($tmstamp){
+	function DbCalendarMonth ($tmstamp) {
 		$this->month = new CalendarMonth($tmstamp);
-		$this->apps = array();
-		DbCalendarYear::DbCalendarYear($tmstamp);
+		$this->events = array();
+		parent::DbCalendarYear($tmstamp);
 	}
 	
 	// public
-	function getMonth(){
+	function getMonth () {
 		return $this->month->getValue();
 	}
 	
 	// public
-	function getNameOfMonth(){
+	function getNameOfMonth () {
 		return $this->month->toString();
 	}
 	
 	// public
-	function getStart(){
+	function getStart () {
 		return $this->month->getStart();
 	}
 	
 	// public
-	function getEnd(){
+	function getEnd () {
 		return $this->month->getEnd();
 	}
 	
 	// public
-	function getTs(){
+	function getTs () {
 		return $this->month->getTs();
 	}
 	
 	// public
-	function sort(){
-		while(list($key, $val)=each($this->apps)){
-			usort($val,"cmp");
-			$this->apps[$key] = $val;
+	function sort () {
+		foreach ($this->events as $key => $val) {
+	//	while (list($key, $val) = each($this->events)) {
+			usort($val, "cmp");
+			$this->events[$key] = $val;
 		}
 	}
 	
@@ -80,43 +82,45 @@ class DbCalendarMonth extends DbCalendarYear{
 	// ist im Prinzip die gleiche Methode, die auch Jahr benutzt, nur werden hier
 	// zusätzlich Terminobjekte erzeugt, so dass in der Monatsansicht auf die
 	// Termindaten zugegriffen werden kann
-	function restore(){
+	function restore () {
 		month_restore($this);
 	}
 	
 	// public
-	function nextEvent($tmstamp){
-		$adate = mktime(12,0,0,date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp),0);
-		if($this->apps["$adate"]){
-			if(!isset($this->arr_pntr["$adate"]))
+	function nextEvent ($tmstamp) {
+		$adate = mktime(12, 0, 0, date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp), 0);
+		if ($this->events["$adate"]) {
+			if (!isset($this->arr_pntr["$adate"]))
 				$this->arr_pntr["$adate"] = 0;
-			if($this->arr_pntr["$adate"] < $this->apdays["$adate"])
-				return $this->apps["$adate"][$this->arr_pntr["$adate"]++];
+			if ($this->arr_pntr["$adate"] < $this->appdays["$adate"])
+				return $this->events["$adate"][$this->arr_pntr["$adate"]++];
+			
 			$this->arr_pntr["$adate"] = 0;
 		}
+		
 		return FALSE;
 	}
 	
 	// public
-	function setPointer($tmstamp, $pos){
-		$adate = mktime(12,0,0,date("n", $tmstamp),date("j", $tmstamp),date("Y", $tmstamp),0);
+	function setPointer ($tmstamp, $pos) {
+		$adate = mktime(12, 0, 0, date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp), 0);
 		$this->arr_pntr["$adate"] = $pos;
 	}
 
-	function bindSeminarEvents(){
+	function bindSeminarEvents () {
 		// 6 Tage zusätzlich (angezeigte Tage des vorigen und des nächsten Monats)
 		$end = $this->getEnd() + 518400;
 		$start = $this->getStart() - 518400;
 		$db = new DB_Seminar;
 		
-		if(func_num_args() == 0)
+		if (func_num_args() == 0)
 			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 			       . "user_id = '%s' AND date BETWEEN %s AND %s"
 						 , $this->user_id, $start, $end);
-		else if(func_num_args() == 1 && $seminar_ids = func_get_arg(0)){
-			if(is_array($seminar_ids))
+		else if (func_num_args() == 1 && $seminar_ids = func_get_arg(0)) {
+			if (is_array($seminar_ids))
 				$seminar_ids = implode("','", $seminar_ids);
 			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
@@ -129,15 +133,20 @@ class DbCalendarMonth extends DbCalendarYear{
 		
 		$db->query($query);
 		
-		while($db->next_record()){
-			$adate = mktime(12,0,0,date("n",$db->f("date")),date("j",$db->f("date")),$this->year,0);
-			$this->apdays["$adate"]++;
-			$app =& new SeminarEvent($db->f("date"), $db->f("end_time"), $db->f("content"),
-				              $db->f("date_typ"), $db->f("raum"), $db->f("termin_id"), $db->f("range_id"),
-											$db->f("mkdate"), $db->f("chdate"));
-			$app->setDescription($db->f("description"));
-			$app->setSemName($db->f("Name"));
-			$this->apps["$adate"][] = $app;
+		while ($db->next_record()) {
+			$adate = mktime(12, 0, 0, date("n", $db->f("date")), date("j", $db->f("date")), $this->year, 0);
+			$this->appdays["$adate"]++;
+			$app =& new SeminarEvent($db->f("termin_id"), array(
+					"DTSTART"     => $db->f("date"),
+					"DTEND"       => $db->f("end_time"),
+					"SUMMARY"     => $db->f("content"),
+					"DESCRIPTION" => $db->f("description"),
+					"CATEGORIES"  => $db->f("date_typ"),
+					"LOCATION"    => $db->f("raum"),
+					"SEMNAME"     => $db->f("Name")),
+					$db->f("range_id"), $db->f("mkdate"), $db->f("chdate"));
+					
+			$this->events["$adate"][] = $app;
 		}
 	}
 	

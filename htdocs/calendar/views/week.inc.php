@@ -38,6 +38,10 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+require("$ABSOLUTE_PATH_STUDIP/header.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\" align=\"center\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" align=\"center\">\n";
@@ -47,7 +51,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" ali
 echo "<tr>\n";
 echo "<th width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getStart() - 1 . "\">&nbsp;";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotlinks.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\" ";
 echo tooltip(_("zurück")) . ">&nbsp;</a></th>\n";
 echo "<th width=\"70%\" class=\"cal\">";
 printf(_("%s. Woche vom %s bis %s"), strftime("%V", $aweek->getStart()),
@@ -55,7 +59,7 @@ printf(_("%s. Woche vom %s bis %s"), strftime("%V", $aweek->getStart()),
 echo "</th>\n";
 echo "<th width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getEnd() + 259201 . "\">&nbsp;";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrot.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\" ";
 echo tooltip(_("vor")) . ">&nbsp;</a></th>\n";
 echo "</tr></table>\n</th></tr>\n";
 

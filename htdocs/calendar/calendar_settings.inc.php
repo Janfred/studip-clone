@@ -19,6 +19,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+if ($i_page == "calendar.php") {
+	require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+	require("$ABSOLUTE_PATH_STUDIP/header.php");
+	require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+}
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 
 // store user-settings
@@ -238,7 +243,6 @@ $css_switcher = new cssClassSwitcher();
 							echo ">&nbsp;" . _("Bearbeiten-Link in Wochenansicht"); ?>
 					</td>
 				</tr>
-<? /*
 				<tr><? $css_switcher->switchClass(); ?>
 					<td class="<? echo $css_switcher->getClass(); ?>">
 						<blockquote>
@@ -264,7 +268,6 @@ $css_switcher = new cssClassSwitcher();
 							echo ">&nbsp;" . _("nie"); ?>
 					</td>
 				</tr>
-*/ ?>
 				<tr><? $css_switcher->switchClass(); ?>
 					<td class="<? echo $css_switcher->getClass(); ?>">&nbsp;
 					</td>

@@ -25,74 +25,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 
 class Event {
-
-	var $id;    	    // termin_id (String)
-	var $txt;         // Terminkurzbeschreibung (String)
-	var $start = "";  // Anfangszeit des Termins als Unix-Timestamp (int)
-	var $end = "";    // Endzeit des des Termins als Unix-Timestamp (int)
-	var $cat;         // Kategorie (int)
-	var $loc;         // Ort (String)
-	var $desc = null;         // Terminbeschreibung (String)
+	
+	var $id;
+	var $properties = array();
+//	var $id;    	    // termin_id (String)
 	var $chng_flag = FALSE;   // Termin geaendert ? (boolean)
-	var $chdate;
-	var $mkdate;
 
-	function Event ($start, $end, $title, $category = 1, $description = null,
-									$location = "") {
-		$this->start = $start;
-		if($this->start > $end){
-			unset($this);
-			return FALSE;
-		}
-		$this->end = $end;
-		$this->txt = $title;
-		if(!$this->setCategory($category)){
-			unset($this);
-			return FALSE;
-		}
-		$this->desc = $description;
-		$this->loc = $location;
-		$this->chng_flag = FALSE;
-		$this->mkdate = time();
-		$this->chdate = $this->mkdate;
-		$chng_flag = FALSE;
-		return TRUE;
-	}
-	
-	/**
-	* Returns the title of this event.
-	*
-	* @access public
-	* @return String the title of this event
-	*/
-	function getTitle () {
-		if ($this->txt == "")
-			return _("Keine Titel");
+	function Event ($properties) {
 		
-		return $this->txt;
+		$this->properties = $properties;
+		
+		$this->chng_flag = FALSE;
+		if (!$this->properties['DTSTAMP']) {
+			$this->setMakeDate();
+			$this->chng_flag = TRUE;
+		}
+		if (!$this->properties['LAST-MODIFIED']) {
+			$this->setChangeDate(1);//$this->getMakeDate());
+			$this->chng_flag = TRUE;
+		}
 	}
 	
-	/**
-	* Returns the starttime of this event.
-	*
-	* @access public
-	* @return int the starttime of this event as a unix timestamp
-	*/
-	function getStart () {
-		return $this->start;
+	function getProperty ($property_name = "") {
+		
+		return $property_name ? $this->properties[$property_name] : $this->properties;
 	}
 	
-	/**
-	* Returns the endtime of this event.
-	*
-	* @access public
-	* @return int the endtime of this event as a unix timestamp
-	*/
-	function getEnd () {
-		return $this->end;
+	function setProperty ($property_name, $value) {
+	
+		$this->properties[$property_name] = $value;
+		$this->chng_flag = TRUE;
 	}
 	
-		// public
+	// public
 	function setId ($id) {
 		$this->id = $id;
 		$this->chng_flag = TRUE;
@@ -104,13 +69,46 @@ class Event {
 	}
 	
 	/**
-	* Returns the integer representation of the category.
+	* Returns the title of this event.
 	*
 	* @access public
-	* @return int the integer representation of a category
+	* @return String the title of this event
+	*/
+	function getTitle () {
+		if ($this->properties["SUMMARY"] == "")
+			return _("Keine Titel");
+		
+		return $this->properties["SUMMARY"];
+	}
+	
+	/**
+	* Returns the starttime of this event.
+	*
+	* @access public
+	* @return int the starttime of this event as a unix timestamp
+	*/
+	function getStart () {
+		return $this->properties["DTSTART"];
+	}
+	
+	/**
+	* Returns the endtime of this event.
+	*
+	* @access public
+	* @return int the endtime of this event as a unix timestamp
+	*/
+	function getEnd () {
+		return $this->properties["DTEND"];
+	}
+	
+	/**
+	* Returns the categories.
+	*
+	* @access public
+	* @return String the categories
 	*/
 	function getCategory () {
-		return $this->cat;
+		return $this->properties["CATEGORIES"];
 	}
 	
 	/**
@@ -122,18 +120,9 @@ class Event {
 	* @return String the description
 	*/
 	function getDescription () {
-		if($this->desc == null)
+		if(!$this->properties["DESCRIPTION"])
 			return FALSE;
-		return $this->desc;
-	}
-	
-	/**
-	* Returns the unix timestamp of the last change
-	*
-	* @access public
-	*/
-	function getChangeDate () {
-		return $this->chdate;
+		return $this->properties["DESCRIPTION"];
 	}
 	
 	/**
@@ -143,8 +132,8 @@ class Event {
 	* @return int the duration of this event in seconds
 	*/
 	function getDuration () {
-		return $this->end - $this->start -
-			((date("I", $this->start) - date("I", $this->end)) * 3600);
+		return $this->properties["DTEND"] - $this->properties["DTSTART"] -
+			((date("I", $this->properties["DTSTART"]) - date("I", $this->properties["DTEND"])) * 3600);
 	}
 	
 	/**
@@ -154,9 +143,9 @@ class Event {
 	* @return String the location
 	*/
 	function getLocation () {
-		if($this->loc == "")
+		if($this->properties["LOCATION"] == "")
 			return FALSE;
-		return $this->loc;
+		return $this->properties["LOCATION"];
 	}
 	
 	/**
@@ -165,7 +154,58 @@ class Event {
 	* @access public
 	*/
 	function getMakeDate () {
-		return $this->mkdate;
+	
+		return $this->getProperty('DTSTAMP');
+	}
+	
+	/**
+	* Sets the unix timestamp of the creation date
+	*
+	* Access to this method is useful only from the container classes
+	* DbCalendarEventList, DbCalendarDay, DbCalendarMonth. Normally the
+	* constructor sets this timestamp.
+	*
+	* @access public
+	* @param int $timestamp a valid unix timestamp
+	*/
+	function setMakeDate ($timestamp = "") {
+		if($timestamp === "")
+			$this->properties['DTSTAMP'] = time();
+		else
+			$this->properties['DTSTAMP'] = $timestamp;
+		if ($this->properties['LAST-MODIFIED'] < $this->properties['DTSTAMP'])
+			$this->properties['LAST-MODIFIED'] = $this->properties['DTSTAMP'];
+		$this->chng_flag = TRUE;
+	}
+	
+	/**
+	* Returns the unix timestamp of the last change
+	*
+	* @access public
+	*/
+	function getChangeDate () {
+	
+		return $this->getProperty('LAST-MODIFIED');
+	}
+	
+	/**
+	* Sets the unix timestamp of the last change
+	*
+	* Access to this method is useful only from the container classes
+	* DbCalendarEventList, DbCalendarDay, DbCalendarMonth. Normally every
+	* modification of this object sets this value automatically.
+	* Nevertheless it is a public function.
+	*
+	* @access public
+	* @param int $timestamp a valid unix timestamp
+	*/
+	function setChangeDate ($timestamp = "") {
+		if($timestamp === "")
+			$this->properties['LAST-MODIFIED'] = time();
+		else
+			$this->properties['LAST-MODIFIED'] = $timestamp;
+		if($this->properties['DTSTAMP'] > $this->properties['LAST-MODIFIED'])
+			$this->properties['LAST-MODIFIED'] = $this->properties['DTSTAMP'];
 	}
 	
 	/**
@@ -199,7 +239,7 @@ class Event {
 	* @param String $description the description
 	*/
 	function setDescription ($description) {
-		$this->desc = $description;
+		$this->properties["DESCRIPTION"] = $description;
 		$this->chng_flag = TRUE;
 	}
 	
@@ -212,7 +252,7 @@ class Event {
 	* @param String $location the location
 	*/
 	function setLocation ($location) {
-		$this->loc = $location;
+		$this->properties["LOCATION"] = $location;
 		$this->chng_flag = TRUE;
 	}
 	
@@ -225,9 +265,9 @@ class Event {
 	* @param int $start a valid unix timestamp
 	*/ 
 	function setStart ($start) {
-		if($this->end != "" && $this->end < $start)
+		if($this->properties["DTEND"] < $start)
 			return FALSE;
-		$this->start = $start;
+		$this->properties["DTSTART"] = $start;
 		$this->chng_flag = TRUE;
 		return TRUE;
 	}
@@ -241,9 +281,9 @@ class Event {
 	* @param int $end a valid unix timestamp
 	*/
 	function setEnd ($end) {
-		if($this->start != "" && $this->start > $end)
+		if($this->properties["DTSTART"] != 0 && $this->properties["DTSTART"] > $end)
 			return FALSE;
-		$this->end = $end;
+		$this->properties["DTEND"] = $end;
 		$this->chng_flag = TRUE;
 		return TRUE;
 	}
@@ -263,7 +303,7 @@ class Event {
 	function setCategory ($category) {
 		global $PERS_TERMIN_KAT;
 		if(is_array($PERS_TERMIN_KAT[$category])){
-			$this->cat = $category;
+			$this->properties["CATEGORIES"] = $category;
 			$this->chng_flag = TRUE;
 			return TRUE;
 		}
@@ -281,11 +321,12 @@ class Event {
 	* @param String $title title of this event
 	*/
 	function setTitle ($title = "") {
-		$this->txt = $title;
+		$this->properties["SUMMARY"] = $title;
 		$this->chng_flag = TRUE;
 	}
 	
 	function isDayEvent () {
+	
 		return FALSE;
 	}
 	

@@ -22,6 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //****************************************************************************
 
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CALENDAR_DRIVER;
+
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarDay.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
@@ -29,15 +31,15 @@ require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/driver/$CALENDAR_DRIVER/day_driver.inc.php");
 
-class DbCalendarDay extends CalendarDay{
+class DbCalendarDay extends CalendarDay {
 
-	var $app;         	// Termine (Object[])
-	var $app_del;       // Termine, die geloescht werden (Object[])
-	var $arr_pntr;    	// "private" function getTermin
-	var $user_id;       // User-ID aus PphLib (String)
+	var $events;         	// Termine (Object[])
+	var $events_delete;   // Termine, die geloescht werden (Object[])
+	var $arr_pntr;    	  // "private" function getTermin
+	var $user_id;         // User-ID aus PphLib (String)
 	
 	// Konstruktor
-	function DbCalendarDay($tmstamp){
+	function DbCalendarDay ($tmstamp) {
 		global $user;
 		$this->user_id = $user->id;
 		CalendarDay::CalendarDay($tmstamp);
@@ -49,11 +51,11 @@ class DbCalendarDay extends CalendarDay{
 	// Anzahl von Terminen innerhalb eines bestimmten Zeitabschnitts
 	// default one day
 	// public
-	function numberOfEvents($start = 0, $end = 86400){
+	function numberOfEvents ($start = 0, $end = 86400) {
 		$i = 0;
 		$count = 0;
-		while($aterm = $this->app[$i]){
-			if($aterm->getStart() >= $this->getStart() + $start && $aterm->getStart() <= $this->getStart() + $end)
+		while ($aterm = $this->events[$i]) {
+			if ($aterm->getStart() >= $this->getStart() + $start && $aterm->getStart() <= $this->getStart() + $end)
 				$count++;
 			$i++;
 		}
@@ -61,11 +63,11 @@ class DbCalendarDay extends CalendarDay{
 	}
 	
 	// public
-	function numberOfSimultaneousApps($term){
+	function numberOfSimultaneousApps ($term) {
 		$i = 0;
 		$count = 0;
-		while($aterm = $this->app[$i]){
-			if($aterm->getStart() >= $term->getStart() && $aterm->getStart() < $term->getEnd())
+		while ($aterm = $this->events[$i]) {
+			if ($aterm->getStart() >= $term->getStart() && $aterm->getStart() < $term->getEnd())
 				$count++;
 			$i++;
 		}
@@ -75,96 +77,99 @@ class DbCalendarDay extends CalendarDay{
 	// Termin hinzufuegen
 	// Der Termin wird gleich richtig einsortiert
 	// public
-	function addEvent($term){
-		$this->app[] = $term;
+	function addEvent ($term) {
+		$this->events[] = $term;
 		$this->sort();
 	//	return TRUE;
 	}
 	
 	// Termin loeschen
 	// public
-	function delEvent($id){
-		for($i = 0;$i < sizeof($this->app);$i++)
-			if($id != $this->app[$i]->getId())
-				$app_bck[] = $this->app[$i];
+	function delEvent ($id) {
+		for ($i = 0;$i < sizeof($this->events);$i++) {
+			if ($id != $this->events[$i]->getId())
+				$app_bck[] = $this->events[$i];
 			else
-				$this->app_del[] = $this->app[$i];
+				$this->events_delete[] = $this->events[$i];
+		}
 				
-		if(sizeof($app_bck) == sizeof($this->app))
+		if (sizeof($app_bck) == sizeof($this->events))
 			return FALSE;
 		
-		$this->app = $app_bck;
+		$this->events = $app_bck;
 		return TRUE;
 	}
 	
 	// ersetzt vorhandenen Termin mit uebergebenen Termin, wenn ID gleich
 	// public
-	function replaceEvent($term){
-		for($i = 0;$i < sizeof($this->app);$i++)
-			if($this->app[$i]->getId() == $term->getId()){
-				$this->app[$i] = $term;
+	function replaceEvent ($term) {
+		for ($i = 0;$i < sizeof($this->events);$i++) {
+			if ($this->events[$i]->getId() == $term->getId()) {
+				$this->events[$i] = $term;
 				$this->sort();
 				return TRUE;
 			}
+		}
+		
 		return FALSE;
 	}
 	
 	// Abrufen der Termine innerhalb eines best. Zeitraums
 	// default 1 hour
 	// public
-	function nextEvent($start = -1, $step = 3600){
+	function nextEvent ($start = -1, $step = 3600) {
 		if($start < 0)
 			$start = $this->start;
-		while($this->arr_pntr < sizeof($this->app)){
-			if($this->app[$this->arr_pntr]->getStart() >= $start && $this->app[$this->arr_pntr]->getStart() < $start + $step)
-				return $this->app[$this->arr_pntr++];
+		while ($this->arr_pntr < sizeof($this->events)) {
+			if ($this->events[$this->arr_pntr]->getStart() >= $start && $this->events[$this->arr_pntr]->getStart() < $start + $step)
+				return $this->events[$this->arr_pntr++];
 			$this->arr_pntr++;
 		}
 		$this->arr_pntr = 0;
+		
 		return FALSE;
 	}
 	
 	// Termine in Datenbank speichern.
 	// public
-	function save(){
+	function save () {
 		
 		day_save($this);
-		
 	}
 	
 	// public
-	function existEvent(){
-		if(sizeof($this->app) > 0)
+	function existEvent () {
+		if (sizeof($this->events) > 0)
 			return TRUE;
 		return FALSE;
 	}
 
 	// Wiederholungstermine, die in der Vergangenheit angelegt wurden belegen in
-	// app[] die ersten Positionen und werden hier in den "Tagesablauf" einsortiert
+	// events[] die ersten Positionen und werden hier in den "Tagesablauf" einsortiert
 	// Termine, die sich ueber die Tagesgrenzen erstrecken, muessen anhand ihrer
 	// "absoluten" Anfangszeit einsortiert werden.
 	// private
-	function sort(){
-		if(sizeof($this->app))
-			usort($this->app, "cmp_list");
+	function sort () {
+		if (sizeof($this->events))
+			usort($this->events, "cmp_list");
 	}					
 
 	// Termine aus Datenbank holen
 	// private
-	function restore(){
+	function restore () {
 		day_restore($this);
 	}
 	
 	// public
-	function bindSeminarEvents($sem_id = ""){
-		if($sem_id == "")
+	function bindSeminarEvents ($sem_id = "") {
+		if ($sem_id == "")
 			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 			       . "user_id = '%s' AND date_typ!=-1 AND date_typ!=-2 AND date BETWEEN %s AND %s"
 						 , $this->user_id, $this->getStart(), $this->getEnd());
-		else if($sem_id != ""){
-			if(is_array($sem_id))
+		else if ($sem_id != "") {
+			if (is_array($sem_id))
 				$sem_id = implode("','", $sem_id);
 			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
@@ -179,13 +184,18 @@ class DbCalendarDay extends CalendarDay{
 		$db =& new DB_Seminar;	
 		$db->query($query);
 		
-		if($db->num_rows() != 0){
-			while($db->next_record()){
-				$app =& new SeminarEvent($db->f("date"), $db->f("end_time"), $db->f("content"),
-				              $db->f("date_typ"), $db->f("raum"), $db->f("termin_id"), $db->f("range_id"),
-											$db->f("mkdate"), $db->f("chdate"));
-				$app->setSemName($db->f("Name"));
-				$this->app[] = $app;
+		if ($db->num_rows() != 0) {
+			while ($db->next_record()) {
+				$app =& new SeminarEvent($db->f("termin_id"), array(
+						"DTSTART"     => $db->f("date"),
+						"DTEND"       => $db->f("end_time"),
+						"SUMMARY"     => $db->f("content"),
+						"DESCRIPTION" => $db->f("description"),
+						"CATEGORIES"  => $db->f("date_typ"),
+						"SEMNAME"     => $db->f("Name"),
+						"LOCATION"    => $db->f("raum")),
+						$db->f("range_id"), $db->f("mkdate"), $db->f("chdate"));
+				$this->events[] = $app;
 			}
 			$this->sort();
 			return TRUE;
@@ -194,26 +204,29 @@ class DbCalendarDay extends CalendarDay{
 	}
 	
 	// public
-	function serialisiere(){
-		$size_app = sizeof($this->app);
-		$size_app_del = sizeof($this->app_del);
+	function serialisiere () {
+		$size_app = sizeof($this->events);
+		$size_app_del = sizeof($this->events_delete);
 		
-		for($i = 0;$i < $size_app;$i++)
-			$ser_app .= 'i:'.$i.';'.$this->app[$i]->serialisiere();
-		for($i = 0;$i < $size_app_del;$i++)
-			$ser_app_del .= 'i:'.$i.';'.$this->app_del[$i]->serialisiere();
+		for ($i = 0; $i < $size_app; $i++)
+			$ser_app .= "i:$i;" . $this->events[$i]->serialisiere();
+		for ($i = 0; $i < $size_app_del; $i++)
+			$ser_app_del .= "i:$i;" . $this->events_delete[$i]->serialisiere();
 		
-		$pattern[0] = "/s:3:\"app\";a:".$size_app.":\{\}/";
-		$pattern[1] = "/s:7:\"app_del\";a:".$size_app_del.":\{\}/";
+		$pattern[0] = "/s:3:\"events\";a:$size_app:\{\}/";
+		$pattern[1] = "/s:7:\"events_delete\";a:$size_app_del:\{\}/";
 		
-		$replace[0] = "s:3:\"app\";a:".$size_app.":{".$ser_app."}";
-		$replace[1] = "s:7:\"app_del\";a:".$size_app_del.":{".$ser_app_del."}";
+		$replace[0] = "s:3:\"events\";a:$size_app:{".$ser_app."}";
+		$replace[1] = "s:7:\"events_delete\";a:$size_app_del:{".$ser_app_del."}";
 		
-		$serialized = preg_replace($pattern, $replace, serialize($this));
-		
-		return $serialized;
+		return preg_replace($pattern, $replace, serialize($this));
 	}
-
+	
+	function getUserId () {
+	
+		return $this->user_id;
+	}
+	
 }
 
 // class Day

@@ -225,6 +225,7 @@ function holiday ($tmstamp, $mod = "") {
 }
 
 // ueberprueft eine Datumsangabe, die in einen Timestamp gewandelt werden soll
+// gibt bei Erfolg den timestamp zurück mit DST
 function check_date ($month, $day, $year, $hour = 0, $min = 0) {
 	if (!preg_match("/^\d{1,2}$/", $day) || !preg_match("/^\d{1,2}$/", $month)
 			|| !preg_match("/^\d{4}$/", $year)) {
@@ -237,7 +238,7 @@ function check_date ($month, $day, $year, $hour = 0, $min = 0) {
 	if ($hour > 23 || $hour < 0 || $min > 59 || $min < 0)
 		return FALSE;
 	
-	return TRUE;
+	return mktime($hour, $min, 0, $month, $day, $year);
 }
 
 // ermittelt die Anzahl von Tagen zwischen zwei timestamps (plus Schalttage)

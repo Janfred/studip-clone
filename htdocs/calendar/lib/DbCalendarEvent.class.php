@@ -7,69 +7,69 @@ require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
 		. "/lib/driver/$CALENDAR_DRIVER/event_driver.inc.php");
 
 class DbCalendarEvent extends CalendarEvent {
-
-	// ($start = "", $end = "", $txt = "", $exp = "", $cat = "", $prio = 1, $loc = "", $id = "", $type = -2)
 	
-	function DbCalendarEvent () {
-		
-		switch(func_num_args()){
-			// get event out of database...
-			case 1:
-				global $user, $PERS_TERMIN_KAT, $TERMIN_TYP;
-				$this->user_id = $user->id;
-			
-				$id = func_get_arg(0);
-				$this->restore($id);
-			
-				// nur persoenliche Termin haben per default eine Farbe
-				// fuer Veranstaltungstermine muss eine Farbe explizit mit setColor() gesetzt werden
-				if($this->type == -1 || $this->type == -2)
-					$this->col = $PERS_TERMIN_KAT[$this->cat]["color"];
-				break;
-			case 3:
-			case 6:
-				$pa = func_get_args();
-				CalendarEvent::CalendarEvent($pa[0], $pa[1], $pa[2], $pa[3], $pa[4], $pa[5]);
-			//	call_user_func_array(array(&$this, "CalendarEvent"), $pa);
-				break;
-			case 8:
-			case 9:
-				$pa = func_get_args();
-				CalendarEvent::CalendarEvent($pa[0], $pa[1], $pa[2], $pa[3], $pa[4], $pa[5],
-													$pa[6], $pa[7], $pa[8]);
-			//	call_user_func_array($func_array, $pa);
-				break;
-			default:
-				die("Wrong parameter (".func_num_args().") count for DbCalendarEvent()");
+	function DbCalendarEvent ($id, $properties = NULL) {
+	
+		global $user, $PERS_TERMIN_KAT, $TERMIN_TYP;
+		$this->user_id = $user->id;
+				
+		if (!$properties) {
+			$this->restore($id);
+		}
+		else {
+			parent::CalendarEvent($properties);
 		}
 	}
 	
 	// public
-	function getDescription (){
-		if($this->desc == null && $description = event_get_description($this->id))
-			$this->desc = $description;
-		return $this->desc;
+	function getDescription () {
+	
+		if(isset($this->properties['DESCRIPTION']))
+			return $this->properties['DESCRIPTION'];
+		elseif ($description = event_get_description($this->id)) {
+			$this->properties['DESCRIPTION'] = $description;
+			return $this->properties['DESCRIPTION'];
+		}
+		else
+			return $this->properties['DESCRIPTION'] = '';
 	}
 	
 	// Store event in database
 	// public
-	function save (){
+	function save () {
+	
 		event_save($this);
 	}
 	
 	// delete event in database
 	// public
-	function delete (){
+	function delete () {
+	
 		return event_delete($this->id, $this->user_id);
 	}
 	
 	// get event out of database
 	// public
-	function restore ($id){
-		if(! event_restore($id, $this))
-			die("This event (ID='$id') can not be restored!");
+	function restore ($id) {
+	
+		if(!event_restore($id, $this))
+			die("Unable to restore this event (ID='$id')!");
 	}
 	
+	function update ($new_event) {
+	
+		$properties = $new_event->getProperty();
+		// never update the uid and the make date!
+		$uid = $this->getProperty('UID');
+		$mkdate = $this->getMakeDate();
+		foreach ($properties as $name => $value)
+			$this->setProperty($name, $value);
+		$this->setProperty('UID', $uid);
+		
+		$this->setMakeDate($mkdate);
+		$this->chng_flag = TRUE;
+	}
+		
 }
 
 ?>

@@ -26,13 +26,13 @@ require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarYear.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/driver/$CALENDAR_DRIVER/year_driver.inc.php");
 
-class DbCalendarYear extends CalendarYear{
+class DbCalendarYear extends CalendarYear {
 
-	var $apdays;          // timestamps der Tage, die Termine enthalten (int[])
+	var $appdays;          // timestamps der Tage, die Termine enthalten (int[])
 	var $user_id;         // User-ID aus PhpLib (String)
 
   // Konstruktor
-	function DbCalendarYear($tmstamp){
+	function DbCalendarYear ($tmstamp) {
 		global $user;
 		$this->user_id = $user->id;
 		CalendarYear::CalendarYear($tmstamp);
@@ -40,11 +40,11 @@ class DbCalendarYear extends CalendarYear{
 	}
 	
 	// public
-	function restore(){
+	function restore () {
 		year_restore($this);
 	}
 	
-	function bindSeminarEvents(){
+	function bindSeminarEvents () {
 		// zeigt alle abonnierten Seminare an
 		if(func_num_args() == 0)
 			$query = sprintf("SELECT t.* FROM termine t LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
@@ -67,7 +67,7 @@ class DbCalendarYear extends CalendarYear{
 		if($db->num_rows() > 0){
 			while($db->next_record()){
 				$adate = mktime(12,0,0,date("n",$db->f("date")),date("j",$db->f("date")),$this->year,0);
-				$this->apdays["$adate"]++;
+				$this->appdays["$adate"]++;
 			}
 			return TRUE;
 		}
@@ -75,22 +75,22 @@ class DbCalendarYear extends CalendarYear{
 	}
 	
 	// public
-	function existEvent($tmstamp){
-		$adate = mktime(12,0,0,date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp),0);
-		if(empty($this->apdays["$adate"]))
+	function existEvent ($tmstamp) {
+		$adate = mktime(12, 0, 0, date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp),0);
+		if(empty($this->appdays["$adate"]))
 			return FALSE;
 		return TRUE;
 	}
 	
 	// Anzahl von Terminen an einem bestimmten Tag
 	// public
-	function numberOfEvents($tmstamp){
-		$adate = mktime(12,0,0,date("n", $tmstamp),date("j", $tmstamp),date("Y", $tmstamp),0);
-		return $this->apdays[$adate];
+	function numberOfEvents ($tmstamp) {
+		$adate = mktime(12, 0, 0, date("n", $tmstamp), date("j", $tmstamp), date("Y", $tmstamp),0);
+		return $this->appdays[$adate];
 	}
 	
 	// public
-	function serialisiere(){
+	function serialisiere () {
 		return serialize($this);
 	}
 	
