@@ -84,7 +84,7 @@ $messaging=new messaging;
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)) {
-	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$seminar_id'");
+	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Institut_id, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$admin_admission_data='';	
 	$admin_admission_data["metadata_dates"]=unserialize($db->f("metadata_dates"));
@@ -93,7 +93,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_type_org"]=$db->f("admission_type");	
 	$admin_admission_data["admission_selection_take_place"]=$db->f("admission_selection_take_place");	
 	$admin_admission_data["admission_endtime"]=$db->f("admission_endtime");
-	$admin_admission_data["admission_binding"]=$db->f("admission_binding");	
+	$admin_admission_data["admission_binding"]=$db->f("admission_binding");
+	$admin_admission_data["heimat_inst_id"]=$db->f("Institut_id"); 
 	$admin_admission_data["passwort"]=$db->f("Passwort");	
 	$admin_admission_data["name"]=$db->f("Name");	
 	$admin_admission_data["status"]=$db->f("status");	
@@ -423,8 +424,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 				<font size=-1><b>Anmeldeverfahren:</b><br /></font>
 				<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-					printf ("<font size=-1>Sie haben das Anmeldeverfahren %s aktiviert. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an einen der Administratoren.<br /></font>", ($admin_admission_data["admission_type_org"] == 1) ? "per Los" : "in Anmeldereihenfolge");
-					printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\" />");					
+					$db->query("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE institut_id ='".$admin_admission_data["heimat_inst_id"]."' AND perms = 'admin'");
+					printf ("<font size=-1>Sie haben das Anmeldeverfahren %s aktiviert. Dieser Schritt kann </font><font size=-1 color=\"red\"><b>nicht</b></font><font size=-1> r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an einen der %sAdministratoren.<br /></font>", ($admin_admission_data["admission_type_org"] == 1) ? "per Los" : "in Anmeldereihenfolge", ($db->num_rows()) ? "folgenden " : "");
+					printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\" />");
+					while ($db->next_record()) {
+						printf ("<li><font size=-1><a href=\"about?username=%s\">%s %s</a></font></li>", $db->f("username"), $db->f("Vorname"), $db->f("Nachname"));
+					}
 				} else { ?>
 				<font size=-1>Sie k&ouml;nnen hier eine Teilnehmerbeschr&auml;nkung per Anmeldeverfahren festlegen. Sie k&ouml;nnen per Losverfahren beschr&auml;nken oder chronologisches Anmelden zulassen.<br /></font>
 				<br /><input type="IMAGE" name="adm_null" src="./pictures/buttons/keins<? if ($admin_admission_data["admission_type"] == 0) echo "2" ?>-button.gif" border=0 value="keins">&nbsp; 
