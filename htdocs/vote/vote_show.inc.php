@@ -165,6 +165,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       echo createVoteHeadline ( $eval, $open, $openID, $evalDB, $isHomepage);
 
       if ( $open ) {
+	 object_set_visit($evalID, "eval"); //set a visittime for this eval
+	 
          echo createBoxContentHeader ();
          echo createFormHeader ($eval);
          
@@ -276,6 +278,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       echo createVoteHeadline ( $vote, $open, $openID, NULL, $isHomepage );
 
       if ( $open ) {
+	 object_set_visit($voteID, "vote"); //set a visittime for this vote
+     
 	 echo createBoxContentHeader ();
 	 echo createFormHeader ($vote);
 
