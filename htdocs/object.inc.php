@@ -131,15 +131,19 @@ function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '
 }
 
 function object_kill_visits($user_id, $object_ids = false){
-	if ($user_id){
+	if ($user_id || $object_ids){
+		if ($user_id){
+			$sql = " user_id='$user_id' ";
+		} else {
+			$sql = " 1 ";
+		}
 		if ($object_ids){
 			if (!is_array($object_ids)){
 				$object_ids = array($object_ids);
 			}
 			$sql = "AND object_id IN('" . join("','", $object_ids) . "')";
 		}
-		
-		$db = new DB_Seminar("DELETE FROM object_user_visits WHERE user_id = '$user_id' " . $sql);
+		$db = new DB_Seminar("DELETE FROM object_user_visits WHERE " . $sql);
 		return $db->affected_rows();
 	} else {
 		return false;
