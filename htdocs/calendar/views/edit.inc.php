@@ -367,7 +367,35 @@ else {
 		$link_to_seminar = "<a href=\"" . $CANONICAL_RELATIVE_PATH_STUDIP
 											. "seminar_main.php?auswahl=" . $atermin->getSeminarId()
 											. "\">" . htmlReady($db->f("name")) . "</a>";
-		$info_content = array(	
+		$permission = get_perm($atermin->getSeminarId());
+		if($permission == "tutor" || $permission == "dozent")
+			$info_content = array(	
+											array("kategorie" => "Information:",
+														"eintrag" => array(	
+														array("icon" => "pictures/ausruf_small.gif",
+																	"text" => "Dieser Termin geh&ouml;rt zur Veranstaltung:"),
+														array("text" => $link_to_seminar),
+														array("text" => "Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden."
+																	)
+														)
+											),
+											array("kategorie" => "Aktion:",
+		   											"eintrag" => array(	
+														array(	"icon" => "pictures/meinesem.gif",
+																		"text" => "<a href=\"$PHP_SELF?cmd=bind\">W&auml;hlen</a> Sie aus, welche Veranstaltungstermine "
+																							. "automatisch in Ihrem Terminkalender angezeigt werden sollen."
+																	),
+														array("icon" => "pictures/admin.gif",
+																	"text" => "Um diesen Termin zu bearbeiten, wechseln Sie bitte "
+																		. "in die <a href=\"./admin_dates.php?range_id="
+																		. $atermin->getSeminarId() . "&ebene=sem&manuel_edit=yes&show_id="
+																		. $atermin->getId()."\">Terminverwaltung</a>."
+																	)
+														)
+											)
+										);
+		else
+			$info_content = array(	
 											array("kategorie" => "Information:",
 														"eintrag" => array(	
 														array("icon" => "pictures/ausruf_small.gif",
@@ -398,9 +426,6 @@ else {
 				</table>
 			<tr><td class="steel1">
 <?
-		$permission = get_perm($atermin->getSeminarId());
-		if($permission == "tutor" || $permission == "dozent")
-			echo 'Um diesen Termin zu bearbeiten, wechseln Sie bitte in die <a href="./admin_dates.php?range_id='.$atermin->getSeminarId().'&ebene=sem&manuel_edit=yes&show_id='.$atermin->getId().'">Terminverwaltung</a>.';
 		echo "</td></tr>\n";
  	}
 	else{
