@@ -123,7 +123,7 @@ if (!$set_recur_x) {
 	echo "</select>";
 	echo ($err["start_time"] ? $error_sign : "");
 	echo "&nbsp; &nbsp; <input type=\"checkbox\" name=\"wholeday\"";
-	echo ($wholeday ? 'checked' : '') . '> &nbsp;';
+	echo ($wholeday ? 'checked="checked"' : '') . "$disabled> &nbsp;";
 	echo _("ganzt&auml;gig");
 	$info = _("Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen Starttag und enden um 23.59 am angegeben Endtag.");
 	echo "&nbsp;&nbsp;&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
@@ -603,20 +603,20 @@ if (isset($atermin) && get_class($atermin) == "seminarevent") {
 		
 		$info_box['all'][0]['kategorie'] = _("Information:");
 		$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
-				"text" => $info['sem1']);
+				"text" => $info_box['sem1']);
 		$info_box['all'][1]['kategorie'] = _("Aktion:");
 		$info_box['all'][1]['eintrag'][] = array("icon" => "pictures/meinesem.gif",
-				"text" => $info['sem2']);
+				"text" => $info_box['sem2']);
 		$info_box['all'][1]['eintrag'][] = array("icon" => "pictures/admin.gif",
-				"text" => $info['sem3']);
+				"text" => $info_box['sem3']);
 	}
 	else {
 		$info_box['all'][0]['kategorie'] = _("Information:");
 		$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
-				"text" => $info['sem1']);
+				"text" => $info_box['sem1']);
 		$info_box['all'][1]['kategorie'] = _("Aktion:");
 		$info_box['all'][1]['eintrag'][] = array("icon" => "pictures/meinesem.gif",
-				"text" => $info['sem2']);
+				"text" => $info_box['sem2']);
 	}
 }
 else {
@@ -657,11 +657,6 @@ else {
 	$info_box['all'][0]['kategorie'] = _("Information:");
 	$info_box['all'][0]['eintrag'][] = array("icon" => "pictures/ausruf_small.gif",
 			"text" => $info_box['count']);
-/*	$info['all'][1]['kategorie'] = _("Aktion:");
-	$info['all'][1]['eintrag'][] = array("icon" => "pictures/meinesem.gif",
-			"text" => $info['sem2']);
-	$info['all'][1]['eintrag'][] = array("icon" => "pictures/admin.gif",
-			"text" => $info['sem3']);*/
 }
 
 
