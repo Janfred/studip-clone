@@ -120,7 +120,7 @@ class EditResourceData {
 		
 		if (($add_ts) && ($resAssign->isNew())) {
 			$resAssign->setBegin($add_ts);
-			$resAssign->setEnd($add_ts + (60 * 60));
+			$resAssign->setEnd($add_ts + (2 * 60 * 60));
 		}
 		
 		//it is not allowed to edit or kill assigns for rooms here
