@@ -145,10 +145,10 @@ function dump_sem($sem_id)
 
 // Fakultaeten...
 
-	$db3->query("SELECT DISTINCT b.Name FROM seminar_inst a Institute LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND a.Institut_id=b.fakultaets_id) WHERE a.seminar_id = '$sem_id'");
+	$db3->query("SELECT DISTINCT c.Name FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN Institute c ON(c.Institut_id=b.fakultaets_id)  WHERE a.seminar_id = '$sem_id'");
 	IF ($db3->affected_rows() > 0)
 		{
-		$dump.= "<tr><td width=\"15%\"><b>Fakult&auml;t:&nbsp;</b></td><td>";
+		$dump.= "<tr><td width=\"15%\"><b>Fakult&auml;t(en):&nbsp;</b></td><td>";
 		WHILE ($db3->next_record())
 			$dump.= htmlReady($db3->f("Name"))."<br>";
 		$dump.= "</td></tr>\n";
