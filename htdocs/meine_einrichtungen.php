@@ -253,7 +253,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 		}
 
 // delete Entry from List:
-		if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin"))
+		if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
 			echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
 		else
 			printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Einrichtung austragen")." border=\"0\"></a></td>", $instid);
