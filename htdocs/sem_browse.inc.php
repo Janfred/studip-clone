@@ -61,6 +61,13 @@ if ($level) $sem_browse_data["level"]=$level;
 if ($group_by) $sem_browse_data["group_by"]=$group_by;
 if ($start_item_id) $sem_browse_data["start_item_id"] = $start_item_id;
 
+if (isset($_REQUEST[$search_obj->form_name . "_scope_choose"])){
+	$sem_browse_data["start_item_id"] = $_REQUEST[$search_obj->form_name . "_scope_choose"];
+}
+if (isset($_REQUEST[$search_obj->form_name . "_range_choose"])){
+	$sem_browse_data["start_item_id"] = $_REQUEST[$search_obj->form_name . "_range_choose"];
+}
+
 if (isset($_REQUEST[$search_obj->form_name . "_sem"])){
 	$sem_browse_data['default_sem'] = $_REQUEST[$search_obj->form_name . "_sem"];
 } elseif (!isset($sem_browse_data['default_sem'])){
@@ -81,7 +88,12 @@ if (($i_page=="show_bereich.php") && (!$extern))
 elseif (!$extern)
 	$sem_browse_data["extern"]=FALSE;
 //Zuruecksetzen
-if (($reset_all)  || $search_obj->new_search_button_clicked){
+if ($search_obj->new_search_button_clicked){
+	unset($level);
+	$reset_all = true;
+}
+	
+if ($reset_all){
 	$tmp_cmd = $sem_browse_data["cmd"];	
 	$sem_browse_data = array();
 	$sem_browse_data["cmd"] = $tmp_cmd;	
@@ -92,9 +104,8 @@ if (($reset_all)  || $search_obj->new_search_button_clicked){
 if($sem_browse_data["default_sem"] != 'all'){
 	$default_sems[0] = $sem_browse_data["default_sem"];
 } 
-if ($sem_browse_data['cmd'] != 'xts' && $sem_browse_data["default_sem"] != $SEM_ID){
-	$default_sems[0] = $SEM_ID;
-	$default_sems[1] = $SEM_ID_NEXT;
+if ($sem_browse_data['cmd'] != 'xts'){
+	unset($default_sems);
 }
 
 
@@ -201,7 +212,7 @@ if ((!$sem_browse_data["extern"]) ) {
 			}
 			echo "</td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
 			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("scope_choose",array('style' => 'vertical-align:middle'),$sem_tree->start_item_id);
-			echo "\n<input type=\"hidden\" name=\"start_item_id\" value=\"{$sem_tree->start_item_id}\">";
+			echo "\n<input type=\"hidden\" name=\"level\" value=\"vv\">";
 		}
 		if ($sem_browse_data['level'] == "ev"){
 			$search_obj->range_tree =& $range_tree->tree; 
@@ -210,7 +221,7 @@ if ((!$sem_browse_data["extern"]) ) {
 			}
 			echo "</td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
 			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("range_choose",array('style' => 'vertical-align:middle'),$range_tree->start_item_id);
-			echo "\n<input type=\"hidden\" name=\"start_item_id\" value=\"{$range_tree->start_item_id}\">";
+			echo "\n<input type=\"hidden\" name=\"level\" value=\"ev\">";
 		}
 		echo "</td></tr>";
 		echo $search_obj->getFormEnd();
@@ -261,11 +272,11 @@ if ((!$sem_browse_data["extern"]) ) {
 		echo $search_obj->getSearchButton();
 		echo "&nbsp;";
 		echo $search_obj->getNewSearchButton();
-		echo "</td><td class=\"steel1\">&nbsp;</td><td class=\"steel1\"><a href=\"$PHP_SELF?cmd=qs";
+		echo "</td><td class=\"steel1\">&nbsp;</td><td class=\"steel1\"><a href=\"$PHP_SELF?cmd=qs&level=f";
 		echo  "\"><img " . makeButton("schnellsuche", "src") . tooltip(_("Zur Schnellsuche zurückgehen")) ." border=0></a></td></tr>\n";
 		echo "<tr><td class=\"steel1\" colspan=4 align=\"center\"></td></tr>";
-		echo "</table>\n";
 		echo $search_obj->getFormEnd();
+		echo "</table>\n";
 	}
 	
 	//header to reset (start a new) search
@@ -330,7 +341,7 @@ if ($search_obj->search_button_clicked){
 }
 
 //Anzeige des Suchergebnis (=Seminarebene)
-if (($sem_browse_data["level"]=="s") || ($sem_browse_data['sset'])) {
+if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_browse_data['sset'])) {
 	$sem_browse_data["level"] = "s";
 	echo "<form action=\"$PHP_SELF\" method=\"POST\">\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 	if (is_array($_marked_sem) && count($_marked_sem)) {
