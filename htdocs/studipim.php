@@ -190,7 +190,12 @@ if ($new_msg) {
 
 if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 	$nu_msg=trim($nu_msg);
-	if ($sms->insert_message ($nu_msg, $msg_rec, FALSE, FALSE, FALSE, FALSE, FALSE, "RE: ".$msg_subject))
+	if (!$msg_subject) {
+		$msg_subject = _("Ohne Betreff");
+	} else {
+		if (substr($msg_subject, 0, 3) != "RE:") $msg_subject = "RE: ".$msg_subject;
+	}
+	if ($sms->insert_message ($nu_msg, $msg_rec, FALSE, FALSE, FALSE, FALSE, FALSE, $msg_subject))
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
 			. sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt!"),get_fullname_from_uname($msg_rec)) . "</font></td></tr>";
 	else 
