@@ -67,6 +67,18 @@ function PrintAllStatusgruppen ()
 	echo "</select>";
 }
 
+function GetAllSelected ()
+{	global $SessSemName;
+  	$db3=new DB_Seminar;
+	$db3->query ("SELECT DISTINCT user_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$SessSemName[1]'");
+	while ($db3->next_record()) {
+		$zugeordnet[] = $db3->f("user_id");
+	}
+	RETURN $zugeordnet;
+}
+
+
+
 function PrintAktualStatusgruppen ()
 {	global $SessSemName, $PHP_SELF;
 	$db=new DB_Seminar;
@@ -152,12 +164,18 @@ function PrintSearchResults ($search_exp)
 
 function PrintAktualMembers ()
 {	global $SessSemName;
+	$bereitszugeordnet = GetAllSelected();
 	echo "<font size=\"-1\">&nbsp; TeilnehmerInnen der Veranstaltung</font><br>";
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
-	$db->query ("SELECT username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$SessSemName[1]' ORDER BY Nachname ASC");
+	$db->query ("SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$SessSemName[1]' ORDER BY Nachname ASC");
 	while ($db->next_record()) {
-		printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
+		if (in_array($db->f("user_id"), $bereitszugeordnet)) {
+			$tmpcolor = "#777777";
+		} else {
+			$tmpcolor = "#000000";
+		}
+		printf ("<option style=\"color:%s;\" value=\"%s\">%s - %s\n", $tmpcolor, $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
 	}
 	echo "</select>";
 }
@@ -190,7 +208,7 @@ function PrintInstitutMembers ()
 	$db->query($query); // ergibt alle berufbaren Personen
 		printf ("<option>---</option>");
 	while ($db->next_record()) {
-				printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
+		printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
 	}
 	echo "</select>";
 }
