@@ -104,7 +104,7 @@ class VeranstaltungResourcesAssign {
 			foreach ($SEMESTER as $val)
 				if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"]))
 					$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
-					$val["vorles_beginn"];
+
 		} else  {
 			$dow = date("w", $term_data["start_termin"]);
 			//calculate corrector to get first day of the week
