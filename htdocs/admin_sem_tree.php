@@ -42,6 +42,9 @@ $view = new DbView();
 $the_tree = new StudipSemTreeViewAdmin($_REQUEST['start_item_id']);
 $search_obj = new StudipSemSearch();
 
+$_open_items =& $the_tree->open_items;
+$_open_ranges =& $the_tree->open_ranges;
+
 if ($search_obj->search_done){
 	if ($search_obj->search_result->numRows > 50){
 		$_msg = "error§" . _("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schr&auml;nken Sie Ihre Suche weiter ein.");

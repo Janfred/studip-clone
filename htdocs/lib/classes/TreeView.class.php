@@ -84,6 +84,9 @@ class TreeView {
 	* @var	string	$root_content
 	*/
 	var $root_content;
+	
+	var	$max_cols = 80;
+	
 	/**
 	* constructor
 	*
@@ -93,14 +96,15 @@ class TreeView {
 	* @param	mixed	$args				argument passed to the tree class
 	*/
 	function TreeView($tree_class_name,$args = null){
-		global $sess,$_open_ranges,$_open_items;
+		global $sess;
 		$this->tree_class_name = $tree_class_name;
+		$this->class_name = get_class($this);
 		$this->tree =& TreeAbstract::GetInstance($tree_class_name,$args);
 		if (is_object($sess)){
-			$sess->register("_open_ranges");
-			$sess->register("_open_items");
-			$this->open_ranges =& $_open_ranges;
-			$this->open_items =& $_open_items;
+			$sess->register("_open_ranges_" . $this->class_name);
+			$sess->register("_open_items_" . $this->class_name);
+			$this->open_ranges =& $GLOBALS["_open_ranges_" . $this->class_name];
+			$this->open_items =& $GLOBALS["_open_items_" . $this->class_name];
 			$this->handleOpenRanges();
 		}
 		
@@ -260,7 +264,7 @@ class TreeView {
 		else 
 			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		
-		if (($this->tree->isLastKid($item_id) && !($item_id == $this->start_item_id)) || (!$this->open_ranges[$item_id] && $item_id == $this->start_item_id)) 
+		if (($this->tree->isLastKid($item_id) && !($item_id == $this->start_item_id)) || (!$this->open_ranges[$item_id] && $item_id == $this->start_item_id) || ($item_id == $this->start_item_id && !$this->tree->hasKids($item_id))) 
 			$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		else 
 			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
@@ -328,7 +332,7 @@ class TreeView {
 		$head .= "&nbsp;<a class=\"tree\" href=\"";
 		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . "><b>"
 											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= htmlReady($this->tree->tree_data[$item_id]['name']);
+		$head .= htmlReady(my_substr($this->tree->tree_data[$item_id]['name'],0,$this->max_cols));
 		$head .= ($this->open_items[$item_id]) ? "</b></a>" : "</a>";
 		return $head;
 	}
@@ -369,10 +373,4 @@ class TreeView {
 	}
 }
 //test
-//page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-//include "SemTree.class.php";
-//include "html_head.inc.php";
-//$test = new TreeView("SemTree");
-//$test->showTree();
-//page_close(); 
 ?>

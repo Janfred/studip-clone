@@ -272,12 +272,11 @@ class DbView {
 				}
 			}
 			$query .= $tokens[$i];
+			if ($this->auto_free_params)
+				$this->params = array();		
 		}
 		(is_array($query_list)) ? $query_list[0] = $query  : $query_list = $query;
-		if ($this->auto_free_params)
-			$this->params = array();
 		return $query_list;
-		
 	}
 	
 	function Get_union(){

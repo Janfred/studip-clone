@@ -376,5 +376,18 @@ class TreeAbstract {
 		$ret .= $this->tree_data[$item_id]['name'];
 		return $ret;
 	}
+	
+	/**
+	* Returns the maximum priority value from a parents child
+	*
+	* @access	public
+	* @param	string	$parent_id
+	* @return	int
+	*/
+	function getMaxPriority($parent_id){
+		$children = $this->getKids($parent_id);
+		$last = $this->getNumKids($parent_id) - 1;
+		return (int)$this->tree_data[$children[$last]]['priority'];
+	}
 }
 ?>
