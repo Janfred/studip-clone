@@ -357,7 +357,7 @@ if ($i_view)
 		$cssSw->resetClass();
  		?>
  		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
- 		<tr><td width="100%" colspan=2><br>&nbsp;Dieser Einrichtung sind folgende Fachbereiche zugeordnet:<br><br></th></tr>
+ 		<tr><td width="100%" colspan=2><br>&nbsp;Dieser Einrichtung sind folgende Studienf&auml;cher zugeordnet:<br><br></th></tr>
  		<tr><th width="80%" align="center">Name</th><th width="20%" align="center">Aktion</th><tr>
 		<?
  		while ($db->next_record()) {
