@@ -1441,8 +1441,8 @@ if ($level==2)
 							&nbsp; <input type="text" name="sem_art" size=30 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_art"])) ?>">
 							<font size=-1>(eigene Beschreibung)</font>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier können Sie eine frei wählbare Bezeichnug für die Art der Veranstaltung wählen.');" 
-									alt="Hier k&ouml;nnen Sie eine frei w&auml;hlbare Bezeichnug f&uuml;r die Art der Veranstaltung w&auml;hlen.">
+									onClick="alert('Hier können Sie eine frei wählbare Bezeichnung für die Art der Veranstaltung wählen.');" 
+									alt="Hier k&ouml;nnen Sie eine frei w&auml;hlbare Bezeichnung f&uuml;r die Art der Veranstaltung w&auml;hlen.">
 						</td>
 					</tr>
 									
