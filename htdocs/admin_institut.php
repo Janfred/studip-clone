@@ -60,24 +60,7 @@ $cssSw = new cssClassSwitcher;
 while ( is_array($HTTP_POST_VARS) 
      && list($key, $val) = each($HTTP_POST_VARS)) {
   switch ($key) {
-  
-  ## Zugeordneten Fachbereich rauswerfen
-  case "kill_fach_x":
-  	{
-	$db->query("DELETE FROM fach_inst WHERE fach_id = '$fach_id' AND institut_id ='$i_view'");
-	if ($db->affected_rows()==0)  $msg="error§Datenbankoperation gescheitert."; else $msg="msg§Die Zuordnung wurde aufgehoben";
-	break;
-  	}
-  	
-  ## Fachbereich zuordnen
-  case "add_fach_x":
-  	{
-	$db->query("INSERT INTO fach_inst VALUES ('$fach_id', '$i_view')");
-	if ($db->affected_rows()==0)  $msg="error§Datenbankoperation gescheitert."; else $msg="msg§Das Fach wurde der Einrichtung zugeordnet";
-	break;
-  	}
-  
-  
+ 	
   ## Create a new Institut
   case "create_x":
   if (!$perm->is_fak_admin()){
@@ -389,34 +372,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	</td></tr></table>
 	</form>
 	<br>
-<?
-	
-	if ($i_view != "new")
-		{
-		$db->query("SELECT * FROM faecher LEFT  JOIN fach_inst USING (fach_id) WHERE institut_id = '$i_id'");
-		$cssSw->resetClass();
-		?>
-		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
-		<tr><td width="100%" colspan=2><br>&nbsp;Dieser Einrichtung sind folgende Studienf&auml;cher zugeordnet:<br><br></th></tr>
-		<tr><th width="80%" align="center">Name</th><th width="20%" align="center">Aktion</th><tr>
-		<?
-		while ($db->next_record()) {
-			$cssSw->switchClass();
-			echo"<tr><td class=\"".$cssSw->getClass()."\">", htmlReady($db->f("name")), "</td><td class=\"".$cssSw->getClass()."\" align=\"center\"><form method=\"POST\" name=\"kill_f\" action=", $PHP_SELF, "><input type=\"IMAGE\" name=\"kill_fach\" src=\"./pictures/buttons/entfernen-button.gif\" border=0 value=\" Zuordnung aufheben\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"><input type=\"hidden\" name=\"fach_id\" value=\"", $db->f("fach_id"),"\"></td></form></tr>";
-		}
-		$cssSw->switchClass();
-		echo"<tr><td class=\"".$cssSw->getClass()."\"><form method=\"POST\" name=\"add_f\" action=", $PHP_SELF, "><select name=\"fach_id\" size=1>";
-		$db2->query("SELECT * FROM faecher ORDER BY name");
-		while ($db2->next_record())
-			{
-			$ftmp = $db2->f("fach_id");
-			$db->query("SELECT * FROM fach_inst WHERE institut_id = '$i_view' AND fach_id = '$ftmp'");
-			IF (!$db->next_record())
-				echo "<option value=".$db2->f("fach_id").">", htmlReady(substr($db2->f("name"),0,80));
-			}
-		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=\"center\"><input type=\"IMAGE\" src=\"./pictures/buttons/zuordnen-button.gif\" border=0 name=\"add_fach\" value=\" Zuordnen\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"></td></form></tr>";
-		echo "</table><br><br>";
-		}
+	<?
 }
 
 
