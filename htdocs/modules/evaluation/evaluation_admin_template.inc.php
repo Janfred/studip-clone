@@ -230,6 +230,29 @@ switch( $command ) {
     /* Check userinput ----------------------------------------------------- */
 
    // todo: check bzgl. nicht eingegebener anderer Felder
+   // Differenzierte Betrauchtung: leere Antowroten bei polskala und freitext
+   // ignorieren, leere antworten bei anderen typen warnen
+   // if($question->getType==EVALQUESTION_TYPE_POL){
+   //echo "Type:".$question->getType."<br>";
+      for ( $i=0; $i < count($template_answers); $i++ ) {
+	 $text     = $template_answers[$i]['text'];
+	 if($text==""){
+	    $report = 
+	       EvalCommon::createReportMessage(_("Leere Antworten sind ".
+						 "nicht zulässig, löschen".
+						 " Sie betreffende Felder".
+						 " oder geben Sie einen ".
+						 " Text ein."),
+					       EVAL_PIC_ERROR,
+					       EVAL_CSS_ERROR);	 
+	    $command = "continue_edit";
+	    break;
+	 }
+      }
+      if($command == "continue_edit")
+	 break;
+  // }
+
 
    if ($template_residual && empty ($template_residual_text)) {
       $report = EvalCommon::createReportMessage(_("Geben Sie eine Ausweichant".
@@ -329,8 +352,10 @@ if( !$command || $command == "back" ) {
    $typ=$questionload->getType();
    $text=my_substr ($questionload->getText(), 0, EVAL_MAX_TEMPLATENAMELEN);
    /*Root kennzeichnung hier entfernen!!*/
-     if (($answer = $questionload->getChild()) == NULL)
-       $answer = new EvaluationAnswer ();
+   //if($questionload->getParentID()==0)
+   //  $text="<b>".$text."</b>"; 
+   if (($answer = $questionload->getChild()) == NULL)
+      $answer = new EvaluationAnswer ();
      /* --------------------------------------------------------------- */
        switch( $typ ) {
 

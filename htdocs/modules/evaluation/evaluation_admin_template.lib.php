@@ -539,9 +539,14 @@ class EvalTemplateGUI {
 		      $form->cont( $this->BR );
 		   }
 		   else{
-		      if($answer->getText(UNQUOTED) == "")
+		     
+		      if($answer->getText(UNQUOTED) == "" ){
+			 $oldid=$answer->getObjectID();
 			 continue;
+		      }
+			 
 		      $form->cont( _("Beschriftung letzte Antwort") );
+		      $lastone=YES;
 		      $input = new HTMpty( "input" );
 		      $input->attr( "type", "text" );
 		      $input->attr( "name", "template_answers[1][text]" );
@@ -556,8 +561,25 @@ class EvalTemplateGUI {
 		   }
 		}
 	     }
-	     else
+	     else{
 		$isResidual = YES;
+		
+	     }
+	     if($lastone!=YES){
+		$form->cont( _("Beschriftung letzte Antwort") );
+		$lastone=YES;
+		$input = new HTMpty( "input" );
+		$input->attr( "type", "text" );
+		$input->attr( "name", "template_answers[1][text]" );
+		$input->attr( "value", "" );
+		$input->attr( "size", 29 );
+		$form->cont( $input );
+		$input = new HTMpty( "input" );
+		$input->attr( "type", "hidden" );
+		$input->attr( "name", "template_answers[1][answer_id]" );
+		$input->attr( "value", $oldid );
+		$form->cont( $input );
+	     }
 	  }
 	  $form->cont( $this->BR );
 	  $form->cont( $this->
