@@ -360,7 +360,8 @@ function printhead ($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestm
              $timecolor= "#".$red.$other.$other;
          }
 
-	$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"bottom\">";
+	IF ($open=="close") $print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"bottom\">";
+	ELSE $print = "<td class=\"printhead\" nowrap width=\"1%\" align=left valign=\"bottom\">";
 
 	if ($link)
 		$print.= "<a href=\"".$link."\">";
