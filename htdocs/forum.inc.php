@@ -933,17 +933,17 @@ function forum_draw_topicline() {
 function print_rating($rate, $id, $username) {
 	global $openorig, $forum, $user, $auth;	 
 	 if ($rate == "?")
-	 	$bar = "<img src=\"pictures/rate_leer\" width=\"50\" border=\"0\" height=\"11\">";
+	 	$bar = "<img src=\"pictures/rate_leer.gif\" width=\"50\" border=\"0\" height=\"11\">";
 	 elseif ($rate > 3) {
 		 $grau = (5-$rate)*10;
 		 $rot = 25 - $grau;
-		 $bar = "<img src=\"pictures/rate_leer\" width=25 height=11 border=\"0\"><img src=\"pictures/rate_rot\" width=\"$rot\" border=\"0\" height=\"11\"><img src=\"pictures/rate_leer\" width=\"$grau\" border=\"0\" height=11>";
+		 $bar = "<img src=\"pictures/rate_leer.gif\" width=25 height=11 border=\"0\"><img src=\"pictures/rate_rot\" width=\"$rot\" border=\"0\" height=\"11\"><img src=\"pictures/rate_leer\" width=\"$grau\" border=\"0\" height=11>";
 	 } elseif ($rate < 3) {
 		 $grau = ($rate-1)*10;
 		 $gruen = 25 - $grau;
-		 $bar = "<img src=\"pictures/rate_leer\" width=\"$grau\" height=\"11\" border=\"0\"><img src=\"pictures/rate_gruen\" border=\"0\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer\" border=\"0\" width=25 height=11>";
+		 $bar = "<img src=\"pictures/rate_leer.gif\" width=\"$grau\" height=\"11\" border=\"0\"><img src=\"pictures/rate_gruen\" border=\"0\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer\" border=\"0\" width=25 height=11>";
 	 } else {
-		$bar = "<img src=\"pictures/rate_neutral\" width=\"50\" height=\"11\" border=\"0\">"; 
+		$bar = "<img src=\"pictures/rate_neutral.gif\" width=\"50\" height=\"11\" border=\"0\">"; 
 	 }
 
 	if ($auth->auth["jscript"]) { //Java Script activated?
