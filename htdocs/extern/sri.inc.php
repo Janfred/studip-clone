@@ -144,9 +144,3 @@ $module_obj->printout($start, $end);
 echo $sri_matches[3];
 
 ?>
-
-
-
-
-
-
