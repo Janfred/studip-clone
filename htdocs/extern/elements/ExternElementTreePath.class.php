@@ -9,7 +9,7 @@
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
-* @module		ExternElement
+* @module		ExternElementTreePath
 * @package	studip_extern
 */
 
@@ -69,7 +69,7 @@ class ExternElementTreePath extends ExternElement {
 		$element_headline = $this->getEditFormHeadline($edit_form);
 		
 		$headline = $edit_form->editHeadline(_("Allgemeine Angaben"));
-		$title = _("Pfad-Trennzeichen");
+		$title = _("Pfad-Trennzeichen:");
 		$info = _("Geben Sie ein oder mehrere Zeichen ein, die als Trennzeichen zwischen den Links im Navigations-Pfad erscheinen sollen.");
 		$content = $edit_form->editTextfieldGeneric("delimiter", $title, $info, 25, 50);
 		

@@ -89,7 +89,7 @@ class ExternElementPersondetailsHeader extends ExternElement {
 				"picturetd_width", "picturetd_align", "picturetd_valign", "picturetd_bgcolor",
 				"picturetd_class", "picturetd_style", "contacttd_width", "contacttd_align",
 				"contacttd_valign", "contacttd_bgcolor", "contacttd_class", "contacttd_style",);
-		$headlines = array("tr" => "Tabellenzeile Name", "font" => _("Schriftformatierung Name"),
+		$headlines = array("tr" => _("Tabellenzeile Name"), "font" => _("Schriftformatierung Name"),
 				"headlinetd" => _("Tabellenzelle Name"), "picturetd" => _("Tabellenzelle Bild"),
 				"contacttd" => _("Tabellenzelle Kontakt"));
 		$content_table .= $edit_form->getEditFormContent($attributes, $headlines);

@@ -61,7 +61,8 @@ class ExternElementRangeTreeLevelContent extends ExternElement {
 	function getDefaultConfig () {
 		$config = parent::getDefaultConfig();
 		$config["mapping"] = "|Strasse|Plz|telefon|fax|email|url";
-		$config["aliases"] = "|Straﬂe:|Ort:|Telefon:|Fax:|Email:|Homepage:";
+		$config["aliases"] = "|"._("Stra&szlig;e:")."|"._("Ort:")."|"._("Telefon:")
+				."|"._("Fax:")."|"._("Email:")."|"._("Homepage:");
 		
 		return $config;
 	}

@@ -9,7 +9,7 @@
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
-* @module		ExternElement
+* @module		ExternElementTreeKids
 * @package	studip_extern
 */
 

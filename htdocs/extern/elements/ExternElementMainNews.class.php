@@ -2,7 +2,7 @@
 /**
 * ExternElementMainNews.class.php
 * 
-* This class defines 
+*  
 * 
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
@@ -15,7 +15,7 @@
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternElementMainDownload.class.php
+// ExternElementMainNews.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -120,12 +120,12 @@ class ExternElementMainNews extends ExternElementMain {
 		$title = _("Datumsformat:");
 		$info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
 		$nametitle_values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
-		$nametitle_names = array(_("25. Nov. 2003"), _("25.11.2003"), _("25.11.03"),
-				_("25. November 2003"), _("11/25/03"));
+		$nametitle_names = array(_("25. Nov. 2003"), "25.11.2003", "25.11.03",
+				_("25. November 2003"), "11/25/03");
 		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $nametitle_values, $nametitle_names);
 		
 		$title = _("Sprache Datum");
-		$info = ("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$nametitle_values = array("de_DE", "en_US");
 		$nametitle_names = array(_("Deutsch"), _("Englisch (US)"));
 		$table .= $edit_form->editOptionGeneric("timelocale", $title, $info, $nametitle_values, $nametitle_names);

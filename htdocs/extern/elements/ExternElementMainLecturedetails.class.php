@@ -141,7 +141,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache Datum");
-		$info = ("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$values = array("de_DE", "en_US");
 		$names = array(_("Deutsch"), _("Englisch (US)"));
 		$table .= $edit_form->editOptionGeneric("timelocale", $title, $info, $values, $names);

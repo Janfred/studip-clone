@@ -87,7 +87,7 @@ class ExternElementStudipLink extends ExternElement {
 		$content_table = $edit_form->getEditFormContent($this->attributes);
 		$content_table .= $edit_form->editBlankContent();
 		
-		$headline = $edit_form->editHeadline("Weitere Angaben");
+		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		$title = _("Linktext:");
 		$info = _("Geben Sie den Text für den Link ein.");
 		$content = $edit_form->editTextfieldGeneric("linktext", $title, $info, 40, 150);

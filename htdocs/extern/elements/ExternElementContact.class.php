@@ -62,9 +62,10 @@ class ExternElementContact extends ExternElement {
 		$config = array(
 			"order" => "|0|1|2|3|4|5",
 			"visible" => "|1|1|1|1|1|1",
-			"aliases" => "|Raum:|Telefon:|Fax:|Email:|Homepage:|Sprechzeiten:",
-			"headline" => "Kontakt:",
-			"adrradd" => "der Georg-August-Universit&auml;t G&ouml;ttingen"
+			"aliases" => "|"._("Raum:")."|"._("Telefon:")."|"._("Fax:")."|"._("Email:")."|"
+					._("Homepage:")."|"._("Sprechzeiten:"),
+			"headline" => _("Kontakt:"),
+			"adrradd" => _("der Georg-August-Universit&auml;t G&ouml;ttingen")
 		);
 		
 		return $config;

@@ -148,7 +148,7 @@ class ExternElementMainPersons extends ExternElementMain {
 		$title = _("Spalten&uuml;berschriften<br>Wiederholen:");
 		$info = _("Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile.");
 		$values = array("above", "beneath", "");
-		$names = array("&uuml;ber", "unter Gruppierungszeile", "keine");
+		$names = array(_("&uuml;ber"), _("unter Gruppierungszeile"), _("keine"));
 		$table .= $edit_form->editRadioGeneric("repeatheadrow", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");

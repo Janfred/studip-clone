@@ -71,8 +71,8 @@ class ExternElementList extends ExternElement {
 		$content_table = $edit_form->getEditFormContent($this->attributes);
 		$content_table .= $edit_form->editBlankContent();
 		
-		$headline = $edit_form->editHeadline("Einzug");
-		$title = "Linker Einzug:";
+		$headline = $edit_form->editHeadline(_("Einzug"));
+		$title = _("Linker Einzug:");
 		$info = _("Geben Sie an, wie weit (Pixel) die Aufzählungsliste im Absatz links eingerückt werden soll.");
 		$content = $edit_form->editTextfieldGeneric("margin", $title, $info, 3, 3);
 		

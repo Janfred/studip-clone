@@ -1,6 +1,6 @@
 <?
 /**
-* ExternElementTable.class.php
+* ExternElementTableHeadrow.class.php
 * 
 * 
 * 
@@ -9,13 +9,13 @@
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
-* @module		ExternElementTable
+* @module		ExternElementTableHeadrow
 * @package	studip_extern
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternElementTable.class.php
+// ExternElementTableHeadrow.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>

@@ -61,7 +61,7 @@ class ExternElementMainDownload extends ExternElementMain {
 		$config = array(
 			"name" => "",
 			"order" => "|0|1|2|3|4|5",
-			"visible" => "|TRUE|TRUE|TRUE|TRUE|TRUE|TRUE",
+			"visible" => "|1|1|1|1|1|1",
 			"aliases" => "||"._("Name")."|"._("Beschreibung")."|"._("Upload am")."|"
 					._("Gr&ouml;&szlig;e")."|"._("Upload durch"),
 			"width" => "|1%|20%|25%|15%|15%|24%",

@@ -83,7 +83,7 @@ class ExternElementLinkIntern extends ExternElement {
 		$headline = $edit_form->editHeadline($this->headlines[2]);
 		
 		$title = _("Konfiguration:");
-		$info = ("Der Link ruft das Modul mit der gewählten Konfiguration auf. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
+		$info = _("Der Link ruft das Modul mit der gewählten Konfiguration auf. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
 		if ($configs = get_all_configurations($this->config->range_id, $this->link_module_type)) {
 			$module_name = $EXTERN_MODULE_TYPES[$this->link_module_type]["module"];
 			$values = array_keys($configs[$module_name]);
