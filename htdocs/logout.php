@@ -45,10 +45,14 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	}
  
 	$logout_user=$user->id;            
-        
 	//Logout aus dem Sessionmanagement
 	$auth->logout();
 	$sess->delete();
+	//evtl verbleibende Session Variablen löschen
+	foreach($sess->pt as $key => $value){
+		$$key = null;
+	}
+	
 	page_close();
 
 	//Session changed zuruecksetzen
