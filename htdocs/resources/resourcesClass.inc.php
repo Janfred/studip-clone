@@ -426,24 +426,31 @@ class AssignObject {
 		if ((($this->chng_flag) || ($create)) && (($this->assign_user_id) || ($this->user_free_name))) {
 			$chdate = time();
 			$mkdate = time();
+
+			//insert NULL instead of nothing
+			if (!$this->assign_user_id)
+				$tmp_assign_user_id = "NULL";
+			else
+				$tmp_assign_user_id = "'$this->assign_user_id'";			
+
 			if($create) {
 				$query = sprintf("INSERT INTO resources_assign SET assign_id='%s', resource_id='%s', " 
-					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
+					."assign_user_id=%s, user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
 					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s', "
 					."mkdate='%s' "
-							 , $this->id, $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin
+							 , $this->id, $this->resource_id, $tmp_assign_user_id, $this->user_free_name, $this->begin
 							 , $this->end, $this->repeat_end, $this->repeat_quantity, $this->repeat_interval
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
 							 , $mkdate);
 			} else {
 				$query = sprintf("UPDATE resources_assign SET resource_id='%s', " 
-					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
+					."assign_user_id=%s, user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
 					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s' "
 					." WHERE assign_id='%s' "
-							 , $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin 
+							 , $this->resource_id, $tmp_assign_user_id, $this->user_free_name, $this->begin 
 							 , $this->end, $this->repeat_end, $this->repeat_quantity, $this->repeat_interval
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
