@@ -815,7 +815,7 @@ function smile ($text = "", $extern = FALSE) {
 		}
 		else {
 			$replaces[] = "\\1<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
-					. "$path$SMILE_PATH/$value.gif\">\\3";
+					. "$path$SMILE_PATH/$value.gif\">\\2";
 		}
 	}
 	return preg_replace($patterns, $replaces, $text);
