@@ -334,7 +334,9 @@ if ($close) {
 	
 	//und Form wieder schliessen
 	if ($change)
-		echo "</form>";				
+		echo "</form>";		
+		
+	$folder_system_data["linkerror"]="";
 ?>
 <br>
 </td>

@@ -90,9 +90,9 @@ function parse_link($link) {
 	if (empty( $port ) ) $port = "80";
 	$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
 	if (!$socket) {
-		// echo "$errstr ($errno)<br />\n";
+		//echo "$errstr ($errno)<br />\n";
 	} else {
-   		fputs($socket, "HEAD ".$documentpath." HTTP/1.0\nHost: $host\nCookie: Seminar_Session=".$sess->id."\n\n");
+		fputs($socket, "HEAD ".$documentpath." HTTP/1.0\nHost: $host\nCookie: Seminar_Session=".$sess->id."\n\n");
    		socket_set_timeout($socket,2);
    		while (!feof($socket)) {
 	       		$response .= fgets($socket,4096);
@@ -100,6 +100,7 @@ function parse_link($link) {
 	   	fclose($socket);
 	}
 	$parsed_link = parse_header($response);
+	//print_r ($parsed_link);
 	return $parsed_link;
 	}
 }
@@ -834,7 +835,7 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE)
 
 	if ($create) {
 		$link_data = parse_link($the_link);
-		if ($link_data["HTTP/1.0 200 OK"]) {
+		if ($link_data["HTTP/1.0 200 OK"] || $link_data["HTTP/1.1 200 OK"]) {
 			if (insert_link_db($range_id, $link_data["Content-Length"], $refresh))
 				if ($refresh)
 					delete_link($refresh, TRUE);
