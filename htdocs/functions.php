@@ -917,13 +917,13 @@ function archiv_check_perm($seminar_id){
 			$archiv_perms[$db->f("seminar_id")] = $db->f("status");
 		}
 		if ($perm->have_perm("admin")){
-			$db->query("SELECT archiv.seminar_id FROM archiv LEFT  JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
+			$db->query("SELECT archiv.seminar_id FROM user_inst INNER JOIN archiv ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
 			while ($db->next_record()) {
 				$archiv_perms[$db->f("seminar_id")] = "admin";
 			}
 		}
 		if ($perm->is_fak_admin()){
-			$db->query("SELECT archiv.seminar_id FROM archiv LEFT JOIN Institute ON  (archiv.heimat_inst_id = Institute.institut_id) LEFT JOIN user_inst ON (user_inst.institut_id = Institute.fakultaets_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
+			$db->query("SELECT archiv.seminar_id FROM user_inst INNER JOIN Institute ON ( user_inst.institut_id = Institute.fakultaets_id ) INNER JOIN archiv ON ( archiv.heimat_inst_id = Institute.institut_id )  WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
 			while($db->next_record()){
 				$archiv_perms[$db->f("seminar_id")] = "admin";
 			}
