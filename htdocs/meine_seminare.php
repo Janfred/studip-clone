@@ -317,9 +317,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
 			echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
 		elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\">&nbsp;<img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a></td>", $semid);
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\">&nbsp;<img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a></td>", $semid);
 		else
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\">&nbsp;<img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td>", $semid);			
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\">&nbsp;<img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td>", $semid);			
 		 echo "</tr>\n";
 		}
 // 	echo "</table>";
