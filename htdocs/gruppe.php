@@ -50,7 +50,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 <? FOR ($i=0; $i<8; $i++)
 	ECHO "<th class=\"gruppe".$i."\" width=\"10px\"><b>&nbsp;</b></th>";
 	ECHO "</tr>";
-	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY gruppe");
+	$db->query ("SELECT seminare.Name,seminare.visible, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY gruppe,Name");
 	$c=0;
 	while ($db->next_record())
 		{
@@ -59,7 +59,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		else
 			$class="steelgraulight"; 
 
-		printf("<tr><td class=\"$class\">&nbsp;<a href=\"seminar_main.php?auswahl=%s\">%s</a></td>",$db->f("Seminar_id"),htmlReady(my_substr($db->f("Name"),0,50)));
+		printf("<tr><td class=\"$class\">&nbsp;<a href=\"seminar_main.php?auswahl=%s\">%s</a>%s</td>",
+		$db->f("Seminar_id"),htmlReady(my_substr($db->f("Name"),0,50)),
+		(!$db->f('visible') ? "&nbsp;<font size=\"-1\">" . _("(versteckt)") . "</font>" : ""));
 		FOR ($i=0; $i<8; $i++)
 			{
 			ECHO "<td class=\"$class\"><INPUT type=radio name=gruppe[".$db->f('Seminar_id')."] value=".$i;
@@ -82,3 +84,4 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
   page_close()
  ?>
 <!-- $Id$ -->
+
