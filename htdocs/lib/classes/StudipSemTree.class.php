@@ -153,18 +153,6 @@ class StudipSemTree extends TreeAbstract {
 		return $ret_id;
 	}
 	
-	function getShortPath($item_id,$delimeter = ">"){
-		if (!$this->tree_data[$item_id]){
-			return false;
-		}
-		$parents = $this->getParents($item_id);
-		for ($i = 0; $i < count($parents)-1;++$i){
-			$ret = $this->tree_data[$parents[$i]]['name'] . " " . $delimeter . " " . $ret;
-		}
-		$ret .= $this->tree_data[$item_id]['name'];
-		return $ret;
-	}
-	
 	function InsertItem($item_id, $parent_id, $item_name, $item_info, $priority, $studip_object_id){
 		$view = new DbView();
 		$view->params = array($item_id,$parent_id,$item_name,$priority,$item_info,$studip_object_id);

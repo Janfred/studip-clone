@@ -328,6 +328,7 @@ class SemBrowse {
 					$allowed_ranges[] = $this->sem_browse_data['start_item_id'];
 					$sem_tree_query = " AND sem_tree_id IN('" . join("','", $allowed_ranges) . "') ";
 				}
+				$the_tree->buildIndex();
 			}
 					
 			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name, seminare.metadata_dates 
@@ -435,7 +436,7 @@ class SemBrowse {
 					break;
 					
 					case 1:
-					if ($the_tree->getShortPath($group_field)){
+					if ($the_tree->tree_data[$group_field]) {
 						echo htmlReady($the_tree->getShortPath($group_field));
 					} else {
 						echo _("keine Studienbereiche eingetragen");

@@ -155,11 +155,34 @@ class TreeAbstract {
 	*/
 	
 	function storeItem($item_id,$parent_id,$name,$priority){
-		$this->tree_data[$item_id]["index"] = ++$this->index_offset; 
 		$this->tree_data[$item_id]["parent_id"] = $parent_id; 
 		$this->tree_data[$item_id]["priority"] = $priority;
 		$this->tree_data[$item_id]["name"] = $name;
 		$this->tree_childs[$parent_id][] = $item_id;
+		return;
+	}
+	
+	/**
+	* build an index for sorting purpose
+	*
+	* build an index for sorting purpose
+	*
+	* @access	public
+	* @param	string	$item_id
+	* 
+	*/
+	
+	function buildIndex($item_id = false){
+		if (!$item_id){
+			$item_id = "root";
+		}
+		$this->tree_data[$item_id]['index'] = $this->index_offset;
+		++$this->index_offset;
+		if (($num_kids = $this->getNumKids($item_id))){
+			for($i = 0; $i < $num_kids; ++$i){
+				$this->buildIndex($this->tree_childs[$item_id][$i]);
+			}
+		}
 		return;
 	}
 	
@@ -334,6 +357,23 @@ class TreeAbstract {
 			$item_id = $this->tree_data[$item_id]['parent_id'];
 			$ret[] = $item_id;
 		}
+		return $ret;
+	}
+	
+	function getShortPath($item_id, $depth = false, $delimeter = ">"){
+		if (!$this->tree_data[$item_id]){
+			return false;
+		}
+		$parents = $this->getParents($item_id);
+		if ($depth){
+			$d = count($parents) - $depth;
+		} else {
+			$d = count($parents)-1;
+		}
+		for ($i = 0; $i < $d;++$i){
+			$ret = $this->tree_data[$parents[$i]]['name'] . " " . $delimeter . " " . $ret;
+		}
+		$ret .= $this->tree_data[$item_id]['name'];
 		return $ret;
 	}
 }

@@ -532,9 +532,20 @@ class StudipSemTreeViewAdmin extends TreeView {
 		if (is_array($tmp_group_by_data)){
 			foreach ($tmp_group_by_data as $start_sem => $detail){
 				$group_by_data[$start_sem] = $detail;
-				uasort($group_by_data[$start_sem]['seminar_id'], 'strnatcasecmp');
 			}
 		}
+		
+		foreach ($group_by_data as $group_field => $sem_ids){
+				foreach ($sem_ids['seminar_id'] as $seminar_id => $foo){
+					$name = strtolower(key($sem_data[$seminar_id]["Name"]));
+					$name = str_replace("ä","ae",$name);
+					$name = str_replace("ö","oe",$name);
+					$name = str_replace("ü","ue",$name);
+					$group_by_data[$group_field]['seminar_id'][$seminar_id] = $name;
+				}
+				uasort($group_by_data[$group_field]['seminar_id'], 'strnatcmp');
+			}
+		
 		krsort($group_by_data, SORT_NUMERIC);
 		
 		foreach ($group_by_data as $sem_number => $sem_ids){
