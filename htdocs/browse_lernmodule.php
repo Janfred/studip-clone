@@ -53,8 +53,12 @@ if ($ILIAS_CONNECT_ENABLE)
 	$infobox = array	(array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(array (	"icon" => "pictures/ausruf_small.gif",
 									"text"  => sprintf(_("Auf dieser Seite k&ouml;nnen Sie nach Lernmodulen im angebundenen ILIAS-System suchen.")) ) ) ) );
+	
+	$infobox[1]["kategorie"] = _("Aktionen:");
 	$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
-									"text"  => sprintf(_("Geben Sie einen Suchbegriff ein und klicken Sie auch 'Suche Starten'."))
+									"text"  => sprintf(_("Geben Sie einen Suchbegriff ein und klicken Sie auf 'Suche starten'. Die Suche bezieht sich auf den ausgew&auml;hlten Suchbereich.")));
+//	$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+//									"text"  => sprintf(_("Gefundene Lernmodule k&ouml;nnen von hier aus gestartet werden. ")));
 
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -62,13 +66,23 @@ if ($ILIAS_CONNECT_ENABLE)
 			<td class="topic" colspan="3">&nbsp;<img src="./pictures/suchen.gif" border="0" align="texttop">&nbsp;<b><? echo _("Suche nach Lernmodulen");?></b></td>
 		</tr>
 		<tr>
-			<td class="blank" colspan="1">&nbsp;
+			<td class="blank" colspan="3">&nbsp; 
 			</td>
-     			<td width="100%" class="blank" colspan="1">
+		</tr>
+		<tr valign="top">
+                <td width="1%" class="blank">
+                &nbsp; 
+                </td>
+     			<td width="90%" class="blank">
 	<form method="POST" action="<? echo $PHP_SELF; ?>">
 
 	<table cellpadding="10" cellspacing="01" border="0" width="100%"><tr><td>
+	<br>
 	<? echo _("Hier k&ouml;nnen Sie nach Lernmodulen suchen."); ?>
+	<br>
+	<br>
+	<br>
+	<br>
 	</td></tr>
 	<tr valign="middle"><td class="steel1" align="center"><font size="-1"><? echo _("Suchbereich:");?>&nbsp;</font>
 	<select name="search_area">
