@@ -137,7 +137,7 @@ if ($cmd=="insert") {
 		}
 
 	$id=md5(uniqid($hash_secret));
-	$my_personal_sems[$id]=array("start_time"=>$start_time, "ende_time"=>$ende_time, "beschreibung"=>$beschreibung, "seminar_id"=>$id);
+	$my_personal_sems[$id]=array("start_time"=>$start_time, "ende_time"=>$ende_time, "beschreibung"=>$beschreibung, "room" =>$room, "doz" =>$dozent, "seminar_id"=>$id);
 	//die;
 	}
 
@@ -216,8 +216,12 @@ while ($db->next_record())
 		$i=1;
 		while ($db2->next_record())
 			{
-			if ($i>1) $dozenten.=", ";
-			$dozenten.="<a href =\"about.php?username=".$db2->f("username")."\">".$db2->f("Nachname")."</a>";
+			if ($i>1) 
+				$dozenten.=", ";
+			if (!$print_view)
+				$dozenten.="<a href =\"about.php?username=".$db2->f("username")."\">".$db2->f("Nachname")."</a>";
+			else
+				$dozenten.=$db2->f("Nachname");
 			$i++;
 			}
 		
@@ -293,7 +297,7 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 			$tmp_day=date("w", $mps["start_time"]);
 			if ($tmp_day==0) $tmp_day=7;
 		
-			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>"", "row_span"=>$tmp_row_span, "dozenten"=>"", "personal_sem"=>TRUE);
+			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>$mps["doz"], "personal_sem"=>TRUE);
 		}
 
 //Array der Zellenbelegungen erzeugen
@@ -517,7 +521,7 @@ for ($i; $i<$global_end_time+1; $i++)
 					} else
 						echo "</td></tr><tr><td class=\"topic\">";
 					if (($print_view) && ($r!=0))
-						echo "<hr width=\"100%\">";
+						echo "<hr src=\"pictures/border.jpg\" width=\"100%\">";
 					$r++;
 					echo "<font size=-1 ";
 					if (!$print_view)
@@ -527,7 +531,7 @@ for ($i; $i<$global_end_time+1; $i++)
 						echo " - ",  date ("H:i",  $my_sems[$cc["seminar_id"]]["end_time"]);
 					if ($my_sems[$cc["seminar_id"]]["ort"]) echo ",  ", $my_sems[$cc["seminar_id"]]["ort"];
 					echo "</font></td></tr><tr><td class=\"blank\">";
-					if (!$my_sems[$cc["seminar_id"]]["personal_sem"]) 
+					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view))
 						{
 						if ($view=="inst")
 							echo  "<a href=\"details.php?sem_id=";						
@@ -594,7 +598,7 @@ if ((!$print_view) && (!$inst_id)) {
 				<option value="5"><?=_("Freitag")?></option>
 				<option value="6"><?=_("Samstag")?></option>
 				<option value="7"><?=_("Sonntag")?></option>				
-			</select>
+			</select>&nbsp; &nbsp; 
 			<?=_("Beginn:")?> 
 			<?	    
 			echo"<select name=\"start_stunde\">";
@@ -610,7 +614,7 @@ if ((!$print_view) && (!$inst_id)) {
 				if ($i==0) echo "<option selected value=".$i.">0".$i."</option>";
 					else echo "<option value=".$i.">".$i."</option>";
 				}
-				echo"</select> "._("Uhr");
+				echo"</select> "._("Uhr")."&nbsp; &nbsp; ";
 				?>
 			<?=_("Ende:")?>
 			<?	    
@@ -629,9 +633,13 @@ if ((!$print_view) && (!$inst_id)) {
 					else echo "<option value=".$i.">".$i."</option>";
 				}
 				echo"</select> "._("Uhr");
-				echo _("Beschreibung:");
+				echo "<br />&nbsp; "._("Beschreibung:");
 				?>
-				<input name="beschreibung" type="text" size=40 maxlength=255>
+				<input name="beschreibung" type="text" size=40 maxlength=255>&nbsp; &nbsp; 
+				<?=_("Raum:")?>
+				<input name="room" type="text" size=20 maxlength=255>&nbsp; &nbsp; 
+				<?=_("DozentIn:")?>
+				<input name="dozent" type="text" size=20 maxlength=255><br />&nbsp; 
 				<input name="send" type="IMAGE" <?=makeButton("eintragen", "src")?> value="<?=("Eintragen")?>">
 		</form>
 	</td>
