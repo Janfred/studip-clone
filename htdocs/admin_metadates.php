@@ -50,11 +50,14 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");//ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//ja,ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");//ja,ja,ja,ja,ja auch die...
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/LockRules.class.php");//ja,ja,ja,ja,ja auch die...
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Seminar.class.php");//ja,ja,ja,ja,ja,ja auch die...
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/LockRules.class.php");//ja,ja,ja,ja,ja,ja,ja auch die...
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	$resList = new ResourcesUserRoomsList($user_id);
 }
@@ -89,33 +92,24 @@ function get_snapshot() {
 			serialize($term_metadata["art"]);
 }
 
-$db6 = new DB_Seminar;
 //get ID
-$lock_text = "<font color=\"red\" size=\"2\">"._("&nbsp;Feld gesperrt&nbsp;")."<img src=\"pictures/info.gif\" ".tooltip(_("Sie dürfen nicht alle Daten dieser Veranstaltung verändern. Diese Sperrung ist von einem/einer AdministratorIn vorgenommen worden."),TRUE,TRUE)."></font>";
 if ($SessSemName[1])
 	$seminar_id=$SessSemName[1]; 
 
 if (isset($seminar_id) && (!$perm->have_perm("admin"))) {
-	$db6->query("SELECT lock_rule, Name FROM seminare WHERE Seminar_id='".$seminar_id."'");
-	$db6->next_record();
-	//$lock_status = $db6->f("lock_rule");
+	$db->query("SELECT lock_rule, Name FROM seminare WHERE Seminar_id='".$seminar_id."'");
+	$db->next_record();
 	$lock_status = "attributes";
-	$lockdata = $lock_rules->getLockRule($db6->f("lock_rule"));
-	/*if ($db6->f("lock_rule")==1) {
-		$error = "error§" . _("Sie d&uuml;rfen die Zeiten nicht ver&auml;ndern!"); 
-		?>
-		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=5 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Veranstaltung: ".$db6->f("Name")." - allgemeine Zeiten")?></b></td>
-</tr>
-<tr><td class="blank" colspan=2>&nbsp;</td></tr><?
-		parse_msg($error);
-		die();
-	}*/
+	$lockdata = $lock_rules->getLockRule($db->f("lock_rule"));
+	$lock_text = "<font color=\"red\" size=\"2\">"._("&nbsp;Feld gesperrt&nbsp;")."<img src=\"pictures/info.gif\" ".tooltip(_("Sie dürfen nicht alle Daten dieser Veranstaltung verändern. Diese Sperrung ist von einem/einer AdministratorIn vorgenommen worden."),TRUE,TRUE)."></font>";
 }
+
 //wenn wir frisch reinkommen, werden die alten Metadaten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field) && !($open_ureg_x) && !($open_reg_x) && !($enter_start_termin_x) && !($nenter_start_termin_x)) {
-	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
+	if ($RESOURCES_ENABLE)
+		$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status, request_id  FROM seminare LEFT JOIN resources_requests USING (seminar_id) WHERE seminare.Seminar_id = '$seminar_id'");
+	else
+		$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$term_metadata=unserialize($db->f("metadata_dates"));
 	$term_metadata["sem_status"]=$db->f("status");
@@ -123,6 +117,7 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	$term_metadata["sem_start_time"]=$db->f("start_time");	
 	$term_metadata["sem_duration_time"]=$db->f("duration_time");
 	$term_metadata["sem_id"] = $seminar_id;
+	$term_metadata["request_id"] = $db->f("request_id");
 	if (!$term_metadata["sem_start_termin"]) $term_metadata["sem_start_termin"] =-1;
 	if (!$term_metadata["sem_end_termin"]) $term_metadata["sem_end_termin"] =-1;
 	if (!$term_metadata["sem_vor_termin"]) $term_metadata["sem_vor_termin"] =-1;
@@ -175,6 +170,7 @@ if ($turnus_refresh)
 
 
 	//Arrays fuer Turnus loeschen
+	$temp_turnus_data = $term_metadata["turnus_data"];
 	$term_metadata["turnus_data"]='';
 
 	//Alle eingegebenen Turnus-Daten in Sessionvariable uebernehmen
@@ -186,7 +182,11 @@ if ($turnus_refresh)
 		$term_metadata["turnus_data"][$i]["end_stunde"]=$turnus_end_stunde[$i]; 
 		$term_metadata["turnus_data"][$i]["end_minute"]=$turnus_end_minute[$i]; 
 		$term_metadata["turnus_data"][$i]["room"]=$turnus_room[$i]; 
-		$term_metadata["turnus_data"][$i]["resource_id"]=($turnus_resource_id[$i] == "FALSE") ? FALSE : $turnus_resource_id[$i];
+		if (($turnus_resource_id[$i]) && ($turnus_resource_id[$i] != "FALSE")) {
+			$term_metadata["turnus_data"][$i]["resource_id"] = $turnus_resource_id[$i];
+		} else
+			$term_metadata["turnus_data"][$i]["resource_id"] = $temp_turnus_data[$i]["resource_id"];
+		
 		if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"]) {
 			$resObject=new ResourceObject($term_metadata["turnus_data"][$i]["resource_id"]);
 			$term_metadata["turnus_data"][$i]["room"]=$resObject->getName();
@@ -287,7 +287,7 @@ else
 }
 
 
-//Daten speichern
+//Daten zum speichern vorbereiten
 if (($uebernehmen_x) && (!$errormsg)) {
 	//Termin-Metadaten-Array erzeugen
 	$metadata_termin["art"]=$term_metadata["art"];
@@ -327,8 +327,43 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$metadata_termin["turnus_data"][]=$tmp_array;
 			}
 		}
-	}
 		
+		//check for changes to the old (saved) metadates (for each metadate)
+		foreach ($metadata_termin["turnus_data"] as $key => $val) {
+			if (($metadata_termin["turnus_data"][$key]["start_stunde"] != $term_metadata["original_turnus"][$key]["start_stunde"])
+				|| ($metadata_termin["turnus_data"][$key]["start_minute"] != $term_metadata["original_turnus"][$key]["start_minute"])
+				|| ($metadata_termin["turnus_data"][$key]["end_stunde"] != $term_metadata["original_turnus"][$key]["end_stunde"])
+				|| ($metadata_termin["turnus_data"][$key]["end_minute"] != $term_metadata["original_turnus"][$key]["end_minute"])) {
+			$metadates_changed[$key] = TRUE;
+			}
+		}
+
+		//check for the rights, the user has on the selected resource-objects
+		$foreign_resource;
+		$update_resources = TRUE;
+		if (($RESOURCES_ENABLE) && ($metadates_changed)) {
+			foreach ($metadates_changed as $key=>$val) {
+				$resObjPrm = new ResourceObjectPerms($metadata_termin["turnus_data"][$key]["resource_id"]);
+				if (!$resObjPrm->havePerm("autor"))
+					$foreign_resources = TRUE;
+			}
+		
+		
+			//ok, what do we here? If foreign requests and the ability to create a room request, do this. Else (no requests available or rights on the resource), we try so save the assign.
+			if (($foreign_resources) && ($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$change_metadates_open_request)) {
+				$update_resources = FALSE;
+				$create_request = TRUE;
+				$errormsg.="info§"._("Sie haben die Zeiten eines zugewiesenen Raums ge&auml;ndert. Dabei verlieren Sie die Buchung des zugewiesenen Raums. Der zust&auml;ndige Raumadministrator mu&szlig; Ihnen den Raum erneut zuweisen, daf&uuml;r wird Raumanfrage ben&ouml;tigt.")
+						."<br />"._("Wollen Sie die Zeiten dennoch &auml;ndern?")."<br /><a href=\"$PHP_SELF?change_metadates_open_request=1&uebernehmen_x=1\">".makeButton("ja2")."</a>"
+						."&nbsp;<a href=\"$PHP_SELF\">".makeButton("nein")."</a>§";
+			} elseif  (!$change_metadates_open_request)
+				$update_resources = TRUE;
+		}
+	}
+}
+
+//now, save the data
+if (($uebernehmen_x) && (!$errormsg)) {
 	//Termin-Metadaten-Array zusammenmatschen zum beseren speichern in der Datenbank
 	$serialized_metadata=mysql_escape_string(serialize ($metadata_termin));
 	
@@ -338,10 +373,10 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		$errormsg.="msg§"._("Die allgemeinen Termindaten wurden aktualisiert.")."§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 		
-		//update the dates....
-		if ($term_metadata["update_dates"] ) {
+		//update the dates.... (we update if NOT update_resources is set to kill the actual assigns.... ok ;-) ??)
+		if (($term_metadata["update_dates"]) || (!$update_resources)) {
 			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
-			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"]);
+			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"], TRUE, $update_resources);
 			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
 			if ($result) {
 				$errormsg.= sprintf ("msg§"._("%s Termine des Ablaufplans aktualisiert.")."§", $result["changed"]);
@@ -349,7 +384,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		}
 		
 		//If resource-management activ, update the assigned resources and do the overlap checks.... not so easy!
-		if ($RESOURCES_ENABLE) {
+		if (($RESOURCES_ENABLE) && ($update_resources)) {
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
     			$updateResult = array_merge ($updateResult, $veranstAssign->updateAssign());
 
@@ -370,6 +405,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 							if (($val3["day"] == $day) && ($val3["start_stunde"] == date("G", $begin)) && ($val3["start_minute"] == date("i", $begin)) && ($val3["end_stunde"] == date("G", $end)) && ($val3["end_minute"] == date("i", $end)) && ($val["resource_id"] == $resource_id)) {
 								$metadata_termin["turnus_data"][$key3]["resource_id"]='';
 								$metadata_termin["turnus_data"][$key3]["room"]='';
+								$term_metadata["turnus_data"][$key3]["resource_id"]='';
+								$term_metadata["turnus_data"][$key3]["room"]='';
 								$metadata_changed = TRUE;
 							}
 						}
@@ -419,11 +456,35 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				elseif ($i)
 					$errormsg.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen oder aktualisiert.")."§", $rooms_booked);
  		}
+ 		
+ 		//reopen a request or send user to admin_room_requests, if no request exists
+ 		if (($RESOURCES_ENABLE) && ($RESOURCES_ALLOW_ROOM_REQUESTS) && ($change_metadates_open_request)) {
+ 			//kill the assigns
+ 			$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
+ 			$veranstAssign->deleteAssignedRooms();
+ 			$semObj = new Seminar($term_metadata["sem_id"]);
+ 			foreach ($semObj->getMetaDates() as $key=>$val) {
+				$semObj->setMetaDateValue($key, "resource_id", FALSE);
+				$metadata_termin["turnus_data"][$key]["resource_id"] = FALSE;
+			}
+			$semObj->store();
+
+ 			//no request... user should create self an request
+ 			if (!$term_metadata["request_id"]) {
+				$errormsg.= sprintf ("info§"._("Um R&auml;ume f&uuml;r Ihre Veranstaltung zu bekommen, m&uuml;ssen Sie eine %sRaumanfrage%s erstellen.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$term_metadata["sem_id"]."\">", "</a>");
+ 			//update request (set closed 0 (open!))
+ 			} else {
+	 			$resReq = new RoomRequest($term_metadata["request_id"]);
+ 				$resReq->setClosed(0);
+ 				$resReq->store();
+				$errormsg.= sprintf ("info§"._("Die Raumanfrage der Veranstaltung wurde an den zust&auml;ndigen Raumadministrator gesandt. Um die Anfrage einzusehen oder zu bearbeiten, gehen Sie auf %sRaumanfragen%s.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$term_metadata["sem_id"]."\">", "</a>");
+ 			}
+ 		}
 	}
 	
 	//Save the current state as snapshot to compare with current data
-	$term_metadata["original"]=get_snapshot();
-
+	$term_metadata["original"] = get_snapshot();
+	$term_metadata["original_turnus"] = $term_metadata["turnus_data"];
 	$metadata_saved=TRUE;
 }
  
@@ -492,7 +553,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				if (!$term_metadata["art"]) {
 					echo "<br><br><img ".makeButton("regelmaessig2","src")." >&nbsp;&nbsp;<img ".makeButton("unregelmaessig","src")." >";
 				} else {
-					echo "<img ".makeButton("regelmaessig","src")." >&nbsp;&nbsp;<img ".makeButton("unregelmaessig2","src")." >";
+					echo "<br><br><img ".makeButton("regelmaessig","src")." >&nbsp;&nbsp;<img ".makeButton("unregelmaessig2","src")." >";
 				}
 				echo "&nbsp;&nbsp;".$lock_text;	
 			} else { ?><br /></font>
@@ -596,21 +657,31 @@ if (($uebernehmen_x) && (!$errormsg)) {
 										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
 										if ($lockdata[$lock_status]["metadata_dates"]) { echo "disabled";} 
 										print " ></font>";
-										printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
+										printf ("<option %s value=\"FALSE\">[".(($term_metadata["original_turnus"][$i]["resource_id"]) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")." -->")."]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
 										while ($resObject = $resList->next()) {
-											printf ("<option %s value=\"%s\">%s</option>", ($term_metadata["turnus_data"][$i]["resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+											printf ("<option value=\"%s\">%s</option>", $resObject->getId(), htmlReady($resObject->getName()));
 										}
 										print "</select></font>";
-									}
+									} 
 								}
 								?>
-								&nbsp; <font size=-1><input type="text" name="turnus_room[]" size="15" <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "readonly";} ?> maxlength="255" value="<?= htmlReady($term_metadata["turnus_data"][$i]["room"]) ?>"/></font>&nbsp; 
+								&nbsp; <font size=-1><input type="text" name="turnus_room[]" size="30" <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "readonly";} ?> maxlength="255" value="<?= htmlReady($term_metadata["turnus_data"][$i]["room"]) ?>"/></font>&nbsp; 
 								<?
 								if ($lockdata[$lock_status]["metadata_dates"]) { echo $lock_text;} 
-								print "<br /><br />";
+								if ($RESOURCES_ENABLE) {
+									print "<br />&nbsp;"._("gebuchter Raum:")."&nbsp; ";
+									if ($term_metadata["turnus_data"][$i]["resource_id"]) {
+										$resObj = new ResourceObject ($term_metadata["original_turnus"][$i]["resource_id"]);
+										print "<font size=-1>".$resObj->getFormattedLink(TRUE, TRUE, TRUE)."</font>";
+									} else
+										print "<font size=-1>"._("kein gebuchter Raum")."</font>";
+								}
+
+								print "<br />";
 								}
 								?>
 								<input type="HIDDEN" name="turnus_refresh" value="TRUE">
+								<br />
 								<?if ($lockdata[$lock_status]["metadata_dates"]) {
 									echo "<img ".makeButton("feldhinzufuegen","src")." border=0>".$lock_text;
 								} else { ?>
