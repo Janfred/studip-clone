@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-24 18:32+0100\n"
+"POT-Creation-Date: 2003-03-28 13:12+0100\n"
 "PO-Revision-Date: 2003-03-24 18:14+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -239,7 +239,7 @@ msgstr "back"
 msgid "vor"
 msgstr "forwards"
 
-#: calendar/lib/CalendarEvent.class.php:107
+#: calendar/lib/CalendarEvent.class.php:108
 msgid "name"
 msgstr "name"
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-24 18:32+0100\n"
+"POT-Creation-Date: 2003-03-28 13:12+0100\n"
 "PO-Revision-Date: 2003-03-28 12:29+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -19,16 +19,16 @@ msgstr ""
 msgid "Verwaltung der externen Anzeigemodule"
 msgstr ""
 
-#: extern/admin_extern.inc.php:80
+#: extern/admin_extern.inc.php:79
 #, c-format
 msgid ""
 "Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> "
 "wirklich l&ouml;schen?"
 msgstr ""
-"Do you really want to delete the configuration "
-"<b>&quot;%s&quot;</b> of the module <b>%s</b>?"
+"Do you really want to delete the configuration <b>&quot;%s&quot;</b> of the "
+"module <b>%s</b>?"
 
-#: extern/admin_extern.inc.php:140
+#: extern/admin_extern.inc.php:141
 msgid "Übersicht über alle angelegten Konfigurationen."
 msgstr "Overview of all configurations created."
 
@@ -43,9 +43,9 @@ msgid ""
 "angelegt. Um eine neue Konfiguration anzulegen, m&uuml;ssen Sie erst eine "
 "bestehende im gew&uuml;nschten Modul l&ouml;schen."
 msgstr ""
-"You have already created the maximum number of configurations for all modules. "
-"To create a new configuration, you must first delete an existing one in the selected "
-"module."
+"You have already created the maximum number of configurations for all "
+"modules. To create a new configuration, you must first delete an existing "
+"one in the selected module."
 
 #: extern/admin_extern.inc.php:176
 msgid "Es wurden noch keine Konfigurationen angelegt."
@@ -55,61 +55,61 @@ msgstr "No configurations have been created."
 msgid "Angelegte Konfigurationen"
 msgstr "Created configurations"
 
-#: extern/admin_extern.inc.php:217
+#: extern/admin_extern.inc.php:218
 msgid "weitere Informationen anzeigen"
 msgstr "Show further information"
 
-#: extern/admin_extern.inc.php:227
+#: extern/admin_extern.inc.php:228
 msgid "Standard entziehen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:234
+#: extern/admin_extern.inc.php:235
 msgid "Standard zuweisen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:243
+#: extern/admin_extern.inc.php:244
 msgid "Konfiguration löschen"
 msgstr "Delete configuration"
 
-#: extern/admin_extern.inc.php:250
+#: extern/admin_extern.inc.php:251
 msgid "Konfiguration bearbeiten"
 msgstr "Edit configuration"
 
-#: extern/admin_extern.inc.php:273
+#: extern/admin_extern.inc.php:272
 #, c-format
 msgid "Sie können pro Modul maximal %s Konfigurationen anlegen."
 msgstr "You can create a maximum of %s configurations per module."
 
-#: extern/admin_extern.inc.php:277
+#: extern/admin_extern.inc.php:276
 msgid ""
 "Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-"
 "Konfiguration zu erklären."
 msgstr ""
 
-#: extern/admin_extern.inc.php:278
+#: extern/admin_extern.inc.php:277
 msgid ""
 "Wenn Sie keine Konfiguration als Standard ausgew&auml;hlt haben, wird die "
 "Stud.IP-Konfiguration verwendet."
 msgstr ""
-"If you have not selected a configuration as standard, "
-"the Stud.IP configuration will be used."
+"If you have not selected a configuration as standard, the Stud.IP "
+"configuration will be used."
 
-#: extern/admin_extern.inc.php:279
+#: extern/admin_extern.inc.php:278
 msgid ""
 "Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung "
 "herangezogen wird, wenn sie beim Aufruf dieses Moduls keine Konfiguration "
 "angeben."
 msgstr ""
 
-#: extern/admin_extern.inc.php:280
+#: extern/admin_extern.inc.php:279
 msgid ""
 "Klicken Sie auf diesen Button um weitere Informationen über diese "
 "Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die "
 "Module in Ihrer Website einbinden können."
 msgstr ""
-"Click on this button to receive further information about this configuration. Here "
-"you will also find links, with which you can use to integrate the modules with "
-"your website."
+"Click on this button to receive further information about this "
+"configuration. Here you will also find links, with which you can use to "
+"integrate the modules with your website."
 
 #: extern/extern_config.inc.php:49
 msgid "Download"
@@ -120,8 +120,8 @@ msgid ""
 "Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich "
 "einer Einrichtung zum Download zur Verf&uuml;gung."
 msgstr ""
-"The module &quot;download&quot; provides all files from the file area of an institute "
-"for downloading."
+"The module &quot;download&quot; provides all files from the file area of an "
+"institute for downloading."
 
 #: extern/extern_config.inc.php:52
 msgid "Personal"
@@ -131,7 +131,31 @@ msgstr "Personal"
 msgid ""
 "Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer "
 "Einrichtung aus."
-msgstr "The module &quot;personal&quot; provides a staff index of an institute."
+msgstr ""
+"The module &quot;personal&quot; provides a staff index of an institute."
+
+#: extern/extern_config.inc.php:61
+#: extern/modules/ExternModulePersondetails.class.php:72
+msgid "News"
+msgstr ""
+
+#: extern/extern_config.inc.php:62
+#, fuzzy
+msgid "Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."
+msgstr ""
+"The module &quot;personal&quot; provides a staff index of an institute."
+
+#: extern/extern_config.inc.php:64
+msgid "Mitarbeiterdetails"
+msgstr ""
+
+#: extern/extern_config.inc.php:65
+#, fuzzy
+msgid ""
+"Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters "
+"einer Einrichtung aus."
+msgstr ""
+"The module &quot;personal&quot; provides a staff index of an institute."
 
 #: extern/views/ExternEditGeneric.class.php:56
 msgid "serifenlose Schrift"
@@ -168,8 +192,8 @@ msgid ""
 "Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in "
 "das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste."
 msgstr ""
-"Enter a HTML colour name or a colour in Hex Format (#RRGGBB) in the text field, "
-"or choose a colour from the drop down menu."
+"Enter a HTML colour name or a colour in Hex Format (#RRGGBB) in the text "
+"field, or choose a colour from the drop down menu."
 
 #: extern/views/ExternEditHtml.class.php:118
 msgid "Schriftfarbe"
@@ -188,12 +212,14 @@ msgid ""
 "Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in "
 "das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. "
 msgstr ""
-"Enter a HTML colour name or a colour in Hex Format (#RRGGBB) in the "
-"text field, or choose a colour from the drop down menu."
+"Enter a HTML colour name or a colour in Hex Format (#RRGGBB) in the text "
+"field, or choose a colour from the drop down menu."
 
 #: extern/views/ExternEditHtml.class.php:161
-msgid "Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
-msgstr "This colour will be used as the second colour when Zebra Effect is activated."
+msgid ""
+"Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
+msgstr ""
+"This colour will be used as the second colour when Zebra Effect is activated."
 
 #: extern/views/ExternEditHtml.class.php:162
 msgid "2. Hintergrundf.:"
@@ -204,8 +230,10 @@ msgid "keine Auswahl"
 msgstr "no selection"
 
 #: extern/views/ExternEditHtml.class.php:271
-msgid "Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
-msgstr "Enter the distance, in pixels, between the cell contents and the cell border."
+msgid ""
+"Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
+msgstr ""
+"Enter the distance, in pixels, between the cell contents and the cell border."
 
 #: extern/views/ExternEditHtml.class.php:283
 msgid "Cellpadding:"
@@ -228,14 +256,14 @@ msgid "Tabellenbreite:"
 msgstr "Tablw width:"
 
 #: extern/views/ExternEditHtml.class.php:359
-#: extern/views/ExternEditModule.class.php:140
-#: extern/views/ExternEditModule.class.php:146
+#: extern/views/ExternEditModule.class.php:164
+#: extern/views/ExternEditModule.class.php:170
 msgid "Prozent"
 msgstr "Percent"
 
 #: extern/views/ExternEditHtml.class.php:365
-#: extern/views/ExternEditModule.class.php:140
-#: extern/views/ExternEditModule.class.php:150
+#: extern/views/ExternEditModule.class.php:164
+#: extern/views/ExternEditModule.class.php:174
 msgid "Pixel"
 msgstr "Pixel"
 
@@ -253,6 +281,7 @@ msgstr "right-justified"
 
 #: extern/views/ExternEditHtml.class.php:389
 #: extern/views/ExternEditHtml.class.php:432
+#: extern/elements/ExternElementPersondetailsHeader.class.php:102
 msgid "zentriert"
 msgstr "centred"
 
@@ -320,7 +349,8 @@ msgstr "Page title:"
 msgid ""
 "Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt für "
 "Tabellenzeilen/-spalten. "
-msgstr "Activate a vertical or horizontal Zebra Effect for table rows / columns. "
+msgstr ""
+"Activate a vertical or horizontal Zebra Effect for table rows / columns. "
 
 #: extern/views/ExternEditHtml.class.php:542
 #: extern/views/ExternEditHtml.class.php:559
@@ -357,83 +387,86 @@ msgstr "at"
 msgid ""
 "Geben Sie die URL eines Bildes an, das als Hintergrundbild für die gesamte "
 "Seite dienen soll."
-msgstr "Enter a URL for a picture, that should serve as the background picture for the entire page."
+msgstr ""
+"Enter a URL for a picture, that should serve as the background picture for "
+"the entire page."
 
 #: extern/views/ExternEditHtml.class.php:576
 msgid "Hintergrundbild:"
 msgstr "Background picture:"
 
-#: extern/views/ExternEditModule.class.php:61
+#: extern/views/ExternEditModule.class.php:65
 msgid "Spaltenname"
 msgstr "Column name"
 
-#: extern/views/ExternEditModule.class.php:62
+#: extern/views/ExternEditModule.class.php:66
+#: extern/elements/ExternElementContact.class.php:92
 msgid "&Uuml;berschrift"
 msgstr "Heading"
 
-#: extern/views/ExternEditModule.class.php:63
+#: extern/views/ExternEditModule.class.php:70
 msgid "Breite"
 msgstr "Width"
 
-#: extern/views/ExternEditModule.class.php:64
+#: extern/views/ExternEditModule.class.php:75
 msgid "Sortierung"
 msgstr "Sort order"
 
-#: extern/views/ExternEditModule.class.php:65
+#: extern/views/ExternEditModule.class.php:77
 msgid "Reihenfolge/<br>Sichtbarkeit"
 msgstr "Order/<br>Visibility"
 
-#: extern/views/ExternEditModule.class.php:109
+#: extern/views/ExternEditModule.class.php:130
 msgid "nach links verschieben"
 msgstr "move to the left"
 
-#: extern/views/ExternEditModule.class.php:115
+#: extern/views/ExternEditModule.class.php:136
 msgid "nach rechts verschieben"
 msgstr "move to the right"
 
-#: extern/views/ExternEditModule.class.php:122
-#: extern/views/ExternEditModule.class.php:217
+#: extern/views/ExternEditModule.class.php:143
+#: extern/views/ExternEditModule.class.php:242
 msgid "Spalte ausblenden"
 msgstr "Hide column"
 
-#: extern/views/ExternEditModule.class.php:128
-#: extern/views/ExternEditModule.class.php:223
+#: extern/views/ExternEditModule.class.php:149
+#: extern/views/ExternEditModule.class.php:248
 msgid "Spalte einblenden"
 msgstr "Show column"
 
-#: extern/views/ExternEditModule.class.php:137
+#: extern/views/ExternEditModule.class.php:161
 msgid "Breite in:"
 msgstr "Width in:"
 
-#: extern/views/ExternEditModule.class.php:138
+#: extern/views/ExternEditModule.class.php:162
 msgid ""
 "Wählen Sie hier, ob die Breiten der Tabellenspalten als Prozentwerte oder "
 "Pixel interpretiert werden sollen."
 msgstr ""
-"Choose here whether the width of the table columns should be interpreted as percent values "
-"or pixels. "
+"Choose here whether the width of the table columns should be interpreted as "
+"percent values or pixels. "
 
-#: extern/views/ExternEditModule.class.php:161
+#: extern/views/ExternEditModule.class.php:185
 msgid "Geben Sie den Namen der Konfiguration an."
 msgstr "Enter a name for the configuration."
 
-#: extern/views/ExternEditModule.class.php:172
+#: extern/views/ExternEditModule.class.php:196
 msgid "Gruppen auswählen:"
 msgstr "Select group:"
 
-#: extern/views/ExternEditModule.class.php:173
+#: extern/views/ExternEditModule.class.php:197
 msgid "Wählen sie die Statusgruppen aus, die ausgegeben werden sollen."
 msgstr "Select the status group which should be published."
 
-#: extern/views/ExternEditModule.class.php:192
+#: extern/views/ExternEditModule.class.php:216
 msgid "Gruppenname"
 msgstr "Group name"
 
-#: extern/views/ExternEditModule.class.php:193
+#: extern/views/ExternEditModule.class.php:217
 msgid "alternativer Gruppenname"
 msgstr "alternative group name"
 
-#: extern/views/ExternEditModule.class.php:194
+#: extern/views/ExternEditModule.class.php:220
 msgid "Sichtbarkeit"
 msgstr "Visibility"
 
@@ -446,46 +479,47 @@ msgstr ""
 "%s configurations have already been created. You cannot create any more "
 "configurations for these modules."
 
-#: extern/views/extern_edit_module.inc.php:109
+#: extern/views/extern_edit_module.inc.php:107
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"
 msgstr "Please correct the values marked with a %s!"
 
-#: extern/views/extern_edit_module.inc.php:123
+#: extern/views/extern_edit_module.inc.php:121
 msgid ""
 "Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls "
 "vergeben. Bitte geben Sie einen anderen Namen ein."
 msgstr ""
-"The configuration name is already being used by another configuration of this module. "
-"Please enter another name."
+"The configuration name is already being used by another configuration of "
+"this module. Please enter another name."
 
-#: extern/views/extern_edit_module.inc.php:129
+#: extern/views/extern_edit_module.inc.php:127
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
-msgstr "The given value has been accepted and the name of the configuration changed."
+msgstr ""
+"The given value has been accepted and the name of the configuration changed."
 
-#: extern/views/extern_edit_module.inc.php:136
+#: extern/views/extern_edit_module.inc.php:134
 msgid "Die eingegebenen Werte wurden übernommen."
 msgstr "The given values have been accepted."
 
-#: extern/views/extern_edit_module.inc.php:154
+#: extern/views/extern_edit_module.inc.php:152
 msgid ""
 "Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den "
 "&quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements."
 msgstr ""
-"To change the value of a single element, click on the &quot;accept&quot; button "
-"within the corresponding element."
+"To change the value of a single element, click on the &quot;accept&quot; "
+"button within the corresponding element."
 
-#: extern/views/extern_edit_module.inc.php:155
+#: extern/views/extern_edit_module.inc.php:153
 msgid "Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:"
 msgstr "To see a preview of the page, please click here:"
 
-#: extern/views/extern_edit_module.inc.php:161
+#: extern/views/extern_edit_module.inc.php:159
 msgid "Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet."
 msgstr "The preview will be opened in a new window."
 
-#: extern/views/extern_edit_module.inc.php:162
+#: extern/views/extern_edit_module.inc.php:160
 msgid "Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt."
 msgstr "Not all settings may be shown in the preview."
 
@@ -535,19 +569,25 @@ msgstr "Stud.IP Remote Include (SRI) Interface"
 msgid ""
 "Der unten aufgef&uuml;hrte Textblock erm&ouml;glicht Ihnen den Zugriff auf "
 "die Stud.IP-Remote-Include-Schnittstelle (SRI)."
-msgstr "The indexed text block below allows you to access the Stud.IP Remote Include Interface (SRI)."
+msgstr ""
+"The indexed text block below allows you to access the Stud.IP Remote Include "
+"Interface (SRI)."
 
 #: extern/views/extern_info_module.inc.php:84
 msgid ""
 "Kopieren Sie dieses Code-Schnipsel in eine beliebige Stelle im HTML-"
 "Quelltext einer Seite Ihrer Website."
-msgstr "Copy this code-snippet in any place in HTML source code of a page in your website. "
+msgstr ""
+"Copy this code-snippet in any place in HTML source code of a page in your "
+"website. "
 
 #: extern/views/extern_info_module.inc.php:86
 msgid ""
 "Durch eine spezielle Art des Seitenaufrufs, wird an dieser Stelle die "
 "Ausgabe des Moduls eingef&uuml;gt."
-msgstr "By way of a specific type of page loading, the module readout will be inserted in this position."
+msgstr ""
+"By way of a specific type of page loading, the module readout will be "
+"inserted in this position."
 
 #: extern/views/extern_info_module.inc.php:91
 msgid "Link zur SRI-Schnittstelle"
@@ -593,25 +633,69 @@ msgstr "Size"
 msgid "Upload durch"
 msgstr "Upload via"
 
-#: extern/modules/ExternModulePersons.class.php:54
-msgid "Name"
-msgstr "Name"
-
-#: extern/modules/ExternModulePersons.class.php:55
-msgid "Telefon"
-msgstr "Telephone"
-
+#: extern/modules/ExternModulePersondetails.class.php:60
 #: extern/modules/ExternModulePersons.class.php:56
+#: extern/elements/ExternElementContact.class.php:89
 msgid "Raum"
 msgstr "Room"
 
+#: extern/modules/ExternModulePersondetails.class.php:61
+#: extern/modules/ExternModulePersons.class.php:55
+#: extern/elements/ExternElementContact.class.php:89
+msgid "Telefon"
+msgstr "Telephone"
+
+#: extern/modules/ExternModulePersondetails.class.php:62
+#: extern/elements/ExternElementContact.class.php:89
+msgid "Fax"
+msgstr ""
+
+#: extern/modules/ExternModulePersondetails.class.php:63
 #: extern/modules/ExternModulePersons.class.php:57
+#: extern/elements/ExternElementContact.class.php:89
 msgid "Email"
 msgstr "E-mail"
 
+#: extern/modules/ExternModulePersondetails.class.php:64
+#: extern/elements/ExternElementContact.class.php:89
+msgid "Homepage"
+msgstr ""
+
+#: extern/modules/ExternModulePersondetails.class.php:65
 #: extern/modules/ExternModulePersons.class.php:58
+#: extern/elements/ExternElementContact.class.php:89
 msgid "Sprechzeiten"
 msgstr "Office hours"
+
+#: extern/modules/ExternModulePersondetails.class.php:69
+msgid "Lebenslauf"
+msgstr ""
+
+#: extern/modules/ExternModulePersondetails.class.php:70
+msgid "Schwerpunkte"
+msgstr ""
+
+#: extern/modules/ExternModulePersondetails.class.php:71
+#: extern/elements/ExternElementPersondetailsLectures.class.php:54
+msgid "Lehrveranstaltungen"
+msgstr ""
+
+#: extern/modules/ExternModulePersondetails.class.php:73
+msgid "Termine"
+msgstr ""
+
+#: extern/modules/ExternModulePersondetails.class.php:74
+msgid "Publikationen"
+msgstr ""
+
+#: extern/modules/ExternModulePersondetails.class.php:75
+#, fuzzy
+msgid "eigene Kategorien"
+msgstr "No files:"
+
+#: extern/modules/ExternModulePersons.class.php:54
+msgid "Name"
+msgstr "Name"
 
 #: extern/modules/views/download_preview.inc.php:43
 msgid "Das ist eine Text-Datei."
@@ -688,8 +772,9 @@ msgid "Angaben zum Element %s"
 msgstr "Information about element %s"
 
 #: extern/lib/ExternElementMain.class.php:54
-#: extern/elements/ExternElementMainDownload.class.php:52
-#: extern/elements/ExternElementMainPersons.class.php:52
+#: extern/elements/ExternElementMainDownload.class.php:53
+#: extern/elements/ExternElementMainPersondetails.class.php:51
+#: extern/elements/ExternElementMainPersons.class.php:53
 msgid "Grundeinstellungen"
 msgstr "Basic settings"
 
@@ -707,6 +792,40 @@ msgstr "Page body"
 msgid "Eigenschaften des Seitenkörpers (HTML-Tag &gt;body&lt;)."
 msgstr "Page body properties (HTML Tag &gt;body&lt;)."
 
+#: extern/elements/ExternElementContact.class.php:56
+msgid "Name, Anschrift, Kontakt"
+msgstr ""
+
+#: extern/elements/ExternElementContact.class.php:57
+msgid ""
+"Allgemeine Angaben zum und Formatierung des Kontaktfeldes (Anschrift, Email, "
+"Homepage usw.)."
+msgstr ""
+
+#: extern/elements/ExternElementContact.class.php:88
+msgid "Aufbau der Adress- und Kontakt-Tabelle"
+msgstr ""
+
+#: extern/elements/ExternElementContact.class.php:93
+msgid "Überschrift der Kontakt-Daten"
+msgstr ""
+
+#: extern/elements/ExternElementContact.class.php:96
+msgid "Adresszusatz:"
+msgstr ""
+
+#: extern/elements/ExternElementContact.class.php:97
+msgid "Zusatz zur Adresse der Einrichtung, z.B. Universitätsname."
+msgstr ""
+
+#: extern/elements/ExternElementContact.class.php:113
+msgid "Schriftformatierung Spaltentitel"
+msgstr ""
+
+#: extern/elements/ExternElementContact.class.php:114
+msgid "Schriftformatierung Spalteninhalt"
+msgstr ""
+
 #: extern/elements/ExternElementLink.class.php:54
 msgid "Links"
 msgstr "Links"
@@ -715,153 +834,253 @@ msgstr "Links"
 msgid "Eigenschaften der Schrift für Links."
 msgstr "Properties of the font for links."
 
-#: extern/elements/ExternElementMainDownload.class.php:53
-#: extern/elements/ExternElementMainPersons.class.php:53
+#: extern/elements/ExternElementList.class.php:53
+msgid "Aufz&auml;hlungsliste"
+msgstr ""
+
+#: extern/elements/ExternElementList.class.php:54
+msgid "Eigenschaften einer Aufz&auml;hlungsliste."
+msgstr ""
+
+#: extern/elements/ExternElementList.class.php:76
+msgid ""
+"Geben Sie an, wie weit (Pixel) die Aufzählungsliste im Absatz links "
+"eingerückt werden soll."
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:54
+#: extern/elements/ExternElementMainPersondetails.class.php:52
+#: extern/elements/ExternElementMainPersons.class.php:54
 msgid ""
 "In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;"
 "ndern."
 msgstr "In the basic settings you can change the general data of the module."
 
-#: extern/elements/ExternElementMainDownload.class.php:104
-#: extern/elements/ExternElementMainPersons.class.php:103
+#: extern/elements/ExternElementMainDownload.class.php:109
+#: extern/elements/ExternElementMainPersondetails.class.php:89
+#: extern/elements/ExternElementMainPersons.class.php:106
 msgid "Name der Konfiguration"
 msgstr "Name of the configuration"
 
-#: extern/elements/ExternElementMainDownload.class.php:109
-#: extern/elements/ExternElementMainPersons.class.php:109
+#: extern/elements/ExternElementMainDownload.class.php:114
+#: extern/elements/ExternElementMainPersondetails.class.php:95
+#: extern/elements/ExternElementMainPersons.class.php:112
 msgid "Allgemeine Angaben zum Tabellenaufbau"
 msgstr "General information about table construction"
 
-#: extern/elements/ExternElementMainDownload.class.php:117
-#: extern/elements/ExternElementMainPersons.class.php:137
+#: extern/elements/ExternElementMainDownload.class.php:122
+#: extern/elements/ExternElementMainPersondetails.class.php:104
+#: extern/elements/ExternElementMainPersons.class.php:140
 msgid "Weitere Angaben"
 msgstr "Further information"
 
-#: extern/elements/ExternElementMainDownload.class.php:119
-#: extern/elements/ExternElementMainPersons.class.php:152
+#: extern/elements/ExternElementMainDownload.class.php:124
+#: extern/elements/ExternElementMainPersondetails.class.php:113
+#: extern/elements/ExternElementMainPersons.class.php:155
 msgid "HTML-Header/Footer:"
 msgstr "HTML-Header / Footer:"
 
-#: extern/elements/ExternElementMainDownload.class.php:120
-#: extern/elements/ExternElementMainPersons.class.php:153
+#: extern/elements/ExternElementMainDownload.class.php:125
+#: extern/elements/ExternElementMainPersondetails.class.php:114
+#: extern/elements/ExternElementMainPersons.class.php:156
 msgid ""
 "Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z."
 "B. bei direkter Verlinkung oder in einem Frameset."
 msgstr ""
 
-#: extern/elements/ExternElementMainDownload.class.php:125
+#: extern/elements/ExternElementMainDownload.class.php:130
 msgid "Max. L&auml;nge der Beschreibung:"
 msgstr "Max. length of the description:"
 
-#: extern/elements/ExternElementMainDownload.class.php:126
+#: extern/elements/ExternElementMainDownload.class.php:131
 msgid ""
 "Geben Sie an, wieviele Zeichen der Beschreibung der Datei ausgegeben werden "
 "sollen."
 msgstr "Enter how many characters the file description should include."
 
-#: extern/elements/ExternElementMainDownload.class.php:129
-#: extern/elements/ExternElementMainPersons.class.php:139
+#: extern/elements/ExternElementMainDownload.class.php:134
+#: extern/elements/ExternElementMainPersondetails.class.php:106
+#: extern/elements/ExternElementMainPersons.class.php:142
 msgid "Namensformat:"
 msgstr "Name format:"
 
-#: extern/elements/ExternElementMainDownload.class.php:130
-#: extern/elements/ExternElementMainPersons.class.php:140
+#: extern/elements/ExternElementMainDownload.class.php:135
+#: extern/elements/ExternElementMainPersondetails.class.php:107
+#: extern/elements/ExternElementMainPersons.class.php:143
 msgid "Wählen Sie, wie Personennamen formatiert werden sollen."
 msgstr "Choose how people's names should be fomatted."
 
-#: extern/elements/ExternElementMainDownload.class.php:132
-#: extern/elements/ExternElementMainPersons.class.php:142
+#: extern/elements/ExternElementMainDownload.class.php:137
+#: extern/elements/ExternElementMainPersondetails.class.php:109
+#: extern/elements/ExternElementMainPersons.class.php:145
 msgid "Vorname Nachname"
 msgstr "Forename Surname"
 
-#: extern/elements/ExternElementMainDownload.class.php:132
-#: extern/elements/ExternElementMainPersons.class.php:142
+#: extern/elements/ExternElementMainDownload.class.php:137
+#: extern/elements/ExternElementMainPersondetails.class.php:109
+#: extern/elements/ExternElementMainPersons.class.php:145
 msgid "Nachname Vorname"
 msgstr "Surname Forename"
 
-#: extern/elements/ExternElementMainDownload.class.php:133
-#: extern/elements/ExternElementMainPersons.class.php:143
+#: extern/elements/ExternElementMainDownload.class.php:138
+#: extern/elements/ExternElementMainPersondetails.class.php:110
+#: extern/elements/ExternElementMainPersons.class.php:146
 msgid "Titel Vorname Nachname"
 msgstr "Title Forename Surname"
 
-#: extern/elements/ExternElementMainDownload.class.php:133
-#: extern/elements/ExternElementMainPersons.class.php:143
+#: extern/elements/ExternElementMainDownload.class.php:138
+#: extern/elements/ExternElementMainPersondetails.class.php:110
+#: extern/elements/ExternElementMainPersons.class.php:146
 msgid "Nachname Vorname Titel"
 msgstr "Surname Forename Title"
 
-#: extern/elements/ExternElementMainDownload.class.php:136
-#: extern/elements/ExternElementMainPersons.class.php:158
+#: extern/elements/ExternElementMainDownload.class.php:141
+#, fuzzy
+msgid "Datumsformat:"
+msgstr "Name format:"
+
+#: extern/elements/ExternElementMainDownload.class.php:142
+#, fuzzy
+msgid "Wählen Sie, wie Datumsangaben formatiert werden sollen."
+msgstr "Choose how people's names should be fomatted."
+
+#: extern/elements/ExternElementMainDownload.class.php:144
+msgid "25. Nov. 2003"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:144
+msgid "25.11.2003"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:144
+msgid "25.11.03"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:145
+msgid "25. November 2003"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:145
+msgid "11/25/03"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:148
+msgid "Sprache Datum"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:151
+msgid "Deutsch"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:151
+msgid "Englisch (US)"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:154
+#: extern/elements/ExternElementMainPersondetails.class.php:119
+#: extern/elements/ExternElementMainPersons.class.php:161
 msgid "Stylesheet-Datei:"
 msgstr "Stylesheet file:"
 
-#: extern/elements/ExternElementMainDownload.class.php:137
-#: extern/elements/ExternElementMainPersons.class.php:159
+#: extern/elements/ExternElementMainDownload.class.php:155
+#: extern/elements/ExternElementMainPersondetails.class.php:120
+#: extern/elements/ExternElementMainPersons.class.php:162
 msgid "Geben Sie hier die URL Ihrer Stylesheet-Datei an."
 msgstr "Enter here the URL of your Stylesheet file."
 
-#: extern/elements/ExternElementMainDownload.class.php:140
-#: extern/elements/ExternElementMainPersons.class.php:162
+#: extern/elements/ExternElementMainDownload.class.php:158
+#: extern/elements/ExternElementMainPersondetails.class.php:123
+#: extern/elements/ExternElementMainPersons.class.php:165
 msgid "Seitentitel:"
 msgstr "Page title:"
 
-#: extern/elements/ExternElementMainDownload.class.php:141
-#: extern/elements/ExternElementMainPersons.class.php:163
+#: extern/elements/ExternElementMainDownload.class.php:159
+#: extern/elements/ExternElementMainPersondetails.class.php:124
+#: extern/elements/ExternElementMainPersons.class.php:166
 msgid ""
 "Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im "
 "Web-Browser in der Titelzeile des Anzeigefensters angezeigt."
 msgstr ""
-"Enter here the title of the page. The title will be shown in the title row of the browser window "
-"when shown by a web-browser."
+"Enter here the title of the page. The title will be shown in the title row "
+"of the browser window when shown by a web-browser."
 
-#: extern/elements/ExternElementMainDownload.class.php:144
-#: extern/elements/ExternElementMainPersons.class.php:166
+#: extern/elements/ExternElementMainDownload.class.php:162
+#: extern/elements/ExternElementMainPersons.class.php:169
 msgid "Keine Dateien:"
 msgstr "No files:"
 
-#: extern/elements/ExternElementMainDownload.class.php:145
-#: extern/elements/ExternElementMainPersons.class.php:167
+#: extern/elements/ExternElementMainDownload.class.php:163
+#: extern/elements/ExternElementMainPersons.class.php:170
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum "
 "Download verfügbar sind."
-msgstr "This text will be published in place of a table, if no files are available for downloading."
+msgstr ""
+"This text will be published in place of a table, if no files are available "
+"for downloading."
 
-#: extern/elements/ExternElementMainDownload.class.php:151
+#: extern/elements/ExternElementMainDownload.class.php:166
+#: extern/elements/ExternElementMainPersons.class.php:173
+#, fuzzy
+msgid "Konfiguration Mitarbeiterdetails:"
+msgstr "Edit configuration"
+
+#: extern/elements/ExternElementMainDownload.class.php:179
+#: extern/elements/ExternElementMainPersons.class.php:186
+#, fuzzy
+msgid "Standardkonfiguration"
+msgstr "Name of the configuration"
+
+#: extern/elements/ExternElementMainDownload.class.php:182
+#: extern/elements/ExternElementMainPersons.class.php:189
+msgid "SRI-Link:"
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:183
+#: extern/elements/ExternElementMainPersons.class.php:190
+msgid ""
+"Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige "
+"URL (mit http://) der Seite angeben, in der das Ausgabemodul für die "
+"Mitarbeiterdaten eingebunden wird. Lassen Sie dieses Feld unbedingt leer, "
+"falls Sie die SRI-Schnittstelle nicht nutzen."
+msgstr ""
+
+#: extern/elements/ExternElementMainDownload.class.php:189
 msgid "Eigene Icons"
 msgstr "Personal icons"
 
-#: extern/elements/ExternElementMainDownload.class.php:155
+#: extern/elements/ExternElementMainDownload.class.php:193
 msgid "Bilder:"
 msgstr "Pictures:"
 
-#: extern/elements/ExternElementMainDownload.class.php:156
+#: extern/elements/ExternElementMainDownload.class.php:194
 msgid "Text:"
 msgstr "Text:"
 
-#: extern/elements/ExternElementMainDownload.class.php:157
+#: extern/elements/ExternElementMainDownload.class.php:195
 msgid "Adobe pdf:"
 msgstr "Adobe pdf:"
 
-#: extern/elements/ExternElementMainDownload.class.php:158
+#: extern/elements/ExternElementMainDownload.class.php:196
 msgid "Powerpoint (ppt):"
 msgstr "Powerpoint (ppt):"
 
-#: extern/elements/ExternElementMainDownload.class.php:159
+#: extern/elements/ExternElementMainDownload.class.php:197
 msgid "Excel (xls):"
 msgstr "Excel (xls):"
 
-#: extern/elements/ExternElementMainDownload.class.php:160
+#: extern/elements/ExternElementMainDownload.class.php:198
 msgid "Rich Text (rtf):"
 msgstr "Rich Text (rtf):"
 
-#: extern/elements/ExternElementMainDownload.class.php:161
+#: extern/elements/ExternElementMainDownload.class.php:199
 msgid "ZIP-Dateien:"
 msgstr "ZIP files:"
 
-#: extern/elements/ExternElementMainDownload.class.php:162
+#: extern/elements/ExternElementMainDownload.class.php:200
 msgid "sonstige Dateien:"
 msgstr "Other files:"
 
-#: extern/elements/ExternElementMainDownload.class.php:165
+#: extern/elements/ExternElementMainDownload.class.php:203
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Bild-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
@@ -869,23 +1088,23 @@ msgstr ""
 "Enter the URL of a picture that should serve as an icon for picture files. "
 "Formats allowed: jpg, png, gif.  "
 
-#: extern/elements/ExternElementMainDownload.class.php:166
+#: extern/elements/ExternElementMainDownload.class.php:204
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Text-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for text files. "
-"Formats allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as icon for text files. Formats "
+"allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:167
+#: extern/elements/ExternElementMainDownload.class.php:205
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für PDF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for PDF files. "
-"Formats allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as icon for PDF files. Formats "
+"allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:168
+#: extern/elements/ExternElementMainDownload.class.php:206
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Powerpoint-Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
@@ -893,7 +1112,7 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for Powerpoint files. "
 "Formats allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:169
+#: extern/elements/ExternElementMainDownload.class.php:207
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für Excel-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
@@ -901,15 +1120,15 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for Excel files. "
 "Formats allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:170
+#: extern/elements/ExternElementMainDownload.class.php:208
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für RTF-Dateien dienen "
 "soll. Erlaubte Formate: jpg, png, gif. "
 msgstr ""
-"Enter the URL of a picture that should serve as icon for RTF files. "
-"Formats allowed: jpg, png, gif."
+"Enter the URL of a picture that should serve as icon for RTF files. Formats "
+"allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:171
+#: extern/elements/ExternElementMainDownload.class.php:209
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für komprimierte Dateien "
 "dienen soll. Erlaubte Formate: jpg, png, gif. "
@@ -917,47 +1136,204 @@ msgstr ""
 "Enter the URL of a picture that should serve as icon for compressed files. "
 "Formats allowed: jpg, png, gif."
 
-#: extern/elements/ExternElementMainDownload.class.php:172
+#: extern/elements/ExternElementMainDownload.class.php:210
 msgid ""
 "Geben Sie die URL eines Bildes ein, dass als Icon für alle anderen "
 "Dateiformate dienen soll. "
-msgstr "Enter the URL of a picture that should serve as icon for all other file formats. "
+msgstr ""
+"Enter the URL of a picture that should serve as icon for all other file "
+"formats. "
 
-#: extern/elements/ExternElementMainDownload.class.php:174
+#: extern/elements/ExternElementMainDownload.class.php:212
 msgid "Wenn sie keine URL angeben, wird ein Standard-Icon ausgegeben."
 msgstr "If you do not enter a URL, the standard icon will be used."
 
-#: extern/elements/ExternElementMainPersons.class.php:117
+#: extern/elements/ExternElementMainPersons.class.php:120
 msgid "Anzeige von Gruppen"
 msgstr ""
 
-#: extern/elements/ExternElementMainPersons.class.php:121
+#: extern/elements/ExternElementMainPersons.class.php:124
 msgid "Gruppierung:"
 msgstr "Grouping:"
 
-#: extern/elements/ExternElementMainPersons.class.php:122
+#: extern/elements/ExternElementMainPersons.class.php:125
 msgid "Personen nach Gruppen/Funktionen gruppieren."
 msgstr "Group people according to group / function."
 
-#: extern/elements/ExternElementMainPersons.class.php:128
+#: extern/elements/ExternElementMainPersons.class.php:131
 msgid ""
 "An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es "
 "wurden diesen noch keine Personen zugeordnet."
-msgstr "No group / function has been created at this institute, or they have not been assigned any people."
+msgstr ""
+"No group / function has been created at this institute, or they have not "
+"been assigned any people."
 
-#: extern/elements/ExternElementMainPersons.class.php:129
+#: extern/elements/ExternElementMainPersons.class.php:132
 msgid ""
 "Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion "
 "zugeordnet sind."
-msgstr "The module will only display data about people, who are assigned to a group / function."
+msgstr ""
+"The module will only display data about people, who are assigned to a "
+"group / function."
 
-#: extern/elements/ExternElementMainPersons.class.php:146
+#: extern/elements/ExternElementMainPersons.class.php:149
 msgid "Spalten&uuml;berschriften<br>Wiederholen:"
 msgstr "Repeat column heading<br>"
 
-#: extern/elements/ExternElementMainPersons.class.php:147
-msgid "Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
+#: extern/elements/ExternElementMainPersons.class.php:150
+msgid ""
+"Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile."
 msgstr "Repeat the column heading above or under the grouping row."
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:61
+msgid "Seitenkopf/Bild"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:62
+msgid "Angaben zur Gestaltung des Seitenkopfes."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:92
+#, fuzzy
+msgid "Schriftformatierung Name"
+msgstr "Font colour"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:93
+#, fuzzy
+msgid "Tabellenzelle Name"
+msgstr "Tablw width:"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:93
+#, fuzzy
+msgid "Tabellenzelle Bild"
+msgstr "Tablw width:"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:94
+msgid "Tabellenzelle Kontakt"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:98
+#, fuzzy
+msgid "Bild"
+msgstr "Pictures:"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:100
+#, fuzzy
+msgid "Ausrichtung:"
+msgstr "Vertical arrangement:"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:101
+msgid "Ausrichtung des Bildes."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:102
+#, fuzzy
+msgid "linksb&uuml;ndig"
+msgstr "left-justified"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:102
+#, fuzzy
+msgid "rechtsb&uuml;ndig"
+msgstr "right-justified"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:103
+#, fuzzy
+msgid "obenb&uuml;ndig"
+msgstr "top-justified"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:103
+#, fuzzy
+msgid "untenb&uuml;ndig"
+msgstr "bottom-justified"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:107
+#, fuzzy
+msgid "Rahmenbreite:"
+msgstr "Border thickness:"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:108
+msgid "Breite des Bildrahmens."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:111
+#, fuzzy
+msgid "Breite:"
+msgstr "Width"
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:112
+#: extern/elements/ExternElementPersondetailsHeader.class.php:116
+msgid "Breite des Bildes."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsHeader.class.php:115
+msgid "Höhe:"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:55
+msgid "Angaben zur Ausgabe von Lehrveranstaltungen."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:88
+#, fuzzy
+msgid "Allgemeine Angaben"
+msgstr "General data"
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:90
+msgid "Semesterumfang:"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:91
+#, fuzzy
+msgid ""
+"Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden "
+"sollen."
+msgstr "Enter how many characters the file description should include."
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:92
+msgid "nur aktuelles"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:92
+msgid "vorheriges, aktuelles, n&auml;chstes"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:92
+msgid "alle"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:96
+msgid "Bezeichnung Sommersemester:"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:97
+msgid "Alternative Bezeichnung für den Begriff \"Sommersemester\"."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:100
+msgid "Bezeichnung Wintersemester:"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:101
+msgid "Alternative Bezeichnung für den Begriff \"Wintersemester\"."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:104
+msgid "Darstellungsart:"
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:105
+msgid "Wählen Sie zwischen Listendarstellung und reiner Textdarstellung."
+msgstr ""
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:106
+#, fuzzy
+msgid "Liste"
+msgstr "Links"
+
+#: extern/elements/ExternElementPersondetailsLectures.class.php:106
+#, fuzzy
+msgid "nur Text"
+msgstr "Text:"
 
 #: extern/elements/ExternElementTableFooter.class.php:55
 msgid "Tabellenfuß"
@@ -993,7 +1369,59 @@ msgstr ""
 msgid "Angaben, die die Kopfzeile einer Tabelle betreffen."
 msgstr "Information that concerns the head line."
 
+#: extern/elements/ExternElementTableParagraph.class.php:56
+#, fuzzy
+msgid "Allgemeine Angaben zum Absatz"
+msgstr "General information about table construction"
+
+#: extern/elements/ExternElementTableParagraph.class.php:57
+msgid "Der Absatz wird mit Hilfe einer Tabelle aufgebaut."
+msgstr ""
+
+#: extern/elements/ExternElementTableParagraphHeadline.class.php:56
+#, fuzzy
+msgid "Absatz&uuml;berschrift"
+msgstr "Heading"
+
+#: extern/elements/ExternElementTableParagraphHeadline.class.php:57
+msgid "Angaben zur Formatierung einer Absatz&uuml;berschrift."
+msgstr ""
+
+#: extern/elements/ExternElementTableParagraphSubHeadline.class.php:56
+#, fuzzy
+msgid "&Uuml;berschrift eines Unterabsatzes"
+msgstr "Heading"
+
+#: extern/elements/ExternElementTableParagraphSubHeadline.class.php:57
+msgid "Angaben zur Formatierung der &Uuml;berschrift eines Unterabsatzes."
+msgstr ""
+
+#: extern/elements/ExternElementTableParagraphSubHeadline.class.php:79
+#, fuzzy
+msgid ""
+"Geben Sie an, wie weit (Pixel) die Überschrift im Absatz links eingerückt "
+"werden soll."
+msgstr "Enter how many characters the file description should include."
+
+#: extern/elements/ExternElementTableParagraphText.class.php:56
+msgid "Text im Absatz"
+msgstr ""
+
+#: extern/elements/ExternElementTableParagraphText.class.php:57
+msgid "Angaben zur Formatierung des Absatztextes."
+msgstr ""
+
+#: extern/elements/ExternElementTableParagraphText.class.php:79
+#, fuzzy
+msgid ""
+"Geben Sie an, wie weit (Pixel) der Text im Absatz links eingerückt werden "
+"soll."
+msgstr "Enter how many characters the file description should include."
+
 #: extern/elements/ExternElementTableRow.class.php:57
 msgid "Datenzeile"
 msgstr "Data row"
 
+#: extern/elements/ExternElementTableRow.class.php:58
+msgid "Angaben zur Formatierung einer Datenzeile."
+msgstr ""

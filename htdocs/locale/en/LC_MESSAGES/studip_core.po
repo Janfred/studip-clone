@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-03-24 18:32+0100\n"
+"POT-Creation-Date: 2003-03-28 13:12+0100\n"
 "PO-Revision-Date: 2003-03-24 17:08+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -61,7 +61,7 @@ msgstr "Where I work:"
 
 #: about.php:188 admin_metadates.php:522 admin_seminare_assi.php:2027
 #: admin_seminare_assi.php:2086 admin_seminare_assi.php:2128
-#: edit_about.php:972 show_dates.inc.php:141 show_dates.inc.php:496
+#: edit_about.php:972 show_dates.inc.php:141 show_dates.inc.php:504
 msgid "Raum:"
 msgstr "Room:"
 
@@ -131,8 +131,8 @@ msgstr "Publications"
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
-#: about.php:298 admin_news.php:491 browse.php:126 header.php:137
-#: links_openobject.inc.php:60
+#: about.php:298 admin_news.php:491 admin_test_fak.php:351 browse.php:126
+#: header.php:137 links_openobject.inc.php:60
 msgid "Veranstaltungen"
 msgstr "Courses"
 
@@ -550,18 +550,19 @@ msgstr "and others"
 msgid "Raumplan anzeigen"
 msgstr "Show room plan"
 
-#: admin_dates.php:389 admin_metadates.php:363 admin_seminare_assi.php:2615
-#, c-format
+#: admin_dates.php:389 admin_metadates.php:363
+#, fuzzy, c-format
 msgid ""
-"Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen."
+"Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen oder "
+"aktualisiert."
 msgstr ""
 "The allocation of room %s has been sent to the resources administration."
 
 #: admin_dates.php:391 admin_metadates.php:365
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung "
-"eingetragen."
+"eingetragen oder aktualisiert."
 msgstr ""
 "The allocation of rooms %s has been sent to the resources administration."
 
@@ -592,7 +593,7 @@ msgstr "Add new learning module"
 #: meine_einrichtungen.php:374 meine_seminare.php:476 meine_seminare.php:499
 #: migration2studip.php:165 migration2studip.php:198 my_archiv.php:165
 #: seminar_lernmodule.php:171 seminar_lernmodule.php:207
-#: seminar_lernmodule.php:270 sem_portal.php:244 statusgruppen.php:196
+#: seminar_lernmodule.php:270 sem_portal.php:249 statusgruppen.php:196
 msgid "Information:"
 msgstr "Information:"
 
@@ -937,7 +938,7 @@ msgstr "Expiration date"
 msgid "Bearbeiten"
 msgstr "Edit"
 
-#: admin_news.php:172
+#: admin_news.php:172 admin_test_fak.php:329 admin_test_fak.php:356
 msgid "L&ouml;schen"
 msgstr "Delete"
 
@@ -2312,6 +2313,13 @@ msgstr "<b>1</b> area entered for the course."
 msgid "<b>%s</b> Bereiche f&uuml;r die Veranstaltung eingetragen."
 msgstr "<b>%s</b> areas entered for the course."
 
+#: admin_seminare_assi.php:2615
+#, c-format
+msgid ""
+"Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen."
+msgstr ""
+"The allocation of room %s has been sent to the resources administration."
+
 #: admin_seminare_assi.php:2617
 #, c-format
 msgid ""
@@ -2480,9 +2488,135 @@ msgstr "Enter in all open areas"
 msgid "In \"%s\" eintragen"
 msgstr "Enter in \"%s\""
 
+#: admin_sem_tree.php:206
+#, fuzzy
+msgid "Aus Merkliste l&ouml;schen"
+msgstr "Delete selected news"
+
 #: admin_sem_tree.php:209 lib/classes/StudipSemTreeViewAdmin.class.php:538
 msgid "Gewählte Aktion starten"
 msgstr "Start selected action"
+
+#: admin_test_fak.php:146
+#, fuzzy, c-format
+msgid "Es wurden %s Nutzer mit der Berechtigung '%s' erzeugt."
+msgstr "%s access authorisations have been deleted."
+
+#: admin_test_fak.php:188
+#, fuzzy, c-format
+msgid "Es wurden %s Nutzer gelöscht."
+msgstr "%s news have been deleted!"
+
+#: admin_test_fak.php:214
+#, fuzzy, c-format
+msgid "Es wurden %s Veranstaltungen erzeugt."
+msgstr "%s courses were found."
+
+#: admin_test_fak.php:236
+#, fuzzy, c-format
+msgid "Es wurden %s Veranstaltungen gelöscht."
+msgstr "%s courses were found."
+
+#: admin_test_fak.php:249
+#, fuzzy
+msgid "Nutzer wurde zugeordnet."
+msgstr "Category has been reordered"
+
+#: admin_test_fak.php:258
+#, fuzzy, c-format
+msgid "%s Zuordnungen wurden aufgehoben."
+msgstr "The allocation has been removed."
+
+#: admin_test_fak.php:271
+#, fuzzy
+msgid "Administration der Testumgebung: "
+msgstr "Administration of this course"
+
+#: admin_test_fak.php:285
+#, fuzzy
+msgid "Veranstaltungen des Nutzers"
+msgstr "Courses"
+
+#: admin_test_fak.php:289 admin_test_fak.php:353
+#, fuzzy
+msgid "Keine Veranstaltungen gefunden."
+msgstr "No course was found."
+
+#: admin_test_fak.php:292
+#, fuzzy
+msgid "Name der Veranstaltung"
+msgstr "Name of the course:"
+
+#: admin_test_fak.php:292 browse.php:272
+msgid "Status in der Veranstaltung"
+msgstr "Status in the course"
+
+#: admin_test_fak.php:292
+#, fuzzy
+msgid "Entfernen"
+msgstr "Remove"
+
+#: admin_test_fak.php:316
+#, fuzzy
+msgid "Nutzer eintragen"
+msgstr "User enquiries"
+
+#: admin_test_fak.php:322
+#, fuzzy
+msgid "zur Verwaltung der Einrichtung"
+msgstr "Institute administration"
+
+#: admin_test_fak.php:324
+#, fuzzy
+msgid "Nutzer"
+msgstr "User"
+
+#: admin_test_fak.php:326
+#, fuzzy
+msgid "Keine Nutzer gefunden."
+msgstr "No user found."
+
+#: admin_test_fak.php:329 admin_test_fak.php:356 archiv.inc.php:374
+#: archiv.php:403 browse.php:271 browse.php:275 browse.php:279 browse.php:283
+#: freie.php:166 institut_members.php:102 institut_members.php:124
+#: institut_members.php:146 institut_members.php:166 institut_members.php:186
+#: institut_members.php:210 institut_members.php:228 institut_members.php:246
+#: institut_members.php:262 institut_members.php:278
+#: meine_einrichtungen.php:213 meine_seminare.php:269 meine_seminare.php:408
+#: meine_seminare.php:629 my_archiv.php:93 online.php:162 online.php:219
+#: sem_browse.inc.php:428
+msgid "Name"
+msgstr "Name"
+
+#: admin_test_fak.php:329
+#, fuzzy
+msgid "Status in der Einrichtung"
+msgstr "In another institute:"
+
+#: admin_test_fak.php:329
+#, fuzzy
+msgid "Anzahl Veranstaltungen"
+msgstr "Courses"
+
+#: admin_test_fak.php:347
+#, fuzzy
+msgid "Nutzer neu anlegen"
+msgstr "Add a new topic"
+
+#: admin_test_fak.php:356
+#, fuzzy
+msgid "angelegt am"
+msgstr "Created by:"
+
+#: admin_test_fak.php:356
+#, fuzzy
+msgid "Anzahl Nutzer"
+msgstr "All users"
+
+#: admin_test_fak.php:373
+#, fuzzy
+msgid "Veranstaltung(en) neu anlegen"
+msgstr "Set up new courses"
 
 #: admission.inc.php:151
 #, c-format
@@ -2629,17 +2763,6 @@ msgstr "Authors"
 msgid "Leser"
 msgstr "Reader"
 
-#: archiv.inc.php:374 archiv.php:403 browse.php:271 browse.php:275
-#: browse.php:279 browse.php:283 freie.php:166 institut_members.php:102
-#: institut_members.php:124 institut_members.php:146 institut_members.php:166
-#: institut_members.php:186 institut_members.php:210 institut_members.php:228
-#: institut_members.php:246 institut_members.php:262 institut_members.php:278
-#: meine_einrichtungen.php:213 meine_seminare.php:269 meine_seminare.php:408
-#: meine_seminare.php:629 my_archiv.php:93 online.php:162 online.php:219
-#: sem_browse.inc.php:428
-msgid "Name"
-msgstr "Name"
-
 #: archiv.inc.php:375 freie.php:75 teilnehmer.php:407
 msgid "Postings"
 msgstr "Postings"
@@ -2648,7 +2771,7 @@ msgstr "Postings"
 msgid "Dokumente"
 msgstr "Documents"
 
-#: archiv.inc.php:433 dates.inc.php:686 dates.inc.php:976 dates.inc.php:1011
+#: archiv.inc.php:433 dates.inc.php:686 dates.inc.php:976 dates.inc.php:1018
 #: folder.php:88
 msgid "am"
 msgstr "on"
@@ -2961,10 +3084,6 @@ msgstr "Surname"
 msgid "Alle NutzerInnen"
 msgstr "All users"
 
-#: browse.php:272
-msgid "Status in der Veranstaltung"
-msgstr "Status in the course"
-
 #: browse.php:276
 msgid "Funktion an der Einrichtung"
 msgstr "Function within the institute"
@@ -3118,7 +3237,7 @@ msgstr "Colloquium "
 msgid "Forschungsgruppe"
 msgstr "Research group"
 
-#: config.inc.php:84
+#: config.inc.php:84 config.inc.php:273
 msgid "Arbeitsgruppe"
 msgstr "Work group"
 
@@ -3386,7 +3505,7 @@ msgstr "Add to buddies"
 msgid "Editieren"
 msgstr "Edit"
 
-#: contact.inc.php:318 contact.php:259
+#: contact.inc.php:318 contact.php:261
 msgid "Kontakt löschen"
 msgstr "Delete contact"
 
@@ -3508,27 +3627,32 @@ msgstr "no entries "
 msgid "Alle Gruppen"
 msgstr "All groups"
 
-#: contact.php:251
+#: contact.php:222
+#, fuzzy
+msgid "Nachricht an alle Personen dieser Gruppe schicken"
+msgstr "Allocate selected users to this group"
+
+#: contact.php:253
 msgid "Nachricht an Kontakt"
 msgstr "Message to contact"
 
-#: contact.php:253
+#: contact.php:255
 msgid "Kontakt zuklappen"
 msgstr "Close contact"
 
-#: contact.php:255
+#: contact.php:257
 msgid "Kontakt aufklappen"
 msgstr "Open contact"
 
-#: contact.php:257
+#: contact.php:259
 msgid "Buddystatus"
 msgstr "Buddy status"
 
-#: contact.php:258
+#: contact.php:260
 msgid "Eigene Rubriken"
 msgstr "My categories"
 
-#: contact.php:261
+#: contact.php:263
 msgid "Bedienung:"
 msgstr "Usage:"
 
@@ -3936,8 +4060,8 @@ msgstr "(%s documents)"
 msgid "(1 Dokument)"
 msgstr "(1 Document)"
 
-#: datei.inc.php:692 datei.inc.php:826 show_dates.inc.php:201
-#: show_dates.inc.php:329 show_dates.inc.php:485
+#: datei.inc.php:692 datei.inc.php:826 show_dates.inc.php:203
+#: show_dates.inc.php:334 show_dates.inc.php:493
 msgid "Keine Beschreibung vorhanden"
 msgstr "No description available"
 
@@ -4168,7 +4292,7 @@ msgstr "Clipboard for folders and documents for this appointment"
 msgid "Kein Titel"
 msgstr "No title"
 
-#: dates.inc.php:1014
+#: dates.inc.php:1021
 #, c-format
 msgid "%s: %s am %s"
 msgstr "%s: %s at %s"
@@ -5042,8 +5166,8 @@ msgstr "Your posting"
 msgid "Ihr Name:"
 msgstr "Your name:"
 
-#: forum.inc.php:135 functions.php:466 functions.php:486 functions.php:510
-#: functions.php:530 write_topic.php:117
+#: forum.inc.php:135 functions.php:465 functions.php:485 functions.php:509
+#: functions.php:529 write_topic.php:117
 msgid "unbekannt"
 msgstr "unknown"
 
@@ -5216,7 +5340,7 @@ msgid "Zur Literatur- und Linkliste"
 msgstr "go to literature and links list"
 
 #: freie.php:96 show_dates.inc.php:112 show_dates.inc.php:123
-#: show_dates.inc.php:218 show_dates.inc.php:350 show_dates.inc.php:521
+#: show_dates.inc.php:220 show_dates.inc.php:355 show_dates.inc.php:529
 msgid "Termine"
 msgstr "Appointments"
 
@@ -5348,67 +5472,67 @@ msgid ""
 msgstr ""
 "If you have been inactive for longer than %s minutes, you must login again."
 
-#: functions.php:585
+#: functions.php:584
 msgid "Unbeschriebenes Blatt"
 msgstr "Dark horse"
 
-#: functions.php:586
+#: functions.php:585
 msgid "Neuling"
 msgstr "Fledgling"
 
-#: functions.php:587
+#: functions.php:586
 msgid "Greenhorn"
 msgstr "Greenhorn"
 
-#: functions.php:588
+#: functions.php:587
 msgid "Anf&auml;nger"
 msgstr "Amateur"
 
-#: functions.php:589
+#: functions.php:588
 msgid "Einsteiger"
 msgstr "Climber"
 
-#: functions.php:590
+#: functions.php:589
 msgid "Beginner"
 msgstr "Beginner"
 
-#: functions.php:591
+#: functions.php:590
 msgid "Novize"
 msgstr "Novice"
 
-#: functions.php:592
+#: functions.php:591
 msgid "Fortgeschrittener"
 msgstr "Advancer"
 
-#: functions.php:593
+#: functions.php:592
 msgid "Kenner"
 msgstr "Aficionado"
 
-#: functions.php:594
+#: functions.php:593
 msgid "K&ouml;nner"
 msgstr "Professional"
 
-#: functions.php:595
+#: functions.php:594
 msgid "Experte"
 msgstr "Expert"
 
-#: functions.php:596
+#: functions.php:595
 msgid "Meister"
 msgstr "Master"
 
-#: functions.php:597
+#: functions.php:596
 msgid "Gro&szlig;meister"
 msgstr "Grand master"
 
-#: functions.php:598
+#: functions.php:597
 msgid "Guru"
 msgstr "Guru"
 
-#: functions.php:599
+#: functions.php:598
 msgid "Lichtgestalt"
 msgstr "Light bearer"
 
-#: functions.php:600
+#: functions.php:599
 msgid "Gott"
 msgstr "God"
 
@@ -5933,6 +6057,11 @@ msgstr "for registered users"
 #: index.php:144
 msgid "Registrieren"
 msgstr "Register"
+
+#: index.php:144
+#, fuzzy
+msgid "um NutzerIn zu werden"
+msgstr "User found:"
 
 #: index.php:153
 msgid "Freier Zugang"
@@ -6862,12 +6991,12 @@ msgstr ""
 msgid "Sie haben eine SMS von <b>%s</b> erhalten!"
 msgstr "You have received a SMS from <b>%s</b>!"
 
-#: messaging.inc.php:186
+#: messaging.inc.php:188
 #, c-format
 msgid "Sie wurden von %s in den Chatraum %s eingeladen!"
 msgstr "%s has invited you into the chat room %s! "
 
-#: messaging.inc.php:193
+#: messaging.inc.php:195
 #, c-format
 msgid "Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"
 msgstr "<b>%s</b> has invited you into the chat room <b>%s</b>! "
@@ -7240,7 +7369,7 @@ msgstr "Accept changes"
 msgid "Wer ist Online?"
 msgstr "Who is online?"
 
-#: online.php:68 sms.php:304
+#: online.php:68 sms.php:303
 msgid "Einstellungen &auml;ndern"
 msgstr "Change settings"
 
@@ -7263,11 +7392,11 @@ msgstr "Invite to chat"
 msgid "Wenn Sie auf den Namen klicken, kommen Sie zur Homepage des Users."
 msgstr "When you click on a name, you will go to the user's homepage."
 
-#: online.php:88 sms.php:173 sms.php:242 sms.php:323
+#: online.php:88 sms.php:173 sms.php:241 sms.php:322
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Einrichtung"
 msgstr "Back to selected institute"
 
-#: online.php:90 sms.php:175 sms.php:244 sms.php:325
+#: online.php:90 sms.php:175 sms.php:243 sms.php:324
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung"
 msgstr "Back to selected course"
 
@@ -7578,7 +7707,7 @@ msgstr "in:"
 msgid "Verkn&uuml;pfung:"
 msgstr "Combination:"
 
-#: sem_browse.inc.php:276 sem_portal.php:170
+#: sem_browse.inc.php:276 sem_portal.php:174
 msgid "Zur Schnellsuche zurückgehen"
 msgstr "Back to quick search"
 
@@ -7624,7 +7753,7 @@ msgstr "My Status"
 msgid "Es wurden keine Veranstaltungen gefunden."
 msgstr "No course was found."
 
-#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:419
+#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:421
 msgid "(Der Suchbegriff fehlt oder ist zu kurz)"
 msgstr "(The search keyword is missing or is too short)"
 
@@ -7796,11 +7925,11 @@ msgstr ""
 "to use the learning module, a connection to a ILIAS installation in the "
 "system settings must be set up. Please contact an administrator."
 
-#: sem_portal.php:148
+#: sem_portal.php:152
 msgid "Anmeldung zu Veranstaltungen und Veranstaltungssuche"
 msgstr "Registration for courses and course search"
 
-#: sem_portal.php:160
+#: sem_portal.php:164
 msgid ""
 "Sie k&ouml;nnen hier nach allen Veranstaltungen suchen, sich Informationen "
 "anzeigen lassen und Veranstaltungen abonnieren.<br>"
@@ -7808,57 +7937,57 @@ msgstr ""
 "Here you can search for all courses, view information and register for the "
 "courses.<br>"
 
-#: sem_portal.php:166
+#: sem_portal.php:170
 msgid ""
 "In dieser Kategorie sind keine Veranstaltungen angelegt.<br>Bitte w&auml;"
 "hlen Sie einen andere Kategorie!"
 msgstr ""
 "There are no courses in this category.<br>Please choose another category!"
 
-#: sem_portal.php:172
+#: sem_portal.php:176
 msgid "Erweitertes Suchformular aufrufen"
 msgstr "Use advanced search form"
 
-#: sem_portal.php:199
+#: sem_portal.php:203
 msgid "Suchergebnis gruppieren:"
 msgstr "Group search results:"
 
-#: sem_portal.php:218 sem_portal.php:235
+#: sem_portal.php:223 sem_portal.php:240
 msgid "neueste Veranstaltungen"
 msgstr "Latest courses"
 
-#: sem_portal.php:221 sem_portal.php:237
+#: sem_portal.php:226 sem_portal.php:242
 msgid "Teilnehmeranzahl"
 msgstr "Number of participants"
 
-#: sem_portal.php:225 sem_portal.php:239
+#: sem_portal.php:230 sem_portal.php:244
 msgid "die meisten Materialien"
 msgstr "The most material"
 
-#: sem_portal.php:229 sem_portal.php:241
+#: sem_portal.php:234 sem_portal.php:246
 msgid "aktivste Veranstaltungen"
 msgstr "Most active courses"
 
-#: sem_portal.php:247
+#: sem_portal.php:252
 #, c-format
 msgid "Gew&auml;hlte Kategorie: <b>%s</b>"
 msgstr "Chosen category: <b>%s</b>"
 
-#: sem_portal.php:247
+#: sem_portal.php:252
 #, c-format
 msgid "%s Veranstaltungen vorhanden"
 msgstr "%s courses available"
 
-#: sem_portal.php:248
+#: sem_portal.php:253
 #, c-format
 msgid "Alle Veranstaltungen %sanzeigen%s"
 msgstr "%sShow%s all courses."
 
-#: sem_portal.php:252
+#: sem_portal.php:257
 msgid "Topliste:"
 msgstr "Top list:"
 
-#: sem_portal.php:260
+#: sem_portal.php:265
 msgid "weitere Toplisten:"
 msgstr "Other top lists:"
 
@@ -8227,8 +8356,8 @@ msgstr "Group list:"
 msgid "Daten ausgeben:"
 msgstr "Export data:"
 
-#: show_dates.inc.php:106 show_dates.inc.php:111 show_dates.inc.php:256
-#: show_dates.inc.php:388
+#: show_dates.inc.php:106 show_dates.inc.php:111 show_dates.inc.php:258
+#: show_dates.inc.php:393
 msgid ""
 "Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich "
 "zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die "
@@ -8237,18 +8366,18 @@ msgstr ""
 "Appointments. Click on the arrow (right) to edit appointments in this area. "
 "Click on the simple arrow in order to read the appointment description."
 
-#: show_dates.inc.php:107 show_dates.inc.php:119 show_dates.inc.php:257
-#: show_dates.inc.php:263
+#: show_dates.inc.php:107 show_dates.inc.php:119 show_dates.inc.php:259
+#: show_dates.inc.php:265
 #, c-format
 msgid "Termine für die Zeit vom %s bis zum %s"
 msgstr "Appointments for the time period from %s until %s. "
 
-#: show_dates.inc.php:108 show_dates.inc.php:113 show_dates.inc.php:259
-#: show_dates.inc.php:392
+#: show_dates.inc.php:108 show_dates.inc.php:113 show_dates.inc.php:261
+#: show_dates.inc.php:397
 msgid "Termine bearbeiten"
 msgstr "Edit appointments"
 
-#: show_dates.inc.php:118 show_dates.inc.php:122 show_dates.inc.php:262
+#: show_dates.inc.php:118 show_dates.inc.php:122 show_dates.inc.php:264
 msgid ""
 "Termine. Klicken Sie auf den Pfeil, um eine Beschreibung des Termins "
 "anzuzeigen."
@@ -8256,24 +8385,24 @@ msgstr ""
 "Appointments. Click on the arrow in order to show a description of the "
 "appointment."
 
-#: show_dates.inc.php:167 show_dates.inc.php:173 show_dates.inc.php:444
+#: show_dates.inc.php:167 show_dates.inc.php:173 show_dates.inc.php:449
 #, c-format
 msgid "%s Dokument(e) vorhanden"
 msgstr "%s document(s) available"
 
-#: show_dates.inc.php:203 show_dates.inc.php:332
+#: show_dates.inc.php:205 show_dates.inc.php:337
 msgid "Art des Termins:"
 msgstr "Type of appointment:"
 
-#: show_dates.inc.php:205
+#: show_dates.inc.php:207
 msgid "angelegt von:"
 msgstr "Created by:"
 
-#: show_dates.inc.php:219 show_dates.inc.php:351 show_dates.inc.php:522
+#: show_dates.inc.php:221 show_dates.inc.php:356 show_dates.inc.php:530
 msgid "Termine einstellen"
 msgstr "Create appointments"
 
-#: show_dates.inc.php:221 show_dates.inc.php:352 show_dates.inc.php:524
+#: show_dates.inc.php:223 show_dates.inc.php:357 show_dates.inc.php:532
 msgid ""
 "Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, "
 "klicken Sie auf die Doppelpfeile."
@@ -8281,19 +8410,19 @@ msgstr ""
 "There are no current appointments available. In order to create new "
 "appointments, click on the double arrow."
 
-#: show_dates.inc.php:276
+#: show_dates.inc.php:278
 msgid "Termin"
 msgstr "Appointment"
 
-#: show_dates.inc.php:390
+#: show_dates.inc.php:395
 msgid "Meine aktuellen Termine"
 msgstr "All current appointments"
 
-#: show_dates.inc.php:412
+#: show_dates.inc.php:417
 msgid "Heute"
 msgstr "Today"
 
-#: show_dates.inc.php:491
+#: show_dates.inc.php:499
 msgid "Kategorie:"
 msgstr "Category:"
 
@@ -8505,41 +8634,41 @@ msgstr "all members of the group: %s (%s user(s))"
 msgid "Diese Nachricht (auch) an alle meine Buddies versenden"
 msgstr "Send this message to all my buddies (as well)."
 
-#: sms.php:234
+#: sms.php:233
 msgid "Chateinladung verschicken"
 msgstr "Send chat invitation "
 
-#: sms.php:240
+#: sms.php:239
 msgid ""
 "Schreiben Sie hier eine Chateinladung an eine(n) anderen Benutzer(in), der "
 "Nachrichtentext ist optional:"
 msgstr ""
 "Write a chat invitation to another user here, the message text is optional:"
 
-#: sms.php:256
+#: sms.php:255
 msgid "Chateinladung verschicken an"
 msgstr "Send chat invitation to"
 
-#: sms.php:259
+#: sms.php:258
 msgid "Chatraum ausw&auml;hlen:"
 msgstr "Select chat room:"
 
-#: sms.php:272
+#: sms.php:271
 msgid "Diese Einladung (auch) an alle meine Buddies verschicken"
 msgstr "Send this invitation to all my buddies (as well)."
 
-#: sms.php:277
+#: sms.php:276
 msgid ""
 "Sie haben in keinem aktiven Chatraum die Berechtigung andere NutzerInnen "
 "einzuladen!"
 msgstr ""
 "You have the authorisation to invite other users into all active chat rooms!"
 
-#: sms.php:303
+#: sms.php:302
 msgid "Systeminterne Nachrichten anzeigen"
 msgstr "Show internal system messages"
 
-#: sms.php:319
+#: sms.php:318
 msgid ""
 "Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie verschickt "
 "wurden."
@@ -8547,25 +8676,36 @@ msgstr ""
 "You can see here all the internal system messages (SMS) that you have "
 "received."
 
-#: sms.php:320
+#: sms.php:319
 msgid "Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt."
 msgstr "All messages received since your last login are displayed opened."
 
-#: sms.php:331
+#: sms.php:330
 msgid "Nachrichten seit letztem Login nicht l&ouml;schen"
 msgstr "Don't delete messages received since last login."
 
-#: sms.php:377
+#: sms.php:351
+#, fuzzy
+msgid "Einladung zum Chat"
+msgstr "There is no-one in the chat"
+
+#: sms.php:353
+msgid ""
+"Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in "
+"der Kopfzeile."
+msgstr ""
+
+#: sms.php:379
 #, c-format
 msgid "automatische Systemnachricht, gesendet am %s"
 msgstr "automatic system message sent to %s."
 
-#: sms.php:381
+#: sms.php:383
 #, c-format
 msgid "gesendet von %s am %s"
 msgstr "Sent from %s at %s."
 
-#: sms.php:439
+#: sms.php:444
 msgid "Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor."
 msgstr "At present there are no internal system messages for you."
 
@@ -9047,7 +9187,7 @@ msgstr "(search results)"
 msgid "keine Studienbereiche eingetragen"
 msgstr "No subject areas added"
 
-#: lib/classes/SemBrowse.class.php:417
+#: lib/classes/SemBrowse.class.php:419
 msgid "Ihre Suche ergab keine Treffer"
 msgstr "The search did not reveal any matches"
 
