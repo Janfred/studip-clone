@@ -763,7 +763,7 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 				&nbsp; <a href="<? echo $PHP_SELF ?>?sortby=Name"><b><?=_("Name")?></b></a>
 			</td>
 			<td width="15%" align="center" class="steel" valign=bottom>
-				<b><?=_("DozentIn")?></b></a>
+				<b><?=_("DozentIn")?></b>
 			</td>
 			<td width="25%"align="center" class="steel" valign=bottom>
 				<a href="<? echo $PHP_SELF ?>?sortby=status"><b><?=_("Status")?></b></a>
@@ -872,6 +872,11 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 		</tr>
 	</table>
 	</form>
+
+
+	</td>
+	</tr>
+	</table>
 	<?
 	page_close();
 	die;
