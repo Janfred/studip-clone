@@ -62,7 +62,7 @@ class VeranstaltungResourcesAssign {
 			$this->db2->query($query2);			
 		}
 	}
-	
+
 	function updateAssign() {
 		global $TERMIN_TYP;
 
@@ -122,22 +122,23 @@ class VeranstaltungResourcesAssign {
 		
 		$interval = $term_data["turnus"] + 1;
 				
-		//create the assigns		
-		foreach ($term_data["turnus_data"] as $val) {
-			$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
-			$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
+		//create the assigns
+		if (is_array($term_data["turnus_data"]))
+			foreach ($term_data["turnus_data"] as $val) {
+				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
+				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
 			
-			$day_of_week = date("w", $start_time);
-			if ($day_of_week == 0)
-				$day_of_week = 7;
-			
-			$createAssign=new AssignObject(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
-										$start_time, $end_time, $sem_end,
-										-1, $interval, 0, 0, 0, 
-										0, $day_of_week, 0);
-			$createAssign->create();
-			$created_ids[] = $createAssign->getId();
-		}			
+				$day_of_week = date("w", $start_time);
+				if ($day_of_week == 0)
+					$day_of_week = 7;
+
+				$createAssign=new AssignObject(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
+											$start_time, $end_time, $sem_end,
+											-1, $interval, 0, 0, 0, 
+											0, $day_of_week, 0);
+				$createAssign->create();
+				$created_ids[] = $createAssign->getId();
+			}
 	
 	if ($created_ids)
 		return $created_ids;

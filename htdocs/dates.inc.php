@@ -604,10 +604,9 @@ Dabei werden die Beschriftungen der Ordner im Forensystem und im Dateisystem akt
 
 
 function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum,$resource_id,$range_id,$term_data='') {
-	global $user,$auth, $SEMESTER, $TERMIN_TYP;
+	global $user,$auth, $SEMESTER, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
 	
 	if ($RESOURCES_ENABLE) {
-		require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
 		require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	}
 	
@@ -788,7 +787,11 @@ dies muss das aufrufende Script sicherstellen.
 */
 
 function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id=0) {
-	global $RESOURCES_ENABLE;
+	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
+	
+	if ($RESOURCES_ENABLE) {
+		require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	}
 	
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
@@ -824,7 +827,7 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 	if ($db->affected_rows() && $RESOURCES_ENABLE) {
 		$insertAssign = new VeranstaltungResourcesAssign($sem_id);
 		$insertAssign->killDateAssign($termin_id);
-		$insertAssign->updateAssign($termin_id);
+		$insertAssign->updateAssign();
 	}
 		
 	$count = $db->affected_rows();
