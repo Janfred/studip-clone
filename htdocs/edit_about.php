@@ -96,6 +96,9 @@ function get_auth_user($username) {
 			$this->auth_user[$field_name] = $this->db->f("$field_name");
 		}
 	}
+	if (!$this->auth_user['auth_plugin']){
+		$this->auth_user['auth_plugin'] = "standard";
+	}
 }
 
 function get_user_details() {       // füllt die arrays  mit Daten
@@ -907,12 +910,12 @@ if ($view=="Daten") {
 	//persönliche Daten...
 	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
 	echo "<br><font size=-1>" . sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), "</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>") . "</font><br><br>";
-	if ($my_about->auth_user['auth_plugin']){
+	if ($my_about->auth_user['auth_plugin'] != "standard"){
       		echo "<font size=\"-1\">" . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
 	}
 	echo "<br><br></td></tr>\n<tr><td class=blank><table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>";
 	//Keine JavaScript überprüfung bei adminzugriff
-	if ($my_about->check=="user" && $auth->auth["jscript"] && !$my_about->auth_user['auth_plugin']) {
+	if ($my_about->check=="user" && $auth->auth["jscript"] && $my_about->auth_user['auth_plugin'] != "standard") {
 	echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
 	} else {
 		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
