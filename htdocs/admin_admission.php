@@ -283,7 +283,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			}
 	
 			if ($admin_admission_data["passwort"]=="")
-       			  	$errormsg=$errormsg."error§".("Sie haben kein Passwort eingegeben! Bitte geben Sie ein Passwort ein!")."§";
+       			  	$errormsg=$errormsg."error§"._("Sie haben kein Passwort eingegeben! Bitte geben Sie ein Passwort ein!")."§";
 		      	elseif (isset($check_pw) AND $admin_admission_data["passwort"] != $check_pw) {
 					$errormsg=$errormsg."error§"._("Das eingegebene Passwort und das Wiederholungspasswort stimmen nicht &uuml;berein!")."§";
      					$admin_admission_data["passwort"] = "";

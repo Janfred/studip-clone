@@ -554,7 +554,7 @@ if (($uebernehmen_x) && (!$errormsg))
 								if ($term_metadata["sem_duration_time"] == -1)
 									echo "<option value=-1 selected>"._("unbegrenzt")."</option>";
 								else
-									echo "<option value=-1>".("unbegrenzt")."</option>";
+									echo "<option value=-1>"._("unbegrenzt")."</option>";
 							?>
 							</select>
 						</td>
