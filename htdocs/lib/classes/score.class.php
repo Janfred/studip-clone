@@ -122,7 +122,7 @@ function doRefreshScoreContentCache(){
 		while ($db->next_record()){
 			$this->score_content_cache[$db->f('range_id')]['newscount'] = $db->f('newscount');
 		}
-		$db->query("SELECT count(event_id) eventcount,range_id FROM calendar_events WHERE range_id IN $id_list AND class = 'PUBLIC' GROUP BY range_id");
+		$db->query("SELECT count(event_id) as eventcount,range_id FROM calendar_events WHERE range_id IN $id_list AND class = 'PUBLIC' GROUP BY range_id");
 		while ($db->next_record()){
 			$this->score_content_cache[$db->f('range_id')]['eventcount'] = $db->f('eventcount');
 		}
