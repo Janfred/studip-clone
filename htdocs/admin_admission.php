@@ -637,7 +637,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		<? if ($admin_admission_data["admission_prelim"] == 1) { ?>
 			<tr>
 			<td class="<? echo $cssSw->getClass() ?>" align=right>&nbsp;</td>
-			<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><font size=-1><? echo _("Hinweistext bei vorl&auml;ufigen Eintragungen:"); ?></font><br>&nbsp; <textarea name="admission_prelim_txt" cols=58 rows=4><?php echo htmlReady($admin_admission_data["admission_prelim_txt"]) ?></textarea></td>
+			<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><font size=-1><? echo _("Hinweistext bei vorl&auml;ufigen Eintragungen:"); ?></font><br><textarea name="admission_prelim_txt" cols=58 rows=4><?php echo htmlReady($admin_admission_data["admission_prelim_txt"]) ?></textarea></td>
 			</tr>
 		<?
 		}
