@@ -179,7 +179,7 @@ function get_ampel_read ($mein_status, $admission_status, $read_level, $print="T
 	return $ampel_status;
 }
 
-function htmlReady($what, $trim = TRUE, $br = FALSE){
+function htmlReady ($what, $trim = TRUE, $br = FALSE) {
 	if ($trim)
 		$what = trim(htmlentities($what,ENT_QUOTES));
 	else
@@ -234,8 +234,7 @@ function JSReady ($what = "", $target = "overlib") {
 //////////////////////
 // de- und encodieren der Quotings
 
-function quotes_decode($description) 
-{
+function quotes_decode ($description) {
 // Funktion um Quotings zu decoden
 // $description: der Text der gequotet werden soll, wird zurueckgegeben
 
@@ -332,7 +331,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE) {
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = htmlReady($what, $trim, FALSE);
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
-		$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, $extern), $extern), $extern);
+		$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 		$what = explode('ö', $what);
 		$i = 0;
 		foreach ($what as $w)	
@@ -342,7 +341,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE) {
 	}
 	
 	return symbol(smile(FixLinks(format(latex(htmlReady($what, $trim, FALSE), $extern)),
-			FALSE, TRUE, $extern), $extern), $extern);
+			FALSE, TRUE, TRUE, $extern), $extern), $extern);
 }
 
 
@@ -396,7 +395,7 @@ function latex($text, $extern = FALSE) {
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
 		if ($extern) {
-			$extern_path = 'http://' . substr($EXTERN_SERVER_NAME, 0, -1);
+			$extern_path = substr($EXTERN_SERVER_NAME, 0, -1);
 			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $extern_path . $TEXCACHE_PATH);
 		}
 		else {
@@ -462,7 +461,7 @@ function decodeHTML ($string) {
 function format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	$pattern = array(
-					"'^--+(\d?)$'m",               // Trennlinie
+					"'^--+(\d?)$'me",               // Trennlinie
 					"'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
 					"'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
@@ -489,7 +488,7 @@ function format ($text) {
 					"'\n?(</?h[1-4r]>)\n?'"                        // removes newline delimiters
 					);
 	$replace = array(
-					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
+					"'<hr noshade=\"noshade\" width=\"98%\" size=\"'.('\\1' ? '\\1' : '1').'\" align=\"center\" />'",
 					"<pre>\\1</pre>",
 					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
 					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
@@ -575,13 +574,11 @@ function preg_call_format_list ($content) {
 		else
 			$ret .= "<li>{$items[$i]['content']}";
 		
-		if ($level_diff >= 0)
+		if ($level_diff >= 0 && $i < sizeof($items) - 1)
 			$ret .= "</li>";
 		$level = $items[$i]["level"];
 	}
-	
-	$ret .= "</" . $list_tags[0] . ">";
-	
+		
 	return $ret;
 }
 
@@ -668,16 +665,18 @@ function kill_format ($text) {
 * @param	string	text to convert
 * @param	string	TRUE if all forms of newlines have to be converted in single \n
 * @param	boolean	TRUE if newlines have to be converted into <br>
+* @param boolean	TRUE if pictures should be displayed
 * @param	boolean TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
-function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE) {
+function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $extern = FALSE) {
 	if (empty($data)) {
 		return $data;
 	}
 	if ($fix_nl)
 		$data = preg_replace("/\n?\r\n?/", "\n", $data); // newline fixen
 	
+	$img = $img ? 'TRUE' : 'FALSE';
 	$extern = $extern ? 'TRUE' : 'FALSE';
 	
 	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
@@ -687,7 +686,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE
 					"'((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:(.+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*))'ie",
 					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 					);
-	$replace = array("preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $extern)",
+	$replace = array("preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
 		//	"preg_call_link(array('\\2', '\\3'), 'LINK')",
 			"preg_call_link(array('\\2', '\\3'), 'MAIL', $extern)");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
@@ -703,11 +702,12 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE
 *
 * @access	private
 * @param	array $params	parameters extracted by the regular expression
-* @param	string	$mod type of lin ('LINK' or 'MAIL')
-* @param	boolean $extern TRUE if called from external pages ('externe Seiten')
+* @param	string	$mod	type of lin ('LINK' or 'MAIL')
+* @param boolean	$img	TRUE to handle image-links
+* @param	boolean	$extern	TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
-function preg_call_link ($params, $mod, $extern = FALSE) {
+function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	global $auth;
 	
 	if ($extern)
@@ -722,7 +722,7 @@ function preg_call_link ($params, $mod, $extern = FALSE) {
 			$params[4] = str_replace('&amp;', '&', $params[4]);
 			$tbr = "<a href=\"{$params[4]}\" target=\"_blank\">$link_pic{$params[3]}</a>";
 		}
-		else {
+		elseif ($img) {
 			if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:', $params[0]))
 				$tbr = $params[0];
 			else {
@@ -752,6 +752,9 @@ function preg_call_link ($params, $mod, $extern = FALSE) {
 					$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
 			}
 		}
+		else
+			return $params[0];
+			
 	}
 	elseif ($mod == 'MAIL') {
 		if ($params[0] != '')
@@ -784,28 +787,38 @@ function smile ($text = "", $extern = FALSE) {
 		return $text;
 	
 	//smileys in the ":name:" notation
-	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m";
+	$pattern = "'(\>\s|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\s\<|\s)'m";
 	$replace = "\\1";
 	if (!$extern) {
-		$replace .= "<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
+		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
+		$replace .= "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-		$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/\\2.gif\"></a>\\3";
+		$replace .= "$path$SMILE_PATH . /\\2.gif\"></a>\\3";
 	}
 	else {
-		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-		$replace .= "http://$EXTERN_SERVER_NAME$SMILE_PATH/\\2.gif\">\\3";
+		$path = $EXTERN_SERVER_NAME;
+		$replace .= "\\1<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
+		$replace .= "$path$SMILE_PATH/\\2.gif\">\\3";
 	}
 	$text = preg_replace($pattern, $replace, $text);
 	
 	//smileys in short notation
+	$patterns = array();
+	$replaces = array();
 	reset($SMILE_SHORT);
 	while (list($key,$value) = each($SMILE_SHORT)) {
-		$text = str_replace($key,"<a href=\""
-				. $CANONICAL_RELATIVE_PATH_STUDIP . "show_smiley.php\" target=\"_blank\">"
-				. "<img ".tooltip($value)." border=\"0\" src=\""
-				. $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/$value.gif\"></a>",$text);
+		$patterns[] = "'(\>|^|\s)" . preg_quote($key) . "($|\<|\s)'m";
+		if (!$extern) {
+			$replaces[] = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">"
+					. "<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
+					. "$path$SMILE_PATH/$value.gif\"></a>\\2";
+		}
+		else {
+			$replaces[] = "\\1<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
+					. "$path$SMILE_PATH/$value.gif\">\\3";
+		}
 	}
-	return $text;
+	return preg_replace($patterns, $replaces, $text);
 }
 
 
@@ -831,17 +844,21 @@ function symbol ($text = "", $extern = FALSE) {
 		return $text;
 	
 	if ($extern)
-		$path = "http://$EXTERN_SERVER_NAME";
+		$path = $EXTERN_SERVER_NAME;
 	else
 		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
+	
+	$patterns = array();
+	$replaces = array();
 	//symbols in short notation
 	reset($SYMBOL_SHORT);
 	while (list($key, $value) = each($SYMBOL_SHORT)) {
-		$text = str_replace($key, "<img " . tooltip($key)
-				. " border=\"0\" src=\"$path$SYMBOL_PATH/$value.gif\">",$text);
+		$patterns[] = "'" . preg_quote($key) . "'m";
+		$replaces[] = "<img " . tooltip($key)
+				. " border=\"0\" src=\"$path$SYMBOL_PATH/$value.gif\">";
 	}
 	
-	return $text;
+	return preg_replace($patterns, $replaces, $text);
 }
 
 //Beschneidungsfunktion fuer alle printhead Ausgaben
@@ -1104,8 +1121,7 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 * @param        string $toolwindow	For a special Toolwindow
 * @return        string
 */
-function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE")
-{
+function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE") {
 	if ($toolwindow == "FALSE") {
 		$tool = tooltip($tooltip);
 	} else {
