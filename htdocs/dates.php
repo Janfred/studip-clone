@@ -53,7 +53,8 @@ if ($dclose)
 			<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-uhr.gif" align="absmiddle">&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Ablaufplan")?></b>
 			</td>
 		</tr>
-			<td class="blank" width="100%"><blockquote><?=_("Hier finden Sie alle Termine der Veranstaltung."). "<br><br>" . _("Klicken Sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.")?>
+		<tr>
+			<td class="blank" width="100%" valign="top"><br /><blockquote><?=_("Hier finden Sie alle Termine der Veranstaltung."). "<br><br>" . _("Klicken Sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.")?>
 			</td>
 			<td class="blank" align="right"><img src="pictures/termine.jpg" border="0">
 			</td>
