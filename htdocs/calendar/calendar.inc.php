@@ -54,11 +54,7 @@ require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/SeminarEven
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
 closeObject();
 
-// bei Einsprung ohne $cmd wird im Header eine Erlaeuterung ausgegeben
-if (!$cmd && !$atime)
-	$intro = TRUE;
-
-// Wird kein timestamp an das Skript uebergeben, benutze aktuellen
+// use current timestamp if no timestamp is given
 if (!$atime && !$termin_id)
 	$atime = time();
 	
@@ -94,11 +90,11 @@ if ($cancel_x) {
 		$cmd = $calendar_user_control_data['view'];
 }
 
-// Zeitbereich eingrenzen
+// allowed time range
 if (isset($atime) && ($atime < 0 || $atime > 2114377200))
 	$atime = time();
 
-// Datum fuer "Gehe-zu-Funktion" checken
+// check date of "go-to-function"
 if (check_date($jmp_m, $jmp_d, $jmp_y))
 	$atime = mktime(12, 0, 0, $jmp_m, $jmp_d, $jmp_y);
 else {
@@ -107,7 +103,7 @@ else {
 	$jmp_y = date('Y', $atime);
 }
 
-// Benutzereinstellungen uebernehmen
+// restore user defined settings
 if ($cmd_cal == 'chng_cal_settings') {
 	$calendar_user_control_data = array(
 		'view'             => $cal_view,
@@ -162,7 +158,7 @@ else
 
 if ($cmd == '') {
 	if ($termin_id)
-		// wird eine termin_id uebergeben immer in den Bearbeiten-Modus
+		// if termin_id is given always change in edit mode
 		$cmd = 'edit';
 	else
 		$cmd = $calendar_user_control_data['view'];
@@ -206,7 +202,58 @@ if ($source_page && ($cmd == 'edit' || $cmd == 'add' || $cmd == 'delete')) {
 	$calendar_sess_control_data['source'] = rawurldecode($source_page);
 }
 
+// add an event to database *********************************************************
+
+if ($cmd == 'add') {
+	$atermin =& new DbCalendarEvent();
+	// Ueberpruefung der Formulareingaben
+	$err = check_form_values($calendar_sess_forms_data);
+	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
+	// wenn alle Daten OK, dann Termin anlegen oder, wenn termin_id vorhanden,
+	// updaten
+	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS) {
+		// wird eine termin_id uebergeben, wird ein update durchgefuehrt
+		if ($termin_id) {
+			$termin_old =& new DbCalendarEvent($termin_id);
+			$termin_old->update($atermin);
+			$termin_old->save();
+		}
+		else {
+			$atermin->save();
+			$atime = $atermin->getStart();
+		}
+				
+		if ($calendar_sess_control_data['source']) {
+			$destination = $calendar_sess_control_data['source'] . "#a";
+			$calendar_sess_control_data['source'] = '';
+			unset($calendar_sess_forms_data);
+			$sess->unregister('calendar_sess_forms_data');
+			page_close();
+			header("Location: $destination");
+			exit;
+		}
+		
+		if (!empty($calendar_sess_control_data['view_prv']))
+			$cmd = $calendar_sess_control_data['view_prv'];
+		else
+			$cmd = 'showday';
+			
+		unset($calendar_sess_forms_data);
+		$sess->unregister('calendar_sess_forms_data');
+	}
+	// wrong data? -> switch back to edit mode
+	else {
+		$cmd = 'edit';
+		$mod = $mod_prv ? $mod_prv : 'SINGLE';
+		if ($back_recur_x) {
+			$set_recur_x = 1;
+			unset($back_recur_x);
+		}
+	}
+}
+
 // Seitensteuerung
+
 switch ($cmd) {
 	case 'showday':
 		$calendar_sess_control_data['view_prv'] = $cmd;
@@ -266,7 +313,6 @@ switch ($cmd) {
 	
 	case 'export':
 		$title = _("Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren und synchronisieren");
-	//	$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 		
 	case 'bind':
@@ -295,7 +341,7 @@ switch ($cmd) {
 			}
 		}
 		else {
-			
+			$title = _("Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten");
 			// call from dayview for new event -> set default values
 			if ($atime && empty($HTTP_POST_VARS)) {
 				if ($devent) {
@@ -346,62 +392,9 @@ switch ($cmd) {
 				elseif ($set_recur_x)
 					unset($set_recur_x);
 			}
-			$title = _("Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten");
 		}
 		extract($calendar_sess_forms_data, EXTR_OVERWRITE);
 		break;
-}
-
-// add an event to database *********************************************************
-
-if ($cmd == 'add') {
-	$atermin =& new DbCalendarEvent();
-	// Ueberpruefung der Formulareingaben
-	$err = check_form_values($calendar_sess_forms_data);
-	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
-	// wenn alle Daten OK, dann Termin anlegen oder, wenn termin_id vorhanden,
-	// updaten
-	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS) {
-		// wird eine termin_id uebergeben, wird ein update durchgefuehrt
-		if ($termin_id) {
-			$termin_old =& new DbCalendarEvent($termin_id);
-			$termin_old->update($atermin);
-			$termin_old->save();
-		}
-		else {
-			$atermin->save();
-			$atime = $atermin->getStart();
-		}
-				
-		if ($calendar_sess_control_data['source']) {
-			$destination = $calendar_sess_control_data['source'];
-			$calendar_sess_control_data['source'] = '';
-			unset($calendar_sess_forms_data);
-			$sess->unregister('calendar_sess_forms_data');
-			page_close();
-			header("Location: $destination");
-			exit;
-		}
-		
-		if (!empty($calendar_sess_control_data['view_prv']))
-			$cmd = $calendar_sess_control_data['view_prv'];
-		else
-			$cmd = 'showday';
-			
-	}
-	// wrong data? -> switch back to edit mode
-	else {
-		$cmd = 'edit';
-		$mod = $mod_prv ? $mod_prv : 'SINGLE';
-		if ($back_recur_x) {
-			$set_recur_x = 1;
-			unset($back_recur_x);
-		}
-	//	else
-		//	unset($set_recur_x);
-	}
-	unset($calendar_sess_forms_data);
-	$sess->unregister('calendar_sess_forms_data');
 }
 
 // Tagesuebersicht anzeigen ***************************************************
