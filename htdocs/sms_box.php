@@ -164,7 +164,7 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 		$link = $PHP_SELF."?mclose=TRUE";
 	} else {
 		$open = "close";
-		$link = $PHP_SELF."?mopen=".$message_id;
+		$link = $PHP_SELF."?mopen=".$message_id."#".$message_id;
 	}
 
 	if ($read == "1") {
