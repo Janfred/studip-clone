@@ -289,7 +289,7 @@ if ($s_send) {
 		}
 	}
 
-	if (!$perm->have_perm("admin")) { // wenn nicht admin, aktuellen Dozenten eintragen
+/*	if (!$perm->have_perm("admin")) { // wenn nicht admin, aktuellen Dozenten eintragen
 		$tempDozent_id = $auth->auth["uid"];
 		$group=select_group($temp_admin_seminare_start_time);
 		$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempDozent_id'";
@@ -300,7 +300,7 @@ if ($s_send) {
 			$query = "INSERT INTO seminar_user values('$s_id','$tempDozent_id',\"dozent\",'$group', '', '".time()."')";
 		$db3->query($query);
 		}
-	}
+	}*/
 	
 		if (isset($b_institute)) 
 			{
