@@ -84,6 +84,14 @@ switch($referrer_page) {
 		$help_page = "auswahl_suche.html";
 		break;
 		
+		case "resources.php":
+		$help_page = "xii_suche_res.html";
+		break;
+		
+		case "institut_browse.php":
+		$help_page = "xii_suche_einr.htm";
+		break;
+		
 	case "archiv.php" :
 		$help_page = "xii_suchen3.htm";
 		break;
@@ -117,6 +125,9 @@ switch($referrer_page) {
 				$help_page = "iii_homepagee.htm";
 				break;			
 			case "Login":
+				$help_page = "iii_homepageh.htm";
+				break;		
+				case "allgemein":
 				$help_page = "iii_homepagef1.htm";
 				break;			
 			case "Forum":
@@ -125,6 +136,10 @@ switch($referrer_page) {
 			case "Terminkalender":
 				$help_page = "iii_homepagef3.htm";
 				break;			
+			case "Tools":
+				$help_page = "iii_homepageg.htm";
+				break;			
+					
 			case "Stundenplan":
 				$help_page = "iii_homepagef4.htm";
 				break;			
@@ -168,6 +183,10 @@ switch($referrer_page) {
 		
 	case "about.php" :
 		$help_page = "iv_interaktion.htm";
+		break;
+		
+	case "institut_main.php" :
+		$help_page = "institut_main.htm";
 		break;
 
 	case "browse.php" :
@@ -274,13 +293,27 @@ switch($referrer_page) {
 		$help_page = "x_adminarea.htm";
 		break;
 	
+	case "admin_lit_list.php": 
+		$help_page = "iii_homelit.htm";
+		break;
+	
+	case "adminvote.php": 
+		$help_page = "iii_homevote.htm";
+		break;
+	
+	case "admin_news.php": 
+		$help_page = "iii_homenews.htm";
+		break;
+	
+	
+	
 	case "admin_dates.php" :
 		if ($admin_dates_data["assi"]) 
 			$help_page = "va_assi7.htm";
 		else
 			$help_page = "x_ablauf.htm";
 		break;
-	
+	admin_lit_list adminvote
 	case "display_topic.php" :
 		if ($perm->have_perm("tutor"))
 		    $help_page = "x_themen.htm";

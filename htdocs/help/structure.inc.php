@@ -36,6 +36,12 @@ array	(	"name" => _("Allgemeines"),
 																				"text" => _("Was Sie über diese Hilfefunktion wissen sollten"),
 																				"page" => "help_help.html"
 																			),
+																			
+																array	(	"name" => _("Spracheinstellungen"),
+																				"text" => _("Deutsch oder Englisch?"),
+																				"page" => "iii_homepagef1.htm"
+																			),
+																			
 																array	(	"name" => _("Nutzungsbedingungen"),
 																				"text" => _("Die rechtlichen Grundlagen"),
 																				"page" => "nutzung.html"
@@ -130,17 +136,25 @@ array	(	"name" => _("Die eigene Homepage"),
 																				"text" => _("Eigene Kategorien anlegen"),
 																				"page" => "iii_homepagee.htm"
 																			),
+																			array	(	"name" => _("Tools"),
+																				"text" => _("Umfragen, Literaturlisten und News"),
+																				"page" => "iii_homepageg.htm"
+																			),
+																			array	(	"name" => _("MyStudip"),
+																				"text" => _("Stud.IP anpassen"),
+																				"page" => "iii_homepagef1.htm"
+																			),
 															)
 			),
 			
 			
 
 array	(	"name" => _("Interaktion"),
-				"text" => _("Wie man mit anderen Nutzern des Systems interagieren kann"),
+				"text" => _("Wie Sie mit anderen Nutzenden des Systems interagieren können"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
 																array	(	"name" => _("Die Homepages der anderen"),
-																				"text" => _("Wie Sie die Homepages anderer Nutzer finden können"),
+																				"text" => _("Wie Sie die Homepages anderen Nutzenden finden können"),
 																				"page" => "iv_interaktion.htm"
 																			),
 																array	(	"name" => _("Wer ist online?"),
@@ -148,7 +162,7 @@ array	(	"name" => _("Interaktion"),
 																				"page" => "iv_online.htm"
 																			),
 																array	(	"name" => _("Systeminterne Nachrichten"),
-																				"text" => _("Wie Sie Nachrichten an andere Nutzer schicken können"),
+																				"text" => _("Wie Sie Nachrichten an andere Nutzenden schicken können"),
 																				"page" => "iv_sms.htm"
 																			),
 																array	(	"name" => _("Der Chatbereich"),
@@ -157,6 +171,29 @@ array	(	"name" => _("Interaktion"),
 																			)
 															)
 			),
+			
+	array	(	"name" => _("Meine Einrichtungen"),
+				"text" => _("Fakultäten, Institute, Seminare an denen Sie studieren oder arbeiten"),
+				"perm" =>	"user",
+				"kategorien" => array	(						array	(	"name" => _("Informationen über Einrichtungen "),
+																				"text" => _("Adressen, Mitarbeiterlisten und mehr"),
+																				"page" => "institut_main.htm"
+																			),
+																array	(	"name" => _("Die Einrichtungssuche"),
+																				"text" => _("Einrichtungen in Stud.IP finden"),
+																				"page" => "xii_suche_einr.htm"
+																			),
+																
+																
+																array	(	"name" => _("Zuordnung zu Einrichtungen"),
+																				"text" => _("Wie Sie sich Einrichtungen zuordnen können"),
+																				"page" => "iii_homepagec.htm"
+																			)
+																
+											)
+			),
+			
+			
 array	(	"name" => _("Meine Veranstaltungen"),
 				"text" => _("Meine Veranstaltungen - hinzufügen, löschen, verwalten"),
 				"perm" =>	"user",
@@ -183,6 +220,7 @@ array	(	"name" => _("Meine Veranstaltungen"),
 																			)																		
 															)
 			),
+			
 array	(	"name" => _("In der Veranstaltung: grundlegende Funktionen"),
 				"text" => _("Wie Sie sich im Veranstaltungsbereich zurechtfinden"),
 				"perm" =>	"user",
@@ -419,8 +457,8 @@ $pages[] = array	(	"name" => _("MyStud.IP"),
 				"text" => _("Stud.IP anpassen"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																array	(	"name" => _("Autologin"),
-																				"text" => _("Wenn es bequem sein soll"),
+																array	(	"name" => _("Allgemeines"),
+																				"text" => _("Sprach- und Geschwindigkeitseinstellungen"),
 																				"page" => "iii_homepagef1.htm"
 																			),
 																array	(	"name" => _("Einstellungen des Forums"),
@@ -438,6 +476,10 @@ $pages[] = array	(	"name" => _("MyStud.IP"),
 																array	(	"name" => _("Einstellungen des Messaging"),
 																				"text" => _("So bleiben Sie in Kontakt"),
 																				"page" => "iii_homepagef5.htm"
+																			),
+																array	(	"name" => _("Auto-LogIn"),
+																				"text" => _("Wenn es bequem sein soll"),
+																				"page" => "iii_homepageh.htm"
 																			)
 															)
 			);
@@ -454,9 +496,17 @@ $pages[] = array	(	"name" => _("Suchen"),
 																				"text" => _("DozentInnen und KommilitonInnen"),
 																				"page" => "personensuche.htm"
 																			),
-																array	(	"name" => _("Suchen nach Veranstaltungen"),
-																				"text" => _("Veranstaltungen des aktuellen und kommenden Semesters"),
+																array	(	"name" => _("Suchen nachVeranstaltungen"),
+																				"text" => _("Veranstaltungen des aktuellen und kommender Semester"),
 																				"page" => "v_abonnieren.htm"
+																			),
+																			array	(	"name" => _("Suchen nach Einrichtungen"),
+																				"text" => _("Fakultäten, Institute, ..."),
+																				"page" => "xii_suche_einr.htm"
+																			),
+																array	(	"name" => _("Suchen nach Ressourcen"),
+																				"text" => _("Suche nach Räumen, Ausstattung, etc."),
+																				"page" => "xii_suche_res.htm"
 																			),
 																array	(	"name" => _("Suchen im Archiv"),
 																				"text" => _("Veranstaltungen vergangener Semester"),
