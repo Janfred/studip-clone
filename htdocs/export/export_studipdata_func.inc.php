@@ -285,7 +285,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 function export_teilis($inst_id, $ex_sem_id = "no")
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE, $SessSemName;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $xml_names_studiengaenge, $xml_groupnames_studiengaenge, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE, $SessSemName;
 
 	$db=new DB_Seminar;
 
@@ -311,8 +311,10 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 			for ($i2 = 0; $i2 < sizeof( $studiengang_count); $i2 ++)
 			while (list ($key, $val) = each ($studiengang_count)) 
 			{
+				$data_object .= xml_open_tag($xml_groupnames_studiengaenge["object"]);
 				$data_object .= xml_tag($xml_names_studiengaenge["name"], $key);
 				$data_object .= xml_tag($xml_names_studiengaenge["count"], $val);
+				$data_object .= xml_close_tag($xml_groupnames_studiengaenge["object"]);
 			}
 			$data_object .= xml_close_tag($xml_groupnames_studiengaenge["group"]);
 		}
