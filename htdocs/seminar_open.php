@@ -129,12 +129,9 @@ function startpage_redirect($page_code) {
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
 //get the name of the current page in $i_page
-$url=parse_url($PHP_SELF);
-$i_page_array = explode("/" , $url[path]);
-end ($i_page_array);
-$i_page = current($i_page_array);
-unset($url); unset($i_page_array);
-	
+
+$i_page = basename($PHP_SELF);
+
 // function to get the parameters of the current page in array $i_query
 
 $i_query = explode('&',getenv("QUERY_STRING"));
