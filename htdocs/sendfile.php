@@ -256,7 +256,7 @@ if ($no_access) {
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-	parse_window("error§Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!", "§", "Download nicht m&ouml;glch", $add_msg);
+	parse_window("error§Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!", "§", "Download nicht m&ouml;glich", $add_msg);
 	page_close();
 	echo "</body>";
 	die;
