@@ -95,6 +95,9 @@ $modules = $Modules->getLocalModules($admin_dates_data["range_id"]);
 //Einpflegen neu angekommender Daten/Schalter
 if ($assi) 
 	$admin_dates_data["assi"]=$assi;
+if ($list) //note: we re-use the $list switch here, because it indicates that we are defenitely not coming from the assi.
+	$admin_dates_data["assi"]=FALSE;
+	
 if ($show_id) 
 	$admin_dates_data["show_id"]=$show_id;
 if ($show_all) 
@@ -467,8 +470,10 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	}
 		
 	print("<form method=\"POST\" action=\"$PHP_SELF\">");
-	printf("<font size=\"-1\">" . _("Einen neuen Termin %s") . "<br>", "<a href=\"admin_dates.php?insert_new=TRUE#anchor\">" . makeButton("anlegen", "img") . "</a>");
-
+	printf("<font size=\"-1\">" . _("Einen neuen Termin %s"), "<a href=\"admin_dates.php?insert_new=TRUE#anchor\">" . makeButton("anlegen", "img") . "</a>");
+	if ($admin_dates_data["assi"])
+		print("&nbsp;<a href=\"admin_seminare1.php\">" . makeButton("abbrechen", "img") . "</a>");
+	print "<br />";
 	$db2->query("SELECT count(*) AS anzahl FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' AND date_typ IN $typ_clause");
 	$db2->next_record();
 
