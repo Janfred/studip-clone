@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2003-06-20 14:45+0200\n"
+"POT-Creation-Date: 2003-07-08 17:46+0200\n"
 "PO-Revision-Date: 2003-05-13 20:08+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -112,22 +112,22 @@ msgstr ""
 "configuration. Here you will also find links, with which you can use to "
 "integrate the modules with your website."
 
-#: extern/extern_config.inc.php:50
+#: extern/extern_config.inc.php:45
 msgid "Mitarbeiter"
 msgstr "Staff member"
 
-#: extern/extern_config.inc.php:51
+#: extern/extern_config.inc.php:46
 msgid ""
 "Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer "
 "Einrichtung aus."
 msgstr ""
 "The module &quot;staff member&quot; provides a staff index of an institute."
 
-#: extern/extern_config.inc.php:53
+#: extern/extern_config.inc.php:48
 msgid "Mitarbeiterdetails"
 msgstr "Staff details"
 
-#: extern/extern_config.inc.php:54
+#: extern/extern_config.inc.php:49
 msgid ""
 "Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters "
 "einer Einrichtung aus."
@@ -135,22 +135,22 @@ msgstr ""
 "The module &quot;staff details&quot; provides all data of the staff of an "
 "institute."
 
-#: extern/extern_config.inc.php:56
+#: extern/extern_config.inc.php:51
 #: extern/elements/ExternElementMainLectures.class.php:72
 msgid "Veranstaltungen"
 msgstr "Courses"
 
-#: extern/extern_config.inc.php:57
+#: extern/extern_config.inc.php:52
 msgid ""
 "Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer "
 "Einrichtung aus."
 msgstr "The module &quot;Courses&quot; provides all courses from an institute."
 
-#: extern/extern_config.inc.php:59
+#: extern/extern_config.inc.php:54
 msgid "Veranstaltungsdetails"
 msgstr "Course details"
 
-#: extern/extern_config.inc.php:60
+#: extern/extern_config.inc.php:55
 msgid ""
 "Das Modul &quot;Veranstaltungsdetails&quot; gibt alle allgemeinen Daten "
 "einer Veranstaltung aus."
@@ -158,22 +158,22 @@ msgstr ""
 "The module &quot;course details&quot; provides all general data from a "
 "course."
 
-#: extern/extern_config.inc.php:62
+#: extern/extern_config.inc.php:57
 #: extern/modules/ExternModulePersondetails.class.php:74
 #: extern/elements/ExternElementMainNews.class.php:75
 msgid "News"
 msgstr "News"
 
-#: extern/extern_config.inc.php:63
+#: extern/extern_config.inc.php:58
 msgid "Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."
 msgstr "The module &quot;News&quot; provides all news from an institute."
 
-#: extern/extern_config.inc.php:65
+#: extern/extern_config.inc.php:60
 #: extern/elements/ExternElementMainDownload.class.php:73
 msgid "Download"
 msgstr "Download"
 
-#: extern/extern_config.inc.php:66
+#: extern/extern_config.inc.php:61
 msgid ""
 "Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich "
 "einer Einrichtung zum Download zur Verf&uuml;gung."
