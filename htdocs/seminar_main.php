@@ -113,7 +113,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 	<?
 
 	if ($SessSemName[3]) {
-		echo "<br /><b><font size=\"-1\">" . _("Untertitel:") . " </b>"; 
+		echo "<br /><font size=\"-1\"><b>" . _("Untertitel:") . " </b>"; 
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
