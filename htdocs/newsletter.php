@@ -119,6 +119,15 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 		$REMOTE_ADDR=getenv("REMOTE_ADDR");
 		$Zeit=date("H:i:s, d.m.Y",time());
 
+		$validator=new email_validation_class;	## Klasse zum Ueberpruefen der Eingaben
+		$validator->timeout=10;									## Wie lange warten wir auf eine Antwort des Mailservers?
+
+		if (!$validator->ValidateEmailHost($Email)) {     ## Mailserver nicht erreichbar, ablehnen
+			echo "nicht versand";
+			return false;
+		} 
+
+
 		## Abschicken der Bestaetigungsmail
 		$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
 		$env_from="wwwrun@".$smtp->host_name;
