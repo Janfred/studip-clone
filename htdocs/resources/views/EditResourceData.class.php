@@ -117,7 +117,6 @@ class EditResourceData {
 		$resReq = new RoomRequest();
 
 		$killButton = TRUE;
-
 		if ($new_assign_object)
 			$resAssign = unserialize($new_assign_object);
 		else
@@ -144,6 +143,7 @@ class EditResourceData {
 			}
 		}
 
+			
 		//load the object perms
 		$ResourceObjectPerms =& ResourceObjectPerms::Factory($resAssign->getResourceId());
 		
@@ -160,7 +160,7 @@ class EditResourceData {
 			$ObjectPerms =& $ResourceObjectPerms;
 		}
 		
-		if ((!$ObjectPerms->havePerm("tutor"))){ // && (!$resAssign->isNew()) && (!$new_assign_object)) {
+		if ((!$ObjectPerms->havePerm("autor"))){ // && (!$resAssign->isNew()) && (!$new_assign_object)) {
 			$killButton = FALSE;
 			$lockedAssign = TRUE;
 		}
@@ -177,7 +177,7 @@ class EditResourceData {
 		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
+		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", (!$resAssign->isNew()) ?  $resAssign->getId() : "NEW"); ?>">
 			<input type="HIDDEN" name="quick_view" value="<?=$this->used_view ?>" />
 			<input type="HIDDEN" name="quick_view_mode" value="<?=$view_mode ?>" />
 			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", (!$resAssign->isNew()) ? $resAssign->getResourceId() : $resources_data["actual_object"]); ?>" />			
