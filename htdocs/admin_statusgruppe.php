@@ -310,7 +310,7 @@ function PrintInstitutMembers ()
 							$db2->query("INSERT INTO user_inst SET Institut_id = '$range_id', user_id = '$user_id', inst_perms = '$globalperms'");
 						}
 						if (get_perm($range_id, $user_id) =="user") {
-							$db2->query("UPDATE user_inst SET inst_perms = '$globalperms'");
+							$db2->query("UPDATE user_inst SET inst_perms = '$globalperms' WHERE user_id = '$user_id' AND Institut_id = '$range_id'");
 						}
 					}
 				}
