@@ -452,7 +452,7 @@ if ($perm->have_perm("admin"))
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2">
 				<font size="-1"><b><?=("Nachricht an den Raumadministrator:")?></b><br /><br />
-					<?=_("Sie k&ouml;nnen hier eine Nachricht an den Raumadministrator verfassen, um weitere W&uuml;nsche oder Bermerkungen zur gew&uuml;nschten Raumbelegung anzugeben.")?> <br /><br />
+					<?=_("Sie k&ouml;nnen hier eine Nachricht an den Raumadministrator verfassen, um weitere W&uuml;nsche oder Bemerkungen zur gew&uuml;nschten Raumbelegung anzugeben.")?> <br /><br />
 					<textarea name="comment" cols=58 rows=4><?=$admin_rooms_data["resRequest"]->getComment(); ?></textarea>
 				</font>
 			</td>
