@@ -105,6 +105,19 @@ if ($topic_id AND !$update) {
 	}
 }
 
+// loeschen von nicht zuende getippten Postings
+
+if ($forum["lostposting"]!="" AND !isset($update)) {
+	$writemode = $forum["lostposting"];
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode' and (description = 'Dieser Beitrag wird gerade bearbeitet.' OR description = 'Beschreibung des Themas')");
+	if ($db->num_rows()) { // wir sind im richtigen Seminar!
+		$count = 0;
+		delete_topic($writemode,$count);
+		$forum["lostposting"]="";
+	}
+}
+
 // Rekursives Löschen von Postings, Warnung
 if ($delete_id) {
 	$db=new DB_Seminar;
@@ -289,7 +302,7 @@ if ($really_kill) {
 			if ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
 				$message = "kill";
 			}
-			
+			$forum["lostposting"]="";
 		}		
 	}
 }
@@ -307,6 +320,7 @@ if ($answer_id) {
 		$postinginhalt = _("Dieser Beitrag wird gerade bearbeitet.");
 		$edit_id = CreateTopic (addslashes($name), $author, $postinginhalt, $answer_id, $db->f("root_id"));
 		$open = $edit_id;
+		$forum["lostposting"] = $edit_id;
 	}
 }
 
@@ -328,6 +342,7 @@ if ($update) {
 	}
 	UpdateTopic ($titel, $update, $description);
 	$open = $update; //gerade bearbeiteten Beitrag aufklappen
+	$forum["lostposting"] = "";
 }
 
 if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
@@ -335,6 +350,7 @@ if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 		$author = get_fullname();
 		$edit_id = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0");
 		$open = $edit_id;
+		$forum["lostposting"] = $edit_id;
 }
 
 // Anker setzen
