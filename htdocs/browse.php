@@ -45,7 +45,7 @@ require_once "visual.inc.php";
 require_once "functions.php";
 
 $sess->register("browse_data");
-$qeury='';
+$query='';
 
 if ($send) {
 	$browse_data["Vorname"]=$Vorname;
