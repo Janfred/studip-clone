@@ -555,7 +555,7 @@ if ($cmd_d_x)
 				if ((($sem_create_data["term_turnus_start_stunde"][$i]>23) || ($sem_create_data["term_turnus_start_stunde"][$i]<0))  ||  (($sem_create_data["term_turnus_start_minute"][$i]>59) || ($sem_create_data["term_turnus_start_minute"][$i]<0))  ||  (($sem_create_data["term_turnus_end_stunde"][$i]>23) ||($sem_create_data["term_turnus_end_stunde"][$i]<0))  || (($sem_create_data["term_turnus_end_minute"][$i]>59) || ($sem_create_data["term_turnus_end_minute"][$i]<0)))
 						{
 						if (!$just_informed3)
-							$errormsg=$errormsg."error§Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!$";	
+							$errormsg=$errormsg."error§Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!§";	
 						$just_informed3=TRUE;
 						}
 				if (mktime($sem_create_data["term_turnus_start_stunde"][$i], $sem_create_data["term_turnus_start_minute"][$i], 0, 1, 1, 2001) > mktime($sem_create_data["term_turnus_end_stunde"][$i], $sem_create_data["term_turnus_end_minute"][$i], 0, 1, 1, 2001)) 
@@ -1039,36 +1039,27 @@ if ($cmd_h_x)
 //Gibt den aktuellen View an, brauchen wir in der Hilfe
 $sem_create_data["level"]=$level;
 
-//ab hier folgen nun die eigentlichen Ausgaben der Seite
- ?>
-<html>
-	<head>
-		<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-		<title>Stud.IP</title>
-		<link rel="stylesheet" href="style.css" type="text/css">
-
-		<script language="javascript" src="md5.js"></script>
-
-		<script language="javascript">
-		<!--
-     		function doCrypt() {
-				document.form_4.hashpass.value = MD5(document.form_4.password.value);
-				document.form_4.hashpass2.value = MD5(document.form_4.password2.value);
-				document.form_4.password.value = "";
-				document.form_4.password2.value = "";
-				return true;
-				}
-		
-		// -->
-		</script>
-	 </head>
- <body>
- <?
-
-//Includes...
-
-include "$ABSOLUTE_PATH_STUDIP/header.php";   		//hier wird der "Kopf" nachgeladen
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  		//Linkleiste fuer admins
+
+?>
+	<script type="text/javascript" language="javascript" src="md5.js"></script>
+
+	<script type="text/javascript" language="javascript">
+	<!--
+   		function doCrypt() {
+			document.form_4.hashpass.value = MD5(document.form_4.password.value);
+			document.form_4.hashpass2.value = MD5(document.form_4.password2.value);
+			document.form_4.password.value = "";
+			document.form_4.password2.value = "";
+			return true;
+			}
+	
+	// -->
+	</script>
+<?
 
 //Level 1: Hier werden die Grunddaten abgefragt.
 if ((!$level) || ($level==1))

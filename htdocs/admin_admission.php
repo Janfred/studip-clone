@@ -8,9 +8,9 @@
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
-* @modulegroup		system_core
-* @module		system_core
-* @package		studip
+* @module		admin_admission.php
+* @modulegroup		admin
+* @package		studip_core
 */
 
 // +---------------------------------------------------------------------------+
@@ -45,9 +45,9 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 ?>
-	<script language="javascript" src="md5.js"></script>
+	<script type="text/javascript" language="javascript" src="md5.js"></script>
 
-	<script language="javascript">
+	<script type="text/javascript" language="javascript">
 	<!--
 	function doCrypt() {
 		document.admission.hashpass.value = MD5(document.admission.password.value);
