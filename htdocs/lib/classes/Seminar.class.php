@@ -237,7 +237,7 @@ class Seminar {
 			}
 			
 			//serialize
-			$this->serializedMetadata = mysql_escape_string(serialize ($this->metadata));
+			$this->serializedMetadata = serialize ($this->metadata);
 		}
 	}
 
@@ -303,28 +303,28 @@ class Seminar {
 		if ($this->is_new) {
 			$query = "INSERT INTO seminare SET
 				Seminar_id = '".			$this->id."', 
-				VeranstaltungsNummer = '".		$this->seminar_number."', 
+				VeranstaltungsNummer = '".		mysql_escape_string($this->seminar_number)."', 
 				Institut_id = '".			$this->institut_id."', 
-				Name = '".				$this->name."', 
-				Untertitel = '".			$this->subtitle."',
+				Name = '".				mysql_escape_string($this->name)."', 
+				Untertitel = '".			mysql_escape_string($this->subtitle)."',
 				status = '".				$this->status."', 
-				Beschreibung = '".			$this->description."', 
-				Ort = '".				$this->location."', 
-				Sonstiges = '".				$this->misc."', 
+				Beschreibung = '".			mysql_escape_string($this->description)."', 
+				Ort = '".				mysql_escape_string($this->location)."', 
+				Sonstiges = '".				mysql_escape_string($this->misc)."', 
 				Passwort= '".				$this->password."', 
 				Lesezugriff = '".			$this->read_level."', 
 				Schreibzugriff = '".			$this->write_level."', 
 				start_time = '".			$this->semester_start_time."', 
 				duration_time = '".			$this->semester_duration_time."', 
-				art = '".				$this->form."', 
-				teilnehmer = '".			$this->participants."', 
-				vorrausetzungen = '".			$this->requirements."', 
-				lernorga = '".				$this->orga."', 
-				leistungsnachweis = '".			$this->leistungsnachweis."', 
-				metadata_dates= '".			$this->getSerializedMetadata()."', 
+				art = '".				mysql_escape_string($this->form)."', 
+				teilnehmer = '".			mysql_escape_string($this->participants)."', 
+				vorrausetzungen = '".			mysql_escape_string($this->requirements)."', 
+				lernorga = '".				mysql_escape_string($this->orga)."', 
+				leistungsnachweis = '".			mysql_escape_string($this->leistungsnachweis)."', 
+				metadata_dates= '".			mysql_escape_string($this->getSerializedMetadata())."', 
 				mkdate = '".				time()."', 
 				chdate = '".				time()."', 
-				ects = '".				$this->ects."', 
+				ects = '".				mysql_escape_string($this->ects)."', 
 				admission_endtime = '".			$this->admission_endtime."', 
 				admission_turnout = '".			$this->admission_turnout."', 
 				admission_binding = 			NULL , 	
@@ -332,7 +332,7 @@ class Seminar {
 				admission_selection_take_place = 	'0', 
 				admission_group = 			NULL , 				
 				admission_prelim = '".			$this->admission_prelim."', 
-				admission_prelim_txt = '".		$this->admission_prelim_txt."', 
+				admission_prelim_txt = '".		mysql_escape_string($this->admission_prelim_txt)."', 
 				admission_starttime = '".		$this->admission_starttime."',  
 				admission_endtime_sem = '".		$this->admission_endtime_sem."', 
 				visible =  				'1', 
