@@ -93,6 +93,8 @@ class ShowList extends ShowTreeRow{
 			$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
 			$open="close";
 		}
+				//create a link onto the titel, too
+
 		$titel='';
 		if ($resObject->getCategoryName())
 			$titel=$resObject->getCategoryName().": ";
@@ -102,6 +104,11 @@ class ShowList extends ShowTreeRow{
 		} else {
 			$titel.=htmlReady($resObject->getName());
 		}
+
+		//create a link on the titel, too
+		if (($link) && ($edit_structure_object != $resObject->id))
+			$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
+		
 		if ($resObject->getOwnerLink())
 			$zusatz=sprintf (_("Besitzer:")." <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
 		else			
@@ -271,6 +278,7 @@ class ShowThread extends ShowTreeRow {
 				$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
 				$open="close";
 			}
+			
 			if ($resObject->getCategoryName())
 				$titel=$resObject->getCategoryName().": ";
 			if ($edit_structure_object==$resObject->id) {
@@ -279,6 +287,11 @@ class ShowThread extends ShowTreeRow {
 			} else {
 				$titel.=htmlReady($resObject->getName());
 			}
+
+			//create a link on the titel, too
+			if (($link) && ($edit_structure_object != $resObject->id))
+				$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
+			
 			if ($resObject->getOwnerLink())
 				$zusatz=sprintf ("Besitzer: <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
 			else			
