@@ -326,7 +326,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 			} else {
 				echo "\n<select name=\"Fakultaet\">";
 				if ($perm->have_perm("root")) {
-					printf ("<option %s value=\"%s\">" . _("Diese Einrichtung hat den Status einer Fakult&auml;t") . "</option>", ($db->f("fakultaets_id") == $db->f("Institut_id")) ? "selected" : "", $db->f("Institut_id"));
+					printf ("<option %s value=\"%s\">" . _("Diese Einrichtung hat den Status einer Fakult&auml;t.") . "</option>", ($db->f("fakultaets_id") == $db->f("Institut_id")) ? "selected" : "", $db->f("Institut_id"));
 					$db2->query("SELECT Institut_id,Name FROM Institute WHERE Institut_id=fakultaets_id AND fakultaets_id !='". $db->f("institut_id") ."' ORDER BY Name");
 				} else {
 					$db2->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute USING (Institut_id) WHERE user_id='$user->id' AND inst_perms='admin' AND a.Institut_id=fakultaets_id AND fakultaets_id !='". $db->f("institut_id") ."' ORDER BY Name");

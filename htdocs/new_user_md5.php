@@ -90,11 +90,11 @@ while ( is_array($HTTP_POST_VARS)
 		$run = TRUE;
 		// Do we have permission to do so?
 		if (!$perm->is_fak_admin() && addslashes(implode($perms,",")) == "admin") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung <b>admins</b> anzulegen.") . "§";
+			$msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> anzulegen.") . "§";
 			$run = FALSE;
 		}
 		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "root") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung <b>roots</b> anzulegen.") . "§";
+			$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> anzulegen.") . "§";
 			$run = FALSE;
 		}
 		
@@ -105,7 +105,7 @@ while ( is_array($HTTP_POST_VARS)
 		
 		// Do we have all necessary data?
 		if (empty($username) || empty($perms) || empty ($Email)) {
-			$msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>Email</b> an!") . "§";
+			$msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>E-Mail</b> an!") . "§";
 			$run = FALSE;
 		}
 
@@ -113,7 +113,7 @@ while ( is_array($HTTP_POST_VARS)
 		// NOTE: This should be a transaction, but it is not...
 		$db->query("select * from auth_user_md5 where username='$username'");
 		if ($db->nf()>0) {
-			$msg .= "error§" . sprintf(_("Benutzer <b>%s</b> ist schon vorhanden!"), $username) . "§";
+			$msg .= "error§" . sprintf(_("BenutzerIn <b>%s</b> ist schon vorhanden!"), $username) . "§";
 			$run = FALSE;
 		}
 
@@ -158,13 +158,13 @@ while ( is_array($HTTP_POST_VARS)
 					$db->next_record();							
 					$group=select_group ($db->f("start_time"),$u_id);							
 					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$u_id', 'autor', '$group')");
-					$msg .= sprintf("msg§" . _("Der Nutzer wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $db->f("Name"));
+					$msg .= sprintf("msg§" . _("Die Person wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $db->f("Name"));
 				}
 			}
 		}
 		
 		if ($run) { // Benutzer angelegt
-			$msg .= "msg§" . sprintf(_("Benutzer \"%s\" angelegt."), $username) . "§";
+			$msg .= "msg§" . sprintf(_("BenutzerIn \"%s\" angelegt."), $username) . "§";
 
 			// Mail abschicken...
 			$to=$Email;
@@ -188,22 +188,22 @@ while ( is_array($HTTP_POST_VARS)
 		$run = TRUE;
 		// Do we have permission to do so?
 		if (!$perm->is_fak_admin() && addslashes(implode($perms,",")) == "admin") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung, <b>Administratoren</b> anzulegen.") . "§";
+			$msg .= "error§" . _("Sie haben keine Berechtigung, <b>Admin-Accounts</b> anzulegen.") . "§";
 			$run = FALSE;
 		}
 		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "root") {
-			$msg .= "error§" . _("Sie haben keine Berechtigung, <b>Roots</b> anzulegen.") . "§";
+			$msg .= "error§" . _("Sie haben keine Berechtigung, <b>Root-Accounts</b> anzulegen.") . "§";
 			$run = FALSE;
 		}
 		if (!$perm->have_perm("root")) {
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
 			if (!$perm->is_fak_admin() && $db->f("perms") == "admin") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Administratoren</b> zu ver&auml;ndern.") . "§";
+				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> zu ver&auml;ndern.") . "§";
 				$run = FALSE;
 			}
 			if ($db->f("perms") == "root") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Roots</b> zu ver&auml;ndern.") . "§";
+				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
 				$run = FALSE;
 			}
 			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
@@ -214,7 +214,7 @@ while ( is_array($HTTP_POST_VARS)
 				$db->next_record();
 				$run = $db->f("admin_ok");
 				if (!$run){
-					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin zu ver&auml;ndern.") . "§";
+					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu ver&auml;ndern.") . "§";
 				}
 			}
 		}
@@ -235,7 +235,7 @@ while ( is_array($HTTP_POST_VARS)
 		
 		// Do we have all necessary data?
 		if (empty($username) || empty($perms) || empty ($Email)) {
-			$msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>Email</b> an!") . "§";
+			$msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>E-Mail</b> an!") . "§";
 			$run = FALSE;
 		}
 		
@@ -308,12 +308,12 @@ while ( is_array($HTTP_POST_VARS)
 									$db2->next_record();
 									if ($db2->f("status") == "user") { // wir können ihn hochstufen
 										$db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$a' AND user_id='$user->id'");	
-										$msg .= sprintf("msg§" . _("Dem Nutzer wurden wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $db->f("Name"));
+										$msg .= sprintf("msg§" . _("Der Person wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $db->f("Name"));
 									}
 								} else {  // Benutzer ist noch nicht eingetragen
 									$group=select_group ($db->f("start_time"),$u_id);							
 									$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$u_id', 'autor', '$group')");
-									$msg .= sprintf("msg§" . _("Der Nutzer wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $db->f("Name"));
+									$msg .= sprintf("msg§" . _("Die Person wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $db->f("Name"));
 								}
 							}
 						}
@@ -345,14 +345,14 @@ while ( is_array($HTTP_POST_VARS)
 				$query = "delete from user_inst where user_id='$u_id' AND inst_perms != 'admin'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Mitarbeiterlisten gel&ouml;scht."), $db_ar) . "§";
+					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
 				}
 			}
 			if (addslashes(implode($perms,",")) == "root") {
 				$query = "delete from user_inst where user_id='$u_id'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Mitarbeiterlisten gel&ouml;scht."), $db_ar) . "§";
+					$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
 				}
 			}
 		}
@@ -368,7 +368,7 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
 			if ($db->f("perms") == "root") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Roots</b> zu ver&auml;ndern.") . "§";
+				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
 				$run = FALSE;
 			}
 			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
@@ -379,7 +379,7 @@ while ( is_array($HTTP_POST_VARS)
 				$db->next_record();
 				$run = $db->f("admin_ok");
 				if (!$run){
-					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin zu ver&auml;ndern.") . "§";
+					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu ver&auml;ndern.") . "§";
 				}
 			}
 			
@@ -439,7 +439,7 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
 			if ($db->f("perms") == "root") {
-				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Roots</b> zu l&ouml;schen.") . "§";
+				$msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu l&ouml;schen.") . "§";
 				$run = FALSE;
 			}
 			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
@@ -450,7 +450,7 @@ while ( is_array($HTTP_POST_VARS)
 				$db->next_record();
 				$run = $db->f("admin_ok");
 				if (!$run){
-					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin zu l&ouml;schen.") . "§";
+					$msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu l&ouml;schen.") . "§";
 				}
 			}
 		}
@@ -459,7 +459,7 @@ while ( is_array($HTTP_POST_VARS)
 		$db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '$u_id' AND status = 'dozent' GROUP BY user_id");
 		$db->next_record();
 		if ($db->f("count")) {
-			$msg .= sprintf("error§" . _("Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.") . "§", $username, $db->f("count"));
+			$msg .= sprintf("error§" . _("Der Benutzer/die Benutzerin <b>%s</b> ist DozentIn in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.") . "§", $username, $db->f("count"));
 			$run = FALSE;
 		}
 
@@ -523,13 +523,13 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query($query);
 	 		$db->next_record();
 			if ($db->f("count")) {
-				$msg .= sprintf("info§" . _("%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer Benutzer enthalten.") . "§", $db->f("count"));
+				$msg .= sprintf("info§" . _("%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer BenutzerInnen enthalten.") . "§", $db->f("count"));
 			}
 			// delete user from instituts
 			$query = "delete from user_inst where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Mitarbeiterlisten gel&ouml;scht."), $db_ar) . "§";
+				$msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
 			}
 			// user aus den Statusgruppen rauswerfen
 			if ($db_ar = RemovePersonFromAllStatusgruppen(get_username($u_id))  > 0) {
@@ -642,7 +642,7 @@ if (isset($details)) {
 		?>
 		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 		<tr valign=top align=middle>
-			<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Eingabe eines neuen Benutzers")?></b></td>
+			<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Eingabe eines neuen Benutzer-Accounts")?></b></td>
 		</tr>
 		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 		<tr><td class="blank" colspan=2>
@@ -721,7 +721,7 @@ if (isset($details)) {
 			
 			<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 			<tr valign=top align=middle>
-				<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Ver&auml;ndern eines bestehenden Benutzers")?></b></td>
+				<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Ver&auml;ndern eines bestehenden Benutzer-Accounts")?></b></td>
 			</tr>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 			<tr><td class="blank" colspan=2>
@@ -834,7 +834,7 @@ if (isset($details)) {
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst AS x LEFT JOIN user_inst AS y USING (Institut_id) LEFT JOIN Institute USING (Institut_id) WHERE x.user_id ='$temp_user_id' AND x.inst_perms != 'user' AND y.user_id = '$user->id' AND y.inst_perms = 'admin'");
 			if ($db2->num_rows()) {
 				print "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
-				print "<b>&nbsp;" . _("Link zur Mitarbeiter-Verwaltung") . "&nbsp;</b>";
+				print "<b>&nbsp;" . _("Link zur MitarbeiterInnen-Verwaltung") . "&nbsp;</b>";
 				print "</td></tr>\n";
 			}
 			while ($db2->next_record()) {
@@ -862,7 +862,7 @@ if (isset($details)) {
 
 	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 	<tr valign=top align=middle>
-		<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung aller Benutzer des Systems")?></b></td>
+		<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung aller BenutzerInnen des Systems")?></b></td>
 	</tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
@@ -872,7 +872,7 @@ if (isset($details)) {
 
 	<tr><td class="blank" colspan=2>
 	
-	<p><b><a href="<? echo $PHP_SELF . "?details="?>">&nbsp;<?=_("Neuen Benutzer anlegen")?></a></b></p>
+	<p><b><a href="<? echo $PHP_SELF . "?details="?>">&nbsp;<?=_("Neuen Benutzer-Account anlegen")?></a></b></p>
 
 	<?
 	unset($msg);
@@ -899,16 +899,16 @@ if (isset($details)) {
 		if ($db->num_rows() == 0) { // kein Suchergebnis
 			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 cellpadding=2 width=\"80%\">";
 			print "<tr valign=\"top\" align=\"middle\">";
-			print "<td>" . _("Es wurden keine Benutzer gefunden, auf die die obigen Kriterien zutreffen.") . "</td>";
+			print "<td>" . _("Es wurden keine Personen gefunden, auf die die obigen Kriterien zutreffen.") . "</td>";
 			print "</tr><tr><td class=\"blank\">&nbsp;</td></tr></table>";
 
 		} else { // wir haben ein Suchergebnis
 			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 class=blank cellpadding=2 width=\"100%\">";
 			print "<tr valign=\"top\" align=\"middle\">";
 				if ($db->num_rows() == 1)
-			 		print("<td colspan=7>" . _("Suchergebnis: Es wurde <b>1</b> Benutzer gefunden.") . "</td></tr>\n");
+			 		print("<td colspan=7>" . _("Suchergebnis: Es wurde <b>1</b> Person gefunden.") . "</td></tr>\n");
 				else
-			 		printf("<td colspan=7>" . _("Suchergebnis: Es wurden <b>%s</b> Benutzer gefunden.") . "</td></tr>\n", $db->num_rows());
+			 		printf("<td colspan=7>" . _("Suchergebnis: Es wurden <b>%s</b> Personen gefunden.") . "</td></tr>\n", $db->num_rows());
 			?>
 			 <tr valign="top" align="middle">
 				<th align="left"><a href="new_user_md5.php?sortby=username"><?=_("Benutzername")?></a></th>

@@ -42,7 +42,7 @@ $db3=new DB_Seminar;
 	<tr>
 		<td class="topic">&nbsp;<b>
 		<?
-		echo _("Teilnehmerbeschr&auml;nkte Veranstaltungen");
+		echo _("Teilnahmebeschr&auml;nkte Veranstaltungen");
 		?></b>
 		</td>
 	</tr>

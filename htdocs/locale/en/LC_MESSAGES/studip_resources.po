@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-06-16 21:03+0200\n"
+"POT-Creation-Date: 2003-06-18 22:16+0200\n"
 "PO-Revision-Date: 2003-03-28 16:23+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -915,6 +915,13 @@ msgstr ""
 msgid "Suche nach Ressourcen"
 msgstr "Search for resources"
 
+#: resources/views/page_intros.inc.php:60
+#: resources/views/page_intros.inc.php:84
+#: resources/views/page_intros.inc.php:98
+#: resources/views/page_intros.inc.php:157
+msgid "Aktionen:"
+msgstr "Actions:"
+
 #: resources/views/page_intros.inc.php:63
 #, c-format
 msgid "Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"
@@ -1100,10 +1107,6 @@ msgstr "Resource details"
 #: resources/views/page_intros.inc.php:155
 msgid "Anzeige der Ressourceneigenschaften"
 msgstr "Show resource properties"
-
-#: resources/views/page_intros.inc.php:157
-msgid "Aktionen:"
-msgstr "Actions:"
 
 #: resources/views/page_intros.inc.php:160
 msgid "zur&uuml;ck zur Suche"

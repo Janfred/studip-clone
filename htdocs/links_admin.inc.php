@@ -652,7 +652,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 					<tr>
 						<td class="steel1" colspan=5>
 							<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo checked ?> />&nbsp;<?=_("nur archivierbare Veranstaltungen ausw&auml;hlen -  (letztes) Veranstaltungssemester verstrichen")?> </font><br />
-							<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;<?=_("nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als 6 Monaten)")?> </font> -->
+							<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;<?=_("nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als sechs Monaten)")?> </font> -->
 						</td>
 					</tr>
 					<?
