@@ -1099,7 +1099,7 @@ if ($view=="Lebenslauf") {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>" . _("Publikationen:") . "</b><br>";
 		echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
 	}
-	echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</td>";
+	echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=\"0\" value=\"" . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</td>";
 }
 
 if ($view=="Sonstiges") {
