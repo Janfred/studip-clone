@@ -59,7 +59,7 @@ $css_switcher = new cssClassSwitcher();
 			<table width ="100%" cellspacing="0" cellpadding="2" border="0">
 				<tr>
 					<td class="<? echo $css_switcher->getClass(); ?>" width="1%" nowrap=\"nowrap\">
-						<blockquote><p><b><? echo _("Startansicht einstellen:"); ?></b></p></blockquote>
+						<blockquote><p><b><? echo _("Startansicht anpassen:"); ?></b></p></blockquote>
 					</td>
 					<td class="<? echo $css_switcher->getClass(); ?>" width="99%">
 						<select name="cal_view" size="1">
@@ -85,7 +85,7 @@ $css_switcher = new cssClassSwitcher();
 				<tr><? $css_switcher->switchClass(); ?>
 				<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 					<blockquote>
-						<p><b><? echo _("Zeitraum der Tages- und Wochensansicht:"); ?></b></p>
+						<p><b><? echo _("Zeitraum der Tages- und Wochenansicht:"); ?></b></p>
 					</blockquote>
 				</td>
 				<td class="<? echo $css_switcher->getClass(); ?>">
@@ -192,7 +192,7 @@ $css_switcher = new cssClassSwitcher();
 				<tr><? $css_switcher->switchClass(); ?>
 					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
-							<p><b><? echo _("Wochenansicht definieren:"); ?></b></p>
+							<p><b><? echo _("Wochenansicht anpassen:"); ?></b></p>
 						</blockquote>
 					</td>
 					<td class="<? echo $css_switcher->getClass(); ?>">
@@ -206,6 +206,7 @@ $css_switcher = new cssClassSwitcher();
 							echo ">&nbsp;" . _("5 Tage-Woche"); ?>
 					</td>
 				</tr>
+		<?/*
 				<tr><? $css_switcher->switchClass(); ?>
 					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
@@ -223,10 +224,11 @@ $css_switcher = new cssClassSwitcher();
 							echo ">&nbsp;" . _("Semesterdaten anzeigen"); ?>
 					</td>
 				</tr>
+		*/ ?>
 				<tr><? $css_switcher->switchClass(); ?>
 					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
-							<p><b><? echo _("Komfortfunktionen"); ?></b></p>
+							<p><b><? echo _("Extras:"); ?></b></p>
 						</blockquote>
 					</td>
 					<td class="<? echo $css_switcher->getClass(); ?>">

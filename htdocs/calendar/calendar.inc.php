@@ -559,7 +559,7 @@ if($cmd == "edit"){
 		$cat = 1;
 		$via = "private";
 		$edit_mode_out = "<b>";
-		$edit_mode_out .= sprintf(_("Termin erstellen f&uuml;r %s"), ldate($atime));
+		$edit_mode_out .= sprintf(_("Termin erstellen am %s"), ldate($atime));
 		$edit_mode_out .= "</b></td></tr>\n";
 	}
 	// call from different views to edit an event
