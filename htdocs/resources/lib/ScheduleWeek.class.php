@@ -197,34 +197,34 @@ class ScheduleWeek {
 		?>
 		<table <? if ($this->print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
 			<tr>
-				<td width="10%" align="center" class="rahmen_steelgraulight" >Zeit
+				<td width="10%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit"):?>
 				</td>
 				<? if ($this->show_days[1]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Montag
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Montag"):?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", $this->start_date)."</font>" ?>
 				</td><?}
 				if ($this->show_days[2]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Dienstag
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Dienstag"):?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+1, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[3]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Mittwoch
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Mittwoch"):?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+2, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[4]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Donnerstag
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Donnerstag"):?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+3, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[5]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Freitag
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Freitag"):?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+4, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[6]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Samstag
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Samstag"):?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+5, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[7]) {?>
-				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Sonntag
+				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Sonntag"):?>
 				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+6, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}?>
 			</tr>
@@ -240,7 +240,7 @@ class ScheduleWeek {
 				if ($k==0)  {
 					echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>"; 
 					if ($i<10) echo "0";
-					echo $i, ".00 Uhr</td>";
+					echo $i, ".00 "._("Uhr")."</td>";
 				}
 				else echo "<tr>";
 				$l=1;
@@ -298,7 +298,7 @@ class ScheduleWeek {
 			}
 
 			if ($print_view) {
-				echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; Erstellt am ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr></tr>";
+				echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; "._("Erstellt am")." ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr></tr>";
 			} else {
 			}
 			?>
