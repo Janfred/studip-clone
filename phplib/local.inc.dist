@@ -78,6 +78,30 @@ $DVIPS_PATH = "/usr/bin/dvips";
 $CONVERT_PATH = "/usr/bin/convert";
 $IDENTIFY_PATH = "/usr/bin/identify";
 
+// Format templates for LaTex renderer
+//
+$LATEX_FORMATS = array(
+ "math" => array("tag" => "tex", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{amsmath}\n \usepackage{amsfonts}\n \usepackage{amssymb}\n \pagestyle{empty}\n \begin{document}\n $%s$\n \end{document}\n"));
+
+/*
+   Format of entries:
+   Internal format name => array ( 
+  	Format tag (e.g. "tex" --> [tex]...[/tex])
+  	Format template (must contain structure of an entire valid LaTeX-document and must contain exactly one %s placeholder that will be replaced be the code entered between [tag]....[/tag].
+   )
+  
+   Examples for additional formats:
+  
+   IPA Phonetic font (needs LaTeX package tipa installed):
+  
+   "ipa" => array("tag" => "ipa", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{tipa}\n \pagestyle{empty}\n \begin{document}\n \\textipa{%s}\n \end{document}\n")
+  
+   Arab font (needs LaTeX package arabtex installed):
+  
+   "arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
+  
+*/
+ 
 
 /*Stud.IP modules
 ----------------------------------------------------------------
@@ -121,6 +145,9 @@ $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the mai
 $WIKI_ENABLE = TRUE;									//Stud.IP module: Wiki-Web
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
+
+$BANNER_ADS_ENABLE = FALSE;
+	//Stud.IP module: Banner ads (config as root in "global settings")
 
 /*system settings
 ----------------------------------------------------------------
