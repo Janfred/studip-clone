@@ -8,9 +8,9 @@
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	resources
+* @modulegroup		support
 * @module		page_intros.inc.php
-* @package		resources
+* @package		support
 */
 
 // +---------------------------------------------------------------------------+
@@ -45,7 +45,7 @@ switch ($supportdb_data["view"]) {
 			$infobox[1]["kategorie"]=_("Aktionen:");
 			$infobox[1]["eintrag"][] = array ("icon" => "pictures/forumrot.gif", "text"  =>sprintf (_("Einen neuen Vertrag %sanlegen%s"), "<a href=\"$PHP_SELF?view=overview&create_con=TRUE#a\">", "</a>"));
 		}							
-		$infopic = "pictures/rooms.jpg";
+		$infopic = $RELATIVE_PATH_SUPPORT."/pictures/contract.jpg";
 	break;
 	case "requests":
 		$conObject = new ContractObject ($supportdb_data["actual_con"]);
@@ -57,23 +57,7 @@ switch ($supportdb_data["view"]) {
 			$infobox[1]["kategorie"]=_("Aktionen:");
 			$infobox[1]["eintrag"][] = array ("icon" => "pictures/forumrot.gif", "text"  =>sprintf (_("Eine neue Anfrage %sanlegen%s"), "<a href=\"$PHP_SELF?view=requests&create_req=TRUE#a\">", "</a>"));
 		}							
-		$infopic = "pictures/rooms.jpg";
-	break;
-	case "events":
-		$page_intro=_("Sie k&ouml;nnen hier BEarbeitungszeiten zu einem Request anlegen oder bearbeiten");
-		$title=_("Bearbeitungszeiten");
-		$infobox = array(
-/*					array  ("kategorie"  => _("Information:"), 
-							"eintrag" => array (
-								array ("icon" => "pictures/ausruf_small.gif", 	
-									"text"  => ($resources_data["list_recurse"]) ? _("Untergeordnete Ebenen werden ausgegeben.") : _("Untergeordnete Ebenen werden <u>nicht</u> ausgegeben.")))),*/
-					array  ("kategorie" => "Aktionen:", 
-							"eintrag" => array (
-								array	("icon" => "pictures/suchen.gif",
-									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"), "<a href=\"$PHPSELF?view=search&mode=properties\">", "</a>") :  sprintf(_("%sEbenen%s durchsuchen"), "<a href=\"$PHP_SELF?view=search&mode=browse\">", "</a>")),
-								array("icon" => "pictures/blank.gif",
-									"text"  => "<br /><a href=\"$PHP_SELF?view=search&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
-		$infopic = "pictures/rooms.jpg";
+		$infopic = $RELATIVE_PATH_SUPPORT."/pictures/help.jpg";
 	break;
 	}
 ?>
