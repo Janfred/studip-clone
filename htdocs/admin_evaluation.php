@@ -48,8 +48,14 @@ include_once($ABSOLUTE_PATH_STUDIP . "header.php");
 
 
 $the_range = $rangeID;
-	
-if ($the_range != $auth->auth['uname'] && $the_range != 'studip'){
+
+if (get_Username($the_range))
+	$the_range = get_Username($the_range);
+
+if (get_Userid($the_range))
+	$isUserrange = 1;
+
+if ($the_range != $auth->auth['uname'] && $the_range != 'studip' && !$isUserrange){
 	$view_mode = get_object_type($the_range);
 	if ($view_mode == "fak"){
 		$view_mode = "inst";
