@@ -1011,7 +1011,10 @@ switch ($skip_closed_requests) {
 if ($cancel_edit_request_x) {
 	if (sizeof($resources_data["requests_open"]) < sizeof ($resources_data["requests_working_on"])) {
 		$msg->addMsg(40, array($PHP_SELF, $PHP_SELF));
+		//hmmm ???
 		//$resources_data["requests_working_on"] = FALSE;
+		//$resources_data["requests_open"] = false;
+		//$resources_data["requests_working_pos"] = 0;
 		$save_state_x = FALSE;
 	}
 	$resources_data["view"] = "requests_start";
@@ -1048,7 +1051,7 @@ if (($start_multiple_mode_x) || ($single_request)) {
 			$resources_data["requests_working_on"][] = array("request_id" => $single_request, "closed" => FALSE);
 			$resources_data["requests_open"][$single_request] = TRUE;
 		}
-	} else {
+	} elseif (is_array($selected_requests)) {
 		//order requests
 		$in =  "('".join("','",array_keys($selected_requests))."')";
 		if ($resolve_requests_order == "complex")
