@@ -1,5 +1,4 @@
 <?php
-
 /*
 bb.php - Big Brother Bilder Browser
 Copyright (C) 2001 Cornelis Kater <ckater@gwdg.de>
@@ -19,39 +18,29 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-        page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-         $perm->check("root");
-        ?>
-<html>
-<head>
-        <title>Stud.IP</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
-        <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-        <body bgcolor=white>
-</head>
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("root");
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<?php
-  	chdir ('/usr/local/httpd/htdocs/seminar/');
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
+// -- here you have to put initialisations for the current page
+// chdir ('/usr/local/httpd/htdocs/studip/');
 
-<!-- hier muessen Seiten-Initialisierungen passieren -->
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
-<?php
-        include "header.php";   //hier wird der "Kopf" nachgeladen
-        include "links_admin.inc.php";
-
-        $db=new DB_Seminar;
-        $db2=new DB_Seminar;
-         ?>
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	 ?>
   
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b>Der geheime Bilderbrowser</b></td></tr>
 	<tr><td class="blank" colspan=2><br><br>Unsch&ouml;n dass wir uns hier sehen... diese Seite ist das geheime Easteregg von Stud.IP. Wenn es jemand hierher geschafft hat, der nicht zum Team geh&ouml;rt, dann k&uuml;ndige ich.<br><br>
 	<i>Cornelis</i><br><br>
 	<?
-	$folder=opendir("user/");
+	$folder=opendir("$ABSOLUTE_PATH_STUDIP/user/");
 	$i=0;
 	while ($entry=readdir($folder))
 		{
@@ -73,15 +62,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		if ((($i % 4) ==0)  && (!$i==0))  echo"</tr><tr>";
 		}
 	echo "</tr></table>";
-/*
   
-	       <table border="0" cellpadding="0" cellspacing="2" width="100%" align="center">
-		
-		</table>
+?>	
+		</td></tr></table>
  
- 	</table>*/
- 	
-         page_close();
+<?
+	 page_close();
  ?>
 </body>
 </html>
