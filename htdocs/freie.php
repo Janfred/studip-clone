@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 function get_my_sem_values(&$my_sem) {
-	 //global $user,$auth;
 	 $db2 = new DB_seminar;
 	 $my_semids="('".implode("','",array_keys($my_sem))."')";
 // Postings
@@ -31,28 +30,26 @@ function get_my_sem_values(&$my_sem) {
 	 while($db2->next_record()) {
 	 $my_sem[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
 	 }
-
 //dokumente
 	 $db2->query ("SELECT seminar_id , count(*) as count FROM dokumente WHERE seminar_id IN ".$my_semids." GROUP BY seminar_id");
 	 while($db2->next_record()) {
 	 $my_sem[$db2->f("seminar_id")]["dokumente"]=$db2->f("count");
 	 }
-
 //News
-	 $db2->query ("SELECT range_id,count(*) as count  FROM news LEFT JOIN news_range USING(news_id) WHERE range_id IN ".$my_semids." GROUP BY range_id");
+	 $db2->query ("SELECT range_id,count(*) as count  FROM news_range  LEFT JOIN news USING(news_id) WHERE range_id IN ".$my_semids." GROUP BY range_id");
 	 while($db2->next_record()) {
 	 $my_sem[$db2->f("range_id")]["news"]=$db2->f("count");
 	 }
 // Literatur?
 	 $db2->query ("SELECT range_id,chdate,user_id FROM literatur WHERE range_id IN ".$my_semids);
-	 while($db2->next_record()) {
+	while($db2->next_record()) {
+	 $my_sem[$db2->f("range_id")]["literatur"]=TRUE;
 	 }
-// Termine
+//termine
 	 $db2->query ("SELECT range_id,count(*) as count FROM termine WHERE range_id IN ".$my_semids." GROUP BY range_id");
 	 while($db2->next_record()) {
 	 $my_sem[$db2->f("range_id")]["termine"]=$db2->f("count");
 	 }
-
 	 return;
 }  // Ende function get_my_sem_values
 
@@ -193,3 +190,4 @@ if ($num_my_sem){
   page_close()
  ?>
 <!-- $Id$ -->
+
