@@ -295,15 +295,47 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	$types = implode("','", $types);
 	
 	// current semester
-	$now = time();
+	/* $now = time();
 	foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
 		if ($sem["beginn"] >= $now)
 			break;
-	}
+	}*/
 	
 	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
+	$now = time();
+	$i = -1;
+	$max = -1;
+	if ($sem_range == "current") {
+		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
+			if ($sem["beginn"] >= $now) {
+				$i = $key - 1;
+				break;
+			}
+		}
+		if ($i == 0 || $i == -1)
+			return;
+	}
+	else if ($sem_range == "three") {
+		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
+			if ($sem["beginn"] >= $now) {
+				$max = $key + 1;
+				break;
+			}
+			if ($sem["beginn"] <= $now)
+				$i = $key - 1;
+		}
+		if ($i == -1 || $max == -1)
+			return;
+		if ($i == 0)
+			$i = 1;
+	}
+	else {
+		$max = sizeof($GLOBALS["SEMESTER"]) + 1;
+		$i = 1;
+	}
+	
 	if ($sem_range != "current") {
-		if ($sem_range == "three") {
+	/*	if ($sem_range == "three") {
 			if ($key > 1)
 				$i = -1;
 			else
@@ -316,12 +348,12 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 		else {
 			$i = 1 - $key;
 			$max = sizeof($GLOBALS["SEMESTER"]) - $key + 1;
-		}
+		}*/
 		
 		$out = "";
 		for (;$i < $max; $i++) {
-			$start = $GLOBALS["SEMESTER"][$key + $i]["beginn"];
-			$end = $GLOBALS["SEMESTER"][$key + $i]["ende"];
+			$start = $GLOBALS["SEMESTER"][$i]["beginn"];
+			$end = $GLOBALS["SEMESTER"][$i]["ende"];
 				
 			$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 			$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
@@ -370,8 +402,8 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 		}
 	}
 	else{
-		$start = $GLOBALS["SEMESTER"][$key]["beginn"];
-		$end = $GLOBALS["SEMESTER"][$key]["ende"];
+		$start = $GLOBALS["SEMESTER"][$i]["beginn"];
+		$end = $GLOBALS["SEMESTER"][$i]["ende"];
 		
 		$out .= "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 		$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";

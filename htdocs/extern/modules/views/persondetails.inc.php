@@ -14,8 +14,8 @@ $instituts_id = $this->config->range_id;
 $username = $args["username"];
 $sem_id = $args["seminar_id"];
 
-$db_inst =& new DB_Institut();
-$db =& new DB_Institut();
+$db_inst =& new DB_Seminar();
+$db =& new DB_Seminar();
 
 $query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
 						. $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname,"
@@ -131,7 +131,7 @@ function news (&$this, $db, $alias_content, $text_div, $text_div_end) {
 		$subheadline_div_end = "";
 	}
 	
-	$db_news = new DB_Institut();
+	$db_news = new DB_Seminar();
 	$query = "SELECT * FROM news_range nr LEFT JOIN news n USING(news_id) WHERE "
 					. "nr.range_id = '" . $db->f("user_id") . "' AND user_id = '" . $db->f("user_id")
 					. "' AND date <= " . time() . " AND (date + expire) >= " . time();
@@ -208,7 +208,7 @@ function termine (&$this, $db, $alias_content, $text_div, $text_div_end) {
 }
 
 function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
-	$db_kategorien = new DB_Institut();
+	$db_kategorien = new DB_Seminar();
 	$query = "SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON (range_id=user_id) "
 	       ."WHERE username='" . $db->f("username") . "' AND hidden=0";
 	$db_kategorien->query($query);
@@ -256,38 +256,48 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	}
 	$types = implode("','", $types);
 	
-	// current semester
+	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
 	$now = time();
-	foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
-		if ($now >= $sem["beginn"])
-			break;
+	$i = -1;
+	$max = -1;
+	if ($sem_range == "current") {
+		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
+			if ($sem["beginn"] >= $now) {
+				$i = $key - 1;
+				break;
+			}
+		}
+		if ($i == 0 || $i == -1)
+			return;
+	}
+	else if ($sem_range == "three") {
+		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
+			if ($sem["beginn"] >= $now) {
+				$max = $key + 1;
+				break;
+			}
+			if ($sem["beginn"] <= $now)
+				$i = $key - 1;
+		}
+		if ($i == -1 || $max == -1)
+			return;
+		if ($i == 0)
+			$i = 1;
+	}
+	else {
+		$max = sizeof($GLOBALS["SEMESTER"]) + 1;
+		$i = 1;
 	}
 	
 	$lnk_sdet = $this->getModuleLink("Lecturedetails",
 			$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
 	$lnk_sdet .= "&seminar_id=";
 	
-	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
 	if ($sem_range != "current") {
-		if ($sem_range == "three") {
-			if ($key > 1)
-				$i = -1;
-			else
-				$i = 0;
-			if ((sizeof($GLOBALS["SEMESTER"]) - $key) > 0)
-				$max = 2;
-			else
-				$max = 1;
-		}
-		else {
-			$i = 1 - $key;
-			$max = sizeof($GLOBALS["SEMESTER"]) - $key + 1;
-		}
-		
 		$out = "";
 		for (;$i < $max; $i++) {
-			$start = $GLOBALS["SEMESTER"][$key + $i]["beginn"];
-			$end = $GLOBALS["SEMESTER"][$key + $i]["ende"];
+			$start = $GLOBALS["SEMESTER"][$i]["beginn"];
+			$end = $GLOBALS["SEMESTER"][$i]["ende"];
 			$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
 		           ."WHERE user_id='".$db->f("user_id")."' AND "
 				       ."su.status LIKE 'dozent' AND ((start_time >= $start "
@@ -352,8 +362,8 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 		}
 	}
 	else {
-		$start = $GLOBALS["SEMESTER"][$key]["beginn"];
-		$end = $GLOBALS["SEMESTER"][$key]["ende"];
+		$start = $GLOBALS["SEMESTER"][$i]["beginn"];
+		$end = $GLOBALS["SEMESTER"][$i]["ende"];
 		$out = "";
 		$db1->query("SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
 		  	        ."WHERE user_id LIKE '".$db->f("user_id")."' AND "
