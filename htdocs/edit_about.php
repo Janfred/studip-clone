@@ -36,9 +36,10 @@ require_once "visual.inc.php";
 class about extends messaging  
 {
 var $db;     //unsere Datenbankverbindung
-var $auth_user = array();     // assoziatives Array, enthält die Userdaten aus der Tabelle auth_user_md5
-var $user_info = array();     // assoziatives Array, enthält die Userdaten aus der Tabelle user_info
-var $user_inst = array();     // assoziatives Array, enthält die Userdaten aus der Tabelle user_inst
+var $auth_user = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle auth_user_md5
+var $user_info = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_info
+var $user_inst = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_inst
+var $user_studiengang = array(); // assoziatives Array, enthält die Userdaten aus der Tabelle user_studiengang
 var $check="";    //Hilfsvariable für den Rechtecheck
 var $special_user=FALSE;  // Hilfsvariable für bes. Institutsfunktionen
 var $msg = ""; //enthält evtl Fehlermeldungen
@@ -98,6 +99,11 @@ function get_user_details()        // füllt die arrays  mit Daten
     if (!$this->user_info["Home"])
     	$this->user_info["Home"]=$this->default_url;
     }
+   }
+
+   $this->db->query("SELECT user_studiengang.*,studiengaenge.name FROM user_studiengang LEFT JOIN studiengaenge USING (studiengang_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY studiengang_id");
+   while ($this->db->next_record()) {
+         $this->user_studiengang[$this->db->f("studiengang_id")] = array ("name" => $this->db->f("name"));
    }
 
 
@@ -165,6 +171,34 @@ function imaging($img,$img_size,$img_name)
    }
   return;
 }
+
+
+function studiengang_edit($studiengang_delete,$new_studiengang)
+{
+ if (is_array($studiengang_delete))
+   {
+   for ($i=0; $i < count($studiengang_delete); $i++)
+    {
+    $this->db->query("DELETE FROM user_studiengang WHERE user_id='".$this->auth_user["user_id"]."' AND studiengang_id='$studiengang_delete[$i]'");
+    if (!$this->db->affected_rows()) $this->msg = $this->msg."error§Fehler beim L&ouml;schen in user_studiengang bei ID=$studiengang_delete[$i]§";
+    }
+   }
+
+  if ($new_studiengang)
+   {
+   $this->db->query("INSERT INTO user_studiengang (user_id,studiengang_id) VALUES ('".$this->auth_user["user_id"]."','$new_studiengang')");
+   if (!$this->db->affected_rows()) $this->msg = $this->msg."error§Fehler beim Einf&uuml;gen in user_studiengang bei ID=$new_studiengang§";
+   }
+
+  if ( ($studiengang_delete || $new_studiengang) && !$this->msg)
+  {
+  $this->msg = "msg§Die Zuordnung zu Studiengängen wurde ge&auml;ndert.";
+  $this->priv_msg= "Die Zuordnung zu Studiengängen wurde ge&auml;ndert!";
+  }
+
+  return;
+}
+
 
 
 function inst_edit($inst_delete,$new_inst)
@@ -389,6 +423,21 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 }
 
 
+function select_studiengang()   //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Studiengängen
+{
+  echo "<select name=\"new_studiengang\" width=30><option selected></option>";
+  $this->db->query("SELECT a.studiengang_id,a.name FROM studiengaenge AS a LEFT JOIN user_studiengang AS b ON (b.user_id='".$this->auth_user["user_id"]."' AND a.studiengang_id=b.studiengang_id) WHERE b.studiengang_id IS NULL ORDER BY a.name");
+
+  while ($this->db->next_record())
+   {
+   echo "<option value=\"".$this->db->f("studiengang_id")."\">".htmlReady(substr($this->db->f("name"),0,50))."</option>";
+   }
+  echo "</select>";
+
+  return;
+}
+
+
 function select_inst()   //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Instituten
 {
   echo "<select name=\"new_inst\" width=30><option selected></option>";
@@ -568,6 +617,12 @@ if ($cmd=="copy")
  {
   $my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
 
+  }
+
+//Veränderungen an Studiengängen
+if ($cmd=="studiengang_edit")
+ {
+  $my_about->studiengang_edit($studiengang_delete,$new_studiengang);
   }
 
 //Veränderungen an Instituten für Studies
@@ -1010,13 +1065,51 @@ ELSE {
    }
 }
 
-  //Institute, an denen studiert wird
+ //Studiengänge die ich belegt habe
+if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")  // nur für Autoren und Tutoren
+   {
+   $cssSw->resetClass();
+   $cssSw->switchClass();
+   echo "<tr><td class=\"blank\">";
+   echo "<b>&nbsp; Ich bin in folgenden Studiengängen immatrikuliert:</b>";
+   echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
+   echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view\" method=\"POST\">";
+   echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
+   reset ($my_about->user_studiengang);
+   $flag=FALSE;
+
+   $i=0;
+   while (list ($studiengang_id,$details) = each ($my_about->user_studiengang)){
+         if (!$i)
+            echo "<tr><td class=\"steelgraudunkel\" width=\"80%\">Studiengang</td><td class=\"steelgraudunkel\" width=\"30%\">austragen</ts></tr>";
+         $cssSw->switchClass();
+         echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\"><input type=\"CHECKBOX\" name=\"studiengang_delete[]\" value=\"$studiengang_id\"></td><tr>";
+         $i++;
+         $flag=TRUE;
+   }
+
+   if (!$flag) echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\"><br /><font size=-1><b>Sie haben sich noch keinem Studiengang zugeordnet.</b><br /><br />Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!</font></td><tr>";
+   $cssSw->resetClass();
+   $cssSw->switchClass();
+   echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden Liste aus:<br>";
+   echo "<br><div align=\"center\">";
+   $my_about->select_studiengang();
+   echo "</div><br></b>Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.<br>";
+   echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
+   echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
+   echo "</form>";
+   }
+ echo "</td></tr></table>";
+
+
+
+//Institute, an denen studiert wird
   if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")
    {
    $cssSw->resetClass();
    $cssSw->switchClass();    
    echo "<tr><td class=\"blank\">";
-   echo "<b>&nbsp; Ich studiere an folgenden Einrichtungen:</b>";
+   echo "<br><b>&nbsp; Ich studiere an folgenden Einrichtungen:</b>";
    echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
    echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view\" method=\"POST\">";
    echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
