@@ -244,7 +244,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 					<tr valign="top" align="center">
 						<td colspan=>
-							<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class="blank">
+							<table border="0" cellpadding="0" cellspacing="0" width="96%" align="center" class="blank">
 								<tr>
 									<td class="blank" colspan="2">&nbsp;
 									
@@ -288,7 +288,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ECHO "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 		if ($lastVisit <= $values["chdate"])
 			print ("<font color=\"red\">");    // red color for new metadates
-		ECHO htmlReady($values["name"]);
+		ECHO "<font size=-1>".htmlReady($values["name"])."</font>";
 		if ($lastVisit <= $values["chdate"])
 			print ("</font>");
 		print ("</a></td>");
@@ -317,9 +317,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
 			echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
 		elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\">&nbsp;<img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a></td>", $semid);
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a></td>", $semid);
 		else
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\">&nbsp;<img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td>", $semid);			
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td>", $semid);			
 		 echo "</tr>\n";
 		}
 // 	echo "</table>";
@@ -371,10 +371,10 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
 	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
 	printf ("<td width=\"54%%\" class=\"%s\">",$cssSw->getClass());
-	print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";
-	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
-	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s %s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
-	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldel." : "Wartel.");
+	print "<a href=details.php?sem_id=".$db->f("seminar_id")."><font size=-1>".$db->f("Name")."</font></a></td>";
+	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
+	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
+	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldel." : "Wartel.");
 	printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
 	}
 	print "</table></td>";
@@ -418,7 +418,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 								</tr>
 								<tr>
 									<td width="1%" valign="top">
-										<img src="./pictures/haken.gif">
+										<img src="./pictures/ausruf_small.gif">
 									</td>
 									<td class="blank" width="100%">
 									 	<? $db->query("SELECT count(*) as count  FROM seminare");
