@@ -57,12 +57,12 @@ class ExternElementTreePath extends ExternElement {
 	
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-		if ($faulty_values = "")
+		if ($faulty_values == '')
 			$faulty_values = array();	
-		$out = "";
-		$tag_headline = "";
-		$table = "";
-		if ($edit_form == "")
+		$out = '';
+		$tag_headline = '';
+		$table = '';
+		if ($edit_form == '')
 			$edit_form =& new ExternEditHtml($this->config, $post_vars, $faulty_values, $anker);
 		
 		$edit_form->setElementName($this->getName());

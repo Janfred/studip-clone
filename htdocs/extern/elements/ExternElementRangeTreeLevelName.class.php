@@ -73,12 +73,12 @@ class ExternElementRangeTreeLevelName extends ExternElement {
 		
 		global $INST_TYPE;
 		
-		if ($faulty_values = "")
+		if ($faulty_values == '')
 			$faulty_values = array();	
-		$out = "";
-		$tag_headline = "";
-		$table = "";
-		if ($edit_form == "")
+		$out = '';
+		$tag_headline = '';
+		$table = '';
+		if ($edit_form == '')
 			$edit_form =& new ExternEditHtml($this->config, $post_vars, $faulty_values, $anker);
 		
 		$edit_form->setElementName($this->getName());

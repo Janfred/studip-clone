@@ -115,7 +115,7 @@ class ExternElementLinkIntern extends ExternElement {
 	}
 	
 	function checkValues ($attribute, $value) {
-		if ($attribute = "srilink")
+		if ($attribute == "srilink")
 			return preg_match("|^https?://.*$|i", $value);
 	}
 	

@@ -78,16 +78,16 @@ class ExternElementMain extends ExternElement {
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
 		
-		$out = "";
-		$table = "";
-		if ($edit_form == "")
+		$out = '';
+		$table = '';
+		if ($edit_form == '')
 			$edit_form =& new ExternEdit($this->config, $post_vars, $faulty_values, $anker);
 		
 		$edit_form->setElementName($this->getName());
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE);
 		
-		if ($faulty_values = "")
+		if ($faulty_values == '')
 			$faulty_values = array();
 		
 		$edit_function = $this->edit_function;

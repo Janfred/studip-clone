@@ -90,11 +90,11 @@ class ExternElementReplaceTextSemType extends ExternElement {
 			$this->config->store();
 		}
 					
-		if ($faulty_values = "")
+		if ($faulty_values == '')
 			$faulty_values = array();	
-		$out = "";
-		$table = "";
-		if ($edit_form == "")
+		$out = '';
+		$table = '';
+		if ($edit_form == '')
 			$edit_form =& new ExternEditHtml($this->config, $post_vars, $faulty_values, $anker);
 		
 		$edit_form->setElementName($this->getName());

@@ -92,16 +92,16 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			$edit_form = "", $anker = "") {
 		
 		update_generic_datafields($this->config, $this->data_fields, $this->field_names, "sem");
-		$out = "";
-		$table = "";
-		if ($edit_form == "")
+		$out = '';
+		$table = '';
+		if ($edit_form == '')
 			$edit_form =& new ExternEditModule($this->config, $post_vars, $faulty_values, $anker);
 		
 		$edit_form->setElementName($this->getName());
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE, $anker);
 		
-		if ($faulty_values = "")
+		if ($faulty_values == '')
 			$faulty_values = array();
 		
 		$headline = $edit_form->editHeadline(_("Name der Konfiguration"));
