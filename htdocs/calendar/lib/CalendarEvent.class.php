@@ -144,7 +144,7 @@ class CalendarEvent extends Event {
 		
 		switch ($this->properties['CLASS']) {
 			case 'PUBLIC':
-				return _("&ouml;ffentlich");
+				return _("öffentlich");
 			case 'CONFIDENTIAL':
 				return _("vertraulich");
 			default:
@@ -474,9 +474,16 @@ class CalendarEvent extends Event {
 								$this->properties['RRULE']['day'], $this->properties['RRULE']['linterval']);
 					}
 					else {
-						$text = sprintf(_("Der Termin wird jeden %s. %s alle %s Monate wiederholt."),
-							$this->properties['RRULE']['sinterval'], $wdays,
-							$this->properties['RRULE']['linterval']);
+						if ($this->properties['RRULE']['sinterval'] != '5') {
+							$text = sprintf(_("Der Termin wird jeden %s. %s alle %s Monate wiederholt."),
+									$this->properties['RRULE']['sinterval'], $wdays,
+									$this->properties['RRULE']['linterval']);
+						}
+						else {
+							$text = sprintf(_("Der Termin wird jeden letzten %s alle %s Monate wiederholt."),
+									$wdays,
+									$this->properties['RRULE']['linterval']);
+						}
 					}
 				}
 				else {
@@ -485,9 +492,16 @@ class CalendarEvent extends Event {
 								$this->properties['RRULE']['day'], $this->properties['RRULE']['linterval']);
 					}
 					else {
-						$text = sprintf(_("Der Termin wird am %s. %s jeden Monat wiederholt."),
-							$this->properties['RRULE']['sinterval'], $wdays,
-							$this->properties['RRULE']['linterval']);
+						if ($this->properties['RRULE']['sinterval'] != '5') {
+							$text = sprintf(_("Der Termin wird am %s. %s jeden Monat wiederholt."),
+									$this->properties['RRULE']['sinterval'], $wdays,
+									$this->properties['RRULE']['linterval']);
+						}
+						else {
+							$text = sprintf(_("Der Termin wird jeden letzten %s alle %s Monate wiederholt."),
+									$wdays,
+									$this->properties['RRULE']['linterval']);
+						}
 					}
 				}
 				break;
@@ -502,9 +516,16 @@ class CalendarEvent extends Event {
 							$month_names[$this->properties['RRULE']['month'] - 1]);
 				}
 				else {
-					$text = sprintf(_("Der Termin wird jeden %s. %s im %s wiederholt."),
-							$this->properties['RRULE']['sinterval'], $wdays,
-							$month_names[$this->properties['RRULE']['month'] - 1]);
+					if ($this->properties['RRULE']['sinterval'] != '5') {
+						$text = sprintf(_("Der Termin wird jeden %s. %s im %s wiederholt."),
+								$this->properties['RRULE']['sinterval'], $wdays,
+								$month_names[$this->properties['RRULE']['month'] - 1]);
+					}
+					else {
+						$text = sprintf(_("Der Termin wird jeden letzten %s im %s wiederholt."),
+								$wdays,
+								$month_names[$this->properties['RRULE']['month'] - 1]);
+					}
 				}
 				break;
 			
