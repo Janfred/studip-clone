@@ -117,7 +117,9 @@ class ExternElementMainPersons extends ExternElementMain {
 		$headline = $edit_form->editHeadline(_("Allgemeine Angaben zum Tabellenaufbau"));
 		
 		$edit_function = $this->edit_function;
-		$table = $edit_form->$edit_function($this->field_names, array());
+		for ($i = 5; $i < sizeof($this->field_names); $i++)
+			$hide_sort[] = $i;
+		$table = $edit_form->$edit_function($this->field_names, array('sort' => $hide_sort));
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
