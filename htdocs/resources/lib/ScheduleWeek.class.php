@@ -240,7 +240,7 @@ class ScheduleWeek {
 				if ($k==0)  {
 					echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>"; 
 					if ($i<10) echo "0";
-					echo $i, ".00 "._("Uhr")."</td>";
+					echo $i, ":00 "._("Uhr")."</td>";
 				}
 				else echo "<tr>";
 				$l=1;
