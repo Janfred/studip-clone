@@ -1,3 +1,8 @@
+<?
+require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+global $_language;
+$_language_path = init_i18n($_language);
+?>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
