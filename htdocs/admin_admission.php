@@ -464,7 +464,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			if ($db2->affected_rows()) {
 				while ($db->next_record()) {
 					$message="Ihr Abonnement der Veranstaltung **".$admin_admission_data["name"]."** wurde aufgehoben, da die Veranstaltung mit einem teilnahmebeschränkten Anmeldeverfahren versehen wurde. \nWenn Sie einen Platz in der Veranstaltung bekommen wollen, melden Sie sich bitte erneut an.";
-					$messaging->insert_message (addslashes($message), $db->f("username"), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("vorläufig akzeptiert"), TRUE);
+					$messaging->insert_message (addslashes($message), $db->f("username"), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Abonnement aufgehoben"), TRUE);
 				}
 			}
 
