@@ -36,18 +36,31 @@ require_once($ABSOLUTE_PATH_STUDIP . "/TreeAbstract.class.php");
 */
 class StudipRangeTree extends TreeAbstract {
 	
+	var $sem_number;
 	
+	var $sem_status;
+	
+	var $sem_dates;
+
 	/**
 	* constructor
 	*
 	* do not use directly, call &TreeAbstract::GetInstance("StudipRangeTree")
 	* @access private
 	*/ 
-	function StudipRangeTree() {
+	function StudipRangeTree($args) {
 		$this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
 		$this->studip_objects['inst'] = array('pk' => 'Institut_id', 'table' => 'Institute');
 		$this->studip_objects['fak'] = array('pk' => 'Institut_id', 'table' => 'Institute');
+		if (isset($args['sem_number']) ){
+			$this->sem_number = $args['sem_number'];
+		}
+		if (isset($args['sem_status']) ){
+			$this->sem_status = $args['sem_status'];
+		}
 		parent::TreeAbstract(); //calling the baseclass constructor 
+		$this->sem_dates = $GLOBALS['SEMESTER'];
+		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
 	}
 
 	/**
@@ -59,7 +72,9 @@ class StudipRangeTree extends TreeAbstract {
 	function init(){
 		parent::init();
 		$this->tree_data['root']['studip_object_id'] = 'root';
-		$db = $this->view->get_query("view:TREE_GET_DATA");
+		$this->view->params[0] = (isset($this->sem_number)) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),d.Seminar_id,NULL)"  : "d.Seminar_id";
+		$this->view->params[1] = (isset($this->sem_status)) ? " AND d.status IN('" . join("','", $this->sem_status) . "')" : " ";
+		$db = $this->view->get_query("view:TREE_GET_DATA_WITH_SEM");
 		while ($db->next_record()){
 			$item_name = $db->f("name");
 			if ($db->f("studip_object")){
@@ -67,7 +82,7 @@ class StudipRangeTree extends TreeAbstract {
 			}
 			$this->tree_data[$db->f("item_id")] = array("studip_object" => $db->f("studip_object"),
 													"studip_object_id" => $db->f("studip_object_id"),
-													"fakultaets_id" => $db->f("fakultaets_id"));
+													"fakultaets_id" => $db->f("fakultaets_id"),"entries" => $db->f("entries"));
 			$this->storeItem($db->f("item_id"), $db->f("parent_id"), $item_name, $db->f("priority"));
 		}
 	}
@@ -130,6 +145,38 @@ class StudipRangeTree extends TreeAbstract {
 		return $ret_id;
 	}
 	
+	function getSemIds($item_id,$ids_from_kids = false){
+		if (!$this->tree_data[$item_id])
+			return false;
+		if ($ids_from_kids){
+			$this->view->params[0] = $this->getKidsKids($item_id);
+		}
+		$this->view->params[0][] = $item_id;
+		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number IN(" . join(",".$this->sem_number) .")" : " ";
+		$ret = false;
+		$rs = $this->view->get_query("view:RANGE_TREE_GET_SEMIDS");
+		while($rs->next_record()){
+			$ret[] = $rs->f(0);
+		}
+		return $ret;
+	}
+	
+	function getNumEntries($item_id, $num_entries_from_kids = false){
+		if (!$this->tree_data[$item_id])
+			return false;
+		if (!$num_entries_from_kids){
+			return $this->tree_data[$item_id]["entries"];
+		} else {
+			$item_list = $this->getKidsKids($item_id);
+			$item_list[] = $item_id;
+			$ret = 0;
+			$num_items = count($item_list);
+			for ($i = 0; $i < $num_items; ++$i){
+				$ret += $this->tree_data[$item_list[$i]]["entries"];
+			}
+			return $ret;
+		}
+	}
 }
 //$test =& TreeAbstract::GetInstance("StudipRangeTree");
 //echo "<pre>";

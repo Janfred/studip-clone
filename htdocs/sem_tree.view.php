@@ -86,7 +86,7 @@ $_views["SEM_SEARCH_SEM"] = array("query" =>"SELECT c.seminar_id, " . $_views['s
 $_views["SEM_GET_FAKS"] = array("query" => "SELECT DISTINCT b.fakultaets_id,d.sem_tree_id FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN sem_tree d ON (b.fakultaets_id=d.studip_object_id) WHERE a.seminar_id=?");
 $_views["SEM_GET_INST"] = array("query" => "SELECT Institut_id FROM seminare WHERE Seminar_id=?");
 
-$_views["SEM_INST_GET_SEM"] = array("query" => "SELECT b.Seminar_id," . $_views['sem_number_sql'] . " AS sem_number FROM seminar_inst a LEFT JOIN seminare b USING (seminar_id) WHERE a.Institut_id IN (&)
+$_views["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id," . $_views['sem_number_sql'] . " AS sem_number FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE a.Institut_id IN (&)
 												§ §  ");
 												
 		

@@ -153,7 +153,7 @@ if ($_REQUEST['cmd'] == "show_sem_range_tree"){
 	$inst_ids[] = $range_object->item_data['studip_object_id'];
 	$db_view = new DbView();
 	$db_view->params[0] = $inst_ids;
-	$db_view->params[1] = (is_array($_sem_status)) ? " AND b.status IN('" . join("','",$_sem_status) ."')" : "";
+	$db_view->params[1] = (is_array($_sem_status)) ? " AND c.status IN('" . join("','",$_sem_status) ."')" : "";
 	$db_view->params[2] = (is_array($default_sems)) ? " HAVING sem_number IN (" . join(",",$default_sems) .")" : "";
 	$db_snap = new DbSnapshot($db_view->get_query("view:SEM_INST_GET_SEM"));
 	if ($db_snap->numRows){
@@ -183,9 +183,9 @@ if ((!$sem_browse_data["extern"]) ) {
 	if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset($sem_browse_data["cmd"]))) {
 		$search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"), 'comment' => _("Kommentar"));
 		$search_obj->search_fields['type']['class'] = ($show_class) ? $show_class : "all";
-		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo $search_obj->getFormStart("$PHP_SELF?send=yes");
-		echo "<tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
+		echo "<tr><td height=\"40\" class=\"steel1\" align=\"center\" valign=\"middle\" >";
 		echo _("Schnellsuche:") . "&nbsp;";
 		echo $search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle'));
 		echo "&nbsp;";
@@ -195,7 +195,7 @@ if ((!$sem_browse_data["extern"]) ) {
 		echo "&nbsp;<a href=\"$PHP_SELF?cmd=xts";
 		echo "\"><img style=\"vertical-align:middle\" " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
 		if ($sem_browse_data['level'] == "vv"){
-			$search_obj->tree =& $sem_tree->tree; 
+			$search_obj->sem_tree =& $sem_tree->tree; 
 			if ($sem_tree->start_item_id != 'root'){
 				$search_obj->search_scopes[] = $sem_tree->start_item_id;
 			}
@@ -203,7 +203,16 @@ if ((!$sem_browse_data["extern"]) ) {
 			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("scope_choose",array('style' => 'vertical-align:middle'),$sem_tree->start_item_id);
 			echo "\n<input type=\"hidden\" name=\"start_item_id\" value=\"{$sem_tree->start_item_id}\">";
 		}
-		echo "</td></tr><tr><td class=\"steel1\"  align=\"center\"></td></tr>";
+		if ($sem_browse_data['level'] == "ev"){
+			$search_obj->range_tree =& $range_tree->tree; 
+			if ($range_tree->start_item_id != 'root'){
+				$search_obj->search_ranges[] = $range_tree->start_item_id;
+			}
+			echo "</td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
+			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("range_choose",array('style' => 'vertical-align:middle'),$range_tree->start_item_id);
+			echo "\n<input type=\"hidden\" name=\"start_item_id\" value=\"{$range_tree->start_item_id}\">";
+		}
+		echo "</td></tr>";
 		echo $search_obj->getFormEnd();
 		echo "</table>\n";
 	}
@@ -713,8 +722,8 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data['sset'])) {
 	}
 echo "</form></table>";
 } elseif ($sem_browse_data['level'] == "f"){
-	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-	echo "\n<tr><td align=\"center\"><br />";
+	echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+	echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\">";
 	printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs\">","</a>");
 	if (!$hide_bereich){
 		printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&view=1&reset_all=1\">","</a>");
@@ -722,14 +731,14 @@ echo "</form></table>";
 	echo "</td></tr>\n</table>";
 }
 if ($sem_browse_data['level'] == "vv"){
-	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 	echo "\n<tr><td align=\"center\">";
 	$sem_tree->showSemTree();
 	echo "</td></tr>";
 	echo "\n</table>";
 }	
 if ($sem_browse_data['level'] == "ev"){
-	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 	echo "\n<tr><td align=\"center\">";
 	$range_tree->showSemRangeTree();
 	echo "</td></tr>";

@@ -20,7 +20,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once($ABSOLUTE_PATH_STUDIP . "StudipSemRangeTree.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "StudipRangeTree.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "RangeTreeObject.class.php");
 
 /**
@@ -53,7 +53,7 @@ class StudipSemRangeTreeViewSimple {
 		if ($sem_status !== false){
 			$args['sem_status'] =  $sem_status;
 		}
-		$this->tree =& TreeAbstract::GetInstance("StudipSemRangeTree",$args);
+		$this->tree =& TreeAbstract::GetInstance("StudipRangeTree",$args);
 	}
 	
 	function showSemRangeTree(){

@@ -21,6 +21,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once($ABSOLUTE_PATH_STUDIP . "StudipSemTree.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "StudipRangeTree.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 
@@ -45,7 +46,9 @@ class StudipSemSearch {
 	
 	var $num_sem;
 	
-	var $tree;
+	var $sem_tree;
+	
+	var $range_tree;
 	
 	var $search_done = false;
 	
@@ -72,9 +75,11 @@ class StudipSemSearch {
 								'category' => array('type' => 'select', 'default_value' => 'all', size => 50),
 								'combination' => array('type' => 'select', 'default_value' => 'AND'),
 								'scope_choose' => array('type' => 'select', 'default_value' => 'root', size => 50),
+								'range_choose' => array('type' => 'select', 'default_value' => 'root', size => 50),
 								'qs_choose' => array('type' => 'select', 'default_value' => 'all', 'content' => array()));
 	
 	var $search_scopes = array();
+	var $search_ranges = array();
 	
 	
 	
@@ -154,12 +159,20 @@ class StudipSemSearch {
 										'value' => $class_key);
 				}
 		} elseif ($name == "scope_choose"){
-			if(!is_object($this->tree)){
-				$this->tree =& TreeAbstract::GetInstance("StudipSemTree");
+			if(!is_object($this->sem_tree)){
+				$this->sem_tree =& TreeAbstract::GetInstance("StudipSemTree", false);
 			}
-			$options = array(array('name' => htmlReady(my_substr($this->tree->root_name,0,$this->search_fields['scope_choose']['size'])), 'value' => 'root'));
+			$options = array(array('name' => htmlReady(my_substr($this->sem_tree->root_name,0,$this->search_fields['scope_choose']['size'])), 'value' => 'root'));
 			for($i = 0; $i < count($this->search_scopes); ++$i){
-				$options[] = array('name' => htmlReady(my_substr($this->tree->tree_data[$this->search_scopes[$i]]['name'],0,$this->search_fields['scope_choose']['size'])), 'value' => $this->search_scopes[$i]);
+				$options[] = array('name' => htmlReady(my_substr($this->sem_tree->tree_data[$this->search_scopes[$i]]['name'],0,$this->search_fields['scope_choose']['size'])), 'value' => $this->search_scopes[$i]);
+			}
+		} elseif ($name == "range_choose"){
+			if(!is_object($this->range_tree)){
+				$this->range_tree =& TreeAbstract::GetInstance("StudipRangeTree", false);
+			}
+			$options = array(array('name' => htmlReady(my_substr($this->range_tree->root_name,0,$this->search_fields['range_choose']['size'])), 'value' => 'root'));
+			for($i = 0; $i < count($this->search_ranges); ++$i){
+				$options[] = array('name' => htmlReady(my_substr($this->range_tree->tree_data[$this->search_ranges[$i]]['name'],0,$this->search_fields['scope_choose']['size'])), 'value' => $this->search_ranges[$i]);
 			}
 		} elseif ($name == "qs_choose"){
 			$options = array(array('name' =>_("alles"),'value' => 'all'));
@@ -284,10 +297,10 @@ class StudipSemSearch {
 		}
 		
 		if (isset($_REQUEST[$this->form_name . "_scope_choose"]) && $_REQUEST[$this->form_name . "_scope_choose"] != 'root'){
-			if(!is_object($this->tree)){
-				$this->tree =& TreeAbstract::GetInstance("StudipSemTree");
+			if(!is_object($this->sem_tree)){
+				$this->sem_tree =& TreeAbstract::GetInstance("StudipSemTree");
 			}
-			$this->view->params[0] = $this->tree->getKidsKids($_REQUEST[$this->form_name . "_scope_choose"]);
+			$this->view->params[0] = $this->sem_tree->getKidsKids($_REQUEST[$this->form_name . "_scope_choose"]);
 			$this->view->params[0][] = $_REQUEST[$this->form_name . "_scope_choose"];
 			$this->view->params[1] = $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_TREE_GET_SEMIDS"));
@@ -296,7 +309,21 @@ class StudipSemSearch {
 			}
 			unset($snap);
 		}
-			
+		
+		if (isset($_REQUEST[$this->form_name . "_range_choose"]) && $_REQUEST[$this->form_name . "_range_choose"] != 'root'){
+			$range_object =& RangeTreeObject::GetInstance($_REQUEST[$this->form_name . "_range_choose"]);
+			$this->view->params[0] = $range_object->getAllObjectKids();
+			$this->view->params[0][] = $range_object->item_data['studip_object_id'];
+			$this->view->params[1] = $clause;
+			$this->view->params[2] = "";
+			$snap = new DbSnapshot($this->view->get_query("view:SEM_INST_GET_SEM"));
+			if ($snap->numRows){
+				$clause = " AND c.seminar_id IN('" . join("','",$snap->getRows("Seminar_id")) ."')" . $clause;
+			}
+			unset($snap);
+		}
+		
+		
 		if (isset($_REQUEST[$this->form_name . "_lecturer"]) && strlen($_REQUEST[$this->form_name . "_lecturer"]) > 2){
 			$this->view->params[0] = "%".$_REQUEST[$this->form_name . "_lecturer"]."%";
 			$this->view->params[1] = "%".$_REQUEST[$this->form_name . "_lecturer"]."%";

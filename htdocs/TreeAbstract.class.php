@@ -92,11 +92,20 @@ class TreeAbstract {
 		static $tree_instance;
 		
 		if ($args){
-			$class_hash = md5($class_name . serialize($args));
+			$class_hash = $class_name . "_" . md5(serialize($args));
 		} elseif ($args === false && is_array($tree_instance)){
-			$class_hash = key($tree_instance);
+			foreach ($tree_instance as $key => $value){
+				$tmp_name = explode("_",$key);
+				if ($tmp_name[0] == $class_name){
+					$class_hash = $key;
+					break;
+				}
+			}
+			if (!$class_hash){
+				$class_hash = $class_name;
+			}
 		} else {
-			$class_hash = md5($class_name);
+			$class_hash = $class_name;
 		}
 		if (!is_object($tree_instance[$class_hash])){
 			$tree_instance[$class_hash] = new $class_name($args);
