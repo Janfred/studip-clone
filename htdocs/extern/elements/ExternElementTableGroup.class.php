@@ -39,9 +39,9 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementTableGroup extends ExternElement {
 
-	var $attributes = array("td_align", "td_valign", "td_bgcolor", "td_bgcolor_2",
-			"td_class", "td_style", "tr_height", "tr_class", "tr_style", "font_face",
-			"font_size", "font_color", "font_class", "font_style");
+	var $attributes = array("tr_height", "tr_class", "tr_style", "td_align",
+			"td_valign", "td_bgcolor", "td_bgcolor_2", "td_class", "td_style",
+			"font_face", "font_size", "font_color", "font_class", "font_style");
 
 	/**
 	* Constructor
@@ -54,7 +54,7 @@ class ExternElementTableGroup extends ExternElement {
 		
 		$this->name = "TableGroup";
 		$this->real_name = _("Gruppen&uuml;berschriften");
-		$this->description = _("Gruppenüberschriften sind Tabellenzeilen, die eine neue Gruppe einleiten.");
+		$this->description = _("Gruppen&uuml;berschriften sind Tabellenzeilen, die eine neue Gruppe einleiten.");
 	}
 
 }
