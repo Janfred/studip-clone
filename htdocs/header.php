@@ -139,7 +139,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			<tr>
 <?
 				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zurück zur Startseite"),40,"_top");
-				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),40, "_top","left");
+				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),105, "_top","left");
 
 
 
