@@ -16,5 +16,5 @@ $export_icon["htm"] = "txt-icon.gif";
 $export_icon["txt"] = "txt-icon.gif";
 
 $xml_filename = "data.xml";
-if (!isset($xslt_filename)) $xslt_filename = "studip";
+if ($xslt_filename == "") $xslt_filename = "studip";
 ?>
