@@ -120,7 +120,7 @@ if ($sem_portal["bereich"] != "all") {
 			}
 		}
 	}
-echo lala, $sem_portal["bereich"] ;
+
 	$query = "SELECT count(*) AS count FROM seminare WHERE seminare.status IN ('" . join("','", $_sem_status) . "')";
 	$db->query($query);
 	if ($db->next_record())
