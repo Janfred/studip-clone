@@ -45,10 +45,10 @@ class StudipLitClipBoard {
 	
 	function &GetInstance(){
 		static $instance;
-		if (!is_object($instance)){
-			$instance =& new StudipLitClipBoard();
+		if (!is_object($instance[0])){
+			$instance[0] =& new StudipLitClipBoard();
 		}
-		return $instance;
+		return $instance[0];
 	}
 	
 	function StudipLitClipBoard(){
