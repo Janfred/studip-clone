@@ -1,22 +1,37 @@
 <?php
-/*
-index.php - Startseite von Stud.IP (anhaengig vom Status)
-Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* freie.php
+* 
+* Show all courses readable by everyone
+* 
+*
+* @author		Stefan Suchi <suchi@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>
+* @version		$Id$
+* @access		public
+* @module		freie.php
+* @modulegroup	views
+* @package		studip_core
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// freie.php
+// Show all courses readable by everyone 
+// Copyright (C) 2000 Stefan Suchi <suchi@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
@@ -56,26 +71,31 @@ function get_my_sem_values(&$my_sem) {
 
 function print_seminar_content($semid,$my_sem_values) {
   // Postings
-  IF ($my_sem_values["postings"]) ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 alt='".$my_sem_values["postings"]." Postings'></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  if ($my_sem_values["postings"])
+		printf ("<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 %s></a>", tooltip($my_sem_values["postings"]." "._("Postings")));
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
-  IF ($my_sem_values["dokumente"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 alt='".$my_sem_values["dokumente"]." Dokumente'></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-
+  if ($my_sem_values["dokumente"])
+		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 %s></a>", tooltip($my_sem_values["dokumente"]." "._("Dokumente")));
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //News
-  IF ($my_sem_values["news"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 alt='".$my_sem_values["news"]." News'></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-
+  if ($my_sem_values["news"])
+		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 %s></a>", tooltip($my_sem_values["news"]." "._("News")));
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Literatur
-  IF ($my_sem_values["literatur"]) {
-    ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
-		ECHO "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 alt='Zur Literatur und Linkliste'></a>";
+  if ($my_sem_values["literatur"]) {
+    echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
+		printf ("&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 %s></a>", tooltip(_("Zur Literatur und Linkliste")));
   }
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-
+  else echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   // Termine
-  IF ($my_sem_values["termine"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 alt='".$my_sem_values["termine"]." Termine'></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  if ($my_sem_values["termine"])
+		printf ("&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 %s></a>", tooltip($my_sem_values["termine"]." "._("Termine")));
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   echo "&nbsp;&nbsp;";
 
@@ -84,9 +104,6 @@ function print_seminar_content($semid,$my_sem_values) {
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-// -- wir sind jetzt definitiv in keinem Seminar, also... --
-$SessSemName[0] = "";
-$SessSemName[1] = "";
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -95,6 +112,9 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
+// we are definitely not in an lexture or institute
+closeObject();
 
 
 $db=new DB_Seminar;
