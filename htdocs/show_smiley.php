@@ -24,8 +24,8 @@ require_once "config.inc.php";
 function my_comp($a, $b){
 	return strcasecmp($a[1], $b[1]);
 }
-
-$folder=dir($ABSOLUTE_PATH_STUDIP."/".$SMILE_PATH);
+$path = realpath($ABSOLUTE_PATH_STUDIP."/".$SMILE_PATH);
+$folder=dir($path);
 $SMILE_SHORT_R=array_flip($SMILE_SHORT);
 $i_smile = array();
 while ($entry=$folder->read()){
@@ -33,7 +33,7 @@ while ($entry=$folder->read()){
 	$l = strlen($entry) - $dot;
 	$name = substr($entry,0,$dot);
 	$ext = strtolower(substr($entry,$dot+1,$l));
-	if ($dot AND !is_dir($entry) AND $ext=="gif"){
+	if ($dot AND !is_dir($path."/".$entry) AND $ext=="gif"){
 		$i_smile[] = array($entry,$name);
 	}
 }
@@ -71,4 +71,5 @@ for($i=0;$i < count($i_smile);++$i){
 }
 ?>
 </table></td></tr></table></body></html>
+
 
