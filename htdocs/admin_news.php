@@ -178,7 +178,7 @@ function show_news($id)
 global $auth;
 
 $cssSw= new cssClassSwitcher;
-$cssSw->hoverenabled = TRUE;
+$cssSw->enableHover();
  $this->get_news_by_range($id,$limit=100);
  if (!is_array($this->news_query))
 		 {
@@ -271,7 +271,7 @@ echo "\n<tr><td class=\"blank\"><hr width=\"99%\"></td></tr>";
 echo "\n<tr><td class=\"blank\">&nbsp; <b>In diesen Bereichen wird die News angezeigt:</b><br /><br /></td></tr>";
 echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"99%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
 $cssSw=new cssClassSwitcher;
-$cssSw->hoverenabled = TRUE;
+$cssSw->enableHover();
 if ($perm->have_perm("root"))
 	{
 	 echo "\n<tr><th width=\"90%\" align=\"left\">System Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
@@ -522,7 +522,7 @@ function list_range_details($type)
 {
 global $auth,$perm;
 $cssSw=new cssClassSwitcher;
-$cssSw->hoverenabled = TRUE;
+$cssSw->enableHover();
 $output="";
 $output[0]="\n<tr><th width=\"90%\" align=\"left\">";
 switch ($type)
