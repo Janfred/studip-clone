@@ -1,7 +1,7 @@
 <?php
 /*
-seminar_open.php - Initialisierung einer Stud.IP-Session
-Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>
+seminar_open.php - Initialises a Stud.IP sesssion
+Copyright (C) 2000 Stefan Suchi <suchi@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//Funktion zum generieren der default Werte des Messagings
+// set default Values for messaging
 function check_messaging_default() {
 	global $my_messaging_settings;
 	
@@ -35,7 +35,7 @@ function check_messaging_default() {
 	}
 	
 	
-//Funktion zum generieren der default Werte des Stundenplans	
+// set default Values for schedule (timetable)	
 function check_schedule_default() {
 	global $my_schedule_settings;
 		
@@ -57,7 +57,7 @@ function check_schedule_default() {
 	}		
 }
 
-//Funktion zum generieren der default Werte des Kalenders	
+// set default Values for calendar	
 function check_calendar_default(){
 	global $calendar_user_control_data;
 	
@@ -80,9 +80,11 @@ function check_calendar_default(){
 	}
 }
 
+
+// user init starts here
 if ($auth->is_authenticated() && $user->id != "nobody") {
-	if ($SessionStart > $CurrentLogin) {      // gerade eingeloggt
-		//Registrieren aller Uservariablen
+	if ($SessionStart > $CurrentLogin) {      // just logged in
+		// register all user variables
 		$LastLogin=$CurrentLogin;
 		$CurrentLogin=$SessionStart;
 		$user->register("loginfilelast");
@@ -90,14 +92,13 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$user->register("CurrentLogin");
 		$user->register("LastLogin");
 		$user->register("forum");
-		$user->register("writemode");  // Forum-Postings
+		$user->register("writemode");  // forum postings
 		$user->register("my_messaging_settings");
 		$user->register("my_schedule_settings");
 		$user->register("my_personal_sems");
 		$user->register("my_buddies");
 		
 		//garbage collect for user variables
-		//uservariablen aufräumen
 		// loginfilenow und loginfilelast
 		$db = new DB_Seminar();
 		if (is_array($loginfilenow)){
@@ -118,7 +119,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 			}
 			unset($tmp_sem_inst);
 		}
-		//buddylist
+		// buddylist
 		if (is_array($my_buddies)) {
 			$db->query("SELECT username FROM auth_user_md5 WHERE username IN ('".join("','",array_keys($my_buddies))."')");
 			while($db->next_record()){
@@ -132,7 +133,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		}
 		
 		
-		//Default-Funktionen ausfuehren
+		// call default functions
 		check_messaging_default();
 		check_schedule_default();
 		if($CALENDAR_ENABLE){
@@ -142,6 +143,8 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 	}
 }
 
+
+// session init starts here
 if ($SessionStart==0) { 
 	$SessionStart=time(); 
 	$SessionSeminar="";
@@ -176,7 +179,7 @@ if ($SessionStart==0) {
 
 if (isset($_language_domain) && isset($_language)) {
 	$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
-	if ($_language != "de_DE") { // German is the original languages, so we need no I18N
+	if ($_language != "de_DE") { // German is the original language, so we need no I18N
 		putenv("LANG=$_language");
 		setlocale(LC_ALL, "");
 		bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
@@ -184,20 +187,16 @@ if (isset($_language_domain) && isset($_language)) {
 	}
 }
 
-// Funktion, um den Namen der eigenen Seite zu bekommen:
+// function to get the name of the current page in $i_page
 
 $url=parse_url($PHP_SELF);
 $i_page_array = explode("/" , $url[path]);
 end ($i_page_array);
 $i_page = current($i_page_array);
 unset($url); unset($i_page_array);
-
-// steht jetzt lesbar in $i_page
 	
-// Funktion, um die übergebenen Parameter der Seite zu bekommen:
+// function to get the parameters of the current page in array $i_query
 
 $i_query = explode('&',getenv("QUERY_STRING"));
-
-// steht jetzt lesbar im Array $i_query
 	
 ?>
