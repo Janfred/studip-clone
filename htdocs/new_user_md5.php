@@ -721,7 +721,6 @@ if (isset($details)) {
 	?>
 
 	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr valign=top align=middle>
 		<td class="topic" colspan=2 align="left"><b>&nbsp;Verwaltung aller Benutzer des Systems</b></td>
 	</tr>
