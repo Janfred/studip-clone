@@ -103,9 +103,9 @@ function PrintAktualStatusgruppen ()
 		$k = 1;
 		while ($db2->next_record()) {
 			if ($k > $size) {
-				$farbe = "AAAAAA";
+				$farbe = "#AAAAAA";
 			} else {
-				$farbe = "000000";
+				$farbe = "#000000";
 			}
 			printf ("     <tr><td><font color=\"%s\">$k</font></td>", $farbe);
 			printf ("       <td class=\"blank\">%s&nbsp; %s</td>",$db2->f("Vorname"), $db2->f("Nachname"));
@@ -115,9 +115,9 @@ function PrintAktualStatusgruppen ()
 		}
 		while ($k <= $db->f("size")) {
 			echo "     <tr> 
-  			                  <td><font color=\"FF4444\">$k</font></td>";
+  			                  <td><font color=\"#FF4444\">$k</font></td>";
 			printf ("       <td class=\"blank\">&nbsp; </td>");
-			printf ( "	   <td width=\"5%%\">&nbsp; ");
+			printf ( "	   <td width=\"5%%\">&nbsp; </td>");
 			echo "	</tr>";
 			$k++;
 		} 
@@ -152,6 +152,7 @@ function PrintSearchResults ($search_exp)
 
 function PrintAktualMembers ()
 {	global $SessSemName;
+	echo "<font size=\"-1\">&nbsp; TeilnehmerInnen der Veranstaltung</font><br>";
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
 	$db->query ("SELECT username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$SessSemName[1]' ORDER BY Nachname ASC");
@@ -178,6 +179,7 @@ function get_inst_list(){
 
 function PrintInstitutMembers ()
 {	global $SessSemName;
+	echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Institute</font><br>";
 	echo "&nbsp; <select name=\"InstitutMembers\">";
 	$db=new DB_Seminar;
 	$value_list = get_inst_list();
@@ -340,11 +342,11 @@ function PrintInstitutMembers ()
 		if (strlen($tmp_name) > 60)
 			echo "... ";
 		echo " -  Statusgruppen";
-	?></b></td></tr><tr><td class="steel1">&nbsp; </td></tr></table>
+	?></b></td></tr><tr><td class="steel1" colspan="2">&nbsp; </td></tr></table>
 
 <table class="steel1" width="100%" border="0" cellspacing="0">
   <tr>
-    <td align="right" width="50%">
+    <td align="right" width="50%" class="steel1">
  	<form action="<? echo $PHP_SELF ?>?cmd=move_old_statusgruppe" method="POST">
             &nbsp;
 	<? 
@@ -352,14 +354,14 @@ function PrintInstitutMembers ()
 	?>
     	<input type="IMAGE" name="move_old_statusgruppe" src="./pictures/move.gif" border=0 value="Statusgruppe uebernehmen">&nbsp;  
         </form><br></td>
-    <td align="right" width="50%" NOWRAP>
+    <td align="right" width="50%" NOWRAP class="steel1">
 	<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="POST">
-        Name: 
+        <font size="2">Name: </font>
         <input type="text" name="new_statusgruppe_name" value="<? echo $statusgruppe_name;?>">
-        &nbsp; &nbsp; &nbsp; Anzahl: 
+        &nbsp; &nbsp; &nbsp; <font size="2">Anzahl:</font> 
         <input name="new_statusgruppe_size" type="text" value="" size="3">
-        &nbsp; &nbsp; &nbsp; Einf&uuml;gen 
-    	<input type="IMAGE" name="add_new_statusgruppe" src="./pictures/move_down.gif" border=0 value=" neue Statusgruppe ">&nbsp;  
+        &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
+    	<input type="IMAGE" name="add_new_statusgruppe" src="./pictures/move_down.gif" border=0 value=" neue Statusgruppe ">&nbsp;  &nbsp; &nbsp; 
       </form><br></td>
   </tr>
 </table>
@@ -384,10 +386,12 @@ function PrintInstitutMembers ()
 		PrintSearchResults($search_exp);
 		echo "<input type=\"IMAGE\" name=\"search\" src= \"./pictures/trash.gif\" border=\"0\" value=\" Personen suchen\">&nbsp;  ";
 	} else {
+		echo "<font size=\"-1\">&nbsp; freie Personensuche</font><br>";
 		echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 		echo "<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\">&nbsp;  ";
 	} 
 	?>                            
+	<br><br>
     </td>
     <td class="steel1" width="50%" align="center" valign="top"> 
 	<?
