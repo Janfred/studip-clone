@@ -307,6 +307,7 @@ edit/add assigns
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
 	require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php"); //needed for extended checkdate
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 
 	//load the object perms
 	$ObjectPerms = new ResourceObjectPerms($change_schedule_resource_id);
@@ -318,6 +319,33 @@ if ($change_object_schedules) {
 		if ($SavedStateAssignObject->getAssignUserId())
 			$ObjectPerms = new AssignObjectPerms($change_object_schedules);
 	}
+	
+	if (($ObjectPerms->havePerm("admin")) && ($change_meta_to_single_assigns_x)) {
+		$assObj = new AssignObject($change_object_schedules);	
+		$semResAssign = new VeranstaltungResourcesAssign($assObj->getAssignUserId());
+		$semResAssign->deleteAssignedRooms();
+		
+		$resultAssi = dateAssi ($assObj->getAssignUserId(), "insert", FALSE, FALSE, FALSE, FALSE);
+		if ($resultAssi["changed"]) {
+			header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_schedule" : "view_schedule", $view_mode));
+		}
+	}
+
+	if (($ObjectPerms->havePerm("admin")) && ($send_change_resource_x)) {
+		$ChangeObjectPerms = new ResourceObjectPerms($select_change_resource);
+		if ($ChangeObjectPerms->havePerm("tutor")) {
+			$changeAssign=new AssignObject($change_object_schedules);
+			$changeAssign->setResourceId($select_change_resource);
+			$overlaps = $changeAssign->checkOverlap();
+			if ($overlaps) {
+				$msg->addMsg(11);
+			} else {
+				$changeAssign->store();
+				header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=38&msg_resource_id=%s", ($view_mode == "oobj") ? "openobject_schedule" : "view_schedule", $view_mode, $select_change_resource));
+			}
+		} else
+			$msg->addMsg(2);
+	}
 
 	if ($ObjectPerms->havePerm("autor")) {
 		if ($kill_assign_x) {
@@ -325,7 +353,7 @@ if ($change_object_schedules) {
 			$killAssign->delete();
 			$new_assign_object='';
 			$msg ->addMsg(5);
-		} else {
+		} elseif ($sumbit_x) {
 			if ($change_object_schedules == "NEW")
 				$change_schedule_id=FALSE;
 			else
@@ -340,7 +368,7 @@ if ($change_object_schedules) {
 				if ($ForeignObjectPerms->havePerm("autor"))
 					$change_schedule_assign_user_id=$submit_search_user;
 				else
-					$msg ->addMsg(2);
+					$msg->addMsg(2);
 			}
 
 			//the user send infinity repeat (until date) as empty field, but it's -1 in the db
@@ -535,7 +563,7 @@ if ($change_object_schedules) {
 					$overlaps = $changeAssign->checkOverlap();
 				if (!$overlaps) {
 					if ($changeAssign->create()) {
-						$assign_id=$changeAssign->getId();
+						$resources_data["actual_assign"]=$changeAssign->getId();
 						$msg->addMsg(3);
 						$new_assign_object='';
 					} else {
@@ -557,7 +585,7 @@ if ($change_object_schedules) {
 						$msg->addMsg(4);
 						$new_assign_object='';						
 						}
-					$assign_id=$changeAssign->getId();
+					$resources_data["actual_assign"]=$changeAssign->getId();
 				} else
 					$msg->addMsg(11);
 					
@@ -1089,8 +1117,8 @@ if ($save_state_x) {
 		} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
 			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
 				$assignObjects[$key]->setResourceId($val);
+				$semResAssign->deleteAssignedRooms();
 				if (!$particular_free) {
-					$semResAssign->deleteAssignedRooms();
 					$result = $semResAssign->changeMetaAssigns($assignObjects);
 				}
 			}
@@ -1531,6 +1559,12 @@ if ((in_array("1", $msg->codes)) || (in_array("25", $msg->codes))) {
 //show object, this object will be edited or viewed
 if ($show_object)
 	$resources_data["actual_object"]=$show_object;
+
+if ($show_msg) {
+	if ($msg_resource_id)
+		$msgResourceObj = new ResourceObject ($msg_resource_id);
+	$msg->addMsg($show_msg, ($msg_resource_id) ? array(htmlReady($msgResourceObj->getName())) : FALSE);
+}
 
 //if ObjectPerms for actual user and actual object are not loaded, load them!
 if ($ObjectPerms) {

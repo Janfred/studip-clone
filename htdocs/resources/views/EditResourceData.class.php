@@ -35,8 +35,10 @@
 
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObjectPerms.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 
 require_once ($ABSOLUTE_PATH_STUDIP."/cssClassSwitcher.inc.php");
 
@@ -109,7 +111,10 @@ class EditResourceData {
 
 	function showScheduleForms($assign_id='') {
 		global $PHP_SELF, $perm, $resources_data, $new_assign_object, $search_user, $search_string_search_user,
-			$CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $add_ts;
+			$CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $add_ts,
+			$search_exp_room, $search_room_x, $search_properties_x;
+		
+		$resReq = new RoomRequest();
 
 		$killButton = TRUE;
 		
@@ -123,8 +128,10 @@ class EditResourceData {
 			$resAssign->setEnd($add_ts + (2 * 60 * 60));
 		}
 		
+		$owner_type = $resAssign->getOwnerType();
+		
 		//it is not allowed to edit or kill assigns for rooms here
-		if (($resAssign->getOwnerType() == "sem") || ($resAssign->getOwnerType() == "date")) {
+		if (($owner_type == "sem") || ($owner_type == "date")) {
 			$resObject=new ResourceObject ($resAssign->getResourceId());
 			if ($resObject->isRoom()) {
 				$lockedAssign=TRUE;
@@ -134,6 +141,7 @@ class EditResourceData {
 
 		//load the object perms
 		$ObjectPerms = new ResourceObjectPerms($resAssign->getResourceId());
+		$ResourceObjectPerms = $ObjectPerms;
 		
 		//in some case, we load the perms from the assign object, if it has an owner
 		if (($ObjectPerms->getUserPerm() != "admin") && (!$resAssign->isNew()) && (!$new_assign_object)) {
@@ -181,16 +189,16 @@ class EditResourceData {
 				elseif (!$lockedAssign)
 					print "<br />&nbsp;";
 				if ($lockedAssign) {
-					if ($resAssign->getOwnerType() == "sem") {
+					if ($owner_type == "sem") {
 						$query = sprintf("SELECT Name, Seminar_id FROM seminare WHERE Seminar_id='%s' ",$resAssign->getAssignUserId());
 						$this->db->query($query);
 						$this->db->next_record();
-					} elseif ($resAssign->getOwnerType() == "date") {
+					} elseif ($owner_type == "date") {
 						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN seminare ON (termine.range_id = seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
 						$this->db->query($query);
 						$this->db->next_record();
 					}
-					if ($resAssign->getOwnerType() == "sem") {
+					if ($owner_type == "sem") {
 						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
@@ -199,7 +207,7 @@ class EditResourceData {
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
 							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie die %sZeiten%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_metadates.php?seminar_id=".$this->db->f("Seminar_id")."\">", "</a>");
 						print "</font>";
-					} elseif ($resAssign->getOwnerType() == "date") {
+					} elseif ($owner_type == "date") {
 						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
@@ -243,12 +251,12 @@ class EditResourceData {
 							echo "<b>"._("zweiw&ouml;chentlich")."</b>";
 						else
 							echo "<b>"._("w&ouml;chentlich")."</b>";
-					else
-						if ($resAssign->getOwnerType() == "date") {
-							if (isMetadateCorrespondingDate($resAssign->getAssignUserId()))
-								echo "<b>"._("Einzeltermin zu regelm&auml;&szlig;igen Veranstaltungszeiten")."</b>";
+					else {
+						if (($owner_type == "date") && (isMetadateCorrespondingDate($resAssign->getAssignUserId()))) {
+							echo "<b>"._("Einzeltermin zu regelm&auml;&szlig;igen Veranstaltungszeiten")."</b>";
 						} else
 							echo "<b>"._("keine Wiederholung (Einzeltermin)")."</b>";
+					}
 				} else {
 				?>				
 					<input type="IMAGE" name="change_schedule_repeat_none" <?=makeButton("keine".(($resAssign->getRepeatMode()=="na") ? "2" :""), "src") ?> border=0 />&nbsp;&nbsp;
@@ -336,7 +344,7 @@ class EditResourceData {
 				</font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top">
-				<? if (($resAssign->getRepeatMode() != "na") && ($resAssign->getRepeatMode() != "sd") && ($resAssign->getOwnerType() != "sem") && ($resAssign->getOwnerType() != "date")) {?>
+				<? if (($resAssign->getRepeatMode() != "na") && ($resAssign->getRepeatMode() != "sd") && ($owner_type != "sem") && ($owner_type != "date")) {?>
 				<font size=-1><?=_("Wiederholungsturnus:")?></font><br />				
 				<font size=-1>
 					<?
@@ -432,6 +440,75 @@ class EditResourceData {
 				}
 				?>
 				<br />&nbsp; 
+				</td>
+			</tr>
+			<?
+			}
+			if (($ResourceObjectPerms->havePerm("tutor")) && (!$resAssign->isNew())) {
+			?>
+			<tr>
+				<td class="blank" colspan="3" width="100%">&nbsp; 
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan="2">
+					<font size=-1><b><?=_("weitere Aktionen:")?></b></font>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" valign="top">
+					<font size=-1>
+					<b><?=_("Belegung in anderen Raum verschieben:")?></b><br />
+					<?=_("Sie k&ouml;nnen diese Belegung in einen anderen Raum verschieben. <br />Alle anderen Angaben bleiben unver&auml;ndert.");?>
+					</font><br />&nbsp;
+					<?
+					if ((($search_exp_room) && ($search_room_x)) || ($search_properties_x)) {
+						if (getGlobalPerms($user->id) != "admin")
+							$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
+							
+						$result = $resReq->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE, 10, FALSE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
+						if ($result) {
+							printf ("<br /><font size=-1><b>%s</b> ".((!$search_properties_x) ? _("Ressourcen gefunden:") : _("passende R&auml;ume gefunden"))."<br />", sizeof($result));
+							print "<select name=\"select_change_resource\">";
+							foreach ($result as $key => $val) {
+								printf ("<option value=\"%s\">%s </option>", $key, htmlReady(my_substr($val, 0, 30)));
+							}
+							print "</select></font>";
+							print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("neue Suche starten"))." border=\"0\" name=\"reset_room_search\" />";
+							print "<br><input type=\"IMAGE\" ".makeButton("verschieben", "src")." ".tooltip(_("Die Belegung ist den ausgew&auml;hlten Raum verschieben"))." border=\"0\" name=\"send_change_resource\" />";
+							if ($search_properties_x)
+								print "<br /><br />"._("(Diese Resourcen/R&auml;ume erf&uuml;llen die Wunschkriterien einer Raumanfrage.)");
+
+						}
+					}
+					if (((!$search_exp_room) && (!$search_properties_x)) || (($search_exp_room) && (!$result)) || (($search_properties_x) && (!$result))) {
+						?>
+						<font size=-1>
+						<? print ((($search_exp_room) || ($search_properties_x)) && (!$result)) ? _("<b>Keine</b> Ressource gefunden.") : "";?>
+						</font><br />
+						<font size=-1><?=_("Geben Sie zur Suche den Namen der Ressource ganz oder teilweise ein:"); ?></font>
+						<input type="TEXT" size="30" maxlength="255" name="search_exp_room" />&nbsp; 
+						<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_room" /><br />
+						<?
+					}										
+					?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" valign="top">
+				<?
+				if ($owner_type == "sem") {
+				?>
+					<font size=-1>
+					<b><?=_("Regelm&auml;&szlig;ige Belegung in Einzeltermine umwandeln:")?></b><br /><br />
+					<?=_("Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. Diese Einzeltermine k&ouml;nnen dann getrennt bearbeitet werden. Ein Ablaufplan wird dabei angelegt.");?>
+					<br /><br /><input type="IMAGE" align="absmiddle" <?=makeButton("umwandeln", "src") ?> border=0 name="change_meta_to_single_assigns" value="<?=_("umwandeln")?>">
+					</font>
+				<?
+				}
+				?>
 				</td>
 			</tr>
 			<?
