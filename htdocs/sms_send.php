@@ -46,29 +46,6 @@ $db=new DB_Seminar;
 # FUNCTIONS
 ###########################################################
 
-//
-function array_add_value($add, $array) {
-	foreach ($add as $a) {
-		if (!empty($array)) {
-			if (!in_array($a, $array)) {
-				$x = array_push($array, $a);
-			}
-		} else {
-			$array = array($a);
-		}
-	}
-	return $array;
-}
-
-//
-function array_delete_value($array, $value) {
-	for ($i=0;$i<count($array);$i++) {
-		if ($array[$i] == $value) 
-			array_splice($array, $i, 1);
-		}
-	return $array;
-}
-
 // checkt ob alle adressbuchmitglieder in der empaengerliste stehen
 function CheckAllAdded($adresses_array, $rec_array) {
 	$x = sizeof($adresses_array);
@@ -432,9 +409,9 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	if ($sms_data["sig"] == "1") {
 		echo "<br><br>--<br>";
 		if ($signature) {
-			echo quotes_decode(formatReady($signature));
+			echo quotes_decode(formatReady(stripslashes($signature)));
 		} else {
-			echo quotes_decode(formatReady($my_messaging_settings["sms_sig"]));
+			echo quotes_decode(formatReady(stripslashes($my_messaging_settings["sms_sig"])));
 		}
 	}
 
