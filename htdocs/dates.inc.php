@@ -23,13 +23,14 @@ require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php";  //Daten 
+require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php";  //Daten 
 require_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CALENDAR."/calendar_func.inc.php");
 
 /**
 * This function creates the assigned room name for range_id
 *
 * @param		string	the id of the Veranstaltung or date
-* @retunr		string	the name of the room
+* @return		string	the name of the room
 *
 */
 
@@ -779,7 +780,6 @@ function delete_topic($topic_id, &$deleted)  //rekursives löschen von topics VOR
 {
 
 	$db=new DB_Seminar;
-	// echo "gelöscht $topic_id<br>";
 	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
 	if ($db->num_rows()) {
 		while ($db->next_record()) {
@@ -895,14 +895,14 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 
 
 //Erstellt automatisch einen Ablaufplan oder aktualisiert ihn
-function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE) {
+function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $user;
 	
 	if ($RESOURCES_ENABLE)	{
 	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 	}
-	 	
+
 	$hash_secret = "blubbersuppe";
 	$date_typ=1; //type to use for new dates
 	$author = get_fullname();
@@ -921,13 +921,16 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 	$veranstaltung_start_time = $db->f("start_time");
 	$veranstaltung_duration_time = $db->f("duration_time");
 	
+	if (($mode == "update") && (!$old_turnus))
+		$old_turnus = $term_data;
+	
 	//load the ids from already created dates
-	if (($mode == "update") && (is_array($old_turnus))) {
+	if ($mode == "update") {
 
 		//first, we load all dates that exists
 		$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' ORDER BY date", $sem_id);
 		$db->query($query);
-	
+
 		//than we check, which ones matches to our metadates
 		while ($db->next_record()) {
 			foreach ($old_turnus as $val) {
@@ -946,7 +949,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 			}
 		}
 	}
-
+	
 	//determine first day of the start-week as sem_begin
 	$all_semester = $semester->getAllSemesterData();
 	if ($term_data["start_woche"] >= 0) {
@@ -1056,7 +1059,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 					if ($db2->affected_rows()) {
 						//insert an entry for the linked resource, if resource management activ
 						if ($RESOURCES_ENABLE) {
-							$insertAssign->dont_check = TRUE;
+							$insertAssign->dont_check = $dont_check_overlaps;
 							//only if we get a resource_id, we update assigns...
 							if ($val["resource_id"]) {
 								if ($saved_dates[$affected_dates]) {
@@ -1112,6 +1115,11 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 
 //Checkt, ob Ablaufplantermine zu gespeicherten Metadaten vorliegen
 function isSchedule ($sem_id) {
+	static $cache;
+
+	if (isset($cache[$sem_id]))
+		return $cache[$sem_id];
+
 	$db = new DB_Seminar;
 	$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
 	
@@ -1123,30 +1131,40 @@ function isSchedule ($sem_id) {
 	//first, we load all dates that exists
 	$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' ORDER BY date", $sem_id);
 	$db->query($query);
+	
+	if ($term_metadata["art"] == 1) {
+		$cache[$sem_id] = $db->nf();
+		return $cache[$sem_id];
+		
+	} else {
 
-	//than we check, which ones matches to our metadates
-	while ($db->next_record()) {
-		if (is_array($term_metadata["turnus_data"]))
-		foreach ($term_metadata["turnus_data"] as $val) {
-			//compense php sunday = 0 bullshit
-			if ($val["day"] == 7)
-				$t_day = 0;
-			else
-				$t_day = $val["day"];
-			
-			if ((date("w", $db->f("date")) == $t_day) &&
-				(date("G", $db->f("date")) == $val["start_stunde"]) &&
-				(date("i", $db->f("date")) == $val["start_minute"]) &&
-				(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
-				(date("i", $db->f("end_time")) == $val["end_minute"]))
-				$matched_dates[$db->f("termin_id")] = TRUE;
+		//than we check, which ones matches to our metadates
+		while ($db->next_record()) {
+			if (is_array($term_metadata["turnus_data"]))
+			foreach ($term_metadata["turnus_data"] as $val) {
+				//compense php sunday = 0 bullshit
+				if ($val["day"] == 7)
+					$t_day = 0;
+				else
+					$t_day = $val["day"];
+				
+				if ((date("w", $db->f("date")) == $t_day) &&
+					(date("G", $db->f("date")) == $val["start_stunde"]) &&
+					(date("i", $db->f("date")) == $val["start_minute"]) &&
+					(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
+					(date("i", $db->f("end_time")) == $val["end_minute"]))
+					$matched_dates[$db->f("termin_id")] = TRUE;
+			}
+		}
+	
+		if (isset($matched_dates)) {
+			$cache[$sem_id] = sizeof($matched_dates);
+			return $cache[$sem_id];
+		} else {
+			$cache[$sem_id] = FALSE;
+			return FALSE;
 		}
 	}
-
-	if (isset($matched_dates))
-		return TRUE;
-	else
-		return FALSE;
 }
 
 //Checkt, ob bereits angelegte Termine ueber mehrere Semester laufen
@@ -1171,4 +1189,73 @@ function isDatesMultiSem ($sem_id) {
 	else
 		return FALSE;
 }
+
+/**
+* this functions extracts all the dates, which are corresponding to a metadate
+*
+* @param		string	seminar_id
+* @return		array	["metadate_numer"]["termin_id"]
+*				"metadate_number" the numerber of the corresponding metadate. first metadate (in chronological order) is always 0
+*				"termin_id" the termin_id that are corresponding to the given metdat_number
+*
+*/
+function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
+	$semObj = new Seminar($sem_id);
+	$db = new DB_Seminar;
+	
+	//first, we load all dates that exists
+	$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' %s ORDER BY date", $sem_id, ($presence_dates_only) ? "AND date_typ IN".getPresenceTypeClause() : "");
+	$db->query($query);
+
+	//than we check, which ones matches to our metadates
+	while ($db->next_record()) {
+
+		foreach ($semObj->getMetaDates() as $key=>$val) {
+			//compense php sunday = 0 bullshit
+			if ($val["day"] == 7)
+				$t_day = 0;
+			else
+				$t_day = $val["day"];
+			
+			if ((date("w", $db->f("date")) == $t_day) &&
+				(date("G", $db->f("date")) == $val["start_hour"]) &&
+				(date("i", $db->f("date")) == $val["start_minute"]) &&
+				(date("G", $db->f("end_time")) == $val["end_hour"]) &&
+				(date("i", $db->f("end_time")) == $val["end_minute"]))
+				$result[$key][$db->f("termin_id")] = TRUE;
+		}
+	}
+
+	if (is_array($result))
+		return $result;
+	else
+		return FALSE;
+}
+
+/**
+* a small helper funktion to get the type query for "Sitzungstermine"
+* (this dates are important to get he regularly, presence dates
+* for a seminar
+*
+* @return		string	the SQL-clause to select only the "Sitzungstermine"
+*
+*/
+function getPresenceTypeClause() {
+	global $TERMIN_TYP;
+	
+	$i=0;
+	$typ_clause = "(";
+	foreach ($TERMIN_TYP as $key=>$val) {
+		if ($val["sitzung"]) {
+			if ($i)
+				$typ_clause .= ", ";
+			$typ_clause .= "'".$key."' ";
+			$i++;
+		}
+	}
+	$typ_clause .= ")";
+	
+	return $typ_clause;
+}
+
 ?>
