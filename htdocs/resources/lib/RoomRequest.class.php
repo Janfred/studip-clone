@@ -209,7 +209,7 @@ class RoomRequest {
 		$this->default_seats=($value);
 	}
 
-	function searchRooms($search_exp, $properties = FALSE, $limit = 0, $only_rooms = TRUE, $permitted_resources = FALSE) {
+	function searchRooms($search_exp, $properties = FALSE, $limit_lower = 0, $limit_upper = 0, $only_rooms = TRUE, $permitted_resources = FALSE) {
 		//create permitted resource clause
 		if (is_array($permitted_resources)) {
 			$permitted_resources_clause="AND a.resource_id IN ('".join("','",$permitted_resources)."')";
@@ -263,7 +263,7 @@ class RoomRequest {
 			if ($setted_properties)
 				$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
 			
-			$query.= sprintf ("ORDER BY b.name %s", ($limit) ? "LIMIT 0, ".$limit : "");
+			$query.= sprintf ("ORDER BY b.name %s", ($limit_upper) ? "LIMIT ".(($limit_lower) ? $limit_lower : 0).",".$limit_upper : "");
 		}
 
 		$this->db->query($query);
