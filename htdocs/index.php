@@ -43,7 +43,10 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 	} else {
 		$db->query("SELECT preferred_language FROM user_info WHERE user_id='$user->id'");
 		if ($db->next_record()) {
-			$_language = $db->f("preferred_language");
+			if ($db->f("preferred_language") != "NULL" && $db->f("preferred_language") != "") {
+				// we found a stored setting for preferred language
+				$_language = $db->f("preferred_language");
+			}
 		}
 	}
 }

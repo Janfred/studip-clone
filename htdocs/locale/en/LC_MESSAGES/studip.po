@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-01-10 20:59+0100\n"
-"PO-Revision-Date: 2003-01-10 19:33+GMT\n"
+"POT-Creation-Date: 2003-01-14 09:00+0100\n"
+"PO-Revision-Date: 2003-01-13 20:55+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -260,7 +260,7 @@ msgid "Alle Studieng&auml;nge"
 msgstr ""
 
 #: admin_admission.php:659
-msgid "Den Studiengang aus der Liste lschen"
+msgid "Den Studiengang aus der Liste löschen"
 msgstr ""
 
 #: admin_admission.php:677
@@ -721,6 +721,26 @@ msgstr ""
 msgid "Kategorie nach unten schieben"
 msgstr ""
 
+#: meine_seminare.php:514
+#, c-format
+msgid ""
+"An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt.§"
+msgstr ""
+
+#: meine_seminare.php:520
+#, fuzzy
+msgid "Veranstaltungen an meinen Einrichtungen"
+msgstr "Type of course"
+
+#: meine_seminare.php:533
+msgid "Bitte w&auml;hlen Sie eine Einrichtung aus:"
+msgstr ""
+
+#: meine_seminare.php:555
+#, fuzzy
+msgid "Einrichtung auswählen"
+msgstr "Institution"
+
 #: sem_verify.php:72
 #, fuzzy
 msgid "Veranstaltungsfreischaltung"
@@ -1034,7 +1054,7 @@ msgstr ""
 #: StudipRangeTreeViewAdmin.class.php:189
 #: StudipRangeTreeViewAdmin.class.php:238
 msgid ""
-"W&auml;hlen sie einen Namen fr dieses Element, oder verlinken sie es mit "
+"W&auml;hlen sie einen Namen für dieses Element, oder verlinken sie es mit "
 "einer Stud.IP Einrichtung"
 msgstr ""
 
@@ -1076,7 +1096,7 @@ msgid "Wollen sie diese Elemente wirklich l&ouml;schen ?"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:297
-msgid "lschen"
+msgid "löschen"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:300
@@ -1104,7 +1124,7 @@ msgid "Element wurde verschoben."
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:357
-msgid "Keine Verschiebung durchgefhrt."
+msgid "Keine Verschiebung durchgeführt."
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:395
@@ -1132,7 +1152,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen sie ein "
-"Einfgesymbol %s aus,"
+"Einfügesymbol %s aus,"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:511
@@ -1140,11 +1160,11 @@ msgid " um das Element zu verschieben."
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:511
-msgid "Einfgesymbol"
+msgid "Einfügesymbol"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:518
-msgid "Innerhalb dieser Ebene ein neues Element einfgen"
+msgid "Innerhalb dieser Ebene ein neues Element einfügen"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:523
@@ -1152,7 +1172,7 @@ msgid "Dieses Element bearbeiten"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:527
-msgid "Dieses Element lschen"
+msgid "Dieses Element löschen"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:531
@@ -1186,7 +1206,7 @@ msgid "Keine weiteren Daten vorhanden!"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:600
-msgid "An dieser Stelle einfgen"
+msgid "An dieser Stelle einfügen"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:608
@@ -1240,6 +1260,84 @@ msgid "Datenfeld nach unten"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:687
+msgid "Änderungen übernehmen"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:690
+msgid "Datenfeld löschen"
+msgstr ""
+
+#: StudipRangeTreeView.class.php:275 StudipRangeTreeView.class.php:301
+msgid "Dieses Element schließen"
+msgstr ""
+
+#: StudipRangeTreeView.class.php:276 StudipRangeTreeView.class.php:302
+msgid "Dieses Element öffnen"
+msgstr ""
+
+#: StudipRangeTreeView.class.php:288
+msgid "Unterelement(e) öffnen"
+msgstr ""
+
+#: StudipRangeTreeView.class.php:288
+msgid "Alle Unterelemente schliessen"
+msgstr ""
+
+#: StudipRangeTreeView.class.php:293
+msgid "Dieses Element hat keine Unterelemente"
+msgstr ""
+
+#: StudipRangeTreeView.class.php:329
+msgid "Seite dieser Einrichtung in Stud.IP aufrufen"
+msgstr ""
+
+#: StudipRangeTreeView.class.php:330
+msgid "in Stud.IP"
+msgstr ""
+
+#: admin_admission.php:659
+msgid "Den Studiengang aus der Liste lschen"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:189
+#: StudipRangeTreeViewAdmin.class.php:238
+msgid ""
+"W&auml;hlen sie einen Namen fr dieses Element, oder verlinken sie es mit "
+"einer Stud.IP Einrichtung"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:297
+msgid "lschen"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:357
+msgid "Keine Verschiebung durchgefhrt."
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:510
+#, c-format
+msgid ""
+"Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen sie ein "
+"Einfgesymbol %s aus,"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:511
+msgid "Einfgesymbol"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:518
+msgid "Innerhalb dieser Ebene ein neues Element einfgen"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:527
+msgid "Dieses Element lschen"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:600
+msgid "An dieser Stelle einfgen"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:687
 msgid "nderungen bernehmen"
 msgstr ""
 
@@ -1257,22 +1355,6 @@ msgstr ""
 
 #: StudipRangeTreeView.class.php:288
 msgid "Unterelement(e) ffnen"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:288
-msgid "Alle Unterelemente schliessen"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:293
-msgid "Dieses Element hat keine Unterelemente"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:329
-msgid "Seite dieser Einrichtung in Stud.IP aufrufen"
-msgstr ""
-
-#: StudipRangeTreeView.class.php:330
-msgid "in Stud.IP"
 msgstr ""
 
 #, fuzzy
