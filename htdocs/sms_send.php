@@ -67,6 +67,10 @@ function array_delete_value($array, $value) {
 	return $array;
 }
 
+// check if active chat avaiable
+if (($cmd == "write_chatinv") && (!is_array($admin_chats)))
+	$cmd='';
+
 // send message
 if ($cmd_insert_x) {
 	
@@ -75,7 +79,11 @@ if ($cmd_insert_x) {
 		$time = date("U");
 		$tmp_message_id = md5(uniqid("321losgehtes"));
 		foreach ($sms_data["p_rec"] as $a) {
-			$count = ($count+$msging->insert_message($message, $a, FALSE, $time, $tmp_message_id));
+			if ($chat_id) {
+				$count = ($count+$msging->insert_chatinv($message, $a, $chat_id));
+			} else {
+				$count = ($count+$msging->insert_message($message, $a, FALSE, $time, $tmp_message_id));
+			}
 		}
 	}
 
@@ -265,7 +273,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 		<tr>
 			<td colspan="2" valign="top" width="30%" class="steelgraudunkel">
 			<?
-			echo "<font size=\"-1\" color=\"#FFFFFF\"><b>"._("Nachricht")."</b></font>";
+			echo "<font size=\"-1\" color=\"#FFFFFF\"><b>".(($cmd=="write_chatinv") ? _("Chateinladung") : _("Nachricht"))."</b></font>";
 			?>
 			</td>
 		</tr>
@@ -281,6 +289,22 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 		}
 	}
 	echo "<input type=\"hidden\" name=\"sms_source_page\" value=\"$sms_source_page\">";
+	echo "<input type=\"hidden\" name=\"cmd\" value=\"$cmd\">";
+	if ($cmd=="write_chatinv") {
+		echo "<td class=\"steel1\" width=\"100%\" valign=\"left\"><div align=\"left\">";
+		echo "<font size=\"-1\"><b>"._("Chatraum ausw&auml;hlen:")."</b>&nbsp;&nbsp;</font>";
+		echo "<select name=\"chat_id\" style=\"vertical-align:middle;font-size:9pt;\">";
+		foreach($admin_chats as $chat_id => $chat_name){
+			echo "<option value=\"$chat_id\"";
+			if ($_REQUEST['selected_chat_id'] == $chat_id){
+				echo " selected ";
+			}
+			echo ">" . htmlReady($chat_name) . "</option>";
+		}
+		echo "</select>";
+		echo "</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";
+		echo "</td></tr>";	
+	}
 	echo "<td class=\"steelgraulight\" width=\"100%\" valign=\"center\"><div align=\"center\">";
 	echo "<textarea name=\"message\" style=\"width: 99%\" cols=80 rows=10 wrap=\"virtual\">";
 	if ($quote) {
