@@ -62,8 +62,8 @@ class ExternModule {
 		
 		if ($module_name != "") {
 			$class_name = "ExternModule" . $module_name;
-			
-			require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
+			// Vorläufiger Bugfix (Modul-Skript wird schon in extern.inc.php eingebunden)
+		//	require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
 			$this = new $class_name();
 		}
 		

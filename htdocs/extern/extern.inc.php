@@ -97,8 +97,12 @@ if (!$global_id && ($global_configuration = get_global_config($range_id)))
 
 // all parameters ok, instantiate module and print data
 foreach ($EXTERN_MODULE_TYPES as $type) {
-	if ($type["module"] == $module)
+	if ($type["module"] == $module) {
+		// Vorläufiger Bugfix
+		$class_name = "ExternModule" . $module;
+		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
 		$module_obj =& new ExternModule($range_id, $module, $config_id, $default, $global_id);
+	}
 }
 
 
