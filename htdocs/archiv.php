@@ -402,7 +402,7 @@ if ($archiv_data["perform_search"]) {
    	echo "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; </td>\n";
 		echo "<td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=Name\">" . _("Name") . "</a></b></td>\n";
 		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=dozenten\">" . _("DozentIn") . "</a></b></td>\n";
-		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=institute\">" . _("Institut") . "</a></b></td>\n";
+		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=institute\">" . _("Einrichtungen") . "</a></b></td>\n";
 		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=semester\">" . _("Semester") . "</a></b></td>\n";
 		echo "<td  width=\"10%\" class=\"steel\" colspan=3 align=center valign=bottom><b>" . _("Aktion") . "</b></td></tr>\n";
 
