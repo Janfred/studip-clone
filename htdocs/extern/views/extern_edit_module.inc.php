@@ -90,6 +90,7 @@ $elements = $module->getAllElements();
 	
 // the first parameter of printOutEdit() has to be an array, because it is
 // possible to open more than one element form
+$edit_open = "";
 foreach ($elements as $element) {
 	if ($edit == $element->getName())
 	//	$EXTERN_SESSION_OPEN_ELEMENTS[$element->getName()] = ($com == "open");
@@ -140,7 +141,15 @@ if ($com == "store") {
 	}
 }
 
-echo "</td></tr></table>\n<td class=\"blank\" width=\"1%\" valign=\"top\">\n";
+echo "</td></tr>\n";
+if (!$edit_open[$edit]) {
+	echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
+	echo "<tr><td class=\"blank\" align=\"center\">";
+	echo "<a href=\"{$GLOBALS['PHP_SELF']}?list=TRUE&view=extern_inst\">";
+	echo "<img " . makeButton("zurueck", "src");
+	echo " border=\"0\" valign=\"absmiddle\"></a>\n</td></tr>\n";
+}
+echo "</table>\n<td class=\"blank\" width=\"1%\" valign=\"top\">\n";
 
 $info_edit_element = _("Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den &quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements.");
 $info_preview = _("Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:");
