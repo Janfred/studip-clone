@@ -384,6 +384,19 @@ switch ($i_page) {
 		else
 			$reiter_view="seminar_main";
 	break;
+	case "wiki.php":
+		switch ($view){
+			case "listall":
+				$reiter_view="wiki_listall";
+			break;
+			case "listnew":
+				$reiter_view="wiki_listnew";
+			break;
+			default:
+				$reiter_view="wiki";
+			break;
+		}
+	break;
 }
 
 $reiter->create($structure, $reiter_view, $tooltip);
