@@ -93,7 +93,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		}
 
 		elseif($entry_level=="inst") {
-			$db->query ("SELECT user_id, inst_perms FROM user_inst WHERE Institut_id = '$SessSemName[1]' AND user_inst.user_id LIKE '$user->id' AND inst_perms='admin'");
+			$db->query ("SELECT user_id, inst_perms FROM user_inst WHERE Institut_id = '$SessSemName[1]' AND user_inst.user_id LIKE '$user->id' ");
 			
 			if ($db->next_record()) {
 				$SemUserStatus=$db->f("inst_perms");
@@ -107,7 +107,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			elseif ($perm->have_perm("root"))  // hier kommt root
 				$rechte=TRUE;
 			else
-				$SemUserStatus="autor"; //wenn gar nichts wird man hier autor
+				$SemUserStatus="user"; //wenn gar nichts wird man hier autor
 		}
 
 		elseif($entry_level=="fak") { //Fakultaetsbereich, mehr als Platzhalter, daher nur rudimentaer ausgebaut.
