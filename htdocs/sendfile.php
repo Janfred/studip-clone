@@ -87,7 +87,7 @@ if ($zip && is_file($path_file)) {
 	@copy($path_file, $tmp_file_name);
 	exec ("$ZIP_PATH -9 -j {$zip_path_file}.zip $tmp_file_name");
 	$file_name = $file_name . ".zip";
-	$path_file = $zip_path_file;
+	$path_file = $zip_path_file . ".zip";
 	@unlink($tmp_file_name);
 }
 
