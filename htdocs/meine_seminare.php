@@ -228,7 +228,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
      $sortby = "count DESC";
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
-     if (!$num_my_sem) $meldung="msg§Sie haben keine Veranstaltungen abonniert!§".$meldung;
+     if (!$num_my_sem) $meldung="msg§Sie haben zur keine Veranstaltungen abonniert, in denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie die Veranstaltungssuche um neue Veranstaltungen aufzunehmen.§".$meldung;
 
      ?>
      <table width="100%" border=0 cellpadding=0 cellspacing=0>
