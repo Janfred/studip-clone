@@ -306,7 +306,7 @@ if ($view=="ansprechpartner") {?>
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	
-	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname,Email FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE perms='root' ORDER BY Nachname");
+	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname, Email, username FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE perms='root' ORDER BY Nachname");
 	if ($db->affected_rows() ==0) { echo _("keine. Na sowas. Das kann ja eigentlich gar nicht sein..."); }
 	while ($db->next_record())
 		{
