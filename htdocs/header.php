@@ -171,7 +171,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 	echo MakeToolbar($icon,$link,$text,$tip,40, "_top");
 
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
-			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top");
+			if ($GLOBALS['CALENDAR_ENABLE'])
+				echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top");
+			else
+				echo MakeToolbar("pictures/meinetermine.gif","./mein_stundenplan.php",_("Planer"),_("Stundenplan und Kontakte"),40, "_top");
 		}		
 
 		if ($GLOBALS['CHAT_ENABLE']) {
