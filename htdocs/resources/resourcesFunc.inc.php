@@ -164,7 +164,7 @@ search_administrable_objects searches in all the (for me!) adminstrable objects
 /*****************************************************************************/
 
 function search_administrable_objects ($search_string='', $user_id='') {
-	global $user, $perm, $auth;
+	global $user, $perm, $auth, $_fullname_sql;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -180,9 +180,9 @@ function search_administrable_objects ($search_string='', $user_id='') {
 		switch ($user_global_perm) {
 		case "root": 
 			//Alle Personen...
-			$db->query("SELECT user_id, Vorname, Nachname, username FROM auth_user_md5 WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR user_id = '$search_string' ORDER BY Nachname");
+			$db->query("SELECT a.user_id,". $_fullname_sql['full_rev'] ." AS fullname , username FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 			while ($db->next_record())
-					$my_objects[$db->f("user_id")]=array("name"=>$db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", "art"=>"Personen", "perms" => "admin");
+					$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>"Personen", "perms" => "admin");
 			//Alle Seminare...
 			$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
 			while ($db->next_record())
@@ -202,9 +202,9 @@ function search_administrable_objects ($search_string='', $user_id='') {
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE inst_perms = 'admin' AND user_inst.user_id='$user_id' ");
 			while ($db->next_record()) {
 				//...alle Mitarbeiter meiner Institute, in denen ich Admin bin....
-				$db2->query ("SELECT auth_user_md5.user_id, Vorname, Nachname, username FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string') AND Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ORDER BY Nachname");
+				$db2->query ("SELECT auth_user_md5.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string') AND Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ORDER BY Nachname");
 				while ($db2->next_record()) {
-					$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("Nachname").", ".$db2->f("Vorname")." (".$db2->f("username").")", "art"=>"Personen", "perms" => "admin");
+					$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>"Personen", "perms" => "admin");
 				}
 				//...alle Seminare meiner Institute, in denen ich Admin bin....
 				$db2->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_inst USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
@@ -259,13 +259,13 @@ search_admin_user searches in all the admins
 /*****************************************************************************/
 
 function search_admin_user ($search_string='') {
-
+	global $_fullname_sql;
 	$db=new DB_Seminar;
 
 	//In allen Admins suchen...
-	$db->query("SELECT user_id, Vorname, Nachname, username FROM auth_user_md5 WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR user_id = '$search_string' ORDER BY Nachname");
+	$db->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM auth_user_md5  a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 	while ($db->next_record())
-			$my_objects[$db->f("user_id")]=array("name"=>$db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", "art"=>"Personen");
+			$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>"Personen");
 	
 	return $my_objects;
 }
@@ -276,7 +276,7 @@ search_objects searches in all objects
 /*****************************************************************************/
 
 function search_objects ($search_string='', $user_id='') {
-	global $user, $perm, $auth;
+	global $user, $perm, $auth, $_fullname_sql;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -286,9 +286,9 @@ function search_objects ($search_string='', $user_id='') {
 		$user_id=$user->id;
 		
 	//Alle Personen...
-	$db->query("SELECT user_id, Vorname, Nachname, username FROM auth_user_md5 WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR user_id = '$search_string' ORDER BY Nachname");
+	$db->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 	while ($db->next_record())
-		$my_objects[$db->f("user_id")]=array("name"=>$db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", "art"=>"Personen");
+		$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>"Personen");
 	//Alle Seminare...
 	$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
 	while ($db->next_record())
