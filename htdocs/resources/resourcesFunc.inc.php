@@ -302,11 +302,17 @@ function getMyRoomRequests($user_id = '') {
 		
 		if (sizeof($my_res)) {
 			$in_resource_id =  "('".join("','",array_keys($my_res))."')";
-			$query_res = sprintf("SELECT request_id, closed FROM resources_requests WHERE resource_id IN %s", $in_resource_id);
+			$query_res = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
+								(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
+								rr.termin_id, COUNT(t.termin_id) as anzahl_termine
+								FROM resources_requests rr 
+								INNER JOIN seminare s USING(seminar_id)
+								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.resource_id IN %s GROUP BY request_id", $in_resource_id);
 			$db2->query($query_res);
 			while ($db2->next_record()) {
 				$requests [$db2->f("request_id")]["my_res"] = TRUE;
 				$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
+				$requests [$db2->f("request_id")]["have_times"] = ($db2->f("termin_id") || $db2->f("metatime") || ($db2->f("anzahl_termine") && $db2->f("irregular")));
 			}
 		}
 		if (sizeof($my_sems)) {
