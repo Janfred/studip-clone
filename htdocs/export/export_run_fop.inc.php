@@ -97,8 +97,12 @@ else
 		}	
 		else
 		{	
-			$export_info = "";
-			$export_msg = "";
+			unset($result_printimage);
+			unset($result_printlink);
+			unset($result_printdesc);
+			unset($result_printcontent);
+			unset($export_info);
+			unset($export_msg);
 			$export_pagecontent = "";
 			$export_error = "<b>" . _("Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten.") . "</b><br>";
 			$export_error_num ++;
