@@ -639,10 +639,10 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 			$timecolor = "#BBBBBB";
 		} else {
 			if ($index >= 68)
-				$index = 68;
-			$index = 68-$index;
-			$blue = dechex(255 - $index);
-			$other = dechex(119 + ($index/1.5));
+				$tmp = 68;
+			$tmp2 = 68-$tmp;
+			$blue = dechex(255 - $tmp2);
+			$other = dechex(119 + ($tmp2/1.5));
 			$timecolor= "#" . $other . $other . $blue;
 		}
 	} else {
@@ -680,10 +680,10 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	
 	if ($link) {
 		if ($open == "close")
-			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen"));
+			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen ($indikator: $index)"));
 	
 		if ($open == "open")
-			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen"));
+			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen ($indikator: $index)"));
 	}
 	else {
 		if ($open == "close") {

@@ -320,12 +320,8 @@ function forum_get_buttons ($forumposting) {
 	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar;	
 
 	{ if (!(have_sem_write_perm())) { // nur mit Rechten...	
-		
-		if ($forum["view"] == "flatfolder")
-			$page = (ceil($forum["forumsum"] / $forum["postingsperside"])-1)*$forum["postingsperside"];
-		else 	$page = "0";
-		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=$page&sort=age#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=$page&sort=age#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
 		if ($forumposting["lonely"]==TRUE && ($rechte || $forumposting["perms"]=="write")) // ich darf bearbeiten
 			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?edit_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\">"
 			. makeButton("bearbeiten", "img") . "</a>";
@@ -339,8 +335,8 @@ function forum_get_buttons ($forumposting) {
 		$db=new DB_Seminar;
 		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id='$SessionSeminar' AND Schreibzugriff=0");
 		if ($db->num_rows())  {
-			$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=$page#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-			$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=$page#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+			$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+			$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
 		} else
 			$edit=""; // war kein nobody Seminar
 	} else 	// nix mit Rechten
@@ -591,11 +587,11 @@ function printposting ($forumposting) {
   		if (($forumposting["rating"] == 99))
   			$forumposting["rating"] = "?";
   		
-  		$relevanz = $forumposting["score"];
+  		$forumposting["score"] = round($forumposting["score"],1);
   		
-  		$forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
-  		$forumhead[] = "<font color=\"#AA8800\">".$forumposting["rating"]."</font> / ";
-  		$forumhead[] = "<font color=\"#000077\">".round($relevanz,1)."</font> / ";
+  		// $forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
+  		// $forumhead[] = "<font color=\"#AA8800\">".$forumposting["rating"]."</font> / ";
+  		// $forumhead[] = "<font color=\"#000077\">".round($relevanz,1)."</font> / ";
   		
   		/// Ende Indexe
   		
@@ -618,6 +614,8 @@ function printposting ($forumposting) {
 					."</a>"
 					."&nbsp; ";
   		
+		$forumhead[] = "| ".$forumposting[$forum["sort"]]." | ";
+
 		if (!(have_sem_write_perm())) // Antwort-Pfeil
 			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; 
   		
@@ -648,9 +646,8 @@ function printposting ($forumposting) {
   		elseif ($forum["indikator"] == "rate")
   			$index = $forumposting["rating"];
   		elseif ($forum["indikator"] == "score")
-  			$index = $relevanz;
-  		
-  		
+  			$index = $forumposting["score"];
+  		  	
   // Kopfzeile ausgeben 		
   		
   		if ($forumposting["intree"]!=TRUE)
@@ -757,7 +754,6 @@ if ($forum["sort"] == "rating" && ($forum["view"] != "tree" && $forum["view"] !=
 if ($forum["view"]=="search") {
 	if ($forum["search"]!="") {
 		$addon = " AND (".$forum["search"].")";
-		// $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, y.name AS root_name, y.topic_id AS thema_id, x.description, x.Seminar_id, x.user_id, x.chdate, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND ($addon) ORDER BY mkdate DESC ";
 	} else {
 		echo forum_search_field()."<br><br>";
 		$nomsg="TRUE";
@@ -768,7 +764,7 @@ if ($forum["view"]=="search") {
 	$addon = " AND x.chdate > '$datumtmp'";
 }
 
-$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, x.user_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.Seminar_id = '$SessionSeminar'".$addon."";
+$query = "SELECT x.topic_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.Seminar_id = '$SessionSeminar'".$addon."";
 $db->query($query);
 if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	$forum["forumsum"] = $db->num_rows();

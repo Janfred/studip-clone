@@ -75,6 +75,11 @@ function getMsTime(){
 
 $stoppuhr=getMsTime();
 
+
+if ($forum["view"]=="mixed" && $open) {
+	$forum["flatfolder"] = $open;
+}
+
 if ($view) {
 	if ($view=="reset") {
 		if ($forum["view"]=="tree" || $forum["view"]=="mixed")
@@ -93,8 +98,7 @@ if (!$forum["view"]) {
 	$view = "tree";
 	$forum["view"] = $view;
 }
-if ($forum["view"]=="flatfolder" && $view)
-	$forum["flatfolder"] = $open;
+
 $view = $forum["view"];
 
 	include "links_openobject.inc.php";
