@@ -479,7 +479,7 @@ if ($cmd_b_x)
 	if (!$sem_create_data["sem_inst_id"])
 		{
 		$level=1;
-		$errormsg=$errormsg.sprintf ("error§"._("Da Ihr Account keiner Einrichtung zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den/die zust&auml;ndigeN AdministratorIn der Einrichtung oder einen der %sAdministratoren%s des Systems!")."§", "<a href=\"ansprechpartner.php\">", "</a>");
+		$errormsg=$errormsg.sprintf ("error§"._("Da Ihr Account keiner Einrichtung zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den/die zust&auml;ndigeN AdministratorIn der Einrichtung oder einen der %sAdministratoren%s des Systems!")."§", "<a href=\"impressum.php?view=ansprechpartner\">", "</a>");
 		}
 	if (($sem_create_data["sem_turnout"] < 1) && ($sem_create_data["sem_admission"]))
  		{
