@@ -31,8 +31,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-echo "test";
-
 if(ini_get('zlib.output_compression'))
       ini_set('zlib.output_compression', 'Off');
 
@@ -307,11 +305,16 @@ if ($no_access) {
 	die;
 }
 
-echo "hallo";
-
 if (substr($path_file,0,6) != "ftp://") {
-	echo "bin da";
 	//Datei per HTTP verschicken
+	
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	parse_window("error§" . _("Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"), "§", _("Download nicht m&ouml;glich"), $pathfile);
+	page_close();
+	echo "</body>";
+	die;
+	
 	if ($type != 5 && $type != 6){
 		$filesize = filesize($path_file);
 	} else {
@@ -338,10 +341,7 @@ if (substr($path_file,0,6) != "ftp://") {
 	} else {
 		echo $the_data;
 	}
-	echo "<hr>$path_file<hr>";
-	echo "<hr>$file_name<hr>";
 } else {
-	echo "nein";
 	//Datei von FTP verschicken
 	$url_parts = @parse_url($path_file);
 	$documentpath = $url_parts["path"];
