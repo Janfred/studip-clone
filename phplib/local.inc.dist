@@ -35,7 +35,6 @@ activate or deactivate some basic system-functions here*/
 $LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
 $WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
 $SCM_ENABLE = TRUE;									//enable Simple-Content functionality
-$SEMINAR_LOCK_ENABLE = FALSE;								//enable the locking-system for seminars
 
 
 /*Stud.IP modules
@@ -141,7 +140,6 @@ $BANNER_ADS_ENABLE = FALSE; 				//enable the Banner ads functions (config as roo
 							//needs write accees for this folder.
 							
 
-
 /*language settings
 ----------------------------------------------------------------*/
 $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "name"=>"Deutsch");
@@ -157,8 +155,8 @@ $_language_domain = "studip";  // the name of the language file. Should not be c
 If you write your own plugin put it in studip-htdocs/lib/classes/lit_search_plugins 
 and enable it here. The name of the plugin is the classname excluding "StudipLitSearchPlugin". 
 If the catalog your plugin is designed for offers the possibility to create a link to an entry, you
-could provide the link here. Place templates for the needed attributes in curly braces. (see examples below)
-----------------------*/
+could provide the link here. Place templates for the needed attributes in curly braces. (see examples below)*/
+
 //standard plugin, searches in Stud.IP Database (table lit_catalog), you should leave this one enabled !
 $_lit_search_plugins[] = array('name' => "Studip", 'link' => '');
 
@@ -187,8 +185,8 @@ If you write your own plugin put it in studip-htdocs/lib/classes/auth_plugins
 and enable it here. The name of the plugin is the classname excluding "StudipAuth". 
 
 You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>, 
-all uppercase each item of the configuration array will become a member of your plugin class.
-----------------------*/
+all uppercase each item of the configuration array will become a member of your plugin class.*/
+
 
 //$STUDIP_AUTH_PLUGIN[] = "LdapReader";
 //$STUDIP_AUTH_PLUGIN[] = "Ldap";
@@ -250,10 +248,13 @@ $ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are allowed to change their emai
 $ALLOW_CHANGE_NAME = TRUE;				//if true, users are allowed to change their name
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself
 
-//IDs of courses, in which users were entered when they are promoted to 'autor'
-//-----------------------------------------------------------------
+
+/*IDs of courses, in which users were entered when they are promoted to 'autor'
+-----------------------------------------------------------------*/
+
 //$AUTO_INSERT_SEM[1]="<seminar_id>";
 //further courses can be added with their IDs here
+
 
 /*format templates for LaTex renderer
 -----------------------------------------------------------------
@@ -279,6 +280,7 @@ $LATEX_FORMATS = array(
 	Arab font (needs LaTeX package arabtex installed):
   		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
 */
+
 
 /*path generation 
 -----------------------------------------------------------------
