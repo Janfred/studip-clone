@@ -1,15 +1,22 @@
 31.03.2003 v 0.9
+- systemweiter TeX-Support
+- personalisierte Übersicht der perönlichen Veranstaltungen im Archiv
+- automatische Verwaltung und Konfiguration für externe Seiten (zur Einbindung des Stud.IP Contens in
+  bestehende Internetseitem)
+- Veranstaltungssuche / Browser umgebaut und erweitert, verwendet nun zur Darstellung die neuen Bäume
 - Internationalisierung: weite Teile des Systems können nun auch in Englisch benutzt werden
 - Ressourcenverwaltung wird nun für Verwaltung der Räume von Veranstaltungen genutzt (falls aktiviert)
 - neue Ressourcenverwaltung (eigenständiges Modul) zur Verwaltung von Räumen, Gebäuden, Geräten und 
   weiteren Ressourcen. 
-- neues Adressbuch auf Grundlage der Buddies
+- neues Adressbuch auf Grundlage der Buddyverwaltung
 - neues Exporttool, unterstützt Ausgaben in XML, RTF, TXT und PDF
 - neue Einrichtungssuche, verwendet den Einrichtungsbaum
 - neuer Einrichtungsbaum zur Darstellung der Uni-Hierachie
+- neuer Vorlesungsbaum zur Darstellung von Veranstaltungshierachien (etwa Vorlesungsverzeichnis)
 - bei regelmäßigen Veranstaltungen kann nun ein Raum für jeden Termin angegeben werden
 - Ablaufplanverwaltung überarbeitet
 - neue Titelverwaltung für Nutzernamen mit vor- und nachgestellten Titeln
+- überarbeitete Startseite
 - verbesserte Konfigurierbarkeit des Mailversands
 - weitere Detailverbesserungen und Bugfixes
 
