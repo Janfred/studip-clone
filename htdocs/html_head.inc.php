@@ -64,7 +64,7 @@ unset ($_html_head_title);
 ?>
 	</head>
 	<body>
-?>
+<?
 
 //start messenger, if set
 if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$messenger_started)) {
