@@ -321,6 +321,12 @@ $export_icon["html"] = "txt-icon.gif";
 $export_icon["htm"] = "txt-icon.gif";
 $export_icon["txt"] = "txt-icon.gif";
 // weitere Icons und Formate können hier angefügt werden
+
+// PDF-Vorlagen für den Veranstaltungsexport (Index von 1 bis X)
+// title = Beschreibung der Vorlage
+// template = PDF-Vorlage in '/export'
+$record_of_study_templates[1] = array("title" => "Allgmeine Druckvorlage", "template" =>"general_template.pdf");
+$record_of_study_templates[2] = array("title" => "Studienbuch", "template" => "record_of_study_template.pdf");
 // EXPORT -->>
 
 
