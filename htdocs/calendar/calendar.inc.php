@@ -477,7 +477,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		}
 		
 		require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
-		$aweek = new DB_Week($atime, $calendar_user_control_data["type_week"]);
+		$aweek = new DbCalendarWeek($atime, $calendar_user_control_data["type_week"]);
 		$aweek->bindSeminarTermine($bind_seminare);
 		$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data["step_week"]
 													, FALSE, $calendar_user_control_data["link_edit"]);

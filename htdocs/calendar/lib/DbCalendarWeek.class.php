@@ -1,7 +1,7 @@
 <?
 
 /*
-DbWeek.class.php - 0.8.20020520
+DbCalendarWeek.class.php - 0.8.20020520
 Klassen fuer Persoenlichen Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
 
@@ -22,9 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //****************************************************************************
 
-require_once "config.inc.php";
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
 
-class DB_Week{
+class DbCalendarWeek{
 
 	var $wdays;     // Object[]
 	var $kw;        // Kalenderwoche (String)
@@ -32,7 +33,7 @@ class DB_Week{
 	var $type;      // 5 für 5-Tage-Woche, 7 für gesamte Woche (int)
 	
 	// Konstruktor
-	function DB_Week($tmstamp, $type = "LONG"){
+	function DbCalendarWeek($tmstamp, $type = "LONG"){
 		if($type == "SHORT")
 			$this->type = 5;
 		else
@@ -45,7 +46,7 @@ class DB_Week{
 		$this->kw = strftime("%W", $this->ts);
 		
 		for($i = 0;$i < $this->type;$i++)
-			$this->wdays[$i] = new DB_Day($this->ts + $i * 86400);
+			$this->wdays[$i] = new DbCalendarDay($this->ts + $i * 86400);
 	}
 	
 	// public
