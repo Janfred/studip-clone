@@ -74,7 +74,7 @@ class ExternElementMainPersondetails extends ExternElementMain {
 			"title" => _("MitarbeiterInnen"),
 		);
 		
-	//	get_default_generic_datafields($config, "user");
+		get_default_generic_datafields($config, "user");
 		
 		return $config;
 	}
@@ -85,8 +85,8 @@ class ExternElementMainPersondetails extends ExternElementMain {
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
 		
-	//	update_generic_datafields($this->config, $this->data_fields["content"],
-		//		$this->field_names["content"], "user");
+		update_generic_datafields($this->config, $this->data_fields["content"],
+				$this->field_names["content"], "user");
 		$out = "";
 		$table = "";
 		if ($edit_form == "")
@@ -177,7 +177,7 @@ class ExternElementMainPersondetails extends ExternElementMain {
 	}
 	
 	function checkValue ($attribute, $value) {
-		if ($attribute == "showcontact" || $attribute == "showimage") {
+		if ($attribute == "showcontact") {
 			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_$attribute"])) {
 				$GLOBALS["HTTP_POST_VARS"]["Main_$attribute"] = 0;
 				return FALSE;
@@ -185,6 +185,16 @@ class ExternElementMainPersondetails extends ExternElementMain {
 				
 			return !($value == "1" || $value == "0");
 		}
+		
+		if ($attribute == "showimage") {
+			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_$attribute"])) {
+				$GLOBALS["HTTP_POST_VARS"]["Main_$attribute"] = 0;
+				return FALSE;
+			}
+			
+			return !($value == "left" || $value == "right" || $value == "0");
+		}
+		
 		return FALSE;
 	}
 	
