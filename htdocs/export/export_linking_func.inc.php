@@ -2,7 +2,8 @@
 
 function export_form($range_id, $ex_type = "", $filename = "", $format = "")
 {
-	global $output_formats, $ABSOLUTE_PATH_STUDIP , $PATH_EXPORT;
+	global $output_formats, $ABSOLUTE_PATH_STUDIP , $PATH_EXPORT, $xslt_filename;
+	$filename = $xslt_filename;
 	require_once ($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_xslt_vars.inc.php");
 	$export_string .= "<form action=\"" . "export.php\" method=\"post\">";
 	$export_string .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"steel1\"> &nbsp; &nbsp; &nbsp; ";
@@ -33,8 +34,9 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "")
 	
 function export_link($range_id, $ex_type = "", $filename = "", $format = "", $choose = "")
 {
-	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT;
+	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT, $xslt_filename;
 
+	$filename = $xslt_filename;
 	$export_string .= "";
 	if ($choose != "")
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&format=$format&choose=$choose&o_mode=processor\">";
@@ -49,7 +51,8 @@ function export_link($range_id, $ex_type = "", $filename = "", $format = "", $ch
 	
 function export_button($range_id, $ex_type = "", $filename = "", $format = "", $choose = "")
 {
-	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT;
+	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT, $xslt_filename;
+	$filename = $xslt_filename;
 	if ($choose != "")
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&format=$format&choose=$choose&o_mode=processor\">";
 	elseif ($ex_type != "")
