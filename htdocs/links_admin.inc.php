@@ -243,9 +243,9 @@ if (($RESOURCES_ALLOW_ROOM_REQUESTS) && ($RESOURCES_ENABLE))
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_sem", active=>FALSE, isolator=>TRUE);
 if (($modules["literature"]) || (!$SessSemName[1]))
 	$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur"), link=>"admin_lit_list.php?list=TRUE&view=literatur_sem", active=>FALSE);
-if ($EXPORT_ENABLE)
+if ($VOTE_ENABLE)
 	$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votings und Tests"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
-if ($EXPORT_ENABLE)
+if ($VOTE_ENABLE)
 	$structure["eval_sem"]=array (topKat=>"veranstaltungen", name=>_("Evaluationen"), link=>"admin_evaluation.php?view=eval_sem", active=>FALSE);
 
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE, isolator=>TRUE);
@@ -273,10 +273,10 @@ if ($perm->have_perm("admin")) {
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_lit_list.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_inst", active=>FALSE);
 
-if ($EXPORT_ENABLE)
+if ($VOTE_ENABLE)
 	$structure["vote_inst"]=array (topKat=>"einrichtungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_inst", active=>FALSE);
 
-if ($EXPORT_ENABLE)
+if ($VOTE_ENABLE)
 	$structure["eval_inst"]=array (topKat=>"einrichtungen", name=>_("Evaluationen"), link=>"admin_evaluation.php?view=eval_inst", active=>FALSE);
 
 if ($perm->have_perm("admin"))
