@@ -51,6 +51,10 @@ require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/ms_stundenplan.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 
+if ($RESOURCES_ENABLE)	
+ 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	
+
 //eingebundene Daten auf Konsitenz testen (Semesterwechsel? nicht mehr Admin im gespeicherten Institut?)
 check_schedule_settings();
 
@@ -140,15 +144,15 @@ if ($cmd=="insert") {
 
 //meine Seminare einlesen
 if ($inst_id) {
-	$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
+	$db->query("SELECT seminare.Seminar_id, Name, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
 	$view="inst";
 } else {
 	$user_id=$user->id;
 	if ($perm->have_perm("admin")) {
-		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
+		$db->query("SELECT seminare.Seminar_id, Name, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
 		$view="inst_admin";
 	} else {
-		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM  seminar_user LEFT JOIN seminare USING (seminar_id) WHERE user_id = '$user_id'");
+		$db->query("SELECT seminare.Seminar_id, Name, start_time, duration_time,  metadata_dates FROM  seminar_user LEFT JOIN seminare USING (seminar_id) WHERE user_id = '$user_id'");
 		$view="user";
 	}
 }
@@ -221,6 +225,14 @@ while ($db->next_record())
 		$i=0;
 		foreach 	($term_data["turnus_data"] as $data)
 			if ($data["end_stunde"] >= $global_start_time) {
+				//generate the room
+				if (($RESOURCES_ENABLE) && ($data["resource_id"]))
+					$tmp_room = getResourceObjectName($data["resource_id"]);
+				elseif (!$data["room"]) 
+					$tmp_room =_("n. A.");
+				else
+					$tmp_room =$data["room"];
+			
 				//Patch fuer Problem mit alten Versionwn <=0.7 (Typ war falsch gesetzt), wird nur fuer rueckwaerts-Kompatibilitaet benoetigt
 				settype ($data["start_stunde"], "integer");
 				settype ($data["end_stunde"], "integer");
@@ -251,7 +263,7 @@ while ($db->next_record())
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 				
-				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>htmlReady($db->f("Name")), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$db->f("Ort"), "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
+				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>htmlReady($db->f("Name")), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
 			}
 		}
 	}
