@@ -40,6 +40,10 @@ define("CHAT_SHM_KEY",98374);    //muss eindeutig sein!!!
 * @const CHAT_SHM_SIZE
 */
 define("CHAT_SHM_SIZE",512);     //in Kbyte
+
+define("CHAT_FILE_NAME", "chat_data");
+define("CHAT_FILE_PATH", "/tmp");
+
 /**
 * Used for shm access, do not alter
 * @const CHAT_USER_KEY
@@ -51,17 +55,28 @@ define("CHAT_USER_KEY",1);       //am besten nicht ändern
 */
 define("CHAT_DETAIL_KEY",2);     //dito
 /**
+* max Number of entries in one chat room
+* @const CHAT_MAX_MSG
+*/
+
+define("CHAT_MAX_MSG",50);
+/**
 * Time in seconds before chat user gets kicked
 * @const CHAT_IDLE_TIMEOUT
 */
 define("CHAT_IDLE_TIMEOUT",600);       //in Sekunden
+/**
+* Time in seconds before chat admin gets kicked
+* @const CHAT_ADMIN_IDLE_TIMEOUT
+*/
+define("CHAT_ADMIN_IDLE_TIMEOUT",7200);       //in Sekunden
 /**
 * Time in microseconds for client to sleep
 *
 * A higher number means lower CPU usage on the server, but slower response times for the clients
 * @const CHAT_SLEEP_TIME
 */
-define("CHAT_SLEEP_TIME",200000);       //in usleep(micro s)
+define("CHAT_SLEEP_TIME",500000);       //in usleep(micro s)
 /**
 * Time seconds to 'ping' the clients
 *
@@ -70,31 +85,21 @@ define("CHAT_SLEEP_TIME",200000);       //in usleep(micro s)
 */
 define("CHAT_TO_PREV_TIME",3.5);       //in Sekunden
 /**
-* 
-* @const CHAT_ENTRY_MSG
-*/
-define("CHAT_ENTRY_MSG","hat den Chat betreten!");
-/**
-* 
-* @const CHAT_EXIT_MSG
-*/
-define("CHAT_EXIT_MSG","hat den Chat verlassen!");
-
-/**
 * Global array, contains pre-defined colors (use HTML compliant names)
 * @var array $chatColors
 */
-$chatColors=array("black","blue","green","orange","indigo","darkred","red","darkblue","maroon","pink");
+$chatColors = array("black","blue","green","orange","indigo","darkred","red","darkblue","maroon","pink");
 /**
 * Global array, contains chat commands with according help text
-* @var array $chatColors
+* @var array $chatCmd
 */
-$chatCmd=array("quit" => " [msg] - Du verlässt den Chat mit der Botschaft [msg]",
-			"color" => " [colorcode] - Deine Schriftfarbe wird auf [colorcode] gesetzt",
-			"me" => " [msg] - Dein Name wird zusammen mit [msg] vom Chatbot ausgegeben",
-			"private" => " [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt",
-			"help" => " - Zeigt diesen Hilfetext",
-			"kick" => " [username] - Wirft [username] aus dem Chat wenn du Chatadmin bist",
-			"sms" => " [username][msg] - Verschickt eine Studip SMS [msg] an [username]");
+$chatCmd = array("quit" => _(" [msg] - Sie verlassen den Chat mit der Botschaft [msg]"),
+			"color" => _(" [colorcode] - Ihre Schriftfarbe wird auf [colorcode] gesetzt"),
+			"me" => _(" [msg] - Ihr Name wird zusammen mit [msg] vom Chatbot ausgegeben"),
+			"private" => _(" [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"),
+			"help" => _(" - Zeigt diesen Hilfetext"),
+			"kick" => _(" [username] - Wirft [username] aus dem Chat wenn sie Chatadmin sind, mit /kick all werfen sie alle anderen Nutzer aus dem Chat"),
+			"sms" => _(" [username][msg] - Verschickt eine Studip SMS [msg] an [username]"),
+			"password" => _(" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird ein eventuell vorhandenes Paßwort gelöscht"));
 
 ?>

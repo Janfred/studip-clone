@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php"; //wird für Nachrichten im chat benötigt
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 
@@ -107,8 +107,8 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 		
 			//Benachrichtigung in alle Chaträume schicken
 			if ($CHAT_ENABLE) {
-				$chatServer=new ChatShmServer;
-        			$myUser=$chatServer->chatUser[$db2->f("user_id")];
+				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+					$myUser=$chatServer->chatUser[$db2->f("user_id")];
 	        		$chatMsg="Du hast eine SMS von <b>".$db->f("fullname")." (".$db->f("username").")</b> erhalten!<br></i>";
 		        	$chatMsg.=formatReady(stripslashes($message))."<i>";
 		        	if (is_array($myUser))
@@ -144,7 +144,7 @@ function insert_chatinv ($rec_uname, $user_id='') {
 
 	//Benachrichtigung in alle Chaträume schicken, noch nicht so sinnvoll :)
 	if ($CHAT_ENABLE) {
-		$chatServer=new ChatShmServer;
+		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 		$myUser=$chatServer->chatUser[$db2->f("user_id")];
 		$chatMsg="Du wurdest von <b>".$db->f("fullname")." (".$db->f("username").")</b> in den Chat eingeladen !";
 		if (is_array($myUser))        

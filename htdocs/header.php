@@ -38,13 +38,13 @@ ob_start();
 if (!$perm->have_perm("user"))
 	$my_messaging_settings["active_time"]=5;
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
 
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
-	$chatServer=new ChatShmServer;
+	$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 	$chatServer->caching = TRUE;
 	echo "\t\t<script type=\"text/javascript\">\n";
 	echo "\t\tfunction open_chat() {\n";

@@ -50,12 +50,16 @@ if (!$CHAT_ENABLE) {
 	page_close();
 	die;
 }
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 
 //Studip includes
 require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 
-$chatServer = &new ChatShmServer;
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
+
 $chatServer->caching = true;
 
 ?>
@@ -69,7 +73,7 @@ $chatServer->caching = true;
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
 	?><table width="100%"><tr><?
-	my_error("Du bist nicht in diesem Chat angemeldet!","chat",1,false);
+	my_error(_("Sie sind nicht in diesem Chat angemeldet!"),"chat",1,false);
 	?></tr></table></body></html><?
 	page_close();
 	die;
@@ -84,12 +88,27 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 				<td class="topic" align="center"><b>Nicklist</b></td>
 			</tr>
 			<?
-			foreach ($chatServer->chatUser as $chatUserId => $chatUserDetail){
-					if ($chatUserDetail[$chatid]["action"]){
+			$is_admin = $chatServer->getPerm($user->id,$chatid);
+			$chat_users = $chatServer->getUsers($chatid);
+			foreach ($chat_users as $chatUserId => $chatUserDetail){
+					if ($chatUserDetail["action"]){
 						echo "\n<tr><td><span style=\"font-size:10pt\">";
-						if ($chatUserDetail[$chatid]["perm"])  echo "<b>";
-						echo "<a href=\"javascript:parent.coming_home('{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$chatUserDetail[$chatid]["nick"]."')\">".$chatUserDetail[$chatid]["fullname"]."</a><br>(".$chatUserDetail[$chatid]["nick"].")";
-						if ($chatUserDetail[$chatid]["perm"])  echo "</b>";
+						if ($chatUserDetail["perm"])  echo "<b>";
+						echo "<a href=\"#\" ". tooltip(_("Homepage dieses Nutzers aufrufen"),false) 
+							. "onClick=\"return parent.coming_home('{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$chatUserDetail["nick"]."')\">"
+							. htmlReady($chatUserDetail["fullname"])."</a><br>";
+						if ($chatUserId != $user->id){
+							if ($is_admin){
+								echo "\n<a href=\"#\" " . tooltip(_("diesen Nutzer aus dem Chat werfen"),false) 
+							. "onClick=\"parent.frames['frm_input'].document.inputform.chatInput.value='/kick "
+							. $chatUserDetail["nick"] . " ';parent.frames['frm_input'].document.inputform.submit();return false;\">#</a>&nbsp;";
+							}
+							echo "\n<a href=\"#\" " . tooltip(_("diesem Nutzer eine private Botschaft senden"),false) 
+							. "onClick=\"parent.frames['frm_input'].document.inputform.chatInput.value='/private "
+							. $chatUserDetail["nick"] . " ';return false;\">@</a>&nbsp;";
+						}
+						echo "(".$chatUserDetail["nick"].")";
+						if ($chatUserDetail["perm"])  echo "</b>";
 						echo "</span></td></tr>";
 					}
 			}

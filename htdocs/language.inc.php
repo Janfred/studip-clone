@@ -100,8 +100,8 @@ function init_i18n($_language) {
 * @return		string	html output of the button
 */
 function makeButton ($name, $mode = "img") {
-	global $_language_path;
-	$path = "./locale/$_language_path/LC_BUTTONS";
+	global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
+	$path = "$CANONICAL_RELATIVE_PATH_STUDIP/locale/$_language_path/LC_BUTTONS";
 	if ($mode == "img")
 		$tag = sprintf ("<img src=\"%s/%s-button.gif\" border=\"0\" align=\"absmiddle\"/>", $path, $name);
 	else

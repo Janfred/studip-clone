@@ -46,13 +46,17 @@ if (!$CHAT_ENABLE) {
 	die;
 }
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 //Studip includes
 require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";
+require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 
-$chatServer = &new ChatShmServer;
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+
+$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
 $chatServer->addChat($chatid);
 if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),$perm->have_perm("root"))){
@@ -88,28 +92,28 @@ $sms->delete_chatinv($auth->auth["uname"]);
 <html>
 <head>
 	<title>Chat(<?=$auth->auth["uname"]?>) -
-	<?=$chatServer->chatDetail[$chatid]["name"]?></title>
+	<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></title>
 
 <script type="text/javascript">
 	/**
 	* JavaScript 
 	*/
-	function coming_home(url)
-	{
-		if (opener.closed) alert('Das Hauptfenster wurde geschlossen,\ndiese Funktion kann nicht mehr ausgeführt werden!');
+	function coming_home(url) {
+		if (opener.closed) alert('<?=_("Das Hauptfenster wurde geschlossen,\\ndiese Funktion kann nicht mehr ausgeführt werden!")?>');
 		else {
 			opener.location.href = url;
 			opener.focus();
 		}
-
+		return false;
 	}
+	
 	</script>
 </head>
 <frameset rows="83%,*" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
 	<frameset cols="*,25%" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
 		<frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1>
 		<frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1>
-		</frameset>
+	</frameset>
 <frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 >
 </frameset>
 </html>

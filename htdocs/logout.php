@@ -23,7 +23,7 @@ ob_start();
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
 
 if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir dies tun!
 
@@ -32,7 +32,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 
 	//User aus allen Chatraeumen entfernen
 	if ($CHAT_ENABLE) {
-		$chatServer=new ChatShmserver();
+		$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 		$chatServer->logoutUser($user->id);
 	}
 	
