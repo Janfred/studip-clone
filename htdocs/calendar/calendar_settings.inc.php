@@ -246,7 +246,7 @@ $css_switcher->switchClass();
 				</tr>
 				<tr><? $css_switcher->switchClass(); ?>
 					<td align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><? echo _("Löschen von Terminen"); ?></font>
+						<font size="-1"><? echo _("L&ouml;schen von Terminen:"); ?></font>
 					</td>
 					<td class="<? echo $css_switcher->getClass(); ?>">
 						<font size="-1">
