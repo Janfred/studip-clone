@@ -781,7 +781,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 					);
 	$replace = array(
 			"preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
-			"preg_call_link(array('\\2', '\\3'), 'MAIL', $extern)");
+			"preg_call_link(array('\\2', '\\3'), 'MAIL', false, $extern)");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 
 	if ($nl_to_br)
@@ -1211,7 +1211,7 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 	$ret = "";
 	if ($with_popup)
 		$ret = " onClick=\"alert('".JSReady($text,"alert")."');\"";
-	$text = preg_replace("/(\n\r|\r\n|\n|\r)/", "", $text);
+	$text = preg_replace("/(\n\r|\r\n|\n|\r)/", " ", $text);
 	$text = htmlReady($text);
 	if ($with_alt)
 		$ret .= " alt=\"$text\"";
