@@ -403,7 +403,7 @@ function checkObjektAdministrablePerms ($resource_object_owner_id, $user_id='') 
 		return TRUE;
 	
 	//for the resources admin too
-	if ($my_perms ->getGlobalPerms() == "admin")
+	if (getGlobalPerms($user_id) == "admin")
 		return TRUE;
 	
 	//load all my administrable objects
