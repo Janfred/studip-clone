@@ -22,8 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $auth->login_if($auth->auth["uid"] == "nobody");
  $perm->check("autor");
 
-require_once "messaging.inc.php";
-
+require_once "$ABSOLUTE_PATH_STUDIP/messaging.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 
 // Klassendefinition
 class studip_news extends messaging
@@ -169,6 +169,9 @@ function get_one_news($news_id)
 function show_news($id)
 {
 global $auth;
+
+$cssSw= new cssClassSwitcher;
+
  $this->get_news_by_range($id,$limit=100);
  if (!is_array($this->news_query))
          {
@@ -181,25 +184,28 @@ global $auth;
      return FALSE;
      }
  echo "\n<form action=\"".$this->p_self("cmd=kill")."\" method=\"POST\">";
- echo "\n<tr><td class=\"blank\"><table class=\"blank\" align=\"center\" width=\"90%\" cellspacing=\"2\" cellpadding=\"1\" border=\"0\">";
- echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\">Vorhandene News im Bereich:<br><b>$this->range_name</b><br>";
- echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\">Markierte News <input type=\"SUBMIT\" name=\"kill\" value=\"löschen\">&nbsp;&nbsp;</td></tr>";
+ echo "\n<tr><td class=\"blank\"><blockquote>";
+ echo "<table class=\"blank\" align=\"left\" width=\"90%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+ echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\"><font size=-1>Vorhandene News im gew&auml;hlten Bereich:<br>";
+ echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\"><font size=-1>markierte News <input type=\"IMAGE\" name=\"kill\" src=\"pictures/buttons/loeschen-button.gif\" border=0 value=\"l&ouml;schen\">&nbsp;&nbsp;</td></tr>";
  echo "\n<tr><th width=\"15%\">Überschrift</th><th width=\"20%\">Inhalt</th><th width=\"20%\">Autor</th><th width=\"10%\">Einstelldatum</th><th width=\"10%\">Ablaufdatum</th><th width=\"15%\">Bearbeiten</th><th width=\"10%\">Löschen</th>";
 
  while (list ($news_id,$details) = each ($this->news_query))
         {
-        echo "\n<tr><td width=\"15%\" align=\"center\"><b>".htmlReady($details["topic"])."</b></td>";
+	$cssSw->switchClass();
+        echo "\n<tr><td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><b>".htmlReady($details["topic"])."</b></td>";
         list ($body,$admin_msg)=explode("<admin_msg>",$details["body"]);
-        echo "\n<td width=\"25%\" align=\"center\">".htmlready(mila($body))."</td>";
-        echo "\n<td width=\"15%\" align=\"center\">".$details["author"]."</td>";
-        echo "\n<td width=\"10%\" align=\"center\">".strftime("%d.%m.%y", $details["date"])."</td>";
-        echo "\n<td width=\"10%\" align=\"center\">".strftime("%d.%m.%y", ($details["date"]+$details["expire"]))."</td>";
-        echo "\n<td width=\"15%\" align=\"center\"><a href=\"".$this->p_self("cmd=edit&edit_news=$news_id")."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" alt=\"Diese News bearbeiten\" border=\"0\"></a></td>";
-        echo "\n<td width=\"10%\" align=\"center\">";
+        echo "\n<td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"center\">".htmlready(mila($body))."</td>";
+        echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\">".$details["author"]."</td>";
+        echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", $details["date"])."</td>";
+        echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", ($details["date"]+$details["expire"]))."</td>";
+        echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><a href=\"".$this->p_self("cmd=edit&edit_news=$news_id")."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" alt=\"Diese News bearbeiten\" border=\"0\"></a></td>";
+        echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">";
         if ($this->news_perm[$id]["perm"]==3 OR $auth->auth["perm"]=="root" OR $details["user_id"]==$this->user_id) echo "<input type=\"CHECKBOX\" name=\"kill_news[]\" value=\"$news_id\">";
         else echo "<font color=\"red\">Nein</font>";
         echo "</td></tr>";
         }
+ echo "\n<tr><td class=\"blank\" colspan=8>&nbsp; </td></tr>";
  echo "\n</form></table><br><br></td></tr>";
  return TRUE;
 
@@ -221,17 +227,18 @@ else
    }
 
 if ($this->news_query["user_id"]==$this->user_id) $this->modus="";
-echo "\n<tr><td class=\"blank\" width=\"100%\" align=\"center\">";
+echo "\n<tr><td width=\"99%\" align=\"center\" cellpadding=2 cellspacing=0 border=0>";
 echo "\n<form action=\"".$this->p_self("cmd=news_submit")."\" method=\"POST\">";
 echo "\n<input type=\"HIDDEN\" name=\"news_id\" value=\"".$this->news_query["news_id"]."\">";
 echo "\n<input type=\"HIDDEN\" name=\"user_id\" value=\"".$this->news_query["user_id"]."\">";
 echo "\n<input type=\"HIDDEN\" name=\"author\" value=\"".$this->news_query["author"]."\">";
-echo "\n<table class=\"blank\" cellspacing=\"6\" cellpadding=\"2\" border=\"0\">";
-echo "\n<tr><td class=\"blank\" width=\"70%\"><b>Autor:</b>&nbsp;".$this->news_query["author"]."<br><br><b>Überschrift</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\"  name=\"topic\" value=\"".htmlReady($this->news_query["topic"])."\"><br>";
+echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
+echo "\n<table width=\"99%\" cellspacing=\"0\" cellpadding=\"6\" border=\"0\">";
+echo "\n<tr><td class=\"steel1\" class=\"blank\" width=\"70%\"><b>Autor:</b>&nbsp;".$this->news_query["author"]."<br><br><b>Überschrift</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\"  name=\"topic\" value=\"".htmlReady($this->news_query["topic"])."\"><br>";
 list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
 echo "\n<br><b>Inhalt</b><br><textarea name=\"body\" style=\"width: 100%\" cols=\"".floor($this->max_col*.8*.8)."\" rows=\"10\"   wrap=\"virtual\">".htmlReady($body)."</textarea><br></td>";
-echo "\n<td class=\"blank\" width=\"30%\">Geben sie hier die Überschrift und den Inhalt ihrer News ein.<br><br>Im unteren Bereich können sie auswählen, in welchen Bereichen ihre News angezeigt wird.";
-echo "\n<br><br>Drücken sie danach hier, um die Änderungen zu übernehmen.<br><br><center><INPUT TYPE=\"SUBMIT\"  name=\"news_submit\" value=\"Übernehmen\"></center></td></tr>";
+echo "\n<td class=\"steelgraulight\"  class=\"blank\" width=\"30%\">Geben sie hier die Überschrift und den Inhalt ihrer News ein.<br><br>Im unteren Bereich können sie auswählen, in welchen Bereichen ihre News angezeigt wird.";
+echo "\n<br><br>Drücken sie danach hier, um die Änderungen zu übernehmen.<br><br><center><INPUT TYPE=\"IMAGE\"  name=\"news_submit\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"&Uuml;bernehmen\"></center></td></tr>";
 echo "\n<tr><td class=\"blank\" colspan=\"2\">Einstelldatum: <select name=\"date\"><option value=\"".$aktuell."\" selected>".strftime("%d.%m.%y", $aktuell)."</option>";
 for ($i=1; $i<=14; $i++)
     {
@@ -252,21 +259,21 @@ for ($i=2; $i<=12; $i+=2)
     echo ">$i Wochen (".strftime("%d.%m.%y",($temp+$aktuell)).")</option>";
     }
 echo "</select></td></tr></table></td></tr>";
-echo "\n<tr><td class=\"blank\"><hr></td></tr>";
-echo "\n<tr><td class=\"blank\"><b>In diesen Bereichen wird die News angezeigt:</b></td></tr>";
-echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"100%\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">";
+echo "\n<tr><td class=\"blank\"><hr width=\"99%\"></td></tr>";
+echo "\n<tr><td class=\"blank\">&nbsp; <b>In diesen Bereichen wird die News angezeigt:</b><br /><br /></td></tr>";
+echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"99%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
 
 if ($perm->have_perm("root"))
 	{
      echo "\n<tr><th width=\"90%\" align=\"left\">System Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
-	echo "\n<tr><td  width=\"90%\">StudIP System News</td>";
-	echo "\n<td width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"studip\"";
+	echo "\n<tr><td class=\"steel1\"  width=\"90%\">StudIP System News</td>";
+	echo "\n<td class=\"steel1\" width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"studip\"";
 	if ($this->range_detail["studip"]["type"] OR ($this->news_range=="studip" AND $news_id=="new_entry")) echo "checked";
 	echo "></td></tr>";
      }
 echo "\n<tr><th width=\"90%\" align=\"left\">Persönlicher Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
-echo "\n<tr><td  width=\"90%\">".$this->news_query["author"]."</td>";
-echo "\n<td width=\"10%\" align=\"center\">";
+echo "\n<tr><td class=\"steel1\"  width=\"90%\">".$this->news_query["author"]."</td>";
+echo "\n<td class=\"steel1\"  width=\"10%\" align=\"center\">";
 if ($this->news_perm[$this->news_query["user_id"]]["perm"] OR $this->news_query["user_id"]==$this->user_id)
 	{
      echo"<input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->news_query["user_id"]."\"";
@@ -282,15 +289,17 @@ else
 $this->list_range_details("sem");
 $this->list_range_details("inst");
 $this->list_range_details("fak");
-echo "\n</table></form></td></tr>";
+echo "\n</form></td></tr>";
 if ($perm->have_perm("admin"))
      {
+      echo "<tr><td class=\"blank\" colspan=2><br />";
+      echo "<table class=\"blank\" width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
       echo "\n<form action=\"".$this->p_self("cmd=edit")."\" method=\"POST\"><input type=\"HIDDEN\" name=\"edit_news\" value=\"".$this->news_query["news_id"]."\">";
-      echo "\n<tr><td><br>Einen neuen Bereich hinzufügen:  <INPUT TYPE=\"TEXT\"  name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"submit\" value=\"SUCHEN\"><br><br></td></tr></form>";
+      echo "\n<tr><td class=\"blank\"><b>Einen weiteren Bereich hinzufügen:<br /><br /></td></tr>";
+      echo "\n<tr><td class=\"steel1\"><font size=-1>Hier k&ouml;nnen Sie weitere Bereiche, auf die sie Zugriff haben, der Auswahl hinzuf&uuml;gen</font><br /><br />";
+      echo "<input type=\"TEXT\"  name=\"search\" size=\"20\">&nbsp; <input type=\"IMAGE\" name=\"submit\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\"></td></tr></form>";
      }
-
-
-
+echo "</table>";
 }
 
 
@@ -517,7 +526,7 @@ while (list ($range,$details) = each ($this->range_detail))
        {
        if ($details["type"]==$type)
            {
-           $output[1].= "\n<tr><td  width=\"90%\">".htmlReady($details["name"])."</td>\n<td width=\"10%\" align=\"center\">";
+           $output[1].= "\n<tr><td class=\"steel1\" width=\"90%\">".htmlReady($details["name"])."</td>\n<td class=\"steel1\"  width=\"10%\" align=\"center\">";
            //$output[1].= "\n<td width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\" checked></td></tr>";
            if ($this->news_perm[$range]["perm"] OR $auth->auth["perm"]=="root")
 			{
@@ -544,8 +553,8 @@ if ($perm->have_perm("tutor") && is_array($this->search_result))
             {
             if ($details["type"]==$type)
                  {
-                 $output[1].= "\n<tr><td  width=\"90%\">".htmlReady($details["name"])."</td>";
-                 $output[1].= "\n<td width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\"";
+                 $output[1].= "\n<tr><td  class=\"steel1\"  width=\"90%\">".htmlReady($details["name"])."</td>";
+                 $output[1].= "\n<td class=\"steel1\"  width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\"";
                  if ($range==$this->news_range AND $this->news_query["news_id"]=="new_entry") $output[1].=" checked ";
                  $output[1].="></td></tr>";
                  }
@@ -556,8 +565,8 @@ else
     $this->db->query($query.$add);
     while($this->db->next_record())
              {
-             $output[1].= "\n<tr><td  width=\"90%\">".$this->db->f("name")."</td>";
-             $output[1].= "\n<td width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->db->f("id")."\"";
+             $output[1].= "\n<tr><td  class=\"steel1\"  width=\"90%\">".$this->db->f("name")."</td>";
+             $output[1].= "\n<td class=\"steel1\"  width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->db->f("id")."\"";
              if ($this->db->f("id")==$this->news_range AND $this->news_query["news_id"]=="new_entry") $output[1].=" checked ";
              $output[1].="></td></tr>";
              }
@@ -685,7 +694,7 @@ include "links_admin.inc.php";  //Linkleiste fuer admins
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr><td class="topic"><b>&nbsp;
-News eingeben / verändern</b> <font size="-1">( Bereich: <b><?=$news_range_name?></b> )</font></td></tr>
+Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_name?></b>)</font></td></tr>
 <?
 
  if ($perm->have_perm("admin"))
@@ -715,26 +724,36 @@ News eingeben / verändern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
       else $cmd="";
       }
 
- if ($news->msg) parse_msg($news->msg,"§","blank","1",FALSE);
+ if ($news->msg) {
+ 	echo "<tr><td class=\"blank\"><br />";
+ 	parse_msg($news->msg,"§","blank","1");
+ 	echo "</td></tr>";
+ }
  $news->msg="";
 
- if ($cmd=="edit")
-      {
-      if ($perm->have_perm("admin") && $search)
-           {
+ if ($cmd=="edit") {
+      if ($perm->have_perm("admin") && $search) {
            if ($search) $news->search_range($search);
-           if (empty($news->search_result)) parse_msg("info§Die Suche ergab keine Treffer!§","§","blank","1",FALSE);
-           }
+           if (empty($news->search_result)) {
+		echo "<tr><td class=\"blank\"><br />";
+           	parse_msg("info§Die Suche ergab keine Treffer!§","§","blank","1",FALSE);
+	 	echo "</td></tr>";
+	   }
+      }
       if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") $news->search_range("blah");
       $news->edit_news($edit_news);
-      }
+}
 
  if ($cmd=="kill")
     		{
           $news->kill_news($kill_news);
           $cmd="";
           }
- if ($news->msg) parse_msg($news->msg,"§","blank","1",FALSE);
+ if ($news->msg) {
+	echo "<tr><td class=\"blank\"><br />";
+ 	parse_msg($news->msg,"§","blank","1");
+ 	echo "</td></tr>"; 	
+ }
  $news->msg="";
 
  if ($cmd=="new_entry")
@@ -748,33 +767,47 @@ News eingeben / verändern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
 
           if ($perm->have_perm("tutor"))
              {
-             echo"\n<tr> <td class=\"steel1\"><b><br>&nbsp;&nbsp;&nbsp;Bereichsauswahl</b><br>";
+             echo"\n<tr><td class=\"blank\"><br /><blockquote><b>Bereichsauswahl</b><blockquote></td></tr>\n";
              if ($perm->have_perm("admin"))
               {
-              echo "<form action=\"".$news->p_self("cmd=search")."\" method=\"POST\">&nbsp;&nbsp;&nbsp;<INPUT TYPE=\"TEXT\"  name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"submit\" value=\"SUCHEN\">";
-              echo "&nbsp;&nbsp;&nbsp;Geben sie einen Suchbegriff ein, um den gewünschten Bereich zu finden!</form>";
+              echo "<tr><td class=\"blank\"><blockquote> ";
+              echo "<table width=\"50%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+              echo "<form action=\"".$news->p_self("cmd=search")."\" method=\"POST\">";
+              echo "<tr><td class=\"steel1\">";
+              echo "&nbsp; <font size=-1>Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!</font><br /><br />";
+              echo "&nbsp; <INPUT TYPE=\"TEXT\"  name=\"search\" size=\"20\">&nbsp;&nbsp;<input type=\"IMAGE\" name=\"submit\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">";
+              echo "</td></tr></table>\n";
+              echo "</form>";
+              echo "</blockquote>";
                }
              else $news->search_range("blah");
-          echo "\n</td></tr>";
-          echo "\n<tr><td class=\"steel1\"  align=\"center\"><table class=\"blank\" width=\"90%\" cellspacing=\"2\" cellpadding=\"1\" border=\"0\">";
+          echo "\n<tr><td class=\"blank\"><blockquote><b>";
+	  echo "<hr width=\"100%\"><br />verf&uuml;gbare Bereiche";	
+          echo "</b><blockquote></td></tr>\n ";
+          echo "<tr><td class=\"blank\"><blockquote> ";
           $typen = array("user"=>"Benutzer","sem"=>"Veranstaltung","inst"=>"Institut","fak"=>"Fakultät");
-          $my_cols=3;
-          if ($perm->have_perm("root"))
-             {
-              $my_cols=4;
-              echo "<tr><td colspan=\"$my_cols\" align=\"left\"><b>Systemweite News</b>&nbsp;<a href=\"".$news->p_self("range_id=studip")."\">bearbeiten</a></td></tr>";
-             }
-          if ($perm->have_perm("tutor"))
-             {
-              echo "<tr><td colspan=\"$my_cols\" align=\"left\"><b>Persönliche News</b>&nbsp;<a href=\"".$news->p_self("range_id=$user->id")."\">bearbeiten</a></td></tr>";
-             }
-
+          $my_cols=4;
+          if ($perm->have_perm("tutor")){
+              echo "\n<tr><td class=\"blank\"><blockquote>";
+              echo "<font size=-1>Sie k&ouml;nnen&nbsp; <b>Persönliche News</font></b>&nbsp;<a href=\"".$news->p_self("range_id=$user->id")."\">&nbsp; <img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a></font>";
+          }
+          if ($perm->have_perm("root")) {
+              echo "<font size=-1>&nbsp; <i>oder</I>&nbsp; <b>Systemweite News</font></b>&nbsp;<a href=\"".$news->p_self("range_id=studip")."\">&nbsp; <img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a></font>";
+          }
           if ($news->search_result)
-             {
+              echo "<font size=-1>&nbsp; <i>oder</i> <b>hier</b> einen der gefundenen Bereiche ausw&auml;hlen:</I>&nbsp; <b></font>";
+          
+          if ($perm->have_perm("tutor"))
+              echo "</td></tr></blockquote>";
+
+          if ($news->search_result) {
+            echo "\n<tr><td class=\"blank\"><br /><blockquote>";
+            echo "<table width=\"90%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+             
              while (list($typen_key,$typen_value)=each ($typen))
                       {
                       if (!$perm->have_perm("root") AND $typen_key=="user") continue;
-                      echo "\n<td width=\"".floor(100/$my_cols)."%\" align=\"center\" valign=\"top\"><b>$typen_value</b><br><font size=\"-1\">";
+                      echo "\n<td class=\"steel1\" width=\"".floor(100/$my_cols)."%\" align=\"center\" valign=\"top\"><b>$typen_value</b><br><font size=\"-1\">";
                       reset($news->search_result);
                       while (list ($range,$details) = each ($news->search_result))
                       {
@@ -785,19 +818,25 @@ News eingeben / verändern</b> <font size="-1">( Bereich: <b><?=$news_range_name?
                          echo "</a><br>";
                          }
                       }
-                      echo "\n</font></td>";
                       }
+                      echo "\n</font></td>";
+		      echo"\n</table></td></tr>";
+                      
              }
-
-          echo"\n</table></td></tr>";
-
           }
-           echo"\n<tr><td class=\"steel1\"><br><form action=\"".$news->p_self("cmd=new_entry")."\" method=\"POST\">&nbsp;&nbsp;&nbsp;<input type=\"SUBMIT\" name=\"new_entry\" value=\"NEU\"> - Drücken sie hier, um eine neue News zu erstellen.</form></td></tr>";
 
-         if (!$news->show_news($news_range_id))
-            {
-            echo "\n<tr><td class=\"steel1\" align=\"center\">Im Bereich <b>".htmlReady($news_range_name)."</b> sind keine News vorhanden!<br><br></td></tr>";
-            }
+         echo "\n<tr><td class=\"blank\"><br /><blockquote>";
+         echo "<form action=\"".$news->p_self("cmd=new_entry")."\" method=\"POST\">";
+	 echo "<hr width=\"100%\"><br /><b>gew&auml;hlter Bereich: </b>".htmlReady($news_range_name). "<br /><br />";
+         echo "<font size=-1>eine neue News im gew&auml;hlten Bereich </font>&nbsp; <input type=\"IMAGE\" name=\"new_entry\" src=\"pictures/buttons/erstellen-button.gif\" border=0  value=\"erstellen\">";
+         echo "</b><blockquote></td></tr>\n ";
+	 echo "</form>";          
+
+         if (!$news->show_news($news_range_id)) {
+            echo "\n<tr><td class=\"blank\"><blockquote>";
+            echo "<font size=-1>Im gew&auml;hlten Bereich sind keine News vorhanden!<br>";
+            echo "</blockquote></td></tr>";
+         }
      }
 
 echo"\n</table></html>";
