@@ -254,11 +254,11 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" ".tooltip("Gruppe ändern")." border="0"></a></th>
 									<th width="84%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
-<?
-/*									<th width="10%"><b>besucht</b></th>
-									<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
-*/
-?>
+<?									if ($view=="ext") { ?>
+										<th width="10%"><b>besucht&nbsp;&nbsp;</b></th>
+										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
+										<th width="10%"><img src="pictures/nutzer.gif" alt="TeilnehmerInnen der Veranstaltung"></th>
+									<?	}?>
 									<th width="3%"><b>X</b></th>
 								</tr>
 	<?
@@ -298,21 +298,27 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		echo "</td>";
 
 
-// last visited-field
-/*
-		IF ($loginfilenow[$semid]==0)
-			{
-			echo "<td class=".$cssSw->getClass()."  align=\"center\" nowrap>nicht besucht</td>";
-			}
-		ELSE
-			 {
-			 echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>", date("d.m.Y", $loginfilenow[$semid]),"</td>";
-			}
+// Extendet views:
 
-// Status-field
-		echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
+	// last visited-field
+		IF ($view=="ext") {
+			IF ($loginfilenow[$semid]==0) {
+				echo "<td class=".$cssSw->getClass()."  align=\"center\" nowrap>n.b.</td>";
+			}
+			ELSE {
+			 	echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>", date("d.m.", $loginfilenow[$semid]),"</td>";
+			}
+	// Status-field
+			echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
+	// Teilnehmer
+			$db2=new DB_Seminar;
+			$db2->query ("SELECT count(*) as teilnehmer FROM seminar_user WHERE Seminar_id ='$semid'");
+	 		while($db2->next_record()) 
+	 			echo "<td class=\"".$cssSw->getClass()."\"  nowrap align=\"right\">". $db2->f("teilnehmer")."&nbsp;</td>";
+		}
 
-*/
+
+// delete Entry from List:
 
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
 			echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";

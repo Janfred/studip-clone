@@ -31,6 +31,7 @@ $structure["meine_einrichtungen"]=array (topKat=>"", name=>"Meine Einrichtungen"
 
 //Bottomkats
 $structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>"&Uuml;bersicht", link=>"meine_seminare.php", active=>FALSE);
+$structure["_meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>"Erweitert", link=>"meine_seminare.php?view=ext", active=>FALSE);
 //
 $structure["Alle"]=array (topKat=>"veranstaltungen_suche", name=>"Alle", link=>"sem_portal.php?view=Alle", active=>FALSE);
 foreach ($SEM_CLASS as $key=>$val)  {
@@ -46,7 +47,9 @@ if ($perm->have_perm("admin")) {
 //View festlegen
 switch ($i_page) {
 	case "meine_seminare.php" : 
-		$reiter_view="meine_veranstaltungen"; 
+		IF ($view=="ext") $reiter_view="_meine_veranstaltungen_extendet"; 
+		ELSE
+			$reiter_view="meine_veranstaltungen"; 
 	break;
 	case "meine_einrichtungen.php" : 
 		$reiter_view="meine_einrichtungen"; 
