@@ -52,12 +52,7 @@ if ((sizeof ($_REQUEST) == 1) && (!$view)) {
 if ($view)
 	$supportdb_data["view"] = $view;
 	
-//Illegal view?
-if (($supportdb_data["view"] == "requests") && (!$supportdb_data["actual_req"])) {
-	$msg->addMsg(8);
-	$supportdb_data["view"] = "overview";
-}
-	
+
 //Open a contract
 if ($con_open) {
 	$supportdb_data["con_opens"][$con_open] = TRUE;
@@ -305,6 +300,12 @@ if (($rechte) && ($kill_evt)) {
 	$killEvt->delete();
 
 	unset($supportdb_data["evt_edits"][$kill_evt]);
+}
+
+//Illegal view?
+if (($supportdb_data["view"] == "requests") && (!$supportdb_data["actual_con"])) {
+	$msg->addMsg(8);
+	$supportdb_data["view"] = "overview";
 }
 
 ?>
