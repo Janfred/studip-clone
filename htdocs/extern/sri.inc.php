@@ -39,7 +39,7 @@
 
 $sri_page = implode("", file($page_url));
 //echo $sri_page;
-$sri_pattern = "'(.*)\<studip_remote_include\>(.*)\<\/studip_remote_include\>(.*)'is";
+$sri_pattern = "'(.*)(\<studip_remote_include\>.*\<\/studip_remote_include\>)(.*)'is";
 
 if (!preg_match($sri_pattern, $sri_page, $sri_matches)) {
 	echo $EXTERN_ERROR_MESSAGE;
@@ -47,58 +47,36 @@ if (!preg_match($sri_pattern, $sri_page, $sri_matches)) {
 	exit;
 }
 
-//echo $sri_matches[0];
-//echo $sri_matches[1];
-//echo $sri_matches[2];
-//echo $sri_matches[3];
-//echo $sri_matches[3];
+$parser = xml_parser_create();
+xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+xml_parse_into_struct($parser, $sri_matches[2], $xml_values, $xml_tags);
 
+$allowed_xml_tags = array("module", "range", "config", "sem");
 
-// get data out of sri-block
-// 1. range_id
-if (preg_match("'range_id\s*\=\s*([a-f0-9]{32})\s?\n'", $sri_matches[2], $matches)) {
-	$range_id = $matches[1];
-	echo $range_id . "<br>";
+foreach ($allowed_xml_tags as $xml_tag) {
+	if ($xml_tags[$xml_tag]) {
+		$attributes = $xml_values[$xml_tags[$xml_tag][0]]["attributes"];
+		foreach ($attributes as $attribute => $value) {
+			$parameter_name = $xml_tag . "_" . $attribute;
+			$$parameter_name = $value;
+		}
+	}
 }
-else {
-	echo $sri_matches[1];
-	echo $EXTERN_ERROR_MESSAGE;
-	echo $sri_matches[3];
-	exit;
-}
-
-// 2. module
-if (preg_match("'module\s*\=\s*([a-z]{5,20})\s?\n'i", $sri_matches[2], $matches)) {
-	$module = ucfirst(strtolower($matches[1]));
-	echo $module . "<br>";
-}
-else {
-	echo $sri_matches[1];
-	echo $EXTERN_ERROR_MESSAGE;
-	echo $sri_matches[3];
-	exit;
-}
-
-// 3. config_id / config_name
-if (preg_match("'config_id\s*\=\s*([a-f0-9]{32})\s?\n'", $sri_matches[2], $matches)){
-	$config_id = $matches[1];
-	echo $config_id . "<br>";
-}
-elseif (preg_match("'config_name\s*\=\s*([a-z0-9-_ ]{1,40})\s?\n'i", $sri_matches[2], $matches)){
-	$config_name = $matches[1];
-	echo $config_name . "<br>";
-}
-
-// 4. sem (which semester?)
-if (preg_match("'sem\s*\=\s*([\+\-]1)\s?\n'", $sri_matches[2], $matches))
-	$sem = $matches[1];
-
 
 // check given data
+// no range_id? sorry...
+if (!$range_id) {
+	echo $sri_matches[1];
+	echo $EXTERN_ERROR_MESSAGE;
+	echo $sri_matches[3];
+	exit;
+}
+
 // Is it a valid module name?
 reset($EXTERN_MODULE_TYPES);
 foreach ($EXTERN_MODULE_TYPES as $module_type => $module_data) {
-	if ($module_data["module"] == $module) {
+	if ($module_data["module"] == $module_name) {
 		$type = $module_type;
 		break;
 	}
@@ -111,6 +89,7 @@ if (!$type) {
 	exit;
 }
 
+// if there is no config_id or config_name, take the DEFAULT configuration
 if ($config_name) {
 	// check for valid configuration name and convert it into a config_id
 	if (!$config_id = get_config_by_name($range_id, $type, $config_name)) {
@@ -141,23 +120,23 @@ foreach ($SEMESTER as $key => $sem_record) {
 		break;
 	}
 }
-if ($sem == "-1") {
-	$start = $SEMESTER[$key - 1]["beginn"];
-	$end = $SEMESTER[$key - 1]["ende"];
+if ($sem_offset == "-1") {
+	$start = $SEMESTER[$current - 1]["beginn"];
+	$end = $SEMESTER[$current - 1]["ende"];
 }
-elseif ($sem == "+1") {
-	$start = $SEMESTER[$key + 1]["beginn"];
-	$end = $SEMESTER[$key + 1]["ende"];
+elseif ($sem_offset == "+1") {
+	$start = $SEMESTER[$current + 1]["beginn"];
+	$end = $SEMESTER[$current + 1]["ende"];
 }
 else {
-	$start = $SEMESTER[$key]["beginn"];
-	$end = $SEMESTER[$key]["ende"];
+	$start = $SEMESTER[$current]["beginn"];
+	$end = $SEMESTER[$current]["ende"];
 }
 
 // all parameters ok, instantiate module and print data
 foreach ($EXTERN_MODULE_TYPES as $type) {
-	if ($type["module"] == $module)
-		$module_obj =& new ExternModule($range_id, $module, $config_id, $default);
+	if ($type["module"] == $module_name)
+		$module_obj =& new ExternModule($range_id, $module_name, $config_id, $default);
 }
 
 echo $sri_matches[1];
