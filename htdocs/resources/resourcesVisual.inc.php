@@ -734,6 +734,143 @@ class editObject extends cssClasses {
 			return TRUE;
 	}
 
+	function create_schedule_forms($assign_id='') {
+		global $PHP_SELF, $resources_data, $search_user, $search_string_search_user;
+
+		$resAssign=new resourceAssign($assign_id);
+
+		?>
+		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
+		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
+			<input type="HIDDEN" name="view" value="edit_object_schedule" />
+			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", ($assign_id) ? $resAssign->getResourceId() : $resources_data["structure_open"]); ?>" />			
+			<input type="HIDDEN" name="change_schedule_repeat_month_of_year" value="<? echo $resAssign->getRepeatMonthOfYear() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_day_of_month" value="<? echo $resAssign->getRepeatDayOfMonth() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_month" value="<? echo $resAssign->repeatMonth() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_week_of_month" value="<? echo $resAssign->getRepeatWeekOfMonth() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_day_of_week" value="<? echo $resAssign->getRepeatDayOfWeek() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_week" value="<? echo $resAssign->getRepeatWeek() ?>" />
+			<tr>
+				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Datum:</font><br />
+				<font size=-1>
+					<input name="change_schedule_day" value="<? echo date("d",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
+					.<input name="change_schedule_month" value="<? echo date("m",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
+					.<input name="change_schedule_year" value="<? echo date("Y",$resAssign->getBegin()); ?>" size=4 maxlength="4" />
+				</font>
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="40%"><font size=-1>Art der Wiederholung:</font><br />
+				<font size=-1>
+					<input type="IMAGE" name="change_schedule_repeat_none" src="./pictures/buttons/keine<? printf (($resAssign->getRepeatMode()=="na") ? "2" :"") ?>-button.gif" border=0 />
+					&nbsp;<input type="IMAGE" name="change_schedule_repeat_day" src="./pictures/buttons/jedentag<? printf (($resAssign->getRepeatMode()=="d") ? "2" :"") ?>-button.gif" border=0 />
+					&nbsp;<input type="IMAGE" name="change_schedule_repeat_week" src="./pictures/buttons/jedewoche<? printf (($resAssign->getRepeatMode()=="w") ? "2" :"") ?>-button.gif" border=0 /><br />
+					<input type="IMAGE" name="change_schedule_repeat_month" src="./pictures/buttons/jedenmonat<? printf (($resAssign->getRepeatMode()=="m") ? "2" :"") ?>-button.gif" border=0 />
+					&nbsp;<input type="IMAGE" name="change_schedule_repeat_year" src="./pictures/buttons/jedesjahr<? printf (($resAssign->getRepeatMode()=="y") ? "2" :"") ?>-button.gif" border=0 />
+				</font>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Beginn/Ende:</font><br />
+				<font size=-1>
+					<input name="change_schedule_start_hour" value="<? echo date("G",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
+					:<input name="change_schedule_start_minute" value="<? echo date("i",$resAssign->getBegin()); ?>" size=2 maxlength="2" />Uhr
+					&nbsp; &nbsp; <input name="change_schedule_end_hour"  value="<? echo date("G",$resAssign->getEnd()); ?>" size=2 maxlength="2" />
+					:<input name="change_schedule_end_minute" value="<? echo date("i",$resAssign->getEnd()); ?>" size=2 maxlength="2" />Uhr
+				</font>
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="40%" valign="top">
+				<? if ($resAssign->getRepeatMode() != "na") { ?>
+				<font size=-1>Wiederholung bis:</font><br />				
+				<font size=-1>
+					<input name="change_schedule_repeat_end_day" value="<? echo date("d",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
+					.<input name="change_schedule_repeat_end_month" value="<? echo date("m",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
+					.<input name="change_schedule_repeat_end_year" value="<? echo date("Y",$resAssign->getRepeatEnd()); ?>" size=4 maxlength="4" />
+					<input type="CHECKBOX" <? printf ("%s", ($resAssign->isRepeatEndSemEnd()) ? "checked" : "") ?> name="change_schedule_repeat_sem_end" /> Ende des Semesters
+				</font>
+				<? 
+				} else { 
+				?> &nbsp;  
+				<? } ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Nutzer:</font><br />
+				<font size=-1>
+					<? create_search_form("search_user", $search_string_search_user) ?> <i>oder</i><br/>
+					freie Eingabe:<br />
+					<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" /
+				</font>
+				</td>
+				<td class="<? echo $this->getClass() ?>" valign="top">
+				<? if ($resAssign->getRepeatMode() != "na") { ?>
+				<font size=-1>Anzahl der Wiederholungen:</font><br />				
+				<font size=-1>
+					<input name="change_schedule_repeat_quantity" value="<?  echo $resAssign->getRepeatQuantity(); ?>" size=2 maxlength="2" />
+					alle&nbsp;<input name="change_schedule_repeat_interval" value="<? echo $resAssign->getRepeatInterval(); ?>" size=2 maxlength="2" />
+					<?
+					switch ($resAssign->getRepeatMode()) {
+						case "d": 
+							echo "Tage";
+						break;
+						case "w": 
+							echo "Wochen";
+						break;
+						case "m": 
+							echo "Monate";
+						break;
+						case "y": 
+							echo "Jahre";
+						break;
+					}
+					?>
+				</font>
+				<? 
+				} else { 
+				?> &nbsp;  
+				<? } ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->getClass() ?>" valign="top">&nbsp; 
+				</td>
+				<td class="<? echo $this->getClass() ?>" width="40%">
+					<? if ($resAssign->getRepeatMode() == "w") { ?>
+					<font size=-1>Wochentage:</font><br />
+						<input type="IMAGE" name="change_schedule_repeat_day1" src="./pictures/buttons/m<? printf (($resAssign->getRepeatDayOfWeek()=="1") ? "2" :"1") ?>-mini.gif" border=0 />
+						<input type="IMAGE" name="change_schedule_repeat_day2" src="./pictures/buttons/d<? printf (($resAssign->getRepeatDayOfWeek()=="2") ? "2" :"1") ?>-mini.gif" border=0 />
+						<input type="IMAGE" name="change_schedule_repeat_day3" src="./pictures/buttons/m<? printf (($resAssign->getRepeatDayOfWeek()=="3") ? "2" :"1") ?>-mini.gif" border=0 />
+						<input type="IMAGE" name="change_schedule_repeat_day4" src="./pictures/buttons/d<? printf (($resAssign->getRepeatDayOfWeek()=="4") ? "2" :"1") ?>-mini.gif" border=0 />
+						<input type="IMAGE" name="change_schedule_repeat_day5" src="./pictures/buttons/f<? printf (($resAssign->getRepeatDayOfWeek()=="5") ? "2" :"1") ?>-mini.gif" border=0 />
+						<input type="IMAGE" name="change_schedule_repeat_day6" src="./pictures/buttons/s<? printf (($resAssign->getRepeatDayOfWeek()=="6") ? "2" :"1") ?>-mini.gif" border=0 />
+						<input type="IMAGE" name="change_schedule_repeat_day7" src="./pictures/buttons/s<? printf (($resAssign->getRepeatDayOfWeek()=="7") ? "2" :"1") ?>-mini.gif" border=0 />
+					<font size=-1>
+					</font>
+					<? 
+					} else { 
+					?> &nbsp;  
+					<? } ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 name="submit" value="Zuweisen"><br />&nbsp; 
+				</td>
+			</tr>
+			</form>
+		</table>
+		<br /><br />
+		<?
+	}	
+
+
 	function create_propertie_forms() {
 		global $PHP_SELF;
 			

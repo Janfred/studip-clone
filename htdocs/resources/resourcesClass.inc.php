@@ -19,6 +19,234 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+
+/*****************************************************************************
+resourceAssign, zentrale Klasse Ressourcen Belegungen
+/*****************************************************************************/
+class resourceAssign {
+	var $db;					//Datenbankanbindung;
+	var $id;					//Id des Belegungs-Objects
+	var $resource_id;			//resource_id des verknuepten Objects;
+	var $assign_user_id;		//id des verknuepten Benutzers der Ressource
+	var $user_free_name;		//freier Name fuer Belegung
+	var $begin_ts;				//Timestamp der Startzeit
+	var $end_ts;				//Timestamp der Endzeit
+	var $repeat_end_ts;		//Timestamp der Endzeit der Belegung (expire)
+	var $repeat_quantity;		//Anzahl der Wiederholungen
+	var $repeat_interval;		//Intervall der Wiederholungen
+	var $repeat_month_of_year ;	//Wiederholungen an bestimmten Monat des Jahres
+	var $repeat_day_of_month;	//Wiederholungen an bestimmten Tag des Monats
+	var $repeat_month;			//janaja...
+	var $repeat_week_of_month;	//Wiederholungen immer in dieser Woxche des Monats
+	var $repeat_day_of_week;	//Wiederholungen immer an diesem Wochentag
+	var $repeat_week;			//najan
+
+	//Konstruktor
+	function resourceAssign($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin_ts='', $end_ts='', 
+						$repeat_end_ts='', $repeat_quantity='', $repeat_interval='', $repeat_month_of_year='', $repeat_day_of_month='', 
+						$repeat_month='', $repeat_week_of_month='', $repeat_day_of_week='', $repeat_week='') {
+		global $user;
+		
+		$this->user_id = $user->id;
+		$this->db=new DB_Seminar;
+
+		if(func_num_args() == 1) {
+			$this->id = func_get_arg(0);
+			$this->restore($this->id);
+		} elseif(func_num_args() == 15) {
+			$this->id=func_get_arg(0);
+			$this->resource_id = func_get_arg(1);
+			$this->assign_user_id = func_get_arg(2);
+			$this->user_free_name = func_get_arg(3);
+			$this->begin_ts = func_get_arg(4);
+			$this->end_ts = func_get_arg(5);
+			$this->repeat_end_ts = func_get_arg(6);
+			$this->repeat_quantity = func_get_arg(7);
+			$this->repeat_interval = func_get_arg(8);
+			$this->repeat_month_of_year  = func_get_arg(9);
+			$this->repeat_day_of_month = func_get_arg(10);
+			$this->repeat_month = func_get_arg(11);
+			$this->repeat_week_of_month = func_get_arg(12);
+			$this->repeat_day_of_week = func_get_arg(13);
+			$this->repeat_week = func_get_arg(14);
+			if (!$this->id)
+				$this->id=$this->createId();
+		} 	
+	}
+
+	function createId() {
+		return md5(uniqid("BartSimpson"));
+	}
+	
+	function create() {
+		return $this->store(TRUE);
+	}
+
+	function getId() {
+		return $this->id;
+	}
+	
+	function getAssignUserId() {
+		return $this->assign_user_id;
+	}
+
+	function getResourceId() {
+		return $this->resource_id;
+	}
+
+	function getUserFreeName() {
+		return $this->user_free_name;
+	}
+
+	function getBegin() {
+		if (!$this->begin_ts)
+			return time();
+		else
+			return $this->begin_ts;
+	}
+
+	function getEnd() {
+		if (!$this->end_ts)
+			return time()+3600;
+		else
+			return $this->end_ts;
+	}
+
+	function getRepeatEnd() {
+		if (!$this->repeat_end_ts)
+			return time();
+		else
+			return $this->repeat_end_ts;
+	}
+
+	function getRepeatQuantity() {
+		return $this->repeat_quantity;
+	}
+
+	function getRepeatInterval() {
+		return $this->repeat_interval;
+	}
+
+	function getRepeatMonthOfYear() {
+		return $this->repeat_month_of_year ;
+	}
+
+	function getRepeatDayOfMonth() {
+		return $this->repeat_day_of_month;
+	}
+
+	function repeatMonth() {
+		return $this->repeat_month;
+	}
+	function getRepeatWeekOfMonth() {
+		return $this->repeat_week_of_month;
+	}
+	function getRepeatDayOfWeek() {
+		return $this->repeat_day_of_week;
+	}
+	
+	function getRepeatWeek() {
+		return $this->repeat_week;
+	}
+	
+	function getBeginTs() {
+		return $this->begin_ts;
+	}
+	
+	function getRepeatMode() {
+		if ((!$this->repeat_month_of_year) && (!$this->repeat_week_of_moth) && (!$this->repeat_day_of_month) && (!$this->repeat_day_of_week) && (!$this->repeat_quantity))
+			return "na";
+		elseif ($this->repeat_month_of_year)
+			return "y";
+		elseif ($this->repeat_week_of_moth || $this->repeat_day_of_month)
+			return "m";
+		elseif ($this->repeat_day_of_week)
+			return "w";
+		else
+			return "d";
+	}
+	
+	function isRepeatEndSemEnd() {
+		global $SEMESTER;
+
+		foreach ($SEMESTER as $a)	
+			if (($this->begin_ts >= $a["beginn"]) &&($this->begin_ts <= $a["ende"]))
+				if ($this->repeat_end_ts==$a["vorles_ende"])
+					return true;
+		return false;
+	}
+
+	function restore($id='') {
+		if(func_num_args() == 1)
+			$query = sprintf("SELECT * FROM resources_assign WHERE assign_id='%s' ",$id);
+		else 
+			$query = sprintf("SELECT * FROM resources_assign WHERE assign_id='%s' ",$this->id);
+		$this->db->query($query);
+		
+		if($this->db->next_record()) {
+			$this->id = $id;
+			$this->resource_id = $this->db->f("resource_id");
+			$this->assign_user_id = $this->db->f("assign_user_id");
+			$this->user_free_name = $this->db->f("user_free_name");
+			$this->begin_ts =$this->db->f("begin");
+			$this->end_ts = $this->db->f("end");
+			$this->repeat_end_ts = $this->db->f("repeat_end");
+			$this->repeat_quantity = $this->db->f("repeat_quantity");
+			$this->repeat_interval = $this->db->f("repeat_interval");
+			$this->repeat_month_of_year  =$this->db->f("repeat_month_of_year");
+			$this->repeat_day_of_month =$this->db->f("repeat_day_of_month");
+			$this->repeat_month = $this->db->f("repeat_month");
+			$this->repeat_week_of_month = $this->db->f("repeat_week_of_month");
+			$this->repeat_day_of_week = $this->db->f("repeat_day_of_week");
+			$this->repeat_week = $this->db->f("repeat_week");
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	function store($create=''){
+		// Natuerlich nur Speichern, wenn sich was geaendert hat oder das Object neu angelegt wird
+		if(($this->chng_flag) || ($create)) {
+			$chdate = time();
+			$mkdate = time();
+			if($create)
+				$query = sprintf("INSERT INTO resources_assign SET assign_id='%s', resource_id='%s', " 
+					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
+					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
+					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s', "
+					."mkdate='%s', chdate='%s' "
+							 , $this->id, $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin_ts
+							 , $this->end_ts, $this->repeat_end_ts, $this->repeat_quantity, $this->repeat_interval
+							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
+							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
+							 , $mkdate, $chdate);
+			else
+				$query = sprintf("UPDATE resources_assign SET resource_id='%s', " 
+					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
+					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
+					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s', "
+					."chdate='%s' WHERE assign_id='%s'"
+							 , $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin_ts 
+							 , $this->end_ts, $this->repeat_end_ts, $this->repeat_quantity, $this->repeat_interval
+							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
+							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
+							 , $chdate, $this->id);
+			if($this->db->query($query))
+				return TRUE;
+			return FALSE;
+		}
+		return FALSE;
+	}
+
+	function delete() {
+		$query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
+		if($this->db->query($query))
+			return TRUE;
+		return FALSE;
+	}
+
+}
+
 /*****************************************************************************
 resourceObjeckt, zentrale Klasse der Ressourcen Objecte
 /*****************************************************************************/
@@ -63,7 +291,7 @@ class resourceObject {
 		return md5(uniqid("DuschDas"));
 	}
 
-	function createObject() {
+	function create() {
 		return $this->store(TRUE);
 	}
 	
@@ -362,7 +590,6 @@ class resourceObject {
 			return TRUE;
 		return FALSE;
 	}
-	
 }
 
 /*****************************************************************************
@@ -505,13 +732,11 @@ class resourcesUser {
 					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
 			break;
 		}
-		
 		//Bestimmen aller weiteren Straenge, die nicht oben schon ausgewaehlt wurden
 		$db->query("SELECT resources_objects.resource_id, root_id FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id='".$this->user_id."' ");
 		while ($db->next_record())
 			if (!$this->my_roots[$db->f("root_id")])
 				$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
-			
 	}
 	
 	//public
