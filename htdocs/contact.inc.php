@@ -11,13 +11,6 @@
 * @modulegroup	library
 * @module				contact.inc.php
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",false);
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // statusgruppe.inc.php
@@ -194,11 +187,11 @@ function GetUserInfo($user_id)
 	$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");	
 	if ($db->next_record()) {	
 		if ($db->f("Home")!="")
-			$userinfo["Homepage"] = "<a href=\"".$db->f("Home")."\">".$db->f("Home")."</a>";
+			$userinfo[_("Homepage")] = "<a href=\"".$db->f("Home")."\">".$db->f("Home")."</a>";
 		if ($db->f("privatnr")!="")
-			$userinfo["Privat Tel."] = $db->f("privatnr");
+			$userinfo[_("Privat Tel.")] = $db->f("privatnr");
 		if ($db->f("privadr")!="")
-			$userinfo["Adresse"] = $db->f("privadr");
+			$userinfo[_("Adresse")] = $db->f("privadr");
 	}
 	return $userinfo;
 }
@@ -209,23 +202,21 @@ function GetinstInfo($user_id)
 	$i = 0;
 	$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
 	while ($db->next_record()) {	
-		$userinfo[$i]["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
+		$userinfo[$i][_("Einrichtung")] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
 		if ($gruppen = GetStatusgruppen($db->f("Institut_id"), $user_id))
-			$userinfo[$i]["Funktion"] = htmlReady(join(", ", array_values($gruppen)));
+			$userinfo[$i][_("Funktion")] = htmlReady(join(", ", array_values($gruppen)));
 		if ($db->f("raum")!="")
-			$userinfo[$i]["Raum"] = FormatReady($db->f("raum"));
+			$userinfo[$i][_("Raum")] = FormatReady($db->f("raum"));
 		if ($db->f("sprechzeiten")!="")
-			$userinfo[$i]["Sprechzeiten"] = FormatReady($db->f("sprechzeiten"));
+			$userinfo[$i][_("Sprechzeiten")] = FormatReady($db->f("sprechzeiten"));
 		if ($db->f("telefon")!="")
-			$userinfo[$i]["Dienst Tel."] =FormatReady($db->f("telefon"));			
+			$userinfo[$i][_("Dienst Tel.")] =FormatReady($db->f("telefon"));			
 		if ($db->f("fax")!="")
-			$userinfo[$i]["Dienst Fax"] = FormatReady($db->f("fax"));
+			$userinfo[$i][_("Dienst Fax")] = FormatReady($db->f("fax"));
 		$i++;
 	}
 	return $userinfo;
 }
-
-
 
 
 
@@ -242,7 +233,7 @@ function ShowUserInfo ($contact_id)
 	}
 	$db->query ("SELECT Email, username FROM auth_user_md5 WHERE user_id = '$user_id'");	
 	if ($db->next_record()) {	
-		$basicinfo["Email"] = "<a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a>";
+		$basicinfo[_("E-Mail")] = "<a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a>";
 		$basicinfo["Stud.IP"] = "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("username")." (".get_global_perm($user_id).")</a>";
 	}
 
@@ -303,15 +294,15 @@ function ShowContact ($contact_id)
 		if ($open == $contact_id || $open == "all") {
 			$rnd = rand(0,10000);
 			if ($db->f("buddy")=="1") {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\" =".tooltip(_("Als Buddie entfernen"))."></a>&nbsp; ";
+				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\" ".tooltip(_("Als Buddie entfernen"))."></a>&nbsp; ";
 			} else {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\" =".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
+				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\" ".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
 			}
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						.$buddy		
-						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" =".tooltip(_("Editieren"))."></a>&nbsp; "
-						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash.gif\" border=\"0\" =".tooltip(_("Kontakt löschen"))."></a></td></tr>"
-						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" =".tooltip(_("Kontakte schliessen"))."></a></td></tr>";
+						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" ".tooltip(_("Editieren"))."></a>&nbsp; "
+						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Kontakt löschen"))."></a></td></tr>"
+						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schliessen"))."></a></td></tr>";
 		} else {
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
 				$description = "";	
@@ -364,7 +355,7 @@ function ShowContact ($contact_id)
 					<tr>
 						<td class=\"topic\" width=\"99%\"><font size=\"2\"><b>"
 							.get_fullname($db->f("user_id"), $format = "full_rev" )."</b></font></td>"
-							."<td class=\"topic\"><a href=\"sms.php?sms_source_page=contact.php&cmd=write&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachrichtsmall.gif\" border=\"0\" =".tooltip(_("Nachricht schreiben"))." align=\"right\"></a>"
+							."<td class=\"topic\"><a href=\"sms.php?sms_source_page=contact.php&cmd=write&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachrichtsmall.gif\" border=\"0\" ".tooltip(_("Nachricht schreiben"))." align=\"right\"></a>"
 							."</td>"
 							."
 						</td>
@@ -409,11 +400,11 @@ function ShowEditContact ($contact_id)
 	if ($db->next_record()) {
 
 		$lastrow =	"<tr><td class=\"steelkante\">&nbsp; "
-					."<input type=\"text\" name=\"owninfolabel[]\" value=\"Neue Rubrik\"></td>"
-					."<td colspan=\"2\" class=\"steelkante\"><br><textarea style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual name=\"owninfocontent[]\" value=\"Inhalt\">Inhalt</textarea>"
+					."<input type=\"text\" name=\"owninfolabel[]\" value=\"" . _("Neue Rubrik") . "\"></td>"
+					."<td colspan=\"2\" class=\"steelkante\"><br><textarea style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual name=\"owninfocontent[]\" value=\"Inhalt\">" . _("Inhalt") . "</textarea>"
 					."\n"
 					. "</td></tr>";
-		$lastrow .= "<tr><td valign=\"middle\" colspan=\"3\" class=\"steelgraulight\" align=\"center\"><br><a href=\"$PHP_SELF?open=$contact_id#anker\"><img src= \"./pictures/buttons/zurueck-button.gif\" border=\"0\" ".tooltip("zur&uuml;ck zur &Uuml;bersicht")."></a>&nbsp; <input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/uebernehmen-button.gif\" border=\"0\" value=\" Personen suchen\" ".tooltip("Seite aktualisieren")."></form></td></tr>";
+		$lastrow .= "<tr><td valign=\"middle\" colspan=\"3\" class=\"steelgraulight\" align=\"center\"><br><a href=\"$PHP_SELF?open=$contact_id#anker\"><img " . makeButton("zurueck", "src") . " border=\"0\" ".tooltip(_("zurück zur Übersicht"))."></a>&nbsp; <input type=\"IMAGE\" name=\"search\" " . makeButton("uebernehmen", "src") . " border=\"0\" value=\"uebernehmen\" ".tooltip(_("Seite aktualisieren"))."></form></td></tr>";
 		$output = "<table cellspacing=\"0\" cellpadding=\"3\" width=\"700\" class=\"blank\">
 					<tr>
 						<td class=\"topicwrite\" colspan=\"3\">"
@@ -429,9 +420,9 @@ function ShowEditContact ($contact_id)
 		$output .= "<tr><td class=\"steel1\" colspan=\"3\">&nbsp; </td></tr>";
 		while ($db2->next_record()) 	{
 			if ($i ==0) {
-				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\"><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" =".tooltip(_("Diesen Eintrag löschen"))."></a></td></tr>";
+				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\"><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."></a></td></tr>";
 			} else {
-				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td NOWRAP class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\" nowrap><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" =".tooltip(_("Diesen Eintrag löschen"))."></a>&nbsp; <a href=\"$PHP_SELF?edit_id=$contact_id&move=".$db2->f("userinfo_id")."\"><img src=\"pictures/move_up.gif\" border=\"0\" =".tooltip(_("Diesen Eintrag nach oben schieben"))."></a></td></tr>";			
+				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td NOWRAP class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\" nowrap><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."></a>&nbsp; <a href=\"$PHP_SELF?edit_id=$contact_id&move=".$db2->f("userinfo_id")."\"><img src=\"pictures/move_up.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag nach oben schieben"))."></a></td></tr>";			
 			}
 			$i++;
 		}

@@ -111,7 +111,7 @@ if ($move) {
 
 // add a new userinfo
 
-if ($owninfolabel AND ($owninfocontent[0]!="Inhalt")){
+if ($owninfolabel AND ($owninfocontent[0]!=_("Inhalt"))){
 	AddNewUserinfo ($edit_id, $owninfolabel[0], $owninfocontent[0]);
 }
 
@@ -125,7 +125,7 @@ if ($existingowninfolabel) {
 
 ?>
 <table width = "100%" cellspacing="0" border="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Addressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%s Eintr&auml;ge"),$size_of_book);?>)</font></b>
+	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Addressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book);?>)</font></b>
 	</td>
 </tr><tr><td class="blank" align="left" valign="absmiddle">
 
@@ -141,7 +141,7 @@ echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
 	if (SearchResults($search_exp)) {
-		printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\"" . _("In Addressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Addressbuch eintragen")));
+		printf ("<input type=\"IMAGE\" name=\"search\" " . makeButton("eintragen", "src") . " border=\"0\" value=\"" . _("In Addressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Addressbuch eintragen")));
 		echo SearchResults($search_exp);
 	} else {
 		echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
@@ -171,7 +171,7 @@ if (($contact["view"])=="alpha") {
 		$cssSw->switchClass();
 	}
 	echo "<td width=\"5%\" align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\" "
-		. tooltip(($size_of_book == 1) ? _("1 Eintrag") : sprintf(_("%s Einträge"),$size_of_book),false)
+		. tooltip(($size_of_book == 1) ? _("1 Eintrag") : sprintf(_("%d Einträge"),$size_of_book),false)
 		."><a href=\"$PHP_SELF?filter=all\">a-z</a>"
 		."</td>";
 	if (!$filter) {
@@ -190,7 +190,7 @@ if (($contact["view"])=="alpha") {
 			$character = chr($i);
 		}
 		echo "<td width=\"3%\"  align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\""
-		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? _("1 Eintrag") : (($size_of_book_by_letter[chr($i)] > 1 ) ? sprintf(_("%s Einträge"),$size_of_book_by_letter[chr($i)]) : _("keine Einträge")),false)
+		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? _("1 Eintrag") : (($size_of_book_by_letter[chr($i)] > 1 ) ? sprintf(_("%d Einträge"),$size_of_book_by_letter[chr($i)]) : _("keine Einträge")),false)
 		."><a href=\"$PHP_SELF?filter=".chr($i)."\" "
 		. ">".$character."</a>"
 		."</td>";
