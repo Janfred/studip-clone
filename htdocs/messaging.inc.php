@@ -220,7 +220,7 @@ class messaging {
 			$db4->next_record();
 
 			if ($user_id != "____%system%____")  {
-				$db5->query("SELECT smsforward_rec FROM user_info WHERE user_id='".$db4->f("user_id")."'");
+				$db5->query("SELECT smsforward_rec, smsforward_copy FROM user_info WHERE user_id='".$db4->f("user_id")."'");
 				$db5->next_record();
 				$snd_user_id = $user_id;
 				if ($sms_data["tmpsavesnd"] != "1") { // don't save save sms in outbox
@@ -259,8 +259,12 @@ class messaging {
 			// insert rec
 			if ($db5->f("smsforward_rec") != "") {
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db5->f("smsforward_rec")."', snd_rec='rec' ");
+				if ($db5->f("smsforward_copy") == 1) {
+					$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
+				}			
+			} else {
+				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
 			}
-			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
 
 			//Benachrichtigung in alle Chaträume schicken	 
 			$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
