@@ -374,7 +374,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 					$this->msg .= "error§" . _("Der Username wird bereits von einem anderen User verwendet. Bitte wählen sie einen anderen Usernamen!") . "§";
 					return false;
 				} else {
-					$this->msg .= "info§" . $check_uname['error'] ."§";
+					//$this->msg .= "info§" . $check_uname['error'] ."§";
 				}
 				$this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
 				$this->msg=$this->msg . "msg§" . _("Ihr Username wurde ge&auml;ndert!") . "§";
