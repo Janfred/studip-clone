@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-04-14 14:39+0200\n"
+"POT-Creation-Date: 2004-08-24 12:42+0200\n"
 "PO-Revision-Date: 2003-10-01 11:20+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -446,17 +446,17 @@ msgstr "Throw this user out of the chat"
 msgid "diesem Nutzer / dieser Nutzerin eine private Botschaft senden"
 msgstr "Send this user a private message"
 
-#: chat/ChatServer.class.php:136
+#: chat/ChatServer.class.php:137
 #, c-format
 msgid "%s hat den Chat betreten!"
 msgstr "%s has entered the chat!"
 
-#: chat/ChatServer.class.php:161
+#: chat/ChatServer.class.php:162
 #, c-format
 msgid "%s hat den Chat verlassen!"
 msgstr "%s has left the chat!"
 
-#: chat/ChatServer.class.php:226
+#: chat/ChatServer.class.php:227
 #, c-format
 msgid "%s hat sich aus Stud.IP ausgeloggt!"
 msgstr "%s has logged out of Stud.IP!"

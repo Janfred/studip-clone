@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-04-14 14:39+0200\n"
+"POT-Creation-Date: 2004-08-24 12:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -724,47 +724,47 @@ msgstr ""
 msgid "Keine gestoppten Votings oder Tests vorhanden."
 msgstr ""
 
-#: vote/vote_show.inc.php:47
+#: vote/vote_show.inc.php:49
 msgid "Vote-Datenbankfehler"
 msgstr ""
 
-#: vote/vote_show.inc.php:52
+#: vote/vote_show.inc.php:54
 msgid "Evaluation-Datenbankfehler"
 msgstr ""
 
-#: vote/vote_show.inc.php:69
+#: vote/vote_show.inc.php:71
 msgid "Datenbankfehler bei Voteaktivierung"
 msgstr ""
 
-#: vote/vote_show.inc.php:85 vote/vote_show.inc.php:93
+#: vote/vote_show.inc.php:87 vote/vote_show.inc.php:95
 msgid "Datenbankfehler beim Auslesen der EvaluationsIDs."
 msgstr ""
 
-#: vote/vote_show.inc.php:116 vote/vote_show.inc.php:125
+#: vote/vote_show.inc.php:118 vote/vote_show.inc.php:127
 msgid "Umfragen"
 msgstr ""
 
-#: vote/vote_show.inc.php:118 vote/vote_show.inc.php:127
+#: vote/vote_show.inc.php:120 vote/vote_show.inc.php:129
 msgid "Umfragen und mehr..."
 msgstr ""
 
-#: vote/vote_show.inc.php:123
+#: vote/vote_show.inc.php:125
 msgid "Umfragen bearbeiten"
 msgstr ""
 
-#: vote/vote_show.inc.php:150
+#: vote/vote_show.inc.php:152
 msgid "Fehler beim Einlesen der Evaluation"
 msgstr ""
 
-#: vote/vote_show.inc.php:251
+#: vote/vote_show.inc.php:254
 msgid "Fehler beim Einlesen des Votes"
 msgstr ""
 
-#: vote/vote_show.inc.php:280
+#: vote/vote_show.inc.php:283
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr ""
 
-#: vote/vote_show.inc.php:301
+#: vote/vote_show.inc.php:304
 msgid "Fehler bei der Abstimmung"
 msgstr ""
 

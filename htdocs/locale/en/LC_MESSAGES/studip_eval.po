@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2004-04-14 14:39+0200\n"
+"POT-Creation-Date: 2004-08-24 12:42+0200\n"
 "PO-Revision-Date: 2004-03-31 18:28+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -1312,69 +1312,69 @@ msgstr "You have already attended to this evaluation."
 msgid "Mit %s gekennzeichnete Fragen müssen beantwortet werden."
 msgstr "Questions marked by %s must be answered."
 
-#: modules/evaluation/evaluation_show.lib.php:195
+#: modules/evaluation/evaluation_show.lib.php:196
 #, c-format
 msgid "Es haben insgesamt <b>%s</b> Personen teilgenommen"
 msgstr "A total of <b>%s</b> people have taken part"
 
-#: modules/evaluation/evaluation_show.lib.php:198
+#: modules/evaluation/evaluation_show.lib.php:199
 msgid "Sie waren der/die einzige TeilnehmerIn"
 msgstr "You were the only participant"
 
-#: modules/evaluation/evaluation_show.lib.php:199
+#: modules/evaluation/evaluation_show.lib.php:200
 msgid "Es hat insgesamt <b>eine</b> Person teilgenommen"
 msgstr "Only <b>one</b> person has taken part"
 
-#: modules/evaluation/evaluation_show.lib.php:203
+#: modules/evaluation/evaluation_show.lib.php:204
 #, c-format
 msgid "Es haben bisher <b>%s</b> Personen teilgenommen"
 msgstr "To date <b>%s</b> people have taken part"
 
-#: modules/evaluation/evaluation_show.lib.php:206
+#: modules/evaluation/evaluation_show.lib.php:207
 msgid "Sie waren bisher der/die einzige TeilnehmerIn"
 msgstr "You are the only participant, yet"
 
-#: modules/evaluation/evaluation_show.lib.php:207
+#: modules/evaluation/evaluation_show.lib.php:208
 msgid "Es hat bisher <b>eine</b> Person teilgenommen"
 msgstr "One person has taken part, yet"
 
-#: modules/evaluation/evaluation_show.lib.php:212
+#: modules/evaluation/evaluation_show.lib.php:213
 msgid ", Sie ebenfalls"
 msgstr ", including you"
 
-#: modules/evaluation/evaluation_show.lib.php:225
+#: modules/evaluation/evaluation_show.lib.php:226
 #, c-format
 msgid "Die Evaluation wurde beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr "This evaluation has been terminated <b>%s</b> at <b>%s</b>."
 
-#: modules/evaluation/evaluation_show.lib.php:231
+#: modules/evaluation/evaluation_show.lib.php:232
 #, c-format
 msgid ""
 "Die Evaluation wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr "This evaluation is likely to be terminated <b>%s</b> at <b>%s</b>."
 
-#: modules/evaluation/evaluation_show.lib.php:236
+#: modules/evaluation/evaluation_show.lib.php:237
 #, c-format
 msgid "Sie k&ouml;nnen teilnehmen bis zum <b>%s</b> um <b>%s</b> Uhr."
 msgstr "You can take part until <b>%s</b> at <b>%s</b>."
 
-#: modules/evaluation/evaluation_show.lib.php:243
+#: modules/evaluation/evaluation_show.lib.php:244
 msgid "Der Endzeitpunkt dieser Evaluation steht noch nicht fest."
 msgstr "The termination date of this evaluation has not been determined yet."
 
-#: modules/evaluation/evaluation_show.lib.php:258
+#: modules/evaluation/evaluation_show.lib.php:259
 msgid "Die Teilnahme war anonym."
 msgstr "Participation was anonymous."
 
-#: modules/evaluation/evaluation_show.lib.php:259
+#: modules/evaluation/evaluation_show.lib.php:260
 msgid "Die Teilnahme war <b>nicht</b> anonym."
 msgstr "Participation was <b>not</b> anonymous."
 
-#: modules/evaluation/evaluation_show.lib.php:262
+#: modules/evaluation/evaluation_show.lib.php:263
 msgid "Die Teilnahme ist anonym."
 msgstr "Participation is anonymous."
 
-#: modules/evaluation/evaluation_show.lib.php:265
+#: modules/evaluation/evaluation_show.lib.php:266
 msgid ""
 "Dies ist eine personalisierte Evaluation. Ihre Angaben werden verknüpft mit "
 "Ihrem Namen gespeichert."
@@ -1382,47 +1382,47 @@ msgstr ""
 "This evaluation is personalized. Upon saving, your replies will be linked to "
 "your name."
 
-#: modules/evaluation/evaluation_show.lib.php:296
+#: modules/evaluation/evaluation_show.lib.php:297
 msgid "Senden Sie Ihre Antworten hiermit ab."
 msgstr "Submit your replies now."
 
-#: modules/evaluation/evaluation_show.lib.php:307
+#: modules/evaluation/evaluation_show.lib.php:308
 msgid "Schließt dieses Fenster."
 msgstr "Close this window."
 
-#: modules/evaluation/evaluation_show.lib.php:312
+#: modules/evaluation/evaluation_show.lib.php:313
 msgid "Sie können dieses Fenster jetzt schließen."
 msgstr "Now you can close this window."
 
-#: modules/evaluation/evaluation_show.lib.php:323
+#: modules/evaluation/evaluation_show.lib.php:324
 msgid "Vorschau aktualisieren."
 msgstr "Update preview."
 
-#: modules/evaluation/evaluation_show.lib.php:340
+#: modules/evaluation/evaluation_show.lib.php:341
 msgid "Evaluation anzeigen."
 msgstr "Evaluation preview."
 
-#: modules/evaluation/evaluation_show.lib.php:387
+#: modules/evaluation/evaluation_show.lib.php:388
 msgid "Evaluation bearbeiten."
 msgstr "Edit evaluation."
 
-#: modules/evaluation/evaluation_show.lib.php:397
+#: modules/evaluation/evaluation_show.lib.php:398
 msgid "Evaluationsverwaltung."
 msgstr "Evaluation administration."
 
-#: modules/evaluation/evaluation_show.lib.php:407
+#: modules/evaluation/evaluation_show.lib.php:408
 msgid "Evaluation löschen."
 msgstr "Delete evaluation."
 
-#: modules/evaluation/evaluation_show.lib.php:417
+#: modules/evaluation/evaluation_show.lib.php:418
 msgid "Evaluation stoppen."
 msgstr "Stop evaluation."
 
-#: modules/evaluation/evaluation_show.lib.php:427
+#: modules/evaluation/evaluation_show.lib.php:428
 msgid "Evaluation fortsetzen."
 msgstr "Continue evaluation."
 
-#: modules/evaluation/evaluation_show.lib.php:437
+#: modules/evaluation/evaluation_show.lib.php:438
 msgid "Evaluation exportieren."
 msgstr "Export evaluation."
 
