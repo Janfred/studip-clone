@@ -341,7 +341,7 @@ ELSE {
 
 // print the info_box
 
-print_infobox ("pictures/einrichtungen.jpg",$infobox);
+print_infobox ($infobox,"pictures/einrichtungen.jpg");
 
 ?>				
 				<br />

@@ -567,7 +567,8 @@ function printcontent ($breite,$write=FALSE,$inhalt,$edit) {
 
 
 /*****************************************************************************
-print_infobox, baut einen Info-Kasten aus folgenden Elementen zusammen: Bild (separat uebergeben), Ueberschriften, Icons, Inhalt (in Array)
+print_infobox, baut einen Info-Kasten aus folgenden Elementen zusammen: Bild (separat uebergeben), Ueberschriften, Icons, Inhalt (in Array).
+Der Aufruf des Bildes ist optional.
 Beispielaufbau f&uuml;r das Array:
 
 $infobox = array	(	
@@ -591,15 +592,17 @@ array  ("kategorie" => "Aktionen:",
 );
 /*****************************************************************************/
 
-function print_infobox ($picture, $content) {
+function print_infobox ($content, $picture="") {
 
-$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
-			<tr>
+$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
+IF ($picture!="") {
+	$print .= "<tr>
 				<td class=\"blank\" width=\"100%\" align=\"right\">
 					<img src=\"".$picture."\">
 				</td>
-			</tr>
-			<tr>
+			</tr>";
+		}
+	$print .= "<tr>
 				<td class=\"angemeldet\" width=\"100%\">
 					<table align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
 for ($i = 0; $i < count($content); $i++) { $print .= "
