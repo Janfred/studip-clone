@@ -151,21 +151,22 @@ if ($make_dates_x) {
 	}
 }
 
-if ($new)
-	{
+if ($new) {
 	$do=TRUE;
-	if (!checkdate($monat,$tag,$jahr))
-		{
+	
+	if ($resource_id == "FALSE")
+		$resource_id = FALSE;
+	
+	if (!checkdate($monat,$tag,$jahr)) {
 		$do=FALSE;
 		$result="error§Bitte geben Sie ein g&uuml;ltiges Datum ein!§";
-		}
+	}
 
 	if ($do)		
-		if ((!$stunde) && (!end_stunde))
-			{
+		if ((!$stunde) && (!end_stunde)) {
 			$do=FALSE;	
 			$result.="error§Bitte geben Sie eine g&uuml;eltige Start- und Endzeit an!§";
-			}
+	}
 		
 	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
 	$end_time = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr);
@@ -249,10 +250,9 @@ if ($new)
 		$tmp_titel=$tmp_titel;
 		$description=$description;
 		$db->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
-
 		if ($db->affected_rows()) {
 			//insert a entry for the linked resource, if resource management activ
-			if ($RESOURCES_ENABLE) {
+			if (($RESOURCES_ENABLE) && ($resource_id)){
 				$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 				$resources_result = $insertAssign->insertDateAssign($t_id, $resource_id);
 				$insertAssign->updateAssign($t_id, $resource_id);
@@ -386,9 +386,9 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 		
 		if ($rooms_booked) 
 			if ($i == 1)
-				$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+				$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen oder aktualisiert.")."§", $rooms_booked);
 			elseif ($i)
-				$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+				$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen oder aktualisiert.")."§", $rooms_booked);
 	  }
 	
 
@@ -630,17 +630,21 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 		$content.="</td>\n";
 		$content.="<td class=\"steel1\" width=\"20%\">\n";
 		$content.="<font size=-1>&nbsp;Raum:</font>";
+		if ((is_array($term_data["turnus_data"])) && (sizeof($term_data["turnus_data"]) == 1)) {
+				$new_date_resource_id = $term_data["turnus_data"][0]["resource_id"];
+				$new_date_room = $term_data["turnus_data"][0]["room"];
+		}
 		if ($RESOURCES_ENABLE) {
 			$resList -> reset();
 			if ($resList->numberOfEvents()) {
 				$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id\"></font>";
 				$content.= ("<option value=\"FALSE\">[eingeben oder aus Liste]</option>");												
 				while ($resObject = $resList->nextEvent())
-					$content.= sprintf("<option value=\"%s\">%s</option>", $resObject->getId(), htmlReady($resObject->getName()));
+					$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id == $resObject->getId()) ? "selected" : "", $resObject->getId(), htmlReady($resObject->getName()));
 				$content.= "</select></font>";
 			}
 		}
-		$content.="<br />&nbsp;<input type=\"TEXT\" name=\"raum\" maxlength=255 size=20 value=\"".htmlReady($default_room)."\"><br>\n";
+		$content.="<br />&nbsp;<input type=\"TEXT\" name=\"raum\" maxlength=255 size=20 value=\"".htmlReady($new_date_room)."\"><br>\n";
 		$content.="&nbsp;<font size=-1>Art:</font><br>&nbsp;<select name=\"art\">\n";
 		
 		for ($i=1; $i<=sizeof($TERMIN_TYP); $i++)
