@@ -152,7 +152,6 @@ if ($inst_id) {
 		$view="user";
 	}
 }
-	
 //richtiges Semester ausw&auml;hlen
 if ($view=="inst") {
 	if (!$instview_sem) {
@@ -201,10 +200,11 @@ while ($db->next_record())
 	{
 	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
 	$use_this=FALSE;
+	$term_data=unserialize($db->f("metadata_dates"));
 
 	if (($db->f("start_time") <=$tmp_sem_beginn) &&(($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time"))) || ($db->f("duration_time") == -1)))
 		$use_this=TRUE;
-	
+		
 	if (($use_this) && (!$term_data["art"]) && (is_array($term_data["turnus_data"])))
 		{
 		//Zusammenbasteln Dozentenfeld
@@ -247,7 +247,7 @@ while ($db->next_record())
 			}
 		}
 	}
-
+echo sizeof ($my_sems);
 	
 //Daten aus der Sessionvariable hinzufuegen
 if ((is_array($my_personal_sems)) && (!$inst_id))
@@ -384,15 +384,15 @@ if (!$print_view) {
 				}
 			?>
 			</select>&nbsp; 
-			<input type="IMAGE" value="change_instview_sem" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&uuml;bernehmen" />
+			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 value="&uuml;bernehmen" />&nbsp; 
 			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" />
 		<? } else { ?>
 		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen ihrer Einrichtung eines Semesters. <br /> Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen<br />
-		<br /><font size=-1>Angezeigtes Semester:&nbsp; 
+		<br />
 			<? 
 		}
 		if ($view !="user")
-			printf ("&nbsp; <font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">Druckansicht dieser Seite</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
+			printf ("<font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">Druckansicht dieser Seite</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
 		?>
 		<br>
 		</blockquote>
