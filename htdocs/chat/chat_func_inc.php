@@ -183,9 +183,43 @@ function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_u
 		}
 		$ret .= ")";
 	}
-	
 	$ret .= "</font></blockquote></td></tr>";
 	$ret .= "\n<tr><td class=\"steel1\" colspan=\"2\" width=\"100%\">&nbsp;</td></tr>";
 	return $ret;
+}
+
+function chat_get_online_icon($user_id = false, $username = false, $pref_chat_id = false){
+	global $i_page;
+	if ($GLOBALS['CHAT_ENABLE']) {
+		if ($user_id && !$username){
+			$username = get_username($user_id);
+		}
+		if (!$user_id && $username){
+			$user_id = get_userid($username);
+		}
+		if (!$user_id && !$username){
+			return false;
+		}
+		$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "/pictures/";
+		$stud_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "/";
+		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+		$admin_chats = $chatServer->getAdminChats($GLOBALS['auth']->auth['uid']);
+		if ($tmp_num_chats = $chatServer->chatUser[$user_id]) {
+			$ret = "<a href=\"{$stud_path}chat_online.php?search_user={$user_id}\"><img src=\"{$pic_path}chat2.gif\""
+			.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
+			." border=\"0\"></a>";
+		} elseif (is_array($admin_chats)) {
+			$ret = "<a href=\"{$stud_path}sms.php?sms_source_page=$i_page&cmd=write_chatinv&rec_uname=$username";
+			if ($pref_chat_id && $admin_chats[$pref_chat_id]){
+				$ret .= "&selected_chat_id=$pref_chat_id";
+			}
+			$ret .= "\"><img src=\"{$pic_path}chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+		} else {
+			$ret = "<img src=\"{$pic_path}chat1.gif\" " . tooltip(_("Sie haben in keinem aktiven Chatraum die Berechtigung andere NutzerInnen einzuladen!")) . " border=\"0\">";
+		}
+		return $ret;
+	} else {
+		return "&nbsp;";
+	}
 }
 ?>
