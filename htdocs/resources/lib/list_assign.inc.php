@@ -33,6 +33,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignEvent.class.php");
+
+
 function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $range_id=''){
 	$db = new DB_Seminar();
 
@@ -41,8 +45,8 @@ function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $r
 	
 	//create the query
 	$query = sprintf("SELECT assign_id, resource_id, begin, end, repeat_end, repeat_quantity, "
-				."repeat_interval, repeat_month_of_year, repeat_day_of_month, repeat_month, "
-				."repeat_week_of_month, repeat_day_of_week, repeat_week FROM resources_assign ");
+				."repeat_interval, repeat_month_of_year, repeat_day_of_month, "
+				."repeat_week_of_month, repeat_day_of_week FROM resources_assign ");
 	if ($range_id) $query.= sprintf("LEFT JOIN  resources_user_resources USING resource_id ");
 	$query.= "WHERE ";
 	if ($resource_id) $query.= sprintf("resources_assign.resource_id = '%s' AND ", $resource_id);

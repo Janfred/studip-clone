@@ -9,7 +9,7 @@
 * @version		$Id$
 * @access		public
 * @package		resources
-* @modulegroup	resources_modules
+* @modulegroup		resources_modules
 * @module		VeranstaltungResourcesAssign.class.php
 */
 
@@ -35,7 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
-require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 
 class DeleteResourcesUser {
 	var $db;

@@ -33,6 +33,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObjectPerms.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 
 //a temp session-variable...
 $sess->register("new_assign_object");
@@ -68,21 +72,37 @@ function updateStructure ($resource_id, $root_id, $level) {
 }
 
 /*****************************************************************************
-empfangene Werte auswerten und Befehle ausfuehren
+handle the view-logic
 /*****************************************************************************/
 
 //got a fresh session?
-if ((sizeof ($_REQUEST) == 1) && (!$view)) {
+if ((sizeof ($_REQUEST) == 1) && (!$view) && (!$quick_view)) {
 	$resources_data='';
 	$resources_data["view"]="resources";
 	$resources_data["view_mode"]=FALSE;
 	closeObject();
 }
 
-//a dirty trick to prevent sometimes chaos ;-)
-/*if ((sizeof ($_REQUEST) == 2) && ($view == "view_schedule")) {
-	$resources_data["view_mode"]=FALSE;
-}*/
+//get views/view_modes
+if ($view)
+	$resources_data["view"]=$view;
+if ($view_mode)	
+	$resources_data["view_mode"]=$view_mode;
+if (strpos($view, "openobject") !== FALSE)
+	$resources_data["view_mode"]="oobj";
+
+//if quick_view, we take this view (only one page long, until the next view is given!)
+if ($quick_view)
+	$view = $quick_view;
+//or we take back the persitant view from $resources_data
+else
+	$view = $resources_data["view"];
+	
+//we do so for the view_mode too
+if ($quick_view_mode)
+	$view_mode = $quick_view_mode;
+else
+	$quick_view_mode = $resources_data["view_mode"];
 
 //reset edit the assign
 if ((sizeof ($_REQUEST) == 2) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
@@ -104,13 +124,7 @@ if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="open
 if (($view=="openobject_main") || ($view=="_lists") || ($view=="lists") || ($view=="resources") || ($view=="_resources"))
 	$resources_data["search_array"]='';
 
-//get views/view_modes
-if ($view)
-	$resources_data["view"]=$view;
-if ($view_mode)	
-	$resources_data["view_mode"]=$view_mode;
-if (strpos($view, "openobject") !== FALSE)
-	$resources_data["view_mode"]="oobj";
+
 
 //Open a level/resource
 if ($structure_open) {
@@ -145,6 +159,7 @@ if ($cancel_move) {
 if ($open_list) {
 	$resources_data["list_open"]=$open_list;
 	$resources_data["view"]="_lists";
+	$view = $resources_data["view"];
 	}
 
 if ($recurse_list) 
@@ -152,66 +167,93 @@ if ($recurse_list)
 
 if ($nrecurse_list) 
 	$resources_data["list_recurse"]=FALSE;
+	
+//Create ClipBoard-Class, if needed
+if (($view == "search") || ($view == "edit_request")) {
+	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/ClipBoard.class.php");
+	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/ClipBoard.class.php");
+
+	$clipObj = & ClipBoard::GetInstance("search");
+	$clipFormObj =& $clipObj->getFormObject();
+	
+	if ($view == "edit_request") {
+		$clipFormObj->form_fields['clip_cmd']['options'][] = array('name' => _("In aktueller Anfrage mit ber&uuml;cksichtigen"), 'value' => 'add');
+		
+		if ($clipFormObj->getFormFieldValue("clip_cmd") == "add") {
+			$marked_clip_ids = $clipFormObj->getFormFieldValue("clip_content");
+			$msg->addMsg(32);
+		}
+	}
+	
+	if ($clip_in)
+		$clipObj->insertElement($clip_in, "res");
+	if ($clip_out)
+		$clipObj->deleteElement($clip_out);
+	$clipObj->doClipCmd();
+}
+
 
 //Neue Hierachieebene oder Unterebene anlegen
-if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {
-	if ($resources_data["view"]=="create_hierarchie") {
+if ($view == "create_hierarchie" || $create_hierachie_level) {
+	if ($view == "create_hierarchie") {
 		$newHiearchie=new ResourceObject("Neue Hierachie", "Dieses Objekt kennzeichnet eine Hierachie und kann jederzeit in eine Ressource umgewandelt werden"
-						, '', '', '', "0", '', $user->id);
+						, '', '', '', '', $user->id);
 	} elseif ($create_hierachie_level) {
 		$parent_Object=new ResourceObject($create_hierachie_level);
 		$newHiearchie=new ResourceObject("Neue Hierachieebene", "Dieses Objekt kennzeichnet eine neue Hierachieebene und kann jederzeit in eine Ressource umgewandelt werden"
-						, '', '', $parent_Object->getRootId(), $create_hierachie_level, '', $user->id);
+						, '', $parent_Object->getRootId(), $create_hierachie_level, '', $user->id);
 	}
 	$newHiearchie->create();
 	$edit_structure_object=$newHiearchie->id;
 	$resources_data["structure_opens"][$newHiearchie->id] =TRUE;
 	$resources_data["actual_object"]=$newHiearchie->getId();	
 	$resources_data["view"]="resources";
+	$view = $resources_data["view"];
 	}
 
 //Neues Objekt anlegen
 if ($create_object) {
 	$parent_Object=new ResourceObject($create_object);
 	$new_Object=new ResourceObject("Neues Objekt", "Dieses Objekt wurde neu erstellt. Es wurden noch keine Eigenschaften zugewiesen."
-					, FALSE, FALSE, $parent_Object->getRootId(), $create_object, "0", $user->id);
+					, FALSE, $parent_Object->getRootId(), $create_object, "0", $user->id);
 	$new_Object->create();
 	$resources_data["view"]="edit_object_properties";
+	$view = $resources_data["view"];
 	$resources_data["actual_object"]=$new_Object->getId();
 	}
 
 
 //Object loeschen
 if ($kill_object) {
-	$ObjectPerms = new ResourcesObjectPerms($kill_object);
+	$ObjectPerms = new ResourceObjectPerms($kill_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		$killObject=new ResourceObject($kill_object);
 		if ($killObject->delete())
 		 	$msg -> addMsg(7);
 		$resources_data["view"]="resources";
+		$view = $resources_data["view"];
 	} else {
-		$msg->displayMsg(1, "window");
-		die;
+		$msg->addMsg(1);
 	}
 }
 
 //cancel a just created object
 if ($cancel_edit) {
-	$ObjectPerms = new ResourcesObjectPerms($cancel_edit);
+	$ObjectPerms = new ResourceObjectPerms($cancel_edit);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		$cancel_edit = new ResourceObject($cancel_edit);
 		$cancel_edit->delete();
 		$resources_data["view"]="resources";
+		$view = $resources_data["view"];
 	} else {
-		$msg->displayMsg(1, "window");
-		die;
+		$msg->addMsg(1);
 	}
 }
 
 
 //move an object
 if ($target_object) {
-	$ObjectPerms = new ResourcesObjectPerms($target_object);
+	$ObjectPerms = new ResourceObjectPerms($target_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		if ($target_object != $resources_data["move_object"]) {
 			//we want to move an object, so we have first to check if we want to move a object in a subordinated object
@@ -236,14 +278,13 @@ if ($target_object) {
 		}
 		unset($resources_data["move_object"]);
 	} else {
-		$msg->displayMsg(1, "window");
-		die;
+		$msg->addMsg(1);
 	}	
 }
 
 //Name und Beschreibung aendern
 if ($change_structure_object) {
-	$ObjectPerms = new ResourcesObjectPerms($change_structure_object);
+	$ObjectPerms = new ResourceObjectPerms($change_structure_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		$changeObject=new ResourceObject($change_structure_object);
 		$changeObject->setName($change_name);
@@ -251,10 +292,10 @@ if ($change_structure_object) {
 		if ($changeObject->store())
 			$msg -> addMsg(6);
 	} else {
-		$msg->displayMsg(1, "window");
-		die;
+		$msg->addMsg(1);
 	}
 	$resources_data["view"]="resources";
+	$view = $resources_data["view"];
 	$resources_data["actual_object"]=$change_structure_object;
 }
 
@@ -263,7 +304,7 @@ if ($change_object_schedules) {
 	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
 
 	//load the object perms
-	$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
+	$ObjectPerms = new ResourceObjectPerms($change_schedule_resource_id);
 	
 	//in some case, we load the perms from the assign object, if it has an owner
 	if (($ObjectPerms->getUserPerm() != "admin") && ($change_object_schedules != "NEW") && (!$new_assign_object)) {
@@ -273,7 +314,7 @@ if ($change_object_schedules) {
 			$ObjectPerms = new AssignObjectPerms($change_object_schedules);
 	}
 
-	if ($ObjectPerms->getUserPerm() == "autor" || $ObjectPerms->getUserPerm() == "admin") {
+	if ($ObjectPerms->havePerm("autor")) {
 		if ($kill_assign_x) {
 			$killAssign=new AssignObject($change_object_schedules);
 			$killAssign->delete();
@@ -290,8 +331,8 @@ if ($change_object_schedules) {
 
 			if (($send_search_user_x) && ($submit_search_user !="FALSE") && (!$reset_search_user_x)) {
 				//Check if this user is able to reach the resource (and this assign), to provide, that the owner of the resources foists assigns to others
-				$ForeignObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id, $submit_search_user); 
-				if (($ForeignObjectPerms->getUserPerm() == "autor") || ($ForeignObjectPerms-> getUserPerm() == "admin"))
+				$ForeignObjectPerms = new ResourceObjectPerms($change_schedule_resource_id, $submit_search_user); 
+				if ($ForeignObjectPerms->havePerm("autor"))
 					$change_schedule_assign_user_id=$submit_search_user;
 				else
 					$msg ->addMsg(2);
@@ -436,10 +477,8 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_interval,
 				$change_schedule_repeat_month_of_year,
 				$change_schedule_repeat_day_of_month, 
-				$change_schedule_repeat_month,
 				$change_schedule_repeat_week_of_month,
-				$change_schedule_repeat_day_of_week,
-				$change_schedule_repeat_week);
+				$change_schedule_repeat_day_of_week);
 			
 			//if isset quantity, we calculate the correct end date
 			if ($changeAssign->getRepeatQuantity() >0)
@@ -460,7 +499,7 @@ if ($change_object_schedules) {
 				//limit recurrences
 				if (!$illegal_dates) {
 					switch ($changeAssign->getRepeatMode()) {
-						case "y" : echo hallo;if ((date("Y",$changeAssign->getRepeatEnd()) - date("Y", $changeAssign->getBegin())) > 10) {
+						case "y" : if ((date("Y",$changeAssign->getRepeatEnd()) - date("Y", $changeAssign->getBegin())) > 10) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(21);
 								}
@@ -520,21 +559,25 @@ if ($change_object_schedules) {
 			}
 		}
 	} else {
-		$msg->displayMsg(1, "window");
-		die;
+		$msg->addMsg(1);
 	}
 }
 
 //Objekteigenschaften aendern
 if ($change_object_properties) {
-	$ObjectPerms = new ResourcesObjectPerms($change_object_properties);
+	$ObjectPerms = new ResourceObjectPerms($change_object_properties);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		$changeObject=new ResourceObject($change_object_properties);
 		$changeObject->setName($change_name);
 		$changeObject->setDescription($change_description);
 		$changeObject->setCategoryId($change_category_id);
 		$changeObject->setParentBind($change_parent_bind);
-	
+		$changeObject->setInstitutId($change_institut_id);
+		
+		if (getGlobalPerms($user->id) == "admin") {
+			$changeObject->setMultipleAssign($change_multiple_assign);
+		}
+
 		//Properties loeschen
 		$changeObject->flushProperties();
 	
@@ -551,16 +594,16 @@ if ($change_object_properties) {
 		if (($changeObject->store()) || ($props_changed))
 		 	$msg -> addMsg(6);
 	} else {
-		$msg->displayMsg(1, "window");
-		die;
+		$msg->addMsg(1);
 	}
 	
 	$resources_data["view"]="edit_object_properties";
+	$view = $resources_data["view"];
 }
 
 //Objektberechtigungen aendern
 if ($change_object_perms) {
-	$ObjectPerms = new ResourcesObjectPerms($change_object_perms);
+	$ObjectPerms = new ResourceObjectPerms($change_object_perms);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		$changeObject=new ResourceObject($change_object_perms);
 	
@@ -586,27 +629,50 @@ if ($change_object_perms) {
 		if (($send_search_perm_user_x) && ($submit_search_perm_user !="FALSE") && (!$reset_search_perm_user_x))
 			if ($changeObject->storePerms($submit_search_perm_user))
 				$perms_changed=TRUE;
+		
+		if ((getGlobalPerms($user->id) == "admin") && ($changeObject->isRoom())) {
+			if ($changeObject->isParent()) {
+				if (($change_lockable) && (!$changeObject->isLockable()))
+					$msg->addMsg(29, array($PHP_SELF, $changeObject->getId(), $PHP_SELF));
+				elseif ((!$change_lockable) && ($changeObject->isLockable()))
+					$msg->addMsg(30, array($PHP_SELF, $changeObject->getId(), $PHP_SELF));
+			}
+			$changeObject->setLockable($change_lockable);
+		}
 	
 		//Object speichern
 		if (($changeObject->store()) || ($perms_changed))
 			$msg->addMsg(8);
 	} else {
-		$msg->displayMsg(1, "window");
-		die;
+		$msg->addMsg(1);
 	}
 	$resources_data["view"]="edit_object_perms";
+	$view = $resources_data["view"];
+}
+
+//set/unset lockable for a comlete hierarchy
+if (($set_lockable_recursiv) || ($unset_lockable_recursiv)) {
+	if (getGlobalPerms($user->id) == "admin") {
+		changeLockableRecursiv($lock_resource_id, ($set_lockable_recursiv) ? TRUE : FALSE);
+	} else {
+		$msg->addMsg(1);
+	}
+	$resources_data["view"]="edit_object_perms";
+	$view = $resources_data["view"];
 }
 
 //Typen bearbeiten
 if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_categories)) {
-	if ($my_perms->getGlobalPerms () == "admin") { //check for resources root or global root
+	if (getGlobalPerms ($user->id) == "admin") { //check for resources root or global root
 		if ($delete_type) {
 			$db->query("DELETE FROM resources_categories WHERE category_id ='$delete_type'");
 		}
 	
 		if (($add_type) && ($_add_type_x)) {
 			$id=md5(uniqid("Sommer2002"));
-			$db->query("INSERT INTO resources_categories SET category_id='$id', name='$add_type', description='$insert_type_description' ");
+			if ($resource_is_room)
+				$resource_is_room = 1;
+			$db->query("INSERT INTO resources_categories SET category_id='$id', name='$add_type', description='$insert_type_description', is_room='$resource_is_room' ");
 			if ($db->affected_rows())
 				$created_category_id=$id;
 		}
@@ -623,15 +689,27 @@ if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_cate
 				$db->query("INSERT INTO resources_categories_properties SET category_id='$key', property_id='$add_type_property_id[$key]' ");
 			}
 		}
+		
+		if (is_array($requestable)) {
+			foreach ($requestable as $key=>$val) {
+				if ((strpos($requestable[$key-1], "id1_")) &&  (strpos($requestable[$key], "id2_"))) {
+					if ($requestable[$key+1] == "on")
+						$req_num = 1;
+					else
+						$req_num = 0;
+					$query = sprintf ("UPDATE resources_categories_properties SET requestable ='%s' WHERE category_id = '%s' AND property_id = '%s' ", $req_num, substr($requestable[$key-1], 5, strlen($requestable[$key-1])), substr($requestable[$key], 5, strlen($requestable[$key])));			
+					$db->query($query);
+				}
+			}
+		}
 	} else {
-		$msg->displayMsg(25, "window");
-		die;
+		$msg->addMsg(25);
 	}
 }
 
 //Eigenschaften bearbeiten
 if (($add_property) || ($delete_property) || ($change_properties)) {
-	if ($my_perms->getGlobalPerms () == "admin") { //check for resources root or global root
+	if ($globalPerm == "admin") { //check for resources root or global root
 		if ($delete_property) {
 			$db->query("DELETE FROM resources_properties WHERE property_id ='$delete_property' ");
 		}
@@ -666,14 +744,13 @@ if (($add_property) || ($delete_property) || ($change_properties)) {
 			$db->query("UPDATE resources_properties SET name='$change_property_name[$key]', options='$options', type='$send_property_type[$key]' WHERE property_id='$key' ");
 		}
 	} else {
-		$msg->displayMsg(25, "window");
-		die;
+		$msg->addMsg(25);
 	}
 }
 
 //Globale Perms bearbeiten
 if (($add_root_user) || ($delete_root_user_id)){
-	if ($my_perms->getGlobalPerms () == "admin") { //check for resources root or global root
+	if ($globalPerm == "admin") { //check for resources root or global root
 		if ($reset_search_root_user_x)
 			$search_string_search_root_user=FALSE;
 
@@ -688,13 +765,103 @@ if (($add_root_user) || ($delete_root_user_id)){
 				$db->query("UPDATE resources_user_resources SET perms='".$change_root_user_perms[$key]."' WHERE user_id='$val' ");
 			}
 	} else {
-		$msg->displayMsg(25, "window");
-		die;
+		$msg->addMsg(25);
 	}
 }
 
+//change settings
+if ($change_global_settings) {
+	if ($globalPerm == "admin") { //check for resources root or global root
+		write_config("RESOURCES_LOCKING_ACTIVE", $locking_active);
+		write_config("RESOURCES_ALLOW_ROOM_REQUESTS", $allow_requests);
+		write_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS", $allow_property_requests);
+		write_config("RESOURCES_ALLOW_CREATE_ROOMS", $allow_create_resources);
+		write_config("RESOURCES_INHERITANCE_PERMS_ROOMS", $inheritance_rooms);
+		write_config("RESOURCES_INHERITANCE_PERMS", $inheritance);
+		write_config("RESOURCES_ENABLE_ORGA_CLASSIFY", $enable_orga_classify);
+		write_config("RESOURCES_ENABLE_ORGA_ADMIN_NOTICE", $enable_orga_admin_notice);
+	} else {
+		$msg->addMsg(25);
+	}
+}	
+
+//create a lock
+if ($create_lock) {
+	if ($globalPerm == "admin") { //check for resources root or global root
+		$id = md5(uniqid("locks"));
+		$query = sprintf("INSERT INTO resources_locks SET lock_begin = '%s', lock_end = '%s', lock_id = '%s' ", 0, 0, $id);
+		$db->query($query);
+	
+		$resources_data["lock_edits"][$id] = TRUE;
+	} else {
+		$msg->addMsg(25);
+	}
+}	
+
+//edit a lock
+if ($edit_lock) {
+	if ($globalPerm == "admin") { //check for resources root or global root
+		$resources_data["lock_edits"][$edit_lock] = TRUE;
+	} else {
+		$msg->addMsg(25);
+	}
+}
+
+//edit locks
+if (($lock_sent_x)) {
+	if ($globalPerm == "admin") { //check for resources root or global root
+		require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
+		
+		foreach ($lock_id as $key=>$id) {
+			$illegal_begin = FALSE;
+			$illegal_end = FALSE;
+	
+			//checkdates
+			if (!check_date($lock_begin_month[$key], $lock_begin_day[$key], $lock_begin_year[$key], $lock_begin_hour[$key], $lock_begin_min[$key])) {
+				//$msg->addMsg(2);
+				$illegal_begin=TRUE;
+			} else
+				$lock_begin = mktime($lock_begin_hour[$key],$lock_begin_min[$key],0,$lock_begin_month[$key], $lock_begin_day[$key], $lock_begin_year[$key]);
+	
+			if (!check_date($lock_end_month[$key], $lock_end_day[$key], $lock_end_year[$key], $lock_end_hour[$key], $lock_end_min[$key])) {
+				//$msg -> addMsg(3);
+				$illegal_end=TRUE;						
+			} else
+				$lock_end = mktime($lock_end_hour[$key],$lock_end_min[$key],0,$lock_end_month[$key], $lock_end_day[$key], $lock_end_year[$key]);
+			
+			if ((!$illegal_begin) && (!$illegal_end) && ($lock_begin < $lock_end)) {
+				$query = sprintf("UPDATE resources_locks SET lock_begin = '%s', lock_end = '%s' WHERE lock_id = '%s' ", $lock_begin, $lock_end, $id);
+				$db->query($query);
+				
+				if ($db->affected_rows()) {
+					$msg->addMsg(27);
+					unset($resources_data["lock_edits"][$id]);			
+				}
+			} else
+				$msg->addMsg(26);
+		}
+	} else {
+		$msg->addMsg(25);
+	}
+}
+
+//kill a lock-time
+if (($kill_lock)) {
+	if ($globalPerm == "admin") { //check for resources root or global root
+		$query = sprintf("DELETE FROM resources_locks WHERE lock_id = '%s' ", $kill_lock);
+		$db->query($query);	
+		if ($db->affected_rows()) {
+			$msg->addMsg(28);
+			unset($resources_data["lock_edits"][$kill_lock]);			
+		}
+	} else {
+		$msg->addMsg(25);
+	}
+}
+
+
 //evaluate the command from schedule navigator
-if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openobject_schedule") {
+if ($view == "view_schedule" || $view == "openobject_schedule") {
 	if ($next_week)
 		$resources_data["schedule_week_offset"]++;
 	if ($previous_week)
@@ -744,7 +911,7 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 }
 
 //handle commands from the search 'n' browse modul
-if ($resources_data["view"]=="search") {
+if ($view == "search") {
 	if ($open_level)
 		 $resources_data["browse_open_level"]=$open_level;
 
@@ -770,6 +937,261 @@ if ($resources_data["view"]=="search") {
 	}
 }
 
+/*****************************************************************************
+the room-planning module
+/*****************************************************************************/
+
+//we start a new room-planning-session
+if ($start_single_mode_x) {
+	unset($resources_data["requests_working_on"]);
+	unset($resources_data["requests_open"]);
+	
+	$requests = getMyRoomRequests();
+	
+	$resources_data["requests_working_pos"] = 0;
+	
+	//filter the requests
+	foreach($requests as $key => $val) {
+		if (!$val["closed"]) {
+			if ($resolve_requests_mode == "sem") {
+				if ($val["my_sem"])
+					$selected_requests[$key] = TRUE;
+			} elseif ($resolve_requests_mode == "res") {
+				if ($val["my_res"])
+					$selected_requests[$key] = TRUE;
+			} else {
+				$selected_requests[$key] = TRUE;
+			}
+		}
+	}
+	
+	//order requests
+	$in =  "('".join("','",array_keys($selected_requests))."')";
+	if ($resolve_requests_order = "complex")
+		$order = "seats DESC, complexity DESC";
+	if ($resolve_requests_order = "newest")
+		$order = "a.mkdate DESC";
+	if ($resolve_requests_order = "newest")
+		$order = "a.mkdate ASC";
+
+	$query = sprintf ("SELECT a.request_id, a. resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
+			FROM resources_requests a 
+			LEFT JOIN resources_requests_properties b USING (request_id)
+			LEFT JOIN resources_properties c ON (b.property_id = c.property_id AND c.system = 2)
+			LEFT JOIN resources_requests_properties d ON (c.property_id = d.property_id AND a.request_id = d.request_id)
+			WHERE a.request_id IN %s
+			GROUP BY a.request_id
+			ORDER BY %s", $in, $order);
+	
+	$db->query($query);
+	
+	while($db->next_record()) {
+		$resources_data["requests_working_on"][] = array("request_id" => $db->f("request_id"), "closed" => FALSE);
+		$resources_data["requests_open"][$db->f("request_id")] = TRUE;
+	} 
+	$resources_data["view"] = "edit_request";
+	$view = $resources_data["view"];
+}
+
+if (is_array($selected_resource_id)) {
+	//asort ($selected_resource_id); //kann auch vielleicht weg....
+	foreach ($selected_resource_id as $key=>$val) {
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key] = $val;
+	}
+}
+
+// save the assigments in db
+if ($save_state_x) {
+	// RECHTECHECK NICHT VERGESSEN!
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
+	
+	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
+	$semObj = new Seminar($reqObj->getSeminarId());
+	$semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
+
+	//create the assign_objects - now to save the resource_id
+	if ($reqObj->getTerminId())
+		$assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
+	elseif ($semObj->getMetaDateType() == 1)
+		$assignObjects = $semResAssign->getDateAssignObjects();
+	else
+		$assignObjects = $semResAssign->getMetaAssignObjects();
+		
+	if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"])) {
+		if ($semObj->getMetaDateType() == 0)
+			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
+				$assignObjects[$key]->setResourceId($val);
+			}
+	
+		if ($reqObj->getTerminId())
+			$result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
+		elseif ($semObj->getMetaDateType() == 1)
+			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val){
+				$result = array_merge($result, $semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
+				$result_termin_id[] = $key;
+			}
+		else
+			$result = $semResAssign->changeMetaAssigns($assignObjects);
+			
+		//update the matadata (we save the resource there too), if no overlaps detected and create msg's
+		$sem_changed = FALSE;
+		if ($semObj->getMetaDateType() == 0) {
+			$i=0;
+			foreach ($result as $key=>$val) {
+				$resObj = new ResourceObject($val["resource_id"]);
+				if (!$val["overlap_assigns"]) {
+					$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
+					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+					$sem_changed = TRUE;
+				} else
+					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+				$i++;
+			}
+		//create msgs (single date request)
+		} elseif ($reqObj->getTerminId()) {
+			$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
+			if (!$val["overlap_assigns"]) {
+				$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+				$sem_changed = TRUE;
+			} else
+				$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+		//create msgs (multiple	dates, a irregular seminar)
+		} else {
+			$i=0;
+			foreach ($result as $key=>$val) {
+				$resObj = new ResourceObject($val["resource_id"]);
+				if (!$val["overlap_assigns"]) {
+					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					$sem_changed = TRUE;
+				} else
+					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+				$i++;
+			}
+		}
+		
+		if ($sem_changed) {
+			//update seminar-date (save the new resource_ids)
+			if ($semObj->getMetaType == 0)
+				$semObj->store();
+		
+			//set request to closed 
+			$reqObj->setClosed(TRUE);
+			//$reqObj->store();
+		}
+	
+		//create msg's
+		if ($good_msg)
+			$msg->addMsg(33, array($good_msg));
+		if ($bad_msg)
+			$msg->addMsg(34, array($bad_msg));
+	}
+}
+
+
+// inc if we have requests left in the upper
+if ($inc_request_x)
+	if ($resources_data["requests_working_pos"] < sizeof($resources_data["requests_open"])-1) {
+		$i = 1;
+		while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) && ($resources_data["requests_working_pos"] + $i < sizeof($resources_data["requests_open"])-1))
+		$i++;
+		if ((sizeof($resources_data["requests_open"]) > 1) && ($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]])) {
+			$resources_data["requests_working_pos"] = $resources_data["requests_working_pos"] + $i;
+		}
+	} 
+
+// dec if we have requests left in the lower
+if ($dec_request_x)
+	if ($resources_data["requests_working_pos"] > 0) {
+		$d = -1;
+		while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) && ($resources_data["requests_working_pos"] + $d > 0))
+		$d--;
+		if ((sizeof($resources_data["requests_open"]) > 1) && ($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]])) {
+			$resources_data["requests_working_pos"] = $resources_data["requests_working_pos"] + $d;
+		}
+	}
+
+//create the (overlap)data for all resources that should we cheked for a request
+if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_clip_ids)) {
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
+	
+	
+	if ((!is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"])) || ($marked_clip_ids)){
+		$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
+		$semObj = new Seminar($reqObj->getSeminarId());
+		$multiOverlaps = new CheckMultipleOverlaps;
+		$semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
+		
+		//add the requested ressource to selection
+		if ($reqObj->getResourceId())
+			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$reqObj->getResourceId()] = array("type"=>"requested");
+	
+		//add the matching ressources to selection
+		$machting_resources = $reqObj->searchRooms(FALSE, TRUE);
+		foreach ($machting_resources as $key => $val) {
+			if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key])
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key] = array("type"=>"matching");
+		}
+
+		//add resource_ids from clipboard
+		if (is_array($marked_clip_ids))
+			foreach ($marked_clip_ids as $val)
+				if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$val])
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$val] = array("type"=>"clipped");
+		
+		
+		//create the assign-objects for the seminar (virtual!)
+		if ($reqObj->getTerminId())
+			$assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
+		elseif ($semObj->getMetaDateType() == 1)
+			$assignObjects = $semResAssign->getDateAssignObjects();
+		else
+			$assignObjects = $semResAssign->getMetaAssignObjects();
+		
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]=array();
+		if (is_array($assignObjects)) {
+			//set the time range to check;
+			if (($semObj->getMetaDateType() == 1) || ($reqObj->getTerminId()))
+				$multiOverlaps->setAutoTimeRange($assignObjects);
+			else
+				$multiOverlaps->setTimeRange($semObj->getSemesterStartTime(), $SEMESTER[get_sem_num($semObj->getSemesterStartTime())]["ende"]); //!!!!!
+			
+			//add the considered resources to the check-set
+			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"] as $key => $val) {
+				$multiOverlaps->addResource($key);
+			}
+			
+			//do checks
+			$result = array();
+			foreach ($assignObjects as $obj) {
+				$multiOverlaps->checkOverlap($obj, &$result);
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$obj->getId()] = array("termin_id" => ($semObj->getMetaDateType() == 1) ?  $obj->getAssignUserId() : FALSE);
+			}
+			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"] = $result;
+		}
+	}
+}
+
+
+/*****************************************************************************
+some other stuff ;-)
+/*****************************************************************************/
+
+//display perminvalid window
+if ((in_array("1", $msg->codes)) || (in_array("25", $msg->codes))) {
+	$forbiddenObject = new ResourceObject($resources_data["actual_object"]);
+	if ($forbiddenObject->isLocked()) {
+		$lock_ts = getLockPeriod();
+		$msg->addMsg(31, array(date("d.m.Y, G:i", $lock_ts[0]), date("d.m.Y, G:i", $lock_ts[1])));
+	}
+	$msg->displayAllMsg("window");
+	die;
+}
+
 //show object, this object will be edited or viewed
 if ($show_object)
 	$resources_data["actual_object"]=$show_object;
@@ -779,15 +1201,18 @@ if ($ObjectPerms) {
 	if (($ObjectPerms->getId() == $resources_data["actual_object"]) && ($ObjectPerms->getUserId()  == $user->id))
 		$ActualObjectPerms = $ObjectPerms;	
 	 else
-		$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
+		$ActualObjectPerms = new ResourceObjectPerms($resources_data["actual_object"]);
 } else
-	$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
+	$ActualObjectPerms = new ResourceObjectPerms($resources_data["actual_object"]);
 	
 //edit or view object
 if ($edit_object) {
-	if ($ActualObjectPerms->getUserPerm() == "admin")
+	if ($ActualObjectPerms->getUserPerm() == "admin") {
 		$resources_data["view"]="edit_object_properties";
-	else
+		$view = $resources_data["view"];
+	} else {
 		$resources_data["view"]="view_details";
+		$view = $resources_data["view"];
+	}
 }
 ?>

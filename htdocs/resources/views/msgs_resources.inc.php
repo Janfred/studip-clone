@@ -119,4 +119,36 @@ $this->msg[25] = array (
 		"mode" => "error",
 		"titel" => _("Fehlende Berechtigung"),
 		"msg"=> _("Sie haben leider keine Berechtigung, diese Funktion zu benutzen!"));		
+$this->msg[26] = array (
+		"mode" => "error",
+		"msg"=> _("Fehler in den Sperrzeiten, bitte korrigieren Sie die Zeiten!"));
+$this->msg[27] = array (
+		"mode" => "msg",
+		"msg"=> _("Die Sperrzeiten wurden ge&auml;ndert."));
+$this->msg[28] = array (
+		"mode" => "msg",
+		"msg"=> _("Die Sperrzeit wurde gel&ouml;scht. Falls die Blockierung aktiviert war, und der gel&ouml;schte Zeitraum bereits l&auml;uft, k&ouml;nnen berechtigte Nutzer wieder Belegungen erstellen."));
+$this->msg[29] = array (
+		"mode" => "info",
+		"msg"=> _("Sie haben den Raum als <u>blockierbar</u> markiert. Wollen Sie auch alle untergeordneten R&auml;ume ebenfalls als <u>blockierbar</u> markieren?")
+			."<br /><a href=\"%s?set_lockable_recursiv=1&lock_resource_id=%s\">".makeButton("ja2")."</a>"
+			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
+$this->msg[30] = array (
+		"mode" => "info",
+		"msg"=> _("Sie haben den Raum als <u>nicht</u> mehr blockierbar markiert. Wollen Sie auch alle untergeordneten R&auml;ume ebenfalls als <u>nicht</u> blockierbar markieren?")
+			."<br /><a href=\"%s?unset_lockable_recursiv=1&lock_resource_id=%s\">".makeButton("ja2")."</a>"
+			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
+$this->msg[31] = array (
+		"mode" => "info",
+		"msg"=> "<font size=\"-1\">"._("<b>Ressourcenblockierung vom %s bis zum %s.</b>")."</font><br />".
+			_("Sie versuchen, ein Objekt zu bearbeiten, das zur Zeit f&uuml;r eine Bearbeitung gesperrt ist. Nur der globale Ressourcenadministrator hat Zugriff auf dieses Objekt! <br />(Wenn Sie normalerweise Zugriff auf dieses Objekt haben, wird Ihnen der Zugriff nach Aufhebung der Blockierung wieder gew&auml;hrt.)"));
+$this->msg[32] = array (
+		"mode" => "msg",
+		"msg"=> _("Die ausgew&auml;hlten Eintr&auml;ge wurden in die aktuelle Anfrage &uuml;bernommen."));
+$this->msg[33] = array (
+		"mode" => "msg",
+		"msg"=> _("Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen: <font size=\"-1\" color=\"black\">%s</font>"));		
+$this->msg[34] = array (
+		"mode" => "error",
+		"msg"=> _("Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden: <font size=\"-1\" color=\"black\">%s</font>"));
 ?>

@@ -34,13 +34,165 @@
 // +---------------------------------------------------------------------------+
 
 
+/*
+* allowCreateRooms
+*
+* gets the status, if an user is allowed to create new room(objects)
+*
+* @param	string	the user_id, if not set, the actual user's id is used
+* @return	boolean	
+*
+**/
+function allowCreateRooms($user_id='') {
+	global $user, $perm;
+	
+	if (!$user_id)
+		$user_id = $user->id;
+	
+	switch (get_config("RESOURCES_ALLOW_CREATE_ROOMS")) {
+		case 1:
+			if ($perm->have_perm("tutor"))
+				return TRUE;
+			else
+				return FALSE;
+		break;
+		case 2:
+			if ($perm->have_perm("admin"))
+				return TRUE;
+			else
+				return FALSE;
+		break;
+		case 3:
+			if (getGlobalPerms($user_id) == ("admin"))
+				return TRUE;
+			else
+				return FALSE;
+		break;
+
+	}
+}
+
+/*
+* getLockPeriod
+*
+* gets a lock-period, if one is active (only the first lock period that matches will be returned)
+*
+* @param	int	the timestamp, if left, the actual time
+* @return	array	the start- and end-timestamp
+*
+**/
+function getLockPeriod($timestamp='') {
+	$db = new DB_Seminar;
+	
+	if (!$timestamp)
+		$timestamp = time();
+	
+	if (!get_config("RESOURCES_LOCKING_ACTIVE"))
+		return FALSE;
+	else {
+		$query = sprintf ("SELECT lock_begin, lock_end FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp, $timestamp);
+		$db->query($query);
+		$db->next_record();
+		if ($db->nf()) {
+			$arr[0] = $db->f("lock_begin");
+			$arr[1] = $db->f("lock_end");
+			return $arr;
+		} else
+			return FALSE;
+	}
+}
+
+/**
+* isLockPeriod
+*
+* determines, if a lock period could be found in resources_locks and locking is active
+*
+* @param	int	the timestamp, if left, the actual time
+* @return	boolean	true or false
+*
+**/
+function isLockPeriod($timestamp='') {
+	$db = new DB_Seminar;
+	
+	if (!$timestamp)
+		$timestamp = time();
+	
+	if (!get_config("RESOURCES_LOCKING_ACTIVE"))
+		return FALSE;
+	else {
+		$query = sprintf ("SELECT * FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp, $timestamp);
+		$db->query($query);
+		if ($db->nf())
+			return TRUE;
+		else
+			return FALSE;
+	}
+}
+
+/**
+* changeLockableRecursiv
+*
+* sets the lockale option for all childs to state
+*
+* @param	string	the key for the resource object
+* @param	boolean	if set, all childs will be lockable
+*
+**/
+function changeLockableRecursiv ($resource_id, $state) {
+	global $resources_data;
+	$db = new DB_Seminar;
+
+	$query = sprintf ("UPDATE resources_objects SET lockable = '%s' WHERE resource_id = '%s' ", $state, $resource_id);
+	$db->query($query);
+
+	$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' ", $resource_id);
+	$db->query($query);
+	while ($db->next_record()) {
+		changeLockableRecursiv ($db->f("resource_id"), $state);
+	}
+}
+
+
+/*
+* getGlobalPerms
+*
+* this Funktion get the globals perms, the given user has in the 
+* resources-management
+*
+* @param	string	the user_id
+* @return	string	the perms-string	
+*
+**/
+function getGlobalPerms ($user_id) {
+	static $cache;
+	global $perm;
+	
+	if ($cache[$user_id])
+		return $cache[$user_id];
+	
+	$db = new DB_Seminar;
+	
+	if (!$perm->have_perm("root")) {
+		$db->query("SELECT user_id, perms FROM resources_user_resources WHERE user_id='$user_id' AND resource_id = 'all' ");
+		if ($db->next_record() && $db->f("perms")) 
+			$res_perm = $db->f("perms");
+		else
+			$res_perm = "autor";
+	} else
+		$res_perm = "admin";
+
+	$cache[$user_id] = $res_perm;
+	return $res_perm;
+}
+
+
 /*****************************************************************************
 a quick function to get the resource_id (only rooms!) for a assigned date
 /*****************************************************************************/
 
 function getDateAssigenedRoom($date_id){
 	$db=new DB_Seminar;
-	$query = sprintf ("SELECT resources_assign.resource_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $date_id);
+	$query = sprintf ("SELECT resources_assign.resource_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE assign_user_id = '%s' AND resources_categories.is_room = 1 ", $date_id);
 	$db->query($query);
 	if ($db->next_record())
 		return $db->f("resource_id");
@@ -76,6 +228,50 @@ function getResourceObjectCategory($id){
 		return FALSE;
 }
 
+function getMyRoomRequests($user_id = '') {
+	global $user, $perm, $RELATIVE_PATH_RESOURCES;
+
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
+	
+	$db = new DB_Seminar;
+	$db2 = new DB_Seminar;
+
+	if (!$user_id)
+		$user_id = $user->id;
+		
+	if ((getGlobalPerms($user_id) == "admin") && ($perm->have_perm("root"))) {
+		$query = sprintf("SELECT request_id, closed FROM resources_requests");
+		$db->query($query);
+		while ($db->next_record()) {
+			$requests [$db->f("request_id")] = array("my_sem"=>TRUE, "my_res"=>TRUE, "closed"=>$db->f("closed"));
+		}
+	} else {
+		//load all my resources
+		$resList = new ResourcesUserRoomsList($user_id, FALSE, FALSE);
+		$my_res = $resList->getRooms();
+	
+		//load all my seminars
+		$my_sems = search_my_administrable_seminars();
+		
+		$in_resource_id =  "('".join("','",array_keys($my_res))."')";
+		$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
+		
+		$query_sem = sprintf("SELECT request_id, closed FROM resources_request WHERE seminar_id IN %s", $in_seminar_id, $in_resource_id);
+		$query_res = sprintf("SELECT request_id, closed FROM resources_request WHERE resource_id IN %s", $in_seminar_id, $in_resource_id);
+		$db->query($query_sem);
+		while ($db->next_record()) {
+			$requests [$db->f("request_id")]["my_sem"] = TRUE;
+			$requests [$db->f("request_id")]["closed"] = $db->f("closed");
+		}
+		$db2->query($query_res);
+		while ($db2->next_record()) {
+			$requests [$db2->f("request_id")]["my_res"] = TRUE;
+			$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
+		}
+	}
+	
+	return $requests;
+}
 
 
 /*****************************************************************************
@@ -105,22 +301,29 @@ function cmp_resources($a, $b){
 	return 1;
 }
 
-/*****************************************************************************
-checkAvaibleResources, a quick function to check if for a studip-object
-or a user are resources avaiable
-/*****************************************************************************/
 
-function checkAvaiableResources($id) {
+/*
+* checkAvailableResources
+*
+* This Funktion searches for available resources for studip-objects (and users, too), 
+* but it only work's properly with studip-objects, because it didn't pay attention for 
+* inheritance of perms for a studip-user.
+*
+* @param	string	the obejct id
+* @return 	boolean true, if resources are found, otherwise false
+*
+**/
+function checkAvailableResources($id) { 
 	$db = new DB_Seminar;
 	
 	//check if owner
-	$db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$id' ");
-	if ($db->nf())
+	$db->query("SELECT COUNT(owner_id) AS count FROM resources_objects WHERE owner_id='$id' ");
+	if ($count)
 		return TRUE;
 	
 	//or additional perms avaiable
-	$db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$id' ");
-	if ($db->nf())
+	$db->query("SELECT COUNT(perms) AS count FROM resources_user_resources  WHERE user_id='$id' ");
+	if ($count)
 		return TRUE;
 	
 	return FALSE;	
@@ -134,8 +337,8 @@ exists assigns
 function checkAssigns($id) {
 	$db = new DB_Seminar;
 	
-	$db->query("SELECT assign_id FROM resources_assign WHERE resource_id='$id' ");
-	if ($db->nf())
+	$db->query("SELECT COUNT(assign_id) AS count FROM resources_assign WHERE resource_id='$id' ");
+	if ($count)
 		return TRUE;
 	return FALSE;	
 }
@@ -173,19 +376,22 @@ function checkObjektAdministrablePerms ($resource_object_owner_id, $user_id='') 
 	} else
 		return FALSE;
 }
-
-
-/*****************************************************************************
-search_administrable_objects searches in all the (for me!) adminstrable objects
-/*****************************************************************************/
-
-function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE) {
-	global $user, $perm, $auth, $_fullname_sql;
+/*
+* search_administrable_seminars
+*
+* this Funktion searches all my aministrable seminars
+*
+* @param	string	a search string, that could be used
+* @param	string	the user_id
+* @return 	array	result
+*
+**/
+function search_administrable_seminars ($search_string='', $user_id='') {
+	global $user, $perm, $auth;
 
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 	$db3 = new DB_Seminar;
-	$resPerm = new ResourcesPerms;
 	
 	if (!$user_id)
 		$user_id = $user->id;
@@ -193,11 +399,67 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 	if (!$search_string)
 		$search_string = "_";
 
-	if ($resPerm->getGlobalPerms() == "admin") 
+	$user_global_perm=get_global_perm($this->user_id);
+	switch ($user_global_perm) {
+		case "root": 
+			//Alle Seminare...
+			$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
+			while ($db->next_record())
+				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+		break;
+		case "admin": 
+			//Alle meine Institute (unabhaengig von Suche fuer Rechte)...
+			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE inst_perms = 'admin' AND user_inst.user_id='$user_id' ");
+			while ($db->next_record()) {
+				//...alle Seminare meiner Institute, in denen ich Admin bin....
+				$db2->query("SELECT seminare.Seminar_id, Name FROM seminar_inst LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
+				while ($db2->next_record()) {
+					$my_objects[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+				}
+			}
+		break;
+		case "dozent": 
+		case "tutor":
+			//Alle meine Seminare
+			$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status IN ('tutor', 'dozent')  AND seminar_user.user_id='$user_id' ORDER BY Name");
+			while ($db->next_record())
+				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+		break;
+	}
+	return $my_objects;
+}
+
+
+/*
+* search_administrable_objects
+*
+* this Funktion searches all my aministrable objects (the object i've got tutor 
+* or better perms, so I'am able to administrate most of the things).
+*
+* @param	string	a search string, that could be used
+* @param	string	the user_id
+* @param	boolean	should seminars searched`?
+* @return 	array
+*
+**/
+function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE) {
+	global $user, $perm, $auth, $_fullname_sql;
+
+	$db = new DB_Seminar;
+	$db2 = new DB_Seminar;
+	$db3 = new DB_Seminar;
+	
+	if (!$user_id)
+		$user_id = $user->id;
+		
+	if (!$search_string)
+		$search_string = "_";
+
+	if (getGlobalPerms($user_id) == "admin") 
 		$my_objects["global"]=array("name"=>_("Global"), "perms" => "admin");
 		
 	$user_global_perm=get_global_perm($this->user_id);
-		switch ($user_global_perm) {
+	switch ($user_global_perm) {
 		case "root": 
 			//Alle Personen...
 			$db->query("SELECT a.user_id,". $_fullname_sql['full_rev'] ." AS fullname , username FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");

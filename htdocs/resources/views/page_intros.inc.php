@@ -33,6 +33,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+
+
 if ($resources_data["actual_object"]) {
 	$currentObject=new ResourceObject($resources_data["actual_object"]);
 	$currentObjectTitelAdd=": ".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene"));
@@ -41,7 +44,7 @@ if ($resources_data["actual_object"]) {
 	$currentObjectTitelAdd=": ".$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
 }
 
-switch ($resources_data["view"]) {
+switch ($view) {
 	//Reiter "Uebersicht"
 	case "resources":
 	case "_resources":
@@ -52,17 +55,14 @@ switch ($resources_data["view"]) {
 		$page_intro=_("Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen zu suchen oder sich durch die Ebenen zu navigieren.");
 		$title=_("Suche nach Ressourcen");
 		$infobox = array(
-/*					array  ("kategorie"  => _("Information:"), 
-							"eintrag" => array (
-								array ("icon" => "pictures/ausruf_small.gif", 	
-									"text"  => ($resources_data["list_recurse"]) ? _("Untergeordnete Ebenen werden ausgegeben.") : _("Untergeordnete Ebenen werden <u>nicht</u> ausgegeben.")))),*/
 					array  ("kategorie" => _("Aktionen:"), 
 							"eintrag" => array (
 								array	("icon" => "pictures/suchen.gif",
-									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"), "<a href=\"$PHPSELF?view=search&mode=properties\">", "</a>") :  sprintf(_("%sEbenen%s durchsuchen"), "<a href=\"$PHP_SELF?view=search&mode=browse\">", "</a>")),
+									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"), "<a href=\"$PHPSELF?quick_view=search&quick_view_mode=".$view_mode."&mode=properties\">", "</a>") :  sprintf(_("%sEbenen%s durchsuchen"), "<a href=\"$PHP_SELF?view=search&quick_view_mode=".$view_mode."&mode=browse\">", "</a>")),
 								array("icon" => "pictures/blank.gif",
-									"text"  => "<br /><a href=\"$PHP_SELF?view=search&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
+									"text"  => "<br /><a href=\"$PHP_SELF?qwuick_view=search&quick_view_mode=".$view_mode."&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
 		$infopic = "pictures/rooms.jpg";
+		$clipboard = TRUE;
 	break;
 	
 	//Reiter "Listen"
@@ -92,12 +92,12 @@ switch ($resources_data["view"]) {
 	case "edit_object_assign":
 		$page_intro=_("Sie sehen hier die Einzelheiten der Belegung. Falls Sie &uuml;ber entsprechende Rechte verf&uuml;gen, k&ouml;nnen Sie sie bearbeiten oder eine neue Belegung erstellen.");
 		$title=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
-		if (($resources_data["view_mode"] == "no_nav") || ($resources_data["view_mode"] == "search")) {
+		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox = array(
 						array  ("kategorie" => _("Aktionen:"), 
 								"eintrag" => array (
 									array	("icon" => "pictures/link_intern.gif",
-										"text"  => "<a href=\"$PHP_SELF?view=view_schedule\">"._("zur&uuml;ck zum Belegungsplan")."</a>"))));
+										"text"  => "<a href=\"$PHP_SELF?quick_view=view_schedule&quick_view_mode=".$view_mode."\">"._("zur&uuml;ck zum Belegungsplan")."</a>"))));
 		}
 	break;
 	case "edit_object_properties":
@@ -114,16 +114,16 @@ switch ($resources_data["view"]) {
 		
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-								"text"  => sprintf (_("%sEigenschaften%s anzeigen"), "<a href=\"$PHP_SELF?view=view_details\">", "</a>"));
+								"text"  => sprintf (_("%sEigenschaften%s anzeigen"), "<a href=\"$PHP_SELF?quick_view=view_details&quick_view_mode=".$view_mode."\">", "</a>"));
 		if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
 			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
+									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
 
-		if ($resources_data["view_mode"] == "search")
+		if ($view_mode == "search")
 			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-									"text"  =>"<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>");
+									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur&uuml;ck zur Suche")."</a>");
 
-		if (!($resources_data["view_mode"] == "search")) {
+		if (!($view_mode == "search")) {
 			if ($SessSemName["class"] == "sem")
 				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 										"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
@@ -146,10 +146,36 @@ switch ($resources_data["view"]) {
 		$title=_("Eigenschaften bearbeiten");
 	break;
 	case "edit_perms":
-		$page_intro=_("Verwalten Sie hier AdministratorInnen des Systems, die volle Rechte &uuml;ber alle Ressourcen erhalten.");
+		$page_intro=_("Verwalten Sie hier AdministratorInnen des Systems, die Rechte &uuml;ber alle Ressourcen erhalten.");
 		$title=_("Ressourcen-AdministratorInnen bearbeiten");
 	break;
+	case "edit_settings":
+		$page_intro=_("Verwalten Sie hier grundlegende Einstellungen der Ressourcenverwaltung.");
+		$title=_("Einstellungen der Ressourcenverwaltung");
+	break;
 	
+	//Reiter Raumplanung
+	case "requests_start":
+		$page_intro=_("Auf dieser Seite wird Ihnen der Status der Anfragen aus Ihren Bereichen angezeigt. Sie k&ouml;nnen das Bearbeiten der Anfragen von hier aus starten. .");
+		$title=_("&Uuml;bersicht des Raumplanungs-Status");
+	break;
+	case "edit_request":
+		$page_intro=_("Sie k&ouml;nnen hier die einzelnen Anfragen einsehen und passenden R&auml;ume ausw&auml;hlen sowie zuweisen.");
+		$title=_("Bearbeiten der Anfragen");
+		$infobox = array(
+					array  ("kategorie"  => _("Information:"), 
+							"eintrag" => array (
+								array ("icon" => "pictures/ausruf_small.gif", 	
+									"text"  => ($resources_data["skip_closed_requests"]) ? _("Bearbeitete Anfragen werden </u>ausgeblendet</u>.") : _("Bearbeitete Anfragen werden nicht ausgeblendet.")))),
+					array  ("kategorie" => _("Aktionen:"), 
+							"eintrag" => array (
+								array	("icon" =>  (!$resources_data["skip_closed_requests"]) ? "pictures/off_small.gif" : "pictures/on_small.gif",
+									"text"  => ($resources_data["skip_closed_requests"]) ? sprintf(_("Bearbeitete Anfragen mit %sanzeigen%s."), "<a href=\"$PHPSELF?skip_closed_requests=TRUE\">", "</a>") :  sprintf(_("Bearbeitete Anfragen %snicht anzeigen%s"), "<a href=\"$PHP_SELF?skip_closed_requests=FALSE\">", "</a>")),
+								array	("icon" =>  "pictures/nachricht1.gif",
+									"text"  => sprintf(_("Nachrichten zu zugewiesenen Anfragen %sversenden%s."), "<a href=\"$PHPSELF?snd_closed_rewuest_sms=TRUE\">", "</a>")))));
+		$infopic = "pictures/rooms.jpg";
+		$clipboard = TRUE;
+	break;
 	//all the intros in an open object (Veranstaltung, Einrichtung)
 	case "openobject_main":
 		$page_intro=sprintf(_("Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."), $SessSemName["art_generic"]);
@@ -169,23 +195,23 @@ switch ($resources_data["view"]) {
 	case "view_details":
 		if ($resources_data["actual_object"])
 			$page_intro= sprintf(_("Hier sehen Sie detaillierte Informationen der Ressource %s"), "<b>".$currentObject->getName()."</b> (".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene")).").");
-		if ($resources_data["view_mode"] == "oobj")
+		if ($view_mode == "oobj")
 			$title=$SessSemName["header_line"]." - "._("Ressourcendetails");
 		else
 			$title=_("Anzeige der Ressourceneigenschaften");
 		
-		if (($resources_data["view_mode"] == "no_nav") || ($resources_data["view_mode"] == "search")) {
+		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox[0]["kategorie"] = _("Aktionen:");
 	
 			if (is_object($currentObject)) {
 				if ($currentObject->getCategoryId())
 					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-											"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_schedule\">" : "<a href=\"$PHP_SELF?view=view_schedule".(($resources_data["view_mode"] == "no_nav") ? "&view_mode=no_nav" : "")."\">", "</a>"));
+											"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?quick_view=openobject_schedule&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?quick_view=view_schedule".(($view_mode == "no_nav") ? "&quick_view_mode=no_nav" : "")."\">", "</a>"));
 				if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
 					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-											"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
+											"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
 			}
-			if (!($resources_data["view_mode"] == "search")) {
+			if (!($view_mode == "search")) {
 				if ($SessSemName["class"] == "sem")
 					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 											"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
@@ -194,9 +220,9 @@ switch ($resources_data["view"]) {
 											"text"  => "<a href=\"institut_main.php\">"._("zur&uuml;ck zur Einrichtung")."</a>");
 			}
 		
-			if ($resources_data["view_mode"] == "search")
+			if ($view_mode == "search")
 				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-										"text"  =>"<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>");
+										"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur&uuml;ck zur Suche")."</a>");
 		$infopic = "pictures/schedule.jpg";
 		}
 	break;
