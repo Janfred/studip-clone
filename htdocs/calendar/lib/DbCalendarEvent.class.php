@@ -26,13 +26,16 @@ class DbCalendarEvent extends CalendarEvent {
 				break;
 			case 3:
 			case 6:
-				$param_array = func_get_args();
-				call_user_func_array(array(&$this, "Event"), $param_array);
+				$pa = func_get_args();
+				CalendarEvent::CalendarEvent($pa[0], $pa[1], $pa[2], $pa[3], $pa[4], $pa[5]);
+			//	call_user_func_array(array(&$this, "CalendarEvent"), $pa);
 				break;
 			case 8:
 			case 9:
-				$param_array = func_get_args();
-				call_user_func_array(array(&$this, "CalendarEvent"), $param_array);
+				$pa = func_get_args();
+				CalendarEvent::CalendarEvent($pa[0], $pa[1], $pa[2], $pa[3], $pa[4], $pa[5],
+													$pa[6], $pa[7], $pa[8]);
+			//	call_user_func_array($func_array, $pa);
 				break;
 			default:
 				die("Wrong parameter (".func_num_args().") count for DbCalendarEvent()");
