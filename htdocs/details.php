@@ -267,9 +267,9 @@ print_infobox ($infobox,"pictures/details.jpg");
 			//wer macht den Dozenten?
 				$db->query ("SELECT Vorname, Nachname, seminar_user.user_id, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
-					printf ("<font size=-1><b>DozentInnen:</b></font><br />");
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterInnen" : "DozentInnen");
 				elseif ($db->num_rows() == 1)
-					printf ("<font size=-1><b>DozentIn:</b></font><br />");
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterIn" : "DozentIn");
 				else	
 					print "&nbsp; ";
 				while ($db->next_record()) {
@@ -286,9 +286,9 @@ print_infobox ($infobox,"pictures/details.jpg");
 				//und wer ist Tutor?
 				$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
-					printf ("<font size=-1><b>TutorInnen:</b></font><br />");
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mtglieder" : "TutorInnen");
 				elseif ($db->num_rows() == 1)
-					printf ("<font size=-1><b>TutorIn:</b></font><br />");
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mitglied" : "TutorIn");
 				else	
 					print "&nbsp; ";
 				while ($db->next_record()) {
@@ -392,7 +392,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 			</tr>
 			<? }
-			if ($db2->f("ects") !="") {
+			if ($db2->f("ects")) {
 			?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
