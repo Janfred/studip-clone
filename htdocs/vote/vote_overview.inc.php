@@ -237,7 +237,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 	if ($vote->isError()){
 		createErrorReport ($vote);
 		printSafeguard("",createErrorReport($vote));
-		return;
+		//return;
 	}
 	$votename = htmlReady($vote->getTitle($voteID));
 	//$vote->finalize ();
