@@ -39,13 +39,13 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 ?>
 	<table width="75%" border=0 cellpadding=0 cellspacing=0 align=center>
 	<tr>
-		<td class="topic">&nbsp;&nbsp;<img src='pictures/gruppe.gif' alt='Gruppe &auml;ndern' border=0>&nbsp;&nbsp;<b>Gruppenzuordnung</></td>
+		<td class="topic">&nbsp;&nbsp;<img src="pictures/gruppe.gif" alt="Gruppe &auml;ndern" border=0>&nbsp;&nbsp;<b><?=_("Gruppenzuordnung")?></></td>
 	</tr>
-	<tr><td class="blank"><br><blockquote>Hier k&ouml;nnen Sie Ihre Veranstaltungen in Gruppen einordnen. Die Gruppen werden farbig gegliedert - die Darstellung unter "meine Veranstaltungen" wird entsprechend den Gruppen sortiert.</blockquote><br>
-	<FORM method=post action=meine_seminare.php>
+	<tr><td class="blank"><br><blockquote><?=_("Hier k&ouml;nnen Sie Ihre Veranstaltungen in Gruppen einordnen. Die Gruppen werden farbig gegliedert - die Darstellung unter <b>meine Veranstaltungen</b> wird entsprechend den Gruppen sortiert.")?></blockquote><br>
+	<FORM method=post action="meine_seminare.php">
 	<table border="0" cellpadding="0" cellspacing="0" width="90%" align="center">
 	<tr valign"top" align="center">
-	<th width="90%">Veranstaltung</th>
+	<th width="90%"><?=_("Veranstaltung")?></th>
 
 <? FOR ($i=0; $i<8; $i++)
 	ECHO "<th class=\"gruppe".$i."\" width=\"10px\"><b>&nbsp;</b></th>";
@@ -69,7 +69,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ECHO "</tr>";	
 		$c++;
 		}
-		ECHO "<tr><td class=\"blank\">&nbsp; </td><td class=\"blank\" align=center colspan=8><br><INPUT type=\"IMAGE\" src=\"pictures/buttons/absenden-button.gif\" border=0 value=absenden><INPUT type=hidden name=gruppesent value=1><br />&nbsp; </td></tr></form>";
+		ECHO "<tr><td class=\"blank\">&nbsp; </td><td class=\"blank\" align=center colspan=8><br><INPUT type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=absenden><INPUT type=hidden name=gruppesent value=1><br />&nbsp; </td></tr></form>";
 	echo "</table></td></tr>";
 }
 

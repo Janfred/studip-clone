@@ -14,17 +14,17 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Score</td>
+	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Stud.IP-Score")?></td>
 </tr>
 <tr>
 <td class="blank" align = left valign="top" width="60%"><br /><blockquote>
-Auf dieser Seite k&ouml;nnen Sie abrufen, wie weit Sie in der Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto h&ouml;her klettern Sie!
 <?
+echo _("Auf dieser Seite k&ouml;nnen Sie abrufen, wie weit Sie in der Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto h&ouml;her klettern Sie!");
 
 $score = getscore();
 $user_id=$user->id; //damit keiner schummelt...
 
-////////////////////////// schreiben des Wertes
+// schreiben des Wertes
 $db=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 
@@ -43,11 +43,10 @@ IF ($cmd=="kill") {
 		$db->query($query);
 	}
 
-////////////////////////// Angabe der eigenen Werte (immer)
-
-echo "<br><br><b>Ihre Score:&nbsp; ".$score."</b>";
-echo "<br><b>Ihr Titel</b> ;-)&nbsp; <b>".gettitel($score)."</b>";
-echo "<br><br><a href='score.php?cmd=write'>Diesen Wert hier ver&ouml;ffentlichen</a>";
+// Angabe der eigenen Werte (immer)
+echo "<br><br><b>" . _("Ihr Score:") . "&nbsp; ".$score."</b>";
+echo "<br><b>" . _("Ihr Titel") . "</b> ;-)&nbsp; <b>".gettitel($score)."</b>";
+echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert hier ver&ouml;ffentlichen") . "</a>";
 ?>
 
 </blockquote></td>
@@ -55,11 +54,13 @@ echo "<br><br><a href='score.php?cmd=write'>Diesen Wert hier ver&ouml;ffentliche
 </tr>
 </table>
 <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class=blank>
-<br><br><blockquote>Hier sehen Sie die Score der Nutzer, die Ihre Werte ver&ouml;ffentlicht haben:</blockquote>&nbsp; </td></tr>
+<br><br><blockquote>
+<?_("Hier sehen Sie die Score der Nutzer, die Ihre Werte ver&ouml;ffentlicht haben:")?>
+</blockquote>&nbsp; </td></tr>
 <tr><td class="blank">
 <?
 
-///////////////////////// Liste aller die mutig (oder eitel?) genug sind
+// Liste aller die mutig (oder eitel?) genug sind
 
 $rang = 1;
 $db=new DB_Seminar;
@@ -70,7 +71,7 @@ if ($db->num_rows()) {
 		$kill = "";
 		$cssSw->switchClass();
 		if ($db->f("user_id")==$user_id) {
-			$kill = "&nbsp; &nbsp; <a href='score.php?cmd=kill'>[l&ouml;schen]</a>";
+			$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[l&ouml;schen]") . "</a>";
 		}
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
 		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("fullname")."</a></td>"
