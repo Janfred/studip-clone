@@ -1,7 +1,4 @@
 <?
-$EXPORT_ENABLE = true;
-
-$XSLT_ENABLE = true;
 $skip_page_3 = true;
 $PATH_XSLT_PROCESS = $TMP_PATH;
 
