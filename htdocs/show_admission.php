@@ -89,22 +89,25 @@ $db3=new DB_Seminar;
 		</form>
 	</tr>	
 	<tr>
-		<td class="blank"align="center">
+		<td class="blank">
 <?
 		//check if grouping / ungrouping
 		//first show warning
 		if (isset($group) && (!$real) && ($ALLOW_GROUPING_SEMINARS)) {
 			printf("<form action=\"%s\" method=\"post\">",$PHP_SELF);
-			if ($group == "group")
-				echo _("Achten Sie darauf, dass ein Teilnehmer bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann.");
-			else 
-				echo _(" Achten Sie darauf, was mit den bereits eingetragenen / auf der Warteliste stehenden Teilnehmern geschieht.");
-			echo "<br/><br/>\n";
-			if ($group == "group")
-				echo _("Gruppieren?");
-			else
-				echo _("Gruppierung aufheben?");
-			echo "<br/><br/>\n";
+			printf("<table>");
+			if ($group == "group") {
+				my_info("Beachten Sie, dass ein Teilnehmer bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt heran keine Änderungen vor!");
+				my_info("Wollen Sie die ausgewählten Veranstaltungen gruppieren?");
+			} else { 
+				my_info("Beachten Sie, dass für bereits eingetragenen / auf der Warteliste stehende Teilnehmer keine Änderungen vorgenommen werden.");
+				my_info("Wollen Sie die Gruppierung für die ausgewählte Gruppe auflösen?");
+			}
+			echo "<tr><td>\n";
+			//if ($group == "group")
+			//	echo _("Gruppieren?");
+			//else
+			//	echo _("Gruppierung aufheben?");
 			printf("<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja","src"),tooltip(_("Änderung durchfuehren")));
 			print("<input type=\"hidden\" name=\"real\" value=\"1\">\n");
 			printf("<input type=\"hidden\" name=\"group\" value=\"%s\">\n",$group);
@@ -116,7 +119,7 @@ $db3=new DB_Seminar;
 				}
 			}
 			printf("<a href=\"show_admission.php?institut_id=%s\"><img %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\"></a>\n",$institut_id,makeButton("nein","src"),tooltip(_("Änderung NICHT durchfuehren")));
-			print("</form>");
+			print("</tr></td></table></form>");
 		} elseif ($ALLOW_GROUPING_SEMINARS) {
 			//execute order
 			if ($group=="group") {
@@ -149,7 +152,7 @@ $db3=new DB_Seminar;
 			}
 			echo "<th width=\"25%\">". _("Veranstaltung") ."</th>";
 			echo "<th width=\"8%\">". _("Teilnehmer") ."</th>";
-			echo "<th width=\"8%\">". _("Quota") ."</th>";
+			echo "<th width=\"8%\">". _("Max. Teilnehmer") ."</th>";
 			echo "<th width=\"8%\">". _("Anmeldeliste") ."</th>";
 			echo "<th width=\"8%\">". _("Warteliste") ."</th>";
 			echo "<th width=\"15%\">". _("Enddatum Kontingente") ."</th>";
@@ -161,7 +164,6 @@ $db3=new DB_Seminar;
 		}
 
 		if ($db->nf()) printf("<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
-
 	  	while ($db->next_record()) {
 			$seminar_id = $db->f("Seminar_id");
 	  		$query2 = "SELECT * FROM seminar_user WHERE seminar_id='$seminar_id'";
@@ -211,33 +213,33 @@ $db3=new DB_Seminar;
 					 printf("<td class=\"%s\"></td>",$cssSw->getClass());
 				}
 			}
-				printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\"><font size=\"-1\">%s%s</font></a></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>",
-				$cssSw->getClass(), $db->f("Seminar_id"), htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "", $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, ($datum != -1) ? ($datum < time() ? "steelgroup4" : "steelgroup1") : $cssSw->getClass(), ($datum != -1) ? date("d.m.Y, G:i", $datum) : "");
-				if (($db->f("admission_endtime_sem") != -1)  || ($db->f("admission_starttime") != -1)) {  // last tabel-data: "Anmeldeverfahren"
-					$class = "";  //we have to parse the correct color for the background
-					if ($db->f("admission_starttime") != -1) {
-						if ($db->f("admission_starttime") > time()) $class = "steelgroup1";
-							else $class="steelgroup4";
-					}
-					if ($db->f("admission_endtime_sem") != -1) {
-						if ($db->f("admission_endtime_sem") < time()) $class = "steelgroup1";
-							else if($class != "steelgroup1") $class = "steelgroup4";
-					}
-					// print out table-data
-					printf ("<td class=\"%s\" align=\"center\"><font size=\"-1\">", $class);
-					if ($db->f("admission_starttime") != -1) echo _("Start:")." ".date("d.m.Y, G:i", $db->f("admission_starttime"))." <br/>";
-					if ($db->f("admission_endtime_sem") != -1) echo _("Ende:")." ".date("d.m.Y, G:i", $db->f("admission_endtime_sem"));
-					echo "</font></td>";
-				} else {
-					printf("<td class=\"%s\" align=\"center\"></td>", $cssSw->getClass());
+			printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\"><font size=\"-1\">%s%s</font></a></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>",
+			$cssSw->getClass(), $db->f("Seminar_id"), htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "", $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, ($datum != -1) ? ($datum < time() ? "steelgroup4" : "steelgroup1") : $cssSw->getClass(), ($datum != -1) ? date("d.m.Y, G:i", $datum) : "");
+			if (($db->f("admission_endtime_sem") != -1)  || ($db->f("admission_starttime") != -1)) {  // last tabel-data: "Anmeldeverfahren"
+				$class = "";  //we have to parse the correct color for the background
+				if ($db->f("admission_starttime") != -1) {
+					if ($db->f("admission_starttime") > time()) $class = "steelgroup1";
+						else $class="steelgroup4";
 				}
+				if ($db->f("admission_endtime_sem") != -1) {
+					if ($db->f("admission_endtime_sem") < time()) $class = "steelgroup1";
+						else if($class != "steelgroup1") $class = "steelgroup4";
+				}
+				// print out table-data
+				printf ("<td class=\"%s\" align=\"center\"><font size=\"-1\">", $class);
+				if ($db->f("admission_starttime") != -1) echo _("Start:")." ".date("d.m.Y, G:i", $db->f("admission_starttime"))." <br/>";
+				if ($db->f("admission_endtime_sem") != -1) echo _("Ende:")." ".date("d.m.Y, G:i", $db->f("admission_endtime_sem"));
+				echo "</font></td>";
+			} else {
+				printf("<td class=\"%s\" align=\"center\"></td>", $cssSw->getClass());
+			}
 			print ("</tr>");
 		}
 
 		if ($db->nf() && $ALLOW_GROUPING_SEMINARS) {
 			print("<table width=\"90%\" border=0 cellspacing=0 cellpadding=2>\n");
 			print ("<tr><td>\n");
-			echo "<input ".makeButton("zuordnen","src")." ".tooltip(_("Markierte Veranstaltungen gruppieren"))." type=\"image\" border=\"0\" style=\"vertical-align:left;\" align=\"left\">";
+			echo "<input ".makeButton("gruppieren","src")." ".tooltip(_("Markierte Veranstaltungen gruppieren"))." type=\"image\" border=\"0\" style=\"vertical-align:left;\" align=\"left\">";
 			//TODO: Button gruppieren statt auswählen
 			print("</td></tr>\n");
 			print("<input type=\"hidden\" name=\"group\" value=\"group\">\n");
