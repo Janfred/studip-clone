@@ -389,7 +389,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
   $to=$email;
   $url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
   $mailbody="Dies ist eine Informationsmail des Systems\n"
-  ."\"Studentischer Internetsupport Präsenzlehre\"\n"
+  ."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 	."- $UNI_NAME_CLEAN -\n\n"
   ."Ihr Passwort wurde um $Zeit neu gesetzt,\n"
   ."da Sie Ihre Email Addresse verändert haben!\n"

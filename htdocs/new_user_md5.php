@@ -147,7 +147,7 @@ while ( is_array($HTTP_POST_VARS)
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studentischer Internetsupport Präsenzlehre\"\n"
+			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
 			."Sie wurden um $Zeit mit folgenden Angaben von einem\n"
 			."der Administratoren ins System eingetragen:\n\n"
@@ -260,7 +260,7 @@ while ( is_array($HTTP_POST_VARS)
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studentischer Internetsupport Präsenzlehre\"\n"
+			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
 			."Ihr Account wurde um $Zeit von einem der Administratoren verändert.\n"
 			."Die aktuellen Angaben lauten:\n\n"
@@ -376,7 +376,7 @@ while ( is_array($HTTP_POST_VARS)
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
 			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studentischer Internetsupport Präsenzlehre\"\n"
+			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
 			."Ihr Passwort wurde um $Zeit von einem der Administratoren neu gesetzt.\n"
 			."Die aktuellen Angaben lauten:\n\n"
@@ -559,7 +559,7 @@ while ( is_array($HTTP_POST_VARS)
 					$abuse="abuse@".$smtp->host_name;
 					$to=$Email;
 					$mailbody="Dies ist eine Informationsmail des Systems\n"
-					."\"Studentischer Internetsupport Präsenzlehre\"\n"
+					."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 					."- $UNI_NAME_CLEAN -\n\n"
 					."Ihr Account\n\n"
 					."Benutzername: $username\n"
