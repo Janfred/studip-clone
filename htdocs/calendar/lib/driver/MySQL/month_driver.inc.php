@@ -275,10 +275,10 @@ function month_restore(&$this){
 				
 			// jährliche Wiederholung
 			case "YEARLY" :
-				if($db->f("date") > $start + 1 && $db->f("date") < $end + 1){
+				if ($db->f("date") > $start + 1 && $db->f("date") < $end + 1){
 					$wdate = mktime(12,0,0,date("n",$db->f("date")),date("j",$db->f("date")),$year,0);
 					if($rep["ts"] != $wdate){
-						if($db->f("end_date") < $end)
+						if($db->f("end_time") < $end)
 							$event_end = mktime(0,0,0,date("n",$db->f("end_time")),date("j",$db->f("end_time")) + 1,date("Y",$db->f("end_time")),0);
 						else
 							$event_end = $end;
@@ -293,9 +293,8 @@ function month_restore(&$this){
 							$wdate += 86400;
 						}
 					}
-					break;
 				}
-				
+								
 				if($rep["sintervall"] == 5)
 					$cor = 0;
 				else
