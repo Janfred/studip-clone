@@ -59,6 +59,7 @@ function reset_all_data() {
 	$sem_create_data='';
 	$admin_dates_data='';
 	$admin_admission_data='';
+	$admin_rooms_data='';
 	$archiv_assi_data='';
 	$term_metadata='';
 
@@ -152,6 +153,7 @@ if ($i_page == "admin_seminare1.php"
 		OR $i_page == "admin_dates.php"
 		OR $i_page == "admin_metadates.php"
 		OR $i_page == "admin_admission.php"
+		OR $i_page == "admin_room_requests.php"
 		OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem")
 		OR ($i_page == "admin_lit_list.php" AND $links_admin_data["view"]=="literatur_sem")
 		OR $i_page == "archiv_assi.php"
@@ -231,6 +233,8 @@ elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_d
 
 //Bottomkats
 $structure["grunddaten_sem"]=array (topKat=>"veranstaltungen", name=>_("Grunddaten"), link=>"admin_seminare1.php?list=TRUE", active=>FALSE);
+if (((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))) && ($RESOURCES_ENABLE))
+	$structure["room_requests"]=array (topKat=>"veranstaltungen", name=>_("Raumw&uuml;nsche"), link=>"admin_room_requests.php?list=TRUE", active=>FALSE);
 $structure["zeiten"]=array (topKat=>"veranstaltungen", name=>_("Zeiten"), link=>"admin_metadates.php?list=TRUE", active=>FALSE);
 if (($modules["schedule"]) || (!$SessSemName[1]))
 	$structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>_("Ablaufplan"), link=>"admin_dates.php?list=TRUE", active=>FALSE);
@@ -271,7 +275,7 @@ if ($perm->have_perm("admin"))
 	$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
 
 if ($EXTERN_ENABLE && $perm->have_perm("admin"))
-	$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
+	$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe&nbsp;Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
 if ($perm->is_fak_admin())
 	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>_("neue&nbsp;Einrichtung"), link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
@@ -295,7 +299,7 @@ if ($perm->have_perm("root")) {
 	$structure["studiengang"]=array (topKat=>"global", name=>_("Studieng&auml;nge"), link=>"admin_studiengang.php", active=>FALSE);
 	$structure["datafields"]=array (topKat=>"global", name=>_("Datenfelder"), link=>"admin_datafields.php", active=>FALSE);
 	$structure["sessions"]=array (topKat=>"modules", name=>_("Sessions"), link=>"view_sessions.php", active=>FALSE);
-	$structure["integrity"]=array (topKat=>"modules", name=>_("DB Integrit&auml;t"), link=>"admin_db_integrity.php", active=>FALSE);
+	$structure["integrity"]=array (topKat=>"modules", name=>_("DB&nbsp;Integrit&auml;t"), link=>"admin_db_integrity.php", active=>FALSE);
 	if ($BANNER_ADS_ENABLE)  {
 		$structure["bannerads"]=array (topKat=>"global", name=>_("Werbebanner"), link=>"admin_banner_ads.php", active=>FALSE);
 	}
@@ -341,6 +345,9 @@ elseif ($SessSemName["class"] == "inst")
 
 //View festlegen
 switch ($i_page) {
+	case "admin_room_requests.php" : 
+		$reiter_view="room_requests"; 
+	break;
 	case "admin_admission.php" : 
 		$reiter_view="zugang"; 
 	break;
@@ -930,6 +937,9 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 				break;
 			case "admin_admission.php": 
 				printf("<font size=-1>" . _("Zugangsberechtigungen") . "<br /><a href=\"admin_admission.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));  
+				break;
+			case "admin_room_requests.php": 
+				printf("<font size=-1>" . _("Raumw&uuml;nsche") . "<br /><a href=\"admin_room_requests.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));  
 				break;
 			case "admin_lit_list.php": 
 				printf("<font size=-1>" . _("Literatur") . "<br /><a href=\"admin_lit_list.php?_range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten")); 

@@ -92,7 +92,7 @@ if ($SessSemName["class"]=="inst") {
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-		if (checkAvaiableResources ($SessSemName[1]))
+		if (checkAvailableResources ($SessSemName[1]))
 			$structure["resources"]=array (topKat=>"", name=>_("Ressourcen"), link=>"resources.php?view=openobject_main&view_mode=no_nav", active=>FALSE);
 	}
 } else {
@@ -118,7 +118,7 @@ if ($SessSemName["class"]=="inst") {
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-		if (checkAvaiableResources ($SessSemName[1]))
+		if (checkAvailableResources ($SessSemName[1]))
 			$structure["resources"]=array (topKat=>"", name=>_("Ressourcen"), link=>"resources.php?view=openobject_main&view_mode=no_nav", active=>FALSE);
 	}
 }
