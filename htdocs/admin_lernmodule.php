@@ -45,11 +45,11 @@ if ($ILIAS_CONNECT_ENABLE)
 
 	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
@@ -64,9 +64,10 @@ if ($ILIAS_CONNECT_ENABLE)
      		<td width="90%" class="blank">
 		<?
 	//neuen ILIAS-User anlegen, wenn noch nicht vorhanden.
-	create_ilias_user($auth->auth["uname"]);
+//	create_ilias_user($auth->auth["uname"]);
 
-		echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
+		if (get_ilias_user($auth->auth["uname"]) != false)
+			echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
 
 		if ($perm->have_perm("admin"))  
 			show_all_modules_admin();
