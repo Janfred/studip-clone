@@ -48,17 +48,22 @@ function change_general_view() {
 			<form method="POST" action="<? echo $PHP_SELF ?>?cmd=change_general">
 			<table width ="99%" align="center" cellspacing=0 cellpadding=2 border=0>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b><? echo _("Sprache:") ?></b></blockquote>
+					<td class="<? echo $cssSw->getClass() ?>" width="5%">&nbsp;
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%" colspan="2"> 
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
+					<br><b><? echo _("Sprache:") ?></b><br><br>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" width="75%" colspan="2"> 
 					<?	    
 					select_language($_language);
 					?>
 					</td>
 				</tr>
 				
-				<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" width="20%"><blockquote><b><?print _("Java-Script Hovereffekte");?></b></td><td  width="20%" class="<? echo $cssSw->getClass() ?>">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="5%">&nbsp;
+					</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="20%"><b><?print _("Java-Script Hovereffekte");?></b></td><td  width="20%" class="<? echo $cssSw->getClass() ?>">
 				<?
 				IF ($auth->auth["jscript"]) {
 					echo "<input type=CHECKBOX name='jshover' value=1";
@@ -68,12 +73,14 @@ function change_general_view() {
 				} else
 					echo _("Sie müssen in Ihrem Browser Javascript aktivieren um dieses Feature nutzen zu können.");
 				?>
-				</td><td   width="60%" class="<? echo $cssSw->getClass() ?>"><br><font size="2"><?print _("Mit dieser Funktion k&ouml;nnen sie durch reines &Uuml;berfahren bestimmter Icons mit dem Mauszeiger (z.B. in den Foren oder im Addresbuch) die entsprechenden Eintr&auml;ge anzeigen lassen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch gr&ouml;&szlig;ere Informationsmengen arbeiten. Da jedoch die Ladezeiten der Seiten erheblich ansteigen, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens &uuml;ber eine ISDN Verbindung verf&uuml;gen.");?></font><br><br></td></tr>								
+				</td><td   width="55%" class="<? echo $cssSw->getClass() ?>"><br><font size="2"><?print _("Mit dieser Funktion k&ouml;nnen sie durch reines &Uuml;berfahren bestimmter Icons mit dem Mauszeiger (z.B. in den Foren oder im Addresbuch) die entsprechenden Eintr&auml;ge anzeigen lassen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch gr&ouml;&szlig;ere Informationsmengen arbeiten. Da jedoch die Ladezeiten der Seiten erheblich ansteigen, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens &uuml;ber eine ISDN Verbindung verf&uuml;gen.");?></font><br><br></td></tr>								
 				
 				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="5%">&nbsp;
+					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%" colspan="2"><br>	&nbsp; 				
+					<td class="<? echo $cssSw->getClass() ?>" width="75%" colspan="2"><br>	&nbsp; 				
 	<?
 	echo "<font size=\"-1\"><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=" . _("&Auml;nderungen &uuml;bernehmen") . "></font>&nbsp;"; 
 	echo "<input type=\"HIDDEN\" name=\"view\" value=\"allgemein\">\n";
