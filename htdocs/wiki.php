@@ -201,7 +201,18 @@ if ($view=="listall") {
 	//
 	// Show Page
 	//
-	showWikiPage($keyword, $version, $special);
+	if (!isset($show_wiki_comments)) {
+		$sess->register("show_wiki_comments");
+		$show_wiki_comments="icon";
+	}
+	if ($wiki_comments=="all") {         // show all comments
+		$show_wiki_comments="all";
+	} elseif ($wiki_comments=="none") {  // don't show comments
+		$show_wiki_comments="none";
+	} elseif ($wiki_comments=="icon") {  // show comments as icons
+		$show_wiki_comments="icon";
+	}
+	showWikiPage($keyword, $version, $special, $show_wiki_comments);
 
 } // end default action
 
