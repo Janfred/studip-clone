@@ -24,7 +24,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<meta http-equiv="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 <?
