@@ -56,14 +56,12 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	/**
 	* constructor
 	*
-	* only calls the base class constructor
+	* calls the base class constructor, registers a session variable, calls the init function and the command parser
 	* @access public
 	*/
 	function StudipRangeTreeViewAdmin(){
 		global $sess,$_marked_item;
-		$base_class = get_parent_class($this);
-		parent::$base_class($item_id); //calling the baseclass constructor 
-		//$this->$base_class(); //calling the baseclass constructor PHP < 4.1.0
+		parent::StudipRangeTreeView(); //calling the baseclass constructor 
 		if (is_object($sess)){
 			$sess->register("_marked_item");
 			$this->marked_item =& $_marked_item;

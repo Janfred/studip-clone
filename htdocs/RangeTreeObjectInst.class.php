@@ -42,9 +42,7 @@ class RangeTreeObjectInst extends RangeTreeObject {
 	* @param	string	$item_id
 	*/
 	function RangeTreeObjectInst($item_id) {
-		$base_class = get_parent_class($this);
-		//parent::$base_class($item_id); //calling the baseclass constructor 
-		$this->$base_class($item_id); //calling the baseclass constructor PHP < 4.1.0
+		parent::RangeTreeObject($item_id); //calling the baseclass constructor 
 		$this->initItemDetail();
 		$this->item_data_mapping = array('Strasse' => 'Straße', 'Plz' => 'Ort', 'telefon' => 'Tel.', 'fax' => 'Fax',
 										'url' => 'Homepage', 'email' => 'Kontakt');
