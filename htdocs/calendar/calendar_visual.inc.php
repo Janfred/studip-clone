@@ -360,7 +360,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
 													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
-													, js_hover($term[$zeile][$j]));
+													, js_hover($day_obj->events[$mapping[$zeile][$j]]));
 						$tab[$zeile] .= $title . "</a>";
 					}
 					else {
@@ -373,7 +373,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
 													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
-													, js_hover($term[$zeile][$j]));
+													, js_hover($day_obj->events[$mapping[$zeile][$j]]));
 						$tab[$zeile] .= $title . "</a>";
 					}
 					if ($term[$zeile][$j]->getRepeat('rtype') != 'SINGLE') {
