@@ -130,7 +130,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 		if ($ex_sem_id == "all")
 			export_pers($inst_id); 
 		elseif (($o_mode != "passthrough") AND ($o_mode != "direct"))
-			export_teilis($inst_id, $ex_sem_id, $filter); 
+			export_teilis($inst_id, $ex_sem_id); 
 		else
 			$data_object .= xml_tag("message", _("KEINE BERECHTIGUNG!"));
 		break;
