@@ -284,6 +284,20 @@ class StudipLitCatElement {
 		}
 	}
 	
+	function checkElement(){
+		if ($this->getValue('user_id') == 'studip' && $this->getValue('accession_number')){
+			$this->dbv->params[0] = $this->getValue('accession_number');
+			$rs = $this->dbv->get_query("view:LIT_CHECK_ELEMENT");
+			if ($rs->next_record()){
+				return $rs->f('catalog_id');
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
 	function checkValues(){
 		$missing_fields = false;
 		foreach($this->fields as $name => $detail){
@@ -358,7 +372,7 @@ class StudipLitCatElement {
 	}
 	
 	function isChangeable(){
-		return ($GLOBALS['auth']->auth['uid'] == $this->getValue("user_id") || $GLOBALS['auth']->auth['perms'] == "root");
+		return ($GLOBALS['auth']->auth['uid'] == $this->getValue("user_id") || $GLOBALS['auth']->auth['perm'] == "root");
 	}
 	
 	function isNewEntry(){
@@ -371,6 +385,13 @@ class StudipLitCatElement {
 		$year = explode("-", $this->getValue("dc_date"));
 		$year = $year[0];
 		return $autor . "(" . $year . ")-" . $this->getValue("dc_title");
+	}
+	
+	function CloneElement($catalog_id){
+		$clone = new StudipLitCatElement($catalog_id);
+		$clone->getElementData('new_entry');
+		$clone->insertData();
+		return ($clone->getValue('catalog_id') == $catalog_id ? false : $clone->getValue('catalog_id'));
 	}
 }
 ?>
