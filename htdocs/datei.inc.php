@@ -849,7 +849,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							$content= htmlReady($db3->f("description"), TRUE, TRUE);
 						else
 							$content= _("Keine Beschreibung vorhanden");
-						$content.=  "<br />" . sprintf(_("Dateigr&ouml;&szlig;e: %s kB"), round ($db3->f("filesize") / 1024));	
+						$content.=  "<br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
+						$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
 						}
 			
 					if ($move == $db3->f("dokument_id"))
