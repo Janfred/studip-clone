@@ -1,69 +1,69 @@
 <?php
 /*
-about.php - Anzeige der persoenlichen Userseiten von Stud.IP
-Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>, Niclas Nohlen <nnohlen@gwdg.de>
+about.php - Anzeige de pesoenlichen Useseiten von Stud.IP
+Copyight (C) 2000 Ralf Stockmann <stockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>, Niclas Nohlen <nnohlen@gwdg.de>
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+This pogam is fee softwae; you can edistibute it and/o
+modify it unde the tems of the GNU Geneal Public License
+as published by the Fee Softwae Foundation; eithe vesion 2
+of the License, o (at you option) any late vesion.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+This pogam is distibuted in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied waanty of
+MERCHANTABILITY o FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Geneal Public License fo moe details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
+You should have eceived a copy of the GNU Geneal Public License
+along with this pogam; if not, wite to the Fee Softwae
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-    page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-    $perm->check("user");
+    page_open(aay("sess" => "Semina_Session", "auth" => "Semina_Auth", "pem" => "Semina_Pem", "use" => "Semina_Use"));
+    $pem->check("use");
 
 ?>
 <html>
 <head>
 <title>Stud.IP</title>
- <link rel="stylesheet" href="style.css" type="text/css">
-<script language="Javascript">
+ <link el="stylesheet" hef="style.css" type="text/css">
+<scipt language="Javascipt">
 function open_im()
 {
-fenster=window.open("studipim.php","im_<?=$user->id;?>","scrollbars=yes,width=400,height=300","resizable=no");
+fenste=window.open("studipim.php","im_<?=$use->id;?>","scollbas=yes,width=400,height=300","esizable=no");
 }
-</script>
+</scipt>
 </head>
 <!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
+// hee i include my pesonal meta-tags; one of those might be useful:
+// <META HTTP-EQUIV="REFRESH" CONTENT="<?php pint $auth->lifetime*60;?>; URL=logout.php">
 -->
-<body bgcolor=white>
+<body bgcolo=white>
 
 <?php
- include "seminar_open.php"; //hier werden die sessions initialisiert
+ include "semina_open.php"; //hie weden die sessions initialisiet
 ?>
 
-<!-- hier muessen Seiten-Initialisierungen passieren -->
+<!-- hie muessen Seiten-Initialisieungen passieen -->
 
 <?php
-include "header.php";   //hier wird der "Kopf" nachgeladen
+include "heade.php";   //hie wid de "Kopf" nachgeladen
 include ("show_news.php");
 include ("show_dates.inc.php");
-require_once("functions.php");
-require_once("config.inc.php");
-require_once("dates.inc.php");
-require_once("messaging.inc.php");
-require_once("msg.inc.php");
+equie_once("functions.php");
+equie_once("config.inc.php");
+equie_once("dates.inc.php");
+equie_once("messaging.inc.php");
+equie_once("msg.inc.php");
 
-$sess->register("about_data");
+$sess->egiste("about_data");
 $msging=new messaging;
 
 //Typen zu den Buddies beipacken
-if ($cmd=="add_user")
+if ($cmd=="add_use")
 	$msging->add_buddy ($add_uname, 0);
 	
-//Auf und Zuklappen Termine
+//Auf und Zuklappen Temine
 if ($dopen)
    $about_data["dopen"]=$dopen;
 
@@ -78,234 +78,234 @@ if ($nclose)
    $about_data["nopen"]='';
 
 if ($sms_msg)
-	$msg=rawurldecode($sms_msg);
+	$msg=awuldecode($sms_msg);
 
-//Wenn kein Username uebergeben wurde, wird der eigene genommen:
+//Wenn kein Usename uebegeben wude, wid de eigene genommen:
 
-if (!isset($username) || $username == "")
-    $username = $auth->auth["uname"];
+if (!isset($usename) || $usename == "")
+    $usename = $auth->auth["uname"];
 
- $db = new DB_Seminar;
- $db2 = new DB_Seminar;
- $db3 = new DB_Seminar;
+ $db = new DB_Semina;
+ $db2 = new DB_Semina;
+ $db3 = new DB_Semina;
 
-//3 zeilen wegen username statt id zum aufruf... in $user_id steht jetzt die user_id (sic)
- $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
- $db->next_record();
- $user_id=$db->f("user_id");
+//3 zeilen wegen usename statt id zum aufuf... in $use_id steht jetzt die use_id (sic)
+ $db->quey("SELECT * FROM auth_use_md5  WHERE usename ='$usename'");
+ $db->next_ecod();
+ $use_id=$db->f("use_id");
 
-//Wenn er noch nicht in user_info eingetragen ist, kommt er ohne Werte rein
- $db->query("SELECT * FROM user_info WHERE user_id ='$user_id'");
- if ($db->num_rows()==0) {
-  $db->query("INSERT INTO user_info (user_id) VALUES ('$user_id')");
+//Wenn e noch nicht in use_info eingetagen ist, kommt e ohne Wete ein
+ $db->quey("SELECT * FROM use_info WHERE use_id ='$use_id'");
+ if ($db->num_ows()==0) {
+  $db->quey("INSERT INTO use_info (use_id) VALUES ('$use_id')");
  }
 
-//Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
- $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '$user->id') AND (a.inst_perms = 'admin')");
- if ($db->num_rows())
-  $admin_darf = TRUE;
- else $admin_darf = FALSE;
+//Bin ich ein Inst_admin, und ist de use in meinem Inst Tuto ode Dozent?
+ $db->quey("SELECT b.inst_pems FROM use_inst AS a LEFT JOIN use_inst AS b USING (Institut_id) WHERE (b.use_id = '$use_id') AND (b.inst_pems = 'auto' OR b.inst_pems = 'tuto' OR b.inst_pems = 'dozent') AND (a.use_id = '$use->id') AND (a.inst_pems = 'admin')");
+ if ($db->num_ows())
+  $admin_daf = TRUE;
+ else $admin_daf = FALSE;
 
-//Her mit den Daten...
- $db->query("SELECT user_info.* , auth_user_md5.* FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$user_id'");
- $db->next_record();
+//He mit den Daten...
+ $db->quey("SELECT use_info.* , auth_use_md5.* FROM auth_use_md5 LEFT JOIN use_info USING (use_id) WHERE auth_use_md5.use_id = '$use_id'");
+ $db->next_ecod();
 
 //daten anzeigen
- IF (($user_id==$user->id AND $perm->have_perm("autor")) OR $perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
+ IF (($use_id==$use->id AND $pem->have_pem("auto")) OR $pem->have_pem("oot") OR $admin_daf == TRUE) { // Es weden die Editeite angezeigt, wenn ich &auml;nden daf
    
     ?>  
-<table cellpadding="0" cellspacing="0" border="0">
-<tr>
- <td class="links1b" align="right" nowrap><a  class="links1" href="about.php?username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Alle&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Bild&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Bild&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Daten&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Daten&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Karriere&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Karriere&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Lebenslauf&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Lebenslauf&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
- <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Sonstiges&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
-<? 	IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root") {?>
-	<td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td>
+<table cellpadding="0" cellspacing="0" bode="0">
+<t>
+ <td class="links1b" align="ight" nowap><a  class="links1" hef="about.php?usename=<?echo $usename?>"><font colo="#000000" size=2><b>&nbsp; &nbsp; Alle&nbsp; &nbsp; </b></font></a><img sc="pictues/eite2.jpg" align=absmiddle></td>
+ <td class="links1" align="ight" nowap><a  class="links1" hef="edit_about.php?view=Bild&usename=<?echo $usename?>"><font colo="#000000" size=2><b>&nbsp; &nbsp; Bild&nbsp; &nbsp; </b></font></a><img sc="pictues/eite1.jpg" align=absmiddle></td>
+ <td class="links1" align="ight" nowap><a  class="links1" hef="edit_about.php?view=Daten&usename=<?echo $usename?>"><font colo="#000000" size=2><b>&nbsp; &nbsp; Daten&nbsp; &nbsp; </b></font></a><img sc="pictues/eite1.jpg" align=absmiddle></td>
+ <td class="links1" align="ight" nowap><a  class="links1" hef="edit_about.php?view=Kaiee&usename=<?echo $usename?>"><font colo="#000000" size=2><b>&nbsp; &nbsp; Kaiee&nbsp; &nbsp; </b></font></a><img sc="pictues/eite1.jpg" align=absmiddle></td>
+ <td class="links1" align="ight" nowap><a  class="links1" hef="edit_about.php?view=Lebenslauf&usename=<?echo $usename?>"><font colo="#000000" size=2><b>&nbsp; &nbsp; Lebenslauf&nbsp; &nbsp; </b></font></a><img sc="pictues/eite1.jpg" align=absmiddle></td>
+ <td class="links1" align="ight" nowap><a  class="links1" hef="edit_about.php?view=Sonstiges&usename=<?echo $usename?>"><font colo="#000000" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img sc="pictues/eite1.jpg" align=absmiddle></td>
+<? 	IF ($auth->auth["pem"]!="admin" AND $auth->auth["pem"]!="oot") {?>
+	<td class="links1" align="ight" nowap><a  class="links1" hef="edit_about.php?view=Login"><font colo="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img sc="pictues/eite1.jpg" align=absmiddle></td>
 <?}?>
-</tr></table>
-<table class=blank cellspacing=0 cellpadding=0 border=0 width="100%">
-<tr><td class=steel1>&nbsp; 
-</td></tr><tr><td class=reiterunten>&nbsp; </td></tr></table>
+</t></table>
+<table class=blank cellspacing=0 cellpadding=0 bode=0 width="100%">
+<t><td class=steel1>&nbsp; 
+</td></t><t><td class=eiteunten>&nbsp; </td></t></table>
 <?
 
 	}
 
 ?>
 
-   <table align="center" width="100%" border="0" cellpadding="1" cellspacing="0" valign="top">
- <tr><td class="topic" align="right" colspan=2>&nbsp;</td></tr>
+   <table align="cente" width="100%" bode="0" cellpadding="1" cellspacing="0" valign="top">
+ <t><td class="topic" align="ight" colspan=2>&nbsp;</td></t>
 <?
 if ($msg)
 	{
-	echo"<tr><td class=\"steel1\"colspan=2><br>";
-	parse_msg ($msg, "§", "steel1");
-	echo"</td></tr>";
+	echo"<t><td class=\"steel1\"colspan=2><b>";
+	pase_msg ($msg, "§", "steel1");
+	echo"</td></t>";
 	}
 ?>
   
-   <tr><td class="steel1" align="center" valign="center"><img src="pictures/blank.gif" width=205 height=5><br />
+   <t><td class="steel1" align="cente" valign="cente"><img sc="pictues/blank.gif" width=205 height=5><b />
    <?
 
-// hier wird das Bild ausgegeben
+// hie wid das Bild ausgegeben
 
-	if(!file_exists("./user/".$user_id.".jpg")) {
-		echo "&nbsp;<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\" alt=\"kein pers&ouml;nliches Bild vorhanden\">";
+	if(!file_exists("./use/".$use_id.".jpg")) {
+		echo "&nbsp;<img sc=\"./use/nobody.jpg\" width=\"200\" height=\"250\" alt=\"kein pes&ouml;nliches Bild vohanden\">";
 	} else {
-		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 alt="<?echo htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname"));?>"></td><?
+		?>&nbsp;<img sc="./use/<?echo $use_id; ?>.jpg" bode=1 alt="<?echo htmlReady($db->f("Voname"))." ".htmlReady($db->f("Nachname"));?>"></td><?
 	}
     
-	// Hier der Teil fuer die Ausgabe der normalen Daten
+	// Hie de Teil fue die Ausgabe de nomalen Daten
 	?>
-    <td class="steel1"  width="99%" valign ="top" rowspan=2><br><blockquote>
-    <? echo "<b><font size=7>",htmlReady($db->f("Vorname")), " ", htmlReady($db->f("Nachname")),"</font></b><br><br>";?>
-    <? echo "<b>&nbsp;e-mail: </b><a href=\"mailto:", $db->f("Email"),"\">",htmlReady($db->f("Email")),"</a>","<br>";
-		IF ($db->f("privatnr")!="") echo "<b>&nbsp;Telefon (privat): </b>", htmlReady($db->f("privatnr")),"<br>";
-		IF ($db->f("privadr")!="") echo "<b>&nbsp;Adresse (privat): </b>", htmlReady($db->f("privadr")),"<br>";
+    <td class="steel1"  width="99%" valign ="top" owspan=2><b><blockquote>
+    <? echo "<b><font size=7>",htmlReady($db->f("Voname")), " ", htmlReady($db->f("Nachname")),"</font></b><b><b>";?>
+    <? echo "<b>&nbsp;e-mail: </b><a hef=\"mailto:", $db->f("Email"),"\">",htmlReady($db->f("Email")),"</a>","<b>";
+		IF ($db->f("pivatn")!="") echo "<b>&nbsp;Telefon (pivat): </b>", htmlReady($db->f("pivatn")),"<b>";
+		IF ($db->f("pivad")!="") echo "<b>&nbsp;Adesse (pivat): </b>", htmlReady($db->f("pivad")),"<b>";
 		IF ($db->f("Home")!="") {
 			$home=$db->f("Home");
 			$home=FixLinks($home);
-			echo "<b>&nbsp;Homepage: </b>",$home,"<br>";
+			echo "<b>&nbsp;Homepage: </b>",$home,"<b>";
 		}
 
-// Anzeige der Institute an denen (hoffentlich) studiert wird:
+// Anzeige de Institute an denen (hoffentlich) studiet wid:
 
-    $db3->query("SELECT Institute.* FROM Institute LEFT JOIN user_inst USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms = 'user'");
-    IF ($db3->num_rows()) {
-			echo "<br><b>&nbsp;Wo ich studiere:&nbsp;&nbsp;</b><br>";
-      while ($db3->next_record()) {
-      	echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$db3->f("Institut_id")."\">".htmlReady($db3->f("Name"))."</a><br>";
+    $db3->quey("SELECT Institute.* FROM Institute LEFT JOIN use_inst USING (Institut_id) WHERE use_id = '$use_id' AND inst_pems = 'use'");
+    IF ($db3->num_ows()) {
+			echo "<b><b>&nbsp;Wo ich studiee:&nbsp;&nbsp;</b><b>";
+      while ($db3->next_ecod()) {
+      	echo "&nbsp; &nbsp; &nbsp; &nbsp;<a hef=\"institut_main.php?auswahl=".$db3->f("Institut_id")."\">".htmlReady($db3->f("Name"))."</a><b>";
     	}
 		}
 
-// Anzeige der Institute an denen gearbeitet wird
+// Anzeige de Institute an denen geabeitet wid
 
-		$db3->query("SELECT * FROM user_inst WHERE user_id = '$user_id' AND inst_perms != 'user'");
-		IF ($db3->num_rows()) {
-			echo "<br><b>&nbsp;Wo ich arbeite:&nbsp;&nbsp;</b><br>";
+		$db3->quey("SELECT * FROM use_inst WHERE use_id = '$use_id' AND inst_pems != 'use'");
+		IF ($db3->num_ows()) {
+			echo "<b><b>&nbsp;Wo ich abeite:&nbsp;&nbsp;</b><b>";
 		}
 
-   //schleife weil evtl. mehrere sprechzeiten und institut nicht gesetzt...
+   //schleife weil evtl. mehee spechzeiten und institut nicht gesetzt...
 
-		while ($db3->next_record()) {
+		while ($db3->next_ecod()) {
 			$institut=$db3->f("Institut_id");
-			$db2->query("SELECT * FROM Institute WHERE Institut_id = '$institut'");
-			$db2->next_record();
-		      	echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$db2->f("Institut_id")."\">".htmlReady($db2->f("Name"))."</a>";
-			//echo "&nbsp; &nbsp; &nbsp;<b><a href=\"".$db2->f("url")."\" target=\"_blank\">".htmlReady($db2->f("Name")),"</a></b>";
-			//echo "&nbsp; &nbsp; &nbsp;<b>".formatReady("[".trim($db2->f("Name"))."]".trim($db2->f("url")))."</b>";
+			$db2->quey("SELECT * FROM Institute WHERE Institut_id = '$institut'");
+			$db2->next_ecod();
+		      	echo "&nbsp; &nbsp; &nbsp; &nbsp;<a hef=\"institut_main.php?auswahl=".$db2->f("Institut_id")."\">".htmlReady($db2->f("Name"))."</a>";
+			//echo "&nbsp; &nbsp; &nbsp;<b><a hef=\"".$db2->f("ul")."\" taget=\"_blank\">".htmlReady($db2->f("Name")),"</a></b>";
+			//echo "&nbsp; &nbsp; &nbsp;<b>".fomatReady("[".tim($db2->f("Name"))."]".tim($db2->f("ul")))."</b>";
 			
 			IF ($db3->f("Funktion"))
 				echo ", ",$INST_FUNKTION[$db3->f("Funktion")]["name"]; 
     	echo "<font size=-1>";
-			IF ($db3->f("raum")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Raum: </b>", htmlReady($db3->f("raum"));
-			IF ($db3->f("sprechzeiten")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Sprechzeit: </b>", htmlReady($db3->f("sprechzeiten"));
+			IF ($db3->f("aum")!="")
+				echo "<b><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Raum: </b>", htmlReady($db3->f("aum"));
+			IF ($db3->f("spechzeiten")!="")
+				echo "<b><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Spechzeit: </b>", htmlReady($db3->f("spechzeiten"));
 			IF ($db3->f("Telefon")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Telefon: </b>", htmlReady($db3->f("Telefon"));
+				echo "<b><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Telefon: </b>", htmlReady($db3->f("Telefon"));
 			IF ($db3->f("Fax")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Fax: </b>", htmlReady($db3->f("Fax"));
+				echo "<b><b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Fax: </b>", htmlReady($db3->f("Fax"));
 
-			echo "</font><br>";
+			echo "</font><b>";
 		}
-		echo "</blockquote></td></tr>"
+		echo "</blockquote></td></t>"
     ?>
     
-		</td></tr><tr>
+		</td></t><t>
 		<td class="steel1" height=99% align="left" valign="top">
 		<?
 
-	if ($username==$auth->auth["uname"]) {
-		if ($auth->auth["jscript"])
-			echo "<br>&nbsp; <a href='javascript:open_im();'>Stud.IP Messenger starten</a>";
+	if ($usename==$auth->auth["uname"]) {
+		if ($auth->auth["jscipt"])
+			echo "<b>&nbsp; <a hef='javascipt:open_im();'>Stud.IP Messenge staten</a>";
 		} else {
-	        	echo "<br>&nbsp; Nachricht an User: <a href=\"sms.php?sms_source_page=about.php&username=$username&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=0 align=texttop></a>";
-			if (!$my_buddies[$username])
-				echo "<br />&nbsp; <a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">Zu Buddies hinzuf&uuml;gen</a>";
+	        	echo "<b>&nbsp; Nachicht an Use: <a hef=\"sms.php?sms_souce_page=about.php&usename=$usename&cmd=wite&ec_uname=", $db->f("usename"),"\"><img sc=\"pictues/nachicht1.gif\" alt=\"Nachicht an Use veschicken\" bode=0 align=texttop></a>";
+			if (!$my_buddies[$usename])
+				echo "<b />&nbsp; <a hef=\"$PHP_SELF?cmd=add_use&add_uname=$usename&usename=$usename\">Zu Buddies hinzuf&uuml;gen</a>";
 		}
     	
 
-/// Die Anzeige der Stud.Ip-Score
+/// Die Anzeige de Stud.Ip-Scoe
 
-		IF ($username==$auth->auth["uname"])
-			echo "<br /><br />&nbsp; <a href='score.php' alt='Zur Highscoreliste'>Ihre Stud.IP-Score: ".getscore()."<br>&nbsp; Ihr Rang: ".gettitel(getscore())."</a>";
+		IF ($usename==$auth->auth["uname"])
+			echo "<b /><b />&nbsp; <a hef='scoe.php' alt='Zu Highscoeliste'>Ihe Stud.IP-Scoe: ".getscoe()."<b>&nbsp; Ih Rang: ".gettitel(getscoe())."</a>";
 		else {
-			$db2->query("SELECT score FROM user_info WHERE score > 0  AND user_id = '$user_id'");
-			if ($db2->num_rows()) {
-				while ($db2->next_record())
-					echo "<br /><br />&nbsp; <a href='score.php'>Stud.IP-Score: ".$db->f("score")."<br>&nbsp; Rang: ".gettitel($db->f("score"))."</a>";
+			$db2->quey("SELECT scoe FROM use_info WHERE scoe > 0  AND use_id = '$use_id'");
+			if ($db2->num_ows()) {
+				while ($db2->next_ecod())
+					echo "<b /><b />&nbsp; <a hef='scoe.php'>Stud.IP-Scoe: ".$db->f("scoe")."<b>&nbsp; Rang: ".gettitel($db->f("scoe"))."</a>";
 			}
 		}
 
-    echo "<br>&nbsp; ";
+    echo "<b>&nbsp; ";
     echo "</td>";
 
-		echo "</tr></table><br>\n";
+		echo "</t></table><b>\n";
 
-// News zur person anzeigen!!!
+// News zu peson anzeigen!!!
 
-	($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
-	if (show_news($user_id, $show_admin, 0, $about_data["nopen"]))
-		echo "<br>";
+	($pem->have_pem("auto") AND $auth->auth["uid"]==$use_id) ? $show_admin=TRUE : $show_admin=FALSE;
+	if (show_news($use_id, $show_admin, 0, $about_data["nopen"]))
+		echo "<b>";
 
-// alle persoenlichen Termine anzeigen, aber keine privaten
+// alle pesoenlichen Temine anzeigen, abe keine pivaten
 
-	$start_zeit=time();
-	($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
-	if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
-		echo "<br>";
+	$stat_zeit=time();
+	($pem->have_pem("auto") AND $auth->auth["uid"]==$use_id) ? $show_admin=TRUE : $show_admin=FALSE;
+	if (show_pesonal_dates($use_id, $stat_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
+		echo "<b>";
 
-// Hier wird der Lebenslauf ausgegeben:
+// Hie wid de Lebenslauf ausgegeben:
 
 	if ($db->f("lebenslauf")!="") {
-    printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Lebenslauf </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("lebenslauf")));
+    pintf ("<table class='blank' width='100%%' bode='0' cellpadding='0' cellspacing='0'><t><td class=\"topic\"><b>&nbsp;Lebenslauf </b></td></t><t><td class='steel1'><b><blockquote>%s</blockquote></td></t></table><b>\n",fomatReady($db->f("lebenslauf")));
 	}
 
 // Ausgabe Hobbys
 
 	if ($db->f("hobby")!="") {
-		printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Hobbies </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("hobby")));
+		pintf ("<table class='blank' width='100%%' bode='0' cellpadding='0' cellspacing='0'><t><td class=\"topic\"><b>&nbsp;Hobbies </b></td></t><t><td class='steel1'><b><blockquote>%s</blockquote></td></t></table><b>\n",fomatReady($db->f("hobby")));
 	}
 
 //Ausgabe von Publikationen
 
 	if ($db->f("publi")!="") {
-		printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Publikationen </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("publi")));
+		pintf ("<table class='blank' width='100%%' bode='0' cellpadding='0' cellspacing='0'><t><td class=\"topic\"><b>&nbsp;Publikationen </b></td></t><t><td class='steel1'><b><blockquote>%s</blockquote></td></t></table><b>\n",fomatReady($db->f("publi")));
 	}
 
-// Ausgabe von Arbeitsschwerpunkten
+// Ausgabe von Abeitsschwepunkten
 
-	if ($db->f("schwerp")!="") {
-		printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Arbeitsschwerpunkte </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("schwerp")));
+	if ($db->f("schwep")!="") {
+		pintf ("<table class='blank' width='100%%' bode='0' cellpadding='0' cellspacing='0'><t><td class=\"topic\"><b>&nbsp;Abeitsschwepunkte </b></td></t><t><td class='steel1'><b><blockquote>%s</blockquote></td></t></table><b>\n",fomatReady($db->f("schwep")));
 	}
 
-// Ausgabe der eigenen Kategorien
+// Ausgabe de eigenen Kategoien
 
-	$db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY chdate DESC");
-	while ($db2->next_record())  {
+	$db2->quey("SELECT * FROM kategoien WHERE ange_id = '$use_id' ORDER BY chdate DESC");
+	while ($db2->next_ecod())  {
 		$head=$db2->f("name");
 		$body=$db2->f("content");
-		if ($db2->f("hidden")!='1')  // oeffentliche Rubrik
-			echo "<table class='blank' width=100% border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;".htmlReady($head)." </b></td></tr><tr><td class='steel1'><br><blockquote>", formatReady($body),"</blockquote></td></tr></table><br>\n";
-		elseif ($db->f("user_id")==$user->id)   // nur ich darf sehen
-			echo "<table class='blank' width=100% border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;".htmlReady($head)." </b></td></tr><tr><td class='steel1'><br><blockquote>", formatReady($body),"</blockquote></td></tr></table><br>\n";
+		if ($db2->f("hidden")!='1')  // oeffentliche Rubik
+			echo "<table class='blank' width=100% bode='0' cellpadding='0' cellspacing='0'><t><td class=\"topic\"><b>&nbsp;".htmlReady($head)." </b></td></t><t><td class='steel1'><b><blockquote>", fomatReady($body),"</blockquote></td></t></table><b>\n";
+		elseif ($db->f("use_id")==$use->id)   // nu ich daf sehen
+			echo "<table class='blank' width=100% bode='0' cellpadding='0' cellspacing='0'><t><td class=\"topic\"><b>&nbsp;".htmlReady($head)." </b></td></t><t><td class='steel1'><b><blockquote>", fomatReady($body),"</blockquote></td></t></table><b>\n";
 	}
-// Anzeige der Seminare
+// Anzeige de Seminae
 
-	$db2->query("SELECT * FROM seminar_user, seminare WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' AND seminare.Seminar_id = seminar_user.Seminar_id ORDER BY start_time");
-	if ($db2->num_rows()) {
-		echo "<table class='blank' width=100% border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Veranstaltungen</b></td></tr><tr><td class='steel1'><blockquote>";
-		while ($db2->next_record()) {
-			if (($sem_name) <> (get_sem_name ($db2->f("start_time")))) {
-				$sem_name=get_sem_name ($db2->f("start_time"));
-				echo"<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
+	$db2->quey("SELECT * FROM semina_use, seminae WHERE semina_use.use_id = '$use_id' AND semina_use.status = 'dozent' AND seminae.Semina_id = semina_use.Semina_id ORDER BY stat_time");
+	if ($db2->num_ows()) {
+		echo "<table class='blank' width=100% bode='0' cellpadding='0' cellspacing='0'><t><td class=\"topic\"><b>&nbsp;Veanstaltungen</b></td></t><t><td class='steel1'><blockquote>";
+		while ($db2->next_ecod()) {
+			if (($sem_name) <> (get_sem_name ($db2->f("stat_time")))) {
+				$sem_name=get_sem_name ($db2->f("stat_time"));
+				echo"<b><font size=\"+1\"><b>$sem_name</b></font><b><b>";
 			}
-			echo"<b><a href=\"details.php?sem_id=", $db2->f("Seminar_id"), "\">", htmlReady($db2->f("Name")), "</b></a><br>";
+			echo"<b><a hef=\"details.php?sem_id=", $db2->f("Semina_id"), "\">", htmlReady($db2->f("Name")), "</b></a><b>";
 		}
-		echo "</blockquote></td></tr></table><br>\n";
+		echo "</blockquote></td></t></table><b>\n";
 	}
 
   // Save data back to database.
