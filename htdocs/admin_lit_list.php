@@ -58,19 +58,16 @@ if (($_the_tree->range_type == "sem" && !$perm->have_studip_perm("tutor", $_rang
 }
 
 $_the_treeview->open_ranges['root'] = true;
-$_the_clipboard =& new StudipLitClipBoard();
-$_the_treeview->clip_board =& $_the_clipboard;
 $_the_treeview->parseCommand();
+$_the_clipboard =& StudipLitClipBoard::GetInstance();
 $_the_clip_form =& $_the_clipboard->getFormObject();
 
 
 if ( ($lists = $_the_tree->getListIds()) ){
 	for ($i = 0; $i < count($lists); ++$i){
-		if (isset($_the_treeview->open_items[$lists[$i]])){
-			$_the_clip_form->form_fields['clip_cmd']['options'][] 
-			= array('name' => my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50),
-			'value' => 'ins_' . $lists[$i]);
-		}
+		$_the_clip_form->form_fields['clip_cmd']['options'][] 
+		= array('name' => my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50),
+		'value' => 'ins_' . $lists[$i]);
 	}
 }
 
@@ -119,7 +116,7 @@ $_the_treeview->showTree();
 <tr>
 <td class="blank" width="270" align="right" valign="top">
 <?
-$infobox[0] = array ("kategorie" => _("Literaturlisten erstellen / bearbeiten"),
+$infobox[0] = array ("kategorie" => _("Information:"),
 					"eintrag" =>	array(	
 									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie Literaturlisten erstellen / bearbeiten.")),
 									)
@@ -132,20 +129,20 @@ $infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  =>
 
 print_infobox ($infobox,"pictures/browse.jpg");
 
-echo $_the_clip_form->getFormStart($_the_treeview->getSelf());
 ?>
 </td>
 </tr>
+<?=$_the_clip_form->getFormStart($_the_treeview->getSelf());?>
 <tr>
 	<td class="blank" align="center" valign="top">
 	<b><?=_("Merkliste:")?></b>
 	<br>
-	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
-	<div align="right">
-	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle'))?>
-	</div>
-	<hr>
 	<?=$_the_clip_form->getFormField("clip_content", array_merge(array('size' => $_the_clipboard->getNumElements()), $_attributes['lit_select']))?>
+	<div align="center" style="background-image:url(pictures/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="pictures/blank.gif" height="2" border="0"></div>
+	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
+	<div align="center">
+	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle;margin:3px;'))?>
+	</div>
 	</td>
 </tr>
 </table>

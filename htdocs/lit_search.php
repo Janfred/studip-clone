@@ -42,7 +42,7 @@ $_attributes['radio'] = array('style' => 'font-size:8pt;vertical-align:bottom;')
 $_attributes['button'] = array('style' => 'vertical-align:middle;');
 
 $_the_search =& new StudipLitSearch();
-$_the_clipboard =& new StudipLitClipBoard();
+$_the_clipboard =& StudipLitClipBoard::GetInstance();
 $_the_clip_form =& $_the_clipboard->getFormObject();
 
 if ($_REQUEST['change_start_result']){
@@ -98,13 +98,15 @@ if ($_msg)	{
 	echo "<br><br>";
 }
 $class_changer = new CssClassSwitcher();
+$_attributes['search_plugin'] = $_attributes['text'];
+$_attributes['search_plugin']['onChange'] = 'document.' . $_the_search->outer_form->form_name . '.submit()';
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr><td align="center">
 <table width="99%" border="0" cellpadding="2" cellspacing="0" style="font-size:10pt">
 <tr>
 <?=$_the_search->outer_form->getFormStart();?>
-<td colspan="3" class="steel2" align="right">&nbsp;
+<td colspan="3" class="steel2" align="center">&nbsp;
 <?=$_the_search->outer_form->getFormButton('search',$_attributes['button']);?>
 &nbsp;
 <?=$_the_search->outer_form->getFormButton('reset',$_attributes['button']);?>
@@ -112,14 +114,14 @@ $class_changer = new CssClassSwitcher();
 <tr><td <?=$class_changer->getFullClass()?> width="30%">
 <?=$_the_search->outer_form->getFormFieldCaption('search_plugin') ;?>
 </td><td <?=$class_changer->getFullClass()?> width="40%" align="right">
-<?=$_the_search->outer_form->getFormField('search_plugin',$_attributes['text']). $_the_search->outer_form->getFormFieldInfo('search_plugin',$_attributes['button']);?>
-</td><td <?=$class_changer->getFullClass()?> width="30%" align="right">
+<?=$_the_search->outer_form->getFormField('search_plugin',$_attributes['search_plugin']). $_the_search->outer_form->getFormFieldInfo('search_plugin',$_attributes['button']);?>
+</td><td <?=$class_changer->getFullClass()?> width="30%" align="center">
 <?=$_the_search->outer_form->getFormButton('change');?>
 </td>
 </tr>
 <?
 $class_changer->switchClass();
-echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"pictures\border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
+echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"pictures/border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
 for ($i = 0 ; $i < $_the_search->term_count; ++$i){
 	if ($i > 0){
 		echo "<tr><td " . $class_changer->getFullClass() ." width=\"30%\">";
@@ -147,19 +149,24 @@ for ($i = 0 ; $i < $_the_search->term_count; ++$i){
 	echo "</td><td " . $class_changer->getFullClass() ." width=\"40%\" align=\"right\">";
 	echo $_the_search->inner_form->getFormField("search_term_" . $i, $_attributes['text']);
 	echo $_the_search->inner_form->getFormFieldInfo("search_term_" . $i);
-	echo "</td><td " . $class_changer->getFullClass() ." width=\"30%\">&nbsp;</td></tr>";
-	$class_changer->switchClass();
+	echo "</td><td " . $class_changer->getFullClass() ." width=\"30%\" align=\"center\">";
+	if ($i == $_the_search->term_count - 1){
+		echo $_the_search->outer_form->getFormButton('search_add');
+		if ($_the_search->term_count > 1){
+			echo "&nbsp;" . $_the_search->outer_form->getFormButton('search_sub');
+		}
+	} else {
+		echo "&nbsp;";
+		$class_changer->switchClass();
+	}
+	echo "</td></tr>";
 }
-echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"pictures\border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
+echo "<tr><td " . $class_changer->getFullClass() ." colspan=\"3\" align=\"center\"><img src=\"pictures/border.jpg\" width=\"99%\" border=\"0\"></td></tr>";
 
 ?>
-<tr><td colspan="3" <?=$class_changer->getFullClass()?>  align="right">
-<?=$_the_search->outer_form->getFormButton('search_add');?>
-&nbsp;
-<?=$_the_search->outer_form->getFormButton('search_sub');?>
-</td></tr>
+
 <tr>
-<td colspan="3" class="steel2" align="right">&nbsp;
+<td colspan="3" class="steel2" align="center">&nbsp;
 <?=$_the_search->outer_form->getFormButton('search',$_attributes['button']);?>
 &nbsp;
 <?=$_the_search->outer_form->getFormButton('reset',$_attributes['button']);?>
@@ -200,7 +207,8 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 	$element = $_the_search->getSearchResult($i);
 	if ($element){
 		echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>";
-		$addon = "<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id") . 
+		$addon = ($_the_clipboard->isInClipboard($element->getValue("catalog_id"))) ? "<img src=\"pictures/forum_fav.gif\" hspace=\"4\"  border=\"0\" " . 
+				tooltip(_("Dieser Eintrag ist bereits in ihrer Merkliste")) . ">" : "<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id") . 
 				"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\"  border=\"0\" " . 
 				tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
 		printhead(0,0,false,"open",true,"<img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\">",htmlReady(my_substr($element->getShortName(),0,85)),$addon);
@@ -243,7 +251,7 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 <tr>
 <td class="blank" width="270" align="right" valign="top">
 <?
-$infobox[0] = array ("kategorie" => _("Literatur suchen"),
+$infobox[0] = array ("kategorie" => _("Information:"),
 					"eintrag" =>	array(	
 									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie in verschiedenen Katalogen nach Literatur suchen.")),
 									array("icon" => "pictures/blank.gif","text"  =>	"<b>" . _("Ausgew&auml;hlter Katalog:") . "</b><br>" . $_the_search->search_plugin->description),
@@ -261,20 +269,20 @@ $infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  =>
 
 print_infobox ($infobox,"pictures/browse.jpg");
 
-echo $_the_clip_form->getFormStart();
 ?>
 </td>
 </tr>
+<?=$_the_clip_form->getFormStart();?>
 <tr>
 	<td class="blank" align="center" valign="top">
 	<b><?=_("Merkliste:")?></b>
 	<br>
-	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
-	<div align="right">
-	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle'))?>
-	</div>
-	<hr>
 	<?=$_the_clip_form->getFormField("clip_content", array_merge(array('size' => $_the_clipboard->getNumElements()), $_attributes['lit_select']))?>
+	<div align="center" style="background-image:url(pictures/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="pictures/blank.gif" height="2" border="0"></div>
+	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
+	<div align="center">
+	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle;margin:3px;'))?>
+	</div>
 	</td>
 </tr>
 </table>

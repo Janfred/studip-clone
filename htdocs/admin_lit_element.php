@@ -34,10 +34,10 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 $_attributes['text'] = array('style' => 'width:100%');
-$_attributes['textarea'] = array('style' => 'width:100%','rows'=>1);
+$_attributes['textarea'] = array('style' => 'width:100%','rows'=>2);
 $_attributes['select'] = array();
 $_attributes['date'] = array();
-$_attributes['combo'] = array('style' => 'width:50%');
+$_attributes['combo'] = array('style' => 'width:45%');
 $_attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
 
 if ($_REQUEST['cmd'] == "new_entry"){
@@ -61,7 +61,7 @@ if ($_catalog_id{0} == "_"){
 
 $_the_element =& new StudipLitCatElement($_catalog_id, true);
 $_the_form =& $_the_element->getFormObject();
-$_the_clipboard =& new StudipLitClipBoard();
+$_the_clipboard =& StudipLitClipBoard::GetInstance();
 $_the_clip_form =& $_the_clipboard->getFormObject();
 
 $_the_clip_form->form_fields['clip_cmd']['options'][] = array('name' => _("In Merkliste eintragen"), 'value' => 'ins');
@@ -135,18 +135,25 @@ if ($_msg)	{
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 <?
+$class_changer = new CssClassSwitcher();
 echo $_the_form->getFormStart("$PHP_SELF?_catalog_id=$_catalog_id");
-echo "<tr><td align=\"left\" style=\"font-size:10pt;\">"
+echo "<tr><td " . $class_changer->getFullClass() . " align=\"left\" width=\"40%\" style=\"font-size:10pt;\">"
 	. sprintf(_("Anzahl an Referenzen für diesen Eintrag: %s"), (int)$_the_element->reference_count) ."</td>";
-echo "<td align=\"right\"><a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
-	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a>&nbsp;"
-	. $_the_form->getFormButton("reset") . "</td></tr>";
+echo "<td " . $class_changer->getFullClass() . " align=\"center\">";
+if ($_the_element->isChangeable()){
+	echo $_the_form->getFormButton("send") .  $_the_form->getFormButton("delete") ;
+}
+echo  $_the_form->getFormButton("reset");
+echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
+	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a></td></tr>";
+
 foreach ($_the_element->fields as $field_name => $field_detail){
 	if ($field_detail['caption']){
-		echo "<tr><td>";
+		echo "<tr><td " . $class_changer->getFullClass() . ">";
 		echo $_the_form->getFormFieldCaption($field_name,array('style'=>'font-weight:bold;font-size:10pt;'));
 		echo $_the_form->getFormFieldInfo($field_name);
-		echo "</td><td>";
+		echo "</td><td " . $class_changer->getFullClass() . ">";
 		$attributes = $_attributes[$_the_form->form_fields[$field_name]['type']];
 		if (!$_the_element->isChangeable()){
 			$attributes['readonly'] = 'readonly';
@@ -163,10 +170,18 @@ foreach ($_the_element->fields as $field_name => $field_detail){
 		}
 		echo "</td></tr>";
 	}
+	$class_changer->switchClass();
 }
+$class_changer->switchClass();
+echo "<tr><td align=\"left\" " . $class_changer->getFullClass() . " width=\"40%\" style=\"font-size:10pt;\">&nbsp;</td>";
+echo "<td " . $class_changer->getFullClass() . " align=\"center\">";
 if ($_the_element->isChangeable()){
-	echo "<tr><td colspan=\"2\" align=\"right\">" . $_the_form->getFormButton("send") ."&nbsp;" .  $_the_form->getFormButton("delete") . "</td></tr>";
+	echo $_the_form->getFormButton("send") .  $_the_form->getFormButton("delete") ;
 }
+echo  $_the_form->getFormButton("reset");
+echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
+	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a></td></tr>";
 ?>
 </table>
 </td>
@@ -175,7 +190,7 @@ if ($_the_element->isChangeable()){
 <tr>
 <td class="blank" width="270" align="right" valign="top">
 <?
-$infobox[0] = array ("kategorie" => _("Literatur eintragen / bearbeiten"),
+$infobox[0] = array ("kategorie" => _("Information:"),
 					"eintrag" =>	array(	
 									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie Literatur / Quellen erfassen, oder von Ihnen erfasste Einträge ändern.")),
 									array("icon" => "pictures/blank.gif","text"  =>	"<b>" . _("Eingetragen von:") . "</b><br>" . get_fullname($_the_element->getValue("user_id"))),
@@ -201,12 +216,12 @@ print_infobox ($infobox,"pictures/browse.jpg");
 	<td class="blank" align="center" valign="top">
 	<b><?=_("Merkliste:")?></b>
 	<br>
-	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
-	<div align="right">
-	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle'))?>
-	</div>
-	<hr>
 	<?=$_the_clip_form->getFormField("clip_content", array_merge(array('size' => $_the_clipboard->getNumElements()), $_attributes['lit_select']))?>
+	<div align="center" style="background-image:url(pictures/border.jpg);background-repeat:repeat-y;margin:3px;"><img src="pictures/blank.gif" height="2" border="0"></div>
+	<?=$_the_clip_form->getFormField("clip_cmd", $_attributes['lit_select'])?>
+	<div align="center">
+	<?=$_the_clip_form->getFormButton("clip_ok",array('style'=>'vertical-align:middle;margin:3px;'))?>
+	</div>
 	</td>
 </tr>
 </table>
