@@ -75,6 +75,19 @@ if (($sem_create_data["sem_entry"]) && (!$form))
 	}	
 
 //empfangene Variablen aus diversen Formularen auswerten
+if ($start_level) {
+	$sem_create_data["sem_class"]=$class;
+
+	if ($SEM_CLASS[$class]["turnus_default"]) 
+		$sem_create_data["term_art"] = $SEM_CLASS[$class]["turnus_default"];
+
+	if ($SEM_CLASS[$class]["default_read_level"]) 
+		$sem_create_data["sem_sec_lese"] = $SEM_CLASS[$class]["default_read_level"];
+
+	if ($SEM_CLASS[$class]["default_write_level"]) 
+		$sem_create_data["sem_sec_schreib"] = $SEM_CLASS[$class]["default_write_level"];
+}
+
 if ($form==1)
 	{
 	$sem_create_data["sem_name"]=$sem_name;
@@ -96,11 +109,6 @@ if ($form==1)
 		$sem_create_data["sem_bet_inst"]=$tmp_create_data_bet_inst;
 		}
 	$i=0;
-	foreach ($SEM_CLASS as $a) {
-		$i++;
-		if ($sem_class==$a["name"])
-			$sem_create_data["sem_class"]=$i;
-		}
 	}
 
 if ($form==2)
@@ -469,9 +477,12 @@ if ($cmd_c_x)
 		$level=2; //wir bleiben auf der zweiten Seite
 		$errormsg=$errormsg."error§Es macht keinen Sinn, die Sicherheitsstufe f&uuml;r den Lesezugriff h&ouml;her zu setzen als f&uuml;r den Schreibzugriff!§";
 		}
-	if (!$errormsg)
-		$level=3;
-	else
+	if (!$errormsg) {
+		if ($sem_create_data["term_art"]== -1)
+			$level=4;
+		else
+			$level=3;
+	} else
 		$level=2;
 	}
 
@@ -814,6 +825,10 @@ if ($cmd_f_x)
 			$sem_create_data["sem_sec_schreib"]=3;
 		}
 
+		//set temporary entry (for skip dates field) to the right value
+		if ($sem_create_data["term_art"]==-1) 
+			$sem_create_data["term_art"]=1;
+
 		if ($Schreibzugriff < $Lesezugriff) // hier wusste ein Dozent nicht, was er tat
 			$Schreibzugriff = $Lesezugriff;
 		
@@ -1060,9 +1075,54 @@ include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  		//Linkleiste fuer admins
 	// -->
 	</script>
 <?
+//Befre we start, let's decide the category (class) of the Veranstaltung
+if (!$sem_create_data["sem_class"]) {
+	?>
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Veranstaltungskategorie  ausw&auml;hlen</b>
+			</td>
+		</tr>
+		<tr>
+			<td class="blank" colspan=2>&nbsp;
+				<?
+				if ($errormsg) parse_msg($errormsg);
+				?>
+			</td>
+		</tr>
+		<tr>
+			<td class="blank" valign="top">
+				<blockquote>
+				Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent wird Sie Schritt f&uuml;r Schritt durch die notwendigen Schritte zum Anlegen einer neuen Veranstaltung in Stud.IP leiten.<br><br>
+				Bitte geben Sie zun&auml;chst an, welche Art von Veranstaltung Sie neu anlegen m&ouml;chten:<br /<<br />
+				</blockqoute>
+			</td>
+			<td class="blank" align="right" valign="top" rowspan="2">
+				<img src="pictures/hands01.jpg" border="0">
+			</td>
+		</tr>
+		<tr>
+			<td class="blank">&nbsp;
+				<blockquote>
+					<table cellpadding=0>
+					<?
+					foreach ($SEM_CLASS as $key=>$val) {
+						echo "<tr><td width=\"5%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"pictures/forumrot.gif\" border=0 /></a><td>";
+						echo "<td width=\"95%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\">".$val["name"]."</a><td></tr>";
+						echo "<tr><td width=\"5%\" class=\"blank\">&nbsp; <td>";
+						echo "<td width=\"95%\" class=\"blank\"><font size=-1>".$val["create_description"]."<td></tr>";
+					}
+					?>
+					</table>
+				</blockquote>
+			</td>
+		</tr>
+	</table>
+	<?
+}
 
 //Level 1: Hier werden die Grunddaten abgefragt.
-if ((!$level) || ($level==1))
+elseif ((!$level) || ($level==1))
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -1127,28 +1187,6 @@ if ((!$level) || ($level==1))
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							Kategorie:
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							&nbsp; 
-							<?
-								$i=0;
-								foreach ($SEM_CLASS as $a) {
-									$i++;
-									if ((($i==1) && (!$sem_create_data["sem_class"])) || ($sem_create_data["sem_class"] == $i))
-										echo "<input type=\"RADIO\" name=\"sem_class\" checked value=\"".$a["name"]."\">", $a["name"], "&nbsp; ";
-									else
-										echo "<input type=\"RADIO\" name=\"sem_class\"  value=\"".$a["name"]."\">", $a["name"], "&nbsp; ";
-									}
-							?>
-							</select>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Hier legen Sie fest, ob Sie eine Lehrveranstaltung anlegen möchten, oder ob die Veranstaltungen einer anderen Kategorie zugeordnet wird. Im Normalfall sollten sie eine Lehrveranstaltung anlegen.", TRUE, TRUE) ?>
-							>
-						</td>
-					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Raum:
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
@@ -1157,6 +1195,9 @@ if ((!$level) || ($level==1))
 								<? echo tooltip("Der Raum, in dem die Veranstaltung stattfindet", TRUE, TRUE) ?>
 							>
 						</td>
+						<?
+						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
+						?>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Veranstaltungsnummer:
 						</td>
@@ -1166,6 +1207,10 @@ if ((!$level) || ($level==1))
 								<? echo tooltip("Die von der Universität vergebene Veranstaltungsnummer.", TRUE, TRUE) ?>
 							>
 						</td>
+						<?
+						} else 
+							echo "<td ", $cssSw->getFullClass(), " colspan=\"2\">&nbsp; </td>";
+						?>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
@@ -1175,14 +1220,17 @@ if ((!$level) || ($level==1))
 							&nbsp; <select  name="term_art">
 							<?
 							if ($sem_create_data["term_art"] == 0) 
-								echo "<option selected value=0>regelm&auml;&szlig;ig</option>";
+								echo "<option selected value=\"0\">regelm&auml;&szlig;ig</option>";
 							else
-								echo "<option value=0>regelm&auml;&szlig;ig</option>>";
+								echo "<option value=\"0\">regelm&auml;&szlig;ig</option>>";
 							if ($sem_create_data["term_art"] == 1) 
-								echo "<option selected value=1>unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
+								echo "<option selected value=\"1\">unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
 							else
-								echo "<option value=1>unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
-											
+								echo "<option value=\"1\">unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
+							if ($sem_create_data["term_art"] == -1) 
+								echo "<option selected value=\"-1\">keine Termine engeben</option>";
+							else
+								echo "<option value=\"-1\">keine Termine eingeben</option>";
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
@@ -1190,6 +1238,10 @@ if ((!$level) || ($level==1))
 							>
 							<font color="red" size=+2>*</font>									
 						</td>
+						<?
+						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
+						?>
+
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							ECTS-Punkte:
 						</td>
@@ -1199,7 +1251,14 @@ if ((!$level) || ($level==1))
 								<? echo tooltip("ECTS-Kreditpunkte, die in dieser Veranstaltung vergeben werden.", TRUE, TRUE) ?>
 							>
 						</td>
+						<?
+						} else 
+							echo "<td ", $cssSw->getFullClass(), " colspan=\"2\">&nbsp; </td>";
+						?>
 					</tr>
+					<?
+					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
+					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Teilnehmer- begrenzung:
@@ -1226,7 +1285,9 @@ if ((!$level) || ($level==1))
 						</td>
 						
 					</tr>
-					</tr>
+					<?
+					}
+					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Beschreibung/ Kommentar:
@@ -1365,7 +1426,12 @@ if ($level==2)
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							DozentInnen der Veranstaltung:
+						<?
+						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+							echo "DozentInnen der Veranstaltung:";
+						else
+							echo "Leiter der Veranstaltung:";
+						?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <select name="sem_doz[]" MULTIPLE SIZE=7>
@@ -1406,7 +1472,12 @@ if ($level==2)
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							TutorInnen der Veranstaltung:
+						<?
+						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+							echo "TutorInnen der Veranstaltung:";
+						else
+							echo "Mitglieder der Veranstaltung: <br />";
+						?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <select name="sem_tut[]" MULTIPLE SIZE=7>
@@ -1939,7 +2010,7 @@ if ($level==4)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_c">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_e">
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_<? if ($sem_create_data["term_art"]== -1) echo "b"; else echo "c" ?>">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_e">
 						</td>
 					</tr>
 					<?
@@ -2089,6 +2160,7 @@ if ($level==4)
 					</tr>
 					<?
 					}
+					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
 					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
@@ -2134,12 +2206,15 @@ if ($level==4)
 							>
 						</td>
 					</tr>
+					<?
+					}
+					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Sonstiges:
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							&nbsp; <textarea name="sem_sonst" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_sonst"])) ?></textarea>
+							&nbsp; <textarea name="sem_sonst" cols=58 rows=<? 	if ($SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) echo "10"; else echo "4" ?>><? echo  htmlReady(stripslashes($sem_create_data["sem_sonst"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip("Hier ist Platz für alle sonstigen Informationen der Veranstaltung.", TRUE, TRUE) ?>
 							>
@@ -2171,7 +2246,7 @@ if ($level==4)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_c">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_e">
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_<? if ($sem_create_data["term_art"]== -1) echo "b"; else echo "c" ?>">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_e">
 						</td>
 					</tr>
 				</table>
