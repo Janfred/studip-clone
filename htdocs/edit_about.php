@@ -112,7 +112,7 @@ function get_user_details()        // füllt die arrays  mit Daten
   $this->db->query("SELECT user_inst.*,Institute.Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY Institut_id");
   while ($this->db->next_record())
    {
-   $this->user_inst[$this->db->f("Institut_id")] = array ("inst_perms" => $this->db->f("inst_perms"), "sprechzeiten" => $this->db->f("sprechzeiten"), "raum" => $this->db->f("raum"), "Telefon" => $this->db->f("Telefon"), "Fax" => $this->db->f("Fax"), "Name" => $this->db->f("Name"), "Funktion" => $this->db->f("Funktion"));
+   $this->user_inst[$this->db->f("Institut_id")] = array ("inst_perms" => $this->db->f("inst_perms"), "sprechzeiten" => $this->db->f("sprechzeiten"), "raum" => $this->db->f("raum"), "Telefon" => $this->db->f("Telefon"), "Fax" => $this->db->f("Fax"), "Name" => $this->db->f("Name"));
    if ($this->db->f("inst_perms")!="user") $this->special_user=TRUE;
    }
 
@@ -216,7 +216,7 @@ function inst_edit($inst_delete,$new_inst)
 
   if ($new_inst)
    {
-   $this->db->query("INSERT INTO user_inst (user_id,Institut_id,inst_perms,Funktion) VALUES ('".$this->auth_user["user_id"]."','$new_inst','user','Student')");
+   $this->db->query("INSERT INTO user_inst (user_id,Institut_id,inst_perms) VALUES ('".$this->auth_user["user_id"]."','$new_inst','user')");
    if (!$this->db->affected_rows()) $this->msg = $this->msg."error§Fehler beim Einf&uuml;gen in user_inst bei ID=$new_inst§";
    }
 
