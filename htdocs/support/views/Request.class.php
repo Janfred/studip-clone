@@ -48,13 +48,35 @@ class Request extends ShowTreeRow {
 		$this->db2 = new DB_Seminar;
 	}
 
-	function ShowRequests ($range_id) {
+	function showRequests ($contract_id, $search_exp = '', $show_all) {
 		$db = new DB_Seminar;
-		$query = sprintf("SELECT request_id FROM support_request WHERE contract_id = '%s' ORDER BY date ASC", $range_id);
+		$query = sprintf("SELECT request_id FROM support_request WHERE contract_id = '%s' %s ORDER BY date DESC %s", $contract_id, ($search_exp) ? "AND name LIKE '%$search_exp%' " : "", (($this->getRequestsCount($contract_id) > 10) && (!$show_all)) ? "LIMIT 0,10" : "");
 		$db->query($query);
 		while ($db->next_record()) {
 			$this->showListObject($db->f("request_id"));
 		}
+	}
+	
+	function getRequestsCount ($contract_id) {
+		$db = new DB_Seminar;
+		$query = sprintf("SELECT count(request_id) AS count FROM support_request WHERE contract_id = '%s' ", $contract_id);
+		$db->query($query);
+		$db->next_record();
+		return 	$db->f("count");
+	}
+	
+	function showSearchForm($search_exp) {
+		?>
+		<table align="center" width="99%" cellpadding="2" cellspacing="0">
+		<tr>
+			<td class="steel1" align="center">
+				<font size=-1>freie Suche:&nbsp;
+				<input name="search_exp"  type="TEXT" style="{font-size:8 pt; vertikal-align: middle;}" size=30 maxlength=255 value="<? echo $search_exp; ?>" />
+				<input type="IMAGE" align="absmiddle"  <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
+			</td>
+		</tr>
+		</table>
+		<?
 	}
 
 	//private
@@ -246,7 +268,8 @@ class Request extends ShowTreeRow {
 			} else {
 				$content .= "<font size=\"-1\">"._("Diese Anfrage wurde noch nicht bearbeitet")."</font><br />";
 			}
-			$content .= "<a href=\"$PHP_SELF?create_evt=$reqObject->id\"><img src=\"pictures/add_right.gif\" border=\"0\" ".tooltip ("Bearbeitungszeit hinzufügen")."/></a>";
+			if ($supporter)
+				$content .= "<a href=\"$PHP_SELF?create_evt=$reqObject->id\"><img src=\"pictures/add_right.gif\" border=\"0\" ".tooltip ("Bearbeitungszeit hinzufügen")."/></a>";
 		}
 		if ($supporter) {
 			if ($edit_req_object == $reqObject->id) {
