@@ -122,7 +122,8 @@ if ($ILIAS_CONNECT_ENABLE)
 		$connect_result = connect_users($auth->auth["uid"], get_ilias_user_id($ilias_uname));
 	$out = true;
 	
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+	$username = $auth->auth["uname"];
+	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
@@ -169,9 +170,6 @@ if ($ILIAS_CONNECT_ENABLE)
 		$infobox = array	(array ("kategorie"  => _("Information:"),
 				"eintrag" => array	(array (	"icon" => "pictures/ausruf_small.gif",
 										"text"  => sprintf(_("Diese Seite organisiert die Verbindung zwischen BenutzerInnen von ILIAS und Stud.IP."), "<br><i>", "</i>") ) ) ) );
-		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
-										"text"  => _("Geben bitte Sie ihre Logindaten ein.") );
 		$auth_mode = true;
 		switch($mode)
 		{	
@@ -225,6 +223,9 @@ if ($ILIAS_CONNECT_ENABLE)
 				}
 			break;
 			case "connect":
+				$infobox[1]["kategorie"] = _("Aktionen:");
+					$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
+												"text"  => _("Geben Sie bitte ihre Logindaten ein.") );
 				if (!check_ilias_auth()) 
 					ilias_auth_user();
 //				if (!check_studip_auth()) 
@@ -259,10 +260,11 @@ if ($ILIAS_CONNECT_ENABLE)
 		<? if ($auth_mode == false) { ?>
 		<input type="IMAGE" <? echo makeButton("weiter", "src"); ?> name="next" value="<? echo _("Weiter"); ?>">
 		<? }
-		else
+/*		else
 		{
 			echo "&nbsp;<a href=\"./index.php\"><b>" . _("Zur&uuml;ck zu Stud.IP") . "</b></a>";
-		} ?>
+		} /**/
+		?>
 		<br>
 		<br>
 		</td></tr></table>

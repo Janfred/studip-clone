@@ -48,6 +48,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		{
 			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
 			$op_string= _("Die Zuordnung wurde aufgehoben.");
+			$print_open[$op_co_id . "@" . $op_co_inst . "@sem"] = false;
 	     	}
 	     	elseif ($do_op == "connect")
 	     	{
@@ -56,7 +57,10 @@ if ($ILIAS_CONNECT_ENABLE)
 	     		if ($db->next_record())
 				$op_string= _("Dieses Lernmodul ist der Veranstaltung bereits zugeordnet.");
 	     		else
+	     		{
 	     			$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst')");
+				$print_open[$op_co_id . "@" . $op_co_inst . "@all"] = false;
+			}
      		}
 	}
 	
@@ -99,13 +103,52 @@ if ($ILIAS_CONNECT_ENABLE)
                 </td>
 		<td width="90%" class="blank">
 <?     				
-	if (($perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
+include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
+
+		if ($seminar_id != $print_open["id"])
+		{	
+			$sess->unregister("print_open");
+			unset($print_open);
+		}/**/
+		$print_open["id"] = $seminar_id;
+		if (isset($do_open))
+			$print_open[$do_open] = true;
+		elseif (isset($do_close))
+			$print_open[$do_close] = false;
+		$sess->register("print_open");
+
+// Anzeige, wenn noch keine Zuordnung besteht	
+	if (get_connected_user_id($auth->auth["uid"]) == false)
+	{
+
+		echo "<table><tr>";
+		my_info(_("Sie m&uuml;ssen Ihren Account mit dem angebundenen ILIAS-System verbinden, bevor sie Lernmodule nutzen k&ouml;nnen."));
+		echo "</tr></table>";
+		echo _("F&uuml;r die Verwendung von Lernmodulen ist das Stud.IP mit einem ILIAS System verbunden. Damit Sie die Funktionen von ILIAS nutzen k&ouml;nnen, muss Ihrem Account in Stud.IP zun&auml;chst ein ILIAS-Account zugeordnet werden. Die Verwaltung des ILIAS-Accounts finden Sie auf ihrer Einstellungsseite (Werkzeugsymbol) unter \"My Stud.IP\". Dorthin gelangen Sie auch mit dem folgenden Link.");
+		echo "<br><br>";
+		echo "<a href=\"migration2studip.php\"><b>" . _("Mein ILIAS-Account") . "</b></a>";
+		$infobox = array	(			
+		array ("kategorie"  => _("Information:"),
+			"eintrag" => array	(	
+							array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => _("Ihr Account wurde noch nicht mit dem angebundenen ILIAS-System verbunden.")
+								 )
+							)
+			)
+		);
+		$infobox[1]["kategorie"] = _("Aktionen:");
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie Ihrem Stud.IP-Account einen %s ILIAS-Account zuweisen. %s"), "<a href=\"migration2studip.php\">", "</a>")
+									);
+	}
+// Lernmodule hinzufuegen / entfernen
+	elseif (($perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
 	{
 		$infobox = array	(			
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => sprintf(_("Auf dieser Seite können Sie Lernmodule einer Veranstaltung zuordnen."), "<br><i>", "</i>")
+									"text"  => sprintf(_("Auf dieser Seite können Sie einer Veranstaltung Lernmodule zuordnen."), "<br><i>", "</i>")
 								 )
 							)
 			)
@@ -130,21 +173,9 @@ if ($ILIAS_CONNECT_ENABLE)
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 		show_all_modules($seminar_id);
 	}
+// Lernmodule anzeigen und benutzen
 	else
 	{
-		include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
-
-		if ($seminar_id != $print_open["id"])
-		{	
-			$sess->unregister("print_open");
-			unset($print_open);
-		}/**/
-		$print_open["id"] = $seminar_id;
-		if (isset($do_open))
-			$print_open[$do_open] = true;
-		elseif (isset($do_close))
-			$print_open[$do_close] = false;
-		$sess->register("print_open");
 
 
 		$le_modules = get_seminar_modules($seminar_id);

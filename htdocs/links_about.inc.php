@@ -62,15 +62,21 @@ if (!$perm->have_perm("admin")) {
 	$structure["stundenplan"]=array (topKat=>"mystudip", name=>_("Stundenplan"), link=>"edit_about.php?view=Stundenplan&username=$username", active=>FALSE);
 }
 $structure["messaging"]=array (topKat=>"mystudip", name=>_("Messaging"), link=>"edit_about.php?view=Messaging&username=$username", active=>FALSE);
+if ($perm->have_perm("autor") AND $ILIAS_CONNECT_ENABLE) {
+	$structure["ilias"]=array (topKat=>"mystudip", name=>_("Mein ILIAS-Account"), link=>"migration2studip.php", active=>FALSE);
+}
 if (!$perm->have_perm("admin")) {
 	$structure["login"]=array (topKat=>"mystudip", name=>_("Login"), link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
 }
-
+//$structure["ilias"]=array (topKat=>"mystudip", name=>_("Mein ILIAS-Account"), link=>"migration2studip.php", active=>FALSE);
 
 //View festlegen
 switch ($i_page) {
 	case "about.php" : 
 		$reiter_view="alle"; 
+	break;
+	case "migration2studip.php" : 
+		$reiter_view="ilias"; 
 	break;
 	case "edit_about.php" : 
 		switch ($view) {
