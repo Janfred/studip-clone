@@ -228,23 +228,23 @@ class ShowList extends ShowTreeRow{
 			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE name LIKE '%%%s%%' ORDER BY name", $search_array["search_exp"]);
 
 		if ($search_array["properties"]) {
-			$query = sprintf ("SELECT a.resource_id, COUNT(a.resource_id) AS resource_id_count FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) %s WHERE ", ($search_array["search_exp"]) ? "LEFT JOIN resources_objects b USING (resource_id)" : "");
+			$query = sprintf ("SELECT a.resource_id %s FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) %s ", ($search_array["properties"]) ? ", COUNT(a.resource_id) AS resource_id_count" : "", (($search_array["properties"]) || ($search_array["search_exp"])) ? "WHERE" : "");
 			
 			$i=0;
 			foreach ($search_array["properties"] as $key => $val) {
 				//let's create some possible wildcards
-				if (ereg("<", $val)) {
-					$val = trim(substr($val, strpos($val, "<")+1, strlen($val)));
-					$linking = "<";
-				} elseif (ereg(">", $val)) {
-					$val = trim(substr($val, strpos($val, "<")+1, strlen($val)));
-					$linking = ">";
-				} elseif (ereg("<=", $val)) {
+				if (ereg("<=", $val)) {
 					$val = trim(substr($val, strpos($val, "<")+2, strlen($val)));
 					$linking = "<=";
 				} elseif (ereg(">=", $val)) {
 					$val = trim(substr($val, strpos($val, "<")+2, strlen($val)));
 					$linking = ">=";
+				} elseif (ereg("<", $val)) {
+					$val = trim(substr($val, strpos($val, "<")+1, strlen($val)));
+					$linking = "<";
+				} elseif (ereg(">", $val)) {
+					$val = trim(substr($val, strpos($val, "<")+1, strlen($val)));
+					$linking = ">";
 				} else $linking = "=";
 				
 				$query.= sprintf(" %s (property_id = '%s' AND state %s %s%s%s) ", ($i) ? "OR" : "", $key, $linking,  (!is_numeric($val)) ? "'" : "", $val, (!is_numeric($val)) ? "'" : "");
@@ -252,9 +252,10 @@ class ShowList extends ShowTreeRow{
 			}
 			
 			if ($search_array["search_exp"]) 
-				$query.= sprintf(" AND (b.name LIKE '%%%s%%' OR b.description LIKE '%%%s%%') ", $search_array["search_exp"], $search_array["search_exp"]);
+				$query.= sprintf(" %s (b.name LIKE '%%%s%%' OR b.description LIKE '%%%s%%') ", $search_array["properties"] ? "AND" : "", $search_array["search_exp"], $search_array["search_exp"]);
 			
-			$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
+			if ($search_array["properties"]) 
+				$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
 		}
 		
 		$db->query($query);
