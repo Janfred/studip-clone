@@ -56,10 +56,10 @@ $_views["SEM_TREE_GET_LONELY_SEM_DATA"] = array("query" => "SELECT d.Seminar_id 
 										LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN seminar_sem_tree c ON (c.seminar_id=b.seminar_id) 
 										WHERE  " . ((is_array($allowed_sem_status)) ? " d.status IN('" . join("','",$allowed_sem_status) . "') AND " : "") ." ISNULL(c.sem_tree_id) 
 										AND a.fakultaets_id LIKE ? AND NOT ISNULL(b.seminar_id)  GROUP BY d.Seminar_id § ORDER BY sem_number DESC,d.Name ASC");
-$_views["SEM_TREE_GET_NUM_LONELY_SEM"] = array("query" => "SELECT COUNT(DISTINCT(b.seminar_id)) AS num_sem , " . $_views['sem_number_sql'] . " AS sem_number FROM Institute a LEFT JOIN seminar_inst b USING(Institut_id) 
+$_views["SEM_TREE_GET_NUM_LONELY_SEM"] = array("query" => "SELECT COUNT(DISTINCT(b.seminar_id)) AS num_sem , " . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM Institute a LEFT JOIN seminar_inst b USING(Institut_id) 
 										LEFT JOIN seminare d USING(seminar_id)  LEFT JOIN seminar_sem_tree c USING(seminar_id)  
 										WHERE " . ((is_array($allowed_sem_status)) ? " d.status IN('" . join("','",$allowed_sem_status) . "') AND " : "") . " ISNULL(c.sem_tree_id) 
-										AND a.fakultaets_id LIKE ? AND NOT ISNULL(b.seminar_id) § ");
+										AND a.fakultaets_id LIKE ? AND NOT ISNULL(b.seminar_id) GROUP BY sem_number,sem_number_end § ");
 $_views["SEM_TREE_GET_LONELY_FAK"] = array("query" => "SELECT Institut_id,a.Name FROM Institute a LEFT JOIN sem_tree b ON(studip_object_id=Institut_id) WHERE Institut_id = fakultaets_id AND ISNULL(studip_object_id) ORDER BY a.Name");
 $_views["SEM_TREE_UPD_PRIO"] = array("query" => "UPDATE sem_tree SET priority=§ WHERE sem_tree_id=?");
 $_views["SEM_TREE_INS_ITEM"] = array("query" => "INSERT INTO sem_tree (sem_tree_id,parent_id,name,priority,info,studip_object_id) VALUES (?,?,?,§,?,§)");
