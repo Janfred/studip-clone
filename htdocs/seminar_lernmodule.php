@@ -81,7 +81,11 @@ if ($ILIAS_CONNECT_ENABLE)
 	
 	if ((!$perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{
-		parse_window ("error§" . _("Sie haben keine Berechtigung, die Lernmodul-Zuordnungen dieser Veranstaltung zu ver&auml;ndern."), "§",
+		if ($SessSemName["class"]=="inst") 
+			$msg = 
+		else	
+			$msg = 
+		parse_window ("error§" . $msg, "§",
 					_("Keine Berechtigung"));
 		die();
 	}
@@ -99,9 +103,19 @@ if ($ILIAS_CONNECT_ENABLE)
 		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif">&nbsp;
 		<b>
 		<?   if ($view=="edit") 
-				echo _("Verbindung von Veranstaltungen und Lernmodulen"); 
+			{	
+				if ($SessSemName["class"]=="inst") 
+					echo _("Verbindung von Einrichtungen und Lernmodulen"); 
+				else	
+					echo _("Verbindung von Veranstaltungen und Lernmodulen"); 
+			}
 			else
-				echo _("Lernmodule f&uuml;r diese Veranstaltung"); 
+			{
+				if ($SessSemName["class"]=="inst") 
+					echo _("Lernmodule f&uuml;r diese Einrichtung"); 
+				else	
+					echo _("Lernmodule f&uuml;r diese Veranstaltung"); 
+			}
 		?></b>
 		</td>
 	</tr>
@@ -157,18 +171,26 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 // Lernmodule hinzufuegen / entfernen
 	elseif (($perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
 	{
+		if ($SessSemName["class"]=="inst") 
+			$msg = _("Auf dieser Seite können Sie einer Einrichtung Lernmodule zuordnen."); 
+		else	
+			$msg = _("Auf dieser Seite können Sie einer Veranstaltung Lernmodule zuordnen."); 
 		$infobox = array	(			
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => sprintf(_("Auf dieser Seite können Sie einer Veranstaltung Lernmodule zuordnen."), "<br><i>", "</i>")
+									"text"  => sprintf($msg, "<br><i>", "</i>")
 								 )
 							)
 			)
 		);
+		if ($SessSemName["class"]=="inst") 
+			$msg = _("Sie können der Einrichtung ein Lernmodul zuordnen..."); 
+		else	
+			$msg = _("Sie können der Veranstaltung ein Lernmodul zuordnen..."); 
 		$infobox[1]["kategorie"] = _("Aktionen:");
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
-										"text"  => _("Sie können der Veranstaltung ein Lernmodul zuordnen...")
+										"text"  => $msg
 									);
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/trash.gif" ,
 										"text"  => _("...oder eine bestehende Verknüpfung aufheben.")
@@ -195,9 +217,19 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 		else
 			$le_anzahl = 0;
 		if ($le_anzahl == 1)
-			$info_text1 = _("Dieser Veranstaltung ist ein Lernmodul zugeordnet.");
+		{
+			if ($SessSemName["class"]=="inst") 
+				$info_text1 = _("Dieser Einrichtung ist ein Lernmodul zugeordnet.");
+			else	
+				$info_text1 = _("Dieser Veranstaltung ist ein Lernmodul zugeordnet.");
+		}
 		else
-			$info_text1 = sprintf(_("Dieser Veranstaltung sind %s Lernmodule zugeordnet."), $le_anzahl);
+		{
+			if ($SessSemName["class"]=="inst") 
+				$info_text1 = sprintf(_("Dieser Einrichtung sind %s Lernmodule zugeordnet."), $le_anzahl);
+			else	
+				$info_text1 = sprintf(_("Dieser Veranstaltung sind %s Lernmodule zugeordnet."), $le_anzahl);
+		}
 		$infobox = array	(			
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
