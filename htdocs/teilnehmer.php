@@ -534,10 +534,9 @@ if ($rechte AND $SemUserStatus!="tutor") {
 //insert autors via free search form
 if ($rechte) {
 	if ($search_exp) {
-		$query = "SELECT DISTINCT a.user_id, username, Vorname, Nachname, perms FROM seminar_user a ".
-			"LEFT JOIN auth_user_md5  b USING(user_id) ".		
-			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
-			"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(c.seminar_id) AND ".
+		$query = "SELECT a.user_id, username, Vorname, Nachname, perms FROM auth_user_md5 a ".		
+			"LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
+			"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
 			"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
 			"ORDER BY Nachname";
 		$db->query($query); // results all users which are not in the seminar
