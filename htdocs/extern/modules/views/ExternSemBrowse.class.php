@@ -287,7 +287,7 @@ class ExternSemBrowse extends SemBrowse {
 							$sem_name .= " (" . $this->sem_dates[$sem_number_start]['name'] . " - ";
 							$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->sem_dates[$sem_number_end]['name']) . ")";
 						}
-						echo "\n</td></tr>\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
+						echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
 						if ($zebra % 2 && $this->config->getValue("LecturesInnerTable", "td_bgcolor2_"))
 							echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td", TRUE)."\">\n";
 						else
