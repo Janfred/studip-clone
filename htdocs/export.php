@@ -45,9 +45,7 @@ $perm->check("dozent");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 //$i_page = "meine_seminare.php";
-$EXPORT_ENABLE = true;
-$XSLT_ENABLE = false;
-$PATH_EXPORT = "export";
+$EXPORT_ENABLE = TRUE;
 // -- here you have to put initialisations for the current page
 
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
@@ -58,6 +56,12 @@ require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT" . "/export_config.inc.php");
 
 if ($EXPORT_ENABLE)
 {
+	if (!isset($range_id) AND !isset($xml_file_id) AND !isset($o_mode) AND !isset($ex_type))
+	{
+		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_start.inc.php");
+		$start_done = true;
+	}
+
 	if (($page==2) AND $XSLT_ENABLE AND $skip_page_3) $page=3;
 	//Exportmodul einbinden
 	if ($range_id != "")	
@@ -67,7 +71,7 @@ if ($EXPORT_ENABLE)
 			$xml_output_done = true;
 	}
 	
-	if (($xml_file_id != "") AND ($page != 3) AND ($o_mode == "choose"))
+	if (($xml_file_id != "") AND ($page != 3) AND ($o_mode == "choose") AND ($export_error_num < 1))
 	{
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_choose_xslt.inc.php");
 		if ($export_error_num < 1)
@@ -82,10 +86,10 @@ if ($EXPORT_ENABLE)
 			$xslt_process_done = true;
 	}
 	
-	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
+	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo") AND ($FOP_ENABLE))
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_fop.inc.php");
 
-	if (($export_error_num < 1) AND (!$xml_output_done) AND (!$xslt_choose_done) AND (!$xslt_process_done))
+	if (($export_error_num < 1) AND (!$start_done) AND (!$xml_output_done) AND (!$xslt_choose_done) AND (!$xslt_process_done))
 	{
 		$export_pagename = "Exportmodul - Fehler!";
 		$export_error = _("Fehlerhafter Seitenaufruf");
