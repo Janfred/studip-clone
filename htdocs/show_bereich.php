@@ -119,7 +119,7 @@ if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s"))
 	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
 							"eintrag" => array(array(	"icon" => "pictures/blank.gif",
-														"text" => export_link($SessSemName[1], "person", $SessSemName[0])))
+														"text" => export_link($SessSemName[1], "veranstaltung", $SessSemName[0])))
 					);
 }
 print_infobox ($infobox,"pictures/browse.jpg");
