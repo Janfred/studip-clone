@@ -56,6 +56,19 @@ $db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 $sess->register ("term_metadata");
 
+function get_snapshot() {
+	global $term_metadata;
+	return	serialize($term_metadata["turnus_data"]).
+			serialize($term_metadata["sem_start_time"]).
+			serialize($term_metadata["sem_duration_time"]).
+			serialize($term_metadata["sem_start_termin"]).
+			serialize($term_metadata["sem_end_termin"]).
+			serialize($term_metadata["sem_vor_termin"]).
+			serialize($term_metadata["sem_vor_end_termin"]).
+			serialize($term_metadata["start_woche"]).
+			serialize($term_metadata["art"]);
+}
+
 //wenn wir frisch reinkommen, werden die alten Metadaten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field)) {
 	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
@@ -71,6 +84,7 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	if (!$term_metadata["sem_end_termin"]) $term_metadata["sem_end_termin"] =-1;
 	if (!$term_metadata["sem_vor_termin"]) $term_metadata["sem_vor_termin"] =-1;
 	if (!$term_metadata["sem_vor_end_termin"]) $term_metadata["sem_vor_end_termin"] =-1;
+	$term_metadata["original"]=get_snapshot();
 	}
 else {
 
@@ -256,6 +270,10 @@ if (($uebernehmen_x) && (!$errormsg))
 		$errormsg.="msg§Die allgemeinen Termindaten wurden aktualisiert§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 		}
+	
+	//Save the current state as snapshot to compare with current data
+	$term_metadata["original"]=get_snapshot();
+
 	$metadata_saved=TRUE;
 	}
  
@@ -309,10 +327,13 @@ if (($uebernehmen_x) && (!$errormsg))
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
-				<font size=-1>Diese Daten&nbsp; </font>
 				<input type="IMAGE" name="uebernehmen" src="./pictures/buttons/uebernehmen-button.gif" border=0 value="uebernehmen">
 				<? if ($term_metadata["source_page"]) {
 					?> &nbsp; <input type="IMAGE" name="abbrechen" src="pictures/buttons/abbrechen-button.gif" border=0 value="abbrechen"> <?
+					}
+				?>
+				<? if ($term_metadata["original"] != get_snapshot()) {
+					?> <br /><font size=-1>Diese Daten sind noch nicht gespeichert.</font><br /> <?
 					}
 				?>
 			</td>
@@ -330,11 +351,6 @@ if (($uebernehmen_x) && (!$errormsg))
 		</tr>
 		<?
 		if (!$term_metadata["art"]) {
-			if ($term_metadata["block_na"])
-				unset ($term_metadata["turnus_data"]);
-			
-			if (!count($term_metadata["turnus_data"])) 
-				$term_metadata["block_na"]=TRUE;
 		?>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
@@ -534,7 +550,6 @@ if (($uebernehmen_x) && (!$errormsg))
 	</tr>
 	<tr <? $cssSw->switchClass() ?>>
 		<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
-			<font size=-1>Diese Daten&nbsp; </font>
 			<input type="IMAGE" name="uebernehmen" src="./pictures/buttons/uebernehmen-button.gif" border=0 value="uebernehmen">
 			<? if ($term_metadata["source_page"]) {
 				?> &nbsp; <input type="IMAGE" name="abbrechen" src="pictures/buttons/abbrechen-button.gif" border=0 value="abbrechen"> <?
