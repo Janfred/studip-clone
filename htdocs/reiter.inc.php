@@ -87,7 +87,10 @@ class reiter {
 		return;
 	}
 
-	function topkatCloseRow() {
+	function topkatCloseRow($addLine = FALSE, $cols = '') {
+		if ($addLine) {
+			printf ("</tr><td colspan=\"%s\" style=\"background-image: url('pictures/line.gif')\"><img src=\"pictures/blank.gif\" width=\"10\" height=\"1\" /></td>", $cols);
+		}
 		printf ("</tr></table>\n");
 		return;
 	}
@@ -140,23 +143,24 @@ class reiter {
 		$lettercounter = 0;
 			
 		if (strtolower($this->topkatBreakLineLimit) == "auto")
-			$topkatLetterBreakLineLimit = round($auth->auth["xres"] / 8 );
-			
+			$topkatLetterBreakLineLimit = round($auth->auth["xres"] / 7.1);
+		
 		foreach ($structure as $key=>$val) {
 			if (!$val["topKat"]) {
 				$i++;
 				$counter++;
 				$lettercounter = $lettercounter + strlen($val["name"]) + 6;
-				if (strtolower($this->topkatBreakLineLimit) == "auto")
+				if (strtolower($this->topkatBreakLineLimit) == "auto") {
 					if ($lettercounter > $topkatLetterBreakLineLimit) {
 						$segment++;
 						$lettercounter=0;
 					}
-				elseif (strtolower($this->topkatBreakLineLimit) > 0)
+				} else {
 					if ($counter > $this->topkatBreakLineLimit) {
 						$segment++;
 						$counter=1;
 					}
+				}
 				
 				$structure[$key]["topKatSegment"] = $segment;
 			}
@@ -184,15 +188,24 @@ class reiter {
 		$bottomKats=sizeof($structure)-$topKats;
 		
 		$tooltipCreated=FALSE;
+		$rows=0;
+		
 		for ($s=1; $s<=$segments; $s++) {
-			$this->topkatStart();
 			reset($structure);
 			$a=current($structure);
-
+				$cols=0;
+			$topkatOpened = FALSE;
+			
+			
 			for ($i=0; $i<$topKats; $i++) {
 				$b=next($structure);
-				$close=FALSE;		
+				$close=FALSE;
 				if (($a["topKatSegment"] == $s) && (($a["topKatSegment"] != $activeSegment) || ($activeSegment == $segments))) {
+					if (!$topkatOpened) {
+						$rows++;
+						$this->topkatStart();
+						$topkatOpened = TRUE;
+					}
 					if ((($tooltip) || ($addText)) && ($s == $segments) && ($activeSegment == $segments) && (!$tooltipCreated)) {
 						$this->info($tooltip, $addText, $a["active"]);
 						$tooltipCreated=TRUE;
@@ -202,17 +215,22 @@ class reiter {
 					if ($a["topKatSegment"] <> $b["topKatSegment"])
 						$close=TRUE;
 					$this->topkat($a["name"], $a["link"], $a["width"],$a["active"], $a["target"], $close);
+					$cols++;
 					}
 				
 				$a=$b;
 				}
-			$this->topkatCloseRow();
+			if ($topkatOpened) {
+				$this->topkatCloseRow(($rows < $segments) ? TRUE : FALSE, $cols);
+			}
 		}
 		
 		if ($activeSegment != $segments) {
 			$this->topkatStart();
 			reset($structure);
 			$a=current($structure);
+			$cols=0;
+
 			for ($i=0; $i<$topKats; $i++) {
 				$b=next($structure);
 				$close=FALSE;		
@@ -226,10 +244,11 @@ class reiter {
 					if ($a["topKatSegment"] <> $b["topKatSegment"])
 						$close=TRUE;
 					$this->topkat($a["name"], $a["link"], $a["width"],$a["active"], $a["target"], $close);
+					$cols++;
 				}
 				$a=$b;
 			}
-			$this->topkatCloseRow();
+			$this->topkatCloseRow(FALSE);
 		}
 		//BottomKats
 		if ($bottomKats) {
