@@ -40,14 +40,19 @@ define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User", "ses" => "ses"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
+		"perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("admin");
 
 if ($EXTERN_ENABLE)
 	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/admin_extern.inc.php");
 else {
-	$perm->check("GOTT");
-	page_close();
+	// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
+	parse_window ("error§Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an den Systemadministrator.", "§",
+				"Modul \"externe Seiten\" nicht eingebunden");
 }
 page_close();
 ?>
