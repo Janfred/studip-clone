@@ -8,31 +8,96 @@ function show_user_modules($benutzername)
 	if ($mod_array != false)
 	{	
 		echo "<b>" . _("Sie haben Zugriff auf folgende Lernmodule:") . "</b><br><br>";
-		?> 
-		<table cellspacing="0" cellpadding="0" border="0" width="100%">
-			<tr align="center" valign="top">
-				<th width="80%" align="left"><b><? echo _("Name"); ?></b></th>
-				<th width="15%"><b><? echo _("Bearbeiten"); ?></b></th>
-				<th width="5%"><b>X</b></th>
-			</tr>		
-		<?
 		while ($module_count < sizeof($mod_array))
 		{
 			$edit_link = link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			$delete_link = link_delete_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
-			$cssSw->switchClass();
-			?><tr><td class="<? echo $cssSw->getClass(); ?>"><? echo "<b>" . $mod_array[$module_count]["title"] . "</b> - " . $mod_array[$module_count]["description"]; ?>
-			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $edit_link;?>" target="_blank"><img src='pictures/icon-posting.gif' border=0  alt="<? echo _("Bearbeiten") ?>" title="<? echo _("Bearbeiten") ?>"></a>&nbsp; 
-			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $delete_link;?>" target="_blank"><img src='pictures/trash.gif' border=0 alt="<? echo _("Löschen") ?>" title="<? echo _("Löschen") ?>"></a>
-			</td></tr><?
+
+			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "user";
+			$printlink = $module_info["title"];
+			$printimage = "<img src=\"pictures/icon-lern.gif\">";
+			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$edit_link\">" . makeButton("loeschen", "img") . "</a></center>";
+			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			for ($i=0; $i<sizeof($mod_author); $i ++)
+				$mod_author[$i] = $mod_author[$i]["fullname"];
+			$printdesc = implode($mod_author, ", ");
+			?>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tr>
+					<?
+					if ($print_open[$ph_key] == true)
+						printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+					else
+						printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
+					?>
+				</tr>
+			</table>
+			<? if ($print_open[$ph_key] == true) 
+			{ ?>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tr>
+					<?
+					printcontent("99%", FALSE, $printcontent, "");
+					?>
+				</tr>
+			</table>
+			<? }
 			$module_count ++;
 		}
-		?></table><?
 	}
 	else
 		echo "<b>" . _("Sie haben keinen Zugriff auf bestehende ILIAS-Lernmodule.") . "</b><br><br>";
+}
+
+function show_admin_modules()
+{
+	global $cssSw;
+	$module_count = 0;
+	$mod_array = get_all_modules();
+	if ($mod_array != false)
+	{	
+		echo "<b>" . _("Auf folgende Lernmodule haben Sie Zugriff:") . "</b><br><br>";
+		while ($module_count < sizeof($mod_array))
+		{
+			$edit_link = link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			$delete_link = link_delete_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+
+			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "admin";
+			$printlink = $module_info["title"];
+			$printimage = "<img src=\"pictures/icon-lern.gif\">";
+			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$edit_link\">" . makeButton("loeschen", "img") . "</a></center>";
+			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
+			for ($i=0; $i<sizeof($mod_author); $i ++)
+				$mod_author[$i] = $mod_author[$i]["fullname"];
+			$printdesc = implode($mod_author, ", ");
+			?>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tr>
+					<?
+					if ($print_open[$ph_key] == true)
+						printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+					else
+						printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
+					?>
+				</tr>
+			</table>
+			<? if ($print_open[$ph_key] == true) 
+			{ ?>
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tr>
+					<?
+					printcontent("99%", FALSE, $printcontent, "");
+					?>
+				</tr>
+			</table>
+			<? }
+			$module_count ++;
+		}
+	}
+	else
+		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }
 
 function show_seminar_modules($seminar_id)
@@ -157,41 +222,6 @@ function show_all_modules($seminar_id)
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }
 	
-function show_all_modules_admin()
-{
-	global $cssSw;
-	$module_count = 0;
-	$mod_array = get_all_modules();
-	if ($mod_array != false)
-	{	
-		echo "<b>" . _("Auf folgende Lernmodule haben Sie Zugriff:") . "</b><br><br>";
-		?> 
-		<table cellspacing="0" cellpadding="0" border="0" width="100%">
-			<tr align="center" valign="top">
-				<th width="80%" align="left"><b><? echo _("Name"); ?></b></th>
-				<th width="15%"><b><? echo _("Bearbeiten"); ?></b></th>
-				<th width="5%"><b>X</b></th>
-			</tr>		
-		<?
-		while ($module_count < sizeof($mod_array))
-		{
-			$edit_link = link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
-			$delete_link = link_delete_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
-			$cssSw->switchClass();
-			?><tr><td class="<? echo $cssSw->getClass(); ?>"><? echo "<b>" . $mod_array[$module_count]["title"] . "</b> - " . $mod_array[$module_count]["description"]; ?>
-			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $edit_link; ?>" target="_blank"><img src='pictures/icon-posting.gif' border=0  alt="<? echo _("Bearbeiten") ?>" title="<? echo _("Bearbeiten") ?>"></a>&nbsp; 
-			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $delete_link; ?>" target="_blank"><img src='pictures/trash.gif' border=0 alt="<? echo _("Löschen") ?>" title="<? echo _("Löschen") ?>"></a>
-			</td></tr><?
-			$module_count ++;
-		}
-		?></table><?
-	}
-	else
-		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
-}
-
 function show_seminar_modules_links($seminar_id)
 {
 	global $PHP_SELF, $print_open, $SessSemName;
