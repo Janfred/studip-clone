@@ -306,13 +306,13 @@ elseif ($SessSemName["class"] == "inst")
 else
 	$tooltip.= _("Keine Veranstaltung oder Einrichtung ausgewählt");
 
-//Additional Text erzeugen
+//create addtional text
 if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Veranstaltung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 elseif ($SessSemName["class"] == "inst")
 	if ($perm->have_perm("admin")) //backlink for admin is admin_institut.php
 		$addText=" <a href=\"admin_institut.php?list=TRUE&quit=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
-	else //backlink for <=dozent is admin_literatur, becauso he is not allowed to view admin_institut.php!
+	else //backlink for <=dozent is admin_lit_list.php, because he is not allowed to view admin_institut.php!
 		$addText=" <a href=\"admin_lit_list.php?list=TRUE&quit=TRUE&view=literatur_inst\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 
 //View festlegen
@@ -839,7 +839,7 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 				printf("<font size=-1>" . _("Zugangsberechtigungen") . "<br /><a href=\"admin_admission.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));  
 				break;
 			case "admin_lit_list.php": 
-				printf("<font size=-1>" . _("Literatur/Links") . "<br /><a href=\"admin_lit_list.php?_range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten")); 
+				printf("<font size=-1>" . _("Literatur") . "<br /><a href=\"admin_lit_list.php?_range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten")); 
 				break;
 			case "admin_statusgruppe.php": 
 				printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"admin_statusgruppe.php?range_id=%s&ebene=sem\">%s</a></font>", $seminar_id, makeButton("bearbeiten")); 
