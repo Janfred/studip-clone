@@ -188,6 +188,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		//redirect user to another page if he want to
 		if (($my_studip_settings["startpage_redirect"]) && ($i_page == "index.php"))
 			startpage_redirect($my_studip_settings["startpage_redirect"]);
+			$seminar_open_redirected = TRUE;
 	}
 }
 
