@@ -77,7 +77,7 @@ function PrintAktualStatusgruppen () {
 		$size = $db->f("size");
 		$groupmails = groupmail($statusgruppe_id);
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s</b></font></td>",htmlReady($db->f("name")));
+		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font></td>",CheckAssignRights($statusgruppe_id,$user->id)?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"pictures/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"", htmlReady($db->f("name")));
 		printf ("<td width=\"10%%\"class=\"topic\" align=\"right\" nowrap>");
 		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("<a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("E-Mail an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
@@ -99,6 +99,8 @@ function PrintAktualStatusgruppen () {
 			printf ("<tr>");
 			printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("fullname")));
 			printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
+			if (CheckSelfAssign($statusgruppe_id) && $user->id == $db2->f("user_id"))
+				printf ("<a href=\"$PHP_SELF?delete_id=%s\"><img src=\"pictures/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ", $statusgruppe_id); 
 			printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db2->f("username")); 
 			printf ("&nbsp;</td>");
 			echo "</tr>";
@@ -111,7 +113,7 @@ function PrintAktualStatusgruppen () {
 
 function PrintNonMembers ($range_id)
 {	
-	global $_fullname_sql;
+	global $_fullname_sql, $PHP_SELF;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	$db=new DB_Seminar;
 	$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full'] ." AS fullname, perms FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
@@ -149,6 +151,16 @@ function PrintNonMembers ($range_id)
 	}
 	return $Memberstatus;
 }
+
+// Command-Parsing
+
+if ($assign)
+	if (GetRangeOfStatusgruppe($assign)==$SessSemName[1] && CheckAssignRights($assign, $user->id))
+		InsertPersonStatusgruppe($user->id, $assign);
+
+if ($delete_id)
+	if (GetRangeOfStatusgruppe($delete_id)==$SessSemName[1] && CheckUserStatusgruppe($delete_id, $user->id))
+		RemovePersonStatusgruppe($user->username, $delete_id);
 
 // Beginn Darstellungsteil
 
@@ -213,6 +225,12 @@ function PrintNonMembers ($range_id)
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
 									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")
 								);
+		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/move.gif" ,
+									"text"  => _("In Gruppe mit diesem Symbol können Sie sich selbst eintragen. Klicken Sie auf das jeweilige Symbol um sich einzutragen.")
+								);	
+		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/trash.gif" ,
+									"text"  => _("Aus diesen Gruppen können Sie Sich selbst austragen.")
+								);						
 	if ($rechte) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
 								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">", "</a>")

@@ -52,7 +52,7 @@ function MakeUniqueStatusgruppeID () {
 
 // Funktionen zum veraendern der Gruppen
 
-function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size) {
+function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size, $new_selfassign="0") {
 
 	$statusgruppe_id = MakeUniqueStatusgruppeID();
 	$mkdate = time();
@@ -64,14 +64,37 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
 	} else {
 		$position = "1";
 	}
-	$db->query("INSERT INTO statusgruppen SET statusgruppe_id = '$statusgruppe_id', name = '$new_statusgruppe_name', range_id= '$range_id', position='$position', size = '$new_statusgruppe_size', mkdate = '$mkdate', chdate = '$chdate'");
+	$db->query("INSERT INTO statusgruppen SET statusgruppe_id = '$statusgruppe_id', name = '$new_statusgruppe_name', range_id= '$range_id', position='$position', size = '$new_statusgruppe_size', selfassign = '$new_selfassign', mkdate = '$mkdate', chdate = '$chdate'");
 	return $statusgruppe_id;	
 } 
 
-function GetAllSelected ($range_id) {	
+function CheckSelfAssign ($statusgruppe_id) {
+	$db=new DB_Seminar;
+	$db->query ("SELECT selfassign FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id' AND selfassign='1'");
+	if ($db->next_record()) {
+		$tmp = TRUE;
+	} else {
+		$tmp = FALSE;
+	}
+	return $tmp;		
+}
 
+function CheckAssignRights($statusgruppe_id, $user_id) {
+	if (CheckSelfAssign($statusgruppe_id) && !CheckUserStatusgruppe($statusgruppe_id, $user_id)) 
+		$assign = TRUE;
+	else
+		$assign = FALSE;
+	return $assign;	
+}
+
+function SetSelfAssign ($statusgruppe_id, $flag="0") {
+	$db=new DB_Seminar;
+	$db->query("UPDATE statusgruppen SET selfassign = '$flag' WHERE statusgruppe_id = '$statusgruppe_id'");
+}
+
+function GetAllSelected ($range_id) {	
 	$zugeordnet[] = "";
-  $db3=new DB_Seminar;
+  	$db3=new DB_Seminar;
 	$db3->query ("SELECT DISTINCT user_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$range_id'");
 	while ($db3->next_record()) {
 		if (!in_array($db3->f("user_id"), $zugeordnet)) {
@@ -81,11 +104,11 @@ function GetAllSelected ($range_id) {
 	return $zugeordnet;
 }
 
-function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id) {
+function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id, $new_selfassign="0") {
 
 	$chdate = time();
 	$db=new DB_Seminar;
-	$db->query("UPDATE statusgruppen SET name = '$new_statusgruppe_name', size = '$new_statusgruppe_size', chdate = '$chdate' WHERE statusgruppe_id = '$edit_id'");
+	$db->query("UPDATE statusgruppen SET name = '$new_statusgruppe_name', size = '$new_statusgruppe_size', chdate = '$chdate', selfassign = '$new_selfassign' WHERE statusgruppe_id = '$edit_id'");
 }
 
 function InsertPersonStatusgruppe ($user_id, $statusgruppe_id) {
@@ -111,7 +134,6 @@ function RemovePersonStatusgruppe ($username, $statusgruppe_id) {
 	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 	
 	// Neusortierung
-	echo $position;
 	$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND position > '$position'");
 	while ($db->next_record()) {
 		$new_position = $db->f("position")-1;
@@ -226,6 +248,17 @@ function CheckUserStatusgruppe ($group_id, $object_id) {
 			return FALSE;
 		}
 	}
+function GetRangeOfStatusgruppe ($statusgruppe_id) {
+	$db=new DB_Seminar;
+	$db->query("SELECT range_id FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
+	if ($db->next_record()) {
+		$range = $db->f("range_id");
+	} else {
+		$range = FALSE;
+	}
+	return $range;
+}
+
 
 /**
 * get all statusgruppen for one user and one range
