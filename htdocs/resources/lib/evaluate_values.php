@@ -1594,19 +1594,25 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 						if (($evtObj->getBegin() < $first_event) || (!$first_event))
 							$first_event = $evtObj->getBegin();
 					}
-					
+									
 					$multiOverlaps->checkOverlap($events, &$result, "assign_id");
-					
-					$tmp_overlap_event_ids = array();
+					$lock_count = array();
 					foreach ($result as $key => $val) {
 						foreach ($val as $key2 => $val2) {
 							if ($key2 == $assObj->getId()) {
+								$tmp_overlap_event_count = 0;
 								foreach ($val2 as $val3) {
-									$tmp_overlap_event_ids[$key][$val3["event_id"]] = TRUE;
+									foreach ($events as $one_event){
+										if ( 	($val3['begin'] > $one_event->begin && $val3['begin'] < $one_event->end)
+											||	($val3['begin'] <= $one_event->begin && $val3['end'] > $one_event->begin)
+											||	($val3['begin'] == $one_event->begin && $val3['end'] == $one_event->end)){
+										++$tmp_overlap_event_count;
+										}
+									}
 								}
 							}
 						}
-						$overlap_event_ids[$key] = sizeof($tmp_overlap_event_ids[$key]);
+						$overlap_event_ids[$key] = $tmp_overlap_event_count;
 					}
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assObj->getId()] = array("termin_id" => ($semObj->getMetaDateType() == 1) ?  $assObj->getAssignUserId() : FALSE, "resource_id" => $assObj->getResourceId(), "events_count"=>sizeof($events), "overlap_events_count" => $overlap_event_ids);
 				}
