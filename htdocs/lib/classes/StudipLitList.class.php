@@ -24,6 +24,8 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/dbviews/literatur.view.php
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/TreeAbstract.class.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitCatElement.class.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/functions.php");
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/config.inc.php");
+
 
 
 /**
@@ -50,6 +52,9 @@ class StudipLitList extends TreeAbstract {
 	* @access private
 	*/ 
 	function StudipLitList($range_id) {
+		if ($GLOBALS['LIT_LIST_FORMAT_TEMPLATE']){
+			$this->format_default = $GLOBALS['LIT_LIST_FORMAT_TEMPLATE'];
+		}
 		$this->range_id = $range_id;
 		$this->range_type = get_object_type($range_id);
 		if ($this->range_type == "user"){
