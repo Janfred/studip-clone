@@ -30,36 +30,41 @@ $reiter=new reiter;
 //Create Reitersystem
 
 //Topkats
-$structure["alle"]=array (topKat=>"", name=>"Alle", link=>"about.php?username=$username", active=>FALSE);
-$structure["bild"]=array (topKat=>"", name=>"Bild", link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
-$structure["daten"]=array (topKat=>"", name=>"Nutzerdaten", link=>"edit_about.php?view=Daten&username=$username", active=>FALSE);
-$structure["karriere"]=array (topKat=>"", name=>"universit&auml;re Daten", link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
-$structure["lebenslauf"]=array (topKat=>"", name=>"Lebenslauf", link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
-$structure["sonstiges"]=array (topKat=>"", name=>"Sonstiges", link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
-if (!$perm->have_perm("admin"))
-	$structure["mystudip"]=array (topKat=>"", name=>"My Stud.IP", link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
+$structure["alle"]=array (topKat=>"", name=>_("Alle"), link=>"about.php?username=$username", active=>FALSE);
+$structure["bild"]=array (topKat=>"", name=>_("Bild"), link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
+$structure["daten"]=array (topKat=>"", name=>_("Nutzerdaten"), link=>"edit_about.php?view=Daten&username=$username", active=>FALSE);
+$structure["karriere"]=array (topKat=>"", name=>_("universit&auml;re Daten"), link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
+$structure["lebenslauf"]=array (topKat=>"", name=>_("Lebenslauf"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
+$structure["sonstiges"]=array (topKat=>"", name=>_("Sonstiges"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
+if ($username==$auth->auth["uname"]) 
+// if (!$perm->have_perm("admin"))
+	$structure["mystudip"]=array (topKat=>"", name=>_("My Stud.IP"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
 
 //Bottomkats
-$structure["_alle"]=array (topKat=>"alle", name=>"Pers&ouml;nliche Homepage", link=>"about.php?username=$username", active=>FALSE);
-$structure["_bild"]=array (topKat=>"bild", name=>"Hochladen des pers&ouml;nlichen Bildes", link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
-$structure["_daten"]=array (topKat=>"daten", name=>"Nutzerdaten bearbeiten", link=>"edit_about.php?view=Daten&username=$username", active=>FALSE);
-$structure["_karriere"]=array (topKat=>"karriere", name=>"universit&auml;re Daten", link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
+$structure["_alle"]=array (topKat=>"alle", name=>_("Pers&ouml;nliche Homepage"), link=>"about.php?username=$username", active=>FALSE);
+$structure["_bild"]=array (topKat=>"bild", name=>_("Hochladen des pers&ouml;nlichen Bildes"), link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
+$structure["_daten"]=array (topKat=>"daten", name=>_("Nutzerdaten bearbeiten"), link=>"edit_about.php?view=Daten&username=$username", active=>FALSE);
+$structure["_karriere"]=array (topKat=>"karriere", name=>_("universit&auml;re Daten"), link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
 if (!$perm->have_perm ("dozent")) {
-	$structure["studiengaenge"]=array (topKat=>"karriere", name=>"Zuordnung zu Studieng&auml;ngen", link=>"edit_about.php?view=Karriere&username=$username#studiengaenge", active=>FALSE);
-	$structure["einrichtungen"]=array (topKat=>"karriere", name=>"Zuordnung zu Einrichtungen", link=>"edit_about.php?view=Karriere&username=$username#einrichtungen", active=>FALSE);
+	$structure["studiengaenge"]=array (topKat=>"karriere", name=>_("Zuordnung zu Studieng&auml;ngen"), link=>"edit_about.php?view=Karriere&username=$username#studiengaenge", active=>FALSE);
+	$structure["einrichtungen"]=array (topKat=>"karriere", name=>_("Zuordnung zu Einrichtungen"), link=>"edit_about.php?view=Karriere&username=$username#einrichtungen", active=>FALSE);
 }
-$structure["_lebenslauf"]=array (topKat=>"lebenslauf", name=>"Lebenslauf", link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
+$structure["_lebenslauf"]=array (topKat=>"lebenslauf", name=>_("Lebenslauf"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
 if ($perm->have_perm ("dozent")) {
-	$structure["schwerpunkte"]=array (topKat=>"lebenslauf", name=>"Schwerpunkte", link=>"edit_about.php?view=Lebenslauf&username=$username#schwerpunkte", active=>FALSE);
-	$structure["publikationen"]=array (topKat=>"lebenslauf", name=>"Publikationen", link=>"edit_about.php?view=Lebenslauf&username=$username#publikationen", active=>FALSE);
+	$structure["schwerpunkte"]=array (topKat=>"lebenslauf", name=>_("Schwerpunkte"), link=>"edit_about.php?view=Lebenslauf&username=$username#schwerpunkte", active=>FALSE);
+	$structure["publikationen"]=array (topKat=>"lebenslauf", name=>_("Publikationen"), link=>"edit_about.php?view=Lebenslauf&username=$username#publikationen", active=>FALSE);
 }
-$structure["_sonstiges"]=array (topKat=>"sonstiges", name=>"eigene Kategorien bearbeiten", link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
-$structure["allgemein"]=array (topKat=>"mystudip", name=>"Allgemeines", link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
-$structure["forum"]=array (topKat=>"mystudip", name=>"Forum", link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
-$structure["calendar"]=array (topKat=>"mystudip", name=>"Terminkalender", link=>"edit_about.php?view=calendar&username=$username", active=>FALSE);
-$structure["stundenplan"]=array (topKat=>"mystudip", name=>"Stundenplan", link=>"edit_about.php?view=Stundenplan&username=$username", active=>FALSE);
-$structure["messaging"]=array (topKat=>"mystudip", name=>"Messaging", link=>"edit_about.php?view=Messaging&username=$username", active=>FALSE);
-$structure["login"]=array (topKat=>"mystudip", name=>"Login", link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
+$structure["_sonstiges"]=array (topKat=>"sonstiges", name=>_("eigene Kategorien bearbeiten"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
+$structure["allgemein"]=array (topKat=>"mystudip", name=>_("Allgemeines"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
+$structure["forum"]=array (topKat=>"mystudip", name=>_("Forum"), link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
+if (!$perm->have_perm("admin")) {
+	$structure["calendar"]=array (topKat=>"mystudip", name=>_("Terminkalender"), link=>"edit_about.php?view=calendar&username=$username", active=>FALSE);
+	$structure["stundenplan"]=array (topKat=>"mystudip", name=>_("Stundenplan"), link=>"edit_about.php?view=Stundenplan&username=$username", active=>FALSE);
+}
+$structure["messaging"]=array (topKat=>"mystudip", name=>_("Messaging"), link=>"edit_about.php?view=Messaging&username=$username", active=>FALSE);
+if (!$perm->have_perm("admin")) {
+	$structure["login"]=array (topKat=>"mystudip", name=>_("Login"), link=>"edit_about.php?view=Login&username=$username", active=>FALSE);
+}
 
 
 //View festlegen
