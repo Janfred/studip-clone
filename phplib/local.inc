@@ -1,0 +1,138 @@
+<?php
+
+/*basic settings for Stud.IP
+----------------------------------------------------------------
+you find here the basic system settings. You shouldn't have to touch much of them...
+please note the CONFIG.INC.PHP in the system folder for the indivual settings for your installation!*/
+
+
+//the name of your master-faculty (e.g. "University of Göttingen")
+
+// (without html-entities, used for mail-system!)
+$UNI_NAME_CLEAN = "Studip 0.9";
+//create the html-version
+$UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
+
+/*settings for database access
+----------------------------------------------------------------
+please fill in your database connection settings.
+please note: Stud.IP uses the class DB_Seminar*/
+
+// default Stud.IP database (DB_Seminar)
+$DB_STUDIP_HOST = "localhost";
+$DB_STUDIP_USER = "<username>";
+$DB_STUDIP_PASSWORD = "<password>";
+$DB_STUDIP_DATABASE = "studip";
+
+//additional class, for Ilias connection (DB_Ilias)
+$DB_ILIAS_HOST = "localhost";
+$DB_ILIAS_USER = "<username>";
+$DB_ILIAS_PASSWORD = "<password>";
+$DB_ILIAS_DATABASE = "ilias";
+
+//additional class, used with extern module (DB_Institut)
+$DB_INSTITUT_HOST = "localhost";
+$DB_INSTITUT_USER = "<username>";
+$DB_INSTITUT_PASSWORD = "<password>";
+$DB_INSTITUT_DATABASE = "studip"; 
+
+/*mail settings
+----------------------------------------------------------------
+leave blank if localhost is also the mailserver*/
+$MAIL_LOCALHOST = "";	// name of the mail sending machine (the web server) defaults to SERVER_NAME
+$MAIL_HOST_NAME = "";	// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+
+
+/*paths
+----------------------------------------------------------------
+the Stud.IP system-folder*/
+
+$ABSOLUTE_PATH_STUDIP = "/srv/www/htdocs/studip/";
+//where ro store documents and the archive
+$UPLOAD_PATH = "/var/lib/studip/upload_doc";					//uploaded documents
+$ARCHIV_PATH = "/var/lib/studip/archiv";					//Stud.IP archive
+
+//path to smileys and symbols
+$SMILE_PATH = "pictures/smile";							//smileys
+$SYMBOL_PATH = "pictures/symbol";						//symbols
+
+//oath to the temporary folder
+$TMP_PATH ="/tmp";								//the system temp path
+
+//paths to the command line tools, used in Stud.IP
+$ZIP_PATH = "/usr/bin/zip";							//zip tool
+$DJPEG_PATH = "/usr/bin/djpeg";							//djpeg tool for imaging
+$GIFTOPNM_PATH = "/usr/bin/giftopnm";						//giftopnm tool for imaging
+$PNMSCALE_PATH = "/usr/bin/pnmscale";						//pnmscaletool for imaging
+$CJPEG_PATH = "/usr/bin/cjpeg";							//cjpeg tool for imaging
+
+//latexrender settings
+$LATEXRENDER_ENABLE = TRUE;
+$TEXCACHE_PATH = "pictures/tex";
+$LATEX_PATH = "/usr/bin/latex";
+$DVIPS_PATH = "/usr/bin/dvips";
+$CONVERT_PATH = "/usr/bin/convert";
+$IDENTIFY_PATH = "/usr/bin/identify";
+
+
+/*Stud.IP modules
+----------------------------------------------------------------
+enable or disable the Stud.IP internal modules, set the path
+to the modules and basic settings*/
+
+//path to Stud.IP modules
+$RELATIVE_PATH_RESOURCES = "./resources";					//Stud.IP module: resourge management
+$RELATIVE_PATH_CALENDAR = "./calendar";						//Stud.IP module: calendar
+$RELATIVE_PATH_CHAT = "chat"; 							//Stud.IP module: chat
+$RELATIVE_PATH_ADMIN_MODULES = "admin";				 		//Stud.IP module: admin tools
+$RELATIVE_PATH_EXTERN = "extern"; 						//Stud.IP module: module for including Stud.IP data in websites
+
+$RESOURCES_ENABLE = TRUE;							//Stud.IP module: resource management
+
+$CALENDAR_ENABLE = TRUE;							//Stud.IP module: calendar
+$CALENDAR_DRIVER = "MySQL"; 							//Stud.IP module: calendar driver: database to use (MySQL in default installation)
+
+$CHAT_ENABLE = TRUE;								//Stud.IP module: chat
+$CHAT_SERVER_NAME = "ChatShmServer";
+
+$PATH_EXPORT = "export";							//Stud.IP module: export
+$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    //path to fop
+$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     //used to set environment for JRE
+$EXPORT_ENABLE = TRUE;
+$XSLT_ENABLE = TRUE;
+$FOP_ENABLE = TRUE;
+
+$ILIAS_CONNECT_ENABLE = FALSE;							//Stud.IP module: ilias connect
+$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";
+$ABSOLUTE_PATH_ILIAS = "http://<your.server.name>/ilias/";
+
+$EXTERN_ENABLE = TRUE;								//Stud.IP module: SRI-System (extern Modules) 
+//(See extern_config.inc.php in the specified path for further settings)
+
+
+/*language settings
+----------------------------------------------------------------*/
+
+$INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "name"=>"Deutsch");
+$INSTALLED_LANGUAGES["en_GB"] =	array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
+
+$DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user? 
+
+$_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
+
+
+/*path generation 
+-----------------------------------------------------------------
+(end of user defined settings)*/
+
+//path generation
+if (substr($ABSOLUTE_PATH_STUDIP,-1) != "/"){
+	$ABSOLUTE_PATH_STUDIP .= "/";
+}
+$CANONICAL_RELATIVE_PATH_STUDIP = substr($ABSOLUTE_PATH_STUDIP,strlen(getenv("DOCUMENT_ROOT")));
+if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
+	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
+}
+
+require_once $ABSOLUTE_PATH_STUDIP . "/phplib_local.inc.php";
+?>
