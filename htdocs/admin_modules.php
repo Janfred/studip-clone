@@ -250,9 +250,9 @@ if ($admin_modules_data["range_id"]) {
 				<font size=-1><b><?=_("Lernmodule:")?></b><br /></font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="16%">
-				<input type="RADIO" name="ilias-connect_value" value="TRUE" <?=($amodules->isBit($admin_modules_data["changed_bin"], 2)) ? "checked" : "" ?>>
+				<input type="RADIO" name="ilias_connect_value" value="TRUE" <?=($amodules->isBit($admin_modules_data["changed_bin"], 2)) ? "checked" : "" ?>>
 				<font size=-1><?=_("an")?></font>
-				<input type="RADIO" name="ilias-connect_value" value="FALSE" <?=($amodules->isBit($admin_modules_data["changed_bin"], 2)) ? "" : "checked" ?>>
+				<input type="RADIO" name="ilias_connect_value" value="FALSE" <?=($amodules->isBit($admin_modules_data["changed_bin"], 2)) ? "" : "checked" ?>>
 				<font size=-1><?=_("aus")?><br /></font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
