@@ -115,7 +115,7 @@ foreach ($order as $position) {
 				echo "<div>";
 			echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
 			echo $data["content"];
-			echo "</font></div></td></tr>\n</table>\n";
+			echo "</font></div></td></tr>\n</table><br>\n";
 		}
 		else
 			$data_field($this, $data, $aliases_content[$position]);
@@ -149,7 +149,7 @@ function news (&$this, $data, $alias_content) {
 		echo $content;
 		echo "</font></div></td></tr>\n";
 	}
-	echo "</table>\n";
+	echo "</table><br>\n";
 }
 
 function termine (&$this, $data, $alias_content) {
@@ -185,7 +185,7 @@ function termine (&$this, $data, $alias_content) {
 			echo $dat["content"];
 			echo "</font></div></td></tr>\n";
 		} 
-		echo "</table>\n";
+		echo "</table><br>\n";
 	}
 }
 
@@ -204,7 +204,7 @@ function kategorien (&$this, $data, $alias_content) {
 		echo "<div>";
 	echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
 	echo $data["content"];
-	echo "</font></div></td></tr>\n</table>\n";
+	echo "</font></div></td></tr>\n</table><br>\n";
 }
 
 function lehre (&$this, $data, $alias_content) {
@@ -349,7 +349,7 @@ function lehre (&$this, $data, $alias_content) {
 		$out_title .= "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
 		$out_title .= "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
 		$out_title .= $alias_content . "</font></td></tr>\n";
-		echo $out_title . $out . "</table>\n";
+		echo $out_title . $out . "</table><br>\n";
 	}
 }
 
@@ -392,7 +392,7 @@ function head (&$this, $data) {
 	else
 		$out .=  "&nbsp;";
 		
-	$out .=  "</td></tr>\n</table>\n";
+	$out .=  "</td></tr>\n</table><br>\n";
 	
 	echo $out;
 }

@@ -95,7 +95,7 @@ foreach ($order as $position) {
 				echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
 				echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
 				echo FixLinks(format(htmlReady($db->f($data_field))));
-				echo "</font></div></td></tr>\n</table>\n";
+				echo "</font></div></td></tr>\n</table><br>\n";
 			}
 		}
 		else
@@ -131,7 +131,7 @@ function news (&$this, $db, $alias_content) {
 			echo FixLinks(format(htmlReady($content)));
 			echo "</font></div></td></tr>\n";
 		}
-		echo "</table>\n";
+		echo "</table><br>\n";
 	}
 }
 
@@ -166,7 +166,7 @@ function termine (&$this, $db, $alias_content) {
 					echo "</font></div></td></tr>\n";
 				}
 			} 
-			echo "</table>\n";
+			echo "</table><br>\n";
 		}
 	}
 }
@@ -188,7 +188,7 @@ function kategorien (&$this, $db, $alias_content) {
 		echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
 		echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
 		echo FixLinks(format(htmlReady($db_kategorien->f("content"))));
-		echo "</font></div></td></tr>\n</table>\n";
+		echo "</font></div></td></tr>\n</table><br>\n";
 	} 
 }
 
@@ -352,7 +352,7 @@ function lehre (&$this, $db, $alias_content) {
 		$out_title .= "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
 		$out_title .= "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
 		$out_title .= $alias_content . "</font></td></tr>\n";
-		echo $out_title . $out . "</table>\n";
+		echo $out_title . $out . "</table><br>\n";
 	}
 }
 
@@ -398,7 +398,7 @@ function head (&$this, $db) {
 	else
 		$out .=  "&nbsp;";
 		
-	$out .=  "</td></tr>\n</table>\n";
+	$out .=  "</td></tr>\n</table><br>\n";
 	
 	return $out;
 }
