@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-17 18:22+0100\n"
+"POT-Creation-Date: 2003-03-20 23:57+0100\n"
 "PO-Revision-Date: 2003-03-17 15:00+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -15,40 +15,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
 
-#: resources/resourcesClass.inc.php:131 resources/resourcesClass.inc.php:976
+#: resources/resourcesClass.inc.php:131 resources/resourcesClass.inc.php:995
 #: resources/resourcesVisual.inc.php:536
 msgid "NutzerIn"
 msgstr "User"
 
-#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:985
+#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:1004
 msgid "Einrichtung"
 msgstr "Institute"
 
-#: resources/resourcesClass.inc.php:149 resources/resourcesClass.inc.php:994
+#: resources/resourcesClass.inc.php:149 resources/resourcesClass.inc.php:1013
 msgid "Fakult&auml;t"
 msgstr "Faculty"
 
-#: resources/resourcesClass.inc.php:158 resources/resourcesClass.inc.php:1003
+#: resources/resourcesClass.inc.php:158 resources/resourcesClass.inc.php:1022
 msgid "Veranstaltung"
 msgstr "Course"
 
-#: resources/resourcesClass.inc.php:962
+#: resources/resourcesClass.inc.php:981
 msgid "jederR"
 msgstr "everyone"
 
-#: resources/resourcesClass.inc.php:964
+#: resources/resourcesClass.inc.php:983
 msgid "jedeR (alle Nutzenden)"
 msgstr "everyone (all users)"
 
-#: resources/resourcesClass.inc.php:968 resources/resourcesFunc.inc.php:195
+#: resources/resourcesClass.inc.php:987 resources/resourcesFunc.inc.php:195
 msgid "Global"
 msgstr "global"
 
-#: resources/resourcesClass.inc.php:970
+#: resources/resourcesClass.inc.php:989
 msgid "Global (zentral verwaltet)"
 msgstr "global (central administrated)"
 
-#: resources/resourcesClass.inc.php:1582 resources/resourcesClass.inc.php:1590
+#: resources/resourcesClass.inc.php:1638 resources/resourcesClass.inc.php:1646
 msgid "zur&uuml;ck"
 msgstr "back"
 
@@ -88,6 +88,7 @@ msgid "Starten Sie hier eine ihre Suche"
 msgstr "Start your search here"
 
 #: resources/resourcesVisual.inc.php:112 resources/resourcesVisual.inc.php:114
+#: resources/resourcesVisual.inc.php:327 resources/resourcesVisual.inc.php:329
 #: resources/resourcesVisual.inc.php:888
 #: resources/resourcesVisual.inc.php:1347
 #: resources/resourcesVisual.inc.php:1458

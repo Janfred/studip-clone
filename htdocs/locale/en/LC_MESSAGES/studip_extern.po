@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-17 18:22+0100\n"
+"POT-Creation-Date: 2003-03-20 23:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,82 +19,82 @@ msgstr ""
 msgid "Verwaltung der externen Anzeigemodule"
 msgstr ""
 
-#: extern/admin_extern.inc.php:72
+#: extern/admin_extern.inc.php:80
 #, c-format
 msgid ""
 "Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> "
 "wirklich l&ouml;schen?"
 msgstr ""
 
-#: extern/admin_extern.inc.php:132
+#: extern/admin_extern.inc.php:140
 msgid "Übersicht über alle angelegten Konfigurationen."
 msgstr ""
 
-#: extern/admin_extern.inc.php:156
+#: extern/admin_extern.inc.php:164
 #, c-format
 msgid "Neue Konfiguration f&uuml;r Modul %s anlegen."
 msgstr ""
 
-#: extern/admin_extern.inc.php:161
+#: extern/admin_extern.inc.php:169
 msgid ""
 "Sie haben bereits für alle Module die maximale Anzahl von Konfigurationen "
 "angelegt. Um eine neue Konfiguration anzulegen, m&uuml;ssen Sie erst eine "
 "bestehende im gew&uuml;nschten Modul l&ouml;schen."
 msgstr ""
 
-#: extern/admin_extern.inc.php:168
+#: extern/admin_extern.inc.php:176
 msgid "Es wurden noch keine Konfigurationen angelegt."
 msgstr ""
 
-#: extern/admin_extern.inc.php:174
+#: extern/admin_extern.inc.php:182
 msgid "Angelegte Konfigurationen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:209
+#: extern/admin_extern.inc.php:217
 msgid "weitere Informationen anzeigen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:219
+#: extern/admin_extern.inc.php:227
 msgid "Standard entziehen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:226
+#: extern/admin_extern.inc.php:234
 msgid "Standard zuweisen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:235
+#: extern/admin_extern.inc.php:243
 msgid "Konfiguration löschen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:242
+#: extern/admin_extern.inc.php:250
 msgid "Konfiguration bearbeiten"
 msgstr ""
 
-#: extern/admin_extern.inc.php:264
+#: extern/admin_extern.inc.php:273
 #, c-format
 msgid "Sie können pro Modul maximal %s Konfigurationen anlegen."
 msgstr ""
 
-#: extern/admin_extern.inc.php:268
+#: extern/admin_extern.inc.php:277
 msgid ""
 "Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-"
 "Konfiguration zu erklären."
 msgstr ""
 
-#: extern/admin_extern.inc.php:269
+#: extern/admin_extern.inc.php:278
 msgid ""
 "Wenn Sie keine Konfiguration als Standard ausgew&auml;hlt haben, wird die "
 "Stud.IP-Konfiguration verwendet."
 msgstr ""
 
-#: extern/admin_extern.inc.php:270
+#: extern/admin_extern.inc.php:279
 msgid ""
 "Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung "
 "herangezogen wird, wenn sie beim Aufruf dieses Moduls keine Konfiguration "
 "angeben."
 msgstr ""
 
-#: extern/admin_extern.inc.php:271
+#: extern/admin_extern.inc.php:280
 msgid ""
 "Klicken Sie auf diesen Button um weitere Informationen über diese "
 "Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die "
@@ -533,7 +533,7 @@ msgid ""
 msgstr ""
 
 #: extern/views/extern_info_module.inc.php:97
-#: extern/lib/extern_functions.inc.php:292
+#: extern/lib/extern_functions.inc.php:315
 msgid "URL_DER_INCLUDE_SEITE"
 msgstr ""
 
@@ -621,12 +621,12 @@ msgstr ""
 msgid "Ein Bild im PNG-Format."
 msgstr ""
 
-#: extern/lib/ExternEdit.class.php:151
+#: extern/lib/ExternEdit.class.php:118 extern/lib/ExternEdit.class.php:126
 #, c-format
-msgid "Angaben zum HTML-Tag %s"
+msgid "Angaben zum HTML-Tag &lt;%s&gt;"
 msgstr ""
 
-#: extern/lib/ExternEdit.class.php:166
+#: extern/lib/ExternEdit.class.php:205
 #, c-format
 msgid "Angaben zum Element %s"
 msgstr ""
@@ -641,6 +641,14 @@ msgstr ""
 msgid ""
 "In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Elements "
 "ändern."
+msgstr ""
+
+#: extern/elements/ExternElementBody.class.php:53
+msgid "Seitenkörper"
+msgstr ""
+
+#: extern/elements/ExternElementBody.class.php:54
+msgid "Eigenschaften des Seitenkörpers (HTML-Tag &gt;body&lt;)."
 msgstr ""
 
 #: extern/elements/ExternElementLink.class.php:54
@@ -659,25 +667,27 @@ msgid ""
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:107
-#: extern/elements/ExternElementMainPersons.class.php:106
+#: extern/elements/ExternElementMainPersons.class.php:103
 msgid "Name der Konfiguration"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:112
-#: extern/elements/ExternElementMainPersons.class.php:112
+#: extern/elements/ExternElementMainPersons.class.php:109
 msgid "Allgemeine Angaben zum Tabellenaufbau"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:120
-#: extern/elements/ExternElementMainPersons.class.php:129
+#: extern/elements/ExternElementMainPersons.class.php:126
 msgid "Weitere Angaben"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:122
+#: extern/elements/ExternElementMainPersons.class.php:135
 msgid "HTML-Header/Footer:"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:123
+#: extern/elements/ExternElementMainPersons.class.php:136
 msgid ""
 "Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z."
 "B. bei direkter Verlinkung oder in einem Frameset."
@@ -694,84 +704,84 @@ msgid ""
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:132
-#: extern/elements/ExternElementMainPersons.class.php:131
+#: extern/elements/ExternElementMainPersons.class.php:128
 msgid "Personennamen:"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:133
-#: extern/elements/ExternElementMainPersons.class.php:132
+#: extern/elements/ExternElementMainPersons.class.php:129
 msgid "Wählen Sie, wie Personennamen formatiert werden sollen."
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:135
-#: extern/elements/ExternElementMainPersons.class.php:134
+#: extern/elements/ExternElementMainPersons.class.php:131
 msgid "Vorname Nachname"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:135
-#: extern/elements/ExternElementMainPersons.class.php:134
+#: extern/elements/ExternElementMainPersons.class.php:131
 msgid "Nachname Vorname"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:136
-#: extern/elements/ExternElementMainPersons.class.php:135
+#: extern/elements/ExternElementMainPersons.class.php:132
 msgid "Titel Vorname Nachname"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:136
-#: extern/elements/ExternElementMainPersons.class.php:135
+#: extern/elements/ExternElementMainPersons.class.php:132
 msgid "Nachname Vorname Titel"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:139
-#: extern/elements/ExternElementMainPersons.class.php:138
+#: extern/elements/ExternElementMainPersons.class.php:141
 msgid "Stylesheet-Datei:"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:140
-#: extern/elements/ExternElementMainPersons.class.php:139
+#: extern/elements/ExternElementMainPersons.class.php:142
 msgid "Geben Sie hier die URL Ihrer Stylesheet-Datei an."
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:143
-#: extern/elements/ExternElementMainPersons.class.php:142
+#: extern/elements/ExternElementMainPersons.class.php:145
 msgid "Seitentitel:"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:144
-#: extern/elements/ExternElementMainPersons.class.php:143
+#: extern/elements/ExternElementMainPersons.class.php:146
 msgid ""
 "Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im "
 "Web-Browser in der Titelzeile des Anzeigefensters angezeigt."
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:147
-#: extern/elements/ExternElementMainPersons.class.php:146
+#: extern/elements/ExternElementMainPersons.class.php:149
 msgid "Style f&uuml;r &lt;body&gt;:"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:148
-#: extern/elements/ExternElementMainPersons.class.php:147
+#: extern/elements/ExternElementMainPersons.class.php:150
 msgid "Sie können hier eine Stylesheet-Definition für das <body>-Tag eingeben."
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:151
-#: extern/elements/ExternElementMainPersons.class.php:150
+#: extern/elements/ExternElementMainPersons.class.php:153
 msgid "Class f&uuml;r &lt;body&gt;:"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:152
-#: extern/elements/ExternElementMainPersons.class.php:151
+#: extern/elements/ExternElementMainPersons.class.php:154
 msgid "Sie können hier eine Stylesheet-Klasse für das <body>-Tag eingeben."
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:155
-#: extern/elements/ExternElementMainPersons.class.php:154
+#: extern/elements/ExternElementMainPersons.class.php:157
 msgid "Keine Dateien:"
 msgstr ""
 
 #: extern/elements/ExternElementMainDownload.class.php:156
-#: extern/elements/ExternElementMainPersons.class.php:155
+#: extern/elements/ExternElementMainPersons.class.php:158
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum "
 "Download verfügbar sind."
@@ -865,7 +875,7 @@ msgstr ""
 msgid "Wenn sie keine URL angeben, wird ein Standard-Icon ausgegeben."
 msgstr ""
 
-#: extern/elements/ExternElementMainPersons.class.php:123
+#: extern/elements/ExternElementMainPersons.class.php:120
 msgid "Anzeige von Gruppen"
 msgstr ""
 

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-17 18:22+0100\n"
+"POT-Creation-Date: 2003-03-20 23:57+0100\n"
 "PO-Revision-Date: 2003-03-17 16:20+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -23,20 +23,20 @@ msgstr "Stud.IP user was not found."
 msgid "Sie sind nicht als User im angebundenen ILIAS-System eingetragen."
 msgstr "You are not entered as user in the connected ILIAS system."
 
-#: lernmodule/lernmodul_linking_functions.inc.php:32
+#: lernmodule/lernmodul_linking_functions.inc.php:33
 #, c-format
 msgid "Diese Lerneinheit enth&auml;lt %s Seiten. "
 msgstr "This learning module contains %s pages."
 
-#: lernmodule/lernmodul_linking_functions.inc.php:34
+#: lernmodule/lernmodul_linking_functions.inc.php:35
 msgid "Diese Lerneinheit enth&auml;lt eine Seite. "
 msgstr "This learning module contains one page."
 
-#: lernmodule/lernmodul_linking_functions.inc.php:36
+#: lernmodule/lernmodul_linking_functions.inc.php:37
 msgid "Es gibt eine Testfrage zu der Lerneinheit."
 msgstr "There is one test question to this learning module."
 
-#: lernmodule/lernmodul_linking_functions.inc.php:38
+#: lernmodule/lernmodul_linking_functions.inc.php:39
 #, c-format
 msgid "Es gibt %s Testfragen zu der Lerneinheit."
 msgstr "There are %s test questions to the learning module."
@@ -54,63 +54,79 @@ msgstr "Data base operation could not be executed!"
 msgid "Sie haben Zugriff auf folgende Lernmodule:"
 msgstr "You have access to the following learning modules:"
 
-#: lernmodule/lernmodul_view_functions.inc.php:14
-#: lernmodule/lernmodul_view_functions.inc.php:49
-#: lernmodule/lernmodul_view_functions.inc.php:80
-#: lernmodule/lernmodul_view_functions.inc.php:113
-msgid "Name"
-msgstr "Name"
-
-#: lernmodule/lernmodul_view_functions.inc.php:15
-#: lernmodule/lernmodul_view_functions.inc.php:114
-msgid "Bearbeiten"
-msgstr "Edit"
-
-#: lernmodule/lernmodul_view_functions.inc.php:35
+#: lernmodule/lernmodul_view_functions.inc.php:54
 msgid "Sie haben keinen Zugriff auf bestehende ILIAS-Lernmodule."
 msgstr "You do not access to the current ILIAS learning modules."
 
-#: lernmodule/lernmodul_view_functions.inc.php:45
-msgid "Der Veranstaltung sind folgende Lernmodule zugeordnet:"
-msgstr "The course is allocated the following learning modules:"
-
-#: lernmodule/lernmodul_view_functions.inc.php:50
-msgid "Entfernen"
-msgstr "Remove"
-
-#: lernmodule/lernmodul_view_functions.inc.php:59
-msgid "Verknüpfung aufheben"
-msgstr "Delete link"
-
-#: lernmodule/lernmodul_view_functions.inc.php:65
-msgid "Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft."
-msgstr "No ILIAS learning modules are linked to this course."
-
-#: lernmodule/lernmodul_view_functions.inc.php:76
-msgid "Folgende Lernmodule können eingebunden werden:"
-msgstr "The following learning modules can be connected:"
-
-#: lernmodule/lernmodul_view_functions.inc.php:81
-msgid "Hinzufügen"
-msgstr "Add"
-
-#: lernmodule/lernmodul_view_functions.inc.php:97
-msgid "Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet."
-msgstr "All available learning modules are allocated to the course."
-
-#: lernmodule/lernmodul_view_functions.inc.php:99
-#: lernmodule/lernmodul_view_functions.inc.php:134
-msgid "Es sind keine Lernmodule vorhanden."
-msgstr "There are no learning modules available."
-
-#: lernmodule/lernmodul_view_functions.inc.php:109
+#: lernmodule/lernmodul_view_functions.inc.php:64
 msgid "Auf folgende Lernmodule haben Sie Zugriff:"
 msgstr "You have access to following learning modules:"
 
-#: lernmodule/lernmodul_view_functions.inc.php:148
+#: lernmodule/lernmodul_view_functions.inc.php:109
+#: lernmodule/lernmodul_view_functions.inc.php:237
+msgid "Es sind keine Lernmodule vorhanden."
+msgstr "There are no learning modules available."
+
+#: lernmodule/lernmodul_view_functions.inc.php:121
+#, fuzzy
+msgid "Der Einrichtung sind folgende Lernmodule zugeordnet:"
+msgstr "The course is allocated the following learning modules:"
+
+#: lernmodule/lernmodul_view_functions.inc.php:123
+msgid "Der Veranstaltung sind folgende Lernmodule zugeordnet:"
+msgstr "The course is allocated the following learning modules:"
+
+#: lernmodule/lernmodul_view_functions.inc.php:170
+#, fuzzy
+msgid "Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft."
+msgstr "No ILIAS learning modules are linked to this course."
+
+#: lernmodule/lernmodul_view_functions.inc.php:172
+msgid "Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft."
+msgstr "No ILIAS learning modules are linked to this course."
+
+#: lernmodule/lernmodul_view_functions.inc.php:186
+msgid "Folgende Lernmodule können eingebunden werden:"
+msgstr "The following learning modules can be connected:"
+
+#: lernmodule/lernmodul_view_functions.inc.php:231
+#, fuzzy
+msgid "Alle verf&uuml;gbaren Lernmodule sind der Einrichtung zugeordnet."
+msgstr "All available learning modules are allocated to the course."
+
+#: lernmodule/lernmodul_view_functions.inc.php:233
+msgid "Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet."
+msgstr "All available learning modules are allocated to the course."
+
+#: lernmodule/lernmodul_view_functions.inc.php:253
+#, fuzzy
+msgid "Diese Einrichtung ist mit einem Lernmodul verbunden:"
+msgstr "This course is connected to a learning module:"
+
+#: lernmodule/lernmodul_view_functions.inc.php:255
 msgid "Diese Veranstaltung ist mit einem Lernmodul verbunden:"
 msgstr "This course is connected to a learning module:"
 
-#: lernmodule/lernmodul_view_functions.inc.php:150
+#: lernmodule/lernmodul_view_functions.inc.php:261
+#, fuzzy
+msgid "Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:"
+msgstr "This course is connected to the following learning modules:"
+
+#: lernmodule/lernmodul_view_functions.inc.php:263
 msgid "Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:"
 msgstr "This course is connected to the following learning modules:"
+
+#~ msgid "Name"
+#~ msgstr "Name"
+
+#~ msgid "Bearbeiten"
+#~ msgstr "Edit"
+
+#~ msgid "Entfernen"
+#~ msgstr "Remove"
+
+#~ msgid "Verknüpfung aufheben"
+#~ msgstr "Delete link"
+
+#~ msgid "Hinzufügen"
+#~ msgstr "Add"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-17 18:22+0100\n"
+"POT-Creation-Date: 2003-03-20 23:57+0100\n"
 "PO-Revision-Date: 2003-03-17 17:30+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -342,6 +342,26 @@ msgstr "In order to enter this chat room, you need a valid invitation."
 #: chat/chat_func_inc.php:172
 msgid "Dieser Chatraum ist leer."
 msgstr "This chat room is empty."
+
+#: chat/chat_func_inc.php:209
+#, fuzzy
+msgid "Dieser User befindet sich in einem Chatraum."
+msgstr "There is one person in this cat room."
+
+#: chat/chat_func_inc.php:209
+#, c-format
+msgid "Dieser User befindet sich in %s Chaträumen"
+msgstr ""
+
+#: chat/chat_func_inc.php:216
+msgid "zum Chatten einladen"
+msgstr ""
+
+#: chat/chat_func_inc.php:218
+msgid ""
+"Sie haben in keinem aktiven Chatraum die Berechtigung andere NutzerInnen "
+"einzuladen!"
+msgstr ""
 
 #: chat/chat_input.php:177
 msgid "Nachricht senden"
