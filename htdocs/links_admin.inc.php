@@ -314,9 +314,11 @@ if ($perm->have_perm("admin"))
 if ($perm->have_perm("admin")) {		
 	$structure["new_user"]=array (topKat=>"global", name=>_("Benutzer"), link=>"new_user_md5.php", active=>FALSE);
 	$structure["range_tree"]=array (topKat=>"global", name=>_("Einrichtungshierarchie"), link=>"admin_range_tree.php", active=>FALSE);
+	if ($perm->is_fak_admin()) {
+		$structure["sem_tree"]=array (topKat=>"global", name=>_("Veranstaltungshierarchie"), link=>"admin_sem_tree.php", active=>FALSE);
+	}
 }
 if ($perm->have_perm("root")) {
-	$structure["sem_tree"]=array (topKat=>"global", name=>_("Veranstaltungshierarchie"), link=>"admin_sem_tree.php", active=>FALSE);
 	$structure["studiengang"]=array (topKat=>"global", name=>_("Studieng&auml;nge"), link=>"admin_studiengang.php", active=>FALSE);
 	$structure["sessions"]=array (topKat=>"modules", name=>_("Sessions"), link=>"view_sessions.php", active=>FALSE);
 	$structure["integrity"]=array (topKat=>"modules", name=>_("DB Integrit&auml;t"), link=>"admin_db_integrity.php", active=>FALSE);
