@@ -80,7 +80,7 @@ class CalendarEvent extends Event {
 	
 	function isDayEvent () {
 		return ($this->dev || (date('His', $this->getStart()) == '000000' &&
-				date('Hi', $this->getEnd()) == '2359'));
+				date('His', $this->getEnd()) == '235959'));
 	}
 	
 	function setDayEvent ($is_dev) {
@@ -551,10 +551,50 @@ class CalendarEvent extends Event {
 	
 	function setExceptions ($exceptions) {
 		
-		if (is_array($exceptions)) {
+		if (is_array($exceptions) && !($this->getRepeat('rtype') == ''
+				|| $this->getRepeat('rtype') == 'SINGLE')) {
 			sort(array_unique($exceptions), SORT_NUMERIC);
 			$this->properties['EXDATE'] = implode(',', $exceptions);
 		}
+		else
+			$this->properties['EXDATE'] = '';
 	}
 	
-} // class Termin
+	function toStringDate ($mod = 'SHORT') {
+		
+		if ($this->isDayEvent()) {
+			if ($mod == 'SHORT')
+				return _("ganztägig");
+			
+			if (date('zY', $this->getStart()) != date('zY', $this->getEnd())) {
+				if ($mod == 'LONG') {
+					$string = wday($this->getStart())
+							. strftime(', %x - ', $this->getStart());
+					$string .= wday($this->getEnd())
+							. strftime(', %x (ganztägig)', $this->getEnd());
+				}
+				else {
+					$string = wday($this->getStart(), 'SHORT')
+							. strftime('. %x - ', $this->getStart());
+					$string .= wday($this->getEnd(), 'SHORT')
+							. strftime('. %x (ganztägig)', $this->getEnd());
+				}
+			}
+			else {
+				if ($mod == 'LONG') {
+					$tring = wday($this->getStart())
+							. strftime(', %x (ganztägig)', $this->getStart());
+				}
+				else {
+					$string = wday($this->getStart(), 'SHORT')
+							. strftime('. %x (ganztägig)', $this->getStart());
+				}
+			}
+			
+			return $string;
+		}
+		
+		return parent::toStringDate($mod);
+	}
+	
+} // class CalendarEvent
