@@ -120,7 +120,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	include("show_dates.inc.php");
 	$start = time();
 	$end = $start + 60 * 60 * 24 * 7;
-	show_all_dates($start, $end, FALSE, FALSE, $index_data["dopen"]);
+	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
 
 
 } elseif (!$perm->have_perm("dozent")) {
@@ -251,7 +251,7 @@ unset($temp_language_key); unset($temp_language);
 	include("show_dates.inc.php");
 	$start = time();
 	$end = $start + 60 * 60 * 24 * 7;
-	show_all_dates($start, $end, FALSE, FALSE, $index_data["dopen"]);
+	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
 
 
 
