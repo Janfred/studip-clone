@@ -32,35 +32,27 @@ $sess->register("dates_data");
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	
+require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
+checkObject();
+
+include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+	
+if ($dopen)
+	$dates_data["open"]=$dopen;
+	
+if ($dclose)
+	$dates_data["open"]='';
+
 ?>
-<body>
-
-<?
-if ($SessSemName[1] =="") {
-	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Keine Veranstaltung gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
-	die;
-} else {
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-
-	require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
-	require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-	require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-	
-	if ($dopen)
-		$dates_data["open"]=$dopen;
-	
-	if ($dclose)
-		$dates_data["open"]='';
-
-	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-uhr.gif" align="absmiddle">&nbsp; <? echo $SessSemName["header_line"]; ?> - Ablaufplan</b>
+			<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-uhr.gif" align="absmiddle">&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Ablaufplan")?></b>
 			</td>
 		</tr>
-			<td class="blank" width="100%"><blockquote>Hier finden Sie alle Termine der Veranstaltung.<br><br>Klicken sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.
+			<td class="blank" width="100%"><blockquote><?=_("Hier finden Sie alle Termine der Veranstaltung."). "<br><br>" . _("Klicken sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.")?>
 			</td>
 			<td class="blank" align="right"><img src="pictures/termine.jpg" border="0">
 			</td>
@@ -72,7 +64,6 @@ if ($SessSemName[1] =="") {
 	($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]" : $show_admin=FALSE;
 	if (show_dates($SessSemName[1], 0, 0, $show_not,$show_docs, $show_admin, $dates_data["open"]))
 		echo"<br>";
-}
 
 ?>
 </body>
