@@ -62,7 +62,7 @@ $SEM_TYPE[4]=array("name"=>"Seminar", "en"=>"Seminar", "class"=>1);
 $SEM_TYPE[5]=array("name"=>"Praxisveranstaltung", "en"=>"Practical course", "class"=>1);
 $SEM_TYPE[6]=array("name"=>"Colloquium", "en"=>"Colloqia", "class"=>1);
 $SEM_TYPE[7]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>1);
-$SEM_TYPE[8]=array("name"=>"Arbeitsgruppe", "en"=>"work group", "class"=>5);
+$SEM_TYPE[8]=array("name"=>"Arbeitsgruppe", "en"=>"Work group", "class"=>5);
 $SEM_TYPE[9]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>1); 
 $SEM_TYPE[10]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>2); 
 $SEM_TYPE[11]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>2); 
@@ -76,6 +76,9 @@ $SEM_TYPE[18]=array("name"=>"Anleitung zu selbständigen wissenschaftlichen Arbei
 $SEM_TYPE[19]=array("name"=>"Sprachkurs", "en"=>"Language Course", "class"=>1);
 $SEM_TYPE[20]=array("name"=>"Fachdidaktik", "en"=>"Didactics", "class"=>1);
 $SEM_TYPE[21]=array("name"=>"Übung", "en"=>"Exercise Course", "class"=>1);
+$SEM_TYPE[22]=array("name"=>"Proseminar", "en"=>"Proseminar", "class"=>1);
+$SEM_TYPE[23]=array("name"=>"Oberseminar", "en"=>"Oberseminar", "class"=>1);
+$SEM_TYPE[24]=array("name"=>"Arbeitsgemeinschaft", "en"=>"Workgroup", "class"=>1);
 //weitere Typen koennen hier angefuegt werden
 
 
