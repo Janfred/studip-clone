@@ -461,6 +461,8 @@ class SemBrowse {
 						if ($sem_number_start != $sem_number_end){
 							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . " - ";
 							$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->search_obj->sem_dates[$sem_number_end]['name']) . ")";
+						} elseif ($this->sem_browse_data["group_by"]) {
+							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
 						}
 						echo"<td class=\"steel1\" width=\"66%\"><font size=-1><a href=\"{$this->target_url}?{$this->target_id}={$seminar_id}&send_from_search=1&send_from_search_page="
 						. $PHP_SELF. "?keep_result_set=1\">", htmlReady($sem_name), "</a><br>";
