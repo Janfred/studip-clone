@@ -335,7 +335,7 @@ if ($really_kill) {
 			$count = 0;
 			delete_topic($really_kill, $count);
 			$db->next_record();
-			if ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
+			if ($nurneu!=1) { // es wurde wirklich was gelöscht und nicht nur ein Anlegen unterbrochen
 				$message = "kill";
 			}
 			$forum["lostposting"]="";
@@ -396,8 +396,8 @@ if ($zitat==TRUE)
 if ($edit_id) 
 	$open = $edit_id;
 
-if ($rate && $open) // Objekt bewerten
-	$txt = object_add_rate ($open, $rate);
+if ($rate && $sidebar) // Objekt bewerten
+	$txt = object_add_rate ($sidebar, $rate);
 
 if ($fav)   // zu den Favoriten hinzufügen/entfernen
 	$fav = object_switch_fav($fav);
