@@ -181,14 +181,14 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 	
 	if($tmp_day_event){
 		if($link_edit)
-			$link_edit_str = "<td align=\"right\"><a href=\"kalender.php?cmd=edit&atime=".$day_obj->getTs()
+			$link_edit_str = "<td align=\"right\"><a href=\"calendar.php?cmd=edit&atime=".$day_obj->getTs()
 											."\"><img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"neuer Tagestermin\"></a></td>\n";
 			
 		$day_event_row[0] .= '><table width="100%" border="0" cellpadding="'.($padding / 2).'" cellspacing="1">';
 		reset($tmp_day_event);
 		foreach($tmp_day_event as $day_event){
-			$title = fit_title($day_event->getTitel(),1,1,$title_length);
-			$title_str = sprintf('<a href="kalender.php?cmd=edit&termin_id=%s&atime=%s"><font class="inday">%s'
+			$title = fit_title($day_event->getTitle(),1,1,$title_length);
+			$title_str = sprintf('<a href="calendar.php?cmd=edit&termin_id=%s&atime=%s"><font class="inday">%s'
 													. '</font></a>', $day_event->getId(), $day_event->getStart(), $title);
 			$day_event_row[0] .= sprintf('<tr><td bgcolor="%s" style="background-color:%s">'
 																.'<table width="100%%" border="0" cellpadding="1" cellspacing="0"><tr>'
@@ -200,7 +200,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 	}
 	else
 		if($link_edit)
-			$day_event_row[0] .= " align=\"right\"><a href=\"kalender.php?cmd=edit&atime=".$day_obj->getTs()
+			$day_event_row[0] .= " align=\"right\"><a href=\"calendar.php?cmd=edit&atime=".$day_obj->getTs()
 												. "\"><img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"neuer Tagestermin\"></a></td>\n";
 		else
 			$day_event_row[0] .= ">&nbsp;</td>\n";
@@ -223,7 +223,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 		// Vorspalte mit Uhrzeiten zusammenbauen
 		if($precol){
 			if(($i * $step) % 3600 == 0){
-				$tab[$zeile] .= sprintf('<th%s%s%s><a class="precol1" href="kalender.php'
+				$tab[$zeile] .= sprintf('<th%s%s%s><a class="precol1" href="calendar.php'
 												, $width_precol_1_txt, $height_precol_1, $rowspan_precol);
 				$tab[$zeile] .= sprintf('?cmd=edit&atime=%s">%s</a></th>'
 												, $day_obj->getStart() + $i * $step, $i / (3600 / $step));
@@ -231,7 +231,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 			}
 			// bei Intervallen mit vollen Stunden Minuten ausblenden
 			if($step % 3600 != 0){
-				$tab[$zeile] .= sprintf('<th%s%s><a class="precol2" href="kalender.php?cmd=edit&atime=%s">'
+				$tab[$zeile] .= sprintf('<th%s%s><a class="precol2" href="calendar.php?cmd=edit&atime=%s">'
 												, $width_precol_2_txt, $height_precol_2, ($day_obj->getStart() + $i * $step));
 				$minute = ($zeile % (3600 / $step)) * ($step / 60);
 				if($minute == 0)
@@ -247,10 +247,10 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 			if($link_edit){
 				if($max_spalte > 0)
 					$tab[$zeile] .= '<td align="right" colspan="'.($max_spalte + 1)
-												.'"><a href="kalender.php?cmd=edit&atime='.($day_obj->getStart() + $i * $step)
+												.'"><a href="calendar.php?cmd=edit&atime='.($day_obj->getStart() + $i * $step)
 												.'"><img src="./pictures/cal-link.gif" border="0" alt="'.$link_edit_alt.'"></a>'."</td>\n";
 				else
-					$tab[$zeile] .= "<td align=\"right\"><a href=\"kalender.php?cmd=edit&atime="
+					$tab[$zeile] .= "<td align=\"right\"><a href=\"calendar.php?cmd=edit&atime="
 												.($day_obj->getStart() + $i * $step)
 												."\"><img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n";
 			}
@@ -310,20 +310,20 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 					$tab[$zeile] .= sprintf(' style="background-color:%s">', $term[$zeile][$j]->getColor());
 					$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
 					if($rows == 1){
-						$title = fit_title($term[$zeile][$j]->getTitel(),$colsp[$zeile],$rows,$title_length - 6);
+						$title = fit_title($term[$zeile][$j]->getTitle(),$colsp[$zeile],$rows,$title_length - 6);
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
 													, $height_event - $padding);
-						$tab[$zeile] .= sprintf('<a href="kalender.php?cmd=edit&termin_id=%s&atime=%d">'
+						$tab[$zeile] .= sprintf('<a href="calendar.php?cmd=edit&termin_id=%s&atime=%d">'
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400));
 						$tab[$zeile] .= sprintf("<font class=\"inday\">%s</font></a></td>\n", $title);
 						$tab[$zeile] .= "<td class=\"steel1\" align=\"right\">&nbsp;</td></tr>\n";
 					}
 					else{
-						$title = fit_title($term[$zeile][$j]->getTitel(),$colsp[$zeile],$rows - 1,$title_length);
+						$title = fit_title($term[$zeile][$j]->getTitle(),$colsp[$zeile],$rows - 1,$title_length);
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
 													, ($height_event * ($rows - 1) + $spacing * ($rows - 2) - $padding));
-						$tab[$zeile] .= sprintf('<a href="kalender.php?cmd=edit&termin_id=%s&atime=%d">'
+						$tab[$zeile] .= sprintf('<a href="calendar.php?cmd=edit&termin_id=%s&atime=%d">'
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400));
 						$tab[$zeile] .= sprintf("<font class=\"inday\">%s</font></a></td></tr>\n", $title);
@@ -357,7 +357,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 						$colspan_attr = "";
 						
 					if($link_edit)
-						$tab[$zeile] .= sprintf('<td%s align="right"><a href="kalender.php?cmd=edit&atime=%s">'
+						$tab[$zeile] .= sprintf('<td%s align="right"><a href="calendar.php?cmd=edit&atime=%s">'
 																."<img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n"
 																, $colspan_attr, $day_obj->getStart() + $i * $step);
 					else
@@ -376,7 +376,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 						$colspan_attr = "";
 					
 					if($link_edit)
-						$tab[$zeile] .= sprintf('<td%s align="right"><a href="kalender.php?cmd=edit&atime=%s">'
+						$tab[$zeile] .= sprintf('<td%s align="right"><a href="calendar.php?cmd=edit&atime=%s">'
 															."<img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n"
 															, $colspan_attr, $day_obj->getStart() + $i * $step);
 					else
@@ -392,7 +392,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 		}
 		
 		if($link_edit && $link_notset)
-			$tab[$zeile] .= "<td width=\"1\" align=\"right\"><a href=\"kalender.php?cmd=edit&atime="
+			$tab[$zeile] .= "<td width=\"1\" align=\"right\"><a href=\"calendar.php?cmd=edit&atime="
 										. ($day_obj->getStart() + $i * $step)
 										. "\"><img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n";	
 		
@@ -467,7 +467,7 @@ function createWeekTable($week_obj, $start = 6, $end = 21, $step = 3600, $compac
 			
 		if($tab_arr[$i]["max_columns"] > 1)
 			$tab[0] .= ' colspan="'.$tab_arr[$i]["max_columns"].'"';
-		$tab[0] .= '><a href="kalender.php?cmd=showday&atime='.$dtime.'">';
+		$tab[0] .= '><a href="calendar.php?cmd=showday&atime='.$dtime.'">';
 		$tab[0] .= wday($dtime, "SHORT") . " " . date("d", $dtime) . "</a></th>\n";
 	}
 	if($compact)
@@ -498,7 +498,7 @@ function jumpTo($month, $day, $year, $colsp = 1){
 		<tr><td<? if($colsp > 1) echo " colspan=\"$colsp\""; ?>>&nbsp;</td></tr>
 		<tr><td width="100%" align="center"<? if($colsp > 1) echo " colspan=\"$colsp\""; ?>>
 			<blockquote>
-				<form action="./kalender.php?cmd=<? echo $cmd; ?>" method="post">
+				<form action="./calendar.php?cmd=<? echo $cmd; ?>" method="post">
 	  			<b>Gehe zu:</b>&nbsp;&nbsp;<input type="text" name="jmp_d" size=2 maxlength="2" value="<? echo $day; ?>">
 					&nbsp;.&nbsp;<input type="text" name="jmp_m" size=2 maxlength="2" value="<? echo $month; ?>">
 					&nbsp;.&nbsp;<input type="text" name="jmp_y" size=4 maxlength="4" value="<? echo $year; ?>">

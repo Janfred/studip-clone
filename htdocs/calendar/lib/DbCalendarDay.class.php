@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarDay.class.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
 
 class DbCalendarDay extends CalendarDay{
 
@@ -33,10 +34,10 @@ class DbCalendarDay extends CalendarDay{
 	var $user_id;       // User-ID aus PphLib (String)
 	
 	// Konstruktor
-	function DB_Day($tmstamp){
+	function DbCalendarDay($tmstamp){
 		global $user;
 		$this->user_id = $user->id;
-		Day::Day($tmstamp);
+		CalendarDay::CalendarDay($tmstamp);
 		$this->restore();
 		$this->sort();
 		$this->arr_pntr = 0;
@@ -631,7 +632,7 @@ class DbCalendarDay extends CalendarDay{
 						$start = $this->getStart();
 						$end = mktime(date("G",$db->f("end_time")),date("i",$db->f("end_time")),0,$this->mon,$this->dom,$this->year);
 				}
-				$termin = new Termin($start, $end, $db->f("content"), $db->f("repeat"), $db->f("expire"),
+				$termin = new CalendarEvent($start, $end, $db->f("content"), $db->f("repeat"), $db->f("expire"),
 				                     $db->f("color"), $db->f("priority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 				if($time_range == 2)
 					$termin->setDayEvent(TRUE);

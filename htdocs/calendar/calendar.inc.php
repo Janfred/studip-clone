@@ -1,6 +1,6 @@
 <?
 /*
-kalender.php 0.7.5-20020311
+calendar.inc.php 0.8-20020628
 Persoenlicher Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
 
@@ -208,7 +208,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			break; */
 		case "edit":
 			if($termin_id && !$mod){
-				require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+				require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
 				$atermin = new CalendarEvent($termin_id);
 				$repeat = $atermin->getRepeat();
 				$translate = array("SINGLE"=>"keine", "DAYLY"=>"t&auml;glich", "WEEKLY"=>"w&ouml;chentlich",
@@ -445,7 +445,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
 		jumpTo($jmp_m, $jmp_d, $jmp_y);
 		echo "</table></td></tr>\n";
-		$link = "./kalender.php?cmd=showday&atime=";
+		$link = "./$PHP_SELF?cmd=showday&atime=";
 		echo "<tr><td align=\"center\">".includeMonth($atime, $link)."</td></tr>\n";
 		echo "<tr><td>&nbsp;</td></tr>\n";
 		echo "</table>\n";
@@ -510,7 +510,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <?
 		printf('<tr><th width="4%%"%s>', $colspan_1);
 		if($st > 0){
-			echo '<a href="kalender.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
+			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
 			echo '<img border="0" src="./pictures/forumgraurauf.gif" alt="zeig davor"></a>';
 		}
 		else
@@ -518,7 +518,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		echo '</th>'.$tab["table"][0];
 		printf('<th width="4%%"%s>', $colspan_1);
 		if($st > 0){
-			echo '<a href="kalender.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
+			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
 			echo '<img border="0" src="./pictures/forumgraurauf.gif" alt="zeig davor"></a>';
 		}
 		else
@@ -564,7 +564,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		echo '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
 		echo '<tr><th width="4%">';
 		if($et < 23){
-			echo '<a href="kalender.php?cmd=showweek&atime='.$atime.'&wtime='.($et + 1).'">';
+			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($et + 1).'">';
 			echo '<img border="0" src="./pictures/forumgraurunt.gif" alt="zeig danach"></a>';
 		}
 		else
@@ -572,7 +572,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		echo '</th><th width="92%">&nbsp;</th>';
 		echo '<th width="4%">';
 		if($et < 23){
-			echo '<a href="kalender.php?cmd=showweek&atime='.$atime.'&wtime='.($et + 1).'">';
+			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($et + 1).'">';
 			echo '<img border="0" src="./pictures/forumgraurunt.gif" alt="zeig danach"></a>';
 		}
 		else
@@ -588,7 +588,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	// Monatsuebersicht anzeigen **************************************************
 
 	if($cmd == "showmonth"){
-		$amonth = new DB_Month($atime);
+	
+		require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarMonth.class.php");
+		
+		$amonth = new DbCalendarMonth($atime);
 		$calendar_sess_forms_data["bind_seminare"] = "";
 		$amonth->bindSeminarTermine($bind_seminare);
 		$amonth->sort();
@@ -676,8 +679,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					echo '<br><font class="inday">' . $hday["name"] . '</font>';
 				$count = 0;
 				while(($aterm = $amonth->nextTermin($i)) && $count < $max_apps){
-					$html_txt = fit_title($aterm->getTitel(),1,1,15);
-					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitel())."',NOCLOSE,CSSOFF";
+					$html_txt = fit_title($aterm->getTitle(),1,1,15);
+					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitle())."',NOCLOSE,CSSOFF";
 					echo '<br><a class="inday" href="'.$PHP_SELF.'?cmd=edit&termin_id='.$aterm->getId().'" onmouseover="return overlib('.$jscript_txt
 					     .');" onmouseout="nd();"><font color="'.$aterm->getColor().'">'
 							 .$html_txt."</font><a>\n";
@@ -714,8 +717,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				
 				$count = 0;
 				while(($aterm = $amonth->nextTermin($i)) && $count < $max_apps){
-					$html_txt = fit_title($aterm->getTitel(),1,1,15);
-					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitel()).'&nbsp;&nbsp;&nbsp;&nbsp;'.strftime("%H:%M-",$aterm->getStart()).strftime("%H:%M",$aterm->getEnd())."',NOCLOSE,CSSOFF";
+					$html_txt = fit_title($aterm->getTitle(),1,1,15);
+					$jscript_txt = "'',CAPTION,'".JSReady($aterm->getTitle()).'&nbsp;&nbsp;&nbsp;&nbsp;'.strftime("%H:%M-",$aterm->getStart()).strftime("%H:%M",$aterm->getEnd())."',NOCLOSE,CSSOFF";
 					echo '<br><a class="inday" href="'.$PHP_SELF.'?cmd=edit&termin_id='.$aterm->getId().'&atime='.$i.'" onmouseover="return overlib('.$jscript_txt
 					     .');" onmouseout="return nd();"><font color="'.$aterm->getColor().'">'
 							 .$html_txt."</font></a>";
@@ -739,8 +742,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	// Jahresuebersicht ***********************************************************
 	
 	if($cmd == "showyear"){
-		$ayear = new DB_Year($atime);
+	
+		require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
 		
+		$ayear = new DbCalendarYear($atime);
 		$ayear->bindSeminarTermine($bind_seminare);
 		
 ?>
@@ -910,9 +915,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				$vue = "public";
 			else
 				$vue = "private";
-			$cat = $atermin->getKategorie();
+			$cat = $atermin->getCategory();
 			$priority = $atermin->getPriority();
-			$txt = htmlReady($atermin->getTitel());
+			$txt = htmlReady($atermin->getTitle());
 			$content = htmlReady($atermin->getDescription());
 			$loc = htmlReady($atermin->getLocation());
 			switch($repeat["type"]){

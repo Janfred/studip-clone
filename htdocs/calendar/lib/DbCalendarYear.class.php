@@ -1,7 +1,7 @@
 <?
 
 /*
-DbCalendarYear.class.php - 0.8.20020520
+DbCalendarYear.class.php - 0.8.20020628
 Personal calendar for Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
 
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //****************************************************************************
 
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
-require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarYear.class.php";
+require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarYear.class.php");
 
 class DbCalendarYear extends CalendarYear{
 

@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
 
 class DbCalendarMonth extends DbCalendarYear{
 
@@ -33,19 +35,19 @@ class DbCalendarMonth extends DbCalendarYear{
 	
 	// Konstruktor
 	function DbCalendarMonth($tmstamp){
-		$this->month = new Month($tmstamp);
+		$this->month = new CalendarMonth($tmstamp);
 		$this->apps = array();
 		DbCalendarYear::DbCalendarYear($tmstamp);
 	}
 	
 	// public
 	function getMonth(){
-		return $this->month->getMonth();
+		return $this->month->getValue();
 	}
 	
 	// public
 	function getNameOfMonth(){
-		return $this->month->getNameOfMonth();
+		return $this->month->toString();
 	}
 	
 	// public
@@ -108,7 +110,7 @@ class DbCalendarMonth extends DbCalendarYear{
 					while($duration-- && $adate <= $end){
 						if($adate > $start){
 							$this->apdays["$adate"]++;
-							$this->apps["$adate"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+							$this->apps["$adate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 						}
@@ -128,7 +130,7 @@ class DbCalendarMonth extends DbCalendarYear{
 							$md_date = $start_ts;
 							while($duration_first-- && $md_date <= $end && $md_date <= $expire){
 								$this->apdays["$md_date"]++;
-								$this->apps["$md_date"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+								$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                             $db->f("repeat"),$expire,$db->f("color"),
 																				 $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 								$md_date += 86400;
@@ -142,7 +144,7 @@ class DbCalendarMonth extends DbCalendarYear{
 						$md_date = $adate;
 						while($md_date <= $db->f("expire") && $md_date <= $end){
 							$this->apdays["$md_date"]++;
-							$this->apps["$md_date"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+							$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                             $db->f("repeat"),$expire,$db->f("color"),
 																				 $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 							$md_date += 86400 * $rep["lintervall"];
@@ -160,7 +162,7 @@ class DbCalendarMonth extends DbCalendarYear{
 							$count = $duration;
 							while($count-- && $md_date <= $end && $md_date <= $expire){
 								$this->apdays["$md_date"]++;
-								$this->apps["$md_date"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+								$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                            $db->f("repeat"),$expire,$db->f("color"),
 																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 								$md_date += 86400;
@@ -176,7 +178,7 @@ class DbCalendarMonth extends DbCalendarYear{
 									if($wdate > $end || $wdate > $expire)
 										break 2;
 									$this->apdays["$wdate"]++;
-									$this->apps["$wdate"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+									$this->apps["$wdate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 									$wdate += 86400;
@@ -203,7 +205,7 @@ class DbCalendarMonth extends DbCalendarYear{
 								if($wdate > $end || $wdate > $db->f("expire"))
 									break 3;
 								$this->apdays["$wdate"]++;
-								$this->apps["$wdate"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+								$this->apps["$wdate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 								$wdate += 86400;
@@ -221,7 +223,7 @@ class DbCalendarMonth extends DbCalendarYear{
 						$count = $duration;
 						while($count-- && $adate <= $end && $adate <= $db->f("expire")){
 							$this->apdays["$adate"]++;
-							$this->apps["$adate"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+							$this->apps["$adate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 							$adate += 86400;
@@ -287,7 +289,7 @@ class DbCalendarMonth extends DbCalendarYear{
 						$md_date = $start_ts;
 						while($md_date < $xdate && $md_date <= $db->f("expire")){
 							$this->apdays["$md_date"]++;
-							$this->apps["$md_date"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+							$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 							$md_date += 86400;
@@ -302,7 +304,7 @@ class DbCalendarMonth extends DbCalendarYear{
 							if($rep["wdays"] == ""?date("j", $adate) == $rep["day"]:TRUE
 								&& $md_date <= $db->f("expire") && $md_date <= $end)
 									$this->apdays["$md_date"]++;
-									$this->apps["$md_date"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+									$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 							$md_date += 86400;
@@ -340,7 +342,7 @@ class DbCalendarMonth extends DbCalendarYear{
 							$count = $duration;
 							while($wdate < $event_end && $wdate < $expire + 1){
 								$this->apdays["$wdate"]++;
-								$this->apps["$wdate"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+								$this->apps["$wdate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 								$wdate += 86400;
@@ -397,7 +399,7 @@ class DbCalendarMonth extends DbCalendarYear{
 						if($xdate + $duration * 86400 > $start){
 							while($duration_first-- > 0 && $md_date <= $end && $md_date <= $expire){
 								$this->apdays["$md_date"]++;
-								$this->apps["$md_date"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+								$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                             $db->f("repeat"),$expire,$db->f("color"),
 																				 $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 								$md_date += 86400;
@@ -407,7 +409,7 @@ class DbCalendarMonth extends DbCalendarYear{
 					
 					while($duration-- && $adate <= $expire && $adate <= $end){
 						$this->apdays["$adate"]++;
-						$this->apps["$adate"][] = new Termin($db->f("date"),$db->f("end_time"),$db->f("content"),
+						$this->apps["$adate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
 						                              $db->f("repeat"),$expire,$db->f("color"),
 																				  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 						$adate += 86400;
@@ -464,7 +466,7 @@ class DbCalendarMonth extends DbCalendarYear{
 			$repeat = $db->f("date").",,,,,,SINGLE,#";
 			$expire = 2114377200; //01.01.2037 00:00:00 Uhr
 			$this->apdays["$adate"]++;
-			$app = new Termin($db->f("date"), $db->f("end_time"),
+			$app = new CalendarEvent($db->f("date"), $db->f("end_time"),
 			                          $db->f("content"), $repeat, $expire, $db->f("date_typ"),
 															  $db->f("priority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 			$app->setSeminarId($db->f("Seminar_id"));

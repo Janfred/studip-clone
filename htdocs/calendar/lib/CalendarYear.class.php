@@ -1,7 +1,7 @@
 <?
 
 /*
-Year.class.php - 0.8.20020409a
+CalendarYear.class.php - 0.8.20020628
 Klassen fuer Persoenlichen Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
 

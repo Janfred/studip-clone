@@ -162,7 +162,7 @@ class CalendarEvent{
 	}
 	
 	// public
-	function getCategorie(){
+	function getCategory(){
 		return $this->cat;
 	}
 	
@@ -450,7 +450,7 @@ class CalendarEvent{
 	}
 	
 	// public
-	function setCategorie($cat){
+	function setCategory($cat){
 		$this->cat = $cat;
 		$this->chng_flag = TRUE;
 	}
