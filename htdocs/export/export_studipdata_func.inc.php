@@ -452,16 +452,16 @@ function export_pers($inst_id)
 	switch ($filter)
 	{
 		case "no":
-			$order = "statusgruppen.name";
+			$order = "statusgruppen.position";
 		break;
 		case "status":
-			$order = "statusgruppen.name";
+			$order = "statusgruppen.position";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "name";
 			$do_group = true;
 		break;
 		default:
-			$order = "statusgruppen.name";
+			$order = "statusgruppen.position";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "name";
 			$do_group = true;
