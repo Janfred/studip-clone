@@ -6,10 +6,11 @@
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		1.0
+* @version		$Id$
 * @access		public
-* @modulegroup	system_core
+* @modulegroup	admission
 * @module		admission.inc.php
+* @package		studip_core
 */
 
 // +---------------------------------------------------------------------------+

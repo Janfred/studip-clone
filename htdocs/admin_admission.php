@@ -9,7 +9,7 @@
 * @version		$Id$
 * @access		public
 * @module		admin_admission.php
-* @modulegroup		admin
+* @modulegroup	admin
 * @package		studip_core
 */
 
