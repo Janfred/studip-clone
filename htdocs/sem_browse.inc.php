@@ -198,13 +198,13 @@ if ((!$sem_browse_data["extern"]) ) {
 		echo $search_obj->getFormStart("$PHP_SELF?send=yes");
 		echo "<tr><td height=\"40\" class=\"steel1\" align=\"center\" valign=\"middle\" >";
 		echo _("Schnellsuche:") . "&nbsp;";
-		echo $search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle'));
+		echo $search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;'));
 		echo "&nbsp;";
-		echo $search_obj->getSearchField("quick_search",array('style' => 'vertical-align:middle', 'size' => 20));
+		echo $search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;','size' => 20));
 		echo $search_obj->getSearchButton(array('style' => 'vertical-align:middle'));
 		echo $search_obj->getNewSearchButton(array('style' => 'vertical-align:middle'), _("Suchergebnis löschen und neue Suche starten"));
 		echo "&nbsp;<a href=\"$PHP_SELF?cmd=xts";
-		echo "\"><img style=\"vertical-align:middle\" " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
+		echo "\"><img align=\"middle\" " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
 		if ($sem_browse_data['level'] == "vv"){
 			$search_obj->sem_tree =& $sem_tree->tree; 
 			if ($sem_tree->start_item_id != 'root'){
@@ -375,7 +375,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			printf ("<option %s value=\"dozent\">" . _("DozentIn") . "</option>", ($sem_browse_data["group_by"]=="dozent") ? "selected" : "");
 			printf ("<option %s value=\"typ\">" . _("Typ") . "</option>", ($sem_browse_data["group_by"]=="typ") ? "selected" : "");
 			printf ("<option %s value=\"einrichtung\">" . _("Einrichtung") . "</option>", ($sem_browse_data["group_by"]=="einrichtung") ? "selected" : "");
-			print ("</select>&nbsp; <input style=\"vertical-align:middle;\" type=\"IMAGE\" " . makeButton("uebernehmen","src") . tooltip(_("Anzeigeoptionen übernehmen")) . "/></font>");
+			print ("</select>&nbsp; <input border=\"0\" style=\"vertical-align:middle;\" type=\"IMAGE\" " . makeButton("uebernehmen","src") . tooltip(_("Anzeigeoptionen übernehmen")) . "/></font>");
 			print("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font size=-1>&nbsp;");
 			printf(_("<b>%s</b> Veranstaltungen gefunden."),count($_marked_sem));
 			print ("</font> </td>");
@@ -383,9 +383,9 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			printf ("<td class=\"steel1\" nowrap align=\"right\" colspan=%s>", $rightspan);
 			echo"<a href=\"" . $PHP_SELF;
 			if ($sem_browse_data["extend"] != "yes") { 
-				echo "?extend=yes\"><img style=\"vertical-align:middle;\" " . makeButton("erweiterteansicht","src") . tooltip(_("Zur erweiterten Ansicht umschalten")) ." border=0>"; 
+				echo "?extend=yes\"><img align=\"middle\" " . makeButton("erweiterteansicht","src") . tooltip(_("Zur erweiterten Ansicht umschalten")) ." border=0>"; 
 			} else {
-				echo "?extend=no\"><img style=\"vertical-align:middle;\" " . makeButton("normaleansicht", "src") . tooltip(_("Zur normalen Ansicht umschalten")) ."  border=0>"; 
+				echo "?extend=no\"><img align=\"middle\" " . makeButton("normaleansicht", "src") . tooltip(_("Zur normalen Ansicht umschalten")) ."  border=0>"; 
 			} 
 			echo "</a></font></td></tr>";
 		}
@@ -574,7 +574,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", ($sem_browse_switch_headers) ? $group_header_class : "1", $rows, htmlReady($group_header_name));
 			//create name-field	
 			echo"<tr ".$cssSw->getHover()."><font size=-1>";
-			echo"<td class=\"".$cssSw->getClass()."\"><font size=-1><a href=\"", $target_url, "?", $target_id, "=", $seminar_id, "&send_from_search=true&send_from_search_page=$PHP_SELF\">", htmlReady(key($value["Name"])), "</a></font></td>";
+			echo"<td class=\"".$cssSw->getClass()."\"><font size=-1><a href=\"", $target_url, "?", $target_id, "=", $seminar_id, "&send_from_search=true&send_from_search_page=" . rawurlencode($PHP_SELF . "?view=" . $view) . "\">", htmlReady(key($value["Name"])), "</a></font></td>";
 			
 			//----------------------
 			
