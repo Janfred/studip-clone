@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * resourcesFunc.php
 * 
@@ -130,27 +130,25 @@ function getLockPeriod($timestamp1='', $timestamp2='') {
 function isLockPeriod($timestamp='') {
 	static $cache;
 	
-	if ($cache[$timestamp % 60]) {
-		return $cache[$timestamp % 60];
+	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
+		return false;
 	}
-	
-	$db = new DB_Seminar;
 	
 	if (!$timestamp)
 		$timestamp = time();
 	
-	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
-		$cache[$timestamp % 60] = FALSE;
-		return FALSE;
+	$c_timestamp = floor($timestamp / 60);
+	
+	if (isset($cache[$c_timestamp])) {
+		return $cache[$c_timestamp];
 	} else {
+		$db = new DB_Seminar;
 		$query = sprintf ("SELECT * FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp, $timestamp);
 		$db->query($query);
-		if ($db->nf()) {
-			$cache[$timestamp % 60] = TRUE;
-			return TRUE;
+		if ($db->next_record()) {
+			return ($cache[$c_timestamp] = TRUE);
 		} else {
-			$cache[$timestamp % 60] = FALSE;
-			return FALSE;
+			return ($cache[$c_timestamp] = FALSE);
 		}
 	}
 }
@@ -598,7 +596,7 @@ function search_administrable_seminars ($search_string='', $user_id='') {
 * @return 	array
 *
 **/
-function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE) {
+function search_administrable_objects($search_string='', $user_id='', $sem=TRUE) {
 	static $my_object_cache;
 	global $user, $perm, $auth, $_fullname_sql;
 	
@@ -608,6 +606,8 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 	
 	if (!$user_id)
 		$user_id = $user->id;
+	
+	$user_global_perm = $perm->get_perm($user_id);
 		
 	if (!$search_string){
 		$caching = true;
@@ -618,6 +618,16 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 		$search_sql['user'] = "username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string'";
 		$search_sql['institut'] = "Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string'";
 		$search_sql['seminar'] = "Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR seminare.Seminar_id = '$search_string'";
+		if ($user_global_perm == 'admin'){
+			$tmp_objects = search_administrable_objects(false,$user_id,false);
+			if (is_array($tmp_objects)){
+				foreach ($tmp_objects as $id => $detail){
+					if ($detail['inst_id']){
+						$my_inst_ids[$id] = true;
+					}
+				}
+			}
+		}
 	}
 	
 	if ($caching && isset($my_object_cache[$user_id][$sem])){
@@ -628,8 +638,6 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 		$my_objects["global"]=array("name"=>_("Global"), "perms" => "admin");
 		
 	$username = get_username($user_id);
-	
-	$user_global_perm = get_global_perm($user_id);
 	
 	switch ($user_global_perm) {
 		case "root": 
@@ -652,13 +660,13 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 			//Alle meine Institute (Suche)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE ({$search_sql['institut']}) AND inst_perms = 'admin' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record()) {
-				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin");
+				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin", 'inst_id' => true);
 				$my_inst_ids[$db->f("Institut_id")] = true;
 			}
 			if ($perm->is_fak_admin($user_id)){
 				$db->query("SELECT Institut_id,Name FROM Institute WHERE ({$search_sql['institut']}) AND fakultaets_id IN('" . join("','" , array_keys($my_inst_ids)) ."')");
 				while($db->next_record()){
-					$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin");
+					$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin",'inst_id' => true);
 					$my_inst_ids[$db->f("Institut_id")] = true;
 				}
 			}
@@ -669,7 +677,7 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 							LEFT JOIN auth_user_md5 USING (user_id) 
 							LEFT JOIN user_info USING (user_id) 
 							WHERE (({$search_sql['user']}))
-							AND  a.Institut_id IN $inst_in GROUP BY auth_user_md5.user_id ORDER BY Nachname");
+							AND a.inst_perms!='user' AND  a.Institut_id IN $inst_in GROUP BY auth_user_md5.user_id ORDER BY Nachname");
 				while ($db2->next_record()) {
 					$my_objects[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
 				}
@@ -704,7 +712,7 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 	$my_objects[$user_id]=array("name"=>"aktueller Account"." (".$username.")", "art"=>_("Personen"),  "perms" => "admin");
 	
 	if ($caching){
-		$my_object_cache[$user_id][$sem] =& $my_objects;
+		$my_object_cache[$user_id][$sem] = $my_objects;
 	}
 	return $my_objects;
 }
