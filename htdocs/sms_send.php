@@ -105,7 +105,12 @@ if ($cmd_insert_x) {
 	$sms_msg = rawurlencode ($msg);
 
 	if ($sms_source_page) {
-		header ("Location: $sms_source_page?sms_msg=$sms_msg");
+		if ($sms_source_page == "about.php") {
+			$header_info = "Location: ".$sms_source_page."?username=".$sms_data["p_rec"][0]."&sms_msg=".$sms_msg;
+		} else {
+			$header_info = "Location: ".$sms_source_page."?sms_msg=".$sms_msg;
+		}
+		header ($header_info);
 		die;
 	}
 }
