@@ -10,6 +10,7 @@ chmod("/tmp/auto_key_$auto_id", 0600);
 header("Content-type: text/javascript");
 header("Pragma: no-cache");
 header("Expires: 0");
+header("cache-control: no-cache");
 echo "var auto_key = \"$auto_challenge\";\nvar auto_id = \"$auto_id\";\n";
 ob_end_flush();
 ?>
