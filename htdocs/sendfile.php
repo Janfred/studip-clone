@@ -6,7 +6,7 @@
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, André Noack André Noack <andre.noack@gmx.net>
 * @access		public
-* @package	studip_core
+* @package		studip_core
 * @modulegroup	library
 * @module		sendfile.php
 */
@@ -178,6 +178,7 @@ switch (strtolower(getFileExtension ($file_name))) {
 	}
 
 //determine the type of the object we want to download a file from (only in type=0 mode!)
+$skip_check=FALSE;
 if (!$type) {
 	$db->query("SELECT seminar_id AS object_id FROM dokumente WHERE dokument_id = '".$file_id."' ");
 	$db->next_record();
