@@ -53,6 +53,11 @@
 								<h2>Veranstaltungen</h2>
 							</td>
 						</tr>
+						<tr>
+							<td>
+								<br/>
+							</td>
+						</tr>
 						<xsl:choose>
 							<xsl:when test="seminare/gruppe">
 								<xsl:for-each select="seminare/gruppe">
