@@ -201,7 +201,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 	<tr valign="top" align="center">
 		<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" alt="Gruppe &auml;ndern" border="0"></a></th>
-		<th width="65%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
+		<th width="64%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 		<th width="10%"><b>besucht</b></th>
 		<th width="10%"><b>Inhalt</b></th>
 		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
@@ -276,28 +276,35 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
       $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) WHERE user_id = '$user->id'");
       IF ($db->num_rows()) {
-            ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"blank\">";
-            ECHO "<tr>";
-            ECHO "<th width=\"1%\"><b>&nbsp;</b>";
-		    ECHO "<th width=\"61%\"><b>Im Losverfahren:</b>";
-   		    ECHO "<th width=\"10%\"><b>Art</b>";
+      	?>
+       	<tr>
+	<td class="blank" colspan=2><b>Anmelde- und Wartelisteneintr&auml;ge:</b><br />&nbsp; </td>
+	</tr>
+      	<?
+        ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"blank\">";
+        ECHO "<tr>";
+            ECHO "<th width=\"2%\" nowrap colspan=2>&nbsp";
+		    ECHO "<th width=\"64%\"><b>Name</b>";
+		    ECHO "<th width=\"10%\"><b>Losdatum</b>";
    		    ECHO "<th width=\"10%\"><b>Position</b>";
-		    ECHO "<th width=\"18%\">Losdatum";
-       	    ECHO "<th width=\"2%\">X</tr>";
+   		    ECHO "<th width=\"10%\"><b>Art</b>";
+       	    ECHO "<th width=\"3%\">X</tr>";
       }
       WHILE ($db->next_record()) {
             $cssSw->switchClass();
-     		printf ("<tr><td bgcolor=\"%s\">&nbsp;</td><td class=\"%s\">&nbsp;&nbsp;","#880000",$cssSw->getClass());
-		    ECHO "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a>";
-		    ECHO "</td>";
-		    IF ($db->f("status") == "claiming") $art = "Anmeldeliste";
-		    ELSE $art = "Warteliste";
-		    printf ("<td class=\"%s\">%s</td>",$cssSw->getClass(),$art);
-   		    printf ("<td align=center class=\"%s\">%s</td>",$cssSw->getClass(),"100%");
-		    ECHO "<td align=center class=".$cssSw->getClass().">".date("d.m.Y", $db->f("admission_endtime"))."</td>";
-            printf("<td class=\"%s\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a>&nbsp;&nbsp;</td></tr>", $cssSw->getClass(),$db->f("seminar_id"));
+     		printf ("<tr><td bgcolor=\"%s\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>","#880000");
+     		printf ("<td class=\"%s\">&nbsp;</td>",$cssSw->getClass());
+     		printf ("<td class=\"%s\">",$cssSw->getClass());
+		print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";
+		print  "<td width=\"10%%\" align=center class=".$cssSw->getClass().">".date("d.m.Y", $db->f("admission_endtime"))."</td>";
+		printf ("<td align=\"center\" class=\"%s\">%s</td>",$cssSw->getClass(),"100%");
+		IF ($db->f("status") == "claiming") 
+			$art = "Anmeldeliste";
+		ELSE $art = "Warteliste";
+		printf ("<td align=\"center\" class=\"%s\">%s</td>",$cssSw->getClass(),$art);
+            printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(),$db->f("seminar_id"));
       }
-
+      
 ?>
 
 	</table><table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank"><tr>
