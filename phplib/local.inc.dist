@@ -110,6 +110,15 @@ $PATH_EXPORT = "export";								//Stud.IP module: export
 $FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored. 
 
 
+/*domain names
+----------------------------------------------------------------
+to translate internal links (within Stud.IP) to the different
+domain names. To activate this feature uncomment these lines
+and add all used domain names.*/
+
+//$STUDIP_DOMAINS[1] = "";
+
+
 /*mail settings
 ----------------------------------------------------------------
 leave blank if localhost is also the mailserver*/
