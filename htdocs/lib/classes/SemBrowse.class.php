@@ -355,6 +355,7 @@ class SemBrowse {
 			}
 			$group_by_data = $snap->getGroupedResult($group_field, $data_fields);
 			$sem_data = $snap->getGroupedResult("Seminar_id");
+			
 			if ($this->sem_browse_data['group_by'] == 0){
 				$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
 				foreach ($group_by_duration as $sem_number_end => $detail){
@@ -388,6 +389,10 @@ class SemBrowse {
 					}
 				}
 			}
+			
+			//release memory
+			unset($snap);
+			unset($tmp_group_by_data);
 			
 			foreach ($group_by_data as $group_field => $sem_ids){
 				foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
@@ -457,6 +462,8 @@ class SemBrowse {
 					
 				}
 				echo "</b></font></td></tr>";
+				ob_end_flush();
+				ob_start();
 				if (is_array($sem_ids['Seminar_id'])){
 					while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
 						$sem_name = key($sem_data[$seminar_id]["Name"]);
