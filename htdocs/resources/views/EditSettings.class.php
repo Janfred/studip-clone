@@ -233,7 +233,7 @@ class EditSettings {
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="25%" align="left">
+				<td class="<? echo $cssSw->getClass() ?>" width="25%" align="left" valign="top">
 					<font size=-1><?=_("neuer Typ:")?></font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="left">
@@ -264,8 +264,8 @@ class EditSettings {
 						printf ("<input type=\"RADIO\" name=\"change_category_iconnr[%s]\" %s value=\"%s\"><img src=\"%s/pictures/%s\" />&nbsp; ", $this->db->f("category_id"), ($this->db->f("iconnr") == $key) ? "checked" : "", $key, $RELATIVE_PATH_RESOURCES, $val);
 					}
 					?>
-					<font size=-1><? ($this->db->f("is_room")) ? print "wird als <i>Raum</i> behandelt":print("");?></font><br />
-					<font size=-1><? printf(_("wird von <b>%s</b> Objekten verwendet")."</font><br />", $depRes); ?>
+					<font size=-1><? ($this->db->f("is_room")) ? print "<br />"._("wird als <i>Raum</i> behandelt"):print("");?></font>
+					<font size=-1><? printf("<br />"._("wird von <b>%s</b> Objekten verwendet")."</font><br />", $depRes); ?>
 					<font size=-1><? ($this->db->f("system")) ? print( _("(systemobjekt)")."<br />") :print("") ?></font>
 					
 					
@@ -336,32 +336,38 @@ class EditSettings {
 						<? } ?>
 						<tr>
 							<td class="<? echo $cssSw->getClass() ?>" width="33%">
-								<select name="add_type_property_id[<?=$this->db->f("category_id")?>]">
 								<?
-								$this->selectProperties($this->db->f("category_id"), TRUE);
-								//Noch nicht vergebene Properties zum Vergeben anbieten
-								while ($this->db2->next_record()) {
-									if (is_array($tmp_resvis))
-										if (!in_array($this->db2->f("property_id"), $tmp_resvis)) 
-											$give_it=TRUE;
+								$this->selectProperties($this->db->f("category_id"), TRUE);								
+								if (($this->db2->nf() != sizeof ($tmp_resvis)) || (!is_array($tmp_resvis))) {
+									?>
+									<select name="add_type_property_id[<?=$this->db->f("category_id")?>]">
+									<?
+									//Noch nicht vergebene Properties zum Vergeben anbieten
+									while ($this->db2->next_record()) {
+										if (is_array($tmp_resvis))
+											if (!in_array($this->db2->f("property_id"), $tmp_resvis)) 
+												$give_it=TRUE;
+											else
+												$give_it=FALSE;
 										else
-											$give_it=FALSE;
-									else
-										$give_it=TRUE;
-									if ($give_it) {
-										?>
-									<option value="<? echo $this->db2->f("property_id") ?>"><? echo htmlReady($this->db2->f("name")) ?></option>
-									</option>
-										<?
-											
+											$give_it=TRUE;
+										if ($give_it) {
+											?>
+										<option value="<? echo $this->db2->f("property_id") ?>"><? echo htmlReady($this->db2->f("name")) ?></option>
+										</option>
+											<?
+												
+										}
 									}
+									?>
+									</tr>
+									<td class="<? echo $cssSw->getClass() ?>" width="67%" colspan=2>
+										<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property<?=$this->db->f("category_id")?>" border=0 />&nbsp; 
+									</select>
+								<?
 								}
 								?>
-								</tr>
-								<td class="<? echo $cssSw->getClass() ?>" width="67%" colspan=2>
-									<input type="IMAGE" <?=makeButton("zuweisen", "src") ?> name="change_category_add_property<?=$this->db->f("category_id")?>" border=0 /> 
-									&nbsp;<input type="IMAGE" name="change_types" <?=makeButton("uebernehmen", "src")?> border="0" /><br />
-								</select>
+								<input type="IMAGE" name="change_types" <?=makeButton("uebernehmen", "src")?> border="0" /><br />
 							</td>
 						</tr>
 					</table>
@@ -375,7 +381,7 @@ class EditSettings {
 						<a href="<? echo $PHP_SELF ?>?delete_type=<? echo $this->db->f("category_id") ?>">
 						<?=makeButton ("loeschen", "img");
 						} else {
-							print makeButton ("n_loeschen", "img");
+							print "<img ".makeButton ("n_loeschen", "src")." border=\"0\" tooltip=\"".tooltip(_("Dieser Typ kann nicht gelöscht werden, da er von Ressourcen verwendet wird!"))."\" />";
 						} ?>
 					</font><br />
 				</td>
