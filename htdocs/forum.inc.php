@@ -680,7 +680,7 @@ function forum_print_navi ($forum) {
 **/
 function CreateTopic ($name="[no name]", $author="[no author]", $description="", $parent_id="0", $root_id="0", $tmpSessionSeminar=0, $user_id=FALSE, $writeextern=TRUE)
 
-{	global $SessionSeminar,$auth, $PHP_SELF, $user;
+{	global $SessionSeminar,$auth, $PHP_SELF, $user, $perm;
 	if (!$tmpSessionSeminar)
 		$tmpSessionSeminar=$SessionSeminar;
 	$db=new DB_Seminar;
@@ -719,9 +719,10 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 			die;
 		}
 			
-		}
+	}
 	
-	$db->query ($query);
+	if ($perm->have_perm("autor"))
+		$db->query ($query);
 	if  ($db->affected_rows() == 0) {
 		print "<p>"._("Fehler beim Anlegen eines Postings.")."</p>\n";
 		}
@@ -1434,7 +1435,7 @@ if ($update)
 *
 **/
 function DisplayFolders ($open=0, $update="", $zitat="") {
-	global $SessionSeminar,$SessSemName,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen, $SEM_CLASS, $SEM_TYPE;
+	global $SessionSeminar,$SessSemName,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen, $SEM_CLASS, $SEM_TYPE, $perm;
 
 //Zeigt im Treeview die Themenordner an
 
@@ -1532,7 +1533,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	}
 	echo "<table class=blank border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class='blank'><img src='pictures/forumleer.gif' border=0 height='4'></td></tr><tr>";
 	echo "<td align=center class=steelgraudunkel><img src='pictures/forumleer.gif' border=0 height='20' align=middle>";
-	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
+	if (($perm->have_perm("autor")) && (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"])))
 		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='pictures/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='pictures/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
 	echo "</td></tr><tr><td class=blank>&nbsp; <br>&nbsp; <br></td></tr></table>\n";
 
