@@ -418,8 +418,9 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 	if ($show_comment=="all") {
 		$commenttmpl="<table style=\"border:thin solid;margin: 5px;\" bgcolor=\"#ffff88\"><tr><td><font size=-1><b>"._("Kommentar von")." %s:</b>&nbsp;</font></td></tr><tr class=steelgrau><td class=steelgrau><font size=-1>%s</font></td></tr></table>";
 	} elseif ($show_comment=="icon") {
-		$trans_tbl = array_flip(get_html_translation_table (HTML_ENTITIES));
-		$comment = strtr($comment, $trans_tbl);
+//		$trans_tbl = array_flip(get_html_translation_table (HTML_ENTITIES));
+//		$comment = strtr($comment, $trans_tbl);
+		$comment = decodehtml($comment);
 		$comment = preg_replace("/<.*>/U","",$comment);
 		$commenttmpl="<img src=\"pictures/icon-posting.gif\" alt=\"%s: %s\" title=\"%s: %s\" ".tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE).">";
 	} else {
