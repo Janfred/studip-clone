@@ -909,36 +909,38 @@ class ResourcesObjectPerms extends ResourcesPerms {
 ResourcesUserRoots, stellt Stamm-Ressourcen zur Verfuegung
 /*****************************************************************************/
 
-class ResourcesUserRoots {
+class ResourcesRootThreads {
 	var $user_global_perm;			//Globaler Status des Users, fuer den Klasse initiert wird
-	var $user_id;					//User_id des Users;
+	var $range_id;					//the id of the User (could be a Person, Einrichtung oder Veranstaltung)
 	var $my_roots;					//Alle meine Ressourcen-Staemme
 	
 	//Konstruktor
-	function ResourcesUserRoots($user_id='') {
+	function ResourcesRootThreads($range_id='') {
 		global $user, $perm, $auth;
 		
-		if (!$this->user_id)
-			$this->user_id=$user->id;
+		if (!$this->range_id)
+			$this->range_id=$user->id;
 
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$db3=new DB_Seminar;
-		$resPerms= new ResourcesPerms($this->user_id);
+		$resPerms= new ResourcesPerms($this->range_id);
 		
 		if(func_num_args() == 1){
-			$this->user_id = func_get_arg(0);
+			$this->range_id = func_get_arg(0);
 		}
-
-		//load the global perms in the resources-system (check if the user ist resources-root)
-		$this->resources_global_perm=$resPerms->getGlobalPerms();
-		//load the global studip perms (check, if user id root)
-		$this->user_global_perm=get_global_perm($this->user_id);
 		
-		if ($this->resources_global_perm == "admin")
-			$global_perm="root";
-		else
-			$global_perm=$this->user_global_perm;
+		if (get_object_type($this->range_id) == "user") {
+			//load the global perms in the resources-system (check if the user ist resources-root)
+			$this->resources_global_perm=$resPerms->getGlobalPerms();
+			//load the global studip perms (check, if user id root)
+			$this->user_global_perm=get_global_perm($this->range_id);
+		
+			if ($this->resources_global_perm == "admin")
+				$global_perm="root";
+			else
+				$global_perm=$this->user_global_perm;
+		}
 			
 		//Bestimmen aller Root Straenge auf die ich Zugriff habe
 		switch ($global_perm) {
@@ -950,7 +952,7 @@ class ResourcesUserRoots {
 			break;
 			case "admin": 
 				//Alle meine Institute...
-				$db->query("SELECT Institut_id, inst_perms FROM user_inst WHERE inst_perms IN ('tutor', 'dozent', 'admin') AND user_inst.user_id='".$this->user_id."' ");
+				$db->query("SELECT Institut_id, inst_perms FROM user_inst WHERE inst_perms IN ('tutor', 'dozent', 'admin') AND user_inst.user_id='".$this->range_id."' ");
 				while ($db->next_record()) {
 					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Institut_id")."' AND parent_id='0'");
 					while ($db2->next_record())
@@ -974,59 +976,60 @@ class ResourcesUserRoots {
 					}
 				}
 				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->user_id."' AND parent_id='0'");
+				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
 				while ($db->next_record())
 					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");					
 			break;
 			case "dozent": 
 				//Alle meine Institute...
-				$db->query("SELECT Institut_id FROM user_inst WHERE inst_perms IN ('tutor', 'dozent') AND user_id='".$this->user_id."' ");
+				$db->query("SELECT Institut_id FROM user_inst WHERE inst_perms IN ('tutor', 'dozent') AND user_id='".$this->range_id."' ");
 				while ($db->next_record()) {
 					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Institut_id")."' AND parent_id='0'");
 					while ($db2->next_record())
 						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
 				}
 				//..und alle meine Seminare
-				$db->query("SELECT Seminar_id FROM seminar_user WHERE status IN ('tutor', 'dozent') AND user_id='".$this->user_id."' ");
+				$db->query("SELECT Seminar_id FROM seminar_user WHERE status IN ('tutor', 'dozent') AND user_id='".$this->range_id."' ");
 				while ($db->next_record()) {
 					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Seminar_id")."' AND parent_id='0'");
 					while ($db2->next_record())
 						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
 				}
 				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->user_id."' AND parent_id='0'");
+				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
 				while ($db->next_record())
 					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
 			break;
 			case "tutor": 
 				//Alle meine Institute...
-				$db->query("SELECT Institut_id FROM user_inst WHERE inst_perms='tutor' AND user_id='".$this->user_id."' ");
+				$db->query("SELECT Institut_id FROM user_inst WHERE inst_perms='tutor' AND user_id='".$this->range_id."' ");
 				while ($db->next_record()) {
 					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Institut_id")."' AND parent_id='0'");
 					while ($db2->next_record())
 						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
 				}
 				//..und alle meine Seminare
-				$db->query("SELECT Seminar_id FROM seminar_user WHERE status='tutor' AND user_id='".$this->user_id."' ");
+				$db->query("SELECT Seminar_id FROM seminar_user WHERE status='tutor' AND user_id='".$this->range_id."' ");
 				while ($db->next_record()) {
 					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Seminar_id")."' AND parent_id='0'");
 					while ($db2->next_record())
 						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
 				}
 				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->user_id."' AND parent_id='0'");
+				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
 				while ($db->next_record())
 					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
 			break;
 			case "autor": 
+			default:
 				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->user_id."' AND parent_id='0'");
+				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
 				while ($db->next_record())
 					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
 			break;
 		}
 		//Bestimmen aller weiteren Straenge, die nicht oben schon ausgewaehlt wurden
-		$db->query("SELECT resources_objects.resource_id, root_id FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id='".$this->user_id."' ");
+		$db->query("SELECT resources_objects.resource_id, root_id FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id='".$this->range_id."' ");
 		while ($db->next_record())
 			if (!$this->my_roots[$db->f("root_id")])
 				$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");

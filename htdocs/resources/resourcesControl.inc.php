@@ -528,16 +528,18 @@ else
 /*****************************************************************************
 Treeview, die Strukturdarstellung, views: resources, _resources, make_hierarchie
 /*****************************************************************************/
-if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources") {
+if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources"){
 
-	$resUser=new ResourcesUserRoots();
-	$thread=new getThread();
-	
 
 	if ($edit_structure_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
 	}
 
+	$range_id = $user->id;
+
+	$resUser=new ResourcesRootThreads($range_id);
+	$thread=new getThread();
+	
 	$roots=$resUser->getRoots();
 	if (is_array($roots)) {
 		foreach ($roots as $a) {
@@ -546,7 +548,7 @@ if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources
 		echo "<br />&nbsp;";			
 	} else {
 		echo "</td></tr>";
-		parse_msg ("infoºEs sind keine Objekte beziehungsweise Ebene angelegt, auf die Sie Zugriff haben. <br />Sie k&ouml;nnen eine neue Ebene erzeugen, wenn sie \"Neue Hierarchie erzeugen\" anw&auml;hlen.");
+		parse_msg ("info§Es sind keine Objekte beziehungsweise Ebene angelegt, auf die Sie Zugriff haben. <br />Sie k&ouml;nnen eine neue Ebene erzeugen, wenn sie \"Neue Hierarchie erzeugen\" anw&auml;hlen.");
 	}
 
 	if ($edit_structure_object) {
@@ -558,7 +560,7 @@ if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources
 /*****************************************************************************
 Listview, die Listendarstellung, views: resources, _resources, make_hierarchie
 /*****************************************************************************/
-if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists") {
+if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $resources_data["view"]=="openobject_main") {
 
 	$list=new getList();
 	$list->setRecurseLevels(-1);
@@ -567,11 +569,18 @@ if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists") {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
 	}
 	
-	if (!$list->createList($resources_data["list_open"])) {
-		echo "</td></tr>";
-		parse_msg ("infoºSie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Startpunkt in der Hierachie aus.");
+	if ($resources_data["view"]=="openobject_main") {
+		if (!$list->createRangeList($SessSemName[1])) {
+			echo "</td></tr>";
+			parse_msg ("info§Es existieren keine Ressourcen, die Sie in dieser Veranstaltung belegen k&ouml;nnen.");
+		}
+	} else {
+		if (!$list->createList($resources_data["list_open"])) {
+			echo "</td></tr>";
+			parse_msg ("info§Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Startpunkt in der Hierachie aus.");
+		}
 	}
-
+	
 	if ($edit_structure_object) {
 		echo "</form>";
 	}
@@ -587,7 +596,7 @@ if ($resources_data["view"]=="edit_object_properties" || $resources_data["view"]
 		$editObject->create_propertie_forms();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("infoºSie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
+		parse_msg ("info§Sie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
 	}
 }
 
@@ -601,7 +610,7 @@ if ($resources_data["view"]=="edit_object_perms") {
 		$editObject->create_perm_forms();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("infoºSie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
+		parse_msg ("info§Sie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
 	}
 }
 
@@ -617,7 +626,7 @@ if ($resources_data["view"]=="edit_object_schedules") {
 		$editObject->create_schedule_forms($assign_id);
 	} else {
 		echo "</td></tr>";
-		parse_msg ("infoºSie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
+		parse_msg ("info§Sie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
 	}
 }
 

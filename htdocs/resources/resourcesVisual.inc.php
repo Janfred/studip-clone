@@ -200,7 +200,31 @@ class getList extends printThread {
 		}
 	return $result_count;
 	}
+	
+	function createRangeList($range_id) {
+		$db=new DB_Seminar;	
+		
+		//create the query for all objects owned by the range
+		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $range_id);
+		$db->query($query);
+		
+		while ($db->next_record()) {
+			$this->createListObject($db->f("resource_id"));
+			$result_count++;
+		}
 
+		//create the query for all additionale perms by the range to an object 
+		$query = sprintf ("SELECT resource_id FROM  resources_user_resources WHERE user_id = '%s' ", $range_id);
+		$db->query($query);
+		
+		while ($db->next_record()) {
+			$this->createListObject($db->f("resource_id"));
+			$result_count++;
+		}
+		
+	return $result_count;		
+	}
+	
 	function createSearchList($search_array) {
 
 		$db=new DB_Seminar;	
@@ -1286,7 +1310,7 @@ class ViewSchedules extends cssClasses {
 }
 
 /*****************************************************************************
-ResourcesBrowse, the serach engine
+ResourcesBrowse, the search engine
 /*****************************************************************************/
 
 class ResourcesBrowse {
