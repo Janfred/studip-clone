@@ -79,7 +79,7 @@ $_views["SEMINAR_SEM_TREE_DEL_RANGE"] = array("query" => "DELETE FROM seminar_se
 $_views["SEMINAR_SEM_TREE_DEL_SEM_RANGE"] = array("query" => "DELETE FROM seminar_sem_tree WHERE sem_tree_id IN (&) AND seminar_id IN (&)");
 $_views["SEMINAR_SEM_TREE_DEL_SEMID_RANGE"] = array("query" => "DELETE FROM seminar_sem_tree WHERE seminar_id IN (&)");
 $_views["SEMINAR_SEM_TREE_INS_ITEM"] = array("query" => "INSERT IGNORE INTO seminar_sem_tree (seminar_id,sem_tree_id) VALUES (?,?)");
-$_views["SEMINAR_SEM_TREE_GET_IDS"] = array("query" => "SELECT DISTINCT a.sem_tree_id,b.parent_id FROM seminar_sem_tree a LEFT JOIN sem_tree b USING(sem_tree_id) WHERE seminar_id=? ORDER BY parent_id,priority");
+$_views["SEMINAR_SEM_TREE_GET_IDS"] = array("query" => "SELECT DISTINCT a.sem_tree_id,b.parent_id FROM seminar_sem_tree a INNER JOIN sem_tree b USING(sem_tree_id) WHERE seminar_id=? ORDER BY parent_id,priority");
 $_views["SEMINAR_SEM_TREE_GET_EXP_IDS"] = array("query" => "SELECT DISTINCT b.sem_tree_id,c.parent_id FROM seminare a LEFT JOIN seminar_sem_tree b USING(seminar_id) LEFT JOIN sem_tree c USING(sem_tree_id) WHERE a.Institut_id=? AND b.sem_tree_id NOT IN(&)");
 
 
