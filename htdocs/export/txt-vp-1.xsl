@@ -170,8 +170,11 @@
 		<xsl:if test="ects">
 					ECTS: <xsl:value-of select="ects"/>
 		</xsl:if>
-		<xsl:if test="bereich">
-					Bereich: <xsl:value-of select="bereich"/>
+		<xsl:if test="bereiche">
+				Bereich: 
+			<xsl:for-each select="bereiche/bereich">
+					<xsl:value-of select="bereich"/>
+			</xsl:for-each>
 		</xsl:if>
 <xsl:text>
 </xsl:text>
