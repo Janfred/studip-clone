@@ -136,6 +136,13 @@ class ShowThread extends ShowTreeRow {
 				
 				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 				
+				if ($perms == "admin") {
+					$edit.= "<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt", "img")."</a>";
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?create_hierachie_level=$resObject->id\">".makeButton("neueebene", "img")."</a>";
+				}				
+		
+				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
+
 				if ($weitere)
 					$edit.= "<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
 			
@@ -146,15 +153,6 @@ class ShowThread extends ShowTreeRow {
 					
 				if ((!$weitere) && ($perms == "admin") && ($resObject->isDeletable()))
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen", "img")."</a>";
-				
-
-				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
-							
-				if ($perms == "admin") {
-					$edit.= "<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt", "img")."</a>";
-					$edit.= "&nbsp;<a href=\"$PHP_SELF?create_hierachie_level=$resObject->id\">".makeButton("neueebene", "img")."</a>";
-					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
-				}
 			}	
 
 			//Daten an Ausgabemodul senden (aus resourcesVisual)
