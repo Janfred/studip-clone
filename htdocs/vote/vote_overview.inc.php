@@ -636,7 +636,7 @@ function createLabel(){
 		"status_button_stopped" => "fortsetzen",
 		"status_tooltip_stopped" => _("Diesen Eintrag jetzt fortsetzen."),
 
-		"restart_button" => _("zuruecksetzen"),	
+		"restart_button" => "zuruecksetzen",
 		"restart_tooltip" => _("Alle abgegebenen Stimmen l&ouml;schen."),		
 
 		"edit" => _("Bearbeiten"),
