@@ -95,7 +95,7 @@ if ($dec)
 	}
 
 //Delete (and archive) the lecture
-if ($kill) {
+if ($archive_kill) {
    $run = TRUE;
    $s_id=$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"];
     ## Do we have permission to do so?
@@ -415,7 +415,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?dec=TRUE"><img src="./pictures/buttons/vorherige-button.gif" border=0></a> <? }
 					if (!$links_admin_data["sem_id"])
 						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?list=TRUE&new_session=TRUE"><img src="./pictures/buttons/abbrechen-button.gif" border=0></a> <? } ?>
-					&nbsp;<a href="<? echo $PHP_SELF ?>?kill=TRUE"><img src="./pictures/buttons/archivieren-button.gif" border=0></a>
+					&nbsp;<a href="<? echo $PHP_SELF ?>?archive_kill=TRUE"><img src="./pictures/buttons/archivieren-button.gif" border=0></a>
 					<?
 					//can we dec?
 					if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) {
