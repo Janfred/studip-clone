@@ -37,7 +37,16 @@ if ($auth->auth["uid"]!="nobody"){
 	
 	
 	$db = new DB_Seminar;
+	$sess->register("messenger_data");
 	$sms= new messaging;
+	
+	//Initial time, all msg's from this time will later be counted as new
+	if (!$messenger_data["messenger_start"])
+		if ($my_messaging_settings["last_visit"] < time())
+			$messenger_data["messenger_start"] = $my_messaging_settings["last_visit"];
+		else
+			$messenger_data["messenger_start"] = time();
+
 	
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
 	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
@@ -53,30 +62,25 @@ if ($auth->auth["uid"]!="nobody"){
 	$query =  "SELECT message_id,mkdate,user_id_snd,message,user_id_snd FROM globalmessages WHERE user_id_rec='".$auth->auth["uname"]."'";
 	$db->query($query);
 	$old_msg = 0;
-	$new_msg = array();
+        $new_msgs = FALSE;
 	
 	while ($db->next_record()){
 		if ($cmd=="read" AND $msg_nr==$db->f("message_id")){
 			$msg_text=$db->f("message");
 			$msg_snd=$db->f("user_id_snd");
+                        $messenger_data["read_new_msgs"][$db->f("message_id")]=TRUE;
+			
 		}
-		if ($db->f("mkdate") <= ($now-$refresh)){
-			if (!preg_match("/chat_with_me/i", $db->f("message"))) {
-				$old_msg++;
-			}
-		} else {
-			if (preg_match("/chat_with_me/i", $db->f("message")) && $online[$db->f("user_id_snd")]){
-				$new_msg[] = date("H:i",$db->f("mkdate")). sprintf(_(" Sie wurden von <b>%s</b> zum Chatten eingeladen!"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))));
+                if (($db->f("mkdate") > $messenger_data["messenger_start"]) && (!$messenger_data["read_new_msgs"][$db->f("message_id")])) {
+			//this is a new msg, will be shown as new msg until the user wants to see it
+			if ($db->f("user_id_snd") == "____%system%____"){
+				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
 			} else {
-				if ($db->f("user_id_snd") == "____%system%____"){
-					$new_msg[]=date("H:i",$db->f("mkdate")) . sprintf(_(" Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
-				} else {
-					$new_msg[]=date("H:i",$db->f("mkdate")). sprintf(_(" Sie haben eine Nachricht von <b>%s</b> erhalten! %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
-				}
+				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");
 			}
 			$refresh+=10;
-		}
-		
+		} else
+                	$old_msg++;
 	}
 }
 // Start of Output
@@ -111,7 +115,7 @@ function again_and_again()
 
 setTimeout('again_and_again();',<? print($refresh*1000);?>);
 <?
-($new_msg[0] OR $cmd) ? print ("focus();\n") : print ("blur();\n");
+($new_msgs[0] OR $cmd) ? print ("focus();\n") : print ("blur();\n");
 ?>
 //-->
 </script>
@@ -120,7 +124,7 @@ setTimeout('again_and_again();',<? print($refresh*1000);?>);
 <tr>
 	<td class="topic" colspan=2><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Messenger (<?=$auth->auth["uname"]?>)</b></td>
 </tr>
-<tr><td class="blank" width="50%" ><table width="100%" border=0 cellpadding=1 cellspacing=0 valign="top">
+<tr><td class="blank" width="50%" valign="top"><br /><table width="100%" border=0 cellpadding=1 cellspacing=0 valign="top">
 <?php
 
 $c=0;
@@ -129,7 +133,7 @@ if (is_array($online)) {
 	foreach($online as $tmp_uname => $detail){
 		if ($detail['is_buddy']){
 			if (!$c){
-				echo "<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>" . _("Buddies:") . "</b></td></tr>";
+				echo "<tr><td class=\"blank\" colspan=2 align=\"left\" ><font size=-1><b>" . _("Buddies:") . "</b></td></tr>";
 			}
 			echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a " . tooltip(sprintf(_("letztes Lebenszeichen: %s"),date("i:s",$detail['last_action'])),false) . " href=\"javascript:coming_home('about.php?username=$tmp_uname');\">".htmlReady($detail['name'])."</a></font></td>\n";
 			echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_uname'><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
@@ -137,7 +141,7 @@ if (is_array($online)) {
 		}
 	}
 } else {
-	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Buddy ist online.") . "</font>";
+	echo "<tr><td class='blank' colspan='2' align='left' ><font size=-1>" . _("Kein Nutzer ist online.") . "</font>";
 }
 
 if (!$my_messaging_settings["show_only_buddys"]) {
@@ -153,13 +157,17 @@ if (!$my_messaging_settings["show_only_buddys"]) {
 ?>
 </td></tr></table></td><td class="blank" width="50%" valign="top"><br><font size=-1>
 <?
-($old_msg) ? printf(_("%s alte Nachricht(en)&nbsp;%s[lesen]%s"),$old_msg,"<a href=\"javascript:coming_home('sms.php')\">","</a><br>")
-		 : print (_("Keine alten Nachrichten") . "<br>");
-if ($new_msg[0]){
-	echo implode("<br>",$new_msg);
-}
-else {
-	echo"\n<br>" . _("Keine neuen Nachrichten");
+if ($old_msg) 
+	printf(_("%s alte Nachricht(en)&nbsp;%s[lesen]%s"),$old_msg,"<a href=\"javascript:coming_home('sms.php')\">","</a><br>");
+elseif (!is_array($new_msgs))
+	print (_("Keine Nachrichten") . "<br>");
+else
+	print (_("Keine alten Nachrichten") . "<br>");
+
+if (is_array($new_msgs)) {
+	print ("<br /><b>"._("neue Nachrichten:") . "</b><br />");
+	foreach ($new_msgs as $val)
+        	print "<br />".$val;
 }
 
 ?>
