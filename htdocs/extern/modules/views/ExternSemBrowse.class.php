@@ -235,7 +235,7 @@ class ExternSemBrowse extends SemBrowse {
 					case 1:
 					$range_path_new = NULL;
 					if ($the_tree->tree_data[$group_field]) {
-						$range_path = explode(" > ", $the_tree->getShortPath($group_field));
+						$range_path = explode(" ^ ", $the_tree->getShortPath($group_field, "^"));
 						$range_path_level = $this->config->getValue("Main", "rangepathlevel");
 						if ($range_path_level > sizeof($range_path))
 							$range_path_level = sizeof($range_path);
