@@ -1,8 +1,13 @@
 31.03.2003 v 0.9
-- neues Exporttool, unterstützt Ausgaben in XML, RTF und PDF
-- neue Einrichtungssuche, verwendet den Bereichsbaum
-- neuer Bereichsbaum zur Darstellung der Uni-Hierachie
-- bei regelmäßigen Veranstaltungen können nun ein Raum für jeden Termin angegeben werden
+- Internationalisierung: weite Teile des Systems können nun auch in Englisch benutzt werden
+- Ressourcenverwaltung wird nun für Verwaltung der Räume von Veranstaltungen genutzt (falls aktiviert)
+- neue Ressourcenverwaltung (eigenständiges Modul) zur Verwaltung von Räumen, Gebäuden, Geräten und 
+  weiteren Ressourcen. 
+- neues Adressbuch auf Grundlage der Buddies
+- neues Exporttool, unterstützt Ausgaben in XML, RTF, TXT und PDF
+- neue Einrichtungssuche, verwendet den Einrichtungsbaum
+- neuer Einrichtungsbaum zur Darstellung der Uni-Hierachie
+- bei regelmäßigen Veranstaltungen kann nun ein Raum für jeden Termin angegeben werden
 - Ablaufplanverwaltung überarbeitet
 - neue Titelverwaltung für Nutzernamen mit vor- und nachgestellten Titeln
 - weitere Detailverbesserungen und Bugfixes
@@ -26,9 +31,9 @@
 - Äusserst umfangreiche und flexible Funktionen zur Teilnehmerbegrenzung von Veranstaltungen. Veranstaltungen können
   mit einem eigenen Losverfahren oder nach chronologischer Anmeldung mit unterschiedlichen Kontingenten für beliebig viele
   Studiengänge begrenzt werden
-- Neue Ebene "Studienfach" eingebaut. Studenten können nun im System hinterlegen, welche Studienfächer sie
+- neue Ebene "Studienfach" eingebaut. Studenten können nun im System hinterlegen, welche Studienfächer sie
   studieren
-- Neuer Archivierungsassistent
+- neuer Archivierungsassistent
 - System zur optischen Gewichtung des Alters von Objekten eingeführt (Pfeile sind je nach alter mehr oder weniger rot)
 - Veranstaltungssuche/Übersicht verbessert: optische besser hervorgehobene Gliederung, frei wählbare Gliederungsmodi,
   verbesserte und übersichtlichere Darstellung
