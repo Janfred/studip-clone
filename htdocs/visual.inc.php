@@ -638,4 +638,36 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 }
 
 
+/**
+* Returns a an entry in the top navigation bar
+*
+* 
+* @access        public        
+* @param        string $icon       	 Path to the icon
+* @param        string $URL		URL on button
+* @param        string $text		Hovertext under the Button
+* @param        string $tooltip		for Tooltip Window
+* @param        integer $size		Width of the Element
+* @param        string $target		same or new window...
+* @param        string $align		
+* @param        string $toolwindow	For a special Toolwindow
+* @return        string
+*/
+function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE")
+{
+	if ($toolwindow == "FALSE") {
+		$tool = tooltip($tooltip);
+	} else {
+		$tool = tooltip($tooltip,TRUE,TRUE);
+	}
+	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
+
+	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"45\"><br>"
+			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"6\" width=\"$size\"><br>"
+			  ."<b><font size=\"2\">".$text."</font></b></a><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"30\">";
+	$toolbar .= "</td>\n";
+	return $toolbar;
+}
 ?>
