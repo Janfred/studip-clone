@@ -48,7 +48,7 @@ if ($ILIAS_CONNECT_ENABLE)
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-	checkObject();
+//	checkObject();
 	checkObjectModule("ilias_connect");
 
 ?>
