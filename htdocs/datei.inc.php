@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+/*
 function doc_count ($parent_id) {
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -53,6 +53,38 @@ function doc_challenge ($parent_id, $doc_ids=array()) {
 		} 
 	return $doc_ids;
 	}
+*/
+	
+function getFolderId(&$folders,$parent_id){
+	if(!$folders) $folders[]=$parent_id;
+	$db = new DB_Seminar;
+	$db->query ("SELECT folder_id FROM folder WHERE range_id='$parent_id'");
+		while ($db->next_record()) {
+			getFolderId($folders,$db->f("folder_id"));
+			$folders[]=$db->f("folder_id");
+		}
+	return;
+}
+	
+function doc_count ($parent_id) {
+	$db=new DB_Seminar;
+	getFolderId($arr,$parent_id);
+	if (count($arr)==1) $in="('$arr[0]')";
+        else $in="('".join("','",$arr)."')";
+	$db->query ("SELECT count(*) as count FROM dokumente WHERE range_id IN $in");
+	$db->next_record();
+	return $db->Record[0];
+}
+
+function doc_challenge ($parent_id){
+	$db=new DB_Seminar;
+	getFolderId($arr,$parent_id);
+	if (count($arr)==1) $in="('$arr[0]')";
+        else $in="('".join("','",$arr)."')";
+	$db->query ("SELECT dokument_id FROM dokumente WHERE range_id IN $in");
+	while($db->next_record()) $result[] = $db->Record[0];
+	return $result;
+}
 
 function move_item ($item_id, $new_parent) {
 

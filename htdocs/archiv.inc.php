@@ -68,7 +68,7 @@ function dump_sem($sem_id)
 
 	//wer macht den Dozenten?
 	$db=new DB_Seminar;
-	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
+	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 
 	if ($db->affected_rows() > 1)
 		$dump.= "<tr><td><b>DozentInnen: </b></td><td>";
@@ -79,7 +79,7 @@ function dump_sem($sem_id)
 	$dump.="</td></tr>\n";
 		
 	//und wer ist Tutor?
-	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
+	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
 
 	if ($db->affected_rows() > 1)
 		$dump.="<tr><td><b>TutorInnen: </b></td><td>";
@@ -180,7 +180,7 @@ function dump_sem($sem_id)
 	$db3->query("SELECT Name, url FROM Institute WHERE Institut_id = '$iid'");
 	$db3->next_record();
 	$dump.="<tr><td><b>Heimatinstitut:&nbsp;</b></td><td>".$db3->f("Name")."</td></tr>\n";
-	$db3->query("SELECT Name, url FROM Institute LEFT JOIN seminar_inst USING (institut_id) WHERE seminar_id = '$sem_id' AND Institute.institut_id != '$iid'");
+	$db3->query("SELECT Name, url FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE seminar_id = '$sem_id' AND Institute.institut_id != '$iid'");
 	$cd=$db3->affected_rows();
 	if ($db3->affected_rows() == 1)
 		$dump.="<tr><td><b>beteiligtes Institut:&nbsp;</b></td><td>";
@@ -205,12 +205,13 @@ function dump_sem($sem_id)
 	$db3->next_record();
 	$dump.= "<tr><td><b>Postings:&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
 
-	$db3->query("SELECT count(*) as anzahl FROM dokumente WHERE range_id='$sem_id'");
+	$db3->query("SELECT count(*) as anzahl FROM dokumente WHERE Seminar_id='$sem_id'");
 	$db3->next_record();
 	$docs=$db3->f("anzahl");
-	$db3->query("SELECT count(*) as anzahl FROM dokumente, termine WHERE termine.range_id = '$sem_id' AND dokumente.range_id=termin_id");
-	$db3->next_record();
-	$docs=$docs + $db3->f("anzahl");
+	// ????!!
+	//$db3->query("SELECT count(*) as anzahl FROM dokumente, termine WHERE termine.range_id = '$sem_id' AND dokumente.range_id=termin_id");
+	//$db3->next_record();
+	//$docs=$docs + $db3->f("anzahl");
 	$dump.= "<tr><td><b>Dokumente:&nbsp;</b></td><td>".$docs."</td></tr>\n";
 
 	$dump.= "</table>\n";
@@ -368,7 +369,7 @@ function dump_sem($sem_id)
 		$sortby = "doll DESC";
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
-		$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) LEFT OUTER JOIN px_topics USING (user_id, Seminar_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key' GROUP by seminar_user.user_id ORDER BY $sortby");
+		$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id)  WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
 		IF (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
 	  	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
@@ -389,11 +390,12 @@ function dump_sem($sem_id)
 
 				$Dokumente = 0;
 				$UID = $db->f("user_id");
-				$db2->query ("SELECT count(dokument_id) AS doll FROM termine LEFT JOIN dokumente ON termine.termin_id = dokumente.range_id WHERE termine.range_id = '$sem_id' AND dokumente.user_id = '$UID' GROUP by termine.range_id");
-				while ($db2->next_record()) {
-					$Dokumente += $db2->f("doll");
-				}
-				$db2->query ("SELECT count(dokument_id) AS doll FROM dokumente WHERE dokumente.range_id = '$sem_id' AND dokumente.user_id = '$UID' GROUP by dokumente.range_id");
+				//???!!!
+				//$db2->query ("SELECT count(dokument_id) AS doll FROM termine LEFT JOIN dokumente ON termine.termin_id = dokumente.range_id WHERE termine.range_id = '$sem_id' AND dokumente.user_id = '$UID' GROUP by termine.range_id");
+				//while ($db2->next_record()) {
+				//	$Dokumente += $db2->f("doll");
+				//}
+				$db2->query ("SELECT count(dokument_id) AS doll FROM dokumente WHERE dokumente.Seminar_id = '$sem_id' AND dokumente.user_id = '$UID'");
 				while ($db2->next_record()) {
 					$Dokumente += $db2->f("doll");
 				}
@@ -401,14 +403,14 @@ function dump_sem($sem_id)
 				$dump.="</td><td align=center>";
 
 				$Literatur = 0;
-				$db2->query ("SELECT count(literatur_id) AS doll FROM termine LEFT JOIN literatur ON termine.termin_id = literatur.range_id WHERE termine.range_id = '$sem_id' AND literatur.user_id = '$UID' GROUP by termine.range_id");
-				while ($db2->next_record()) {
-					$Literatur += $db2->f("doll");
-				}
-				$db2->query ("SELECT count(literatur_id) AS doll FROM literatur WHERE literatur.range_id = '$sem_id' AND literatur.user_id = '$UID' GROUP by literatur.range_id");
-				while ($db2->next_record()) {
-					$Literatur += $db2->f("doll");
-				}
+				//$db2->query ("SELECT count(literatur_id) AS doll FROM termine LEFT JOIN literatur ON termine.termin_id = literatur.range_id WHERE termine.range_id = '$sem_id' AND literatur.user_id = '$UID' GROUP by termine.range_id");
+				//while ($db2->next_record()) {
+				//	$Literatur += $db2->f("doll");
+				//}
+				//$db2->query ("SELECT count(literatur_id) AS doll FROM literatur WHERE literatur.range_id = '$sem_id' AND literatur.user_id = '$UID' GROUP by literatur.range_id");
+				//while ($db2->next_record()) {
+				//	$Literatur += $db2->f("doll");
+				//}
 				$dump.= $Literatur;
 				$username=$db->f("username");
 				$dump.="</td>";

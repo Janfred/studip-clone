@@ -211,7 +211,7 @@ while (list ($key, $val) = each ($gruppe)) {
 if (!isset($sortby) || $sortby=="") 
 	$sortby = "doll DESC";
 
-$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) LEFT OUTER JOIN px_topics USING (user_id, Seminar_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key' GROUP by seminar_user.user_id ORDER BY $sortby");
+$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id)  WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
 if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle

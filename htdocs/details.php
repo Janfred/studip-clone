@@ -17,9 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
-	  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	  $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 ?>
 
@@ -62,7 +61,6 @@ IF (($SessSemName[1] =="") && (!isset($sem_id)))
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
 	}
-
 //wenn externer Aufruf, nachfragen, ob das Seminar abonniert werden soll
 if (($sem_id) && (!$perm->have_perm("admin"))) {
 	if ($perm->have_perm("user")) { //Add lecture only if logged in	
@@ -177,8 +175,8 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="47%" valign="top">
 				<?		
-				//wer macht den Dozenten?
-				$db->query ("SELECT Vorname, Nachname, seminar_user.user_id, username, status FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
+			//wer macht den Dozenten?
+				$db->query ("SELECT Vorname, Nachname, seminar_user.user_id, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
 					printf ("<font size=-1><b>DozentInnen:</b></font><br />");
 				else
@@ -195,7 +193,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				<td class="<? echo $cssSw->getClass() ?>" width="47%" valign="top">
 				<?		
 				//und wer ist Tutor?
-				$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
+				$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
 					printf ("<font size=-1><b>TutorInnen:</b></font><br />");
 				else
@@ -390,9 +388,9 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 				<?
-				$db3->query("SELECT count(*) as anzahl FROM px_topics WHERE Seminar_id = '$sem_id'");
+				$db3->query("SELECT count(*) as anzahl FROM dokumente WHERE Seminar_id = '$sem_id'");
 				$db3->next_record();
-				printf ("<font size=-1><b>Dokumente:&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("docs")) ? $db3->f("docs") : "keine");
+				printf ("<font size=-1><b>Dokumente:&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anzahl")) ? $db3->f("anzahl") : "keine");
 				?>
 				</td>
 			</tr>
