@@ -329,8 +329,8 @@ function quotes_encode ($description,$author) {
 * @return       string
 */
 function formatReady ($what, $trim = TRUE, $extern = FALSE) {
-	$what = htmlReady($what, $trim, FALSE);
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
+		$what = htmlReady($what, $trim, FALSE);
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
 		$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, $extern), $extern), $extern);
 		$what = explode('ö', $what);
@@ -356,10 +356,10 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE) {
 * @return       string
 */
 function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
-	$what = htmlReady($what, $trim, FALSE);
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
+		$what = htmlReady($what, $trim, FALSE);
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
-		$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), FALSE), $extern), $extern), $extern);
+		$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), FALSE), FALSE, TRUE, $extern), $extern), $extern);
 		$what = explode('ö', $what);
 		$i = 0;
 		foreach ($what as $w)
