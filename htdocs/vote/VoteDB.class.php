@@ -844,7 +844,7 @@ class VoteDB extends StudipObject {
 	     "\"".$chdate."\", \"".$resultvisibility."\", ".
 	     "\"".$multiplechoice."\", \"".$anonymous."\", ".
 	     "\"".$changeable."\", ".$co_visibility.")";
-	   //      echo $query;
+
 	   if (!$this->db->query ($query)) {
 	       $this->throwError (mysql_errno (), mysql_error (), 
 				  __LINE__, __FILE__, ERROR_CRITICAL);
@@ -888,6 +888,7 @@ class VoteDB extends StudipObject {
 	       "changeable=\"".$changeable."\", ".
 	       "co_visibility=".$co_visibility." ".
 	       "WHERE vote_id=\"".$voteID."\"";
+
 	   $this->db->query($query);
 	   $query="DELETE FROM voteanswers WHERE ".
 	     "vote_id=\"".$voteID."\"";

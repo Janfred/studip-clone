@@ -192,7 +192,7 @@ function printTitleField ( $title = "" ) {
     }
 
     if( strpos($_SERVER["HTTP_REFERER"], "page=edit") )
-	$title = stripslashes($title);
+       $title = stripslashes($title);
     
     $html = "<font size=-1><b>" . _("Titel:")	. "</b></font><br>"
 	. "<input type=text size=50 maxlength=100 name=\"title\" value=\"".htmlReady($title)."\" ".$js." tabindex=1>"
@@ -219,16 +219,17 @@ function printQuestionField ( $question = "" ) {
     }
 
     if( strpos($_SERVER["HTTP_REFERER"], "page=edit") )
-	$question = stripslashes($question);
+       $question = stripslashes($question);
 
     $html = "<font size=-1><b>" . _("Frage:")	. "</b></font><br>";
 
-    if( $pageMode != MODE_RESTRICTED )
+    if( $pageMode != MODE_RESTRICTED ) {
 	$html .= "<textarea cols=50 rows=2 style=\"width:100%;\" name=\"question\" ".$js." tabindex=2>".htmlReady($question)."</textarea>";
-    else 
-	$html .= "<div class=steelgraulight style=\"width:100%; padding:2px;\">"
-	    . "<font size=-1>".formatReady($question)."</font>"
-	    . "</div>";
+    } else {
+       $html .= "<div class=steelgraulight style=\"width:100%; padding:2px;\">"
+	  . "<font size=-1>".formatReady($question)."</font>"
+	  . "</div>";
+    }
 
     $html .= "<br><br>\n";
     echo $html;

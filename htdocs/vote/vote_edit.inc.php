@@ -255,7 +255,7 @@ if( isset( $saveButton_x ) ) {
 
     if( $pageMode != MODE_RESTRICTED ) {
 	/* -------------------------------------------------------- */
-	$vote->setQuestion( $question );
+	$vote->setQuestion ( $question );
     
 	// remove any empty answers
 	for( $i=0; $i<count($answers); $i++ ) {
@@ -328,7 +328,10 @@ if( isset( $saveButton_x ) ) {
 	}
     }
 
-    if( ! $vote->isError() ) {
+    if ( ! $vote->isError() ) {
+if ($GLOBALS["pageMode"] == MODE_RESTRICTED)
+     $vote->question = addslashes ($vote->question);
+
 	// save vote to database!
 	$vote->executeWrite();
 
