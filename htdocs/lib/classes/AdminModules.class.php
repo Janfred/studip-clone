@@ -39,6 +39,8 @@ require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("dates.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/Modules.class.php");
+require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipLitList.class.php");
+
 
 class AdminModules extends Modules {
 	var $db;
@@ -74,8 +76,8 @@ class AdminModules extends Modules {
 		$this->registered_modules["personal"]["msg_deactivate"] = _("Die Personalliste kann jederzeit deaktiviert werden.");
 
 		$this->registered_modules["literature"]["name"] = _("Literatur");
-		$this->registered_modules["literature"]["msg_warning"] = _("Wollen Sie wirklich den Literaturverwaltung deaktivieren und damit die erfasste Literatur und Links l&ouml;schen?");
-		$this->registered_modules["literature"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Literaturverwaltung werden die eingestellte Literatur und Links ebenfalls gel&ouml;scht!");
+		$this->registered_modules["literature"]["msg_warning"] = _("Wollen Sie wirklich die Literaturverwaltung deaktivieren und damit die erfassten Literaturlisten l&ouml;schen?");
+		$this->registered_modules["literature"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Literaturverwaltung werden <b>%s</b> &ouml;ffentliche / nicht &ouml;ffentliche Literaturlisten ebenfalls gel&ouml;scht!");
 		$this->registered_modules["literature"]["msg_activate"] = _("Die Literaturverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["literature"]["msg_deactivate"] = _("Die Literaturverwaltung kann jederzeit deaktiviert werden.");
 
@@ -193,19 +195,12 @@ class AdminModules extends Modules {
 	}
 
 	function getModuleLiteratureExistingItems($range_id) {
-		$query = sprintf ("SELECT COUNT(literatur_id) as items FROM literatur WHERE range_id = '%s' ", $range_id);
-
-		$this->db->query($query);
-		$this->db->next_record();
-		
-		return $this->db->f("items");
+		$list_count = StudipLitList::GetListCountByRange($range_id);
+		return ($list_count["visible_list"] || $list_count["invisible_list"]) ? $list_count["visible_list"] . "/" . $list_count["invisible_list"] : false;
 	}
 
 	function moduleLiteratureDeactivate($range_id) {
-		$db = new DB_Seminar;
-
-		$query = sprintf ("DELETE FROM literatur WHERE range_id='%s'", $range_id);
-		$db->query($query);
+		return StudipLitList:: DeleteListsByRange($range_id);
 	}
 
 	function getModuleIlias_ConnectExistingItems($range_id) {
