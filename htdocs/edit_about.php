@@ -29,6 +29,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/kategorien.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/messaging.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 
 // Klassendefinition
 
@@ -430,7 +431,7 @@ function select_studiengang()   //Hilfsfunktion, erzeugt eine Auswahlbox mit noc
 
   while ($this->db->next_record())
    {
-   echo "<option value=\"".$this->db->f("studiengang_id")."\">".htmlReady(substr($this->db->f("name"),0,50))."</option>";
+   echo "<option value=\"".$this->db->f("studiengang_id")."\">".htmlReady(my_substr($this->db->f("name"),0,50))."</option>";
    }
   echo "</select>";
 
@@ -445,7 +446,7 @@ function select_inst()   //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswä
 
   while ($this->db->next_record())
    {
-   echo "<option value=\"".$this->db->f("Institut_id")."\">".htmlReady(substr($this->db->f("Name"),0,50))."</option>";
+   echo "<option value=\"".$this->db->f("Institut_id")."\">".htmlReady(my_substr($this->db->f("Name"),0,50))."</option>";
    }
   echo "</select>";
 
