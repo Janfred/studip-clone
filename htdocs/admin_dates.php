@@ -1,4 +1,4 @@
-<?php
+<?php
 /*
 admin_dates.php - Terminverwaltung von Stud.IP
 Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>
@@ -365,7 +365,6 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 		 	
 		 	//delete the temporary data (actual data will be loaded from db while showing the date)
 		 	if ($tmp_result["changed"]) {
-		 		echo changed;
 		 		$admin_dates_data["form_data"][$t_id] = '';
 		 	}
 		}
