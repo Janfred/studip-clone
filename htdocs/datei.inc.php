@@ -142,47 +142,52 @@ function parse_link($link, $level=0) {
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
 	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName;
 	$db = new DB_Seminar();
-		
-	$zip_file_id=md5(uniqid("jabba"));
-	
+
+	$zip_file_id = md5(uniqid("jabba"));
+
 	//create temporary Folder
-	exec ("mkdir $TMP_PATH/$zip_file_id");
-	$tmp_full_path="$TMP_PATH/$zip_file_id";
-	
+	$tmp_full_path = "$TMP_PATH/$zip_file_id";
+	mkdir($tmp_full_path);
+
 	//create folder content
-	$in="('".join("','",$file_ids)."')";	
+	$in = "('".join("','",$file_ids)."')";
 	$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
 	$db->query($query);
 	while ($db->next_record()) {
 		$docs++;
-		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
+		@copy($UPLOAD_PATH . '/' . $db->f('dokument_id'), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
 	}
 
 	//zip stuff
-	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$TMP_PATH."/".$zip_file_id." * ");
+	@chdir($tmp_full_path);
+	exec ($ZIP_PATH.' -9 -R '.$TMP_PATH.'/'.$zip_file_id.' * ');
+	@chdir($ABSOLUTE_PATH_STUDIP);
  	exec ("rm -r $tmp_full_path");
- 	exec ("mv ".$TMP_PATH."/".$zip_file_id.".zip ".$TMP_PATH."/".$zip_file_id);
- 	
+	@rename( $TMP_PATH.'/'.$zip_file_id.'.zip', $TMP_PATH.'/'.$zip_file_id);
+
+
  	return $zip_file_id;
 }
 
 
 function createFolderZip ($folder_id) {
 	global $TMP_PATH, $ZIP_PATH;
-	$zip_file_id=md5(uniqid("jabba"));
-	
+	$zip_file_id = md5(uniqid("jabba"));
+
 	//create temporary Folder
-	exec ("mkdir $TMP_PATH/$zip_file_id");
-	$tmp_full_path="$TMP_PATH/$zip_file_id";
-	
+	$tmp_full_path = "$TMP_PATH/$zip_file_id";
+	mkdir($tmp_full_path);
+
 	//create folder comntent
 	createTempFolder ($folder_id, $tmp_full_path);
 
 	//zip stuff
-	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$TMP_PATH."/".$zip_file_id." * ");
+	chdir ($tmp_full_path);
+	exec ($ZIP_PATH.' -9 -R '.$TMP_PATH.'/'.$zip_file_id.' * ');
+	chdir($ABSOLUTE_PATH_STUDIP);
  	exec ("rm -r $tmp_full_path");
- 	exec ("mv ".$TMP_PATH."/".$zip_file_id.".zip ".$TMP_PATH."/".$zip_file_id);
- 	
+ 	rename( $TMP_PATH.'/'.$zip_file_id.'.zip', $TMP_PATH.'/'.$zip_file_id);
+
  	return $zip_file_id;
 }
 
@@ -195,26 +200,26 @@ function createTempFolder ($folder_id, $tmp_full_path, $perm_check = TRUE) {
 	$query = sprintf ("SELECT dokument_id, filename, url FROM dokumente WHERE range_id = '%s' %s ORDER BY name, filename", $folder_id, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
 	$db->query($query);
 	while ($db->next_record()) {
-		if ($db->f("url")!="") {  // just a linked file
+		if ($db->f("url") != "") {  // just a linked file
 			$linkinfo .= "\r\n".$db->f("filename");
 		} else {
 			$docs++;
-			exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
+			copy( $UPLOAD_PATH.'/'.$db->f('dokument_id'), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
 		}
 	}
 	if ($linkinfo) {
 		$linkinfo = _("Hinweis: die folgenden Dateien sind nicht im Archiv enthalten, da sie lediglich verlinkt wurden:").$linkinfo;
-		exec ("touch $tmp_full_path/info.txt");
+		//exec ("touch $tmp_full_path/info.txt");
 		$fp = fopen ("$tmp_full_path/info.txt","w");
 		fwrite ($fp,$linkinfo);
 		fclose ($fp);
 	}
-	
+
 	$db->query("SELECT folder_id, name FROM folder WHERE range_id = '$folder_id' ORDER BY name");
 	while ($db->next_record()) {
 		$folders++;
-		$tmp_sub_full_path = $tmp_full_path."/[".$folders."] ".prepareFilename($db->f("name"), FALSE);
-		exec ("mkdir '$tmp_sub_full_path' ");
+		$tmp_sub_full_path = $tmp_full_path.'/['.$folders.']_'.escapeshellcmd(prepareFilename($db->f('name'), FALSE));
+		mkdir($tmp_sub_full_path);
 		createTempFolder($db->f("folder_id"), $tmp_sub_full_path, $perm_check);
 	}
 	return TRUE;
@@ -444,14 +449,14 @@ function form($refresh = FALSE) {
 
 //kill the forbidden characters, shorten filename to 31 Characters
 function prepareFilename($filename, $shorten = FALSE) {
-	$bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?");
-	$replacements = array ("", "", "", "'", "", "", "", "", "", "");
-	
+	$bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?", ' ');
+	$replacements = array ("", "", "", "'", "", "", "", "", "", '_');
+
 	$filename=str_replace($bad_characters, $replacements, $filename);
-	
+
 	if ($filename{0} == ".")
 		$filename = substr($filename, 1, strlen($filename));
-	
+
 	if ($shorten) {
 		$ext = getFileExtension ($filename);
 		$filename = substr(substr($filename, 0, strrpos($filename,$ext)-1), 0, (30 - strlen($ext))).".".$ext;
