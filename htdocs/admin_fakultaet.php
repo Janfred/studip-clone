@@ -62,10 +62,10 @@ $_msg = "";
 
 //DB views
 $_views["FAK_ALL_INFO"]= array("pk"=>"Fakultaets_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.*, count(b.Institut_id) AS anzahl FROM Fakultaeten a LEFT JOIN institute b USING(fakultaets_id)
+							"query"=>"SELECT a.*, count(b.Institut_id) AS anzahl FROM Fakultaeten a LEFT JOIN Institute b USING(fakultaets_id)
 									GROUP BY a.Fakultaets_id ORDER BY ! !");
 $_views["FAK_ONE_INFO"]= array("pk"=>"Fakultaets_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.*,count(b.Institut_id) AS anzahl FROM Fakultaeten a LEFT JOIN institute b USING(fakultaets_id) 
+							"query"=>"SELECT a.*,count(b.Institut_id) AS anzahl FROM Fakultaeten a LEFT JOIN Institute b USING(fakultaets_id) 
 									WHERE a.Fakultaets_id=? GROUP BY a.Fakultaets_id");
 $_views["FAK_ADMINS"]= array("pk"=>"user_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT " . $_fullname_sql['no_title'] . " AS fullname, c.username,a.user_id FROM fakultaet_user a LEFT JOIN 
