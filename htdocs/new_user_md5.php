@@ -50,7 +50,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	// Enthaelt Funktionen zum Updaten der Wartelisten
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	// Enthaelt Funktionen fuer Statusgruppen
 require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 	// Enthaelt Funktionen fuer Adressbuchverwaltung
-require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 	// Enthaelt Funktionen fuer Nachrichtenubermittlung
+require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	 	// Enthaelt Funktionen fuer Nachrichtenubermittlung
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 if ($RESOURCES_ENABLE) {
