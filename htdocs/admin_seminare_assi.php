@@ -774,7 +774,7 @@ if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 				if ($cnt <= 100)
 					$sem_create_data["sem_all_ratio"]=(100 - $cnt);
 				else {
-					$errormsg.=sprintf ("error§"._("Die Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!")."§");	
+					$errormsg.= "error§". _("Die Werte der einzelnen Kontigente &uuml;bersteigen 100%. Bitte &auml;ndern Sie die Kontigente!") . "§";	
 					$level=4;
 				}
 		}
@@ -829,9 +829,9 @@ if ($cmd_e_x)
 			if (($sem_create_data["sem_admission_date"] > $tmp_first_date) && ($tmp_first_date >0)){
 				if ($tmp_first_date > 0)
 					if ($sem_create_data["sem_admission"] == 1)
-						$errormsg.= sprintf ("error§"._("Das Losdatum liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern sie das Losdatum!")."§", date ("d.m.Y", $tmp_first_date));
+						$errormsg.= sprintf ("error§"._("Das Losdatum liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern Sie das Losdatum!")."§", date ("d.m.Y", $tmp_first_date));
 					else
-				$level=4;$errormsg.= sprintf ("error§"._("Das Enddatum der Kontingentierung liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern sie das Enddatum der Kontingentierung!")."§", date ("d.m.Y", $tmp_first_date));
+				$level=4;$errormsg.= sprintf ("error§"._("Das Enddatum der Kontingentierung liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern Sie das Enddatum der Kontingentierung!")."§", date ("d.m.Y", $tmp_first_date));
 			}
 		} elseif (($sem_create_data["sem_admission_date"] > $sem_create_data["term_first_date"]) && ($sem_create_data["term_first_date"])) {
 				if ($sem_create_data["sem_admission"] == 1)
