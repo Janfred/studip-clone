@@ -305,6 +305,8 @@ if ($no_access) {
 	die;
 }
 
+/*
+
 if (substr($path_file,0,6) != "ftp://") {
 	//Datei per HTTP verschicken
 	
@@ -365,6 +367,36 @@ if (substr($path_file,0,6) != "ftp://") {
 	TrackAccess ($file_id);
 	
 	ftp_quit($ftp);
+}
+
+*/
+
+//Datei verschicken
+if ($type != 5 && $type != 6){
+	$filesize = filesize($path_file);
+} else {
+	$filesize = strlen($the_data);
+}
+header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
+header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+header("Cache-Control: post-check=0, pre-check=0", false);
+if ($_SERVER['HTTPS'] == "on")
+	header("Pragma: public");
+else
+	header("Pragma: no-cache");
+header("Cache-Control: private");
+header("Expires: 0");
+
+header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
+if ($type != 6)
+	header("Content-length: $filesize");
+header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
+if ($type != 5){
+	readfile($path_file);
+	TrackAccess ($file_id);
+} else {
+	echo $the_data;
 }
 
 //remove temporary file after zipping
