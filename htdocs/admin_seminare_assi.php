@@ -631,31 +631,7 @@ if ($cmd_d_x)
 						}
 			//check overlaps...
 			if ($RESOURCES_ENABLE) {
-				$resAssign = new VeranstaltungResourcesAssign();
 				$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
-				if (is_array($checkResult)) {
-					$overlaps_detected=FALSE;
-					foreach ($checkResult as $key=>$val)
-						if ($val["overlap_assigns"] == TRUE)
-							$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
-					}
-				if ($overlaps_detected) {
-					$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
-					$i=0;
-					foreach ($overlaps_detected as $key=>$val) {
-						$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
-						//show the first overlap
-						list(, $val2) = each($val);
-						$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-						if (sizeof($val) >1)
-							$errormsg.=", ... ("._("und weitere").")";
-						$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
-						$i++;
-					}
-					$errormsg.="</font>§";
-				}
-				unset($checkResult);
-				unset($overlaps_detected);
 			}
 		}
 	else {
@@ -698,60 +674,45 @@ if ($cmd_d_x)
 					$errormsg=$errormsg."error§Sie haben nicht alle Felder bei der Termineingabe ausgef&uuml;llt, bitte korrigieren sie dies!§";
 					$just_informed4=TRUE;
 					}
+	}
 
-			if (is_array($checkResult)) {
-				$overlaps_detected=FALSE;
-				foreach ($checkResult as $key=>$val)
-					if ($val["overlap_assigns"] == TRUE)
-						$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
-				}
-			if ($overlaps_detected) {
-				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
-				foreach ($overlaps_detected as $key=>$val) {
-					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
-					//show first overlap
-					list(, $val2) = each($val);
-					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-					if (sizeof($val) >1)
-						$errormsg.=", ... ("._("und weitere").")";
-					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
-				}
-				$errormsg.="</font>§";
-			}
-			unset($checkResult);
-			unset($overlaps_detected);
-	} 
 	if ($sem_create_data["sem_vor_termin"] == -1);
 	else {
 		if ((($vor_stunde) && (!$vor_end_stunde)) || ((!$vor_stunde) && ($vor_end_stunde)))
 			$errormsg=$errormsg."error§Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der Vorbesprechung aus!§";	
+
 		//check overlaps...
 		if ($RESOURCES_ENABLE) {
-			$resAssign = new VeranstaltungResourcesAssign();
-			$checkResult = $resAssign->insertDateAssign(FALSE, $sem_create_data["sem_vor_resource_id"], $sem_create_data["sem_vor_termin"], $sem_create_data["sem_vor_end_termin"],TRUE);
-			if (is_array($checkResult)) {
-				$overlaps_detected=FALSE;
-				foreach ($checkResult as $key=>$val)
-					if ($val["overlap_assigns"] == TRUE)
-						$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
-				}
-			if ($overlaps_detected) {
-				$errormsg=$errormsg."error§"._("Der gew&uuml;nschte Raum f&uuml;r die Vorbesprechung &uuml;berschneidet sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die Zeit!");
-				foreach ($overlaps_detected as $key=>$val) {
-					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
-					//show first overlap
-					list(, $val2) = each($val);
-					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-					if (sizeof($val) >1)
-						$errormsg.=", ... ("._("und weitere").")";
-					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
-				}
-				$errormsg.="</font>§";
-			}
-			unset($checkResult);
-			unset($overlaps_detected);
+			$checkResult = array_merge($checkResult, $resAssign->insertDateAssign(FALSE, $sem_create_data["sem_vor_resource_id"], $sem_create_data["sem_vor_termin"], $sem_create_data["sem_vor_end_termin"],TRUE));
 		}
 	}
+	
+	//create overlap array
+	if (is_array($checkResult)) {
+		$overlaps_detected=FALSE;
+		foreach ($checkResult as $key=>$val)
+			if ($val["overlap_assigns"] == TRUE)
+					$overlaps_detected[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
+	}
+	
+	//generate bad msg if overlaps exists
+	if ($overlaps_detected) {
+		$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+		$i=0;
+		foreach ($overlaps_detected as $val) {
+			$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($val["resource_id"])).": ";
+			//show the first overlap
+			list(, $val2) = each($val["overlap_assigns"]);
+			$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
+			if (sizeof($val) >1)
+				$errormsg.=", ... ("._("und weitere").")";
+			$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["resource_id"], $val2["begin"]);
+			$i++;
+		}
+		$errormsg.="</font>§";
+		unset($overlaps_detected);		
+	}
+	
 	if (!$errormsg)
 		$level=4;
 	else
@@ -1165,7 +1126,7 @@ if ($cmd_f_x)
 			//update/insert the assigned roomes
 			if ($RESOURCES_ENABLE && $db->affected_rows()) {
 				$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-				$updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]);
+				$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
 			}
 		}
 		
@@ -1187,7 +1148,7 @@ if ($cmd_f_x)
 					//update/insert the assigned roomes
 					if ($RESOURCES_ENABLE && $db->affected_rows()) {
 						$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-						$updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]);
+						$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
 					}
 				}
 		}
@@ -2658,12 +2619,13 @@ if ($level==6)
 									foreach ($resources_booked as $key=>$val) {
 										if ($i)
 											$rooms.=", ";
-										$rooms.="<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">".htmlReady(getResourceObjectName($key))."</a>";
+										$rooms.= sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+										$i++;
 									}
 									if (sizeof($resources_booked) == 1)
-										printf ("<li>"._(" Der Raum %s wurde gebucht.")."<br /><br />", $rooms);
+										printf ("<li>"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."<br /><br />", $rooms);
 									else
-										printf ("<li>"._("Die R&auml;ume %s wurden gebucht."), "<br /><br />", $rooms);
+										printf ("<li>"._("Die Belegung der R&auml;ume %s wurde in die Ressourcenverwaltung eingetragen."). "<br /><br />", $rooms);
 								}
 								if ($resources_failed) {
 									$i=0;
@@ -2671,12 +2633,14 @@ if ($level==6)
 									foreach ($resources_failed as $key=>$val) {
 										if ($i)
 											$rooms.=", ";
-										$rooms.="<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">".htmlReady(getResourceObjectName($key))."</a>";
+										$rooms.= sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+										$i++;
 									}
 									if (sizeof($resources_failed) == 1)
-										printf ("<li><font color=\"red\">"._("Der Raum %s konnte wegen &Uuml;berschneidungen nicht gebucht werden!")."</font><br /><br />", $rooms);
+										printf ("<li><font color=\"red\">"._("Eine oder mehrere Belegungen des Raum %s konnte wegen &Uuml;berschneidungen nicht in die Ressourcenverwaltung eingetragen werden!")."<br />", $rooms);
 									else
-										printf ("<li><font color=\"red\">"._("Die R&auml;ume %s konnten wegen &Uuml;berschneidungen nicht gebucht werden!")."</font><br /><br />", $rooms);
+										printf ("<li><font color=\"red\">"._("Eine oder mehrere Belegungen der R&auml;ume %s konnten wegen &Uuml;berschneidungen nicht nicht in die Ressourcenverwaltung eingetragen werden!")."<br />", $rooms);
+									print _("Bitte &uuml;berpr&uuml;fen sie manuell die Belegungen!")."</font><br /><br />";
 								}
 							}
 								

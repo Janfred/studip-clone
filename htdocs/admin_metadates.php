@@ -289,7 +289,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$overlaps_detected=FALSE;
 				foreach ($updateResult as $key=>$val)
 					if ($val["overlap_assigns"] == TRUE) {
-						$overlaps_detected[$val["resource_id"]] = $val["overlap_assigns"];
+						$overlaps_detected[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
 						list($key2, $val2) = each($val["overlap_assigns"]);
 						$begin = $val2["begin"];
 						$end = $val2["end"];
@@ -316,14 +316,14 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			if ($overlaps_detected) {
 				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 				$i=0;
-				foreach ($overlaps_detected as $key=>$val) {
-					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+				foreach ($overlaps_detected as $val) {
+					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($val["resource_id"])).": ";
 					//show the first overlap
-					list(, $val2) = each($val);
+					list(, $val2) = each($val["overlap_assigns"]);
 					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
 					if (sizeof($val) >1)
 						$errormsg.=", ... ("._("und weitere").")";
-					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
+					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["overlap_assigns"], $val2["begin"]);
 					$i++;
 				}
 				$errormsg.="</font>§";
@@ -337,15 +337,15 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			if (is_array($rooms_id))
 				foreach ($rooms_id as $key=>$val) {
 					if ($i)
-					$rooms_booked.=", ";
+						$rooms_booked.=", ";
 					$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
 					$i++;
 				}
 				
 			if ($i == 1)
-				$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+				$errormsg.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
 			elseif ($i)
-				$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+				$errormsg.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
  		}
 	}
 	
