@@ -103,11 +103,29 @@ class cssClassSwitcher {
 		$ret = "";
 		if($GLOBALS["auth"]->auth["jscript"] && !$is_called) {
 			$ret = "<script type=\"text/javascript\">
-					function hexToRgb(hexcolor){
-						var rgb = 'rgb(' + parseInt(hexcolor.substr(1,2),16) + ',' + parseInt(hexcolor.substr(3,2),16) + ','
-									+ parseInt(hexcolor.substr(5,2),16) +')';
-						return rgb;
+					function convert(x, n, m, d){
+						if (x == 0) return '00';
+						var r = '';
+						while (x != 0){
+							r = d.charAt((x & m)) + r;
+							x = x >>> n
+						}
+						return (r.length%2) ? '0' + r : r;
 					}
+					
+					function toHexString(x){
+						return convert(x, 4, 15, '0123456789abcdef');
+					}
+					
+					function rgbToHex(rgb_str){
+						var ret = '#';
+						var rgb_arr = rgb_str.substring(rgb_str.indexOf('(')+1,rgb_str.lastIndexOf(')')).split(',');
+						for(var i = 0; i < rgb_arr.length; ++i){
+							ret += toHexString(rgb_arr[i]);
+						}
+						return ret;
+					}
+					
 					function doHover(theRow, theFromColor, theToColor){
 						if (theFromColor == '' || theToColor == '') {
 							return false;
@@ -120,7 +138,6 @@ class cssClassSwitcher {
 						} else {
 							return false;
 						}
-						hexToRgb(theToColor);
 						if (theRow.tagName.toLowerCase() != 'tr'){
 							if ((theRow.style.backgroundColor.toLowerCase() == theFromColor.toLowerCase()) || (theRow.style.backgroundColor == hexToRgb(theFromColor))) {
 								theRow.style.backgroundColor = theToColor;
@@ -128,7 +145,7 @@ class cssClassSwitcher {
 						} else {
 							var rowCellsCnt  = theCells.length;
 							for (var c = 0; c < rowCellsCnt; c++) {
-								if ((theCells[c].style.backgroundColor == theFromColor.toLowerCase()) || (theCells[c].style.backgroundColor == hexToRgb(theFromColor))) {
+								if ((theCells[c].style.backgroundColor == theFromColor.toLowerCase()) || (rgbToHex(theCells[c].style.backgroundColor) == theFromColor.toLowerCase())) {
 									theCells[c].style.backgroundColor = theToColor;
 								}
 							}
