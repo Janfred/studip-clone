@@ -227,7 +227,8 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 
 $ALLOW_CHANGE_USERNAME = TRUE;				//if true, users are allowed to change their username
 $ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are allowed to change their email-address
-$ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself 
+$ALLOW_CHANGE_NAME = TRUE;				//if true, users are allowed to change their name
+$ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself
 
 //IDs of courses, in which users were entered when they were promoted to 'autor'
 //$AUTO_INSERT_SEM[1]="<seminar_id>";
