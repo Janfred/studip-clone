@@ -37,12 +37,19 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 		$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 		$chatServer->logoutUser($user->id);
 	}
-	
+	/*
 	//Wenn Option dafuer gewaehlt, vorliegende Nachrichen loeschen
-	if ($my_messaging_settings["delete_messages_after_logout"]) {
-		$sms->delete_all_messages();
-	}
-	
+	#if ($my_messaging_settings["delete_messages_after_logout"]) {
+		if ($my_messaging_settings["delete_messages_after_logout"] == "all") {
+			$sms->delete_all_messages();
+		} else if ($my_messaging_settings["delete_messages_after_logout"] == "7d") {
+			$sms->delete_all_messages(FALSE, "7d");
+		} else if ($my_messaging_settings["delete_messages_after_logout"] == "30d") {
+			$sms->delete_all_messages(FALSE, "30d");
+		}
+		
+	#}
+	*/
 	$logout_user=$user->id;
 	$logout_language = $_language;
 	//Logout aus dem Sessionmanagement
@@ -87,6 +94,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	<?
 					$msg= _("Sie sind nun aus dem System abgemeldet");
 					parse_msg ("info§$msg","§","blank", 1);
+
 	?>
 					<tr>
 					<td class="blank"><blockquote><font size=-1><a href="index.php"><b>&nbsp;<? print _("Hier</b></a> geht es wieder zur Startseite.");?>
