@@ -41,6 +41,8 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	
 	var $edit_item_id;
 	
+	var $search_result;
+	
 	/**
 	* constructor
 	*
@@ -126,6 +128,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		for ($i = 0; $i < count($items_to_order); ++$i){
 			$rs = $view->get_query("view:TREE_UPD_PRIO:$i,$items_to_order[$i]");
 		}
+		$this->mode = "";
 		return true;
 	}
 	
@@ -150,7 +153,86 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		}
 		return false;
 	}
-		
+	
+	function execCommandSearchStudip(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+		$parent_id = $_REQUEST['parent_id'];
+		$search_str = $_REQUEST['edit_search'];
+		$view = new DbView();
+		if(strlen($search_str) > 1){
+			$rs = $view->get_query("view:TREE_SEARCH_INST:$search_str");
+			while ($rs->next_record()){
+				$this->search_result[$rs->f("Institut_id")]['name'] = $rs->f("Name");
+				$this->search_result[$rs->f("Institut_id")]['studip_object'] = "inst";
+			}
+			if ($parent_id == "root"){
+				$rs = $view->get_query("view:TREE_SEARCH_FAK:$search_str");
+				while ($rs->next_record()){
+					$this->search_result[$rs->f("Fakultaets_id")]['name'] = $rs->f("Name");
+					$this->search_result[$rs->f("Fakultaets_id")]['studip_object'] = "fak";
+				}
+			}
+		}
+		if ($this->mode == "NewItem"){
+			$_REQUEST['item_id'] = $parent_id;
+			$this->execCommandNewItem();
+		} else {
+			$this->anchor = $item_id;
+			$this->edit_item_id = $item_id;
+		}
+		return false;
+	}
+	
+	function execCommandEditItem(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+		if ($this->isItemAdmin($item_id)){
+			$this->mode = "EditItem";
+			$this->anchor = $item_id;
+			$this->edit_item_id = $item_id;
+		}
+		return false;
+	}
+	
+	function execCommandInsertItem(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+		$parent_id = $_REQUEST['parent_id'];
+		$item_name = $_REQUEST['edit_name'];
+		$tmp = explode(":",$_REQUEST['edit_studip_object']);
+		if ($tmp[1] == "fak" || $tmp[1] == "inst"){
+			$studip_object = $tmp[1];
+			$studip_object_id = $tmp[0];
+		} else {
+			$studip_object = "";
+			$studip_object_id = "";
+		}
+		$view = new DbView();
+		if ($this->mode == "NewItem" && $item_id){
+			if ($this->isItemAdmin($parent_id)){
+				$priority = count($this->tree->getKids($parent_id));
+				$rs = $view->get_query("view:TREE_INS_ITEM:$item_id,$parent_id,$item_name,$priority,$studip_object,$studip_object_id");
+				if ($rs->affected_rows()){
+					$this->mode = "";
+					$this->anchor = $item_id;
+					$this->open_items[$item_id] = true;
+				}
+			}
+		}
+		if ($this->mode == "EditItem"){
+			if ($this->isItemAdmin($item_id)){
+				$rs = $view->get_query("view:TREE_UPD_ITEM:$item_name,$studip_object,$studip_object_id,$item_id");
+				if ($rs->affected_rows()){
+					$this->mode = "";
+					$this->anchor = $item_id;
+					$this->open_items[$item_id] = true;
+				}
+			}
+		}
+		return true;
+	}
+				
 	function isItemAdmin($item_id){
 		return ($this->tree_status[$this->tree->getAdminRange($item_id)] == 1) ? true :false;
 	}
@@ -243,7 +325,8 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	}
 	
 	function getEditItemContent(){
-		$content = "\n<form action=\"" . $this->getSelf("cmd=InsertItem") . "\" method=\"POST\">";
+		$content = "\n<form action=\"" . $this->getSelf("cmd=InsertItem&item_id={$this->edit_item_id}") . "\" method=\"POST\">";
+		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
 		$content .= "\n<table width=\"90%\" border =\"0\" style=\"border-style: solid; border-color: #000000;  border-width: 1px;font-size: 10pt;\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
 		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\" ><b>". _("Element editieren") . "</b></td></tr>";
 		$content .= "\n<tr><td class=\"steel1\" width=\"60%\">". _("Name des Elements:") . "&nbsp;"
@@ -252,14 +335,23 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 				. makeButton("absenden","src") . tooltip("Einstellungen übernehmen") . "></td></tr>";
 		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\"><b>". _("Element mit Stud.IP Einrichtung verlinken") . "</b></td></tr>";
 		$content .= "\n<tr><td colspan=\"2\" class=\"steel1\">" . _("Stud.IP Einrichtung:") . "&nbsp;";
-		$content .= "\n<select>";
+		$content .= "\n<select name=\"edit_studip_object\">\n<option value=\"none\" ";
+		$content .= ($this->tree->tree_data[$this->edit_item_id]['studip_object']) ? ">" : "selected >";
+		$content .= _("Kein Link") . "</option>";
 		if ($this->tree->tree_data[$this->edit_item_id]['studip_object']){
-			$content .= "\n<option selected value=\"".$this->tree->tree_data[$this->edit_item_id]['studip_object_id']
-					. "\">" . $this->tree->tree_data[$this->edit_item_id]['name'] ."</option>";
+			$content .= "\n<option selected value=\"". $this->tree->tree_data[$this->edit_item_id]['studip_object_id'] . ":"
+					. $this->tree->tree_data[$this->edit_item_id]['studip_object'] ."\">" 
+					. $this->tree->tree_data[$this->edit_item_id]['name'] ."</option>";
+		}
+		if (count($this->search_result)){
+			foreach ($this->search_result as $key => $value){
+				$content .= "\n<option value=\"" . $key . ":" . $value['studip_object'] . "\">" . $value['name'] . "</option>";
+			}
 		}
 		$content .= "</select></td></tr></form>";
-		$content .= "\n<form action=\"" . $this->getSelf("cmd=SearchStudIP") . "\" method=\"POST\"><tr><td class=\"steel1\">" . _("Stud.IP Einrichtung suchen:") . "&nbsp;";
-		$content .= "\n<input type=\"TEXT\" name=\"edit_name\" size=\"30\"></td><td class=\"steel1\" align=\"left\"><input type=\"image\" "
+		$content .= "\n<form action=\"" . $this->getSelf("cmd=SearchStudIP&item_id={$this->edit_item_id}") . "\" method=\"POST\"><tr><td class=\"steel1\">" . _("Stud.IP Einrichtung suchen:") . "&nbsp;";
+		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
+		$content .= "\n<input type=\"TEXT\" name=\"edit_search\" size=\"30\"></td><td class=\"steel1\" align=\"left\"><input type=\"image\" "
 				. makeButton("suchen","src") . tooltip("Einrichtung suchen") . "></td></tr>";
 		$content .= "\n</table>";
 		
