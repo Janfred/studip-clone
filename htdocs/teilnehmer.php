@@ -208,7 +208,7 @@ if ($cmd=="admission_rein") {
 
 // so bin auch ich berufen?
 
-if (isset($berufen)) {
+if (isset($add_tutor_x)) {
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte AND $SemUserStatus!="tutor") {
 				// nur wenn wer ausgewaehlt wurde
