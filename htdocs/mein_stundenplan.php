@@ -57,7 +57,7 @@ check_schedule_settings();
 if (!$print_view) {
 	include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
 	if ($inst_id) //Links if we show in the instiute-object-view
-		include "$ABSOLUTE_PATH_STUDIP/links1.php";
+		include "$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php";
 	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
 		include "$RELATIVE_PATH_CALENDAR/calendar_links.inc.php";
 	else
