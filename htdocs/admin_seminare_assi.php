@@ -24,15 +24,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Set this to something, just something different...
 $hash_secret = "nirhtak";
 
-include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; 	//hier werden die sessions initialisiert
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 	//hier werden die sessions initialisiert
 
-require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php"; 		//Funktionen fuer Nachrichtenmeldungen
-require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; 		//wir brauchen die Seminar-Typen
-require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";  //Bereitstellung weiterer Daten
-require_once "$ABSOLUTE_PATH_STUDIP/functions.php";		//noch mehr Stuff
-require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen koennen
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
-require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); 		//Funktionen fuer Nachrichtenmeldungen
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		//wir brauchen die Seminar-Typen
+require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");  //Bereitstellung weiterer Daten
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");		//noch mehr Stuff
+require_once ("$ABSOLUTE_PATH_STUDIP/forum.inc.php");		//damit wir Themen anlegen koennen
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");		//Aufbereitungsfunktionen
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");		//Terminfunktionen
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 
@@ -41,6 +41,11 @@ if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	$resAssign = new VeranstaltungResourcesAssign();
+}
+
+//cancel
+if ($cancel_x) {
+	header ("Location: admin_seminare1.php?");
 }
 
 // Get a database connection and Stuff
@@ -99,7 +104,17 @@ if (($sem_create_data["sem_entry"]) && (!$form))
 
 //empfangene Variablen aus diversen Formularen auswerten
 if ($start_level) { //create defaults
+	$Modules = new Modules;
+	
 	$sem_create_data["sem_class"]=$class;
+	
+	foreach ($SEM_TYPE as $key => $val) {
+		if ($val["class"] == $class) {
+			$sem_create_data["modules_list"] = $Modules->getLocalModules("", "sem", false, $key);
+			break;
+		}
+	}
+	print_r ($sem_create_data["modules_list"]);
 
 	if ($SEM_CLASS[$class]["turnus_default"]) 
 		$sem_create_data["term_art"] = $SEM_CLASS[$class]["turnus_default"];
@@ -1171,10 +1186,12 @@ if ($cmd_f_x)
 		$db3->query($query);
 
 		//Standard Thema im Forum anlegen, damit Studis auch ohne Zutun des Dozenten diskutieren koennen
-		CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user_id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $sem_create_data["sem_id"]);
+		if ($sem_create_data["modules_list"]["forum"])
+			CreateTopic(_("Allgemeine Diskussionen"), get_fullname($user_id), _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $sem_create_data["sem_id"]);
 		
 		//Standard Ordner im Foldersystem anlegen, damit Studis auch ohne Zutun des Dozenten Uploaden k&ouml;nnen
-		$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
+		if ($sem_create_data["modules_list"]["documents"])
+			$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
 		
 		//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
 		if ($sem_create_data["sem_vor_termin"] <>-1) {
@@ -1225,22 +1242,28 @@ if ($cmd_f_x)
 //Nur der Form halber... es geht weiter zur Literaturliste
 if ($cmd_g_x)
    	{
+	if (!$sem_create_data["modules_list"]["literature"]) {
+		header ("Location: admin_seminare1.php");
+		die;
+	}
 	$level=7;
    	}
 
 //Eintragen der Literatur und Links
 if ($cmd_h_x)
 	{
-	if ($sem_create_data["lit_entry"])
+	if ($sem_create_data["lit_entry"]) {
 		$db->query("UPDATE literatur SET literatur='".$sem_create_data["sem_literat"]."', links='".$sem_create_data["sem_links"]."', chdate='".time()."' WHERE literatur_id='".$sem_create_data["sem_lit_id"]."'");
-	else
-		{
+	} else {
 		$sem_create_data["sem_lit_id"]=md5(uniqid($hash_secret));
 		$db->query("INSERT INTO literatur SET literatur_id='".$sem_create_data["sem_lit_id"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', literatur='".$sem_create_data["sem_literat"]."', links='".$sem_create_data["sem_links"]."', mkdate='".time()."', chdate='".time()."' ");
-		}
+	}
 	if ($db->affected_rows()) {
 		$sem_create_data["lit_entry"]=TRUE;
-		header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+		if ($sem_create_data["modules_list"]["schedule"])
+			header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+		else
+			header ("Location: admin_seminare1.php");
 		die;
 		}
 	else
@@ -1289,17 +1312,17 @@ if (!$sem_create_data["sem_class"]) {
 			<td class="blank" valign="top">
 				<blockquote><br />
 				<?=_("Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent wird Sie Schritt f&uuml;r Schritt durch die notwendigen Schritte zum Anlegen einer neuen Veranstaltung in Stud.IP leiten."); ?><br><br>
-				<?=_("Bitte geben Sie zun&auml;chst an, welche Art von Veranstaltung Sie neu anlegen m&ouml;chten:"); ?><br /><br />
-				</blockqoute>
+				<?=_("Bitte geben Sie zun&auml;chst an, welche Art von Veranstaltung Sie neu anlegen m&ouml;chten:"); ?>
+				</blockquote>
 			</td>
 			<td class="blank" align="right" valign="top" rowspan="2">
 				<img src="./locale/<?=$_language_path?>/LC_PICTURES/assistent.jpg" border="0">
 			</td>
 		</tr>
 		<tr>
-			<td class="blank">&nbsp;
+			<td class="blank" colspan="1">&nbsp;
 				<blockquote>
-					<table cellpadding=0 cellspacing=2 width="100%" border="0">
+					<table cellpadding=0 cellspacing=2 width="90%" border="0">
 					<?
 					foreach ($SEM_CLASS as $key=>$val) {
 						echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"pictures/forumrot.gif\" border=0 /></a><td>";
@@ -1515,10 +1538,12 @@ elseif ((!$level) || ($level==1))
 								echo "<option selected value=\"0\">"._("regelm&auml;&szlig;ig")."</option>";
 							else
 								echo "<option value=\"0\">"._("regelm&auml;&szlig;ig")."</option>>";
-							if ($sem_create_data["term_art"] == 1) 
-								echo "<option selected value=\"1\">"._("unregelm&auml;&szlig;ig oder Blockveranstaltung")."</option>";
-							else
-								echo "<option value=\"1\">"._("unregelm&auml;&szlig;ig oder Blockveranstaltung")."</option>";
+							if ($sem_create_data["modules_list"]["schedule"]) {
+								if ($sem_create_data["term_art"] == 1) 
+									echo "<option selected value=\"1\">"._("unregelm&auml;&szlig;ig oder Blockveranstaltung")."</option>";
+								else
+									echo "<option value=\"1\">"._("unregelm&auml;&szlig;ig oder Blockveranstaltung")."</option>";
+							}
 							if ($sem_create_data["term_art"] == -1) 
 								echo "<option selected value=\"-1\">"._("keine Termine eingeben")."</option>";
 							else
@@ -2162,7 +2187,8 @@ if ($level==3) {
 							</tr>
 						<?
 						}
-						?>
+					if ($sem_create_data["modules_list"]["schedule"]) {
+					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?=_("Vorbesprechung:"); ?>
@@ -2196,6 +2222,9 @@ if ($level==3) {
 							>
 						</td>
 					</tr>
+					<?
+					}
+					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
@@ -2536,7 +2565,7 @@ if ($level==5)
 				<?=_("Sie haben nun alle n&ouml;tigen Daten zum Anlegen der Veranstaltung eingegeben. Wenn Sie auf &raquo;Fertig stellen&laquo; klicken, wird die Veranstaltung in Stud.IP &uuml;bernommen. Wenn Sie sich nicht sicher sind, ob alle Daten korrekt sind, &uuml;berpr&uuml;fen Sie noch einmal Ihre Eingaben auf den vorhergehenden Seiten."); ?><br><br>
 				<form method="POST" action="<? echo $PHP_SELF ?>">
 					<input type="HIDDEN" name="form" value=5>
-					<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?> >>" name="cmd_d">&nbsp;<input type="IMAGE" <?=makeButton("fertigstellen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_f">
+					<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?> >>" name="cmd_d">&nbsp;<input type="IMAGE" <?=makeButton("anlegen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_f">
 				</form>
 				</blockqoute>
 			</td>
@@ -2574,7 +2603,7 @@ if ($level==6)
 					<?=_("Bitte korrigieren Sie die Daten."); ?>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_a">
+						<input type="IMAGE" <?=makeButton("zur&uuml;ck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_a">
 					</form>
 					</blockqoute>
 				</td>
@@ -2586,12 +2615,31 @@ if ($level==6)
 		elseif ($successful_entry==2)
 			{ ?>
 			<tr>
-				<td class="blank">
+				<td class="blank" valign="top">
 					<blockquote>
-					<?=_("Sie haben die Veranstaltung bereits angelegt und k&ouml;nnen nun mit der Literatur- und Linkverwaltung und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen."); ?><br><br><br>
+					<?
+					print _("Sie haben die Veranstaltung bereits angelegt.");
+					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
+						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))
+							print " "._("Sie k&ouml;nnen nun mit der Literatur- und Linkverwaltung und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen."); 
+						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["literature"]))	
+							print " "._("Sie k&ouml;nnen nun mit dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen.");
+						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))	
+							print " "._("Sie k&ouml;nnen nun mit der Literatur- und Linkverwaltung fortfahren oder an diesem Punkt abbrechen."); 						
+						print "<br><br><font size=-1>"._("Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und diese Schritte sp&auml;ter nachzuholen.")."</font>";
+					}
+					?>
+					<br /><br />
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_a">
+						<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel_finished">
+						<?
+						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
+							?>
+							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_g">
+							<?
+						}
+						?>
 					</form>
 					</blockqoute>
 				</td>
@@ -2607,11 +2655,29 @@ if ($level==6)
 				<td class="blank" valign="top">
 					<blockquote>
 					<b><?=_("Die Daten der Veranstaltung wurden in das System &uuml;bernommen"); ?></b><br><br>
-					<?=_("Die Veranstaltung ist damit eingerichtet. Wenn Sie nun auf &raquo;weiter >>&laquo; klicken, k&ouml;nnen Sie weitere -optionale- Daten f&uuml;r die Veranstaltung eintragen. Sie haben die M&ouml;glichkeit, Literatur- und Linklisten einzugeben und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen."); ?><br><br>
-					<font size=-1><?=_("Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und die n&auml;chsten Schritte sp&auml;ter nachzuholen."); ?></font><br><br>
+					<?
+					print _("Die Veranstaltung ist jetzt eingerichtet.");
+					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
+						print " "._("Wenn Sie nun auf &raquo;weiter >>&laquo; klicken, k&ouml;nnen Sie weitere -optionale- Daten f&uuml;r die Veranstaltung eintragen.");
+						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))
+							print " "._("Sie haben die M&ouml;glichkeit, Literatur- und Linklisten einzugeben und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen."); 
+						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["literature"]))	
+							print " "._("Sie haben die M&ouml;glichkeit, mit Hilfe des Termin-Assisten einen Ablaufplan zu erstellen.");
+						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))	
+							print " "._("Sie haben die M&ouml;glichkeit, Literatur- und Linklisten einzugeben."); 						
+						print "<br><br><font size=-1>"._("Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und die n&auml;chsten Schritte sp&auml;ter nachzuholen.")."</font>";
+					}
+					?><br><br>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_g">
+						<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("fertigstellen");?>" name="cancel_finished">						
+						<?
+						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
+							?>
+							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_g">
+							<?
+						}
+						?>
 					</form>
 					</blockqoute>
 				</td>
@@ -2724,7 +2790,10 @@ if ($level==7)
 			<td class="blank" valign="top">
 				<blockquote>
 				<b><?=_("Schritt 6: Eingeben der Literatur- und Linkliste"); ?></b><br><br>
-				<? printf (_("Sie k&ouml;nnen nun Literatur und Links f&uuml;r die eben angelegte Veranstaltung <b>%s</b> eingeben. Wenn Sie auf &raquo;weiter&laquo; klicken, haben Sie die M&ouml;glichkeit, mit dem Termin-Assistenten einen Ablaufplan f&uuml;r die Veranstaltung anzulegen."), $sem_create_data["sem_name"]);?>
+				<? printf (_("Sie k&ouml;nnen nun Literatur und Links f&uuml;r die eben angelegte Veranstaltung <b>%s</b> eingeben."), $sem_create_data["sem_name"]);
+				if ($sem_create_data["modules_list"]["schedule"])
+					print " "._("Wenn Sie auf &raquo;weiter&laquo; klicken, haben Sie die M&ouml;glichkeit, mit dem Termin-Assistenten einen Ablaufplan f&uuml;r die Veranstaltung anzulegen.")
+				?>
 				<br><br>
 				</blockqoute>
 			</td>
@@ -2742,10 +2811,21 @@ if ($level==7)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							<input type="IMAGE"<?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_h">
+							<input type="IMAGE"<?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">
+							<?
+							if ($sem_create_data["modules_list"]["schedule"]) {
+								?>
+								&nbsp;<input type="IMAGE"<?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_h">
+								<?
+							} else {
+								?>
+								&nbsp;<input type="IMAGE"<?=makeButton("uebernehmen", "src"); ?> border=0 value="<?=_("uebernehmen");?>" name="cmd_h">
+								<?
+							}
+							?>
 						</td>
 					</tr>
-						<tr <? $cssSw->switchClass() ?>>
+					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?=_("Literaturliste:"); ?>
 						</td>
@@ -2772,7 +2852,19 @@ if ($level==7)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_h">
+							<input type="IMAGE"<?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cancel">
+							<?
+							if ($sem_create_data["modules_list"]["schedule"]) {
+								?>
+								&nbsp;<input type="IMAGE"<?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_h">
+								<?
+							} else {
+								?>
+								&nbsp;<input type="IMAGE"<?=makeButton("uebernehmen", "src"); ?> border=0 value="<?=_("uebernehmen");?>" name="cmd_h">
+								<?
+							}
+							?>
+							
 						</td>
 					</tr>
 				</table>
