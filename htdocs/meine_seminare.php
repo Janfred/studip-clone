@@ -323,19 +323,20 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 // Content-field
 			echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 			print_seminar_content($semid, $values);
-			if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
-				if (get_seminar_modules($semid) != false){
+			if ($GLOBALS['CHAT_ENABLE']){
+				echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$semid]['is_active']) ? "false" : "'$semid'") . ");\">&nbsp;";
+				echo chat_get_chat_icon($chat_info[$semid]['chatter'], $chat_invs[$chat_info[$semid]['chatuniqid']], $chat_info[$semid]['is_active'],true);
+				echo "</a>&nbsp;";
+			}
+			if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
+				$mod_count = get_seminar_modules($semid);
+				if ($mod_count) {
 					echo "<a href=\"seminar_lernmodule.php?view=show&seminar_id=$semid\">&nbsp;";
-					echo "<img src=\"pictures/icon-lern.gif\" border=\"0\">";
+					echo "<img src=\"pictures/icon-lern.gif\" ".tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
 					echo "</a>";
 				}
 				else
 					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" border=\"0\">";
-			}
-			if ($GLOBALS['CHAT_ENABLE']){
-				echo "<a href=\"#\" onClick=\"return open_chat(" . (($chat_info[$semid]['is_active']) ? "false" : "'$semid'") . ");\">&nbsp;";
-				echo chat_get_chat_icon($chat_info[$semid]['chatter'], $chat_invs[$chat_info[$semid]['chatuniqid']], $chat_info[$semid]['is_active'],true);
-				echo "</a>&nbsp;";
 			}
 			echo "</td>";
 
