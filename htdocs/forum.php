@@ -237,7 +237,7 @@ if ($topic_id AND !$update) {
 if ($forum["lostposting"]!="" AND !isset($update)) {
 	$writemode = $forum["lostposting"];
 	$db=new DB_Seminar;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode' and (description = 'Dieser Beitrag wird gerade bearbeitet.' OR description = 'Beschreibung des Themas')");
+	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode'");
 	if ($db->num_rows()) { 
 		$count = 0;
 		if (forum_lonely($writemode)==TRUE) // nur löschen wenn noch keine Antworten, sonst stehenlassen
