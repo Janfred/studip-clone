@@ -291,7 +291,7 @@ class Seminar {
 			$this->showscore = $this->db->f("showscore");
 			$this->modules = $this->db->f("modules");
 			return TRUE;
-			
+			$this->is_new = false;
 		}
 		return FALSE;
 	}
@@ -383,7 +383,7 @@ class Seminar {
 		$this->db->query($query);
 		
 		if ($this->db->affected_rows()) {
-			$query = sprintf("UPDATE seminare SET chdate='%s' WHERE Seminar_id='%s' ", $chdate, $this->id);
+			$query = sprintf("UPDATE seminare SET chdate='%s' WHERE Seminar_id='%s' ", time(), $this->id);
 			$this->db->query($query);
 			return TRUE;
 		} else
