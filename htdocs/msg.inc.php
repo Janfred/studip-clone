@@ -28,6 +28,7 @@ wird eine eigene Tabellenzelle geoeffnet
 
 //Displays Errormessages (kritischer Abbruch, Symbol "X")
 function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE) {
+	global $CANONICAL_RELATIVE_PATH_STUDIP;
 
 ?>
 	<tr>
@@ -51,7 +52,8 @@ function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 //Displays Successmessages (Information ueber erfolgreiche Aktion, Symbol Haken)
 
 function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE) {
-?>
+	global $CANONICAL_RELATIVE_PATH_STUDIP;
+	?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
@@ -72,7 +74,8 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 //Displays Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
 
 function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE) {
-?>
+	global $CANONICAL_RELATIVE_PATH_STUDIP;
+	?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
 			<table border=0 cellspacing=0 cellpadding=2>
