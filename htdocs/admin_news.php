@@ -69,7 +69,7 @@ class studip_news {
 				$news_range_name=$this->news_perm[$news_range_id]["name"];
 			}
 			elseif ($news_range_id=="studip"){
-				$news_range_name="StudIP System News";
+				$news_range_name="Stud.IP System News";
 			}
 			elseif ($news_range_id!=""){
 				$object_type = get_object_type($news_range_id);
@@ -149,7 +149,7 @@ class studip_news {
 			if ($perm->have_perm("root")) {
 				$this->db->query("SELECT * FROM news_range WHERE news_id='$news_id' AND range_id='studip'");
 				if ($this->db->next_record()) 
-					$this->range_detail[$this->db->f("range_id")]= array("type"=>"sys","name"=>"StudIP System News");
+					$this->range_detail[$this->db->f("range_id")]= array("type"=>"sys","name"=>"Stud.IP System News");
 				}
 			}
 	}
@@ -618,7 +618,7 @@ class studip_news {
 			}
 		}
 		if ($auth->auth["perm"]=="root") 
-			$this->news_perm["studip"]=array("name"=>"StudIP News","perm"=>3);
+			$this->news_perm["studip"]=array("name"=>"Stud.IP News","perm"=>3);
 	}
 
 	function check_news_perm($news_id,$check=2) {
