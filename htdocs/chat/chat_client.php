@@ -410,7 +410,7 @@ $chat_log = array();
 <?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
 	?><table width="100%"><tr><?
-	my_error(_("Sie sind nicht in diesem Chat angemeldet!"),"chat",1,false);
+	my_error(_("<font size=\"-1\">Sie sind nicht in diesem Chat angemeldet!</font>"),"chat",1,false);
 	?></tr></table></body></html><?
 //PHPLib Session Variablen unangetastet lassen
 	//page_close();

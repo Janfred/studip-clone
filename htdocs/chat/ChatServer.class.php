@@ -42,7 +42,7 @@ class ChatServer {
 		static $object_instance;
 		if (!is_object($object_instance[$class_name])){
 			$object_instance[$class_name] =& new $class_name();
-		} 
+		}
 		return $object_instance[$class_name];
 	}
 	
@@ -228,6 +228,24 @@ class ChatServer {
 			}
 		}
 		return true;
+	}
+	
+	function getAllChatUsers(){
+		$this->restore();
+		if (!$this->caching){
+			$this->chatUser = array();
+		}
+		if (count($this->chatDetail) && !count($this->chatUser)){
+			foreach($this->chatDetail as $chatid => $detail){
+				if ($this->isActiveChat($chatid)){
+					$users = $this->getUsers($chatid);
+					foreach ($users as $user_id => $data){
+						++$this->chatUser[$user_id];
+					}
+				}
+			}
+		}
+		return count($this->chatUser);
 	}
 	
 	function getMsTime(){
