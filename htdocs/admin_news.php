@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+//$Id$
  page_open(array("sess"=> "Seminar_Session", "auth" =>"Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
  $perm->check("autor");
@@ -268,18 +268,19 @@ echo "</select></td></tr></table></td></tr>";
 echo "\n<tr><td class=\"blank\"><hr width=\"99%\"></td></tr>";
 echo "\n<tr><td class=\"blank\">&nbsp; <b>In diesen Bereichen wird die News angezeigt:</b><br /><br /></td></tr>";
 echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"99%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
-
+$cssSw=new cssClassSwitcher;
+$cssSw->hoverclass="gruppe2";
 if ($perm->have_perm("root"))
 	{
      echo "\n<tr><th width=\"90%\" align=\"left\">System Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
-	echo "\n<tr><td class=\"steel1\"  width=\"90%\">StudIP System News</td>";
-	echo "\n<td class=\"steel1\" width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"studip\"";
+	echo "\n<tr class=\"".$cssSw->getClass()."\" ".$cssSw->getHoverJS()."><td   width=\"90%\">StudIP System News</td>";
+	echo "\n<td  width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"studip\"";
 	if ($this->range_detail["studip"]["type"] OR ($this->news_range=="studip" AND $news_id=="new_entry")) echo "checked";
 	echo "></td></tr>";
      }
 echo "\n<tr><th width=\"90%\" align=\"left\">Persönlicher Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
-echo "\n<tr><td class=\"steel1\"  width=\"90%\">".$this->news_query["author"]."</td>";
-echo "\n<td class=\"steel1\"  width=\"10%\" align=\"center\">";
+echo "\n<tr class=\"".$cssSw->getClass()."\" ".$cssSw->getHoverJS()."><td  width=\"90%\">".$this->news_query["author"]."</td>";
+echo "\n<td   width=\"10%\" align=\"center\">";
 if ($this->news_perm[$this->news_query["user_id"]]["perm"] OR $this->news_query["user_id"]==$this->user_id)
 	{
      echo"<input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->news_query["user_id"]."\"";
@@ -519,6 +520,7 @@ function list_range_details($type)
 {
 global $auth,$perm;
 $cssSw=new cssClassSwitcher;
+$cssSw->hoverclass="gruppe2";
 $output="";
 $output[0]="\n<tr><th width=\"90%\" align=\"left\">";
 switch ($type)
@@ -563,8 +565,8 @@ if ($perm->have_perm("tutor") && is_array($this->search_result))
             if ($details["type"]==$type)
                  {
                  $cssSw->switchClass();
-                 $output[1].= "\n<tr><td  class=\"".$cssSw->getClass()."\"  width=\"90%\">".htmlReady($details["name"])."</td>";
-                 $output[1].= "\n<td class=\"".$cssSw->getClass()."\"  width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\"";
+                 $output[1].= "\n<tr class=\"".$cssSw->getClass()."\" ".$cssSw->getHoverJS()."><td    width=\"90%\">".htmlReady($details["name"])."</td>";
+                 $output[1].= "\n<td   width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\"";
                  if ($range==$this->news_range AND $this->news_query["news_id"]=="new_entry") $output[1].=" checked ";
                  $output[1].="></td></tr>";
                  }
@@ -576,8 +578,8 @@ else
     while($this->db->next_record())
 		{
 		$cssSw->switchClass();             
-		$output[1].= "\n<tr><td  class=\"".$cssSw->getClass()."\"  width=\"90%\">".$this->db->f("name")."</td>";
-		$output[1].= "\n<td class=\"".$cssSw->getClass()."\"  width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->db->f("id")."\"";
+		$output[1].= "\n<tr class=\"".$cssSw->getClass()."\" ".$cssSw->getHoverJS()."><td    width=\"90%\">".$this->db->f("name")."</td>";
+		$output[1].= "\n<td  width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->db->f("id")."\"";
 		if ($this->db->f("id")==$this->news_range AND $this->news_query["news_id"]=="new_entry") $output[1].=" checked ";
 		$output[1].="></td></tr>";
 		}
