@@ -722,17 +722,21 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 *
 **/
 function UpdateTopic ($name="[no name]", $topic_id, $description)
-{	global $user, $nobodysname;
+{	global $user, $nobodysname, $rechte;
 	$db=new DB_Seminar;
 	$chdate = time();
-	IF ($user->id == "nobody")  // bei nobodys wird mit Namen geschrieben, ist sonst schon da
-		$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate', author='$nobodysname' WHERE topic_id = '$topic_id'";
-	ELSE
-		$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate' WHERE topic_id = '$topic_id'";
-	$db->query ($query);
-	IF  ($db->affected_rows() == 0) {
-		print _("<p>Aktualisieren des Postings fehlgeschlagen</p>\n");
+	if (lonely($topic_id)==FALSE) {
+		IF ($user->id == "nobody")  // bei nobodys wird mit Namen geschrieben, ist sonst schon da
+			$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate', author='$nobodysname' WHERE topic_id = '$topic_id'";
+		ELSE
+			$query = "UPDATE px_topics SET name = '$name', description = '$description', chdate= '$chdate' WHERE topic_id = '$topic_id'";
+		$db->query ($query);
+		IF  ($db->affected_rows() == 0) {
+			print _("<p>Aktualisieren des Postings fehlgeschlagen</p>\n");
 		}
+	} else {
+		echo parse_msg("error§" . _("Ihnen fehlen die Rechte diesen Beitrag zu bearbeiten"));
+	}
 }
 
 /**
