@@ -83,7 +83,7 @@ $SEM_TYPE[24]=array("name"=>"Arbeitsgemeinschaft", "en"=>"Workgroup", "class"=>1
 
 
 //Festlegen von zulaessigen Bezeichnungen fuer Einrichtungen (=Institute)
-$INST_TYPE[1]=array("name"=>"Institut", "en"=>"Institute");
+$INST_TYPE[1]=array("name"=>"Einrichtung", "en"=>"Institute");
 $INST_TYPE[2]=array("name"=>"Zentrum", "en"=>"Center");
 $INST_TYPE[3]=array("name"=>"Lehrstuhl", "en"=>"Lehrstuhl");
 $INST_TYPE[4]=array("name"=>"Abteilung", "en"=>"Unit");
