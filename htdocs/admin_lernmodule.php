@@ -77,21 +77,24 @@ if ($ILIAS_CONNECT_ENABLE)
 
 		if (isset($delete))
 		{	
-			my_info( _("Wenn Sie fortfahren, wird das gew&auml;hlte Lernmodul unwiderruflich gel&ouml;scht. Soll dieses Lernmodul wirklich gel&ouml;scht werden?"));
-			?>
-			<tr><td><br><br><center>
+			echo "<table>";
+			my_info(sprintf(_("Wenn Sie fortfahren, wird das Lernmodul mit dem Titel %s unwiderruflich gel&ouml;scht. Soll dieses Lernmodul wirklich gel&ouml;scht werden?"), "<b>" . $del_title . "</b>"));
+			echo "</table>";
+			?><br><center>
 			<a href="<? echo link_delete_module($del_inst, $del_id); ?>"><? echo makeButton("ja", "img"); ?>&nbsp;
 			<a href="<? echo $PHP_SELF; ?>"><? echo makeButton("nein", "img"); ?></center>
 			<?
 		}
-
-		if (get_connected_user_id($auth->auth["uid"]) != false)
-			echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
-
-		if ($perm->have_perm("admin"))  
-			show_all_modules_admin();
 		else
-			show_user_modules($auth->auth["uid"]);
+		{
+			if (get_connected_user_id($auth->auth["uid"]) != false)
+				echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
+
+			if ($perm->have_perm("admin"))  
+				show_all_modules_admin();
+			else
+				show_user_modules($auth->auth["uid"]);
+		}
 
 		?>
 		<br>
