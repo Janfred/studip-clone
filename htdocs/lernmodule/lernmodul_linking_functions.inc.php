@@ -28,14 +28,14 @@ function link_seminar_modules($seminar_id)
 			$link_str[$i]["link"] .= ")";
 			$link_str[$i]["link"] .= "</a>";
 			$link_str[$i]["content"] .= $mod_info["description"] . "<br>";
-			$link_str[$i]["content"] .= "Diese Lerneinheit enth&auml;lt " . $mod_info["pages"] . " Seite";
 			if ($mod_info["pages"] != 1) 
-				$link_str[$i]["content"] .= "n";
-			if ($mod_info["questions"] != 0) 
-				$link_str[$i]["content"] .= " und " . $mod_info["questions"] . " Frage";
-			if ($mod_info["questions"] > 1) 
-				$link_str[$i]["content"] .= "n";
-			$link_str[$i]["content"] .= ".";
+				$link_str[$i]["content"] .= sprintf(_("Diese Lerneinheit enth&auml;lt %s Seiten. "), $mod_info["pages"]);
+			else
+				$link_str[$i]["content"] .= _("Diese Lerneinheit enth&auml;lt eine Seite. ");
+			if ($mod_info["questions"] == 1) 
+				$link_str[$i]["content"] .= _("Es gibt eine Test-Frage zu der Lerneinheit.");
+			elseif ($mod_info["questions"] > 1) 
+				$link_str[$i]["content"] .= sprintf(_("Es gibt %s Test-Fragen zu der Lerneinheit."), $mod_info["questions"]);
 			$link_str[$i]["key"] .= $mod_array[$i]["id"] . "@" . $mod_array[$i]["inst"];
 			$mod_author = get_module_author($mod_array[$i]["inst"], $mod_array[$i]["id"]);
 			for ($i2=0; $i2<sizeof($mod_author); $i2 ++)
