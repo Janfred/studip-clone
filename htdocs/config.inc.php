@@ -48,6 +48,7 @@ $SEMESTER[7]=array("name"=>"WS 2003/04", "beginn"=>mktime(0,0,0,10,1,2003), "end
 $SEM_CLASS[1]=array("name"=>"Lehre", "bereiche"=>TRUE, 	//the name of the class
 					"compact_mode"=>FALSE, 			//indicates, if all fields are used in the creation process or only the fields that are necessary for workgroups
 					"workgroup_mode"=>FALSE, 			//indicates, if the workgroup mode is used (to use different declarations)
+					"only_inst_user"=>TRUE,				//indicates, that olny staff from the Einrichtungen which own the Veranstaltung, are allowed for tutor and dozent
 					"turnus_default"=>1	, 				//indicates, whether the turnus field is default set to "regulary" (0), "not regulary" (1) or "no dates" (-1) in the creation process
 					"default_read_level"=>1, 				//the default read acces level. "without signed in" (0), "signed in" (1), "password" (2)
 					"default_write_level" =>1, 				//the default write acces level. "without signed in" (0), "signed in" (1), "password" (2)
@@ -59,6 +60,7 @@ $SEM_CLASS[1]=array("name"=>"Lehre", "bereiche"=>TRUE, 	//the name of the class
 $SEM_CLASS[2]=array("name"=>"Forschung", 
 					"compact_mode"=>TRUE, 
 					"workgroup_mode"=>TRUE, 
+					"only_inst_user"=>TRUE,
 					"turnus_default"=>-1, 
 					"default_read_level"=>2, 
 					"default_write_level" =>2, 
@@ -71,6 +73,7 @@ $SEM_CLASS[2]=array("name"=>"Forschung",
 $SEM_CLASS[3]=array("name"=>"Organisation", 
 					"compact_mode"=>TRUE, 
 					"workgroup_mode"=>TRUE, 
+					"only_inst_user"=>FALSE,
 					"turnus_default"=>-1, 
 					"default_read_level"=>2, 
 					"default_write_level" =>2, 
@@ -83,6 +86,7 @@ $SEM_CLASS[3]=array("name"=>"Organisation",
 $SEM_CLASS[4]=array("name"=>"Community", 
 					"compact_mode"=>TRUE, 
 					"workgroup_mode"=>FALSE, 
+					"only_inst_user"=>FALSE,
 					"turnus_default"=>-1, 
 					"default_read_level"=>0, 
 					"default_write_level" =>0, 
@@ -95,6 +99,7 @@ $SEM_CLASS[4]=array("name"=>"Community",
 $SEM_CLASS[5]=array("name"=>"Arbeitsgruppen", 
 					"compact_mode"=>FALSE, 
 					"workgroup_mode"=>FALSE, 
+					"only_inst_user"=>TRUE,
 					"turnus_default"=>1, 
 					"default_read_level"=>1, 
 					"default_write_level" =>1, 
