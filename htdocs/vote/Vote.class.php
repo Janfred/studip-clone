@@ -111,6 +111,13 @@ class Vote extends StudipObject {
    var $resultvisibility;
 
    /**
+    * Defines whether a user can see the participants of the vote.
+    * @access   private
+    * @var      integer    $resultvisibility
+    */
+   var $namesvisibility;
+   
+   /**
     * Defines whether a user had already used this vote
     * @access   private
     * @var      boolean   $isInUse
@@ -195,6 +202,7 @@ class Vote extends StudipObject {
       $this->visible          = NO;
       $this->isInUse          = NO;
       $this->resultvisibility = VOTE_RESULTS_AFTER_VOTE;
+	  $this->namesvisibility  = NO;
       $this->state            = VOTE_NEW;
       /* ------------------------------------------------------------------- */
 
@@ -477,6 +485,32 @@ class Vote extends StudipObject {
     */
    function getResultvisibility () {
       return $this->resultvisibility;
+   }
+
+   /**
+    * Sets the way how to show the results
+    * @access  public
+    * @param   boolean
+    * @throws  error
+    */
+   function setNamesvisibility ($namesvisibility) {
+      if ($namesvisibility == YES &&
+	  $this->resultvisibility != VOTE_RESULTS_NEVER)
+	 return $this->throwError (1, _("Üngültige Teilnehmersichtbarkeit: Der Teilnehmer sieht die (Zwischen-)Ergebnisse dar nicht auf \"nie\" stehen.");
+      elseif ($namesvisibility == YES &&
+	  $this->isAnonymous ())
+	 return $this->throwError (1, _("Üngültige Teilnehmersichtbarkeit: Die Teilnahme darf nicht anonym sein."));
+      
+      $this->namesvisibility = $namesvisibility;
+   }
+
+   /**
+    * Gets the way how to show the participants
+    * @access  public
+    * @return  boolean
+    */
+   function getNamesvisibility () {
+      return ($this->namesvisibility == YES) ? YES : NO;
    }
 
    /**
@@ -858,6 +892,7 @@ class Vote extends StudipObject {
 				$this->getCreationdate (),
 				time (), #,$this->getChangedate (),provisorisch
 				$this->getResultvisibility (),
+				$this->getNamesvisibility (),
 				$this->isMultiplechoice (),
 				$this->isAnonymous (),
 				$this->getAnswers (),
@@ -926,6 +961,7 @@ class Vote extends StudipObject {
       $this->setMultiplechoice ($result["multiplechoice"]);
 
       $this->setResultvisibility ($result["resultvisibility"]);
+      $this->setNamesvisibility ($result["namesvisibility"]);
       $this->setAnonymous ($result["anonymous"]);
       $this->setChangeable ($result["changeable"]);
       $this->setAnswers ($result["answerArray"]);
@@ -1028,6 +1064,9 @@ class Vote extends StudipObject {
 	  $this->resultvisibility != VOTE_RESULTS_ALWAYS &&
 	  $this->resultvisibility != VOTE_RESULTS_NEVER)
 	 $this->throwError (13, _("Objekt besitzt ungültigen Status für die Ergebnissichtbarkeit!"));
+
+      if (empty ($this->namesvisibility))
+	 $this->throwError (5, _("Objekt besitzt keine Teilnehmersichtbarkeit."));	 
 
       if ($this->state != VOTE_NEW &&
 	  $this->state != VOTE_ACTIVE &&
