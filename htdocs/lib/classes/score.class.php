@@ -297,6 +297,10 @@ function GetMyScore() {
 		$db->query("SELECT count(*) FROM vote_user WHERE user_id = '$user_id'");
 		$db->next_record();
 		$vote += $db->f(0);
+		
+		$db->query("SELECT count(*) FROM eval WHERE author_id = '$user_id'");
+		$db->next_record();
+		$vote += 2*$db->f(0);
 	}
 	
 	if ($GLOBALS['WIKI_ENABLE']) {
@@ -312,7 +316,7 @@ function GetMyScore() {
 
 ///////////////////////// Die HOCHGEHEIME Formel:
 
-	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (10*$archiv*$age) + (5*$contact) + (5*$seminare) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
+	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (10*$archiv*$age) + (10*$contact) + (5*$seminare) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
 	$score = round($score/$age);
 	if(file_exists("./user/".$user_id.".jpg"))
 		$score *=10;
