@@ -110,6 +110,7 @@ $export_pagename = _("Datenexport - Startseite");
 	
 	$export_pagecontent .="<b><font size=\"-1\">". _("Aus welchem Semester sollen die Daten exportiert werden (f&uuml;r Veranstaltungsexport): ") .  "</font></b><br /><select name=\"ex_sem\">";
 	$export_pagecontent .= "<option value=\"all\">" . _("Alle Semester") . "</option>";
+	reset($SEMESTER);
 	while (list($key, $val) = each($SEMESTER))
 	{
 		$export_pagecontent .= "<option";
