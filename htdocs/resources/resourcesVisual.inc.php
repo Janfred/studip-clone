@@ -1041,16 +1041,15 @@ class EditObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; 				
+				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"> 				
 				<?
 				if (!$lockedAssign) {
 				?>
+					<br />&nbsp;
 					<input type="IMAGE" align="absmiddle"  <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
-				<?
-				}
-				?>
 					&nbsp;<a href="<?=$PHP_SELF."?view=".$this->used_view ?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
+				}
 				if ($killButton) {
 					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
 				}
