@@ -721,12 +721,13 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
  **/
 function write_config ($key='', $val='', $arr='') {
 	$db = new DB_Seminar;
-
+	
 	if (func_num_args() == 2) {
 		$arr[$key] = $val;
 	}
 	if (is_array($arr)) {
 		foreach ($arr as $key=>$val) {
+			$GLOBALS[$key] = $val;
 			$query = sprintf ("SELECT * FROM config WHERE `key` = '%s' ", $key);
 			$db->query($query);
 		
