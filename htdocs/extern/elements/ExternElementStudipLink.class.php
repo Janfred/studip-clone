@@ -122,7 +122,7 @@ class ExternElementStudipLink extends ExternElement {
 		$out .= "<tr height=\"{$args['height']}\">";
 		$out .= "<td width=\"100%\" align=\"" . $this->config->getValue($this->name, "align") . "\">\n";
 		$out .= "<font" . $this->config->getAttributes($this->name, "font") . ">";
-		$out .= sprintf("<a href=\"\"%s>%s</a>",
+		$out .= sprintf("<a href=\"%s\"%s>%s</a>", $args['link'],
 				$this->config->getAttributes($this->name, "a"),
 				$this->config->getValue($this->name, "linktext"));
 		if ($this->config->getValue($this->name, "image")) {
