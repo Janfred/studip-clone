@@ -1,4 +1,6 @@
 31.03.2003 v 0.9
+- erweitertes Chatsystem: eigene Chaträume für Veranstaltungen, Personen und Einrichtungen, Protokoll-
+  Funktion, Chaträume können mit Passwörter gesichert werden
 - Erste Testversion einer Einbindung von ILIAS-Lernmodulen
 - systemweiter TeX-Support
 - personalisierte Übersicht der persönlichen Veranstaltungen im Archiv
