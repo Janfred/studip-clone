@@ -134,7 +134,7 @@ class DataFields {
 				$object_type = $this->db->f("type");
 			}
 
-			$object_type = $SEM_TYPE[$object_type]["class"];
+			$object_type = ($object_class == 'sem') ? $SEM_TYPE[$object_type]['class'] : $object_type;
 			
 			switch ($object_class) {
 				case "sem": 
