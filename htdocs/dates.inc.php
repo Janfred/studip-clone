@@ -32,7 +32,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/calendar_func.inc.ph
 *
 */
 
-function getRoom ($range_id, $link=TRUE) {
+function getRoom ($range_id, $link=TRUE, $start_time = 0) {
 	global $RESOURCES_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
 	
 	if ($RESOURCES_ENABLE)	
@@ -97,7 +97,7 @@ function getRoom ($range_id, $link=TRUE) {
 					}
 					$typ_clause .= ")";	
 					
-					$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE date_typ IN $typ_clause AND range_id='%s' ORDER BY date", $range_id);
+					$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE date_typ IN $typ_clause AND range_id='%s' AND date >= $start_time ORDER BY date", $range_id);
 					$db->query($query);
 					$i=0;
 					while ($db->next_record()) {
@@ -314,7 +314,7 @@ Bei regelmaessigen Veranstaltungen werden die einzelen Zeiten ausgegeben, bei zw
 Turnus mit dem enstprechenden Zusatz. Short verkuerzt die Ansicht nochmals.
 */
 
-function view_turnus ($seminar_id, $short = FALSE, $meta_data = false) {
+function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = 0) {
 	
 	static $turnus_cache;
 	
@@ -350,7 +350,7 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false) {
 		}
 		$typ_clause .= ")";
 		
-		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ IN $typ_clause ORDER BY date");
+		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ IN $typ_clause AND date >= $start_time ORDER BY date");
 		if ($db2->affected_rows() == 0)
 			{
 			if ($short)
