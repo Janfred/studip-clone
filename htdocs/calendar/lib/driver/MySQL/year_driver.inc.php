@@ -233,6 +233,15 @@ function year_restore(&$this){
 					}
 				}
 				
+				if($rep["ts"] > $start -1 && $rep["ts"] < $end + 1){
+					$adate = $rep["ts"];
+					$count = $duration;
+					while($count-- && $adate <= $end && $adate <= $db->f("expire")){
+						$this->apdays["$adate"]++;
+						$adate += 86400;
+					}
+				}
+				
 				if($rep["sintervall"] == 5)
 					$cor = 0;
 				else
