@@ -27,10 +27,10 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 
-include "functions.php";
-include "statusgruppe.inc.php";
-include "contact.inc.php";
-include "visual.inc.php";
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
