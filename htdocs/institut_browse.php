@@ -72,7 +72,7 @@ if ($_REQUEST['cmd']=="suche"){
 		<td class="topic" colspan="2"><img src="pictures/suchen.gif" border="0" align="absbottom"><b>&nbsp;<?=_("Suche nach Einrichtungen")?></b></td>
 	</tr>
 	<tr>
-	<td class="blank" width="100%" align="left">
+	<td class="blank" width="100%" align="left" valign="top">
 	<?
 if ($msg)	{
 	echo "\n<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
