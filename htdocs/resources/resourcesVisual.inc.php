@@ -116,7 +116,7 @@ class ShowList extends ShowTreeRow{
 		$this->showRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
 	}
 	
-	function showList ($start_id='', $level=0, $result_count=0) {
+	function showListObjects ($start_id='', $level=0, $result_count=0) {
 
 		$db=new DB_Seminar;	
 		$db2=new DB_Seminar;
@@ -137,7 +137,7 @@ class ShowList extends ShowTreeRow{
 				$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ");
 				
 				while ($db2->next_record())
-					$this->showList($db2->f("resource_id"), $level+1, $result_count);
+					$this->showListObjects($db2->f("resource_id"), $level+1, $result_count);
 			}
 			$result_count++;
 		}

@@ -161,7 +161,7 @@ if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $re
 			parse_msg ("info§Es existieren keine Ressourcen, die Sie in dieser Veranstaltung belegen k&ouml;nnen.");
 		}
 	} else {
-		if (!$list->showList($resources_data["list_open"])) {
+		if (!$list->showListObjects($resources_data["list_open"])) {
 			echo "</td></tr>";
 			parse_msg ("info§Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Ebene bzw. Ressource in der Hierachie aus.");
 		}
