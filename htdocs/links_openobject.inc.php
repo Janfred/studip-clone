@@ -152,7 +152,7 @@ if ($SessSemName["class"]=="inst") {
 		if ($perm->have_perm("admin"))
 			$structure["administration_e"]=array (topKat=>"institut_main", name=>_("Administration der Einrichtung"), link=>"admin_institut.php?new_inst=TRUE", active=>FALSE);
 		else
-			$structure["administration_e"]=array (topKat=>"institut_main", name=>_("Administration der Einrichtung"), link=>"admin_literatur.php?new_inst=TRUE&view=literatur_inst", active=>FALSE);		
+			$structure["administration_e"]=array (topKat=>"institut_main", name=>_("Administration der Einrichtung"), link=>"admin_lit_list.php?new_inst=TRUE&view=literatur_inst", active=>FALSE);		
 } else {
 //
 	$structure["_seminar_main"]=array (topKat=>"seminar_main", name=>_("Kurzinfo"), link=>"seminar_main.php", active=>FALSE);
