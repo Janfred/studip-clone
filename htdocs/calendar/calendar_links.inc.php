@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	else{
 		?><td class="links1" align="right" nowrap><a class="links1" href="calendar.php">&nbsp; &nbsp; Terminkalender&nbsp; &nbsp; </a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?
 	}
-	if($i_page == "contact.php"){
+	if($i_page == "contact.php" || $i_page == "contact_statusgruppen.php"){
 		?><td class="links1b" align="right" nowrap><a class="links1b" href="contact.php">&nbsp; &nbsp; Addressbuch&nbsp; &nbsp; </a><img src="pictures/reiter2.jpg" align="absmiddle"></td><?
 	}
 	else{
@@ -117,11 +117,14 @@ if($i_page == "calendar.php"){
 	echo"<br />";
 }
 
-elseif ($i_page == "contact.php"){
+elseif ($i_page == "contact.php" || $i_page == "contact_statusgruppen.php"){
 	echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";	
 
 
-	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  target="_new" href="contact.php?print_view=TRUE">Gruppenverwaltung&nbsp; &nbsp; </a><?
+	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact.php">Alphabetisch&nbsp; &nbsp; </a><?
+	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact.php?view=gruppen">Gruppenansicht&nbsp; &nbsp; </a><?
+	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="contact_statusgruppen.php">Gruppenverwaltung&nbsp; &nbsp; </a><?
+
 
 	echo"<br />";
 }
