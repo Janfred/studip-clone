@@ -99,7 +99,13 @@ class AssignObject {
 	}
 	
 	function create() {
-		return $this->store(TRUE);
+		$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_id ='%s' ", $this->id);
+		$this->db->query($query);
+		if ($this->db->nf()) {
+			$this->chng_flag=TRUE;
+			return $this->store();
+		} else
+			return $this->store(TRUE);
 	}
 
 	function getId() {
@@ -795,7 +801,13 @@ class ResourceObject {
 	}
 
 	function create() {
-		return $this->store(TRUE);
+		$query = sprintf("SELECT resource_id FROM resources_objects WHERE resource_id ='%s'", $this->id);
+		$this->db->query($query);
+		if ($this->db->nf()) {
+			$this->chng_flag=TRUE;		
+			return $this->store();
+		} else
+			return $this->store(TRUE);
 	}
 	
 	function setName($name){

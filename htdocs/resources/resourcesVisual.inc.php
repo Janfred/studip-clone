@@ -73,7 +73,7 @@ class ShowList extends ShowTreeRow{
 	
 	//private
 	function showListObject ($resource_id, $admin_buttons=FALSE) {
-		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF, $ActualObjectPerms;
+		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF, $ActualObjectPerms, $SessSemName;
 	
 		//Object erstellen
 		$resObject=new ResourceObject($resource_id);
@@ -138,8 +138,13 @@ class ShowList extends ShowTreeRow{
 				$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
 				$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details")."</a>";
 			} else {
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("details")."</a>";
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>";
+				if ($SessSemName[1]) {
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>";
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("details")."</a>";
+				} else {
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>";
+					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("details")."</a>";
+				}
 			}
 		}
 
@@ -1725,8 +1730,8 @@ class ResourcesBrowse {
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center">
 				<font size=-1>freie Suche:&nbsp;
-				<input name="search_exp"  type=textarea size=20 maxlength=255 value="<? echo $this->searchArray["search_exp"]; ?>" />
-				<input type="IMAGE" <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
+				<input name="search_exp"  type="TEXT" style="{vertikal-align: middle;}" size=20 maxlength=255 value="<? echo $this->searchArray["search_exp"]; ?>" />
+				<input type="IMAGE" align="absmiddle"  <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
 				&nbsp;<a href="<? echo $PHP_SELF?>?search=TRUE&reset=TRUE"><? echo makeButton ("neuesuche") ?></a>
 				<?
 				if ($this->mode == "browse")
@@ -1952,7 +1957,7 @@ class ResourcesBrowse {
 	function showSearch() {
 		?>
 			<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-				<form method="POST" action="<?echo $PHP_SELF ?>?view=search">
+				<form method="POST" action="<?echo $PHP_SELF ?>?search_send=yes&view=search">
 				<?
 				$this->searchForm();
 				if (!$this->searchArray) {

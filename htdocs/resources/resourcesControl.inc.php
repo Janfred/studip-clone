@@ -62,7 +62,6 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");
 /*****************************************************************************
 empfangene Werte auswerten und Befehle ausfuehren
 /*****************************************************************************/
-
 //handle values
 include ("$RELATIVE_PATH_RESOURCES/lib/evaluate_values.php");
 

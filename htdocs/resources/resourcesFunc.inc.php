@@ -349,7 +349,7 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 		<select name="<? echo "submit_".$name ?>">
 		<?
 		if ($allow_all)
-			print "<option value=\"all\">"._("jedeR")."</option>";
+			print "<option tyle=\"{vertikal-align: middle;}\" value=\"all\">"._("jedeR")."</option>";
 
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
@@ -364,12 +364,12 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 			$old_art=$val["art"];
 		}
 		?></select>
-			<font size=-1><input type="IMAGE" name="<? echo "send_".$name ?>" <?=makeButton("uebernehmen", "src") ?> value="<?=_("&uuml;bernehmen")?>"  /></font>
-			<font size=-1><input type="IMAGE" name="<? echo "reset_".$name ?>" <?=makeButton("neuesuche", "src") ?> border=0 value="<?=_("neue Suche")?>" /></font>
+			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "send_".$name ?>" <?=makeButton("uebernehmen", "src") ?> value="<?=_("&uuml;bernehmen")?>"  /></font>
+			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "reset_".$name ?>" <?=makeButton("neuesuche", "src") ?> border=0 value="<?=_("neue Suche")?>" /></font>
 		<?
 	} else {
 		?>
-		<font size=-1><input type="TEXT" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
+		<font size=-1><input type="TEXT" tyle="{vertikal-align: middle;}" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
 		<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "do_".$name ?>" <?=makeButton("suchestarten", "src") ?> border=0 value="<?=_("suchen")?>" /></font>
 		<?
 	}
