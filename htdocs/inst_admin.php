@@ -39,7 +39,10 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
 
-
+//get ID from a open Institut
+if ($SessSemName[1])
+	$inst_id=$SessSemName[1];
+	
 function perm_select($name,$global_perm,$default) {
 	$possible_perms=array("user","autor","tutor","dozent");
 	$counter=0;
