@@ -87,7 +87,8 @@ if (($reset_all) || ($level == "O")){
 
 if (!isset ($sem_browse_data["level"])) $sem_browse_data["level"]="f";
 if ($level==0) $sem_browse_data["extern"] == FALSE;
-	
+
+
 //Quicksort Formular... fuer die eiligen oder die DAUs....
 
 if (!$sem_browse_data["extern"]) {
@@ -321,6 +322,12 @@ if ($sem_browse_data["sset"])
 
 	if ($sem_browse_data["sset"]=="qs")
 		{
+
+		//Empty searchstring?	
+		if (!$sem_browse_data["qs_string"])
+			$dont_search=TRUE;
+		else {
+
 		if ($sem_browse_data["s_range"]=="alles")
 			{
 			$sql_where_query_seminare="(seminare.Name LIKE '%".$sem_browse_data["qs_string"]."%' OR seminare.Untertitel LIKE '%".$sem_browse_data["qs_string"]."%' OR seminare.Beschreibung LIKE '%".$sem_browse_data["qs_string"]."%' OR auth_user_md5.Nachname LIKE '%".$sem_browse_data["qs_string"]."%'";
@@ -337,13 +344,16 @@ if ($sem_browse_data["sset"])
 			{
 			$sql_where_query_seminare="(seminare.Beschreibung LIKE '%".$sem_browse_data["qs_string"]."%'";
 			}
+		/* Uncomment to let the quicksearch search only in the current semester
 		if (!$all_sem) {
 			if ($VORLES_ENDE <= time())
 				$sql_where_query_seminare=$sql_where_query_seminare.") AND seminare.start_time <=".$SEM_BEGINN_NEXT." AND (".$SEM_BEGINN_NEXT." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1)";
 			else
 				$sql_where_query_seminare=$sql_where_query_seminare.") AND seminare.start_time <=".$SEM_BEGINN." AND (".$SEM_BEGINN." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1)";
 			}
-		else $sql_where_query_seminare=$sql_where_query_seminare. ") ";
+		else*/
+		$sql_where_query_seminare=$sql_where_query_seminare. ") ";
+		}
 		}
 	elseif ($sem_browse_data["sset"]=="xts")
 		{
@@ -458,10 +468,12 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 	if (($sem_browse_data["level"]=="sbb") && ((!isset($sem_browse_data["sset"])) || $sem_browse_data["extern"]))
 		$sql_where_query_seminare="seminar_bereich.bereich_id = '".$sem_browse_data["id"]."' $class_query";
 	
-	if ($sem_browse_data["sortby"] == "Nachname")
-		$db->query("SELECT DISTINCT seminare.*, auth_user_md5.username, auth_user_md5.Nachname, auth_user_md5.Vorname, Institute.Name AS Institut, bereiche.name AS bereich, Institute.Institut_id FROM seminare LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN seminar_bereich ON (seminare.seminar_id=seminar_bereich.seminar_id) LEFT JOIN seminar_inst USING (seminar_id) LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) WHERE $sql_where_query_seminare ORDER BY $order_by_exp, Nachname ASC");
-	else
-		$db->query("SELECT seminare.*, auth_user_md5.username, auth_user_md5.Nachname, auth_user_md5.Vorname, Institute.Name AS Institut, bereiche.name AS bereich, Institute.Institut_id FROM seminare LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN seminar_bereich ON (seminare.seminar_id=seminar_bereich.seminar_id) LEFT JOIN seminar_inst USING (seminar_id) LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) WHERE $sql_where_query_seminare GROUP BY seminare.Seminar_id ORDER BY $order_by_exp, ".$sem_browse_data["sortby"]." ASC");
+	if (!$dont_search) {
+		if ($sem_browse_data["sortby"] == "Nachname") 
+			$db->query("SELECT DISTINCT seminare.*, auth_user_md5.username, auth_user_md5.Nachname, auth_user_md5.Vorname, Institute.Name AS Institut, bereiche.name AS bereich, Institute.Institut_id FROM seminare LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN seminar_bereich ON (seminare.seminar_id=seminar_bereich.seminar_id) LEFT JOIN seminar_inst USING (seminar_id) LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) WHERE $sql_where_query_seminare ORDER BY $order_by_exp, Nachname ASC");
+		else
+			$db->query("SELECT seminare.*, auth_user_md5.username, auth_user_md5.Nachname, auth_user_md5.Vorname, Institute.Name AS Institut, bereiche.name AS bereich, Institute.Institut_id FROM seminare LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN seminar_bereich ON (seminare.seminar_id=seminar_bereich.seminar_id) LEFT JOIN seminar_inst USING (seminar_id) LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) WHERE $sql_where_query_seminare GROUP BY seminare.Seminar_id ORDER BY $order_by_exp, ".$sem_browse_data["sortby"]." ASC");
+		}
 
 	if (($sem_browse_data["sset"]) || ($sem_browse_data["extern"]))
 		{
@@ -541,10 +553,14 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 				}
 		echo "</tr>";
 	} else {
-		echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden.</b></font>";
+		if ($dont_search)
+			echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden, da Sie keinen Suchbegriff angegeben haben.</b></font>";
+		else
+			echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden.</b></font>";		
 	}
 	
 	$group=1;
+	if (!$dont_search)
 	while ($db->next_record()) {
 		//This isn't a very good workaround to avoid duplicate entries in the sort-by-Nachname Query. Someone should fix this...
 		while ($temp_sem_browse_lastid == $db->f("Seminar_id")) {
