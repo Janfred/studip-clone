@@ -330,7 +330,7 @@ class ExternEditHtml extends ExternEditGeneric {
 	* @return	string A complete table row includes a closed table with the form.
 	*/
 	function editWidth ($attribute) {
-		$info = _("Geben Sie die Gesamtbreite der Tabelle in Prozent oder Pixeln an.");
+		$info = _("Geben Sie die Breite des Elements in Prozent oder Pixeln an.");
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
 		$value_pp = "";
@@ -347,7 +347,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
-		$out .= _("Tabellenbreite:");
+		$out .= _("Breite:");
 		$out .= "</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"3\"";
 		$out .= " maxlength=\"3\" value=\"$value\" />&nbsp; &nbsp;\n";
