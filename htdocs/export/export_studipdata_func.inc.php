@@ -75,6 +75,7 @@ function export_range($range_id)
 		$range_name = $db->f("Name");
 		if (!$output_startet) 
 			output_data ( xml_header(), $o_mode);
+		$output_startet = true;
 		export_inst( $db->f("Institut_id"), $db->f("Seminar_id") );
 	}
 
@@ -86,14 +87,18 @@ function export_range($range_id)
 //    Tree-Item ist ein Institut:
 	if ($tree_object->item_data['studip_object'] == 'inst')
 	{
-		output_data ( xml_header(), $o_mode);
+		if (!$output_startet) 
+			output_data ( xml_header(), $o_mode);
+		$output_startet = true;
 		export_inst( $tree_object->item_data['studip_object_id'] );
 	}
 //    Tree-Item hat Institute als Kinder:
 	$inst_array = $tree_object->GetInstKids();
 	if (sizeof($inst_array) > 0)
 	{
-		output_data ( xml_header(), $o_mode);
+		if (!$output_startet) 
+			output_data ( xml_header(), $o_mode);
+		$output_startet = true;
 		while (list($key, $inst_ids) = each($inst_array))
 		{
 			export_inst($inst_ids);
