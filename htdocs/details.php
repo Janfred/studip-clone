@@ -65,7 +65,9 @@ if (($sem_id) && (!$perm->have_perm("admin"))) {
 	if ($perm->have_perm("user")) { //Add lecture only if logged in	
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		if (!$db->num_rows()) {
-			$abo_msg="Tragen Sie sich hier ein";
+			$db->query("SELECT status FROM admission_seminar_user WHERE user_id ='$user->id' AND seminar_id = '$sem_id'");
+			if (!$db->num_rows())
+				$abo_msg="Tragen Sie sich hier ein";
 			}
 	 else {
 		    $db->next_record();
@@ -138,22 +140,32 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 							} else {
 								unset ($mein_status);
 							}
+							//Status als Wartender ermitteln
+							$db3->query("SELECT status FROM admission_seminar_user WHERE seminar_id = '$sem_id' AND user_id = '$user_id'");
+							if ($db3->next_record() ){
+							$admission_status = $db3->f("status");
+							} else {
+								unset ($admission_status);
+							}
 							?>
 						</td>
 					</tr>
 					<tr>
 						<td width="1%" valign="top">
-							<?printf ("%s", ($mein_status) ? "<img src=\"./pictures/haken.gif\" border=0>" : "<img src=\"./pictures/x2.gif\" border=0>");?>
+							<?printf ("%s", (($mein_status) || ($admission_status))? "<img src=\"./pictures/haken.gif\" border=0>" : "<img src=\"./pictures/x2.gif\" border=0>");?>
 						</td>
 						<td width="99%">
 						<?
-						if ($mein_status)
-							$tmp_text="Sie sind als Teilnehmer der Veranstaltung eingetragen";
+						if (($mein_status) || ($admission_status))
+							if ($mein_status)
+								$tmp_text="Sie sind als Teilnehmer der Veranstaltung eingetragen";
+							elseif ($admission_status)
+								$tmp_text=sprintf ("Sie sind in die %s der Veranstaltung eingetragen", ($admission_status=="claiming")  ? "Anmeldeliste" : "Warteliste");
 						elseif (!$perm->have_perm("admin"))
 							$tmp_text="Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.";
 						else
 							$tmp_text="Sie sind Administrator und k&ouml;nnen die Veranstaltung nicht abonnieren.";
-						printf ("<font size=-1 %s>%s</font>", (!$mein_status) ? " color=\"red\"" : "",$tmp_text);
+						printf ("<font size=-1 %s>%s</font>", ((!$mein_status) && (!$admission_status)) ? " color=\"red\"" : "",$tmp_text);
 						?>
 						</td>
 					</tr>
