@@ -23,7 +23,7 @@ require_once ("visual.inc.php");
 
 function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%", $last_visited=0)
 {
-global $PHP_SELF,$auth,$QUERY_STRING;
+global $PHP_SELF,$auth,$QUERY_STRING, $SessSemName;
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -49,7 +49,7 @@ if (!$db->num_rows())
      			echo"\n<table  border='0' bgcolor='#FFFFFF' cellspacing='0' cellpadding='2' align=\"center\" width='$width' >";
      			echo"\n<tr><td class='topic' colspan='2' width='99%'><img src='./pictures/news2.gif' border='0' alt='Newsticker. Klicken Sie rechts auf die Pfeile, um neue News in diesen Bereich zu stellen. Klicken Sie auf die roten Pfeile, um den ganzen Nachrichtentext zu lesen.' align='texttop'><b>&nbsp;News</b></td>";
      			echo"\n<td align = 'right' class='topic'>";
-     			echo"&nbsp;<a href='admin_news.php?new_sem=TRUE&cmd=new_entry'><img src='./pictures/pfeillink.gif' border='0' alt='News einstellen'></a>&nbsp;";
+     			printf ("&nbsp;<a href='admin_news.php?%s&cmd=new_entry'><img src='./pictures/pfeillink.gif' border='0' alt='News einstellen'></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=sem" : "new_inst=TRUE&view=inst");
      			echo"\n</td></tr>";
 			echo "\n<tr><td class='steel1' colspan=3><blockquote><br /><font size=-1>Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken sie auf die Doppelpfeile.</font></blockquote>";
      			echo "\n</td></tr></table>";
@@ -74,7 +74,8 @@ else
 			if ($show_admin) {
 				$colspan++;
 				echo"\n<td align = 'right' class='topic'>";
-				echo"&nbsp;<a href='admin_news.php?new_sem=TRUE&modus=admin&cmd=show&range_id=$range_id'><img src='./pictures/pfeillink.gif' border='0' alt='News bearbeiten'></a>&nbsp;";
+				printf ("&nbsp;<a href='admin_news.php?%s&modus=admin&cmd=show&range_id=$range_id'><img src='./pictures/pfeillink.gif' border='0' alt='News bearbeiten'></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=sem" : "new_inst=TRUE&view=inst");
+	     			echo"\n</td></tr>";
 			     	echo"\n</td></tr>";
 				}
 			echo "</table>";

@@ -27,19 +27,18 @@ if (!$entry_level) {
 //Reitersytem erzeugen
 
 //Topkats
-if ($entry_level=="inst")
+if ($entry_level=="inst") {
 	$structure["institut_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"institut_main.php", active=>FALSE);
-else
+	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
+	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
+	$structure["literatur"]=array (topKat=>"", name=>"Literatur zur Einrichtung", link=>"literatur.php?", active=>FALSE);
+} else {
 	$structure["seminar_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"seminar_main.php", active=>FALSE);
-
-$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
-
-$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
-
-if ($entry_level=="sem")
+	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
+	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>"Ablaufplan", link=>"dates.php", active=>FALSE);
-
-$structure["literatur"]=array (topKat=>"", name=>"Literatur", link=>"literatur.php", active=>FALSE);
+	$structure["literatur"]=array (topKat=>"", name=>"Literatur", link=>"literatur.php?", active=>FALSE);
+}
 
 //Bottomkats
 if ($entry_level=="inst") {
@@ -47,6 +46,8 @@ if ($entry_level=="inst") {
 	$structure["institut_mitarbeiter"]=array (topKat=>"institut_main", name=>"Mitarbeiter", link=>"institut_mitarbeiter.php", active=>FALSE);
 	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>"Veranstaltungen", link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
 	$structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
+	if ($rechte)
+		$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_institut.php?new_inst=TRUE&view=inst", active=>FALSE);
 } else {
 //
 	$structure["_seminar_main"]=array (topKat=>"seminar_main", name=>"Kurzinfo", link=>"seminar_main.php", active=>FALSE);
@@ -54,7 +55,7 @@ if ($entry_level=="inst") {
 	$structure["teilnehmer"]=array (topKat=>"seminar_main", name=>"Teilnehmer", link=>"teilnehmer.php", active=>FALSE);
 	$structure["druckansicht_s"]=array (topKat=>"seminar_main", name=>"Druckansicht", link=>"print_seminar.php", target=>"_new", active=>FALSE);
 	if ($rechte)
-		$structure["administration_v"]=array (topKat=>"seminar_main", name=>"Administration dieser Veranstaltung", link=>"admin_seminare1.php?new_sem=TRUE&s_details=1&s_id=".$SessSemName[1], active=>FALSE);
+		$structure["administration_v"]=array (topKat=>"seminar_main", name=>"Administration dieser Veranstaltung", link=>"admin_seminare1.php?new_sem=TRUE".$SessSemName[1], active=>FALSE);
 }
 //
 $structure["_forum"]=array (topKat=>"forum", name=>"Themen", link=>"forum.php", active=>FALSE);
@@ -76,9 +77,13 @@ if ($entry_level=="sem") {
 $structure["_folder"]=array (topKat=>"folder", name=>"Ordneransicht", link=>"folder.php?cmd=tree", active=>FALSE);
 $structure["alle_dateien"]=array (topKat=>"folder", name=>"Alle Dateien", link=>"folder.php?cmd=all", active=>FALSE);
 //
-$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php", active=>FALSE);
+$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=sem", active=>FALSE);
+	
 if ($rechte)
-	$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+	if ($entry_level=="sem")
+		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+	else
+		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=inst&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
 //Infofenstereintraege erzeugen
 if ($entry_level=="inst") {

@@ -663,15 +663,9 @@ function send_sms()
 <?php
 
 
- include "seminar_open.php"; //hier werden die     sessions initialisiert
-
- include "header.php";       //hier wird der "Kopf" nachgeladen
-
-
-if (($SessSemName["class"]=="inst") || ($SessSemName["class"]=="fak"))
-	include "links1.php";  //Linkleiste fuer geoffnetes Institut
-else
-	include "links_admin.inc.php";  //Linkleiste fuer admins
+include "seminar_open.php"; //hier werden die     sessions initialisiert
+include "header.php";       //hier wird der "Kopf" nachgeladen
+include "links_admin.inc.php";  //Linkleiste fuer admins
 
  require_once ("visual.inc.php");
 
