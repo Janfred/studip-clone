@@ -8,12 +8,6 @@ function xml_header()
 	return $xml_tag_string;
 }
 
-function xml_footer()
-{
-	$xml_tag_string = "</studip>";
-	return $xml_tag_string;
-}
-
 function xml_open_tag($tag_name, $tag_key = "")
 {
 	if ($tag_key != "")  
@@ -33,6 +27,12 @@ function xml_tag($tag_name, $tag_content)
 	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">" 
 		. utf8_encode( htmlspecialchars (kill_format( $tag_content ) ) )
 		. "</" . $tag_name .  ">\n";
+	return $xml_tag_string;
+}
+
+function xml_footer()
+{
+	$xml_tag_string = "</studip>";
 	return $xml_tag_string;
 }
 

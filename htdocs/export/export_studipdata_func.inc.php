@@ -2,10 +2,10 @@
 
 function output_data($object_data, $output_mode = "file")
 {
-	global $xml_file, $o_mode;
-	if (($o_mode == "file") OR ($o_mode == "processor") OR ($o_mode == "passthrough"))
+	global $xml_file;
+	if (($output_mode == "file") OR ($output_mode == "processor") OR ($output_mode == "passthrough") OR ($output_mode == "choose"))
 		fputs($xml_file, $object_data);
-	elseif ($o_mode == "direct")
+	elseif ($output_mode == "direct")
 		echo $object_data;
 }
 
@@ -61,23 +61,65 @@ function export_inst($inst_id)
 
 function export_sem($inst_id)
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $filter;
 
-	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
+	switch ($filter)
+	{
+		case "bereich":
+			$order = "bereiche.name, seminare.Name";
+			$group = "FIRSTGROUP";
+			$group_tab_zelle = "name";
+		break;
+		case "status":
+			$order = "seminare.status, bereiche.name, seminare.Name";
+			$group = "FIRSTGROUP";
+			$group_tab_zelle = "status";
+			$subgroup = "FIRSTGROUP";
+			$subgroup_tab_zelle = "name";
+		break;
+		case "seminar":
+			$order = " seminare.Name";
+		break;
+		default:
+			$order = "bereiche.name, seminare.Name";
+	}
+
 	$db->query('SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_bereich USING(Seminar_id) 
 				LEFT JOIN bereiche USING(bereich_id) 
 				WHERE seminar_inst.Institut_id = "' . $inst_id . '" 
-				ORDER BY bereiche.name, seminare.Name');
+				ORDER BY ' . $order);
+
+	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
 	while ($db->next_record()) 
 	{
+		$group_string = "";
+		if ((isset($group)) AND ($group != $db->f($group_tab_zelle)))
+		{
+			if ($group != "FIRSTGROUP")
+				$group_string .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
+			$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $db->f($group_tab_zelle));
+			$group = $db->f($group_tab_zelle);
+			if (isset($subgroup) AND ($subgroup == $db->f($subgroup_tab_zelle)))
+				$subgroup = "NEXTGROUP";
+		}
+		if ((isset($subgroup)) AND ($subgroup != $db->f($subgroup_tab_zelle)))
+		{
+			if ($subgroup != "FIRSTGROUP")
+				$group_string = xml_close_tag($xml_groupnames_lecture["subgroup2"]) . $group_string;
+			$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup2"], $db->f($subgroup_tab_zelle));
+			$subgroup = $db->f($subgroup_tab_zelle);
+		}
+		$data_object .= $group_string;
 		$object_counter++;
 		$data_object .= xml_open_tag($xml_groupnames_lecture["object"], $db->f("Name"));
 		while ( list($key, $val) = each($xml_names_lecture))
 		{
 			if ($val == "") $val = $key;
-			if ($key == "metadata_dates") 
+			if ($key == "status") 
+				$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
+			elseif ($key == "metadata_dates") 
 			{
 				$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
 				$vorb = vorbesprechung($db->f("Seminar_id"));
@@ -87,7 +129,7 @@ function export_sem($inst_id)
 				$data_object .= xml_tag($val[2], view_turnus($db->f("Seminar_id")));
 				$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
 			}
-			else if ($db->f($key) != "") 
+			elseif ($db->f($key) != "") 
 				$data_object .= xml_tag($val, $db->f($key));
 		}
 		$db2->query('SELECT * FROM auth_user_md5 
@@ -107,14 +149,30 @@ function export_sem($inst_id)
 		$data_object = "";
 	}
 
-	$data_object = xml_close_tag($xml_groupnames_lecture["group"]);
+	if (isset($subgroup))
+		$data_object .= xml_close_tag($xml_groupnames_lecture["subgroup2"]);
+	if (isset($group))
+		$data_object .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
+
+	$data_object .= xml_close_tag($xml_groupnames_lecture["group"]);
 	output_data($data_object, $o_mode);
 	$data_object = "";
 }
 
 function export_pers($inst_id)
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter;
+
+	switch ($filter)
+	{
+		case "status":
+			$order = "statusgruppen.name";
+			$group = "FIRSTGROUP";
+			$group_tab_zelle = "name";
+		break;
+		default:
+			$order = "statusgruppen.name";
+	}
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
@@ -126,10 +184,19 @@ function export_pers($inst_id)
 		LEFT JOIN user_info info USING(user_id) 
 		LEFT JOIN user_inst ui USING(user_id)
 		WHERE ui.Institut_id = "' . $inst_id . '" AND ui.inst_perms != "user"
-		 ');
+		ORDER BY ' . $order);
 
 	while ($db->next_record()) 
 	{
+		$group_string = "";
+		if ((isset($group)) AND ($group != $db->f($group_tab_zelle)))
+		{
+			if ($group != "FIRSTGROUP")
+				$group_string .= xml_close_tag($xml_groupnames_person["subgroup1"]);
+			$group_string .= xml_open_tag($xml_groupnames_person["subgroup1"], $db->f($group_tab_zelle));
+			$group = $db->f($group_tab_zelle);
+		}
+		$data_object .= $group_string;
 		$object_counter++;
 		$data_object .= xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
 		while ( list($key, $val) = each($xml_names_person))
@@ -145,7 +212,10 @@ function export_pers($inst_id)
 		$data_object = "";
 	}
 
-	$data_object = xml_close_tag( $xml_groupnames_person["group"]);
+	if (isset($group))
+		$data_object .= xml_close_tag($xml_groupnames_person["subgroup1"]);
+
+	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
 	output_data($data_object, $o_mode);
 	$data_object = "";
 }

@@ -28,6 +28,8 @@ $xml_names_inst = array(
 
 $xml_groupnames_lecture = array(
 	"group"			=>		"seminare",
+	"subgroup1"		=>		"gruppe",
+	"subgroup2"		=>		"untergruppe",
 	"object"			=>		"seminar",
 	"childgroup1"		=>		"termine",
 	"childgroup2"		=>		"dozenten",
@@ -53,6 +55,7 @@ $xml_names_lecture = array(
 
 $xml_groupnames_person = array(
 	"group"			=>		"personen",
+	"subgroup1"		=>		"gruppe",
 	"object"			=>		"person"
 );
 
@@ -62,9 +65,9 @@ $xml_names_person = array(
 	"geschlecht"		=>		"geschlecht",
 	"sprechzeiten"		=>		"sprechzeiten",
 	"raum"			=>		"raum",
-	"Telefon"			=>		"tel",
+	"Telefon"			=>		"telefon",
 	"Fax"			=>		"fax",
-	"email"			=>		"email",
+	"Email"			=>		"email",
 	"Home"			=>		"homepage",
 	"name"			=>		"statusgruppe"
 );

@@ -1,49 +1,41 @@
 <?
+$perm->check("dozent");
+
+$export_pagename = _("Datenexport");
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xml_vars.inc.php");   // XML-Variablen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xml_func.inc.php");   // XML-Funktionen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_studipdata_func.inc.php");   // Studip-Export-Funktionen
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");   // Datumsfunktionen
 
-if ($o_mode == "file")
+function CheckParamXML()
 {
-// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_num, $export_o_modes, $export_ex_types;
+
+	if ((($range_id != "") OR ($xml_file_id != "")) AND (in_array($o_mode, $export_o_modes) AND (in_array($ex_type, $export_ex_types))))
+		return true;
+
+	$export_error .= "<b>" . _("Unzulässiger Seitenaufruf!") . "</b><br>";
+	$export_error_num++;
+	return false;
 }
 
-function CheckParam()
+
+if (!CheckParamXML()) 
 {
-global $range_id, $ex_type, $xml_file_id, $o_mode;
-if ((($range_id != "") OR ($xml_file_id != "")) AND ($o_mode != "") AND (in_array($ex_type, array("veranstaltung", "person", "forschung"))))
-	return true;
-return false;
+	$infobox = array(			
+	array ("kategorie"  => "Information:",
+		"eintrag" => array	(	
+						array (	"icon" => "pictures/ausruf_small.gif",
+								"text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
+							 )
+						)
+		)
+	);
 }
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
-
-if ($o_mode == "file")
-{
-	 ?>
-	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr>
-		<td class="topic" colspan="2"><b>Datenexport</b>
-		</td>
-	</tr>
-	<? if (!CheckParam()) my_error("<b>Unzul&auml;ssiger Seitenaufruf!</b>");
-	?>
-	<tr>
-		<td class="blank" colspan="2">&nbsp; 
-		</td>
-	</tr>
-	<tr valign="top">
-     		<td width="90%" class="blank">
-	<table>		
-	<?
-
-}
 
 if ($o_mode != "direct")
 {
@@ -51,57 +43,48 @@ if ($o_mode != "direct")
 	$xml_file = fopen($TMP_PATH."/" . $xml_file_id, "w");
 }
 
-output_data ( xml_header() );
+output_data ( xml_header(), $o_mode);
 
 export_inst( $range_id );
 
-output_data ( xml_footer() );
+output_data ( xml_footer(), $o_mode);
 
 if ($o_mode != "direct")
+{
 	fclose($xml_file);
+}
 
 if ($o_mode == "file")
 {
 
 	if ($object_counter<1)
 	{
-		$xml_export_text = "Es wurden keine Daten gefunden!";
-//		echo "</td>";
-		my_error("Es wurden keine Daten gefunden! Die &uuml;bergebene ID verweist auf keine Veranstaltungs- / Personendaten.");
-//		die("</table></body>");
+		$xml_export_text = _("Es wurden keine Daten gefunden!");
+		$export_error = _("Es wurden keine Daten gefunden! Die übergebene ID verweist auf keine Veranstaltungs- / Personendaten.");
+		$export_error_num++;
+//		echo "</td></tr>";
+//		die("</table></td></tr></table></body>");
 
 	}
 	else
 	{
-		$xml_export_text = "Die Daten wurden erfolgreich exportiert.";
-		my_msg(sprintf("%s Objekte wurden verarbeitet.", $object_counter));
+		$xml_export_text = _("Die Daten wurden erfolgreich exportiert.");
+		$export_msg = sprintf(_("%s Objekte wurden verarbeitet."), $object_counter);
 
-		my_info("Die Daten wurden in eine XML-Datei exportiert. <br>Wenn Sie die Datei in ein anderes Format konvertieren wollen, klicken Sie auf weiter.<br>Um die Datei herunterzuladen, klicken Sie auf den Dateinamen.");
+		$export_info = _("Die Daten wurden in eine XML-Datei exportiert. <br>Wenn Sie die Datei in ein anderes Format konvertieren wollen, klicken Sie auf weiter.<br>Um die Datei herunterzuladen, klicken Sie auf den Dateinamen.");
+
+		$export_pagecontent .= "<br><br>";
+		
+		$export_weiter_button = "<center><a href=\"" . $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type . "&o_mode=choose\">" . makeButton("weiter") . "</a></center>";
+
+		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
+		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>";
+		$xml_printdesc = _("XML-Daten");
+		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	
 	}
-	?>
-	</table>
-	<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr><?
-	printhead ("99%", 0, "", "close", true, "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>", "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>", "XML-Daten");
-	?></tr></table><table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>
-	<?
-	printcontent("99%", FALSE, "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;nnen mit einem XSLT-Script verarbeitet werden.<br>", "");
-	?>
-	</tr></table>
-	<br><br><br><?
 	
-	if ($object_counter>0) 
-	{
-		?>
-		<center><a href="<? echo $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type . "&o_mode=" . $o_mode;?>"><? echo makeButton("weiter"); ?></a></center>
-		<?
-	}
-	?>
-	</td>
-	<td width="270" NOWRAP class="blank" align="center" valign="top">
-	<?
-
 	$infobox = array	(			
-	array ("kategorie"  => "Information:",
+	array ("kategorie"  => _("Information:"),
 		"eintrag" => array	(	
 						array (	"icon" => "pictures/ausruf_small.gif",
 								"text"  => $xml_export_text
@@ -112,26 +95,14 @@ if ($o_mode == "file")
 	if ($object_counter > 0)
 	{
 		$link = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">";
-		$infobox[1]["kategorie"] = "Aktionen:";
+		$infobox[1]["kategorie"] = _("Aktionen:");
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/" . $export_icon["xml"] ,
-										"text"  => "Um die XML-Datei jetzt herunterzuladen klicken Sie $link hier </a>."
+										"text"  => sprintf(_("Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."), $link, "</a>")
 									);
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/file.gif" ,
-										"text"  => "Wenn Sie die Daten konvertieren wollen, klicken Sie auf 'weiter'."
+										"text"  => _("Wenn Sie die Daten konvertieren wollen, klicken Sie auf 'weiter'.")
 									);
 	}
-	print_infobox ($infobox,"pictures/export.jpg");
-	?>		
-		</td>		
-	</tr>
-	<tr>
-		<td class="blank" colspan="2">&nbsp; 
-		</td>
-	</tr>
-	</table>
-	<p>&nbsp;</p>
-	</body>
-	</html>
-	<?
+	
 }
 ?>
