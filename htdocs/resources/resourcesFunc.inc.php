@@ -281,10 +281,11 @@ function getMyRoomRequests($user_id = '') {
 		$user_id = $user->id;
 		
 	if ((getGlobalPerms($user_id) == "admin") || ($perm->have_perm("root"))) {
-		$query = sprintf("SELECT request_id, closed FROM resources_requests");
+		$query = sprintf("SELECT request_id, closed, IF(LEFT(metadata_dates,16)='a:4:{s:3:\"art\";N',NULL,1) AS metadatime, termin_id FROM resources_requests rr LEFT JOIN seminare USING(seminar_id) GROUP BY request_id");
 		$db->query($query);
 		while ($db->next_record()) {
 			$requests [$db->f("request_id")] = array("my_sem"=>TRUE, "my_res"=>TRUE, "closed"=>$db->f("closed"));
+			$requests [$db->f("request_id")]["have_times"] = ($db->f("termin_id") || $db->f("metatime"));
 		}
 	} else {
 		//load all my resources
@@ -305,11 +306,12 @@ function getMyRoomRequests($user_id = '') {
 		}
 		if (sizeof($my_sems)) {
 			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
-			$query_sem = sprintf("SELECT request_id, closed FROM resources_requests WHERE seminar_id IN %s", $in_seminar_id);
+			$query_sem = sprintf("SELECT request_id, closed, IF(LEFT(metadata_dates,16)='a:4:{s:3:\"art\";N',NULL,1) AS metadatime, termin_id FROM resources_requests rr INNER JOIN seminare USING(seminar_id) WHERE rr.seminar_id IN %s GROUP BY request_id", $in_seminar_id);
 			$db->query($query_sem);
 			while ($db->next_record()) {
 				$requests [$db->f("request_id")]["my_sem"] = TRUE;
 				$requests [$db->f("request_id")]["closed"] = $db->f("closed");
+				$requests [$db->f("request_id")]["have_times"] = ($db->f("termin_id") || $db->f("metatime"));
 			}
 		}
 	}

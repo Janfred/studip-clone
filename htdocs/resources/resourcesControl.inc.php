@@ -280,12 +280,13 @@ if ($view == "edit_object_assign" || $view == "openobject_assign") {
 				<td valign ="top">
 			<?
 		}
-
+	
 	if ($resources_data["actual_object"]) {
 		$editObject=new EditResourceData($resources_data["actual_object"]);
 		$editObject->setUsedView($view);
-		if ($edit_assign_object)
+		if ($edit_assign_object){
 			$resources_data["actual_assign"]=$edit_assign_object;
+		}
 		$editObject->showScheduleForms($resources_data["actual_assign"]);
 	} else {
 		echo "</td></tr>";
