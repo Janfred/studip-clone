@@ -33,6 +33,51 @@ function object_add_view ($object_id) {
 	return $views;
 }
 
+function object_check_user ($object_id, $flag) {
+	global $user;
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM object_user WHERE object_id = '$object_id' AND user_id = '$user->id' AND flag = '$flag'");
+	if ($db->next_record())  // Der Nutzer hat hier einen Eintrag
+		$tmp = TRUE;
+	else
+		$tmp = FALSE;
+	return $tmp;
+}
+
+function object_add_rate ($object_id, $rate) {
+	global $user;
+	if (object_check_user($object_id, "rate") == FALSE) {
+		$now = time();
+		$db=new DB_Seminar;
+		$db->query("INSERT INTO object_user (object_id, user_id, flag, mkdate) values ('$object_id', '$user->id', 'rate', '$now')");	
+		$db->query("INSERT INTO object_rate (object_id, rate, mkdate) values ('$object_id', '$rate', '$now')");	
+		$txt = _("Sie haben das Objekt mit \"$rate\"  bewertet.");
+	} else {
+		$txt = _("Sie haben dieses Objekt bereits bewertet.");
+	}
+	return $txt;
+}
+
+function object_print_rate ($object_id) {
+	$db=new DB_Seminar;
+	$db->query("SELECT avg(rate) as mittelwert FROM object_rate WHERE object_id = '$object_id'");
+	if ($db->next_record())
+		$tmp = round($db->f("mittelwert"),2);
+		if ($tmp == 0)
+			$tmp = "?";
+	return $tmp;
+}
+
+function object_print_rates_detail ($object_id) {
+	$db=new DB_Seminar;
+	for ($i = 1;$i<6;$i++)
+		$tmp[$i] = 0;
+	$db->query("SELECT DISTINCT count(rate) as count, rate FROM object_rate WHERE object_id = '$object_id' GROUP BY rate");
+	while ($db->next_record())
+		$tmp[$db->f("rate")] = $db->f("count");
+	return $tmp;
+}
+
 function object_return_views ($object_id) {
 	$db=new DB_Seminar;
 	$db->query("SELECT views FROM object_views WHERE object_id = '$object_id'");

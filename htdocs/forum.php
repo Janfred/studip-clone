@@ -304,6 +304,10 @@ if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 		$forum["lostposting"] = $edit_id;
 }
 
+if ($rate && $open) {
+	$txt = object_add_rate ($open, $rate);
+}
+
 // Anker setzen
 
 	$forum["anchor"] = $open;
@@ -316,6 +320,7 @@ if (!$forumsend=="anpassen") {
 	// Ausgabe für Zusatzinfos
 	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
 	if ($message=="move") echo parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
+	if ($txt) echo parse_msg("msg§" . $txt);
 	if ($cmd == "move" && $topic_id !="" && $rechte)
 		forum_move_navi ($topic_id);
 		

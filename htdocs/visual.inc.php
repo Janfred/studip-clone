@@ -608,21 +608,31 @@ function mila ($titel, $size = 60) {
 
 //Ausgabe der Aufklapp-Kopfzeile
 function printhead ($breite, $left, $link, $open, $new, $icon,
-		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $views="", $indikator="age") {
+		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index="", $indikator="age") {
 
 		// Verzweigung was der PFeil anzeigen soll
 		
 	if ($indikator=="views") {
-		if ($views == "0") {
+		if ($index == "0") {
 			$timecolor = "#BBBBBB";
 		} else {
-			$tmp = $views;
+			$tmp = $index;
 			if ($tmp > 68)
 				$tmp = 68;
 			$tmp = 68-$tmp;
 			$green = dechex(255 - $tmp);
 			$other = dechex(119 + ($tmp/1.5));
 			$timecolor= "#" . $other . $green . $other;
+		}
+	} elseif ($indikator == "rate") {
+		if ($index == "?") {
+			$timecolor = "#BBBBBB";
+		} else {
+			$tmp = (ABS(1-$index))*10*3;
+			$green = dechex(255 - $tmp);
+			$other = dechex(0);
+			$red = dechex(255);
+			$timecolor= "#" . $red . $green . $other;
 		}
 	} else {
 		if ($timestmp == 0)

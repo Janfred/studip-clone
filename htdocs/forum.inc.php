@@ -590,7 +590,9 @@ function printposting ($forumposting) {
   		
   		if (!$objectviews)
   			$objectviews = object_return_views($forumposting["id"]);
+  		$forumposting["rate"] = object_print_rate($forumposting["id"]);
   		$forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
+  		$forumhead[] = "<font color=\"#AA8800\">".$forumposting["rate"]."</font> / ";
   		
   		if ($forumposting["foldercount"] && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
@@ -630,6 +632,10 @@ function printposting ($forumposting) {
 			 	$new = TRUE;		
   			$forumposting["mkdate"] = $forumposting["folderlast"];
   		}
+  		if ($forum["indikator"] == "views")
+  			$index = $objectviews;
+  		elseif ($forum["indikator"] == "rate")
+  			$index = $forumposting["rate"];
   		
   // Kopfzeile ausgeben 		
   		
@@ -637,7 +643,7 @@ function printposting ($forumposting) {
   			echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
   		if ($forum["anchor"] == $forumposting["id"])
   			echo "<a name='anker'></a>";
-		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$forumposting["mkdate"],"TRUE",$objectviews,$forum["indikator"]);
+		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$forumposting["mkdate"],"TRUE",$index,$forum["indikator"]);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
 		echo "</tr></table>\n";	
@@ -660,16 +666,26 @@ function printposting ($forumposting) {
 			$description = quotes_decode($description);
 
 		if ($sidebar==$forumposting["id"]) {
-			$addon = "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz:<br>&nbsp;&nbsp;Bewertung:";
-			$addon .= "<br><font size=\"-2\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5:<br>";
-			$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
-			$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1<input type=radio name=rate value=1>";
-			$addon .= "<input type=radio name=rate value=2>";
-			$addon .= "<input type=radio name=rate value=3>";
-			$addon .= "<input type=radio name=rate value=4>";
-			$addon .= "<input type=radio name=rate value=5>5&nbsp;";
-			$addon .= "<br><br><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>";
-			$addon .= "</form>";
+			$addon = "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz:<br>&nbsp;&nbsp;Bewertung: ".$forumposting["rate"]."<br>";
+			$rate = object_print_rates_detail($forumposting["id"]);
+			while(list($key,$value) = each($rate)) 
+				$addon .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$key: $value<br>";
+					
+			if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
+				$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
+				$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1<input type=radio name=rate value=1>";
+				$addon .= "<input type=radio name=rate value=2>";
+				$addon .= "<input type=radio name=rate value=3>";
+				$addon .= "<input type=radio name=rate value=4>";
+				$addon .= "<input type=radio name=rate value=5>5&nbsp;";
+				$addon .= "<br><br>";
+				$addon .= "<input type=hidden name=open value='".$forumposting["id"]."'><input type=hidden name=sidebar value='".$forumposting["id"]."'>";
+				$addon .= "<input type=hidden name=flatviewstartposting value='".$forum["flatviewstartposting"]."'>";
+				$addon .= "<input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>";
+				$addon .= "</form>";
+			} else {
+				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
+			}
 		} else 
 			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";		
   
