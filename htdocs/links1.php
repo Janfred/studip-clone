@@ -112,9 +112,9 @@ if ($rechte)
 
 //Infofenstereintraege erzeugen
 if ($entry_level=="inst") {
-	$tooltip="Sie befinden sich in der Einrichtung: ".$SessSemName.", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Einrichtung: ".$SemUserStatus;
+	$tooltip="Sie befinden sich in der Einrichtung: ".$SessSemName[0].", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Einrichtung: ".$SemUserStatus;
 } else {
-	$tooltip="Sie befinden sich in der Veranstaltung: ".$SessSemName.", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Veranstaltung: ".$SemUserStatus;
+	$tooltip="Sie befinden sich in der Veranstaltung: ".$SessSemName[0].", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Veranstaltung: ".$SemUserStatus;
 }
 
 //View festlegen
