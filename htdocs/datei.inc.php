@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 function createSelectedZip ($file_ids) {
-	global $TMP_PATH, $ZIP_PATH, $SessSemName;
+	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName;
 	$db = new DB_Seminar();
 		
 	$zip_file_id=md5(uniqid("jabba"));
@@ -30,14 +30,14 @@ function createSelectedZip ($file_ids) {
 	
 	//create folder content
 	$in="('".join("','",$file_ids)."')";	
-	$db->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN $in AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename");
+	echo "SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN $in AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename";
 	while ($db->next_record()) {
 		$docs++;
 		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
 	}
 
 	//zip stuff
-	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -j ".$TMP_PATH."/".$zip_file_id." * ");
+	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$TMP_PATH."/".$zip_file_id." * ");
  	exec ("rm -r $tmp_full_path");
  	exec ("mv ".$TMP_PATH."/".$zip_file_id.".zip ".$TMP_PATH."/".$zip_file_id);
  	
@@ -77,7 +77,7 @@ function createTempFolder ($folder_id,$tmp_full_path) {
 	$db->query("SELECT folder_id, name FROM folder WHERE range_id = '$folder_id' ORDER BY name");
 	while ($db->next_record()) {
 		$folders++;
-		$tmp_sub_full_path = $tmp_full_path."/[".$folders."]".$db->f("name");
+		$tmp_sub_full_path = $tmp_full_path."/[".$folders."] ".$db->f("name");
 		exec ("mkdir '$tmp_sub_full_path' ");
 		createTempFolder($db->f("folder_id"),$tmp_sub_full_path);
 	}
