@@ -62,10 +62,12 @@ class ShowToolsRequests {
 	function getMyOpenSemRequests() {
 		if (!$this->requests)
 			$this->requests = getMyRoomRequests();
-		
-		foreach ($this->requests as $val) {
-			if ((!$val["closed"]) && ($val["my_sem"]))
-				$count++;
+
+		if (is_array($this->requests)) {
+			foreach ($this->requests as $val) {
+				if ((!$val["closed"]) && ($val["my_sem"]))
+					$count++;
+			}
 		}
 		return $count;
 	}
@@ -74,9 +76,11 @@ class ShowToolsRequests {
 		if (!$this->requests)
 			$this->requests = getMyRoomRequests();
 
-		foreach ($this->requests as $val) {
-			if ((!$val["closed"]) && ($val["my_res"]))
-				$count++;
+		if (is_array($this->requests)) {
+			foreach ($this->requests as $val) {
+				if ((!$val["closed"]) && ($val["my_res"]))
+					$count++;
+			}
 		}
 		return $count;
 	}
@@ -85,9 +89,11 @@ class ShowToolsRequests {
 		if (!$this->requests)
 			$this->requests = getMyRoomRequests();
 		
-		foreach ($this->requests as $val) {
-			if (!$val["closed"])
-				$count++;
+		if (is_array($this->requests)) {
+			foreach ($this->requests as $val) {
+				if (!$val["closed"])
+					$count++;
+			}
 		}
 		return $count;
 	}
@@ -225,7 +231,10 @@ class ShowToolsRequests {
 								$tmp_assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 								foreach ($metadates as $key=>$val) {
 									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $key+1, $val);
-									$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
+									if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"])
+										$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$i]["resource_id"]);
+									else
+										$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
 									if ($link = $resObj->getFormattedLink(TRUE, TRUE, TRUE))
 										print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 									$i++;
@@ -264,7 +273,7 @@ class ShowToolsRequests {
 							while ($this->db->next_record()) {
 								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
 								$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i-1]]["resource_id"]);
-								if ($link == $resObj->getFormattedLink(TRUE, TRUE, TRUE))
+								if ($link = $resObj->getFormattedLink(TRUE, TRUE, TRUE))
 									print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 								$i++;
 							}
@@ -282,12 +291,19 @@ class ShowToolsRequests {
 							</td>
 							<?
 							$cols=0;
-							if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]))
-								
-								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key => $val) {
-									$cols++;
-									print "<td width=\1%\" align=\"left\"><font size=\"-1\" color=\"blue\"><i><b>".$cols.".</b></i></font></td>";
-								}
+							if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"]))
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key => $val) {
+										$cols++;
+										print "<td width=\1%\" align=\"left\"><font size=\"-1\" color=\"blue\"><i><b>".$cols.".</b></i></font></td>";
+									}
+							} else {
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]))
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key => $val) {
+										$cols++;
+										print "<td width=\1%\" align=\"left\"><font size=\"-1\" color=\"blue\"><i><b>".$cols.".</b></i></font></td>";
+									}
+							}
 							?>
 							<td width="29%">
 								&nbsp;
@@ -309,15 +325,32 @@ class ShowToolsRequests {
 							</td>
 							<?
 							$i=0;
-							if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
+							if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
+								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key => $val) {
+									print "<td width=\"1%\" nowrap><font size=\"-1\">";
+									if ($request_resource_id) {
+										if ($request_resource_id == $val["resource_id"]) {
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id], $val["events_count"], $val["overlap_events_count"][$request_resource_id], $val["termin_ids"]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $request_resource_id, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $request_resource_id) ? "checked" : "", ($overlap_status["status"] == 2) ? "disabled" : "");
+										}
+									} else
+										print "&nbsp;";
+									print "</font></td>";
+									$i++;
+								}
+							} elseif (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key => $val) {
 									print "<td width=\"1%\" nowrap><font size=\"-1\">";
 									if ($request_resource_id) {
 										if ($request_resource_id == $val["resource_id"]) {
-											echo "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
 										} else {
-											print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id][$key]);
-											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id][$key], $val["events_count"], $val["overlap_events_count"][$request_resource_id]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $request_resource_id, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $request_resource_id) ? "checked" : "", ($overlap_status["status"] == 2) ? "disabled" : "");
 										}
 									} else
 										print "&nbsp;";
@@ -358,17 +391,35 @@ class ShowToolsRequests {
 							</td>
 							<?
 							$i=0;
-							if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
-								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
-									print "<td width=\"1%\" nowrap><font size=\"-1\">";
-									if ($key == $val2["resource_id"]) {
-										print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
-									} else {
-										print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]);
-										printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+							if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"])) {
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key2 => $val2) {
+										print "<td width=\"1%\" nowrap><font size=\"-1\">";
+										if ($key == $val2["resource_id"]) {
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", (($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $key) ? "checked" : "", ($overlap_status["status"] == 2) ? "disabled" : "");
+										}
+										print "</font></td>";
+										$i++;
 									}
-									print "</font></td>";
-									$i++;
+								}
+							} else {								
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
+										print "<td width=\"1%\" nowrap><font size=\"-1\">";
+										if ($key == $val2["resource_id"]) {
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", (($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($overlap_status["status"] == 2) ? "disabled" : "");
+										}
+										print "</font></td>";
+										$i++;
+									}
 								}
 							}
 							?>
@@ -403,17 +454,35 @@ class ShowToolsRequests {
 							</td>
 							<?
 							$i=0;
-							if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
-								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
-									print "<td width=\"1%\" nowrap><font size=\"-1\">";
-									if ($key == $val2["resource_id"]) {
-										print "<img src=\"pictures/haken.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
-									} else {
-										print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]);
-										printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+							if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"])) {
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key2 => $val2) {
+										print "<td width=\"1%\" nowrap><font size=\"-1\">";
+										if ($key == $val2["resource_id"]) {
+											print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", (($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $key) ? "checked" : "", ($overlap_status["status"] == 2) ? "disabled" : "");
+										}
+										print "</font></td>";
+										$i++;
 									}
-									print "</font></td>";
-									$i++;
+								}
+							} else {									
+								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
+										print "<td width=\"1%\" nowrap><font size=\"-1\">";
+										if ($key == $val2["resource_id"]) {
+											print "<img src=\"pictures/haken.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
+											print $overlap_status["html"];
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($overlap_status["status"] == 2) ? "disabled" : "");
+										}
+										print "</font></td>";
+										$i++;
+									}
 								}
 							}
 							?>
@@ -445,13 +514,13 @@ class ShowToolsRequests {
 							?>
 							<tr>
 								<td width="50%">
-									<font size="-1"><?=htmlReady($val["name"])?></font>
+									<li><font size="-1"><?=htmlReady($val["name"])?></font></li>
 								</td>
 								<td width="50%"><font size="-1">
 								<?
 								switch ($val["type"]) {
 									case "bool":
-										printf ("%s", ($val["state"]) ?  htmlReady($val["options"]) : " - ");
+										/*printf ("%s", ($val["state"]) ?  htmlReady($val["options"]) : " - ");*/
 									break;
 									case "num":
 									case "text";
@@ -537,14 +606,55 @@ class ShowToolsRequests {
 		<?
 	}
 	
-	function showOverlapStatus($overlaps) {
-		//print_r ($overlaps);
-		if (is_array($overlaps)) {
-			foreach ($overlaps as $val) { 
-				$desc.=sprintf(_("Überschneidung am %s von %s bis %s Uhr")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("H:i", $val["end"]));
+	function showGroupOverlapStatus($overlaps, $events_count, $overlap_events_count, $group_dates) {
+		if ($overlap_events_count) {
+			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
+				if ($overlap_events_count == 1)
+					$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
+				else
+					$desc.=sprintf(_("Es existieren Überschneidungen zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n", $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
+				$html = "<img src=\"pictures/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$status = 2;
+			} else {
+				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen:\n"));
+				foreach ($group_dates as $key=>$val) { 
+					if ($overlaps[$key]) 
+						foreach ($overlaps[$key] as $key2=>$val2) 
+							$desc.=sprintf(_("%s von %s bis %s Uhr")."\n", date("d.m.Y", $val2["begin"]), date("H:i", $val2["begin"]), date("H:i", $val2["end"]));
+				}
+				$html = "<img src=\"pictures/ampel_gelb.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$status = 1;
 			}
-			return "<img src=\"pictures/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
-		} else
-			return "<img src=\"pictures/ampel_gruen.gif\" ".tooltip(_("Keine Überschneidungen"), TRUE, TRUE)."/>";
-	}		
+		} else {
+			$html = "<img src=\"pictures/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
+			$status = 0;
+		}
+		return array("html"=>$html, "status"=>$status);
+	}
+
+
+	function showOverlapStatus($overlaps, $events_count, $overlap_events_count) {
+		if (is_array($overlaps)) {
+			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
+				if ($overlap_events_count == 1)
+					$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
+				else
+					$desc.=sprintf(_("Es existieren Überschneidungen zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n", $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
+				$html = "<img src=\"pictures/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$status = 2;
+			} else {
+				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen:\n"));
+				foreach ($overlaps as $val) { 
+					$desc.=sprintf(_("%s von %s bis %s Uhr")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("H:i", $val["end"]));
+				}
+				$html = "<img src=\"pictures/ampel_gelb.gif\" ".tooltip($desc, TRUE, TRUE)." />";
+				$status = 1;
+			}
+		} else {
+			$html = "<img src=\"pictures/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
+			$status = 0;
+		}
+		return array("html"=>$html, "status"=>$status);
+	}
+	
 }
