@@ -115,7 +115,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo FixLinks(format(htmlReady($db->f($data_field))));
+					echo formatReady($db->f($data_field), TRUE, TRUE, TRUE);
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 				break;
@@ -139,7 +139,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo FixLinks(format(htmlReady($datafields[$data_field]["content"])));
+					echo formatReady($datafields[$data_field]["content"], TRUE, TRUE, TRUE);
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 		}
@@ -183,13 +183,13 @@ function news (&$this, $db, $alias_content, $text_div, $text_div_end) {
 			echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 			echo $subheadline_div;
 			echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-			echo format(htmlReady($db_news->f("topic")));
+			echo htmlReady($db_news->f("topic"));
 			echo "</font>$subheadline_div_end</td></tr>\n";
 			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 			list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
 			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 			echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-			echo FixLinks(format(htmlReady($content)));
+			echo formatReady($content, TRUE, TRUE, TRUE);
 			echo "</font>$text_div_end</td></tr>\n";
 		}
 		echo "</table>\n</td></tr>\n";
@@ -226,13 +226,13 @@ function termine (&$this, $db, $alias_content, $text_div, $text_div_end) {
 					echo strftime(" - %H.%m", $event->getEnd());
 				else
 					echo strftime(" - " . $this->config->getValue("Main", "dateformat") . " %H.%m", $event->getEnd());
-				echo " &nbsp;" . format(htmlReady($event->getTitle()));
+				echo " &nbsp;" . htmlReady($event->getTitle());
 				echo "</font>$subheadline_div_end</td></tr>\n";
 				if ($event->getDescription()) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-					echo FixLinks(format(htmlReady($event->getDescription())));
+					echo htmlReady($event->getDescription());
 					echo "</font>$text_div_end</td></tr>\n";
 				}
 			} 
@@ -257,7 +257,7 @@ function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
 		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 		echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-		echo FixLinks(format(htmlReady($db_kategorien->f("content"))));
+		echo formatReady($db_kategorien->f("content"), TRUE, TRUE, TRUE);
 		echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 	} 
 }
@@ -568,7 +568,7 @@ function kontakt ($this, $db) {
 		}
         	
 		if($data_field == "Home" && $db->f("Home")){
-			$home = trim(formatReady($db->f("Home")));
+			$home = trim(FixLinks($db->f("Home"), TRUE, TRUE, FALSE, TRUE));
 			$out .= "<tr$attr_tr>";
 			$out .= "<td$attr_td>";
 			$out .= "<font$attr_fonttitle>";
@@ -585,7 +585,7 @@ function kontakt ($this, $db) {
 			$out .= $alias_contact[$position] . "</font></td>";
 			$out .= "<td$attr_td>";
 			$out .= "<font$attr_fontcontent>";
-			$out .= formatReady($db->f("sprechzeiten"), TRUE) . "</font></td></tr>\n";
+			$out .= htmlReady($db->f("sprechzeiten")) . "</font></td></tr>\n";
 		}
 	}
 	$out .= "</table>\n";
