@@ -811,7 +811,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 		//Zusatz erstellen
 		if ((!$admin_dates_data["insert_id"]) && ($show_id  != $db->f("termin_id")) && (!$show_all))
-			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
+			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
 		else
 			$zusatz='';
 
