@@ -115,7 +115,7 @@ if ($existingowninfolabel) {
 
 ?>
 <table width = "100%" cellspacing="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch <font size="2">(<?echo GetSizeofBook();?> Eintr&auml;ge)</size></b>
+	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch <font size="2">(<?echo $size_of_book = GetSizeofBook();?> Eintr&auml;ge)</size></b>
 	</td>
 </tr><tr><td class="blank" align="left" valign="absmiddle">
 
@@ -156,23 +156,27 @@ echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"1\"><
 
 
 if (($contact["view"])=="alpha") {
-	echo "<table align=\"center\" ><tr>";
+	echo "<table align=\"center\" width=\"70%\"><tr>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
-	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=all\">a-z</a>"
-		."&nbsp; </td>";
+	echo "<td width=\"5%\" align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\" "
+		. tooltip(($size_of_book == 1) ? _("1 Eintrag") : sprintf(_("%s Einträge"),$size_of_book),false)
+		."><a href=\"$PHP_SELF?filter=all\">a-z</a>"
+		."</td>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
+	$size_of_book_by_letter = GetSizeOfBookByLetter();
 	for ($i=97;$i<123;$i++) {
 		if ($filter==chr($i)) {
 			$cssSw->switchClass();
 		}
-		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=".chr($i)."\">".chr($i)."</a>"
-		."&nbsp; </td>";
+		echo "<td width=\"3%\"  align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\""
+		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? ("1 Eintrag") : sprintf(_("%s Einträge"),($size_of_book_by_letter[chr($i)]) ? $size_of_book_by_letter[chr($i)] : "keine"),false)
+		."><a href=\"$PHP_SELF?filter=".chr($i)."\" "
+		. ">".chr($i)."</a>"
+		."</td>";
 		if ($filter==chr($i)) {
 			$cssSw->switchClass();
 		}
