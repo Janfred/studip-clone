@@ -51,7 +51,7 @@ while ($db2->next_record()) {
 }
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
-if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x) {
+if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x) {
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
 	$my_messaging_settings["delete_messages_after_logout"] = $delete_messages_after_logout;
@@ -294,14 +294,14 @@ function change_messaging_view() {
 								}
 							}
 						} ?>
-                        			</select>
+                        </select>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
 						<input type="hidden" name="view" value="Messaging">
 						<font size=-1>
-						<input type="image" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>"></font>&nbsp;
+						<input type="image" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>" name="newmsgset"></font>&nbsp;
 						<input type="image" name="set_msg_default" <?=makeButton("zuruecksetzen", "src") ?> border=0 value="<?_("Einstellungen zurücksetzen")?>"></font>
 						</form>	
 					</td>
