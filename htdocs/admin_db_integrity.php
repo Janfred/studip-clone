@@ -165,9 +165,9 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
 			echo "\n$anzahl Datensätze gefunden</td>";
 			echo "\n<td ".$_csw->getFullClass().">";
 			echo ($anzahl==0) ? "&nbsp;" : "<a href=\"{$PHP_SELF}?plugin={$_REQUEST['plugin']}&cmd=show&checkid={$i}\">"
-				."<img src=\"pictures/buttons/anzeigen-button.gif\" border=\"0\"></a>&nbsp;"
+				."<img src=\"pictures/buttons/anzeigen-button.gif\" border=\"0\" align=\"middle\"></a>&nbsp;"
 				."<a href=\"{$PHP_SELF}?plugin={$_REQUEST['plugin']}&cmd=assure&checkid={$i}\">"
-				."<img src=\"pictures/buttons/loeschen-button.gif\" border=\"0\"></a></td></tr>";
+				."<img src=\"pictures/buttons/loeschen-button.gif\" border=\"0\" align=\"middle\"></a></td></tr>";
 			$_csw->switchClass();
 		}
 		?><tr><td colspan="3">&nbsp;</td></tr></table><?
@@ -197,7 +197,8 @@ if(!$_REQUEST['plugin']){
 		echo "\n<td ".$_csw->getFullClass()." style=\"font-size:smaller\">Testet Tabelle: <b>".$plugin_obj->getCheckMasterTable()
 			."</b> gegen <i>".join(", ",$plugin_obj->getCheckDetailList())."</i></td>";
 		echo "\n<td align=\"center\" ".$_csw->getFullClass().">".$plugin_obj->getCheckCount()."</td>";
-		echo "\n<td align=\"center\" ".$_csw->getFullClass()."><a href=$PHP_SELF?plugin=".$_integrity_plugins[$i].">&nbsp; <img src=\"pictures/buttons/jetzttesten-button.gif\" border=0></a>&nbsp; </td></tr>";
+		echo "\n<td align=\"center\" ".$_csw->getFullClass()."><a href=$PHP_SELF?plugin=".$_integrity_plugins[$i]
+			."><img src=\"pictures/buttons/jetzttesten-button.gif\" border=\"0\" align=\"middle\" hspace=\"10\" vspace=\"10\"></a></td></tr>";
 		$_csw->switchClass();
 	}
 	?><tr><td colspan="3">&nbsp;</td></tr></table><?
