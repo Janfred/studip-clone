@@ -53,12 +53,9 @@ $AUTO_INSERT_SEM[2]="db3ef283064dc8b34aa8e8df579998da";
 
 
 //Daten ueber Uniferien
-$HOLIDAY[1]=array("beginn"=>mktime(0,0,0,12,22,2001), "ende"=>mktime (23,59,59,1,6,2002));		# Beginn und Ende der Weihnachtsferien
-$HOLIDAY[2]=array("beginn"=>mktime(0,0,0,5,20,2002), "ende"=>mktime (23,59,59,5,26,2002));		# Beginn und Ende der Pfingstferien 2002
-$HOLIDAY[3]=array("beginn"=>mktime(0,0,0,12,23,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
-$HOLIDAY[4]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
-$HOLIDAY[5]=array("beginn"=>mktime(0,0,0,12,23,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
-$HOLIDAY[6]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
+$HOLIDAY[1]=array("beginn"=>mktime(0,0,0,12,21,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
+$HOLIDAY[2]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
+$HOLIDAY[3]=array("beginn"=>mktime(0,0,0,12,20,2003), "ende"=>mktime (23,59,59,1,4,2004));		# Beginn und Ende der Weihnachtsferien 2003
 //weitere Feiertage und Ferien koennen hier angefuegt werden
 
 
