@@ -141,7 +141,7 @@ if ($cmd=="raus") {
 		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
-		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
+		//$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
 		
 		$message="Ihr Abonnement der Veranstaltung **$SessSemName[0]** wurde von einem Dozenten oder Administrator aufgehoben.";
 		$messaging->insert_sms ($username, $message, "____%system%____");
