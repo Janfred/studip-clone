@@ -1,17 +1,19 @@
 <?php
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-?>
-
-<html>
-<head>
-<?IF (!isset($SessSemName[0]) || $SessSemName[0] == "") {
-    echo "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=index.php\">";
-    echo "</head></html>";
-    die;
+if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
+	header("Location: index.php");
+	die;
 }
 
-IF  ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+
+if  ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
 ?>
 <SCRIPT language="JavaScript">
 <!--
@@ -34,16 +36,6 @@ function pruefe_name(){
 </SCRIPT>
 <?
 }
-?>
-<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<?
-	echo "<BODY>";
-
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-
-// -- hier muessen Seiten-Initialisierungen passieren --
 
 	require_once("forum.inc.php");
 	require_once("visual.inc.php");

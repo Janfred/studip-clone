@@ -1,38 +1,25 @@
 <?php
-## Include this, if you do not use auto_prepend
-
-  include($_PHPLIB["libdir"] . "table.inc");
   
-  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-  $perm->check("root");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("root");
 
-  ## We need a database connection and a table object for later...
-  $db = new DB_Seminar;
-  $t  = new Table;
-  $t->heading = "on";
-  $t->check   = "sid";
-?>
-<html>
-<head>
- <title>Stud.IP</title>
- 	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<body bgcolor="#ffffff">
+// -- here you have to put initialisations for the current page
 
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
+## Include this, if you do not use auto_prepend
+include($_PHPLIB["libdir"] . "table.inc");
 
-<!-- hier muessen Seiten-Initialisierungen passieren -->
+## We need a database connection and a table object for later...
+$db = new DB_Seminar;
+$t  = new Table;
+$t->heading = "on";
+$t->check   = "sid";
 
-<?php 
-	include "header.php";   //hier wird der "Kopf" nachgeladen 
-?>
-<body>
-
-<?php
-include "links_admin.inc.php";  //Linkleiste fuer admins
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 ?>
 
 <table border=0 align="center" cellspacing=0 cellpadding=0 width=100%>
