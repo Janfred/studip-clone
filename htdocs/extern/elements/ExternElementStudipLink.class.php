@@ -127,17 +127,32 @@ class ExternElementStudipLink extends ExternElement {
 				$this->config->getValue($this->name, "linktext"));
 		if ($this->config->getValue($this->name, "image")) {
 			if ($image_url = $this->config->getValue($this->name, "imageurl"))
-				$img = "&nbsp;<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
+				$img = "<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
 			else {
-				$img = "&nbsp;<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
+				$img = "<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
 				$img .= "pictures/login.gif\" align=\"absmiddle\">";
 			}
-			$out .= sprintf("<a href=\"%s\"%s>%s</a>", $args['link'],
+			$out .= sprintf("&nbsp;<a href=\"%s\"%s>%s</a>", $args['link'],
 					$this->config->getAttributes($this->name, "a"), $img);
 		}
 		$out .= "\n</td></tr></table>\n";
 		
 		return $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == "image") {
+			// This is especially for checkbox-values. If there is no checkbox
+			// checked, the variable is not declared and it is necessary to set the
+			// variable to 0.
+			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				return FALSE;
+			}
+			return !($value == "1" || $value == "0");
+		}
+		
+		return FALSE;
 	}
 	
 }
