@@ -53,7 +53,7 @@ class ExternModule {
 	var $elements;
 	var $field_names;
 	var $data_fields;
-
+	var $args = array();
 	/**
 	*
 	*/
@@ -166,6 +166,11 @@ class ExternModule {
 	*/
 	function getAttributes ($element_name, $tag_name) {
 		return $this->config->getAttributes($element_name, $tag_name);
+	}
+	
+	function getArgs () {
+		
+		return $this->args;
 	}
 	
 	/**
