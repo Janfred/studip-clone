@@ -62,7 +62,7 @@ ALTER TABLE `wiki_links` CHANGE `from_keyword` `from_keyword` CHAR( 128 ) BINARY
 ALTER TABLE `wiki_locks` CHANGE `keyword` `keyword` VARCHAR( 128 ) BINARY NOT NULL ;
 
 # #7
-# create new table for new smiley-management
+# create new table and changes for new smiley-management
 #
 
 CREATE TABLE smiley (
@@ -78,7 +78,11 @@ CREATE TABLE smiley (
   PRIMARY KEY  (smiley_id),
   UNIQUE KEY name (smiley_name),
   KEY short (short_name)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) TYPE=MyISAM;
+
+ALTER TABLE user_info
+  ADD smiley_favorite VARCHAR(255) NOT NULL ,
+  ADD smiley_favorite_publish TINYINT(1) DEFAULT '0' NOT NULL ;
 
 # #8
 # initialize new smiley-management <SCRIPT?admin_smileys.php?cmd=updatetable>
@@ -90,4 +94,11 @@ CREATE TABLE smiley (
 
 ALTER TABLE `user_inst` ADD `externdefault` TINYINT( 3 ) UNSIGNED DEFAULT '0' NOT NULL ,
 ADD `priority` TINYINT( 3 ) UNSIGNED DEFAULT '0' NOT NULL ;
-ALTER TABLE `user_inst` CHANGE `raum` `raum` VARCHAR( 200 ) NOT NULL ;
+ALTER TABLE `user_inst` CHANGE `raum` `raum` VARCHAR( 200 ) NOT NULL, 
+ADD `visible` TINYINT UNSIGNED DEFAULT '1' NOT NULL ; 
+
+# #10
+# change the indexes of votes for better performance
+#
+
+ALTER TABLE `voteanswers_user` ADD INDEX ( `user_id` );
