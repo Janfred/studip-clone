@@ -806,15 +806,17 @@ class viewObject {
 			</tr>
 			<? 
 			if ($this->resObject->getCategoryId()) {
-				$this->selectProperties();
-				while ($this->db->next_record()) {
-					?>
+			?>
 			<tr>
 				<td class="<? $this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>" colspan=2><font size=-1><b>Eigenschaften:</b></font>
 				</td>
 			</tr>
+			<?
+				$this->selectProperties();
+				while ($this->db->next_record()) {
+					?>
 			<tr>
 				<td class="<? 	$this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
