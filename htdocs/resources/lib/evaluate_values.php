@@ -978,6 +978,7 @@ if ($start_single_mode_x) {
 	$requests = getMyRoomRequests();
 	
 	$resources_data["requests_working_pos"] = 0;
+	$resources_data["skip_closed_requests"] = TRUE;
 	
 	//filter the requests
 	foreach($requests as $key => $val) {
@@ -1023,7 +1024,6 @@ if ($start_single_mode_x) {
 }
 
 if (is_array($selected_resource_id)) {
-	//asort ($selected_resource_id); //kann auch vielleicht weg....
 	foreach ($selected_resource_id as $key=>$val) {
 		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key] = $val;
 	}
@@ -1214,6 +1214,10 @@ if ($save_state_x) {
 				$semObj->store();
 		}
 		
+		//set reload flag for this request (the next time the user skips to the request, we reload all data)
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+			
+		
 		//create msg's
 		if ($good_msg)
 			$msg->addMsg(33, array($good_msg));
@@ -1235,14 +1239,16 @@ if ($save_state_x) {
 		$reqObj->store();
 		unset($resources_data["requests_open"][$reqObj->getId()]);
 		if (sizeof($resources_data["requests_open"]) == 0) {
+			$resources_data["view"] = "requests_start";
 			$view = "requests_start";
-			$resources_data["requests_working_on"] = FALSE;
+			$msg->addMsg(36, array($PHP_SELF, $PHP_SELF));
+			//$resources_data["requests_working_on"] = FALSE;
 			$save_state_x = FALSE;
 		} else  {
 			if ($resources_data["requests_working_pos"] == sizeof($resources_data["requests_working_on"])-1) {
-				$dec_request_x = TRUE;
+				$auto_dec = TRUE;
 			} else {
-				$inc_request_x = TRUE;
+				$auto_inc = TRUE;
 			}
 		}
 	}
@@ -1250,7 +1256,7 @@ if ($save_state_x) {
 
 
 // inc if we have requests left in the upper
-if ($inc_request_x) 
+if (($inc_request_x) || ($auto_inc))
 	if ($resources_data["requests_working_pos"] < sizeof($resources_data["requests_working_on"])-1) {
 		$i = 1;
 		if ($resources_data["skip_closed_requests"])
@@ -1258,11 +1264,12 @@ if ($inc_request_x)
 				$i++;
 		if ((sizeof($resources_data["requests_open"]) >= 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) || (!$resources_data["skip_closed_requests"]))){
 			$resources_data["requests_working_pos"] = $resources_data["requests_working_pos"] + $i;
-		}
+		} elseif ($auto_inc)
+			$dec_request_x = TRUE; //we cannot inc - so we are at the end and want to find an request below, so try do dec. 
 	} 
 
 // dec if we have requests left in the lower
-if ($dec_request_x)
+if (($dec_request_x) || ($auto_dec))
 	if ($resources_data["requests_working_pos"] > 0) {
 		$d = -1;
 		if ($resources_data["skip_closed_requests"])
@@ -1281,7 +1288,8 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
 	
-	if ((!is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"])) || ($marked_clip_ids) || ($save_state_x)) {
+	if ((!is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"])) || ($marked_clip_ids) || ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"])) {
+		unset ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"]);
 		$semester = new SemesterData;
 		$all_semester = $semester->getAllSemesterData();
 		
@@ -1311,7 +1319,7 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 		$assignObjects = array();
 		if ($reqObj->getTerminId()) {
 			$assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
-		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId())))
+		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), TRUE)))
 			$assignObjects = $semResAssign->getDateAssignObjects(TRUE);
 		else
 			$assignObjects = $semResAssign->getMetaAssignObjects();
@@ -1336,7 +1344,6 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 			if ((($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId())))
 				|| (($semObj->getMetaDateType() == 1) && (isSchedule($semObj->getId()) < $GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]))
 				|| ($reqObj->getTerminId())) {
-			
 				//in this cases, we handle it assin-object based (every column in the tool is one assign-object)
 				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"] = FALSE;
 				foreach ($assignObjects as $assObj) {

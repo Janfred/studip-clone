@@ -101,7 +101,9 @@ else
 				<td valign ="top">
 					<table width="100%" cellspacing="0" cellpadding="0" border="0">
 						<?
-						if ($msg->checkMsgs()) {	
+						if ($msg->checkMsgs()) {
+							if (!$infobox)
+									print "<tr><td class=\"blank\">&nbsp; </td></tr>";							
 							$msg->displayAllMsg("line");
 							print "<tr><td class=\"blank\">&nbsp; </td></tr>";
 						}

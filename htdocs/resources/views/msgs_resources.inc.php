@@ -154,5 +154,10 @@ $this->msg[34] = array (
 $this->msg[35] = array (
 		"mode" => "error",
 		"msg"=> _("Die folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden.")."<br />"._("Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r jede Belegungszeit erstellt.  <font size=\"-1\" color=\"black\">%s</font>"));
+$this->msg[36] = array (
+		"mode" => "info",
+		"msg"=> _("Sie haben alle Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")
+			."<br /><a href=\"%s?snd_closed_request_sms=1\">".makeButton("ja2")."</a>"
+			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
 
 ?>

@@ -629,7 +629,8 @@ class ShowToolsRequests {
 					print("&nbsp;<input type=\"IMAGE\" name=\"inc_request\" ".makeButton("weiter", "src")." border=\"0\" />");
 				} 
 				if (sizeof($resources_data["requests_open"]) > 1)
-					printf ("<br /><font size=\"-1\">" . _("<b>%s</b> von <b>%s</b> Anfragen wurden noch nicht bearbeitet.") . "</font>", sizeof($resources_data["requests_open"]), sizeof($resources_data["requests_working_on"]));
+					printf ("<br /><font size=\"-1\">" . _("<b>%s</b> von <b>%s</b> Anfragen in der Bearbeitung wurden noch nicht aufgel&ouml;st.") . "</font>", sizeof($resources_data["requests_open"]), sizeof($resources_data["requests_working_on"]));
+					printf ("<br /><font size=\"-1\">" . _("Aktueller Request: ")."<b>%s</b></font>", $resources_data["requests_working_pos"]+1);
 				?>
 				</td>
 			</tr>
