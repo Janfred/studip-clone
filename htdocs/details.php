@@ -73,9 +73,9 @@ if ($sem_id) {
 		$db2->query("SELECT admission_starttime, admission_endtime_sem FROM seminare WHERE Seminar_id = '$sem_id'");
 		$db2->next_record();
 		if (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") == "-1"))) {
-			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier ab %s um %s ein.")."<A>",date("d.m. Y",$db2->f("admission_starttime")),date("G:i",$db2->f("admission_starttime")));
+			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier ab %s um %s ein.")."<A>",date("d.m.Y",$db2->f("admission_starttime")),date("G:i",$db2->f("admission_starttime")));
 		} elseif (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") != "-1"))) {
-			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier von %s bis %s ein.")."<A>",date("d.m. Y, G:i",$db2->f("admission_starttime")),date("d.m. Y, G:i",$db2->f("admission_endtime_sem")));
+			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier von %s bis %s ein.")."<A>",date("d.m.Y, G:i",$db2->f("admission_starttime")),date("d.m.Y, G:i",$db2->f("admission_endtime_sem")));
 		} elseif (($db2->f("admission_endtime_sem") < time()) && ($db2->f("admission_endtime_sem") != -1)) {
 			if (!$db->f("status") == "user") $abo_msg = "</A>" ._("Eintragen nicht mehr möglich!") . "<A>";
 		} else {
@@ -543,7 +543,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 	}
 	if (($db2->f("admission_endtime_sem") <= time()) && ($db2->f("admission_endtime_sem") != -1)) {
 		echo "<font size=-1>";
-		printf (_("Das Teilnahmeverfahren für diese Veranstaltung wurde am %s um %s beendet."),date("d.m. Y",$db2->f("admission_endtime_sem")), date("G:i",$db2->f("admission_endtime_sem")));
+		printf (_("Das Teilnahmeverfahren für diese Veranstaltung wurde am %s um %s beendet."),date("d.m.Y",$db2->f("admission_endtime_sem")), date("G:i",$db2->f("admission_endtime_sem")));
 		echo "<br/>";
 		echo "</font>";
 	}

@@ -692,7 +692,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id")) && $perm->have_perm("dozent")) {
 			printf ("<tr><td class=\"%s\" colspan=9><form action=\"%s%s\" method=\"POST\">", $class, $PHPSELF, "#info");
 			printf("<table border=\"0\"><tr><td width=\"%s\"><font size=\"-1\">Bemerkungen:&nbsp;</font></td><td><TEXTAREA name=\"userinfo\" rows=3 cols=30>%s</TEXTAREA></td>", "10%", $db->f("comment"));
-			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>Anmeldedatum: %s</font></td>",$class, "50%", date("d.m. Y",$db->f("mkdate")));
+			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>Anmeldedatum: %s</font></td>",$class, "50%", date("d.m.Y",$db->f("mkdate")));
 			echo "<td class=\"$class\" align=\"center\" width=\"20%\"><font size=\"-1\">&Auml;nderungen</font><br /><INPUT type=\"image\" ".makeButton("uebernehmen", "src").">";
 			echo "<INPUT type=\"hidden\" name=\"user_id\" value=\"".$db->f("user_id")."\">";
 			echo "<INPUT type=\"hidden\" name=\"cmd\" value=\"change_userinfo\">";
