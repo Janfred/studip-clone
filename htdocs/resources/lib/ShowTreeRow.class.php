@@ -5,7 +5,7 @@ print a row in the common stud.ip printhead/content style
 /*****************************************************************************/
 class ShowTreeRow {
 
-	function ShowRow($icon, $link, $titel, $zusatz, $level='', $lines='', $weitere, $new=FALSE, $open="close", $content='Keine Beschreibung', $edit='', $breite="99%") {
+	function ShowRow($icon, $link, $titel, $zusatz, $level='', $lines='', $weitere, $new=FALSE, $open="close", $content=_("Keine Beschreibung"), $edit='', $breite="99%") {
 		
 		?><table border=0 cellpadding=0 cellspacing=0 width="100%">
 			<tr>
