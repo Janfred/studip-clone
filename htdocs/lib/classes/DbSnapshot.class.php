@@ -206,12 +206,19 @@ class DbSnapshot {
 		return $ret;
 	}
 	
-	function sortRows($fieldname = 0, $order = "ASC", $stype = SORT_REGULAR){
+	function sortRows($fieldname = 0, $order = "ASC", $stype = false){
 		if(!$this->numRows)
 			$this->halt("No snapshot available or empty result!");
-		$sortfunc = ($order=="ASC") ? "asort" : "arsort";
 		$sortfields = $this->getRows($fieldname);
-		$sortfunc($sortfields,$stype);
+		if ($stype !== false){
+			$sortfunc = ($order=="ASC") ? "asort" : "arsort";
+			$sortfunc($sortfields,$stype);
+		} else {
+			uasort($sortfields, 'strnatcasecmp');
+			if ($order == "DESC"){
+				$sortfields = array_reverse($sortfields, TRUE);
+			}
+		}
 		$sortresult = array();
 		foreach($sortfields as $key => $value){
 			$sortresult[] = $this->result[$key];
