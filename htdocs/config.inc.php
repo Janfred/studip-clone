@@ -113,7 +113,7 @@ $SEM_CLASS[1]=array("name"=>"Lehre", "bereiche"=>TRUE, 	//the name of the class
 					"show_browse"=>TRUE, 				//indicates, if the hierachy-system should be shown in the search-process
 					"write_access_nobody"=>FALSE, 		//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
 					"description"=>"Hier finden Sie alle im System registrierten Lehrveranstaltungen", 						//the description
-					"create_description"=>"Verwenden Sie diese Kategorie, um normale Lehrveranstaltunegen anzulegen");		//the description in the creation process
+					"create_description"=>"Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen");		//the description in the creation process
 
 $SEM_CLASS[2]=array("name"=>"Forschung", 
 					"compact_mode"=>TRUE, 
@@ -126,7 +126,7 @@ $SEM_CLASS[2]=array("name"=>"Forschung",
 					"show_browse"=>TRUE,
 					"write_access_nobody"=>FALSE, 
 					"description"=>"Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t",
-					"create_description"=>"In diese Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r Forschungsprojekte anlegen.");
+					"create_description"=>"In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r Forschungsprojekte anlegen.");
 
 $SEM_CLASS[3]=array("name"=>"Organisation", 
 					"compact_mode"=>TRUE, 
