@@ -19,24 +19,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	$perm->check("tutor");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("tutor");
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-	include "$ABSOLUTE_PATH_STUDIP/html_head.inc.php"; // Output of html head
-	include "$ABSOLUTE_PATH_STUDIP/header.php";   // Output of Stud.IP head
-	include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php"; //Output the nav
+include "$ABSOLUTE_PATH_STUDIP/html_head.inc.php"; // Output of html head
+include "$ABSOLUTE_PATH_STUDIP/header.php";   // Output of Stud.IP head
+include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php"; //Output the nav
 
-	require_once"$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once"$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 	
-	if ($links_admin_data["sem_id"]) {
-	$db=new DB_Seminar;
-	$db->query("SELECT Name FROM seminare WHERE Seminar_id ='".$links_admin_data["sem_id"]."'");
-	$db->next_record();
+if ($SessSemName[1]) {
 	?>
       	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b>Veranstaltung vorgew&auml;hlt</b></td></tr>
@@ -44,27 +41,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	<tr><td class="blank" colspan=2>
 		<blockquote>
 		<?
-		if ($SessSemName[1]) {
+		if ($links_admin_data["referred_from"] == "sem") {
 		?>
-		Sie k&ouml;nnen hier direkt die Daten der Veranstaltung <b><? echo htmlReady($db->f("Name")) ?></b> bearbeiten.<br>
+		Sie k&ouml;nnen hier direkt die Daten der Veranstaltung <b><? echo htmlReady($SessSemName[0]) ?></b> bearbeiten.<br>
 		Wenn Sie die Daten einer anderen Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<br />&nbsp; 
 		<?
-			}
-		else
-			{
+		} else {
 		?>
-		Sie haben die Veranstaltung <b><? echo htmlReady($db->f("Name")) ?></b> vorgew&auml;hlt. Sie k&ouml;nnen nun direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, in dem Sie die entsprechenden Menupunkte w&auml;hlen.<br>
+		Sie haben die Veranstaltung <b><? echo htmlReady($SessSemName[0]) ?></b> vorgew&auml;hlt. Sie k&ouml;nnen nun direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, in dem Sie die entsprechenden Menupunkte w&auml;hlen.<br>
 		Wenn Sie eine andere Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<br />&nbsp; 
 		<?
-			}
+		}
 		?>
 		</blockquote>
 		</td>
 	</tr>
 </table>
 <?		
-	}
-	page_close();
+}
+page_close();
  ?>
  </tr></td></table>
 </body>
