@@ -299,8 +299,8 @@ if ($s_send) {
 		else					     			// User noch nicht da
 			$query = "INSERT INTO seminar_user values('$s_id','$tempDozent_id',\"dozent\",'$group', '', '".time()."')";
 		$db3->query($query);
-		}
-	}*/
+		}*/
+	}
 	
 		if (isset($b_institute)) 
 			{
