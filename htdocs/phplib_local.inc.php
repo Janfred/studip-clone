@@ -62,6 +62,8 @@ $_fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
 $_fullname_sql['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $_fullname_sql['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 
+//software version - please leave it as it as!
+$SOFTWARE_VERSION="0.91";
 	
 /*classes for database access
 ----------------------------------------------------------------
@@ -204,9 +206,18 @@ class Seminar_Auth extends Auth {
 	var $database_class = "DB_Seminar";
 	var $database_table = "auth_user_md5";
 	var $error_msg = "";
-	
+
+	//constructor
+	function Seminar_Auth() {
+		//load the lifetime from the settings
+		global $AUTH_LIFETIME;
+
+		if ($AUTH_LIFETIME)
+			$this->lifetime = $AUTH_LIFETIME;
+	}	
 	
 	function auth_preauth() {
+		echo $lifetime;
 		global $auto_user,$auto_response,$auto_id,$resolution;
 		
 		if (!$auto_user OR !$auto_response OR !$auto_id){
@@ -262,13 +273,14 @@ class Seminar_Auth extends Auth {
 		global $challenge;
 		global $ABSOLUTE_PATH_STUDIP;
 		global $shortcut;
+		global $order;
 		
-		$challenge = StudipAuthAbstract::CheckMD5();
-		if ($challenge){
-			$challenge = md5(uniqid($this->magic));
-			$sess->register("challenge");
-		}
-		
+	  $challenge = StudipAuthAbstract::CheckMD5();
+    if ($challenge){
+        $challenge = md5(uniqid($this->magic));
+        $sess->register("challenge");
+    }
+	
 		include("$ABSOLUTE_PATH_STUDIP/crcloginform.ihtml");
 	}
 	
@@ -439,7 +451,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		"from %s where Email = '%s'",
 		$this->database_table,
 		addslashes($Email)));
-		
+
 		while($this->db->next_record()) {
 			//error_log("E-Mail schon vorhanden", 0);
 			$this->error_msg=$this->error_msg. _("Die angegebene E-Mail-Adresse wird bereits von einem anderen User verwendet. Sie müssen eine andere E-Mail-Adresse angeben!") . "<br>";
