@@ -53,11 +53,8 @@ class IntegrityCheckSeminar extends IntegrityCheckAbstract{
 									'query' => 'view:SEM_ADMISSIONSTUD:');
 		$this->checklist[] = array('detail_table' => 'admission_seminar_user',
 									'query' => 'view:SEM_ADMISSIONUSER:');
-		$this->checklist[] = array('detail_table' => 'seminar_bereich',
-									'query' => 'view:SEM_BEREICH:');
 		$this->checklist[] = array('detail_table' => 'seminar_inst',
 									'query' => 'view:SEM_SEMINST:');
-		
 	}
 
 }

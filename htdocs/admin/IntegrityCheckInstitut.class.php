@@ -49,8 +49,6 @@ class IntegrityCheckInstitut extends IntegrityCheckAbstract{
 		$this->master_table = "Institute";
 		$this->checklist[] = array('detail_table' => 'user_inst',
 									'query' => 'view:INST_USER:');
-		$this->checklist[] = array('detail_table' => 'fach_inst',
-									'query' => 'view:INST_FACH:');
 		$this->checklist[] = array('detail_table' => 'seminar_inst',
 									'query' => 'view:INST_SEM:');
 	}
