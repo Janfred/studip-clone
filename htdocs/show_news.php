@@ -41,7 +41,7 @@ if ($QUERY_STRING) {
 } else
 	$self=$PHP_SELF."?";
 
-$query="SELECT *, date FROM news_range LEFT JOIN news USING (news_id) WHERE news_range.range_id='$range_id' AND date < $aktuell AND (date+expire) > $aktuell ORDER BY date DESC";
+$query="SELECT * FROM news_range LEFT JOIN news USING (news_id) WHERE news_range.range_id='$range_id' AND date < $aktuell AND (date+expire) > $aktuell ORDER BY date,topic DESC";
 if ($limit)
 	$query=$query." LIMIT $limit";
 $db->query($query);
@@ -90,7 +90,7 @@ if (!$db->num_rows()) {
 			$titel=$tmp_titel."<a name='anker'>";
 			if ($db->f("user_id") != $auth->auth["uid"])
 				object_add_view($db->f("news_id"));  //Counter for news - not my own
-				object_set_visit($db->f("news_id"), "news"); //and, set a visittime
+			object_set_visit($db->f("news_id"), "news"); //and, set a visittime
 		} else {
 			$link=$PHP_SELF."?nopen=".$db->f("news_id");
 			$titel=$tmp_titel;
@@ -106,7 +106,7 @@ if (!$db->num_rows()) {
 		if ($link)
 			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
 
-		$tempnew = ($db->f("date") >= $last_visited);
+		$tempnew = (($db->f("date") >= object_get_visit($db->f("news_id"),'news',false)) && ($db->f("user_id") != $auth->auth["uid"]));
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 		if ($open == $db->f("news_id"))
