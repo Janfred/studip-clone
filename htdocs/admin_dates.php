@@ -280,7 +280,7 @@ if ($new) {
 		} else
 			$f_id='';
 	
-		$db->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
+		$db->query("REPLACE INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
 		if ($db->affected_rows()) {
 			//insert a entry for the linked resource, if resource management activ
 			if (($RESOURCES_ENABLE) && ($resource_id)){
