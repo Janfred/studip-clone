@@ -138,39 +138,18 @@ class StudipAuthLdap extends StudipAuthAbstract {
 	* 
 	*
 	* 
-	* @access public
+	* @access private
 	* 
 	*/
-	function authenticateUser($username, $password, $jscript){
+	function isAuthenticated($username, $password, $jscript){
 		if (!$this->doLdapBind($username,$password)){
 			ldap_unbind($this->conn);
 			return false;
 		}
 		ldap_unbind($this->conn);
-		return $this->getStudipUserid($username);
+		return true;
 	}
 	
-	
-	function getStudipUserid($username){
-		$this->dbv->params[] = $username;
-		$db = $this->dbv->get_query("view:AUTH_USER_UNAME");
-		if ($db->next_record()){
-			if ($db->f("auth_plugin") != $this->plugin_name){
-				$this->error_msg = sprintf(_("Dieser Username wird bereits über %s authentifiziert!"),(is_null($db->f("auth_plugin")) ? "standard" : $db->f("auth_plugin"))) . "<br>";
-				return false;
-			}
-			$uid = $db->f("user_id");
-			$this->doDataMapping($uid);
-			return $uid;
-		}
-		$uid = md5(uniqid($username,1));
-		$this->dbv->params = array($uid,mysql_escape_string($username),"autor","","","","",$this->plugin_name);
-		$db = $this->dbv->get_query("view:AUTH_USER_INSERT");
-		$this->dbv->params = array($uid,time(),time(),$GLOBALS['_language']);
-		$db = $this->dbv->get_query("view:USER_INFO_INSERT");
-		$this->doDataMapping($uid);
-		return $uid;
-	}
 	
 	
 	function doLdapMap($map_params){

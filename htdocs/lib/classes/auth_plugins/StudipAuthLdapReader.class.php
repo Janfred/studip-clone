@@ -75,7 +75,7 @@ class StudipAuthLdapReader extends StudipAuthLdap {
 			return false;
 		}
 		if (!($r = @ldap_bind($this->conn, $this->reader_dn, $this->reader_password))){
-			$this->error_msg = sprintf(_("Anmeldung von %s fehlgeschlagen."),$this->ldap_reader_dn) . $this->getLdapError();
+			$this->error_msg = sprintf(_("Anmeldung von %s fehlgeschlagen."),$this->reader_dn) . $this->getLdapError();
 			return false;
 		}
 		if (!($result = @ldap_search($this->conn, $this->base_dn, $this->username_attribute . "=" . $username))){
@@ -102,7 +102,7 @@ class StudipAuthLdapReader extends StudipAuthLdap {
 	* @access public
 	* 
 	*/
-	function authenticateUser($username, $password, $jscript){
+	function isAuthenticated($username, $password, $jscript){
 		
 		if (!$this->doLdapBind($username)){
 			ldap_unbind($this->conn);
@@ -119,7 +119,7 @@ class StudipAuthLdapReader extends StudipAuthLdap {
 				return false;
 			} else {
 				ldap_unbind($this->conn);
-				return $this->getStudipUserid($username);
+				return true;
 			}
 		} elseif ($this->challenge) {
 			if ($expected_response != $password) {
@@ -128,13 +128,14 @@ class StudipAuthLdapReader extends StudipAuthLdap {
 				return false;
 			} else {
 				ldap_unbind($this->conn);
-				return $this->getStudipUserid($username);
+				return true;
 			}
 		}
 		$this->error_msg = _("Unbekannter Fehler!");
 		ldap_unbind($this->conn);
 		return false;
 	}
+	
 	
 	function isUsedUsername($username){
 		return $this->doLdapBind($username);

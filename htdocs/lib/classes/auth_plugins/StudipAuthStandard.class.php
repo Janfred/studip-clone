@@ -66,7 +66,7 @@ class StudipAuthStandard extends StudipAuthAbstract {
 	* @access public
 	* 
 	*/
-	function authenticateUser($username, $password, $jscript){
+	function isAuthenticated($username, $password, $jscript){
 		$this->dbv->params[] = $username;
 		$db = $this->dbv->get_query("view:AUTH_USER_UNAME");
 		if (!$db->next_record()){
@@ -89,14 +89,14 @@ class StudipAuthStandard extends StudipAuthAbstract {
 				$this->error_msg= _("Das Passwort ist falsch!") ;
 				return false;
 			} else {
-				return $uid;
+				return true;
 			}
 		} elseif ($this->challenge) {
 			if ($expected_response != $password) {
 				$this->error_msg= _("Das Passwort ist falsch!") ;
 				return false;
 			} else {
-				return $uid;
+				return true;
 			}
 		}
 		$this->error_msg = _("Unbekannter Fehler!");

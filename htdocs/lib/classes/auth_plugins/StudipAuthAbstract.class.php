@@ -23,6 +23,8 @@
 
 require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbView.class.php");
 require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbSnapshot.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/config.inc.php");
+			
 
 /**
 * abstract base class for authentication plugins
@@ -67,6 +69,15 @@ class StudipAuthAbstract {
 	var $error_msg;
 	
 	/**
+	* indicates whether the authenticated user logs in for the first time
+	*
+	* 
+	* @access	public
+	* @var		bool
+	*/
+	var $is_new_user = false;
+	
+	/**
 	* associative array with mapping for database fields
 	*
 	* 
@@ -101,7 +112,7 @@ class StudipAuthAbstract {
 	* @static
 	*/
 	
-	function &GetInstance($plugin_name = false){
+	function &GetInstance( $plugin_name = false){
 		static $plugin_instance;
 		if (!is_array($plugin_instance)){
 			foreach($GLOBALS['STUDIP_AUTH_PLUGIN'] as $plugin){
@@ -143,7 +154,7 @@ class StudipAuthAbstract {
 		$uid = false;
 		foreach($plugins as $object){
 			if ($uid = $object->authenticateUser($username,$password,$jscript)){
-				return array('uid' => $uid,'error' => $error);
+				return array('uid' => $uid,'error' => $error, 'is_new_user' => $object->is_new_user);
 			} else {
 				$error .= $object->plugin_name . ": " . $object->error_msg . "<br>";
 			}
@@ -183,7 +194,7 @@ class StudipAuthAbstract {
 			return false;
 		}
 		$plugin =& StudipAuthAbstract::GetInstance($plugin_name);
-		return $plugin->isMappedField($field_name);
+		return (is_object($plugin) ? $plugin->isMappedField($field_name) : false);
 	}
 	
 	
@@ -191,7 +202,7 @@ class StudipAuthAbstract {
 	* Constructor
 	*
 	* 
-	* @access public
+	* @access private
 	* 
 	*/
 	function StudipAuthAbstract() {
@@ -211,10 +222,72 @@ class StudipAuthAbstract {
 	* 
 	*
 	* 
-	* @access public
+	* @access private
 	* 
 	*/
 	function authenticateUser($username, $password, $jscript = false){
+		if ($this->isAuthenticated($username, $password, $jscript)){
+			$uid = $this->getStudipUserid($username);
+			$this->doDataMapping($uid);
+			if ($this->is_new_user){
+				$this->doNewUserInit($uid);
+			}
+			return $uid;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	* 
+	*
+	* 
+	* @access private
+	* 
+	*/
+	function getStudipUserid($username){
+		$this->dbv->params[] = $username;
+		$db = $this->dbv->get_query("view:AUTH_USER_UNAME");
+		if ($db->next_record()){
+			$auth_plugin = is_null($db->f("auth_plugin")) ? "standard" : $db->f("auth_plugin");
+			if ($auth_plugin != $this->plugin_name){
+				$this->error_msg = sprintf(_("Dieser Username wird bereits über %s authentifiziert!"),$auth_plugin) . "<br>";
+				return false;
+			}
+			$uid = $db->f("user_id");
+			return $uid;
+		}
+		$uid = md5(uniqid($username,1));
+		$this->dbv->params = array($uid,mysql_escape_string($username),"autor","","","","",$this->plugin_name);
+		$db = $this->dbv->get_query("view:AUTH_USER_INSERT");
+		$this->dbv->params = array($uid,time(),time(),$GLOBALS['_language']);
+		$db = $this->dbv->get_query("view:USER_INFO_INSERT");
+		$this->is_new_user = true;
+		return $uid;
+	}
+	
+	
+	/**
+	* 
+	*
+	* 
+	* @access private
+	* 
+	*/
+	function doNewUserInit($uid){
+		$permlist = array('autor','tutor','dozent');
+		$this->dbv->params[] = $uid;
+		$db = $this->dbv->get_query("view:AUTH_USER_UID");
+		$db->next_record();
+		if (in_array($db->f("perms"), $permlist)){
+			if (is_array($GLOBALS['AUTO_INSERT_SEM'])){
+				foreach ($GLOBALS['AUTO_INSERT_SEM'] as $sem_id) {
+					$this->dbv->params = array($sem_id, $uid, 'autor', 0);
+					$db = $this->dbv->get_query("view:SEM_USER_INSERT");
+				}
+			}
+		return true;
+		}
 		return false;
 	}
 	
@@ -222,7 +295,7 @@ class StudipAuthAbstract {
 	* 
 	*
 	* 
-	* @access public
+	* @access private
 	* 
 	*/
 	function doDataMapping($uid){
@@ -245,7 +318,7 @@ class StudipAuthAbstract {
 	* 
 	*
 	* 
-	* @access public
+	* @access private
 	* 
 	*/
 	function isMappedField($name){
@@ -256,13 +329,26 @@ class StudipAuthAbstract {
 	* 
 	*
 	* 
-	* @access public
+	* @access private
 	* 
 	*/
 	function isUsedUsername($username){
 		$this->error = sprintf(_("Methode %s nicht implementiert!"),get_class($this) . "::isUsedUsername()");
 		return false;
 	}
+	
+	/**
+	* 
+	*
+	* 
+	* @access private
+	* 
+	*/
+	function isAuthenticated($username, $password, $jscript){
+		$this->error = sprintf(_("Methode %s nicht implementiert!"),get_class($this) . "::isAuthenticated()");
+		return false;
+	}
+	
 	
 }
 ?>
