@@ -53,7 +53,14 @@ if ($_the_clip_form->isClicked("clip_ok")){
 	$_the_clipboard->doClipCmd();
 }
 
-if ($_the_search->outer_form->isClicked("search")){
+if ($_the_search->outer_form->isClicked("search") 
+	|| ($_the_search->outer_form->isSended() 
+	&& !$_the_search->outer_form->isClicked("reset")
+	&& !$_the_search->outer_form->isClicked("change")
+	&& !$_the_search->outer_form->isClicked("search_add")
+	&& !$_the_search->outer_form->isClicked("search_sub")
+	&& !$_the_search->outer_form->isChanged("search_plugin") //scheiss IE
+	)){
 	$hits = $_the_search->doSearch();
 	if(!$_the_search->search_plugin->getNumError()){
 		$_msg .= "msg§" . sprintf(_("Ihre Suche ergab %s Treffer."), $_the_search->getNumHits()) . "§";
@@ -194,7 +201,7 @@ if ($_the_search->start_result > 1) {
 	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 echo $_the_search->start_result . " - " . $end_result;
-if ($_the_search->start_result + 5 < $num_hits) {
+if ($_the_search->start_result + 4 < $num_hits) {
 	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"pictures/move_right.gif\" hspace=\"3\" border=\"0\"></a>";
 } else {
 	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
@@ -235,6 +242,25 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 		printcontent(0,0,$content,$edit);
 		echo "\n</table>";
 	}
+}
+?>
+</td></tr>
+<tr>
+<td class="steel2" align="left">
+<?printf(_("%s Treffer in ihrem Suchergebnis."), $num_hits);?>
+</td><td class="steel2" align="right">
+<?
+echo _("Anzeige: ");
+if ($_the_search->start_result > 1) {
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result - 5) . "\"><img src=\"pictures/move_left.gif\" hspace=\"3\" border=\"0\"></a>";
+} else {
+	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
+}
+echo $_the_search->start_result . " - " . $end_result;
+if ($_the_search->start_result + 4 < $num_hits) {
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"pictures/move_right.gif\" hspace=\"3\" border=\"0\"></a>";
+} else {
+	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 ?>
 </td></tr>
