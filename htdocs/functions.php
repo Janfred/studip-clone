@@ -49,6 +49,7 @@
 *	$SessSemName["art_num"]			Veranstaltung type in numeric form<br>
 *	$SessSemName["art_generic"]		Veranstaltung generic type in alhanumeric form (self description)<br>
 *	$SessSemName["class"]				Veranstaltung class (sem or inst, in this function always sem)<br>
+*	$SessSemName["header_line"]		the header-line to use on every page of the Veranstaltung<br />
 *	$loginfilelast[$sem_id]				last login-time to the Veranstaltung<br>
 *	$loginfilenowt[$sem_id]				current login-time to the Veranstaltung<br>
 *
@@ -56,7 +57,7 @@
 *
 */
 function openSem ($sem_id) {
-	global $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast;
+	global $SEM_TYPE, $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast;
 
 	$db=new DB_Seminar;
 
@@ -77,6 +78,12 @@ function openSem ($sem_id) {
 		else
 			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
 		$nr = $db->f("Seminar_id");
+		
+		//create the header-line for all the views
+		$SessSemName["header_line"] = $SessSemName["art"].": ".htmlReady(substr($SessSemName[0], 0, 60));
+		if (strlen($db->f("Name")) > 60)
+			$SessSemName["header_line"].= "... ";
+
 		$loginfilelast["$nr"] = $loginfilenow["$nr"];
 		$loginfilenow["$nr"] = time();
 	}
@@ -96,6 +103,7 @@ function openSem ($sem_id) {
 *	$SessSemName["art_num"]			Einrichtung type in numeric form<br>
 *	$SessSemName["art_generic"]		Einrichtung generic type in alhanumeric form (self description)<br>
 *	$SessSemName["class"]				Einrichtung class (sem or inst, in this function always inst)<br>
+*	$SessSemName["header_line"]		the header-line to use on every page of the Einrichtung<br />
 *	$loginfilelast[$sem_id]				last login-time to the Einrichtung<br>
 *	$loginfilenowt[$sem_id]				current login-time to the Einrichtung<br>
 *
@@ -119,6 +127,12 @@ function openInst ($inst_id) {
 		$SessSemName["class"]="inst";
 		$SessSemName["art_num"]=$db->f("type");
 		$nr = $db->f("Institut_id");
+		
+		//create the header-line for all the views
+		$SessSemName["header_line"] = $SessSemName["art"].": ".htmlReady(substr($SessSemName[0],  0, 60));
+		if (strlen($db->f("Name")) > 60)
+			$SessSemName["header_line"].= "... ";
+
 		$loginfilelast["$nr"] = $loginfilenow["$nr"];
 		$loginfilenow["$nr"] = time();
 	}
