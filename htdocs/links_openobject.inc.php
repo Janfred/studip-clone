@@ -22,6 +22,8 @@ if ($SessSemName["class"]=="inst") {
 	$structure["personal"]=array (topKat=>"", name=>_("Personal"), link=>"institut_members.php", active=>FALSE);
 	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>_("Literatur zur Einrichtung"), link=>"literatur.php", active=>FALSE);
+
+	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
@@ -36,12 +38,16 @@ if ($SessSemName["class"]=="inst") {
 	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
+
+	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
 			$structure["resources"]=array (topKat=>"", name=>_("Ressourcen"), link=>"resources.php?view=openobject_main&view_mode=no_nav", active=>FALSE);
 	}
 }
+
+//topkats for Ilias-learningmodules, if module is activated
 if ($ILIAS_CONNECT_ENABLE) {
 	if (get_seminar_modules($SessSemName[1]) != false)
 		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
@@ -52,6 +58,7 @@ if ($ILIAS_CONNECT_ENABLE) {
 			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"migration2studip.php", active=>FALSE);/**/
 }
 
+//topkats for SupportDB, if module is activated
 if ($SUPPORT_ENABLE) {
 	$structure["support"]=array (topKat=>"", name=>_("SupportDB"), link=>"support.php?view=overview", active=>FALSE);
 }
@@ -87,7 +94,7 @@ $structure["neue"]=array (topKat=>"forum", name=>_("neue Beitr&auml;ge"), link=>
 $structure["letzte"]=array (topKat=>"forum", name=>_("letzte 5 Beitr&auml;ge"), link=>"forum.php?view=letzte&mehr=1", active=>FALSE);
 $structure["suchen"]=array (topKat=>"forum", name=>_("Suchen"), link=>"suchen.php", active=>FALSE);
 $structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
-if ($rechte)
+if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["topic_create_autor"]))
 	$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema"), link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
 //
 if ($SessSemName["class"]=="sem") {
@@ -125,7 +132,7 @@ if ($rechte)
 	else
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
-//entrys for resources-management, if modul is activated
+//bottomkats for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {
 	$structure["resources_overview"]=array (topKat=>"resources", name=>_("&Uuml;bersicht"), link=>"resources.php?view=openobject_main", active=>FALSE);
 	$structure["resources_details"]=array (topKat=>"resources", name=>_("Details"), link=>"resources.php?view=openobject_details", active=>FALSE);
@@ -135,7 +142,7 @@ if ($RESOURCES_ENABLE) {
 		$structure["resources_admin"]=array (topKat=>"resources", name=>_("Ressourcen verwalten"), link=>"resources.php", active=>FALSE);
 }
 
-//entrys for Ilias-connect, if modul is activated
+//bottomkats for Ilias-connect, if modul is activated
 if ($ILIAS_CONNECT_ENABLE) {
 	if (get_seminar_modules($SessSemName[1]) != false)
 	{
@@ -148,7 +155,7 @@ if ($ILIAS_CONNECT_ENABLE) {
 		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
 }
 
-//entrys for SupportDB, if modul is activated
+//bottomkats for SupportDB, if modul is activated
 if ($SUPPORT_ENABLE) {
 	$structure["support_overview"]=array (topKat=>"support", name=>_("&Uuml;bersicht"), link=>"support.php?view=overview", active=>FALSE);
 	$structure["support_requests"]=array (topKat=>"support", name=>_("Anfragen"), link=>"support.php?view=requests", active=>FALSE);
