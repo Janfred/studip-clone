@@ -224,14 +224,14 @@ if ($auth->auth["uid"] == "nobody") { ?>
 <?
 
 		if ($perm->have_perm("autor")) {
-			echo MakeToolbar("pictures/einst.gif","about.php",_("Homepage"),_("Zu Ihrer Einstellungsseite"),40, "_top");
+			echo MakeToolbar("pictures/einst.gif","about.php",_("Homepage"),_("Zu Ihrer Einstellungsseite"),40, "_top","right");
 			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top");
 		}
 
 		if ($perm->have_perm("tutor")) {
 			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top");
 		}
-		echo MakeToolbar("pictures/info.gif","",$auth->auth["uname"],$infotext,40, "","center","TRUE");
+		echo MakeToolbar("pictures/info.gif","",$auth->auth["uname"],$infotext,40, "","left","TRUE");
 		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfestellung"),_("Hilfe zu dieser Seite"),40, "_new","right");
 		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
 
