@@ -895,7 +895,7 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 
 
 //Erstellt automatisch einen Ablaufplan oder aktualisiert ihn
-function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE) {
+function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE, $update_resources = TRUE) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $user;
 	
 	if ($RESOURCES_ENABLE)	{
@@ -1061,7 +1061,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 						if ($RESOURCES_ENABLE) {
 							$insertAssign->dont_check = $dont_check_overlaps;
 							//only if we get a resource_id, we update assigns...
-							if ($val["resource_id"]) {
+							if (($val["resource_id"]) && ($update_resources)){
 								if ($saved_dates[$affected_dates]) {
 									$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"]));
 								} else {
