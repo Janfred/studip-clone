@@ -26,16 +26,17 @@ $reiter=new reiter;
 
 //Topkats
 $structure["meine_veranstaltungen"]=array (topKat=>"", name=>"Meine Veranstaltungen", link=>"meine_seminare.php", active=>FALSE);
+$structure["veranstaltungen_suche"]=array (topKat=>"", name=>"Veranstaltungen Suchen / Hinzuf&uuml;gen", link=>"sem_portal.php?view=Alle", active=>FALSE);
 $structure["meine_einrichtungen"]=array (topKat=>"", name=>"Meine Einrichtungen", link=>"meine_einrichtungen.php", active=>FALSE);
 
 //Bottomkats
 $structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>"&Uuml;bersicht", link=>"meine_seminare.php", active=>FALSE);
-$structure["veranstaltung_suche"]=array (topKat=>"meine_veranstaltungen", name=>"Veranstaltungen suchen", link=>"sem_portal.php?view=Alle", active=>FALSE);
-if ($perm->have_perm("dozent")) {
-	$structure["veranstaltung_admin"]=array (topKat=>"meine_veranstaltungen", name=>"Veranstaltungen verwalten", link=>"adminarea_start.php?list=TRUE", active=>FALSE);
-	$structure["veranstaltung_neu"]=array (topKat=>"meine_veranstaltungen", name=>"neue Veranstaltungen anlegen", link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE);
+//
+$structure["Alle"]=array (topKat=>"veranstaltungen_suche", name=>"Alle", link=>"sem_portal.php?view=Alle", active=>FALSE);
+foreach ($SEM_CLASS as $key=>$val)  {
+	$structure["class_".$key]=array (topKat=>"veranstaltungen_suche", name=>$val["name"], link=>"sem_portal.php?view=$key&reset_all=TRUE&cmd=qs", active=>FALSE);
 }
-
+//
 $structure["_meine_einrichtungen"]=array (topKat=>"meine_einrichtungen", name=>"&Uuml;bersicht", link=>"meine_einrichtungen.php", active=>FALSE);
 $structure["einrichtung_suche"]=array (topKat=>"meine_einrichtungen", name=>"Einrichtungen suchen", link=>"institut_browse", active=>FALSE);
 
@@ -54,6 +55,12 @@ switch ($i_page) {
 	break;
 	case "meine_einrichtungen.php" : 
 		$reiter_view="meine_einrichtungen"; 
+	break;
+	case "sem_portal.php" : 
+		if ($view=="Alle")
+			$reiter_view="Alle";
+		else
+			$reiter_view="class_".$view;
 	break;
 	default :
 		$reiter_view="meine_seminare";

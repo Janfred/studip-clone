@@ -85,42 +85,26 @@ function write_toplist($rubrik,$query) {
 
 ?>
 <body>
-<table cellpadding="0" cellspacing="0" border="0">
-	<tr>
 <?	
 $view = $sem_portal["bereich"];
-	IF (!$view) $view="Alle";
+if (!$view) 
+	$view="Alle";
 	
-	if ($view == "Alle") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="sem_portal.php?cmd=qs&view=Alle&reset_all=true"><font color="#000000" size=2><b>&nbsp; &nbsp; Alle&nbsp; &nbsp; </b></font></a><img src="pictures/reiter2.jpg" align=absmiddle></td><?}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="sem_portal.php?cmd=qs&view=Alle&reset_all=true"><font color="#000000" size=2><b>&nbsp; &nbsp; Alle&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-
-	$counter=1;
-
-foreach ($SEM_CLASS as $a) {
-	if ($view == $counter) {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="sem_portal.php?cmd=xts&view=<?echo $counter;?>&reset_all=true"><font color="#000000" size=2><b>&nbsp; &nbsp; <?echo $a["name"];?>&nbsp; &nbsp; </b></font></a><? if ($counter == sizeof($SEM_CLASS)) echo "<img src=\"pictures/reiter4.jpg\" align=absmiddle></td>"; else echo "<img src=\"pictures/reiter2.jpg\" align=absmiddle></td>"; $beschreibung = $a["description"];}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="sem_portal.php?cmd=xts&view=<?echo $counter;?>&reset_all=true"><font color="#000000" size=2><b>&nbsp; &nbsp; <?echo $a["name"];?>&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
-	$counter++;
-	}
-
-
-	echo "</tr></table>\n<table cellspacing=0 cellpadding=4 border=0 width=100%><tr><td class=\"steel1\">&nbsp; &nbsp; ";
-	echo"<br></td></tr><tr><td class=\"reiterunten\">&nbsp; </td></tr></table>\n";
-//	echo "<table class=blank width=100% border=0 cellspacing=0 cellpadding=0><tr><td class=\"blank\">&nbsp; </td></tr></table>";
-
+if (!$perm->have_perm("root"))
+	include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
 ?>
-
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
 	<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;Anmeldung zu Veranstaltungen</b></td>
 </tr>
 <tr>
 <td class="blank" align = left width="90%"><blockquote>
-<? 
-IF ($sem_portal["bereich"]=="Alle") {
-	echo"<br>Um an einer Veranstaltung teilnehmen zu k&ouml;nnen und damit die dort zur Verf&uuml;gung gestellten Materialien  zu nutzen, w&auml;hlen Sie die Veranstaltung &uuml;ber diese Suchfunktion aus.<p>Bitte klicken Sie zur Anmeldung auf den Namen der Veranstaltung.<br>Wenn Sie eine Veranstaltung aus einem bestimmten Bereich suchen, w&auml;hlen Sie oben den entsprechenden Reiter.";
-	}
-ELSE {
 
+<?
+echo"<br>Um an einer Veranstaltung teilnehmen zu k&ouml;nnen und um damit die dort zur Verf&uuml;gung gestellten Materialien nutzen zu k&ouml;nnen, w&auml;hlen Sie die Veranstaltung &uuml;ber diese Suchfunktion aus.<p>Bitte klicken Sie zur Anmeldung auf den Namen der Veranstaltung.";
+if ($sem_portal["bereich"]=="Alle")
+	echo "<br>Wenn Sie eine Veranstaltung aus einem bestimmten Bereich suchen, w&auml;hlen Sie oben den entsprechenden Reiter.";
+else {
 	$sem_browse_data["s_sem"] ="alle";
 	$db=new DB_Seminar;
 	if (!$show_class)
@@ -146,7 +130,7 @@ ELSE {
 		$Anzahl = $db->f("count");
 		IF ($Anzahl > 0) {
 			echo $beschreibung;
-			echo "&nbsp; <br>(<a href='sem_portal.php?send=yes&s_sem=alle&sset=xts&s_bool=1&show_class=$view'>alle ".$db->f("count")."&nbsp;Veranstaltungen anzeigen</a>)";
+			echo "&nbsp; <br>(<a href='sem_portal.php?send=yes&s_sem=alle&sset=xts&s_bool=1&show_class=$view'>alle ".$db->f("count")."&nbsp;Veranstaltungen in dieser Kategorie anzeigen</a>)";
 			}
 		ELSE {
 			echo "<br>In diesem Bereich sind noch keine Veranstaltungen angelegt.<br>Bitte w&auml;hlen Sie mit den Reitern einen anderen Bereich!<br><br></td></tr></table>\n";
