@@ -793,7 +793,7 @@ function smile ($text = "", $extern = FALSE) {
 		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
 		$replace .= "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-		$replace .= "$path$SMILE_PATH . /\\2.gif\"></a>\\3";
+		$replace .= "$path$SMILE_PATH/\\2.gif\"></a>\\3";
 	}
 	else {
 		$path = $EXTERN_SERVER_NAME;
