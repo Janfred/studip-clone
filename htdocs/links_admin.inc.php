@@ -136,7 +136,9 @@ if ($i_page == "admin_institut.php"
 		OR $i_page == "inst_admin.php"
 		OR ($i_page == "admin_news.php" AND $links_admin_data["view"] == "news_inst")
 		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_inst")
-		OR ($i_page == "admin_extern.php" AND $links_admin_data["view"] == "extern_inst")) {
+		OR ($i_page == "admin_extern.php" AND $links_admin_data["view"] == "extern_inst")
+		OR ($i_page == "admin_vote.php" AND $links_admin_data["view"] == "vote_inst")
+		) {
 		
 	$view_mode="inst";
 }
@@ -151,7 +153,9 @@ if ($i_page == "admin_seminare1.php"
 		OR $i_page == "archiv_assi.php"
 		OR $i_page == "adminarea_start.php"
 		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_sem")		
-		OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_sem")) {
+		OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_sem")
+		OR ($i_page == "admin_vote.php" AND $links_admin_data["view"]=="vote_sem")
+		) {
 	
 	$view_mode="sem";
 }
@@ -228,6 +232,7 @@ $structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtig
 if (($modules["participants"]) || (!$SessSemName[1]))
 	$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?view=news_sem", active=>FALSE);
+$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
 $structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
@@ -241,7 +246,11 @@ if ($perm->have_perm("admin")) {
 }
 if (($modules["literature"]) || (!$SessSemName[1]))
 	$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
+
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
+
+$structure["vote_inst"]=array (topKat=>"einrichtungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_inst", active=>FALSE);
+
 if ($perm->have_perm("admin"))
 	$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
 
@@ -337,6 +346,12 @@ switch ($i_page) {
 			$reiter_view="news_sem"; 
 		elseif ($links_admin_data["topkat"] == "inst")
 			$reiter_view="news_inst";
+	break;
+	case "admin_vote.php": 
+		if ($links_admin_data["topkat"] == "sem")
+			$reiter_view="vote_sem"; 
+		elseif ($links_admin_data["topkat"] == "inst")
+			$reiter_view="vote_inst";
 	break;
 	case "admin_seminare1.php": 
 		$reiter_view="grunddaten_sem"; 
