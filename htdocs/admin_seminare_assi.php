@@ -1454,7 +1454,7 @@ if ($level==2)
 							<?
 							if (sizeof($sem_create_data["sem_doz"]) >0) {
 								foreach($sem_create_data["sem_doz"] as $key=>$val) {
-									printf ("&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <a href=\"$PHP_SELF?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a><br />", get_nachname($key), get_vorname($key), get_username($key), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_nachname($key)), htmlReady(get_vorname($key)), get_username($key));
 								}
 							} else {
 								printf ("<font size=\"-1\">&nbsp;  Keine %s gew&auml;hlt.</font><br >", $SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"] ? "LeiterIn" : "DozentIn");
@@ -1486,10 +1486,11 @@ if ($level==2)
 								else
 									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
+									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
 									print "<select name=\"add_doz\">";
 									while ($db->next_record()) {
-										printf ("<option value=\"%s\">%s </option>", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname"), 0, 30));
+										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", 0, 30)));
 									}
 									print "</select></font>";
 									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
@@ -1499,7 +1500,7 @@ if ($level==2)
 							if ((!$search_exp_doz) || (($search_exp_doz) && (!$db->num_rows()))) {
 								?>
 								<font size=-1>
-								<? printf ("%s %s", (($search_exp_doz) && (!$db->num_rows())) ? "Keinen Nutzer gefunden." : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "DozentIn hinzuf&uuml;gen" : "LeiterIn hinzuf&uuml;gen"  : "");?>
+								<? printf ("%s %s", (($search_exp_doz) && (!$db->num_rows())) ? "Keinen Nutzer gefunden.<a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "DozentIn hinzuf&uuml;gen" : "LeiterIn hinzuf&uuml;gen"  : "");?>
 								</font><br />
 								<input type="TEXT" size="30" maxlength="255" name="search_exp_doz" />&nbsp; 
 								<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip("Suche starten") ?> border="0" name="search_doz" />
@@ -1521,10 +1522,10 @@ if ($level==2)
 							<?
 							if (sizeof($sem_create_data["sem_tut"]) >0) {
 								foreach($sem_create_data["sem_tut"] as $key=>$val) {
-									printf ("&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <a href=\"$PHP_SELF?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a><br />", get_nachname($key), get_vorname($key), get_username($key), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_nachname($key)), htmlReady(get_vorname($key)), get_username($key));
 								}
 							} else {
-								printf ("<font size=\"-1\">&nbsp;  %s gew&auml;hlt.</font><br >", $SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"] ? "Kein Mitglied" : "Keine TutorIn");
+								printf ("<font size=\"-1\">&nbsp; %s gew&auml;hlt.</font><br >", $SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"] ? "Kein Mitglied" : "Keine TutorIn");
 							}
 							?>
 							&nbsp; <img  src="./pictures/info.gif" 
@@ -1537,7 +1538,7 @@ if ($level==2)
 							>
 							<font color="red" size=+2>*</font>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="40%">
+						<td class="<? echo $cssSw->getClass() ?>" width="50%">
 							<?
 							if (($search_exp_tut) && ($search_tut_x)) {
 								if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
@@ -1553,10 +1554,11 @@ if ($level==2)
 								else
 									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
+									print "<a name=\"anker\"></a>";
 									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
 									print "<select name=\"add_tut\">";
 									while ($db->next_record()) {
-										printf ("<option value=\"%s\">%s </option>", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname"), 0, 30));
+										printf ("<option value=\"%s\">%s </option>", $db->f("username"), htmlReady(my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", 0, 30)));
 									}
 									print "</select></font>";
 									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
@@ -1566,7 +1568,7 @@ if ($level==2)
 							if ((!$search_exp_tut) || (($search_exp_tut) && (!$db->num_rows()))) {
 								?>
 								<font size=-1>
-								<? printf ("%s %s", (($search_exp_tut) && (!$db->num_rows())) ? "Keinen Nutzer gefunden." : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "TutorIn hinzuf&uuml;gen" : "Mitglied hinzuf&uuml;gen"  : "");?>
+								<? printf ("%s %s", (($search_exp_tut) && (!$db->num_rows())) ? "Keinen Nutzer gefunden.<a name=\"anker\"></a>" : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "TutorIn hinzuf&uuml;gen" : "Mitglied hinzuf&uuml;gen"  : "");?>
 								</font><br />
 								<input type="TEXT" size="30" maxlength="255" name="search_exp_tut" />&nbsp; 
 								<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip("Suche starten") ?> border="0" name="search_tut" /><br />
