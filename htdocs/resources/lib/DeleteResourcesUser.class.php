@@ -62,7 +62,7 @@ class DeleteResourcesUser {
 			$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_user_id = '%s' ", $this->range_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
-				$killAssign = new AssignObject ($this->db->f("assign_id"));
+				$killAssign =& AssignObject::Factory($this->db->f("assign_id"));
 				$killAssign->delete();
 			}
 		}
@@ -70,7 +70,7 @@ class DeleteResourcesUser {
 			$query = sprintf("SELECT assign_id FROM termine LEFT JOIN resources_assign ON (resources_assign.assign_user_id = termine.termin_id) WHERE range_id = '%s' ", $this->range_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
-				$killAssign = new AssignObject ($this->db->f("assign_id"));
+				$killAssign =& AssignObject::Factory($this->db->f("assign_id"));
 				$killAssign->delete();
 			}
 		}

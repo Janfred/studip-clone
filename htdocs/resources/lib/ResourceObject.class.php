@@ -607,7 +607,7 @@ class ResourceObject {
 		$query = sprintf("SELECT assign_id FROM resources_assign WHERE resource_id = '%s' ", $id);
 		$this->db->query($query);
 		while ($this->db->next_record()) {
-			$killAssign = new AssignObject ($this->db->f("assign_id"));
+			$killAssign =& AssignObject::Factory($this->db->f("assign_id"));
 			$killAssign->delete();
 		}
 	}

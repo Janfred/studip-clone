@@ -121,7 +121,7 @@ class EditResourceData {
 		if ($new_assign_object)
 			$resAssign = unserialize($new_assign_object);
 		else
-			$resAssign=new AssignObject($assign_id);
+			$resAssign =& AssignObject::Factory($assign_id);
 		
 		//workaround anoack: new AssignObjects need a resource_id !
 		if ($resAssign->isNew()){
@@ -150,7 +150,7 @@ class EditResourceData {
 		//in some case, we load the perms from the assign object, if it has an owner
 		if (($ResourceObjectPerms->getUserPerm() != "admin") && (!$resAssign->isNew()) && (!$new_assign_object)) {
 			//load the assign-object perms of a saved object
-			$SavedStateAssignObject = new AssignObject($resAssign->getId());
+			$SavedStateAssignObject =& AssignObject::Factory($resAssign->getId());
 			if ($SavedStateAssignObject->getAssignUserId()){
 				unset($ObjectPerms);
 				$ObjectPerms = new AssignObjectPerms($resAssign->getId());

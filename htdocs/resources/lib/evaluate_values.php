@@ -320,7 +320,7 @@ if ($change_object_schedules) {
 	//in some case, we load the perms from the assign object, if it has an owner
 	if (($ObjectPerms->getUserPerm() != "admin") && ($change_object_schedules != "NEW") && (!$new_assign_object)) {
 		//load the assign-object perms of a saved object
-		$SavedStateAssignObject = new AssignObject($change_object_schedules);
+		$SavedStateAssignObject =& AssignObject::Factory($change_object_schedules);
 		if ($SavedStateAssignObject->getAssignUserId()){
 			unset($ObjectPerms);
 			$ObjectPerms = new AssignObjectPerms($change_object_schedules);
@@ -328,7 +328,7 @@ if ($change_object_schedules) {
 	}
 	
 	if (($ObjectPerms->havePerm("admin")) && ($change_meta_to_single_assigns_x)) {
-		$assObj = new AssignObject($change_object_schedules);	
+		$assObj =& AssignObject::Factory($change_object_schedules);	
 		$semResAssign = new VeranstaltungResourcesAssign($assObj->getAssignUserId());
 		$semResAssign->deleteAssignedRooms();
 		
@@ -342,7 +342,7 @@ if ($change_object_schedules) {
 	if (($ObjectPerms->havePerm("admin")) && ($send_change_resource_x)) {
 		$ChangeObjectPerms =& ResourceObjectPerms::Factory($select_change_resource);
 		if ($ChangeObjectPerms->havePerm("tutor")) {
-			$changeAssign=new AssignObject($change_object_schedules);
+			$changeAssign =& AssignObject::Factory($change_object_schedules);
 			$changeAssign->setResourceId($select_change_resource);
 			$overlaps = $changeAssign->checkOverlap();
 			if ($overlaps) {
@@ -358,7 +358,7 @@ if ($change_object_schedules) {
 
 	if ($ObjectPerms->havePerm("autor")) {
 		if ($kill_assign_x) {
-			$killAssign=new AssignObject($change_object_schedules);
+			$killAssign =& AssignObject::Factory($change_object_schedules);
 			$killAssign->delete();
 			$new_assign_object='';
 			$msg ->addMsg(5);
@@ -507,7 +507,7 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_day_of_week=7;
 
 			//give data to the assignobject
-			$changeAssign=new AssignObject(
+			$changeAssign =& AssignObject::Factory(
 				$change_schedule_id,
 				$change_schedule_resource_id,
 				$change_schedule_assign_user_id,
@@ -1106,7 +1106,7 @@ if ($save_state_x) {
 
 	//single date mode - just create one assign-object
 	if ($reqObj->getTerminId())
-		$assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
+		$assignObjects[] =& $semResAssign->getDateAssignObject($reqObj->getTerminId());
 	//multiple assign_objects (every date one assign-object or every metadate one assign-object)
 	elseif (is_array ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 		$i=0;
@@ -1125,9 +1125,9 @@ if ($save_state_x) {
 		}
 	
 		if (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
-			$assignObjects = $semResAssign->getDateAssignObjects(TRUE);
+			$assignObjects =& $semResAssign->getDateAssignObjects(TRUE);
 		} else {
-			$assignObjects = $semResAssign->getMetaAssignObjects();
+			$assignObjects =& $semResAssign->getMetaAssignObjects();
 		}
 	}
 	
@@ -1250,7 +1250,7 @@ if ($save_state_x) {
 				$assi_result = dateAssi ($semObj->getId(), "update", FALSE, FALSE, FALSE, FALSE, FALSE);
 	
 				//reload the assignObject - now we are dealing with indivual dates instead of a regularly assign
-				$assignObjects = $semResAssign->getDateAssignObjects();
+				$assignObjects =& $semResAssign->getDateAssignObjects();
 				
 				foreach ($assi_result["resources_result"] as $key=>$val) {
 					$resObj =& ResourceObject::Factory($val["resource_id"]);
@@ -1417,11 +1417,11 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 		//create the assign-objects for the seminar (virtual!)
 		$assignObjects = array();
 		if ($reqObj->getTerminId()) {
-			$assignObjects[] = $semResAssign->getDateAssignObject($reqObj->getTerminId());
+			$assignObjects[] =& $semResAssign->getDateAssignObject($reqObj->getTerminId());
 		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE, TRUE)))
-			$assignObjects = $semResAssign->getDateAssignObjects(TRUE);
+			$assignObjects =& $semResAssign->getDateAssignObjects(TRUE);
 		else
-			$assignObjects = $semResAssign->getMetaAssignObjects();
+			$assignObjects =& $semResAssign->getMetaAssignObjects();
 			
 		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]=array();
 		if (is_array($assignObjects)) {

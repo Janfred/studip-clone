@@ -81,7 +81,7 @@ class VeranstaltungResourcesAssign {
 	}
 	
 	//this method creates all assign-objects based on the seminar-metadata
-	function getMetaAssignObjects ($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='') {
+	function &getMetaAssignObjects ($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='') {
 		$semester = new SemesterData;
 		$all_semester = $semester->getAllSemesterData();
 
@@ -152,7 +152,7 @@ class VeranstaltungResourcesAssign {
 				if ($day_of_week == 0)
 					$day_of_week = 7;
 						
-				$AssignObjects[]=new AssignObject(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
+				$AssignObjects[] =& AssignObject::Factory(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
 											$start_time, $end_time, $sem_end,
 											-1, $interval, 0, 0, 
 											0, $day_of_week);
@@ -165,19 +165,19 @@ class VeranstaltungResourcesAssign {
 			return FALSE;
 	}
 
-	function getDateAssignObjects($presence_dates_only = FALSE) {
+	function &getDateAssignObjects($presence_dates_only = FALSE) {
 		$query2 = sprintf("SELECT termin_id FROM termine WHERE range_id = '%s' %s ORDER BY date, content", $this->seminar_id, ($presence_dates_only) ? "AND date_typ IN ".getPresenceTypeClause() : "");
 		$this->db2->query($query2);
 		
 		while ($this->db2->next_record()) {
-			$assignObjects[$this->db2->f("termin_id")] = $this->getDateAssignObject($this->db2->f("termin_id"));
+			$assignObjects[$this->db2->f("termin_id")] =& $this->getDateAssignObject($this->db2->f("termin_id"));
 		}
 		
 		return $assignObjects;
 	}
 	
 	//this method creates an assign-object for a seminar-date
-	function getDateAssignObject($termin_id, $resource_id='', $begin='', $end='') {
+	function &getDateAssignObject($termin_id, $resource_id='', $begin='', $end='') {
 		if (!$begin) {
 			$query = sprintf("SELECT date, content, end_time, assign_id FROM termine LEFT JOIN resources_assign ON (assign_user_id = termin_id) WHERE termin_id = '%s' ORDER BY date, content", $termin_id);
 			$this->db->query($query);
@@ -191,7 +191,7 @@ class VeranstaltungResourcesAssign {
 				$end=$begin;
 		}
 
-		$AssignObject=new AssignObject($assign_id);
+		$AssignObject =& AssignObject::Factory($assign_id);
 		if ($resource_id)
 			$AssignObject->setResourceId($resource_id);
 		if (!$AssignObject->getAssignUserId())
@@ -219,7 +219,7 @@ class VeranstaltungResourcesAssign {
 		
 		//load the assign-objects, if not given
 		if (!$assignObjects) {
-			$assignObjects = $this->getMetaAssignObjects($term_data, $veranstaltung_start_time, $veranstaltung_duration_time);
+			$assignObjects =& $this->getMetaAssignObjects($term_data, $veranstaltung_start_time, $veranstaltung_duration_time);
 		}
 
 		//check and save the assigns
@@ -262,7 +262,7 @@ class VeranstaltungResourcesAssign {
 		if ((!$assign_id) && (!$check_only))
 			 $result = $this->insertDateAssign($termin_id, $resource_id);
 		else {
-			$changeAssign=new AssignObject($assign_id);
+			$changeAssign =& AssignObject::Factory($assign_id);
 			if ($resource_id)
 				$changeAssign->setResourceId($resource_id);
 			else
@@ -312,7 +312,7 @@ class VeranstaltungResourcesAssign {
 			}
 			
 			if ($begin) {
-				$createAssign=new AssignObject(FALSE, $resource_id, $termin_id, '', 
+				$createAssign =& AssignObject::Factory(FALSE, $resource_id, $termin_id, '', 
 											$begin, $end, $end,
 											0, 0, 0, 0, 0, 0);
 				//check if there are overlaps (resource isn't free!)
@@ -336,7 +336,7 @@ class VeranstaltungResourcesAssign {
 			$query = sprintf ("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE assign_user_id = '%s' AND resources_categories.is_room = 1 ", $termin_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
-				$killAssign=new AssignObject($this->db->f("assign_id"));
+				$killAssign =& AssignObject::Factory($this->db->f("assign_id"));
 				$killAssign->delete();
 			}
 			$query = sprintf("SELECT request_id FROM resources_requests WHERE termin_id = '%s' ", $this->range_id);
@@ -353,7 +353,7 @@ class VeranstaltungResourcesAssign {
 			$query = sprintf("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE resources_assign.assign_user_id = '%s' AND resources_categories.is_room = 1 ", $this->seminar_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
-				$killAssign=new AssignObject($this->db->f("assign_id"));
+				$killAssign =& AssignObject::Factory($this->db->f("assign_id"));
 				$killAssign->delete();
 			}
 		}

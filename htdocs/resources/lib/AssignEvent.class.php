@@ -53,7 +53,7 @@ class AssignEvent {
 	function AssignEvent($assign_id, $begin, $end, $resource_id, $assign_user_id, $user_free_name='') {
 		global $user;
 		$this->user_id = $user->id;
-		$this->db=new DB_Seminar;
+		//$this->db=new DB_Seminar;
 
 		$this->assign_id=$assign_id;
 		$this->begin=$begin;
@@ -70,7 +70,7 @@ class AssignEvent {
 	
 	function getRepeatMode ($check_corresponding_metadata = FALSE) {
 		if (($this->repeat_mode == "na") && ($check_corresponding_metadata)) {
-			$assObj = new AssignObject($this->getAssignId());
+			$assObj =& AssignObject::Factory($this->getAssignId());
 			if (($assObj->getOwnerType() == "date") && (isMetadateCorrespondingDate($this->getAssignUserId())))
 				return "meta";
 		}

@@ -60,7 +60,7 @@ function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $r
 	
 	//handle the assigns und create all the repeated stuff
 	while($db->next_record()) {
-		$assign_object = new AssignObject($db->f("assign_id"));
+		$assign_object =& AssignObject::Factory($db->f("assign_id"));
 		create_assigns($assign_object, $this, $begin, $end, $filter);
 	}
 }
