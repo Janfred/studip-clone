@@ -107,7 +107,7 @@ class SemBrowse {
 		}
 		
 		
-		if ($this->search_obj->search_button_clicked){
+		if ($this->search_obj->search_button_clicked && !$this->search_obj->new_search_button_clicked){
 			$this->search_obj->override_sem = $this->sem_number;
 			$this->search_obj->doSearch();
 			if ($this->search_obj->found_rows){
@@ -226,8 +226,8 @@ class SemBrowse {
 		global $PHP_SELF;
 		$this->search_obj->attributes_default = array('style' => 'width:100%;font-size:10pt;');
 		$this->search_obj->search_fields['type']['size'] = 40 ;
-		echo $this->search_obj->getFormStart("$PHP_SELF?send=yes");
 		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+		echo $this->search_obj->getFormStart("$PHP_SELF?send=yes");
 		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">" . _("Titel:") . " </td>";
 		echo "<td class=\"steel1\" align=\"left\" width=\"35%\">";
 		echo $this->search_obj->getSearchField("title");
@@ -263,7 +263,6 @@ class SemBrowse {
 		echo "&nbsp;";
 		echo $this->search_obj->getNewSearchButton();
 		echo "&nbsp</td></tr>\n";
-		echo "<tr><td class=\"steel1\" colspan=\"4\" align=\"center\">&nbsp;</td></tr>";
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
 	}
@@ -284,19 +283,19 @@ class SemBrowse {
 		global $PHP_SELF, $_language_path;
 		echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		if ($this->sem_browse_data['level'] == "f"){
-			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\"><div style=\"margin-top:10px\"><font size=\"-1\">";
-//			printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
-//			if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
-//				printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&sset=0\">","</a>");
-//			}
-			if (!is_array($this->sem_browse_data['search_result'])) {
-				echo "<br />";
+			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\">";
+			if (($this->show_result && count($this->sem_browse_data['search_result'])) || $this->sem_browse_data['cmd'] == "xts") {
+				printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
+				if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
+					printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&sset=0\">","</a>");
+				}
+			} else {
 				printf ("<a href=\"%s?level=ev&cmd=qs&sset=0\"><img src=\"./locale/%s/LC_PICTURES/institute_index.jpg\" border=\"0\" /></a>", $PHP_SELF, $_language_path);
 				if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
 					printf ("&nbsp; &nbsp; <a href=\"%s?level=vv&cmd=qs&sset=0\"><img src=\"./locale/%s/LC_PICTURES/course_index.jpg\" border=\"0\" /></a>", $PHP_SELF, $_language_path);
 				}
-				echo "<br>&nbsp;</font></div>"; 
 			}
+			echo "</font></div>"; 
 		}
 		if ($this->sem_browse_data['level'] == "vv"){
 			echo "\n<tr><td align=\"center\">";
@@ -423,6 +422,7 @@ class SemBrowse {
 			}
 			echo "</b></font></td></tr>";
 			echo "\n</table>";
+			$this->sem_browse_data["sset"] = 0;
 		}
 	}
 }
