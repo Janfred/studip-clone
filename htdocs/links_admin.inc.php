@@ -277,6 +277,7 @@ if ($perm->have_perm("admin")) {
 }
 if ($perm->have_perm("root")) {
 	$structure["studiengang"]=array (topKat=>"global", name=>_("Studieng&auml;nge"), link=>"admin_studiengang.php", active=>FALSE);
+	$structure["datafields"]=array (topKat=>"global", name=>_("Datenfelder"), link=>"admin_datafields.php", active=>FALSE);
 	$structure["sessions"]=array (topKat=>"modules", name=>_("Sessions"), link=>"view_sessions.php", active=>FALSE);
 	$structure["integrity"]=array (topKat=>"modules", name=>_("DB Integrit&auml;t"), link=>"admin_db_integrity.php", active=>FALSE);
 }
@@ -404,9 +405,12 @@ switch ($i_page) {
 	case "admin_sem_tree.php": 
 		$reiter_view="sem_tree"; 
 	break;
+	case "admin_datafields.php": 
+		$reiter_view="datafields"; 
+	break;
 	case "admin_extern.php":
 		$reiter_view = "extern_inst";
-		break;
+	break;
 }
 
 $reiter->create($structure, $reiter_view, $tooltip, $addText);
