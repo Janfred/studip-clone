@@ -201,7 +201,7 @@ if ($view=="statistik") {?>
 			write_toplist(_("die meisten Materialien (Dokumente)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM dokumente a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			$week = time()-1209600;
 			write_toplist(_("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM px_topics a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) AND a.mkdate > $week GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
-			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, count(post_id) as count FROM auth_user_md5 LEFT JOIN guestbook ON(auth_user_md5.user_id=range_id) WHERE NOT ISNULL(range_id) GROUP BY range_id ORDER BY count DESC LIMIT $count");
+			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, views as count FROM object_views LEFT JOIN auth_user_md5 ON(object_id=user_id) WHERE object_id=user_id ORDER BY count DESC LIMIT $count");
 			?>	
 			</table>
 		</blockquote>
