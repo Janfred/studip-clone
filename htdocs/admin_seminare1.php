@@ -631,6 +631,7 @@ if ($s_command) {
 ?>
 				<td align=left colspan=3><select name="Dozenten[]" MULTIPLE SIZE=10>
 					<?php
+					unset($tempDozent_id);
 					$db4->query("SELECT seminar_user.user_id,status FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status IN('dozent','tutor')");
 					while ($db4->next_record()){
 						$tempDozent_id[$db4->f("user_id")] = $db4->f("status");
