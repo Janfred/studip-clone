@@ -1181,6 +1181,12 @@ if (($form == 6) && ($jump_next_x))
 
 		if ($Schreibzugriff < $Lesezugriff) // hier wusste ein Dozent nicht, was er tat
 			$Schreibzugriff = $Lesezugriff;
+		
+		//Visibility
+		if ($SEM_CLASS[$sem_create_data["sem_class"]]["visible"] !== FALSE)
+			$visible = TRUE;
+		else
+			$visible = FALSE;
 
 		$query = "INSERT INTO seminare SET
 				Seminar_id = '".			$sem_create_data["sem_id"]."', 
@@ -1216,7 +1222,7 @@ if (($form == 6) && ($jump_next_x))
 				admission_prelim_txt = '".		$sem_create_data["sem_paytxt"]."', 
 				admission_starttime = '".		$sem_create_data["sem_admission_start_date"]."',  
 				admission_endtime_sem = '".		$sem_create_data["sem_admission_end_date"]."', 
-				visible =  '". 				($SEM_CLASS[$sem_create_data["sem_class"]]["visible"] ? 1 : 0) . "',
+				visible =  '". 				(($visible) ? 1 : 0) . "',
 				showscore =				'0', 
 				modules = 				NULL";
 				
@@ -2851,13 +2857,13 @@ if ($level == 4) {
 						
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="96%"  colspan=3>
-							<font size="-1">&nbsp; 
+							<font size="-1">
 							<?=_("Sie k&ouml;nnen hier eine unspezifische Ortsangabe machen:")?><br />
-							&nbsp; <textarea name="sem_room" cols=58 rows="4"><? echo  htmlReady(stripslashes($sem_create_data["sem_room"])) ?></textarea>
+							<textarea name="sem_room" cols=58 rows="4"><? echo  htmlReady(stripslashes($sem_create_data["sem_room"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Sie können hier einen Ort eingeben, der nur angezeigt wird, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden können oder Sitzungstermine bereits abgelaufen sind und aus diesem Grund nicht mehr angezeigt werden."), TRUE, TRUE) ?>
 							>
-							<br />&nbsp; <?=_("<b>Achtung:</b> Diese Ortsangabe wird nur angezeigt, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?>
+							<br /><?=_("<b>Achtung:</b> Diese Ortsangabe wird nur angezeigt, wenn keine genaueren Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?>
 						</td>
 					</tr>
 					<?
