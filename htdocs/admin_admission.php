@@ -380,14 +380,14 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					$db4->query("INSERT INTO admission_seminar_user SET user_id ='".$db3->f("user_id")."', seminar_id = '".$db3->f("Seminar_id")."', studiengang_id ='".$db3->f("admission_studiengang_id")."', mkdate='".$db3->f("mkdate")."', status ='accepted'");
 					$db4->query("DELETE FROM seminar_user WHERE user_id='".$db3->f("user_id")."' AND Seminar_id='".$db3->f("Seminar_id")."'");
 					$message=sprintf(_("Sie wurden in der Veranstaltung **%s** in den Status **vorläufig akzeptiert** befördert, da das Anmeldeverfahren geändert wurde."), $admin_admission_data["name"]);
-					$messaging->insert_sms ($db3->f("username"), addslashes($message), "____%system%____");
+					$messaging->insert_message(addslashes($message), $db3->f("username"), "____%system%____", FALSE, FALSE, "1");
 				}
 				$db3->query("SELECT *, auth_user_md5.username FROM seminar_user, auth_user_md5 WHERE seminar_user.Seminar_id = '".$admin_admission_data["sem_id"]."' AND seminar_user.status='user' AND seminar_user.user_id = auth_user_md5.user_id");
 				$db4->query("DELETE FROM seminar_user WHERE Seminar_id = '".$admin_admission_data["sem_id"]."' AND status='user'");
 				if ($db4->affected_rows()) {
 					while ($db3->next_record()) {
 						$message=sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde aufgehoben, da die Veranstaltung mit einem teilnahmebeschränkten Anmeldeverfahren versehen wurde. \nWenn Sie einen Platz in der Veranstaltung bekommen wollen, melden Sie sich bitte erneut an."), $admin_admission_data["name"]);
-						$messaging->insert_sms ($db3->f("username"), addslashes($message), "____%system%____");
+						$messaging->insert_message(addslashes($message), $db3->f("username"), "____%system%____", FALSE, FALSE, "1");
 					}
 				}
 				$db4->query("UPDATE seminare SET admission_prelim = 1 WHERE Seminar_id = '".$admin_admission_data["sem_id"]."'");
@@ -403,8 +403,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 						$db4->query("INSERT INTO seminar_user SET user_id ='".$db3->f("user_id")."', Seminar_id = '".$db3->f("seminar_id")."', admission_studiengang_id ='".$db3->f("studiengang_id")."', mkdate='".$db3->f("mkdate")."', status='autor'");
 						$db4->query("DELETE FROM admission_seminar_user WHERE user_id='".$db3->f("user_id")."' AND seminar_id='".$db3->f("seminar_id")."'");
 						$message=sprintf(_("Sie wurden in der Veranstaltung **%s** in den Status **Autor** versetzt, da das Anmeldeverfahren geändert wurde."), $admin_admission_data["name"]);
-						$messaging->insert_sms ($db3->f("username"), addslashes($message), "____%system%____");
-		
+						$messaging->insert_message(addslashes($message), $db3->f("username"), "____%system%____", FALSE, FALSE, "1");
 					}
 					$db4->query("UPDATE seminare SET admission_prelim = 0 WHERE Seminar_id = '".$admin_admission_data["sem_id"]."'");
 					$admin_admission_data["admission_prelim"] = 0;
