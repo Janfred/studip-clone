@@ -65,10 +65,11 @@ class ShowList extends ShowTreeRow{
 
 		//Daten vorbereiten
 		$icon="<img src=\"pictures/cont_folder2.gif\" />";
-		if ($resources_data["structure_open"] == $resObject->id) {
+		if ($resources_data["structure_opens"][$resObject->id]) {			
 			$link=$PHP_SELF."?structure_close=".$resObject->id."#a";
 			$open="open";
-			echo "<a name=\"a\"></a>";
+			if ($resources_data["actual_object"] == $resObject->id)
+				echo "<a name=\"a\"></a>";
 		} else {
 			$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
 			$open="close";
@@ -100,7 +101,7 @@ class ShowList extends ShowTreeRow{
 			if (!$weitere) {
 				$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
 			} 
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobject")."</a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("bearbeiten")."</a>";
 		} else {
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("details")."</a>";
@@ -236,10 +237,11 @@ class ShowThread extends ShowTreeRow {
 
 			//Daten vorbereiten
 			$icon="<img src=\"pictures/cont_folder2.gif\" />";
-			if ($resources_data["structure_open"] == $resObject->id) {
+			if ($resources_data["structure_opens"][$resObject->id]) {
 				$link=$PHP_SELF."?structure_close=".$resObject->id."#a";
 				$open="open";
-				echo "<a name=\"a\"></a>";
+				if ($resources_data["actual_object"] == $resObject->id)
+					echo "<a name=\"a\"></a>";
 			} else {
 				$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
 				$open="close";
@@ -282,7 +284,8 @@ class ShowThread extends ShowTreeRow {
 			
 			//in weitere Ebene abtauchen
 			while ($db2->next_record()) {
-				$this->showThreadLevel($db2->f("resource_id"), $level+1, $lines);
+				if ($resources_data["structure_opens"][$db->f("resource_id")])
+					$this->showThreadLevel($db2->f("resource_id"), $level+1, $lines);
 			}
 		}
 	}
@@ -882,7 +885,7 @@ class EditObject extends cssClasses {
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
 			<input type="HIDDEN" name="view" value="<?=$this->used_view ?>" />
-			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", ($assign_id) ? $resAssign->getResourceId() : $resources_data["structure_open"]); ?>" />			
+			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", ($assign_id) ? $resAssign->getResourceId() : $resources_data["actual_object"]); ?>" />			
 			<input type="HIDDEN" name="change_schedule_repeat_month_of_year" value="<? echo $resAssign->getRepeatMonthOfYear() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_month" value="<? echo $resAssign->getRepeatDayOfMonth() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_month" value="<? echo $resAssign->getRepeatMonth() ?>" />
