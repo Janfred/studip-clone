@@ -192,7 +192,7 @@ function GetUserInfo($user_id)
 		if ($db->f("privatnr")!="")
 			$userinfo["Privat Tel."] = $db->f("privatnr");
 		if ($db->f("privadr")!="")
-			$userinfo["Addresse"] = $db->f("privadr");
+			$userinfo["Adresse"] = $db->f("privadr");
 	}
 	return $userinfo;
 }
