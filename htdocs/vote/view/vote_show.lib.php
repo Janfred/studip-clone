@@ -73,13 +73,17 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
 
    $sortAnswers = $_GET["sortAnswers"] && 
        $vote->getVoteID() == $_GET["voteopenID"];
-      
+
+   $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) ||
+       $userID == $vote->getAuthorID ();
+	
    $link  = $GLOBALS["PHP_SELF"];
    $link .= "?voteopenID=".$vote->getVoteID();
    $link .= ($_GET["openAllVotes"]) ? "&openAllVotes=".YES : "";
    $link .= ($_GET["openStoppedVotes"]) ? "&openStoppedVotes=".YES : "";
    $link .= ($_GET["showrangeID"]) ? "&showrangeID=".$_GET["showrangeID"] : "";
    $link .= ($isPreview) ? "&previewResults=".YES : "";
+   $link .= ($GLOBALS["username"]) ? "&username=".$GLOBALS["username"] : "";
       
    /* Meta-informations about the vote ------------------------------------- */
    $html .= createVoteInfo ($vote, $isAssociated);
@@ -100,8 +104,9 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
    /* ---------------------------------------------------------------------- */
 
    /* Viewbutton ----------------------------------------------------------- */
-   if ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS &&
-       !($isAssociated || $isPreview)) {
+   if ( ! ($isAssociated || $isPreview) &&
+	($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm)
+	) {
       $html .= 
 	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
 	 "name=\"previewButton\" " .
@@ -151,9 +156,6 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
       $link_sort = $link."&sortAnswers=".($sortAnswers ? NO : YES);
       $link_sort .= "&revealNames=".($revealNames ? YES : NO);
 
-      if (!empty ($GLOBALS["username"]))
-	 $link_sort .= "&username=".$GLOBALS["username"];
-
       $link_sort .= ($vote->isStopped()) ? "#stoppedVotes" : "#openvote";
 
       $html .= 
@@ -170,18 +172,13 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
    /* ---------------------------------------------------------------------- */
 
    /* 'Show names'-button -------------------------------------------------- */
-   $haveShowPerms = 
-      $GLOBALS["perm"]->have_studip_perm ("tutor", $vote->getRangeID ())
-      OR
-      $userID == $vote->getAuthorID ();
-	
    if ( ! $vote->isAnonymous()
 	&& ($isAssociated || $isPreview)
 	&& $vote->isInUse()
 	&& ! (($vote->getResultVisibility() == VOTE_RESULTS_AFTER_END
 	       || $vote->getResultVisibility() == VOTE_RESULTS_NEVER)
-	      && $vote->isActive())
-	&& $haveShowPerms
+	      && $vote->isActive() && !$haveFullPerm)
+	&& $haveFullPerm
 	)
        {
        $link_reveal = $link."&sortAnswers=".($_GET["sortAnswers"] ? YES : NO);
@@ -215,8 +212,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
        $perm->have_studip_perm ("admin", $rangeID) OR
        $userID == $rangeID) {
    */
-   if ($perm->have_studip_perm ("tutor", $rangeID) OR
-       $userID == $vote->getAuthorID ()) {
+   if ($haveFullPerm) {
       if (!$vote->isStopped())
 	 $html .= 
 	    "&nbsp;".
@@ -463,11 +459,19 @@ function createStoppedVoteFooter () {
  * @returns  String   The HTML-text
  */
 function createSuccessReport (&$vote, $firstTime = YES, $changed = NO) {
+   global $perm, $auth;
+
    $html     = "";
    $stopdate = $vote->getRealStopdate();
 
    /* Show the results ----------------------------------------------------- */
-   switch ($vote->getResultvisibility ()) {
+   $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) ||
+       $auth->auth["uid"] == $vote->getAuthorID ();
+
+   $resVis = $haveFullPerm ? VOTE_RESULTS_ALWAYS : $vote->getResultvisibility();
+   // brutal, ich weiss..
+
+   switch ($resVis) {
 
      case VOTE_RESULTS_AFTER_VOTE:
      case VOTE_RESULTS_ALWAYS:
