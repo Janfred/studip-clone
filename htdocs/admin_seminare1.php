@@ -31,6 +31,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeSearch.class.php");
+
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -53,14 +55,14 @@ function checkname(){
 
 function checkbereich(){
  var checked = true;
- if (document.details["bereich[]"].selectedIndex < 0) {
+ if (document.details["details_chooser[]"].selectedIndex < 0) {
     alert("Bitte geben Sie mindestens einen Studienbereich für die Veranstaltung ein!");
- 		document.details["bereich[]"].focus();
+ 		document.details["details_chooser[]"].focus();
     checked = false;
  } else {
-		if (document.details["bereich[]"].options[document.details["bereich[]"].selectedIndex].value == "nix") {
-			alert("Die Zeilen die mit '--' beginnen sind keine gültigen Bereiche, sie dienen nur der Orientierung.\nBitte geben Sie einen gültigen Bereich ein!");
- 			document.details["bereich[]"].focus();
+		if (document.details["details_chooser[]"].options[document.details["details_chooser[]"].selectedIndex].value == 0) {
+			alert("Die Zeilen, die unterstrichen sind, dienen nur der Orientierung.\nBitte geben Sie einen gültigen Bereich ein!");
+ 			document.details["details_chooser[]"].focus();
     	checked = false;
 		}
  }
@@ -109,26 +111,10 @@ $cssSw = new cssClassSwitcher;
 $user_id = $auth->auth["uid"];
 $msg = "";
 
-function auth_check() {
-	/*
-	global $s_id, $user_id, $perm;
-	$db = new DB_Seminar;
-	
-	$db->query("select * from seminar_user where Seminar_id = '$s_id' AND user_id = '$user_id'");
-	$db->next_record();
-	$my_perms=$db->f("status");
+$st_search = new StudipSemTreeSearch($s_id,"details");
 
-	if ((!$perm->have_perm("admin")) && ($db->f("status") != "dozent") && ($db->f("status") != "tutor")) {
-		return FALSE;
-	}
-			
-	if ($perm->have_perm("admin") && !$perm->have_perm("root")) {
-		$db->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
-			if (!$db->next_record() || $db->f("inst_perms") != "admin")
-				return FALSE;
-    	}
-	return TRUE;
-	*/
+
+function auth_check() {
 	global $perm,$s_id;
 	return $perm->have_studip_perm("tutor",$s_id);
 }
@@ -194,18 +180,17 @@ if ($s_send) {
     }
 
     if ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["bereiche"]) {
-    if (empty($bereich)) {
+    if (empty($_REQUEST['details_chooser'])) {
       $msg .= "error§Bitte geben Sie wenigstens einen <B>Studienbereich</B> an!§";
       $run = FALSE;
 		} else {
-			$dochnoch = "nein";    // Test ob ausser Murks auch etwas Sinnvolles angeklickt wurde
-			while (list($key,$val) = each($bereich)) 
-				if ($val != "nix") $dochnoch = "ja";
+			for ($i = 0; $i < count($_REQUEST['details_chooser']);++$i){ 
+				if ($_REQUEST['details_chooser'][$i] != '0') $dochnoch = "ja";
+			}
 			if ($dochnoch != "ja") {
 				$msg .= "error§Sie haben nur einen ung&uuml;ltigen Studienbereich ausgew&auml;hlt. Bitte geben Sie wenigstens einen <B>Studienbereich</B> an!§";
-    	  $run = FALSE;
+				$run = FALSE;
 			}
-			reset ($bereich);
 		}
 	}
     
@@ -330,27 +315,21 @@ if ($s_send) {
 		
 		//Bereiche aendern
 		if ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["bereiche"]) {
-		if (isset($bereich)) 
-			{
-			## Alle alten Eintraege aus seminar_bereich rauswerfen, dann noch mal sauber neu eintragen
-			    $query = "DELETE from seminar_bereich where Seminar_id='$s_id'";
-			    $db3->query($query);
-
-			while (list($key,$val) = each($bereich)) 
-				{ 
-				IF ($val != "nix")
-					{      
-					$query = "INSERT IGNORE INTO seminar_bereich VALUES('$s_id','$val')";
-					$db3->query($query);			     // Bereich eintragen
-					}
+			if (isset($_REQUEST['details_chooser'])) {
+				$st_search->insertSelectedRanges();
+				if ($st_search->num_inserted){
+					$msg .= "msg§" . sprintf(_("%s Studienbereiche hinzugefügt."),$st_search->num_inserted) ."§";
+				}
+				if ($st_search->num_deleted){
+					$msg .= "msg§" . sprintf(_("%s Studienbereiche gel&ouml;scht."),$st_search->num_deleted) ."§";
 				}
 			}
 		} else {
-			## nur alte Eintraege rauswerfen, falls voher Kategorie mit Bereichen gewaehlt war
-			$query = "DELETE from seminar_bereich where Seminar_id='$s_id'";
+			// nur alte Eintraege rauswerfen, falls voher Kategorie mit Bereichen gewaehlt war
+			$query = "DELETE from seminar_sem_tree where seminar_id='$s_id'";
 			$db3->query($query);
 		}
-			
+		
 		
 	     // Heimat-Institut ebenfalls eintragen, wenn noch nicht da		
 		if (!$my_perms == "tutor") {
@@ -700,71 +679,20 @@ if (($s_id) && (auth_check())) {
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Studienbereich(e)</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <br />&nbsp; 
-					<select MULTIPLE name="bereich[]" onchange="checkbereich()" SIZE=12>
-					<?php
-					$fachtmp="0";
-					//Anzeige der eigenen Faecher
-					if (!$perm->have_perm("root"))
-					$db3->query("SELECT DISTINCT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) LEFT OUTER JOIN fach_inst USING(fach_id) LEFT OUTER JOIN user_inst USING(institut_id) WHERE user_id ='$user_id' AND user_inst.inst_perms !='user' AND user_inst.inst_perms !='autor' AND user_inst.inst_perms !='tutor' ORDER BY bereich_fach.fach_id");
-					while ($db3->next_record()) 
-						{
-						IF ($fachtmp != $db3->f("fach_id"))
-							{
-					//Hier werden die Faecherueberschriften ausgegeben 
-							$fachtmp = $db3->f("fach_id");
-							$db4->query("SELECT name from faecher WHERE fach_id = '$fachtmp'");	
-							while ($db4->next_record()) 
-								{
-								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
-								ECHO "<option style=\"color:red;\" value = \"nix\">".htmlReady(my_substr($db4->f("name"),0,60))."</option>";
-								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
-								}
-							}
-						$bereichtmp =	 $db3->f("bereich_id");
-						$db4->query("SELECT bereich_id FROM seminar_bereich WHERE seminar_id = '$s_id' AND bereich_id = '$bereichtmp'");
-					//Anzeige ob Selected oder nicht
-						IF ($db4->next_record()) 
-							printf ("<option selected VALUE=%s>&nbsp;%s</option>", $db3->f("bereich_id"), htmlReady(my_substr($db3->f("name"),0,60)));
-						ELSE
-							printf ("<option VALUE=%s>&nbsp;%s</option>", $db3->f("bereich_id"), htmlReady(my_substr($db3->f("name"),0,60)));
-						$fachtmp = $db3->f("fach_id");
-						}		
-						
-					// Anzeige der anderen Faecher
-					$query = "SELECT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id)";
-					$db3->query("SELECT fach_id FROM fach_inst LEFT JOIN user_inst USING(institut_id) WHERE user_id ='$user_id' AND user_inst.inst_perms !='user' AND user_inst.inst_perms !='autor' AND user_inst.inst_perms !='tutor' GROUP BY fach_id");
-					while ($db3->next_record()) 
-						$filter .= " fach_id != '".$db3->f("fach_id")."' AND";
-					$filter = substr($filter, 1, -3);
-					IF (strlen($filter) > 4) $query .= " WHERE " .$filter;
-					$query .= " ORDER BY bereich_fach.fach_id";
-					$fachtmp="0";
-					$db3->query($query);
-					while ($db3->next_record()) 
-						{
-						IF ($fachtmp != $db3->f("fach_id"))
-							{
-							//Hier werden die Faecherueberschriften ausgegeben 
-							$fachtmp = $db3->f("fach_id");
-							$db4->query("SELECT name from faecher WHERE fach_id = '$fachtmp'");	
-							while ($db4->next_record()) 
-								{
-								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
-								ECHO "<option style=\"color:red;\" value = \"nix\">".htmlReady(my_substr($db4->f("name"),0,60))."</option>";
-								ECHO "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
-								}
-							}
-						$bereichtmp =	 $db3->f("bereich_id");
-						$db4->query("SELECT bereich_id FROM seminar_bereich WHERE seminar_id = '$s_id' AND bereich_id = '$bereichtmp'");
-						//Anzeige ob Selected oder nicht
-						IF ($db4->next_record()) 
-							printf ("<option selected VALUE=%s>&nbsp;%s</option>", $db3->f("bereich_id"), htmlReady(my_substr($db3->f("name"),0,60)));
-						ELSE
-							printf ("<option VALUE=%s>&nbsp;%s</option>", $db3->f("bereich_id"), htmlReady(my_substr($db3->f("name"),0,60)));
-						$fachtmp = $db3->f("fach_id");
-						}					
+					<?
+					echo "\n<div align=\"left\" style=\"width:100%\">&nbsp;";
+					echo $st_search->getSearchField(array('style' => 'vertical-align:middle;width:60%;'));
+					echo "&nbsp;";
+					echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
+					echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
+					if ($st_search->num_search_result !== false){
+						echo "<br>&nbsp;&nbsp;<b><a name=\"anker\">" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) ."</a></b>";
+					}
+					echo "</span><br>&nbsp;";
+					echo $st_search->getChooserField(array('size' => 12, 'onChange' => 'checkbereich()'),70);
+					echo "</div>";
 				?>
-				</select></td>
+				</td>
 			<?
 			}
 			?>

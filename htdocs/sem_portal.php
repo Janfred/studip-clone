@@ -88,42 +88,43 @@ if (!$perm->have_perm("root"))
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;Anmeldung zu Veranstaltungen</b></td>
+	<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<?=_("Anmeldung zu Veranstaltungen")?></b></td>
 </tr>
 <tr>
 <td class="blank" align = left width="90%"><blockquote>
-
+<br>
 <?
-echo"<br>Um an einer Veranstaltung teilnehmen zu k&ouml;nnen und um damit die dort zur Verf&uuml;gung gestellten Materialien nutzen zu k&ouml;nnen, w&auml;hlen Sie die Veranstaltung &uuml;ber diese Suchfunktion aus.<p>Bitte klicken Sie zur Anmeldung auf den Namen der Veranstaltung.";
+echo _("Um an einer Veranstaltung teilnehmen zu k&ouml;nnen und um damit die dort zur Verf&uuml;gung gestellten Materialien nutzen zu k&ouml;nnen, w&auml;hlen Sie die Veranstaltung &uuml;ber diese Suchfunktion aus.");
+ echo "<p>" . _("Bitte klicken Sie zur Anmeldung auf den Namen der Veranstaltung.");
 if ($sem_portal["bereich"]=="Alle")
-	echo "<br>Wenn Sie eine Veranstaltung aus einem bestimmten Bereich suchen, w&auml;hlen Sie oben den entsprechenden Reiter.";
-else {
-	$sem_browse_data["s_sem"] ="alle";
-	$db=new DB_Seminar;
-	if (!$show_class)
+	echo "<br>" . _("Wenn Sie eine Veranstaltung aus einem bestimmten Bereich suchen, w&auml;hlen Sie oben den entsprechenden Reiter.");
+	else {
+		$sem_browse_data["s_sem"] ="alle";
+		$db=new DB_Seminar;
+		if (!$show_class)
 		$show_class = $view;
-	$tmp_classes=''; $query="";
-	$i=1;
-	foreach ($SEM_TYPE as $a) {
-		if ($a["class"] == $show_class)
-			$tmp_classes[]=$i;
-		$i++;
+		foreach ($SEM_CLASS as $key => $value){
+			if ($key == $show_class){
+				foreach($SEM_TYPE as $type_key => $type_value){
+					if($type_value['class'] == $key)
+					$_sem_status[] = $type_key;
+				}
+			}
 		}
-	$query.="SELECT count(*) AS count FROM seminare WHERE seminare.status in (";
-	$i=0;
-	foreach ($tmp_classes as $a) {
-		if ($i)
-			$query.=", ";
-		$query.="'$a'";
-		$i++;
-		}
-	$query.=" )";
+	$query = "SELECT count(*) AS count FROM seminare WHERE seminare.status IN ('" . join("','", $_sem_status) . "')";
 	$db->query($query);
 	IF ($db->next_record() ){
-		$Anzahl = $db->f("count");
-		IF ($Anzahl > 0) {
+		$anzahl = $db->f("count");
+		IF ($anzahl > 0) {
 			echo $beschreibung;
-			echo "&nbsp; <br>(<a href='sem_portal.php?send=yes&s_sem=alle&sset=xts&s_bool=1&show_class=$view'>alle ".$db->f("count")."&nbsp;Veranstaltungen in dieser Kategorie anzeigen</a>)";
+			echo "&nbsp; <br>";
+			printf(_("( %s Veranstaltungen in dieser Kategorie )"),$anzahl);
+			if ($anzahl <= 20){
+				echo "<br><a href=\"$PHP_SELF?cmd=show_class\">";
+				echo _("Alle Veranstaltungen anzeigen");
+				echo "</a>";
+			}
+			echo "<br>";
 			}
 		ELSE {
 			echo "<br>In diesem Bereich sind noch keine Veranstaltungen angelegt.<br>Bitte w&auml;hlen Sie mit den Reitern einen anderen Bereich!<br><br></td></tr></table>\n";
@@ -141,7 +142,10 @@ else {
 <tr><td class="blank" colspan=2>
 <?
 
-IF ($view=="Alle") $show_class=FALSE;
+IF ($view=="Alle") {
+	$show_class=FALSE;
+	$reset_all = true;
+}
 ELSE $show_class=$view;
 IF ($SEM_CLASS[$view]["show_browse"]==FALSE AND $view!="Alle") {
 	$hide_bereich=TRUE;
@@ -153,14 +157,13 @@ ELSE $hide_bereich=FALSE;
 
 	include "sem_browse.inc.php"; 		//der zentrale Seminarbrowser wird hier eingef&uuml;gt.
 	
-	$sql_where_query_seminare="";
 
 echo "</td></tr><tr><td class=\"blank\" colspan=2>&nbsp; </td></tr>";
 echo "</table><br>";
 
-IF ($sem_browse_data["level"]!="s" AND $sem_browse_data["level"]!="sbb" AND !$level) { // Wir sind auf einer Uebersichtsseite, also her mit den TOP-Listen
+IF ($sem_browse_data["level"]!="s" AND $sem_browse_data["level"]!="vv" AND $sem_browse_data["level"]!="ev" AND !$level) { // Wir sind auf einer Uebersichtsseite, also her mit den TOP-Listen
 
-   IF ($Anzahl > 0 OR $view=="Alle") { //Wenn was da ist TOP-Listren ausgeben
+   IF ($anzahl > 0 OR $view=="Alle") { //Wenn was da ist TOP-Listren ausgeben
 	echo "<table width=100% border=0 cellspacing=0 cellpadding=1><tr><td class=topic><b>TOP-Listen";
 	IF ($view!="Alle") ECHO " im Bereich ".$SEM_CLASS[$view]["name"];
 	IF ($mehr) echo "<a name='anker'>";
@@ -170,24 +173,8 @@ IF ($sem_browse_data["level"]!="s" AND $sem_browse_data["level"]!="sbb" AND !$le
 
 	//Erweierung des query um Klasseneingrenzung
 	IF ($view!="Alle") {
-		$show_class = $view;
-		$tmp_classes='';
-		$i=1;
-		foreach ($SEM_TYPE as $a) {
-			if ($a["class"] == $show_class)
-				$tmp_classes[]=$i;
-			$i++;
-			}
-		$sql_where_query_seminare.="WHERE seminare.status in (";
-		$i=0;
-		foreach ($tmp_classes as $a) {
-			if ($i)
-				$sql_where_query_seminare.=", ";
-			$sql_where_query_seminare.="'$a'";
-			$i++;
-			}
-		$sql_where_query_seminare.=" )";
-		}
+		$sql_where_query_seminare = "WHERE seminare.status IN ('" . join("','", $_sem_status) . "')";
+	}
 
 	IF (!$mehr) {
 		$count=5; // wieviel zeigen wir von den Listen?

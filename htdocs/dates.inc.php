@@ -735,6 +735,22 @@ function get_sem_num ($time) {
 
 }
 
+function get_sem_num_sem_browse () {
+	global $SEMESTER;
+	$time = time();
+	$ret = false;
+	foreach ($SEMESTER as $key=>$val){
+		if ($ret && ($val["vorles_ende"] >= $time)){
+			$ret = $key;
+			break;
+		}
+		if ($time >= $val["vorles_ende"]){
+			$ret = true;
+		}
+	}
+	return $ret;
+}
+
 /*
 Die Funktion get_semester gibt den oder die Semester einer speziellen Veranstaltung aus.
 */

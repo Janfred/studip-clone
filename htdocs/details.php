@@ -34,6 +34,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); // wir brauchen htmlReady
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php"); 
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTree.class.php");
 
 if ($ILIAS_CONNECT_ENABLE) 
 {
@@ -426,13 +427,16 @@ print_infobox ($infobox,"pictures/details.jpg");
 			<? }
 			// Anzeige der Bereiche  
 			if ($SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
+				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+				$view = new DbView();
 			?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
-				$db3->query("SELECT bereiche.* FROM bereiche LEFT JOIN seminar_bereich USING(bereich_id) WHERE seminar_id = '$sem_id'");
+				$view->params[0] = $sem_id;
+				$db3 = $view->get_query("view:SEMINAR_SEM_TREE_GET_IDS");
 				if ($db3->num_rows() ==1)
 					printf ("<font size=-1><b>" . _("Studienbereich:") . "</b></font><br />");
 				elseif ($db3->num_rows() >=2)
@@ -440,7 +444,8 @@ print_infobox ($infobox,"pictures/details.jpg");
 				while ($db3->next_record()) {
 					if ($db3->num_rows() >= 2)
 						print "<li>";
-						printf ("<font size=-1><a href=\"show_bereich.php?level=sbb&id=%s\">%s</a></font>",$db3->f('bereich_id'), htmlReady($db3->f("name")));
+						printf ("<font size=-1><a href=\"show_bereich.php?level=sbb&id=%s\">%s</a></font>",$db3->f('sem_tree_id'),
+								htmlReady($the_tree->getShortPath($db3->f('sem_tree_id'))));
 					if ($db3->num_rows() > 2)
 						print "</li>";
 				}

@@ -25,6 +25,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTree.class.php");
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -38,26 +39,38 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	$sess->register ("show_bereich_data");
 	$db=new DB_Seminar;
 
-	if ($id)
+	if ($id){
 		$show_bereich_data["id"]=$id;
+		$show_bereich_data['level'] = $level;
+	}
 	
-	if (!$level)
-		$level=$sem_browse_data["level"];
+	if (!$level){
+		$level=$show_bereich_data['level'];
+	}
 	
 	switch ($level) {
 		case "sbb": 
-			$bereich_typ="Studienbereich";
-			$db->query("SELECT name FROM bereiche WHERE bereich_id='".$show_bereich_data["id"]."'");
-			$db->next_record();
-			$head_text="&nbsp; &Uuml;bersicht aller Veranstaltungen eines Studienbereichs";
-			$intro_text="Alle Veranstaltungen, die dem Studienbereich <b>".$db->f("name")."</b> zugeordnet wurden.";
-		break;
+			$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+			$bereich_typ = _("Studienbereich");
+			$head_text = "&nbsp; " . _("&Uuml;bersicht aller Veranstaltungen eines Studienbereichs");
+			$intro_text = sprintf(_("Alle Veranstaltungen, die dem Studienbereich: <br><b>%s</b><br> zugeordnet wurden."),
+							htmlReady($the_tree->getShortPath($show_bereich_data["id"])));
+			$_REQUEST['cmd'] = "show_sem_range";
+			$_REQUEST['item_id'] = $show_bereich_data["id"];
+			$sem_browse_data['default_sem'] = "all";
+			
+			break;
 		case "s":
-			$bereich_typ="Einrichtung";
+			$bereich_typ=_("Einrichtung");
 			$db->query("SELECT Name FROM Institute WHERE Institut_id='".$show_bereich_data["id"]."'");
 			$db->next_record();
-			$head_text="&nbsp; &Uuml;bersicht aller Veranstaltungen einer Einrichtung";
-			$intro_text="Alle Veranstaltungen der Einrichtung <b>".$db->f("Name")."</b>";
+			$head_text = "&nbsp;" . _("&Uuml;bersicht aller Veranstaltungen einer Einrichtung");
+			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"),$db->f("Name"));
+			$db->query("SELECT seminar_id FROM seminar_inst WHERE Institut_id='".$show_bereich_data["id"]."'");
+			$_marked_sem = array();
+			while ($db->next_record()){
+				$_marked_sem[$db->f("seminar_id")] = true;
+			}
 		break;
 	}
 
@@ -68,7 +81,7 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	<td class="topic" colspan=2><b><? echo $head_text ?></td>
 </tr>
 <tr>
-	<td class="blank" colspan=2><br /><blockquote><? echo $intro_text ?></blockquote></td>
+	<td class="blank" colspan=2><br /><blockquote><font size="-1"><? echo $intro_text ?></font></blockquote><br></td>
 </tr>
 
 <tr><td class="blank" colspan=2>
@@ -78,6 +91,8 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	$target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
 
 	include "sem_browse.inc.php"; 		//der zentrale Seminarbrowser wird hier eingef&uuml;gt.
+
+	unset($sem_browse_data['default_sem']);
 
 ?>
 </td>

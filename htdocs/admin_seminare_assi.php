@@ -33,6 +33,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/functions.php";		//noch mehr Stuff
 require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen koennen
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeSearch.class.php");
 
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -46,6 +47,15 @@ $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
+$st_search = new StudipSemTreeSearch("dummy","sem_bereich");
+if (is_array($sem_create_data["sem_bereich"])){
+		for ($i = 0; $i < count($sem_create_data["sem_bereich"]); $i++){
+			$st_search->selected[$sem_create_data["sem_bereich"][$i]] = true;
+			$st_search->sem_tree_ranges[$st_search->tree->tree_data[$sem_create_data["sem_bereich"][$i]]['parent_id']][] = $sem_create_data["sem_bereich"][$i];
+			$st_search->sem_tree_ids[] = $sem_create_data["sem_bereich"][$i];
+		}
+	}
+$st_search->institut_id = $sem_create_data["sem_inst_id"];
 $user_id = $auth->auth["uid"];
 $errormsg='';
 
@@ -129,15 +139,27 @@ if ($form==1)
 		$sem_create_data["sem_bet_inst"]=$tmp_create_data_bet_inst;
 		}
 	$i=0;
+	$st_search->institut_id = $sem_create_data["sem_inst_id"];
+	
 	}
 
 if ($form==2)
 	{
-	$i=0;
-	for ($i; $i<sizeof($sem_bereich); $i++)
-		$tmp_create_data_bereich[]=$sem_bereich[$i];
-	unset ($sem_create_data["sem_bereich"]);
-	$sem_create_data["sem_bereich"]=$tmp_create_data_bereich;
+	if(isset($sem_bereich_chooser)){
+		unset($st_search->sem_tree_ranges);
+		unset($st_search->sem_tree_ids);
+		for ($i = 0; $i < count($sem_bereich_chooser); $i++){
+			if($sem_bereich_chooser[$i] != '0'){
+				$st_search->selected[$sem_bereich_chooser[$i]] = true;
+				$st_search->sem_tree_ranges[$st_search->tree->tree_data[$sem_bereich_chooser[$i]]['parent_id']][] = $sem_bereich_chooser[$i];
+				$st_search->sem_tree_ids[] = $sem_bereich_chooser[$i];
+			} else {
+				$false_mark = true;
+			}
+		}
+		$sem_create_data["sem_bereich"] = $st_search->sem_tree_ids;
+	}
+	
 	if (!$sem_create_data["sem_admission"]) {
 		$sem_create_data["sem_sec_lese"]=$sem_sec_lese;
 		$sem_create_data["sem_sec_schreib"]=$sem_sec_schreib;
@@ -470,7 +492,7 @@ if (($send_tut_x) && (!$reset_search_x)) {
 	$level=2;	
 }
 
-if (($search_doz_x) || ($search_tut_x) || ($reset_search_x)) {
+if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_search_x) {
 	$level=2;
 }
 
@@ -507,14 +529,10 @@ if ($cmd_c_x)
 			}
 		else
 			{
-			$false_mark=false;
-			foreach ($sem_create_data["sem_bereich"] as $tmp_array)
-				if ($tmp_array == "nix")
-					$false_mark=true;
 			if ($false_mark)
 				{
 				$level=2;
-				$errormsg=$errormsg."error§"._("Sie haben eine oder mehrere Fach&uuml;berschriften (rot bzw. innerhalb der Linien dargestellt) ausgew&auml;hlt. Diese dienen nur der Orientierung und k&ouml;nnen nicht ausgew&auml;hlt werden!")."§";
+				$errormsg=$errormsg."error§"._("Sie haben eine oder mehrere Fach&uuml;berschriften (unterstrichen) ausgew&auml;hlt. Diese dienen nur der Orientierung und k&ouml;nnen nicht ausgew&auml;hlt werden!")."§";
 				}
 			}
 		}
@@ -885,18 +903,6 @@ if ($cmd_f_x)
 			$errormsg .= "error§"._("Bitte geben Sie wenigstens einen Studienbereich f&uuml;r die Veranstaltung an!")."§";
 			$run = FALSE;
 			}
-		else
-			{
-			$dochnoch = FALSE;    // Test ob ausser Murks auch etwas Sinnvolles angeklickt wurde
-			while (list($key,$val) = each($sem_create_data["sem_bereich"]))
-				if ($val != "nix") $dochnoch = TRUE;
-				if (!$dochnoch)
-					{
-					$errormsg .= "error§"._("Sie haben nur einen ung&uuml;ltigen Studienbereich ausgew&auml;hlt. Bitte geben Sie wenigstens einen Studienbereich an!")."§";
-	    	  			$run = FALSE;
-					}
-				reset ($sem_create_data["sem_bereich"]);
-			}
 		}
 
     	if ($perm->have_perm("admin") && empty($sem_create_data["sem_doz"]))
@@ -1072,22 +1078,14 @@ if ($cmd_f_x)
 			}
 
 		//Eintrag der Studienbereiche
-		if (is_array($sem_create_data["sem_bereich"]))
-			{
-			$count_bereich=0;
-			foreach ($sem_create_data["sem_bereich"] as $tmp_array)  // alle ausgewählten Bereiche durchlaufen
-				{
-				if ($tmp_array != "nix")
-					{
-					$query = "INSERT IGNORE INTO seminar_bereich VALUES('".$sem_create_data["sem_id"]."', '$tmp_array')";
-					$db3->query($query);// Bereich eintragen
-					if ($db3->affected_rows() >= 1)
-						$count_bereich++;
-					}
-				}
+		if (is_array($sem_create_data["sem_bereich"])) {
+			$st_search->seminar_id = $sem_create_data["sem_id"];
+			$st_search->selected = array();
+			$st_search->insertSelectedRanges($sem_create_data["sem_bereich"]);
+			$count_bereich = $st_search->num_inserted;
 			}
 			
-		//Eintrag der zugelassen Studienbereiche
+		//Eintrag der zugelassen Studiengänge
 		if ($sem_create_data["sem_admission"]) {
 			if (is_array($sem_create_data["sem_studg"]))
 				foreach($sem_create_data["sem_studg"] as $key=>$val)
@@ -1796,60 +1794,26 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?=_("Studienbereiche:"); ?><br>
 							<font color="red" size=-1>
-								<?=_("(Studien<i>f&auml;cher</i> sind rot bzw. innerhalb der Linien dargestellt und k&ouml;nnen nicht ausgew&auml;hlt werden!)"); ?>
+								<?=_("(&Uuml;berschriften k&ouml;nnen nicht ausgew&auml;hlt werden!)"); ?>
 							</font>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							&nbsp; <select MULTIPLE name="sem_bereich[]" SIZE=10>
 							<?
-								$fachtmp="0";
-								$clause='';
-								$clause=$clause."fach_inst.institut_id = '".$sem_create_data["sem_inst_id"]."'";
-								if ($sem_create_data["sem_bet_inst"])
-									foreach ($sem_create_data["sem_bet_inst"] as $tmp_array)
-										{
-										$clause=$clause." OR fach_inst.institut_id = '".$tmp_array."'";
-										}
-								// Anzeige der eigenen Faecher
-								$db3->query("SELECT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM fach_inst
-											LEFT JOIN bereich_fach USING(fach_id) 
-											LEFT JOIN bereiche USING (bereich_id) 
-											WHERE $clause 
-											ORDER BY bereich_fach.fach_id, bereiche.name");
-								while ($db3->next_record())
-									{
-									IF ($fachtmp != $db3->f("fach_id"))
-										{
-										// Hier werden die Faecherueberschriften ausgegeben
-										$fachtmp = $db3->f("fach_id");
-										$db4->query("SELECT name from faecher WHERE fach_id = '$fachtmp'");
-										while ($db4->next_record())
-											{
-											//echo "</optgroup>"; ## Optgroups funktionieren nur ab Browser v. 6 Koennen auf Wunsch statt der naechsten drei Zeilen verwendet werden
-											echo "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
-											echo "<option style=\"color:red;\" value = \"nix\">".my_substr($db4->f("name"),0,60)."</option>";
-											echo "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
-											//echo "<optgroup style=\"color:red;\" label=\"".my_substr($db4->f("name"),0,60)."\">";
-											}
-										}
-										// Anzeige ob Selected oder nicht
-										$bereichtmp =	 $db3->f("bereich_id");
-										$selected=FALSE;
-										$i=0;
-										for ($i; $i<sizeof($sem_create_data["sem_bereich"]); $i++)
-											if ($sem_create_data["sem_bereich"][$i] == $bereichtmp) $selected=TRUE;
-										if ($selected)
-											printf ("<option selected VALUE=\"%s\"> %s</option>", $db3->f("bereich_id"), "&nbsp;".my_substr($db3->f("name"),0,60));
-										else
-											printf ("<option VALUE=\"%s\"> %s</option>", $db3->f("bereich_id"), "&nbsp;".my_substr($db3->f("name"),0,60));
-										$fachtmp = $db3->f("fach_id");
-									}
+							echo "\n<div align=\"left\" style=\"width:100%\">&nbsp;";
+							echo $st_search->getSearchField(array('style' => 'vertical-align:middle;width:60%;'));
+							echo "&nbsp;";
+							echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
+							echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
+							if ($st_search->num_search_result !== false){
+								echo "<br>&nbsp;&nbsp;<b><a name=\"anker\">" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) ."</a></b>";
+							}
+							echo "</span><br>&nbsp;";
+							echo $st_search->getChooserField(array('style' => 'width:70%','size' => 10),70);
 							?>
-							</select>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Hier k&ouml;nnen Sie die Studienbereiche, an denen die Veranstaltung angeboten wird, markieren. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten."), TRUE, TRUE) ?>
+								<? echo tooltip(_("Hier können Sie die Studienbereiche, an denen die Veranstaltung angeboten wird, markieren. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten."), TRUE, TRUE) ?>
 							>
-							<font color="red" size=+2>*</font>
+							<font color="red" size=+2>*</font></div>
 						</td>
 					</tr>
 					<?
