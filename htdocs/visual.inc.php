@@ -187,6 +187,7 @@ function htmlReady ($what, $trim = TRUE, $br = FALSE) {
 		$what = trim(htmlentities($what,ENT_QUOTES));
 	else
 		$what = htmlentities($what,ENT_QUOTES);
+	$what = preg_replace('/&amp;(#[1-9][0-9]{2,3};)/i', '&$1', $what);
 	if ($br)
 		$what = preg_replace("/(\n\r|\r\n|\n|\r)/", "<br />", $what); // newline fixen
 	return $what;
@@ -760,7 +761,8 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 		$domains = '';
 		foreach ($STUDIP_DOMAINS as $studip_domain)
 			$domains .= '|' . preg_quote($studip_domain);
-		$domains = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1.*?\\2", $domains);
+		//$domains = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1.*?\\2", $domains);
+		$domains = preg_replace("'(\|.+?)((/.*?)|\|)'", "\\1[^/]*?\\2", $domains);
 		$domains = substr($domains, 1);
 		$user_domain = preg_replace("'^($domains)(.*)$'i", "\\1",
 				$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -816,10 +818,11 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 			$params[4] = str_replace('&amp;', '&', $params[4]);
 			$tbr = '<a href="'.idna_link($params[4])."\" target=\"_blank\">$link_pic{$params[3]}</a>";
 		}
-		elseif ($img) {
+		elseif ($img) { 
 			// Don't execute scripts
-			if (preg_match("'{$_SERVER['HTTP_HOST']}.*?\/.+?[\?\&]'i", $params[4]))
-				return $params[0];
+			$pu = parse_url($params[4]);
+			if ((basename($pu['path']) != 'sendfile.php') && preg_match("'{$_SERVER['HTTP_HOST']}.*?\/.+?[\?\&]'i", $params[4]))
+				return $params[0] ;
 			else if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
 				$tbr = $params[0];
 			else {
