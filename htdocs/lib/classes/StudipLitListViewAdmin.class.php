@@ -125,7 +125,7 @@ class StudipLitListViewAdmin extends TreeView{
 			}
 		} else {
 			$priority = $this->tree->getMaxPriority($parent_id) + 1;
-			$affected_rows = $this->tree->insertList(array('list_id' => $item_id,'priority' => $priority, 'format' => $_REQUEST['edit_format'],'name' => $_REQUEST['edit_name'],'user_id' => $user_id));
+			$affected_rows = $this->tree->insertList(array('list_id' => $item_id,'priority' => $priority, 'format' => $_REQUEST['edit_format'],'visibility' => $_REQUEST['edit_visibility'], 'name' => $_REQUEST['edit_name'],'user_id' => $user_id));
 			if ($affected_rows){
 				$this->mode = "";
 				$this->anchor = $item_id;
@@ -271,10 +271,11 @@ class StudipLitListViewAdmin extends TreeView{
 			'name' => _("Neue Liste"),
 			'priority' => ($this->tree->getMaxPriority($item_id) + 1),
 			'chdate' => time(),
-			'format '=> '',
+			'format'=> $this->tree->format_default,
 			'user_id' => $GLOBALS['auth']->auth['uid'],
 			'username' => $GLOBALS['auth']->auth['uname'],
-			'fullname' => get_fullname($GLOBALS['auth']->auth['uid'],'no_title_short')
+			'fullname' => get_fullname($GLOBALS['auth']->auth['uid'],'no_title_short'),
+			'visibility' => 0
 			);
 		$this->anchor = $new_item_id;
 		$this->edit_item_id = $new_item_id;
@@ -341,7 +342,7 @@ class StudipLitListViewAdmin extends TreeView{
 			$content .= "\n<tr><td align=\"center\">";
 			if ($item_id == "root"){
 				$content .= "<a href=\"" . $this->getSelf("cmd=NewItem&item_id=$item_id") . "\">"
-				. "<img " .makeButton("neuerordner","src") . tooltip(_("Eine neue Literaturliste anlegen."))
+				. "<img " .makeButton("neueliteraturliste","src") . tooltip(_("Eine neue Literaturliste anlegen."))
 				. " border=\"0\"></a>&nbsp;";
 			}
 			if ($this->mode != "NewItem"){
@@ -463,9 +464,9 @@ class StudipLitListViewAdmin extends TreeView{
 			$content .= "\n<tr><td class=\"steelgraulight\" style=\"font-size:10pt;border-bottom: 1px solid black;;border-left: 1px solid black;border-right: 1px solid black;\" >
 			<b>". _("Sichtbarkeit der Liste:") . "</b>&nbsp;&nbsp;&nbsp;
 			<input type=\"radio\" name=\"edit_visibility\" value=\"1\" style=\"vertical-align:bottom\" " 
-			. (($this->tree->tree_data[$this->edit_item_id]['visibility']) ? "checked" : "") . "\">" . _("Ja") 
+			. (($this->tree->tree_data[$this->edit_item_id]['visibility']) ? "checked" : "") . ">" . _("Ja") 
 			. "&nbsp;<input type=\"radio\" name=\"edit_visibility\" value=\"0\" style=\"vertical-align:bottom\" "
-			. ((!$this->tree->tree_data[$this->edit_item_id]['visibility']) ? "checked" : "") . "\">" . _("Nein") . "</td></tr>";
+			. ((!$this->tree->tree_data[$this->edit_item_id]['visibility']) ? "checked" : "") . ">" . _("Nein") . "</td></tr>";
 			
 		}
 		$content .= "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\" align=\"center\"><input type=\"image\" "

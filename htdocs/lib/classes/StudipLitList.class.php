@@ -257,6 +257,7 @@ class StudipLitList extends TreeAbstract {
 			$this->view->params[] = (isset($fields['user_id'])) ? $fields['user_id'] : $this->tree_data[$list_id]['user_id'];
 			$this->view->params[] = (isset($fields['format'])) ? $fields['format'] : mysql_escape_string($this->tree_data[$list_id]['format']);
 			$this->view->params[] = (isset($fields['priority'])) ? $fields['priority'] : $this->tree_data[$list_id]['priority'];
+			$this->view->params[] = (isset($fields['visibility'])) ? $fields['visibility'] : $this->tree_data[$list_id]['visibility'];
 			$this->view->params[] = $list_id;
 			$rs = $this->view->get_query("view:LIT_INS_LIST");
 			return $rs->affected_rows();
