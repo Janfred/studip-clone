@@ -21,7 +21,7 @@ foreach ($sort as $key => $position) {
 }
 if ($query_order) {
 	ksort($query_order, SORT_NUMERIC);
-	$query_order = " ORDER BY " . implode(",", $query_order);
+	$query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
 }
 
 $nameformat = $this->config->getValue("Main", "nameformat");
@@ -45,18 +45,30 @@ $db->query($query);
 if (!$db->num_rows())
 	$error_message = $this->config->getValue("Main", "nodatatext");
 
-$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}institut_main.php?auswahl=" . $this->config->range_id;
-$studip_link .= "&redirect_to=admin_news.php&cmd=new_entry&view=inst&new_inst=TRUE&range_id=";
-$studip_link .= $this->config->range_id;
-if ($this->config->getValue("Main", "studiplink") == "top") {
-	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
-			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "top",
-	"height" => "40", "link" => $studip_link);
-	$this->elements["StudipLink"]->printout($args);
-	echo "<br>";
-}
+if ($this->config->getValue("Main", "studiplink")) {
+	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
+	echo "width=\"" . $this->config->getValue("TableHeader", "table_width");
+	echo " align=\"" . $this->config->getValue("TableHeader", "table_align") . "\">\n";
 
-echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
+	$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}institut_main.php?auswahl=" . $this->config->range_id;
+	$studip_link .= "&redirect_to=admin_news.php&cmd=new_entry&view=inst&new_inst=TRUE&range_id=";
+	$studip_link .= $this->config->range_id;
+	if ($this->config->getValue("Main", "studiplink") == "top") {
+		$args = array("width" => "100%",
+		"height" => "40", "link" => $studip_link);
+		echo "<tr><td width=\"100%\">\n";
+		$this->elements["StudipLink"]->printout($args);
+		echo "</td></tr>";
+	}
+	$table_attr = $this->config->getAttributes("TableHeader", "table");
+	$pattern = array("/width=\"[0-9%]+\"/", "/align=\"[a-z]+\"/");
+	$replace = array("width=\"100%\"", "");
+	$table_attr = preg_replace($pattern, $replace, $table_attr);
+	echo "<tr><td width=\"100%\">\n<table$table_attr>\n";
+}
+else
+	echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
+
 echo "<tr" . $this->config->getAttributes("TableHeadRow", "tr") . ">\n";
 
 $rf_news = $this->config->getValue("Main", "order");
@@ -173,13 +185,14 @@ else {
 	
 	echo "\n</table>";
 }
-
-if ($this->config->getValue("Main", "studiplink") == "bottom") {
-	echo "<br>";
-	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
-			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "bottom",
-	"height" => "40", "link" => $studip_link);
-	$this->elements["StudipLink"]->printout($args);
+if ($this->config->getValue("Main", "studiplink")) {
+	if ($this->config->getValue("Main", "studiplink") == "bottom") {
+		$args = array("width" => "100%",
+		"height" => "40", "link" => $studip_link);
+		echo "</td></tr>\n<tr><td width=\"100%\">\n";
+		$this->elements["StudipLink"]->printout($args);
+	}
+	echo "</td></tr></table>\n";
 }
 
 ?>
