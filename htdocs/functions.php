@@ -497,16 +497,21 @@ function get_perm($range_id,$user_id="") {
 * @return		string	
 *
 */
-function get_fullname($user_id = "", $format = "full" )
-{
- global $user,$_fullname_sql;
- $author= _("unbekannt");
- if (!($user_id)) $user_id=$user->id;
- $db=new DB_Seminar;
- $db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
-	 if ($db->next_record())
+function get_fullname($user_id = "", $format = "full" ){
+	static $cache;
+	global $user,$_fullname_sql;
+	$author = _("unbekannt");
+	if (!($user_id)) $user_id=$user->id;
+	if (isset($cache[md5($user_id . $format)])){
+		return $cache[md5($user_id . $format)];
+	} else {
+		$db=new DB_Seminar;
+		$db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
+		if ($db->next_record()){
 			$author = $db->f("fullname");
- return $author;
+		}
+		return ($cache[md5($user_id . $format)] = $author);
+	}
  }
 
 /**
@@ -517,16 +522,21 @@ function get_fullname($user_id = "", $format = "full" )
 * @return		string	
 *
 */
-function get_fullname_from_uname($uname = "", $format = "full")
-{
- global $auth,$_fullname_sql;
- $author = _("unbekannt");
- if (!$uname) $uname=$auth->auth["uname"];
- $db=new DB_Seminar;
- $db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
-	if ($db->next_record())
-		$author = $db->f("fullname");
- return $author;
+function get_fullname_from_uname($uname = "", $format = "full"){
+	static $cache;
+	global $auth,$_fullname_sql;
+	$author = _("unbekannt");
+	if (!$uname) $uname=$auth->auth["uname"];
+	if (isset($cache[md5($uname . $format)])){
+		return $cache[md5($uname . $format)];
+	} else {
+		$db=new DB_Seminar;
+		$db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
+		if ($db->next_record()){
+			$author = $db->f("fullname");
+		}
+		return ($cache[md5($uname . $format)] = $author);
+	}
  }
  
 /**
@@ -578,15 +588,21 @@ function get_nachname($user_id="")
 *
 */
 function get_username($user_id="") {
+	static $cache;
 	global $auth;
 	$author = "";
 	if (!$user_id || $user_id == $auth->auth['uid'])
 		return $auth->auth["uname"];
-	$db=new DB_Seminar;
-	$db->query ("SELECT username , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
-	while ($db->next_record())
-		$author = $db->f("username");
-	return $author;
+	if (isset($cache[$user_id])){
+		return $cache[$user_id];
+	} else {
+		$db=new DB_Seminar;
+		$db->query ("SELECT username , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
+		while ($db->next_record()){
+			$author = $db->f("username");
+		}
+		return ($cache[$user_id] = $author);
+	}
 }
 
 /**
@@ -599,15 +615,21 @@ function get_username($user_id="") {
 *
 */
 function get_userid($username="") {
+	static $cache;
 	global $auth;
 	$author = "";
 	if (!$username || $username == $auth->auth['uname'])
 		return $auth->auth['uid'];
-	$db=new DB_Seminar;
-	$db->query ("SELECT user_id  FROM auth_user_md5 WHERE username = '$username'");
-	while ($db->next_record())
-		$author=$db->f("user_id");
-	return $author;
+	if (isset($cache[$username])){
+		return $cache[$username];
+	} else {
+		$db=new DB_Seminar;
+		$db->query ("SELECT user_id  FROM auth_user_md5 WHERE username = '$username'");
+		while ($db->next_record()){
+			$author=$db->f("user_id");
+		}
+		return ($cache[$username] = $author);
+	}
 }
 
 
