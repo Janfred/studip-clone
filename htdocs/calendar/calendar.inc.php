@@ -299,7 +299,7 @@ switch ($cmd) {
 									date('Y', $atime)),
 							'DTEND'   => mktime(23, 59, 59, date('n', $atime),
 									date('j', $atime), date('Y', $atime)),
-							'SUMMARY' => _("Keine Titel"),
+							'SUMMARY' => _("Kein Titel"),
 							'STUDIP_CATEGORY' => 1,
 							'CATEGORIES' => '',
 							'CLASS' => 'PRIVATE');
@@ -311,7 +311,7 @@ switch ($cmd) {
 							'DTSTART' => $atime,
 							'DTEND'   => mktime(date('G', $atime) + 1, date('i', $atime), 0,
 									date('n', $atime), date('j', $atime), date('Y', $atime)),
-							'SUMMARY' => _("Keine Titel"),
+							'SUMMARY' => _("Kein Titel"),
 							'STUDIP_CATEGORY' => 1,
 							'CATEGORIES' => '',
 							'CLASS' => 'PRIVATE');
