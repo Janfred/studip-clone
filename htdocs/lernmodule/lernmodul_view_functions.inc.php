@@ -16,7 +16,11 @@ function show_user_modules($benutzername)
 			$delete_link = $PHP_SELF . "?delete=now&del_inst=".$mod_array[$module_count]["inst"]."&del_id=".$mod_array[$module_count]["id"]."&del_title=".$module_info["title"];
 
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "user";
-			$printlink = $module_info["title"];
+			if ($print_open_admin[$ph_key] == true)
+				$do_str = "do_close";
+			else
+				$do_str = "do_open";
+			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
@@ -70,7 +74,11 @@ function show_admin_modules()
 			$delete_link = $PHP_SELF . "?delete=now&del_inst=".$mod_array[$module_count]["inst"]."&del_id=".$mod_array[$module_count]["id"]."&del_title=".$module_info["title"];
 
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "admin";
-			$printlink = $module_info["title"];
+			if ($print_open_admin[$ph_key] == true)
+				$do_str = "do_close";
+			else
+				$do_str = "do_open";
+			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;".
 				"<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
@@ -129,7 +137,11 @@ function show_seminar_modules($seminar_id)
 
 			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "sem";
-			$printlink = $module_info["title"];
+			if ($print_open[$ph_key] == true)
+				$do_str = "do_close";
+			else
+				$do_str = "do_open";
+			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_del\">" . makeButton("entfernen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
@@ -191,7 +203,11 @@ function show_all_modules($seminar_id)
 
 			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "all";
-			$printlink = $module_info["title"];
+			if ($print_open[$ph_key] == true)
+				$do_str = "do_close";
+			else
+				$do_str = "do_open";
+			$printlink = "<a href=\"".$PHP_SELF . "?$do_str=" . $ph_key . "&view=edit&seminar_id=$seminar_id\" class=\"tree\">" . $module_info["title"] . "</a>";
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
 			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$link_con\">" . makeButton("hinzufuegen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
