@@ -37,6 +37,8 @@ $structure["meine_einrichtungen"]=array (topKat=>"", name=>"Meine Einrichtungen"
 $structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>"&Uuml;bersicht", link=>"meine_seminare.php", active=>FALSE);
 if (!$perm->have_perm("admin"))
 	$structure["meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>"erweiterte &Uuml;bersicht", link=>"meine_seminare.php?view=ext", active=>FALSE);
+if ($perm->have_perm("admin"))
+	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>"Veranstaltungs Timetable", link=>"mein_stundenplan.php", active=>FALSE);
 //
 $structure["Alle"]=array (topKat=>"veranstaltungen_suche", name=>"Alle", link=>"sem_portal.php?view=Alle", active=>FALSE);
 foreach ($SEM_CLASS as $key=>$val)  {
@@ -69,6 +71,9 @@ switch ($i_page) {
 			$reiter_view="Alle";
 		else
 			$reiter_view="class_".$view;
+	break;
+	case "mein_stundenplan.php" : 
+		$reiter_view="veranstaltungs_timetable";
 	break;
 	default :
 		$reiter_view="meine_seminare";
