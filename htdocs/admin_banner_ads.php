@@ -129,7 +129,7 @@ function show_banner_list($cssSw) {
 		print wrap_table_row("Beschreibung",$db->f("description"));
 		print wrap_table_row("Ziel","(".$db->f("target_type").") " . $db->f("target"));
 		print wrap_table_row("Anzeigezeitraum", ($db->f("startdate") ? date("d.m.Y, h:i") : _("sofort")) . " " . _("bis") . " " . ($db->f("enddate") ? date("d.m.Y, h:i") : _("unbegrenzt")));
-		print wrap_table_row("Views/Clicks/Clickrate", $db->f("views") . " / " . $db->f("clicks") . " / " . ($db->f("clicks") ? ($db->f("views")/$db->f("clicks")) : "-"));
+		print wrap_table_row("Views", $db->f("views"));
 		print wrap_table_row("Priorität (Wahrscheinlichkeit)", $db->f("priority") . " (" . view_probability($db->f("priority")) . ")");
 		print wrap_table_row("", "<a href=\"$PHP_SELF?cmd=editdb&ad_id=".$db->f("ad_id")."\"><img " . makeButton("bearbeiten","src") . " border=0/></a> <a href=\"$PHP_SELF?cmd=delete&ad_id=".$db->f("ad_id")."\"><img " . makeButton("loeschen","src") . "\" border=0></a>");
 		print "<tr><td colspan=2 class=blank>&nbsp;</td></tr>";
