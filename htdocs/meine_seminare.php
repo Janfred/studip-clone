@@ -16,6 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+$Id$
 */
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
@@ -23,134 +24,98 @@ $perm->check("user");
 
 ob_start(); //Outputbuffering für maximal Performance
 
-function get_my_obj_values(&$my_obj) {
-	global $user;
-	
-	$db2 = new DB_seminar;
+function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $type, $obj_ids, $add_fields = false){
+	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " a.{$range_field} as object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue 
+	FROM $table_name LEFT JOIN object_user_visits b ON (b.object_id = a.{$range_field} AND b.user_id = '".$GLOBALS['user']->id."' AND b.type IN ('$type'))
+	WHERE a.{$range_field} IN $obj_ids GROUP BY a.{$range_field}";
+}
 
+function get_my_obj_values(&$my_obj) {
+	
+	$user_id = $GLOBALS['user']->id;
+	$db2 = new DB_seminar;
+	$obj_ids = "('" . join("','",array_keys($my_obj)) . "')" ;
+	
 	// Postings
-	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(IF((chdate > b.loginfilenow AND chdate >= mkdate AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
-	FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
+	$db2->query(get_obj_clause('px_topics a','Seminar_id','topic_id',"(chdate > IFNULL(b.visitdate,0) AND chdate >= mkdate AND a.user_id !='$user_id')", 'forum', $obj_ids));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("Seminar_id")]["modules"]["forum"]) {
-			$my_obj[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
-			$my_obj[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
+		if ($my_obj[$db2->f("object_id")]["modules"]["forum"]) {
+			$my_obj[$db2->f("object_id")]["neuepostings"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["postings"]=$db2->f("count");
 		}
 	}
 	
 	//dokumente
-	$db2->query("SELECT b.Seminar_id,count(dokument_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.dokument_id,NULL)) AS neue 
-	FROM loginfilenow_".$user->id." b  LEFT JOIN dokumente a USING (Seminar_id) GROUP BY b.Seminar_id");
+	$db2->query(get_obj_clause('dokumente a','Seminar_id','dokument_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'documents', $obj_ids));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("Seminar_id")]["modules"]["documents"]) {
-			$my_obj[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
-			$my_obj[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
+		if ($my_obj[$db2->f("object_id")]["modules"]["documents"]) {
+			$my_obj[$db2->f("object_id")]["neuedokumente"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["dokumente"]=$db2->f("count");
 		}
 	}
 
 	//News
-	$db2->query("SELECT b.Seminar_id,count(IF(date < UNIX_TIMESTAMP(),range_id,NULL)) as count, count(IF((date < UNIX_TIMESTAMP() AND date > b.loginfilenow AND user_id !='".$user->id."'),range_id,NULL)) AS neue 
-				FROM loginfilenow_".$user->id." b  LEFT JOIN news_range ON (b.Seminar_id=range_id) LEFT JOIN news  USING(news_id) GROUP BY b.Seminar_id");
+	
+	$db2->query(get_obj_clause('news_range a LEFT JOIN news nw USING(news_id)','range_id','(IF(date < UNIX_TIMESTAMP(),range_id,NULL))',"(date > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')", "sem','inst", $obj_ids));
 	while($db2->next_record()) {
-		$my_obj[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
-		$my_obj[$db2->f("Seminar_id")]["news"]=$db2->f("count");
+		$my_obj[$db2->f("object_id")]["neuenews"]=$db2->f("neue");
+		$my_obj[$db2->f("object_id")]["news"]=$db2->f("count");
 	}
 	
 	// scm?
-	$db2->query("SELECT b.Seminar_id, tab_name, IF(content !='',1,0) AS scmcontent,
-			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND content !=''),1,0) AS scmcontentneu 
-			FROM loginfilenow_".$user->id." b  LEFT JOIN scm ON (range_id = b.Seminar_id)");
+	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > b.visitdate AND a.user_id !='$user_id')", "scm", $obj_ids, 'tab_name'));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("Seminar_id")]["modules"]["scm"]) {	
-			$my_obj[$db2->f("Seminar_id")]["neuscmcontent"]=$db2->f("scmcontentneu");
-			$my_obj[$db2->f("Seminar_id")]["scmcontent"]=$db2->f("scmcontent");
-			$my_obj[$db2->f("Seminar_id")]["scmtabname"]=$db2->f("tab_name");
+		if ($my_obj[$db2->f("object_id")]["modules"]["scm"]) {	
+			$my_obj[$db2->f("object_id")]["neuscmcontent"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["scmcontent"]=$db2->f("count");
+			$my_obj[$db2->f("object_id")]["scmtabname"]=$db2->f("tab_name");
 		}
 	}
 	
 	//Literaturlisten
-	$db2->query("SELECT b.Seminar_id,count(list_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),list_id,NULL)) AS neue 
-				FROM loginfilenow_".$user->id." b  LEFT JOIN lit_list  ON (b.Seminar_id=range_id AND visibility=1) GROUP BY b.Seminar_id");
+	$db2->query(get_obj_clause('lit_list a','range_id','list_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'literature', $obj_ids . " AND a.visibility=1"));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("Seminar_id")]["modules"]["literature"]) {	
-			$my_obj[$db2->f("Seminar_id")]["neuelitlist"]=$db2->f("neue");
-			$my_obj[$db2->f("Seminar_id")]["litlist"]=$db2->f("count");
+		if ($my_obj[$db2->f("object_id")]["modules"]["literature"]) {	
+			$my_obj[$db2->f("object_id")]["neuelitlist"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["litlist"]=$db2->f("count");
 		}
 	}
 	
 	//Termine?
-	$db2->query("SELECT b.Seminar_id,count(termin_id) as count, count(IF((chdate > b.loginfilenow AND autor_id !='".$user->id."'),a.termin_id,NULL)) AS neue 
-				FROM loginfilenow_".$user->id." b  LEFT JOIN termine a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
+	$db2->query(get_obj_clause('termine a','range_id','termin_id',"(chdate > IFNULL(b.visitdate,0) AND autor_id !='$user_id')", 'schedule', $obj_ids));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("Seminar_id")]["modules"]["schedule"]) {	
-			$my_obj[$db2->f("Seminar_id")]["neuetermine"]=$db2->f("neue");
-			$my_obj[$db2->f("Seminar_id")]["termine"]=$db2->f("count");
+		if ($my_obj[$db2->f("object_id")]["modules"]["schedule"]) {	
+			$my_obj[$db2->f("object_id")]["neuetermine"]=$db2->f("neue");
+			$my_obj[$db2->f("object_id")]["termine"]=$db2->f("count");
 		}
 	}
 	
 	//Wiki-Eintraege?
         if ($GLOBALS['WIKI_ENABLE']) {
-		$db2->query("SELECT b.Seminar_id, COUNT(DISTINCT keyword) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.keyword,NULL)) AS neue 
-				FROM loginfilenow_".$user->id." b  LEFT JOIN wiki a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
+		$db2->query(get_obj_clause('wiki a','range_id','keyword',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'wiki', $obj_ids,"COUNT(DISTINCT keyword) as count_d"));
 		while($db2->next_record()) {
-			if ($my_obj[$db2->f("Seminar_id")]["modules"]["wiki"]) {	
-				$my_obj[$db2->f("Seminar_id")]["neuewikiseiten"]=$db2->f("neue");
-				$my_obj[$db2->f("Seminar_id")]["wikiseiten"]=$db2->f("count");
+			if ($my_obj[$db2->f("object_id")]["modules"]["wiki"]) {	
+				$my_obj[$db2->f("object_id")]["neuewikiseiten"]=$db2->f("neue");
+				$my_obj[$db2->f("object_id")]["wikiseiten"]=$db2->f("count_d");
 			}
 		}
 	}
 	
 	//Umfragen
 	if ($GLOBALS['VOTE_ENABLE']) {
-		$sql = 
-			"SELECT".
-			" b.Seminar_id,".
-			" (COUNT(DISTINCT d.eval_id) + COUNT(DISTINCT vote_id)) AS count,".
-			" (COUNT(DISTINCT(if ((".
-			"             a.chdate > b.loginfilenow".
-			"             AND".
-			"             a.author_id !='".$user->id."'".
-			"            ),".
-			"            a.vote_id,".
-			"            NULL".
-			"           ))".
-			"        ) + ".
-			"  COUNT(DISTINCT(if ((".
-			"             d.chdate > b.loginfilenow".
-			"             AND".
-			"             d.author_id != '".$user->id."'".
-			"            ),".
-			"            d.eval_id,".
-			"            NULL".
-			"           )".
-			"        ))".
-			" ) AS neue ".
-			"FROM".
-			" loginfilenow_".$user->id." b ".
-			"LEFT JOIN".
-			" eval_range c ".
-			"ON".
-			" (c.range_id = b.Seminar_id ) ".
-			"LEFT JOIN".
-			" eval d ".
-			"ON".
-			" (d.eval_id = c.eval_id AND d.startdate IS NOT NULL ".
-			" AND".
-			" (d.stopdate > ".time()." OR d.stopdate IS NULL) ) ".
-			"LEFT JOIN".
-			" vote a ".
-			"ON".
-			" (a.range_id = b.Seminar_id".   
-			"  AND".
-			"  a.state ".
-			"  IN".
-			"  ('active','stopvis')) ".
-			"GROUP BY".
-			" b.Seminar_id";
-		$db2->query ($sql);
+		$db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate,0) AND a.author_id !='$user_id')",
+									"sem','inst", $obj_ids . " AND a.state IN('active','stopvis')"));
 		while($db2->next_record()) {
-				$my_obj[$db2->f("Seminar_id")]["neuevotes"]=$db2->f("neue");
-				$my_obj[$db2->f("Seminar_id")]["votes"]=$db2->f("count");
+				$my_obj[$db2->f("object_id")]["neuevotes"] = $db2->f("neue");
+				$my_obj[$db2->f("object_id")]["votes"] = $db2->f("count");
+		}
+		
+		$db2->query(get_obj_clause('eval_range a INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate IS NOT NULL AND (d.stopdate > UNIX_TIMESTAMP() OR d.stopdate IS NULL) )',
+									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id')",
+									"sem','inst", $obj_ids));
+		while($db2->next_record()) {
+				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
+				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
 		}
 	}
 	
@@ -245,9 +210,9 @@ require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");			// htmlReady fuer die V
 require_once ($ABSOLUTE_PATH_STUDIP."dates.inc.php");			// Semester-Namen fuer Admins
 require_once ($ABSOLUTE_PATH_STUDIP."admission.inc.php");		// Funktionen der Teilnehmerbegrenzung
 require_once ($ABSOLUTE_PATH_STUDIP."messaging.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Modules.class.php");	// modul-config class
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/Modules.class.php");	// modul-config class
 require_once ($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");		// Funktionen für Statusgruppen
-
+require_once ($ABSOLUTE_PATH_STUDIP."object.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
@@ -382,7 +347,11 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		$sortby = "count DESC";
 		
 	
-	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe, seminare.chdate, seminare.visible, admission_binding,modules FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
+				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate
+				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) 
+				LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminar_user.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
+				WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem = $db->num_rows();
 	
 	if (!$num_my_sem)
@@ -392,8 +361,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	while ($db->next_record()) {
 			$my_obj[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"visible" => $db->f("visible"), "gruppe" => $db->f("gruppe"),
 				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"),"sem",$db->f("modules"),$db->f("sem_status")), 
-				"obj_type" => "sem", "sem_status" => $db->f("sem_status"));
-			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
+				"obj_type" => "sem", "sem_status" => $db->f("sem_status"), "visitdate" => $db->f("visitdate"));
 			if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Seminar_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
 				$chat_info[$db->f("Seminar_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Seminar_id")]["id"],
@@ -407,13 +375,15 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	$sortby="Name";
 	if ($sortby == "count")
 		$sortby = "count DESC";
-	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,if(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,modules FROM user_inst LEFT JOIN Institute b USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
-	$num_my_inst=$db->num_rows();
+	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,if(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,
+				modules,IFNULL(visitdate,0) as visitdate FROM user_inst LEFT JOIN Institute b USING (Institut_id) 
+				LEFT JOIN object_user_visits ouv ON (ouv.object_id=user_inst.Institut_id AND ouv.user_id='$user->id' AND ouv.type='inst')
+				WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
+	$num_my_inst = $db->num_rows();
 	while ($db->next_record()) {
 			$my_obj[$db->f("Institut_id")]= array("name" => $db->f("Name"),"status" => $db->f("inst_perms"), 
 												"type" =>($db->f("type")) ? $db->f("type") : 1, "modules" => $Modules->getLocalModules($db->f("Institut_id"),"inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)),
-												"obj_type" => "inst");
-			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
+												"obj_type" => "inst","visitdate" => $db->f("visitdate"));
 			if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Institut_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
 				$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
@@ -422,33 +392,9 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					$active_chats[$chatServer->chatDetail[$db->f("Institut_id")]["id"]] = $db->f("Institut_id");
 				}
 			}
-			if ($db->f("is_fak") && $db->f("inst_perms") == "admin") {
-				$db2->query("SELECT a.Institut_id, a.Name, a.type FROM Institute a 
-					 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
-					 ORDER BY $sortby");
-				while($db2->next_record()) {
-					$my_obj[$db->f("Institut_id")]= array("name" => $db->f("Name"),"status" => $db->f("inst_perms"), 
-												"type" =>($db->f("type")) ? $db->f("type") : 1, "modules" => $Modules->getLocalModules($db->f("Institut_id"),"inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)),
-												"obj_type" => "inst");
-					$value_list.="('".$db2->f("Institut_id")."',0".$loginfilenow[$db2->f("Institut_id")]."),";
-					if ($GLOBALS['CHAT_ENABLE'] && ($my_obj[$db->f("Institut_id")]["modules"]["chat"])){
-						$chatter = $chatServer->isActiveChat($db2->f("Institut_id"));
-						$chat_info[$db2->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db2->f("Institut_id")]["id"],
-						"is_active" => $chatServer->isActiveUser($user->id,$db2->f("Institut_id")));
-						if ($chatter){
-							$active_chats[$chatServer->chatDetail[$db2->f("Institut_id")]["id"]] = $db2->f("Institut_id");
-						}
-					}
-				}
-			}
 		}
 		if (($num_my_sem + $num_my_inst) > 0){
-			$value_list = substr($value_list,0,-1);
-			$db->query("CREATE  TEMPORARY TABLE if NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
-			$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
-			$db->query($ins_query);
 			get_my_obj_values($my_obj);
-			$db->query("DROP TABLE loginfilenow_".$user->id);
 		}
 	if ($GLOBALS['CHAT_ENABLE']){
 		if (is_array($active_chats)){
@@ -494,10 +440,10 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 		ob_start();
 		
-	  foreach ($my_obj as $semid=>$values) {
+	  foreach ($my_obj as $semid => $values) {
 		  if ($values['obj_type'] == "sem"){
 			$cssSw->switchClass();
-			$lastVisit = $loginfilenow[$semid];
+			$lastVisit = $values['visitdate'];
 			echo "<tr ".$cssSw->getHover()."><td class=gruppe";
 			echo $values["gruppe"];
 			echo "><a href='gruppe.php'><img src='pictures/blank.gif' ".tooltip(_("Gruppe ändern"))." border=0 width=7 height=12></a></td>";
@@ -546,10 +492,10 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 			// last visited-field
 			if ($view=="ext") {
-				if ($loginfilenow[$semid]==0) {
+				if ($lastVisit == 0) {
 					echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>" . _("n.b.") . "</font></td>";
 				} else {
-					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$semid]),"</font></td>";
+					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $lastVisit),"</font></td>";
 				}
 				// Status-field
 				echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
@@ -682,7 +628,7 @@ if ( !$perm->have_perm("root")) {
 		foreach ($my_obj as $instid=>$values) {
 			if ($values['obj_type'] == "inst"){
 				$cssSw->switchClass();
-				$lastVisit = $loginfilenow[$instid];
+				$lastVisit = $values['visitdate'];
 				echo "<tr ".$cssSw->getHover().">";
 				echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 				// Name-field		
@@ -719,10 +665,10 @@ if ( !$perm->have_perm("root")) {
 				
 				// last visited-field
 				if ($view=="ext") {
-					if ($loginfilenow[$instid]==0) {
+					if ($lastVisit == 0) {
 						echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>n.b.</font></td>";
 					} else  {
-						echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$instid]),"</font></td>";
+						echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $lastVisit),"</font></td>";
 					}
 					// Status-field
 					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
@@ -883,7 +829,10 @@ elseif ($auth->auth["perm"]=="admin") {
 		if (!isset($sortby)) $sortby="start_time DESC, Name ASC";
 		if ($sortby == "teilnehmer")
 		$sortby = "teilnehmer DESC";
-		$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM Institute LEFT JOIN seminare USING(Institut_id) LEFT JOIN seminar_user USING(Seminar_id) WHERE Institute.Institut_id='$_my_admin_inst_id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
+		$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate
+					FROM Institute LEFT JOIN seminare USING(Institut_id) LEFT JOIN seminar_user USING(Seminar_id) 
+					LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminare.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
+					WHERE Institute.Institut_id='$_my_admin_inst_id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
 		$num_my_sem=$db->num_rows();
 		if (!$num_my_sem) 
 			$meldung = "msg§"
@@ -959,22 +908,16 @@ elseif ($auth->auth["perm"]=="admin") {
 		<?
 	
 		while ($db->next_record()){
-		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),
+		$my_sem[$db->f("Seminar_id")]=array('visitdate' => $db->f('visitdate'), institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),
 			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules"),$db->f("status")));
-			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 		}
-		$value_list=substr($value_list,0,-1);
-		$db->query("CREATE TEMPORARY TABLE IF NOT EXISTS  loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0 ) TYPE=HEAP");
-		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
-		$db->query($ins_query);
 		get_my_obj_values(&$my_sem);
-		$db->query("DROP TABLE loginfilenow_".$user->id);
 		$cssSw->enableHover();
 		foreach ($my_sem as $semid=>$values){
 			$cssSw->switchClass();
 			$class = $cssSw->getClass();
 			
-			$lastVisit = $loginfilenow[$semid];
+			$lastVisit = $values['visitdate'];
 			
 			echo "<tr ".$cssSw->getHover()."><td class=\"$class\">&nbsp;&nbsp;</td>";
 			echo "<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">";
@@ -1060,4 +1003,4 @@ ELSEIF ($perm->have_perm("root")){
   // Save data back to database.
 ob_end_flush(); //Outputbuffering beenden
 page_close();
-  ?>
+?>
