@@ -141,59 +141,61 @@ function parse_link($link, $level=0) {
 
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
 	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName, $ABSOLUTE_PATH_STUDIP;
-	$db = new DB_Seminar();
+	$zip_file_id = false;
+	if (file_exists($ZIP_PATH) && is_array($file_ids)){
+		$db = new DB_Seminar();
+		$zip_file_id = md5(uniqid("jabba"),1);
 
-	$zip_file_id = md5(uniqid("jabba"));
+		//create temporary Folder
+		$tmp_full_path = "$TMP_PATH/$zip_file_id";
+		mkdir($tmp_full_path);
 
-	//create temporary Folder
-	$tmp_full_path = "$TMP_PATH/$zip_file_id";
-	mkdir($tmp_full_path);
+		//create folder content
+		$in = "('".join("','",$file_ids)."')";
+		$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
+		$db->query($query);
+		while ($db->next_record()) {
+			$docs++;
+			@copy($UPLOAD_PATH . '/' . $db->f('dokument_id'), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
+		}
 
-	//create folder content
-	$in = "('".join("','",$file_ids)."')";
-	$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
-	$db->query($query);
-	while ($db->next_record()) {
-		$docs++;
-		@copy($UPLOAD_PATH . '/' . $db->f('dokument_id'), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
+		//zip stuff
+		$zippara = (ini_get('safe_mode')) ? ' -9 -R ':' -9 -r ';
+		@chdir($tmp_full_path);
+		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' *');
+		@chdir($ABSOLUTE_PATH_STUDIP);
+		rmdirr($tmp_full_path);
+		@rename($tmp_full_path .".zip " , $tmp_full_path);
 	}
-
-	//zip stuff
-	$zippara = (ini_get('safe_mode'))? ' -9 -R ':' -9 -r ';
-	@chdir($tmp_full_path);
-	exec ($ZIP_PATH.$zippara.$TMP_PATH.'/'.$zip_file_id. ' *');
-	@chdir($ABSOLUTE_PATH_STUDIP);
- 	exec ("rm -r $tmp_full_path");
-	@rename( $TMP_PATH.'/'.$zip_file_id.'.zip', $TMP_PATH.'/'.$zip_file_id);
-
-
  	return $zip_file_id;
 }
-
 
 function createFolderZip ($folder_id) {
 	global $TMP_PATH, $ZIP_PATH, $ABSOLUTE_PATH_STUDIP;
-	$zip_file_id = md5(uniqid("jabba"));
-
-	//create temporary Folder
-	$tmp_full_path = "$TMP_PATH/$zip_file_id";
-	mkdir($tmp_full_path);
-
-	//create folder comntent
-	createTempFolder ($folder_id, $tmp_full_path);
-
-	//zip stuff
-	$zippara = (ini_get('safe_mode'))? ' -9 -R ':' -9 -r ';
-	chdir ($tmp_full_path);
-	exec ($ZIP_PATH.$zippara.$TMP_PATH.'/'.$zip_file_id.' * ');
-	chdir($ABSOLUTE_PATH_STUDIP);
- 	exec ("rm -r $tmp_full_path");
- 	rename( $TMP_PATH.'/'.$zip_file_id.'.zip', $TMP_PATH.'/'.$zip_file_id);
-
+	$zip_file_id = false;
+	if (file_exists($ZIP_PATH)){
+		
+		$zip_file_id = md5(uniqid("jabba"),1);
+		
+		//create temporary Folder
+		$tmp_full_path = "$TMP_PATH/$zip_file_id";
+		mkdir($tmp_full_path);
+		
+		//create folder comntent
+		createTempFolder($folder_id, $tmp_full_path);
+		
+		//zip stuff
+		$zippara = (ini_get('safe_mode')) ? ' -9 -R ':' -9 -r ';
+		chdir ($tmp_full_path);
+		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' * ');
+		chdir($ABSOLUTE_PATH_STUDIP);
+		rmdirr($tmp_full_path);
+		@rename($tmp_full_path .".zip " , $tmp_full_path);
+	}
  	return $zip_file_id;
 }
 
-function createTempFolder ($folder_id, $tmp_full_path, $perm_check = TRUE) {
+function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
 	global $UPLOAD_PATH, $SessSemName;
 	$db = new DB_Seminar();
 
@@ -206,13 +208,12 @@ function createTempFolder ($folder_id, $tmp_full_path, $perm_check = TRUE) {
 			$linkinfo .= "\r\n".$db->f("filename");
 		} else {
 			$docs++;
-			copy( $UPLOAD_PATH.'/'.$db->f('dokument_id'), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
+			@copy( $UPLOAD_PATH.'/'.$db->f('dokument_id'), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
 		}
 	}
 	if ($linkinfo) {
 		$linkinfo = _("Hinweis: die folgenden Dateien sind nicht im Archiv enthalten, da sie lediglich verlinkt wurden:").$linkinfo;
-		//exec ("touch $tmp_full_path/info.txt");
-		$fp = fopen ("$tmp_full_path/info.txt","w");
+		$fp = fopen ("$tmp_full_path/info.txt","a");
 		fwrite ($fp,$linkinfo);
 		fclose ($fp);
 	}
@@ -226,7 +227,6 @@ function createTempFolder ($folder_id, $tmp_full_path, $perm_check = TRUE) {
 	}
 	return TRUE;
 }
-
 
 
 function getFolderChildren($folder_id){
@@ -1542,5 +1542,38 @@ function recursiv_folder_delete ($parent_id) {
 	return $doc_count;
 	}
 
+/**
+* Delete a file, or a folder and its contents
+*
+* @author      Aidan Lister <aidan@php.net>
+* @version     1.0
+* @param       string   $dirname    The directory to delete
+* @return      bool     Returns true on success, false on failure
+*/
+function rmdirr($dirname){
+    // Simple delete for a file
+    if (is_file($dirname)) {
+        return @unlink($dirname);
+    }
+
+    // Loop through the folder
+    $dir = dir($dirname);
+    while (false !== $entry = $dir->read()) {
+        // Skip pointers
+        if ($entry == '.' || $entry == '..') {
+            continue;
+        }
+
+        // Deep delete directories      
+        if (is_dir("$dirname/$entry")) {
+            rmdirr("$dirname/$entry");
+        } else {
+            @unlink("$dirname/$entry");
+        }
+    }
+    // Clean up
+    $dir->close();
+    return @rmdir($dirname);
+}
 
 ?>

@@ -625,13 +625,13 @@ function in_archiv ($sem_id) {
 
 	$query = sprintf ("SELECT dokument_id FROM dokumente WHERE seminar_id = '%s' AND url = ''", $seminar_id);
 	$db->query ($query);
-	if ($db->affected_rows()) {
-		$archiv_file_id=md5(uniqid($hash_secret));
-		$docs=0;	
+	if (file_exists($ZIP_PATH) && $db->affected_rows()) {
+		$archiv_file_id = md5(uniqid($hash_secret),1);
+		$docs = 0;	
 		
 		//temporaeres Verzeichnis anlegen
-		exec ("mkdir $TMP_PATH/$archiv_file_id");
-		$tmp_full_path="$TMP_PATH/$archiv_file_id";
+		$tmp_full_path = "$TMP_PATH/$archiv_file_id";
+		mkdir($tmp_full_path, 0700);
 		
 		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s'", $seminar_id);
 		$db->query ($query);
@@ -647,16 +647,21 @@ function in_archiv ($sem_id) {
 		$folder = 0;
 		while ($db->next_record()) {
 			$folder++;
-			exec ("mkdir '$tmp_full_path/[$folder] ".prepareFilename($db->f("name"), FALSE)."' ");
-			createTempFolder ($db->f("folder_id"), $tmp_full_path."/[$folder] ".prepareFilename($db->f("name"), FALSE), FALSE);
+			$temp_folder = $tmp_full_path."/[$folder] " . prepareFilename($db->f("name"), FALSE);
+			mkdir($temp_folder, 0700);
+			createTempFolder($db->f("folder_id"), $temp_folder, FALSE);
 		}
 		
 		//zip all the stuff
-	 	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$ARCHIV_PATH."/".$archiv_file_id." * ");
-	 	exec ("mv ".$ARCHIV_PATH."/".$archiv_file_id.".zip ".$ARCHIV_PATH."/".$archiv_file_id);
-		exec ("rm -r $tmp_full_path");	 	
+		$archiv_full_path = "$ARCHIV_PATH/$archiv_file_id";
+		$zippara = (ini_get('safe_mode')) ? ' -9 -R ':' -9 -r ';
+		chdir ($tmp_full_path);
+		exec ($ZIP_PATH . $zippara . $archiv_full_path . ' * ');
+		chdir($ABSOLUTE_PATH_STUDIP);
+	 	@rename($archiv_full_path . '.zip', $archiv_full_path);
+		rmdirr($tmp_full_path);	 	
 	} else
-		$archiv_file_id="";
+		$archiv_file_id = "";
 	
 	//Reinschreiben von diversem Klumpatsch in die Datenbank
 	$db->query("INSERT INTO archiv (seminar_id,name,untertitel,beschreibung,start_time,semester,heimat_inst_id,
