@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-13 19:13+0100\n"
+"POT-Creation-Date: 2003-03-16 20:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,51 +50,51 @@ msgstr ""
 msgid "Angelegte Konfigurationen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:208
+#: extern/admin_extern.inc.php:209
 msgid "weitere Informationen anzeigen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:218
+#: extern/admin_extern.inc.php:219
 msgid "Standard entziehen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:225
+#: extern/admin_extern.inc.php:226
 msgid "Standard zuweisen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:234
+#: extern/admin_extern.inc.php:235
 msgid "Konfiguration löschen"
 msgstr ""
 
-#: extern/admin_extern.inc.php:241
+#: extern/admin_extern.inc.php:242
 msgid "Konfiguration bearbeiten"
 msgstr ""
 
-#: extern/admin_extern.inc.php:263
+#: extern/admin_extern.inc.php:264
 #, c-format
 msgid "Sie können pro Modul maximal %s Konfigurationen anlegen."
 msgstr ""
 
-#: extern/admin_extern.inc.php:267
+#: extern/admin_extern.inc.php:268
 msgid ""
 "Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-"
 "Konfiguration zu erklären."
 msgstr ""
 
-#: extern/admin_extern.inc.php:268
+#: extern/admin_extern.inc.php:269
 msgid ""
 "Wenn Sie keine Konfiguration als Standard ausgew&auml;hlt haben, wird die "
 "Stud.IP-Konfiguration verwendet."
 msgstr ""
 
-#: extern/admin_extern.inc.php:269
+#: extern/admin_extern.inc.php:270
 msgid ""
 "Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung "
 "herangezogen wird, wenn sie beim Aufruf dieses Moduls keine Konfiguration "
 "angeben."
 msgstr ""
 
-#: extern/admin_extern.inc.php:270
+#: extern/admin_extern.inc.php:271
 msgid ""
 "Klicken Sie auf diesen Button um weitere Informationen über diese "
 "Konfiguration zu erhalten. Hier finden Sie auch die Links, über die Sie die "
@@ -418,42 +418,42 @@ msgid ""
 "dieses Module keine weiteren Konfigurationen anlegen."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:105
+#: extern/views/extern_edit_module.inc.php:108
 #, c-format
 msgid "Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:119
+#: extern/views/extern_edit_module.inc.php:122
 msgid ""
 "Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls "
 "vergeben. Bitte geben Sie einen anderen Namen ein."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:125
+#: extern/views/extern_edit_module.inc.php:128
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:132
+#: extern/views/extern_edit_module.inc.php:135
 msgid "Die eingegebenen Werte wurden übernommen."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:142
+#: extern/views/extern_edit_module.inc.php:145
 msgid ""
 "Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den "
 "&quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:143
+#: extern/views/extern_edit_module.inc.php:146
 msgid "Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:"
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:149
+#: extern/views/extern_edit_module.inc.php:152
 msgid "Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet."
 msgstr ""
 
-#: extern/views/extern_edit_module.inc.php:150
+#: extern/views/extern_edit_module.inc.php:153
 msgid "Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt."
 msgstr ""
 
@@ -533,7 +533,7 @@ msgid ""
 msgstr ""
 
 #: extern/views/extern_info_module.inc.php:97
-#: extern/lib/extern_functions.inc.php:289
+#: extern/lib/extern_functions.inc.php:292
 msgid "URL_DER_INCLUDE_SEITE"
 msgstr ""
 
@@ -621,12 +621,12 @@ msgstr ""
 msgid "Ein Bild im PNG-Format."
 msgstr ""
 
-#: extern/lib/ExternEdit.class.php:143
+#: extern/lib/ExternEdit.class.php:151
 #, c-format
 msgid "Angaben zum HTML-Tag %s"
 msgstr ""
 
-#: extern/lib/ExternEdit.class.php:158
+#: extern/lib/ExternEdit.class.php:166
 #, c-format
 msgid "Angaben zum Element %s"
 msgstr ""

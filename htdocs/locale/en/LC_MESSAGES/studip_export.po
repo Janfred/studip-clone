@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-13 19:13+0100\n"
+"POT-Creation-Date: 2003-03-16 20:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: export/export_choose_xslt.inc.php:133
 msgid ""
-"Bitte w&auml;hlen Sie das Dateiformat, in dem ihre Daten ausgegeben werden "
+"Bitte w&auml;hlen Sie das Dateiformat, in dem Ihre Daten ausgegeben werden "
 "sollen. Klicken Sie anschlieﬂend auf 'weiter'."
 msgstr ""
 
@@ -172,8 +172,7 @@ msgstr ""
 msgid "Fehlende Parameter!"
 msgstr ""
 
-#: export/export_run_fop.inc.php:53 export/export_run_xslt.inc.php:65
-#: export/export_xml.inc.php:54
+#: export/export_run_fop.inc.php:53 export/export_xml.inc.php:54
 msgid ""
 "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr ""
@@ -230,6 +229,10 @@ msgstr ""
 
 #: export/export_run_xslt.inc.php:56
 msgid "Download der Ausgabedatei"
+msgstr ""
+
+#: export/export_run_xslt.inc.php:65
+msgid "Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr ""
 
 #: export/export_run_xslt.inc.php:83
@@ -310,7 +313,7 @@ msgstr ""
 #: export/export_start.inc.php:90
 #, c-format
 msgid ""
-"Dies ist das Stud.IP Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in "
+"Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in "
 "den Formaten %s und XML ausgeben."
 msgstr ""
 
@@ -497,7 +500,7 @@ msgstr ""
 msgid ""
 "Standardmodul zur Ausgabe von Veranstaltungs- und Personendaten als "
 "Vorlesungskommentar bzw. MitarbeiterInnenlisten mit Seitenzahlen im Adobe "
-"PDF-Format. Die Datei kann mit dem Abrobat PDF-Reader gelesen werden."
+"PDF-Format. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden."
 msgstr ""
 
 #: export/export_xslt_vars.inc.php:90
@@ -505,7 +508,7 @@ msgid ""
 "Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe "
 "PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit "
 "der Seitenzahl. Deckblatt und Inhaltsverzeichnis werden automatisch "
-"generiert. Die Datei kann mit dem Abrobat PDF-Reader gelesen werden."
+"generiert. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden."
 msgstr ""
 
 #: export/export_xslt_vars.inc.php:95
@@ -516,10 +519,10 @@ msgstr ""
 msgid ""
 "Modul zur Ausgabe von Personendaten als MitarbeiterInnenlisten im Adobe PDF-"
 "Format. Die Grunddaten der Personen (Name, Telefon, Sprechzeiten, Raum, E-"
-"Mail) werden in einer Tabelle angezeigt. Die Seiten enthalten eine Kopfzeile "
-"und eine Fu&szlig;zeile mit der Seitenzahl. Es wird automatisch ein "
-"Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem PDF-"
-"Abrobat Reader gelesen werden."
+"Mail-Adresse) werden in einer Tabelle angezeigt. Die Seiten enthalten eine "
+"Kopfzeile und eine Fu&szlig;zeile mit der Seitenzahl. Es wird automatisch "
+"ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem "
+"PDF-Acrobat Reader gelesen werden."
 msgstr ""
 
 #: export/export_xslt_vars.inc.php:101
@@ -530,7 +533,11 @@ msgstr ""
 msgid ""
 "Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungsverzeichnis im Adobe "
 "PDF-Format. Die Grunddaten der Veranstaltungen (DozentInnen, Titel, Status, "
-"Termin und Raum) werden in einer Tabelle angezeigt. Es wird automatisch ein "
-"Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem "
-"Abrobat Reader gelesen werden."
+"erster Termin und Raum) werden in einer Tabelle angezeigt. Es wird "
+"automatisch ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei "
+"kann mit dem Acrobat Reader gelesen werden."
+msgstr ""
+
+#: export/oscar.php:50
+msgid "Das Verzeichnis existiert nicht!"
 msgstr ""

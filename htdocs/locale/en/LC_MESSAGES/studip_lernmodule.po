@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-13 19:13+0100\n"
+"POT-Creation-Date: 2003-03-16 20:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,12 +33,12 @@ msgid "Diese Lerneinheit enth&auml;lt eine Seite. "
 msgstr ""
 
 #: lernmodule/lernmodul_linking_functions.inc.php:36
-msgid "Es gibt eine Test-Frage zu der Lerneinheit."
+msgid "Es gibt eine Testfrage zu der Lerneinheit."
 msgstr ""
 
 #: lernmodule/lernmodul_linking_functions.inc.php:38
 #, c-format
-msgid "Es gibt %s Test-Fragen zu der Lerneinheit."
+msgid "Es gibt %s Testfragen zu der Lerneinheit."
 msgstr ""
 
 #: lernmodule/lernmodul_user_functions.inc.php:81
@@ -51,8 +51,7 @@ msgid "Datenbankoperation konnte nicht ausgeführt werden!"
 msgstr ""
 
 #: lernmodule/lernmodul_view_functions.inc.php:10
-#: lernmodule/lernmodul_view_functions.inc.php:109
-msgid "Auf folgende Lernmodule haben Sie Zugriff:"
+msgid "Sie haben Zugriff auf folgende Lernmodule:"
 msgstr ""
 
 #: lernmodule/lernmodul_view_functions.inc.php:14
@@ -72,7 +71,7 @@ msgid "Sie haben keinen Zugriff auf bestehende ILIAS-Lernmodule."
 msgstr ""
 
 #: lernmodule/lernmodul_view_functions.inc.php:45
-msgid "Folgende Lernmodule sind der Veranstaltung zugeordnet:"
+msgid "Der Veranstaltung sind folgende Lernmodule zugeordnet:"
 msgstr ""
 
 #: lernmodule/lernmodul_view_functions.inc.php:50
@@ -102,6 +101,10 @@ msgstr ""
 #: lernmodule/lernmodul_view_functions.inc.php:99
 #: lernmodule/lernmodul_view_functions.inc.php:134
 msgid "Es sind keine Lernmodule vorhanden."
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:109
+msgid "Auf folgende Lernmodule haben Sie Zugriff:"
 msgstr ""
 
 #: lernmodule/lernmodul_view_functions.inc.php:148
