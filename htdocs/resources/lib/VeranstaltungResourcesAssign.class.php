@@ -72,9 +72,38 @@ class VeranstaltungResourcesAssign {
 		
 		//if no schedule-date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
 		if (!isSchedule($this->seminar_id,true,true)){
-			$result = array_merge($result, $this->changeMetaAssigns());
+			$result2 = $this->changeMetaAssigns();
+			if (is_array($result2)){
+				$clear_turnus = false;
+				foreach($result2 as $key => $value){
+					if ($value['overlap_assigns']){
+						$clear_turnus = true;
+						break;
+					}
+				}
+				if ($clear_turnus){
+					$this->clearTurnusData(); //die, dreaded resource_id, die!!!
+				}
+			}
+			$result = array_merge($result, $result2);
 		}
 		return $result;
+	}
+	
+	//kills resource_id in metadata_dates
+	function clearTurnusData(){
+		$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->seminar_id);
+		$this->db->query($query);
+		$this->db->next_record();
+		$metadata_termin = unserialize ($this->db->f("metadata_dates"));
+		foreach ($metadata_termin["turnus_data"] as $key =>$val){
+			$metadata_termin["turnus_data"][$key]["resource_id"]=FALSE;
+			$metadata_termin["turnus_data"][$key]["room"]=FALSE;
+		}
+		$serialized_metadata = serialize($metadata_termin);
+		$query = sprintf ("UPDATE seminare SET metadata_dates ='%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $this->seminar_id);
+		$this->db->query($query);
+		$this->turnus_cleared = true;
 	}
 	
 	//this method creates all assign-objects based on the seminar-metadata
