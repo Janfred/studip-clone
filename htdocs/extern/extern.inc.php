@@ -120,9 +120,13 @@ foreach ($EXTERN_MODULE_TYPES as $type) {
 		$module_obj =& new ExternModule($range_id, $module, $config_id, $default);
 }
 
+$args = $module_obj->getArgs();
+for ($i = 0; $i < sizeof($args); $i++)
+	$arguments[$args[$i]] = $$args[$i];
+
 if ($preview)
 	$module_obj->printoutPreview();
 else
-	$module_obj->printout($start, $end);
+	$module_obj->printout($arguments);
 
 ?>
