@@ -247,51 +247,52 @@ if ($change_object_schedules) {
 					$msg -> addMsg(2);
 			}
 
-			//check, if the owner of the assign object is a Veranstaltung, which has own dates to insert
-			if (get_object_type($change_schedule_assign_user_id) == "sem") {
-			 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-		 		$veranstAssign = new VeranstaltungResourcesAssign($change_schedule_assign_user_id);
-				$created_ids = $veranstAssign->updateAssign($change_schedule_resource_id, $change_schedule_user_free_name);
+			//the user send infinity repeat (until date) as empty field, but it's -1 in the db
+			if (($change_schedule_repeat_quantity_infinity) && (!$change_schedule_repeat_quantity))
+				$change_schedule_repeat_quantity=-1;
 
-				//after a succesful insert show the first (maybe the only) assign-object
-				if (is_array($created_ids))
-					$assign_id=$created_ids[0];
+			//create timestamps
+			if ($change_schedule_year) {
+				$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
+				$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
+			}
+	
+			if ($change_schedule_repeat_end_year)
+				$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
 
-			//create the "normal" assign object
-			} else {
-				//the user send infinity repeat (until date) as empty field, but it's -1 in the db
-				if (($change_schedule_repeat_quantity_infinity) && (!$change_schedule_repeat_quantity))
+			if ($change_schedule_repeat_sem_end)
+				foreach ($SEMESTER as $a)	
+					if (($change_schedule_begin >= $a["beginn"]) &&($change_schedule_begin <= $a["ende"]))
+						$change_schedule_repeat_end=$a["vorles_ende"];
+
+			//create repeatdata
+
+			//repeat = none
+			if ($change_schedule_repeat_none_x) {
+				$change_schedule_repeat_month_of_year='';
+				$change_schedule_repeat_day_of_month='';
+				$change_schedule_repeat_week_of_month='';
+				$change_schedule_repeat_day_of_week='';
+				$change_schedule_repeat_quantity='';
+				$change_schedule_repeat_interval='';	
+			}
+
+			//repeat = year
+			if ($change_schedule_repeat_year_x) {
+				$change_schedule_repeat_month_of_year=date("n", $change_schedule_begin);
+				$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
+				$change_schedule_repeat_week_of_month='';
+				$change_schedule_repeat_day_of_week='';
+				if (!$change_schedule_repeat_quantity	)
 					$change_schedule_repeat_quantity=-1;
-	
-				//create timestamps
-				if ($change_schedule_year) {
-					$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
-					$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
-				}
-		
-				if ($change_schedule_repeat_end_year)
-					$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
-	
-				if ($change_schedule_repeat_sem_end)
-					foreach ($SEMESTER as $a)	
-						if (($change_schedule_begin >= $a["beginn"]) &&($change_schedule_begin <= $a["ende"]))
-							$change_schedule_repeat_end=$a["vorles_ende"];
-	
-				//create repeatdata
-	
-				//repeat = none
-				if ($change_schedule_repeat_none_x) {
+				if (!$change_schedule_repeat_interval)
+					$change_schedule_repeat_interval=1;
+			}
+
+			//repeat = month
+			if ($change_schedule_repeat_month_x)
+				if (!$change_schedule_repeat_week_of_month) {
 					$change_schedule_repeat_month_of_year='';
-					$change_schedule_repeat_day_of_month='';
-					$change_schedule_repeat_week_of_month='';
-					$change_schedule_repeat_day_of_week='';
-					$change_schedule_repeat_quantity='';
-					$change_schedule_repeat_interval='';	
-				}
-	
-				//repeat = year
-				if ($change_schedule_repeat_year_x) {
-					$change_schedule_repeat_month_of_year=date("n", $change_schedule_begin);
 					$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
 					$change_schedule_repeat_week_of_month='';
 					$change_schedule_repeat_day_of_week='';
@@ -301,107 +302,93 @@ if ($change_object_schedules) {
 						$change_schedule_repeat_interval=1;
 				}
 
-				//repeat = month
-				if ($change_schedule_repeat_month_x)
-					if (!$change_schedule_repeat_week_of_month) {
-						$change_schedule_repeat_month_of_year='';
-						$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
-						$change_schedule_repeat_week_of_month='';
-						$change_schedule_repeat_day_of_week='';
-						if (!$change_schedule_repeat_quantity	)
-							$change_schedule_repeat_quantity=-1;
-						if (!$change_schedule_repeat_interval)
-							$change_schedule_repeat_interval=1;
-					}
-
-				//repeat = week
-				if ($change_schedule_repeat_week_x) {
-					$change_schedule_repeat_month_of_year='';
-					$change_schedule_repeat_day_of_month='';
-					$change_schedule_repeat_week_of_month='';
-					$change_schedule_repeat_quantity='';
-					if (!$change_schedule_repeat_day_of_week)
-						$change_schedule_repeat_day_of_week=1;
-					if (!$change_schedule_repeat_quantity	)
-						$change_schedule_repeat_quantity=-1;
-					if (!$change_schedule_repeat_interval)
-						$change_schedule_repeat_interval=1;
-				}
-
-				//repeat = day
-				if ($change_schedule_repeat_day_x) {
-					$change_schedule_repeat_month_of_year='';
-					$change_schedule_repeat_day_of_month='';
-					$change_schedule_repeat_week_of_month='';
-					$change_schedule_repeat_quantity='';
-					$change_schedule_repeat_day_of_week='';
-					if (!$change_schedule_repeat_quantity	)
-						$change_schedule_repeat_quantity=-1;
-					if (!$change_schedule_repeat_interval)
-						$change_schedule_repeat_interval=1;
-				}
-	
-				//repeat days, only if week°
-				if ($change_schedule_repeat_day1_x)
+			//repeat = week
+			if ($change_schedule_repeat_week_x) {
+				$change_schedule_repeat_month_of_year='';
+				$change_schedule_repeat_day_of_month='';
+				$change_schedule_repeat_week_of_month='';
+				$change_schedule_repeat_quantity='';
+				if (!$change_schedule_repeat_day_of_week)
 					$change_schedule_repeat_day_of_week=1;
-				if ($change_schedule_repeat_day2_x)
-					$change_schedule_repeat_day_of_week=2;
-				if ($change_schedule_repeat_day3_x)
-					$change_schedule_repeat_day_of_week=3;
-				if ($change_schedule_repeat_day4_x)
-					$change_schedule_repeat_day_of_week=4;
-				if ($change_schedule_repeat_day5_x)
-					$change_schedule_repeat_day_of_week=5;
-				if ($change_schedule_repeat_day6_x)
-					$change_schedule_repeat_day_of_week=6;
-				if ($change_schedule_repeat_day7_x)
-					$change_schedule_repeat_day_of_week=7;
+				if (!$change_schedule_repeat_quantity	)
+					$change_schedule_repeat_quantity=-1;
+				if (!$change_schedule_repeat_interval)
+					$change_schedule_repeat_interval=1;
+			}
 
-				//give data to the assignobject
-				$changeAssign=new AssignObject(
-					$change_schedule_id,
-					$change_schedule_resource_id,
-					$change_schedule_assign_user_id,
-					$change_schedule_user_free_name,
-					$change_schedule_begin,
-					$change_schedule_end,
-					$change_schedule_repeat_end,
-					$change_schedule_repeat_quantity,
-					$change_schedule_repeat_interval,
-					$change_schedule_repeat_month_of_year,
-					$change_schedule_repeat_day_of_month, 
-					$change_schedule_repeat_month,
-					$change_schedule_repeat_week_of_month,
-					$change_schedule_repeat_day_of_week,
-					$change_schedule_repeat_week);
+			//repeat = day
+			if ($change_schedule_repeat_day_x) {
+				$change_schedule_repeat_month_of_year='';
+				$change_schedule_repeat_day_of_month='';
+				$change_schedule_repeat_week_of_month='';
+				$change_schedule_repeat_quantity='';
+				$change_schedule_repeat_day_of_week='';
+				if (!$change_schedule_repeat_quantity	)
+					$change_schedule_repeat_quantity=-1;
+				if (!$change_schedule_repeat_interval)
+					$change_schedule_repeat_interval=1;
+			}
 
-				if (($change_object_schedules == "NEW") || ($new_assign_object)) {
-					if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
-						$overlaps = $changeAssign->checkOverlap();
-					if (!$overlaps) {
-						if ($changeAssign->create()) {
-							$assign_id=$changeAssign->getId();
-							$msg->addMsg(3);
-							$new_assign_object='';
-						} else {
-							if ((!$do_search_user_x) && (!$reset_search_user_x))
-								$msg->addMsg(10);					
-							$new_assign_object=serialize($changeAssign);
-						}
-					} else
-						$msg->addMsg(11);
-				} else {
-					if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
-						$overlaps = $changeAssign->checkOverlap();
-					if (!$overlaps) {
-						$changeAssign->chng_flag=TRUE;
-						if ($changeAssign->store()) {
-							$msg->addMsg(4);
-							}
+			//repeat days, only if week°
+			if ($change_schedule_repeat_day1_x)
+				$change_schedule_repeat_day_of_week=1;
+			if ($change_schedule_repeat_day2_x)
+				$change_schedule_repeat_day_of_week=2;
+			if ($change_schedule_repeat_day3_x)
+				$change_schedule_repeat_day_of_week=3;
+			if ($change_schedule_repeat_day4_x)
+				$change_schedule_repeat_day_of_week=4;
+			if ($change_schedule_repeat_day5_x)
+				$change_schedule_repeat_day_of_week=5;
+			if ($change_schedule_repeat_day6_x)
+				$change_schedule_repeat_day_of_week=6;
+			if ($change_schedule_repeat_day7_x)
+				$change_schedule_repeat_day_of_week=7;
+
+			//give data to the assignobject
+			$changeAssign=new AssignObject(
+				$change_schedule_id,
+				$change_schedule_resource_id,
+				$change_schedule_assign_user_id,
+				$change_schedule_user_free_name,
+				$change_schedule_begin,
+				$change_schedule_end,
+				$change_schedule_repeat_end,
+				$change_schedule_repeat_quantity,
+				$change_schedule_repeat_interval,
+				$change_schedule_repeat_month_of_year,
+				$change_schedule_repeat_day_of_month, 
+				$change_schedule_repeat_month,
+				$change_schedule_repeat_week_of_month,
+				$change_schedule_repeat_day_of_week,
+				$change_schedule_repeat_week);
+
+			if (($change_object_schedules == "NEW") || ($new_assign_object)) {
+				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
+					$overlaps = $changeAssign->checkOverlap();
+				if (!$overlaps) {
+					if ($changeAssign->create()) {
 						$assign_id=$changeAssign->getId();
-					} else
-						$msg->addMsg(11);
-				}
+						$msg->addMsg(3);
+						$new_assign_object='';
+					} else {
+						if ((!$do_search_user_x) && (!$reset_search_user_x))
+							$msg->addMsg(10);					
+						$new_assign_object=serialize($changeAssign);
+					}
+				} else
+					$msg->addMsg(11);
+			} else {
+				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
+					$overlaps = $changeAssign->checkOverlap();
+				if (!$overlaps) {
+					$changeAssign->chng_flag=TRUE;
+					if ($changeAssign->store()) {
+						$msg->addMsg(4);
+						}
+					$assign_id=$changeAssign->getId();
+				} else
+					$msg->addMsg(11);
 			}
 		}
 	} else {

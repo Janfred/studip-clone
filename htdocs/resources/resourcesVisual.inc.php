@@ -1097,7 +1097,7 @@ class EditObject extends cssClasses {
 						 else
 							print _("einen User (Nutzer oder Einrichtung) eintragen:");						 
 						?><br /></font><font size=-1>
-						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE) ?> <br/>
+						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE) ?> <br/>
 						<?=_("freie Eingabe zur Belegung:")?><br /></font>
 						<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
 						<br /><font size=-1><?=_("<b>Beachten Sie:</b> Wenn sie einen Nutzer oder eine Einrichtung eintragen, kann dieser Nutzer oder berechtigte Personen die Belegung selbstst&auml;ndig aufheben. Sie k&ouml;nnen die die Belegung aber auch frei eingeben.")?></font>
