@@ -152,13 +152,13 @@ $_language_domain = "studip";  // the name of the language file. Should not be c
 ----------------------------------------------------------------
 the following plugins are available:
 Standard 		authentication using the local Stud.IP database
-StandardExtern  	authentication using an alternative Stud.IP database, e.g. another installation
+StandardExtern  authentication using an alternative Stud.IP database, e.g. another installation
 Ldap  			authentication using an LDAP server, this plugin uses anonymous bind against LDAP to retrieve the user dn,
-			then it uses the submitted password to authenticate with this user dn
+				then it uses the submitted password to authenticate with this user dn
 LdapReader		authentication using an LDAP server, this plugin binds to the server using a given dn and a password,
-			this account must have read access to gather the attributes for the user who tries to authenticate.
-			Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
-			hash of the user password is available in LDAP
+				this account must have read access to gather the attributes for the user who tries to authenticate.
+				Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
+				hash of the user password is available in LDAP
 
 if you write your own plugin put it in 
 studip-htdocs/lib/classes/auth_plugins and enable it here
@@ -225,6 +225,9 @@ $ALLOW_CHANGE_USERNAME = TRUE;				// if true, users are not allowed to change th
 $ALLOW_CHANGE_EMAIL = TRUE;				// if true, users are not allowed to change their email-address
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself 
 
+//IDs of courses, in which users were entered when they were promoted to 'autor'
+//$AUTO_INSERT_SEM[1]="<seminar_id>";
+//further courses can be added with their IDs here
 
 /*path generation 
 -----------------------------------------------------------------
