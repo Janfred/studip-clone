@@ -388,7 +388,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 //now, save the data
 if (($uebernehmen_x) && (!$errormsg)) {
 	//now it's time to sort....
-	if ($term_metadata["art"] == 0) {
+	if (($term_metadata["art"] == 0) && (is_array($tmp_metadata_termin["turnus_data"]))) {
 		sort ($tmp_metadata_termin["turnus_data"]);
 
 		foreach ($tmp_metadata_termin["turnus_data"] as $tmp_array) {
