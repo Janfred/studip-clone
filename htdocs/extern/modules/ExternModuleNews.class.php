@@ -43,7 +43,7 @@ class ExternModuleNews extends ExternModule {
 	var $field_names = array();
 	var $data_fields = array("date", "topic");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableRow",
-																		"ContentNews", "LinkIntern", "StudipLink");
+																		"ContentNews", "LinkInternSimple", "StudipLink");
 
 	/**
 	*
@@ -58,8 +58,9 @@ class ExternModuleNews extends ExternModule {
 	}
 	
 	function setup () {
-		$this->elements["LinkIntern"]->link_module_type = 6;
-		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Mitarbeiterdetails");
+		$this->elements["LinkInternSimple"]->link_module_type = 6;
+		$this->elements["LinkInternSimple"]->real_name = _("Link zum Modul Mitarbeiterdetails");
+		$this->elements["TableRow"]->real_name = _("Datenzeilen, Schrift von Name und Datum")
 	}
 	
 	function checkRangeId ($range_id) {
