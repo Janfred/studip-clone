@@ -37,7 +37,7 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $cssSw=new cssClassSwitcher; // Klasse für Zebra-Design
-$cssSw->hoverenabled = TRUE;
+$cssSw->enableHover();
 
 $sess->register("sem_browse_data");
 
@@ -185,25 +185,25 @@ if (($sem_browse_data["cmd"]=="xts"))
 	$db->query("SELECT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) ORDER BY bereich_fach.fach_id");
 	while ($db->next_record()) 
 		{
-      		if ($fachtmp != $db->f("fach_id"))
-       			{
+			if ($fachtmp != $db->f("fach_id"))
+				{
 			// Hier werden die Faecherueberschriften ausgegeben 
-		       $fachtmp = $db->f("fach_id");
-		       $db2->query("SELECT name from faecher WHERE fach_id = '$fachtmp'"); 
-		       while ($db2->next_record()) 
-        			{
-			        echo "<option value = nix>------------------------------------------------------------</option>";
-			        echo "<option value = nix>".htmlReady(my_substr($db2->f("name"), 0,30))."</option>";
-			        echo "<option value = nix>------------------------------------------------------------</option>";
-        			}
-       			}
-      			$bereichtmp =  $db->f("bereich_id");
-      		if($sem_browse_data["s_bereich"]==$db->f("bereich_id"))
+			   $fachtmp = $db->f("fach_id");
+			   $db2->query("SELECT name from faecher WHERE fach_id = '$fachtmp'"); 
+			   while ($db2->next_record()) 
+					{
+					echo "<option value = nix>------------------------------------------------------------</option>";
+					echo "<option value = nix>".htmlReady(my_substr($db2->f("name"), 0,30))."</option>";
+					echo "<option value = nix>------------------------------------------------------------</option>";
+					}
+				}
+				$bereichtmp =  $db->f("bereich_id");
+			if($sem_browse_data["s_bereich"]==$db->f("bereich_id"))
 			echo "<option selected VALUE=\"".$db->f("bereich_id")."\">&nbsp;".htmlReady(my_substr($db->f("name"), 0, 30))."</option>";
 		else
 			echo "<option  VALUE=\"".$db->f("bereich_id")."\">&nbsp;".htmlReady(my_substr($db->f("name"), 0, 30))."</option>";
-	      $fachtmp = $db->f("fach_id");
-	      }
+		  $fachtmp = $db->f("fach_id");
+		  }
 	echo "</select></td>";
 	}
 	if (!$show_class) {
@@ -485,60 +485,60 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 	ob_end_flush();
 	ob_start();
 
- 	//init the cols
- 	if ($db->num_rows()) {
+	//init the cols
+	if ($db->num_rows()) {
 		if ($sem_browse_data["extend"]=="yes") {
 		?>
-   		<colgroup>
-       			<col width="30%">
-       			<col width="15%">
-       			<col width="10%">
-       			<col width="15%">
-       			<col width="10%">
-       			<col width="10%">
-       			<col width="10%">
-       		</colgroup>
-       		<?
-       		} else {
+		<colgroup>
+				<col width="30%">
+				<col width="15%">
+				<col width="10%">
+				<col width="15%">
+				<col width="10%">
+				<col width="10%">
+				<col width="10%">
+			</colgroup>
+			<?
+			} else {
 		?>
-   		<colgroup>
-       			<col width="45%">
-       			<col width="15%">
-       			<col width="20%">
-       			<col width="20%">
-       		</colgroup>
-       		<?
-       		}
-     		
+		<colgroup>
+				<col width="45%">
+				<col width="15%">
+				<col width="20%">
+				<col width="20%">
+			</colgroup>
+			<?
+			}
+			
 		?> 
-        	<tr align="center">
-	                <td class="steel" align="left"><font size=-1>
-        	        	<img src=\"pictures/blank.gif\" width=1 height=20 valign="top">
-                		<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
-	                </td>
-        	        <td class="steel">
-                		<font size=-1><b>Zeit</b></font>
-	                </td>
-        	        <td class="steel">
-                		<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
-                	</td>
-        	        <td class="steel">
-	                	<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
-                	</td>
-	   	<?
-   		if ($sem_browse_data["extend"]=="yes") {
+			<tr align="center">
+					<td class="steel" align="left"><font size=-1>
+						<img src=\"pictures/blank.gif\" width=1 height=20 valign="top">
+						<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
+					</td>
+					<td class="steel">
+						<font size=-1><b>Zeit</b></font>
+					</td>
+					<td class="steel">
+						<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
+					</td>
+					<td class="steel">
+						<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
+					</td>
+		<?
+		if ($sem_browse_data["extend"]=="yes") {
 			?>
 			<td class="steel">
 				<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=art">Typ</a></b></font>
 			</td>
-	                <td class="steel">
-        	        	<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Lesezugriff">Lesen</a></b> / <b><font size=-1><a href="<? echo $PHP_SELF;?>?sortby=Schreibzugriff">Schreiben</a></b></font>
-                	</td>
-	                <td class="steel">
-        	        	<font size=-1><b>Mein Status</b></font>
-                	</td>
-	                <?
-                }
+					<td class="steel">
+						<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Lesezugriff">Lesen</a></b> / <b><font size=-1><a href="<? echo $PHP_SELF;?>?sortby=Schreibzugriff">Schreiben</a></b></font>
+					</td>
+					<td class="steel">
+						<font size=-1><b>Mein Status</b></font>
+					</td>
+					<?
+				}
 		echo "</tr>";
 	} else {
 		echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden.</b></font>";
