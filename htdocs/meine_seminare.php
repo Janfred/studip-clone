@@ -45,7 +45,7 @@ function get_my_obj_values(&$my_obj) {
 	
 	$user_id = $GLOBALS['user']->id;
 	$db2 = new DB_seminar;
-	$db2->query("CREATE  TABLE IF NOT EXISTS myobj_".$user_id." ( object_id char(32) NOT NULL, PRIMARY KEY (object_id)) TYPE=HEAP");
+	$db2->query("CREATE TEMPORARY TABLE IF NOT EXISTS myobj_".$user_id." ( object_id char(32) NOT NULL, PRIMARY KEY (object_id)) TYPE=HEAP");
 	$db2->query("REPLACE INTO  myobj_" . $user_id . " (object_id) VALUES ('" . join("'),('", array_keys($my_obj)) . "')");
 	// Postings
 	$db2->query(get_obj_clause('px_topics a','Seminar_id','topic_id',"(a.chdate > IFNULL(b.visitdate,0) AND a.chdate >= a.mkdate AND a.user_id !='$user_id')", 'forum'));
