@@ -126,7 +126,7 @@
 
 		<tr>
 			<td class="steel1">&nbsp;</td>
-			<td align=right class="steel1"><input type="image"  name="submitbtn" src="./pictures/buttons/login-button.gif" alt="Login" title="Login" value=" Login "></td>
+			<td align=right class="steel1"><input type="image"  name="submitbtn" src="./pictures/buttons/login-button.gif" border="0" alt="Login" title="Login" value=" Login "></td>
 		</tr>
 
 	</table></blockquote></td><td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr><tr><td class=blank colspan=2 align=center><br><br><img src="pictures/willkommen.gif"><br>&nbsp;</td></tr></table>
