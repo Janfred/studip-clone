@@ -1943,6 +1943,26 @@ if ($level==4)
 						</td>
 					</tr>
 					<?
+					if (($sem_create_data["sem_sec_lese"] ==2) || ($sem_create_data["sem_sec_schreib"] ==2)) {
+						?>
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+								Passwort f&uuml;r Freischaltung:
+							</td>
+							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>&nbsp;
+								<?
+									if ($sem_create_data["sem_pw"]!="")
+										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31 value=\"*******\">&nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31 value=\"*******\">";
+									else	
+										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31> &nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31>";
+								?>
+								<img  src="./pictures/info.gif" 
+									<? echo tooltip("Bitte geben Sie hier ein Passwort für die Veranstaltung sowie dasselbe Passwort nochmal zur Best&auml;tigung ein. Dieses wird von den Teilnehmer benötigt, um die Veranstaltung abonnieren zu können.", TRUE, TRUE) ?>
+								>
+							</td>
+						</tr>
+						<?
+					}
 					if ($sem_create_data["sem_admission"]) {
 					?>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2064,7 +2084,7 @@ if ($level==4)
 							&nbsp; 
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							<font size=-1 color="red">&nbsp; Achtung: </font><font size=-1>Wenn Sie ein Anmeldeverfahren starten, so kann dieser Schritt sp&auml;ter nicht r&uuml;ckg&auml;ngig gemacht werden. <br />&nbsp; Sie k&ouml;nnen jedoch die Anzahl der Teilnehmer jederzeit anpassen.</font>
+							<font size=-1 color="red">&nbsp; Achtung: </font><font size=-1>Wenn Sie ein Anmeldeverfahren starten, so kann dieser Schritt sp&auml;ter nicht r&uuml;ckg&auml;ngig gemacht werden. <br />&nbsp; Sie k&ouml;nnen jedoch die Anzahl der Teilnehmer jederzeit unter <i>Grunddaten</i> anpassen .</font>
 						</td>
 					</tr>
 					<?
@@ -2126,27 +2146,6 @@ if ($level==4)
 						</td>
 					</tr>
 					<?
-					if (($sem_create_data["sem_sec_lese"] ==2) || ($sem_create_data["sem_sec_schreib"] ==2))
-						{
-						?>
-						<tr <? $cssSw->switchClass() ?>>
-							<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-								Passwort f&uuml;r Freischaltung:
-							</td>
-							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>&nbsp;
-								<?
-									if ($sem_create_data["sem_pw"]!="")
-										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31 value=\"*******\">&nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31 value=\"*******\">";
-									else	
-										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31> &nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31>";
-								?>
-								<img  src="./pictures/info.gif" 
-									<? echo tooltip("Bitte geben Sie hier ein Passwort sowie ein einmaliges Wiederholungspasswort für die Veranstaltung ein. Dieses wird von den Teilnehmer benötigt, um die Veranstaltung abonnieren zu können.", TRUE, TRUE) ?>
-								>
-							</td>
-						</tr>
-						<?
-						}
 					if (($sem_create_data["term_start_woche"]==-1) && ($sem_create_data["term_art"] == 0))
 						{
 						?>
