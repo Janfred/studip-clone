@@ -47,6 +47,7 @@ if (!$perm->have_perm("user"))
 
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "sms_functions.inc.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
@@ -122,7 +123,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		
 		$myuname=$auth->auth["uname"];
 		$tmp_last_visit = ($my_messaging_settings["last_visit"]) ?  $my_messaging_settings["last_visit"] : time();
-		$db->query("
+		/*$db->query("
 					SELECT COUNT(m.chat_id) AS chat_m, 
 					COUNT(IF(m_u.readed = 0, m_u.message_id, NULL)) AS neu_m, 
 					COUNT(IF(m_u.readed = 1, m_u.message_id, NULL)) AS alt_m,
@@ -135,6 +136,13 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			$altm = $db->f("alt_m");
 			$neux = $db->f("neu_x");
 		}
+		*/
+		$db->query("SELECT STRAIGHT_JOIN count(*) FROM message LEFT JOIN message_user USING (message_id) WHERE message_user.user_id = '{$user->id}' AND snd_rec = 'rec' AND chat_id IS NOT NULL");
+		$db->next_record();
+		$chatm = $db->f(0);
+		$neum = count_messages_from_user('in', " AND message_user.readed = 0 ");
+		$altm = count_messages_from_user('in', " AND message_user.readed = 1 ");
+		$neux = count_x_messages_from_user('in', 'all', "AND message.mkdate > ".$my_messaging_settings["last_box_visit"]." AND message_user.readed = 0 ");
 		
 		//globale Objekte zählen
 		$db->query("SELECT  COUNT((IF(date < UNIX_TIMESTAMP(),range_id,NULL))) as count,
