@@ -274,14 +274,12 @@ function ShowContact ($contact_id)
 			}
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						.$buddy		
-						."<a href=\"sms.php?sms_source_page=contact.php&cmd=write&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachricht1.gif\" border=\"0\" =".tooltip(_("Nachricht schreiben"))."></a>&nbsp; "
 						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" =".tooltip(_("Editieren"))."></a>&nbsp; "
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash_att.gif\" border=\"0\" =".tooltip(_("Kontakt löschen"))."></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" =".tooltip(_("Kontakte schliessen"))."></a></td></tr>";
 		} else {
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
 				$description = "";	
-
 				$userinfo = GetUserInfo($db->f("user_id"));
 				if (sizeof($userinfo)>0) {
 					while(list($key,$value) = each($userinfo)) {
@@ -310,7 +308,7 @@ function ShowContact ($contact_id)
 				$link = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
 			}
 
-			$lastrow = "<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\">".$link."</td></tr>";
+			$lastrow = "<tr><td colspan=\"3\" class=\"steelgraulight\" align=\"center\">".$link."</td></tr>";
 		}			
 		if ($open == $contact_id) {		//es ist ein einzelner Beitrag aufgeklappt, also Anker setzen
 			$output = "<a name=\"anker\"></a>";
@@ -319,11 +317,15 @@ function ShowContact ($contact_id)
 		}
 		$output .= "<table cellspacing=\"0\" width=\"280\" class=\"blank\">
 					<tr>
-						<td class=\"topic\" colspan=\"2\"><font size=\"2\"><b>"
+						<td class=\"topic\" width=\"99%\"><font size=\"2\"><b>"
 							.get_fullname($db->f("user_id"), $format = "full_rev" )."</b></font></td>"
+							."<td class=\"topic\"><a href=\"sms.php?sms_source_page=contact.php&cmd=write&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachrichtsmall.gif\" border=\"0\" =".tooltip(_("Nachricht schreiben"))." align=\"right\"></a>"
+							."</td>"
 							."
 						</td>
-					</tr>"
+					</tr>
+				    </table>
+				    <table cellspacing=\"0\" width=\"280\" class=\"blank\">"
 						.ShowUserInfo ($contact_id)
 						. $lastrow
 				."</table>";
