@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von Dokumenten
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
-require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
 
 /**
 * This function creates the assigned room name for range_id
@@ -33,10 +33,10 @@ require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
 */
 
 function getRoom ($range_id, $link=TRUE) {
-	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
+	global $RESOURCES_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
 	
 	if ($RESOURCES_ENABLE)	
-	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
@@ -1056,21 +1056,21 @@ function isSchedule ($sem_id) {
 	//than we check, which ones matches to our metadates
 	while ($db->next_record()) {
 		if (is_array($term_metadata["turnus_data"]))
-			foreach ($term_metadata["turnus_data"] as $val) {
-				//compense php sunday = 0 bullshit
-				if ($val["day"] == 7)
-					$t_day = 0;
-				else
-					$t_day = $val["day"];
-				
-				if ((date("w", $db->f("date")) == $t_day) &&
-					(date("G", $db->f("date")) == $val["start_stunde"]) &&
-					(date("i", $db->f("date")) == $val["start_minute"]) &&
-					(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
-					(date("i", $db->f("end_time")) == $val["end_minute"]))
-					$matched_dates[$db->f("termin_id")] = TRUE;
-			}
+		foreach ($term_metadata["turnus_data"] as $val) {
+			//compense php sunday = 0 bullshit
+			if ($val["day"] == 7)
+				$t_day = 0;
+			else
+				$t_day = $val["day"];
+			
+			if ((date("w", $db->f("date")) == $t_day) &&
+				(date("G", $db->f("date")) == $val["start_stunde"]) &&
+				(date("i", $db->f("date")) == $val["start_minute"]) &&
+				(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
+				(date("i", $db->f("end_time")) == $val["end_minute"]))
+				$matched_dates[$db->f("termin_id")] = TRUE;
 		}
+	}
 
 	if (isset($matched_dates))
 		return TRUE;

@@ -253,7 +253,7 @@ function latex($text) {
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH;
 	
 	if ($LATEXRENDER_ENABLE) {
-		require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
+		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
 		$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
@@ -453,18 +453,18 @@ function smile ($text = "") {
 	
 	//smileys in the ":name:" notation
 	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m";
-	$replace = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
+	$replace = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}/show_smiley.php\" target=\"_blank\">";
 	$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-	$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/\\2.gif\"></a>\\3";
+	$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . "/" . $SMILE_PATH . "/\\2.gif\"></a>\\3";
 	$text = preg_replace($pattern, $replace, $text);
 	
 	//smileys in short notation
 	reset($SMILE_SHORT);
 	while (list($key,$value) = each($SMILE_SHORT)) {
 		$text = str_replace($key,"<a href=\""
-				. $CANONICAL_RELATIVE_PATH_STUDIP . "show_smiley.php\" target=\"_blank\">"
+				. $CANONICAL_RELATIVE_PATH_STUDIP . "/show_smiley.php\" target=\"_blank\">"
 				. "<img ".tooltip($value)." border=\"0\" src=\""
-				. $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/$value.gif\"></a>",$text);
+				. $CANONICAL_RELATIVE_PATH_STUDIP . "/" . $SMILE_PATH . "/$value.gif\"></a>",$text);
 	}
 	return $text;
 }
@@ -492,7 +492,7 @@ function symbol ($text = "") {
 	//symbols in short notation
 	reset($SYMBOL_SHORT);
 	while (list($key, $value) = each($SYMBOL_SHORT)) {
-		$text=str_replace($key,"<img ".tooltip($key)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SYMBOL_PATH/$value.gif\">",$text);
+		$text=str_replace($key,"<img ".tooltip($key)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/$SYMBOL_PATH/$value.gif\">",$text);
 	}
 	
 	return $text;
