@@ -166,7 +166,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
       $link_sort = $link."&sortAnswers=".($sortAnswers ? NO : YES);
       $link_sort .= "&revealNames=".($revealNames ? YES : NO);
 
-      $link_sort .= ($vote->isStopped()) ? "#stoppedVotes" : "#openvote";
+      $link_sort .= ($vote->isStopped()) ? "#stoppedvotes" : "#openvote";
 
       $html .= 
 	 "&nbsp;".
@@ -199,7 +199,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
        else
 	  $link_reveal .= "&revealNames=".($_GET["revealNames"] ? NO : YES);
        
-       $link_reveal .= ($vote->isStopped()) ? "#stoppedVotes" : "#openvote";
+       $link_reveal .= ($vote->isStopped()) ? "#stoppedvotes" : "#openvote";
        
        if( $_GET["revealNames"] && 
 	   $GLOBALS["voteopenID"] == $vote->getVoteID ())
@@ -417,7 +417,7 @@ function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
        ($openStoppedVotes ? NO : YES);
    if (!empty ($GLOBALS["username"]))
        $link .= "&username=".$GLOBALS["username"];
-   $link .= "#stoppedVotes";
+   $link .= "#stoppedvotes";
 
    return "<tr>"
        . printhead (0, 0, $link, ($openStoppedVotes) ? "open" : "close",
@@ -425,7 +425,7 @@ function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
 		    "\" border=\"0\">",
 		    "<a href=\"".$link."\" class=\"tree\">" . 
 		    _("Abgelaufene Votings und Tests") . "</a>".
-		    "<a name=\"stoppedVotes\"></a>",
+		    "<a name=\"stoppedvotes\">&nbsp;</a>",
 		    "<font size=\"-1\">(".count( $stoppedVotes ).
 		    ")</font>", 0, FALSE)
        . "</tr>";
