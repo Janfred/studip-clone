@@ -69,7 +69,7 @@ IF ($user->id == "nobody"){
 	}
 
 if (!(have_sem_write_perm()) OR $pass==TRUE) {
-if (!isset($Create) || $Create != "abschicken") {
+if (!isset($Create)) {  //|| $Create != "abschicken"
 	if (isset($topic_id)) {
 		$db=new DB_Seminar;
 		$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
@@ -102,8 +102,8 @@ if (!isset($Create) || $Create != "abschicken") {
 		$name = "";
 	}
 
-IF  ($user->id == "nobody") echo "<form name=forumwrite method=post action=\"write_topic.php\" onsubmit=\"return pruefe_name()\">"; // bei nobody mit namen pruefen
-ELSE echo "<form name=forumwrite method=post action=\"write_topic.php\">";
+IF  ($user->id == "nobody") echo "<form name=Create method=post action=\"write_topic.php?Create=TRUE\" onsubmit=\"return pruefe_name()\">"; // bei nobody mit namen pruefen
+ELSE echo "<form name=Create method=post action=\"write_topic.php?Create=TRUE\">";
 
 ?>
 <input type=hidden name="parent_id" value="<? print $topic_id; ?>">
@@ -141,9 +141,12 @@ IF ($quote==TRUE){  // es soll zitiert werden
 	echo htmlReady($zitat);
 	echo "\n";
 }
+
+// <input type="submit" name=Create value="abschicken">
+
 ?>
 </textarea><br>
-<input type="submit" name=Create value="abschicken">
+<input type="IMAGE" src="pictures/buttons/abschicken-button.gif" border=0>
 </form>
 <?
 }
