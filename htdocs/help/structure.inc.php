@@ -40,8 +40,8 @@ array	(	"name" => "Allgemeines",
 																				"text" => "Die rechtlichen Grundlagen",
 																				"page" => "nutzung.html"
 																			),
-																array	(	"name" => "Was ist neu?",
-																				"text" => "neue Funktionen in dieser Version",
+																array	(	"name" => "neue Funktionen in Stud.IP",
+																				"text" => "neue Funktionen in jeder Version",
 																				"page" => "whatsnew.htm"
 																			)
 															)
