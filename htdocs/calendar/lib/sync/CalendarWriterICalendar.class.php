@@ -84,25 +84,28 @@ class CalendarWriteriCalendar extends CalendarWriter {
 		
 		if ($event->properties["RRULE"]["rtype"] != "SINGLE")
 			$event->properties["RRULE"]["expire"] = $event->properties["EXPIRE"];
-		else
-			unset($event->properties["RRULE"]);
-		unset($event->properties["EXPIRE"]);
+		
+		$safe_categories = $event->properties['CATEGORIES'];
 		$event->properties['CATEGORIES'] = str_replace($match_pattern_2, $replace_pattern_2,
 				$event->toStringCategories());
-		unset($event->properties['STUDIP_CATEGORY']);
 		
 		$result	= "BEGIN:VEVENT" . $this->newline;
 		
-		foreach ($event->properties as $name => $attribute) {
+		foreach ($event->properties as $name => $value) {
 			$name = $name;
 			$params = array();
 			$params_str = '';
 
-			$value = $attribute;
 			if ($value === "")
 				continue;
 			
 			switch ($name) {
+				// not supported event properties
+				case 'SEMNAME':
+				case 'EXPIRE':
+				case 'STUDIP_CATEGORY':
+					continue 2;
+					
 				// text fields
 				case 'SUMMARY':
 				case 'DESCRIPTION':
@@ -111,6 +114,7 @@ class CalendarWriteriCalendar extends CalendarWriter {
 					break;
 				
 				case 'CATEGORIES':
+					$event->properties['CATEGORIES'] = $safe_categories;
 					break;
 				
 				// Date fields
@@ -232,7 +236,10 @@ class CalendarWriteriCalendar extends CalendarWriter {
 				// Recursion fields
 				case 'EXRULE':
 				case 'RRULE':
-					$value = $this->_exportRecurrence($value);
+					if ($event->properties["RRULE"]["rtype"] != "SINGLE")
+						$value = $this->_exportRecurrence($value);
+					else
+						continue 2;
 					break;
 				
 				case "UID":
