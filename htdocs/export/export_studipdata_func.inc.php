@@ -114,7 +114,11 @@ function export_sem($inst_id)
 		{
 			if ($group != "FIRSTGROUP")
 				$group_string .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
-			$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $db->f($group_tab_zelle));
+			if ($group_tab_zelle == "status") 
+				$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $SEM_TYPE[$db->f($group_tab_zelle)]["name"]);
+			else
+			{	
+				$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $db->f($group_tab_zelle));
 			$group = $db->f($group_tab_zelle);
 			if (($do_subgroup) AND ($subgroup == $db->f($subgroup_tab_zelle)))
 				$subgroup = "NEXTGROUP";
