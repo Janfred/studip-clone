@@ -258,7 +258,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				echo "<br><br><font size=\"-1\"><b>"._("Freie Suche:")."</b></font><br>";
 				if ($search_exp != "") {
 					$query = "
-					SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('autor', 'tutor', 'dozent') AND (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
+					SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
 					$db->query($query); //
 					if (!$db->num_rows()) {
 						echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
