@@ -841,8 +841,10 @@ if (isset($details)) {
 	<p><b><a href="<? echo $PHP_SELF . "?details="?>">&nbsp;Neuen Benutzer anlegen</a></b></p>
 
 	<?
+	unset($msg);
 	include ("pers_browse.inc.php");
 	print "<br>\n";
+	parse_msg($msg);
 	
 
 	if (isset($pers_browse_search_string)) { // Es wurde eine Suche initiert

@@ -94,18 +94,20 @@ if (isset($pers_browse_search)) {
 	if ($pers_browse_search_string != "") {
 		$pers_browse_search_string = " WHERE " . $pers_browse_search_string;	
 		$pers_browse_search_string = substr($pers_browse_search_string,0,-4);
+		$sess->register("pers_browse_search_string");
+	} else {
+		$sess->unregister("pers_browse_search_string");
+		unset($pers_browse_search_string);
+		$msg = "error§Bitte geben Sie einen Suchbegriff ein.§";
 	}
-	$sess->register("pers_browse_search_string");
 }
 
 
 // Formular zuruecksetzen
 if (isset($pers_browse_clear)) {
 	$sess->unregister("pers_browse_old");
-	$user->unregister("pers_browse_old");
 	unset($pers_browse_old);
 	$sess->unregister("pers_browse_search_string");
-	$user->unregister("pers_browse_search_string");
 	unset($pers_browse_search_string);
 }
 
