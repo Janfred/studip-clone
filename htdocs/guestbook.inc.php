@@ -81,7 +81,7 @@ function form_guestbook($range_id) {
 		."<div align=center><textarea name=post style=\"width:70%\" cols=\"". $cols."\"  rows=8 wrap=virtual>"
 		."</textarea>"
 		."<br><br><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
-		."&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
+		."&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br>";
 	return $form;
 }
 
