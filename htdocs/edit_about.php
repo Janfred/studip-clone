@@ -171,11 +171,10 @@ function imaging($img,$img_size,$img_name) {
 		$ext = strtolower(substr($img_name,$dot+1,$l));
 	}
 	//passende Endung ?
-	if ($ext != "jpg" && $ext != "gif" ) {
+	if ($ext != "jpg" && $ext != "gif" && $ext != "png") {
 		$this->msg = "error§" . sprintf(_("Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die Dateiendungen .gif und .jpg erlaubt!"), $ext);
 		return;
 	}
-
 	//na dann kopieren wir mal...
 	$newfile = $this->uploaddir . "/".$this->auth_user["user_id"].".jpg";
 	if(!@copy($img,$newfile)) {
@@ -183,51 +182,70 @@ function imaging($img,$img_size,$img_name) {
 		return;
 	} else {
 		list($width, $height, $img_type, ) = getimagesize($img);
+		if (extension_loaded('gd')){
+			switch ($ext) {  //original Bild einlesen
+				case 'gif': //GIF
+				$img_org = ImageCreateFromGIF($img);
+				break;
+				case 'jpg': //JPG
+				$img_org = ImageCreateFromJPEG($img);
+				break;
+				case 'png': //PNG
+				$img_org = ImageCreateFromPNG($img);
+				break;
+				default:
+				$img_org = FALSE;
+			} // end switch
+		}
+		if (!$width && $img_org){
+			$width = ImageSX($img_org);
+			$height = ImageSY($img_org);
+		}
 		// Check picture size
 		$hscale = $height / $this->img_max_h;
 		$wscale = $width / $this->img_max_w;
-		if (($hscale > 1) || ($wscale > 1)) {
+		if ($width && ($hscale > 1) || ($wscale > 1)) {
 			$scale = ($hscale > $wscale)? $hscale : $wscale;
 			$newwidth = floor($width / $scale);
 			$newheight= floor($height / $scale);
 			$ret_val = false;
+			//try ImageMagick...
 			if (file_exists($CONVERT_PATH)){
 				system($CONVERT_PATH . ' -resize ' . $newwidth . 'x' . $newheight . '! ' . $newfile .' ' . $newfile, $ret_val);
-			} else if (extension_loaded('gd') && function_exists('imagecopyresampled')){
-				// leeres Bild erzeugen
-				$img_res = ImageCreateTrueColor($newwidth, $newheight);
-				switch ($img_type) {  //original Bild einlesen
-				case 1: //GIF
-					$img_org = ImageCreateFromGIF($img);
-					break;
-				case 2: //JPG
-					$img_org = ImageCreateFromJPEG($img);
-					break;
-				case 3: //PNG
-					$img_org = ImageCreateFromPNG($img);
-					break;
-				default:
-					$img_org = FALSE;
-				} // end switch
-				if (!$img_org) {
-					$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
-					return;
-				}
-				// resampeln und als jpg speichern
-				$ret_val = ImageCopyResampled ( $img_res, $img_org, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-				$ret_val = ImageJPEG ( $img_res, $newfile , 70);
-				$ret_val = $ret_val ? false : true;
-				ImageDestroy ( $img_res);
-				ImageDestroy ( $img_org);
 			} else {
-				$ret_val = true; //Fehler!!!
+				$ret_val = true;
 			}
+			//no luck, lets try GD...
 			if ($ret_val){
-				@unlink($newfile);
-				$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
-				return;
+				if (function_exists('imagecopyresampled')){
+					// leeres Bild erzeugen
+					$img_res = ImageCreateTrueColor($newwidth, $newheight);
+					if (!$img_org) {
+						$ret_val = true;
+					} else {
+						// resampeln und als jpg speichern
+						$ret_val = ImageCopyResampled ( $img_res, $img_org, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+						$ret_val = ImageJPEG ( $img_res, $newfile , 70);
+						$ret_val = $ret_val ? false : true;
+						ImageDestroy ( $img_res);
+						ImageDestroy ( $img_org);
+					}
+				} else {
+					$ret_val = true; //still no luck, picture can not be resized
+				}
 			}
-		} 
+		}
+		//resizing not possible or dimensions not available
+		if ($ret_val || !$width){
+			@unlink($newfile);
+			$this->msg = "error§" . _("Es ist ein Fehler beim Bearbeiten des Bildes aufgetreten.");
+			if (!$width){
+				$this->msg .= " ". _("Die Gr&ouml;&szlig;e des Bildes konnte nicht ermittelt werden.");
+			} elseif ($ret_val){
+				$this->msg .= " ". _("Die Gr&ouml;&szlig;e des Bildes konnte nicht angepasst werden.") . " " . sprintf(_("Die maximale Gr&ouml;&szlig;e betr&auml;gt %s x %s Pixel."),$this->img_max_w,$this->img_max_h);
+			}
+			return;
+		}
 		$this->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).");
 		setTempLanguage($this->auth_user["user_id"]);
 		$this->priv_msg = _("Ein neues Bild wurde hochgeladen.\n");
