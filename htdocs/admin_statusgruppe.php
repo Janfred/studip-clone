@@ -376,7 +376,7 @@ function SwapStatusgruppe ($statusgruppe_id)
 	// bestehende Statusgruppe editieren
 
 	if (($cmd=="edit_existing_statusgruppe") && ($new_statusgruppe_name != "")) {
-		EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id);
+		EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $update_id);
 	}
 	
 	// bestehende Statusgruppe in Textfeld
@@ -502,7 +502,7 @@ function SwapStatusgruppe ($statusgruppe_id)
 			$gruppe_anzahl = $db->f("size");
 		}
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
-  	  	  echo"<input type=\"HIDDEN\" name=\"edit_id\" value=\"$edit_id\">";
+  	  	  echo"<input type=\"HIDDEN\" name=\"update_id\" value=\"$edit_id\">";
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
 	        <font size="2">Name: </font>
