@@ -41,6 +41,7 @@ class ExternConfig {
 
 	var $id;
 	var $config = array();
+	var $global_id = NULL;
 	var $module_type;
 	var $module_name;
 	var $config_name;
@@ -98,7 +99,6 @@ class ExternConfig {
 	*/
 	function getType () {
 		global $EXTERN_MODULE_TYPES;
-		reset($EXTERN_MODULE_TYPES);
 		foreach ($EXTERN_MODULE_TYPES as $key => $known_module) {
 			if ($known_module["name"] == $this->module_type)
 				return $key;
@@ -147,15 +147,13 @@ class ExternConfig {
 	/**
 	*
 	*/
-	function getParameterNames () {
-	}
+	function getParameterNames () {}
 
 	/**
 	*
 	*/
 	
-	function getAllParameterNames () {
-	}
+	function getAllParameterNames () {}
 
 	/**
 	*
@@ -225,6 +223,11 @@ class ExternConfig {
 		return $attributes;
 	}
 	
+	// Returns a complete HTML-tag with attributes
+	function getTag ($element_name, $tag, $second_set = FALSE) {
+		return "<$tag" . $this->getAttributes($element_name, $tag, $second_set) . ">";
+	}
+	
 	/**
 	*
 	*/
@@ -276,7 +279,6 @@ class ExternConfig {
 			reset($attributes);
 			foreach ($attributes as $attribute => $value)
 				$file_content .= $attribute . " = \"" . $value . "\"\n";
-			
 		}
 
 		if ($file = @fopen($GLOBALS["EXTERN_CONFIG_FILE_PATH"] . $this->file_name, 'w')) {
@@ -324,7 +326,7 @@ class ExternConfig {
 	function createConfigName ($range_id) {
 		$configurations = get_all_configurations($range_id, $this->module_type);
 		
-		$config_name_prefix = "Configuration ";
+		$config_name_prefix = _("Konfiguration") . " ";
 		$config_name_suffix = 1;
 		$config_name = $config_name_prefix . $config_name_suffix;
 		$all_config_names = "";
@@ -345,136 +347,24 @@ class ExternConfig {
 	/**
 	*
 	*/
-/*	function checkFormValues ($element_name, $attributes) {
-		global $HTTP_POST_VARS;
-		$fault = array();
-	
-		foreach ($attributes as $attribute) {
-			$form_name = $element_name . "_" . $attribute;
-			
-			// Check for an alternative input field. All names of alternative input
-			// fields begin with an underscore. The alternative input field overwrites
-			// the input field having the same name but without the leading underscore.
-			if (isset($HTTP_POST_VARS["_$form_name"])) {
-				if ($HTTP_POST_VARS[$form_name] == $this->config[$element_name][$attribute]
-						&& $HTTP_POST_VARS["_$form_name"] != "")
-					$HTTP_POST_VARS[$form_name] = $HTTP_POST_VARS["_$form_name"];
+	function setGlobalConfig ($global_config, $registered_elements) {
+		$this->global_id = $global_config->getId();
+		
+		foreach ($registered_elements as $name => $element) {
+			if ((is_int($name) || !$name) && $this->config[$element]) {
+				foreach ($this->config[$element] as $attribute => $value) {
+					if ($value === "")
+						$this->config[$element][$attribute] = $global_config->config[$element][$attribute];
+				}
 			}
-			
-			if (is_array($HTTP_POST_VARS[$form_name]))
-				$value = $HTTP_POST_VARS[$form_name];
-			else
-				$value = array($HTTP_POST_VARS[$form_name]);
-						
-			$splitted_attribute = explode("_", $attribute);
-			if (sizeof($splitted_attribute) == 1)
-				$html_attribute = $splitted_attribute[0];
-			else
-				$html_attribute = $splitted_attribute[1] . $splitted_attribute[2];
-			
-			for ($i = 0; $i < sizeof($value); $i++) {
-			
-				// Don't accept strings longer than 200 characters!
-				if (strlen($value[$i]) > 200) {
-					$fault[$form_name] = TRUE;
-					continue;
+			else if ($this->config["name"]) {
+				foreach ($this->config[$name] as $attribute => $value) {
+					if ($value === "")
+						$this->config[$name] = $global_config->config[$element][$attribute];
 				}
-				
-				if ($value[$i] != "" && preg_match("/(<|>|\"|<script|<php)/i", $value[$i])) {
-					$fault[$form_name] = TRUE;
-					continue;
-				}
-					
-				switch ($html_attribute) {
-			
-					case "height" :
-						$fault[$form_name] = (!preg_match("/^\d{0,3}$/", $value[$i])
-								|| $value[$i]> 100 || $value[$i]< 0);
-						break;
-					case "cellpadding" :
-					case "cellspacing" :
-					case "border" :
-					case "sort" :
-						$fault[$form_name] = (!preg_match("/^\d{0,2}$/", $value[$i])
-								|| $value[$i]> 30 || $value[$i]< 0);
-						break;
-					case "width" :
-						$fault[$form_name] = (!preg_match("/^\d{0,4}$/", $value[$i])
-								|| $value[$i]> 2000 || $value[$i]< 0);
-						if ($HTTP_POST_VARS["{$form_name}pp"] == "%") {
-							if (is_array($HTTP_POST_VARS[$form_name]))
-								$HTTP_POST_VARS[$form_name][$i] = $HTTP_POST_VARS[$form_name][$i] . "%";
-							else
-								$HTTP_POST_VARS[$form_name] = $HTTP_POST_VARS[$form_name] . "%";
-						}
-						break;
-					case "valign" :
-						$fault[$form_name] = !preg_match("/^(top|bottom|center)$/", $value[$i]);
-						break;
-					case "align" :
-						$fault[$form_name] = !preg_match("/^(left|right|center)$/", $value[$i]);
-						break;
-					case "size" :
-						$fault[$form_name] = !preg_match("/^(-|\+)*(1|2|3|4|5|6|7)$/", $value[$i]);
-						break;
-					case "face" :
-						$fault[$form_name] = !preg_match("/^(Verdana,Arial,Helvetica,sans-serif|"
-								. "Times,Times New Roman,serif|Courier,Courier New,monospace)$/", $value[$i]);
-						break;
-					case "iconpic" :
-					case "icontxt" :
-					case "iconpdf" :
-					case "iconppt" :
-					case "iconxls" :
-					case "iconrtf" :
-					case "iconzip" :
-					case "icondefault" :
-					case "background" :
-						$fault[$form_name] = ($value[$i] != ""
-								&& (preg_match("/(<|>|\"|<script|<php)/i", $value[$i])
-								|| !preg_match("/^[^.\/\\\].*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
-						break;
-					case "wholesite" :
-					case "addinfo" :
-					case "time" :
-					case "lecturer" :
-						// This is especially for checkbox-values. If there is no checkbox
-						// checked, the variable is not declared and it is necessary to set the
-						// variable to 0.
-						if (!isset($HTTP_POST_VARS[$form_name])) {
-							$HTTP_POST_VARS[$form_name] = 0;
-							break;
-						}
-						$fault[$form_name] = !($value[$i] == "1" || $value[$i] == "0" || !isset($value[$i]));
-						break;
-					case "name" :
-						$HTTP_POST_VARS[$form_name] = trim($HTTP_POST_VARS[$form_name]);
-						$fault[$form_name] = (preg_match("/^.*(<script|<php).*$/i", $value[$i])
-								|| !preg_match("/^[0-9a-z\._\- ]+$/i", $value[$i]));
-						break;
-					case "widthpp" :
-						$fault[$form_name] = ($value[$i] != "" || $value[$i] != "%");
-						break;
-					default :
-						$fault[$form_name] = $this->checkValue($html_attribute, $value[$i]);
-						
-				}
-					
-				if ($fault[$form_name])
-					break;
 			}
-			
 		}
-		
-		if (in_array(TRUE, $fault))
-			return $fault;
-		
-		// these two values are included in every "main"-element
-		$HTTP_POST_VARS["Main_order"] = $this->config["Main"]["order"];
-		$HTTP_POST_VARS["Main_visible"] = $this->config["Main"]["visible"];
-		
-		return FALSE;
-	}*/
+	}
 	
 }
 
