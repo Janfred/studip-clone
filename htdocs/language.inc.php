@@ -76,9 +76,9 @@ function init_i18n($_language) {
 
 	if (isset($_language_domain) && isset($_language)) {
 		$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
-		if ($_language != "de_DE") { // German is the original language, so we need no I18N
 			putenv("LANG=$_language");
 			setlocale(LC_ALL, "");
+		if ($_language != "de_DE") { // German is the original language, so we need no I18N
 			bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
 			textdomain($_language_domain);
 		}
