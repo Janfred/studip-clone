@@ -1477,7 +1477,8 @@ class ResourcesRootThreads {
 		} else {
 			$my_objects=search_administrable_objects();
 			$my_objects[$user->id]=TRUE;
-			
+			$my_objects["global"]=TRUE;
+
 			//create the clause with all my id's
 			$i=0;
 			$clause = " (";

@@ -1474,7 +1474,7 @@ class EditObject extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" colspan=2 valign="top"><font size=-1><?=_("Berechtigungen:")?></font><br />
-				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1><?=_("Berechtigung hinzuf&uuml;gen")?></font><br />
+				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1<?=_("Berechtigung hinzuf&uuml;gen")?></font><br />
 				<? showSearchForm("search_perm_user", $search_string_search_perm_user, FALSE, FALSE, FALSE, TRUE) ?>
 				</td>
 			</tr>
@@ -1489,7 +1489,7 @@ class EditObject extends cssClasses {
 					<input type="HIDDEN" name="change_user_id[]" value="<? echo $this->db->f("user_id")?>" />
 					<font size=-1><a href="<? echo $this->resObject->getOwnerLink($this->db->f("user_id"))?>"><? echo htmlReady($this->resObject->getOwnerName(TRUE, $this->db->f("user_id"))) ?></a></font>
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="*" nowrap>
+				<td class="<? echo $this->getClass() ?>" width="*">
 					<font size=-1>&nbsp; 
 					<?
 					if (($admin_perms) && ((($this->db->f("perms") == "autor") || ($owner_perms))))
@@ -1909,7 +1909,15 @@ class ResourcesBrowse {
 			if ($this->db2->f("parent_id") != "0")
 				$way_back=$this->db2->f("parent_id");
 		} else {
-			$query = sprintf ("SELECT resource_id, name, description FROM resources_objects WHERE resource_id = root_id ORDER BY name");
+			$resRoots=new ResourcesRootThreads($range_id);
+	
+			$roots=$resRoots->getRoots();
+			if (is_array($roots)) 
+				$clause = "AND resource_id  IN('" . join("','",$roots) . "')";
+			else
+				$clause = "AND 1=2";
+	
+			$query = sprintf ("SELECT resource_id, name, description FROM resources_objects WHERE 1 %s ORDER BY name", $clause);
 			$way_back=-1;
 		}
 
