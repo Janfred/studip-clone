@@ -46,10 +46,14 @@ define("PHPDOC_DUMMY",true);
 
 $dirstr = "" . $TMP_PATH . "/export";
 
+if (!(is_dir( $TMP_PATH."/export" )))
+{
+	mkdir($TMP_PATH . "/export");
+}
+
 if (!($handle=opendir( $dirstr )))
 {
-	echo _("Das Verzeichnis existiert nicht!");
-	exec("md $dirstr");
+	echo _("Fehler beim &Ouml;ffnen des Export-Temp-Verzeichnisses!");
 }
 elseif ($perm->have_perm("admin"))  
 {

@@ -69,12 +69,10 @@ if (isset($ex_sem_class))
 
 if ($o_mode != "direct")
 {
-	if (!($handle=readdir( $TMP_PATH."/export/" )))
+	if (!(is_dir( $TMP_PATH."/export" )))
 	{
-		exec("md $TMP_PATH/export/");
+		mkdir($TMP_PATH . "/export");
 	}
-	else
-		closedir($handle); 
 	$xml_file_id = md5(uniqid(rand())) . ".xml";
 	$xml_file = fopen($TMP_PATH."/export/" . $xml_file_id, "w");
 }
