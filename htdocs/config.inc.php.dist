@@ -35,7 +35,7 @@
 
 /*basic settings for Stud.IP
 ----------------------------------------------------------------
-you find here the indivual settings for your installation. 
+you find here the indivdual settings for your installation. 
 please note the LOCAL.INC.PHP in the php-lib folder for the basic system settings!*/
 
 
