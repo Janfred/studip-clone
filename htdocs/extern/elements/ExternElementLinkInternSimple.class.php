@@ -35,11 +35,12 @@
 // +---------------------------------------------------------------------------+
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/elements/ExternElementLinkIntern.class.php");
 
+// dummy class for compatibility reasons (Stud.IP < 0.95)
+// this class is replaced by ExternElementLinkIntern and the
+// use of global configurations
 class ExternElementLinkInternSimple extends ExternElement {
-
-	var $attributes = array("a_class", "a_style", "config", "srilink");
-	var $link_module_type;
 
 	/**
 	* Constructor
@@ -47,73 +48,9 @@ class ExternElementLinkInternSimple extends ExternElement {
 	* @param array config
 	*/
 	function ExternElementLinkInternSimple ($config = "") {
-		if ($config)
-			$this->config = $config;
-		
-		$this->name = "LinkInternSimple";
-		$this->real_name = _("Links");
-		$this->description = _("Formatierung des Links.");
-		$this->headlines = array(_("Linkformatierung"), _("Verlinkung zum Modul"));
+		$this = new ExternElementLinkIntern($config);
 	}
-	
-	/**
-	* 
-	*/
-	function toStringEdit ($post_vars = "", $faulty_values = "",
-			$edit_form = "", $anker = "") {
-		global $EXTERN_MODULE_TYPES;
-		$out = "";
-		$table = "";
-		if ($edit_form == "")
-			$edit_form =& new ExternEditModule($this->config, $post_vars, $faulty_values, $anker);
-		
-		$edit_form->setElementName($this->getName());
-		$element_headline = $edit_form->editElementHeadline($this->real_name,
-				$this->config->getName(), $this->config->getId(), TRUE, $anker);
-		
-		$attributes = array("a_class", "a_style");
-		$headlines = array("a" => $this->headlines[0]);
-		$content_table = $edit_form->getEditFormContent($attributes, $headlines);
-		$content_table .= $edit_form->editBlankContent();
-		
-		$headline = $edit_form->editHeadline($this->headlines[1]);
-		
-		$title = _("Konfiguration:");
-		$info = _("Der Link ruft das Modul mit der gewählten Konfiguration auf. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
-		if ($configs = get_all_configurations($this->config->range_id, $this->link_module_type)) {
-			$module_name = $EXTERN_MODULE_TYPES[$this->link_module_type]["module"];
-			$values = array_keys($configs[$module_name]);
-			unset($names);
-			foreach ($configs[$module_name] as $config)
-				$names[] = $config["name"];
-		}
-		else {
-			$values = array();
-			$names = array();
-		}
-		array_unshift($values, "");
-		array_unshift($names, _("Standardkonfiguration"));
-		$table = $edit_form->editOptionGeneric("config", $title, $info, $values, $names);
-		
-		$title = _("SRI-Link:");
-		$info = _("Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden ist. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nicht nutzen.");
-		$table .= $edit_form->editTextfieldGeneric("srilink", $title, $info, 50, 250);
-		
-		$content_table .= $edit_form->editContentTable($headline, $table);
-		$content_table .= $edit_form->editBlankContent();
-				
-		$submit = $edit_form->editSubmit($this->config->getName(),
-				$this->config->getId(), $this->getName());
-		$out = $edit_form->editContent($content_table, $submit);
-		$out .= $edit_form->editBlank();
-		
-		return $element_headline . $out;
-	}
-	
-	function checkValues ($attribute, $value) {
-		if ($attribute = "srilink")
-			return preg_match("|^https?://.*$|i", $value);
-	}
+
 }
 
 ?>
