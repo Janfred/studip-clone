@@ -57,6 +57,8 @@ if (!$print_view) {
 		include "$ABSOLUTE_PATH_STUDIP/links1.php";
 	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
 		include "$RELATIVE_PATH_CALENDAR/calendar_links.inc.php";
+	else
+		include "$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php";	
 	}
 
 if ($change_view) {
