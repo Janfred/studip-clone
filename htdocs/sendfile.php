@@ -48,9 +48,9 @@ switch ($type) {
 	case 1: 
 		$path_file=$ARCHIV_PATH."/".$file_id;
 	break;
-	//We want to download from the tmp-folder
+	//We want to download from the tmp/export-folder
 	case 2:
-		$path_file=$TMP_PATH."/".$file_id;
+		$path_file=$TMP_PATH."/export/".$file_id;
 	break;
 	//We want to download an XSL-Script
 	case 3:
