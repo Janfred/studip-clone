@@ -39,9 +39,9 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementTableParagraph extends ExternElement {
 
-	var $attributes = array("table_width", "table_align", "table_border", "table_bgcolor",
-				"table_bordercolor", "table_cellpadding", "table_cellspacing", "table_class",
-				"table_style");
+	var $attributes = array("table_width", "table_align", "table_valign", "table_border",
+			"table_bgcolor", "table_bordercolor", "table_cellpadding", "table_cellspacing",
+			"table_class", "table_style");
 
 	/**
 	* Constructor
