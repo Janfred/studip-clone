@@ -535,31 +535,20 @@ function get_nachname($user_id="")
 /**
 * Retrieves the username for a given user_id
 *
-* uses global $online array if user is online
 * 
 * @param		string	if omitted, current username will be returned
 * @return		string	
 *
 */
 function get_username($user_id="") {
-	global $auth,$online;
-	$author="";
-	if (!($user_id))
+	global $auth;
+	$author = "";
+	if (!$user_id || $user_id == $auth->auth['uid'])
 		return $auth->auth["uname"];
-	if(count($online)) {
- 		foreach($online as $key=>$value) {
-			if ($value["userid"]==$user_id) {
-		    $author=$key;
-		    break;
-			}
-		}
-	}
-	if (!$author) {
-		$db=new DB_Seminar;
-		$db->query ("SELECT username , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
-		while ($db->next_record())
-			$author=$db->f("username");
-	}
+	$db=new DB_Seminar;
+	$db->query ("SELECT username , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
+	while ($db->next_record())
+		$author = $db->f("username");
 	return $author;
 }
 
