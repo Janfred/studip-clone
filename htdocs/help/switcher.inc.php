@@ -143,7 +143,7 @@ switch($referrer_page) {
 				}
 		break;
 
-	case "kalender.php" :
+	case "calendar.php" :
 		switch($cmd) {	
 			case "edit":
 				$help_page = "termin2.htm";
