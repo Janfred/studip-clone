@@ -512,7 +512,7 @@ else {
 		table_body($db_institut_members, $auswahl, $table_structure, $css_switcher);
 }
 
-if (($EXPORT_ENABLE) AND ($db_institut_members->num_rows() > 0))
+if (($EXPORT_ENABLE) AND ($db_institut_members->num_rows() > 0) AND ($perm->have_perm("tutor")))
 {
 	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 	echo "<tr><td colspan=$colspan><br>" . export_form($auswahl, "person", $SessSemName[0]) . "</td></tr>";
