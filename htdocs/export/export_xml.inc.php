@@ -36,8 +36,6 @@ if (!CheckParamXML())
 	);
 }
 
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
 
 if ($o_mode != "direct")
 {
@@ -45,14 +43,11 @@ if ($o_mode != "direct")
 	$xml_file = fopen($TMP_PATH."/" . $xml_file_id, "w");
 }
 
-$tree_object = new RangeTreeObject($range_id);
-$range_name = $tree_object->item_data["name"];
 
-output_data ( xml_header(), $o_mode);
 
 export_range( $range_id );
 
-output_data ( xml_footer(), $o_mode);
+
 
 if ($o_mode != "direct")
 {
@@ -74,7 +69,10 @@ if ($o_mode == "file")
 	else
 	{
 		$xml_export_text = _("Die Daten wurden erfolgreich exportiert.");
-		$export_msg = sprintf(_("%s Objekte wurden verarbeitet."), $object_counter);
+		if ($object_counter == 1)
+			$export_msg = sprintf(_("%s Objekt wurde verarbeitet."), $object_counter);
+		else
+			$export_msg = sprintf(_("%s Objekte wurden verarbeitet."), $object_counter);
 
 		$export_info = _("Die Daten wurden in eine XML-Datei exportiert. <br>Wenn Sie die Datei in ein anderes Format konvertieren wollen, klicken Sie auf weiter.<br>Um die Datei herunterzuladen, klicken Sie auf den Dateinamen.");
 
