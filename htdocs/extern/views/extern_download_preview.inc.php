@@ -114,9 +114,7 @@ echo "</tr>\n";
 $set_1 = $this->config->getAttributes("TableRow", "td");
 $set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
 $zebra = $this->config->getValue("TableRow", "td_zebratd_");
-echo "<br>$set_1";
-echo "<br>$set_2";
-echo "<br>$zebra";
+
 $i = 0;
 reset($data);
 foreach ($data as $db) {
