@@ -97,6 +97,7 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					//the name of the class
 					"documents"=>TRUE,			//documents, this modul is stud_ip core; always avaiable
 					"schedule"=>TRUE,			//schedule, this modul is stud_ip core; always avaiable
 					"participants"=>TRUE,			//participants, this modul is stud_ip core; always avaiable
+					"scm"=>FALSE,				//simple content module, this modul is stud_ip core; always avaiable 
 					"literature"=>TRUE,			//literature, this modul is stud_ip core; always avaiable
 					"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
 					"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
@@ -117,6 +118,7 @@ $SEM_CLASS[2]=array("name"=>_("Organisation"),
 					"documents"=>TRUE,
 					"schedule"=>TRUE,
 					"participants"=>TRUE,
+					"scm"=>FALSE,
 					"literature"=>TRUE,
 					"chat"=>TRUE,					
 					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t"),
@@ -132,6 +134,7 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 					"forum"=>TRUE,
 					"documents"=>TRUE,
 					"schedule"=>TRUE,
+					"scm"=>FALSE,
 					"participants"=>TRUE,
 					"chat"=>TRUE,					
 					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der Universit&auml;t"),
@@ -220,6 +223,7 @@ $INST_MODULES["default"] = array(
 			"documents"=>TRUE,			//documents, this modul is stud_ip core; always avaiable
 			"personal"=>TRUE,			//personal, this modul is stud_ip core; always avaiable 
 			"literature"=>TRUE,			//literature, this modul is stud_ip core; always avaiable 
+			"scm"=>FALSE,				//simple content module, this modul is stud_ip core; always avaiable 
 			"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
 			"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
 			"support"=>FALSE,			//support, only, if the modul is global activated; see local.inc (this modul is not part of the main distribution)

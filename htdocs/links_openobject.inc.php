@@ -46,6 +46,22 @@ $db=new DB_Seminar;
 $reiter=new reiter;
 $Modules=new Modules;
 
+/**
+* Get dynamic tab name for simple content module
+*
+**/
+function scm_tab_name() {
+	global $SessSemName;
+	static $tab_name="";
+	if (!$tab_name) {
+		$db=new DB_Seminar();
+		$db->query("SELECT tab_name FROM scm WHERE range_id='$SessSemName[1]'");
+		$db->next_record();
+		$tab_name=$db->f("tab_name");
+	}
+	return $tab_name;
+}
+
 //load list of used modules
 $modules = $Modules->getLocalModules($SessSemName[1]);
 
@@ -65,6 +81,8 @@ if ($SessSemName["class"]=="inst") {
 		$structure["personal"]=array (topKat=>"", name=>_("Personal"), link=>"institut_members.php", active=>FALSE);
 	if ($modules["documents"])
 		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
+	if ($modules["scm"])
+		$structure["scm"]=array (topKat=>"", name=>scm_tab_name(), link=>"scm.php", active=>FALSE);
 	if ($modules["literature"])
 		$structure["literatur"]=array (topKat=>"", name=>_("Literatur zur Einrichtung"), link=>"literatur.php", active=>FALSE);
 	if ($modules["wiki"]){
@@ -88,6 +106,9 @@ if ($SessSemName["class"]=="inst") {
 		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	if ($modules["schedule"])
 		$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
+	if ($modules["scm"]) {
+		$structure["scm"]=array (topKat=>"", name=>scm_tab_name(), link=>"scm.php", active=>FALSE);
+	}
 	if ($modules["literature"])
 		$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
 	if ($modules["wiki"]){
@@ -168,6 +189,12 @@ if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
 if ($modules["documents"]) {
 	$structure["_folder"]=array (topKat=>"folder", name=>_("Ordneransicht"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["alle_dateien"]=array (topKat=>"folder", name=>_("Alle Dateien"), link=>"folder.php?cmd=all", active=>FALSE);
+}
+//
+if ($modules["scm"]) {
+	$structure["_scm"]=array (topKat=>"scm", name=>scm_tab_name(), link=>"scm.php", active=>FALSE);
+	if ($rechte)
+		$structure["scm_admin"]=array (topKat=>"scm", name=>_("Administration"), link=>"admin_scm.php", active=>FALSE);
 }
 //
 if ($modules["literature"]) {
@@ -342,6 +369,9 @@ switch ($i_page) {
 	case "mein_stundenplan.php": 
 		$reiter_view="timetable"; 
 	break;	
+	case "scm.php":
+		$reiter_view="scm";
+	break;
 	case "literatur.php": 
 		$reiter_view="literatur";
 	break;
@@ -390,12 +420,6 @@ switch ($i_page) {
 			break;
 		}
 	break;
-	default :
-		if ($SessSemName["class"]=="inst")
-			$reiter_view="institut_main";
-		else
-			$reiter_view="seminar_main";
-	break;
 	case "wiki.php":
 		switch ($view){
 			case "listall":
@@ -411,6 +435,12 @@ switch ($i_page) {
 				$reiter_view="wiki";
 			break;
 		}
+	break;
+	default:
+		if ($SessSemName["class"]=="inst")
+			$reiter_view="institut_main";
+		else
+			$reiter_view="seminar_main";
 	break;
 }
 
