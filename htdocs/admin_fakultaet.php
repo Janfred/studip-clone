@@ -1,5 +1,22 @@
 <?php
+/*
+admin_fakultaet.php - Fakultaeten-Verwaltung von Stud.IP.
+Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>
 
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
   page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
   $perm->check("root");
@@ -7,13 +24,6 @@
 ## Set this to something, just something different...
   $hash_secret = "hjeroxghsdf";
 
-###
-### Utility functions
-###
-
-## my_error($msg):
-##
-## Display error messages
 
 ?>
 <html>
@@ -24,7 +34,6 @@
 -->
   <title>Stud.IP</title>
 	<link rel="stylesheet" href="style.css" type="text/css">
- <script language="javascript" src="./md5.js"></script>
  </head>
 
 <body bgcolor="#ffffff">
