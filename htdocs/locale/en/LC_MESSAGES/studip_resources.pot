@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-04-01 13:48+0200\n"
+"POT-Creation-Date: 2004-04-07 13:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,45 +15,45 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resources/resourcesFunc.inc.php:429 resources/resourcesFunc.inc.php:438
-#: resources/resourcesFunc.inc.php:447 resources/resourcesFunc.inc.php:493
-#: resources/resourcesFunc.inc.php:518 resources/resourcesFunc.inc.php:540
-#: resources/resourcesFunc.inc.php:553 resources/resourcesFunc.inc.php:596
-#: resources/resourcesFunc.inc.php:647
+#: resources/resourcesFunc.inc.php:449 resources/resourcesFunc.inc.php:458
+#: resources/resourcesFunc.inc.php:467 resources/resourcesFunc.inc.php:513
+#: resources/resourcesFunc.inc.php:538 resources/resourcesFunc.inc.php:560
+#: resources/resourcesFunc.inc.php:573 resources/resourcesFunc.inc.php:616
+#: resources/resourcesFunc.inc.php:667
 msgid "Veranstaltungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:480
+#: resources/resourcesFunc.inc.php:500
 #: resources/lib/ResourceObject.class.php:263
 msgid "Global"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:488 resources/resourcesFunc.inc.php:512
-#: resources/resourcesFunc.inc.php:546 resources/resourcesFunc.inc.php:559
-#: resources/resourcesFunc.inc.php:562 resources/resourcesFunc.inc.php:619
-#: resources/resourcesFunc.inc.php:642
+#: resources/resourcesFunc.inc.php:508 resources/resourcesFunc.inc.php:532
+#: resources/resourcesFunc.inc.php:566 resources/resourcesFunc.inc.php:579
+#: resources/resourcesFunc.inc.php:582 resources/resourcesFunc.inc.php:639
+#: resources/resourcesFunc.inc.php:662
 msgid "Personen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:498 resources/resourcesFunc.inc.php:504
-#: resources/resourcesFunc.inc.php:545 resources/resourcesFunc.inc.php:558
-#: resources/resourcesFunc.inc.php:602 resources/resourcesFunc.inc.php:652
+#: resources/resourcesFunc.inc.php:518 resources/resourcesFunc.inc.php:524
+#: resources/resourcesFunc.inc.php:565 resources/resourcesFunc.inc.php:578
+#: resources/resourcesFunc.inc.php:622 resources/resourcesFunc.inc.php:672
 msgid "Einrichtungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:678
+#: resources/resourcesFunc.inc.php:698
 msgid "diesen Eintrag übernehmen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:682
+#: resources/resourcesFunc.inc.php:702
 msgid "jedeR"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:697
+#: resources/resourcesFunc.inc.php:717
 msgid "Suche zurücksetzen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:702
+#: resources/resourcesFunc.inc.php:722
 msgid "Starten Sie hier Ihre Suche"
 msgstr ""
 
@@ -202,40 +202,40 @@ msgstr ""
 msgid "In aktueller Anfrage mit ber&uuml;cksichtigen"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1148
-#: resources/lib/evaluate_values.php:1152
-#: resources/lib/evaluate_values.php:1162
-#: resources/lib/evaluate_values.php:1164
-#: resources/lib/evaluate_values.php:1182
-#: resources/lib/evaluate_values.php:1186
-#: resources/lib/evaluate_values.php:1211
-#: resources/lib/evaluate_values.php:1214
-#: resources/lib/evaluate_values.php:1230
-#: resources/lib/evaluate_values.php:1233
+#: resources/lib/evaluate_values.php:1179
+#: resources/lib/evaluate_values.php:1183
+#: resources/lib/evaluate_values.php:1193
+#: resources/lib/evaluate_values.php:1195
+#: resources/lib/evaluate_values.php:1213
+#: resources/lib/evaluate_values.php:1217
+#: resources/lib/evaluate_values.php:1242
+#: resources/lib/evaluate_values.php:1245
+#: resources/lib/evaluate_values.php:1261
+#: resources/lib/evaluate_values.php:1264
 #, c-format
 msgid "%s, Belegungszeit: %s"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1483
+#: resources/lib/evaluate_values.php:1522
 #, c-format
 msgid "Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet."
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1483
+#: resources/lib/evaluate_values.php:1522
 msgid "Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1500
+#: resources/lib/evaluate_values.php:1539
 msgid "wöchentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1502
+#: resources/lib/evaluate_values.php:1541
 #: resources/views/EditResourceData.class.php:251
 #: resources/views/ShowToolsRequests.class.php:246
 msgid "zweiw&ouml;chentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1503
+#: resources/lib/evaluate_values.php:1542
 #: resources/views/ShowToolsRequests.class.php:247
 msgid "ab:"
 msgstr ""
@@ -250,10 +250,6 @@ msgstr ""
 
 #: resources/lib/ResourceObject.class.php:265
 msgid "Global (zentral verwaltet)"
-msgstr ""
-
-#: resources/lib/ResourceObject.class.php:305
-msgid "Ressource anzeigen und bearbeiten"
 msgstr ""
 
 #: resources/lib/ShowTreeRow.class.php:15
@@ -465,8 +461,8 @@ msgstr ""
 
 #: resources/views/EditResourceData.class.php:571
 #: resources/views/EditResourceData.class.php:736
-#: resources/views/ShowList.class.php:127
-#: resources/views/ShowList.class.php:129
+#: resources/views/ShowList.class.php:128
+#: resources/views/ShowList.class.php:130
 #: resources/views/ShowObject.class.php:82
 #: resources/views/ShowThread.class.php:106
 #: resources/views/ShowThread.class.php:108
@@ -1218,8 +1214,14 @@ msgid ""
 "nschten Ressource einer anderen Belegung &uuml;berschneidet!"
 msgstr ""
 
+#: resources/views/msgs_resources.inc.php:173
+msgid ""
+"Sie haben bereits Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. "
+"Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?"
+msgstr ""
+
 #: resources/views/page_intros.inc.php:41
-#: resources/views/page_intros.inc.php:197
+#: resources/views/page_intros.inc.php:199
 #: resources/views/ShowObject.class.php:80
 msgid "Hierachieebene"
 msgstr ""
@@ -1231,7 +1233,7 @@ msgid ""
 msgstr ""
 
 #: resources/views/page_intros.inc.php:52
-#: resources/views/page_intros.inc.php:247
+#: resources/views/page_intros.inc.php:249
 msgid "&Uuml;bersicht der Ressourcen"
 msgstr ""
 
@@ -1251,7 +1253,7 @@ msgstr ""
 #: resources/views/page_intros.inc.php:97
 #: resources/views/page_intros.inc.php:115
 #: resources/views/page_intros.inc.php:170
-#: resources/views/page_intros.inc.php:204
+#: resources/views/page_intros.inc.php:206
 msgid "Aktionen:"
 msgstr ""
 
@@ -1280,7 +1282,7 @@ msgstr ""
 
 #: resources/views/page_intros.inc.php:79
 #: resources/views/page_intros.inc.php:166
-#: resources/views/page_intros.inc.php:184
+#: resources/views/page_intros.inc.php:186
 msgid "Information:"
 msgstr ""
 
@@ -1355,23 +1357,23 @@ msgid "%sEigenschaften%s anzeigen"
 msgstr ""
 
 #: resources/views/page_intros.inc.php:120
-#: resources/views/page_intros.inc.php:212
+#: resources/views/page_intros.inc.php:214
 #, c-format
 msgid "Eine neue Belegung %serstellen%s"
 msgstr ""
 
 #: resources/views/page_intros.inc.php:124
-#: resources/views/page_intros.inc.php:225
+#: resources/views/page_intros.inc.php:227
 msgid "zur&uuml;ck zur Suche"
 msgstr ""
 
 #: resources/views/page_intros.inc.php:129
-#: resources/views/page_intros.inc.php:217
+#: resources/views/page_intros.inc.php:219
 msgid "zur&uuml;ck zur Veranstaltung"
 msgstr ""
 
 #: resources/views/page_intros.inc.php:132
-#: resources/views/page_intros.inc.php:220
+#: resources/views/page_intros.inc.php:222
 msgid "zur&uuml;ck zur Einrichtung"
 msgstr ""
 
@@ -1440,83 +1442,87 @@ msgid "Bereits bearbeitete Anfragen werden weiterhin angezeigt."
 msgstr ""
 
 #: resources/views/page_intros.inc.php:173
-#, c-format
-msgid "Bearbeitete Anfragen %sanzeigen%s."
-msgstr ""
-
-#: resources/views/page_intros.inc.php:173
-#, c-format
-msgid "Bearbeitete Anfragen %snicht anzeigen%s"
+msgid "Ressourcen suchen"
 msgstr ""
 
 #: resources/views/page_intros.inc.php:175
 #, c-format
+msgid "Bearbeitete Anfragen %sanzeigen%s."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:175
+#, c-format
+msgid "Bearbeitete Anfragen %snicht anzeigen%s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:177
+#, c-format
 msgid "Nachrichten zu zugewiesenen Anfragen %sversenden%s."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:181
+#: resources/views/page_intros.inc.php:183
 #, c-format
 msgid "Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:182
+#: resources/views/page_intros.inc.php:184
 msgid "Ressourcen&uuml;bersicht"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:188
+#: resources/views/page_intros.inc.php:190
 msgid ""
 "Als Teilnehmer der Veranstaltung haben Sie die M&ouml;glichkeit, diese "
 "Ressourcen frei zu belegen oder den Belegungsplan einzusehen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:189
+#: resources/views/page_intros.inc.php:191
 msgid ""
 "Als Mitarbeiter der Einrichtung haben Sie die M&ouml;glichkeit, diese "
 "Ressourcen frei zu belegen oder den Belegungsplan einzusehen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:190
+#: resources/views/page_intros.inc.php:192
 msgid ""
 "Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Veranstaltung "
 "zugeordneten Ressourcen einsehen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:191
+#: resources/views/page_intros.inc.php:193
 msgid ""
 "Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Einrichtung "
 "zugeordneten Ressourcen einsehen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:197
+#: resources/views/page_intros.inc.php:199
 #, c-format
 msgid "Hier sehen Sie detaillierte Informationen der Ressource %s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:199
+#: resources/views/page_intros.inc.php:201
 msgid "Ressourcendetails"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:201
+#: resources/views/page_intros.inc.php:203
 msgid "Anzeige der Ressourceneigenschaften"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:209
+#: resources/views/page_intros.inc.php:211
 #, c-format
 msgid "%sBelegungsplan%s anzeigen"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:231
+#: resources/views/page_intros.inc.php:233
 #, c-format
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s ausgeben "
 "lassen"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:232
+#: resources/views/page_intros.inc.php:234
 msgid "Ressourcenbelegung"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:236
+#: resources/views/page_intros.inc.php:238
 #, c-format
 msgid ""
 "Anzeigen der der Belegung der Ressource %s. Sie k&ouml;nnen die Belegung "
@@ -1524,17 +1530,17 @@ msgid ""
 "Belegung erstellen."
 msgstr ""
 
-#: resources/views/page_intros.inc.php:241
+#: resources/views/page_intros.inc.php:243
 #, c-format
 msgid "Vergeben von Rechten auf die Ressource %s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:242
+#: resources/views/page_intros.inc.php:244
 #, c-format
 msgid "Vergeben von Berechtigungen - Objekt%s"
 msgstr ""
 
-#: resources/views/page_intros.inc.php:246
+#: resources/views/page_intros.inc.php:248
 msgid ""
 "Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen "
 "hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."
@@ -1622,15 +1628,15 @@ msgstr ""
 msgid "Erstellt am"
 msgstr ""
 
-#: resources/views/ShowList.class.php:134
+#: resources/views/ShowList.class.php:135
 msgid "Aus der Merkliste entfernen"
 msgstr ""
 
-#: resources/views/ShowList.class.php:136
+#: resources/views/ShowList.class.php:137
 msgid "In Merkliste aufnehmen"
 msgstr ""
 
-#: resources/views/ShowList.class.php:149
+#: resources/views/ShowList.class.php:150
 #: resources/views/ShowThread.class.php:121
 msgid "&Auml;nderungen speichern"
 msgstr ""
@@ -1833,7 +1839,7 @@ msgstr ""
 
 #: resources/views/ShowToolsRequests.class.php:318
 #: resources/views/ShowToolsRequests.class.php:398
-#: resources/views/ShowToolsRequests.class.php:472
+#: resources/views/ShowToolsRequests.class.php:471
 msgid "Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:"
 msgstr ""
 
@@ -1843,10 +1849,10 @@ msgstr ""
 
 #: resources/views/ShowToolsRequests.class.php:333
 #: resources/views/ShowToolsRequests.class.php:349
-#: resources/views/ShowToolsRequests.class.php:410
-#: resources/views/ShowToolsRequests.class.php:425
-#: resources/views/ShowToolsRequests.class.php:484
-#: resources/views/ShowToolsRequests.class.php:499
+#: resources/views/ShowToolsRequests.class.php:409
+#: resources/views/ShowToolsRequests.class.php:424
+#: resources/views/ShowToolsRequests.class.php:482
+#: resources/views/ShowToolsRequests.class.php:497
 msgid "Dieser Raum ist augenblicklich gebucht"
 msgstr ""
 
@@ -1854,68 +1860,68 @@ msgstr ""
 msgid "weitere passende R&auml;ume:"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:456
+#: resources/views/ShowToolsRequests.class.php:455
 msgid "keine gefunden"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:462
+#: resources/views/ShowToolsRequests.class.php:461
 msgid "R&auml;ume aus der Merkliste:"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:538
+#: resources/views/ShowToolsRequests.class.php:536
 msgid "gew&uuml;nschte Raumeigenschaften:"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:579
+#: resources/views/ShowToolsRequests.class.php:577
 msgid "Es wurden keine Raumeigenschaften gew&uuml;nscht."
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:588
+#: resources/views/ShowToolsRequests.class.php:586
 msgid "Kommentar des Anfragenden:"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:593
+#: resources/views/ShowToolsRequests.class.php:591
 msgid "Es wurde kein Kommentar eingegeben"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:632
+#: resources/views/ShowToolsRequests.class.php:630
 #, c-format
 msgid ""
 "<b>%s</b> von <b>%s</b> Anfragen in der Bearbeitung wurden noch nicht "
 "aufgel&ouml;st."
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:633
+#: resources/views/ShowToolsRequests.class.php:631
 msgid "Aktueller Request: "
+msgstr ""
+
+#: resources/views/ShowToolsRequests.class.php:645
+#: resources/views/ShowToolsRequests.class.php:672
+msgid "Es existieren Überschneidungen zur gewünschten Belegungszeit."
 msgstr ""
 
 #: resources/views/ShowToolsRequests.class.php:647
 #: resources/views/ShowToolsRequests.class.php:674
-msgid "Es existieren Überschneidungen zur gewünschten Belegungszeit."
-msgstr ""
-
-#: resources/views/ShowToolsRequests.class.php:649
-#: resources/views/ShowToolsRequests.class.php:676
 #, c-format
 msgid ""
 "Es existieren Überschneidungen zu mehr als %s%% aller gewünschten "
 "Belegungszeiten."
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:653
-#: resources/views/ShowToolsRequests.class.php:680
+#: resources/views/ShowToolsRequests.class.php:651
+#: resources/views/ShowToolsRequests.class.php:678
 msgid ""
 "Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen "
 "Belegungen:\n"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:657
-#: resources/views/ShowToolsRequests.class.php:682
+#: resources/views/ShowToolsRequests.class.php:655
+#: resources/views/ShowToolsRequests.class.php:680
 #, c-format
 msgid "%s von %s bis %s Uhr"
 msgstr ""
 
-#: resources/views/ShowToolsRequests.class.php:663
-#: resources/views/ShowToolsRequests.class.php:688
+#: resources/views/ShowToolsRequests.class.php:661
+#: resources/views/ShowToolsRequests.class.php:686
 msgid "Es existieren keine Überschneidungen"
 msgstr ""

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_calendar\n"
-"POT-Creation-Date: 2004-04-01 13:48+0200\n"
+"POT-Creation-Date: 2004-04-07 13:15+0200\n"
 "PO-Revision-Date: 2004-04-06 23:54+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -42,7 +42,8 @@ msgstr ""
 
 #: calendar/calendar.inc.php:273
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden"
-msgstr "Integrate my personal appointment calendar with the course appointments"
+msgstr ""
+"Integrate my personal appointment calendar with the course appointments"
 
 #: calendar/calendar.inc.php:288
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin"
@@ -83,7 +84,8 @@ msgstr "Customize settings for the appointment calendar"
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr "Here you can customize the lay-out of your personal appointment calendar."
+msgstr ""
+"Here you can customize the lay-out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:67
 msgid "Option"
@@ -690,7 +692,8 @@ msgstr ""
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr "To edit this appointment, please switch to the %s Course administration</a> "
+msgstr ""
+"To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:611 calendar/views/edit.inc.php:621
 #: calendar/views/edit.inc.php:678
@@ -809,7 +812,8 @@ msgstr "All appointments"
 
 #: calendar/views/export.inc.php:184
 msgid "Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:"
-msgstr "Please enter from which time period the appointments should be exported."
+msgstr ""
+"Please enter from which time period the appointments should be exported."
 
 #: calendar/views/export.inc.php:195
 #, c-format
@@ -850,7 +854,8 @@ msgid "Es wurden keine Termine importiert."
 msgstr "No appointments have been imported."
 
 #: calendar/views/export.inc.php:258
-msgid "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
+msgid ""
+"Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
 msgstr "You can import, export and synchronize appointment data."
 
 #: calendar/views/export.inc.php:295
@@ -980,10 +985,11 @@ msgid "Die Datei ist keine g&uuml;ltige iCalendar-Datei!"
 msgstr "The file is not a valid iCalendar file!"
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:103
-msgid "Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
-msgstr "The file can not be synchronized with the Stud.IP appointment calendar."
+msgid ""
+"Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
+msgstr ""
+"The file can not be synchronized with the Stud.IP appointment calendar."
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:146
 msgid "Die zu synchronisierende Datei enth&auml;lt zu viele Termine."
 msgstr "The file to be synchronized contains too many appointments."
-

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2004-04-01 13:48+0200\n"
+"POT-Creation-Date: 2004-04-07 13:15+0200\n"
 "PO-Revision-Date: 2004-04-01 13:35+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -759,39 +759,39 @@ msgstr "Vote data base error."
 msgid "Evaluation-Datenbankfehler"
 msgstr "Evaluation data base error"
 
-#: vote/vote_show.inc.php:63
+#: vote/vote_show.inc.php:69
 msgid "Datenbankfehler bei Voteaktivierung"
 msgstr "Data base error while activating votes."
 
-#: vote/vote_show.inc.php:79 vote/vote_show.inc.php:86
+#: vote/vote_show.inc.php:85 vote/vote_show.inc.php:93
 msgid "Datenbankfehler beim Auslesen der EvaluationsIDs."
 msgstr "Database error while reading EvaluationID."
 
-#: vote/vote_show.inc.php:109 vote/vote_show.inc.php:118
+#: vote/vote_show.inc.php:116 vote/vote_show.inc.php:125
 msgid "Umfragen"
 msgstr "Surveys"
 
-#: vote/vote_show.inc.php:111 vote/vote_show.inc.php:120
+#: vote/vote_show.inc.php:118 vote/vote_show.inc.php:127
 msgid "Umfragen und mehr..."
 msgstr "Surveys and more..."
 
-#: vote/vote_show.inc.php:116
+#: vote/vote_show.inc.php:123
 msgid "Umfragen bearbeiten"
 msgstr "Edit surveys."
 
-#: vote/vote_show.inc.php:140
+#: vote/vote_show.inc.php:148
 msgid "Fehler beim Einlesen der Evaluation"
 msgstr "Error while reading the evaluation"
 
-#: vote/vote_show.inc.php:247
+#: vote/vote_show.inc.php:249
 msgid "Fehler beim Einlesen des Votes"
 msgstr "Error while reading the votes"
 
-#: vote/vote_show.inc.php:276
+#: vote/vote_show.inc.php:278
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr "The changes were saved."
 
-#: vote/vote_show.inc.php:297
+#: vote/vote_show.inc.php:299
 msgid "Fehler bei der Abstimmung"
 msgstr "Error while voting."
 
