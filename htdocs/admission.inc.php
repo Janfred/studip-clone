@@ -202,7 +202,7 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 				$db4->query("SELECT username FROM auth_user_md5 WHERE user_id = '".$db2->f("user_id")."' ");
 				$db4->next_record();
 				setTempLanguage($db2->f("user_id"));
-				$message = sprintf(_("Sie sind in der Warteliste der Veranstaltung **%s (%s)** hochgestuft worden. Sie stehen zur Zeit auf Position %s."), $db->f("Name"), htmlReady(view_turnus($db->f("Seminar_id"))), $position);
+				$message = sprintf(_("Sie sind in der Warteliste der Veranstaltung **%s (%s)** hochgestuft worden. Sie stehen zur Zeit auf Position %s."), $db->f("Name"), view_turnus($db->f("Seminar_id")), $position);
 				restoreLanguage();
 				$messaging->insert_message($message, $db4->f("username"), "____%system%____", FALSE, FALSE, "1");
 			}
@@ -240,7 +240,7 @@ function check_group($user_id, $username, $grouped_sems, $cur_name, $cur_id) {
 			$db3->query("SELECT Name FROM seminare WHERE Seminar_id = '".$db->f("Seminar_id")."';");
 			$db3->next_record();
 			setTempLanguage($db->f("user_id"));
-			$message = sprintf (_("Ihr Abonnement der Veranstaltung **%s (%s)** wurde aufgehoben, da Sie in der Veranstaltung **%s (%s)** von der Warteliste nachgerückt sind. Bei diesen Veranstaltungen handelt sich um gruppierte Veranstaltungen, der Wartelisteneintrag wurde somit bevorzugt behandelt."),$db3->f("Name") ,view_turnus($db->f("Seminar_id")),$cur_name, view_turnus($cur_id));
+			$message = sprintf (_("Ihr Abonnement der Veranstaltung **%s (%s)** wurde aufgehoben, da Sie in der Veranstaltung **%s (%s)** von der Warteliste nachgerückt sind. Bei diesen Veranstaltungen handelt sich um gruppierte Veranstaltungen, der Wartelisteneintrag wurde somit bevorzugt behandelt."),$db3->f("Name"), view_turnus($db->f("Seminar_id")),$cur_name, view_turnus($cur_id));
 			restoreLanguage();
 			$messaging->insert_message(addslashes($message), $username, "____%system%____", FALSE, FALSE, "1");
 			update_admission($db->f("Seminar_id"), $send_message);
