@@ -445,18 +445,26 @@ function preg_call_link($name, $link, $mod) {
 * @param		string	the text to convert
 * @return		string	convertet text
 */
-function smile ($text= "") {
+function smile ($text = "") {
 	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
-	if(empty($text)) {
+	
+	if(empty($text))
 		return $text;
-	}
+	
 	//smileys in the ":name:" notation
-	$text=preg_replace("'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m","\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\"><img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SMILE_PATH/\\2.gif\"></a>\\3",$text);
+	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m";
+	$replace = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
+	$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
+	$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/\\2.gif\"></a>\\3";
+	$text = preg_replace($pattern, $replace, $text);
 	
 	//smileys in short notation
 	reset($SMILE_SHORT);
-	WHILE (list($key,$value) = each($SMILE_SHORT)) {
-		$text=str_replace($key,"<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\"><img ".tooltip($value)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SMILE_PATH/$value.gif\"></a>",$text);
+	while (list($key,$value) = each($SMILE_SHORT)) {
+		$text = str_replace($key,"<a href=\""
+				. $CANONICAL_RELATIVE_PATH_STUDIP . "show_smiley.php\" target=\"_blank\">"
+				. "<img ".tooltip($value)." border=\"0\" src=\""
+				. $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/$value.gif\"></a>",$text);
 	}
 	return $text;
 }
@@ -475,28 +483,30 @@ function smile ($text= "") {
 * @param		string	the text to convert
 * @return		string	convertet text
 */
-function symbol ($text= "") {
+function symbol ($text = "") {
 	global $SYMBOL_SHORT, $SYMBOL_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
-	if(empty($text)) {
+	
+	if(empty($text))
 		return $text;
-	}
 
 	//symbols in short notation
 	reset($SYMBOL_SHORT);
-	WHILE (list($key,$value) = each($SYMBOL_SHORT)) {
+	while (list($key, $value) = each($SYMBOL_SHORT)) {
 		$text=str_replace($key,"<img ".tooltip($key)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SYMBOL_PATH/$value.gif\">",$text);
 	}
+	
 	return $text;
 }
 
 //Beschneidungsfunktion fuer alle printhead Ausgaben
-function mila ($titel,$size=60){
+function mila ($titel, $size = 60) {
 	global $auth;
 
-	if ($auth->auth["jscript"] AND $size==60) {
-		if (strlen ($titel) >$auth->auth["xres"] / 13)        //hier wird die maximale Laenge berechnet, nach der Abgeschnitten wird (JS dynamisch)
+	if ($auth->auth["jscript"] AND $size == 60) {
+		//hier wird die maximale Laenge berechnet, nach der Abgeschnitten wird (JS dynamisch)
+		if (strlen ($titel) >$auth->auth["xres"] / 13)
 			$titel=substr($titel, 0, $auth->auth["xres"] / 13)."... ";
-		}
+	}
 	else {
 		if (strlen ($titel) >$size) 
 			$titel=substr($titel, 0, $size)."... ";
@@ -505,84 +515,101 @@ function mila ($titel,$size=60){
 }
 
 //Ausgabe der Aufklapp-Kopfzeile
-function printhead($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp=0) {
+function printhead ($breite, $left, $link, $open, $new, $icon,
+		$titel, $zusatz, $timestmp = 0, $printout = TRUE) {
 
-		if ($timestmp==0) {
+		if ($timestmp == 0)
 			$timecolor = "#BBBBBB";
-		} else {
-			$timediff = (int) log((time()-$timestmp)/86400 + 1) * 15;
-			if ($timediff >= 68) {
+		else {
+			$timediff = (int) log((time() - $timestmp) / 86400 + 1) * 15;
+			if ($timediff >= 68)
 				$timediff = 68;
-			}
-			$red = dechex(255-$timediff);
-			$other = dechex(119+$timediff);
-			$timecolor= "#".$red.$other.$other;
+			
+			$red = dechex(255 - $timediff);
+			$other = dechex(119 + $timediff);
+			$timecolor= "#" . $red . $other . $other;
 		}
 
-	if ($open=="close") {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"top\">";
-	} else {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\" align=left valign=\"top\">";
+	if ($open == "close") {
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\"";
+		$print .= "align=left valign=\"top\">";
+	}
+	else {
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\"";
+		$print .= " align=left valign=\"top\">";
 	}
 
+	if ($link)
+		$print .= "<a href=\"".$link."\">";
+	
+	$print .= "&nbsp;<img src=\"";
+	if ($open == "open")
+		$titel = "<b>" . $titel . "</b>";
+	
 	if ($link) {
-		$print.= "<a href=\"".$link."\">";
+		if ($open == "close" AND $new != TRUE)
+			$print .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen"));
+	
+		if ($open == "open" AND $new != TRUE)
+			$print .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen"));
+		
+		if ($open == "close" AND $new == TRUE)
+			$print .= "pictures/forumrot.gif\"" . tooltip(_("Objekt aufklappen"));
+		
+		if ($open == "open" AND $new == TRUE)
+			$print .= "pictures/forumrotrunt.gif\"" . tooltip(_("Objekt zuklappen"));
+		
 	}
-	$print.="&nbsp;<img src=\"";
-	if ($open=="open") {
-		$titel = "<b>".$titel."</b>";
-	}
-	if ($link) {
-		if ($open=="close" AND $new!=TRUE) {
-			$print.="pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen"));
+	else {
+		if ($open == "close") {
+			if (!$new)
+				$print .= "pictures/forumgrau2.gif\"";
+			
+			if ($new)
+				$print .= "pictures/forumrot.gif\"";
 		}
-		if ($open=="open" AND $new!=TRUE) {
-			$print.="pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen"));
-		}
-		if ($open=="close" AND $new==TRUE) {
-			$print.="pictures/forumrot.gif\"" . tooltip(_("Objekt aufklappen"));
-		}
-		if ($open=="open" AND $new==TRUE) {
-			$print.="pictures/forumrotrunt.gif\"" . tooltip(_("Objekt zuklappen"));
-		}
-	} else {
-		if ($open=="close") {
-			if (!$new) {
-				$print.="pictures/forumgrau2.gif\"";
-			}
-			if ($new) { 
-				$print.="pictures/forumrot.gif\"";
-			}
-		} else {
-			if (!$new) {
-				$print.="pictures/forumgraurunt2.gif\"";
-			}
-			if ($new) {
-				$print.="pictures/forumrotrunt.gif\"";
-			}
+		else {
+			if (!$new)
+				$print .= "pictures/forumgraurunt2.gif\"";
+			
+			if ($new)
+				$print .= "pictures/forumrotrunt.gif\"";
 		}
 	}
 	
-	$print .=" border=0>";
+	$print .= " border=0>";
 	if ($link) {
-		$print.= "</a>";
+		$print .= "</a>";
 	}
-	$print.="</td><td class=\"printhead\" nowrap width=\"1%\" valign=\"middle\">".$icon."</td>"."<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;".$titel."</td>"."<td align=\"right\" class=\"printhead\" width=\"99%\" valign='bottom'>".$zusatz."&nbsp;</td>";
-	echo $print;
+	$print .= "</td><td class=\"printhead\" nowrap width=\"1%\" valign=\"middle\">$icon</td>";
+	$print .= "<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;";
+	$print .= $titel."</td>"."<td align=\"right\" class=\"printhead\" width=\"99%\" valign='bottom'>";
+	$print .= $zusatz."&nbsp;</td>";
+	
+	if ($printout)
+		echo $print;
+	else
+		return $print;
 }
 
 //Ausgabe des Contents einer aufgeklappten Kopfzeile
-function printcontent ($breite,$write=FALSE,$inhalt,$edit) {
+function printcontent ($breite, $write = FALSE, $inhalt, $edit, $printout = TRUE) {
 
-	$print.= "<td class=\"printcontent\" width=22>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td class=\"printcontent\" width=\"$breite\"><br>";
+	$print = "<td class=\"printcontent\" width=\"22\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	$print .= "</td><td class=\"printcontent\" width=\"$breite\"><br>";
 	$print .= $inhalt;
-	if ($edit) {
-		$print.= "<br><br><div align=\"center\">".$edit."</div>";
-	} else {
-		$print.= "<br>";
-	}
-	$print.="</td>";
-	echo $print;
+	
+	if ($edit)
+		$print .= "<br><br><div align=\"center\">$edit</div>";
+	else
+		$print .= "<br>";
+	
+	$print .= "</td>";
+	
+	if ($printout)
+		echo $print;
+	else
+		return $print;
 }
 
 
