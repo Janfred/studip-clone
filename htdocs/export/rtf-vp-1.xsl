@@ -109,7 +109,7 @@
 		<xsl:text>
 \page</xsl:text>
 		</xsl:for-each>
-\par\fs36 Generiert von Stud.IP Version <xsl:value-of select="@version"/>
+\par\qr\fs24 Generiert von Stud.IP Version <xsl:value-of select="@version"/>
 		</xsl:for-each>
 		<xsl:text> }</xsl:text>
 	</xsl:template>
