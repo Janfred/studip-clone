@@ -1655,14 +1655,18 @@ if ($level==2)
 							<?
 								$fachtmp="0";
 								$clause='';
-								$clause=$clause."user_inst.institut_id = '".$sem_create_data["sem_inst_id"]."'";
+								$clause=$clause."fach_inst.institut_id = '".$sem_create_data["sem_inst_id"]."'";
 								if ($sem_create_data["sem_bet_inst"])
 									foreach ($sem_create_data["sem_bet_inst"] as $tmp_array)
 										{
-										$clause=$clause." OR user_inst.institut_id = '".$tmp_array."'";
+										$clause=$clause." OR fach_inst.institut_id = '".$tmp_array."'";
 										}
 								// Anzeige der eigenen Faecher
-								$db3->query("SELECT DISTINCT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) LEFT JOIN fach_inst USING (fach_id) LEFT JOIN user_inst USING (institut_id) WHERE ($clause)  AND user_inst.inst_perms !='user' AND user_inst.inst_perms !='autor' AND user_inst.inst_perms !='tutor' ORDER BY bereich_fach.fach_id, bereiche.name");
+								$db3->query("SELECT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM fach_inst
+											LEFT JOIN bereich_fach USING(fach_id) 
+											LEFT JOIN bereiche USING (bereich_id) 
+											WHERE $clause 
+											ORDER BY bereich_fach.fach_id, bereiche.name");
 								while ($db3->next_record())
 									{
 									IF ($fachtmp != $db3->f("fach_id"))
