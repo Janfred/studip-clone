@@ -54,8 +54,7 @@ ob_start();
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
 
-
-if (($change_view) || ($add_user) || ($do_add_user) || ($delete_user)) {
+if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	change_messaging_view();
 	echo "</tr></td></table>";
 	page_close();
