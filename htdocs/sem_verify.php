@@ -51,7 +51,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 	if ($ask == "TRUE") {
 		$db->query("SELECT admission_prelim_txt FROM seminare WHERE Seminar_id = '$sem_id'");
 		$db->next_record();
-		echo "<tr><td class=\"blank\">&nbsp;&nbsp;</td><td class=\"blank\" colspan=2>";
+		echo "<tr><td class=\"blank\">&nbsp;&nbsp;</td><td class=\"blank\">";
 		printf (_("Um endg&uuml;ltig in die Veranstaltung <b>%s</b> aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen. Lesen Sie bitte den folgenden Hinweistext:"),$sem_name);
 		echo "<br/><br/><table width=90%><tr><td>\n";
 		echo $db->f("admission_prelim_txt");
