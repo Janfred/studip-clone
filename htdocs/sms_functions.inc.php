@@ -48,7 +48,7 @@ function MessageIcon ($message_hovericon) {
 			."', NOCLOSE, CSSOFF)\" "
 			." onMouseOut=\"nd();\"><img src=\"pictures/".$message_hovericon["picture"]."\" border=0></a>";
 	} else {
-		$hovericon = "<a href=\"".$message_hovericon['link']."\"><img src=\"pictures/cont_nachricht.gif\" border=0></a>";	
+		$hovericon = "<a href=\"".$message_hovericon['link']."\"><img src=\"pictures/".$message_hovericon["picture"]."\" border=0></a>";	
 	}
 	return $hovericon;
 }
@@ -161,7 +161,7 @@ function folder_openclose($folder, $x) {
 
 // print_snd_message
 function print_snd_message($psm) {	
-	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF, $msging, $cmd_show, $sms_data, $_fullname_sql;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF, $msging, $cmd_show, $sms_data, $_fullname_sql, $user;	
 
 	// open?!
 	if ($sms_data["open"] == $psm['message_id']) {
@@ -177,10 +177,10 @@ function print_snd_message($psm) {
 
 	// make message_header
 	$x = "0"; // how many receivers are there?
-	$query = "SELECT * FROM message_user WHERE message_id = '".$psm['message_id']."' AND snd_rec = 'rec'";
+	$query = "SELECT COUNT(message_id) as tmp_count_msg FROM message_user WHERE message_id = '".$psm['message_id']."' AND snd_rec = 'rec'";
 	$db7->query($query);
 	while ($db7->next_record()) {
-		$x = $x+1;
+		$x = $db7->f("tmp_count_msg");
 	}
 	if ($psm['dont_delete'] == "1") { // disable the checkbox if message is locked
 		$tmp_cmd = "open_selected";
@@ -226,31 +226,42 @@ function print_snd_message($psm) {
 	} else {
 		$titel = mila(trim(kill_format($psm['message'])));
 	}
-	$content = quotes_decode(formatReady($psm['message']));
-	if ($x >= "2") { // if more than one receiver add appendix
-		$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
-		$query = "
-		SELECT message_user.*, auth_user_md5.username, " .$_fullname_sql['full'] ." AS fullname
-			FROM message_user 
-			LEFT JOIN auth_user_md5 USING(user_id) 
-			LEFT JOIN user_info USING(user_id) 
-			WHERE message_user.message_id = '".$psm['message_id']."' 
-			AND message_user.snd_rec = 'rec'";
-		$db7->query($query);
-		$i = "0";
-		while ($db7->next_record()) {
-			if ($i != "0") {
-				$content .= ",&nbsp;";
-			}
-			$content .= "<a href=\"about.php?username=".$db7->f("username")."\"><font size=-1 color=\"#333399\">".$db7->f("fullname")."</font></a>";
-			$i = ($i+1);
-		}
-	}
 
-	// buttons
-	$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$psm['message_id']."\" ".tooltip(_("Diese Nachricht löschen.")).">".makeButton("loeschen", "img")."</a>&nbsp;";
-	if (!empty($my_messaging_settings["folder"][$sms_data["view"]])) {
-		$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder[1]=".$psm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
+	if ($open == "open") {
+		$content = quotes_decode(formatReady($psm['message']));
+		if ($x >= "2") { // if more than one receiver add appendix
+			$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
+			$query = "
+			SELECT message_user.*, auth_user_md5.username, " .$_fullname_sql['full'] ." AS fullname
+				FROM message_user 
+				LEFT JOIN auth_user_md5 USING(user_id) 
+				LEFT JOIN user_info USING(user_id) 
+				WHERE message_user.message_id = '".$psm['message_id']."' 
+				AND message_user.snd_rec = 'rec'";
+			$db7->query($query);
+			$i = "0";
+			while ($db7->next_record()) {
+				if ($db7->f("user_id") != $user->id && $db7->f("username") != "") {
+					if ($i > "0") {
+						$content .= ",&nbsp;";
+					}
+					$content .= "<a href=\"about.php?username=".$db7->f("username")."\"><font size=-1 color=\"#333399\">".$db7->f("fullname")."</font></a>";
+					$i = ($i+1);
+				} else {
+					$msg_sndnote = _("und an Sie selbst");
+				}
+			}
+			if ($msg_sndnote) {
+				$content .= "&nbsp;".$msg_sndnote;
+				unset($msg_sndnote);
+			}
+		}
+
+		// buttons
+		$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$psm['message_id']."\" ".tooltip(_("Diese Nachricht löschen.")).">".makeButton("loeschen", "img")."</a>&nbsp;";
+		if (!empty($my_messaging_settings["folder"][$sms_data["view"]])) {
+			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder[1]=".$psm['message_id']."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
+		}
 	}
 
 	$message_hovericon['titel'] = $titel;
@@ -330,9 +341,9 @@ function print_rec_message($prm) {
 		$move_option = "<a href=\"".$PHP_SELF."?move_to_folder[1]=".$prm['message_id']."\"><img src=\"./pictures/cont_folder_sms_move.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a>";
 	}
 	$zusatz = "<font size=-1>";
-	if ($sms_show['sort'] != "snd_rec" && $prm['user_id_snd'] == "____%system%____") {
+	if ($prm['user_id_snd'] == "____%system%____") {
 		$zusatz .= _("automatische Systemnachricht, ");
-	} else if ($sms_show['sort'] != "snd_rec") {
+	} else {
 		$zusatz .= sprintf(_("von %s, "), "</font><a href=\"about.php?username=".$prm['uname_snd']."\"><font size=-1 color=\"#333399\">".$prm['vorname']."&nbsp;".$prm['nachname']."</font></a><font size=-1>");
 	}
 	$zusatz .= date("d.m.y, H:i", $prm['mkdate']);
@@ -416,7 +427,8 @@ function print_messages() {
 			print_rec_message($prm);
 		}
 	} else if ($sms_data['view'] == "out") { // postbox out
-		$db->query("SELECT message.*, message_user.* FROM message_user LEFT JOIN message USING (message_id) WHERE message_user.user_id = '".$user_id."' AND message_user.snd_rec = 'snd' AND message_user.deleted = '0' ".$query_movetofolder." ".$query_showfolder." ".$query_time);
+		$query = "SELECT message.*, message_user.* FROM message_user LEFT JOIN message USING (message_id) WHERE message_user.user_id = '".$user_id."' AND message_user.snd_rec = 'snd' AND message_user.deleted = '0' ".$query_movetofolder." ".$query_showfolder." ".$query_time;
+		$db->query($query);
 		while ($db->next_record()) {
 			$count = ($count-1);
 			$psm['count'] = $count;
