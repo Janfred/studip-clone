@@ -163,78 +163,6 @@ $errormsg='';
 $sess->register("sem_create_data");
 $sess->register("links_admin_data");
 
-if (isset($cmd) && ($cmd == "copy")) {
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  		//Linkleiste fuer admins
-	?>
-		<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="topic" colspan=8><b>&nbsp;<?=_("Veranstaltungs-Assistent - Veranstaltungskategorie ausw&auml;hlen"); ?></b>
-			</td>
-		</tr>
-		<tr>
-			<td class="blank" valign="top">&nbsp;</td>
-			<td colspan=6 class="blank" valign="top">
-				<br />
-				<?=_("Bitte w&auml;hlen Sie zun&auml;chst die zu kopierende Veranstaltung aus:"); ?>	
-			</td>
-			<td class="blank" align="right" valign="top" rowspan="2">
-				<img src="./locale/<?=$_language_path?>/LC_PICTURES/assistent.jpg" border="0">
-			</td>
-		</tr>
-	<?
-	//print_r($auth->auth);
-	$seminars = get_seminars_user($auth->auth["uid"]);
-	echo "<tr>";
-	echo "<td class=\"blank\" valign=\"top\">&nbsp;</td>";
-	echo "<td class=\"blank\" valign=\"top\">";
-	echo "<font size=\"3\"><b>VA-Nummer</b></font>";
-	echo "</td>";
-	echo "<td class=\"blank\" valign=\"top\">";
-	echo "<font size=\"3\"><b>Semester</b></font>";
-	echo "</td>";
-	echo "<td class=\"blank\" valign=\"top\">";
-	echo "<font size=\"3\"><b>Titel</b></font>";
-	echo "</td>";
-	echo "<td class=\"blank\" valign=\"top\">";
-	echo "<font size=\"3\"><b>Dozent</b></font>";
-	echo "</td>";
-	echo "<td class=\"blank\" valign=\"top\" colspan=\"2\">";
-	echo "<font size=\"3\"><b>Anlegedatum</b></font>";
-	echo "</td>";
-	echo "</tr>";
-	foreach ($seminars as $val) {
-		$cssSw->switchClass();
-		echo "<tr>";
-		echo "<td class=\"blank\" valign=\"top\">&nbsp;</td>";
-		echo "<td class=\"".$cssSw->getClass()."\" valign=\"top\" colspan=\"\">";
-		echo "<font size=\"2\">&nbsp;".$val["va_nummer"]."</font>";
-		//echo "&nbsp;<a href=\"".$PHP_SELF."?cmd=do_copy&cp_id=".$val["id"]."&start_level=TRUE&class=1\">".$val["name"]."</a>";
-		echo "</td>";
-		echo "<td class=\"".$cssSw->getClass()."\" valign=\"top\">";
-		echo "<font size=\"2\">".get_semester($val["id"])."</font>";
-		echo "</td>";
-		echo "<td class=\"".$cssSw->getClass()."\" valign=\"top\">";
-		echo "<font size=\"2\">".$val["name"]."</font>";
-		echo "</td>";
-		echo "<td class=\"".$cssSw->getClass()."\" valign=\"top\">";
-		echo "<font size=\"2\">".get_dozent_name($user_id)."</font>";
-		echo "</td>";
-		echo "<td class=\"".$cssSw->getClass()."\" valign=\"top\">";
-		echo "<font size=\"2\">".date("d-m-Y", $val["mkdate"])."</font>";
-		echo "</td>";
-		echo "<td class=\"".$cssSw->getClass()."\" valign=\"top\" colspan=\"2\">";
-		echo "&nbsp;<a href=\"".$PHP_SELF."?cmd=do_copy&cp_id=".$val["id"]."&start_level=TRUE&class=1\"><img src=\"kopieren.gif\" width=5></a>";
-		/*echo "<td class=\"".$cssSw->getClass()."\">";
-		echo "&nbsp;&nbsp;&nbsp;";
-		echo "</td>";*/
-	}
-	echo "</table>";
-	page_close();
-	die;
-}
-
 if (isset($cmd) && ($cmd=="do_copy")) {
 	$sql = "SELECT * FROM seminare WHERE Seminar_id = '".$cp_id."'";
 	if (!$db->query($sql)) {
@@ -245,9 +173,6 @@ if (isset($cmd) && ($cmd=="do_copy")) {
 	
 	$serialized_metadata = $db->f("metadata_dates");
 	$data = unserialize($serialized_metadata);
-	/*echo "<pre>";
-	print_r($data);
-	echo "</pre>";*/
 	$term_turnus = $data["turnus_data"];
 	$sem_create_data["term_turnus"]	= $data["turnus"];
 	$sem_create_data["term_start_woche"] = $data["start_woche"];
@@ -285,7 +210,6 @@ if (isset($cmd) && ($cmd=="do_copy")) {
 	$sem_create_data["sem_voraus"] = $db->f("vorrausetzungen");
 	$sem_create_data["sem_orga"] = $db->f("lernorga");;
 	$sem_create_data["sem_leistnw"] = $db->f("leistungsnachweis");
-//	$sem_create_data[]
 	$sem_create_data["sem_ects"] = $db->f("ects"); 
 	$sem_create_data["sem_admission_date"] = $db->f("admission_endtime");
 	$sem_create_data["sem_turnout"] = $db->f("admission_turnout");
