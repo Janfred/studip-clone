@@ -589,7 +589,8 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 						IF (leer($r_topic_id)==FALSE) $icon ="<a href='forum.php?topic_id=".$r_topic_id."&all=TRUE#anker'><img src=\"pictures/cont_folder.gif\" border=0 alt=\"alle Postings im Ordner &ouml;ffnen\"></a>";
 						ELSE $icon ="<a href='forum.php?topic_id=".$r_topic_id."&all=TRUE#anker'><img src=\"pictures/cont_folder2.gif\" border=0 alt=\"alle Postings im Ordner &ouml;ffnen\"></a>";
 						//create a link onto the titel, too
-						$name = "<a href=\"forum.php\" class=\"tree\" >$name</a>";
+						if (!$form)
+							$name = "<a href=\"forum.php\" class=\"tree\" >$name</a>";
 
 						printhead ("100%","0","forum.php","open",$neuer_beitrag,$icon,$name,$zusatz,$mkdate);
 
