@@ -191,12 +191,12 @@ if ($close) {
 		$folder_system_data["open"]=substr($folder_system_data["open"], 0, $pos).substr($folder_system_data["open"], $pos+32, strlen($folder_system_data["open"])); 
 		
 	else
-		$folder_system_data["open"]=substr($folder_system_data["open"], 31, strlen($folder_system_data["open"])); 
+		$folder_system_data["open"]=substr($folder_system_data["open"], 32, strlen($folder_system_data["open"])); 	
 	}
 
 // Funktion zur Anzeige aller Dateien (alt - aber man wei&szlig; ja nie...)
 
-
+/*
 function show_all()
 {
 global $cmd,$PHP_SELF,$user,$auth,$rechte,$range_id;
@@ -243,7 +243,7 @@ for ($i=0; $i<sizeof($dbresult); $i++)
 $result=$result."</table>";
 return $result;
 }
-
+*/
 // Hauptteil
 
  if (!isset($range_id)) $range_id = $SessionSeminar ;
