@@ -34,8 +34,8 @@
 // +---------------------------------------------------------------------------+
 
 require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/SemesterData.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
-require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+require_once ($GLOBALS["RELATIVE_PATH_RESOURCES"]."/lib/list_assign.inc.php");
+require_once ($GLOBALS["RELATIVE_PATH_RESOURCES"]."/resourcesFunc.inc.php");
 
 
 /*****************************************************************************
