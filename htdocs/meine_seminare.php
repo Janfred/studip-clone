@@ -381,6 +381,7 @@ else {  // es sind keine Veranstaltungen abboniert
 		}
 	
 	//$cssSw->disableHover();
+	$cssSw->resetClass();
 	$cssSw->switchClass();
 	printf ("<tr".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12></td>",$chance_color);
 	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
