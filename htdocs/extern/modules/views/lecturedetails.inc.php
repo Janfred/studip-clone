@@ -21,8 +21,8 @@ if ($db->next_record()) {
 	
 	if ($visible[++$j]) {
 		$lecturer_link = $this->getModuleLink("Persondetails",
-				$this->config->getValue("LecturerLink", "config"),
-				$this->config->getValue("LecturerLink", "srilink"));
+				$this->config->getValue("LinkInternSimple", "config"),
+				$this->config->getValue("LinkInternSimple", "srilink"));
 		$name_sql = $GLOBALS['_fullname_sql'][$this->config->getValue("Main", "nameformat")];
 		$db_lecturer = new DB_Institut();
 		$db_lecturer->query("SELECT $name_sql AS name, username FROM seminar_user su LEFT JOIN
