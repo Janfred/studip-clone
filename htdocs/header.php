@@ -42,13 +42,19 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
 
-function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target,$align="center")
+function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target,$align="center",$toolwindow="FALSE")
 {
+	if ($toolwindow == "FALSE") {
+		$tool = tooltip($tooltip);
+	} else {
+		$tool = tooltip($tooltip,TRUE,TRUE);
+	}
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
-	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"2\" width=\"50\"><br>"
-			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".tooltip($tooltip)."><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"3\" width=\"50\"><br>"
-			  ."$text</a><br>"
+
+	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"50\"><br>"
+			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"50\"><br>"
+			  ."<b>$text</b></a><br>"
 			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"50\">";
 	$toolbar .= "</td>\n";
 	return $toolbar;
@@ -207,7 +213,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				$infotext = sprintf (_("Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"),
 								$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
 								($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
-				echo MakeToolbar("pictures/logo2.gif","Impressum.php",_("Impressum"),$infotext,40, "_top");
+				echo MakeToolbar("pictures/logo2.gif","Impressum.php",_("Impressum"),_("Informationen zu dieser Installation"), "_top");
 ?>
 	</tr>
 	</table>
@@ -225,7 +231,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		if ($perm->have_perm("tutor")) {
 			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top");
 		}
-
+		echo MakeToolbar("pictures/info.gif","",$auth->auth["uname"],$infotext,40, "","center","TRUE");
 		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfestellung"),_("Hilfe zu dieser Seite"),40, "_new","right");
 		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
 
