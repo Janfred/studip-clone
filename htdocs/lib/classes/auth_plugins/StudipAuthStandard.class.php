@@ -77,7 +77,7 @@ class StudipAuthStandard extends StudipAuthAbstract {
 		} elseif ($db->f("username") != $username) {
 			$this->error_msg = _("Bitte achten Sie auf korrekte Gro&szlig;-Kleinschreibung beim Username!");
 			return false;
-		} elseif ($db->f("auth_plugin")){
+		} elseif (!is_null($db->f("auth_plugin")) && $db->f("auth_plugin") != "standard"){
 			$this->error_msg = sprintf(_("Dieser Username wird bereits über %s authentifiziert!"),$db->f("auth_plugin")) ;
 			return false;
 		} else {
