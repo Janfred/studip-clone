@@ -93,8 +93,8 @@ if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_da
 	
 	//Quicksort Formular... fuer die eiligen oder die DAUs....
 	if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset($sem_browse_data["cmd"]))) {
-		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo "<form action=\"$PHP_SELF?send=yes&sset=qs\" method=\"post\">\n";
+		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo "<tr><td class=\"steel1\" align=\"center\"  colspan=2>Schnellsuche:&nbsp;<select name=s_range size=1>";
 		if ($sem_browse_data["s_range"] == "alles")
 			echo "<option selected>alles</option>";
@@ -119,14 +119,14 @@ if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_da
 		if (isset($sem_browse_data["sset"])) echo "&sset=", $sem_browse_data["sset"];
 		echo "\"><img src=\"pictures/buttons/erweitertesuche-button.gif\" border=0></a></td></tr>";
 		echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><hr></td></tr>";
-		echo "</form></table>\n";
+		echo "</table>\n";
 		}
 	
 	//Extended Sortformular, fuer Leute mit mehr GRiPS...
 	if (($sem_browse_data["cmd"]=="xts"))
 		{
-		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo "<form action=\"$PHP_SELF?send=yes&sset=xts\" method=\"post\">\n";
+		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Titel: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_titel type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_titel"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Typ:</td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_art size=1>";
 		if ($sem_browse_data["s_art"]=="alle")
 			echo "<option selected>alle</option>";
@@ -222,18 +222,16 @@ if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_da
 			if (isset($sem_browse_data["sset"])) echo "&sset=", $sem_browse_data["sset"];
 		echo  "\"><img src=\"pictures/buttons/schnellsuche-button.gif\" border=0></a></td></tr>\n";
 		echo "<tr><td class=\"steel1\" colspan=4 align=\"center\"><hr></td></tr>";
-		echo "</form></table>\n";
+		echo "</table>\n";
 	}
 
 //header to reset (start a new) search
 } elseif (!$sem_browse_data["extern"]) {
-	echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+	echo "<form action=\"$PHP_SELF\" method=\"POST\"><table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 	echo "<tr><td class=\"steel1\" align=\"center\">";
 	echo "<a href=\"$PHP_SELF?reset_all=true\">".makeButton("neuesuche")."</a>\n";
 	echo "</table>\n";
 }
-
-echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 
 //Parser zur Auswertung des Suchstrings
 if (!$sem_browse_data["extern"]) {
@@ -390,6 +388,8 @@ if (($sem_browse_data["group_by"] == "einrichtung" || $sem_browse_data["group_by
 
 ob_start(); //Outputbuffering start
 
+echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+
 //Anzeige der Hierarchiezeile
 if ((!isset($sem_browse_data["sset"])) && (!$hide_bereich))
 	{
@@ -467,9 +467,8 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 	$db->query($query);
 
 	if ($db->num_rows()) {
-		if (($sem_browse_data["sset"]) || ($sem_browse_data["extern"]) ||  $sem_browse_data["level"] !="f")
-			{
-			printf ("<form action=\"$PHP_SELF\" method=\"POST\"><tr><td class=\"steel1\" colspan=%s>", $leftspan);
+		if (($sem_browse_data["sset"]) || ($sem_browse_data["extern"]) ||  $sem_browse_data["level"] !="f") {
+			printf ("<tr><td nowrap class=\"steel1\" colspan=\"%s\">", $leftspan);
 			//Change/view the group method
 			print ("<font size=-1><b>Gruppierung:</b>&nbsp;<select name=\"group_by\">");
 			printf ("<option %s value=\"semester\">Semester</option>", (($sem_browse_data["group_by"]=="semester") || (!$sem_browse_data["group_by"])) ? "selected" : "");
@@ -482,7 +481,12 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 			print ("</td>");
 			//Show how many items were found
 			printf ("<td class=\"steel1\" nowrap align=\"right\" colspan=%s>", $rightspan);
-			echo"<a href=\"", $PHP_SELF; if ($sem_browse_data["extend"]<>"yes") { echo "?extend=yes\"><img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=0>"; } else {echo "?extend=no\"><img src=\"pictures/buttons/normaleansicht-button.gif\" border=0>"; } echo "</a></font></td></form></tr>";
+			echo"<a href=\"", $PHP_SELF; if ($sem_browse_data["extend"]<>"yes") { 
+				echo "?extend=yes\"><img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=0>"; 
+			} else {
+				echo "?extend=no\"><img src=\"pictures/buttons/normaleansicht-button.gif\" border=0>"; 
+			} 
+			echo "</a></font></td></tr>";
 			}
 	
 		ob_end_flush();
@@ -903,7 +907,6 @@ if (($sem_browse_data["level"]=="sb") && (!$hide_bereich))
 	echo "<br>Es werden nur Studienf&auml;cher angezeigt, zu denen Veranstaltungen in Stud.IP existieren.</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
 	}
 
-echo $sem_browse_data["s_class"];
 //Uebersicht Studienbereichebereiche/Institute
 if (($sem_browse_data["level"]=="sbi")  && (!$hide_bereich))
 	{
@@ -987,5 +990,5 @@ if ((($sem_browse_data["level"]=="f") || (!isset($sem_browse_data["level"])))  &
 	}
 	
 			
-echo "</table>";
+echo "</table></form>";
 ?>
