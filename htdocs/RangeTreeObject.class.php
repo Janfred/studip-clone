@@ -21,9 +21,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ("$ABSOLUTE_PATH_STUDIP./StudipRangeTree.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP./RangeTreeObjectInst.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP./RangeTreeObjectFak.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "/StudipRangeTree.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "/RangeTreeObjectInst.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "/RangeTreeObjectFak.class.php");
 
 /**
 * base class for items in the "range tree"

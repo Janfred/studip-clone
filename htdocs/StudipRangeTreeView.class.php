@@ -20,9 +20,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once "StudipRangeTree.class.php";
-require_once "RangeTreeObject.class.php";
-
+require_once($ABSOLUTE_PATH_STUDIP . "StudipRangeTree.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "RangeTreeObject.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 /**
 * class to print out the "range tree"
 *
@@ -212,7 +212,7 @@ class StudipRangeTreeView {
 		echo "\n</td><td class=\"printhead\" align=\"left\" width=\"100%\" nowrap valign=\"bottom\">";
 		if ($this->anchor == $item_id)
 			echo "<a name=\"anchor\">";
-		echo $this->tree->tree_data[$item_id]['name'];
+		echo "<b>" . htmlReady($this->tree->tree_data[$item_id]['name']) . "</b>";
 		if ($this->anchor == $item_id)
 			echo "</a>";
 		echo "</td></tr></table>";
@@ -252,7 +252,7 @@ class StudipRangeTreeView {
 		$range_object =& RangeTreeObject::GetInstance($item_id);
 		echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"blank\" valign=\"middle\"  nowrap>$level_output</td>";
 		echo "<td class=\"printcontent\" width=\"100%\">Untergeordnete Bereiche: ".count($range_object->getAllItemKids());
-		echo "<br>Pfad: " . $range_object->getItemPath();
+		echo "<br>Pfad: " . htmlReady($range_object->getItemPath());
 		echo "</td></tr></table>";
 		
 		return;
