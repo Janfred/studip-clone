@@ -9,7 +9,7 @@ $username_prefix = "studip_";
 $ilias_status = array(
 "user" => "1",
 "autor" => "3",
-"tutor" => "3",
+"tutor" => "4",
 "dozent" => "4",
 "admin" => "2",
 "root" => "2",
@@ -20,9 +20,9 @@ $ilias_status = array(
 $ilias_systemgroup = array(
 "user" => "4",
 "autor" => "3",
-"tutor" => "3",
+"tutor" => "2",
 "dozent" => "2",
-"admin" => "2",
+"admin" => "1",
 "root" => "1",
 );
 ?>
