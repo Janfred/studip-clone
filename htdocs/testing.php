@@ -14,6 +14,7 @@ Bearbeitet jetzt auch unter Windows und wieder committed
 Sieht immer noch gut aus :)
 Hmmm,mal sehen...
 blablubb
+Wer erzählt denn hier Blödsinn? ;-)
 ?>
 
 </body>
