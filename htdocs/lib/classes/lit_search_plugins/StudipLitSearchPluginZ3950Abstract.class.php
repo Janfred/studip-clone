@@ -43,6 +43,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	var $z_hits = 0;
 	var $z_profile = array(); // [attribute] => [name]
 	var $z_timeout = 10;
+	var $convert_umlaute = false;
 	
 	function StudipLitSearchPluginZ3950Abstract(){
 		parent::StudipLitSearchPluginAbstract();
@@ -90,7 +91,11 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			$rpn_front = "";
 			$rpn_end = "";
 			for ($i = 0 ; $i < count($search_values); ++$i){
-				if (strlen($search_values[$i]['search_term'])){
+				$term = $search_values[$i]['search_term'];
+				if (strlen($term)){
+					if ($this->convert_umlaute){
+						$term = $this->ConvertUmlaute($term);
+					}
 					$rpn_end .= " @attr 1=" . $search_values[$i]['search_field'] . " ";
 					switch ($search_values[$i]['search_truncate']){
 						case "left":
@@ -104,7 +109,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 						break;
 					}
 					$rpn_end .= " @attr 5=$truncate ";
-					$rpn_end .= " \"" . $search_values[$i]['search_term'] . "\" ";
+					$rpn_end .= " \"" . $term . "\" ";
 					if ($i > 0){
 						switch ($search_values[$i]['search_operator']){
 							case "AND":
@@ -179,6 +184,16 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			$result = trim($data);
 		}
 		$cat_element->setValue($field, $cat_element->getValue($field) . " " . $result);
+		return;
+	}
+	
+	function notEmptyMap(&$cat_element, $data, $field, $args){
+		if (!$cat_element->getValue($field)){
+			$this->simpleMap($cat_element, $data, $field, $args[0]);
+		} else {
+			$this->simpleMap($cat_element, $data, $args[1], $args[2]);
+		}
+		return;
 	}
 	
 	function getSearchFields(){
@@ -187,6 +202,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 		}
 		return $ret;
 	}
+	
 		
 	function getSearchResult($num_hit){
 		if (!isset($this->search_result[$num_hit]) && $num_hit <= $this->z_hits){
@@ -209,6 +225,14 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	
 	function getNumHits(){
 		return $this->z_hits;
+	}
+	
+	function ConvertUmlaute($text){
+		$text = str_replace("ä","ae",$text);
+		$text = str_replace("ö","oe",$text);
+		$text = str_replace("ü","ue",$text);
+		$text = str_replace("ß","ss",$text);
+		return $text;
 	}
 }
 ?>
