@@ -140,7 +140,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 			} else
 				return FALSE;
 		break;
-		case ("date");
+		case ("date"):
 			$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE termin_id='%s' ", $range_id);
 			$db->query($query);
 			$db->next_record();
