@@ -290,7 +290,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				 printf ("<font size=-1><b>" . _("Veranstaltungsort:") . "</b></font><br /><font size=-1>%s</font>", (getRoom ($sem_id, TRUE, (time() - $quarter_year))) ? getRoom ($sem_id, TRUE, (time() - $quarter_year)) : "nicht angegeben.");
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="25%"	align="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="25%"	valign="top">
 				<?
 				if ($db2->f("VeranstaltungsNummer"))
 					printf ("<font size=-1><b>" . _("Veranstaltungsnummer:") . "</b></font><br /><font size=-1>%s</font>",$db2->f("VeranstaltungsNummer"));
