@@ -1,7 +1,7 @@
 <?php
 /*
-institut_mitarbeiter.php - Liste der Mitarbeiter eines Instituts
-Copyright (C) 2000 Peter Thienel <pthienel@web.de>
+institut_members.php - Liste der Mitarbeiter eines Instituts
+Copyright (C) 2002 Peter Thienel <pthienel@web.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -57,22 +57,29 @@ else
 // initialize session variable and store data given by URL
 if(!isset($institut_members_data))
 	$sess->register("institut_members_data");
-if(!empty($i_query)){
-		
-	$accepted_vars = array("sortby", "direction", "show", "extend");
-	
-	reset($i_query);
-	foreach($i_query as $key_value){
-		list($key, $value) = explode("=", $key_value);
-		if(in_array($key, $accepted_vars))
-			$institut_members_data[$key] = $value;
-	}
-}
-else
-	$institut_members_data = "";
+
+if (isset($sortby))
+	$institut_members_data["sortby"] = $sortby;
+if (isset($direction))
+	$institut_members_data["direction"] = $direction;
+if (isset($show))
+	$institut_members_data["show"] = $show;
+if (isset($extend))
+	$institut_members_data["extend"] = $extend;
+
+// The script remembers the users settings for the hole duration of the session,
+// remove the comments if you don't like this behavior.
+//if($i_query[0] == "" && sizeof($HTTP_POST_VARS) == 0) {
+//	$sess->unregister($institut_members_data);
+//	unset($institut_members_data);
+//}
 
 // check the given parameters or initialize them
-$accepted_columns = array("Nachname", "Funktion", "Raum");
+if ($perm->have_perm("admin"))
+	$accepted_columns = array("Nachname", "Funktion", "Status");
+else
+	$accepted_columns = array("Nachname", "Funktion");
+	
 if(!in_array($institut_members_data["sortby"], $accepted_columns))
 	$institut_members_data["sortby"] = "Nachname";
 	
@@ -85,64 +92,247 @@ else{
 	$new_direction = "DESC";
 }
 
+// if the user have admin permissions, we show him the member who has no function 
+if ($perm->have_perm("admin"))
+	$INST_FUNKTION_ORDER[] = 0;
+
 $accepted_functions = implode(",", $INST_FUNKTION_ORDER);
 
 if($SessSemName[1] == ""){
 	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Kein Objekt gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+	page_close();
 	die;
 }
 
 require($ABSOLUTE_PATH_STUDIP."links1.php");
 
-if ($institut_members_data["show"] != "list")
-	$institut_members_data["show"] = "group";
+// group by function as preset
+switch ($institut_members_data["show"]) {
+	case status :
+		if ($perm->have_perm("admin"))
+			break;
+	case liste :
+		break;
+	default :
+		$institut_members_data["show"] = "funktion";
+}
 
-// this array contains the data and structure of the table head
+// this array contains the structure of the table for the different views
 if ($institut_members_data["extend"] == "yes") {
-	$table_structure = array(
-											"name" => array("name" => "Name",
-													"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
-													"width" => "30%"),
-											"raum" => array("name" => "Raum",
-													"width" => "15%"),
-											"sprechzeiten" => array("name" => "Sprechzeiten",
-													"width" => "10%"),
-											"telefon" => array("name" => "Telefon",
-													"width" => "15%"),
-											"email" => array("name" => "Email",
-													"width" => "10%"),
-											"home" => array("name" => "externe Homepage",
-													"width" => "15%"),
-											"nachricht" => array("name" => "Nachricht&nbsp;",
-													"width" => "5%")
-										);
-	$colspan = 7;
+	switch ($institut_members_data["show"]) {
+		case liste :
+			if ($perm->have_perm("admin")) {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"funktion" => array("name" => "Funktion",
+														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+														"width" => "15%"),
+												"status" => array("name" => "Status",
+														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"width" => "10"),
+												"raum" => array("name" => "Raum",
+														"width" => "10%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "10%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "10%"),
+												"email" => array("name" => "Email",
+														"width" => "10%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			}
+			else {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"funktion" => array("name" => "Funktion",
+														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+														"width" => "15%"),
+												"raum" => array("name" => "Raum",
+														"width" => "10%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "10%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "10%"),
+												"email" => array("name" => "Email",
+														"width" => "10%"),
+												"home" => array("name" => "externe Homepage",
+														"width" => "10%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			}
+			break;
+		case status :
+			$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"funktion" => array("name" => "Funktion",
+														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+														"width" => "15%"),
+												"raum" => array("name" => "Raum",
+														"width" => "10%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "15%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "10%"),
+												"email" => array("name" => "Email",
+														"width" => "15%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			break;
+		default :
+			if ($perm->have_perm("admin")) {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"status" => array("name" => "Status",
+														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"width" => "10"),
+												"raum" => array("name" => "Raum",
+														"width" => "15%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "15%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "15%"),
+												"email" => array("name" => "Email",
+														"width" => "10%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			}
+			else {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"raum" => array("name" => "Raum",
+														"width" => "15%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "10%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "15%"),
+												"email" => array("name" => "Email",
+														"width" => "10%"),
+												"home" => array("name" => "externe Homepage",
+														"width" => "15%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			}
+	} // switch
 }
 else {
-	$table_structure = array(
-											"name" => array("name" => "Name",
-													"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
-													"width" => "35%"),
-											"raum" => array("name" => "Raum",
-													"width" => "20%"),
-											"sprechzeiten" => array("name" => "Sprechzeiten",
-													"width" => "20%"),
-											"telefon" => array("name" => "Telefon",
-													"width" => "15%"),
-											"nachricht" => array("name" => "Nachricht&nbsp;",
-													"width" => "10%")
-											);
-	$colspan = 5;
+	switch ($institut_members_data["show"]) {
+		case liste :
+			if ($perm->have_perm("admin")) {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"funktion" => array("name" => "Funktion",
+														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+														"width" => "15%"),
+												"status" => array("name" => "Status",
+														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"width" => "10"),
+												"raum" => array("name" => "Raum",
+														"width" => "15%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "15%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			}
+			else {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"funktion" => array("name" => "Funktion",
+														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+														"width" => "15%"),
+												"raum" => array("name" => "Raum",
+														"width" => "15%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "20%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "15%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			}
+			break;
+		case status :
+			$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "30%"),
+												"funktion" => array("name" => "Funktion",
+														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
+														"width" => "15%"),
+												"raum" => array("name" => "Raum",
+														"width" => "15%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "15%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "5%")
+												);
+			break;
+		default :
+			if ($perm->have_perm("admin")) {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "35%"),
+												"status" => array("name" => "Status",
+														"link" => $PHP_SELF . "?sortby=inst_perm&direction=" . $new_direction,
+														"width" => "10"),
+												"raum" => array("name" => "Raum",
+														"width" => "20%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "20%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "15%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "10%")
+												);
+			}
+			else {
+				$table_structure = array(
+												"name" => array("name" => "Name",
+														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
+														"width" => "35%"),
+												"raum" => array("name" => "Raum",
+														"width" => "20%"),
+												"sprechzeiten" => array("name" => "Sprechzeiten",
+														"width" => "20%"),
+												"telefon" => array("name" => "Telefon",
+														"width" => "15%"),
+												"nachricht" => array("name" => "Nachricht&nbsp;",
+														"width" => "10%")
+												);
+			}
+	} // switch
 }
+
+$colspan = sizeof($table_structure);
 
 $query = "SELECT COUNT(*) AS count FROM user_inst WHERE Institut_id = '$auswahl'
 					AND Funktion IN ($accepted_functions)";
 $db_institut_members->query($query);
 $db_institut_members->next_record();
 
-echo '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
+echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 printf("\n<tr><td class=\"topic\" colspan=\"2\"><b>&nbsp; %s</b></td></tr>",
 	"Mitarbeiter der Einrichtung");
 	
@@ -155,7 +345,7 @@ if ($sms_msg) {
 echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
 
 if ($db_institut_members->f("count") > 0)
-	printf("Alle Mitarbeiter der Einrichtung <b>%s</b>", $SessSemName[0]);
+	printf("%s <b>%s</b>", "Alle Mitarbeiter der Einrichtung", $SessSemName[0]);
 else {
 	printf("Der Einrichtung <b>%s</b> wurden noch keine Mitarbeiter zugeordnet!", $SessSemName[0]);
 	echo "\n<br /><br /></blockquote>\n";
@@ -174,13 +364,29 @@ echo "<table border=\"0\" width=\"99%\" cellpadding=\"4\" cellspacing=\"0\" alig
 echo "<tr>\n";
 echo "<td class=\"steel1\" width=\"60%\">\n";
 
-if ($institut_members_data["show"] == "group") {
-	echo "&nbsp; &nbsp; &nbsp; <a href=\"./institut_members.php?show=list\">";
-	echo "<font size=\"-1\"><b>Alphabetische Liste anzeigen</b></font></a>\n";
+// Admins can choose between different grouping functions
+if ($perm->have_perm("admin")) {
+	echo "<form action=\"./institut_members.php\" method=\"post\">\n";
+	printf("<font size=\"-1\"><b>%s&nbsp;</b></font>\n", "Gruppierung:");
+	printf("<select name=\"show\"><option %svalue=\"funktion\">%s</option>\n",
+		($institut_members_data["show"] == "funktion" ? "selected " : ""), "Funktion");
+	printf("<option %svalue=\"status\">%s</option>\n",
+		($institut_members_data["show"] == "status" ? "selected " : ""), "Status");
+	printf("<option %svalue=\"liste\">%s</option>\n",
+		($institut_members_data["show"] == "liste" ? "selected " : ""), "keine");
+	echo "</select>\n";
+	echo "<input type=\"image\" border=\"0\" src=\"./pictures/buttons/uebernehmen-button.gif\" />";
+	echo "\n</form>\n";
 }
 else {
-	echo "&nbsp; &nbsp; &nbsp; <a href=\"./institut_members.php?show=group\">";
-	echo "<font size=\"-1\"><b>Nach Status gruppiert anzeigen</b></font></a>\n";
+	if ($institut_members_data["show"] == "funktion") {
+		echo "&nbsp; &nbsp; &nbsp; <a href=\"./institut_members.php?show=liste\">";
+		printf("<font size=\"-1\"><b>%s</b></font></a>\n", "Alphabetische Liste anzeigen");
+	}
+	else {
+		echo "&nbsp; &nbsp; &nbsp; <a href=\"./institut_members.php?show=funktion\">";
+		printf("<font size=\"-1\"><b>%s</b></font></a>\n", "Nach Status gruppiert anzeigen");
+	}
 }
 	
 echo "</td><td class=\"steel1\" width=\"30%\">\n";
@@ -204,28 +410,48 @@ echo "<table border=\"0\" width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" alig
 
 table_head($table_structure, $css_switcher);
 
-if ($institut_members_data["show"] == "group") {
+if ($institut_members_data["show"] == "funktion") {
 	foreach ($INST_FUNKTION_ORDER as $key => $function) {
-		if ($function != 0) {
-			$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, Email,
-												auth_user_md5.user_id,
-												username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
-												WHERE user_inst.Institut_id = '%s' AND Funktion = '%s'
-												ORDER BY %s %s", $auswahl, $function,
-												$institut_members_data["sortby"], $institut_members_data["direction"]);
-			$db_institut_members->query($query);
-			if ($db_institut_members->num_rows() != 0) {
-				printf("<tr><td class=\"steelgroup1\" colspan=\"%s\" height=\"20\">", $colspan);
-				printf("<font size=\"-1\"><b>&nbsp;%s<b></font></td></tr>\n", $INST_FUNKTION[$function]["name"]);
-				table_boddy($db_institut_members,$table_structure, $css_switcher);
-			}
+		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
+											Email, auth_user_md5.user_id,
+											username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
+											WHERE user_inst.Institut_id = '%s' AND Funktion = '%s'
+											ORDER BY %s %s", $auswahl, $function,
+											$institut_members_data["sortby"], $institut_members_data["direction"]);
+		$db_institut_members->query($query);
+		if ($db_institut_members->num_rows() > 0) {
+			if ($function == 0)
+				$function_name = "keine Funktion";
+			else
+				$function_name = $INST_FUNKTION[$function]["name"];
+			printf("<tr><td class=\"steelgroup1\" colspan=\"%s\" height=\"20\">", $colspan);
+			printf("<font size=\"-1\"><b>&nbsp;%s<b></font></td></tr>\n", $function_name);
+			table_boddy($db_institut_members,$table_structure, $css_switcher);
+		}
+	}
+}
+elseif ($institut_members_data["show"] == "status") {
+	$inst_permissions = array("admin" => "Admin", "dozent" => "Dozent", "tutor" => "Tutor",
+														"autor" => "Autor", "user" => "User");
+	foreach ($inst_permissions as $key => $permission) {
+		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, Funktion,
+											inst_perms, Email, auth_user_md5.user_id,
+											username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
+											WHERE user_inst.Institut_id = '%s' AND inst_perms = '%s'
+											ORDER BY %s %s", $auswahl, $key,
+											$institut_members_data["sortby"], $institut_members_data["direction"]);
+		$db_institut_members->query($query);
+		if ($db_institut_members->num_rows() > 0) {
+			printf("<tr><td class=\"steelgroup1\" colspan=\"%s\" height=\"20\">", $colspan);
+			printf("<font size=\"-1\"><b>&nbsp;%s<b></font></td></tr>\n", $permission);
+			table_boddy($db_institut_members,$table_structure, $css_switcher);
 		}
 	}
 }
 else {
 	if ($institut_members_data["extend"] == "yes")
 		$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
-											ui.Funktion, aum.user_id, info.Home, 
+											ui.Funktion, ui.inst_perms, aum.user_id, info.Home, 
 											aum.Nachname, aum.Vorname,aum.Email, aum.username
 											FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
 											LEFT JOIN user_info info USING(user_id)
@@ -234,7 +460,7 @@ else {
 											$institut_members_data["sortby"], $institut_members_data["direction"]);
 	else
 		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, Funktion,
-											Email, auth_user_md5.user_id,
+											inst_perms, Email, auth_user_md5.user_id,
 											username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
 											WHERE user_inst.Institut_id = '%s' AND Funktion IN (%s)
 											ORDER BY %s %s", $auswahl, $accepted_functions,
@@ -287,7 +513,8 @@ function table_boddy ($db, $structure, $css_switcher) {
 	$css_switcher->enableHover();
 	
 	while ($db->next_record()) {
-	
+		
+		$css_switcher->switchClass();
 		printf("<tr%s>\n", $css_switcher->getHover());
 		if($db->f("Vorname") && $db->f("Nachname")) {
 			printf("<td%s>", $css_switcher->getFullClass());
@@ -301,7 +528,17 @@ function table_boddy ($db, $structure, $css_switcher) {
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
 					$css_switcher->getFullClass(), htmlReady($INST_FUNKTION[$db->f("Funktion")]["name"]));
 			else
-				printf("<td align=\"center\"><font size=\"-1\">%s</font></td>\n", "keine");
+				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
+					$css_switcher->getFullClass(), "keine");
+		}
+		
+		if ($structure["status"]) {
+			if ($db->f("inst_perms"))
+				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
+					$css_switcher->getFullClass(), htmlReady($db->f("inst_perms")));
+			else // It is actually impossible !
+				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
+					$css_switcher->getFullClass());
 		}
 		
 		if ($structure["raum"]) {
@@ -355,12 +592,12 @@ function table_boddy ($db, $structure, $css_switcher) {
 			printf("<td%salign=\"center\">\n",$css_switcher->getFullClass());
 			printf("<a href=\"sms.php?sms_source_page=institut_members.php&cmd=write&rec_uname=%s\">",
 				$db->f("username"));
-			echo "<img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\" valign=\"baseline\"></a>";
+			printf("<img src=\"pictures/nachricht1.gif\" alt=\"%s\" ", "Nachricht an User verschicken");
+			printf("title=\"%s\" border=\"0\" valign=\"baseline\"></a>", "Nachricht an User verschicken");
 			echo "\n</td>\n";
 		}
 		
 		echo "</tr>\n";
-		$css_switcher->switchClass();
 	}
 }
 
