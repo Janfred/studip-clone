@@ -286,10 +286,10 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ob_start();
 		while ($db->next_record()) {
 			$my_sem[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
-				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id")));
+				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"), "sem"));
 			
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
-			if (($GLOBALS['CHAT_ENABLE']) && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])) {
+			if (($GLOBALS['CHAT_ENABLE']) && ($my_sem[$db->f("Seminar_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
 				$chat_info[$db->f("Seminar_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Seminar_id")]["id"],
 												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Seminar_id")));
@@ -333,7 +333,9 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$semid]['is_active']) ? "false" : "'$semid'") . ");\">&nbsp;";
 				echo chat_get_chat_icon($chat_info[$semid]['chatter'], $chat_invs[$chat_info[$semid]['chatuniqid']], $chat_info[$semid]['is_active'],true);
 				echo "</a>&nbsp;";
-			}
+			} else
+				echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"15\" height=\"17\" border=0>";
+				
 			if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
 				$mod_count = get_seminar_modules($semid);
 				if ($mod_count) {
@@ -652,7 +654,7 @@ elseif ($auth->auth["perm"]=="admin") {
 	
 		while ($db->next_record()){
 		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),
-			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id")));
+			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id"), "sem"));
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 		}
 		$value_list=substr($value_list,0,-1);

@@ -233,7 +233,7 @@ if ( !$perm->have_perm("root")) {
 		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 		ob_start();
 		while ($db->next_record()) {
-			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1, modules =>$Modules->getLocalModules($db->f("Institut_id")));
+			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1, modules =>$Modules->getLocalModules($db->f("Institut_id"), "inst"));
 			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
 			if (($GLOBALS['CHAT_ENABLE']) && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
@@ -289,7 +289,9 @@ if ( !$perm->have_perm("root")) {
 				echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$instid]['is_active']) ? "false" : "'$instid'") . ");\">&nbsp;";
 				echo chat_get_chat_icon($chat_info[$instid]['chatter'], $chat_invs[$chat_info[$instid]['chatuniqid']], $chat_info[$instid]['is_active'],true);
 				echo "</a>&nbsp;";
-			}
+			} else
+				echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"15\" height=\"17\" border=0>";
+				
 			if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
 				$mod_count = get_seminar_modules($instid);
 				if ($mod_count) {
@@ -353,7 +355,7 @@ if ( !$perm->have_perm("root")) {
 
 	$db->query("SELECT count(*) as count  FROM Institute");
 	$db->next_record();
-	$anzahltext = sprintf(_("Es sind %s weitere Einrichtungen vorhanden."), ($db->f("count")-$num_my_sem));
+	$anzahltext = sprintf(_("Es sind %s weitere Einrichtungen vorhanden."), ($db->f("count")-$num_my_inst));
 	
 	if (!$perm->have_perm("dozent")) {
 
