@@ -103,7 +103,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
-	$db->query('SELECT Name FROM Institute WHERE Institut_id = "' . $inst_id . '" AND fakultaets_id = "' . $inst_id . '"');
+	$db->query('SELECT Name FROM Institute WHERE Institut_id = "' . $db->f("fakultaets_id") . '" AND fakultaets_id = "' . $db->f("fakultaets_id") . '"');
 	$db->next_record();
 	{
 		if ($db->f("Name") != "") 
