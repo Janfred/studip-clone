@@ -32,6 +32,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 
+if ($RESOURCES_ENABLE) {
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+}
+
 ## Get a database connection
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -204,8 +208,14 @@ if ($archive_kill) {
     $db->query($query);
     if ($db->affected_rows() == 0) {
       $msg .= "error§<b>Fehler beim L&ouml;schen der Veranstaltung §";
-      break;
+      die;
     }
+    
+	if ($RESOURCES_ENABLE) {
+		//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
+		$killAssign = new ResourcesAssign($s_id);
+		$killAssign->delete();
+	}
     
     //Successful archived, if we are here
     $msg .= "msg§Die Veranstaltung <b>".htmlReady(stripslashes($tmp_name))."</b> wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung.§";
