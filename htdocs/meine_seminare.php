@@ -437,7 +437,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
 					array	 (	"icon" => "pictures/suchen.gif",
-										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">")
+										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php\">")
 					),
 					array	 (	"icon" => "pictures/admin.gif",
 										"text"  => sprintf(_("Um Veranstaltungen anzulegen, nutzen Sie bitte den %sVeranstaltungs-Assistenten</a>"), "<a href=\"admin_seminare_assi.php?new_session=TRUE\">")
@@ -460,7 +460,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
 					array	 (	"icon" => "pictures/suchen.gif",
-										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">")
+										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php\">")
 					)
 				)
 			)
