@@ -402,7 +402,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			
 			$titel = "";
 			if(date("dmy", $termin->getStart()) == date("dmy", time()))
-				$titel .= "HEUTE" . date(", H:i", $termin->getStart());
+				$titel .= "Heute" . date(", H:i", $termin->getStart());
 			else
 				$titel .= date("d.m.Y, H:i", $termin->getStart());
 			
