@@ -139,7 +139,7 @@ if ($forumsend=="bla"){
 				</td>
 				<td <?=$cssSw->getFullClass()?> align="left">
 					<font size=-1>
-					<input type=radio value="theme" name=presetview <?if ($forum["presetview"]=="theme" || $forum["presetview"]=="mixed") echo "checked"; echo "> "._("Themenansicht");?><br>
+					<input type=radio value="theme" name=presetview <?if ($forum["presetview"]=="theme" || $forum["presetview"]=="tree" || $forum["presetview"]=="mixed") echo "checked"; echo "> "._("Themenansicht");?><br>
 					<input type=radio value="neue" name=presetview <?if ($forum["presetview"]=="neue") echo "checked";echo "> "._("Neue Beiträge");?><br>
 					<input type=radio value="flat" name=presetview <?if ($forum["presetview"]=="flat") echo "checked";echo "> "._("Letzte Beiträge");?><br>
 				</td>
