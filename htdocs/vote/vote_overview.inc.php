@@ -51,6 +51,11 @@ $showrangeID								= $HTTP_POST_VARS['rangeID'];
 	if(empty($showrangeID))	$showrangeID	= $HTTP_GET_VARS['showrangeID'];
 	if(empty($showrangeID)) $showrangeID	= $HTTP_GET_VARS['rangeID'];
 	if(empty($showrangeID)) $showrangeID	= $HTTP_POST_VARS['showrangeID'];
+	//<workaround author='anoack'>
+	if(	empty($showrangeID) 
+		&& isset($SessSemName[1])) 
+							$showrangeID	= $SessSemName[1];
+	//</workaround>
 	if(empty($showrangeID)) $showrangeID	= NULL;
 $voteID     								= $HTTP_POST_VARS['voteID'];
 	if(empty($voteID))      	$voteID 	= $HTTP_GET_VARS['voteID'];
