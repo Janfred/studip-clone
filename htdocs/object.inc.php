@@ -60,10 +60,9 @@ function object_add_rate ($object_id, $rate) {
 
 function object_print_rate ($object_id) {
 	$db=new DB_Seminar;
-	$db->query("SELECT avg(rate) as mittelwert FROM object_rate WHERE object_id = '$object_id'");
+	$db->query("SELECT ROUND(avg(rate),1) as mittelwert FROM object_rate WHERE object_id = '$object_id'");
 	if ($db->next_record()) {
-		$tmp = round($db->f("mittelwert"),1);
-		// $tmp = $db->f("mittelwert");
+		$tmp = $db->f("mittelwert");
 		if ($tmp == 0)
 			$tmp = "?";
 		}
