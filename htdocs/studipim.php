@@ -136,7 +136,7 @@ if (is_array($online)) {
 		}
 	}
 } else {
-	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Buddy ist online.") . "</font>";
+	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Nutzer ist online.") . "</font>";
 }
 
 if (!$my_messaging_settings["show_only_buddys"]) {
