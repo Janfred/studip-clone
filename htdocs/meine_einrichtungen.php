@@ -176,7 +176,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 	else
 			$meldung="info§Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende <a href=\"edit_about.php?view=Karriere#einrichtungen\">Option</a> unter \"universt&auml;re Daten\" in ihren pers&ouml;nlichen Einstellungen.§".$meldung;
 	 ?>
-	 <table width="100%" border=0 cellpadding=0 cellspacing=0>
+	 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="topic" colspan="3">
 			<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Einrichtungen</>
@@ -265,7 +265,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 } else {
 	 ?>
 	 <tr>
-	 	<td class="blank" colspan=\"2\">&nbsp; 
+	 	<td class="blank" colspan="2">&nbsp; 
 	 	</td>
 	 </tr>
 	 <tr>
