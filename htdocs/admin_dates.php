@@ -121,6 +121,13 @@ if ($show_nall)
 if (($edit_x) && (!$admin_dates_data["show_all"]))
 	$admin_dates_data["show_id"]='';
 
+
+//single kill
+if ($kill_single_date) {
+	$kill_date[] = $kill_single_date;
+	$kill_x = TRUE;
+}
+
 //save the edit-arrays (if sent from from) in a persistent varaiable
 if ((is_array ($termin_id)) || (is_array ($kill_date))){
 	$admin_dates_data["form_data"] = '';
@@ -145,7 +152,8 @@ if ((is_array ($termin_id)) || (is_array ($kill_date))){
 	if (is_array ($kill_date)) foreach ($kill_date as $key=>$val) {
 		$admin_dates_data["form_data"][$val]["kill_date"] = TRUE;
 	}
-}	
+}
+
 if ($reset_edit)
 	$admin_dates_data["form_data"] = '';
 
@@ -214,10 +222,11 @@ if ($new) {
 	
 	//check, if a single date should be created when it is forbidden (no single dates corresponding to metadates are allowed when using resources, only a whole schedule creating with date-assi is fine...!)
 	if ($GLOBALS["RESOURCES_ENABLE"]) {
+		echo $termin_id;
 		if ((isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $admin_dates_data["range_id"])) && (!$term_data["art"]) && (!isSchedule($admin_dates_data["range_id"]))) {
 			$do = FALSE;
 				if ($TERMIN_TYP[$art]["sitzung"])
-					$result .= "info§" . sprintf(_("Sie wollen einen Sitzungstermin zu den regelm&auml;&szlig;igen Veranstaltungszeiten anlegen. Bitte verwenden daf&uuml;r zun&auml;chst den Ablaufplanassistenten, um die entsprechenden Termine f&uuml;r den gesamten Veranstaltungszeitraum anzulegen.")) . "§";
+					$result .= "info§" . sprintf(_("Sie wollen einen Sitzungstermin zu den regelm&auml;&szlig;igen Veranstaltungszeiten anlegen oder &auml;ndern. Bitte verwenden daf&uuml;r zun&auml;chst den Ablaufplanassistenten, um die entsprechenden Termine f&uuml;r den gesamten Veranstaltungszeitraum anzulegen.")) . "§";
 				else
 					$result .= "info§" . sprintf(_("Sie wollen einen Sondertermin (%s) zu den regelm&auml;&szlig;igen Veranstaltungszeiten anlegen. Bitte verwenden zun&auml;chst den Ablaufplanassistenten und &auml;ndern dann die Terminart f&uuml;r den gew&uuml;nschten Termin in %s "), $TERMIN_TYP[$art]["name"], $TERMIN_TYP[$art]["name"]) . "§";
 
@@ -809,7 +818,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 
 		//Zusatz erstellen
 		if ((!$admin_dates_data["insert_id"]) && ($show_id  != $db->f("termin_id")) && (!$show_all))
-			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
+			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_selected)) ? "checked" : "")." name=\"kill_date[]\" value=\"". $db->f("termin_id")."\"><a href=\"$PHP_SELF?kill_single_date=".$db->f("termin_id")."\"><img src=\"pictures/trash.gif\" border=0 /></a>";
 		else
 			$zusatz='';
 
@@ -954,7 +963,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 
 				if (!$show_all)
-					$content.="<input type=\"IMAGE\" name=\"edit\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"verändern\"><br /><br />";
+					$content.="<input type=\"IMAGE\" name=\"edit\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"verändern\">&nbsp;";
+				$content.="<a href=\"$PHP_SELF?kill_single_date=$show_id\">".makeButton("loeschen")."</a><br /><br />";
 				printcontent(0,1, $content, '');
 				$c++;
 			}
