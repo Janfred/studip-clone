@@ -104,8 +104,11 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					//the name of the class
 					//modules, select the active modules for this class
 					"forum"=>TRUE,				//forum, this modul is stud_ip core; always avaiable
 					"documents"=>TRUE,			//documents, this modul is stud_ip core; always avaiable
-					"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
+					"schedule"=>TRUE,			//schedule, this modul is stud_ip core; always avaiable
+					"participants"=>TRUE,			//participants, this modul is stud_ip core; always avaiable
+					"literature"=>TRUE,			//literature, this modul is stud_ip core; always avaiable
 					"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
+					"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
 					"support"=>FALSE,			//support, only, if the modul is global activated; see local.inc (this modul is not part of the main distribution)
 					//descriptions
 					"description"=>_("Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"), 						//the description
@@ -121,6 +124,9 @@ $SEM_CLASS[2]=array("name"=>_("Organisation"),
 					"show_browse"=>TRUE,
 					"forum"=>TRUE,
 					"documents"=>TRUE,
+					"schedule"=>TRUE,
+					"participants"=>TRUE,
+					"literature"=>TRUE,
 					"chat"=>TRUE,					
 					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t"),
 					"create_description"=>_("In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r Forschungsprojekte anlegen."));
@@ -134,6 +140,8 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 					"write_access_nobody"=>TRUE, 
 					"forum"=>TRUE,
 					"documents"=>TRUE,
+					"schedule"=>TRUE,
+					"participants"=>TRUE,
 					"chat"=>TRUE,					
 					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der Universit&auml;t"),
 					"create_description"=>_("Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie diese Kategorie"));
