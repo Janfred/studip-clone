@@ -9,25 +9,25 @@
 		</tr>
 		
 <?
-		printf('<tr><th width="4%%"%s>', $colspan_1);
+		echo "<tr><th width=\"4%\"$colspan_1>";
 		if($st > 0){
 			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
 			echo '<img border="0" src="./pictures/forumgraurauf.gif" alt="zeig davor"></a>';
 		}
 		else
 			echo "&nbsp";
-		echo '</th>'.$tab["table"][0];
-		printf('<th width="4%%"%s>', $colspan_1);
+		echo "</th>".$tab["table"][0];
+		echo "<th width=\"4%\"$colspan_1>";
 		if($st > 0){
 			echo '<a href="calendar.php?cmd=showweek&atime='.$atime.'&wtime='.($st - 1).'">';
 			echo '<img border="0" src="./pictures/forumgraurauf.gif" alt="zeig davor"></a>';
 		}
 		else
 			echo "&nbsp;";
-		echo '</th></tr>';
+		echo "</th></tr>\n";
 		
 		// Zeile mit Tagesterminen ausgeben
-		printf('</tr><th%s>Tag</th>%s<th%s>Tag</th></tr>', $colspan_1, $tab["table"][1], $colspan_1);
+		printf("<tr><th%s>Tag</th>%s<th%s>Tag</th></tr>\n", $colspan_1, $tab["table"][1], $colspan_1);
 		
 		
 		$j = $st;
