@@ -240,6 +240,7 @@ function ShowUserInfo ($contact_id)
 	global $user, $open, $edit_id;
 
 	$output = "";
+	$basicinfo = array();
 	$db=new DB_Seminar;
 	$db->query ("SELECT user_id FROM contact WHERE contact_id = '$contact_id'");	
 	if ($db->next_record()) {	
