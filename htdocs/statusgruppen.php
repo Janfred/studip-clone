@@ -53,7 +53,7 @@ function groupmail($range_id, $filter="") {
 		$db=new DB_Seminar;
 		$db->query ("SELECT Email FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$range_id'");
 		while ($db->next_record()) {
-			$mailpersons .= ",".$db->f("Email");
+			$mailpersons .= ";".$db->f("Email");
 		}
 		$mailpersons = substr($mailpersons,1);
 		return $mailpersons;
