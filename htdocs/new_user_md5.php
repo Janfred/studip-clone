@@ -154,6 +154,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+			$env_from="<wwwrun@".$smtp->host_name.">";
 			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -183,7 +184,7 @@ while ( is_array($HTTP_POST_VARS)
 			."weiter (auch nicht an einen Administrator), damit nicht Dritte in ihrem\n"
 			."Namen Nachrichten in das System einstellen können!\n\n";
 			$smtp->SendMessage(
-			$from, array($to),
+			$env_from, array($to),
 			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Anmeldung Stud.IP"),
 			$mailbody);
 		}
@@ -266,6 +267,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+			$env_from="<wwwrun@".$smtp->host_name.">";
 			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -287,7 +289,7 @@ while ( is_array($HTTP_POST_VARS)
 			."$url\n\n"
 ;
 			$smtp->SendMessage(
-			$from, array($to),
+			$env_from, array($to),
 			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-Änderung Stud.IP"),
 			$mailbody);
 
@@ -381,6 +383,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+			$env_from="<wwwrun@".$smtp->host_name.">";
 			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -402,7 +405,7 @@ while ( is_array($HTTP_POST_VARS)
 			."$url\n\n"
 ;
 			$smtp->SendMessage(
-			$from, array($to),
+			$env_from, array($to),
 			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
 			$mailbody);
 		}
@@ -564,6 +567,7 @@ while ( is_array($HTTP_POST_VARS)
 					## Mail abschicken...
 					$permlist = addslashes(implode($perms,","));
 					$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+					$env_from="<wwwrun@".$smtp->host_name.">";
 					$abuse="abuse@".$smtp->host_name;
 					$to=$Email;
 					$mailbody="Dies ist eine Informationsmail des Systems\n"
@@ -577,7 +581,7 @@ while ( is_array($HTTP_POST_VARS)
 					."Email-Adresse: $Email\n\n"
 					."wurde um $Zeit von einem der Administratoren gelöscht.\n";
 					$smtp->SendMessage(
-					$from, array($to),
+					$env_from, array($to),
 					array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Account-Löschung Stud.IP"),
 					$mailbody);
 				}
