@@ -17,17 +17,19 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+ob_start();
 //Daten fuer Onlinefunktion einbinden
 if ($perm->have_perm("user")) ;
 else
 	$my_messaging_settings["active_time"]=5;
 
 require_once ($ABSOLUTE_PATH_STUDIP . "ChatShmServer.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 //nur sinnvoll wenn chat eingeschaltet
 if ($CHAT_ENABLE) {
      $chatServer=new ChatShmServer;
-     ?>
+	$chatServer->caching = TRUE;
+	 ?>
      <script type="text/javascript">
      function open_chat()
      {
@@ -57,14 +59,14 @@ if ($CHAT_ENABLE) {
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" align="left" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" alt="zurück zur Startseite"></a>
-					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" alt="Hilfe" width="24" height="21"></a>
-					&nbsp;<a href="freie.php"><img border="0" src="pictures/meinesem.gif" alt="Freie Veranstaltungen" width="24" height="21"></a></td>
+					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip("zurück zur Startseite")?>></a>
+					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip("Hilfe")?> width="24" height="21"></a>
+					&nbsp;<a href="freie.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip("Freie Veranstaltungen")?> width="24" height="21"></a></td>
 				<td class="angemeldet" width="20%" nowrap bgcolor="#C0C0C0" align="center" valign="middle" background="pictures/kaverl1b.jpg">
 					<font color="#000080">Sie sind nicht angemeldet</font></td>
 				<td class="header" width="33%" nowrap valign="bottom" align="right" background="pictures/fill1.gif">
-					&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" alt="Impressum"></a>
-					&nbsp;&nbsp;<a href="index.php?again=yes"><img border="0" src="pictures/login.gif" alt="Am System anmelden"</a>&nbsp;</td>
+					&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" <?=tooltip("Impressum")?>></a>
+					&nbsp;&nbsp;<a href="index.php?again=yes"><img border="0" src="pictures/login.gif" <?=tooltip("Am System anmelden")?>></a>&nbsp;</td>
 			</tr>
 		</table>
 
@@ -75,14 +77,12 @@ if ($CHAT_ENABLE) {
 		$db=new DB_Seminar;
 
 		// wer ist ausser mir online
-		$now = date ("YmdHis", time() - ($my_messaging_settings["active_time"] * 60)); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-		$db->query ("SELECT Vorname,Nachname,changed,username FROM active_sessions LEFT JOIN auth_user_md5 ON user_id=sid WHERE changed > '$now' AND sid != 'nobody' AND sid != '$user->id' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC");
-		while ($db->next_record())
-		{
-			$stamp=mktime(substr($db->f("changed"),8,2),substr($db->f("changed"),10,2),substr($db->f("changed"),12,2),substr($db->f("changed"),4,2),substr($db->f("changed"),6,2),substr($db->f("changed"),0,4));
-			$online[] = array($db->f("Vorname"), $db->f("Nachname"), (time()-$stamp), $db -> f("username"));
-		}
-		
+		$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
+		$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,username,user_id FROM active_sessions LEFT JOIN auth_user_md5 ON user_id=sid WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
+		$db->query($query);
+		while ($db->next_record()){
+      		$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"));      
+      	}
 		
 		//Chatnachrichten zaehlen (wenn Sender Online)
 		$myuname=$auth->auth["uname"];
@@ -92,15 +92,9 @@ if ($CHAT_ENABLE) {
 		while ($db->next_record())
 		{
 			if (ereg(("chat_with_me"), $db->f("message")))  {
-				if (count($online)){
-					while (list($index)=each($online)) {
-						list(,,,$tmp_header_uname)=$online[$index];
-						if ($db->f("user_id_snd")==$tmp_header_uname) {
-							$i++;
-							$chatm=true;
-						}
+				if ($online[$db->f("user_id_snd")]) {
+				    $chatm=true;
 					}
-				}
 			}
 			elseif ($my_messaging_settings["last_visit"] < $db->f("mkdate"))
 				$neum++; // das ist eine neue Nachricht.
@@ -108,29 +102,28 @@ if ($CHAT_ENABLE) {
 				$altm++;
 		}
 
-		//Neue Nachrichten z&auml;hlen (die nicht Chat sind)
 		//Nachrichten auf Wunsch anzeigen
 		?>
 
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" alt="zurück zur Startseite" width="24" height="21"></a>
-					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" alt="Hilfe" width="24" height="21"></a>
-					&nbsp;<a href="meine_seminare.php"><img border="0" src="pictures/meinesem.gif" alt="Meine Veranstaltungen" width="24" height="21"></a>
+					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip("zurück zur Startseite")?> width="24" height="21"></a>
+					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip("Hilfe")?> width="24" height="21"></a>
+					&nbsp;<a href="meine_seminare.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip("Meine Veranstaltungen")?> width="24" height="21"></a>
 					&nbsp;&nbsp;&nbsp;
 
 
 <?	if ((($altm) && (!$neum)) || ((($altm+$neum) >0) && ($i_page == "sms.php")))
 		if ($altm > 1)
-			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht1.gif' alt='Sie haben $altm alte Nachrichten!'></a>&nbsp;&nbsp;&nbsp;";
+			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht1.gif' ".tooltip("Sie haben $altm alte Nachrichten!")."></a>&nbsp;&nbsp;&nbsp;";
 		else
-			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht1.gif' alt='Sie haben eine alte Nachricht!'></a>&nbsp;&nbsp;&nbsp;";
+			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht1.gif' ".tooltip("Sie haben eine alte Nachricht!")."></a>&nbsp;&nbsp;&nbsp;";
 	elseif (($neum) && ($i_page != "sms.php"))
 		if ($neum > 1)
-			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht2.gif' alt='Sie haben $neum neue Nachrichten!'></a>&nbsp;&nbsp;&nbsp;";
+			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht2.gif' ".tooltip("Sie haben $neum neue Nachrichten!")."></a>&nbsp;&nbsp;&nbsp;";
 		else
-			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht2.gif' alt='Sie haben eine neue Nachricht!'></a>&nbsp;&nbsp;&nbsp;";
+			echo "&nbsp;<a href=\"sms.php\" ><img border='0' src='pictures/nachricht2.gif' ".tooltip("Sie haben eine neue Nachricht!")."></a>&nbsp;&nbsp;&nbsp;";
 	else
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 
@@ -139,19 +132,19 @@ if ($CHAT_ENABLE) {
   if ($CHAT_ENABLE) {
 
           if (($chatm) && ($i_page != "sms.php") && (!$chatServer->isActiveUser($user->id,"studip"))) {
-			echo "<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chateinladung.gif' alt='Sie wurden zum Chatten eingeladen!'></a>\n";
+			echo "<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chateinladung.gif' ".tooltip("Sie wurden zum Chatten eingeladen!")."></a>\n";
 		} else {
 
                $chatter=$chatServer->getActiveUsers("studip");
    		     if ($chatter == 1)
    		     		if ($chatServer->isActiveUser($user->id,"studip"))	
-			       		printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat3.gif' alt='Nur sie sind im Chat' ></a>");
+			       		printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat3.gif' ".tooltip("Nur Sie sind im Chat")."></a>");
 			       	else
-			       		printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat2.gif' alt='Es ist eine Person im Chat' ></a>");
+			       		printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat2.gif' ".tooltip("Es ist eine Person im Chat")."></a>");
 			elseif ($chatter > 1)
-			       printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat2.gif' alt='Es sind %s Personen im Chat' ></a>", $chatter);
+			       print ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat2.gif' ".tooltip("Es sind $chatter Personen im Chat")."></a>");
                else
-                    echo "<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat1.gif' alt='Es ist niemand im Chat' ></a>";
+                    echo "<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat1.gif' ".tooltip("Es ist niemand im Chat")."></a>";
           }
      }
      else echo "&nbsp;&nbsp;";
@@ -163,12 +156,12 @@ if ($CHAT_ENABLE) {
 &nbsp;
 
 <?	// Ist sonst noch wer da?
-		if (!count($online)) print "<a href=\"online.php\"><img src='pictures/nutzer.gif' alt='nur Sie sind online' border='0'></a>";
+		if (!count($online)) print "<a href=\"online.php\"><img src='pictures/nutzer.gif' ".tooltip("Nur Sie sind online")." border='0'></a>";
 		else {
-			if (count($online)==1) print "<a href=\"online.php\"><img src='pictures/nutzeronline.gif' alt='Ausser Ihnen ist 1 Person online' border='0'></a>";
+			if (count($online)==1) print "<a href=\"online.php\"><img src='pictures/nutzeronline.gif' ".tooltip("Ausser Ihnen ist eine Person online")." border='0'></a>";
 			else {
 				?>
-				<a href="online.php"><img src="pictures/nutzeronline.gif" alt="Es sind ausser Ihnen <?echo count($online);?> Personen online" border='0'></a>
+				<a href="online.php"><img src="pictures/nutzeronline.gif" <?=tooltip("Es sind ausser Ihnen ".count($online)." Personen online")?> border='0'></a>
 				<?
 			}
 		}
@@ -181,22 +174,8 @@ if ($CHAT_ENABLE) {
 
 			<img border="0" src="pictures/info.gif"
 			<? //JavaScript Infofenster aufbauen
-				if ($auth->auth["jscript"])
-					{
-					echo " onClick=\"alert('";
-					print "Sie sind angemeldet als ";
-					printf ("%s", $auth->auth["uname"]);
-					print " mit der Berechtigung ";
-					printf ("%s.", $auth->auth["perm"]);
-					print " Beginn der Session: ";
-					print date ("d. M Y, H:i:s", $SessionStart);
-					print ", Letztes Login: ";
-					print date ("d. M Y, H:i:s", $LastLogin);
-					if ($auth->auth["jscript"]) print " JavaScript eingeschaltet, ";
-					if ($auth->auth["xres"]) print "Auflösung :".$auth->auth["xres"]."x".$auth->auth["yres"];
-					echo "');\" ";
-					}
-			?> alt="<?
+				ob_end_flush();
+				ob_start();
 				print "Sie sind angemeldet als ";
 				printf ("%s", $auth->auth["uname"]);
 				print " mit der Berechtigung ";
@@ -207,7 +186,16 @@ if ($CHAT_ENABLE) {
 				print date ("d. M Y, H:i:s", $LastLogin);
 				if ($auth->auth["jscript"]) print " JavaScript eingeschaltet, ";
 				if ($auth->auth["xres"]) print "Auflösung :".$auth->auth["xres"]."x".$auth->auth["yres"];
-			?>">
+				$infotext=ob_get_contents();
+				ob_end_clean();
+				ob_start();	
+				if ($auth->auth["jscript"])
+					{
+					echo " onClick=\"alert('$infotext');\" ";
+					}
+			echo tooltip($infotext);
+			?>
+			>
 			</font>
 		</td>
 
@@ -216,18 +204,18 @@ if ($CHAT_ENABLE) {
 <?
 		IF ($perm->have_perm("autor"))
 		{
-			echo"&nbsp;<a href=\"about.php\"><img border='0' src='pictures/einst.gif' alt='zu Ihrer Einstellungsseite'></a>\n";
-			echo"&nbsp;<a href=\"auswahl_suche.php\"><img border='0' src='pictures/suchen.gif' alt='Im System suchen'></a>\n";
+			echo"&nbsp;<a href=\"about.php\"><img border='0' src='pictures/einst.gif' ".tooltip("Zu Ihrer Einstellungsseite")."></a>\n";
+			echo"&nbsp;<a href=\"auswahl_suche.php\"><img border='0' src='pictures/suchen.gif' ".tooltip("Im System suchen")."></a>\n";
 		}
 
 		IF ($perm->have_perm("tutor"))
 		{
-			echo"&nbsp;<a href=\"adminarea_start.php?list=TRUE\"><img border='0' src='pictures/admin.gif' alt='zu Ihrer Administrationsseite'></a>\n";
+			echo"&nbsp;<a href=\"adminarea_start.php?list=TRUE\"><img border='0' src='pictures/admin.gif' ".tooltip("Zu Ihrer Administrationsseite")."></a>\n";
 		}
 ?>
 
-			&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" alt="Impressum"></a>
-			&nbsp;&nbsp;<a href="logout.php"><img border="0" src="pictures/logout.gif" alt="Aus dem System abmelden"></a>&nbsp;
+			&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" <?=tooltip("Impressum")?>></a>
+			&nbsp;&nbsp;<a href="logout.php"><img border="0" src="pictures/logout.gif" <?=tooltip("Aus dem System abmelden")?>></a>&nbsp;
 
 		</td>
 	</tr>
@@ -236,6 +224,7 @@ if ($CHAT_ENABLE) {
 	}
 
 	echo"<body><br>";
+	ob_end_flush();
 
 	include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft
 ?>
