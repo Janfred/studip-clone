@@ -134,14 +134,12 @@ $_language_path = init_i18n($_language);
 
 		<tr valign=top align=left>
 			<td class="steel1"><?=_("Benutzername:")?> </td>
-			<td class="steel1"><input type="text" name="username" value="
-			<?php
+			<td class="steel1"><input type="text" name="username" value="<?php
 				if (isset($this->auth["uname"]))
 					print $this->auth["uname"];
 				else if (isset($shortcut))
 					print $shortcut;
-			?>
-			" size=20 maxlength=63></td>
+			?>" size=20 maxlength=63></td>
 		</tr>
 
 		<tr valign=top align=left>
