@@ -898,6 +898,13 @@ class viewObject {
 				<font size=-1><? echo $this->resObject->getDescription() ?></font>
 				<cho
 			</tr>
+			<tr>
+				<td class="<? $this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>" valign="top" colspan=2><font size=-1><b><?=_("Einordnung:")?></b></font><br />
+				<font size=-1><? echo ResourcesBrowse::getHistory($this->resObject->getId(), "view_details") ?></font>
+				<cho
+			</tr>
 			<? 
 			if ($this->resObject->getCategoryId()) {
 			?>
@@ -1816,17 +1823,17 @@ class ResourcesBrowse {
 	}
 	
 	//private
-	function getHistory($id) {
+	function getHistory($id, $view = FALSE) {
 		global $PHP_SELF, $UNI_URL, $UNI_NAME;
 		$top=FALSE;
 		$k=0;
 		while ((!$top) && ($id)) {
 			$k++;
-			$query = sprintf ("SELECT name, parent_id, resource_id FROM resources_objects WHERE resource_id = '%s' ", $id);
+			$query = sprintf ("SELECT name, parent_id, resource_id, owner_id FROM resources_objects WHERE resource_id = '%s' ", $id);
 			$this->db2->query($query);
 			$this->db2->next_record();
 
-			$result_arr[] = array("id" => $this->db2->f("resource_id"), "name" => $this->db2->f("name"));
+			$result_arr[] = array("id" => $this->db2->f("resource_id"), "name" => $this->db2->f("name"), "owner_id" =>$this->db2->f("owner_id"));
 			$id=$this->db2->f("parent_id");
 
 			if ($this->db2->f("parent_id") == "0") {
@@ -1834,10 +1841,28 @@ class ResourcesBrowse {
 			}
 		}
 
-		$result = printf (" <font size = -1>Ressourcen der<a href=\"%s?view=search&reset=TRUE\"> %s</a></font>", $PHP_SELF, $UNI_NAME);
 		if (is_array($result_arr))
+			switch (ResourceObject::getOwnerType($result_arr[0]["owner_id"])) {
+				case "global": 
+					$top_level_name = $UNI_NAME;
+				break;
+				case "sem":
+					$top_level_name = _("Veranstaltungsressourcen");
+				break;
+				case "inst":
+					$top_level_name = _("Einrichtungsressourcen");
+				break;
+				case "fak":
+					$top_level_name = _("Fakult&auml;tsressourcen");
+				break;
+				case "user":
+					$top_level_name = _("pers&ouml;nliche Ressourcen");
+				break;
+			}
+					
+			$result = printf (" <font size = -1>%s %s%s</font>", (!$view) ? "<a href=\"$PHP_SELF?view=search&reset=TRUE\">" : "", (!$view) ? "</a>" : "", $top_level_name);
 			for ($i = sizeof($result_arr)-1; $i>=0; $i--) {
-				$result.= sprintf (" > <a href=\"%s?view=search&open_level=%s\"><font size = -1>%s</font></a>", $PHP_SELF, $result_arr[$i]["id"], htmlReady($result_arr[$i]["name"]));
+				$result.= sprintf (" > <a href=\"%s?view=%s&%s=%s\"><font size = -1>%s</font></a>", $PHP_SELF, (!$view) ? "search" : $view, (!$view) ? "open_level" : "actual_object", $result_arr[$i]["id"], htmlReady($result_arr[$i]["name"]));
 			}
 		return $result;
 	}
@@ -2045,12 +2070,12 @@ class ResourcesBrowse {
 				<?
 				$this->searchForm();
 				if (!$this->searchArray) {
-					if ($this->mode == "browse")
-						$this->browseLevels();
+					/*if ($this->mode == "browse")
+						$this->browseLevels();*/
 					if ($this->mode == "properties")
 						$this->showProperties();
-					if ($this->mode == "browse")
-						$this->showList();
+					/*if ($this->mode == "browse")
+						$this->showList();*/
 				} else {
 					$this->showSearchList();
 				}
