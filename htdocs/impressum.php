@@ -106,15 +106,21 @@ $reiter->create($structure, $view);
 		<td class="steel1"colspan=2>
 			<br>&nbsp; &nbsp; <b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:<br>
 			<blockquote>
-			<b>Marco Bohnsack</b>, eMail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> (Hilfe)
-			<br><b>Oliver Brakel</b>, eMail: <a href="mailto:obrakel@gwdg.de">obrakel@gwdg.de</a> (Distribution)
-			<br><b>Cornelis Kater</b>, eMail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> (Kernentwicklung, Terminverwaltung, Adminbereich, Design)
-			<br><b>André Noack</b>, eMail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> (Kernentwicklung, Newsverwaltung, Chat)
-			<br><b>Arne Schröder</b>, eMail: <a href="mailto:23arne@web.de">23arne@web.de</a> (Externe Seiten)
-			<br><b>Ralf Stockmann</b>, eMail: <a href="mailto:rstockm@gwdg.de">rstockm@gwdg.de</a> (Kernentwicklung, Forensystem, pers&ouml;nliche Seiten, Design)
-			<br><b>Stefan Suchi</b>, eMail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> (Kernentwicklung, Datenbankstruktur, Rechtesystem, Adminbereich)
-			<br><b>Peter Thienel</b>, eMail: <a href="mailto:thienel@data-quest.de">thienel@data-quest.de</a> (Externe Seiten, Terminplaner)
+			<font size=-1><b>Marco Bohnsack</b>, eMail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> (Hilfe)</font>
+			<br><font size=-1><b>Oliver Brakel</b>, eMail: <a href="mailto:obrakel@gwdg.de">obrakel@uni-goettingen.de</a> (Distribution)</font>
+			<br><font size=-1><b>Cornelis Kater</b>, eMail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> (Kernentwicklung, Terminverwaltung, Adminbereich, Design)</font>
+			<br><font size=-1><b>André Noack</b>, eMail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> (Kernentwicklung, Newsverwaltung, Chat)</font>
+			<br><font size=-1><b>Arne Schröder</b>, eMail: <a href="mailto:23arne@web.de">schroeder@data-quest.de</a> (Externe Seiten)</font>
+			<br><font size=-1><b>Ralf Stockmann</b>, eMail: <a href="mailto:rstockm@gwdg.de">rstockm@uni-goettingen.de</a> (Kernentwicklung, Forensystem, pers&ouml;nliche Seiten, Design)</font>
+			<br><font size=-1><b>Stefan Suchi</b>, eMail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> (Kernentwicklung, Datenbankstruktur, Rechtesystem, Adminbereich)</font>
+			<br><font size=-1><b>Peter Thienel</b>, eMail: <a href="mailto:thienel@data-quest.de">thienel@data-quest.de</a> (Externe Seiten, Terminplaner)</font>
 			<br></blockquote>
+			&nbsp; &nbsp; Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:</b><br>
+			<blockquote>
+			<font size=-1><b>Nutzer-Anfragen</b>, eMail: <a href="mailto:studip-users@lists.sourceforge.net">studip-users@lists.sourceforge.net</a>: Fragen, Anregungen und Vorschl&auml;ge an die Entwickler</font><br />
+			<font size=-1><b>Developer-Mailingliste</b>, eMail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-devel">studip-devel@lists.sourceforge.net</a>: Mailingliste f&uuml;r alle Entwickler (Eintragung notwendig)</font><br />
+			<font size=-1><b>News-Mailingsliste</b>, eMail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: News rund um Stud.IP (Eintragung notwendig)</font><br />
+			</blockquote>
 		</td>
 	</tr>
 	</table>
@@ -302,11 +308,13 @@ IF ($view=="ansprechpartner") {?>
 	if ($db->affected_rows() ==0) { echo"keine. Na sowas. Das kann ja eigentlich gar nicht sein..."; }
 	while ($db->next_record())
 		{
-		echo "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a><br>";
+		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font ><br>";
 		}
 	
 ?>
 		<br>
+		<b>allgemeine Anfragen</b> wie Passwort-Anforderungen u.a. richten Sie bitte an:<br>
+		<font size="-1"><a href="mailto:<?=$UNI_CONTACT?>"><?=$UNI_CONTACT?>	</a></font ><br /><br />
 		</td>
 	</tr>
 	<tr>
@@ -339,10 +347,10 @@ IF ($view=="ansprechpartner") {?>
 		if ($last_inst<>$db->f("Institut_id"))
 			{
 			$inst_id=$db->f("Institut_id");
-			echo "<br><br><b><a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>:</b><br>";
+			echo "<br><br><b><font size=\"-1\"><a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>:</font></b><br>";
 			}
 		$last_inst=$inst_id;
-		echo "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a><br>";
+		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("Vorname")." ".$db->f("Nachname")."</a>, eMail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font><br>";
 		$count=$count-1;
 		}
 
@@ -364,7 +372,7 @@ echo "<br><br>Die technische Grundlage bietet ein LINUX-System mit Apache Webser
 echo "<br><br>Im System findet ein 6-stufiges Rechtesystem Verwendung, das individuell auf verschiedenen Ebenen wirkt - etwa in Veranstaltungen, Einrichtungen, Fakultäten oder systemweit.";
 echo "<br><br>Seminare oder Arbeitsgruppen können mit Passwörtern geschützt werden - die Verschlüsselung erfolgt mit einem MD5 one-way-hash.";
 echo "<br><br>Das System ist zu 100% über das Internet administrierbar, es sind keine zusätzlichen Werkzeuge nötig. Ein Webbrowser ab Version 4 wird empfohlen.";
-echo "<br><br>Das System wird ständig weiterentwickelt und an die Wünsche unserer Nutzer angepasst - <a href='mailto:crew@studip.de'>sagen Sie uns Ihre Meinung!</a>";
+echo "<br><br>Das System wird ständig weiterentwickelt und an die Wünsche unserer Nutzer angepasst - <a href='mailto:studip-users@lists.sourceforge.net'>sagen Sie uns Ihre Meinung!</a>";
 
 ?>
 
