@@ -188,7 +188,7 @@ function htmlReady ($what, $trim = TRUE, $br = FALSE) {
 	else
 		$what = htmlentities($what,ENT_QUOTES);
 	// workaround zur Darstellung von Zeichen in der Form &#x268F oder &#283;
-	$what = preg_replace('/&amp;#((x[1-9a-f][0-9a-f]{3})|([1-9][0-9]{2,3}));/i', '&#$1;', $what);
+	$what = preg_replace('/&amp;#((x[1-9a-f][0-9a-f]{3})|([1-9][0-9]{2,5}));/i', '&#$1;', $what);
 	if ($br)
 		$what = preg_replace("/(\n\r|\r\n|\n|\r)/", "<br />", $what); // newline fixen
 	return $what;
