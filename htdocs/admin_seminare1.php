@@ -319,10 +319,11 @@ if (($s_command=="edit") && ($s_send)){
 					$group=select_group($temp_admin_seminare_start_time, $tempDozent_id);					
 					$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$tempDozent_id'";
 					$db4->query($query);
-					if ($db4->next_record())			  // User schon da
+					if ($db4->next_record())	{		  // User schon da
 						$query = "UPDATE seminar_user SET status = \"dozent\" WHERE Seminar_id = '$s_id' AND user_id = '$tempDozent_id'";
+						}						
 					else					     // User noch nicht da
-						$query = "insert into seminar_user values('$s_id','$tempDozent_id','dozent','$group', '', '".time()."' )";
+						$query = "insert into seminar_user values('$s_id','$tempDozent_id',\"dozent\",'$group', '', '".time()."')";
 					$db3->query($query);			     // Dozent eintragen
 				}
 			}
@@ -346,7 +347,7 @@ if (($s_command=="edit") && ($s_send)){
 						else									//User schon da aber was anderes (unterhalb Tutor), also Hochstufen.
 						$query = "UPDATE seminar_user SET status = \"tutor\" WHERE Seminar_id = '$s_id' AND user_id = '$tempTutor_id'";
 					} else										// User noch nicht da
-						$query = "insert into seminar_user values('$s_id','$tempTutor_id',\"tutor\",'$group', '', '".time()."' )";
+						$query = "insert into seminar_user values('$s_id','$tempTutor_id',\"tutor\",'$group', '', '".time()."')";
 					$db3->query($query);							// Tutor eintragen
 				}
 			}
@@ -365,7 +366,7 @@ if (($s_command=="edit") && ($s_send)){
 			if ($db4->next_record())			  // User schon da
 				$query = "UPDATE seminar_user SET status = \"dozent\" WHERE Seminar_id = '$s_id' AND user_id = '$tempDozent_id'";
 			else					     // User noch nicht da
-				$query = "insert into seminar_user values('$s_id','$tempDozent_id',\"dozent\",'$group', '', '".time()."' )";
+				$query = "insert into seminar_user values('$s_id','$tempDozent_id',\"dozent\",'$group', '', '".time()."')";
 			$db3->query($query);
 		}
 	}
