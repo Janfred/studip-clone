@@ -378,7 +378,7 @@ class CalendarWriteriCalendar extends CalendarWriter {
 			$value['sinterval'] = -1;
 			
 		if ($value['count'])
-			unset($value['expire'];
+			unset($value['expire']);
 		
 		foreach ($value as $r_param => $r_value) {
 			if ($r_value) {
