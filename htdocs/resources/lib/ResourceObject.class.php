@@ -44,7 +44,7 @@ class ResourceObject {
 	function &Factory(){
 		static $ressource_object_pool;
 		$argn = func_num_args();
-		if ($argn < 2){
+		if ($argn == 1){
 			if ( ($id = func_get_arg(0)) ){
 				if (is_object($ressource_object_pool[$id])){
 					return $ressource_object_pool[$id];
