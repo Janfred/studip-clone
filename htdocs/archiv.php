@@ -436,7 +436,7 @@ IF ($archiv_data["perform_search"]) {
 	$c=0;
        	WHILE ($db->next_record()) 
 	    	{
- 		$file_name="Dateisammlung ".$db->f("name").".zip";
+ 		$file_name="Dateisammlung ".substr($db->f("name"),0,200).".zip";
 	 	$view = 0;
 		if ($archiv_data["open"]) {
 	 	  	if ($archiv_data["open"] ==$db->f('seminar_id'))
