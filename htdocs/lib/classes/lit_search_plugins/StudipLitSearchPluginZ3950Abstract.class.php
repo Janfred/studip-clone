@@ -77,7 +77,6 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 										'008' => array(	array('field' => 'dc_language', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>35,'length'=>3)),
 												array('field' => 'dc_date', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>7,'length'=>4,'template'=>'{result}-01-01'))),
 										'020' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a'),
-										'084' => array('field' => 'dc_subject', 'callback' => 'simpleMap', 'cb_args' => '$a'. chr(10)),
 										'245' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => '$a $b $h'),
 										'260' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$a $b'),
 										'256' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
@@ -88,6 +87,14 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 										'518' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
 										'520' => array('field' => 'dc_subject', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
 										'533' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$n' . chr(10)),
+										'600' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
+										'610' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
+										'611' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
+										'630' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
+										'650' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
+										'651' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
+										'652' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
+										'653' => array('field' => 'dc_subject', 'callback' => 'simpleListMap', 'cb_args' => false),
 										'773' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$t, $g, $d'),
 										'100' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a'),
 										'700' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a','dc_contributor','$a;')),
@@ -279,6 +286,13 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			$result = trim($data);
 		}
 		$cat_element->setValue($field, $cat_element->getValue($field) . " " . $result);
+		return;
+	}
+	
+	function simpleListMap(&$cat_element, $data, $field, $args){
+		$result = trim(preg_replace('/\s*\$[0-9a-z]\s*/', "; ", $data),';');
+		$result = (($cat_element->getValue($field)) ? $cat_element->getValue($field) . '; ' . $result : $result);
+		$cat_element->setValue($field, $result);
 		return;
 	}
 	
