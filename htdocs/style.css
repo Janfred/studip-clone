@@ -25,7 +25,7 @@ TD.angemeldet {border-style: solid; border-color: #000000;  border-width: 1px;}
 TD.rahmen_white {border-style: solid; border-color: #000000;  border-width: 1px; background-color: #FFFFFF; background-image: url('pictures/blank.gif');}
 TD.rahmen_steel {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('pictures/steel1.jpg');}
 TD.rahmen_steelgraulight {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('pictures/steelgraulight.jpg');}
-TD.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-size:8;}
+TD.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-size:8px;}
 TD.nix {background-color: transparent;}
 TD.aufklapp {background-color : #FFFAEE;}
 
