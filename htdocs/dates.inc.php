@@ -717,12 +717,15 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 					$add_result .= "info§" . sprintf(_("Sie wollen einen oder mehrere Sondertermine auf die regelm&auml;&szlig;igen Veranstaltungszeiten &auml;ndern. Bitte verwenden Sie f&uuml;r diese Termine den Ablaufplanassistenten und &auml;ndern dann die Terminart f&uuml;r den gew&uuml;nschten Termin.")). "§";
 
 		} elseif ($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) {
-			
-			if ($resource_id) {
+			if (($resource_id) && ($resource_id != "FALSE") && ($resource_id != "NULL")){
 				$check_resource_id = $resource_id;
-			} else {
+			} elseif ($resource_id == "NULL") {
 				$check_resource_id = getDateAssigenedRoom($termin_id);
+			} elseif ($resource_id == "FALSE") {
+				$check_resource_id = FALSE;
+				$resource_id = FALSE;
 			}
+						
 			if ($check_resource_id) {	
 				$resObjPrm =& ResourceObjectPerms::Factory($check_resource_id);
 				if (!$resObjPrm->havePerm("autor")) {
@@ -797,7 +800,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		$description=$description; 
 
 		//if we have a resource_id, we take the room name from resource_id
-		if ($resource_id)
+		if (($resource_id) && ($resource_id != "NULL") && ($resource_id != "FALSE"))
 			$raum=getResourceObjectName($resource_id);
 		
 		$db->query("UPDATE  termine SET autor_id='$user->id', content='$titel', date= '$start_time', end_time='$end_time', date_typ='$art', raum='$raum', description='$description'  WHERE termin_id='$termin_id'");
@@ -844,9 +847,9 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		//update assigned resources, if resource manangement activ
 		if ($RESOURCES_ENABLE) {
 			$updateAssign = new VeranstaltungResourcesAssign($range_id);
-			if ($resource_id)
+			if (($resource_id) && ($resource_id != "NULL"))
 				$resources_result=$updateAssign->changeDateAssign($termin_id, $resource_id);
-			if ($create_update_request)
+			if (($create_update_request) || (!$resource_id))
 				$resources_result=$updateAssign->killDateAssign($termin_id);
 		}
 		

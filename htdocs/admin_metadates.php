@@ -172,8 +172,10 @@ if ($turnus_refresh)
 		$term_metadata["turnus_data"][$i]["end_stunde"]=$turnus_end_stunde[$i]; 
 		$term_metadata["turnus_data"][$i]["end_minute"]=$turnus_end_minute[$i]; 
 		$term_metadata["turnus_data"][$i]["room"]=$turnus_room[$i]; 
-		if (($turnus_resource_id[$i]) && ($turnus_resource_id[$i] != "FALSE")) {
+		if (($turnus_resource_id[$i]) && ($turnus_resource_id[$i] != "NULL") && ($turnus_resource_id[$i] != "FALSE")) {
 			$term_metadata["turnus_data"][$i]["resource_id"] = $turnus_resource_id[$i];
+		} elseif (($turnus_resource_id[$i]) && ($turnus_resource_id[$i] == "FALSE")) {
+			$term_metadata["turnus_data"][$i]["resource_id"] = FALSE;
 		} else
 			$term_metadata["turnus_data"][$i]["resource_id"] = $temp_turnus_data[$i]["resource_id"];
 		
@@ -635,7 +637,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									if ($resList->numberOfRooms()) {
 										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
 										print " ></font>";
-										printf ("<option %s value=\"FALSE\">[".(($term_metadata["original_turnus"][$i]["resource_id"]) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")." -->")."]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
+										printf ("<option %s value=\"NULL\">[".(($term_metadata["original_turnus"][$i]["resource_id"]) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")." -->")."]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");
+										if ($term_metadata["original_turnus"][$i]["resource_id"])
+											print "<option value=\"FALSE\">["._("kein gebuchter Raum") ."]</option>";
 										while ($res = $resList->next()) {
 											printf ("<option value=\"%s\">%s</option>", $res["resource_id"], htmlReady($res["name"]));
 										}

@@ -329,9 +329,6 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 		 	$t_id=$termin_id[$i];
 			$f_id=md5(uniqid($hash_secret));
 			
-			if ($resource_id[$i] == "FALSE")
-				$resource_id[$i] = FALSE;
-				
 			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$i], $titel[$i],$description[$i], $topic_id[$i],$raum[$i], $resource_id[$i], $admin_dates_data["range_id"], $save_changes_with_request);
 		 	$result.=$tmp_result["msg"];
 
@@ -624,8 +621,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	<?
 	
 	 //Vorhandene Termine holen und anzeigen und nach Bedarf bearbeiten
-	 
-	 $db->query("SELECT * FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' ORDER BY date");
+	  $db->query("SELECT * FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' ORDER BY date");
 	 if ($db->num_rows() || $admin_dates_data["insert_id"]) {
 		?>
 		<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
@@ -722,8 +718,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$content.="<td class=\"steel1\" width=\"30%\" valign=\"top\">\n";
 		$content.="<font size=-1>&nbsp;<b>" . _("Raum:") . "</b></font>";
 		if ((is_array($term_data["turnus_data"])) && (sizeof($term_data["turnus_data"]) == 1)) {
-				$new_date_resource_id = $term_data["turnus_data"][0]["resource_id"];
-				$new_date_room = $term_data["turnus_data"][0]["room"];
+			$new_date_resource_id = $term_data["turnus_data"][0]["resource_id"];
+			$new_date_room = $term_data["turnus_data"][0]["room"];
 		}
 		if ($RESOURCES_ENABLE) {
 			$resList -> reset();
@@ -922,7 +918,9 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 					$resList -> reset();
 					if ($resList->numberOfRooms()) {
 						$content.= "<br />&nbsp;<select name=\"resource_id[]\">";
-						$content.= sprintf("<option %s value=\"FALSE\">[" . (($resource_id) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")) . "]</option>", (!$resource_id) ? "selected" : "");												
+						$content.= sprintf("<option %s value=\"NULL\">[" . (($resource_id) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")) . "]</option>", (!$resource_id) ? "selected" : "");
+						if ($resource_id)
+							$content.= "<option value=\"FALSE\">["._("kein gebuchter Raum") ."]</option>";
 						while ($res = $resList->next())
 							$content.= sprintf("<option value=\"%s\">%s</option>", $res["resource_id"], my_substr(htmlReady($res["name"]), 0, 30));
 						$content.= "</select>";
