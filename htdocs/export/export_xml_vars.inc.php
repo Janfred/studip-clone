@@ -43,14 +43,15 @@ $xml_names_lecture = array(
 	"Untertitel"		=>		"untertitel",
 	"status"			=>		"status",
 	"Beschreibung"	=>		"beschreibung",
-	"Ort"			=>		"raum",
+	"ort"			=>		"raum",
 	"Sonstiges"		=>		"sonstiges",
 	"art"				=>		"art", 
 	"teilnehmer"		=>		"teilnehmer",
 	"vorrausetzungen"	=>		"voraussetzung",
 	"lernorga"		=>		"lernorga",
 	"leistungsnachweis"=>		"schein",
-	"ects"			=>		"ects",
+ 	"VeranstaltungsNummer"	=>	"veranstaltungsnummer",
+ 	"ects"			=>		"ects",
 	"bereich"			=>		"bereich",
 	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin")
 );
