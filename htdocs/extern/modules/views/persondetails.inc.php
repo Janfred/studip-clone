@@ -121,7 +121,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo formatReady($db->f($data_field), TRUE, TRUE, TRUE);
+					echo formatReady($db->f($data_field), TRUE, TRUE);
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 				break;
@@ -145,7 +145,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo formatReady($datafields[$data_field]["content"], TRUE, TRUE, TRUE);
+					echo formatReady($datafields[$data_field]["content"], TRUE, TRUE);
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 		}
@@ -195,7 +195,7 @@ function news (&$this, $db, $alias_content, $text_div, $text_div_end) {
 			list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
 			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 			echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-			echo formatReady($content, TRUE, TRUE, TRUE);
+			echo formatReady($content, TRUE, TRUE);
 			echo "</font>$text_div_end</td></tr>\n";
 		}
 		echo "</table>\n</td></tr>\n";
@@ -265,7 +265,7 @@ function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
 		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 		echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-		echo formatReady($db_kategorien->f("content"), TRUE, TRUE, TRUE);
+		echo formatReady($db_kategorien->f("content"), TRUE, TRUE);
 		echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 	} 
 }
