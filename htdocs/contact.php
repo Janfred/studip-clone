@@ -147,11 +147,13 @@ if ($search_exp) {
 	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Addressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
 } 
-echo "</form>";
+echo "</form></td></tr>";
 
+if ($sms_msg)	{
+	parse_msg (rawurldecode($sms_msg));
+	}
 ?>
-
-</td></tr></table>
+</table>
 <?
 
 
