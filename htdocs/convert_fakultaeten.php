@@ -2,7 +2,7 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("root");
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ADMIN_MODULES."/DbView.class.php";
+require_once $ABSOLUTE_PATH_STUDIP . "/lib/classes/DbView.class.php";
 require_once $ABSOLUTE_PATH_STUDIP . "/forum.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP . "/visual.inc.php";
 

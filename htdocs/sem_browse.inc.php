@@ -31,9 +31,9 @@ require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemSearch.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeViewSimple.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemRangeTreeViewSimple.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemSearch.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeViewSimple.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemRangeTreeViewSimple.class.php");
 
 
 //init classes

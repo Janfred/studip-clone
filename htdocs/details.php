@@ -34,7 +34,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); // wir brauchen htmlReady
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php"); 
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTree.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
 
 ?>
 <body>

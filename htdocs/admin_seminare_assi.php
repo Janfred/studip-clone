@@ -33,7 +33,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/functions.php";		//noch mehr Stuff
 require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen koennen
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeSearch.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
 
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");

@@ -43,7 +43,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("autor");
 
 require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."StudipRangeTreeViewAdmin.class.php");
+require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/StudipRangeTreeViewAdmin.class.php");
 
 
 include($ABSOLUTE_PATH_STUDIP."seminar_open.php"); //hier werden die sessions initialisiert

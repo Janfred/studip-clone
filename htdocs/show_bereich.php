@@ -25,7 +25,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 // -- here you have to put initialisations for the current page
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTree.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head

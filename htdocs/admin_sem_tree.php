@@ -24,11 +24,12 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 if (!$perm->is_fak_admin()){
 	$perm->perm_invalid(0,0);
+	page_close();
 	die;
 }
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeViewAdmin.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemSearch.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeViewAdmin.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemSearch.class.php");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 

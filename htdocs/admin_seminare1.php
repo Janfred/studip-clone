@@ -31,7 +31,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeSearch.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
 
 
 // Start of Output

@@ -34,8 +34,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTree.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipRangeTree.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTree.class.php");
 
 /**
 * This function creates the header line for studip-objects
