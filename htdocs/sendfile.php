@@ -30,7 +30,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-
+if (ini_get('zlib.output_compression')){
+	@ini_set('zlib.output_compression','0');
+}
 $dont_put_headers=TRUE;
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -317,7 +319,7 @@ header("Expires: 0");
 header("Content-Type: $content_type; name=\"$file_name\"");
 if ($filesize != FALSE)
 	header("Content-Length: $filesize");
-header("Content-disposition: $content_disposition; filename=\"$file_name\"");
+header("Content-Disposition: $content_disposition; filename=\"$file_name\"");
 if ($type != 5){
 	@readfile($path_file);
 	TrackAccess($file_id);
