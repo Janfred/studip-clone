@@ -187,7 +187,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$db->query('SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_sem_tree USING(Seminar_id) 
 				LEFT JOIN sem_tree USING(sem_tree_id) 
-				WHERE sem_tree.parent_id = "' . $inst_id . '" AND seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
+				WHERE seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
 				ORDER BY ' . $order);
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
