@@ -129,7 +129,7 @@ class ShowList extends ShowTreeRow{
 				$zusatz=sprintf (_("verantwortlich:")." %s", $resObject->getOwnerName());
 			
 			//clipboard in/out
-			if (getGlobalPerms($user->id) == "admin")
+			if ((getGlobalPerms($user->id) == "admin") && (is_object($clipObj)))
 				if ($clipObj->isInClipboard($resObject->getId()))
 					$zusatz .= "<a href=\"".$PHP_SELF."?clip_out=".$resObject->getId()."\"><img src=\"pictures/forum_fav.gif\" border=\"0\" ".tooltip(_("Aus der Merkliste entfernen"))." /></a>";
 				else
