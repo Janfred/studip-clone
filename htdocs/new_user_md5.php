@@ -40,6 +40,7 @@ function generate_password($length) {
 	return $pass;
 }
 
+
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); // Funktionen fuer Nachrichtenmeldungen
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Wir brauchen die Funktionen zum Loeschen von Terminen...
@@ -85,7 +86,7 @@ while ( is_array($HTTP_POST_VARS)
 	case "create":
 		$run = TRUE;
 		## Do we have permission to do so?
-		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "admin") {
+		if (!$perm->is_fak_admin() && addslashes(implode($perms,",")) == "admin") {
 			$msg .= "error§Sie haben keine Berechtigung <b>admins</b> anzulegen.§";
 			$run = FALSE;
 		}
@@ -189,7 +190,7 @@ while ( is_array($HTTP_POST_VARS)
 	case "u_edit":
 		$run = TRUE;
 		## Do we have permission to do so?
-		if (!$perm->have_perm("root") && addslashes(implode($perms,",")) == "admin") {
+		if (!$perm->is_fak_admin() && addslashes(implode($perms,",")) == "admin") {
 			$msg .= "error§Sie haben keine Berechtigung, <b>Administratoren</b> anzulegen.§";
 			$run = FALSE;
 		}
@@ -200,7 +201,7 @@ while ( is_array($HTTP_POST_VARS)
 		if (!$perm->have_perm("root")) {
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
-			if ($db->f("perms") == "admin") {
+			if (!$perm->is_fak_admin() && $db->f("perms") == "admin") {
 				$msg .= "error§Sie haben keine Berechtigung <b>admins</b> zu ver&auml;ndern.§";
 				$run = FALSE;
 			}
@@ -208,7 +209,19 @@ while ( is_array($HTTP_POST_VARS)
 				$msg .= "error§Sie haben keine Berechtigung <b>roots</b> zu ver&auml;ndern.§";
 				$run = FALSE;
 			}
+			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
+				$db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
+							WHERE a.user_id ='$u_id' AND a.inst_perms = 'admin'");
+				$db->next_record();
+				$run = $db->f("admin_ok");
+				if (!$run){
+					$msg .= "error§Sie haben keine Berechtigung diesen Admin zu ver&auml;ndern.§";
+				}
+			}
 		}
+		
 		// aktiver Dozent?
 		$db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '$u_id' AND status = 'dozent' GROUP BY user_id");
 		$db->next_record();
@@ -320,11 +333,6 @@ while ( is_array($HTTP_POST_VARS)
 				if (($db_ar = $db->affected_rows()) > 0) {
 					$msg .= "info§$db_ar Eintr&auml;ge aus Mitarbeiterlisten gel&ouml;scht.§";
 				}
-				$query = "delete from fakultaet_user where user_id='$u_id'";
-				$db->query($query);
-				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§$db_ar Eintr&auml;ge aus den Fakult&auml;tsangeh&ouml;rigen gel&ouml;scht.§";
-				}
 			}
 		}
 
@@ -337,14 +345,22 @@ while ( is_array($HTTP_POST_VARS)
 		if (!$perm->have_perm("root")) {
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
-			if ($db->f("perms") == "admin") {
-				$msg .= "error§Sie haben keine Berechtigung <b>admins</b> zu ver&auml;ndern.§";
-      	$run = FALSE;
-			}
 			if ($db->f("perms") == "root") {
 				$msg .= "error§Sie haben keine Berechtigung <b>roots</b> zu ver&auml;ndern.§";
-      	$run = FALSE;
+				$run = FALSE;
 			}
+			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
+				$db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
+							WHERE a.user_id ='$u_id' AND a.inst_perms = 'admin'");
+				$db->next_record();
+				$run = $db->f("admin_ok");
+				if (!$run){
+					$msg .= "error§Sie haben keine Berechtigung diesen Admin zu ver&auml;ndern.§";
+				}
+			}
+			
 		}
 		
 		if ($run) { // Rechte ok
@@ -411,13 +427,20 @@ while ( is_array($HTTP_POST_VARS)
 		if (!$perm->have_perm("root")) {
 			$db->query("select * from auth_user_md5 where user_id='$u_id'");
 			$db->next_record();
-			if ($db->f("perms") == "admin") {
-				$msg .= "error§Sie haben keine Berechtigung <b>admins</b> zu l&ouml;schen.§";
-      	$run = FALSE;
-			}
 			if ($db->f("perms") == "root") {
 				$msg .= "error§Sie haben keine Berechtigung <b>roots</b> zu l&ouml;schen.§";
-      	$run = FALSE;
+				$run = FALSE;
+			}
+			if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
+				$db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
+							WHERE a.user_id ='$u_id' AND a.inst_perms = 'admin'");
+				$db->next_record();
+				$run = $db->f("admin_ok");
+				if (!$run){
+					$msg .= "error§Sie haben keine Berechtigung diesen Admin zu l&ouml;schen.§";
+				}
 			}
 		}
 		
@@ -497,12 +520,6 @@ while ( is_array($HTTP_POST_VARS)
 			if ($db_ar = RemovePersonFromAllStatusgruppen(get_username($u_id))  > 0) {
 				$msg .= "info§$db_ar Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht.§";
 			}
-			## user aus den Fakultaeten rauswerfen
-			$query = "delete from fakultaet_user where user_id='$u_id'";
- 			$db->query($query);
-		 	if (($db_ar = $db->affected_rows()) > 0) {
-			 	$msg .= "info§$db_ar Eintr&auml;ge der Fakult&auml;tsangeh&ouml;rigen gel&ouml;scht.§";
-	 		}
 			## Alle persoenlichen Termine dieses users löschen
 		 	if ($db_ar = delete_range_of_dates($u_id, FALSE) > 0) {
 				$msg .= "info§$db_ar Eintr&auml;ge aus den Terminen gel&ouml;scht.§";
@@ -760,8 +777,17 @@ if (isset($details)) {
 				<td class="steel1" colspan=3 align=center>&nbsp;
 				<input type="hidden" name="u_id"	 value="<?= $db->f("user_id") ?>">
 				<?
+				if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
+					$db2->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin') 
+							WHERE a.user_id ='".$db->f("user_id")."' AND a.inst_perms = 'admin'");
+					$db2->next_record();
+				}
+			
 				if ($perm->have_perm("root") || 
-					($db->f("perms") != "admin" && $db->f("perms") != "root")) {
+					($db->f("perms") != "admin" && $db->f("perms") != "root") ||
+					$db2->f("admin_ok") ) {
 					?>
 					<input type="submit" name="u_edit" value=" Ver&auml;ndern ">&nbsp;
 					<input type="submit" name="u_pass" value=" Passwort neu setzen ">&nbsp;
@@ -784,7 +810,12 @@ if (isset($details)) {
 			$temp_user_id = $db->f("user_id");
 			if ($perm->have_perm("root"))
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id ='$temp_user_id' AND inst_perms != 'user'");
-			else
+			elseif ($perm->is_fak_admin())
+				$db2->query("SELECT a.Institut_id,b.Name FROM user_inst AS a 
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id ) 
+							WHERE a.user_id ='".$db->f("user_id")."' AND a.inst_perms = 'admin' AND c.user_id = '$user->id' AND c.inst_perms='admin'");
+			else	
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst AS x LEFT JOIN user_inst AS y USING (Institut_id) LEFT JOIN Institute USING (Institut_id) WHERE x.user_id ='$temp_user_id' AND x.inst_perms != 'user' AND y.user_id = '$user->id' AND y.inst_perms = 'admin'");
 			if ($db2->num_rows()) {
 				print "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
