@@ -266,7 +266,7 @@ while ($db->next_record())
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 				
-				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>htmlReady($db->f("Name")), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
+				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
 			}
 		}
 	}
@@ -538,7 +538,7 @@ for ($i; $i<$global_end_time+1; $i++)
 						else
 							echo  "<a href=\"seminar_main.php?auswahl=";
 						echo substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
-						echo substr($my_sems[$cc["seminar_id"]]["name"], 0,50);
+						echo htmlReady(substr($my_sems[$cc["seminar_id"]]["name"], 0,50));
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "..."; 
 						echo"</font></a>";
