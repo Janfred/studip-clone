@@ -423,11 +423,11 @@ if (($s_id) && (auth_check())) {
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right>Veranstaltungs-Nummer</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="int" name="VeranstaltungsNummer" size=6 maxlength=6 value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="VeranstaltungsNummer" size="20" maxlength="255" value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right>ECTS-Punkte</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="int" name="ects" size=6 maxlength=32 value="<?php echo htmlReady($db->f("ects")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="ects" size="6" maxlength="32" value="<?php echo htmlReady($db->f("ects")) ?>"></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%smax. Teilnehmeranzahl%s", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
@@ -681,7 +681,7 @@ if (($s_id) && (auth_check())) {
 			?>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Studienbereich(e)</b></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <br />&nbsp; 
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp;
 					<?
 					echo "\n<div align=\"left\">&nbsp;";
 					echo $st_search->getSearchField(array('style' => 'vertical-align:middle;','size'=>30));

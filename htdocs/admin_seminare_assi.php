@@ -1352,7 +1352,7 @@ elseif ((!$level) || ($level==1))
 							<?=_("Veranstaltungsnummer:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="30%">
-							&nbsp; <input type="int" name="sem_nummer" size=20 maxlength=255 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
+							&nbsp; <input type="text" name="sem_nummer" size=20 maxlength=255 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Fall Sie eine eindeutige Veranstaltungsnummer für diese Veranstaltung kennen, geben Sie diese bitte hier ein."), TRUE, TRUE) ?>
 							>
@@ -1361,7 +1361,7 @@ elseif ((!$level) || ($level==1))
 							<?=_("ECTS-Punkte:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="60%">
-							&nbsp; <input type="int" name="sem_ects" size=6 maxlength=32 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_ects"])) ?>">
+							&nbsp; <input type="text" name="sem_ects" size=6 maxlength=32 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_ects"])) ?>">
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("ECTS-Kreditpunkte, die in dieser Veranstaltung erreicht werden können."), TRUE, TRUE) ?>
 							>
