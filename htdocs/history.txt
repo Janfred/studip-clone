@@ -4,13 +4,14 @@
   Studiengänge begrenzt werden
 - Neue Ebene "Studienfach" eingebaut. Studenten können nun im System hinterlegen, welche Studienfächer sie
   studieren
+- Neuer Archivierungsassistent
 - System zur optischen Gewichtung des Alters von Objekten eingeführt (Pfeile sind je nach alter mehr oder weniger rot)
 - Veranstaltungssuche/Übersicht verbessert: optische besser hervorgehobene Gliederung, frei wählbare Gliederungsmodi,
   verbesserte und übersichtlichere Darstellung
 - Rundmails an alle Buddies können verschickt werden
-- neue Institutssuche eingebaut
+- neue Einrichtungssuche eingebaut
 - Selbstbezeichnung für Einrichtungen kann nun verändert werden
-- Institute können nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarberlisten und
+- Einrichtungen können nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarberlisten und
   Veranstaltungsübersicht an jedem Institut innerhalb des Systems 
 - weitere Detailverbesserungen und Bugfixes
 
