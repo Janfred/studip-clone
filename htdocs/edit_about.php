@@ -615,7 +615,6 @@ if (!$my_about->check)
 if ($cmd=="copy")
  {
   $my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
-
   }
 
 //Veränderungen an Studiengängen
@@ -677,7 +676,6 @@ if ($cmd)
 	   $priv_msg = "Ihre persönliche Seite wurde von einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \n".$my_about->priv_msg;
 	$my_about->insert_sms($my_about->auth_user["username"], $priv_msg);
 	  }
-
   $msg = rawurlencode($my_about->msg);
   header("Location: $PHP_SELF?username=$username&msg=$msg&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
   page_close();
@@ -875,7 +873,7 @@ IF ($view=="Bild"){
 			echo "<img border=\"1\" src=\"./user/".$my_about->auth_user["user_id"].".jpg\" alt=\"". $my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."\"><br />&nbsp; ";
 			
 		echo "</td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote>";
-		echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username\" method=\"POST\">";
+		echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username&view=Bild\" method=\"POST\">";
 		echo "<br />Upload eines Bildes:<br><br>1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.<br><br>";
 		echo "&nbsp;&nbsp;<input name=\"imgfile\" type=\"file\" style=\"width: 80%\" cols=".round($max_col*0.7*0.8)."><br><br>";
 		echo "2. Klicken sie auf <b>Bild senden</b>, um das Bild hochzuladen.<br><br>";
