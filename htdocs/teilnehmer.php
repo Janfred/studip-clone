@@ -618,14 +618,11 @@ while (list ($key, $val) = each ($gruppe)) {
 	}
 	print "</td>";
 	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", $val);
-	if ($key != dozent)
+	if ($key != dozent && $rechte)
 		printf("<td class=\"steel\" width=\"1%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Anmeldedatum"));
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Postings"));
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Dokumente"));
 	printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
-	if ($key == "dozent") {
-		echo "<td class=\"steel\"></td>";
-	}
 
 	if ($rechte) {
 
@@ -638,7 +635,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
 			if ($db3->f("admission_type"))
-				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
+				echo"<td class=\"steel\" width=\"10%\" align=\"center\" colspan=\"2\"><b>&nbsp;</b></td>";
 		}
 
 		if ($key == "tutor") {
@@ -760,7 +757,7 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
 	echo htmlReady($db->f("fullname")) ."</a></font></td>";
-	if ($key != "dozent")
+	if ($key != "dozent" && $rechte)
 		echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".date("d.m.y,",$db->f("mkdate"))."&nbsp;".date("H:i:s",$db->f("mkdate"))."</font></td>";
 	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$db->f("doll")."</font></td>";
 	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$Dokumente."</font></td>";
