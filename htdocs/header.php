@@ -228,5 +228,6 @@ if (isset($i_query[0]) && $i_query[0] != "") {
 	ob_end_flush();
 
 	include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft
+	include "tracking.inc.php"; //teomporaer. hier wird der User getrackt. 
 ?>
 <!-- $Id$ -->
