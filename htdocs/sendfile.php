@@ -6,7 +6,8 @@
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, André Noack André Noack <andre.noack@gmx.net>
 * @access		public
-* @modulegroup	system_core
+* @package	studip_core
+* @modulegroup	library
 * @module		sendfile.php
 */
 

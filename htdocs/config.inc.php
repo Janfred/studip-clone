@@ -8,7 +8,7 @@
 * 
 * @access		public
 * @package		studip_core
-* @modulegroup	studip_core
+* @modulegroup	library
 * @module		config.inc.php
 */
 
