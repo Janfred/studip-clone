@@ -131,10 +131,53 @@ class EventObject {
 		else
 			return FALSE;
 	}
+	
+	//private, works as ceil, but if the output is o, it will be converted to 1
+	function myCeil ($number) {
+		$result = ceil ($number);
+
+		if (!$result)
+			$result = 1;
+
+		return $result;
+	}
 
 	//private
 	function calculatePoints() {
-		$points = ceil(($this->end - $this->begin) / 60 / 15);
+		global $POINTS, $CALENDAR_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
+		
+		if ($CALENDAR_ENABLE)
+			include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
+	
+		
+		$tmp_begin = $this->begin;
+		$tmp_end = $this->end;
+		
+		$i = 0;
+		while ($tmp_end) {
+			if  ($CALENDAR_ENABLE)
+				if (holiday($tmp_begin) == 3)
+					$tmp_day = "holiday";
+					
+			if ($tmp_day !=  "holiday")
+				$tmp_day = date("w", $tmp_begin);
+			
+			foreach ($POINTS[$tmp_day] as $val) {
+				$tmp_seperating_start = mktime ($val["begin_hour"], $val["begin_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
+				$tmp_seperating_end = mktime ($val["end_hour"], $val["end_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
+				$i++;				
+				
+				if (($tmp_seperating_start <= $tmp_begin) && ($tmp_seperating_end >= $tmp_begin))
+					if ($tmp_seperating_end >= $tmp_end){
+						$points = $points + ($this->myCeil($this->myCeil(($tmp_end - $tmp_begin) / 60) / $val["min"]) * $val["ratio"]);
+						unset ($tmp_end);
+					} else {
+						$points = $points + ($this->myCeil($this->myCeil(($tmp_seperating_end - $tmp_begin) / 60) / $val["min"]) * $val["ratio"]);
+						$tmp_begin = $tmp_seperating_end + 60;
+					}
+			}
+		}
+		
 		return $points;
 	}
 	
@@ -161,7 +204,6 @@ class EventObject {
 		$chdate = time();
 		$mkdate = time();
 		if($create) {
-			
 			$query = sprintf("INSERT INTO support_event SET event_id = '%s', request_id='%s', begin='%s', " 
 				."end='%s', used_points='%s', user_id ='%s', mkdate='%s', chdate='%s' "
 						 , $this->id, $this->request_id, $this->begin, $this->end

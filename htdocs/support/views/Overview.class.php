@@ -151,7 +151,7 @@ class Overview extends ShowTreeRow {
 			}
 			if ($edit_con_object != $conObject->id)
 				$edit .= "&nbsp;<a href=\"$PHP_SELF?edit_con=$conObject->id\">".makeButton("bearbeiten")."</a>";				
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_req=$conObject->id\">".makeButton("neueanfrage")."</a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_req=$conObject->id&view=requests\">".makeButton("neueanfrage")."</a>";
 		} 
 		
 		$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?show_con_req=$conObject->id&view=requests\">".makeButton("anfragen")."</a>&nbsp;";

@@ -144,10 +144,12 @@ class Request extends ShowTreeRow {
 				$content .= date("d.m.Y H:i", $reqObject->getDate());
 				
 			$content .="</font></td></tr>\n";
+			
+			$content .="<tr><td colspan=\"5\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"3\"  /></td></tr>\n";
 
 			//Topic assignment
 			if (($edit_req_object == $reqObject->id) && ($rechte)) {
-				$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Beitrag im Forum:")."</font></b></td><td width=\"80%%\" align=\"left\" colspan=\"2\"><font size=\"-1\">");
+				$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Beitrag im Forum:")."</font></b></td><td width=\"80%%\" align=\"left\" colspan=\"4\"><font size=\"-1\">");
 					
 				$query = sprintf("SELECT px_topics.name, px_topics.topic_id, date FROM px_topics LEFT OUTER JOIN support_request USING (topic_id) WHERE (support_request.topic_id IS NULL AND seminar_id = '%s' AND parent_id ='0') OR px_topics.topic_id = '%s'", $SessSemName[1], $reqObject->getTopicId());
 				$this->db->query($query);
@@ -161,7 +163,7 @@ class Request extends ShowTreeRow {
 				$content .= "</select>";				
 				
 			} elseif ($reqObject->getTopicId()) {
-				$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Beitrag im Forum:")."</font></b></td><td width=\"80%%\" align=\"left\" colspan=\"2\"><font size=\"-1\">");
+				$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Beitrag im Forum:")."</font></b></td><td width=\"80%%\" align=\"left\" colspan=\"4\"><font size=\"-1\">");
 				$query = sprintf("SELECT name FROM px_topics WHERE topic_id = '%s'", $reqObject->getTopicId());
 				$this->db->query($query);
 				$this->db->next_record();
@@ -178,10 +180,15 @@ class Request extends ShowTreeRow {
 			
 			if ($this->db->nf()) {
 				$rows = 0;
-				$content .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
+				$content .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"90%\">\n";
 				$content .= "<tr><td width=\"20%%\"><font size=\"-1\">"._("Beginn:")."</td><td width=\"20%%\"><font size=\"-1\">"._("Ende:")."</td><td width=\"20%%\"><font size=\"-1\">"._("Punkte:")."</td><td width=\"20%%\"><font size=\"-1\">"._("bearbeitet von:")."</td></tr>";
 				while ($this->db->next_record()) {
 					$rows++;
+					if ($rows <= $this->db->nf()) {
+						$content .= "<tr><td colspan=\"5\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
+						$content .= "<tr><td colspan=\"5\" style=\"{background-image: url('pictures/line.gif')};\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
+						$content .= "<tr><td colspan=\"5\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"3\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
+					}
 					$content .= "<tr>";
 					if ($supportdb_data["evt_edits"][$this->db->f("event_id")]) {
 						//we need the user_id's from all the supporter (=dozenten)
@@ -208,26 +215,27 @@ class Request extends ShowTreeRow {
 						$content .= sprintf ("<td width=\"20%%\" valign=\"top\"><font size=\"-1\">%s</font></td>", ($this->db->f("used_points")) ? $this->db->f("used_points") : _("werden automatisch berechnet"));
 						
 						//edit event supporter
-						$content .= "<td width=\"40%%\" valign=\"top\"><font size=\"-1\">";
+						$content .= "<td width=\"30%%\" valign=\"top\"><font size=\"-1\">";
 						$content .= "<select style=\"{font-size:8 pt;}\" name=\"evt_user_id[]\">";
+						$content .= sprintf ("<option %s value=\"FALSE\">"._("unbekannt")."</option>", (!$reqObject->getUserId()) ? "selected" : "");			
 						while ($this->db2->next_record()) {
 							$content .= sprintf ("<option %s style=\"{font-size:8 pt;}\" value=\"%s\">%s</option>\n", $this->db2->f("user_id") == $this->db->f("user_id") ? "selected" : "", $this->db2->f("user_id"), htmlReady(my_substr($this->db2->f(0),0,30)));						
 						}
 						$content .= "</select>\n";
 						$content .= "<br /><input type=\"HIDDEN\" name=\"evt_id[]\" value=\"".$this->db->f("event_id")."\" />";
+						$content .= "</td>";
+						
+						$content .= "<td width=\"10%%\" align=\"right\" valign=\"top\"><font size=\"-1\">";
 						$content .= "<input type=\"IMAGE\" name=\"evt_sent\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip("Diesen Eintrag speichern")." />";
-						$content .= "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_evt=".$this->db->f("event_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip("Diesen Eintrag löschen")."/></a>";						$content .= "</td></tr>";
-						if ($rows < $this->db->nf()) {
-							$content .= "<tr><td colspan=\"4\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
-							$content .= "<tr><td colspan=\"4\" style=\"{background-image: url('pictures/line.gif')};\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
-							$content .= "<tr><td colspan=\"4\"><img src=\"pictures/blank.gif\" width =\"10\" height=\"3\"  /><td><td><img src=\"pictures/blank.gif\" width =\"10\" height=\"1\"  /></td></tr>\n";
-						}
+						$content .= "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_evt=".$this->db->f("event_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip("Diesen Eintrag löschen")."/></a>";						
+						$content .= "</td></tr>";
 						
 					} else {
 						$content .= sprintf ("<td width=\"20%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("begin")));
 						$content .= sprintf ("<td width=\"20%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("end")));
 						$content .= sprintf ("<td width=\"20%%\"><font size=\"-1\">%s</font></td>", $this->db->f("used_points"));
-						$content .= sprintf ("<td width=\"40%%\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s</a></font></td>", get_username($this->db->f("user_id")), htmlReady(get_fullname($this->db->f("user_id"))));
+						$content .= sprintf ("<td width=\"30%%\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s</a></font></td>", get_username($this->db->f("user_id")), htmlReady(get_fullname($this->db->f("user_id"))));
+						$content .= sprintf ("<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_evt=".$this->db->f("event_id")."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" ".tooltip("Diesen Eintrag bearbeiten")."/>&nbsp;&nbsp;</a><a href=\"$PHP_SELF?kill_evt=".$this->db->f("event_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip("Diesen Eintrag löschen")."/></a></td>");
 					}
 					$content .= "</tr>\n";
 				}

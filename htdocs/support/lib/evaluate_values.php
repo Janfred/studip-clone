@@ -36,36 +36,8 @@
 require_once ("$RELATIVE_PATH_SUPPORT/lib/ContractObject.class.php");
 require_once ("$RELATIVE_PATH_SUPPORT/lib/RequestObject.class.php");
 require_once ("$RELATIVE_PATH_SUPPORT/lib/EventObject.class.php");
+require_once ("$RELATIVE_PATH_SUPPORT/supportConfig.inc.php");
 
-/*****************************************************************************
-Functions...
-/*****************************************************************************/
-
-//a small helper function to close all the kids
-function closeStructure ($resource_id) {
-	global $resources_data;
-	$db = new DB_Seminar;
-	
-	unset($resources_data["structure_opens"][$resource_id]);
-	$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' ", $resource_id);
-	$db->query($query);
-	while ($db->next_record()) {
-		closeStructure ($db->f("resource_id"));
-	}
-}
-
-//a small helper function to update some data of the tree-structure (after move something)
-function updateStructure ($resource_id, $root_id, $level) {
-	$db = new DB_Seminar;
-	$query = sprintf ("UPDATE resources_objects SET root_id = '%s', level='%s' WHERE resource_id = '%s' ", $root_id, $level, $resource_id);
-	$db->query($query);
-	
-	$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' ", $resource_id);
-	$db->query($query);
-	while ($db->next_record()) {
-		closeStructure ($db->f("resource_id"), $root_id, $level+1);
-	}
-}
 
 /*****************************************************************************
 empfangene Werte auswerten und Befehle ausfuehren
@@ -260,16 +232,21 @@ if (($rechte) && ($sent_req_id)) {
 		$changedReq->setDate(mktime($req_hour,$req_min,0,$req_month, $req_day, $req_year));
 	
 	$changedReq->store();
-}
+	}
 
 //create a new event
 if (($rechte) && ($create_evt)) {
 	$evt_end = mktime(date("H", time()),(date("i", time())+30),0, date("m", time()), date("d", time()), date("Y", time()));
 
-	$createdEvt = new EventObject('', $create_evt, time(), $evt_end, $user->id, '');
+	$createdEvt = new EventObject('', $create_evt, time(), $evt_end, '', '');
 	$createdEvt->create();
 
 	$supportdb_data["evt_edits"][$createdEvt->getId()] = TRUE;
+}
+
+//edit a new event
+if (($rechte) && ($edit_evt)) {
+	$supportdb_data["evt_edits"][$edit_evt] = TRUE;
 }
 
 //changes for one ore more events coming in...
@@ -279,8 +256,9 @@ if (($rechte) && ($evt_sent_x)) {
 	foreach ($evt_id as $key=>$id) {
 		$changedEvt = new EventObject($id);
 		$changedEvt->restore();
-		
-		$changedEvt->setUserId($evt_user_id[$key]);
+
+		if (($evt_user_id[$key]) && ($evt_user_id[$key] != "FALSE") )
+			$changedEvt->setUserId($evt_user_id[$key]);
 		
 		$illegal_begin = FALSE;
 		$illegal_end = FALSE;
@@ -306,10 +284,12 @@ if (($rechte) && ($evt_sent_x)) {
 		elseif ((!$illegal_end) && ($evt_end > $changedEvt->getBegin()))
 			$changedEvt->setEnd($evt_end);
 
-		$changedEvt->store();
-		
-		if ((!$illegal_begin) && (!$illegal_end) && (!$changedEvt->isUnchanged()))
-			unset($supportdb_data["evt_edits"][$id]);
+		if ($changedEvt->getUserId()) {
+			$changedEvt->store();
+			if ((!$illegal_begin) && (!$illegal_end) && (!$changedEvt->isUnchanged()));
+				unset($supportdb_data["evt_edits"][$id]);			
+		} else
+			$msg->addMsg(7);
 	}
 }
 
