@@ -40,14 +40,25 @@ function my_session_var($var, $id = false){
 	}
 }
 
-my_session_var(array('_semester_id','_inst_id','_anker_id','_open','_lit_data','_lit_data_id'));
 
 $db = new DB_Seminar();
 $db2 = new DB_Seminar();
 $_semester = new SemesterData();
 $element = new StudipLitCatElement();
 
+if ($_REQUEST['cmd'] == 'check' && !isset($_REQUEST['_check_list'])){
+	$_REQUEST['_check_list'] = array();
+}
 
+my_session_var(array('_semester_id','_inst_id','_anker_id','_open','_lit_data','_lit_data_id','_check_list','_check_plugin'));
+
+if (isset($_REQUEST['send'])){
+	$_anker_id = null;
+	$_open = null;
+	$_lit_data = null;
+	$_lit_data_id = null;
+	$_check_list = null;
+}
 
 if (isset($_REQUEST['open_element'])){
 	$_open[$_REQUEST['open_element']] = true;
@@ -60,7 +71,20 @@ if (isset($_REQUEST['close_element'])){
 if (isset($_GET['_catalog_id'])){
 	$_anker_id = $_GET['_catalog_id'];
 }
-
+if ($_REQUEST['cmd'] == 'markall' && is_array($_lit_data)){
+	$_check_list = array_keys($_lit_data);
+}
+if ($_REQUEST['cmd'] == 'check' && is_array($_check_list) && is_array($_lit_data)){
+	foreach ($_check_list as $el){
+		$check = StudipLitSearch::CheckZ3950($_lit_data[$el]['accession_number'], $_check_plugin);
+		if (is_array($_lit_data[$el]['check_accession'])){
+			$_lit_data[$el]['check_accession'] = array_merge($_lit_data[$el]['check_accession'],$check);
+		} else {
+			$_lit_data[$el]['check_accession'] = $check;
+		}
+	}
+}
+ 	
 if (isset($_REQUEST['_semester_id']) && $_REQUEST['_semester_id'] != 'all'){
 	$_sem_sql = "  LEFT JOIN seminare s ON (c.seminar_id=s.Seminar_id)
 				LEFT JOIN semester_data sd
@@ -76,6 +100,16 @@ if (isset($_REQUEST['_semester_id']) && $_REQUEST['_semester_id'] != 'all'){
 }
 
 $_is_fak = false;
+
+$_search_plugins = StudipLitSearch::GetAvailablePlugins();
+if (in_array('Studip', $_search_plugins)){
+	array_splice($_search_plugins,  array_search('Studip', $_search_plugins), 1);
+}
+$preferred_plugin = StudipLitSearch::getPreferredPlugin();
+if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
+	array_splice($_search_plugins,  array_search($preferred_plugin, $_search_plugins), 1);
+	array_unshift($_search_plugins,$preferred_plugin);
+}
 
 ?>
 <table width="100%" cellspacing=0 cellpadding=0 border=0>
@@ -163,14 +197,26 @@ $_is_fak = false;
 					&nbsp; 
 				</td>
 			</tr>
-			<tr>
-				<td class="blank">
-					&nbsp; 
-				</td>
-			</tr>
-		</table>
 		</form>
 		<form name="check_elements" action="<?=$PHP_SELF?>?cmd=check" method="POST">
+			<tr>
+				<td class="steel1" align="right">
+					<select name="_check_plugin" style="vertical-align:middle">
+					<?
+					foreach($_search_plugins as $sp){
+						?>
+						<option <?=($sp == $_check_plugin ? " selected " : "")?>><?=htmlReady($sp)?></option>
+						<?
+					}
+					?>
+				</select>
+					<input style="vertical-align:middle" type="image" <?=makeButton('jetzttesten','src') . ' ' . tooltip(_("Alle markierten Einträge im ausgewählten Katalog suchen"))?> border="0">
+					&nbsp;&nbsp;&nbsp;
+					<a href="<?=$PHP_SELF?>?cmd=markall"><img style="vertical-align:middle" <?=makeButton('alleauswaehlen','src') . ' ' . tooltip(_("Alle Einträge markieren"))?> border="0"></a>
+				</td>
+			</tr>
+		
+		</table>
 		<?
 	if ($_is_fak){
 		$sql = "SELECT f.*
@@ -221,7 +267,23 @@ $_is_fak = false;
 				} else {
 					$icon = "<img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\">";
 				}
-				$addon = '<input type="checkbox" name="_check_list[]" value="' . $element->getValue('catalog_id') . '">';
+				$ampel = "";
+				if ($_check_plugin && isset($_lit_data[$cid]['check_accession'][$_check_plugin])){
+					$check = $_lit_data[$cid]['check_accession'][$_check_plugin];
+					if ($check['found']){
+						$ampel_pic = 'ampel_gruen.gif';
+						$tt = _("gefunden");
+					} else if (count($check['error'])){
+						$ampel_pic = 'ampel_gelb.gif';
+						$tt = _("keine automatische Suche möglich");
+					} else {
+						$ampel_pic = 'ampel_rot.gif';
+						$tt =_("nicht gefunden");
+					}
+					$ampel = '<span ' . tooltip($tt,false) . '><img src="pictures/' . $ampel_pic . '" style="vertical-align:middle;">&nbsp(' . $_check_plugin . ')</span>&nbsp;&nbsp;';
+				}
+				$addon = $ampel . '<input type="checkbox" style="vertical-align:middle;" name="_check_list[]" value="' . $element->getValue('catalog_id') . '" '
+						. (is_array($_check_list) && in_array($element->getValue('catalog_id'), $_check_list) ? 'checked' : '') .' >';
 				$open = isset($_open[$element->getValue('catalog_id')]) ? 'open' : 'close';
 				$link = $PHP_SELF . '?' . (isset($_open[$element->getValue('catalog_id')]) ? 'close' : 'open') . '_element=' . $element->getValue('catalog_id') . '#anker';
 				$titel = '<a href="' . $link . '" class="tree">' . htmlReady(my_substr($element->getShortName(),0,85)) . '</a>';
