@@ -223,7 +223,11 @@ if (isset($add_tutor_x)) {
 					if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
 						// gehen wir ihn halt hier hochstufen
 						$db2->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
-						$msg = "msg§".$db->f("Vorname")." ". $db->f("Nachname")." wurde zum Tutor bef&ouml;rdert..§";
+						$msg = "msg§".$db->f("Vorname")." ". $db->f("Nachname")." wurde zum Tutor bef&ouml;rdert.§";
+						//kill from waiting user
+						$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
+						//reordner waiting list
+						 renumber_admission($id);
 					} else {
 						;	// na, das ist ja voellig witzlos, da tun wir einfach nix.
 							// Nicht das sich noch ein Dozent auf die Art und Weise selber degradiert!
@@ -234,7 +238,12 @@ if (isset($add_tutor_x)) {
 					$group=select_group ($db3->f("start_time"), $u_id);
 					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$id', '$u_id', 'tutor','$group' )");
 					$msg = sprintf ("msg§%s wurde als Tutor in die Veranstaltung aufgenommen.</b>", get_fullname($u_id));
-			
+	
+					//kill from waiting user
+					$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
+					//reordner waiting list
+					 renumber_admission($id);
+
 					$message="Sie wurden vom einem Dozenten oder Administrator als **Tutor** in die Veranstaltung **$SessSemName[0]** aufgenommen und sind damit zugelassen";
 					$messaging->insert_sms (get_username($u_id), $message, "____%system%____");
 				}
