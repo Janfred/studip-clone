@@ -93,7 +93,7 @@ class AssignObject {
 	}
 
 	function createId() {
-		$this->id = md5(uniqid("BartSimpson"));
+		$this->id = md5(uniqid("BartSimpson",1));
 	}
 	
 	function create() {
@@ -120,7 +120,7 @@ class AssignObject {
 		if (!$id)
 			$id=$this->assign_user_id;
 			
-		switch (ResourceObject::getOwnerType($id)) {
+		switch (get_object_type($id)) {
 			case "user";
 				if (!$explain)
 					return get_fullname($id);
@@ -128,6 +128,7 @@ class AssignObject {
 					return get_fullname($id)." ("._("NutzerIn").")";
 			break;
 			case "inst":
+			case "fak":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);
 				$this->db->query($query);
 				if ($this->db->next_record())
@@ -172,29 +173,8 @@ class AssignObject {
 	}
 	
 	function getOwnerType() {
-		//Ist es eine Veranstaltung?
-		$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$this->getAssignUserId());
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "sem";
-
-		//Ist es ein Nutzer?
-		$query = sprintf("SELECT user_id FROM auth_user_md5 WHERE user_id='%s' ",$this->getAssignUserId());
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "user";
-		
-		//Ist es ein Termin?
-		$query = sprintf("SELECT termin_id FROM termine WHERE termin_id='%s' ",$this->getAssignUserId());
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "date";
-
-		//Ist es ein Institut?
-		$query = sprintf("SELECT Institut_id FROM Institute WHERE Institut_id='%s' ",$this->getAssignUserId());
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "inst";
+		$type = get_object_type($this->getAssignUserId());
+		return $type == "fak" ? "inst" : $type;
 	}
 
 	function getResourceId() {
@@ -464,10 +444,17 @@ class AssignObject {
 	}
 
 	function restore($id='') {
-		if(func_num_args() == 1)
-			$query = sprintf("SELECT * FROM resources_assign WHERE assign_id='%s' ",$id);
-		else 
-			$query = sprintf("SELECT * FROM resources_assign WHERE assign_id='%s' ",$this->id);
+		if(func_num_args() == 1){
+			if (!$id){
+				return false;
+			}
+		} else {
+			if (!$this->id){
+				return false;
+			}
+			$id = $this->id;
+		}
+		$query = sprintf("SELECT * FROM resources_assign WHERE assign_id='%s' ",$id);
 		$this->db->query($query);
 		
 		if($this->db->next_record()) {

@@ -710,7 +710,7 @@ if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_cate
 		}
 	
 		if (($add_type) && ($_add_type_x)) {
-			$id=md5(uniqid("Sommer2002"));
+			$id=md5(uniqid("Sommer2002",1));
 			if ($resource_is_room)
 				$resource_is_room = 1;
 			$db->query("INSERT INTO resources_categories SET category_id='$id', name='$add_type', description='$insert_type_description', is_room='$resource_is_room' ");
@@ -760,7 +760,7 @@ if (($add_property) || ($delete_property) || ($change_properties)) {
 				$options="vorhanden";
 			if ($add_property_type=="select")
 				$options="Option 1;Option 2;Option 3";
-			$id=md5(uniqid("Regen2002"));
+			$id=md5(uniqid("Regen2002",1));
 			$db->query("INSERT INTO resources_properties SET options='$options', property_id='$id', name='$add_property', description='$insert_property_description', type='$add_property_type' ");
 		}
 	
@@ -834,7 +834,7 @@ if ($change_global_settings) {
 //create a lock
 if ($create_lock) {
 	if ($globalPerm == "admin") { //check for resources root or global root
-		$id = md5(uniqid("locks"));
+		$id = md5(uniqid("locks",1));
 		$query = sprintf("INSERT INTO resources_locks SET lock_begin = '%s', lock_end = '%s', lock_id = '%s' ", 0, 0, $id);
 		$db->query($query);
 	

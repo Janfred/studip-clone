@@ -61,7 +61,7 @@ class AssignEvent {
 		$this->resource_id=$resource_id;
 		$this->assign_user_id=$assign_user_id;
 		$this->user_free_name=$user_free_name;
-		$this->id = md5(uniqid("jasony"));
+		$this->id = md5(uniqid("jasony",1));
 	}
 
 	function setRepeatMode ($value) {

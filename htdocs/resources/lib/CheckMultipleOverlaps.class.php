@@ -86,8 +86,8 @@ class CheckMultipleOverlaps {
 			$assEvt = new AssignEventList($this->begin, $this->end, $resource_id, FALSE, FALSE, FALSE);
 			$now = time();
 			if ($assEvt->existEvent()){
-			while ($event = $assEvt->nextEvent()) {
-				$sql[] = "('" . md5(uniqid("tempo")) ."','$resource_id', '".$event->getAssignId()."', ".$event->getBegin().", ".$event->getEnd().", $now)";
+				while ($event = $assEvt->nextEvent()) {
+					$sql[] = "('" . md5(uniqid("tempo",1)) ."','$resource_id', '".$event->getAssignId()."', ".$event->getBegin().", ".$event->getEnd().", $now)";
 			}
 			$query = "INSERT INTO resources_temporary_events (event_id ,resource_id, assign_id,begin,end,mkdate) VALUES " . join(",",$sql);
 			$this->db->query($query);

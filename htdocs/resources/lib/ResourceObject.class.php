@@ -52,7 +52,6 @@ class ResourceObject {
 	var $is_room = null;
 	var	$is_parent = null;
 	var $my_state = null;
-	var $my_owner_type = null;
 	
 	//Konstruktor
 	function ResourceObject($name='', $description='', $parent_bind='', $root_id='', $parent_id='', $category_id='', $owner_id='', $id = '') {
@@ -84,7 +83,7 @@ class ResourceObject {
 	}
 
 	function createId() {
-		return md5(uniqid("DuschDas"));
+		return md5(uniqid("DuschDas",1));
 	}
 
 	function create() {
@@ -204,40 +203,15 @@ class ResourceObject {
 		if (!$id)
 			$id=$this->owner_id;
 
-		if (is_null($this->my_owner_type)){
-			//Is it a global?
-			if ($id == "global")
-				$this->my_owner_type = "global";
-	
-			//Is it a entry for "everyone"?
-			if ($id == "all")
-				$this->my_owner_type = "all";
-			
-			//Ist es eine Veranstaltung?
-			$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$id);
-			$this->db->query($query);
-			if ($this->db->next_record())
-				$this->my_owner_type = "sem";
-	
-			//Ist es ein Nutzer?
-			$query = sprintf("SELECT user_id FROM auth_user_md5 WHERE user_id='%s' ",$id);
-			$this->db->query($query);
-			if ($this->db->next_record())
-				$this->my_owner_type = "user";
-			
-			//Ist es ein Termin?
-			$query = sprintf("SELECT termin_id FROM termine WHERE termin_id='%s' ",$id);
-			$this->db->query($query);
-			if ($this->db->next_record())
-				$this->my_owner_type = "date";
-	
-			//Ist es ein Institut?
-			$query = sprintf("SELECT Institut_id FROM Institute WHERE Institut_id='%s' ",$id);
-			$this->db->query($query);
-			if ($this->db->next_record())
-				$this->my_owner_type = "inst";
+		//Is it a global?
+		if ($id == "global"){
+			return "global";
+		} else if ($id == "all"){
+			return "all";
+		} else {
+			$type = get_object_type($id);
+			return ($type == "fak") ? "inst" : $type;
 		}
-		return $this->my_owner_type;
 	}
 	
 	function getOrgaName ($explain=FALSE, $id='') {

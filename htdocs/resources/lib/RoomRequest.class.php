@@ -65,7 +65,7 @@ class RoomRequest {
 	}
 
 	function createId() {
-		return md5(uniqid("wintergoe"));
+		return md5(uniqid("wintergoe",1));
 	}
 	
 	function create() {
