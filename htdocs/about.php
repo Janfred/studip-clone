@@ -38,6 +38,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/dbviews/sem_tree.view.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/guestbook.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 	
@@ -114,6 +115,12 @@ if ($guestbook)
 	actions_guestbook($guestbook);
 if ($deletepost)
 	delete_post_guestbook($user_id, $deletepost);
+
+// count views of Page
+if ($auth->auth["uid"]!=$user_id && $homepage_cache != $user_id) {
+	object_add_view($user_id);
+	$homepage_cache = $user_id;
+}
 
 	
 $DataFields = new DataFields($user_id);
@@ -226,6 +233,7 @@ echo "</blockquote></td></tr>"
 </td></tr><tr>
 <td class="steel1" height=99% align="left" valign="top">
 <?
+echo "<font size=\"-1\">&nbsp;"._("Besucher dieser Homepage:")."&nbsp;".object_return_views($user_id)."</font><br>";
 
 if ($username==$auth->auth["uname"]) {
 	if ($auth->auth["jscript"])
