@@ -36,6 +36,7 @@
 
 require_once $ABSOLUTE_PATH_STUDIP."dates.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php";
 
 class VeranstaltungResourcesAssign {
 	var $db;
@@ -79,8 +80,8 @@ class VeranstaltungResourcesAssign {
 	}
 	
 	function changeMetaAssigns($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='', $check_only=FALSE) {
-		global $SEMESTER;
-
+		$semester = new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
 		//load data of the Veranstaltung
 		if (!$term_data) {
 			$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->seminar_id);
@@ -94,7 +95,7 @@ class VeranstaltungResourcesAssign {
 
 		//determine first day of the start-week as sem_begin
 		if ($term_data["start_woche"] >= 0) {
-			foreach ($SEMESTER as $val)
+			foreach ($all_semester as $val)
 				if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
 					$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
 				}
@@ -124,7 +125,7 @@ class VeranstaltungResourcesAssign {
 	
 	
 		//determine the last day as sem_end
-		foreach ($SEMESTER as $val)
+		foreach ($all_semester as $val)
 			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"])) {
 				$sem_end=$val["vorles_ende"];
 			}
