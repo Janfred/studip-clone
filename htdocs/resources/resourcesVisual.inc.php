@@ -944,7 +944,7 @@ class EditObject extends cssClasses {
 						?><input type="IMAGE" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
 					}
 				} else
-					 print "<br /><img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
+					 print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
 				if ($lockedAssign) {
 					if ($resAssign->getOwnerType() == "sem")
 						$query = sprintf("SELECT Name, Seminar_id FROM seminare WHERE Seminar_id='%s' ",$resAssign->getAssignUserId());
@@ -952,7 +952,7 @@ class EditObject extends cssClasses {
 						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN Seminare ON (termine.range_id = Seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
 					$this->db->query($query);
 					$this->db->next_record();
-					print "<br /><img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+					print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 					if ($resAssign->getOwnerType() == "sem")
 						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in diesem Raum staffindet.")."<br />"._("Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".$this->db->f("Name")."</a>");
 					else
@@ -1319,7 +1319,7 @@ class EditObject extends cssClasses {
 					<font size=-1>Besitzer &auml;ndern:</font><font size=-1 color="red"></font><br />
 					<? showSearchForm("search_owner", $search_string_search_owner, FALSE,TRUE);
 				} else
-					print "<img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den Besitzer nicht &auml;ndern.")."</font>";
+					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den Besitzer nicht &auml;ndern.")."</font>";
 				?>
 				</td>
 			</tr>
@@ -1374,7 +1374,7 @@ class EditObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				<td class="<? echo $this->getClass() ?>" colspan=3>
-					<font size=-1><img src="pictures/ausruf_small.gif" align="absmiddle" />&nbsp;<font size=-1><font size="-1"><?=_("Es sind keine weiteren Berechtigungen eingetragen")?></font>
+					<font size=-1><img src="pictures/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><font size="-1"><?=_("Es sind keine weiteren Berechtigungen eingetragen")?></font>
 				</td>
 			</tr>
 			<? } ?>
