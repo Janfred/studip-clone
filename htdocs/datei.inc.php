@@ -711,7 +711,10 @@ function insert_link_db($range_id, $sem_id=0, $refresh = FALSE) {
 	$name = trim($name);  			// laestige white spaces loswerden
 	$dokument_id=md5(uniqid(rand()));
 	
-	$the_file_name = substr(strrchr($the_link,"/"), 1);
+	// $the_file_name = substr(strrchr($the_link,"/"), 1);
+	
+	$url_parts = parse_url($the_link);
+	$the_file_name = basename($url_parts['path']);
 	
 	if ($protect=="on")
 		$protect = 1;
