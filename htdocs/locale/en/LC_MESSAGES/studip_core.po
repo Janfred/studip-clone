@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-04-03 14:41+0200\n"
+"POT-Creation-Date: 2003-04-03 19:46+0200\n"
 "PO-Revision-Date: 2003-03-28 16:21+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -14,11 +14,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
 
-#: about.php:95
+#: about.php:100
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
 msgstr "No user was found under the given username!"
 
-#: about.php:95
+#: about.php:100
 msgid ""
 " Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der "
 "Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;"
@@ -27,111 +27,127 @@ msgstr ""
 "If you have clicked on a link, it could be that the username of the user you "
 "have searched for has changed, or that the user has been deleted."
 
-#: about.php:95
+#: about.php:100
 msgid "Benutzer nicht gefunden"
 msgstr "User not found"
 
-#: about.php:146
+#: about.php:151
 msgid "kein persönliches Bild vorhanden"
 msgstr "no personal photo is included"
 
-#: about.php:155
+#: about.php:160
 msgid "E-mail:"
 msgstr "E-mail:"
 
-#: about.php:156
+#: about.php:161
 msgid "Telefon (privat):"
 msgstr "Home telephone number: "
 
-#: about.php:157
+#: about.php:162
 msgid "Adresse (privat):"
 msgstr "Home address:"
 
-#: about.php:161 edit_about.php:928 institut_main.php:121
+#: about.php:166 edit_about.php:928 institut_main.php:121
 msgid "Homepage:"
 msgstr "Homepage:"
 
-#: about.php:168
+#: about.php:173
 msgid "Wo ich studiere:"
 msgstr "Where I study:"
 
-#: about.php:178
+#: about.php:183
 msgid "Wo ich arbeite:"
 msgstr "Where I work:"
 
-#: about.php:192 admin_metadates.php:522 admin_seminare_assi.php:2027
+#: about.php:197 admin_metadates.php:522 admin_seminare_assi.php:2027
 #: admin_seminare_assi.php:2086 admin_seminare_assi.php:2128
-#: edit_about.php:972 show_dates.inc.php:141 show_dates.inc.php:504
+#: edit_about.php:972 mein_stundenplan.php:639 show_dates.inc.php:141
+#: show_dates.inc.php:504
 msgid "Raum:"
 msgstr "Room:"
 
-#: about.php:194 edit_about.php:974
+#: about.php:199 edit_about.php:974
 msgid "Sprechzeit:"
 msgstr "Office hours:"
 
-#: about.php:196 edit_about.php:924 edit_about.php:976
+#: about.php:201 edit_about.php:924 edit_about.php:976
 msgid "Telefon:"
 msgstr "Telephone:"
 
-#: about.php:198 edit_about.php:978 institut_main.php:117
+#: about.php:203 edit_about.php:978 institut_main.php:117
 msgid "Fax:"
 msgstr "Fax:"
 
-#: about.php:211
+#: about.php:216
 msgid "Stud.IP Messenger starten"
 msgstr "Start Stud.IP Messenger"
 
-#: about.php:213
+#: about.php:218
 msgid "Nachricht an User:"
 msgstr "Message to user:"
 
-#: about.php:213 browse.php:325 institut_members.php:647
+#: about.php:218 browse.php:325 institut_members.php:647
 #: institut_members.php:648 online.php:84 online.php:186 online.php:203
 #: online.php:230 studipim.php:139 teilnehmer.php:527 teilnehmer.php:647
 msgid "Nachricht an User verschicken"
 msgstr "Send message to user"
 
-#: about.php:215
+#: about.php:220
 msgid "Zu Buddies hinzuf&uuml;gen"
 msgstr "Add to Buddies"
 
-#: about.php:222
+#: about.php:227
 msgid "Zur Highscoreliste"
 msgstr "To high score list"
 
-#: about.php:222
+#: about.php:227
 msgid "Ihr Stud.IP-Score:"
 msgstr "Your Stud.IP score:"
 
-#: about.php:222
+#: about.php:227
 msgid "Ihr Rang:"
 msgstr "Your rank:"
 
-#: about.php:227
+#: about.php:232
 msgid "Stud.IP-Score:"
 msgstr "Stud.IP-Score:"
 
-#: about.php:227
+#: about.php:232
 msgid "Rang:"
 msgstr "Rank:"
 
-#: about.php:259 links_about.inc.php:37 links_about.inc.php:52
+#: about.php:264 links_about.inc.php:37 links_about.inc.php:52
 msgid "Lebenslauf"
 msgstr "CV"
 
-#: about.php:266
+#: about.php:271
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: about.php:273 links_about.inc.php:55
+#: about.php:278 links_about.inc.php:55
 msgid "Publikationen"
 msgstr "Publications"
 
-#: about.php:280
+#: about.php:285
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
-#: about.php:302 admin_news.php:491 admin_test_fak.php:351 browse.php:126
+#: about.php:306 lib/classes/StudipRangeTree.class.php:63
+#: lib/classes/StudipSemSearch.class.php:91
+#: lib/classes/StudipSemTree.class.php:56
+#, c-format
+msgid "vor dem %s"
+msgstr "for the %s"
+
+#: about.php:324 admin_metadates.php:654 admin_metadates.php:656
+#: admin_seminare_assi.php:1444 admin_seminare_assi.php:1446
+#: admin_sem_tree.php:194 lib/classes/SemBrowse.class.php:422
+#: lib/classes/StudipSemTreeViewAdmin.class.php:519
+#: lib/classes/StudipSemTreeView.class.php:187
+msgid "unbegrenzt"
+msgstr "unlimited"
+
+#: about.php:331 admin_news.php:491 admin_test_fak.php:351 browse.php:126
 #: header.php:137 links_openobject.inc.php:60
 msgid "Veranstaltungen"
 msgstr "Courses"
@@ -484,7 +500,7 @@ msgstr "at"
 #: admin_admission.php:731 admin_metadates.php:516
 #: admin_seminare_assi.php:2020 admin_seminare_assi.php:2078
 #: admin_seminare_assi.php:2126 admin_seminare_assi.php:2271
-#: mein_stundenplan.php:485 mein_stundenplan.php:613 mein_stundenplan.php:631
+#: mein_stundenplan.php:489 mein_stundenplan.php:617 mein_stundenplan.php:635
 #: ms_stundenplan.inc.php:165 ms_stundenplan.inc.php:187
 msgid "Uhr"
 msgstr "    "
@@ -766,49 +782,49 @@ msgstr "Update schedule "
 
 #: admin_metadates.php:484 admin_metadates.php:486
 #: admin_seminare_assi.php:1988 admin_seminare_assi.php:1990 dates.inc.php:451
-#: mein_stundenplan.php:448 mein_stundenplan.php:590
+#: mein_stundenplan.php:452 mein_stundenplan.php:594
 #: ms_stundenplan.inc.php:195
 msgid "Montag"
 msgstr "Monday"
 
 #: admin_metadates.php:488 admin_metadates.php:490
 #: admin_seminare_assi.php:1992 admin_seminare_assi.php:1994 dates.inc.php:452
-#: mein_stundenplan.php:451 mein_stundenplan.php:591
+#: mein_stundenplan.php:455 mein_stundenplan.php:595
 #: ms_stundenplan.inc.php:196
 msgid "Dienstag"
 msgstr "Tuesday"
 
 #: admin_metadates.php:492 admin_metadates.php:494
 #: admin_seminare_assi.php:1996 admin_seminare_assi.php:1998 dates.inc.php:453
-#: mein_stundenplan.php:454 mein_stundenplan.php:592
+#: mein_stundenplan.php:458 mein_stundenplan.php:596
 #: ms_stundenplan.inc.php:197
 msgid "Mittwoch"
 msgstr "Wednesday"
 
 #: admin_metadates.php:496 admin_metadates.php:498
 #: admin_seminare_assi.php:2000 admin_seminare_assi.php:2002 dates.inc.php:454
-#: mein_stundenplan.php:457 mein_stundenplan.php:593
+#: mein_stundenplan.php:461 mein_stundenplan.php:597
 #: ms_stundenplan.inc.php:198
 msgid "Donnerstag"
 msgstr "Thursday"
 
 #: admin_metadates.php:500 admin_metadates.php:502
 #: admin_seminare_assi.php:2004 admin_seminare_assi.php:2006 dates.inc.php:455
-#: mein_stundenplan.php:460 mein_stundenplan.php:594
+#: mein_stundenplan.php:464 mein_stundenplan.php:598
 #: ms_stundenplan.inc.php:199
 msgid "Freitag"
 msgstr "Friday"
 
 #: admin_metadates.php:504 admin_metadates.php:506
 #: admin_seminare_assi.php:2008 admin_seminare_assi.php:2010 dates.inc.php:456
-#: mein_stundenplan.php:463 mein_stundenplan.php:595
+#: mein_stundenplan.php:467 mein_stundenplan.php:599
 #: ms_stundenplan.inc.php:200
 msgid "Samstag"
 msgstr "Saturday"
 
 #: admin_metadates.php:508 admin_metadates.php:510
 #: admin_seminare_assi.php:2012 admin_seminare_assi.php:2014 dates.inc.php:457
-#: mein_stundenplan.php:466 mein_stundenplan.php:596
+#: mein_stundenplan.php:470 mein_stundenplan.php:600
 #: ms_stundenplan.inc.php:201
 msgid "Sonntag"
 msgstr "Sunday"
@@ -888,14 +904,6 @@ msgstr "1 semester"
 #: admin_seminare_assi.php:1441
 msgid "bis"
 msgstr "until"
-
-#: admin_metadates.php:654 admin_metadates.php:656
-#: admin_seminare_assi.php:1444 admin_seminare_assi.php:1446
-#: admin_sem_tree.php:194 lib/classes/SemBrowse.class.php:389
-#: lib/classes/StudipSemTreeViewAdmin.class.php:519
-#: lib/classes/StudipSemTreeView.class.php:187
-msgid "unbegrenzt"
-msgstr "unlimited"
 
 #: admin_news.php:157
 msgid "Keine News vorhanden!"
@@ -2664,7 +2672,7 @@ msgstr "First meeting:"
 msgid "Ort:"
 msgstr "Place:"
 
-#: archiv.inc.php:78 sem_browse.inc.php:256
+#: archiv.inc.php:78 mein_stundenplan.php:641 sem_browse.inc.php:256
 #: lib/classes/SemBrowse.class.php:248
 msgid "DozentIn:"
 msgstr "Lecturer:"
@@ -2678,7 +2686,7 @@ msgid "TutorIn:"
 msgstr "Tutor:"
 
 #: archiv.inc.php:119 archiv.php:299 archiv.php:459 datei.inc.php:198
-#: mein_stundenplan.php:632
+#: mein_stundenplan.php:636
 msgid "Beschreibung:"
 msgstr "Description:"
 
@@ -4144,7 +4152,7 @@ msgstr "Sat.:"
 msgid "So.: "
 msgstr "Sun.:"
 
-#: dates.inc.php:77 mein_stundenplan.php:231
+#: dates.inc.php:77 mein_stundenplan.php:235
 msgid "n. A."
 msgstr "n.a"
 
@@ -6421,7 +6429,7 @@ msgid "MitarbeiterInnen"
 msgstr "Staff"
 
 #: links_openobject.inc.php:61 links_seminare.inc.php:46
-#: mein_stundenplan.php:377 mein_stundenplan.php:388
+#: mein_stundenplan.php:381 mein_stundenplan.php:392
 msgid "Veranstaltungs-Timetable"
 msgstr "Course time table"
 
@@ -6891,15 +6899,15 @@ msgid ""
 "Suchfunktion aus."
 msgstr "In order to edit a course, select via the search function."
 
-#: mein_stundenplan.php:377 mein_stundenplan.php:388
+#: mein_stundenplan.php:381 mein_stundenplan.php:392
 msgid "Mein Stundenplan"
 msgstr "My time table"
 
-#: mein_stundenplan.php:379
+#: mein_stundenplan.php:383
 msgid "Ansicht anpassen"
 msgstr "Customise lay-out"
 
-#: mein_stundenplan.php:402
+#: mein_stundenplan.php:406
 msgid ""
 "Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen "
 "eines Semesters. Um den Stundenplan auszudrucken, nutzen Sie bitte die "
@@ -6908,7 +6916,7 @@ msgstr ""
 "The time table displays all your regular courses in semester. Please use "
 "your browser's print function to print out the time table. "
 
-#: mein_stundenplan.php:404
+#: mein_stundenplan.php:408
 #, c-format
 msgid ""
 "Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen "
@@ -6917,13 +6925,13 @@ msgstr ""
 "If you would like to add further courses from Stud.IP to your time table, "
 "please use the %scourse search%s."
 
-#: mein_stundenplan.php:407
+#: mein_stundenplan.php:411
 #, c-format
 msgid "Ihre pers&ouml;nlichen Termine finden Sie im %sTerminkalender%s."
 msgstr ""
 "You will find your personal appointments in your %sappointment calendar%s. "
 
-#: mein_stundenplan.php:410 mein_stundenplan.php:422
+#: mein_stundenplan.php:414 mein_stundenplan.php:426
 msgid ""
 "Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters "
 "an der gew&auml;hlten Einrichtung."
@@ -6931,37 +6939,37 @@ msgstr ""
 "In the course time table you will see all courses offered at the selected "
 "institute within a semester."
 
-#: mein_stundenplan.php:411 ms_stundenplan.inc.php:206
+#: mein_stundenplan.php:415 ms_stundenplan.inc.php:206
 msgid "Angezeigtes Semester:"
 msgstr "Displayed semester:"
 
-#: mein_stundenplan.php:422
+#: mein_stundenplan.php:426
 msgid "Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen."
 msgstr "You can add additional events."
 
-#: mein_stundenplan.php:427
+#: mein_stundenplan.php:431
 msgid ""
 "Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet)."
 msgstr "Print view of this page (a new browser window will open)."
 
-#: mein_stundenplan.php:445 sem_browse.inc.php:431
+#: mein_stundenplan.php:449 sem_browse.inc.php:431
 msgid "Zeit"
 msgstr "Time"
 
-#: mein_stundenplan.php:551
+#: mein_stundenplan.php:555
 msgid "Diesen Termin löschen"
 msgstr "Delete this appointment"
 
-#: mein_stundenplan.php:563
+#: mein_stundenplan.php:567
 #, c-format
 msgid "Erstellt am %s um %s  Uhr."
 msgstr "Created on %s at %s."
 
-#: mein_stundenplan.php:585
+#: mein_stundenplan.php:589
 msgid "Eigene Veranstaltung eintragen:"
 msgstr "Enter own course:"
 
-#: mein_stundenplan.php:586
+#: mein_stundenplan.php:590
 msgid ""
 "Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren "
 "oder andere, eigene Ereignisse eintragen"
@@ -6969,16 +6977,16 @@ msgstr ""
 "Here you can enter courses that do not exist in Stud.IP, or enter your own "
 "events."
 
-#: mein_stundenplan.php:588
+#: mein_stundenplan.php:592
 msgid "Wochentag:"
 msgstr "Week day:"
 
-#: mein_stundenplan.php:598
+#: mein_stundenplan.php:602
 #, fuzzy
 msgid "Beginn:"
 msgstr "Beginner"
 
-#: mein_stundenplan.php:615
+#: mein_stundenplan.php:619
 #, fuzzy
 msgid "Ende:"
 msgstr "End time:"
@@ -7754,7 +7762,7 @@ msgstr "My Status"
 msgid "Es wurden keine Veranstaltungen gefunden."
 msgstr "No course was found."
 
-#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:428
+#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:461
 msgid "(Der Suchbegriff fehlt oder ist zu kurz)"
 msgstr "(The search keyword is missing or is too short)"
 
@@ -9185,29 +9193,22 @@ msgstr "Search in %sInstitute index%s"
 msgid "Suche im Vorlesungsverzeichnis"
 msgstr "/%sCourse index%s"
 
-#: lib/classes/SemBrowse.class.php:344
+#: lib/classes/SemBrowse.class.php:377
 #, c-format
 msgid " %s Veranstaltungen gefunden %s, Gruppierung: %s"
 msgstr "%s courses found %s, grouping:%s "
 
-#: lib/classes/SemBrowse.class.php:345
+#: lib/classes/SemBrowse.class.php:378
 msgid "(Suchergebnis)"
 msgstr "(search results)"
 
-#: lib/classes/SemBrowse.class.php:364
+#: lib/classes/SemBrowse.class.php:397
 msgid "keine Studienbereiche eingetragen"
 msgstr "No subject areas added"
 
-#: lib/classes/SemBrowse.class.php:426
+#: lib/classes/SemBrowse.class.php:459
 msgid "Ihre Suche ergab keine Treffer"
 msgstr "The search did not reveal any matches"
-
-#: lib/classes/StudipRangeTree.class.php:63
-#: lib/classes/StudipSemSearch.class.php:91
-#: lib/classes/StudipSemTree.class.php:56
-#, c-format
-msgid "vor dem %s"
-msgstr "for the %s"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:170
 msgid "Element wurde um eine Position nach oben verschoben."
