@@ -101,7 +101,7 @@ else
 	
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $art,": ",htmlReady($db2->f("Name"))." - Details"; ?>
+	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]." - Details"; ?>
 	</b></td></tr>
 	<?
 

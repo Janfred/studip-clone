@@ -314,7 +314,7 @@ else
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 printf("\n<tr><td class=\"topic\" colspan=\"2\"><b>&nbsp; %s</b></td></tr>",
-	"Mitarbeiter der Einrichtung");
+	$SessSemName["header_line"]." - Mitarbeiter der Einrichtung");
 	
 if ($sms_msg) {
 	echo "<tr><td class=\"blank\">";
