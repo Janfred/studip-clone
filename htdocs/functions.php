@@ -507,27 +507,28 @@ function get_perm($range_id,$user_id="")
 * uses global $online array if user is online
 * 
 * @param		string	if omitted, current user_id is used
+* @param		bool	if set to true, title is included
 * @return		string	
 *
 */
-function get_fullname($user_id="")
+function get_fullname($user_id = "", $with_title = true)
 {
  global $user,$online;
- $author="";
+ $author = "";
  if (!($user_id)) $user_id=$user->id;
  if(count($online)) {
  	foreach($online as $key=>$value){
 		if ($value["userid"]==$user_id) {
-		    $author=$value["name"];
+		    $author = ($with_title) ? trim($value["title"] . " ". $value["name"]) : $value["name"];
 		    break;
 			}
 		}
 	}
 if (!$author) {
      $db=new DB_Seminar;
-     $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname FROM auth_user_md5 WHERE user_id = '$user_id'");
+     $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname, title FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
     				 while ($db->next_record())
-    					 $author=$db->f("fullname");
+    					 $author = ($with_title) ? trim($db->f("title") . " " . $db->f("fullname")) : $db->f("fullname");
  }
  if ($author=="") $author="unbekannt";
  return $author;
@@ -537,24 +538,25 @@ if (!$author) {
 * Retrieves the fullname for a given username
 * 
 * @param		string	if omitted, current user_id is used
+* @param		bool	if set to true, title is included
 * @return		string	
 *
 */
-function get_fullname_from_uname($uname="")
+function get_fullname_from_uname($uname = "", $with_title = true)
 {
  global $auth,$online;
  $author="";
  if (!$uname) $uname=$auth->auth["uname"];
  if(count($online)) {
  	if ($online[$uname]) {
-		    $author=$online["name"];
+			$author = ($with_title) ? trim($online[$uname]["title"] . " ". $online[$uname]["name"]) : $online[$uname]["name"];
 	}
 }
 if (!$author) {
  $db=new DB_Seminar;
- $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname FROM auth_user_md5 WHERE username = '$uname'");
+ $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname, title FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE username = '$uname'");
 				 while ($db->next_record())
-					 $author=$db->f("fullname");
+					 $author = ($with_title) ? trim($db->f("title") . " " . $db->f("fullname")) : $db->f("fullname");
  }
  if ($author=="") $author="unbekannt";
 

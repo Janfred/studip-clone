@@ -125,22 +125,22 @@ if ($msg)
 // hier wird das Bild ausgegeben
 
 	if(!file_exists("./user/".$user_id.".jpg")) {
-		echo "&nbsp;<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\" alt=\"kein pers&ouml;nliches Bild vorhanden\">";
+		echo "&nbsp;<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip("kein persönliches Bild vorhanden").">";
 	} else {
-		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 alt="<?echo htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname"));?>"></td><?
+		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 <?=tooltip(trim($db->f("title"). " " .$db->f("Vorname") . " " . $db->f("Nachname")));?>"></td><?
 	}
     
 	// Hier der Teil fuer die Ausgabe der normalen Daten
 	?>
     <td class="steel1"  width="99%" valign ="top" rowspan=2><br><blockquote>
-    <? echo "<b><font size=7>",htmlReady($db->f("Vorname")), " ", htmlReady($db->f("Nachname")),"</font></b><br><br>";?>
-    <? echo "<b>&nbsp;e-mail: </b><a href=\"mailto:", $db->f("Email"),"\">",htmlReady($db->f("Email")),"</a>","<br>";
-		IF ($db->f("privatnr")!="") echo "<b>&nbsp;Telefon (privat): </b>", htmlReady($db->f("privatnr")),"<br>";
-		IF ($db->f("privadr")!="") echo "<b>&nbsp;Adresse (privat): </b>", htmlReady($db->f("privadr")),"<br>";
+    <? echo "<b><font size=7>".htmlReady(trim($db->f("title"). " " .$db->f("Vorname") . " " . $db->f("Nachname")))."</font></b><br><br>";?>
+    <? echo "<b>&nbsp;e-mail: </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
+		IF ($db->f("privatnr")!="") echo "<b>&nbsp;Telefon (privat): </b>". htmlReady($db->f("privatnr"))."<br>";
+		IF ($db->f("privadr")!="") echo "<b>&nbsp;Adresse (privat): </b>". htmlReady($db->f("privadr"))."<br>";
 		IF ($db->f("Home")!="") {
 			$home=$db->f("Home");
 			$home=FixLinks($home);
-			echo "<b>&nbsp;Homepage: </b>",$home,"<br>";
+			echo "<b>&nbsp;Homepage: </b>".$home."<br>";
 		}
 
 // Anzeige der Institute an denen (hoffentlich) studiert wird:

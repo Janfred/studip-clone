@@ -341,6 +341,8 @@ $PERS_TERMIN_KAT[13]=array("name"=>"Urlaub", "color"=>"#DB7093");
 $PERS_TERMIN_KAT[14]=array("name"=>"Reise", "color"=>"#C71585");
 // weitere Kategorien können hier angefügt werden
 
+//Vorgaben für die Titelauswahl
+$TITLE_TEMPLATE = array("",_("Prof."),_("Prof. Dr."),_("Dr."),_("Dipl.Ing."),_("Dipl.Sozw."));
 
 //Shorts for Smiley
 $SMILE_SHORT = array( //diese Kuerzel fuegen das angegebene Smiley ein (Dateiname + ".gif")

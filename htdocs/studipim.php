@@ -40,12 +40,11 @@ $db = new DB_Seminar;
 $sms= new messaging;
 
 $now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,username,user_id FROM active_sessions LEFT JOIN auth_user_md5 ON user_id=sid WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
+$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,title FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
 $db->query($query);
-while ($db->next_record())
-      {
-      $online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"));      
-      }
+while ($db->next_record()){
+	$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"title"=>$db->f("title"));
+}
 
 $query =  "SELECT message_id,mkdate,user_id_snd,message,user_id_snd FROM globalmessages WHERE user_id_rec='".$auth->auth["uname"]."'";
 $db->query($query);
@@ -129,7 +128,7 @@ if ((is_array($online)) && (is_array ($my_buddies))) {
 			if ($key == $a["username"]) {
 				if (!$c)
 					printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>Buddies:</b></td></tr>");					
-				echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a href=\"javascript:coming_home('about.php?username=$key');\">".$value["name"]."</a></font></td>\n";
+				echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a href=\"javascript:coming_home('about.php?username=$key');\">".trim($value["title"]. " " .$value["name"])."</a></font></td>\n";
 				echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$key'><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
 				$c++;
       				}

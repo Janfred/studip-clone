@@ -115,11 +115,9 @@ if ($make_dates) {
 	$date_typ=1; //hier setzen wir den Typ, den automatisch generierte Termine haben sollen. "1" steht fuer Sitzungstermine.
 	$orig_stunde=date("G",$sstamp);
 	$tmp = $auth->auth["uname"];
-	$db->query ("SELECT Vorname , Nachname , username FROM auth_user_md5 WHERE username = '$tmp'");
-	$db->next_record();
 	$db2->query("SELECT start_time, duration_time, Ort FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
 	$db2->next_record();
-	$author=$db->f("Vorname")." " . $db->f("Nachname");
+	$author = get_fullname();
 
 	//Semesterbeginn herausfinden
 	foreach ($SEMESTER as $sem)
@@ -306,9 +304,7 @@ if ($new)
 		$aktuell=time();
 
 		$tmp = $auth->auth["uname"];
-		$db->query ("SELECT Vorname , Nachname , username FROM auth_user_md5 WHERE username = '$tmp'");
-		$db->next_record();
-		$author=$db->f("Vorname")." " . $db->f("Nachname");
+		$author=get_fullname();
 
 		if ($titel==$default_titel)
 			$tmp_titel="Kein Titel";
@@ -368,9 +364,7 @@ if (($edit) && (!$admin_dates_data["termin_id"]))
 			$aktuell=time();
 
 			$tmp = $auth->auth["uname"];
-			$db->query ("SELECT Vorname , Nachname , username FROM auth_user_md5 WHERE username = '$tmp'");
-			$db->next_record();
-			$author=$db->f("Vorname")." " . $db->f("Nachname");
+			$author=get_fullname();
 			
 			if ($tag[$i]<10)
 				$tag[$i]="0".$tag[$i];

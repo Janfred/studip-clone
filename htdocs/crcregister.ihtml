@@ -115,9 +115,10 @@ function checkdata(){
 <tr><td class="blank">
 
 	<? 
-	global $HTTP_COOKIE_VARS, $username, $Vorname, $Nachname, $Email;
+	global $HTTP_COOKIE_VARS, $username, $Vorname, $Nachname, $Email, $title, $ABSOLUTE_PATH_STUDIP;
 
-	require_once("msg.inc.php");
+	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+	include("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	
 	if (!$HTTP_COOKIE_VARS[$sess->name] || !$HTTP_COOKIE_VARS[$sess->cookiename]) {
   		?>
@@ -210,6 +211,21 @@ function checkdata(){
   <td><input type="password" name="password2" onchange="checkpassword2()" size=32 maxlength=31></td>
  </tr>
 
+ <tr valign=top align=left>
+  <td>Titel:&nbsp;&nbsp;&nbsp;<select name="title_chooser" onChange="document.login.title.value=document.login.title_chooser.options[document.login.title_chooser.selectedIndex].text;">
+  <?
+  for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+	  echo "\n<option";
+	  if($TITLE_TEMPLATE[$i] == $title)
+	  	echo " selected ";
+	  echo ">$TITLE_TEMPLATE[$i]</option>";
+  }
+  ?>
+  </select></td>
+  <td><input type="text" name="title" value="<?php print (isset($title) ? $title : "" ) ?>" size=32 maxlength=63></td>
+ </tr>
+
+ 
  <tr valign=top align=left>
   <td>Vorname:</td>
   <td><input type="text" name="Vorname" onchange="checkVorname()"  value="<?php print (isset($Vorname) ? $Vorname : "" ) ?>"size=32 maxlength=63></td>

@@ -458,11 +458,11 @@ if (($s_id) && (auth_check())) {
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
 						echo "<select name=\"Institut\">";
 						if (!$perm->have_perm("admin"))
-							$db3->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_id = '$user_id' AND (inst_perms = 'dozent' OR inst_perms = 'tutor')) GROUP BY Institute.institut_id ORDER BY Name");
+							$db3->query("SELECT Name,a.Institut_id FROM user_inst a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND (inst_perms = 'dozent' OR inst_perms = 'tutor')) ORDER BY Name");
 						else if (!$perm->have_perm("root"))
-							$db3->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'admin') GROUP BY Institute.institut_id ORDER BY Name");
+							$db3->query("SELECT Name,a.Institut_id FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'admin') GROUP BY a.institut_id ORDER BY Name");
 						else
-							$db3->query("SELECT * FROM Institute ORDER BY Name");
+							$db3->query("SELECT Name,Institut_id FROM Institute ORDER BY Name");
 						while ($db3->next_record()) {
 							printf ("<option %s value=%s> %s</option>", $db3->f("Institut_id") == $db->f("Institut_id") ? "selected" : "", $db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
 							}
@@ -481,11 +481,10 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=right>beteiligte Einrichtungen</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <select  name="b_institute[]" MULTIPLE SIZE=8>
 					<?php
-					$db3->query("SELECT * FROM Institute ORDER BY Name");
+					$db3->query("SELECT Name,a.Institut_id,b.Institut_id as beteiligt FROM Institute a LEFT JOIN seminar_inst b ON(a.Institut_id=b.Institut_id AND Seminar_id='$s_id') ORDER BY Name");
 					while ($db3->next_record()) {
 						$tempInstitut_id = $db3->f("Institut_id");
-						$db4->query("SELECT * FROM seminar_inst WHERE Seminar_id = '$s_id' AND institut_id = '$tempInstitut_id'");
-						if ($db4->next_record()) {
+						if ($db3->f("beteiligt")) {
 							printf ("<option selected value=%s> %s</option>", $tempInstitut_id, htmlReady(my_substr($db3->f("Name"),0,60)));
 						} else {
 							printf ("<option value=%s> %s</option>", $tempInstitut_id, htmlReady(my_substr($db3->f("Name"),0,60)));
@@ -513,12 +512,12 @@ if (($s_id) && (auth_check())) {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan="2">&nbsp; 
 				<?
-				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'dozent' AND Seminar_id='$s_id' ORDER BY Nachname");
+				$db3->query("SELECT TRIM(CONCAT(title,' ',Vorname,' ',Nachname)) FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status = 'dozent' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
 				while ($db3->next_record()) {
 					if ($i)
 						echo ", ";
-					echo "<b>", htmlReady($db3->f("Vorname")), " ", htmlReady($db3->f("Nachname")), "</b>";
+					echo "<b>" . htmlReady($db3->f(0)) . "</b>";
 					$i++;						
 				}
 				?>
@@ -528,12 +527,12 @@ if (($s_id) && (auth_check())) {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
 				<?
-				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'tutor' AND Seminar_id='$s_id' ORDER BY Nachname");
+				$db3->query("SELECT TRIM(CONCAT(title,' ',Vorname,' ',Nachname)) FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status = 'tutor' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
 				while ($db3->next_record()) {
 					if ($i)
 						echo ", ";
-					echo "<b>", htmlReady($db3->f("Vorname")), " ", htmlReady($db3->f("Nachname")), "</b>";
+					echo "<b>" . htmlReady($db3->f(0)) . "</b>";
 					$i++;						
 				}
 				?>
@@ -552,10 +551,10 @@ if (($s_id) && (auth_check())) {
 				?>
 				<td class="<? echo $cssSw->getClass() ?>" align="left">
 					<?
-					$db4->query("SELECT seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'dozent' ORDER BY Nachname");
+					$db4->query("SELECT TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname, seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'dozent' ORDER BY Nachname");
 					if ($db4->nf()) {
 						while ($db4->next_record()) {
-							printf ("&nbsp; <a href=\"%s?delete_doz=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
+							printf ("&nbsp; <a href=\"%s?delete_doz=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady($db4->f("fullname")), $db4->f("username"));
 						}
 					} else {
 						printf ("<font size=\"-1\">&nbsp;  Keine %s gew&auml;hlt.</font><br >", ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "LeiterIn" : "DozentIn");
@@ -578,16 +577,16 @@ if (($s_id) && (auth_check())) {
 								$i++;
 							}
 							$clause.=")";
-							$db4->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
+							$db4->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
 						} else
-							$db4->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
+							$db4->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id)  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 						if ($db4->num_rows()) {
 							$no_doz_found=FALSE;
 							printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db4->num_rows());
 							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
 							print "&nbsp; <select name=\"add_doz\">";
 							while ($db4->next_record()) {
-								printf ("<option value=\"%s\">%s </option>", $db4->f("username"), htmlReady(my_substr($db4->f("Nachname").", ".$db4->f("Vorname")." (".$db4->f("username").")",  0, 30)));
+								printf ("<option value=\"%s\">%s </option>", $db4->f("username"), htmlReady(my_substr($db4->f("fullname") ." (" . $db4->f("username"). ")",  0, 30)));
 							}
 							print "</select></font>";
 							print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("Neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
@@ -616,10 +615,10 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align="right"><? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) echo "TutorInnen"; else echo "Mitglieder";?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left">
 					<?
-					$db4->query("SELECT seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'tutor' ORDER BY Nachname");
+					$db4->query("SELECT TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname,seminar_user.user_id,status,username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE Seminar_id = '$s_id' AND Status = 'tutor' ORDER BY Nachname");
 					if ($db4->nf()) {
 						while ($db4->next_record()) {
-							printf ("&nbsp; <a href=\"%s?delete_tut=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady(get_nachname($db4->f("user_id"))), htmlReady(get_vorname($db4->f("user_id"))), $db4->f("username"));
+							printf ("&nbsp; <a href=\"%s?delete_tut=%s&s_id=%s#anker\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, $db4->f("username"), $s_id, htmlReady($db4->f("fullname")), $db4->f("username"));
 						}
 					} else {
 						printf ("<font size=\"-1\">&nbsp;  %s gew&auml;hlt.</font><br >", ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? "Kein Mitarbeiter" : "Keine TutorIn");
@@ -642,16 +641,16 @@ if (($s_id) && (auth_check())) {
 								$i++;
 							}
 							$clause.=")";
-							$db4->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+							$db4->query ("SELECT DISTINCT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 						} else
-							$db4->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+							$db4->query ("SELECT username, TRIM(CONCAT(Nachname,', ',Vorname,', ',title)) AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
 						if ($db4->num_rows()) {
 							$no_tut_found=FALSE;
 							printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db4->num_rows());
 							print "<input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
 							print "&nbsp; <select name=\"add_tut\">";
 							while ($db4->next_record()) {
-								printf ("<option value=\"%s\">%s </option>", $db4->f("username"), htmlReady(my_substr($db4->f("Nachname").", ".$db4->f("Vorname")." (".$db4->f("username").")", 0, 30)));
+								printf ("<option value=\"%s\">%s </option>", $db4->f("username"), htmlReady(my_substr($db4->f("fullname")." (".$db4->f("username").")", 0, 30)));
 							}
 							print "</select></font>";
 							print "<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("neue Suche starten")." border=\"0\" name=\"reset_search\" />";									

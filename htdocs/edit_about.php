@@ -247,7 +247,7 @@ function special_edit($raum,$sprech,$tel,$fax,$name)
   return;
 }
 
-function edit_leben($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view)
+function edit_leben($lebenslauf,$schwerp,$publi,$view)
 {
   //check ob die blobs ver‰ndert wurden...
    $this->db->query("SELECT  lebenslauf, schwerp, publi FROM user_info WHERE user_id='".$this->auth_user["user_id"]."'");
@@ -261,13 +261,15 @@ function edit_leben($password,$check_pass,$response,$new_username,$vorname,$nach
    }
 
 
-function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view)
+function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title,$title_chooser,$view)
 {
 	global $UNI_NAME_CLEAN; 
  //erstmal die "unwichtigen" Daten
-  if ($home==$this->default_url)
+ if ($home==$this->default_url)
 	$home='';
-  $this->db->query("UPDATE user_info SET privatnr='$telefon', privadr='$anschrift', Home='$home', hobby='$hobby', geschlecht='$geschlecht', chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
+ if($title == "")
+	$title = $title_chooser;
+  $this->db->query("UPDATE user_info SET privatnr='$telefon', privadr='$anschrift', Home='$home', hobby='$hobby', geschlecht='$geschlecht', title='$title',chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
   if ($this->db->affected_rows())
 	   {
 	   $this->msg = $this->msg."msgßIhre pers&ouml;nlichen Daten wurden ge&auml;ndert.ß";
@@ -642,7 +644,7 @@ if ($cmd=="special_edit")
 if ($cmd=="edit_pers")
  {
 
-  $my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view);
+  $my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title,$title_chooser,$view);
 
   if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde ge‰ndert!
    else $my_about->get_auth_user($username);
@@ -650,10 +652,8 @@ if ($cmd=="edit_pers")
   }
 
 if ($cmd=="edit_leben")  {
-	$my_about->edit_leben($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$lebenslauf,$schwerp,$publi,$view);
-	if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde ge‰ndert!
-	else $my_about->get_auth_user($username);
-	$username = $my_about->auth_user["username"];
+	$my_about->edit_leben($lebenslauf,$schwerp,$publi,$view);
+	$my_about->get_auth_user($username);
 	}
 
 if ($my_about->logout_user)
@@ -905,7 +905,7 @@ IF ($view=="Daten"){
    echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Paﬂwort: </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; neues Passwort:</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; Passwort-Wiederholung:</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
    $cssSw->switchClass();
    echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Name: </td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><font size=-1>&nbsp; Vorname:</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; Nachname:</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
-   $cssSw->switchClass();
+    $cssSw->switchClass();
    echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Email: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
    }
   else {
@@ -918,7 +918,19 @@ IF ($view=="Daten"){
    $cssSw->switchClass();
    echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Email: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
    }
-
+   $cssSw->switchClass();
+   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Titel: </td>
+   		<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
+	echo "\n<select name=\"title_chooser\" onChange=\"document.pers.title.value=document.pers.title_chooser.options[document.pers.title_chooser.selectedIndex].text;\">";
+	for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+		echo "\n<option";
+		if($TITLE_TEMPLATE[$i] == $my_about->user_info['title'])
+		echo " selected ";
+		echo ">$TITLE_TEMPLATE[$i]</option>";
+	}	
+	echo "</select></td><td class=\"".$cssSw->getClass()."\" width=\"60%\" align=\"left\">&nbsp;&nbsp;";
+	echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title\" value=\"".$my_about->user_info['title']."\"></td></tr>\n";
+  
    $cssSw->switchClass();
   echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Geschlecht: </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>&nbsp; m&auml;nnlich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=0 ";
   if (!$my_about->user_info["geschlecht"]) 

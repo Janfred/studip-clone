@@ -48,8 +48,8 @@ if (isset($i_query[0]) && $i_query[0] != "") {
 	}
 }
 
-  if ($auth->auth["uid"] == "nobody") { ?>
-  
+if ($auth->auth["uid"] == "nobody") { ?>
+
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" align="left" background="pictures/fill1.gif">
@@ -65,18 +65,18 @@ if (isset($i_query[0]) && $i_query[0] != "") {
 		</table>
 
 <?php
-  }
-	else {   // Benutzer angemeldet
+}
+else {   // Benutzer angemeldet
 
 		$db=new DB_Seminar;
 
 		// wer ist ausser mir online
 		$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-		$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,username,user_id FROM active_sessions LEFT JOIN auth_user_md5 ON user_id=sid WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
+		$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,title FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
 		$db->query($query);
 		while ($db->next_record()){
-      		$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"));      
-      	}
+			$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"title"=>$db->f("title"));      
+		}
 		
 		//Chatnachrichten zaehlen (wenn Sender Online)
 		$myuname=$auth->auth["uname"];

@@ -41,25 +41,25 @@ function generate_password($length) {
 }
 
 	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-	require_once("msg.inc.php"); // Funktionen fuer Nachrichtenmeldungen
-	require_once('dates.inc.php'); //Wir brauchen die Funktionen zum Loeschen von Terminen...
-	require_once("config.inc.php"); // Wir brauchen den Namen der Uni
-	require_once("datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
-	require_once("visual.inc.php");
-	require_once("admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
-	require_once("statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
+	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); // Funktionen fuer Nachrichtenmeldungen
+	require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Wir brauchen die Funktionen zum Loeschen von Terminen...
+	require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); // Wir brauchen den Namen der Uni
+	require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
+	require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+	require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
+	require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 	$cssSw=new cssClassSwitcher;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
 // Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include "header.php";	 //hier wird der "Kopf" nachgeladen 
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");	 //hier wird der "Kopf" nachgeladen 
 ?>
 <body>
 
 <?php
-	include "links_admin.inc.php";	//Linkleiste fuer admins
+	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 
 
 ## Get a database connection
@@ -127,8 +127,10 @@ while ( is_array($HTTP_POST_VARS)
 			$permlist = addslashes(implode($perms,","));
 			$password = generate_password(6);
 			$hashpass = md5($password);
+			if (!$title)
+				$title = $title_chooser;
 			$query = "INSERT INTO auth_user_md5 (user_id, username, password, perms, Vorname, Nachname, Email) values('$u_id','$username','$hashpass','$permlist','$Vorname','$Nachname','$Email')";
-			$query2 = "INSERT INTO user_info SET user_id='$u_id', mkdate='".time()."', chdate='".time()."' ";			
+			$query2 = "INSERT INTO user_info SET user_id='$u_id', geschlecht='$geschlecht', title='$title', mkdate='".time()."', chdate='".time()."' ";			
 			$db->query($query);
 			$db2->query($query2);
 
@@ -240,8 +242,10 @@ while ( is_array($HTTP_POST_VARS)
 		if ($run) { // E-Mail erreichbar
 			## Update user information.
 			$permlist = addslashes(implode($perms,","));
+			if (!$title)
+				$title = $title_chooser;
 			$query = "UPDATE auth_user_md5 set username='$username', perms='$permlist', Vorname='$Vorname', Nachname='$Nachname', Email='$Email' where user_id='$u_id'";
-			$query2 = "UPDATE user_info SET chdate='".time()."' WHERE user_id = '$u_id' ";			
+			$query2 = "UPDATE user_info SET geschlecht='$geschlecht', title='$title',chdate='".time()."' WHERE user_id = '$u_id' ";			
 			$db->query($query);
 			$db2->query($query2);
 
@@ -611,7 +615,7 @@ if (isset($details)) {
 				</tr>
 				<tr>
 					<td><b>&nbsp;globaler Status:&nbsp;</b></td>
-					<td><? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
+					<td>&nbsp;<? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
 				</tr>
 				<tr>
 					<td><b>&nbsp;Vorname:</b></td>
@@ -620,6 +624,25 @@ if (isset($details)) {
 				<tr>
 					<td><b>&nbsp;Nachname:</b></td>
 					<td>&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value=""></td>
+				</tr>
+				<tr>
+				<td><b>&nbsp;Titel:</b>
+				&nbsp;&nbsp;<select name="title_chooser" onChange="document.edit.title.value=document.edit.title_chooser.options[document.edit.title_chooser.selectedIndex].text;">
+				<?
+				 for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+					 echo "\n<option";
+					 if($TITLE_TEMPLATE[$i] == $title)
+					 echo " selected ";
+					 echo ">$TITLE_TEMPLATE[$i]</option>";
+				}
+				?>
+				</select></td>
+				<td>&nbsp;<input type="text" name="title" value="" size=24 maxlength=63></td>
+				</tr>
+				<tr>
+				<td><b>&nbsp;Geschlecht:</b></td>
+				<td><input type="RADIO" checked name="geschlecht" value="0">m&auml;nnlich&nbsp;
+				<input type="RADIO" name="geschlecht" value="1">weiblich</td>
 				</tr>
 				<tr>
 					<td><b>&nbsp;E-Mail:</b></td>
@@ -638,7 +661,7 @@ if (isset($details)) {
 
 	} else { // alten Benutzer bearbeiten
 	
-		$db->query("SELECT auth_user_md5.*, changed, mkdate FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
+		$db->query("SELECT auth_user_md5.*, changed, user_info.* FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
 		while ($db->next_record()) {
 			if ($db->f("changed") != "") {
 				$stamp = mktime(substr($db->f("changed"),8,2),substr($db->f("changed"),10,2),substr($db->f("changed"),12,2),substr($db->f("changed"),4,2),substr($db->f("changed"),6,2),substr($db->f("changed"),0,4));
@@ -664,7 +687,7 @@ if (isset($details)) {
 				</tr>
 				<tr>
 					<td class="steel1"><b>&nbsp;globaler Status:&nbsp;</b></td>
-					<td class="steel1"><? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
+					<td class="steel1">&nbsp;<? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
 				</tr>
 				<tr>
 					<td class="steel1"><b>&nbsp;Vorname:</b></td>
@@ -673,6 +696,24 @@ if (isset($details)) {
 				<tr>
 					<td class="steel1"><b>&nbsp;Nachname:</b></td>
 					<td class="steel1">&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value="<?php $db->p("Nachname") ?>"></td>
+				</tr>
+				<td class="steel1"><b>&nbsp;Titel:</b>
+				&nbsp;&nbsp;&nbsp;<select name="title_chooser" onChange="document.edit.title.value=document.edit.title_chooser.options[document.edit.title_chooser.selectedIndex].text;">
+				<?
+				 for($i = 0; $i < count($TITLE_TEMPLATE); ++$i){
+					 echo "\n<option";
+					 if($TITLE_TEMPLATE[$i] == $db->f("title"))
+					 	echo " selected ";
+					 echo ">$TITLE_TEMPLATE[$i]</option>";
+				}
+				?>
+				</select></td>
+				<td class="steel1">&nbsp;<input type="text" name="title" value="<?=$db->f("title")?>" size=24 maxlength=63></td>
+				</tr>
+				<tr>
+				<td class="steel1"><b>&nbsp;Geschlecht:</b></td>
+				<td class="steel1"><input type="RADIO" <? if (!$db->f("geschlecht")) echo "checked";?> name="geschlecht" value="0">m&auml;nnlich&nbsp;
+				<input type="RADIO" <? if ($db->f("geschlecht")) echo "checked";?> name="geschlecht" value="1">weiblich</td>
 				</tr>
 				<tr>
 					<td class="steel1"><b>&nbsp;E-Mail:</b></td>
