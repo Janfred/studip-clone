@@ -188,6 +188,12 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		$folder_system_data["upload"]=substr($open, (strpos($open, "_rfu_"))-32, (strpos($open, "_rfu_")));
 		$folder_system_data["refresh"]=substr($open, (strpos($open, "_rfu_"))-32, (strpos($open, "_rfu_")));
 		}	
+		
+	//wurde Code fuer Aktualisieren-Verlinken uebermittelt (=id+"_led_"), wird entsprechende Variable gesetzt
+	if ((strpos($open, "_led_")) && (!$cancel_x)) {
+		$folder_system_data["link"]=substr($open, (strpos($open, "_led_"))-32, (strpos($open, "_led_")));
+		$folder_system_data["update_link"]=TRUE;
+	}
 	
 	//wurde eine Datei hochgeladen/aktualisiert?
 	if (($cmd=="upload") && (!$cancel_x) && ($folder_system_data["upload"])) {
@@ -201,11 +207,26 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		
 	//wurde eine Datei verlinkt?
 	if (($cmd=="link") && (!$cancel_x) && ($folder_system_data["link"])) {
-		if (link_item ($folder_system_data["link"], TRUE, FALSE, $folder_system_data["refresh"])) {
+		if (link_item ($folder_system_data["link"], TRUE, FALSE, $folder_system_data["refresh"],FALSE)) {
 			$open = $dokument_id;
 			$close = $folder_system_data["refresh"];
 			$folder_system_data["link"]='';
 			$folder_system_data["refresh"]='';		
+			$folder_system_data["update_link"]='';	
+			unset($cmd);
+		} else {
+			$folder_system_data["linkerror"]=TRUE;	
+		}
+	}
+	
+	//wurde ein Link aktualisiert?
+	if (($cmd=="link_update") && (!$cancel_x) && ($folder_system_data["link"])) {
+		if (link_item ($range_id, TRUE, FALSE, FALSE, $link_update)) {
+			$open = $link_update;
+			$close = $folder_system_data["refresh"];
+			$folder_system_data["link"]='';
+			$folder_system_data["refresh"]='';	
+			$folder_system_data["update_link"]='';	
 			unset($cmd);
 		} else {
 			$folder_system_data["linkerror"]=TRUE;	
@@ -216,6 +237,7 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		$folder_system_data["upload"]='';
 		$folder_system_data["refresh"]='';
 		$folder_system_data["link"]='';
+		$folder_system_data["update_link"]='';	
 		unset($cmd);
 	}
 }

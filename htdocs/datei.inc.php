@@ -283,15 +283,22 @@ function move_item ($item_id, $new_parent) {
 		return TRUE;
 	}
 	
-function edit_item ($item_id, $type, $name, $description, $protected=0) {
-
+function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "") {
+	global $the_file_name;
 	$db=new DB_Seminar;
+	if (!$url) {
+		$db->query("SELECT filename FROM dokumente WHERE dokument_id = '$item_id'");	
+		if($db->next_record())
+			$the_file_name = $db->f("filename");
+	} else {
+		$url_parts = parse_url($url);
+		$the_file_name = basename($url_parts['path']);	
+	}
 	if ($protected == "on") $protected=1;
-	echo $protected;
 	if ($type)
 		$db->query("UPDATE folder SET name='$name', description='$description' WHERE folder_id ='$item_id'");
 	else
-		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected'  WHERE dokument_id ='$item_id'");	
+		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");	
 	
 	if ($db->affected_rows())
 		return TRUE;
@@ -839,16 +846,21 @@ function insert_link_db($range_id, $the_file_size, $refresh = FALSE) {
 }
 
 
-function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE) {
-	global $the_link;
+function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE, $link_update = FALSE) {
+	global $the_link, $name, $description, $protect;
 
 	if ($create) {
 		$link_data = parse_link($the_link);
 		if ($link_data["HTTP/1.0 200 OK"] || $link_data["HTTP/1.1 200 OK"] || $link_data["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) {
-			if (insert_link_db($range_id, $link_data["Content-Length"], $refresh))
-				if ($refresh)
-					delete_link($refresh, TRUE);
-			$tmp = TRUE;
+			if (!$link_update) {
+				if (insert_link_db($range_id, $link_data["Content-Length"], $refresh))
+					if ($refresh)
+						delete_link($refresh, TRUE);
+				$tmp = TRUE;
+			} else {
+				edit_item ($link_update, FALSE, $name, $description, $protect , $the_link);
+				$tmp = TRUE;
+			}
 		} else {
 			$tmp = FALSE;	
 			
@@ -857,10 +869,10 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE)
 		
 	} else {
 		if ($echo) {
-			echo link_form($refresh);
+			echo link_form($refresh,$link_update);
 			return;
 		} else {
-			return link_form($refresh);
+			return link_form($refresh,$link_update);
 		}
 	}
 }
@@ -878,10 +890,23 @@ function linkcheck ($URL) {
 */
 
 
-function link_form ($range_id) {
+function link_form ($range_id, $updating=FALSE) {
 	global $SessSemName, $the_link, $protect, $description, $name, $folder_system_data;
+	if ($folder_system_data["update_link"])
+		$updating = TRUE;
 	if ($protect=="on") $protect = "checked";
 	$print = "";
+	if ($updating == TRUE) {
+		$db=new DB_Seminar;
+		$db->query("SELECT * FROM dokumente WHERE dokument_id='$range_id'");
+		if ($db->next_record()) {
+			$the_link = $db->f("url");
+			$protect = $db->f("protected");
+			if ($protect==1) $protect = "checked";
+			$name = $db->f("name");
+			$description = $db->f("description");
+		}
+	}
 	if ($folder_system_data["linkerror"]==TRUE) {
 		$print.="<hr><img src=\"pictures/x.gif\" align=\"left\"><font color=\"red\">";
 		$print.=_("&nbsp;FEHLER: unter der angegebenen Adresse wurde keine Datei gefunden.<br>&nbsp;Bitte kontrollieren Sie die Pfadangabe!");
@@ -915,8 +940,14 @@ function link_form ($range_id) {
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";	
 	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\" border=\"0\">";
 	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
-	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link\">";	
+	
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";	
+	if ($updating == TRUE) {
+		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link_update\">";	
+		$print.= "\n<input type=\"hidden\" name=\"link_update\" value=\"$range_id\">";
+	} else {
+		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link\">";		
+	}
 	$print.= "\n</form></table><br /></center>";
 
 	return $print;
@@ -1249,7 +1280,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						
 						//Editbereich ertstellen
 						$edit='';
-						if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id"))) {
+						if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id")) && $filelink != $db3->f("dokument_id")) {
 							if ($db3->f("url")!="") {
 								$type = 6;
 							} else {
@@ -1260,8 +1291,11 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 								$edit.= "&nbsp;<a href=\"sendfile.php/?zip=TRUE&type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
 							
 							if (($rechte) || ($db3->f("user_id")==$user->id)) {
-								$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
-								if ($type != "6")
+								if ($type!=6)
+									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
+								if ($type==6)
+									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_led_&rnd=".rand()."#anker \">" . makeButton("aktualisieren", "img") . "</a>";
+								else
 									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
 								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
 								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
@@ -1280,6 +1314,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							$content .= "<br><br><hr><table><tr><td><img src=\"pictures/ausruf.gif\" valign=\"middle\"></td><td><font size=\"2\"><b>"
 							._("Diese Datei ist urheberrechtlich geschützt.<br>Sie darf nur im Rahmen dieser Veranstaltung verwendet werden, jede weitere Verbreitung ist strafbar!")
 							."</td></tr></table>";
+						}
+						if ($filelink == $db3->f("dokument_id")) {
+							$content .= link_item($db3->f("dokument_id"),FALSE,FALSE,$db3->f("dokument_id"));
 						}
 						
 						printcontent ("100%",TRUE, $content, $edit);
