@@ -227,7 +227,7 @@ function topic_liste ($eintrag, $root_id, $open, $name, $author, $create_dt, $ro
 			echo "<input type=hidden name=view value=$view>";
 			echo "<input type=hidden name=open value=$topic_id>";
 			echo "<input type=hidden name=topic_id value=$topic_id>";
-			if (substr($name,0,3)!="Re:" AND $write!=-1) $name = "Re:".$name; // RE: davor 
+			if (substr($name,0,3)!="Re:" AND $write!=-1) $name = "Re: ".$name; // RE: davor 
 			$name = "<input type=text size=50 style='font-size:8 pt;font-weight:normal;' name=titel value='".htmlReady($name)."'>";
 			$zusatz = ""; // beim editieren brauchen wir den Kram nicht
 			} 
@@ -414,7 +414,7 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="")
 					echo "<input type=hidden name=open value=$r_topic_id>";
 					echo "<input type=hidden name=topic_id value=$anfang>";
 					echo "<a name='anker'></a>";
-					if (substr($r_name,0,3)!="Re:" AND $write!=-1) $r_name = "Re:".$r_name;
+					if (substr($r_name,0,3)!="Re:" AND $write!=-1) $r_name = "Re: ".$r_name;
 					$r_name = "<input type=text size=50 style='font-size:8 pt;' name=titel value='".htmlReady($r_name)."'>";
 					$zusatz = ""; //beim Editieren kein Zusatz
 					} 
