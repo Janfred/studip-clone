@@ -21,7 +21,7 @@ $Id$
 */
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$perm->check("autor");
+$perm->check("user");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
@@ -303,7 +303,7 @@ if (!$guestpage)
 	$guestpage = 0;
 $guest = new Guestbook($user_id,$admin_darf,$guestpage);
 
-if ($guestbook)
+if ($guestbook && $perm->have_perm('autor'))
 	$guest->actionsGuestbook($guestbook,$post,$deletepost);
 
 if ($guest->active == TRUE || $guest->rights == TRUE) {
