@@ -24,10 +24,10 @@ function getWikiPage($keyword, $version) {
 	if (!$exists) {
 		if ($keyword=="StartSeite") {
 			$body=_("Dieses Wiki ist noch leer. Bearbeiten Sie es!\nNeue Seiten oder Links werden einfach durch Eingeben von WikiNamen angelegt.");
-		$wikidata=array("body"=>$body, "user_id"=>"nobody",  "version"=>-1);
+			$wikidata=array("body"=>$body, "user_id"=>"nobody",  "version"=>-1);
 		} else {
-      return NULL;
-    }
+			return NULL;
+		}
 	} else {
 		$wikidata = $db->Record;
 	}
@@ -129,7 +129,7 @@ function isKeyword($str, $page){
 function getLock($keyword, $version) {
 	global $SessSemName;
 	$db=new DB_seminar;
-	$db->query("SELECT * FROM wiki_locks WHERE range_id='$SessSemName[1]' AND keyword='$keyword' AND version='$version'");
+	$db->query("SELECT * FROM wiki_locks WHERE range_id='$SessSemName[1]' AND keyword='$keyword'"); // HACK: AND version='$version'" removed - all locks are considered
 	$db->next_record();
 	return $db->Record;
 }
@@ -148,7 +148,6 @@ function releaseLocks($keyword) {
 	while ($db->next_record()) {
 		if ((time() - $db->f("chdate")) > (30*60)) {
 			$q="DELETE FROM wiki_locks WHERE range_id='".$db->f("range_id")."' AND keyword='".$db->f("keyword")."' AND chdate='".$db->f("chdate")."'";
-			// print "<p>Query: $q</p>";
 			$db2->query($q);
 		}
 	}
@@ -174,6 +173,9 @@ function releasePageLock($keyword) {
 *
 **/
 function wikiLinks($str, $page) { 
+	// regex adapted from RoboWiki
+	// added > as possible start of WikiWord
+	// because htmlFormat converts newlines to <br>
 	return preg_replace("/(^|\s|\A|\>)([A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]+)/e", "'\\1'.isKeyword('\\2', $page)", $str); 
 }
 
@@ -184,12 +186,12 @@ function wikiLinks($str, $page) {
 *
 **/
 function getZusatz($wikiData) {
-	if (!$wikiData || $wikiData["version"]<0) {
+	if (!$wikiData || $wikiData["version"] < 0) {
 		return "";
 	}
 	$s = "<font size=-1>";
 	$s .=  _("Version ") . $wikiData[version];
-        $s .= sprintf(_(", ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($wikiData[user_id])."\"><font size=-1 color=\"#333399\">".get_fullname ($wikiData[user_id])."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData[chdate])."<font size=-1>&nbsp;"."</font>");
+	$s .= sprintf(_(", ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($wikiData[user_id])."\"><font size=-1 color=\"#333399\">".get_fullname ($wikiData[user_id])."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData[chdate])."<font size=-1>&nbsp;"."</font>");
 	return $s;
 }
 
@@ -197,7 +199,7 @@ function getZusatz($wikiData) {
 * List all topics in this seminar's wiki
 *
 * @param  mode  string  Either "all" or "new", affects default sorting and page title.
-* @param  sortby  string  Different sorting of entries.
+* @param  sortby  string  Different sortings of entries.
 **/
 function listPages($mode, $sortby=NULL) {
 	global $SessSemName, $user_id, $loginfilelast, $begin_blank_table, $end_blank_table;
@@ -205,64 +207,68 @@ function listPages($mode, $sortby=NULL) {
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
-  if ($mode=="all") {
-    $selfurl = "wiki.php?view=listall";
-    $sort = "ORDER by keyword"; // default sort order for "all pages"
-    $nopages = _("In dieser Veranstaltung wurden noch keine WikiSeiten angelegt.");
-  } else if ($mode=="new") {
-    $selfurl = "wiki.php?view=listnew";
-    $sort = "ORDER by lastchange"; // default sort order for "new pages"
-    $nopages = _("Seit Ihrem letzten Login gibt es keinen neuen Seiten.");
-  } else {
-			parse_msg("info§" . _("ERROR: Falscher Anzeigemodus:") . $mode);
-      return 0;
-  }  
+	if ($mode=="all") {
+		$selfurl = "wiki.php?view=listall";
+		$sort = "ORDER by keyword"; // default sort order for "all pages"
+		$nopages = _("In dieser Veranstaltung wurden noch keine WikiSeiten angelegt.");
+	} else if ($mode=="new") {
+		$selfurl = "wiki.php?view=listnew";
+		$sort = "ORDER by lastchange"; // default sort order for "new pages"
+		$nopages = _("Seit Ihrem letzten Login gab es keine Änderungen.");
+	} else {
+		parse_msg("info§" . _("ERROR: Falscher Anzeigemodus:") . $mode);
+		return 0;
+	}  
 
-  $titlesortlink = "title";
-  $changesortlink = "lastchange";
-  $bysortlink = "by";
-  if ($sortby == 'title') { // sort by keyword, prepare link for descending sorting
-    $sort = " ORDER BY keyword";
-    $titlesortlink = "titledesc";
-  } else if ($sortby == 'titledesc') { // sort descending by keyword, prep link for asc. sort
-    $sort = " ORDER BY keyword DESC";
-    $titlesortlink = "title";
-  } else if ($sortby == 'lastchange') {
-    $sort = " ORDER BY lastchange DESC"; // default: Neuester zuerst
-    $changesortlink = "lastchangedesc";
-  } else if ($sortby == 'lastchangedesc') {
-    $sort = " ORDER BY lastchange"; // aelteste zuerst
-    $changesortlink = "lastchange";
-  } 
+	$titlesortlink = "title";
+	$changesortlink = "lastchange";
 
-  if ($mode=="all") {
-    $q="SELECT keyword, MAX(chdate) AS lastchange FROM wiki WHERE range_id='$SessSemName[1]' GROUP BY keyword " . $sort;
-  } else if ($mode=="new") {
-    $datumtmp = $loginfilelast[$SessSemName[1]];
-    $q="SELECT keyword, MAX(chdate) AS lastchange FROM wiki WHERE range_id='$SessSemName[1]' AND chdate > '$datumtmp' GROUP BY keyword " . $sort;
-  }
-  $result=$db->query($q);
+	if ($sortby == 'title') { 
+		// sort by keyword, prepare link for descending sorting
+		$sort = " ORDER BY keyword";
+		$titlesortlink = "titledesc";
+	} else if ($sortby == 'titledesc') { 
+		// sort descending by keyword, prep link for asc. sort
+		$sort = " ORDER BY keyword DESC";
+		$titlesortlink = "title";
+	} else if ($sortby == 'lastchange') {
+		// sort by change date, default: newest first
+		$sort = " ORDER BY lastchange DESC"; 
+		$changesortlink = "lastchangedesc";
+	} else if ($sortby == 'lastchangedesc') {
+		// sort by change date, oldest first
+		$sort = " ORDER BY lastchange"; 
+		$changesortlink = "lastchange";
+	} 
 
-  // quit if no pages found
-  if  ($db->affected_rows() == 0){
-    echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-    parse_msg ("info\xa7" . $nopages);
-    echo "</table></td></tr></table></body></html>";
-    die;
-  }
+	if ($mode=="all") {
+		$q="SELECT keyword, MAX(chdate) AS lastchange FROM wiki WHERE range_id='$SessSemName[1]' GROUP BY keyword " . $sort;
+	} else if ($mode=="new") {
+		$datumtmp = $loginfilelast[$SessSemName[1]];
+		$q="SELECT keyword, MAX(chdate) AS lastchange FROM wiki WHERE range_id='$SessSemName[1]' AND chdate > '$datumtmp' GROUP BY keyword " . $sort;
+	}
+	$result=$db->query($q);
 
-  // show pages
-  echo $begin_blank_table;
-  echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
-  echo "<tr><td class=\"blank\" colspan=\"2\">";
-  echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
-  echo "<tr height=28>";
-  $s = "<td class=\"steel\" width=\"%d%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\">%s</td>";
-  printf($s, 3, "&nbsp;");
-  printf($s, 49, "<font size=-1><b><a href=\"$selfurl&sortby=$titlesortlink\">"._("Titel")."</a></b></font>");
-  printf($s, 24, "<font size=-1><b><a href=\"$selfurl&sortby=$changesortlink\">"._("Letzte Änderung")."</a></b></font>");
-  printf($s, 24, "<font size=-1><b>"._("von")."</b></font>");
-  echo "</tr>";
+	// quit if no pages found
+	if ($db->affected_rows() == 0) {
+		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
+		parse_msg ("info\xa7" . $nopages);
+		echo "</table></td></tr></table></body></html>";
+		die;
+	}
+
+	// show pages
+	echo $begin_blank_table;
+	echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
+	echo "<tr><td class=\"blank\" colspan=\"2\">";
+	echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
+	echo "<tr height=28>";
+	$s = "<td class=\"steel\" width=\"%d%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\">%s</td>";
+	printf($s, 3, "&nbsp;");
+	printf($s, 49, "<font size=-1><b><a href=\"$selfurl&sortby=$titlesortlink\">"._("Titel")."</a></b></font>");
+	printf($s, 24, "<font size=-1><b><a href=\"$selfurl&sortby=$changesortlink\">"._("Letzte Änderung")."</a></b></font>");
+	printf($s, 24, "<font size=-1><b>"._("von")."</b></font>");
+	echo "</tr>";
 
 	$c=1;
 	while ($db->next_record()) {
@@ -275,12 +281,12 @@ function listPages($mode, $sortby=NULL) {
 			$class2="colorline2";
 		}
 
-    $keyword=$db->f("keyword");
-    $lastchange=$db->f("lastchange");
-    $db2->query("SELECT user_id FROM wiki WHERE range_id='$SessSemName[1]' AND keyword='$keyword' AND chdate='$lastchange'");
-    $db2->next_record();
-    $userid=$db2->f("user_id");
-    
+		$keyword=$db->f("keyword");
+		$lastchange=$db->f("lastchange");
+		$db2->query("SELECT user_id FROM wiki WHERE range_id='$SessSemName[1]' AND keyword='$keyword' AND chdate='$lastchange'");
+		$db2->next_record();
+		$userid=$db2->f("user_id");
+	    
 		print("<tr><td class=\"$class\">&nbsp;</td>");
 		printf("<td class=\"%s\"><font size=\"-1\"><a href = wiki.php?keyword=" . $keyword . ">", $class);
 		print(htmlReady($keyword) ."</a>");
@@ -294,7 +300,7 @@ function listPages($mode, $sortby=NULL) {
 		print("</font></td></tr>\n");
 	}
 	echo "</table><p>&nbsp;</p>";
-  echo $end_blank_table;
+	echo $end_blank_table;
 }
 
 
@@ -321,45 +327,45 @@ function wikiSinglePageHeader($wikiData, $keyword) {
 }
 
 function wikiEdit($keyword, $wikiData, $backpage=NULL) {
-    global $begin_blank_table, $end_blank_table, $user_id;
-    
-    if (!$wikiData) {
-      $body = "";
-      $version = 0;
-      $lastpage="&lastpage=$backpage";
-    } else {
-      $body = $wikiData["body"];
-      $version = $wikiData["version"];
-      $lastpage = "";
-    }
-  	releaseLocks($keyword); // kill old locks 
-    $lock=getLock($keyword,$wikiData["version"]);
-		if ($lock && $lock["user_id"]!=$user_id) { //XXX TODO
-		  $locktime=ceil((time()-$lock["chdate"])/60);
-		  $lockuser=get_fullname($lock["user_id"]);
-			echo $begin_blank_table;
-      echo "<tr><td class=blank>&nbsp;</td></tr>";
-      parse_msg("info§" . sprintf(_("Die Seite wird evtl. von %s bearbeitet. (Seit %s Minuten)"), $lockuser, $locktime) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden."));
-      echo $end_blank_table;
-		}
+	global $begin_blank_table, $end_blank_table, $user_id;
 
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
-    echo "<tr><td>";
-    $cont = "<font size=-2><p>" . _("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern.") . " ";
-    $cont .= _("Beachten Sie dabei die <a href=\"help/index.php?help_page=ix_forum6.htm\">Formatierungsm&ouml;glichkeiten</a>.") . "<br>";
-    $cont .= _("Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten.") . "</p></font>";
+	if (!$wikiData) {
+		$body = "";
+		$version = 0;
+		$lastpage="&lastpage=$backpage";
+	} else {
+		$body = $wikiData["body"];
+		$version = $wikiData["version"];
+		$lastpage = "";
+	}
+	releaseLocks($keyword); // kill old locks 
+	$lock=getLock($keyword,$wikiData["version"]);
+	if ($lock && $lock["user_id"]!=$user_id) { 
+		$locktime=ceil((time()-$lock["chdate"])/60);
+		$lockuser=get_fullname($lock["user_id"]);
+		echo $begin_blank_table;
+		echo "<tr><td class=blank>&nbsp;</td></tr>";
+		parse_msg("info§" . sprintf(_("Die Seite wird evtl. von %s bearbeitet. (Seit %s Minuten)"), $lockuser, $locktime) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden."));
+		echo $end_blank_table;
+	}
+
+	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
+	echo "<tr><td>";
+	$cont = "<font size=-2><p>" . _("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern.") . " ";
+	$cont .= _("Beachten Sie dabei die <a href=\"help/index.php?help_page=ix_forum6.htm\">Formatierungsm&ouml;glichkeiten</a>.") . "<br>";
+	$cont .= _("Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten.") . "</p></font>";
     
-		$cont .= "<p><form method=\"post\" action=\"?keyword=$keyword&cmd=edit\">";
-		$cont .= "<textarea name=\"body\" cols=\"80\" rows=\"15\">$body</textarea>\n";
-		$cont .= "<input type=\"hidden\" name=\"wiki\" value=\"$keyword\">";
-		$cont .= "<input type=\"hidden\" name=\"version\" value=\"$version\">";
-		$cont .= "<input type=\"hidden\" name=\"submit\" value=\"true\">";
-		$cont .= "<input type=\"hidden\" name=\"cmd\" value=\"show\">";
-		$cont .= "<br><br><input type=image name=\"submit\" value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0 >&nbsp;<a href=\"wiki.php?cmd=abortedit&keyword=$keyword$lastpage\"><img " . makeButton("abbrechen", "src") . " align=\"absmiddle\" border=0></a>";
-		$cont .= "</form>\n";
-		printcontent(0,0,$cont,"");
-		echo "</tr></table>     ";
-		echo "</td></tr></table>";
+	$cont .= "<p><form method=\"post\" action=\"?keyword=$keyword&cmd=edit\">";
+	$cont .= "<textarea name=\"body\" cols=\"80\" rows=\"15\">$body</textarea>\n";
+	$cont .= "<input type=\"hidden\" name=\"wiki\" value=\"$keyword\">";
+	$cont .= "<input type=\"hidden\" name=\"version\" value=\"$version\">";
+	$cont .= "<input type=\"hidden\" name=\"submit\" value=\"true\">";
+	$cont .= "<input type=\"hidden\" name=\"cmd\" value=\"show\">";
+	$cont .= "<br><br><input type=image name=\"submit\" value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0 >&nbsp;<a href=\"wiki.php?cmd=abortedit&keyword=$keyword$lastpage\"><img " . makeButton("abbrechen", "src") . " align=\"absmiddle\" border=0></a>";
+	$cont .= "</form>\n";
+	printcontent(0,0,$cont,"");
+	echo "</tr></table>     ";
+	echo "</td></tr></table>";
 }
 
 /////////////////////////////////////////////////
