@@ -57,13 +57,14 @@ function get_my_obj_values(&$my_obj) {
 	}
 	
 	// scm?
-	$db2->query("SELECT b.Seminar_id,IF(content !='',1,0) AS scmcontent,
+	$db2->query("SELECT b.Seminar_id, tab_name, IF(content !='',1,0) AS scmcontent,
 			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND content !=''),1,0) AS scmcontentneu 
 			FROM loginfilenow_".$user->id." b  LEFT JOIN scm ON (range_id = b.Seminar_id)");
 	while($db2->next_record()) {
 		if ($my_obj[$db2->f("Seminar_id")]["modules"]["scm"]) {	
 			$my_obj[$db2->f("Seminar_id")]["neuscmcontent"]=$db2->f("scmcontentneu");
 			$my_obj[$db2->f("Seminar_id")]["scmcontent"]=$db2->f("scmcontent");
+			$my_obj[$db2->f("Seminar_id")]["scmtabname"]=$db2->f("tab_name");
 		}
 	}
 	
@@ -146,9 +147,9 @@ function print_seminar_content($semid,$my_obj_values, $type="seminar") {
   if ($my_obj_values["scmcontent"]) {
 		echo "<a href=\"$link?auswahl=$semid&redirect_to=scm.php\">";
 		if ($my_obj_values["neuscmcontent"])
-	  	echo "&nbsp; <img src=\"pictures/icon-cont2.gif\" border=0 ".tooltip(_("Zur freien Kursseite (geändert)"))."></a>";
+			echo "&nbsp; <img src=\"pictures/icon-cont2.gif\" border=0 ".tooltip($my_obj_values["scmtabname"]._(" (geändert)"))."></a>";
 		else
-		  echo "&nbsp; <img src=\"pictures/icon-cont.gif\" border=0 ".tooltip(_("Zur freien Kursseite"))."></a>";
+			echo "&nbsp; <img src=\"pictures/icon-cont.gif\" border=0 ".tooltip($my_obj_values["scmtabname"])."></a>";
   }
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
