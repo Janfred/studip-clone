@@ -153,4 +153,9 @@ $_include_extra_stylesheet = EVAL_FILE_CSS;
 /* ------------------------------------------------------ end: css constants */
 
 # ===================================================== end: define constants #
+
+// startpage fix :(
+if (strstr($PHP_SELF, "index.php"))
+     printf("<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n",
+	    EVAL_FILE_CSS);
 ?>
