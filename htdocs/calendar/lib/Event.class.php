@@ -40,7 +40,7 @@ class Event {
 	function Event ($start, $end, $title, $category = 1, $description = null,
 									$location = "") {
 		$this->start = $start;
-		if($this->start >= $end){
+		if($this->start > $end){
 			unset($this);
 			return FALSE;
 		}
