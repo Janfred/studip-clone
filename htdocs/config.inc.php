@@ -122,8 +122,8 @@ $TERMIN_TYP[2]=array("name"=>"Vorbesprechung", "sitzung"=>0); 	//dieser Termin T
 $TERMIN_TYP[3]=array("name"=>"Klausur", "sitzung"=>0);
 $TERMIN_TYP[4]=array("name"=>"Exkursion", "sitzung"=>0);
 $TERMIN_TYP[5]=array("name"=>"anderer Termin", "sitzung"=>0);
-$TERMIN_TYP[8]=array("name"=>"Sondersitzung", "sitzung"=>0);
-$TERMIN_TYP[8]=array("name"=>"Vorlesung", "sitzung"=>1);
+$TERMIN_TYP[6]=array("name"=>"Sondersitzung", "sitzung"=>0);
+$TERMIN_TYP[7]=array("name"=>"Vorlesung", "sitzung"=>1);
 //weitere Typen koennen hier angefuegt werden
 
 
