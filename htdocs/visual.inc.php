@@ -734,7 +734,7 @@ function preg_call_link ($params, $mod, $extern = FALSE) {
 						// width of image in pixels
 						if (is_object($auth) && $auth->auth['xres'])
 							// 50% of x-resolution maximal
-							$max_width = floor((int) $auth->auth['xres'] * 0.5);
+							$max_width = floor($auth->auth['xres'] / 2);
 						else
 							$max_width = 400;
 						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
