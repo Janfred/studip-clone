@@ -180,7 +180,7 @@ function change_messaging_view() {
 							}
 						} ?>
 						<input type="checkbox" value="1" name="smsforward_active" <? if ($smsforward['active'] != "2") { echo " checked "; } ?>>
-						<font size="-1">&nbsp;<?=_("Empfangene Nachrichten weitergeleiten.")?></font> <?
+						<font size="-1">&nbsp;<?=_("Empfangene Nachrichten weiterleiten.")?></font> <?
 						if ($smsforward['active'] == "1") { // wenn umleitung aktiv ?>
 							<br><input type="checkbox" value="1" name="smsforward_copy" <? if ($smsforward['copy'] != "2") echo " checked"; ?>>
 							&nbsp;<font size="-1"><?=("Kopie im persönlichen Posteingang speichern.")?></font>
@@ -263,7 +263,7 @@ function change_messaging_view() {
 						&nbsp;<textarea name="sms_sig" rows=3 cols=30><? echo htmlready($my_messaging_settings["sms_sig"]); ?></textarea>
 					</td>
 				</tr>
-				<tr>
+				<tr <? $cssSw->switchClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Stud.IP-Messenger")?></b></font></td>
 				</tr <? $cssSw->switchClass() ?>>
 					<td align="right" class="blank">
@@ -272,7 +272,7 @@ function change_messaging_view() {
 					<td <?=$cssSw->getFullClass()?>>
 						<input type="checkbox" name="start_messenger_at_startup" <? if ($my_messaging_settings["start_messenger_at_startup"]) echo " checked"; ?> >
 					</td>
-				<tr>
+				<tr <? $cssSw->switchClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Buddies/ Wer ist online?")?></b></font></td>
 				</tr>
 				<? if (GetNumberOfBuddies()) { ?>                      
@@ -300,17 +300,22 @@ function change_messaging_view() {
 								}
 							}
 						} ?>
-                        </select>
+                        			</select>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
 						<input type="HIDDEN" name="view" value="Messaging">
-						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>"></font>&nbsp;</form>	
+						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>"></font>&nbsp;	
 					</td>
 				</tr>
+				</form>	
 			</table>
+			<br />
+			<br />
 			</td>
 		</tr>
-	</table> <?
-} ?>
+	</table> 
+<?
+} 
+?>
