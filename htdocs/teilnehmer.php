@@ -387,7 +387,7 @@ if ($db->num_rows()) { //Only if Users were found...
 
 // Aktivitaet berechnen
 
-	$aktivity_index_user =  (($postings_user + (10 * $Dokumente)) / $aktivity_index_seminar) * 100;
+	$aktivity_index_user =  (($postings_user + (5 * $Dokumente)) / $aktivity_index_seminar) * 100;
 	if ($aktivity_index_user > 100) {
 		$offset = $aktivity_index_user / 4;
 		if ($offset < 0) {
