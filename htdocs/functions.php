@@ -125,14 +125,24 @@ function get_perm($range_id,$user_id="")
 
 function get_fullname($user_id="")
 {
- global $user;
+ global $user,$online;
+ $author="";
  if (!($user_id)) $user_id=$user->id;
- $db=new DB_Seminar;
- $db->query ("SELECT Vorname , Nachname , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
-				 while ($db->next_record())
-					 $author=$db->f("Vorname")." " . $db->f("Nachname");
+ if(count($online)) {
+ 	foreach($online as $key=>$value){
+		if ($value["userid"]==$user_id) {
+		    $author=$value["name"];
+		    break;
+			}
+		}
+	}
+if (!$author) {
+     $db=new DB_Seminar;
+     $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname FROM auth_user_md5 WHERE user_id = '$user_id'");
+    				 while ($db->next_record())
+    					 $author=$db->f("fullname");
+ }
  if ($author=="") $author="unbekannt";
-
  return $author;
  }
  
@@ -140,11 +150,20 @@ function get_fullname($user_id="")
 
 function get_fullname_from_uname($uname="")
 {
- global $user;
+ global $auth,$online;
+ $author="";
+ if (!$uname) $uname=$auth->auth["uname"];
+ if(count($online)) {
+ 	if ($online[$uname]) {
+		    $author=$online["name"];
+	}
+}
+if (!$author) {
  $db=new DB_Seminar;
- $db->query ("SELECT Vorname , Nachname , user_id FROM auth_user_md5 WHERE username = '$uname'");
+ $db->query ("SELECT CONCAT(Vorname ,' ', Nachname) AS fullname FROM auth_user_md5 WHERE username = '$uname'");
 				 while ($db->next_record())
-					 $author=$db->f("Vorname")." " . $db->f("Nachname");
+					 $author=$db->f("fullname");
+ }
  if ($author=="") $author="unbekannt";
 
  return $author;
@@ -158,7 +177,7 @@ function get_nachname($user_id="")
  global $user;
  if (!($user_id)) $user_id=$user->id;
  $db=new DB_Seminar;
- $db->query ("SELECT Vorname , Nachname , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
+ $db->query ("SELECT Nachname FROM auth_user_md5 WHERE user_id = '$user_id'");
 				 while ($db->next_record())
 					 $author=$db->f("Nachname");
  if ($author=="") $author="unbekannt";
@@ -170,13 +189,23 @@ function get_nachname($user_id="")
  
  function get_username($user_id="")
 {
- global $user;
- if (!($user_id)) $user_id=$user->id;
+  global $auth,$online;
+ $author="";
+ if (!($user_id)) return $auth->auth["uname"];
+ if(count($online)) {
+ 	foreach($online as $key=>$value){
+		if ($value["userid"]==$user_id) {
+		    $author=$key;
+		    break;
+			}
+		}
+	}
+if (!$author) {
  $db=new DB_Seminar;
  $db->query ("SELECT username , user_id FROM auth_user_md5 WHERE user_id = '$user_id'");
 				 while ($db->next_record())
 					 $author=$db->f("username");
-
+}
  return $author;
  }
 
@@ -184,12 +213,18 @@ function get_nachname($user_id="")
  
  function get_userid($username="")
 {
- global $user;
- $db=new DB_Seminar;
+ global $user,$online;
+ $author="";
+ if (!$username) return $user->id;
+ if(count($online)) {
+ 	$author=$online[$username]["userid"];
+	}
+if (!$author) {
+$db=new DB_Seminar;
  $db->query ("SELECT user_id  FROM auth_user_md5 WHERE username = '$username'");
 				 while ($db->next_record())
 					 $author=$db->f("user_id");
-
+}
  return $author;
  }
  
