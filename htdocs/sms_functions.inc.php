@@ -19,6 +19,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+function return_key_from_val($array, $val) {
+	while(list($tmp_key, $tmp_val) = each($array)) {
+		if ($tmp_val == $val) {
+			$key = $tmp_key;
+		}
+	}
+	return $key;
+}
+
+function return_val_from_key($array, $key) {
+	while(list($tmp_key, $tmp_val) = each($array)) {
+		if ($tmp_key == $key) {
+			$val = $tmp_val;
+		}
+	}
+	return $val;
+}
+
 function MessageIcon ($message_hovericon) {
 	global $my_messaging_settings, $PHP_SELF, $auth, $forum;
 	if ($auth->auth["jscript"] AND $message_hovericon["content"]!="" && $message_hovericon["openclose"]=="close" &&  $forum["jshover"] == "1") {
@@ -143,7 +161,7 @@ function folder_openclose($folder, $x) {
 
 // print_snd_message
 function print_snd_message($psm) {	
-	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF, $msging, $cmd_show, $sms_data;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF, $msging, $cmd_show, $sms_data, $_fullname_sql;	
 
 	// open?!
 	if ($sms_data["open"] == $psm['message_id']) {
@@ -204,17 +222,28 @@ function print_snd_message($psm) {
 	
 	// tread content
 	if (strpos($psm['message'],$msging->sig_string)) {
-		$titel = mila(kill_format(substr($psm['message'], 0, strpos($psm['message'],$msging->sig_string))));
+		$titel = mila(trim(kill_format(substr($psm['message'], 0, strpos($psm['message'],$msging->sig_string)))));
 	} else {
-		$titel = mila(kill_format($psm['message']));
+		$titel = mila(trim(kill_format($psm['message'])));
 	}
 	$content = quotes_decode(formatReady($psm['message']));
 	if ($x >= "2") { // if more than one receiver add appendix
 		$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
-		$query = "SELECT message_user.*, auth_user_md5.username FROM message_user LEFT JOIN auth_user_md5 USING(user_id) WHERE message_user.message_id = '".$psm['message_id']."' AND message_user.snd_rec = 'rec'";
+		$query = "
+		SELECT message_user.*, auth_user_md5.username, " .$_fullname_sql['full'] ." AS fullname
+			FROM message_user 
+			LEFT JOIN auth_user_md5 USING(user_id) 
+			LEFT JOIN user_info USING(user_id) 
+			WHERE message_user.message_id = '".$psm['message_id']."' 
+			AND message_user.snd_rec = 'rec'";
 		$db7->query($query);
+		$i = "0";
 		while ($db7->next_record()) {
-			$content .= "<a href=\"about.php?username=".$db7->f("username")."\"><font size=-1 color=\"#333399\">".get_fullname($db7->f("user_id"))."</font></a>,&nbsp;";
+			if ($i != "0") {
+				$content .= ",&nbsp;";
+			}
+			$content .= "<a href=\"about.php?username=".$db7->f("username")."\"><font size=-1 color=\"#333399\">".$db7->f("fullname")."</font></a>";
+			$i = ($i+1);
 		}
 	}
 
