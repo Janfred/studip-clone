@@ -282,18 +282,25 @@ class AssignObject {
 		
 
 		//ok, a very heavy algorythmus do detect the overlaps...
-		for ($i1=0; $i1<count($this->events); $i1++) {
+		$count_this_events = count($this->events);
+		for ($i1=0; $i1<$count_this_events; $i1++) {
 			$val = $this->events[$keys[$i1]];
-			for ($i2=0; $i2<count($this->events); $i2++) {
+			for ($i2=0; $i2<$count_this_events; $i2++) {
 				$val2 = $this->events[$keys[$i2]];
-				if ($val2->getId() != $val->getId())
-					if ((($val->getEnd() >= $val2->getBegin()) &&($val->getEnd() <= $val2->getEnd()))
-					|| (($val->getBegin() >= $val2->getBegin()) &&($val->getBegin() <= $val2->getEnd()))
-					|| (($val2->getEnd() >= $val->getBegin()) &&($val2->getEnd() <= $val->getEnd()))
-					|| (($val2->getBegin() >= $val->getBegin()) &&($val2->getBegin() <= $val->getEnd()))) {
+				if ($val2->getId() != $val->getId()) {
+					$val_begin = $val->getBegin();
+					$val_end = $val->getEnd();
+					$val2_begin = $val2->getBegin();
+					$val2_end = $val2->getEnd();
+					
+					if ((($val_end >= $val2_begin) && ($val_end <= $val2_end))
+					|| (($val_begin >= $val2_begin) && ($val_begin <= $val2_end))
+					|| (($val2_end >= $val_begin) && ($val2_end <= $val_end))
+					|| (($val2_begin >= $val_begin) && ($val2_begin <= $val_end))) {
 						if (($val2->getAssignId()	 != $this->getId()) &&($val->getAssignId() == $this->getId())) {
-							$overlaps[$val2->getAssignId()] = array("begin" =>$val->getBegin(), "end"=>$val->getEnd());
-							}
+							$overlaps[$val2->getAssignId()] = array("begin" =>$val_begin, "end"=>$val_end);
+						}
+					}
 				}
 			}
 		}
