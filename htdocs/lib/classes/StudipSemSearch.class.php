@@ -303,11 +303,12 @@ class StudipSemSearch {
 			if(!is_object($this->sem_tree)){
 				$this->sem_tree =& TreeAbstract::GetInstance("StudipSemTree");
 			}
-			$this->view->params[0] = $this->visible_only ? "visible=1" : "1";
+			$this->view->params[0] = (is_array($sem_types) ? $sem_types : $this->sem_tree->sem_status);
+			$this->view->params[1] = $this->visible_only ? "visible=1" : "1";
 
-			$this->view->params[1] = $this->sem_tree->getKidsKids($_REQUEST[$this->form_name . "_scope_choose"]);
-			$this->view->params[1][] = $_REQUEST[$this->form_name . "_scope_choose"];
-			$this->view->params[2] = $clause;
+			$this->view->params[2] = $this->sem_tree->getKidsKids($_REQUEST[$this->form_name . "_scope_choose"]);
+			$this->view->params[2][] = $_REQUEST[$this->form_name . "_scope_choose"];
+			$this->view->params[3] = $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_TREE_GET_SEMIDS"));
 			if ($snap->numRows){
 				$clause = " AND c.seminar_id IN('" . join("','",$snap->getRows("seminar_id")) ."')" . $clause;
