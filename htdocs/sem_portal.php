@@ -59,16 +59,14 @@ if (isset($view)){
 		);
 	}
 	
-function write_toplist($rubrik,$query)
-{
-
-//	echo $query;
+function write_toplist($rubrik,$query) {
+	$global $PHP_SELF;
 	$db=new DB_Seminar;
 	$db->query($query);
 	IF  ($db->affected_rows() > 0) {
 		echo "<tr><td class=links1>&nbsp; $rubrik</td></tr><tr><td class=steel1><ol type='1' start='1'>";
 		while ($db->next_record() ){
-			echo"<font size=2><li><a href='details.php?sem_id=".$db->f("seminar_id")."&send_from_search=tru'>";
+			echo"<font size=2><li><a href='details.php?sem_id=".$db->f("seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF'>";
 			echo "".htmlReady($db->f("name"))."</a>";
 			IF ($rubrik=="zuletzt angelegt" AND $db->f("count") >0) {
 				$last =  date("YmdHis",$db->f("count"));
