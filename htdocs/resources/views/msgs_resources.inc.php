@@ -38,5 +38,8 @@ $this->msg[9] = array (
 $this->msg[10] = array (
 		"mode" => "error",
 		"msg"=> _("Bitte geben Sie einen Nutzer f&uuml;r die Belegung an, um diese Belegung zu speichern!"));
+$this->msg[11] = array (
+		"mode" => "error",
+		"msg"=> _("Die Belegung konnte nicht gespeichert werden, da sie sich mit einer anderen Belegung &uuml;berschneidet!"));
 		
 ?>
