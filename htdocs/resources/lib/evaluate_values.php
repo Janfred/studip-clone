@@ -1,4 +1,7 @@
 <?
+//a temp session-variable...
+$sess->register("new_assign_object");
+
 /*****************************************************************************
 Functions...
 /*****************************************************************************/
@@ -78,7 +81,6 @@ if ($recurse_list)
 
 if ($nrecurse_list) 
 	$resources_data["list_recurse"]=FALSE;
-
 
 //Neue Hierachieebene oder Unterebene anlegen
 if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {
@@ -334,17 +336,22 @@ if ($change_object_schedules) {
 					$change_schedule_repeat_day_of_week,
 					$change_schedule_repeat_week);
 
-				if ($change_object_schedules == "NEW") {
+				if (($change_object_schedules == "NEW") || ($new_assign_object)) {
 					if ($changeAssign->create()) {
 						$assign_id=$changeAssign->getId();
 						$msg->addMsg(3);
+						$new_assign_object='';
+					} else {
+						if ((!$do_search_user_x) && (!$reset_search_user_x))
+							$msg->addMsg(10);					
+						$new_assign_object=serialize($changeAssign);
 					}
 				} else {
 					$changeAssign->chng_flag=TRUE;
 					if ($changeAssign->store()) {
-						$assign_id=$changeAssign->getId();
 						$msg->addMsg(4);
 						}
+					$assign_id=$changeAssign->getId();
 				}
 			}
 		}
