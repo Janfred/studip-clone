@@ -203,11 +203,11 @@ if (($s_command=="edit") && ($s_send)) {
     //Checks for admission turnout (only important if an admission is set)
     if ($db->f("admission_type")) {
     	if ($turnout < 1) {
-		$msg .= "error§Diese Veranstaltung ist teilnehmerbeschr&auml;nkt. Daher m&uuml;ssen Sie wenigstens einen Teilnehmer zulassen!§";
+		$msg .= "error§Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Daher m&uuml;ssen Sie wenigstens einen Teilnehmer zulassen!§";
 		$run=FALSE;
 	}
     	if (($run) &&($turnout < $db->f("admission_turnout")))
-		$msg .= "info§Diese Veranstaltung ist teilnehmerbeschr&auml;nkt. Wenn Sie die Teilnehmerzahl verringern, m&uuml;ssen Sie evtl. Nutzer, die bereits einen Platz in der Veranstaltung erhalten haben, manuell entfernen!§";
+		$msg .= "info§Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Wenn Sie die Teilnehmerzahl verringern, m&uuml;ssen Sie evtl. Nutzer, die bereits einen Platz in der Veranstaltung erhalten haben, manuell entfernen!§";
 
 	if ($turnout > $db->f("admission_turnout"))
 		$do_update_admission=TRUE;

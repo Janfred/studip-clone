@@ -347,7 +347,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$db2->query("DELETE FROM seminar_user WHERE Seminar_id ='".$admin_admission_data["sem_id"]."' AND status IN ('autor', 'user') ");
 			if ($db2->affected_rows()) {
 				while ($db->next_record()) {
-					$message="Ihr Abonnement der Veranstaltung **".$admin_admission_data["name"]."** wurde aufgehoben, da die Veranstaltung mit einem teilnehmerbeschränkten Anmeldeverfahren versehen wurde. \nWenn Sie einen Platz in der Veranstaltrung bekommen wollen, melden Sie sich bitte erneut an.";
+					$message="Ihr Abonnement der Veranstaltung **".$admin_admission_data["name"]."** wurde aufgehoben, da die Veranstaltung mit einem teilnahmebeschränkten Anmeldeverfahren versehen wurde. \nWenn Sie einen Platz in der Veranstaltung bekommen wollen, melden Sie sich bitte erneut an.";
 					$messaging->insert_sms ($db->f("username"), $message, "____%system%____");
 					}
 			}
