@@ -362,6 +362,7 @@ class VoteDB extends StudipObject {
 			  'mkdate'        => $this->db->f("mkdate"),
 			  'chdate'        => $this->db->f("chdate"),
 			  'resultvisibility'=>$this->db->f("resultvisibility"),
+			  'namesvisibility'=>$this->db->f("namesvisibility"),
 			  'multiplechoice'=> $this->db->f("multiplechoice"), 
 			  'anonymous'     => $this->db->f("anonymous"), 
 			  'changeable'    => $this->db->f("changeable"), 
@@ -823,7 +824,7 @@ class VoteDB extends StudipObject {
     */
    function writeVote ($voteID, $authorID, $rangeID, $title, $question,
 		       $state, $startTime, $endTime, $timespan, $mkdate,
-		       $chdate, $resultvisibility, $multiplechoice,
+		       $chdate, $resultvisibility, $namesvisibility, $multiplechoice,
 		       $anonymous, $answerarray, $changeable,
 		       $co_visibility = NULL, $type) {
 	
@@ -859,13 +860,13 @@ class VoteDB extends StudipObject {
 	   $query = "INSERT INTO vote (".
 	     "vote_id, author_id, range_id,type , title, question, state, ".
 	     "startdate, stopdate, timespan, mkdate, chdate, ".
-	     "resultvisibility, ".
+	     "resultvisibility, namesvisibility".
 	     "multiplechoice, anonymous, changeable, co_visibility) ".
 	     "VALUES (\"".$voteID."\",\"".$authorID."\", \"".$rangeID."\",".
 	     "\"".$type."\",\"".$title."\", ".
 	     "\"".$question."\", \"".$state."\", ".$startTime.", ".
 	     $endTime.", ".$timespan.", \"".$mkdate."\", ".
-	     "\"".$chdate."\", \"".$resultvisibility."\", ".
+	     "\"".$chdate."\", \"".$resultvisibility."\", \"".$namesvisibility."\",".
 	     "\"".$multiplechoice."\", \"".$anonymous."\", ".
 	     "\"".$changeable."\", ".$co_visibility.")";
 
@@ -907,6 +908,7 @@ class VoteDB extends StudipObject {
 	       "timespan=".$timespan."   , mkdate=\"".$mkdate."\", ".
 	       "chdate=\"".time()."\" , ".
 	       "resultvisibility=\"".$resultvisibility."\", ".
+	       "namesvisibility=\"".$namesvisibility."\", ".
 	       "multiplechoice=\"".$multiplechoice."\", ".
 	       "anonymous=\"".$anonymous."\", ".
 	       "changeable=\"".$changeable."\", ".
@@ -1315,6 +1317,7 @@ class VoteDB extends StudipObject {
 	    "  mkdate,".
 	    "  chdate,".
 	    "  resultvisibility,".
+	    "  namesvisibility,".
 	    "  multiplechoice,".
 	    "  anonymous,".
 	    "  changeable".
@@ -1332,6 +1335,7 @@ class VoteDB extends StudipObject {
 	    " '".$this->vote->getCreationdate ()."',".
 	    " '".$this->vote->getChangedate ()."',".
 	    " '".$this->vote->getResultvisibility ()."',".
+	    " '".$this->vote->getNamesvisibility ()."',".
 	    " '".$this->vote->isMultiplechoice ()."',".
 	    " '".$this->vote->isAnonymous ()."',".
 	    " '".$this->vote->isChangeable ()."'".
@@ -1381,6 +1385,7 @@ class VoteDB extends StudipObject {
 	    " mkdate           = '".$this->vote->getCreationdate ()."',".
 	    " chdate           = '".time()."',".
 	    " resultvisibility = '".$this->vote->getResultvisibility ()."',".
+	    " namesvisibility = '".$this->vote->getNamesvisibility ()."',".
 	    " multiplechoice   = '".$this->vote->isMultiplechoice ()."',".
 	    " anonymous        = '".$this->vote->isAnonymous ()."',".
 	    " changeable       = '".$this->vote->isChangeable ()."' ".
