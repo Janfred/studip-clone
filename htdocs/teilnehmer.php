@@ -38,15 +38,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <?php
 	include "seminar_open.php"; //hier werden die sessions initialisiert
 
-// -- hier muessen Seiten-Initialisierungen passieren --
-
 	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung	
-    $cssSw=new cssClassSwitcher;
+	require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
+	require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
+	
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	include "links1.php";
+	
+	$messaging=new messaging;
+	$cssSw=new cssClassSwitcher;
 
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
@@ -141,6 +143,9 @@ if ($cmd=="raus") {
 		$userchange=$db->f("user_id");
 		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
 		
+		$message="Ihr Abonnement der Veranstaltung **$SessSemName[0]** wurde von einem Dozenten oder Administrator aufgehoben.";
+		$messaging->insert_sms ($username, $message, "____%system%____");
+		
 		//Pruefen, ob es Nachruecker gibt
 		update_admission($auswahl);
 
@@ -159,6 +164,9 @@ if ($cmd=="admission_raus") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+
+		$message="Sie wurden vom einem Dozenten oder Administrator von der Warteliste der Veranstaltung **$SessSemName[0]** gestrichen und sind damit __nicht__ zugelassen worden.";
+		$messaging->insert_sms ($username, $message, "____%system%____");
 		
 		//Warteliste neu sortieren
 		 renumber_admission($id);
@@ -180,6 +188,9 @@ if ($cmd=="admission_rein") {
 		$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$userchange', status= 'autor' ");
 		if ($db->affected_rows())
 			$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+
+		$message="Sie wurden vom einem Dozenten oder Administrator aus der Warteliste in die Veranstaltung **$SessSemName[0]** aufgenommen und sind damit zugelassen.";
+		$messaging->insert_sms ($username, $message, "____%system%____");
 
 		//Warteliste neu sortieren
 		 renumber_admission($id);
@@ -218,6 +229,9 @@ if (isset($berufen)) {
 					$group=select_group ($db3->f("start_time"), $u_id);
 					$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$id', '$u_id', 'tutor','$group' )");
 					$msg = sprintf ("msg§%s wurde als Tutor in die Veranstaltung aufgenommen.</b>", get_fullname($u_id));
+			
+					$message="Sie wurden vom einem Dozenten oder Administrator als **Tutor** in die Veranstaltung **$SessSemName[0]** aufgenommen und sind damit zugelassen";
+					$messaging->insert_sms (get_username($u_id), $message, "____%system%____");
 				}
 			}
 			else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
