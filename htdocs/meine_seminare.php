@@ -77,17 +77,17 @@ function get_my_sem_values(&$my_sem) {
 
 function print_seminar_content($semid,$my_sem_values) {
   // Postings
-  IF ($my_sem_values["neuepostings"])  ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 alt='".$my_sem_values["postings"]." Postings, ".$my_sem_values["neuepostings"]." Neue'></a>";
-  ELSEIF ($my_sem_values["postings"]) ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 alt='".$my_sem_values["postings"]." Postings'></a>";
+  IF ($my_sem_values["neuepostings"])  ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 alt='".$my_sem_values["postings"]." Postings, ".$my_sem_values["neuepostings"]." Neue' title='".$my_sem_values["postings"]." Postings, ".$my_sem_values["neuepostings"]." Neue'></a>";
+  ELSEIF ($my_sem_values["postings"]) ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 alt='".$my_sem_values["postings"]." Postings' title='".$my_sem_values["postings"]." Postings'></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
-  IF ($my_sem_values["neuedokumente"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 alt='".$my_sem_values["dokumente"]." Dokumente, ".$my_sem_values["neuedokumente"]." neue'></a>";
-  ELSEIF ($my_sem_values["dokumente"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 alt='".$my_sem_values["dokumente"]." Dokumente'></a>";
+  IF ($my_sem_values["neuedokumente"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 alt='".$my_sem_values["dokumente"]." Dokumente, ".$my_sem_values["neuedokumente"]." neue' title='".$my_sem_values["dokumente"]." Dokumente, ".$my_sem_values["neuedokumente"]." neue'></a>";
+  ELSEIF ($my_sem_values["dokumente"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 alt='".$my_sem_values["dokumente"]." Dokumente' title='".$my_sem_values["dokumente"]." Dokumente'></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //News
-  IF ($my_sem_values["neuenews"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 alt='".$my_sem_values["news"]." News, ".$my_sem_values["neuenews"]." neue'></a>";
-  ELSEIF ($my_sem_values["news"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 alt='".$my_sem_values["news"]." News'></a>";
+  IF ($my_sem_values["neuenews"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 alt='".$my_sem_values["news"]." News, ".$my_sem_values["neuenews"]." neue' title='".$my_sem_values["news"]." News, ".$my_sem_values["neuenews"]." neue'></a>";
+  ELSEIF ($my_sem_values["news"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 alt='".$my_sem_values["news"]." News' title='".$my_sem_values["news"]." News'></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //Literatur
@@ -101,8 +101,8 @@ function print_seminar_content($semid,$my_sem_values) {
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   // Termine
-  IF ($my_sem_values["neuetermine"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 alt='".$my_sem_values["termine"]." Termine, ".$my_sem_values["neuetermine"]." neue'></a>";
-  ELSEIF ($my_sem_values["termine"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 alt='".$my_sem_values["termine"]." Termine'></a>";
+  IF ($my_sem_values["neuetermine"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 alt='".$my_sem_values["termine"]." Termine, ".$my_sem_values["neuetermine"]." neue' title='".$my_sem_values["termine"]." Termine, ".$my_sem_values["neuetermine"]." neue'></a>";
+  ELSEIF ($my_sem_values["termine"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 alt='".$my_sem_values["termine"]." Termine' title='".$my_sem_values["termine"]." Termine'></a>";
   ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   echo "&nbsp;&nbsp;";
