@@ -43,7 +43,7 @@ $range_id = $this->config->range_id;
 $all_groups = $this->config->getValue("Main", "groups");
 
 if (!$group_ids = $this->config->getValue("Main", "groupsvisible")) {
-	die($EXTERN_ERROR_MESSAGE);
+	die($GLOBALS["EXTERN_ERROR_MESSAGE"]);
 }
 	
 $visible_groups = get_statusgruppen_by_id($range_id, $group_ids);
