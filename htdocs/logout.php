@@ -80,7 +80,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 
 	?>
 	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">
-		<tr><td colspan="2" class="topic" valign="middle"><img src="pictures/logout.gif" border="0" style="vertical-align:middle"><b>&nbsp;<? print _("Stud.IP - Logout");?></b></td></tr>
+		<tr><td colspan="2" class="topic" valign="middle"><img src="pictures/logout.gif" border="0" align="texttop"><b>&nbsp;<? print _("Stud.IP - Logout");?></b></td></tr>
 		<tr>
 			<td width="99%"  class="blank" valign="middle">
 				<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -99,7 +99,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 				</table>
 			</td>
 			<td class="blank">
-			<img src="pictures/maus.jpg" style="vertical-align:top" border="0">
+			<img src="pictures/maus.jpg" align="top"  border="0">
 			</td>
 		</tr>
 	</table>
