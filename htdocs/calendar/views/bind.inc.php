@@ -1,9 +1,5 @@
 <?
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
-/*echo "<tr><td class=\"blank\" width=\"100%\" colspan=\"2\">\n";
-echo "<blockquote>Termine aus den ausgewählten Veranstaltungen werden ";
-echo "in Ihren Terminkalender übernommen.</blockquote>\n";
-echo "</td></tr>\n";*/
 echo "<tr><td class=\"blank\" width=\"90%\">\n";
 echo "<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"1\" class=\"blank\">\n";
 
