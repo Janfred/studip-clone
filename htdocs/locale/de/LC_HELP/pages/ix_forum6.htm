@@ -161,7 +161,7 @@ Das war´s.</p><br>
 <p><a name="profis">&nbsp;</a>
 
 <p><b><font size="+1">Formatierungen f&uuml;r Profis</font></b></p><br>
-<p>In diese Kategorie fallen der sog. <b>pr&auml;formatierte Text</b>, <b>Text als Link</b> und das <b>Zitieren</b>.<br><br>
+<p>In diese Kategorie fallen der sog. <b>pr&auml;formatierte Text</b>, das <b>Zitieren</b>, <b>Text als Link</b>, das <b>Einbinden von Bildern</b> und die <b>Formatierung von Programmcode</b><br><br>
 <b>Pr&auml;fomatierter Text:</b><br>
 Pr&auml;formatierter Text bedeutet, da&szlig; der Text mit allen Leerzeichen, Zeilenumbr&uuml;chen und Tabulatoren so ausgegeben wird, wie er (z.B. in WORD) erstellt wurde.
 Damit ist unter anderem die Ausgabe von Tabellen (keine HTML-Tabellen!) und numerierten Listen mit mehreren Ebenen m&ouml;glich (oder auch die  Ausgabe einer Signatur).<br>
@@ -180,12 +180,48 @@ In der Ausgabe erscheint nur der Text in den in den eckigen Klammern als Link. D
 Linknamen k&ouml;nnen (noch) nicht weitergehend formatiert werden.</p>
 
 <p><u><b>Beispiel:</b></u></p>
-<p align="center"> Hallo, mailt mich an! Unter diesem Link: [Kuckuck!]Silencer1@team-gamestar.de <p>
+<p align="center"> Hallo, mailt mich an! Unter diesem Link: [Kuckuck!]info@studip.de <p>
 <br><p align="center">Wird zu:</p><br>
-<p align="center">Hallo, mailt ich an! Unter diesem Link: <a href="mailto:Silencer1@team-gamestar.de">Kuckuck!</a></p>
+<p align="center">Hallo, mailt ich an! Unter diesem Link: <a href="mailto:info@studip.de">Kuckuck!</a></p>
 <br>
 <p><b>Zitate:</b><br>M&ouml;chten Sie auf ein Posting antworten und den urspr&uuml;nglichen Textes zitieren, k&ouml;nnen Sie den <b>Zitieren</b>-Button unter dem Ursprungsposting verwenden. M&ouml;chten Sie nur einen Teil des urspr&uuml;nglichen Textes in Ihren Beitrag aufnehmen, bietet es sich an, den Befehl f&uuml;r die Darstellung von Zitaten per Hand einzuf&uuml;gen. Markieren und kopieren Sie hierzu den zu zitierenden Text und &ouml;ffnen Sie ein Antwortfenster. F&uuml;gen Sie an der Stelle, an der das Zitat beginnen soll, den Ausdruck [quote] ein. Kopieren Sie nun den zu zitierenden Textabschnitt und schlie&szlig;en Sie das Zitat mit [/quote]. Nach dem Absenden erscheint nun alles innerhalb der beiden Befehle als Zitat.</p>
 <p>&nbsp; </p>
+<p><b>Einbinden von Bildern:</b><br>Sie k&ouml;nnen Bilder, die an anderer Stelle im Internet (etwa Ihrer eigenen Internetseite) liegen, innerhalb von Stud.IP einbinden. Dazu wird der Ausdruck [img] verwendet. Hinter diesen Ausdruck setzen Sie einfach die Adresse des Bildes, das verlinkt werden soll.</p>
+<p><u><b>Beispiel:</b></u></p>
+<p align="center"><b>[img]</b>http://www.studip.de/images/studip_logo.gif <p>
+<br><p align="center">Wird zu:</p><br>
+<p align="center"><img src="../pictures/studipanim.gif"><p>
+<p>Sie k&ouml;nnen weitere Parameter zur Formatierung des Bildes angeben. Die Syntax lautet: <br>
+[img=alt-Text:Größe:Ausrichtung:URL]Bild-URL<br><br>
+Die einzelnen Parameter bedeuten:<br>
+<ul>
+<li>alt-Text: Alternativer Text, wenn Bild nicht darstellbar
+<li>Größe: Breite in Pixeln oder Prozent (richtet sich nach Größe des Browserfenster. Ist diese nicht ermittelbar, maximal 400px)
+<li>Ausrichtung: center für zentrierte, right für rechtsbündige Ausrichtung
+<li>URL: Bild als Link mit angegebener URL
+</ul>
+Alle Parameter sind optional. Die angegebene Reihenfolge mu&szlig; jedoch beachtet werden, wenn mehr als ein Parameter angegeben wird.
+</p><br>
+<p><b>Formatierung von Programmcode:</b><br>Sie k&ouml;nnen Programmcode (etwa PHP-Code) in Stud.IP eingeben und automatisch formatieren lassen. Benutzen Sie daf&uuml;r den Ausdruck [code]<p>
+<p><u><b>Beispiel:</b></u></p>
+<p>Aus <br><br>
+<kbd><b>[code]</b><br>
+&lt;?<br>
+print ("Hallo ihr ").$personenanzahl;<br>
+for ($i; $i<$personenanzahl, $++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print "Hallo Person Nummer ".$i;<br>
+}<br>
+?&gt;<br>
+<b>[/code]</b></kbd><br><br>Wird zu<br>
+<kbd><font color="#000000">
+<br><font color="#0000cc">&lt;?
+<br></font><font color="#006600">print (</font><font color="#cc0000">"Hallo ihr "</font><font color="#006600">).</font><font color="#0000cc">$personenanzahl</font><font color="#006600">;
+<br>for (</font><font color="#0000cc">$i</font><font color="#006600">; </font><font color="#0000cc">$i</font><font color="#006600">&lt;</font><font color="#0000cc">$personenanzahl</font><font color="#006600">, $++) {
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print </font><font color="#cc0000">"Hallo Person Nummer "</font><font color="#006600">.</font><font color="#0000cc">$i</font><font color="#006600">;
+<br>}
+<br></font><font color="#0000cc">?&gt;
+<br></font><br></font></kbd>
+</p>
 <p><b>Abschalten der Formatierung:</b><br>Sie k&ouml;nnen alle oben beschriebenen Formatierungen auch komplett abschalten. Das ist z.B. dann wichtig, wenn Ihr Text viele Zeichen enth&auml;lt, die von der Stud.IP-Formatierung benutzt werden. Um hier keine ungewollten Formatierungen zu erhalten, beginnen Sie den Text mit dem Ausdruck [nop] und beenden Sie ihn mit [/nop]. Alles zwischen [nop] und [/nop] wird nicht formatiert. Text, der au&szlig;erhalb dieser beiden Ausdr&uuml;cke steht, wird wie vorangehend beschrieben formatiert. Dadurch haben Sie die M&ouml;glichkeit, einen mit [nop][/nop] geklammerten Textabschnitt selbst in eine Formatierung einzubetten.<p>
 <p><u><b>Beispiel:</b></u></p>
 <p>##[pre][nop]Dieser Text  &nbsp; &nbsp;wird  &nbsp; &nbsp;++trotz++  &nbsp; &nbsp;seiner  &nbsp; &nbsp;__vielen__  &nbsp; &nbsp;Formatierungszeichen<br>%%nicht &nbsp; &nbsp;weiter &nbsp; &nbsp;formatiert%%. Er ist aber pr&auml;formatiert<br>(zu sehen an den gro&szlig;en Wortzwischenr&auml;umen) und diktengleich.<br>[/nop][/pre]##</p>
