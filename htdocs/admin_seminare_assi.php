@@ -873,7 +873,8 @@ if ($cmd_f_x)
 				$sem_create_data["sem_turnout"]."', '".			//Feld admission_turnout 
 				"', '".										//Feld admission_binding
 				$sem_create_data["sem_admission"]."', '".		//Feld admission_type 
-				"0' )";									//Feld admission_selection_take_place
+				"0' ,'".									//Feld admission_selection_take_place
+				"0' )";									//Feld showscore
 
 		//und jetzt wirklich eintragen
 		if (!$sem_create_data["sem_entry"])
