@@ -96,23 +96,32 @@ if ($ILIAS_CONNECT_ENABLE)
 	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_config.inc.php"); // Konfigurationsdatei
 	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_user_functions.inc.php"); // Funktionen f&uuml;r ILIAS-User
 
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
 	if (isset($back_x))
 		unset($mode);
 	$this_ilias_id = get_connected_user_id($auth->auth["uid"]);
 	if (($mode == "s2i") AND (($this_ilias_id == false) OR isset($ja_x)))
 	{
 		if (isset($ja2_x))
-			if (delete_ilias_user( $this_ilias_id))
+		{	
+			if ((get_studip_user($ilias_id) != false) AND (get_studip_user($ilias_id) != $auth->auth["uname"]))
+				die(_("Dieser ILIAS-Account ist noch einem bestehenden Stud.IP-User verbunden und kann daher nicht gel&ouml;scht werden. Bitte wenden Sie sich an den/die AdministratorIn."));
+			// Loeschen von ILIAS-Accounts, auch wenn sie nicht mit dem User verbunden sind
+			if ($this_ilias_id == false)
+				$ilias_id = get_ilias_user_id($username_prefix . $auth->auth["uname"]);
+			else 
+				$ilias_id = $this_ilias_id;
+			if (delete_ilias_user( $ilias_id ))
 				$deleted_msg = _("Alter Account wurde gel&ouml;scht.");/**/
+		}
 		$creation_result = create_ilias_user($auth->auth["uid"]);
 	}
 	if ( (check_ilias_auth()) AND ($mode == "connect") AND (($this_ilias_id == false) OR isset($ja_x)))
 		$connect_result = connect_users($auth->auth["uid"], get_ilias_user_id($ilias_uname));
 	$out = true;
 	
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
