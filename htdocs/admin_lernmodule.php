@@ -47,6 +47,7 @@ if ($ILIAS_CONNECT_ENABLE)
 
 	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_config.inc.php");
 	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_db_functions.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_user_functions.inc.php");
 	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_view_functions.inc.php");
 	require_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LERNMODUL ."/lernmodul_linking_functions.inc.php");
 
@@ -64,22 +65,13 @@ if ($ILIAS_CONNECT_ENABLE)
      		<td width="90%" class="blank">
 		<?
 		echo "<a href=\"" . link_new_module() ."\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
-		echo "<b>" . _("Auf folgende Lernmodule haben Sie Zugriff:") . "</b><br><br>";
-		?> 
-		<table cellspacing="0" cellpadding="0" border="0" width="100%">
-			<tr align="center" valign="top">
-				<th width="80%" align="left"><b><? echo _("Name"); ?></b></th>
-				<th width="15%"><b><? echo _("Bearbeiten"); ?></b></th>
-				<th width="5%"><b>X</b></th>
-			</tr>		
-		<?
+
 		if ($perm->have_perm("admin"))  
 			show_all_modules_admin();
 		else
-			show_user_modules("System", "Administrator", "1");
+			show_user_modules($auth->auth["uname"]);
 
 		?>
-		</table>
 		<br>
 		</td>
 		<td width="270" NOWRAP class="blank" align="center" valign="top">
