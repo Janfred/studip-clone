@@ -121,36 +121,28 @@ if ($visible[++$j]) {
 if ($visible[$i++])
 	$data["misc"] = $data_sem["misc"];
 
-if ($this->config->getValue("Main", "studiplink") == "top") {
-	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
-			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "top",
-	"height" => "40", "link" => "");
-	$this->elements["StudipLink"]->printout($args);
-	echo "<br>";
-}
+if ($this->config->getValue("Main", "studiplink")) {
+	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
+	echo "width=\"" . $this->config->getValue("TableHeader", "table_width");
+	echo "\" align=\"" . $this->config->getValue("TableHeader", "table_align") . "\">\n";
 
-echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">";
+	if ($this->config->getValue("Main", "studiplink") == "top") {
+		$args = array("width" => "100%", "height" => "40", "link" => "");
+		echo "<tr><td width=\"100%\">\n";
+		$this->elements["StudipLink"]->printout($args);
+		echo "</td></tr>";
+	}
+	$table_attr = $this->config->getAttributes("TableHeader", "table");
+	$pattern = array("/width=\"[0-9%]+\"/", "/align=\"[a-z]+\"/");
+	$replace = array("width=\"100%\"", "");
+	$table_attr = preg_replace($pattern, $replace, $table_attr);
+	echo "<tr><td width=\"100%\">\n<table$table_attr>\n";
+}
+else
+	echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
+
 echo "<tr" . $this->config->getAttributes("SemName", "tr") . ">";
 echo "<td" . $this->config->getAttributes("SemName", "td") . ">";
-
-if ($this->config->getValue("Main", "studiplink")) {
-	echo "<div" . $this->config->getAttributes("StudipLink", "div") . ">";
-	echo "<font" . $this->config->getAttributes("StudipLink", "font") . ">";
-	printf("<a href=\"\"%s>%s</a>",
-			$this->config->getAttributes("StudipLink", "a"),
-			$this->config->getValue("StudipLink", "linktext"));
-	if ($this->config->getValue("StudipLink", "image")) {
-		if ($image_url = $this->config->getValue("StudipLink", "imageurl"))
-			$img = "<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
-		else {
-			$img = "<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
-			$img .= "pictures/login.gif\" align=\"absmiddle\">";
-		}
-		printf("&nbsp;<a href=\"\"%s>%s</a>",
-			$this->config->getAttributes("StudipLink", "a"), $img);
-	}
-	echo "</font></div>";
-}
 
 if ($margin = $this->config->getValue("SemName", "margin"))
 	echo "<div style=\"margin-left:{$margin}px;\">";
@@ -162,29 +154,43 @@ echo $data["name"] . "</font></div></td></tr>\n";
 $headline_tr = $this->config->getAttributes("Headline", "tr");
 $headline_td = $this->config->getAttributes("Headline", "td");
 $headline_font = $this->config->getAttributes("Headline", "font");
-$headline_margin = $this->config->getValue("Headline", "margin");
+if ($headline_margin = $this->config->getValue("Headline", "margin")) {
+	$headline_div = "<div style=\"margin-left:$headline_margin;\">";
+	$headline_div_end = "</div>";
+}
+else {
+	$headline_div = "";
+	$headline_div_end = "";
+}
 $content_tr =$this->config->getAttributes("Content", "tr");
 $content_td = $this->config->getAttributes("Content", "td");
 $content_font = $this->config->getAttributes("Content", "font");
-$content_margin = $this->config->getValue("Content", "margin");
+if ($content_margin = $this->config->getValue("Content", "margin")) {
+	$content_div = "<div style=\"margin-left:$content_margin;\">";
+	$content_div_end = "</div>";
+}
+else {
+	$content_div = "";
+	$content_div_end = "";
+}
 
 foreach ($order as $position) {
 	if ($visible[$position] && $data[$this->data_fields[$position]]) {
-		echo "<tr$headline_tr><td$headline_td><div style=\"margin-left:$headline_margin;\">";
-		echo "<font$headline_font>{$aliases[$position]}</font></div></td></tr>\n";
-		echo "<tr$content_tr><td$content_td><div style=\"margin-left:$content_margin;\">";
+		echo "<tr$headline_tr><td$headline_td>$headline_div";
+		echo "<font$headline_font>{$aliases[$position]}</font>$headline_div_end</td></tr>\n";
+		echo "<tr$content_tr><td$content_td>$content_div";
 		echo "<font$content_font>" . $data[$this->data_fields[$position]];
-		echo "</font></div></td></tr>\n";
+		echo "</font>$content_div_end</td></tr>\n";
 	}
 }
 
 if ($this->config->getValue("Main", "studipinfo")) {
-	echo "<tr$headline_tr><td$headline_td><div style=\"margin-left:$headline_margin;\">";
+	echo "<tr$headline_tr><td$headline_td>$headline_div";
 	echo "<font$headline_font>" . $this->config->getValue("StudipInfo", "headline");
-	echo "<font></div></td></tr>\n";
+	echo "<font>$headline_div_end</td></tr>\n";
 	
 	$pre_font = $this->config->getAttributes("StudipInfo", "font");
-	echo "<tr$content_tr><td$content_td><div style=\"margin-left:$content_margin;\">";
+	echo "<tr$content_tr><td$content_td>$content_div";
 	echo "<font$pre_font>" . $this->config->getValue("StudipInfo", "homeinst");
 	echo "&nbsp;</font><font$content_font>";
 	printf("<a href=\"\"%s>%s</a>",
@@ -207,17 +213,18 @@ if ($this->config->getValue("Main", "studipinfo")) {
 	echo "<font$pre_font>" . $this->config->getValue("StudipInfo", "countdocuments");
 	echo "&nbsp;</font><font$content_font>";
 	echo "7<br></font>\n";
-	echo "</div></td></tr>";
+	echo "$content_div_end</td></tr>";
 }
 
 echo "</table>\n";
 
-if ($this->config->getValue("Main", "studiplink") == "bottom") {
-	echo "<br>";
-	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
-			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "bottom",
-	"height" => "40", "link" => "");
-	$this->elements["StudipLink"]->printout($args);
+if ($this->config->getValue("Main", "studiplink")) {
+	if ($this->config->getValue("Main", "studiplink") == "bottom") {
+		$args = array("width" => "100%", "height" => "40", "link" => "");
+		echo "</td></tr>\n<tr><td width=\"100%\">\n";
+		$this->elements["StudipLink"]->printout($args);
+	}
+	echo "</td></tr></table>\n";
 }
 ?>
 
