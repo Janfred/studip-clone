@@ -994,7 +994,8 @@ function printposting ($forumposting) {
 			$favicon = "pictures/forum_fav2.gif";
 			$favtxt = _("zu den Favoriten hinzufügen");
 		}
-		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
+		$rand = "&random=".rand();
+		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig".$rand."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
 		
 	// Antwort-Pfeil
 		
@@ -1271,11 +1272,11 @@ echo "</tr>";
 echo "</table><br>";
 
 
-
+/*
 echo DebugForum($forum);
 echo "<hr>";
 echo DebugForum($forumposting);
-
+*/
 
 if ($update)
 	echo "</form>\n";
@@ -1389,11 +1390,13 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	if ($rechte)
 		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='pictures/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='pictures/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
 	echo "</td></tr><tr><td class=blank>&nbsp; <br>&nbsp; <br></td></tr></table>\n";
-	
+
+
+/*	
 	echo DebugForum($forum);
 	echo "<hr>";
 	echo DebugForum($forumposting);
-	
+*/	
 	
 	if ($update)
 		echo "</form>\n";
