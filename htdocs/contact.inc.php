@@ -113,7 +113,7 @@ function ShowUserInfo ($user_id)
 			}
 		}
 		if(file_exists("./user/".$user_id.".jpg")) {
-			$output.="<tr><td class=\"steel1\" colspan=\"2\" width=\"350\"><img src=\"./user/".$user_id.".jpg\" border=1></td>";
+			$output.="<tr><td align=\"center\" class=\"steel1\" colspan=\"2\" width=\"350\"><br><img src=\"./user/".$user_id.".jpg\" border=1></td>";
 		}
 	}
 	return $output;	
