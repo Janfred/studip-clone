@@ -2,7 +2,7 @@
 /**
 * admin_admission.php
 * 
-* edit the setting for the admission system
+* edit the settings for the admission system
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
@@ -99,11 +99,11 @@ $messaging=new messaging;
 /**
 * This function creates a snapshor for all the values the admin_admission script uses
 *
-* The function serialized all the data which is used on this page. So you can
+* The function serializes all the data which is used on this page. So you can
 * compare an old and a new state of the whole set. It is used to inform the user,
 * that the data isn't saved yet.
 *
-* @param		string	all the data in serilized form
+* @param		string	all the data in serialized form
 *
 */
 function get_snapshot() {
