@@ -315,7 +315,7 @@ function getMyRoomRequests($user_id = '') {
 								(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
 								rr.termin_id, COUNT(t.termin_id) as anzahl_termine
 								FROM resources_requests rr 
-								INNER JOIN seminare USING(seminar_id)
+								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.seminar_id IN %s GROUP BY request_id", $in_seminar_id);
 			$db->query($query_sem);
 			while ($db->next_record()) {
