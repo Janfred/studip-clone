@@ -151,7 +151,7 @@ class SemBrowse {
 	}
 	
 	function get_sem_class(){
-		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
+		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE seminare.visible=1 AND seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
 		$snap = new DbSnapshot($db);
 		$sem_ids = $snap->getRows("Seminar_id");
 		if (is_array($sem_ids)){
