@@ -1,15 +1,4 @@
 <?
-/**
-* cssClassSwitcher.inc.php
-* 
-* class for handling zebra-tables
-*
-* @author		Andre Noack <noack@data-quest.de>
-* @version		$Id$
-* @access		public
-* @package		studip_core
-*/
-
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // html_head.inc.php
@@ -29,6 +18,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+/**
+* cssClassSwitcher.inc.php
+* 
+* class for handling zebra-tables
+*
+* @author		Andre Noack <noack@data-quest.de>
+* @version		$Id$
+* @access		public
+* @package		studip_core
+*/
 class cssClassSwitcher {
 	var $class = array("steelgraulight", "steel1");                 //Klassen
 	var $headerClass = "steel";
