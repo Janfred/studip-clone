@@ -509,13 +509,13 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 		echo "</table>";
 		}
 	ELSE {
-		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank colspan=4>&nbsp;<br>";
+		echo "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\" colspan=3>&nbsp;";
 		IF ($write) {
 			IF  ($user->id == "nobody")  echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"forum.php#anker\">\n";  // es wird geschrieben oder editiert
 			ELSE echo "<form name=forumwrite method=post action=\"forum.php#anker\">\n";  // es wird geschrieben oder editiert
 			}
 		echo "</td></tr><tr>";
-		echo "<td class=\"steelgraudunkel\"><b>&nbsp;Thema</b></td><td class=\"steelgraudunkel\" ><img src='pictures/forumleer.gif' border=0 height='25'></td><td class=\"steelgraudunkel\" align=right colspan=2><b>Postings</b> / letzter Eintrag&nbsp;</td></tr></table>\n";
+		echo "<td class=\"steelgraudunkel\"><b>&nbsp;Thema</b></td><td class=\"steelgraudunkel\"><img src=\"pictures/forumleer.gif\" border=0 height=\"25\"></td><td class=\"steelgraudunkel\" align=\"right\"><b>Postings</b> / letzter Eintrag&nbsp;</td></tr></table>\n";
 		while ($db->next_record()) {
 			$r_topic_id = $db->f("topic_id");
 			$parent_id = $db->f("parent_id");
