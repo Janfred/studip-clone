@@ -3,7 +3,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Erstellungszeit: 08. September 2003 um 23:40
+# Erstellungszeit: 17. September 2003 um 10:29
 # Server Version: 3.23.52
 # PHP-Version: 4.2.2
 # Datenbank: `studip`
@@ -174,6 +174,7 @@ CREATE TABLE datafields (
   object_type enum('sem','inst','user') default NULL,
   object_class varchar(10) default NULL,
   edit_perms enum('user','autor','tutor','dozent','admin','root') default NULL,
+  view_perms varchar(10) default NULL,
   priority tinyint(3) unsigned NOT NULL default '0',
   mkdate int(20) unsigned default NULL,
   chdate int(20) unsigned default NULL,
@@ -256,25 +257,6 @@ CREATE TABLE folder (
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `globalmessages`
-#
-
-CREATE TABLE globalmessages (
-  user_id_rec varchar(32) NOT NULL default '',
-  user_id_snd varchar(32) NOT NULL default '',
-  mkdate int(20) NOT NULL default '0',
-  message text NOT NULL,
-  message_id varchar(32) NOT NULL default '',
-  chat_id varchar(32) default NULL,
-  PRIMARY KEY  (message_id),
-  KEY user_id_rec (user_id_rec),
-  KEY user_id_snd (user_id_snd),
-  KEY mkdate (mkdate),
-  KEY chat_id (chat_id)
-) TYPE=MyISAM PACK_KEYS=1;
-# --------------------------------------------------------
-
-#
 # Tabellenstruktur für Tabelle `kategorien`
 #
 
@@ -310,6 +292,36 @@ CREATE TABLE literatur (
   KEY mkdate (mkdate),
   KEY chdate (chdate)
 ) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `message`
+#
+
+CREATE TABLE message (
+  message_id varchar(32) NOT NULL default '',
+  chat_id varchar(32) default NULL,
+  autor_id varchar(32) NOT NULL default '',
+  message text NOT NULL,
+  mkdate int(20) NOT NULL default '0',
+  PRIMARY KEY  (message_id),
+  KEY chat_id (chat_id),
+  KEY autor_id (autor_id)
+) TYPE=MyISAM;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `message_user`
+#
+
+CREATE TABLE message_user (
+  user_id varchar(32) NOT NULL default '',
+  message_id varchar(32) NOT NULL default '',
+  readed tinyint(1) NOT NULL default '0',
+  deleted tinyint(1) NOT NULL default '0',
+  snd_rec char(3) NOT NULL default '',
+  PRIMARY KEY  (user_id,message_id)
+) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
@@ -889,6 +901,7 @@ CREATE TABLE vote (
   anonymous tinyint(1) NOT NULL default '1',
   changeable tinyint(1) NOT NULL default '0',
   co_visibility tinyint(1) default NULL,
+  namesvisibility tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (vote_id),
   KEY range_id (range_id),
   KEY state (state),
@@ -939,6 +952,17 @@ CREATE TABLE voteanswers_user (
   votedate int(20) default NULL,
   PRIMARY KEY  (answer_id,user_id)
 ) TYPE=MyISAM PACK_KEYS=1;
+# --------------------------------------------------------
+
+#
+# Tabellenstruktur für Tabelle `wap_sessions`
+#
+
+CREATE TABLE wap_sessions (
+  user_id char(32) NOT NULL default '',
+  session_id char(32) NOT NULL default '',
+  creation_time datetime default NULL
+) TYPE=MyISAM;
 # --------------------------------------------------------
 
 #
