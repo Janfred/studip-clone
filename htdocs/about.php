@@ -250,10 +250,13 @@ if (show_news($user_id, $show_admin, 0, $about_data["nopen"]))
 	echo "<br>";
 
 // alle persoenlichen Termine anzeigen, aber keine privaten
-$start_zeit=time();
-($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
-if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
-	echo "<br>";
+$temp_user_perm = get_global_perm($user_id);
+if ($temp_user_perm != "root" && $temp_user_perm != "admin") {
+	$start_zeit=time();
+	($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
+	if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
+		echo "<br>";
+}
 
 // show chat info
 if ($GLOBALS['CHAT_ENABLE']){
