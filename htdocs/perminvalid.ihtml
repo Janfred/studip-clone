@@ -5,6 +5,8 @@ include $ABSOLUTE_PATH_STUDIP."html_head.inc.php";
 include $ABSOLUTE_PATH_STUDIP."header.php";   //hier wird der "Kopf" nachgeladen 
 require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
+if (CLOSE_ON_LOGIN_SCREEN === true) 
+	echo "<script type=\"text/javascript\">self.close();</script>";
 ?>
 
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>

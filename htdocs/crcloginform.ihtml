@@ -17,6 +17,8 @@
     document.login.resolution.value = screen.width+"x"+screen.height;
     document.login.submit();
   }
+  
+  <? if (CLOSE_ON_LOGIN_SCREEN === true) echo "self.close();";?>
 // -->
 </script>
 </head>
