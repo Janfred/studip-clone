@@ -517,7 +517,7 @@ function forum_print_toolbar ($id="") {
 			$print .= "<option value=\"\">Bewertungen";
 			$print .= "<option value=\"\">Relevanz";
 			$print .= "</select>&nbsp;&nbsp;";
-			$print .= "<img src=\"pictures/vote_answer_correct.gif\" align=\"middle\">&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
+			$print .= "<img src=\"pictures/haken_transparent.gif\" align=\"middle\">&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
 			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
 		} else {
 			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
