@@ -30,6 +30,26 @@ $db3=new DB_Seminar;
 
 ## ACTION ##
 
+
+// add forward_receiver
+if ($add_smsforward_rec_x) { 
+	$query = "UPDATE user_info SET smsforward_rec='".get_userid($smsforward_rec)."', smsforward_copy='1' WHERE user_id='".$user->id."'";
+	$db3->query($query);
+}
+
+// del forward receiver
+if ($del_forwardrec_x) {
+	$query = "UPDATE user_info SET smsforward_rec='', smsforward_copy='1' WHERE user_id='".$user->id."'";
+	$db3->query($query);
+}
+
+$query = "SELECT * FROM user_info WHERE user_id='".$user->id."'";
+$db2->query($query);
+while ($db2->next_record()) {
+	$smsforward['copy'] = $db2->f("smsforward_copy");
+	$smsforward['rec'] = $db2->f("smsforward_rec");
+}
+
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($messaging_cmd=="change_view_insert") {
 	$my_messaging_settings["changed"] = TRUE;
@@ -42,48 +62,26 @@ if ($messaging_cmd=="change_view_insert") {
 	$my_messaging_settings["openall"] = $openall;
 	$my_messaging_settings["opennew"] = $opennew;
 	$my_messaging_settings["hover"] = $hover;
+	$my_messaging_settings["logout_markreaded"] = $logout_markreaded;
 	$my_messaging_settings["addsignature"] = $addsignature;
 	$my_messaging_settings["changed"] = "TRUE";
 	$my_messaging_settings["save_snd"] = $save_snd;
 	$sms_data["time"] = $my_messaging_settings["timefilter"];
-	if (!$smsforward_active) {
-		$smsforward_active = "2";
+	if ($smsforward['rec']) {
+		if ($smsforward_copy && !$smsforward['copy'])  {
+			$query = "UPDATE user_info SET smsforward_copy='1'  WHERE user_id='".$user->id."'";
+			$db3->query($query);		
+		}
+		if (!$smsforward_copy && $smsforward['copy'])  {
+			$query = "UPDATE user_info SET smsforward_copy=''  WHERE user_id='".$user->id."'";
+			$db3->query($query);		
+		}
 	}
-	if (!$smsforward_copy && ($smsforward_copy_orig == "1" || $smsforward_copy_orig == "2")) {
-		$smsforward_copy = "2";
+	if ($set_msg_default_x) {
+		echo $set_msg_default_x;
+		unset($my_messaging_settings);
+		check_messaging_default();
 	}
-	$query = "UPDATE user_info SET smsforward_active='".$smsforward_active."', smsforward_copy='".$smsforward_copy."'  WHERE user_id='".$user->id."'";
-	$db3->query($query);
-	$nosearch = "1";
-}
-
-if (!empty($new_folder_in) && $new_folder_in_button_x) {
-	$my_messaging_settings["folder"]['in'] = array_add_value($new_folder_in, $my_messaging_settings["folder"]['in']);
-}
-if (!empty($new_folder_out) && $new_folder_out_button_x) {
-	$my_messaging_settings["folder"]['out'] = array_add_value($new_folder_out, $my_messaging_settings["folder"]['out']);
-}
-
-if (empty($my_messaging_settings["save_snd"])) {
-	$my_messaging_settings["save_snd"] = "2";
-}
-if (empty($my_messaging_settings["openall"])) {
-	$my_messaging_settings["openall"] = "2";
-}
-if (empty($my_messaging_settings["timefilter"])) {
-	$my_messaging_settings["timefilter"] = "all";
-}
-if (empty($my_messaging_settings["addsignature"])) {
-	$my_messaging_settings["addsignature"] = "2";
-}
-if (empty($my_messaging_settings["opennew"])) {
-	$my_messaging_settings["opennew"] = "2";
-}
-
-if ($add_smsforward_rec_x) { // update forward_receiver
-	$query = "UPDATE user_info SET smsforward_rec='".get_userid($smsforward_rec)."' WHERE user_id='".$user->id."'";
-	$db3->query($query);
-	$nosearch = "1";
 }
 
 if ($do_add_user_x)
@@ -91,10 +89,10 @@ if ($do_add_user_x)
 
 ## FUNCTION ##
 
-
 function change_messaging_view() {
-	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x, $show_form;
+	global $_fullname_sql,$my_messaging_settings, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page, $search_exp, $gosearch_x,  $smsforward;
 	$msging=new messaging;
+	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;	
 	$cssSw=new cssClassSwitcher;	
@@ -127,7 +125,7 @@ function change_messaging_view() {
 						<font size="-1"><?print _("Neue Nachrichten immer aufgeklappt");?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
-						<input type="checkbox" value="1" name="opennew"<? if ($my_messaging_settings["opennew"] != "2") echo " checked"; ?>>
+						<input type="checkbox" value="1" name="opennew"<? if ($my_messaging_settings["opennew"] == "1") echo " checked"; ?>>
 					</td>
 				</tr>
 			
@@ -136,7 +134,7 @@ function change_messaging_view() {
 						<font size="-1"><?print _("Alle Nachrichten immer aufgeklappt");?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
-						<input type="checkbox" value="1" name="openall"<? if ($my_messaging_settings["openall"] != "2") echo " checked"; ?>>
+						<input type="checkbox" value="1" name="openall"<? if ($my_messaging_settings["openall"] == "1") echo " checked"; ?>>
 					</td>
 				</tr>
 
@@ -145,7 +143,26 @@ function change_messaging_view() {
 						<font size="-1"><?print _("Gesendete Nachrichten im Postausgang speichern");?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
-						<input type="checkbox" value="1" name="save_snd"<? if ($my_messaging_settings["save_snd"] != "2") echo " checked"; ?>>
+						<input type="checkbox" value="1" name="save_snd"<? if ($my_messaging_settings["save_snd"] == "1") echo " checked"; ?>>
+					</td>
+				</tr>
+				
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Beim Logout alle Nachrichten löschen");?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<input type="checkbox" value="1" name="delete_messages_after_logout"<? if ($my_messaging_settings["delete_messages_after_logout"] == "1") echo " checked"; ?>>
+						&nbsp;<font size="-1">(<?=_("davon ausgenommen sind geschützte Nachrichten")?>)</font>
+					</td>
+				</tr>
+
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Beim Logout alle Nachrichten als gelesen speichern");?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<input type="checkbox" value="1" name="logout_markreaded"<? if ($my_messaging_settings["logout_markreaded"] == "1") echo " checked"; ?>>
 					</td>
 				</tr>	
 
@@ -162,37 +179,31 @@ function change_messaging_view() {
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size="-1">
 						<?print _("Weiterleitung empfangener Nachrichten");?></font>
-					</td> <?
+					</td>
+					<td <?=$cssSw->getFullClass()?>> <?
 						$query = "SELECT * FROM user_info WHERE user_id='".$user->id."'";
 						$db2->query($query);
 						while ($db2->next_record()) {
-							$smsforward['active'] = $db2->f("smsforward_active");
 							$smsforward['copy'] = $db2->f("smsforward_copy");
 							$smsforward['rec'] = $db2->f("smsforward_rec");
-						} ?>
-					<td <?=$cssSw->getFullClass()?>> <?
-						if ($smsforward['active'] == "1") { // wenn umleitung aktiv
-							if ($smsforward['rec']) { // empfaenger ausgewaehlt
-								printf("&nbsp;<font size=\"-1\">"._("%s%s%s ist der Empfänger der weitergeleiteten Nachrichten.")."</font><br>", "<a href=\"about.php?username=".get_username($smsforward['rec'])."\">", get_fullname($smsforward['rec']), "</a>");
-							} else { // kein empfaenger ausgewaehlt
-								$show_form = "1";
-								printf("<font size=\"-1\">"._("Es ist kein Empfänger ausgewählt.")."</font>");	
-							}
-						} ?>
-						<input type="checkbox" value="1" name="smsforward_active" <? if ($smsforward['active'] != "2") { echo " checked "; } ?>>
-						<font size="-1">&nbsp;<?=_("Empfangene Nachrichten weiterleiten.")?></font> <?
-						if ($smsforward['active'] == "1") { // wenn umleitung aktiv ?>
-							<br><input type="checkbox" value="1" name="smsforward_copy" <? if ($smsforward['copy'] != "2") echo " checked"; ?>>
-							&nbsp;<font size="-1"><?=("Kopie im persönlichen Posteingang speichern.")?></font>
-							<input type="hidden" name="smsforward_copy_orig" value="<?=$smsforward['copy']?>"><br><?
-							if ($search_exp != "" && $gosearch_x) { // auswahl
+						}
+						if ($smsforward['rec']) { // empfaenger ausgewaehlt
+							printf("&nbsp;<font size=\"-1\">"._("Empfänger: %s%s%s")."</font>&nbsp;&nbsp;<input type=\"image\" name=\"del_forwardrec\" src=\"./pictures/trash.gif\" border=\"0\" ".tooltip(_("Empfänger und Weiterleitung löschen.")).">&nbsp;<input type=\"image\" name=\"del_forwardrec\" src=\"./pictures/suche2.gif\" border=\"0\" ".tooltip(_("Neuen Empfänger suchen."))."><br>", "<a href=\"about.php?username=".get_username($smsforward['rec'])."\">", get_fullname($smsforward['rec']), "</a>");
+							echo "<input type=\"checkbox\" value=\"1\" name=\"smsforward_copy\"";
+							if ($smsforward['copy'] == "1") echo " checked";
+							echo ">&nbsp;<font size=\"-1\">".("Kopie im persönlichen Posteingang speichern.")."</font>";
+						} else { // kein empfaenger ausgewaehlt
+							if ($search_exp == "") { ?>
+								<input type="text" name="search_exp" size="30" value="">
+								<input type="image" name="gosearch" src="./pictures/suche2.gif" border="0"><?
+							} else {
 								$db->query("SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC"); 
 								if (!$db->num_rows()) { // wenn keine treffer
 									echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
 									echo "<font size=\"-1\">&nbsp;"._("keine Treffer")."</font>";
 								} else { // treffer auswählen
 									echo "<input type=\"image\" name=\"add_smsforward_rec\" ".tooltip(_("als Empfänger weitergeleiteter Nachrichten eintragen"))." value=\""._("als Empfänger auswählen")."\" src=\"./pictures/vote_answer_correct.gif\" border=\"0\">&nbsp;&nbsp;";
-									echo "<select size=\"1\" width=\"100\" name=\"smsforward_rec\">";
+									echo "<select size=\"1\" name=\"smsforward_rec\">";
 									while ($db->next_record()) {
 										if (get_username($user->id) != $db->f("username")) {
 											echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))." (".$db->f("username").") - ".$db->f("perms")."</option>";
@@ -200,15 +211,10 @@ function change_messaging_view() {
 									} ?>
 									</select>
 									<input type="image" name="reset_serach" src="./pictures/rewind.gif" border="0" value="<?=_("Suche zur&uuml;cksetzen")?>" <?=tooltip(_("setzt die Suche zurück"))?>> <?
-								}
-							} else if ($show_form == "1" || !empty($show_form_x)) { // suchinput ?>
-								<input type="text" name="search_exp" size="30" value="">
-								<input type="image" name="gosearch" src="./pictures/suche2.gif" border="0"><?
-							} else {?>
-								<input type="image" name="show_form" value="1" src="./pictures/suche2.gif" border="0" <?=tooltip(_("Suche nach Empfänger anzeigen."))?>>
-								&nbsp;<font size="-1"><?=_("Neuen Empfänger suchen.")?></font> <?
+								}								
 							}
-						} ?>
+						}
+						?>
 					</td>
 				</tr>	
 				<tr <? $cssSw->switchClass() ?>>
@@ -226,40 +232,13 @@ function change_messaging_view() {
 						</select>
 					</td>
 				</tr>	
-<!-- 
-				<tr <? #$cssSw->switchClass() ?>>
-					<td align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size=-1><?echo _("Persönliche Ordner");?></font>
-					</td>
-					<td <?=#$cssSw->getFullClass()?> align="left"> <font size=-1> <?
-						printf("&nbsp;<b>%s:</b><br>", _("Posteingang"));
-						printf("&nbsp;<input type=\"text\" name=\"new_folder_in[]\" value=\"\" size=\"25\" maxlength=\"255\">&nbsp;<input type=\"image\" name=\"new_folder_in_button\" %s  src=\"./pictures/cont_folder_add.gif\" border=\"0\">&nbsp;%s<br>", tooltip(_("Erstellt einen neuen Ordner im Posteingang.")), _("Neuen Ordner anlegen"));
-						if (!empty($my_messaging_settings["folder"]['in'])) {
-							printf("&nbsp;<select name=\"delete_folder_in\" style=\"width:175px\">");
-							for($x="0";$x<sizeof($my_messaging_settings["folder"]['in']);$x++) {
-								printf("<option>".$my_messaging_settings["folder"]['in'][$x]."</option>");
-							}
-							printf("</select>&nbsp;<input type=\"image\" name=\"delete_folder_in_button\" %s src=\"./pictures/trash.gif\" border=\"0\">&nbsp;&nbsp;%s<br>", tooltip(_("Entfernt den Ordner. Nachrichten aus diesem Ordner werden in \"Unzugeordnet\" verschoben.")), _("Ordner entfernen"));
-						}
-						printf("&nbsp;<b>%s:</b><br>", _("Postausgang"));
-						printf("&nbsp;<input type=\"text\" name=\"new_folder_out[]\" value=\"\" size=\"25\" maxlength=\"255\">&nbsp;<input type=\"image\" name=\"new_folder_out_button\" %s src=\"./pictures/cont_folder_add.gif\" border=\"0\">&nbsp;%s<br>", tooltip(_("Erstellt einen neuen Ordner im Postausgang.")), _("Neuen Ordner anlegen"));
-						if (!empty($my_messaging_settings["folder"]['out'])) {
-							printf("&nbsp;<select name=\"delete_folder_out\" style=\"width:175px\">");
-							for($x="0";$x<sizeof($my_messaging_settings["folder"]['out']);$x++) {
-								printf("<option>".$my_messaging_settings["folder"]['out'][$x]."</option>");
-							}
-							printf("</select>&nbsp;<input type=\"image\" name=\"delete_folder_out_button\" %s src=\"./pictures/trash.gif\" border=\"0\">&nbsp;&nbsp;%s<br>", tooltip(_("Entfernt den Ordner. Nachrichten aus diesem Ordner werden in \"Unzugeordnet\" verschoben.")), _("Ordner entfernen"));
-						} ?>
-						</font>
-					</td>
-				</tr>
- -->
+
 				<tr <? $cssSw->switchClass() ?>>
 					<td align="right" class="blank">
 						<font size=-1><?echo _("Signatur gesendeten Nachrichten anhängen");?></font>
 					</td>
 					<td align="left" <?=$cssSw->getFullClass()?>>
-						<font size=-1><input type="checkbox" value="1" name="addsignature"<? if ($my_messaging_settings["addsignature"] != "2") echo " checked"; ?>>&nbsp;<?=_("Signatur anhängen")?></font> <br>
+						<font size=-1><input type="checkbox" value="1" name="addsignature"<? if ($my_messaging_settings["addsignature"] == "1") echo " checked"; ?>>&nbsp;<?=_("Signatur anhängen")?></font> <br>
 						&nbsp;<textarea name="sms_sig" rows=3 cols=30><? echo htmlready($my_messaging_settings["sms_sig"]); ?></textarea>
 					</td>
 				</tr>
@@ -305,8 +284,11 @@ function change_messaging_view() {
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
-						<input type="HIDDEN" name="view" value="Messaging">
-						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>"></font>&nbsp;	
+						<input type="hidden" name="view" value="Messaging">
+						<font size=-1>
+						<input type="image" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>"></font>&nbsp;
+						<input type="image" name="set_msg_default" <?=makeButton("zuruecksetzen", "src") ?> border=0 value="<?_("Einstellungen zurücksetzen")?>"></font>
+						</form>	
 					</td>
 				</tr>
 				</form>	
