@@ -90,10 +90,12 @@ if (!$set_recur_x) {
 	echo " . <input type=\"text\" name=\"start_month\" size=\"2\" maxlength=\"2\" value=\"";
 	echo ((strlen($start_month) < 2) ? '0' . $start_month : $start_month) . "\"\"$disabled>\n";
 	echo " . <input type=\"text\" name=\"start_year\" size=\"4\" maxlength=\"4\" value=\"$start_year\"$disabled>\n";
+	$atimetxt = ($start_day && $start_month && $start_year)? '&atime='.mktime(12,0,0,$start_month,$start_day,$start_year):'';
 	echo "&nbsp;";
-	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/edit_transparent.gif\" border=\"0\" ";
+//	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/edit_transparent.gif\" border=\"0\" ";
+	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" ";
 	echo "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
-	echo "/views/insert_date_popup.php', 'InsertDate', ";
+	echo "/views/insert_date_popup.php?element_switch=50${atimetxt}', 'InsertDate', ";
 	echo "'dependent=yes, width=210, height=210, left=500, top=150')\">";
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
@@ -139,6 +141,14 @@ if (!$set_recur_x) {
 	echo " . <input type=\"text\" name=\"end_month\" size=\"2\" maxlength=\"2\" value=\"";
 	echo ((strlen($end_month) < 2) ? '0' . $end_month : $end_month) . "\"$disabled>\n";
 	echo " . <input type=\"text\" name=\"end_year\" size=\"4\" maxlength=\"4\" value=\"$end_year\"$disabled>\n";
+
+	$atimetxt = ($end_day && $end_month && $end_year)? '&atime='.mktime(12,0,0,$end_month,$end_day,$end_year):'';
+	echo '&nbsp;';
+	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/popupkalender.gif\" border=\"0\" ";
+	echo "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
+	echo "/views/insert_date_popup.php?element_switch=51${atimetxt}', 'InsertDate', ";
+	echo "'dependent=yes, width=210, height=210, left=500, top=150')\">";
+
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
 	echo " <select name=\"end_h\" size=\"1\"$disabled>\n";
