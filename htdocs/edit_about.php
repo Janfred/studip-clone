@@ -189,7 +189,7 @@ function studiengang_edit($studiengang_delete,$new_studiengang) {
 	}
 
 	if ($new_studiengang) {
-		$this->db->query("INSERT INTO user_studiengang (user_id,studiengang_id) VALUES ('".$this->auth_user["user_id"]."','$new_studiengang')");
+		$this->db->query("INSERT IGNORE INTO user_studiengang (user_id,studiengang_id) VALUES ('".$this->auth_user["user_id"]."','$new_studiengang')");
 		if (!$this->db->affected_rows())
 			$this->msg = $this->msg."error§" . sprintf(_("Fehler beim Einf&uuml;gen in user_studiengang bei ID=%s"), $new_studiengang) . "§";
 	}
@@ -216,7 +216,7 @@ function inst_edit($inst_delete,$new_inst) {
 	}
 
 	if ($new_inst) {
-		$this->db->query("INSERT INTO user_inst (user_id,Institut_id,inst_perms) VALUES ('".$this->auth_user["user_id"]."','$new_inst','user')");
+		$this->db->query("INSERT IGNORE INTO user_inst (user_id,Institut_id,inst_perms) VALUES ('".$this->auth_user["user_id"]."','$new_inst','user')");
 		if (!$this->db->affected_rows())
 			$this->msg = $this->msg . "error§" . sprintf(_("Fehler beim Einf&uuml;gen in user_inst bei ID=%s"), $new_inst) . "§";
 	}
