@@ -104,7 +104,7 @@ if ($SessSemName[1] =="")
 	}
 		
 	if ($db->f("Plz")) {
-		echo "<b>Plz: </b>"; echo htmlReady($db->f("Strasse")); echo"<br>";
+		echo "<b>Plz: </b>"; echo htmlReady($db->f("Plz")); echo"<br>";
 	}
 
 	if ($db->f("url")) {
