@@ -54,6 +54,11 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");//ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//ja,ja,ja,ja auch die...
 
+if ($RESOURCES_ENABLE) {
+	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+}
+
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
@@ -134,6 +139,13 @@ if ($turnus_refresh)
 		$term_metadata["turnus_data"][$i]["start_minute"]=$turnus_start_minute[$i]; 
 		$term_metadata["turnus_data"][$i]["end_stunde"]=$turnus_end_stunde[$i]; 
 		$term_metadata["turnus_data"][$i]["end_minute"]=$turnus_end_minute[$i]; 
+		$term_metadata["turnus_data"][$i]["room"]=$turnus_room[$i]; 
+		$term_metadata["turnus_data"][$i]["resource_id"]=$turnus_resource_id[$i];
+		if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"] != "FALSE") {
+			$resObject=new ResourceObject($term_metadata["turnus_data"][$i]["resource_id"]);
+			$term_metadata["turnus_data"][$i]["room"]=$resObject->getName();
+		}
+		
 		//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
 		settype($term_metadata["turnus_data"][$i]["start_stunde"], "integer");
 		settype($term_metadata["turnus_data"][$i]["start_minute"], "integer");  
@@ -262,7 +274,7 @@ if (($uebernehmen_x) && (!$errormsg))
 		{
 		for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 			if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
-				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].$term_metadata["turnus_data"][$i]["start_stunde"].$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"]);
+				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].$term_metadata["turnus_data"][$i]["start_stunde"].$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], "room" => $term_metadata["turnus_data"][$i]["room"], "resource_id" => $term_metadata["turnus_data"][$i]["resource_id"]);
 	
 		//sortieren
 		if (is_array($tmp_metadata_termin["turnus_data"])) {
@@ -282,9 +294,9 @@ if (($uebernehmen_x) && (!$errormsg))
 	if ($db->affected_rows()) {
 		$errormsg.="msg§"._("Die allgemeinen Termindaten wurden aktualisiert")."§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
+		
 		//If resource-management activ, update the assigned reources
 		if ($RESOURCES_ENABLE) {
-		 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
 		 	$veranstAssign->updateAssign();
 		}
@@ -379,7 +391,7 @@ if (($uebernehmen_x) && (!$errormsg))
 								echo "<option value=1>"._("zweiw&ouml;chentlich")."</option>";
 							?>
 							</select>
-							<br><br><font size=-1>&nbsp; <?=_("Die Veranstaltung findet immer zu diesen Zeiten statt:")?></font><br><br>
+							<br><br><font size=-1>&nbsp;<?=_("Die Veranstaltung findet immer zu diesen Zeiten statt:")?></font><br><br>
 							<?
 							if (!$term_metadata["turnus_count"])
 								{
@@ -388,13 +400,13 @@ if (($uebernehmen_x) && (!$errormsg))
 									$term_metadata["turnus_count"]=sizeof($term_metadata["turnus_data"]);
 									}
 								else
-									$term_metadata["turnus_count"]=2;
+									$term_metadata["turnus_count"]=1;
 								}
 								
 							for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 								{
 								if ($i>0) echo "<br>";
-								?>&nbsp; <select name="turnus_day[<?echo $i?>]">
+								?>&nbsp;<select name="turnus_day[<?echo $i?>]">
 								<?
 								if ($term_metadata["turnus_data"][$i]["day"]==1)
 									echo "<option selected value=1>"._("Montag")."</option>";
@@ -426,20 +438,35 @@ if (($uebernehmen_x) && (!$errormsg))
 									echo "<option value=7>"._("Sonntag")."</option>";
 									echo "</select>\n";
 								?>
-								&nbsp; <input type="text" name="turnus_start_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["start_stunde"]) echo $term_metadata["turnus_data"][$i]["start_stunde"] ?>"> :
-								<input type="text" name="turnus_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["start_minute"]) && ($term_metadata["turnus_data"][$i]["start_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["start_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["start_minute"]; else echo $term_metadata["turnus_data"][$i]["start_minute"];  } elseif ($term_metadata["turnus_data"][$i]["start_stunde"]) echo "00"; ?>"><?=_("Uhr bis")?>
-								&nbsp; <input type="text" name="turnus_end_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["end_stunde"]) echo $term_metadata["turnus_data"][$i]["end_stunde"] ?>"> :
-								<input type="text" name="turnus_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["end_minute"]) && ($term_metadata["turnus_data"][$i]["end_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["end_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["end_minute"]; else echo $term_metadata["turnus_data"][$i]["end_minute"];  } elseif ($term_metadata["turnus_data"][$i]["end_stunde"]) echo "00"; ?>"><?=_("Uhr")?>
-								<? if ($term_metadata["turnus_count"]>1) 
-									{
+								&nbsp; <input type="text" name="turnus_start_stunde[]" size=2 maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["start_stunde"]) echo $term_metadata["turnus_data"][$i]["start_stunde"] ?>"> :
+								<input type="text" name="turnus_start_minute[]" size=2 maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["start_minute"]) && ($term_metadata["turnus_data"][$i]["start_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["start_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["start_minute"]; else echo $term_metadata["turnus_data"][$i]["start_minute"];  } elseif ($term_metadata["turnus_data"][$i]["start_stunde"]) echo "00"; ?>"><?=_("Uhr bis")?>
+								&nbsp; <input type="text" name="turnus_end_stunde[]" size=2 maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["end_stunde"]) echo $term_metadata["turnus_data"][$i]["end_stunde"] ?>"> :
+								<input type="text" name="turnus_end_minute[]" size=2 maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["end_minute"]) && ($term_metadata["turnus_data"][$i]["end_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["end_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["end_minute"]; else echo $term_metadata["turnus_data"][$i]["end_minute"];  } elseif ($term_metadata["turnus_data"][$i]["end_stunde"]) echo "00"; ?>"><?=_("Uhr")?>
+								<? if ($term_metadata["turnus_count"]>1)  {
 									?>
 									&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? tooltip(_("Dieses Feld aus der Auswahl l&ouml;schen")) ?>></a>
 									<?
+								}
+								print "<br />&nbsp;Raum:&nbsp; ";
+								if ($RESOURCES_ENABLE) {
+									$resList = new ResourcesUserRoomsList($user_id);
+									if ($resList->numberOfEvents()) {
+										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
+										printf ("<option %s value=\"FALSE\">--</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
+										while ($resObject = $resList->nextEvent()) {
+											printf ("<option %s value=\"%s\">%s</option>", ($term_metadata["turnus_data"][$i]["resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+										}
+										print "</select></font>";
 									}
 								}
 								?>
+								&nbsp; <font size=-1><input type="text" name="turnus_room[]" size="15" maxlength="255" value="<?= htmlReady($term_metadata["turnus_data"][$i]["room"]) ?>"/></font>&nbsp; 
+								<?
+								print "<br /><br />";
+								}
+								?>
 								<input type="HIDDEN" name="turnus_refresh" value="TRUE">
-								&nbsp; &nbsp; <input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src") ?> border=0 value="Feld hinzuf&uuml;gen"><br />
+								&nbsp;<input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src") ?> border=0 value="Feld hinzuf&uuml;gen"><br />
 						</td>
 					</tr>
 		<?

@@ -28,59 +28,59 @@ $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
 $db4=new DB_Seminar;	
 
-/**
-* Helper functin: If resource-management activ, update the assigned reources
-*/
-function update_resources() {
-	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $admin_dates_data;
-	if ($RESOURCES_ENABLE) {
-	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-	 	$veranstAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-	 	$veranstAssign->updateAssign();
-	}
+//Defaults, die fuer DAUS (<admin) gesetzt werden
+$default_description="Bitte geben Sie hier nur optionale Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.";
+$default_titel="Kurztitel, bitte ausfüllen";
+if ((!$perm->have_perm ("admin")) && (!$perm->have_perm ("root"))) {
+	$temp_default[1]="tt";
+	$temp_default[2]="mm";
+	$temp_default[3]="jjjj";
+	$temp_default[4]="hh";
+	$temp_default[5]="mm";
+	$temp_default[6]="hh";
+	$temp_default[7]="mm";
 }
 
-	//Defaults, die fuer DAUS (<admin) gesetzt werden
-	$default_description="Bitte geben Sie hier nur optionale Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.";
-	$default_titel="Kurztitel, bitte ausfüllen";
-	if ((!$perm->have_perm ("admin")) && (!$perm->have_perm ("root"))) {
-		$temp_default[1]="tt";
-		$temp_default[2]="mm";
-		$temp_default[3]="jjjj";
-		$temp_default[4]="hh";
-		$temp_default[5]="mm";
-		$temp_default[6]="hh";
-		$temp_default[7]="mm";
-		}
-
-	$sess->register("term_data");
-	$sess->register("admin_dates_data");
+$sess->register("term_data");
+$sess->register("admin_dates_data");
 	
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //ben&ouml;tigete Funktionen der Terminverwaltung
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//*urgs* das brauchen wir leider auch
+require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");//Was solls....
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//was solls...^
+require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");//was solls....
+
+if ($RESOURCES_ENABLE) {
+	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+}
+
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
-include "links_admin.inc.php";
-	
-require_once("dates.inc.php"); //ben&ouml;tigete Funktionen der Terminverwaltung
-require_once("functions.php");//*urgs* das brauchen wir leider auch
-require_once("forum.inc.php");//Was solls....
-require_once("visual.inc.php");//was solls...^
-require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");//was solls....
 
-//Einpflegen neu angekommender Daten/Schalter
-if ($manuel_edit) $admin_dates_data["manuel_edit"]=$manuel_edit;
-if ($manuel_edit_set) $admin_dates_data["manuel_edit"]=TRUE;
-if ($assi) $admin_dates_data["assi"]=$assi;
-if ($range_id) $admin_dates_data["range_id"]=$range_id; 
-if ($show_id) $admin_dates_data["show_id"]=$show_id;
+if ($SessSemName[1])
+	$admin_dates_data["range_id"]=$SessSemName[1]; 
+elseif ($range_id)
+	$admin_dates_data["range_id"]=$range_id; 
 
-//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
 if (!$admin_dates_data["range_id"]) {
 	echo "</tr></td></table>";
 	die;
 }
 
+//Einpflegen neu angekommender Daten/Schalter
+if ($manuel_edit) 
+	$admin_dates_data["manuel_edit"]=$manuel_edit;
+if ($manuel_edit_set) 
+	$admin_dates_data["manuel_edit"]=TRUE;
+if ($assi) 
+	$admin_dates_data["assi"]=$assi;
+if ($show_id) 
+	$admin_dates_data["show_id"]=$show_id;
 
 if ($insert_new) {
 	$hash_secret = "blubbelsupp";
@@ -109,8 +109,7 @@ if ($kill)
 	$edit="yes";
 
 //Assistent zum automatischen generieren eines Ablaufplans
-if ($make_dates)
-	{
+if ($make_dates) {
 	//Initialisierungen
 	$hash_secret = "blubbelsupp";
 	$date_typ=1; //hier setzen wir den Typ, den automatisch generierte Termine haben sollen. "1" steht fuer Sitzungstermine.
@@ -142,8 +141,7 @@ if ($make_dates)
 	
 	do
 		{	
-		for ($i=0; $i<sizeof($term_data["turnus_data"]); $i++)
-			{
+		for ($i=0; $i<sizeof($term_data["turnus_data"]); $i++) {
 			//check auf diverse HOLIDAY, gesetzt in der config.inc.php. Sollte man aber nur noch fuer Uni-Ferien benutzen.
 			for ($k=0; $k<=sizeof($HOLIDAY); $k++)
 				if (($HOLIDAY[$k]["beginn"] <= $insert_termin_start[$i]) && ($insert_termin_start[$i]<=$HOLIDAY[$k]["ende"]))
@@ -178,11 +176,16 @@ if ($make_dates)
 					$insert_termin_end[$i]=mktime($term_data["turnus_data"][$i]["end_stunde"],date("i",$insert_termin_end[$i]),0,date("n",$insert_termin_end[$i]),date("j",$insert_termin_end[$i]),date("Y",$insert_termin_end[$i]));
 				
 			//Alles moegliche schreiben
-			if ($insert_termin_start[$i])
-				{
+			if ($insert_termin_start[$i]) {
 				$t_id=md5(uniqid($hash_secret));   //termin_id erzeugen
 				$f_id=md5(uniqid($hash_secret)); 	//folder_id erzeiugen
 				$aktuell=time();
+				
+				//if we have a resource_id, we flush the room name
+				if (!$term_data["turnus_data"][$i]["resource_id"])
+					$raum=$term_data["turnus_data"][$i]["raum"];
+				else
+					$raum='';
 				
 				if ($pfad)  //Forumseintrag erzeugen
 					$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." am ".date("d.m.Y", $insert_termin_start[$i]), $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $admin_dates_data["range_id"]);
@@ -195,19 +198,23 @@ if ($make_dates)
 					}
 				else
 					$f_id='';
-				$db4->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='Kein Titel', date='$insert_termin_start[$i]', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$insert_termin_end[$i]', raum='".$db2->f("Ort")."'");
+				$db4->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='Kein Titel', date='$insert_termin_start[$i]', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$insert_termin_end[$i]', raum='$raum' ");
 				if ($db4->affected_rows()) {
-					$made_dates++;
+					//insert a entry for the linked resource, if resource management activ
+					if ($RESOURCES_ENABLE) {
+						$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+						$insertAssign->insertDateAssign($t_id, $term_data["turnus_data"][$i]["resource_id"]);
 					}
+					$made_dates++;
 				}
 			}
+		}
 
 		//frische Daten erzeugen
-		for ($i=0; $i<sizeof($term_data["turnus_data"]); $i++)
-			{
+		for ($i=0; $i<sizeof($term_data["turnus_data"]); $i++) {
 			$insert_termin_start[$i]=$vorles_beginn+(($term_data["turnus_data"][$i]["day"]-1)*24*60*60)+($term_data["turnus_data"][$i]["start_stunde"]*60*60)+($term_data["turnus_data"][$i]["start_minute"]*60) + ($semester_woche * 7 * 24 * 60 *60);
 			$insert_termin_end[$i]=$vorles_beginn+(($term_data["turnus_data"][$i]["day"]-1)*24*60*60)+($term_data["turnus_data"][$i]["end_stunde"]*60*60)+($term_data["turnus_data"][$i]["end_minute"]*60) + ($semester_woche * 7 * 24 * 60 *60);
-			}
+		}
 		
 		//Woche erhoehen
 		if (($term_data["turnus"]==1) && (!$supress_turnus))
@@ -221,10 +228,12 @@ if ($make_dates)
 		
 	while ($insert_termin_start[0] <=$vorles_ende);
 
+	//make an update, this will kill old metadate entries in the resources
+	if ($RESOURCES_ENABLE)
+		$insertAssign->updateAssign();
+
 	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.§";
 	$admin_dates_data["manuel_edit"]=TRUE;
-	if ($made_dates)
-		update_resources();		
 	}
 
 if ($new)
@@ -308,6 +317,10 @@ if ($new)
 		
 		if ($description==$default_description)
 			$description='';
+			
+		//if we have a resource_id, we flush the room name
+		if ($resource_id)
+			$raum='';
 
 		if ($topic)  //Forumseintrag erzeugen
 			$topic_id=CreateTopic($TERMIN_TYP[$art]["name"].": ".$tmp_titel." am ".date("d.m.Y ", $start_time), $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $admin_dates_data["range_id"]);
@@ -325,9 +338,15 @@ if ($new)
 		$db->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
 
 		if ($db->affected_rows()) {
+			//insert a entry for the linked resource, if resource management activ
+			if ($RESOURCES_ENABLE) {
+				$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+				$insertAssign->insertDateAssign($t_id, $resource_id);
+				$insertAssign->updateAssign($t_id, $resource_id);
+			}
+		
 			$result.="msg§Ihr Termin wurde eingef&uuml;gt!§";
 			$admin_dates_data["termin_id"]=FALSE;
-			update_resources();		
 			}
 		}
 	else
@@ -343,7 +362,7 @@ if (($edit) && (!$admin_dates_data["termin_id"]))
 	 		{
 		 	$t_id=$termin_id[$i];
 			$f_id=md5(uniqid($hash_secret));
-			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$t_id], $titel[$i],$description[$t_id], $topic_id[$i],$raum[$t_id]);
+			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$t_id], $titel[$i],$description[$t_id], $topic_id[$i],$raum[$t_id], $resource_id[$t_id], $admin_dates_data["range_id"]);
 		 	$result.=$tmp_result["msg"];
 		 	
 			$aktuell=time();
@@ -402,7 +421,6 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		else
 			$result="msg§$del_count Termine wurden gel&ouml;scht!";
 	$beschreibung='';
-	update_resources();		
 	}
 
 
@@ -709,7 +727,18 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		$content.="</textarea>\n</div>";
 		$content.="</td>\n";
 		$content.="<td class=\"steel1\" width=\"20%\">\n";
-		$content.="<font size=-1>&nbsp;Raum:</font><br>&nbsp;<input type=\"TEXT\" name=\"raum\" maxlength=255 size=20 value=\"".htmlReady($default_room)."\"><br>\n";
+		$content.="<font size=-1>&nbsp;Raum:</font>";
+		if ($RESOURCES_ENABLE) {
+			$resList = new ResourcesUserRoomsList($user_id);
+			if ($resList->numberOfEvents()) {
+				$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id\"></font>";
+				$content.= ("<option value=\"FALSE\">--</option>");												
+				while ($resObject = $resList->nextEvent())
+					$content.= sprintf("<option value=\"%s\">%s</option>", $resObject->getId(), htmlReady($resObject->getName()));
+				$content.= "</select></font>";
+			}
+		}
+		$content.="<br />&nbsp;<input type=\"TEXT\" name=\"raum\" maxlength=255 size=20 value=\"".htmlReady($default_room)."\"><br>\n";
 		$content.="&nbsp;<font size=-1>Art:</font><br>&nbsp;<select name=\"art\">\n";
 		
 		for ($i=1; $i<=sizeof($TERMIN_TYP); $i++)
@@ -816,18 +845,27 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				
 				if (!$show_all) {
 					$content.="<input type=\"HIDDEN\" name=\"show_id\" value=\"". $db->f("termin_id")."\">";
-					$content.="<input type=\"HIDDEN\" name=\"range_id\" value=\"".$admin_dates_data["range_id"]."\">";
-					$content.="<input type=\"HIDDEN\" name=\"assi\" value=\"".$admin_dates_data["assi"]."\">";
-					$content.="<input type=\"HIDDEN\" name=\"manuel_edit\" value=\"".$admin_dates_data["manuel_edit"]."\">";
 					$content.="<input type=\"HIDDEN\" name=\"kill\" value=\"yes\">";
-					}
+				}
 				
 				$content.="<font size=-1>Titel:</font><br /><input type=\"TEXT\" name=\"titel[]\" maxlength=255 size=".round($max_col*0.45)." value=\"".htmlReady($db->f("content"))."\"><br />";
-				$content.="<font size=-1>Beschreibung:<br></font><textarea style=\"width:98%\" cols=\"". round($max_col*0.45)."\" rows=4 name=\"description[".$db->f("termin_id")."]\"  wrap=\"virtual\">".$db->f("description")."</textarea>\n</div>";
+				$content.="<font size=-1>Beschreibung:<br></font><textarea style=\"width:98%\" cols=\"". round($max_col*0.45)."\" rows=4 name=\"description[]\"  wrap=\"virtual\">".$db->f("description")."</textarea>\n</div>";
 				$content.="</td>\n";
 				$content.="<td class=\"steel1\" width=\"20%\">\n";
-				$content.="<font size=-1>&nbsp;Raum:</font><br>&nbsp;<input type=\"TEXT\"  name=\"raum[" . $db->f("termin_id")."]\" maxlength=255 size=20 value=\"". htmlReady($db->f("raum"))."\"><br>\n";
-				$content.="&nbsp;<font size=-1>Art:</font><br>&nbsp;<select name=\"art[". $db->f("termin_id")."]\">\n";
+				$content.="<font size=-1>&nbsp;Raum:</font>";
+				if ($RESOURCES_ENABLE) {
+					$assigned_resource_id = getDateAssigenedRoom($db->f("termin_id"));
+					$resList = new ResourcesUserRoomsList($user_id);
+					if ($resList->numberOfEvents()) {
+						$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id[]\"></font>";
+						$content.= sprintf("<option %s value=\"FALSE\">--</option>", (!$assigned_resource_id) ? "selected" : "");												
+						while ($resObject = $resList->nextEvent())
+							$content.= sprintf("<option %s value=\"%s\">%s</option>", ($assigned_resource_id) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+						$content.= "</select></font>";
+					}
+				}
+				$content.="<br />&nbsp;<input type=\"TEXT\"  name=\"raum[]\" maxlength=255 size=20 value=\"". htmlReady($db->f("raum"))."\"><br>\n";
+				$content.="&nbsp;<font size=-1>Art:</font><br>&nbsp;<select name=\"art[]\">\n";
 				for ($i=1; $i<=sizeof($TERMIN_TYP); $i++)
 					if ($db->f("date_typ") == $i)
 						$content.= "<option value=$i selected>".$TERMIN_TYP[$i]["name"]."</option>";
@@ -838,12 +876,12 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				if ($db->f("topic_id")) 
 					$content.= "<font size=-1>&nbsp; Forenthema vorhanden</font><br>";
 				else
-					$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_topic[". $db->f("termin_id")."]\"/>Thema im Forum anlegen</font><br />\n";
+					$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_topic[]\"/>Thema im Forum anlegen</font><br />\n";
 
 				if ($folder)
 					$content.= "<font size=-1>&nbsp; Dateiordner vorhanden</font>";
 				else
-					$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_folder[". $db->f("termin_id")."]\"/>Dateiordner anlegen</font>\n";
+					$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_folder[]\"/>Dateiordner anlegen</font>\n";
 				
 				$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 

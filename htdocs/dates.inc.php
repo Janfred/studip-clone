@@ -603,46 +603,48 @@ Dabei werden die Beschriftungen der Ordner im Forensystem und im Dateisystem akt
 */
 
 
-function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum)
-		{
-		global $range_id,$user,$auth, $ebene, $term_data, $SEMESTER, $TERMIN_TYP;
-		$do=TRUE;
-		if (!checkdate($monat,$tag,$jahr))
-			{
-			$do=FALSE;
-			$result="error§Bitte geben Sie ein g&uuml;ltiges Datum ein!";
-			}
+function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum,$resource_id,$range_id,$term_data='') {
+	global $user,$auth, $SEMESTER, $TERMIN_TYP;
+	
+	if ($RESOURCES_ENABLE) {
+		require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+		require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	}
+	
+	$do=TRUE;
+	if (!checkdate($monat,$tag,$jahr)) {
+		$do=FALSE;
+		$result="error§Bitte geben Sie ein g&uuml;ltiges Datum ein!";
+	}
 
-		if ($do)		
-			if ((!$stunde) && (!end_stunde))
-				{
-				$do=FALSE;	
-				$result.="error§Bitte geben Sie eine g&uuml;eltige Start- und Endzeit an!";
-				}
+	if ($do)		
+		if ((!$stunde) && (!end_stunde)) {
+			$do=FALSE;	
+			$result.="error§Bitte geben Sie eine g&uuml;eltige Start- und Endzeit an!";
+		}
 	
-		$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
-		$end_time = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr);
+	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
+	$end_time = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr);
 	
-		if ($do)		
-			if ($start_time > $end_time)
-				{
-				$do=FALSE;	
-				$result.="error§Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!";
-				}
+	if ($do)		
+		if ($start_time > $end_time) {
+			$do=FALSE;	
+			$result.="error§Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!";
+		}
 				
-		//Check auf Konsistenz mt Metadaten, Semestercheck
-		if (($do) && ($ebene=="sem") && ($art==1) && (is_array($term_data ["turnus_data"]))) {
-			foreach ($SEMESTER as $a) {
+	//Check auf Konsistenz mt Metadaten, Semestercheck
+	if (($do) && ($TERMIN_TYP[$art]["sitzung"]==1) && (is_array($term_data ["turnus_data"]))) {
+		foreach ($SEMESTER as $a) {
 			if (($term_data["start_time"] >= $a["beginn"]) && ($term_data["start_time"] <= $a["ende"]))  {
 				$sem_beginn=$a["beginn"];
 				$sem_ende=$a["ende"];
-				}
+			}
 			if (($term_data["duration_time"] > 0) && ((($term_data["start_time"] + $term_data["duration_time"]) >= $a["beginn"]) && (($term_data["start_time"] + $term_data["duration_time"]) < $a["ende"])))
 				$sem_ende=$a["ende"];
 			}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$add_result.="info§Sie haben einen oder mehrere Termine eingegeben, der ausserhalb des Semesters, in dem die Veranstaltung stattfindet, liegt. Es wird empfohlen, diese Termin anzupassen.§";
+			$add_result.="info§Sie haben einen oder mehrere Termine eingegeben, der ausserhalb des Semesters liegt, in dem die Veranstaltung stattfindet. Es wird empfohlen, diese Termine anzupassen.§";
 		
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewsehlt ist
 		if (!$term_data["art"]) {
@@ -658,80 +660,88 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 					$tmp_turnus_end=mktime ($a["end_stunde"], $a["end_minute"], 0, 8, 1, 2001);
 					if (($tmp_start_time >= $tmp_turnus_start) && ($tmp_end_time <= $tmp_turnus_end))
 						$ok=TRUE;
-					}
 				}
+			}
 			if (!$ok)
 				$add_result.="info§Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.§";
-			}
 		}
-
+	}
 		
-		if ($result) 
-			$result.="<br> Der Termin <b>\"$titel\"</b> konnte nicht ge&auml;ndert werden.§";
+	if ($result) 
+		$result.="<br> Der Termin <b>\"$titel\"</b> konnte nicht ge&auml;ndert werden.§";
 	
-		if ($do)
-			{
-			$db=new DB_Seminar;
-			$db2=new DB_Seminar;
-			$db3=new DB_Seminar;
-			$db4=new DB_Seminar;
-			$tmp = $auth->auth["uname"];
-			$db->query ("SELECT Vorname , Nachname , username FROM auth_user_md5 WHERE username = '$tmp'");
-			$db->next_record();
-			$author=$db->f("Vorname")." " . $db->f("Nachname");
+	if ($do) {
+		$db=new DB_Seminar;
+		$db2=new DB_Seminar;
+		$db3=new DB_Seminar;
+		$db4=new DB_Seminar;
 
-			$titel=$titel;
-			$description=$description; 
+		$tmp = $auth->auth["uname"];
+		$db->query ("SELECT Vorname , Nachname , username FROM auth_user_md5 WHERE username = '$tmp'");
+		$db->next_record();
+		$author=$db->f("Vorname")." " . $db->f("Nachname");
+
+		$titel=$titel;
+		$description=$description; 
+		
+		//if we have a resource_id, we flush the room name
+		if ($resource_id)
+			$raum='';
+		
+		$db->query("UPDATE  termine SET autor_id='$user->id', content='$titel', date= '$start_time', end_time='$end_time', date_typ='$art', raum='$raum', description='$description'  WHERE termin_id='$termin_id'");
+		if ($db->affected_rows()) {
+			$db->query ("UPDATE termine SET chdate='".time()."' WHERE termin_id='$termin_id'"); //Nur wenn Daten geaendert wurden, schreiben wir auch ein chdate
+			$succes=$termin_id;
+		}
 			
-			$db->query("UPDATE  termine SET autor_id='$user->id', content='$titel', date= '$start_time', end_time='$end_time', date_typ='$art', raum='$raum', description='$description'  WHERE termin_id='$termin_id'");
-			if ($db->affected_rows()) {
-				$db->query ("UPDATE termine SET chdate='".time()."' WHERE termin_id='$termin_id'"); //Nur wenn Daten geaendert wurden, schreiben wir auch ein chdate
-				$succes=$termin_id;
-				}
+		//Workaround fuer Forenbug. Dies ist keine Loesung, sondern Schadensvermeidung!!
+		$db3->query("SELECT Seminar_id FROM px_topics WHERE topic_id ='$topic_id'");
+		$db3->next_record();
 			
-			//Workaround fuer Forenbug. Dies ist keine Loesung, sondern Schadensvermeidung!!
-			$db3->query("SELECT Seminar_id FROM px_topics WHERE topic_id ='$topic_id'");
-			$db3->next_record();
+		$db4->query("SELECT range_id FROM termine WHERE termin_id ='$termin_id'");
+		$db4->next_record();
 			
-			$db4->query("SELECT range_id FROM termine WHERE termin_id ='$termin_id'");
-			$db4->next_record();
-			
-			if ($db3->f("Seminar_id") == $db4->f("range_id")) {
-			//WA Ende
+		if ($db3->f("Seminar_id") == $db4->f("range_id")) {
+		//WA Ende
 			
 			if ($topic_id) 
 				$db->query("UPDATE px_topics SET name='".$TERMIN_TYP[$art]["name"].": $titel am ".date("d.m.Y ", $start_time)."', author='$author', user_id='".$user->id."' WHERE topic_id='$topic_id'");		
 			if ($db->affected_rows())
 				$db2->query("UPDATE px_topics SET chdate='".time()."' WHERE topic_id='$topic_id'");
 			
-			//WA Teil zwei, wo gefunden, so korrigieren
+		//WA Teil zwei, wo gefunden, so korrigieren
+		} else {
+			if ($topic_id) 
+				$db->query("UPDATE termine SET topic_id=''  WHERE termin_id='$termin_id'");		
 			}
+		//WA Ende
 			
-			else {
-				if ($topic_id) 
-					$db->query("UPDATE termine SET topic_id=''  WHERE termin_id='$termin_id'");		
-				}
-			//WA Ende
-			
-			//Aendern des Titels des zugehoerigen Ordners
-			$titel_f=$TERMIN_TYP[$art]["name"].": $titel";
-			$titel_f.=" am ".date("d.m.Y ", $start_time);
-			$db->query("SELECT folder_id FROM folder WHERE range_id ='$termin_id'");
-			if ($db->num_rows() == 1) {
-				$db->next_record();
-				$db2->query ("UPDATE folder SET name='$titel_f' WHERE folder_id = '".$db->f("folder_id")."'");
-				if ($db2->affected_rows())
-					$db3->query("UPDATE folder SET chdate='".time()."' WHERE folder_id = '".$db->f("folder_id")."'");
-				}
-			
-			}
-			$result_a["msg"]=$result;
-			$result_a["succes"]=$succes;
-			$result_a["add_msg"]=$add_result;
-		return ($result_a);
+		//Aendern des Titels des zugehoerigen Ordners
+		$titel_f=$TERMIN_TYP[$art]["name"].": $titel";
+		$titel_f.=" am ".date("d.m.Y ", $start_time);
+		
+		$db->query("SELECT folder_id FROM folder WHERE range_id ='$termin_id'");
+		if ($db->num_rows() == 1) {
+			$db->next_record();
+			$db2->query ("UPDATE folder SET name='$titel_f' WHERE folder_id = '".$db->f("folder_id")."'");
+			if ($db2->affected_rows())
+				$db3->query("UPDATE folder SET chdate='".time()."' WHERE folder_id = '".$db->f("folder_id")."'");
 		}
+		
+		//update assigned resources, if resource manangement activ
+		if ($RESOURCES_ENABLE) {
+			$updateAssign = new VeranstaltungResourcesAssign($range_id);
+			$updateAssign->changeDateAssign($termin_id, $resource_id);
+			$updateAssign->updateAssign();
+		}
+	}
 
+	$result_a["msg"]=$result;
+	$result_a["succes"]=$succes;
+	$result_a["add_msg"]=$add_result;
 
+	return ($result_a);
+}
 
 /*
 Die Funktion delete_topic löscht rekursiv alle Postings ab der übergebenen topic_id, der zweite Parameter
@@ -778,7 +788,8 @@ dies muss das aufrufende Script sicherstellen.
 */
 
 function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id=0) {
-
+	global $RESOURCES_ENABLE;
+	
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 	$db3 = new DB_Seminar;	
@@ -807,9 +818,15 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 			}
 		}
 
-	## Und den Termine selbst loeschen
+	## Und den Termin selbst loeschen
 	$query = "DELETE FROM termine WHERE termin_id='$termin_id'";
 	$db->query($query);
+	if ($db->affected_rows() && $RESOURCES_ENABLE) {
+		$insertAssign = new VeranstaltungResourcesAssign($sem_id);
+		$insertAssign->killDateAssign($termin_id);
+		$insertAssign->updateAssign($termin_id);
+	}
+		
 	$count = $db->affected_rows();
 
 	return $count;
