@@ -168,6 +168,17 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 										"text"  => sprintf(_("Hier k&ouml;nnen Sie Ihrem Stud.IP-Account einen %s ILIAS-Account zuweisen. %s"), "<a href=\"migration2studip.php\">", "</a>")
 									);
 	}
+// Sicherheitsabfrage vor Loeschen eines Lernmoduls	
+	elseif (isset($delete))
+	{	
+		echo "<table>";
+		my_info(sprintf(_("Wenn Sie fortfahren, wird das Lernmodul mit dem Titel %s unwiderruflich gel&ouml;scht. Soll dieses Lernmodul wirklich gel&ouml;scht werden?"), "<b>" . $del_title . "</b>"));
+		echo "</table>";
+		?><br><center>
+		<a href="<? echo link_delete_module($del_inst, $del_id); ?>" target="_blank"><? echo makeButton("ja", "img"); ?>&nbsp;
+		<a href="<? echo $PHP_SELF; ?>"><? echo makeButton("nein", "img"); ?></center>
+		<?
+	}
 // Lernmodule hinzufuegen / entfernen
 	elseif (($perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{
@@ -249,7 +260,7 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 		}
 		else
 			$language = "de";
-		$link1 = "<a href=\"".$ABSOLUTE_PATH_ILIAS . "/help/$language/editor/index.html\">";
+		$link1 = "<a href=\"".$ABSOLUTE_PATH_ILIAS . "help/$language/editor/index.html\">";
 		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
 		$infobox[0]["eintrag"][] = array (	"icon" => "pictures/hilfe.gif",
 									"text"  => $link1 . _("Hilfe zum Anlegen und Bearbeiten von ILIAS-Lernmodulen.") . "</a>"

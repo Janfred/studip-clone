@@ -48,7 +48,7 @@ function link_seminar_modules($seminar_id)
 					. makeButton("bearbeiten", "img")."</a>&nbsp";
 					$delete_link = $PHP_SELF . "?delete=now&del_inst=".$mod_array[$i]["inst"]."&del_id=".$mod_array[$i]["id"]."&del_title=".$mod_info["title"];
 					$link_str[$i]["button"] .= "<a href=\"" . $delete_link . "\">"
-					. makeButton("bearbeiten", "img")."</a></center>";
+					. makeButton("loeschen", "img")."</a></center>";
 				}
 				if (get_studip_user($mod_author[$i2]["id"]) == false)
 					$mod_desc[$i2] = $mod_author[$i2]["fullname"];
