@@ -140,12 +140,12 @@ if ($open != "all") {
 echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\" In Addressbuch eintragen\" %s>&nbsp;  ", tooltip("In Addressbuch eintragen"));
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\"" . _("In Addressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Addressbuch eintragen")));
 	SearchResults($search_exp);
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>&nbsp;  ", tooltip(_("neue Suche")));
 } else {
 	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Addressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
 } 
 echo "</form>";
 
@@ -181,7 +181,7 @@ if (($contact["view"])=="alpha") {
 			$character = chr($i);
 		}
 		echo "<td width=\"3%\"  align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\""
-		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? ("1 Eintrag") : sprintf(_("%s Einträge"),($size_of_book_by_letter[chr($i)]) ? $size_of_book_by_letter[chr($i)] : "keine"),false)
+		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? _("1 Eintrag") : (($size_of_book_by_letter[chr($i)] ) ? sprintf(_("%s Einträge"),$size_of_book_by_letter[chr($i)]) : _("keine Einträge")),false)
 		."><a href=\"$PHP_SELF?filter=".chr($i)."\" "
 		. ">".$character."</a>"
 		."</td>";
@@ -198,7 +198,7 @@ if (($contact["view"])=="gruppen") {
 		$cssSw->switchClass();
 	}
 	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=all\"><font size=\"2\">Alle Gruppen</font></a>"
+		."<a href=\"$PHP_SELF?filter=all\"><font size=\"2\">" . _("Alle Gruppen") . "</font></a>"
 		."&nbsp; </td>";
 	if (!$filter) {
 		$cssSw->switchClass();
