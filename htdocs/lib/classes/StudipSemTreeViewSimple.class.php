@@ -59,17 +59,17 @@ class StudipSemTreeViewSimple {
 		echo "\n<tr><td class=\"steelgraulight\" align=\"left\" valign=\"top\" style=\"font-size:10pt;\">"
 			. "<div style=\"font-size:10pt;margin-left:10px\"><b>" . _("Studienbereiche:"). "</b><br>". $this->getSemPath();
 		echo "</div></td></tr>";
-		echo "\n<tr><td class=\"steel1\"  align=\"center\" valign=\"center\">";
-		$this->showKids($this->start_item_id);
-		echo "\n</td></tr><tr><td class=\"steelgraulight\"  align=\"left\" valign=\"center\">";
+		echo "\n<tr><td class=\"steel1\"  align=\"left\" valign=\"center\">";
 		$this->showContent($this->start_item_id);
+		echo "\n</td></tr><tr><td class=\"steelgraulight\"  align=\"center\" valign=\"center\">";
+		$this->showKids($this->start_item_id);
 		echo "\n</td></tr></table>";
 	}
 	
 	function showKids($item_id){
 		$num_kids = $this->tree->getNumKids($item_id);
 		$kids = $this->tree->getKids($item_id);
-		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\"><tr>\n<td class=\"steel1\" width=\"50%\" align=\"left\" valign=\"top\">";
+		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\"><tr>\n<td class=\"steelgraulight\" width=\"50%\" align=\"left\" valign=\"top\">";
 		for ($i = 0; $i < $num_kids; ++$i){
 			$num_entries = $this->tree->getNumEntries($kids[$i],true);
 			echo "<b><a " . tooltip(sprintf(_("%s Einträge in allen Unterebenen vorhanden"), $num_entries)) . " href=\"" .$this->getSelf("start_item_id={$kids[$i]}", false) . "\">";
@@ -77,7 +77,7 @@ class StudipSemTreeViewSimple {
 			echo "&nbsp;($num_entries)</span>";
 			echo "</a></b>";
 			if ($i == ceil($num_kids / 2)-1){
-				echo "</td>\n<td class=\"steel1\" align=\"left\" valign=\"top\">";
+				echo "</td>\n<td class=\"steelgraulight\" align=\"left\" valign=\"top\">";
 			} else {
 				echo "<br>";
 			}
