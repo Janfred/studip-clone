@@ -676,6 +676,9 @@ if ($range_id){
 	$news_range_id = $range_id;
 }
 
+$news = new studip_news();
+
+
 if ($list || $view || (($news_range_id != $user->id) && ($news_range_id != 'studip')) ){
 		include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 		if ($SessSemName[1] && ($list || $view)) {
@@ -687,7 +690,6 @@ if ($list || $view || (($news_range_id != $user->id) && ($news_range_id != 'stud
 }
 
 
-$news = new studip_news();
 
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
