@@ -186,9 +186,9 @@ if (is_array($n_buddies))
 				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
-							echo "<img src=\"pictures/chat2.gif\"".tooltip("Dieser User befindet sich im Chat")." border=\"0\"></td>";
+						echo "<img src=\"pictures/chat2.gif\"".tooltip("Dieser User befindet sich im Chat")." border=\"0\"></td>";
 					else    
-							echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip("zum Chatten einladen")." border=\"0\"></a>";
+						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip("zum Chatten einladen")." border=\"0\"></a>";
 				}
 				else echo "&nbsp;";
 				echo "\n</td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Buddylist entfernen")." border=\"0\"></a></td></tr>";
@@ -196,7 +196,10 @@ if (is_array($n_buddies))
 				}
 			$cssSw->switchClass();
 			}
-			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"50%\" align=\"center\" colspan=6><font size=-1>Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
+		if (!sizeof($non_group_buddies) &&!sizeof($group_buddies) ) { // gar keine Buddies online
+			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"50%\" align=\"center\" colspan=6><font size=-1>Es sind keine Ihrer Buddies online.</font></td></tr><tr>";		
+		}
+		echo "\n<td class=\"".$cssSw->getClass()."\" width=\"50%\" align=\"center\" colspan=6><font size=-1>Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
 		echo "\n</tr></table></td>";
 		}
 
