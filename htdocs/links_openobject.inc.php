@@ -193,9 +193,10 @@ if (($rechte) && ($modules["literature"]))
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
 if ($modules["wiki"]) {
-	$structure["_wiki"]=array (topKat=>"wiki", name=>_("Start Seite"), link=>"wiki.php", active=>FALSE);
+	$structure["_wiki"]=array (topKat=>"wiki", name=>_("WikiWikiWeb"), link=>"wiki.php", active=>FALSE);
 	$structure["wiki_listnew"]=array (topKat=>"wiki", name=>_("Neue Seiten"), link=>"wiki.php?view=listnew", active=>FALSE);
 	$structure["wiki_listall"]=array (topKat=>"wiki", name=>_("Alle Seiten"), link=>"wiki.php?view=listall", active=>FALSE); 
+	$structure["wiki_export"]=array (topKat=>"wiki", name=>_("Export"), link=>"wiki.php?view=export", active=>FALSE); 
 }
 		
 
@@ -392,6 +393,9 @@ switch ($i_page) {
 			case "listnew":
 				$reiter_view="wiki_listnew";
 			break;
+			case "export":
+				$reiter_view="wiki_export";
+			break;
 			default:
 				$reiter_view="wiki";
 			break;
@@ -402,3 +406,4 @@ switch ($i_page) {
 $reiter->create($structure, $reiter_view, $tooltip);
 }
 ?>
+
