@@ -45,7 +45,7 @@ class VeranstaltungResourcesAssign {
 	var $dont_check;
 	
 	//Konstruktor
-	function VeranstaltungResourcesAssign ($seminar_id='') {
+	function VeranstaltungResourcesAssign ($seminar_id=FALSE) {
 		global $RELATIVE_PATH_RESOURCES;
 	 	//make shure to load all the classes from resources, if this class is extern used °change if the classes are storen in own scripts
 	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -262,11 +262,13 @@ class VeranstaltungResourcesAssign {
 	}
 	
 	function deleteAssignedRooms() {
-		$query = sprintf("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE resources_assign.assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $this->seminar_id);
-		$this->db->query($query);
-		while ($this->db->next_record()) {
-			$query2 = sprintf("DELETE FROM resources_assign WHERE assign_id = '%s'  ", $this->db->f("assign_id"));
-			$this->db2->query($query2);			
+		if ($this->seminar_id) {
+			$query = sprintf("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE resources_assign.assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $this->seminar_id);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$query2 = sprintf("DELETE FROM resources_assign WHERE assign_id = '%s'  ", $this->db->f("assign_id"));
+				$this->db2->query($query2);			
+			}
 		}
 	}
 }
