@@ -9,15 +9,15 @@ function print_freie($username) {
 	
 	$db->query("SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON(range_id=user_id) WHERE username='$username' AND NOT ISNULL(range_id) ORDER BY priority ");
 
-	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie beliebige eigene Kategorien anlegen."
-			."Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der "
-			."die Kategorien angezeigt werden, ver&auml;ndern.<br>Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen "
-			."sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.";
-	echo "<br><br></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
+	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>";
+	echo _("Hier können Sie beliebige eigene Kategorien anlegen. Diese Kategorien erscheinen auf Ihrer pers&ouml;nlichen Homepage. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der die Kategorien angezeigt werden, ver&auml;ndern.");
+	echo "<br>\n";
+	echo _("Wenn Sie die Option \"f&uuml;r andere unsichtbar\" verwenden, k&ouml;nnen sie Memos anlegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen die Daten nicht einsehen.");
+	echo "\n<br><br></blockquote></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
 	echo "<form action=\"$PHP_SELF?freie=update_freie&username=$username&view=$view\" method=\"POST\" name=\"edit_freie\">";
 	if (!$db->num_rows())
-		echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>Es existieren zur Zeit keine eigenen Kategorien.</b></font></blockquote></td></tr>\n";
-	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>Kategorie&nbsp; <a href='$PHP_SELF?freie=create_freie&view=$view&username=$username'><img src='pictures/buttons/neuanlegen-button.gif' border=0 align=absmiddle></a></blockquote></td></tr>";
+		echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>" . _("Es existieren zur Zeit keine eigenen Kategorien.") . "</blockquote></b></font></blockquote></td></tr>\n";
+	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>" . _("Kategorie") . "&nbsp; <a href='$PHP_SELF?freie=create_freie&view=$view&username=$username'>" . makeButton("neuanlegen") . "</a></blockquote></td></tr>";
 	$count = 0;
 	$hidden_count = 0;
 	while ($db->next_record() ){
@@ -36,7 +36,7 @@ function print_freie($username) {
 			echo "&nbsp; &nbsp; &nbsp; <input type=checkbox name='freie_secret[$count]' value='1'";
 			IF ($db->f("hidden")=='1') 
 				echo " checked";
-			echo ">f&uuml;r andere unsichtbar&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
+			echo ">" . _("f&uuml;r andere unsichtbar") . "&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
 			if ($count){
 				echo "\n<a href=\"$PHP_SELF?freie=order_freie&direction=up&username=$username&view=$view&cat_id=" . $db->f("kategorie_id")
 				. "\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " 
@@ -51,58 +51,62 @@ function print_freie($username) {
 			// Breite für textarea
 			$cols = $auth->auth["jscript"]?ceil($auth->auth["xres"]/13):50;
 			echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote><textarea  name='freie_content[]' style=\"width: 90%\" cols=\"$cols\" rows=7 wrap=virtual>".htmlReady($db->f("content"))."</textarea>";
-			echo "<br><br><input type='IMAGE' name='update' border=0 src='pictures/buttons/uebernehmen-button.gif' value='ver&auml;ndern'>";
-			echo "&nbsp;<a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'><img src='pictures/buttons/loeschen-button.gif' border=0></a><br />&nbsp; </td></tr>";
+			echo "<br><br><input type='IMAGE' name='update' border=0 align=\"absmiddle\"" . makeButton("uebernehmen", "src") . " value='" . _("ver&auml;ndern") . "'>";
+			echo "&nbsp;<a href='$PHP_SELF?freie=delete_freie&freie_id=$id&view=$view&username=$username'>";
+			echo makeButton("loeschen") . "</a><br />&nbsp; </td></tr>";
 			$count++;
 			}
 		}
-	if ($hidden_count)
-		if ($hidden_count > 1)
-			echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>Es existiereren zus&auml;tzlich $hidden_count Kategorien, die Sie nicht einsehen und bearbeiten k&ouml;nnen.</b></font></blockquote></td></tr>\n";
-		else
-			echo "<tr><tdclass=\"".$cssSw->getClass()."\" ><font size=-1><b><blockquote>Es existiert zus&auml;tzlich eine Kategorie, die Sie nicht einsehen und bearbeiten k&ouml;nnen.</b></font></blockquote></td></tr>\n";
-	 echo "</form></td></tr></table></td></tr>";
+	if ($hidden_count) {
+		if ($hidden_count > 1) {
+			echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>";
+			printf(_("Es existiereren zus&auml;tzlich %s Kategorien, die Sie nicht einsehen und bearbeiten k&ouml;nnen."), $hidden_count);
+			echo "</b></font></blockquote></td></tr>\n";
+		} else {
+			echo "<tr><tdclass=\"".$cssSw->getClass()."\" ><font size=-1><b><blockquote>";
+			print(_("Es existiert zus&auml;tzlich eine Kategorie, die Sie nicht einsehen und bearbeiten k&ouml;nnen."));
+			echo "</b></font></blockquote></td></tr>\n";
+	 	}
+	}
+	echo "</form></td></tr></table></td></tr>";
 }
 
-function create_freie()
-{ global $auth,$use,$username,$PHP_SELF;
+function create_freie() {
+	global $username;
+
 	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$tmp = $username;
 	$now = time();
 	$kategorie_id=md5(uniqid("blablubburegds4"));
-	$db->query ("SELECT user_id FROM auth_user_md5 WHERE username = '$tmp'");
+	$db->query ("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
 	$db->next_record();
 	$user_id = $db->f("user_id");
 	$db->query("UPDATE kategorien SET priority=priority+1 WHERE range_id='$user_id'");
-	$db2->query("INSERT INTO kategorien (kategorie_id,name, content, mkdate, chdate, range_id,priority) VALUES ('$kategorie_id','neue Kategorie','Inhalt der Kategorie','$now','$now','$user_id',0)");
-	IF  ($db2->affected_rows() == 0){
-		parse_msg ("info§Anlegen fehlgeschlagen");
+	$db->query("INSERT INTO kategorien (kategorie_id,name, content, mkdate, chdate, range_id,priority) VALUES ('$kategorie_id','" . _("neue Kategorie") . "','" . _("Inhalt der Kategorie") . "','$now','$now','$user_id',0)");
+	if ($db->affected_rows() == 0) {
+		parse_msg ("info§" . _("Anlegen fehlgeschlagen"));
 		die;
-		}
+	}
 }
 
-function delete_freie($kategorie_id)
-{ global $auth,$user,$PHP_SELF,$username;
+function delete_freie($kategorie_id) {
+	global $username;
+	
 	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-//	$tmp = $auth->auth["uname"];
-	$tmp = $username;
-	$db->query ("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username = '$tmp' and kategorie_id='$kategorie_id'");
-		IF (!$db->next_record()) { //hier wollte jemand schummeln
-				parse_msg ("info§Netter Versuch, vielleicht beim n&auml;chsten Mal!");
-			die;
-			}
-		ELSE {
-			$db2->query("DELETE FROM kategorien WHERE kategorie_id='$kategorie_id'");
-			IF  ($db2->affected_rows() == 1) {
-				parse_msg ("msg§Kategorie gel&ouml;scht!");
-				}
-			}
+	$db->query ("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username = '$username' and kategorie_id='$kategorie_id'");
+	if (!$db->next_record()) { //hier wollte jemand schummeln
+		parse_msg ("info§" . _("Netter Versuch, vielleicht beim n&auml;chsten Mal!"));
+		die;
+	} else {
+		$db->query("DELETE FROM kategorien WHERE kategorie_id='$kategorie_id'");
+		if ($db->affected_rows() == 1) {
+			parse_msg ("msg§" . _("Kategorie gel&ouml;scht!"));
+		}
+	}
 }
 
-function update_freie()
-{ global $auth,$user,$freie_id,$freie_name,$freie_content,$freie_secret,$PHP_SELF;
+function update_freie() {
+	global $freie_id,$freie_name,$freie_content,$freie_secret;
+
 	$max = sizeof($freie_id);
 	FOR ($i=0;$i<$max;$i++) {
 		$now = time();
@@ -112,33 +116,32 @@ function update_freie()
 		$secret=$freie_secret[$i];
 		$id = $freie_id[$i];
 		$db->query("UPDATE kategorien SET name='$name', content='$content', hidden='$secret', chdate='$now' WHERE kategorie_id='$id'");
-		}
-	parse_msg ("msg§Kategorien ge&auml;ndert!");
+	}
+	parse_msg ("msg§" . _("Kategorien ge&auml;ndert!"));
 }
 
 function order_freie($cat_id,$direction,$username){
 	$items_to_order = array();
 	$user_id = get_userid($username);
 	$db = new DB_Seminar("SELECT kategorie_id FROM kategorien WHERE range_id='$user_id' ORDER BY priority");
-	while($db->next_record()){
+	while($db->next_record()) {
 		$items_to_order[] = $db->f("kategorie_id");
 	}
-	for ($i = 0; $i < count($items_to_order); ++$i){
+	for ($i = 0; $i < count($items_to_order); ++$i) {
 		if ($cat_id == $items_to_order[$i])
 			break;
 	}
-	if ($direction == "up" && isset($items_to_order[$i-1])){
+	if ($direction == "up" && isset($items_to_order[$i-1])) {
 		$items_to_order[$i] = $items_to_order[$i-1];
 		$items_to_order[$i-1] = $cat_id;
-	} elseif (isset($items_to_order[$i+1])){
+	} elseif (isset($items_to_order[$i+1])) {
 		$items_to_order[$i] = $items_to_order[$i+1];
 		$items_to_order[$i+1] = $cat_id;
 	}
-	for ($i = 0; $i < count($items_to_order); ++$i){
+	for ($i = 0; $i < count($items_to_order); ++$i) {
 		$db->query("UPDATE kategorien SET priority=$i WHERE kategorie_id='$items_to_order[$i]'");
 	}
-	parse_msg("msg§Kategorien wurden neu geordnet");
+	parse_msg("msg§" . _("Kategorien wurden neu geordnet"));
 }
 
-//////////////////////////////////////////////////////////////////////////
 ?>
