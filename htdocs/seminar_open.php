@@ -108,7 +108,7 @@ function startpage_redirect($page_code) {
 			$jump_page = "calendar.php";
 		break;
 	}
-	
+	page_close();
 	header ("location: $jump_page");
 }
 
@@ -128,6 +128,24 @@ $i_query = explode('&',getenv("QUERY_STRING"));
 
 //INITS
 
+// session init starts here
+if ($SessionStart==0) { 
+	$SessionStart=time(); 
+	$SessionSeminar="";
+	$SessSemName="";
+	$sess->register("SessionStart");
+	$sess->register("SessionSeminar");
+	$sess->register("SessSemName");
+
+	// Language Settings
+	$sess->register("_language");
+	// try to get accepted languages from browser
+	if (!isset($_language))
+		$_language = get_accepted_languages();
+	if (!$_language)
+		$_language = $DEFAULT_LANGUAGE; // else use system default
+}		
+	
 // user init starts here
 if ($auth->is_authenticated() && $user->id != "nobody") {
 	if ($SessionStart > $CurrentLogin) {      // just logged in
@@ -186,24 +204,6 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 }
 
 
-// session init starts here
-if ($SessionStart==0) { 
-	$SessionStart=time(); 
-	$SessionSeminar="";
-	$SessSemName="";
-	$sess->register("SessionStart");
-	$sess->register("SessionSeminar");
-	$sess->register("SessSemName");
-
-	// Language Settings
-	$sess->register("_language");
-	// try to get accepted languages from browser
-	if (!isset($_language))
-		$_language = get_accepted_languages();
-	if (!$_language)
-		$_language = $DEFAULT_LANGUAGE; // else use system default
-}		
-	
 // init of output via I18N
 
 $_language_path = init_i18n($_language);
