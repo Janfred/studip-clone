@@ -96,7 +96,7 @@ function parse_link($link, $level=0) {
 		if (!$socket) {
 			//echo "$errstr ($errno)<br />\n";
 		} else {
-			$urlString = "HEAD ".$documentpath." HTTP/1.0\nHost: $host\r\n";
+			$urlString = "HEAD ".$documentpath." HTTP/1.0\r\nHost: $host\r\n";
 			if ($url_parts["user"] && $url_parts["pass"]) {
 				$pass = $url_parts["pass"];
 				$user = $url_parts["user"];
