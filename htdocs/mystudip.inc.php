@@ -32,11 +32,12 @@ function select_language($selected_language = "") {
 
 //Anpassen der Ansicht
 function change_general_view() {
-	global $PHP_SELF, $_language, $auth, $forum;
+	global $PHP_SELF, $_language, $auth, $forum, $user, $my_studip_settings;
+;
 		
 	$db=new DB_Seminar;
-	$cssSw=new cssClassSwitcher;		
-
+	$cssSw=new cssClassSwitcher;
+	
 	echo "<table width =\"100%\" cellspacing=0 cellpadding=0 border=0><tr>\n";
 	echo "<td class=\"topic\" colspan=2><img src=\"pictures/einst.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;" . _("Allgemeine Stud.IP-Einstellungen anpassen") . "</b></td></tr>\n";
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp;\n";
@@ -73,7 +74,32 @@ function change_general_view() {
 				} else
 					echo _("Sie müssen in Ihrem Browser Javascript aktivieren um dieses Feature nutzen zu können.");
 				?>
-				</td><td   width="55%" class="<? echo $cssSw->getClass() ?>"><br><font size="2"><?print _("Mit dieser Funktion k&ouml;nnen sie durch reines &Uuml;berfahren bestimmter Icons mit dem Mauszeiger (z.B. in den Foren oder im Addresbuch) die entsprechenden Eintr&auml;ge anzeigen lassen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch gr&ouml;&szlig;ere Informationsmengen arbeiten. Da jedoch die Ladezeiten der Seiten erheblich ansteigen, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens &uuml;ber eine ISDN Verbindung verf&uuml;gen.");?></font><br><br></td></tr>								
+				</td><td   width="55%" class="<? echo $cssSw->getClass() ?>"><br><font size="2"><?print _("Mit dieser Funktion k&ouml;nnen sie durch reines &Uuml;berfahren bestimmter Icons mit dem Mauszeiger (z.B. in den Foren oder im Addresbuch) die entsprechenden Eintr&auml;ge anzeigen lassen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch gr&ouml;&szlig;ere Informationsmengen arbeiten. Da jedoch die Ladezeiten der Seiten erheblich ansteigen, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens &uuml;ber eine ISDN Verbindung verf&uuml;gen.");?></font><br><br>
+				</td>
+				</tr>
+
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="5%">&nbsp;
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
+					<br><b><? echo _("pers&ouml;nliche Startseite:") ?></b><br><br>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" width="25%">
+						<select name="personal_startpage">
+							<?	    
+							printf ("<option %s value=\"\">"._("keine")."</option>", (!$my_studip_settings["startpage_redirect"]) ? "selected" : "");
+							printf ("<option %s value=\"1\">"._("Meine Veranstaltungen")."</option>", ($my_studip_settings["startpage_redirect"] ==  1) ? "selected" : "");
+							printf ("<option %s value=\"2\">"._("Meine Einrichtungen")."</option>", ($my_studip_settings["startpage_redirect"] == 2) ? "selected" : "");
+							printf ("<option %s value=\"3\">"._("Mein Stundenplan")."</option>", ($my_studip_settings["startpage_redirect"] == 3) ? "selected" : "");
+							printf ("<option %s value=\"4\">"._("Mein Adressbuch")."</option>", ($my_studip_settings["startpage_redirect"] == 4) ? "selected" : "");
+							printf ("<option %s value=\"5\">"._("Mein Terminkalender")."</option>", ($my_studip_settings["startpage_redirect"] == 5) ? "selected" : "");
+							?>
+						</select>
+					</td>
+					<td  width="55%" class="<? echo $cssSw->getClass() ?>">
+					<br><font size="2"><?print _("Sie k&ouml;nnen hier einstellen, welcher Systembereich automatisch nach dem Login oder Autologin aufgerufen wird. Wenn Sie zum Beispiel regelm&auml;&szlig;ig die Seite &raquo;Meine Veranstaltungen&laquo;. nach dem Login aufrufen, so k&ouml;nnen Sie dies hier direkt einstellen.");?></font><br><br>
+				</tr>
+				
 				
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="5%">&nbsp;
