@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * sendfile.php
 * 
@@ -31,9 +31,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-if(ini_get('zlib.output_compression'))
-      ini_set('zlib.output_compression', 'Off');
-
 $dont_put_headers=TRUE;
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -47,7 +44,7 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
 if (isset($file_id))
-	$file_id = basename($file_id);
+	$file_id = escapeshellcmd(basename($file_id));
 	
 switch ($type) {
 	//We want to download from the archive (this mode performs perm checks)
@@ -79,19 +76,19 @@ switch ($type) {
 		$path_file=$UPLOAD_PATH."/".$file_id;
 	break;
 }
-	
-if ($zip) {
-	$tmp_id=md5(uniqid("suppe"));
-	exec ("cp '$path_file' '$TMP_PATH/".rawurldecode($file_name)."'");
-	exec ("$ZIP_PATH -9 -j $TMP_PATH/$tmp_id.zip '$TMP_PATH/".rawurldecode($file_name)."'");
-	$tmp_file_name="'$TMP_PATH/".rawurldecode($file_name)."'";
-	$file_name=$file_name.".zip";
-	$path_file="$TMP_PATH/$tmp_id.zip";
-	}
-
 
 //replace bad charakters to avoid problems when saving the file
 $file_name = prepareFilename(rawurldecode($file_name));
+
+if ($zip && is_file($path_file)) {
+	$tmp_id = md5(uniqid("suppe"));
+	$zip_path_file = "$TMP_PATH/$tmp_id.zip";
+	exec ("$ZIP_PATH -9 -j $zip_path_file $path_file");
+	$file_name = $file_name . ".zip";
+	$path_file = $zip_path_file;
+}
+
+
 
 if ($force_download) {
 	$content_type="application/octet-stream";
@@ -341,10 +338,10 @@ else
 header("Cache-Control: private");
 header("Expires: 0");
 
-header("Content-Type: $content_type; name=\"".rawurldecode($file_name)."\"");
+header("Content-Type: $content_type; name=\"$file_name\"");
 if ($filesize != FALSE)
 	header("Content-Length: $filesize");
-header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
+header("Content-disposition: $content_disposition; filename=\"$file_name\"");
 if ($type != 5){
 	readfile($path_file);
 	TrackAccess ($file_id);
@@ -354,15 +351,9 @@ if ($type != 5){
 
 
 //remove temporary file after zipping
-if ($zip) {
-	exec ("rm $tmp_file_name");
-	exec ("rm $path_file");
-	}
-
-//remove temporary file after multiple-dwonload (as zip)
-if ($type == 4) {
-	exec ("rm $path_file");
-	}
+if ($zip || $type == 4) {
+	@unlink($path_file);
+}
 
 // Save data back to database.
 page_close();
