@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#
+#  extract all Stud.IP message strings and merge with old translations
+#
+
+# first handle files separate
+mv locale/en/LC_MESSAGES/studip_core.po locale/en/LC_MESSAGES/studip_core.po.old
+xgettext -C -n --keyword=_ -o locale/en/LC_MESSAGES/studip_core.po.new  *.php
+msgmerge locale/en/LC_MESSAGES/studip_core.po.old locale/en/LC_MESSAGES/studip_core.po.new --output-file=locale/en/LC_MESSAGES/studip_core.po
+
+
+# then merge into one file
+msgmerge locale/en/LC_MESSAGES/studip_core.po locale/en/LC_MESSAGES/studip.po --output-file=locale/en/LC_MESSAGES/studip.po

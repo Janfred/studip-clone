@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#
+#  convert all Stud.IP message strings into binary format
+#
+
+mv locale/en/LC_MESSAGES/studip.mo locale/en/LC_MESSAGES/studip.mo.old
+msgfmt locale/en/LC_MESSAGES/studip.po --output-file=locale/en/LC_MESSAGES/studip.mo
