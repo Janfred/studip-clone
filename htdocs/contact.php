@@ -141,13 +141,13 @@ echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
 	if (SearchResults($search_exp)) {
-		printf ("<input type=\"IMAGE\" name=\"search\" src=\"pictures/move_down.gif\" border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
+		printf ("<input type=\"IMAGE\" name=\"addsearch\" src=\"pictures/move_down.gif\" border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
 		echo SearchResults($search_exp);
 	} else {
 		echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
 	}
 	SearchResults($search_exp);
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>&nbsp;  ", tooltip(_("neue Suche")));
+	printf ("<a href=\"$PHP_SELF\"><img src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 } else {
 	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Adressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
@@ -219,11 +219,13 @@ if (($contact["view"])=="gruppen") {
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
 			$color = "color=\"#FF0000\"";
+			$maillink = "&nbsp; <a href=\"sms.php?sms_source_page=contact.php&cmd=write&group_id=$filter\"><img src=\"pictures/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
 		} else {
 			$color = "";
+			$maillink ="";
 		}
 		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>"
+		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>$maillink"
 		."&nbsp; </td>";
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
