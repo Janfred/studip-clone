@@ -43,7 +43,7 @@ $export_pagename = _("Datenexport - Startseite");
 	
 	$export_pagecontent .= _("Bitte wählen Sie eine Einrichtung: ") .  "<select name=\"range_id\">";
 	
-	$db->query("SELECT Institut_id, Name FROM Institute ORDER BY Name");
+	$db->query("SELECT Institute.Institut_id, Institute.Name FROM Institute WHERE Institut_id <> fakultaets_id ORDER BY Institute.Name");
 	while ($db->next_record())
 	{
 		$export_pagecontent .= "<option value=\"" . $db->f("Institut_id") . "\">" . $db->f("Name");
