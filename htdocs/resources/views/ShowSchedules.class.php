@@ -170,7 +170,7 @@ class ShowSchedules {
 					echo "<br /><br />";
 					while ($event=$assign_events->nextEvent()) {
 						echo "<a href=\"$PHP_SELF?quick_view=".$view."&quick_view_mode=".$quick_view_mode."&edit_assign_object=".$event->getAssignId()."\">".makeButton("eigenschaften")."</a>";
-						printf ("&nbsp; <font size=-1>"._("Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br />", date("d.m.Y H:i", $event->getBegin()), date("d.m.Y H:i", $event->getEnd()), $event->getName());
+						printf ("&nbsp; <font size=-1>"._("Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br />", strftime("%A, %d.%m.%Y %H:%M", $event->getBegin()), strftime("%A, %d.%m.%Y %H:%M", $event->getEnd()), $event->getName());
 					}
 					?>
 				</td>
