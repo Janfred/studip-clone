@@ -8,9 +8,9 @@
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	resources
-* @module		resourcesControl.php
-* @package		resources
+* @modulegroup		support
+* @module		support.inc.php
+* @package		support
 */
 
 // +---------------------------------------------------------------------------+
@@ -94,8 +94,7 @@ include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 						<?
 						if ($msg->checkMsgs()) {	
 							$msg->displayAllMsg($view_mode = "line");
-							print "<tr><td class=\"blank\">&nbsp; </td></tr>";
-						}
+							print "<tr><td class=\"blank\">&nbsp; </td></tr>";						}
 						if ($page_intro) {
 						?>
 						<tr>

@@ -50,7 +50,6 @@ class RequestObject {
 	function RequestObject($id='', $contract_id='', $name='', $date=0, $user_id='', $channel='', $topic_id='') {
 		global $user;
 		
-		$this->user_id = $user->id;
 		$this->db=new DB_Seminar;
 		
 		if(func_num_args() == 1) {

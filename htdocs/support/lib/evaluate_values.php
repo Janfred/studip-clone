@@ -38,7 +38,6 @@ require_once ("$RELATIVE_PATH_SUPPORT/lib/RequestObject.class.php");
 require_once ("$RELATIVE_PATH_SUPPORT/lib/EventObject.class.php");
 require_once ("$RELATIVE_PATH_SUPPORT/supportConfig.inc.php");
 
-
 /*****************************************************************************
 empfangene Werte auswerten und Befehle ausfuehren
 /*****************************************************************************/
@@ -187,6 +186,13 @@ if (($rechte) && ($create_req)) {
 	$supportdb_data["req_opens"][$createdReq->getId()] = TRUE;
 	$supportdb_data["actual_req"] = $createdReq->getId();
 	$edit_req_object = $createdReq->getId();
+	
+	//check, if participants for the Veranstaltung are avaiable
+	$query = sprintf("SELECT user_id FROM seminar_user WHERE seminar_id = '%s' AND status IN ('tutor', 'autor')", $SessSemName[1]);
+	$db->query($query);
+	if (!$db->nf()) {
+		$msg->addMsg(7);
+	}
 }
 
 //cancel a just created request
