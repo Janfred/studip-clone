@@ -140,7 +140,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 <table class="blank" width="600" border=0 cellpadding=0 cellspacing=0 align=center>
 <tr><td colspan=3 class="topic">&nbsp;<b><? echo $UNI_NAME;?></b></td></tr>
 <tr> 
-	<td colspan=3 background="./locale/<?=$_language_path?>/LC_PICTURES/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
+	<td colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
 	<table cellspacing="20">
 		<tr>
 			<?
