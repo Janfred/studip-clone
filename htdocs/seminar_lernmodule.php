@@ -56,7 +56,7 @@ if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id ==
 	die();
 }
 
-if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias-connect"]))
+if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"]))
 {
 
 	$db = New DB_Seminar;
