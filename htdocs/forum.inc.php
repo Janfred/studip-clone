@@ -576,10 +576,10 @@ function DebugForum ($debugvar) {
 **/
 function ForumEmpty () {
 	global $rechte, $SessSemName;
-	IF ($rechte)
+	if ($rechte)
 		$text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter <b>neues Thema</b> einen Ordner anlegen.");
-	ELSE {
-		if ($SessSemName["class"]=="inst")
+	else {
+		if ($SessSemName["class"]!="inst")
 			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Ordner anlegen zu lassen.");
 		else
 			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Ordner anlegen zu lassen.");
