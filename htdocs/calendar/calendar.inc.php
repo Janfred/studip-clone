@@ -1,30 +1,49 @@
 <?
-/*
-calendar.inc.php 0.8-20020628
-Persoenlicher Terminkalender in Stud.IP.
-Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* calendar.inc.php
+* 
+* 
+*
+* @author		Peter Thienel <pthienel@web.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	calendar
+* @module		calendar
+* @package	calendar
 */
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// calendar.inc.php
+//
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 
-require_once("config.inc.php"); //Daten laden
-require_once("visual.inc.php");
-require_once("functions.php");
-require($RELATIVE_PATH_CALENDAR . "/calendar_func.inc.php");
-require($RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php"); //Daten laden
+require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_func.inc.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -139,7 +158,8 @@ if($cmd == "add" || $cmd == "edit"){
 													"exp_year", "cat", "priority", "txt", "content", "loc", "lintervall_d",
 													"lintervall_w", "wdays", "type_m", "lintervall_m2", "sintervall_m",
 													"lintervall_m1", "wday_m", "day_m", "type_y", "sintervall_y", "wday_y",
-													"day_y", "month_y1", "month_y2", "atime", "termin_id", "exp_c", "mod"
+													"day_y", "month_y1", "month_y2", "atime", "termin_id", "exp_c", "mod",
+													"via"
 													);
 		reset($HTTP_POST_VARS);
 		while(list($key, $value) = each($HTTP_POST_VARS)){
@@ -179,7 +199,7 @@ switch($cmd){
 		}
 		break;
 	case "del":
-		require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+		require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
 		$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
 		$atermin =& new DbCalendarEvent($termin_id);
 		$atermin->delete();
@@ -212,18 +232,18 @@ switch($cmd){
 		$title = _("Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden");
 		break;
 /*		case "import":
-		$title = "Mein pers&ouml;nlicher Terminkalender - Termine importieren";
+		$title = _("Mein pers&ouml;nlicher Terminkalender - Termine importieren");
 		break; */
 	case "edit":
 		if($termin_id && !$mod){
 			// in the near future there will be a factory method to get the
-			// right type of event ;-)
+			// right type of an event ;-)
 			if($sem_id){
 				$db_check_event =& new DBSeminar();
 				$db_check_event->query("SELECT termin_id FROM termine WHERE termin_id='$termin_id' "
 						. "AND range_id='$sem_id'");
 				if($db_check_event->next_record()){
-					require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
+					require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
 					$atermin =& new SeminarEvent($termin_id);
 				}
 				else{
@@ -234,7 +254,7 @@ switch($cmd){
 				}
 			}
 			else{	
-				require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+				require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
 				$atermin =& new DbCalendarEvent($termin_id);
 				$repeat = $atermin->getRepeat();
 		//	$translate = array("SINGLE"=>"keine", "DAYLY"=>"taeglich", "WEEKLY"=>"woechentlich",
@@ -330,7 +350,7 @@ if($cmd == "add"){
 	
 	// wenn alle Daten OK, dann Termin anlegen		
 	if(empty($err)){
-		include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+		include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
 		$atermin =& new DbCalendarEvent($start, $end, $txt, "SINGLE", $exp, $cat, $priority, $loc);		
 		$atermin->setDescription($content);
 		if($via == "public")
@@ -389,15 +409,15 @@ if($cmd == "add"){
 	}
 	else{
 		$cmd = "edit";
-		if(!$mod_err)
-			$mod_err = $mod_prv;
-		$mod = $mod_err;
+	//	if(!$mod_err)
+		//	$mod_err = $mod_prv;
+		$mod = $mod_prv;	//	$mod = $mod_err;
 	}
 }
 
 // including the calendar header (it includes the studip main header)
-require($RELATIVE_PATH_CALENDAR . "/views/header.inc.php");
-require($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/header.inc.php");
+require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 
 // Tagesuebersicht anzeigen ***************************************************
 
@@ -420,7 +440,7 @@ if($cmd == "showday"){
 		$et = 23;
 	}
 	
-	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
+	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
 	$aday =& new DbCalendarDay($atime);
 	$aday->bindSeminarEvents($bind_seminare);
 	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"],
@@ -454,7 +474,7 @@ if($cmd == "showweek"){
 		$et = 23;
 	}
 
-	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
+	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
 	$aweek =& new DbCalendarWeek($atime, $calendar_user_control_data["type_week"]);
 	$aweek->bindSeminarEvents($bind_seminare);
 	$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data["step_week"],
@@ -474,7 +494,7 @@ if($cmd == "showweek"){
 		$colspan_2 = $tab["max_columns"] + 2;
 	}
 	
-	include($RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
+	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
 
 }
 
@@ -482,7 +502,7 @@ if($cmd == "showweek"){
 
 if($cmd == "showmonth"){
 
-	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarMonth.class.php");
+	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarMonth.class.php");
 	
 	$amonth =& new DbCalendarMonth($atime);
 	$calendar_sess_forms_data["bind_seminare"] = "";
@@ -500,7 +520,7 @@ if($cmd == "showmonth"){
 		$height = "80";
 	}
 	
-	include($RELATIVE_PATH_CALENDAR . "/views/month.inc.php");
+	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/month.inc.php");
 	
 }
 
@@ -508,12 +528,12 @@ if($cmd == "showmonth"){
 
 if($cmd == "showyear"){
 
-	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
+	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
 	
 	$ayear =& new DbCalendarYear($atime);
 	$ayear->bindSeminarEvents($bind_seminare);
 	
-	include($RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
+	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
 
 }
 
@@ -524,7 +544,7 @@ if($cmd == "showyear"){
 if($cmd == "edit"){
 
 	// call from dayview for new event
-	if($atime && !$termin_id/* && !$mod*/){
+	if($atime && !$termin_id && !$mod){
 		$start_h = date("G", $atime);
 		$start_m = date("i", $atime);
 		$start_day = date("j", $atime);
@@ -647,7 +667,7 @@ if($cmd == "edit"){
 	$start_m = $start_m - ($start_m % 5);
 	$end_m = $end_m - ($end_m % 5);
 	
-	include($RELATIVE_PATH_CALENDAR . "/views/edit.inc.php");
+	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/edit.inc.php");
 }
 
 // Seminartermine einbinden **************************************************
@@ -671,7 +691,7 @@ if($cmd == "bind"){
 	else
 		$order = "ASC";
 	
-	include($RELATIVE_PATH_CALENDAR . "/views/bind.inc.php");
+	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/bind.inc.php");
 	
 }
 
@@ -685,11 +705,11 @@ if($cmd == "bind"){
 
 if($cmd == "changeview"){
 
-	include($RELATIVE_PATH_CALENDAR . "/calendar_settings.inc.php");
+	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_settings.inc.php");
 	
 }
 	
-include($RELATIVE_PATH_CALENDAR . "/views/footer.inc.php");
+include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/footer.inc.php");
 	
 // Save data back to database.
 page_close();
