@@ -1774,7 +1774,7 @@ function forum_move_navi ($topic_id) {
 			</tr>
 			<tr>
 				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-					<font size="-1"><?=_("in anderes Forum:")?></font>&nbsp; &nbsp; 
+					<font size="-1"><?=_("in das Forum einer Veranstaltung:")?></font>&nbsp; &nbsp; 
 				</td>
 				<td class="steel1" width="80%">
 			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
@@ -1796,7 +1796,7 @@ function forum_move_navi ($topic_id) {
 		?>
 			<tr>
 				<td class="steel1" align="right" nowrap width="20%" valign="baseline">
-			  		<font size="-1"><?=_("in andere Einrichtung:")?></font>&nbsp; &nbsp; 
+			  		<font size="-1"><?=_("in das Forum einer Einrichtung:")?></font>&nbsp; &nbsp; 
 			  	</td>
 				<td class="steel1" width="80%">
 			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
