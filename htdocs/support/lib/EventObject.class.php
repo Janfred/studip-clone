@@ -144,16 +144,24 @@ class EventObject {
 
 	//private
 	function calculatePoints() {
-		global $POINTS, $CALENDAR_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
+		global $POINTS, $CALENDAR_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR,
+			$BASE_DATE_FROM_REQUEST, $CHANGE_RATE;
 		
 		if ($CALENDAR_ENABLE)
 			include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
 	
 		
-		$tmp_begin = $this->begin;
-		$tmp_end = $this->end;
+		if ($BASE_DATE_FROM_REQUEST) {
+			$tmpRequest = new RequestObject ($this->request_id);
+			$tmp_begin = $tmpRequest->getDate();
+			$tmp_end = $tmpRequest->getDate() + ($this->end - $this->begin);
+		} else {
+			$tmp_begin = $this->begin;
+			$tmp_end = $this->end;
+		}
 		
 		$i = 0;
+		
 		while ($tmp_end) {
 			if  ($CALENDAR_ENABLE)
 				if (holiday($tmp_begin) == 3)
@@ -163,8 +171,13 @@ class EventObject {
 				$tmp_day = date("w", $tmp_begin);
 			
 			foreach ($POINTS[$tmp_day] as $val) {
-				$tmp_seperating_start = mktime ($val["begin_hour"], $val["begin_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
-				$tmp_seperating_end = mktime ($val["end_hour"], $val["end_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
+				if ($CHANGE_RATE) {
+					$tmp_seperating_start = $tmp_begin;
+					$tmp_seperating_end = $tmp_end;
+				} else {
+					$tmp_seperating_start = mktime ($val["begin_hour"], $val["begin_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
+					$tmp_seperating_end = mktime ($val["end_hour"], $val["end_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
+				}
 				$i++;				
 				
 				if (($tmp_seperating_start <= $tmp_begin) && ($tmp_seperating_end >= $tmp_begin))

@@ -31,6 +31,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+
+//get the base date for point-calculation from the request (opposite would be from event)
+$BASE_DATE_FROM_REQUEST = TRUE;
+
+//change the rate, if the duration laps into another range
+$CHANGE_RATE = FALSE;
+
 //Sunday
 $POINTS[0][] = array ("begin_hour" => 0, "begin_min" => 0, "end_hour" => 7, "end_min" =>59, "min" => 60, "ratio" => 8);
 $POINTS[0][] = array ("begin_hour" => 8, "begin_min" => 0, "end_hour" => 19, "end_min" =>59, "min" => 60, "ratio" => 6);
