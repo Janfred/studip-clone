@@ -474,21 +474,23 @@ class VoteDB extends StudipObject {
 
       /* If vote is anonymous ---------------------------------------------- */
       if ($this->db->f("anonymous") == YES) {
-	 $sql="SELECT vote_id FROM vote_user WHERE vote_id = '".$voteID."'";
+	 $sql="SELECT count(*) FROM vote_user WHERE vote_id = '".$voteID."'";
 	 $this->db->query ($sql);
-     	 return ($this->db->nf() == NO) ? NO : YES;
+	 $this->db->next_record();
+	 return ($this->db->f(0)) ? YES : NO;
       }
       /* If vote is not anonymous ------------------------------------------ */
       else {
 	 $sql = 
 	    "SELECT".
-	    " a.answer_id".
+	    " count(*)".
 	    " FROM ".
 	    "  voteanswers b INNER JOIN voteanswers_user a USING(answer_id)".
 	    "WHERE".
-	    " b.vote_id = '".$voteID."' LIMIT 1";
+	    " b.vote_id = '".$voteID."' ";
 	 $this->db->query ($sql);
-	 return ($this->db->next_record()) ? YES : NO;
+	 $this->db->next_record();
+	 return ($this->db->f(0)) ? YES : NO;
       }
       /* ------------------------------------------------------------------- */
    }
