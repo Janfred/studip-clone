@@ -605,7 +605,7 @@ function gettitel($score, $gender=0) {
 	$titel[12] =	array(0 => _("Experte"), 1 => _("Expertin"));
 	$titel[13] =	array(0 => _("Meister"), 1 => _("Meisterin"));
 	$titel[14] =	array(0 => _("Gro&szlig;meister"), 1 => _("Gro&szlig;meisterin"));
-	$titel[15] =	array(0 => _("Guru"), 1 => _("Guru"));
+	$titel[15] =	array(0 => _("Guru"), 1 => _("Hohepriesterin"));
 	$titel[16] =	array(0 => _("Lichtgestalt"), 1 => _("Lichtgestalt"));
 	$titel[17] =	array(0 => _("Gott"), 1 => _("G&ouml;ttin"));
 
