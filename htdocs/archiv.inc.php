@@ -639,8 +639,7 @@ function in_archiv ($sem_id) {
 		//zip all the stuff
 	 	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$ARCHIV_PATH."/".$archiv_file_id." * ");
 	 	exec ("mv ".$ARCHIV_PATH."/".$archiv_file_id.".zip ".$ARCHIV_PATH."/".$archiv_file_id);
-	 	exec ("rm $tmp_full_path/*.*");
-	 	exec ("rmdir $TMP_PATH/$archiv_file_id");
+		exec ("rm -r $tmp_full_path");	 	
 	} else
 		$archiv_file_id="";
 	
