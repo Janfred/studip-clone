@@ -57,7 +57,7 @@ if ($SessSemName[1] =="") {
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-uhr.gif" align="absmiddle">&nbsp; <? echo htmlReady($SessSemName["header_line"]); ?> - Ablaufplan</b>
+			<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-uhr.gif" align="absmiddle">&nbsp; <? echo $SessSemName["header_line"]; ?> - Ablaufplan</b>
 			</td>
 		</tr>
 			<td class="blank" width="100%"><blockquote>Hier finden Sie alle Termine der Veranstaltung.<br><br>Klicken sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.

@@ -44,7 +44,7 @@ if ($SessSemName[1] =="") {
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo htmlReady($SessSemName["header_line"]); ?> - Literatur und Links</b></td>
+	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - Literatur und Links</b></td>
 </tr>
 	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? "Hier finden Sie n&uuml;tzliche Literatur und Links zu der Einrichtung." : "Hier finden Sie die Literatur- und Linkliste der Veranstaltung.");?></td>
 	<td class="blank" align = right><img src="pictures/literatur.jpg" border="0"></td>
