@@ -26,7 +26,7 @@ switch ($resources_data["view"]) {
 
 	//Reiter "Objekt"
 	case "objects":
-	case "edit_object_perms":
+	case "edit_object_assign":
 	case "edit_object_properties":
 	case "edit_object_schedules":
 	case "view_schedule":
@@ -54,15 +54,18 @@ switch ($resources_data["view"]) {
 		$title=$SessSemName["header_line"]." - Ressourcen&uuml;bersicht";
 	break;
 	case "openobject_details":
-		$page_intro="Hier sehen Sie detaillierte Informationen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
+		if ($resources_data["structure_open"])
+			$page_intro="Hier sehen Sie detaillierte Informationen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
 		$title=$SessSemName["header_line"]." - Ressourcendetails";
 	break;
 	case "openobject_schedule":
-		$page_intro="Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().") ausgeben lassen.";
+		if ($resources_data["structure_open"])
+			$page_intro="Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().") ausgeben lassen.";
 		$title=$SessSemName["header_line"]." - Ressourcenbelegung";
 	break;
 	case "openobject_assign":
-		$page_intro="Bearbeiten von Belegungen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
+		if ($resources_data["structure_open"])
+			$page_intro="Bearbeiten von Belegungen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
 		$title=$SessSemName["header_line"]." - Bearbeiten der Belegung";
 	break;
 	
