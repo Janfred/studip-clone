@@ -1,4 +1,4 @@
-	<?
+<?
 /*
 resourcesClass.php - 0.8
 Klassen fuer Ressourcenverwaltung von Stud.IP.
@@ -794,7 +794,69 @@ class ResourcesPerms {
 }
 
 /*****************************************************************************
-ResourcesObjectPerms, stellt Perms zum Ressourcen Objectzur 
+ResourcesObjectPerms, stellt Perms zum Ressourcen Object zur 
+Verfuegung
+/*****************************************************************************/
+
+class AssignObjectPerms extends ResourcesPerms {
+	var $user_id;
+	var $db;
+	var $db2;
+	var $assign_id;
+	
+	function AssignObjectPerms ($assign_id, $user_id='') {
+		global $user, $perm;
+		
+		$this->db = new DB_Seminar;
+		$this->db2 = new DB_Seminar;
+		
+		if ($user_id)
+			$this->$user_id=$user_id;
+		else
+			$this->user_id=$user->id;
+		
+		$this->assign_id=$assign_id;
+		
+		//check if user is root
+		if ($perm->have_perm("root")) {
+			$this->perm="admin";
+		} else //check if resources admin
+			if ($this->getGlobalPerms() == "admin")
+				$this->perm="admin";
+
+		//check if the user assigns the assign 
+		if ($this->perm != "admin") {
+			$this->db->query("SELECT assign_user_id FROM resources_assign WHERE assign_user_id='$this->user_id' AND assign_id = '$this->assign_id' ");
+			if ($this->db->next_record()) {
+				$this->owner=TRUE;
+				$this->perm="admin";
+			} else {
+				$this->owner=FALSE;
+			}
+		}
+		
+		//else check if the user is admin of the assigned resource
+		if ($this->perm != "admin") {
+			$this->db->query("SELECT resource_id FROM resources_assign WHERE assign_id = '$this->assign_id' ");
+			if ($this->db->next_record()) {		
+				$ObjectPerms = new ResourcesObjectPerms($this->db->f("resource_id"));
+				if ($ObjectPerms->getUserPerm () == "admin")
+					$this->perm="admin";
+			}
+		}
+	}
+	
+	function getUserPerm () {
+		return $this->perm;
+	}
+	
+	function getUserIsOwner () {
+		return $this->owner;
+	}
+}
+
+/*****************************************************************************
+ResourcesObjectPerms, stellt Perms zum Ressourcen Object zur 
 Verfuegung
 /*****************************************************************************/
 
@@ -824,13 +886,15 @@ class ResourcesObjectPerms extends ResourcesPerms {
 			if ($this->getGlobalPerms() == "admin")
 				$this->perm="admin";
 		
-		//check if the user is owner of the object	
-		$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$this->user_id' AND resource_id = '$this->resource_id' ");
-		if ($this->db->next_record()) {
-			$this->owner=TRUE;
-			$this->perm="admin";
-		} else {
-			$this->owner=FALSE;
+		//check if the user is owner of the object
+		if ($this->perm != "admin") {			
+			$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$this->user_id' AND resource_id = '$this->resource_id' ");
+			if ($this->db->next_record()) {
+				$this->owner=TRUE;
+				$this->perm="admin";
+			} else {
+				$this->owner=FALSE;
+			}
 		}
 		
 		//else check all the other possibilities
@@ -856,8 +920,10 @@ class ResourcesObjectPerms extends ResourcesPerms {
 				if ($this->perm=="admin")
 					break;
 			}
+		}
 			
-			//if all the check don't work, we have to take a look to the superordinated objects
+		//if all the check don't work, we have to take a look to the superordinated objects
+		if ($this->perm != "admin") {
 			foreach ($my_objects as $key=>$val) {
 				$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $this->resource_id);
 				$this->db->query($query);	

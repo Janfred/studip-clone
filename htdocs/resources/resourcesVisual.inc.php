@@ -955,7 +955,23 @@ class editObject extends cssClasses {
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_week" value="<? echo $resAssign->getRepeatDayOfWeek() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_week" value="<? echo $resAssign->getRepeatWeek() ?>" />
 			<tr>
-				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="Zuweisen">
+				<? 
+				if  ($resAssign->getId()) {
+					$ObjectPerms = new AssignObjectPerms($resAssign->getId());
+					if ($ObjectPerms->getUserPerm () == "admin") {
+						$killButton=TRUE;
+						?><input type="IMAGE" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
+					}
+				} else
+					 print "<br /><img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
+				?>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Datum:</font><br />
 				<font size=-1>
@@ -1115,7 +1131,13 @@ class editObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 name="submit" value="Zuweisen"><br />&nbsp; 
+				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="Zuweisen">
+				<?
+				if ($killButton) {
+					?><input type="IMAGE" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
+				}
+				?>
+				<br />&nbsp; 
 				</td>
 			</tr>
 			</form>
@@ -1411,6 +1433,12 @@ class ViewSchedules extends cssClasses {
 	function create_schedule_list() {
 		global $PHP_SELF;
 
+		 //select view to jump from the schedule
+		 if ($this->used_view == "openobject_schedule")
+		 	$view = "openobject_assign";
+		 else
+			$view = "edit_object_assign";
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
@@ -1430,7 +1458,7 @@ class ViewSchedules extends cssClasses {
 					echo "<br /><font size=-1>Anzahl der Belegungen in diesem Zeitraum	: ", $assign_events->numberOfEvents()."</font>";
 					echo "<br /><br />";
 					while ($event=$assign_events->nextEvent()) {
-						echo "<a href=\"$PHP_SELF?view=edit_object_schedules&edit_assign_object=".$event->getAssignId()."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a>";
+						echo "<a href=\"$PHP_SELF?view=".$view."&edit_assign_object=".$event->getAssignId()."\">".makeButton("bearbeiten")."</a>";
 						echo "&nbsp; <font size=-1>Belegung ist von <b>", date("d.m.Y H:i", $event->getBegin()), "</b> bis <b>", date("d.m.Y H:i", $event->getEnd()), "</b></font>";
 						echo "&nbsp; <font size=-1>belegt von <b>".$event->getName()."</b></font><br />";
 					}
@@ -1463,7 +1491,7 @@ class ViewSchedules extends cssClasses {
 			$view = "edit_object_assign";
 		 
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
- 		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6+($this->week_offset*7), date("Y", $start_time));
+ 		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
 		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -1474,7 +1502,6 @@ class ViewSchedules extends cssClasses {
 					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&previous_week=TRUE"><img src="pictures/forumrotlinks.gif" <? echo tooltip ("Vorherige Woche anzeigen") ?>border="0" /></a>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="76%" align="center"><br />
-					<a href="anker"></a>
 					<? echo "<b>Anzeige der Woche vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b> (".strftime("%V", $start_time).". Woche)";?>
 					<br /><br />
 				</td>

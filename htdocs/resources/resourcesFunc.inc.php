@@ -64,6 +64,27 @@ function cmp_assign_events($a, $b){
 	return 1;
 }
 
+/*****************************************************************************
+checkAvaibleResources, a quick function to check if for a studip-object
+or a user are resources avaiable
+/*****************************************************************************/
+
+function checkAvaiableResources($id) {
+	$db = new DB_Seminar;
+	
+	//check if owner
+	$db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$id' ");
+	if ($db->nf())
+		return TRUE;
+	
+	//or additional perms avaiable
+	$db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$id' ");
+	if ($db->nf())
+		return TRUE;
+	
+	return FALSE;	
+}
+
 
 /*****************************************************************************
 get_admin_user sucht mit angegebenem Ausruck in den Admins

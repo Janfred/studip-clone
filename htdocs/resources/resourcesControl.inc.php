@@ -37,6 +37,12 @@ $my_perms= new ResourcesPerms;
 $error = new ResourcesError;
 $db=new DB_Seminar;
 
+/*****************************************************************************
+Kopf der Ausgabe
+/*****************************************************************************/
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+include ("$ABSOLUTE_PATH_STUDIP/header.php");
+
 
 /*****************************************************************************
 empfangene Werte auswerten und Befehle ausfuehren
@@ -45,7 +51,7 @@ empfangene Werte auswerten und Befehle ausfuehren
 //View uebernehmen
 if ($view)
 	 $resources_data["view"]=$view;
-	
+
 //If we start the admin mode, kill open objects
 if ($resources_data["view"] == "resources")
 	closeObject();
@@ -128,77 +134,73 @@ if ($change_structure_object) {
 
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
-	$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
+	//load the perms
+	if ($change_object_schedules == "NEW") 
+		$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
+	else
+		$ObjectPerms = new AssignObjectPerms($change_object_schedules);
+	
 	if ($ObjectPerms->getUserPerm () == "user" || $ObjectPerms->getUserPerm () == "admin") {
-		if ($change_object_schedules == "NEW")
-			$change_schedule_id=FALSE;
-		else
-			$change_schedule_id=$change_object_schedules;
-
-		if ($reset_search_user)
-			$search_string_search_user=FALSE;
-
-		if (($submit_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user))
-			$change_schedule_assign_user_id=$submit_search_user;
-
-		//check, if the owner of the assign object is a Veranstaltung, which has own dates to insert
-		if (get_object_type($change_schedule_assign_user_id) == "sem") {
-		 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-		 	$veranstAssign = new VeranstaltungResourcesAssign($change_schedule_assign_user_id);
-			$created_ids = $veranstAssign->changeAssign($change_schedule_resource_id, $change_schedule_user_free_name);
-
-			//after a succesful insert show the first (maybe the only) assign-object
-			if (is_array($created_ids))
-				$assign_id=$created_ids[0];
-
-		//create the "normal" assign object
+		if ($kill_assign_x) {
+			$killAssign=new AssignObject($change_object_schedules);
+			$killAssign->delete();
 		} else {
-			//the user send infinity repeat (until date) as empty field, but it's -1 in the db
-			if (($change_schedule_repeat_quantity_infinity) && (!$change_schedule_repeat_quantity))
-				$change_schedule_repeat_quantity=-1;
-	
-			//create timestamps
-			if ($change_schedule_year) {
-				$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
-				$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
-			}
-		
-			if ($change_schedule_repeat_end_year)
-				$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
-	
-			if ($change_schedule_repeat_sem_end)
-				foreach ($SEMESTER as $a)	
-					if (($change_schedule_begin >= $a["beginn"]) &&($change_schedule_begin <= $a["ende"]))
-						$change_schedule_repeat_end=$a["vorles_ende"];
-	
-			//create repeatdata
-	
-			//repeat = none
-			if ($change_schedule_repeat_none_x) {
-				$change_schedule_repeat_month_of_year='';
-				$change_schedule_repeat_day_of_month='';
-				$change_schedule_repeat_week_of_month='';
-				$change_schedule_repeat_day_of_week='';
-				$change_schedule_repeat_quantity='';
-				$change_schedule_repeat_interval='';	
-			}
-	
-			//repeat = year
-			if ($change_schedule_repeat_year_x) {
-				$change_schedule_repeat_month_of_year=date("n", $change_schedule_begin);
-				$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
-				$change_schedule_repeat_week_of_month='';
-				$change_schedule_repeat_day_of_week='';
-				if (!$change_schedule_repeat_quantity	)
-					$change_schedule_repeat_quantity=-1;
-				if (!$change_schedule_repeat_interval)
-					$change_schedule_repeat_interval=1;
-			}
+			if ($change_object_schedules == "NEW")
+				$change_schedule_id=FALSE;
+			else
+				$change_schedule_id=$change_object_schedules;
 
-			//repeat = month
-			if ($change_schedule_repeat_month_x)
-				if (!$change_schedule_repeat_week_of_month) {
+			if ($reset_search_user)
+				$search_string_search_user=FALSE;
+
+			if (($submit_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user))
+				$change_schedule_assign_user_id=$submit_search_user;
+
+			//check, if the owner of the assign object is a Veranstaltung, which has own dates to insert
+			if (get_object_type($change_schedule_assign_user_id) == "sem") {
+			 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+		 		$veranstAssign = new VeranstaltungResourcesAssign($change_schedule_assign_user_id);
+				$created_ids = $veranstAssign->changeAssign($change_schedule_resource_id, $change_schedule_user_free_name);
+
+				//after a succesful insert show the first (maybe the only) assign-object
+				if (is_array($created_ids))
+					$assign_id=$created_ids[0];
+
+			//create the "normal" assign object
+			} else {
+				//the user send infinity repeat (until date) as empty field, but it's -1 in the db
+				if (($change_schedule_repeat_quantity_infinity) && (!$change_schedule_repeat_quantity))
+					$change_schedule_repeat_quantity=-1;
+	
+				//create timestamps
+				if ($change_schedule_year) {
+					$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
+					$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
+				}
+		
+				if ($change_schedule_repeat_end_year)
+					$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
+	
+				if ($change_schedule_repeat_sem_end)
+					foreach ($SEMESTER as $a)	
+						if (($change_schedule_begin >= $a["beginn"]) &&($change_schedule_begin <= $a["ende"]))
+							$change_schedule_repeat_end=$a["vorles_ende"];
+	
+				//create repeatdata
+	
+				//repeat = none
+				if ($change_schedule_repeat_none_x) {
 					$change_schedule_repeat_month_of_year='';
+					$change_schedule_repeat_day_of_month='';
+					$change_schedule_repeat_week_of_month='';
+					$change_schedule_repeat_day_of_week='';
+					$change_schedule_repeat_quantity='';
+					$change_schedule_repeat_interval='';	
+				}
+	
+				//repeat = year
+				if ($change_schedule_repeat_year_x) {
+					$change_schedule_repeat_month_of_year=date("n", $change_schedule_begin);
 					$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
 					$change_schedule_repeat_week_of_month='';
 					$change_schedule_repeat_day_of_week='';
@@ -208,75 +210,89 @@ if ($change_object_schedules) {
 						$change_schedule_repeat_interval=1;
 				}
 
-			//repeat = week
-			if ($change_schedule_repeat_week_x) {
-				$change_schedule_repeat_month_of_year='';
-				$change_schedule_repeat_day_of_month='';
-				$change_schedule_repeat_week_of_month='';
-				$change_schedule_repeat_quantity='';
-				if (!$change_schedule_repeat_day_of_week)
-					$change_schedule_repeat_day_of_week=1;
-				if (!$change_schedule_repeat_quantity	)
-					$change_schedule_repeat_quantity=-1;
-				if (!$change_schedule_repeat_interval)
-					$change_schedule_repeat_interval=1;
-			}
+				//repeat = month
+				if ($change_schedule_repeat_month_x)
+					if (!$change_schedule_repeat_week_of_month) {
+						$change_schedule_repeat_month_of_year='';
+						$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
+						$change_schedule_repeat_week_of_month='';
+						$change_schedule_repeat_day_of_week='';
+						if (!$change_schedule_repeat_quantity	)
+							$change_schedule_repeat_quantity=-1;
+						if (!$change_schedule_repeat_interval)
+							$change_schedule_repeat_interval=1;
+					}
 
-			//repeat = day
-			if ($change_schedule_repeat_day_x) {
-				$change_schedule_repeat_month_of_year='';
-				$change_schedule_repeat_day_of_month='';
-				$change_schedule_repeat_week_of_month='';
-				$change_schedule_repeat_quantity='';
-				$change_schedule_repeat_day_of_week='';
-				if (!$change_schedule_repeat_quantity	)
-					$change_schedule_repeat_quantity=-1;
-				if (!$change_schedule_repeat_interval)
-					$change_schedule_repeat_interval=1;
-			}
+				//repeat = week
+				if ($change_schedule_repeat_week_x) {
+					$change_schedule_repeat_month_of_year='';
+					$change_schedule_repeat_day_of_month='';
+					$change_schedule_repeat_week_of_month='';
+					$change_schedule_repeat_quantity='';
+					if (!$change_schedule_repeat_day_of_week)
+						$change_schedule_repeat_day_of_week=1;
+					if (!$change_schedule_repeat_quantity	)
+						$change_schedule_repeat_quantity=-1;
+					if (!$change_schedule_repeat_interval)
+						$change_schedule_repeat_interval=1;
+				}
+
+				//repeat = day
+				if ($change_schedule_repeat_day_x) {
+					$change_schedule_repeat_month_of_year='';
+					$change_schedule_repeat_day_of_month='';
+					$change_schedule_repeat_week_of_month='';
+					$change_schedule_repeat_quantity='';
+					$change_schedule_repeat_day_of_week='';
+					if (!$change_schedule_repeat_quantity	)
+						$change_schedule_repeat_quantity=-1;
+					if (!$change_schedule_repeat_interval)
+						$change_schedule_repeat_interval=1;
+				}
 	
-			//repeat days, only if week°
-			if ($change_schedule_repeat_day1_x)
-				$change_schedule_repeat_day_of_week=1;
-			if ($change_schedule_repeat_day2_x)
-				$change_schedule_repeat_day_of_week=2;
-			if ($change_schedule_repeat_day3_x)
-				$change_schedule_repeat_day_of_week=3;
-			if ($change_schedule_repeat_day4_x)
-				$change_schedule_repeat_day_of_week=4;
-			if ($change_schedule_repeat_day5_x)
-				$change_schedule_repeat_day_of_week=5;
-			if ($change_schedule_repeat_day6_x)
-				$change_schedule_repeat_day_of_week=6;
-			if ($change_schedule_repeat_day7_x)
-				$change_schedule_repeat_day_of_week=7;
+				//repeat days, only if week°
+				if ($change_schedule_repeat_day1_x)
+					$change_schedule_repeat_day_of_week=1;
+				if ($change_schedule_repeat_day2_x)
+					$change_schedule_repeat_day_of_week=2;
+				if ($change_schedule_repeat_day3_x)
+					$change_schedule_repeat_day_of_week=3;
+				if ($change_schedule_repeat_day4_x)
+					$change_schedule_repeat_day_of_week=4;
+				if ($change_schedule_repeat_day5_x)
+					$change_schedule_repeat_day_of_week=5;
+				if ($change_schedule_repeat_day6_x)
+					$change_schedule_repeat_day_of_week=6;
+				if ($change_schedule_repeat_day7_x)
+					$change_schedule_repeat_day_of_week=7;
 		
-			//give data to the assignobject
-			$changeAssign=new AssignObject(
-				$change_schedule_id,
-				$change_schedule_resource_id,
-				$change_schedule_assign_user_id,
-				$change_schedule_user_free_name,
-				$change_schedule_begin,
-				$change_schedule_end,
-				$change_schedule_repeat_end,
-				$change_schedule_repeat_quantity,
-				$change_schedule_repeat_interval,
-				$change_schedule_repeat_month_of_year,
-				$change_schedule_repeat_day_of_month, 
-				$change_schedule_repeat_month,
-				$change_schedule_repeat_week_of_month,
-				$change_schedule_repeat_day_of_week,
-				$change_schedule_repeat_week);
+				//give data to the assignobject
+				$changeAssign=new AssignObject(
+					$change_schedule_id,
+					$change_schedule_resource_id,
+					$change_schedule_assign_user_id,
+					$change_schedule_user_free_name,
+					$change_schedule_begin,
+					$change_schedule_end,
+					$change_schedule_repeat_end,
+					$change_schedule_repeat_quantity,
+					$change_schedule_repeat_interval,
+					$change_schedule_repeat_month_of_year,
+					$change_schedule_repeat_day_of_month, 
+					$change_schedule_repeat_month,
+					$change_schedule_repeat_week_of_month,
+					$change_schedule_repeat_day_of_week,
+					$change_schedule_repeat_week);
 			
-			if ($change_object_schedules == "NEW")
-				$changeAssign->create();
-			else {
-				$changeAssign->chng_flag=TRUE;
-				$changeAssign->store();
-			}
+				if ($change_object_schedules == "NEW")
+					$changeAssign->create();
+				else {
+					$changeAssign->chng_flag=TRUE;
+					$changeAssign->store();
+				}
 		
-			$assign_id=$changeAssign->getId();
+				$assign_id=$changeAssign->getId();
+			}
 		}
 	} else {
 		$error->displayMsg(1);
@@ -375,7 +391,7 @@ if (($add_type) || ($delete_type) || ($add_type_property_id) || ($delete_type_pr
 		die;
 	}*/
 }
-	
+
 //Eigenschaften bearbeiten
 if (($add_property) || ($delete_property) || ($send_property_type_id)) {
 	//if ($ObjectPerms->getUserPerm () == "admin") { { --> da muss der Ressourcen Root check hin °
@@ -484,6 +500,7 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 	} else {
 		$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
 		$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+7, date("Y", time()));
+		$resources_data["schedule_mode"] = "graphical";		
 	}
 }
 
@@ -517,12 +534,6 @@ if ($resources_data["view"]=="search") {
 //show object, this object will be edited or viewed
 if ($show_object)
 	$resources_data["structure_open"]=$show_object;
-
-/*****************************************************************************
-Kopf der Ausgabe
-/*****************************************************************************/
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 //Create Reitersystem
 if ($SessSemName[1])
@@ -621,7 +632,7 @@ if ($resources_data["view"]=="edit_object_properties" || $resources_data["view"]
 		$editObject->create_propertie_forms();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
+		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
 	}
 }
 
@@ -636,7 +647,7 @@ if ($resources_data["view"]=="openobject_details") {
 		$viewObject->view_properties();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben kein Objekt zum Anzeigen ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie in der \"&Uuml;bersicht\"  ein Objekt aus.");
+		parse_msg ("info§Sie haben keine Objekt zum Anzeigen ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
 	}
 }
 
@@ -650,7 +661,7 @@ if ($resources_data["view"]=="edit_object_perms") {
 		$editObject->create_perm_forms();
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
+		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
 	}
 }
 
@@ -658,7 +669,6 @@ if ($resources_data["view"]=="edit_object_perms") {
 Objectbelegung bearbeiten, views: edit_object_assign, openobject_assign
 /*****************************************************************************/
 if ($resources_data["view"]=="edit_object_assign" || $resources_data["view"]=="openobject_assign") {
-
 	if ($resources_data["structure_open"]) {
 		$editObject=new editObject($resources_data["structure_open"]);
 		$editObject->setUsedView($resources_data["view"]);
@@ -667,7 +677,7 @@ if ($resources_data["view"]=="edit_object_assign" || $resources_data["view"]=="o
 		$editObject->create_schedule_forms($assign_id);
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Sie haben kein Objekt zum Bearbeiten ausgew&auml;hlt. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie in der \"&Uuml;bersicht\"  oder einer ge&ouml;ffnete Liste ein Objekt aus.");
+		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
 	}
 }
 
@@ -690,7 +700,7 @@ if ($resources_data["view"]=="edit_properties") {
 }
 
 /*****************************************************************************
-Eigenschaften verwalten, views: edit_perms
+Berechtigungen verwalten, views: edit_perms
 /*****************************************************************************/
 if ($resources_data["view"]=="edit_perms") {
 	
@@ -703,21 +713,26 @@ Belegungen ausgeben, views: view_schedule, openobject_schedule
 /*****************************************************************************/
 if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openobject_schedule") {
 	
-	$ViewSchedules=new ViewSchedules($resources_data["structure_open"]);
-	$ViewSchedules->setStartTime($resources_data["schedule_start_time"]);
-	$ViewSchedules->setEndTime($resources_data["schedule_end_time"]);
-	$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
-	$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
-	$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
-	$ViewSchedules->setUsedView($resources_data["view"]);	
+	if ($resources_data["structure_open"]) {
+		$ViewSchedules=new ViewSchedules($resources_data["structure_open"]);
+		$ViewSchedules->setStartTime($resources_data["schedule_start_time"]);
+		$ViewSchedules->setEndTime($resources_data["schedule_end_time"]);
+		$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
+		$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
+		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
+		$ViewSchedules->setUsedView($resources_data["view"]);	
 		
-	$ViewSchedules->navigator();
+		$ViewSchedules->navigator();
 	
-	if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
-		if ($resources_data["schedule_mode"] == "list") //view List
-			$ViewSchedules->create_schedule_list($schedule_start_time, $schedule_end_time);
-		else
-			$ViewSchedules->create_schedule_graphical($schedule_start_time, $schedule_end_time);
+		if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
+			if ($resources_data["schedule_mode"] == "list") //view List
+				$ViewSchedules->create_schedule_list($schedule_start_time, $schedule_end_time);
+			else
+				$ViewSchedules->create_schedule_graphical($schedule_start_time, $schedule_end_time);
+	} else {
+		echo "</td></tr>";
+		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
+	}
 }
 
 /*****************************************************************************
