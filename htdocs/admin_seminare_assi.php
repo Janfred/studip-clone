@@ -300,40 +300,44 @@ if ($form==4)
 	}	
 	
 	//Datum fuer Ende der Anmeldung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
-	if ($sem_create_data["sem_admission"] == 1) {
-		if (($adm_jahr>0) && ($adm_jahr<100))
-			 $adm_jahr=$adm_jahr+2000;
+	if ($sem_create_data["sem_admission"] == 1)
+		$end_date_name="Losdatum";
+	else
+		$end_date_name="Enddatum der Kontingentierung";		
 	
-		if ($adm_monat == "mm") $adm_monat=0;
-		if ($adm_tag == "tt") $adm_tag=0;
-		if ($adm_jahr == "jjjj") $adm_jahr=0;	
-		if ($adm_stunde == "hh") $adm_stunde=0;
-		if ($adm_minute == "mm") $adm_minute=0;
+	if (($adm_jahr>0) && ($adm_jahr<100))
+		 $adm_jahr=$adm_jahr+2000;
+	
+	if ($adm_monat == "mm") $adm_monat=0;
+	if ($adm_tag == "tt") $adm_tag=0;
+	if ($adm_jahr == "jjjj") $adm_jahr=0;	
+	if ($adm_stunde == "hh") $adm_stunde=0;
+	if ($adm_minute == "mm") $adm_minute=0;
 
-		if (!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr))
+	if (!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr))
+		{
+		$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das $end_date_name ein!§";
+		$check=FALSE;			
+		}
+	else
+		$check=TRUE;
+
+	if (($adm_monat) && ($adm_tag) && ($adm_jahr))
+		if (!$adm_stunde)
 			{
-			$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Anmeldefrist ein!§";
-			$check=FALSE;			
+			$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r das $end_date_name ein!§"; 
+			$check=FALSE;
 			}
 		else
 			$check=TRUE;
-		if (($adm_monat) && ($adm_tag) && ($adm_jahr))
-			if (!$adm_stunde)
-				{
-				$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Ende der Anmeldefrist ein!§"; 
-				$check=FALSE;
-				}
-			else
-				$check=TRUE;
 
-		if ($check)
-			{
-	 		$sem_create_data["sem_admission_date"] = mktime($adm_stunde,$adm_minute,59,$adm_monat,$adm_tag,$adm_jahr);
-			}
-		else
-			{
-			$sem_create_data["sem_admission_date"] = -1;
-			}
+	if ($check)
+		{
+ 		$sem_create_data["sem_admission_date"] = mktime($adm_stunde,$adm_minute,59,$adm_monat,$adm_tag,$adm_jahr);
+		}
+	else
+		{
+		$sem_create_data["sem_admission_date"] = -1;
 		}
 	}
 		
@@ -677,18 +681,29 @@ if ($cmd_e_x)
 	}
 	
 	//Ende der Anmeldung checken
-	if ($sem_create_data["sem_admission"] == 1) {
+	if ($sem_create_data["sem_admission"]) {
+		if ($sem_create_data["sem_admission"] == 1)
+			$end_date_name="Losdatum";
+		else
+			$end_date_name="Enddatum der Kontingentierung";		
 		if ($sem_create_data["sem_admission_date"] == -1) 
-			$errormsg.="error§Bitte geben Sie einen Termin f&uuml;r das Ende der Anmeldefrist an!§";	
+			$errormsg.="error§Bitte geben Sie einen Termin f&uuml;r das $end_date_name an!§";	
 		elseif ($sem_create_data["term_art"]==0) {
 			$tmp_first_date=veranstaltung_beginn ($sem_create_data["term_art"], $sem_create_data["sem_start_time"], $sem_create_data["term_start_woche"], $sem_create_data["sem_start_termin"], $sem_create_data["metadata_termin"]["turnus_data"], "int");
 			if ($sem_create_data["sem_admission_date"] > $tmp_first_date) {
 				if ($tmp_first_date > 0)
-					$errormsg.= sprintf ("error§Das Ende der Anmeldefrist liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern sie den Termin der Anmeldefrist!§", date ("d.m.Y", $tmp_first_date));
+					$errormsg.= sprintf ("error§Das $end_date_name liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern sie das $end_date_name!§", date ("d.m.Y", $tmp_first_date));
 				$level=4;
 			}
 		} elseif ($sem_create_data["sem_admission_date"] > $sem_create_data["term_first_date"]) {
-				$errormsg.=sprintf ("error§Das Ende der Anmeldefrist liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte &auml;ndern sie den Termin der Anmeldefrist!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
+				$errormsg.=sprintf ("error§Das $end_date_name liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte &auml;ndern sie das $end_date_name!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
+				$level=4;
+		} 
+		if ($sem_create_data["sem_admission_date"] < time()) {
+				$errormsg.=sprintf ("error§Das $end_date_name liegt in der Vergangenheit. Bitte &auml;ndern sie das $end_date_name!§");	
+				$level=4;
+		} elseif ($sem_create_data["sem_admission_date"] < (time() + (24 * 60 *60))) {
+				$errormsg.=sprintf ("error§Das $end_date_name liegt zu nah am aktuellen Datum. Bitte &auml;ndern sie das $end_date_name!§");	
 				$level=4;
 		}
 	}
@@ -1921,8 +1936,8 @@ if ($level==4)
 							Anmeldeverfahren:
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							<font size=-1>&nbsp;Sie haben vorher das Stud.IP Anmeldeverfahren aktiviert. <br />
-							&nbsp;Bitte geben Sie hier an, welche Studieng&auml;nge mit welchen Kontingenten zugelassen sind und wann das Enddatum der Anmeldung ist:<br /><br />
+							<font size=-1>&nbsp;Sie haben vorher das Stud.IP Anmeldeverfahren <? if ($sem_create_data["sem_admission"] == 1) echo "nach dem Losverfahren"; else echo "in Reihenfolge der Anmeldung";?> aktiviert. <br />
+							&nbsp;Bitte geben Sie hier an, welche Studieng&auml;nge mit welchen Kontingenten zugelassen sind und wann das <? if ($sem_create_data["sem_admission"] == 1) echo "Losdatum"; else echo "Enddatum der Kontingentierung";?> ist:<br /><br />
 								<table border=0 cellpadding=2 cellspacing=0>
 									<tr>
 										<td class="<? echo $cssSw->getClass() ?>" valign="bottom" width="25%">
@@ -1938,28 +1953,31 @@ if ($level==4)
 										printf ("<input type=\"TEXT\" name=\"sem_all_ratio\" size=5 maxlength=5 value=\"%s\" /> <font size=-1> %%</font>", ($sem_create_data["sem_studg"]) ? $sem_create_data["sem_all_ratio"] : "100");
 										?>
 										</td>
-										<?
-										if ($sem_create_data["sem_admission"] == 1) {
-										?>
 										<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="25%">
-											<font size=-1>Enddatum:</font>
+											<font size=-1><? if ($sem_create_data["sem_admission"] == 1) echo "Losdatum"; else echo "Enddatum der Kontingentierung";?>:</font>
 										</td>
 										<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 											<font size=-1>&nbsp; <input type="text" name="adm_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("d",$sem_create_data["sem_admission_date"]); else echo"tt" ?>">.
 											<input type="text" name="adm_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("m",$sem_create_data["sem_admission_date"]); else echo"mm" ?>">.
 											<input type="text" name="adm_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_date"]); else echo"jjjj" ?>">um&nbsp;</font><br />
 											<font size=-1>&nbsp; <input type="text" name="adm_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("H",$sem_create_data["sem_admission_date"]); else echo"23" ?>">:
-											<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("i",$sem_create_data["sem_admission_date"]); else echo"59" ?>">&nbsp;Uhr</font>
+											<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("i",$sem_create_data["sem_admission_date"]); else echo"59" ?>">&nbsp;Uhr</font>&nbsp; 
+											<? 
+											if ($sem_create_data["sem_admission"] == 1) {
+											?>
+											<img  src="./pictures/info.gif" 
+												onClick="alert('Bitte geben Sie hier ein, wann die Anwärter auf der Anmeldeliste in die Veranstaltung gelost werden. Freigebliebene Plätze werden nach diesem Termin per Warteliste an andere interessierte Personen vergeben.');" 
+												alt="Bitte geben Sie hier ein, wann die Anw&auml;rter auf der Anmeldeliste in die Veranstaltung gelost werden. Freigebliebene Pl&auml;tze werden nach diesem Termin per Warteliste an andere interessierte Personen vergeben.">
+											<? 
+											} else {
+											?>
+											<img  src="./pictures/info.gif" 
+												onClick="alert('Bitte geben Sie hier ein, wann das Anmelderverfahren die Kontingentierung aufheben soll. Ab diesem Zeitpunkt werden freie Plätze an interessierten Personen aus der Warteliste vergeben.');" 
+												alt="'Bitte geben Sie hier ein, wann das Anmelderverfahren die Kontingentierung aufheben soll. Ab diesem Zeitpunkt werden freie Pl&auml;tze an interessierten Personen aus der Warteliste vergeben">
+											<?
+											}
+											?>
 										</td>
-										<?
-										} else {
-										?>
-										<td class="<? echo $cssSw->getClass() ?>" valign="top" coslspan=2" width="70%">
-											&nbsp; 
-										</td>
-										<?
-										}
-										?>
 									</tr>
 									<?
 									if ($sem_create_data["sem_studg"]) {
