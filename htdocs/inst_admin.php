@@ -40,24 +40,25 @@ $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
 
 
-function perm_select($name,$global_perm,$default)
-{
-$possible_perms=array("user","autor","tutor","dozent");
-$counter=0;
-echo "<select name=\"$name\">";
-if ($global_perm == "admin")
-	echo "<option selected>admin</option>";  // einmal admin, immer admin...
-else {
-	while ($counter <= 4 ) {
-		echo "<option";
-		if ($default==$possible_perms[$counter])  echo" selected";
-		echo">$possible_perms[$counter]</option>";
-		if ($possible_perms[$counter]==$global_perm) break;
-		$counter++;
+function perm_select($name,$global_perm,$default) {
+	$possible_perms=array("user","autor","tutor","dozent");
+	$counter=0;
+	echo "<select name=\"$name\">";
+	if ($global_perm == "admin")
+		echo "<option selected>admin</option>";  // einmal admin, immer admin...
+	else {
+		while ($counter <= 4 ) {
+			echo "<option";
+			if ($default==$possible_perms[$counter])
+				echo" selected";
+			echo ">$possible_perms[$counter]</option>";
+			if ($possible_perms[$counter]==$global_perm)
+				break;
+			$counter++;
+		}
 	}
-}
-echo "</select>";
-return;
+	echo "</select>";
+	return;
 }
 
 ?>
@@ -65,7 +66,7 @@ return;
 	<tr valign=top align=middle>
 		<td class="topic" colspan=2 align="left">&nbsp;<b>
 		<?
-		print getHeaderLine($inst_id)." -  Mitarbeiter";
+		print getHeaderLine($inst_id)." -  " . _("Mitarbeiter");
 		?></b>
 		</td>
 	</tr>
@@ -87,15 +88,15 @@ if (isset($details)) {
 		<table border=0 align="center" cellspacing=0 cellpadding=2>
 			<form method="POST" name="edit" action="inst_admin.php">
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;Einrichtung:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;<?=_("Einrichtung:")?></b></td>
 				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo htmlReady($db->f("Name")) ?></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;Name:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;<?=_("Name:")?></b></td>
 				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo $db->f("fullname") ?></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Status in der Einrichtung:&nbsp;</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Status in der Einrichtung:")?>&nbsp;</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" >
 				<?
 				perm_select("perms",$db->f("perms"),$db->f("inst_perms"));
@@ -103,47 +104,48 @@ if (isset($details)) {
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Gruppe / Funktion in der Einrichtung:&nbsp;</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Gruppe / Funktion in der Einrichtung:")?>&nbsp;</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" >
 			<?	
 			$user_id = $db->f("user_id")	;
 			
-			if ($gruppen = GetStatusgruppen($inst_id, $user_id)){
+			if ($gruppen = GetStatusgruppen($inst_id, $user_id)) {
 					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">";
 					echo htmlReady(join(", ", array_values($gruppen)));
 					echo "</a>";
-				} else 
-					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">bisher keiner zugeordnet</a>";
+			} else 
+					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">" . _("bisher keiner zugeordnet") . "</a>";
 			?>	
 			</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Raum:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Raum:")?></b></td>
 			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="raum" size=24 maxlength=31 value="<?php echo htmlReady($db->f("raum")) ?>"></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Sprechstunde:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Sprechstunde:")?></b></td>
 			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="sprechzeiten" size=24 maxlength=63 value="<?php echo htmlReady($db->f("sprechzeiten")) ?>"></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Telefon:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Telefon:")?></b></td>
 			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Telefon" size=24 maxlength=31 value="<?php echo htmlReady($db->f("Telefon")) ?>"></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?> >
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Fax:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Fax:")?></b></td>
 			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Fax" size=24 maxlength=31 value="<?php echo htmlReady($db->f("Fax")) ?>"></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align=center>&nbsp;
 				<input type="hidden" name="u_id"  value="<?php $db->p("user_id") ?>">
 				<input type="hidden" name="ins_id"  value="<?php $db->p("Institut_id") ?>">
-				<input type="IMAGE" name="u_edit" src="pictures/buttons/uebernehmen-button.gif" border=0 value="ver&auml;ndern">&nbsp;
+				<input type="IMAGE" name="u_edit" <?=makeButton("uebernehmen", "src")?> border=0 value="<?=_("ver&auml;ndern")?>">&nbsp;
 				<?
-				if ($db->f("user_id") != $user->id){
+				if ($db->f("user_id") != $user->id) {
 					?>
-				<input type="IMAGE" name="u_kill"  src="pictures/buttons/loeschen-button.gif" border=0  value=" l&ouml;schen ">&nbsp;
-				<?}?>
-				<input type="IMAGE" name="nothing"  src="pictures/buttons/abbrechen-button.gif" border=0  value="abbrechen ">
+					<input type="IMAGE" name="u_kill"  <?=makeButton("loeschen", "src")?> border=0  value="<?=_("l&ouml;schen")?>">&nbsp;
+					<?
+				}?>
+				<input type="IMAGE" name="nothing"  <?=makeButton("abbrechen", "src")?> border=0  value="<?=_("abbrechen")?>">
 				</td>
 			</tr>
 			<tr>
@@ -151,23 +153,23 @@ if (isset($details)) {
 			
 			<? // links to everywhere
 			print "<tr><td  class=\"steel1\" colspan=2 align=\"center\">";
-				printf("&nbsp;pers&ouml;nliche Homepage <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
-				printf("&nbsp;Nachricht an Benutzer <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
+				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
+				printf("&nbsp;" . _("Nachricht an Benutzer") . " <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
 			?>
 			</form>
 		</table>
 		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 		<?
-	} // Ende der while-Schleife
-} // Ende der Detail-Ansicht
+	} // end while ($db->next_record())
+} // end if (isset($details))
 	
 else {
 
 	// haben wir was uebergeben bekommen?
 
 	if ( is_array($HTTP_POST_VARS) && list($key, $val) = each($HTTP_POST_VARS)) {
-    		if ($perms!="") { //hoffentlich auch was Sinnvolles?
+    if ($perms!="") { //hoffentlich auch was Sinnvolles?
 			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$u_id'");
 			while ($db->next_record()) {
 				$scherge=$db->f("perms");
@@ -178,42 +180,42 @@ else {
 
 			if (isset($u_kill_x)) {
 				if (!($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) && $scherge=='admin')
-					my_error("<b>Sie haben keine Berechtigung einen Administrator dieser Einrichtung zu l&ouml;schen.</b>");
+					my_error("<b>" . _("Sie haben keine Berechtigung einen Administrator dieser Einrichtung zu l&ouml;schen.") . "</b>");
 				else {
 					$db2->query("DELETE from user_inst WHERE Institut_id = '$ins_id' AND user_id = '$u_id'");
-					my_msg ("<b>$Fullname wurde aus der Einrichtung ausgetragen.</b>");
-					// raus aus allen Statusgruppen
+					my_msg ("<b>" . sprintf(_("%s wurde aus der Einrichtung ausgetragen."), $Fullname) . "</b>");
+					// remove from all Statusgruppen
 					RemovePersonStatusgruppeComplete (get_username($u_id), $ins_id);
 				}
 			} 
 
 			if (isset($u_edit_x)) {
 				if (!($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) && $scherge=='admin' && $u_id != $auth->auth["uid"])
-					my_error("<b>Sie haben keine Berechtigung einen anderen Administrator dieser Einrichtung zu ver&auml;ndern.</b>");
-				else {
+					my_error("<b>" . _("Sie haben keine Berechtigung einen anderen Administrator dieser Einrichtung zu ver&auml;ndern.") . "</b>");
 
+				else {
 					if ($perms=='autor' AND $scherge=='user') {
-						my_error("<b>Sie k&ouml;nnen den User nicht auf AUTOR hochstufen, da er im gesamten System nur den Status USER hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren.</b>");
+						my_error("<b>" . _("Sie k&ouml;nnen den User nicht auf AUTOR hochstufen, da er im gesamten System nur den Status USER hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren.") . "</b>");
 					}
 					elseif ($perms=='tutor' AND ($scherge=='user' OR $scherge=='autor')) {
-						my_error("<b>Sie k&ouml;nnen den User nicht auf TUTOR hochstufen, da er im gesamten System nur den Status ".$scherge." hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren.</b>");
+						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf TUTOR hochstufen, da er im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren."), $scherge) . "</b>");
 					}
 					elseif ($perms=='dozent' AND ($scherge=='user' OR $scherge=='autor' OR $scherge=='tutor')) {
-						my_error("<b>Sie k&ouml;nnen den User nicht auf DOZENT hochstufen, da er im gesamten System nur den Status ".$scherge." hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren.</b>");
+						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf DOZENT hochstufen, da er im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren."), $scherge) . "</b>");
 					}
 					elseif ($perms=='admin' AND ($scherge=='user' OR $scherge=='autor' OR $scherge=='tutor' OR $scherge=='dozent')) {
-						my_error("<b>Sie k&ouml;nnen den User nicht auf ADMIN hochstufen, da er im gesamten System nur den Status ".$scherge." hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren.</b>");
+						my_error("<b>" . sprintf(_("Sie k&ouml;nnen den User nicht auf ADMIN hochstufen, da er im gesamten System nur den Status %s hat. Wenn Sie dennoch an der Bef&ouml;rderung festhalten wollen, kontaktieren Sie bitte einen der Systemadministratoren."), $scherge) . "</b>");
 					}
 					elseif ($perms=='root') {
-						my_error("<b>Sie k&ouml;nnen den User nicht auf ROOT hochstufen, dieser Status ist im System nicht vorgesehen.</b>");
+						my_error("<b>" . _("Sie k&ouml;nnen den User nicht auf ROOT hochstufen, dieser Status ist an einer Einrichtung nicht vorgesehen.") . "</b>");
 					}
 					elseif ($scherge == 'admin' && $perms != 'admin') {
-						my_error("<b>Globale Administratoren k&ouml;nnen auch an Einrichtung nur den Status \"admin\" haben.</b>");
+						my_error("<b>" . _("Globale Administratoren k&ouml;nnen auch an Einrichtung nur den Status \"admin\" haben.") . "</b>");
 					}
 					else { //na, dann muss es wohl sein (grummel)
 						$query = "UPDATE user_inst SET inst_perms='$perms', raum='$raum', Telefon='$Telefon', Fax='$Fax', sprechzeiten='$sprechzeiten' WHERE Institut_id = '$ins_id' AND user_id = '$u_id'";
 						$db2->query($query);
-						my_msg("<b>Status&auml;nderung f&uuml;r $Fullname durchgef&uuml;hrt.</b>");
+						my_msg("<b>" . sprintf(_("Status&auml;nderung f&uuml;r %s durchgef&uuml;hrt."), $Fullname) . "</b>");
 					}
 				}
 			}
@@ -223,27 +225,27 @@ else {
 
 	// Jemand soll ans Institut...
 	if (isset($berufen_x) && $ins_id != "") {
-    		if ($u_id == "0")
-			my_error("<b>Bitte eine Person ausw&auml;hlen!</b>");
-		else {		
+		if ($u_id == "0") {
+			my_error("<b>" . _("Bitte eine Person ausw&auml;hlen!") . "</b>");
+		} else {		
 	 	
 			$db->query("SELECT *  FROM user_inst WHERE Institut_id = '$ins_id' AND user_id = '$u_id'");
 			if (($db->next_record()) && ($db->f("inst_perms") != "user")) {
 				// der Admin hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Institut
-				my_error("<b>Die Person ist bereits in der Einrichtung eingetragen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
+				my_error("<b>" . _("Die Person ist bereits in der Einrichtung eingetragen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!") . "</b>");
 			} else {  // mal nach dem globalen Status sehen
 				$db3->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$u_id'");
 				$db3->next_record();
 				$Fullname = $db3->f("fullname");
 				if ($db3->f("perms") == "root")
-					my_error("<b>roots k&ouml;nnen nicht berufen werden!</b>");
+					my_error("<b>" . _("ROOTs k&ouml;nnen nicht berufen werden!") . "</b>");
 				elseif ($db3->f("perms") == "admin") {
 					if ($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) {
 					    // als admin aufnehmen
 					    $db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', 'admin')");
-					    my_msg("<b>$Fullname wurde als \"admin\" in die Einrichtung aufgenommen.</b>");
+					    my_msg("<b>" . sprintf(_("%s wurde als \"admin\" in die Einrichtung aufgenommen."), $Fullname) . "</b>");
 					} else {
-					    my_error("<b>Sie haben keine Berechtigung einen admin zu berufen!</b>");
+					    my_error("<b>" . _("Sie haben keine Berechtigung einen admin zu berufen!") . "</b>");
 					}
 				} else {
 					$insert_perms = $db3->f("perms");				
@@ -255,9 +257,9 @@ else {
 						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', '$insert_perms')");
 					}
 					if ($db2->affected_rows())
-						my_msg("<b>$Fullname wurde als \"$insert_perms\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
+						my_msg("<b>" . sprintf(_("%s wurde als \"%s\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!"), $Fullname, $insert_perms) . "</b>");
 					else
-						parse_msg ("error§<b>$Fullname konnte nicht in die Einrichtung aufgenommen werden!§");
+						parse_msg ("error§<b>" . sprintf(_("%s konnte nicht in die Einrichtung aufgenommen werden!"), $Fullname) . "§");
 				}
 			}
 		}
@@ -275,13 +277,13 @@ else {
 if ($inst_id != "" && $inst_id !="0") {
 
 	$inst_name = $SessSemName[0];
-	if (isset($search_exp) && strlen($search_exp) > 2)
-		{
+	if (isset($search_exp) && strlen($search_exp) > 2) {
 		// Der Admin will neue Sklaven ins Institut berufen...
-			$db->query ("SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] . " AS fullname, username, perms  FROM auth_user_md5 LEFT JOIN user_info USING(user_id)LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");		
-			?>
-			<blockquote>Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung <b><? echo htmlReady($inst_name) ?></b> zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben.<br /><br /></blockquote>
-			<table width="100%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">			
+		$db->query ("SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] . " AS fullname, username, perms  FROM auth_user_md5 LEFT JOIN user_info USING(user_id)LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");		
+		printf("<blockquote>" . _("Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung %s zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben."), "<b>" . htmlReady($inst_name) . "</b>");
+		echo "<br /><br /></blockquote>";
+		?>
+		<table width="100%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">			
 			<form action="<? echo $PHP_SELF, "?inst_id=", $inst_id ?>" method="POST">
 			<tr>
 				<td class="blank" colspan=2>
@@ -289,11 +291,11 @@ if ($inst_id != "" && $inst_id !="0") {
 					<table width="50%" border="0" cellpadding="2" cellspacing="0">
 					<tr>
 						<td class="steel1">
-						<font size=-1><b>neue Person der Einrichtung zuordnen</b><br>
-						es wurden <? echo $db->num_rows() ?> Benutzer gefunden.<br>
-						<?
+						<font size=-1><b><?=_("neue Person der Einrichtung zuordnen")?></b><br>
+						<? printf(_("es wurden %s Benutzer gefunden") . "<br>", $db->num_rows());
 						if ($db->num_rows()) {
-						?>bitte w&auml;hlen Sie die zu berufende Person aus der Liste aus.</font>
+						echo _("bitte w&auml;hlen Sie die zu berufende Person aus der Liste aus.");
+						?></font>
 						</td>
 					</tr>
 					<tr>
@@ -306,9 +308,9 @@ if ($inst_id != "" && $inst_id !="0") {
 							?>
 							</select>&nbsp;
 						<input type="hidden" name="ins_id" value="<?echo $inst_id;?>"><br />
-						<input type="IMAGE" name="berufen" src="pictures/buttons/hinzufuegen-button.gif" border=0 value="berufen">
+						<input type="IMAGE" name="berufen" <?=makeButton("hinzufuegen", "src")?> border=0 value="<?=_("berufen")?>">
 					<? } ?>
-						<input type="IMAGE" name="reset" src="pictures/buttons/neuesuche-button.gif" border=0 value="Neue Suche">
+						<input type="IMAGE" name="reset" <?=makeButton("neuesuche", "src")?> border=0 value="<?=_("Neue Suche")?>">
 						</td>
 					</tr>
 					</table>
@@ -318,13 +320,15 @@ if ($inst_id != "" && $inst_id !="0") {
 			</form>
 		</table>
 		<br>
-		<?
-		} // Ende der Berufung
-	else
-		{
+		<? // Ende der Berufung
+
+	} else {
+
 		// Der Admin will neue Sklaven ins Institut berufen... aber erst mal suchen
+		printf("<blockquote>" . _("Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung %s zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben."), "<b>" . htmlReady($inst_name) . "</b>");
+		echo "<br />" . _("Um weitere Personen als Mitarbeiter hinzuzuf&uuml;gen, benutzen Sie die Suche.");
+		echo "<br /><br /></blockquote>";
 		?>
-			<blockquote>Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung <b><? echo htmlReady($inst_name) ?></b> zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben. <br> Um weitere Personen als Mitarbeiter hinzuzuf&uuml;gen, benutzen Sie die Suche. <br /><br /></blockquote>
 			<table width="100%" border="0" cellpadding="2" cellspacing="0">
 			<form action="<? echo $PHP_SELF ?>" method="POST">
 			<tr>
@@ -333,13 +337,13 @@ if ($inst_id != "" && $inst_id !="0") {
 					<table width="50%" border="0" cellpadding="2" cellspacing="0">
 					<tr>
 						<td class="steel1">
-						<font size=-1><b>neue Person der Einrichtung zuordnen</b><br>
-						bitte geben Sie Vornamen, Nachnamen oder den Usernamen ein:<br></font>
+						<font size=-1><b><?=_("neue Person der Einrichtung zuordnen")?></b><br>
+						<?=_("bitte geben Sie Vornamen, Nachnamen oder den Usernamen ein:")?><br></font>
 						</td>
 					</tr>
 					<tr>
 						<td class="steel1"><input type="TEXT" size=20 maxlength=255 name="search_exp"><br />
-						<input type="IMAGE" name="search_user" src="pictures/buttons/suchestarten-button.gif" border=0 value="Suche starten ">
+						<input type="IMAGE" name="search_user" <?=makeButton("suchestarten", "src")?> border=0 value="<?=_("Suche starten")?>">
 						&nbsp;<input type="hidden" name="inst_id" value="<?echo $inst_id;?>">
 						</td>
 					</tr>
@@ -359,35 +363,35 @@ if ($inst_id != "" && $inst_id !="0") {
 
 	//entweder wir gehoeren auch zum Institut oder sind global root und es ist ein Institut ausgewählt
 	if ($perm->have_studip_perm("admin",$inst_id)) {  
-	  	$query = "SELECT user_inst.*, " . $_fullname_sql['full_rev'] . " AS fullname,Email,username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Institut_id ='$inst_id' AND inst_perms !='user' ORDER BY $sortby";
+		$query = "SELECT user_inst.*, " . $_fullname_sql['full_rev'] . " AS fullname,Email,username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Institut_id ='$inst_id' AND inst_perms !='user' ORDER BY $sortby";
 		$db->query($query);
 
 		//Ausgabe der Tabellenueberschrift
 		print ("<tr><td class=\"blank\" colspan=2><blockquote>");
-		print ("<b>Bereits der Einrichtung zugeordnet:</b><br><br />");
+		print ("<b>" . _("Bereits der Einrichtung zugeordnet:") . "</b><br><br />");
 		print ("<table width=\"90%\" border=0 cellspacing=0 cellpadding=2>");
 		print ("<tr>");
 
 		if ($db->num_rows() > 0) {
 			// wir haben ein Ergebnis
-			echo "<th width=\"30%\"><a href=\"inst_admin.php?sortby=Nachname&inst_id=$inst_id\">Name</a></th>";
-			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=inst_perms&inst_id=$inst_id\">Status </a></th>";
+			echo "<th width=\"30%\"><a href=\"inst_admin.php?sortby=Nachname&inst_id=$inst_id\">" . _("Name") . "</a></th>";
+			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=inst_perms&inst_id=$inst_id\">" . _("Status") . "</a></th>";
 			echo "<th width=\"15%\">Gruppe / Funktion</th>";
-			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=raum&inst_id=$inst_id\">Raum Nr.</a></th>";
-			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=sprechzeiten&inst_id=$inst_id\">Sprechzeit</a></th>";
-			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=Telefon&inst_id=$inst_id\">Telefon</a></th>";
-			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=Fax&inst_id=$inst_id\">Fax</a></th>";
+			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=raum&inst_id=$inst_id\">" . _("Raum Nr.") . "</a></th>";
+			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=sprechzeiten&inst_id=$inst_id\">" . _("Sprechzeit") . "</a></th>";
+			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=Telefon&inst_id=$inst_id\">" . _("Telefon") . "</a></th>";
+			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=Fax&inst_id=$inst_id\">" . _("Fax") . "</a></th>";
 			echo "</tr>";
 
 			//anfuegen der daten an tabelle in schleife...
 
 	  	while ($db->next_record()) {
-	  			$user_id = $db->f("user_id");
+				$user_id = $db->f("user_id");
 				$mail_list[] = $db->f("Email");
-	  			$cssSw->switchClass();
-				ECHO "<tr valign=middle align=left>";
+				$cssSw->switchClass();
+				echo "<tr valign=middle align=left>";
 				
-				  if ((!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"])) || $perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
+				if ((!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"])) || $perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
 					printf ("<td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("fullname"));	 
 				else
 					printf ("<td class=\"%s\">&nbsp;%s</td>", $cssSw->getClass(), $db->f("fullname"));	 ?>
@@ -415,13 +419,13 @@ if ($inst_id != "" && $inst_id !="0") {
 
 			//Link fuer tolle Rundmailfunktion wird hier gebastelt
 	
-			echo"</table><br><b>Rundmail an alle Mitarbeiter verschicken</b><br><br>&nbsp;Bitte hier <a href=\"mailto:";
-			echo join(",",$mail_list);
-			echo"\">klicken</a><br /><br /></blockquote></td></tr>";
+			echo "</table><br><b>" . _("Rundmail an alle Mitarbeiter verschicken") . "</b><br><br>&nbsp;";
+			printf(_("Bitte hier %sklicken%s"), "<a href=\"mailto:" . join(",",$mail_list) . "?subject=" . urlencode(_("Mitarbeiter-Rundmail")) .  "\">", "</a>");
+			echo "<br /><br /></blockquote></td></tr>";
 
 			print("</table>");
 		} else { // wir haben kein Ergebnis
-			printf("</table>Es wurde niemand gefunden! Bevor Sie die Mitarbeiterliste dieser Einrichtung bearbeiten k&ouml;nnen, m&uuml;ssen Sie der Einrichtung zuerst Mitarbeiter zuordnen.<br /><br />");
+			print("</table>" . _("Es wurde niemand gefunden! Bevor Sie die Mitarbeiterliste dieser Einrichtung bearbeiten k&ouml;nnen, m&uuml;ssen Sie der Einrichtung zuerst Mitarbeiter zuordnen.") . "<br /><br />");
 		}
 	}	
 }
@@ -430,8 +434,8 @@ if ($inst_id != "" && $inst_id !="0") {
 
 </table>
 <?
-	  page_close()
- ?>
+	page_close()
+?>
 </body>
 </html>
 <!-- $Id$ -->
