@@ -1122,7 +1122,7 @@ function printposting ($forumposting) {
 				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie können sich&nbsp;<br>&nbsp;&nbsp;nicht selbst bewerten.&nbsp;";
 			} else {
 				if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
-					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
+					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF#anker>";
 					$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=1>";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=2>";
