@@ -649,7 +649,7 @@ function in_archiv ($sem_id) {
 	
 	//Reinschreiben von diversem Klumpatsch in die Datenbank
 	$db->query("INSERT INTO archiv (seminar_id,name,untertitel,beschreibung,start_time,semester,heimat_inst_id,
-				fakultaet_id,institute,dozenten,fakultaet,dump,archiv_file_id,mkdate,forumdump,studienbereiche) VALUES 
+				institute,dozenten,fakultaet,dump,archiv_file_id,mkdate,forumdump,studienbereiche) VALUES 
 				('$seminar_id', '$name', '$untertitel', '$beschreibung', '$start_time', '$semester_tmp', '$heimat_inst_id', 
 				'$institute', '$dozenten', '$fakultaet', '$dump', '$archiv_file_id', '".time()."','$forumdump',
 				'$studienbereiche')");
