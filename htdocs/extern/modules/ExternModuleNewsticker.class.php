@@ -93,7 +93,7 @@ class ExternModuleNewsticker extends ExternModule {
 		if ($this->config->getValue("Main", "endtext"))
 			$topics[] = "'" . $this->config->getValue("Main", "endtext") . "'";
 		
-		$out .= implode(", ", $topics) . ")\n\n";
+		$out .= implode(", ", $topics) . ");\n\n";
 		
 		$out .= "var newsticker_x = 0; newsticker_pos = 0;\n";
 		$out .= "var newsticker_l = newsticker_tl[0].length;\n\n";
