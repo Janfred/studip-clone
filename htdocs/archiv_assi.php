@@ -436,12 +436,10 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 	<?
 }
 elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==0)) {
-	if ($links_admin_data["sem_id"])
-		unset ($links_admin_data);
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2><b>Keine Veranstaltung zum Archivieren gew&auml;hlt</b>
+		<td class="topic" colspan=2><b>&nbsp; Keine Veranstaltung zum Archivieren gew&auml;hlt</b>
 		</td>
 	</tr>
 	<tr>
@@ -451,28 +449,38 @@ elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==
 			parse_msg($msg."info§Sie haben die ausgew&auml;hlte Veranstaltungen archiviert!");
 		else
 			parse_msg($msg."info§Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
+			
 		?>
 		</td>
-	</tr>
+	</tr>	
 	</table>
 	<?
+	if ($links_admin_data["sem_id"])
+		unset ($links_admin_data);
 	}
 elseif (!$list) {
+	if ($links_admin_data["sem_id"])
+		unset ($links_admin_data);
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2><b>Keine Veranstaltung zum Archivieren gew&auml;hlt</b>
+		<td class="topic" colspan=2><b>&nbsp; Keine Veranstaltung zum Archivieren gew&auml;hlt</b>
 		</td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2><b>&nbsp;
 		<?
-		parse_msg("info§Sie haben keine Veranstaltung zum Archivieren gew&auml;hlt.");
+		if ($links_admin_data["sem_id"])
+			parse_msg("info§Sie haben die ausgew&auml;hlte Veranstaltungen archiviert!");
+		else		
+			parse_msg("info§Sie haben keine Veranstaltung zum Archivieren gew&auml;hlt.");
 		?>
 		</td>
 	</tr>
 	</table>
 	<?
+	if ($links_admin_data["sem_id"])
+		unset ($links_admin_data);
 	}
 	page_close();
 ?>

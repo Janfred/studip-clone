@@ -215,28 +215,28 @@ if ($links_admin_data["inst_id"]) {
 	
 	if ($auth->auth["jscript"]) {
 		echo "onClick=\"alert('Sie befinden sich im Administrationsbereich von Stud.IP.";
-		if ($links_admin_data["sem_id"]) 
+		if (($links_admin_data["sem_id"]) && (!$kill))
 			echo " Ausgewählte Veranstaltung: ",JSReady($db->f("Name"),"popup"), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.');\" ";
-		elseif ($links_admin_data["inst_id"]) 
+		elseif ($links_admin_data["inst_id"])
 			echo " Ausgewählte Einrichtung: ",JSReady($db->f("Name"),"popup"), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.');\" ";		
 		else
 			echo " Keine Veranstaltung oder Einrichtung ausgew&auml;hlt.');\" ";
 		}
 	?> alt="Sie befinden sich im Administrationsbereich von Stud.IP.<? 
-	if ($links_admin_data["sem_id"])
+	if (($links_admin_data["sem_id"]) && (!$kill))
 		echo " Ausgew&auml;hlte Veranstaltung: ",htmlReady($db->f("Name")), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.\" border=0>";
-	elseif ($links_admin_data["inst_id"]) 
+	elseif ($links_admin_data["inst_id"])
 		echo " Ausgew&auml;hlte Einrichtung: ",htmlReady($db->f("Name")), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.\" border=0>";
 	else
 		echo " Keine Veranstaltung ausgew&auml;hlt.\" border=0>&nbsp;";
 	
-	if ($links_admin_data["sem_id"])
+	if (($links_admin_data["sem_id"]) && (!$kill))
 		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Veranstaltung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
-	elseif ($links_admin_data["inst_id"]) 
+	elseif ($links_admin_data["inst_id"])
 		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Einrichtung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 					
 	if ($i_page != "admin_dates.php" AND $i_page != "admin_literatur.php" AND $i_page != "admin_news.php" AND $i_page != "admin_seminare1.php" AND $i_page != "admin_seminare_assi.php" AND $i_page != "admin_metadates.php" AND $i_page != "admin_admission.php" AND $i_page != "adminarea_start.php" AND $i_page != "archiv_assi.php" 
-		OR $links_admin_data["sem_id"]
+		OR ($links_admin_data["sem_id"] AND !$kill)
 		OR (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")))
 		echo "&nbsp; <img src=\"pictures/reiter2.jpg\" align=absmiddle>";
 	else
@@ -246,21 +246,22 @@ if ($links_admin_data["inst_id"]) {
 if (($links_admin_data["sem_id"]) || ($links_admin_data["inst_id"])) {
 	if ($links_admin_data["inst_id"])
 		{?>  <td class="links1" align=right nowrap><a  class="links1" href="institut_main.php?auswahl=<? echo $links_admin_data["inst_id"] ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; <? }
-	else
+	elseif (!$kill)
 		{?>  <td class="links1" align=right nowrap><a  class="links1" href="seminar_main.php?auswahl=<? echo $links_admin_data["sem_id"] ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; <? }
 
 	if (($SessSemName[0]) && (!$links_admin_data["assi"]))
 		if ($links_admin_data["inst_id"])
-			echo "zur&uuml;ck zur ausgew&auml;hlten Einrichtung";
-		else
-			echo "zur&uuml;ck zur ausgew&auml;hlten Veranstaltung";
-	elseif ($links_admin_data["assi"])
-		echo "zur neu angelegten Veranstaltung";
+			echo "zur&uuml;ck zur ausgew&auml;hlten Einrichtung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
+		else {
+			if (!$kill)
+				echo "zur&uuml;ck zur ausgew&auml;hlten Veranstaltung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
+		}
+	elseif (($links_admin_data["assi"]) && (!$kill))
+		echo "zur neu angelegten Veranstaltung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
 	elseif ($links_admin_data["inst_id"])
-		echo "zur ausgew&auml;hlten Einrichtung";
-	else 
-		echo "zur ausgew&auml;hlten Veranstaltung";
-	 ?>&nbsp; &nbsp; </b></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?
+		echo "zur ausgew&auml;hlten Einrichtung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
+	elseif (!$kill)
+		echo "zur ausgew&auml;hlten Veranstaltung&nbsp; &nbsp; </b></a><img src=\"pictures/reiter1.jpg\" align=absmiddle></td>";
 	}
 
 if ($perm->have_perm("tutor")) {
