@@ -261,7 +261,7 @@ function edit_leben($lebenslauf,$schwerp,$publi,$view) {
 
 
 function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view) {
-	global $UNI_NAME_CLEAN; 
+	global $UNI_NAME_CLEAN, $_language_path; 
 
 	//erstmal die "unwichtigen" Daten
 	if ($home==$this->default_url)
@@ -380,27 +380,13 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 			// Mail abschicken...
 			$to=$email;
 			$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
-			$mailbody="Dies ist eine Informationsmail des Systems\n"
-			."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-			."- $UNI_NAME_CLEAN -\n\n"
-			."Ihr Passwort wurde um $Zeit neu gesetzt,\n"
-			."da Sie Ihre Email Addresse verändert haben!\n"
-			."Die aktuellen Angaben lauten:\n\n"
-			."Benutzername: $new_username\n"
-			."Passwort: $newpass\n"
-			."Status: ".$this->auth_user["perms"]."\n"
-			."Vorname: $vorname\n"
-			."Nachname: $nachname\n"
-			."Email-Adresse: $email\n\n"
-			."Das Passwort ist nur Ihnen bekannt. Bitte geben Sie es an niemanden\n"
-			."weiter (auch nicht an einen Administrator), damit nicht Dritte in Ihrem\n"
-			."Namen Nachrichten in das System einstellen können!\n\n"
-			."Hier kommen Sie direkt ins System:\n"
-			."$url\n\n";
+
+			// include language-specific subject and mailbody
+			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
 
 			$smtp->SendMessage(
 			$smtp->env_from, array($to),
-			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
+			array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 			$mailbody);
 
 	 		$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
