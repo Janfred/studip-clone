@@ -310,7 +310,7 @@ switch($referrer_page) {
 		break;
 
 	case "export.php" :
-		$help_page = "export_intro.php";
+		$help_page = "export_intro.htm";
 		break;
 
 	case "seminar_lernmodule.php" :
