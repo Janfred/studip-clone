@@ -222,6 +222,12 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 					$end_termin = mktime(date("G",$end_termin), date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin)+$corr,  date("Y",$end_termin));
 				}
 				
+				//and, correct the start_termin, if de dayligt saving time plays a trick with us
+				if (date("G", $start_termin) != $term_data["turnus_data"][0]["start_stunde"])
+					$start_termin = mktime($term_data["turnus_data"][0]["start_stunde"], date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin),  date("Y",$start_termin));
+				if (date("G", $end_termin) != $term_data["turnus_data"][0]["end_stunde"])
+					$end_termin = mktime($term_data["turnus_data"][0]["end_stunde"], date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin),  date("Y",$end_termin));
+				
 				$return_string=date ("d.m.Y, G:i", $start_termin);
 				$return_int=$start_termin;
 				if ($start_termin != $end_termin) 
