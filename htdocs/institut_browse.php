@@ -34,7 +34,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 $view = new DbView();
 $the_tree = new StudipRangeTreeView();
-$_open_ranges['root'] = true;
+$the_tree->open_ranges['root'] = true;
 if ($_REQUEST['cmd']=="suche"){
 	if ($_REQUEST['search_name'] && strlen($_REQUEST['search_name']) > 1){
 		$view->params[0] = "%" . $_REQUEST['search_name'] . "%";
