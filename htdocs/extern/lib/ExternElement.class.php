@@ -36,7 +36,8 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
 
 class ExternElement {
-
+	
+	var $type;
 	var $config;
 	var $name;
 	var $attributes;
@@ -55,7 +56,7 @@ class ExternElement {
 		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
 				. $GLOBALS["RELATIVE_PATH_EXTERN"] . "/elements/$class_name.class.php");
 		$this = new $class_name();
-		$this->config = $config;
+		$this->config =& $config;
 	}
 
 	/**
