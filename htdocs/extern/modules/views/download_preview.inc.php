@@ -70,6 +70,9 @@ $data[] = array("dokument_id" => 9, "description" => _("Eine weitere Text-Datei.
 $data[] = array("dokument_id" => 10, "description" => _("Ein Bild im PNG-Format."),
 	"filename" => "picture_png_file.png", "mkdate" => ($time - 1000000), "chdate" => ($time - 950000),
 	"filesize" => 263784, "Vorname" => "John", "Nachname" => "Greely");
+$data[] = array("dokument_id" => 11, "description" => _("Das ist ein Adobe PDF-Dokument."),
+	"filename" => "good_music.mp3", "mkdate" => ($time - 1150000), "chdate" => ($time - 653900),
+	"filesize" => 263784, "Vorname" => "Augustus", "Nachname" => "Barnard");
 
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 echo "\n<tr" . $this->config->getAttributes("TableHeadrow", "tr") . ">\n";
@@ -182,16 +185,16 @@ foreach ($data as $db) {
 											, htmlReady(mila_extern($db["description"],
 												$this->config->getValue("Main", "lengthdesc")))),
 		
-		"date"        => sprintf("<font%s>%s</font>"
+		"mkdate"      => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font")
 											, date("d.m.Y", $db["mkdate"])),
 		
-		"size"        => sprintf("<font%s>%s</font>"
+		"filesize"    => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font"),
 											$db["filesize"] > 1048576 ? round($db["filesize"] / 1048576, 1) . " MB"
 											: round($db["filesize"] / 1024, 1) . " kB"),
 												
-		"name"        => sprintf("<font%s><a href=\"\"%s>%s</font>"
+		"fullname"    => sprintf("<font%s><a href=\"\"%s>%s</a></font>"
 											, $this->config->getAttributes("Link", "font")
 											, $this->config->getAttributes("Link", "a") 
 											, htmlReady($db["Vorname"]." ".$db["Nachname"]))

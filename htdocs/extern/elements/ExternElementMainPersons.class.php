@@ -1,21 +1,21 @@
 <?
 /**
-* ExternElementMainDownload.class.php
+* ExternElementMainPersons.class.php
 * 
-* This class defines 
+*  
 * 
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
-* @module		ExternElementMainDownload
+* @module		ExternElementMainPersons
 * @package	studip_extern
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternElementMainDownload.class.php
+// ExternElementMainPersons.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -40,8 +40,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainPersons extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
-			"width_pp", "sort", "groups", "groupsalias", "groupsvisible", "wholesite",
-			"nametitle", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext");
+			"width_pp", "sort", "groups", "groupsalias", "groupsvisible", "grouping", "wholesite",
+			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -73,12 +73,12 @@ class ExternElementMainPersons extends ExternElementMain {
 			"groups" => $groups,
 			"groupsalias" => "",
 			"groupsvisible" => $groups,
+			"grouping" => "1",
 			"wholesite" => "",
-			"nametitle" => "no_title",
+			"nameformat" => "no_title",
+			"repeatheadrow" => "",
 			"urlcss" => "",
 			"title" => "Personal",
-			"bodystyle" => "",
-			"bodyclass" => "",
 			"nodatatext" => ""
 		);
 		
@@ -114,29 +114,46 @@ class ExternElementMainPersons extends ExternElementMain {
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
-		$table = $edit_form->editGroups();
-		// show nothing if there are no groups
-		if ($table) {
-			$headline = $edit_form->editHeadline(_("Anzeige von Gruppen"));
+		$headline = $edit_form->editHeadline(_("Anzeige von Gruppen"));
 		
-			$content_table .= $edit_form->editContentTable($headline, $table);
-			$content_table .= $edit_form->editBlankContent();
+		$table = $edit_form->editGroups();
+		if ($table) {
+			$title = _("Gruppierung:");
+			$info = _("Personen nach Gruppen/Funktionen gruppieren.");
+			$values = array("1", "0");
+			$names = array("an", "aus");
+			$table .= $edit_form->editRadioGeneric("grouping", $title, $info, $values, $names);
 		}
+		else {
+			$text = _("An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es wurden diesen noch keine Personen zugeordnet.");
+			$text .= _("Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion zugeordnet sind.");
+			$table = $edit_form->editText($text);
+		}
+		
+		$content_table .= $edit_form->editContentTable($headline, $table);
+		$content_table .= $edit_form->editBlankContent();
+		
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
-		$title = _("Personennamen:");
+		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$nametitle_values = array("no_title", "no_title_rev", "full", "full_rev");
-		$nametitle_names = array(_("Vorname Nachname"), _("Nachname Vorname"),
+		$values = array("no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("Vorname Nachname"), _("Nachname Vorname"),
 				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
-		$table = $edit_form->editOptionGeneric("nametitle", $title, $info, $nametitle_values, $nametitle_names);
+		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
+		
+		$title = _("Spalten&uuml;berschriften<br>Wiederholen:");
+		$info = _("Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile.");
+		$values = array("above", "beneath", "");
+		$names = array("&uuml;ber", "unter Gruppierungszeile", "keine");
+		$table .= $edit_form->editRadioGeneric("repeatheadrow", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
-		$wholesite_values = "1";
-		$wholesite_names = "";
-		$table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $wholesite_values, $wholesite_names);
+		$values = "1";
+		$names = "";
+		$table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $values, $names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
@@ -145,14 +162,6 @@ class ExternElementMainPersons extends ExternElementMain {
 		$title = _("Seitentitel:");
 		$info = _("Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im Web-Browser in der Titelzeile des Anzeigefensters angezeigt.");
 		$table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
-		
-		$title = _("Style f&uuml;r &lt;body&gt;:");
-		$info = _("Sie können hier eine Stylesheet-Definition für das <body>-Tag eingeben.");
-		$table .= $edit_form->editTextfieldGeneric("bodystyle", $title, $info, 50, 250);
-		
-		$title = _("Class f&uuml;r &lt;body&gt;:");
-		$info = _("Sie können hier eine Stylesheet-Klasse für das <body>-Tag eingeben.");
-		$table .= $edit_form->editTextfieldGeneric("bodyclass", $title, $info, 30, 128);
 		
 		$title = _("Keine Dateien:");
 		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfügbar sind.");

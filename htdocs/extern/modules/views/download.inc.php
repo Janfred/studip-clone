@@ -41,7 +41,7 @@ $db = new DB_Institut();
 $error_message = "";
 
 // stimmt die übergebene range_id?
-$query = "SELECT Name FROM Institute WHERE Institut_id=\"{$this->config->range_id}\"";
+$query = "SELECT Name FROM Institute WHERE Institut_id='{$this->config->range_id}'";
 $db->query($query);
 if(!$db->next_record())
 	$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
@@ -52,7 +52,7 @@ $query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesiz
 $query .= $_fullname_sql[$this->config->getValue("Main", "nametitle")];
 $query .= "AS fullname FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 $query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
-$query .= "Seminar_id=\"{$this->config->range_id}\"";
+$query .= "Seminar_id='{$this->config->range_id}'";
 
 $sort = $this->config->getValue("Main", "sort");
 sort($sort, SORT_NUMERIC);
@@ -69,7 +69,7 @@ if ($query_order)
 		
 $db->query($query);
 
-if ($db->num_rows() == 0)
+if (!$db->num_rows())
 	$error_message = $this->config->getValue("Main", "nodatatext");
 
 // Titelzeile bauen
@@ -86,6 +86,11 @@ $visible = $this->config->getValue("Main", "visible");
 $set_1 = $this->config->getAttributes("TableHeadrow", "th");
 $set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
 $zebra = $this->config->getValue("TableHeadrow", "th_zebrath_");
+
+$set_td_1 = $this->config->getAttributes("TableRow", "td");
+$set_td_2 = $this->config->getAttributes("TableRow", "td", TRUE);
+$zebra_td = $this->config->getValue("TableRow", "td_zebratd_");
+
 $i = 0;
 reset($rf_download);
 foreach($rf_download as $spalte){
@@ -106,7 +111,7 @@ foreach($rf_download as $spalte){
 		if($alias_download[$spalte] == "")
 			echo "<b>&nbsp;</b>\n";
 		else 
-			echo "<font" . $this->config->getAttributes("TableHeadrow", "font") . "><b>" . $alias_download[$spalte] . "</b></font>\n";
+			echo "<font" . $this->config->getAttributes("TableHeadrow", "font") . ">" . $alias_download[$spalte] . "</font>\n";
 	
 		echo "</th>\n";
 		$i++;
@@ -122,9 +127,6 @@ if ($error_message) {
 	echo "</td></tr>\n</table>\n";
 }
 else {
-	$set_1 = $this->config->getAttributes("TableRow", "td");
-	$set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
-	$zebra = $this->config->getValue("TableRow", "td_zebratd_");
 	
 	while($db->next_record()){
 	
@@ -194,7 +196,7 @@ else {
 												, htmlReady(mila_extern($db->f("description"),
 													$this->config->getValue("Main", "lengthdesc")))),
 			
-			"date"        => sprintf("<font%s>%s</font>"
+			"mkdate"      => sprintf("<font%s>%s</font>"
 												, $this->config->getAttributes("TableRow", "font")
 												, date("d.m.Y", $db->f("mkdate"))),
 			
@@ -203,20 +205,21 @@ else {
 												$db->f("filesize") > 1048576 ? round($db->f("filesize") / 1048576, 1) . " MB"
 												: round($db->f("filesize") / 1024, 1) . " kB"),
 													
-			"name"        => sprintf("<font%s>%s</font>"
+			"fullname"    => sprintf("<font%s><a href=\"%s\"%s>%s</a></font>"
+												, $this->config->getAttributes("TableRow", "font")
 												, $this->config->getAttributes("TableRow", "font")
 												, htmlReady($db->f("fullname")))
 		);
 		
 		// "horizontal zebra"
-		if ($zebra == "HORIZONTAL") {
+		if ($zebra_td == "HORIZONTAL") {
 			if ($i % 2)
-				$set = $set_2;
+				$set = $set_td_2;
 			else
-				$set = $set_1;
+				$set = $set_td_1;
 		}
 		else
-			$set = $set_1;
+			$set = $set_td_1;
 		
 		echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">\n";
 		
@@ -227,16 +230,16 @@ else {
 			// "vertical zebra"
 			if ($zebra == "VERTICAL") {
 				if ($j % 2)
-					$set = $set_2;
+					$set = $set_td_2;
 				else
-					$set = $set_1;
+					$set = $set_td_1;
 			}
 		
 			if ($visible[$spalte]) {
-				if($daten[$this->data_fields[$spalte]] == "")
-					echo "<td$set>&nbsp;</td>\n";
-				else
+				if($db->f($this->data_fields[$spalte]) || $spalte == "icon")
 					echo "<td$set>" . $daten[$this->data_fields[$spalte]] . "</td>\n";
+				else
+					echo "<td$set>&nbsp;</td>\n";
 				$j++;
 			}
 		}

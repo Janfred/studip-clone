@@ -34,27 +34,30 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-
-$group_data[] = array("group_name" => "Gruppe A", "persons" => array(
-array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
-		"telefon" => "38-374982", "email" => "bla@bla.com"),
-array("name" => "Vorname Nachname", "raum" => "M 13", "sprechzeiten" => "Mi. und Fr., 12.00 - 13.00",
-		"telefon" => "38-895638", "email" => "bla@bla.com"),
-array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
-		"telefon" => "38-374982", "email" => "bla@bla.com")));
-$group_data[] =  array("group_name" => "Gruppe B", "persons" => array(
-array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
-		"telefon" => "38-374982", "email" => "bla@bla.com"),
-array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
-		"telefon" => "38-374982", "email" => "bla@bla.com"),
-array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
-		"telefon" => "38-374982", "email" => "bla@bla.com")));
+$data_name = _("Name Name");
+$data_room = _("Raum 21");
+$data_office_hours = _("jeden Tag, 13.00 - 14.00");
+$group_data[] = array("group_name" => _("Gruppe A"), "persons" => array(
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-374982", "email" => "name.name@email.com"),
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-895638", "email" => "name.name@email.com"),
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-374982", "email" => "name.name@email.com")));
+$group_data[] =  array("group_name" => _("Gruppe B"), "persons" => array(
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-374982", "email" => "name.name@email.com"),
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-374982", "email" => "name.name@email.com"),
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-374982", "email" => "name.name@email.com")));
 $group_data[] =  array("group_name" => "Gruppe C", "persons" => array(
-array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
-		"telefon" => "38-374982", "email" => "bla@bla.com"),
-array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
-		"telefon" => "38-374982", "email" => "bla@bla.com")));
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-374982", "email" => "name.name@email.com"),
+array("name" => $data_name, "raum" => $data_room, "sprechzeiten" => $data_office_hours,
+		"telefon" => "38-374982", "email" => "name.name@email.com")));
 
+$repeat_headrow = $this->config->getValue("Main", "repeatheadrow");
 $order = $this->config->getValue("Main", "order");
 $width = $this->config->getValue("Main", "width");
 $alias = $this->config->getValue("Main", "aliases");
@@ -63,31 +66,33 @@ if ($this->config->getValue("TableHeader", "width_pp") == "PERCENT")
 	$percent = "%";
 else
 	$percent = "";
-	
+$group_colspan = array_count_values($visible);
+$grouping = $this->config->getValue("Main", "grouping");
+
 $set_1 = $this->config->getAttributes("TableHeadrow", "th");
 $set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
 $zebra = $this->config->getValue("TableHeadrow", "th_zebrath_");
 
+$set_td_1 = $this->config->getAttributes("TableRow", "td");
+$set_td_2 = $this->config->getAttributes("TableRow", "td", TRUE);
+$zebra_td = $this->config->getValue("TableRow", "td_zebratd_");
+
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 
-// Die "große" Schleife. Sie wird für jede Statusgruppe einmal durchlaufen.
-// Fuer jede Statusgruppe wird eine Abfrage abgesetzt.
+$first_loop = TRUE;
 reset($group_data);
 foreach ($group_data as $groups) {
 	$statusgruppe = $groups["group_name"];
 	
-	$name_sp_first = TRUE;
-	$group_colspan = sizeof($this->config->getValue("Main", "order"));
-	if(!$name_sp_frst && $statusgruppe && !$no_group_headers){
+	if ($grouping && $repeat_headrow == "above") {
   	echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
-		echo "<td colspan=\"$group_colspan\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
+		echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
   	echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
 		echo $statusgruppe . "</font>\n</td></tr>\n";
 	}
 	
-	// Hier noch mal das gleiche für $rf_daten
-//	if($sp_titel_wdhlg || $count == 1){
-		echo "<tr" . $this->config->getAttributes("TableHeadRow", "tr") . ">\n";
+	if ($first_loop || ($grouping && $repeat_headrow)) {
+		echo "<tr" . $this->config->getAttributes("TableHeadrow", "tr") . ">\n";
 		$i = 0;
 		reset($order);
 		foreach ($order as $column) {
@@ -104,7 +109,7 @@ foreach ($group_data as $groups) {
 			
 			if ($visible[$column]) {
   			echo "<th$set width=\"" . $width[$column] . $percent . "\">\n";
-				echo "<font" . $this->config->getAttributes("TableHeadRow", "font") . ">";
+				echo "<font" . $this->config->getAttributes("TableHeadrow", "font") . ">";
 				if ($alias[$column])
 					echo $alias[$column];
 				else
@@ -114,28 +119,24 @@ foreach ($group_data as $groups) {
 			$i++;
 		}
 		echo "</tr>\n";
-//	}
+	}
 	
-	if($name_sp_frst && $statusgruppe && !$no_group_headers){
+	if ($grouping && $repeat_headrow != "above") {
   	echo "<tr" . $this->config->getAttributes("TableGroup", "tr") . ">";
-		echo "<td colspan=\"$anz_sp\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
+		echo "<td colspan=\"{$group_colspan['1']}\"" . $this->config->getAttributes("TableGroup", "td") . ">\n";
   	echo "<font" . $this->config->getAttributes("TableGroup", "font") . ">";
 		echo $statusgruppe . "</font>\n</td></tr>\n";
 	}
-	
-//	reset($rf_daten);
-//	echo "</tr>\n";
-	$set_1 = $this->config->getAttributes("TableRow", "td");
-	$set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
-	$zebra = $this->config->getValue("TableRow", "td_zebratd_");
+	$first_loop = FALSE;
 	
 	$i = 0;
 	reset($groups["persons"]);
 	foreach ($groups["persons"] as $data) {
 					
 		$wert_daten = array(
-			"Name"         => sprintf("<a href=\"\"%s>%s</a>",
+			"fullname"         => sprintf("<a href=\"\"%s><font%s>%s</font></a>",
 												$this->config->getAttributes("Link", "a"),
+												$this->config->getAttributes("Link", "font"),
 												htmlReady($data["name"], TRUE)),
 												
 			"Telefon"      => sprintf("<font%s>%s</font>",
@@ -150,21 +151,22 @@ foreach ($group_data as $groups) {
 												$this->config->getAttributes("TableRow", "font"),
 												htmlReady($data["raum"], TRUE)),
 			
-			"Email"       => sprintf("<a href=\"mailto:%s\"%s>%s</a>",
+			"Email"       => sprintf("<a href=\"mailto:%s\"%s><font%s>%s</font></a>",
 												$data["email"],
 												$this->config->getAttributes("Link", "a"),
+												$this->config->getAttributes("Link", "font"),
 												$data["email"])
 		);
 		
 		// "horizontal zebra"
-		if ($zebra == "HORIZONTAL") {
+		if ($zebra_td == "HORIZONTAL") {
 			if ($i % 2)
-				$set = $set_2;
+				$set_td = $set_td_2;
 			else
-				$set = $set_1;
+				$set_td = $set_td_1;
 		}
 		else
-			$set = $set_1;
+			$set_td = $set_td_1;
 		
 		echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">";
 		
@@ -174,16 +176,14 @@ foreach ($group_data as $groups) {
 			if ($visible[$column]) {
 				
 				// "vertical zebra"
-				if ($zebra == "VERTICAL") {
+				if ($zebra_td == "VERTICAL") {
 					if ($j % 2)
-						$set = $set_2;
+						$set_td = $set_td_2;
 					else
-						$set = $set_1;
+						$set_td = $set_td_1;
 				}
-				else
-					$set = $set_1;
 			
-				echo "<td$set>";
+				echo "<td$set_td>";
 				if ($wert_daten[$this->data_fields[$column]])
    				echo $wert_daten[$this->data_fields[$column]];
 				else
@@ -192,8 +192,8 @@ foreach ($group_data as $groups) {
 				$j++;
 			}
 		}
-
 		echo "</tr>\n";
+		$i++;
 	}
 }
 	

@@ -41,8 +41,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternModulePersons extends ExternModule {
 
 	var $field_names = array();
-	var $data_fields = array("Name", "Telefon", "Raum", "Email", "Sprechzeiten");
-	var $registered_elements = array("TableHeader", "TableHeadrow", "TableGroup",
+	var $data_fields = array("fullname", "Telefon", "Raum", "Email", "Sprechzeiten");
+	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableGroup",
 																	 "TableRow", "Link", "TableFooter");
 
 	/**
@@ -52,10 +52,10 @@ class ExternModulePersons extends ExternModule {
 		$this->field_names = array
 		(
 				_("Name"),
-				_("Sprechzeiten"),
 				_("Telefon"),
 				_("Raum"),
-				_("Email")
+				_("Email"),
+				_("Sprechzeiten")
 		);
 		
 	}
@@ -69,7 +69,7 @@ class ExternModulePersons extends ExternModule {
 		return FALSE;
 	}
 	
-	function printout ($start, $end) {
+	function printout ($args) {
 		if ($this->config->getValue("Main", "wholesite")) {
 			if ($body_class = $this->config->getValue("Main", "bodyclass"))
 				$body_class = "class=\"$body_class\" ";
