@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2004-01-05 15:56+0100\n"
+"POT-Creation-Date: 2004-02-13 17:36+0100\n"
 "PO-Revision-Date: 2003-10-06 13:00+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -1353,92 +1353,99 @@ msgstr "You could have selected more than one answer."
 msgid "Sie k&ouml;nnen mehrere Antworten ausw&auml;hlen."
 msgstr "You can select more than one answer."
 
-#: vote/view/vote_show.lib.php:774
+#: vote/view/vote_show.lib.php:767
+#, c-format
+msgid " Die Summe kann daher über 100% liegen."
+msgstr ""
+
+#: vote/view/vote_show.lib.php:775
 #, c-format
 msgid "Es haben insgesamt <b>%s</b> Personen teilgenommen"
 msgstr "A total of <b>%s</b> people have taken part"
 
-#: vote/view/vote_show.lib.php:777
-msgid "Sie waren der/die einzigste TeilnehmerIn"
+#: vote/view/vote_show.lib.php:778
+#, fuzzy
+msgid "Sie waren der/die einzige TeilnehmerIn"
 msgstr "You are the only participant."
 
-#: vote/view/vote_show.lib.php:778
+#: vote/view/vote_show.lib.php:779
 msgid "Es hat insgesamt <b>eine</b> Person teilgenommen"
 msgstr "Only <b>one</b> person has taken part."
 
-#: vote/view/vote_show.lib.php:782
+#: vote/view/vote_show.lib.php:783
 #, c-format
 msgid "Es haben bisher <b>%s</b> Personen teilgenommen"
 msgstr "To date <b>%s</b> people have taken part"
 
-#: vote/view/vote_show.lib.php:785
-msgid "Sie waren bisher der/die einzigste TeilnehmerIn"
+#: vote/view/vote_show.lib.php:786
+#, fuzzy
+msgid "Sie waren bisher der/die einzige TeilnehmerIn"
 msgstr "You are to date the only participant"
 
-#: vote/view/vote_show.lib.php:786
+#: vote/view/vote_show.lib.php:787
 msgid "Es hat bisher insgesamt <b>eine</b> Person teilgenommen"
 msgstr "To date only <b>one</b> person has taken part"
 
-#: vote/view/vote_show.lib.php:795
+#: vote/view/vote_show.lib.php:796
 msgid ", Sie ebenfalls"
 msgstr ", including you"
 
-#: vote/view/vote_show.lib.php:806
+#: vote/view/vote_show.lib.php:807
 #, c-format
 msgid "Der Test wurde beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr "The test was terminated on <b>%s</b> at <b>%s</b>."
 
-#: vote/view/vote_show.lib.php:809
+#: vote/view/vote_show.lib.php:810
 #, c-format
 msgid "Das Voting wurde beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr "The vote was terminated on <b>%s</b> at <b>%s</b>."
 
-#: vote/view/vote_show.lib.php:816
+#: vote/view/vote_show.lib.php:817
 #, c-format
 msgid ""
 "Sie k&ouml;nnen Ihre Antwort &auml;ndern bis zum <b>%s</b> um <b>%s</b> Uhr."
 msgstr "You may change your answer until <b>%s</b> at <b>%s</b>."
 
-#: vote/view/vote_show.lib.php:822
+#: vote/view/vote_show.lib.php:823
 #, c-format
 msgid "Der Test wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr "The test will probably be terminated on <b>%s</b> at <b>%s</b>."
 
-#: vote/view/vote_show.lib.php:825
+#: vote/view/vote_show.lib.php:826
 #, c-format
 msgid "Das Voting wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr "The vote will probably be terminated on <b>%s</b> at <b>%s</b>."
 
-#: vote/view/vote_show.lib.php:831
+#: vote/view/vote_show.lib.php:832
 #, c-format
 msgid "Sie k&ouml;nnen abstimmen bis zum <b>%s</b> um <b>%s</b> Uhr."
 msgstr "You can vote until the <b>%s</b> at <b>%s</b>."
 
-#: vote/view/vote_show.lib.php:839
+#: vote/view/vote_show.lib.php:840
 msgid "Der Endzeitpunkt dieses Tests steht noch nicht fest."
 msgstr "The termination date for this test has not yet been decided on."
 
-#: vote/view/vote_show.lib.php:840
+#: vote/view/vote_show.lib.php:841
 msgid "Der Endzeitpunkt dieses Votings steht noch nicht fest."
 msgstr "The termination date for this vote has not yet been decided on."
 
-#: vote/view/vote_show.lib.php:848
+#: vote/view/vote_show.lib.php:849
 msgid "Die Teilnahme war anonym."
 msgstr "Participation was anonymous."
 
-#: vote/view/vote_show.lib.php:849
+#: vote/view/vote_show.lib.php:850
 msgid "Die Teilnahme war <b>nicht</b> anonym."
 msgstr "Participation was <b>not</b> anonymous."
 
-#: vote/view/vote_show.lib.php:852
+#: vote/view/vote_show.lib.php:853
 msgid "Die Teilnahme ist anonym."
 msgstr "Participation is anonymous."
 
-#: vote/view/vote_show.lib.php:853
+#: vote/view/vote_show.lib.php:854
 msgid "Die Teilnahme ist <b>nicht</b> anonym."
 msgstr "Participation is <b>not</b> anonymous."
 
-#: vote/view/vote_show.lib.php:873
+#: vote/view/vote_show.lib.php:874
 msgid ""
 "Es sind keine aktuellen Votes vorhanden. Um neue Votes zu erstellen, klicken "
 "Sie auf die Doppelpfeile."

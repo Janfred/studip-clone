@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-01-05 15:56+0100\n"
+"POT-Creation-Date: 2004-02-13 17:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,37 +349,45 @@ msgstr ""
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:339
+#: export/export_studipdata_func.inc.php:268
+msgid "max."
+msgstr ""
+
+#: export/export_studipdata_func.inc.php:268
+msgid "erw."
+msgstr ""
+
+#: export/export_studipdata_func.inc.php:344
 msgid "keiner Funktion oder Gruppe zugeordnet"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:348
+#: export/export_studipdata_func.inc.php:353
 msgid "Alle Studieng&auml;nge"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:350
+#: export/export_studipdata_func.inc.php:355
 msgid "DozentInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:351
+#: export/export_studipdata_func.inc.php:356
 msgid "TutorInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:352
 #: export/export_studipdata_func.inc.php:357
+#: export/export_studipdata_func.inc.php:362
 msgid "AutorInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:353
 #: export/export_studipdata_func.inc.php:358
+#: export/export_studipdata_func.inc.php:363
 msgid "LeserInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:355
+#: export/export_studipdata_func.inc.php:360
 msgid "LeiterInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:356
+#: export/export_studipdata_func.inc.php:361
 msgid "Mitglieder"
 msgstr ""
 

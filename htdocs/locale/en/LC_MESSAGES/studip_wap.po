@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-01-05 15:56+0100\n"
+"POT-Creation-Date: 2004-02-13 17:36+0100\n"
 "PO-Revision-Date: 2003-10-01 13:49+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -24,16 +24,16 @@ msgstr "Appointment"
 msgid "Für die nächsten Tage:"
 msgstr "For the next few days:"
 
-#: wap/dates_search.php:163 wap/directory_search.php:265
+#: wap/dates_search.php:161 wap/directory_search.php:265
 #, c-format
 msgid "Mehr als %s Einträge."
 msgstr "More than %s entries."
 
-#: wap/dates_search.php:165
+#: wap/dates_search.php:163
 msgid "Bitte den Zeitraum einschränken."
 msgstr "Please restrict time period."
 
-#: wap/dates_search.php:172 wap/event_dates.php:150
+#: wap/dates_search.php:170 wap/event_dates.php:150
 msgid "Keine Termine vorhanden."
 msgstr "No appointments available."
 
@@ -114,7 +114,7 @@ msgstr "Short message"
 msgid "Username oder Passwort nicht korrekt."
 msgstr "Username or password not correct."
 
-#: wap/show_date.php:101
+#: wap/show_date.php:108
 msgid "bis"
 msgstr "until"
 
@@ -132,7 +132,8 @@ msgid "Fax:"
 msgstr "Fax:"
 
 #: wap/show_institute.php:164
-msgid "Raum"
+#, fuzzy
+msgid "Raum:"
 msgstr "Room"
 
 #: wap/show_institute.php:170
@@ -147,7 +148,7 @@ msgstr "From"
 msgid "Von"
 msgstr "From"
 
-#: wap/show_user.php:93
+#: wap/show_user.php:94
 msgid "Privat"
 msgstr "Private"
 
