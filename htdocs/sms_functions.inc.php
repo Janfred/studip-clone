@@ -303,7 +303,7 @@ function print_snd_message($psm) {
 	}
 
 	$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($psm['message_subject']))."</a></a>";
-	$message_hovericon['titel'] = $titel;
+	$message_hovericon['titel'] = htmlready(stripslashes($psm['message_subject']));
 
 	// (hover) icon 
 	$message_hovericon['openclose'] = $open;
@@ -388,7 +388,7 @@ function print_rec_message($prm) {
 	$zusatz .= "</font>";
 
 	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($prm['message_subject']))."</a></a>";
-	$message_hovericon['titel'] = $titel;
+	$message_hovericon['titel'] = htmlready(stripslashes($prm['message_subject']));
 	
 	$content = quotes_decode(formatReady($prm['message']));
 
@@ -449,7 +449,7 @@ function print_rec_message($prm) {
 	if (($open == "open") || ($sms_data["open"] == $prm['message_id'])) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		echo "<td class=\"blank\" background=\"pictures/".$tmp_line2."\"><img src=\"pictures/blank.gif\" height=\"100%\" width=\"10px\"></td>";
-		printcontent("99%",0, $content, $edit);
+		printcontent("99%", 0, $content, $edit);
 		echo "</tr></table>	";		
 	}
 	return $n++;
