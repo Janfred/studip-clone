@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2004-02-14 18:58+0100\n"
-"PO-Revision-Date: 2004-02-14 17:23+0100\n"
+"PO-Revision-Date: 2004-02-15 13:53+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 #: wap/dates.php:54 wap/event_dates.php:57 wap/login_index.php:76
 #: wap/show_event.php:114
 msgid "Termine"
-msgstr "Appointment"
+msgstr "Appointments"
 
 #: wap/dates.php:59
 msgid "Für die nächsten Tage:"
@@ -200,3 +200,4 @@ msgstr "display"
 #: wap/wap_buttons.inc.php:231
 msgid "suchen"
 msgstr "search"
+

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2004-02-14 18:58+0100\n"
-"PO-Revision-Date: 2003-10-01 11:34+0200\n"
+"PO-Revision-Date: 2004-02-15 14:13+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -103,8 +103,7 @@ msgstr "Selection of export module"
 msgid ""
 "W&auml;hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf "
 "'weiter'"
-msgstr ""
-"Please select one of the following XSLT- files and click on 'continue' "
+msgstr "Please select one of the following XSLT- files and click on 'continue' "
 
 #: export/export_choose_xslt.inc.php:169
 msgid "Ausgabemodul"
@@ -203,8 +202,7 @@ msgid "Fehlende Parameter!"
 msgstr "Defective parameter!"
 
 #: export/export_run_fop.inc.php:52 export/export_xml.inc.php:53
-msgid ""
-"Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
+msgid "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr "The parameters, with which this page has been loaded are defective."
 
 #: export/export_run_fop.inc.php:61
@@ -386,11 +384,11 @@ msgstr "The chosen export module is not supported."
 
 #: export/export_studipdata_func.inc.php:268
 msgid "max."
-msgstr ""
+msgstr "max."
 
 #: export/export_studipdata_func.inc.php:268
 msgid "erw."
-msgstr ""
+msgstr "exp."
 
 #: export/export_studipdata_func.inc.php:344
 msgid "keiner Funktion oder Gruppe zugeordnet"
@@ -442,8 +440,7 @@ msgstr "No data was found!"
 msgid ""
 "Es wurden keine Daten gefunden! Die &uuml;bergebene ID ist mit keinen "
 "Veranstaltungs- / Personendaten verbunden."
-msgstr ""
-"No data was found! The given ID is not connected to any course or user data."
+msgstr "No data was found! The given ID is not connected to any course or user data."
 
 #: export/export_xml.inc.php:109
 msgid "Die Daten wurden erfolgreich exportiert."
@@ -722,172 +719,161 @@ msgid "Fehler beim &Ouml;ffnen des Export-Temp-Verzeichnisses!"
 msgstr "Error while opening the temporary export directory!"
 
 #: export/recordofstudy.lib.php:32
-#, fuzzy
 msgid "Veranstaltungsübersicht erstellen"
-msgstr "Course data"
+msgstr "Create course overview"
 
 #: export/recordofstudy.lib.php:33
-#, fuzzy
 msgid "Veranstaltungsübersicht erstellen:"
-msgstr "Course data"
+msgstr "Create course overview:"
 
 #: export/recordofstudy.lib.php:57
-#, fuzzy
 msgid "Bitte wählen sie ein Semster aus:"
-msgstr "Please choose an institute:"
+msgstr "Please select a semester:"
 
 #: export/recordofstudy.lib.php:65
 msgid "Semester und Kriterium auswählen."
-msgstr ""
+msgstr "Select semester and criteria."
 
 #: export/recordofstudy.lib.php:67
-#, fuzzy
 msgid "nur Lehrveranstaltungen"
-msgstr "Course data"
+msgstr "only taught courses"
 
 #: export/recordofstudy.lib.php:68
-#, fuzzy
 msgid "alle Veranstaltungen"
-msgstr "Course data"
+msgstr "All courses"
 
 #: export/recordofstudy.lib.php:71
 msgid "Vorlage"
-msgstr ""
+msgstr "Templates"
 
 #: export/recordofstudy.lib.php:126
 msgid "Keine Veranstaltungen zum Anzeigen vorhanden."
-msgstr ""
+msgstr "No courses available for display."
 
 #: export/recordofstudy.lib.php:126
 msgid ""
 "Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein "
 "oder ändern Sie ihre ihre Auswahl."
-msgstr ""
+msgstr "Please enter the courses of your choice with the help of the button \"add\"."
 
 #: export/recordofstudy.lib.php:128
 msgid "Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt."
-msgstr ""
+msgstr "You have choosen more than 10 courses in this semester."
 
 #: export/recordofstudy.lib.php:128
 msgid "Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt."
-msgstr ""
+msgstr "More course overviews were automatically created."
 
 #: export/recordofstudy.lib.php:138 export/recordofstudy.lib.php:244
 msgid "Hochschule: "
-msgstr ""
+msgstr "University:"
 
 #: export/recordofstudy.lib.php:139 export/recordofstudy.lib.php:245
 msgid "Studienfach: "
-msgstr ""
+msgstr "Subject:"
 
 #: export/recordofstudy.lib.php:140 export/recordofstudy.lib.php:246
 msgid "Name (Vor- und Zuname): "
-msgstr ""
+msgstr "Name (first and surname):"
 
 #: export/recordofstudy.lib.php:141 export/recordofstudy.lib.php:247
-#, fuzzy
 msgid "Semester: "
-msgstr "All semesters"
+msgstr "Semester:"
 
 #: export/recordofstudy.lib.php:142 export/recordofstudy.lib.php:248
 msgid "Fachsemester: "
-msgstr ""
+msgstr "Subject semester:"
 
 #: export/recordofstudy.lib.php:146
-#, fuzzy
 msgid "Veranstaltungen:"
-msgstr "Course data"
+msgstr "Courses:"
 
 #: export/recordofstudy.lib.php:150
 msgid "Kenn.-Nr"
-msgstr ""
+msgstr "Course number"
 
 #: export/recordofstudy.lib.php:151
 msgid "Name des Dozenten"
-msgstr ""
+msgstr "Lecturer's name"
 
 #: export/recordofstudy.lib.php:152
 msgid "Wochenstundenzahl"
-msgstr ""
+msgstr "Number of hours per week"
 
 #: export/recordofstudy.lib.php:153
 msgid "löschen"
-msgstr ""
+msgstr "delete"
 
 #: export/recordofstudy.lib.php:169
 msgid "SWS"
-msgstr ""
+msgstr "SWS"
 
 #: export/recordofstudy.lib.php:177
 msgid "Genaue Bezeichnung:"
-msgstr ""
+msgstr "Exact description:"
 
 #: export/recordofstudy.lib.php:189
-#, fuzzy
 msgid "Neue Veranstaltung hinzufügen."
-msgstr "Course data"
+msgstr "Add new course."
 
 #: export/recordofstudy.lib.php:199
-#, fuzzy
 msgid "Markierte Veranstaltung(en) löschen"
-msgstr "Unformatted with course numbers"
+msgstr "Delete marked course(s)"
 
 #: export/recordofstudy.lib.php:199
 msgid "Markierte Veranstaltung(en) löschen."
-msgstr ""
+msgstr "Delete marked course(s)"
 
 #: export/recordofstudy.lib.php:210
 msgid "Abbrechen und ein anderes Semester auswählen."
-msgstr ""
+msgstr "Cancel and select another semester."
 
 #: export/recordofstudy.lib.php:211
 msgid "Weiter zum Download ihrer Veranstaltungsübersicht."
-msgstr ""
+msgstr "Onward to download your course overview."
 
 #: export/recordofstudy.lib.php:238
 #, c-format
 msgid "Sie haben %s Einträge für ihre Veranstaltungsübersicht ausgewählt. "
-msgstr ""
+msgstr "You have chosen %s entries for your course overview."
 
 #: export/recordofstudy.lib.php:240
 #, c-format
 msgid "Deshalb werden ihre Einträge auf %s Seiten verteilt."
-msgstr ""
+msgstr "Therefore your entries will be spread over %s pages."
 
 #: export/recordofstudy.lib.php:241
 msgid "Ihre Einträge können auf einer Seite untergebracht werden."
-msgstr ""
+msgstr "Your entries could be fit onto one page."
 
 #: export/recordofstudy.lib.php:243
 msgid "Ihre Studiendaten:"
-msgstr ""
+msgstr "Your study data:"
 
 #: export/recordofstudy.lib.php:250
 msgid "Vorlage:"
-msgstr ""
+msgstr "Templates:"
 
 #: export/recordofstudy.lib.php:254
 msgid ""
 "Klicken sie nun auf die einzelnen Links, um ihre Veranstaltungsübersicht zu "
 "erstellen."
-msgstr ""
+msgstr "Click on the various links to create your course overview."
 
 #: export/recordofstudy.lib.php:255
-msgid ""
-"Klicken sie nun auf den Link, um ihre Veranstaltungsübersicht zu erstellen."
-msgstr ""
+msgid "Klicken sie nun auf den Link, um ihre Veranstaltungsübersicht zu erstellen."
+msgstr "Click the link to create your course overview."
 
 #: export/recordofstudy.lib.php:259
-#, fuzzy
 msgid "Veranstaltungsübersicht: "
-msgstr "Course data"
+msgstr "Course overview:"
 
 #: export/recordofstudy.lib.php:263
 #, c-format
 msgid "Seite %s"
-msgstr ""
+msgstr "Page %s"
 
 #: export/recordofstudy.lib.php:264
-#, fuzzy
 msgid "Veranstaltungsübersicht"
-msgstr "Course data"
+msgstr "Course overview"
+

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2004-02-14 18:58+0100\n"
-"PO-Revision-Date: 2003-03-28 14:21+0100\n"
+"PO-Revision-Date: 2004-02-15 13:48+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -33,34 +33,30 @@ msgid "Mein pers&ouml;nlicher Terminkalender - Jahresansicht"
 msgstr "My personal appointment calendar - yearly view"
 
 #: calendar/calendar.inc.php:267
-#, fuzzy
 msgid ""
 "Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren "
 "und synchronisieren"
-msgstr "Integrate my personal appointment calendar with the course meetings"
+msgstr "My personal appointment calender - import, export and synchronise appointment data."
 
 #: calendar/calendar.inc.php:272
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden"
-msgstr "Integrate my personal appointment calendar with the course meetings"
+msgstr "Integrate my personal appointment calendar with the course appointments"
 
 #: calendar/calendar.inc.php:287
-#, fuzzy
 msgid "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin"
-msgstr "Integrate my personal appointment calendar with the course meetings"
+msgstr "My personal appointment calender - course appointment"
 
 #: calendar/calendar.inc.php:293
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten"
 msgstr "My personal appointment calendar - edit appointment"
 
 #: calendar/calendar.inc.php:306 calendar/calendar.inc.php:318
-#, fuzzy
 msgid "Kein Titel"
-msgstr "no title"
+msgstr "no title "
 
 #: calendar/calendar.inc.php:348
-#, fuzzy
 msgid "Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten"
-msgstr "My personal appointment calendar - edit appointment"
+msgstr "My personal appointment calendar - create / edit appointment"
 
 #: calendar/calendar.inc.php:511
 #, c-format
@@ -78,25 +74,22 @@ msgid "Termin erstellen am %s"
 msgstr "Create appointment on %s"
 
 #: calendar/calendar_settings.inc.php:52
-#, fuzzy
 msgid "Einstellungen des Terminkalenders anpassen"
-msgstr "Customise settings for my appointment calendar"
+msgstr "Customise settings for the appointment calendar"
 
 #: calendar/calendar_settings.inc.php:62
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr ""
-"Here you can customise the lay-out of your personal appointment calendar."
+msgstr "Here you can customise the lay-out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:67
-#, fuzzy
 msgid "Option"
-msgstr "Action:"
+msgstr "Option"
 
 #: calendar/calendar_settings.inc.php:68
 msgid "Auswahl"
-msgstr ""
+msgstr "Choice"
 
 #: calendar/calendar_settings.inc.php:72
 msgid "Startansicht anpassen:"
@@ -182,21 +175,20 @@ msgid "Bearbeiten-Link in Wochenansicht"
 msgstr "Edit link in week view"
 
 #: calendar/calendar_settings.inc.php:249
-#, fuzzy
 msgid "L&ouml;schen von Terminen:"
-msgstr "%s appointments"
+msgstr "Delete appointments:"
 
 #: calendar/calendar_settings.inc.php:257
 msgid "12 Monate nach Ablauf"
-msgstr ""
+msgstr "12 months after event"
 
 #: calendar/calendar_settings.inc.php:261
 msgid "6 Monate nach Ablauf"
-msgstr ""
+msgstr "6 months after event"
 
 #: calendar/calendar_settings.inc.php:265
 msgid "3 Monate nach Ablauf"
-msgstr ""
+msgstr "3 months after event"
 
 #: calendar/calendar_settings.inc.php:269 calendar/views/edit.inc.php:517
 msgid "nie"
@@ -222,24 +214,23 @@ msgstr "Go to:"
 
 #: calendar/calendar_visual.inc.php:609 calendar/views/month.inc.php:67
 msgid "ein Jahr zurück"
-msgstr ""
+msgstr "one year back"
 
 #: calendar/calendar_visual.inc.php:612
 msgid "vorherige Woche"
-msgstr ""
+msgstr "Last week"
 
 #: calendar/calendar_visual.inc.php:627
 msgid "nächste Woche"
-msgstr ""
+msgstr "Next week"
 
 #: calendar/calendar_visual.inc.php:631 calendar/views/month.inc.php:84
-#, fuzzy
 msgid "ein Jahr vor"
-msgstr "show before"
+msgstr "one year forward"
 
 #: calendar/calendar_visual.inc.php:750
 msgid "Veranstaltung:"
-msgstr ""
+msgstr "Course:"
 
 #: calendar/calendar_visual.inc.php:752 calendar/views/edit.inc.php:175
 msgid "Beschreibung:"
@@ -251,7 +242,7 @@ msgstr "Category:"
 
 #: calendar/calendar_visual.inc.php:756
 msgid "Ort:"
-msgstr ""
+msgstr "Place:"
 
 #: calendar/calendar_visual.inc.php:758 calendar/views/edit.inc.php:242
 msgid "Priorit&auml;t:"
@@ -259,40 +250,35 @@ msgstr "Priority:"
 
 #: calendar/calendar_visual.inc.php:759
 msgid "Zugriff:"
-msgstr ""
+msgstr "Access:"
 
 #: calendar/calendar_visual.inc.php:760
-#, fuzzy
 msgid "Wiederholung:"
-msgstr "Repetition"
+msgstr "Repetition:"
 
 #: calendar/lib/CalendarEvent.class.php:133 calendar/views/edit.inc.php:246
-#, fuzzy
 msgid "hoch"
-msgstr "Week"
+msgstr "high"
 
 #: calendar/lib/CalendarEvent.class.php:135 calendar/views/edit.inc.php:247
-#, fuzzy
 msgid "mittel"
-msgstr "third"
+msgstr "middle"
 
 #: calendar/lib/CalendarEvent.class.php:137 calendar/views/edit.inc.php:248
-#, fuzzy
 msgid "niedrig"
-msgstr "never"
+msgstr "low"
 
 #: calendar/lib/CalendarEvent.class.php:139 calendar/views/edit.inc.php:245
 msgid "keine Angabe"
-msgstr ""
+msgstr "no entry"
 
 #: calendar/lib/CalendarEvent.class.php:147
-#, fuzzy
 msgid "öffentlich"
-msgstr "public"
+msgstr "public "
 
 #: calendar/lib/CalendarEvent.class.php:149 calendar/views/edit.inc.php:231
 msgid "vertraulich"
-msgstr ""
+msgstr "trusted"
 
 #: calendar/lib/CalendarEvent.class.php:151 calendar/views/edit.inc.php:230
 msgid "privat"
@@ -336,47 +322,47 @@ msgstr "Sunday"
 #: calendar/lib/CalendarEvent.class.php:454
 #, c-format
 msgid "Der Termin wird alle %s Tage wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s days."
 
 #: calendar/lib/CalendarEvent.class.php:458
 msgid "Der Termin wird täglich wiederholt"
-msgstr ""
+msgstr "The appointment will be repeated daily"
 
 #: calendar/lib/CalendarEvent.class.php:463
 #, c-format
 msgid "Der Termin wird alle %s Wochen am %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s weeks on %s."
 
 #: calendar/lib/CalendarEvent.class.php:467
 #, c-format
 msgid "Der Termin wird jeden %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s."
 
 #: calendar/lib/CalendarEvent.class.php:473
 #, c-format
 msgid "Der Termin wird am %s. alle %s Monate wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on %s every %s months."
 
 #: calendar/lib/CalendarEvent.class.php:478
 #, c-format
 msgid "Der Termin wird jeden %s. %s alle %s Monate wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s. %s every %s month."
 
 #: calendar/lib/CalendarEvent.class.php:483
 #: calendar/lib/CalendarEvent.class.php:501
 #, c-format
 msgid "Der Termin wird jeden letzten %s alle %s Monate wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on the last %s every %s months."
 
 #: calendar/lib/CalendarEvent.class.php:491
 #, c-format
 msgid "Der Termin wird am %s. jeden Monat wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on %s every month."
 
 #: calendar/lib/CalendarEvent.class.php:496
 #, c-format
 msgid "Der Termin wird am %s. %s jeden Monat wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated on %s. %s every month."
 
 #: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:326
 msgid "Januar"
@@ -388,7 +374,7 @@ msgstr "February"
 
 #: calendar/lib/CalendarEvent.class.php:510
 msgid "März"
-msgstr ""
+msgstr "March"
 
 #: calendar/lib/CalendarEvent.class.php:510 calendar/views/edit.inc.php:329
 msgid "April"
@@ -429,31 +415,31 @@ msgstr "December"
 #: calendar/lib/CalendarEvent.class.php:514
 #, c-format
 msgid "Der Termin wird jeden %s. %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s. %s repeated."
 
 #: calendar/lib/CalendarEvent.class.php:520
 #, c-format
 msgid "Der Termin wird jeden %s. %s im %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every %s %s in %s."
 
 #: calendar/lib/CalendarEvent.class.php:525
 #, c-format
 msgid "Der Termin wird jeden letzten %s im %s wiederholt."
-msgstr ""
+msgstr "The appointment will be repeated every last %s in %s."
 
 #: calendar/lib/CalendarEvent.class.php:533 calendar/views/edit.inc.php:263
 #: calendar/views/edit.inc.php:570
 msgid "Der Termin wird nicht wiederholt."
-msgstr ""
+msgstr "The appointment will not be repeated."
 
 #: calendar/lib/calendar_misc_func.inc.php:75
 msgid "Daten-Export"
-msgstr ""
+msgstr "Export data"
 
 #: calendar/lib/calendar_misc_func.inc.php:78
 #, c-format
 msgid "Die Daten werden exportiert. %sBitte haben sie etwas Geduld!"
-msgstr ""
+msgstr "The data are being exported. %s Please be patient!"
 
 #: calendar/views/bind.inc.php:70
 msgid "Gruppe ändern"
@@ -527,13 +513,15 @@ msgstr "Time"
 
 #: calendar/views/edit.inc.php:122
 msgid "ganzt&auml;gig"
-msgstr ""
+msgstr "full-time"
 
 #: calendar/views/edit.inc.php:123
 msgid ""
 "Als ganztägig markierte Termine beginnen um 00:00 Uhr am angegebenen "
 "Starttag und enden um 23.59 am angegeben Endtag."
 msgstr ""
+"The appointments marked full-time begin at 00:00 on the "
+"given start day and end at 23:59 on the given end day."
 
 #: calendar/views/edit.inc.php:129
 msgid "Ende:"
@@ -541,30 +529,31 @@ msgstr "End:"
 
 #: calendar/views/edit.inc.php:168
 msgid "Zusammenfassung:"
-msgstr ""
+msgstr "Summary:"
 
 #: calendar/views/edit.inc.php:199
 msgid "keine Auswahl"
-msgstr ""
+msgstr "No selection"
 
 #: calendar/views/edit.inc.php:208
 msgid ""
 "Sie können beliebige Kategorien in das Freitextfeld eingeben. Trennen Sie "
 "einzelne Kategorien bitte durch ein Komma."
 msgstr ""
+"You can enter categories of your choice in the free text field. "
+"Please separate the various categories with a comma."
 
 #: calendar/views/edit.inc.php:217
 msgid "Raum:"
 msgstr "Room:"
 
 #: calendar/views/edit.inc.php:224
-#, fuzzy
 msgid ""
 "Private und vertrauliche Termine sind nur für Sie sichtbar. Öffentliche "
 "Termine werden auf ihrer internen Homepage auch anderen Nutzern "
 "bekanntgegeben."
 msgstr ""
-"Private appointments can only be seen by you. Public appointments will be "
+"Private and trusted appointments can only be seen by you. Public appointments will be "
 "made known to other users via your internal homepage."
 
 #: calendar/views/edit.inc.php:226
@@ -589,7 +578,7 @@ msgstr "third"
 
 #: calendar/views/edit.inc.php:311
 msgid "vierten"
-msgstr "fouth"
+msgstr "fourth"
 
 #: calendar/views/edit.inc.php:312
 msgid "letzten"
@@ -614,12 +603,12 @@ msgstr "Every work day"
 #: calendar/views/edit.inc.php:371
 #, c-format
 msgid "Alle %s Wochen %s am:"
-msgstr ""
+msgstr "Every %s weeks at %s:"
 
 #: calendar/views/edit.inc.php:413
-#, fuzzy, c-format
+#, c-format
 msgid "Wiederholt am %s alle %s Monate"
-msgstr "<b>repeat on</b>%s<b>every</b>%smonths"
+msgstr "Repeated on %s every %s months."
 
 #: calendar/views/edit.inc.php:416 calendar/views/edit.inc.php:454
 msgid "Jeden"
@@ -634,31 +623,30 @@ msgid "Monate"
 msgstr "Months"
 
 #: calendar/views/edit.inc.php:493
-#, fuzzy, c-format
+#, c-format
 msgid "Jeden %s im"
-msgstr "Every%sin"
+msgstr "Every %s in"
 
 #: calendar/views/edit.inc.php:513
 msgid "Wiederholung endet:"
 msgstr "Repetition ends:"
 
 #: calendar/views/edit.inc.php:520
-#, fuzzy
 msgid "am:"
-msgstr "Room:"
+msgstr "at:"
 
 #: calendar/views/edit.inc.php:532
-#, fuzzy, c-format
+#, c-format
 msgid "nach %s Wiederholungen"
-msgstr "Repetition"
+msgstr "after %s repetitions"
 
 #: calendar/views/edit.inc.php:545
 msgid "Ausnahmen:"
-msgstr ""
+msgstr "Exception:"
 
 #: calendar/views/edit.inc.php:564
 msgid "ausgew&auml;hlte l&ouml;schen"
-msgstr ""
+msgstr "Delete selection"
 
 #: calendar/views/edit.inc.php:589
 #, c-format
@@ -670,12 +658,12 @@ msgstr ""
 "edited in your personal appointment calendar."
 
 #: calendar/views/edit.inc.php:591
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<a href=\"%s?cmd=bind\">W&auml;hlen</a> Sie aus, welche "
 "Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen."
 msgstr ""
-"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should automatically "
+"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should "
 "be displayed in your appointment calendar."
 
 #: calendar/views/edit.inc.php:596
@@ -683,8 +671,7 @@ msgstr ""
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr ""
-"To edit this appointment, please switch to the %s Course administration</a> "
+msgstr "To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:602 calendar/views/edit.inc.php:612
 msgid "Aktion:"
@@ -692,7 +679,7 @@ msgstr "Action:"
 
 #: calendar/views/edit.inc.php:643
 msgid "Sie k&ouml;nnen keine weiteren Termine mehr speichern!"
-msgstr ""
+msgstr "You can not save any further appointments!"
 
 #: calendar/views/edit.inc.php:645
 #, c-format
@@ -700,11 +687,13 @@ msgid ""
 "L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische "
 "L&ouml;schfunktion in ihren %sKalenderoptionen%s."
 msgstr ""
+"Delete old appointments or choose an automatic deletion function from your "
+"%scalendar options%s."
 
 #: calendar/views/edit.inc.php:651
 #, c-format
 msgid "Sie k&ouml;nnen noch %s Termine speichern."
-msgstr ""
+msgstr "You can save %s more appointments."
 
 #: calendar/views/edit.inc.php:654
 #, c-format
@@ -712,6 +701,8 @@ msgid ""
 "W&auml;hlen Sie eine automatische L&ouml;schfunktion in Ihren %"
 "sKalenderoptionen%s, um &auml;ltere Termine zu l&ouml;schen."
 msgstr ""
+"Select an automatic deletion function from your %scalendar options%s, "
+"in order to delete old appointments."
 
 #: calendar/views/edit.inc.php:659
 #, c-format
@@ -719,152 +710,156 @@ msgid ""
 "Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;"
 "hlen Sie dazu eine L&ouml;schfunktion in Ihren %sKalenderoptionen%s."
 msgstr ""
+"You can let past appointments automatically be deleted. Select a "
+"deletion function from your %scalandar options%s."
 
 #: calendar/views/export.inc.php:106
 #, c-format
 msgid "Stud.IP hat %s Termine synchronisiert."
-msgstr ""
+msgstr "Stud.IP has synchronised %s appointments."
 
 #: calendar/views/export.inc.php:110
 msgid ""
 "Ihr iCalendar-Datei enthielt keine Termine, die synchronisiert werden "
 "konnten."
-msgstr ""
+msgstr "Your iCalendar-file does not contain any appointments which can be synchronised."
 
 #: calendar/views/export.inc.php:114
 #, c-format
 msgid "Die zum Download zur Verf&uuml;gung stehende Datei enthält %s Termine."
-msgstr ""
+msgstr "There are %s appointments in files available for download."
 
 #: calendar/views/export.inc.php:118
 msgid ""
 "Ihr Stud.IP-Kalender enthält keine neueren Termine als die hochgeladene "
 "iCalendar-Datei. Es wurde keine Ausgabedatei erzeugt."
 msgstr ""
+"Your Stud.IP calendar does not contain any new appointments not already in the "
+"uploaded iCalendar file. No export file has been created."
 
 #: calendar/views/export.inc.php:130
 msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
-msgstr ""
+msgstr "Click the button in order to download the file with the synchronised calendar data."
 
 #: calendar/views/export.inc.php:131
 msgid ""
 "Die Daten liegen ebenfalls in einer iCalendar-Datei vor, die Sie in Ihren "
 "lokalen Terminkalender (z.B. MS Outlook) importieren können."
 msgstr ""
+"The data are also in a iCalendar file, which you can import into your local "
+"appointment calendar (e.g. MS Outlook). "
 
 #: calendar/views/export.inc.php:143
 msgid "Herunterladen der synchronisierten Kalenderdaten"
-msgstr ""
+msgstr "Download the synchronised calendar data."
 
 #: calendar/views/export.inc.php:153
 msgid "Exportieren Ihrer Kalenderdaten"
-msgstr ""
+msgstr "Export your calendar data."
 
 #: calendar/views/export.inc.php:155
 msgid ""
 "Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt "
 "\"Veranstaltungstermine\" ausgewählt wurden."
 msgstr ""
+"Only those course appointments will be exported, which were selected under "
+"the menu tab \"Course appointments\" beforehand."
 
 #: calendar/views/export.inc.php:157
 msgid "Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:"
-msgstr ""
+msgstr "Please select which appointments should be exported:"
 
 #: calendar/views/export.inc.php:160
-#, fuzzy
 msgid "Nur meine pers&ouml;nlichen Termine"
-msgstr "My personal appointment calendar - new appointment"
+msgstr "only my personal appointments"
 
 #: calendar/views/export.inc.php:162
-#, fuzzy
 msgid "Nur meine Veranstaltungstermine"
-msgstr "Course meetings"
+msgstr "only my course appointments"
 
 #: calendar/views/export.inc.php:164 calendar/views/export.inc.php:173
-#, fuzzy
 msgid "Alle Termine"
-msgstr "Appointments"
+msgstr "All appointments"
 
 #: calendar/views/export.inc.php:168
 msgid "Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:"
-msgstr ""
+msgstr "Please enter from which time period the appointments should be exported."
 
 #: calendar/views/export.inc.php:179
 #, c-format
 msgid "Nur Termine vom:%sbis zum:"
-msgstr ""
+msgstr "Only appointments from: %s until:"
 
 #: calendar/views/export.inc.php:200
 msgid "Importieren Ihrer Kalenderdaten"
-msgstr ""
+msgstr "Import your calendar data"
 
 #: calendar/views/export.inc.php:204
 msgid ""
 "Sie k&ouml;nnen Termine importieren, die sich in einer iCalendar-Datei "
 "befinden."
-msgstr ""
+msgstr "You can import appointments which are in a iCalendar file."
 
 #: calendar/views/export.inc.php:205 calendar/views/export.inc.php:218
 msgid "Klicken Sie auf \"Durchsuchen\", um eine Datei auszuwählen."
-msgstr ""
+msgstr "Click on \"Browse\" to select a file."
 
 #: calendar/views/export.inc.php:213
 msgid "Synchronisieren Ihrer Kalenderdaten"
-msgstr ""
+msgstr "Synchronise your calendar data"
 
 #: calendar/views/export.inc.php:217
 msgid ""
 "Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei "
 "befinden."
-msgstr ""
+msgstr "You can synchronise appointments which are in a iCalendar file."
 
 #: calendar/views/export.inc.php:227
 #, c-format
 msgid "Es wurden %s Termine importiert."
-msgstr ""
+msgstr "%s appointments have been imported."
 
 #: calendar/views/export.inc.php:232
 msgid "Es wurden keine Termine importiert."
-msgstr ""
+msgstr "No appointments have been imported."
 
 #: calendar/views/export.inc.php:242
-msgid ""
-"Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
-msgstr ""
+msgid "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
+msgstr "You can import, export and synchronise appointment data."
 
 #: calendar/views/export.inc.php:279
 msgid "Der Export konnte nicht durchgef&uuml;hrt werden!"
-msgstr ""
+msgstr "The export could not be carried out!"
 
 #: calendar/views/export.inc.php:306 calendar/views/export.inc.php:318
 msgid "Der Import konnte nicht durchgef&uuml;hrt werden!"
-msgstr ""
+msgstr "The import could not be carried out!"
 
 #: calendar/views/export.inc.php:314
 msgid "Der Import wurde erfolgreich durchgef&uuml;hrt!"
-msgstr ""
+msgstr "The import was successfully carried out!"
 
 #: calendar/views/export.inc.php:319
 msgid "Die zu importierende Datei enth&auml;lt zuviele Termine."
-msgstr ""
+msgstr "The file to import contains too many appointments."
 
 #: calendar/views/export.inc.php:342
 msgid "Die Synchronisation konnte nicht durgef&uuml;hrt werden!"
-msgstr ""
+msgstr "The synchronisation could not be carried out!"
 
 #: calendar/views/export.inc.php:353
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
-msgstr ""
+msgstr "The synchronisation was successfully carried out!"
 
 #: calendar/views/month.inc.php:71
 msgid "einen Monat zurück"
-msgstr ""
+msgstr "one month back"
 
 #: calendar/views/month.inc.php:79
 msgid "einen Monat vor"
-msgstr ""
+msgstr "one month forward"
 
 #: calendar/views/month.inc.php:93
 msgid "Woche"
@@ -882,7 +877,7 @@ msgstr "still %s appointments before"
 
 #: calendar/views/week.inc.php:85
 msgid "eine Woche zurück"
-msgstr ""
+msgstr "one week back"
 
 #: calendar/views/week.inc.php:87
 #, c-format
@@ -891,7 +886,7 @@ msgstr "Week %s from %s until %s."
 
 #: calendar/views/week.inc.php:93
 msgid "eine Woche vor"
-msgstr ""
+msgstr "one week forward"
 
 #: calendar/views/year.inc.php:152
 #, c-format
@@ -905,69 +900,68 @@ msgstr "1. appointment"
 #: calendar/lib/sync/CalendarExport.class.php:72
 #: calendar/lib/sync/CalendarExport.class.php:96
 msgid "Es wurden keine Termine exportiert."
-msgstr ""
+msgstr "No appointments have been exported."
 
 #: calendar/lib/sync/CalendarExport.class.php:76
 #: calendar/lib/sync/CalendarExport.class.php:100
 #, c-format
 msgid "Es wurden %s Termine exportiert"
-msgstr ""
+msgstr "%s appointments have been exported"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:93
 #: calendar/lib/sync/CalendarExportFile.class.php:141
 msgid "Die Export-Datei konnte nicht erstellt werden!"
-msgstr ""
+msgstr "The export file could not be created!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:122
 msgid "Das Export-Verzeichnis konnte nicht angelegt werden!"
-msgstr ""
+msgstr "The export index could not be created!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:127
 msgid ""
 "Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht ge&auml;ndert "
 "werden!"
-msgstr ""
+msgstr "The access authorisation to the export index could not be changed!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:135
 msgid "Eine bestehende Export-Datei konnte nicht gel&ouml;scht werden!"
-msgstr ""
+msgstr "An existing export file could not be deleted!"
 
 #: calendar/lib/sync/CalendarImportFile.class.php:67
 msgid "Die Import-Datei konnte nicht geöffnet werden!"
-msgstr ""
+msgstr "The import file could not be opened!"
 
 #: calendar/lib/sync/CalendarImportFile.class.php:143
 #: calendar/lib/sync/CalendarImportFile.class.php:161
 msgid "Die Datei konnte nicht gelesen werden!"
-msgstr ""
+msgstr "The file could not be read!"
 
 #: calendar/lib/sync/CalendarImportFile.class.php:181
 msgid "Die Datei konnte nicht gel&ouml;scht werden!"
-msgstr ""
+msgstr "The file could not be deleted!"
 
 #: calendar/lib/sync/CalendarParser.class.php:84
 msgid "Die Import-Datei konnte nicht verarbeitet werden!"
-msgstr ""
+msgstr "The import file could not be processed!"
 
 #: calendar/lib/sync/CalendarParserICalendar.class.php:58
 #: calendar/lib/sync/CalendarParserICalendar.class.php:89
 msgid "Die Datei enthält keine Termine."
-msgstr ""
+msgstr "The file contains no appointments."
 
 #: calendar/lib/sync/CalendarParserICalendar.class.php:78
 #: calendar/lib/sync/CalendarParserICalendar.class.php:299
 #: calendar/lib/sync/CalendarParserICalendar.class.php:310
 msgid "Die Datei ist keine g&uuml;ltige iCalendar-Datei!"
-msgstr ""
+msgstr "The file is not a valid iCalendar file!"
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:103
-msgid ""
-"Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
-msgstr ""
+msgid "Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
+msgstr "The file can not be synchronised with the Stud.IP appointment calendar."
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:146
 msgid "Die zu synchronisierende Datei enth&auml;lt zu viele Termine."
-msgstr ""
+msgstr "The file to be synchronised contains too many appointments."
 
 #~ msgid "Terminkalender"
 #~ msgstr "Appointment calendar"
@@ -1024,3 +1018,4 @@ msgstr ""
 #~ msgstr ""
 #~ "This appointment calendar administers your appointments. You can enter "
 #~ "appointments as well as edit, group and display them."
+
