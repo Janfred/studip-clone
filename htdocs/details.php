@@ -129,7 +129,17 @@ else
 				printf ("<font size=-1>%s</font>",htmlReady($db2->f("Untertitel")));
 				?>
 				</td>
-				<td class="angemeldet" width="26%" rowspan=4  valign="top">
+				<td class="blank" width="26%" rowspan=4  valign="top">
+				
+				<? // Infobox 
+				
+				
+/*				
+				
+				
+				?>
+							
+				
 					<table "center" width="99%" border=0 cellpadding=2 cellspacing=0>
 					<tr>
 						<td width="100%" colspan=2>
@@ -226,6 +236,100 @@ else
 						</td>
 					</tr>
 				</table>
+<?
+
+*/
+
+							$user_id = $auth->auth["uid"];
+							$db3->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
+							if ($db3->next_record() ){
+							$mein_status = $db3->f("status");
+							} else {
+								unset ($mein_status);
+							}
+							//Status als Wartender ermitteln
+							$db3->query("SELECT status FROM admission_seminar_user WHERE seminar_id = '$sem_id' AND user_id = '$user_id'");
+							if ($db3->next_record() ){
+							$admission_status = $db3->f("status");
+							} else {
+								unset ($admission_status);
+							}
+
+							if (($mein_status) || ($admission_status)) {
+								$picture_tmp = "./pictures/haken.gif";
+							} else {
+								$picture_tmp = "./pictures/x2.gif";
+							}
+							
+							if (($mein_status) || ($admission_status)) {
+								if ($mein_status) {
+									$tmp_text="Sie sind als Teilnehmer der Veranstaltung eingetragen";
+								} elseif ($admission_status) {
+									$tmp_text=sprintf ("Sie sind in die %s der Veranstaltung eingetragen", ($admission_status=="claiming")  ? "Anmeldeliste" : "Warteliste");
+								} 
+							} elseif (!$perm->have_perm("admin")) {
+								$tmp_text="Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.";
+							} else {
+								$tmp_text="Sie sind Administrator und k&ouml;nnen die Veranstaltung nicht abonnieren.";
+							}
+							if ((!$mein_status) && (!$admission_status)) {
+								$tmp_text = "<font color = red>".$tmp_text."<font>";
+							}
+
+	$infobox = array	(			
+	array  ("kategorie"  => "Pers&ouml;nlicher Status:",
+		"eintrag" => array	(	
+						array (	"icon" => $picture_tmp,
+								"text"  => $tmp_text
+								)
+		)
+	),
+	array  ("kategorie" => "Berechtigungen:",
+	       "eintrag" => array	(	
+						array	 (	"icon" => "pictures/blank.gif",
+								"text"  => "Lesen:&nbsp; ".get_ampel_read($mein_status, $admission_status, $db2->f("Lesezugriff"),FALSE)
+								),
+						array	 (	"icon" => "pictures/blank.gif",
+								"text"  => "Schreiben:&nbsp; ".get_ampel_write($mein_status, $admission_status, $db2->f("Schreibzugriff"),FALSE)
+								)
+			)
+		)
+	);
+
+
+if ($abo_msg || $back_msg) {
+	$infobox[2]["kategorie"] = "Aktionen:";
+	if ($abo_msg) {
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/meinesem.gif" ,
+									"text"  => "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">".$abo_msg. "</a>"
+								);
+	}
+	if ($back_msg) {
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/suchen.gif" ,
+									"text"  => "<a href=\"$send_from_search_page\">".$back_msg. "</a>"
+								);
+	}
+}
+
+if ($db2->f("admission_binding")) {
+	$infobox[3]["kategorie"] = "Information:";
+	if ($abo_msg) {
+		$infobox[3]["eintrag"][] = array (	"icon" => "./pictures/info.gif" ,
+									"text"  => "Das Abonnement dieser Veranstaltung ist <u>bindend</u>!"
+								);
+	}
+}
+
+
+// print the info_box
+
+print_infobox ($infobox,"pictures/seminare.jpg");
+			
+// ende Infobox
+
+?>
+				
+				
 				</td>
 			</tr>
 			<tr>
