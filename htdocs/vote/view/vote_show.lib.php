@@ -344,6 +344,8 @@ function createVoteHeadline (&$vote, $open, $openID) {
    $date           = $vote->getChangedate ();
    $authorName     = $vote->voteDB->getAuthorRealname ($vote->getAuthorID ());
    $authorUsername = $vote->voteDB->getAuthorUsername ($vote->getAuthorID ());
+   $number         = $vote->voteDB->getNumberUserVoted ();
+
    $openStr = ($open) ? "open" : "close";
 #   $isNew = ($date >= $last_visited);
    $icon = ($vote->instanceof () == INSTANCEOF_TEST) ? VOTE_ICON_TEST : 
@@ -367,7 +369,7 @@ function createVoteHeadline (&$vote, $open, $openID) {
       $link .= "#openvote";
    }
 
-   $title = "<a href=\"$link\" class=\"tree\" >".$title."</a>";
+   $title = "<a href=\"$link\" class=\"tree\" >".$title." (".$number.")</a>";
    if ($vote->getVoteID() == $openID)
       $title .= "<a name=\"openvote\">&nbsp;</a>";
 
@@ -386,7 +388,7 @@ function createVoteHeadline (&$vote, $open, $openID) {
 function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
     $link = $GLOBALS["PHP_SELF"]."?openStoppedVotes=" . 
 	($openStoppedVotes ? NO : YES) . "#stoppedVotes";
-   
+    
    return "<tr>"
        . printhead (0, 0, $link, ($openStoppedVotes) ? "open" : "close",
 		    FALSE, "&nbsp;<img src=\"".VOTE_ICON_STOPPED.
@@ -410,11 +412,12 @@ function createStoppedVoteHeader (&$vote) {
     $authorName     = $vote->voteDB->getAuthorRealname ($vote->getAuthorID ());
     $authorUsername = $vote->voteDB->getAuthorUsername ($vote->getAuthorID ());
     $title          = formatReady ($vote->getTitle ());
+    $number         = $vote->voteDB->getNumberUserVoted ();
 
     $html .= "<table align=center width=\"92%\" cellpadding=1 cellspacing=0><tr>\n";
     $html .= "<td class=toolbar align=left>\n";
     $html .= "<font size=-1 color=\"#ffffff\"><b>\n";
-    $html .= "&nbsp;".$title;
+    $html .= "&nbsp;".$title." (".$number.")";
     $html .= "</b></font>";
     $html .= "</td>";
     $html .= "<td class=toolbar align=right>\n";
