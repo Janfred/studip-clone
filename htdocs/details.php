@@ -596,7 +596,12 @@ print_infobox ($infobox,"pictures/details.jpg");
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 			<?
-				$db3->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)	WHERE seminar_id = '$sem_id' "); //Alle	moeglichen Studiengaenge anziegen
+				$all_cont_user = false;
+				$db3->query("SELECT a.studiengang_id, name, quota, count(b.user_id) AS sem_user_count, count(c.user_id) AS accepted_user_count FROM admission_seminar_studiengang a 
+							LEFT JOIN studiengaenge USING (studiengang_id) 
+							LEFT JOIN seminar_user b ON (a.seminar_id = b.Seminar_id AND a.studiengang_id = b.admission_studiengang_id) 
+							LEFT JOIN admission_seminar_user c ON (a.seminar_id=c.seminar_id AND a.studiengang_id = c.studiengang_id AND c.status='accepted') 
+							WHERE a.seminar_id = '$sem_id' GROUP BY a.studiengang_id"); //Alle	moeglichen Studiengaenge anziegen
 				$c = $db3->num_rows();
 				while ($db3->next_record()) {
 					if (($db3->f("studiengang_id") == "all") && ($c == 1)) break;
@@ -608,7 +613,9 @@ print_infobox ($infobox,"pictures/details.jpg");
 						$tmp_details_quota=get_all_quota($sem_id);
 					else
 						$tmp_details_quota=round ($db2->f("admission_turnout") * ($db3->f("quota") / 100));
-					printf ("<font size=-1>" . _("Kontingent f&uuml;r %s (%s Pl&auml;tze)") . "</font>",	($db3->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db3->f("name"), $tmp_details_quota);
+					$user_count = $db3->f("sem_user_count") + $db3->f("accepted_user_count");
+					$all_cont_user += $user_count;
+					printf ("<font size=-1>" . _("Kontingent f&uuml;r %s (%s Pl&auml;tze / %s belegt)") . "</font>",	($db3->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db3->f("name"), $tmp_details_quota, $user_count );
 					print "<br />";
 				}
 			?>
@@ -625,22 +632,37 @@ print_infobox ($infobox,"pictures/details.jpg");
 			<td class="<? echo $cssSw->getClass() ?>" width="27%" valign="top">
 			<?
 				//Statistikfunktionen
-				$db3->query("SELECT count(*) as anzahl FROM seminar_user WHERE Seminar_id = '$sem_id'");
+				$db3->query("SELECT COUNT(Seminar_id) AS anzahl, COUNT(IF(status='dozent',Seminar_id,NULL)) AS anz_dozent
+						, COUNT(IF(status='tutor',Seminar_id,NULL)) AS anz_tutor, COUNT(IF(status='autor',Seminar_id,NULL)) AS anz_autor
+						, COUNT(IF(status='user',Seminar_id,NULL)) AS anz_user FROM seminar_user 
+						WHERE Seminar_id = '$sem_id' GROUP BY Seminar_id");
 				$db3->next_record();
 				$db4->query("SELECT count(*) as anzahl FROM admission_seminar_user WHERE seminar_id = '$sem_id' AND status = 'accepted'");
 				$db4->next_record();
 				$count = 0;
 				if ($db3->f("anzahl")) $count += $db3->f("anzahl");
 				if ($db4->f("anzahl")) $count += $db4->f("anzahl");
-				printf ("<font size=-1><b>" . _("Anzahl der Teilnehmenden:") . "&nbsp;</b></font><font size=-1>%s </font>", ($count!=0) ? $count : _("keine"));
+				printf("<font size=-1><b>" . _("Anzahl der Teilnehmenden:") . "&nbsp;</b></font><font size=-1>%s </font>", ($count!=0) ? $count : _("keine"));
+				printf("<br><font size=-1><b>" . ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("LeiterInnen") : _("DozentInnen")) . ":&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anz_dozent") ? $db3->f("anz_dozent") : _("keine")));
+				printf("<br><font size=-1><b>" . ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("Mitglieder") : _("TutorInnen")) . ":&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anz_tutor") ? $db3->f("anz_tutor") : _("keine")));
+				printf("<br><font size=-1><b>" . _("Sonstige") . ":&nbsp;</b></font><font size=-1>%s </font>", (($db3->f("anz_autor")+ $db3->f("anz_user") + $db4->f("anzahl")) ? $db3->f("anz_autor")+$db3->f("anz_user") +$db4->f("anzahl") : _("keine")));
 			?>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="24%" valign="top">
 			<?
-				if ($db2->f("admission_turnout"))
+			if ($db2->f("admission_turnout")){
 					printf ("<font size=-1><b>" . _("%s Teilnehmerzahl:") . "&nbsp;</b></font><font size=-1>%s </font>", ($db2->f("admission_type")) ? _("max.") : _("erw."), $db2->f("admission_turnout"));
-				else
+					if ($all_cont_user !== false){
+						printf ("<br><font size=-1><b>" . _("Freie Kontingentpl&auml;tze:") . "&nbsp;</b></font><font size=-1>%s </font>",$db2->f("admission_turnout") - $all_cont_user );
+						if (($db2->f("admission_turnout") - $all_cont_user) == 0){
+							$db3->query("SELECT COUNT(*) AS wartende FROM admission_seminar_user WHERE seminar_id='$sem_id' AND status !='accepted'");
+							$db3->next_record();
+							printf ("<br><font size=-1><b>" . _("Wartelisteneintr&auml;ge:") . "&nbsp;</b></font><font size=-1>%s </font>",$db3->f("wartende"));
+						}
+					}
+			} else {
 					print "&nbsp; ";
+			}
 			?>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="24%" valign="top">
