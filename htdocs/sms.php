@@ -47,7 +47,7 @@ if ($mopen)
 //alle Nachrichten loeschen
 if ($cmd=="delete_all") { 
 	$count=0;
-	$count_deleted_sms=$msging->delete_all_sms ($user->id, $delete_unread);
+	$count_deleted_sms = $msging->delete_all_sms ($user->id, ($delete_unread) ? $GLOBALS['LastLogin'] : false);
 	if ($count_deleted_sms)
 		if ($count_deleted_sms==1)
 			$msg="msg§Es wurde eine Nachricht gel&ouml;scht.";
