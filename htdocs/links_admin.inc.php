@@ -41,6 +41,7 @@ if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
 	$links_admin_data["sem_id"]=$admin_sem_id;
 	$sem_create_data='';
 	$admin_dates_data='';
+	$archiv_assi_data='';
 	$term_metadata='';
 	$admin_dates_data='';
 	$SessSemName[0] = "";
@@ -58,6 +59,7 @@ elseif (($i_page== "adminarea_start.php") && ($list)) {
 	$links_admin_data='';
 	$sem_create_data='';
 	$admin_dates_data='';
+	$archiv_assi_data='';
 	$term_metadata='';	
 	$admin_dates_data='';	
 	$SessSemName[0] = "";
@@ -68,7 +70,8 @@ elseif ((($SessSemName[1]) && ($new_sem)) || ($SessSemName[1] && !$links_admin_d
 	$links_admin_data='';
 	$links_admin_data["sem_id"]=$SessSemName[1];
 	$sem_create_data='';
-	$admin_dates_data='';	
+	$admin_dates_data='';
+	$archiv_assi_data='';
 	$term_metadata='';	
 	}
 //neue Admin-Institut-Sitzung, ich komme aus einem Institut rein ($new_inst==TRUE) 
