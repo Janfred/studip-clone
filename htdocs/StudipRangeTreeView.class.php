@@ -311,7 +311,7 @@ class StudipRangeTreeView {
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">" . _("Keine Grunddaten vorhanden!") . "</td></tr>";
 		}
 		$content .= "\n<tr><td>&nbsp;</td></tr>";
-		$kategorien =& $range_object->item_data['categories'];
+		$kategorien =& $range_object->getCategories();
 		if ($kategorien->numRows){
 			while($kategorien->nextRow()){
 				$content .= "\n<tr><td class=\"topic\">" . htmlReady($kategorien->getField("name")) . "</td></tr>";

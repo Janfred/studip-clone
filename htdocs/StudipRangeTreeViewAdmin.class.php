@@ -372,7 +372,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		$items_to_order = array();
 		if ($this->isItemAdmin($item_id)){
 			$range_object =& RangeTreeObject::GetInstance($item_id);
-			$categories =& $range_object->item_data['categories'];
+			$categories =& $range_object->getCategories();
 			while($categories->nextRow()){
 				$items_to_order[] = $categories->getField("kategorie_id");
 			}
@@ -403,7 +403,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		$item_id = $_REQUEST['item_id'];
 		if ($this->isItemAdmin($item_id)){
 			$range_object =& RangeTreeObject::GetInstance($item_id);
-			$this->edit_cat_snap =& $range_object->item_data['categories'];
+			$this->edit_cat_snap =& $range_object->getCategories();
 			$this->edit_cat_snap->result[$this->edit_cat_snap->numRows] = 
 				array("kategorie_id" => "new_entry", "range_id" => $item_id, "name" => "Neues Datenfeld", "content" => "Neues Datenfeld",
 						"priority" => $this->edit_cat_snap->numRows);
@@ -573,7 +573,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		if ($this->mode == "NewCat" && ($this->edit_cat_item_id == $item_id)){
 			$categories =& $this->edit_cat_snap;
 		} else {
-			$categories =& $range_object->item_data['categories'];
+			$categories =& $range_object->getCategories();
 		}
 		if (!$this->isItemAdmin($item_id)){
 			if ($categories->numRows){

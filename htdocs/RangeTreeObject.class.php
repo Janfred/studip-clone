@@ -60,7 +60,7 @@ class RangeTreeObject {
 	* @access	public
 	* @var		array $item_data
 	*/
-	var $item_data;
+	var $item_data = null;
 	
 	/**
 	* associative array with mapping for database fields
@@ -97,7 +97,6 @@ class RangeTreeObject {
 		$this->tree =& StudipRangeTree::getInstance();
 		$this->tree_item_id = $item_id;
 		$this->item_data = $this->tree->tree_data[$item_id];
-		$this->getCategories();
 	}
 	
 	/**
@@ -200,13 +199,12 @@ class RangeTreeObject {
 			$view->params = array($this->tree->studip_objects[$type]['table'],
 								$this->tree->studip_objects[$type]['pk'],
 								$this->item_data['studip_object_id']);
-			$rs = $view->get_query("view:TREE_OBJECT_DETAIL");
-			if($rs->next_record()){
-				$i = 1;
-				foreach ($rs->Record as $key => $value) {
-					if ( !($i % 2) ) 
-					$this->item_data[$key] = $value;
-					++$i;
+			$snap = new DbSnapshot($view->get_query("view:TREE_OBJECT_DETAIL"));
+			if ($snap->numRows){
+				$fields = $snap->getFieldList();
+				$snap->nextRow();
+				for ($i = 0; $i < count($fields); ++$i){
+					$this->item_data[$fields[$i]] = $snap->getField($fields[$i]);
 				}
 			}
 		return true;
@@ -221,7 +219,7 @@ class RangeTreeObject {
 	* @access private
 	* @return	boolean	true if categories were found
 	*/
-	function getCategories(){
+	function fetchCategories(){
 		$view = new DbView();
 		$view->params[] = $this->tree_item_id;
 		$rs = $view->get_query("view:TREE_OBJECT_CAT");
@@ -230,6 +228,20 @@ class RangeTreeObject {
 			return true;
 		}
 	return false;
+	}
+	
+	/**
+	* getter method for categories of this object
+	*
+	* 
+	* @access public
+	* @return	object DbSnapshot
+	*/
+	function &getCategories(){
+		if (!is_object($this->item_data['categories'])){
+			$this->fetchCategories();
+		}
+		return $this->item_data['categories'];
 	}
 	
 	/**
