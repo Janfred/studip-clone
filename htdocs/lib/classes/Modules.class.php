@@ -51,53 +51,20 @@ class Modules {
 	}
 
 	function getStatus($modul, $range_id) {
-		if (get_object_type($range_id) == "sem") {
-			$query = sprintf ("SELECT status AS type, modules FROM seminare WHERE Seminar_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
-		} else {
-			$query = sprintf ("SELECT type, modules FROM Institute WHERE Institut_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
-		}	
-		$this->db->query($query);
-		$this->db->next_record();
-
-		if ($this->db->nf()) {
-			if ($this->db->f("modules"))
-				$bitmask = $this->db->f("modules");
-			else
-				$bitmask = $this->getDefaultBinValue($this->db->f("type"), $range_id);
-		}
-		
-		if ($this->isBit($bitmask,$this->registered_modules[$modul]["id"]))
+		if ($this->isBit($this->getBin($range_id),$this->registered_modules[$modul]["id"]))
 			return TRUE;
 		else
 			return FALSE;
 	}
-	
-	function getLocalModules($range_id) {
-		if (get_object_type($range_id) == "sem") {
-			$query = sprintf ("SELECT status AS type, modules FROM seminare WHERE Seminar_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
-		} else {
-			$query = sprintf ("SELECT type, modules FROM Institute WHERE Institut_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
-		}
-		$this->db->query($query);
-		$this->db->next_record();
 
-		if ($this->db->nf()) {
-			if ($this->db->f("modules"))
-				$bitmask = $this->db->f("modules");
+	function getLocalModules($range_id) {
+		foreach ($this->registered_modules as $key => $val) {
+			if ($this->isBit($this->getBin($range_id),$val["id"]))
+				$modules_list[$key]= TRUE;
 			else
-				$bitmask = $this->getDefaultBinValue($this->db->f("type"), $range_id);
+				$modules_list[$key]= FALSE;
 		}
-			
-		reset ($this->registered_modules);
-		
-		for ($i = 1; $i <= 31; $i++) {
-			if (list($module_name, $tmp_module) = each($this->registered_modules)) {
-				if ($this->isBit($bitmask,$tmp_module["id"]))
-					$modules_list[$module_name]= TRUE;
-				else
-					$modules_list[$module_name]= FALSE;
-			}
-		}
+
 		return $modules_list;
 	}
 	
@@ -121,6 +88,47 @@ class Modules {
 		}
 		return $bitmask;
 	}
+	
+	function getBin ($range_id) {
+		$db = new DB_Seminar;
+		
+		if (get_object_type($range_id) == "sem") {
+			$query = sprintf ("SELECT status AS type, modules FROM seminare WHERE Seminar_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
+		} else {
+			$query = sprintf ("SELECT type, modules FROM Institute WHERE Institut_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
+		}
+
+		$db->query($query);
+		$db->next_record();
+
+		if ($db->nf()) {
+			if ($db->f("modules"))
+				$bitmask = $db->f("modules");
+			else
+				$bitmask = $this->getDefaultBinValue($db->f("type"), $range_id);
+		}
+
+		return $bitmask;
+	}
+	
+	function writeBin ($range_id, $bitmask) {
+		$db = new DB_Seminar;
+		
+		if (get_object_type($range_id) == "sem") {
+			$query = sprintf ("UPDATE seminare SET modules = '%s' WHERE Seminar_id ='%s'", $bitmask, $range_id);
+		} else {
+			$query = sprintf ("UPDATE Institute SET modules = '%s' WHERE Institut_id ='%s'", $bitmask, $range_id);
+		}
+
+		$db->query($query);
+		$db->next_record();
+
+		if ($db->affected_rows)
+			return TRUE;
+		else
+			return FALSE;
+	}
+	
 	
 	function writeDefaultStatus($range_id) {
 		if (get_object_type($range_id) == "sem") {
@@ -152,30 +160,29 @@ class Modules {
 	function writeStatus($modul, $range_id, $value) {
 		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
 		
+		$db = new DB_Seminar;
+		
 		if (get_object_type($range_id) == "sem") {
-			$query = sprintf ("SELECT status AS type, modules FROM seminare WHERE Seminar_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
+			$query = sprintf ("SELECT status AS type FROM seminare WHERE Seminar_id ='%s'", $range_id);
 		} else {
-			$query = sprintf ("SELECT type, modules FROM Institute WHERE Institut_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
+			$query = sprintf ("SELECT type FROM Institute WHERE Institut_id ='%s'", $range_id);
 		}
-		$this->db->query($query);
-		$this->db->next_record();
-		if ($this->db->nf()) {
-			if ($this->db->f("modules"))
-				$bitmask = $this->db->f("modules");
-			else
-				$bitmask = $this->getDefaultBinValue($this->db->f("type"), $range_id);
-		}
+		
+		$db->query($query);
+		$db->next_record();
+		
+		$bitmask = $this->getBin($range_id);
 		
 		if ($value)
 			$this->setBit($bitmask, $this->registered_modules[$modul]["id"]);
 		else
-			$this->cleartBit($bitmask, $this->registered_modules[$modul]["id"]);
+			$this->clearBit($bitmask, $this->registered_modules[$modul]["id"]);
 			
 		if (get_object_type($range_id) == "sem") {
 			if (($SEM_CLASS[$SEM_TYPE[$db->f("type")]["class"]][$modul]) && ($this->checkGlobal($modul))) {
-				$query = sprintf ("INSERT INTO seminare SET modules = '%s' WHERE Seminar_id ='%s'", bindec($changed_modules), $range_id);
-				$this->db->query($query);
-				if ($this->db->affected_rows())
+				$query = sprintf ("UPDATE seminare SET modules = '%s' WHERE Seminar_id ='%s'", $bitmask, $range_id);
+				$db->query($query);
+				if ($db->affected_rows())
 					return TRUE;
 				else 
 					return FALSE;
@@ -183,9 +190,9 @@ class Modules {
 				return FALSE;
 		} else {
 			if (($INST_MODULES[($INST_MODULES[$db->f("type")]) ? $db->f("type") : "default"][$module]) && ($this->checkGlobal($modul))) {
-				$query = sprintf ("INSERT INTO Institute SET modules = '%s' WHERE Institut_id ='%s'", bindec($changed_modules), $range_id);
-				$this->db->query($query);
-				if ($this->db->affected_rows())
+				$query = sprintf ("UPDATE Institute SET modules = '%s' WHERE Institut_id ='%s'", $bitmask, $range_id);
+				$db->query($query);
+				if ($db->affected_rows())
 					return TRUE;
 				else 
 					return FALSE;
@@ -209,6 +216,30 @@ class Modules {
 			return TRUE;
 		else
 			return FALSE;
+	}
+	
+	function isEnableable ($modul, $range_id) {
+		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
+		
+		if (get_object_type($range_id) == "sem") {
+			$query = sprintf ("SELECT status AS type FROM seminare WHERE Seminar_id ='%s'", $range_id);
+		} else {
+			$query = sprintf ("SELECT type FROM Institute WHERE Institut_id ='%s'", $range_id);
+		}
+		
+		$this->db->query($query);
+		$this->db->next_record();
+		if (get_object_type($range_id) == "sem") {
+			if (($SEM_CLASS[$SEM_TYPE[$this->db->f("type")]["class"]][$modul]) && ($this->checkGlobal($modul)))
+				return TRUE;
+			else
+				return FALSE;
+		} else {
+			if (($INST_MODULES[($INST_MODULES[$this->db->f("type")]) ? $db->f("type") : "default"][$module]) && ($this->checkGlobal($modul)))
+				return TRUE;
+			else
+				return FALSE;
+		}
 	}
 	
 	function setBit(&$bitField,$n) { 
