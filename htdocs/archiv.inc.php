@@ -608,33 +608,35 @@ function in_archiv ($sem_id) {
 	
 	//OK, letzter Schritt: ZIPpen der Dateien des Seminars und Verschieben in eigenes Verzeichnis
 
-	
-	$archiv_file_id=md5(uniqid($hash_secret));
-	$docs=0;	
-	
-	//temporaeres Verzeichnis anlegen
-	exec ("mkdir $TMP_PATH/$archiv_file_id");
-	$tmp_full_path="$TMP_PATH/$archiv_file_id";
-	
-	$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s'", $seminar_id);
+	$query = sprintf ("SELECT dokument_id FROM dokumente WHERE seminar_id = '%s'", $seminar_id);
 	$db->query ($query);
-	$list = "('".$seminar_id."'";
-	while ($db->next_record()) {
-		$list .= ", '".$db->f("termin_id")."' ";
-	}
-	$list.= ")";
-	//copy documents in the temporary folder-system
-	$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN %s ORDER BY name", $list);
-	$db->query ($query);
-	$folder = 0;
-	while ($db->next_record()) {
-		$folder++;
-		exec ("mkdir $tmp_full_path/[$folder] ".prepareFilename($db->f("name"), FALSE));
-		createTempFolder ($folder_id,$tmp_full_path."/[$folder] ".prepareFilename($db->f("name"), FALSE));
-	}
-	
-	//zip all the stuff
-	if ($docs) {
+	if ($db->affected_rows()) {
+		$archiv_file_id=md5(uniqid($hash_secret));
+		$docs=0;	
+		
+		//temporaeres Verzeichnis anlegen
+		exec ("mkdir $TMP_PATH/$archiv_file_id");
+		$tmp_full_path="$TMP_PATH/$archiv_file_id";
+		
+		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s'", $seminar_id);
+		$db->query ($query);
+		$list = "('".$seminar_id."'";
+		while ($db->next_record()) {
+			$list .= ", '".$db->f("termin_id")."' ";
+		}
+		$list.= ")";
+		
+		//copy documents in the temporary folder-system
+		$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN %s ORDER BY name", $list);
+		$db->query ($query);
+		$folder = 0;
+		while ($db->next_record()) {
+			$folder++;
+			exec ("mkdir $tmp_full_path/[$folder] ".prepareFilename($db->f("name"), FALSE));
+			createTempFolder ($folder_id,$tmp_full_path."/[$folder] ".prepareFilename($db->f("name"), FALSE));
+		}
+		
+		//zip all the stuff
 	 	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$ARCHIV_PATH."/".$archiv_file_id." * ");
 	 	exec ("mv ".$ARCHIV_PATH."/".$archiv_file_id.".zip ".$ARCHIV_PATH."/".$archiv_file_id);
 	 	exec ("rm $tmp_full_path/*.*");
