@@ -112,6 +112,7 @@ if( $onthefly &&($command == "delete" || $command == "add_answers"
     $answer->setParentID($template_id);
     $question->addChild($answer);
    }
+   
 }
 
 switch( $command ) {
@@ -172,8 +173,12 @@ switch( $command ) {
  /* -------------------------------------------------------------------- */
  case "add_answers":
   // Bevor etwas hinzugefügt wird nochmal die Speicherungsroutine laufen lassen
-  if(!$onthefly)
+  if(!$onthefly){
      $question=save1($myuserid);
+  }
+  else{
+     $question->save();
+  }
   //$question->setMultiplechoice($template_multiple);
   //$question->setText(trim($template_name), YES);
   //$question->setType($template_type);
@@ -185,6 +190,7 @@ switch( $command ) {
 	$answer->setText("");
 	$question->addChild ($answer);
      }
+     echo "Nummer: ".$question->getNumberChildren()."<br>";
      break;
 
    } elseif ($question->getType () == EVALQUESTION_TYPE_POL) {
@@ -193,6 +199,7 @@ switch( $command ) {
       echo (_("Unbekanntes Objekt"));
    }
   $command = "continue_edit";
+  
      break;
 
 
@@ -202,6 +209,8 @@ switch( $command ) {
      $question=save1($myuserid);
      $question->setParentID($myuserid);
   }
+  else
+     $question->save();
   //else{
   //  echo "parentID: ".$parentID."<br>";
   //  echo "parentID: ".$question->getParentID()."<br>";
@@ -387,6 +396,9 @@ if( !$command || $command == "back" ) {
    /*Root kennzeichnung hier entfernen!!*/
    //if($questionload->getParentID()==0)
    //  $text="<b>".$text."</b>"; 
+   if($questionload->getParentID()==0) {  
+      $text=$questionload->getText()." ".EVAL_ROOT_TAG;
+   }
    if (($answer = $questionload->getChild()) == NULL)
       $answer = new EvaluationAnswer ();
      /* --------------------------------------------------------------- */
@@ -718,7 +730,13 @@ function save1($myuserid){
    return $question;
   
 }
-
+# Define constants ========================================================== #
+/**
+ * @const EVAL_ROOT_TAG Specifies the string for taging root templates
+ * @access public
+ */
+define (EVAL_ROOT_TAG, "[R]");
+# ===================================================== end: define constants #
 
 
 ?>

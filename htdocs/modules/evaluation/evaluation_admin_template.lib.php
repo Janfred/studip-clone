@@ -47,7 +47,7 @@ class EvalTemplateGUI {
               $normalTemplates, $freeTemplates, $myuserid) {
 
      $form = new HTM( "form" );
-     $form->attr( "action", $GLOBALS['PHP_SELF']."?page=edit" );
+     $form->attr( "action", $GLOBALSR['PHP_SELF']."?page=edit" );
      $form->attr( "method", "post" );
 
      $table = new HTML("table");
@@ -459,7 +459,7 @@ class EvalTemplateGUI {
        /* show multiple choice checkboxes & answers------------------------- */
        $form->cont( $this->createSubHeadline( _("Antworten").": " ) );
        for( $i=0; $answer = $question->getNextChild(); $i++ ) {
-	  $form->cont( ($i<9?"0":"").($i+1).". " );
+       	  $form->cont( ($i<9?"0":"").($i+1).". " );
 	  $input = new HTMpty( "input" );
 	  $input->attr( "type", "text" );
 	  $input->attr( "name", "template_answers[".$i."][text]" );
@@ -1134,23 +1134,23 @@ class EvalTemplateGUI {
    function setUniqueName (&$question, $db, $myuserid, $rootTag = NO) {
       $text = $question->getText ();
 
-      /* Add root tag if necessary ------------------------------------------ */
-      if ($rootTag && $myuserid == "0" && !strstr ($text, EVAL_ROOT_TAG))
-         $question->setText ($text." ".EVAL_ROOT_TAG);
-      /* -------------------------------------------------- end: add root tag */
+      /* Add root tag if necessary ----------------------------------------- */
+      //if ($rootTag && $myuserid == "0" && !strstr ($text, EVAL_ROOT_TAG))
+      //   $question->setText ($text." ".EVAL_ROOT_TAG);
+      /* ------------------------------------------------- end: add root tag */
 
-      /* Remove root tag if necessary --------------------------------------- */
+      /* Remove root tag if necessary -------------------------------------- */
       if ($myuserid != "0" && strstr ($text, EVAL_ROOT_TAG)) {
          $question->setText  (trim(implode("", explode(EVAL_ROOT_TAG,$text))));
       }
-      /* ----------------------------------------------- end: remove root tag */
+      /* ---------------------------------------------- end: remove root tag */
 
-      /* Change text if necessary with increasing number -------------------- */
+      /* Change text if necessary with increasing number ------------------- */
       $originalName = $question->getText ();
       for ($i = 1; $db->titleExists ($question->getText (), $myuserid); $i++) {
          $question->setText ($originalName." (".$i.")");
       }
-      /* --------------------------------------------------- end: change text */
+      /* -------------------------------------------------- end: change text */
    }
 
 # ==================================================== end: private functions #
