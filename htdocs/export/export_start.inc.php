@@ -87,7 +87,7 @@ $export_pagename = _("Datenexport - Startseite");
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => sprintf(_("Dies ist das Stud.IP Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in den Formaten %s und XML ausgeben."), implode($output_formats, ", "))
+									"text"  => sprintf(_("Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in den Formaten %s und XML ausgeben."), implode($output_formats, ", "))
 								 )
 							)
 			)

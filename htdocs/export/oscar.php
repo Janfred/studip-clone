@@ -47,11 +47,11 @@ require_once ("./export_xslt_vars.inc.php"); //
 $dirstr = "" . $TMP_PATH;
 //$dirstr = "/apache/htdocs/studip/" . $TMP_PATH;
 if (!($handle=opendir( $dirstr )))
-	echo "Das Verzeichnis existiert nicht!";
+	echo _("Das Verzeichnis existiert nicht!");
 else
 {
-	echo "Verzeichnis: $handle<br>";
-	echo "Dateien:<br>";
+//	echo _("Verzeichnis:") . "$handle<br>";
+//	echo _("Dateien:<br>");
 
 	while (($file = readdir($handle))!==false) 
 	{
@@ -61,19 +61,21 @@ else
 		if (filemtime($dirstr . "/" . $file) < (time() - 60*60 * 24) AND ($file != ".") AND ($file != "..") AND !is_dir($dirstr . "/" . $file) 
 		AND (in_array($endung, array("xml", "pdf", "fo", "htm", "html", "rtf"))))
 		{
-			echo "<font color=\"FF0000#\">" . date("h:i d. m. y", filemtime($dirstr . "/" . $file)) . " $file</font><br>";
+//			echo "<font color=\"FF0000#\">" . date("h:i d. m. y", filemtime($dirstr . "/" . $file)) . " $file</font><br>";
 			if (unlink($dirstr . "/" . $file)) 
 				$deleted++;
 		}
-		else
-			echo date("h:i d. m. y", filemtime($dirstr . "/" . $file)) . " $file<br>";
+//		else
+//			echo date("h:i d. m. y", filemtime($dirstr . "/" . $file)) . " $file<br>";
 	}
 
 	closedir($handle); 
+/*
 	if ($deleted<1)
-		echo "Es wurden keine Dateien gel&ouml;scht.<br>";
+		echo _("Es wurden keine Dateien gel&ouml;scht.<br>");
 	else
-		echo "Es wurden $deleted Dateien gel&ouml;scht.<br>";
+		printf(_("Es wurden %s Dateien gel&ouml;scht.<br>"), $deleted);
+*/
 }
 //page_close();
 ?>

@@ -130,7 +130,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
-									"text"  => _("Bitte w&auml;hlen Sie das Dateiformat, in dem ihre Daten ausgegeben werden sollen. Klicken Sie anschließend auf 'weiter'.")
+									"text"  => _("Bitte w&auml;hlen Sie das Dateiformat, in dem Ihre Daten ausgegeben werden sollen. Klicken Sie anschließend auf 'weiter'.")
 								);
 }
 

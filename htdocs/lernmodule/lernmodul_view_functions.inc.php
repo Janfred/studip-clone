@@ -7,7 +7,7 @@ function show_user_modules($benutzername)
 	$mod_array = get_user_modules($benutzername);
 	if ($mod_array != false)
 	{	
-		echo "<b>" . _("Auf folgende Lernmodule haben Sie Zugriff:") . "</b><br><br>";
+		echo "<b>" . _("Sie haben Zugriff auf folgende Lernmodule:") . "</b><br><br>";
 		?> 
 		<table cellspacing="0" cellpadding="0" border="0" width="100%">
 			<tr align="center" valign="top">
@@ -42,7 +42,7 @@ function show_seminar_modules($seminar_id)
 	$mod_array = get_seminar_modules($seminar_id);
 	if ($mod_array != false)
 	{	
-		echo "<b>" . _("Folgende Lernmodule sind der Veranstaltung zugeordnet:") . "</b><br><br>";
+		echo "<b>" . _("Der Veranstaltung sind folgende Lernmodule zugeordnet:") . "</b><br><br>";
 		?>
 		<table cellspacing="0" cellpadding="0" border="0" width="100%">
 			<tr align="center" valign="top">

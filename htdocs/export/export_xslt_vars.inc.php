@@ -80,26 +80,26 @@ $xslt_files["rtf-kommentar"]["veranstaltung"] = true;
 
 
 $xslt_files["pdf-standard"]["name"] = _("Standardmodul");
-$xslt_files["pdf-standard"]["desc"] = _("Standardmodul zur Ausgabe von Veranstaltungs- und Personendaten als Vorlesungskommentar bzw. MitarbeiterInnenlisten mit Seitenzahlen im Adobe PDF-Format. Die Datei kann mit dem Abrobat PDF-Reader gelesen werden.");
+$xslt_files["pdf-standard"]["desc"] = _("Standardmodul zur Ausgabe von Veranstaltungs- und Personendaten als Vorlesungskommentar bzw. MitarbeiterInnenlisten mit Seitenzahlen im Adobe PDF-Format. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden.");
 $xslt_files["pdf-standard"]["file"] = "pdf-vp-1.xsl";
 $xslt_files["pdf-standard"]["fo"] = true;
 $xslt_files["pdf-standard"]["person"] = true;
 $xslt_files["pdf-standard"]["veranstaltung"] = true;
 
 $xslt_files["pdf-kommentar"]["name"] = _("Vorlesungskommentar");
-$xslt_files["pdf-kommentar"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit der Seitenzahl. Deckblatt und Inhaltsverzeichnis werden automatisch generiert. Die Datei kann mit dem Abrobat PDF-Reader gelesen werden.");
+$xslt_files["pdf-kommentar"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit der Seitenzahl. Deckblatt und Inhaltsverzeichnis werden automatisch generiert. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden.");
 $xslt_files["pdf-kommentar"]["file"] = "pdf-vp-2.xsl";
 $xslt_files["pdf-kommentar"]["fo"] = true;
 $xslt_files["pdf-kommentar"]["veranstaltung"] = true;
 
 $xslt_files["pdf-staff"]["name"] = _("MitarbeiterInnenlisten");
-$xslt_files["pdf-staff"]["desc"] = _("Modul zur Ausgabe von Personendaten als MitarbeiterInnenlisten im Adobe PDF-Format. Die Grunddaten der Personen (Name, Telefon, Sprechzeiten, Raum, E-Mail) werden in einer Tabelle angezeigt. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit der Seitenzahl. Es wird automatisch ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem PDF-Abrobat Reader gelesen werden.");
+$xslt_files["pdf-staff"]["desc"] = _("Modul zur Ausgabe von Personendaten als MitarbeiterInnenlisten im Adobe PDF-Format. Die Grunddaten der Personen (Name, Telefon, Sprechzeiten, Raum, E-Mail-Adresse) werden in einer Tabelle angezeigt. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit der Seitenzahl. Es wird automatisch ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem PDF-Acrobat Reader gelesen werden.");
 $xslt_files["pdf-staff"]["file"] = "pdf-vp-2.xsl";
 $xslt_files["pdf-staff"]["fo"] = true;
 $xslt_files["pdf-staff"]["person"] = true;
 
 $xslt_files["pdf-liste"]["name"] = _("Vorlesungsverzeichnis");
-$xslt_files["pdf-liste"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungsverzeichnis im Adobe PDF-Format. Die Grunddaten der Veranstaltungen (DozentInnen, Titel, Status, Termin und Raum) werden in einer Tabelle angezeigt. Es wird automatisch ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem Abrobat Reader gelesen werden.");
+$xslt_files["pdf-liste"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungsverzeichnis im Adobe PDF-Format. Die Grunddaten der Veranstaltungen (DozentInnen, Titel, Status, erster Termin und Raum) werden in einer Tabelle angezeigt. Es wird automatisch ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem Acrobat Reader gelesen werden.");
 $xslt_files["pdf-liste"]["file"] = "pdf-v-3.xsl";
 $xslt_files["pdf-liste"]["fo"] = true;
 $xslt_files["pdf-liste"]["veranstaltung"] = true;
@@ -107,7 +107,7 @@ $xslt_files["pdf-liste"]["veranstaltung"] = true;
 $xslt_files["pdf-kommentar2"]["name"] = _("Vorlesungskommentar, Layout 2");
 $xslt_files["pdf-kommentar2"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. 
 	Deckblatt und Inhaltsverzeichnis werden automatisch generiert. 
-	Die Datei kann mit dem Abrobat Reader gelesen werden.");
+	Die Datei kann mit dem Acrobat Reader gelesen werden.");
 $xslt_files["pdf-kommentar2"]["file"] = "pdf-v-4.xsl";
 $xslt_files["pdf-kommentar2"]["fo"] = true;
 $xslt_files["pdf-kommentar2"]["veranstaltung"] = true;
