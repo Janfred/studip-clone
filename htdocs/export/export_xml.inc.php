@@ -1,4 +1,17 @@
 <?
+/**
+* Export-subfile that calls export-functions to create a xml-file.
+* 
+* This file call export_range to get a xml-strem with the wanted data. 
+* Depending on $o_mode it passes the xml-stream into a file or to the screen.
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export_xml
+* @package		Export
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export_xml.inc.php
@@ -32,6 +45,15 @@ require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xml_func.inc.php");   //
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_studipdata_func.inc.php");   // Studip-Export-Funktionen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");   // Datumsfunktionen
 
+/**
+* Checks given parameters
+*
+* This function checks the given parameters. If some are missing
+* it returns false and adds a warning to $export_error.
+*
+* @access	public        
+* @return		boolean
+*/
 function CheckParamXML()
 {
 global $range_id, $ex_type, $xml_file_id, $o_mode, $export_error, $export_error_num, $export_o_modes, $export_ex_types;

@@ -1,4 +1,19 @@
 <?
+/**
+* Visual presentation of the Export-module. 
+*
+* This file outputs the export-infobox, forms, messages and errors to the screen. 
+* The HTML-Design and table-Structure for export-pages are part of this file.
+* It is used for any part of the export-module. If $o_mode is "direct" or "passthrough" 
+* it writes only the xml-stream or the output-file to the screen.
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export_view
+* @package		Export
+*/
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 {
 // Start of Output

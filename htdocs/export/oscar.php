@@ -2,7 +2,7 @@
 /**
 * Tool to delete old files in the tmp-directory.
 * 
-* 
+* This file checks the tmp-directory for old files an deletes them.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$

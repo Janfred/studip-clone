@@ -1,4 +1,16 @@
 <?
+/**
+* Export-Subfile that exports data.
+* 
+* This file contains functions to get data from the Stud.IP-db and write it into a file. 
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export_studipdata_functions
+* @package		Export
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export_studipdata_func.inc.php
@@ -23,6 +35,15 @@
 
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 
+/**
+* Converts special charakters into unicode format.
+*
+* This function converts special charakters in the given sring into unicode format UTF-8. 
+*
+* @access	public        
+* @param		string	$xml_string	string to be converted
+* @return		string	converted string
+*/
 function string_to_unicode ($xml_string) 
 {
 	for ($x=0; $x<strlen($xml_string); $x++) 
@@ -34,6 +55,16 @@ function string_to_unicode ($xml_string)
 	return $ret;
 }
 
+/**
+* Writes the xml-stream into a file or to the screen.
+*
+* This function writes the xml-stream $object_data into a file or to the screen, 
+* depending on the content of $output_mode. 
+*
+* @access	public        
+* @param		string	$object_data	xml-stream
+* @param		string	$output_mode	switch for output target
+*/
 function output_data($object_data, $output_mode = "file")
 {
 	global $xml_file;
@@ -43,6 +74,15 @@ function output_data($object_data, $output_mode = "file")
 		echo string_to_unicode( $object_data );
 }
 
+/**
+* Exports data of the given range.
+*
+* This function calls the functions that export the data sepcified by the given $export_range. 
+* It calls the function output_data afterwards.
+*
+* @access	public        
+* @param		string	$range_id	Stud.IP-range_id for export
+*/
 function export_range($range_id)
 {
 	global $db, $o_mode, $range_name;
@@ -110,6 +150,16 @@ function export_range($range_id)
 }
 
 
+/**
+* Exports a Stud.IP-institute.
+*
+* This function gets the data of an institute and writes it into $data_object. 
+* It calls one of the functions export_sem, export_pers or export_teilis and then output_data.
+*
+* @access	public        
+* @param		string	$inst_id	Stud.IP-inst_id for export
+* @param		string	$ex_sem_id	allows to choose if only a specific lecture is to be exported
+*/
 function export_inst($inst_id, $ex_sem_id = "all")
 {
 	global $db, $ex_type, $o_mode, $xml_file, $xml_names_inst, $xml_groupnames_inst, $INST_TYPE;
@@ -180,6 +230,16 @@ function export_inst($inst_id, $ex_sem_id = "all")
 	$data_object = "";
 }
 
+/**
+* Exports lecture-data.
+*
+* This function gets the data of the lectures at an institute and writes it into $data_object. 
+* It calls output_data afterwards.
+*
+* @access	public        
+* @param		string	$inst_id	Stud.IP-inst_id for export
+* @param		string	$ex_sem_id	allows to choose if only a specific lecture is to be exported
+*/
 function export_sem($inst_id, $ex_sem_id = "all")
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $ex_sem, $ex_class_array;
@@ -338,6 +398,16 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$data_object = "";
 }
 
+/**
+* Exports member-list for a Stud.IP-lecture.
+*
+* This function gets the data of the members of a lecture and writes it into $data_object. 
+* It calls output_data afterwards.
+*
+* @access	public        
+* @param		string	$inst_id	Stud.IP-inst_id for export
+* @param		string	$ex_sem_id	allows to choose which lecture is to be exported
+*/
 function export_teilis($inst_id, $ex_sem_id = "no")
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $xml_names_studiengaenge, $xml_groupnames_studiengaenge, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE, $SessSemName;
@@ -465,6 +535,17 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 	$data_object = "";
 }
 
+/**
+* Exports member-list for a Stud.IP-institute.
+*
+* This function gets the data of the members of an institute and writes it into $data_object. 
+* The order of the members depends on the grouping-option $filter.
+* It calls output_data afterwards.
+*
+* @access	public        
+* @param		string	$inst_id	Stud.IP-inst_id for export
+* @param		string	$ex_sem_id	allows to choose which lecture is to be exported
+*/
 function export_pers($inst_id)
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter;

@@ -1,7 +1,9 @@
 <?
 /**
-* Config file for xml export
+* Config file for xml-export
 * 
+* This file contains several arrays, that define which names will be used for specific xml-tags in the output-file. 
+* Changes in this file may cause export-problems if the XSLT-Scripts are not changed either!
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$

@@ -1,4 +1,18 @@
 <?
+/**
+* Config file for xslt-script inclusion
+* 
+* This file contains several arrays, that define which xslt-scripts are available to the export-module. 
+* To add new designs and file-formats to the export-module, just add a new set of filetype, name, 
+* description and format-name to this file.
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export_xml_vars
+* @package		Export
+*/
 
 $xslt_files["txt-standard"]["name"] = _("Standardmodul");
 $xslt_files["txt-standard"]["desc"] = _("Standardmodul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die Daten werden nur mit Tabulatoren und Bindestrichen formatiert. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
