@@ -88,9 +88,11 @@ class DeleteResourcesUser {
 	}
 	
 	function delete() {
-		$this->deleteForeignAssigns();
-		$this->deleteForeignPerms();
-		$this->deleteOwnerResources();		
+		if ($this->range_id) {
+			$this->deleteForeignAssigns();
+			$this->deleteForeignPerms();
+			$this->deleteOwnerResources();
+		}
 	}
 }
 ?>
