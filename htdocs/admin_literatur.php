@@ -38,15 +38,14 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
 
-//get ID from a open Object
-if ($SessSemName[1]) {
+//get ID 
+if ($SessSemName[1])
 	$range_id=$SessSemName[1];
-	$ebene=$SessSemName["class"];
-}
+
 
 //Sicherheitscheck ob was zum Bearbeiten gewaehlt ist.
 if (!$perm->have_studip_perm("tutor",$range_id)) {
-	echo "</tr></td></table>";
+	echo "</tr></td></table>";echo dideldeo;
 	die;
 }
 
@@ -75,7 +74,7 @@ if($aendern && $range_id) {
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr><td class="topic" colspan=2>&nbsp;<b>
 <?
-echo $SessSemName["header_line"] . " -  " . _("Literatur und Links");
+echo getHeaderLine($range_id) . " -  " . _("Literatur und Links");
 ?></b></td></tr>
 <tr><td class="blank" colspan=2>&nbsp;</td></tr>
 <?

@@ -119,9 +119,13 @@ function get_snapshot() {
 			serialize($admin_admission_data["all_ratio"]);
 }
 
+//get ID
+if ($SessSemName[1])
+	$seminar_id=$SessSemName[1];
+	
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($SessSemName[1]) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)) {
-	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Institut_id, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$SessSemName[1];'");
+if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)) {
+	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Institut_id, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$seminar_id;'");
 	$db->next_record();
 	$admin_admission_data='';	
 	$admin_admission_data["metadata_dates"]=unserialize($db->f("metadata_dates"));
@@ -131,6 +135,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!
 	$admin_admission_data["admission_selection_take_place"]=$db->f("admission_selection_take_place");	
 	$admin_admission_data["admission_endtime"]=$db->f("admission_endtime");
 	$admin_admission_data["admission_binding"]=$db->f("admission_binding");
+	$admin_admission_data["sem_id"]=$seminar_id;
 	settype($admin_admission_data["admission_binding"], integer);
 	$admin_admission_data["heimat_inst_id"]=$db->f("Institut_id"); 
 	$admin_admission_data["passwort"]=$db->f("Passwort");	
@@ -139,9 +144,8 @@ if (($SessSemName[1]) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!
 	$admin_admission_data["start_time"]=$db->f("start_time");	
 	$admin_admission_data["read_level"]=$db->f("Lesezugriff");	
 	$admin_admission_data["write_level"]=$db->f("Schreibzugriff");	
-	$admin_admission_data["sem_id"]=$SessSemName[1];
 	if (!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] =-1;
-	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$SessSemName[1]'");
+	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id'");
 	while ($db->next_record()) {
 		if ($db->f("studiengang_id") == "all")
 			$admin_admission_data["all_ratio"]	=$db->f("quota");

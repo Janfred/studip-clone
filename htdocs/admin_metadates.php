@@ -85,16 +85,20 @@ function get_snapshot() {
 			serialize($term_metadata["art"]);
 }
 
+//get ID
+if ($SessSemName[1])
+	$seminar_id=$SessSemName[1]; 
+
 //wenn wir frisch reinkommen, werden die alten Metadaten eingelesen
-if (($SessSemName[1]) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field) && !($open_ureg_x) && !($open_reg_x) && !($enter_start_termin_x) && !($nenter_start_termin_x)) {
-	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$SessSemName[1]'");
+if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field) && !($open_ureg_x) && !($open_reg_x) && !($enter_start_termin_x) && !($nenter_start_termin_x)) {
+	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$term_metadata=unserialize($db->f("metadata_dates"));
 	$term_metadata["sem_status"]=$db->f("status");
 	$term_metadata["sem_name"]=$db->f("Name");	
 	$term_metadata["sem_start_time"]=$db->f("start_time");	
-	$term_metadata["sem_duration_time"]=$db->f("duration_time");	
-	$term_metadata["sem_id"]=$SessSemName[1];
+	$term_metadata["sem_duration_time"]=$db->f("duration_time");
+	$term_metadata["sem_id"] = $seminar_id;
 	if (!$term_metadata["sem_start_termin"]) $term_metadata["sem_start_termin"] =-1;
 	if (!$term_metadata["sem_end_termin"]) $term_metadata["sem_end_termin"] =-1;
 	if (!$term_metadata["sem_vor_termin"]) $term_metadata["sem_vor_termin"] =-1;
