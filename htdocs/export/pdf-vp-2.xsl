@@ -351,7 +351,7 @@ MitarbeiterInnenliste
 			</fo:table-cell>
 			<fo:table-cell border-style="solid" border-color="black">
 				<fo:block>
-					<xsl:if test="email">
+					<xsl:if test="email" hyphenate="true">
 						<xsl:value-of select="email"/>
 					</xsl:if>
 				</fo:block>
@@ -359,6 +359,7 @@ MitarbeiterInnenliste
 		</fo:table-row>
 		</xsl:for-each>
 	</xsl:template>
+
 	<xsl:template name="showseminar">
 		<xsl:for-each select="seminar">
 			<fo:block text-align="justify" font-size="14pt" border-style="solid" border-color="black" space-after="6pt" id="{generate-id()}">
