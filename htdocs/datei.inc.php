@@ -53,9 +53,9 @@ function parse_link($link,$level=0) {
 		$ftp = ftp_connect($url_parts["host"]);
 		// echo $url_parts["pass"];
 		
-				
+		$mailtmp = ($GLOBALS['MAIL_LOCALHOST'] == "") ? getenv("SERVER_NAME") : $GLOBALS['MAIL_LOCALHOST']; 		
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
-		if (!$url_parts["pass"]) $url_parts["pass"] = "wwwrun@".$GLOBALS['MAIL_LOCALHOST'];
+		if (!$url_parts["pass"]) $url_parts["pass"] = "wwwrun@".$mailtmp;
 		if (!@ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
       			ftp_quit($ftp);
       			return FALSE;
