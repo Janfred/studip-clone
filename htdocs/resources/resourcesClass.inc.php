@@ -345,7 +345,7 @@ class AssignEventList{
 	// Konstruktor
 	// if activated without timestamps, we take the current semester
 	function AssignEventList($start = -1, $end = -1, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
-	 	global $SEMESTER, $SEM_ID, $user;
+	 	global $RELATIVE_PATH_RESOURCES, $SEMESTER, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
 	 	

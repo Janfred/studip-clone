@@ -6,18 +6,19 @@
 * or a timetable for a ressource like a room, a device or a building
 * 
 *
-* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		1.0
+* @author		Cornelis Kater <ckater@gwdg.de>
+* @version		$Id$
 * @access		public
-* @modulegroup	resources
+* @package		resources
+* @modulegroup	resources_modules
 * @module		ScheduleWeek.class.php
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // ScheduleWeek.class.php
-// Modul zum erstenn grafischer &Uuml;bersichten wie Belungen oder Stundenplaene
-// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// Modul zum Erstellen grafischer Belegungspl&auml;ne
+// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

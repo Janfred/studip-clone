@@ -129,8 +129,8 @@ if ($change_structure_object) {
 
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
-	//$ObjectPerms = new ResourcesObjectPerms($change_structure_object);
-	//if ($ObjectPerms->getUserPerm () == "user") {			---> hier brauchen wir irgendwie noch die Object id °
+	$ObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id);
+	if ($ObjectPerms->getUserPerm () == "user" || $ObjectPerms->getUserPerm () == "admin") {
 		if ($change_object_schedules == "NEW")
 			$change_schedule_id=FALSE;
 		else
@@ -144,7 +144,13 @@ if ($change_object_schedules) {
 
 		//check, if the owner of the assign object is a Veranstaltung, which has own dates to insert
 		if (get_object_type($change_schedule_assign_user_id) == "sem") {
-		
+		 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+		 	$veranstAssign = new VeranstaltungResourcesAssign($change_schedule_assign_user_id, $change_schedule_resource_id, $change_schedule_user_free_name);
+			$created_ids = $veranstAssign->updateAssign();
+
+			//after a succesful insert show the first (maybe the only) assign-object
+			if (is_array($created_ids))
+				$assign_id=$created_ids[0];
 
 		//create the "normal" assign object
 		} else {
@@ -271,12 +277,12 @@ if ($change_object_schedules) {
 				$changeAssign->store();
 			}
 		
-		$assign_id=$changeAssign->getId();
+			$assign_id=$changeAssign->getId();
 		}
-	/*} else {
+	} else {
 		$error->displayMsg(1);
 		die;
-	}*/
+	}
 		
 	$resources_data["view"]="edit_object_schedules";
 }

@@ -806,7 +806,6 @@ class editObject extends cssClasses {
 		global $PHP_SELF, $resources_data, $search_user, $search_string_search_user;
 
 		$resAssign=new AssignObject($assign_id);
-
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
@@ -1256,7 +1255,7 @@ class ViewSchedules extends cssClasses {
 	}
 
 	function create_schedule_graphical($start_time='', $end_time='') {
-		global $PHP_SELF;
+		global $RELATIVE_PATH_RESOURCES, $PHP_SELF;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ScheduleWeek.class.php");
 	 	
