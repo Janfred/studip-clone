@@ -56,7 +56,7 @@ $ARCHIV_PATH = "/var/lib/studip/archiv";					//Stud.IP archive
 $SMILE_PATH = "pictures/smile";							//smileys
 $SYMBOL_PATH = "pictures/symbol";						//symbols
 
-//oath to the temporary folder
+//path to the temporary folder
 $TMP_PATH ="/tmp";								//the system temp path
 
 //paths to the command line tools, used in Stud.IP
@@ -86,6 +86,9 @@ $RELATIVE_PATH_CALENDAR = "./calendar";						//Stud.IP module: calendar
 $RELATIVE_PATH_CHAT = "chat"; 							//Stud.IP module: chat
 $RELATIVE_PATH_ADMIN_MODULES = "admin";				 		//Stud.IP module: admin tools
 $RELATIVE_PATH_EXTERN = "extern"; 						//Stud.IP module: module for including Stud.IP data in websites
+$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";					//Stud.IP module: ilias connect
+$PATH_EXPORT = "export";							//Stud.IP module: export
+$ABSOLUTE_PATH_ILIAS = "http://<your.server.name>/ilias/";
 
 $RESOURCES_ENABLE = TRUE;							//Stud.IP module: resource management
 
@@ -95,16 +98,13 @@ $CALENDAR_DRIVER = "MySQL"; 							//Stud.IP module: calendar driver: database t
 $CHAT_ENABLE = TRUE;								//Stud.IP module: chat
 $CHAT_SERVER_NAME = "ChatShmServer";
 
-$PATH_EXPORT = "export";							//Stud.IP module: export
-$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    //path to fop
-$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     //used to set environment for JRE
-$EXPORT_ENABLE = TRUE;
+$EXPORT_ENABLE = TRUE;								//Stud.IP module: export
 $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
+$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    //path to fop
+$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     //used to set environment for JRE
 
 $ILIAS_CONNECT_ENABLE = FALSE;							//Stud.IP module: ilias connect
-$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";
-$ABSOLUTE_PATH_ILIAS = "http://<your.server.name>/ilias/";
 
 $EXTERN_ENABLE = TRUE;								//Stud.IP module: SRI-System (extern Modules) 
 //(See extern_config.inc.php in the specified path for further settings)
