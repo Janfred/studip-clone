@@ -29,6 +29,11 @@ Fax: <xsl:value-of select="fax"/>
 <xsl:if test="email">
 E-mail: <xsl:value-of select="email"/>
 </xsl:if>
+<xsl:if test="datenfelder">
+<xsl:for-each select="datenfelder/datenfeld">
+<xsl:value-of select="@key"/>: <xsl:value-of select="."/>
+</xsl:for-each>
+</xsl:if>
 <xsl:text>
 </xsl:text>				
 <xsl:if test="seminare">
@@ -167,6 +172,11 @@ ECTS: <xsl:value-of select="ects"/>
 Bereich: 
 <xsl:for-each select="bereiche/bereich"><xsl:value-of select="."/><xsl:text>
 </xsl:text></xsl:for-each>
+		</xsl:if>
+		<xsl:if test="datenfelder">
+		<xsl:for-each select="datenfelder/datenfeld">
+<xsl:value-of select="@key"/>: <xsl:value-of select="."/>
+		</xsl:for-each>
 		</xsl:if>
 <xsl:text>
 </xsl:text>

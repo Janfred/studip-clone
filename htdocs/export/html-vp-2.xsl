@@ -46,6 +46,13 @@
 				<xsl:value-of select="email"/>
 				<br/>
 </xsl:if>
+<xsl:if test="datenfelder">
+	<xsl:for-each select="datenfelder/datenfeld">
+				<b><xsl:value-of select="@key"/>: </b>
+				<xsl:value-of select="."/>
+				<br/>
+	</xsl:for-each>
+</xsl:if>
 				<br/>
 				<xsl:if test="seminare">
 					<table width="100%" cellpadding="5" cellspacing="0" border="1">
@@ -399,6 +406,19 @@
 					</xsl:for-each>
 				</td>
 			</tr>
+		</xsl:if>
+		<xsl:if test="datenfelder">
+			<xsl:for-each select="datenfelder/datenfeld">
+			<tr>
+				<td>
+					<b><xsl:value-of select="@key"/>: </b>
+				</td>
+				<td>
+					<xsl:value-of select="."/>
+					<br/>
+				</td>
+			</tr>
+			</xsl:for-each>
 		</xsl:if>
 		<tr>
 			<td colspan="2">

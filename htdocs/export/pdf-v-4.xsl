@@ -194,6 +194,14 @@ MitarbeiterInnenliste
 								<xsl:value-of select="email"/>
 							</fo:block>
 </xsl:if>
+<xsl:if test="datenfelder">
+	<xsl:for-each select="datenfelder/datenfeld">
+							<fo:block>
+								<fo:inline font-weight="bold"><xsl:value-of select="@key"/>: </fo:inline>
+								<xsl:value-of select="."/>
+							</fo:block>
+	</xsl:for-each>
+</xsl:if>
 							<fo:block space-after="12pt">
 							</fo:block>
 							<xsl:if test="seminare">
@@ -358,6 +366,14 @@ MitarbeiterInnenliste
 				<fo:block>
 					<xsl:value-of select="."/>
 				</fo:block>
+				</xsl:for-each>
+			</xsl:if>
+			<xsl:if test="datenfelder">
+				<xsl:for-each select="datenfelder/datenfeld">
+					<fo:block>
+						<fo:inline font-weight="bold"><xsl:value-of select="@key"/>: </fo:inline>
+						<xsl:value-of select="."/>
+					</fo:block>
 				</xsl:for-each>
 			</xsl:if>
 			<fo:block space-after="12pt"> 

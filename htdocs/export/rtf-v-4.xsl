@@ -73,6 +73,13 @@
 \par\b E-mail: \b0 </xsl:text>
 			<xsl:value-of select="email"/>
 </xsl:if>
+<xsl:if test="datenfelder">
+	<xsl:for-each select="datenfelder/datenfeld">
+			<xsl:text>
+\par\b </xsl:text><xsl:value-of select="@key"/><xsl:text>: \b0 </xsl:text>
+			<xsl:value-of select="."/>
+	</xsl:for-each>
+</xsl:if>
 			<xsl:if test="seminare">
 				<xsl:text>
 \page\fs36 Veranstaltungen\fs24\par</xsl:text>
@@ -195,6 +202,13 @@
 \par\b Bereich: \b0 </xsl:text>
 				<xsl:for-each select="bereiche/bereich">
 \par <xsl:value-of select="."/>
+				</xsl:for-each>
+			</xsl:if>
+			<xsl:if test="datenfelder">
+				<xsl:for-each select="datenfelder/datenfeld">
+					<xsl:text>
+\par\b </xsl:text><xsl:value-of select="@key"/><xsl:text>: \b0 </xsl:text>
+					<xsl:value-of select="."/>
 				</xsl:for-each>
 			</xsl:if>
 			<xsl:text>
