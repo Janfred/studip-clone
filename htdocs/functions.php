@@ -1,9 +1,15 @@
 <?
+// functions.php - This file contains various functions
+// functions.php - author: studip crew
+// functions.php - version: $Id$
+
+////
+// !dunno
+// A longer, more complete description would go here
+// We might include details of what the function parameters do and what the 
+// result should be, etc.
 function select_group($sem_start_time, $user_id='') {
 	global $SEMESTER;
-	
-	$db=new DB_Seminar;
-	
 	//Farben Algorhytmus, erzeugt eindeutige Farbe fuer jedes Semester. Funktioniert ab 2001 die naechsten 1000 Jahre.....
 	$year_of_millenium=date ("Y", $sem_start_time) % 1000;
 	$index=$year_of_millenium * 2;
@@ -76,6 +82,13 @@ function get_global_perm($user_id="") {
 
 //////////////////////////////////////////////////////////////////////////
 
+////
+// !Returns permission for given range_id and user_id
+// Function works for seminare,institute, fakultaeten
+// admins get status 'admin' if range_id is a seminar
+// param:	string 	$range_id 	an id from a seminar,institut, fakultaet
+// param:	string 	$user_id 	if omitted,current user_id is used
+// return:	string 	
 function get_perm($range_id,$user_id="")
 {
  global $user,$auth;
@@ -120,9 +133,14 @@ function get_perm($range_id,$user_id="")
 
  return $status;
 }
-
+// TABLES: seminar_user,seminare,user_inst,fakultaet_user
 //////////////////////////////////////////////////////////////////////////
 
+////
+// !Retrieves fullname for a given user_id
+// uses global $online array if user is online
+// param:	string 	$user_id 	if omitted,current user_id is used
+// return:	string 	
 function get_fullname($user_id="")
 {
  global $user,$online;
@@ -145,9 +163,14 @@ if (!$author) {
  if ($author=="") $author="unbekannt";
  return $author;
  }
- 
+// TABLES: auth_user_md5 
  /////////////////////////////////////////////////////////////////////////
 
+////
+// !Retrieves fullname for a given username
+// uses global $online array if user is online
+// param:	string 	$uname 	if omitted,current username is used
+// return:	string 	
 function get_fullname_from_uname($uname="")
 {
  global $auth,$online;
@@ -168,10 +191,14 @@ if (!$author) {
 
  return $author;
  }
- 
+// TABLES: auth_user_md5
  
  //////////////////////////////////////////////////////////////////////////
 
+////
+// !Retrieves nachname for a given user_id
+// param:	string 	$user_id 	if omitted,current user_id is used
+// return:	string 	
 function get_nachname($user_id="")
 {
  global $user;
@@ -184,10 +211,15 @@ function get_nachname($user_id="")
 
  return $author;
  }
- 
+ // TABLES: auth_user_md5
  //////////////////////////////////////////////////////////////////////////
- 
- function get_username($user_id="")
+
+ ////
+// !Retrieves username for a given user_id
+// uses global $online array if user is online
+// param:	string 	$user_id 	if omitted,current user_id is used
+// return:	string 	
+function get_username($user_id="")
 {
   global $auth,$online;
  $author="";
@@ -207,11 +239,16 @@ if (!$author) {
 					 $author=$db->f("username");
 }
  return $author;
- }
-
+}
+// TABLES: auth_user_md5
  //////////////////////////////////////////////////////////////////////////
- 
- function get_userid($username="")
+
+////
+// !Retrieves user_id for a given username
+// uses global $online array if user is online
+// param:	string 	$username 	if omitted,current username is used
+// return:	string 	
+function get_userid($username="")
 {
  global $user,$online;
  $author="";
@@ -226,11 +263,15 @@ $db=new DB_Seminar;
 					 $author=$db->f("user_id");
 }
  return $author;
- }
- 
+}
+//TABLES auth_user_md5 
  //////////////////////////////////////////////////////////////////////////
- 
- FUNCTION gettitel($score)
+
+////
+// !Retrieves titel for a given studip score
+// param:	integer	$score
+// return:	string 	
+FUNCTION gettitel($score)
 
 {
 	IF ($score==0) $titel =		"Unbeschriebenes Blatt";
@@ -255,6 +296,10 @@ $db=new DB_Seminar;
 
 //////////////////////////////////////////////////////
 
+////
+// !calculate score for current user
+// score is also stored in DB
+// return:	integer
 function getscore()
 
 { global $user,$auth;
@@ -304,6 +349,6 @@ $db->query($query);
 	
 RETURN $score;
 }
-
+// TABLES: user_info,news,user_inst,archiv_user,seminar_user,dokumente,px_topics
 ///////////////////////////////////////////////////////////////
 ?>
