@@ -114,6 +114,12 @@ switch ($resources_data["view"]) {
 	case "openobject_main":
 		$page_intro=sprintf(_("Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."), $SessSemName["art_generic"]);
 		$title=$SessSemName["header_line"]." - "._("Ressourcen&uuml;bersicht");
+		$infobox = array(
+					array  ("kategorie"  => _("Information:"), 
+							"eintrag" => array (
+								array ("icon" => "pictures/ausruf_small.gif", 	
+									"text"  => _("Als Teilnehmer der Veranstaltung haben Sie die M&ouml;glichkeit, diese Ressourcen frei zu belegen oder den Belegungsplan einzusehen.")))));
+		$infopic = "pictures/schedule.jpg";
 	break;
 	case "openobject_details":
 	case "view_details":
