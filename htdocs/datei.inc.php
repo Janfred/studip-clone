@@ -51,7 +51,6 @@ function parse_link($link) {
       			die("Error: can't login");
       			return FALSE;
    		} 
-   		echo ftp_size($ftp, $documentpath);
    		$parsed_link["Content-Length"] = ftp_size($ftp, $documentpath);
    		ftp_quit($ftp);
 		if ($parsed_link["Content-Length"] != "-1")
