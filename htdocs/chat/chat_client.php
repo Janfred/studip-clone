@@ -53,11 +53,7 @@ require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 
-//shutdown funktion, wird automatisch bei skriptende aufgerufen
-function chatLogout(){
-	global $userid,$chatid,$chatServer;
-	$chatServer->removeUser($userid,$chatid);
-}
+
 
 //Hilfsfunktion, druckt script tags
 function printJs($code){
@@ -275,5 +271,11 @@ foreach($user->pt as $key){
 	unset($$key);
 }
 page_close();
+
+//shutdown funktion, wird automatisch bei skriptende aufgerufen
+function chatLogout(){
+	global $userid,$chatid,$chatServer;
+	$chatServer->removeUser($userid,$chatid);
+}
 ?>
 
