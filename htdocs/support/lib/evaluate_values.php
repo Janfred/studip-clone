@@ -191,7 +191,7 @@ if (($rechte) && ($create_req)) {
 	$query = sprintf("SELECT user_id FROM seminar_user WHERE seminar_id = '%s' AND status IN ('tutor', 'autor')", $SessSemName[1]);
 	$db->query($query);
 	if (!$db->nf()) {
-		$msg->addMsg(7);
+		$msg->addMsg(9);
 	}
 }
 
