@@ -371,7 +371,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status&view=<? echo $view ?>">&nbsp;<? echo(_("Status")) ?>&nbsp;</a></th>
 										<th width="10%"><img src="pictures/nutzer.gif" <? echo tooltip(_("TeilnehmerInnen der Veranstaltung")) ?>></th>
 									<?	}?>
-									<th width="3%"><b>X&nbsp; </b></th>
+									<th width="3%"><b>&nbsp; </b></th>
 							</tr>
 		<?
 		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
@@ -471,7 +471,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
 				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
 			else
-				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td>", $semid);
+				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td>", $semid);
 			echo "</tr>\n";
 		}
 		echo "</table><br><br>";
@@ -543,7 +543,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? _("Los") : (($db->f("status") == "accepted") ? _("Vorl.") :_("Wartel.")));
-			printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/logout.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
+			printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
 		}
 		print "</table>";
 		?>
@@ -577,7 +577,7 @@ if ( !$perm->have_perm("root")) {
 							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
 								<tr valign="top" align="center">
 									<th width="1%">&nbsp; </th>
-									<th width="86%" align="left"><a href="<?=$PHP_SELF?>?sortby=Name&view=<?=$view?>"><?=_("Meine Einrichtungen")?></a></th>
+									<th width="86%" align="left"><?=_("Meine Einrichtungen")?></th>
 									<th width="10%"><b><?=_("Inhalt")?></b></th>
 									<?
 									if ($view=="ext") { 
@@ -585,7 +585,7 @@ if ( !$perm->have_perm("root")) {
 										<th width="10%"><b>&nbsp;<?=_("besucht")?>&nbsp;</b></th>
 										<th width="10%"><b>&nbsp;<?=_("Status")?>&nbsp;</b></th>
 									<? }?>
-									<th width="3%"><b>&nbsp;X&nbsp;</b></th>
+									<th width="3%"><b>&nbsp;&nbsp;</b></th>
 								</tr>
 		<?
 		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
@@ -683,7 +683,7 @@ if ( !$perm->have_perm("root")) {
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
 				echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
 			else
-				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\"></a></td>", $instid);
+				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\">&nbsp;</a></td>", $instid);
 		 	echo "</tr>\n";
 		}
 	} else {
@@ -702,11 +702,6 @@ if ( !$perm->have_perm("root")) {
 }
 
 ////////////////////
-
-
-
-
-
 
 //Info-field on the right side
 	?>
