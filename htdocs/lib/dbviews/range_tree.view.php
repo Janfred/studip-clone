@@ -22,8 +22,11 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
+$semester = new SemesterData;
+$all_semester = $semester->getAllSemesterData();
 
-foreach ($SEMESTER as $key => $value){
+foreach ($all_semester as $key => $value){
 	$sem_start_times[] = $value['beginn'];
 }
 $_views['sem_number_sql'] = "INTERVAL(start_time," . join(",",$sem_start_times) .")";
@@ -63,7 +66,7 @@ $_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Institut_id AS Fakult
 $_views["TREE_SEARCH_ITEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT a.item_id FROM range_tree a LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) WHERE a.name LIKE ?");
 $_views["TREE_SEARCH_USER"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT rt.item_id FROM auth_user_md5 a LEFT JOIN user_inst b ON (a.user_id = b.user_id AND b.inst_perms !='user') 
+							"query"=>"SELECT rt.item_id FROM auth_user_md5 a LEFT JOIN user_inst b ON (a.user_id=b.user_id AND b.inst_perms!='user')
 LEFT JOIN range_tree rt ON (rt.studip_object_id=b.Institut_id ) WHERE NOT ISNULL(rt.item_id) AND CONCAT(a.username,' ',a.Vorname,' ',a.Nachname) LIKE ?");
 $_views["TREE_SEARCH_SEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT rt.item_id FROM seminare a LEFT JOIN seminar_inst b USING (Seminar_id)LEFT JOIN range_tree rt ON (rt.studip_object_id=b.institut_id) 

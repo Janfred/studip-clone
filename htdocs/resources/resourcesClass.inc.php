@@ -37,6 +37,7 @@
 /*****************************************************************************
 AssignObject, zentrale Klasse der Objekte der Belegung
 /*****************************************************************************/
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 class AssignObject {
 	var $db;					//Datenbankanbindung;
 	var $id;					//Id des Belegungs-Objects
@@ -278,9 +279,9 @@ class AssignObject {
 	}
 	
 	function isRepeatEndSemEnd() {
-		global $SEMESTER;
-
-		foreach ($SEMESTER as $a)	
+		$semester = new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
+		foreach ($all_semester as $a)	
 			if (($this->begin >= $a["beginn"]) &&($this->begin <= $a["ende"]))
 				if ($this->repeat_end==$a["vorles_ende"])
 					return true;
@@ -597,16 +598,17 @@ class AssignEventList{
 	// Konstruktor
 	// if activated without timestamps, we take the current semester
 	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
-	 	global $RELATIVE_PATH_RESOURCES, $SEMESTER, $SEM_ID, $user;
+	 	global $RELATIVE_PATH_RESOURCES, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
 	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-	 	
+	 	$semester = new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
 	 	
 		if (!$begin)
-			$begin = $SEMESTER[$SEM_ID]["beginn"];
+			$begin = $all_semester[$SEM_ID]["beginn"];
 		if (!$end )
-			$end = $SEMESTER[$SEM_ID]["ende"];
+			$end = $all_semester[$SEM_ID]["ende"];
 		
 		
 		$this->begin = $begin;
@@ -1229,9 +1231,9 @@ class ResourceObject {
 	//delete section, very privat :)
 	
 	//private
-	function deleteAllAssigns($id='') {
+	function deleteAllAssigns($id) {
 		if (!$id)
-			$id = $this->id;
+			$id=$this->id;
 		$query = sprintf("SELECT assign_id FROM resources_assign WHERE resource_id = '%s' ", $id);
 		$this->db->query($query);
 		while ($this->db->next_record()) {
@@ -1241,9 +1243,9 @@ class ResourceObject {
 	}
 
 	//private
-	function deleteAllPerms($id='') {
+	function deleteAllPerms($id) {
 		if (!$id)
-			$id = $this->id;
+			$id=$this->id;
 		$query = sprintf("DELETE FROM resources_user_resources WHERE resource_id = '%s' ", $id);
 		$this->db->query($query);			
 	}
@@ -1418,10 +1420,8 @@ class ResourcesObjectPerms extends ResourcesPerms {
 		
 		//else check all the other possibilities
 		if ($this->perm != "admin") {
-			$my_administrable_objects=search_administrable_objects();	//the administrative ones....
-			$my_objects=search_my_objects();				//...and the other, where the user is autor.
+			$my_objects=search_administrable_objects();
 			$my_objects["all"]=TRUE;
-			$my_objects = array_merge($my_administrable_objects, $my_objects);
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			foreach ($my_objects as $key=>$val) {
 				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$this->resource_id' ");
