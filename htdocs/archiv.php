@@ -427,7 +427,7 @@ if ($archiv_data["perform_search"]) {
 				if (!$db->f('archiv_file_id')=='')
 					echo "<a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\"><img src=\"pictures/files.gif\" " . tooltip(_("Dateisammlung")) . " border=\"0\"></a>";
 				echo "</td><td class=\"$class\" width=\"3%\">&nbsp;";
-				if ($perm->have_perm("admin"))
+				if (archiv_check_perm($db->f("seminar_id")) == "admin")
 					echo "<a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\">&nbsp;<img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Diese Veranstaltung aus dem Archiv entfernen")) . "></a>";
 				echo "</td>";
 			} else
@@ -452,7 +452,7 @@ if ($archiv_data["perform_search"]) {
 						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?forum_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Beitr&auml;ge des Forums") . "</a></font></li>";
 					if (!$db->f('archiv_file_id')=='')
 						echo "<li><font size=\"-1\"><a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\">" . _("Download der Dateisammlung") . "</a></font></li>";
-					if ($perm->have_perm("admin"))
+					if (archiv_check_perm($db->f("seminar_id")) == "admin")
 						echo "<li><a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\"><font size=\"-1\">" . _("Diese Veranstaltung unwiderruflich aus dem Archiv entfernen") . "</font></a></li>";
 					if (archiv_check_perm($db->f("seminar_id")) == "admin") {
 						if (!$archiv_data["edit_grants"])
