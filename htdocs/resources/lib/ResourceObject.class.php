@@ -292,7 +292,7 @@ class ResourceObject {
 				else
 					return _("Global (zentral verwaltet)");
 			break;
-			case "user";
+			case "user":
 				if (!$explain)
 					return get_fullname($id);
 				else
@@ -354,7 +354,7 @@ class ResourceObject {
 		if (!$id)
 			$id=$this->institut_id;
 		
-		return  sprintf ("institut_main?auswahl=%s",$id);	
+		return  sprintf ("institut_main.php?auswahl=%s",$id);	
 	}
 
 	
