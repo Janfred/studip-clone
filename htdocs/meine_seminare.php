@@ -56,14 +56,24 @@ function get_my_sem_values(&$my_sem) {
 		$my_sem[$db2->f("Seminar_id")]["news"]=$db2->f("count");
 	}
 	
-	// Literatur?
-	$db2->query("SELECT b.Seminar_id,IF(literatur !='' OR links != '',1,0) AS literatur,
-			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND (literatur !='' OR links != '')),1,0) AS neue 
-			FROM loginfilenow_".$user->id." b  LEFT JOIN literatur ON (range_id = b.Seminar_id)");
+	// scm?
+	$db2->query("SELECT b.Seminar_id,IF(content !='',1,0) AS scmcontent,
+			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND content !=''),1,0) AS scmcontentneu 
+			FROM loginfilenow_".$user->id." b  LEFT JOIN scm ON (range_id = b.Seminar_id)");
+	while($db2->next_record()) {
+		if ($my_sem[$db2->f("Seminar_id")]["modules"]["scm"]) {	
+			$my_sem[$db2->f("Seminar_id")]["neuscmcontent"]=$db2->f("scmcontentneu");
+			$my_sem[$db2->f("Seminar_id")]["scmcontent"]=$db2->f("scmcontent");
+		}
+	}
+	
+	//Literaturlisten
+	$db2->query("SELECT b.Seminar_id,count(list_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),list_id,NULL)) AS neue 
+				FROM loginfilenow_".$user->id." b  LEFT JOIN lit_list  ON (b.Seminar_id=range_id AND visibility=1) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		if ($my_sem[$db2->f("Seminar_id")]["modules"]["literature"]) {	
-			$my_sem[$db2->f("Seminar_id")]["neueliteratur"]=$db2->f("neue");
-			$my_sem[$db2->f("Seminar_id")]["literatur"]=$db2->f("literatur");
+			$my_sem[$db2->f("Seminar_id")]["neuelitlist"]=$db2->f("neue");
+			$my_sem[$db2->f("Seminar_id")]["litlist"]=$db2->f("count");
 		}
 	}
 	
@@ -130,17 +140,25 @@ function print_seminar_content($semid,$my_sem_values) {
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
-  //Literatur
-  if ($my_sem_values["literatur"]) {
-		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
-		if ($my_sem_values["neueliteratur"])
-	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste (geändert)"))."></a>";
+  //SCM
+  if ($my_sem_values["scmcontent"]) {
+		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=scm.php\">";
+		if ($my_sem_values["neuscmcontent"])
+	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur freien Kursseite (geändert)"))."></a>";
 		else
-		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste"))."></a>";
+		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur freien Kursseite"))."></a>";
   }
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-
+	
+	// Literaturlisten
+  if ($my_sem_values["neuelitlist"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit2.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten, %s neue"), $my_sem_values["litlist"], $my_sem_values["neuelitlist"]))."></a>";
+  elseif ($my_sem_values["litlist"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten"), $my_sem_values["litlist"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  
   // Termine
   if ($my_sem_values["neuetermine"])
 		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_sem_values["termine"], $my_sem_values["neuetermine"]))."></a>";
@@ -148,6 +166,7 @@ function print_seminar_content($semid,$my_sem_values) {
 		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_sem_values["termine"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+	
 
   // Wikiseiten
   if ($GLOBALS['WIKI_ENABLE']) {  

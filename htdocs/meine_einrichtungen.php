@@ -60,14 +60,24 @@ function get_my_inst_values(&$my_inst) {
 		$my_inst[$db2->f("Seminar_id")]["news"]=$db2->f("count");
 	}
 	
-	// Literatur?
-	$db2->query("SELECT b.Seminar_id,if(literatur !='' OR links != '',1,0) AS literatur,
-			if((chdate > b.loginfilenow AND user_id !='".$user->id."' AND (literatur !='' OR links != '')),1,0) AS neue 
-			FROM loginfilenow_".$user->id." b  LEFT JOIN literatur ON (range_id = b.Seminar_id)");
+	// scm?
+	$db2->query("SELECT b.Seminar_id,IF(content !='',1,0) AS scmcontent,
+			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND content !=''),1,0) AS scmcontentneu 
+			FROM loginfilenow_".$user->id." b  LEFT JOIN scm ON (range_id = b.Seminar_id)");
 	while($db2->next_record()) {
-		if ($my_inst[$db2->f("Seminar_id")]["modules"]["literature"]) {			
-			$my_inst[$db2->f("Seminar_id")]["neueliteratur"]=$db2->f("neue");
-			$my_inst[$db2->f("Seminar_id")]["literatur"]=$db2->f("literatur");
+		if ($my_inst[$db2->f("Seminar_id")]["modules"]["scm"]) {	
+			$my_inst[$db2->f("Seminar_id")]["neuscmcontent"]=$db2->f("scmcontentneu");
+			$my_inst[$db2->f("Seminar_id")]["scmcontent"]=$db2->f("scmcontent");
+		}
+	}
+	
+	//Literaturlisten
+	$db2->query("SELECT b.Seminar_id,count(list_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),list_id,NULL)) AS neue 
+				FROM loginfilenow_".$user->id." b  LEFT JOIN lit_list  ON (b.Seminar_id=range_id AND visibility=1) GROUP BY b.Seminar_id");
+	while($db2->next_record()) {
+		if ($my_inst[$db2->f("Seminar_id")]["modules"]["literature"]) {	
+			$my_inst[$db2->f("Seminar_id")]["neuelitlist"]=$db2->f("neue");
+			$my_inst[$db2->f("Seminar_id")]["litlist"]=$db2->f("count");
 		}
 	}
 	
@@ -122,16 +132,24 @@ function print_institut_content($instid,$my_inst_values) {
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
-  //Literatur
-	if ($my_inst_values["literatur"]) {
-		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=literatur.php\">";
-		if ($my_inst_values["neueliteratur"])
-	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste (geändert)"))."></a>";
+   //SCM
+  if ($my_inst_values["scmcontent"]) {
+		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=scm.php\">";
+		if ($my_inst_values["neuscmcontent"])
+	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur freien Seite (geändert)"))."></a>";
 		else
-		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste"))."></a>";
-  } else {
+		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur freien Seite"))."></a>";
+  }
+  else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-	}
+	
+	// Literaturlisten
+  if ($my_inst_values["neuelitlist"])
+		echo "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=literatur.php\"><img src='pictures/icon-lit2.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten, %s neue"), $my_inst_values["litlist"], $my_inst_values["neuelitlist"]))."></a>";
+  elseif ($my_inst_values["litlist"])
+		echo "&nbsp; <a href=\"institut_main.php?auswahl=$instid&redirect_to=literatur.php\"><img src='pictures/icon-lit.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten"), $my_inst_values["litlist"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   // Termine
   if ($my_inst_values["neuetermine"])
