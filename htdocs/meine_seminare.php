@@ -172,7 +172,7 @@ if ($cmd=="suppose_to_kill_admission") {
 
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
-	$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
+	//$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
 	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 	else {
 	  //Pruefen, ob es Nachruecker gibt
