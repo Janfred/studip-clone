@@ -97,8 +97,7 @@ if ($the_tree->mode == "MoveItem"){
 	if ($_msg){
 		$_msg .= "§";
 	}
-	$_msg .= "info§" . sprintf(_("Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus,"
-								." um das Element <b>%s</b> zu verschieben.%s"),
+	$_msg .= "info§" . sprintf(_("Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus, um das Element <b>%s</b> zu verschieben.%s"),
 								"<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">",
 								htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
 								"<div align=\"right\"><a href=\"" . $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id") . "\">"
