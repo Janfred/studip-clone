@@ -114,22 +114,22 @@ function CheckBuddy($username, $owner_id=FALSE)
 }
 
 function GetNumberOfBuddies()
-{ global $user;
+{ 
+	global $user;
 	$db=new DB_Seminar;
-	$db->query ("SELECT buddy FROM contact WHERE owner_id = '$user->id'");	
-	return $db->nf();
-	
+	$db->query("SELECT count(*) FROM contact WHERE owner_id = '$user->id' AND buddy=1");	
+	$db->next_record();
+	return $db->f(0);
 }
 
 function GetSizeofBook()
-{ global $user;
+{
+	global $user;
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
-	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id'");	
-	if ($db->next_record()) {
-		$size = $db->num_rows();
-	}
-	return $size;
+	$db->query("SELECT count(*) FROM contact WHERE owner_id = '$owner_id'");	
+	$db->next_record();
+	return $db->f(0);
 }
 
 function GetSizeOfBookByLetter()
