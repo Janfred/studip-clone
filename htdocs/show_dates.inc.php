@@ -186,7 +186,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 				$titel .= ", " . $tmp_titel;
 				}
 			
-			if ($db->f("chdate") > object_get_visit($SessSemName[1], "sem"))
+			if ($db->f("chdate") > object_get_visit($SessSemName[1], "schedule"))
 				$new = TRUE;
 			else
 				$new = FALSE;
