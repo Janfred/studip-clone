@@ -152,7 +152,7 @@ if ($cmd=="raus") {
 		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
 		
 		$message= sprintf ("Ihr Abonnement der Veranstaltung **%s** wurde von einem %s oder Administrator aufgehoben.", $SessSemName[0], ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozent");
-;
+
 		$messaging->insert_sms ($username, $message, "____%system%____");
 		
 		// raus aus allen Statusgruppen
@@ -301,14 +301,14 @@ else
 			while ($db3->next_record()) {
 				if ($db3->f("showscore") == 1) {
 					if ($rechte) {
-						printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"pictures/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige eingeschaltet. Klicken zum Ausschalten."));
+						printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"pictures/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitätsanzeige eingeschaltet. Klicken zum Ausschalten."));
 					} else {
 						echo "&nbsp; ";
 					}
 					$showscore = TRUE;
 				} else {
 					if ($rechte) {
-						printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"pictures/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige ausgeschaltet. Klicken zum Einschalten."));
+						printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"pictures/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitätsanzeige ausgeschaltet. Klicken zum Einschalten."));
 					} else {
 						echo "&nbsp; ";
 					}
@@ -460,7 +460,7 @@ if ($db->num_rows()) { //Only if Users were found...
 	echo "<tr>";
 	if ($showscore == TRUE) {
 		printf("<td bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
-		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip("Aktivit&auml;aet: ".round($aktivity_index_user)."%"));
+		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip("Aktivität: ".round($aktivity_index_user)."%"));
 	}
 	printf("<td class=\"%s\"><font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">", $class);
 	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
