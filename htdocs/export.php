@@ -47,8 +47,8 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 }
 
 //$i_page = "meine_seminare.php";
-$EXPORT_ENABLE = TRUE;
-$PATH_EXPORT = "export";
+//$EXPORT_ENABLE = TRUE;
+//$PATH_EXPORT = "export";
 // -- here you have to put initialisations for the current page
 
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
@@ -60,7 +60,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT" . "/export_config.inc.php");
 if ($EXPORT_ENABLE)
 {
 	// Zurueckbutton benutzt?
-	if (isset($back))
+	if (isset($back_x))
 	{
 		if ($o_mode == "choose")
 		{
@@ -83,19 +83,30 @@ if ($EXPORT_ENABLE)
 	}
 	if (($o_mode != "passthrough") AND ($o_mode != "direct"))
 	{
-		?> <script LANGUAGE="JavaScript">
+		?><script LANGUAGE="JavaScript">
+		<!-- Begin
+	
+		var exportproc=false;
+	
+		function export_end()
+		{
+			if (exportproc)
+			{
+				msg_window.close();
+			}
+			return;
+		}
+		
 		function export_start()
 		{
 			msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 			msg_window.document.write("<html><head><title>Daten-Export</title></head>");
 			msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='pictures/alienupload.gif' width='165' height='125'></p>");
 			msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;Die Daten werden exportiert.<br>&nbsp;Bitte haben sie etwas Geduld!<br /></font></p></body></html>");
+			exportproc=true; 
+			return true;
 		}
-		function export_end()
-		{
-			msg_window.close();
-		}
-		
+		// End -->
 		</script>
 		<body onUnLoad="export_end()">
 		<?
