@@ -56,12 +56,32 @@ include "links_openobject.inc.php";
 
 // Aktionen
 
+// deletel a contact
+
 if ($cmd == "delete") {
-	echo DeleteContact ($contact_id);
+	DeleteContact ($contact_id);
 }
+
+// delete a single userinfo
 
 if ($deluserinfo) {
 	DeleteUserinfo ($deluserinfo);
+}
+
+if ($move) {
+	MoveUserinfo ($move);
+}
+
+// add a new userinfo
+
+if ($owninfolabel AND ($owninfocontent[0]!="Inhalt")){
+	AddNewUserinfo ($edit_id, $owninfolabel[0], $owninfocontent[0]);
+}
+
+if ($existingowninfolabel) {
+	for ($i=0; $i<sizeof($existingowninfolabel); $i++) {
+		UpdateUserinfo ($existingowninfolabel[$i], $existingowninfocontent[$i], $userinfo_id[$i]);
+	}
 }
 
 echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"10\"><tr><td class=\"steelgraulight\">";
@@ -92,10 +112,7 @@ for ($i=97;$i<123;$i++) {
 }
 echo "</tr></table>";
 
-if ($owninfolabel) {
-	echo $owninfolabel[0];
-	AddNewUserinfo ($edit_id, $owninfolabel[0], $owninfocontent[0]);
-}
+
 
 // Anzeige Treffer
 if ($edit_id) {

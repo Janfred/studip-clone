@@ -84,7 +84,11 @@ function AddNewUserinfo ($contact_id, $name, $content)
 	global $user;
 	$userinfo_id = MakeUniqueUserinfoID();
 	$db=new DB_Seminar;
-		$db->query("INSERT INTO contact_userinfo SET userinfo_id = '$userinfo_id', contact_id = '$contact_id', name = '$name', content= '$content', priority= '0'");
+	$db->query ("SELECT MAX(priority) as maximum FROM contact_userinfo WHERE contact_id = '$contact_id'");	
+	if ($db->next_record()) {
+		$priority = $db->f("maximum")+1;	
+	}
+	$db->query("INSERT INTO contact_userinfo SET userinfo_id = '$userinfo_id', contact_id = '$contact_id', name = '$name', content= '$content', priority= '$priority'");
 	return $userinfo_id;	
 } 
 
@@ -151,7 +155,7 @@ function ShowUserInfo ($user_id, $contact_id)
 		$extra = GetExtraUserinfo ($contact_id);
 		if (sizeof($extra)>0) {
 			while(list($key,$value) = each($extra)) {
-				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
+				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".htmlReady($key).":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".formatReady($value)."</font></td></tr>";
 			}
 		}
 
@@ -203,26 +207,32 @@ function ShowEditContact ($contact_id)
 	if ($db->next_record()) {
 
 		$lastrow =	"<tr><td class=\"steel2\">"
-					."<input type=\"text\" name=\"owninfolabel[]\" value=\"Beschreibung\"></td>"
-					."<td class=\"steel2\"><textarea style=\"width: 55%\" cols=\"20\" rows\"3\" wrap=virtual name=\"owninfocontent[]\" value=\"Inhalt\">Inhalt</textarea>"
-					."<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n"
+					."<input type=\"text\" name=\"owninfolabel[]\" value=\"Neue Rubrik\"></td>"
+					."<td colspan=\"2\" class=\"steel2\"><textarea style=\"width: 55%\" cols=\"20\" rows\"3\" wrap=virtual name=\"owninfocontent[]\" value=\"Inhalt\">Inhalt</textarea>"
+					."\n"
 					. "</td></tr>";
-		$lastrow .= "<tr><td valign=\"middle\" colspan=\"2\" class=\"steelgraulight\" align=\"center\"><br><input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/uebernehmen-button.gif\" border=\"0\" value=\" Personen suchen\" ".tooltip("Seite aktualisieren")."></form></td></tr>";
+		$lastrow .= "<tr><td valign=\"middle\" colspan=\"3\" class=\"steelgraulight\" align=\"center\"><br><input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/uebernehmen-button.gif\" border=\"0\" value=\" Personen suchen\" ".tooltip("Seite aktualisieren")."></form></td></tr>";
 		$output = "<table cellspacing=\"0\" width=\"700\" class=\"blank\">
 					<tr>
-						<td class=\"topicwrite\" colspan=\"2\">"
+						<td class=\"topicwrite\" colspan=\"3\">"
 							.get_nachname($db->f("user_id")).", ".get_vorname($db->f("user_id"))."</td>"
 							."
 						</td>
 					</tr>"
-						.ShowUserInfo ($db->f("user_id"))
+						.ShowUserInfo ($db->f("user_id"))."</table><table cellspacing=\"0\" width=\"700\" class=\"blank\">"
 						."<form action=\"$PHP_SELF?edit_id=$contact_id\" method=\"POST\">";
 						
 		$db2->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
+		$i = 0;
 		while ($db2->next_record()) 	{
-			$output .= "<tr><td class=\"steel1\" width=\"100\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\">&nbsp; <img src=\"pictures/trash.gif\" border=\"0\"></a></td></tr>";
+			if ($i ==0) {
+				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP><input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\"><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\"></a></td></tr>";
+			} else {
+				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP><input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td NOWRAP class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\" nowrap><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\"></a>&nbsp; <a href=\"$PHP_SELF?edit_id=$contact_id&move=".$db2->f("userinfo_id")."\"><img src=\"pictures/move_up.gif\" border=\"0\"></a></td></tr>";			
+			}
+			$i++;
 		}
-		$output .= "<tr><td class=\"steel1\" colspan=\"2\">&nbsp; </td></tr>".$lastrow
+		$output .= "<tr><td class=\"steel1\" colspan=\"3\">&nbsp; </td></tr>".$lastrow
 				."</table>";
 	} else {
 		$output = "Fehler!";
@@ -230,10 +240,51 @@ function ShowEditContact ($contact_id)
 	return $output;
 }
 
+function MoveUserinfo($userinfo_id)
+{
+	$db=new DB_Seminar;
+	$db->query ("SELECT * FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");	
+	if ($db->next_record()) {
+		$priority = $db->f("priority");		
+		$prioritybevore = $db->f("priority")-1;		
+		$contact_id = $db->f("contact_id");		
+	}
+	$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' AND priority = '$prioritybevore'");	
+	if ($db->next_record()) {
+		$userinfobevore_id = $db->f("userinfo_id");			
+	}
+	$db->query("UPDATE contact_userinfo SET priority = '$prioritybevore' WHERE userinfo_id = '$userinfo_id'");
+	$db->query("UPDATE contact_userinfo SET priority = '$priority' WHERE userinfo_id = '$userinfobevore_id'");
+}
+
+function UpdateUserinfo($name, $content, $userinfo_id)
+{
+	$db=new DB_Seminar;
+	$db->query("UPDATE contact_userinfo SET name =  '$name', content = '$content' WHERE userinfo_id = '$userinfo_id'");
+}
+
+function ResortUserinfo($contact_id)
+{	// resort the userinfos after deleting an item etc.
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$i = 0;
+	$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
+	while ($db->next_record()) {
+		$userinfo_id = $db->f("userinfo_id");
+		$db2->query("UPDATE contact_userinfo SET priority =  '$i' WHERE userinfo_id = '$userinfo_id'");
+		$i++;
+	}
+}
+
 function DeleteUserinfo ($userinfo_id)
 {	// loeschen einer Userinfo
 	$db=new DB_Seminar;
+	$db->query ("SELECT contact_id FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");	
+	if ($db->next_record()) {
+		$contact_id = $db->f("contact_id");	
+	}
 	$db->query ("DELETE FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");	
+	ResortUserinfo($contact_id);
 }
 
 function DeleteContact ($contact_id)
