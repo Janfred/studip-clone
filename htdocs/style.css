@@ -3,8 +3,6 @@ A:link {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, s
 A:hover {	color: #FF3333; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
 A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
 
-TABLE.links1 {	background-color: #FFFFFF;}
-
 A:link.links1 {	color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
 A:visited.links1 {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
 A:hover.links1 {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
@@ -13,21 +11,23 @@ A:link.links1b { color: #000000; font-family: Arial, Helvetica, sans-serif; font
 A:visited.links1b { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
 A:hover.links1b {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
 
-A:link.index {	color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
-A:visited.index {color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
-A:hover.index {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif ;font-size:8pt;}
-
-
+A:link.index {	color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
+A:visited.index {color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
+A:hover.index {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
 
 A:link.tree {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:10pt;}
 A:visited.tree {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:10pt;}
 A:hover.tree {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-size:10pt;}
+
+
+
 
 TD.links1b {background-image: url('pictures/steel1.jpg');}
 TD.links1 {background-image: url('pictures/fill2.gif');}
 TD.reiterunten {background-image: url('pictures/reiter3.jpg');}
 
 table.header { background-image: url('pictures/fill1.gif');}
+TABLE.links1 {	background-color: #FFFFFF;}
 
 table.toolbar {background-image: url('pictures/toolbarbg.gif');}
 TD.toolbar {background-image: url('pictures/toolbarbg.gif');}
