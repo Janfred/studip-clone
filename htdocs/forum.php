@@ -320,46 +320,8 @@ if (!$forumsend=="anpassen") {
 		forum_move_navi ($topic_id);
 		
 	if (!$cmd && !$reset) {
-		if ($forum["toolbar"] == "open") {
-			echo "<tr><td class=\"blank\" colspan=\"2\"><br>";
-			?>
-			<table cellpadding="0" cellspacing="0" border="0" class="blank"><tr><td class="steelkante"><img src="pictures/blank.gif" height="22" width="5"></td>
-			<td class="steelkante"><font size=-1>Indikator:&nbsp;
-			<?
-			if ($forum["indikator"] == "age")
-				echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Alter")." &nbsp;";
-			else
-				echo "</td><td class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Alter")."</a> &nbsp;";
-			if ($forum["indikator"] == "views")
-				echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">"._("Views")." &nbsp;";
-			else
-				echo "</td><td class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=views\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Views")."</a> &nbsp;";
-			if ($forum["indikator"] == "rate")
-				echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Bewertung")." &nbsp;";
-			else
-				echo "</td><td class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rate\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Bewertung")."</a> &nbsp;";
-			if ($forum["indikator"] == "score")
-				echo "</td><td class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Relevanz")." &nbsp;";
-			else
-				echo "</td><td class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Relevanz")."</a> &nbsp;";
-			?>
-			</td><td class="steelkante" valign="bottom">&nbsp;|&nbsp;&nbsp;<font size="-1">Sortierung:&nbsp;&nbsp;</font>
-			<select name="username" size="1">
-			<option value="" size="-1">Alter
-			<option value="">Views
-			<option value="">Bewertungen
-			<option value="">Relevanz
-			</select>&nbsp;&nbsp;
-			<?
-			echo "<img src=\"pictures/vote_answer_correct.gif\" align=\"middle\">&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
-			echo "</td></tr>";
-		} else {
-			echo "<tr><td class=\"blank\" colspan=\"2\"><br>";
-			echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"steelkante\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
-			echo "<td class=\"steelkante\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/forum_indikator_grau.gif\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
-			echo "</td></tr>";
-		}
 	}	
+
 	echo "\n</table>\n";
 }
 
@@ -380,6 +342,9 @@ if ($flatallopen=="TRUE")
 	$forum["flatallopen"] = "TRUE";
 if ($flatallopen=="FALSE")
 	$forum["flatallopen"] = "FALSE";
+
+if (!$reset)
+	echo forum_print_toolbar($edit_id);
 
 if ($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flatfolder" || $forum["view"]=="search")
  	flatview ($open, $mehr, $show, $edit_id, $name, $description, $zitat);

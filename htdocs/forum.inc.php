@@ -398,9 +398,7 @@ function ForumNoPostings () {
 		$text = _("In dieser Ansicht gibt es derzeit keine Beiträge.");
 	else
 		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.<br><a href=\"".$PHP_SELF."?view=search&reset=1\">Neue Suche</a>");
-	$empty = "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 	$empty .= parse_msg("info§$text");
-	$empty .= "</table>";	
 	return $empty;
 } 
 
@@ -501,6 +499,53 @@ function ForumStriche($forumposting) {
 	return $striche;
 }
 
+function forum_print_toolbar ($id="") {
+		global $user, $PHP_SELF, $forum;
+		$print = "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">";
+		if ($id) {  // Schreibmodus, also form einbauen
+			if  ($user->id == "nobody") $print .= "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
+			else $print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
+		}
+		if ($forum["toolbar"] == "open") {
+			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
+			$print .= "<td class=\"steelkante\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
+			$print .= "<td class=\"steelkante\"><font size=\"-1\">Indikator:&nbsp;";
+			
+			if ($forum["indikator"] == "age")
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Alter")." &nbsp;";
+			else
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Alter")."</a> &nbsp;";
+			if ($forum["indikator"] == "views")
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">"._("Views")." &nbsp;";
+			else
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=views\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Views")."</a> &nbsp;";
+			if ($forum["indikator"] == "rate")
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Bewertung")." &nbsp;";
+			else
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rate\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Bewertung")."</a> &nbsp;";
+			if ($forum["indikator"] == "score")
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">"._("Relevanz")." &nbsp;";
+			else
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">"._("Relevanz")."</a> &nbsp;";
+			$print .= "</td><td nowrap class=\"steelkante\" valign=\"bottom\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
+			$print .= "<select name=\"username\" size=\"1\">";
+			$print .= "<option value=\"\">Alter";
+			$print .= "<option value=\"\">Views";
+			$print .= "<option value=\"\">Bewertungen";
+			$print .= "<option value=\"\">Relevanz";
+			$print .= "</select>&nbsp;&nbsp;";
+			$print .= "<img src=\"pictures/vote_answer_correct.gif\" align=\"middle\">&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
+			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
+		} else {
+			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
+			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/pfeillink.gif\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
+			$print .= "</td></tr></table>";
+		}
+		
+		
+		$print .= "</td></tr></table>";	
+		return $print;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -648,16 +693,6 @@ function flatview ($open=0, $mehr=1, $show=0, $update="", $name="", $description
 
 {	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$view,$rechte,$forum,$user,$flatviewstartposting,$PHP_SELF;
 
-?>
-<table width="100%" border=0 cellpadding=0 cellspacing=0 class="blank">
-	<tr>
-		<td colspan=2 class="blank"><br>
-<?
-IF ($update) {  // Schreibmodus, also form einbauen
-	IF  ($user->id == "nobody") echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">\n";
-	ELSE echo "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">\n";
-}
-
 /////////////////////////////// Konstanten setzen bzw. zuweisen die für die ganze Seite gelten
 
 $forum["openlist"] = $open;
@@ -691,6 +726,7 @@ if ($forum["view"]=="search") {
 	} else {
 		echo forum_search_field()."<br><br>";
 		$nomsg="TRUE";
+		
 	}
 } elseif ($forum["view"]=="neue") {
 	$datumtmp = $loginfilelast[$SessSemName[1]];
@@ -703,8 +739,11 @@ $db->query($query);
 if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	$forum["forumsum"] = $db->num_rows();
 } else { // das Forum ist leer
-	if ($nomsg!="TRUE")
+	if ($nomsg!="TRUE") {
+		echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		echo ForumNoPostings();
+		echo "</table>";
+	}
 	die;
 }
 $query .= $addonlimit;
@@ -716,6 +755,7 @@ $db->query($query);
 <table border=0 width="100%" cellspacing="0" cellpadding="0" align="center"><tr>
 <td class="steelgraudunkel" align="left" width="45%">
 <?
+
 if ($forum["view"]=="flatfolder")
 	echo "<img src=\"pictures/cont_folder.gif\" align=\"baseline\"><font size=\"-1\"><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40)." / ";
 if ($forum["search"]!="" && $forum["view"]=="search") {
@@ -824,12 +864,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		
 		// HTML
 
-		echo "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\" colspan=3>&nbsp;";
-		if ($update) {  // Schreibmodus, also form einbauen
-			if  ($user->id == "nobody") echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">\n";
-			else echo "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">\n";
-		}
-		echo "</td></tr><tr>";
+		echo "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"><b><font size=\"-1\">&nbsp;" . _("Thema") . "</font></b></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\" align=\"center\"><font size=\"-1\">&nbsp;&nbsp;";
 		if ($forum["view"] == "tree")
@@ -934,6 +969,7 @@ function DisplayKids ($forumposting, $level=0) {
 function forum_search_field () {
 	global $PHP_SELF;
 $searchfield = "
+<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\"><tr><td class=\"blank\">
 <table border=\"0\" width=\"604\" cellspacing=\"5\" cellpadding=\"0\" align=\"center\">
 <tr>
 <td class=\"blank\">&nbsp;</td></tr>
@@ -987,7 +1023,7 @@ $searchfield = "
 </td>
 <td class=\"suche\"><img src=\"pictures/blank.gif\" height=\"10\" width=\"285\">
 <tr>
-</tr></table>";
+</tr></table><br></td></tr></table>";
 return $searchfield;
 }
 	
