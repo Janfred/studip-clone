@@ -328,10 +328,27 @@ function decodeHTML($string) {
 
 // ermöglicht einfache Formatierungen in Benutzereingaben
 
-function format($text){
+function format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
-	$pattern = array("'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text 
-					"'\n--+(\d?)(\n|$|(?=<))'m",            // Trennlinie
+	
+	$pattern = array("'(^|\n)\!([^!].*)$'m",     // Überschrift 4. Stufe
+					"'(^|\n)\!{2}([^!].*)$'m",           // Überschrift 3. Stufe
+					"'(^|\n)\!{3}([^!].*)$'m",           // Überschrift 2. Stufe
+					"'(^|\n)\!{4}([^!].*)$'m",           // Überschrift 1. Stufe
+					"'(^|\n)--+(\d?)(\n|$)'m",           // Trennlinie
+					"'(\n|\A)(((-|=)+.*(\n|\Z))+)'e"
+					);
+	$replace = array("<h4>\\2 </h4>",
+					"<h3> \\2 </h3>",
+					"<h2> \\2 </h2>",
+					"'<h1> \\2 </h1>",
+					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
+					"preg_call_format_list('\\2')"
+					);
+	$text = preg_replace($pattern, $replace, $text);
+	$text = preg_replace("'(\</h.\>)\n'", "\\1", $text);
+	
+	$pattern = array("'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
 					"'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
 					"'(^|\s)_(?!_)(\S+_)+(?=(\s|$))'e",     // SL-unterstrichen
@@ -348,11 +365,9 @@ function format($text){
 					"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
-					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",        // Absatz eingerueckt
-					"'(\n|\A)((-([^\-]|[^\-].+?)(\n|\Z))+?)(\n|\Z)'se"   // Aufzaehlungsliste
+					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se"        // Absatz eingerueckt
 					);
 	$replace = array("<pre>\\1</pre>",
-					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
 					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
 					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
 					"'\\1<u>'.substr(str_replace('_', ' ', '\\2'), 0, -1).'</u>'",
@@ -369,8 +384,7 @@ function format($text){
 					"'<small>'.format('\\1').'</small>'",
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
-					"'<blockquote>'.format('\\1').'</blockquote>'",
-					"'<ul>'.preg_call_format('\\2').'</ul>'"
+					"'<blockquote>'.format('\\1').'</blockquote>'"
 					);
 	$text = preg_replace($pattern, $replace, $text);
 	
@@ -378,14 +392,57 @@ function format($text){
 }
 
 // Hilfsfunktion für format()
-function preg_call_format($tbr){
-	return preg_replace("'-(.+?)(\n(?=-)|\Z)'se", "'<li>\\1</li>'", $tbr);
+function preg_call_format_list ($content_str) {
+	$current_level = 0;
+	$closed_level[0] = TRUE;
+	
+	$lines = explode("\n", $content_str);
+	foreach ($lines as $line) {
+		if (preg_match("'^((-|=)+)\s*(.*)$'", $line, $matches)) {
+			$level = strlen($matches[1]);
+			if ($matches[1]{0} == "-")
+				$tag = "ul";
+			else
+				$tag = "ol";
+		
+			if ($level > $current_level) {
+				while ($level > $current_level) {
+					$ret .= "<$tag><li>";
+					$closed_level[$current_level++] = FALSE;
+				}
+				$ret .= $matches[3];
+				$closed_level[$current_level] = FALSE;
+			}
+			else if ($level == $current_level) {
+				if (!$closed_level[$current_level]) {
+					$ret .= "</li>";
+					$closed_level[$current_level] = TRUE;
+				}
+				$ret .= "<li>{$matches[3]}</li>";
+			}
+			else if ($level < $current_level) {
+				while ($level < $current_level) {
+					$ret .= "</li></$tag>";
+					$closed_level[$current_level--] = TRUE;
+				}
+				$ret .= "<li>$matches[3]";
+				$closed_level[$current_level] = FALSE;
+			}
+		}
+	}
+	
+	foreach ($closed_level as $closed) {
+		if (!$closed)
+			$ret .= "</$tag>";
+	}
+	
+	return $ret;
 }
 
 // entfernt alle Schnellformatierungszeichen aus $text
 // zurückgegeben wird reiner Text (für HTML-Ausgabe (Druckansicht)
 // muss dieser noch durch nl2br() laufen
-function kill_format($text){
+function kill_format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	$pattern = array("'(^|\s)%(?!%)(\S+%)+'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+'e",  // SL-fett
@@ -472,14 +529,15 @@ function preg_call_link($name, $link, $mod) {
 *
 * This functions converts the smileys codes (":name:") notation an the shorts, 
 * located in the config.inc into the assigned pictures. 
-* On every smiley a link to show_smiley.php overview is given. A tooltip which 
-* shows the smiley code is given, too.
+* On every smiley a link to show_smiley.php overview is given (only if $extern
+* is FALSE). A tooltip which shows the smiley code is given, too.
 *
 * @access	public        
 * @param		string	the text to convert
+* @param		boolean	TRUE if function is called from extern pages
 * @return		string	convertet text
 */
-function smile ($text = "") {
+function smile ($text = "", $extern = FALSE) {
 	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
 	
 	if(empty($text))
@@ -487,9 +545,16 @@ function smile ($text = "") {
 	
 	//smileys in the ":name:" notation
 	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m";
-	$replace = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
-	$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-	$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/\\2.gif\"></a>\\3";
+	$replace = "\\1";
+	if (!$extern) {
+		$replace .= "<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
+		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
+		$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/\\2.gif\"></a>\\3";
+	}
+	else {
+		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
+		$replace .= "http://$SERVER_NAME/$SMILE_PATH/\\2.gif\"></a>\\3";
+	}
 	$text = preg_replace($pattern, $replace, $text);
 	
 	//smileys in short notation
