@@ -25,9 +25,23 @@ function get_user_modules($benutzername)
 	$module_count = 0;
 	$db = New DB_Seminar;
 	$db->query("SELECT * FROM auth_user_md5  WHERE username ='$benutzername'");
-	$firstname = $db->f("Vorname");
-	$surname = $db->f("Nachname");
-	$ilias_user_id = get_ilias_user_id($benutzername);
+	if ($db->next_record())
+	{
+		$firstname = $db->f("Vorname");
+		$surname = $db->f("Nachname");
+		$ilias_user_id = get_ilias_user_id($benutzername);
+	}
+	else
+	{		
+		printf(_("Stud.IP-User '%s' wurde nicht gefunden.") . "<br>", $benutzername);
+		return false;
+	}
+	if (get_ilias_user_id($benutzername) == false)
+	{		
+		echo _("Sie sind nicht als User im angebundenen ILIAS-System eingetragen. Wenden Sie sich bitte an den/die AdministratorIn.") . "<br>";
+		return false;
+	}
+//	echo $firstname . $surname . $ilias_user_id;
 	$ilias_db = New DB_Ilias;
 	$ilias_db -> query("SELECT DISTINCT meta.id, meta.inst, meta.title, meta.description ".
 			" FROM lerneinheit LEFT JOIN meta USING(id, inst) LEFT JOIN meta_author USING(id, inst, typ) LEFT JOIN meta_contrib USING(id, inst, typ)".

@@ -37,8 +37,7 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 	$ilias_db->query("SELECT benutzername FROM benutzer WHERE benutzername='". $username_prefix . mysql_escape_string($benutzername) ."'");
 	if ($ilias_db->next_record())
 	{
-		printf(_("Der User '%s' existiert bereits!<br>"), $ilias_db->f("benutzername"));
-		return false;
+		return sprintf(_("Der ILIAS-User '%s' existiert bereits!<br>"), $ilias_db->f("benutzername"));
 	}
 	else
 	{	
@@ -100,19 +99,21 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 	}
 }
 
-function create_ilias_user()
+function create_ilias_user($benutzername)
 {
 	global $auth;
 	$db = new DB_Seminar;
-	$query_string = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.username = '". $auth->auth["uname"] . "'";
+	$query_string = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.username = '". $benutzername . "'";
 	$db->query($query_string);
 	if ($db->next_record())
 	{
-		new_ilias_user($db->f("username"), md5($db->f("password")), $db->f("geschlecht"), 
+		return new_ilias_user($db->f("username"), md5($db->f("password")), $db->f("geschlecht"), 
 			$db->f("Vorname"), $db->f("Nachname"), $db->f("title_front"), 
 			"Stud.IP", $db->f("privatnr"), $db->f("Email"), 
 			$db->f("perms"), $db->f("preferred_language"));
 	}
+	else 
+		return false;
 }
 
 function edit_ilias_user ($u_id, $benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)

@@ -7,6 +7,15 @@ function show_user_modules($benutzername)
 	$mod_array = get_user_modules($benutzername);
 	if ($mod_array != false)
 	{	
+		echo "<b>" . _("Auf folgende Lernmodule haben Sie Zugriff:") . "</b><br><br>";
+		?> 
+		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+			<tr align="center" valign="top">
+				<th width="80%" align="left"><b><? echo _("Name"); ?></b></th>
+				<th width="15%"><b><? echo _("Bearbeiten"); ?></b></th>
+				<th width="5%"><b>X</b></th>
+			</tr>		
+		<?
 		while ($module_count < sizeof($mod_array))
 		{
 			$edit_link = link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
@@ -20,6 +29,7 @@ function show_user_modules($benutzername)
 			</td></tr><?
 			$module_count ++;
 		}
+		?></table><?
 	}
 	else
 		echo "<b>" . _("Sie haben keinen Zugriff auf bestehende ILIAS-Lernmodule.") . "</b><br><br>";
