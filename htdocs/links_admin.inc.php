@@ -1,4 +1,4 @@
-<?
+	<?
 /*
 links_admin.inc.php - Navigation fuer die Verwaltungsseiten von Stud.IP.
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de
@@ -257,22 +257,22 @@ $structure["zeiten"]=array (topKat=>"veranstaltungen", name=>"Zeiten", link=>"ad
 $structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>"Ablaufplan", link=>"admin_dates.php?list=TRUE", active=>FALSE);
 $structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_sem", active=>FALSE);
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>"Zugangsberechtigungen", link=>"admin_admission.php?list=TRUE", active=>FALSE);
-$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>"Gruppen / Funktionen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
+$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>"Gruppen&nbsp;/&nbsp;Funktionen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>"News", link=>"admin_news.php?view=news_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>"archivieren", link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
 if ($perm->have_perm("dozent")) 
-	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>"neue Veranstaltung", link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE);
+	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>"neue&nbsp;Veranstaltung", link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE, newline=>FALSE);
 //
 if ($perm->have_perm("admin")) {
 	$structure["grunddaten_inst"]=array (topKat=>"einrichtungen", name=>"Grunddaten", link=>"admin_institut.php?list=TRUE", active=>FALSE);
 	$structure["mitarbeiter"]=array (topKat=>"einrichtungen", name=>"Mitarbeiter", link=>"inst_admin.php?list=TRUE", active=>FALSE);
-	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>"Gruppen / Funktionen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
+	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>"Gruppen&nbsp;/&nbsp;Funktionen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
 }	
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"admin_news.php?view=news_inst", active=>FALSE);
 if ($perm->is_fak_admin())
-	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
+	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue&nbsp;Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
 $structure["export"]=array (topKat=>"modules", name=>"Export", link=>"export.php", active=>FALSE);
 if ($RESOURCES_ENABLE)

@@ -92,21 +92,21 @@ class reiter {
 	}
 	
 	function bottomkatStart() {
-		printf ("<table width=\"100%%\" cellspacing=0 cellpadding=4 border=0>\n<tr><td class=\"%s\">&nbsp; &nbsp; ", $this->classActive);
+		printf ("<table width=\"100%%\" cellspacing=0 cellpadding=4 border=0>\n<tr><td class=\"%s\" width=\"2%%\">&nbsp; </td><td class=\"%s\">",  $this->classActive, $this->classActive);
 		return;
 	}
 
 	function bottomkat($text,$link,$active=FALSE, $target="") {
 		if (($active) && (!$this->noAktiveBottomkat))
-			printf("<img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s&nbsp; &nbsp; </a>\n",
+			printf("<span style=\"white-space:nowrap;\"><img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"pictures/blank.gif\" width=\"15\"></span>\n",
 				$this->activeBottomkatPic, $this->classActive, $target, $link, $text);
 		else
-			printf("<img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s&nbsp; &nbsp; </a>\n",
+			printf("<span style=\"white-space:nowrap;\"><img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"pictures/blank.gif\" width=\"15\"></span>\n",
 				$this->inactiveBottomkatPic, $this->classActive, $target, $link, $text);
 	}
 
 	function bottomkatCloseRow() {
-		printf ("</td></tr><tr><td background=\"%s\">&nbsp;</td></tr></table>\n", $this->bottomPic);
+		printf ("</td></tr><tr><td colspan=\"2\" background=\"%s\">&nbsp;</td></tr></table>\n", $this->bottomPic);
 		return;
 	}
 	
