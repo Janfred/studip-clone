@@ -1124,8 +1124,13 @@ if ($view=="Login") {
 		echo "<tr><td colspan=2 class=blank><blockquote>";
 		echo "<br><br>" . _("Um die automatische Anmeldung zu nutzen, m&uuml;ssen Sie ihre pers&ouml;nliche Login-Datei auf ihren Rechner kopieren. Mit dem folgenden Link &ouml;ffnet sich ein Fenster, indem Sie ihr Passwort eingeben m&uuml;ssen.") . " ";
 		echo _("Dann wird die Datei erstellt und zu Ihrem Rechner geschickt.") . "<br><br>";
-		echo "<b><center><a href=\"javascript:oeffne();\">" . _("Auto-Login-Datei erzeugen") . "</a></b></center>";
+		echo "<center><b><a href=\"javascript:oeffne();\">" . _("Auto-Login-Datei erzeugen") . "</a></b></center>";
 		echo "<br><br>" . _("<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große Sicherheitslücke dar. Jeder, der Zugriff auf Ihren Rechner hat, kann sich damit unter Ihrem Namen in Stud.IP einloggen!");
+		echo "<br><br>";
+		echo _("Eine sichere Variante besteht aus folgendem Link:") . "<br>";
+		printf ("<center><b><a href=\"%s\">%s</a></b></center><br>", sprintf("index.php?again=yes&shortcut=%s", $auth->auth["uname"]), sprintf(_("Stud.IP - Login (%s)"), $auth->auth["uname"]));
+		echo _("Speichern Sie diesen Link als Bookmark oder Favoriten.") . "<br>";
+		echo _("Er f&uuml;hrt Sie direkt zum Login-Bildschirm von Stud.IP mit Ihrem schon eingetragenen Benutzernamen. Sie m&uuml;ssen nur noch Ihr Passwort eingeben.");
 		echo "</blockquote></td></tr>";
 	} else {
 		echo "<blockquote><br><br>" . _("Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - Sie tragen Verantwortung!");

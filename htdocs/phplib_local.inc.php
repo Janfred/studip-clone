@@ -290,6 +290,7 @@ class Seminar_Auth extends Auth {
 		global $sess;
 		global $challenge;
 		global $ABSOLUTE_PATH_STUDIP;
+		global $shortcut;
 		
 		
 		$challenge = md5(uniqid($this->magic));
