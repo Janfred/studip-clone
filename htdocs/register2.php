@@ -18,8 +18,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Register_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
+if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	parse_window ("error§" . _("In dieser Installation ist die M&ouml;glichkeit zur Registrierung ausgeschaltet."), "§",
+				_("Registrierung ausgeschaltet"), 
+				"<a href=\"index.php\"><b>&nbsp;" . sprintf(_("Hier%s geht es zur Startseite."), "</b></a>") . "<br />&nbsp;");
+page_close();
+die;
+}
 if ($auth->auth["uid"] == "nobody") {
 	$auth->logout();
 	header("Location: register2.php");
