@@ -35,6 +35,107 @@
 // +---------------------------------------------------------------------------+
 
 /**
+* This function "opens" a Veranstaltung to work with it
+*
+* The following variables will bet set:
+*	$SessionSeminar					Veranstaltung id
+*	$SessSemName[0]					Veranstaltung name
+*	$SessSemName[1]					Veranstaltung id
+*	$SessSemName[2]					Veranstaltung ort (room)
+*	$SessSemName[3]					Veranstaltung Untertitel (subtitle)
+*	$SessSemName[4]					Veranstaltung start_time (the Semester start_time)
+*	$SessSemName[5]					Veranstaltung institut_id (the home-intitute)
+*	$SessSemName["art"]				Veranstaltung type in alphanumeric form
+*	$SessSemName["art_num"]			Veranstaltung type in numeric form
+*	$SessSemName["art_generic"]		Veranstaltung generic type in alhanumeric form (self description)
+*	$SessSemName["class"]				Veranstaltung class (sem or inst, in this function always sem)
+*	$loginfilelast[$sem_id]				last login-time to the Veranstaltung
+*	$loginfilenowt[$sem_id]				current login-time to the Veranstaltung
+*
+* @param		string	the id of the Veranstaltung
+*
+*/
+function openSem ($sem_id) {
+	global $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast;
+
+	$db=new DB_Seminar;
+
+	$SessionSeminar="$sem_id";
+	$db->query ("SELECT Institut_id, Name, Seminar_id, Ort, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$sem_id'");
+	while ($db->next_record()) {
+		$SessSemName[0] = $db->f("Name");
+		$SessSemName[1] = $db->f("Seminar_id");
+		$SessSemName[2] = $db->f("Ort");
+		$SessSemName[3] = $db->f("Untertitel");
+		$SessSemName[4] = $db->f("start_time");
+		$SessSemName[5] = $db->f("Institut_id");
+		$SessSemName["art_generic"]="Veranstaltung";
+		$SessSemName["class"]="sem";
+		$SessSemName["art_num"]=$db->f("status");
+		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
+			$SessSemName["art"] = "Veranstaltung";
+		else
+			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
+		$nr = $db->f("Seminar_id");
+		$loginfilelast["$nr"] = $loginfilenow["$nr"];
+		$loginfilenow["$nr"] = time();
+	}
+}
+
+
+/**
+* This function "opens" an Einrichtung to work with it
+*
+* Note: Stud.IP treats Einrichtungen like Veranstaltungen, yu can see this
+* especially if you look at the variable names....
+*
+* The following variables will bet set:
+*	$SessionSeminar					Einrichtung id
+*	$SessSemName[0]					Einrichtung name
+*	$SessSemName[1]					Einrichtung id
+*	$SessSemName["art"]				Einrichtung type in alphanumeric form
+*	$SessSemName["art_num"]			Einrichtung type in numeric form
+*	$SessSemName["art_generic"]		Einrichtung generic type in alhanumeric form (self description)
+*	$SessSemName["class"]				Einrichtung class (sem or inst, in this function always inst)
+*	$loginfilelast[$sem_id]				last login-time to the Einrichtung
+*	$loginfilenowt[$sem_id]				current login-time to the Einrichtung
+*
+* @param		string	the id of the Veranstaltung
+*
+*/
+function openInst ($inst_id) {
+	global $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast;
+
+	$db=new DB_Seminar;
+
+	$SessionSeminar="$inst_id";
+	$db->query ("SELECT Name, Institut_id, type FROM Institute WHERE Institut_id='$inst_id'");
+	while ($db->next_record()) {
+		$SessSemName[0] = $db->f("Name");
+		$SessSemName[1] = $db->f("Institut_id");
+		$SessSemName["art_generic"]="Einrichtung";
+		$SessSemName["art"]=$INST_TYPE[$db->f("type")]["name"];
+		if (!$SessSemName["art"])
+			$SessSemName["art"]=$SessSemName["art_generic"];
+		$SessSemName["class"]="inst";
+		$SessSemName["art_num"]=$db->f("type");
+		$nr = $db->f("Institut_id");
+		$loginfilelast["$nr"] = $loginfilenow["$nr"];
+		$loginfilenow["$nr"] = time();
+	}
+}
+
+/**
+* This function closes a opened Veranstaltung or Einrichtung
+*/
+function closeObject() {
+	global $SessionSeminar, $SessSemName;
+	
+	$SessionSeminar='';
+	$SessSemName='';
+}
+
+/**
 * This function returns the last activity in the Veranstaltung
 *
 * @param		string	the id of the Veranstaltung
