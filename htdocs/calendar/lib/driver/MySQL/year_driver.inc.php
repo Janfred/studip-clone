@@ -1,6 +1,6 @@
 <?
 
-function year_restore(&$this){
+function year_restore (&$this) {
 	$db = new DB_Seminar();
 	$end = $this->getEnd();
 	$start = $this->getStart();
@@ -34,7 +34,7 @@ function year_restore(&$this){
 			case 'SINGLE' :
 				$adate = $rep['ts'];
 				while($duration-- && $adate <= $end){
-					$this->appdays["$adate"]++;
+					add_event($this, $db, $adate);
 					$adate += 86400;
 				}
 				break;
@@ -50,7 +50,7 @@ function year_restore(&$this){
 						$duration_first = ($xdate - $this->ts) / 86400 + 1;
 						$md_date = $this->ts;
 						while($duration_first-- && $md_date <= $end && $md_date <= $db->f('expire')){
-							$this->appdays["$md_date"]++;
+							add_event($this, $db, $md_date);
 							$md_date += 86400;
 						}
 					}
@@ -61,7 +61,7 @@ function year_restore(&$this){
 				while($duration--){
 					$md_date = $adate;
 					while($md_date <= $db->f('expire') && $md_date <= $end){
-						$this->appdays["$md_date"]++;
+						add_event($this, $db, $md_date);
 						$md_date += 86400 * $rep['linterval'];
 					}
 					$adate += 86400;
@@ -76,7 +76,7 @@ function year_restore(&$this){
 						$md_date = $adate;
 						$count = $duration;
 						while($count-- && $md_date <= $end && $md_date <= $db->f('expire')){
-							$this->appdays["$md_date"]++;
+							add_event($this, $db, $md_date);
 							$md_date += 86400;
 						}
 					}
@@ -90,7 +90,7 @@ function year_restore(&$this){
 							while($count--){
 								if($wdate > $end || $wdate > $db->f('expire'))
 									break 2;
-								$this->appdays["$wdate"]++;
+								add_event($this, $db, $wdate);
 								$wdate += 86400;
 							}
 						}
@@ -114,7 +114,7 @@ function year_restore(&$this){
 						while($count--){
 							if($wdate > $end || $wdate > $db->f('expire'))
 								break 3;
-							$this->appdays["$wdate"]++;
+							add_event($this, $db, $wdate);
 							$wdate += 86400;
 						}
 					}
@@ -128,7 +128,7 @@ function year_restore(&$this){
 					$adate = mktime(12,0,0,date('n',$db->f('start')),date('j',$db->f('start')),date('Y',$db->f('start')),0);
 					$count = $duration;
 					while($count-- && $adate <= $end && $adate <= $db->f('expire')){
-						$this->appdays["$adate"]++;
+						add_event($this, $db, $adate);
 						$adate += 86400;
 					}
 				}
@@ -190,7 +190,7 @@ function year_restore(&$this){
 					$xdate++;
 					$md_date = $this->ts;
 					while($md_date < $xdate && $md_date <= $db->f('expire')){
-						$this->appdays["$md_date"]++;
+						add_event($this, $db, $md_date);
 						$md_date += 86400;
 					}
 				}
@@ -202,7 +202,7 @@ function year_restore(&$this){
 						// verhindert die Anzeige an Tagen, die außerhalb des Monats liegen (am 29. bis 31.)
 						if($rep['wdays'] == ''?date('j', $adate) == $rep['day']:TRUE
 							&& $md_date <= $db->f('expire') && $md_date <= $end)
-								$this->appdays["$md_date"]++;
+								add_event($this, $db, $md_date);
 						$md_date += 86400;
 					}
 					$amonth += $rep['linterval'];
@@ -233,7 +233,7 @@ function year_restore(&$this){
 					if($rep['ts'] != $adate){
 						$count = $duration;
 						while($count-- && $adate <= $end && $adate <= $db->f('expire')){
-							$this->appdays["$adate"]++;
+							add_event($this, $db, $adate);
 							$adate += 86400;
 						}
 					}
@@ -243,7 +243,7 @@ function year_restore(&$this){
 					$adate = $rep['ts'];
 					$count = $duration;
 					while($count-- && $adate <= $end && $adate <= $db->f('expire')){
-						$this->appdays["$adate"]++;
+						add_event($this, $db, $adate);
 						$adate += 86400;
 					}
 				}
@@ -297,20 +297,30 @@ function year_restore(&$this){
 					$xdate++;
 					$md_date = $this->ts;
 					while($md_date < $xdate && $md_date <= $db->f('expire')){
-						$this->appdays["$md_date"]++;
+						add_event($this, $db, $md_date);
 						$md_date += 86400;
 					}
 				}
 				
 				if($adate > $db->f('start'))
 					while($duration-- && $adate <= $db->f('expire') && $adate <= $end){
-						$this->appdays["$adate"]++;
+						add_event($this, $db, $adate);
 						$adate += 86400;
 					}
 				break;
 				
 		}
 	}
+}
+
+function add_event (&$this, &$db, $date) {
+	// if this date is in the exceptions return FALSE
+	if (in_array($date, explode(',', $db->f('exceptions'))))
+		return FALSE;
+	
+	$this->appdays["$date"]++;
+	
+	return TRUE;
 }
 
 ?>

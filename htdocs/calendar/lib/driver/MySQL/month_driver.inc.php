@@ -315,6 +315,10 @@ function month_restore (&$this) {
 }
 
 function new_event (&$this, &$db, $date) {
+	// if this date is in the exceptions return FALSE
+	if (in_array($date, explode(',', $db->f('exceptions'))))
+		return FALSE;
+	
 	$this->events["$date"][] =& new CalendarEvent(array(
 			'DTSTART'         => $db->f('start'),
 			'DTEND'           => $db->f('end'),
@@ -325,8 +329,9 @@ function new_event (&$this, &$db, $date) {
 			'CATEGORIES'      => $db->f('categories'),
 			'STUDIP_CATEGORY' => $db->f('studip_category'),
 			'UID'             => $db->f('uid'),
-			"DTSTAMP"         => $db->f("mkdate"),
-			"LAST-MODIFIED"   => $db->f("chdate"),
+			'CREATED'         => $db->f('mkdate'),
+			'LAST-MODIFIED'   => $db->f('chdate'),
+			'EXCEPTIONS'      => $db->f('exceptions'),
 			'RRULE'           => array(
 				'ts'            => $db->f('ts'),
 				'linterval'     => $db->f('linterval'),
@@ -340,6 +345,8 @@ function new_event (&$this, &$db, $date) {
 			$db->f('event_id'));
 	
 	$this->appdays["$date"]++;
+	
+	return TRUE;
 }
 
 ?>

@@ -45,100 +45,122 @@ class CalendarDriver extends MysqlDriver {
 	var $db_sem;
 	var $_sem_events;
 	var $_create_sem_object;
+	var $mod;
 	
 	function CalendarDriver () {
 		
 		parent::MysqlDriver();
-		$this->db_sem = NULL;
-		$this->$_bind_sem_events;
+		$this->db['db_sem'] = NULL;
+		$this->$_sem_events;
 		$this->_create_sem_object = FALSE;
 	}
 	
 	function bindSeminarEvents () {
 		
-		
 		$this->$_sem_events = TRUE;
 	}
 	
-	function openDatabaseForReading ($range_id, $start, $end, $event_types,
-			$except = NULL, $sem_id = "") {
+	function openDatabase ($mod, $event_types = '', $start = 0,
+			$end = 2114377200, $except = NULL, $range_id = '', $sem_ids = '') {
 		global $user;
-				
-		if ($event_types == 'ALL_EVENTS' || $event_types == 'CALENDAR_EVENTS') {
-			$this->initialize('db');
+		
+		if ($event_types == '')
+			$event_types = 'CALENDAR_EVENTS';
+		
+		if ($range_id == '')
+			$range_id = $user->id;
+		
+		$this->mod = $mod;
+		switch ($this->mod) {
+			case 'EVENTS':
+				$select_cal = '*';
+				$select_sem = 't.*, s.Name';
+				break;
 			
-			$query = "SELECT * FROM calendar_events WHERE range_id = '$range_id' "
+			case 'COUNT':
+				$select_cal = 'count(event_id) AS cnt';
+				$select_sem = 'count(termin_id) AS cnt';
+				break;
+		}
+		
+		if ($event_types == 'ALL_EVENTS' || $event_types == 'CALENDAR_EVENTS') {
+			$this->initialize('cal');
+			
+			$query = "SELECT $select_cal FROM calendar_events WHERE range_id = '$range_id' "
 					. "AND start BETWEEN $start AND $end";
 			if ($exept !== NULL) {
 				$except = implode("','", $except);
 				$query .= " AND NOT IN '$except'";
 			}
-			$this->db->query($query);
+			$this->db['cal']->query($query);
 		}
 		if ($event_types == 'ALL_EVENTS' || $event_types == 'SEMINAR_EVENTS') {
-			$this->initialize('db_sem');
+			$this->initialize('sem');
 			
-			if ($sem_id == "")
-				$query = "SELECT t.*, s.Name "
+			if ($sem_ids == '')
+				$query = "SELECT $select_sem "
 							 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 							 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 		      		 . "user_id = '{$user->id}' AND date_typ!=-1 AND date_typ!=-2 "
 							 . "AND date BETWEEN $start AND $end";
-			else if ($sem_id != "") {
-				if (is_array($sem_id))
-					$sem_id = implode("','", $sem_id);
-				$query = "SELECT t.*, s.Name "
+			else if ($sem_ids != "") {
+				if (is_array($sem_ids))
+					$sem_ids = implode("','", $sem_ids);
+				$query = "SELECT $select_sem "
 							 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 							 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-		       		 . "user_id = '%s' AND range_id IN ('$sem_id') AND date_typ!=-1 "
+		       		 . "user_id = '%s' AND range_id IN ('$sem_ids') AND date_typ!=-1 "
 					 		 . "AND date_typ!=-2 AND date BETWEEN $start AND $end";
 			}
-			$this->db_sem->query($query);
+			$this->db['sem']->query($query);
 		//	echo $query;
 		}
 	}
 	
 	function nextProperties () {
+		
+		if ($this->mod != 'EVENTS')
+			return FALSE;
 
-		if (is_object($this->db) && $this->db->next_record()) {
+		if (is_object($this->db['cal']) && $this->db['cal']->next_record()) {
 			$properties = array(
-					'DTSTART'         => $this->db->f('start'),
-					'DTEND'           => $this->db->f('end'),
-					'SUMMARY'         => $this->db->f('summary'),
-					'DESCRIPTION'     => $this->db->f('description'),
-					'UID'             => $this->db->f('uid'),
-					'CLASS'           => $this->db->f('class'),
-					'CATEGORIES'      => $this->db->f('categories'),
-					'STUDIP_CATEGORY' => $this->db->f('category_intern'),
-					'PRIORITY'        => $this->db->f('priority'),
-					'LOCATION'        => $this->db->f('location'),
+					'DTSTART'         => $this->db['cal']->f('start'),
+					'DTEND'           => $this->db['cal']->f('end'),
+					'SUMMARY'         => $this->db['cal']->f('summary'),
+					'DESCRIPTION'     => $this->db['cal']->f('description'),
+					'UID'             => $this->db['cal']->f('uid'),
+					'CLASS'           => $this->db['cal']->f('class'),
+					'CATEGORIES'      => $this->db['cal']->f('categories'),
+					'STUDIP_CATEGORY' => $this->db['cal']->f('category_intern'),
+					'PRIORITY'        => $this->db['cal']->f('priority'),
+					'LOCATION'        => $this->db['cal']->f('location'),
 					'RRULE'           => array(
-							'rtype'       => $this->db->f('rtype'),
-							'linterval'   => $this->db->f('linterval'),
-							'sinterval'   => $this->db->f('sinterval'),
-							'wdays'       => $this->db->f('wdays'),
-							'month'       => $this->db->f('month'),
-							'day'         => $this->db->f('day'),
-							'expire'      => $this->db->f('expire')),
-					'CREATED'         => $this->db->f('mkdate'),
-					'LAST-MODIFIED'   => $this->db->f('chdate'),
+							'rtype'       => $this->db['cal']->f('rtype'),
+							'linterval'   => $this->db['cal']->f('linterval'),
+							'sinterval'   => $this->db['cal']->f('sinterval'),
+							'wdays'       => $this->db['cal']->f('wdays'),
+							'month'       => $this->db['cal']->f('month'),
+							'day'         => $this->db['cal']->f('day'),
+							'expire'      => $this->db['cal']->f('expire')),
+					'CREATED'         => $this->db['cal']->f('mkdate'),
+					'LAST-MODIFIED'   => $this->db['cal']->f('chdate'),
 					'DTSTAMP'         => time());
 			
 			$this->count();
 			return $properties;
 		}
-		elseif (is_object($this->db_sem) && $this->db_sem->next_record()) {
+		elseif (is_object($this->db['sem']) && $this->db['sem']->next_record()) {
 			$this->_create_sem_object = TRUE;
 			$properties = array(
-					'DTSTART'         => $this->db_sem->f('date'),
-					'DTEND'           => $this->db_sem->f('end_time'),
-					'SUMMARY'         => $this->db_sem->f('content'),
-					'DESCRIPTION'     => $this->db_sem->f('description'),
-					'LOCATION'        => $this->db_sem->f('raum'),
-					'STUDIP_CATEGORY' => $this->db_sem->f('date_typ'),
-					'CREATED'         => $this->db_sem->f('mkdate'),
-					'LAST-MODIFIED'     => $this->db_sem->f('chdate'),
-					'DTSTAMP'       => time());
+					'DTSTART'         => $this->db['sem']->f('date'),
+					'DTEND'           => $this->db['sem']->f('end_time'),
+					'SUMMARY'         => $this->db['sem']->f('content'),
+					'DESCRIPTION'     => $this->db['sem']->f('description'),
+					'LOCATION'        => $this->db['sem']->f('raum'),
+					'STUDIP_CATEGORY' => $this->db['sem']->f('date_typ'),
+					'CREATED'         => $this->db['sem']->f('mkdate'),
+					'LAST-MODIFIED'   => $this->db['sem']->f('chdate'),
+					'DTSTAMP'         => time());
 			
 			$this->count();
 			return $properties;
@@ -151,13 +173,16 @@ class CalendarDriver extends MysqlDriver {
 	
 	function &nextObject () {
 		
+		if ($this->mod != 'EVENTS')
+			return FALSE;
+		
 		if ($properties = $this->nextProperties()) {
 			if ($this->_create_sem_object) {
-				$event =& new SeminarEvent($this->db_sem->f('termin_id'), $properties, $this->db_sem->f('range_id'));
+				$event =& new SeminarEvent($this->db['sem']->f('termin_id'), $properties, $this->db['sem']->f('range_id'));
 			}
 			else {
-				$event =& new CalendarEvent($properties, $this->db->f('event_id'));
-				$event->user_id = $this->db->f('range_id');
+				$event =& new CalendarEvent($properties, $this->db['cal']->f('event_id'));
+				$event->user_id = $this->db['cal']->f('range_id');
 			}
 			
 			$this->count();
@@ -182,7 +207,7 @@ class CalendarDriver extends MysqlDriver {
 		
 		$query .= " calendar_events VALUES ";
 		
-		$this->initialize('db');
+		$this->initialize('cal');
 		
 		$mult = FALSE;
 		foreach ($properties as $property_set) {
@@ -227,7 +252,7 @@ class CalendarDriver extends MysqlDriver {
 	
 	//	echo "<br>$query<br>";
 		
-		$this->db->query($query);
+		$this->db['cal']->query($query);
 	}
 	
 	function writeObjectsIntoDatabase ($objects, $mode = 'REPLACE') {
@@ -243,11 +268,9 @@ class CalendarDriver extends MysqlDriver {
 		elseif ($mode == 'REPLACE')
 			$query = "REPLACE";
 		
-		$query .= " calendar_events VALUES ";/*(event_id,range_id,autor_id,uid,start,end,summary,description,"
-		        . "class,categories,priority,location,ts,linterval,sinterval,wdays,"
-						. "month,day,rtype,duration,expire,exceptions,mkdate,chdate) VALUES ";*/
+		$query .= " calendar_events VALUES ";
 		
-		$this->initialize('db');
+		$this->initialize('cal');
 		
 		$mult = FALSE;
 		foreach ($objects as $object) {
@@ -286,7 +309,53 @@ class CalendarDriver extends MysqlDriver {
 	
 //		echo "<br>$query<br>";
 		
-		$this->db->query($query);
+		$this->db['cal']->query($query);
+	}
+	
+	function getCountEvents () {
+		
+		if ($this->mod != 'COUNT')
+			return FALSE;
+		
+		$count = 0;
+		if (is_object($this->db['cal']) && $this->db['cal']->next_record())
+			$count = $this->db['cal']->f('cnt');
+		if (is_object($this->db['sem']) && $this->db['sem']->next_record())
+			$count += $this->db['sem']->f('cnt');
+		
+		return $count;
+	}
+	
+	function deleteFromDatabase ($mod, $event_ids = NULL, $start = 0,
+			$end = 2114377200, $range_id = '') {
+		global $user;
+		
+		$this->initialize('cal');
+		if ($range_id == '')
+			$range_id = $user->id;
+		
+		$query = "DELETE FROM calendar_events WHERE range_id = '$range_id'";
+		switch ($mod) {
+			case 'ALL':
+				break;
+			
+			case 'EXPIRED':
+				$query .= " AND (expire < $end OR (rtype = 'SINGLE' AND end < $end))";
+				$query .= " AND chdate < $end";
+				break;
+			
+			case 'SINGLE':
+				$event_ids = implode(',', $event_ids);
+				$query .= " AND event_id IN '$event_ids'";
+				break;
+		}
+		
+		$this->db['cal']->query($query);
+		
+		if ($rows = $this->db['cal']->affected_rows())
+			return $rows;
+		
+		return FALSE;
 	}
 	
 }

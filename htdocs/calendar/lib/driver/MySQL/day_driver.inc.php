@@ -10,7 +10,7 @@ function day_save (&$events_save, &$events_delete) {
 		$sep = FALSE;
 		
 		$chdate = time();
-		if ($event->getMakeDate() == -1)
+		if (!$event->getMakeDate())
 			$mkdate = $chdate;
 		else
 			$mkdate = $event->getMakeDate();
@@ -93,6 +93,10 @@ function day_restore (&$this) {
 	$db->query($query);
 	
 	while ($db->next_record()) {
+		// if the date of this day is in the exceptions take the next event
+		if (in_array($this->ts, explode(',', $db->f('exceptions'))))
+			continue;
+		
 		$rep = array(
 				"ts"        => $db->f("ts"),
 				"linterval" => $db->f("linterval"),
@@ -121,7 +125,7 @@ function day_restore (&$this) {
 			switch ($rep["rtype"]) {
 				case "DAILY":
 					
-		/*			// täglich wiederholte Termine sind eh drin
+		/*	
 					if($rep["linterval"] == 1){
 						createEvent($this, $db, 0);
 						break;
@@ -503,26 +507,27 @@ function day_restore (&$this) {
 				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0, $this->mon, $this->dom, $this->year);
 		}
 		$termin =& new CalendarEvent(array(
-				"DTSTART"         => $start,
-				"DTEND"           => $end,
-				"SUMMARY"         => $db->f("summary"),
-				"DESCRIPTION"     => $db->f("description"),
-				"PRIORITY"        => $db->f("prority"),
-				"LOCATION"        => $db->f("location"),
-				"CATEGORIES"      => $db->f("categories"),
-				"STUDIP_CATEGORY" => $db->f("category_intern"),
-				"UID"             => $db->f("uid"),
-				"RRULE"           => array(
-						"ts"          => $db->f("ts"),
-						"linterval"   => $db->f("linterval"),
-						"sinterval"   => $db->f("sinterval"),
-						"wdays"       => $db->f("wdays"),
-						"month"       => $db->f("month"),
-						"day"         => $db->f("day"),
-						"rtype"       => $db->f("rtype"),
-						"duration"    => $db->f("duration"),
-						"expire"      => $db->f("expire"))),
-				$db->f("event_id"), $db->f("mkdate"), $db->f("chdate"));
+				'DTSTART'         => $start,
+				'DTEND'           => $end,
+				'SUMMARY'         => $db->f('summary'),
+				'DESCRIPTION'     => $db->f('description'),
+				'PRIORITY'        => $db->f('prority'),
+				'LOCATION'        => $db->f('location'),
+				'CATEGORIES'      => $db->f('categories'),
+				'STUDIP_CATEGORY' => $db->f('category_intern'),
+				'UID'             => $db->f('uid'),
+				'EXCEPTIONS'      => $db->f('exceptions'),
+				'RRULE'           => array(
+						'ts'          => $db->f('ts'),
+						'linterval'   => $db->f('linterval'),
+						'sinterval'   => $db->f('sinterval'),
+						'wdays'       => $db->f('wdays'),
+						'month'       => $db->f('month'),
+						'day'         => $db->f('day'),
+						'rtype'       => $db->f('rtype'),
+						'duration'    => $db->f('duration'),
+						'expire'      => $db->f('expire'))),
+				$db->f('event_id'), $db->f('mkdate'), $db->f('chdate'));
 		
 		if ($time_range == 2)
 			$termin->setDayEvent(TRUE);
