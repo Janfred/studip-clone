@@ -703,7 +703,7 @@ function kill_format ($text) {
 					//"'\[.+?\](((http\://|https\://|ftp\://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 					"'\[(.+?)\](((http\://|https\://|ftp\://)?([^/\s]+)(\.[^/\s]+){2,}(/[^\s]*)?)|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 			//		"'\[quote=.+?quote\]'is",    // quoting
-					"'\s:[^\s]+?:\s's"              // smileys
+					"'(\s):[^\s]+?:(\s)'s"              // smileys
 
 					);
 	$replace = array(
@@ -721,7 +721,7 @@ function kill_format ($text) {
 					//"\\2",
 					'$1 ($2)',
 					 //"",
-					  ' ');
+					  '$1$2');
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $text, $matches)) {
 		$text = preg_replace($pattern, $replace, $text);
