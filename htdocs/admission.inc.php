@@ -185,7 +185,7 @@ function group_update_admission($seminar_id, $send_message=TRUE, $user_id, $user
 				setTempLanguage($user_id);
 				$message = sprintf (_("Sie wurden aus der Veranstaltung **%s (%s)** gelöscht, da Sie in einer anderen Veranstaltung dieser Gruppe von der Warteliste in die Teilnehmerliste aufgestiegen sind."), $db2->f("Name"), view_turnus($db2->f("Seminar_id")));
 				restoreLanguage();
-				$messaging->insert_sms ($username, addslashes($message), "____%system%____");
+				$messaging->insert_message(addslashes($message), $username, "____%system%____", FALSE, FALSE, "1");
 			}
 		//there was a change on the list of participants if the other seminar, so we have to update this seminar, maybe we can someone new put into the seminar
 		update_admission($db2->f("Seminar_id"), $send_message);
@@ -252,7 +252,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 						$message = sprintf (_("Sie haben den Status vorläufig akzeptiert in der Veranstaltung **%s (%s)** erhalten, da für Sie ein Platz freigeworden ist."), $db->f("Name"), view_turnus($db->f("Seminar_id")));
 					}
 					restoreLanguage();
-					$messaging->insert_message($message, $db3->f("username"), "____%system%____", FALSE, FALSE, "1");
+					$messaging->insert_message(addslashes($message), $db3->f("username"), "____%system%____", FALSE, FALSE, "1");
 				}
 			}
 		}
