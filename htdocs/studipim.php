@@ -81,6 +81,7 @@ if ($auth->auth["uid"]!="nobody"){
 				// "open" the message (display it in the messenger)
 				$msg_text=$db->f("message");
 				$msg_snd=get_username($db->f("autor_id"));
+				$msg_autor_id = $db->f("autor_id");
 			}
 		//this is a new msg, will be shown as new msg until the user wants to see it
 		if (!$db->f("readed") && $db->f("message_id")!=$msg_id) {
@@ -199,13 +200,13 @@ if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 
 
 if ($cmd=="read" AND $msg_text){
-	if ($msg_snd == "____%system%____")
+	if ($msg_autor_id == "____%system%____")
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1><b>"
 		. _("automatisch erzeugte Systemnachricht:") . " </b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	else
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
 		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname_from_uname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
-	if ($msg_snd != "____%system%____")
+	if ($msg_autor_id != "____%system%____")
 		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>"
 		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
 		. "&nbsp;<a href='$PHP_SELF?cmd=cancel'><img " . makeButton("abbrechen","src") . tooltip(_("Vorgang abbrechen")) . " border=0></a></td></tr>";
