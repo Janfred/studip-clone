@@ -33,7 +33,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 
 if ($RESOURCES_ENABLE) {
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
 }
 
 ## Get a database connection
@@ -108,21 +108,6 @@ if ($archive_kill) {
 		$run = FALSE;
 	}
 	
-	//Soll die Veranstaltung in weiteren (kommenden Semestern auftauchen?
-	$db2->query ("SELECT start_time, duration_time, Name FROM seminare WHERE Seminar_id = '$s_id'");
-	$db2->next_record();
-	$tmp_name = $db2->f("Name");
-	if ($db2->f("duration_time") == -1) {
-		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung eine dauerhafte Veranstaltung ist. <br>Wenn Sie sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
-		      $wrong_semester=TRUE;
-		      $run = FALSE;
-		}
-	elseif (time() < ($db2->f("start_time") + $db2->f("duration_time"))) {
-		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung &uuml;ber mehrere Semester l&auml;uft und noch nicht abgeschlossen ist. <br>Wenn sie Sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
-		      $wrong_semester=TRUE;
-		      $run = FALSE;
-		}
-
 	if ($run) {
     ## Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
     	in_archiv($s_id);
@@ -240,14 +225,24 @@ if ($archive_kill) {
 
 //Outputs...
 if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
-	if (!$wrong_semester)
-		$msg.="info§<font color=\"red\">Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!";
+	$db->query("SELECT * FROM seminare WHERE Seminar_id = '".$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]."' ");
+	$db->next_record();
+
+	$msg.="info§<font color=\"red\">Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!§";
+	
+	//check is Veranstaltung running
+	if ($db->f("duration_time") == -1) {
+		      $msg .= "info§Das Archivieren k&ouml;nnte unter Umst&auml;nden nicht sinnvoll sein, da es sich um eine dauerhafte Veranstaltung handelt.§";
+	} elseif (time() < ($db->f("start_time") + $db->f("duration_time"))) {
+		      $msg .= "info§Das Archivieren k&ouml;nnte unter Umst&auml;nden nicht sinnvoll sein, da das oder die Semester, in denen die Veranstaltung stattfindet, noch nicht verstrichen ist.§";
+	}
+	
+
+	
 ?>
 <body>
 
 	<?
-	$db->query("SELECT * FROM seminare WHERE Seminar_id = '".$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]."' ");
-	$db->next_record();
 	?>
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -274,7 +269,12 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<?
 				//Grunddaten des Seminars
 				printf ("<b>%s</b>",htmlReady($db->f("Name")));
-				printf ("<br><font size=\"-1\">letzte Ver&auml;nderung am: %s </font>", date("d.m.Y, G:i", lastActivity($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])));
+				
+				//last activity
+				$last_activity = lastActivity($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]);
+				if ((time() - $last_activity) < (60 * 60 * 24 * 7 *12))
+					$activity_warning = TRUE;
+				printf ("<br><font size=\"-1\" >letzte Ver&auml;nderung am: %s%s%s </font>", ($activity_warning) ? "<font color=\"red\" >" : "", date("d.m.Y, G:i", $last_activity), ($activity_warning) ? "</font>" : "");
 				?>
 				</td>
 			</tr>
