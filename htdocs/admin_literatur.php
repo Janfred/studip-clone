@@ -37,21 +37,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
-	if ($range_id && !$perm->have_perm("root")) {
-		//Sicherheitscheck
-	  $range_perm=get_perm($range_id);
-	  if (($ebene=="sem") && ($range_perm!="admin" && $range_perm!="dozent" && $range_perm!="tutor")) 
-			die;
-		if (($ebene=="inst") && ($range_perm!="admin" && $range_perm!="dozent" && $range_perm!="tutor"))
-			die;
-		if (($ebene=="fak") && ($range_perm!="admin")) 
-			die;
-		if ((!$ebene) && $range_id!=$user->id)  
-	  	die;
-	}
-
 	//Sicherheitscheck ob was zum Bearbeiten gewaehlt ist.
-	if (!$range_id) {
+	if (!$perm->have_studip_perm("tutor",$range_id)) {
 		echo "</tr></td></table>";
 		die;
 	}
@@ -79,29 +66,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			 }
 
 		 }
-
-	$db->query ("SELECT Name, status FROM seminare WHERE Seminar_id = '$range_id'");
-	if (!$db->next_record()) {
-		$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$range_id'");
-			if ($db->next_record()) {
-				$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-		}
-	} else
-		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) 	
-			$tmp_typ = "Veranstaltung"; 
-		else
-			$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
-
-	$tmp_name=$db->f("Name");
-
-	 ?>
-       	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+?>
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr><td class="topic" colspan=2>&nbsp;<b>
 	<?
-	echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
-		if (strlen($tmp_name) > 60)
-			echo "... ";
-		echo " -  Literatur und Links";
+	echo htmlReady($SessSemName["header_line"]) . " -  Literatur und Links";
 	?></b></td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<?

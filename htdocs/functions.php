@@ -46,12 +46,13 @@
 */
 
 function getHeaderLine ($id) {
-	global $SEM_TYPE;
+	global $SEM_TYPE,$INST_TYPE;
 	
 	$db = new DB_Seminar;
+	$object_type = get_object_type($id);
 	
 	//header-line for Veranstaltungen
-	if (get_object_type($id) == "sem") {
+	if ($object_type == "sem") {
 		$query = sprintf ("SELECT status, Name FROM seminare WHERE Seminar_id = '%s' ", $id);
 		$db->query($query);
 		$db->next_record();
@@ -70,7 +71,7 @@ function getHeaderLine ($id) {
 			$header_line.= "... ";
 	
 	//header-line for Einrichtungen
-	} elseif(get_object_type($id) == "inst") {
+	} elseif($object_type == "inst" || $object_type == "fak") {
 		$query = sprintf ("SELECT type, Name FROM Institute WHERE Institut_id = '%s' ", $id);
 		$db->query($query);
 		$db->next_record();		
@@ -163,12 +164,12 @@ function openSem ($sem_id) {
 *
 */
 function openInst ($inst_id) {
-	global $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast;
+	global $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast, $INST_TYPE;
 
 	$db=new DB_Seminar;
 
 	$SessionSeminar="$inst_id";
-	$db->query ("SELECT Name, Institut_id, type FROM Institute WHERE Institut_id='$inst_id'");
+	$db->query ("SELECT Name, Institut_id, type,fakultaets_id, IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM Institute WHERE Institut_id='$inst_id'");
 	while ($db->next_record()) {
 		$SessSemName[0] = $db->f("Name");
 		$SessSemName[1] = $db->f("Institut_id");
@@ -176,9 +177,10 @@ function openInst ($inst_id) {
 		$SessSemName["art"]=$INST_TYPE[$db->f("type")]["name"];
 		if (!$SessSemName["art"])
 			$SessSemName["art"]=$SessSemName["art_generic"];
-		$SessSemName["class"]="inst";
+		$SessSemName["class"] = "inst";
+		$SessSemName["is_fak"] = $db->f("is_fak");
 		$SessSemName["art_num"]=$db->f("type");
-		$nr = $db->f("Institut_id");
+		$SessSemName["fak"] = $db->f("fakultaets_id");
 		
 		$SessSemName["header_line"] = getHeaderLine ($inst_id);		
 
@@ -280,13 +282,17 @@ function get_object_type($id) {
 	if ($db->next_record())
 		return "sem";
 
-	$db->query("SELECT Institut_id FROM Institute WHERE Institut_id = '$id' ");
+	$db->query("SELECT Institut_id,IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM institute WHERE Institut_id = '$id' ");
 	if ($db->next_record())
-		return "inst";
+		return ($db->f("is_fak")) ? "fak" : "inst";
 
 	$db->query("SELECT user_id FROM auth_user_md5 WHERE user_id = '$id' ");
 	if ($db->next_record())
 		return "user";
+
+	$db->query("SELECT item_id FROM range_tree WHERE item_id = '$id' ");
+	if ($db->next_record())
+		return "range_tree";
 
 	$db->query("SELECT termin_id FROM termine WHERE termin_id = '$id' ");
 	if ($db->next_record())
@@ -295,10 +301,6 @@ function get_object_type($id) {
 	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
 	if ($db->next_record())
 		return "group";
-
-	$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$id' ");
-	if ($db->next_record())
-		return "fak";
 
 	return FALSE;
 }

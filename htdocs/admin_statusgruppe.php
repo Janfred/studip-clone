@@ -18,48 +18,32 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 	$auth->login_if($auth->auth["uid"] == "nobody");
 	$perm->check("tutor");
 
-## Set this to something, just something different...
-  $hash_secret = "dslkjjhetbjs";
-  
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+$hash_secret = "dslkjjhetbjs";
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-// -- here you have to put initialisations for the current page
 
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
-	require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 	
 // Rechtecheck
-
-	if ($range_id && !$perm->have_perm("root")) {
-		//Sicherheitscheck
-
-	  $range_perm=get_perm($range_id);
-	  if (($view=="statusgruppe_sem") && ($range_perm!="admin" && $range_perm!="dozent" && $range_perm!="tutor")) 
-			die;
-		if (($view=="statusgruppe_inst") && ($range_perm!="admin"))
-			die;
-		if (($view=="fak") && ($range_perm!="admin")) 
-			die;
-	}
-
-
 	
-		//Sicherheitscheck ob was zum Bearbeiten gewaehlt ist.
-	if (!$range_id) {
-		echo "</tr></td></table>";
-		die;
-	}
-
+$_range_type = get_object_type($range_id);
+if (!($_range_type == "sem" && $perm->have_studip_perm("tutor",$range_id)) &&
+	!(($_range_type == "inst" || $_range_type == "fak") && $perm->have_studip_perm("admin",$range_id))) {
+	echo "</tr></td></table>";
+	page_close();
+	die;
+}
 
 
 // Beginn Funktionsteil
@@ -88,7 +72,7 @@ function GetPresetGroups ($view, $veranstaltung_class)
 }
 
 function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="", $workgroup_mode=FALSE)
-{ global $HTTP_POST_VARS;
+{ global $HTTP_POST_VARS,$_range_type;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
@@ -122,7 +106,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 				$user_id = get_userid($Freesearch[$i]);
 				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
 				if ($writedone==TRUE) {
-					if (get_object_type($range_id) == "sem") {
+					if ($_range_type == "sem") {
 						if ($workgroup_mode == TRUE) {
 							$globalperms = get_global_perm($user_id);
 							if ($globalperms == "tutor" || $globalperms == "dozent") {
@@ -133,7 +117,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 						} else {
 							$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
 						}
-					} elseif (get_object_type($range_id) == "inst") {
+					} elseif ($_range_type == "inst" || $_range_type == "fak") {
 						$globalperms = get_global_perm($user_id);
 						if (get_perm($range_id, $user_id) =="fehler!") {
 							$db2->query("INSERT INTO user_inst SET Institut_id = '$range_id', user_id = '$user_id', inst_perms = '$globalperms'");
@@ -203,9 +187,9 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 }
 
 function PrintSearchResults ($search_exp, $range_id)
-{ global $SessSemName, $_fullname_sql;
+{ global $SessSemName, $_fullname_sql,$_range_type;
 	$db=new DB_Seminar;
-	if (get_object_type($range_id) == "sem") {
+	if ($_range_type == "sem") {
 		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".		
 		"LEFT JOIN user_info USING (user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$range_id')  ".
 		"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
@@ -231,9 +215,9 @@ function PrintSearchResults ($search_exp, $range_id)
 
 function PrintAktualMembers ($range_id)
 {	
-	global $_fullname_sql;
+	global $_fullname_sql,$_range_type;
 	$bereitszugeordnet = GetAllSelected($range_id);
-	if (get_object_type($range_id) == "sem") {
+	if ($_range_type == "sem") {
 		echo "<font size=\"-1\">&nbsp; TeilnehmerInnen der Veranstaltung</font><br>";
 		$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	} else {
@@ -275,15 +259,9 @@ function PrintInstitutMembers ($range_id)
 
 // Ende Funktionen
 
-	reset($HTTP_POST_VARS);
-
 // fehlende Werte holen
 
-	if (get_object_type($range_id) == "sem") {
-		$view = "statusgruppe_sem";
-	} elseif (get_object_type($range_id) == "inst") {
-		$view = "statusgruppe_inst";
-	}
+	$view = "statusgruppe_" . $_range_type;
 
 	$db=new DB_Seminar;
 	$db->query ("SELECT Name, status FROM seminare WHERE Seminar_id = '$range_id'");
@@ -449,13 +427,13 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
 	if ($db->num_rows() > 0) {
 		$nogroups = 1;
-		if (get_object_type($range_id) == "sem" || get_object_type($range_id) == "inst") {
+		if ($_range_type == "sem" || $_range_type == "inst" || $_range_type == "fak") {
 			PrintAktualMembers ($range_id);
 		}
 		?>
 		<br><br>
 		<?
-		if (get_object_type($range_id) == "sem") {
+		if ($_range_type == "sem") {
 			PrintInstitutMembers ($range_id);
 		}
 		?>

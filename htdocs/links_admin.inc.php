@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-if ($perm->have_perm("tutor")):	// Navigationsleiste ab status "Tutor"
+if ($perm->have_perm("tutor")){	// Navigationsleiste ab status "Tutor"
 
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
@@ -135,7 +135,7 @@ elseif ($view_mode=="inst")
 else
 	$links_admin_data["topkat"]="global";
 
-//Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
+/*//Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
 if ((!$SessSemName[1]) && ($list) && ($view_mode=="inst")) {
 	if ($perm->have_perm("root"))
 		$db->query("SELECT Institut_id  FROM Institute ORDER BY Name");
@@ -148,7 +148,7 @@ if ((!$SessSemName[1]) && ($list) && ($view_mode=="inst")) {
 		openInst($db->f("Institut_id"));
 	}
 }
-
+*/
 
 //Wenn Seminar_id gesetzt ist oder vorgewaehlt wurde, werden die spaeteren Seiten mit entsprechend gesetzten Werten aufgerufen
 if ($SessSemName["class"]=="sem") {
@@ -273,7 +273,7 @@ if ($perm->have_perm("admin")) {
 }	
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"admin_news.php?view=news_inst", active=>FALSE);
-if ($perm->have_perm("root"))
+if ($perm->is_fak_admin())
 	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
 $structure["export"]=array (topKat=>"modules", name=>"Export", link=>"export.php", active=>FALSE);
@@ -428,14 +428,25 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($vie
 					<td class="steel1">
 					<font size=-1><select name="admin_inst_id" size="1">
 					<?
-					if ($perm->have_perm("root"))
-						$db->query("SELECT Institut_id, Name  FROM Institute ORDER BY Name");
-					else
-						$db->query("SELECT DISTINCT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms IN ('admin', 'dozent', 'tutor') ORDER BY Name");
-					
+					if ($auth->auth['perm'] == "root"){
+						$db->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
+					} elseif ($auth->auth['perm'] == "admin") {
+						$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN institute b USING (Institut_id)  
+									WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
+					} else {
+						$db->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id'");
+					}
+						
 					printf ("<option value=\"NULL\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
-					while ($db->next_record())
-						printf ("<option %s value=\"%s\">%s </option>\n", $db->f("Institut_id") == $inst_id ? "selected" : "", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 50)));
+					while ($db->next_record()){
+						printf ("<option value=\"%s\">%s </option>\n", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 70)));
+						if ($db->f("is_fak")){
+							$db2->query("SELECT Institut_id, Name FROM institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
+							while ($db2->next_record()){
+								printf("<option value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", $db2->f("Institut_id"), htmlReady(substr($db2->f("Name"), 0, 70)));
+							}
+						}
+					}
 					?>
 				</select></font>&nbsp; 
 				<input type="IMAGE" src="./pictures/buttons/auswaehlen-button.gif" border=0 value="bearbeiten">
@@ -505,11 +516,12 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 						
 						<td class="steel1">
 							<?
-							if ($perm->have_perm("root"))
-								$db->query("SELECT * FROM Institute ORDER BY Name");
-							else
-								$db->query("SELECT DISTINCT b.Institut_id,Name FROM user_inst  LEFT JOIN Institute b USING (Institut_id) WHERE user_id = '".$user->id."' AND inst_perms = 'admin' ORDER BY Name");
-							if ($db->num_rows() >1) {
+							if ($perm->have_perm("root")){
+								$db->query("SELECT Institut_id, Name FROM Institute WHERE Institut_id!=fakultaets_id ORDER BY Name");
+							} else {
+								$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN institute b USING (Institut_id)  
+									WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
+							}
 							?>
 							<font size=-1>Einrichtung:</font><br /><select name="srch_inst">
 								<option value=0>alle</option>
@@ -520,16 +532,19 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 										echo"<option selected value=".$db->f("Institut_id").">".substr($db->f("Name"), 0, 30)."</option>";
 									else
 										echo"<option value=".$db->f("Institut_id").">".substr($db->f("Name"), 0, 30)."</option>";
-									}										
-								?>								
+									if ($db->f("is_fak")){
+										$db2->query("SELECT Institut_id, Name FROM institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
+										while ($db2->next_record()){
+											if ($links_admin_data["srch_inst"] == $db2->f("Institut_id"))
+												echo"<option selected value=".$db2->f("Institut_id").">&nbsp;&nbsp;&nbsp;".substr($db2->f("Name"), 0, 30)."</option>";
+											else
+												echo"<option value=".$db2->f("Institut_id").">&nbsp;&nbsp;&nbsp;".substr($db2->f("Name"), 0, 30)."</option>";
+										$my_inst[]=$db2->f("Institut_id");
+										}
+									}
+								}
+								?>
 							</select>
-							<?
-								}
-							else {
-								$db->next_record();
-								$my_inst[]=$db->f("Institut_id");
-								}
-							?>
 						</td>
 						<td class="steel1">
 							<?
@@ -559,21 +574,18 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 							</select>
 							<?
 								}
-							else {
-								$db->next_record();
-								$my_inst[]=$db->f("Institut_id");
-								}
+							
 							if ($perm->have_perm("root")) {
-								$db->query("SELECT * FROM Fakultaeten ORDER BY Name");
+								$db->query("SELECT Institut_id,Name FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
 							?>
 							<font size=-1>Fakult&auml;t:</font><br /><select name="srch_fak">
 								<option value=0>alle</option>
 								<?
 								while ($db->next_record()) {
-									if ($links_admin_data["srch_fak"] == $db->f("Fakultaets_id"))
-										echo"<option selected value=".$db->f("Fakultaets_id").">".substr($db->f("Name"), 0, 30)."</option>";
+									if ($links_admin_data["srch_fak"] == $db->f("Institut_id"))
+										echo"<option selected value=".$db->f("Institut_id").">".substr($db->f("Name"), 0, 30)."</option>";
 									else
-										echo"<option value=".$db->f("Fakultaets_id").">".substr($db->f("Name"), 0, 30)."</option>";
+										echo"<option value=".$db->f("Institut_id").">".substr($db->f("Name"), 0, 30)."</option>";
 									}										
 								?>								
 							</select>
@@ -622,8 +634,8 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 
 
 //Zusammenbasteln der Seminar-Query
-if (($links_admin_data["srch_on"]) || ($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")){
-$query="SELECT DISTINCT seminare.*, Institute.Name AS Institut, Fakultaeten.Name AS Fakultaet FROM seminare LEFT JOIN Institute USING (institut_id) LEFT JOIN Fakultaeten USING (Fakultaets_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id)";
+if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth["perm"] == "dozent"){
+$query="SELECT DISTINCT seminare.*, Institute.Name AS Institut FROM seminare LEFT JOIN Institute USING (institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id)";
 $conditions=0;
 if ($links_admin_data["srch_sem"]) {
 	$i=0;
@@ -635,6 +647,15 @@ if ($links_admin_data["srch_sem"]) {
 		}
 	}
 
+if (is_array($my_inst) && $auth->auth["perm"] != "root") {
+	if ($conditions)
+		$query.="AND ";
+	else
+		$query.="WHERE ";
+	$query.="Institute.Institut_id IN ('".join("','",$my_inst)."') ";
+	$conditions++;
+	}
+
 if ($links_admin_data["srch_inst"]) {
 	if ($conditions)
 		$query.="AND ";
@@ -644,14 +665,16 @@ if ($links_admin_data["srch_inst"]) {
 	$conditions++;
 	}
 	
+
 if ($links_admin_data["srch_fak"]) {
 	if ($conditions)
 		$query.="AND ";
 	else
 		$query.="WHERE ";
-	$query.="Fakultaeten.Fakultaets_id ='".$links_admin_data["srch_fak"]."' ";
+	$query.="fakultaets_id ='".$links_admin_data["srch_fak"]."' ";
 	$conditions++;
 	}
+
 
 if ($links_admin_data["srch_doz"]) {
 	if ($conditions)
@@ -705,13 +728,15 @@ while ($db->next_record()) {
 	//weitere Abfragen, falls nur eingeschraenkter Zugriff moeglich
 	$seminar_id = $db->f("Seminar_id");
 	$user_id = $auth->auth["uid"];
+/*
 	$db2->query("select * from seminar_user WHERE Seminar_id = '$seminar_id' and user_id = '$user_id' AND (status = 'dozent' OR status = 'tutor')");
 	$db3->query("select * from seminare LEFT JOIN user_inst USING (Institut_id) where Seminar_id = '$seminar_id' and user_id = '$user_id' AND inst_perms = 'admin'");
 	
 	 if ($perm->have_perm("root") ||
 		($perm->have_perm("admin") && $db3->next_record()) || 
 		($db2->next_record()) ) {
-		
+	if ($perm->have_studip_perm("tutor",$seminar_id)){
+*/	
 		$c++;
 		//Titelzeile wenn erste Veranstaltung angezeigt werden soll
 		if ($c==0) {
@@ -815,7 +840,7 @@ while ($db->next_record()) {
 			}
 		echo "</tr>";
 		}			
-	}
+	//}
 	//Traurige Meldung wenn nichts gefunden wurde oder sonst irgendwie nichts da ist
 	if ($c<0) {
 		?>
@@ -852,5 +877,5 @@ while ($db->next_record()) {
 </table>			
 <?
 }
-endif; // Navigationsleiste ab status "Tutor"
+}
 ?>

@@ -39,11 +39,6 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
 
-$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$inst_id'");
-if ($db->next_record())
-	$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-$tmp_name=$db->f("Name");
-
 
 function perm_select($name,$global_perm,$default)
 {
@@ -143,7 +138,11 @@ if (isset($details)) {
 				<input type="hidden" name="u_id"  value="<?php $db->p("user_id") ?>">
 				<input type="hidden" name="ins_id"  value="<?php $db->p("Institut_id") ?>">
 				<input type="IMAGE" name="u_edit" src="pictures/buttons/uebernehmen-button.gif" border=0 value="ver&auml;ndern">&nbsp;
+				<?
+				if ($db->f("user_id") != $user->id){
+					?>
 				<input type="IMAGE" name="u_kill"  src="pictures/buttons/loeschen-button.gif" border=0  value=" l&ouml;schen ">&nbsp;
+				<?}?>
 				<input type="IMAGE" name="nothing"  src="pictures/buttons/abbrechen-button.gif" border=0  value="abbrechen ">
 				</td>
 			</tr>
@@ -178,7 +177,7 @@ else {
 			// Hier darf fast keiner was:
 
 			if (isset($u_kill_x)) {
-				if (!$perm->have_perm("root") && $scherge=='admin')
+				if (!($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) && $scherge=='admin')
 					my_error("<b>Sie haben keine Berechtigung einen Administrator dieser Einrichtung zu l&ouml;schen.</b>");
 				else {
 					$db2->query("DELETE from user_inst WHERE Institut_id = '$ins_id' AND user_id = '$u_id'");
@@ -189,7 +188,7 @@ else {
 			} 
 
 			if (isset($u_edit_x)) {
-				if (!$perm->have_perm("root") && $scherge=='admin' && $u_id != $auth->auth["uid"])
+				if (!($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) && $scherge=='admin' && $u_id != $auth->auth["uid"])
 					my_error("<b>Sie haben keine Berechtigung einen anderen Administrator dieser Einrichtung zu ver&auml;ndern.</b>");
 				else {
 
@@ -239,7 +238,7 @@ else {
 				if ($db3->f("perms") == "root")
 					my_error("<b>roots k&ouml;nnen nicht berufen werden!</b>");
 				elseif ($db3->f("perms") == "admin") {
-					if ($perm->have_perm("root")) {
+					if ($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) {
 					    // als admin aufnehmen
 					    $db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', 'admin')");
 					    my_msg("<b>$Fullname wurde als \"admin\" in die Einrichtung aufgenommen.</b>");
@@ -247,7 +246,7 @@ else {
 					    my_error("<b>Sie haben keine Berechtigung einen admin zu berufen!</b>");
 					}
 				} else {
-					$insert_perms = get_global_perm($u_id);				
+					$insert_perms = $db3->f("perms");				
 					//ok, aber nur hochstufen auf Maximal-Status (hat sich selbst schonmal gemeldet als Student an dem Inst)
 					if ($db->f("inst_perms") == "user") {
 						$db2->query("UPDATE user_inst SET inst_perms='$insert_perms' WHERE user_id='$u_id' AND Institut_id = '$ins_id' ");
@@ -274,14 +273,11 @@ else {
 		
 //Abschnitt zur Auswahl und Suche von neuen Personen
 if ($inst_id != "" && $inst_id !="0") {
-	$db->query("SELECT Name FROM Institute WHERE Institut_id ='$inst_id'");
-	$db->next_record();
-	$inst_name=$db->f("Name");
-	if (isset($search_exp))
+
+	$inst_name = $SessSemName[0];
+	if (isset($search_exp) && strlen($search_exp) > 2)
 		{
 		// Der Admin will neue Sklaven ins Institut berufen...
-			if (!$search_exp) //wenn leerer Suchaussruck, verwutzen (aus Datenschutzgruenden)
-				$search_exp=md5(uniqid(rand()));
 			$db->query ("SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] . " AS fullname, username, perms  FROM auth_user_md5 LEFT JOIN user_info USING(user_id)LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");		
 			?>
 			<blockquote>Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung <b><? echo htmlReady($inst_name) ?></b> zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben.<br /><br /></blockquote>
@@ -362,8 +358,7 @@ if ($inst_id != "" && $inst_id !="0") {
 		$sortby = "Nachname";
 
 	//entweder wir gehoeren auch zum Institut oder sind global root und es ist ein Institut ausgewählt
-	$db2->query("SELECT Institut_id FROM user_inst WHERE Institut_id = '$inst_id' AND user_id = '$user->id'");
-	if ($db2->num_rows() > 0 || ($perm->have_perm("root") && isset($inst_id))) {  
+	if ($perm->have_studip_perm("admin",$inst_id)) {  
 	  	$query = "SELECT user_inst.*, " . $_fullname_sql['full_rev'] . " AS fullname,Email,username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Institut_id ='$inst_id' AND inst_perms !='user' ORDER BY $sortby";
 		$db->query($query);
 
@@ -392,7 +387,7 @@ if ($inst_id != "" && $inst_id !="0") {
 	  			$cssSw->switchClass();
 				ECHO "<tr valign=middle align=left>";
 				
-				  if ($perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
+				  if ((!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"])) || $perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
 					printf ("<td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("fullname"));	 
 				else
 					printf ("<td class=\"%s\">&nbsp;%s</td>", $cssSw->getClass(), $db->f("fullname"));	 ?>

@@ -30,21 +30,21 @@ require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 // Klassendefinition
 class studip_news extends messaging
 {
-	  var $db;			  //Datenbankverbindung
-	  var $modus;
-	  var $self;	   //enthält $PHP_SELF
-	  var $msg;		   //Nachricht für msg.inc.php
-	  var $sms=array();		   //private Nachricht wegen Admin zugriff
-	  var $news_query=array();
-	  var $range_detail=array();
-	  var $search_result=array();
-	  var $user_id;
-	  var $news_range;
-	  var $range_name;
-	  var $full_username;
-	  var $news_perm=array();
-	  var $max_col;
-	  var $xres;
+	var $db;			  //Datenbankverbindung
+	var $modus;
+	var $self;	   //enthält $PHP_SELF
+	var $msg;		   //Nachricht für msg.inc.php
+	var $sms=array();		   //private Nachricht wegen Admin zugriff
+	var $news_query=array();
+	var $range_detail=array();
+	var $search_result=array();
+	var $user_id;
+	var $news_range;
+	var $range_name;
+	var $full_username;
+	var $news_perm=array();
+	var $max_col;
+	var $xres;
 
 function studip_news()
 {
@@ -85,13 +85,7 @@ function studip_news()
 				 if ($this->db->next_record()){
 				 $news_range_name=$this->db->f("Name");
 				 }
-				 else {
-					 $query="SELECT Name FROM Fakultaeten WHERE Fakultaets_id='$news_range_id'";
-					 $this->db->query($query);
-					 if ($this->db->next_record()){
-						$news_range_name=$this->db->f("Name");
-					 }
-				  }
+				 
 			  }
 		}
 
@@ -444,42 +438,52 @@ if ($perm->have_perm("root"))
 			 {
 		  $this->search_result[$this->db->f("Seminar_id")]=array("type"=>"sem","name"=>$this->db->f("Name"));
 		  }
-	 $query="SELECT Institut_id,Name FROM Institute WHERE Name LIKE '%$search_str%'";
+	 $query="SELECT Institut_id,Name, IF(Institut_id=fakultaets_id,'fak','inst') AS inst_type FROM Institute WHERE Name LIKE '%$search_str%'";
 	 $this->db->query($query);
 	 while($this->db->next_record())
 			 {
-		  $this->search_result[$this->db->f("Institut_id")]=array("type"=>"inst","name"=>$this->db->f("Name"));
-		  }
-	 $query="SELECT Fakultaets_id,Name FROM Fakultaeten WHERE Name LIKE '%$search_str%'";
-	 $this->db->query($query);
-	 while($this->db->next_record())
-			 {
-		  $this->search_result[$this->db->f("Fakultaets_id")]=array("type"=>"fak","name"=>$this->db->f("Name"));
+		  $this->search_result[$this->db->f("Institut_id")]=array("type"=>$db->f("inst_type"),"name"=>$this->db->f("Name"));
 		  }
 	 }
 
 elseif ($perm->have_perm("admin"))
 		{
-	 $query="SELECT b.Seminar_id,b.Name from user_inst AS a LEFT JOIN  seminare AS b USING (Institut_id) WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND	b.Name LIKE '%$search_str%'";
-	 $this->db->query($query);
-	 while($this->db->next_record())
-			 {
-		  $this->search_result[$this->db->f("Seminar_id")]=array("type"=>"sem","name"=>$this->db->f("Name"));
-		  }
-	 $query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN	Institute AS b USING (Institut_id) WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND  b.Name LIKE '%$search_str%'";
-	 $this->db->query($query);
-	 while($this->db->next_record())
-			 {
-		  $this->search_result[$this->db->f("Institut_id")]=array("type"=>"inst","name"=>$this->db->f("Name"));
-		  }
-	 $query="SELECT b.Fakultaets_id,b.Name from fakultaet_user AS a LEFT JOIN  Fakultaeten AS b USING (Fakultaets_id) WHERE a.user_id='$this->user_id' AND a.status='admin' AND	 b.Name LIKE '%$search_str%'";
-	 $this->db->query($query);
-	 while($this->db->next_record())
-			 {
-		  $this->search_result[$this->db->f("Fakultaets_id")]=array("type"=>"fak","name"=>$this->db->f("Name"));
-		  }
-
-	 }
+	$query="SELECT b.Seminar_id,b.Name from user_inst AS a LEFT JOIN  seminare AS b USING (Institut_id) WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND	b.Name LIKE '%$search_str%'";
+	$this->db->query($query);
+	while($this->db->next_record())
+		{
+		$this->search_result[$this->db->f("Seminar_id")]=array("type"=>"sem","name"=>$this->db->f("Name"));
+		}
+	$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN	Institute AS b USING (Institut_id) WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND a.institut_id!=b.fakultaets_id AND  b.Name LIKE '%$search_str%'";
+	$this->db->query($query);
+	while($this->db->next_record())
+		{
+		$this->search_result[$this->db->f("Institut_id")]=array("type"=>"inst","name"=>$this->db->f("Name"));
+		}
+	if ($perm->is_fak_admin()){
+		$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
+			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND d.Name LIKE '%$search_str%'";
+		$this->db->query($query);
+		while($this->db->next_record()){
+		$this->search_result[$this->db->f("Seminar_id")]=array("type"=>"sem","name"=>$this->db->f("Name"));
+		}
+		$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
+			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND c.Name LIKE '%$search_str%'";
+		$this->db->query($query);
+		while($this->db->next_record()){
+		$this->search_result[$this->db->f("Institut_id")]=array("type"=>"inst","name"=>$this->db->f("Name"));
+		}
+		$query = "SELECT b.Institut_id,b.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND b.Name LIKE '%$search_str%'";
+		$this->db->query($query);
+		while($this->db->next_record()){
+		$this->search_result[$this->db->f("Institut_id")]=array("type"=>"fak","name"=>$this->db->f("Name"));
+		}
+	}
+	
+	}
 
  elseif ($perm->have_perm("tutor"))
 		{
@@ -523,9 +527,9 @@ $output="";
 $output[0]="\n<tr><th width=\"90%\" align=\"left\">";
 switch ($type)
 		{
-		case "sem" : $output[0].="Veranstaltungen"; $query="SELECT seminare.Seminar_id AS id,Name AS name FROM seminare LEFT JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";$add=" AND seminare.Seminar_id ";break;
-		case "inst" : $output[0].= "Einrichtungen"; $query="SELECT Institute.Institut_id AS id,Name AS name FROM Institute LEFT JOIN user_inst USING (Institut_id) WHERE user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms IN ('admin','dozent','tutor','autor')";$add=" AND Institute.Institut_id ";break;
-		case "fak" : $output[0].= "Fakult&auml;ten"; $query="SELECT Fakultaeten.fakultaets_id AS id,Name AS name FROM Fakultaeten LEFT JOIN fakultaet_user USING (fakultaets_id) WHERE fakultaet_user.user_id='".$this->user_id."' AND fakultaet_user.status IN ('admin','autor')";$add=" AND Fakultaeten.fakultaets_id ";break;
+		case "sem" : $output[0].="Veranstaltungen";break;
+		case "inst" : $output[0].= "Einrichtungen"; $query="SELECT institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN institute ON(user_inst.Institut_id=institute.Institut_id AND institute.Institut_id!=fakultaets_id) WHERE NOT ISNULL(institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
+		case "fak" : $output[0].= "Fakult&auml;ten"; $query="SELECT institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN institute ON(user_inst.Institut_id=institute.Institut_id AND institute.Institut_id=fakultaets_id) WHERE NOT ISNULL(institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
 		}
 $output[0].= "</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
 $not_in="";
@@ -570,18 +574,19 @@ if ($perm->have_perm("tutor") && is_array($this->search_result))
 				 }
 			}
 	 }
-else
-	{
-	$this->db->query($query.$add);
-	while($this->db->next_record())
+else {
+	if ($query){
+		$this->db->query($query.$add);
+		while($this->db->next_record())
 		{
-		$cssSw->switchClass();			   
-		$output[1].= "\n<tr ".$cssSw->getHover()."><td	".$cssSw->getFullClass()." width=\"90%\">".$this->db->f("name")."</td>";
-		$output[1].= "\n<td	".$cssSw->getFullClass()." width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->db->f("id")."\"";
-		if ($this->db->f("id")==$this->news_range AND $this->news_query["news_id"]=="new_entry") $output[1].=" checked ";
-		$output[1].="></td></tr>";
+			$cssSw->switchClass();
+			$output[1].= "\n<tr ".$cssSw->getHover()."><td	".$cssSw->getFullClass()." width=\"90%\">".$this->db->f("name")."</td>";
+			$output[1].= "\n<td	".$cssSw->getFullClass()." width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->db->f("id")."\"";
+			if ($this->db->f("id")==$this->news_range AND $this->news_query["news_id"]=="new_entry") $output[1].=" checked ";
+			$output[1].="></td></tr>";
 		}
 	}
+}
 
 if ($output[1]) echo $output[0].$output[1];
 
@@ -594,7 +599,7 @@ return "$this->self?$par";
 
 function get_news_perm()
 {
-global $auth;
+global $auth,$perm;
 $this->news_perm[$this->user_id]=array("name"=>$this->full_username,"perm"=>3);
 $query="SELECT seminare.Seminar_id AS id,seminar_user.status,Name FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";
 $this->db->query($query);
@@ -619,7 +624,9 @@ while($this->db->next_record())
 	 if ($this->db->f("status")=="tutor" OR $this->db->f("status")=="autor" OR $this->db->f("status")=="dozent") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
 	 if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
 	 }
-$query="SELECT Fakultaeten.fakultaets_id AS id,Name,fakultaet_user.status FROM fakultaet_user LEFT JOIN Fakultaeten USING (fakultaets_id) WHERE fakultaet_user.user_id='".$this->user_id."' AND fakultaet_user.status IN ('admin','autor')";
+$query = "SELECT b.Institut_id,b.Name,a.inst_perms AS status FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			WHERE a.user_id='$this->user_id' AND a.inst_perms IN ('admin','autor') AND NOT ISNULL(b.Institut_id)";
+		
 $this->db->query($query);
 while($this->db->next_record())
 	{
@@ -627,6 +634,22 @@ while($this->db->next_record())
 	 if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
 	 }
 
+if ($perm->is_fak_admin()){
+	$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
+			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
+	$this->db->query($query);
+	while($this->db->next_record()){
+		$this->news_perm[$this->db->f("Seminar_id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+	}
+	$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
+			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
+	$this->db->query($query);
+	while($this->db->next_record()){
+		$this->news_perm[$this->db->f("Institut_id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
+	}
+}
 if ($auth->auth["perm"]=="root") $this->news_perm["studip"]=array("name"=>"StudIP News","perm"=>3);
 
 }
