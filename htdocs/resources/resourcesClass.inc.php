@@ -1451,23 +1451,19 @@ class ResourcesMsg {
 	}
 	
 	function displayAllMsg($view_mode = "window") {
-		global $RELATIVE_PATH_STUDIP;
-		
 		if (is_array($this->codes)) {
 			foreach ($this->codes as $val)
 				$collected_msg.=($this->msg[$val]["mode"]."§".$this->msg[$val]["msg"]."§");
 			if ($view_mode == "window")
-				parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"$RELATIVE_PATH_STUDIP/resources.php\">"._("zur&uuml;ck")."</a>");
+				parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"resources.php\">"._("zur&uuml;ck")."</a>");
 			else
 				parse_msg($collected_msg);
 		}
 	}
 	
 	function displayMsg($msg_code, $view_mode = "window") {
-		global $RELATIVE_PATH_STUDIP;
-		
 		if ($view_mode == "window")
-			parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "<a href=\"$RELATIVE_PATH_STUDIP/resources.php\">"._("zur&uuml;ck")."</a>");
+			parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "<a href=\"resources.php\">"._("zur&uuml;ck")."</a>");
 		else
 			parse_msg($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"]);
 	}
