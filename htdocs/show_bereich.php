@@ -40,8 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         include "header.php";   //hier wird der "Kopf" nachgeladen
         if ($SessSemName[1]) {
         	include "links1.php";
-        	include "links2.php";
-        	}
+       	}
         	
         $sess->register ("show_bereich_data");
 	$db=new DB_Seminar;
