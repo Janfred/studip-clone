@@ -138,7 +138,7 @@ function PrintAktualStatusgruppen ()
 				$farbe = "#000000";
 			}
 			printf ("     <tr><td><font color=\"%s\">$k</font></td>", $farbe);
-			printf ("       <td class=\"blank\">%s&nbsp; %s</td>",$db2->f("Vorname"), $db2->f("Nachname"));
+			printf ("       <td class=\"steel1\">%s&nbsp; %s</td>",$db2->f("Vorname"), $db2->f("Nachname"));
 			printf ( "	   <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\"></a></td>", $statusgruppe_id, $db2->f("username"), $range_id);
 			echo "	</tr>";
 			$k++;
@@ -387,11 +387,11 @@ function PrintInstitutMembers ()
 		if (strlen($tmp_name) > 60)
 			echo "... ";
 		echo " -  Statusgruppen";
-	?></b></td></tr><tr><td class="steel1" colspan="2">&nbsp; </td></tr></table>
+	?></b></td></tr><tr><td class="blank" colspan="2">&nbsp; </td></tr></table>
 
-<table class="steel1" width="100%" border="0" cellspacing="0">
+<table class="blank" width="100%" border="0" cellspacing="0">
   <tr>
-    <td align="right" width="50%" class="steel1">
+    <td align="right" width="50%" class="blank">
  	<form action="<? echo $PHP_SELF ?>?cmd=move_old_statusgruppe" method="POST">
  	<?
   	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
@@ -402,7 +402,7 @@ function PrintInstitutMembers ()
 	?>
     	<input type="IMAGE" name="move_old_statusgruppe" src="./pictures/move.gif" border=0 value="Statusgruppe uebernehmen">&nbsp;  
         </form><br></td>
-    <td align="right" width="50%" NOWRAP class="steel1">
+    <td align="right" width="50%" NOWRAP class="blank">
 	<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="POST">
 	<?
   	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
@@ -422,7 +422,7 @@ function PrintInstitutMembers ()
   	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	?>
   <tr>
-    <td class="steelgraudunkel" valign="top" width="50%">
+    <td class="steel1" valign="top" width="50%">
     	<br>
 	<?
 	if (get_object_type($range_id) == "sem" || get_object_type($range_id) == "inst") {
@@ -439,7 +439,7 @@ function PrintInstitutMembers ()
 	<?
 	if ($search_exp) {
 		PrintSearchResults($search_exp);
-		echo "<input type=\"IMAGE\" name=\"search\" src= \"./pictures/trash.gif\" border=\"0\" value=\" Personen suchen\">&nbsp;  ";
+		echo "<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\">&nbsp;  ";
 	} else {
 		echo "<font size=\"-1\">&nbsp; freie Personensuche</font><br>";
 		echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
@@ -448,7 +448,7 @@ function PrintInstitutMembers ()
 	?>                            
 	<br><br>
     </td>
-    <td class="steel1" width="50%" align="center" valign="top"> 
+    <td class="blank" width="50%" align="center" valign="top"> 
 	<?
 	PrintAktualStatusgruppen ();
 	?>
