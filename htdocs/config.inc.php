@@ -345,4 +345,38 @@ $SYMBOL_SHORT = array( //use this shorts to insert an symbols (filename + ".gif"
 	"(c)"=>"symbol05" , 
 	"(r)"=>"symbol06" , 
 	" tm "=>"symbol08");
+
+// <<-- EXPORT-EINSTELLUNGEN
+// Ausgabemodi für den Export
+$export_o_modes = array("start","file","choose", "direct","processor","passthrough");
+// Exportierbare Datenarten
+$export_ex_types = array("veranstaltung", "person", "forschung");
+
+$skip_page_3 = true;
+// Name der erzeugten XML-Datei
+$xml_filename = "data.xml";
+// Name der erzeugten Ausgabe-Datei
+if ($xslt_filename == "") $xslt_filename = "studip";
+
+// Vorhandene Ausgabeformate
+$output_formats = array(
+	"html"		=>		"Hypertext (HTML)", 
+	"rtf"			=>		"Rich Text Format (RTF)", 
+	"txt"			=>		"Text (TXT)", 
+	"fo"			=>		"Adobe Postscript (PDF)", 
+	"xml"		=>		"Extensible Markup Language (XML)"
+);
+
+// Icons für die Ausgabeformate
+$export_icon["xml"] = "xls-icon.gif";
+$export_icon["xslt"] = "xls-icon.gif";
+$export_icon["xsl"] = "xls-icon.gif";
+$export_icon["rtf"] = "rtf-icon.gif";
+$export_icon["fo"] = "pdf-icon.gif";
+$export_icon["pdf"] = "pdf-icon.gif";
+$export_icon["html"] = "txt-icon.gif";
+$export_icon["htm"] = "txt-icon.gif";
+$export_icon["txt"] = "txt-icon.gif";
+// weitere Icons und Formate können hier angefügt werden
+// EXPORT -->>
 ?>

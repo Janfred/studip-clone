@@ -55,7 +55,7 @@ require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 
-require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT" . "/export_config.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 
 if ($EXPORT_ENABLE)
 {
