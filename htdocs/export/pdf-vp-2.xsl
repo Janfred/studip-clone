@@ -314,7 +314,7 @@ MitarbeiterInnenliste
 		<xsl:for-each select="person">
 		<fo:table-row>
 			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
+				<fo:block hyphenate="true">
 	<xsl:if test="titel">
 				<xsl:value-of select="titel"/>
 				<xsl:text> </xsl:text>
@@ -329,21 +329,21 @@ MitarbeiterInnenliste
 				</fo:block>
 			</fo:table-cell>
 			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
+				<fo:block hyphenate="true">
 					<xsl:if test="telefon">
 					<xsl:value-of select="telefon"/>
 					</xsl:if>
 				</fo:block>
 			</fo:table-cell>
 			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
+				<fo:block hyphenate="true">
 					<xsl:if test="raum">
 					<xsl:value-of select="raum"/>
 					</xsl:if>
 				</fo:block>
 			</fo:table-cell>
 			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
+				<fo:block hyphenate="true">
 					<xsl:if test="sprechzeiten">
 					<xsl:value-of select="sprechzeiten"/>
 					</xsl:if>
