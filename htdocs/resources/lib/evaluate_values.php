@@ -1463,13 +1463,14 @@ if (($dec_request_x) || ($auto_dec))
 if ($inc_limit_low) {
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"]+=10;
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
-	if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] >= $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"])
+	if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] >= $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"])
 		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] -1;
 }
 if ($inc_limit_high) {
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]+=10;
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
 }
+
 if ($dec_limit_low) {
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"]-=10;
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
@@ -1487,7 +1488,6 @@ if ($matching_rooms_limit_submit_x) {
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $search_rooms_limit_high ;
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
 }
-
 
 //create the (overlap)data for all resources that should checked for a request
 if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_clip_ids) || ($save_state_x) || $auto_inc || $auto_dec || $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"]) {
@@ -1522,9 +1522,9 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 		if (getGlobalPerms($user->id) != "admin")
 			$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
 		$matching_resources = $reqObj->searchRooms(FALSE, TRUE, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"], $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"], TRUE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
-		if (($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] + $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]) > $reqObj->last_search_result_count)
+		echo $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"], ",", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"];
+		if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]  > ($reqObj->last_search_result_count + $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"]))
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_low"] + $reqObj->last_search_result_count;
-		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["found_rooms"] + $reqObj->last_search_result_count;
 		
 		foreach ($matching_resources as $key => $val) {
 			if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key])
