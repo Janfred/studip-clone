@@ -5,14 +5,14 @@
 	<html>
 		<body>
 		<xsl:for-each select="studip">
-			<xsl:for-each select="institut">
 				<h1>Veranstaltung: <xsl:value-of select="@range"/></h1>
+			<xsl:for-each select="institut">
 				<br/>
 				<xsl:if test="personen">
 					<table width="100%" cellpadding="5" cellspacing="2">
 						<tr colspan="5">
 							<td>
-								<h2>TeilnehmerInnen</h2>
+								<h2>TeilnehmerInnenliste</h2>
 							</td>
 						</tr>
 						<tr>
