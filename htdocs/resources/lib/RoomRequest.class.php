@@ -210,17 +210,24 @@ class RoomRequest {
 		$this->default_seats=($value);
 	}
 
-	function searchRooms($search_exp, $properties = FALSE, $limit = 0) {
+	function searchRooms($search_exp, $properties = FALSE, $limit = 0, $only_rooms = TRUE, $permitted_resources = FALSE) {
+	
+		print_r ($permitted_resources);
+		//create permitted resource clause
+		if (is_array($permitted_resources)) {
+			$permitted_resources_clause="AND resource_id IN ('".join("','",$permitted_resources)."')";
+		}
+
 		//create the query
 		if ($search_exp && !$properties)
-			$query = sprintf ("SELECT b.resource_id, b.name FROM resources_categories a LEFT JOIN resources_objects b USING (category_id) WHERE is_room = '1' AND b.name LIKE '%%%s%%' ORDER BY b.name", $search_exp);
+			$query = sprintf ("SELECT b.resource_id, b.name FROM resources_categories a LEFT JOIN resources_objects b USING (category_id) WHERE 1 %s AND b.name LIKE '%%%s%%' %s ORDER BY b.name", ($only_rooms) ? "AND is_room = '1'" : "", $search_exp, $permitted_resources_clause);
 
-		//create the very complex query for room serach AND room propterties search...	
+		//create the very complex query for room search AND room propterties search...	
 		if ($properties) {
 			$availalable_properties = $this->getAvailableProperties();
 			$setted_properties = $this->getSettedPropertiesCount();
 
-			$query = sprintf ("SELECT a.resource_id, b.name %s FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) WHERE ", ($setted_properties) ? ", COUNT(a.resource_id) AS resource_id_count" : "");
+			$query = sprintf ("SELECT a.resource_id, b.name %s FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) WHERE %s ", ($setted_properties) ? ", COUNT(a.resource_id) AS resource_id_count" : "", ($permitted_resources_clause) ? $permitted_resources_clause." AND " : "");
 
 			$i=0;
 			if ($setted_properties) {
@@ -264,7 +271,6 @@ class RoomRequest {
 		}
 
 		$this->db->query($query);
-		
 		if ($this->db->affected_rows()) {
 			while ($this->db->next_record()) {
 				if ($this->db->f("name")) {
