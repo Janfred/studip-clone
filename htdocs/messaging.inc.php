@@ -90,31 +90,39 @@ class messaging {
 	}
 
 	//Nachricht loeschen
-	function delete_message($message_id, $user_id = FALSE) {
+	function delete_message($message_id, $user_id = FALSE, $force = FALSE) {
 		global $user;
 		
 		if (!$user_id) {
 			$user_id = $user->id;
 		}	
-		
+
+		$query = "UPDATE message_user SET deleted = '1' WHERE message_id = '".$message_id."' AND user_id = '".$user_id."' AND deleted='0'";
+
+		if(!$force) {
+			$query .= " AND dont_delete='0'";
+		}
+
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 
-		$db->query("UPDATE message_user SET deleted = '1' WHERE message_id = '".$message_id."' AND user_id = '".$user_id."' AND dont_delete='0' AND deleted='0'");
+		$db->query($query);
 		if ($db->affected_rows()) {
+			$db2->query("SELECT message_id FROM message_user WHERE message_id = '".$message_id."' AND deleted = '0'");
+			if (!$db2->num_rows()) {
+				$db2->query("DELETE FROM message WHERE message_id = '".$message_id."'");
+				$db2->query("DELETE FROM message_user WHERE message_id = '".$message_id."'");
+			}
 			return TRUE;
 		} else {
 			return FALSE;
 		}
-		$db2->query("SELECT message_id FROM message_user WHERE message_id = '".$message_id."' AND deleted = '0'");
-		if (!$db2->num_rows()) {
-			$db2->query("DELETE FROM message WHERE message_id = '".$message_id."'");
-			$db2->query("DELETE FROM message_user WHERE message_id = '".$message_id."'");
-		}
+
 	}
 
+
 	// delete all messages from user
-	function delete_all_messages($user_id = FALSE) {
+	function delete_all_messages($user_id = FALSE, $force = FALSE) {
 		global $user;
 		$db=new DB_Seminar;
 		
@@ -125,9 +133,10 @@ class messaging {
 		$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."' AND deleted='0'";
 		$db->query("$query");
 		while ($db->next_record()) {
-			$this->delete_message($db->f("message_id"));
+			$this->delete_message($db->f("message_id"), $user_id, $force);
 		}
 	}
+
 
 	// update messages as readed
 	function set_read_message($message_id) {
