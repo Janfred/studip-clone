@@ -102,20 +102,19 @@ class ExternModuleGlobal extends ExternModule {
 	/**
 	*
 	*/
-	function store ($element_name = "", $values = "") {
-		$this->globalConfigMapping($element_name, $values);
-		parent::store($element_name, $values);
+	function store ($element_name = '', $values = '') {
+		$this->config->restore($this, $element_name, $values);
+		$this->globalConfigMapping();
+		$this->config->store();
 	}
 	
 	/**
 	*
 	*/
-	function globalConfigMapping ($element_name = "", $values = "") {
+	function globalConfigMapping () {
 	
 		// mapping entire elements
-		
-		$elements_map["PersondetailsLectures"][] = $this->elements["Main"];
-		
+				
 		$elements_map["Body"][] = $this->elements["PageBodyGlobal"];
 		$elements_map["TableHeader"][] = $this->elements["MainTableHeaderGlobal"];
 		
@@ -162,9 +161,9 @@ class ExternModuleGlobal extends ExternModule {
 		
 		foreach ($elements_map as $name => $elements) {
 			foreach ($elements as $element) {
-				if ($element->name == $element_name) {
-					foreach ($element->attributes as $attribute)
-						$this->config->config[$name][$attribute] = $values[$element->name . "_" . $attribute];
+				foreach ($element->attributes as $attribute) {
+					$this->config->config[$name][$attribute]
+							= $this->config->getValue($element->name, $attribute);
 				}
 			}
 		}
@@ -172,27 +171,36 @@ class ExternModuleGlobal extends ExternModule {
 		// mapping single attributes
 		
 		$this->config->config["PersondetailsHeader"]["headlinetd_align"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_align"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_align");
 		$this->config->config["PersondetailsHeader"]["headlinetd_valign"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_valign"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_valign");
 		$this->config->config["PersondetailsHeader"]["headlinetd_bgcolor"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_bgcolor"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_bgcolor");
 		$this->config->config["PersondetailsHeader"]["headlinetd_class"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_class"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_class");
 		$this->config->config["PersondetailsHeader"]["headlinetd_style"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_style"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_style");
 		
 		$this->config->config["SemName"]["td_align"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_align"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_align");
 		$this->config->config["SemName"]["td_valign"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_valign"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_valign");
 		$this->config->config["SemName"]["td_bgcolor"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_bgcolor"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_bgcolor");
 		$this->config->config["SemName"]["td_class"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_class"];
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_class");
 		$this->config->config["SemName"]["td_style"]
-				= $this->config->config["MainTableHeadrowGlobal"]["th_style"];
-	
+				= $this->config->getValue("MainTableHeadrowGlobal", "th_style");
+		
+		$this->config->config["Contact"]["defaultadr"]
+				= $this->config->getValue("Main", "defaultadr");
+		
+		$this->config->config["PersondetailsLectures"]["semstart"]
+				= $this->config->getValue("Main", "semstart");
+		$this->config->config["PersondetailsLectures"]["semrange"]
+				= $this->config->getValue("Main", "semrange");
+		$this->config->config["PersondetailsLectures"]["semswitch"]
+				= $this->config->getValue("Main", "semswitch");
 	}
 	
 	/**
