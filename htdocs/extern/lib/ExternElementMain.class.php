@@ -36,6 +36,7 @@
 
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
 
 class ExternElementMain extends ExternElement {
 
@@ -48,8 +49,8 @@ class ExternElementMain extends ExternElement {
 	* Constructor
 	*
 	*/
-	function ExternElementMain ($module_name, $data_fields,
-			$field_names, &$config) {
+	function ExternElementMain ($module_name, &$data_fields,
+			&$field_names, &$config) {
 			
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Elements ändern.");
@@ -57,13 +58,13 @@ class ExternElementMain extends ExternElement {
 		if ($module_name != "") {
 			$main_class_name = "ExternElementMain" . $module_name;
 			require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
-					. "/elements/$main_class_name.class.php");
+					. "/elements/main/$main_class_name.class.php");
 			$this = new $main_class_name();
 		}
 		$this->name = "Main";
 		$this->config =& $config;
-		$this->data_fields = $data_fields;
-		$this->field_names = $field_names;
+		$this->data_fields =& $data_fields;
+		$this->field_names =& $field_names;
 	}
 	
 	/**
