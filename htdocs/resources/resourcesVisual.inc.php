@@ -182,7 +182,7 @@ class ShowList extends ShowTreeRow{
 	
 	function showRangeList($range_id) {
 		$db=new DB_Seminar;	
-		
+
 		//create the query for all objects owned by the range
 		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $range_id);
 		$db->query($query);
@@ -205,9 +205,8 @@ class ShowList extends ShowTreeRow{
 	}
 	
 	function showSearchList($search_array) {
-
 		$db=new DB_Seminar;	
-		
+
 		//create the query
 		if (($search_array["search_exp"]) && (!$search_array["search_properties"]))
 			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE name LIKE '%%%s%%' ORDER BY name", $search_array["search_exp"]);
@@ -220,7 +219,22 @@ class ShowList extends ShowTreeRow{
 				if ($val == "on")
 					$val = 1;
 				
-				$query.= sprintf(" %s (property_id = '%s' AND state = '%s') ", ($i) ? "AND" : "", $key, $val);
+				//let's create some possible wildcards
+				if (ereg("<", $val)) {
+					$val = trim(substr($val, strpos($val, "<")+1, strlen($val)));
+					$linking = "<";
+				} elseif (ereg(">", $val)) {
+					$val = trim(substr($val, strpos($val, "<")+1, strlen($val)));
+					$linking = ">";
+				} elseif (ereg("<=", $val)) {
+					$val = trim(substr($val, strpos($val, "<")+2, strlen($val)));
+					$linking = "<=";
+				} elseif (ereg(">=", $val)) {
+					$val = trim(substr($val, strpos($val, "<")+2, strlen($val)));
+					$linking = ">=";
+				} else $linking = "=";
+				
+				$query.= sprintf(" %s (property_id = '%s' AND state %s %s%s%s) ", ($i) ? "AND" : "", $key, $linking,  (!is_numeric($val)) ? "'" : "", $val, (!is_numeric($val)) ? "'" : "");
 				$i++;
 			}
 			
@@ -229,7 +243,7 @@ class ShowList extends ShowTreeRow{
 		}
 		
 		$db->query($query);
-		
+		echo $query;
 		//if we have an empty result
 		if ((!$db->num_rows()) && ($level==0))
 			return FALSE;
@@ -1723,11 +1737,13 @@ class ResourcesBrowse {
 	var $searchArray;		//the array of search expressions (free search & properties)
 	var $db;
 	var $db2;
+	var $db3;
 	var $cssSw;			//the cssClassSwitcher
 	
 	function ResourcesBrowse() {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
+		$this->db3 = new DB_Seminar;
 		$this->cssSw = new cssClassSwitcher;
 		$this->list = new ShowList;
 		
@@ -1757,17 +1773,10 @@ class ResourcesBrowse {
 	function searchForm() {
 		?>
 		<tr>
-			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center">
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
 				<font size=-1>freie Suche:&nbsp;
-				<input name="search_exp"  type="TEXT" style="{vertikal-align: middle;}" size=20 maxlength=255 value="<? echo $this->searchArray["search_exp"]; ?>" />
+				<input name="search_exp"  type="TEXT" style="{vertikal-align: middle;}" size=30 maxlength=255 value="<? echo $this->searchArray["search_exp"]; ?>" />
 				<input type="IMAGE" align="absmiddle"  <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
-				&nbsp;<a href="<? echo $PHP_SELF?>?search=TRUE&reset=TRUE"><? echo makeButton ("neuesuche") ?></a>
-				<?
-				if ($this->mode == "browse")
-					printf ("&nbsp;<a href=\"%s?view=search&mode=properties\">%s</a> "._("durchsuchen"), $PHP_SELF, makeButton ("eigenschaften"));
-				else
-					printf ("&nbsp;<a href=\"%s?view=search&mode=browse\">%s</a> "._("durchsuchen"), $PHP_SELF, makeButton ("ebenen"));				
-				?>
 			</td>
 		</tr>
 		<?
@@ -1784,7 +1793,7 @@ class ResourcesBrowse {
 			$this->db2->query($query);
 			$this->db2->next_record();
 
-			$result_arr[] = array("id" => $this->db2->f("resource_id"), "name" => htmlReady($this->db2->f("name")));
+			$result_arr[] = array("id" => $this->db2->f("resource_id"), "name" => $this->db2->f("name"));
 			$id=$this->db2->f("parent_id");
 
 			if ($this->db2->f("parent_id") == "0") {
@@ -1881,7 +1890,7 @@ class ResourcesBrowse {
 		global $PHP_SELF;
 		
 		if ($this->open_object) {
-			$query = sprintf ("SELECT resource_id, name, description FROM resources_objects WHERE parent_id = '%s' ORDER BY name", $this->open_object);
+			$query = sprintf ("SELECT a.resource_id, a.name, a.description FROM resources_objects a LEFT JOIN resources_objects b ON (b.parent_id = a.resource_id)  WHERE a.parent_id = '%s' AND (a.category_id IS NULL OR b.resource_id IS NOT NULL) GROUP BY resource_id ORDER BY name", $this->open_object);
 			$query2 = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $this->open_object);
 			
 			$this->db2->query($query2);			
@@ -1910,45 +1919,48 @@ class ResourcesBrowse {
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?>>
 				<?
-				echo $this->getHistory($this->open_object)." > <font size=-1><b>".$this->db->num_rows()."</b> "._("Unterebenen vorhanden")."</font>";
+				echo $this->getHistory($this->open_object);
 				?>
 			</td>
-		</tr>
-		<tr>
-			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="right">
-				<table width="70%" cellpadding=5 cellspacing=0 border=0 align="center">
-					<?
-					if ((!$this->db->num_rows()) || (!$sublevels)) {
-						echo " <font size=-1><br /><b>"._("Auf dieser Ebene existieren keine weiteren Unterebenen")."</b><br /></font>";
-					} else {
-						if ($this->db->num_rows() % 2 == 1)
-							$i=0;
-						else
-							$i=1;
-						print "<td width=\"60%\" valign=\"top\">";
-						while ($this->db->next_record()) {
-							if (($i > ($this->db->num_rows() /2 )) && (!$switched)) {
-								print "</td><td width=\"40%\" valign=\"top\">";
-								$switched = TRUE;
-							}
-							printf ("<a href=\"$PHP_SELF?view=search&open_level=%s\"><b>%s</b></a><br />", $this->db->f("resource_id"), htmlReady($this->db->f("name")));
-							$i++;
-						}
-					}
-					?>
-				</table>
+			<td <? echo $this->cssSw->getFullClass() ?>width="15%" align="right" nowrap valign="top">
 				<?
 				if ($way_back>=0) {
 					printf ("<a href = \"%s?view=search&%s\">", $PHP_SELF, (!$way_back) ? "reset=TRUE" : "open_level=$way_back"); 
-					print ("<img src=\"./pictures/move_left.gif\" border=\"0\" />&nbsp; <font size=\"-1\">"._("eine Ebene zur&uuml;ck")."</font></a>");
-			
+					print ("<img align=\"absmiddle\" src=\"./pictures/move_left.gif\" border=\"0\" />&nbsp; <font size=\"-1\">"._("eine Ebene zur&uuml;ck")."</font></a>");
 				}
 				?>
 			</td>
 		</tr>
 		<tr>
-			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?>>
-				<font size=-1><?=_("Eintr&auml;ge auf dieser Ebene:")?></font>
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="left" colspan="2">
+				<?
+				if ((!$this->db->num_rows()) || (!$sublevels)) {
+					echo "<br /><font size=-1><img align=\"absmiddle\" src=\"./pictures/ausruf_small2.gif\" />&nbsp; <b>"._("Auf dieser Ebene existieren keine weiteren Unterebenen")."</b><br />&nbsp; </font>";
+				} else {
+				?>
+				<table width="90%" cellpadding=5 cellspacing=0 border=0 align="center">
+					<?
+					if ($this->db->num_rows() % 2 == 1)
+						$i=0;
+					else
+						$i=1;
+					print "<td width=\"55%\" valign=\"top\">";
+					while ($this->db->next_record()) {
+						if (($i > ($this->db->num_rows() /2 )) && (!$switched)) {
+							print "</td><td width=\"40%\" valign=\"top\">";
+							$switched = TRUE;
+						}
+						printf ("<a href=\"$PHP_SELF?view=search&open_level=%s\"><font size=\"-1\"><b>%s</b></font></a><br />", $this->db->f("resource_id"), htmlReady($this->db->f("name")));
+						$i++;
+					}
+					print "</table>";
+				}
+				?>
+			</td>
+		</tr>
+		<tr>
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="left" colspan="2">
+				<font size="-1"><?=_("Ressourcen auf dieser Ebene:")?></font>
 			</td>
 		</tr>		
 		<? 
@@ -1956,25 +1968,27 @@ class ResourcesBrowse {
 	
 	//private
 	function showList() {
-		$result_count=$this->list->showList($this->open_object);
+		?>
+		<tr>
+			<td <? echo ($this->mode == "browse") ? " colspan=\"2\"" : "" ?>>
+				<?$result_count=$this->list->showListObjects($this->open_object);
 		if (!$result_count) {
 			?>
-		<tr>
-			<td <? echo $this->cssSw->getFullClass() ?>>
 				<font size=-1><b><?=_("Es existieren keine Eintr&auml;ge auf dieser Ebene.")?></b></font>
 			</td>
 		</tr>		
 			<?
 		}
-	}
+}
 	
 	//private
 	function showSearchList() {
-		$result_count=$this->list->showSearchList($this->searchArray);
+		?>
+		<tr>
+			<td <? echo ($this->mode == "browse") ? " colspan=\"2\"" : "" ?>>
+				<?$result_count=$this->list->showSearchList($this->searchArray);
 		if (!$result_count) {
 			?>
-		<tr>
-			<td <? echo $this->cssSw->getFullClass() ?>>
 				<font size=-1><b><?=_("Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden.")?></b></font>
 			</td>
 		</tr>		

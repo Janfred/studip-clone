@@ -52,6 +52,18 @@ switch ($resources_data["view"]) {
 	case "search":
 		$page_intro=_("Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen zu suchen oder sich durch die Ebenen zu navigieren.");
 		$title=_("Suche nach Ressourcen");
+		$infobox = array(
+/*					array  ("kategorie"  => _("Information:"), 
+							"eintrag" => array (
+								array ("icon" => "pictures/ausruf_small.gif", 	
+									"text"  => ($resources_data["list_recurse"]) ? _("Untergeordnete Ebenen werden ausgegeben.") : _("Untergeordnete Ebenen werden <u>nicht</u> ausgegeben.")))),*/
+					array  ("kategorie" => "Aktionen:", 
+							"eintrag" => array (
+								array	("icon" => "pictures/suchen.gif",
+									"text"  => (($resources_data["search_mode"] == "browse") || (!$resources_data["search_mode"]))? sprintf(_("Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"), "<a href=\"$PHPSELF?view=search&mode=properties\">", "</a>") :  sprintf(_("%sEbenen%s durchsuchen"), "<a href=\"$PHP_SELF?view=search&mode=browse\">", "</a>")),
+								array("icon" => "pictures/blank.gif",
+									"text"  => "<br /><a href=\"$PHP_SELF?view=search&reset=TRUE\">".makeButton("neuesuche")."</a>"))));
+		$infopic = "pictures/rooms.jpg";
 	break;
 	
 	//Reiter "Listen"

@@ -7,9 +7,9 @@ class ShowTreeRow {
 
 	function ShowRow($icon, $link, $titel, $zusatz, $level='', $lines='', $weitere, $new=FALSE, $open="close", $content=FALSE, $edit='', $breite="99%") {
 		
-		?><table border=0 cellpadding=0 cellspacing=0 width="100%">
+		?><table border=0 cellpadding=0 cellspacing=0 width="99%" align="center">
 			<tr>
-				<td class="blank" valign="top" heigth=21 nowrap><img src="pictures/forumleer.gif"><img src="pictures/forumleer.gif"><?
+				<td class="blank" valign="top" heigth=21 nowrap><?
 	
 		if (!$content)
 			$content=_("Keine Beschreibung");
@@ -37,18 +37,18 @@ class ShowTreeRow {
 	
 		//Kofzeile ausgeben
 		 printhead ($breite, 0, $link, $open, $new, $icon, $titel, $zusatz);
-			?><td class="blank" width="*">&nbsp;</td>
+			?>
 			</tr>
 		</table>
 		<?	 
 		 
 		 //weiter zur Contentzeile
 		 if ($open=="open") {
-		?><table width="100%" cellpadding=0 cellspacing=0 border=0>
+		?><table width="99%" cellpadding=0 cellspacing=0 border=0 align="center">
 			<tr>
 				<?
 			 	//wiederum Striche fuer Struktur
-				?><td class="blank" nowrap background="pictures/forumleer.gif"><img src="pictures/forumleer.gif"><img src="pictures/forumleer.gif"></td>
+				?><td class="blank" nowrap background="pictures/forumleer.gif"></td>
 				<?
 				$striche='';
 				if ($level)
@@ -70,9 +70,7 @@ class ShowTreeRow {
 		
 				//Contenzeile ausgeben
 				printcontent ($breite, FALSE, $content, $edit);
-				?><td class="blank" width="*">
-					&nbsp;
-				</td>
+				?>
 			</tr>	
 		</table>
 		<?
