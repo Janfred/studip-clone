@@ -49,6 +49,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 require_once ($RELATIVE_PATH_RESOURCES."/views/Msg.class.php");
 
 $sess->register("resources_data");
+$resources_data = unserialize($resources_data);
 $globalPerm = getGlobalPerms($this->user_id);
 $msg = new Msg;
 $db=new DB_Seminar;
@@ -456,5 +457,6 @@ if (!$suppress_infobox) {
 	</tr>
 </table>
 <?
+$resources_data = serialize($resources_data);
 page_close();
 ?>
