@@ -31,10 +31,9 @@ $db3=new DB_Seminar;
 $db4=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 
-$sess->register("$ABSOLUTE_PATH_STUDIP/links_admin_data");
-$sess->register("$ABSOLUTE_PATH_STUDIP/sem_create_data");
-$sess->register("$ABSOLUTE_PATH_STUDIP/admin_dates_data");
-
+$sess->register("links_admin_data");
+$sess->register("sem_create_data");
+$sess->register("admin_dates_data");
 
 //neue Admin-Seminar-Sitzung, ich komme mit einer seminar_id rein
 if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
@@ -91,6 +90,7 @@ elseif ((($SessSemName[1]) && ($new_inst)) || ($SessSemName[1] && !$links_admin_
 	}
 elseif ($i_page== "adminarea_start.php")
 	$list=TRUE;
+
 
 if ($sortby) {
 	$links_admin_data["sortby"]=$sortby;
@@ -250,12 +250,12 @@ if ($perm->have_perm("tutor")) {
 }
 
 if ($perm->have_perm("admin")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_institut.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")) {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="admin_institut.php?view=inst&list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><?
+	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")) {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="admin_institut.php?list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><?
 		?><img src="pictures/reiter2.jpg" align=absmiddle></td><?
 	}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="admin_institut.php?view=inst&list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="admin_institut.php?list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 
-	if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR ($i_page == "admin_institut.php" AND $links_admin_data["view"]=="global") OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
+	if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
 	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 }
 
@@ -303,11 +303,11 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_pag
 
 }
 
-if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php" OR ($i_page == "admin_institut.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst"))
+if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php" OR $i_page == "admin_institut.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst"))
 {
 
-	IF ($i_page == "admin_institut.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?view=inst&list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?view=inst&list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
+	IF (($i_page == "admin_institut.php") && ($i_view!="new")){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
+	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
 
 	IF ($i_page == "inst_admin.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
@@ -317,10 +317,14 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_pa
 
 	IF ($i_page == "admin_news.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_news.php?view=inst&list=TRUE">News&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_news.php?view=inst&list=TRUE">News&nbsp; &nbsp; </a> <?}
-	
+
+	if ($perm->have_perm("root")) {
+		IF (($i_page == "admin_institut.php") && ($i_view=="new")) { ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?i_view=new"">neue Einrichtung&nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?i_view=new">neue Einrichtung&nbsp; &nbsp; </a> <?}
+	}
 }
 
-if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR ($i_page == "admin_institut.php" AND $links_admin_data["view"]=="global") OR $i_page == "new_user_md5.php")
+if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php")
 {
 	IF ($i_page == "new_user_md5.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
@@ -328,9 +332,6 @@ if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page =
 	if ($perm->have_perm("root")) {
 		IF ($i_page == "admin_fakultaet.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_fakultaet.php">Fakult&auml;ten&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_fakultaet.php">Fakult&auml;ten&nbsp; &nbsp; </a> <?}
-
-		IF ($i_page == "admin_institut.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?view=global&list=TRUE">Einrichtungen &nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?view=global&list=TRUE">Einrichtungen &nbsp; &nbsp; </a> <?}
 
 		IF ($i_page == "admin_fach.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="admin_fach.php">F&auml;cher&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_fach.php">F&auml;cher&nbsp; &nbsp; </a> <?}
@@ -357,7 +358,7 @@ if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page =
 
 //Einheitliches Auswahlmenu fuer Einrichtungen
 if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
+	(($i_page == "admin_institut.php" OR $i_page == "admin_literatur.php" OR $i_page == "inst_admin.php"))) {
 
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
@@ -366,12 +367,15 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 		</td>
 	</tr>
 	<?
-		if ($msg)
-			parse_msg ($msg);
+	if ($msg) {
+		echo "<tr> <td class=\"blank\" colspan=2><br />";
+		parse_msg ($msg);
+		echo "</td></tr>";
+	}
 	?>
+	<form name="links_admin_search" action="<? echo $PHP_SELF,"?", "view=$view"?>" method="POST">
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
-		<form name="links_admin_search" action="<? echo $PHP_SELF,"?", "view=$view"?>" method="POST">
 			<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 				<tr>
 					<td class="steel1">
