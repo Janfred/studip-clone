@@ -134,7 +134,7 @@ if ($institut_members_data["extend"] == "yes") {
 														"width" => "30%"),
 												"funktion" => array("name" => "Funktion",
 														"link" => $PHP_SELF . "?sortby=Funktion&direction=" . $new_direction,
-														"width" => "15%"),
+														"width" => "10%"),
 												"raum" => array("name" => "Raum",
 														"width" => "10%"),
 												"sprechzeiten" => array("name" => "Sprechzeiten",
@@ -144,7 +144,7 @@ if ($institut_members_data["extend"] == "yes") {
 												"email" => array("name" => "Email",
 														"width" => "10%"),
 												"home" => array("name" => "externe Homepage",
-														"width" => "10%"),
+														"width" => "15%"),
 												"nachricht" => array("name" => "Nachricht&nbsp;",
 														"width" => "5%")
 												);
