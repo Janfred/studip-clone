@@ -1,7 +1,7 @@
 <?
 
-require_once ("$ABSOLUTE_PATH_STUDIPexport/export_config.inc.php");   // Konfigurationsdatei
-require_once ("$ABSOLUTE_PATH_STUDIPexport/export_xslt_vars.inc.php");   // Liste der XSLT-Skripts
+require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
+require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xslt_vars.inc.php");   // Liste der XSLT-Skripts
 
 if ($o_mode != "passthrough")
 {
