@@ -59,17 +59,17 @@ function write_toplist($rubrik,$query) {
 $reiter=new reiter;
 
 //Topkats
-$structure["kontakt"]=array (topKat=>"", name=>_("Kontakt"), link=>"impressum.php?view=main", active=>FALSE);
-$structure["programm"]=array (topKat=>"", name=>_("&Uuml;ber Stud.IP"), link=>"impressum.php?view=technik", active=>FALSE);
+$structure["kontakt"]=array ("topKat"=>"", "name"=>_("Kontakt"), "link"=>"impressum.php?view=ansprechpartner", "active"=>FALSE);
+$structure["programm"]=array ("topKat"=>"", "name"=>_("&Uuml;ber Stud.IP"), "link"=>"impressum.php?view=technik", "active"=>FALSE);
 //Bottomkats
-$structure["main"]=array (topKat=>"kontakt", name=>_("Entwickler"), link=>"impressum.php?view=main", active=>FALSE);
-$structure["ansprechpartner"]=array (topKat=>"kontakt", name=>_("Ansprechpartner"), link=>"impressum.php?view=ansprechpartner", active=>FALSE);
-$structure["technik"]=array (topKat=>"programm", name=>_("Technik"), link=>"impressum.php?view=technik", active=>FALSE);
-$structure["statistik"]=array (topKat=>"programm", name=>_("Statistik"), link=>"impressum.php?view=statistik", active=>FALSE);
-$structure["history"]=array (topKat=>"programm", name=>_("History"), link=>"impressum.php?view=history", active=>FALSE);
+$structure["ansprechpartner"]=array ("topKat"=>"kontakt", "name"=>_("Ansprechpartner"), "link"=>"impressum.php?view=ansprechpartner", "active"=>FALSE);
+$structure["main"]=array ("topKat"=>"kontakt", "name"=>_("Entwickler"), "link"=>"impressum.php?view=main", "active"=>FALSE);
+$structure["technik"]=array ("topKat"=>"programm", "name"=>_("Technik"), "link"=>"impressum.php?view=technik", "active"=>FALSE);
+$structure["statistik"]=array ("topKat"=>"programm", "name"=>_("Statistik"), "link"=>"impressum.php?view=statistik", "active"=>FALSE);
+$structure["history"]=array ("topKat"=>"programm", "name"=>_("History"), "link"=>"impressum.php?view=history", "active"=>FALSE);
 
 if (!$view)
-	$view="main";
+	$view="ansprechpartner";
 
 $reiter->create($structure, $view);
 
