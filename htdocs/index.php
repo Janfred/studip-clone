@@ -95,7 +95,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	<td width="90%" class="blank" valign="top">
 		<table cellpadding=4>
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Meine Veranstaltungen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="sem_portal.php"><?=_("Veranstaltung hinzuf&uuml;gen")?></a></td></tr>
-		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Terminkalender")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php"><?=_("pers&ouml;nlicher Stundenplan")?></a></td></tr>
+		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Mein Planer")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="calendar.php"><?=_("Terminkalender")?></a>&nbsp;/&nbsp;<a href="contact.php"><?=_("Adressbuch")?></a>&nbsp;/&nbsp;<a href="mein_stundenplan.php"><?=_("Stundenplan")?></a></td></tr>
 		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("pers&ouml;nliche Homepage")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=allgemein"><?=_("individuelle Einstellungen")?></a></td></tr>
 		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungssuche")?></a></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Hilfe")?></a></td></tr>
@@ -225,7 +225,7 @@ unset($temp_language_key); unset($temp_language);
 		<table cellpadding=4>
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Meine Veranstaltungen")?></a></td></tr>
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="admin_seminare_assi.php?new_session=TRUE"><?=_("neue Veranstaltung anlegen")?></a></font></td></tr>
-		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Terminkalender")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php"><?=_("pers&ouml;nlicher Stundenplan")?></a></font></td></tr>
+		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Mein Planer")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="calendar.php"><?=_("Terminkalender")?></a>&nbsp;/&nbsp;<a href="contact.php"><?=_("Adressbuch")?></a>&nbsp;/&nbsp;<a href="mein_stundenplan.php"><?=_("Stundenplan")?></a></td></tr>
 		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("pers&ouml;nliche Homepage")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=allgemein"><?=_("individuelle Einstellungen")?></a></font></td></tr>
 		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungssuche")?></a></font></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Hilfe")?></a></td></tr>
