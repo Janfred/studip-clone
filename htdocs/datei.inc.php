@@ -743,7 +743,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/rtf-icon.gif' border=0></a>";
 				elseif (getFileExtension(strtolower($db3->f("filename"))) == "xls")
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/xls-icon.gif' border=0></a>";
-				elseif (getFileExtension(strtolower($db3->f("filename"))) == "zip")
+				elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "tar.gz"))
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/zip-icon.gif' border=0></a>";
 				elseif (getFileExtension(strtolower($db3->f("filename"))) == "ppt")
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/ppt-icon.gif' border=0></a>";
@@ -832,7 +832,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \"><img src=\"./pictures/buttons/bearbeiten-button.gif\" border=0></a>";
 							}
 						$edit.= "&nbsp;<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src=\"./pictures/buttons/herunterladen-button.gif\" border=0></a>";
-						if (getFileExtension(strtolower($db3->f("filename"))) != "zip")
+						if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "tar.gz"))
 							$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src=\"./pictures/buttons/alsziparchiv-button.gif\" border=0></a>";						
 						}
 	
