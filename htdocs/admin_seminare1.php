@@ -235,8 +235,6 @@ if ($s_send) {
 			Sonstiges='$Sonstiges', art='$art', teilnehmer='$teilnehmer', 
 			vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
 			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout'";
-	if ($db->f("admission_prelim") == 1)
-		$query .= ", admission_prelim_txt='$paytxt'";
 		
 	$query .= "WHERE Seminar_id='$s_id'";
 
@@ -752,13 +750,7 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=3><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
 			</tr>
-			<? if ($db->f("admission_prelim") == 1) {i ?>
-				<tr>
-					<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Hinweistext bei vorl&auml;ufigen Eintragungen")?></td>
-					<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="paytxt" cols=58 rows=4><?php echo htmlReady($db->f("admission_prelim_txt")) ?></textarea></td>
-				</tr>
 			<?
-			} 
 			$mkstring=date ("d.m.Y, G:i", $db->f("mkdate"));
 			if (!$db->f("mkdate"))
 				$mkstring=_("unbekannt");
