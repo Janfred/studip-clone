@@ -179,7 +179,7 @@ if ($cmd=="write") {
 	
 	$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
 	$titel="</b>Nachricht schreiben an: <a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a><b>";				
-	$content="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 maxlength=255>";
+	$content="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 wrap=\"virtual\">";
 	if ($quote)
 		$content.=quotes_encode($tmp_sms_content, $db->f("Vorname")." ".$db->f("Nachname"));
 	$content.="</textarea><br />\n";
