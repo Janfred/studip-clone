@@ -36,7 +36,7 @@ $LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please not
 $WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
 $SCM_ENABLE = TRUE;									//enable Simple-Content functionality
 $SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
-
+$SMILEY_COUNTER = FALSE;								//enable Smiley-counter
 
 /*Stud.IP modules
 ----------------------------------------------------------------
@@ -127,8 +127,7 @@ $MAIL_LOCALHOST = "";		// name of the mail sending machine (the web server) defa
 $MAIL_HOST_NAME = "";		// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
 
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
-$MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if TRUE, every message will be forwarded else the user has to switch it on (both only if above option is active) 
-
+$MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if TRUE, every message will be forwarded else the user has to switch it on (both only if above option is active)
 
 /*advanced system settings
 ----------------------------------------------------------------
@@ -149,6 +148,7 @@ $BANNER_ADS_ENABLE = FALSE; 				//enable the Banner ads functions (config as roo
 							//you'll need an additional folder in the pictures folder named banner. The Webserver
 							//needs write accees for this folder.
 							
+$CONVERT_IDNA_URL = TRUE;				//if true, urls with umlauts are converted
 
 /*language settings
 ----------------------------------------------------------------*/
@@ -196,7 +196,6 @@ and enable it here. The name of the plugin is the classname excluding "StudipAut
 
 You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>, 
 all uppercase each item of the configuration array will become a member of your plugin class.*/
-
 
 //$STUDIP_AUTH_PLUGIN[] = "LdapReader";
 //$STUDIP_AUTH_PLUGIN[] = "Ldap";
@@ -258,13 +257,10 @@ $ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are allowed to change their emai
 $ALLOW_CHANGE_NAME = TRUE;				//if true, users are allowed to change their name
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself
 
-
 /*IDs of courses, in which users were entered when they are promoted to 'autor'
 -----------------------------------------------------------------*/
-
 //$AUTO_INSERT_SEM[1]="<seminar_id>";
 //further courses can be added with their IDs here
-
 
 /*format templates for LaTex renderer
 -----------------------------------------------------------------
@@ -290,7 +286,6 @@ $LATEX_FORMATS = array(
 	Arab font (needs LaTeX package arabtex installed):
   		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
 */
-
 
 /*path generation 
 -----------------------------------------------------------------
