@@ -81,7 +81,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" ali
 echo "<tr>\n";
 echo "<td align=\"center\" width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getStart() - 1 . "\">&nbsp;";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\"";
 echo tooltip(_("eine Woche zurück")) . ">&nbsp;</a></td>\n";
 echo "<td width=\"70%\" class=\"calhead\">";
 printf(_("%s. Woche vom %s bis %s"), strftime("%V", $aweek->getStart()),
@@ -89,14 +89,14 @@ printf(_("%s. Woche vom %s bis %s"), strftime("%V", $aweek->getStart()),
 echo "</td>\n";
 echo "<td align=\"center\" width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getEnd() + 259201 . "\">&nbsp;";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\"";
 echo tooltip(_("eine Woche vor")) . ">&nbsp;</a></td>\n";
 echo "</tr></table>\n</td></tr>\n";
 
 echo "<tr><td nowrap=\"nowrap\" align=\"center\" width=\"$width\"$colspan_1>";
 if ($st > 0) {
 	echo "<a href=\"calendar.php?cmd=showweek&atime=$atime&wtime=" . ($st - 1) . "\">";
-	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurauf.gif\" ";
+	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_up.gif\"";
 	echo tooltip(_("zeig davor")) . "></a>";
 }
 else
@@ -107,7 +107,7 @@ echo "</td>" . $tab["table"][0];
 echo "<td nowrap=\"nowrap\" align=\"center\" width=\"$width\"$colspan_1>";
 if ($st > 0) {
 	echo "<a href=\"$PHP_SELF?cmd=showweek&atime=$atime&wtime=" . ($st - 1) . "\">";
-	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurauf.gif\" ";
+	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_up.gif\"";
 	echo tooltip(_("zeig davor")) . "></a>";
 }
 else
@@ -155,7 +155,7 @@ for ($i = 2; $i < sizeof($tab["table"]); $i++) {
 echo "<tr><td$colspan_1 align=\"center\">";
 if ($et < 23) {
 	echo "<a href=\"$PHP_SELF?cmd=showweek&atime=$atime&wtime=" . ($et + 1) . "\">";
-	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurunt.gif\" ";
+	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_down.gif\"";
 	echo tooltip(_("zeig danach")) . "></a>";
 }
 else
@@ -164,7 +164,7 @@ echo "</td><td colspan=\"{$tab['max_columns']}\">&nbsp;</td>";
 echo "<td$colspan_1 align=\"center\">";
 if ($et < 23) {
 	echo "<a href=\"$PHP_SELF?cmd=showweek&atime=$atime&wtime=" . ($et + 1) . "\">";
-	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurunt.gif\" ";
+	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_down.gif\"";
 	echo tooltip(_("zeig danach")) . "></a>";
 }
 else
