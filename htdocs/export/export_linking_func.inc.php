@@ -70,6 +70,7 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "", $fi
 * @param		string	$ex_type	type of data to be exported
 * @param		string	$filename	filename for data-file
 * @param		string	$format	file-format for export
+* @param		string	$choose	xslt-Script for transformation
 * @param		string	$filter	grouping-category for export
 * @return		string
 */
@@ -101,6 +102,7 @@ function export_link($range_id, $ex_type = "", $filename = "", $format = "", $ch
 * @param		string	$ex_type	type of data to be exported
 * @param		string	$filename	filename for data-file
 * @param		string	$format	file-format for export
+* @param		string	$choose	xslt-Script for transformation
 * @param		string	$filter	grouping-category for export
 * @return		string
 */
