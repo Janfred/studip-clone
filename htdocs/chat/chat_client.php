@@ -103,7 +103,7 @@ function chatCommand_quit($msgStr){
 		flush();
 		sleep(3);
 	} else {
-		echo _("Das Chatfenster wird in 3 s geschlossen!") . "<br>";
+		echo _("Das Chatfenster wird in 3 Sekunden geschlossen!") . "<br>";
 		printJs("window.scrollBy(0, 500);");
 		printJs("setTimeout('parent.close()',3000);");
 	} 
@@ -119,7 +119,7 @@ function chatCommand_me($msgStr){
 
 function chatCommand_help($msgStr){
 	global $user,$chatServer,$chatid,$chatCmd;
-	$str = _("Mögliche Chat Kommandos:");
+	$str = _("Mögliche Chat-Kommandos:");
 	foreach($chatCmd as $cmd => $text)
 		$str .= "<br><b>/$cmd</b>" . htmlReady($text);
 	$chatServer->addMsg("system:$user->id",$chatid,$str);
@@ -131,7 +131,7 @@ function chatCommand_private($msgStr){
 	$recid = $chatServer->getIdFromNick($chatid,$recnick);
 	$privMsgStr = trim(strstr($msgStr," "));
 	if ($chatServer->isActiveUser($recid,$chatid)){
-		$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Botschaft an %s wurde &uuml;bermittelt."),htmlReady(fullNick($recid)))
+		$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Botschaft an %s wurde verschickt."),htmlReady(fullNick($recid)))
 			.":<br></i><font color=\"".$chatServer->chatDetail[$chatid]['users'][$user->id]["color"]."\"> " . formatReady($privMsgStr)
 			."</font>");
 		$chatServer->addMsg("system:$recid",$chatid,sprintf(_("Eine geheime Botschaft von %s"),htmlReady(fullNick($user->id)))
@@ -140,7 +140,7 @@ function chatCommand_private($msgStr){
 	} elseif ($recnick) {
 		$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("<b>%s</b> ist in diesem Chat nicht bekannt."),$recnick));
 	} else {
-		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));
+		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Falsche Kommandosyntax!"));
 	}
 }
 
@@ -172,10 +172,10 @@ function chatCommand_kick($msgStr){
 				}
 			}
 		} else {
-			$chatServer->addMsg("system:$user->id",$chatid,_("Kein Nutzer gefunden, der entfernt werden k&ouml;nnte."));
+			$chatServer->addMsg("system:$user->id",$chatid,_("Kein(e) Nutzer(in) zum entfernen gefunden."));
 		}
 	} elseif (!$kicknick){
-		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));
+		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Falsche Kommandosyntax!"));
 	} else {
 		$chatServer->addMsg("system:$user->id",$chatid,_("Sie d&uuml;rfen hier niemanden rauswerfen!"));
 	}
@@ -186,14 +186,14 @@ function chatCommand_sms($msgStr){
 	$recUserName = trim(substr($msgStr." ",0,strpos($msgStr," ")));
 	$smsMsgStr = trim(strstr($msgStr," "));
 	if (!$recUserName || !$smsMsgStr){
-		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));
+		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Falsche Kommandosyntax!"));
 		return;
 	}
 	$msging = new messaging();
 	if ($msging->insert_sms($recUserName,$smsMsgStr))
-		$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre SMS an <b>%s</b> wurde &uuml;bermittelt."),$recUserName));
+		$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre SMS an <b>%s</b> wurde verschickt."),$recUserName));
 	else
-		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, ihre SMS konnte nicht &uuml;bermittelt werden!"));
+		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre SMS konnte nicht verschickt werden!"));
 }
 
 function chatCommand_invite($msgStr){
@@ -202,14 +202,14 @@ function chatCommand_invite($msgStr){
 		$recUserName = trim(substr($msgStr." ",0,strpos($msgStr." "," ")));
 		$smsMsgStr = trim(strstr($msgStr," "));
 		if (!$recUserName){
-			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));
+			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Falsche Kommandosyntax!"));
 			return;
 		}
 		$msging = new messaging();
 		if ($msging->insert_chatinv($recUserName,$chatid,$smsMsgStr))
-			$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Einladung an <b>%s</b> wurde &uuml;bermittelt."),$recUserName));
+			$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Einladung an <b>%s</b> wurde verschickt."),$recUserName));
 		else
-			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, ihre Einladung konnte nicht &uuml;bermittelt werden!"));
+			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre Einladung konnte nicht verschickt werden!"));
 		} else {
 				$chatServer->addMsg("system:$user->id",$chatid,_("Sie d&uuml;rfen f&uuml;r diesen Chat keine Einladungen verschicken!"));
 	}
@@ -261,7 +261,7 @@ function chatCommand_log($msgStr){
 	if ($chatServer->getPerm($user->id,$chatid)){
 		if ($cmd == "start"){
 			if ($chatServer->chatDetail[$chatid]['log'][$user->id]){
-				$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Sie lassen bereits seit %s eine Aufzeichnug laufen."),date("H:i",$chatServer->chatDetail[$chatid]['log'][$user->id])));
+				$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Sie lassen bereits seit %s eine Aufzeichnung laufen."),date("H:i",$chatServer->chatDetail[$chatid]['log'][$user->id])));
 			} else {
 				$chatServer->addMsg("system",$chatid,sprintf(_("Es wurde soeben von <b>%s</b> eine Aufzeichnung gestartet."),htmlReady(fullNick($user->id))));
 				$chatServer->chatDetail[$chatid]['log'][$user->id] = time();
@@ -271,7 +271,7 @@ function chatCommand_log($msgStr){
 		} elseif ($cmd == "stop"){
 			if ($chatServer->chatDetail[$chatid]['log'][$user->id]){
 				$chatServer->addMsg("system",$chatid,sprintf(_("Die Aufzeichnung von <b>%s</b> wurde beendet."),htmlReady(fullNick($user->id))));
-				$chatServer->addMsg("system:$user->id",$chatid,_("Ihre Aufzeichnug wurde beendet und wird zu ihrem Browser geschickt."));
+				$chatServer->addMsg("system:$user->id",$chatid,_("Ihre Aufzeichnug wurde beendet und wird zu Ihrem Browser geschickt."));
 				$chat_log[] = $chatServer->chatDetail[$chatid]['log'][$user->id];
 				$chat_log[] = time();
 				$chatServer->chatDetail[$chatid]['users'][$user->id]['log'] = $chat_log;
@@ -279,17 +279,17 @@ function chatCommand_log($msgStr){
 				$chatServer->store();
 				printJs("if (parent.frames['frm_dummy'].location.href) parent.frames['frm_dummy'].location.href = parent.frames['frm_dummy'].location.href;");
 			} else {
-				$chatServer->addMsg("system:$user->id",$chatid,_("Sie haben keine Aufzeichnug gestartet."));
+				$chatServer->addMsg("system:$user->id",$chatid,_("Sie haben keine Aufzeichnung gestartet."));
 			}
 		} elseif ($cmd == "send"){
 			if ($chatServer->chatDetail[$chatid]['users'][$user->id]['log']){
-				$chatServer->addMsg("system:$user->id",$chatid,_("Ihre Aufzeichnug wird zu ihrem Browser geschickt."));
+				$chatServer->addMsg("system:$user->id",$chatid,_("Ihre Aufzeichnung wird zu Ihrem Browser geschickt."));
 				printJs("if (parent.frames['frm_dummy'].location.href) parent.frames['frm_dummy'].location.href = parent.frames['frm_dummy'].location.href;");
 			} else {
-				$chatServer->addMsg("system:$user->id",$chatid,_("Sie haben keine gespeicherte Aufzeichnug."));
+				$chatServer->addMsg("system:$user->id",$chatid,_("Sie haben keine gespeicherte Aufzeichnung."));
 			}
 		} else {
-			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));
+			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Falsche Kommandosyntax!"));
 		}
 	} else {
 		$chatServer->addMsg("system:$user->id",$chatid,_("Sie d&uuml;rfen hier keine Aufzeichnung starten!"));
@@ -371,7 +371,7 @@ function outputLoop($chatid){
 		if (!$chatServer->isActiveUser($user->id,$chatid)){
 			echo _("Sie mussten den Chat verlassen...") ."<br>";
 			echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">"
-					. _("Hier</a> k&ouml;nnen sie versuchen wieder einzusteigen.<br>");
+					. _("Hier</a> k&ouml;nnen Sie versuchen wieder einzusteigen.<br>");
 			printJs("window.scrollBy(0, 500);");
 			flush();
 			break;
@@ -379,10 +379,10 @@ function outputLoop($chatid){
 //Allzulange rumidlen soll keiner
 		if ((!$chatServer->getPerm($user->id,$chatid) && (time()-$chatServer->getAction($user->id,$chatid)) > CHAT_IDLE_TIMEOUT) ||
 			($chatServer->getPerm($user->id,$chatid) && (time()-$chatServer->getAction($user->id,$chatid)) > CHAT_ADMIN_IDLE_TIMEOUT)){
-			echo _("<b>IDLE TIMOUT</b> - sie wurden aus dem Chat entfernt!<br>");
+			echo _("<b>IDLE TIMOUT</b> - Sie wurden aus dem Chat entfernt!<br>");
 			$chatServer->removeUser($user->id,$chatid);
 			echo "<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">"
-				._("Hier</a> k&oumlnnen sie versuchen wieder einzusteigen.<br>");
+				._("Hier</a> k&oumlnnen Sie versuchen wieder einzusteigen.<br>");
 			printJs("window.scrollBy(0, 500);");
 			flush();
 			break;

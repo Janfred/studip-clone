@@ -223,7 +223,7 @@ class ChatServer {
 			foreach($this->chatDetail as $chatid => $detail){
 				$name = htmlReady($this->getFullname($userid,$chatid) . " (".$this->getNick($userid,$chatid).")");
 				if ($this->removeUser($userid,$chatid)){
-					$this->addMsg("system",$chatid,sprintf(_("%s hat sich aus StudIP ausgeloggt!"),$name));
+					$this->addMsg("system",$chatid,sprintf(_("%s hat sich aus Stud.IP ausgeloggt!"),$name));
 				}
 			}
 		}
