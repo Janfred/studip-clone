@@ -17,7 +17,7 @@ function show_user_modules($benutzername)
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "user";
 			$printlink = $module_info["title"];
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
-			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$edit_link\">" . makeButton("loeschen", "img") . "</a></center>";
+			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			for ($i=0; $i<sizeof($mod_author); $i ++)
 				$mod_author[$i] = $mod_author[$i]["fullname"];
@@ -67,7 +67,7 @@ function show_admin_modules()
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "admin";
 			$printlink = $module_info["title"];
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
-			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$edit_link\">" . makeButton("loeschen", "img") . "</a></center>";
+			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$delete_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$edit_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			for ($i=0; $i<sizeof($mod_author); $i ++)
 				$mod_author[$i] = $mod_author[$i]["fullname"];
