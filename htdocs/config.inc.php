@@ -77,7 +77,7 @@ $SEM_TYPE[2]=array("name"=>_("Grundstudium"), "en"=>"Basic classes", "class"=>1)
 $SEM_TYPE[3]=array("name"=>_("Hauptstudium"), "en"=>"Advanced classes", "class"=>1);
 $SEM_TYPE[4]=array("name"=>_("Seminar"), "en"=>"Seminar", "class"=>1);
 $SEM_TYPE[5]=array("name"=>_("Praxisveranstaltung"), "en"=>"Practical course", "class"=>1);
-$SEM_TYPE[6]=array("name"=>_("Colloquium"), "en"=>"Colloqia", "class"=>1);
+$SEM_TYPE[6]=array("name"=>_("Kolloquium"), "en"=>"Colloqia", "class"=>1);
 $SEM_TYPE[7]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>1);
 $SEM_TYPE[8]=array("name"=>_("Arbeitsgruppe"), "en"=>"Workgroup", "class"=>5);
 $SEM_TYPE[9]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>1); 
@@ -85,7 +85,7 @@ $SEM_TYPE[10]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "clas
 $SEM_TYPE[11]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>2); 
 $SEM_TYPE[12]=array("name"=>_("Gremiumsveranstaltung"), "en"=>"Board meeting", "class"=>3); 
 $SEM_TYPE[13]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>3); 
-$SEM_TYPE[14]=array("name"=>_("Kulturforum"), "en"=>"Cultural forum", "class"=>4); 
+$SEM_TYPE[14]=array("name"=>_("Community-Forum"), "en"=>"Community forum", "class"=>4); 
 $SEM_TYPE[15]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>4); 
 $SEM_TYPE[16]=array("name"=>_("Praktikum"), "en"=>"Practical course", "class"=>1); 
 $SEM_TYPE[17]=array("name"=>_("Lehrveranstaltung nach PVO-Lehr I"), "en"=>"", "class"=>1); 
@@ -110,7 +110,7 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					 	//the name of the class
 					"bereiche"=>TRUE,					//indicates, if bereiche should be used
 					"show_browse"=>TRUE, 				//indicates, if the hierachy-system should be shown in the search-process
 					"write_access_nobody"=>FALSE, 		//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
-					"description"=>_("Hier finden Sie alle im System registrierten Lehrveranstaltungen"), 						//the description
+					"description"=>_("Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"), 						//the description
 					"create_description"=>_("Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"));		//the description in the creation process
 
 $SEM_CLASS[2]=array("name"=>_("Forschung"), 
@@ -136,7 +136,7 @@ $SEM_CLASS[3]=array("name"=>_("Organisation"),
 					"bereiche"=>FALSE, 
 					"show_browse"=>TRUE,
 					"write_access_nobody"=>TRUE, 
-					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Uni-Gremien"),
+					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der Universit&auml;t"),
 					"create_description"=>_("Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie diese Kategorie"));
 
 $SEM_CLASS[4]=array("name"=>_("Community"), 
