@@ -185,13 +185,19 @@ function imaging($img,$img_size,$img_name) {
 		if (extension_loaded('gd')){
 			switch ($ext) {  //original Bild einlesen
 				case 'gif': //GIF
-				$img_org = ImageCreateFromGIF($img);
+				if (function_exists('ImageCreateFromGIF')){
+					$img_org = ImageCreateFromGIF($img);
+				}
 				break;
 				case 'jpg': //JPG
-				$img_org = ImageCreateFromJPEG($img);
+				if (function_exists('ImageCreateFromJPEG')){
+					$img_org = ImageCreateFromJPEG($img);
+				}
 				break;
 				case 'png': //PNG
-				$img_org = ImageCreateFromPNG($img);
+				if (function_exists('ImageCreateFromPNG')){
+					$img_org = ImageCreateFromPNG($img);
+				}
 				break;
 				default:
 				$img_org = FALSE;
