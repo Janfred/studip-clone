@@ -71,7 +71,7 @@ $_fullname_sql['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $_fullname_sql['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 
 //software version - please leave it as it as!
-$SOFTWARE_VERSION="1.0.5 alpha cvs";
+$SOFTWARE_VERSION="1.1.0 beta cvs";
 
 /*classes for database access
 ----------------------------------------------------------------
