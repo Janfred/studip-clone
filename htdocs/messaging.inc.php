@@ -26,23 +26,12 @@ class messaging {
 	var $sig_string;					//String, der Signaturen vom eigentlichen Text abgrenut
 
 
-//Konstruktor, testet, ob es gesetzte Buddies ueberhaupt noch gibt
+//Konstruktor
 function messaging () {
-	global $my_buddies;
+	
 	$this->sig_string="\n \n -- \n";
 		
 	$this->db = new DB_Seminar;
-	if (is_array($my_buddies)) {
-		$this->db->query("SELECT username FROM auth_user_md5 WHERE username IN ('".join("','",array_keys($my_buddies))."')");
-		while($this->db->next_record()){
-			$known_buddies[$this->db->f("username")] = true;
-		}
-		foreach ($my_buddies as $key => $value){
-			if (!$known_buddies[$key]){
-				unset($my_buddies[$key]);
-			}
-		}
-	}
 }
 
 //alle Nachrichten loeschen
