@@ -76,14 +76,14 @@ if ($o_mode != "direct")
 	fclose($xml_file);
 }
 
-if ($o_mode == "file")
+if (($o_mode == "file") OR ($o_mode == "choose"))
 {
 
 	if ($object_counter<1)
 	{
 		$xml_export_text = _("Es wurden keine Daten gefunden!");
-		$export_error = _("Es wurden keine Daten gefunden! Die übergebene ID verweist auf keine Veranstaltungs- / Personendaten.");
-		$export_error_num++;
+		$export_error = _("Es wurden keine Daten gefunden! Die übergebene ID ist mit keinen Veranstaltungs- / Personendaten verbunden.");
+		$export_error_num ++;
 //		echo "</td></tr>";
 //		die("</table></td></tr></table></body>");
 

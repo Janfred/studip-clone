@@ -83,11 +83,17 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 { 
 	$export_pagename .= _("Auswahl des Dateiformats");
 	
+	unset($export_msg);
+	unset($xml_printimage);
+	unset($xml_printlink);
+	unset($xml_printdesc);
+	unset($xml_printcontent);
+
 	$export_info = _("Bitte wählen Sie, in welchem Format die Daten ausgegeben werden sollen!") . "<br>";
 
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 	
-	$export_pagecontent .= "<br><br>";
+	$export_pagecontent .= "";
 	$export_pagecontent .= _("Ausgabeformat:") .  "<select name=\"format\">";
 
 	while (list($key, $val) = each($output_formats))
