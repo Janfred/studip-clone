@@ -51,6 +51,10 @@ if ($ILIAS_CONNECT_ENABLE) {
 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_user_functions.inc.php");
 }
+if ($CALENDAR_ENABLE) {
+	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CALENDAR
+			. "/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
+}
 
 
 class UserManagement {
@@ -709,8 +713,11 @@ class UserManagement {
 			$this->msg .= "info§" . sprintf(_("%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."), $db_ar) . "§";
 
 		// delete all private appointments of this user
-	 	if ($db_ar = delete_range_of_dates($this->user_data['auth_user_md5.user_id'], FALSE) > 0) {
-			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Terminen gel&ouml;scht."), $db_ar) . "§";
+		if ($GLOBALS['CALENDAR_ENABLE']) {
+			$calendar = new CalendarDriver();
+			$calendar->deleteFromDatabase('ALL', NULL, 0, 0, $this->user_data['auth_user_md5.user_id']);
+			if ($calendar->getCount())
+				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Terminen gel&ouml;scht."), $calendar->getCount()) ."§";
 		}
 
 		// delete all messages send or received by this user
