@@ -285,12 +285,12 @@ class SemBrowse {
 		echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		if ($this->sem_browse_data['level'] == "f"){
 			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\"><div style=\"margin-top:10px\"><font size=\"-1\">";
-			printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
-			if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
-				printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&sset=0\">","</a>");
-			}
+//			printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
+//			if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
+//				printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&sset=0\">","</a>");
+//			}
 			if (!is_array($this->sem_browse_data['search_result'])) {
-				echo "<br /><br />";
+				echo "<br />";
 				printf ("<a href=\"%s?level=ev&cmd=qs&sset=0\"><img src=\"./locale/%s/LC_PICTURES/institute_index.jpg\" border=\"0\" /></a>", $PHP_SELF, $_language_path);
 				if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
 					printf ("&nbsp; &nbsp; <a href=\"%s?level=vv&cmd=qs&sset=0\"><img src=\"./locale/%s/LC_PICTURES/course_index.jpg\" border=\"0\" /></a>", $PHP_SELF, $_language_path);
