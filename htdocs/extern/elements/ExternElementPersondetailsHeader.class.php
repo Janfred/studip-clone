@@ -63,6 +63,18 @@ class ExternElementPersondetailsHeader extends ExternElement {
 		$this->description = _("Angaben zur Gestaltung des Seitenkopfes.");
 	}
 	
+	function getDefaultConfig () {
+		$config = array(
+			"table_width" => "100%",
+			"table_border" => "0",
+			"table_bordercolor" => "",
+			"table_cellpadding" => "0",
+			"table_cellspacing" => "0"
+		);
+		
+		return $config;
+	}
+	
 	/**
 	* 
 	*/
