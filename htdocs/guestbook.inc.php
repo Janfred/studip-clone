@@ -118,7 +118,7 @@ function actions_guestbook($guestbook) {
 		$msg = switch_guestbook($user->id);
 	if ($guestbook=="erase")
 		erase_guestbook ($user->id);
-	if ($create) {
+	if ($post) {
 		$msg = add_post_guestbook($guestbook,$post);
 	}
 }
