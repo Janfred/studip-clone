@@ -795,7 +795,7 @@ if (!$cmd)
 	if ($view == "Sonstiges") {
 		IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root")
 			ECHO "<td class=\"links1b\" align=\"right\" nowrap><a  class=\"links1b\" href=\"edit_about.php?view=Sonstiges&username=".$username."\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src=\"pictures/reiter2.jpg\" align=\"absmiddle\"></td>";
-		ELSE echo "<td \"class=links1b\" align=\"right\" nowrap><a  class=\"links1b\" href=\"edit_about.php?view=Sonstiges&username=".$username."\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src=\"pictures/reiter4.jpg\" align=\"absmiddle\"></td>";
+		ELSE echo "<td class=\"links1b\" align=\"right\" nowrap><a  class=\"links1b\" href=\"edit_about.php?view=Sonstiges&username=".$username."\"><font color=\"#000000\" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src=\"pictures/reiter4.jpg\" align=\"absmiddle\"></td>";
 		}
 	ELSE {?>  <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Sonstiges&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?}
 
