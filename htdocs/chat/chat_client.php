@@ -197,7 +197,7 @@ function chatCommand_sms($msgStr){
 	}
 	$msging = new messaging();
 	if ($recUserName != get_username($user->id)) {
-		if ($msging->insert_message($smsMsgStr, $recUserName))
+		if ($msging->insert_message(addslashes($smsMsgStr), $recUserName))
 			$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt."),$recUserName));
 		else
 			$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre Nachricht konnte nicht verschickt werden!"));
@@ -217,7 +217,7 @@ function chatCommand_invite($msgStr){
 		}
 		$msging = new messaging();
 		if ($recUserName != get_username($user->id)) {
-			if ($msging->insert_chatinv($smsMsgStr, $recUserName, $chatid)) {
+			if ($msging->insert_chatinv(addslashes($smsMsgStr), $recUserName, $chatid)) {
 				$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre Einladung an <b>%s</b> wurde verschickt."),$recUserName));
 			} else {
 				$chatServer->addMsg("system:$user->id",$chatid,_("Fehler: Ihre Einladung konnte nicht verschickt werden!"));
