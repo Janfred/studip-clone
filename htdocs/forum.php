@@ -111,9 +111,10 @@ if ($forum["lostposting"]!="" AND !isset($update)) {
 	$writemode = $forum["lostposting"];
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode' and (description = 'Dieser Beitrag wird gerade bearbeitet.' OR description = 'Beschreibung des Themas')");
-	if ($db->num_rows()) { // wir sind im richtigen Seminar!
+	if ($db->num_rows()) { 
 		$count = 0;
-		delete_topic($writemode,$count);
+		if (leer($writemode)==TRUE) // nur löschen wenn noch keine Antworten, sonst stehenlassen
+			delete_topic($writemode,$count);
 		$forum["lostposting"]="";
 	}
 }
