@@ -25,14 +25,17 @@ $reiter=new reiter;
 //Create Reitersystem
 
 //Topkats
-$structure["meine_veranstaltungen"]=array (topKat=>"", name=>_("Meine&nbsp;Veranstaltungen"), link=>"meine_seminare.php", active=>FALSE);
-if (!$perm->have_perm("admin"))
+if (!$perm->have_perm("root")){
+	$structure["meine_veranstaltungen"]=array (topKat=>"", name=>_("Meine&nbsp;Veranstaltungen"), link=>"meine_seminare.php", active=>FALSE);
+}
+if (!$perm->have_perm("admin")){
 	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen&nbsp;suchen / hinzuf&uuml;gen"), link=>"sem_portal.php", active=>FALSE);
-else
+} else {
 	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen&nbsp;suchen"), link=>"sem_portal.php", active=>FALSE);
-
-$structure["meine_einrichtungen"]=array (topKat=>"", name=>_("Meine&nbsp;Einrichtungen"), link=>"meine_einrichtungen.php", active=>FALSE);
-
+}
+if (!$perm->have_perm("root")){
+	$structure["meine_einrichtungen"]=array (topKat=>"", name=>_("Meine&nbsp;Einrichtungen"), link=>"meine_einrichtungen.php", active=>FALSE);
+}
 //Bottomkats
 $structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>_("&Uuml;bersicht"), link=>"meine_seminare.php", active=>FALSE);
 if (!$perm->have_perm("admin")) {
