@@ -113,9 +113,9 @@ function change_messaging_view() {
 					<?=_("Neue aufgeklappen:")?>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="70%">&nbsp;<font size=-1> 
-					<input type="radio" name="opennew" value="1" <? echo CheckChecked("1", $my_messaging_settings["opennew"]) ?>>JA
-					<input type="radio" name="opennew" value="2" <? echo CheckChecked("2", $my_messaging_settings["opennew"]) ?>>NEIN
-					&nbsp;<?=_("Neue Nachrichten werden automatisch aufgeklappt")?></font>
+					<input type="radio" name="opennew" value="1" <? echo CheckChecked("1", $my_messaging_settings["opennew"]) ?>>ja
+					<input type="radio" name="opennew" value="2" <? echo CheckChecked("2", $my_messaging_settings["opennew"]) ?>>nein
+					&nbsp;<?#=_("Neue Nachrichten werden automatisch aufgeklappt")?></font>
 					</td>
 				</tr>
 				
@@ -125,9 +125,9 @@ function change_messaging_view() {
 					<?=_("immer aufgeklappen:")?>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="70%">&nbsp;<font size=-1> 
-					<input type="radio" name="openall" value="1" <? echo CheckChecked("1", $my_messaging_settings["openall"]) ?>>JA
-					<input type="radio" name="openall" value="2" <? echo CheckChecked("2", $my_messaging_settings["openall"]) ?>>NEIN
-					&nbsp;<?=_("Alle Nachrichten werden immer automatisch aufgeklappt dargestellt")?></font>					
+					<input type="radio" name="openall" value="1" <? echo CheckChecked("1", $my_messaging_settings["openall"]) ?>>ja
+					<input type="radio" name="openall" value="2" <? echo CheckChecked("2", $my_messaging_settings["openall"]) ?>>nein
+					&nbsp;<?=#_("Alle Nachrichten werden immer automatisch aufgeklappt dargestellt")?></font>					
 					</td>
 				</tr>
 
@@ -137,9 +137,9 @@ function change_messaging_view() {
 					<?=_("Gesendete speichern:")?>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="70%">&nbsp;<font size=-1> 
-					<input type="radio" name="save_snd" value="1" <? echo CheckChecked("1", $my_messaging_settings["save_snd"]) ?>>JA
-					<input type="radio" name="save_snd" value="2" <? echo CheckChecked("2", $my_messaging_settings["save_snd"]) ?>>NEIN
-					&nbsp;<?=_("Gesendete Nachrichten werden im Postausgang gespeichert")?></font>					
+					<input type="radio" name="save_snd" value="1" <? echo CheckChecked("1", $my_messaging_settings["save_snd"]) ?>>ja
+					<input type="radio" name="save_snd" value="2" <? echo CheckChecked("2", $my_messaging_settings["save_snd"]) ?>>nein
+					&nbsp;<?#=_("Gesendete Nachrichten werden im Postausgang gespeichert")?></font>					
 					</td>
 				</tr>
 
@@ -181,8 +181,8 @@ function change_messaging_view() {
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<?=_("Signatur:")?>
 					<td class="<? echo $cssSw->getClass() ?>">&nbsp;<font size=-1> 
-					<input type="radio" name="addsignature" value="1" <? echo CheckChecked("1", $my_messaging_settings["addsignature"]) ?>>JA
-					<input type="radio" name="addsignature" value="0" <? echo CheckChecked("0", $my_messaging_settings["addsignature"]) ?>>NEIN
+					<input type="radio" name="addsignature" value="1" <? echo CheckChecked("1", $my_messaging_settings["addsignature"]) ?>>ja
+					<input type="radio" name="addsignature" value="0" <? echo CheckChecked("0", $my_messaging_settings["addsignature"]) ?>>nein
 					&nbsp;&nbsp;<?=_("gesendeten Nachrichten eine Signatur anhängen") ?>
 					</font>
 					<br>&nbsp;
