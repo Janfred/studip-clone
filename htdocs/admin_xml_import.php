@@ -8,6 +8,9 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("admin");
 
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
 //session_start();
 {
 	session_register("xml_import_org");
@@ -15,11 +18,11 @@ $perm->check("admin");
 	session_register("xml_import_raum");
 	session_register("xml_import_titel");
 }/**/
-include "seminar_open.php"; //hier werden die sessions initialisiert
-require_once ("config.inc"); 		//wir brauchen die Seminar-Typen
+
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		//wir brauchen die Seminar-Typen
 //require_once ("functions.php");	//noch mehr Stuff
 //require_once ("forum.inc");		//damit wir Themen anlegen koennen
-require_once ("msg.inc"); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
 //if (!$xml_import_person)
 //if ($sess->is_registered("xml_import_person")) echo "JOJO";
 /*{
@@ -29,23 +32,11 @@ require_once ("msg.inc"); //Funktionen f&uuml;r Nachrichtenmeldungen
 	$sess->register("xml_import_org");
 }/**/
 
-?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-</head>
-<body>
-
-
-<body>
-
-<?
-
-include "header.php";   //hier wird der "Kopf" nachgeladen 
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 $i_page = "admin_institut.php";
-include "links_admin.inc";  //Linkleiste fuer admins
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
 //$xml_import_person = "MMM";
 ?>

@@ -678,9 +678,9 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include "links_admin.inc.php";	//Linkleiste fuer admins
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 
-require_once ("visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 

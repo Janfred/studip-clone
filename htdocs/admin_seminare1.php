@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 ?>
 
  <SCRIPT language="JavaScript">
@@ -358,8 +359,6 @@ if (($s_command=="edit") && ($s_send)) {
 }
 
 ## Details-Formular
-include ("links_admin.inc.php");
-
 if ($s_command) {
 
   $db->query("SELECT x.*, y.Name AS Institut FROM seminare x LEFT JOIN Institute y USING (institut_id) WHERE x.Seminar_id = '$s_id'");
