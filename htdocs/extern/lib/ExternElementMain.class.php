@@ -84,7 +84,7 @@ class ExternElementMain extends ExternElement {
 		
 		$edit_form->setElementName($this->getName());
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
-				$this->config->getName(), $this->config->getId(), TRUE, $anker);
+				$this->config->getName(), $this->config->getId(), TRUE);
 		
 		if ($faulty_values = "")
 			$faulty_values = array();
