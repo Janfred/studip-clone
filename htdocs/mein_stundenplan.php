@@ -1,5 +1,4 @@
 <?php
-
 /*
 mein_stundenplan.php - Persoenliche Stundenplanansicht in Stud.IP.
 Copyright (C) 2001-2002 Cornelis Kater <ckater@gwdg.de>
@@ -149,7 +148,6 @@ if ($cmd=="insert") {
 	//die;
 	}
 
-
 //meine Seminare einlesen
 if ($inst_id) {
 	$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
@@ -166,47 +164,44 @@ if ($inst_id) {
 }
 	
 //richtiges Semester ausw&auml;hlen
-$k=1;
-foreach ($SEMESTER as $a) {
-	if ($sem_name) {
-		if (rawurldecode($sem_name) == $my_schedule_settings["glb_sem"])
-			$tmp_sem_nr=$k;
-	}
-	else {
-		if ($a["name"] == $my_schedule_settings["glb_sem"])
-			$tmp_sem_nr=$k;
-		$k++;
+if ($view=="inst") {
+	if (!$instview_sem) {
+	} else
+		$tmp_sem_nr=$instview_sem;
+} else {
+	$k=1;
+	foreach ($SEMESTER as $a) {
+		if ($sem_name) {
+			if (rawurldecode($sem_name) == $my_schedule_settings["glb_sem"])
+				$tmp_sem_nr=$k;
+		} else {
+			if ($a["name"] == $my_schedule_settings["glb_sem"])
+				$tmp_sem_nr=$k;
+			$k++;
 		}
 	}
+}
 
 if (!$tmp_sem_nr) {
 	if (time() < $VORLES_ENDE) {
 		$tmp_sem_beginn=$SEM_BEGINN;
 		$tmp_sem_ende=$SEM_ENDE;
-		}
-	else {
+		$tmp_sem_nr=$SEM_ID;
+	} else {
 		$tmp_sem_beginn=$SEM_BEGINN_NEXT;
 		$tmp_sem_ende=$SEM_ENDE_NEXT;
-		}
+		$tmp_sem_nr=$SEM_ID_NEXT;		
 	}
-else {
+} else {
 	$tmp_sem_beginn=$SEMESTER[$tmp_sem_nr]["beginn"];
 	$tmp_sem_ende=$SEMESTER[$tmp_sem_nr]["ende"];
-	}
+}
 	
 //Array der Seminare erzeugen 
 while ($db->next_record())
 	{
 	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
 	$use_this=FALSE;
-/*	if ((($db->f("start_time") >= $tmp_sem_beginn) && ($tmp_sem_ende >= ($db->f("start_time"))))) //alle normalen Seminare
-		$use_this=TRUE;
-	elseif (((($db->f("start_time") + $db->f("duration_time")) >= $tmp_sem_beginn) && ($tmp_sem_ende >= (($db->f("start_time") + $db->f("duration_time")))))) //alle Seminare, die auch bis ins aktuelle Semester laufen
-		$use_this=TRUE;
-	elseif ((($db->f("start_time") <= $tmp_sem_ende) && ($tmp_sem_beginn <= (($db->f("start_time") + $db->f("duration_time")))))) //alle Seminare die vor diesem Semster angefangen haben und auch noch weiterlaufen
-		$use_this=TRUE;
-	elseif (($db->f("start_time") <= $tmp_sem_beginn) && ($db->f("duration_time") ==-1)) //alle Seminare, die auch ueber das aktuelle Semester hinauslaufen + unbegrenzt.
-		$use_this=TRUE;*/
 
 	if (($db->f("start_time") <=$tmp_sem_beginn) &&(($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time"))) || ($db->f("duration_time") == -1)))
 		$use_this=TRUE;
@@ -378,16 +373,32 @@ if (!$print_view) {
 ?>
 <tr>
 	<td class="blank" colspan=<? echo $glb_colspan+1?>>&nbsp;
+		<form action="<? echo $PHP_SELF ?>" method="POST">
 		<blockquote>
 		<?  if ($view=="user")  { ?>
 		Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die Druckfunktion ihres Browsers.<br /><br />
 		<font size=-1>Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die <a href = "sem_portal.php?view=Alle">Veranstaltungssuche</a>. <br>
 		Ihre pers&ouml;nlichen Termine finden sie auf der <a href="kalender.php">Termin&uuml;bersicht</a>.</font>
 		<?} else { ?>
-		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung des aktuellen Semesters.<br />
-		<? } ?>
+		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung eines Semesters.<br />
+		<br /><font size=-1>Angezeigtes Semester:&nbsp; 
+			<select name="instview_sem">
+			<?
+				foreach ($SEMESTER as $key=>$val) {
+					printf ("<option %s value=\"%s\">%s</option>\n", ($tmp_sem_nr == $key) ? "selected" : "", $key, $val["name"]);
+				}
+			?>
+			</select>&nbsp; 
+			<input type="IMAGE" value="change_instview_sem" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&uuml;bernehmen" />
+			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" />
+		<? } 
+		if ($view !="user")
+			printf ("&nbsp; <font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">Druckansicht dieser Seite</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
+		?>
 		<br>
 		</blockquote>
+		</form>
+		
 	</td>
 </tr>	
 <tr>
@@ -474,6 +485,8 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 						echo "<table width=\"100%\" cellspacing=0 cellpadding=2 border=0><tr><td class=\"topic\">";
 					} else
 						echo "</td></tr><tr><td class=\"topic\">";
+					if (($print_view) && ($r!=0))
+						echo "<hr width=\"100%\">";
 					$r++;
 					echo "<font size=-1 ";
 					if (!$print_view)
@@ -485,7 +498,11 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 					echo "</font></td></tr><tr><td class=\"blank\">";
 					if (!$my_sems[$cc["seminar_id"]]["personal_sem"]) 
 						{
-						echo  "<a href=\"seminar_main.php?auswahl=", substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
+						if ($view=="inst")
+							echo  "<a href=\"details.php?sem_id=";						
+						else
+							echo  "<a href=\"seminar_main.php?auswahl=";
+						echo substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
 						echo substr($my_sems[$cc["seminar_id"]]["name"], 0,50);
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "..."; 
@@ -512,7 +529,7 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 	}
 
 	if ($print_view) {
-		echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; Erstellt am ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td>";
+		echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; Erstellt am ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr></tr>";
 		}
 	else {
 		}
@@ -521,6 +538,13 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 </tr>
 <?
 echo "</table></td></tr>";
+?>
+<tr>
+	<td colspan=<? echo $glb_colspan+1?> class="blank">
+		&nbsp; 
+	</td>
+</tr>
+<?
 if ((!$print_view) && (!$inst_id)) {
 ?>
 <tr>
