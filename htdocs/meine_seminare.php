@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-	  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	$perm->check("user");
+
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("user");
 
 ob_start(); //Outputbuffering für maximal Performance
 
@@ -148,6 +149,13 @@ $cssSw=new cssClassSwitcher;                                // Klasse für Zebra-
 <?
 $db=new DB_Seminar;
 
+//Ausgabe bei bindenden Veranstaltungen, loeschen nicht moeglich!
+if ($cmd=="no_kill") {
+	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
+	$db->next_record();
+	$meldung="info§Die Veranstaltung <b>".htmlReady($db->f("Name"))."</b> ist als <b>bindend</b> angelegt. Wenn sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung  wenden.<br />";
+}
+
 //Sicherheitsabfrage fuer abonnierte Veranstaltungen
 if ($cmd=="suppose_to_kill") {
 	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
@@ -215,7 +223,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
      if (!isset($sortby)) $sortby="gruppe, Name";
      if ($sortby == "count")
      $sortby = "count DESC";
-	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
      if (!$num_my_sem) $meldung="msg§Sie haben keine Veranstaltungen abonniert!§".$meldung;
 
@@ -248,7 +256,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	ob_start();
      while ($db->next_record())
 		{
-	  $my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"));
+	  $my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"), binding=>$db->f("admission_binding"));
 	  $value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
      }
      $value_list=substr($value_list,0,-1);
@@ -293,10 +301,13 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		echo "<td class=\"$class\" align=\"left\" nowrap>";
 		print_seminar_content($semid, $values);
 		echo "</td>";
-
 		echo "<td class=\"$class\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
-		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) echo "<td class=\"$class\"  align=center>&nbsp;</td>";
-			else printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td>", $semid);
+		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
+			echo "<td class=\"$class\"  align=center>&nbsp;</td>";
+		elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
+			printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" alt=\"Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.\" border=\"0\"></a></td>", $semid);
+		else
+			printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td>", $semid);			
 		 echo "</tr>\n";
 		}
 	echo "</table></td></tr>";
@@ -427,7 +438,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
   $db2=new DB_Seminar;
 
 	while ($db->next_record()){
-		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),start_time=>$db->f("start_time"));
+	$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"));
 		$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 	}
 	$value_list=substr($value_list,0,-1);
