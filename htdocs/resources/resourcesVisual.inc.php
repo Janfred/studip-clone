@@ -82,6 +82,9 @@ class ShowList extends ShowTreeRow{
 		//Object erstellen
 		$resObject=new ResourceObject($resource_id);
 		
+		if (!$resObject->getId())
+			return FALSE;
+		
 		if ($this->simple_list){
 			//create a simple list intead of printhead/printcontent-design
 			$return="<li><a href=\"$PHP_SELF?view=view_details&actual_object=".$resObject->getId()."\">".$resObject->getName()."</a></li>\n";
@@ -225,7 +228,7 @@ class ShowList extends ShowTreeRow{
 			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE name LIKE '%%%s%%' ORDER BY name", $search_array["search_exp"]);
 
 		if ($search_array["properties"]) {
-			$query = sprintf ("SELECT DISTINCT resources_objects_properties.resource_id FROM resources_objects_properties %s WHERE ", ($search_array["search_exp"]) ? "LEFT JOIN resources_objects USING (resource_id)" : "");
+			$query = sprintf ("SELECT a.resource_id, COUNT(a.resource_id) AS resource_id_count FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) %s WHERE ", ($search_array["search_exp"]) ? "LEFT JOIN resources_objects b USING (resource_id)" : "");
 			
 			$i=0;
 			foreach ($search_array["properties"] as $key => $val) {
@@ -247,12 +250,14 @@ class ShowList extends ShowTreeRow{
 					$linking = ">=";
 				} else $linking = "=";
 				
-				$query.= sprintf(" %s (property_id = '%s' AND state %s %s%s%s) ", ($i) ? "AND" : "", $key, $linking,  (!is_numeric($val)) ? "'" : "", $val, (!is_numeric($val)) ? "'" : "");
+				$query.= sprintf(" %s (property_id = '%s' AND state %s %s%s%s) ", ($i) ? "OR" : "", $key, $linking,  (!is_numeric($val)) ? "'" : "", $val, (!is_numeric($val)) ? "'" : "");
 				$i++;
 			}
 			
 			if ($search_array["search_exp"]) 
-				$query.= sprintf(" AND (name LIKE '%%%s%%' OR description LIKE '%%%s%%') ", $search_array["search_exp"], $search_array["search_exp"]);
+				$query.= sprintf(" AND (b.name LIKE '%%%s%%' OR b.description LIKE '%%%s%%') ", $search_array["search_exp"], $search_array["search_exp"]);
+			
+			$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
 		}
 		
 		$db->query($query);
