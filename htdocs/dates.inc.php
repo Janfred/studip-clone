@@ -1005,7 +1005,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='" . _("Kein Titel") . "', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='$room' ";
 					$db2->query($query2);
 					if ($db2->affected_rows()) {
-						//insert a entry for the linked resource, if resource management activ
+						//insert an entry for the linked resource, if resource management activ
 						if ($RESOURCES_ENABLE) {
 							$insertAssign->dont_check = TRUE;
 							//only if we get a resource_id, we update assigns...
@@ -1016,7 +1016,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 									$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"]));
 								}
 							//...if no resource_id (but assign, if ressource was set but is no more), kill assign
-							} else {
+							} elseif ($saved_dates[$affected_dates]) {
 								$insertAssign->killDateAssign($saved_dates[$affected_dates]);
 							}
 						}
