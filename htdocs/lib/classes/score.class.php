@@ -302,6 +302,11 @@ function GetMyScore() {
 		$db->next_record();
 		$vote += $db->f(0);
 		
+		$db->query("SELECT count(*) FROM voteanswers_user LEFT JOIN voteanswers USING(answer_id) WHERE user_id = '$user_id' GROUP BY vote_id");
+		$db->next_record();
+		$vote += $db->f(0);
+		echo $db->f(0);
+				
 		$db->query("SELECT count(*) FROM eval WHERE author_id = '$user_id'");
 		$db->next_record();
 		$vote += 2*$db->f(0);
