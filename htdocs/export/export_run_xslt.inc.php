@@ -117,7 +117,7 @@ else
 		$export_weiter_button .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
-		$export_weiter_button .= "<center><input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"back\" value=\"back\"><br>";
+		$export_weiter_button .= "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " name=\"back\" value=\"". _("Zur&uuml;ck")."\"><br>";
 		$export_weiter_button .= "</center></form>";
 
 		if ($xslt_process)
@@ -132,7 +132,7 @@ else
 		}	
 
 
-		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
+		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\" target=\"new\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
 		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>";
 		$xml_printdesc = _("XML-Daten");
 		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	

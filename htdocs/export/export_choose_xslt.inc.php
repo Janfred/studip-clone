@@ -113,8 +113,8 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	$export_pagecontent .= "<input type=\"hidden\" name=\"choose\" value=\"" . $choose . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 
-	$export_weiter_button = "<br /><center><input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"back\" value=\"back\">&nbsp;";
-	$export_weiter_button .= "<input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\">";
+	$export_weiter_button = "<br /><center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;";
+	$export_weiter_button .= "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " name=\"next\">";
 
 	$export_weiter_button .= "</center></form>";
 
@@ -141,7 +141,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 
 	$export_info = _("W&auml;hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf 'weiter'");
 
-	$export_pagecontent .= "<form method=.\"POST\" action=\"" . $PHP_SELF . "\">";
+	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 	$export_pagecontent .= "";
 	$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"1\" border=\"0\" width=\"100%\">";
 	$export_pagecontent .= "<tr align=\"center\" valign=\"top\">";
@@ -178,8 +178,8 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
 	
-	$export_weiter_button = "<center><input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"back\" value=\"back\">&nbsp;";
-	$export_weiter_button .= "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " name=\"\"";
+	$export_weiter_button = "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;";
+	$export_weiter_button .= "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " name=\"next\"";
 	if ($skip_page_3 AND $XSLT_ENABLE)
 		$export_weiter_button .=  " onClick=\"return export_start();\"";
 	$export_weiter_button .=  "></center></form>";
@@ -230,11 +230,11 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
 
-	$export_weiter_button = "<center><input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"back\" value=\"back\">&nbsp;";
+	$export_weiter_button = "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;";
 	if ($XSLT_ENABLE) 
 	{
 		$export_pagecontent .= _("Um die Daten mit dem installierten XSLT-Prozessor in das gew&uuml;nschte Format zu bringen, klicken Sie bitte auf 'weiter'") . "<br><br>";
-		$export_weiter_button .= "<input type=\"IMAGE\"" . makeButton("weiter", "src") . " onClick=\"return export_start();\" name=\"\">";
+		$export_weiter_button .= "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " onClick=\"return export_start();\" name=\"next\">";
 	}
 	else
 		$export_pagecontent .= "<br><br><br>";
