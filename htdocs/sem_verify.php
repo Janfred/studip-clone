@@ -281,12 +281,12 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 							<br />
 							&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
 							</form>
-							</td></tr>							
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt",  date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
+								printf ("<font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt",  date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							else
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
+								printf ("<font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
+							echo "</tr></td>";								
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 						    	if ($send_from_search)
 					    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -323,9 +323,10 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 							</td></tr>							
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
+								printf ("<font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							else
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
+								printf ("<font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
+							echo "</tr></td>";
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 						    	if ($send_from_search)
 					    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
