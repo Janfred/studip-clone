@@ -92,7 +92,7 @@ if(!$sms_data["tmpsavesnd"]) {
 	$sms_data["tmpsavesnd"] = 2;
 }
 
-// email-forwarding wished?!
+// email-forwarding?
 if ($rmv_tmpemailsnd_button_x) {
 	$sms_data['tmpemailsnd'] = "";
 }
@@ -100,7 +100,7 @@ if ($add_tmpemailsnd_button_x) {
 	$sms_data['tmpemailsnd'] = 1;
 }
 
-//reading-confirmation wished?!
+//reading-confirmation?
 if ($rmv_tmpreadsnd_button_x) {
 	$sms_data["tmpreadsnd"] = "";
 }
@@ -212,7 +212,7 @@ if($rec_uname) {
 }
 
 
-// if send message at adressbook-group
+// if send message at group (adressbook or groups in courses)
 if ($group_id) {
 
 	$query = sprintf("SELECT statusgruppe_user.user_id, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING (user_id) WHERE statusgruppe_id = '%s' ", $group_id);
@@ -526,7 +526,7 @@ function show_msgsaveoptionsform() {
 
 	if($sms_data["tmpsavesnd"] == 1) {
 
-		$tmp .= "<input type=\"image\" name=\"rmv_tmpsavesnd_button\" src=\"./pictures/icon-disc2.gif\" border=\"0\" ".tooltip(_("speichert die Nachricht nicht.")).">&nbsp;"._("Nachricht wird gespeichert.");
+		$tmp .= "<input type=\"image\" name=\"rmv_tmpsavesnd_button\" src=\"./pictures/smssave_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht nicht zu speichern.")).">&nbsp;"._("Die Nachricht wird gespeichert.");
 		// do we have any personal folders? if, show them here
 		if (have_msgfolder("out") == TRUE) {
 			// walk throw personal folders
@@ -544,7 +544,7 @@ function show_msgsaveoptionsform() {
 
 	} else {
 
-		$tmp .= "<input type=\"image\" name=\"add_tmpsavesnd_button\" src=\"./pictures/icon-disc.gif\" border=\"0\" ".tooltip(_("speichert die Nachricht im Postausgang.")).">&nbsp;"._("Nachricht wird nicht gespeichert.");
+		$tmp .= "<input type=\"image\" name=\"add_tmpsavesnd_button\" src=\"./pictures/smssave.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht zu speichern.")).">&nbsp;"._("Die Nachricht wird nicht gespeichert.");
 
 	}
 
@@ -559,11 +559,11 @@ function show_msgemailoptionsform() {
 
 	if($sms_data["tmpemailsnd"] == 1) {
 
-		$tmp .= "<input type=\"image\" name=\"rmv_tmpemailsnd_button\" src=\"./pictures/nachricht2.gif\" border=\"0\" ".tooltip(_("klicke hier um die Nachricht nicht (auch) als Email zu versenden.")).">&nbsp;"._("auch als Email versand.");
+		$tmp .= "<input type=\"image\" name=\"rmv_tmpemailsnd_button\" src=\"./pictures/emailrequest_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht nicht (auch) als Email zu versenden.")).">&nbsp;"._("Die Nachricht wird auch als Email versendet.");
 
 	} else {
 
-		$tmp .= "<input type=\"image\" name=\"add_tmpemailsnd_button\" src=\"./pictures/nachricht1.gif\" border=\"0\" ".tooltip(_("klcike hier um die Nachricht (auch) als Email zu versenden.")).">&nbsp;"._("kein Versand als Email.");
+		$tmp .= "<input type=\"image\" name=\"add_tmpemailsnd_button\" src=\"./pictures/emailrequest.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht (auch) als Email zu versenden.")).">&nbsp;"._("Die Nachricht wird nicht als Email versendet.");
 
 	}
 
@@ -578,11 +578,11 @@ function show_msgreadconfirmoptionsform() {
 
 	if($sms_data["tmpreadsnd"] == 1) {
 
-		$tmp .= "<input type=\"image\" name=\"rmv_tmpreadsnd_button\" src=\"./pictures/suchen.gif\" border=\"0\" ".tooltip(_("klicke hier um für diese Nachricht keine Lesebestätigung anzufordern.")).">&nbsp;"._("Lesebestätigung wird angefordert.");
+		$tmp .= "<input type=\"image\" name=\"rmv_tmpreadsnd_button\" src=\"./pictures/lesebst_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um für diese Nachricht keine Lesebestätigung anzufordern.")).">&nbsp;"._("Es wird eine Lesebestätigung angefordert.");
 
 	} else {
 
-		$tmp .= "<input type=\"image\" name=\"add_tmpreadsnd_button\" src=\"./pictures/suchen.gif\" border=\"0\" ".tooltip(_("klicke hier um für die Nachricht eine Lesebestätigung anzufordern.")).">&nbsp;"._("keine Lesebestätigung.");
+		$tmp .= "<input type=\"image\" name=\"add_tmpreadsnd_button\" src=\"./pictures/lesebst.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um für diese Nachricht eine Lesebestätigung anzufordern.")).">&nbsp;"._("Es wird keine Lesebestätigung angefordert.");
 
 	}
 
