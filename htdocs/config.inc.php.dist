@@ -72,7 +72,7 @@ $SEMESTER[4]=array("name"=>"SS 2004", "beginn"=>mktime(0,0,0,4,1,2004), "ende"=>
 
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
-$SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezeichnung (=Veranstaltung ersetzt)
+$SEM_TYPE_MISC_NAME=_("sonstige"); //dieser Name wird durch die allgemeine Bezeichnung (=Veranstaltung ersetzt)
 $SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);
 $SEM_TYPE[2]=array("name"=>_("Seminar"),  "class"=>1);
 $SEM_TYPE[3]=array("name"=>_("Übung"),  "class"=>1);
