@@ -768,24 +768,24 @@ function forum_print_toolbar ($id="") {
 				$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."#anker\">";
 			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
 			$print .= "<td class=\"steelkante2\" valign=\"middle\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
-			$print .= "<td class=\"steelkante2\" valign=\"middle\"><font size=\"-1\">"._("Indikator:")."&nbsp;";
+			$print .= "<td class=\"steelkante2\" valign=\"middle\"><font size=\"-1\">"._("Indikator:")."&nbsp;</font>";
 			
 			if ($forum["indikator"] == "age")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["age"]["name"]." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forumrot_indikator.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["age"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "viewcount")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gruen.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "rating")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gelb.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["rating"]["name"]." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_gelb.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["rating"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "score")
-				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["score"]["name"]." &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"pictures/forum_indikator_blau.gif\" align=\"middle\"><font size=\"-1\">".$indexvars["score"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"pictures/forum_indikator_grau.gif\" border=\"0\" align=\"middle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</font></a> &nbsp;";
 			
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed") { // Anzeige der Sortierung nicht in der Themenansicht
 				$print .= "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
@@ -806,12 +806,12 @@ function forum_print_toolbar ($id="") {
 				$print .= "</select>&nbsp;&nbsp;";
 				$print .= "<input type=hidden name=flatviewstartposting value='".$flatviewstartposting."'>";
 				$print .= "<input type=hidden name=view value='".$forum["view"]."'>";
-				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" align=\"middle\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
+				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
 			}
-			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/griff.jpg\" align=\"middle\" border=\"0\"></a>&nbsp;";
+			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/griff.jpg\" align=\"middle\" border=\"0\"></a>";
+			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
 				$print .= "</form>";
-			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
 		} else {
 			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"1\"></td>";
 			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
