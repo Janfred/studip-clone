@@ -152,6 +152,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		echo "<tr><th align=\"left\" width=\"100%\">\n<font size=\"-1\">";
 		echo _("Exportieren Ihrer Kalenderdaten")."</font>\n</th></tr>\n";
 		
+		$tooltip = _("Es werden nur Termine von Veranstaltungen exportiert, die zuvor im Menüpunkt \"Veranstaltungstermine\" ausgewählt wurden.");
 		$params['form'] = "<form action=\"$PHP_SELF?cmd=export&atime=$atime\" method=\"post\">\n";
 		$params['content'] = _("Bitte w&auml;hlen Sie, welche Termine exportiert werden sollen:") . "</font></div>\n"
 				. "<br>&nbsp; &nbsp; <select name=\"extype\" size=\"1\">\n"
@@ -160,8 +161,10 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 				. "<option value=\"SEM\"" . ($extype == 'SEM' ? 'selected="selected"' : '')
 				. ">" . _("Nur meine Veranstaltungstermine") . "</option>\n"
 				. "<option value=\"ALL\"" . ($extype == 'ALL' ? 'selected="selected"' : '')
-				. ">" . _("Alle Termine") . "</option>\n"
-				. "</select><br>&nbsp;\n<div><font size=\"-1\">"
+				. ">" . _("Alle Termine") . "</option>\n</select>"
+				. "&nbsp;&nbsp;&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"]
+				. "pictures/info.gif\"" . tooltip($tooltip, TRUE, TRUE) . ">\n"
+				. "<br>&nbsp;\n<div><font size=\"-1\">"
 				. _("Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:")
 				. "</div><br>\n&nbsp; &nbsp; <input type=\"radio\" name=\"experiod\" value=\"all\" ";
 		if ($experiod != 'period')
@@ -255,14 +258,12 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 }
 elseif ($expmod == 'exp' && empty($err)) {
 	
-	$sem_ids = '';
 	switch ($extype) {
 		case 'ALL':
 			$extype = 'ALL_EVENTS';
 			break;
 		case 'SEM':
 			$extype = 'SEMINAR_EVENTS';
-			$sem_ids = $bind_seminare;
 			break;
 		default:
 			$extype = 'CALENDAR_EVENTS';
@@ -270,9 +271,9 @@ elseif ($expmod == 'exp' && empty($err)) {
 	
 	$export = new CalendarExportFile(new CalendarWriterICalendar());
 	if ($experiod != 'period')
-		$export->exportFromDatabase($user->id, 0, 2114377200, $extype, $sem_ids);
+		$export->exportFromDatabase($user->id, 0, 2114377200, $extype, $bind_seminare);
 	else
-		$export->exportFromDatabase($user->id, $exstart, $exend, $extype, $sem_ids);
+		$export->exportFromDatabase($user->id, $exstart, $exend, $extype, $bind_seminare);
 	
 	if ($_calendar_error->getMaxStatus(ERROR_CRITICAL)) {
 		$calendar_sess_export['msg'] = 'error§' . _("Der Export konnte nicht durchgef&uuml;hrt werden!");
