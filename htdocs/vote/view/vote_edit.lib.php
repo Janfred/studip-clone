@@ -462,7 +462,7 @@ function printRightRegion ( ) {
 
     echo "<br><input type=image style=\"vertical-align:middle;\" name=\"saveButton\""
 	. " onClick=\"finishInputs();\" "
-	. makeButton("speicher","src") . tooltip(_("Alle Änderungen speichern und zurück!"))
+	. makeButton("speichern","src") . tooltip(_("Alle Änderungen speichern und zurück!"))
 	. " border=0>"
 	. "&nbsp;<input type=image style=\"vertical-align:middle;\" name=\"cancelButton\" "
 	. makeButton("abbrechen","src") . tooltip(_("Alle Änderungen verwerfen und zurück!"))
