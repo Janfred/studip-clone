@@ -51,16 +51,18 @@ if ($perm->have_studip_perm ("dozent", $SessSemName[1]))
 if ((sizeof ($_REQUEST) == 1) && (!$view)) {
 	$supportdb_data='';
 	$supportdb_data["view"] = "overview";
+	$supportdb_data["user_action_con"] = FALSE;
 }
 
 if ($view)
 	$supportdb_data["view"] = $view;
-	
 
-//Open a contract
+
+//open a contract
 if ($con_open) {
 	$supportdb_data["con_opens"][$con_open] = TRUE;
 	$supportdb_data["actual_con"] = $con_open;
+	$supportdb_data["user_action_con"] = TRUE;
 }
 
 if ($edit_con) {
@@ -73,6 +75,7 @@ if ($con_close) {
 	unset($supportdb_data["con_opens"][$con_close]);
 	if ($con_close == $supportdb_data["actual_con"])
 		unset($resources_data["actual_con"]);
+	$supportdb_data["user_action_con"] = TRUE;		
 }
 
 //Open a request

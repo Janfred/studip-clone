@@ -37,7 +37,7 @@
 switch ($supportdb_data["view"]) {
 	//Reiter "Uebersicht"
 	case "overview":
-		$page_intro=_("Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag wie den Punktestand oder die Laufzeit einsehen.");
+		$page_intro=_("Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag (wie den Punktestand oder die Laufzeit) einsehen.");
 		$title=_("&Uuml;berblick &uuml;ber ihre Supportvertr&auml;ge");
 		$infobox[0]["kategorie"]=_("Information:");
 		$infobox[0]["eintrag"][] = array ("icon" => "pictures/ausruf_small.gif", "text"  =>sprintf (_("Insgesamt <b>%s</b> Punkte, davon noch <b>%s</b> verf&uuml;gbar"), calculateGlobalPoints($SessSemName[1]), calculateGlobalRemainingPoints ($SessSemName[1])));
@@ -55,7 +55,7 @@ switch ($supportdb_data["view"]) {
 			$page_intro.=sprintf(" ".("Nutzen Sie f&uuml;r &auml;ltere Anfragen die Suchfunktion."));
 		$title=_("Anfragen");
 		$infobox[0]["kategorie"]=_("Information:");
-		$infobox[0]["eintrag"][] = array ("icon" => "pictures/ausruf_small.gif", "text"  =>(countUnassignedTopics ($SessSemName[1]) ? sprintf(_("Es liegen noch <b>%s</b> unbeantwortete Themen im Forum vor"), countUnassignedTopics ($SessSemName[1])) : _("Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es liegen keine Themen vor.")));
+		$infobox[0]["eintrag"][] = array ("icon" => "pictures/ausruf_small.gif", "text"  =>(countUnassignedTopics ($SessSemName[1]) ? sprintf(_("Es liegen noch <b>%s</b> unbeantwortete Anfragen im Forum vor"), countUnassignedTopics ($SessSemName[1])) : _("Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es liegen keine Themen vor.")));
 		if ($supporter) {
 			$infobox[1]["kategorie"]=_("Aktionen:");
 			$infobox[1]["eintrag"][] = array ("icon" => "pictures/forumrot.gif", "text"  =>sprintf (_("Eine neue Anfrage %sanlegen%s"), "<a href=\"$PHP_SELF?view=requests&create_req=TRUE#a\">", "</a>"));

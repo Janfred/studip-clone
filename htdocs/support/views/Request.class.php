@@ -134,10 +134,10 @@ class Request extends ShowTreeRow {
 			if (($edit_req_object == $reqObject->id) && ($supporter)) {
 				$content .= "<select style=\"{font-size:8pt;}\" name=\"req_channel\">";
 				$content .= sprintf ("<option %s value=\"FALSE\">"._("unbekannt")."</option>", (!$reqObject->getChannel()) ? "selected" : "");
-				$content .= sprintf ("<option %s value=\"1\">"._("eMail")."</option>", ($reqObject->getChannel() == 1) ? "selected" : "");
+				$content .= sprintf ("<option %s value=\"1\">"._("E-Mail")."</option>", ($reqObject->getChannel() == 1) ? "selected" : "");
 				$content .= sprintf ("<option %s value=\"2\">"._("Telefon")."</option>", ($reqObject->getChannel() == 2) ? "selected" : "");
-				$content .= sprintf ("<option %s value=\"3\">"._("Feedbackforum")."</option>", ($reqObject->getChannel() == 3) ? "selected" : "");
-				$content .= sprintf ("<option %s value=\"4\">"._("Supportforum")."</option>", ($reqObject->getChannel() == 4) ? "selected" : "");
+				$content .= sprintf ("<option %s value=\"3\">"._("Feedback-Forum")."</option>", ($reqObject->getChannel() == 3) ? "selected" : "");
+				$content .= sprintf ("<option %s value=\"4\">"._("Support-Forum")."</option>", ($reqObject->getChannel() == 4) ? "selected" : "");
 				$content .= "</select>";
 			} else
 				switch ($reqObject->getChannel()) {
@@ -148,10 +148,10 @@ class Request extends ShowTreeRow {
 						$content .= _("Telefon");
 					break;
 					case 3:
-						$content .= _("Feedbackforum der Installation");
+						$content .= _("Feedback-Forum der Installation");
 					break;
 					case 4:
-						$content .= _("Supportforum");
+						$content .= _("Support-Forum");
 					break;
 					default:
 						$content .= _("unbekannt");
@@ -279,10 +279,10 @@ class Request extends ShowTreeRow {
 				$edit .= "&nbsp;<a href=\"$PHP_SELF?cancel_edit_req=$reqObject->id\">".makeButton("abbrechen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			}
 			if ($reqObject->isDeleteable()) {
-				$edit .= "<a href=\"$PHP_SELF?kill_req=$reqObject->id\">".makeButton("loeschen")."</a>";
+				$edit .= "<a href=\"$PHP_SELF?kill_req=$reqObject->id\" style=\"{vertical-align:middle;}\" valign=\"absmiddle\">".makeButton("loeschen")."</a>";
 			}
 			if ($edit_req_object != $reqObject->id)
-				$edit .= "&nbsp;<a href=\"$PHP_SELF?edit_req=$reqObject->id\"><img ".makeButton("bearbeiten", "src")." ".tooltip(_("Die Anfrage bearbeiten"))." border=\"0\"/></a>";				
+				$edit .= "&nbsp;<a href=\"$PHP_SELF?edit_req=$reqObject->id\" style=\"{vertical-align:middle;}\" valign=\"absmiddle\"><img ".makeButton("bearbeiten", "src")." ".tooltip(_("Die Anfrage bearbeiten"))." border=\"0\"/></a>";				
 		} 
 		
 		//Daten an Ausgabemodul senden

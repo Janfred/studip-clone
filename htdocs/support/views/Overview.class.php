@@ -67,8 +67,12 @@ class Overview extends ShowTreeRow {
 		//Daten vorbereiten
 		$icon="<img src=\"pictures/cont_folder2.gif\" />";
 		
+		if ((!$supportdb_data["con_opens"]) && (!$supportdb_data["user_action_con"]) && ($conObject->isOldestActive()) && ($conObject->getRemainingPoints() > 0)) {
+			$supportdb_data["con_opens"][$conObject->getId()] = TRUE;
+		}
+
 		if ($supportdb_data["con_opens"][$conObject->getId()]) {
-			$link=$PHP_SELF."?con_close=".$conObject->getId()."#a";
+			$link=$PHP_SELF."?con_close=".$conObject->getId();
 			$open="open";
 			if ($supportdb_data["actual_con"] == $conObject->getId())
 				echo "<a name=\"a\"></a>";
@@ -76,10 +80,6 @@ class Overview extends ShowTreeRow {
 			$link=$PHP_SELF."?con_open=".$conObject->getId()."#a";
 			$open="close";
 		}
-
-		if ((!$supportdb_data["con_opens"]) && ($conObject->isOldestActive()) && ($conObject->getRemainingPoints() > 0)) 
-			$open="open";
-		
 
 		if (($edit_con_object == $conObject->id) && ($supporter)){
 			echo "<a name=\"a\"></a>";
