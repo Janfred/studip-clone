@@ -200,11 +200,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$day_event_row[0] .= $category_style['color'] . "; background-image:url(";
 			$day_event_row[0] .= $category_style['image'] . ");\">";
 			$day_event_row[0] .= $title_str;
-			if ($day_event->getRepeat('rtype') != 'SINGLE') {
-				$day_event_row[0] .= "<div align=\"right\">";
-				$day_event_row[0] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/recur.gif\" ";
-				$day_event_row[0] .= "border=\"0\"" . tooltip($day_event->toStringRecurrence()) . "></div>";
-			}
+			$day_event_row[0] .= to_string_info_icons($day_event);
 			$day_event_row[0] .= "</td>";
 			$i++;
 		}
@@ -388,11 +384,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 													, js_hover($day_obj->events[$mapping[$zeile][$j]]));
 						$tab[$zeile] .= $title . "</a>";
 					}
-					if ($term[$zeile][$j]->getRepeat('rtype') != 'SINGLE') {
-						$tab[$zeile] .= "<div align=\"right\">";
-						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/recur.gif\" ";
-						$tab[$zeile] .= "border=\"0\"" . tooltip($term[$zeile][$j]->toStringRecurrence()) . "></div>";
-					}
+					$tab[$zeile] .= to_string_info_icons($term[$zeile][$j]);
 					$tab[$zeile] .= "</td>\n";
 					
 					if ($sp > 0) {
@@ -788,4 +780,31 @@ function js_hover ($aterm) {
 	
 	return "";
 }
+
+function to_string_info_icons (&$event) {
+	global $CANONICAL_RELATIVE_PATH_STUDIP;
+	
+	$ret = '';
+	$div = FALSE;
+	$tooltip = _("Öffentlicher Termin");
+	
+	if ($event->getType() == 'PUBLIC') {
+		$ret .= "<div align=\"right\">";
+		$div = TRUE;
+		$ret .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_public.gif\" ";
+		$ret .= "border=\"0\"" . tooltip($tooltip) . " valign>";
+	}
+	
+	if ($event->getRepeat('rtype') != 'SINGLE') {
+		if (!$div)
+			$ret .= "<div align=\"right\">";
+		$ret .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/recur.gif\" ";
+		$ret .= "border=\"0\"" . tooltip($event->toStringRecurrence()) . ">";
+	}
+	
+	$ret .= "</div>";
+	
+	return $ret;
+}
+		
 ?>
