@@ -58,15 +58,17 @@ class VeranstaltungResourcesAssign {
 	
 	function updateAssign() {
 		global $TERMIN_TYP;
+		$db = new DB_Seminar;
+
 		$query = sprintf("SELECT termin_id, date_typ FROM termine WHERE range_id = '%s' ", $this->seminar_id);
-		$this->db->query($query);
+		$db->query($query);
 		$course_session=FALSE;
-		while ($this->db->next_record()) {
-			if ($TERMIN_TYP[$this->db->f("date_typ")]["sitzung"])
+		while ($db->next_record()) {
+			if ($TERMIN_TYP[$db->f("date_typ")]["sitzung"])
 				$course_session=TRUE;
-			$result = array_merge($result, $this->changeDateAssign($this->db->f("termin_id")));
+			$result = array_merge($result, $this->changeDateAssign($db->f("termin_id")));
 		}
-		
+
 		//kill all assigned roomes (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
 		$this->deleteAssignedRooms();
 		
@@ -81,7 +83,7 @@ class VeranstaltungResourcesAssign {
 
 		//load data of the Veranstaltung
 		if (!$term_data) {
-			$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $this->seminar_id);
+			$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->seminar_id);
 			$this->db->query($query);
 			$this->db->next_record();
 
@@ -182,6 +184,8 @@ class VeranstaltungResourcesAssign {
 			$changeAssign=new AssignObject($assign_id);
 			if ($resource_id)
 				$changeAssign->setResourceId($resource_id);
+			else
+				$resource_id = $changeAssign->getResourceId();
 
 			$changeAssign->setBegin($begin);
 			$changeAssign->setEnd($end);
