@@ -18,7 +18,7 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "")
 	}
 	$export_string .= "</select>";
 
-	$export_string .= "</td><td>";
+	$export_string .= "</td><td align=\"right\">";
 	$export_string .= "<input type=\"IMAGE\" " . makeButton("export", "src") . " value=\"" . _("Diese Daten Exportieren") . "\" name=\"export\">&nbsp;";
 
 	$export_string .= "<input type=\"hidden\" name=\"range_id\" value=\"$range_id\">";
