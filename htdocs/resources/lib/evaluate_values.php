@@ -451,11 +451,11 @@ if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_cate
 			$db->query("DELETE FROM resources_categories_properties WHERE category_id='$delete_type_category_id' AND property_id='$delete_type_property_id' ");
 		}
 
-		if (is_array($change_category_name)) foreach 	($change_category_name as $key=>$val) {
+		if (is_array($change_category_name)) foreach ($change_category_name as $key=>$val) {
 			$query = sprintf ("UPDATE  resources_categories SET name='%s', iconnr='%s' WHERE category_id = '%s'", $change_category_name[$key], $change_category_iconnr[$key], $key);
 			$db->query($query);
 
-			if (${"change_category_add_property_".$key."_x"}) {
+			if (${"change_category_add_property".$key."_x"}) {
 				$db->query("INSERT INTO resources_categories_properties SET category_id='$key', property_id='$add_type_property_id[$key]' ");
 			}
 		}
@@ -466,7 +466,7 @@ if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_cate
 }
 
 //Eigenschaften bearbeiten
-if (($add_property) || ($delete_property) || ($send_property_type_id)) {
+if (($add_property) || ($delete_property) || ($change_properties)) {
 	//if ($ObjectPerms->getUserPerm () == "admin") { { --> da muss der Ressourcen Root check hin °
 		if ($delete_property) {
 			$db->query("DELETE FROM resources_properties WHERE property_id ='$delete_property' ");
@@ -481,9 +481,9 @@ if (($add_property) || ($delete_property) || ($send_property_type_id)) {
 			$db->query("INSERT INTO resources_properties SET options='$options', property_id='$id', name='$add_property', description='$insert_property_description', type='$add_property_type' ");
 		}
 	
-		if ($send_property_type_id) {
-			if ($send_property_type == "select") {
-				$tmp_options=explode (";",$send_property_select_opt);
+		if (is_array($change_property_name)) foreach ($change_property_name as $key=>$val) {
+			if ($send_property_type[$key] == "select") {
+				$tmp_options=explode (";",$send_property_select_opt[$key]);
 				$options='';
 				$i=0;
 				if (is_array($tmp_options))
@@ -493,19 +493,19 @@ if (($add_property) || ($delete_property) || ($send_property_type_id)) {
 						$options.=trim($a);						
 						$i++;
 					}
-			} elseif ($send_property_type == "bool") {
-				$options=$send_property_bool_desc;
+			} elseif ($send_property_type[$key] == "bool") {
+				$options=$send_property_bool_desc[$key];
 			}
 			else
 				$options='';
 			
 			if (!$options)
-				if ($send_property_type == "bool")
+				if ($send_property_type[$key] == "bool")
 					$options="vorhanden";
-				elseif ($send_property_type == "select")
+				elseif ($send_property_type[$key] == "select")
 					$options="Option 1;Option 2;Option 3";	
 				
-			$db->query("UPDATE resources_properties SET options='$options', type='$send_property_type' WHERE property_id='$send_property_type_id' ");
+			$db->query("UPDATE resources_properties SET name='$change_property_name[$key]', options='$options', type='$send_property_type[$key]' WHERE property_id='$key' ");
 		}
 	/*} else {
 		$msg->displayMsg(1);
