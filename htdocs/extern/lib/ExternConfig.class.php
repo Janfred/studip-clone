@@ -244,14 +244,12 @@ class ExternConfig {
 			else
 				$module_elements = $module->elements;
 		
-			reset($module_elements);
 			foreach ($module_elements as $element_name => $element_obj) {
 			
 				if ($element_obj->isEditable()) {
 			
 					$attributes = $element_obj->getAttributes();
 				
-					reset($attributes);
 					foreach ($attributes as $attribute) {
 						$form_name = $element_name . "_" . $attribute;
 					
@@ -368,7 +366,7 @@ class ExternConfig {
 			else if ($this->config[$name]) {
 				foreach ($this->config[$name] as $attribute => $value) {
 					if ($value === "")
-						$this->config[$name][$attribute] = $global_config->config[$element][$attribute];
+						$this->config[$name][$attribute] = $global_config->config[$name][$attribute];
 				}
 			}
 		}
