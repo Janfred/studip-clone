@@ -140,7 +140,7 @@ if ($msg)
 	?>
     <td class="steel1"  width="99%" valign ="top" rowspan=2><br><blockquote>
     <? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br><br>";?>
-    <? echo "<b>&nbsp;" . _("e-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
+    <? echo "<b>&nbsp;" . _("E-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
 		IF ($db->f("privatnr")!="") echo "<b>&nbsp;" . _("Telefon (privat):") . " </b>". htmlReady($db->f("privatnr"))."<br>";
 		IF ($db->f("privadr")!="") echo "<b>&nbsp;" . _("Adresse (privat):") . " </b>". htmlReady($db->f("privadr"))."<br>";
 		IF ($db->f("Home")!="") {
@@ -207,7 +207,7 @@ if ($msg)
 /// Die Anzeige der Stud.Ip-Score
 
 		IF ($username==$auth->auth["uname"])
-			echo "<br /><br />&nbsp; <a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . ">" . _("Ihre Stud.IP-Score:") . " ".getscore()."<br>&nbsp; " . _("Ihr Rang:") . " ".gettitel(getscore())."</a>";
+			echo "<br /><br />&nbsp; <a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . ">" . _("Ihr Stud.IP-Score:") . " ".getscore()."<br>&nbsp; " . _("Ihr Rang:") . " ".gettitel(getscore())."</a>";
 		else {
 			$db2->query("SELECT score FROM user_info WHERE score > 0  AND user_id = '$user_id'");
 			if ($db2->num_rows()) {

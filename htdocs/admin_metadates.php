@@ -202,7 +202,7 @@ if ($delete_turnus_field)
 //Checks performen
 if (($term_metadata["sem_duration_time"]<0) && ($term_metadata["sem_duration_time"] != -1))
 	{ 
-	$errormsg=$errormsg."error§"._("Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern Sie die entsprechenden Einstellungen!")."§";
+	$errormsg=$errormsg."error§"._("Das Endsemester darf nicht vor dem Startsemester liegen. Bitte &auml;ndern Sie die entsprechenden Angaben!")."§";
 	}
 	
 if ($term_metadata["art"]==0)
@@ -213,18 +213,18 @@ if ($term_metadata["art"]==0)
 			if ((($term_metadata["turnus_data"][$i]["start_stunde"]) && (!$term_metadata["turnus_data"][$i]["end_stunde"])) || ((!$term_metadata["turnus_data"][$i]["start_stunde"]) && ($term_metadata["end_stunde"])))
 					{
 					if (!$just_informed)
-						$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Termine aus!")."§";	
+						$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Veranstaltungstermine aus!")."§";	
 					$just_informed=TRUE;
 					}
 			if ((($term_metadata["turnus_data"][$i]["start_stunde"]>23) || ($term_metadata["turnus_data"][$i]["start_stunde"]<0))  ||  (($term_metadata["turnus_data"][$i]["start_minute"]>59) || ($term_metadata["turnus_data"][$i]["start_minute"]<0))  ||  (($term_metadata["turnus_data"][$i]["end_stunde"]>23) ||($term_metadata["turnus_data"][$i]["end_stunde"]<0))  || (($term_metadata["turnus_data"][$i]["end_minute"]>59) || ($term_metadata["turnus_data"][$i]["end_minute"]<0)))
 					{
 					if (!$just_informed3)
-						$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!")."§";	
+						$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte &auml;ndern Sie die entsprechenden Angaben!")."§";	
 					$just_informed3=TRUE;
 					}
 			if (mktime($term_metadata["turnus_data"][$i]["start_stunde"], $term_metadata["turnus_data"][$i]["start_minute"], 0, 1, 1, 2001) > mktime($term_metadata["turnus_data"][$i]["end_stunde"], $term_metadata["turnus_data"][$i]["end_minute"], 0, 1, 1, 2001)) 
 				if ((!$just_informed5) && (!$just_informed)) {
-					$errormsg=$errormsg."error§"._("Die jeweilige Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
+					$errormsg=$errormsg."error§"._("Der Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
 					$just_informed5=TRUE;				
 				}
 			}
@@ -233,7 +233,7 @@ if ($term_metadata["art"]==0)
 					$empty_fields++;
 				else
 					{
-					$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt, bitte korrigieren sie dies!")."§";
+					$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder f&uuml;r regul&auml;ren Termine ausgef&uuml;llt. Bitte holen Sie dies nach!")."§";
 					$just_informed4=TRUE;
 					}
 	}
@@ -364,7 +364,7 @@ if (($uebernehmen_x) && (!$errormsg))
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 				<font size=-1><b>&nbsp;<?= _("Allgemeine Zeiten:") ?></b><br /></font>
-				<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig stattfindet oder die Termine unregelm&auml;&szlig;ig sind (etwa bei einer Blockveranstaltung).") ?><br /></font>
+				<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig stattfindet oder ob die Termine unregelm&auml;&szlig;ig sind (etwa bei einer Blockveranstaltung).") ?><br /></font>
 				<br />&nbsp;<input type="IMAGE" name="open_ureg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?> border=0 value="regelmaessig">&nbsp; 
 				<input type="IMAGE" name="open_reg"  <? if (!$term_metadata["art"]) print makeButton ("unregelmaessig", "src");  else print makeButton ("unregelmaessig2", "src") ?> border=0 value="unregelmaessig">
 			</td>
@@ -471,7 +471,7 @@ if (($uebernehmen_x) && (!$errormsg))
 		?>
 					<tr >
 						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
-							&nbsp;<font size=-1><?=_("Bitte geben Sie die einzelnen Sitzungstermine unter dem Menupunkt Ablaufplan ein!")?></font><br><br>
+							&nbsp;<font size=-1><?=_("Bitte geben Sie die einzelnen Sitzungstermine unter dem Men&uuml;punkt Ablaufplan ein!")?></font><br><br>
 							<input type="HIDDEN" name="term_refresh" value="TRUE">
 						</td>
 					</tr>
@@ -487,7 +487,7 @@ if (($uebernehmen_x) && (!$errormsg))
 					</td>
 						<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 							&nbsp;<font size=-1><b><?=_("Veranstaltungsbeginn")?></b></font><br /><br />
-							<font size=-1>&nbsp;<?=_("Bei einer regelm&auml;&szlig;igen Veranstaltungen k&ouml;nnen sie den ersten Termin eingeben oder automatisch berechnen lassen.") ?></font><br />
+							<font size=-1>&nbsp;<?=_("Bei einer regelm&auml;&szlig;igen Veranstaltung k&ouml;nnen Sie den ersten Termin entweder selbst eingeben oder automatisch berechnen lassen.") ?></font><br />
 							<br />&nbsp;<input type="IMAGE" name="nenter_start_termin" <? if (!$term_metadata["start_woche"]) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
 							<input type="IMAGE" name="enter_start_termin" <? if (!$term_metadata["start_woche"]) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben">
 						</td>
@@ -519,7 +519,7 @@ if (($uebernehmen_x) && (!$errormsg))
 		?>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
-							<br /><font size=-1>&nbsp;<?=_("Bitte geben Sie hier den ersten Termin ein:")?></font><br>
+							<br /><font size=-1>&nbsp;<?=_("Bitte geben Sie hier das Datum des ersten Termins ein:")?></font><br>
 							&nbsp;<input type="text" name="tag" size=2 maxlength=2 value="<? if ($term_metadata["start_termin"]<>-1) echo date("d",$term_metadata["start_termin"]); else echo _("tt") ?>">.
 							<input type="text" name="monat" size=2 maxlength=2 value="<? if ($term_metadata["start_termin"]<>-1) echo date("m",$term_metadata["start_termin"]); else echo _("mm") ?>">.
 							<input type="text" name="jahr" size=4 maxlength=4 value="<? if ($term_metadata["start_termin"]<>-1) echo date("Y",$term_metadata["start_termin"]); else echo _("jjjj") ?>">&nbsp; 

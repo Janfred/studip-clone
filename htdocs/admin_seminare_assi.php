@@ -728,7 +728,7 @@ if ($cmd_d_x)
 						$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
 				}
 			if ($overlaps_detected) {
-				$errormsg=$errormsg."error§"._("Der gew&uuml;nschte Raum der Vorbesprechung &uuml;berschneidet sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die Zeit!");
+				$errormsg=$errormsg."error§"._("Der gew&uuml;nschte Raum f&uuml;r die Vorbesprechung &uuml;berschneidet sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die Zeit!");
 				foreach ($overlaps_detected as $key=>$val) {
 					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
 					//show first overlap

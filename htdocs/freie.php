@@ -88,7 +88,7 @@ function print_seminar_content($semid,$my_sem_values) {
   //Literatur
   if ($my_sem_values["literatur"]) {
     echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
-		printf ("&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 %s></a>", tooltip(_("Zur Literatur und Linkliste")));
+		printf ("&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 %s></a>", tooltip(_("Zur Literatur- und Linkliste")));
   }
   else echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   // Termine
@@ -134,12 +134,12 @@ $db2=new DB_Seminar;
 	print( _("Die folgenden Veranstaltungen k&ouml;nnen Sie betreten, ohne sich im System registriert zu haben."));
 	print("<br></blockquote>");
 	print("<blockquote>");
-	printf( _("In den %s blau markierten Veranstaltungen d&uuml;rfen Sie nur Lesen und Dokumente herunterladen."), "<font class=\"gruppe6\">&nbsp;&nbsp;</font>");
+	printf( _("In den %s blau markierten Veranstaltungen d&uuml;rfen Sie nur lesen und Dokumente herunterladen."), "<font class=\"gruppe6\">&nbsp;&nbsp;</font>");
 	print("<br>");
 	printf( _("In den %s orange markierten Veranstaltungen k&ouml;nnen Sie sich zus&auml;tzlich mit eigenen Beitr&auml;gen im Forum beteiligen."), "<font class=\"gruppe2\">&nbsp;&nbsp;</font>");
 	print("</blockquote>");
 	print("<blockquote>");
-	print( _("In der rechten Spalte erfahren Sie, was in den einzelnen Veranstaltungen an Inhalten vorhanden ist."));
+	print( _("In der rechten Spalte k&ouml;nnen Sie sehen, was in den einzelnen Veranstaltungen an Inhalten vorhanden ist."));
 	print("</blockquote>");
 ?>
 	</td>

@@ -71,7 +71,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" align="left" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip(_("zurück zur Startseite"))?>></a>
+					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip(_("Zurück zur Startseite"))?>></a>
 					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip(_("Hilfe"))?> width="24" height="21"></a>
 					&nbsp;<a href="freie.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip(_("Freie Veranstaltungen"))?> width="24" height="21"></a></td>
 				<td class="angemeldet" width="20%" nowrap bgcolor="#C0C0C0" align="center" valign="middle" background="pictures/kaverl1b.jpg">

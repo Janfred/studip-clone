@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-01-20 16:05+0100\n"
+"POT-Creation-Date: 2003-01-24 00:57+0100\n"
 "PO-Revision-Date: 2003-01-20 14:33+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -19,7 +19,7 @@ msgid "kein persönliches Bild vorhanden"
 msgstr ""
 
 #: about.php:143
-msgid "e-mail:"
+msgid "E-mail:"
 msgstr ""
 
 #: about.php:144
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Adresse (privat):"
 msgstr ""
 
-#: about.php:149 edit_about.php:945
+#: about.php:149 edit_about.php:941
 msgid "Homepage:"
 msgstr ""
 
@@ -42,19 +42,19 @@ msgstr ""
 msgid "Wo ich arbeite:"
 msgstr ""
 
-#: about.php:180 edit_about.php:989 show_dates.inc.php:483
+#: about.php:180 edit_about.php:985 show_dates.inc.php:483
 msgid "Raum:"
 msgstr ""
 
-#: about.php:182 edit_about.php:991
+#: about.php:182 edit_about.php:987
 msgid "Sprechzeit:"
 msgstr ""
 
-#: about.php:184 edit_about.php:941 edit_about.php:993
+#: about.php:184 edit_about.php:937 edit_about.php:989
 msgid "Telefon:"
 msgstr ""
 
-#: about.php:186 edit_about.php:995
+#: about.php:186 edit_about.php:991
 msgid "Fax:"
 msgstr ""
 
@@ -79,7 +79,7 @@ msgid "Zur Highscoreliste"
 msgstr ""
 
 #: about.php:210
-msgid "Ihre Stud.IP-Score:"
+msgid "Ihr Stud.IP-Score:"
 msgstr ""
 
 #: about.php:210
@@ -314,7 +314,7 @@ msgstr ""
 msgid "Schreibzugriff:"
 msgstr ""
 
-#: admin_admission.php:581
+#: admin_admission.php:581 edit_about.php:881 edit_about.php:890
 msgid "Passwort:"
 msgstr ""
 
@@ -324,7 +324,7 @@ msgid ""
 "gew&auml;hlt haben."
 msgstr ""
 
-#: admin_admission.php:585 admin_admission.php:587 edit_about.php:885
+#: admin_admission.php:585 admin_admission.php:587 edit_about.php:881
 msgid "Passwort-Wiederholung:"
 msgstr ""
 
@@ -425,15 +425,55 @@ msgstr ""
 
 #: admin_dates.php:106
 msgid ""
-"Sie haben hier die M&ouml;glichkeit, den Ablaufplan und weitere Termine der "
-"Veranstaltung zu ver&auml;ndern."
+"Sie k&ouml;nnen hier den Ablaufplan und weitere Termine der Veranstaltung "
+"ver&auml;ndern."
 msgstr ""
 
 #: admin_dates.php:110
 #, c-format
 msgid ""
 "Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte "
-"den Menupunkt %s Zeiten %s"
+"den Men&uuml;punkt %s Zeiten %s"
+msgstr ""
+
+#: admin_lernmodule.php:67
+msgid "Neues Lernmodul anlegen"
+msgstr ""
+
+#: admin_lernmodule.php:80 seminar_lernmodule.php:98
+msgid "Information:"
+msgstr ""
+
+#: admin_lernmodule.php:83
+msgid "Auf dieser Seite k&ouml;nnen Sie die Lernmodule administrieren."
+msgstr ""
+
+#: admin_lernmodule.php:89 seminar_lernmodule.php:107
+msgid "Aktionen:"
+msgstr ""
+
+#: admin_lernmodule.php:91
+msgid ""
+"Sie k&ouml;nnen ein Lernmodul bearbeiten, wenn Sie als Autor oder Co-Autor "
+"daf&uuml;r eingetragen sind."
+msgstr ""
+
+#: admin_lernmodule.php:94
+msgid ""
+"Sie k&ouml;nnen ein Lernmodul l&ouml;schen, indem Sie auf die M&uuml;lltonne "
+"klicken."
+msgstr ""
+
+#: admin_lernmodule.php:108
+msgid ""
+"Das Verbindungsmodul f&uuml;r ILIAS-Lernmodule ist nicht eingebunden. Damit "
+"Lernmodule verwendet werden k&ouml;nnen, muss die Verbindung zu einer ILIAS-"
+"Installation in den Systemeinstellungen hergestellt werden. Wenden Sie sich "
+"bitte an den/die AdministratorIn."
+msgstr ""
+
+#: admin_lernmodule.php:109 seminar_lernmodule.php:127
+msgid "Lernmodule nicht eingebunden"
 msgstr ""
 
 #: admin_metadates.php:164
@@ -442,31 +482,32 @@ msgstr ""
 
 #: admin_metadates.php:205
 msgid ""
-"Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern "
-"Sie die entsprechenden Einstellungen!"
+"Das Endsemester darf nicht vor dem Startsemester liegen. Bitte &auml;ndern "
+"Sie die entsprechenden Angaben!"
 msgstr ""
 
 #: admin_metadates.php:216
 msgid ""
 "Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der "
-"regul&auml;ren Termine aus!"
+"regul&auml;ren Veranstaltungstermine aus!"
 msgstr ""
 
 #: admin_metadates.php:222
 msgid ""
-"Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!"
+"Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte &auml;ndern Sie die "
+"entsprechenden Angaben!"
 msgstr ""
 
 #: admin_metadates.php:227
 msgid ""
-"Die jeweilige Endzeitpunkt der regul&auml;ren Termine muss nach dem "
-"jeweiligen Startzeitpunkt liegen!"
+"Der Endzeitpunkt der regul&auml;ren Termine muss nach dem jeweiligen "
+"Startzeitpunkt liegen!"
 msgstr ""
 
 #: admin_metadates.php:236
 msgid ""
-"Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt, "
-"bitte korrigieren sie dies!"
+"Sie haben nicht alle Felder f&uuml;r regul&auml;ren Termine ausgef&uuml;llt. "
+"Bitte holen Sie dies nach!"
 msgstr ""
 
 #: admin_metadates.php:242
@@ -509,7 +550,7 @@ msgstr ""
 #: admin_metadates.php:367
 msgid ""
 "Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig "
-"stattfindet oder die Termine unregelm&auml;&szlig;ig sind (etwa bei einer "
+"stattfindet oder ob die Termine unregelm&auml;&szlig;ig sind (etwa bei einer "
 "Blockveranstaltung)."
 msgstr ""
 
@@ -567,8 +608,8 @@ msgstr ""
 
 #: admin_metadates.php:474
 msgid ""
-"Bitte geben Sie die einzelnen Sitzungstermine unter dem Menupunkt Ablaufplan "
-"ein!"
+"Bitte geben Sie die einzelnen Sitzungstermine unter dem Men&uuml;punkt "
+"Ablaufplan ein!"
 msgstr ""
 
 #: admin_metadates.php:489
@@ -578,8 +619,8 @@ msgstr "Type of course"
 
 #: admin_metadates.php:490
 msgid ""
-"Bei einer regelm&auml;&szlig;igen Veranstaltungen k&ouml;nnen sie den ersten "
-"Termin eingeben oder automatisch berechnen lassen."
+"Bei einer regelm&auml;&szlig;igen Veranstaltung k&ouml;nnen Sie den ersten "
+"Termin entweder selbst eingeben oder automatisch berechnen lassen."
 msgstr ""
 
 #: admin_metadates.php:501
@@ -596,7 +637,7 @@ msgid "2. Semesterwoche"
 msgstr ""
 
 #: admin_metadates.php:522
-msgid "Bitte geben Sie hier den ersten Termin ein:"
+msgid "Bitte geben Sie hier das Datum des ersten Termins ein:"
 msgstr ""
 
 #: admin_metadates.php:537
@@ -623,30 +664,308 @@ msgstr ""
 msgid "unbegrenzt"
 msgstr ""
 
+#: admin_news.php:157
+msgid "Keine News vorhanden!"
+msgstr ""
+
+#: admin_news.php:161
+msgid "Sie d&uuml;rfen diesen News Bereich nicht administrieren!"
+msgstr ""
+
+#: admin_news.php:167
+msgid "Vorhandene News im gew&auml;hlten Bereich:"
+msgstr ""
+
+#: admin_news.php:168
+msgid "markierte News l&ouml;schen"
+msgstr ""
+
+#: admin_news.php:169
+msgid "Markierte News löschen"
+msgstr ""
+
+#: admin_news.php:170 admin_news.php:216
+msgid "&Uuml;berschrift"
+msgstr ""
+
+#: admin_news.php:170 admin_news.php:220 freie.php:169
+msgid "Inhalt"
+msgstr "Content"
+
+#: admin_news.php:171
+msgid "Autor"
+msgstr ""
+
+#: admin_news.php:171
+msgid "Einstelldatum"
+msgstr ""
+
+#: admin_news.php:171
+msgid "Ablaufdatum"
+msgstr ""
+
+#: admin_news.php:172
+msgid "Bearbeiten"
+msgstr ""
+
+#: admin_news.php:172
+msgid "L&ouml;schen"
+msgstr ""
+
+#: admin_news.php:182
+msgid "Diese News bearbeiten"
+msgstr ""
+
+#: admin_news.php:185
+msgid "Diese News zum löschen vormerken"
+msgstr ""
+
+#: admin_news.php:187 admin_news.php:273
+msgid "Nein"
+msgstr ""
+
+#: admin_news.php:216
+msgid "Autor:"
+msgstr ""
+
+#: admin_news.php:222
+msgid "Geben sie hier die &Uuml;berschrift und den Inhalt ihrer News ein."
+msgstr ""
+
+#: admin_news.php:223
+msgid ""
+"Im unteren Bereich k&ouml;nnen sie ausw&auml;hlen, in welchen Bereichen ihre "
+"News angezeigt wird."
+msgstr ""
+
+#: admin_news.php:224
+msgid "Klicken sie danach hier, um die &Auml;nderungen zu &uuml;bernehmen."
+msgstr ""
+
+#: admin_news.php:225 edit_about.php:945 edit_about.php:995
+#: edit_about.php:1033 edit_about.php:1073 edit_about.php:1098
+#: StudipRangeTreeViewAdmin.class.php:688
+msgid "Änderungen übernehmen"
+msgstr ""
+
+#: admin_news.php:226
+msgid "Einstelldatum:"
+msgstr ""
+
+#: admin_news.php:231
+msgid "G&uuml;ltigkeitsdauer:"
+msgstr ""
+
+#: admin_news.php:235
+#, c-format
+msgid "bis zum %s"
+msgstr ""
+
+#: admin_news.php:244
+#, c-format
+msgid "%s Wochen (%s)"
+msgstr ""
+
+#: admin_news.php:249
+msgid "In diesen Bereichen wird die News angezeigt:"
+msgstr ""
+
+#: admin_news.php:254
+msgid "System Bereich:"
+msgstr ""
+
+#: admin_news.php:254 admin_news.php:261
+msgid "Anzeigen ?"
+msgstr ""
+
+#: admin_news.php:255
+msgid "StudIP System News"
+msgstr ""
+
+#: admin_news.php:261
+msgid "Pers&ouml;nlicher Bereich:"
+msgstr ""
+
+#: admin_news.php:271
+msgid "Ja"
+msgstr ""
+
+#: admin_news.php:285
+msgid "Einen weiteren Bereich hinzuf&uuml;gen:"
+msgstr ""
+
+#: admin_news.php:286
+msgid ""
+"Hier k&ouml;nnen Sie weitere Bereiche, auf die sie Zugriff haben, der "
+"Auswahl hinzuf&uuml;gen"
+msgstr ""
+
+#: admin_news.php:288 admin_news.php:741 institut_browse.php:103
+msgid "Suche starten"
+msgstr ""
+
+#: admin_news.php:308
+msgid "Ok, ihre neue News wurde gespeichert!"
+msgstr ""
+
+#: admin_news.php:316
+#, c-format
+msgid "Zuletzt aktualisiert von %s (%s) am %s"
+msgstr ""
+
+#: admin_news.php:321
+msgid "Ok, die News wurde ver&auml;ndert!"
+msgstr ""
+
+#: admin_news.php:324 admin_news.php:375
+#, c-format
+msgid "Ihre News \"%s\" wurde von einem Administrator verändert!"
+msgstr ""
+
+#: admin_news.php:338 admin_news.php:341
+#, c-format
+msgid "Der Bereich: %s wurde gelöscht."
+msgstr ""
+
+#: admin_news.php:350
+msgid ""
+"Sie haben keinen Bereich für ihre News ausgew&auml;hlt! Ihre News ist so "
+"nicht sichtbar."
+msgstr ""
+
+#: admin_news.php:360 admin_news.php:363
+#, c-format
+msgid "Der Bereich: %s wurde hinzugefügt."
+msgstr ""
+
+#: admin_news.php:381
+msgid "Keine news_id &uuml;bergeben!"
+msgstr ""
+
+#: admin_news.php:397
+#, c-format
+msgid "Ihre News \"%s\" wurde von einem Administrator gelöscht!"
+msgstr ""
+
+#: admin_news.php:404
+#, c-format
+msgid "Es wurden %s News gel&ouml;scht!"
+msgstr ""
+
+#: admin_news.php:406
+msgid "Keine News zum l&ouml;schen ausgew&auml;hlt!"
+msgstr ""
+
+#: admin_news.php:612
+msgid "Sie d&uuml;rfen nur ihre eigenen News ver&auml;ndern"
+msgstr ""
+
+#: admin_news.php:619
+msgid "Sie haben keine Berechtigung für diese News"
+msgstr ""
+
+#: admin_news.php:663
+msgid "Newsverwaltung"
+msgstr ""
+
+#: admin_news.php:663 admin_news.php:795
+msgid "gew&auml;hlter Bereich:"
+msgstr ""
+
+#: admin_news.php:669
+msgid "Der Suchbegriff fehlt!"
+msgstr ""
+
+#: admin_news.php:674 admin_news.php:702
+msgid "Die Suche ergab keine Treffer!"
+msgstr ""
+
+#: admin_news.php:734
+msgid "Bereichsauswahl"
+msgstr ""
+
+#: admin_news.php:739
+msgid "Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!"
+msgstr ""
+
+#: admin_news.php:750
+msgid "verf&uuml;gbare Bereiche"
+msgstr ""
+
+#: admin_news.php:752
+msgid "Benutzer"
+msgstr ""
+
+#: admin_news.php:752
+#, fuzzy
+msgid "Veranstaltung"
+msgstr "Type of course"
+
+#: admin_news.php:752 edit_about.php:1054 freie.php:168
+msgid "Einrichtung"
+msgstr "Institution"
+
+#: admin_news.php:752
+msgid "Fakult&auml;t"
+msgstr ""
+
+#: admin_news.php:756
+msgid "Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b> bearbeiten"
+msgstr ""
+
+#: admin_news.php:757
+msgid "Persönliche News bearbeiten"
+msgstr ""
+
+#: admin_news.php:761
+msgid "<i>oder</i> <b>Systemweite News</b> bearbeiten"
+msgstr ""
+
+#: admin_news.php:762
+msgid "Systemweite News bearbeiten"
+msgstr ""
+
+#: admin_news.php:765
+msgid "<i>oder</i> <b>hier</b> einen der gefundenen Bereiche ausw&auml;hlen:"
+msgstr ""
+
+#: admin_news.php:796
+msgid "Eine neue News im gew&auml;hlten Bereich erstellen"
+msgstr ""
+
+#: admin_news.php:797
+msgid "Eine neue News erstellen"
+msgstr ""
+
+#: admin_news.php:801
+msgid "Im gew&auml;hlten Bereich sind keine News vorhanden!"
+msgstr ""
+
 #: admin_range_tree.php:57
 msgid " - Bereiche verwalten"
 msgstr ""
 
-#: admin_seminare_assi.php:635 admin_seminare_assi.php:698
+#: admin_seminare_assi.php:635 admin_seminare_assi.php:701
 msgid ""
 "Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits "
 "vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!"
 msgstr ""
 
-#: admin_seminare_assi.php:643 admin_seminare_assi.php:705
-#: admin_seminare_assi.php:733
+#: admin_seminare_assi.php:643 admin_seminare_assi.php:708
+#: admin_seminare_assi.php:738
 msgid "und weitere"
 msgstr ""
 
-#: admin_seminare_assi.php:644 admin_seminare_assi.php:706
-#: admin_seminare_assi.php:734
+#: admin_seminare_assi.php:644 admin_seminare_assi.php:709
+#: admin_seminare_assi.php:739
 msgid "Raumplan anzeigen"
 msgstr ""
 
-#: admin_seminare_assi.php:726
+#: admin_seminare_assi.php:731
 msgid ""
-"Der gew&uuml;nschte Raum der Vorbesprechung &uuml;berschneidet sich mit "
-"bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die Zeit!"
+"Der gew&uuml;nschte Raum f&uuml;r die Vorbesprechung &uuml;berschneidet sich "
+"mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die "
+"Zeit!"
 msgstr ""
 
 #: dates.inc.php:57
@@ -688,33 +1007,36 @@ msgstr ""
 #: edit_about.php:131
 #, c-format
 msgid ""
-"Die hochgeladene Bilddatei ist %s KB groß!<br>Die maximale Dateigröße "
+"Die hochgeladene Bilddatei ist %s KB groß.<br>Die maximale Dateigröße "
 "beträgt %s KB!"
 msgstr ""
 
 #: edit_about.php:136
-msgid "Sie haben keine Datei zum hochladen ausgewählt!"
+msgid "Sie haben keine Datei zum Hochladen ausgewählt!"
 msgstr ""
 
 #: edit_about.php:148
 #, c-format
 msgid ""
-"Der Dateityp der Bilddatei ist falsch (%s)!<br>Es sind nur die "
+"Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die "
 "Dateiendungen .gif und .jpg erlaubt!"
 msgstr ""
 
 #: edit_about.php:155
-msgid "Fehler beim kopieren der Datei!"
+msgid ""
+"Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht "
+"hochgeladen!"
 msgstr ""
 
 #: edit_about.php:173
 msgid ""
-"Die Bilddatei wurde erfolgreich hochgeladen! Eventuell sehen Sie das neue "
-"Bild erst nach einem Reload dieser Seite."
+"Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue "
+"Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten "
+"Browsern F5 dr&uuml;cken)."
 msgstr ""
 
 #: edit_about.php:175
-msgid "Eine neue Bilddatei wurde hochgeladen.\n"
+msgid "Ein neues Bild wurde hochgeladen.\n"
 msgstr ""
 
 #: edit_about.php:187
@@ -764,11 +1086,13 @@ msgid "Ihre Daten an der Einrichtung %s wurden geändert.\n"
 msgstr ""
 
 #: edit_about.php:255
-msgid "Daten an Lebenslauf u.a. ge&auml;ndert"
+#, fuzzy
+msgid "Daten im Lebenslauf u.a. wurden ge&auml;ndert"
 msgstr "Data regarding curriculum vitae were changed"
 
 #: edit_about.php:257
-msgid "Daten an Lebenslauf u.a. wurden geändert.\n"
+#, fuzzy
+msgid "Daten im Lebenslauf u.a. wurden geändert.\n"
 msgstr "Data regarding curriculum vitae were changed.\n"
 
 #: edit_about.php:277
@@ -780,13 +1104,13 @@ msgid "Ihre persönlichen Daten wurden geändert.\n"
 msgstr ""
 
 #: edit_about.php:298
-msgid "Das Paßwort ist zu kurz!"
+msgid "Das Paßwort ist nicht lang genug!"
 msgstr ""
 
 #: edit_about.php:302
 msgid ""
-"Die Wiederholung des Paßwortes ist falsch! Bitte geben sie das exakte "
-"Paßwort ein!"
+"Die Wiederholung des Passwortes ist falsch! Bitte geben sie das exakte "
+"Passwort ein!"
 msgstr ""
 
 #: edit_about.php:310
@@ -794,11 +1118,11 @@ msgid "Ihr Passwort wurde ge&auml;ndert!"
 msgstr ""
 
 #: edit_about.php:315
-msgid "Der Vorname fehlt, oder ist unsinnig!"
+msgid "Der Vorname fehlt oder ist unsinnig!"
 msgstr ""
 
 #: edit_about.php:319
-msgid "Der Nachname fehlt, oder ist unsinnig!"
+msgid "Der Nachname fehlt oder ist unsinnig!"
 msgstr ""
 
 #: edit_about.php:323
@@ -806,14 +1130,14 @@ msgid "Ihr Name wurde ge&auml;ndert!"
 msgstr ""
 
 #: edit_about.php:328
-msgid "Der gewählte Username ist zu kurz!"
+msgid "Der gewählte Username ist nicht lang genug!"
 msgstr ""
 
 #: edit_about.php:333
 #, c-format
 msgid ""
 "Der Username wird bereits von einem anderen User (%s %s) verwendet. Bitte "
-"wählen sie einen Anderen!"
+"wählen sie einen anderen Usernamen!"
 msgstr ""
 
 #: edit_about.php:337
@@ -821,355 +1145,348 @@ msgid "Ihr Username wurde ge&auml;ndert!"
 msgstr ""
 
 #: edit_about.php:350
-msgid "Die E-Mail Addresse fehlt, oder ist falsch geschrieben!"
+msgid "Die E-Mail Addresse fehlt oder ist falsch geschrieben!"
 msgstr ""
 
 #: edit_about.php:355
 msgid ""
-"Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails "
-"mit der angegebenen Addresse verschicken können!"
+"Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie "
+"E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!"
 msgstr ""
 
 #: edit_about.php:365
 msgid ""
-"Die angegebene E-Mail Addresse ist nicht erreichbar. Bitte überprüfen Sie "
-"Ihre Angaben!"
+"Die angegebene E-Mail Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;"
+"fen Sie Ihre Angaben!"
 msgstr ""
 
 #: edit_about.php:372
 #, c-format
 msgid ""
-"Die angegebene E-Mail Addresse wird bereits von einem anderen User (%s %s) "
-"verwendet. Sie müssen eine andere E-Mail Addresse angeben!"
+"Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) "
+"verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."
 msgstr ""
 
 #: edit_about.php:407
-msgid "Ihre Email Addresse wurde geändert!"
+msgid "Ihre E-Mail-Adresse wurde ge&auml;ndert!"
 msgstr ""
 
 #: edit_about.php:407
 msgid ""
-"ACHTUNG!<br>Aus Sicherheitsgründen wurde auch ihr Paßwort geändert, es wurde "
-"an die neu angegebene Email Addresse geschickt!"
+"ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;"
+"ndert. Es wurde an die neue E-Mail-Adresse geschickt!"
 msgstr ""
 
 #: edit_about.php:559
-msgid "Um eine korrekte Authentifizierung mit ihren neuen Daten"
+#, c-format
+msgid ""
+"Um eine korrekte Authentifizierung mit ihren neuen Daten sicherzustellen, "
+"wurden sie automatisch ausgeloggt.<br>Wenn sie ihre E-Mail-Adresse ge&auml;"
+"ndert haben, m&uuml;ssen sie das Ihnen an diese Adresse zugesandte Passwort "
+"verwenden!<br><br>Ihr aktueller Username ist: <b>%s</b><br>"
 msgstr ""
 
-#: edit_about.php:564 links_about.inc.php:66
+#: edit_about.php:560 links_about.inc.php:66
 msgid "Login"
 msgstr ""
 
-#: edit_about.php:581
+#: edit_about.php:577
 msgid "Zugriff auf Userdaten verweigert"
 msgstr ""
 
-#: edit_about.php:582
+#: edit_about.php:578
 msgid ""
 "<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung "
 "beziehungsweise Startseite.<br />&nbsp;"
 msgstr ""
 
-#: edit_about.php:657
+#: edit_about.php:653
 msgid ""
-"Ihre persönliche Seite wurde von einem Administrator verändert.\n"
+"Ihre persönliche Seite wurde von einer Administratorin oder einem "
+"Administrator verändert.\n"
 " Folgende Veränderungen wurden vorgenommen:\n"
 " \n"
 msgstr ""
 
-#: edit_about.php:806 links_about.inc.php:45
-msgid "Hochladen des pers&ouml;nlichen Bildes"
+#: edit_about.php:802
+msgid "Hochladen eines pers&ouml;nlichen Bildes"
 msgstr ""
 
-#: edit_about.php:809
+#: edit_about.php:805
 msgid "Benutzerdaten bearbeiten"
 msgstr ""
 
-#: edit_about.php:813
+#: edit_about.php:809
 msgid "Studienkarriere und Einrichtungen bearbeiten"
 msgstr ""
 
-#: edit_about.php:815
+#: edit_about.php:811
 msgid "Studienkarriere bearbeiten"
 msgstr ""
 
-#: edit_about.php:819
+#: edit_about.php:815
 msgid "Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten"
 msgstr ""
 
-#: edit_about.php:821
+#: edit_about.php:817
 msgid "Lebenslauf bearbeiten"
 msgstr ""
 
-#: edit_about.php:824
+#: edit_about.php:820
 msgid "Eigene Kategorien bearbeiten"
 msgstr ""
 
-#: edit_about.php:827
-msgid "Autologin einrichten"
+#: edit_about.php:823
+msgid "Auto-Login einrichten"
 msgstr ""
 
-#: edit_about.php:833
+#: edit_about.php:829
 #, c-format
 msgid "Daten von: %s %s (%s), Status: %s"
 msgstr ""
 
-#: edit_about.php:849
+#: edit_about.php:845
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre "
 "Homepage hochladen."
 msgstr ""
 
-#: edit_about.php:851
+#: edit_about.php:847
 msgid "Aktuell angezeigtes Bild:"
 msgstr ""
 
-#: edit_about.php:854
-msgid "kein pers&ouml;nliches Bild vorhanden"
+#: edit_about.php:850
+msgid "Kein pers&ouml;nliches Bild vorhanden"
 msgstr ""
 
-#: edit_about.php:861
-msgid "Upload eines Bildes:"
+#: edit_about.php:857
+msgid "Hochladen eines Bildes:"
 msgstr ""
 
-#: edit_about.php:861
+#: edit_about.php:857
 msgid ""
 "1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus."
 msgstr ""
 
-#: edit_about.php:863
+#: edit_about.php:859
 msgid "2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen."
 msgstr ""
 
-#: edit_about.php:864
+#: edit_about.php:860
 msgid "absenden"
 msgstr ""
 
-#: edit_about.php:872
-msgid "Hier können sie Ihre Benutzerdaten verändern."
+#: edit_about.php:868
+msgid "Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern."
 msgstr ""
 
-#: edit_about.php:873
+#: edit_about.php:869
 #, c-format
 msgid ""
 "Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt "
 "werden."
 msgstr ""
 
-#: edit_about.php:883 edit_about.php:892
+#: edit_about.php:879 edit_about.php:888
 msgid "Username:"
 msgstr ""
 
-#: edit_about.php:885 edit_about.php:894
-msgid "Paßwort:"
-msgstr ""
-
-#: edit_about.php:885
+#: edit_about.php:881
 msgid "neues Passwort:"
 msgstr ""
 
-#: edit_about.php:887 edit_about.php:896
+#: edit_about.php:883 edit_about.php:892
 #, fuzzy
 msgid "Name:"
 msgstr "Name"
 
-#: edit_about.php:887
+#: edit_about.php:883
 msgid "Vorname:"
 msgstr ""
 
-#: edit_about.php:887
+#: edit_about.php:883
 #, fuzzy
 msgid "Nachname:"
 msgstr "Name"
 
-#: edit_about.php:889 edit_about.php:898
-msgid "Email:"
+#: edit_about.php:885 edit_about.php:894
+msgid "E-Mail:"
 msgstr ""
 
-#: edit_about.php:892
+#: edit_about.php:888
 msgid "Adminzugriff hier nicht möglich!"
 msgstr ""
 
-#: edit_about.php:901
+#: edit_about.php:897
 msgid "Titel:"
 msgstr ""
 
-#: edit_about.php:914
+#: edit_about.php:910
 msgid "Titel nachgest.:"
 msgstr ""
 
-#: edit_about.php:928
+#: edit_about.php:924
 msgid "Geschlecht:"
 msgstr ""
 
-#: edit_about.php:928
+#: edit_about.php:924
 msgid "m&auml;nnlich"
 msgstr ""
 
-#: edit_about.php:932
+#: edit_about.php:928
 msgid "weiblich"
 msgstr ""
 
-#: edit_about.php:939
-msgid "Optionale Angaben"
+#: edit_about.php:935
+msgid "Freiwillige Angaben"
 msgstr ""
 
-#: edit_about.php:943
+#: edit_about.php:939
 msgid "Anschrift:"
 msgstr ""
 
-#: edit_about.php:947
+#: edit_about.php:943
 msgid "Hobbies:"
 msgstr ""
 
-#: edit_about.php:949 edit_about.php:999 edit_about.php:1037
-#: edit_about.php:1077 edit_about.php:1102
-#: StudipRangeTreeViewAdmin.class.php:688
-msgid "Änderungen übernehmen"
-msgstr ""
-
-#: edit_about.php:957
+#: edit_about.php:953
 msgid "Als Root haben Sie bereits genug Karriere gemacht ;-)"
 msgstr ""
 
-#: edit_about.php:960
+#: edit_about.php:956
 msgid ""
 "Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an "
 "Einrichtungen, an denen Sie arbeiten, machen."
 msgstr ""
 
-#: edit_about.php:962
+#: edit_about.php:958
 msgid ""
 "Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie "
 "arbeiten, machen."
 msgstr ""
 
-#: edit_about.php:964
+#: edit_about.php:960
 msgid "Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen."
 msgstr ""
 
-#: edit_about.php:973
+#: edit_about.php:969
 #, fuzzy
 msgid "Ich arbeite an folgenden Einrichtungen:"
 msgstr "Institution"
 
-#: edit_about.php:1008
-msgid "Ich bin in folgenden Studiengängen immatrikuliert:"
+#: edit_about.php:1004
+msgid "Ich bin in folgenden Studieng&auml;ngen eingeschrieben:"
 msgstr ""
 
-#: edit_about.php:1018
+#: edit_about.php:1014
 msgid "Studiengang"
 msgstr ""
 
-#: edit_about.php:1018 edit_about.php:1058
+#: edit_about.php:1014 edit_about.php:1054
 msgid "austragen"
 msgstr ""
 
-#: edit_about.php:1027
+#: edit_about.php:1023
 msgid "Sie haben sich noch keinem Studiengang zugeordnet."
 msgstr ""
 
-#: edit_about.php:1027
+#: edit_about.php:1023
 msgid "Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!"
 msgstr ""
 
-#: edit_about.php:1031
+#: edit_about.php:1027
 msgid ""
 "Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden "
 "Liste aus:"
 msgstr ""
 
-#: edit_about.php:1035
+#: edit_about.php:1031
 msgid ""
 "Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die "
 "entsprechenden Felder in der linken Tabelle."
 msgstr ""
 
-#: edit_about.php:1036 edit_about.php:1076
+#: edit_about.php:1032 edit_about.php:1072
 msgid ""
 "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen "
 "durchgeführt."
 msgstr ""
 
-#: edit_about.php:1048
+#: edit_about.php:1044
 #, fuzzy
 msgid "Ich studiere an folgenden Einrichtungen:"
 msgstr "Type of course"
 
-#: edit_about.php:1058 freie.php:168
-msgid "Einrichtung"
-msgstr "Institution"
-
-#: edit_about.php:1067
+#: edit_about.php:1063
 msgid "Sie haben sich noch keinen Einrichtungen zugeordnet."
 msgstr ""
 
-#: edit_about.php:1067
+#: edit_about.php:1063
 msgid ""
 "Wenn Sie auf ihrer Homepage die Einrichtungen, an denen Sie studieren, "
 "auflisten wollen, k&ouml;nnen Sie diese Einrichtungen hier entragen."
 msgstr ""
 
-#: edit_about.php:1071
+#: edit_about.php:1067
 msgid ""
 "Um sich als Student einer Einrichtung zuzuordnen, wählen sie die "
 "entsprechende Einrichtung aus der folgenden Liste aus:"
 msgstr ""
 
-#: edit_about.php:1075
+#: edit_about.php:1071
 msgid ""
 "Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie "
 "die entsprechenden Felder in der linken Tabelle."
 msgstr ""
 
-#: edit_about.php:1086
+#: edit_about.php:1082
 msgid ""
-"Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte "
+"Hier k&ouml;nnen Sie Lebenslauf, Publikationen und Arbeitschwerpunkte "
 "bearbeiten."
 msgstr ""
 
-#: edit_about.php:1088
-msgid "Hier können sie Ihren Lebenslauf bearbeiten."
+#: edit_about.php:1084
+#, fuzzy
+msgid "Hier k&ouml;nnen Sie Ihren Lebenslauf bearbeiten."
 msgstr "Here you can change your curriculum vitae."
 
-#: edit_about.php:1092
+#: edit_about.php:1088
 msgid "Lebenslauf:"
 msgstr ""
 
-#: edit_about.php:1096
+#: edit_about.php:1092
 msgid "Schwerpunkte:"
 msgstr ""
 
-#: edit_about.php:1099
+#: edit_about.php:1095
 msgid "Publikationen:"
 msgstr ""
 
-#: edit_about.php:1142
+#: edit_about.php:1138
 msgid ""
-"Um die automatische Anmeldung zu nutzen müssen sie ihre persönliche Login "
-"Datei auf ihren Rechner kopieren. Mit dem folgenden Link öffnet sich ein "
-"Fenster, indem sie ihr Paßwort eingeben müssen."
+"Um die automatische Anmeldung zu nutzen, m&uuml;ssen sie ihre pers&ouml;"
+"nliche Login-Datei auf ihren Rechner kopieren. Mit dem folgenden Link &ouml;"
+"ffnet sich ein Fenster, indem Sie ihr Passwort eingeben m&uuml;ssen."
 msgstr ""
 
-#: edit_about.php:1143
+#: edit_about.php:1139
 msgid "Dann wird die Datei erstellt und zu ihrem Rechner geschickt."
 msgstr ""
 
-#: edit_about.php:1144
-msgid "Autologin Datei erzeugen"
+#: edit_about.php:1140
+msgid "Auto-Login-Datei erzeugen"
 msgstr ""
 
-#: edit_about.php:1145
+#: edit_about.php:1141
 msgid ""
 "<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große "
 "Sicherheitslücke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich "
-"damit unter ihrem Namen in Stud.IP einloggen!"
+"damit unter Ihrem Namen in Stud.IP einloggen!"
 msgstr ""
 
-#: edit_about.php:1148
+#: edit_about.php:1144
 msgid ""
-"Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - tragen Sie "
+"Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - Sie tragen "
 "Verantwortung!"
 msgstr ""
 
@@ -1205,7 +1522,8 @@ msgid "News"
 msgstr "news"
 
 #: freie.php:91
-msgid "Zur Literatur und Linkliste"
+#, fuzzy
+msgid "Zur Literatur- und Linkliste"
 msgstr "go to literature and links"
 
 #: freie.php:96
@@ -1227,9 +1545,9 @@ msgid ""
 msgstr "The following courses can be entered without registration."
 
 #: freie.php:137
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"In den %s blau markierten Veranstaltungen d&uuml;rfen Sie nur Lesen und "
+"In den %s blau markierten Veranstaltungen d&uuml;rfen Sie nur lesen und "
 "Dokumente herunterladen."
 msgstr "In courses marked %s blue you only can read and download documents."
 
@@ -1241,9 +1559,10 @@ msgid ""
 msgstr "In courses marked %s orange you may also write postings."
 
 #: freie.php:142
+#, fuzzy
 msgid ""
-"In der rechten Spalte erfahren Sie, was in den einzelnen Veranstaltungen an "
-"Inhalten vorhanden ist."
+"In der rechten Spalte k&ouml;nnen Sie sehen, was in den einzelnen "
+"Veranstaltungen an Inhalten vorhanden ist."
 msgstr "In the right column you can see the content of every course."
 
 #: freie.php:166
@@ -1254,19 +1573,16 @@ msgstr "Name"
 msgid "Veranstaltungstyp"
 msgstr "Type of course"
 
-#: freie.php:169
-msgid "Inhalt"
-msgstr "Content"
-
 #: header.php:53
 msgid "Sie sind bereits im Chat angemeldet!"
 msgstr "You have already entered the chat!"
 
 #: header.php:74
-msgid "zurück zur Startseite"
+#, fuzzy
+msgid "Zurück zur Startseite"
 msgstr "back to start page"
 
-#: header.php:75
+#: header.php:75 header.php:122
 msgid "Hilfe"
 msgstr "Help"
 
@@ -1278,12 +1594,117 @@ msgstr "public courses"
 msgid "Sie sind nicht angemeldet"
 msgstr "You are not logged in"
 
-#: header.php:80
+#: header.php:80 header.php:212
 msgid "Impressum"
 msgstr "imprint"
 
 #: header.php:81
 msgid "Am System anmelden"
+msgstr "Login"
+
+#: header.php:121
+msgid "zurück zur Startseite"
+msgstr "back to start page"
+
+#: header.php:123
+#, fuzzy
+msgid "Meine Veranstaltungen & Einrichtungen"
+msgstr "Type of course"
+
+#: header.php:128
+#, fuzzy
+msgid "Meine Terminverwaltung"
+msgstr "public courses"
+
+#: header.php:136
+#, c-format
+msgid "Sie haben %s alte Nachrichten!"
+msgstr ""
+
+#: header.php:138
+msgid "Sie haben eine alte Nachricht!"
+msgstr ""
+
+#: header.php:141
+#, c-format
+msgid "Sie haben %s neue Nachrichten!"
+msgstr ""
+
+#: header.php:143
+msgid "Sie haben eine neue Nachricht!"
+msgstr ""
+
+#: header.php:151
+#, fuzzy
+msgid "Sie wurden zum Chatten eingeladen!"
+msgstr "You have already entered the chat!"
+
+#: header.php:156
+msgid "Nur Sie sind im Chat"
+msgstr ""
+
+#: header.php:158
+msgid "Es ist eine Person im Chat"
+msgstr ""
+
+#: header.php:160
+#, c-format
+msgid "Es sind %s Personen im Chat"
+msgstr ""
+
+#: header.php:162
+msgid "Es ist niemand im Chat"
+msgstr ""
+
+#: header.php:173
+msgid "Nur Sie sind online"
+msgstr ""
+
+#: header.php:175
+msgid "Ausser Ihnen ist eine Person online"
+msgstr ""
+
+#: header.php:177
+#, c-format
+msgid "Es sind ausser Ihnen %s Personen online"
+msgstr ""
+
+#: header.php:186
+#, c-format
+msgid "angemeldet als %s"
+msgstr ""
+
+#: header.php:190
+#, c-format
+msgid ""
+"Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %"
+"s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"
+msgstr ""
+
+#: header.php:192
+msgid "JavaScript eingeschaltet"
+msgstr ""
+
+#: header.php:192
+msgid "JavaScript abgeschaltet"
+msgstr ""
+
+#: header.php:203
+msgid "Zu Ihrer Einstellungsseite"
+msgstr ""
+
+#: header.php:204
+#, fuzzy
+msgid "Im System suchen"
+msgstr "Login"
+
+#: header.php:208
+msgid "Zu Ihrer Administrationsseite"
+msgstr ""
+
+#: header.php:213
+#, fuzzy
+msgid "Aus dem System abmelden"
 msgstr "Login"
 
 #: institut_browse.php:64
@@ -1293,7 +1714,8 @@ msgstr "Institution"
 
 #: institut_browse.php:66
 msgid ""
-"Es konnte keine den Suchkriterien entsprechende Einrichtung gefunden werden."
+"Es konnte keine Einrichtung gefunden werden, die Ihrer Suchanfrage "
+"entspricht."
 msgstr ""
 
 #: institut_browse.php:73
@@ -1309,10 +1731,6 @@ msgstr ""
 
 #: institut_browse.php:96
 msgid "Bitte geben Sie hier Ihre Suchkriterien ein:"
-msgstr ""
-
-#: institut_browse.php:103
-msgid "Suche starten"
 msgstr ""
 
 #: institut_members.php:452
@@ -1428,6 +1846,10 @@ msgstr ""
 msgid "Pers&ouml;nliche Homepage"
 msgstr ""
 
+#: links_about.inc.php:45
+msgid "Hochladen des pers&ouml;nlichen Bildes"
+msgstr ""
+
 #: links_about.inc.php:46
 msgid "Nutzerdaten bearbeiten"
 msgstr ""
@@ -1507,6 +1929,40 @@ msgstr ""
 
 #: mystudip.inc.php:65
 msgid "&Auml;nderungen &uuml;bernehmen"
+msgstr ""
+
+#: seminar_lernmodule.php:40
+msgid ""
+"Die Seite wurde mit fehlerhaften Parametern aufgerufen. Bitte wenden Sie "
+"sich an den/die AdministratorIn."
+msgstr ""
+
+#: seminar_lernmodule.php:41
+msgid "Fehlerhafte Parameter"
+msgstr ""
+
+#: seminar_lernmodule.php:60
+msgid "Verbindung von Stud.IP-Veranstaltungen und Lernmodulen"
+msgstr ""
+
+#: seminar_lernmodule.php:101
+msgid "Auf dieser Seite können Sie einer Veranstaltung Lernmodule zuordnen."
+msgstr ""
+
+#: seminar_lernmodule.php:109
+msgid "Sie können ein Lernmodul einer Veranstaltung zuordnen..."
+msgstr ""
+
+#: seminar_lernmodule.php:112
+msgid "...oder eine bestehende Verknüpfung aufheben."
+msgstr ""
+
+#: seminar_lernmodule.php:126
+msgid ""
+"Das Verbindungsmodul für ILIAS-Lernmodule ist nicht eingebunden. Damit "
+"Lernmodule verwendet werden können, muss die Verbindung zu einer ILIAS-"
+"Installation in den Systemeinstellungen hergestellt werden. Wenden Sie sich "
+"bitte an den/die AdministratorIn."
 msgstr ""
 
 #: sem_verify.php:72
@@ -2053,6 +2509,286 @@ msgstr ""
 
 #: TreeView.class.php:314
 msgid "Dieses Element hat keine Unterelemente"
+msgstr ""
+
+#: admin_metadates.php:205
+msgid ""
+"Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern "
+"Sie die entsprechenden Einstellungen!"
+msgstr ""
+
+#: admin_metadates.php:216
+msgid ""
+"Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der "
+"regul&auml;ren Termine aus!"
+msgstr ""
+
+#: admin_metadates.php:222
+msgid ""
+"Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren sie dies!"
+msgstr ""
+
+#: admin_metadates.php:227
+msgid ""
+"Die jeweilige Endzeitpunkt der regul&auml;ren Termine muss nach dem "
+"jeweiligen Startzeitpunkt liegen!"
+msgstr ""
+
+#: admin_metadates.php:236
+msgid ""
+"Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt, "
+"bitte korrigieren sie dies!"
+msgstr ""
+
+#: admin_metadates.php:367
+msgid ""
+"Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig "
+"stattfindet oder die Termine unregelm&auml;&szlig;ig sind (etwa bei einer "
+"Blockveranstaltung)."
+msgstr ""
+
+#: admin_metadates.php:474
+msgid ""
+"Bitte geben Sie die einzelnen Sitzungstermine unter dem Menupunkt Ablaufplan "
+"ein!"
+msgstr ""
+
+#: admin_metadates.php:490
+msgid ""
+"Bei einer regelm&auml;&szlig;igen Veranstaltungen k&ouml;nnen sie den ersten "
+"Termin eingeben oder automatisch berechnen lassen."
+msgstr ""
+
+#: admin_metadates.php:522
+msgid "Bitte geben Sie hier den ersten Termin ein:"
+msgstr ""
+
+#: admin_seminare_assi.php:731
+msgid ""
+"Der gew&uuml;nschte Raum der Vorbesprechung &uuml;berschneidet sich mit "
+"bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die Zeit!"
+msgstr ""
+
+#: edit_about.php:131
+#, c-format
+msgid ""
+"Die hochgeladene Bilddatei ist %s KB groß!<br>Die maximale Dateigröße "
+"beträgt %s KB!"
+msgstr ""
+
+#: edit_about.php:136
+msgid "Sie haben keine Datei zum hochladen ausgewählt!"
+msgstr ""
+
+#: edit_about.php:148
+#, c-format
+msgid ""
+"Der Dateityp der Bilddatei ist falsch (%s)!<br>Es sind nur die "
+"Dateiendungen .gif und .jpg erlaubt!"
+msgstr ""
+
+#: edit_about.php:155
+msgid "Fehler beim kopieren der Datei!"
+msgstr ""
+
+#: edit_about.php:173
+msgid ""
+"Die Bilddatei wurde erfolgreich hochgeladen! Eventuell sehen Sie das neue "
+"Bild erst nach einem Reload dieser Seite."
+msgstr ""
+
+#: edit_about.php:175
+msgid "Eine neue Bilddatei wurde hochgeladen.\n"
+msgstr ""
+
+#: edit_about.php:255
+msgid "Daten an Lebenslauf u.a. ge&auml;ndert"
+msgstr "Data regarding curriculum vitae were changed"
+
+#: edit_about.php:257
+msgid "Daten an Lebenslauf u.a. wurden geändert.\n"
+msgstr "Data regarding curriculum vitae were changed.\n"
+
+#: edit_about.php:298
+msgid "Das Paßwort ist zu kurz!"
+msgstr ""
+
+#: edit_about.php:302
+msgid ""
+"Die Wiederholung des Paßwortes ist falsch! Bitte geben sie das exakte "
+"Paßwort ein!"
+msgstr ""
+
+#: edit_about.php:315
+msgid "Der Vorname fehlt, oder ist unsinnig!"
+msgstr ""
+
+#: edit_about.php:319
+msgid "Der Nachname fehlt, oder ist unsinnig!"
+msgstr ""
+
+#: edit_about.php:328
+msgid "Der gewählte Username ist zu kurz!"
+msgstr ""
+
+#: edit_about.php:333
+#, c-format
+msgid ""
+"Der Username wird bereits von einem anderen User (%s %s) verwendet. Bitte "
+"wählen sie einen Anderen!"
+msgstr ""
+
+#: edit_about.php:350
+msgid "Die E-Mail Addresse fehlt, oder ist falsch geschrieben!"
+msgstr ""
+
+#: edit_about.php:355
+msgid ""
+"Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails "
+"mit der angegebenen Addresse verschicken können!"
+msgstr ""
+
+#: edit_about.php:365
+msgid ""
+"Die angegebene E-Mail Addresse ist nicht erreichbar. Bitte überprüfen Sie "
+"Ihre Angaben!"
+msgstr ""
+
+#: edit_about.php:372
+#, c-format
+msgid ""
+"Die angegebene E-Mail Addresse wird bereits von einem anderen User (%s %s) "
+"verwendet. Sie müssen eine andere E-Mail Addresse angeben!"
+msgstr ""
+
+#: edit_about.php:407
+msgid "Ihre Email Addresse wurde geändert!"
+msgstr ""
+
+#: edit_about.php:407
+msgid ""
+"ACHTUNG!<br>Aus Sicherheitsgründen wurde auch ihr Paßwort geändert, es wurde "
+"an die neu angegebene Email Addresse geschickt!"
+msgstr ""
+
+#: edit_about.php:559
+msgid "Um eine korrekte Authentifizierung mit ihren neuen Daten"
+msgstr ""
+
+#: edit_about.php:657
+msgid ""
+"Ihre persönliche Seite wurde von einem Administrator verändert.\n"
+" Folgende Veränderungen wurden vorgenommen:\n"
+" \n"
+msgstr ""
+
+#: edit_about.php:827
+msgid "Autologin einrichten"
+msgstr ""
+
+#: edit_about.php:854
+msgid "kein pers&ouml;nliches Bild vorhanden"
+msgstr ""
+
+#: edit_about.php:861
+msgid "Upload eines Bildes:"
+msgstr ""
+
+#: edit_about.php:872
+msgid "Hier können sie Ihre Benutzerdaten verändern."
+msgstr ""
+
+#: edit_about.php:885 edit_about.php:894
+msgid "Paßwort:"
+msgstr ""
+
+#: edit_about.php:889 edit_about.php:898
+msgid "Email:"
+msgstr ""
+
+#: edit_about.php:939
+msgid "Optionale Angaben"
+msgstr ""
+
+#: edit_about.php:1008
+msgid "Ich bin in folgenden Studiengängen immatrikuliert:"
+msgstr ""
+
+#: edit_about.php:1086
+msgid ""
+"Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte "
+"bearbeiten."
+msgstr ""
+
+#: edit_about.php:1088
+msgid "Hier können sie Ihren Lebenslauf bearbeiten."
+msgstr "Here you can change your curriculum vitae."
+
+#: edit_about.php:1142
+msgid ""
+"Um die automatische Anmeldung zu nutzen müssen sie ihre persönliche Login "
+"Datei auf ihren Rechner kopieren. Mit dem folgenden Link öffnet sich ein "
+"Fenster, indem sie ihr Paßwort eingeben müssen."
+msgstr ""
+
+#: edit_about.php:1144
+msgid "Autologin Datei erzeugen"
+msgstr ""
+
+#: edit_about.php:1145
+msgid ""
+"<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große "
+"Sicherheitslücke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich "
+"damit unter ihrem Namen in Stud.IP einloggen!"
+msgstr ""
+
+#: edit_about.php:1148
+msgid ""
+"Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - tragen Sie "
+"Verantwortung!"
+msgstr ""
+
+#: freie.php:91
+msgid "Zur Literatur und Linkliste"
+msgstr "go to literature and links"
+
+#: freie.php:137
+#, c-format
+msgid ""
+"In den %s blau markierten Veranstaltungen d&uuml;rfen Sie nur Lesen und "
+"Dokumente herunterladen."
+msgstr "In courses marked %s blue you only can read and download documents."
+
+#: freie.php:142
+msgid ""
+"In der rechten Spalte erfahren Sie, was in den einzelnen Veranstaltungen an "
+"Inhalten vorhanden ist."
+msgstr "In the right column you can see the content of every course."
+
+#: institut_browse.php:66
+msgid ""
+"Es konnte keine den Suchkriterien entsprechende Einrichtung gefunden werden."
+msgstr ""
+
+#: about.php:143
+msgid "e-mail:"
+msgstr ""
+
+#: about.php:210
+msgid "Ihre Stud.IP-Score:"
+msgstr ""
+
+#: admin_dates.php:106
+msgid ""
+"Sie haben hier die M&ouml;glichkeit, den Ablaufplan und weitere Termine der "
+"Veranstaltung zu ver&auml;ndern."
+msgstr ""
+
+#: admin_dates.php:110
+#, c-format
+msgid ""
+"Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte "
+"den Menupunkt %s Zeiten %s"
 msgstr ""
 
 #: edit_about.php:256

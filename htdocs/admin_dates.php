@@ -103,11 +103,11 @@ $infobox = array(
 		array  ("kategorie"  => "Information:", 
 			"eintrag" => array (
 					array ("icon" => "pictures/ausruf_small.gif", 	
-						"text"  => ($admin_dates_data["assi"]) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Sie haben hier die M&ouml;glichkeit, den Ablaufplan und weitere Termine der Veranstaltung zu ver&auml;ndern.")))),
+						"text"  => ($admin_dates_data["assi"]) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Sie k&ouml;nnen hier den Ablaufplan und weitere Termine der Veranstaltung ver&auml;ndern.")))),
 		array  ("kategorie" => "Aktionen:", 
 				"eintrag" => array (
 					array	("icon" => "pictures/meinetermine.gif",
-						"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Menupunkt %s Zeiten %s"), "<a href=\"admin_metadates.php?seminar_id=".$admin_dates_data["range_id"]."\">", "</a>")))));
+						"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten %s"), "<a href=\"admin_metadates.php?seminar_id=".$admin_dates_data["range_id"]."\">", "</a>")))));
 
 
 
