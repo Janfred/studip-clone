@@ -46,7 +46,6 @@ class DeleteResourcesUser {
 	//Konstruktor
 	function DeleteResourcesUser ($range_id) {
 		global $RELATIVE_PATH_RESOURCES;
-
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
 		
@@ -64,7 +63,7 @@ class DeleteResourcesUser {
 				$killAssign->delete();
 			}
 		}
-		if (get_object_type($this->range_id == "sem")) {
+		if (get_object_type($this->range_id) == "sem") {
 			$query = sprintf("SELECT assign_id FROM termine LEFT JOIN resources_assign ON (resources_assign.assign_user_id = termine.termin_id) WHERE range_id = '%s' ", $this->range_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
