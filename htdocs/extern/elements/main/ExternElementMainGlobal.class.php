@@ -39,7 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainGlobal extends ExternElementMain {
 
-	var $attributes = array();
+	var $attributes = array("name", "nameformat", "wholesite", "urlcss");
 	
 	/**
 	* Constructor
@@ -54,36 +54,15 @@ class ExternElementMainGlobal extends ExternElementMain {
 	* 
 	*/
 	function getDefaultConfig () {
-		/*
-		if ($groups = get_all_statusgruppen($this->config->range_id))
-			$groups = "|" . implode("|", array_keys($groups));
-		else
-			$groups = "";
 		
 		$config = array(
 			"name" => "",
-			"order" => "|0|1|2|3|4",
-			"visible" => "|1|1|1|1|1",
-			"aliases" => "|"._("Name")."|"._("Telefon")."|"._("Raum")."|"._("Email")."|"._("Sprechzeiten"),
-			"width" => "|30%|15%|15%|20%|20%",
-			"widthpp" => "",
-			"sort" => "|1|0|0|0|0",
-			"groupsalias" => "",
-			"groupsvisible" => $groups,
-			"grouping" => "1",
 			"wholesite" => "",
 			"nameformat" => "no_title",
-			"repeatheadrow" => "",
 			"urlcss" => "",
-			"title" => _("MitarbeiterInnen"),
-			"nodatatext" => "",
-			"config" => "",
-			"srilink" => ""
 		);
-		
-		get_default_generic_datafields($config, "user");
-		
-		return $config;*/
+				
+		return $config;
 	}
 	
 	/**
@@ -91,8 +70,7 @@ class ExternElementMainGlobal extends ExternElementMain {
 	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-		/*
-		update_generic_datafields($this->config, $this->data_fields, $this->field_names, "user");
+		
 		$out = "";
 		$table = "";
 		if ($edit_form == "")
@@ -102,38 +80,11 @@ class ExternElementMainGlobal extends ExternElementMain {
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE, $anker);
 		
-		$headline = $edit_form->editHeadline(_("Name der Konfiguration"));
+		$headline = $edit_form->editHeadline(_("Name der globalen Konfiguration"));
 		$table = $edit_form->editName("name");
 		
 		$content_table = $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
-		
-		$headline = $edit_form->editHeadline(_("Allgemeine Angaben zum Tabellenaufbau"));
-		
-		$edit_function = $this->edit_function;
-		$table = $edit_form->$edit_function($this->field_names, array());
-		
-		$content_table .= $edit_form->editContentTable($headline, $table);
-		$content_table .= $edit_form->editBlankContent();
-		
-		$headline = $edit_form->editHeadline(_("Anzeige von Gruppen"));
-		
-		$table = $edit_form->editGroups();
-		if ($table) {
-			$title = _("Gruppierung:");
-			$info = _("Personen nach Gruppen/Funktionen gruppieren.");
-			$values = "1";
-			$table .= $edit_form->editCheckboxGeneric("grouping", $title, $info, $values, "");
-		}
-		else {
-			$text = _("An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es wurden diesen noch keine Personen zugeordnet.");
-			$text .= _("Das Modul gibt nur Daten von Personen aus, die einer Gruppe/Funktion zugeordnet sind.");
-			$table = $edit_form->editText($text);
-		}
-		
-		$content_table .= $edit_form->editContentTable($headline, $table);
-		$content_table .= $edit_form->editBlankContent();
-		
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
@@ -144,11 +95,11 @@ class ExternElementMainGlobal extends ExternElementMain {
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
-		$title = _("Spalten&uuml;berschriften<br>wiederholen:");
-		$info = _("Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile.");
-		$values = array("above", "beneath", "");
-		$names = array(_("&uuml;ber"), _("unter Gruppenname"), _("keine"));
-		$table .= $edit_form->editRadioGeneric("repeatheadrow", $title, $info, $values, $names);
+		$title = _("Sprache:");
+		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$values = array("de_DE", "en_GB");
+		$names = array(_("Deutsch"), _("Englisch"));
+		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
@@ -160,10 +111,6 @@ class ExternElementMainGlobal extends ExternElementMain {
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
 		$table .= $edit_form->editTextfieldGeneric("urlcss", $title, $info, 50, 200);
 		
-		$title = _("Seitentitel:");
-		$info = _("Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im Web-Browser in der Titelzeile des Anzeigefensters angezeigt.");
-		$table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
-		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
@@ -172,7 +119,7 @@ class ExternElementMainGlobal extends ExternElementMain {
 		$out = $edit_form->editContent($content_table, $submit);
 		$out .= $edit_form->editBlank();
 		
-		return $element_headline . $out;*/
+		return $element_headline . $out;
 	}
 	
 	function checkValue ($attribute, $value) {}
