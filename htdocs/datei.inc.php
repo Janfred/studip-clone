@@ -92,7 +92,7 @@ function parse_link($link) {
 	if (!$socket) {
 		//echo "$errstr ($errno)<br />\n";
 	} else {
-		fputs($socket, "HEAD ".$documentpath." HTTP/1.0\nHost: $host\nCookie: Seminar_Session=".$sess->id."\n\n");
+		fputs($socket, "HEAD ".$documentpath." HTTP/1.0\nHost: $host\n\n");
    		socket_set_timeout($socket,2);
    		while (!feof($socket)) {
 	       		$response .= fgets($socket,4096);
@@ -1165,7 +1165,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						
 						//Zusatzangaben erstellen
 						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
-						if (($all) && (!$upload)){
+						if (($all) && (!$upload) && ($db3->f("url")=="")) {
 							$zusatz.=sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
 					}
