@@ -5,10 +5,10 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "")
 	global $output_formats, $ABSOLUTE_PATH_STUDIP , $PATH_EXPORT;
 	require_once ($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_xslt_vars.inc.php");
 	$export_string .= "<form action=\"" . "export.php\" method=\"post\">";
-	$export_string .= "<table width=\"100%\"><tr><td>";
+	$export_string .= "<table width=\"100%\" cellpadding=4><tr><td class=\"steel1\">&nbsp;&nbsp;&nbsp;";
 
-	$export_string .= "<font size=\"-1\">"._("Daten exportieren: ") .  "</font>";
-	$export_string .= "</td><td align=\"center\">";
+	$export_string .= "<font size=\"-1\">"._("Diese Daten exportieren: ") .  "</font>";
+	$export_string .= "</td><td align=\"center\" class=\"steel1\">";
 	$export_string .= "<select name=\"format\">";
 	while (list($key, $val) = each($output_formats))
 	{
@@ -18,7 +18,7 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "")
 	}
 	$export_string .= "</select>";
 
-	$export_string .= "</td><td align=\"right\">";
+	$export_string .= "</td><td align=\"right\" class=\"steel1\">";
 	$export_string .= "<input type=\"IMAGE\" " . makeButton("export", "src") . " value=\"" . _("Diese Daten Exportieren") . "\" name=\"export\">&nbsp;";
 
 	$export_string .= "<input type=\"hidden\" name=\"range_id\" value=\"$range_id\">";
