@@ -562,19 +562,14 @@ function get_username($user_id="") {
 *
 */
 function get_userid($username="") {
-	global $user,$online;
-	$author="";
-	if (!$username)
-		return $user->id;
- 	if(count($online)) {
- 		$author=$online[$username]["userid"];
-	}
-	if (!$author) {
-		$db=new DB_Seminar;
- 		$db->query ("SELECT user_id  FROM auth_user_md5 WHERE username = '$username'");
-		while ($db->next_record())
-			$author=$db->f("user_id");
-	}
+	global $auth;
+	$author = "";
+	if (!$username || $username == $auth->auth['uname'])
+		return $auth->auth['uid'];
+	$db=new DB_Seminar;
+	$db->query ("SELECT user_id  FROM auth_user_md5 WHERE username = '$username'");
+	while ($db->next_record())
+		$author=$db->f("user_id");
 	return $author;
 }
 

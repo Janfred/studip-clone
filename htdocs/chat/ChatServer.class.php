@@ -207,7 +207,7 @@ class ChatServer {
 		for ($i = 0;$i < $anzahl; ++$i){
 			if ($this->chatDetail[$rangeid]["messages"][$i][0] == $userid){
 				if (substr($this->chatDetail[$rangeid]["messages"][$i][1],0,1) == "/") {
-					$this->chatDetail[$rangeid]["messages"][$i]=array("system:system"," ",0);
+					$this->chatDetail[$rangeid]["messages"][$i][0] = "system:system";
 				}
 			}
 		}
