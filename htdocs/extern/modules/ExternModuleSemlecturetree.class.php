@@ -62,11 +62,8 @@ class ExternModuleSemLectureTree extends ExternModule {
 	
 	function printout ($args) {
 		global $ABSOLUTE_PATH_STUDIP;
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
-		}
+		if ($this->config->getValue("Main", "wholesite"))
+			echo html_header($this->config);
 		
 		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/ExternSemLectureTree.class.php");
@@ -80,11 +77,8 @@ class ExternModuleSemLectureTree extends ExternModule {
 	
 	function printoutPreview ($args) {
 		global $ABSOLUTE_PATH_STUDIP;
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
-		}
+		if ($this->config->getValue("Main", "wholesite"))
+			echo html_header($this->config);
 		
 		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/ExternSemLectureTree.class.php");
@@ -97,4 +91,5 @@ class ExternModuleSemLectureTree extends ExternModule {
 	}
 	
 }
+
 ?>

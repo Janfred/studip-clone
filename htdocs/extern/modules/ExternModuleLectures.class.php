@@ -79,13 +79,9 @@ class ExternModuleLectures extends ExternModule {
 	
 	function printout ($args) {
 		global $ABSOLUTE_PATH_STUDIP;
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"),
-					$this->config->getValue("Main", "copyright"),
-					$this->config->getValue("Main", "author"));
-		}
+		if ($this->config->getValue("Main", "wholesite"))
+			echo html_header($this->config);
+		
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
@@ -99,13 +95,9 @@ class ExternModuleLectures extends ExternModule {
 	}
 	
 	function printoutPreview () {
-		if ($this->config->getValue("Main", "wholesite")) {
-			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"),
-					$this->config->getValue("Main", "copyright"),
-					$this->config->getValue("Main", "author"));
-		}
+		if ($this->config->getValue("Main", "wholesite"))
+			echo html_header($this->config);
+		
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
@@ -118,4 +110,5 @@ class ExternModuleLectures extends ExternModule {
 	}
 	
 }
+
 ?>
