@@ -1,11 +1,18 @@
-30.09.2002 v 0.8 release candidate 3
+31.08.2002 v 0.8 release candidate 3
+- Äusserst umfangreiche und flexible Funktionen zur Teilnehmerbegrenzung von Veranstaltungen. Veranstaltungen könnn 
+  mit einem eigen Losverfahren oder nach chronologischer Anmeldung mit unterschiedlichen Kontigenten für beliebig viele
+  Studiengänge begrenzt werden
+- Neue Ebene "Studienfach" eingebaut. Studenten können nun im System hinterlegen, welche Studienfächer sie
+  studieren
+- System zur optischen Gewichtung des Alters von Objekten eingeführt (Pfeile sind je nach alter mehr oder weniger rot)
 - Veranstaltungssuche/Übersicht verbessert: optische besser hervorgehobene Gliederung, frei wählbare Gliederungsmodi,
   verbesserte und übersichtlichere Darstellung
 - Rundmails an alle Buddies können verschickt werden
 - neue Institutssuche eingebaut
-- Selbstbezeichnung für Institute kann nun verändert werden
+- Selbstbezeichnung für Einrichtungen kann nun verändert werden
 - Institute können nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarberlisten und
   Veranstaltungsübersicht an jedem Institut innerhalb des Systems 
+- weitere Detailverbesserungen und Bugfixes
 
 10.03.2002 v.0.7.5 release candidate 2
 - bessere Performance der Veranstaltungsübersicht
