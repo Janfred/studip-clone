@@ -111,38 +111,7 @@ if ($auth->auth["uid"] !="nobody") {
 //$_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
 //include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 ?>
-<script language="JavaScript">
-<!--
 
-<?if ($auth->auth["uid"]=="nobody") echo "close();"; //als nobody macht der IM keinen Sinn?>
-
-function coming_home(url)
-        {
-     if (opener)
-        {
-          opener.location.href = url;
-                opener.focus();
-
-          }
-     else
-        {
-          top.open(url,'');
-          }
-        }
-
-function again_and_again()
-        {
-<? if ($cmd!="write")
-        ($cmd) ? print("location.replace('$PHP_SELF');\n") : print("location.reload();\n"); ?>
-     }
-
-
-//setTimeout('again_and_again();',<? print($refresh*1000);?>);
-<?
-(is_array($sidebar_data["new_msgs"]) || $cmd) ? print ("focus();\n") : print ("blur();\n");
-?>
-//-->
-</script>
 
 <table width="100%" border=0 cellpadding=2 cellspacing=0>
 <tr>
