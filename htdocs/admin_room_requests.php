@@ -53,6 +53,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");	//Ausgaben
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");	//Settings....
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");	//basale Funktionen
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");	//Darstellungsfunktionen
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Seminar.class.php");	//Seminar-class
+
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
@@ -90,7 +92,7 @@ if ($SessSemName[1])
 	$seminar_id=$SessSemName[1];
 	
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($seminar_id) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_search_x) && (!$send_room_x) 
+if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_search_x) && (!$send_room_x) 
 	&& (!$search_properties_x) && (!$select_room_type) && (!$send_room_type_x) && (!$reset_room_type_x)
 	&& (!$reset_resource_id_x)) {
 	$db->query("SELECT admission_turnout FROM seminare WHERE Seminar_id = '$seminar_id' ");
@@ -99,8 +101,8 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_sea
 	$admin_rooms_data["admission_turnout"] = $db->f("admission_turnout");
 	
 	//initialisations for room-requests
-	if ($RESOURCES_ENABLE && get_config("RESOURCES_ALLOW_ROOM_REQUESTS") || get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS")) {
-		$db->query("SELECT request_id FROM resources_requests WHERE seminar_id = '$seminar_id'");
+	if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) {
+		$db->query("SELECT request_id FROM resources_requests WHERE seminar_id = '$seminar_id'".(($termin_id) ? " AND termin_id = '".$termin_id."'" : ""));
 		$db->next_record();
 
 		if ($db->nf()) {
@@ -110,6 +112,10 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_sea
 			$admin_rooms_data["resRequest"]->setSeminarId($seminar_id);
 			$admin_rooms_data["resRequest"]->setDefaultSeats($admin_rooms_data["admission_turnout"]);
 		}
+		
+		//if we start with a termin_id, we want to create a request for a single date, so save it!
+		if ($termin_id)
+			$admin_rooms_data["resRequest"]->setTerminId($termin_id);
 		
 	}
 	$admin_rooms_data["sem_id"] = $seminar_id;	
@@ -166,6 +172,10 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_sea
 		}
 	}
 }
+
+//initiate the seminar-class
+$semObj = new Seminar($admin_rooms_data["sem_id"]);
+
 	//Output & Forms
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -186,11 +196,10 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_sea
 		</td>
 	</tr>
 	<? } ?>
- 	<tr>
+	<tr>
 		<td class="blank" valign="top">
-			<br />
 			<blockquote>
-			<b><?=_("Raumanfragen und gew&uuml;nschte Raumeigenschaften f&uuml;r") ?></b><br /><br />
+			<b><?=_("Raumanfragen und gew&uuml;nschte Raumeigenschaften") ?></b><br /><br />
 			<?=_("Sie k&ouml;nnen hier Angaben &uuml;ber einen gew&uuml;nschten Raum und gew&uuml;nschte Raumeigenschaften machen.")?> <br />
 			<?=_("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird dann ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen.")?><br />
 			</blockqoute>
@@ -219,8 +228,20 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_sea
 			<td class="<? echo $cssSw->getClass() ?>" width="96%">
 				<font size="-1">
 				<?
-				print _("Sie haben die M&ouml;glichkeit, sich Raumeigenschaften sowie einen konkreten Raum zu anzugeben. Diese Raumw&uuml;nsche werden von der zentralen Raumverwaltung bearbeitet.");
+				print _("Sie haben die M&ouml;glichkeit, gew&uuml;nschte Raumeigenschaften sowie einen konkreten Raum anzugeben. Diese Raumw&uuml;nsche werden von der zentralen Raumverwaltung bearbeitet.");
 				print "<br />"._("<b>Achtung:</b> Um sp&auml;ter einen passenden Raum f&uuml;r Ihre Veranstaltung zu bekommen, geben Sie bitte <u>immer</u> die gew&uuml;nschten Eigenschaften mit an!");
+				?>
+			</td>
+		</tr>		
+		<tr <? $cssSw->switchClass() ?>>
+			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+				&nbsp;
+			</td>
+			<td class="<? echo $cssSw->getClass() ?>" width="96%">
+				<font size="-1"><b><?=("Art des Wunsches:")?></b><br /><br />
+				<?
+				print (($admin_rooms_data["resRequest"]->getTerminId()) ? _("Einzeltermin ihrer Veranstaltung") : (($semObj->getMetaDateType() == 1) ?_("alle Ablaufplan-Termine der Veranstaltung (unregelm&auml;&szlig;ige Veranstaltung)") :_("alle Veranstaltungszeiten (regelm&auml;&szlig;ige Veranstaltung)")))."<br />";
+				
 				?>
 			</td>
 		</tr>		
@@ -228,12 +249,11 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_sea
 		if ($request_resource_id = $admin_rooms_data["resRequest"]->getResourceId()) {
 			$resObject = new ResourceObject($request_resource_id);
 		?>
-		<tr>
+		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="96%">
-				<br />
 				<font size="-1"><b><?=("gew&uuml;nschter Raum:")?></b><br /><br />
 					<?
 					print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".htmlReady($resObject->getOwnerName())."</a>";
