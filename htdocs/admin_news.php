@@ -72,20 +72,26 @@ class studip_news {
 				$news_range_name="StudIP System News";
 			}
 			elseif ($news_range_id!=""){
-				$news_range_name = get_fullname($news_range_id);
-				if ($news_range_name == "unbekannt") {
+				$object_type = get_object_type($news_range_id);
+				switch ($object_type){
+					case "sem":
 					$query="SELECT Name FROM seminare WHERE Seminar_id='$news_range_id'";
 					$this->db->query($query);
-					if ($this->db->next_record()){
-						$news_range_name=$this->db->f("Name");
-					} else {
-						$query="SELECT Name FROM Institute WHERE Institut_id='$news_range_id'";
-						$this->db->query($query);
-						if ($this->db->next_record()){
-							$news_range_name=$this->db->f("Name");
-						}
-					}
-				}
+					$this->db->next_record();
+					$news_range_name = $this->db->f("Name");
+					break;
+					
+					case "inst":
+					case "fak":
+					$query="SELECT Name FROM Institute WHERE Institut_id='$news_range_id'";
+					$this->db->query($query);
+					$this->db->next_record();
+					$news_range_name=$this->db->f("Name");
+					break;
+					
+					default:
+					$news_range_name = get_fullname($news_range_id);
+				}	
 			} else {
 				$this->news_range=$news_range_id=$this->user_id;
 				$this->range_name=$news_range_name=$this->full_username;
@@ -472,7 +478,7 @@ class studip_news {
 			//$this->search_result[$this->user_id]=array("type"=>"user","name"=>$this->full_username."(".$auth->auth["uname"].")");
 		}
 		
-		if (is_array($this->search_result)){
+		if (is_array($this->search_result) && count($this->search_result)){
 			$query="SELECT range_id,COUNT(range_id) AS anzahl FROM news_range WHERE range_id IN ('".implode("','",array_keys($this->search_result))."') GROUP BY range_id";
 			$this->db->query($query);
 			while($this->db->next_record()) {
@@ -649,10 +655,11 @@ if(!$news_range_id) {
 	}
 
 //take a settet object as startview
-if ($SessSemName[1] AND !$range_id) {
-	$news_range_id=$SessSemName[1];
+if ($SessSemName[1] && !$range_id && !$news_range_id) {
+	$news_range_id = $SessSemName[1];
+	$news_range_name = $SessSemName[0];
 } elseif ($range_id) {
-	$news_range_id=$range_id;	
+	$news_range_id = $range_id;	
 }
 
 $news = new studip_news();
@@ -670,7 +677,7 @@ if ($perm->have_perm("admin"))	{
 			$cmd="";
 		} else {
 			$news->search_range($search);
-			if (!is_array($news->search_result)) 
+			if (is_array($news->search_result) && !count($news->search_result)) 
 				$news->msg.="info§" . _("Die Suche ergab keine Treffer!") . "§";
 			$cmd="";
 		}
@@ -697,7 +704,7 @@ if ($cmd=="edit") {
 	if ($perm->have_perm("admin") && $search) {
 		if ($search) 
 			$news->search_range($search);
-		if (empty($news->search_result)) {
+			if (is_array($news->search_result) && !count($news->search_result)) {
 			echo "<tr><td class=\"blank\"><br />";
 			parse_msg("info§" . _("Die Suche ergab keine Treffer!") . "§","§","blank","1",FALSE);
 			echo "</td></tr>";
