@@ -1,9 +1,7 @@
 <?php
 /*
 details.php - Detail-Uebersicht und Statistik fuer ein Seminar
-Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>aus
-aus
-
+Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
