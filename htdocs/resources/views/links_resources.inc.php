@@ -31,7 +31,7 @@ if ($resources_data["list_open"])
 if ($resources_data["actual_object"])
 	$structure["objects"]=array (topKat=>"", name=>"Ressource", link=>"resources.php?view=objects", active=>FALSE);
 if (($my_perms->getGlobalPerms() == "admin") || ($perm->have_perm("root")))
-	$structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=settings", active=>FALSE);
+	$structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=edit_types", active=>FALSE);
 
 //Reiter "Uebersicht"
 $structure["_resources"]=array (topKat=>"resources", name=>"Struktur", link=>"resources.php?view=_resources#a", active=>FALSE);

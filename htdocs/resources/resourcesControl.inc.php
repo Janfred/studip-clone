@@ -55,7 +55,7 @@ include ("$RELATIVE_PATH_RESOURCES/lib/evaluate_values.php");
 //load correct nav
 if ($resources_data["view_mode"] == "oobj")
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-elseif ($resources_data["view_mode"] == "res")
+elseif ($resources_data["view_mode"] == "no_nav")
 	;
 else
 	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
@@ -190,7 +190,7 @@ if ($resources_data["view"]=="edit_object_properties" || $resources_data["view"]
 /*****************************************************************************
 Objecteigenschaften anzeigen, views: openobject_details
 /*****************************************************************************/
-if ($resources_data["view"]=="openobject_details") {
+if (($resources_data["view"]=="openobject_details")  || ($resources_data["view"]=="view_details")) {
 
 	if ($resources_data["actual_object"]) {
 		$viewObject = new viewObject($resources_data["actual_object"]);

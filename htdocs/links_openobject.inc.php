@@ -20,7 +20,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
-			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main&view_mode=oobj", active=>FALSE);
+			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main&view_mode=no_nav", active=>FALSE);
 	}
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"seminar_main.php", active=>FALSE);
@@ -32,7 +32,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
-			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main&view_mode=oobj", active=>FALSE);
+			$structure["resources"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=openobject_main&view_mode=no_nav", active=>FALSE);
 	}
 }
 
@@ -110,7 +110,7 @@ if ($RESOURCES_ENABLE) {
 	$structure["resources_schedule"]=array (topKat=>"resources", name=>"Belegung", link=>"resources.php?view=openobject_schedule", active=>FALSE);
 	$structure["resources_assign"]=array (topKat=>"resources", name=>"Belegungen bearbeiten", link=>"resources.php?view=openobject_assign", active=>FALSE);
 	if ($rechte)
-		$structure["resources_admin"]=array (topKat=>"resources", name=>"Ressourcen verwalten", link=>"resources.php?view=resources", active=>FALSE);
+		$structure["resources_admin"]=array (topKat=>"resources", name=>"Ressourcen verwalten", link=>"resources.php", active=>FALSE);
 }
 
 

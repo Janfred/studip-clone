@@ -104,8 +104,8 @@ class ShowList extends ShowTreeRow{
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("bearbeiten")."</a>";
 		} else {
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("details")."</a>";
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("details")."</a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>";
 		}
 
 		//Daten an Ausgabemodul senden (aus resourcesVisual)
@@ -1346,7 +1346,7 @@ class ViewSchedules extends cssClasses {
 	function navigator () {
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?navigate=TRUE">
+		<form method="POST" action="<?echo $PHP_SELF ?>?navigate=TRUE&view=view_schedule">
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
 				</td>

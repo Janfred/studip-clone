@@ -33,19 +33,19 @@ function updateStructure ($resource_id, $root_id, $level) {
 empfangene Werte auswerten und Befehle ausfuehren
 /*****************************************************************************/
 
-//get view/view_mode
-if ($view)
-	 $resources_data["view"]=$view;
-else {
+//got a fresh session?
+if ((sizeof ($_REQUEST) == 1) && (!$view)) {
 	$resources_data["view"]="resources";
 	$resources_data["view_mode"]=FALSE;
 }
+
+//get views/view_modes
+if ($view)
+	 $resources_data["view"]=$view;
 if ($view_mode)	
 	$resources_data["view_mode"]=$view_mode;
-
-//If we start the admin mode, kill open objects
-if ($resources_data["view"] == "resources")
-	closeObject();
+if (strpos($view, "openobject") !== FALSE)
+	$resources_data["view_mode"]="oobj";
 
 //Open a level/resource
 if ($structure_open) {
