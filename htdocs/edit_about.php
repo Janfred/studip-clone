@@ -866,8 +866,8 @@ if ($view=="Bild") {
 	echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username&view=Bild\" method=\"POST\">";
 	echo "<br />" . _("Upload eines Bildes:") . "<br><br>" . _("1. W‰hlen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.") . "<br><br>";
 	echo "&nbsp;&nbsp;<input name=\"imgfile\" type=\"file\" style=\"width: 80%\" cols=".round($max_col*0.7*0.8)."><br><br>";
-	echo _("2. Klicken sie auf <b>Bild senden</b>, um das Bild hochzuladen.") . "<br><br>";
-	echo "&nbsp;&nbsp;<input type=\"submit\" value=\"Bild senden\"><br><br>";
+	echo _("2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen.") . "<br><br>";
+	echo "&nbsp;&nbsp;<input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\"><br><br>";
 	printf ("<b>ACHTUNG!</b><br>Die Bilddatei darf max. %s KB groﬂ sein, es sind nur Dateien mit den Endungen <b>.jpg</b> oder <b>.gif</b> erlaubt!", $my_about->max_file_size);
 	echo "</blockquote></td></tr>";
 }
