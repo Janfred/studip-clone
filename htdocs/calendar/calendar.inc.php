@@ -505,8 +505,6 @@ if ($cmd == 'showyear') {
 // ist $atime an das Skript uebergeben worden, dann erzeuge neuen Termin (s.o.)
 if ($cmd == 'edit') {
 
-		
-	$edit_mode_out = '<b>';
 	if (get_class($atermin) == 'seminarevent') {
 		$edit_mode_out .= sprintf(_("Termin am %s"), ldate($atermin->getStart()));
 	}
@@ -523,7 +521,6 @@ if ($cmd == 'edit') {
 		page_close();
 		die;
 	}
-	$edit_mode_out .= "</b>\n";
 	if (!$mod)
 		$mod = 'SINGLE';
 	
