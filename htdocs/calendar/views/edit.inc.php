@@ -358,8 +358,8 @@ else{
 			break;
 			
 		case "WEEKLY":
-			if (!$wdays)
-				$wdays = array();
+			if (!is_array($wdays))
+				$wdays = array(strftime('%u', mktime(0, 0, 0, $start_month, $start_day, $start_year)));
 			
 			$css_switcher->switchClass();
 			echo "<tr><td nowrap=\"nowrap\" class=\"" . $css_switcher->getClass() . "\">\n";
@@ -471,7 +471,6 @@ else{
 			$out_1 = "&nbsp; ";
 			$out_1 .= "<select name=\"sinterval_y\" size=\"1\">\n";
 			
-			reset($form_week_arr);
 			foreach ($form_week_arr as $key => $value) {
 				$out_1 .= "<option value=\"$key\"";
 				if($sinterval_y == $key)
