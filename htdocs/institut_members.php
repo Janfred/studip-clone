@@ -515,7 +515,7 @@ else {
 if (($EXPORT_ENABLE) AND ($db_institut_members->num_rows() > 0))
 {
 	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
-	echo "<tr><td colspan=$colspan>" . export_form($auswahl, "person", $SessSemName[0]) . "</td></tr>";
+	echo "<tr><td colspan=$colspan><br>" . export_form($auswahl, "person", $SessSemName[0]) . "</td></tr>";
 }
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>\n";
 echo "</table></td></tr></table>\n";
