@@ -34,8 +34,8 @@ $structure["alle"]=array (topKat=>"", name=>_("Alle"), link=>"about.php?username
 $structure["bild"]=array (topKat=>"", name=>_("Bild"), link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
 $structure["daten"]=array (topKat=>"", name=>_("Nutzerdaten"), link=>"edit_about.php?view=Daten&username=$username", active=>FALSE);
 $structure["karriere"]=array (topKat=>"", name=>_("universit&auml;re Daten"), link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
-$structure["lebenslauf"]=array (topKat=>"", name=>_("Lebenslauf"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
-$structure["sonstiges"]=array (topKat=>"", name=>_("Sonstiges"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
+$structure["lebenslauf"]=array (topKat=>"", name=>_("weitere Daten"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
+$structure["sonstiges"]=array (topKat=>"", name=>_("eigene Kategorien"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
 if ($username==$auth->auth["uname"]) 
 // if (!$perm->have_perm("admin"))
 	$structure["mystudip"]=array (topKat=>"", name=>_("My Stud.IP"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
