@@ -1,9 +1,20 @@
 <?
+
+/**
+* displays tabs for messaging pages
+* 
+* @author				Suchi & Berg GmbH <info@data-quest.de>, Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <studip@nkwindisch.de>
+* @access				public
+* @modulegroup	Messaging
+* @module				links_sms.php
+* @package			Stud.IP-Core
+*/
+
 /*
-links_about.inc.php - Navigation fuer die Uebersichtsseiten.
+links_sms.inc.php - Navigation fuer die Uebersichtsseiten.
 Copyright (C) 2002	Stefan Suchi <suchi@gmx.de>, 
 				Ralf Stockmann <rstockm@gwdg.de>, 
-				Cornelis Kater <ckater@gwdg.de
+				Cornelis Kater <ckater@gwdg.de, 
 				Suchi & Berg GmbH <info@data-quest.de> 
 
 This program is free software; you can redistribute it and/or
