@@ -258,12 +258,12 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 
 function delete_ilias_user($ilias_id)
 {
-	if (get_studip_user($ilias_id) == false)
+/*	if (get_studip_user($ilias_id) == false)
 	{
 		echo _("User wurde nicht gefunden.") . "<br>";
 		return false;
 	}
-	else
+	else/**/
 	{
 		$ilias_db = New DB_Ilias;
 
