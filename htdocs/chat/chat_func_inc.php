@@ -41,7 +41,7 @@ require_once $ABSOLUTE_PATH_STUDIP."contact.inc.php";
 function chat_get_chat_icon($chatter,$chatinv,$is_active,$as_icon = false){
 	if ($GLOBALS['CHAT_ENABLE']){
 			$pic_prefix = ($as_icon) ? "icon-" : "";
-			$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "/pictures/";
+			$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "pictures/";
 			$image = "<img border=\"0\" src=\"" . $pic_path . $pic_prefix;
 			if (!$chatter){
 				$image .= "chat1.gif\"" . tooltip(_("Dieser Chatraum ist leer"));
@@ -144,7 +144,7 @@ function chat_show_info($chatid){
 }
 
 function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_user){
-	$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "/pictures/";
+	$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "pictures/";
 	$ret = "\n<tr><td class=\"steel1\" colspan=\"2\" width=\"100%\">&nbsp;</td></tr>";
 	$ret .= "\n<tr><td class=\"steel1\" width=\"50%\" valign=\"center\"><blockquote><font size=\"-1\">";
 	if (chat_get_entry_level($chatid) || $chatinv){
@@ -175,7 +175,7 @@ function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_u
 		$ret .= "<br>(";
 		$c = 0;
 		foreach ($chat_user as $chat_user_id => $detail){
-			$ret .= "<a href=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}/about.php?username={$detail['nick']}\">"
+			$ret .= "<a href=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}about.php?username={$detail['nick']}\">"
 			. htmlReady($detail['fullname']) . "</a>";
 			if (++$c != $chatter){
 				$ret .= ", ";
@@ -200,8 +200,8 @@ function chat_get_online_icon($user_id = false, $username = false, $pref_chat_id
 		if (!$user_id && !$username){
 			return false;
 		}
-		$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "/pictures/";
-		$stud_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "/";
+		$pic_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "pictures/";
+		$stud_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 		$admin_chats = $chatServer->getAdminChats($GLOBALS['auth']->auth['uid']);
 		if ($tmp_num_chats = $chatServer->chatUser[$user_id]) {

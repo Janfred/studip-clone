@@ -453,18 +453,18 @@ function smile ($text = "") {
 	
 	//smileys in the ":name:" notation
 	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m";
-	$replace = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}/show_smiley.php\" target=\"_blank\">";
+	$replace = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
 	$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-	$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . "/" . $SMILE_PATH . "/\\2.gif\"></a>\\3";
+	$replace .= $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/\\2.gif\"></a>\\3";
 	$text = preg_replace($pattern, $replace, $text);
 	
 	//smileys in short notation
 	reset($SMILE_SHORT);
 	while (list($key,$value) = each($SMILE_SHORT)) {
 		$text = str_replace($key,"<a href=\""
-				. $CANONICAL_RELATIVE_PATH_STUDIP . "/show_smiley.php\" target=\"_blank\">"
+				. $CANONICAL_RELATIVE_PATH_STUDIP . "show_smiley.php\" target=\"_blank\">"
 				. "<img ".tooltip($value)." border=\"0\" src=\""
-				. $CANONICAL_RELATIVE_PATH_STUDIP . "/" . $SMILE_PATH . "/$value.gif\"></a>",$text);
+				. $CANONICAL_RELATIVE_PATH_STUDIP . $SMILE_PATH . "/$value.gif\"></a>",$text);
 	}
 	return $text;
 }
@@ -492,7 +492,7 @@ function symbol ($text = "") {
 	//symbols in short notation
 	reset($SYMBOL_SHORT);
 	while (list($key, $value) = each($SYMBOL_SHORT)) {
-		$text=str_replace($key,"<img ".tooltip($key)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/$SYMBOL_PATH/$value.gif\">",$text);
+		$text=str_replace($key,"<img ".tooltip($key)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SYMBOL_PATH/$value.gif\">",$text);
 	}
 	
 	return $text;
@@ -647,7 +647,7 @@ function print_infobox ($content, $picture="") {
 	if ($picture) {
 		$print .= "<tr>
 					<td class=\"blank\" width=\"100%\" align=\"right\">
-						<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$picture."\">
+						<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP . $picture."\">
 					</td>
 				</tr>";
 	}
@@ -669,7 +669,7 @@ function print_infobox ($content, $picture="") {
 				$print .= "
 							<tr>
 								<td class=\"blank\" width=\"1%\" align=\"center\" valign=\"top\">
-									<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$content[$i]["eintrag"][$j]["icon"]."\">
+									<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP . $content[$i]["eintrag"][$j]["icon"]."\">
 								</td>
 								<td class=\"blank\" width=\"99%\">
 									<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>

@@ -101,7 +101,7 @@ if (!$chat_entry_check){
 	<head>
 	 <title>Stud.IP</title>
 	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
-	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/md5.js"></script>
+	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>md5.js"></script>
 	<script type="text/javascript">
 	/**
 	* JavaScript 
@@ -144,7 +144,7 @@ $sms->delete_chatinv();
 <head>
 	<title>Chat(<?=$auth->auth["uname"]?>) -
 	<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></title>
-	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/md5.js"></script>
+	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>md5.js"></script>
 <script type="text/javascript">
 	/**
 	* JavaScript 
