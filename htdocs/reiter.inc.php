@@ -23,25 +23,26 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 class reiter {
 	//Classes
-	var $classActive = "links1b";					//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
-	var $classInactive="links1";					//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
+	var $classActive = "links1b";				//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
+	var $classInactive="links1";				//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
 	//Pics
-	var $infoPic="pictures/info.gif";				//Bild das als Info Click/Alt-Text verwendet wird
-	var $toActiveTopkatPic="pictures/reiter1.jpg";	//Trenner fuer Reiter
+	var $infoPic="pictures/info.gif";			//Bild das als Info Click/Alt-Text verwendet wird
+	var $toActiveTopkatPic="pictures/reiter1.jpg";		//Trenner fuer Reiter
 	var $toInactiveTopkatPic="pictures/reiter2.jpg";	//Trenner auf Inactive fuer Reiter
 	var $closerTopkatPic="pictures/reiter4.jpg";		//Closer fuer Reiter
-	var $closerInfo="";							//generic Closer for Info
-	var $activeBottomkatPic="pictures/forumrot.gif";			//Aktiver Pfeil
-	var $inactiveBottomkatPic="pictures/forumgrau.gif";		//Inaktiver Pfeil
+	var $closerInfo="";					//generic Closer for Info
+	var $activeBottomkatPic="pictures/forumrot.gif";	//Aktiver Pfeil
+	var $inactiveBottomkatPic="pictures/forumgrau.gif";	//Inaktiver Pfeil
 	var $bottomPic="pictures/reiter3.jpg";			//Unterer Abschluss
 	//Width's
-	var $infoWidth="";							//Width of the Infoarea
-	var $tableWidth="";						//Width of the whole table
+	var $infoWidth="";					//Width of the Infoarea
+	var $tableWidth="";					//Width of the whole table
 	//Settings
 	var $noAktiveBottomkat=FALSE;				//Wenn trotz bestimmtem View kein Unterktagorie markiert sein soll (wird durch "(view)" erreicht) 
 	var $spacerInfoTopkat=FALSE;				//Should a spacer be used between Info and Topkat?
 	var $textAdd="&nbsp; &nbsp; ";				//a addition, which will be added before and after every text
-	var $katsAlign="left";						//how to align every kat
+	var $katsAlign="left";					//how to align every kat
+	var $topkatBreakLineLimit="auto";			//more than x topkats = arrange topkats in two lines, or auto for automatic arrangement
 	
 	function topkatStart() {
 		printf ("<table %s cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr>", ($this->tableWidth) ? "width=\"$this->tableWidth\"" : "");
@@ -131,28 +132,106 @@ class reiter {
 		return $structure;
 	}
 
+	function segmentTopKats(&$structure) {
+		global $auth;
+		
+		$segment = 1;
+		$counter = 0;
+		$lettercounter = 0;
+			
+		if (strtolower($this->topkatBreakLineLimit) == "auto")
+			$topkatLetterBreakLineLimit = round($auth->auth["xres"] / 8 );
+			
+		foreach ($structure as $key=>$val) {
+			if (!$val["topKat"]) {
+				$i++;
+				$counter++;
+				$lettercounter = $lettercounter + strlen($val["name"]) + 6;
+				if (strtolower($this->topkatBreakLineLimit) == "auto")
+					if ($lettercounter > $topkatLetterBreakLineLimit) {
+						$segment++;
+						$lettercounter=0;
+					}
+				elseif (strtolower($this->topkatBreakLineLimit) > 0)
+					if ($counter > $this->topkatBreakLineLimit) {
+						$segment++;
+						$counter=1;
+					}
+				
+				$structure[$key]["topKatSegment"] = $segment;
+			}
+		}
+		return $segment;
+	}
+
 	function printStructure ($structure, $tooltip, $addText) {
+		//TopKats
+		if ($this->topkatBreakLineLimit)
+			$segments = $this->segmentTopKats($structure);
+		else
+			$segments = 1;
+
 		reset($structure);
 		foreach ($structure as $key=>$val) {
 			if (!$val["topKat"]) {
 				$topKats++;
-				if ($val["active"])
+				if ($val["active"]) {
 					$tmp_topKat=$key;
+					$activeSegment = $val["topKatSegment"];
+				}
 			}
 		}
 		$bottomKats=sizeof($structure)-$topKats;
-		reset($structure);
-		$this->topkatStart();
-		$a=current($structure);
-		if (($tooltip) || ($addText))
-			$this->info($tooltip, $addText, $a["active"]);
-		for ($i=0; $i<$topKats; $i++) {
-			if ($i+1==$topKats)
-				$close=TRUE;
-			$this->topkat($a["name"], $a["link"], $a["width"],$a["active"], $a["target"], $close);
-			$a=next($structure);
+		
+		$tooltipCreated=FALSE;
+		for ($s=1; $s<=$segments; $s++) {
+			$this->topkatStart();
+			reset($structure);
+			$a=current($structure);
+
+			for ($i=0; $i<$topKats; $i++) {
+				$b=next($structure);
+				$close=FALSE;		
+				if (($a["topKatSegment"] == $s) && (($a["topKatSegment"] != $activeSegment) || ($activeSegment == $segments))) {
+					if ((($tooltip) || ($addText)) && ($s == $segments) && ($activeSegment == $segments) && (!$tooltipCreated)) {
+						$this->info($tooltip, $addText, $a["active"]);
+						$tooltipCreated=TRUE;
+					}
+					if ($i+1 == $topKats)
+						$close=TRUE;
+					if ($a["topKatSegment"] <> $b["topKatSegment"])
+						$close=TRUE;
+					$this->topkat($a["name"], $a["link"], $a["width"],$a["active"], $a["target"], $close);
+					}
+				
+				$a=$b;
+				}
+			$this->topkatCloseRow();
+		}
+		
+		if ($activeSegment != $segments) {
+			$this->topkatStart();
+			reset($structure);
+			$a=current($structure);
+			for ($i=0; $i<$topKats; $i++) {
+				$b=next($structure);
+				$close=FALSE;		
+				if ($a["topKatSegment"] == $activeSegment) {
+					if ((($tooltip) || ($addText)) && (!$tooltipCreated)) {
+						$this->info($tooltip, $addText, $a["active"]);
+						$tooltipCreated=TRUE;
+					}
+					if ($i+1 == $topKats)
+						$close=TRUE;
+					if ($a["topKatSegment"] <> $b["topKatSegment"])
+						$close=TRUE;
+					$this->topkat($a["name"], $a["link"], $a["width"],$a["active"], $a["target"], $close);
+				}
+				$a=$b;
 			}
-		$this->topkatCloseRow();
+			$this->topkatCloseRow();
+		}
+		//BottomKats
 		if ($bottomKats) {
 			$this->bottomkatStart();
 			for ($i=0; $i<=$bottomKats; $i++) {
