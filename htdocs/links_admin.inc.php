@@ -132,6 +132,9 @@ if ($links_admin_data["sem_id"]) {
 			$range_id=$links_admin_data["sem_id"];
 			$ebene="sem";
 		break;
+		case "admin_news.php": 
+			$range_id=$links_admin_data["sem_id"];
+		break;
 		case "admin_seminare1.php": 
 			$s_id=$links_admin_data["sem_id"];
 			if (!$s_command)
@@ -150,6 +153,9 @@ if ($links_admin_data["inst_id"]) {
 			$inst_id=$links_admin_data["inst_id"];
 		break;
 		case "admin_literatur.php": 
+			$range_id=$links_admin_data["inst_id"];
+		break;
+		case "admin_news.php": 
 			$range_id=$links_admin_data["inst_id"];
 		break;
 		}
@@ -182,7 +188,7 @@ if ($links_admin_data["inst_id"]) {
 		elseif ($links_admin_data["inst_id"]) 
 			echo " Ausgewählte Einrichtung: ",JSReady($db->f("Name"),"popup"), " - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.');\" ";		
 		else
-			echo " Keine Veranstaltung ausgew&auml;hlt.');\" ";
+			echo " Keine Veranstaltung oder Einrichtung ausgew&auml;hlt.');\" ";
 		}
 	?> alt="Sie befinden sich im Administrationsbereich von Stud.IP.<? 
 	if ($links_admin_data["sem_id"])
@@ -195,7 +201,7 @@ if ($links_admin_data["inst_id"]) {
 	if ($links_admin_data["sem_id"])
 		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Veranstaltung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 	elseif ($links_admin_data["inst_id"]) 
-		echo " <a href=\"admin_institut.php?list=TRUE\"><img alt=\"Auswahl der Einrichtung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
+		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Einrichtung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 					
 	if ($i_page != "admin_dates.php" AND $i_page != "admin_literatur.php" AND $i_page != "admin_news.php" AND $i_page != "admin_seminare1.php" AND $i_page != "admin_seminare_assi.php" AND $i_page != "admin_metadates.php" AND $i_page != "adminarea_start.php" AND $i_page != "archiv_assi.php" OR $links_admin_data["sem_id"])
 		echo "&nbsp; <img src=\"pictures/reiter2.jpg\" align=absmiddle>";
@@ -358,7 +364,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 					<select class="steel1" name="admin_inst_id" size="1">
 					<?
 					if ($perm->have_perm("root"))
-						$db->query("SELECT Institut_id; Name  FROM Institute ORDER BY Name");
+						$db->query("SELECT Institut_id, Name  FROM Institute ORDER BY Name");
 					else
 						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms = 'admin' ORDER BY Name");
 					
