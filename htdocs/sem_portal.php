@@ -56,6 +56,12 @@ echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 //Einstellungen fuer Reitersystem
 $sess->register("sem_portal");
 
+//got a fresh session?
+if ((sizeof ($_REQUEST) == 1) && (!$view)) {
+	$sem_portal='';
+	$reset_all=TRUE;
+}
+
 //Standard herstellen
 if (!$sem_portal["bereich"])
 	$sem_portal["bereich"] = "all";
