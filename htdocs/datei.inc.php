@@ -30,7 +30,7 @@ function createSelectedZip ($file_ids) {
 	
 	//create folder content
 	$in="('".join("','",$file_ids)."')";	
-	echo "SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN $in AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename";
+	$db->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN $in AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename");
 	while ($db->next_record()) {
 		$docs++;
 		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
