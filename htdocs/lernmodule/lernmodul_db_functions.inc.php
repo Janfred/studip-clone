@@ -18,8 +18,8 @@
 * This function searches for learning modules according to the given keyword
 *
 * @access	public        
-* @param		string	keyword
-* @param		integer	where to search
+* @param		string	$key	keyword
+* @param		integer	$area	where to search
 * @return		array		returns array of string or false
 */
 function search_modules($key, $area = 4)
@@ -64,8 +64,8 @@ function search_modules($key, $area = 4)
 * This function returns information about the learning module specified by the given IDs
 *
 * @access	public        
-* @param		integer	ILIAS Inst ID
-* @param		integer	ILIAS learning module ID
+* @param		integer	$co_inst	Ilias Inst ID
+* @param		integer	$co_id	Ilias learning module ID
 * @return		array		returns array of string or false
 */
 function get_module_info($co_inst, $co_id)
@@ -99,8 +99,8 @@ function get_module_info($co_inst, $co_id)
 * This function returns an array of the authors of the learning module specified by the given IDs
 *
 * @access	public        
-* @param		integer	ILIAS Inst ID
-* @param		integer	ILIAS learning-module ID
+* @param		integer	$co_inst	Ilias Inst ID
+* @param		integer	$co_id	Ilias learning-module ID
 * @return		array		returns array of string or false
 */
 function get_module_author($co_inst, $co_id)
@@ -130,7 +130,7 @@ function get_module_author($co_inst, $co_id)
 * This function returns an array of the learning module that belong to the given Stud.IP-user-ID
 *
 * @access	public        
-* @param		string	StudIP User ID
+* @param		string	$studip_id		StudIP User ID
 * @return		array		returns array of string or false
 */
 function get_user_modules($studip_id)
@@ -186,7 +186,7 @@ function get_user_modules($studip_id)
 * This function returns an array of the learning module that belong to the given Stud.IP-Range-ID
 *
 * @access	public        
-* @param		string	Stud IP Seminar-ID
+* @param		string	$seminar_id	StudIP Seminar ID
 * @return		array		returns array of string or false
 */
 function get_seminar_modules($seminar_id)
