@@ -565,6 +565,74 @@ function printcontent ($breite,$write=FALSE,$inhalt,$edit) {
 	echo $print;
 	}
 
+
+/*****************************************************************************
+print_infobox, baut einen Info-Kasten aus folgenden Elementen zusammen: Bild (separat uebergeben), Ueberschriften, Icons, Inhalt (in Array)
+Beispielaufbau f&uuml;r das Array:
+
+$infobox = array	(	
+array  ("kategorie"  => "Information:",
+		"eintrag" => array	(	
+						array	 (	"icon" => "pictures/suchen.gif",
+								"text"  => "Um weitere Veranstaltungen bitte Blabla"
+								),
+						array	 (	"icon" => "pictures/admin.gif",
+								"text"  => "um Verwaltung  Veranstaltungen bitte Blabla"
+								)
+		)
+	),
+array  ("kategorie" => "Aktionen:",
+	       "eintrag" => array	(	
+						array (	"icon" => "pictures/ausruf_small.gif",
+								"text"  => "es sind noch 19 Veranstaltungen vorhanden."
+								)
+		)
+	)
+);
+/*****************************************************************************/
+
+function print_infobox ($picture, $content) {
+
+$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
+			<tr>
+				<td class=\"blank\" width=\"100%\" align=\"right\" colspan=\"2\">
+					<img src=".$picture.">
+				</td>
+			</tr>
+			<tr>
+				<td class=\"angemeldet\" width=\"100%\" colspan=\"2\">
+					<table align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
+for ($i = 0; $i < count($content); $i++) { $print .= "
+						<tr>
+							<td class=\"blank\" width=\"100%\" colspan=\"2\">
+								<font size=\"-1\"><b>".$content[$i]["kategorie"]."</b></font>
+								<br>
+							</td>
+						</tr>";
+	for ($j = 0; $j < count($content[$i]["eintrag"]); $j++) { $print .= "
+						<tr>
+							<td class=\"blank\" width=\"1%\" valign=\"top\">
+								<img src=\"".$content[$i]["eintrag"][$j]["icon"]."\">
+							</td>
+							<td class=\"blank\" width=\"100%\">
+								<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>
+							</td>
+						</tr>";
+	}
+}
+$print .= "
+					</table>
+				</td>
+			</tr>
+		</table>";
+
+echo $print;
+}
+
+
+
+
+
 /**
 * Returns a given text as html tooltip
 *
