@@ -74,7 +74,7 @@ function GetPresetGroups ($view, $veranstaltung_class)
 		}
 	}
 	if ($view == "statusgruppe_sem") {
-		if (isset($tmp_class) AND isset($SEM_STATUS_GROUPS[$veranstaltung_class])) {   // wir sind in einer Veranstaltung die Presets hat
+		if (isset($SEM_STATUS_GROUPS[$veranstaltung_class])) {   // wir sind in einer Veranstaltung die Presets hat
 			$key = $veranstaltung_class;
 		} else {
 			$key = "default";
