@@ -365,7 +365,7 @@ class ExternConfig {
 						$this->config[$element][$attribute] = $global_config->config[$element][$attribute];
 				}
 			}
-			else if ($this->config["name"]) {
+			else if ($this->config[$name]) {
 				foreach ($this->config[$name] as $attribute => $value) {
 					if ($value === "")
 						$this->config[$name][$attribute] = $global_config->config[$element][$attribute];
