@@ -39,6 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
 
 $time = time();
 
+// preview data
 $data[] = array("dokument_id" => 1, "description" => _("Das ist eine Text-Datei."),
 	"filename" => "text_file.txt", "mkdate" => ($time - 100000), "chdate" => ($time - 50000),
 	"filesize" => 263784, "Vorname" => "Julius", "Nachname" => "Rodman");
@@ -70,7 +71,6 @@ $data[] = array("dokument_id" => 10, "description" => _("Ein Bild im PNG-Format.
 	"filename" => "picture_png_file.png", "mkdate" => ($time - 1000000), "chdate" => ($time - 950000),
 	"filesize" => 263784, "Vorname" => "John", "Nachname" => "Greely");
 
-// Titelzeile bauen
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 echo "\n<tr" . $this->config->getAttributes("TableHeadrow", "tr") . ">\n";
 
@@ -89,6 +89,7 @@ reset($rf_download);
 foreach($rf_download as $spalte){
 	if ($visible[$spalte] == "TRUE") {
 		
+		// "zebra-effect" in head-row
 		if ($zebra) {
 			if ($i % 2)
 				$set = $set_2;
@@ -121,6 +122,7 @@ foreach ($data as $db) {
 	
 	preg_match("/^.+\.([a-z1-9_-]+)$/i", $db["filename"], $file_suffix);
 	
+	// choose the icon for the given file format
 	$icon = "";
 	switch ($file_suffix[1]) {
 		case "txt" :
@@ -209,6 +211,7 @@ foreach ($data as $db) {
 	reset($rf_download);
 	foreach($rf_download as $spalte){
 		
+		// "vertical zebra"
 		if ($zebra == "VERTICAL") {
 			if ($j % 2)
 				$set = $set_2;
