@@ -35,6 +35,10 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 	
+//get ID, if a object is open
+if ($SessSemName[1])
+	$range_id = $SessSemName[1];
+
 // Rechtecheck
 	
 $_range_type = get_object_type($range_id);
@@ -44,6 +48,7 @@ if (!($_range_type == "sem" && $perm->have_studip_perm("tutor",$range_id)) &&
 	page_close();
 	die;
 }
+
 
 
 // Beginn Funktionsteil

@@ -50,6 +50,14 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
+
+//single delete (a Veranstaltung is open)
+if ($SessSemName[1]) {
+	$archiv_sem[]="_id_".$SessSemName[1];
+	$archiv_sem[]="on";
+}
+
+
 //Handlings....
 
 //Kill current list and stuff

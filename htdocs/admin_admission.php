@@ -120,8 +120,8 @@ function get_snapshot() {
 }
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)) {
-	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Institut_id, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$seminar_id'");
+if (($SessSemName[1]) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)) {
+	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Institut_id, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$SessSemName[1];'");
 	$db->next_record();
 	$admin_admission_data='';	
 	$admin_admission_data["metadata_dates"]=unserialize($db->f("metadata_dates"));
@@ -139,9 +139,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["start_time"]=$db->f("start_time");	
 	$admin_admission_data["read_level"]=$db->f("Lesezugriff");	
 	$admin_admission_data["write_level"]=$db->f("Schreibzugriff");	
-	$admin_admission_data["sem_id"]=$seminar_id;
+	$admin_admission_data["sem_id"]=$SessSemName[1];
 	if (!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] =-1;
-	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id'");
+	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$SessSemName[1]'");
 	while ($db->next_record()) {
 		if ($db->f("studiengang_id") == "all")
 			$admin_admission_data["all_ratio"]	=$db->f("quota");

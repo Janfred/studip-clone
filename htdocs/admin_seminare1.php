@@ -111,6 +111,10 @@ $cssSw = new cssClassSwitcher;
 $user_id = $auth->auth["uid"];
 $msg = "";
 
+//get ID, if a Veranstaltung is open
+if ($SessSemName[1])
+	$s_id=$SessSemName[1];
+
 $st_search = new StudipSemTreeSearch($s_id,"details");
 
 
