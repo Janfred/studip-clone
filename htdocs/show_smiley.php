@@ -58,7 +58,7 @@ if ($sm->error) { // old code is used
 	<div align="center"><b><?=_("Aktuelle Smiley Anzahl: ") . count($i_smile)?></b></div>
 	<table align="center"><tr><td valign="top" align="center"><table><tr>
 	<?
-	$table_head = '<th>' . _('Bild') . '</th><th>' . _('Schreibweise') . '</th><th>' . _('Kürzel') . '</th></tr>';
+	$table_head = '<th>' . _("Bild") . '</th><th>' . _("Schreibweise") . '</th><th>' . _("Kürzel") . '</th></tr>';
 	echo $table_head;
 	ob_start();
 	$tabspalten = 1;
@@ -83,7 +83,7 @@ if ($sm->error) { // old code is used
 
 } else { // new class is used
 	$info = $sm->get_info();
-	echo '<html><head><title>',_('Smiley-&Uuml;bersicht'),' (',$info['count_all'],')</title>', "\n";
+	echo '<html><head><title>',_("Smiley-&Uuml;bersicht"),' (',$info['count_all'],')</title>', "\n";
 	echo '<link rel="stylesheet" href="style.css" type="text/css">', "\n";
 	echo '</head>', "\n";
 	echo '<body>', "\n";
@@ -101,12 +101,12 @@ if ($sm->error) { // old code is used
 	$sm->show_favorite();
 
 	echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0" >', "\n";
-	echo '<tr><td class="topic"><b>&nbsp;' . _('Smiley-&Uuml;bersicht') . '</b></td></tr>', "\n";
+	echo '<tr><td class="topic"><b>&nbsp;' . _("Smiley-&Uuml;bersicht") . '</b></td></tr>', "\n";
 	echo '<tr><td class="blank" valign="top" align="center">';
 
 
 
-	$txt = sprintf(_('%s Smileys vorhanden - Auswahl:'),$info['count_all']);
+	$txt = sprintf(_("%s Smileys vorhanden - Auswahl:"),$info['count_all']);
 	$sm->user_menue($txt);
 	echo '</td></tr><tr><td class="blank" valign="top" align="center">', "\n";
 	$sm->user_smiley_list();

@@ -108,7 +108,7 @@ while ( is_array($HTTP_POST_VARS)
 		$Modules->writeDefaultStatus($i_id);
 		
 		// Create default folder and discussion
-		CreateTopic(_('Allgemeine Diskussionen'), " ", _('Hier ist Raum für allgemeine Diskussionen'), 0, 0, $i_id, 0);
+		CreateTopic(_("Allgemeine Diskussionen"), " ", _("Hier ist Raum für allgemeine Diskussionen"), 0, 0, $i_id, 0);
 		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$i_id."', name='" . _("Allgemeiner Dateiordner") . "', description='" . _("Ablage für allgemeine Ordner und Dokumente der Einrichtung") . "', mkdate='".time()."', chdate='".time()."'");
  
 		$msg="msg§<b>" . sprintf(_("Die Einrichtung \"%s\" wurde angelegt."), htmlReady(stripslashes($Name))) . "</b>";

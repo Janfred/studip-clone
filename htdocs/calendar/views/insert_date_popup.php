@@ -48,7 +48,7 @@ if (isset($GLOBALS['TIME_PRESETS']) && is_array($GLOBALS['TIME_PRESETS']) && cou
 } else {
 	include_once($ABSOLUTE_PATH_STUDIP . '/msg.inc.php');
 	$zz = array();
-	$preset_error = _('Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben.');
+	$preset_error = _("Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben.");
 }
 
 // Array für javascript aufbereiten
@@ -144,7 +144,7 @@ switch ($element_switch){  // Auswahl der Zielparameter
 
 }
 
-$title = _('Kalender');
+$title = _("Kalender");
 $resize = '';
 if ($zeiten && !$kalender) {  // popup Fenster verkleinern wenn kein Kalender
 	$resize = 'window.resizeTo('.(($auth->auth["xres"] > 650)? 780 : 600).',160);'. "\n";
@@ -185,7 +185,7 @@ function insert_date (m, d, y) {
    if (document.forms['TimeForm']) {
       insert_time();
    } else {
-      window.close(); // bei this.close() stürzt Konqueror ab ...
+      window.close(); 
    }
 }
 -->
@@ -234,12 +234,12 @@ if ($mcount > 3) {
 					$check = '';
 				}
 				$txtzeit =  $zz[$z][0].':'.$zz[$z][1].'&nbsp;-&nbsp;'.$zz[$z][2].':'.$zz[$z][3];
-				$txtzeitc =  $zz[$z][0].':'.$zz[$z][1].' - '.$zz[$z][2].':'.$zz[$z][3] .' ' . _('Uhr') . ' ' . _('eintragen');
+				$txtzeitc =  $zz[$z][0].':'.$zz[$z][1].' - '.$zz[$z][2].':'.$zz[$z][3] .' ' . _("Uhr") . ' ' . _("eintragen");
 				echo '<td class="', $selx, '" ', tooltip($txtzeitc), '><input type="radio" name="timei" value="',$z,'"',$check,'>', $txtzeit, '</td>', "\n";
 			}
 			if ($sel == 0 && $ss != '' && $sm != '' && $es != '' && $em != '') {
 				$txtzeit =  $ss.':'.$sm.'&nbsp;-&nbsp;'.$es.':'.$em;
-				$txtzeitc =  _('zurücksetzen auf') .' '. $ss.':'.$sm.' - '.$es.':'.$em .' ' . _('Uhr');
+				$txtzeitc =  _("zurücksetzen auf") .' '. $ss.':'.$sm.' - '.$es.':'.$em .' ' . _("Uhr");
 				echo '<td class="tddaterowpx" ', tooltip($txtzeitc), '><input type="radio" name="timei" value="',$z,'" checked>', $txtzeit, '&nbsp;</td>', "\n";
 			}
 			echo '</tr></table></form>';
@@ -253,15 +253,15 @@ if ($mcount > 3) {
 		echo '<tr>';
 		$zeiten_buttons = '<a href="javascript:insert_time();">'. makeButton('uebernehmen', 'img') . '</a> &nbsp; <a href="javascript:window.close();">' . makeButton('abbrechen', 'img').'</a>';
 		if ($kalender) {
-			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _('Monate zurück')),' border="0"></a>';
-			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_small.gif"', tooltip($mcounth .' ' . _('Monate zurück')),' border="0"></a></td>', "\n";
+			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _("Monate zurück")),' border="0"></a>';
+			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_small.gif"', tooltip($mcounth .' ' . _("Monate zurück")),' border="0"></a></td>', "\n";
 			if ($mcounth - 2 > 0) {
 				echo '<td class="blank" colspan="' , ($mcounth - 2) , '" align=center>';
 				if ($zeiten) echo $zeiten_buttons;
 				echo '&nbsp;</td>';
 			}
-			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcounth,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_small.gif"', tooltip($mcounth . ' ' . _('Monate vor')),' border="0"></a>&nbsp;', "\n";
-			echo '<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcount,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_double_small.gif"', tooltip($mcount .' ' . _('Monate vor')),' border="0"></a>&nbsp;</td>';
+			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcounth,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_small.gif"', tooltip($mcounth . ' ' . _("Monate vor")),' border="0"></a>&nbsp;', "\n";
+			echo '<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcount,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_double_small.gif"', tooltip($mcount .' ' . _("Monate vor")),' border="0"></a>&nbsp;</td>';
 		} elseif ($zeiten) {
 			echo '<td class="blank" colspan="',$mcounth,'" align="center">', $zeiten_buttons, "</td>\n";
 		}

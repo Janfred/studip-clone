@@ -258,7 +258,7 @@ if ($term_metadata["art"]==0)
 			if ((($term_metadata["turnus_data"][$i]["start_stunde"]) && (!$term_metadata["turnus_data"][$i]["end_stunde"])) || ((!$term_metadata["turnus_data"][$i]["start_stunde"]) && ($term_metadata["end_stunde"])))
 					{
 					if (!$just_informed)
-						$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Veranstaltungstermine aus!")."§";	
+						$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Veranstaltungstermine aus!")."§";
 					$just_informed=TRUE;
 					}
 			if ((($term_metadata["turnus_data"][$i]["start_stunde"]>23) || ($term_metadata["turnus_data"][$i]["start_stunde"]<0))  ||  (($term_metadata["turnus_data"][$i]["start_minute"]>59) || ($term_metadata["turnus_data"][$i]["start_minute"]<0))  ||  (($term_metadata["turnus_data"][$i]["end_stunde"]>23) ||($term_metadata["turnus_data"][$i]["end_stunde"]<0))  || (($term_metadata["turnus_data"][$i]["end_minute"]>59) || ($term_metadata["turnus_data"][$i]["end_minute"]<0)))
@@ -658,14 +658,14 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									echo '<option ', (($kk == $term_metadata['turnus_data'][$i]['day'])? 'selected ':'');
 									echo 'value="',$kk,'">';
 									switch ($kk){
-										case 2: echo _('Dienstag'); break;
-										case 3: echo _('Mittwoch'); break;
-										case 4: echo _('Donnerstag'); break;
-										case 5: echo _('Freitag'); break;
-										case 6: echo _('Samstag'); break;
-										case 7: echo _('Sonntag'); break;
+										case 2: echo _("Dienstag"); break;
+										case 3: echo _("Mittwoch"); break;
+										case 4: echo _("Donnerstag"); break;
+										case 5: echo _("Freitag"); break;
+										case 6: echo _("Samstag"); break;
+										case 7: echo _("Sonntag"); break;
 										case 1:
-										default: echo _('Montag');
+										default: echo _("Montag");
 									}
 									echo '</option>';
 								}
@@ -687,15 +687,15 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									$em = '';
 								}
 								echo '&nbsp; <input type="text" name="turnus_start_stunde[',$i,']" size=2 maxlength=2 value="',  $ss, '"> :';
-								echo '<input type="text" name="turnus_start_minute[',$i,']" size=2 maxlength=2 value="', $sm, '">', _('Uhr bis');
+								echo '<input type="text" name="turnus_start_minute[',$i,']" size=2 maxlength=2 value="', $sm, '">', _("Uhr bis");
 								echo '&nbsp; <input type="text" name="turnus_end_stunde[',$i,']" size=2 maxlength=2 value="', $es, '"> : ';
-								echo '<input type="text" name="turnus_end_minute[',$i,']" size=2 maxlength=2 value="', $em, '">', _('Uhr'), "\n";
+								echo '<input type="text" name="turnus_end_minute[',$i,']" size=2 maxlength=2 value="', $em, '">', _("Uhr"), "\n";
 
 								if ($term_metadata["turnus_count"]>1)  {
 									echo '&nbsp; <a href="', $PHP_SELF, '?delete_turnus_field=', $i+1,'"><img border=0 src="./pictures/trash.gif" ', tooltip(_("Dieses Feld aus der Auswahl löschen")), '></a>', "\n";
 								}
-								echo Termin_Eingabe_javascript(3,$i,$ss,$sm,$es,$em);
-								echo '<br />&nbsp;', _('Raum:'), '&nbsp; ';
+								echo Termin_Eingabe_javascript(3,$i,0,$ss,$sm,$es,$em);
+								echo '<br />&nbsp;', _("Raum:"), '&nbsp; ';
 
 								if ($RESOURCES_ENABLE) {
 									$resList->reset();

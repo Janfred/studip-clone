@@ -51,7 +51,7 @@ class smiley {
 		$this->my_smiley = array();
 		$this->user_id = $auth->auth['uid'];
 		if (!$GLOBALS['SMILEYADMIN_ENABLE']) {
-			$this->msg .=  '§error§' . _('Smiley-Modul abgeschaltet.');
+			$this->msg .=  '§error§' . _("Smiley-Modul abgeschaltet.");
 			$this->error = true;
 		} else {
 			$this->SMILEY_COUNTER = (isset($GLOBALS['SMILEY_COUNTER']))? $GLOBALS['SMILEY_COUNTER']:false;
@@ -93,7 +93,7 @@ EOT2;
 				// test again!!
 				$dbsmile->query('SHOW TABLES FROM '. $GLOBALS['DB_STUDIP_DATABASE'] .' LIKE "smiley";');
 				if (!$dbsmile->next_record()){ //error, no right to create table
-					$this->msg .= 'error§'. _('Fehler: Studip kann die neue Smiley-Tabelle nicht anlegen, bitte wenden Sie sich an Ihren Systembetreuer!'). '§';
+					$this->msg .= 'error§'. _("Fehler: Studip kann die neue Smiley-Tabelle nicht anlegen, bitte wenden Sie sich an Ihren Systembetreuer!"). '§';
 					$this->msg .= 'info§'.'<pre>'.$sql_create."\n\n".$sql_alter.'</pre>§';
 					$this->error = true;
 				} else { // ALTER TABLE user_info
@@ -101,7 +101,7 @@ EOT2;
 					if (!$this->db->next_record()) {
 						$this->db->query($sql_alter);
 					}
-					$this->msg .= 'msg§'. _('Smiley-Tabelle angelegt, Tabelle "user_info" geändert.'). '§';
+					$this->msg .= 'msg§'. _("Smiley-Tabelle angelegt, Tabelle \"user_info\" geändert."). '§';
 					$this->error = false;
 					// fill table smiley
 					$this->update_smiley_table();
@@ -204,7 +204,7 @@ EOT2;
 				$aenderungen++;
 			}
 		}
-		$this->msg .= 'msg§'. sprintf(_('%d Zählerstände aktualisiert'), $aenderungen). '§';
+		$this->msg .= 'msg§'. sprintf(_("%d Zählerstände aktualisiert"), $aenderungen). '§';
 		return true;
 	}
 
@@ -273,14 +273,14 @@ EOT2;
 		if ($sql_smile_del != '') {
 			$dbsmile->query('DELETE FROM smiley WHERE smiley_id IN (' . $sql_smile_del .')');
 		}
-		$this->msg .= 'msg§'. sprintf(_('%d Smileys aktualisiert'), $c_update). ' / '. sprintf(_('%d Smileys eingefügt'), $c_insert). ' / '. sprintf(_('%d Smileys gelöscht'), $c_delete). '§';
+		$this->msg .= 'msg§'. sprintf(_("%d Smileys aktualisiert"), $c_update). ' / '. sprintf(_("%d Smileys eingefügt"), $c_insert). ' / '. sprintf(_("%d Smileys gelöscht"), $c_delete). '§';
 	}
 
 
 	function imaging() {
 		if ($this->error) return false;
 		if (!isset($GLOBALS['imgfile_name']) || $GLOBALS['imgfile_name'] == '') { //keine Datei ausgewählt!
-			$this->msg .= 'error§' . _('Sie haben keine Datei zum Hochladen ausgewählt!'). '§';
+			$this->msg .= 'error§' . _("Sie haben keine Datei zum Hochladen ausgewählt!"). '§';
 			return false;
 		} else {
 			$img_name = $GLOBALS['imgfile_name'];
@@ -295,7 +295,7 @@ EOT2;
 		}
 		//passende Endung ?
 		if ($ext != 'gif' ) {
-			$this->msg .= 'error§' . sprintf(_('Der Dateityp der Bilddatei ist falsch (%s).<br>Es ist nur die Dateiendung .gif erlaubt!'), $ext). '§';
+			$this->msg .= 'error§' . sprintf(_("Der Dateityp der Bilddatei ist falsch (%s).<br>Es ist nur die Dateiendung .gif erlaubt!"), $ext). '§';
 			$this->error = true;
 			return false;
 		}
@@ -309,20 +309,20 @@ EOT2;
 		if ($this->db->next_record()){
 			$smiley_id = $this->db->f('smiley_id');
 			if (!isset($_POST['replace'])){
-				$this->msg .= 'error§' . sprintf(_('Es ist bereits eine Bildatei mit dem Namen "%s" vorhanden.'),$img_name). '§';
+				$this->msg .= 'error§' . sprintf(_("Es ist bereits eine Bildatei mit dem Namen \"%s\" vorhanden."),$img_name). '§';
 				return false;
 			}
 		}
 		if(!@copy($GLOBALS['imgfile'],$newfile)) {
-			$this->msg .= 'error§' . _('Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!'). '§';
+			$this->msg .= 'error§' . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!"). '§';
 			$this->error = true;
 			return false;
 		} elseif($smiley_id) {
-			$this->msg .= 'msg§' .sprintf( _('Die Bilddatei "%s" wurde erfolgreich ersetzt.'), $img_name). '§';
+			$this->msg .= 'msg§' .sprintf( _("Die Bilddatei \"%s\" wurde erfolgreich ersetzt."), $img_name). '§';
 			$img = getImageSize($newfile);
 			$sql_smile = 'UPDATE smiley SET smiley_name="'.$smiley_name.'", smiley_width='.$img[0].' , smiley_height='.$img[1].' WHERE smiley_id = '.$smiley_id;
 		} else {
-			$this->msg .= 'msg§' .sprintf( _('Die Bilddatei "%s" wurde erfolgreich hochgeladen.'), $img_name). '§';
+			$this->msg .= 'msg§' .sprintf( _("Die Bilddatei \"%s\" wurde erfolgreich hochgeladen."), $img_name). '§';
 			$img = getImageSize($newfile);
 			$sql_smile = 'INSERT INTO smiley (smiley_name, smiley_width, smiley_height, short_name, smiley_counter, short_counter) VALUES ';
 			$sql_smile .= '("'.$smiley_name.'", '.$img[0].', '. $img[1].', "", 0, 0)';
@@ -338,10 +338,10 @@ EOT2;
 		echo '<input type="hidden" name="cmd" value="upload">';
 		echo '<input type="hidden" name="fc" value="',$this->fc,'">';
 		$table=new ZebraTable(array('bgcolor'=>'#eeeeee', 'align'=>'center', 'padding'=>2));
-		echo $table->headerRow(array('<b>' . _('Neues Smiley hochladen') . '</b>',''));
-		echo $table->row(array(_('existierende Datei überschreiben:'),' <input type="checkbox" name="replace" value="1">'));
-		echo $table->row(array(_('1. Bilddatei auswählen:'),' <input name="imgfile" type="file" cols=45>'));
-		echo $table->row(array(_('2. Bilddatei hochladen:'),' <input type="IMAGE" ' . makeButton('absenden', 'src') . ' border=0 value="' . _('absenden') . '">'));
+		echo $table->headerRow(array('<b>' . _("Neues Smiley hochladen") . '</b>',''));
+		echo $table->row(array(_("existierende Datei überschreiben:"),' <input type="checkbox" name="replace" value="1">'));
+		echo $table->row(array(_("1. Bilddatei auswählen:"),' <input name="imgfile" type="file" cols=45>'));
+		echo $table->row(array(_("2. Bilddatei hochladen:"),' <input type="IMAGE" ' . makeButton('absenden', 'src') . ' border=0 value="absenden">'));
 		echo $table->close(), '&nbsp;<br>';
 		echo '</form>';
 
@@ -370,10 +370,10 @@ EOT2;
 		$table=new ZebraTable(array('bgcolor'=>'#eeeeee', 'align'=>'center', 'padding'=>'2'));
 
 		echo $table->open();
-		echo $table->openHeaderRow(), $table->cell('<b>' . _('Auswahl') . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
+		echo $table->openHeaderRow(), $table->cell('<b>' . _("Auswahl") . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
 		echo $table->openHeaderRow();
-		echo $table->cell('<b>' . _('1. Zeichen') . '</b>', array('align'=>'center'));
-		echo $table->cell( _('Anzahl') , array('align'=>'right'));
+		echo $table->cell('<b>' . _("1. Zeichen") . '</b>', array('align'=>'center'));
+		echo $table->cell( _("Anzahl") , array('align'=>'right'));
 		echo $table->closeRow();
 
 		$this->db->query('SELECT COUNT(smiley_name) AS c, LEFT(smiley_name, 1) AS firstchar FROM smiley GROUP BY LEFT(smiley_name,1)');
@@ -388,26 +388,26 @@ EOT2;
 		echo '</td><td valign="top">';
 
 		echo $table->open();
-		echo $table->openHeaderRow(), $table->cell('<b>' . _('Auswahl') . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=all">'._('alle').'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'all')? $style:$style2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=top20">'._('Top 20').'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'top20')? $style:$style2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=used">'._('benutzte').'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'used')? $style:$style2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=none">'._('nicht benutzte').'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'none')? $style:$style2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=short">'._('nur mit Kürzel').'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'short')? $style:$style2)), $table->closeRow();
+		echo $table->openHeaderRow(), $table->cell('<b>' . _("Auswahl") . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=all">'._("alle").'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'all')? $style:$style2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=top20">'._("Top 20").'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'top20')? $style:$style2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=used">'._("benutzte").'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'used')? $style:$style2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=none">'._("nicht benutzte").'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'none')? $style:$style2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?fc=short">'._("nur mit Kürzel").'</a>', array('align'=>'center', 'colspan'=>2, 'class'=>($this->fc == 'short')? $style:$style2)), $table->closeRow();
 		echo '<tr><td colspan="2" class="blank">&nbsp;</td></tr>', "\n";
 
-		echo $table->openHeaderRow(), $table->cell('<b>' . _('Aktionen') . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?cmd=updatetable&fc='.$this->fc.'">'._('Tabelle aktualisieren').'</a>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?cmd=countsmiley&fc='.$this->fc.'">'._('Smileys zählen').'</a>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
-		echo $table->openRow(), $table->cell('<a href="show_smiley.php" target="_smileys">'._('Smiley-Übersicht öffnen').'</a>', array('align'=>'center', 'colspan'=>2)),  $table->closeRow();
+		echo $table->openHeaderRow(), $table->cell('<b>' . _("Aktionen") . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?cmd=updatetable&fc='.$this->fc.'">'._("Tabelle aktualisieren").'</a>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="'.$GLOBALS['PHP_SELF'].'?cmd=countsmiley&fc='.$this->fc.'">'._("Smileys zählen").'</a>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
+		echo $table->openRow(), $table->cell('<a href="show_smiley.php" target="_smileys">'._("Smiley-Übersicht öffnen").'</a>', array('align'=>'center', 'colspan'=>2)),  $table->closeRow();
 		echo '<tr><td colspan="2" class="blank">&nbsp;</td></tr>', "\n";
 
 		$info = $this->get_info();
-		echo $table->openHeaderRow(), $table->cell('<b>' . _('Smileys') . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
-		echo $table->openRow(), $table->cell(_('vorhanden:'), array('align'=>'left')), $table->cell($info['count_all'], array('align'=>'right')), $table->closeRow();
-		echo $table->openRow(), $table->cell(_('davon benutzt:'), array('align'=>'left')), $table->cell($info['count_used'], array('align'=>'right')), $table->closeRow();
-		echo $table->openRow(), $table->cell(_('insgesamt benutzt:'), array('align'=>'left')), $table->cell($info['sum'], array('align'=>'right')), $table->closeRow();
-		echo $table->openRow(), $table->cell(_('letzte Änderung:'), array('align'=>'left', 'colspan'=>2)), $table->closeRow();
+		echo $table->openHeaderRow(), $table->cell('<b>' . _("Smileys") . '</b>', array('align'=>'center', 'colspan'=>2)), $table->closeRow();
+		echo $table->openRow(), $table->cell(_("vorhanden:"), array('align'=>'left')), $table->cell($info['count_all'], array('align'=>'right')), $table->closeRow();
+		echo $table->openRow(), $table->cell(_("davon benutzt:"), array('align'=>'left')), $table->cell($info['count_used'], array('align'=>'right')), $table->closeRow();
+		echo $table->openRow(), $table->cell(_("insgesamt benutzt:"), array('align'=>'left')), $table->cell($info['sum'], array('align'=>'right')), $table->closeRow();
+		echo $table->openRow(), $table->cell(_("letzte Änderung:"), array('align'=>'left', 'colspan'=>2)), $table->closeRow();
 		echo $table->openRow(), $table->cell(strftime('%d.%m.%Y %H:%M:%S',$info['last_change']), array('align'=>'center', 'colspan'=>2)), $table->closeRow();
 		echo $table->close();
 
@@ -422,13 +422,13 @@ EOT2;
 		$table = new ZebraTable(array('bgcolor'=>'#eeeeee', 'align'=>'center', 'padding'=>'2'));
 		echo $table->open();
 		echo $table->openHeaderRow();
-		echo $table->cell('<b>' . _('Nr.') . '</b>', array('align'=>'center'));
-		echo $table->cell('<b>' . _('Smiley') . '</b>', array('align'=>'center'));
-		echo $table->cell('<b>' . _('Smileyname') . '</b>', array('align'=>'center'));
+		echo $table->cell('<b>' . _("Nr.") . '</b>', array('align'=>'center'));
+		echo $table->cell('<b>' . _("Smiley") . '</b>', array('align'=>'center'));
+		echo $table->cell('<b>' . _("Smileyname") . '</b>', array('align'=>'center'));
 		echo $table->cell('&nbsp;&nbsp;&Sigma;&nbsp;&nbsp;', array('align'=>'center'));
-		echo $table->cell('<b>' . _('Kürzel') . '</b>', array('align'=>'center'));
+		echo $table->cell('<b>' . _("Kürzel") . '</b>', array('align'=>'center'));
 		echo $table->cell('&nbsp;&nbsp;&Sigma;&nbsp;&nbsp;', array('align'=>'center'));
-		echo $table->cell('<b>' . _('Löschen') . '</b>', array('align'=>'center'));
+		echo $table->cell('<b>' . _("Löschen") . '</b>', array('align'=>'center'));
 		echo $table->closeRow();
 		$this->db->query('SELECT * FROM smiley '.$this->where);
 		$count=0;
@@ -444,12 +444,12 @@ EOT2;
 			//echo $table->cell('<input readonly name="short_'.$urlname.'.gif" value="'.$db->f('short').'" size="5">');
 			echo $table->cell($this->db->f('short_name'), array('align'=>'center'));
 			echo $table->cell((($this->db->f('short_name'))?  $this->db->f('short_counter') : '-'), array('align'=>'center'));
-			echo $table->cell('&nbsp;<a href="'.$GLOBALS['PHP_SELF'].'?cmd=delete&img='.$this->db->f('smiley_id').(($this->fc != '')?'&fc='.$this->fc:'').'" alt="delete" title="'.sprintf(_('Smiley %s löschen'),'&quot;'.$smile_name.'&quot;').'"><img src="pictures/trash.gif" border="0" width="12" height="17"></a>&nbsp;', array('align'=>'center'));
+			echo $table->cell('&nbsp;<a href="'.$GLOBALS['PHP_SELF'].'?cmd=delete&img='.$this->db->f('smiley_id').(($this->fc != '')?'&fc='.$this->fc:'').'" alt="delete" title="'.sprintf(_("Smiley %s löschen"),'&quot;'.$smile_name.'&quot;').'"><img src="pictures/trash.gif" border="0" width="12" height="17"></a>&nbsp;', array('align'=>'center'));
 			echo $table->closeRow();
 		}
 		echo $table->openRow();
 		if ($count == 0) {
-			print $table->cell('<h4>' . _('Keine Smileys vorhanden.') . '</h4>', array('colspan'=>7, 'class'=>'blank'));
+			print $table->cell('<h4>' . _("Keine Smileys vorhanden.") . '</h4>', array('colspan'=>7, 'class'=>'blank'));
 		} else {
 			echo $table->cell('<input type=image '.makeButton('absenden','src').'>', array('colspan'=>7, 'align'=>'center'));
 		}
@@ -476,15 +476,15 @@ EOT2;
 		}
 
 		echo '<table align="center"><tr><td class="smiley_th">',$txt,'</td>';
-		echo '<td align="center"',(($this->fc == 'all')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=all">',_('alle'),'</a>&nbsp;</td>',"\n";
+		echo '<td align="center"',(($this->fc == 'all')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=all">',_("alle"),'</a>&nbsp;</td>',"\n";
 		$this->db->query('SELECT LEFT(smiley_name, 1) AS fc FROM smiley GROUP BY LEFT(smiley_name,1)');
 		while($this->db->next_record()){
 			echo '<td align="center"',(($this->fc == $this->db->f('fc'))? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=', $this->db->f('fc'), '">', $this->db->f('fc'),'</a>&nbsp;</td>',"\n";
 		}
-		echo '<td align="center"',(($this->fc == 'short')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=short">',_('Kürzel'),'</a>&nbsp;</td>',"\n";
-		if($this->SMILEY_COUNTER) echo '<td align="center"',(($this->fc == 'top20')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=top20">',_('Top 20'),'</a>&nbsp;</td>',"\n";
+		echo '<td align="center"',(($this->fc == 'short')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=short">',_("Kürzel"),'</a>&nbsp;</td>',"\n";
+		if($this->SMILEY_COUNTER) echo '<td align="center"',(($this->fc == 'top20')? $style:''),'>&nbsp;<a href="', $GLOBALS['PHP_SELF'], '?fc=top20">',_("Top 20"),'</a>&nbsp;</td>',"\n";
 		if ($GLOBALS['auth']->auth['jscript'])
-			echo '<td class="smiley_th">&nbsp;<a href="javascript:void(0);" onclick="window.close();">Fenster schließen</a>&nbsp;</td>';
+			echo '<td class="smiley_th">&nbsp;<a href="javascript:void(0);" onclick="window.close();">' , _("Fenster schließen"),'</a>&nbsp;</td>';
 		echo '</tr></table>';
 	}
 
@@ -493,8 +493,8 @@ EOT2;
 
 		echo '<table align="center" width="100%"><tr><td valign="top" align="center">';
 		$tabstart = '<table cellspacing="2" cellpadding="2" class="blank" bgcolor="#94a6bc">'. "\n";
-		$tabstart .= '<tr><td class="smiley_th">' .  _('Bild') . '</td><td class="smiley_th">' .  _('Schreibweise') . '</td><td class="smiley_th">' . _('Kürzel') . '</td>';
-		if($this->SMILEY_COUNTER) $tabstart .= '<td class="smiley_th">' .  _(' &Sigma; ') . '</td>';
+		$tabstart .= '<tr><td class="smiley_th">' .  _("Bild") . '</td><td class="smiley_th">' .  _("Schreibweise") . '</td><td class="smiley_th">' . _("Kürzel") . '</td>';
+		if($this->SMILEY_COUNTER) $tabstart .= '<td class="smiley_th"> &Sigma; </td>';
 		$tabstart .= "</tr>\n";
 		echo $tabstart;
 		$this->db->query('SELECT count(*) AS c FROM smiley '.$this->where);
@@ -519,7 +519,7 @@ EOT2;
 			echo '<td align="center" class="blank">';
 			if ($this->user_id != 'nobody') {
 				echo '<a href="',$GLOBALS['PHP_SELF'],'?cmd=addfav&fc=',$this->fc,'&img=',$this->db->f('smiley_id'),'">';
-				$tooltiptxt = sprintf(_('%s zu meinen Favoriten hinzufügen'),$smile_name);
+				$tooltiptxt = sprintf(_("%s zu meinen Favoriten hinzufügen"),$smile_name);
 			} else {
 				$tooltiptxt = $smile_name;
 			}
@@ -531,7 +531,7 @@ EOT2;
 			echo "</tr>\n";
 		}
 		if (!$count) {
-			print '<tr><td align="center" colspan="3"><h4>' . _('Keine Smileys vorhanden.') . '</h4></td></tr>';
+			print '<tr><td align="center" colspan="3"><h4>' . _("Keine Smileys vorhanden.") . '</h4></td></tr>';
 		}
 		echo '</table>', "\n";
 		echo '</td></tr></table>', "\n";
@@ -550,14 +550,14 @@ EOT2;
 					$this->db->query('SELECT COUNT(smiley_id) AS c FROM smiley WHERE smiley_name LIKE "'.urldecode($val).'"');
 					$this->db->next_record();
 					if ($this->db->f('c') > 0) {
-						$this->msg .= 'error§' . sprintf( _('Es existiert bereits eine Datei mit dem Namen "%s".'),  urldecode($val). '.gif'). '§';
+						$this->msg .= 'error§' . sprintf( _("Es existiert bereits eine Datei mit dem Namen \"%s\"."),  urldecode($val). '.gif'). '§';
 					} else {
 						if ( rename($path.urldecode($matches[2]).'.gif', $path.urldecode($val).'.gif')) {
 							$sql_smile = 'UPDATE smiley SET smiley_name="'.urldecode($val).'" WHERE smiley_name = "'.urldecode($matches[2]).'"';
 							$this->db->query($sql_smile);
 							$count++;
 						} else {
-							$this->msg .= 'error§' . sprintf( _('Die Datei "%s" konnte nicht umbenannt werden.'),  urldecode($matches[2]).'.gif'). '§';
+							$this->msg .= 'error§' . sprintf( _("Die Datei \"%s\" konnte nicht umbenannt werden."),  urldecode($matches[2]).'.gif'). '§';
 						}
 					}
 				}
@@ -565,9 +565,9 @@ EOT2;
 		}
 		if ($count > 0) {
 			if ($count == 1) {
-				$this->msg .= 'msg§'._('Es wurde 1 Smiley umbenannt.'). '§';
+				$this->msg .= 'msg§'._("Es wurde 1 Smiley umbenannt."). '§';
 			} else {
-				$this->msg .= 'msg§'.sprintf(_('Es wurden %d Smileys umbenannt.'), $count). '§';
+				$this->msg .= 'msg§'.sprintf(_("Es wurden %d Smileys umbenannt."), $count). '§';
 			}
 		}
 	}
@@ -581,11 +581,11 @@ EOT2;
 			$file = $this->db->f('smiley_name') . '.gif';
 			if (unlink($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['SMILE_PATH'].'/'.$file)) {
 				$this->db->query('DELETE FROM smiley WHERE smiley_id = ' . $img);
-				$this->msg .= 'msg§' .sprintf( _('Smiley "%s" erfolgreich gelöscht.'),$file) . '§';
+				$this->msg .= 'msg§' .sprintf( _("Smiley \"%s\" erfolgreich gelöscht."),$file) . '§';
 				return true;
 			}
 		}
-		$this->msg .= 'error§'. sprintf(_('Fehler: Smiley "%s" konnte nicht gelöscht werden.'),$file). '§';
+		$this->msg .= 'error§'. sprintf(_("Fehler: Smiley \"%s\" konnte nicht gelöscht werden."),$file). '§';
 		return false;
 	}
 
@@ -643,20 +643,20 @@ EOT2;
 				$i = ($c <= 10)? 0:1;
 				$zeile[$i][1] .= '<td class="smiley_th">'.$c++.'</td>';
 				$zeile[$i][2] .= '<td class="blank"><a href="'.$GLOBALS['PHP_SELF'].'?cmd=delfav&fc='.$this->fc.'&img='.$value['id'].'">';
-				$zeile[$i][2] .= '<img src="' . $GLOBALS['SMILE_PATH'] . '/' . $smile . '.gif" ' . tooltip(sprintf(_('%s  entfernen'),$smile)) . ' width="'. $value['width']. '" height="'. $value['height']. '" border="0"></a></td>'."\n";
+				$zeile[$i][2] .= '<img src="' . $GLOBALS['SMILE_PATH'] . '/' . $smile . '.gif" ' . tooltip(sprintf(_("%s  entfernen"),$smile)) . ' width="'. $value['width']. '" height="'. $value['height']. '" border="0"></a></td>'."\n";
 				$zeile[$i][3] .= '<td class="blank">&nbsp;:'.$smile.':&nbsp;</td>'."\n";
 			}
 			echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0" >', "\n";
-			echo '<tr><td class="topic"><b>&nbsp;' . _('meine Smiley-Favoriten') . '</b></td></tr>', "\n";
-			echo '<tr><td class="blank"><blockquote>&nbsp;<br>' , _('Klicken Sie auf ein Smiley um es zu Ihren Favoriten hinzuzufügen. Wenn Sie auf einen Favoriten klicken, wird er wieder entfernt.') ,'<br>',_('Sie können maximal 20 Smileys aussuchen.'), '<br>&nbsp;</blockquote></td></tr>', "\n";
+			echo '<tr><td class="topic"><b>&nbsp;' . _("meine Smiley-Favoriten") . '</b></td></tr>', "\n";
+			echo '<tr><td class="blank"><blockquote>&nbsp;<br>' , _("Klicken Sie auf ein Smiley um es zu Ihren Favoriten hinzuzufügen. Wenn Sie auf einen Favoriten klicken, wird er wieder entfernt.") ,'<br>',_("Sie können maximal 20 Smileys aussuchen."), '<br>&nbsp;</blockquote></td></tr>', "\n";
 			//echo '</table>', "\n";
 			echo '<tr><td class="blank">';
 			echo '<table align=center><tr><td align=left>', "\n";
 			for($i = 0; $i <= count($zeile); $i++){
 				if ($zeile[$i][1]){
-					echo '<table bgcolor="#94a6bc"><tr align=center><td class="smiley_th">',_('Favoriten'),'</td>', $zeile[$i][1], '</tr>';
-					echo '<tr align="center"><td class="smiley_th">',_('Smiley'),'</td>', $zeile[$i][2], '</tr>';
-					echo '<tr align="center"><td class="smiley_th">',_('Schreibweise'),'</td>', $zeile[$i][3], '</tr></table>';
+					echo '<table bgcolor="#94a6bc"><tr align=center><td class="smiley_th">',_("Favoriten"),'</td>', $zeile[$i][1], '</tr>';
+					echo '<tr align="center"><td class="smiley_th">',_("Smiley"),'</td>', $zeile[$i][2], '</tr>';
+					echo '<tr align="center"><td class="smiley_th">',_("Schreibweise"),'</td>', $zeile[$i][3], '</tr></table>';
 				}
 			}
 			echo '</td></tr></table>&nbsp;<br>';

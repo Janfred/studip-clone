@@ -426,7 +426,7 @@ if ($form == 3)
 	
 	//Datum fuer Vobesprechung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
 	if (!check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_stunde, $vor_minute, $sem_create_data, "sem_vor_termin") || !check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_end_stunde, $vor_end_minute, $sem_create_data, "sem_vor_end_termin")) {
-		$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der Vorbesprechung ein!")."§"; 
+		$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der Vorbesprechung ein!")."§";
 	}
 }
 
@@ -2326,14 +2326,14 @@ if ($level == 3) {
 											echo '<option ', (($kk == $ttd)? 'selected ':'');
 											echo 'value="',$kk,'">';
 											switch ($kk){
-												case 2: echo _('Dienstag'); break;
-												case 3: echo _('Mittwoch'); break;
-												case 4: echo _('Donnerstag'); break;
-												case 5: echo _('Freitag'); break;
-												case 6: echo _('Samstag'); break;
-												case 7: echo _('Sonntag'); break;
+												case 2: echo _("Dienstag"); break;
+												case 3: echo _("Mittwoch"); break;
+												case 4: echo _("Donnerstag"); break;
+												case 5: echo _("Freitag"); break;
+												case 6: echo _("Samstag"); break;
+												case 7: echo _("Sonntag"); break;
 												case 1:
-												default: echo _('Montag');
+												default: echo _("Montag");
 											}
 											echo '</option>';
 										}
@@ -2450,7 +2450,7 @@ if ($level == 3) {
 							$sm = (($sem_create_data["sem_vor_termin"] <> -1)? date("i",$sem_create_data["sem_vor_termin"]):'');
 							$es = (($sem_create_data["sem_vor_end_termin"] <> -1)? date("H",$sem_create_data["sem_vor_end_termin"]):'');
 							$em = (($sem_create_data["sem_vor_end_termin"] <> -1)? date("i",$sem_create_data["sem_vor_end_termin"]):'');
-							echo '<font size=-1>&nbsp; <font size=-1>', _("Wenn es eine Vorbesprechung gibt, tragen Sie diese bitte hier ein:"), '</font><br><br>&nbsp; ', _('Datum:'), '</font>', "\n";
+							echo '<font size=-1>&nbsp; <font size=-1>', _("Wenn es eine Vorbesprechung gibt, tragen Sie diese bitte hier ein:"), '</font><br><br>&nbsp; ', _("Datum:"), '</font>', "\n";
 							echo '<font size=-1><input type="text" name="vor_tag" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_termin"] <> -1)? date("d",$sem_create_data["sem_vor_termin"]):''), '">. ', "\n";
 							echo '<input type="text" name="vor_monat" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_termin"] <> -1)?  date("m",$sem_create_data["sem_vor_termin"]):''), '">. ', "\n";
 							echo '<input type="text" name="vor_jahr" size=4 maxlength=4 value="', (($sem_create_data["sem_vor_termin"] <> -1)? date("Y",$sem_create_data["sem_vor_termin"]):''), '">&nbsp;', "\n";

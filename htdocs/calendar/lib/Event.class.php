@@ -77,7 +77,7 @@ class Event {
 	*/
 	function getTitle () {
 		if ($this->properties['SUMMARY'] == '')
-			return _('Keine Titel');
+			return _("Keine Titel");
 		
 		return $this->properties['SUMMARY'];
 	}

@@ -1431,7 +1431,7 @@ function Termin_Eingabe_javascript ($t = 0, $n = 0, $atime=0, $ss = '', $sm = ''
 	$txt .= "<a href=\"javascript:window.open('".$CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
 	$txt .= "/views/insert_date_popup.php?mcount={$km}&element_switch={$t}&c={$n}{$at}{$q}', 'kalender', 'dependent=yes $sb, width=$kx, height=$ky');void(0);";
 	$txt .= '"><img src="pictures/popupkalender.gif" width="17" height="18" border="0" align="middle" ';
-	$txt .= tooltip(_('Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken.'),TRUE,FALSE);
+	$txt .= tooltip(_("Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken."),TRUE,FALSE);
 	$txt .= '></a>';
 
 	return  $txt;

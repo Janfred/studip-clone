@@ -23,7 +23,7 @@ page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Auth', 'perm' =>
 $perm->check('root');
 
 if (!$SMILEYADMIN_ENABLE) {
-	print '<p>' . _('Smiley-Modul abgeschaltet.'). '</p>';
+	print '<p>' . _("Smiley-Modul abgeschaltet."). '</p>';
 	print '</body></html>';
 	page_close();
 	die;

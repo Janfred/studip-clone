@@ -26,7 +26,7 @@ $sess->register("save_banner_data");
 $sess->register("banner_data");
 
 if (!$BANNER_ADS_ENABLE) {
-	echo '<p>', _('Banner-Modul abgeschaltet.'), "</p>\n";
+	echo '<p>', _("Banner-Modul abgeschaltet."), "</p>\n";
 	echo "</body></html>\n";
 	page_close();
 	die;
@@ -142,30 +142,30 @@ function check_data(&$banner_data) {
 	}
 
 	if (!$banner_data['banner_path'])
-		$msg .= 'error§' . _('Es wurde kein Bild ausgewählt.') . '§';
+		$msg .= 'error§' . _("Es wurde kein Bild ausgewählt.") . '§';
 
 	if (!$banner_data['target'] && $banner_data['target_type'] != 'none')
-		$msg .= 'error§' . _('Es wurde kein Verweisziel angegeben.') . '§';
+		$msg .= 'error§' . _("Es wurde kein Verweisziel angegeben.") . '§';
 
 	if (($x=valid_date($banner_data['start_hour'], $banner_data['start_minute'], $banner_data['start_day'], $banner_data['start_month'], $banner_data['start_year']))==-1)
-		$msg .= 'error§' . _('Bitte geben Sie einen gültiges Startdatum ein.') . '§';
+		$msg .= 'error§' . _("Bitte geben Sie einen gültiges Startdatum ein.") . '§';
 	else
 		$banner_data['startdate']=$x;
 
 	if (($x=valid_date($banner_data["end_hour"], $banner_data["end_minute"], $banner_data["end_day"], $banner_data["end_month"], $banner_data["end_year"]))==-1)
-		$msg .= 'error§' . _('Bitte geben Sie einen gültiges Enddatum ein.') . '§';
+		$msg .= 'error§' . _("Bitte geben Sie einen gültiges Enddatum ein.") . '§';
 	else
 		$banner_data['enddate']=$x;
 
 	switch ($banner_data['target_type']) {
 		case 'url':
-			 if (!eregi('^(https?)|(ftp)://', $banner_data['target'])) $msg .= "error§" . _('Das Verweisziel muss eine gültige URL sein (incl. http://).') . "§";
+			 if (!eregi('^(https?)|(ftp)://', $banner_data['target'])) $msg .= "error§" . _("Das Verweisziel muss eine gültige URL sein (incl. http://).") . "§";
 			break;
 		case 'inst':
 			$q = 'SELECT * FROM Institute WHERE Institut_id="' . $banner_data["target"] . '"';
 			$db->query($q);
 			if (!$db->next_record()) {
-				$msg .= "error§" . _('Die angegebene Einrichtung existiert nicht. Bitte geben Sie eine gültige Einrichtungs-ID ein.') .'§';
+				$msg .= "error§" . _("Die angegebene Einrichtung existiert nicht. Bitte geben Sie eine gültige Einrichtungs-ID ein.") .'§';
 			}
 			break;
 		case 'user':
@@ -183,7 +183,7 @@ function check_data(&$banner_data) {
 			}
 			break;
 		case "special":
-			$msg .= 'error§' . _('Der Verweistyp "speziell" wird in dieser Installation nicht unterstützt.') . '§';
+			$msg .= 'error§' . _("Der Verweistyp \"speziell\" wird in dieser Installation nicht unterstützt.") . '§';
 			break;
 		case "none":
 			$banner_data['target'] = '';
@@ -360,17 +360,17 @@ if ($cmd=="upload") {
 		$banner_data["alttext"]=$db->f("alttext");
 		$banner_data["banner_path"]=$db->f("banner_path");
 		$starttime=$db->f("startdate");
-		$banner_data["start_minute"] = ($starttime == 0)? _('mm'):date("i", $starttime);
-		$banner_data["start_hour"]   = ($starttime == 0)? _('hh'):date("H", $starttime);
-		$banner_data["start_day"]    = ($starttime == 0)? _('tt'):date("d", $starttime);
-		$banner_data["start_month"]  = ($starttime == 0)? _('mm'):date("m", $starttime);
-		$banner_data["start_year"]   = ($starttime == 0)? _('jjjj'):date("Y", $starttime);
+		$banner_data["start_minute"] = ($starttime == 0)? _("mm"):date("i", $starttime);
+		$banner_data["start_hour"]   = ($starttime == 0)? _("hh"):date("H", $starttime);
+		$banner_data["start_day"]    = ($starttime == 0)? _("tt"):date("d", $starttime);
+		$banner_data["start_month"]  = ($starttime == 0)? _("mm"):date("m", $starttime);
+		$banner_data["start_year"]   = ($starttime == 0)? _("jjjj"):date("Y", $starttime);
 		$endtime = $db->f("enddate");
-		$banner_data["end_minute"] = ($endtime == 0)? _('mm'):date("i", $endtime);
-		$banner_data["end_hour"]   = ($endtime == 0)? _('hh'):date("H", $endtime);
-		$banner_data["end_day"]    = ($endtime == 0)? _('tt'):date("d", $endtime);
-		$banner_data["end_month"]  = ($endtime == 0)? _('mm'):date("m", $endtime);
-		$banner_data["end_year"]   = ($endtime == 0)? _('jjjj'):date("Y", $endtime);
+		$banner_data["end_minute"] = ($endtime == 0)? _("mm"):date("i", $endtime);
+		$banner_data["end_hour"]   = ($endtime == 0)? _("hh"):date("H", $endtime);
+		$banner_data["end_day"]    = ($endtime == 0)? _("tt"):date("d", $endtime);
+		$banner_data["end_month"]  = ($endtime == 0)? _("mm"):date("m", $endtime);
+		$banner_data["end_year"]   = ($endtime == 0)? _("jjjj"):date("Y", $endtime);
 		$banner_data["priority"]= $db->f("priority");
 
 		$i_view="edit";
