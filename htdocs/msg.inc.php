@@ -107,7 +107,7 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
 }
 
 //Kombinierte Nachrichten zerlegen und in eigenem Fenster anzeigen
-function parse_window ($long_msg,$separator="§", $titel, $add_msg) {
+function parse_window ($long_msg,$separator="§", $titel, $add_msg="") {
 
 if ($titel == "")
 	$titel= _("Fehler");
