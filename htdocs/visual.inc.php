@@ -326,10 +326,11 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 		$what = htmlReady($what, $trim, FALSE);
 		$what = preg_replace("'\[code\].+\[/code\]'isU", 'ü', $what);
 		if ($wiki == TRUE)
-			$what = wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
+			//$what = wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
+			$what = wiki_format(symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern), $show_comments);
 		else
-			$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
-		//	$what = symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
+		//	$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+			$what = symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
 		$what = explode('ü', $what);
 		$i = 0;
 		$all = '';
@@ -347,10 +348,11 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 	$what = htmlReady($what, $trim, FALSE);
 	if ($wiki == TRUE)
 		//return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), $show_comments), FALSE, TRUE, TRUE, $extern), $extern), $extern);
-		return wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
+		//return wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
+		return wiki_format(symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern), $show_comments);
 	else
-		return symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
-	//	return symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
+	//	return symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		return symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
 }
 
 /**
@@ -366,7 +368,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 * @return       string
 */
 function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
-
+$extern = TRUE;
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{-*~*%}', $what);
 		$what = format_help($what, $trim, $extern, $wiki, $show_comments);
@@ -383,7 +385,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show
 		}
 		return $all;
 	}
-	return format_help($what, $trim, $extern, $wiki, $show_comments);
+	return str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments));
 }
 
 
@@ -447,7 +449,7 @@ function latex($text, $extern = FALSE) {
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
 		if ($extern) {
-			$extern_path = $EXTERN_SERVER_NAME;
+			$extern_path = 'http://' . $EXTERN_SERVER_NAME;
 			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $extern_path . $TEXCACHE_PATH);
 		}
 		else {
@@ -476,7 +478,7 @@ function latex($text, $extern = FALSE) {
 				$url = $latex->getFormulaURL($latex_formula);
 			
 				if ($url != false) {
-					$text = substr_replace($text, "<img src='".$url."'>",$pos,strlen($tex_matches[0][$i]));
+					$text = substr_replace($text, "<img src=\"".$url."\">",$pos,strlen($tex_matches[0][$i]));
 				}
 				else {
 					if ($extern)
