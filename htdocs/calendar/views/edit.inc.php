@@ -48,7 +48,7 @@ echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
 
 if (!empty($err)) {
-	$error_sign = "<font color=\"#FF0000\" size=\"+2\"><b>&nbsp;*&nbsp;</b></font>";
+	$error_sign = "<font color=\"#FF0000\" size=\"+1\"><b>&nbsp;*&nbsp;</b></font>";
 	$error_message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s"),
 		$error_sign, $err_message);
 	my_info($error_message, "blank", 2);
@@ -278,7 +278,7 @@ else{
 
 	if (!isset($atermin) || get_class($atermin) != "seminarevent") {
 		echo "<tr><td align=\"center\" class=\"" .  $css_switcher->getClass();
-		echo "\" colspan=\"2\" nowrap=\"nowrap\">\n<br><font size=\"-1\">&nbsp;";
+		echo "\" colspan=\"2\" nowrap=\"nowrap\">\n<font size=\"-1\">&nbsp;";
 
 		if ($mod == "SINGLE")
 			echo "<input type=\"image\" name=\"mod_s\" " . makeButton("keine2", "src") . " border=\"0\">\n";
@@ -305,7 +305,7 @@ else{
 		else
 			echo "<input type=\"image\" name=\"mod_y\" " . makeButton("jaehrlich", "src") . " border=\"0\">\n";
 		
-		echo "<br>&nbsp;</font></td></tr>\n";
+		echo "</font></td></tr>\n";
 	}
 	
 	if ($mod == "MONTHLY" || $mod == "YEARLY") {
