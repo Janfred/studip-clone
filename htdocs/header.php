@@ -39,12 +39,6 @@ if ($SHOW_TERMS_ON_FIRST_LOGIN){
 	check_terms($user->id, $_language_path);	
 } 
 
-if ($LDAP_CONVERSION) {
-	if ($check_ldap || $ldap_cmd) {
-		require_once ("$ABSOLUTE_PATH_STUDIP/ldap_conversion.inc.php");
-		ldap_convert($user->id);
-	}
-}
 
 ob_start();
 //Daten fuer Onlinefunktion einbinden

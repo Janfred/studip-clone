@@ -91,8 +91,6 @@ class StudipAuthStandard extends StudipAuthAbstract {
 				$this->error_msg= _("Das Passwort ist falsch!") ;
 				return false;
 			} else {
-				session_register("check_ldap");
-				$check_ldap = TRUE;
 				return true;
 			}
 		} elseif ($this->challenge) {
@@ -100,8 +98,6 @@ class StudipAuthStandard extends StudipAuthAbstract {
 				$this->error_msg= _("Das Passwort ist falsch!") ;
 				return false;
 			} else {
-				session_register("check_ldap");
-				$check_ldap = TRUE;
 				return true;
 			}
 		}
