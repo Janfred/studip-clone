@@ -679,11 +679,8 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE
 	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
-	//"'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
-		//			"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 	$pattern = array(
 					"'((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:(.+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*))'ie",
-			//		"'(\[([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
 					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 					);
 	$replace = array("preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $extern)",
@@ -746,9 +743,9 @@ function preg_call_link ($params, $mod, $extern = FALSE) {
 				if (preg_match("'(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'i",
 						$params[7])) {
 					$tbr = "<a href=\"{$params[7]}\" target=\"_blank\">$tbr</a>";
+				}
 				if ($params[6])
 					$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
-				}
 			}
 		}
 	}
