@@ -7,7 +7,8 @@ require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php");
 class ExternSemBrowseTable extends SemBrowse {
 	
 	var $module;
-	
+	var $sem_types_position;
+		
 	function ExternSemBrowseTable (&$module, $start_item_id) {
 		
 		global $SEM_TYPE,$SEM_CLASS,$SEMESTER;
@@ -74,7 +75,7 @@ class ExternSemBrowseTable extends SemBrowse {
 	}
 	
 	function print_result () {
-		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS,$SEMESTER;
+		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS,$SEMESTER, $sem_type_tmp;
 		
 		$sem_link = $this->module->getModuleLink("Lecturedetails",
 			$this->module->config->getValue("SemLink", "config"),
@@ -187,18 +188,26 @@ class ExternSemBrowseTable extends SemBrowse {
 					break;
 					
 					case 3:
-					// reorganize SEM_TYPE-array (uahhh...)
-					
-					uksort($group_by_data, create_function('$a,$b',
-							'global $SEM_CLASS,$SEM_TYPE;
-							return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
+					if ($order = $this->module->config->getValue("ReplaceTextSemType", "order")) {
+						foreach ($order as $position) {
+							if (isset($group_by_data[$position]))
+								$group_by_data_tmp[$position] = $group_by_data[$position];
+						}
+						$group_by_data = $group_by_data_tmp;
+						unset($group_by_data_tmp);
+					}
+					else {
+						uksort($group_by_data, create_function('$a,$b',
+								'global $SEM_CLASS,$SEM_TYPE;
+								return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
 												$SEM_TYPE[$b]["name"]." (". $SEM_CLASS[$SEM_TYPE[$b]["class"]]["name"].")");'));
+					}
 					break;
 					default:
 					uksort($group_by_data, 'strnatcasecmp');
 					break;
 					
-			}			
+			}
 			
 			// generic datafields
 	//		if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields"))
@@ -250,7 +259,7 @@ class ExternSemBrowseTable extends SemBrowse {
 						
 						//create Turnus field
 						$data["content"]["zeiten"] = view_turnus($seminar_id, TRUE ,key($sem_data[$seminar_id]["metadata_dates"]));
-						//Shorten, if string too long (add link for details.php)
+						//Shorten, if string too long
 						if (strlen($data["zeiten"]) >70) {
 							$data["content"]["zeiten"] = substr($data["content"]["zeiten"], 0,
 									strpos(substr($data["zeiten"], 70, strlen($data["content"]["zeiten"])), ",") +71);
@@ -261,9 +270,9 @@ class ExternSemBrowseTable extends SemBrowse {
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						if (is_array($doz_name)){
 							uasort($doz_name, 'strnatcasecmp');
+							$data["content"]["dozent"] = "";
 							$i = 0;
 							foreach ($doz_name as $index => $value) {
-								$data["content"]["dozent"] = "(";
 								$data["content"]["dozent"] .= $this->module->elements["LecturerLink"]->toString(
 										array("module" => "Persondetails", "link_args" => "username="
 										. $doz_uname[$index] . "&seminar_id=$seminar_id",
@@ -272,12 +281,13 @@ class ExternSemBrowseTable extends SemBrowse {
 									$data["content"]["dozent"] .= ", ";
 								}
 								if ($i == 3) {
-									$data["content"]["dozent"] .= "...";
+									$data["content"]["dozent"] .= $this->module->elements["LecturerLink"]->toString(
+										array("module" => "Lecturedetails", "link_args" => "seminar_id=$seminar_id",
+										"content" => htmlReady($sem_name)));
 									break;
 								}
 								++$i;
 							}
-							$data["content"]["dozent"] .= ") ";
 						}
 						
 						$data["content"]["Name"] = $this->module->elements["SemLink"]->toString(
@@ -286,9 +296,20 @@ class ExternSemBrowseTable extends SemBrowse {
 						$data["content"]["VeranstaltungsNummer"] =
 								htmlReady(key($sem_data[$seminar_id]["VeranstaltungsNummer"]));
 						$data["content"]["Untertitel"] = htmlReady(key($sem_data[$seminar_id]["Untertitel"]));
-						$data["content"]["status"] =
-								htmlReady($SEM_TYPE[key($sem_data[$seminar_id]["status"])]["name"]);
-						$data["content"]["Ort"] = htmlReady(key($sem_data[$seminar_id]["Ort"]));
+						
+						$aliases_sem_type = $this->module->config->getValue("ReplaceTextSemType",
+								"class_" . $SEM_TYPE[key($sem_data[$seminar_id]["status"])]['class']);
+						if ($aliases_sem_type[$this->sem_types_position[key($sem_data[$seminar_id]["status"])] - 1]) {
+							$data["content"]["status"] =
+									$aliases_sem_type[$this->sem_types_position[key($sem_data[$seminar_id]["status"])] - 1];
+						}
+						else {
+							$data["content"]["status"] =
+									htmlReady($SEM_TYPE[key($sem_data[$seminar_id]["status"])]["name"]
+									." (". $SEM_CLASS[$SEM_TYPE[key($sem_data[$seminar_id]["status"])]]["name"].")");
+						}
+						
+						$data["content"]["Ort"] = getRoom($seminar_id, FALSE, 0, "sem");
 						if ($sem_data[$seminar_id]["art"])
 							$data["content"]["art"] = htmlReady(key($sem_data[$seminar_id]["art"]));
 						else
@@ -307,6 +328,8 @@ class ExternSemBrowseTable extends SemBrowse {
 	
 	// private
 	function getGroupContent ($the_tree, $group_field) {
+		global $SEM_TYPE, $SEM_CLASS;
+		
 		switch ($this->sem_browse_data["group_by"]){
 			case 0:
 				$content = $this->sem_dates[$group_field]['name'];
@@ -318,21 +341,7 @@ class ExternSemBrowseTable extends SemBrowse {
 					$this->module->config->getValue("Main", "rangepathlevel")));
 				else
 					$content = $this->module->config->getValue("Main", "textnogroups");
-			/*
-			$range_path_new = NULL;
-			if ($the_tree->tree_data[$group_field]) {
-				$range_path = explode(" ^ ", $the_tree->getShortPath($group_field, "^"));
-				$range_path_level = $this->config->getValue("Main", "rangepathlevel");
-				if ($range_path_level > sizeof($range_path))
-					$range_path_level = sizeof($range_path);
-				for ($i = $range_path_level - 1; $i < sizeof($range_path); $i++)
-					$range_path_new[] = $range_path[$i];
-				echo htmlReady(implode(" > ", $range_path_new));
-			}
-			else
-				echo $this->config->getValue("Main", "textnogroups");
-			*/
-			break;
+				break;
 			
 			case 2:
 				$content = htmlReady($group_field);
@@ -340,15 +349,14 @@ class ExternSemBrowseTable extends SemBrowse {
 			
 			case 3:
 				$aliases_sem_type = $this->module->config->getValue("ReplaceTextSemType",
-						"class_{$GLOABALS['SEM_TYPE'][$group_field]['class']}");
-				if ($aliases_sem_type[$this->module->sem_types_position[$group_field] - 1])
-					$content = $aliases_sem_type[$this->module->sem_types_position[$group_field] - 1];
+						"class_{$SEM_TYPE[$group_field]['class']}");
+				if ($aliases_sem_type[$this->sem_types_position[$group_field] - 1])
+					$content = $aliases_sem_type[$this->sem_types_position[$group_field] - 1];
 				else {
 					$content = htmlReady($GLOBALS["SEM_TYPE"][$group_field]["name"]
-							." (". $GLOBALS["SEM_CLASS"][$GLOBALS["SEM_TYPE"][$group_field]["class"]]["name"].")");
+							." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")");
 				}
 				break;
-			
 			case 4:
 				$content = htmlReady($group_field);
 				break;

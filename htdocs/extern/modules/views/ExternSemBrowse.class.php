@@ -5,9 +5,11 @@ require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
 
 class ExternSemBrowse extends SemBrowse {
 	
+	var $module;
 	var $config;
+	var $sem_types_position;
 	
-	function ExternSemBrowse (&$config, $start_item_id) {
+	function ExternSemBrowse (&$module, $start_item_id) {
 		
 		global $SEM_TYPE,$SEM_CLASS,$SEMESTER;
 		
@@ -17,7 +19,8 @@ class ExternSemBrowse extends SemBrowse {
 										array('name' => _("Typ"), 'group_field' => 'status'),
 										array('name' => _("Einrichtung"), 'group_field' => 'Institut', 'unique_field' => 'Institut_id'));
 
-		$this->config = $config;
+		$this->module = $module;
+		$this->config = $this->module->config;
 		$this->sem_browse_data["group_by"] = $this->config->getValue("Main", "grouping");
 		$this->sem_dates = $GLOBALS['SEMESTER'];
 		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
@@ -75,12 +78,6 @@ class ExternSemBrowse extends SemBrowse {
 	function print_result () {
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS,$SEMESTER;
 		
-		$sem_link = ExternModule::getModuleLink("Lecturedetails",
-			$this->config->getValue("SemLink", "config"), $this->config->getValue("SemLink", "srilink"));
-		
-		$lecturer_link = ExternModule::getModuleLink("Persondetails",
-			$this->config->getValue("LecturerLink", "config"), $this->config->getValue("LecturerLink", "srilink"));
-			
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			
 			if ($this->sem_browse_data['group_by'] == 1){
@@ -184,15 +181,25 @@ class ExternSemBrowse extends SemBrowse {
 					break;
 					
 					case 3:
-					uksort($group_by_data, create_function('$a,$b',
-							'global $SEM_CLASS,$SEM_TYPE;
-							return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
+					if ($order = $this->module->config->getValue("ReplaceTextSemType", "order")) {
+						foreach ($order as $position) {
+							if (isset($group_by_data[$position]))
+								$group_by_data_tmp[$position] = $group_by_data[$position];
+						}
+						$group_by_data = $group_by_data_tmp;
+						unset($group_by_data_tmp);
+					}
+					else {
+						uksort($group_by_data, create_function('$a,$b',
+								'global $SEM_CLASS,$SEM_TYPE;
+								return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
 												$SEM_TYPE[$b]["name"]." (". $SEM_CLASS[$SEM_TYPE[$b]["class"]]["name"].")");'));
+					}
 					break;
+					
 					default:
 					uksort($group_by_data, 'strnatcasecmp');
 					break;
-					
 			}
 			
 			$show_time = $this->config->getValue("Main", "time");
@@ -301,9 +308,11 @@ class ExternSemBrowse extends SemBrowse {
 						echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr1") . ">";
 						echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
 						echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font1") . ">";
-						echo "<a href=\"$sem_link&seminar_id=$seminar_id\"";
-						echo $this->config->getAttributes("SemLink", "a") . ">";
-						echo htmlReady($sem_name) . "</a></font></td></tr>\n";
+						$sem_link["module"] = "Lecturedetails";
+						$sem_link["link_args"] = "&seminar_id=$seminar_id";
+						$sem_link["content"] = htmlReady($sem_name);
+						$this->module->elements["SemLink"]->printout($sem_link);
+						echo "</font></td></tr>\n";
 						//create Turnus field
 						$temp_turnus_string = view_turnus($seminar_id, TRUE ,key($sem_data[$seminar_id]["metadata_dates"]));
 						//Shorten, if string too long (add link for details.php)
@@ -324,12 +333,13 @@ class ExternSemBrowse extends SemBrowse {
 								$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 								$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 								if (is_array($doz_name)){
+									$lecturer_link["module"] = "Persondetails";
 									uasort($doz_name, 'strnatcasecmp');
 									$i = 0;
 									foreach ($doz_name as $index => $value) {
-										echo "<a href=\"$lecturer_link&username={$doz_uname[$index]}&seminar_id=$seminar_id\"";
-										echo $this->config->getAttributes("LecturerLink", "a") . ">";
-										echo htmlReady($value) . "</a>";
+										$lecturer_link["link_args"] = "username={$doz_uname[$index]}&seminar_id=$seminar_id";
+										$lecturer_link["content"] = htmlReady($value);
+										$this->module->elements["LecturerLink"]->printout($lecturer_link);
 										if ($i != count($doz_name) - 1) {
 											echo ", ";
 										}

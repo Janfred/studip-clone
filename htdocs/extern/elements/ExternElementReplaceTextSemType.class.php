@@ -55,6 +55,7 @@ class ExternElementReplaceTextSemType extends ExternElement {
 		$this->description = _("Ersetzt die Bezeichnung der Veranstaltungstypen.");
 		for ($i = 1; $i <= sizeof($GLOBALS["SEM_CLASS"]); $i++)
 			$this->attributes[] = "class_" . $i;
+		$this->attributes[] = "order";
 	}
 	
 	/**
@@ -63,21 +64,32 @@ class ExternElementReplaceTextSemType extends ExternElement {
 	function getDefaultConfig () {
 		global $SEM_TYPE, $SEM_CLASS;
 		$config = array();
-		for ($i = 1; $i <= sizeof($SEM_CLASS); $i++) {
-			for ($j = 1; $j <= sizeof($SEM_TYPE); $j++) {
-				if ($SEM_TYPE[$j]["class"] == $i) {
-					$config["class_" . $i] .= "|" . htmlReady($SEM_TYPE[$j]["name"])
-							. " ({$SEM_CLASS[$i]['name']})";
+		foreach ($SEM_CLASS as $class_index => $class) {
+			foreach ($SEM_TYPE as $type_index => $type) {
+				if ($type["class"] == $class_index) {
+					$config["class_$class_index"] .= "|" . htmlReady($type["name"])
+							. " ({$class['name']})";
 				}
 			}
 		}
-				
+		
+		foreach ($SEM_TYPE as $type_index => $foo)
+			$config["order"] .= "|$type_index";
+		
 		return $config;
 	}
 	
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-			
+		
+		global $SEM_TYPE;
+		
+		$order = $this->config->getValue($this->name, "order");
+		if (!is_array($order) || array_diff(array_keys($SEM_TYPE), $order)) {
+			$this->config->setValue($this->name, "order", array_keys($SEM_TYPE));
+			$this->config->store();
+		}
+					
 		if ($faulty_values = "")
 			$faulty_values = array();	
 		$out = "";
@@ -88,27 +100,10 @@ class ExternElementReplaceTextSemType extends ExternElement {
 		$edit_form->setElementName($this->getName());
 		$element_headline = $this->getEditFormHeadline($edit_form);
 		
-		foreach ($GLOBALS["SEM_CLASS"] as $key => $class) {
-			$titles = NULL;
-			$info = NULL;
-			$headline = $edit_form->editHeadline(sprintf(_("Veranstaltungstypen der Kategorie &quot;%s&quot;"),
-					$class["name"]));
-			
-			foreach ($GLOBALS["SEM_TYPE"] as $type) {
-				if ($type["class"] == $key) {
-					if (strlen($type["name"]) > 25)
-						$titles[] = htmlReady(substr($type["name"], 0, 22)) . "...";
-					else
-						$titles[] = htmlReady($type["name"]);
-					$info[] = sprintf(_("Geben Sie eine Bezeichnung für den Veranstaltungstyp \"%s\" ein. Diese wird an Stelle der ursprünglichen Bezeichnung ausgegeben."),
-							$type["name"]);
-				}
-			}
-			$table = $edit_form->editTextfieldGeneric("class_$key", $titles, $info, 30, 150);
+		$table = $edit_form->editSemTypes();
 		
-			$content_table .= $edit_form->editContentTable($headline, $table);
-			$content_table .= $edit_form->editBlankContent();
-		}
+		$content_table .= $edit_form->editContentTable($headline, $table);
+		$content_table .= $edit_form->editBlankContent();
 		
 		$submit = $edit_form->editSubmit($this->config->getName(),
 				$this->config->getId(), $this->getName());
