@@ -151,4 +151,8 @@ $this->msg[33] = array (
 $this->msg[34] = array (
 		"mode" => "error",
 		"msg"=> _("Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden: <font size=\"-1\" color=\"black\">%s</font>"));
+$this->msg[35] = array (
+		"mode" => "error",
+		"msg"=> _("Die folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden.")."<br />"._("Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r jede Belegungszeit erstellt.  <font size=\"-1\" color=\"black\">%s</font>"));
+
 ?>
