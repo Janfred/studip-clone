@@ -54,8 +54,8 @@ function editarea($forumposting) {
 		$description = $forumposting["description"];  // bereits bestehender Text 
 	}
 	
-	if (ereg("%%\[editiert von",$forumposting["description"])) { // wurde schon mal editiert
-		$postmp = strpos($forumposting["description"],"%%[editiert von");
+	if (ereg("%%\[edit-",$forumposting["description"])) { // wurde schon mal editiert
+		$postmp = strpos($forumposting["description"],"%%[edit-");
 		$description = substr_replace($forumposting["description"]," ",$postmp);
 	}
 	if ($forum["zitat"]!="") {
@@ -818,6 +818,23 @@ function ForumCheckShrink($id)  {
 	return $age;
 }
 
+
+/**
+* Replaces edit-comment
+*
+* @param	array	forumposting contains several data of the actual posting
+*
+* @return	array forumposting
+*
+**/
+function forum_check_edit($forumposting) {
+	if (ereg("%%\[edit-",$forumposting)) { // wurde schon mal editiert
+		$tmp = "%%["._("editiert von: ");
+		$forumposting = str_replace("%%[edit-", $tmp ,$forumposting);
+	}
+	return $forumposting;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -981,6 +998,8 @@ function printposting ($forumposting) {
 		if ($forumposting["writestatus"] != "none") { // Posting wird geschrieben
 			$description = editarea($forumposting);
 		} else {
+			
+			$forumposting["description"] = forum_check_edit($forumposting["description"]);
 			$description = formatReady($forumposting["description"]);
 			if ($forumposting["buttons"] == "no" || $forum["update"]) {
 				$edit = "<br>";
@@ -991,7 +1010,7 @@ function printposting ($forumposting) {
 		if (ereg("\[quote",$description) AND ereg("\[/quote\]",$description) AND $forumposting["writestatus"] == "none")
 			$description = quotes_decode($description);
 
-		// Anzeigen der Sidebar /////////////
+	// Anzeigen der Sidebar /////////////
 		
 		if ($sidebar==$forumposting["id"] || $forum["rateallopen"]==TRUE) {  
 			

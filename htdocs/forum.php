@@ -336,12 +336,12 @@ if ($answer_id) {
 if ($update) {
 	$author = get_fullname();
 	$now = date ("d.m.y - H:i", time());
-	if (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
+	if (ereg("%%\[edit-",$description)) { // wurde schon mal editiert
 		$postmp = strpos($description,"editiert von");
-		$description = substr_replace($description,"editiert von ".$author." am ".$now."]%%",$postmp);
+		$description = substr_replace($description,"edit-".$author." - ".$now."]%%",$postmp);
 	} else {
 		if (ForumFreshPosting($update)==FALSE) // editiert von nur dranhängen wenn nicht frisch erstellt
-			$description.="\n\n%%[editiert von ".$author." am ".$now."]%%";
+			$description.="\n\n%%[edit-".$author." - ".$now."]%%";
 	}
 	UpdateTopic ($titel, $update, $description);
 	$open = $update; //gerade bearbeiteten Beitrag aufklappen
