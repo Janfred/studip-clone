@@ -229,7 +229,8 @@ class studip_news {
 			. "<br><br>" . _("Im unteren Bereich k&ouml;nnen Sie ausw&auml;hlen, in welchen Bereichen Ihre News angezeigt wird.");
 		echo "\n<br><br>" . _("Klicken Sie danach hier, um die &Auml;nderungen zu &uuml;bernehmen.") . "<br><br><center>"
 			. "<INPUT TYPE=\"IMAGE\" name=\"news_submit\" " . makeButton("uebernehmen","src") . tooltip(_("Änderungen übernehmen")) ."  border=\"0\" ></center></td></tr>";
-		echo "\n<tr><td class=\"blank\" colspan=\"2\">" . _("Einstelldatum:") . " <select name=\"date\"><option value=\"".$aktuell."\" selected>".strftime("%d.%m.%y", $aktuell)."</option>";
+		$news_date = ($this->news_query['date'] > $aktuell) ? $this->news_query['date'] : $aktuell;
+		echo "\n<tr><td class=\"blank\" colspan=\"2\">" . _("Einstelldatum:") . " <select name=\"date\"><option value=\"".$news_date."\" selected>".strftime("%d.%m.%y", $news_date)."</option>";
 		for ($i=1; $i<=14; $i++) {
 			$temp=$aktuell+$i*86400;
 			echo "\n<option value=\"".$temp."\">".strftime("%d.%m.%y",$temp)."</option>";
