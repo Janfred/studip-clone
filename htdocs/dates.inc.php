@@ -24,7 +24,7 @@ require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php";  //Daten 
-require_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CALENDAR."/calendar_func.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php");
 
 /**
 * This function creates the assigned room name for range_id
