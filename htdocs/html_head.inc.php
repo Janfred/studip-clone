@@ -56,8 +56,9 @@ if ($AUTH_LIFETIME) {
 ?>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
-		<link rel="SHORTCUT ICON" href="http://www.studip.de/favicon.ico">
 <?php
+if (isset($FAVICON))
+		printf("<link rel=\"SHORTCUT ICON\" href=\"%s\">", $FAVICON);
 if (!isset($_html_head_title))  // if not set, use default title
 	$_html_head_title ="Stud.IP";
 printf("\t\t<title>%s</title>",$_html_head_title);

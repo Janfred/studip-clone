@@ -41,7 +41,8 @@ define("PHPDOC_DUMMY",true);
 
 echo "<html>\n<head>\n<title>Stud.IP</title>\n";
 echo "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\">";
-echo "<link rel=\"SHORTCUT ICON\" href=\"http://www.studip.de/favicon.ico\">";
+if (isset($FAVICON))
+		printf("<link rel=\"SHORTCUT ICON\" href=\"%s\">", $FAVICON);
 echo "</head>\n<body bgcolor=\"#FFFFFF\">\n";
 
 if($cmd == "showmonth"){
