@@ -286,7 +286,7 @@ if ($new) {
 			if (($RESOURCES_ENABLE) && ($resource_id)){
 				$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 				$resources_result = $insertAssign->insertDateAssign($t_id, $resource_id);
-				$insertAssign->updateAssign($t_id, $resource_id);
+				$insertAssign->updateAssign(false); 
 			}
 		
 			$result.="msg§" . _("Ihr Termin wurde eingef&uuml;gt!") . "§";
@@ -372,14 +372,13 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 	//after every change, we have to do this check (and we create the msgs...)
 	if ($RESOURCES_ENABLE) {
 		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign());
+		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign(false)); //do not check locks, we are only editing real dates
 	}
 }  // end if ($edit_x)
 
 if ($kill_date)
 	$kill_termin = $kill_date;
 if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
-	$is_schedule = IsSchedule($admin_dates_data["range_id"], true, true); // we need to know if there is a schedule BEFORE something gets deleted
 	if (is_array($kill_date)) {
 		for ($i=0; $i < count($kill_date); $i++) {		
 			$do_delete = TRUE;
@@ -406,10 +405,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 	//after every change, we have to do this check (and we create the msgs...)
 	if ($RESOURCES_ENABLE) {
 		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		//only check locks if there is no longer a schedule after deletion of dates
-		$check_locks = ($is_schedule && !IsSchedule($admin_dates_data["range_id"], true, true)) ? false : true;
-		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign($check_locks));
-		
+		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign(false));
 		if ($updateAssign->turnus_cleared && $RESOURCES_ALLOW_ROOM_REQUESTS){
 			$request_id = getSeminarRoomRequest($admin_dates_data["range_id"]);
 			if ($request_id){		//reactivate room request if there is one
