@@ -6,7 +6,7 @@
 * ans the linked resources (rooms)
 * 
 *
-* @author		Cornelis Kater <ckater@gwdg.de>
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
 * @package		resources
@@ -18,7 +18,7 @@
 // This file is part of Stud.IP
 // VeranstaltungResourcesAssign.class.php
 // Modul zum Verknuepfen von Veranstaltungszeiten mit Resourcenbelegung
-// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
+// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
