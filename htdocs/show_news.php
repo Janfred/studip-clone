@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-require_once ("functions.php");
-require_once ("visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
 
-function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%", $last_visited=0)
-{
+function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%", $last_visited=0) {
 global $_fullname_sql,$PHP_SELF,$auth,$QUERY_STRING, $SessSemName;
 
 $db=new DB_Seminar;
@@ -30,79 +30,74 @@ $db2=new DB_Seminar;
 
 $aktuell=time();
 
-if ($QUERY_STRING)
-	{
-     list ($schnipp,)=explode("show_full",$QUERY_STRING);
-     if (substr($schnipp,-1)=='&') $schnipp=substr($schnipp, 0, -1);
-     if ($schnipp) $self=$PHP_SELF."?".$schnipp.'&';
-     else $self=$PHP_SELF."?";
-     }
-else $self=$PHP_SELF."?";
+if ($QUERY_STRING) {
+	list ($schnipp,)=explode("show_full",$QUERY_STRING);
+	if (substr($schnipp,-1)=='&')
+		$schnipp=substr($schnipp, 0, -1);
+	if ($schnipp)
+		$self=$PHP_SELF."?".$schnipp.'&';
+	else $self=$PHP_SELF."?";
+} else
+	$self=$PHP_SELF."?";
+
 $query="SELECT *, date FROM news_range LEFT JOIN news USING (news_id) WHERE news_range.range_id='$range_id' AND date < $aktuell AND (date+expire) > $aktuell ORDER BY date DESC";
-if ($limit) $query=$query." LIMIT $limit";
+if ($limit)
+	$query=$query." LIMIT $limit";
 $db->query($query);
 
-if (!$db->num_rows())
-	{
-		 if ($show_admin)
-		 	 {
-     			echo"\n<table  border='0' bgcolor='#FFFFFF' cellspacing='0' cellpadding='2' align=\"center\" width='$width' >";
-     			echo"\n<tr><td class='topic' colspan='2' width='99%'><img src='./pictures/news2.gif' border='0' alt='Newsticker. Klicken Sie rechts auf die Pfeile, um neue News in diesen Bereich zu stellen. Klicken Sie auf die roten Pfeile, um den ganzen Nachrichtentext zu lesen.' align='texttop'><b>&nbsp;News</b></td>";
-     			echo"\n<td align = 'right' class='topic'>";
-     			printf ("&nbsp;<a href='admin_news.php?%s&cmd=new_entry'><img src='./pictures/pfeillink.gif' border='0' alt='News einstellen'></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=news_sem" : (($SessSemName["class"]=="inst") ? "new_inst=TRUE&view=news_inst" : "view=news_global&range_id=studip"));
-     			echo"\n</td></tr>";
-			echo "\n<tr><td class='steel1' colspan=3><blockquote><br /><font size=-1>Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken sie auf die Doppelpfeile.<br />&nbsp; </font></blockquote>";
-     			echo "\n</td></tr></table>";
-     			return TRUE;
-			 }
-		 else {
-		 	return FALSE;
-		 	}
+if (!$db->num_rows()) {
+	if ($show_admin) {
+		echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
+		echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie rechts auf die Pfeile, um neue News in diesen Bereich zu stellen. Klicken Sie auf die roten Pfeile, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
+		echo"\n<td align = \"right\" class=\"topic\">";
+		printf ("&nbsp;<a href=\"admin_news.php?%s&cmd=new_entry\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=news_sem" : (($SessSemName["class"]=="inst") ? "new_inst=TRUE&view=news_inst" : "view=news_global&range_id=studip"));
+		echo"\n</td></tr>";
+		echo "\n<tr><td class=\"steel1\" colspan=\"3\"><blockquote><br /><font size=\"-1\">" . _("Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken sie auf die Doppelpfeile.") . "<br />&nbsp; </font></blockquote>";
+		echo "\n</td></tr></table>";
+		return TRUE;
+	} else {
+		return FALSE;
 	}
-else
-	{     	
-     	$colspan=2;
-     	$k=0;
+} else {     	
+	$colspan=2;
+	$k=0;
      	
 	// Ausgabe der Daten
-	while ($db->next_record())
- 	{
-	  	if(!$k) {
-		  	//Ausgabe der Kopfzeile vor erster auszugebener News
-		     	echo"\n<table  border='0' bgcolor='#FFFFFF' cellspacing='0' cellpadding='0' align=\"center\" width='$width' >";
-			echo"\n<tr><td class='topic' colspan='2' width='99%'><img src='./pictures/news2.gif' border='0' alt='Newsticker. Klicken Sie rechts auf die Pfeile, um neue News in diesen Bereich zu stellen. Klicken Sie auf die roten Pfeile, um den ganzen Nachrichtentext zu lesen.' align='texttop'><b>&nbsp;News</b></td>";
+	while ($db->next_record()) {
+		if(!$k) {
+			//Ausgabe der Kopfzeile vor erster auszugebener News
+			echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
+			echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie rechts auf die Pfeile, um neue News in diesen Bereich zu stellen. Klicken Sie auf die roten Pfeile, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
 			if ($show_admin) {
 				$colspan++;
-				echo"\n<td align = 'right' class='topic'>";
-				printf ("&nbsp;<a href='admin_news.php?%s&modus=admin&cmd=show&range_id=$range_id&view=news_global'><img src='./pictures/pfeillink.gif' border='0' alt='News bearbeiten'></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=sem" : "new_inst=TRUE&view=inst");
-	     			echo"\n</td></tr>";
-			     	echo"\n</td></tr>";
-				}
-			echo "</table>";
+				echo"\n<td align = \"right\" class=\"topic\">";
+				printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show&range_id=$range_id&view=news_global\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=sem" : "new_inst=TRUE&view=inst");
+				echo"\n</td></tr>";
+				echo"\n</td></tr>";
 			}
+			echo "</table>";
+		}
 		
 		$k++;
 		
 		$tmp_titel=htmlReady(mila($db->f("topic")));
 		$titel='';
-	  	if ($open ==$db->f("news_id")) { 
+	  if ($open ==$db->f("news_id")) { 
 			$link=$PHP_SELF."?nclose=true";
 			$titel=$tmp_titel."<a name='anker'>";
-			}
-	  	else {
+		} else {
 			$link=$PHP_SELF."?nopen=".$db->f("news_id");
 			$titel=$tmp_titel;
-			}
+		}
 
 		$icon="&nbsp;<img src=\"./pictures/news-icon.gif\" border=0>";
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width='$width'><tr>";
+		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"$width\"><tr>";
 						
-	    $db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$db->f("user_id")."'");
-	  	$db2->next_record();
+		$db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$db->f("user_id")."'");
+		$db2->next_record();
 		$link .= "&username=".$db2->f("username");
 		$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".$db2->f("fullname")."</font></a><font size=-1>&nbsp;".date("d.m.Y",$db->f("date"))."</font>";			
 
-			
 		$tempnew = ($db->f("date") >= $last_visited);
 		if ($open == $db->f("news_id"))
 			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $db->f("date"));
@@ -111,23 +106,21 @@ else
 		
 		echo "</tr></table>	";
 
-	  	if ($open==$db->f("news_id"))
-	  		{
-	  		list ($content,$admin_msg)=explode("<admin_msg>",$db->f("body"));
-	       		$content = formatReady($content);
-	       		if ($admin_msg) 
-	       			$content.="<br><br><i>$admin_msg</i>";
+		if ($open==$db->f("news_id")) {
+			list ($content,$admin_msg)=explode("<admin_msg>",$db->f("body"));
+			$content = formatReady($content);
+			if ($admin_msg) 
+				$content.="<br><br><i>$admin_msg</i>";
 	       		
-	       		if (!$content)
-	       			$content="Keine Beschreibung vorhanden\n";
-	       		else
-	       			$content.="<br>";
+			if (!$content)
+				$content="Keine Beschreibung vorhanden\n";
+			else
+				$content.="<br>";
 
-		       	if ($auth->auth["uid"]==$db->f("user_id"))
-		       		{
-			    	$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$db->f("news_id")."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a>";
-		    		$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$db->f("news_id")."\"><img src=\"pictures/buttons/loeschen-button.gif\" border=0></a>";
-		  	  	}
+			if ($auth->auth["uid"]==$db->f("user_id")) {
+				$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$db->f("news_id")."\">" . makeButton("bearbeiten") . "</a>";
+				$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$db->f("news_id")."\">" . makeButton("loeschen") . "</a>";
+			}
 			
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width='$width'><tr>";
 			printcontent(0,0, $content, $edit);
