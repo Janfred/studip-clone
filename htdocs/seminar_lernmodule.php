@@ -57,6 +57,19 @@ if ($ILIAS_CONNECT_ENABLE)
 {
 
 	$db = New DB_Seminar;
+
+	$db->query("SELECT preferred_language FROM user_info WHERE user_id='" . $auth->auth["uid"] . "'");
+	if ($db->next_record()) 
+		$preferred_language = $db->f("preferred_language");
+	if ($preferred_language != "")
+	{
+		$language = explode("_", $preferred_language);
+		$language = $language[0];
+	}
+	else
+		$language = "de";
+	$link1 = "<a href=\"".$ABSOLUTE_PATH_ILIAS . "help/$language/editor/index.html\">";
+
 	if (($perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{		
 		if ($do_op == "clear")
@@ -167,6 +180,10 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
 										"text"  => sprintf(_("Hier k&ouml;nnen Sie Ihrem Stud.IP-Account einen %s ILIAS-Account zuweisen. %s"), "<a href=\"migration2studip.php\">", "</a>")
 									);
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss anschlie&szlig;end noch zugewiesen werden."), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+									);
 	}
 // Sicherheitsabfrage vor Loeschen eines Lernmoduls	
 	elseif (isset($delete))
@@ -194,6 +211,10 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 								 )
 							)
 			)
+		);
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
+		$infobox[0]["eintrag"][] = array (	"icon" => "pictures/hilfe.gif",
+									"text"  => $link1 . _("Hilfe zum Anlegen und Bearbeiten von ILIAS-Lernmodulen.") . "</a>"
 		);
 		if ($SessSemName["class"]=="inst") 
 			$msg = _("Sie können der Einrichtung ein Lernmodul zuordnen..."); 
@@ -250,17 +271,6 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 							)
 			)
 		);
-		$db->query("SELECT preferred_language FROM user_info WHERE user_id='" . $auth->auth["uid"] . "'");
-		if ($db->next_record()) 
-			$preferred_language = $db->f("preferred_language");
-		if ($preferred_language != "")
-		{
-			$language = explode("_", $preferred_language);
-			$language = $language[0];
-		}
-		else
-			$language = "de";
-		$link1 = "<a href=\"".$ABSOLUTE_PATH_ILIAS . "help/$language/editor/index.html\">";
 		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
 		$infobox[0]["eintrag"][] = array (	"icon" => "pictures/hilfe.gif",
 									"text"  => $link1 . _("Hilfe zum Anlegen und Bearbeiten von ILIAS-Lernmodulen.") . "</a>"
@@ -272,7 +282,7 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 
 		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
-										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss anschlie&szlig;end der Veranstaltung zugewiesen werden."), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss anschlie&szlig;end noch zugewiesen werden."), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
 									);
 
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
