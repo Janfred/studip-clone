@@ -1,8 +1,8 @@
 <?
 /**
 * Export-Subfile that exports data.
-* 
-* This file contains functions to get data from the Stud.IP-db and write it into a file. 
+*
+* This file contains functions to get data from the Stud.IP-db and write it into a file.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
@@ -194,7 +194,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 			if (!$d_fields)
 				$data_object .= xml_open_tag( $xml_groupnames_inst["childgroup2"] );
 			$data_object .= xml_open_tag($xml_groupnames_inst["childobject2"] , $val["name"]);
-			$data_object .= $val["content"];
+			$data_object .= htmlspecialchars ($val["content"]);
 			$data_object .= xml_close_tag($xml_groupnames_inst["childobject2"]);
 			$d_fields = true;
 		}
@@ -375,7 +375,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 					if (!$d_fields)
 						$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup4"] );
 					$data_object .= xml_open_tag($xml_groupnames_lecture["childobject4"] , $val["name"]);
-					$data_object .= $val["content"];
+					$data_object .= htmlspecialchars ($val["content"]);
 					$data_object .= xml_close_tag($xml_groupnames_lecture["childobject4"]);
 					$d_fields = true;
 				}
@@ -492,7 +492,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 							if (!$d_fields)
 								$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
 							$data_object .= xml_open_tag($xml_groupnames_person["childobject1"] , $val["name"]);
-							$data_object .= $val["content"];
+							$data_object .= htmlspecialchars ($val["content"]);
 							$data_object .= xml_close_tag($xml_groupnames_person["childobject1"]);
 							$d_fields = true;
 						}
@@ -615,7 +615,7 @@ function export_pers($inst_id)
 				if (!$d_fields)
 					$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
 				$data_object .= xml_open_tag($xml_groupnames_person["childobject1"] , $val["name"]);
-				$data_object .= $val["content"];
+				$data_object .= htmlspecialchars ($val["content"]);
 				$data_object .= xml_close_tag($xml_groupnames_person["childobject1"]);
 				$d_fields = true;
 			}
