@@ -34,6 +34,7 @@ if ($entry_level=="inst") {
 	$structure["literatur"]=array (topKat=>"", name=>"Literatur zur Einrichtung", link=>"literatur.php", active=>FALSE);
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"seminar_main.php", active=>FALSE);
+	$structure["teilnehmer"]=array (topKat=>"", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
 	$structure["folder"]=array (topKat=>"", name=>"Dateien", link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>"Ablaufplan", link=>"dates.php", active=>FALSE);
@@ -56,12 +57,16 @@ if ($entry_level=="inst") {
 //
 	$structure["_seminar_main"]=array (topKat=>"seminar_main", name=>"Kurzinfo", link=>"seminar_main.php", active=>FALSE);
 	$structure["details"]=array (topKat=>"seminar_main", name=>"Details", link=>"details.php", active=>FALSE);
-	$structure["teilnehmer"]=array (topKat=>"seminar_main", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
 	$structure["druckansicht_s"]=array (topKat=>"seminar_main", name=>"Druckansicht", link=>"print_seminar.php", target=>"_new", active=>FALSE);
 	if ($rechte)
 		$structure["administration_v"]=array (topKat=>"seminar_main", name=>"Administration dieser Veranstaltung", link=>"admin_seminare1.php?new_sem=TRUE", active=>FALSE);
 }
 //
+
+$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
+if ($rechte)
+	$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>"Statusgruppen verwalten", link=>"admin_statusgruppe.php?view=sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+
 $structure["_forum"]=array (topKat=>"forum", name=>"Themen", link=>"forum.php", active=>FALSE);
 $structure["neue"]=array (topKat=>"forum", name=>"neue Beitr&auml;ge", link=>"forum.php?view=neue", active=>FALSE);
 $structure["letzte"]=array (topKat=>"forum", name=>"letzte 5 Beitr&auml;ge", link=>"forum.php?view=letzte&mehr=1", active=>FALSE);
