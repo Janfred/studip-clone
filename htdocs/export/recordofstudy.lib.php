@@ -123,7 +123,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 			  . "			 </td>\n"
 			  . "			 <td align=\"left\" valign=\"middle\">\n";
 		if ($notice == "empty")
-			$html .="		  <font size=\"-1\"><b>"._("Keine Veranstaltungen zum Anzeigen vorhanden.")."</b><br>"._("Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre ihre Auswahl.")."\n";
+			$html .="		  <font size=\"-1\"><b>"._("Keine Veranstaltungen zum Anzeigen vorhanden.")."</b><br>"._("Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre Auswahl.")."\n";
 		elseif ($notice == "above_limit")
 			$html .="		  <font size=\"-1\"><b>"._("Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt.")."</b><font size=\"-1\" color=\"yello\"><br>"._("Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt.")."</font>\n";
 		$html .="			  </font>\n"
