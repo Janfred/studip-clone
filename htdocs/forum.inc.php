@@ -921,9 +921,10 @@ function DisplayKids ($forumposting, $level=0) {
 function forum_search_field () {
 	global $PHP_SELF;
 $searchfield = "
-<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">
+<table border=\"0\" width=\"604\" cellspacing=\"5\" cellpadding=\"0\" align=\"center\">
 <tr>
-<td class=\"blank\" width=\"100%\" align=\"center\">
+<td class=\"blank\">&nbsp;</td></tr>
+<td class=\"blank\" width=\"302\" align=\"center\">
    <table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" valign=\"top\">
 	<form  name=\"search\" method=\"post\"  action=".$PHP_SELF."
 		<tr>
@@ -971,6 +972,8 @@ $searchfield = "
 	</form>
    </table>
 </td>
+<td class=\"suche\"><img src=\"pictures/blank.gif\" height=\"10\" width=\"285\">
+<tr>
 </tr></table>";
 return $searchfield;
 }

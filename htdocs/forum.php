@@ -308,7 +308,7 @@ if (!$forumsend=="anpassen") {
 	if ($cmd == "move" && $topic_id !="" && $rechte)
 		forum_move_navi ($topic_id);
 		
-	if (!$cmd) {
+	if (!$cmd && !$reset) {
 		echo "<tr><td class=\"blank\">&nbsp;";
 		?>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 

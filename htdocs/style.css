@@ -50,6 +50,7 @@ TD.rahmen_steelgraulight {border-style: solid; border-color: #000000;  border-wi
 TD.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-size:8px;}
 TD.nix {background-color: transparent;}
 TD.aufklapp {background-color : #FFFAEE;}
+TD.suche {background-image: url('pictures/suche2.jpg');}
 
 BODY { background-color: #91A2B6; background : url('pictures/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
 
