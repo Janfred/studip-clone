@@ -25,35 +25,19 @@
 /* ------------------------------------------------------------------------- */
 
 
-/* Define all required konstants ------------------------------------------- */
-// /**
-//  * Status for showCorrectAnswers. Show the correct answers immediately.
-//  * @access public
-//  * @const CORRECTANSWERS_AFTER_VOTE
-//  */
-// define ("CORRECTANSWERS_AFTER_VOTE", 1);
-
-// /**
-//  * Status for showCorrectAnswers. Show the correct answers after the end of
-//  * the test
-//  * @access public
-//  * @const CORRECTANSWERS_AFTER_END
-//  */
-// define ("CORRECTANSWERS_AFTER_END", 0);
-/* ------------------------------------------------------------------------- */
-
-
 /**
  * TestVote.class.php
  *
  * This extends a vote in order to use right and wrong answers
  *
- * @author     Alexander Willner <mail@alexanderwillner.de>,
- *             Michael Cohrs <michael@cohrs.de>
- * @version    $Id$
- * @access     public
- * @package    vote
+ * @author      Alexander Willner <mail@alexanderwillner.de>,
+ *              Michael Cohrs <michael@cohrs.de>
+ * @version     $Id$
+ * @access      public
+ * @package     vote
+ * @modulegroup vote_modules
  */
+
 class TestVote extends Vote {
    /**
     * Whether the correctness shall be revealed to the user right after voting
@@ -91,9 +75,7 @@ class TestVote extends Vote {
       }
 
       if ($ok == NO)
-	 return $this->throwError (1, _("Der Test besitzt ".
-					"keine als richtig deklarierte ".
-					"Antwort."));
+	 return $this->throwError (1, _("Der Test besitzt keine als richtig deklarierte Antwort."));
 
       parent::setAnswers ($answerArray);
    }
@@ -117,7 +99,6 @@ class TestVote extends Vote {
    function getCo_Visibility () {
       return ($this->co_visibility == YES) ? YES : NO;
    }
-
 
    /**
     * Gets number of correct answers
@@ -143,7 +124,6 @@ class TestVote extends Vote {
 
       return $result;
    }
-
 
    /**
     * Loads an old vote (internal!)
