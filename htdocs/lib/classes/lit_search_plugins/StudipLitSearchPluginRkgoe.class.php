@@ -40,8 +40,10 @@ class StudipLitSearchPluginRkgoe extends StudipLitSearchPluginZ3950Abstract{
 		$this->description = "Göttinger Gesamtkatalog (Regionalkatalog Göttingen)";
 		$this->z_host = "z3950.gbv.de:20010/rkgoe";
 		$this->z_options = array('user' => '999', 'password' => 'abc');
-		$this->z_syntax = "UNIMARC";
+		$this->z_syntax = "MARC";
 		$this->convert_umlaute = true;
+		$this->z_accession_bib = "12";
+		$this->z_accession_re = '/[0-9]{9}/';
 		$this->z_profile = array('1016' => _("Basisindex [ALL]"), '2' => _("Körperschaftsname [KOS]"),
 								'3' => _("Kongress [KNS]"),'4' => _("Titelstichwörter [TIT]"),
 								'5' => _("Serienstichwörter [SER]"), '7' => _("ISBN [ISB]"),
@@ -49,26 +51,6 @@ class StudipLitSearchPluginRkgoe extends StudipLitSearchPluginZ3950Abstract{
 								'21' => _("alle Klassifikationen [SYS]"), '1004' => _("Person, Author [PER]"),
 								'1005' => _("Körperschaften [KOR]"), '1006' => _("Kongresse [KON]"),
 								'1007' => _("alle Nummern [NUM]"));
-		$this->mapping = array('001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
-								'010' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a '),
-								'101' => array('field' => 'dc_language', 'callback' => 'simpleMap', 'cb_args' => '$a'),
-								'200' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => '$a $e' . chr(10) . '$f'),
-								'210' => array(	array('field' => 'dc_date', 'callback' => 'simpleMap', 'cb_args' => '$d-01-01'),
-												array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$c, $a')),
-								'215' => array('field' => 'dc_format', 'callback' => 'simpleMap', 'cb_args' => '$a, $c'),
-								'225' => array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$a, $v'),
-								'300' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => 'Abstract: $a' . chr(10)),
-								'328' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => 'Dissertation note:$a' . chr(10)),
-								'463' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$t, $v'),
-								'606' => array('field' => 'dc_subject', 'callback' => 'simpleMap', 'cb_args' => ' $a '),
-								'700' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a, $b'),
-								'701' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
-								'702' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
-								'710' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a, $b'),
-								'711' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
-								'712' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
-								'856' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'URL: $u '),
-								);
 	}
 }
 ?>
