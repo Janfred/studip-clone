@@ -814,7 +814,10 @@ class VoteDB extends StudipObject {
 	 "FROM".
 	 " voteanswers ".
 	 "WHERE".
-	 " answer_id = '".$answerarray[0]["answer_id"]."'";
+	 " answer_id = '".$answerarray[0]["answer_id"]."'".
+	 " AND".
+	 " vote_id != '".$voteID."'";
+
       $this->db->query ($sql);
       if ($this->db->nf ()) 
 	 return $this->throwError (1, _("Sie haben mehrmals auf ".
@@ -1254,7 +1257,10 @@ class VoteDB extends StudipObject {
 	 "FROM".
 	 " voteanswers ".
 	 "WHERE".
-	 " answer_id = '".$answerarray[0]["answer_id"]."'";
+	 " answer_id = '".$answerarray[0]["answer_id"]."'".
+	 " AND".
+	 " vote_id != '".$voteID."'";
+
       $this->db->query ($sql);
       if ($this->db->nf ()) 
 	 return $this->throwError (1, _("Sie haben mehrmals auf ".
@@ -1262,7 +1268,7 @@ class VoteDB extends StudipObject {
 					"Voting bzw. der Test wurde bereits ".
 					" in die Datenbank geschrieben."));
       /* ------------------------------------------------------------------- */
-
+      
       /* If vote does not exists in DB create it --------------------------- */
       if (!$this->isExistant2 ()) {
 	 $sql =
