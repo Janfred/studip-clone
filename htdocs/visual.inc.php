@@ -818,7 +818,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 		}
 		elseif ($img) {
 			// Don't execute scripts
-			if (preg_match("'{$_SERVER['HTTP_HOST']}.*?\/.+?\.php'i", $params[4]))
+			if (preg_match("'{$_SERVER['HTTP_HOST']}.*?\/.+?[\?\&]'i", $params[4]))
 				return $params[0];
 			else if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
 				$tbr = $params[0];
@@ -839,7 +839,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 					}
 				}
-				$tbr = '<img src="'.idna_link($params[4])."\"$width border=\"0\"$style alt=\"{$params[1]}\" title=\"{$params[1]}\">";
+				$tbr = '<img src="'.idna_link($params[4])."\" $width border=\"0\" $style alt=\"{$params[1]}\" title=\"{$params[1]}\">";
 
 				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)+(/[^<\s]*[^\.\s<])*)#i', $params[7])) {
 					$tbr = '<a href="'.idna_link($params[7]).'" target="_blank">'.$tbr.'</a>';
