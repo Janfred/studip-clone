@@ -2,7 +2,7 @@
 
 /*
 copy_assi.php - Dummy zum Einstieg in Veranstaltungskopieren
-Copyright (C) 2001 Cornelis Kater <ckater@gwdg.de>
+Copyright (C) 2004 Tobias Thelen <tthelen@uni-osnabrueck.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ if ($SessSemName[1]) {
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="blank" colspan=2>
 	<blockquote>
-	Um die vorgewählte Veranstaltung zu kopieren klicken sie <a href="admin_seminare_assi.php?cmd=do_copy&cp_id=<? echo $SessSemName[1]; ?>&start_level=TRUE&class=1">hier</a>.
+	<? echo _("Um die vorgewählte Veranstaltung zu kopieren klicken sie <a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=$SessSemName[1]&start_level=TRUE&class=1\">hier</a>."); ?>
 	</blockquote>
 	<br />
 	</td></tr>
