@@ -243,26 +243,16 @@ if ($no_access) {
 		$add_msg="<a href=\"archiv.php?back=TRUE\"><b>&nbsp;Zur&uuml;ck</b></a> zum Archiv<br />&nbsp;" ;
 	else
 		$add_msg="<a href=\"folder.php\"><b>&nbsp;Zur&uuml;ck</b></a> zum Downloadbereich<br />&nbsp;";
-	?>
-	<html>
-		<head>
-			<title>Stud.IP</title>
-		<link rel="stylesheet" href="style.css" type="text/css">
-		<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-		<body bgcolor=white>
-	</head>
-	<body>
-	<?
 
-	include "header.php";
+	// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
 	parse_window("error§Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!", "§", "Download nicht m&ouml;glch", $add_msg);
 	page_close();
-
-	?>
-	</body>
-	<?
+	echo "</body>";
 	die;
-	}
+}
 
 //Datei verschicken
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");

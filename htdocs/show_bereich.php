@@ -1,6 +1,6 @@
 <?php
 /*
-sem_portal.php - Portal fuer Seminarfreischaltung von Stud.IP
+show_bereich.php - Anzeige von Veranstaltungen eines Bereiches oder Institutes
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>
 
 This program is free software; you can redistribute it and/or
@@ -21,28 +21,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
-include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
+// -- here you have to put initialisations for the current page
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php")
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-?>
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-</head>
-
-<? echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
-
-include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
-
-        if ($SessSemName[1]) {
-        	include "links1.php";
-       	}
-        	
-        $sess->register ("show_bereich_data");
+if ($SessSemName[1]) {
+	include ("$ABSOLUTE_PATH_STUDIP/links1.php");
+}
+		
+	$sess->register ("show_bereich_data");
 	$db=new DB_Seminar;
 
 	if ($id)

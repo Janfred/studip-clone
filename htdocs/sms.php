@@ -19,17 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-
 $perm->check("user");
 	
-include "seminar_open.php";
-        
-require_once ("functions.php");
-require_once ("msg.inc.php");
-require_once ("visual.inc.php");
-require_once ("messagingSettings.inc.php");
-require_once ("messaging.inc.php");
-        
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+	
 $sess->register("sms_data");
 $msging=new messaging;
 
@@ -95,17 +95,17 @@ if ($cmd=="insert") {
 			$msg.="Die Nachricht wurde an alle $buddy_count Buddies verschickt!";
 	}
 	if ($count < 0)
-        	$msg="error§Ihre Nachricht konnte nicht gesendet werden, die Nachricht ist leer.";
-        elseif ((!$count) && (!$buddy_count))
-        	$msg="error§Ihre Nachricht konnte nicht gesendet werden.";
-        	
+		$msg="error§Ihre Nachricht konnte nicht gesendet werden, die Nachricht ist leer.";
+	elseif ((!$count) && (!$buddy_count))
+		$msg="error§Ihre Nachricht konnte nicht gesendet werden.";
+		
 	$sms_msg=rawurlencode ($msg);
 
 	if ($sms_source_page) {
 		header ("Location: $sms_source_page?username=$username&sms_msg=$sms_msg");
 		die;
 		}
-        }
+	}
 
 //Chateinladung absetzen
 if ($cmd=="chatinsert") {
@@ -120,26 +120,12 @@ if ($cmd=="chatinsert") {
 	if ($sms_source_page) {
 		header ("Location: $sms_source_page?username=$username&sms_msg=$sms_msg");
 		die;
-		}
-        }
-        
-?>
-<html>
-<head>
-<title>Stud.IP</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-<body bgcolor=white>
-
-<?
-
-
-//Ab hier Anzeige
-include "header.php";   //hier wird der "Kopf" nachgeladen
+	}
+}
+	
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	change_messaging_view();
@@ -209,11 +195,11 @@ if ($cmd=="write") {
 	echo "</tr></table>	";
 	
 	echo"</form>\n";
-        }
+	}
 
 //Ausgabe von vorhandenen Nachrichten
 else {
-        $db->query("SELECT user_id_snd, user_id_rec, mkdate, message, message_id, Vorname, Nachname  FROM globalmessages LEFT JOIN auth_user_md5 ON (username = user_id_snd) WHERE globalmessages.user_id_rec LIKE '".get_username($user->id)."' ORDER BY globalmessages.mkdate DESC");
+	$db->query("SELECT user_id_snd, user_id_rec, mkdate, message, message_id, Vorname, Nachname  FROM globalmessages LEFT JOIN auth_user_md5 ON (username = user_id_snd) WHERE globalmessages.user_id_rec LIKE '".get_username($user->id)."' ORDER BY globalmessages.mkdate DESC");
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -280,7 +266,7 @@ if ($msg)	{
 							$n++;
 							
 							// nach der Anzeige wird die Message geloescht
-                                                        $db2->query("DELETE FROM globalmessages WHERE message_id LIKE '".$db->f("message_id")."' ");
+							$db2->query("DELETE FROM globalmessages WHERE message_id LIKE '".$db->f("message_id")."' ");
 							}
  						}
 			}
@@ -356,7 +342,7 @@ if ($msg)	{
 		
 	//letzte Besuchszeit ablegen
 	$my_messaging_settings["last_visit"]=time();
-        }
+	}
 
 ?>
 </tr></table></td></tr></table>

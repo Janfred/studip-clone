@@ -71,11 +71,9 @@ while ($db->next_record())
                }
       }
 }
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 ?>
-<html>
-<head>
-<title>Stud.IP-Messenger (<?=$auth->auth["uname"]?>)</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
 <script language="JavaScript">
 <!--
 
@@ -108,12 +106,7 @@ setTimeout('again_and_again();',<? print($refresh*1000);?>);
 ?>
 //-->
 </script>
-</head>
 
-
-
-
-<body bgcolor=white>
 <table width="100%" border=0 cellpadding=2 cellspacing=0>
 <tr>
 	<td class="topic" colspan=2><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp;Stud.IP-Messenger</b></td>
