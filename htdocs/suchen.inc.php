@@ -20,10 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //////////////////////////////////////////////////////////////////////////
 
-function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt, $root_name, $description, $username, $mehr, $show,$write=0,$modify_dt) {
-	global $PHP_SELF,$loginfilelast,$SessSemName,$forum,$view,$davor,$check_author,$check_cont,$check_name,$suchbegriff,$mehr,$tmp,$open,$show,$anfang,$auth,$user;
+function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt, $root_name, $description, $username, $mehr, $show,$write=0,$modify_dt,$suchbegriff) {
+	global $PHP_SELF,$loginfilelast,$SessSemName,$forum,$view,$davor,$check_author,$check_cont,$check_name,$mehr,$tmp,$open,$show,$anfang,$auth,$user;
 	
-	$suchbegriff = rawurlencode($suchbegriff);
 	$meineseite = $PHP_SELF;
 	$datumtmp = $loginfilelast[$SessSemName[1]];
 	IF ($datumtmp < $modify_dt) $neuer_beitrag = TRUE;  //ist der Beitrag neu?
@@ -243,7 +242,7 @@ while($i<=$mehr) {
 	$db2->query("SELECT username FROM auth_user_md5 WHERE user_id='$user_id'");
 	$db2->next_record();
 	$tmp = $db->f("topic_id");
-	topic_liste_suche($db->f("topic_id"),$db->f("thema_id"),$open,$db->f("titel"),$db->f("author"),$db->f("mkdate"),$db->f("thema"),$db->f("description"),$db2->f("username"),$mehr,$show,$write,$db->f("chdate"));
+	topic_liste_suche($db->f("topic_id"),$db->f("thema_id"),$open,$db->f("titel"),$db->f("author"),$db->f("mkdate"),$db->f("thema"),$db->f("description"),$db2->f("username"),$mehr,$show,$write,$db->f("chdate"),$suchbegriff);
 	$i++; 
 }
 $eintrag = 0;
