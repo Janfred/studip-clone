@@ -131,7 +131,7 @@ function print_institut_content($instid,$my_inst_values) {
 
   // Wikiseiten
   if ($my_sem_values["neuewikiseiten"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s neue"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
   elseif ($my_sem_values["wikiseiten"])
 		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
   else
