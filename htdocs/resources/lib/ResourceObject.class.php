@@ -49,8 +49,6 @@ class ResourceObject {
 	var $category_name;			//name of the assigned catgory
 	var $category_iconnr;			//iconnumber of the assigned catgory
 	var $category_id;			//Die Kategorie des Objects
-	var $parent_bind=FALSE;			//Verknuepfung mit Parent? (still unused at present!)
-
 	
 	//Konstruktor
 	function ResourceObject($name='', $description='', $parent_bind='', $root_id='', $parent_id='', $category_id='', $owner_id='', $id = '') {
@@ -300,10 +298,13 @@ class ResourceObject {
 	}
 	
 	function getFormattedLink($javaScript = TRUE, $target_new = TRUE, $quick_view = FALSE, $view ="view_schedule", $view_mode = "no_nav") {
-		if (!$javaScript)
-			return "<a ".(($target_new) ? "target=\"_new\"" : "")." href=\"".$this->getLink($quick_view, $view, $view_mode)."\">".$this->getName()."</a>";
-		else
-			return "<a href=\"".$PHP_SELF."#\" onClick=\"javascript:window.open('".$this->getLink($quick_view, $view, $view_mode)."','"._("Ressource anzeigen und bearbeiten")."','scrollbars=yes,width=1000,height=700,resizable=yes');\" >".$this->getName()."</a>";
+		if ($this->id) {
+			if (!$javaScript)
+				return "<a ".(($target_new) ? "target=\"_new\"" : "")." href=\"".$this->getLink($quick_view, $view, $view_mode)."\">".$this->getName()."</a>";
+			else
+				return "<a href=\"".$PHP_SELF."#\" onClick=\"javascript:window.open('".$this->getLink($quick_view, $view, $view_mode)."','"._("Ressource anzeigen und bearbeiten")."','scrollbars=yes,width=1000,height=700,resizable=yes');\" >".$this->getName()."</a>";
+		} else
+			return FALSE;
 	}
 	
 	function getOrgaLink ($id='') {
