@@ -1,7 +1,7 @@
 <?
 
 /*
-calendar_func.inc.php - 0.8-20020709
+calendar_func.inc.php
 Grundlegende Terminkalenderfunktionen fuer
 persoenlichen Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
@@ -97,18 +97,6 @@ function sem ($tmstamp) {
 		if($tmstamp > $start && $tmstamp < $ende)
 			return "WS";
 	}
-}
-	
-
-// Erzeugt aus einem Unix-Timestamp den Monatsnamen
-// NO LONGER IN USE
-function month ($tmstamp) {
-	$monthname = array("", "Januar", "Februar", "M&auml;rz", "April", "Mai",
-											"Juni", "Juli", "August", "September", "Oktober",
-											"November", "Dezember");
-											
-	$dom = date("n", $tmstamp);
-	return $monthname[$dom];
 }
 
 function ldate ($tmstamp) {
@@ -252,8 +240,6 @@ function day_diff ($ts_1, $ts_2) {
 		$days_2--;
 		
 	return $days - abs($days_1 - $days_2);
-}
-	
-	
+}	
 
 ?>

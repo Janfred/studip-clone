@@ -47,45 +47,45 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n"
 echo "<tr><td class=\"blank\" width=\"50%\">\n";
 echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
-echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n";
-echo "<th width=\"10%\" height=\"40\"><a href=\"$PHP_SELF?cmd=showday&atime=";
+echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n";
+echo "<td align=\"center\" width=\"10%\" height=\"40\"><a href=\"$PHP_SELF?cmd=showday&atime=";
 echo $atime - 86400 . "\">\n";
 $tooltip = tooltip(_("zurück"));
-echo "<img border=\"0\" src=\"./pictures/calendar_previous.gif\"$tooltip></a></th>\n";
-echo "<th width=\"80%\" class=\"cal\"><b>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_previous.gif\"$tooltip></a></td>\n";
+echo "<td class=\"calhead\" width=\"80%\" class=\"cal\"><b>\n";
 
 echo $aday->toString("LONG") . ", " . $aday->getDate();
 // event. Feiertagsnamen ausgeben
 if ($hday = holiday($atime))
 	echo "<br>" . $hday["name"];
 
-echo "</b></th>\n";
-echo "<th width=\"10%\"><a href=\"$PHP_SELF?cmd=showday&atime=";
+echo "</b></td>\n";
+echo "<td align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showday&atime=";
 echo $atime + 86400 . "\">\n";
 $tooltip = tooltip(_("vor"));
-echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\"$tooltip></a></th>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\"$tooltip></a></td>\n";
 echo "</tr>\n";
 
 if ($st > 0) {
-	echo "<tr><th colspan=\"3\"><a href=\"$PHP_SELF?cmd=showday&atime=";
+	echo "<tr><td align=\"center\" colspan=\"3\"><a href=\"$PHP_SELF?cmd=showday&atime=";
 	echo ($atime - ($at - $st + 1) * 3600) . "\">";
 	$tooltip = tooltip(_("zeig davor"));
-	echo "<img border=\"0\" src=\"./pictures/forumgraurauf.gif\"$tooltip></a></th></tr>\n";
+	echo "<img border=\"0\" src=\"./pictures/forumgraurauf.gif\"$tooltip></a></td></tr>\n";
 }
 echo "</table>\n</td></tr>\n<tr><td class=\"blank\">\n";
-echo "<table width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\">";
+echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">";
 
 echo $tab["table"];
 
 if ($et < 23) {
-	echo "<tr><th colspan=\"" . $tab["max_columns"] . "\">";
+	echo "<tr><td align=\"center\" colspan=\"" . $tab["max_columns"] . "\">";
 	echo "<a href=\"$PHP_SELF?cmd=showday&atime=";
 	echo ($atime + ($et - $at + 1) * 3600) . "\">";
 	$tooltip = tooltip(_("zeig danach"));
-	echo "<img border=\"0\" src=\"./pictures/forumgraurunt.gif\"$tooltip></a></th></tr>\n";
+	echo "<img border=\"0\" src=\"./pictures/forumgraurunt.gif\"$tooltip></a></td></tr>\n";
 }
 else
-	echo "<tr><th colspan=\"" . $tab["max_columns"] . "\">&nbsp;</th></tr>\n";
+	echo "<tr><td colspan=\"" . $tab["max_columns"] . "\">&nbsp;</td></tr>\n";
 
 echo "</table>\n</td></tr>\n</table>\n<td width=\"50%\" valign=\"top\" class=\"blank\">\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";

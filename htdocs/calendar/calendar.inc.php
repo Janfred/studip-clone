@@ -45,6 +45,8 @@ require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_func.inc.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -66,7 +68,27 @@ if(isset($mod_y_x)) $mod = 'YEARLY';
 
 if($mod)
 	$cmd = 'edit';
-	
+
+if ($del_x && $termin_id)
+	$cmd = 'del';
+
+if ($back_recur_x)
+	unset($set_recur_x);
+
+if ($cancel_x) {
+	if($calendar_sess_control_data['source']){
+		$destination = $calendar_sess_control_data['source'];
+		$calendar_sess_control_data['source'] = '';
+		page_close();
+		header("Location: $destination");
+		exit;
+	}
+	if ($calendar_sess_control_data['view_prv'])
+		$cmd = $calendar_sess_control_data['view_prv'];
+	else
+		$cmd = $calendar_user_control_data['view'];
+}
+
 // Zeitbereich eingrenzen
 if(isset($atime) && ($atime < 0 || $atime > 2114377200))
 	$atime = time();
@@ -125,7 +147,7 @@ else
 	$bind_seminare = '';
 
 // Wenn Termin-Anlegen oder -Bearbeiten beendet ist, vergiss die Formulardaten
-if(isset($calendar_sess_forms_data) && $cmd != 'edit'){
+if(isset($calendar_sess_forms_data) && $cmd != 'add'){
 	$sess->unregister('calendar_sess_forms_data');
 	unset($calendar_sess_forms_data);
 }
@@ -141,29 +163,21 @@ if($cmd == ''){
 if(!$calendar_sess_control_data)
 	$sess->register('calendar_sess_control_data');
 
+$accepted_vars = array('start_m', 'start_h', 'start_day', 'start_month', 'start_year', 'end_m',
+											'end_h',	'end_day', 'end_month', 'end_year',	'exp_day', 'exp_month',
+											'exp_year', 'cat', 'priority', 'txt', 'content', 'loc', 'linterval_d',
+											'linterval_w', 'wdays', 'type_m', 'linterval_m2', 'sinterval_m',
+											'linterval_m1', 'wday_m', 'day_m', 'type_y', 'sinterval_y', 'wday_y',
+											'day_y', 'month_y1', 'month_y2', 'atime', 'termin_id', 'exp_c', 'mod',
+											'via', 'cat_text');
+
 if($cmd == 'add' || $cmd == 'edit'){
 	if(!isset($calendar_sess_forms_data))
 		$sess->register('calendar_sess_forms_data');
 	if(!empty($HTTP_POST_VARS)){
-	/*	if($calendar_sess_control_data["mod"])
-			$mod_prv = $calendar_sess_control_data["mod"];
-		else
-			$mod_prv = "keine";
-			
-		if($mod)
-			$calendar_sess_control_data["mod"] = $mod; */
 			
 		// Formulardaten uebernehmen
-		$accepted_vars = array('start_m', 'start_h', 'start_day', 'start_month', 'start_year', 'end_m',
-													'end_h',	'end_day', 'end_month', 'end_year',	'exp_day', 'exp_month',
-													'exp_year', 'cat', 'priority', 'txt', 'content', 'loc', 'linterval_d',
-													'linterval_w', 'wdays', 'type_m', 'linterval_m2', 'sinterval_m',
-													'linterval_m1', 'wday_m', 'day_m', 'type_y', 'sinterval_y', 'wday_y',
-													'day_y', 'month_y1', 'month_y2', 'atime', 'termin_id', 'exp_c', 'mod',
-													'via'
-													);
-		reset($HTTP_POST_VARS);
-		while(list($key, $value) = each($HTTP_POST_VARS)){
+		foreach ($HTTP_POST_VARS as $key => $value) {
 			if(in_array($key, $accepted_vars))
 				$calendar_sess_forms_data[$key] = $value;
 		}
@@ -200,7 +214,6 @@ switch($cmd){
 		}
 		break;
 	case 'del':
-		require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
 		$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
 		$atermin =& new DbCalendarEvent($termin_id);
 		$atermin->delete();
@@ -242,38 +255,33 @@ switch($cmd){
 		$title = _("Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden");
 		break;
 		
-/*		case "import":
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Termine importieren");
-		break; */
-		
 	case 'edit':
 		if ($termin_id && !$mod) {
 			//if($sem_id){
 			
 			if ($evtype == 'sem') {
-				require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
 				$atermin =& new SeminarEvent();
 				if (!$atermin->restore($termin_id)) {
-					// there is something wrong... its better to go back to the last view
+					// its something wrong... better to go back to the last view
+					page_close();
 					header("Location: " . $PHP_SELF	. "?cmd="
 							. $calendar_sess_control_data['view_prv'] . "&atime=$atime");
-					page_close();
 					exit;
 				}
 			}
 			else{	
-				require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
 				$atermin =& new DbCalendarEvent($termin_id);
 				$repeat = $atermin->getRepeat();
-		//	$translate = array("SINGLE"=>"keine", "DAILY"=>"taeglich", "WEEKLY"=>"woechentlich",
-			//	                 "MONTHLY"=>"monatlich", "YEARLY"=>"jaehrlich");
 				$mod = $repeat['rtype'];
-		//	if(empty($HTTP_POST_VARS))
-			//	$calendar_sess_control_data["mod"] = $mod;
+		
 			}
 		}
-		if($termin_id)
-			$title = _("Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten");
+		if($termin_id) {
+			if (get_class($atermin) == 'seminarevent')
+				$title = _("Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin");
+			else
+				$title = _("Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten");
+		}
 		else
 			$title = _("Mein pers&ouml;nlicher Terminkalender - Neuer Termin");
 			
@@ -315,56 +323,73 @@ if ($cmd == 'add') {
 	
 	switch($mod_prv){
 		case 'DAILY':
-			if(!preg_match("/^\d{1,3}$/", $linterval_d))
+			if (!preg_match("/^\d{1,3}$/", $linterval_d)) {
 				$err['linterval_d'] = TRUE;
+				$set_recur_x = 1;
+			}
 			break;
 		case 'WEEKLY':
-			if(!preg_match("/^\d{1,3}$/", $linterval_w))
+			if (!preg_match("/^\d{1,3}$/", $linterval_w)) {
 				$err['linterval_w'] = TRUE;
+				$set_recur_x = 1;
+			}
 			break;
 		case 'MONTHLY':
-			if($type_m == 'day'){
-				if(!preg_match("/^\d{1,2}$/", $day_m) && $day_m < 32)
+			if ($type_m == 'day') {
+				if (!preg_match("/^\d{1,2}$/", $day_m) || $day_m > 31 || $day_m < 1) {
 					$err['sinterval_m'] = TRUE;
-				if(!preg_match("/^\d{1,3}$/", $linterval_m1))
+					$set_recur_x = 1;
+				}
+				if (!preg_match("/^\d{1,3}$/", $linterval_m1)) {
 					$err['linterval_m1'] = TRUE;
+					$set_recur_x = 1;
+				}
 			}
-			else
-				if(!preg_match("/^\d{1,3}$/", $linterval_m2))
+			else {
+				if (!preg_match("/^\d{1,3}$/", $linterval_m2)) {
 					$err['linterval_m2'] = TRUE;
+					$set_recur_x = 1;
+				}
+			}
 			break;
 		case 'YEARLY':
 			// Jahr 2000 als Schaltjahr
-			if(!check_date($month_y1, $day_y, 2000))
+			if (!check_date($month_y1, $day_y, 2000)) {
 				$err['day_y'] = TRUE;
+				$set_recur_x = 1;
+			}
 	}
 	
 	if($exp_c == 'date')
-		if(!check_date($exp_month, $exp_day, $exp_year))
+		if (!check_date($exp_month, $exp_day, $exp_year)) {
 			$err['exp_time'] = TRUE;
+			$set_recur_x = 1;
+		}
 		else{
 			$exp = mktime(23, 59, 59, $exp_month, $exp_day, $exp_year);
-			if(!$err['end_time'] && $exp < $end)
+			if (!$err['end_time'] && $exp < $end) {
 				$err['exp_time'] = TRUE;
+				$set_recur_x = 1;
+			}
 		}
 	else
-		$exp = "";
+		$exp = '';
 	
 	// wenn alle Daten OK, dann Termin anlegen oder, wenn termin_id vorhanden,
 	// updaten
 	if (empty($err)) {
-		include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
-		
+	
 		$atermin =& new DbCalendarEvent('', array(
-				'DTSTART'     => $start,
-				'DTEND'       => $end,
-				'SUMMARY'     => $txt,
-				'CATEGORIES'  => $cat,
-				'PRIORITY'    => $priority,
-				'LOCATION'    => $loc,
-				'DESCRIPTION' => $content));
+				'DTSTART'         => $start,
+				'DTEND'           => $end,
+				'SUMMARY'         => $txt,
+				'CATEGORIES'      => $cat_text,
+				'STUDIP_CATEGORY' => $cat,
+				'PRIORITY'        => $priority,
+				'LOCATION'        => $loc,
+				'DESCRIPTION'     => $content));
 		$atermin->setRepeat(array('rtype' => 'SINGLE'));
-	//	$atermin->setDescription($content);
+			$atermin->setDescription($content);
 		switch ($via) {
 			case 'PUBLIC':
 				$atermin->setType('PUBLIC');
@@ -428,33 +453,46 @@ if ($cmd == 'add') {
 				}
 				break;
 		}
-		
-		// wird eine termin_id uebergeben, wird ein update durchgefuehrt
-		if($termin_id) {
-			$termin_old =& new DbCalendarEvent($termin_id);
-			$termin_old->update($atermin);
-			$termin_old->save();
-		}
-		else
-			$atermin->save();
-		
-		if($calendar_sess_control_data['source']){
-			$destination = $calendar_sess_control_data['source'];
-			$calendar_sess_control_data['source'] = '';
-			header("Location: $destination");
-			page_close();
-			exit;
-		}
-		
-		if(!empty($calendar_sess_control_data['view_prv']))
-			$cmd = $calendar_sess_control_data['view_prv'];
-		else
-			$cmd = 'showday';
 			
+		if (!$set_recur_x && !$back_recur_x) {
+		
+			// wird eine termin_id uebergeben, wird ein update durchgefuehrt
+			if($termin_id) {
+				$termin_old =& new DbCalendarEvent($termin_id);
+				$termin_old->update($atermin);
+				$termin_old->save();
+			}
+			else
+				$atermin->save();
+			
+			if($calendar_sess_control_data['source']){
+				$destination = $calendar_sess_control_data['source'];
+				$calendar_sess_control_data['source'] = '';
+				page_close();
+				header("Location: $destination");
+				exit;
+			}
+			
+			if(!empty($calendar_sess_control_data['view_prv']))
+				$cmd = $calendar_sess_control_data['view_prv'];
+			else
+				$cmd = 'showday';
+				
+		}
+		else {
+			$cmd = 'edit';
+			$mod = $mod_prv ? $mod_prv : 'SINGLE';
+		}
 	}
-	else{
+	else {
 		$cmd = 'edit';
-		$mod = $mod_prv;
+		$mod = $mod_prv ? $mod_prv : 'SINGLE';
+		if ($back_recur_x) {
+			$set_recur_x = 1;
+			unset($back_recur_x);
+		}
+		else
+			unset($set_recur_x);
 	}
 }
 
@@ -511,26 +549,6 @@ if($cmd == 'showweek'){
 	else{
 		$st = $w_end - 2;
 		$et = 23;
-	}
-
-	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
-	$aweek =& new DbCalendarWeek($atime, $calendar_user_control_data['type_week']);
-	$aweek->bindSeminarEvents($bind_seminare);
-	$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data['step_week'],
-												FALSE, $calendar_user_control_data['link_edit']);
-	$rowspan = ceil(3600 / $calendar_user_control_data['step_week']);
-	$height = ' height="20"';
-	if($aweek->getType() == 5)
-		$width = '98';
-	else
-		$width = '99';
-	if($rowspan > 1){
-		$colspan_1 = ' colspan="2"';
-		$colspan_2 = $tab['max_columns'] + 4;
-	}
-	else{
-		$colspan_1 = '';
-		$colspan_2 = $tab['max_columns'] + 2;
 	}
 	
 	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
@@ -596,6 +614,7 @@ if ($cmd == "edit") {
 		$end_year = $start_year;
 		$expire = 2114377200;
 		$cat = 1;
+		$cat_text = '';
 		$via = 'PRIVATE';
 		$wdays = array(strftime('%u', $atime));
 		$edit_mode_out = '<b>';
@@ -684,6 +703,10 @@ if ($cmd == "edit") {
 		$content = htmlReady($atermin->getDescription());
 		$loc = htmlReady($atermin->getLocation());
 		
+		// store all form values in session variable
+		foreach ($accepted_vars as $var)
+			$calendar_sess_forms_data[$var] = $$var;
+		
 		$edit_mode_out = '<b>';
 		if (get_class($atermin) == 'seminarevent')
 			$edit_mode_out .= sprintf(_("Termin am %s"), ldate($atermin->getStart()));
@@ -719,6 +742,7 @@ if ($cmd == "edit") {
 		$txt = htmlentities(stripslashes($txt), ENT_QUOTES);
 		$content = htmlentities(stripslashes($content), ENT_QUOTES);
 		$loc = htmlentities(stripslashes($loc), ENT_QUOTES);
+		$cat_text = htmlentities(stripslashes($cat_text), ENT_QUOTES);
 	}
 	
 	// start and end time in 5 minute steps	

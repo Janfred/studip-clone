@@ -38,11 +38,20 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
  
+global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
+
+require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
 
 class CalendarWriter {
 
 	var $default_filename_suffix;
 	var $format;
+	
+	function CalendarWriter () {
+		
+		// initialize error handler
+		init_error_handler('_calendar_error');
+	}
 	
 	function write (&$events) {
 	

@@ -140,12 +140,11 @@ class DbCalendarEventList {
 						'CLASS'         => 'PRIVATE',
 						'SEMNAME'       => $db->f('Name'),
 						'UID'           => SeminarEvent::getUid($db->f('termin_id')),
-						'DTSTAMP'       => $db->f('mkdate'),
+						'CREATED'       => $db->f('mkdate'),
 						'LAST-MODIFIED' => $db->f('chdate')),
 						$db->f('range_id'));
 						
 				$event->setWritePermission($db->f('status') == 'tutor' || $db->f('status') == 'dozent');
-				$event->setColor($db->f('gruppe'));
 				$this->events[] = $event;
 			}
 			$this->sort();

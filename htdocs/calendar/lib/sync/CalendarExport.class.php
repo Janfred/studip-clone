@@ -36,20 +36,24 @@
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CALENDAR_DRIVER;
 
+require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
  
 class CalendarExport {
 	
 	var $_writer;
 	var $export;
-
+	
 	function CalendarExport (&$writer) {
 		
-		$this->_writer = $writer;
+		// initialize error handling
+		init_error_handler('_calendar_error');
+		$this->_writer =& $writer;
 	}
 	
 	function exportFromDatabase ($range_id, $start = 0, $end = 2114377200,
 			$event_types = 'CALENDAR_EVENTS', $except = NULL) {
+		global $_calendar_error;
 		
 		$export_driver =& new CalendarDriver();
 		$export_driver->openDatabaseForReading($range_id, $start, $end, $event_types, $except);
@@ -57,13 +61,26 @@ class CalendarExport {
 		$this->_export($this->_writer->writeHeader());
 		
 		while ($properties = $export_driver->nextProperties()) {
+			if ($properties['RRULE']['rtype'] == 'SINGLE')
+				unset($properties['RRULE']);
+						
 			$this->_export($this->_writer->write($properties));
+		}
+		
+		if ($export_driver->getCount() == 0) {
+			$_calendar_error->throwError(ERROR_MESSAGE,
+					_("Es wurden keine Termine exportiert."));
+		}
+		else {
+			$_calendar_error->throwError(ERROR_MESSAGE,
+					sprintf(_("Es wurden %s Termine exportiert"), $export_driver->getCount()));
 		}
 		
 		$this->_export($this->_writer->writeFooter());
 	}
 	
-	function exportFromObjects ($events) {
+	function exportFromObjects (&$events) {
+		global $_calendar_error;
 		
 		$this->_export($this->_writer->writeHeader());
 		
@@ -76,11 +93,19 @@ class CalendarExport {
 				unset($properties["RRULE"]);
 			unset($properties["EXPIRE"]);
 			
-			$properties["DTSTAMP"] = $event->getMakeDate();
 			$properties["LAST-MODIFIED"] = $event->getChangeDate();
 			$properties["UID"] = CalendarEvent::getUid($event->getId());
 			
 			$this->_export($this->_writer->write($properties));
+		}
+		
+		if (!sizeof($events)) {
+			$_calendar_error->throwError(ERROR_MESSAGE,
+					_("Es wurden keine Termine exportiert."));
+		}
+		else {
+			$_calendar_error->throwError(ERROR_MESSAGE,
+					sprintf(_("Es wurden %s Termine exportiert"), sizeof($events)));
 		}
 		
 		$this->_export($this->_writer->writeFooter());

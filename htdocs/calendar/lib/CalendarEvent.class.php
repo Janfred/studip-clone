@@ -62,7 +62,15 @@ class CalendarEvent extends Event {
 	*/
 	function getCategoryName () {
 		global $PERS_TERMIN_KAT;
-		return ($PERS_TERMIN_KAT[$this->properties['CATEGORIES']]['name']);
+		
+		if ($this->properties['STUDIP_CATEGORY'])
+			$categories[] = $PERS_TERMIN_KAT[$this->properties['STUDIP_CATEGORY']]['name'];
+		
+		$ext_categories = explode(',', $this->properties['CATEGORIES']);
+		foreach ($ext_categories as $ext_category)
+			$categories[] = trim($ext_category);
+		
+		return implode(', ', $categories);
 	}
 	
 	function isDayEvent () {
@@ -318,13 +326,150 @@ class CalendarEvent extends Event {
 		return "Stud.IP-$id@{$_SERVER['SERVER_NAME']}";
 	}
 	
-	function getColor () {
-		return "#000000";
+	/**
+	* Returns the index of a category.
+	* See config.inc.php $PERS_TERMIN_KAT.
+	*
+	* @access public
+	* @return int the index of the category
+	*/
+	function getCategory () {
+		global $PERS_TERMIN_KAT;
+		
+		if ($this->properties['STUDIP_CATEGORY'])
+			return $this->properties['STUDIP_CATEGORY'];
+			
+		$categories = array();
+		foreach ($PERS_TERMIN_KAT as $category)
+			$categories[] = strtolower($category['name']);
+		
+		$cat_event = explode(',', $this->properties['CATEGORIES']);
+		foreach ($cat_event as $category) {
+			if ($index = array_search(strtolower(trim($category)), $categories))
+				return ++$index;
+		}
+		
+		return 0;
+	}
+		
+	/**
+	* Returns an array with the path to a background image (index 'image')
+	* and the color (index 'color') of a category. If $image_size is 'small'
+	* returns th path to the smaller version of the image.
+	* See config.inc.php $PERS_TERMIN_KAT.
+	*
+	* @access public
+	* @param $image_size the size of the image ('small' or 'big')
+	* @return array image path and color
+	*/
+	function getCategoryStyle ($image_size = 'small') {
+		global $PERS_TERMIN_KAT, $CANONICAL_RELATIVE_PATH_STUDIP;
+	
+		$index = $this->getCategory();
+		if ($index) {
+			return array('image' => $image_size == 'small' ?
+				"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar/category{$index}_small.jpg" :
+				"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar/category{$index}.jpg",
+				'color' => $PERS_TERMIN_KAT[$index]['color']);
+		
+		}
+		
+		return array('image' => $image_size == 'small' ?
+				"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar/category1_small.jpg" :
+				"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar/category1.jpg",
+				'color' => $PERS_TERMIN_KAT[1]['color']);
 	}
 	
+	/**
+	* Returns a unique ID
+	*
+	* @access public
+	* @return String the unique ID
+	*/
 	function createUniqueId () {
 	
 		return md5(uniqid(rand() . "Stud.IP Calendar"));
+	}
+	
+	/**
+	* Returns a string representation of the recurrence rule
+	*
+	* @access public
+	* @return String the recurrence rule - human readable
+	*/
+	function toStringRecurrence () {
+		
+		$replace = array(_("Montag") . ', ', _("Dienstag") . ', ', _("Mittwoch") . ', ',
+						_("Donnerstag") . ', ', _("Freitag") . ', ', _("Samstag") . ', ', _("Sonntag") . ', ');
+		$search = array('1', '2', '3', '4', '5', '6', '7');
+		$wdays = str_replace($search, $replace, $this->properties['RRULE']['wdays']);
+		$wdays = substr($wdays, 0, -2);
+		
+		switch ($this->properties['RRULE']['rtype']) {
+			case 'DAILY':
+				if ($this->properties['RRULE']['linterval'] > 1) {
+					$text = sprintf(_("Der Termin wird alle %s Tage wiederholt."),
+						$this->properties['RRULE']['linterval']);
+				}
+				else
+					$text = _("Der Termin wird täglich wiederholt");
+				break;
+				
+			case 'WEEKLY':
+				if ($this->properties['RRULE']['linterval'] > 1) {
+					$text = sprintf(_("Der Termin wird alle %s Wochen am %s wiederholt."),
+							$this->properties['RRULE']['linterval'], $wdays);
+				}
+				else
+					$text = sprintf(_("Der Termin wird jeden %s wiederholt."), $wdays);
+				break;
+			
+			case 'MONTHLY':
+				if ($this->properties['RRULE']['linterval'] > 1) {
+					if ($this->properties['RRULE']['day']) {
+						$text = sprintf(_("Der Termin wird am %s. alle %s Monate wiederholt."),
+								$this->properties['RRULE']['day'], $this->properties['RRULE']['linterval']);
+					}
+					else {
+						$text = sprintf(_("Der Termin wird jeden %s. %s alle %s Monate wiederholt."),
+							$this->properties['RRULE']['sinterval'], $wdays,
+							$this->properties['RRULE']['linterval']);
+					}
+				}
+				else {
+					if ($this->properties['RRULE']['day']) {
+						$text = sprintf(_("Der Termin wird am %s. jeden Monat wiederholt."),
+								$this->properties['RRULE']['day'], $this->properties['RRULE']['linterval']);
+					}
+					else {
+						$text = sprintf(_("Der Termin wird am %s. %s jeden Monat wiederholt."),
+							$this->properties['RRULE']['sinterval'], $wdays,
+							$this->properties['RRULE']['linterval']);
+					}
+				}
+				break;
+				
+			case 'YEARLY':
+				$month_names = array(_("Januar"), _("Februar"), _("März"), _("April"), _("Mai"),
+							_("Juni"), _("Juli"), _("August"), _("September"), _("Oktober"),
+							_("November"), _("Dezember"));
+				if ($this->properties['RRULE']['day']) {
+					$text = sprintf(_("Der Termin wird jeden %s. %s wiederholt."),
+							$this->properties['RRULE']['day'],
+							$month_names[$this->properties['RRULE']['month'] - 1]);
+				}
+				else {
+					$text = sprintf(_("Der Termin wird jeden %s. %s im %s wiederholt."),
+							$this->properties['RRULE']['sinterval'], $wdays,
+							$month_names[$this->properties['RRULE']['month'] - 1]);
+				}
+				break;
+			
+			default:
+				$text = _("Der Termin wird nicht wiederholt.");
+		}
+		
+		return $text;
 	}
 	
 } // class Termin

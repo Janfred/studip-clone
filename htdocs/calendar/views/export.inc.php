@@ -45,7 +45,7 @@ require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExpo
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriterICalendar.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarSynchronizer.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-
+set_time_limit(0);
 if ($experiod != 'period') {
 	unset($exstartmonth);
 	unset($exstartday);
@@ -249,7 +249,7 @@ elseif ($expmod == 'exp' && empty($err)) {
 			$extype = 'ALL_EVENTS';
 			break;
 		case 'SEM':
-			$extype = 'SEM_EVENTS';
+			$extype = 'SEMINAR_EVENTS';
 			break;
 		default:
 			$extype = 'CALENDAR_EVENTS';
@@ -267,7 +267,7 @@ elseif ($expmod == 'imp') {
 	
 	$import->importIntoDatabase();
 	
-	header("Location: $PHP_SELF?cmd=export&atime=$atime");
+	header("Location: $PHP_SELF?cmd=export&atime=$atime&");
 	
 }
 elseif ($expmod == 'sync') {

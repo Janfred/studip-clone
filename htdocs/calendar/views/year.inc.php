@@ -47,19 +47,20 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n"
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
 echo "<table class=\"blank\" border=\"0\" width=\"98%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 echo "<tr><td class=\"blank\">\n";
-echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
-echo "<tr><th align=\"center\" width=\"10%\">\n";
+echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+echo "<tr><td align=\"center\" width=\"10%\">\n";
 echo "<a href=\"$PHP_SELF?cmd=showyear&atime=" . ($ayear->getStart() - 1) . "\">";
 echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\" ";
-echo tooltip(_("zurück")) . ">&nbsp;</a></th>\n";
-echo "<th class=\"cal\" align=\"center\" width=\"80%\">\n";
-echo "<font size=\"+2\"><b>" . $ayear->getYear() . "</b></font></th>\n";
-echo "<th align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showyear&atime=";
+echo tooltip(_("zurück")) . ">&nbsp;</a></td>\n";
+echo "<td class=\"calhead\" align=\"center\" width=\"80%\">\n";
+echo "<font size=\"+2\"><b>" . $ayear->getYear() . "</b></font></td>\n";
+echo "<td align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showyear&atime=";
 echo ($ayear->getEnd() + 1) . "\">\n";
 echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\" ";
-echo tooltip(_("vor")) . ">&nbsp;</a></th>\n";
+echo tooltip(_("vor")) . ">&nbsp;</a></td>\n";
 echo "</tr></table>\n</td></tr>\n";
-echo "<tr><td class=\"blank\"><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n";
+echo "<tr><td class=\"blank\">";
+echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n";
 	
 $days_per_month = array(31, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);											
 if (date("L", $ayear->getStart()))
@@ -68,10 +69,12 @@ if (date("L", $ayear->getStart()))
 echo "<tr>";
 for ($i = 1; $i < 13; $i++) {
 	$ts_month += ($days_per_month[$i] - 1) * 86400;
-	printf("<th width=\"8%%\"><a class=\"precol1\" href=\"%s?cmd=showmonth&atime=%s\">"
-			,$PHP_SELF, ($ayear->getStart() + $ts_month));
+	echo "<td align=\"center\" width=\"8%%\">";
+	echo "<a class=\"calhead\" href=\"" . $PHP_SELF;
+	echo "?cmd=showmonth&atime=" . ($ayear->getStart() + $ts_month) . "\">";
+	echo "<font size=\"-1\"><b>";
 	echo htmlentities(strftime("%B", $ts_month), ENT_QUOTES);
-	echo "</a></th>\n";
+	echo "</b></font></a></td>\n";
 }
 echo "</tr>\n";
 
@@ -164,9 +167,12 @@ for ($i = 1; $i < 32; $i++) {
 		$ts_month = 0;
 		for ($i = 1; $i < 13; $i++){ 
 			$ts_month += ($days_per_month[$i] - 1) * 86400;
-			echo "<th width=\"8%\"><a class=\"precol1\" href=\"$PHP_SELF?cmd=showmonth&atime=";
-			echo ($ayear->getStart() + $ts_month) . "\">"
-					. htmlentities(strftime("%B", $ts_month), ENT_QUOTES) . "</a></th>\n";
+			echo "<td align=\"center\" width=\"8%%\">";
+			echo "<a class=\"calhead\" href=\"" . $PHP_SELF;
+			echo "?cmd=showmonth&atime=" . ($ayear->getStart() + $ts_month) . "\">";
+			echo "<font size=\"-1\"><b>";
+			echo htmlentities(strftime("%B", $ts_month), ENT_QUOTES);
+			echo "</b></font></a></td>\n";
 		}
 		echo "</tr></table>\n</td></tr>\n";
 		jumpTo($jmp_m, $jmp_d, $jmp_y);

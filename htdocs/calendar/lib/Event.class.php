@@ -1,7 +1,7 @@
 <?
 
 /*
-Event.class.php - 0.8.20020409a
+Event.class.php
 Klassen fuer Persoenlichen Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
 
@@ -36,12 +36,12 @@ class Event {
 		$this->properties = $properties;
 		
 		$this->chng_flag = FALSE;
-		if (!$this->properties['DTSTAMP']) {
+		if (!$this->properties['CREATED']) {
 			$this->setMakeDate();
 			$this->chng_flag = TRUE;
 		}
 		if (!$this->properties['LAST-MODIFIED']) {
-			$this->setChangeDate(1);//$this->getMakeDate());
+			$this->setChangeDate($this->getMakeDate());
 			$this->chng_flag = TRUE;
 		}
 	}
@@ -75,10 +75,10 @@ class Event {
 	* @return String the title of this event
 	*/
 	function getTitle () {
-		if ($this->properties["SUMMARY"] == "")
-			return _("Keine Titel");
+		if ($this->properties['SUMMARY'] == '')
+			return _('Keine Titel');
 		
-		return $this->properties["SUMMARY"];
+		return $this->properties['SUMMARY'];
 	}
 	
 	/**
@@ -88,7 +88,7 @@ class Event {
 	* @return int the starttime of this event as a unix timestamp
 	*/
 	function getStart () {
-		return $this->properties["DTSTART"];
+		return $this->properties['DTSTART'];
 	}
 	
 	/**
@@ -98,7 +98,7 @@ class Event {
 	* @return int the endtime of this event as a unix timestamp
 	*/
 	function getEnd () {
-		return $this->properties["DTEND"];
+		return $this->properties['DTEND'];
 	}
 	
 	/**
@@ -108,7 +108,11 @@ class Event {
 	* @return String the categories
 	*/
 	function getCategory () {
-		return $this->properties["CATEGORIES"];
+		return $this->properties['CATEGORIES'];
+	}
+	
+	function getStudipCategory () {
+		return $this->properties['STUDIP_CATEGORY'];
 	}
 	
 	/**
@@ -120,9 +124,9 @@ class Event {
 	* @return String the description
 	*/
 	function getDescription () {
-		if(!$this->properties["DESCRIPTION"])
+		if(!$this->properties['DESCRIPTION'])
 			return FALSE;
-		return $this->properties["DESCRIPTION"];
+		return $this->properties['DESCRIPTION'];
 	}
 	
 	/**
@@ -132,8 +136,8 @@ class Event {
 	* @return int the duration of this event in seconds
 	*/
 	function getDuration () {
-		return $this->properties["DTEND"] - $this->properties["DTSTART"] -
-			((date("I", $this->properties["DTSTART"]) - date("I", $this->properties["DTEND"])) * 3600);
+		return $this->properties['DTEND'] - $this->properties['DTSTART'] -
+			((date('I', $this->properties['DTSTART']) - date('I', $this->properties['DTEND'])) * 3600);
 	}
 	
 	/**
@@ -143,9 +147,9 @@ class Event {
 	* @return String the location
 	*/
 	function getLocation () {
-		if($this->properties["LOCATION"] == "")
+		if($this->properties['LOCATION'] == '')
 			return FALSE;
-		return $this->properties["LOCATION"];
+		return $this->properties['LOCATION'];
 	}
 	
 	/**
@@ -155,7 +159,7 @@ class Event {
 	*/
 	function getMakeDate () {
 	
-		return $this->getProperty('DTSTAMP');
+		return $this->getProperty('CREATED');
 	}
 	
 	/**
@@ -170,11 +174,11 @@ class Event {
 	*/
 	function setMakeDate ($timestamp = "") {
 		if($timestamp === "")
-			$this->properties['DTSTAMP'] = time();
+			$this->properties['CREATED'] = time();
 		else
-			$this->properties['DTSTAMP'] = $timestamp;
-		if ($this->properties['LAST-MODIFIED'] < $this->properties['DTSTAMP'])
-			$this->properties['LAST-MODIFIED'] = $this->properties['DTSTAMP'];
+			$this->properties['CREATED'] = $timestamp;
+		if ($this->properties['LAST-MODIFIED'] < $this->properties['CREATED'])
+			$this->properties['LAST-MODIFIED'] = $this->properties['CREATED'];
 		$this->chng_flag = TRUE;
 	}
 	
@@ -204,8 +208,8 @@ class Event {
 			$this->properties['LAST-MODIFIED'] = time();
 		else
 			$this->properties['LAST-MODIFIED'] = $timestamp;
-		if($this->properties['DTSTAMP'] > $this->properties['LAST-MODIFIED'])
-			$this->properties['LAST-MODIFIED'] = $this->properties['DTSTAMP'];
+		if($this->properties['CREATED'] > $this->properties['LAST-MODIFIED'])
+			$this->properties['LAST-MODIFIED'] = $this->properties['CREATED'];
 	}
 	
 	/**
@@ -219,18 +223,6 @@ class Event {
 	}
 	
 	/**
-	* Returns this object in a serialized form (String)
-	*
-	* To unserialize use the PHP function unserialize().
-	*
-	* @access public
-	* @return String this event Object in a serialized form
-	*/
-	function serialize () {
-		return serialize($this);
-	}
-	
-	/**
 	* Changes the description.
 	*
 	* After calling this method, the method isModified() returns TRUE.
@@ -239,7 +231,7 @@ class Event {
 	* @param String $description the description
 	*/
 	function setDescription ($description) {
-		$this->properties["DESCRIPTION"] = $description;
+		$this->properties['DESCRIPTION'] = $description;
 		$this->chng_flag = TRUE;
 	}
 	
@@ -252,7 +244,7 @@ class Event {
 	* @param String $location the location
 	*/
 	function setLocation ($location) {
-		$this->properties["LOCATION"] = $location;
+		$this->properties['LOCATION'] = $location;
 		$this->chng_flag = TRUE;
 	}
 	
@@ -265,9 +257,9 @@ class Event {
 	* @param int $start a valid unix timestamp
 	*/ 
 	function setStart ($start) {
-		if($this->properties["DTEND"] < $start)
+		if($this->properties['DTEND'] < $start)
 			return FALSE;
-		$this->properties["DTSTART"] = $start;
+		$this->properties['DTSTART'] = $start;
 		$this->chng_flag = TRUE;
 		return TRUE;
 	}
@@ -281,17 +273,18 @@ class Event {
 	* @param int $end a valid unix timestamp
 	*/
 	function setEnd ($end) {
-		if($this->properties["DTSTART"] != 0 && $this->properties["DTSTART"] > $end)
+		if($this->properties['DTSTART'] != 0 && $this->properties['DTSTART'] > $end)
 			return FALSE;
-		$this->properties["DTEND"] = $end;
+		$this->properties['DTEND'] = $end;
 		$this->chng_flag = TRUE;
 		return TRUE;
 	}
 	
 	/**
 	* Changes the category of this event.
+	* Only skeleton, overwrite this function in child classes.
 	*
-	* See config.inc.php for further information and possible values.<br>
+	* See config.inc.php for further information and values.<br>
 	* <br>
 	* After calling this method, the method isModified() returns TRUE.
 	*
@@ -301,27 +294,21 @@ class Event {
 	* @return boolean TRUE if the value of $category is valid, otherwise FALSE
 	*/
 	function setCategory ($category) {
-		global $PERS_TERMIN_KAT;
-		if(is_array($PERS_TERMIN_KAT[$category])){
-			$this->properties["CATEGORIES"] = $category;
-			$this->chng_flag = TRUE;
-			return TRUE;
-		}
-		return FALSE;
+	
 	}
 	
 	/**
 	* Changes the title of this event.
 	*
-	* If no title is set it returns "Kein Titel".<br>
+	* If no title is set it returns 'Kein Titel'.<br>
 	* <br>
 	* After calling this method, the method isModified() returns TRUE.
 	*
 	* @access public
 	* @param String $title title of this event
 	*/
-	function setTitle ($title = "") {
-		$this->properties["SUMMARY"] = $title;
+	function setTitle ($title = '') {
+		$this->properties['SUMMARY'] = $title;
 		$this->chng_flag = TRUE;
 	}
 	

@@ -37,6 +37,7 @@
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CALENDAR_DRIVER;
 
+require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/CalendarEvent.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
 
@@ -46,26 +47,35 @@ class CalendarParser {
 	var $components;
 	var $type;
 	var $number_of_events;
-	var $errors;
-	var $fatal_error;
+	
+	function CalendarParser () {
+	
+		// initialize error handling
+		init_error_handler('_calendar_error');
+	}
 	
 	function numberOfEvents () {
 	
+		return FALSE;
 	}
 	
 	function parseIntoDatabase ($data, $ignore) {
-		
-		$database =& new CalendarDriver();
-		if ($this->parse($data, $ignore))
-			$database->writeIntoDatabase($this->components, 'INSERT_IGNORE');
 	
+		$database =& new CalendarDriver();
+		$this->parseIntoObjects($data, $ignore);
+		$database->writeObjectsIntoDatabase($this->events, 'INSERT_IGNORE');
 	}
 	
 	function parseIntoObjects ($data, $ignore) {
+		global $_calendar_error;
 		
 		if ($this->parse($data, $ignore)) {
 			foreach ($this->components as $properties)
 				$this->events[] =& new CalendarEvent($properties);
+		}
+		else {
+			$_calendar_error->throwError(ERROR_FATAL,
+					_("Die Import-Datei konnte nicht verarbeitet werden!"), __FILE__, __LINE__);
 		}
 	}
 	

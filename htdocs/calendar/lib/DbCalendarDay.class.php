@@ -162,6 +162,8 @@ class DbCalendarDay extends CalendarDay {
 	
 	// public
 	function bindSeminarEvents ($sem_id = "") {
+		global $TERMIN_TYP;
+	
 		if ($sem_id == "")
 			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
@@ -186,40 +188,24 @@ class DbCalendarDay extends CalendarDay {
 		
 		if ($db->num_rows() != 0) {
 			while ($db->next_record()) {
-				$app =& new SeminarEvent($db->f("termin_id"), array(
-						"DTSTART"     => $db->f("date"),
-						"DTEND"       => $db->f("end_time"),
-						"SUMMARY"     => $db->f("content"),
-						"DESCRIPTION" => $db->f("description"),
-						"CATEGORIES"  => $db->f("date_typ"),
-						"SEMNAME"     => $db->f("Name"),
-						"LOCATION"    => $db->f("raum")),
-						$db->f("range_id"), $db->f("mkdate"), $db->f("chdate"));
+				$app =& new SeminarEvent($db->f('termin_id'), array(
+						'DTSTART'            => $db->f('date'),
+						'DTEND'              => $db->f('end_time'),
+						'SUMMARY'            => $db->f('content'),
+						'DESCRIPTION'        => $db->f('description'),
+						'STUDIP_CATEGORY'    => $db->f('date_typ'),
+						'SEMNAME'            => $db->f('Name'),
+						'LOCATION'           => $db->f('raum'),
+						'CREATED'            => $db->f('mkdate'),
+						'LAST-MODIFIED'      => $db->f('chdate'),
+						'DTSTAMP'            => time()),
+						$db->f('range_id'));
 				$this->events[] = $app;
 			}
 			$this->sort();
 			return TRUE;
 		}
 		return FALSE;
-	}
-	
-	// public
-	function serialisiere () {
-		$size_app = sizeof($this->events);
-		$size_app_del = sizeof($this->events_delete);
-		
-		for ($i = 0; $i < $size_app; $i++)
-			$ser_app .= "i:$i;" . $this->events[$i]->serialisiere();
-		for ($i = 0; $i < $size_app_del; $i++)
-			$ser_app_del .= "i:$i;" . $this->events_delete[$i]->serialisiere();
-		
-		$pattern[0] = "/s:3:\"events\";a:$size_app:\{\}/";
-		$pattern[1] = "/s:7:\"events_delete\";a:$size_app_del:\{\}/";
-		
-		$replace[0] = "s:3:\"events\";a:$size_app:{".$ser_app."}";
-		$replace[1] = "s:7:\"events_delete\";a:$size_app_del:{".$ser_app_del."}";
-		
-		return preg_replace($pattern, $replace, serialize($this));
 	}
 	
 	function getUserId () {

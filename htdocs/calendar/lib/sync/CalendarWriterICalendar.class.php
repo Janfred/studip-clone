@@ -48,6 +48,7 @@ class CalendarWriteriCalendar extends CalendarWriter {
 	
 	function CalendarWriteriCalendar () {
 		
+		parent::CalendarWriter();
 		$this->default_filename_suffix = "ics";
 		$this->format = "iCalendar";
 	}
@@ -77,7 +78,10 @@ class CalendarWriteriCalendar extends CalendarWriter {
 	function write ($properties) {
 
 		$result	= "BEGIN:VEVENT" . $this->newline;
-
+		
+		$match_pattern = array('\\', '\n', ';', ',');
+		$replace_pattern = array('\\\\', '\\n', '\;', '\,');
+		
 		foreach ($properties as $name => $attribute) {
 			$name = $name;
 			$params = array();
@@ -87,9 +91,6 @@ class CalendarWriteriCalendar extends CalendarWriter {
 			if ($value === "")
 				continue;
 			
-			$match_pattern = array('\\', '\n', ';', ',');
-			$replace_pattern = array('\\\\', '\\n', '\;', '\,');
-			
 			switch ($name) {
 				// text fields
 				case 'SUMMARY':
@@ -98,15 +99,16 @@ class CalendarWriteriCalendar extends CalendarWriter {
 				case 'LOCATION':
 					$value = str_replace($match_pattern, $replace_pattern, $value);
 					break;
-				// Date fields with DST
-				case 'DTSTAMP':
+					
+				// Date fields
 				case 'LAST-MODIFIED':
-					$value = $this->_exportDateTime($value, TRUE);
-					break;
-				// Date fields without DST
 				case 'CREATED':
 				case 'COMPLETED':
 					$value = $this->_exportDateTime($value);
+					break;
+				
+				case 'DTSTAMP':
+					$value = $this->_exportDateTime(time());
 					break;
 
 				case 'DTEND':
@@ -201,7 +203,7 @@ class CalendarWriteriCalendar extends CalendarWriter {
 							$value = '9';
 							break;
 						default:
-							$value = '1';
+							$value = '0';
 					}
 					break;
 				
@@ -218,13 +220,13 @@ class CalendarWriteriCalendar extends CalendarWriter {
 				
 				case "UID":
 					$value = "$value";
-
+				
 			}
-
+			
 			$attr_string = "$name$params_str:$value";
 			$result .= $this->_foldLine($attr_string) . $this->newline;
 		}
-
+	//	$result .= 'DTSTAMP:' . $this->_exportDateTime(time()) . $this->newline;
 		$result .= "END:VEVENT" . $this->newline;
 
 		return utf8_encode($result);
@@ -271,16 +273,13 @@ class CalendarWriteriCalendar extends CalendarWriter {
 	 * @param int $value Unix timestamp
 	 * @return String Date and time (UTC) iCalendar formatted
 	 */
-	function _exportDateTime ($value, $dst = TRUE) {
+	function _exportDateTime ($value) {
 		
-		if ($dst) {
-			$TZOffset  = 3600 * substr(date('O', $value), 0, 3);
-			$TZOffset += 60 * substr(date('O', $value), 3, 2);
-		}
-		else
-			$TZOffset  = 3600;// * substr(date('O'), 0, 3);
-	//	$TZOffset += 60 * substr(date('O'), 3, 2);
-		$value -= $TZOffset;
+//		$TZOffset  = 3600 * substr(date('O', $value), 0, 3);
+//		$TZOffset += 60 * substr(date('O', $value), 3, 2);
+
+		//transform local time in UTC
+		$value -= date('Z', $value);
 
 		return $this->_exportDate($value) . 'T' . $this->_exportTime($value);
 	}

@@ -108,6 +108,8 @@ class DbCalendarMonth extends DbCalendarYear {
 	}
 
 	function bindSeminarEvents () {
+		global $TERMIN_TYP;
+	
 		// 6 Tage zusätzlich (angezeigte Tage des vorigen und des nächsten Monats)
 		$end = $this->getEnd() + 518400;
 		$start = $this->getStart() - 518400;
@@ -134,16 +136,17 @@ class DbCalendarMonth extends DbCalendarYear {
 		$db->query($query);
 		
 		while ($db->next_record()) {
-			$adate = mktime(12, 0, 0, date("n", $db->f("date")), date("j", $db->f("date")), $this->year, 0);
+			$adate = mktime(12, 0, 0, date("n", $db->f("date")), date("j", $db->f("date")),
+					date('Y', $db->f('date')), 0);
 			$this->appdays["$adate"]++;
 			$app =& new SeminarEvent($db->f("termin_id"), array(
-					"DTSTART"     => $db->f("date"),
-					"DTEND"       => $db->f("end_time"),
-					"SUMMARY"     => $db->f("content"),
-					"DESCRIPTION" => $db->f("description"),
-					"CATEGORIES"  => $db->f("date_typ"),
-					"LOCATION"    => $db->f("raum"),
-					"SEMNAME"     => $db->f("Name")),
+					"DTSTART"          => $db->f("date"),
+					"DTEND"            => $db->f("end_time"),
+					"SUMMARY"          => $db->f("content"),
+					"DESCRIPTION"      => $db->f("description"),
+					"STUDIP_CATEGORY"  => $db->f("date_typ"),
+					"LOCATION"         => $db->f("raum"),
+					"SEMNAME"          => $db->f("Name")),
 					$db->f("range_id"), $db->f("mkdate"), $db->f("chdate"));
 					
 			$this->events["$adate"][] = $app;

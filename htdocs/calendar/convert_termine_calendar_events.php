@@ -30,10 +30,12 @@ while ($db_read->next_record()) {
 		$class = "PRIVATE";
 	
 	global $PERS_TERMIN_KAT;
-	if ($PERS_TERMIN_KAT[$db_read->f("color")]["name"])
-		$categories = $PERS_TERMIN_KAT[$db_read->f("color")]["name"];
+	if (isset($PERS_TERMIN_KAT[$db_read->f("color")]))
+		$category_intern = $db_read->f("color");
 	else
-		$categories = "";
+		$category_intern = 0;
+		
+	$categories = "";
 	
 	switch ($db_read->f("priority")) {
 		case 0:
@@ -86,9 +88,9 @@ while ($db_read->next_record()) {
 	$uid = "Stud.IP-" . $db_read->f("termin_id") . "@{$_SERVER['SERVER_NAME']}";
 	
 	$query  = sprintf("REPLACE calendar_events (event_id, range_id, autor_id, uid, start, end, summary, description,"
-					. "class, categories, priority, location, ts, linterval, sinterval, wdays, month, day, rtype,"
+					. "class, categories, category_intern, priority, location, ts, linterval, sinterval, wdays, month, day, rtype,"
 					. "duration, expire, exceptions, mkdate, chdate) VALUES ('%s','%s','%s','%s',%s,%s,'%s',"
-					. "'%s','%s','%s',%s,'%s',%s,%s,%s,'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
+					. "'%s','%s','%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
 					$db_read->f("termin_id"),
 					$db_read->f("range_id"),
 					$db_read->f("autor_id"),
@@ -99,6 +101,7 @@ while ($db_read->next_record()) {
 					$db_read->f("description"),
 					$class,
 					$categories,
+					(int) $category_intern,
 					$priority,
 					$db_read->f("raum"),
 					$rep["ts"],

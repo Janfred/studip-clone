@@ -19,7 +19,7 @@ function day_save (&$events_save, &$events_delete) {
 			$properties = $event->getProperty();
 			if ($sep1)
 				$values .= ",";
-			$values .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,'%s',%s,%s,%s,
+			$values .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,%s,'%s',%s,%s,%s,
 					'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
 					$event->getId(), $event->getUserId(), $event->getUserId(),
 					$properties['UID'],
@@ -29,6 +29,7 @@ function day_save (&$events_save, &$events_delete) {
 					$properties['DTEND'],
 					$properties['CLASS'],
 					$properties['CATEGORIES'],
+					$properties['STUDIP_CATEGORY'],
 					$properties['PRIORITY'],
 					$properties['LOCATION'],
 					$properties['RRULE']['ts'],
@@ -502,24 +503,25 @@ function day_restore (&$this) {
 				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0, $this->mon, $this->dom, $this->year);
 		}
 		$termin =& new CalendarEvent(array(
-				"DTSTART"       => $start,
-				"DTEND"         => $end,
-				"SUMMARY"       => $db->f("summary"),
-				"DESCRIPTION"   => $db->f("description"),
-				"PRIORITY"      => $db->f("prority"),
-				"LOCATION"      => $db->f("location"),
-				"CATEGORIES"    => $db->f("categories"),
-				"UID"           => $db->f("uid"),
-				"RRULE"         => array(
-						"ts"        => $db->f("ts"),
-						"linterval" => $db->f("linterval"),
-						"sinterval" => $db->f("sinterval"),
-						"wdays"     => $db->f("wdays"),
-						"month"     => $db->f("month"),
-						"day"       => $db->f("day"),
-						"rtype"     => $db->f("rtype"),
-						"duration"  => $db->f("duration"),
-						"expire"    => $db->f("expire"))),
+				"DTSTART"         => $start,
+				"DTEND"           => $end,
+				"SUMMARY"         => $db->f("summary"),
+				"DESCRIPTION"     => $db->f("description"),
+				"PRIORITY"        => $db->f("prority"),
+				"LOCATION"        => $db->f("location"),
+				"CATEGORIES"      => $db->f("categories"),
+				"STUDIP_CATEGORY" => $db->f("category_intern"),
+				"UID"             => $db->f("uid"),
+				"RRULE"           => array(
+						"ts"          => $db->f("ts"),
+						"linterval"   => $db->f("linterval"),
+						"sinterval"   => $db->f("sinterval"),
+						"wdays"       => $db->f("wdays"),
+						"month"       => $db->f("month"),
+						"day"         => $db->f("day"),
+						"rtype"       => $db->f("rtype"),
+						"duration"    => $db->f("duration"),
+						"expire"      => $db->f("expire"))),
 				$db->f("event_id"), $db->f("mkdate"), $db->f("chdate"));
 		
 		if ($time_range == 2)

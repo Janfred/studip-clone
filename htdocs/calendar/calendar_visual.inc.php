@@ -35,7 +35,7 @@
 // Tabellenansicht der Termine eines Tages erzeugen
 function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,
                         $compact = TRUE, $link_edit = FALSE, $title_length = 70,
-												$height = 20, $padding = 6, $spacing = 1) {
+												$height = 20, $padding = 6, $spacing = 1, $bg_image = 'big') {
 	
 	global $atime, $PHP_SELF, $CANONICAL_RELATIVE_PATH_STUDIP;
 	$term = array();    // Array mit eingeordneten Terminen und Platzhaltern (mixed[])
@@ -46,6 +46,10 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 	$width_precol_1 = 5;
 	$width_precol_2 = 4;
 	$day_event_row = "";
+/*	if ($day_obj->getTs() == mktime(12,0,0,date('n', time()),date('j', time()),date('Y', time())))
+		$style_cell = 'celltoday';
+	else*/
+	$style_cell = 'steel1';
 	// one extra column for link
 	if ($link_edit)
 		$link_edit_column = 1;
@@ -152,17 +156,17 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 	// Zeile fuer Tagestermine
 	if ($precol) {
 		if ($step >= 3600) {
-			$day_event_row[0] = "<th class=\"steel1\" width=\"$width_precol_1%\">&nbsp;</th>";
-			$day_event_row[0] .= "<td class=\"steel1\" width=\"".(100 - $width_precol_1)."%\"";
+			$day_event_row[0] = "<td class=\"steel1\" width=\"$width_precol_1%\">&nbsp;</td>";
+			$day_event_row[0] .= "<td class=\"$style_cell\" width=\"".(100 - $width_precol_1)."%\"";
 		}
 		else {
-			$day_event_row[0] = "<th width=\"".($width_precol_1 + $width_precol_2)."\" colspan=\"2\">";
-			$day_event_row[0] .= _("Tag") . "</th>";
-			$day_event_row[0] .= "<td class=\"steel1\" width=\"".(100 - $width_precol_1 - $width_precol_2)."%\"";
+			$day_event_row[0] = "<td class=\"precol1w\" width=\"".($width_precol_1 + $width_precol_2)."\" colspan=\"2\">";
+			$day_event_row[0] .= _("Tag") . "</td>";
+			$day_event_row[0] .= "<td height=\"40\" class=\"$style_cell\" width=\"".(100 - $width_precol_1 - $width_precol_2)."%\"";
 	  }
 	}
 	else
-		$day_event_row[0] = "<td class=\"steel1\"";
+		$day_event_row[0] = "<td class=\"$style_cell\"";
 	
 /*	if ($link_edit) {
 		if ($max_spalte  > 0)
@@ -177,9 +181,9 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		
 		if ($link_edit) {
 			$tooltip = tooltip(_("neuer Tagestermin"));
-			$link_edit_str = "<td class=\"steel1\" align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
+			$link_edit_str = "<td class=\"$style_cell\" align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 			$link_edit_str .= $day_obj->getTs();
-			$link_edit_str .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
+			$link_edit_str .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
 			$link_edit_str .= "border=\"0\" $tooltip></a></td>\n";
 		}
 			
@@ -188,16 +192,16 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		
 		reset($tmp_day_event);
 		foreach ($tmp_day_event as $day_event) {
+			$category_style = $day_event->getCategoryStyle($bg_image);
 			$title = fit_title($day_event->getTitle(), 1, 1, $title_length);
 			$title_str = sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%s%s\">"
 													, $day_event->getId(), $day_event->getStart()
 													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
 			$title_str .= "<font class=\"inday\">$title</font></a>";
-			$day_event_row[0] .= "<tr><td style=\"border-style:solid; border-width:2px; border-color:";
-			$day_event_row[0] .= $day_event->getColor() . ";\">";
-			$day_event_row[0] .= "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\">";
-			$day_event_row[0] .= "<tr><td class=\"steel1\" width=\"100%\">$title_str</td>";
-			$day_event_row[0] .= "\n</tr></table></td>$link_edit_str</tr>\n";
+			$day_event_row[0] .= "<tr><td height=\"20\" style=\"border-style:solid; border-width:1px; border-color:";
+			$day_event_row[0] .= $category_style['color'] . "; background-image:url(";
+			$day_event_row[0] .= $category_style['image'] . ");\">";
+			$day_event_row[0] .= $title_str. "</td>";
 		}
 		
 		$day_event_row[0] .= "</table></td>";
@@ -207,7 +211,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$tooltip = tooltip(_("neuer Tagestermin"));
 			$day_event_row[0] .= " align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 			$day_event_row[0] .= $day_obj->getTs();
-			$day_event_row[0] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
+			$day_event_row[0] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
 			$day_event_row[0] .= "border=\"0\" $tooltip></a></td>\n";
 		}
 		else
@@ -233,22 +237,22 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		// Vorspalte mit Uhrzeiten zusammenbauen
 		if ($precol) {
 			if (($i * $step) % 3600 == 0) {
-				$tab[$zeile] .= "<th$width_precol_1_txt$height_precol_1$rowspan_precol>";
-				$tab[$zeile] .= "<a class=\"precol1\" href=\"$PHP_SELF";
-				$tab[$zeile] .= sprintf("?cmd=edit&atime=%s\">%s</a></th>"
+				$tab[$zeile] .= "<td class=\"precol1\"$width_precol_1_txt$height_precol_1$rowspan_precol>";
+				$tab[$zeile] .= "<a class=\"calhead\" href=\"$PHP_SELF";
+				$tab[$zeile] .= sprintf("?cmd=edit&atime=%s\">%s</a></td>"
 												, $day_obj->getStart() + $i * $step, $i / (3600 / $step));
 				$width_precol_1_txt = "";
 			}
 			// bei Intervallen mit vollen Stunden Minuten ausblenden
 			if ($step % 3600 != 0) {
-				$tab[$zeile] .= "<th$width_precol_2_txt$height_precol_2>";
-				$tab[$zeile] .= sprintf("<a class=\"precol2\" href=\"$PHP_SELF?cmd=edit&atime=%s\">"
+				$tab[$zeile] .= "<td class=\"precol2\"$width_precol_2_txt$height_precol_2>";
+				$tab[$zeile] .= sprintf("<a class=\"calhead\" href=\"$PHP_SELF?cmd=edit&atime=%s\">"
 												, ($day_obj->getStart() + $i * $step));
 				$minute = ($zeile % (3600 / $step)) * ($step / 60);
 				if($minute == 0)
-					$tab[$zeile] .= "00</a></th>";
+					$tab[$zeile] .= "00</a></td>";
 				else
-					$tab[$zeile] .= $minute."</a></th>";
+					$tab[$zeile] .= $minute."</a></td>";
 				$width_precol_2_txt = "";
 			}
 		}
@@ -257,26 +261,26 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		if (!$term[$zeile]) {
 			if ($link_edit) {
 				if ($max_spalte > 0) {
-					$tab[$zeile] .= "<td class=\"steel1\" align=\"right\" colspan=\"";
+					$tab[$zeile] .= "<td class=\"$style_cell\" align=\"right\" colspan=\"";
 					$tab[$zeile] .= ($max_spalte + 1) . "\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 					$tab[$zeile] .= ($day_obj->getStart() + $i * $step);
-					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
+					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
 					$tab[$zeile] .= "border=\"0\" $link_edit_tooltip></a></td>\n";
 				}
 				else {
-					$tab[$zeile] .= "<td class=\"steel1\" align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
+					$tab[$zeile] .= "<td class=\"$style_cell\" align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 					$tab[$zeile] .=	($day_obj->getStart() + $i * $step);
-					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\"";
+					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\"";
 					$tab[$zeile] .= "border=\"0\" $link_edit_tooltip></a></td>\n";
 				}
 			}
 			else {
 				if ($max_spalte > 1) {
-					$tab[$zeile] .= "<td class=\"steel1\" colspan=\"$max_spalte\">";
+					$tab[$zeile] .= "<td class=\"$style_cell\" colspan=\"$max_spalte\">";
 					$tab[$zeile] .= "<font class=\"inday\">&nbsp;</font></td>\n";
 				}
 				else
-					$tab[$zeile] .= "<td class=\"steel1\"><font class=\"inday\">&nbsp;</font></td>\n";
+					$tab[$zeile] .= "<td class=\"$style_cell\"><font class=\"inday\">&nbsp;</font></td>\n";
 			}
 			
 			$height = "";
@@ -329,11 +333,13 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					if ($rows > 1)
 						$tab[$zeile] .= ' rowspan="'.$rows.'"';
 					
-					$tab[$zeile] .= sprintf(" class=\"steel1\" style=\"border-style:solid; border-width:2px; border-color:%s\">", $term[$zeile][$j]->getColor());
-					//$tab[$zeile] .= sprintf(" style=\"background-color:%s\">", $term[$zeile][$j]->getColor());
-					$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
-					//$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
-									
+					$category_style = $term[$zeile][$j]->getCategoryStyle($bg_image);
+					$tab[$zeile] .= " style=\"vertical-align:top; font-size:6pt; color:#FFFFFF;";
+					$tab[$zeile] .= " background-image:url(";
+					$tab[$zeile] .= $category_style['image'];
+					$tab[$zeile] .= "); border-style:solid; border-width:1px; border-color:";
+					$tab[$zeile] .= $category_style['color'] . ";\">";
+						
 					if ($term[$zeile][$j]->getType() == 1
 							&& $term[$zeile][$j]->getTitle() == "Kein Titel") {
 						$title_out = $term[$zeile][$j]->getSemName();
@@ -341,35 +347,36 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					else
 						$title_out = $term[$zeile][$j]->getTitle();
 					
-					if ($rows == 1) {
-						$title = fit_title($title_out, $colsp[$zeile], $rows, $title_length - 6);
-						// calculate the correct height of the event-cell if the cell has 1 row
-						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
-													, $height_event - $padding-2);
+					if ($rows < 2) {
+						$title = fit_title($title_out, $colsp[$zeile], $rows +1, $title_length - 6);
+						
 						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
 													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
-						$tab[$zeile] .= "<font class=\"inday\">$title</font></a></td>\n";
-					//	$tab[$zeile] .= "<td class=\"steel1\" align=\"right\">&nbsp;</td></tr>\n";
+						$tab[$zeile] .= $title . "</a>";
 					}
 					else {
 						$title = fit_title($title_out, $colsp[$zeile], $rows - 1, $title_length);
-						// calculate the correct height of the event-cell if the cell has _more_ than 1 row
-						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
-													, ($height_event * ($rows - 1) + $spacing * ($rows - 1) - (2 * $padding)));
-						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
+						$tab[$zeile] .= "<div style=\"font-size:8pt; height:15px; background-color:";
+						$tab[$zeile] .= $category_style['color'];
+						$tab[$zeile] .= ";\">" . date('H.i-', $term[$zeile][$j]->getStart());
+						$tab[$zeile] .= date('H.i', $term[$zeile][$j]->getEnd()) . "</div>\n";
+						$tab[$zeile] .= "<span style=\"vertical-align:middle;\">";
+						$tab[$zeile] .= sprintf("<a  style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\">"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
 													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : "");
-						$tab[$zeile] .= "<font class=\"inday\">$title</font></a></td></tr>\n";
-					//	$tab[$zeile] .= "<tr><td height=\"$height_event\" class=\"steel1\" align=\"right\">";
-					//	$tab[$zeile] .= "&nbsp;</td></tr>\n";
+						$tab[$zeile] .= $title . "</a>";
 					}
+					$recur_rtype = $term[$zeile][$j]->properties['RRULE']['rtype'];
+					if ($recur_rtype != 'SINGLE') { 
+						$tab[$zeile] .= "<div align=\"right\">";
+						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/recur.gif\" ";
+						$tab[$zeile] .= "border=\"0\"" . tooltip($term[$zeile][$j]->toStringRecurrence()) . "></div>";
+					}
+					$tab[$zeile] .= "</td>\n";
 					
-					
-					$tab[$zeile] .= "</table></td>\n";
-
 					if ($sp > 0) {
 						for ($m = $zeile;$m < $rows + $zeile;$m++) {
 							$colsp[$m] = $colsp[$m] - $sp-1;
@@ -392,18 +399,18 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					else
 						$colspan_attr = "";
 						
-					if ($link_edit) {
-						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr align=\"right\">";
+		/*			if ($link_edit) {
+						$tab[$zeile] .= "<td class=\"$style_cell\"$colspan_attr align=\"right\">";
 						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&atime=%s\">"
 																, $day_obj->getStart() + $i * $step);
-						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
+						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
 						$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 						$tab[$zeile] .= "</a></td>\n";
 					}
-					else {
-						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr>";
+					else {*/
+						$tab[$zeile] .= "<td class=\"$style_cell\"$colspan_attr>";
 						$tab[$zeile] .= "<font class=\"inday\">&nbsp;</font></td>\n";
-					}
+				//	}
 						
 					$height = "";
 				}
@@ -416,15 +423,15 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$colspan_attr = "";
 					
 					if ($link_edit) {
-						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr align=\"right\">";
+						$tab[$zeile] .= "<td class=\"$style_cell\"$colspan_attr align=\"right\">";
 						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&atime=%s\">"
 															, $day_obj->getStart() + $i * $step);
-						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
+						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
 						$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 						$tab[$zeile] .= "</a></td>\n";
 					}
 					else {
-						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr>";
+						$tab[$zeile] .= "<td class=\"$style_cell\"$colspan_attr>";
 						$tab[$zeile] .= "<font class=\"inday\">&nbsp;</font></td>\n";
 					}
 					
@@ -438,9 +445,9 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		}
 		
 		if ($link_edit && $link_notset) {
-			$tab[$zeile] .= "<td class=\"steel1\" width=\"1\" align=\"right\">";
+			$tab[$zeile] .= "<td class=\"$style_cell\" align=\"right\">";
 			$tab[$zeile] .= "<a href=\"$PHP_SELF?cmd=edit&atime=" . ($day_obj->getStart() + $i * $step);
-			$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
+			$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calplus.gif\" ";
 			$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 			$tab[$zeile] .= "</a></td>\n";
 		}
@@ -513,14 +520,14 @@ function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
 		$max_columns += $tab_arr[$i]["max_columns"];
 		$dtime = $week_obj->wdays[$i]->getTs();
 		if ($week_obj->getType() == 5)
-			$tab[0] .= "<th width=\"18%\"";
+			$tab[0] .= "<td class=\"steelgroup0\" align=\"center\" width=\"19%\"";
 		else
-			$tab[0] .= "<th width=\"13%\"";
+			$tab[0] .= "<td class=\"steelgroup0\" align=\"center\" width=\"13%\"";
 			
 		if ($tab_arr[$i]["max_columns"] > 1)
 			$tab[0] .= " colspan=\"{$tab_arr[$i]["max_columns"]}\"";
-		$tab[0] .= "><a href=\"$PHP_SELF?cmd=showday&atime=$dtime\"><font size=\"-1\">";
-		$tab[0] .= wday($dtime, "SHORT") . " " . date("d", $dtime) . "</font></a></th>\n";
+		$tab[0] .= "><a class=\"calhead\" href=\"$PHP_SELF?cmd=showday&atime=$dtime\"><b>";
+		$tab[0] .= wday($dtime, "SHORT") . " " . date("d", $dtime) . "</b></a></td>\n";
 	}
 	if ($compact)
 		$tab[0] = "<tr>{$tab[0]}</tr>\n";
@@ -719,5 +726,6 @@ function fit_title ($title, $cols, $rows, $max_length, $end_str = "...", $pad = 
 		
 	return $new_title;
 }	
+
 
 ?>

@@ -45,15 +45,20 @@ require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/CalendarEvent.cla
 class CalendarParserICalendar extends CalendarParser {
 
 	function CalendarParserICalendar () {
-	
+		
+		parent::CalendarParser();
 		$this->type = "iCalendar";
 	}
 	
 	function numberOfEvents ($data) {
+		global $_calendar_error;
 		static $number_of_events;
 		
 		if (!isset($number_of_events)) {
-			preg_match_all('/^BEGIN:VEVENT$/', $data, $matches);
+			if (!preg_match_all('/^BEGIN:VEVENT$/', $data, $matches)) {
+				$_calendar_error->throwError(ERROR_MESSAGE,
+						_("Die Datei enthält keine Termine."));
+			}
 			$number_of_events = sizeof($matches);
 		}
 		
@@ -68,20 +73,26 @@ class CalendarParserICalendar extends CalendarParser {
    *
    */
 	function parse ($text, $ignore) {
+		global $_calendar_error;
+		
 		// UTF-8 decoding
 		$text = utf8_decode($text);
 	//////////////////////////////////////////////////////////////
 //		$text = implode('', file('./icalout.ics'));
-		if (!preg_match('/(BEGIN:VCALENDAR\r?\n)([\W\w]*)(END:VCALENDAR\r?\n?)/', $text, $matches)) {
+		if (!preg_match('/(BEGIN:VCALENDAR(\r\n|\r|\n))([\W\w]*)(END:VCALENDAR\r?\n?)/', $text, $matches)) {
+			$_calendar_error->throwError(ERROR_CRITICAL,
+					_("Die Datei ist keine g&uuml;ltige iCalendar-Datei!"));
 			return FALSE;
 		}
 		
 		// Unfold any folded lines
-		$v_calendar = preg_replace('/(\r|\n)+ /', '', $matches[2]);
+		$v_calendar = preg_replace('/(\r|\n)+ /', '', $matches[3]);
 		
 		// All sub components
 		$matches = null;
-		if (!preg_match_all('/(BEGIN:)([\W\w]*?)\r?\n?([\w\W]*?)(END:)\2(\r\n|\r|\n)/', $v_calendar, $matches)) {
+		if (!preg_match_all('/(BEGIN:VEVENT)(\r\n|\r|\n)([\w\W]*?)(END:VEVENT)(\r\n|\r|\n)/',
+				$v_calendar, $matches)) {
+			$_calendar_error->throwError(ERROR_MESSAGE, _("Die Datei enthält keine Termine."));
 			return FALSE;
 		}
 		
@@ -297,8 +308,13 @@ class CalendarParserICalendar extends CalendarParser {
 				
 				$this->components[] = $properties;
 			}
+			else {
+				$_calendar_error->throwError(ERROR_CRITICAL,
+						_("Die Datei ist keine g&uuml;ltige iCalendar-Datei!"));
+				return FALSE;
+			}
 		}
-
+		
 		return TRUE;
   }
 		
@@ -340,7 +356,7 @@ class CalendarParserICalendar extends CalendarParser {
 	/**
 	 * Parse a DateTime field
 	 */
-	function _parseDateTime ($text) {
+	function _parseDateTime (&$text) {
 		$dateParts = split('T', $text);
 		if (count($dateParts) != 2 && !empty($text)) {
 			// not a date time field but may be just a date field
@@ -384,7 +400,7 @@ class CalendarParserICalendar extends CalendarParser {
 			return $time;
 		}
 		else {
-			return false;
+			return FALSE;
 		}
 	}
 	
@@ -393,7 +409,7 @@ class CalendarParserICalendar extends CalendarParser {
 	*/
 	function _parseDate ($text) {
 		if (strlen($text) != 8) {
-			return false;
+			return FALSE;
 		}
 
 		$date['year']  = intval(substr($text, 0, 4));
@@ -434,7 +450,7 @@ class CalendarParserICalendar extends CalendarParser {
 			return $duration;
 		}
 		else {
-			return false;
+			return FALSE;
 		}
 	}
 

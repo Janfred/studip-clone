@@ -316,26 +316,27 @@ function month_restore (&$this) {
 
 function new_event (&$this, &$db, $date) {
 	$this->events["$date"][] =& new CalendarEvent(array(
-			'DTSTART'       => $db->f('start'),
-			'DTEND'         => $db->f('end'),
-			'SUMMARY'       => $db->f('summary'),
-			'DESCRIPTION'   => $db->f('description'),
-			'PRIORITY'      => $db->f('prority'),
-			'LOCATION'      => $db->f('location'),
-			'CATEGORIES'    => $db->f('categories'),
-			'UID'           => $db->f('uid'),
-			"DTSTAMP"       => $db->f("mkdate"),
-			"LAST-MODIFIED" => $db->f("chdate"),
-			'RRULE'         => array(
-				'ts'          => $db->f('ts'),
-				'linterval'   => $db->f('linterval'),
-				'sinterval'   => $db->f('sinterval'),
-				'wdays'       => $db->f('wdays'),
-				'month'       => $db->f('month'),
-				'day'         => $db->f('day'),
-				'rtype'       => $db->f('rtype'),
-				'duration'    => $db->f('duration'),
-				'expire'      => $db->f('expire'))),
+			'DTSTART'         => $db->f('start'),
+			'DTEND'           => $db->f('end'),
+			'SUMMARY'         => $db->f('summary'),
+			'DESCRIPTION'     => $db->f('description'),
+			'PRIORITY'        => $db->f('prority'),
+			'LOCATION'        => $db->f('location'),
+			'CATEGORIES'      => $db->f('categories'),
+			'STUDIP_CATEGORY' => $db->f('studip_category'),
+			'UID'             => $db->f('uid'),
+			"DTSTAMP"         => $db->f("mkdate"),
+			"LAST-MODIFIED"   => $db->f("chdate"),
+			'RRULE'           => array(
+				'ts'            => $db->f('ts'),
+				'linterval'     => $db->f('linterval'),
+				'sinterval'     => $db->f('sinterval'),
+				'wdays'         => $db->f('wdays'),
+				'month'         => $db->f('month'),
+				'day'           => $db->f('day'),
+				'rtype'         => $db->f('rtype'),
+				'duration'      => $db->f('duration'),
+				'expire'        => $db->f('expire'))),
 			$db->f('event_id'));
 	
 	$this->appdays["$date"]++;

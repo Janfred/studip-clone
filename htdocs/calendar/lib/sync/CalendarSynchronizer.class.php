@@ -39,6 +39,7 @@
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
 
+require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
 
 class CalendarSynchronizer {
@@ -46,14 +47,17 @@ class CalendarSynchronizer {
 	var $_import;
 	var $_export;
 	
-	function CalendarSynchronizer ($import, $export) {
+	function CalendarSynchronizer (&$import, &$export) {
 		
-		$this->_import = $import;
-		$this->_export = $export;
+		// initialize error handling
+		init_error_handler('_calendar_error');
+		
+		$this->_import =& $import;
+		$this->_export =& $export;
 	}
 	
 	function synchronize ($compare_fields = NULL) {
-		global $user;
+		global $user, $_calendar_error;
 		
 		// export to extern CUA
 		$ext = array();
@@ -76,6 +80,7 @@ class CalendarSynchronizer {
 		while ($in = $db->nextObject()) {
 		
 			while ($ex = array_pop($events)) {
+				
 				// end of queue, return to start
 				if ($ex == $sentinel) {
 					if ($in_to_ext)
@@ -86,6 +91,8 @@ class CalendarSynchronizer {
 				
 				// no chance to do the job because there's no LAST-MODIFIED...
 				if (!$ex->properties['LAST-MODIFIED']) {
+					$_calendar_error->throwError(ERROR_CRITICAL,
+							_("Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."));
 					return FALSE; //throw (fatal-)error object
 				}
 				
@@ -101,7 +108,7 @@ class CalendarSynchronizer {
 					$in_to_ext = FALSE;
 				}
 				// difficult and unsave, if we have no UID...
-				elseif ($ex->properties['DTSTAMP'] == $in->properties['DTSTAMP']) {
+				elseif ($ex->properties['CREATED'] == $in->properties['CREATED']) {
 					if (trim($ex->properties['SUMMARY']) == trim($in->properties['SUMMARY'])) {
 						if ($ex->properties['LAST-MODIFIED'] < $in->properties['LAST-MODIFIED']) {
 							$ext[] = $in;
@@ -126,6 +133,7 @@ class CalendarSynchronizer {
 		// every event left over in $events is not in Stud.IP, so import the rest
 		$int = array_merge($int, $events);
 		
+		// debug
 /*		echo "<br>importieren MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n";
 		echo "<pre>";
 		print_r($int);
@@ -133,10 +141,10 @@ class CalendarSynchronizer {
 		print_r($ext);
 		echo "</pre>";
 		echo "<br><br>Durchl&auml;ufe: $d -------- ";
-*/		
+*/
 		// OK, work is done, import and export the events
 		$db->writeObjectsIntoDatabase($int, 'REPLACE');
-		$this->_export->exportFromObjects($int);
+		$this->_export->exportFromObjects($ext);
 	}
 	
 }

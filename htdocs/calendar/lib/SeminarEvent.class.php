@@ -30,11 +30,10 @@ class SeminarEvent extends Event {
 
 	var $sem_id = "";
 	var $sem_write_perm = FALSE;
-	var $color;
 	
 	function SeminarEvent ($id = "", $properties = NULL, $sem_id = "") {
 	
-		if ($id && !$properties) {
+		if ($id && $properties == NULL) {
 			$this->id = $id;
 			// get event out of database...
 			$this->restore();
@@ -44,8 +43,35 @@ class SeminarEvent extends Event {
 			$this->id = $id;
 			$this->sem_id = $sem_id;
 		}
+		$this->properties['RRULE']['rtype'] = 'SINGLE';
 	}
 	
+	/**
+	* Changes the category of this event.
+	*
+	* See config.inc.php for further information and values.<br>
+	* <br>
+	* After calling this method, the method isModified() returns TRUE.
+	*
+	* @access public
+	* @param int $category a valid integer representation of a category (see 
+	* config.inc.php)
+	* @return boolean TRUE if the value of $category is valid, otherwise FALSE
+	*/
+	function setCategory ($category) {
+		global $TERMIN_TYP;
+		
+		if(is_array($TERMIN_TYP[$category])){
+			$this->properties['STUDIP_CATEGORY'] = $category;
+			$this->chng_flag = TRUE;
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	function getCategory () {		
+		return $this->properties['STUDIP_CATEGORY'];
+	}
 	
 	/**
 	* Returns the name of the category.
@@ -54,17 +80,13 @@ class SeminarEvent extends Event {
 	* @return String the name of the category
 	*/
 	function getCategoryName () {
-	
-		return $this->getProperty("CATEGORIES");
-	}
-	
-	function getColor () {
+		global $TERMIN_TYP;
 		
-		return $this->color;
+		return $TERMIN_TYP[$this->getProperty('STUDIP_CATEGORY')]['name'];
 	}
 	
 	function getTitle () {
-		return $this->getProperty("SUMMARY");
+		return $this->getProperty('SUMMARY');
 	}
 	
 	// public
@@ -100,20 +122,19 @@ class SeminarEvent extends Event {
 						. "AND su.user_id='{$user->id}'";
 		$db->query($query);
 		if ($db->num_rows() == 1 && $db->next_record()) {
-			$this->setProperty('SUMMARY',       $db->f('content'));
-			$this->setProperty('DTSTART',       $db->f('date'));
-			$this->setProperty('DTEND',         $db->f('end_time'));
-			$this->setProperty('CATEGORIES',    $TERMIN_TYP[$db->f('date_typ')]['name']);
-			$this->setProperty('LOCATION',      $db->f('raum'));
-			$this->setProperty('DESCRIPTION',   $db->f('description'));
-			$this->setProperty('CLASS',         'PRIVATE');
-			$this->setProperty('SEMNAME',       $db->f('Name'));
-			$this->setProperty('UID',           $this->getUid($this->id));
-			$this->setProperty('DTSTAMP',       $db->f('mkdate'));
-			$this->setProperty('LAST-MODIFIED', $db->f('chdate'));
-			$this->setProperty('RRULE',         $this->getRepeat());
+			$this->setProperty('SUMMARY',         $db->f('content'));
+			$this->setProperty('DTSTART',         $db->f('date'));
+			$this->setProperty('DTEND',           $db->f('end_time'));
+			$this->setProperty('LOCATION',        $db->f('raum'));
+			$this->setProperty('DESCRIPTION',     $db->f('description'));
+			$this->setProperty('CLASS',           'PRIVATE');
+			$this->setProperty('SEMNAME',         $db->f('Name'));
+			$this->setProperty('UID',             $this->getUid($this->id));
+			$this->setProperty('CREATED',         $db->f('mkdate'));
+			$this->setProperty('LAST-MODIFIED',   $db->f('chdate'));
+			$this->setProperty('RRULE',           $this->getRepeat());
+			$this->setProperty('STUDIP_CATEGORY', $db->f('date_typ'));
 			$this->sem_id   = $db->f('Seminar_id');
-			$this->color    = $this->setcolor($db->f('gruppe'));
 			if ($db->f('status') == 'tutor' || $db->f('status') == 'dozent')
 				$this->setWritePermission(TRUE);
 			
@@ -145,16 +166,17 @@ class SeminarEvent extends Event {
 	
 	function getUid ($id) {
 	
-		return "Stud.IP-SEM$id@{$_SERVER['SERVER_NAME']}";
+		return "Stud.IP-SEM-$id@{$_SERVER['SERVER_NAME']}";
 	}
 	
-	function setColor ($group) {
+	function getCategoryStyle ($image_size = 'small') {
+		global $TERMIN_TYP, $CANONICAL_RELATIVE_PATH_STUDIP;
 		
-		// see style.css gruppe
-		$color = array('#000000', '#FF0000', '#FF9933', '#FFCC66', '#99FF99', '#66CC66',
-				'#6699CC', '#666699');
-		
-		return $color[$group] ? $color[$group] : '#000000';
+		$index = $this->getProperty('STUDIP_CATEGORY');
+		return array('image' => $image_size == 'small' ?
+					"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar/category_sem{$index}_small.jpg" :
+					"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar/category_sem{$index}.jpg",
+					'color' => $TERMIN_TYP[$index]['color']);
 	}
 	
 } // class SeminarEvent

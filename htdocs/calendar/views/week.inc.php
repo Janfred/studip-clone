@@ -41,51 +41,74 @@ define("PHPDOC_DUMMY",true);
 require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
 require("$ABSOLUTE_PATH_STUDIP/header.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
 
+$aweek =& new DbCalendarWeek($atime, $calendar_user_control_data['type_week']);
+$aweek->bindSeminarEvents($bind_seminare);
+$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data['step_week'],
+											FALSE, $calendar_user_control_data['link_edit']);
+$rowspan = ceil(3600 / $calendar_user_control_data['step_week']);
+$height = ' height="20"';
+
+if($rowspan > 1){
+	$colspan_1 = ' colspan="2"';
+	$colspan_2 = $tab['max_columns'] + 4;
+}
+else{
+	$colspan_1 = '';
+	$colspan_2 = $tab['max_columns'] + 2;
+}
+
+if ($aweek->getType() == 7)
+	$width = '1%';
+else
+	$width = '3%';
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\" align=\"center\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" align=\"center\">\n";
-echo "<table border=\"0\" width=\"100%\" cellspacing=\"1\" cellpadding=\"2\">\n";
-echo "<tr><th colspan=\"$colspan_2\">\n";
-echo "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" align=\"center\">\n";
+echo "<table border=\"0\" width=\"100%\" cellspacing=\"1\" cellpadding=\"0\" class=\"steelgroup0\">\n";
+echo "<tr><td colspan=\"$colspan_2\">\n";
+echo "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" align=\"center\" class=\"steelgroup0\">\n";
 echo "<tr>\n";
-echo "<th width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
+echo "<td align=\"center\" width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getStart() - 1 . "\">&nbsp;";
 echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\" ";
-echo tooltip(_("zurück")) . ">&nbsp;</a></th>\n";
-echo "<th width=\"70%\" class=\"cal\">";
+echo tooltip(_("zurück")) . ">&nbsp;</a></td>\n";
+echo "<td width=\"70%\" class=\"calhead\">";
 printf(_("%s. Woche vom %s bis %s"), strftime("%V", $aweek->getStart()),
 		strftime("%x", $aweek->getStart()), strftime("%x", $aweek->getEnd()));
-echo "</th>\n";
-echo "<th width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
+echo "</td>\n";
+echo "<td align=\"center\" width=\"15%\"><a href=\"$PHP_SELF?cmd=showweek&atime=";
 echo $aweek->getEnd() + 259201 . "\">&nbsp;";
 echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\" ";
-echo tooltip(_("vor")) . ">&nbsp;</a></th>\n";
-echo "</tr></table>\n</th></tr>\n";
+echo tooltip(_("vor")) . ">&nbsp;</a></td>\n";
+echo "</tr></table>\n</td></tr>\n";
 
-echo "<tr><th width=\"4%\"$colspan_1>";
+echo "<tr><td nowrap=\"nowrap\" align=\"center\" width=\"$width\"$colspan_1>";
 if ($st > 0) {
 	echo "<a href=\"calendar.php?cmd=showweek&atime=$atime&wtime=" . ($st - 1) . "\">";
 	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurauf.gif\" ";
-	echo tooltip(_("zeig davor")) . "></a>\n";
+	echo tooltip(_("zeig davor")) . "></a>";
 }
 else
-	echo "&nbsp";
-echo "</th>".$tab["table"][0];
+	echo "&nbsp;&nbsp;&nbsp;";
+// row with weekdays
+echo "</td>" . $tab["table"][0];
 
-echo "<th width=\"4%\"$colspan_1>";
+echo "<td nowrap=\"nowrap\" align=\"center\" width=\"$width\"$colspan_1>";
 if ($st > 0) {
 	echo "<a href=\"$PHP_SELF?cmd=showweek&atime=$atime&wtime=" . ($st - 1) . "\">";
 	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurauf.gif\" ";
-	echo tooltip(_("zeig davor")) . "></a>\n";
+	echo tooltip(_("zeig davor")) . "></a>";
 }
 else
-	echo "&nbsp;";
-echo "</th></tr>\n";
+	echo "&nbsp;&nbsp;&nbsp;";
+echo "</td></tr>\n";
 
 // Zeile mit Tagesterminen ausgeben
-echo "<tr><th$colspan_1>" . _("Tag") . "</th>{$tab['table'][1]}<th$colspan_1>";
-echo _("Tag") . "</th></tr>\n";
+echo "<tr><td class=\"precol1w\"$colspan_1 height=\"25\">" . _("Tag");
+echo "</td>{$tab['table'][1]}<td class=\"precol1w\"$colspan_1>";
+echo _("Tag") . "</td></tr>\n";
 		
 		
 $j = $st;
@@ -94,35 +117,33 @@ for ($i = 2; $i < sizeof($tab["table"]); $i++) {
 	
 	if ($i % $rowspan == 0) {
 		if ($rowspan == 1)
-			echo "<th$height>$j</th>";
+			echo "<td class=\"precol1w\"$height>$j</td>";
 		else
-			echo "<th rowspan=\"$rowspan\">$j</th>";
+			echo "<td class=\"precol1w\" rowspan=\"$rowspan\">$j</td>";
 	}
 	if ($rowspan > 1) {
 		$minutes = (60 / $rowspan) * ($i % $rowspan);
 		if ($minutes == 0)
 			$minutes = "00";
-		echo "<th$height><font size=\"-2\">$minutes</font></th>\n";
+		echo "<td class=\"precol2w\"$height>$minutes</td>\n";
 	}
 	
 	echo $tab["table"][$i];
 	
 	if ($rowspan > 1)
-		echo "<th><font size=\"-2\">$minutes</font></th>\n";
+		echo "<td class=\"precol2w\">$minutes</td>\n";
 	if ($i % $rowspan == 0) {
 		if($rowspan == 1)
-			echo "<th>$j</th>";
+			echo "<td class=\"precol1w\">$j</td>";
 		else
-			echo "<th rowspan=\"$rowspan\">$j</th>";
+			echo "<td class=\"precol1w\" rowspan=\"$rowspan\">$j</td>";
 		$j = $j + ceil($calendar_user_control_data["step_week"] / 3600);
 	}
 	
 	echo "</tr>\n";
 }
 
-echo "<tr><th colspan=\"$colspan_2\">\n";
-echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-echo "<tr><th width=\"4%\">";
+echo "<tr><td$colspan_1 align=\"center\">";
 if ($et < 23) {
 	echo "<a href=\"$PHP_SELF?cmd=showweek&atime=$atime&wtime=" . ($et + 1) . "\">";
 	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurunt.gif\" ";
@@ -130,8 +151,8 @@ if ($et < 23) {
 }
 else
 	echo "&nbsp";
-echo "</th><th width=\"92%\">&nbsp;</th>";
-echo "<th width=\"4%\">";
+echo "</td><td colspan=\"{$tab['max_columns']}\">&nbsp;</td>";
+echo "<td$colspan_1 align=\"center\">";
 if ($et < 23) {
 	echo "<a href=\"$PHP_SELF?cmd=showweek&atime=$atime&wtime=" . ($et + 1) . "\">";
 	echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurunt.gif\" ";
@@ -139,8 +160,7 @@ if ($et < 23) {
 }
 else
 	echo "&nbsp;";
-echo "</th></tr>\n</table>\n";
-echo "</th></tr>\n</table>\n";
+echo "</td></tr>\n</table>\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 jumpTo($jmp_m, $jmp_d, $jmp_y);
 echo "</table>\n";

@@ -38,31 +38,17 @@
 class MysqlDriver {
 
 	var $db;
-	var $is_initialized;
 	var $count; 
 	
 	function MysqlDriver () {
 	
-		$this->db =& new DB_Seminar();
-		$this->is_initialized = FALSE;
 		$this->count = 0;
 	}
 	
-	function initialize () {
+	function initialize ($db_name) {
 	
-	}
-	
-	function isInitialized () {
-	
-		return $this->is_initialized;
-	}
-	
-	function setInitialized () {
-	
-		if ($this->is_initialized)
-			$this->is_initialized = FALSE;
-		else
-			$this->is_initialized = TRUE;
+		if (!is_object($this->$db_name))
+			$this->$db_name =& new DB_Seminar();
 	}
 	
 	function count () {

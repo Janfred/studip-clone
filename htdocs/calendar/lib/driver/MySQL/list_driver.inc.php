@@ -241,26 +241,27 @@ function list_restore(&$this){
 
 function new_event (&$this, $db, $real_date) {
 	$event = new CalendarEvent(array(
-			"DTSTART"       => $real_date,
-			"DTEND"         => $db->f("end") - $db->f("start") + $real_date,
-			"SUMMARY"       => $db->f("summary"),
-			"DESCRIPTION"   => $db->f("description"),
-			"PRIORITY"      => $db->f("prority"),
-			"LOCATION"      => $db->f("location"),
-			"CATEGORIES"    => $db->f("categories"),
-			"UID"           => $db->f("uid"),
-			"DTSTAMP"       => $db->f("mkdate"),
-			"LAST-MODIFIED" => $db->f("chdate"),
-			"RRULE"         => array(
-				 "ts"         => $db->f("ts"),
-				 "linterval"  => $db->f("linterval"),
-				 "sinterval"  => $db->f("sinterval"),
-				 "wdays"      => $db->f("wdays"),
-				 "month"      => $db->f("month"),
-				 "day"        => $db->f("day"),
-				 "rtype"      => $db->f("rtype"),
-				 "duration"   => $db->f("duration"),
-				 "expire"     => $db->f("expire"))),
+			"DTSTART"         => $real_date,
+			"DTEND"           => $db->f("end") - $db->f("start") + $real_date,
+			"SUMMARY"         => $db->f("summary"),
+			"DESCRIPTION"     => $db->f("description"),
+			"PRIORITY"        => $db->f("prority"),
+			"LOCATION"        => $db->f("location"),
+			"CATEGORIES"      => $db->f("categories"),
+			"STUDIP_CATEGORY" => $db->f("category_intern"),
+			"UID"             => $db->f("uid"),
+			"DTSTAMP"         => $db->f("mkdate"),
+			"LAST-MODIFIED"   => $db->f("chdate"),
+			"RRULE"           => array(
+				 "ts"           => $db->f("ts"),
+				 "linterval"    => $db->f("linterval"),
+				 "sinterval"    => $db->f("sinterval"),
+				 "wdays"        => $db->f("wdays"),
+				 "month"        => $db->f("month"),
+				 "day"          => $db->f("day"),
+				 "rtype"        => $db->f("rtype"),
+				 "duration"     => $db->f("duration"),
+				 "expire"       => $db->f("expire"))),
 			$db->f("event_id"));
 	
 	$this->events[] = $event;

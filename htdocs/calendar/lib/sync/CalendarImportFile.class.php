@@ -43,13 +43,13 @@ class CalendarImportFile extends CalendarImport {
 	var $_parser;
 	var $file;
 	var $path;
-	var $fatal_error;
 	
 	/**
 	*
 	*/
 	function CalendarImportFile (&$parser, $file, $path = '') {
-	
+		
+		parent::CalendarImport();
 		$this->_parser =& $parser;
 		$this->file = $file;
 		$this->path = $path;
@@ -59,9 +59,15 @@ class CalendarImportFile extends CalendarImport {
 	*
 	*/
   function getContent () {
+		global $_calendar_error;
 	
 		$data = '';
-		$file = @fopen($this->file['tmp_name'], 'rb');
+		if (!$file = @fopen($this->file['tmp_name'], 'rb')) {
+			$_calendar_error->throwError(ERROR_FATAL,
+					_("Die Import-Datei konnte nicht geöffnet werden!"));
+			return FALSE;
+		}
+		
 		if ($file) {
 			while (!feof($file))
 				$data .= fread($file, 1024);
@@ -126,24 +132,15 @@ class CalendarImportFile extends CalendarImport {
 	/**
 	*
 	*/
-	function getFatalError () {
-	
-		if (is_object($this->fatal_error))
-			return $this->fatal_error;
-		
-		return FALSE;
-	}
-	
-	/**
-	*
-	*/
 	function importIntoDatabase ($ignore = 'IGNORE_ERRORS') {
+		global $_calendar_error;
 		
 		if ($this->checkFile())	{
-			if ($errors = $this->_parser->parseIntoDatabase($this->getContent(), $ignore))
+			if ($this->_parser->parseIntoDatabase($this->getContent(), $ignore))
 				return TRUE;
-				
-			array_merge($this->errors, $errors);
+			
+			$_calendar_error->throwError(ERROR_CRITICAL,
+					_("Die Datei konnte nicht gelesen werden!"));
 			return FALSE;
 		}
 		
@@ -154,12 +151,14 @@ class CalendarImportFile extends CalendarImport {
 	*
 	*/
 	function importIntoObjects ($ignore = 'IGNORE_ERRORS') {
+		global $_calendar_error;
 	
 		if ($this->checkFile()) {
-			if ($errors = $this->_parser->parseIntoObjects($this->getContent(), $ignore))
+			if ($this->_parser->parseIntoObjects($this->getContent(), $ignore))
 				return TRUE;
 			
-			array_merge($this->errors, $errors);
+			$_calendar_error->throwError(ERROR_CRITICAL,
+					_("Die Datei konnte nicht gelesen werden!"));
 			return FALSE;
 		}
 		
@@ -175,8 +174,15 @@ class CalendarImportFile extends CalendarImport {
 	*
 	*/
 	function deleteFile () {
+		global $_calendar_error;
 		
-		return unlink($this->file['tmp_name']);
+		if (!unlink($this->file['tmp_name'])) {
+			$_calendar_error->throwError(ERROR_FATAL,
+					_("Die Datei konnte nicht gel&ouml;scht werden!"));
+			return FALSE;
+		}
+		
+		return TRUE;
 	}
 	
 	/**

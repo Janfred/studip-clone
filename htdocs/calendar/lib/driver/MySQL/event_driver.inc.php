@@ -19,10 +19,10 @@ function event_save (&$this) {
 		$db =& new DB_Seminar();
 		
 		$query = "REPLACE calendar_events (event_id,range_id,autor_id,uid,summary,description,"
-		    	  . "start,end,class,categories,priority,location,ts,linterval,sinterval,wdays,"
-						. "month,day,rtype,duration,expire,exceptions,mkdate,chdate) VALUES ";
+		    	  . "start,end,class,categories,category_intern,priority,location,ts,linterval,"
+						. "sinterval,wdays,month,day,rtype,duration,expire,exceptions,mkdate,chdate) VALUES ";
 		
-		$query .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,'%s',%s,%s,%s,
+		$query .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,%s,'%s',%s,%s,%s,
 				'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
 				$this->getId(), $this->getUserId(), $this->getUserId(),
 				$this->properties["UID"],
@@ -32,6 +32,7 @@ function event_save (&$this) {
 				$this->properties["DTEND"],
 				$this->properties["CLASS"],
 				$this->properties["CATEGORIES"],
+				$this->properties["STUDIP_CATEGORY"],
 				$this->properties["PRIORITY"],
 				$this->properties["LOCATION"],
 				$this->properties["RRULE"]["ts"],
@@ -46,22 +47,6 @@ function event_save (&$this) {
 				$this->properties["EXCEPTIONS"],
 				$this->getMakeDate(), $this->getChangeDate());
 		
-	/*		sprintf("REPLACE termine (termin_id,range_id,autor_id,content,description,"
-		         . "date,end_time,mkdate,chdate,date_typ,expire,repeat,color,priority,raum) VALUES"
-			       . " ('%s','%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,'%s')",
-						 $this->id, $this->user_id, $this->user_id,
-						 $this->getProperty("SUMMARY"),
-						 $this->getProperty("DESCRIPTION"),
-						 $this->getProperty("DTSTART"),
-						 $this->getProperty("DTEND"),
-						 $mkdate, $chdate,
-						 $this->getProperty("CLASS"),
-						 $this->getProperty("EXPIRE"),
-						 $this->getProperty("RRULE"),
-						 $this->getProperty("CATEGORIES"),
-						 $this->getProperty("PRIORITY"),
-						 $this->getProperty("LOCATION"));
-	*/	
 		if($db->query($query)){
 			$this->chng_flag = FALSE;
 			return TRUE;
@@ -89,15 +74,16 @@ function event_restore ($id, &$this) {
 	
 	if ($db->next_record()) {
 		$this->setId($id);
-		$this->setProperty("UID",         $db->f("uid"));
-		$this->setProperty("SUMMARY",     $db->f("summary"));
-		$this->setProperty("DTSTART",     $db->f("start"));
-		$this->setProperty("CLASS",       $db->f("class"));
-		$this->setProperty("DTEND",       $db->f("end"));
-		$this->setProperty("CATEGORIES",  $db->f("categories"));
-		$this->setProperty("DESCRIPTION", $db->f("description"));
-		$this->setProperty("PRIORITY",    $db->f("priority"));
-		$this->setProperty("LOCATION",    $db->f("location"));
+		$this->setProperty("UID",             $db->f("uid"));
+		$this->setProperty("SUMMARY",         $db->f("summary"));
+		$this->setProperty("DTSTART",         $db->f("start"));
+		$this->setProperty("CLASS",           $db->f("class"));
+		$this->setProperty("DTEND",           $db->f("end"));
+		$this->setProperty("CATEGORIES",      $db->f("categories"));
+		$this->setProperty("STUDIP_CATEGORY", $db->f("category_intern"));
+		$this->setProperty("DESCRIPTION",     $db->f("description"));
+		$this->setProperty("PRIORITY",        $db->f("priority"));
+		$this->setProperty("LOCATION",        $db->f("location"));
 		$this->setProperty("RRULE", array(
 				"ts"        => $db->f("ts"),
 				"linterval" => $db->f("linterval"),
