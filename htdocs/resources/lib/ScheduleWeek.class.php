@@ -282,7 +282,7 @@ class ScheduleWeek {
 							//if ($this->events[$cc["id"]]["ort"]) echo ",  ", $this->events[$cc["id"]]["ort"];
 							echo "</font></td></tr><tr><td class=\"blank\">";
 								echo  "<a href=\"".$this->events[$cc["id"]]["link"]."\"><font size=-1>";
-								echo substr($this->events[$cc["id"]]["name"], 0,50);
+								echo htmlReady(substr($this->events[$cc["id"]]["name"], 0,50));
 								if (strlen($this->events[$cc["id"]]["name"])>50)
 									echo "..."; 
 								echo"</font></a>";
