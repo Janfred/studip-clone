@@ -129,9 +129,10 @@ class ExternModuleDownload extends ExternModule {
 			$query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
 		}
 		
-		global $_fullname_sql;
+		if (!$nameformat = $this->config->getValue("Main", "nameformat"))
+			$nameformat = "no_title_short";
 		$query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
-		$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")];
+		$query .= $GLOBALS["_fullname_sql"][$nameformat];
 		$query .= "AS fullname, username FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 		$query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
 		$query .= "Seminar_id='{$this->config->range_id}'$query_order";
@@ -332,10 +333,9 @@ class ExternModuleDownload extends ExternModule {
 				"filesize"    => $db["filesize"] > 1048576 ? round($db["filesize"] / 1048576, 1) . " MB"
 													: round($db["filesize"] / 1024, 1) . " kB",
 														
-				"fullname"    => sprintf("<a href=\"\"%s><font%s>%s</font></a>"
-													, $this->config->getAttributes("LinkIntern", "a")
-													, $this->config->getAttributes("LinkIntern", "font")
-													, htmlReady($db["Vorname"]." ".$db["Nachname"]))
+				"fullname"    => $this->elements["LinkIntern"]->toString(
+													array("content" => htmlReady($db["Vorname"]." ".$db["Nachname"])))
+				
 			);
 			$out .= $this->elements["TableRow"]->toString($table_row_data);
 		}
