@@ -58,7 +58,7 @@ echo "</th>\n";
 printf("<th>&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getEnd() + 1);
 $tooltip = tooltip(_("vor"));
-echo "<img border=\"0\" src=\"./pictures/forumrot.gif\" alt=\"$tooltip\"></a>&nbsp;</th>\n";
+echo "<img border=\"0\" src=\"./pictures/forumrot.gif\" $tooltip></a>&nbsp;</th>\n";
 echo "</tr>\n<tr>\n";
 
 $weekdays_german = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
