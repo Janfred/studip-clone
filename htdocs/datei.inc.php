@@ -1396,11 +1396,15 @@ function delete_document ($dokument_id, $delete_only_file = FALSE) {
 	global $UPLOAD_PATH, $msg; // brauchen wir fuer den Pfad zu den Dokumenten
 
 	$db = new DB_Seminar;
-	
-	if (!unlink("$UPLOAD_PATH/$dokument_id"))
-		return FALSE;
-	elseif ($delete_only_file)
-		return TRUE;
+	$db->query("SELECT * FROM dokumente WHERE dokument_id='$dokument_id'");
+	if ($db->next_record()) { 
+		if ($db->f("url")=="") {   //Bei verlinkten Datein nicht nachsehen ob es Datei gibt!
+			if (!unlink("$UPLOAD_PATH/$dokument_id"))
+				return FALSE;
+			elseif ($delete_only_file)
+				return TRUE;
+		}
+	}
 		
 	// eintrag aus der Datenbank werfen
 	$db->query("DELETE FROM dokumente WHERE dokument_id='$dokument_id'");
