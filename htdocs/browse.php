@@ -45,7 +45,6 @@ require_once "visual.inc.php";
 require_once "functions.php";
 
 $sess->register("browse_data");
-$query='';
 
 if ($send) {
 	$browse_data["Vorname"]=$Vorname;
@@ -246,7 +245,8 @@ if($browse_data["group"]=="Search"){
 	}
 	$query .= " ORDER BY ".$browse_data["sortby"];
 } 
-
+if (!$browse_data["group"])
+	unset($query);
 
 if (isset($query)):
     $db = new DB_Seminar;	
