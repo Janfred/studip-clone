@@ -24,7 +24,7 @@
 
 
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 
 //Compatibility for PHP Version < 4.1.0
 // 3/18/2002 - Tim Gallagher<timg@sunflowerroad.com>
@@ -209,85 +209,52 @@ class Seminar_Auth extends Auth {
 	function auth_preauth() {
 		global $auto_user,$auto_response,$auto_id,$resolution;
 		
-		
-		if (!$auto_user OR !$auto_response OR !$auto_id) return false;
-		
-		$aktuell=time();
-		$folder=dir("/tmp");
-		while ($entry=$folder->read())
-		{
-			if (!strncmp($entry,"auto_key",8))
-			{
-				if ($aktuell-filemtime("/tmp/$entry") > 30) unlink("/tmp/$entry");
+		if (!$auto_user OR !$auto_response OR !$auto_id){
+			return false;
+		}
+		$aktuell = time();
+		$folder = dir("/tmp");
+		while ($entry = $folder->read()){
+			if (!strncmp($entry,"auto_key",8)){
+				if ($aktuell-filemtime("/tmp/$entry") > 30){
+					unlink("/tmp/$entry");
+				}
 			}
 		}
 		$folder->close;
-		
-		if (file_exists("/tmp/auto_key_$auto_id"))
-		{
-			$fp=@fopen("/tmp/auto_key_$auto_id","r");
-			$auto_challenge=fgets($fp,100);
+		if (file_exists("/tmp/auto_key_$auto_id")){
+			$fp = @fopen("/tmp/auto_key_$auto_id","r");
+			$auto_challenge = fgets($fp,100);
 			fclose($fp);
 			unlink("/tmp/auto_key_$auto_id");
-		}
-		else
-		{
+		} else {
 			$this->error_msg= _("Fehler beim Auto-Login!") . "<br>";
 			return false;
 		}
-		$this->auth["uname"]=$auto_user;  // This provides access for "loginform.ihtml"
-		
-		$this->db->query(sprintf("select user_id,username,perms,password ".
-		"from %s where username = '%s'",
-		$this->database_table,
-		addslashes($auto_user)));
-		if (!$this->db->num_rows())
-		{
-			$this->error_msg= _("Dieser Username existiert nicht!") . "<br>";
-			return false;
+		$this->auth["uname"] = $auto_user;  // This provides access for "loginform.ihtml"
+		$this->auth["jscript"] = true;
+		$expected_response = "";
+		for ($i = 0;$i < strlen($auto_response)/2;$i++){
+			$s = (256-(ord(substr($auto_challenge,$i,1))-hexdec(substr($auto_response,$i*2,2)))) % 256;
+			$expected_response .= chr($s);
 		}
-		
-		while($this->db->next_record()) {
-			
-			if ($this->db->f("username") != $auto_user) {
-				$this->error_msg= _("Bitte achten Sie auf korrekte Gro&szlig;-Kleinschreibung beim Username!") . "<br>";
+		$check_auth = StudipAuthAbstract::CheckAuthentication($auto_user,$expected_response,$this->auth['jscript']);
+		if ($check_auth['uid']){
+			$uid = $check_auth['uid'];
+			$this->db->query(sprintf("select perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
+			$this->db->next_record();
+			$this->auth["perm"]  = $this->db->f("perms");
+			if ($this->auth["perm"] == "root" || $this->auth["perm"] == "admin"){
+				$this->error_msg= sprintf(_("Autologin ist mit dem Status: %s nicht möglich!"), $this->auth["perm"]);
 				return false;
 			}
-			
-			$uid   = $this->db->f("user_id");
-			$perm  = $this->db->f("perms");
-			$pass  = $this->db->f("password");   // Password is stored as a md5 hash
-		}
-		
-		if ($perm=="root" || $perm=="admin")
-		{
-			$this->error_msg= sprintf(_("Autologin ist mit dem Status: %s nicht möglich!"), $perm);
-			return false;
-		}
-		
-		$expected_response="";
-		for ($i=0;$i < strlen($auto_response)/2;$i++)
-		{
-			$s=(256-(ord(substr($auto_challenge,$i,1))-hexdec(substr($auto_response,$i*2,2)))) % 256;
-			$expected_response.=chr($s);
-		}
-		$expected_response = md5($expected_response);
-		
-		//echo "$auto_user<br>$auto_response<br>$auto_challenge<br>$pass<br>$expected_response<br>";
-		//die;
-		
-		if ($pass != $expected_response) {
-			$this->error_msg= _("Das Passwort ist falsch!") . "<br>";
-			return false;
-		}
-		else {
-			$this->auth["perm"] = $perm;
-			$this->auth["jscript"] = TRUE;
+			$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
 			$this->auth_set_user_settings($uid);
 			return $uid;
+		} else {
+			$this->error_msg = $check_auth['error'];
+			return false;
 		}
-		
-		
 	}
 	
 	function auth_loginform() {
@@ -296,9 +263,11 @@ class Seminar_Auth extends Auth {
 		global $ABSOLUTE_PATH_STUDIP;
 		global $shortcut;
 		
-		
-		$challenge = md5(uniqid($this->magic));
-		$sess->register("challenge");
+		$challenge = StudipAuthAbstract::CheckMD5();
+		if ($challenge){
+			$challenge = md5(uniqid($this->magic));
+			$sess->register("challenge");
+		}
 		
 		include("$ABSOLUTE_PATH_STUDIP/crcloginform.ihtml");
 	}
@@ -314,53 +283,24 @@ class Seminar_Auth extends Auth {
 		
 		$_language_path = init_i18n($_language);
 		
-		$this->auth["uname"]=$username;	// This provides access for "loginform.ihtml"
 		
-		$this->db->query(sprintf("select user_id,username,perms,password ".
-		"from %s where username = '%s'",
-		$this->database_table,
-		addslashes($username)));
-		if (!$this->db->num_rows())
-		{
-			$this->error_msg= _("Dieser Username existiert nicht!") . "<br>";
-			return false;
+		$this->auth["uname"] = $username;	// This provides access for "loginform.ihtml"
+		$this->auth["jscript"] = ($resolution != "");
+		if ($this->auth['jscript'] && $challenge){
+			$password = $response;
 		}
-		
-		while($this->db->next_record()) {
-			
-			if ($this->db->f("username") != $username) {
-				$this->error_msg= _("Bitte achten Sie auf korrekte Gro&szlig;-Kleinschreibung beim Username!") . "<br>";
-				return false;
-			}
-			
-			$uid   = $this->db->f("user_id");
-			$perm  = $this->db->f("perms");
-			$pass  = $this->db->f("password");   // Password is stored as a md5 hash
-		}
-		$exspected_response = md5("$username:$pass:$challenge");
-		
-		// True when JS is disabled
-		if ($response == "") {
-			if (md5($password) != $pass) {       // md5 hash for non-JavaScript browsers
-				$this->error_msg= _("Das Passwort ist falsch!") . "<br>";
-				return false;
-			} else {
-				$this->auth["perm"] = $perm;
-				$this->auth["jscript"] = FALSE;
-				$this->auth_set_user_settings($uid);
-				return $uid;
-			}
-		}
-		
-		// Response is set, JS is enabled
-		if ($exspected_response != $response) {
-			$this->error_msg= _("Das Passwort ist falsch!") . "<br>";
-			return false;
-		} else {
-			$this->auth["perm"] = $perm;
-			$this->auth["jscript"] = TRUE;
+		$check_auth = StudipAuthAbstract::CheckAuthentication($username,$password,$this->auth['jscript']);
+		if ($check_auth['uid']){
+			$uid = $check_auth['uid'];
+			$this->db->query(sprintf("select perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
+			$this->db->next_record();
+			$this->auth["perm"]  = $this->db->f("perms");
+			$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
 			$this->auth_set_user_settings($uid);
 			return $uid;
+		} else {
+			$this->error_msg = $check_auth['error'];
+			return false;
 		}
 	}
 	
@@ -382,7 +322,6 @@ class Seminar_Auth extends Auth {
 			}
 		}
 	}
-	
 }
 
 class Seminar_Default_Auth extends Seminar_Auth {
