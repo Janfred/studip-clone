@@ -28,8 +28,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 
+require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
@@ -46,29 +46,8 @@ $cssSw->switchClass();
 
 // Hilfsfunktionen
 
-function GetPresetGroups ($view, $veranstaltung_class)
-{ 	global $INST_STATUS_GROUPS, $SEM_STATUS_GROUPS;
-        echo "<select name=\"move_old_statusgruppe\">";
-	if ($view == "statusgruppe_inst") {
-		for ($i=0; $i<sizeof($INST_STATUS_GROUPS["default"]); $i++) {
-			printf ("<option>%s</option>",$INST_STATUS_GROUPS["default"][$i]);
-		}
-	}
-	if ($view == "statusgruppe_sem") {
-		if (isset($SEM_STATUS_GROUPS[$veranstaltung_class])) {   // wir sind in einer Veranstaltung die Presets hat
-			$key = $veranstaltung_class;
-		} else {
-			$key = "default";
-		}
-		for ($i=0; $i<sizeof($SEM_STATUS_GROUPS[$key]); $i++) {
-			printf ("<option>%s</option>",$SEM_STATUS_GROUPS[$key][$i]);
-		}
-	}
-	echo "</select>";
-}
-
 function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="", $workgroup_mode=FALSE)
-{ global $HTTP_POST_VARS,$_range_type;
+{ global $HTTP_POST_VARS;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
@@ -109,9 +88,9 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 		echo "\n\t<tr>";
 		echo "\n\t\t<td width=\"5%\">";
-		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
-		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"%s\" width=\"5%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")), $edit_id == $statusgruppe_id?"topicwrite":"topic", $statusgruppe_id, $range_id, $view, tooltip("Gruppenname oder Anzahl anpassen"));
-		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
+		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip(_("Markierte Personen dieser Gruppe zuordnen")));
+		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"%s\" width=\"5%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")), $edit_id == $statusgruppe_id?"topicwrite":"topic", $statusgruppe_id, $range_id, $view, tooltip(_("Gruppenname oder Anzahl anpassen")));
+		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip(_("Gruppe mit Personenzuordnung entfernen")));
 		echo 	"\n\t</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
@@ -129,7 +108,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 			}
 			printf ("\n\t<tr>\n\t\t<td><font color=\"%s\">$k</font></td>", $farbe);
 			printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\">%s</font></td>",$class, htmlReady($db2->f("fullname")));
-			printf ("<td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip("Person aus der Gruppe entfernen"));
+			printf ("<td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip(_("Person aus der Gruppe entfernen")));
 			echo "\n\t</tr>";
 			$k++;
 		}
@@ -142,29 +121,21 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		$i++;
 		echo "</table>";
 		if ($i < $AnzahlStatusgruppen) {
-			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><img src=\"pictures/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"), tooltip("Gruppenreihenfolge tauschen")); 
+			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><img src=\"pictures/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;",$statusgruppe_id, $range_id, $view, tooltip(_("Gruppenreihenfolge tauschen")), tooltip(_("Gruppenreihenfolge tauschen"))); 
 		}
 	}
 }
 
 function PrintSearchResults ($search_exp, $range_id)
-{ global $SessSemName, $_fullname_sql,$_range_type;
+{ global $SessSemName, $_fullname_sql;
 	$db=new DB_Seminar;
-	if ($_range_type == "sem") {
-		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".		
-		"LEFT JOIN user_info USING (user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$range_id')  ".
-		"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
-		"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
-		"ORDER BY Nachname";
-	} else {
-		$query = "SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, username, perms ".
-		"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
-		"WHERE perms !='root' AND perms !='admin' AND perms !='user' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
-		"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
-	}
+	$query = "SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, username, perms ".
+	"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
+	"WHERE perms !='root' AND perms !='admin' AND perms !='user' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
+	"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
 	$db->query($query); // results all users which are not in the seminar
 	if (!$db->num_rows()) {
-		echo "&nbsp; keine Treffer&nbsp; ";
+		echo "&nbsp; " . _("keine Treffer") . "&nbsp; ";
 	} else {
 		echo "&nbsp; <select name=\"Freesearch[]\" size=\"4\" multiple>";
 		while ($db->next_record()) {
@@ -176,9 +147,9 @@ function PrintSearchResults ($search_exp, $range_id)
 
 function PrintAktualContacts ($range_id)
 {	
-	global $_fullname_sql,$_range_type;
+	global $_fullname_sql;
 	$bereitszugeordnet = GetAllSelected($range_id);
-	echo "<font size=\"-1\">&nbsp; Personen im Adressbuch</font><br>";
+	echo "<font size=\"-1\">&nbsp; " . _("Personen im Adressbuch") . "</font><br>";
 	$query = "SELECT contact.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE owner_id = '$range_id' ORDER BY Nachname ASC";
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
@@ -217,14 +188,6 @@ function PrintAktualContacts ($range_id)
 		EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $update_id);
 	}
 	
-	// bestehende Statusgruppe in Textfeld
-	
-	if ($cmd=="move_old_statusgruppe")  {
-		$statusgruppe_name = $move_old_statusgruppe;		
-	} else {
-		$statusgruppe_name = "unbenannt";
-	}
-
 	// zuordnen von Personen zu einer Statusgruppe
 	if ($cmd=="move_person" && ($AktualMembers !="" || $InstitutMembers !="---" || $Freesearch !=""))  {
 		MovePersonStatusgruppe ($range_id, $AktualMembers, $InstitutMembers, $Freesearch, $workgroup_mode);
@@ -261,26 +224,12 @@ function PrintAktualContacts ($range_id)
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr><td class="topic" colspan=2>&nbsp;<b>
 	<?
-		echo "Kontaktgruppen";
+		echo _("Kontaktgruppen");
 	?></b></td></tr><tr><td class="blank" colspan="2">&nbsp; </td></tr></table>
 
 <table class="blank" width="100%" border="0" cellspacing="0">
   <tr>
-    <td align="right" width="50%" class="blank">
-    
-<?
-
-
-	if ($cmd!="edit_statusgruppe") { // normale Anzeige
-?>
-	 	<form action="<? echo $PHP_SELF ?>?cmd=move_old_statusgruppe" method="POST">
-	 	<?
-	 	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">&nbsp; ";
-	        ?>
-	        </form>
-<?	}
-?>        
-     <br></td>
+    <td align="right" width="50%" class="blank">&nbsp;</td>
     <td align="right" width="50%" NOWRAP class="blank">
 <?
 	if ($cmd!="edit_statusgruppe") { // normale Anzeige
@@ -290,11 +239,11 @@ function PrintAktualContacts ($range_id)
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
-	        <font size="2">Adressbuchgruppe anlegen: </font>
-	        <input type="text" name="new_statusgruppe_name" value="Gruppenname">
-	        &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
+	        <font size="2"><?=_("Adressbuchgruppe anlegen:")?> </font>
+	        <input type="text" name="new_statusgruppe_name" style="vertical-align:middle" value="<?=_("Gruppenname")?>">
+	        &nbsp; &nbsp; &nbsp; <b><?=_("Einf&uuml;gen")?></b>&nbsp; 
 	        <?
-	    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"./pictures/move_down.gif\" border=\"0\" value=\" neue Statusgruppe \" %s>&nbsp;  &nbsp; &nbsp; ", tooltip("neue Gruppe anlegen"));
+	    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"./pictures/move_down.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  &nbsp; &nbsp; ", _("neue Statusgruppe"), tooltip(_("neue Gruppe anlegen")));
 	    	?>
 	      </form>
 <?	
@@ -310,11 +259,11 @@ function PrintAktualContacts ($range_id)
   	  	  echo"<input type=\"HIDDEN\" name=\"update_id\" value=\"$edit_id\">";
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
-	        <font size="2">neuer Gruppenname: </font>
-	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlReady($gruppe_name);?>">
-	        &nbsp; &nbsp; &nbsp; <b>&Auml;ndern</b>&nbsp; 
+	        <font size="2"><?=_("neuer Gruppenname:")?> </font>
+	        <input type="text" name="new_statusgruppe_name" style="vertical-align:middle" value="<? echo htmlReady($gruppe_name);?>">
+	        &nbsp; &nbsp; &nbsp; <b><?=_("&Auml;ndern")?></b>&nbsp; 
 	        <?
-	    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"./pictures/move_down.gif\" border=\"0\" value=\" neue Statusgruppe \" %s>&nbsp;  &nbsp; &nbsp; ", tooltip("Gruppe anpassen"));
+	    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"./pictures/move_down.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  &nbsp; &nbsp; ", _("Gruppe anpassen"), tooltip(_("Gruppe anpassen")));
 	    	?>
 	      </form>
 <?	
@@ -346,11 +295,11 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 		<?
 		if ($search_exp) {
 			PrintSearchResults($search_exp, $range_id);
-			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
+			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  ", _("neue Suche"), tooltip(_("neue Suche")));
 		} else {
-			echo "<font size=\"-1\">&nbsp; freie Personensuche (wird in Adressbuch &uuml;bernommen)</font><br>";
+			echo "<font size=\"-1\">&nbsp; " . _("freie Personensuche (wird in Adressbuch &uuml;bernommen)") . "</font><br>";
 			echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
-			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
+			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  ", _("Person suchen"), tooltip(_("Person suchen")));
 		} 
 	}
 		?>                            
@@ -373,12 +322,14 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 ?>
 <table class="blank" width="100%" border="0" cellspacing="0">
     <?
-  	parse_msg("info§Es sind noch keine Gruppen oder Funktionen angelegt. 
-  	<br>Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen!
-  	<br><br>Sie haben mit dem Feld 'Gruppengr&ouml;&szlig;e' die M&ouml;glichkeit, die Sollst&auml;rke f&uuml;r eine Gruppe festzulegen.
-  	<br>Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.
-  	<br><br>Lesen Sie weitere Bedienungshinweise in der <a href=\"help/index.php?referrer_page=admin_statusgruppe.php\">Hilfe</a> nach!
-  	§");
+  	parse_msg("info§"
+		. _("Es sind noch keine Gruppen oder Funktionen angelegt.") . "<br>"
+		. _("Bitte nutzen Sie die obere Zeile, um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen!")
+  	. "<br><br>"
+		. _("Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.")
+  	. "<br><br>"
+		. sprintf(_("Lesen Sie weitere Bedienungshinweise in der %sHilfe%s nach!"),"<a href=\"help/index.php?referrer_page=admin_statusgruppe.php\">", "</a>")
+  	. "§");
     ?>
   </table>
 <?
