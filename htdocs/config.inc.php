@@ -49,7 +49,7 @@ $SEM_CLASS[1]=array("name"=>"Lehre", "bereiche"=>TRUE, 	//the name of the class
 					"compact_mode"=>FALSE, 			//indicates, if all fields are used in the creation process or only the fields that are necessary for workgroups
 					"workgroup_mode"=>FALSE, 			//indicates, if the workgroup mode is used (to use different declarations)
 					"only_inst_user"=>TRUE,				//indicates, that olny staff from the Einrichtungen which own the Veranstaltung, are allowed for tutor and dozent
-					"turnus_default"=>1	, 				//indicates, whether the turnus field is default set to "regulary" (0), "not regulary" (1) or "no dates" (-1) in the creation process
+					"turnus_default"=>0	, 				//indicates, whether the turnus field is default set to "regulary" (0), "not regulary" (1) or "no dates" (-1) in the creation process
 					"default_read_level"=>1, 				//the default read acces level. "without signed in" (0), "signed in" (1), "password" (2)
 					"default_write_level" =>1, 				//the default write acces level. "without signed in" (0), "signed in" (1), "password" (2)
 					"show_browse"=>TRUE, 				//indicates, if the hierachy-system should be shown in the search-process
