@@ -64,6 +64,7 @@ if ($entry_level=="inst") {
 //
 
 $structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
+$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Statusgruppen", link=>"statusgruppen.php", active=>FALSE);
 if ($rechte)
 	$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>"Statusgruppen verwalten", link=>"admin_statusgruppe.php?view=sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
@@ -125,6 +126,9 @@ switch ($i_page) {
 	break;
 	case "teilnehmer.php" : 
 		$reiter_view="teilnehmer"; 
+	break;
+	case "statusgruppen.php" : 
+		$reiter_view="statusgruppen"; 
 	break;
 	case "institut_details.php": 
 		$reiter_view="institut_details"; 
