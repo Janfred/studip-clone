@@ -215,7 +215,7 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 	else 
 		$count = 5 * $mehr;
 	
-	$sql_where_query_seminare = "WHERE seminare.visible='1' "; // OK_VISIBLE
+	$sql_where_query_seminare = "WHERE seminare.visible=1 "; // OK_VISIBLE
 	if ($sem_portal['bereich'] !="all")
 		$sql_where_query_seminare .= " AND seminare.status IN ('" . join("','", $_sem_status) . "')";
 	
@@ -226,15 +226,13 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 			$toplist =	getToplist(_("neueste Veranstaltungen"),"SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ".$sql_where_query_seminare." ORDER BY mkdate DESC LIMIT $count", "date");
 		break;
 		case 1:
-			$toplist = getToplist(_("Teilnehmeranzahl"), "SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
+			$toplist = getToplist(_("Teilnehmeranzahl"), "SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminare LEFT JOIN seminar_user USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
 		break;
 		case 2:
-			$tmp_where = ($view != "all") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) " : " WHERE seminare.visible='1' AND NOT ISNULL(seminare.seminar_id) "; // OK_VISIBLE
-			$toplist =	getToplist(_("die meisten Materialien"),"SELECT dokumente.seminar_id, seminare.name, count(dokumente.seminar_id) as count FROM dokumente LEFT JOIN seminare USING(seminar_id) ".$tmp_where." GROUP BY dokumente.seminar_id  ORDER BY count DESC LIMIT $count");
+			$toplist =	getToplist(_("die meisten Materialien"),"SELECT dokumente.seminar_id, seminare.name, count(dokumente.seminar_id) as count FROM seminare INNER JOIN  dokumente USING(seminar_id) ".$sql_where_query_seminare." GROUP BY dokumente.seminar_id  ORDER BY count DESC LIMIT $count");
 		break;
 		case 3:
-			$tmp_where = ($view != "all") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600) : " WHERE seminare.visible='1' AND NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600); // OK_VISIBLE
-			$toplist =	getToplist(_("aktivste Veranstaltungen"),"SELECT px_topics.seminar_id, seminare.name, count(px_topics.seminar_id) as count FROM px_topics LEFT JOIN seminare USING(seminar_id) ".$tmp_where." GROUP BY px_topics.seminar_id  ORDER BY count DESC LIMIT $count");
+			$toplist =	getToplist(_("aktivste Veranstaltungen"),"SELECT px_topics.seminar_id, seminare.name, count(px_topics.seminar_id) as count FROM px_topics INNER JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." AND px_topics.mkdate > ".(time()-1209600) . " GROUP BY px_topics.seminar_id  ORDER BY count DESC LIMIT $count");
 		break;
 	}
 	
