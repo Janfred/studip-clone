@@ -493,7 +493,21 @@ if ($GLOBALS["RESOURCES_ENABLE"]) {
 			);
 }
 
-//show help for resources management, if available
+//show help for ILIAS-interface, if available
+if ($GLOBALS["EXPORT_ENABLE"]) {
+	$pages[] = array	(	"name" => _("Export von Daten"),
+				"text" => _("Exportieren von Daten aus Stud.IP in verschiedenen Formaten"),
+				"perm" =>	"user",
+				"kategorien" => array	(	
+																array	(	"name" => _("Einführung"),
+																				"text" => _("Was ist das Export-Modul?"),
+																				"page" => "export_intro.htm"
+																			)
+															)
+			);
+
+}
+//show help for ILIAS-interface, if available
 if ($GLOBALS["ILIAS_CONNECT_ENABLE"]) {
 	$pages[] = array	(	"name" => _("ILIAS Lernmodule in Stud.IP"),
 				"text" => _("Einrichten und Nutzen von Lernmodulen aus ILIAS Open Source"),
