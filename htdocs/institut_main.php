@@ -145,7 +145,9 @@ if ($nclose)
 	$localFields = $DataFields->getLocalFields();
 	
 	foreach ($localFields as $val) {
-		echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
+		if ($DataFields->checkPermission($perm, $val["view_perms"])) {
+			echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
+		}
 	}
 	
 ?>

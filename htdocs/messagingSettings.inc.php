@@ -52,6 +52,11 @@ while ($db2->next_record()) {
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x) {
+	if (!$send_as_email) {
+		$my_messaging_settings["send_as_email"] = FALSE;
+	} else {
+		$my_messaging_settings["send_as_email"] = TRUE;
+	}
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
 	$my_messaging_settings["delete_messages_after_logout"] = $delete_messages_after_logout;
@@ -187,6 +192,17 @@ function change_messaging_view() {
 					</td>
 				</tr>	
 
+				<? if ($GLOBALS["ALLOW_SEND_AS_EMAIL"]) { ?>
+        <tr  <? $cssSw->switchClass() ?>>
+          <td  align="right" class="blank" style="border-bottom:1px dotted black;">
+            <font size="-1"><?print _("Eine Kopie aller eingehenden Nachrichten an eigene E-Mail-Adresse schicken");?></font>
+          </td>
+          <td <?=$cssSw->getFullClass()?>>
+            <input type="checkbox" value="1" name="send_as_email"<? if ($my_messaging_settings["send_as_email"] == "1") echo " checked"; ?>>
+          </td>
+        </tr>
+				<? } ?>
+
 				<tr <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size="-1">
@@ -294,7 +310,7 @@ function change_messaging_view() {
 								}
 							}
 						} ?>
-                        </select>
+                        			</select>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>

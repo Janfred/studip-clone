@@ -32,25 +32,26 @@
 
 
 //Checken ob es sich um vergangene Semester handelt + checken, welches das aktuelle Semester ist und Daten daraus verwenden
-$i=1;
-for ($i; $i <= sizeof($SEMESTER); $i++)
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+$semester = new SemesterData;
+$all_semester = $semester->getAllSemesterData();
+for ($i=0; $i < sizeof($all_semester); $i++)
 	{ 
-	if ($SEMESTER[$i]["ende"] < time()) $SEMESTER[$i]["past"]=TRUE;
-	if (($SEMESTER[$i]["beginn"] < time()) && ($SEMESTER[$i]["ende"] >time()))
+	if (($all_semester[$i]["beginn"] < time()) && ($all_semester[$i]["ende"] >time()))
 		{
-		$VORLES_BEGINN=$SEMESTER[$i]["vorles_beginn"];
-		$VORLES_ENDE=$SEMESTER[$i]["vorles_ende"];
-		$SEM_BEGINN=$SEMESTER[$i]["beginn"];
-		$SEM_ENDE=$SEMESTER[$i]["ende"];
-		$SEM_NAME=$SEMESTER[$i]["name"];
+		$VORLES_BEGINN=$all_semester[$i]["vorles_beginn"];
+		$VORLES_ENDE=$all_semester[$i]["vorles_ende"];
+		$SEM_BEGINN=$all_semester[$i]["beginn"];
+		$SEM_ENDE=$all_semester[$i]["ende"];
+		$SEM_NAME=$all_semester[$i]["name"];
 		$SEM_ID=$i;
-		if ($i<sizeof ($SEMESTER))
+		if ($i<sizeof ($all_semester))
 			{
-			$VORLES_BEGINN_NEXT=$SEMESTER[$i+1]["vorles_beginn"];
-			$VORLES_ENDE_NEXT=$SEMESTER[$i+1]["vorles_ende"];
-			$SEM_BEGINN_NEXT=$SEMESTER[$i+1]["beginn"];
-			$SEM_ENDE_NEXT=$SEMESTER[$i+1]["ende"];
-			$SEM_NAME_NEXT=$SEMESTER[$i+1]["name"];			
+			$VORLES_BEGINN_NEXT=$all_semester[$i+1]["vorles_beginn"];
+			$VORLES_ENDE_NEXT=$all_semester[$i+1]["vorles_ende"];
+			$SEM_BEGINN_NEXT=$all_semester[$i+1]["beginn"];
+			$SEM_ENDE_NEXT=$all_semester[$i+1]["ende"];
+			$SEM_NAME_NEXT=$all_semester[$i+1]["name"];			
 			$SEM_ID_NEXT=$i+1;
 			}
 		}

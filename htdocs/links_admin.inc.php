@@ -20,13 +20,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/admin_semester.inc.php";
+//require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php";
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php";
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/LockRules.class.php";
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -34,6 +37,9 @@ $db3=new DB_Seminar;
 $db4=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 $Modules=new Modules;
+$semester=new SemesterData;
+$lock_rules=new LockRules;
+$all_lock_rules=$lock_rules->getAllLockRules();
 
 $sess->register("links_admin_data");
 $sess->register("sem_create_data");
@@ -149,6 +155,9 @@ if ($i_page == "admin_seminare1.php"
 		OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem")
 		OR ($i_page == "admin_lit_list.php" AND $links_admin_data["view"]=="literatur_sem")
 		OR $i_page == "archiv_assi.php"
+		OR $i_page == "admin_visibility.php"
+		OR $i_page == "admin_lock.php"
+		OR $i_page == "copy_assi.php"
 		OR $i_page == "adminarea_start.php"
 		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_sem")		
 		OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_sem")
@@ -236,6 +245,13 @@ if ($EXPORT_ENABLE)
 $structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
+if ($perm->have_perm("admin")) 
+	$structure["visibility"]=array (topKat=>"veranstaltungen", name=>_("Sichtbarkeit"), link=>"admin_visibility.php?list=TRUE&new_session=TRUE", active=>FALSE);
+if ($perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
+	$structure["lock"]=array (topKat=>"veranstaltungen", name=>_("Sperren"), link=>"admin_lock.php?list=TRUE&new_session=TRUE", active=>FALSE);
+} 
+if ($perm->have_perm("dozent")) 
+	$structure["copysem"]=array (topKat=>"veranstaltungen", name=>_("Veranstaltung kopieren"), link=>"copy_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
 if ($perm->have_perm("dozent")) 
 	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>_("neue&nbsp;Veranstaltung"), link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE, newline=>FALSE);
 //
@@ -282,6 +298,14 @@ if ($perm->have_perm("root")) {
 	$structure["integrity"]=array (topKat=>"modules", name=>_("DB Integrit&auml;t"), link=>"admin_db_integrity.php", active=>FALSE);
 	if ($BANNER_ADS_ENABLE)  {
 		$structure["bannerads"]=array (topKat=>"global", name=>_("Werbebanner"), link=>"admin_banner_ads.php", active=>FALSE);
+	}
+	if ($SMILEYADMIN_ENABLE) {
+		$structure["smileyadmin"]=array (topKat=>"global", name=>_("Smileys"), link=>"admin_smileys.php", active=>FALSE);
+	}
+		
+	$structure["semester"]=array (topKat=>"global", name=>_("Semester"), link=>"admin_semester.php", active=>FALSE);
+	if ($SEMINAR_LOCK_ENABLE) {
+		$structure["lock_adjust"]=array (topKat=>"global", name=>("Sperrebenen anpassen"), link=>"admin_lock_adjust.php", active=>FALSE);
 	}
 }
 //Reitersystem Ende
@@ -332,6 +356,9 @@ switch ($i_page) {
 	case "admin_fach.php" : 
 		$reiter_view="fach"; 
 	break;
+	case "admin_semester.php";
+		$reiter_view ="semester";
+	break;
 
 	case "admin_institut.php" : 
 		$reiter_view="grunddaten_inst"; 
@@ -377,6 +404,9 @@ switch ($i_page) {
 		else
 			$reiter_view="modules_inst";
 	break;
+	case "admin_lock_adjust.php":
+		$reiter_view="lock_adjust";
+	break;
 	case "admin_studiengang.php": 
 		$reiter_view="studiengang"; 
 	break;
@@ -385,6 +415,15 @@ switch ($i_page) {
 	break;
 	case "archiv_assi.php": 
 		$reiter_view="archiv"; 
+	break;
+	case "admin_visibility.php": 
+		$reiter_view="visibility"; 
+	break;
+	case "admin_lock.php":
+		$reiter_view="lock";
+	break;
+	case "copy_assi.php": 
+		$reiter_view="copysem"; 
 	break;
 	case "new_user_md5.php": 
 		$reiter_view="new_user"; 
@@ -418,6 +457,9 @@ switch ($i_page) {
 	break;
 	case "admin_banner_ads.php":
 		$reiter_view = "bannerads";
+	break;
+	case "admin_smileys.php":
+		$reiter_view = "smileyadmin";
 	break;
 }
 
@@ -526,8 +568,9 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 						<select name="srch_sem">
 							<option value=0><?=_("alle")?></option>
 							<?
+							$all_semester = $semester->getAllSemesterData();
 							$i=1;
-							foreach ($SEMESTER as $a) {
+							foreach ($all_semester as $a) {
 								$i++;
 								if ($links_admin_data["srch_sem"]==$a["name"])
 									echo "<option selected value=\"".$a["name"]."\">".$a["name"]."</option>";
@@ -634,7 +677,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 				if ($i_page == "archiv_assi.php") {
 					?>
 					<tr>
-						<td class="steel1" colspan=5>
+						<td class="steel1" colspan=6>
 							<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo checked ?> />&nbsp;<?=_("keine zuk&uuml;nftigen Veranstaltungen anzeigen - Beginn des (letzten) Veranstaltungssemesters ist verstrichen")?> </font><br />
 							<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;<?=_("nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als sechs Monaten)")?> </font> -->
 						</td>
@@ -670,13 +713,16 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 	if ($links_admin_data["srch_on"]) {
 
 		$query="SELECT DISTINCT seminare.*, Institute.Name AS Institut FROM seminar_user LEFT JOIN seminare USING (seminar_id) LEFT JOIN Institute USING (institut_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id) WHERE seminar_user.status = 'dozent' ";
+		// old $query="SELECT DISTINCT seminare.*, Institute.Name AS Institut FROM seminare LEFT JOIN Institute USING (institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id)";
 		$conditions=0;
 
 		if ($links_admin_data["srch_sem"]) {
-			$i=0;
-			for ($i; $i <=sizeof($SEMESTER); $i++) {
-				if ($SEMESTER[$i]["name"] == $links_admin_data["srch_sem"]) {
-					$query.="AND seminare.start_time <=".$SEMESTER[$i]["beginn"]." AND (".$SEMESTER[$i]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+			$all_semester = $semester->getAllSemesterData();
+			for ($i=0; $i<sizeof($all_semester); $i++) {
+				if ($all_semester[$i]["name"] == $links_admin_data["srch_sem"]) {
+					$query.="AND seminare.start_time <=".$all_semester[$i]["beginn"]." AND (".$all_semester[$i]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+		// old			$query.="WHERE seminare.start_time <=".$all_semester[$i]["beginn"]." AND (".$all_semester[$i]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+					$conditions++;
 				}
 			}
 		}
@@ -694,17 +740,20 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 			$query.="AND fakultaets_id ='".$links_admin_data["srch_fak"]."' ";
 		}
 
+
 		if ($links_admin_data["srch_doz"]) {
 			$query.="AND seminar_user.user_id ='".$links_admin_data["srch_doz"]."' ";
 		}
 
 		if ($links_admin_data["srch_exp"]) {
 			$query.="AND (seminare.Name LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Untertitel LIKE '%".$links_admin_data["srch_exp"]."%' OR seminare.Beschreibung LIKE '%".$links_admin_data["srch_exp"]."%' OR auth_user_md5.Nachname LIKE '%".$links_admin_data["srch_exp"]."%') ";
+			$conditions++;
 		}
 
 		//Extension to the query, if we want to show lectures which are archiveable
 		if (($i_page== "archiv_assi.php") && ($links_admin_data["select_old"])) {
 			$query.="AND ((seminare.start_time + seminare.duration_time < ".$SEM_BEGINN_NEXT.") AND seminare.duration_time != '-1') ";
+			$conditions++;
 		}
 
 	// tutors and dozents only have a plain list
@@ -732,7 +781,15 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 	if ($db->num_rows()) {
 		?>
 		<tr height=28>
-			<td width="60%" class="steel" valign=bottom>
+			<td width="%10" class="steel" valign=bottom>
+				<img src="pictures/blank.gif" width=1 height=20>
+				&nbsp;<b><?=_("Semester")?></b></a>
+			</td>
+			<td width="5%" class="steel" valign=bottom>
+				<img src="pictures/blank.gif" width=1 height=20>
+				&nbsp; <a href="<? echo $PHP_SELF ?>?adminarea_sortby=VeranstaltungsNummer"><b><?=_("Nr.")?></b></a>
+			</td>
+			<td width="45%" class="steel" valign=bottom>
 				<img src="pictures/blank.gif" width=1 height=20>
 				&nbsp; <a href="<? echo $PHP_SELF ?>?adminarea_sortby=Name"><b><?=_("Name")?></b></a>
 			</td>
@@ -740,10 +797,20 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 				<b><?=_("DozentIn")?></b>
 			</td>
 			<td width="25%"align="center" class="steel" valign=bottom>
-				<a href="<? echo $PHP_SELF ?>??adminarea_sortby=status"><b><?=_("Status")?></b></a>
+				<a href="<? echo $PHP_SELF ?>?adminarea_sortby=status"><b><?=_("Status")?></b></a>
 			</td>
 			<td width="10%" align="center" class="steel" valign=bottom>
-				<b><? printf ("%s", ($i_page=="archiv_assi.php") ?  _("Archivieren") : _("Aktion")) ?></b> 
+				<b><? 
+					if ($i_page=="archiv_assi.php") {
+						echo _("Archivieren");
+					} elseif ($i_page=="admin_visibility.php") {
+						echo _("Sichtbarkeit");
+					} elseif ($i_page=="admin_lock.php") {
+						echo _("Sperrebene");
+					} else {
+						echo _("Aktion");
+					}
+				?></b> 
 			</td>
 		</tr>
 		<? 
@@ -755,7 +822,7 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 					&nbsp; <font size=-1><?=_("Alle ausgew&auml;hlten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("archivieren", "src")?> border=0 align="absmiddle" /></font><br />
 					&nbsp; <font size=-1 color="red"><?=_("Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> r&uuml;ckg&auml;ngig gemacht werden kann!")?></font>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="right">
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
 				<?
 				if ($auth->auth["jscript"]) {
 					printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
@@ -765,17 +832,75 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 			</tr>
 			<?
 		} 
+		//more Options for visibility changing
+		if ($i_page == "admin_visibility.php") {
+			?>
+			<tr <? $cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3>
+					&nbsp; <font size=-1><?=_("Sichtbarkeit der angezeigten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br />
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
+				<input type="HIDDEN" name="change_visible" value="1">
+				<?
+				if ($auth->auth["jscript"]) {
+					printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+					// echo "&nbsp;<br>";
+					// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+				}
+				?>&nbsp; 
+				</td>
+			</tr>
+			<?
+		} 
+		//more Options for lock changing
+		if ($i_page == "admin_lock.php") {
+			?>
+			<tr <? $cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3>
+					&nbsp; <font size=-1><?=_("Sperrebene der angezeigten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br />
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
+				<?
+				if ($auth->auth["jscript"]) {
+					printf("<select name=\"lock_all\" size=1>");
+					printf("<option value='-1'>"._("Bitte w&auml;hlen")."</option>");
+					for ($i=0;$i<count($all_lock_rules);$i++) {
+						printf("<option value=\"".$all_lock_rules[$i]["lock_id"]."\" ");
+						if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
+							printf(" selected ");
+						}
+						printf(">".$all_lock_rules[$i]["name"]."</option>");
+					}
+					// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
+					printf("</select>");
+					printf("<input type=\"IMAGE\" ".makeButton("uebernehmen","general_lock")." name=\"general_lock\">");
+					
+					// echo "&nbsp;<br>";
+					// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+				}
+				?>&nbsp; 
+				</td>
+			</tr>
+			<?
+		} 
 	}
-
 
 	while ($db->next_record()) {
 		$seminar_id = $db->f("Seminar_id");
 		$user_id = $auth->auth["uid"];
 
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\">".htmlReady(substr($db->f("Name"),0,100));
+		echo "<tr>";
+		$sem=new SemesterData;
+		$semdata=$sem->getSemesterDataByDate($db->f("start_time"));
+		echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>".htmlReady($semdata["name"])."</font></td>";
+		echo "<td class=\"".$cssSw->getClass()."\">".htmlReady($db->f("VeranstaltungsNummer"))."</td>";
+		echo "<td class=\"".$cssSw->getClass()."\">".htmlReady(substr($db->f("Name"),0,100));
 		if (strlen ($db->f("Name")) > 100)
 			echo "(...)";
+		if ($db->f("visible")==0) {
+			echo "&nbsp;". _("(versteckt)");
+		}
 		echo "</td>";
 		echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
 		$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent'");
@@ -820,6 +945,41 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 				break;
 			case "admin_news.php": 
 				printf("<font size=-1>" . _("News") . "<br /><a href=\"admin_news.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+				break;
+			case "copy_assi.php": 
+				printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+				break;
+			case "admin_lock.php":
+				$db5 = new Db_Seminar;
+				$db5->query("SELECT lock_rule from seminare WHERE Seminar_id='".$seminar_id."'");
+				$db5->next_record();
+				if ($perm->have_perm("admin")) {
+					?>
+					<input type="hidden" name="make_lock" value=1>
+					<select name=lock_sem[<? echo $seminar_id ?>]>
+					<?
+						for ($i=0;$i<count($all_lock_rules);$i++) {
+							echo "<option value=".$all_lock_rules[$i]["lock_id"]."";
+							if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
+								echo " selected ";
+							} elseif (!isset($lock_all) && ($all_lock_rules[$i]["lock_id"]==$db5->f("lock_rule"))) {
+								echo " selected ";
+							}
+							echo ">".$all_lock_rules[$i]["name"]."</option>";
+						}	
+					?>
+					</select>
+					
+				<?	
+				}
+				break;
+			case "admin_visibility.php": 
+				if ($perm->have_perm("admin")) {
+				?>
+				<input type="HIDDEN" name="all_sem[]" value="<? echo $seminar_id ?>" />
+				<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$select_none && ($select_all || $db->f("visible"))) echo checked; ?> />
+				<?
+				}
 				break;
 			case "archiv_assi.php": 
 				if ($perm->have_perm("admin")) {

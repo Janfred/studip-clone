@@ -39,13 +39,13 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Table.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/ZebraTable.class.php");
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
-
-$cssSw=new cssClassSwitcher;
 
 // Get a database connection
 $db = new DB_Seminar;
@@ -72,7 +72,7 @@ function imaging($img, $img_size, $img_name) {
 	}
 
 	//na dann kopieren wir mal...
-	$uploaddir="./banner";
+	$uploaddir="./pictures/smile";
 	$md5hash=md5($img_name+time());
 	$newfile = $uploaddir . "/" . $md5hash . "." . $ext;
 	$banner_data["banner_path"] = $md5hash . "." . $ext;
@@ -86,18 +86,6 @@ function imaging($img, $img_size, $img_name) {
 }
 
 //Anzeige der Bannerdaten
-function wrap_table_row($category, $value) {
-	global $cssSw;
-	$x = "<tr>";
-	$x .= "<td class=\"";
-	$cssSw->switchClass(); 
-	$x .= $cssSw->getClass() . "\">";
-	$x .= $category;
-	$x .= "</td>";
-	$x .= "<td class=\"" . $cssSw->getClass() . "\">";
-	$x .= $value . "</td></tr>";
-	return $x;
-}
 
 function view_probability($prio) {
 	static $computed=0, $sum=0;
@@ -118,24 +106,24 @@ function view_probability($prio) {
 }
 	
 
-function show_banner_list($cssSw) {
+function show_banner_list($table) {
 	global $db;
 	$q="SELECT * FROM banner_ads ORDER BY priority DESC";
 	$result = $db->query($q);
 	$count=0;
 	while ($db->next_record($result)) {
 		$count++;
-		print wrap_table_row("Banner","<img src=\"./pictures/banner/".$db->f("banner_path")."\" alt=\"".$db->f("alttext")."\">");
-		print wrap_table_row("Beschreibung",$db->f("description"));
-		print wrap_table_row("Ziel","(".$db->f("target_type").") " . $db->f("target"));
-		print wrap_table_row("Anzeigezeitraum", ($db->f("startdate") ? date("d.m.Y, h:i") : _("sofort")) . " " . _("bis") . " " . ($db->f("enddate") ? date("d.m.Y, h:i") : _("unbegrenzt")));
-		print wrap_table_row("Views", $db->f("views"));
-		print wrap_table_row("Priorität (Wahrscheinlichkeit)", $db->f("priority") . " (" . view_probability($db->f("priority")) . ")");
-		print wrap_table_row("", "<a href=\"$PHP_SELF?cmd=editdb&ad_id=".$db->f("ad_id")."\"><img " . makeButton("bearbeiten","src") . " border=0/></a> <a href=\"$PHP_SELF?cmd=delete&ad_id=".$db->f("ad_id")."\"><img " . makeButton("loeschen","src") . "\" border=0></a>");
-		print "<tr><td colspan=2 class=blank>&nbsp;</td></tr>";
+		print $table->row(array("Banner","<img src=\"./pictures/banner/".$db->f("banner_path")."\" alt=\"".$db->f("alttext")."\">"),"",1);
+		print $table->row(array("Beschreibung",$db->f("description")),"",0);
+		print $table->row(array("Ziel","(".$db->f("target_type").") " . $db->f("target")),"",0);
+		print $table->row(array("Anzeigezeitraum", ($db->f("startdate") ? date("d.m.Y, h:i") : _("sofort")) . " " . _("bis") . " " . ($db->f("enddate") ? date("d.m.Y, h:i") : _("unbegrenzt"))),"",0);
+		print $table->row(array("Views", $db->f("views")),"",0);
+		print $table->row(array("Priorität (Wahrscheinlichkeit)", $db->f("priority") . " (" . view_probability($db->f("priority")) . ")"),"",0);
+		print $table->row(array("", "<a href=\"$PHP_SELF?cmd=editdb&ad_id=".$db->f("ad_id")."\"><img " . makeButton("bearbeiten","src") . " border=0/></a> <a href=\"$PHP_SELF?cmd=delete&ad_id=".$db->f("ad_id")."\"><img " . makeButton("loeschen","src") . "\" border=0></a>"),"",0);
+		print $table->row(array("&nbsp;","&nbsp"),array("class"=>"blank", "bgcolor"=>"white"),0);
 	}
 	if ($count==0) {
-		echo "<tr><td colspan=2 class=blank><h4>" . _("Keine Banner vorhanden.") . "</h4></td></tr>";
+		print $table->row(array("<h4>" . _("Keine Banner vorhanden.") . "</h4>"), array("colspan"=>2, "class"=>"blank"));
 	}
 }
 
@@ -229,11 +217,12 @@ function write_data_to_db($banner_data) {
 }
 
 function edit_banner_pic($banner_data) {
-	global $cssSw, $save_banner_data;
+	global $save_banner_data;
 
-	print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" width=\"75%\" cellspacing=0 cellpadding=2>";
-	$cssSw->switchClass();
-	print "<tr><td colspan=2 class=\"" . $cssSw->getClass() . "\">";
+	$table=new ZebraTable(array("bgcolor"=>"#eeeeee", "align"=>"center", "width"=>"75%", "padding"=>"2"));
+	echo $table->open();
+	echo $table->openRow();
+	echo $table->openCell();
 
 	// save data for lower form
 	$save_banner_data=$banner_data;
@@ -245,12 +234,13 @@ function edit_banner_pic($banner_data) {
 		print "<p>" . _("noch kein Bild hochgeladen") . "</p>";
 	}
 	print "</td></tr>";
+	echo $table->closeRow();
 
 	print "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=upload&view=edit\" method=\"POST\">";
-	print wrap_table_row("1. Bilddatei auswählen:", "<input name=\"imgfile\" type=\"file\" cols=45>");
-	print wrap_table_row("2. Bilddatei hochladen:", "<input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\">");
+	print $table->row(array("1. Bilddatei auswählen: <input name=\"imgfile\" type=\"file\" cols=45>"),"",0);
+	print $table->row(array("2. Bilddatei hochladen: <input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\">"),"",0);
 	print "</form>";
-	print "</table>";
+	echo $table->close();
 
 }
 
@@ -264,8 +254,9 @@ function edit_banner_data($banner_data) {
 		$x .= ">" . $printname . "</option>";
 		return $x;
 	}
+	$table=new ZebraTable(array("bgcolor"=>"#eeeeee", "align"=>"center", "width"=>"75%", "padding"=>"2"));
+	echo $table->open();
 
-	print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" width=\"75%\" cellspacing=0 cellpadding=2>";
 	print "<form action=\"$PHP_SELF?cmd=edit&i_view=edit\" method=\"post\">";
 	if ($banner_data["ad_id"]) {
 		print "<input type=hidden name=\"ad_id\" value=\"" . $banner_data["ad_id"] . "\">";
@@ -275,9 +266,9 @@ function edit_banner_data($banner_data) {
 	} else {
 		$path_info = _("Noch kein Bild ausgewählt");
 	}
-	print wrap_table_row("Pfad:",$path_info);
-	print wrap_table_row("Beschreibung","<input type=text name=\"description\" size=\"40\" maxlen=\"254\" value=\"" . $banner_data["description"] . "\">");
-	print wrap_table_row("Alternativtext","<input type=text name=\"alttext\" size=\"40\" maxlen=\"254\" value=\"". $banner_data["alttext"] . "\">");
+	print $table->row(array("Pfad:",$path_info),0);
+	print $table->row(array("Beschreibung","<input type=text name=\"description\" size=\"40\" maxlen=\"254\" value=\"" . $banner_data["description"] . "\">"),0);
+	print $table->row(array("Alternativtext","<input type=text name=\"alttext\" size=\"40\" maxlen=\"254\" value=\"". $banner_data["alttext"] . "\">"),0);
 	$type_selector = "<select name=\"target_type\">";
 	$type_selector .= select_option("url",_("URL"), $banner_data["target_type"]);
 	$type_selector .= select_option("seminar",_("Veranstaltung"), $banner_data["target_type"]);
@@ -286,23 +277,23 @@ function edit_banner_data($banner_data) {
 	$type_selector .= select_option("none",_("Kein Verweis"), $banner_data["target_type"]);
 	//$type_selector .= select_option("special",_("speziell"), $banner_data["target_type"]);
 	$type_selector .= "</select>";
-	print wrap_table_row("Verweis-Typ",$type_selector);
+	print $table->row(array("Verweis-Typ",$type_selector),0);
 
-	print wrap_table_row("Verweis-Ziel","<input type=text name=\"target\" size=40 maxlength=254 value=\"". $banner_data["target"] . "\">");
+	print $table->row(array("Verweis-Ziel","<input type=text name=\"target\" size=40 maxlength=254 value=\"". $banner_data["target"] . "\">"),0);
 
 	$startdate_fields = "<input name=\"start_day\" value=\"tt\" size=2>. ";
 	$startdate_fields .= "<input name=\"start_month\" value=\"mm\" size=2>. ";
 	$startdate_fields .= "<input name=\"start_year\" value=\"jjjj\" size=4> &nbsp; &nbsp;";
 	$startdate_fields .= "<input name=\"start_hour\" value=\"hh\" size=2>:";
 	$startdate_fields .= "<input name=\"start_minute\" value=\"mm\" size=2> ";
-	print wrap_table_row("Anzeigen ab:", $startdate_fields);
+	print $table->row(array("Anzeigen ab:", $startdate_fields),0);
 
 	$enddate_fields = "<input name=\"end_day\" value=\"tt\" size=2>. ";
 	$enddate_fields .= "<input name=\"end_month\" value=\"mm\" size=2>. ";
 	$enddate_fields .= "<input name=\"end_year\" value=\"jjjj\" size=4> &nbsp; &nbsp;";
 	$enddate_fields .= "<input name=\"end_hour\" value=\"hh\" size=2>:";
 	$enddate_fields .= "<input name=\"end_minute\" value=\"mm\" size=2> ";
-	print wrap_table_row("Anzeigen bis:", $enddate_fields);
+	print $table->row(array("Anzeigen bis:", $enddate_fields),0);
 
 	$prio_selector = "<select name=\"priority\">";
 	$prio_selector .= select_option("0", _("0 (nicht anzeigen)"), $banner_data[priority]);
@@ -317,28 +308,27 @@ function edit_banner_data($banner_data) {
 	$prio_selector .= select_option("9", _("9"), $banner_data[priority]);
 	$prio_selector .= select_option("10", _("10 (sehr hoch)"), $banner_data[priority]);
 	$prio_selector .= "</select>";
-	print wrap_table_row("Priorität:", $prio_selector);
+	print $table->row(array("Priorität:", $prio_selector),0);
 
-	print wrap_table_row("", "<input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"absenden\"> <a href=\"admin_banner_ads.php\"><img " . makeButton("abbrechen", "src") . " border=0></a>");
-
-	print "</form>";
-	print "</table>";
+	print $table->row(array("", "<input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"absenden\"> <a href=\"admin_banner_ads.php\"><img " . makeButton("abbrechen", "src") . " border=0></a>"),0);
 
 	print "</form>";
+	$table->close();
 }
 
+//
+// Start output
+//
+$container=new ContainerTable();
+echo $container->headerRow("<b>&nbsp;"._("Verwaltung der Werbebanner")."</b>");
+echo $container->openCell();
 
-?>
-<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung der Werbebanner")?></b></td>
-</tr>
-<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-<tr><td class="blank" colspan=2><b><a href="<?echo $PHP_SELF?>?i_view=new">&nbsp;<?=_("Neues Banner anlegen")?></a><b><br><br></td></tr>
-
-<tr><td class="blank" colspan=2>
-<table border=0 bgcolor="#eeeeee" align="center" width="75%" cellspacing=0 cellpadding=2>
-<?
+$content=new ContentTable();
+echo $content->open();
+echo $content->openRow();
+echo $content->cell("<b><a href=\"$PHP_SELF\"?i_view=new\">&nbsp;"._("Neues Banner anlegen")."</a><b><br><br>", array("colspan"=>"2"));
+echo $content->openRow();
+echo $content->openCell(array("colspan"=>"2"));
 
 $banner_data=array();
 
@@ -435,20 +425,22 @@ if ($i_view=="new") {
 	$banner_data["priority"]="1";
 	edit_banner_pic($banner_data["banner_path"]);
 	print "<p>&nbsp;</p>";
-	edit_banner_data($banner_data, $cssSw);
+	edit_banner_data($banner_data);
 } else if ($i_view=="edit") {
 	edit_banner_pic($banner_data);
 	print "<p>&nbsp;</p>";
-	edit_banner_data($banner_data, $cssSw);
+	edit_banner_data($banner_data);
 } else {
-	show_banner_list($cssSw);
+	$table=new ZebraTable(array("bgcolor"=>"#eeeeee", "align"=>"center", "width"=>"75%", "padding"=>"2"));
+	echo $table->open();
+	show_banner_list($table);
+	echo $table->close();
 }
 
-?>
-</table>
-</table>
+echo $content->close();
+echo $container->blankRow();
+echo $container->close();
 
-<?
 page_close();
 ?>
 </body>

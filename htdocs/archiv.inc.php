@@ -27,6 +27,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 
 
 
@@ -508,12 +509,13 @@ function Export_Topic ($sem_id) {
 //Funktion zum archivieren eines Seminars, sollte in der Regel vor dem Loeschen ausgfuehrt werden.
 function in_archiv ($sem_id) {
 
-	global $SEMESTER, $SEM_CLASS,$SEM_TYPE,$ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $_fullname_sql;
+	global $SEM_CLASS,$SEM_TYPE,$ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $_fullname_sql;
 	
 	$hash_secret="frauen";
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
+	$semester = new SemesterData;
 
 
 	//Besorgen der Grunddaten des Seminars
@@ -530,10 +532,10 @@ function in_archiv ($sem_id) {
 	
 	//Besorgen von einzelnen Daten zu dem Seminar
 	
-	$i=0;
-	for ($i; $i<=sizeof($SEMESTER); $i++)
+	$all_semester = $semester->getAllSemesterData();
+	for ($i=0; $i<sizeof($all_semester); $i++)
 		{
-		if (($start_time >= $SEMESTER[$i]["beginn"]) && ($start_time <= $SEMESTER[$i]["ende"])) $semester_tmp=$SEMESTER[$i]["name"];
+		if (($start_time >= $all_semester[$i]["beginn"]) && ($start_time <= $all_semester[$i]["ende"])) $semester_tmp=$all_semester[$i]["name"];
 		}
 	
 	//Studienbereiche 

@@ -123,7 +123,7 @@ if ($sem_portal["bereich"] != "all") {
 		}
 	}
 
-	$query = "SELECT count(*) AS count FROM seminare WHERE seminare.status IN ('" . join("','", $_sem_status) . "')";
+	$query = "SELECT count(*) AS count FROM seminare WHERE seminare.visible='1' AND seminare.status IN ('" . join("','", $_sem_status) . "')";
 	$db->query($query);
 	if ($db->next_record())
 		$anzahl_seminare_class = $db->f("count");
@@ -160,12 +160,12 @@ if (!$perm->have_perm("root")){
 	<td class="blank" valign="top">
 	<table cellpadding="5" border="0" width="100%"><tr><td colspan="2">
 		<?
-		// 
-		if ($anzahl_seminare_class > 0)
+		//	
+		if ($anzahl_seminare_class > 0) {
 			print $SEM_CLASS[$sem_portal["bereich"]]["description"]."<br>" ;
-
-		 elseif ($sem_portal["bereich"] != "all") 
+		} elseif ($sem_portal["bereich"] != "all") {
 			print "<br>"._("In dieser Kategorie sind keine Veranstaltungen angelegt.<br>Bitte w&auml;hlen Sie einen andere Kategorie!");
+		}
 
 		echo "</td></tr><tr><td class=\"blank\" align=\"left\">";
 		if ($sem_browse_data['cmd'] == "xts"){
@@ -215,8 +215,9 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 	else 
 		$count = 5 * $mehr;
 	
+	$sql_where_query_seminare = "WHERE seminare.visible='1' "; // OK_VISIBLE
 	if ($sem_portal['bereich'] !="all")
-		$sql_where_query_seminare = "WHERE seminare.status IN ('" . join("','", $_sem_status) . "')";
+		$sql_where_query_seminare .= " AND seminare.status IN ('" . join("','", $_sem_status) . "')";
 	
 	
 	switch ($sem_portal["toplist"]) {
@@ -228,11 +229,11 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 			$toplist = getToplist(_("Teilnehmeranzahl"), "SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
 		break;
 		case 2:
-			$tmp_where = ($view != "all") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) " : " WHERE NOT ISNULL(seminare.seminar_id) ";
+			$tmp_where = ($view != "all") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) " : " WHERE seminare.visible='1' AND NOT ISNULL(seminare.seminar_id) "; // OK_VISIBLE
 			$toplist =	getToplist(_("die meisten Materialien"),"SELECT dokumente.seminar_id, seminare.name, count(dokumente.seminar_id) as count FROM dokumente LEFT JOIN seminare USING(seminar_id) ".$tmp_where." GROUP BY dokumente.seminar_id  ORDER BY count DESC LIMIT $count");
 		break;
 		case 3:
-			$tmp_where = ($view != "all") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600) : " WHERE NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600);
+			$tmp_where = ($view != "all") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600) : " WHERE seminare.visible='1' AND NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600); // OK_VISIBLE
 			$toplist =	getToplist(_("aktivste Veranstaltungen"),"SELECT px_topics.seminar_id, seminare.name, count(px_topics.seminar_id) as count FROM px_topics LEFT JOIN seminare USING(seminar_id) ".$tmp_where." GROUP BY px_topics.seminar_id  ORDER BY count DESC LIMIT $count");
 		break;
 	}
@@ -246,20 +247,17 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=2\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("die meisten Materialien")."</a><br />";
 	if ($sem_portal["toplist"] != 3)
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=3\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("aktivste Veranstaltungen")."</a><br />";
-
-
-
-// if ($sem_portal["bereich"] == "all")
+	// if ($sem_portal["bereich"] == "all")
 	$infotxt = _("Sie können hier nach allen Veranstaltungen suchen, sich Informationen anzeigen lassen und Veranstaltungen abonnieren.");
-		
+ 	                 
 	$infobox[] =
 		array  ("kategorie" => _("Aktionen:"),
-			"eintrag" => array	(	
-				array	 (	"icon" => "pictures/suchen.gif",
-									"text"  =>	$infotxt
+			"eintrag" => array        (        
+				array         (        "icon" => "pictures/suchen.gif",
+					"text"  =>        $infotxt
 				)
-			)
-		);
+		)
+	);
 
 	$infobox[] = ($view !="all") ? 
 		 		array  ("kategorie"  => _("Information:"),

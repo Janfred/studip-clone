@@ -198,7 +198,7 @@ if ($view=="statistik") {?>
 			//Toplists
 			$count = 10;
 			write_toplist(_("die meisten Teilnehmer"),"SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
-			write_toplist(_("zuletzt angelegt"),"SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ORDER BY mkdate DESC LIMIT $count");
+			write_toplist(_("zuletzt angelegt"),"SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare WHERE visible = 1 ORDER BY mkdate DESC LIMIT $count");
 			write_toplist(_("die meisten Materialien (Dokumente)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM dokumente a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			$week = time()-1209600;
 			write_toplist(_("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM px_topics a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) AND a.mkdate > $week GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");

@@ -159,7 +159,19 @@ $_language_path = init_i18n($_language);
 	</blockquote></td>
 	<td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr>
 	<tr><td class=blank colspan=2 align=center><br><br><img src="./locale/<?=$_language_path ?>/LC_PICTURES/willkommen.gif" /></td></tr>
-	<tr><td class=blank colspan=2>&nbsp;</td></tr>
+  <tr><td class=blank colspan=2>&nbsp;</td></tr>
+  <tr><td class=blank colspan=2>
+<table width=85% align=center>
+<tr><td>
+<p><font size=-1>An der Universit&auml;t Osnabr&uuml;ck sind alle NutzerInnen des Rechenzentrums 
+bereits in die Stud.IP-Datenbank eingetragen. Benutzen Sie zum Einloggen Ihre Rechenzentrumskennung und entweder Ihre Matrikelnummer oder das spezielle DozentInnenpasswort, das Ihnen Ihr zust&auml;ndiger Administrator oder das Zentrum virtUOS mitteilen.</font></p>
+
+<p><font size=-1>Bei Fragen hilft Ihnen zun&auml;chst unsere <a href="http://www.virtuos.uni-osnabrueck.de/studip">ausf&uuml;hrliche Anleitung zum Einloggen</a> weiter.</font></p>
+<p><font size=-1>Weitere Nachfragen richten Sie bitte an <a href="mailto:kursmanager@uni-osnabrueck.de">kursmanager@uni-osnabrueck.de</a> oder Tel. 0541/969-6506 bzw. 0541/969-6502. Dort k&ouml;nnen Sie auch formlos einen Account beantragen, wenn Sie nicht NutzerIn des Rechenzentrums sind.</font></p>
+<p>&nbsp;</p>
+</td></tr>
+</table>
+</td></tr>
 	</table>
 	</form>
 

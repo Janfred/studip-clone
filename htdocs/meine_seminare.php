@@ -337,7 +337,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		$sortby = "count DESC";
 		
 	
-	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding,modules FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe, seminare.chdate, seminare.visible, admission_binding,modules FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem = $db->num_rows();
 	
 	if (!$num_my_sem)
@@ -345,7 +345,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 	
 	while ($db->next_record()) {
-			$my_obj[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
+			$my_obj[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"visible" => $db->f("visible"), "gruppe" => $db->f("gruppe"),
 				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"),"sem",$db->f("modules"),$db->f("sem_status")), 
 				"obj_type" => "sem", "sem_status" => $db->f("sem_status"));
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
@@ -461,10 +461,15 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 			if ($lastVisit <= $values["chdate"])
 				print ("<font color=\"red\">");    // red color for new metadates
-			echo "<font size=-1>".htmlReady($values["name"])."</font>";
+			echo "<font size=-1>".htmlReady($values["name"]);
+			echo "</font>";
 			if ($lastVisit <= $values["chdate"])
 				print ("</font>");
-			print ("</a></td>");
+			print ("</a>");
+			if ($values["visible"]==0) {
+				echo "<font size=-1>&nbsp;"._("(versteckt)")."<img src=\"pictures/info.gif\" ".tooltip(_("Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden werden. Um die Veranstaltung sichtbar zu machen, wenden Sie sich an eineN der zuständigen AdministratorInnen."),TRUE,TRUE)." border=0></font>";
+			}
+			print "</td>";
 			// Content-field
 			echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 			print_seminar_content($semid, $values);

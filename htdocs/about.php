@@ -40,6 +40,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/guestbook.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 
 
@@ -70,6 +71,7 @@ function open_im()
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
+$semester = new SemesterData;
 
 $sess->register("about_data");
 $msging=new messaging;
@@ -137,8 +139,9 @@ if ($perm->is_fak_admin()){
 	if ($db->next_record()) 
 	$admin_darf = TRUE;
 }
-if ($perm->have_perm("root"))
-	$admin_darf = TRUE;
+if ($perm->have_perm("root")) {
+	$admin_darf=TRUE;
+}
 
 
 //Her mit den Daten...
@@ -372,18 +375,21 @@ while ($db2->next_record())  {
 	}
 }
 // Anzeige der Seminare
+$all_semester = $semester->getAllSemesterData();
+array_unshift($all_semester,array("name" => sprintf(_("vor dem %s"),$all_semester[0]['name'])));
 
-if (!isset($SEMESTER[0])){
+/*if (!isset($SEMESTER[0])){
 	$SEMESTER[0] = array("name" => sprintf(_("vor dem %s"),$SEMESTER[1]['name']));
-}
+}*/
+
 $view = new DbView();
-for ($i = count($SEMESTER)-1; $i >= 0; --$i){
+for ($i = count($all_semester)-1; $i >= 0; --$i){
 	$view->params[0] = $user_id;
 	$view->params[1] = "dozent";
 	$view->params[2] = " HAVING (sem_number <= $i AND (sem_number_end >= $i OR sem_number_end = -1)) ";
 	$snap = new DbSnapshot($view->get_query("view:SEM_USER_GET_SEM"));
 	if ($snap->numRows){
-		$sem_name = $SEMESTER[$i]['name'];
+		$sem_name = $all_semester[$i]['name'];
 		$output .= "<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
 		$snap->sortRows("Name");
 		while ($snap->nextRow()) {
@@ -391,8 +397,8 @@ for ($i = count($SEMESTER)-1; $i >= 0; --$i){
 			$sem_number_start = $snap->getField("sem_number");
 			$sem_number_end = $snap->getField("sem_number_end");
 			if ($sem_number_start != $sem_number_end){
-				$ver_name .= " (" . $SEMESTER[$sem_number_start]['name'] . " - ";
-				$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $SEMESTER[$sem_number_end]['name']) . ")";
+				$ver_name .= " (" . $all_semester[$sem_number_start]['name'] . " - ";
+				$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $all_semester[$sem_number_end]['name']) . ")";
 			}
 			$output .= "<b><a href=\"details.php?sem_id=" . $snap->getField("Seminar_id") . "\">" . htmlReady($ver_name) . "</a></b><br>";
 		}

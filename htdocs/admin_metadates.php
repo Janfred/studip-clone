@@ -50,6 +50,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");//ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//ja,ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");//ja,ja,ja,ja,ja auch die...
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/LockRules.class.php");//ja,ja,ja,ja,ja auch die...
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -59,7 +60,9 @@ if ($RESOURCES_ENABLE) {
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
+$lock_rules = new LockRules;
 $cssSw=new cssClassSwitcher;
+$semester = new SemesterData;
 $sess->register ("term_metadata");
 
 /**
@@ -85,10 +88,30 @@ function get_snapshot() {
 			serialize($term_metadata["art"]);
 }
 
+$db6 = new DB_Seminar;
 //get ID
+$lock_text = "<font color=\"red\" size=\"2\">"._("&nbsp;Feld gesperrt&nbsp;")."<img src=\"pictures/info.gif\" ".tooltip(_("Sie dürfen nicht alle Daten dieser Veranstaltung verändern. Diese Sperrung ist von einem/einer AdministratorIn vorgenommen worden."),TRUE,TRUE)."></font>";
 if ($SessSemName[1])
 	$seminar_id=$SessSemName[1]; 
 
+if (isset($seminar_id) && (!$perm->have_perm("admin"))) {
+	$db6->query("SELECT lock_rule, Name FROM seminare WHERE Seminar_id='".$seminar_id."'");
+	$db6->next_record();
+	//$lock_status = $db6->f("lock_rule");
+	$lock_status = "attributes";
+	$lockdata = $lock_rules->getLockRule($db6->f("lock_rule"));
+	/*if ($db6->f("lock_rule")==1) {
+		$error = "error§" . _("Sie d&uuml;rfen die Zeiten nicht ver&auml;ndern!"); 
+		?>
+		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=5 width=100%>
+<tr valign=top align=middle>
+	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Veranstaltung: ".$db6->f("Name")." - allgemeine Zeiten")?></b></td>
+</tr>
+<tr><td class="blank" colspan=2>&nbsp;</td></tr><?
+		parse_msg($error);
+		die();
+	}*/
+}
 //wenn wir frisch reinkommen, werden die alten Metadaten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_turnus_field) && !($open_ureg_x) && !($open_reg_x) && !($enter_start_termin_x) && !($nenter_start_termin_x)) {
 	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
@@ -434,7 +457,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			print "<b>"._("Zeiten der Veranstaltung bearbeiten")."</b><br /><br />";
 			print _("Sie k&ouml;nnen hier die allgemeinen Zeiten bearbeiten.")." <br />";
 			if ($modules["schedule"])
-				printf (_("Spezifische Termine zur Anzeige im Ablaufplan legen Sie unter dem Menupunkt %s Ablaufplan </a> fest."), "<a href=\"admin_dates.php?ebene=sem&range_id=".$term_metadata["sem_id"]."\">");
+				printf (_("Spezifische Termine zur Anzeige im Ablaufplan (z.B. Vorbesprechungstermine) legen Sie unter dem Men&uuml;punkt %s Ablaufplan </a> fest."), "<a href=\"admin_dates.php?ebene=sem&range_id=".$term_metadata["sem_id"]."\">");
 			?>
 			</blockqoute>
 		</td>
@@ -465,17 +488,28 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 				<font size=-1><b>&nbsp;<?= _("Allgemeine Zeiten:") ?></b><br /></font>
-				<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig stattfindet oder ob die Termine unregelm&auml;&szlig;ig sind (etwa bei einer Blockveranstaltung).") ?><br /></font>
+				<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, ob die Veranstaltung regelm&auml;&szlig;ig stattfindet oder ob die Termine unregelm&auml;&szlig;ig sind (etwa bei einer Blockveranstaltung)."); if ($lockdata[$lock_status]["metadata_dates"]) { 
+				if (!$term_metadata["art"]) {
+					echo "<br><br><img ".makeButton("regelmaessig2","src")." >&nbsp;&nbsp;<img ".makeButton("unregelmaessig","src")." >";
+				} else {
+					echo "<img ".makeButton("regelmaessig","src")." >&nbsp;&nbsp;<img ".makeButton("unregelmaessig2","src")." >";
+				}
+				echo "&nbsp;&nbsp;".$lock_text;	
+			} else { ?><br /></font>
 				<br />&nbsp;<input type="IMAGE" name="open_reg" <? if (!$term_metadata["art"]) print makeButton ("regelmaessig2", "src");  else print makeButton ("regelmaessig", "src") ?> border=0 value="regelmaessig">&nbsp; 
 				<input type="IMAGE" name="open_ureg"  <? if (!$term_metadata["art"]) print makeButton ("unregelmaessig", "src");  else print makeButton ("unregelmaessig2", "src") ?> border=0 value="unregelmaessig">
 			</td>
 		</tr>
 		<?
+		}
 		if (!$term_metadata["art"]) {
 		?>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
-							<br /><font size=-1>&nbsp;<?=("Turnus:") ?> &nbsp; <select name="term_turnus"></font>
+							<?if ($lockdata[$lock_status]["metadata_dates"]) {
+								echo "<input type=\"hidden\" name=\"term_turnus\" value=\"".$term_metadata["turnus"]."\">";
+							} ?>
+							<br /><font size=-1>&nbsp;<?=("Turnus:") ?> &nbsp; <select name="term_turnus" <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "disabled";} ?>></font>
 							<?
 							if ($term_metadata["turnus"]==0)
 								echo "<option selected value=0>"._("w&ouml;chentlich")."</option>";
@@ -486,12 +520,12 @@ if (($uebernehmen_x) && (!$errormsg)) {
 							else
 								echo "<option value=1>"._("zweiw&ouml;chentlich")."</option>";
 							?>
-							</select>
+							</select><?if ($lockdata[$lock_status]["metadata_dates"]) { echo $lock_text;} ?>
 							<br><br><font size=-1>&nbsp;<?=_("Die Veranstaltung findet immer zu diesen Zeiten statt:")?></font><br>
 							<?
 							if (isSchedule($term_metadata["sem_id"])) {
 							?>
-							<font size="-1">&nbsp;(<input type="CHECKBOX" name = "update_dates" <?=($term_metadata["update_dates"]) ? "checked" : "" ?> />&nbsp;<?=_("Ablaufplantermine aktualisieren"); ?>)</font><br>
+							<font size="-1">&nbsp;(<input type="CHECKBOX" <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "disabled";} ?> name = "update_dates" <?=($term_metadata["update_dates"]) ? "checked" : "" ?> />&nbsp;<?=_("Ablaufplantermine aktualisieren"); ?>)</font><?if ($lockdata[$lock_status]["metadata_dates"]) { echo $lock_text;} ?><br>
 							<?
 							}
 							?>
@@ -509,8 +543,11 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								
 							for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 								{
-								if ($i>0) echo "<br>";
-								?>&nbsp;<select name="turnus_day[<?echo $i?>]">
+								if ($i>0) echo "<br>";?>
+								<?if ($lockdata[$lock_status]["metadata_dates"]) {
+									echo "<input type=\"hidden\" name=\"turnus_day[".$i."]\" value=\"".$term_metadata["turnus_data"][$i]["day"]."\">";
+								} ?>
+								&nbsp;<select name="turnus_day[<?echo $i?>]" <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "disabled";} ?>>
 								<?
 								if ($term_metadata["turnus_data"][$i]["day"]==1)
 									echo "<option selected value=1>"._("Montag")."</option>";
@@ -542,10 +579,11 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									echo "<option value=7>"._("Sonntag")."</option>";
 									echo "</select>\n";
 								?>
-								&nbsp; <input type="text" name="turnus_start_stunde[]" size=2 maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["start_stunde"]) echo $term_metadata["turnus_data"][$i]["start_stunde"] ?>"> :
-								<input type="text" name="turnus_start_minute[]" size=2 maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["start_minute"]) && ($term_metadata["turnus_data"][$i]["start_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["start_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["start_minute"]; else echo $term_metadata["turnus_data"][$i]["start_minute"];  } elseif ($term_metadata["turnus_data"][$i]["start_stunde"]) echo "00"; ?>"><?=_("Uhr bis")?>
-								&nbsp; <input type="text" name="turnus_end_stunde[]" size=2 maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["end_stunde"]) echo $term_metadata["turnus_data"][$i]["end_stunde"] ?>"> :
-								<input type="text" name="turnus_end_minute[]" size=2 maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["end_minute"]) && ($term_metadata["turnus_data"][$i]["end_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["end_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["end_minute"]; else echo $term_metadata["turnus_data"][$i]["end_minute"];  } elseif ($term_metadata["turnus_data"][$i]["end_stunde"]) echo "00"; ?>"><?=_("Uhr")?>
+								&nbsp; <input type="text" name="turnus_start_stunde[]" size=2 <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "readonly";} ?> maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["start_stunde"]) echo $term_metadata["turnus_data"][$i]["start_stunde"] ?>"> :
+								<input type="text" name="turnus_start_minute[]" size=2 <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "readonly";} ?> maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["start_minute"]) && ($term_metadata["turnus_data"][$i]["start_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["start_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["start_minute"]; else echo $term_metadata["turnus_data"][$i]["start_minute"];  } elseif ($term_metadata["turnus_data"][$i]["start_stunde"]) echo "00"; ?>"><?=_("Uhr bis")?>
+								&nbsp; <input type="text" name="turnus_end_stunde[]" size=2 <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "readonly";} ?> maxlength=2 value="<? if ($term_metadata["turnus_data"][$i]["end_stunde"]) echo $term_metadata["turnus_data"][$i]["end_stunde"] ?>"> :
+								<input type="text" name="turnus_end_minute[]" size=2 <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "readonly";} ?> maxlength=2 value="<? if (($term_metadata["turnus_data"][$i]["end_minute"]) && ($term_metadata["turnus_data"][$i]["end_minute"] >0)) { if ($term_metadata["turnus_data"][$i]["end_minute"] < 10) echo "0", $term_metadata["turnus_data"][$i]["end_minute"]; else echo $term_metadata["turnus_data"][$i]["end_minute"];  } elseif ($term_metadata["turnus_data"][$i]["end_stunde"]) echo "00"; ?>"><?=_("Uhr")?>
+								<?if ($lockdata[$lock_status]["metadata_dates"]) { echo $lock_text;} ?>
 								<? if ($term_metadata["turnus_count"]>1)  {
 									?>
 									&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <?= tooltip(_("Dieses Feld aus der Auswahl löschen")) ?>></a>
@@ -555,7 +593,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								if ($RESOURCES_ENABLE) {
 									$resList->reset();
 									if ($resList->numberOfEvents()) {
-										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
+										print "<font size=-1><select name=\"turnus_resource_id[]\" ";
+										if ($lockdata[$lock_status]["metadata_dates"]) { echo "disabled";} 
+										print " ></font>";
 										printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
 										while ($resObject = $resList->nextEvent()) {
 											printf ("<option %s value=\"%s\">%s</option>", ($term_metadata["turnus_data"][$i]["resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
@@ -564,13 +604,18 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									}
 								}
 								?>
-								&nbsp; <font size=-1><input type="text" name="turnus_room[]" size="15" maxlength="255" value="<?= htmlReady($term_metadata["turnus_data"][$i]["room"]) ?>"/></font>&nbsp; 
+								&nbsp; <font size=-1><input type="text" name="turnus_room[]" size="15" <?if ($lockdata[$lock_status]["metadata_dates"]) { echo "readonly";} ?> maxlength="255" value="<?= htmlReady($term_metadata["turnus_data"][$i]["room"]) ?>"/></font>&nbsp; 
 								<?
+								if ($lockdata[$lock_status]["metadata_dates"]) { echo $lock_text;} 
 								print "<br /><br />";
 								}
 								?>
 								<input type="HIDDEN" name="turnus_refresh" value="TRUE">
-								&nbsp;<input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src") ?> border=0 value="Feld hinzuf&uuml;gen"><br />
+								<?if ($lockdata[$lock_status]["metadata_dates"]) {
+									echo "<img ".makeButton("feldhinzufuegen","src")." border=0>".$lock_text;
+								} else { ?>
+									&nbsp;<input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src") ?> border=0 value="Feld hinzuf&uuml;gen"><? } ?>
+								<br />
 						</td>
 					</tr>
 		<?
@@ -597,8 +642,16 @@ if (($uebernehmen_x) && (!$errormsg)) {
 						<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 							&nbsp;<font size=-1><b><?=_("Veranstaltungsbeginn")?></b></font><br /><br />
 							<font size=-1>&nbsp;<?=_("Bei einer regelm&auml;&szlig;igen Veranstaltung k&ouml;nnen Sie den ersten Termin entweder selbst eingeben oder automatisch berechnen lassen.") ?></font><br />
-							<br />&nbsp;<input type="IMAGE" name="nenter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
-							<input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben">
+							<br />&nbsp;<? if ($lockdata[$lock_status]["further_time_dates"]) {
+								if ($term_metadata["start_woche"] != -1) {
+									echo "<img ".makeButton("automatisch2","src")." >&nbsp;<img ".makeButton("eingeben","src")." >";
+								} else {
+									echo "<img ".makeButton("automatisch","src")." >&nbsp;<img ".makeButton("eingeben2","src")." >";
+								}
+								echo $lock_text;
+							} else {
+							?><input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
+							<input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben"> <? } ?>
 						</td>
 					</tr>
 		<?
@@ -607,7 +660,10 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		?>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
-							<br />&nbsp;<font size=-1><?=_("Veranstaltungsbeginn in der")?> <select name="term_start_woche">
+							<br />&nbsp;<font size=-1><?=_("Veranstaltungsbeginn in der")?> <select name="term_start_woche" <? if ($lockdata[$lock_status]["further_time_dates"]) { echo "disabled";} ?>>
+							<?if ($lockdata[$lock_status]["further_time_dates"]) {
+								echo "<input type=\"hidden\" name=\"term_start_woche\" value=\"".$term_metadata["start_woche"]."\">";
+							} ?>
 							<?
 							if ($term_metadata["start_woche"]==0)
 								echo "<option selected value=0>"._("1. Semesterwoche")."</option>";
@@ -618,7 +674,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 							else
 								echo "<option value=1>"._("2. Semesterwoche")."</option>";								
 							?>
-							</select></font>
+							</select><? if ($lockdata[$lock_status]["further_time_dates"]) {echo $lock_text;}
+						?></font>
 						</td>
 					</tr>
 		<?
@@ -649,38 +706,47 @@ if (($uebernehmen_x) && (!$errormsg)) {
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" width="4%">
 							&nbsp;<font size=-1><?=_("Semester")?></font>
+							<?if ($lockdata[$lock_status]["duration_time"]) {
+								echo "<input type=\"hidden\" name=\"sem_start_time\" value=\"".$term_metadata["sem_start_time"]."\">";
+							} ?>
 							<?
-							echo "&nbsp;<select name=\"sem_start_time\">";
-							for ($i=1; $i<=sizeof($SEMESTER); $i++)
+							echo "&nbsp;<select name=\"sem_start_time\"";
+							if ($lockdata[$lock_status]["duration_time"]) { echo " disabled ";} 
+							echo " >";
+							$all_semester = $semester->getAllSemesterData();
+							for ($i=0; $i<sizeof($all_semester); $i++)
 								{
-								if ($term_metadata["sem_start_time"] ==$SEMESTER[$i]["beginn"])
-									echo "<option value=".$SEMESTER[$i]["beginn"]." selected>", $SEMESTER[$i]["name"], "</option>";
+								if ($term_metadata["sem_start_time"] ==$all_semester[$i]["beginn"])
+									echo "<option value=".$all_semester[$i]["beginn"]." selected>", $all_semester[$i]["name"], "</option>";
 								else
-									echo "<option value=".$SEMESTER[$i]["beginn"].">", $SEMESTER[$i]["name"], "</option>";
+									echo "<option value=".$all_semester[$i]["beginn"].">", $all_semester[$i]["name"], "</option>";
 								}
 							echo "</select>";
 							?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="96%" valign="bottom">
 							&nbsp;<font size=-1><?=_("Dauer")?><br /></font>
-							&nbsp;<select name="sem_duration_time">
+							<?if ($lockdata[$lock_status]["duration_time"]) {
+								$my_duration = $term_metadata["sem_duration_time"] + $term_metadata["sem_start_time"];
+								echo "<input type=\"hidden\" name=\"sem_duration_time\" value=\"".$my_duration."\">";
+							} ?>
+							&nbsp;<select name="sem_duration_time" <? if ($lockdata[$lock_status]["duration_time"]) { echo " disabled ";}?>>
 							<?
 								if ($term_metadata["sem_duration_time"] == 0)
 									echo "<option value=0 selected>"._("1 Semester")."</option>";
 								else
 									echo "<option value=0>"._("1 Semester")."</option>";
-								$i=1;
-								for ($i; $i<=sizeof($SEMESTER); $i++)
+								for ($i=0; $i<sizeof($all_semester); $i++)
 									{
-									if (($term_metadata["sem_start_time"] + $term_metadata["sem_duration_time"]) == $SEMESTER[$i]["beginn"])
+									if (($term_metadata["sem_start_time"] + $term_metadata["sem_duration_time"]) == $all_semester[$i]["beginn"])
 										{
 										if ((!$term_metadata["sem_duration_time"] == 0) && (!$term_metadata["sem_duration_time"] == 0))
-											echo "<option value=",$SEMESTER[$i]["beginn"], " selected>"._("bis")." ", $SEMESTER[$i]["name"], "</option>";
+											echo "<option value=",$all_semester[$i]["beginn"], " selected>"._("bis")." ", $all_semester[$i]["name"], "</option>";
 										else
-											echo "<option value=",$SEMESTER[$i]["beginn"], ">"._("bis")." ", $SEMESTER[$i]["name"], "</option>";
+											echo "<option value=",$all_semester[$i]["beginn"], ">"._("bis")." ", $all_semester[$i]["name"], "</option>";
 										}
 									else
-										echo "<option value=",$SEMESTER[$i]["beginn"], ">"._("bis")." ", $SEMESTER[$i]["name"], "</option>";
+										echo "<option value=",$all_semester[$i]["beginn"], ">"._("bis")." ", $all_semester[$i]["name"], "</option>";
 									}
 								if ($term_metadata["sem_duration_time"] == -1)
 									echo "<option value=-1 selected>"._("unbegrenzt")."</option>";
@@ -688,6 +754,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 									echo "<option value=-1>"._("unbegrenzt")."</option>";
 							?>
 							</select>
+							<? if ($lockdata[$lock_status]["duration_time"]) {echo $lock_text;}?>
 						</td>
 					</tr>
 		</td>

@@ -32,6 +32,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
+
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
@@ -44,7 +45,6 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
 
-
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
 
@@ -55,15 +55,62 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $db4=new DB_Seminar;
+$db5=new DB_Seminar;
 
 echo "<table cellspacing=\"0\" border=\"0\" width=\"100%\">";
 
-// get user_id if somebody wants more infos about an user
+/*
+ * This function checks if a the given user has to be shown (is in the array
+ * of downpulled users)
+ *
+ * @param  user_id integer
+ *
+ * returns boolean
+ *
+ */
+function is_opened($user_id) {
+	global $open_users;
 
-if (($cmd == "moreinfos") && ($rechte)) {
+	if (!isset($open_users)) return FALSE;
+	if (array_search($user_id, $open_users) === FALSE) {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
+}
+
+if (($cmd == "change_view") && (isset($view_order))) {
+	if (!isset($indikator)) {
+		$sess->register("indikator");
+	}
+	$indikator = $view_order;
+}
+
+// get user_id if somebody wants more infos about an user
+if (($cmd == "allinfos") && ($rechte)) {
+	if (isset($$area)) {
+		unset($$area);
+		$sess->unregister($area);
+	} else {
+		$sess->register($area);
+		$$area = TRUE;
+	}
+}
+
+if ((($cmd == "moreinfos") || ($cmd == "lessinfos")) && ($rechte)) {
 	$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
 	$db->next_record();
 	$user_id = $db->f("user_id");
+	if (!isset($open_users)) {
+		$sess->register("open_users");
+		$open_users = array();
+	}
+	if (($z = array_search($user_id, $open_users)) === FALSE) {
+		$open_users[] = $user_id;
+	} else {
+		unset($open_users[$z]);
+	}
+	sort ($open_users);
 }
 
 // edit special seminar_info of an user
@@ -142,6 +189,7 @@ if ($cmd=="schreiben") {
 			$userchange=$db->f("user_id");
 			$fullname = $db->f("fullname");
 			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
+			seminar_usernumber($id,$userchange);
 			$msg = "msg§" . sprintf(_("User %s wurde als Autor in die Veranstaltung aufgenommen."), $fullname) . "§";
 		}
 		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -242,14 +290,19 @@ if ($cmd=="admission_raus") {
 if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
+
 		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$fullname = $db->f("fullname");
 
 		$status = (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))) ? "tutor" : "autor";
-		$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
 
+		if ($cmd == "add_user") $status="autor"; // otherwise, students with GLOBAL status tutor immediately have the status of a tutor in this seminar. Makes no sense!
+		//But: perhaps a better solution?
+
+		$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
+		seminar_usernumber($id,$userchange);
 		//Only if user was on the waiting list
 		if ($admission_user) {
 			setTempLanguage($userchange);
@@ -374,7 +427,7 @@ if ($perm->have_perm("dozent")) {
 					  "tutor" => _("Mitglieder"),
 					  "autor" => _("AutorInnen"),
 					  "user" => _("LeserInnen"));
-	}
+}
 
 ?>
 
@@ -403,7 +456,76 @@ if ($perm->have_perm("dozent")) {
 			}
 		?>
 		</td>
-</tr>
+	</tr>
+
+	<? if ($rechte) { ?>
+
+	<tr>
+		<td class="blank" colspan="10" align="left">
+			<form name="sortierung" method="post" action="<?=$PHP_SELF?>">
+    		<table class="blank" border=0 cellpadding=0 cellspacing=0>
+					<tr>
+						<td class="blank">&nbsp;</td>
+					</tr>
+					<tr>
+      			<td class="steelkante2" valign="middle">
+							<img src="pictures/blank.gif" height="22" width="5">
+						</td>
+      			<td class="steelkante2" valign="middle">
+							<font size="-1"><?=_("Sortierung:")?>&nbsp;</font>
+						<? if (isset($indikator) && ($indikator == "abc")) { ?>
+     				</td>
+						<td nowrap class="steelgraulight_shadow" valign="middle">
+							&nbsp;<img src="pictures/forumrot_indikator.gif" align="absmiddle">
+							<font size="-1"><?=_("Alphabetisch")?></font>&nbsp;
+						<? } else { ?>
+						</td>
+						<td nowrap class="steelkante2" valign="middle">
+							&nbsp;
+							<a href="<?=$PHP_SELF?>?view_order=abc&cmd=change_view">
+								<img src="pictures/forum_indikator_grau.gif" border="0" align="absmiddle">
+								<font size="-1" color="#555555"><?=_("Alphabetisch")?></font>
+							</a>
+							&nbsp;
+						<? } ?>
+						<? if (isset($indikator) && ($indikator == "date")) { ?>
+     				</td>
+						<td nowrap class="steelgraulight_shadow" valign="middle">
+							&nbsp;<img src="pictures/forumrot_indikator.gif" align="absmiddle">
+							<font size="-1"><?=_("Anmeldedatum")?></font>&nbsp;
+						<? } else { ?>
+						</td>
+						<td nowrap class="steelkante2" valign="middle">
+							&nbsp;
+							<a href="<?=$PHP_SELF?>?view_order=date&cmd=change_view">
+								<img src="pictures/forum_indikator_grau.gif" border="0" align="absmiddle">
+								<font size="-1" color="#555555"><?=_("Anmeldedatum")?></font>
+							</a>
+							&nbsp;
+						<? } ?>
+						<? if (isset($indikator) && ($indikator == "active")) { ?>
+     				</td>
+						<td nowrap class="steelgraulight_shadow" valign="middle">
+							&nbsp;<img src="pictures/forumrot_indikator.gif" align="absmiddle">
+							<font size="-1"><?=_("Aktivität")?></font>&nbsp;
+						<? } else { ?>
+						</td>
+						<td nowrap class="steelkante2" valign="middle">
+							&nbsp;
+							<a href="<?=$PHP_SELF?>?view_order=active&cmd=change_view">
+								<img src="pictures/forum_indikator_grau.gif" border="0" align="absmiddle">
+								<font size="-1" color="#555555"><?=_("Aktivität")?></font>
+							</a>
+							&nbsp;
+						<? } ?>
+					<tr>
+				</table>
+			</form>
+		</td>
+	</tr>
+
+	<? } ?>
+
 	<tr>
 		<td class="blank" width="100%" colspan="2">&nbsp;
 			<?
@@ -437,14 +559,26 @@ $db3->next_record();
 
 while (list ($key, $val) = each ($gruppe)) {
 
-	if (!isset($sortby) || $sortby=="") {
-		if ($showscore) {
-			$sortby = "doll DESC";
-		} else {
-			$sortby = "Nachname";
+	if (!isset($sortby) || $sortby == "") {
+		switch($indikator) {
+			case "date":
+				$sortby .= "mkdate";
+				break;
+
+			case "active":
+				$sortby = "doll DESC";
+				break;
+
+			default:
+				$sortby .= "Nachname";
+				break;
 		}
-	} elseif ($sortby=="doll") {
-		$sortby = "doll DESC";
+	}
+
+	if (isset($sortby)) {
+		$sort = "ORDER BY $sortby";
+	} else {
+		$sort = "";
 	}
 
 	$counter=1;
@@ -459,7 +593,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tbl3 = "S";
 	}
 
-	$db->query ("SELECT $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id AS studiengang_id FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id) LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id) WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' AND status = '$key'  GROUP by ".$tbl.".user_id ORDER BY $sortby");
+	$db->query ("SELECT $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id AS studiengang_id FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id) LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id) WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' AND status = '$key'  GROUP by ".$tbl.".user_id $sort");
 
 	if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
@@ -467,7 +601,22 @@ while (list ($key, $val) = each ($gruppe)) {
 	echo "<tr height=28>";
 	if ($showscore==TRUE)
 		echo "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
-	print "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
+	print "<td class=\"steel\" width=\"1%\" align=\"center\" valign=\"middle\">";
+	if ($rechte) {
+		$show_area = "show_".$key;
+		if (isset($$show_area)) {
+			$image = "forumgraurunt.gif";
+			$tooltiptxt = _("Informationsfelder wieder hochklappen");
+		} else {
+			$image = "forumgrau.gif";
+			$tooltiptxt = _("Alle Informationsfelder aufklappen");
+		}
+		print "<a href=\"$PHP_SELF?cmd=allinfos&area=show_$key\">";
+		print "<img src=\"pictures/$image\" border=\"0\" ".tooltip($tooltiptxt)."></a>";
+	} else {
+		print "&nbsp; ";
+	}
+	print "</td>";
 	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s?sortby=doll>%s</a></b></font></td>", $PHP_SELF, _("Postings"));
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Dokumente"));
@@ -586,23 +735,21 @@ while (list ($key, $val) = each ($gruppe)) {
 	}
 
 	if ($rechte) {
-		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) {
-			$link = $PHPSELF."?cmd=lessinfos";
+		if (is_opened($db->f("user_id"))) {
+			$link = $PHPSELF."?cmd=lessinfos&username=".$db->f("username")."#".$db->f("username");
 			$img = "forumgraurunt.gif";
 		} else {
-			$link = $PHPSELF."?cmd=moreinfos&username=".$db->f("username")."#info";
+			$link = $PHPSELF."?cmd=moreinfos&username=".$db->f("username")."#".$db->f("username");
 			$img = "forumgrau.gif";
 		}
 	}
-	
+
 	printf ("<td class=\"%s\" nowrap><font size=\"-1\">&nbsp;%s.</td>", $class, $c);
 	printf ("<td class=\"%s\">", $class);
 	if ($rechte) {
-		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) 
-			echo "<a name=\"info\"></a>";
-		printf ("<a href=\"%s\"><img src=\"pictures/%s\" border=\"0\"", $link, $img);
-		echo tooltip(sprintf(_("Notizen zum Teilnehmerstatus des Nutzers erfassen/anzeigen")));
-		echo ">&nbsp;</a>";
+		printf ("<A href=\"%s\"><img src=\"pictures/%s\" border=\"0\"", $link, $img);
+		echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
+		echo ">&nbsp;</A>";
 	}
 	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
 	print (htmlReady($db->f("fullname")) ."</a>");
@@ -617,7 +764,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$SessSemName[1]) . "&nbsp;";
 	}
 
-	printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken"))); 
+	printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 
 	echo "</td>";
 
@@ -681,20 +828,54 @@ while (list ($key, $val) = each ($gruppe)) {
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
 		}
 
-		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id")) && $rechte) {
-			printf ("<tr><td class=\"%s\" colspan=9><form action=\"%s%s\" method=\"POST\">", $class, $PHPSELF, "#info");
-			printf("<table border=\"0\"><tr><td valign=\"top\" width=\"%s\"><font size=\"-1\">"._("Bemerkungen:")."&nbsp;</font></td><td><textarea name=\"userinfo\" rows=3 cols=30>%s</textarea></td>", "10%", $db->f("comment"));
-			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>"._("TeilnehmerIn der Veranstaltung seit:<br />")." %s</font></td>",$class, "50%", ($db->f("mkdate")) ? date("d.m.Y",$db->f("mkdate")) : _("unbekannt"));
-			echo "<td class=\"$class\" align=\"center\" width=\"20%\"><font size=\"-1\">"._("&Auml;nderungen")."</font><br /><input type=\"image\" ".makeButton("uebernehmen", "src").">";
-			echo "<input type=\"hidden\" name=\"user_id\" value=\"".$db->f("user_id")."\">";
-			echo "<input type=\"hidden\" name=\"cmd\" value=\"change_userinfo\">";
-			echo "<input type=\"hidden\" name=\"username\" value=\"".$db->f("username")."\">";
-			echo "</td></tr>";
-			echo "</table>";
-			echo "</form>";
+		// info-field for users
+		$show_area = "show_".$key;
+		if ((is_opened($db->f("user_id")) || isset($$show_area)) && $rechte) { // show further userinfosi
+			$db4->query("SELECT status FROM seminare WHERE seminar_id = '$id'");
+			$db4->next_record();
+			$unum = FALSE;
+			if ($db3->f("user_number")) { //get user_number if needed and allowed
+				$db4->query("SELECT * FROM seminar_user_number WHERE user_id = '".$db->f("user_id")."' AND seminar_id = '$id';");
+				if ($db4->next_record()) {
+					$unum = TRUE;
+					$user_number = $db4->f("usernumber");
+				} else {
+					$unum = FALSE;
+				}
+			}
+
+		?>
+			<tr>
+				<td class=<?=$class?> colspan=9>
+					<form action="<?=$PHPSELF."#".$db->f("username")?>" method="POST">
+					<table border="0">
+						<tr>
+							<td width="25%">
+								<font size="-1"><?=_("Bemerkungen:")?></font><br/>
+								<TEXTAREA name="userinfo" rows=3 cols=30><?=$db->f("comment")?></TEXTAREA>
+							</td>
+							<td>&nbsp;</td>
+							<td class="<?=$class?>" align="left" valign="top" width="30%">
+								<font size="-1">
+									<?=_("Anmeldedatum:")." ".date("d.m. Y, H:i:s",$db->f("mkdate"))?><br/>
+								</font>
+							</td>
+							<td class="<?=$class?>" align="center" width="15%">
+								<font size="-1"><?=_("&Auml;nderungen")?></font><br />
+								<INPUT type="image" <?=makeButton("uebernehmen", "src")?>>
+								<INPUT type="hidden" name="user_id" value="<?=$db->f("user_id")?>">
+								<INPUT type="hidden" name="cmd" value="change_userinfo">
+								<INPUT type="hidden" name="username" value="<?=$db->f("username")?>">
+							</td>
+						</tr>
+					</table>
+				</form>
+				</td>
+		<?
 		}
 
 	} // Ende der Dozenten/Tutorenspalten
+
 
 	print("</tr>\n");
 	$c++;
@@ -759,7 +940,7 @@ if ($rechte) {
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken"))); 
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));

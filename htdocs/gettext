@@ -8,11 +8,11 @@ for language in en;
 do {
 	# first handle files separate
 	mv locale/$language/LC_MESSAGES/studip_core.po locale/$language/LC_MESSAGES/studip_core.po.old
-	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_core.pot  *.* lib/classes/*.* lib/classes/auth_plugins/*.* lib/classes/lit_search_plugins/*.* lib/dbviews/*.* help/*.*
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_core.pot  *.* lib/classes/*.* lib/classes/auth_plugins/*.* lib/dbviews/*.* help/*.*
 	msgmerge locale/$language/LC_MESSAGES/studip_core.po.old locale/$language/LC_MESSAGES/studip_core.pot --output-file=locale/$language/LC_MESSAGES/studip_core.po
 
 	mv locale/$language/LC_MESSAGES/studip_calendar.po locale/$language/LC_MESSAGES/studip_calendar.po.old
-	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_calendar.pot  calendar/*.* calendar/lib/*.* calendar/views/*.* calendar/lib/driver/MySQL/*.* calendar/lib/sync/*.*
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_calendar.pot  calendar/*.* calendar/lib/*.* calendar/views/*.* calendar/lib/driver/MySQL/*.*
 	msgmerge locale/$language/LC_MESSAGES/studip_calendar.po.old locale/$language/LC_MESSAGES/studip_calendar.pot --output-file=locale/$language/LC_MESSAGES/studip_calendar.po
 
 	mv locale/$language/LC_MESSAGES/studip_chat.po locale/$language/LC_MESSAGES/studip_chat.po.old

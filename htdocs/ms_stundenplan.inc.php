@@ -43,19 +43,21 @@ require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
 //Funktion zum ueberpruefen der Einstellungen
 function check_schedule_settings() {
-	global $my_schedule_settings,$_my_admin_inst_id, $perm,$auth, $user, $SEMESTER, $SEM_NAME_NEXT, $SEM_NAME, $VORLES_ENDE;
+	global $my_schedule_settings,$_my_admin_inst_id, $perm,$auth, $user, $SEM_NAME_NEXT, $SEM_NAME, $VORLES_ENDE;
 	
 	$db=new DB_Seminar;
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 	
 	//Check, ob Semster, das ich gespeichert habe, inzwischen abgelaufen ist. Dann das naechste (Semesterferien) oder aktuelle Semester setzen.
 	$k=0;
-	foreach ($SEMESTER as $a) {
+	foreach ($all_semester as $a) {
 		if ($a["name"] == $my_schedule_settings["glb_sem"])
 			$tmp_sem_nr=$k;
 		$k++;
 	}
 	
-	if (time() >$SEMESTER[$tmp_sem_nr]["vorles_ende"])
+	if (time() >$all_semester[$tmp_sem_nr]["vorles_ende"])
 		if (time() >$VORLES_ENDE)
 			$my_schedule_settings["glb_sem"]=$SEM_NAME_NEXT;
 		else
@@ -113,10 +115,12 @@ if ($schedule_cmd=="change_view_insert") {
 
 //Anpassen der Ansicht
 function change_schedule_view() {
-	global $my_schedule_settings, $PHP_SELF, $SEMESTER, $SEM_NAME, $SEM_NAME_NEXT, $VORLES_ENDE, $perm,$auth, $user;
+	global $my_schedule_settings, $PHP_SELF, $SEM_NAME, $SEM_NAME_NEXT, $VORLES_ENDE, $perm,$auth, $user;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;		
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
@@ -224,7 +228,7 @@ function change_schedule_view() {
 								}
 							}
 						
-						foreach ($SEMESTER as $a) {
+						foreach ($all_semester as $a) {
 							if ((time() <$a["vorles_ende"]) && ($a["name"] != $tmp_name)){
 								if ($my_schedule_settings ["glb_sem"] == $a["name"])
 									echo "<option selected>".$a["name"]."</option>";

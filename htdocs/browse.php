@@ -132,8 +132,12 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 	if ($perm->have_perm("admin"))
 		$db2->query("SELECT * FROM seminare ORDER BY Name");
 	else {
-		$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";
-		$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminare.Seminar_id NOT IN ($templist) AND user_id = '$user->id' AND (seminare.modules & 8) ORDER BY Name");
+		if ($AUTO_INSERT_SEM) {
+			$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";
+			$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminare.Seminar_id NOT IN ($templist) AND user_id = '$user->id' AND (seminare.modules & 8) ORDER BY Name");
+		} else {
+			$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE user_id = '$user->id' AND (seminare.modules & 8) ORDER BY Name");
+		}
 	}
 	if ($sem_id == "")
 		printf ("<option value=\"0\">- - -\n");
@@ -224,8 +228,12 @@ if($browse_data["group"]=="Institut"){
 
 // nach seminaren
 if($browse_data["group"]=="Seminar"){
-	$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";
-	$db2->query("SELECT Seminar_id FROM seminar_user WHERE Seminar_id NOT IN ($templist) AND Seminar_id = '".$browse_data["sem_id"]."' AND user_id = '$user->id'");
+	if ($AUTO_INSERT_SEM) {
+		$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";
+		$db2->query("SELECT Seminar_id FROM seminar_user WHERE Seminar_id NOT IN ($templist) AND Seminar_id = '".$browse_data["sem_id"]."' AND user_id = '$user->id'");
+	} else {
+		$db2->query("SELECT Seminar_id FROM seminar_user WHERE Seminar_id = '".$browse_data["sem_id"]."' AND user_id = '$user->id'");
+	}
 	if ($db2->num_rows() > 0 || $perm->have_perm("admin")){  // entweder wir gehoeren auch zum Seminar oder sind global admin
  		$query = "SELECT " . $_fullname_sql['full_rev'] ." AS fullname ,username,seminar_user.status,auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id ='".$browse_data["sem_id"]."' ORDER BY ".$browse_data["sortby"];
 	}

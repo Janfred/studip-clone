@@ -209,14 +209,14 @@ unset($temp_language_key); unset($temp_language);
 <td class="blank" align="left" valign="middle">
 	<img src="pictures/blank.gif" height="85" width="38" border="0">
 </td>
-<td class="blank" valign="middle" align="left"><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border="0" <?=tooltip(_("Zur Portalseite"))?>></a></td>
+<td class="blank" valign="middle" align="left"><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border="0" <?=tooltip(_("Zur Portalseite"))?>></a>
 <td class="blank" align=right nowrap valign="middle">
 <?
 
 //Statistics
 $db=new DB_Seminar;
 echo "<table cellspacing=\"0\" cellpadding=\"0\">";
-$db->query("SELECT count(*) from seminare");
+$db->query("SELECT count(*) from seminare where seminare.visible='1'"); // OK_VISIBLE
 $db->next_record();
 $anzahl = $db->f(0);
 echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 

@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von Dokumenten
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
+require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php";  //Daten 
 require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
 
 /**
@@ -161,9 +162,12 @@ uebergeben werden. Dann werden konkrete Termine nur mit berruecksichtigt, sofern
 */
 
 function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='', $start_woche='', $start_termin='', $turnus_data='', $return_mode='') {
-	global $SEMESTER, $TERMIN_TYP;
+	global $TERMIN_TYP;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;	
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
+	
 	
 	if ((func_num_args()==1) || (func_num_args()==2)){
 		$seminar_id=func_get_arg(0);
@@ -187,7 +191,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 		{
 		if (($term_data["start_woche"] ==0) || ($term_data["start_woche"] ==1)) // Startzeitpunkt 1. oder 2. Semesterwoche
 			if (sizeof($term_data["turnus_data"])) {
-				foreach ($SEMESTER as $sem)
+				foreach ($all_semester as $sem)
 					if (($term_data["start_time"] >= $sem["beginn"]) AND ($term_data["start_time"] <= $sem["ende"]))
 						$vorles_beginn=$sem["vorles_beginn"];
 				
@@ -532,8 +536,9 @@ Die Funktion get_sem_name gibt den Namen eines Semester, in dem ein uebergebener
 */
 
 function get_sem_name ($time) {
-	global $SEMESTER;
-	foreach ($SEMESTER as $key=>$val)
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
+	foreach ($all_semester as $key=>$val)
 		if (($time >= $val["beginn"]) AND ($time <= $val["ende"]))
 			return $val["name"];
 
@@ -544,18 +549,20 @@ Die Funktion get_sem_num gibt die Nummer eines Semester, in dem ein uebergebener
 */
 
 function get_sem_num ($time) {
-	global $SEMESTER;
-	foreach ($SEMESTER as $key=>$val)
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
+	foreach ($all_semester as $key=>$val)
 		if (($time >= $val["beginn"]) AND ($time <= $val["ende"]))
 			return $key;
 
 }
 
 function get_sem_num_sem_browse () {
-	global $SEMESTER;
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 	$time = time();
 	$ret = false;
-	foreach ($SEMESTER as $key=>$val){
+	foreach ($all_semester as $key=>$val){
 		if ($ret && ($val["vorles_ende"] >= $time)){
 			$ret = $key;
 			break;
@@ -596,7 +603,8 @@ Dabei werden die Beschriftungen der Ordner im Forensystem und im Dateisystem akt
 
 
 function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum,$resource_id,$range_id,$term_data='') {
-	global $user,$auth, $SEMESTER, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
+	global $user,$auth, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
+	$semester = new SemesterData;
 
 	if ($RESOURCES_ENABLE) {
 		include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
@@ -625,8 +633,9 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		}
 				
 	//Check auf Konsistenz mt Metadaten, Semestercheck
+	$all_semester = $semester->getAllSemesterData();
 	if (($do) && ($TERMIN_TYP[$art]["sitzung"]==1) && (is_array($term_data ["turnus_data"]))) {
-		foreach ($SEMESTER as $a) {
+		foreach ($all_semester as $a) {
 			if (($term_data["start_time"] >= $a["beginn"]) && ($term_data["start_time"] <= $a["ende"]))  {
 				$sem_beginn=$a["beginn"];
 				$sem_ende=$a["ende"];
@@ -859,7 +868,7 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 
 //Erstellt automatisch einen Ablaufplan oder aktualisiert ihn
 function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE) {
-	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $SEMESTER, $HOLIDAY, $TERMIN_TYP, $user;
+	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $user;
 	
 	if ($RESOURCES_ENABLE)	{
 	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
@@ -872,6 +881,8 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
+	$semester = new SemesterData;
+	$holiday = new HolidayData;
 
 	//load data of the Veranstaltung
 	$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
@@ -909,8 +920,9 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 	}
 
 	//determine first day of the start-week as sem_begin
+	$all_semester = $semester->getAllSemesterData();
 	if ($term_data["start_woche"] >= 0) {
-		foreach ($SEMESTER as $val)
+		foreach ($all_semester as $val)
 			if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
 				$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
 			}
@@ -933,7 +945,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 		
 	$sem_begin = mktime(0, 0, 0, date("n",$sem_begin), date("j",$sem_begin)+$corr,  date("Y",$sem_begin));
 	
-	foreach ($SEMESTER as $val)
+	foreach ($all_semester as $val)
 		if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
 			$sem_end = $val["vorles_ende"];
 		}
@@ -941,10 +953,10 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 	//determine the last day as sem_end when $full (Veranstaltung uses multiple Semesters)
 	if ($full)
 		if ($veranstaltung_duration_time == -1) {
-			$last_sem = array_pop($SEMESTER);
+			$last_sem = array_pop($all_semester);
 			$sem_end=$last_sem["vorles_ende"];
 		} else
-			foreach ($SEMESTER as $val)
+			foreach ($all_semester as $val)
 				if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"]))
 					$sem_end=$val["vorles_ende"];
 			
@@ -961,9 +973,9 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 				//create new dates
 				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
 				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
-
-				//check for HOLIDAY from config.inc.php. You should use it only for special holidays
-				foreach ($HOLIDAY as $val2)
+				$all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
+				// get all holidays from db
+				foreach ($all_holiday as $val2)
 					if (($val2["beginn"] <= $start_time) && ($start_time <=$val2["ende"]))
 						$do = FALSE;
 		

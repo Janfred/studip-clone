@@ -1,3 +1,13 @@
+12.1.2004 v 1.0os
+- Funktion zum Kopieren von Veranstaltungen
+- Mechanismus zum Verstecken und sichtbar machen von Veranstaltungen
+- Weiterleitung interner Mail an E-Mail-Adresse schaltbar 
+- Verschiedene Sortierungen der Teilnehmerliste
+- Anzeige von Veranstaltsungnsummern in verschiedenen Listen
+- Umbruch langer Namen von Studienbereichen
+- Smiley-Verwaltung
+- Semester-Verwaltung
+
 29.12.2003 v 1.0
 - neue WAP-Schnittstelle
 - neue Literaturverwaltung zur direkten Literaturrecherche und -verwaltung aus Stud.IP heraus

@@ -101,7 +101,7 @@ if ($active_chats){
 		while ($db->next_record()){
 			$active_user_chats[] = $db->f(0);
 		}
-		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id IN('" . join("','",$chatids) ."')");
+		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id IN('" . join("','",$chatids) ."') AND visible='1'"); // OK_VISIBLE
 		while ($db->next_record()){
 			$active_sem_chats[] = $db->f(0);
 		}

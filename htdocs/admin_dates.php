@@ -34,7 +34,7 @@ $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
 $db4=new DB_Seminar;
 $Modules=new Modules;
-	
+$semester=new SemesterData;	
 
 //Defaults, die fuer DAUS (<admin) gesetzt werden
 $default_description= _("Bitte geben Sie hier nur weiterführende Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.");
@@ -186,8 +186,8 @@ if ($new) {
 	
 	//Check auf Konsistenz mt Metadaten, Semestercheck
 	if (($do) && ($art==1) && (is_array($term_data ["turnus_data"]))) {
-		
-		foreach ($SEMESTER as $a) {
+		$all_semester = $semester->getAllSemesterData();		
+		foreach ($all_semester as $a) {
 			if (($term_data["start_time"] >= $a["beginn"]) && ($term_data["start_time"] <= $a["ende"])) {
 				$sem_beginn=$a["beginn"];
 				$sem_ende=$a["ende"];
@@ -197,7 +197,7 @@ if ($new) {
 		}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$result.="info§" . _("Der eingegebene Termine liegt au&szligerhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.") . "§";
+			$result.="info§" . _("Der eingegebene Termine liegt au&sz;ligerhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.") . "§";
 		
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewaehlt ist
 		if (!$term_data["art"]) {

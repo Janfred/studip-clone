@@ -29,6 +29,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php"); // Funktionen zum Loesche
 require_once($ABSOLUTE_PATH_STUDIP . "datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once($ABSOLUTE_PATH_STUDIP . "archiv.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
+require_once($ABSOLUTE_PATH_STUDIP . "config_tools_semester.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen

@@ -177,7 +177,7 @@ if ($_REQUEST['cmd'] == "show_sem_range_tree"){
 }
 
 if ($_REQUEST['cmd'] == "show_class"){
-	$db->query("SELECT Seminar_id from seminare WHERE seminare.status IN ('" . join("','", $_sem_status) . "')");
+	$db->query("SELECT Seminar_id from seminare WHERE seminare.visible='1' AND seminare.status IN ('" . join("','", $_sem_status) . "')"); // OK_VISIBLE
 	$snap = new DbSnapshot($db);
 	$sem_ids = $snap->getRows("Seminar_id");
 	if (is_array($sem_ids)){
@@ -355,7 +355,7 @@ if ($sem_browse_data['level'] != 'f' && ($sem_browse_data["level"]=="s" || $sem_
 			LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
 			LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 			LEFT JOIN Institute USING (Institut_id) 
-			WHERE seminare.Seminar_id IN('" . join("','", array_keys($_marked_sem)) . "') ORDER BY $order_by_exp, seminare.Name ");
+			WHERE seminare.visible='1' AND seminare.Seminar_id IN('" . join("','", array_keys($_marked_sem)) . "') ORDER BY $order_by_exp, seminare.Name "); // OK_VISIBLE
 
 		$db->query($query);
 		$snap = new DbSnapShot($db);

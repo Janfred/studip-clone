@@ -66,7 +66,6 @@ $DataFields = new DataFields($sem_id);
 $db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
 $db2->next_record();
 
-
 // nachfragen, ob das Seminar abonniert werden soll
 if ($sem_id) {
 	if ($perm->have_studip_perm("admin",$sem_id)) {
@@ -76,9 +75,9 @@ if ($sem_id) {
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");		
 		$db->next_record();
 		if (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") == "-1"))) {
-			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier ab %s um %s ein.")."<A>",date("d.m.Y",$db2->f("admission_starttime")),date("G:i",$db2->f("admission_starttime")));
+			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier ab %s um %s ein.")."<A>",date("d.m. Y",$db2->f("admission_starttime")),date("G:i",$db2->f("admission_starttime")));
 		} elseif (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") != "-1"))) {
-			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier von %s bis %s ein.")."<A>",date("d.m.Y, G:i",$db2->f("admission_starttime")),date("d.m.Y, G:i",$db2->f("admission_endtime_sem")));
+			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier von %s bis %s ein.")."<A>",date("d.m. Y, G:i",$db2->f("admission_starttime")),date("d.m.Y, G:i",$db2->f("admission_endtime_sem")));
 		} elseif (($db2->f("admission_endtime_sem") < time()) && ($db2->f("admission_endtime_sem") != -1)) {
 			if (!$db->f("status") == "user") $info_msg = _("Eintragen nicht mehr möglich, der Anmeldezeitraum ist abgelaufen");
 		} else {
@@ -100,6 +99,10 @@ if ($sem_id) {
 
 if ($send_from_search)
 	$back_msg.=_("Zur&uuml;ck zur letzten Auswahl");
+
+//Namen holen
+$db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
+$db2->next_record();
 
  //calculate a "quarter" year, to avoid showing dates that are older than a quarter year (only for irregular dates)
 $quarter_year = 60 * 60 * 24 * 90;
@@ -155,6 +158,15 @@ else
 				unset ($admission_status);
 			}
 
+			$db4->query("SELECT * FROM seminar_user_number WHERE user_id = '$user_id' AND seminar_id = '$sem_id';");
+			if ($db4->next_record()) {
+				$lead = "";
+				for ($i = 1; $i <= 5 - strlen($db4->f("user_number")); $i++) {
+					$lead .= "0";
+				}
+				$num_text = sprintf("<b>" . _(" (Teilnehmernummer: %s)") . "</b>",$lead.$db4->f("user_number"));
+			}
+
 			if (($mein_status) || ($admission_status)) {
 				$picture_tmp = "./pictures/haken.gif";
 			} else {
@@ -164,11 +176,14 @@ else
 			if (($mein_status) || ($admission_status)) {
 				if ($mein_status) {
 					$tmp_text=_("Sie sind als TeilnehmerIn der Veranstaltung eingetragen");
+					$tmp_text .= $num_text;
 				} elseif ($admission_status) {
 					if ($admission_status == "accepted") {
 						$tmp_text = sprintf(_("Sie wurden f&uuml;r diese Veranstaltung vorl&auml;ufig akzeptiert.<br/>Lesen Sie den Hinweistext!"));
+						$tmp_text .= $num_text;
 					} else {
 						$tmp_text = sprintf (_("Sie sind in die %s der Veranstaltung eingetragen."), ($admission_status=="claiming")	? _("Anmeldeliste") : _("Warteliste"));
+						$tmp_text .= $num_text;
 					}
 				}
 			} elseif (!$perm->have_perm("admin")) {
@@ -239,7 +254,6 @@ if ($db2->f("admission_binding")) {
 							);
 }
 
-
 // print the info_box
 
 print_infobox ($infobox,"pictures/details.jpg");
@@ -247,8 +261,6 @@ print_infobox ($infobox,"pictures/details.jpg");
 // ende Infobox
 
 ?>
-
-
 				</td>
 			</tr>
 			<tr>
@@ -536,7 +548,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 		$db3->query("SELECT * FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='$sem_id'");
 		if ($db3->next_record()) {
 			echo "<table width=\"100%\">";
-			printf ("<tr><td width=\"%s\">&nbsp;</td><td><font size=-1>%s</font><br/></tr></td></table>", "2%", $db2->f("admission_prelim_txt"));
+			printf ("<tr><td width=\"%s\">&nbsp;</td><td><font size=-1>%s</font><br/></tr></td></table>", "2%", formatReady($db2->f("admission_prelim_txt")));
 		} else {
 			if (!$perm->have_perm("admin")) {
 				print("<p>"._("Wenn Sie an der Veranstaltung teilnehmen wollen, klicken Sie auf	\"Tragen Sie sich hier ein\". Sie erhalten dann nähere Hinweise und können sich immer noch gegen eine Teilnahme entscheiden.")."</p>");
@@ -581,8 +593,16 @@ print_infobox ($infobox,"pictures/details.jpg");
 		} else {
 			if ($db2->f("admission_type") == 1)
 				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt nach dem Losverfahren am %s Uhr.") . "</font><br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
-			else
-				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wird am %s aufgehoben.") . "</font><br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+			else {
+				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung."));
+				if ($db2->num_rows()>1) {
+					if ($db2->f("admission_endtime") < time()) {
+						printf ( _("Die Kontingentierung wurde am %s aufgehoben.") . "<br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+					} else {
+						printf (_("Die Kontingentierung wird am %s aufgehoben.") . "<br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+					}
+				}
+			}
 		}
 			
 			$query = "SELECT Seminar_id,admission_group FROM seminare WHERE Seminar_id='$sem_id'";

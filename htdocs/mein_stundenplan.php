@@ -50,6 +50,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; //Daten laden
 require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"; 
 require_once "$ABSOLUTE_PATH_STUDIP/ms_stundenplan.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php";
 
 if ($RESOURCES_ENABLE)	
  	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
@@ -79,8 +80,10 @@ if ($change_view) {
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
+$semester = new SemesterData;
 $hash_secret="machomania";
 
+$all_semester = $semester->getAllSemesterData();
 //Wert fuer colspan Ausrechnen
 $glb_colspan=0;
 if ($my_schedule_settings["glb_days"]["mo"]) $glb_colspan++;
@@ -145,15 +148,15 @@ if ($cmd=="insert") {
 
 //meine Seminare einlesen
 if ($inst_id) {
-	$db->query("SELECT seminare.Seminar_id, Name, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
+	$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
 	$view="inst";
 } else {
 	$user_id=$user->id;
 	if ($perm->have_perm("admin")) {
-		$db->query("SELECT seminare.Seminar_id, Name, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
+		$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
 		$view="inst_admin";
 	} else {
-		$db->query("SELECT seminare.Seminar_id, Name, start_time, duration_time,  metadata_dates FROM  seminar_user LEFT JOIN seminare USING (seminar_id) WHERE user_id = '$user_id'");
+		$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM  seminar_user LEFT JOIN seminare USING (seminar_id) WHERE user_id = '$user_id'");
 		$view="user";
 	}
 }
@@ -163,8 +166,8 @@ if ($view=="inst") {
 	} else
 		$tmp_sem_nr=$instview_sem;
 } else {
-	$k=1;
-	foreach ($SEMESTER as $a) {
+	$k=0;
+	foreach ($all_semester as $a) {
 		if ($sem_name) {
 			if (rawurldecode($sem_name) == $my_schedule_settings["glb_sem"])
 				$tmp_sem_nr=$k;
@@ -187,8 +190,8 @@ if (!$tmp_sem_nr) {
 		$tmp_sem_nr=$SEM_ID_NEXT;		
 	}
 } else {
-	$tmp_sem_beginn=$SEMESTER[$tmp_sem_nr]["beginn"];
-	$tmp_sem_ende=$SEMESTER[$tmp_sem_nr]["ende"];
+	$tmp_sem_beginn=$all_semester[$tmp_sem_nr]["beginn"];
+	$tmp_sem_ende=$all_semester[$tmp_sem_nr]["ende"];
 }
 
 //Set the view (begin hour and and hour)
@@ -206,10 +209,13 @@ while ($db->next_record())
 	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
 	$use_this=FALSE;
 	$term_data=unserialize($db->f("metadata_dates"));
+	/*if (!strncmp($db->f("Name"),"Informatik",6)) {
+		echo "DB: ".$db->f("start_time")."&nbsp;TMP: ".$tmp_sem_beginn."<br>";
+	}*/
 
-	if (($db->f("start_time") <=$tmp_sem_beginn) &&(($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time"))) || ($db->f("duration_time") == -1)))
-		$use_this=TRUE;
-		
+	if (($db->f("start_time") <=$tmp_sem_beginn) && ($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time")))) {
+		$use_this=TRUE; 
+	}
 	if (($use_this) && (!$term_data["art"]) && (is_array($term_data["turnus_data"])))
 		{
 		//Zusammenbasteln Dozentenfeld
@@ -268,7 +274,7 @@ while ($db->next_record())
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 				
-				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
+				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "nummer"=>$db->f("VeranstaltungsNummer"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
 			}
 		}
 	}
@@ -417,7 +423,7 @@ if (!$print_view) {
 		<br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp; 
 			<select name="instview_sem" style="vertical-align:middle">
 			<?
-				foreach ($SEMESTER as $key=>$val) {
+				foreach ($all_semester as $key=>$val) {
 					printf ("<option %s value=\"%s\">%s</option>\n", ($tmp_sem_nr == $key) ? "selected" : "", $key, $val["name"]);
 				}
 			?>
@@ -540,6 +546,9 @@ for ($i; $i<$global_end_time+1; $i++)
 						else
 							echo  "<a href=\"seminar_main.php?auswahl=";
 						echo substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
+						if ($my_sems[$cc["seminar_id"]]["nummer"]) {
+							echo htmlReady($my_sems[$cc["seminar_id"]]["nummer"]) . "&nbsp;";
+						}
 						echo htmlReady(substr($my_sems[$cc["seminar_id"]]["name"], 0,50));
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "..."; 
@@ -548,6 +557,9 @@ for ($i; $i<$global_end_time+1; $i++)
 					else
 						{
 						echo "<font size=-1>";					
+						if ($my_sems[$cc["seminar_id"]]["nummer"]) {
+							echo htmlReady($my_sems[$cc["seminar_id"]]["nummer"]) . "&nbsp;";
+						}
 						echo substr($my_sems[$cc["seminar_id"]]["name"], 0,50);
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "...";

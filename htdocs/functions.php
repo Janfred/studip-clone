@@ -38,6 +38,8 @@ require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTree.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
 
 /**
 * This function creates the header line for studip-objects
@@ -365,7 +367,6 @@ function get_object_type($id) {
 *
 */
 function select_group($sem_start_time, $user_id='') {
-	global $SEMESTER;
 	//Farben Algorhytmus, erzeugt eindeutige Farbe fuer jedes Semester. Funktioniert ab 2001 die naechsten 1000 Jahre.....
 	$year_of_millenium=date ("Y", $sem_start_time) % 1000;
 	$index=$year_of_millenium * 2;
@@ -704,5 +705,27 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 		}
 	}
 	return $check;
+}
+
+/**
+ * This function checks, if a given seminar gives user_numbers and adds the given user to seminar_user_number
+ *
+ * @param    string  seminar_id
+ * @param    string  user_id
+ * @return   boolean
+ *
+ */
+function seminar_usernumber($seminar_id,$userid=NULL) {
+  $db = new DB_Seminar;
+
+  $db->query("SELECT user_number FROM seminare WHERE Seminar_id='$seminar_id'");
+  $db->next_record();
+  if (!$db->f("user_number")) {
+    return FALSE;
+  }
+  if ($userid) {
+    $db->query("INSERT INTO seminar_user_number (user_id, seminar_id) VALUES ('$userid', '$seminar_id');");
+  }
+  return TRUE;
 }
 ?>
