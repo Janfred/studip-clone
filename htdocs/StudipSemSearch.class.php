@@ -57,6 +57,8 @@ class StudipSemSearch {
 	
 	var $sem_change_button_clicked = false;
 	
+	var $override_sem = false;
+	
 	var $attributes_default = array('style' => 'width:100%;');
 	
 	var $search_fields = array('title' => array('type' => 'text'),
@@ -256,6 +258,9 @@ class StudipSemSearch {
 				$combination = "OR";
 			} else {
 				$_REQUEST[$this->form_name . "_" . $_REQUEST[$this->form_name . "_qs_choose"]] = $_REQUEST[$this->form_name . "_quick_search"];
+			}
+			if (is_array($this->override_sem)){
+				$clause = " HAVING sem_number IN(" . join(",",$this->override_sem) . ") ";
 			}
 		}
 		

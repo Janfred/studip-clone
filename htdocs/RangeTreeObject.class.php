@@ -81,7 +81,7 @@ class RangeTreeObject {
 	* @return	object RangeTreeObject
 	*/
 	function &GetInstance($item_id){
-		$tree =& TreeAbstract::GetInstance("StudipRangeTree");
+		$tree =& TreeAbstract::GetInstance("StudipRangeTree", false);
 		$class_name = "RangeTreeObject" . $tree->tree_data[$item_id]['studip_object'];
 		return new $class_name($item_id);
 	}
@@ -94,7 +94,7 @@ class RangeTreeObject {
 	* @param	string	$item_id
 	*/
 	function RangeTreeObject($item_id) {
-		$this->tree =& TreeAbstract::GetInstance("StudipRangeTree");
+		$this->tree =& TreeAbstract::GetInstance("StudipRangeTree", false);
 		$this->tree_item_id = $item_id;
 		$this->item_data = $this->tree->tree_data[$item_id];
 	}

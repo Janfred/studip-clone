@@ -73,8 +73,8 @@ class StudipSemTreeViewSimple {
 		for ($i = 0; $i < $num_kids; ++$i){
 			$num_entries = $this->tree->getNumEntries($kids[$i],true);
 			echo "<b><a " . tooltip(sprintf(_("%s Einträge in allen Unterebenen vorhanden"), $num_entries)) . " href=\"" .$this->getSelf("start_item_id={$kids[$i]}", false) . "\">";
-			echo htmlReady($this->tree->tree_data[$kids[$i]]['name']);
-			echo "&nbsp;($num_entries)";
+			echo "<span style=\"font-size:10pt;\">" . htmlReady($this->tree->tree_data[$kids[$i]]['name']);
+			echo "&nbsp;($num_entries)</span>";
 			echo "</a></b>";
 			if ($i == floor($num_kids / 2)){
 				echo "</td>\n<td class=\"steel1\" align=\"left\" valign=\"top\">";
@@ -93,10 +93,10 @@ class StudipSemTreeViewSimple {
 	function showContent($item_id){
 		echo "\n<div style=\"margin-left:10px\">";
 		if ($item_id == "root"){
-			echo "\n<p><b><u>" . htmlReady($this->tree->root_name) ." </u></b></p>";
+			echo "\n<p style=\"font-size:10pt\"><b><u>" . htmlReady($this->tree->root_name) ." </u></b></p>";
 			echo "\n<p style=\"font-size:10pt\">" . formatReady($this->root_content) ." </p>";
 		} else {
-			echo "\n<p><b><u>" . htmlReady($this->tree->tree_data[$item_id]['name']) ." </u></b></p>";
+			echo "\n<p style=\"font-size:10pt\"><b><u>" . htmlReady($this->tree->tree_data[$item_id]['name']) ." </u></b></p>";
 			echo "\n<p style=\"font-size:10pt\">" . formatReady($this->tree->tree_data[$item_id]['info']) ." </p>";
 			echo "\n<p style=\"font-size:10pt;\">";
 			if ($num_entries = $this->tree->getNumEntries($item_id)){

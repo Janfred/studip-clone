@@ -42,7 +42,7 @@ $_views["SEM_TREE_GET_DATA"] = array("pk"=>"sem_tree_id","temp_table_type"=>"MyI
 							LEFT JOIN seminare USING(seminar_id) LEFT JOIN Institute c ON (a.studip_object_id = c.Institut_id)
 							 GROUP BY a.sem_tree_id ORDER BY priority");
 $_views["SEM_TREE_GET_SEMIDS"] = array("pk"=>"seminar_id","temp_table_type"=>"HEAP",
-							"query" => "SELECT DISTINCT b.seminar_id, " . $_views['sem_number_sql'] . " AS sem_number FROM seminar_sem_tree b LEFT JOIN seminare c USING(seminar_id) WHERE sem_tree_id IN(&) §");
+							"query" => "SELECT  b.seminar_id, " . $_views['sem_number_sql'] . " AS sem_number FROM seminar_sem_tree b LEFT JOIN seminare c USING(seminar_id) WHERE sem_tree_id IN(&) §");
 $_views["SEM_TREE_GET_SEMDATA"] = array("query" => "SELECT a.seminar_id,Name,username AS doz_uname, Nachname AS doz_name, " . $_views['sem_number_sql'] . " AS sem_number 
 										FROM seminar_sem_tree a LEFT JOIN seminare b USING(seminar_id) LEFT JOIN seminar_user c ON (b.seminar_id=c.seminar_id AND c.status='dozent' )
 										LEFT JOIN auth_user_md5 USING(user_id) WHERE sem_tree_id IN(&)  § ORDER BY sem_number DESC,Name ASC");
@@ -86,7 +86,10 @@ $_views["SEM_SEARCH_SEM"] = array("query" =>"SELECT c.seminar_id, " . $_views['s
 $_views["SEM_GET_FAKS"] = array("query" => "SELECT DISTINCT b.fakultaets_id,d.sem_tree_id FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN sem_tree d ON (b.fakultaets_id=d.studip_object_id) WHERE a.seminar_id=?");
 $_views["SEM_GET_INST"] = array("query" => "SELECT Institut_id FROM seminare WHERE Seminar_id=?");
 
-
+$_views["SEM_INST_GET_SEM"] = array("query" => "SELECT b.Seminar_id," . $_views['sem_number_sql'] . " AS sem_number FROM seminar_inst a LEFT JOIN seminare b USING (seminar_id) WHERE a.Institut_id IN (&)
+												§ §  ");
+												
+		
 unset($allowed_sem_status);
 unset($sem_start_times);
 ?>

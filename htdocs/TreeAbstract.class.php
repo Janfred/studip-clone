@@ -90,10 +90,13 @@ class TreeAbstract {
 	*/
 	function &GetInstance($class_name, $args = null){
 		static $tree_instance;
+		
 		if ($args){
 			$class_hash = md5($class_name . serialize($args));
+		} elseif ($args === false && is_array($tree_instance)){
+			$class_hash = key($tree_instance);
 		} else {
-		$class_hash = md5($class_name);
+			$class_hash = md5($class_name);
 		}
 		if (!is_object($tree_instance[$class_hash])){
 			$tree_instance[$class_hash] = new $class_name($args);

@@ -33,6 +33,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemSearch.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeViewSimple.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemRangeTreeViewSimple.class.php");
 
 
 //init classes
@@ -82,29 +83,30 @@ elseif (!$extern)
 //Zuruecksetzen
 if (($reset_all)  || $search_obj->new_search_button_clicked){
 	$tmp_cmd = $sem_browse_data["cmd"];	
-	$default_sem = $sem_browse_data["default_sem"];
 	$sem_browse_data = array();
 	$sem_browse_data["cmd"] = $tmp_cmd;	
-	$sem_browse_data["default_sem"] = $default_sem;
+	$sem_browse_data["default_sem"] = get_sem_num_sem_browse();
 	$_marked_sem = array();
+}
+
+if($sem_browse_data["default_sem"] != 'all'){
+	$default_sems[0] = $sem_browse_data["default_sem"];
+} 
+if ($sem_browse_data['cmd'] != 'xts' && $sem_browse_data["default_sem"] != $SEM_ID){
+	$default_sems[0] = $SEM_ID;
+	$default_sems[1] = $SEM_ID_NEXT;
 }
 
 
 if ($level==0) $sem_browse_data["extern"] == FALSE;
 //Zuruecksetzen
-if ($search_obj->sem_change_button_clicked && $_REQUEST[$search_obj->form_name . "_scope_choose"]){
-	$sem_browse_data["cmd"] = "qs";	
-	$sem_browse_data["level"] = "vv";
-	$sem_browse_data['sset'] = false;
-	$_marked_sem = array();
-}
 
 if (!isset ($sem_browse_data["level"])) {
 	$sem_browse_data["level"]="f";
 }
 
 if ($sem_browse_data['level'] == "vv" || $level=="vv"){
-	$sem_tree = new StudipSemTreeViewSimple($sem_browse_data["start_item_id"], (($sem_browse_data['default_sem'] == 'all') ? false : $sem_browse_data['default_sem']));
+	$sem_tree = new StudipSemTreeViewSimple($sem_browse_data["start_item_id"], ((!is_array($default_sems)) ? false : $default_sems));
 	$sem_browse_data['cmd'] = "qs";
 	if ($level == "vv"){
 		$_open_items = null;
@@ -112,10 +114,21 @@ if ($sem_browse_data['level'] == "vv" || $level=="vv"){
 	}
 }
 
+if ($sem_browse_data['level'] == "ev" || $level=="ev"){
+	$sem_number = (!is_array($default_sems)) ? false : $default_sems;
+	$sem_status = (is_array($_sem_status)) ? $_sem_status : false;
+	$range_tree = new StudipSemRangeTreeViewSimple($sem_browse_data["start_item_id"],$sem_number,$sem_status);
+	$sem_browse_data['cmd'] = "qs";
+	if ($level == "ev"){
+		$_open_items = null;
+		$sem_browse_data['level'] = "ev";
+	}
+}
+
 if ($_REQUEST['cmd'] == "show_sem_range"){
 	$args = null;
 	if ($sem_browse_data['default_sem'] != 'all'){
-		$args = array('sem_number' => $sem_browse_data['default_sem']);
+		$args = array('sem_number' => $default_sems);
 	}
 	$the_tree =& TreeAbstract::GetInstance("StudipSemTree",$args);
 	$tmp = explode("_",$_REQUEST['item_id']);
@@ -123,6 +136,28 @@ if ($_REQUEST['cmd'] == "show_sem_range"){
 	$with_kids = isset($tmp[1]);
 	$sem_ids = $the_tree->getSemIds($item_id,$with_kids);
 	if (is_array($sem_ids)){
+		$_marked_sem = array_flip($sem_ids);
+	} else {
+		$_marked_sem = array();
+	}
+	$sem_browse_data['sset'] = true;
+}
+
+if ($_REQUEST['cmd'] == "show_sem_range_tree"){
+	$tmp = explode("_",$_REQUEST['item_id']);
+	$item_id = $tmp[0];
+	$range_object =& RangeTreeObject::GetInstance($item_id);
+	if (isset($tmp[1])){
+		$inst_ids = $range_object->getAllObjectKids();
+	}
+	$inst_ids[] = $range_object->item_data['studip_object_id'];
+	$db_view = new DbView();
+	$db_view->params[0] = $inst_ids;
+	$db_view->params[1] = (is_array($_sem_status)) ? " AND b.status IN('" . join("','",$_sem_status) ."')" : "";
+	$db_view->params[2] = (is_array($default_sems)) ? " HAVING sem_number IN (" . join(",",$default_sems) .")" : "";
+	$db_snap = new DbSnapshot($db_view->get_query("view:SEM_INST_GET_SEM"));
+	if ($db_snap->numRows){
+		$sem_ids = $db_snap->getRows("Seminar_id");
 		$_marked_sem = array_flip($sem_ids);
 	} else {
 		$_marked_sem = array();
@@ -159,15 +194,12 @@ if ((!$sem_browse_data["extern"]) ) {
 		echo $search_obj->getNewSearchButton(array('style' => 'vertical-align:middle'), _("Suchergebnis löschen und neue Suche starten"));
 		echo "&nbsp;<a href=\"$PHP_SELF?cmd=xts";
 		echo "\"><img style=\"vertical-align:middle\" " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
-		echo "</td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
-		echo _("Semester:") . "&nbsp;";
-		echo $search_obj->getSearchField("sem",array('style' => 'vertical-align:middle'),$sem_browse_data['default_sem']);
-		echo $search_obj->getSemChangeButton(array('style' => 'vertical-align:middle'));
 		if ($sem_browse_data['level'] == "vv"){
 			$search_obj->tree =& $sem_tree->tree; 
 			if ($sem_tree->start_item_id != 'root'){
 				$search_obj->search_scopes[] = $sem_tree->start_item_id;
 			}
+			echo "</td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"center\">";
 			echo "&nbsp;" . _("Suchbereich:") . "&nbsp;" . $search_obj->getSearchField("scope_choose",array('style' => 'vertical-align:middle'),$sem_tree->start_item_id);
 			echo "\n<input type=\"hidden\" name=\"start_item_id\" value=\"{$sem_tree->start_item_id}\">";
 		}
@@ -277,6 +309,7 @@ ob_start(); //Outputbuffering start
 
 
 if ($search_obj->search_button_clicked){
+	$search_obj->override_sem = $default_sems;
 	$search_obj->doSearch();
 	if ($search_obj->found_rows){
 		$_marked_sem = $search_obj->search_result->getDistinctRows("seminar_id");
@@ -695,6 +728,12 @@ if ($sem_browse_data['level'] == "vv"){
 	echo "</td></tr>";
 	echo "\n</table>";
 }	
-	
+if ($sem_browse_data['level'] == "ev"){
+	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+	echo "\n<tr><td align=\"center\">";
+	$range_tree->showSemRangeTree();
+	echo "</td></tr>";
+	echo "\n</table>";
+}
 
 ?>
