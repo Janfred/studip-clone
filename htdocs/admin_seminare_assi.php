@@ -429,8 +429,25 @@ if ($form==7)
 	$sem_create_data["sem_links"]=$sem_links;
 	}
 
+//jump-logic
+if ($jump_back_x)
+	if ($form > 1)
+		if ($form == 4)
+			if ($sem_create_data["term_art"] == -1)
+				$level = 2;
+			else
+				$level = 3;
+		else
+			$level = $form - 1;
+			
+//not pressed any button? Send user to next page and checks...
+if ((!$jump_back_x) && (!$jump_next) && (!$add_doz) && (!$add_tut) && (!$delete_doz) && (!$delete_tut) && (!$add_turnus_field_x) 
+	&& (!$delete_turnus_field_x) && (!$send_doz_x) && (!$reset_search_x) && (!$add_term_field_x) && (!$delete_term_field_x)
+	&& (!$add_studg_x) && (!$delete_studg_x) && (!$search_doz) && (!$search_tut))
+	$jump_next_x=TRUE;
+
 //Check auf korrekte Eingabe und Sprung in naechste Level, hier auf Schritt 2
-if ($cmd_b_x)
+if (($form == 1) && ($jump_next_x))
 	{
 	if (($sem_create_data["sem_duration_time"]<0) && ($sem_create_data["sem_duration_time"] != -1))
 		{ 
@@ -484,7 +501,7 @@ if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_s
 }
 
 //wenn alles stimmt, Sprung auf Schritt 3
-if ($cmd_c_x)
+if (($form == 2) && ($jump_next_x))
 	{
 	if (is_array($sem_create_data["sem_tut"]))
 		foreach ($sem_create_data["sem_tut"] as $key=>$val)
@@ -603,7 +620,7 @@ if ($delete_term_field)
 
 
 //Termin-Metaddaten-Check, wenn alles stimmt, Sprung auf Schritt 4
-if ($cmd_d_x)
+if (($form == 3) && ($jump_next_x))
 	{
 	if ($sem_create_data["term_art"]==0)
 		{
@@ -743,10 +760,10 @@ if ($sem_delete_studg) {
 	$level=4;
 	}
 
-//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
-if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
+//Prozentangabe checken/berechnen wenn neuer Studiengang, einer geloescht oder Seite abgeschickt
+if ((($form == 4) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg)) {
 	if ($sem_create_data["sem_admission"]) {
-		if ((!$sem_create_data["sem_admission_ratios_changed"]) && (!$sem_add_ratio) && (!$cmd_c_x) && (!$cmd_e_x)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
+		if ((!$sem_create_data["sem_admission_ratios_changed"]) && (!$sem_add_ratio) && (!$jump_next) && (!$jump_back)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
 			if (is_array($sem_create_data["sem_studg"]))
 				foreach ($sem_create_data["sem_studg"] as $key=>$val)
 					$sem_create_data["sem_studg"][$key]["ratio"]=round(100 / (sizeof ($sem_create_data["sem_studg"]) + 1));
@@ -770,7 +787,7 @@ if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 }
 
 //wenn alles stimmt, Sprung auf Schritt 5 (Anlegen)
-if ($cmd_e_x)
+if (($form == 4) && ($jump_next_x))
 	{
 	if (($sem_create_data["sem_sec_lese"] ==2) ||  ($sem_create_data["sem_sec_schreib"] ==2))
 		{
@@ -882,7 +899,7 @@ if ($cmd_e_x)
 	}
 	
 //OK, nun wird es ernst, wir legen das Seminar an.
-if ($cmd_f_x)
+if (($form == 5) && ($jump_next_x))
 	{
 	$run = TRUE;
 
@@ -1200,7 +1217,7 @@ if ($cmd_f_x)
 	}
 
 //Nur der Form halber... es geht weiter zur Literaturliste
-if ($cmd_g_x)
+if (($form == 6) && ($jump_next_x))
    	{
 	if (!$sem_create_data["modules_list"]["literature"]) {
 		header ("Location: admin_seminare1.php");
@@ -1210,7 +1227,7 @@ if ($cmd_g_x)
    	}
 
 //Eintragen der Literatur und Links
-if ($cmd_h_x)
+if (($form == 7) && ($jump_next_x))
 	{
 	if ($sem_create_data["lit_entry"]) {
 		$db->query("UPDATE literatur SET literatur='".$sem_create_data["sem_literat"]."', links='".$sem_create_data["sem_links"]."', chdate='".time()."' WHERE literatur_id='".$sem_create_data["sem_lit_id"]."'");
@@ -1340,7 +1357,7 @@ elseif ((!$level) || ($level==1))
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_b">
+							&nbsp; <input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1613,7 +1630,7 @@ elseif ((!$level) || ($level==1))
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_b">
+							&nbsp; <input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 				</table>
@@ -1672,7 +1689,7 @@ if ($level==2)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_a">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_c">
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1935,7 +1952,7 @@ if ($level==2)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_a">&nbsp;<input type="IMAGE"  <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_c">
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE"  <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 				</table>
@@ -1989,7 +2006,7 @@ if ($level==3) {
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_b">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_d">
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 					<?
@@ -2210,7 +2227,7 @@ if ($level==3) {
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_b">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_d">
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 				</table>
@@ -2266,7 +2283,7 @@ if ($level==4)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_<? if ($sem_create_data["term_art"]== -1) echo "b"; else echo "c" ?>">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_e">
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2610,7 +2627,7 @@ if ($level==4)
 							&nbsp;
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
-							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_<? if ($sem_create_data["term_art"]== -1) echo "b"; else echo "c" ?>">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_e">
+							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 						</td>
 					</tr>
 				</table>
@@ -2641,10 +2658,10 @@ if ($level==5)
 			<td class="blank" valign="top">
 				<blockquote>
 				<b><?=_("Schritt 5: Bereit zum Anlegen der Veranstaltung"); ?></b><br><br>
-				<?=_("Sie haben nun alle n&ouml;tigen Daten zum Anlegen der Veranstaltung eingegeben. Wenn Sie auf &raquo;Fertig stellen&laquo; klicken, wird die Veranstaltung in Stud.IP &uuml;bernommen. Wenn Sie sich nicht sicher sind, ob alle Daten korrekt sind, &uuml;berpr&uuml;fen Sie noch einmal Ihre Eingaben auf den vorhergehenden Seiten."); ?><br><br>
+				<?=_("Sie haben nun alle n&ouml;tigen Daten zum Anlegen der Veranstaltung eingegeben. Wenn Sie auf &raquo;anlegen&laquo; klicken, wird die Veranstaltung in Stud.IP &uuml;bernommen. Wenn Sie sich nicht sicher sind, ob alle Daten korrekt sind, &uuml;berpr&uuml;fen Sie noch einmal Ihre Eingaben auf den vorhergehenden Seiten."); ?><br><br>
 				<form method="POST" action="<? echo $PHP_SELF ?>">
 					<input type="HIDDEN" name="form" value=5>
-					<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?> >>" name="cmd_d">&nbsp;<input type="IMAGE" <?=makeButton("anlegen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_f">
+					<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?> >>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("anlegen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 				</form>
 				</blockqoute>
 			</td>
@@ -2682,7 +2699,7 @@ if ($level==6)
 					<?=_("Bitte korrigieren Sie die Daten."); ?>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="IMAGE" <?=makeButton("zur&uuml;ck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_a">
+						<input type="IMAGE" <?=makeButton("zur&uuml;ck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">
 					</form>
 					</blockqoute>
 				</td>
@@ -2715,7 +2732,7 @@ if ($level==6)
 						<?
 						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
 							?>
-							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_g">
+							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 							<?
 						}
 						?>
@@ -2753,7 +2770,7 @@ if ($level==6)
 						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
 							?>
 							<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">						
-							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_g">
+							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 							<?
 						}
 						?>
@@ -2894,11 +2911,11 @@ if ($level==7)
 							<?
 							if ($sem_create_data["modules_list"]["schedule"]) {
 								?>
-								&nbsp;<input type="IMAGE"<?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_h">
+								&nbsp;<input type="IMAGE"<?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 								<?
 							} else {
 								?>
-								&nbsp;<input type="IMAGE"<?=makeButton("uebernehmen", "src"); ?> border=0 value="<?=_("uebernehmen");?>" name="cmd_h">
+								&nbsp;<input type="IMAGE"<?=makeButton("uebernehmen", "src"); ?> border=0 value="<?=_("uebernehmen");?>" name="jump_next">
 								<?
 							}
 							?>
@@ -2935,11 +2952,11 @@ if ($level==7)
 							<?
 							if ($sem_create_data["modules_list"]["schedule"]) {
 								?>
-								&nbsp;<input type="IMAGE"<?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_h">
+								&nbsp;<input type="IMAGE"<?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 								<?
 							} else {
 								?>
-								&nbsp;<input type="IMAGE"<?=makeButton("uebernehmen", "src"); ?> border=0 value="<?=_("uebernehmen");?>" name="cmd_h">
+								&nbsp;<input type="IMAGE"<?=makeButton("uebernehmen", "src"); ?> border=0 value="<?=_("uebernehmen");?>" name="jump_next">
 								<?
 							}
 							?>
