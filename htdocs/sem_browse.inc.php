@@ -73,6 +73,10 @@ if ((!$sem_browse_data["cmd"]) && ($root_mode))
 if (!$sem_browse_data["group_by"])
 	$sem_browse_data["group_by"]="semester";
 
+if (!$sem_browse_data["sortby"] || $sem_browse_data["sortby"] == "")
+	$sem_browse_data["sortby"]="Name";
+
+
 if (($i_page=="show_bereich.php") && (!$extern))
 	$sem_browse_data["extern"]=TRUE;
 elseif (!$extern)
@@ -90,8 +94,7 @@ if ($level==0) $sem_browse_data["extern"] == FALSE;
 
 
 //Quicksort Formular... fuer die eiligen oder die DAUs....
-
-if (!$sem_browse_data["extern"]) {
+if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_data["level"]=="f")){
 
 if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset($sem_browse_data["cmd"])))
 	{
@@ -125,12 +128,12 @@ if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset(
 	}
 	
 
-//Extended Sortformular, fuer mit mehr GRiPS...
+//Extended Sortformular, fuer Leute mit mehr GRiPS...
 if (($sem_browse_data["cmd"]=="xts"))
 	{
 	echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 	echo "<form action=\"$PHP_SELF?send=yes&sset=xts\" method=\"post\">\n";
-	echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Titel: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_titel type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_titel"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Art:</td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_art size=1>";
+	echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Titel: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_titel type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_titel"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Typ:</td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_art size=1>";
 	if ($sem_browse_data["s_art"]=="alle")
 		echo "<option selected>alle</option>";
 	else
@@ -268,7 +271,7 @@ if ((!isset($sem_browse_data["sset"])) && (!$hide_bereich))
 		case "sb":
 			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
 			$db->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Studienbereiche</font>";
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Studienf&auml;cher</font>";
 			break;
 		case "i":
 			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
@@ -285,14 +288,14 @@ if ((!isset($sem_browse_data["sset"])) && (!$hide_bereich))
 		case "b";
 			$db2->query("SELECT name FROM faecher WHERE fach_id ='".$sem_browse_data["id"]."'");
 			$db2->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid"]."\">Studienbereiche</a> > ", htmlReady($db2->f("name")), "</font>";
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid"]."\">Studienf&auml;cher</a> > ", htmlReady($db2->f("name")), "</font>";
 			break;
 		case "sbb";
 			$db2->query("SELECT name FROM faecher WHERE fach_id ='".$sem_browse_data["oid"]."'");
 			$db3->query("SELECT name FROM bereiche WHERE bereich_id='".$sem_browse_data["id"]."'");			
 			$db2->next_record();
 			$db3->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid2"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid2"]."\">Studienbereiche</a> > <a href=\"$PHP_SELF?level=b&id=".$sem_browse_data["oid"]."&oid=".$sem_browse_data["oid2"]."\">", htmlReady($db2->f("name")), "</a> > ", htmlReady($db3->f("name")), "</font>";
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid2"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid2"]."\">Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=b&id=".$sem_browse_data["oid"]."&oid=".$sem_browse_data["oid2"]."\">", htmlReady($db2->f("name")), "</a> > ", htmlReady($db3->f("name")), "</font>";
 			break;
 		}
 	}
@@ -406,7 +409,7 @@ if ($sem_browse_data["sset"])
 	}
 	}
 	
-//Erweierung des query um Klasseneingrenzung
+//Erweiterung des query um Klasseneingrenzung
 if (($show_class) || ($sem_browse_data["s_class"])){
 	if ($sem_browse_data["s_class"])
 		$show_class=$sem_browse_data["s_class"];
@@ -432,19 +435,22 @@ if (($show_class) || ($sem_browse_data["s_class"])){
 	$class_query =" AND".$class_query;
 	}
 
-//Expression for grouping (in fact it is an ORDER exp)
+//Expressions for grouping
 switch ($sem_browse_data["group_by"]) {
 	case "einrichtung":
 		$order_by_exp="institut ASC";
+		$select_add=", Institute.Name AS Institut";
 	break;
 	case "bereich":
 		$order_by_exp="bereich ASC";
+		$select_add=", bereiche.name AS bereich";		
 	break;
-	case "status":
+	case "typ":
 		$order_by_exp="status ASC";
 	break;
 	case "dozent":
 		$order_by_exp="Nachname ASC";
+		$select_add=", auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.Username";
 	break;
 	case "semester":
 		$order_by_exp="start_time DESC";
@@ -454,52 +460,75 @@ switch ($sem_browse_data["group_by"]) {
 	break;
 }
 
+//Expressions for ordering by Nachname or Einrichtung
+switch ($sem_browse_data["sortby"]) {
+	case "Nachname":
+		$select_add.=", auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.Username";
+	break;
+	case "Institut":
+		$select_add.=", Institute.Name as Institut";
+	break;
+}
+
 ob_start(); //Outputbuffering start
 
+
+//Query for view by Bereich or Einrichtung
+if (($sem_browse_data["level"]=="s") && ((!isset($sem_browse_data["sset"])) || $sem_browse_data["extern"]))
+	$sql_where_query_seminare="(seminare.Institut_id = '".$sem_browse_data["id"]."' OR seminar_inst.institut_id = '".$sem_browse_data["id"]."') $class_query";
+
+if (($sem_browse_data["level"]=="sbb") && ((!isset($sem_browse_data["sset"])) || $sem_browse_data["extern"]))
+	$sql_where_query_seminare="seminar_bereich.bereich_id = '".$sem_browse_data["id"]."' $class_query";
+	
+//the basic search SQL
+if (!$dont_search)
+	$query = ("SELECT DISTINCT seminare.Seminar_id, seminare.status, seminare.Name, seminare.start_time, seminare.metadata_dates, seminare.duration_time, seminare.Schreibzugriff, seminare.Lesezugriff $select_add  FROM seminare 
+				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
+				LEFT JOIN seminar_bereich ON (seminare.Seminar_id = seminar_bereich.Seminar_id) 
+				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
+				LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id) 
+				LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) 
+				LEFT JOIN Institute ON (seminar_inst.Institut_id = Institute.Institut_id) 
+				WHERE $sql_where_query_seminare $group_by_exp ORDER BY $order_by_exp, ".$sem_browse_data["sortby"]." ASC");
+
+
+//calculate colspans
+$rows = ($sem_browse_data["extend"] == "yes") ? 8 : 5;
+$rightspan = ($sem_browse_data["extend"] == "yes") ? 3 : 2;
+$leftspan = $rows-$rightspan; 
+if (($sem_browse_data["group_by"] == "einrichtung" || $sem_browse_data["group_by"] == "semester" || $sem_browse_data["group_by"] == "dozent")
+	|| ($sem_browse_data["group_by"] == "einrichtung" && $sem_browse_data["estend"] == "yes")) {
+	$leftspan--;
+	$rows--;
+}
+
 //Anzeige des Suchergebnis (=Seminarebene)
-if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
-	{
-	if (!isset($sem_browse_data["sortby"]) || $sem_browse_data["sortby"] == "") $sem_browse_data["sortby"]="Name";
-	if (!isset($group) || $group == "") $group="Grundstudium";
-	
-	
-	if (($sem_browse_data["level"]=="s") && ((!isset($sem_browse_data["sset"])) || $sem_browse_data["extern"]))
-		$sql_where_query_seminare="(seminare.Institut_id = '".$sem_browse_data["id"]."' OR seminar_inst.institut_id = '".$sem_browse_data["id"]."') $class_query";
+if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
+	$db->query($query);
 
-	if (($sem_browse_data["level"]=="sbb") && ((!isset($sem_browse_data["sset"])) || $sem_browse_data["extern"]))
-		$sql_where_query_seminare="seminar_bereich.bereich_id = '".$sem_browse_data["id"]."' $class_query";
-	
-	if (!$dont_search) {
-		if ($sem_browse_data["sortby"] == "Nachname") 
-			$db->query("SELECT DISTINCT seminare.*, auth_user_md5.username, auth_user_md5.Nachname, auth_user_md5.Vorname, Institute.Name AS Institut, bereiche.name AS bereich, Institute.Institut_id FROM seminare LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN seminar_bereich ON (seminare.seminar_id=seminar_bereich.seminar_id) LEFT JOIN seminar_inst USING (seminar_id) LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) WHERE $sql_where_query_seminare ORDER BY $order_by_exp, Nachname ASC");
-		else
-			$db->query("SELECT seminare.*, auth_user_md5.username, auth_user_md5.Nachname, auth_user_md5.Vorname, Institute.Name AS Institut, bereiche.name AS bereich, Institute.Institut_id FROM seminare LEFT JOIN Institute USING (Institut_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN seminar_bereich ON (seminare.seminar_id=seminar_bereich.seminar_id) LEFT JOIN seminar_inst USING (seminar_id) LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) WHERE $sql_where_query_seminare GROUP BY seminare.Seminar_id ORDER BY $order_by_exp, ".$sem_browse_data["sortby"]." ASC");
-		}
-
-	if (($sem_browse_data["sset"]) || ($sem_browse_data["extern"]))
-		{
-		printf ("<form action=\"$PHP_SELF\" method=\"POST\"><tr><td class=\"steel1\" colspan=%s>", ($sem_browse_data["extend"] == "yes") ? "3" : "2");
-		//Change/view the group method
-		print ("<font size=-1><b>Gruppierung:</b>&nbsp;<select name=\"group_by\">");
-		printf ("<option %s value=\"semester\">Semester</option>", (($sem_browse_data["group_by"]=="semester") || (!$sem_browse_data["group_by"])) ? "selected" : "");
-		printf ("<option %s value=\"bereich\">Bereich</option>", ($sem_browse_data["group_by"]=="bereich") ? "selected" : "");
-		printf ("<option %s value=\"dozent\">DozentIn</option>", ($sem_browse_data["group_by"]=="dozent") ? "selected" : "");
-		printf ("<option %s value=\"status\">Status</option>", ($sem_browse_data["group_by"]=="status") ? "selected" : "");
-		printf ("<option %s value=\"einrichtung\">Einrichtung</option>", ($sem_browse_data["group_by"]=="einrichtung") ? "selected" : "");
-		print ("</select>&nbsp; <input type=\"IMAGE\" border=0 src=\"./pictures/buttons/uebernehmen-button.gif\" />");
-		print ("</font></td>");
-		//Show how many items were found
-		printf ("<td class=\"steel1\" colspan=%s>", ($sem_browse_data["extend"] == "yes") ? "2" : "1");
-		echo "<font size=-1>&nbsp;<b>", $db->num_rows(), " </b>Veranstaltungen gefunden.</td>";
-		printf ("<td class=\"steel1\" align=\"right\" colspan=%s>", ($sem_browse_data["extend"] == "yes") ? "2" : "1");
-		echo"<a href=\"", $PHP_SELF; if ($sem_browse_data["extend"]<>"yes") { echo "?extend=yes\"><img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=0>"; } else {echo "?extend=no\"><img src=\"pictures/buttons/normaleansicht-button.gif\" border=0>"; } echo "</a></font></td></form></tr>";
-		}
-	
-	ob_end_flush();
-	ob_start();
-
-	//init the cols
 	if ($db->num_rows()) {
+		if (($sem_browse_data["sset"]) || ($sem_browse_data["extern"]))
+			{
+			printf ("<form action=\"$PHP_SELF\" method=\"POST\"><tr><td class=\"steel1\" colspan=%s>", $leftspan);
+			//Change/view the group method
+			print ("<font size=-1><b>Gruppierung:</b>&nbsp;<select name=\"group_by\">");
+			printf ("<option %s value=\"semester\">Semester</option>", (($sem_browse_data["group_by"]=="semester") || (!$sem_browse_data["group_by"])) ? "selected" : "");
+			printf ("<option %s value=\"bereich\">Bereich</option>", ($sem_browse_data["group_by"]=="bereich") ? "selected" : "");
+			printf ("<option %s value=\"dozent\">DozentIn</option>", ($sem_browse_data["group_by"]=="dozent") ? "selected" : "");
+			printf ("<option %s value=\"typ\">Typ</option>", ($sem_browse_data["group_by"]=="typ") ? "selected" : "");
+			printf ("<option %s value=\"einrichtung\">Einrichtung</option>", ($sem_browse_data["group_by"]=="einrichtung") ? "selected" : "");
+			print ("</select>&nbsp; <input type=\"IMAGE\" border=0 src=\"./pictures/buttons/uebernehmen-button.gif\" /></font>");
+			echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font size=-1>&nbsp;<b>", $db->num_rows(), " </b>Veranstaltungen gefunden. </font> ";
+			print ("</td>");
+			//Show how many items were found
+			printf ("<td class=\"steel1\" nowrap align=\"right\" colspan=%s>", $rightspan);
+			echo"<a href=\"", $PHP_SELF; if ($sem_browse_data["extend"]<>"yes") { echo "?extend=yes\"><img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=0>"; } else {echo "?extend=no\"><img src=\"pictures/buttons/normaleansicht-button.gif\" border=0>"; } echo "</a></font></td></form></tr>";
+			}
+	
+		ob_end_flush();
+		ob_start();
+
+		//init the cols
 		if ($sem_browse_data["extend"]=="yes") {
 		?>
 		<colgroup>
@@ -507,55 +536,78 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 				<col width="15%">
 				<col width="10%">
 				<col width="15%">
-				<col width="10%">
+				<?
+				if ($sem_browse_data["group_by"] != "semester") print "<col width=\"10%\">";
+				?>
 				<col width="10%">
 				<col width="10%">
 			</colgroup>
-			<?
-			} else {
+		<?
+		} else {
 		?>
 		<colgroup>
-				<col width="45%">
+				<col width="40%">
 				<col width="15%">
-				<col width="20%">
-				<col width="20%">
+				<?
+				if ($sem_browse_data["group_by"] != "einrichtung") print "<col width=\"20%\">";
+				if ($sem_browse_data["group_by"] != "dozent") print "<col width=\"20%\">";				
+				if ($sem_browse_data["group_by"] != "semester") print "<col width=\"5%\">";
+				?>
 			</colgroup>
-			<?
-			}
-			
+		<?
+		}
 		?> 
 			<tr align="center">
-					<td class="steel" align="left"><font size="-1">
-						<img src="pictures/blank.gif" width="1" height="20" valign="top">
-						<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
-					</td>
-					<td class="steel" valign="bottom">
-						<font size="-1"><b>Zeit</b></font>
-					</td>
-					<td class="steel" valign="bottom">
-						<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
-					</td>
-					<td class="steel" valign="bottom">
-						<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
-					</td>
-		<?
-		if ($sem_browse_data["extend"]=="yes") {
-			?>
-			<td class="steel">
-				<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=art">Typ</a></b></font>
-			</td>
-					<td class="steel">
-						<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Lesezugriff">Lesen</a></b> / <b><font size=-1><a href="<? echo $PHP_SELF;?>?sortby=Schreibzugriff">Schreiben</a></b></font>
-					</td>
-					<td class="steel">
-						<font size=-1><b>Mein Status</b></font>
-					</td>
-					<?
+				<td class="steel" align="left"><font size="-1">
+					<img src="pictures/blank.gif" width="1" height="20" valign="top">
+					<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
+				</td>
+				<td class="steel" valign="bottom">
+					<font size="-1"><b>Zeit</b></font>
+				</td>
+				<?
+				if ($sem_browse_data["group_by"] != "einrichtung") {
+				?>
+				<td class="steel" valign="bottom">
+					<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
+				</td>
+				<?
 				}
+				if ($sem_browse_data["group_by"] != "dozent") {
+				?>
+				<td class="steel" valign="bottom">
+					<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
+				</td>
+				<?
+				}
+				if ($sem_browse_data["group_by"] != "semester") {
+				?>
+				<td class="steel" valign="bottom">
+					<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=start_time">Semester</a></b></font>
+				</td>
+				<?
+				}
+		if ($sem_browse_data["extend"]=="yes") {
+			if ($sem_browse_data["group_by"] != "typ") {
+				?>		
+				<td class="steel" valign="bottom">
+					<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=art">Typ</a></b></font>
+				</td>
+				<?
+				}
+				?>
+				<td class="steel" valign="bottom">
+					<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Lesezugriff">Lesen</a></b> / <b><font size=-1><a href="<? echo $PHP_SELF;?>?sortby=Schreibzugriff">Schreiben</a></b></font>
+				</td>
+				<td class="steel" valign="bottom">
+					<font size=-1><b>Mein Status</b></font>
+				</td>
+				<?
+		}
 		echo "</tr>";
 	} else {
 		if ($dont_search)
-			echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden, da Sie keinen Suchbegriff angegeben haben.</b></font>";
+			echo "<tr><td class=\"blank\" colspan=2><br /><font size=-1><b>Es wurden keine Veranstaltungen gefunden, da Sie keinen Suchbegriff angegeben haben.</b></font>";
 		else
 			echo "<tr><td class=\"blank\" colspan=2><font size=-1><b>Es wurden keine Veranstaltungen gefunden.</b></font>";		
 	}
@@ -563,14 +615,6 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 	$group=1;
 	if (!$dont_search)
 	while ($db->next_record()) {
-		//This isn't a very good workaround to avoid duplicate entries in the sort-by-Nachname Query. Someone should fix this...
-		while ($temp_sem_browse_lastid == $db->f("Seminar_id")) {
-			$temp_sem_browse_lastid=$db->f("Seminar_id");
-			$db->next_record();
-		}
-		$temp_sem_browse_lastid=$db->f("Seminar_id");
-		if ($db->f("Seminar_id")) { //Workaround end. :-)
-
 		$cssSw->switchClass();		
 		
 		if ($group==8)
@@ -602,7 +646,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 					$last_bereich=$db->f("bereich");
 				}
 			break;
-			case "status":
+			case "typ":
 				if ((($sem_browse_data["cmd"] != "qs") && ($sem_browse_data["s_status"] == "alle")) || ($sem_browse_data["level"] == "s") || ($sem_browse_data["level"] == "sbb")|| ($sem_browse_data["level"]=="b")) {
 					$tmp_status=$db->f("status");
 					if ($last_status != $db->f("status")) {
@@ -640,15 +684,18 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			break;
 		}
 		
-		//Put group_by header
+		//Put group_by headers
 		if ($group_header_name)
-			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", ($sem_browse_switch_headers) ? $group_header_class : "1", ($sem_browse_data["extend"] == "yes") ? "7" : "4", $group_header_name);
+			printf ("<tr> <td class=\"steelgroup%s\" colspan=%s><font size=-1><b>&nbsp;%s</b></font></td></tr>", ($sem_browse_switch_headers) ? $group_header_class : "1", $rows, $group_header_name);
 			
-	
+		//create name-field	
 		echo"<tr ".$cssSw->getHover()."><font size=-1>";
 		echo"<td class=\"".$cssSw->getClass()."\"><font size=-1><a href=\"", $target_url, "?", $target_id, "=", $db->f("Seminar_id"), "&send_from_search=true&send_from_search_page=$PHP_SELF\">", htmlReady($db->f("Name")), "</a></font></td>";
-		$temp_turnus_string=view_turnus($db->f("Seminar_id"), TRUE);
 		
+		//----------------------
+		
+		//create Turnus field
+		$temp_turnus_string=view_turnus($db->f("Seminar_id"), TRUE);
 		
 		//Shorten, if string too long (add link for details.php)
 		if (strlen($temp_turnus_string) >70) {
@@ -656,30 +703,73 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			$temp_turnus_string.="...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
 		}
 		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>".$temp_turnus_string."</font></td>";
-		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1><a href=\"institut_main.php?auswahl=",$db->f("Institut_id"),"\">".htmlReady($db->f("Institut")),"&nbsp;</font></td>";
-		if ($sem_browse_data["sortby"] == "Nachname") { // so it's easy
-			$dozname = "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname"))."</a>";
-			if ($dozname == "") $dozname = "- - -";
-		} else {
-			//Create Dozenten-field
-			$sem_id=$db->f("Seminar_id");
-			$dozname ="";
-			$i=0;
-			$db2->query("SELECT username, Vorname, Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
-			while (($db2->next_record()) && ($i<=3)) {
-				if ($i) $dozname .= ", ";
-				$dozname .= "<a href=\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname"))."</a>";
-				//more than 3 Dozenten are two much, link to the details.php for more info
-				if ($i==3)
-					$dozname .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
-				$i++;
+
+		//----------------------
+				
+		//create the Einrichtungen Colummn
+		if ($sem_browse_data["group_by"] != "einrichtung") {			
+			if ($sem_browse_data["sortby"] == "Institut") { // so it's easy
+				$einrichtungen = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Institut"))."</a>";
+				if ($einrichtungen == "") $einrichtungen = "- - -";
+			} else {
+				//Create Einrichtungen-field
+				$sem_id=$db->f("Seminar_id");
+				$einrichtungen ="";
+				$i=0;
+				$db2->query("SELECT Name FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE Seminar_id = '$sem_id' ORDER BY Name");
+				while (($db2->next_record()) && ($i<=3)) {
+					if ($i) $einrichtungen .= ", ";
+					$einrichtungen .= "<a href=\"institut_main.php?auswahl=".$db2->f("institut_id")."\">".htmlReady($db2->f("Name"))."</a>";
+					//more than 2 Einrichtungen are two much, link to the details.php for more info
+					if ($i==3)
+						$einrichtungen .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
+					$i++;
+				}
+				if ($einrichtungen == "") $einrichtungen = "- - -";
 			}
-			if ($dozname == "") $dozname = "- - -";
+			echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$einrichtungen,"&nbsp;</font></td>";
 		}
-		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$dozname,"&nbsp;</font></td>";
-		if ($sem_browse_data["extend"]=="yes")
-			{
-			echo "<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>", $SEM_TYPE[$db->f("status")]["name"]." <br>(Kategorie ", $SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"],")</font></td>";
+	
+		//----------------------
+			
+		//create the Dozenten Colummn
+		if ($sem_browse_data["group_by"] != "dozent") {		
+			if ($sem_browse_data["sortby"] == "Nachname") { // so it's easy
+				$dozname = "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname"))."</a>";
+				if ($dozname == "") $dozname = "- - -";
+			} else {
+				//Create Dozenten-field
+				$sem_id=$db->f("Seminar_id");
+				$dozname ="";
+				$i=0;
+				$db2->query("SELECT username, Vorname, Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
+				while (($db2->next_record()) && ($i<=3)) {
+					if ($i) $dozname .= ", ";
+					$dozname .= "<a href=\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname"))."</a>";
+					//more than 3 Dozenten are two much, link to the details.php for more info
+					if ($i==3)
+						$dozname .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
+					$i++;
+				}
+				if ($dozname == "") $dozname = "- - -";
+			}
+			echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$dozname,"&nbsp;</font></td>";
+		}
+		
+		//----------------------
+		
+		//create the Semester colummn
+		if ($sem_browse_data["group_by"] != "semester")
+			echo "<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>".get_semester($db->f("Seminar_id"), TRUE)."</font></td>";
+		
+		//----------------------
+				
+		//create extended fields
+		if ($sem_browse_data["extend"]=="yes") {
+			//Typ
+			if ($sem_browse_data["group_by"] != "typ")
+				echo "<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>", $SEM_TYPE[$db->f("status")]["name"]." <br>(Kategorie ", $SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"],")</font></td>";
+	
 			//Meinen Status ermitteln
 			$user_id = $auth->auth["uid"];
 			$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
@@ -725,7 +815,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 						echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
 					break;
 					case 1 :
-						if ($perm->have_perm("autor"))
+							if ($perm->have_perm("autor"))
 							echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\"></td>";
 						else
 							echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
@@ -754,7 +844,8 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			}
 			echo"</tr>";
 		}
-	}
+
+	
 	if ((!$sem_browse_data["sset"]) && ($sem_browse_data["extern"] <> "yes")) {
 		echo "<tr><td class=\"steel1\" ";
 		if ($sem_browse_data["extend"]=="yes") 
@@ -767,10 +858,10 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 		else
 			echo"<a href=\"$PHP_SELF?level=b&id=".$sem_browse_data["oid"]."&oid=".$sem_browse_data["oid2"]."\">eine Ebene zur&uuml;ck</a>";
 	}
+
 	echo"</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
 	ob_end_flush();
-	}
-
+}
 
 
 //Uebersicht ueber die Institute einer Fakultaet
