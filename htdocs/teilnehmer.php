@@ -153,7 +153,7 @@ if ($cmd=="pleasure") {
 		if ($db->next_record()) {
 			$userchange=$db->f("user_id");
 			$fullname = $db->f("fullname");
-			$db->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
+			$db->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 			$msg = "msg§" . sprintf(_("Bef&ouml;rderung von %s durchgef&uuml;hrt"), $fullname) . "§";
 		}
 		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -170,7 +170,7 @@ if ($cmd=="pain") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$fullname = $db->f("fullname");
-		$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
+		$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 			$msg = "msg§" . sprintf (_("Das Mitglied %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), $fullname) . "§";
 		} else {
@@ -189,7 +189,7 @@ if ($cmd=="schreiben") {
 		if ($db->next_record()) {
 			$userchange=$db->f("user_id");
 			$fullname = $db->f("fullname");
-			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
+			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 			$msg = "msg§" . sprintf(_("User %s wurde als Autor in die Veranstaltung aufgenommen."), $fullname) . "§";
 		}
 		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -206,7 +206,7 @@ if ($cmd=="lesen") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$fullname = $db->f("fullname");
-		$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
+		$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 		$msg = "msg§" . sprintf(_("Der/die AutorIn %s wurde auf den Status 'Leser' zur&uuml;ckgestuft."), $fullname) . "§";
 		$msg.= "info§" . _("Um jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
 				. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts als 'Autor' anmelden.") . "§";
@@ -223,7 +223,7 @@ if ($cmd=="raus") {
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$fullname = $db->f("fullname");
-		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
+		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 
 		setTempLanguage($userchange);
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
