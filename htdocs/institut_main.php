@@ -122,7 +122,7 @@ if ($nclose)
 	}
 
 	if ($db->f("email")) {
-		echo "<b>" . _("E-Mail:") . " </b>"; echo htmlReady($db->f("email")); echo"<br>";
+		echo "<b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br>";
 	}
 
 	if ($db->f("fakultaet_name")) {
