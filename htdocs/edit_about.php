@@ -1035,9 +1035,9 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    $my_about->select_studiengang();
    echo "</div><br></b>Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.<br>";
    echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
+   echo "<a name=\"studiengaenge\"></a>";
    echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
    echo "</form>";
-   echo "<a name=\"studiengaenge\"></a>";
    }
  echo "</td></tr></table>";
 
@@ -1076,9 +1076,9 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    $my_about->select_inst();
    echo "</div><br></b>Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie die entsprechenden Felder in der linken Tabelle.<br>";
    echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
+   echo "<a name=\"einrichtungen\"></a>";   
    echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
    echo "</form>";
-   echo "<a name=\"einrichtungen\"></a>";   
    }
  echo "</td></tr></table>";
 }   
@@ -1093,19 +1093,16 @@ IF ($view=="Lebenslauf"){
   echo "<br>&nbsp; </td></tr>\n<tr><td class=blank><table align=\"center\" width=\"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>";
   echo "<tr><form action=\"$PHP_SELF?cmd=edit_leben&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
   echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Lebenslauf:</b><br>";
-  echo "<textarea  name=\"lebenslauf\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["lebenslauf"])."</textarea></td></tr>\n";
-    echo "<a name=\"lebenslauf\"></a>";  
+  echo "<textarea  name=\"lebenslauf\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["lebenslauf"])."</textarea><a name=\"lebenslauf\"></a></td></tr>\n";
   if ($my_about->auth_user["perms"] == "dozent"){
        $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Schwerpunkte:</b><br>";
-	echo "<textarea  name=\"schwerp\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["schwerp"])."</textarea></td></tr>\n";
-        echo "<a name=\"schwerpunkte\"></a>";   
+	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Schwerpunkte:</b><br>";
+	echo "<textarea  name=\"schwerp\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["schwerp"])."</textarea><a name=\"schwerpunkte\"></a></td></tr>\n";
         $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Publikationen:</b><br>";
-	echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea></td></tr>\n";
-        echo "<a name=\"publikationen\"></a>";   
+	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Publikationen:</b><br>";
+	echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
 	}
-  echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"><br><br></blockquote></td></tr>\n</table>\n</td>";
+  echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"><br></blockquote></td></tr>\n</table>\n</td>";
 }
 
 IF ($view=="Sonstiges"){
