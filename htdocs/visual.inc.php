@@ -318,6 +318,7 @@ function quotes_encode ($description,$author) {
 
 // Hilfsfunktion für formatReady
 function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
+	print "<p>Format help: show_comments=$show_comments"; // DEBUG
 
 	if (preg_match_all("'\[code\](.+)\[/code\]'isU", $what, $match_code)) {
 		$what = htmlReady($what, $trim, FALSE);
@@ -360,6 +361,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 * @return       string
 */
 function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
+	print "<p>FormatReady: show_comments=$show_comments"; // DEBUG
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{-*~*%}', $what);
@@ -392,17 +394,20 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show
 * @return       string
 */
 function wikiReady ($what, $trim = TRUE, $extern = FALSE, $show_comments="icon") {
+	print "<p>wikiReady: show_comments=$show_comments"; // DEBUG
 	return formatReady ($what, $trim, $extern, TRUE, $show_comments);
 }
 
 /**
-* a special wiki formatting routine (unused the moment)
+* a special wiki formatting routine (used for comments)
 *
 *
 * @access       public
 * @param        string $text		what to format
+* @param	string	$show_comments	How to show comments
 */
 function wiki_format ($text, $show_comments) {
+	print "<p>wiki_format: show_comments=$show_comments"; // DEBUG
 	if ($show_comments=="icon" || $show_comments=="all") {
 		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#emU","format_wiki_comment('\\2','\\1',$show_comments)",$text);
 	} else {
@@ -417,6 +422,9 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 	if ($show_comment=="all") {
 		$commenttmpl="<table style=\"border:thin solid;margin: 5px;\" bgcolor=\"#ffff88\"><tr><td><font size=-1><b>"._("Kommentar von")." %s:</b>&nbsp;</font></td></tr><tr class=steelgrau><td class=steelgrau><font size=-1>%s</font></td></tr></table>";
 	} elseif ($show_comment=="icon") {
+		$trans_tbl = array_flip(get_html_translation_table (HTML_ENTITIES));
+		$comment = strtr($comment, $trans_tbl);
+		$comment = preg_replace("/<.*>/U","",$comment);
 		$commenttmpl="<img src=\"pictures/icon-posting.gif\" alt=\"%s: %s\" title=\"%s: %s\" ".tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE).">";
 	} else {
 		echo "<p>Error: unknown show_comment value in format_wiki_comment: ".$show_comment."</p>";
