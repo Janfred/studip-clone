@@ -45,6 +45,12 @@ if ($dopen)
        
 if ($dclose)
 	$index_data["dopen"]='';
+	
+// evaluate language clicks
+if (isset($set_language)) {
+$sess->register($set_language);
+$_language = $set_language;
+}
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -110,7 +116,21 @@ ELSEIF (!$perm->have_perm("dozent")){ ?>
   <area shape="rect" coords="23,246,290,299" href="help/index.php" target="_new">
 </map>
 
-</td></tr><tr>
+</td></tr>
+
+<tr><td class="blank" colspan="3" align="right">
+<?
+
+// choose language
+foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
+	printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
+}
+unset($temp_language_key); unset($temp_language);
+
+?>
+&nbsp;&nbsp;</td></tr>
+
+<tr>
 <td class="blank" nowrap align=left valign=bottom>
 	&nbsp; <a href="index.php?again=yes"><font size=2 color="#6699CC">Login</font></a>&nbsp; 
 	<a href="register1.php"><font size=2 color="#6699CC">Registrieren</font></a>&nbsp; 
