@@ -267,11 +267,11 @@ class StudipSemSearch {
 			}
 			if ($_REQUEST[$this->form_name . "_qs_choose"] == 'all'){
 				foreach ($this->search_fields['qs_choose']['content'] as $key => $value){
-					$_REQUEST[$this->form_name . "_" . $key] = $_REQUEST[$this->form_name . "_quick_search"];
+					$_REQUEST[$this->form_name . "_" . $key] = trim($_REQUEST[$this->form_name . "_quick_search"]);
 				}
 				$combination = "OR";
 			} else {
-				$_REQUEST[$this->form_name . "_" . $_REQUEST[$this->form_name . "_qs_choose"]] = $_REQUEST[$this->form_name . "_quick_search"];
+				$_REQUEST[$this->form_name . "_" . $_REQUEST[$this->form_name . "_qs_choose"]] = trim($_REQUEST[$this->form_name . "_quick_search"]);
 			}
 			if (is_array($this->override_sem)){
 				$clause = " HAVING sem_number IN(" . join(",",$this->override_sem) . ") ";
@@ -331,9 +331,9 @@ class StudipSemSearch {
 		
 		
 		if (isset($_REQUEST[$this->form_name . "_lecturer"]) && strlen($_REQUEST[$this->form_name . "_lecturer"]) > 2){
-			$this->view->params[0] = "%".$_REQUEST[$this->form_name . "_lecturer"]."%";
-			$this->view->params[1] = "%".$_REQUEST[$this->form_name . "_lecturer"]."%";
-			$this->view->params[2] = "%".$_REQUEST[$this->form_name . "_lecturer"]."%";
+			$this->view->params[0] = "%".trim($_REQUEST[$this->form_name . "_lecturer"])."%";
+			$this->view->params[1] = "%".trim($_REQUEST[$this->form_name . "_lecturer"])."%";
+			$this->view->params[2] = "%".trim($_REQUEST[$this->form_name . "_lecturer"])."%";
 			$this->view->params[3] = $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_SEARCH_LECTURER"));
 			$this->search_result = $snap;
@@ -348,11 +348,11 @@ class StudipSemSearch {
 		if ((isset($_REQUEST[$this->form_name . "_title"]) && strlen($_REQUEST[$this->form_name . "_title"]) > 2) ||
 			(isset($_REQUEST[$this->form_name . "_sub_title"]) && strlen($_REQUEST[$this->form_name . "_sub_title"]) > 2) ||
 			(isset($_REQUEST[$this->form_name . "_comment"]) && strlen($_REQUEST[$this->form_name . "_comment"]) > 2)){
-			$this->view->params[0] = ($_REQUEST[$this->form_name . "_title"]) ? " Name LIKE '%".$_REQUEST[$this->form_name . "_title"]."%' " : " ";
+			$this->view->params[0] = ($_REQUEST[$this->form_name . "_title"]) ? " Name LIKE '%".trim($_REQUEST[$this->form_name . "_title"])."%' " : " ";
 			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_title"] && $_REQUEST[$this->form_name . "_sub_title"]) ? $combination : " ";
-			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_sub_title"]) ? " Untertitel LIKE '%".$_REQUEST[$this->form_name . "_sub_title"]."%' " : " ";
+			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_sub_title"]) ? " Untertitel LIKE '%".trim($_REQUEST[$this->form_name . "_sub_title"])."%' " : " ";
 			$this->view->params[0] .= (($_REQUEST[$this->form_name . "_title"] || $_REQUEST[$this->form_name . "_sub_title"]) && $_REQUEST[$this->form_name . "_comment"]) ? $combination : " ";
-			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_comment"]) ? " Beschreibung LIKE '%".$_REQUEST[$this->form_name . "_comment"]."%' " : " ";
+			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_comment"]) ? " Beschreibung LIKE '%".trim($_REQUEST[$this->form_name . "_comment"])."%' " : " ";
 			$this->view->params[0] = "(" . $this->view->params[0] .")";
 			$this->view->params[1] =  $and_clause . $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_SEARCH_SEM"));
@@ -369,7 +369,7 @@ class StudipSemSearch {
 		}
 		
 		if (isset($_REQUEST[$this->form_name . "_scope"]) && strlen($_REQUEST[$this->form_name . "_scope"]) > 2){
-			$this->view->params[0] = "%".$_REQUEST[$this->form_name . "_scope"]."%";
+			$this->view->params[0] = "%".trim($_REQUEST[$this->form_name . "_scope"])."%";
 			$this->view->params[1] = $and_clause . $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_TREE_SEARCH_SEM"));
 			if ($this->found_rows === false){
