@@ -68,7 +68,7 @@ function change_general_view() {
 				} else
 					echo _("Sie müssen in Ihrem Browser Javascript aktivieren um dieses Feature nutzen zu können.");
 				?>
-				</td><td   width="60%" class="<? echo $cssSw->getClass() ?>"><br><font size="2"><?print _("Mit dieser Funktion können sie durch reines Überfahren bestimmer Icons im System (Forum, Addresbuch) den entsprechenden Beitrag lesen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch größere Informationsmengen arbeiten. Da jedoch die Ladezeit der Seite erheblich ansteigt, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens eine ISDN Verbindung haben.");?></font><br><br></td></tr>								
+				</td><td   width="60%" class="<? echo $cssSw->getClass() ?>"><br><font size="2"><?print _("Mit dieser Funktion k&ouml;nnen sie durch reines &Uuml;berfahren bestimmter Icons mit dem Mauszeiger (z.B. in den Foren oder im Addresbuch) die entsprechenden Eintr&auml;ge anzeigen lassen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch gr&ouml;&szlig;ere Informationsmengen arbeiten. Da jedoch die Ladezeiten der Seiten erheblich ansteigen, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens &uuml;ber eine ISDN Verbindung verf&uuml;gen.");?></font><br><br></td></tr>								
 				
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;

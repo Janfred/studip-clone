@@ -194,7 +194,7 @@ function topic_liste ($eintrag, $root_id, $open, $name, $author, $create_dt, $ro
 			."#anker\" class=\"printhead\">".htmlReady(mila($root_name,20))
 			."</a>"
 			."&nbsp; ";
-		if (!(have_sem_write_perm()))  $zusatz .= "<a href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$eintrag."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Klicken um in einem neuen Fenster zu antworten")) . "></a>"; // Antwort-Pfeil
+		if (!(have_sem_write_perm()))  $zusatz .= "<a href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$eintrag."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; // Antwort-Pfeil
 		//create a link onto the titel, too
 		if ($link)
 			$name = "<a href=\"$link\" class=\"tree\" >".htmlReady(mila($name))."</a>";
@@ -234,7 +234,7 @@ function topic_liste ($eintrag, $root_id, $open, $name, $author, $create_dt, $ro
 			."</a>"
 			."&nbsp; ";
 		if (!(have_sem_write_perm()))
-			$zusatz .= "<a href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$eintrag."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Klicken um in einem neuen Fenster zu antworten")) . "></a>"; // antwort pfeil
+			$zusatz .= "<a href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$eintrag."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; // antwort pfeil
 		echo "<a name='anker'></a><table width=\"90%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
 		if ($write AND $eintrag!=$davor) {    //wir sind im Schreibmodus
 			$form=TRUE;
@@ -296,7 +296,7 @@ function NTForum ($what, $r_topic_id, $description="", $name="", $neu="FALSE", $
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"] AND $description!="") {      
 				if ($themenview) { // wir kommen aus der Themenansicht
 					$hoverlink = "<a href=\"forum.php?topic_id=".$r_topic_id."&all=TRUE#anker\" ";
-					$txt = "<i>" . _("Klicken um alle Postings im Ordner zu &ouml;ffnen") . "</i>";
+					$txt = "<i>" . _("Hier klicken um alle Postings im Ordner zu &ouml;ffnen") . "</i>";
 				} else {
 					$hoverlink = "<a href=\"javascript:void(0);\" ";
 					$txt = "";
@@ -435,7 +435,7 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="") {
 				$zusatz .= "&nbsp;".date("d.m.Y - H:i", $r_mkdate)
 					."&nbsp; ";
 				IF (!(have_sem_write_perm()))
-					$zusatz .= "<a class=\"printhead\" href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$r_topic_id."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Klicken um in einem neuen Fenster zu antworten")) . "></a>"; //user brauchen kein antworten
+					$zusatz .= "<a class=\"printhead\" href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$r_topic_id."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; //user brauchen kein antworten
 				IF ($write AND $davor!=$r_topic_id) {  // es wird geschrieben oder editiert
 					$form = TRUE;
 					echo "<input type=hidden name=view value=$view>";
@@ -499,7 +499,7 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="") {
 				$zusatz .= "&nbsp;".date("d.m.Y - H:i", $r_mkdate)
 					."&nbsp; ";
 				IF (!(have_sem_write_perm()))
-					$zusatz .= "<a class=\"printhead\" href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$r_topic_id."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Klicken um in einem neuen Fenster zu antworten")) . "></a>"; // haben user Rechte? 
+					$zusatz .= "<a class=\"printhead\" href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$r_topic_id."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>"; // haben user Rechte? 
 				//create a link onto the titel, too
 				if ($link)
 					$r_name = "<a href=\"$link\" class=\"tree\" >".htmlReady(mila($r_name))."</a>";
@@ -540,9 +540,9 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 			$text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter <b>neues Thema</b> einen Ordner anlegen.");
 		ELSE {
 			if ($SessSemName["class"]=="inst")
-				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.");
+				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Ordner anlegen zu lassen.");
 			else
-				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den Administrator der Einrichtung, um Ordner anlegen zu lassen.");
+				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Ordner anlegen zu lassen.");
 		}
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 		parse_msg("info§$text");
@@ -585,7 +585,7 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 			IF (!(have_sem_write_perm()))
 				$zusatz .=	"&nbsp; " // antwort-Pfeile
 						."<a href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$root_id."\" target=\"_new\">"
-						."<img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Klicken um in einem neuen Fenster zu antworten")) . "></a>";
+						."<img src=\"pictures/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
 
 // Aufgeklappt
 
@@ -758,9 +758,9 @@ if ($view=="neue") {
 		IF ($rechte) $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter <b>neues Thema</b> einen Ordner anlegen.");
 		ELSE {
 			if ($SessSemName["class"]=="inst")
-				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.");
+				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Ordner anlegen zu lassen.");
 			else
-				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den Administrator der Einrichtung, um Ordner anlegen zu lassen.");
+				 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Ordner anlegen zu lassen.");
 		}
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 		parse_msg("info§$text");

@@ -179,7 +179,7 @@ function form() {
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
-	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Bescheibung der Datei ein.") . "</font></td></tr>";
+	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Beschreibung der Datei ein.") . "</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 	$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
 	$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
@@ -334,7 +334,7 @@ function validate_upload($the_file) {
 		
 		//pruefen ob die Groesse stimmt.
 		if ($the_file_size > $max_filesize) {
-			$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse zum Upload (%s Megabyte) wurde &uuml;berschritten!"), $max_filesize / 1048576);
+			$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse f&uuml;r einen Upload (%s Megabyte) wurde &uuml;berschritten!"), $max_filesize / 1048576);
 		}
 	}
 	if ($emsg) {
@@ -675,7 +675,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$content= _("Keine Beschreibung vorhanden");
 			
 			if ($move == $db->f("folder_id")) 
-				$content.="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen")) . ">");
+				$content.="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 			
 			if ($upload == $db->f("folder_id")) {
 				$content.=upload_item ($upload,FALSE,FALSE);
@@ -811,7 +811,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						}
 			
 					if ($move == $db3->f("dokument_id"))
-						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um diese Datei in einen anderen Ordner einzuf&uuml;gen."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 										
 					$content.= "\n";	
 										

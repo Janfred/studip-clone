@@ -91,8 +91,8 @@ if ($topic_id AND !$update) {
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
 		echo "<br><br>";
-		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekten wie falsch einsortierten Postings zu vermeiden,<br>empfehlen wir im System nur ein Browserfenster zu verwenden.") . "</font>", "§",
-				_("zuviele Browserfenster im Forenbereich"), 
+		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
+				_("zuviele Browserfenster im Forenbereich!"), 
 				"");
 		die;
 	}
@@ -101,8 +101,8 @@ if ($topic_id AND !$update) {
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$open' AND Seminar_id ='$SessSemName[1]'");
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
 		echo "<br><br>";
-		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekten wie falsch einsortierten Postings zu vermeiden,<br>empfehlen wir im System nur ein Browserfenster zu verwenden.") . "</font>", "§",
-				_("zuviele Browserfenster im Forenbereich"), 
+		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
+				_("zuviele Browserfenster im Forenbereich!"), 
 				"");
 		die;
 	}
@@ -131,7 +131,7 @@ IF ($cmd == "kill" && $topic_id !="") {
 			echo "\n\n<table class=\"blank\" cellspacing=0 cellpadding=5 border=0 width=\"100%\"><colgroup span=1></colgroup>\n";
 			$msg="info§" . sprintf(_("Wollen Sie das untenstehende Posting %s von %s wirklich l&ouml;schen?"), "<b>".htmlReady($db->f("name"))."</b>", "<b>".$db->f("author")."</b>") . "<br>\n";
 			if ($count)
-				$msg.= sprintf(_("Alle %s Antworten darauf werden ebenfalls gel&ouml;scht!"), $count) . "<br />\n<br />\n";
+				$msg.= sprintf(_("Alle %s Antworten auf diesen Beitrag werden ebenfalls gel&ouml;scht!"), $count) . "<br />\n<br />\n";
 			$msg.="<a href=\"".$PHP_SELF."?cmd=really_kill&topic_id=$topic_id&view=$view&mehr=$mehr#anker\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 			$msg.="<a href=\"".$PHP_SELF."?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker\">" . makeButton("nein", "img") . "</a>\n";
 			parse_msg($msg, '§', 'blank', '1', FALSE);

@@ -347,7 +347,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 			$Zeit=date("H:i:s, d.m.Y",time());
 
 	 		if (!$validator->ValidateEmailAddress($email)) {
-				$this->msg=$this->msg . "errorß" . _("Die E-Mail Addresse fehlt oder ist falsch geschrieben!") . "ß";
+				$this->msg=$this->msg . "errorß" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "ß";
 	 			return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
 	 		}
 
@@ -362,7 +362,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 					$from, array($to),
 					array("From: $from", "To: $to", "Subject: edit_about"),
 					"Emailbox unbekannt\n\nUser: ".$this->auth_user["username"]."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-					$this->msg=$this->msg . "errorß" . _("Die angegebene E-Mail Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "ß";
+					$this->msg=$this->msg . "errorß" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "ß";
 					return false;
 	 			}
 			}
@@ -668,12 +668,12 @@ function checkusername(){
  var re_username = /^([a-zA-Z0-9_@-]*)$/;
  var checked = true;
  if (document.pers.new_username.value.length<4) {
-	alert("Der Benutzername ist zu kurz \n- er sollte mindestens 4 Zeichen lang sein.");
+	alert("<?=_("Der Benutzername ist zu kurz \n- er sollte mindestens 4 Zeichen lang sein.")?>");
 	 document.pers.new_username.focus();
 	checked = false;
 	}
  if (re_username.test(document.pers.new_username.value)==false) {
-	alert("Der Benutzername enth‰lt unzul‰ssige Zeichen\n- er darf keine Sonderzeichen oder Leerzeichen enthalten.");
+	alert("<?=_("Der Benutzername enth‰lt unzul‰ssige Zeichen\n- er darf keine Sonderzeichen oder Leerzeichen enthalten.")?>");
 	 document.pers.new_username.focus();
 	checked = false;
 	}
@@ -683,13 +683,13 @@ function checkusername(){
 function checkpassword(){
  var checked = true;
  if (document.pers.password.value.length<4) {
-	alert("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.");
+	alert("<?=_("Das Passwort ist zu kurz \n- es sollte mindestens 4 Zeichen lang sein.")?>");
 	 document.pers.password.focus();
 	checked = false;
 	}
  if (document.pers.password.value != document.pers.check_pass.value)
 	{
-	alert("Bei der Wiederholung des Paﬂwortes ist ein Fehler aufgetreten! Bitte geben sie das exakte Paﬂwort ein!");
+	alert("<?=_("Bei der Wiederholung des Paﬂwortes ist ein Fehler aufgetreten! Bitte geben sie das exakte Paﬂwort ein!")?>");
 	document.pers.check_pass.focus();
 	checked = false;
 	}
@@ -701,7 +701,7 @@ function checkvorname(){
  var re_vorname = /^([a-zA-Zƒ÷‹][^0-9"¥'`\/\\\(\)\[\]]+)$/;
  var checked = true;
  if (re_vorname.test(document.pers.vorname.value)==false) {
-	alert("Bitte geben Sie Ihren tats‰chlichen Vornamen an.");
+	alert("<?=_("Bitte geben Sie Ihren tats‰chlichen Vornamen an.")?>");
 	 document.pers.vorname.focus();
 	checked = false;
 	}
@@ -712,7 +712,7 @@ function checknachname(){
  var re_nachname = /^([a-zA-Zƒ÷‹][^0-9"¥'`\/\\\(\)\[\]]+)$/;
  var checked = true;
  if (re_nachname.test(document.pers.nachname.value)==false) {
-	alert("Bitte geben Sie Ihren tats‰chlichen Nachnamen an.");
+	alert("<?=_("Bitte geben Sie Ihren tats‰chlichen Nachnamen an.")?>");
 	 document.pers.nachname.focus();
 	checked = false;
 	}
@@ -724,7 +724,7 @@ function checkemail(){
  var email = document.pers.email.value;
  var checked = true;
  if ((re_email.test(email))==false || email.length==0) {
-	alert("Die E-Mail Adresse ist nicht korrekt!");
+	alert("<?=_("Die E-Mail-Adresse ist nicht korrekt!")?>");
 	 document.pers.email.focus();
 	checked = false;
 	}
