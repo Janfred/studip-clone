@@ -175,10 +175,10 @@ if (($contact["view"])=="alpha") {
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
-	echo "<td width=\"5%\" align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\" "
+	echo "<td width=\"8%\" align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\" "
 		. tooltip(($size_of_book == 1) ? _("1 Eintrag") : sprintf(_("%d Einträge"),$size_of_book),false)
 		."><a href=\"$PHP_SELF?filter=all\">a-z</a>"
-		."</td>";
+		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a></td>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
