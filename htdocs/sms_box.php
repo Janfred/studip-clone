@@ -467,7 +467,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 						<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
 							<input type=\"hidden\" name=\"cmd\" value=\"admin_folder\">
 							<input type=\"hidden\" name=\"ren_folder\" value=\"".$my_messaging_settings["folder"][$sms_data['view']][$x]."\">
-							<input type=\"image\" name=\"x\" border=\"0\" ".makeButton("unregelmaessig", "src")." value=\"a\" align=\"absmiddle\">
+							<input type=\"image\" name=\"x\" border=\"0\" ".makeButton("umbenennen", "src")." value=\"a\" align=\"absmiddle\">
 						</form>
 						<br><img src=\"pictures/blank.gif\" height=\"5\"><br>"._("markierte Nachrichten:")."
 						<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
@@ -511,7 +511,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 
 		$infobox = array($tmp_array_1,
 			array("kategorie" => _("Information:"),"eintrag" => array(
-				array("icon" => "pictures/ausruf_small.gif", "text" => sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), count_rec_messages_from_user($user->id), count_snd_messages_from_user($user->id))))),
+				array("icon" => "pictures/ausruf_small.gif", "text" => sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), count_messages_from_user("rec"), count_messages_from_user("snd"))))),
 			array("kategorie" => _("Nachrichten filtern:"),"eintrag" => array(
 				array("icon" => "pictures/suchen.gif", "text" => $time_by_links))),
 			array("kategorie" => _("Optionen:"),"eintrag" => array(

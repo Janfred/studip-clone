@@ -296,11 +296,9 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 						echo "<select size=\"1\" width=\"100\" name=\"freesearch[]\">";
 						while ($db->next_record()) {
 							if (empty($sms_data["p_rec"])) {
-								if (get_username($user->id) != $db->f("username")) {
-									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))." (".$db->f("username").") - ".$db->f("perms")."</option>";
-								}							
+								echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))." (".$db->f("username").") - ".$db->f("perms")."</option>";
 							} else {
-								if (!in_array($db->f("username"), $sms_data["p_rec"]) && get_username($user->id) != $db->f("username")) {
+								if (!in_array($db->f("username"), $sms_data["p_rec"])) {
 									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))." (".$db->f("username").") - ".$db->f("perms")."</option>";
 								}
 							}
