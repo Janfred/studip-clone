@@ -116,8 +116,8 @@ class StudipAuthLdap extends StudipAuthAbstract {
 		if (!($user_dn = $this->getUserDn($username))){
 			return false;
 		}
-		if ($this->anonymous_bind && !$password){
-			$this->error_msg = _("Kein Passwort eingegeben."); //some ldap servers seem to allow binding without passwort, if anonymous bind is enabled
+		if (!$password){
+			$this->error_msg = _("Kein Passwort eingegeben."); //some ldap servers seem to allow binding with a user dn and  without a password, if anonymous bind is enabled
 			return false;
 		}
 		if (!($r = @ldap_bind($this->conn, $user_dn, $password))){
