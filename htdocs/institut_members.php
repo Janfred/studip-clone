@@ -79,6 +79,7 @@ else{
 }
 
 checkObject();
+checkObjectModule("personal");
 
 require($ABSOLUTE_PATH_STUDIP."links_openobject.inc.php");
 

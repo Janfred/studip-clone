@@ -37,6 +37,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 checkObject();
+checkObjectModule("schedule");
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	

@@ -34,6 +34,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 checkObject(); // do we have an open object?
+checkObjectModule("literature");
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	

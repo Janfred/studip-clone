@@ -37,6 +37,7 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
 
 checkObject();
+checkObjectModule("participants");
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	
