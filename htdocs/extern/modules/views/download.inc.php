@@ -45,21 +45,14 @@ $query = "SELECT Name FROM Institute WHERE Institut_id=\"{$this->config->range_i
 $db->query($query);
 if(!$db->next_record())
 	$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
-/*
-else {
-	// checken der Zugangsberechtigung zu diesem Seminar als nobody
-	$query = "SELECT Lesezugriff FROM seminare WHERE Seminar_id=\"$seminar_id\"";
-	$db->query($query);
-	if(!$db->next_record())
-		die($text_no_files);
-	elseif ($db->f("Lesezugriff") != "0")
-		die("Sie besitzen im angegebenen Seminar keine Leseberechtigung!");
-}*/
 
 // Daten holen
-$query = "SELECT dokument_id, description, filename, mkdate, chdate, filesize, Vorname, Nachname "
-       . "FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) WHERE "
-			 . "Seminar_id=\"{$this->config->range_id}\"";
+global $_fullname_sql;
+$query = "SELECT dokument_id, description, filename, mkdate, chdate, filesize, ";
+$query .= $_fullname_sql[$this->config->getValue("Main", "nametitle")];
+$query .= "AS fullname FROM dokumente LEFT JOIN user_info USING (user_id) ";
+$query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE "
+$query .= "Seminar_id=\"{$this->config->range_id}\"";
 
 $sort = $this->config->getValue("Main", "sort");
 sort($sort, SORT_NUMERIC);
@@ -90,11 +83,26 @@ if ($this->config->getValue("TableHeader", "width_pp") == "PERCENT")
 $alias_download = $this->config->getValue("Main", "aliases");
 $visible = $this->config->getValue("Main", "visible");
 
+$set_1 = $this->config->getAttributes("TableHeadrow", "th");
+$set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
+$zebra = $this->config->getValue("TableHeadrow", "th_zebrath_");
 $i = 0;
 reset($rf_download);
 foreach($rf_download as $spalte){
-	if ($visible[$spalte] == "TRUE") {
-		echo "<th" . $this->config->getAttributes("TableHeadrow", "th") . " width=\"" . $breite_download[$spalte] . "$percent\">";
+	if ($visible[$spalte]) {
+	
+		// "zebra-effect" in head-row
+		if ($zebra) {
+			if ($i % 2)
+				$set = $set_2;
+			else
+				$set = $set_1;
+		}
+		else
+			$set = $set_1;
+		
+		echo "<th$set width=\"" . $breite_download[$spalte] . "$percent\">";
+		
 		if($alias_download[$spalte] == "")
 			echo "<b>&nbsp;</b>\n";
 		else 
@@ -115,11 +123,10 @@ if ($error_message) {
 	exit;
 }
 
-/*
-// Daten ausgeben
-$switch_bgcolor = 1;
-$bgcolor = $hgtabelle;
-*/
+$set_1 = $this->config->getAttributes("TableRow", "td");
+$set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
+$zebra = $this->config->getValue("TableRow", "td_zebratd_");
+
 while($db->next_record()){
 
 	preg_match("/^.+\.([a-z1-9_-]+)$/i", $db->f("filename"), $file_suffix);
@@ -185,7 +192,8 @@ while($db->next_record()){
 											 
 		"description" => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font")
-											, htmlReady($db->f("description"))),
+											, htmlReady(mila_extern($db->f("description"),
+												$this->config->getValue("Main", "lengthdesc")))),
 		
 		"date"        => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font")
@@ -198,29 +206,44 @@ while($db->next_record()){
 												
 		"name"        => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font")
-											, htmlReady($db->f("Vorname")." ".$db->f("Nachname")))
+											, htmlReady($db->f("fullname")))
 	);
-
-/*	// Hintergrundfarbe umschalten (zeilenweise)
-	if(isset($hgtabelle_2) && $hgschraffur == "ZEILE"){
-		if($switch_bgcolor % 2 == 1)
-			$bgcolor = $hgtabelle_2;
+	
+	// "horizontal zebra"
+	if ($zebra == "HORIZONTAL") {
+		if ($i % 2)
+			$set = $set_2;
 		else
-			$bgcolor = $hgtabelle;
-		$switch_bgcolor++;
-	}*/
+			$set = $set_1;
+	}
+	else
+		$set = $set_1;
 	
 	echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">\n";
+	
+	$j = 0;
 	reset($rf_download);
 	foreach($rf_download as $spalte){
-		if ($visible[$spalte] == "TRUE") {
-			if($daten[$this->data_fields[$spalte]] == "")
-				echo "<td" . $this->config->getAttributes("TableRow", "td") . ">&nbsp;</td>\n";
+		
+		// "vertical zebra"
+		if ($zebra == "VERTICAL") {
+			if ($j % 2)
+				$set = $set_2;
 			else
-				echo "<td" . $this->config->getAttributes("TableRow", "td") . "><font" . $this->config->getAttributes("TableRow", "font") . ">" . $daten[$this->data_fields[$spalte]] . "</font></td>\n";
+				$set = $set_1;
+		}
+	
+		if ($visible[$spalte]) {
+			if($daten[$this->data_fields[$spalte]] == "")
+				echo "<td$set>&nbsp;</td>\n";
+			else
+				echo "<td$set>" . $daten[$this->data_fields[$spalte]] . "</td>\n";
+			$j++;
 		}
 	}
+	
 	echo "</tr>\n";
+	$i++;
 }
 
 echo "\n</table>";
