@@ -481,14 +481,15 @@ else
 				<?
 				if ($db2->f("admission_selection_take_place") == 1) {
 					if ($db2->f("admission_type") == 1)
+						printf ("<font size=-1>Die Teilnehmerauswahl wurde nach dem Losverfahren am %s Uhr festgelegt. Weitere Teilnehmer k&ouml;nnen per Warteliste einen Platz bekommen.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+					else
+						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurd am %s aufgehoben.Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				} else {
+					if ($db2->f("admission_type") == 1)
 						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 					else
 						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wird am %s aufgehoben.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
-				} else
-					if ($db2->f("admission_type") == 1)
-						printf ("<font size=-1>Die Teilnehmerauswahl wurde dem Losverfahren am %s Uhr festgelegt. Weitere Teilnehmer k&ouml;nnen per Warteliste einen Platz bekommen.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
-					else
-						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurd am %s aufgehoben.Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				}
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
