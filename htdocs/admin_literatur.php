@@ -107,7 +107,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	 ?>
        	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="topic" colspan=2>&nbsp;<b>
 	<?
 	echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));

@@ -84,8 +84,7 @@ if ($send_from_search)
 elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 	{
 	include "links1.php";
-	include "links2.php";
-	
+
 	$sem_id=$SessSemName[1];
 	
 	}

@@ -279,10 +279,6 @@ if (($save) && (!$errormsg))
 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="blank" colspan=2>&nbsp;
-		</td>
-	</tr>
-	<tr>
 		<td class="topic" colspan=2>&nbsp; <b>
 		<?
 		if ($SEM_TYPE[$term_metadata["sem_status"]]["name"] == $SEM_TYPE_MISC_NAME) 	

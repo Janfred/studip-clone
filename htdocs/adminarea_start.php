@@ -49,7 +49,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         $db->next_record();
         ?>
       	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b>Veranstaltung vorgew&auml;hlt</b></td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="blank" colspan=2>

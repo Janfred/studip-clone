@@ -46,7 +46,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	include "links1.php";
-	include "links2.php";
 
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);

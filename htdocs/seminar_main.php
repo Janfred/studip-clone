@@ -114,7 +114,6 @@ IF ($SessSemName[1] =="")
         die;
 } else {
         include "links1.php";
-        include "links2.php";
         include "show_news.php";
           include "show_dates.inc.php";
           require_once "visual.inc.php";

@@ -880,10 +880,6 @@ if ((!$level) || ($level==1))
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
-		</tr>
-		<tr>
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Schritt 1: Grunddaten</b>
 			</td>
 		</tr>
@@ -1113,10 +1109,6 @@ if ($level==2)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
-		</tr>
 		<tr>
 			<td class="topic" colspan=2><b>
 			<?
@@ -1376,10 +1368,6 @@ if ($level==3)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
-		</tr>
 		<tr>
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Schritt 3:  Termine</b>
 			</td>
@@ -1668,10 +1656,6 @@ if ($level==4)
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
-		</tr>
-		<tr>
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Schritt 4: Sonstige Daten</b>
 			</td>
 		</tr>
@@ -1820,10 +1804,6 @@ if ($level==5)
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
-		</tr>
-		<tr>
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Schritt 5: Anlegen der Veranstaltung</b>
 			</td>
 		</tr>
@@ -1858,10 +1838,6 @@ if ($level==6)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
-		</tr>
 		<tr>
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent</b>
 			</td>
@@ -1976,10 +1952,6 @@ if ($level==7)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="blank" colspan=2>&nbsp;
-			</td>
-		</tr>
 		<tr>
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Schritt 6: Literatur- und Linkliste</b>
 			</td>

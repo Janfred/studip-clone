@@ -59,7 +59,6 @@ IF ($SessSemName[1] =="")
 ELSE
         {
         include "links1.php";
-        include "links2.php";
         include "show_dates.inc.php";
         
         require_once("config.inc.php");
@@ -73,10 +72,6 @@ ELSE
 
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="blank" colspan=2 width="100%">&nbsp;
-			</td>
-		</tr>
 		<tr>
 			<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-uhr.gif" align="absmiddle">&nbsp; <? echo htmlReady($SessSemName["art"]) . ": ", htmlReady($SessSemName[0]) ?> - Ablaufplan</b>
 			</td>

@@ -269,9 +269,6 @@ if ((!$links_admin_data["sem_id"]) && ($list) &&
 	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
-	<tr>
-		<td class="blank" colspan=2>&nbsp;</td>
-	</tr>
 	<tr valign=top align=middle>
 		<td class="topic" colspan=2 align="left"><b>&nbsp;Verwaltung aller Veranstaltungen, auf die Sie Zugriff haben:</b>
 		</td>
