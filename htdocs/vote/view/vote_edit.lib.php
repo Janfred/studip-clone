@@ -274,7 +274,7 @@ function printAnswerFields ( $answers ) {
     // the table's header bar
     $html .= "<tr><th align=center width=15>#</th>";
     if( $type == "test" ) 
-	$html .= "<th>" . _("Richtige") . "</th>";
+	$html .= "<th>" . _("Richtig") . "</th>";
 
     $html .= "<th align=left width=100%>" . _("Antwort") . "</th>";
 
