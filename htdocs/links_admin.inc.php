@@ -210,106 +210,106 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	//Topkats
 	if ($perm->have_perm("tutor")) {
 		if (($SessSemName["class"] == "sem") && (!$archive_kill))
-			$structure["veranstaltungen"]=array (topKat=>"", name=>_("Veranstaltungen"), link=>"admin_seminare1.php", active=>FALSE);
+			$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=>_("Veranstaltungen"), 'link'=>"admin_seminare1.php", 'active'=>FALSE);
 		else
-			$structure["veranstaltungen"]=array (topKat=>"", name=>_("Veranstaltungen"), link=>"adminarea_start.php?list=TRUE", active=>FALSE);	
-		$structure["einrichtungen"]=array (topKat=>"", name=>_("Einrichtungen"), link=>"admin_lit_list.php?list=TRUE&view=literatur_inst", active=>FALSE);
+			$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=>_("Veranstaltungen"), 'link'=>"adminarea_start.php?list=TRUE", 'active'=>FALSE);
+		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_inst", 'active'=>FALSE);
 	}
 	
 	if ($perm->have_perm("admin")) {
-		$structure["einrichtungen"]=array (topKat=>"", name=>_("Einrichtungen"), link=>"admin_institut.php?list=TRUE", active=>FALSE);
-		$structure["global"]=array (topKat=>"", name=>_("globale Einstellungen"), link=>"new_user_md5.php", active=>FALSE);
+		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
+		$structure["global"]=array ('topKat'=>"", 'name'=>_("globale Einstellungen"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
 	}
 	
-	$structure["modules"]=array (topKat=>"", name=>_("Tools"), link=>"export.php", active=>FALSE);
+	$structure["modules"]=array ('topKat'=>"", 'name'=>_("Tools"), 'link'=>"export.php", 'active'=>FALSE);
 	
 	if ($SessSemName["class"] == "inst")
-		$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"institut_main.php?auswahl=".$SessSemName[1], active=>FALSE);
+		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"institut_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
 	elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
-		$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"seminar_main.php?auswahl=".$SessSemName[1], active=>FALSE);
+		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"seminar_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
 	
 	//Bottomkats
-	$structure["grunddaten_sem"]=array (topKat=>"veranstaltungen", name=>_("Grunddaten"), link=>"admin_seminare1.php?list=TRUE", active=>FALSE);
-	$structure["zeiten"]=array (topKat=>"veranstaltungen", name=>_("Zeiten"), link=>"admin_metadates.php?list=TRUE", active=>FALSE, isolator=>TRUE);
+	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link'=>"admin_seminare1.php?list=TRUE", 'active'=>FALSE);
+	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten"), 'link'=>"admin_metadates.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["schedule"]) || (!$SessSemName[1]))
-		$structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>_("Ablaufplan"), link=>"admin_dates.php?list=TRUE", active=>FALSE);
+		$structure["ablaufplan"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Ablaufplan"), 'link'=>"admin_dates.php?list=TRUE", 'active'=>FALSE);
 	if (($RESOURCES_ALLOW_ROOM_REQUESTS) && ($RESOURCES_ENABLE))
-		$structure["room_requests"]=array (topKat=>"veranstaltungen", name=>_("Raumanfragen"), link=>"admin_room_requests.php?list=TRUE", active=>FALSE);
-	$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_sem", active=>FALSE, isolator=>TRUE);
+		$structure["room_requests"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Raumanfragen"), 'link'=>"admin_room_requests.php?list=TRUE", 'active'=>FALSE);
+	$structure["news_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("News"), 'link'=>"admin_news.php?list=TRUE&view=news_sem", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["literature"]) || (!$SessSemName[1]))
-		$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur"), link=>"admin_lit_list.php?list=TRUE&view=literatur_sem", active=>FALSE);
+		$structure["literatur_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Literatur"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_sem", 'active'=>FALSE);
 	if ($VOTE_ENABLE)
-		$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votings und Tests"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
+		$structure["vote_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Votings und Tests"), 'link'=>"admin_vote.php?view=vote_sem", 'active'=>FALSE);
 	if ($VOTE_ENABLE)
-		$structure["eval_sem"]=array (topKat=>"veranstaltungen", name=>_("Evaluationen"), link=>"admin_evaluation.php?view=eval_sem", active=>FALSE);
+		$structure["eval_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Evaluationen"), 'link'=>"admin_evaluation.php?view=eval_sem", 'active'=>FALSE);
 	
-	$structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE, isolator=>TRUE);
+	$structure["zugang"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zugangsberechtigungen"), 'link'=>"admin_admission.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["participants"]) || (!$SessSemName[1]))
-		$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
-	$structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
+		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
+	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module"), 'link'=>"admin_modules.php?list=TRUE&view=modules_sem", 'active'=>FALSE);
 	if ($perm->have_perm("dozent")) {
-		$structure["copysem"]=array (topKat=>"veranstaltungen", name=>_("Veranstaltung&nbsp;kopieren"), link=>"copy_assi.php?list=TRUE&new_session=TRUE", active=>FALSE, isolator=>TRUE);
-		$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE);
+		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung&nbsp;kopieren"), 'link'=>"copy_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
+		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), 'link'=>"admin_seminare_assi.php?new_session=TRUE", 'active'=>FALSE);
 	}
 	if ($perm->have_perm("admin")) {
-		$structure["visibility"]=array (topKat=>"veranstaltungen", name=>_("Sichtbarkeit"), link=>"admin_visibility.php?list=TRUE&new_session=TRUE", active=>FALSE, newline=>TRUE);
-		$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);	
+		$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
+		$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link'=>"archiv_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
 	} 
 	
 	//
 	if ($perm->have_perm("admin")) {
-		$structure["grunddaten_inst"]=array (topKat=>"einrichtungen", name=>_("Grunddaten"), link=>"admin_institut.php?list=TRUE", active=>FALSE);
-		$structure["mitarbeiter"]=array (topKat=>"einrichtungen", name=>_("Mitarbeiter"), link=>"inst_admin.php?list=TRUE", active=>FALSE);
-		$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
+		$structure["grunddaten_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Grunddaten"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
+		$structure["mitarbeiter"]=array ('topKat'=>"einrichtungen", 'name'=>_("Mitarbeiter"), 'link'=>"inst_admin.php?list=TRUE", 'active'=>FALSE);
+		$structure["statusgruppe_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", 'active'=>FALSE);
 	}
 	
-	$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_lit_list.php?list=TRUE&view=literatur_inst", active=>FALSE);
-	$structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_inst", active=>FALSE);
+	$structure["literatur_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Literatur"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_inst", 'active'=>FALSE);
+	$structure["news_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("News"), 'link'=>"admin_news.php?list=TRUE&view=news_inst", 'active'=>FALSE);
 	
 	if ($VOTE_ENABLE)
-		$structure["vote_inst"]=array (topKat=>"einrichtungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_inst", active=>FALSE);
+		$structure["vote_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Votes"), 'link'=>"admin_vote.php?view=vote_inst", 'active'=>FALSE);
 	
 	if ($VOTE_ENABLE)
-		$structure["eval_inst"]=array (topKat=>"einrichtungen", name=>_("Evaluationen"), link=>"admin_evaluation.php?view=eval_inst", active=>FALSE);
+		$structure["eval_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Evaluationen"), 'link'=>"admin_evaluation.php?view=eval_inst", 'active'=>FALSE);
 	
 	if ($perm->have_perm("admin"))
-		$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
+		$structure["modules_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Module"), 'link'=>"admin_modules.php?list=TRUE&view=modules_inst", 'active'=>FALSE);
 	
 	if ($EXTERN_ENABLE && $perm->have_perm("admin"))
 		$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe&nbsp;Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
 	if ($perm->is_fak_admin())
-		$structure["new_inst"]=array (topKat=>"einrichtungen", name=>_("neue&nbsp;Einrichtung"), link=>"admin_institut.php?i_view=new", active=>FALSE);
+		$structure["new_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("neue&nbsp;Einrichtung"), 'link'=>"admin_institut.php?i_view=new", 'active'=>FALSE);
 	//
 	if ($EXPORT_ENABLE)
-		$structure["export"]=array (topKat=>"modules", name=>_("Export"), link=>"export.php", active=>FALSE);
+		$structure["export"]=array ('topKat'=>"modules", 'name'=>_("Export"), 'link'=>"export.php", 'active'=>FALSE);
 	if ($ILIAS_CONNECT_ENABLE)
-		$structure["lernmodule"]=array (topKat=>"modules", name=>_("Lernmodule"), link=>"admin_lernmodule.php", active=>FALSE);
+		$structure["lernmodule"]=array ('topKat'=>"modules", 'name'=>_("Lernmodule"), 'link'=>"admin_lernmodule.php", 'active'=>FALSE);
 	if ($RESOURCES_ENABLE)
-		$structure["resources"]=array (topKat=>"modules", name=>_("Ressourcenverwaltung"), link=>"resources.php", active=>FALSE);
+		$structure["resources"]=array ('topKat'=>"modules", 'name'=>_("Ressourcenverwaltung"), 'link'=>"resources.php", 'active'=>FALSE);
 	if ($perm->have_perm("admin")){
-		$structure["show_admission"]=array (topKat=>"modules", name=>_("laufende&nbsp;Anmeldeverfahren"), link=>"show_admission.php", active=>FALSE);
-		$structure["lit_overview"]=array (topKat=>"modules", name=>_("Literatur&uuml;bersicht"), link=>"admin_literatur_overview.php", active=>FALSE);
+		$structure["show_admission"]=array ('topKat'=>"modules", 'name'=>_("laufende&nbsp;Anmeldeverfahren"), 'link'=>"show_admission.php", 'active'=>FALSE);
+		$structure["lit_overview"]=array ('topKat'=>"modules", 'name'=>_("Literatur&uuml;bersicht"), 'link'=>"admin_literatur_overview.php", 'active'=>FALSE);
 	}
 	if ($perm->have_perm("admin")) {		
-		$structure["new_user"]=array (topKat=>"global", name=>_("Benutzer"), link=>"new_user_md5.php", active=>FALSE);
-		$structure["range_tree"]=array (topKat=>"global", name=>_("Einrichtungshierarchie"), link=>"admin_range_tree.php", active=>FALSE);
+		$structure["new_user"]=array ('topKat'=>"global", 'name'=>_("Benutzer"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
+		$structure["range_tree"]=array ('topKat'=>"global", 'name'=>_("Einrichtungshierarchie"), 'link'=>"admin_range_tree.php", 'active'=>FALSE);
 		if ($perm->is_fak_admin()) {
-			$structure["sem_tree"]=array (topKat=>"global", name=>_("Veranstaltungshierarchie"), link=>"admin_sem_tree.php", active=>FALSE);
+			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
 	}
 	if ($perm->have_perm("root")) {
-		$structure["studiengang"]=array (topKat=>"global", name=>_("Studieng&auml;nge"), link=>"admin_studiengang.php", active=>FALSE);
-		$structure["datafields"]=array (topKat=>"global", name=>_("Datenfelder"), link=>"admin_datafields.php", active=>FALSE);
-		$structure["sessions"]=array (topKat=>"modules", name=>_("Sessions"), link=>"view_sessions.php", active=>FALSE);
-		$structure["integrity"]=array (topKat=>"modules", name=>_("DB&nbsp;Integrit&auml;t"), link=>"admin_db_integrity.php", active=>FALSE);
+		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studieng&auml;nge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
+		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
+		$structure["sessions"]=array ('topKat'=>"modules", 'name'=>_("Sessions"), 'link'=>"view_sessions.php", 'active'=>FALSE);
+		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB&nbsp;Integrit&auml;t"), 'link'=>"admin_db_integrity.php", 'active'=>FALSE);
 		if ($BANNER_ADS_ENABLE)  {
-			$structure["bannerads"]=array (topKat=>"global", name=>_("Werbebanner"), link=>"admin_banner_ads.php", active=>FALSE);
+			$structure["bannerads"]=array ('topKat'=>"global", 'name'=>_("Werbebanner"), 'link'=>"admin_banner_ads.php", 'active'=>FALSE);
 		}
 		if ($SMILEYADMIN_ENABLE) {
-			$structure["smileyadmin"]=array (topKat=>"global", name=>_("Smileys"), link=>"admin_smileys.php", active=>FALSE);
+			$structure["smileyadmin"]=array ('topKat'=>"global", 'name'=>_("Smileys"), 'link'=>"admin_smileys.php", 'active'=>FALSE);
 		}
 			
-		$structure["semester"]=array (topKat=>"global", name=>_("Semester"), link=>"admin_semester.php", active=>FALSE);
+		$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
 		}
 	
 	//Reitersystem Ende
@@ -693,8 +693,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						?>
 						<tr>
 							<td class="steel1" colspan=6>
-								<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo checked ?> />&nbsp;<?=_("keine zuk&uuml;nftigen Veranstaltungen anzeigen - Beginn des (letzten) Veranstaltungssemesters ist verstrichen")?> </font><br />
-								<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;<?=_("nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als sechs Monaten)")?> </font> -->
+								<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo ' checked' ?> />&nbsp;<?=_("keine zuk&uuml;nftigen Veranstaltungen anzeigen - Beginn des (letzten) Veranstaltungssemesters ist verstrichen")?> </font><br />
+								<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo ' checked' ?> />&nbsp;<?=_("nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als sechs Monaten)")?> </font> -->
 							</td>
 						</tr>
 						<?
@@ -937,7 +937,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					if ($perm->have_perm("admin")) {
 					?>
 					<input type="HIDDEN" name="all_sem[]" value="<? echo $seminar_id ?>" />
-					<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$select_none && ($select_all || $db->f("visible"))) echo checked; ?> />
+					<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$select_none && ($select_all || $db->f("visible"))) echo ' checked'; ?> />
 					<?
 					}
 					break;
@@ -945,7 +945,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					if ($perm->have_perm("admin")) {
 					?>
 					<input type="HIDDEN" name="archiv_sem[]" value="_id_<? echo $seminar_id ?>" />
-					<input type="CHECKBOX" name="archiv_sem[]" <? if ($select_all) echo checked; ?> />
+					<input type="CHECKBOX" name="archiv_sem[]" <? if ($select_all) echo ' checked'; ?> />
 					<?
 					}
 					break;
