@@ -572,7 +572,7 @@ for ($i; $i<$global_end_time+1; $i++)
 					}
 				echo "</td></tr></table></td>";
 				}
-			if (!$cell_sem[$idx])  echo "class=\"steel1\">&nbsp;</td>"; 
+			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>"; 
 			}
 			}
 			echo "</tr>\n";
