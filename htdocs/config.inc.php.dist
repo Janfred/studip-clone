@@ -39,11 +39,6 @@ you find here the indivdual settings for your installation.
 please note the LOCAL.INC.PHP in the php-lib folder for the basic system settings!*/
 
 
-//Generische Systemeinstellungen
-$AUTH_LIFETIME=60;						//Zeit bis zu einem automatischem Logout in Minuten (wird zur Zeit nur zu Anzeigezwecken verwendet...)
-$SOFTWARE_VERSION="0.9.1 internal";
-
-
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
 $UNI_URL = "http://www.studip.de";
