@@ -714,9 +714,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	
 	$lines[$level] = $check_folder[1];
 
-	if ($check_folder[1]){
+	if (($check_folder[1]) || ($all)) {
 	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.name, a.chdate");
-	while ($db->next_record()) {	
+	while (($db->next_record()) || (($all) && (!$cnt))) {	
+		$cnt++; //a very hard hack to fix the problem, that no documents in view "all documents" are shown, if the "general folder" was deleted. Not good. But works...
 		if (!$all) {?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><td class="blank" valign="top" heigth=21 nowrap><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><?}
 
 		if ($level) { //Hier eine bezaubernde Routine um die Striche exakt wiederzugeben
@@ -748,6 +749,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$newest_document = doc_newest($db->f("folder_id"));
 			$dok_letzter = $documents_count; // wenn $dok_letzter = 0 ist gibt es keine Dokumente in dem Ordner
 		}
+		
 		//Ordner aufgeklappt
 		if ((strstr($open,$db->f("folder_id"))) || ($all)) { 
 			$content='';
@@ -1025,7 +1027,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				}
 			}
 			
-			if (!$all) echo "<td class=\"blank\">&nbsp;</td></tr></td></table>";
+			if (!$all) 
+				echo "<td class=\"blank\">&nbsp;</td></tr></td></table>";
 		}			
 		
 		//Ordner nicht aufgeklappt 
