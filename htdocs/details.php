@@ -277,7 +277,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?		
 			//wer macht den Dozenten?
-				$db->query ("SELECT Vorname, Nachname, seminar_user.user_id, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
+				$db->query ("SELECT " . $_fullname_sql['full'] . " AS fullname, seminar_user.user_id, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
 					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterInnen" : "DozentInnen");
 				elseif ($db->num_rows() == 1)
@@ -287,7 +287,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				while ($db->next_record()) {
 					if ($db->num_rows() > 1)
 						print "<li>";
-					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db->f("username"), htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname")) );
+					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db->f("username"), htmlReady($db->f("fullname")) );
 					if ($db->num_rows() > 1)
 						print "</li>";
 				}
@@ -296,7 +296,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				<td class="<? echo $cssSw->getClass() ?>"width="61%" colspan=1 valign="top">
 				<?		
 				//und wer ist Tutor?
-				$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
+				$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
 				if ($db->num_rows() > 1)
 					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Mtglieder" : "TutorInnen");
 				elseif ($db->num_rows() == 1)
@@ -306,7 +306,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				while ($db->next_record()) {
 					if ($db->num_rows() > 1)
 						print "<li>";
-					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db->f("username"), htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname")) );
+					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db->f("username"), htmlReady($db->f("fullname")) );
 					if ($db->num_rows() > 1)
 						print "</li>";
 				}

@@ -110,7 +110,7 @@ if ($SessSemName[1] =="") {
 	}
 
 	$db=new DB_Seminar;
-	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY Nachname");
+	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY Nachname");
 	if ($db->affected_rows() > 1)
 		printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterInnen" : "DozentInnen");
 	else
@@ -122,7 +122,7 @@ if ($SessSemName[1] =="") {
 			print( ", <a href = about.php?username=" . $db->f("username") . ">");
 		else
 			print( "<a href = about.php?username=" . $db->f("username") . ">");
-		print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
+		print(htmlReady($db->f("fullname")) ."</a>");
 		$i++;
 	}
 	?>
