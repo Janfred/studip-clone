@@ -252,15 +252,11 @@ function export_sem($inst_id, $ex_sem_id = "all")
 					$data_object .= xml_tag($val, getRoom($db->f("Seminar_id"), false));
 				elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
 				{
-					$data_object .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
-					$pathes = get_sem_tree_path($db->f("Seminar_id"));
-					if (is_array($pathes)){
-						foreach ($pathes as $sem_tree_id => $path_name)
-							$data_object .= xml_tag($val, $path_name);
-					} else {
-						$data_object .= xml_tag($val, "n.a.");
-					}
-					$data_object .= xml_close_tag($xml_groupnames_lecture["childgroup3"]);
+				elseif (($key == "admission_turnout") AND ($db->f($key) != "0"))
+				{
+					$data_object .= xml_open_tag($val, $db->f("admission_type")) ? _("max.") : _("erw."));
+					$data_object .= $db->f($key);
+					$data_object .= xml_close_tag($val);
 				}
 				elseif ($key == "metadata_dates") 
 				{

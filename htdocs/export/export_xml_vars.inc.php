@@ -51,6 +51,7 @@ $xml_names_lecture = array(
 	"Sonstiges"		=>		"sonstiges",
 	"art"				=>		"art", 
 	"teilnehmer"		=>		"teilnehmer",
+	"admission_turnout"	=>		"teilnehmerzahl",
 	"vorrausetzungen"	=>		"voraussetzung",
 	"lernorga"		=>		"lernorga",
 	"leistungsnachweis"=>		"schein",
