@@ -13,7 +13,7 @@ $xml_names_fak = array(
 
 $xml_groupnames_inst = array(
 	"object"			=>		"institut",
-	"childobject"		=>		"fakultaet"
+	"childobject"		=>		"fakultaet",
 	"childgroup2"		=>		"datenfelder",
 	"childobject2"		=>		"datenfeld"
 );
@@ -57,13 +57,13 @@ $xml_names_lecture = array(
  	"VeranstaltungsNummer"	=>		"veranstaltungsnummer",
  	"ects"			=>		"ects",
 	"bereich"			=>		"bereich",
-	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin"),
+	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin")
 );
 
 $xml_groupnames_person = array(
 	"group"			=>		"personen",
 	"subgroup1"		=>		"gruppe",
-	"object"			=>		"person"
+	"object"			=>		"person",
 	"childgroup1"		=>		"datenfelder",
 	"childobject1"		=>		"datenfeld"
 );
