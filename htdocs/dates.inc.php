@@ -1420,118 +1420,20 @@ function getPresenceTypeClause() {
 */
 function Termin_Eingabe_javascript ($t = 0, $n = 0, $ss = '', $sm = '', $es = '', $em = '') {
 	global $auth, $CANONICAL_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
-	static $first = 1;
-	$zz = array (
-		array ('07','45','09','15'),
-		array ('09','30','11','00'),
-		array ('11','15','12','45'),
-		array ('13','30','15','00'),
-		array ('15','15','16','45'),
-		array ('17','00','18','30'),
-		array ('18','45','20','15')
-	);
 
-	if (!isset($zz) || count($zz) == 0) return '';
 	if (!$auth->auth["jscript"]) return '';
 	$km = ($auth->auth["xres"] > 650)? 8 : 6;
-	$kx = ($auth->auth["xres"] > 650)? 740 : 600;
-	$jstxt = '';
-	$kalenderok = (($t == 1 || $t == 2 || $t == 5 || $t == 6)? 1:0);
-	$vollebreite = (($t == 1 || $t == 2)? 1:0); // ;-)
-	if ($first == 1) {
-		$jstxt .= <<<EOT
+	$kx = ($auth->auth["xres"] > 650)? 780 : 600;
 
-<script type="text/javascript">
-<!--
-function set_sem_time(t, nn, ss,sm,es,em){
- switch (t){
-  // admin_dates.php Einzeltermin
-  case 1:
-   feld_ss = "stunde";
-   feld_sm = "minute";
-   feld_es = "end_stunde";
-   feld_em = "end_minute";
-   break;
-  // admin_dates.php alle Termine
-  case 2:
-   feld_ss = "stunde["+nn+"]";
-   feld_sm = "minute["+nn+"]";;
-   feld_es = "end_stunde["+nn+"]";
-   feld_em = "end_minute["+nn+"]";
-   break;
-  //
-  case 3:
-   feld_ss = "turnus_start_stunde["+nn+"]";
-   feld_sm = "turnus_start_minute["+nn+"]";
-   feld_es = "turnus_end_stunde["+nn+"]";
-   feld_em = "turnus_end_minute["+nn+"]";
-   break;
-  // admin_seminare_assi.php regelmäßige Veranstaltungen
-  case 4:
-   feld_ss = "term_turnus_start_stunde["+nn+"]";
-   feld_sm = "term_turnus_start_minute["+nn+"]";
-   feld_es = "term_turnus_end_stunde["+nn+"]";
-   feld_em = "term_turnus_end_minute["+nn+"]";
-   break;
-  // admin_seminare_assi.php unregelmäßige Veranstaltungen
-  case 5:
-   feld_ss = "term_start_stunde["+nn+"]";
-   feld_sm = "term_start_minute["+nn+"]";
-   feld_es = "term_end_stunde["+nn+"]";
-   feld_em = "term_end_minute["+nn+"]";
-   break;
-  // admin_seminare_assi.php Vorbesprechung
-  case 6:
-   feld_ss = "vor_stunde";
-   feld_sm = "vor_minute";
-   feld_es = "vor_end_stunde";;
-   feld_em = "vor_end_minute";
-   break;
- }
- document.Formular.elements[feld_ss].value = ss;
- document.Formular.elements[feld_sm].value = sm;
- document.Formular.elements[feld_es].value = es;
- document.Formular.elements[feld_em].value = em;
-}
-//-->
-</script>
+	$txt = '&nbsp;';
 
-EOT;
-		$first = 0;
-	}
-	$txt = "\n";
+	$q = ($ss !== '')? "&ss={$ss}&sm={$sm}&es={$es}&em={$em}":'';
+	$txt .= "<a href=\"javascript:window.open('".$CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR. "/views/insert_date_popup.php?mcount={$km}&element_switch={$t}&c={$n}{$q}', 'kalender', 'dependent=yes, width=$kx, height=480');void(0);";
+	$txt .= '"><img src="pictures/edit_transparent.gif" border="0" align="middle" ';
+	$txt .= tooltip(_('Für Eingabehilfe zur einfacheren Terminwahl bitte hier klicken.'),TRUE,FALSE);
+	$txt .= '></a>';
 
-	if ($kalenderok) {
-		$txt .= '<table cellspacing="0" cellpadding="1"'. (($vollebreite)? ' class="tabdaterow2" width="99%" align="center"':'') . '><tr>';
-		if ($vollebreite) $txt .= '<td class="tddaterow2" width="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-		$txt .= '<td  class="tddaterow2" width="1">&nbsp;<a class="adaterow" href="';
-		$txt .= "javascript:window.open('".$CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR. "/views/insert_date_popup.php?mcount=$km&element_switch=$t&c=$n', 'kalender', 'dependent=yes, width=$kx, height=450');void(0);";
-		$txt .= '" '.tooltip(_('Kalender öffnen')).'>Kalender</a>&nbsp;</td>';
-		$txt .= '<td class="tddaterow2" width="1">' . "\n";
-	} else {
-		$txt .= '<table cellspacing="0" cellpadding="0"><tr><td>&nbsp;&nbsp;</td>';
-		$txt .= '<td width="1">' . "\n";
-	}
-	$txt .= '<table class="tabdaterow" cellspacing="0" cellpadding="0"><tr>'. "\n";
-	for($z = 0; $z < count($zz); $z++) {
-		$txtzeit =  $zz[$z][0].':'.$zz[$z][1].'&nbsp;-&nbsp;'.$zz[$z][2].':'.$zz[$z][3];
-		$txtzeitc =  $zz[$z][0].':'.$zz[$z][1].' - '.$zz[$z][2].':'.$zz[$z][3] .' ' . _('Uhr') . ' ' . _('eintragen');
-		$txt .= '<td class="tddaterow">&nbsp;<a class="adaterow" href="javascript:set_sem_time(' . $t .', ' . $n .',\''.$zz[$z][0].'\', \''.$zz[$z][1].'\', \''.$zz[$z][2].'\', \''.$zz[$z][3]. '\');" ' . tooltip($txtzeitc) .'>'. $txtzeit . '</a>&nbsp;</td>'. "\n";
-		//$txt .= '<td class="tddaterow">'.$z.'</td>';
-	}
-	if ($ss !== '') {
-		$txtzeitc =  _('zurücksetzen auf') .' '. $ss.':'.$sm.' - '.$es.':'.$em .' ' . _('Uhr');
-		$txt .= '<td class="tddaterow">&nbsp;<a class="adaterow" href="javascript:set_sem_time(' . $t .', ' . $n .',\''.$ss.'\', \''.$sm.'\', \''.$es.'\', \''.$em. '\');" ' . tooltip($txtzeitc) .'>'._('Reset').'</a>&nbsp;</td>'. "\n";
-	}
-	//if ($kalenderok)
-	$txt .= '</tr></table></td>'. "\n";
-	$txt .= '<td width="1" '.(($kalenderok)? ' class="tddaterow2"':'').'><img  src="./pictures/info.gif" border="0"';
-	if ($kalenderok)
-		$txt .= tooltip(_("Zur einfacheren Terminwahl können Sie hier einen Kalender öffnen und/oder mit einem Mausklick eine der angegebenen Standardzeiten übernehmen."),TRUE,TRUE).'></td>';
-	else
-		$txt .= tooltip(_("Zur einfacheren Terminwahl können Sie mit einem Mausklick eine der angegebenen Standardzeiten übernehmen."),TRUE,TRUE).'></td>';
-	$txt .= '<td' . (($vollebreite)? ' class="tddaterow2"':'') . '>&nbsp;</td></tr></table>'. "\n";
-	return $jstxt . $txt;
+	return  $txt;
 }
 
 ?>

@@ -155,10 +155,9 @@ td.month {background-image: url('pictures/steelcal.jpg');}
 td.lightmonth{background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
 
 /* Styles fuer TerminZeile */
-a.adaterow {color: #3333DD; font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
 table.tabdaterow {background-color: white; }
-td.tddaterow {border-style: solid; border-color: #dddddd;  border-width: 1px; background-image: url('pictures/steel1.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
-table.tabdaterow2 {background-color: white; }
-td.tddaterow2 {background-image: url('pictures/steel1.jpg');  font-family: Arial, Helvetica, sans-serif; font-size:8pt;}
+td.tddaterowp {border-style: solid; border-color: #FFFFFF;  border-width: 1px; background-image: url('pictures/steelcal.jpg'); font-family: Arial, Helvetica, sans-serif; font-weight: bold; color: #009900;font-size:8pt;}
+td.tddaterowpx {border-style: solid; border-color: #D00000;  border-width: 1px; background-image: url('pictures/steelcal.jpg'); font-family: Arial, Helvetica, sans-serif;font-weight: bold; color: #009900;font-size:8pt;}
+
 
 code  { font-size:10pt; }

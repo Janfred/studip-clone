@@ -619,7 +619,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		<tr>
 			<td class="blank" colspan="2">
 	<?
-	
+
 	 //Vorhandene Termine holen und anzeigen und nach Bedarf bearbeiten
 	  $db->query("SELECT * FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' ORDER BY date");
 	 if ($db->num_rows() || $admin_dates_data["insert_id"]) {
@@ -673,22 +673,22 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$kill_date = '';
 				
 		//Titel erstellen
-		$titel='';
-		$titel.="&nbsp;<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"tag\" maxlength=2 size=2 value=\"".$temp_default[1]."\"><font size=-1>.</font>";
-		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"monat\" maxlength=2 size=2 value=\"".$temp_default[2]."\"><font size=-1>.</font>";
-		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"jahr\" maxlength=4 size=4  value=\"".$temp_default[3]."\"><font size=-1>&nbsp;" . _("von") . "&nbsp;</font>";
-		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"stunde\" maxlength=2 size=2 value=\"".$temp_default[4]."\"><font size=-1> :</font>";
-		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"minute\" maxlength=2 size=2 value=\"".$temp_default[5]."\"><font size=-1>&nbsp;" . _("bis") . "&nbsp;</font>";
-		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde\" maxlength=2 size=2 value=\"".$temp_default[6]."\"><font size=-1> :</font>";
-		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute\" maxlength=2 size=2 value=\"".$temp_default[7]."\"><font size=-1> " . _("Uhr") . ".</font>";
-		$titel.="<input type=\"HIDDEN\" name=\"termin_id\" value=\"".$admin_dates_data["insert_id"]."\">";
-		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
-		$link=$PHP_SELF."?cancel=TRUE";
+		$titel = '';
+		$titel .= "&nbsp;<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"tag\" maxlength=2 size=2 value=\"".$temp_default[1]."\"><font size=-1>.</font>";
+		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"monat\" maxlength=2 size=2 value=\"".$temp_default[2]."\"><font size=-1>.</font>";
+		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"jahr\" maxlength=4 size=4  value=\"".$temp_default[3]."\"><font size=-1>&nbsp;" . _("von") . "&nbsp;</font>";
+		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"stunde\" maxlength=2 size=2 value=\"".$temp_default[4]."\"><font size=-1> :</font>";
+		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"minute\" maxlength=2 size=2 value=\"".$temp_default[5]."\"><font size=-1>&nbsp;" . _("bis") . "&nbsp;</font>";
+		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde\" maxlength=2 size=2 value=\"".$temp_default[6]."\"><font size=-1> :</font>";
+		$titel .= "<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute\" maxlength=2 size=2 value=\"".$temp_default[7]."\"><font size=-1> " . _("Uhr") . ".</font>";
+		$titel .= "<input type=\"HIDDEN\" name=\"termin_id\" value=\"".$admin_dates_data["insert_id"]."\">";
+		$titel .= Termin_Eingabe_javascript(1,0);
+		$icon = "&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
+		$link = $PHP_SELF."?cancel=TRUE";
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		printhead(0, 0, $link, "open", TRUE, $icon, $titel, $zusatz);
 		echo "</tr></table>";
-		echo Termin_Eingabe_javascript(1,0);
 		//Contentbereich
 		$content='';
 
@@ -857,15 +857,14 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 
 		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
+			if ($edit) {
+				$titel .= Termin_Eingabe_javascript(2, $c, $stunde, $minute, $end_stunde, $end_minute);
+			}
 			printhead(0, 0, $link, "open", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
-			echo "</tr></table>";
-			if ($edit)
-				echo Termin_Eingabe_javascript(2,$c,sprintf('%02d',$stunde),sprintf('%02d',$minute),sprintf('%02d',$end_stunde),sprintf('%02d',$end_minute));
 		} else {
 			printhead(0, 0, $link, "close", $neuer_termin, $icon, $titel, $zusatz, $db->f("mkdate"));
-			echo "</tr></table>";
 		}
-
+		echo "</tr></table>";
 		//Contentbereich
 		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
 			$content='';

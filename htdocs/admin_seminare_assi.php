@@ -2319,7 +2319,7 @@ if ($level == 3) {
 									if (empty($sem_create_data["turnus_count"])) 
 										$sem_create_data["turnus_count"]=1;
 									for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
-										if ($i>0) echo "<br>";
+										if ($i>0) echo "<br>\n";
 										echo '&nbsp; <font size=-1><select name="term_turnus_date[', $i, ']">';
 										$ttd = (empty($sem_create_data["term_turnus_date"][$i]))? 1 : $sem_create_data["term_turnus_date"][$i];
 										for($kk = 1; $kk <= 7; $kk++ ){
@@ -2338,26 +2338,33 @@ if ($level == 3) {
 											echo '</option>';
 										}
 										echo "</select>\n";
-										echo '&nbsp; <input type="text" name="term_turnus_start_stunde[',$i,']" size=2 maxlength=2 value="';
-										if ($sem_create_data["term_turnus_start_stunde"][$i]) echo sprintf('%02d', $sem_create_data["term_turnus_start_stunde"][$i]);
-										echo '"> : <input type="text" name="term_turnus_start_minute[',$i,']" size=2 maxlength=2 value="';
-										if (($sem_create_data["term_turnus_start_minute"][$i]) && ($sem_create_data["term_turnus_start_minute"][$i] >0)) {
-											echo sprintf('%02d', $sem_create_data["term_turnus_start_minute"][$i]);
-										} elseif ($sem_create_data["term_turnus_start_stunde"][$i]) echo '00';
-										echo '">&nbsp;', _("Uhr bis"), '&nbsp; <input type="text" name="term_turnus_end_stunde[',$i,']" size=2 maxlength=2 value="';
-										if ($sem_create_data["term_turnus_end_stunde"][$i]) echo sprintf('%02d', $sem_create_data["term_turnus_end_stunde"][$i]);
-										echo '"> : <input type="text" name="term_turnus_end_minute[',$i,']" size=2 maxlength=2 value="';
-										if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) {
-											echo sprintf('%02d', $sem_create_data["term_turnus_end_minute"][$i]);
-										} elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo '00';
-										echo '">&nbsp;', _("Uhr");
+										$ss = ($sem_create_data["term_turnus_start_stunde"][$i])? sprintf('%02d', $sem_create_data["term_turnus_start_stunde"][$i]):'';
+										if ($sem_create_data["term_turnus_start_minute"][$i]) {
+											$sm = sprintf('%02d', $sem_create_data["term_turnus_start_minute"][$i]);
+										} elseif ($sem_create_data["term_turnus_start_stunde"][$i]) {
+											$sm = '00';
+										} else {
+											$sm ='';
+										}
+										$es = ($sem_create_data["term_turnus_end_stunde"][$i])? sprintf('%02d', $sem_create_data["term_turnus_end_stunde"][$i]):'';
+										if ($sem_create_data["term_turnus_end_minute"][$i]) {
+											$em = sprintf('%02d', $sem_create_data["term_turnus_end_minute"][$i]);
+										} elseif ($sem_create_data["term_turnus_end_stunde"][$i]) {
+											$em = '00';
+										} else {
+											$em = '';
+										}
+										echo '&nbsp; <input type="text" name="term_turnus_start_stunde[',$i,']" size=2 maxlength=2 value="', $ss, '"> : ';
+										echo '<input type="text" name="term_turnus_start_minute[',$i,']" size=2 maxlength=2 value="', $sm, '">&nbsp;', _("Uhr bis");
+										echo '&nbsp; <input type="text" name="term_turnus_end_stunde[',$i,']" size=2 maxlength=2 value="', $es. '"> : ';
+										echo '<input type="text" name="term_turnus_end_minute[',$i,']" size=2 maxlength=2 value="', $em, '">&nbsp;', _("Uhr"), "\n";
 
 										if ($sem_create_data["turnus_count"]>1) {
 											?>
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 										}
-										echo  Termin_Eingabe_javascript (4, $i);
+										echo  Termin_Eingabe_javascript(4, $i, $ss,$sm,$es,$em);
 									}
 									?>
 									<br />&nbsp; <input type="IMAGE" name="add_turnus_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp;
@@ -2386,27 +2393,32 @@ if ($level == 3) {
 									for ($i=0; $i<$sem_create_data["term_count"]; $i++)
 										{
 										if ($i>0) echo "<br>";
-
+										$ss = ($sem_create_data["term_start_stunde"][$i])? sprintf('%02d',$sem_create_data["term_start_stunde"][$i]):'';
+										if ($sem_create_data["term_start_minute"][$i]) {
+											$sm = sprintf('%02d', $sem_create_data["term_start_minute"][$i]);
+										} elseif ($sem_create_data["term_start_stunde"][$i]) {
+											$sm = '00';
+										} else {
+											$sm = '';
+										}
+										$es = ($sem_create_data["term_end_stunde"][$i])? sprintf('%02d',$sem_create_data["term_end_stunde"][$i]):'';
+										if ($sem_create_data["term_end_minute"][$i]) {
+											$em = sprintf('%02d', $sem_create_data["term_end_minute"][$i]);
+										} elseif ($sem_create_data["term_end_stunde"][$i]) {
+											$em = '00';
+										} else {
+											$em = '';
+										}
 										echo '<font size=-1>&nbsp; ', _("Datum:"), ' <input type="text" name="term_tag[',$i,']" size=2 maxlength=2 value="';
 										if ($sem_create_data["term_tag"][$i]) echo sprintf('%02d',$sem_create_data["term_tag"][$i]);
 										echo '">.',"\n", '<input type="text" name="term_monat[',$i,']" size=2 maxlength=2 value="';
 										if ($sem_create_data["term_monat"][$i]) echo sprintf('%02d',$sem_create_data["term_monat"][$i]);
 										echo '">. <input type="text" name="term_jahr[',$i,']" size=4 maxlength=4 value="';
 										if ($sem_create_data["term_jahr"][$i]) echo $sem_create_data["term_jahr"][$i];
-										echo '"> &nbsp;', _("um"), '<input type="text" name="term_start_stunde[',$i,']" size=2 maxlength=2 value="';
-										if ($sem_create_data["term_start_stunde"][$i]) echo sprintf('%02d',$sem_create_data["term_start_stunde"][$i]);
-										echo '"> : <input type="text" name="term_start_minute[',$i,']" size=2 maxlength=2 value="';
-										if (($sem_create_data["term_start_minute"][$i]) && ($sem_create_data["term_start_minute"][$i] >0)) {
-											echo sprintf('%02d', $sem_create_data["term_start_minute"][$i]);
-										} elseif ($sem_create_data["term_start_stunde"][$i]) echo '00';
-										echo '">&nbsp;', _("Uhr bis");
-										echo '<input type="text" name="term_end_stunde[',$i,']" size=2 maxlength=2 value="';
-										if ($sem_create_data["term_end_stunde"][$i]) echo sprintf('%02d',$sem_create_data["term_end_stunde"][$i]);
-										echo '"> : <input type="text" name="term_end_minute[',$i,']" size=2 maxlength=2 value="';
-										if (($sem_create_data["term_end_minute"][$i]) && ($sem_create_data["term_end_minute"][$i] >0)) {
-											echo sprintf('%02d', $sem_create_data["term_end_minute"][$i]);
-										} elseif ($sem_create_data["term_end_stunde"][$i]) echo '00';
-										echo '">&nbsp;', _("Uhr"), '</font>', "\n";
+										echo '"> &nbsp;', _("um"), '<input type="text" name="term_start_stunde[',$i,']" size=2 maxlength=2 value="', $ss, '"> : ';
+										echo '<input type="text" name="term_start_minute[',$i,']" size=2 maxlength=2 value="', $sm, '">&nbsp;', _("Uhr bis");
+										echo '<input type="text" name="term_end_stunde[',$i,']" size=2 maxlength=2 value="', $es, '"> : ';
+										echo '<input type="text" name="term_end_minute[',$i,']" size=2 maxlength=2 value="', $em, '">&nbsp;', _("Uhr"), '</font>', "\n";
 
 										if ($sem_create_data["term_count"]>1)
 											{
@@ -2414,10 +2426,10 @@ if ($level == 3) {
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 											}
-										echo  Termin_Eingabe_javascript (5, $i);
+										echo  Termin_Eingabe_javascript (5, $i, $ss, $sm, $es, $em);
 										}
 										?>
-										<br />&nbsp; <input type="IMAGE" name="add_term_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
+										<br />&nbsp; <input type="IMAGE" name="add_term_field" <?=makeButton("feldhinzufuegen", "src"); ?> border=0 value="Feld hinzuf&uuml;gen">&nbsp;
 										<img  src="./pictures/info.gif" 
 											<? echo tooltip(_("In diesem Feldern können Sie alle Veranstaltungstermine eingeben. Wenn die Termine noch nicht feststehen, lassen Sie die Felder einfach frei."), TRUE, TRUE) ?>
 										>
@@ -2434,18 +2446,22 @@ if ($level == 3) {
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 						<?
+							$ss = (($sem_create_data["sem_vor_termin"] <> -1)? date("H",$sem_create_data["sem_vor_termin"]):'');
+							$sm = (($sem_create_data["sem_vor_termin"] <> -1)? date("i",$sem_create_data["sem_vor_termin"]):'');
+							$es = (($sem_create_data["sem_vor_end_termin"] <> -1)? date("H",$sem_create_data["sem_vor_end_termin"]):'');
+							$em = (($sem_create_data["sem_vor_end_termin"] <> -1)? date("i",$sem_create_data["sem_vor_end_termin"]):'');
 							echo '<font size=-1>&nbsp; <font size=-1>', _("Wenn es eine Vorbesprechung gibt, tragen Sie diese bitte hier ein:"), '</font><br><br>&nbsp; ', _('Datum:'), '</font>', "\n";
 							echo '<font size=-1><input type="text" name="vor_tag" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_termin"] <> -1)? date("d",$sem_create_data["sem_vor_termin"]):''), '">. ', "\n";
 							echo '<input type="text" name="vor_monat" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_termin"] <> -1)?  date("m",$sem_create_data["sem_vor_termin"]):''), '">. ', "\n";
 							echo '<input type="text" name="vor_jahr" size=4 maxlength=4 value="', (($sem_create_data["sem_vor_termin"] <> -1)? date("Y",$sem_create_data["sem_vor_termin"]):''), '">&nbsp;', "\n";
-							echo _("um"), ' <input type="text" name="vor_stunde" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_termin"] <> -1)? date("H",$sem_create_data["sem_vor_termin"]):''), '"> : ', "\n";
-							echo '<input type="text" name="vor_minute" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_termin"] <> -1)? date("i",$sem_create_data["sem_vor_termin"]):''), '">&nbsp;', _("Uhr bis"), "\n";
-							echo '<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_end_termin"] <> -1)? date("H",$sem_create_data["sem_vor_end_termin"]):''), '"> : ', "\n";
-							echo '<input type="text" name="vor_end_minute" size=2 maxlength=2 value="', (($sem_create_data["sem_vor_end_termin"] <> -1)? date("i",$sem_create_data["sem_vor_end_termin"]):''), '">&nbsp;', _("Uhr"), "\n";
+							echo _("um"), ' <input type="text" name="vor_stunde" size=2 maxlength=2 value="', $ss, '"> : ', "\n";
+							echo '<input type="text" name="vor_minute" size=2 maxlength=2 value="', $sm, '">&nbsp;', _("Uhr bis"), "\n";
+							echo '<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="', $es, '"> : ', "\n";
+							echo '<input type="text" name="vor_end_minute" size=2 maxlength=2 value="', $em, '">&nbsp;', _("Uhr"), "\n";
 							echo '<img  src="./pictures/info.gif"';
 							echo tooltip(_("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt."), TRUE, TRUE);
 							echo '>';
-							echo  Termin_Eingabe_javascript (6, 0);
+							echo  Termin_Eingabe_javascript (6, 0, $ss, $sm, $es, $em);
 						?>
 						</td>
 					</tr>
