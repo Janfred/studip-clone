@@ -15,6 +15,7 @@
 
 # Include all required files ================================================ #
 require_once ($ABSOLUTE_PATH_STUDIP."vote/view/visual.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."vote/vote.config.php");
 # ====================================================== end: including files #
 
 
@@ -46,9 +47,9 @@ function createFormHeader (&$vote) {
 
    $html .= "#openvote\" method=post>\n".
       " <input type=\"hidden\" name=\"voteformID\" ".
-      "value=\"".$vote->getVoteID (). "\">\n".
+      "value=\"".$vote->getObjectID (). "\">\n".
       " <input type=\"hidden\" name=\"voteopenID\" ".
-      "value=\"".$vote->getVoteID (). "\">\n".
+      "value=\"".$vote->getObjectID (). "\">\n".
       " <input type=\"hidden\" name=\"answerChanged\" ".
       "value=\"".(isset($_POST["changeAnswerButton_x"]) ||
 		  (isset($_POST["answerChanged"]) && !isset($_POST["answer"])) 
@@ -74,19 +75,19 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $isPreview = ($_GET["previewResults"] || $_POST["previewButton_x"]) &&
        ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
 
-   $isAssociated = $vote->voteDB->isAssociated ($vote->getVoteID(), $userID);
+   $isAssociated = $vote->voteDB->isAssociated ($vote->getObjectID(), $userID);
    $isStopped = $vote->isStopped();
 
-   $revealNames = $_GET["revealNames"] && $vote->getVoteID() == $_GET["voteopenID"]
+   $revealNames = $_GET["revealNames"] && $vote->getObjectID() == $_GET["voteopenID"]
        && ! $vote->isAnonymous();
 
-   $sortAnswers = $_GET["sortAnswers"] && $vote->getVoteID() == $_GET["voteopenID"];
+   $sortAnswers = $_GET["sortAnswers"] && $vote->getObjectID() == $_GET["voteopenID"];
 
    $changeAnswer = isset ($_POST["changeAnswerButton_x"]) ||
        ($_POST["answerChanged"] && !isset($_POST["answer"]));
 
    $link  = $GLOBALS["PHP_SELF"];
-   $link .= "?voteopenID=".$vote->getVoteID();
+   $link .= "?voteopenID=".$vote->getObjectID();
    $link .= ($_GET["openAllVotes"]) ? "&openAllVotes=".YES : "";
    $link .= ($_GET["openStoppedVotes"]) ? "&openStoppedVotes=".YES : "";
    $link .= ($_GET["showrangeID"]) ? "&showrangeID=".$_GET["showrangeID"] : "";
@@ -194,7 +195,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
        {
        $link_reveal = $link."&sortAnswers=".($_GET["sortAnswers"] ? YES : NO);
 
-       if ($GLOBALS["voteopenID"] != $vote->getVoteID ())
+       if ($GLOBALS["voteopenID"] != $vote->getObjectID ())
 	  $link_reveal .= "&revealNames=".YES;
        else
 	  $link_reveal .= "&revealNames=".($_GET["revealNames"] ? NO : YES);
@@ -202,7 +203,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
        $link_reveal .= ($vote->isStopped()) ? "#stoppedvotes" : "#openvote";
        
        if( $_GET["revealNames"] && 
-	   $GLOBALS["voteopenID"] == $vote->getVoteID ())
+	   $GLOBALS["voteopenID"] == $vote->getObjectID ())
 	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
 	       "<img ".
 	       makeButton ("normaleansicht", "src"). 
@@ -229,7 +230,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	    "&nbsp;".
 	    "<a href=\"".VOTE_FILE_ADMIN."?page=edit&type=".
 	    $vote->instanceof().
-	    "&voteID=".$vote->getVoteID ()."\">".
+	    "&voteID=".$vote->getObjectID ()."\">".
 	     "<img ".
 	    makeButton ("bearbeiten", "src"). 
 	    tooltip( $vote->instanceof() == INSTANCEOF_TEST
@@ -240,7 +241,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
       $html .= 
 	 "&nbsp;".
 	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
-	 $vote->getVoteID ().
+	 $vote->getObjectID ().
 	 "&voteaction=stop&referer=1&showrangeID=".$vote->getRangeID()."\">" .
 	 "<img  ".
 	 makeButton ("stop", "src"). 
@@ -252,7 +253,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
       $html .= 
 	 "&nbsp;".
 	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
-	 $vote->getVoteID ().
+	 $vote->getObjectID ().
 	 "&voteaction=delete_request&referer=1&showrangeID=".$vote->getRangeID()."\">" .
 	 "<img  ".
 	 makeButton ("loeschen", "src"). 
@@ -367,17 +368,22 @@ function createOpeningOrClosingArrow () {
  *                            the headline only
  * @returns  String   The HTML-text
  */
-function createVoteHeadline (&$vote, $open, $openID) {
+function createVoteHeadline (&$vote, $open, $openID, $evalDB = "") {
    $title          = htmlReady (my_substr ($vote->getTitle (), 0, 35));
    $date           = $vote->getChangedate ();
-   $authorName     = $vote->voteDB->getAuthorRealname ($vote->getAuthorID ());
-   $authorUsername = $vote->voteDB->getAuthorUsername ($vote->getAuthorID ());
-   $number         = $vote->voteDB->getNumberUserVoted ();
+   $authorName     = get_fullname ($vote->getAuthorID ());
+   $authorUsername = get_username ($vote->getAuthorID ());
+   if (empty ($evalDB))
+     $number       = $vote->voteDB->getNumberUserVoted ();
+   else
+     $number       = $evalDB->getNumberOfVotes ($vote->getObjectID ());
 
    $openStr = ($open) ? "open" : "close";
 #   $isNew = ($date >= $last_visited);
    $icon = ($vote->instanceof () == INSTANCEOF_TEST) ? VOTE_ICON_TEST : 
       VOTE_ICON_VOTE;
+   if ($vote->instanceof () == INSTANCEOF_EVAL)
+     $icon = EVAL_PIC_ICON;
    $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\">";
    $voteInfo = $number." / <a href=\"about.php?username=".$authorUsername."\">\n"
       . "  <font size=\"-1\" color=\"#333399\">".$authorName."</font>\n"
@@ -390,14 +396,14 @@ function createVoteHeadline (&$vote, $open, $openID) {
 	 $link .= "&username=".$GLOBALS["username"];
       $link .= "#votetop";
    } else {
-      $link = $GLOBALS["PHP_SELF"]."?voteopenID=".$vote->getVoteID();
+      $link = $GLOBALS["PHP_SELF"]."?voteopenID=".$vote->getObjectID();
       if (!empty ($GLOBALS["username"]))
 	 $link .= "&username=".$GLOBALS["username"];
       $link .= "#openvote";
    }
 
    $title = "<a href=\"$link\" class=\"tree\" >".$title."</a>";
-   if ($vote->getVoteID() == $openID)
+   if ($vote->getObjectID() == $openID)
       $title .= "<a name=\"openvote\">&nbsp;</a>";
 
    return "<tr>"
@@ -412,7 +418,8 @@ function createVoteHeadline (&$vote, $open, $openID) {
  * @param    array    $stoppedVotes   The stopped vote
  * @returns  String   The HTML-text
  */
-function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
+function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes,
+				     $stoppedEvals = NULL) {
    $link = $GLOBALS["PHP_SELF"]."?openStoppedVotes=" . 
        ($openStoppedVotes ? NO : YES);
    if (!empty ($GLOBALS["username"]))
@@ -424,9 +431,10 @@ function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
 		    FALSE, "&nbsp;<img src=\"".VOTE_ICON_STOPPED.
 		    "\" border=\"0\">",
 		    "<a href=\"".$link."\" class=\"tree\">" . 
-		    _("Abgelaufene Votings und Tests") . "</a>".
+		    _("Abgelaufene Umfragen") . "</a>".
 		    "<a name=\"stoppedvotes\">&nbsp;</a>",
-		    "<font size=\"-1\">(".count( $stoppedVotes ).
+		    "<font size=\"-1\">(".(count( $stoppedVotes ) + 
+					   count ($stoppedEvals)).
 		    ")</font>", 0, FALSE)
        . "</tr>";
 }
@@ -437,12 +445,15 @@ function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes) {
  * @param    object   $vote       The vote
  * @returns  String   The HTML-text
  */
-function createStoppedVoteHeader (&$vote) {
+function createStoppedVoteHeader (&$vote, $evalDB = NULL) {
     $date           = $vote->getChangedate ();
-    $authorName     = $vote->voteDB->getAuthorRealname ($vote->getAuthorID ());
-    $authorUsername = $vote->voteDB->getAuthorUsername ($vote->getAuthorID ());
+    $authorName     = get_fullname ($vote->getAuthorID ());
+    $authorUsername = get_username ($vote->getAuthorID ());
     $title          = formatReady ($vote->getTitle ());
-    $number         = $vote->voteDB->getNumberUserVoted ();
+    if (empty ($evalDB))
+      $number       = $vote->voteDB->getNumberUserVoted ();
+    else
+      $number       = $evalDB->getNumberOfVotes ($vote->getObjectID ());
 
     $html .= "<table align=center width=\"92%\" cellpadding=1 cellspacing=0><tr>\n";
     $html .= "<td class=toolbar align=left>\n";
@@ -611,9 +622,9 @@ function createVoteResult ($vote, $preview = NO) {
    $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) ||
        $auth->auth["uid"] == $vote->getAuthorID ();
    $sortAnswers = $_GET["sortAnswers"] && 
-       ($vote->getVoteID() == $_GET["voteopenID"]);
+       ($vote->getObjectID() == $_GET["voteopenID"]);
    $revealNames = $_GET["revealNames"] && 
-       ($vote->getVoteID() == $_GET["voteopenID"]) &&
+       ($vote->getObjectID() == $_GET["voteopenID"]) &&
        ($haveFullPerm || $vote->getNamesVisibility()) &&
        ! $vote->isAnonymous();
       

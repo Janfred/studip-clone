@@ -1,6 +1,6 @@
 <?php
 # Include all required files ================================================ #
-require_once ($ABSOLUTE_PATH_STUDIP."vote/StudipObject.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipObject.class.php");
 require_once ($ABSOLUTE_PATH_STUDIP."vote/VoteDB.class.php");
 # ====================================================== end: including files #
 
@@ -134,9 +134,9 @@ class Vote extends StudipObject {
    /**
     * The unique ID of the vote
     * @access   private
-    * @var      integer $voteID
+    * @var      integer $objectID
     */
-   var $voteID;
+   var $objectID;
    
    /**
     * The unique range ID of the vote
@@ -185,7 +185,7 @@ class Vote extends StudipObject {
       $this->voteDB           = NULL;
       $this->errorArray       = array ();
 
-      $this->voteID           = "";
+      $this->objectID           = "";
       $this->rangeID          = "";
       $this->authorID         = "";
       $this->title            = "";
@@ -214,11 +214,11 @@ class Vote extends StudipObject {
 
       /* Load an old Vote or create a new one ------------------------------ */
       if (empty ($oldVoteID)) {
-	 $this->voteID = md5 (uniqid (rand()));
+	 $this->objectID = md5 (uniqid (rand()));
       } else {
 	 if (! $this->voteDB->isExistant ($oldVoteID))
 	    return $this->throwError (1, _("Die angegebene ID existiert nicht."));
-	 $this->voteID = $oldVoteID;
+	 $this->objectID = $oldVoteID;
 	 $this->readVote ();	
       }
 
@@ -569,10 +569,10 @@ class Vote extends StudipObject {
    /**
     * Sets the unique ID from the vote
     * @access  public
-    * @param   string  $voteID  The unique ID
+    * @param   string  $objectID  The unique ID
     */
-   function setVoteID ($voteID) {
-      $this->voteID = $voteID;
+   function setVoteID ($objectID) {
+      $this->objectID = $objectID;
    }
    
    /**
@@ -581,7 +581,7 @@ class Vote extends StudipObject {
     * @return  string The unique ID
     */
    function getVoteID () {
-      return $this->voteID;
+      return $this->objectID;
    }
 
    /**
@@ -732,7 +732,7 @@ class Vote extends StudipObject {
 
 
       /* Write data -------------------------------------------------------- */
-      $this->voteDB->participate ($this->voteID, $userID, 
+      $this->voteDB->participate ($this->objectID, $userID, 
 				  $answerArray, $this->isAnonymous ());
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
@@ -758,7 +758,7 @@ class Vote extends StudipObject {
       $this->startdate = time ();
       if ($this->stopdate <= $this->startdate)
 	 $this->stopdate = NULL;
-      $this->voteDB->startVote ($this->voteID, $this->state,
+      $this->voteDB->startVote ($this->objectID, $this->state,
 				$this->startdate,
 				$this->stopdate, $this->timespan);
       if ($this->voteDB->isError ())
@@ -784,7 +784,7 @@ class Vote extends StudipObject {
 
 
       $this->stopdate = time ();
-      $this->voteDB->stopVote ($this->voteID, $this->state, $this->stopdate);
+      $this->voteDB->stopVote ($this->objectID, $this->state, $this->stopdate);
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
    }
@@ -797,7 +797,7 @@ class Vote extends StudipObject {
    function executeRemove () {
       //if ($this->isError ()) return;
 
-      $this->voteDB->removeVote ($this->voteID);
+      $this->voteDB->removeVote ($this->objectID);
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
    }
@@ -817,7 +817,7 @@ class Vote extends StudipObject {
       $this->startdate = time ();
       if ($this->stopdate <= $this->startdate)
 	 $this->stopdate = NULL;
-      $this->voteDB->restartVote ($this->voteID, $this->startdate, 
+      $this->voteDB->restartVote ($this->objectID, $this->startdate, 
 				  $this->stopdate, $this->isAnonymous ());
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
@@ -839,7 +839,7 @@ class Vote extends StudipObject {
       $this->startdate = time ();
       if ($this->stopdate <= $this->startdate)
 	 $this->stopdate = 0;
-      $this->voteDB->continueVote ($this->voteID, $this->startdate,
+      $this->voteDB->continueVote ($this->objectID, $this->startdate,
 				   $this->stopdate);
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
@@ -864,7 +864,7 @@ class Vote extends StudipObject {
       else
 	 $this->state = VOTE_STOPPED_INVISIBLE;
 
-      $this->voteDB->setVisible ($this->voteID, $this->state);
+      $this->voteDB->setVisible ($this->objectID, $this->state);
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
    }
@@ -941,7 +941,7 @@ class Vote extends StudipObject {
     * @throws  error
     */
    function readVote () {
-      $result = $this->voteDB->getVote ($this->voteID);
+      $result = $this->voteDB->getVote ($this->objectID);
       
       if ($this->voteDB->isError ()) {
 	 $this->throwErrorFromClass ($this->voteDB);
@@ -1032,7 +1032,7 @@ class Vote extends StudipObject {
     */
    function checkConsistency () {
       /* Check the normal variables ---------------------------------------- */
-      if (empty ($this->voteID))
+      if (empty ($this->objectID))
 	 $this->throwError (1, _("Objekt besitzt keine ID!"));
 
       if (empty ($this->authorID))

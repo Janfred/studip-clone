@@ -42,7 +42,7 @@ define( "QUESTION_HELPTEXT",
 /* -------------------------------------------------------- */
 
 
-
+include_once($ABSOLUTE_PATH_STUDIP . "vote/vote.config.php");
 include_once ($ABSOLUTE_PATH_STUDIP . "vote/Vote.class.php");
 include_once ($ABSOLUTE_PATH_STUDIP . "vote/TestVote.class.php");
 include_once ($ABSOLUTE_PATH_STUDIP . "vote/view/vote_edit.lib.php");

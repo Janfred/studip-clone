@@ -23,7 +23,7 @@
 
 
 // Including all needed files
-require_once ($ABSOLUTE_PATH_STUDIP."vote/StudipObject.class.php");
+require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipObject.class.php");
 
 # wozu diese Datei?
 
