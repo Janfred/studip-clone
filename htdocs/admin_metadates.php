@@ -367,8 +367,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	}
 
 	//check for the rights, the user has on the selected resource-objects
-	if (($RESOURCES_ENABLE) && ($metadates_changed) || ($art_changed)) {
-		$foreign_resource = FALSE;
+	if ($RESOURCES_ENABLE && ($metadates_changed || $art_changed)) {
+		$foreign_resources = FALSE;
 		$update_resources = FALSE;
 		$update_dates_kill_resources = TRUE;
 		//check if change inside regular times
@@ -376,9 +376,11 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			foreach ($metadates_changed as $key=>$val) {
 				if (($tmp_metadata_termin["turnus_data"][$key]["resource_id"]) || ($term_metadata["original_turnus"][$key]["resource_id"])) {
 					$assigned_resources = TRUE;
-					$resObjPrm =& ResourceObjectPerms::Factory($tmp_metadata_termin["turnus_data"][$key]["resource_id"]);
-					if (!$resObjPrm->havePerm("autor"))
-						$foreign_resources = TRUE;
+					if ($tmp_metadata_termin["turnus_data"][$key]["resource_id"]){
+						$resObjPrm =& ResourceObjectPerms::Factory($tmp_metadata_termin["turnus_data"][$key]["resource_id"]);
+						if (!$resObjPrm->havePerm("autor"))
+							$foreign_resources = TRUE;
+					}
 				}
 			}
 		}
@@ -434,12 +436,11 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$updateResult = $result['resources_result'];
 			}
 		}
-		
+
 		//If resource-management activ, update the assigned resources and do the overlap checks.... not so easy!
 		if (($RESOURCES_ENABLE) && ($update_resources)) {
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
-    			$updateResult = array_merge ($updateResult, $veranstAssign->updateAssign());
-
+    		$updateResult = array_merge ($updateResult, $veranstAssign->updateAssign());
 			//are there overlaps, in the meanwhile since the regular check? In the case the sem is regular, we have to touch the metadata
 			if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
 				$overlaps_detected=FALSE;
@@ -456,8 +457,6 @@ if (($uebernehmen_x) && (!$errormsg)) {
 							if (($val3["day"] == $day) && ($val3["start_stunde"] == date("G", $begin)) && ($val3["start_minute"] == date("i", $begin)) && ($val3["end_stunde"] == date("G", $end)) && ($val3["end_minute"] == date("i", $end)) && ($val["resource_id"] == $resource_id)) {
 								$metadata_termin["turnus_data"][$key3]["resource_id"]='';
 								$metadata_termin["turnus_data"][$key3]["room"]='';
-								$term_metadata["turnus_data"][$key3]["resource_id"]='';
-								$term_metadata["turnus_data"][$key3]["room"]='';
 								$metadata_changed = TRUE;
 							}
 						}
@@ -482,7 +481,6 @@ if (($uebernehmen_x) && (!$errormsg)) {
  			foreach ($semObj->getMetaDates() as $key=>$val) {
 				$semObj->setMetaDateValue($key, "resource_id", FALSE);
 				$metadata_termin["turnus_data"][$key]["resource_id"] = FALSE;
-				$term_metadata["turnus_data"][$key]["resource_id"] = FALSE;
 			}
 			$semObj->store();
 
@@ -497,7 +495,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$errormsg.= sprintf ("info§"._("Die Raumanfrage der Veranstaltung wurde an den zust&auml;ndigen Raumadministrator gesandt. Um die Anfrage einzusehen oder zu bearbeiten, gehen Sie auf %sRaumanfragen%s.")."§", "<a href=\"admin_room_requests.php?seminar_id=\"".$term_metadata["sem_id"]."\">", "</a>");
  			}
  		}
+		$term_metadata["turnus_data"] = $metadata_termin["turnus_data"];
 	}
+	
 	
 	//Save the current state as snapshot to compare with current data and other original data for comparisons
 	$term_metadata["original"] = get_snapshot();
