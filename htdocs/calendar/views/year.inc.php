@@ -17,7 +17,8 @@
 		echo '<tr>';
 		for($i = 1;$i < 13;$i++){
 			$ts_month += ($days_per_month[$i] - 1) * 86400;
-			echo '<th width="8%"><a class="precol1" href="'.$PHP_SELF.'?cmd=showmonth&atime='.($ayear->getStart() + $ts_month).'">'.month($ts_month).'</a></th>';
+			printf("<th width=\"8%%\"><a class=\"precol1\" href=\"%s?cmd=showmonth&atime=%s\">%s</a></th>",
+				$PHP_SELF, ($ayear->getStart() + $ts_month), month($ts_month));
 		}
 		echo '</tr>';
 		
@@ -29,17 +30,18 @@
 				if($i <= $days_per_month[$month]){
 					$wday = date("w", $aday);
 					if($wday == 0 || $wday == 6)
-						$weekend = ' class="weekend"';
+						$weekend = " class=\"weekend\"";
 					else
-						$weekend = "";
+						$weekend = " class=\"weekday\"";
 						
 					if($month == 1)
-						echo "<td" . $weekend . ' height="25">';
+						printf("<td%s height=\"25\">", $weekend);
 					else
-						echo "<td" . $weekend . ">";
+						printf("<td%s>", $weekend);
 					
 					if($apps = $ayear->numberOfEvents($aday))
-						echo '<table width="100%" cellspacing=0 cellpadding=0><tr><td' . $weekend . '>';
+						printf("<table width=\"100%%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td%s>",
+							$weekend);
 						
 					// noch wird nicht nach Wichtigkeit bestimmter Feiertage unterschieden
 					$hday = holiday($aday);
@@ -77,22 +79,28 @@
 								    .'"><b>'.$i.'</b></a> '.wday($aday, "SHORT");
 					}
 					
-					if($apps){
-						if($apps > 1)
-							echo '</td><td' . $weekend . ' align="right"><img src="pictures/icon-uhr.gif" alt="'.$apps.' Termine"></td></table>';
-						else
-							echo '</td><td' . $weekend . ' align="right"><img src="pictures/icon-uhr.gif" alt="1 Termin"></td></table>';
+					if	($apps) {
+						if	($apps > 1) {
+							printf("</td><td%s align=\"right\">", $weekend);
+							printf("<img src=\"./pictures/icon-uhr.gif\" alt=\"%s Termine\" title=\"%s Termine\">",
+								$apps, $apps);
+							echo "</td></table>";
+						}
+						else {
+							printf("</td><td%s align=\"right\">", $weekend);
+							echo "<img src=\"pictures/icon-uhr.gif\" alt=\"1 Termin\" title=\"1 Termin\">";
+							echo "</td></table>";
+						}
 					}
-					
-					echo '</td>';
+					echo "</td>";
 				}
 				else
-					echo '<td>&nbsp;</td>';
+					echo "<td class=\"weekday\">&nbsp;</td>";
 			}
 			echo "</tr>\n";
 			
 		}
-		echo '<tr>';
+		echo "<tr>";
 		$ts_month = 0;
 		for($i = 1;$i < 13;$i++){
 			$ts_month += ($days_per_month[$i] - 1) * 86400;

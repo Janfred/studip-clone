@@ -78,8 +78,10 @@
 				}
 				echo "</td>";
 				if($mod != "nokw")
-					echo '<td align=center width='.$width.' height='.$height.'><a class="kw" href="'.$PHP_SELF.'?cmd=showweek&atime=' . $i . '">'
-							 	 . strftime("%V", $i)."</a></td>";
+					printf("<td class=\"lightmonth\" align=\"center\" width=\"%s\" height=\"%s\">",
+						$width, $height);
+					printf("<a class=\"kw\" href=\"%s?cmd=showweek&atime=%s\">%s</a></td>",
+						$PHP_SELF, $i, strftime("%V", $i));
 				echo "</tr>\n";
 			}
 			else{
