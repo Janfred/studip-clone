@@ -44,7 +44,7 @@ function output_data($object_data, $output_mode = "file")
 
 function export_range($range_id)
 {
-	global $db, $o_mode;
+	global $db, $o_mode, $range_name;
 
 //    Ist die Range-ID eine Instituts-ID?
 	$db=new DB_Seminar;
