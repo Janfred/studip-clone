@@ -93,16 +93,29 @@ class cssClassSwitcher {
 		2=>"steel1"); 		//Klassen
 	var $headerClass="steel";
 	var $classcnt=1;		//Counter
-	var	$hoverclass;
+	var	$hoverclass="";
+	var $JSenabled=FALSE;
 	
-	function getHoverJS(){
-		$ret="";
-		if($this->hoverclass){
-			$ret=" onMouseOver='this.className=\"".$this->hoverclass."\"'".
-				" onMouseOut='this.className=\"".$this->class[$this->classcnt]."\"' ";
+	function cssClassSwitcher($class="",$headerClass="",$hoverclass=""){
+		if ($GLOBALS["auth"]->auth["jscript"]) $this->JSenabled = TRUE;
+		if (is_array($class)) $this->class = $class;
+		if ($headerClass) $this->headerClass = $headerClass;
+		if ($hoverclass) $this->hoverclass = $hoverclass;
+	}
+	
+	function getHover(){
+		$ret = $this->getFullClass();
+		if($this->hoverclass AND $this->JSenabled){
+			$ret .=" onMouseOver='doHover(this,\"".$this->class[$this->classcnt]."\",\"".$this->hoverclass."\")'".
+				" onMouseOut='doHover(this,\"".$this->hoverclass."\",\"".$this->class[$this->classcnt]."\")' ";
 		}
 		return $ret;
 	}
+	
+	function getFullClass(){
+		return " class=\"".$this->class[$this->classcnt]."\"";
+	}
+	
 	function getClass() {
 		return $this->class[$this->classcnt];
 	}
@@ -119,6 +132,38 @@ class cssClassSwitcher {
 		$this->classcnt++;
 		if ($this->classcnt >sizeof($this->class))
 			$this->classcnt=1;
+	}
+	
+	function GetHoverJSFunction(){
+		static $is_called = 0;
+		$ret = "";
+		++$is_called;
+		if($GLOBALS["auth"]->auth["jscript"] OR ($is_called <= 1)) {
+			$ret = "<script type=\"text/javascript\">
+					function doHover(theRow, theFromClass, theToClass){
+						if (theFromClass == '' || theToClass == '' || typeof(theRow.className) == 'undefined') {
+							return false;
+						}
+						if (typeof(document.getElementsByTagName) != 'undefined') {
+							var theCells = theRow.getElementsByTagName('td');
+						}
+						else if (typeof(theRow.cells) != 'undefined') {
+							var theCells = theRow.cells;
+						} else {
+							return false;
+						}
+						var rowCellsCnt  = theCells.length;
+						theRow.className = theToClass;
+						for (var c = 0; c < rowCellsCnt; c++) {
+							if (theCells[c].className == theFromClass) {
+								theCells[c].className = theToClass;
+							}
+						}
+						return true;
+					}
+					</script>";
+		}
+		return $ret;
 	}
 }
 
