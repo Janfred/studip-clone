@@ -276,6 +276,7 @@ page_close();
 function chatLogout(){
 	global $userid,$chatid,$chatServer;
 	$chatServer->removeUser($userid,$chatid);
+	die;
 }
 ?>
 
