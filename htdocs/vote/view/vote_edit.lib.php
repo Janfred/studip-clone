@@ -400,10 +400,8 @@ function printRightRegion ( ) {
 	    : _("Es hat bereits jemand an diesem Voting teilgenommen!");
 
 	$action_text1 = ($vote->isAnonymous())
-	    ? _("Sie k&ouml;nnen daher nur noch den Titel, den Endzeitpunkt ".
-		"und die Ergebnissichtbarkeit ver&auml;ndern.")
-	    : _("Sie k&ouml;nnen daher nur noch den Titel, den Endzeitpunkt, ".
-		"die Ergebnissichtbarkeit und die Revidierbarkeit ver&auml;ndern.");
+	    ? _("Sie k&ouml;nnen daher nur noch den Titel, den Endzeitpunkt und die Ergebnissichtbarkeit ver&auml;ndern.")
+	    : _("Sie k&ouml;nnen daher nur noch den Titel, den Endzeitpunkt, die Ergebnissichtbarkeit und die Revidierbarkeit ver&auml;ndern.");
 
 	break;
 	
@@ -441,8 +439,7 @@ function printRightRegion ( ) {
 
     if( $type == "test" && $pageMode != MODE_RESTRICTED ) {
 	    $action_text1_extra =
-		_("Deklarieren Sie mindestens eine Antwort als richtig, ".
-		  "indem Sie einen Haken in die entsprechende Box setzen.");
+		_("Deklarieren Sie mindestens eine Antwort als richtig, indem Sie einen Haken in die entsprechende Box setzen.");
 	    $action_array[] = array( "icon" => "pictures/symbol01.gif",
 				     "text" => $action_text1_extra );
     }
@@ -708,8 +705,7 @@ function printProperties ( $multipleChoice,
     $html .= "<tr><td align=right class=blank style=\"border-bottom:1px dotted black;\">";
     if( $type == "test" ) {
 	$html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\""
-	    . tooltip(_("Bedenken Sie, dass die Einstellung 'immer', also eine Voransicht ".
-			"des Zwischenstands, bei einem Test nicht unbedingt sinnvoll ist."),
+	    . tooltip(_("Bedenken Sie, dass die Einstellung 'immer', also eine Voransicht des Zwischenstands, bei einem Test nicht unbedingt sinnvoll ist."),
 		      FALSE, TRUE)
 	    . " border=0>&nbsp;";
     }
@@ -774,11 +770,7 @@ function printProperties ( $multipleChoice,
     // anonymity
     $html .= "<tr><td align=right class=blank style=\"border-bottom:1px dotted black;\">";
     $html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\""
-	. tooltip(_("'Anonym' bedeutet, dass niemandem angezeigt und nirgends gespeichert wird, ".
-		    "welche Antwort ein Teilnehmer wählt. \n\n".
-		    "'Personalisiert' bedeutet, dass für jeden sichtbar gemacht wird, ".
-		    "wer wofür stimmt. Verwenden Sie diese Option daher am besten ".
-		    "nur, wenn es wirklich nötig ist."), FALSE, TRUE)
+	. tooltip(_("'Anonym' bedeutet, dass niemandem angezeigt und nirgends gespeichert wird, welche Antwort ein Teilnehmer wählt. \n\n'Personalisiert' bedeutet, dass für jeden sichtbar gemacht wird, wer wofür stimmt. Verwenden Sie diese Option daher am besten nur, wenn es wirklich nötig ist."), FALSE, TRUE)
 	. " border=0>&nbsp;";
 
     $html .= "<font size=-1>";
@@ -806,11 +798,9 @@ function printProperties ( $multipleChoice,
     if( ! ($anonymous && $pageMode == MODE_RESTRICTED ) ) {
 	$html .= "<tr><td align=right class=blank>";
 	$html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\""
-	    . tooltip(_("Diese Option ist nur erlaubt, wenn Sie die Auswertung auf ".
-			"'personalisiert' schalten. ").
+	    . tooltip(_("Diese Option ist nur erlaubt, wenn Sie die Auswertung auf 'personalisiert' schalten. ").
 		      ( ($type=="test")
-			? _("\n\nBeachten Sie außerdem, dass das Einschalten dieser Option ".
-			    "in Kombination mit 'Richtigkeits-Anzeige: sofort' keinen Sinn macht.")
+			? _("\n\nBeachten Sie außerdem, dass das Einschalten dieser Option in Kombination mit 'Richtigkeits-Anzeige: sofort' keinen Sinn macht.")
 			: "" ),
 		      FALSE, TRUE)
 	    . " border=0>&nbsp;";

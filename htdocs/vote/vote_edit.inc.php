@@ -203,8 +203,7 @@ if( !isset( $rangeID ) )  $rangeID = $vote->getRangeID();
 // special case: creator wants to modify things in a running vote,
 // but in the meantime the first user has voted...
 if( $pageMode == MODE_RESTRICTED && !empty( $_POST["question"]) )
-     $vote->throwError(666, _("Inzwischen hat jemand abgestimmt! Sie k&ouml;nnen daher die meisten ".
-			      "&Auml;nderungen nicht mehr vornehmen."), __LINE__, __FILE__);
+     $vote->throwError(666, _("Inzwischen hat jemand abgestimmt! Sie k&ouml;nnen daher die meisten &Auml;nderungen nicht mehr vornehmen."), __LINE__, __FILE__);
 
 /*******************************************************************/
 /******************** page commands ********************************/
@@ -317,13 +316,13 @@ if( isset( $saveButton_x ) ) {
 	    // user's vote has been modified by admin/root
 	    // --> send notification sms
 	    $sms = new messaging();
+	    $smsText = sprintf( _("An Ihrem Vote/Test '%s' wurden von dem/der Administrator/in %s Änderungen vorgenommen."),
+				$vote->getTitle(),
+				$vote->voteDB->getAuthorRealname($auth->auth["uid"]) );
 	    $sms->insert_sms( $vote->voteDB->getAuthorUsername($vote->getAuthorID()),
-			      mysql_escape_string( sprintf( _("An Ihrem %s \"%s\" wurden von dem Administrator oder der ".
-							      "Administratorin %s Änderungen vorgenommen."),
-							    ($vote->instanceof() == INSTANCEOF_TEST
-							    ? _("Test") : _("Voting")), $vote->getTitle(),
-							    $vote->voteDB->getAuthorRealname($auth->auth["uid"]) ) ),
-			      "____%system%____" );
+			      mysql_escape_string( $smsText ),
+			      "____%system%____" 
+			      );
 	}
     }
 
