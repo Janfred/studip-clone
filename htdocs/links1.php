@@ -53,7 +53,7 @@ if ($entry_level=="inst") {
 		if ($perm->have_perm("admin"))
 			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_institut.php?new_inst=TRUE", active=>FALSE);
 		else
-			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_literatur.php?new_inst=TRUE&view=inst", active=>FALSE);		
+			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_literatur.php?new_inst=TRUE&view=literatur_inst", active=>FALSE);		
 } else {
 //
 	$structure["_seminar_main"]=array (topKat=>"seminar_main", name=>"Kurzinfo", link=>"seminar_main.php", active=>FALSE);
@@ -85,15 +85,15 @@ $structure["_folder"]=array (topKat=>"folder", name=>"Ordneransicht", link=>"fol
 $structure["alle_dateien"]=array (topKat=>"folder", name=>"Alle Dateien", link=>"folder.php?cmd=all", active=>FALSE);
 //
 if ($entry_level=="sem")
-	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=sem", active=>FALSE);
+	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=literatur_sem", active=>FALSE);
 else
-	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=inst", active=>FALSE);
+	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=literatur_inst", active=>FALSE);
 	
 
 if ($entry_level=="sem")
-	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Statusgruppen", link=>"statusgruppen.php?view=sem", active=>FALSE);
+	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
 else
-	$structure["statusgruppen"]=array (topKat=>"personal", name=>"Statusgruppen", link=>"statusgruppen.php?view=inst", active=>FALSE);
+	$structure["statusgruppen"]=array (topKat=>"personal", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_inst", active=>FALSE);
 
 
 if ($rechte)
