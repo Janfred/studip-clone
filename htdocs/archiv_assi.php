@@ -259,7 +259,8 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" colspan=3 valign="top" width="96%">
 				<?
 				//Grunddaten des Seminars
-				printf ("<font size=-1><b>Titel:</b></font><br /><font size=-1>%s</font>",htmlReady($db->f("Name")));
+				printf ("<b>%s</b>",htmlReady($db->f("Name")));
+				printf ("<br><font size=\"-1\">letzte Ver&auml;nderung am: %s </font>", date("d.m.Y, G:i", lastActivity($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])));
 				?>
 				</td>
 			</tr>
@@ -395,6 +396,37 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
+				<?
+				$db2->query("SELECT Name, url, Institut_id FROM Institute WHERE Institut_id = '".$db->f("Institut_id")."' ");
+				$db2->next_record();
+				if ($db2->num_rows()) {
+				printf("<font size=-1><b>Heimat-Einrichtung:</b></font><br /><font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font>", $db2->f("Institut_id"), htmlReady($db2->f("Name")));
+				}
+				?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
+				<?
+				$db2->query("SELECT Name, url, Institute.Institut_id FROM Institute LEFT JOIN seminar_inst USING (institut_id) WHERE seminar_id = '".$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]."' AND Institute.institut_id != '".$db->f("Institut_id")."'");
+				if ($db2->num_rows() ==1)
+					printf ("<font size=-1><b>beteiligte Einrichtung:</b></font><br />");
+				elseif ($db2->num_rows() >=2)
+					printf ("<font size=-1><b>beteiligte Einrichtungen:</b></font><br />");
+				else	
+					print "&nbsp; ";
+				while ($db2->next_record()) {
+					if ($db2->num_rows() >= 2)
+						print "<li>";
+					printf("<font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font><br />", $db2->f("Institut_id"), htmlReady($db2->f("Name")));
+					if ($db2->num_rows() > 2)
+						print "</li>";
+				}				
+				?>
+				</td>
+			</tr>			
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="96%" valign="top" align="center">
 					<?
 					//can we inc?
@@ -420,7 +452,10 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 							$dec_possible=TRUE;
 					}
 					if ($dec_possible)
-						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?inc=TRUE"><img src="./pictures/buttons/naechster-button.gif" border=0></a><? } ?>
+						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?inc=TRUE"><img src="./pictures/buttons/naechster-button.gif" border=0></a><? }
+					if (sizeof($archiv_assi_data["sems"]) > 1)
+						printf ("<br /><font size=\"-1\">noch <b>%s</b> von <b>%s</b> Veranstaltungen zum Archivieren ausgew&auml;hlt.</font>", sizeof($archiv_assi_data["sem_check"]), sizeof($archiv_assi_data["sems"]));
+					?>
 				</td>
 			</tr>
 		</table>
