@@ -1098,7 +1098,12 @@ function printposting ($forumposting) {
 	if ($forumposting["openclose"] == "open") {
 		$forumposting = ForumGetRights($forumposting);
 		if ($forumposting["writestatus"] != "none") { // Posting wird geschrieben
-			$description = editarea($forumposting);
+			if ($forumposting["writestatus"] == "update" && $forumposting["lonely"] == FALSE) {
+				echo _("Kein Zugriff auf dieses Element möglich.");
+				die;
+			} else {
+				$description = editarea($forumposting);
+			}
 		} else {
 			$forumposting["description"] = forum_parse_edit($forumposting["description"]);
 			$description = formatReady($forumposting["description"]);
