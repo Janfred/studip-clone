@@ -1733,7 +1733,7 @@ if ($snd_closed_request_sms) {
 		
 		//send the message into stud.ip message system
 		setTempLanguage($reqObj->getUserId());
-		$messaging->insert_message($message, get_username($reqObj->getUserId()), $user->id, FALSE, FALSE, FALSE, FALSE, _("Raumanfrage bearbeitet"), TRUE);
+		$messaging->insert_message(mysql_escape_string($message), get_username($reqObj->getUserId()), $user->id, FALSE, FALSE, FALSE, FALSE, _("Raumanfrage bearbeitet"), TRUE);
 		restoreLanguage();
 		
 		//set more closed ;-)
