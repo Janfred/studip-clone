@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-17 10:33+0200\n"
+"POT-Creation-Date: 2003-04-17 11:35+0200\n"
 "PO-Revision-Date: 2003-04-04 14:57+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -9085,6 +9085,14 @@ msgstr "Surname:"
 msgid "Geschlecht:"
 msgstr "Gender:"
 
+#: crcregister.ihtml:258 edit_about.php:911
+msgid "m&auml;nnlich"
+msgstr "male"
+
+#: crcregister.ihtml:258 edit_about.php:915
+msgid "weiblich"
+msgstr "female"
+
 #: crcregister.ihtml:262 edit_about.php:872 edit_about.php:881
 #: institut_main.php:125
 msgid "E-Mail:"
@@ -9752,11 +9760,11 @@ msgstr "The repeated password is incorrect!  Please enter the exact password!"
 msgid "Ihr Passwort wurde ge&auml;ndert!"
 msgstr "Your password has been changed!"
 
-#: edit_about.php:315 phplib_local.inc.php:433
+#: edit_about.php:315 phplib_local.inc.php:439
 msgid "Der Vorname fehlt oder ist unsinnig!"
 msgstr "The forename is missing or is nonsensical!"
 
-#: edit_about.php:319 phplib_local.inc.php:438
+#: edit_about.php:319 phplib_local.inc.php:444
 msgid "Der Nachname fehlt oder ist unsinnig!"
 msgstr "The surname is missing or is nonsensical!"
 
@@ -9781,7 +9789,7 @@ msgstr ""
 msgid "Ihr Username wurde ge&auml;ndert!"
 msgstr "Your username has been changed!"
 
-#: edit_about.php:350 phplib_local.inc.php:443
+#: edit_about.php:350 phplib_local.inc.php:449
 msgid "Die E-Mail-Adresse fehlt oder ist falsch geschrieben!"
 msgstr "The E-mail address is missing or is incorrectly written! "
 
@@ -9951,14 +9959,6 @@ msgstr "new password:"
 #: edit_about.php:875
 msgid "Adminzugriff hier nicht möglich!"
 msgstr "Administrative access not possible here!"
-
-#: edit_about.php:911
-msgid "m&auml;nnlich"
-msgstr "male"
-
-#: edit_about.php:915
-msgid "weiblich"
-msgstr "female"
 
 #: edit_about.php:922
 msgid "Freiwillige Angaben"
@@ -12491,15 +12491,15 @@ msgstr "Autologin is not possible with the status: %s!"
 msgid "Das Passwort ist falsch!"
 msgstr "The password is incorrect!"
 
-#: phplib_local.inc.php:418
+#: phplib_local.inc.php:424
 msgid "Der gewählte Username ist zu kurz!"
 msgstr "The chosen username is too short!"
 
-#: phplib_local.inc.php:426
+#: phplib_local.inc.php:432
 msgid "Das Passwort ist zu kurz!"
 msgstr "The password is too short! "
 
-#: phplib_local.inc.php:452
+#: phplib_local.inc.php:458
 msgid ""
 "Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails "
 "mit der angegebenen Adresse verschicken und empfangen können!"
@@ -12507,7 +12507,7 @@ msgstr ""
 "The mail server is not contactable. Please check whether E-Mails can be sent "
 "and received from the given address!"
 
-#: phplib_local.inc.php:462
+#: phplib_local.inc.php:468
 msgid ""
 "Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie "
 "Ihre Angaben!"
@@ -12515,11 +12515,11 @@ msgstr ""
 "The given E-mail address is not contactable, please check the given "
 "information!"
 
-#: phplib_local.inc.php:476
+#: phplib_local.inc.php:482
 msgid "Der gewählte Username ist bereits vorhanden!"
 msgstr "The chosen username has already been taken!"
 
-#: phplib_local.inc.php:487
+#: phplib_local.inc.php:493
 msgid ""
 "Die angegebene E-Mail-Adresse wird bereits von einem anderen User verwendet. "
 "Sie müssen eine andere E-Mail-Adresse angeben!"
