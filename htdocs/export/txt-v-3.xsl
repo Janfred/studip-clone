@@ -111,7 +111,7 @@ Sonstiges: <xsl:value-of select="sonstiges"/>
 Art der Veranstaltung: <xsl:value-of select="art"/>
 		</xsl:if>
 		<xsl:if test="teilnehmer">
-Teilnehmer: <xsl:value-of select="teilnehmer"/>
+Teilnahme: <xsl:value-of select="teilnehmer"/>
 		</xsl:if>
 		<xsl:if test="teilnehmerzahl"><xsl:text>
 </xsl:text><xsl:value-of select="teilnehmerzahl@key"/> TeilnehmerInnenzahl: <xsl:value-of select="teilnehmerzahl"/>
