@@ -430,6 +430,7 @@ outputLoop($chatid);
 function chatLogout(){
 	global $userid,$chatid,$chatServer;
 	$chatServer->removeUser($userid,$chatid);
+	$chatServer->isActiveChat($chatid); 
 }
 ?>
 

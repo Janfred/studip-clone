@@ -83,10 +83,14 @@ class ChatServer {
 	
 	function isActiveChat($rangeid){
 		$this->restore();
-		if (!$this->getActiveUsers($rangeid)){
+		if (!$this->chatDetail[$rangeid]){
+			return false;
+		}
+		$anzahl = $this->getActiveUsers($rangeid);
+		if (!$anzahl){
 			$this->removeChat($rangeid);
 		}
-		return $this->chatDetail[$rangeid]["name"];
+		return $anzahl;
 	}
 	
 	function getActiveUsers($rangeid){

@@ -47,58 +47,21 @@ if (!$CHAT_ENABLE) {
 }
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 //Studip includes
 require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";
 require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."contact.inc.php";
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
 $sms = new messaging();
-$object_type = get_object_type($chatid);
-$chat_entry_level = "user";
-if (!$perm->have_perm("root")){;
-	switch($object_type){
-		case "user":
-		if ($chatid == $user->id){
-			$chat_entry_check = true;
-			$chat_entry_level = "admin";
-		} else {
-			$chat_entry_check = CheckBuddy($auth->auth['uname'], $chatid);
-		}
-		break;
-		
-		case "sem" :
-		$chat_entry_check = $perm->have_studip_perm("user",$chatid);
-		if ($perm->have_studip_perm("tutor",$chatid)){
-			$chat_entry_level = "admin";
-		}
-		break;
-		
-		case "inst" :
-		case "fak" :
-		$chat_entry_check = $perm->have_studip_perm("autor",$chatid);
-		if ($perm->have_studip_perm("admin",$chatid)){
-			$chat_entry_level = "admin";
-		}
-		break;
-		
-		default:
-		if ($chatid == "studip"){
-			$chat_entry_check = true;
-		}
-	}
-} else {
-	$chat_entry_check = true;
-	$chat_entry_level = "admin";
-}
-
+$chat_entry_level = chat_get_entry_level($chatid);
+$chat_entry_check = $chat_entry_level;
 if ($chat_entry_level != "admin" && $chatServer->isActiveChat($chatid) && $chatServer->chatDetail[$chatid]["password"]){
 	$chat_entry_check = false;
-	if ($_REQUEST['chat_password']){
+	if ($_REQUEST['chat_password'] ){
 		if ($chatServer->chatDetail[$chatid]['password'] == $_REQUEST['chat_password']){
 			$chat_entry_check = true;
 		} else {
@@ -111,16 +74,20 @@ if ($chat_entry_level != "admin" && $chatServer->isActiveChat($chatid) && $chatS
 				$msg = "error§<font size=\"-1\">" . _("Es wurde keine g&uuml;ltige Einladung f&uuml;r diesen Chat gefunden!") . "</font>§";
 		}
 	}
-	if (!$chat_entry_check){
+	if (!$chat_entry_check && $chat_entry_level){
 		$msg .= "info§" . "<form name=\"chatlogin\" method=\"post\" onSubmit=\"doSubmit();return false;\"action=\"$PHP_SELF?chatid=$chatid\"><b>" ._("Passwort erforderlich") 
 			. "</b><br><font size=\"-1\" color=\"black\">" . _("Um an diesem Chat teilnehmen zu k&ouml;nnen, m&uuml;ssen sie das Passwort eingeben.")
 			. "<br><input type=\"password\" style=\"vertical-align:middle;\" name=\"chat_password\">&nbsp;&nbsp;<input style=\"vertical-align:middle;\" type=\"image\" name=\"submit\""
 			. makeButton("absenden","src") . " border=\"0\" value=\"senden\"></font></form>§";
 			}
 }
+if (!$chat_entry_check && !$chat_entry_level){
+	$msg .= "error§" . "<b>" ._("Chatlogin nicht m&ouml;glich") 
+		. "</b><br><font size=\"-1\" color=\"black\">" . _("Sie k&ouml;nnen ohne eine g&uuml;ltige Einladung nicht an diesem Chat teilnehmen.") . "</font>§";
+}
 
 if ($chat_entry_check){
-	$chatServer->addChat($chatid);
+	$chatServer->addChat($chatid, chat_get_name($chatid));
 	if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),(($chat_entry_level == "admin") ? true : false))){
 		$chat_entry_check = false;
 		$msg = "error§<b>" ._("Chatlogin nicht m&ouml;glich"). "</b><br/><font size=\"-1\" color=\"black\">"
