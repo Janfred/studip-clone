@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-03-28 13:12+0100\n"
-"PO-Revision-Date: 2003-03-24 18:14+GMT\n"
-"Last-Translator: \n"
-"Language-Team:  <de@li.org>\n"
+"PO-Revision-Date: 2003-03-28 14:21+0100\n"
+"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
+"Language-Team: english\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -103,7 +103,7 @@ msgstr "Course meetings"
 #: calendar/calendar_links.inc.php:181 calendar/calendar_links.inc.php:188
 #: calendar/calendar_links.inc.php:256 calendar/calendar_links.inc.php:261
 msgid "Ansicht anpassen"
-msgstr "Customise lay out"
+msgstr "Customise lay-out"
 
 #: calendar/calendar_links.inc.php:200 calendar/calendar_links.inc.php:205
 msgid "Alphabetisch"
@@ -129,8 +129,7 @@ msgstr "Customise settings for my appointment calendar"
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr ""
-"Here you can customise the lay out of your personal appointment calendar."
+msgstr "Here you can customise the lay-out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:62
 msgid "Startansicht anpassen:"
@@ -521,8 +520,7 @@ msgstr ""
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr ""
-"To edit this appointment, please switch to the %s Course administration</a> "
+msgstr "To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:498
 msgid "Aktion:"
@@ -568,3 +566,4 @@ msgstr "%s appointments"
 #: calendar/views/year.inc.php:147
 msgid "1 Termin"
 msgstr "1. appointment"
+
