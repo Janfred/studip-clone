@@ -112,7 +112,7 @@ $reiter->create($structure, $view);
 			<br><b>Arne Schröder</b>, eMail: <a href="mailto:23arne@web.de">23arne@web.de</a> (Externe Seiten)
 			<br><b>Ralf Stockmann</b>, eMail: <a href="mailto:rstockm@gwdg.de">rstockm@gwdg.de</a> (Kernentwicklung, Forensystem, pers&ouml;nliche Seiten, Design)
 			<br><b>Stefan Suchi</b>, eMail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> (Kernentwicklung, Datenbankstruktur, Rechtesystem, Adminbereich)
-			<br><b>Peter Thienel</b>, eMail: <a href="mailto:rabeiri@gmx.de">rabeiri@gmx.de</a> (Externe Seiten, Terminplaner)
+			<br><b>Peter Thienel</b>, eMail: <a href="mailto:thienel@data-quest.de">thienel@data-quest.de</a> (Externe Seiten, Terminplaner)
 			<br></blockquote>
 		</td>
 	</tr>
