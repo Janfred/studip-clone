@@ -81,7 +81,7 @@ if ($ILIAS_CONNECT_ENABLE)
 	</td></tr>
 	<tr><td colspan="3">
 	<?
-	if (sizeof(trim($search_key)) < 2)
+	if (isset($search_key) AND (sizeof(trim($search_key)) < 2))
 		echo "<b>" . _("Der Suchbegriff ist zu kurz") . "</b><br><br>";
 	if (isset($search_key) AND (trim($search_key) != ""))
 	{
