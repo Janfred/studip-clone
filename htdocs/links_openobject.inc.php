@@ -30,7 +30,7 @@ if ($SessSemName["class"]=="inst") {
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"seminar_main.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
-	if (!in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) {
+	if (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) {
 		$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 	}
 	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
@@ -74,7 +74,7 @@ if ($SessSemName["class"]=="inst") {
 }
 //
 
-if (!in_array($SessSemName[1], $AUTO_INSERT_SEM)) {
+if (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)) {
 	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 }
 $structure["_forum"]=array (topKat=>"forum", name=>_("Themen"), link=>"forum.php", active=>FALSE);
@@ -102,7 +102,7 @@ else
 	$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
 	
 
-if ($SessSemName["class"]=="sem" && !in_array($SessSemName[1], $AUTO_INSERT_SEM))
+if ($SessSemName["class"]=="sem" && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)))
 	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>_("Funktionen / Gruppen"), link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
 
 
