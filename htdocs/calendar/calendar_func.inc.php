@@ -209,12 +209,14 @@ function holiday($tmstamp, $mod = ""){
 }
 
 // ueberprueft eine Datumsangabe, die in einen Timestamp gewandelt werden soll
-function check_date($month, $day, $year){
+function check_date($month, $day, $year, $hour=0, $min=0){
 	if(!preg_match("/^\d{1,2}$/", $day) || !preg_match("/^\d{1,2}$/", $month) || !preg_match("/^\d{4}$/", $year))
 		return FALSE;
 	if($year < 1970 || $year > 2036)
 		return FALSE;
 	if(!checkdate($month, $day, $year))
+		return FALSE;
+	if ($hour > 23 || $hour < 0 || $min > 59 || $min < 0)
 		return FALSE;
 	return TRUE;
 }
