@@ -95,8 +95,7 @@ class VoteDB extends StudipObject {
       $this->db->query ($query);
 
       if ($this->db->nf() == 0) {
-	$this->throwError (1, _("Es wurden keine aktiven Votes in der ".
-				"Datenbank gefunden."),
+	$this->throwError (1, _("Es wurden keine aktiven Votes in der Datenbank gefunden."),
 			   __LINE__, __FILE__); 
       }
 
@@ -128,8 +127,7 @@ class VoteDB extends StudipObject {
       $this->db->query ($query);
 
       if ($this->db->nf() == 0) {
-	$this->throwError (1, _("Es wurden keine aktiven Votes in der ".
-				"Datenbank gefunden."),
+	$this->throwError (1, _("Es wurden keine aktiven Votes in der Datenbank gefunden."),
 			   __LINE__, __FILE__); 
       }
 
@@ -161,8 +159,7 @@ class VoteDB extends StudipObject {
 	"state = \"stopvis\" ORDER BY chdate DESC";
       $this->db->query ($query);
       if ($this->db->nf() == 0) {
-	$this->throwError (1, _("Es wurden keine gestoppten sichtbaren ".#
-				"Votes in der Datenbank gefunden."),
+	$this->throwError (1, _("Es wurden keine gestoppten sichtbaren Votes in der Datenbank gefunden."),
 			   __LINE__, __FILE__); 
       }
       while ($this->db->next_record ()) {
@@ -192,8 +189,7 @@ class VoteDB extends StudipObject {
        "state = \"stopvis\" OR state = \"stopinvis\" ORDER BY chdate DESC";
      $this->db->query ($query);
      if ($this->db->nf() == 0) {
-       $this->throwError (1, _("Es wurden keine gestoppten ".
-			       "Votes in der Datenbank gefunden."),
+       $this->throwError (1, _("Es wurden keine gestoppten Votes in der Datenbank gefunden."),
 			  __LINE__, __FILE__); 
      }
      while ($this->db->next_record ()) {
@@ -228,8 +224,7 @@ class VoteDB extends StudipObject {
 
       if ($this->db->nf() == 0) {
 
-	$this->throwError (1, _("Es wurden keine passenden Votes in der ".
-				"Datenbank gefunden."),
+	$this->throwError (1, _("Es wurden keine passenden Votes in der Datenbank gefunden."),
 			   __LINE__, __FILE__); 
       }
       while ($this->db->next_record ()) {
@@ -262,8 +257,7 @@ class VoteDB extends StudipObject {
 	  "state = \"active\" AND range_id = \"".$rangeID."\" ORDER BY chdate DESC";
       $this->db->query ($query);
       if ($this->db->nf() == 0) {
-	$this->throwError (1, _("Es wurden keine passenden Votes in der ".
-				"Datenbank gefunden."),
+	$this->throwError (1, _("Es wurden keine passenden Votes in der Datenbank gefunden."),
 			   __LINE__, __FILE__); 
       }
       while ($this->db->next_record ()) {
@@ -298,8 +292,7 @@ class VoteDB extends StudipObject {
 		"range_id =\"".$rangeID."\" ORDER BY chdate DESC";
       $this->db->query ($query);
       if ($this->db->nf() == 0) {
-	$this->throwError (1, _("Es wurden keine passenden Votes in der ".
-				"Datenbank gefunden."),
+	$this->throwError (1, _("Es wurden keine passenden Votes in der Datenbank gefunden."),
 			   __LINE__, __FILE__); 
       }
       while ($this->db->next_record ()) {
@@ -350,8 +343,7 @@ class VoteDB extends StudipObject {
      // auf anonymous eingehen....
       $this->db->query ("SELECT * FROM vote WHERE vote_id=\"".$voteID."\"");
       if ($this->db->nf() == 0) {
-	 $this->throwError (1, _("Es wurden keine Votes mit der ".
-				 "angegebenen ID gefunden."),
+	 $this->throwError (1, _("Es wurden keine Votes mit der angegebenen ID gefunden."),
 			    __LINE__, __FILE__);  
       } else {
 	 $this->db->next_record(); # Das brauchst du um einen Eintrag zu lesen!
@@ -547,7 +539,7 @@ class VoteDB extends StudipObject {
      $this->db->query ($sql);
      if ($this->db->nf() == 0){
        if ($rangeID == "studip")
-	 $rangename = "Systemweite Votings/Tests";
+	 $rangename = _("Systemweite Votings/Tests");
        else
 	 $rangename = getHeaderLine($rangeID);
        return $rangename;
@@ -749,8 +741,7 @@ class VoteDB extends StudipObject {
 	"state = '".$state."' WHERE vote_id = '".$voteID."'";
       $this->db->query ($sql);
       if (!$this->db->affected_rows())
-	$this->throwError (1, _("DB: Vote nicht gefunden oder ist ".
-				"bereits sichtbar"));
+	$this->throwError (1, _("DB: Vote nicht gefunden oder ist bereits sichtbar"));
    }
 
   
@@ -859,10 +850,7 @@ class VoteDB extends StudipObject {
 
       $this->db->query ($sql);
       if ($this->db->nf ()) 
-	 return $this->throwError (1, _("Sie haben mehrmals auf ".
-					"'Speichern' gedr&uuml;ckt. Das ".
-					"Voting bzw. der Test wurde bereits ".
-					" in die Datenbank geschrieben."));
+	 return $this->throwError (1, _("Sie haben mehrmals auf 'Speichern' gedr&uuml;ckt. Das Voting bzw. der Test wurde bereits in die Datenbank geschrieben."));
       /* ------------------------------------------------------------------- */
       
        $this->db->query ("SELECT title from vote WHERE ".
@@ -1308,10 +1296,7 @@ class VoteDB extends StudipObject {
 
       $this->db->query ($sql);
       if ($this->db->nf ()) 
-	 return $this->throwError (1, _("Sie haben mehrmals auf ".
-					"'Speichern' gedr&uuml;ckt. Das ".
-					"Voting bzw. der Test wurde bereits ".
-					" in die Datenbank geschrieben."));
+	 return $this->throwError (1, _("Sie haben mehrmals auf 'Speichern' gedr&uuml;ckt. Das Voting bzw. der Test wurde bereits in die Datenbank geschrieben."));
       /* ------------------------------------------------------------------- */
       
       /* If vote does not exists in DB create it --------------------------- */
