@@ -41,9 +41,11 @@ require_once($ABSOLUTE_PATH_STUDIP."lib/classes/StartupChecks.class.php");
 $checks=new StartupChecks;
 $list = $checks->getCheckList();
 
+$problems_found = 0;
+
 foreach ($list as $key=>$val) {
 	if ($val)
-		$problems_found = TRUE;
+		$problems_found++;
 }
 
 if ($problems_found) {
@@ -59,7 +61,7 @@ if ($problems_found) {
 			<br />
 			<blockquote>
 			<?=_("Das Anlegen einer Veranstaltung ist leider zu diesem Zeitpunkt noch nicht m&ouml;glich, da zun&auml;chst die folgenden Voraussetzungen geschaffen werden m&uuml;ssen.")?> <br /><br />
-			<font size="-1"><?=_("(Beachten Sie bitte die angegebene Reihenfolge!)") ?></font><br />
+			<?($problems_found > 1) ? print"<font size=\"-1\">"._("(Beachten Sie bitte die angegebene Reihenfolge!)")."</font><br />" : "" ?>
 			</blockqoute>
 		</td>
 		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
@@ -78,7 +80,8 @@ if ($problems_found) {
 		$i=0;
 		foreach ($list as $key => $val) {
 			if ($val) {
-			$i++;
+				if ($problems_found > 1)
+					$i++;
 			?>
 			<tr <? $cssSw->switchClass() ?> rowspan=2>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
@@ -88,7 +91,7 @@ if ($problems_found) {
 					<img src="pictures/ausruf_small2.gif" alt="pictures/ausruf_small2.gif" width="22" height="20" border="0">
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>"  width="2%" align="center" valign="top">
-					<font size="-1"><b><?=$i?>.</b></font>
+					<font size="-1"><b><?=($i) ? $i."." : ""?></b></font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="91%" valign="top">
 					<font size="-1"><?=$checks->registered_checks[$key]["msg"]?></font><br>
