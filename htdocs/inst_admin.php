@@ -259,59 +259,11 @@ else {
 	}
 
 
-//Hauptteil: Hat der Admin mehrere Institute, gibt es eine Auswahl, sonst kann er gleich verwalten
-
-if ($perm->have_perm("root"))
-	$db2->query("SELECT * FROM Institute ORDER BY Name");
-else
-	$db2->query("SELECT * FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms = 'admin' ORDER BY Name");
-
-if (($db2->num_rows() >1) && (!$inst_id)) {
-	?>
-	<!-- form zur wahl der institute -->
+?>
 	<tr>
 		<td class="blank" colspan=2>
-		<blockquote>
-		<table width="50%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">
-		<form action="inst_admin.php" method="POST">
-		<tr>
-			<td><font size=-1><b>Auswahl der Einrichtung:</b><br />
-			Bitte w&auml;hlen Sie die Einrichtung aus, f&uuml;r die Sie die Mitarbeiterliste bearbeiten m&ouml;chten</font>
-			</td>
-		</tr>
-		<tr>
-			<td><SELECT Name="inst_id" size="1">
-			<?
-			printf ("<option value=\"0\">-- bitte Einrichtung ausw&auml;hlen --\n");
-			while ($db2->next_record())
-				printf ("<option %s value=\"%s\">%s \n", $db2->f("Institut_id") == $inst_id ? "selected" : "", $db2->f("Institut_id"), htmlReady(substr($db2->f("Name"), 0, 50)));
-			?>
-			</select>
-			<input type="HIDDEN" name="group" value="Institut">
- 			<input type="SUBMIT" value="bearbeiten">
- 			</td>
-		</tr>
-		</form>
-	</table>
-	</blockquote>
-	<br>
-	<?
-}
-elseif (!$inst_id) {
-	$db2->next_record();
-	$inst_id=$db2->f("Institut_id");
-	?>
-	<tr>
-		<td class="blank" colspan=2>
-	<?
-	}
-else {
-	?>
-	<tr>
-		<td class="blank" colspan=2>
-	<?
+<?
 
-	}
 		
 //Abschnitt zur Auswahl und Suche von neuen Personen
 if ($inst_id != "" && $inst_id !="0") {
