@@ -274,7 +274,10 @@ $structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"adm
 if ($perm->is_fak_admin())
 	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue&nbsp;Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
-$structure["export"]=array (topKat=>"modules", name=>"Export", link=>"export.php", active=>FALSE);
+if ($EXPORT_ENABLE)
+	$structure["export"]=array (topKat=>"modules", name=>"Export", link=>"export.php", active=>FALSE);
+if ($ILIAS_CONNECT_ENABLE)
+	$structure["lernmodule"]=array (topKat=>"modules", name=>"Lernmodule", link=>"admin_lernmodule.php", active=>FALSE);
 if ($RESOURCES_ENABLE)
 	$structure["resources"]=array (topKat=>"modules", name=>"Ressourcenverwaltung", link=>"resources.php", active=>FALSE);
 //
@@ -385,6 +388,9 @@ switch ($i_page) {
 	break;
 	case "export.php": 
 		$reiter_view="export"; 
+	break;
+	case "admin_lernmodule.php": 
+		$reiter_view="lernmodule"; 
 	break;
 	case "admin_modules_start.php": 
 		$reiter_view="modules"; 
