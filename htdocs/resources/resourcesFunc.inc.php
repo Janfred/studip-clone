@@ -92,6 +92,8 @@ function getLockPeriod($timestamp1='', $timestamp2='') {
 	
 	if (!$timestamp1)
 		$timestamp1 = time();
+	if (!$timestamp2)
+		$timestamp2 = time();
 	
 	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
 		$cache[$timestamp1 / 60][$timestamp2 / 60] = FALSE;	
