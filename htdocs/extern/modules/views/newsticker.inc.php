@@ -1,8 +1,10 @@
 <?
+$js_only = $this->config->getValue("Main", "jsonly");
+if (!$js_only)
 echo "
 <script type=\"text/javascript\">
-<!--
-var newsticker_max = 0;
+<!--\n";
+echo "var newsticker_max = 0;
 
 function textlist() {
 	newsticker_max = textlist.arguments.length;
@@ -45,17 +47,19 @@ echo ");
 		setTimeout(\"newsticker()\", ";
 echo ceil(1000 / $this->config->getValue("Main", "frequency"));
 echo ");
-}
-//-->
+}\n";
+if (!$js_only) {
+	echo "//-->
 </script>
 <form name=\"tickform\">
 	<textarea name=\"tickfield\" rows=\"";
-echo $this->config->getValue("Main", "rows") . "\" cols=\"";
-echo $this->config->getValue("Main", "length") . "\" style=\"";
-echo $this->config->getValue("Main", "style") . "\" wrap=\"virtual\">";
-echo $this->config->getValue("Main", "starttext");
-echo "</textarea>\n</form>\n";
+	echo $this->config->getValue("Main", "rows") . "\" cols=\"";
+	echo $this->config->getValue("Main", "length") . "\" style=\"";
+	echo $this->config->getValue("Main", "style") . "\" wrap=\"virtual\">";
+	echo $this->config->getValue("Main", "starttext");
+	echo "</textarea>\n</form>\n";
 
-if ($this->config->getValue("Main", "automaticstart"))
-	echo "<script type=\"text/javascript\">\n\tnewsticker();\n</script>\n";
+	if ($this->config->getValue("Main", "automaticstart"))
+		echo "<script type=\"text/javascript\">\n\tnewsticker();\n</script>\n";
+		
 ?>
