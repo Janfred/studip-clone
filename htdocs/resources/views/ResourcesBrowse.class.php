@@ -86,7 +86,7 @@ class ResourcesBrowse {
 		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> align="center" <? echo ($this->mode == "browse") ? "colspan=\"2\"" : "" ?>>
 				<font size=-1>freie Suche:&nbsp;
-				<input name="search_exp"  type="TEXT" style="{vertikal-align: middle;}" size=30 maxlength=255 value="<? echo $this->searchArray["search_exp"]; ?>" />
+				<input name="search_exp"  type="TEXT" style="{vertikal-align: middle;}" size=30 maxlength=255 value="<? echo stripslashes($this->searchArray["search_exp"]); ?>" />
 				<input type="IMAGE" align="absmiddle"  <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
 			</td>
 		</tr>

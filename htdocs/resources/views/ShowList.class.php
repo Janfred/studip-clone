@@ -36,7 +36,7 @@
 require_once ($RELATIVE_PATH_RESOURCES."/views/ShowTreeRow.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
-
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 
 /*****************************************************************************
 ShowList, stellt Liste mit Hilfe von printThread dar
@@ -81,7 +81,7 @@ class ShowList extends ShowTreeRow{
 	//private
 	function showListObject ($resource_id, $admin_buttons=FALSE) {
 		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF, $ActualObjectPerms, $SessSemName, 
-			$user, $clipObj, $view_mode, $view;
+			$user, $perm, $clipObj, $view_mode, $view;
 		
 		//Object erstellen
 		$resObject =& ResourceObject::Factory($resource_id);
@@ -133,8 +133,16 @@ class ShowList extends ShowTreeRow{
 			else			
 				$zusatz=sprintf (_("verantwortlich:")." %s", $resObject->getOwnerName());
 			
+			if ($perm->have_perm('root') || getGlobalPerms($user->id) == "admin"){
+				$simple_perms = 'admin';
+			} elseif (ResourcesUserRoomsList::CheckUserResource($resObject->getId())){
+				$simple_perms = 'tutor';
+			} else {
+				$simple_perms = false;
+			}
+			
 			//clipboard in/out
-			if ((getGlobalPerms($user->id) == "admin") && (is_object($clipObj)))
+			if ( (is_object($clipObj)) && $simple_perms )
 				if ($clipObj->isInClipboard($resObject->getId()))
 					$zusatz .= "<a href=\"".$PHP_SELF."?clip_out=".$resObject->getId().$link_add."\"><img src=\"pictures/forum_fav.gif\" border=\"0\" ".tooltip(_("Aus der Merkliste entfernen"))." /></a>";
 				else
@@ -143,12 +151,14 @@ class ShowList extends ShowTreeRow{
 			$new=TRUE;
 			if ($open=="open") {
 				//load the perms
+				/*
 				if (($ActualObjectPerms) && ($ActualObjectPerms->getId() == $resObject->getId()))
 					$perms = $ActualObjectPerms->getUserPerm();
 				else {
 					$ThisObjectPerms =& ResourceObjectPerms::Factory($resObject->getId());
 					$perms = $ThisObjectPerms->getUserPerm();
 				}
+				*/
 				if ($edit_structure_object==$resObject->id) {
 					$content= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
 					$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
@@ -158,7 +168,7 @@ class ShowList extends ShowTreeRow{
 				} else {
 					$content=htmlReady($resObject->getDescription());
 				}
-				if (($admin_buttons) && ($perms == "admin")) {
+				if (($admin_buttons) && ($simple_perms == "admin")) {
 					$edit.= "<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
 					if ($resObject->isDeletable()) {
 						$edit= "&nbsp;<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
@@ -166,19 +176,19 @@ class ShowList extends ShowTreeRow{
 					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 				} 
 				if ($resources_data["view_mode"] == "oobj"){
-					if (($perms == "autor") || ($perms == "admin") || ($perms == "tutor")) 
+					if ($simple_perms) 
 						if ($resObject->getCategoryId())
 							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
 					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("eigenschaften")."</a>";
 				} else {
-					if (($perms == "autor") || ($perms == "admin") || ($perms == "tutor"))
+					if ($simple_perms) 
 						if ($resObject->getCategoryId())
 							$edit.= sprintf ("<a href=\"%s?show_object=%s&%sview=view_schedule%s\">".makeButton("belegung")."</a>&nbsp;", $PHP_SELF, $resObject->id, ($view_mode == "no_nav") ? "quick_" : "", ($view_mode == "no_nav") ? "&quick_view_mode=$view_mode" : "");
 					$edit.= sprintf ("<a href=\"%s?show_object=%s&%sview=view_details%s\">".makeButton("eigenschaften")."</a>", $PHP_SELF, $resObject->id, ($view_mode == "no_nav") ? "quick_" : "", ($view_mode == "no_nav") ? "&quick_view_mode=$view_mode" : "");
 				}
 				
 				//clipboard in/out
-				if ((getGlobalPerms($user->id) == "admin") && (is_object($clipObj)))
+				if (is_object($clipObj) && $simple_perms)
 					if ($clipObj->isInClipboard($resObject->getId()))
 						$edit .= "&nbsp;<a href=\"".$PHP_SELF."?clip_out=".$resObject->getId().$link_add."\"><img ".makeButton("merkliste", "src")." border=\"0\" ".tooltip(_("Aus der Merkliste entfernen"))." align=\"absmiddle\"/></a>";
 					else
