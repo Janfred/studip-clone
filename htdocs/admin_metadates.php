@@ -49,6 +49,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");//ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");//ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");//ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//ja,ja,ja,ja auch die...
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");//ja,ja,ja,ja,ja auch die...
 
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -99,6 +100,8 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	if (!$term_metadata["sem_vor_termin"]) $term_metadata["sem_vor_termin"] =-1;
 	if (!$term_metadata["sem_vor_end_termin"]) $term_metadata["sem_vor_end_termin"] =-1;
 	$term_metadata["original"]=get_snapshot();
+	$term_metadata["original_turnus"]=$term_metadata["turnus_data"];
+	$term_metadata["update_dates"]=TRUE;
 	}
 else {
 
@@ -121,7 +124,8 @@ if ($turnus_refresh)
 	{
 	if ($term_metadata["start_woche"] !=-1)
 		$term_metadata["start_woche"]=$term_start_woche;
-	$term_metadata["turnus"]=$term_turnus;	
+	$term_metadata["turnus"]=$term_turnus;
+	$term_metadata["update_dates"]=$update_dates;
 
 
 	//Arrays fuer Turnus loeschen
@@ -258,7 +262,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	if ($term_metadata["art"] == 0) {
 		for ($i=0; $i<$term_metadata["turnus_count"]; $i++)
 			if (($term_metadata["turnus_data"][$i]["start_stunde"])  && ($term_metadata["turnus_data"][$i]["end_stunde"]))
-				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].$term_metadata["turnus_data"][$i]["start_stunde"].$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], "room" => $term_metadata["turnus_data"][$i]["room"], "resource_id" => $term_metadata["turnus_data"][$i]["resource_id"]);
+				$tmp_metadata_termin["turnus_data"][]=array("idx"=>$term_metadata["turnus_data"][$i]["day"].(($term_metadata["turnus_data"][$i]["start_stunde"] <10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_stunde"].(($term_metadata["turnus_data"][$i]["start_minute"]< 10) ?  "0" : "").$term_metadata["turnus_data"][$i]["start_minute"], "day" => $term_metadata["turnus_data"][$i]["day"], "start_stunde" => $term_metadata["turnus_data"][$i]["start_stunde"], "start_minute" => $term_metadata["turnus_data"][$i]["start_minute"], "end_stunde" => $term_metadata["turnus_data"][$i]["end_stunde"], "end_minute" => $term_metadata["turnus_data"][$i]["end_minute"], "room" => $term_metadata["turnus_data"][$i]["room"], "resource_id" => $term_metadata["turnus_data"][$i]["resource_id"]);
 	
 		//sortieren
 		if (is_array($tmp_metadata_termin["turnus_data"])) {
@@ -279,10 +283,20 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		$errormsg.="msg§"._("Die allgemeinen Termindaten wurden aktualisiert.")."§";
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 		
+		//update the dates....
+		if ($term_metadata["update_dates"] ) {
+			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, FALSE, $term_metadata["original_turnus"]);
+			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
+			if ($result) {
+				$errormsg.= sprintf ("msg§"._("%s Termine des Ablaufplans aktualisiert.")."§", $result["changed"]);
+				$updateResult = $result["resources_result"];
+			}
+		}
+		
 		//If resource-management activ, update the assigned reources and do the overlap checks.... not so easy!
 		if ($RESOURCES_ENABLE) {
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
-    			$updateResult=$veranstAssign->updateAssign();
+    			$updateResult = array_merge ($updateResult, $veranstAssign->updateAssign());
 
 			//are there overlaps, in the meanwhile since the regulat check? In this case the sem is regular, we have to touch the metadata
 			if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
@@ -321,9 +335,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 					//show the first overlap
 					list(, $val2) = each($val["overlap_assigns"]);
 					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-					if (sizeof($val) >1)
+					if (sizeof($val["overlap_assigns"]) >1)
 						$errormsg.=", ... ("._("und weitere").")";
-					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["overlap_assigns"], $val2["begin"]);
+					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["resource_id"], $val2["begin"]);
 					$i++;
 				}
 				$errormsg.="</font>§";
@@ -336,16 +350,19 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			
 			if (is_array($rooms_id))
 				foreach ($rooms_id as $key=>$val) {
-					if ($i)
-						$rooms_booked.=", ";
-					$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
-					$i++;
+					if ($key) {
+						if ($i)
+							$rooms_booked.=", ";
+						$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+						$i++;
+					}
 				}
-				
-			if ($i == 1)
-				$errormsg.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
-			elseif ($i)
-				$errormsg.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+
+			if ($rooms_booked)
+				if ($i == 1)
+					$errormsg.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+				elseif ($i)
+					$errormsg.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
  		}
 	}
 	
@@ -438,7 +455,15 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								echo "<option value=1>"._("zweiw&ouml;chentlich")."</option>";
 							?>
 							</select>
-							<br><br><font size=-1>&nbsp;<?=_("Die Veranstaltung findet immer zu diesen Zeiten statt:")?></font><br><br>
+							<br><br><font size=-1>&nbsp;<?=_("Die Veranstaltung findet immer zu diesen Zeiten statt:")?></font><br>
+							<?
+							if (isSchedule($term_metadata["sem_id"])) {
+							?>
+							<font size="-1">&nbsp;(<input type="CHECKBOX" name = "update_dates" <?=($term_metadata["update_dates"]) ? "checked" : "" ?> />&nbsp;<?=_("Ablaufplantermine aktualisieren"); ?>)</font><br>
+							<?
+							}
+							?>
+							<br />
 							<?
 							if (!$term_metadata["turnus_count"])
 								{

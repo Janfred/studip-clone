@@ -140,127 +140,17 @@ if ($kill_x)
 
 //Assistent zum automatischen generieren eines Ablaufplans
 if ($make_dates_x) {
-	//Initialisierungen
-	$hash_secret = "blubbelsupp";
-	$date_typ=1; //hier setzen wir den Typ, den automatisch generierte Termine haben sollen. "1" steht fuer Sitzungstermine.
-	$orig_stunde=date("G",$sstamp);
-	$tmp = $auth->auth["uname"];
-	$db2->query("SELECT start_time, duration_time FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
-	$db2->next_record();
-	$author = get_fullname();
+	$resultAssi = dateAssi ($admin_dates_data["range_id"], "insert", $pfad, $folder, $full);
+	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$resultAssi["changed"]." Termine erstellt.§";
 
-	//Semesterbeginn herausfinden
-	foreach ($SEMESTER as $sem)
-		if (($db2->f("start_time") >= $sem["beginn"]) AND ($db2->f("start_time") <= $sem["ende"]))
-			{
-			$vorles_beginn=$sem["vorles_beginn"];
-			$vorles_ende=$sem["vorles_ende"];
-			}
-
-	//andere Endzeit bei Veranstaltungen ueber mehrere Semester
-	if ($full)
-		foreach ($SEMESTER as $sem)
-			if  ((($db2->f("start_time") + $db2->f("duration_time")) >= $sem["beginn"]) AND (($db2->f("start_time") + $db2->f("duration_time")) <= $sem["ende"]))
-				$vorles_ende=$sem["vorles_ende"];
-
-	if ($term_data["start_woche"]>=0)
-		$semester_woche=$term_data["start_woche"];
-	$made_dates=0;
-	
-	do
-		{	
-		for ($i=0; $i<sizeof($term_data["turnus_data"]); $i++) {
-			//check auf diverse HOLIDAY, gesetzt in der config.inc.php. Sollte man aber nur noch fuer Uni-Ferien benutzen.
-			for ($k=0; $k<=sizeof($HOLIDAY); $k++)
-				if (($HOLIDAY[$k]["beginn"] <= $insert_termin_start[$i]) && ($insert_termin_start[$i]<=$HOLIDAY[$k]["ende"]))
-					$insert_termin_start[$i]=FALSE;
-			
-			//check auf diverse Feiertage 2.0 (nutzt Function des Terminkalenders und muss nicht in der config.inc.php angepasst werden)
-			if ($insert_termin_start[$i]) {
-				$holy_type=holiday($insert_termin_start[$i]);
-				if ($holy_type==3)
-					$insert_termin_start[$i]=FALSE;
-				}
-			
-			//check auf Semesterferien (bei Anlegen ueber mehrere Semester)
-			if ($full)
-				for ($k=0; $k<=sizeof($HOLIDAY); $k++)
-					if (($SEMESTER[$k]["vorles_ende"] <= $insert_termin_start[$i]) && ($insert_termin_start[$i]<=$SEMESTER[$k+1]["vorles_beginn"]))
-					$insert_termin_start[$i]=FALSE;
-			
-			//check auf anderen Starttermin (wenn gesetzt blenden wir alles unnoetige weg)
-			if ($term_data["start_termin"]>0)
-				if ($term_data["start_termin"] >$insert_termin_start[$i]) {
-					$insert_termin_start[$i]=FALSE;
-					$supress_turnus=TRUE;
-					}
-			
-			//Sommer oder Winterzeit abfangen
-			if ($insert_termin_start[$i])
-				if (date("G",$insert_termin_start[$i]) != $term_data["turnus_data"][$i]["start_stunde"]) 
-					$insert_termin_start[$i]=mktime($term_data["turnus_data"][$i]["start_stunde"],date("i",$insert_termin_start[$i]),0,date("n",$insert_termin_start[$i]),date("j",$insert_termin_start[$i]),date("Y",$insert_termin_start[$i]));
-			if ($insert_termin_end[$i])
-				if (date("G",$insert_termin_end[$i]) != $term_data["turnus_data"][$i]["end_stunde"]) 
-					$insert_termin_end[$i]=mktime($term_data["turnus_data"][$i]["end_stunde"],date("i",$insert_termin_end[$i]),0,date("n",$insert_termin_end[$i]),date("j",$insert_termin_end[$i]),date("Y",$insert_termin_end[$i]));
-				
-			//Alles moegliche schreiben
-			if ($insert_termin_start[$i]) {
-				$t_id=md5(uniqid($hash_secret));   //termin_id erzeugen
-				$f_id=md5(uniqid($hash_secret)); 	//folder_id erzeiugen
-				$aktuell=time();
-				
-				//if we have a resource_id, we take the room name from resource_id
-				if (($term_data["turnus_data"][$i]["resource_id"]) && ($RESOURCES_ENABLE))
-					$raum=getResourceObjectName($term_data["turnus_data"][$i]["resource_id"]);
-				
-				if ($pfad)  //Forumseintrag erzeugen
-					$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." am ".date("d.m.Y", $insert_termin_start[$i]), $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $admin_dates_data["range_id"]);
-				if ($folder) { //Dateiordner erzeugen
-					//Titel basteln
-					$titel_f=$TERMIN_TYP[1]["name"].": Kein Titel";
-					$titel_f.=" am ".date("d.m.Y ", $insert_termin_start[$i]);
-					$description="Ablage für Ordner und Dokumente zu diesem Termin";
-					$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
-					}
-				else
-					$f_id='';
-				$db4->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='Kein Titel', date='$insert_termin_start[$i]', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$insert_termin_end[$i]', raum='$raum' ");
-				if ($db4->affected_rows()) {
-					//insert a entry for the linked resource, if resource management activ
-					if ($RESOURCES_ENABLE) {
-						$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-						$insertAssign->dont_check = TRUE;
-						$insertAssign->insertDateAssign($t_id, $term_data["turnus_data"][$i]["resource_id"]);
-					}
-					$made_dates++;
-				}
-			}
-		}
-
-		//frische Daten erzeugen
-		for ($i=0; $i<sizeof($term_data["turnus_data"]); $i++) {
-			$insert_termin_start[$i]=$vorles_beginn+(($term_data["turnus_data"][$i]["day"]-1)*24*60*60)+($term_data["turnus_data"][$i]["start_stunde"]*60*60)+($term_data["turnus_data"][$i]["start_minute"]*60) + ($semester_woche * 7 * 24 * 60 *60);
-			$insert_termin_end[$i]=$vorles_beginn+(($term_data["turnus_data"][$i]["day"]-1)*24*60*60)+($term_data["turnus_data"][$i]["end_stunde"]*60*60)+($term_data["turnus_data"][$i]["end_minute"]*60) + ($semester_woche * 7 * 24 * 60 *60);
-		}
-		
-		//Woche erhoehen
-		if (($term_data["turnus"]==1) && (!$supress_turnus))
-			$semester_woche=$semester_woche+2;
-		else
-			$semester_woche++;
-		
-		unset ($supress_turnus);
-		
-		}
-		
-	while ($insert_termin_start[0] <=$vorles_ende);
-
-	//make an update, this will kill old metadate entries in the resources
-	if ($RESOURCES_ENABLE)
-		$resources_result=$insertAssign->updateAssign();
-
-	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.§";
+ 	//make an update, this will kill old metadate entries in the resources
+ 	if ($RESOURCES_ENABLE)
+		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+		$insertAssign->dont_check = TRUE;
+ 		$resources_result = array_merge ($resultAssi["resources_result"], $insertAssign->updateAssign());
 	}
+	
+//	echo print_r($resources_result);
 
 if ($new)
 	{
@@ -472,7 +362,7 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 				//show the first overlap
 				list(, $val2) = each($val["overlap_assigns"]);
 				$result.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-				if (sizeof($val) >1)
+				if (sizeof($val["overlap_assigns"]) >1)
 					$result.=", ... ("._("und weitere").")";
 				$result.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["resource_id"], $val2["begin"]);
 				$i++;
@@ -487,16 +377,19 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 			
 		if (is_array($rooms_id))
 			foreach ($rooms_id as $key=>$val) {
-				if ($i)
-					$rooms_booked.=", ";
-				$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
-				$i++;
+				if ($key) {				
+					if ($i)
+						$rooms_booked.=", ";
+					$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+					$i++;
+				}
 			}
 		
-		if ($i == 1)
-			$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
-		elseif ($i)
-			$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+		if ($rooms_booked) 
+			if ($i == 1)
+				$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+			elseif ($i)
+				$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
 	  }
 	
 
@@ -928,7 +821,7 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 	}
 	if ($show_all) {
 		?>
-		<input type="IMAGE" name="send" border=0 src="pictures/buttons/termineaendern-button.gif" value="verändern">&nbsp; &nbsp; 
+		<input type="IMAGE" name="edit" border=0 src="pictures/buttons/termineaendern-button.gif" value="verändern">&nbsp; &nbsp; 
 		<?
 	}
 }

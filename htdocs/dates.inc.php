@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von Dokumenten
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
+require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
 
 /**
 * This function creates the assigned room name for range_id
@@ -1023,4 +1024,235 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 	return $count;
 }
 
+
+
+function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE) {
+	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $SEMESTER, $HOLIDAY, $TERMIN_TYP, $user;
+	
+	if ($RESOURCES_ENABLE)	{
+	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+	}
+	 	
+	$hash_secret = "blubbelsupp";
+	$date_typ=1; //type to use for new dates
+	$author = get_fullname();
+
+	$db = new DB_Seminar;
+	$db2 = new DB_Seminar;
+
+	//load data of the Veranstaltung
+	$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
+	$db->query($query);
+	$db->next_record();
+
+	$term_data = unserialize ($db->f("metadata_dates"));
+	$veranstaltung_start_time = $db->f("start_time");
+	$veranstaltung_duration_time = $db->f("duration_time");
+	
+	//load the ids from already created dates
+	if (($mode == "update") && (is_array($old_turnus))) {
+		$i=0;
+		$clause=" (";
+		foreach ($old_turnus as $val) {
+			if ($i)
+				$clause.=" OR";
+
+			if ($val["day"] == 7)
+				$t_day = 1;
+			else
+				$t_day = $val["day"] + 1;
+				
+			$clause.="(";
+			$clause.="DAYOFWEEK(FROM_UNIXTIME(date)) = '".$t_day."' AND ";
+			$clause.="HOUR(FROM_UNIXTIME(date)) = '".$val["start_stunde"]."' AND ";
+			$clause.="MINUTE(FROM_UNIXTIME(date)) = '".$val["start_minute"]."' AND ";
+			$clause.="HOUR(FROM_UNIXTIME(end_time)) = '".$val["end_stunde"]."' AND ";
+			$clause.="MINUTE(FROM_UNIXTIME(end_time)) = '".$val["end_minute"]."' ";
+			$clause.=")";
+			
+			$i++;
+		}
+		$clause.=" )";
+		
+		$query = sprintf("SELECT termin_id FROM termine WHERE range_id='%s' AND %s ORDER BY date", $sem_id, $clause);
+		$db->query($query);
+		while ($db->next_record())
+			$saved_dates[] = $db->f("termin_id");
+	}
+
+	//determine first day of the start-week as sem_begin
+	if ($term_data["start_woche"] >= 0) {
+		foreach ($SEMESTER as $val)
+			if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
+				$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
+				$sem_end = $val["vorles_ende"];
+			}
+	} else  {
+		$dow = date("w", $term_data["start_termin"]);
+		//calculate corrector to get first day of the week
+		if ($dow <= 5)
+			$corr = ($dow -1) * -1;
+		elseif ($dow == 6)
+			$corr = 2;
+		elseif ($dow == 0)
+			$corr = 1;
+		else
+			$corr = 0;
+		
+		$sem_begin = mktime(0, 0, 0, date("n",$term_data["start_termin"]), date("j",$term_data["start_termin"])+$corr,  date("Y",$term_data["start_termin"]));
+	}
+
+	//determine the last day as sem_end
+	if ($full)
+		foreach ($SEMESTER as $val)
+			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"]))
+				$sem_end=$val["vorles_ende"];
+	else
+		$sem_end=$val["vorles_ende"];
+	
+	$interval = $term_data["turnus"] + 1;
+			
+	//create the dates
+	$affected_dates=0;
+	if (is_array($term_data["turnus_data"]))
+		do {
+			foreach ($term_data["turnus_data"] as $val) {
+				$do = TRUE;
+
+				//create new dates
+				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
+				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
+				
+				//check for HOLIDAY from config.inc.php. You should use it only for special holidays
+				foreach ($HOLIDAY as $val2)
+					if (($val2["beginn"] <= $start_time) && ($start_time <=$val2["ende"]))
+						$do = FALSE;
+		
+				//check for calculatable holidays
+				if ($do) {
+					$holy_type = holiday($start_time);
+					if ($holy_type == 3)
+						$do = FALSE;
+				}
+
+				if (($do) && ($end_time <$sem_end)){
+					//ids
+					$date_id=md5(uniqid("lisa"));
+					$folder_id=md5(uniqid("alexandra"));
+					$aktuell=time();
+
+					//if we have a resource_id, we take the room name from resource_id
+					if (($val["resource_id"]) && ($RESOURCES_ENABLE))	
+						$room = getResourceObjectName($val["resource_id"]);
+					else
+						$room = $val["room"];
+						
+					//create topic
+					if (($topic) && (!$saved_dates[$affected_dates]))
+						$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." am ".date("d.m.Y", $start_time), $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $sem_id);
+		
+					//create folder
+					if (($folder) && (!$saved_dates[$affected_dates])) {
+						$titel = sprintf ("%s am %s", $TERMIN_TYP[$date_typ]["name"], date("d.m.Y", $start_time));
+						$description="Ablage für Ordner und Dokumente zu diesem Termin";
+						$db2->query("INSERT INTO folder SET folder_id='$folder_id', range_id='$date_id', description='$description', user_id='$user->id', name='$titel', mkdate='$aktuell', chdate='$aktuell'");
+					} else
+						$folder_id='';
+					
+					//insert/update dates
+					if ($saved_dates[$affected_dates]) 
+						$query2 = "UPDATE termine SET autor_id='$user->id', date='$start_time', chdate='$aktuell', end_time='$end_time', raum='$room' WHERE termin_id = '".$saved_dates[$affected_dates]."' ";
+					else
+						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='Kein Titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='$room' ";
+					$db2->query($query2);
+					if ($db2->affected_rows()) {
+						//insert a entry for the linked resource, if resource management activ
+						if ($RESOURCES_ENABLE) {
+							if ($saved_dates[$affected_dates]) 
+								$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"]));
+							else 
+								$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"]));
+						}
+						$affected_dates++;
+					}
+					
+					//update topic & folder
+					if ($saved_dates[$affected_dates-1]) {
+						//load topic- and folder_id
+						$db->query("SELECT topic_id, content FROM termine WHERE termin_id = '".$saved_dates[$affected_dates-1]."' ");
+						$db->next_record();
+						
+						//change topic
+						$db2->query("UPDATE px_topics SET name='".$TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." am ".date("d.m.Y ", $start_time)."', author='$author', user_id='".$user->id."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
+					
+						//change folder
+						$titel = sprintf ("%s: %s am %s", $TERMIN_TYP[$date_typ]["name"], $db->f("content"), date("d.m.Y", $start_time));
+						$db2->query("UPDATE folder SET user_id='$user->id', name='$titel', chdate='$aktuell' WHERE range_id = '".$saved_dates[$affected_dates-1]."' ");
+					}
+				}
+			}
+			//inc the week
+			$week = $week + $interval;			
+		} while ($end_time <$sem_end);
+
+		//kill dates
+		if (sizeof($saved_dates) >$affected_dates)
+			for ($i=$affected_dates; $i<sizeof($saved_dates); $i++) {
+				$query2 = "SELECT topic_id FROM termine WHERE termin_id = '".$saved_dates[$i]."' ";
+				$db2->query($query2);
+				$db2->next_record();
+				delete_date ($saved_dates[$i], $db2->f("topic_id"), TRUE, $range_id);
+			}
+
+	$result_a["changed"]=$affected_dates;
+	$result_a["resources_result"]=$resources_result;
+
+	return ($result_a);
+}
+
+function isSchedule ($sem_id) {
+	$db = new DB_Seminar;
+	
+	$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
+	
+	$db->query($query);
+	$db->next_record();
+	
+	$term_metadata=unserialize($db->f("metadata_dates"));
+
+	//load the ids from already created dates
+	if (is_array($term_metadata["turnus_data"])) {
+		$i=0;
+		$clause=" (";
+		foreach ($term_metadata["turnus_data"] as $val) {
+			if ($i)
+				$clause.=" OR";
+
+			if ($val["day"] == 7)
+				$t_day = 1;
+			else
+				$t_day = $val["day"] + 1;
+				
+			$clause.="(";
+			$clause.="DAYOFWEEK(FROM_UNIXTIME(date)) = '".$t_day."' AND ";
+			$clause.="HOUR(FROM_UNIXTIME(date)) = '".$val["start_stunde"]."' AND ";
+			$clause.="MINUTE(FROM_UNIXTIME(date)) = '".$val["start_minute"]."' AND ";
+			$clause.="HOUR(FROM_UNIXTIME(end_time)) = '".$val["end_stunde"]."' AND ";
+			$clause.="MINUTE(FROM_UNIXTIME(end_time)) = '".$val["end_minute"]."' ";
+			$clause.=")";
+			
+			$i++;
+		}
+		$clause.=" )";
+		
+		$query = sprintf("SELECT termin_id FROM termine WHERE range_id='%s' AND %s ORDER BY date", $sem_id, $clause);
+		$db->query($query);
+		
+		if ($db->num_rows())
+			return TRUE;
+		else
+			return FALSE;
+	}
+}
 ?>
