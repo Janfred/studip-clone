@@ -105,7 +105,6 @@ foreach ($EXTERN_MODULE_TYPES as $type) {
 	}
 }
 
-
 // Workaround to include data in scripts
 if ($incdata)
 	$module_obj->config->config["Main"]["incdata"] = 1;
