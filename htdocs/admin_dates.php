@@ -941,7 +941,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				}
 				
 				//link to admin_room_requests.php
-				if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS && !$resource_id) {
+				if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) {
 					if (getDateRoomRequest($db->f("termin_id")))
 						$content.="<br /><br />&nbsp;<img src=\"pictures/link_intern.gif\" border=\"0\" />&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumanfrage <b>bearbeiten</b>")."</a><br>\n";
 					else
