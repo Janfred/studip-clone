@@ -213,7 +213,7 @@ function PrintSearchResults ($search_exp, $range_id)
 	} else {
 		$query = "SELECT DISTINCT auth_user_md5.user_id, Vorname, Nachname, username, perms ".
 		"FROM auth_user_md5 LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
-		"WHERE perms !='root' AND perms !='admin' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
+		"WHERE perms !='root' AND perms !='admin' AND perms !='user' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
 		"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
 	}
 	$db->query($query); // results all users which are not in the seminar
