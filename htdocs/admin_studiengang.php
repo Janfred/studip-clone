@@ -43,7 +43,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 <tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;Verwaltung der F&auml;cher</b></td>
+	<td class="topic"colspan=2 align="left"><b>&nbsp;Verwaltung der Studieng&auml;nge</b></td>
 </tr>
 <tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
@@ -56,6 +56,8 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 // Check if there was a submission
+
+reset $HTTP_POST_VARS;
 
 
 while ( is_array($HTTP_POST_VARS) 
