@@ -105,6 +105,9 @@ $chatCmd = array("quit" => _(" [msg] - Sie verlassen den Chat mit der Botschaft 
 			"help" => _(" - Zeigt diesen Hilfetext"),
 			"kick" => _(" [username] - Wirft [username] aus dem Chat wenn sie Chatadmin sind, mit /kick all werfen sie alle anderen Nutzer aus dem Chat"),
 			"sms" => _(" [username][msg] - Verschickt eine Studip SMS [msg] an [username]"),
-			"password" => _(" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird ein eventuell vorhandenes Paßwort gelöscht"));
+			"lock" => _(" - Setzt ein zufälliges Paßwort und wirft alle Nutzer aus dem Chat, die nicht Chatadmins sind."),
+			"unlock" => _(" - Ein evetuell gesetztes Paßwort wird gelöscht, der Chat wird damit wieder frei zugänglich."),
+			"password" => _(" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird ein eventuell vorhandenes Paßwort gelöscht"),
+			"log" => _(" [start | stop] - Startet oder beendet eine Aufzeichnung, wenn sie Chatadmin sind"));
 
 ?>

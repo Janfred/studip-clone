@@ -97,13 +97,6 @@ $chatServer->caching = true;
 /**
 * JavaScript 
 */
-	function printhelp(){
-		document.inputform.chatInput.value="/help";
-		document.inputform.submit();
-	}
-/**
-* JavaScript 
-*/
 	function doCheck(){
 		var the_string = document.inputform.chatInput.value.trim();
 		if (the_string.substring(0,the_string.indexOf(" ")) == "/password"){
@@ -151,17 +144,6 @@ if ($chatInput) {
 <input type="hidden" name="chatid" value="<?=$chatid?>">
 <div align="center">
 	<table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">
-		<tr>
-			<td width="80%" align="left" class="topic" ><b>&nbsp;Chat -
-			<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></b></td>
-			<td width="20%" align="right" class="topic" >
-			<a href="javascript:printhelp();">
-			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/hilfe.gif" border=0 align="texttop" <?=tooltip(_("Chat Kommandos einblenden"))?>>
-			</a>&nbsp; 
-			<a href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>show_smiley.php" target=new>
-			<img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/smile/smile.gif" border=0 align="absmiddle" <?=tooltip(_("Alle verfügbaren Smileys anzeigen"))?>>
-			</a>&nbsp; </td>
-		</tr>
 		<tr>
 			<td align="center" colspan=2 valign="center">
 				<table width="100%" border="0" cellspacing="3">

@@ -111,12 +111,14 @@ $sms->delete_chatinv($auth->auth["uname"]);
 	
 	</script>
 </head>
-<frameset rows="83%,*" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
+<frameset rows="83%,30,*,0" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
 	<frameset cols="*,25%" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
 		<frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1>
 		<frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1>
 	</frameset>
-<frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 >
+<frame name="frm_status" src="chat_status.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 >
+<frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=0 >
+<frame name="frm_dummy" src="chat_dummy.php?chatid=<?=$chatid?>" marginwidth=0 marginheight=0 scrolling=no noresize >
 </frameset>
 </html>
 <?
