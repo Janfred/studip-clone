@@ -45,12 +45,65 @@ $SEMESTER[7]=array("name"=>"WS 2003/04", "beginn"=>mktime(0,0,0,10,1,2003), "end
 
 
 //Festlegen der zulaessigen Klassen fuer Veranstaltungen. Jeder sem_type referenziert auf eine dieser Klassen
-$SEM_CLASS[1]=array("name"=>"Lehre", "bereiche"=>TRUE, "show_browse"=>TRUE,"write_access_nobody"=>FALSE, "description"=>"Hier finden Sie alle im System registrierten Lehrveranstaltungen");
-$SEM_CLASS[2]=array("name"=>"Forschung", "bereiche"=>TRUE, "show_browse"=>TRUE,"write_access_nobody"=>FALSE, "description"=>"Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t");
-$SEM_CLASS[3]=array("name"=>"Organisation", "bereiche"=>FALSE, "show_browse"=>TRUE,"write_access_nobody"=>TRUE, "description"=>"Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Uni-Gremien");
-$SEM_CLASS[4]=array("name"=>"Community", "bereiche"=>FALSE, "show_browse"=>FALSE,"write_access_nobody"=>TRUE, "description"=>"Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen");
-$SEM_CLASS[5]=array("name"=>"Arbeitsgruppen", "bereiche"=>FALSE, "show_browse"=>FALSE,"write_access_nobody"=>FALSE, "description"=>"Hier finden Sie verschiedene Arbeitsgruppen an der $UNI_NAME");
-//weitere Klassen koennen hier angefuegt werden
+$SEM_CLASS[1]=array("name"=>"Lehre", "bereiche"=>TRUE, 	//the name of the class
+					"compact_mode"=>FALSE, 			//indicates, if all fields are used in the creation process or only the fields that are necessary for workgroups
+					"workgroup_mode"=>FALSE, 			//indicates, if the workgroup mode is used (to use different declarations)
+					"turnus_default"=>1	, 				//indicates, whether the turnus field is default set to "regulary" (0), "not regulary" (1) or "no dates" (-1) in the creation process
+					"default_read_level"=>1, 				//the default read acces level. "without signed in" (0), "signed in" (1), "password" (2)
+					"default_write_level" =>1, 				//the default write acces level. "without signed in" (0), "signed in" (1), "password" (2)
+					"show_browse"=>TRUE, 				//indicates, if the hierachy-system should be shown in the search-process
+					"write_access_nobody"=>FALSE, 		//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
+					"description"=>"Hier finden Sie alle im System registrierten Lehrveranstaltungen", 						//the description
+					"create_description"=>"Verwenden Sie diese Kategorie, um normale Lehrveranstaltunegen anzulegen");		//the description in the creation process
+
+$SEM_CLASS[2]=array("name"=>"Forschung", 
+					"compact_mode"=>TRUE, 
+					"workgroup_mode"=>TRUE, 
+					"turnus_default"=>-1, 
+					"default_read_level"=>2, 
+					"default_write_level" =>2, 
+					"bereiche"=>TRUE, 
+					"show_browse"=>TRUE,
+					"write_access_nobody"=>FALSE, 
+					"description"=>"Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t",
+					"create_description"=>"In diese Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r Forschungsprojekte anlegen.");
+
+$SEM_CLASS[3]=array("name"=>"Organisation", 
+					"compact_mode"=>TRUE, 
+					"workgroup_mode"=>TRUE, 
+					"turnus_default"=>-1, 
+					"default_read_level"=>2, 
+					"default_write_level" =>2, 
+					"bereiche"=>FALSE, 
+					"show_browse"=>TRUE,
+					"write_access_nobody"=>TRUE, 
+					"description"=>"Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Uni-Gremien",
+					"create_description"=>"Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie diese Kategorie");
+
+$SEM_CLASS[4]=array("name"=>"Community", 
+					"compact_mode"=>TRUE, 
+					"workgroup_mode"=>FALSE, 
+					"turnus_default"=>-1, 
+					"default_read_level"=>0, 
+					"default_write_level" =>0, 
+					"bereiche"=>FALSE, 
+					"show_browse"=>FALSE,
+					"write_access_nobody"=>TRUE, 
+					"description"=>"Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen",
+					"create_description"=>"Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen anlegen m&ouml;chten, verwenden Sie diese Kategorie.");
+
+$SEM_CLASS[5]=array("name"=>"Arbeitsgruppen", 
+					"compact_mode"=>FALSE, 
+					"workgroup_mode"=>FALSE, 
+					"turnus_default"=>1, 
+					"default_read_level"=>1, 
+					"default_write_level" =>1, 
+					"bereiche"=>TRUE, 
+					"show_browse"=>FALSE,
+					"write_access_nobody"=>FALSE, 
+					"description"=>"Hier finden Sie verschiedene Arbeitsgruppen an der $UNI_NAME",
+					"create_description"=>"Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen.");
+//weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
