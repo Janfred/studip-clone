@@ -44,7 +44,8 @@ class IntegrityCheckSeminar extends IntegrityCheckAbstract{
 	*/
 	function IntegrityCheckSeminar(){
 		$baseclass = get_parent_class($this);
-		parent::$baseclass(); //calling the baseclass constructor
+		//parent::$baseclass(); //calling the baseclass constructor 
+		$this->$baseclass(); //calling the baseclass constructor PHP < 4.1.0
 		$this->master_table = "seminare";
 		$this->checklist[] = array('detail_table' => 'seminar_user',
 									'query' => 'view:SEM_SEMUSER:');

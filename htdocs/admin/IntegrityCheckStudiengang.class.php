@@ -44,7 +44,8 @@ class IntegrityCheckStudiengang extends IntegrityCheckAbstract{
 	*/
 	function IntegrityCheckStudiengang(){
 		$baseclass = get_parent_class($this);
-		parent::$baseclass(); //calling the baseclass constructor
+		//parent::$baseclass(); //calling the baseclass constructor 
+		$this->$baseclass(); //calling the baseclass constructor PHP < 4.1.0
 		$this->master_table = "studiengaenge";
 		$this->checklist[] = array('detail_table' => 'admission_seminar_studiengang',
 									'query' => 'view:STUD_ADMISSONSEM:');

@@ -44,7 +44,8 @@ class IntegrityCheckBereich extends IntegrityCheckAbstract{
 	*/
 	function IntegrityCheckBereich(){
 		$baseclass = get_parent_class($this);
-		parent::$baseclass(); //calling the baseclass constructor
+		//parent::$baseclass(); //calling the baseclass constructor 
+		$this->$baseclass(); //calling the baseclass constructor PHP < 4.1.0
 		$this->master_table = "bereiche";
 		$this->checklist[] = array('detail_table' => 'bereich_fach',
 									'query' => 'view:BEREICH_FACH:');

@@ -44,7 +44,8 @@ class IntegrityCheckUser extends IntegrityCheckAbstract{
 	*/
 	function IntegrityCheckUser(){
 		$baseclass = get_parent_class($this);
-		parent::$baseclass(); //calling the baseclass constructor
+		//parent::$baseclass(); //calling the baseclass constructor 
+		$this->$baseclass(); //calling the baseclass constructor PHP < 4.1.0
 		$this->master_table = "auth_user_md5";
 		$this->checklist[] = array('detail_table' => 'user_info',
 									'query' => 'view:USER_USERINFO:');
