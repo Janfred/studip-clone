@@ -80,6 +80,38 @@ function check_calendar_default(){
 	}
 }
 
+//start the Stud.IP Messenger
+function start_messenger() {
+	?>
+	<script language="Javascript">
+	{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
+	</script>
+	<?
+}
+
+//redirect the user whre he want to go today....
+function startpage_redirect($page_code) {
+	switch ($page_code) {
+		case 1:
+			$jump_page = "meine_seminare.php";
+		break;
+		case 2:
+			$jump_page = "meine_einrichtungen.php";
+		break;
+		case 3:
+			$jump_page = "mein_stundenplan.php";
+		break;
+		case 4:
+			$jump_page = "contact.php";
+		break;
+		case 5:
+			$jump_page = "calendar.php";
+		break;
+	}
+	
+	header ("location: $jump_page");
+}
+
 
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
@@ -99,6 +131,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$user->register("my_messaging_settings");
 		$user->register("my_schedule_settings");
 		$user->register("my_personal_sems");
+		$user->register("my_studip_settings");
 		
 		//garbage collect for user variables
 		// loginfilenow und loginfilelast
@@ -129,6 +162,14 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 			$user->register("calendar_user_control_data");
 			check_calendar_default();
 		}
+	
+		//redirect user to another page if he want to
+		if ($my_studip_settings["startpage_redirect"])
+			startpage_redirect($my_studip_settings["startpage_redirect"]);
+
+		//start messenger, if set
+		if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]))
+			start_messenger();
 	}
 }
 
