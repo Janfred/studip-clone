@@ -68,17 +68,11 @@ if ($db->next_record()) {
 		$data["location"] = getRoom($seminar_id, FALSE);
 	
 	if ($visible[++$j]) {
-		if ($first_app = vorbesprechung($seminar_id)) {
-			$data["time"] = $this->config->getValue("Main", "aliaspredisc") . $first_app
-					. "<br>";
-		}
-		else
-			$data["time"] = "";
-		if ($begin = veranstaltung_beginn($seminar_id))
-			$data["time"] .= $this->config->getValue("Main", "aliasfirstmeeting") . $begin;
-		if ($data["time"])
-			$data["time"] .= "<br>";
 		$data["time"] .= view_turnus($seminar_id, FALSE, FALSE);
+		if ($first_app = vorbesprechung($seminar_id))
+			$data["time"] .= "<br>" . $this->config->getValue("Main", "aliaspredisc") . $first_app;
+		if ($begin = veranstaltung_beginn($seminar_id))
+			$data["time"] .= "<br>" . $this->config->getValue("Main", "aliasfirstmeeting") . $begin;
 	}
 	
 	if ($visible[++$j] && $db->f("teilnehmer"))
