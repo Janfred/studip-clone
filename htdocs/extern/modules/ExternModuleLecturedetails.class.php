@@ -93,8 +93,8 @@ class ExternModuleLecturedetails extends ExternModule {
 	
 	function setup () {
 		// extend $data_fields if generic datafields are set
-	//	$config_datafields = $this->config->getValue("Main", "genericdatafields");
-	//	$this->data_fields = array_merge($this->data_fields, $config_datafields);
+		$config_datafields = $this->config->getValue("Main", "genericdatafields");
+		$this->data_fields = array_merge($this->data_fields, $config_datafields);
 		
 		// setup module properties
 		$this->elements["SemName"]->real_name = _("Name der Veranstaltung");
@@ -165,8 +165,9 @@ class ExternModuleLecturedetails extends ExternModule {
 				$data["subtitle"] = htmlReady($this->db->f("Untertitel"));
 			
 			if ($visible[++$j]) {
-				if (!$name_sql = $GLOBALS['_fullname_sql'][$this->config->getValue("Main", "nameformat")])
+				if (!$name_sql = $this->config->getValue("Main", "nameformat"))
 					$name_sql = "full";
+				$name_sql = $GLOBALS['_fullname_sql'][$name_sql];
 				$db_lecturer =& new DB_Seminar();
 				$db_lecturer->query("SELECT $name_sql AS name, username FROM seminar_user su LEFT JOIN
 						auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id)
@@ -253,8 +254,15 @@ class ExternModuleLecturedetails extends ExternModule {
 			if ($visible[++$j] && $this->db->f("ects"))
 				$data["ects"] = htmlReady($this->db->f("ects"));
 			
-			// include generic datafields
-			
+			// generic data fields
+			if ($generic_datafields = $this->config->getValue("Main", "genericdatafields")) {
+				$datafields_obj =& new DataFields($this->seminar_id);
+				$datafields = $datafields_obj->getLocalFields($this->seminar_id);
+				foreach ($generic_datafields as $datafield) {
+					if ($visible[++$j])
+						$data[$datafield] = FixLinks(format(htmlReady($datafields[$datafield]["content"])));
+				}
+			}
 			$out = $this->toStringMainTable($data, FALSE); 
 		}
 		
@@ -291,6 +299,8 @@ class ExternModuleLecturedetails extends ExternModule {
 			case "full_rev" :
 				$data_sem["lecturer"] = _("Meyer, Peter, Dr.");
 				break;
+			default :
+				$data_sem["lecturer"] = _("Dr. Peter Meyer");
 		}
 		$data_sem["art"] = _("Testveranstaltung");
 		$data_sem["semtype"] = 1;
