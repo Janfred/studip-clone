@@ -25,9 +25,9 @@ require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
 <tr><td class="blank">&nbsp;</td></tr>
 
 	<?
-		parse_msg ("error§" . _("Zugriff verweigert") . " <br /><font size=-1 color=black>" . sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "<br /> <br /> " . _("Eine andere Ursache kann der Zugrff auf Teile des System, für die Sie keine Berechtigung haben, sein. In diesem Fall gelangen Sie üben den untenstehenden Link zurück auf die Startseite."), "§", "blank", 1)
+		parse_msg ("error§" . _("Zugriff verweigert") . " <br /><font size=-1 color=black>" . sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn Sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "<br /> <br /> " . _("Eine andere Ursache kann der versuchte Zugriff auf Teile des System sein, für die Sie keine Berechtigung haben. In diesem Fall gelangen Sie über den untenstehenden Link zurück auf die Startseite."), "§", "blank", 1)
 	?>
-	<tr><td class="blank"><font size=-1><a href="index.php"><b>&nbsp;<? printf(_("Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "</b></a>")?><br />&nbsp;
+	<tr><td class="blank"><font size=-1><? printf(_("%sHier%s geht es wieder zur Anmeldungs- bzw. Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>")?><br />&nbsp;
 
 </td></tr>
 </table>

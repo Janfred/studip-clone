@@ -100,9 +100,9 @@ function print_institut_content($instid,$my_inst_values) {
 	if ($my_inst_values["literatur"]) {
 		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=literatur.php\">";
 		if ($my_inst_values["neueliteratur"])
-	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste (geändert)"))."></a>";
+	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste (geändert)"))."></a>";
 		else
-		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste"))."></a>";
+		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste"))."></a>";
   } else {
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 	}
@@ -171,7 +171,7 @@ if ( !$perm->have_perm("root")) {
 		if ($perm->have_perm("dozent"))
 			$meldung="info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§".$meldung;
 		else
-			$meldung="info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"universit&auml;re Daten\" in ihren pers&ouml;nlichen Einstellungen."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>") . "§".$meldung;
+			$meldung="info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"universit&auml;re Daten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>") . "§".$meldung;
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>

@@ -40,7 +40,7 @@ if (!$perm->have_perm("admin")) {
 	$structure["my_archiv"]=array (topKat=>"meine_veranstaltungen", name=>_("meine&nbsp;archivierten&nbsp;Veranstaltungen"), link=>"my_archiv.php", active=>FALSE);
 }
 if ($perm->have_perm("admin"))
-	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>_("Veranstaltungs&nbsp;Timetable"), link=>"mein_stundenplan.php", active=>FALSE);
+	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>_("Veranstaltungs-Timetable"), link=>"mein_stundenplan.php", active=>FALSE);
 //
 $structure["all"]=array (topKat=>"veranstaltungen_suche", name=>_("Alle"), link=>"sem_portal.php", active=>FALSE);
 foreach ($SEM_CLASS as $key=>$val)  {

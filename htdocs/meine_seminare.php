@@ -97,9 +97,9 @@ function print_seminar_content($semid,$my_sem_values) {
   if ($my_sem_values["literatur"]) {
 		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
 		if ($my_sem_values["neueliteratur"])
-	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste (geändert)"))."></a>";
+	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste (geändert)"))."></a>";
 		else
-		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste"))."></a>";
+		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur- und Linkliste"))."></a>";
   }
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
@@ -146,7 +146,7 @@ if (!$perm->have_perm("root"))
 if ($cmd == "no_kill") {
 	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
+	$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
 }
 
 //Sicherheitsabfrage fuer abonnierte Veranstaltungen
@@ -154,7 +154,7 @@ if ($cmd == "suppose_to_kill") {
 	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
 	if ($db->f("admission_type")) {
-		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	} else {
@@ -166,7 +166,7 @@ if ($cmd == "suppose_to_kill") {
 if ($cmd=="suppose_to_kill_admission") {
 	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+	$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
 	$meldung.="<a href=\"$PHP_SELF?cmd=kill_admission&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 	$meldung.="<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 }
@@ -176,7 +176,7 @@ if ($cmd=="kill") {
 	$db->query("SELECT Name, admission_binding, a.status FROM seminar_user a LEFT JOIN seminare USING(Seminar_id) WHERE a.Seminar_id = '$auswahl' AND a.user_id='$user->id' AND a.status IN('user','autor')");
 	$db->next_record();
 	if ($db->f("admission_binding")) {
-		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
+		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
 	} elseif ($db->f("status")) {
 		$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
 		if ($db->affected_rows() == 0)
@@ -187,7 +187,7 @@ if ($cmd=="kill") {
 	  
 	  	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 		  $db->next_record();
-		  $meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert."), $db->f("Name"));
+		  $meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."), $db->f("Name"));
 		}
 	}
 }
@@ -202,7 +202,7 @@ if ($cmd=="kill_admission") {
 	  
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
-	  $meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Wartelistet der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen sie sich erneut bewerben."), $db->f("Name"));
+	  $meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen Sie sich erneut bewerben."), $db->f("Name"));
 	}
 }
 
@@ -323,7 +323,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
 				echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
 			elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
+				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
 			else
 				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td>", $semid);			
 			echo "</tr>\n";
@@ -437,10 +437,10 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
 					array	 (	"icon" => "pictures/suchen.gif",
-										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php\">")
+										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion%s"), "<a href=\"sem_portal.php\">", "</a>")
 					),
 					array	 (	"icon" => "pictures/admin.gif",
-										"text"  => sprintf(_("Um Veranstaltungen anzulegen, nutzen Sie bitte den %sVeranstaltungs-Assistenten</a>"), "<a href=\"admin_seminare_assi.php?new_session=TRUE\">")
+										"text"  => sprintf(_("Um Veranstaltungen anzulegen, nutzen Sie bitte den %sVeranstaltungs-Assistenten%s"), "<a href=\"admin_seminare_assi.php?new_session=TRUE\">", "</a>")
 					)
 				)
 			)
@@ -460,7 +460,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
 					array	 (	"icon" => "pictures/suchen.gif",
-										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion</a>"), "<a href=\"sem_portal.php\">")
+										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion%s"), "<a href=\"sem_portal.php\">", "</a>")
 					)
 				)
 			)
@@ -523,7 +523,8 @@ elseif ($auth->auth["perm"]=="admin") {
 	$num_my_sem=$db->num_rows();
 	if (!$num_my_sem) 
 		$meldung = "msg§"
-				. sprintf(_("An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt.§"), htmlReady($_my_inst[$_my_admin_inst_id]['name']))
+				. sprintf(_("An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt."), htmlReady($_my_inst[$_my_admin_inst_id]['name']))
+				. "§"
 				. $meldung;
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -581,7 +582,7 @@ elseif ($auth->auth["perm"]=="admin") {
 				<tr valign"top" align="center">
 					<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name"><?=_("Name")?></a></th>
 					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status"><?=_("Status")?></a></th>
-					<th width="15%"><b><?=_("Dozent")?></b></th>
+					<th width="15%"><b><?=_("DozentIn")?></b></th>
 					<th width="10%"><b><?=_("Inhalt")?></b></th>
 					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=teilnehmer"><?=_("Teilnehmer")?></a></th>
 					<th width="5%"><b>&nbsp; </b></th>
