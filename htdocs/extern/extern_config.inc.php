@@ -42,7 +42,7 @@
 */
 define("PHPDOC_DUMMY",true);
 
-$EXTERN_SERVER_NAME = "localhost/studip";
+$EXTERN_SERVER_NAME = "test.studip.de/studip";
 
 $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
 
@@ -64,16 +64,16 @@ $EXTERN_MODULE_TYPES[5] = array("module" => "News", "name" => _("News"), "level"
 
 $EXTERN_MODULE_TYPES[6] = array("module" => "Download", "name" => _("Download"), "level" => 1,
 													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."));
-
+/*
 $EXTERN_MODULE_TYPES[7] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
 $EXTERN_MODULE_TYPES[8] = array("module" => "Rangelecturetree", "name" => _("Einrichtungsbaum Veranstaltungen"), "level" => 1,
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
-
+*/
 
 // Don't allow more than 10 configuration files for each module!
-$EXTERN_MAX_CONFIGURATIONS = 4;
+$EXTERN_MAX_CONFIGURATIONS = 6;
 
 // print this message instead of data if an error occurs
 $EXTERN_ERROR_MESSAGE = "<b>Ein Fehler ist aufgetreten. Die Daten k&ouml;nnen nicht angezeigt werden. Bitte wenden Sie sich an den Webmaster.</b>";
