@@ -156,10 +156,7 @@ function change_messaging_view() {
 					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; 
 					<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src")?> border=0 align="absmiddle" value="<?=_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp; 
 					<?
-					if ($i_page == "online.php")
-						echo "<a href=\"online.php\">" . makeButton("zurueck2", "img") . "</a>";
-					if ($i_page == "sms.php")
-						echo "<a href=\"sms.php\">" . makeButton("zurueck2", "img") . "</a>";
+					echo "<a href=\"$i_page\">" . makeButton("zurueck2", "img") . "</a>";
 					?>
 					<input type="HIDDEN" name="view" value="Messaging">
 					</td>
