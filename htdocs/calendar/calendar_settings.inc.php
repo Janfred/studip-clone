@@ -162,7 +162,7 @@ $css_switcher = new cssClassSwitcher();
 							<option value="7200"<?
 								if($calendar_user_control_data["step_day"] == 7200)
 									echo " selected";
-								echo ">" . _(2 Stunden) . "</option>"; ?>
+								echo ">" . _("2 Stunden") . "</option>"; ?>
 						</select>
 					</td>
 				</tr>
