@@ -1,9 +1,11 @@
 <?
-//global $ABSOLUTE_PATH_STUDIP;
+global $ABSOLUTE_PATH_STUDIP;
 //global $RELATIVE_PATH_CALENDAR;
-//require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemBrowse.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
 
-global $SEM_TYPE,$SEM_CLASS, $SEMESTER;
+global $SEM_TYPE,$SEM_CLASS ;
+$semester = new SemesterData;
+$all_semester = $semester->getAllSemesterData();
 
 // reorganize the $SEM_TYPE-array
 foreach ($SEM_CLASS as $key_class => $class) {
@@ -18,7 +20,7 @@ foreach ($SEM_CLASS as $key_class => $class) {
 
 // current semester
 $now = time();
-foreach ($SEMESTER as $key => $sem) {
+foreach ($all_semester as $key => $sem) {
 	if ($sem["beginn"] >= $now)
 		break;
 }

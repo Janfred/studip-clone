@@ -1,6 +1,7 @@
 <?
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/SemesterData.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 		. "/lib/extern_functions.inc.php");
@@ -276,7 +277,9 @@ function kategorien (&$this, $data, $alias_content, $text_div, $text_div_end) {
 }
 
 function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
-	global $attr_text_td, $SEMESTER;
+	global $attr_text_td;
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 	
 	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
@@ -309,25 +312,25 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	
 	switch ($this->config->getValue("PersondetailsLectures", "semstart")) {
 		case "previous" :
-			if (isset($SEMESTER[$current_sem - 1]))
+			if (isset($all_semester[$current_sem - 1]))
 				$current_sem--;
 			break;
 		case "next" :
-			if (isset($SEMESTER[$current_sem + 1]))
+			if (isset($all_semester[$current_sem + 1]))
 				$current_sem++;
 			break;
 		case "current" :
 			break;
 		default :
-			if (isset($SEMESTER[$this->config->getValue("PersondetailsLectures", "semstart")]))
+			if (isset($all_semester[$this->config->getValue("PersondetailsLectures", "semstart")]))
 				$current_sem = $this->config->getValue("PersondetailsLectures", "semstart");
 	}
 	
 	$last_sem = $current_sem + $this->config->getValue("PersondetailsLectures", "semrange") - 1;
 	if ($last_sem < $current_sem)
 		$last_sem = $current_sem;
-	if (!isset($SEMESTER[$last_sem]))
-		$last_sem = sizeof($SEMESTER);
+	if (!isset($all_semester[$last_sem]))
+		$last_sem = sizeof($all_semester);
 	
 	$out = "";
 	for (;$current_sem - 1 < $last_sem; $last_sem--) {			
@@ -337,14 +340,14 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 				&& $this->config->getValue("PersondetailsLectures", "semrange") == 1)) {
 			$out .= $subheadline_div;
 			$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-			$month = date("n", $SEMESTER[$last_sem]["beginn"]);
+			$month = date("n", $all_semester[$last_sem]["beginn"]);
 			if($month > 9) {
 				$out .= $this->config->getValue("PersondetailsLectures", "aliaswise");
-				$out .= date(" Y/", $SEMESTER[$last_sem]["beginn"]) . date("y", $SEMESTER[$last_sem]["ende"]);
+				$out .= date(" Y/", $all_semester[$last_sem]["beginn"]) . date("y", $all_semester[$last_sem]["ende"]);
 			}
 			else if($month > 3 && $month < 10) {
 				$out .= $this->config->getValue("PersondetailsLectures", "aliassose");
-				$out .= date(" Y", $SEMESTER[$last_sem]["beginn"]);
+				$out .= date(" Y", $all_semester[$last_sem]["beginn"]);
 			}
 			$out .= "</font>$subheadline_div_end</td></tr>\n";
 		}

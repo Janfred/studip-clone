@@ -1,6 +1,7 @@
 <?
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/SemesterData.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 		. "/lib/extern_functions.inc.php");
@@ -114,7 +115,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo formatReady($db->f($data_field), TRUE, TRUE, TRUE);
+					echo FixLinks(format(htmlReady($db->f($data_field))));
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 				break;
@@ -138,7 +139,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo formatReady($datafields[$data_field]["content"], TRUE, TRUE, TRUE);
+					echo FixLinks(format(htmlReady($datafields[$data_field]["content"])));
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 		}
@@ -182,13 +183,13 @@ function news (&$this, $db, $alias_content, $text_div, $text_div_end) {
 			echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 			echo $subheadline_div;
 			echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-			echo htmlReady($db_news->f("topic"));
+			echo format(htmlReady($db_news->f("topic")));
 			echo "</font>$subheadline_div_end</td></tr>\n";
 			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 			list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
 			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 			echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-			echo formatReady($content, TRUE, TRUE, TRUE);
+			echo FixLinks(format(htmlReady($content)));
 			echo "</font>$text_div_end</td></tr>\n";
 		}
 		echo "</table>\n</td></tr>\n";
@@ -225,13 +226,13 @@ function termine (&$this, $db, $alias_content, $text_div, $text_div_end) {
 					echo strftime(" - %H.%m", $event->getEnd());
 				else
 					echo strftime(" - " . $this->config->getValue("Main", "dateformat") . " %H.%m", $event->getEnd());
-				echo " &nbsp;" . htmlReady($event->getTitle());
+				echo " &nbsp;" . format(htmlReady($event->getTitle()));
 				echo "</font>$subheadline_div_end</td></tr>\n";
 				if ($event->getDescription()) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-					echo htmlReady($event->getDescription());
+					echo FixLinks(format(htmlReady($event->getDescription())));
 					echo "</font>$text_div_end</td></tr>\n";
 				}
 			} 
@@ -256,14 +257,16 @@ function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
 		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 		echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
-		echo formatReady($db_kategorien->f("content"), TRUE, TRUE, TRUE);
+		echo FixLinks(format(htmlReady($db_kategorien->f("content"))));
 		echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 	} 
 }
 
 function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
-	global $attr_text_td, $end, $start, $SEMESTER;
+	global $attr_text_td, $end, $start; 
 	$db1 = new DB_Seminar();
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 	
 	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
@@ -296,32 +299,32 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	
 	switch ($this->config->getValue("PersondetailsLectures", "semstart")) {
 		case "previous" :
-			if (isset($SEMESTER[$current_sem - 1]))
+			if (isset($all_semester[$current_sem - 1]))
 				$current_sem--;
 			break;
 		case "next" :
-			if (isset($SEMESTER[$current_sem + 1]))
+			if (isset($all_semester[$current_sem + 1]))
 				$current_sem++;
 			break;
 		case "current" :
 			break;
 		default :
-			if (isset($SEMESTER[$this->config->getValue("PersondetailsLectures", "semstart")]))
+			if (isset($all_semester[$this->config->getValue("PersondetailsLectures", "semstart")]))
 				$current_sem = $this->config->getValue("PersondetailsLectures", "semstart");
 	}
 	
 	$last_sem = $current_sem + $this->config->getValue("PersondetailsLectures", "semrange") - 1;
 	if ($last_sem < $current_sem)
 		$last_sem = $current_sem;
-	if (!isset($SEMESTER[$last_sem]))
-		$last_sem = sizeof($SEMESTER);
+	if (!isset($all_semester[$last_sem]))
+		$last_sem = sizeof($all_semester);
 	
 	$out = "";
 	for (;$current_sem - 1 < $last_sem; $last_sem--) {
 		$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
 	           ."WHERE user_id='".$db->f("user_id")."' AND "
-			       ."su.status LIKE 'dozent' AND ((start_time >= {$SEMESTER[$last_sem]['beginn']} "
-			       ."AND start_time <= {$SEMESTER[$last_sem]['beginn']}) OR (start_time <= {$SEMESTER[$last_sem]['ende']} "
+			       ."su.status LIKE 'dozent' AND ((start_time >= {$all_semester[$last_sem]['beginn']} "
+			       ."AND start_time <= {$all_semester[$last_sem]['beginn']}) OR (start_time <= {$all_semester[$last_sem]['ende']} "
 						 ."AND duration_time = -1)) AND s.status IN ('$types') "
 						 ."ORDER BY s.mkdate DESC";
 			
@@ -334,14 +337,14 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 				$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 				$out .= $subheadline_div;
 				$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-				$month = date("n", $SEMESTER[$last_sem]['beginn']);
+				$month = date("n", $all_semester[$last_sem]['beginn']);
 				if($month > 9) {
 					$out .= $this->config->getValue("PersondetailsLectures", "aliaswise");
-					$out .= date(" Y/", $SEMESTER[$last_sem]['beginn']) . date("y", $SEMESTER[$last_sem]['ende']);
+					$out .= date(" Y/", $all_semester[$last_sem]['beginn']) . date("y", $all_semester[$last_sem]['ende']);
 				}
 				else if($month > 3 && $month < 10) {
 					$out .= $this->config->getValue("PersondetailsLectures", "aliassose");
-					$out .= date(" Y", $SEMESTER[$last_sem]['beginn']);
+					$out .= date(" Y", $all_semester[$last_sem]['beginn']);
 				}
 				$out .= "</font>$subheadline_div_end</td></tr>\n";
 			}
@@ -565,7 +568,7 @@ function kontakt ($this, $db) {
 		}
         	
 		if($data_field == "Home" && $db->f("Home")){
-			$home = trim(FixLinks($db->f("Home"), TRUE, TRUE, FALSE, TRUE));
+			$home = trim(formatReady($db->f("Home")));
 			$out .= "<tr$attr_tr>";
 			$out .= "<td$attr_td>";
 			$out .= "<font$attr_fonttitle>";
@@ -582,7 +585,7 @@ function kontakt ($this, $db) {
 			$out .= $alias_contact[$position] . "</font></td>";
 			$out .= "<td$attr_td>";
 			$out .= "<font$attr_fontcontent>";
-			$out .= htmlReady($db->f("sprechzeiten")) . "</font></td></tr>\n";
+			$out .= formatReady($db->f("sprechzeiten"), TRUE) . "</font></td></tr>\n";
 		}
 	}
 	$out .= "</table>\n";

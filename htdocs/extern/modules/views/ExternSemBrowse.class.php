@@ -2,6 +2,7 @@
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
 require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/SemBrowse.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/SemesterData.class.php");
 
 class ExternSemBrowse extends SemBrowse {
 	
@@ -11,7 +12,10 @@ class ExternSemBrowse extends SemBrowse {
 	
 	function ExternSemBrowse (&$module, $start_item_id) {
 		
-		global $SEM_TYPE,$SEM_CLASS,$SEMESTER;
+		global $SEM_TYPE,$SEM_CLASS;
+		$semester = new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
+		array_unshift($all_semester,0);
 		
 		$this->group_by_fields = array(	array('name' => _("Semester"), 'group_field' => 'sem_number'),
 										array('name' => _("Bereich"), 'group_field' => 'bereich'),
@@ -22,7 +26,7 @@ class ExternSemBrowse extends SemBrowse {
 		$this->module = $module;
 		$this->config = $this->module->config;
 		$this->sem_browse_data["group_by"] = $this->config->getValue("Main", "grouping");
-		$this->sem_dates = $GLOBALS['SEMESTER'];
+		$this->sem_dates = $all_semester;
 		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
 		
 		// reorganize the $SEM_TYPE-array
@@ -43,25 +47,25 @@ class ExternSemBrowse extends SemBrowse {
 		
 		switch ($this->config->getValue("Main", "semstart")) {
 			case "previous" :
-				if (isset($SEMESTER[$current_sem - 1]))
+				if (isset($all_semester[$current_sem - 1]))
 					$current_sem--;
 				break;
 			case "next" :
-				if (isset($SEMESTER[$current_sem + 1]))
+				if (isset($all_semester[$current_sem + 1]))
 					$current_sem++;
 				break;
 			case "current" :
 				break;
 			default :
-				if (isset($SEMESTER[$this->config->getValue("Main", "semstart")]))
+				if (isset($all_semester[$this->config->getValue("Main", "semstart")]))
 					$current_sem = $this->config->getValue("Main", "semstart");
 		}
 		
 		$last_sem = $current_sem + $this->config->getValue("Main", "semrange") - 1;
 		if ($last_sem < $current_sem)
 			$last_sem = $current_sem;
-		if (!isset($SEMESTER[$last_sem]))
-			$last_sem = sizeof($SEMESTER);
+		if (!isset($all_semester[$last_sem]))
+			$last_sem = sizeof($all_semester);
 		
 		for ($i = $last_sem; $i >= $current_sem; $i--)
 			$this->sem_number[] = $i;
@@ -76,7 +80,7 @@ class ExternSemBrowse extends SemBrowse {
 	}
 	
 	function print_result () {
-		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS,$SEMESTER;
+		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
 		
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			
