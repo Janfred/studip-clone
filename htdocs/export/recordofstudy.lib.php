@@ -29,7 +29,7 @@ function printSiteTitle($semester = NULL){
    	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
     	  . "	<tr valign=top align=center>\n"
     	  . "    <td class=topic align=left colspan=\"2\">\n"
-		  . "	  <img src=\"PICTURES/meinesem.gif\" alt=\"Studienbuch erstellen\" align=\"texttop\">\n"
+		  . "	  <img src=\"pictures/meinesem.gif\" alt=\"Studienbuch erstellen\" align=\"texttop\">\n"
 		  . "	  &nbsp;<b>Studienbuch erstellen:</b>\n"
 		  . "	  <font size=\"-1\">$semester</font>\n"
     	  . "    </td>\n"
