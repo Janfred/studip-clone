@@ -42,7 +42,7 @@
 */
 define("PHPDOC_DUMMY",true);
 
-$EXTERN_SERVER_NAME = "test.studip.de/studip/";
+$EXTERN_SERVER_NAME = "localhost/studip";
 
 $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
 
@@ -52,16 +52,16 @@ $EXTERN_MODULE_TYPES[1] = array("module" => "Download", "name" => _("Download"),
 $EXTERN_MODULE_TYPES[2] = array("module" => "Persons", "name" => _("Personal"), "level" => 1,
 													"description" => _("Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
 
-//$EXTERN_MODULE_TYPES[3] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
-	//												"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
+$EXTERN_MODULE_TYPES[3] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
+													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
-//$EXTERN_MODULE_TYPES[4] = array("module" => "Rangelecturetree", "name" => _("Einrichtungsbaum Veranstaltungen"), "level" => 1,
-	//												"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
+$EXTERN_MODULE_TYPES[4] = array("module" => "Rangelecturetree", "name" => _("Einrichtungsbaum Veranstaltungen"), "level" => 1,
+													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[3] = array("module" => "News", "name" => _("News"), "level" => 1,
+$EXTERN_MODULE_TYPES[5] = array("module" => "News", "name" => _("News"), "level" => 1,
 													"description" => _("Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[4] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
+$EXTERN_MODULE_TYPES[6] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
 													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."));
 /*
 $EXTERN_MODULE_TYPES[7] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,

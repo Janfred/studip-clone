@@ -125,7 +125,7 @@ function news (&$this, $db, $alias_content) {
 		echo format(htmlReady($db_news->f("topic")));
 		echo "</font></div></td></tr>\n";
 		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-		list ($content,$admin_msg) = explode("<admin_msg>", $db_news->f("body"));
+		list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
 		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 		echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
 		echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
@@ -143,7 +143,8 @@ function termine (&$this, $db, $alias_content) {
 			echo "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
 			echo "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
 			echo "$alias_content</font></td></tr>\n";
-		
+			//$date_form = $this->config->getValue("
+			
 			while ($event = $event_list->nextEvent()) {
 				echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 				echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";

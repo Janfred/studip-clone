@@ -1,6 +1,6 @@
 <?
 /**
-* ExternElementPersondetailsLectures.class.php
+* ExternElementContentNews.class.php
 * 
 * 
 * 
@@ -9,13 +9,13 @@
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
-* @module		ExternElementPersondetailsLectures
+* @module		ExternElement
 * @package	studip_extern
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternElementPersondetailsLectures.class.php
+// ExternElementContentNews.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -34,48 +34,31 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
 
-class ExternElementPersondetailsLectures extends ExternElement {
+class ExternElementContentNews extends ExternElement {
 
-	var $attributes = array("semrange", "aliaswise", "aliassose", "aslist");
-	
+	var $attributes = array("fonttopic_size", "fonttopic_face", "fonttopic_color",
+			"fonttopic_class", "fonttopic_style","divtopic_align", "divtopic_class",
+			"divtopic_style", "fontbody_size", "fontbody_face", "fontbody_color",
+			"fontbody_class", "fontbody_style", "divbody_align", "divbody_class", "divbody_style");
+
 	/**
 	* Constructor
 	*
 	* @param array config
 	*/
-	function ExternElementPersondetailsLectures ($config = "") {
+	function ExternElementContentNews ($config = "") {
 		if ($config)
 			$this->config = $config;
 		
-		$this->name = "PersondetailsLectures";
-		$this->real_name = _("Lehrveranstaltungen");
-		$this->description = _("Angaben zur Ausgabe von Lehrveranstaltungen.");
+		$this->name = "ContentNews";
+		$this->real_name = _("&Uuml;berschrift und Beschreibung der News");
+		$this->description = _("Eigenschaften der Überschrift und der Beschreibung einer News.");
 	}
 	
-	/**
-	* 
-	*/
-	function getDefaultConfig () {
-		
-		$config = array(
-			"semrange" => "three",
-			"aliaswise" => "WiSe",
-			"aliassose" => "SoSe",
-			"aslist" => "1"
-		);
-		
-		return $config;
-	}
-	
-	/**
-	* 
-	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-		
 		$out = "";
 		$table = "";
 		if ($edit_form == "")
@@ -85,30 +68,17 @@ class ExternElementPersondetailsLectures extends ExternElement {
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE, $anker);
 		
-		$headline = $edit_form->editHeadline(_("Allgemeine Angaben"));
-		
-		$title = _("Semesterumfang:");
-		$info = _("Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden sollen.");
-		$names = array(_("nur aktuelles"), _("vorheriges, aktuelles, n&auml;chstes"), _("alle"));
-		$values = array("current", "three", "all");
-		$table = $edit_form->editRadioGeneric("semrange", $title, $info, $values, $names);
-		
-		$title = _("Bezeichnung Sommersemester:");
-		$info = _("Alternative Bezeichnung für den Begriff \"Sommersemester\".");
-		$table .= $edit_form->editTextfieldGeneric("aliassose", $title, $info, 40, 80);
-		
-		$title = _("Bezeichnung Wintersemester:");
-		$info = _("Alternative Bezeichnung für den Begriff \"Wintersemester\".");
-		$table .= $edit_form->editTextfieldGeneric("aliaswise", $title, $info, 40, 80);
-		
-		$title = _("Darstellungsart:");
-		$info = _("Wählen Sie zwischen Listendarstellung und reiner Textdarstellung.");
-		$names = array(_("Liste"), _("nur Text"));
-		$values = array("1", "0");
-		$table .= $edit_form->editRadioGeneric("aslist", $title, $info, $values, $names);
-		
-		$content_table .= $edit_form->editContentTable($headline, $table);
+		$attributes = array("fonttopic_size", "fonttopic_face", "fonttopic_color",
+			"fonttopic_class", "fonttopic_style","divtopic_align", "divtopic_class",
+			"divtopic_style", "fontbody_size", "fontbody_face", "fontbody_color",
+			"fontbody_class", "fontbody_style", "divbody_align", "divbody_class", "divbody_style");
+		$headlines = array("fonttopic" => _("Schriftformatierung News-Titel"),
+				"divtopic" => "Ausrichtung News-Titel", "fontbody" => "Schriftformatierung News-Beschreibung",
+				"divbody" => "Ausrichtung News-Beschreibung");
+		$content_table = $edit_form->getEditFormContent($attributes, $headlines);
 		$content_table .= $edit_form->editBlankContent();
+		
+		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
 		$submit = $edit_form->editSubmit($this->config->getName(),
 				$this->config->getId(), $this->getName());
@@ -116,6 +86,8 @@ class ExternElementPersondetailsLectures extends ExternElement {
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+		
+		return $out;
 	}
 	
 }
