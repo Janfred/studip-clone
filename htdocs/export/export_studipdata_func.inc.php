@@ -64,11 +64,11 @@ function export_sem($inst_id)
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter;
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
-	$db->query('SELECT * FROM Seminare 
-				LEFT JOIN seminar_inst USING (Seminar_id) LEFT JOIN seminar_bereich USING(Seminar_id) 
+	$db->query('SELECT * FROM seminar_inst
+				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_bereich USING(Seminar_id) 
 				LEFT JOIN bereiche USING(bereich_id) 
 				WHERE seminar_inst.Institut_id = "' . $inst_id . '" 
-				ORDER BY bereiche.name, Seminare.Name');
+				ORDER BY bereiche.name, seminare.Name');
 
 	while ($db->next_record()) 
 	{
