@@ -399,8 +399,6 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 					return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
 				}
 				
-				// XXX META OS-HACK
-				/*
 				if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
 					$this->msg=$this->msg . "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
 					return false;
@@ -416,7 +414,6 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 						return false;
 					}
 				}
-				*/
 				
 				if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
 					if (!(($this->check == "admin") && ($ALLOW_ADMIN_USERACCESS))) { //Generate only password, if user changes his own E-Mail
