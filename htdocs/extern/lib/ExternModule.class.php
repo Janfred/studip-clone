@@ -101,7 +101,6 @@ class ExternModule {
 			$config = $this->getDefaultConfig();
 			$this->config->setConfiguration($set_config, $config);
 		}
-		
 	}
 
 	/**
@@ -131,7 +130,6 @@ class ExternModule {
 	function getDefaultConfig () {
 		$default_config = array();
 		
-		reset($this->elements);
 		foreach ($this->elements as $element) {
 			if ($element->isEditable())
 				$default_config[$element->getName()] = $element->getDefaultConfig();
@@ -172,12 +170,11 @@ class ExternModule {
 		
 		return $this->args;
 	}
-	
+		
 	/**
 	*
 	*/
-	function toString ($start, $end) {
-	}
+	function toString ($start, $end) {}
 	
 	/**
 	*
@@ -190,7 +187,6 @@ class ExternModule {
 		
 		$out = $edit_form->editHeader();
 		
-		reset($this->elements);
 		foreach ($this->elements as $element) {
 			if ($element->isEditable()) {
 				if ($open_elements[$element->getName()] == TRUE)
@@ -267,8 +263,9 @@ class ExternModule {
 	/**
 	*
 	*/
-	function mainCommand ($command, $value) {
-		return $this->elements["Main"]->mainCommand($command, $value);
+	function executeCommand ($element, $command, $value) {
+		if ($element == "Main" || in_array($element, $this->registered_elements))
+			return $this->elements[$element]->executeCommand($command, $value);
 	}
 	
 	/**
@@ -282,6 +279,24 @@ class ExternModule {
 	function printError () {
 		
 		exit;
+	}
+	
+	/**
+	*
+	*/
+	function getModuleLink ($module, $config, $sri_link) {
+		if ($sri_link) {
+			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}/extern.php";
+			$link .= "?page_url=$sri_link";
+		}
+		else {
+			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}/extern.php?module=$module";
+			if ($config)
+				$link .= "&config_name=$config";
+			$link .= "&range_id={$this->config->range_id}";
+		}
+		
+		return $link;
 	}
 	
 }
