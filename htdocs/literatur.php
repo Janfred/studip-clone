@@ -50,15 +50,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <?
 IF ($SessSemName[1] =="")
 	{
-	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Keine Veranstaltung gew&auml;hlt", 
+	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+				"Kein Objekt gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
 	}
 ELSE
         {
         include "links1.php";
-        include "links2.php";
         require_once "functions.php";
         require_once "visual.inc.php";
         
@@ -68,11 +67,9 @@ ELSE
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="blank" colspan="2" width="100%">&nbsp;</td></tr>
-<tr>
         <td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo htmlReady($SessSemName["art"]) .": ". htmlReady($SessSemName[0]); ?> - Literatur und Links</b></td>
 </tr>
-	<td class="blank" width="100%"><blockquote>Hier finden Sie die Literatur- und Linkliste der Veranstaltung.</td>
+	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? "Hier finden Sie n&uuml;tzliche Linteratur und Links zu der Einrichtung." : ";Hier finden Sie die Literatur- und Linkliste der Veranstaltung.");?></td>
 	<td class="blank" align = right><img src="pictures/literatur.jpg" border="0"></td>
 </tr>
 <tr>
@@ -116,7 +113,7 @@ if ($db->num_rows()) {
 		}
 	}
 	if ((!$literatur) && (!$links)) {
-		parse_msg("info§<font size=-1><b>In dieser Veranstaltung wurde keine Literatur oder Links erfasst</b></font>", "§", "steel1", 
+		parse_msg("info§<font size=-1><b>In dieser ".$SessSemName["art_generic"]." wurden keine Literatur oder Links erfasst</b></font>", "§", "steel1", 
 		2, FALSE);
 		}
 	echo "</td></tr></table></td></tr></table>";

@@ -479,7 +479,12 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 	$db->query($query);
 	IF ($db->num_rows()==0) {  // Das Forum ist leer
 		IF ($rechte) $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter \"neues Thema\" einen Ordner anlegen.";
-		ELSE $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.";
+		ELSE {
+			if ($SessSemName["class"]=="inst")
+				 $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.";
+			else
+				 $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den Administrator der Einrichtung, um Ordner anlegen zu lassen.";
+		}
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 		parse_msg("info§$text");
 		echo "</table>";
@@ -678,7 +683,12 @@ ELSE {
 	$db->query("SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate, y.name AS root_name, x.description, x.Seminar_id, y.topic_id AS root_id, username FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id), px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' ORDER BY chdate DESC LIMIT $limit");
 	IF ($db->num_rows()==0) {  // Das Forum ist leer
 		IF ($rechte) $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter \"neues Thema\" einen Ordner anlegen.";
-		ELSE $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kntaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.";
+		ELSE {
+			if ($SessSemName["class"]=="inst")
+				 $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie einen Tutor oder den Dozent dieser Veranstaltung, um Ordner anlegen zu lassen.";
+			else
+				 $text = "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den Administrator der Einrichtung, um Ordner anlegen zu lassen.";
+		}
 		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 		parse_msg("info§$text");
 		echo "</table></td></tr></table>";

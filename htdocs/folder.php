@@ -64,15 +64,14 @@ if ($cmd=="all") {
 
 IF ($SessSemName[1] =="")
 	{
-	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Keine Veranstaltung gew&auml;hlt", 
+	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+				"Keine Objekt gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
 	}
 ELSE
 	{
 	include "links1.php";
-	include "links2.php";
 	}
 
 $db=new DB_Seminar;
@@ -97,7 +96,7 @@ if (($rechte) || ($owner)) {
 	if (strpos($open, "_a_")) {
 		if (substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))) == $SessionSeminar) {
 			$titel="Allgemeiner Dateiordner";
-			$description="Ablage für allgemeine Ordner und Dokumente der Veranstaltung";
+			$description="Ablage für allgemeine Ordner und Dokumente der ".$SessSemName["art_generic"];
 			}
 		
 		$db->query("SELECT date, date_typ, content FROM termine WHERE termin_id='".substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_")))."'");
@@ -252,7 +251,6 @@ return $result;
 ?>
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr><td class="blank" colspan="2">&nbsp;</td></tr>
 <tr><td class="topic" colspan="2"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo htmlReady($SessSemName["art"]) . ": ", htmlReady($SessSemName[0]) .  " - Dateien"; ?></b></td></tr>
 
 		<tr>
@@ -296,7 +294,7 @@ return $result;
 	if ($folder_system_data["cmd"]=="all") {
 		?>
 		<blockquote>
-		Hier sehen Sie alle Dateien, die in dieser Veranstaltung eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen.
+		<? printf ("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen.", $SessSemName["art_generic"]); ?>
 		</blockquote>
 		<?
 		}

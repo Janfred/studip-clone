@@ -201,35 +201,15 @@ function form() {
 	$print.="</font></td></tr>";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>Maximale Gr&ouml;&szlig;e:</b></font></td><td class=\"steel1\" width=\"80%\"><font size=-1><b>".($max_filesize / 1048576)." </b>Megabyte</font></td></tr>";
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . $PHP_SELF . "\" method=\"post\">";
-	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>$c. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen. </font></td></tr>";
-	$c++;
+	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen. </font></td></tr>";
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;Dateipfad:&nbsp;</font><br />";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
-	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>$c. Geben Sie eine kurze Bescheibung der Datei ein.</font></td></tr>";
-	$c++;
+	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>2. Geben Sie eine kurze Bescheibung der Datei ein.</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;Beschreibung:&nbsp;</font><br>";
 	$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
-	if (!$range_id) {
-		$print.= "\n<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>$c. W&auml;hlen Sie aus der Liste aus, ob die Datei direkt zum Seminar oder zu einem bestimmten Termin geh&ouml;rt.</font></td></tr>";
-		$c++;
-		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\" width=\"20%\"><font size=-1>Seminar oder Termin:&nbsp;</font></td>";
-		$print.= "\n<td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\" width=\"80%\" height=\"75\"><SELECT NAME=\"range_id\">";
-		}
-			
-/*	$db->query("SELECT termin_id,date,content FROM termine WHERE range_id='$SessSemName[1]' ORDER BY date");
-	if ($db->num_rows())
-		{
-		while ($db->next_record())
-			{
-			print"\n<option ";
-			if ($range_id==$db->f("termin_id")) print"selected ";
-			print"value=\"".$db->f("termin_id")."\">Termin am ".date("d.M.Y",$db->f("date")).": ".substr($db->f("content"),0,20)."...</option>";
-			}
-		}
-	print"\n</select>&nbsp;</td></tr>";*/
-	$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>$c. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen</font></td></tr>";
+	$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";
 	$print.= "\n<input type=\"image\" src=\"pictures/buttons/absenden-button.gif\" border=0 value=\"Senden\" onClick=\"return upload_start();\" name=\"create\">";
 	$print.="&nbsp;<a href=\"$PHP_SELF?abbrechen=true\"><img src=\"./pictures/buttons/abbrechen-button.gif\" border=0></a></td></tr>";	

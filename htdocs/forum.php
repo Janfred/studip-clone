@@ -55,7 +55,6 @@ IF ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
 
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	include "links1.php";
-	include "links2.php";
 	require_once "functions.php";
 	require_once "visual.inc.php";
 	require_once "forum.inc.php";
@@ -108,7 +107,6 @@ ELSEIF ($open AND !$update) {
 //Titel-Zeile
 IF (!$forumsend=="anpassen") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
-	echo "<tr><td class=\"blank\" colspan=2>&nbsp;</td></tr>\n";
 	echo "<tr><td class=\"topic\" width=\"100%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". htmlReady($SessSemName["art"]) .": ". htmlReady($SessSemName[0])." - Forum</b></td><td class=\"topic\" width=\"1%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 alt='Look & Feel anpassen'>&nbsp;</a></td></tr>\n";
 	echo "<tr><td class=\"blank\"  colspan=2>&nbsp; </td></tr>\n";
 	echo "</table>\n";
@@ -117,8 +115,8 @@ IF (!$forumsend=="anpassen") {
 //Sind wir wirklich da, wo wir vogeben zu sein?
 IF ($SessSemName[1] =="")
 	{
-	parse_window ("error§Sie haben keine Veranstaltung gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher eine Veranstaltung gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Keine Veranstaltung gew&auml;hlt", 
+	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+				"Kein Objekt gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
 	}
