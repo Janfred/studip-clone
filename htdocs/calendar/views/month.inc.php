@@ -65,11 +65,11 @@ printf("&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, mktime(12, 0, 0, $amonth->getMonth(),
 			date('j', $amonth->getStart()), date('Y', $amonth->getStart()) - 1));
 $tooltip = tooltip(_("ein Jahr zurück"));
-echo "<img border=\"0\" src=\"./pictures/calendar_previous_double.gif\" $tooltip></a>";
+echo "<img border=\"0\" src=\"./pictures/calendar_previous_double.gif\"$tooltip></a>";
 printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getStart() - 1);
 $tooltip = tooltip(_("einen Monat zurück"));
-echo "<img border=\"0\" src=\"./pictures/calendar_previous.gif\" $tooltip></a>&nbsp;</td>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_previous.gif\"$tooltip></a>&nbsp;</td>\n";
 printf("<td colspan=%s class=\"calhead\">\n", $mod == "nokw" ? "5" : "6");
 echo "<font size=\"+2\">";
 echo htmlentities(strftime("%B ", $amonth->getStart()), ENT_QUOTES) . $amonth->getYear();
@@ -77,12 +77,12 @@ echo "</font></td>\n";
 printf("<td align=\"center\">&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getEnd() + 1);
 $tooltip = tooltip(_("einen Monat vor"));
-echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\" $tooltip></a>";
+echo "<img border=\"0\" src=\"./pictures/calendar_next.gif\"$tooltip></a>";
 printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, mktime(12, 0, 0, $amonth->getMonth(),
 			date('j', $amonth->getStart()), date('Y', $amonth->getEnd()) + 1));
 $tooltip = tooltip(_("ein Jahr vor"));
-echo "<img border=\"0\" src=\"./pictures/calendar_next_double.gif\" $tooltip></a></td>\n";
+echo "<img border=\"0\" src=\"./pictures/calendar_next_double.gif\"$tooltip></a></td>\n";
 echo "</tr>\n<tr>\n";
 
 $weekdays_german = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
@@ -116,9 +116,16 @@ for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 	$aday = date("j", $i);
 	// Tage des vorangehenden und des nachfolgenden Monats erhalten andere
 	// style-sheets
-	$style = "";
-	if (($aday - $j - 1 > 0) || ($j - $aday  > 6))
-		$style = "light";
+	$class_day = '';
+	if (($aday - $j - 1 > 0) || ($j - $aday  > 6)) {
+		$class_cell = 'lightmonth';
+		$class_day = 'light';
+	}
+	// emphesize current day
+	else if (date('Ymd', $i) == date('Ymd'))
+		$class_cell = 'celltoday';
+	else
+		$class_cell = 'month';
 	
 	// Feiertagsueberpruefung
 	if ($mod != "compact" && $mod != "nokw")
@@ -133,11 +140,11 @@ for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 	// week column
 	if ($j % 7 == 0)
 		echo "<tr>\n";
-	echo "<td class=\"{$style}month\" valign=\"top\" width=\"$width\" height=\"$height\">&nbsp;";
+	echo "<td class=\"$class_cell\" valign=\"top\" width=\"$width\" height=\"$height\">&nbsp;";
 	
 	// sunday column
 	if (($j + 1) % 7 == 0) {
-		echo "<a class=\"{$style}sday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
+		echo "<a class=\"{$class_day}sday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
 		month_up_down($amonth, $i, $step, $max_apps);
 		
 		if ($hday["name"] != "")
@@ -159,22 +166,22 @@ for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 		// unterschiedliche Darstellung je nach Art des Tages (Rang des Feiertages)
 		switch ($hday["col"]) {
 			case 1:
-				echo "<a class=\"{$style}day\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
+				echo "<a class=\"{$class_day}day\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
 				month_up_down($amonth, $i, $step, $max_apps);
 				echo "<br><font class=\"inday\">{$hday['name']}</font>";
 				break;
 			case 2:
-				echo "<a class=\{$style}shday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
+				echo "<a class=\{$class_day}shday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
 				month_up_down($amonth, $i, $step, $max_apps);
 				echo "<br><font class=\"inday\">{$hday['name']}</font>";
 				break;
 			case 3;
-				echo "<a class=\"{$style}hday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
+				echo "<a class=\"{$class_day}hday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
 				month_up_down($amonth, $i, $step, $max_apps);
 				echo "<br><font class=\"inday\">{$hday['name']}</font>";
 				break;
 			default:
-				echo "<a class=\"{$style}day\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
+				echo "<a class=\"{$class_day}day\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
 				month_up_down($amonth, $i, $step, $max_apps);
 		}
 		
@@ -253,7 +260,7 @@ function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
 			$tooltip = tooltip($tooltip);
 			echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
 			echo ($step + $max_events) . "\">";
-			echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurunt.gif\" ";
+			echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_down_small.gif\" ";
 			echo $tooltip . " border=\"0\"></a>\n";
 			$spacer = FALSE;
 		}
@@ -264,7 +271,7 @@ function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
 			$tooltip = tooltip($tooltip);
 			echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
 			echo ($step - $max_events) . "\">";
-			echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurauf.gif\" ";
+			echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_up_small.gif\" ";
 			echo $tooltip . " border=\"0\"></a>\n";
 			$month_obj->setPointer($atime, $step);
 		}
@@ -275,7 +282,7 @@ function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
 				$month_obj->numberOfEvents($day_timestamp) - $max_events);
 		$tooltip = tooltip($tooltip);
 		echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
-		echo ($max_events) . "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumgraurunt.gif\" ";
+		echo ($max_events) . "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_down_small.gif\" ";
 		echo $tooltip . " border=\"0\"></a>\n";
 	}
 }

@@ -50,13 +50,13 @@ echo "<tr><td class=\"blank\">\n";
 echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td align=\"center\" width=\"10%\">\n";
 echo "<a href=\"$PHP_SELF?cmd=showyear&atime=" . ($ayear->getStart() - 1) . "\">";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous.gif\"";
 echo tooltip(_("zurück")) . ">&nbsp;</a></td>\n";
 echo "<td class=\"calhead\" align=\"center\" width=\"80%\">\n";
 echo "<font size=\"+2\"><b>" . $ayear->getYear() . "</b></font></td>\n";
 echo "<td align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showyear&atime=";
 echo ($ayear->getEnd() + 1) . "\">\n";
-echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next.gif\"";
 echo tooltip(_("vor")) . ">&nbsp;</a></td>\n";
 echo "</tr></table>\n</td></tr>\n";
 echo "<tr><td class=\"blank\">";
@@ -78,26 +78,30 @@ for ($i = 1; $i < 13; $i++) {
 }
 echo "</tr>\n";
 
+$now = date('Ymd');
 for ($i = 1; $i < 32; $i++) {
 	echo "<tr>";
 	for ($month = 1; $month < 13; $month++) {
 		$aday = mktime(12, 0, 0, $month, $i, $ayear->getYear());
 				
 				if($i <= $days_per_month[$month]){
-					$wday = date("w", $aday);
-					if ($wday == 0 || $wday == 6)
-						$weekend = " class=\"weekend\"";
+					$wday = date('w', $aday);
+					// emphesize current day
+					if (date('Ymd', $aday) == $now)
+						$day_class = ' class="celltoday"';
+					else if ($wday == 0 || $wday == 6)
+						$day_class = ' class="weekend"';
 					else
-						$weekend = " class=\"weekday\"";
+						$day_class = ' class="weekday"';
 						
 					if ($month == 1)
-						echo "<td$weekend height=\"25\">";
+						echo "<td$day_class height=\"25\">";
 					else
-						echo "<td$weekend>";
+						echo "<td$day_class>";
 					
 					if($apps = $ayear->numberOfEvents($aday)) {
 						echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr>";
-						echo "<td$weekend>";
+						echo "<td$day_class>";
 					}
 					
 					$weekday = "<font size=\"2\">" . wday($aday, "SHORT") . "</font>";
@@ -143,13 +147,13 @@ for ($i = 1; $i < 32; $i++) {
 					
 					if	($apps) {
 						if	($apps > 1) {
-							echo "</td><td$weekend align=\"right\">";
+							echo "</td><td$day_class align=\"right\">";
 							echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/icon-uhr.gif\" ";
 							echo tooltip(sprintf(_("%s Termine"), $apps)) . " border=\"0\">";
 							echo "</td></tr></table>\n";
 						}
 						else {
-							echo "</td><td$weekend align=\"right\">";
+							echo "</td><td$day_class align=\"right\">";
 							echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/icon-uhr.gif\" ";
 							echo tooltip(_("1 Termin")) . " border=\"0\">";
 							echo "</td></tr></table>";

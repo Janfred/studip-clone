@@ -46,7 +46,11 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 	$width_precol_1 = 5;
 	$width_precol_2 = 4;
 	$day_event_row = "";
-	$style_cell = 'steel1';
+	// emphesize the current day if $compact is FALSE (this means week-view)
+	if (date("Ymd", $day_obj->getStart()) == date("Ymd") && !$compact)
+		$style_cell = 'celltoday';
+	else
+		$style_cell = 'steel1';
 	// one extra column for link
 	if ($link_edit)
 		$link_edit_column = 1;
@@ -81,7 +85,10 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				&& ($day_obj->events[$i]->getStart() < $day_obj->getStart() + $end + 3600)) {
 				
 			if ($day_obj->events[$i]->isDayEvent()) {
-				$tmp_day_event[] = $day_obj->events[$i];
+				$cloned_day_event = $day_obj->events[$i];
+				$cloned_day_event->setStart($day_obj->getStart());
+				$cloned_day_event->setEnd($day_obj->getEnd() - 59);
+				$tmp_day_event[] = $cloned_day_event;
 			}
 			else {
 				$cloned_event = $day_obj->events[$i];
@@ -598,10 +605,10 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	// navigation arrows left
 	$ret .= "<td align=\"center\" class=\"steelgroup0\" valign=\"top\">\n<a href=\"$href$ptime&imt=";
 	$ret .= mktime(0, 0, -1, $amonth->mon, 15, $amonth->year - 1) . "\">";
-	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_double_small.gif\" ";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_double_small.gif\"";
 	$ret .= tooltip(_("ein Jahr zurück")) . "></a>";
-	$ret .= "<font size=\"-2\">&nbsp;</font><a href=\"$href$ptime&imt=" . ($amonth->getStart() - 1) . "\">";
-	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_small.gif\" ";
+	$ret .= "<a href=\"$href$ptime&imt=" . ($amonth->getStart() - 1) . "\">";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_small.gif\"";
 	$ret .= tooltip(_("vorherige Woche")) . "></a>\n</td>\n";
 	
 	// month and year
@@ -616,11 +623,11 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	
 	// navigation arrows right
 	$ret .= "<td class=\"steelgroup0\" align=\"center\" valign=\"top\"><a href=\"$href$ptime&imt=" . ($amonth->getEnd() + 1) . "\">";
-	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_small.gif\" ";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_small.gif\"";
 	$ret .= tooltip(_("nächste Woche")) . "></a>";
-	$ret .= "<font size=\"-2\">&nbsp;</font><a href=\"$href$ptime&imt=";
+	$ret .= "<a href=\"$href$ptime&imt=";
 	$ret .= (mktime(0, 0, 1, $amonth->mon, 1, $amonth->year + 1)) . "\">";
-	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_double_small.gif\" ";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_double_small.gif\"";
 	$ret .= tooltip(_("ein Jahr vor")) . "></a>\n</td>";
 	$ret .= "</tr>\n";
 	
@@ -665,12 +672,18 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 		
 		if ($j % 7 == 0)
 			$ret .= "<tr>";
-		if ($now == $i)
-			$ret .= "<td class=\"current\" ";
+			
+		if ($now == $i && abs($atime - $i) < 1000)
+			$ret .= "<td class=\"currenttoday\" ";
+		elseif ($now == $i)
+			$ret .= "<td class=\"celltoday\" ";
 		elseif (abs($atime - $i) < 1000)
-			$ret .= "<td class=\"month\" ";
+			$ret .= "<td class=\"current\" ";
+		elseif (date('m', $i) != $amonth->mon) 
+			$ret .= "<td class=\"lightmonth\"";
 		else
-			$ret .= "<td class=\"steel1\"";
+			$ret .= "<td class=\"month\"";
+			
 		$ret .= "align=\"center\" width=\"$width\" height=\"$height\">";
 		
 		if (($j + 1) % 7 == 0) {

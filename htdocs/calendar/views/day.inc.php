@@ -79,7 +79,7 @@ if ($st > 0) {
 	echo "<tr><td align=\"center\" colspan=\"3\"><a href=\"$PHP_SELF?cmd=showday&atime=";
 	echo ($atime - ($at - $st + 1) * 3600) . "\">";
 	$tooltip = tooltip(_("zeig davor"));
-	echo "<img border=\"0\" src=\"./pictures/forumgraurauf.gif\"$tooltip></a></td></tr>\n";
+	echo "<img border=\"0\" src=\"./pictures/calendar_up.gif\"$tooltip></a></td></tr>\n";
 }
 echo "</table>\n</td></tr>\n<tr><td class=\"blank\">\n";
 echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">";
@@ -91,7 +91,7 @@ if ($et < 23) {
 	echo "<a href=\"$PHP_SELF?cmd=showday&atime=";
 	echo ($atime + ($et - $at + 1) * 3600) . "\">";
 	$tooltip = tooltip(_("zeig danach"));
-	echo "<img border=\"0\" src=\"./pictures/forumgraurunt.gif\"$tooltip></a></td></tr>\n";
+	echo "<img border=\"0\" src=\"./pictures/calendar_down.gif\"$tooltip></a></td></tr>\n";
 }
 else
 	echo "<tr><td colspan=\"" . $tab["max_columns"] . "\">&nbsp;</td></tr>\n";
