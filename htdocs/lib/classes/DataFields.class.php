@@ -45,7 +45,8 @@ class DataFields {
 		"tutor" => 4,
 		"dozent" => 8,
 		"admin" => 16,
-		"root" => 32);
+		"root" => 32,
+		"self" => 64,);
 	var $range_id;			//range_id from the stud.ip object
 	
 	function DataFields($range_id = '') {
@@ -64,6 +65,21 @@ class DataFields {
 			}
 		}
 		return $result;
+	}
+
+	function checkPermission($perm, $view_perms, $watcher = "", $user = "") {
+		if (!$view_perms) return TRUE;
+		foreach ($this->perms_mask as $key => $val) {
+			if ($key == "self") {
+				if ($view_perms & $val) {
+					if (($watcher == "") | ($user == "")) return FALSE;
+					if ($user == $watcher) return TRUE; else return FALSE;
+				}
+			} else {
+				if ($perm->have_perm($key) && ($view_perms & $val)) return TRUE;
+			}
+		}
+		return FALSE;
 	}
 
 	function getNumberUsedEntries($datafield_id) {
@@ -98,11 +114,10 @@ class DataFields {
 		
 		if (!$range_id)
 			$range_id = $this->range_id;
-			
+	
 		if ((!$object_class) && ($range_id))
 			$object_class = get_object_type($range_id);
-			
-	
+
 		if ($object_class) {
 			if (!$object_type) {
 				switch ($object_class) {
@@ -117,13 +132,13 @@ class DataFields {
 						$query = sprintf ("SELECT perms FROM auth_user_md5 WHERE user_id = '%s' ", $range_id);
 					break;
 				}
-				
+
 				$this->db->query($query);
 				$this->db->next_record();
 				
 				$object_type = $this->db->f("type");
 			}
-	
+
 			switch ($object_class) {
 				case "sem": 
 				case "inst":
@@ -134,15 +149,17 @@ class DataFields {
 						$clause = "object_class IS NULL";
 				break;
 				case "user":
-					$clause = "(object_class & ".$this->perms_mask[$this->db->f("perms")].") OR object_class IS NULL";
+					$clause = "((object_class & ".$this->perms_mask[$this->db->f("perms")].") OR object_class IS NULL)";
 				break;
 			}
-			
 
 			if ($object_type == "fak")
 				$object_type = "inst";
-	
-			$query = sprintf ("SELECT datafield_id, name, NULL as content, edit_perms FROM datafields WHERE object_type ='%s' AND (%s) ORDER BY object_class, priority", $object_class, $clause);
+
+			if ($object_class == "fak")
+				$object_class = "inst";
+
+			$query = sprintf ("SELECT datafield_id, name, NULL as content, edit_perms, view_perms FROM datafields WHERE object_type ='%s' AND (%s) ORDER BY object_class, priority", $object_class, $clause);
 
 			$this->db->query($query);
 
@@ -150,7 +167,7 @@ class DataFields {
 				$local_datafields[$this->db->f("datafield_id")] = $this->db->Record;
 			}
 			
-			$query2 = sprintf ("SELECT datafields.datafield_id, name, content, edit_perms FROM datafields LEFT JOIN datafields_entries USING (datafield_id) WHERE range_id = '%s' AND object_type ='%s' AND (%s) ORDER BY object_class, priority", $range_id, $object_class, $clause);
+			$query2 = sprintf ("SELECT datafields.datafield_id, name, content, edit_perms, view_perms FROM datafields LEFT JOIN datafields_entries USING (datafield_id) WHERE range_id = '%s' AND object_type ='%s' AND (%s) ORDER BY object_class, priority", $range_id, $object_class, $clause);
 
 			$this->db2->query($query2);
 
@@ -183,7 +200,7 @@ class DataFields {
 
 	}
 	
-	function storeDataField($datafield_id='', $name='', $object_type='', $object_class='', $edit_perms='', $priority='') {
+	function storeDataField($datafield_id='', $name='', $object_type='', $object_class='', $edit_perms='', $priority='', $view_perms='') {
 		if ($datafield_id) {
 			$query = sprintf ("SELECT * FROM datafields WHERE datafield_id = '%s' ", $datafield_id);
 
@@ -201,7 +218,10 @@ class DataFields {
 			
 			if (!$edit_perms)
 				$edit_perms = $this->db->f("edit_perms");
-				
+
+			if (!$view_perms)
+				$view_perms = $this->db->f("view_perms");			
+	
 			if (!$priority)
 				$priority = $this->db->f("priority");
 		} else {
@@ -210,9 +230,12 @@ class DataFields {
 	
 		if (!$object_class)
 			$object_class = "NULL";
-			
-		$query = sprintf ("REPLACE INTO datafields SET datafield_id = '%s', name= '%s', object_type = '%s', object_class = %s, edit_perms = '%s', priority = '%s' ",
-				$datafield_id, $name, $object_type, $object_class, $edit_perms, $priority);
+
+		if (!$view_perms)
+			$view_perms = "NULL";
+
+		$query = sprintf ("REPLACE INTO datafields SET datafield_id = '%s', name= '%s', object_type = '%s', object_class = %s, edit_perms = '%s', priority = '%s', view_perms = %s",
+				$datafield_id, $name, $object_type, $object_class, $edit_perms, $priority, $view_perms);
 
 		$this->db->query($query);
 
