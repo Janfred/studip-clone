@@ -34,7 +34,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-
+if (!ini_get('allow_url_fopen')){
+	@ini_set('allow_url_fopen','1');
+}
 // this script is included in extern.inc.php
 
 $semester = new SemesterData;
