@@ -775,8 +775,8 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$fixed_text = preg_replace($pattern, $replace, $data);
 
 	$pattern = array(
-					'#((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s<])*))#ie',
-					'#(?<=\s|^|\>)(\[([^\n\f\[]+)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
+					'#((\[(img)(\=([^\n\f:]+?))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s<])*))#ie',
+					'#(?<=\s|^|\>)(\[([^\n\f]+?)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
 					);
 	$replace = array(
 			"preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
