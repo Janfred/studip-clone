@@ -191,7 +191,7 @@ $sem_browse_obj->do_output();
 print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 
 if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
-	$goup_by_links = "";
+	$group_by_links = "";
 	for ($i = 0; $i < count($sem_browse_obj->group_by_fields); ++$i){
 		if($sem_browse_data['group_by'] != $i){
 			$group_by_links .= "<a href=\"$PHP_SELF?group_by=$i&keep_result_set=1\"><img src=\"pictures/blank.gif\" width=\"10\" height=\"20\" border=\"0\">";
