@@ -58,8 +58,8 @@ if ($auth->auth["uid"]!="nobody"){
 	}
 
 	//Count new and old msg's
-	$query =  "SELECT COUNT(IF(readed = '0', message.message_id, NULL)) AS new_msg,
-		   COUNT(IF(readed = '1', message.message_id, NULL)) AS old_msg
+	$query =  "SELECT COUNT(IF(message_user.readed = '0', message.message_id, NULL)) AS new_msg,
+		   COUNT(IF(message_user.readed = '1', message.message_id, NULL)) AS old_msg
 		   FROM message_user LEFT JOIN message USING (message_id)
 		   WHERE deleted = '0' AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."'";
 
