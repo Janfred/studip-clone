@@ -40,17 +40,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <DIV ID="overDiv" STYLE="position:absolute; visibility:hidden; z-index:1000;"></DIV>
 <SCRIPT LANGUAGE="JavaScript" SRC="overlib.js"></SCRIPT>
 
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
+<?
 
-// -- hier muessen Seiten-Initialisierungen passieren --
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
+include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen 
+include "$ABSOLUTE_PATH_STUDIP/links1.php";
 
-	include "header.php";   //hier wird der "Kopf" nachgeladen 
-	include "links1.php";
-	require_once "forum.inc.php";
-	require_once "functions.php";
-	require_once "visual.inc.php";
-	require_once("suchen.inc.php");
+require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/suchen.inc.php";
 
 IF ($SessSemName[1] =="")
 	{
@@ -63,9 +62,8 @@ IF ($SessSemName[1] =="")
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr><td class=blank width=100% colspan=2>&nbsp;</td></tr>
 <?
-suchen($eintrag,$mehr,$suchbegriff,$check_author,$check_name,$check_cont,$seite=$PHP_SELF);
+suchen($eintrag,$mehr,$suchbegriff,$check_author,$check_name,$check_cont);
   // Save data back to database.
   page_close()
  ?>

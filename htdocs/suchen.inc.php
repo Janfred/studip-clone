@@ -94,31 +94,34 @@ function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt
 //////////////////////////////////////////////////////////////////////////
 
 
-function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$check_cont,$seite )
-{ global $SessionSeminar,$SessSemName;
+function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$check_cont)
+{ global $SessionSeminar,$SessSemName, $PHP_SELF;
 
 
-	if( !$mehr) $mehr=5;
-	if($check_author=="ON") $search_author="x.author LIKE '%$suchbegriff%'";
+	if(!$mehr) 
+		$mehr=5;
 
-	if($check_author=="ON"&&($check_name="ON"))
+	if($check_author) 
+		$search_author="x.author LIKE '%$suchbegriff%'";
+
+	if ($check_author && $check_name="ON")
 		$search_name=" OR x.name LIKE '%$suchbegriff%'";
-	elseif($check_name=="ON") 
+	elseif($check_name) 
 		$search_name="x.name LIKE '%$suchbegriff%'";
-	if($check_cont=="ON"){
-		if($check_author=="ON")
+	
+	if ($check_cont) {
+		if ($check_author)
 			$search_cont=" OR x.description LIKE '%$suchbegriff%'";
-		if($check_name=="ON")
+		if ($check_name)
 			$search_cont=" OR x.description LIKE '%$suchbegriff%'";
 		else
 			$search_cont="x.description LIKE '%$suchbegriff%'";
 	}
-	
 
 	if(!isset($suchbegriff)):
 	?>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;Bitte geben Sie hier Ihren Suchbegriff ein</b></td>
+	<td class="topic" colspan=2><b>&nbsp;Bitte geben Sie hier Ihren Suchbegriff ein:</b></td>
 </tr>
 <tr>
 <td class="blank" width=100%">
@@ -126,22 +129,56 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 <BR>
 <P>
  <center> 
-   <table cellpadding=3 cellspacing=1>
-	<FORM  NAME="search" METHOD=POST  ACTION="<?echo $seite?>" >
-	<tr>
-	<td><b>Suchbegriff:</b></td>
-	<td><INPUT  TYPE="text"  NAME="suchbegriff"></td>
-	</tr>
-   	<tr><td><b>Suchen in den Feldern:</b></td><td>&nbsp; </td></tr>
-	<tr><td>&nbsp; </td><td><input NAME="check_author" TYPE="checkbox" value="ON" checked> Autor</td></tr>
-     	<tr><td>&nbsp; </td><td><input type="CHECKBOX" name="check_name" value="ON" checked> Thema </td></tr>
-     	<tr><td>&nbsp; </td><td><input type="CHECKBOX" name="check_cont" value="ON" checked> Inhalt</td></tr> 
-	<tr><td colspan=2 align="center"><INPUT  TYPE="submit"  VALUE=" Suche starten "></td>
-	</tr>
-	</FORM>
+   <table cellpadding=2 cellspacing=0 border=0>
+	<form  name="search" method="post"  action="<?echo $PHP_SELF?>" >
+		<tr>
+			<td class="steel1">
+				<b>Suchbegriff:</b>
+			</td>
+			<td class="steel1">
+				<input  type="TEXT" name="suchbegriff">
+			</td>
+		</tr>
+	   	<tr>
+	   		<td class="steelgraulight">
+	   			<b>Suchen in den Feldern:</b>
+	   		</td>
+	   		<td class="steelgraulight">
+	   			&nbsp; 
+	   		</td>
+	   	</tr>
+		<tr>
+			<td class="steel1">
+				&nbsp; 
+			</td>
+			<td class="steel1">
+				<input name="check_author" type="CHECKBOX" value="on" checked> Autor
+			</td>
+		</tr>
+	     	<tr>
+	     		<td class="steelgraulight">
+	     			&nbsp; 
+	     		</td>
+	     		<td class="steelgraulight">
+	     			<input type="CHECKBOX" name="check_name" value="on" checked> Thema 
+	     		</td>
+	     	</tr>
+	     	<tr>
+	     		<td class="steel1">
+		     		&nbsp; 
+		     	</td>
+		     	<td class="steel1">
+		     		<input type="CHECKBOX" name="check_cont" value="on" checked> Inhalt
+		     	</td>
+		</tr> 
+		<tr>
+			<td class="steelgraulight" colspan=2 align="center">
+				<input  type="IMAGE"  src="pictures/buttons/suchestarten-button.gif" border=0 value=" Suche starten ">
+			</td>
+		</tr>
+	</form>
    </table>
 <td class="blank" align="right" valign="top"><img src="pictures/suche.jpg" border="0"></td>
-
 </td>
 </tr>
 
@@ -162,12 +199,16 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 if(isset($SessSemName[0]) && $SessSemName[0] != "")
+	if ($search_author && $search_name && $search_cont)
 	$db->query("SELECT x.topic_id, x.name AS titel, x.author , x.mkdate, y.name AS thema, y.topic_id AS thema_id, x.description, x.Seminar_id, x.user_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.seminar_id =
 	'$SessionSeminar' AND($search_author $search_name $search_cont) ORDER BY mkdate DESC ");
 
 $i = 1;
 $anzahl = $db->num_rows();
-echo "<b>Ihre Suche ergab $anzahl Treffer</b><p>";
+if ($anzahl)
+	echo "<b>Ihre Suche ergab $anzahl Treffer</b><p>";
+else
+	echo "<b>Ihre Suche ergab leider keine Treffer</b><p>";
 if ($anzahl > 0):
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 class="blank">
