@@ -69,7 +69,7 @@ class VeranstaltungResourcesAssign {
 			$result = array_merge($result, $this->changeDateAssign($db->f("termin_id")));
 		}
 
-		//kill all assigned roomes (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
+		//kill all assigned rooms (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
 		$this->deleteAssignedRooms();
 		
 		//if no course session date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
