@@ -222,7 +222,8 @@ function change_schedule_view() {
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; <input type="SUBMIT" value="&Auml;nderungen &uuml;bernehmen"><br>&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>	&nbsp; 				
+					<font size=-1><input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&Auml;nderungen &uuml;bernehmen"></font>&nbsp; 
 					<input type="HIDDEN" name="view" value="Stundenplan">
 					</td>
 				</tr>

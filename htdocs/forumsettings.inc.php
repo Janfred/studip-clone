@@ -65,7 +65,7 @@ ELSE echo "Sie m&uuml;ssen in Ihrem Browser Javascript aktivieren um dieses Feat
 </td><td  class="<? echo $cssSw->getClass() ?>"><br><blockquote>Mit dieser Funktion k&ouml;nnen sie durch reines &Uuml;berfahren der Themen&uuml;berschriften im Forum den entsprechenden Beitrag lesen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch l&auml;ngere Diskussionen arbeiten. Da jedoch die Ladezeit der Seite erheblich ansteigt, empfehlen wir diese Einstellung nur f&uuml;r Nutzer die mindestens eine ISDN Verbindung haben.<br><br></td></tr>
 <tr  <? $cssSw->switchClass() ?>><td  class="<? echo $cssSw->getClass() ?>"><blockquote><b>Neue Beitr&auml;ge immer aufgeklappt</b></td><td class="<? echo $cssSw->getClass() ?>"><input type="CHECKBOX" name="neuauf" value="1"<?IF($forum["neuauf"]==1) echo " checked";?>></td><td  class="<? echo $cssSw->getClass() ?>"><br><blockquote>Neue Postings sind immer automatisch aufgeklappt<br><br></td></tr>
 <input type="HIDDEN" name="forumsend" value="bla">
-<tr  <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>">&nbsp; </td><td  class="<? echo $cssSw->getClass() ?>" colspan=2><input type=submit name=Create value="&Auml;nderungen &uuml;bernehmen">&nbsp; </td></tr>		
+<tr  <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>">&nbsp; </td><td  class="<? echo $cssSw->getClass() ?>" colspan=2><br /><font size=-1><input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&Auml;nderungen &uuml;bernehmen"></font>&nbsp;</td></tr>		
 </form>		
 </table><br />
 <? IF ($forumsend=="anpassen") {
