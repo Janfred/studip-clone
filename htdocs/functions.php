@@ -284,11 +284,27 @@ function lastActivity ($sem_id) {
 		$timestamp = $db->f("chdate");
 
 	//News
-	$db->query("SELECT date FROM news_range LEFT JOIN news USING (news_id)  WHERE range_id = '$sem_id' ORDER BY date LIMIT 1");
+	$db->query("SELECT date FROM news_range LEFT JOIN news USING (news_id)  WHERE range_id = '$sem_id' ORDER BY date DESC LIMIT 1");
 	$db->next_record();
 	if ($db->f("date") > $timestamp)
 		$timestamp = $db->f("date");
 	
+	//Votes
+	if ($GLOBALS['VOTE_ENABLE']) {
+		$db->query("SELECT chdate FROM vote WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+		$db->next_record();
+		if ($db->f("chdate") > $timestamp)
+			$timestamp = $db->f("chdate");
+	}
+
+	//Wiki
+	if ($GLOBALS['WIKI_ENABLE']) {
+		$db->query("SELECT chdate FROM wiki WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
+		$db->next_record();
+		if ($db->f("chdate") > $timestamp)
+			$timestamp = $db->f("chdate");
+	}
+
 	//correct the timestamp, if date in the future (news can be in the future!)
 	if ($timestamp > time())
 		$timestamp = time();
