@@ -290,24 +290,27 @@ function getMyRoomRequests($user_id = '') {
 		//load all my resources
 		$resList = new ResourcesUserRoomsList($user_id, FALSE, FALSE);
 		$my_res = $resList->getRooms();
-	
+		
 		//load all my seminars
-		$my_sems = search_my_administrable_seminars();
+		$my_sems = search_administrable_seminars();
 		
-		$in_resource_id =  "('".join("','",array_keys($my_res))."')";
-		$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
-		
-		$query_sem = sprintf("SELECT request_id, closed FROM resources_request WHERE seminar_id IN %s", $in_seminar_id, $in_resource_id);
-		$query_res = sprintf("SELECT request_id, closed FROM resources_request WHERE resource_id IN %s", $in_seminar_id, $in_resource_id);
-		$db->query($query_sem);
-		while ($db->next_record()) {
-			$requests [$db->f("request_id")]["my_sem"] = TRUE;
-			$requests [$db->f("request_id")]["closed"] = $db->f("closed");
+		if (is_array($my_res)) {
+			$in_resource_id =  "('".join("','",array_keys($my_res))."')";
+			$query_res = sprintf("SELECT request_id, closed FROM resources_requests WHERE resource_id IN %s", $in_seminar_id, $in_resource_id);
+			$db2->query($query_res);
+			while ($db2->next_record()) {
+				$requests [$db2->f("request_id")]["my_res"] = TRUE;
+				$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
+			}
 		}
-		$db2->query($query_res);
-		while ($db2->next_record()) {
-			$requests [$db2->f("request_id")]["my_res"] = TRUE;
-			$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
+		if (is_array($my_sems)) {
+			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
+			$query_sem = sprintf("SELECT request_id, closed FROM resources_requests WHERE seminar_id IN %s", $in_seminar_id, $in_resource_id);
+			$db->query($query_sem);
+			while ($db->next_record()) {
+				$requests [$db->f("request_id")]["my_sem"] = TRUE;
+				$requests [$db->f("request_id")]["closed"] = $db->f("closed");
+			}
 		}
 	}
 	
