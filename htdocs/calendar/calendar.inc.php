@@ -240,6 +240,9 @@ switch ($cmd) {
 			$cmd = $calendar_sess_control_data['view_prv'];
 		else
 			$cmd = 'showday';
+		
+		unset($calendar_sess_forms_data);
+		$sess->unregister('calendar_sess_forms_data');
 		break;
 		
 	case 'showweek':
@@ -335,6 +338,8 @@ switch ($cmd) {
 					$set_recur_x = 1;
 				elseif ($set_recur_x && $err['set_recur'])
 					$mod = $mod_prv;
+				elseif ($set_recur_x)
+					unset($set_recur_x);
 			}
 		}
 		extract($calendar_sess_forms_data, EXTR_OVERWRITE);
@@ -389,6 +394,8 @@ if ($cmd == 'add') {
 	//	else
 		//	unset($set_recur_x);
 	}
+	unset($calendar_sess_forms_data);
+	$sess->unregister('calendar_sess_forms_data');
 }
 
 // Tagesuebersicht anzeigen ***************************************************
