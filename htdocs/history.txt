@@ -1,12 +1,20 @@
-12.1.2004 v 1.0os
+08.4.2004 v 1.1
+- Evaluations und Umfragemodul zur Erstellung empirischer Online-Fragebögen
+- Möglichkeit der Dateiverlinkung auf geschützte Dokumente auf externen Servern
+- Administrationsebene für Literaturnachweise mit integriertem Bibliothekscheck
+- Gruppieren von Veranstaltungen
 - Funktion zum Kopieren von Veranstaltungen
 - Mechanismus zum Verstecken und sichtbar machen von Veranstaltungen
 - Weiterleitung interner Mail an E-Mail-Adresse schaltbar 
 - Verschiedene Sortierungen der Teilnehmerliste
 - Anzeige von Veranstaltsungnsummern in verschiedenen Listen
-- Umbruch langer Namen von Studienbereichen
+- Blätternavigation in Gästebüchern
 - Smiley-Verwaltung
 - Semester-Verwaltung
+- Neue Berechnungsformel der Stud.IP Score ;)
+- weitere Detailverbesserungen und Bugfixes
+
+
 
 29.12.2003 v 1.0
 - neue WAP-Schnittstelle
