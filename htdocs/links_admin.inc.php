@@ -234,7 +234,8 @@ if ($perm->have_perm("admin")) {
 }	
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
-$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
+if ($perm->have_perm("admin"))
+	$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
 
 if ($EXTERN_ENABLE && $perm->have_perm("admin"))
 	$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
