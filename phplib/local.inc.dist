@@ -110,15 +110,22 @@ $PATH_EXPORT = "export";								//Stud.IP module: export
 $FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored. 
 
 
-/*domain names
+/*domain name and path translation
 ----------------------------------------------------------------
 to translate internal links (within Stud.IP) to the different
 domain names. To activate this feature uncomment these lines
-and add all used domain names. Below, two examples are given.
-NOTE: This feature is experimental at the moment, please use it
-at your own risk*/
+and add all used domain names. Below, some examples are given.
+*/
 
+//server-root is stud.ip root dir, or virtual server for stud.ip
 //$STUDIP_DOMAINS[1] = "<your.server.name>"; 
+//$STUDIP_DOMAINS[2] = "<your.server.ip>";
+//$STUDIP_DOMAINS[3] = "<your.virtual.server.name>";
+//
+// or
+//
+//stud.ip root is a normal directory
+//$STUDIP_DOMAINS[1] = "<your.server.name/studip>"; 
 //$STUDIP_DOMAINS[2] = "<your.server.ip/studip>";
 
 
@@ -239,6 +246,7 @@ $_lit_search_plugins[] = array('name' => "Studip", 'link' => '');
 
 /* Deutsche Akademie der Naturforscher Leopoldina */
 //$_lit_search_plugins[] = array('name' => "Leopoldina", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=4/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+
 
 /*authentication plugins
 ----------------------------------------------------------------
