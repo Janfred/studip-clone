@@ -495,12 +495,12 @@ elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==
 	</tr>	
 	</table>
 	<?
-	if ($links_admin_data["sem_id"])
-		unset ($links_admin_data);
+	if ($links_admin_data["sem_id"] == $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])
+		reset_all_data();
 	}
 elseif (!$list) {
-	if ($links_admin_data["sem_id"])
-		unset ($links_admin_data);
+	if ($links_admin_data["sem_id"] == $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])
+		reset_all_data();
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -517,8 +517,6 @@ elseif (!$list) {
 	</tr>
 	</table>
 	<?
-	if ($links_admin_data["sem_id"])
-		unset ($links_admin_data);
 	}
 	page_close();
 ?>

@@ -83,9 +83,9 @@ if (($admin_inst_id) && ($admin_inst_id != "NULL")){
 	$links_admin_data["referred_from"]="inst";
 }
 
-//Veranstaltung was selected but it is on his way to hell....
+//Veranstaltung was selected but it is on his way to hell.... we close t at ths point 
 if (($archive_kill) && ($SessSemName[1] == $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) {
-	reset_all_data();
+	//reset_all_data();
 	closeObject();
 }
 
