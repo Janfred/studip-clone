@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-27 17:00+0100\n"
+"POT-Creation-Date: 2004-01-05 15:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: wap/dates.php:54 wap/event_dates.php:57 wap/login_index.php:75
+#: wap/dates.php:54 wap/event_dates.php:57 wap/login_index.php:76
 #: wap/show_event.php:114
 msgid "Termine"
 msgstr ""
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Bitte Vor- und/oder Nachnamen eingeben."
 msgstr ""
 
-#: wap/event_news.php:57 wap/inst_news.php:58 wap/login_index.php:81
+#: wap/event_news.php:57 wap/inst_news.php:58 wap/login_index.php:83
 #: wap/news.php:56 wap/show_event.php:104 wap/show_institute.php:111
 msgid "News"
 msgstr ""
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Keine News vorhanden."
 msgstr ""
 
-#: wap/events.php:54 wap/login_index.php:87
+#: wap/events.php:54 wap/login_index.php:89
 msgid "Veranstaltungen"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: wap/institutes.php:54 wap/login_index.php:93
+#: wap/institutes.php:54 wap/login_index.php:95
 msgid "Einrichtungen"
 msgstr ""
 
@@ -106,11 +106,11 @@ msgstr ""
 msgid "Menü"
 msgstr ""
 
-#: wap/login_index.php:99 wap/sms.php:56
+#: wap/login_index.php:101 wap/sms.php:56
 msgid "Kurznachrichten"
 msgstr ""
 
-#: wap/login_index.php:117
+#: wap/login_index.php:119
 msgid "Username oder Passwort nicht korrekt."
 msgstr ""
 

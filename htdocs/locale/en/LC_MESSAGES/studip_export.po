@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-27 17:00+0100\n"
+"POT-Creation-Date: 2004-01-05 15:56+0100\n"
 "PO-Revision-Date: 2003-10-01 11:34+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -376,45 +376,45 @@ msgstr ""
 "Choose the type of data that you would like to export and the institute from "
 "which the data should be read. Then click on 'continue'."
 
-#: export/export_studipdata_func.inc.php:161
+#: export/export_studipdata_func.inc.php:166
 msgid "KEINE BERECHTIGUNG!"
 msgstr "NO AUTHORISATION!"
 
-#: export/export_studipdata_func.inc.php:165
+#: export/export_studipdata_func.inc.php:170
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr "The chosen export module is not supported."
 
-#: export/export_studipdata_func.inc.php:334
+#: export/export_studipdata_func.inc.php:339
 msgid "keiner Funktion oder Gruppe zugeordnet"
 msgstr "Not allocated to a function or group"
 
-#: export/export_studipdata_func.inc.php:343
+#: export/export_studipdata_func.inc.php:348
 msgid "Alle Studieng&auml;nge"
 msgstr "All programs of study"
 
-#: export/export_studipdata_func.inc.php:345
+#: export/export_studipdata_func.inc.php:350
 msgid "DozentInnen"
 msgstr "Lecturers"
 
-#: export/export_studipdata_func.inc.php:346
+#: export/export_studipdata_func.inc.php:351
 msgid "TutorInnen"
 msgstr "Tutors"
 
-#: export/export_studipdata_func.inc.php:347
 #: export/export_studipdata_func.inc.php:352
+#: export/export_studipdata_func.inc.php:357
 msgid "AutorInnen"
 msgstr "Authors"
 
-#: export/export_studipdata_func.inc.php:348
 #: export/export_studipdata_func.inc.php:353
+#: export/export_studipdata_func.inc.php:358
 msgid "LeserInnen"
 msgstr "Readers"
 
-#: export/export_studipdata_func.inc.php:350
+#: export/export_studipdata_func.inc.php:355
 msgid "LeiterInnen"
 msgstr "Co-ordinators"
 
-#: export/export_studipdata_func.inc.php:351
+#: export/export_studipdata_func.inc.php:356
 msgid "Mitglieder"
 msgstr "Members"
 
@@ -712,3 +712,174 @@ msgstr ""
 #: export/oscar.php:57
 msgid "Fehler beim &Ouml;ffnen des Export-Temp-Verzeichnisses!"
 msgstr "Error while opening the temporary export directory!"
+
+#: export/recordofstudy.lib.php:32
+#, fuzzy
+msgid "Veranstaltungsübersicht erstellen"
+msgstr "Course data"
+
+#: export/recordofstudy.lib.php:33
+#, fuzzy
+msgid "Veranstaltungsübersicht erstellen:"
+msgstr "Course data"
+
+#: export/recordofstudy.lib.php:57
+#, fuzzy
+msgid "Bitte wählen sie ein Semster aus:"
+msgstr "Please choose an institute:"
+
+#: export/recordofstudy.lib.php:65
+msgid "Semester und Kriterium auswählen."
+msgstr ""
+
+#: export/recordofstudy.lib.php:67
+#, fuzzy
+msgid "nur Lehrveranstaltungen"
+msgstr "Course data"
+
+#: export/recordofstudy.lib.php:68
+#, fuzzy
+msgid "alle Veranstaltungen"
+msgstr "Course data"
+
+#: export/recordofstudy.lib.php:71
+msgid "Vorlage"
+msgstr ""
+
+#: export/recordofstudy.lib.php:126
+msgid "Keine Veranstaltungen zum Anzeigen vorhanden."
+msgstr ""
+
+#: export/recordofstudy.lib.php:126
+msgid ""
+"Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein "
+"oder ändern Sie ihre ihre Auswahl."
+msgstr ""
+
+#: export/recordofstudy.lib.php:128
+msgid "Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt."
+msgstr ""
+
+#: export/recordofstudy.lib.php:128
+msgid "Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt."
+msgstr ""
+
+#: export/recordofstudy.lib.php:138 export/recordofstudy.lib.php:244
+msgid "Hochschule: "
+msgstr ""
+
+#: export/recordofstudy.lib.php:139 export/recordofstudy.lib.php:245
+msgid "Studienfach: "
+msgstr ""
+
+#: export/recordofstudy.lib.php:140 export/recordofstudy.lib.php:246
+msgid "Name (Vor- und Zuname): "
+msgstr ""
+
+#: export/recordofstudy.lib.php:141 export/recordofstudy.lib.php:247
+#, fuzzy
+msgid "Semester: "
+msgstr "All semesters"
+
+#: export/recordofstudy.lib.php:142 export/recordofstudy.lib.php:248
+msgid "Fachsemester: "
+msgstr ""
+
+#: export/recordofstudy.lib.php:146
+#, fuzzy
+msgid "Veranstaltungen:"
+msgstr "Course data"
+
+#: export/recordofstudy.lib.php:150
+msgid "Kenn.-Nr"
+msgstr ""
+
+#: export/recordofstudy.lib.php:151
+msgid "Name des Dozenten"
+msgstr ""
+
+#: export/recordofstudy.lib.php:152
+msgid "Wochenstundenzahl"
+msgstr ""
+
+#: export/recordofstudy.lib.php:153
+msgid "löschen"
+msgstr ""
+
+#: export/recordofstudy.lib.php:169
+msgid "SWS"
+msgstr ""
+
+#: export/recordofstudy.lib.php:177
+msgid "Genaue Bezeichnung:"
+msgstr ""
+
+#: export/recordofstudy.lib.php:189
+#, fuzzy
+msgid "Neue Veranstaltung hinzufügen."
+msgstr "Course data"
+
+#: export/recordofstudy.lib.php:199
+#, fuzzy
+msgid "Markierte Veranstaltung(en) löschen"
+msgstr "Unformatted with course numbers"
+
+#: export/recordofstudy.lib.php:199
+msgid "Markierte Veranstaltung(en) löschen."
+msgstr ""
+
+#: export/recordofstudy.lib.php:210
+msgid "Abbrechen und ein anderes Semester auswählen."
+msgstr ""
+
+#: export/recordofstudy.lib.php:211
+msgid "Weiter zum Download ihrer Veranstaltungsübersicht."
+msgstr ""
+
+#: export/recordofstudy.lib.php:238
+#, c-format
+msgid "Sie haben %s Einträge für ihre Veranstaltungsübersicht ausgewählt. "
+msgstr ""
+
+#: export/recordofstudy.lib.php:240
+#, c-format
+msgid "Deshalb werden ihre Einträge auf %s Seiten verteilt."
+msgstr ""
+
+#: export/recordofstudy.lib.php:241
+msgid "Ihre Einträge können auf einer Seite untergebracht werden."
+msgstr ""
+
+#: export/recordofstudy.lib.php:243
+msgid "Ihre Studiendaten:"
+msgstr ""
+
+#: export/recordofstudy.lib.php:250
+msgid "Vorlage:"
+msgstr ""
+
+#: export/recordofstudy.lib.php:254
+msgid ""
+"Klicken sie nun auf die einzelnen Links, um ihre Veranstaltungsübersicht zu "
+"erstellen."
+msgstr ""
+
+#: export/recordofstudy.lib.php:255
+msgid ""
+"Klicken sie nun auf den Link, um ihre Veranstaltungsübersicht zu erstellen."
+msgstr ""
+
+#: export/recordofstudy.lib.php:259
+#, fuzzy
+msgid "Veranstaltungsübersicht: "
+msgstr "Course data"
+
+#: export/recordofstudy.lib.php:263
+#, c-format
+msgid "Seite %s"
+msgstr ""
+
+#: export/recordofstudy.lib.php:264
+#, fuzzy
+msgid "Veranstaltungsübersicht"
+msgstr "Course data"

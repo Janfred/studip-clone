@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-27 17:00+0100\n"
+"POT-Creation-Date: 2004-01-05 15:56+0100\n"
 "PO-Revision-Date: 2003-10-01 11:20+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -203,30 +203,30 @@ msgstr "<font size=\"-1\">You are not registered in this chat!</font>"
 msgid "Hallo %s,<br> willkommen im Raum: %s"
 msgstr "Hello %s,<br>welcome to room: %s"
 
-#: chat/chat_config.php:101
+#: chat/chat_config.php:126
 msgid " [msg] - Sie verlassen den Chat mit der Botschaft [msg]"
 msgstr " [msg] - You leave the chat with the message [msg] "
 
-#: chat/chat_config.php:102
+#: chat/chat_config.php:127
 msgid " [colorcode] - Ihre Schriftfarbe wird auf [colorcode] gesetzt"
 msgstr " [colorcode] - Your font colour is set at  [colorcode] "
 
-#: chat/chat_config.php:103
+#: chat/chat_config.php:128
 msgid " [msg] - Ihr Name wird zusammen mit [msg] vom Chatbot ausgegeben"
 msgstr ""
 " [msg] - Your name will be printed together with [msg] from the Chatbot"
 
-#: chat/chat_config.php:104
+#: chat/chat_config.php:129
 msgid ""
 " [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"
 msgstr ""
 "[username][msg] - The message [msg] will be sent secretly to [username] "
 
-#: chat/chat_config.php:105
+#: chat/chat_config.php:130
 msgid " - Zeigt diesen Hilfetext"
 msgstr " - Show this help text"
 
-#: chat/chat_config.php:106
+#: chat/chat_config.php:131
 msgid ""
 " [username] - Wirft [username] aus dem Chat wenn sie Chat-Admin sind, mit /"
 "kick all werfen sie alle anderen Nutzer aus dem Chat"
@@ -234,12 +234,12 @@ msgstr ""
 " [username] - Throw [username] out of the chat if they are the chat-admin, "
 "with / kick all throw all other users out of the chat"
 
-#: chat/chat_config.php:107
+#: chat/chat_config.php:132
 msgid ""
 " [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
 msgstr "[username] [msg] - Send an internal system SMS [msg] to [username]"
 
-#: chat/chat_config.php:108
+#: chat/chat_config.php:133
 msgid ""
 " [username][msg] - Verschickt eine Chat-Einladung an [username] mit "
 "optionaler Nachricht [msg]"
@@ -247,7 +247,7 @@ msgstr ""
 " [username][msg] -Send a chat invitation to [username] with optional message "
 "[msg]"
 
-#: chat/chat_config.php:109
+#: chat/chat_config.php:134
 msgid ""
 " - Setzt ein zufälliges Paßwort und wirft alle NutzerInnen aus dem Chat, die "
 "nicht Chat-Admins sind."
@@ -255,7 +255,7 @@ msgstr ""
 " - Set up a coincidental password and throw all users out, who aren't chat "
 "admins."
 
-#: chat/chat_config.php:110
+#: chat/chat_config.php:135
 msgid ""
 " - Ein eventuell gesetztes Passwort wird gelöscht, der Chat wird damit "
 "wieder frei zugänglich."
@@ -263,7 +263,7 @@ msgstr ""
 " - A previously entered password will be deleted and the chat will once "
 "again have free access."
 
-#: chat/chat_config.php:111
+#: chat/chat_config.php:136
 msgid ""
 " [password] - Setzt das Passwort für den Chat, wenn [password] leer ist wird "
 "ein eventuell vorhandenes Passwort gelöscht"
@@ -271,7 +271,7 @@ msgstr ""
 "[password] -Set up a password for the chat. If [password] is empty, any "
 "previously existing password will be deleted. "
 
-#: chat/chat_config.php:112
+#: chat/chat_config.php:137
 msgid ""
 " [start | stop | send] - Startet, beendet oder versendet eine Aufzeichnung, "
 "wenn sie Chat-Admin sind"
