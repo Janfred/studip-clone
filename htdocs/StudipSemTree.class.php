@@ -181,7 +181,7 @@ class StudipSemTree extends TreeAbstract {
 	
 	function DeleteItems($items_to_delete){
 		$view = new DbView();
-		$view->params[0] = $items_to_delete;
+		$view->params[0] = (is_array($items_to_delete)) ? $items_to_delete : array($items_to_delete);
 		$view->auto_free_params = false;
 		$rs = $view->get_query("view:SEM_TREE_DEL_ITEM");
 		$deleted['items'] = $rs->affected_rows();
@@ -190,12 +190,25 @@ class StudipSemTree extends TreeAbstract {
 		return $deleted;
 	}
 	
-	function DeleteSemEntries($item_ids, $sem_entries){
+	function DeleteSemEntries($item_ids = null, $sem_entries = null){
 		$view = new DbView();
-		$view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
-		$view->params[1] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
-		$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEM_RANGE");
-		return $rs->affected_rows();
+		if ($item_ids && $sem_entries){
+			$view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
+			$view->params[1] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
+			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEM_RANGE");
+			$ret = $rs->affected_rows();
+		} elseif ($item_ids){
+			$view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
+			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_RANGE");
+			$ret = $rs->affected_rows();
+		} elseif ($sem_entries){
+			$view->params[0] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
+			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEMID_RANGE");
+			$ret = $rs->affected_rows();
+		} else {
+			$ret = false;
+		}
+		return $ret;
 	}
 	
 	function InsertSemEntry($sem_tree_id, $seminar_id){

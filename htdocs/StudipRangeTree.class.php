@@ -177,6 +177,31 @@ class StudipRangeTree extends TreeAbstract {
 			return $ret;
 		}
 	}
+	
+	function InsertItem($item_id, $parent_id, $item_name, $priority,$studip_object,$studip_object_id){
+		$view = new DbView();
+		$view->params = array($item_id,$parent_id,$item_name,$priority,$studip_object,$studip_object_id);
+		$rs = $view->get_query("view:TREE_INS_ITEM");
+		return $rs->affected_rows();
+	}
+	
+	function UpdateItem($item_name,$studip_object,$studip_object_id,$item_id){
+		$view = new DbView();
+		$view->params = array($item_name,$studip_object,$studip_object_id,$item_id);
+		$rs = $view->get_query("view:TREE_UPD_ITEM");
+		return $rs->affected_rows();
+	}
+	
+	function DeleteItems($items_to_delete){
+		$view = new DbView();
+		$view->params[0] = (is_array($items_to_delete)) ? $items_to_delete : array($items_to_delete);
+		$view->auto_free_params = false;
+		$rs = $view->get_query("view:TREE_DEL_ITEM");
+		$deleted['items'] = $rs->affected_rows();
+		$rs = $view->get_query("view:CAT_DEL_RANGE");
+		$deleted['categories'] = $rs->affected_rows();
+		return $deleted;
+	}
 }
 //$test =& TreeAbstract::GetInstance("StudipRangeTree");
 //echo "<pre>";

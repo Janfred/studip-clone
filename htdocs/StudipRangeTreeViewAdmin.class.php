@@ -254,13 +254,11 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			$studip_object = "";
 			$studip_object_id = "";
 		}
-		$view = new DbView();
 		if ($this->mode == "NewItem" && $item_id){
 			if ($this->isItemAdmin($parent_id)){
 				$priority = count($this->tree->getKids($parent_id));
-				$view->params = array($item_id,$parent_id,$item_name,$priority,$studip_object,$studip_object_id);
-				$rs = $view->get_query("view:TREE_INS_ITEM");
-				if ($rs->affected_rows()){
+				$affected_rows = $this->tree->InsertItem($item_id,$parent_id,$item_name,$priority,$studip_object,$studip_object_id);
+				if ($affected_rows){
 					$this->mode = "";
 					$this->anchor = $item_id;
 					$this->open_items[$item_id] = true;
@@ -270,9 +268,8 @@ class StudipRangeTreeViewAdmin extends TreeView{
 		}
 		if ($this->mode == "EditItem"){
 			if ($this->isParentAdmin($item_id)){
-				$view->params = array($item_name,$studip_object,$studip_object_id,$item_id);
-				$rs = $view->get_query("view:TREE_UPD_ITEM");
-				if ($rs->affected_rows()){
+				$affected_rows = $this->tree->UpdateItem($item_name,$studip_object,$studip_object_id,$item_id);
+				if ($affected_rows){
 					$this->msg[$item_id] = "msg§" . _("Element wurde ge&auml;ndert.");
 				} else {
 					$this->msg[$item_id] = "info§" . _("Keine Ver&auml;nderungen vorgenommen.");
@@ -313,19 +310,14 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			$this->anchor = $this->tree->tree_data[$item_id]['parent_id'];
 			$items_to_delete = $this->tree->getKidsKids($item_id);
 			$items_to_delete[] = $item_id;
-			$view = new DbView();
-			$view->params[0] = $items_to_delete;
-			$view->auto_free_params = false;
-			$rs = $view->get_query("view:TREE_DEL_ITEM");
-			if ($deleted = $rs->affected_rows()){
-				$this->msg[$this->anchor] = "msg§" . sprintf(_("Das Element <b>%s</b> und alle Unterelemente (insgesamt %s) wurden gel&ouml;scht. "),htmlReady($item_name),$deleted);
+			$deleted = $this->tree->DeleteItems($items_to_delete);
+			if ($deleted['items']){
+				$this->msg[$this->anchor] = "msg§" . sprintf(_("Das Element <b>%s</b> und alle Unterelemente (insgesamt %s) wurden gel&ouml;scht. "),htmlReady($item_name),$deleted['items']);
 			} else {
 				$this->msg[$this->anchor] = "error§" . _("Fehler, es konnten keine Elemente gel&ouml;scht werden!");
 			}
-			$deleted = 0;
-			$rs = $view->get_query("view:CAT_DEL_RANGE");
-			if ($deleted = $rs->affected_rows()){
-				$this->msg[$this->anchor] .= sprintf(_("<br>Es wurden %s Datenfelder gel&ouml;scht. "),$deleted);
+			if ($deleted['categories']){
+				$this->msg[$this->anchor] .= sprintf(_("<br>Es wurden %s Datenfelder gel&ouml;scht. "),$deleted['categories']);
 			}
 			$this->mode = "";
 			$this->open_items[$this->anchor] = true;
