@@ -334,7 +334,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 				  "user" => _("LeserInnen"));
 	}
 
-	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
+	$data_object .= xml_open_tag( $xml_groupnames_person["group"] );
 
 	while (list ($key1, $val1) = each ($gruppe)) 
 	{
