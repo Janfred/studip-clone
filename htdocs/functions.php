@@ -9,7 +9,7 @@
 * @version		$Id$
 * @access		public
 * @package		studip_core
-* @modulegroup	library
+* @modulegroup		library
 * @module		functions.php
 */
 
@@ -36,6 +36,7 @@
 
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTree.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 
 /**
 * This function creates the header line for studip-objects
@@ -202,6 +203,27 @@ function checkObject() {
 				_("Kein Objekt gew&auml;hlt"), 
 				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
 		die;
+	}
+}
+
+
+/**
+* This function checks, if given modul is allowed in this stud-ip object
+*/
+function checkObjectModule($modul) {
+	global $SessSemName, $AUTH_LIFETIME;
+	
+	if ($SessSemName[1]) {
+		$Modules=new Modules;
+		
+		$name = strtoupper($modul{0}).substr($modul, 1, strlen($modul));
+		
+		if (!$Modules->checkLocal($modul, $SessSemName[1])) {
+			parse_window ("error§" . sprintf(_("Das Modul &raquo;%s&laquo; ist f&uuml;r dieses Objekt leider nicht verf&uuml;gbar."), $name), "§",
+					_("Modul nicht verf&uuml;gbar"), 
+					sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+			die;
+		}
 	}
 }
 
