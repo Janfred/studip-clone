@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
 if ($perm->have_perm("tutor")):	// Navigationsleiste ab status "Tutor"
 
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
@@ -26,6 +25,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -37,80 +37,68 @@ $sess->register("links_admin_data");
 $sess->register("sem_create_data");
 $sess->register("admin_dates_data");
 
-//neue Admin-Seminar-Sitzung, ich komme mit einer seminar_id rein
+/**
+* We use this helper-function, to reset all the data in the adminarea
+*
+* There are much pages with an own temporary set of data. Please use
+* only this function to add defaults or clear data.
+*/
+function reset_all_data() {
+	global $links_admin_data, $sem_create_data, $admin_dates_data, $admin_admission_data, $archiv_assi_data,
+		$term_metadata;
+	
+	$links_admin_data='';
+	$sem_create_data='';
+	$admin_dates_data='';
+	$admin_admission_data='';
+	$archiv_assi_data='';
+	$term_metadata='';
+
+	$links_admin_data["select_old"]=TRUE;
+	// $links_admin_data["select_inactive"]=TRUE;
+}
+
+
+//a Veranstaltung was selected in the admin-search kann viellecht weg
 if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
-	$links_admin_data='';
-	$links_admin_data["sem_id"]=$admin_sem_id;
-	$links_admin_data["select_old"]=TRUE;
-	$links_admin_data["select_inactive"]=TRUE;
-	$sem_create_data='';
-	$admin_dates_data='';
-	$admin_admission_data='';
-	$archiv_assi_data='';
-	$term_metadata='';
-	$admin_dates_data='';
-	$SessSemName[0] = "";
-	$SessSemName[1] = "";
-	}
-//neue Admin-Institut-Sitzung, ich komme mit einer seminar_id rein
-elseif (($admin_inst_id) && ($admin_inst_id != "NULL")){
-	$links_admin_data='';
-	$links_admin_data["inst_id"]=$admin_inst_id;
-	$links_admin_data["select_old"]=TRUE;
-	$links_admin_data["select_inactive"]=TRUE;
-	$sem_create_data='';
-	$admin_dates_data='';
-	$admin_admission_data='';
-	$archiv_assi_data='';
-	$term_metadata='';
-	$admin_dates_data='';
-	$SessSemName[0] = "";
-	$SessSemName[1] = "";
-	}
-//neue Admin-Sitzung, ich komme frisch rein ($list==TRUE)
-elseif (($i_page== "adminarea_start.php") && ($list)) {
-	$links_admin_data='';
-	$links_admin_data["select_old"]=TRUE;
-	$links_admin_data["select_inactive"]=TRUE;
-	$sem_create_data='';
-	$admin_dates_data='';
-	$admin_admission_data='';	
-	$archiv_assi_data='';
-	$term_metadata='';	
-	$admin_dates_data='';	
-	$SessSemName[0] = "";
-	$SessSemName[1] = "";
-	}
-//neue Admin-Seminar-Sitzung, ich komme aus einem Seminar rein ($new_sem==TRUE) 
-elseif ((($SessSemName[1]) && ($new_sem)) || ($SessSemName[1] && !$links_admin_data["sem_id"]  && $new_sem)) {
-	$links_admin_data='';
-	$links_admin_data["select_old"]=TRUE;
-	$links_admin_data["select_inactive"]=TRUE;
-	$links_admin_data["sem_id"]=$SessSemName[1];
-	$sem_create_data='';
-	$admin_dates_data='';
-	$admin_admission_data='';	
-	$archiv_assi_data='';
-	$term_metadata='';	
-	}
-//neue Admin-Institut-Sitzung, ich komme aus einem Institut rein ($new_inst==TRUE)
-elseif ((($SessSemName[1]) && ($new_inst)) || ($SessSemName[1] && !$links_admin_data["inst_id"]  && $new_inst)) {
-	$links_admin_data='';
-	$links_admin_data["inst_id"]=$SessSemName[1];
-	}
-elseif ($i_page== "adminarea_start.php")
+	reset_all_data();
+	closeObject();
+	openSem($admin_sem_id);
+//hmm... whats that
+} elseif ($select_sem_id) {
+	reset_all_data();
+	closeObject();
+	openSem($select_sem_id);
+//a Veranstaltung which was already open should be administrated
+} elseif (($SessSemName[1]) && ($new_sem))  {
+	reset_all_data();
+	$links_admin_data["referred_from"]="sem";
+}
+
+//a Einrichtung was selected in the admin-search
+if (($admin_inst_id) && ($admin_inst_id != "NULL")){
+	reset_all_data();
+	closeObject();
+	openInst($admin_inst_id);
+//a Enrichtung which was already open should be administrated
+} elseif (($SessSemName[1]) && ($new_inst))  {
+	reset_all_data();
+	$links_admin_data["referred_from"]="inst";
+}
+
+//a new session in the adminarea...
+if (($i_page== "adminarea_start.php") && ($list)) {
+	reset_all_data();
+	closeObject();
+} elseif ($i_page== "adminarea_start.php")
 	$list=TRUE;
 
 
 if ($sortby) {
 	$links_admin_data["sortby"]=$sortby;
 	$list=TRUE;
-	}
-else
+} else
 	$links_admin_data["sortby"]="Name";
-
-if ($select_sem_id)
-	$links_admin_data["sem_id"]=$select_sem_id;
 
 if ($view)
 	$links_admin_data["view"]=$view;
@@ -127,58 +115,66 @@ if ($srch_send) {
 	$list=TRUE;
 	}
 
-//if the user selected the information field at institute-selection....
+//if the user selected the information field at Einrichtung-selection....
 if ($admin_inst_id == "NULL")
 	$list=TRUE;
 
-//user wants to create a new 
+//user wants to create a new Einrichtung
 if ($i_view=="new")
 	$links_admin_data='';
 
+//here are all the pages/views listed, which require the search form for  Einrichtungen
+if (($list) && ($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst") OR $i_page == "inst_admin.php"))
+	$search_mode="inst";
+//here are all the pages/views listed, which require the search form for Veranstaltungen
+if (($list) && ($i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))
+	$search_mode="sem";
+
 //Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
-if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst") OR $i_page == "inst_admin.php"))) {
+if ((!$SessSemName[1]) && ($list) && ($search_mode=="inst")) {
 	if ($perm->have_perm("root"))
 		$db->query("SELECT Institut_id  FROM Institute ORDER BY Name");
 	else
 		$db->query("SELECT Institute.Institut_id FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms IN ('admin', 'dozent', 'tutor') ORDER BY Name");
 
-	if (($db->num_rows() ==1) && (!$links_admin_data["inst_id"])) {
+	if ($db->nf() ==1) {
 		$db->next_record();
-		$links_admin_data["inst_id"]=$db->f("Institut_id");
+		reset_all_data;
+		openInst($db->f("Institut_id"));
 	}
 }
 
+
 //Wenn Seminar_id gesetzt ist oder vorgewaehlt wurde, werden die spaeteren Seiten mit entsprechend gesetzten Werten aufgerufen
-if ($links_admin_data["sem_id"]) {
+if ($SessSemName["class"]=="sem") {
 	switch ($i_page) {
 		case "admin_admission.php": 
-			$seminar_id=$links_admin_data["sem_id"];
+			$seminar_id=$SessSemName[1];
 		break;
 		case "admin_dates.php": 
-			$range_id=$links_admin_data["sem_id"];
+			$range_id=$SessSemName[1];
 		break;
 		case "admin_metadates.php": 
-			$seminar_id=$links_admin_data["sem_id"];
+			$seminar_id=$SessSemName[1];
 		break;
 		case "admin_literatur.php":
 			if ($links_admin_data["view"]=="literatur_sem") {
-				$range_id=$links_admin_data["sem_id"];
+				$range_id=$SessSemName[1];
 				$ebene="sem";
 			}
 		break;
 		case "admin_statusgruppe.php":
 			if ($links_admin_data["view"]=="statusgruppe_sem") {
-				$range_id=$links_admin_data["sem_id"];
+				$range_id=$SessSemName[1];
 				$ebene="sem";
 			}
 		break;
 		case "archiv_assi.php": 
-			$archiv_sem[]="_id_".$links_admin_data["sem_id"];
+			$archiv_sem[]="_id_".$SessSemName[1];
 			$archiv_sem[]="on";
 		break;
 		case "admin_seminare1.php": 
-			$s_id=$links_admin_data["sem_id"];
+			$s_id=$SessSemName[1];
 			if (!$s_command)
 				$s_command="edit";
 		break;
@@ -186,24 +182,23 @@ if ($links_admin_data["sem_id"]) {
 	}
 
 //Wenn Institut_id gesetzt ist oder vorgewaehlt wurde, werden die spaeteren Seiten mit entsprechend gesetzten Werten aufgerufen
-if ($links_admin_data["inst_id"]) {
-
+if ($SessSemName["class"]=="inst") {
 	switch ($i_page) {
 		case "admin_institut.php": 
-			$i_view=$links_admin_data["inst_id"];
+			$i_view=$SessSemName[1];
 		break;
 		case "inst_admin.php": 
-			$inst_id=$links_admin_data["inst_id"];
+			$inst_id=$SessSemName[1];
 		break;
 		case "admin_literatur.php": 
 			if ($links_admin_data["view"]=="literatur_inst") {
-				$range_id=$links_admin_data["inst_id"];
+				$range_id=$SessSemName[1];
 				$ebene="inst";
 				}
 		break;
 		case "admin_statusgruppe.php": 
 			if ($links_admin_data["view"]=="statusgruppe_inst") {
-				$range_id=$links_admin_data["inst_id"];
+				$range_id=$SessSemName[1];
 				$ebene="inst";
 				}
 		break;
@@ -217,29 +212,30 @@ $reiter=new reiter;
 //Topkats
 
 //Ruecksprung-Reiter
-if (($SessSemName[0]) && (!$links_admin_data["assi"])) {
-	if ($links_admin_data["inst_id"])
+if ($SessSemName["class"] == "inst") {
+	if ($links_admin_data["referred_from"] == "inst")
 		$back_jump= "zur&uuml;ck zur ausgew&auml;hlten Einrichtung";
-	elseif (!$archive_kill)
+	else
+		$back_jump= "zur ausgew&auml;hlten Einrichtung";
+}
+if ($SessSemName["class"] == "sem") {
+	if (($links_admin_data["referred_from"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 		$back_jump= "zur&uuml;ck zur ausgew&auml;hlten Veranstaltung";
+	elseif (($links_admin_data["referred_from"] == "assi") && (!$archive_kill))
+		$back_jump= "zur neu angelegten Veranstaltung";
+	elseif (!$links_admin_data["assi"])
+		$back_jump= "zur ausgew&auml;hlten Veranstaltung";
 }
-elseif (($links_admin_data["assi"]) && (!$archive_kill))
-	$back_jump= "zur neu angelegten Veranstaltung";
-elseif ($links_admin_data["inst_id"])
-	$back_jump= "zur ausgew&auml;hlten Einrichtung";
-elseif (!$archive_kill)
-	$back_jump= "zur ausgew&auml;hlten Veranstaltung";
 
-if (($links_admin_data["sem_id"]) || ($links_admin_data["inst_id"])) {
-	if ($links_admin_data["inst_id"])
-		$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"institut_main.php?auswahl=".$links_admin_data["inst_id"], active=>FALSE);
-	elseif (!$archive_kill)
-		$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"seminar_main.php?auswahl=".$links_admin_data["sem_id"], active=>FALSE);
-}
+
+if ($SessSemName["class"] == "inst")
+	$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"institut_main.php?auswahl=".$SessSemName[1], active=>FALSE);
+elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
+	$structure["back_jump"]=array (topKat=>"", name=>$back_jump, link=>"seminar_main.php?auswahl=".$SessSemName[1], active=>FALSE);
 
 //restliche Reiter
 if ($perm->have_perm("tutor")) {
-	if ($links_admin_data["sem_id"])
+	if (($SessSemName["class"] == "sem") && (!$archive_kill))
 		$structure["veranstaltungen"]=array (topKat=>"", name=>"Veranstaltungen", link=>"admin_seminare1.php", active=>FALSE);
 	else
 		$structure["veranstaltungen"]=array (topKat=>"", name=>"Veranstaltungen", link=>"adminarea_start.php?list=TRUE", active=>FALSE);	
@@ -289,28 +285,28 @@ if ($perm->have_perm("root")) {
 
 
 //Tooltip erzeugen
-if ($links_admin_data["sem_id"]) {
-	$db->query ("SELECT Name FROM seminare WHERE Seminar_id = '".$links_admin_data["sem_id"]."' ");
+if ($SessSemName["class"] == "sem") {
+	$db->query ("SELECT Name FROM seminare WHERE Seminar_id = '".$SessSemName[1]."' ");
 	$db->next_record();
 	}
-if ($links_admin_data["inst_id"]) {
-	$db->query ("SELECT Name FROM Institute WHERE Institut_id = '".$links_admin_data["inst_id"]."' ");
+if ($SessSemName["class"] == "inst") {
+	$db->query ("SELECT Name FROM Institute WHERE Institut_id = '".$SessSemName[1]."' ");
 	$db->next_record();
 	}
 
 $tooltip="Sie befinden sich im Administrationsbereich von Stud.IP. ";
 
-if (($links_admin_data["sem_id"]) && (!$archive_kill))
+if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 	$tooltip.= " Ausgewählte Veranstaltung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";
-elseif ($links_admin_data["inst_id"])
+elseif ($SessSemName["class"] == "inst")
 	$tooltip.= " Ausgewählte Einrichtung: ".$db->f("Name")." - Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.";		
 else
 	$tooltip.= " Keine Veranstaltung oder Einrichtung ausgewählt";
 
 //Additional Text erzeugen
-if (($links_admin_data["sem_id"]) && (!$archive_kill))
+if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip("Auswahl der Veranstaltung ".$db->f("Name")." aufheben")." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
-elseif ($links_admin_data["inst_id"])
+elseif ($SessSemName["class"] == "inst")
 	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip("Auswahl der Einrichtung ".$db->f("Name")." aufheben")." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 					
 //View festlegen
@@ -371,8 +367,7 @@ else
 $reiter->create($structure, $reiter_view, $tooltip, $addText);
 
 //Einheitliches Auswahlmenu fuer Einrichtungen
-if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst") OR $i_page == "inst_admin.php"))) {
+if ((!$SessSemName[1]) && ($list) && ($search_mode == "inst")) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -433,10 +428,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 		}
 	
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
-if ((!$links_admin_data["sem_id"]) && ($list) &&
-	(( $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))) {
-
-	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
+if ((!$SessSemName[1]) && ($list) && ($search_mode == "sem")) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -450,7 +442,7 @@ if ((!$links_admin_data["sem_id"]) && ($list) &&
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
 	<?
-	
+	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 	if ($perm->have_perm("admin")) {
 	?>
 		<form name="links_admin_search" action="<? echo $PHP_SELF ?>" method="POST">
@@ -476,6 +468,7 @@ if ((!$links_admin_data["sem_id"]) && ($list) &&
 								?>
 							</select>
 						</td>
+						
 						<td class="steel1">
 							<?
 							if ($perm->have_perm("root"))
