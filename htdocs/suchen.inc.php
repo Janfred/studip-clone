@@ -109,7 +109,6 @@ function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt
 function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$check_cont) {
 	global $SessionSeminar,$SessSemName, $PHP_SELF;
 
-	// $suchbegriff = rawurldecode($suchbegriff);
 	
 	if(!$mehr) 
 		$mehr=5;
@@ -196,7 +195,8 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 <?
 
 else:
-
+$suchbegriff = rawurldecode($suchbegriff);
+	
 ?>
  
 <tr>
