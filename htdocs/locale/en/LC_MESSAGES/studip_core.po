@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-03-21 18:44+0100\n"
+"POT-Creation-Date: 2003-03-23 23:04+0100\n"
 "PO-Revision-Date: 2003-03-21 18:39+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -85,9 +85,9 @@ msgstr "Start Stud.IP Messenger"
 msgid "Nachricht an User:"
 msgstr "Message to user:"
 
-#: about.php:209 browse.php:325 institut_members.php:642
-#: institut_members.php:643 online.php:84 online.php:186 online.php:203
-#: online.php:230 studipim.php:135 teilnehmer.php:527 teilnehmer.php:647
+#: about.php:209 browse.php:325 institut_members.php:647
+#: institut_members.php:648 online.php:84 online.php:186 online.php:203
+#: online.php:230 studipim.php:139 teilnehmer.php:527 teilnehmer.php:647
 msgid "Nachricht an User verschicken"
 msgstr "Send message to user"
 
@@ -577,7 +577,7 @@ msgstr "%s configuration files deleted."
 msgid "Administration von Lernmodulen"
 msgstr "Learning module administration"
 
-#: admin_lernmodule.php:81 seminar_lernmodule.php:192
+#: admin_lernmodule.php:81 migration2studip.php:157 seminar_lernmodule.php:192
 #, c-format
 msgid ""
 "Wenn Sie fortfahren, wird das Lernmodul mit dem Titel %s unwiderruflich "
@@ -593,7 +593,7 @@ msgstr "Add new learning module"
 #: admin_lernmodule.php:105 chat_online.php:235 details.php:203 export.php:155
 #: institut_browse.php:90 meine_einrichtungen.php:352
 #: meine_einrichtungen.php:374 meine_seminare.php:476 meine_seminare.php:499
-#: migration2studip.php:148 migration2studip.php:171 my_archiv.php:165
+#: migration2studip.php:165 migration2studip.php:198 my_archiv.php:165
 #: seminar_lernmodule.php:171 seminar_lernmodule.php:207
 #: seminar_lernmodule.php:270 sem_portal.php:244 statusgruppen.php:196
 msgid "Information:"
@@ -605,7 +605,7 @@ msgstr "On this page you can administer learning modules. "
 
 #: admin_lernmodule.php:114 details.php:185 meine_einrichtungen.php:359
 #: meine_einrichtungen.php:381 meine_seminare.php:483 meine_seminare.php:506
-#: migration2studip.php:151 migration2studip.php:227 my_archiv.php:172
+#: migration2studip.php:168 migration2studip.php:254 my_archiv.php:172
 #: seminar_lernmodule.php:179 seminar_lernmodule.php:223
 #: seminar_lernmodule.php:282 statusgruppen.php:205
 msgid "Aktionen:"
@@ -632,7 +632,7 @@ msgstr ""
 msgid "Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"
 msgstr "Here you can set up a %s new learning module %s."
 
-#: admin_lernmodule.php:141 migration2studip.php:291
+#: admin_lernmodule.php:141 migration2studip.php:318
 msgid ""
 "Das Verbindungsmodul f&uuml;r ILIAS-Lernmodule ist nicht eingebunden. Damit "
 "Lernmodule verwendet werden k&ouml;nnen, muss die Verbindung zu einer ILIAS-"
@@ -643,7 +643,7 @@ msgstr ""
 "learning modules can be used, the connection to a ILIAS installation in the "
 "adjustment system must be set up.  Please contact an administrator."
 
-#: admin_lernmodule.php:142 migration2studip.php:292
+#: admin_lernmodule.php:142 migration2studip.php:319
 #: seminar_lernmodule.php:320
 msgid "Lernmodule nicht eingebunden"
 msgstr "Learning module not connected"
@@ -1601,7 +1601,7 @@ msgstr "Participant limitation:"
 
 #: admin_seminare_assi.php:1363 details.php:245 details.php:515
 #: details.php:530 details.php:537 institut_members.php:350
-#: institut_members.php:576
+#: institut_members.php:581
 msgid "keine"
 msgstr "none"
 
@@ -1717,7 +1717,7 @@ msgstr ""
 "course."
 
 #: admin_seminare_assi.php:1522 archiv.inc.php:182 details.php:456
-#: impressum.php:211
+#: impressum.php:210
 msgid "beteiligte Einrichtungen:"
 msgstr "Participating institutions:"
 
@@ -2592,7 +2592,7 @@ msgstr "maximum number of participants:"
 msgid "Anzahl der angemeldeten Teilnehmer:"
 msgstr "Number of participants:"
 
-#: archiv.inc.php:203 details.php:530 impressum.php:253
+#: archiv.inc.php:203 details.php:530 impressum.php:252
 msgid "Postings:"
 msgstr "Postings:"
 
@@ -2619,7 +2619,7 @@ msgstr "Literature"
 msgid "Links:"
 msgstr "Links"
 
-#: archiv.inc.php:332 impressum.php:259
+#: archiv.inc.php:332 impressum.php:258
 msgid "Dateien:"
 msgstr "Documents:"
 
@@ -5611,35 +5611,39 @@ msgstr "Logout"
 msgid "Aus dem System abmelden"
 msgstr "Logout of the system"
 
-#: impressum.php:63
+#: impressum.php:47 impressum.php:176
+msgid "zuletzt angelegt"
+msgstr "most recently added"
+
+#: impressum.php:62
 msgid "Kontakt"
 msgstr "Contact"
 
-#: impressum.php:64
+#: impressum.php:63
 msgid "&Uuml;ber Stud.IP"
 msgstr "About Stud.IP"
 
-#: impressum.php:66
+#: impressum.php:65
 msgid "Entwickler"
 msgstr "Developer"
 
-#: impressum.php:67
+#: impressum.php:66
 msgid "Ansprechpartner"
 msgstr "Contact"
 
-#: impressum.php:68
+#: impressum.php:67
 msgid "Technik"
 msgstr "Technical details"
 
-#: impressum.php:69 impressum.php:187
+#: impressum.php:68 impressum.php:186
 msgid "Statistik"
 msgstr "Statistics"
 
-#: impressum.php:70
+#: impressum.php:69
 msgid "History"
 msgstr "History"
 
-#: impressum.php:87
+#: impressum.php:86
 msgid ""
 "Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;"
 "senzlehre an der Universit&auml;t G&ouml;ttingen."
@@ -5647,7 +5651,7 @@ msgstr ""
 "Stud.IP is an Open Source Project to support presence teaching at Göttingen "
 "University."
 
-#: impressum.php:88
+#: impressum.php:87
 msgid ""
 "Das System wird entwickelt vom Zentrum f&uuml;r interdisziplin&auml;re "
 "Medienwissenschaft (ZiM), Universit&auml;t G&ouml;ttingen und der Suchi "
@@ -5657,22 +5661,22 @@ msgstr ""
 "Medienwissenschaft'  (ZiM), Göttingen University and Suchi Berg GmbH (data-"
 "quest), Göttingen."
 
-#: impressum.php:89
+#: impressum.php:88
 msgid ""
 "Stud.IP steht unter der GNU General Public License, Version 2 oder neuer."
 msgstr ""
 "Stud.IP is covered by the GNU General Public Licence, version 2 or newer."
 
-#: impressum.php:90
+#: impressum.php:89
 #, c-format
 msgid "Weitere Informationen finden sie auf %swww.studip.de%s"
 msgstr "Further information can be found under %swww.studip.de%s"
 
-#: impressum.php:102
+#: impressum.php:101
 msgid "Version:"
 msgstr "Version:"
 
-#: impressum.php:108
+#: impressum.php:107
 msgid ""
 "<b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und "
 "Weiterentwicklung des Systems befasst:"
@@ -5680,157 +5684,153 @@ msgstr ""
 "<b>The following developers</b> are involved with the constant maintenance "
 "and further developing of the system:"
 
-#: impressum.php:110
+#: impressum.php:109
 msgid "(Hilfe)"
 msgstr "(Help)"
 
-#: impressum.php:111
+#: impressum.php:110
 msgid "(Distribution)"
 msgstr "(Distribution)"
 
-#: impressum.php:112
+#: impressum.php:111
 msgid "(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)"
 msgstr ""
 "(Resource administration, appointment administration, admin area, design)"
 
-#: impressum.php:113
+#: impressum.php:112
 msgid "(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)"
 msgstr "(News administration, chat, institute index, course index)"
 
-#: impressum.php:114
+#: impressum.php:113
 msgid "(Export-Schnittstellen, ILIAS-Anbindung)"
 msgstr "(Export-interfaces, ILIAS connection)"
 
-#: impressum.php:115
+#: impressum.php:114
 msgid "(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)"
 msgstr "(Forum system, personal pages, address book, design)"
 
-#: impressum.php:116
+#: impressum.php:115
 msgid "(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)"
 msgstr "(Data base structure, access system, admin area, internationalisation)"
 
-#: impressum.php:117
+#: impressum.php:116
 msgid "(Externe Seiten, Terminkalender)"
 msgstr "(External pages, appointment calendar)"
 
-#: impressum.php:119
+#: impressum.php:118
 msgid "Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:"
 msgstr "You can contact us via the following <b>mailing lists:"
 
-#: impressum.php:121
+#: impressum.php:120
 msgid "Nutzer-Anfragen"
 msgstr "User enquiries"
 
-#: impressum.php:121
+#: impressum.php:120
 msgid "Fragen, Anregungen und Vorschl&auml;ge an die Entwickler"
 msgstr "Questions, suggestions and recommendations to the developers"
 
-#: impressum.php:122
+#: impressum.php:121
 msgid "Developer-Mailingliste"
 msgstr "Developer mailing list"
 
-#: impressum.php:122
+#: impressum.php:121
 msgid "Mailingliste f&uuml;r alle Entwickler (Eintragung notwendig)"
 msgstr "Mailing list for all developers (registration necessary)"
 
-#: impressum.php:123
+#: impressum.php:122
 msgid "News-Mailingsliste"
 msgstr "News mailing list"
 
-#: impressum.php:123
+#: impressum.php:122
 msgid "News rund um Stud.IP (Eintragung notwendig)"
 msgstr "News about Stud.IP (registration necessary)"
 
-#: impressum.php:131
+#: impressum.php:130
 msgid "Entwicklung und Support:"
 msgstr "Development and support:"
 
-#: impressum.php:134
+#: impressum.php:133
 msgid "gef&ouml;rdert von:"
 msgstr "Supported by:"
 
-#: impressum.php:171
+#: impressum.php:170
 msgid "Top-Listen aller Veranstaltungen"
 msgstr "Top list of all courses"
 
-#: impressum.php:176
+#: impressum.php:175
 msgid "die meisten Teilnehmer"
 msgstr "The most participants"
 
 #: impressum.php:177
-msgid "zuletzt angelegt"
-msgstr "most recently added"
-
-#: impressum.php:178
 msgid "die meisten Materialien (Dokumente)"
 msgstr "The most material (documents)"
 
-#: impressum.php:180
+#: impressum.php:179
 msgid "die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"
 msgstr "the most active courses (postings from the last two weeks)"
 
-#: impressum.php:196
+#: impressum.php:195
 msgid "Aktive Veranstaltungen:"
 msgstr "Active courses:"
 
-#: impressum.php:202
+#: impressum.php:201
 msgid "Archivierte Veranstaltungen:"
 msgstr "Archived courses:"
 
-#: impressum.php:217
+#: impressum.php:216
 msgid "beteiligte Fakult&auml;ten:"
 msgstr "Participating faculties:"
 
-#: impressum.php:226
+#: impressum.php:225
 msgid "registrierte Administratoren:"
 msgstr "Registered administrators:"
 
-#: impressum.php:232
+#: impressum.php:231
 msgid "registrierte Dozenten:"
 msgstr "Registered lecturers:"
 
-#: impressum.php:238
+#: impressum.php:237
 msgid "registrierte Tutoren:"
 msgstr "Registered tutors:"
 
-#: impressum.php:244
+#: impressum.php:243
 msgid "registrierte Studierende:"
 msgstr "Registered students:"
 
-#: impressum.php:265
+#: impressum.php:264
 msgid "Literaturlisten:"
 msgstr "Literature lists: "
 
-#: impressum.php:271
+#: impressum.php:270
 msgid "Termine:"
 msgstr "Appointments:"
 
-#: impressum.php:277
+#: impressum.php:276
 msgid "News:"
 msgstr "News:"
 
-#: impressum.php:305
+#: impressum.php:304
 msgid ""
 "F&uuml;r diese Stud.IP-Installation sind folgende Administratoren zust&auml;"
 "ndig:"
 msgstr ""
 "The following administrators are responsible for this Stud.IP installation:"
 
-#: impressum.php:311
+#: impressum.php:310
 msgid "keine. Na sowas. Das kann ja eigentlich gar nicht sein..."
 msgstr "none. Now there's a thing. That really can't be right..."
 
-#: impressum.php:319
+#: impressum.php:318
 msgid ""
 "<b>allgemeine Anfragen</b> wie Passwort-Anforderungen u.a. richten Sie bitte "
 "an:"
 msgstr "<b>general queries</b> e.g., password queries, please contact:"
 
-#: impressum.php:329
+#: impressum.php:328
 msgid "Folgende Einrichtungen sind beteiligt:"
 msgstr "The following institutes participate:"
 
-#: impressum.php:329
+#: impressum.php:328
 msgid ""
 "(Genannt werden die jeweiligen Administratoren der Einrichtungen f&uuml;r "
 "entsprechende Anfragen)"
@@ -5838,7 +5838,7 @@ msgstr ""
 "(Named are the institute administrators responsible for the different query "
 "areas)"
 
-#: impressum.php:373
+#: impressum.php:372
 #, c-format
 msgid ""
 "Stud IP ist ein Open-Source Projekt und steht unter der GNU General Public "
@@ -5849,7 +5849,7 @@ msgstr ""
 "(GPL). All files necessary for operation can be downloaded under %shttp://"
 "sourcefolge.net/projects/studip/%s."
 
-#: impressum.php:375
+#: impressum.php:374
 msgid ""
 "Die technische Grundlage bietet ein LINUX-System mit Apache Webserver sowie "
 "eine MySQL Datenbank, die über PHP gesteuert wird."
@@ -5857,7 +5857,7 @@ msgstr ""
 "A LINUX system with Apache Webserver as well as a MySQL database, controlled "
 "by PHP provides the technical basis."
 
-#: impressum.php:377
+#: impressum.php:376
 msgid ""
 "Im System findet ein 6-stufiges Rechtesystem Verwendung, das individuell auf "
 "verschiedenen Ebenen wirkt - etwa in Veranstaltungen, Einrichtungen, "
@@ -5867,7 +5867,7 @@ msgstr ""
 "individuals on different levels, in courses, institutes, faculties or system "
 "wide."
 
-#: impressum.php:379
+#: impressum.php:378
 msgid ""
 "Seminare oder Arbeitsgruppen können mit Passwörtern geschützt werden - die "
 "Verschlüsselung erfolgt mit einem MD5 one-way-hash."
@@ -5875,7 +5875,7 @@ msgstr ""
 "Seminars or work groups can be secured with passwords - the encryption of "
 "which occurs with a MD5 one-way-hash."
 
-#: impressum.php:381
+#: impressum.php:380
 msgid ""
 "Das System ist zu 100% über das Internet administrierbar, es sind keine "
 "zusätzlichen Werkzeuge nötig. Ein Webbrowser der 5. Generation wird "
@@ -5884,7 +5884,7 @@ msgstr ""
 "The system is capable of being 100% administrated via internet, there are no "
 "additional tools necessary. A 5th generation web browser is recommended."
 
-#: impressum.php:383
+#: impressum.php:382
 #, c-format
 msgid ""
 "Das System wird ständig weiterentwickelt und an die Wünsche unserer Nutzer "
@@ -6972,7 +6972,7 @@ msgstr "The username or the password for Stud.IP is incorrect."
 msgid "Bitte geben Sie die Logindaten Ihres Stud.IP-Accounts an!"
 msgstr "Please enter the login data for your Stud.IP account!"
 
-#: migration2studip.php:110
+#: migration2studip.php:119
 msgid ""
 "Dieser ILIAS-Account ist noch einem bestehenden Stud.IP-User verbunden und "
 "kann daher nicht gel&ouml;scht werden. Bitte wenden Sie sich an den/die "
@@ -6981,15 +6981,15 @@ msgstr ""
 "This ILIAS account is connected to an existing Stud.IP user and therefore "
 "can not be deleted.  Please contact an administrator."
 
-#: migration2studip.php:117
+#: migration2studip.php:126
 msgid "Alter Account wurde gel&ouml;scht."
 msgstr "Old account has been deleted."
 
-#: migration2studip.php:131
+#: migration2studip.php:140
 msgid "Verbindung der Accounts von ILIAS- und Stud.IP-NutzerInnen"
 msgstr "Connection of ILIAS and Stud.IP accounts."
 
-#: migration2studip.php:150
+#: migration2studip.php:167
 msgid ""
 "Diese Seite organisiert die Verbindung zwischen BenutzerInnen von ILIAS und "
 "Stud.IP. F&uuml;r die Benutzung von Lernmodulen muss je einem Stud.IP-"
@@ -6999,11 +6999,19 @@ msgstr ""
 "order to use the learning modules, a Stud.IP account must be allocated an "
 "ILIAS account."
 
-#: migration2studip.php:153
+#: migration2studip.php:170
 msgid "W&auml;hlen Sie eine Option."
 msgstr "Choose an option."
 
-#: migration2studip.php:156
+#: migration2studip.php:173 seminar_lernmodule.php:185
+#: seminar_lernmodule.php:232 seminar_lernmodule.php:289
+#, fuzzy, c-format
+msgid ""
+"Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss "
+"anschlie&szlig;end noch zugewiesen werden."
+msgstr "Here you can set up a %s new learning module %s."
+
+#: migration2studip.php:177
 msgid ""
 "Ihrem Stud.IP-Account ist bereits ein ILIAS-Account zugeordnet. Diese "
 "Zuordnung k&ouml;nnen Sie nachtr&auml;glich noch &auml;ndern, dabei gehen "
@@ -7012,7 +7020,7 @@ msgstr ""
 "Your Stud.IP account is already allocated an ILIAS-Account.  You may change "
 "this allocation later, but the data already saved in ILIAS will be lost. "
 
-#: migration2studip.php:158
+#: migration2studip.php:179
 msgid ""
 "<b>Ihr Stud.IP-Account ist bisher mit keinem ILIAS-Account verkn&uuml;pft</"
 "b>. Auf dieser Seite k&ouml;nnen Sie eine Zuordnung der Accounts herstellen. "
@@ -7023,12 +7031,12 @@ msgstr ""
 "you can set up a link.  The allocation can be changed later but all data "
 "saved in ILIAS will be lost."
 
-#: migration2studip.php:160
+#: migration2studip.php:187
 msgid ""
 "Sie k&ouml;nnen einen neuen Account anlegen oder einen bestehenden einbinden:"
 msgstr "You can set up a new account or connect an existing one:"
 
-#: migration2studip.php:164
+#: migration2studip.php:191
 msgid ""
 "F&uuml;r den aktuellen Stud.IP-Account einen passenden ILIAS-Account "
 "anlegen. Die Rechte des Stud.IP-Accounts werden analog nach ILIAS &uuml;"
@@ -7038,7 +7046,7 @@ msgstr ""
 "access authorisation status of the Stud.IP account will be applied to the "
 "ILIAS account."
 
-#: migration2studip.php:166
+#: migration2studip.php:193
 msgid ""
 "Den aktuellen Stud.IP-Account mit einem bestehenden ILIAS-Account verbinden. "
 "Gesetzte Rechte bleiben dabei bestehen und werden nicht mit synchronisiert."
@@ -7046,21 +7054,21 @@ msgstr ""
 "Connect the current Stud.IP account with an existing ILIAS account. "
 "Allocated authorisation will stay as it is and will not be synchronised."
 
-#: migration2studip.php:173
+#: migration2studip.php:200
 msgid ""
 "Diese Seite organisiert die Verbindung zwischen BenutzerInnen von ILIAS und "
 "Stud.IP."
 msgstr "This page organises the connection between users of ILIAS and Stud.IP."
 
-#: migration2studip.php:188
+#: migration2studip.php:215
 msgid "Es wurde ein neuer Stud.IP-Account f&uuml;r Sie angelegt."
 msgstr "A new Stud.IP account has been set up for you."
 
-#: migration2studip.php:190
+#: migration2studip.php:217
 msgid "Beim Anlegen des Accounts ist ein Fehler aufgetreten."
 msgstr "An error has occurred while setting up the account."
 
-#: migration2studip.php:201
+#: migration2studip.php:228
 msgid ""
 "Ihrem Stud.IP-Account wurde bereits ein ILIAS-Account zugeordnet. Wenn Sie "
 "fortfahren, wird diese Zuordnung &uuml;berschrieben und ein neuer Account "
@@ -7070,11 +7078,11 @@ msgstr ""
 "continue this allocation will be erased and a new account set up.  Should "
 "the old connection be erased?"
 
-#: migration2studip.php:212
+#: migration2studip.php:239
 msgid "Es wurde ein neuer ILIAS-Account f&uuml;r Sie angelegt."
 msgstr "A new ILIAS account has been set up for you."
 
-#: migration2studip.php:215
+#: migration2studip.php:242
 msgid ""
 " Wenn Sie fortfahren, wird dieser Account &uuml;berschrieben und ein neuer "
 "Account angelegt. Soll der alte Account gel&ouml;scht werden?"
@@ -7082,15 +7090,15 @@ msgstr ""
 "If you continue, this account will be erased and a new account set up.  "
 "Should the old account be deleted?"
 
-#: migration2studip.php:229
+#: migration2studip.php:256
 msgid "Geben Sie bitte Ihre Logindaten ein."
 msgstr "Please enter your login data. "
 
-#: migration2studip.php:238
+#: migration2studip.php:265
 msgid "Dieser ILIAS-Account ist Ihrem Stud.IP-Account bereits zugeordnet."
 msgstr "This ILIAS account is already allocated to your Stud.IP account."
 
-#: migration2studip.php:241
+#: migration2studip.php:268
 msgid ""
 "Dem Stud.IP-Account wurde bereits ein ILIAS-Account zugeordnet. Wenn Sie "
 "fortfahren, wird diese Zuordnung von ihrer neuen Eingabe &uuml;berschrieben. "
@@ -7100,11 +7108,11 @@ msgstr ""
 "continue this connection will be replaced by a new connection.  Should the "
 "old connection be deleted?"
 
-#: migration2studip.php:249
+#: migration2studip.php:276
 msgid "Die Accounts wurden verbunden."
 msgstr "The accounts have been connected."
 
-#: migration2studip.php:251
+#: migration2studip.php:278
 msgid "Beim Verbinden der Accounts ist ein Fehler aufgetreten."
 msgstr "An error has occurred while connecting the accounts."
 
@@ -7628,7 +7636,7 @@ msgstr "My Status"
 msgid "Es wurden keine Veranstaltungen gefunden."
 msgstr "No course was found."
 
-#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:407
+#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:414
 msgid "(Der Suchbegriff fehlt oder ist zu kurz)"
 msgstr "(The search criteria are missing or are too short)"
 
@@ -7736,14 +7744,6 @@ msgid ""
 "Hier k&ouml;nnen Sie Ihrem Stud.IP-Account einen %s ILIAS-Account zuweisen. %"
 "s"
 msgstr "Here you can%s allocate an ILIAS account %sto your Stud.IP account."
-
-#: seminar_lernmodule.php:185 seminar_lernmodule.php:232
-#: seminar_lernmodule.php:289
-#, fuzzy, c-format
-msgid ""
-"Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss "
-"anschlie&szlig;end noch zugewiesen werden."
-msgstr "Here you can set up a %s new learning module %s."
 
 #: seminar_lernmodule.php:203
 msgid "Auf dieser Seite können Sie einer Einrichtung Lernmodule zuordnen."
@@ -8236,6 +8236,11 @@ msgstr "All courses in the institute <b>%s</b>"
 msgid "Anzeige gruppieren:"
 msgstr "Group list:"
 
+#: show_bereich.php:120
+#, fuzzy
+msgid "Daten ausgeben:"
+msgstr "Documents:"
+
 #: show_dates.inc.php:106 show_dates.inc.php:111 show_dates.inc.php:256
 #: show_dates.inc.php:388
 msgid ""
@@ -8362,19 +8367,20 @@ msgstr "&nbsp;<b>System message</b>%s[read]%s"
 msgid "&nbsp;Nachricht von <br /><b>%s</b> %s[lesen]%s"
 msgstr "&nbsp;message from <br /><b>%s</b> %s[read]%s"
 
-#: sidebar_im.php:146 studipim.php:140
-msgid "Kein Buddy ist online."
-msgstr "No buddy is online."
+#: sidebar_im.php:146 studipim.php:144
+#, fuzzy
+msgid "Kein Nutzer ist online."
+msgstr "No other user is online."
 
-#: sidebar_im.php:151 studipim.php:145
+#: sidebar_im.php:151 studipim.php:149
 msgid "Es ist ein anderer Nutzer online."
 msgstr "There is one other buddy online."
 
-#: sidebar_im.php:152 sidebar_im.php:156 studipim.php:146 studipim.php:150
+#: sidebar_im.php:152 sidebar_im.php:156 studipim.php:150 studipim.php:154
 msgid "Wer?"
 msgstr "Who?"
 
-#: sidebar_im.php:155 studipim.php:149
+#: sidebar_im.php:155 studipim.php:153
 #, c-format
 msgid "Es sind %s anderere Nutzer online."
 msgstr "There are %s other users online."
@@ -8384,50 +8390,50 @@ msgstr "There are %s other users online."
 msgid "%s alte Nachricht(en) %s[lesen]%s"
 msgstr "%s old message(s) %s[read]%s"
 
-#: sidebar_im.php:165
+#: sidebar_im.php:165 studipim.php:163
 msgid "Keine Nachrichten"
 msgstr "No messages"
 
-#: sidebar_im.php:167 studipim.php:157
+#: sidebar_im.php:167 studipim.php:165
 msgid "Keine alten Nachrichten"
 msgstr "No old messages"
 
-#: sidebar_im.php:170
+#: sidebar_im.php:170 studipim.php:168
 msgid "neue Nachrichten:"
 msgstr "New messages:"
 
-#: sidebar_im.php:183 studipim.php:173
+#: sidebar_im.php:183 studipim.php:181
 #, c-format
 msgid "Ihre Nachricht an <b>%s</b> wurde verschickt!"
 msgstr "Your message to <b>%s</b> has been sent!"
 
-#: sidebar_im.php:186 studipim.php:176
+#: sidebar_im.php:186 studipim.php:184
 msgid "Ihre Nachricht konnte nicht verschickt werden!"
 msgstr "Your message could not be sent!"
 
-#: sidebar_im.php:193 studipim.php:183
+#: sidebar_im.php:193 studipim.php:191
 msgid "automatisch erzeugte Systemnachricht:"
 msgstr "Automatically created system message:"
 
-#: sidebar_im.php:196 studipim.php:186
+#: sidebar_im.php:196 studipim.php:194
 #, c-format
 msgid "Nachricht von: <b>%s</b>"
 msgstr "Message from: <b>%s</b>"
 
-#: sidebar_im.php:199 studipim.php:189
+#: sidebar_im.php:199 studipim.php:197
 msgid "Diese Nachricht direkt beantworten"
 msgstr "Reply immediately to this message"
 
-#: sidebar_im.php:204 studipim.php:194
+#: sidebar_im.php:204 studipim.php:202
 #, c-format
 msgid "Ihre Nachricht an <b>%s:</b>"
 msgstr "Your message to <b>%s:</b>"
 
-#: sidebar_im.php:209 studipim.php:199
+#: sidebar_im.php:209 studipim.php:207
 msgid "Nachricht versenden"
 msgstr "Send message"
 
-#: sidebar_im.php:210 studipim.php:200
+#: sidebar_im.php:210 studipim.php:208
 msgid "Vorgang abbrechen"
 msgstr "Cancel procedure"
 
@@ -8636,43 +8642,31 @@ msgid ""
 "klicken Sie %shier%s."
 msgstr "Click %shere%s in order to send an E-mail to all course participants ."
 
-#: studipim.php:69
-#, c-format
-msgid " Sie wurden von <b>%s</b> zum Chatten eingeladen!"
-msgstr "<b>%s</b> has invited you to chat!"
+#: studipim.php:77
+#, fuzzy, c-format
+msgid " <b>Systemnachricht</b> %s[lesen]%s"
+msgstr "&nbsp;<b>System message</b>%s[read]%s"
 
-#: studipim.php:72
-#, c-format
-msgid ""
-" Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s"
-"[lesen]%s"
-msgstr ""
-"You have received an automatically created <b>system message</b>! %s[read]%s"
+#: studipim.php:79
+#, fuzzy, c-format
+msgid " von <b>%s</b> %s[lesen]%s"
+msgstr "&nbsp;message from <br /><b>%s</b> %s[read]%s"
 
-#: studipim.php:74
-#, c-format
-msgid " Sie haben eine Nachricht von <b>%s</b> erhalten! %s[lesen]%s"
-msgstr "You have received a message from <b>%s</b>! %s[read]%s"
-
-#: studipim.php:132
+#: studipim.php:136
 msgid "Buddies:"
 msgstr "Buddies:"
 
-#: studipim.php:134
+#: studipim.php:138
 #, c-format
 msgid "letztes Lebenszeichen: %s"
 msgstr "Last signs of life: %s"
 
-#: studipim.php:156
+#: studipim.php:161
 #, c-format
 msgid "%s alte Nachricht(en)&nbsp;%s[lesen]%s"
 msgstr "%s old message(s) &nbsp;%s[read]%s"
 
-#: studipim.php:162
-msgid "Keine neuen Nachrichten"
-msgstr "No new messages"
-
-#: studipim.php:197
+#: studipim.php:205
 msgid "Smileys</a> k&ouml;nnen verwendet werden"
 msgstr "Smileys</a>can be used"
 
@@ -9054,16 +9048,16 @@ msgstr ""
 msgid "Schreiben nicht m&ouml;glich"
 msgstr "Writing not possible"
 
-#: lib/classes/SemBrowse.class.php:337
+#: lib/classes/SemBrowse.class.php:344
 #, c-format
 msgid " %s Veranstaltungen gefunden %s, Gruppierung: %s"
 msgstr "%s courses found %s, grouping:%s "
 
-#: lib/classes/SemBrowse.class.php:338
+#: lib/classes/SemBrowse.class.php:345
 msgid "(Suchergebnis)"
 msgstr "(search results)"
 
-#: lib/classes/SemBrowse.class.php:405
+#: lib/classes/SemBrowse.class.php:412
 msgid "Ihre Suche ergab keine Treffer"
 msgstr "The search did not reveal with any matches"
 
@@ -9579,3 +9573,22 @@ msgstr "Open all sub-elements"
 #: lib/classes/TreeView.class.php:309
 msgid "Alle Unterelemente schließen"
 msgstr "Close all sub-elements"
+
+#~ msgid "Kein Buddy ist online."
+#~ msgstr "No buddy is online."
+
+#~ msgid " Sie wurden von <b>%s</b> zum Chatten eingeladen!"
+#~ msgstr "<b>%s</b> has invited you to chat!"
+
+#~ msgid ""
+#~ " Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s"
+#~ "[lesen]%s"
+#~ msgstr ""
+#~ "You have received an automatically created <b>system message</b>! %s"
+#~ "[read]%s"
+
+#~ msgid " Sie haben eine Nachricht von <b>%s</b> erhalten! %s[lesen]%s"
+#~ msgstr "You have received a message from <b>%s</b>! %s[read]%s"
+
+#~ msgid "Keine neuen Nachrichten"
+#~ msgstr "No new messages"

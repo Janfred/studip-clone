@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-21 18:44+0100\n"
+"POT-Creation-Date: 2003-03-23 23:04+0100\n"
 "PO-Revision-Date: 2003-03-21 17:34+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -15,40 +15,40 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
 
-#: resources/resourcesClass.inc.php:131 resources/resourcesClass.inc.php:995
+#: resources/resourcesClass.inc.php:131 resources/resourcesClass.inc.php:994
 #: resources/resourcesVisual.inc.php:536
 msgid "NutzerIn"
 msgstr "User"
 
-#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:1004
+#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:1003
 msgid "Einrichtung"
 msgstr "Institute"
 
-#: resources/resourcesClass.inc.php:149 resources/resourcesClass.inc.php:1013
+#: resources/resourcesClass.inc.php:149 resources/resourcesClass.inc.php:1012
 msgid "Fakult&auml;t"
 msgstr "Faculty"
 
-#: resources/resourcesClass.inc.php:158 resources/resourcesClass.inc.php:1022
+#: resources/resourcesClass.inc.php:158 resources/resourcesClass.inc.php:1021
 msgid "Veranstaltung"
 msgstr "Course"
 
-#: resources/resourcesClass.inc.php:981
+#: resources/resourcesClass.inc.php:980
 msgid "jederR"
 msgstr "everyone"
 
-#: resources/resourcesClass.inc.php:983
+#: resources/resourcesClass.inc.php:982
 msgid "jedeR (alle Nutzenden)"
 msgstr "everyone (all users)"
 
-#: resources/resourcesClass.inc.php:987 resources/resourcesFunc.inc.php:195
+#: resources/resourcesClass.inc.php:986 resources/resourcesFunc.inc.php:195
 msgid "Global"
 msgstr "global"
 
-#: resources/resourcesClass.inc.php:989
+#: resources/resourcesClass.inc.php:988
 msgid "Global (zentral verwaltet)"
 msgstr "global (central administrated)"
 
-#: resources/resourcesClass.inc.php:1638 resources/resourcesClass.inc.php:1646
+#: resources/resourcesClass.inc.php:1637 resources/resourcesClass.inc.php:1645
 msgid "zur&uuml;ck"
 msgstr "back"
 
