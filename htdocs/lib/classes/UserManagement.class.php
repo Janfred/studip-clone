@@ -35,6 +35,7 @@
 
 require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
 require_once $ABSOLUTE_PATH_STUDIP.("language.inc.php");
+require_once $ABSOLUTE_PATH_STUDIP.("admission.inc.php");	// Enthaelt Funktionen zum Updaten der Wartelisten
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 if ($ILIAS_CONNECT_ENABLE) {
 	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
@@ -43,7 +44,7 @@ if ($ILIAS_CONNECT_ENABLE) {
 
 
 class UserManagement {
-	var $auth_user = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle auth_user_md5 und user_info
+	var $user_data = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle auth_user_md5 und user_info
 	var $msg = ""; //enthält evtl Fehlermeldungen
 	var $db;     //unsere Datenbankverbindung
 	var $db2;     //unsere Datenbankverbindung
@@ -84,16 +85,16 @@ class UserManagement {
 			$fields = $this->db->metadata();
 			for ($i=0; $i<count($fields); $i++) {
 				$field_name = $fields[$i]["name"];
-				$this->auth_user["auth_user_md5.".$field_name] = $this->db->f("$field_name");
+				$this->user_data["auth_user_md5.".$field_name] = $this->db->f("$field_name");
 			}
 		}
 
-		$this->db->query("SELECT * FROM user_info WHERE user_id = '".$this->auth_user["auth_user_md5.user_id"]."'");
+		$this->db->query("SELECT * FROM user_info WHERE user_id = '".$this->user_data["auth_user_md5.user_id"]."'");
 		if ($this->db->next_record()) {
 			$fields = $this->db->metadata();
 			for ($i=0; $i<count($fields); $i++) {
 				$field_name = $fields[$i]["name"];
-				$this->auth_user["user_info.".$field_name] = $this->db->f("$field_name");
+				$this->user_data["user_info.".$field_name] = $this->db->f("$field_name");
 			}
 		}
 	}
@@ -103,29 +104,33 @@ class UserManagement {
 	* store user data from internal array into database
 	*
 	* @access	private
+	* @return	bool all data stored?
 	*/
 	function storeToDatabase() {
 	
-		if (!$this->auth_user['auth_user_md5.user_id']) {
-			$this->auth_user['auth_user_md5.user_id'] = md5(uniqid($this->hash_secret));
-			$this->db->query("INSERT INTO auth_user_md5 SET user_id = '".$this->auth_user['auth_user_md5.user_id']."', username = '".$this->auth_user['auth_user_md5.username']."', password = 'dummy'");
+		if (!$this->user_data['auth_user_md5.user_id']) {
+			$this->user_data['auth_user_md5.user_id'] = md5(uniqid($this->hash_secret));
+			$this->db->query("INSERT INTO auth_user_md5 SET user_id = '".$this->user_data['auth_user_md5.user_id']."', username = '".$this->user_data['auth_user_md5.username']."', password = 'dummy'");
 			if ($this->db->affected_rows() == 0) {
 				return FALSE;
 			}
-			$this->db->query("INSERT INTO user_info SET user_id = '".$this->auth_user['auth_user_md5.user_id']."', mkdate='".time()."'");
+			$this->db->query("INSERT INTO user_info SET user_id = '".$this->user_data['auth_user_md5.user_id']."', mkdate='".time()."'");
 			if ($this->db->affected_rows() == 0) {
 				return FALSE;
 			}
 		}
 		
-		foreach($this->auth_user as $key => $value) {
+		if (!$this->user_data['auth_user_md5.auth_plugin']) {
+			$this->user_data['auth_user_md5.auth_plugin'] = "standard"; // just to be sure
+		}
+		foreach($this->user_data as $key => $value) {
 			$split = explode(".",$key);
 			$table = $split[0];
 			$field = $split[1];
 			$value = mysql_escape_string($value);
-			$this->db->query("UPDATE $table SET $field = '$value' WHERE user_id = '".$this->auth_user['auth_user_md5.user_id']."'");
+			$this->db->query("UPDATE $table SET $field = '$value' WHERE user_id = '".$this->user_data['auth_user_md5.user_id']."'");
 		}
-		$this->db->query("UPDATE user_info SET chdate='".time()."' WHERE user_id = '".$this->auth_user['auth_user_md5.user_id']."'");
+		$this->db->query("UPDATE user_info SET chdate='".time()."' WHERE user_id = '".$this->user_data['auth_user_md5.user_id']."'");
 		if ($this->db->affected_rows() == 0) {
 			return FALSE;
 		}
@@ -138,6 +143,7 @@ class UserManagement {
 	*
 	* @access	private
 	* @param	integer	$length	number of characters
+	* @return	string password
 	*/
 	function generate_password($length) {
 		mt_srand((double)microtime()*1000000);
@@ -153,6 +159,13 @@ class UserManagement {
 	}
 
 
+	/**
+	* Check if Email-Adress is valid and reachable
+	*
+	* @access	private
+	* @param	string	Email-Adress to check
+	* @return	bool Email-Adress valid and reachable?
+	*/
 	function checkMail($Email) {
 		// Adresse korrekt?
 		if (!$this->validator->ValidateEmailAddress($Email)) {
@@ -172,24 +185,29 @@ class UserManagement {
 	}
 	
 	
-	//do auto inserts, if we created an autor, tutor or dozent
+	/**
+	* Do auto inserts, if we created an autor, tutor or dozent
+	*
+	* @access	public
+	* @param	string	old status before changes
+	*/
 	function autoInsertSem($old_status = FALSE) {
 		global $AUTO_INSERT_SEM, $auth;
 		
 		if (($old_status != "autor") && ($old_status != "tutor") && ($old_status != "dozent")) {
-			if (($this->auth_user['auth_user_md5.perms'] == "autor") || ($this->auth_user['auth_user_md5.perms'] == "tutor") || ($this->auth_user['auth_user_md5.perms'] == "dozent")) {
+			if (($this->user_data['auth_user_md5.perms'] == "autor") || ($this->user_data['auth_user_md5.perms'] == "tutor") || ($this->user_data['auth_user_md5.perms'] == "dozent")) {
 				if (is_array($AUTO_INSERT_SEM)){
 					foreach ($AUTO_INSERT_SEM as $sem) {
 						$this->db->query("SELECT Name, start_time, Schreibzugriff FROM seminare WHERE Seminar_id = '$sem'");
 						if ($this->db->num_rows()) {
 							$this->db->next_record();							
 							if ($this->db->f("Schreibzugriff") < 2) { // es gibt das Seminar und es ist kein Passwort gesetzt
-								$this->db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem' AND user_id='".$this->auth_user['auth_user_md5.user_id']."'");
+								$this->db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem' AND user_id='".$this->user_data['auth_user_md5.user_id']."'");
 								if ($this->db2->num_rows()) { // Benutzer ist schon eingetragen
 									$this->db2->next_record();
 									if ($this->db2->f("status") == "user") { // wir können ihn hochstufen
-										$this->db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$sem' AND user_id='".$this->auth_user['auth_user_md5.user_id']."'");	
-										if ($this->auth_user['auth_user_md5.user_id'] == $auth->auth["uid"]) {
+										$this->db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$sem' AND user_id='".$this->user_data['auth_user_md5.user_id']."'");	
+										if ($this->user_data['auth_user_md5.user_id'] == $auth->auth["uid"]) {
 											$this->msg .= sprintf("msg§" . _("Ihnen wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $this->db->f("Name"));
 										} else {
 											$this->msg .= sprintf("msg§" . _("Der Person wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $this->db->f("Name"));
@@ -197,8 +215,8 @@ class UserManagement {
 									}
 								} else {  // Benutzer ist noch nicht eingetragen
 									$group = select_group ($this->db->f("start_time"));
-									$this->db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$sem', '".$this->auth_user['auth_user_md5.user_id']."', 'autor', '$group')");
-									if ($this->auth_user['auth_user_md5.user_id'] == $auth->auth["uid"]) {
+									$this->db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$sem', '".$this->user_data['auth_user_md5.user_id']."', 'autor', '$group')");
+									if ($this->user_data['auth_user_md5.user_id'] == $auth->auth["uid"]) {
 										$this->msg .= sprintf("msg§" . _("Sie wurden automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $this->db->f("Name"));
 									} else {
 										$this->msg .= sprintf("msg§" . _("Die Person wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $this->db->f("Name"));
@@ -213,10 +231,21 @@ class UserManagement {
 	}
 	
 
+	/**
+	* Create a new studip user with the given parameters
+	*
+	* @access	public
+	* @param	array	structure: array('string table_name.field_name'=>'string value')
+	* @return	bool Creation successful?
+	*/
 	function createNewUser($newuser) {
 		global $perm, $ABSOLUTE_PATH_STUDIP;
 		
 		// Do we have permission to do so?
+		if (!$perm->have_perm("admin")) {
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung Accounts anzulegen.") . "§";
+			return FALSE;
+		}
 		if (!$perm->is_fak_admin() && $newuser['auth_user_md5.perms'] == "admin") {
 			$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> anzulegen.") . "§";
 			return FALSE;
@@ -245,11 +274,11 @@ class UserManagement {
 		
 		// Store new values in internal array
 		foreach ($newuser as $key => $value) {
-			$this->auth_user[$key] = $value;
+			$this->user_data[$key] = $value;
 		}
 			
 		$password = $this->generate_password(6);
-		$this->auth_user['auth_user_md5.password'] = md5($password);
+		$this->user_data['auth_user_md5.password'] = md5($password);
 
 		// Does the user already exist?
 		// NOTE: This should be a transaction, but it is not...
@@ -268,16 +297,17 @@ class UserManagement {
 		$this->msg .= "msg§" . sprintf(_("BenutzerIn \"%s\" angelegt."), $newuser['auth_user_md5.username']) . "§";
 
 		// include language-specific subject and mailbody
-		$user_language = getUserLanguagePath($this->auth_user['auth_user_md5.user_id']); // user has been just created, so we will get $DEFAULT_LANGUAGE
+		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']); // user has been just created, so we will get $DEFAULT_LANGUAGE
+		$Zeit=date("H:i:s, d.m.Y",time());
 		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/create_mail.inc.php");
 
 		// send mail
 		$this->smtp->SendMessage(
 				$this->smtp->env_from,
-				array($this->auth_user['auth_user_md5.Email']),
+				array($this->user_data['auth_user_md5.Email']),
 				array("From: " . $this->smtp->from,
 						"Reply-To:" . $this->smtp->abuse,
-						"To: " . $this->auth_user['auth_user_md5.Email'],
+						"To: " . $this->user_data['auth_user_md5.Email'],
 						"Subject: " . $subject),
 				$mailbody);
 		
@@ -285,10 +315,21 @@ class UserManagement {
 	}
 
 
+	/**
+	* Change an existing studip user according to the given parameters
+	*
+	* @access	public
+	* @param	array	structure: array('string table_name.field_name'=>'string value')
+	* @return	bool Creation successful?
+	*/
 	function changeUser($newuser) {
 		global $perm, $auth;
 	
 		// Do we have permission to do so?
+		if (!$perm->have_perm("admin")) {
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung Accounts zu ver&auml;ndern.") . "§";
+			return FALSE;
+		}
 		if (!$perm->is_fak_admin() && $newuser['auth_user_md5.perms'] == "admin") {
 			$this->msg .= "error§" . _("Sie haben keine Berechtigung, <b>Admin-Accounts</b> anzulegen.") . "§";
 			return FALSE;
@@ -298,19 +339,19 @@ class UserManagement {
 			return FALSE;
 		}
 		if (!$perm->have_perm("root")) {
-			if (!$perm->is_fak_admin() && $this->auth_user['auth_user_md5.perms'] == "admin") {
+			if (!$perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin") {
 				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> zu ver&auml;ndern.") . "§";
 				return FALSE;
 			}
-			if ($this->auth_user['auth_user_md5.perms'] == "root") {
+			if ($this->user_data['auth_user_md5.perms'] == "root") {
 				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
 				return FALSE;
 			}
-			if ($perm->is_fak_admin() && $this->auth_user['auth_user_md5.perms'] == "admin") {
+			if ($perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin") {
 				$this->db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
 							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
 							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '" . $auth->auth["uid"] . "' AND c.inst_perms='admin') 
-							WHERE a.user_id ='" . $this->auth_user['auth_user_md5.user_id'] . "' AND a.inst_perms = 'admin'");
+							WHERE a.user_id ='" . $this->user_data['auth_user_md5.user_id'] . "' AND a.inst_perms = 'admin'");
 				$this->db->next_record();
 				if (!$this->db->f("admin_ok")) {
 					$this->msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu ver&auml;ndern.") . "§";
@@ -320,10 +361,10 @@ class UserManagement {
 		}
 
 		// aktiver Dozent?
-		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->auth_user['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
+		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
 		$this->db->next_record();
 		if ($this->db->f("count") && $newuser['auth_user_md5.perms'] != "dozent") {
-			$this->msg .= sprintf("error§" . "Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden." . "§", $this->auth_user['auth_user_md5.username'], $this->db->f("count"));
+			$this->msg .= sprintf("error§" . "Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden." . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
 			return FALSE;
 		}
 			
@@ -343,10 +384,10 @@ class UserManagement {
 		}
 		
 		// Store changed values in internal array if allowed
-		$old_perms = $this->auth_user['auth_user_md5.perms'];
+		$old_perms = $this->user_data['auth_user_md5.perms'];
 		foreach ($newuser as $key => $value) {
-			if (!StudipAuthAbstract::CheckField($key, $this->auth_user['auth_user_md5.auth_plugin'])) {
-				$this->auth_user[$key] = $value;
+			if (!StudipAuthAbstract::CheckField($key, $this->user_data['auth_user_md5.auth_plugin'])) {
+				$this->user_data[$key] = $value;
 			} else {
 				$this->msg .= "error§" .  sprintf(_("Das Feld <b>%s</b> können Sie nicht ändern!"), $key) . "§";
 				return FALSE;
@@ -359,18 +400,83 @@ class UserManagement {
 		}
 		
 		if ($ILIAS_CONNECT_ENABLE) {
-			$this_ilias_id = get_connected_user_id($this->auth_user['auth_user_md5.user_id']);
+			$this_ilias_id = get_connected_user_id($this->user_data['auth_user_md5.user_id']);
 			if ($this_ilias_id) 
-				edit_ilias_user($this_ilias_id, $this->auth_user['auth_user_md5.username'], $this->auth_user['user_info.geschlecht'], $this->auth_user['auth_user_md5.Vorname'], $this->auth_user['auth_user_md5.Nachname'], $this->auth_user['user_info.title_front'], "Stud.IP", $this->auth_user['auth_user_md5.Email'], $this->auth_user['auth_user_md5.perms'], $this->auth_user['user_info.preferred_language']);
+				edit_ilias_user($this_ilias_id, $this->user_data['auth_user_md5.username'], $this->user_data['user_info.geschlecht'], $this->user_data['auth_user_md5.Vorname'], $this->user_data['auth_user_md5.Nachname'], $this->user_data['user_info.title_front'], "Stud.IP", $this->user_data['auth_user_md5.Email'], $this->user_data['auth_user_md5.perms'], $this->user_data['user_info.preferred_language']);
 		}
 		
 		$this->autoInsertSem($old_perms);
-		$this->msg .= "msg§" . sprintf(_("User \"%s\" ver&auml;ndert."), $this->auth_user['auth_user_md5.username']) . "§";
+		$this->msg .= "msg§" . sprintf(_("User \"%s\" ver&auml;ndert."), $this->user_data['auth_user_md5.username']) . "§";
 		
+		// include language-specific subject and mailbody
+		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
+		$Zeit=date("H:i:s, d.m.Y",time());
+		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/change_mail.inc.php");
 
+		// send mail
+		$this->smtp->SendMessage(
+				$this->smtp->env_from,
+				array($this->user_data['auth_user_md5.Email']),
+				array("From: " . $this->smtp->from,
+						"Reply-To:" . $this->smtp->abuse,
+						"To: " . $this->user_data['auth_user_md5.Email'],
+						"Subject: " . $subject),
+				$mailbody);
+		
+		// Hochstufung auf admin oder root?
+		if ($newuser['auth_user_md5.perms'] == "admin" || $newuser['auth_user_md5.perms'] == "root") {
+			//Eintraege aus Veranstaltungen loeschen
+			$query = "SELECT seminar_id FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+			$query2 = "DELETE FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+			$this->db->query($query);
+			$this->db2->query($query2);
+			if (($db_ar = $this->db2->affected_rows()) > 0) {
+				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Veranstaltungen gel&ouml;scht."), $db_ar) . "§";
+				while ($this->db->next_record()) {
+					update_admission($this->db->f("seminar_id"));
+				}
+			}
+			//Eintraege aus Wartelisten loeschen
+			$query = "SELECT seminar_id FROM admission_seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+			$query2 = "DELETE FROM admission_seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+			$this->db->query($query);
+			$this->db2->query($query2);
+			if (($db_ar = $this->db2->affected_rows()) > 0) {
+				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Wartelisten gel&ouml;scht."), $db_ar) . "§";
+				while ($this->db->next_record()) {
+					update_admission($this->db->f("seminar_id"));
+				}
+			}
+			// delete 'Studiengaenge'
+			$query = "DELETE FROM user_studiengang WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+			$this->db->query($query);
+			if (($db_ar = $this->db->affected_rows()) > 0) {
+				$this->msg .= "info§" . sprintf(_("%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."), $db_ar) . "§";
+			}
+			// Alle persoenlichen Termine dieses users löschen
+		 	if ($db_ar = delete_range_of_dates($this->user_data['auth_user_md5.user_id'], FALSE) > 0) {
+				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Terminen gel&ouml;scht."), $db_ar) . "§";
+			}
+		}
 
+		if ($newuser['auth_user_md5.perms'] == "admin") {
+			$query = "DELETE FROM user_inst WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "' AND inst_perms != 'admin'";
+			$this->db->query($query);
+			if (($db_ar = $this->db->affected_rows()) > 0) {
+				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
+			}
+		}
+		if ($newuser['auth_user_md5.perms'] == "root") {
+			$query = "DELETE FROM user_inst WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+			$this->db->query($query);
+			if (($db_ar = $this->db->affected_rows()) > 0) {
+				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
+			}
+		}
 
 		return TRUE;
 	}
+
+
 
 }
