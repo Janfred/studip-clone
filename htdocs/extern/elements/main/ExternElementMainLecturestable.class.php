@@ -40,10 +40,10 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainLecturestable extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width", "widthpp",
-			"grouping", "semrange", "allseminars", "rangepathlevel", "addinfo", "time",
-			"lecturer", "repeatheadrow", "semclasses", "textlectures", "textgrouping",
-			"textnogroups", "aliasesgrouping", "wholesite", "nameformat", "language", "urlcss",
-			"title");
+			"grouping", "semstart", "semrange", "semswitch", "allseminars", "rangepathlevel",
+			"addinfo", "time", "lecturer", "repeatheadrow", "semclasses", "textlectures",
+			"textgrouping", "textnogroups", "aliasesgrouping", "wholesite", "nameformat",
+			"language", "urlcss", "title");
 	var $edit_function = "editMainSettings";
 	
 	/**
