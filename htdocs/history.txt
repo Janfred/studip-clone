@@ -1,8 +1,9 @@
 31.03.2003 v 0.9
+- Erste Testversion einer Einbindung von ILIAS-Lernmodulen
 - systemweiter TeX-Support
-- personalisierte Übersicht der perönlichen Veranstaltungen im Archiv
-- automatische Verwaltung und Konfiguration für externe Seiten (zur Einbindung des Stud.IP Contens in
-  bestehende Internetseitem)
+- personalisierte Übersicht der persönlichen Veranstaltungen im Archiv
+- automatische Verwaltung und Konfiguration für externe Seiten (zur Einbindung des Stud.IP Contents in
+  bestehende Internetseiten)
 - Veranstaltungssuche / Browser umgebaut und erweitert, verwendet nun zur Darstellung die neuen Bäume
 - Internationalisierung: weite Teile des Systems können nun auch in Englisch benutzt werden
 - Ressourcenverwaltung wird nun für Verwaltung der Räume von Veranstaltungen genutzt (falls aktiviert)
