@@ -250,7 +250,7 @@ class ScheduleWeek {
 							//if ($this->events[$cc["id"]]["dozenten"]) echo "<br><div align=\"right\"><font size=-1>", $this->events[$cc["id"]]["dozenten"], "</font></div>";
 							//if ($this->events[$cc["id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$this->events[$cc["id"]]["id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Dieses Feld aus der Auswahl l&ouml;schen\">&nbsp;</a></div>";
 						}
-						echo "</td></tr></table>";
+						echo "</td></tr></table></td>";
 						}
 					if (!$this->cell_allocations[$idx])  echo "class=\"steel1\"></td>"; 
 					}
