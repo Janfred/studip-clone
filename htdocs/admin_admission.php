@@ -184,7 +184,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$errormsg=$errormsg."error§"._("Das Enddatum liegt in der Verangenheit. Bitte geben Sie ein g&uuml;ltiges Enddatum ein!")."§"; 
 		}
 		if ($admin_admission_data["sem_admission_end_date"] <= $admin_admission_data["sem_admission_start_date"]) {
-			$errormsg=$errormsg."error§"._("Das Startadtum muss vor dem Enddatum liegen!")."§"; 
+			$errormsg=$errormsg."error§"._("Das Startdatum muss vor dem Enddatum liegen!")."§"; 
 		}
 	}
 
