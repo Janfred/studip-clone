@@ -113,6 +113,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	 echo createErrorReport ($vote, _("Fehler beim Einlesen des Votes"));
       }
 
+      $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) || $userID == $vote->getAuthorID();
+
       /* Get post and get-variables ---------------------------------------- */
       $formID = $_REQUEST["voteformID"];
       $openID = $_REQUEST["voteopenID"];
@@ -123,6 +125,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       $answerChanged = $_POST["answerChanged"];
       $previewResults = isset( $_POST["previewButton_x"] );
       if ( !$previewResults ) $previewResults = $_GET["previewResults"];
+      $previewResults = $previewResults && ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
       /* ------------------------------------------------------------------- */
 
       /* Show headlines ---------------------------------------------------- */

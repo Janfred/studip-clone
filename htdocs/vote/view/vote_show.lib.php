@@ -64,7 +64,8 @@ function createFormHeader (&$vote) {
  */
 function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $html = "";
-   $isPreview = $_GET["previewResults"] || $_POST["previewButton_x"];
+   $isPreview = ($_GET["previewResults"] || $_POST["previewButton_x"]) &&
+       ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
    $isAssociated = $vote->voteDB->isAssociated ($vote->getVoteID(), $userID);
 
    $revealNames = $_GET["revealNames"] &&
@@ -420,7 +421,7 @@ function createStoppedVoteHeader (&$vote) {
     $html .= "<table align=center width=\"92%\" cellpadding=1 cellspacing=0><tr>\n";
     $html .= "<td class=toolbar align=left>\n";
     $html .= "<font size=-1 color=\"#ffffff\"><b>\n";
-    $html .= "&nbsp;".$title." (".$number.")";
+    $html .= "&nbsp;".$title;
     $html .= "</b></font>";
     $html .= "</td>";
     $html .= "<td class=toolbar align=right>\n";
@@ -740,21 +741,26 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
       if ($number != 1)
 	 $html .= sprintf (_("Es haben insgesamt <b>%s</b> Personen teilgenommen"), $number);
       else
-	 $html .= sprintf (_("Es hat insgesamt <b>eine</b> Person teilgenommen"));
+	  $html .= $isAssociated
+	      ? sprintf (_("Sie waren der/die einzigste TeilnehmerIn"))
+	      : sprintf (_("Es hat insgesamt <b>eine</b> Person teilgenommen"));
    }
    else {
       if ($number != 1)
 	 $html .= sprintf (_("Es haben bisher <b>%s</b> Personen teilgenommen"), $number);
       else
-	 $html .= sprintf (_("Es hat bisher insgesamt <b>eine</b> Person teilgenommen"));
+	 $html .= $isAssociated
+	     ? sprintf (_("Sie waren bisher der/die einzigste TeilnehmerIn"))
+	     : sprintf (_("Es hat bisher insgesamt <b>eine</b> Person teilgenommen"));
    }
    /* ---------------------------------------------------------------------- */
 
    /* participated? -------------------------------------------------------- */
    // a: habe $number als Überprüfung hinzugefügt, da sonst bei abgelaufenen 
    // Votes die Anzeige nicht funktioniert...muss überarbeitet werden!
-   if ($isAssociated && $number) 
-       $html .= formatReady(_(", Sie ebenfalls"));
+   // m: lag wohl an parameter-defaultwert isAssociated=true in createFormFooter...
+   if ($isAssociated && $number > 1)
+       $html .= _(", Sie ebenfalls");
    /* ---------------------------------------------------------------------- */
 
    $html .= ".";
