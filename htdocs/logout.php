@@ -79,18 +79,30 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 	?>
-	<table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>
-		<tr><td class="topic" valign="absmiddle"><img src="pictures/logout.gif" border="0"><b>&nbsp;Stud.IP - Logout</b></td></tr>
-		<tr><td class="blank">&nbsp;</td></tr>
-		<?
-			parse_msg ("info§Sie sind nun aus dem System abgemeldet", "§", "blank", 1)
-		?>
-		<tr><td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Startseite.<br />
-		<? if ($UNI_LOGOUT_ADD) {
-			echo "<tr><td class=\"blank\"><font size=-1>&nbsp;$UNI_LOGOUT_ADD</font></td></tr><tr><td class=\"blank\">&nbsp;</td></tr>";
-			}
-		?>
-		</font></td></tr>
+	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">
+		<tr><td colspan="2" class="topic" valign="absmiddle"><img src="pictures/logout.gif" border="0"><b>&nbsp;Stud.IP - Logout</b></td></tr>
+		<tr>
+			<td width="100%" class="blank" valign="middle">
+				<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<?
+					parse_msg ("info§Sie sind nun aus dem System abgemeldet", "§", "blank", 1)
+	?>
+					<tr>
+					<td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Startseite.<br />
+					
+				<? if ($UNI_LOGOUT_ADD) {
+					echo "<tr><td class=\"blank\"><font size=-1>&nbsp;$UNI_LOGOUT_ADD</font></td></tr><tr></tr>";
+					}
+				?>
+					</font>
+					</td>
+					</tr>
+				</table>
+			</td>
+			<td valign="top">
+			<img src="pictures/maus.jpg" border="0">
+			</td>
+		</tr>
 	</table>
 	</body>
 </html>
