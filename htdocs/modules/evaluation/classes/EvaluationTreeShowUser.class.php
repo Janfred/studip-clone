@@ -298,7 +298,7 @@ class EvaluationTreeShowUser {
 	    : "";
 	
 	$class = $group->getChildType() != "EvaluationQuestion"
-	    ? "steelgroup4"
+	    ? "eval_gray"
 	    : "steelgroup7";
 	$html .= "\n<!-- getGroupContent ----------------- -->\n";
 	$html .= "<table width=\"100%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" ".$style.">\n";
