@@ -167,7 +167,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 			else
 				$tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
 			//belegte Plaetze zaehlen
-			$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id"));
+			$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id")."' ");
 			$free_quota=$tmp_admission_quota - $db3->num_rows();
 			//Studis auswaehlen, die jetzt aufsteigen koennen
 			$db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $free_quota");
