@@ -133,8 +133,8 @@ while ( is_array($HTTP_POST_VARS)
 }
 
 // einzelnen Benutzer anzeigen
-if (isset($details)) {
-	if ($details=="" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
+if (isset($_GET['details'])) {
+	if ($details=="__" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
 		?>
 		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 		<tr valign=top align=middle>
@@ -450,7 +450,7 @@ if (isset($details)) {
 	<tr><td class="blank" colspan=2>
 	<?
 	if (in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])){
-		?><p><b><a href="<? echo $PHP_SELF . "?details="?>">&nbsp;<?=_("Neuen Benutzer-Account anlegen")?></a></b></p><?
+		?><p><b><a href="<? echo $PHP_SELF . "?details=__"?>">&nbsp;<?=_("Neuen Benutzer-Account anlegen")?></a></b></p><?
 	} else {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}
