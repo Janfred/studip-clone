@@ -537,6 +537,7 @@ function preg_call_format_list ($content_str) {
 	$print_li = TRUE;
 	$current_level = 0;
 	$lines = explode("\n", $content_str);
+	$end_tags = "";
 	for ($i = 0; $i < sizeof($lines); $i++) {
 		$line = $lines[$i];
 		if (preg_match("'^((-|=)+)\s*(.*)$'", $line, $matches)) {
@@ -554,6 +555,7 @@ function preg_call_format_list ($content_str) {
 			if ($level < $current_level) {
 				for (;$level < $current_level; $current_level--) {
 					$ret .= "</{$level_tag[$current_tag]}>";
+			//		unset($level_tag[$current_tag]);
 					if ($next_level <= $current_level)
 						$ret .= "</li>";
 				}
@@ -581,8 +583,12 @@ function preg_call_format_list ($content_str) {
 					$ret .= "</li>";
 		}
 	}
-
-	return $ret . "</{$level_tag[1]}>";
+	
+	while ($current_level--) {
+		$end_tags .= "</li></ul>";
+	}
+	
+	return $ret . $end_tags;
 }
 
 
