@@ -22,24 +22,37 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 function check_messaging_default() {
 	global $my_messaging_settings;
 
-	if (!$my_messaging_settings) {
-		$my_messaging_settings=array(
-			"show_only_buddys"=>FALSE, 
-			"delete_messages_after_logout"=>FALSE,
-			"start_messenger_at_startup"=>FALSE,
-			"active_time"=>5,
-			"default_setted"=>time(),
-			"last_login"=>FALSE,
-			"timefilter"=>"all",
-			"opennew"=>1,
-			"logout_markreaded"=>FALSE,
-			"openall"=>FALSE,
-			"save_snd"=>1,
-			"hover"=>FALSE,
-			"addsignature"=>FALSE,
-			"sms_sig"=>FALSE
-			);
-		}			
+	if (!$my_messaging_settings['show_only_buddys'])
+		$my_messaging_settings['show_only_buddys'] = FALSE;
+	if (!$my_messaging_settings['delete_messages_after_logout'])
+		$my_messaging_settings['delete_messages_after_logout'] = FALSE;	
+	if (!$my_messaging_settings['start_messenger_at_startup'])
+		$my_messaging_settings['start_messenger_at_startup'] = FALSE;	
+	if (!$my_messaging_settings['active_time'])
+		$my_messaging_settings['active_time'] = 5;	
+	if (!$my_messaging_settings['default_setted'])
+		$my_messaging_settings['default_setted'] = time();	
+	if (!$my_messaging_settings['last_login'])
+		$my_messaging_settings['last_login'] = FALSE;	
+	if (!$my_messaging_settings['timefilter'])
+		$my_messaging_settings['timefilter'] = "all";	
+	if (!$my_messaging_settings['opennew'])
+		$my_messaging_settings['opennew'] = 1;	
+	if (!$my_messaging_settings['logout_markreaded'])
+		$my_messaging_settings['logout_markreaded'] = FALSE;	
+	if (!$my_messaging_settings['openall'])
+		$my_messaging_settings['openall'] = FALSE;	
+	if (!$my_messaging_settings['save_snd'])
+		$my_messaging_settings['save_snd'] = 1;		
+	if (!$my_messaging_settings['addsignature'])
+		$my_messaging_settings['addsignature'] = FALSE;	
+	if (!$my_messaging_settings['save_snd'])
+		$my_messaging_settings['save_snd'] = 1;	
+	if (!$my_messaging_settings['sms_sig'])
+		$my_messaging_settings['sms_sig'] = FALSE;	
+	if (!$my_messaging_settings['send_view'])
+		$my_messaging_settings['send_view'] = 2;		
+
 	}
 	
 	
