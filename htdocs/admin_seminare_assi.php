@@ -671,7 +671,7 @@ if ($sem_delete_studg) {
 //Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
 if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 	if ($sem_create_data["sem_admission"]) {
-		if ((!$sem_create_data["sem_admission_ratios_changed"]) && (!$sem_add_ratio) && (!cmd_c_x) && (!cmd_e_x)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
+		if ((!$sem_create_data["sem_admission_ratios_changed"]) && (!$sem_add_ratio) && (!$cmd_c_x) && (!$cmd_e_x)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
 			if (is_array($sem_create_data["sem_studg"]))
 				foreach ($sem_create_data["sem_studg"] as $key=>$val)
 					$sem_create_data["sem_studg"][$key]["ratio"]=round(100 / (sizeof ($sem_create_data["sem_studg"]) + 1));
