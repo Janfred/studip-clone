@@ -77,7 +77,7 @@ if ($com == "delete_sec") {
 	$config = get_configuration($range_id, $config_id);
 	
 	$message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich l&ouml;schen?"),
-							$config["name"], $config["module_name"]);
+							$config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
 	$message .= "<br><br><a href=\"$PHP_SELF?com=delete&config_id=$config_id\">";
 	$message .= "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
 	$message .= "pictures/buttons/ja2-button.gif\" border=\"0\"></a>&nbsp; &nbsp;";

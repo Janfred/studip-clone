@@ -87,6 +87,10 @@ class ExternElementList extends ExternElement {
 		return  $element_headline . $out;
 	}
 	
+	function checkValue ($attribute, $value) {
+		if ($attribute == "margin")
+			return !preg_match("|^\d{0,3}$|", $value);
+	}
 }
 
 ?>

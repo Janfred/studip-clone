@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainPersonDetails extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
-			"wholesite", "nameformat", "studiplink", "urlcss", "title");
+			"wholesite", "nameformat", "dateformat", "language", "studiplink", "urlcss", "title");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -59,12 +59,14 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 		
 		$config = array(
 			"name" => "",
-			"order" => "|0|1|2|3|4|5|6",
-			"visible" => "|1|1|1|1|1|1|1",
-			"aliases" => "|"._("Lebenslauf")."|"._("Schwerpunkte")."|"._("Lehrveranstaltungen")."|"
-					._("Aktuell")."|"._("Termine")."|"._("Publikationen"),
+			"order" => "|0|1|2|3|4|5|6|7",
+			"visible" => "|1|1|1|1|1|1|1|1",
+			"aliases" => "||"._("Lebenslauf")."|"._("Schwerpunkte")."|"._("Lehrveranstaltungen")."|"
+					._("Aktuell")."|"._("Termine")."|"._("Publikationen")."|",
 			"wholesite" => "0",
 			"nameformat" => "no_title",
+			"dateformat" => "%d. %b. %Y",
+			"language" => "de_DE",
 			"studiplink" => "1",
 			"urlcss" => "",
 			"title" => _("Mitarbeiter"),
@@ -98,7 +100,7 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 		
 		$edit_function = $this->edit_function;
 		$table = $edit_form->$edit_function($this->field_names["content"],
-				array("aliases" => array(6)), array("sort", "width", "widthpp"));
+				array("aliases" => array(0,7)), array("sort", "width", "widthpp"));
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
@@ -111,6 +113,19 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
+		
+		$title = _("Datumsformat:");
+		$info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
+		$values = array("%d. %b. %Y", "%d.%m.%Y", "%d.%m.%y", "%d. %B %Y", "%m/%d/%y");
+		$names = array(_("25. Nov. 2003"), _("25.11.2003"), _("25.11.03"),
+				_("25. November 2003"), _("11/25/03"));
+		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
+		
+		$title = _("Sprache");
+		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$values = array("de_DE", "en_GB");
+		$names = array(_("Deutsch"), _("Englisch"));
+		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Link:");
 		$info = _("Anwählen, wenn ein Link angezeigt werden soll, der direkt zum Stud.IP-Administrationsbereich verweisen soll.");

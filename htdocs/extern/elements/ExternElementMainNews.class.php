@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainNews extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
-			"width_pp", "sort", "studiplink", "wholesite", "nameformat", "dateformat", "timelocale",
+			"width_pp", "sort", "studiplink", "wholesite", "nameformat", "dateformat", "language",
 			"urlcss", "title", "nodatatext");
 	var $edit_function = "editMainSettings";
 	
@@ -70,7 +70,7 @@ class ExternElementMainNews extends ExternElementMain {
 			"studiplink" => "1",
 			"nameformat" => "no_title",
 			"dateformat" => "%d. %b. %Y",
-			"timelocale" => "de_DE",
+			"language" => "de_DE",
 			"urlcss" => "",
 			"title" => _("News"),
 			"nodatatext" => _("Keine aktuellen News")
@@ -112,9 +112,9 @@ class ExternElementMainNews extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev", "last");
 		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
-				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
+				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."), _("Meyer"));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Datumsformat:");
@@ -124,11 +124,11 @@ class ExternElementMainNews extends ExternElementMain {
 				_("25. November 2003"), "11/25/03");
 		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $nametitle_values, $nametitle_names);
 		
-		$title = _("Sprache Datum");
+		$title = _("Sprache");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$nametitle_values = array("de_DE", "en_US");
-		$nametitle_names = array(_("Deutsch"), _("Englisch (US)"));
-		$table .= $edit_form->editOptionGeneric("timelocale", $title, $info, $nametitle_values, $nametitle_names);
+		$values = array("de_DE", "en_GB");
+		$names = array(_("Deutsch"), _("Englisch"));
+		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Link:");
 		$info = _("Anwählen, wenn ein Link angezeigt werden soll, der direkt zum Stud.IP-Administrationsbereich verweisen soll.");

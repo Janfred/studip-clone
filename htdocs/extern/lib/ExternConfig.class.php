@@ -345,12 +345,10 @@ class ExternConfig {
 	/**
 	*
 	*/
-	function checkFormValues ($element_name, $attributes) {
+/*	function checkFormValues ($element_name, $attributes) {
 		global $HTTP_POST_VARS;
 		$fault = array();
-	/*	echo "<pre>";
-		print_r($HTTP_POST_VARS);
-		echo "</pre>";*/
+	
 		foreach ($attributes as $attribute) {
 			$form_name = $element_name . "_" . $attribute;
 			
@@ -367,9 +365,7 @@ class ExternConfig {
 				$value = $HTTP_POST_VARS[$form_name];
 			else
 				$value = array($HTTP_POST_VARS[$form_name]);
-			
-			$val_temp = array();
-			
+						
 			$splitted_attribute = explode("_", $attribute);
 			if (sizeof($splitted_attribute) == 1)
 				$html_attribute = $splitted_attribute[0];
@@ -381,16 +377,16 @@ class ExternConfig {
 				// Don't accept strings longer than 200 characters!
 				if (strlen($value[$i]) > 200) {
 					$fault[$form_name] = TRUE;
-					break;
+					continue;
+				}
+				
+				if ($value[$i] != "" && preg_match("/(<|>|\"|<script|<php)/i", $value[$i])) {
+					$fault[$form_name] = TRUE;
+					continue;
 				}
 					
 				switch ($html_attribute) {
 			
-					case "color" :
-					case "bgcolor" :
-					case "bordercolor" :
-						$fault[$form_name] = (preg_match("/(<|>|\"|(script)|(php))/i", $value[$i]));
-						break;
 					case "height" :
 						$fault[$form_name] = (!preg_match("/^\d{0,3}$/", $value[$i])
 								|| $value[$i]> 100 || $value[$i]< 0);
@@ -425,16 +421,6 @@ class ExternConfig {
 						$fault[$form_name] = !preg_match("/^(Verdana,Arial,Helvetica,sans-serif|"
 								. "Times,Times New Roman,serif|Courier,Courier New,monospace)$/", $value[$i]);
 						break;
-					case "aliases" :
-					case "class" :
-					case "style" :
-					case "title" :
-					case "urlcss" :
-					case "nodatatext" :
-					case "groupsalias":
-						$fault[$form_name] = ($value[$i] != ""
-								&& preg_match("/(<|>|\"|script|php)/i", $value[$i]));
-						break;
 					case "iconpic" :
 					case "icontxt" :
 					case "iconpdf" :
@@ -443,8 +429,9 @@ class ExternConfig {
 					case "iconrtf" :
 					case "iconzip" :
 					case "icondefault" :
+					case "background" :
 						$fault[$form_name] = ($value[$i] != ""
-								&& (preg_match("/(<|>|\"|script|php)/i", $value[$i])
+								&& (preg_match("/(<|>|\"|<script|<php)/i", $value[$i])
 								|| !preg_match("/^[^.\/\\\].*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
 						break;
 					case "wholesite" :
@@ -462,12 +449,14 @@ class ExternConfig {
 						break;
 					case "name" :
 						$HTTP_POST_VARS[$form_name] = trim($HTTP_POST_VARS[$form_name]);
-						$fault[$form_name] = (preg_match("/^.*(script|php).*$/i", $value[$i])
+						$fault[$form_name] = (preg_match("/^.*(<script|<php).*$/i", $value[$i])
 								|| !preg_match("/^[0-9a-z\._\- ]+$/i", $value[$i]));
 						break;
 					case "widthpp" :
 						$fault[$form_name] = ($value[$i] != "" || $value[$i] != "%");
 						break;
+					default :
+						$fault[$form_name] = $this->checkValue($html_attribute, $value[$i]);
 						
 				}
 					
@@ -485,7 +474,7 @@ class ExternConfig {
 		$HTTP_POST_VARS["Main_visible"] = $this->config["Main"]["visible"];
 		
 		return FALSE;
-	}
+	}*/
 	
 }
 

@@ -40,8 +40,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainLectures extends ExternElementMain {
 
 	var $attributes = array("name", "grouping", "semrange", "addinfo", "time", "lecturer",
-			"semclasses", "textlectures", "textgrouping",
-			"textnogroups", "aliasesgrouping", "wholesite", "nameformat", "urlcss", "title");
+			"semclasses", "textlectures", "textgrouping", "textnogroups", "aliasesgrouping",
+			"wholesite", "nameformat", "language", "urlcss", "title");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -73,6 +73,7 @@ class ExternElementMainLectures extends ExternElementMain {
 					._("Typ")."|"._("Einrichtung"),
 			"wholesite" => "0",
 			"nameformat" => "no_title_short",
+			"language" => "de_DE",
 			"urlcss" => "",
 			"title" => _("Lehrveranstaltungen")
 		);
@@ -182,6 +183,12 @@ class ExternElementMainLectures extends ExternElementMain {
 		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
+		
+		$title = _("Sprache");
+		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$values = array("de_DE", "en_GB");
+		$names = array(_("Deutsch"), _("Englisch"));
+		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");

@@ -41,7 +41,7 @@ class ExternElementMainDownload extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width", "width_pp", "sort",
 			"wholesite", "lengthdesc", "nameformat", "urlcss", "title", "nodatatext", "dateformat",
-			"timelocale", "iconpic", "icontxt", "iconpdf", "iconppt", "iconxls",
+			"language", "iconpic", "icontxt", "iconpdf", "iconppt", "iconxls",
 			"iconrtf", "iconzip", "icondefault");
 	var $edit_function = "editMainSettings";
 	
@@ -73,7 +73,7 @@ class ExternElementMainDownload extends ExternElementMain {
 			"title" => "",
 			"nodatatext" => _("Keine Dateien vorhanden"),
 			"dateformat" => "%d. %b. %Y",
-			"timelocale" => "de_DE",
+			"language" => "de_DE",
 			"config" => "",
 			"srilink" => "",
 			"iconpic" => "",
@@ -146,11 +146,11 @@ class ExternElementMainDownload extends ExternElementMain {
 				_("25. November 2003"), _("11/25/03"));
 		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
 		
-		$title = _("Sprache Datum");
-		$info = ("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_US");
-		$names = array(_("Deutsch"), _("Englisch (US)"));
-		$table .= $edit_form->editOptionGeneric("timelocale", $title, $info, $values, $names);
+		$title = _("Sprache");
+		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$values = array("de_DE", "en_GB");
+		$names = array(_("Deutsch"), _("Englisch"));
+		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
@@ -207,6 +207,28 @@ class ExternElementMainDownload extends ExternElementMain {
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		switch ($attribute) {
+			case "lengthdesc" :
+				return !preg_match("|^\d{0,3}$|", $value);
+			case "timelocale" :
+				return ($value != "de_DE" || $value != "en_US");
+			case "iconpic" :
+			case "icontxt" :
+			case "iconpdf" :
+			case "iconppt" :
+			case "iconxls" :
+			case "iconrtf" :
+			case "iconzip" :
+			case "icondefault" :
+				return ($value[$i] != ""
+						&& (preg_match("/(<|>|\"|<script|<php)/i", $value[$i])
+						|| !preg_match("/^[^.\/\\\].*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
+		}
+		
+		return FALSE;
 	}
 	
 }

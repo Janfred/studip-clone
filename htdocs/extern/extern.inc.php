@@ -91,34 +91,16 @@ else {
 	exit;
 }
 
-// sem == -1: show data from last semester
-// sem == +1: show data from next semester
-// other values: show data from current semester
-$now = time();
-foreach ($SEMESTER as $key => $sem_record) {
-	if ($now >= $sem_record["beginn"] && $now <= $sem_record["ende"]) {
-		$current = $key;
-		break;
-	}
-}
-if ($sem == "-1") {
-	$start = $SEMESTER[$key - 1]["beginn"];
-	$end = $SEMESTER[$key - 1]["ende"];
-}
-elseif ($sem == "+1") {
-	$start = $SEMESTER[$key + 1]["beginn"];
-	$end = $SEMESTER[$key + 1]["ende"];
-}
-else {
-	$start = $SEMESTER[$key]["beginn"];
-	$end = $SEMESTER[$key]["ende"];
-}
-
 // all parameters ok, instantiate module and print data
 foreach ($EXTERN_MODULE_TYPES as $type) {
 	if ($type["module"] == $module)
 		$module_obj =& new ExternModule($range_id, $module, $config_id, $default);
 }
+
+
+// Workaround to include data in scripts
+if ($incdata)
+	$module_obj->config->config["Main"]["incdata"] = 1;
 
 $args = $module_obj->getArgs();
 for ($i = 0; $i < sizeof($args); $i++)

@@ -90,8 +90,11 @@ class ExternEditModule extends ExternEditHtml {
 				$out .= "\" size=\"12\" maxlength=\"50\" value=\"";
 				$out .= $aliases[$order[$i]] . "\"></td>\n";
 			}
-			else
+			else {
 				$out .= "<td>&nbsp;</td>\n";
+				$out .= "<input type=\"hidden\" name=\"{$this->element_name}_aliases[$order[$i]]\" ";
+				$out .= "value=\"\">";
+			}
 			
 			// width
 			if (!in_array("width", $hide)) {

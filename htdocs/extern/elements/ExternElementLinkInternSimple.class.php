@@ -110,7 +110,10 @@ class ExternElementLinkInternSimple extends ExternElement {
 		return $element_headline . $out;
 	}
 	
-	
+	function checkValues ($attribute, $value) {
+		if ($attribute = "srilink")
+			return preg_match("|^https?://.*$|i", $value);
+	}
 }
 
 ?>

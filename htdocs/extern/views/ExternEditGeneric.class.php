@@ -123,7 +123,10 @@ class ExternEditGeneric extends ExternEdit {
 				$out .= "<td$width_2 nowrap=\"nowrap\"><input type=\"text\" name=\"{$form_name}[]\" size=\"$size\"";
 				$out .= " maxlength=\"$maxlength\" value=\"{$value[$i]}\" />&nbsp; \n";
 				$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
-				$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
+				if (is_array($info))
+					$out .= tooltip($info[$i], TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
+				else
+					$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 				$this->css->switchClass();
 			}
 			return $out;

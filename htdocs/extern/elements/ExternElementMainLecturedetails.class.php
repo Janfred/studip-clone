@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainLecturedetails extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "range", "studipinfo",
-			"studiplink", "wholesite", "nameformat", "urlcss", "title", "timelocale");
+			"studiplink", "wholesite", "nameformat", "urlcss", "title", "language");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -71,7 +71,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			"nameformat" => "no_title",
 			"urlcss" => "",
 			"title" => "",
-			"timelocale" => "de_DE"
+			"language" => "de_DE"
 		);
 		
 		return $config;
@@ -140,11 +140,11 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
-		$title = _("Sprache Datum");
+		$title = _("Sprache");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
-		$values = array("de_DE", "en_US");
-		$names = array(_("Deutsch"), _("Englisch (US)"));
-		$table .= $edit_form->editOptionGeneric("timelocale", $title, $info, $values, $names);
+		$values = array("de_DE", "en_GB");
+		$names = array(_("Deutsch"), _("Englisch"));
+		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");

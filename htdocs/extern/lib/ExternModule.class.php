@@ -236,13 +236,12 @@ class ExternModule {
 		
 		if ($element_name == "") {
 			foreach ($this->elements as $element) {
-				if ($faulty = $this->config->checkFormValues($element->getName(), $element->getAttributes()))
+				if ($faulty = $element->checkFormValues())
 					$faulty_values = $faulty_values + $faulty;
 			}
 		}
 		else {
-			if ($faulty_values = $this->config->checkFormValues($element_name,
-					$this->elements[$element_name]->getAttributes())) {
+			if ($faulty_values = $this->elements[$element_name]->checkFormValues()) {
 					
 				return $faulty_values;
 			}
@@ -293,15 +292,19 @@ class ExternModule {
 	*
 	*/
 	function getModuleLink ($module, $config, $sri_link) {
-		if ($sri_link) {
-			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php";
-			$link .= "?page_url=$sri_link";
-		}
+		if ($this->config->config["Main"]["incdata"])
+			$link = $sri_link;
 		else {
-			$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module=$module";
-			if ($config)
-				$link .= "&config_name=$config";
-			$link .= "&range_id={$this->config->range_id}";
+			if ($sri_link) {
+				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php";
+				$link .= "?page_url=$sri_link";
+			}
+			else {
+				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module=$module";
+				if ($config)
+					$link .= "&config_name=$config";
+				$link .= "&range_id={$this->config->range_id}";
+			}
 		}
 		
 		return $link;
