@@ -41,8 +41,7 @@ if ($nclose)
 
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-
-print "<body>\n";
+include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$index_data["im_loaded"])) {
 	?>
@@ -53,8 +52,6 @@ if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscr
 	$index_data["im_loaded"]=TRUE;
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
-		
 ?>
 <body>
 <?

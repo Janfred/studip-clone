@@ -33,6 +33,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");
 ?>
 <script language="Javascript">
 function open_im()
@@ -40,10 +41,8 @@ function open_im()
 fenster=window.open("studipim.php","im_<?=$user->id;?>","scrollbars=yes,width=400,height=300","resizable=no");
 }
 </script>
-<body bgcolor=white>
 
 <?php
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
 include ("$ABSOLUTE_PATH_STUDIP/show_news.php");
 include ("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
 
