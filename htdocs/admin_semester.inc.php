@@ -588,8 +588,8 @@ function semester_show_semester($semester, $i, $duration_seminar_semester, $abso
    $row .=	$duration_seminar_semester[$semester["semester_id"]]+$absolut_seminars."&nbsp;(+&nbsp;".$continuos_seminar_semester[$semester["semester_id"]]."&nbsp;"._("implizit").")</font></td>";
    //$row .= 	"<br>".$continuos_seminar_semester[$semester["semester_id"]]."&nbsp;"._("kontinuierlich");
    //$row .=	"<br>".$absolut_seminars."&nbsp;"._("1-Semester")."</font></td>";
-   $row .=  "<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?change=1&semester_id=".$semester[semester_id]."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a></td>";
-   $row .= 	"<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?delete=1&semester_id=".$semester["semester_id"]."\"><img src=\"pictures/buttons/loeschen-button.gif\" border=0></a></td>";
+   $row .=  "<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?change=1&semester_id=".$semester[semester_id]."\">".makeButton("bearbeiten")."</a></td>";
+   $row .= 	"<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?delete=1&semester_id=".$semester["semester_id"]."\">".makeButton("loeschen"). "</a></td>";
    $row .=  "</tr>";
    return $row;
 }
@@ -651,8 +651,8 @@ function holiday_show_holiday($holidaydata, $i) {
    $row .=  "<td class=".$style." width=\"35%\"><font size=1>".$holidaydata["name"]."</font></td>";
    $row .=  "<td class=".$style." width=\"20%\"><font size=1>".date("d.m.Y", $holidaydata["beginn"])."</font></td>";
    $row .=  "<td class=".$style." width=\"20%\"><font size=1>".date("d.m.Y", $holidaydata["ende"])."</font></td>";
-   $row .=  "<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?holidayChange=1&holiday_id=".$holidaydata["holiday_id"]."\"><img src=\"pictures/buttons/bearbeiten-button.gif\" border=0></a></td>";
-   $row .= 	"<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?delete=1&holiday_id=".$holidaydata["holiday_id"]."\"><img src=\"pictures/buttons/loeschen-button.gif\" border=0></a></td>";
+   $row .=  "<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?holidayChange=1&holiday_id=".$holidaydata["holiday_id"]."\">".makeButton("bearbeiten")."</a></td>";
+   $row .= 	"<td width=\"15%\" align=\"RIGHT\" class=".$style."><a href=\"admin_semester.php?delete=1&holiday_id=".$holidaydata["holiday_id"]."\">".makeButton("loeschen")."</a></td>";
    $row .=  "</tr>";
    return $row;
 }
