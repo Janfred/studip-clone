@@ -847,7 +847,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 
 	$viewtext="<a href=\"wiki.php?keyword=".$keyword."&view=show\">"._("Standard")."</a><br>";
 	$viewtext .= "<a href=\"wiki.php?keyword=".$keyword."&view=wikiprint&version=$version\" target=\"_new\">"._("Druckansicht")."</a>";
-	if (count($versions)>1) {
+	if (count($versions)>=1) {
 		$viewtext .= "<br><a href=\"wiki.php?keyword=".$keyword."&cmd=showdiff&view=diff\">"._("Textänderungen anzeigen")."</a>";
 		$viewtext .= "<br><a href=\"wiki.php?keyword=".$keyword."&cmd=showcombo&view=combodiff\">"._("Text mit AutorInnenzuordnung anzeigen")."</a>";
 	}
@@ -1073,11 +1073,11 @@ function do_diff($strlines1,$strlines2)
 
 function toDiffLineArray($lines, $who) {
 	$dla = array();
-    $lines = explode("\n",preg_replace("/\r/",'',$lines));
-    foreach ($lines as $l) {
-    	$dla[] = new DiffLine($l, $who);
-    }
-    return $dla; 
+	$lines = explode("\n",preg_replace("/\r/",'',$lines));
+	foreach ($lines as $l) {
+		$dla[] = new DiffLine($l, $who);
+	}
+	return $dla; 
 }
 
 function showComboDiff($keyword, $db=NULL) {
@@ -1099,21 +1099,26 @@ function showComboDiff($keyword, $db=NULL) {
 		$db=new DB_Seminar();
 	}
 	$wd1 = getWikiPage($keyword, $version1, $db);
-	$diffarray1 = toDiffLineArray($wd1['body'], get_fullname($wd1['user_id']));
+	$diffarray1 = toDiffLineArray($wd1['body'], $wd1['user_id']);
 	$current_version = $version1 + 1;
 	$differ = new line_diff();
+	$fp=fopen("/tmp/combo.log","w");
 	while ($current_version <= $version2) {
 		$wd2 = getWikiPage($keyword, $current_version, $db);
-		$diffarray2 = toDiffLineArray($wd2['body'], get_fullname($wd2['user_id']));
-		$newarray = $differ->arr_compare("diff", $diffarray1, $diffarray2);
-		$diffarray1=array();
-		foreach ($newarray as $i) {
-			if ($i->status["diff"] != "-") {
-				$diffarray1[]=$i;
+		if ($wd2) {
+			$diffarray2 = toDiffLineArray($wd2['body'], $wd2['user_id']);
+			$newarray = $differ->arr_compare("diff", $diffarray1, $diffarray2);
+			$diffarray1=array();
+			foreach ($newarray as $i) {
+				if ($i->status["diff"] != "-") {
+					$diffarray1[]=$i;
+					fwrite($fp,"#".$current_version."#".get_fullname($i->who)."#".$i->text."\n");
+				}
 			}
 		}
 		$current_version++;
 	}
+	fclose($fp);
 	$content="<table>";
 	$count=0;
 	$authors=array();
@@ -1123,7 +1128,7 @@ function showComboDiff($keyword, $db=NULL) {
 			if ($count % 4 == 0) {
 				$content.= "<tr width=\"100%\">";
 			}
-			$content.= "<td bgcolor=".create_color($count)." width=14><img src=\"pictures/blank.gif\" width=12 height=12></td><td><font size=-1>$i->who</font></td><td><img src=\"pictures/blank.gif\" width=12 height=12></td>";
+			$content.= "<td bgcolor=".create_color($count)." width=14><img src=\"pictures/blank.gif\" width=12 height=12></td><td><font size=-1>".get_fullname($i->who)."</font></td><td><img src=\"pictures/blank.gif\" width=12 height=12></td>";
 			if ($count % 4 == 3) {
 				$content .= "</tr>";
 			}
@@ -1132,22 +1137,22 @@ function showComboDiff($keyword, $db=NULL) {
 	}
 	echo "<tr><td colspan=2>";
 	echo "<p><font size=-1>&nbsp;<br>";
-	echo _("Legende:");
+	echo _("Legende der AutorInnenfarben:");
 	echo "<table cellpadding=6 cellspacing=6>$content</table>\n";
 	echo "</p>";
 	echo "<table cellpadding=0 cellspacing=0 width=\"100%\">";
 	$last_author=None;
 	$collect="";
-	$diffarray[]=NULL;
+	$diffarray1[]=NULL;
 	foreach ($diffarray1 as $i) {
-		$idx=array_search($i->who, $authors);
-		$col=create_color($idx);
-		if ($last_author != $i->who) {
+		if (!$i || $last_author != $i->who) {
 			if (trim($collect)!="") {
+				$idx=array_search($last_author, $authors);
+				$col=create_color($idx);
 				echo "<tr bgcolor=$col>";
 				echo "<td width=30 align=center valign=top>";
 				echo "<img src=\"pictures/blank.gif\" height=3 width=3><br>";
-				echo "<img src=\"pictures/info.gif\" ". tooltip($i->who). ">";
+				echo "<img src=\"pictures/info.gif\" ". tooltip(get_fullname($last_author)). ">";
 				echo "</td>";
 				echo "<td><font size=-1>";
 				echo wikiReady($collect);
@@ -1168,20 +1173,19 @@ function showComboDiff($keyword, $db=NULL) {
 }
 
 function create_color($index) {
-	$shades=array("d","a","7","c","9","7","b","8","6");
-	switch ($index % 6) {
-		case 0:
-			return "#ffd0d0";
-		case 1:
-			return "#d0ffd0";
-		case 2: 
-			return "#d0d0ff";
-		case 3:
-			return "#ffffd0";
-		case 4:
-			return "#ffd0ff";
-		case 5:
-			return "#d0ffff";
+	$shades=array("9","b","7","d","8","a","6","c","e","5");
+	if ($index>70) {
+		$index=$index%70;
+	}
+	$shade=$shades[$index/7]."0";
+	switch ($index % 7) {
+		case 0: return "#".$shade.$shade.$shade;
+		case 1: return "#ff".$shade.$shade;
+		case 2: return "#".$shade."ff".$shade;
+		case 3: return "#".$shade.$shade."ff";
+		case 4: return "#ffff".$shade;
+		case 5: return "#ff".$shade."ff";
+		case 6: return "#".$shade."ffff";
 	} 
 }
 
@@ -1368,13 +1372,13 @@ class DiffLine
 {
 	var $text;
 	var $status;
-    var $who; // who originally wrote this line?
+	var $who; // who originally wrote this line?
 	
 	function DiffLine($text, $who=NULL)
 	{
 		$this->text = "$text\n";
 		$this->status = array();
-        $this->who = $who;
+		$this->who = $who;
 	}
 	function compare($obj)
 	{
