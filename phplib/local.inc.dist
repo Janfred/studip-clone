@@ -114,7 +114,9 @@ $FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favico
 ----------------------------------------------------------------
 to translate internal links (within Stud.IP) to the different
 domain names. To activate this feature uncomment these lines
-and add all used domain names. Below, two examples are given.*/
+and add all used domain names. Below, two examples are given.
+NOTE: This feature is experimental at the moment, please use it
+at your own risk*/
 
 //$STUDIP_DOMAINS[1] = "<your.server.name>"; 
 //$STUDIP_DOMAINS[2] = "<your.server.ip/studip>";
@@ -135,7 +137,7 @@ $MAIL_VALIDATE_HOST = TRUE;		//check for valid mail host when user enters email 
 $MAIL_VALIDATE_BOX = TRUE;		//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
 
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
-$MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if FALSE, the user has to switch it on; if "2", every message will be forwarded; if "3" every message will be forwarded on request of the sender
+$MESSAGING_FORWARD_DEFAULT = 1;		// the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
 
 
 /*advanced system settings
@@ -229,6 +231,14 @@ $_lit_search_plugins[] = array('name' => "Studip", 'link' => '');
 /* Bibliothek der Fachhochschule Schmalkalden */
 //$_lit_search_plugins[] = array('name' => 'FH_Schmalkalden', 'link' => 'http://ilmopc4.bibliothek.tu-ilmenau.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
+/* Universitäts- und Landesbibliothek Sachsen-Anhalt Halle */
+//$_lit_search_plugins[] = array('name' => "Ulb", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+
+/* FB Technik ULB Halle und FH Merseburg  */
+//$_lit_search_plugins[] = array('name' => "FBTechnik", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+
+/* Deutsche Akademie der Naturforscher Leopoldina */
+//$_lit_search_plugins[] = array('name' => "Leopoldina", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=4/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /*authentication plugins
 ----------------------------------------------------------------
