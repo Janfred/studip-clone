@@ -55,6 +55,28 @@ function write_toplist($rubrik,$query) {
 	}
 } 
 
+function write_toplist_person($rubrik,$query) {
+	global $PHP_SELF;
+	
+	$db=new DB_Seminar;
+	$db->query($query);
+	$tmp_link="$PHP_SELF?view=statistik";
+	if  ($db->affected_rows() > 0) {
+		echo "<tr><td class=links1>&nbsp; $rubrik</td></tr><tr><td class=steel1><ol type='1' start='1'>";
+		while ($db->next_record() ) {
+			echo"<font size=2><li><a href='about.php?username=".$db->f("username")."'>";
+			echo "".htmlReady(get_fullname($db->f("user_id")))."</a>";
+			if ($rubrik== _("zuletzt angelegt") AND $db->f("count") >0) {
+				$count =  date("d.m.Y H:i:s",$db->f("count"));
+			} else
+				$count = $db->f("count");
+			if ($count>0) echo "&nbsp; (".$count.")";
+			echo "</li></font>";
+		}
+		echo "</ol><br></td></tr>";
+	}
+} 
+
 //Create Reitersystem
 $reiter=new reiter;
 
@@ -179,6 +201,7 @@ if ($view=="statistik") {?>
 			write_toplist(_("die meisten Materialien (Dokumente)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM dokumente a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			$week = time()-1209600;
 			write_toplist(_("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM px_topics a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) AND a.mkdate > $week GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
+			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, count(range_id) as count FROM auth_user_md5 LEFT JOIN guestbook ON(auth_user_md5.user_id=range_id) WHERE NOT ISNULL(range_id) GROUP BY range_id ORDER BY count DESC LIMIT $count");
 			?>	
 			</table>
 		</blockquote>
