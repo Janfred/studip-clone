@@ -261,10 +261,8 @@ class AdminModules extends Modules {
 	function moduleScmActivate($range_id) {
 		global $user;
 
-		$db = new DB_Seminar;
-
 		//create a default folder
-		$db->query("INSERT INTO scm SET scm_id='".md5(uniqid("simplecontentmodule"))."', range_id='".$range_id."', user_id='".$user_id."', tab_name='"._("Info")."', content='', mkdate='".time()."', chdate='".time()."'");
+		$this->db->query("INSERT INTO scm SET scm_id='".md5(uniqid("simplecontentmodule"))."', range_id='".$range_id."', user_id='".$user->id."', tab_name='"._("Info")."', content='', mkdate='".time()."', chdate='".time()."'");
 	}
 
 	function moduleImpuls_ECDeactivate($range_id) {
