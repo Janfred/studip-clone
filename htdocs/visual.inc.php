@@ -297,25 +297,24 @@ function quotes_decode($description)
 
 ///////////
 
-function quotes_encode($description,$author)
-{
+function quotes_encode ($description,$author) {
 // Funktion um Quotings zu encoden
 // $description: der Text der gequotet werden soll, wird zurueckgegeben
 // $author: Name des urspruenglichen Autors
 
-	IF (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
+	if (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
 		$postmp = strpos($description,"%%[editiert von");
 		$description = substr_replace($description," ",$postmp);
 		}
-	WHILE (ereg("\[quote",$description) AND ereg("\[/quote\]",$description)){ // da wurde schon mal zitiert...
+	while (ereg("\[quote",$description) AND ereg("\[/quote\]",$description)){ // da wurde schon mal zitiert...
 		$pos1 =         strpos($description, "[quote");
 		$pos2 =         strpos($description, "[/quote]");
-		IF ($pos1 < $pos2)
+		if ($pos1 < $pos2)
 			$description = substr($description,0,$pos1)."[...]".substr($description,$pos2+8);
-		ELSE break; // hier hat einer von Hand rumgepfuscht...
+		else break; // hier hat einer von Hand rumgepfuscht...
 		}
 	$description = "[quote=".$author."]\n".$description."\n[/quote]";
-	RETURN $description;
+	return $description;
 }
 
 
@@ -328,7 +327,7 @@ function quotes_encode($description,$author)
 * @param        string $trim		should the output trimmed?
 * @return       string
 */
-function formatReady($what, $trim = TRUE){
+function formatReady ($what, $trim = TRUE) {
 	return symbol(smile(FixLinks(format(latex(htmlReady($what, $trim, FALSE))), FALSE)));
 }
 
@@ -342,7 +341,7 @@ function formatReady($what, $trim = TRUE){
 * @param        string $trim		should the output trimmed?
 * @return       string
 */
-function wikiReady($what, $trim = TRUE){
+function wikiReady ($what, $trim = TRUE) {
 	return symbol(smile(FixLinks(wiki_format(format(latex(htmlReady($what, $trim, FALSE))), FALSE))));
 }
 
@@ -354,13 +353,13 @@ function wikiReady($what, $trim = TRUE){
 * @access       public        
 * @param        string $text		what to format
 */
-function wiki_format($text) {
+function wiki_format ($text) {
 	return $text;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function latex($text) {
+function latex ($text) {
 	global $ABSOLUTE_PATH_STUDIP,$CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH;
 	
@@ -398,7 +397,7 @@ function latex($text) {
 * @param	string
 * @return	string
 */
-function decodeHTML($string) {
+function decodeHTML ($string) {
 	$string = strtr($string, array_flip(get_html_translation_table(HTML_ENTITIES,ENT_QUOTES)));
 	$string = preg_replace("/&#([0-9]+);/me", "chr('\\1')", $string);
 	return $string;
@@ -414,22 +413,9 @@ function decodeHTML($string) {
 function format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	
-	$pattern = array("'(^|\n)\!([^!].*)$'m",     // Ueberschrift 4. Ordnung
-					"'(^|\n)\!{2}([^!].*)$'m",           // Ueberschrift 3. Ordnung
-					"'(^|\n)\!{3}([^!].*)$'m",           // Ueberschrift 2. Ordnung
-					"'(^|\n)\!{4}([^!].*)$'m",           // Ueberschrift 1. Ordnung
-					"'^--+(\d?)$'m"           // Trennlinie
-					);
-	$replace = array("<h4>\\2 </h4>",
-					"<h3> \\2 </h3>",
-					"<h2> \\2 </h2>",
-					"<h1> \\2 </h1>",
-					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />"
-					);
-	$text = preg_replace($pattern, $replace, $text);
-	$text = preg_replace("'(\</h.\>)\n'", "\\1", $text);
-	
-	$pattern = array("'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
+	$pattern = array(
+					"'^--+(\d?)$'m",               // Trennlinie
+					"'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
 					"'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
 					"'(^|\s)_(?!_)(\S+_)+(?=(\s|$))'e",     // SL-unterstrichen
@@ -438,7 +424,11 @@ function format ($text) {
 					"'(^|\s)-(?!-)(\S+-)+(?=(\s|$))'e",     // SL-kleiner
 					"'(^|\s)&gt;(?!&gt;)(\S+&gt;)+(?=(\s|$))'ie",  // SL-hochgestellt
 					"'(^|\s)&lt;(?!&lt;)(\S+&lt;)+(?=(\s|$))'ie",  // SL-tiefgestellt
-					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e",     // Listen
+					"'(^|\n)\!([^!].*)'m",              // Ueberschrift 4. Ordnung
+					"'(^|\n)\!{2}([^!].*)'m",           // Ueberschrift 3. Ordnung
+					"'(^|\n)\!{3}([^!].*)'m",           // Ueberschrift 2. Ordnung
+					"'(^|\n)\!{4}([^!].*)'m",           // Ueberschrift 1. Ordnung
+					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e",    // Listen
 					"'%%(\S|\S.*?\S)%%'s",               // ML-kursiv
 					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
 					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
@@ -447,9 +437,12 @@ function format ($text) {
 					"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
-					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se"   // Absatz eingerueckt
+					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
+					"'\n(<h[1-4r])'"                        // removes newline delimiters
 					);
-	$replace = array("<pre>\\1</pre>",
+	$replace = array(
+					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
+					"<pre>\\1</pre>",
 					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
 					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
 					"'\\1<u>'.substr(str_replace('_', ' ', '\\2'), 0, -1).'</u>'",
@@ -458,6 +451,10 @@ function format ($text) {
 					"'\\1<small>'.substr(str_replace('-', ' ', '\\2'), 0, -1).'</small>'",
 					"'\\1<sup>'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1).'</sup>'",
 					"'\\1<sub>'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1).'</sub>'",
+					"\n<h4>\\2</h4>",
+					"\n<h3>\\2</h3>",
+					"\n<h2>\\2</h2>",
+					"\n<h1>\\2</h1>",
 					"preg_call_format_list('\\2')",
 					"<i>\\1</i>",
 					"<b>\\1</b>",
@@ -467,7 +464,8 @@ function format ($text) {
 					"'<small>'.format('\\1').'</small>'",
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
-					"'<blockquote>'.format('\\1').'</blockquote>'"
+					"'<blockquote>'.format('\\1').'</blockquote>'",
+					"\\1"
 					);
 	$text = preg_replace($pattern, $replace, $text);
 	
@@ -486,7 +484,7 @@ function preg_call_format_list ($content) {
 	$lines = explode("\n", $content);
 	$level = 0;
 	$current_level = 0;
-	for ($i = 0; $i <= sizeof($lines); $i++) {
+	for ($i = 0; $i < sizeof($lines); $i++) {
 		$line = $lines[$i];
 		if (preg_match("'^([-=]+) (.*)$'", $line, $matches)) {
 			
@@ -495,15 +493,13 @@ function preg_call_format_list ($content) {
 				$level++;
 			else if ($matched_level < $current_level)
 				$level = $matched_level;
+				
+			if ($matches[1]{0} == "-")
+				$list_tags[] = "ul";
+			else
+				$list_tags[] = "ol";
 			
-			if ($level > $current_level) {
-				if ($matches[1]{0} == "-")
-					$list_tags[] = "ul";
-				else
-					$list_tags[] = "ol";
-			}
-			
-			$items[$i]["level"] = $level - 1;
+			$items[$i]["level"] = $level;
 			$items[$i]["content"] = $matches[2];
 			
 			$current_level = $level;
@@ -513,25 +509,29 @@ function preg_call_format_list ($content) {
 	for ($i = 0;$i < sizeof($items); $i++) {
 		$level_diff = $items[$i]["level"] - $items[$i + 1]["level"];
 		
-		if ($i == 0)
-			$ret .= "<{$list_tags[$items[$i]['level']]}>";
+		if ($i == 0) {
+			$ret .= "<{$list_tags[$i]}>";
+			$stack[] = $list_tags[$i];
+		}
 			
 		if ($level_diff > 0) {
-			$ret .= "<li>{$items[$i]['content']}</li></{$list_tags[$items[$i]['level']]}>";
+			$ret .= "<li>{$items[$i]['content']}</li></" . array_pop($stack) . ">";
 			for ($j = $items[$i]["level"] - 1; $j > $items[$i + 1]["level"]; $j--)
-					$ret .= "</li></" . $list_tags[$j] . ">";
+				$ret .= "</li></" . array_pop($stack) . ">";
 		}
-		else if ($level_diff < 0)
-			$ret .= "<li>{$items[$i]['content']}<" . $list_tags[$items[$i]['level'] + 1] . ">";
+		else if ($level_diff < 0) {
+			$ret .= "<li>{$items[$i]['content']}<" . $list_tags[$i + 1] . ">";
+			$stack[] = $list_tags[$i + 1];
+		}
 		else if ($level_diff == 0)
 			$ret .= "<li>{$items[$i]['content']}";
 		
 		if ($level_diff >= 0)
 			$ret .= "</li>";
-	
+		$level = $items[$i]["level"];
 	}
-		
-	$ret .= "</{$list_tags[0]}>";	
+	
+	$ret .= "</" . $list_tags[0] . ">";
 	
 	return $ret;
 }
@@ -543,7 +543,7 @@ function preg_call_format_list ($content) {
 * @param	string	string containing a table in quick-format-syntax
 * @return	string
 */
-function preg_call_table_format($content){
+function preg_call_table_format ($content) {
 	return preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se", "'<tr><td>'.preg_
 replace('/\|/','</td><td>','\\1').'</td></tr>'", $tbr);
 }
@@ -610,7 +610,7 @@ function kill_format ($text) {
 * @param	boolean	TRUE if newlines have to be converted into <br>
 * @return	string
 */
-function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
+function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	if (empty($data)) {
 		return $data;
 	}
@@ -643,7 +643,7 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 * @param	string "LINK" if it is a normal url, "MAIL" if it is an email-address
 * @return	string
 */
-function preg_call_link($name, $link, $mod) {
+function preg_call_link ($name, $link, $mod) {
 	if ($mod == "LINK") {
 		if ($name == "")
 			$name = $link;
@@ -965,7 +965,7 @@ function print_infobox ($content, $picture="") {
 * @param        boolean $with_popup        return text with JS alert box on click
 * @return        string
 */
-function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
+function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 	$ret = "";
 	if ($with_popup)
 		$ret = " onClick=\"alert('".JSReady($text,"alert")."');\"";
