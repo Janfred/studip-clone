@@ -47,6 +47,7 @@ function generate_password($length) {
 	require_once("datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
 	require_once("visual.inc.php");
 	require_once("admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
+	require_once("statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 	$cssSw=new cssClassSwitcher;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
@@ -483,6 +484,10 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
 				$msg .= "info§$db_ar Eintr&auml;ge aus Mitarbeirerlisten gel&ouml;scht.§";
+			}
+			// user aus den Statusgruppen rauswerfen
+			if ($db_ar = RemovePersonFromAllStatusgruppen(get_username($u_id))  > 0) {
+				$msg .= "info§$db_ar Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht.§";
 			}
 			## user aus den Fakultaeten rauswerfen
 			$query = "delete from fakultaet_user where user_id='$u_id'";

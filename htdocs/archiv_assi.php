@@ -30,6 +30,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen 
 require_once("$ABSOLUTE_PATH_STUDIP/archiv.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 
 ## Get a database connection
 $db = new DB_Seminar;
@@ -142,8 +143,15 @@ if ($archive_kill) {
     if (($db_ar = $db->affected_rows()) > 0) {
       $liste .= "<li>$db_ar Zuordnungen zu Einrichtungen archiviert.</li>";
     }
-		## Alle Eintraege in der seminar_bereich rauswerfen
-	  $query = "DELETE FROM seminar_bereich where Seminar_id='$s_id'";
+    
+    // user aus den Statusgruppen rauswerfen
+    $count = DeleteAllStatusgruppen($s_id);
+    if ($count  > 0) {
+	$liste .= "<li>Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht.</li>";
+    }
+    
+    ## Alle Eintraege in der seminar_bereich rauswerfen
+    $query = "DELETE FROM seminar_bereich where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
       $liste .= "<li>$db_ar Zuordnungen zu Bereichen archiviert.</li>";

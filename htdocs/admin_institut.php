@@ -36,6 +36,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 	
 
 ###
@@ -158,18 +159,23 @@ while ( is_array($HTTP_POST_VARS)
       break;
     }
     
+    // Statusgruppen entfernen
+    if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
+				$msg .= "info§$db_ar Funktionen / Gruppen gel&ouml;scht.§";
+			}
+    
     ## delete folders and discussions
     $query = "DELETE from px_topics where Seminar_id='$i_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      $msg="msg$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.";
+      $msg.="msg$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.";
     }
     $db_ar = recursiv_folder_delete($i_id);
     if ($db_ar > 0)
-     $msg="msg§$db_ar Dokumente gel&ouml;scht.";
+     $msg.="msg§$db_ar Dokumente gel&ouml;scht.";
 
 
-    $msg="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!";
+    $msg.="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!";
   	unset($i_view);
 	//We deleted that intitute, so we have to unset the selection an switch to list
 	unset ($links_admin_data["inst_id"]);
