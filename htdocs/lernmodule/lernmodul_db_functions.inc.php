@@ -22,7 +22,7 @@ function get_module_author($co_inst, $co_id)
 {
 	$module_author = false;
 	$ilias_db = New DB_Ilias;
-	$ilias_db -> query("SELECT DISTINCT benutzer.benutzername, benutzer.vorname, benutzer.nachname ".
+	$ilias_db -> query("SELECT DISTINCT benutzer.benutzername, benutzer.vorname, benutzer.nachname, benutzer.atitel ".
 			" FROM meta_author, benutzer".
 			" WHERE meta_author.typ = 'le' ".
 			" AND meta_author.id = '$co_id' ".
@@ -31,7 +31,7 @@ function get_module_author($co_inst, $co_id)
 	$mcount = 0;
 	while ($ilias_db->next_record())
 	{
-		$module_author[$mcount]["fullname"] .= $ilias_db -> f("vorname") . " " . $ilias_db -> f("nachname");
+		$module_author[$mcount]["fullname"] .= $ilias_db -> f("atitel") . " " . $ilias_db -> f("vorname") . " " . $ilias_db -> f("nachname");
 		$module_author[$mcount]["username"] .= $ilias_db -> f("benutzername");
 		$mcount++;
 	}
