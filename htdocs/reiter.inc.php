@@ -19,6 +19,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
 class reiter {
 	var $classActive = "links1b";					//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
 	var $classInactive="links1";					//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
@@ -36,14 +38,11 @@ class reiter {
 		return;
 	}
 	
-	function info($alt,$js,$closeToActive=FALSE) {
-		global $auth;
-		
+	function info($tooltip,$addText,$closeToActive=FALSE) {
 		printf ("<td class=\"%s\" nowrap>&nbsp; <img align=\"absmiddle\" src=\"%s\" ", $this->classActive, $this->infoPic);
-		 //JavaScript Infofenster aufbauen
-		if ($auth->auth["jscript"])
-			printf ("onClick=\"alert('%s');\"\n",$js);
-		printf ("alt=\"%s\" border=\"0\">&nbsp;", $alt);
+		printf ("%s border=\"0\">&nbsp;", tooltip($tooltip, TRUE, TRUE));
+		if ($addText)
+			printf ("%s", $addText);
 		if ($closeToActive)
 			printf ("&nbsp; <img src=\"%s\" align=absmiddle>", $this->toActiveTopkatPic);
 		else
@@ -113,7 +112,7 @@ class reiter {
 		return $structure;
 	}
 
-	function printStructure ($structure, $alt, $js) {
+	function printStructure ($structure, $tooltip, $addText) {
 		reset($structure);
 		foreach ($structure as $key=>$val) {
 			if (!$val["topKat"]) {
@@ -126,8 +125,8 @@ class reiter {
 		reset($structure);
 		$this->topkatStart();
 		$a=current($structure);
-		if ($alt)
-			$this->info($alt, $js, $a["active"]);
+		if ($tooltip)
+			$this->info($tooltip, $addText, $a["active"]);
 		for ($i=0; $i<$topKats; $i++) {
 			if ($i+1==$topKats)
 				$close=TRUE;
@@ -145,9 +144,9 @@ class reiter {
 		$this->bottomkatCloseRow();
 	}
 	
-	function create($structure, $view, $alt='', $js='') {
+	function create($structure, $view, $tooltip='', $addText='') {
 		$structure=$this->activateStructure ($structure, $view);
-		$this->printStructure($structure, $alt, $js);
+		$this->printStructure($structure, $tooltip, $addText);
 	}
 }
 ?>
