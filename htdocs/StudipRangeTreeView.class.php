@@ -121,15 +121,21 @@ class StudipRangeTreeView {
 		}
 		
 		if ($_REQUEST['open_range']){
-			if (!$this->open_ranges[$_REQUEST['open_range']]){
-				$this->open_ranges[$_REQUEST['open_range']] = true;
+			$kidskids = $this->tree->getKidsKids($_REQUEST['open_range']);
+			$kidskids[] = $_REQUEST['open_range'];
+			for ($i = 0; $i < count($kidskids); ++$i){
+				if (!$this->open_ranges[$kidskids[$i]]){
+					$this->open_ranges[$kidskids[$i]] = true;
+				}
 			}
 		$this->anchor = $_REQUEST['open_range'];
 		}
+		
 		if ($_REQUEST['close_item'] || $_REQUEST['open_item']){
 			$toggle_item = ($_REQUEST['close_item']) ? $_REQUEST['close_item'] : $_REQUEST['open_item'];
 			if (!$this->open_items[$toggle_item]){
 				$this->open_items[$toggle_item] = true;
+				$this->open_ranges[$toggle_item] = true;
 			} else {
 				unset($this->open_items[$toggle_item]);
 			}
@@ -212,24 +218,15 @@ class StudipRangeTreeView {
 	* @param	string	$item_id
 	*/
 	function printItemOutput($item_id){
-		global $PHP_SELF;
-		echo "\n<td  class=\"printhead\" nowrap width=\"20\" align=\"left\" valign=\"bottom\">";
-		if ($this->tree->hasKids($item_id)){
-			echo "<a href=\"";
-			echo ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}"); 
-			echo "\"><img border=\"0\" src=\"pictures/";
-			echo ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
-			echo "\" " . tooltip(count($this->tree->getKids($item_id)) . " " . _("Unterelement(e)")) . " ></a>";
-		} else { 
-			echo "<img src=\"pictures/forumleer.gif\"  border=\"0\">";
-		}
+		echo "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
+		echo $this->getItemHeadPics($item_id);
 		echo "\n</td><td class=\"printhead\" nowrap width=\"1\" valign=\"middle\">";
 		if ($this->anchor == $item_id)
 			echo "<a name=\"anchor\">";
 		echo "<img src=\"pictures/forumleer.gif\"  border=\"0\" height=\"20\" width=\"1\">";
 		if ($this->anchor == $item_id)
 			echo "</a>";
-		echo "\n</td><td class=\"printhead\" align=\"left\" width=\"100%\" nowrap valign=\"bottom\">";
+		echo "\n</td><td class=\"printhead\" align=\"left\" width=\"99%\" nowrap valign=\"bottom\">";
 		echo $this->getItemHead($item_id);
 		echo "</td></tr></table>";
 		if ($this->open_items[$item_id])
@@ -272,16 +269,39 @@ class StudipRangeTreeView {
 		return;
 	}
 	
+	function getItemHeadPics($item_id){
+		$head = "";
+		$head .= "<a href=\"";
+		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
+											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
+		$head .= "<img src=\"pictures/";
+		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
+		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"2\">";
+		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures\forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
+		$head .= "</a>";
+		if ($this->tree->hasKids($item_id)){
+			$head .= "<a href=\"";
+			$head .= ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}"); 
+			$head .= "\"><img border=\"0\"  src=\"pictures/";
+			$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
+			$head .= "\" ";
+			$head .= (!$this->open_ranges[$item_id])? tooltip(count($this->tree->getKidsKids($item_id)) . " " . _("Unterelement(e) öffnen")) : tooltip(_("Alle Unterelemente schliessen"));
+			$head .= "></a>";
+		} else { 
+			$head .= "<img src=\"pictures/";
+			$head .= ($this->open_items[$item_id]) ? "cont_folder4.gif" : "cont_folder2.gif";
+			$head .= "\" " . tooltip(_("Dieses Element hat keine Unterelemente")) . "border=\"0\">";
+		}
+	return $head;
+	}
+	
 	function getItemHead($item_id){
 		$head = "";
 		$head .= "<a class=\"tree\" href=\"";
 		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . "><b>"
 											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= "<img src=\"pictures/";
-		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
-		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"1\">";
 		$head .= htmlReady($this->tree->tree_data[$item_id]['name']);
-		$head .= ($this->open_items[$item_id]) ? "</b></a>" : "<a/>";
+		$head .= ($this->open_items[$item_id]) ? "</b></a>" : "</a>";
 		return $head;
 	}
 	
