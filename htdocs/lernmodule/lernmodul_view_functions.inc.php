@@ -256,7 +256,7 @@ function show_seminar_modules_links($seminar_id)
 			{
 				$printlink = $out_str[$i]["link"];
 				$printimage = $out_str[$i]["image"];
-				$printcontent = $out_str[$i]["content"] . $out_str[$i]["button"] . "<br>";
+				$printcontent = $out_str[$i]["content"] . $out_str[$i]["button"];
 				$printdesc = $out_str[$i]["desc"];
 				
 				?>

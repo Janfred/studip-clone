@@ -37,18 +37,19 @@ function link_seminar_modules($seminar_id)
 				$link_str[$i]["content"] .= _("Es gibt eine Testfrage zu der Lerneinheit.");
 			elseif ($mod_info["questions"] > 1) 
 				$link_str[$i]["content"] .= sprintf(_("Es gibt %s Testfragen zu der Lerneinheit."), $mod_info["questions"]);
+			$link_str[$i]["content"] .= "<br>";
 			$link_str[$i]["key"] .= $mod_array[$i]["id"] . "@" . $mod_array[$i]["inst"];
 			$mod_author = get_module_author($mod_array[$i]["inst"], $mod_array[$i]["id"]);
 			for ($i2=0; $i2<sizeof($mod_author); $i2 ++)
 			{
-				$mod_author[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["id"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
-				if ($auth->auth["uid"] == get_studip_user($mod_author[$i2]["id"]))
+				if ($auth->auth["uname"] == get_studip_user($mod_author[$i2]["id"]))
 				{
-					$link_str[$i]["button"] .= "<br><a href=\"" . link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]) . "\" target=\"_blank\">".
-					makeButton("bearbeiten", "img")."</a>";
+					$link_str[$i]["button"] .= "<br><center><a href=\"" . link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]) . "\" target=\"_blank\">".
+					makeButton("bearbeiten", "img")."</center></a>";
 				}
+				$mod_desc[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["id"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
 			}
-			$link_str[$i]["desc"] .= implode($mod_author, ", ");
+			$link_str[$i]["desc"] .= implode($mod_desc, ", ");
 		}
 		return $link_str;
 	}
