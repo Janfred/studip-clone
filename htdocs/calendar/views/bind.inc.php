@@ -1,25 +1,65 @@
 <?
+/**
+* bind.inc.php
+* 
+* 
+*
+* @author		Peter Thienel <pthienel@web.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	calendar
+* @module		calendar
+* @package	calendar
+*/
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// bind.inc.php
+//
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"90%\">\n";
 echo "<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"1\" class=\"blank\">\n";
 
 if (!empty($calendar_sess_control_data["view_prv"]))
-	printf("<form action=\"%s?cmd=%s\" method=\"post\">", $PHP_SELF, $calendar_sess_control_data["view_prv"]);
+	echo "<form action=\"$PHP_SELF?cmd={$calendar_sess_control_data['view_prv']}\" method=\"post\">";
 else
 	echo "<form action=\"$PHP_SELF?cmd=showweek\" method=\"post\">";
 echo "\n<tr>\n";
 echo "<th width=\"1%\" nowrap colspan=\"2\" align=\"center\">";
 echo "&nbsp;<a href=\"gruppe.php\">";
-echo "<img src=\"pictures/gruppe.gif\" alt=\"Gruppe &auml;ndern\" title=\"Gruppe &auml;ndern\" border=\"0\">";
+$tooltip = tooltip(_("Gruppe &auml;ndern"));
+echo "<img src=\"pictures/gruppe.gif\"{$tooltip}border=\"0\">";
 echo "</a></th>\n";
 echo "<th width=\"64%\" align=\"left\">";
-printf("<a href=\"%s?cmd=bind&sortby=Name&order=%s\">%s</a></th>\n",
-	$PHP_SELF, $order, "Name");
-printf("<th width=\"7%%\"><a href=\"%s?cmd=bind&sortby=count&order=%s\">%s</a></th>\n",
-	$PHP_SELF, $order, "Termine");
-printf("<th width=\"13%%\"><b>%s</b></th>\n", "besucht");
-printf("<th width=\"13%%\"><a href=\"%s?cmd=bind&sortby=status&order=%s\">%s</a></th>\n",
-	$PHP_SELF,$order, "Status");
+echo "<a href=\"$PHP_SELF?cmd=bind&sortby=Name&order=$order\">" . _("Name") . "</a></th>\n";
+echo "<th width=\"7%\"><a href=\"$PHP_SELF?cmd=bind&sortby=count&order=$order\">";
+echo _("Termine") . "</a></th>\n";
+echo "<th width=\"13%\"><b>" . _("besucht") . "</b></th>\n";
+echo "<th width=\"13%\"><a href=\"$PHP_SELF?cmd=bind&sortby=status&order=$order\">";
+echo _("Status") . "</a></th>\n";
 echo "<th width=\"2%\">&nbsp;</th>\n</tr>\n";
 
 $css_switcher = new cssClassSwitcher();
@@ -35,7 +75,7 @@ while($db->next_record()){
 	echo "<td$style><font size=\"-1\">";
 	echo "<a href=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
 	echo "seminar_main.php?auswahl=" . $db->f("Seminar_id") . "\">";
-	echo format(htmlReady(mila($db->f("Name"))));
+	echo htmlReady(mila($db->f("Name")));
 	echo "</a></font></td>\n";
 	echo "<td$style align=\"center\"><font size=\"-1\">";
 	echo $db->f("count");
@@ -46,7 +86,7 @@ while($db->next_record()){
 	}
 	else{
 		echo "<td$style align=\"center\"><font size=\"-1\">";
-		echo date("d.m.Y", $loginfilenow[$db->f("Seminar_id")]);
+		echo strftime("%x", $loginfilenow[$db->f("Seminar_id")]);
 		echo "</font></td>";
 	}
 	echo "<td$style align=\"center\"><font size=\"-1\">";
@@ -64,7 +104,8 @@ while($db->next_record()){
 
 echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
 echo "<tr><td class=\"blank\" colspan=\"6\" align=\"center\">";
-echo "&nbsp;<input type=\"image\" src=\"./pictures/buttons/auswaehlen-button.gif\" border=\"0\"></td></tr>\n";
+echo "&nbsp;<input type=\"image\" " . makeButton("auswaehlen", "src") . " border=\"0\"></td></tr>\n";
+
 // Dummy-Wert damit $sem auch ohne ausgewaehlte Seminare ausgewertet wird
 echo "\n<input type=\"hidden\" name=\"sem[1]\" value=\"FALSE\">\n";
 echo "<input type=\"hidden\" name=\"atime\" value=\"$atime\">";
