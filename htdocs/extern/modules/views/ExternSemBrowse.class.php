@@ -313,7 +313,7 @@ class ExternSemBrowse extends SemBrowse {
 						echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
 						echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font1") . ">";
 						$sem_link["module"] = "Lecturedetails";
-						$sem_link["link_args"] = "&seminar_id=$seminar_id";
+						$sem_link["link_args"] = "seminar_id=$seminar_id";
 						$sem_link["content"] = htmlReady($sem_name);
 						$this->module->elements["SemLink"]->printout($sem_link);
 						echo "</font></td></tr>\n";
