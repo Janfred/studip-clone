@@ -139,7 +139,7 @@ class cssClassSwitcher {
 							return false;
 						}
 						if (theRow.tagName.toLowerCase() != 'tr'){
-							if ((theRow.style.backgroundColor.toLowerCase() == theFromColor.toLowerCase()) || (theRow.style.backgroundColor == hexToRgb(theFromColor))) {
+							if ((theRow.style.backgroundColor.toLowerCase() == theFromColor.toLowerCase()) || (rgbToHex(theRow.style.backgroundColor) == theFromColor.toLowerCase())) {
 								theRow.style.backgroundColor = theToColor;
 							}
 						} else {
