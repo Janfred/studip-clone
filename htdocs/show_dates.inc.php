@@ -227,7 +227,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			$zusatz .= "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $db->f("date");
 			$zusatz .= "\"><img src=\"pictures/antwortnew.gif\" ";
 			$zusatz .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("d.m.Y", $db->f("date"))));
-			$zusatz .= " border=\"0\" align=\"absmiddle\"></a>";
+			$zusatz .= " border=\"0\"></a>";
 
 			
 			if ($open != $db->f("termin_id"))
