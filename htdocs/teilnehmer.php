@@ -71,7 +71,6 @@ $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 
 echo "<table cellspacing=\"0\" border=\"0\" width=\"100%\">";
-echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>";
 
 // Hier will jemand die Karriereleiter rauf...
 

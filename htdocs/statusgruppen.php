@@ -96,10 +96,6 @@ function PrintAktualStatusgruppen ()
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="blank">&nbsp; 
-		</td>
-	</tr>
-	<tr>
 		<td class="topic"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - Statusgruppen</b>
 		</td>
 	</tr>
