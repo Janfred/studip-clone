@@ -42,18 +42,18 @@ function groupmail($range_id)
 	$type = get_object_type($range_id);
 	if ($type == "group") {
 		$db=new DB_Seminar;
-		$db->query ("SELECT Email FROM auth_user_md5 LEFT JOIN statusgruppe_user USING(user_id) WHERE statusgruppe_id = '$range_id'");
+		$db->query ("SELECT Email FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$range_id'");
 		while ($db->next_record()) {
-			$mailpersons .= ";".$db->f("Email");
+			$mailpersons .= ",".$db->f("Email");
 		}
 		$mailpersons = substr($mailpersons,1);
 		return $mailpersons;
 	}
 	if ($type == "sem") {
 		$db=new DB_Seminar;
-		$db->query ("SELECT Email FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id) WHERE Seminar_id = '$range_id'");
+		$db->query ("SELECT Email FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$range_id'");
 		while ($db->next_record()) {
-			$mailpersons .= ";".$db->f("Email");
+			$mailpersons .= ",".$db->f("Email");
 		}
 		$mailpersons = substr($mailpersons,1);
 		return $mailpersons;
@@ -76,7 +76,7 @@ function PrintAktualStatusgruppen ()
 			        <tr> ";
 		printf ("	        <td width=\"95%%\" class=\"topic\"><font size=\"-1\"><b>%s</b></font></td>",htmlReady($db->f("name")));
 		printf ("	   	<td width=\"5%%\"class=\"topic\" align=\"center\">");
-		printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails,htmlReady($SessSemName[0])); 
+		printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
 		printf ("	        </td>");
 		echo 	"</tr>";
 
@@ -105,7 +105,7 @@ function PrintNonMembers ($range_id)
 {	
 	$bereitszugeordnet = GetAllSelected($range_id);
 	$db=new DB_Seminar;
-	$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
+	$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	$db->query ($query);
 	if ($db->num_rows() >sizeof($bereitszugeordnet)-1) { // there are non-grouped members
 		echo "<table width=\"99%\" cellpadding=\"1\" cellspacing=\"0\" align=\"center\" border=\"0\">
@@ -185,7 +185,7 @@ function PrintNonMembers ($range_id)
 		)
 	);
 
-	$link = "<a href=\"mailto:".groupmail($SessSemName[1])."\">";
+	$link = "<a href=\"mailto:".groupmail($SessSemName[1])."?subject=".rawurlencode($SessSemName[0])."\">";
 	$infobox[1]["kategorie"] = "Aktionen:";
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
 									"text"  => "Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie das normale Briefsymbol."
