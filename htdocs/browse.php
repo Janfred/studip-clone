@@ -199,6 +199,8 @@ endif;
 ## nachsehen, ob wir ein Sortierkriterium haben, sonst nach username
 if (!isset($browse_data["sortby"]) || $browse_data["sortby"]=="") $browse_data["sortby"] = "Nachname";
 
+unset($query);
+
 // global
 if ($browse_data["group"]=="All" && $perm->have_perm("admin")){  // nur global admin darf alle Benutzer sehen
  	$query = "SELECT * FROM auth_user_md5 ORDER BY ".$browse_data["sortby"];
