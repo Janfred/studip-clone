@@ -39,6 +39,9 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
+if ($RESOURCES_ENABLE) {
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+}
 	
 
 ###
@@ -76,7 +79,8 @@ while ( is_array($HTTP_POST_VARS)
   case "create_x":
     ## Do we have all necessary data?
     if (empty($Name)) {
-      $msg="error§<b>Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!</b>";
+      $msg="error§<b>Bitte geben sie eine Bezeichnung f&uuml;r die Einrichtung ein!</b>";
+      $i_view="new";
       break;
     }
     
@@ -189,10 +193,15 @@ while ( is_array($HTTP_POST_VARS)
 	if (($db_ar = $db->affected_rows()) > 0) {
 		$msg.="msg§$db_ar Bereiche im Bereichsbaum angepasst§";
 	}
-    // Statusgruppen entfernen
-    if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
-				$msg .= "msg§$db_ar Funktionen / Gruppen gel&ouml;scht.§";
-			}
+	// Statusgruppen entfernen
+	 if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
+		$msg .= "msg§$db_ar Funktionen / Gruppen gel&ouml;scht.§";
+	}
+	//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
+	if ($RESOURCES_ENABLE) {
+		$killAssign = new ResourcesAssign($u_id);
+		$killAssign->delete();
+	}
     
     ## delete folders and discussions
     $query = "DELETE from px_topics where Seminar_id='$i_id'";
@@ -269,7 +278,7 @@ if (isset($msg)) {
 if ($i_view=="delete") {
 	echo "<tr><td class=\"blank\" colspan=\"2\"><table width=\"70%\" align=\"center\" class=\"steelgraulight\" >";
 	echo "<tr><td><br>Die ausgewählte Einrichtung wurde gel&ouml;scht.<br> Bitte wählen Sie über das Schlüsselsymbol ";
-	echo "<a href=\"adminarea_start.php?list=TRUE\"><img " . tooltip("Neue Auswahl") . " align=\"absmiddle\" src=\"pictures/admin.gif\" border=\"0\"></a>";
+	echo "<a href=\"admin_institut.php?list=TRUE\"><img " . tooltip("Neue Auswahl") . " align=\"absmiddle\" src=\"pictures/admin.gif\" border=\"0\"></a>";
 	echo " eine andere Einrichtung aus.<br><br></td></tr></table><br><br></td></tr></table></html>";
 	page_close();
 	die;
@@ -329,15 +338,15 @@ if ($i_view)
 	<? 
 	if ($i_view<>"new")
 		{
+		?>
+		<input type="hidden" name="i_id"   value="<?php $db->p("Institut_id") ?>">
+		<input type="IMAGE" name="i_edit" src="./pictures/buttons/uebernehmen-button.gif" border=0 value=" Ver&auml;ndern ">
+		<?
 		if ($db->f("number") < 1):
 			?>
-			<input type="IMAGE" name="i_kill" src="./pictures/buttons/loeschen-button.gif" border=0 value=" L&ouml;schen ">
+			&nbsp;<input type="IMAGE" name="i_kill" src="./pictures/buttons/loeschen-button.gif" border=0 value=" L&ouml;schen ">
 			<?
 		endif;
-		?>
-		<input type="IMAGE" name="i_edit" src="./pictures/buttons/uebernehmen-button.gif" border=0 value=" Ver&auml;ndern ">
-		<input type="hidden" name="i_id"   value="<?php $db->p("Institut_id") ?>">
-		<?
 		}
 	else
 		{
