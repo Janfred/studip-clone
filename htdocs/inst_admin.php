@@ -115,16 +115,12 @@ if (isset($details)) {
 				<td class="<? echo $cssSw->getClass() ?>" >
 			<?	
 			$user_id = $db->f("user_id")	;
-			$query = "SELECT * FROM statusgruppe_user LEFT JOIN statusgruppen USING (statusgruppe_id) WHERE range_id ='$inst' AND user_id ='$user_id'";
-			$db2 ->query($query);	
-			$tmptxt = "";
-			while ($db2->next_record()) {
-				 $tmptxt .= $db2->f("name").", ";
-			}
-			echo htmlReady(substr($tmptxt,0,-2));
 			
+			if ($gruppen = GetStatusgruppen($inst, $user_id)){
+					echo htmlReady(join(", ", array_values($gruppen)));
+				} else 
+					echo "&nbsp;";
 			?>	
-			&nbsp; 
 			</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
@@ -393,8 +389,6 @@ if ($inst_id != "" && $inst_id !="0") {
 
 	  	while ($db->next_record()) {
 	  			$user_id = $db->f("user_id");
-	  			$query = "SELECT * FROM statusgruppe_user LEFT JOIN statusgruppen USING (statusgruppe_id) WHERE range_id ='$inst_id' AND user_id ='$user_id'";
-				$db2 ->query($query);
 	  			$cssSw->switchClass();
 				ECHO "<tr valign=middle align=left>";
 				
@@ -406,15 +400,13 @@ if ($inst_id != "" && $inst_id !="0") {
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo $db->f("inst_perms"); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>"  align="left"><?
 				
-				$tmptxt = "";
-				while ($db2->next_record()) {
-					 $tmptxt .= $db2->f("name").", ";
-				}
-				echo htmlReady(substr($tmptxt,0,-2));
-				
+				if ($gruppen = GetStatusgruppen($inst_id, $db->f("user_id"))){
+					echo htmlReady(join(", ", array_values($gruppen)));
+				} else 
+					echo "&nbsp;";
 				?>
 				
-				&nbsp; 
+				
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("raum")); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("sprechzeiten")); ?></td>

@@ -24,12 +24,14 @@ $auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
 
 if ($usr_name)  $username=$usr_name; //wenn wir von den externen Seiten kommen, nehmen wir den Usernamen aus usr_name, falls dieser gesetzt ist, um die Anmeldeprozedur nicht zu verwirren....
 
-require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/kategorien.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/messaging.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/kategorien.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+
 
 // Klassendefinition
 
@@ -971,9 +973,11 @@ ELSE {
 	 {
 	 echo "<tr><td class=\"blank\">&nbsp; </td></tr>";
 	 echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <b>".htmlReady($details["Name"])."</b>";
-	 if ($details ["Funktion"])
-		echo ", Funktion: ", $INST_FUNKTION[$details ["Funktion"]]["name"];
-	 echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"".htmlReady($details["Name"])."\"></td></tr>";
+	//statusgruppen
+	if ($gruppen = GetStatusgruppen($inst_id, $my_about->auth_user["user_id"])){
+		echo ",&nbsp;Funktion(en): " . htmlReady(join(", ", array_values($gruppen)));
+	}
+	echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"".htmlReady($details["Name"])."\"></td></tr>";
 	 $cssSw->switchClass();
 	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Raum:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"raum[$inst_id]\" value=\"".htmlReady($details["raum"])."\"></td></tr>";
 	 $cssSw->switchClass();

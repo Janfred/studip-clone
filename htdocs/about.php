@@ -30,6 +30,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -154,7 +155,7 @@ if ($msg)
 
 // Anzeige der Institute an denen gearbeitet wird
 
-		$db3->query("SELECT * FROM user_inst WHERE user_id = '$user_id' AND inst_perms != 'user'");
+		$db3->query("SELECT a.*,b.Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");
 		IF ($db3->num_rows()) {
 			echo "<br><b>&nbsp;Wo ich arbeite:&nbsp;&nbsp;</b><br>";
 		}
@@ -163,15 +164,12 @@ if ($msg)
 
 		while ($db3->next_record()) {
 			$institut=$db3->f("Institut_id");
-			$db2->query("SELECT * FROM Institute WHERE Institut_id = '$institut'");
-			$db2->next_record();
-		      	echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$db2->f("Institut_id")."\">".htmlReady($db2->f("Name"))."</a>";
-			//echo "&nbsp; &nbsp; &nbsp;<b><a href=\"".$db2->f("url")."\" target=\"_blank\">".htmlReady($db2->f("Name")),"</a></b>";
-			//echo "&nbsp; &nbsp; &nbsp;<b>".formatReady("[".trim($db2->f("Name"))."]".trim($db2->f("url")))."</b>";
-			
-			IF ($db3->f("Funktion"))
-				echo ", ",$INST_FUNKTION[$db3->f("Funktion")]["name"]; 
-    	echo "<font size=-1>";
+			echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$institut."\">".htmlReady($db3->f("Name"))."</a>";
+			//statusgruppen
+			if ($gruppen = GetStatusgruppen($institut,$user_id)){
+				echo "&nbsp;" . htmlReady(join(", ", array_values($gruppen)));
+			}
+			echo "<font size=-1>";
 			IF ($db3->f("raum")!="")
 				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Raum: </b>", htmlReady($db3->f("raum"));
 			IF ($db3->f("sprechzeiten")!="")
