@@ -107,19 +107,20 @@ function printJSfunctions ( ) {
 	. "    field.value = initialValue;\n"
 	. "  }\n"
 	. "}\n"
+	;
 
-	. "function finishInputs() {\n"
-	. "  document.voteform.title.focus();\n"
-	. "  currentTitle = document.voteform.title.value;\n"
-	. "  document.voteform.question.focus();\n"
-	. "  currentQuestion = document.voteform.question.value;\n"
-	. "  if( currentTitle == \"\"  &&  currentQuestion != \"\") {\n"
-	. "    addDots = \"\";\n"
-	. "    if( currentQuestion.length > 50 ) addDots = \"...\";\n"
-	. "    document.voteform.title.value = currentQuestion.substr( 0, 64 ) + addDots;\n"
-	. "  }\n"
-	. "  document.voteform.question.focus(); /* this triggers deleteField */ \n"
-	. "}\n";
+// 	. "function finishInputs() {\n"
+// 	. "  document.voteform.title.focus();\n"
+// 	. "  currentTitle = document.voteform.title.value;\n"
+// 	. "  document.voteform.question.focus();\n"
+// 	. "  currentQuestion = document.voteform.question.value;\n"
+// 	. "  if( currentTitle == \"\"  &&  currentQuestion != \"\") {\n"
+// 	. "    addDots = \"\";\n"
+// 	. "    if( currentQuestion.length > 50 ) addDots = \"...\";\n"
+// 	. "    document.voteform.title.value = currentQuestion.substr( 0, 64 ) + addDots;\n"
+// 	. "  }\n"
+// 	. "  document.voteform.question.focus(); /* this triggers deleteField */ \n"
+// 	. "}\n";
 
     $js .= "//--></script>\n";
 
@@ -172,6 +173,7 @@ function printFormStart ( $voteID, $rangeID, $referer ) {
 	. "<tr><td class=steel1 width=\"80%\" valign=top>\n";
 
     echo $html;
+#    echo $debug;
 }
 
 /**
@@ -195,8 +197,13 @@ function printTitleField ( $title = "" ) {
        $title = stripslashes($title);
     
     $html = "<font size=-1><b>" . _("Titel:")	. "</b></font><br>"
-	. "<input type=text size=50 maxlength=100 name=\"title\" value=\"".htmlReady($title)."\" ".$js." tabindex=1>"
-	. "<br><br>\n";
+	. "<input type=text size=50 maxlength=100 name=\"title\" value=\"".htmlReady($title)."\" ".$js." tabindex=1>";
+    $html .= "&nbsp;<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\" "
+	. tooltip( _("Wenn Sie keinen Titel angeben, wird dieser automatisch aus der Fragestellung übernommen."),
+		   FALSE, TRUE )
+	. " border=0>";
+
+    $html .= "<br><br>\n";
 
     echo $html;
 }
@@ -462,7 +469,7 @@ function printRightRegion ( ) {
     print_infobox( $infobox, "pictures/voting.jpg" );
 
     echo "<br><input type=image style=\"vertical-align:middle;\" name=\"saveButton\""
-	. " onClick=\"finishInputs();\" "
+// 	. " onClick=\"finishInputs();\" "
 	. makeButton("speichern","src") . tooltip(_("Alle Änderungen speichern und zurück!"))
 	. " border=0>"
 	. "&nbsp;<input type=image style=\"vertical-align:middle;\" name=\"cancelButton\" "

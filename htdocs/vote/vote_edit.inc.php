@@ -35,10 +35,7 @@ define( "MODE_MODIFY", 1 );
 define( "MODE_RESTRICTED", 2 );
 
 define( "TITLE_HELPTEXT",
-	($auth->auth["jscript"])
-	? _("Geben Sie hier einen Titel ein (optional)")
-	: _("Geben Sie hier einen Titel ein") );
-
+	_("Geben Sie hier einen Titel ein (optional)") );
 define( "QUESTION_HELPTEXT",
 	_("Geben Sie hier Ihre Frage ein") );
 /* -------------------------------------------------------- */
@@ -130,9 +127,7 @@ if( $voteID && !$makeACopy ) {
 $debug.="referer: $referer\n";
 $debug.="pagemode: $pageMode\n";
 
-$vote->finalize(); // Um erstmal den ErrorHandler wieder zurückzusetzen
-
-// perm check? vote owner?
+$vote->finalize(); // reset ErrorHandler
 
 $answers           = $_POST['answers'];
 $title             = $_POST['title'] != TITLE_HELPTEXT ? $_POST['title'] : NULL;
@@ -250,6 +245,10 @@ if( $pageMode != MODE_RESTRICTED ) {
 /* -------------------------------------------------------- */
 if( isset( $saveButton_x ) ) {
 
+    if( $title == NULL )
+	if( $question != NULL )
+	    $title = my_substr( $question, 0, 50 );
+    
     $vote->setTitle( $title );
     /* -------------------------------------------------------- */
 
