@@ -23,8 +23,8 @@ entpacken. Dieses Verzeichnis kann nach erfolgreicher Installation
 gelöscht oder als Referenz aufbewahrt werden.
 
 Kurzübersicht der Verzeichnisse:
-- db             SQL-Dateien für mysql-Datenbankeinrichtung
-- doc            This quick installation guide ;-)
+- studip-db             SQL-Dateien für mysql-Datenbankeinrichtung
+- studip-doc            This quick installation guide ;-)
 - install        Installations-Skript, getestet mit SuSe 8.0
 - studip-config  Default-Konfigurationsdateien (local.inc, config.inc.php)
 - studip-htdocs  Der Stud.IP-Kern, später sichtbar für Webserver
@@ -52,6 +52,7 @@ ist unter http://phplib.sourceforge.net/ zu finden.
 Folgende Dateien wurden hinzugefügt:
   - email-validation.inc (check von Email-Adressen und anderen Angaben)
   - smtp.inc (versenden von Mails auf einem Linux-System)
+  - ct_sql_patched.inc (kleiner bugfix der ct_sql.inc, nur für MySQL)
 
 Folgende Dateien wurden verändert:
   - prepend.php (autoinclude der beiden obigen)
@@ -112,6 +113,9 @@ In unserem Beispiel also:
 
 include_path            =       /usr/local/httpd/php
 
+Außerdem wichtig:
+register_globals = On
+
 Damit das Registrierungsmodul von Stud.IP funktioniert, muss der Mailversand
 konfiguriert sein, d.h. der Webserver muss in der Lage sein Mails über den in
 $MAIL_HOST_NAME angegebenen Mailserver zu verschicken. In den verschickten Mails
@@ -130,7 +134,7 @@ mysql -e "create database studip"
 
 und die entsprechenden Tabellen hinzugefügt werden
 
-mysql studip < db/studip.sql
+mysql studip < studip-db/studip_x.x.x.sql
 
 (hiermit wird auch der Admin-Acount für studip angelegt: root@studip ;
 password: testing)
@@ -141,7 +145,7 @@ dieser unter $DB_STUDIP_USER mit entsprechendem Passwort ($DB_STUDIP_PASSWORD)
 eingetragen werden. Dieser Datenbankbenutzer benötigt die Rechte: SELECT, 
 INSERT,UPDATE,DELETE,CREATE,DROP (letztere für temporäre Tabellen).
 
-Die Datei db/DefaultValues.sql enthält ein BeispielSeminar (FAQ
+Die Datei studip-db/studip_x.x.x_demo_data.sql enthält Beispiel Daten (FAQ
 - StudIP). Wer Lust hat, kann diese importieren und so bereits auf
 Inhalte treffen ;-)
 
