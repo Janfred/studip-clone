@@ -175,7 +175,7 @@ for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 				month_up_down($amonth, $i, $step, $max_apps);
 				echo "<br><font class=\"inday\">{$hday['name']}</font>";
 				break;
-			case 3;
+			case 3:
 				echo "<a class=\"{$class_day}hday\" href=\"$PHP_SELF?cmd=showday&atime=$i\">$aday</a>";
 				month_up_down($amonth, $i, $step, $max_apps);
 				echo "<br><font class=\"inday\">{$hday['name']}</font>";
