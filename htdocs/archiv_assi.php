@@ -217,6 +217,10 @@ if ($archive_kill) {
 			$killAssign = new DeleteResourcesUser($s_id);
 			$killAssign->delete();
 		} 
+		
+		//kill the object_user_vists for this seminar
+		$query = sprintf ("DELETE FROM object_user_visits WHERE object_id = '%s' ", $s_id);
+		$db->query($query);
 								
 		// und das Seminar loeschen.
 		$query = "DELETE FROM seminare where Seminar_id= '$s_id'";

@@ -265,7 +265,11 @@ while ( is_array($HTTP_POST_VARS)
 		$db_ar = recursiv_folder_delete($i_id);
 		if ($db_ar > 0)
 			$msg.="msg§" . sprintf(_("%s Dokumente gel&ouml;scht."), $db_ar) . "§";
-
+		
+		//kill the object_user_vists for this institut
+		$query = sprintf ("DELETE FROM object_user_visits WHERE object_id = '%s' ", $i_id);
+		$db->query($query);
+		
 		// Delete that Institut.
 		$query = "DELETE FROM Institute WHERE Institut_id='$i_id'";
 		$db->query($query);
