@@ -150,17 +150,26 @@ function again_and_again()
 <?php
 
 $c=0;
-if (is_array($online)) {
-        foreach($online as $tmp_uname => $detail){
-                if ($detail['is_buddy']){
-                        if (!$c){
-                                echo "<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>" . _("Buddies:") . "</b></td></tr>";
-                        }
-                        echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a " . tooltip(sprintf(_("letztes Lebenszeichen: %s"),date("i:s",$detail['last_action'])),false) . " target=\"_content\" href=\"about.php?username=$tmp_uname\">".htmlReady($detail['name'])."</a></font></td>\n";
-                        echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_uname'><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
-                        $c++;
-                }
-        }
+$owner_id = $user->id;
+
+	if (is_array ($online)) { // wenn jemand online ist
+		foreach($online as $username=>$value) { //ale durchgehen die online sind
+			$user_id = get_userid($username);
+			$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
+			if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
+				$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
+			} 
+		}
+	}
+
+if ((is_array($online)) && (is_array ($non_group_buddies))) {
+	while (list($index)=each($non_group_buddies)) {
+		list($fullname,$zeit,$tmp_online_uname)=$non_group_buddies[$index];
+		printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>Buddies:</b></td></tr>");					
+		echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a href=\"javascript:coming_home('about.php?username=$tmp_online_uname');\">".$fullname."</a></font></td>\n";
+		echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_online_uname'><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
+		$c++;
+	}
 } else {
         echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Nutzer ist online.") . "</font>";
 }
