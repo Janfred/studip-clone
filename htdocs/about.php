@@ -308,8 +308,14 @@ if ($GLOBALS['CHAT_ENABLE']){
 
 //test Ausgabe von Literaturlisten
 if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
-	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Literaturlisten") . " </b></td></tr>";
-	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
+	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Literaturlisten") . " </b></td>";
+	$cs = 1;
+	if ($user_id == $auth->auth['uid']){
+		echo '<td align="right" class="topic">&nbsp;<a href="admin_lit_list.php?_range_id=self"><img src="pictures/pfeillink.gif" border="0" ' . tooltip(_("Literaturlisten bearbeiten")) . '>&nbsp;</td>';
+		$cs = 2;
+	}
+	printf ("</tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr><tr><td colspan=\"$cs\" class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
+	unset($cs);
 }
 // Hier wird der Lebenslauf ausgegeben:
 if ($db->f("lebenslauf")!="") {
