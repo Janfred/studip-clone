@@ -132,6 +132,13 @@ function JSReady ($what = "", $target = "overlib") {
 		$what = ereg_replace("\r","",$what);
 		return $what;
 	break;
+	
+	case "alert" :
+		$what = addslashes(htmlentities($what,ENT_COMPAT));
+		$what = str_replace("\r","",$what);
+		$what = str_replace("\n","\\n",$what); // alert boxen stellen keine html tags dar 
+		return $what;
+	break;
 
 	case "forum" :
 
@@ -256,9 +263,9 @@ function format($text){
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	$pattern = array("'\n--+(\d?)(\n|$|(?=<))'m",              // Trennlinie
 									 "'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
-	  							 "'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
+								 "'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
 									 "'(^|\s)_(?!_)(\S+_)+(?=(\s|$))'e",     // SL-unterstrichen
-	                 "'(^|\s)#(?!#)(\S+#)+(?=(\s|$))'e",     // SL-diktengleich
+					 "'(^|\s)#(?!#)(\S+#)+(?=(\s|$))'e",     // SL-diktengleich
 									 "'(^|\s)\+(?!\+)(\S+\+)+(?=(\s|$))'e",  // SL-groesser
 									 "'(^|\s)-(?!-)(\S+-)+(?=(\s|$))'e",     // SL-kleiner
 									 "'(^|\s)&gt;(?!&gt;)(\S+&gt;)+(?=(\s|$))'ie",  // SL-hochgestellt
@@ -281,7 +288,7 @@ function format($text){
 									 "'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
 									 "'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
 									 "'\\1<u>'.substr(str_replace('_', ' ', '\\2'), 0, -1).'</u>'",
-	                 "'\\1<tt>'.substr(str_replace('#', ' ', '\\2'), 0, -1).'</tt>'",
+					 "'\\1<tt>'.substr(str_replace('#', ' ', '\\2'), 0, -1).'</tt>'",
 									 "'\\1<big>'.substr(str_replace('+', ' ', '\\2'), 0, -1).'</big>'",
 									 "'\\1<small>'.substr(str_replace('-', ' ', '\\2'), 0, -1).'</small>'",
 									 "'\\1<sup>'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1).'</sup>'",
@@ -316,9 +323,9 @@ function preg_call_format($tbr){
 function kill_format($text){
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	$pattern = array("'(^|\s)%(?!%)(\S+%)+'e",     // SL-kursiv
-	  							 "'(^|\s)\*(?!\*)(\S+\*)+'e",  // SL-fett
+								 "'(^|\s)\*(?!\*)(\S+\*)+'e",  // SL-fett
 									 "'(^|\s)_(?!_)(\S+_)+'e",     // SL-unterstrichen
-	                 "'(^|\s)#(?!#)(\S+#)+'e",     // SL-diktengleich
+					 "'(^|\s)#(?!#)(\S+#)+'e",     // SL-diktengleich
 									 "'(^|\s)\+(?!\+)(\S+\+)+'e",  // SL-groesser
 									 "'(^|\s)-(?!-)(\S+-)+'e",     // SL-kleiner
 									 "'(^|\s)>(?!>)(\S+>)+'e",  // SL-hochgestellt
@@ -343,7 +350,7 @@ function kill_format($text){
 	$replace = array("'\\1'.substr(str_replace('%', ' ', '\\2'), 0, -1)",
 									 "'\\1'.substr(str_replace('*', ' ', '\\2'), 0, -1)",
 									 "'\\1'.substr(str_replace('_', ' ', '\\2'), 0, -1)",
-	                 "'\\1'.substr(str_replace('#', ' ', '\\2'), 0, -1)",
+					 "'\\1'.substr(str_replace('#', ' ', '\\2'), 0, -1)",
 									 "'\\1'.substr(str_replace('+', ' ', '\\2'), 0, -1)",
 									 "'\\1'.substr(str_replace('-', ' ', '\\2'), 0, -1)",
 									 "'\\1'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1)",
@@ -403,10 +410,10 @@ function smile ($text= "") {
 	if(empty($text)) {
 		return $text;
 	}
-	$text=preg_replace("'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m","\\1<a href=\"show_smiley.php\" target=\"_blank\"><img alt=\"\\2\" border=\"0\" src=\"$SMILE_PATH/\\2.gif\"></a>\\3",$text);
+	$text=preg_replace("'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):($|\<|\s)'m","\\1<a href=\"show_smiley.php\" target=\"_blank\"><img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"$SMILE_PATH/\\2.gif\"></a>\\3",$text);
 	reset($SMILE_SHORT);
 	WHILE (list($key,$value) = each($SMILE_SHORT)) {
-		$text=str_replace($key,"<a href=\"show_smiley.php\" target=\"_blank\"><img alt=\"$value\" border=\"0\" src=\"$SMILE_PATH/$value.gif\"></a>",$text);
+		$text=str_replace($key,"<a href=\"show_smiley.php\" target=\"_blank\"><img ".tooltip($value)." border=\"0\" src=\"$SMILE_PATH/$value.gif\"></a>",$text);
 	}
 	return $text;
 }
@@ -430,16 +437,16 @@ function mila ($titel,$size=60){
 //Ausgabe der Aufklapp-Kopfzeile
 function printhead ($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp=0) {
 
-         IF ($timestmp==0) $timecolor = "#BBBBBB";
-         ELSE {
-             $timediff = log((time()-$timestmp)/86400 + 1) * 15;
+		 IF ($timestmp==0) $timecolor = "#BBBBBB";
+		 ELSE {
+			 $timediff = log((time()-$timestmp)/86400 + 1) * 15;
 //	     echo $timediff;
-             IF ($timediff >= 68) $timediff = 68;
-             $red = dechex(255-$timediff);
-	     $other = dechex(119+$timediff);
-             // IF ($timediff >= 239) $timecolor = "0".$timecolor;
-             $timecolor= "#".$red.$other.$other;
-         }
+			 IF ($timediff >= 68) $timediff = 68;
+			 $red = dechex(255-$timediff);
+		 $other = dechex(119+$timediff);
+			 // IF ($timediff >= 239) $timecolor = "0".$timecolor;
+			 $timecolor= "#".$red.$other.$other;
+		 }
 
 	IF ($open=="close") $print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\" align=left valign=\"bottom\">";
 	ELSE $print = "<td class=\"printhead\" nowrap width=\"1%\" align=left valign=\"bottom\">";
@@ -460,11 +467,11 @@ function printhead ($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestm
 	}
  else {
 		IF ($open=="close") {
-		    if (!$new) $print.="pictures/forumgrau2.gif\"";
-		    if ($new) $print.="pictures/forumrot.gif\"";
+			if (!$new) $print.="pictures/forumgrau2.gif\"";
+			if ($new) $print.="pictures/forumrot.gif\"";
 		} else {
-		    if (!$new) $print.="pictures/forumgraurunt.gif\"";
-		    if ($new) $print.="pictures/forumrotrunt.gif\"";
+			if (!$new) $print.="pictures/forumgraurunt.gif\"";
+			if ($new) $print.="pictures/forumrotrunt.gif\"";
 		}
 	}
 	
@@ -488,10 +495,24 @@ function printcontent ($breite,$write=FALSE,$inhalt,$edit) {
 	echo $print;
 	}
 
-//alt und title tag zurückgeben
-function tooltip($text,$only_title=FALSE){
+/**
+* Returns a given text as html tooltip
+*
+* title and alt attribute is default, with_popup means a JS alert box activated on click
+* @access	public	
+* @param	string $text	
+* @param	boolean	$with_alt	return text with alt attribute
+* @param	boolean $with_popup	return text with JS alert box on click
+* @return	string
+*/
+function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
+	$ret = "";
+	if ($with_popup)
+		$ret = " onClick=\"alert('".JSReady($text,"alert")."');\"";
 	$text = htmlReady($text);
-	$ret = " title=\"$text\" ";
-	return ($only_title) ? $ret : " alt=\"$text\" ".$ret;
+	if ($with_alt)
+		$ret .= " alt=\"$text\"";
+	$ret .= " title=\"$text\" ";
+	return $ret;
 }
 ?>
