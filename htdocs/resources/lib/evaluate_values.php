@@ -1254,7 +1254,9 @@ if ($save_state_x) {
 	
 			//single date mode
 			} elseif ($reqObj->getTerminId()) {
-				$result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
+				reset($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"]);
+				list(,$res_id) = each($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"]);
+				$result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $res_id);
 			
 			//multiple dates mode
 			} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
@@ -1273,7 +1275,7 @@ if ($save_state_x) {
 			//create msgs, single date mode
 			if ($reqObj->getTerminId()) {
 				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-				$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
+				$resObj =& ResourceObject::Factory($res_id);
 				foreach ($result as $key=>$val) {
 					if (!$val["overlap_assigns"]) {
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = $resObj->getId();			
