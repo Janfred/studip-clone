@@ -506,6 +506,7 @@ function day_restore (&$this) {
 				'DTEND'           => $end,
 				'SUMMARY'         => $db->f('summary'),
 				'DESCRIPTION'     => $db->f('description'),
+				'CLASS'           => $db->f('class'),
 				'PRIORITY'        => $db->f('prority'),
 				'LOCATION'        => $db->f('location'),
 				'CATEGORIES'      => $db->f('categories'),
