@@ -154,7 +154,7 @@ elseif ($rangemode == "dozent" OR $rangemode == "tutor") {
 	foreach ($rangeARUser as $k => $v) {
 		while (list($typen_key,$typen_value)=each($typen)){
        		if ($v["type"] == $typen_key){
-				$range[] = array($k,$typen_value.":".$v["name"]);
+				$range[] = array($k,$typen_value.": ".$v["name"]);
 				}
 		}
 		reset($typen);
