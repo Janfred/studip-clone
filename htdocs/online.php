@@ -207,7 +207,7 @@ ob_start();
 			
 			}
 		else {
-			echo "\n<td class=\"steel1\" width=\"50%\" align=\"center\" colspan=4><font size=-1>Kein anderer Nutzer ist online.</font></td>";
+			echo "\n<td class=\"steelgraudunkel\" width=\"50%\" align=\"center\" colspan=4><font size=-1>Kein anderer Nutzer ist online.</font></td>";
 			echo "\n</tr></table></td>";
 			}
 		}
