@@ -283,7 +283,7 @@ class ExternSemBrowseTable extends SemBrowse {
 								if ($i == 3) {
 									$data["content"]["dozent"] .= $this->module->elements["LecturerLink"]->toString(
 										array("module" => "Lecturedetails", "link_args" => "seminar_id=$seminar_id",
-										"content" => htmlReady($sem_name)));
+										"content" => "..."));
 									break;
 								}
 								++$i;
@@ -315,7 +315,14 @@ class ExternSemBrowseTable extends SemBrowse {
 						else
 							$data["content"]["art"] = "";
 						
-						// include generic datafields
+						// generic data fields
+						if (is_array($generic_datafields)) {
+							$datafields = $datafields_obj->getLocalFields($seminar_id);
+							foreach ($generic_datafields as $datafield) {
+								$data["content"][$datafield] =
+										FixLinks(format(htmlReady($datafields[$datafield]["content"])));
+							}
+						}
 						
 						$data["data_fields"] = $this->module->data_fields;
 						$out .= $this->module->elements["TableRow"]->toString($data);
