@@ -119,7 +119,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 		show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
 	}
 	else {
-		show_dates($start, $end, $index_data["dopen"]);
+		show_dates($start, $end, $index_data["dopen"], "", 0, TRUE, FALSE, FALSE);
 	}
 
         if ($GLOBALS['VOTE_ENABLE']) {
