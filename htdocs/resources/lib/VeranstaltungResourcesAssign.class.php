@@ -42,6 +42,7 @@ class VeranstaltungResourcesAssign {
 	var $db2;
 	var $seminar_id;
 	var $assign_id;
+	var $dont_check;
 	
 	//Konstruktor
 	function VeranstaltungResourcesAssign ($seminar_id='') {
@@ -52,6 +53,7 @@ class VeranstaltungResourcesAssign {
 		$this->db2 = new DB_Seminar;
 		
 		$this->seminar_id = $seminar_id;
+		$this->dont_check=FALSE;
 	}
 	
 	function deleteAssignedRooms() {
@@ -65,7 +67,6 @@ class VeranstaltungResourcesAssign {
 
 	function updateAssign() {
 		global $TERMIN_TYP;
-
 		$query = sprintf("SELECT termin_id, date_typ FROM termine WHERE range_id = '%s' ", $this->seminar_id);
 		$this->db->query($query);
 		$course_session=FALSE;
@@ -145,7 +146,9 @@ class VeranstaltungResourcesAssign {
 												0, $day_of_week, 0);
 	
 					//check if there are overlaps (resource isn't free!)
-					$overlaps = $createAssign->checkOverlap();
+					if (!$this->dont_check)
+						$overlaps = $createAssign->checkOverlap();
+						
 					if ($overlaps)
 						$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$val["resource_id"]);
 					$i++;
@@ -174,10 +177,9 @@ class VeranstaltungResourcesAssign {
 				$end=$begin;
 		}
 		if ((!$assign_id) && (!$check_only))
-			 $this->insertDateAssign($termin_id, $resource_id);
+			 $result = $this->insertDateAssign($termin_id, $resource_id);
 		else {
 			$changeAssign=new AssignObject($assign_id);
-
 			if ($resource_id)
 				$changeAssign->setResourceId($resource_id);
 
@@ -192,9 +194,13 @@ class VeranstaltungResourcesAssign {
 			$changeAssign->setRepeatDayOfWeek(0);
 			
 			//check if there are overlaps (resource isn't free!)
-			$overlaps = $changeAssign->checkOverlap();
-			if ($overlaps)
+			if (!$this->dont_check)
+				$overlaps = $changeAssign->checkOverlap();
+
+			if ($overlaps) {
 				$result[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+				$this->killDateAssign($termin_id);
+			}
 			
 			if ((!$check_only) && (!$overlaps)) {
 				$changeAssign->store();
@@ -221,9 +227,10 @@ class VeranstaltungResourcesAssign {
 				$createAssign=new AssignObject(FALSE, $resource_id, $termin_id, '', 
 											$begin, $end, $end,
 											0, 0, 0, 0, 0, 0, 0, 0);
-	
 				//check if there are overlaps (resource isn't free!)
-				$overlaps = $createAssign->checkOverlap();
+				if (!$this->dont_check)
+					$overlaps = $createAssign->checkOverlap();
+					
 				if ($overlaps)
 					$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
 	
