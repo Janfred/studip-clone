@@ -499,15 +499,18 @@ function PrintAllContact($filter="")
 		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");		
 	if ($contact["view"]=="gruppen" && $filter!="") 
 		$db->query ("SELECT nachname, contact_id FROM contact LEFT JOIN statusgruppe_user USING(user_id) LEFT JOIN auth_user_md5 USING(user_id)  WHERE statusgruppe_id = '$filter' AND owner_id =  '$owner_id' ORDER BY nachname");		
-	$middle = round($db->num_rows()/3);
+
 	$spalten = 0;
 	if ($auth->auth["xres"] > 800) {
 		$maxcolls = 2;
 		$maxwidth = 900;
+		$middle = round($db->num_rows()/3);
 	} else {
 		$maxcolls = 1;
 		$maxwidth = 700;
+		$middle = round($db->num_rows()/2);
 	}
+
 	if ($db->num_rows() == 0) {
 		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"300\" class=\"blank\">"._("Keine Einträge in diesem Bereich")."";	
 		echo "</td><td valign=\"top\" width=\"300\" class=\"blank\">";
