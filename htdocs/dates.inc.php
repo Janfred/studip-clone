@@ -314,7 +314,7 @@ Bei regelmaessigen Veranstaltungen werden die einzelen Zeiten ausgegeben, bei zw
 Turnus mit dem enstprechenden Zusatz. Short verkuerzt die Ansicht nochmals.
 */
 
-function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = 0) {
+function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = false) {
 	
 	static $turnus_cache;
 	
@@ -324,6 +324,9 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 		return $turnus_cache[$seminar_id][$short];
 	}
 	
+	if (!$start_time){
+		$start_time = 0;
+	}
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	
