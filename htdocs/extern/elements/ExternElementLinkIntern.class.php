@@ -123,8 +123,15 @@ class ExternElementLinkIntern extends ExternElement {
 		if (!$args["main_module"])
 			$args["main_module"] = "Main";
 		$sri_link = $this->config->getValue($this->name, "srilink");
-		if ($this->config->config[$args["main_module"]]["incdata"])
+		if ($this->config->config[$args["main_module"]]["incdata"]) {
 			$link = $sri_link;
+			if ($args["link_args"]) {
+				if (preg_match("#.*\?.*#", $link))
+					$link .= "&" . $args["link_args"];
+				else
+					$link .= "?" . $args["link_args"];
+			}
+		}
 		else {
 			if ($sri_link) {
 				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php";
@@ -136,8 +143,8 @@ class ExternElementLinkIntern extends ExternElement {
 			}
 			else {
 				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module={$args['module']}";
-				if ($config)
-					$link .= "&config_id=" . $this->config->getId();
+				if ($config = $this->config->getValue($this->name, "config"))
+					$link .= "&config_id=" . $config;
 				$link .= "&range_id={$this->config->range_id}";
 				if ($args["link_args"])
 					$link .= "&" . $args["link_args"];
