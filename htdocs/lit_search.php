@@ -76,6 +76,10 @@ if ($_REQUEST['cmd'] == "add_to_clipboard"){
 			$cat_element = new StudipLitCatElement();
 			$cat_element->setValues($fields);
 			$cat_element->setValue("catalog_id", "new_entry");
+			$cat_element->setValue("user_id", "studip");
+			if ( ($existing_element = $cat_element->checkElement()) ){
+				$cat_element->setValue('catalog_id', $existing_element);
+			}
 			$cat_element->insertData();
 			$catalog_id = $cat_element->getValue("catalog_id");
 			$GLOBALS[$parts[0]][$parts[1]]['catalog_id'] = $catalog_id;
