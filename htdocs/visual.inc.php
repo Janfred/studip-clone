@@ -416,18 +416,17 @@ function wiki_format ($text, $show_comments) {
 function format_wiki_comment($comment, $metainfo, $show_comment) {
 	$metainfo=trim($metainfo,"=");
 	if ($show_comment=="all") {
-		$commenttmpl="<table style=\"border:thin solid;margin: 5px;\" bgcolor=\"#ffff88\"><tr><td><font size=-1><b>"._("Kommentar von")." %s:</b>&nbsp;</font></td></tr><tr class=steelgrau><td class=steelgrau><font size=-1>%s</font></td></tr></table>";
+		$commenttmpl="<table style=\"border:thin solid;margin: 5px;\" bgcolor=\"#ffff88\"><tr><td><font size=-1><b>"._("Kommentar von")." %1\$s:</b>&nbsp;</font></td></tr><tr class=steelgrau><td class=steelgrau><font size=-1>%2\$s</font></td></tr></table>";
+		return sprintf($commenttmpl, $metainfo, $comment);
 	} elseif ($show_comment=="icon") {
-//		$trans_tbl = array_flip(get_html_translation_table (HTML_ENTITIES));
-//		$comment = strtr($comment, $trans_tbl);
 		$comment = decodehtml($comment);
 		$comment = preg_replace("/<.*>/U","",$comment);
-		$commenttmpl="<img src=\"pictures/icon-posting.gif\" alt=\"%s: %s\" title=\"%s: %s\" ".tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE).">";
+		$metainfo = decodeHTML($metainfo);
+		return "<img src=\"pictures/icon-posting.gif\" ".tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE) . ">";
 	} else {
 		echo "<p>Error: unknown show_comment value in format_wiki_comment: ".$show_comment."</p>";
 		die();
 	}
-	return sprintf($commenttmpl, $metainfo, $comment, $metainfo, $comment);
 }
 
 
@@ -1188,6 +1187,7 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 	$ret = "";
 	if ($with_popup)
 		$ret = " onClick=\"alert('".JSReady($text,"alert")."');\"";
+	$text = preg_replace("/(\n\r|\r\n|\n|\r)/", "", $text);
 	$text = htmlReady($text);
 	if ($with_alt)
 		$ret .= " alt=\"$text\"";
