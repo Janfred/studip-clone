@@ -90,8 +90,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 				$count = 0;
 
 		//Studis auswaehlen, die jetzt aufsteigen koennen
-		echo "SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count";
-		die;
+		$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count");
 		while ($db3->next_record()) {
 			$group = select_group ($db->f("start_time"), $db3->f("user_id"));			
 			$db4->query("INSERT INTO seminar_user SET user_id = '".$db3->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db3->f("studiengang_id")."', mkdate = '".time()."' ");
@@ -100,7 +99,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 				//User benachrichten
 				if (($db5->affected_rows()) && ($send_message)) {
 					$message="Sie sind als Teilnehmer der Veranstaltung **".$db->f("Name")."** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen.";
-					$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
+					$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
 				}
 			}
 		}
@@ -160,11 +159,11 @@ function check_admission ($send_message=TRUE) {
 			$position ++;
 		}
 
-		//evtl. verbliebene Plaetze auffuellen
-		update_admission($db->f("Seminar_id"). $send_message);
-		
 		//Veranstaltung lock aufheben und erfolgreichen Losvorgang einragen
 		$db2->query("UPDATE seminare SET admission_selection_take_place ='1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
+
+		//evtl. verbliebene Plaetze auffuellen
+		update_admission($db->f("Seminar_id"). $send_message);
 
 		//User benachrichten
 		if ($send_message) {
