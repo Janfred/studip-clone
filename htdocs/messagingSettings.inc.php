@@ -21,26 +21,28 @@ if ($messaging_cmd=="change_view_insert") {
 	$my_messaging_settings["changed"]="TRUE";
 	}
 
-if ($do_add_user)
+if ($do_add_user_x)
 	$msging->add_buddy ($add_user, 0);
 
 if ($delete_user)
 	$msging->delete_buddy ($delete_user);
 	
-if (is_array($buddy_grp))
-	foreach ($buddy_grp as $key=>$value) 
-		$my_buddies[$key]["group"] =$value;
+if (is_array($buddy_grp)) {
+	foreach ($buddy_grp as $key=>$value)  {
+		$my_buddies[$buddy_key[$key]]["group"] =$value;
+	}
+}
 
 
 //Anpassen der Ansicht
 function change_messaging_view() {
-	global $my_messaging_settings, $my_buddies, $PHP_SELF, $perm, $user, $search_exp, $add_user, $do_add_user, $new_search;
+	global $my_messaging_settings, $my_buddies, $PHP_SELF, $perm, $user, $search_exp, $add_user, $add_user_x, $do_add_user_x, $new_search_x, $i_page;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;	
 	
 	if ((!$search_exp) && (!$add_user))
-		$new_search=TRUE;
+		$new_search_x=TRUE;
 	
 	?>
 	<table width ="100%" cellspacing=0 cellpadding=0 border=0>
@@ -58,7 +60,7 @@ function change_messaging_view() {
 	</tr>	
 	<tr>
 		<td class="blank" colspan=2>
-			<form method="POST" action="<? echo $PHP_SELF ?>?messaging_cmd=change_view_insert#anker">
+			<form method="POST" action="<? echo $PHP_SELF ?>?messaging_cmd=change_view_insert">
 			<table width ="99%" align="center" cellspacing=0 cellpadding=2 border=0>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
@@ -102,7 +104,7 @@ function change_messaging_view() {
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-					&nbsp; &nbsp; <b>Buddiess</b><a name="buddy_anker"></a>
+					&nbsp; &nbsp; <b>Buddies</b><a name="buddy_anker"></a>
 					</td>
 				</tr>
 				<?
@@ -147,7 +149,7 @@ function change_messaging_view() {
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 					<?
-					if ((!$new_search)){
+					if ((!$new_search_x)){
 						$db->query("SELECT Vorname, Nachname, username, user_id FROM auth_user_md5 WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
 						if ($db->affected_rows()) {
 							echo "<b><font size=-1>&nbsp; Es wurden ", $db->affected_rows(), " Benutzer gefunden </font><br /></b>";
@@ -156,24 +158,28 @@ function change_messaging_view() {
 								echo "<option value=",$db->f("username"),">",$db->f("Nachname"),", ".$db->f("Vorname"), ", (",$db->f("username"),") </option>";
 							}
 							echo "</select></font>";
-							echo "<br /><br />&nbsp; <font size=-1><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"Diesen Benutzer hinzuf&uuml;gen\" /></font>";
-							echo "<font size=-1>&nbsp;<input type=\"SUBMIT\"  name=\"new_search\" value=\"Neue Suche\" /></font>";
+							echo "<br /><br />&nbsp; <font size=-1><input type=\"IMAGE\"  src=\"pictures/buttons/hinzufuegen-button.gif\" border=0  name=\"do_add_user\" value=\"Diesen Benutzer hinzuf&uuml;gen\" /></font>&nbsp;";
+							echo "<font size=-1>&nbsp;<input type=\"IMAGE\"  name=\"new_search\" src=\"pictures/buttons/neuesuche-button.gif\" border=0  value=\"Neue Suche\" /></font>";
 							echo "<input type=\"HIDDEN\" name=search_exp value=\"$search_exp\">";
 							echo "<a name=\"anker\"></a>";
 							}
 						}
-					if (((!$db->affected_rows())) || ($new_search)) {
-						if (($add_user) && (!$db->affected_rows)  && (!$new_search))
+					if (((!$db->affected_rows())) || ($new_search_x)) {
+						if (($add_user) && (!$db->affected_rows)  && (!$new_search_x))
 							echo "<br /><b><font size=-1>&nbsp; Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!</font></b><br />";
 						echo "<font size=-1>&nbsp; Bitte Namen, Vornamen oder Usernamen eingeben:</font>&nbsp; ";
 						echo "<input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
-						echo "&nbsp;<input type=\"SUBMIT\"  name=\"add_user\" value=\"Suche starten\" />";	
+						echo "&nbsp;<input type=\"IMAGE\"  name=\"add_user\" src=\"pictures/buttons/suchestarten-button.gif\" border=0  value=\"Suche starten\" />";	
 						}
 					?>
 					</td>
 				</tr>
 				<?
 				if (is_array($my_buddies)) {
+					//temp sort
+					foreach ($my_buddies as $key=>$val)
+						$tmp_buddies[$key]=array(group=>$val["group"], username=>$val["username"]);
+					sort ($tmp_buddies);
 				?>				
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
@@ -188,7 +194,7 @@ function change_messaging_view() {
 						echo "<td class=\"".$cssSw->getClass() ."\" width=\"10%\" align=\"center\">&nbsp; </td>";
 						echo "</tr>";
 						$i=0;
-						foreach ($my_buddies as $a) {
+						foreach ($tmp_buddies as $a) {
 							$db->query("SELECT Vorname, Nachname, username FROM auth_user_md5 WHERE username = '".$a["username"]."' ");
 							$db->next_record();
 
@@ -198,9 +204,10 @@ function change_messaging_view() {
 								$class="steel1";
 							
 							echo "<tr><td class=\"$class\" width=\"70%\">";
+							echo "<input type=\"HIDDEN\" name=\"buddy_key[]\" value=\"".$db->f("username")."\"/> ";
 							echo "<a href=\"about.php?username=",$db->f("username"),"\">",$db->f("Vorname")," ",$db->f("Nachname"), "</a></td>\n";
 							for ($k=0; $k<8; $k++) {
-								echo "<td class=\"$class\" width=\"1%\"><input type=\"RADIO\" name=\"buddy_grp[".$db->f("username")."]\" value=$k ";
+								echo "<td class=\"$class\" width=\"1%\"><input type=\"RADIO\" name=\"buddy_grp[$i]\" value=$k ";
 								if ($a["group"]==$k)
 									echo " checked";
 								echo " /></td>";
@@ -219,7 +226,14 @@ function change_messaging_view() {
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; <font size=-1><input type="SUBMIT" value="&Auml;nderungen &uuml;bernehmen"></font><br>&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; 
+					<font size=-1><input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&Auml;nderungen &uuml;bernehmen"></font>&nbsp; 
+					<?
+					if ($i_page == "online.php")
+						echo "<a href=\"online.php\"><img src=\"pictures/buttons/zurueck2-button.gif\" border=0></a>";
+					if ($i_page == "sms.php")
+						echo "<a href=\"sms.php\"><img src=\"pictures/buttons/zurueck2-button.gif\" border=0></a>";
+					?>
 					<input type="HIDDEN" name="view" value="Messaging">
 					</td>
 				</tr>
