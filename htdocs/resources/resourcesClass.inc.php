@@ -247,9 +247,12 @@ class AssignObject {
 	}
 	
 	function getRepeatMode() {
-		if ((!$this->repeat_month_of_year) && (!$this->repeat_week_of_month) && (!$this->repeat_day_of_month) && (!$this->repeat_day_of_week) && (!$this->repeat_quantity))
-			return "na";
-		elseif ($this->repeat_month_of_year)
+		if ((!$this->repeat_month_of_year) && (!$this->repeat_week_of_month) && (!$this->repeat_day_of_month) && (!$this->repeat_day_of_week) && (!$this->repeat_quantity)) {
+			if ((date("j", $this->repeat_end) != date("j", $this->begin)) && ($this->repeat_end))
+				return "sd";
+			else
+				return "na";
+		} elseif ($this->repeat_month_of_year)
 			return "y";
 		elseif ($this->repeat_week_of_moth || $this->repeat_day_of_month)
 			return "m";

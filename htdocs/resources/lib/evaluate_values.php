@@ -320,7 +320,10 @@ if ($change_object_schedules) {
 			}
 	
 			if (check_date($change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year))
-				$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
+				if ($change_schedule_repeat_mode == "sd")
+					$change_schedule_repeat_end=mktime(date("G", $change_schedule_end), date("i", $change_schedule_end), 0, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
+				else
+					$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
 
 			if ($change_schedule_repeat_sem_end)
 				foreach ($SEMESTER as $a)	
@@ -331,6 +334,7 @@ if ($change_object_schedules) {
 
 			//repeat = none
 			if ($change_schedule_repeat_none_x) {
+				$change_schedule_repeat_end='';
 				$change_schedule_repeat_month_of_year='';
 				$change_schedule_repeat_day_of_month='';
 				$change_schedule_repeat_week_of_month='';
@@ -339,6 +343,18 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_interval='';	
 			}
 
+
+			//repeat = several days
+			if ($change_schedule_repeat_severaldays_x) {
+				$change_schedule_repeat_end = mktime(date("G", $change_schedule_end), date("i", $change_schedule_end), 0, date("n", $change_schedule_begin), date("j", $change_schedule_begin)+1, date("Y", $change_schedule_begin));
+				$change_schedule_repeat_month_of_year='';
+				$change_schedule_repeat_day_of_month='';
+				$change_schedule_repeat_week_of_month='';
+				$change_schedule_repeat_day_of_week='';
+				$change_schedule_repeat_quantity='';
+				$change_schedule_repeat_interval='';	
+			}
+			
 			//repeat = year
 			if ($change_schedule_repeat_year_x) {
 				$change_schedule_repeat_month_of_year=date("n", $change_schedule_begin);
@@ -484,8 +500,10 @@ if ($change_object_schedules) {
 								$msg->addMsg(10);					
 						$new_assign_object=serialize($changeAssign);
 					}
-				} else
+				} else {
 					$msg->addMsg(11);
+					$new_assign_object=serialize($changeAssign);
+				}
 			} else {
 				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
 					$overlaps = $changeAssign->checkOverlap();

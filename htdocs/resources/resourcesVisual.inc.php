@@ -1108,10 +1108,11 @@ class EditObject extends cssClasses {
 						echo "<b>"._("keine Wiederholung (Einzeltermin)")."</b>";
 				} else {
 				?>				
-					<input type="IMAGE" name="change_schedule_repeat_none" <?=makeButton("keine".(($resAssign->getRepeatMode()=="na") ? "2" :""), "src") ?> border=0 />
+					<input type="IMAGE" name="change_schedule_repeat_none" <?=makeButton("keine".(($resAssign->getRepeatMode()=="na") ? "2" :""), "src") ?> border=0 />&nbsp;&nbsp;
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_day" <?=makeButton("taeglich".(($resAssign->getRepeatMode()=="d") ? "2" :""), "src") ?> border=0 />
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_week" <?=makeButton("woechentlich".(($resAssign->getRepeatMode()=="w") ? "2" :""), "src") ?> border=0 /><br />
-					<input type="IMAGE" name="change_schedule_repeat_month" <?=makeButton("monatlich".(($resAssign->getRepeatMode()=="m") ? "2" :""), "src") ?> border=0 />
+					<input type="IMAGE" name="change_schedule_repeat_severaldays" <?=makeButton("mehrtaegig".(($resAssign->getRepeatMode()=="sd") ? "2" :""), "src") ?> border=0 />&nbsp;&nbsp;
+					&nbsp;<input type="IMAGE" name="change_schedule_repeat_month" <?=makeButton("monatlich".(($resAssign->getRepeatMode()=="m") ? "2" :""), "src") ?> border=0 />
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_year" <?=makeButton("jaehrlich".(($resAssign->getRepeatMode()=="y") ? "2" :""), "src") ?> border=0 />
 				<?
 				}
@@ -1140,7 +1141,7 @@ class EditObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%" valign="top">
 				<? if ($resAssign->getRepeatMode() != "na") { ?>
-				<font size=-1><?=_("Wiederholung bis sp&auml;testens:")?></font><br />				
+				<font size=-1><?if ($resAssign->getRepeatMode() != "sd") print _("Wiederholung bis sp&auml;testens:"); else print _("Letzter Termin:"); ?></font><br />				
 				<font size=-1>
 				<?
 				if ($lockedAssign) {
@@ -1150,7 +1151,7 @@ class EditObject extends cssClasses {
 					<input name="change_schedule_repeat_end_day" value="<? echo date("d",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_repeat_end_month" value="<? echo date("m",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_repeat_end_year" value="<? echo date("Y",$resAssign->getRepeatEnd()); ?>" size=4 maxlength="4" />
-					<? if ($resAssign->getRepeatMode() != "y") { ?>
+					<? if (($resAssign->getRepeatMode() != "y") && ($resAssign->getRepeatMode() != "sd")) { ?>
 						<input type="CHECKBOX" <? printf ("%s", ($resAssign->isRepeatEndSemEnd()) ? "checked" : "") ?> name="change_schedule_repeat_sem_end" /> <?=_("Ende der Vorlesungszeit")?>
 					<? }
 				}
@@ -1185,13 +1186,14 @@ class EditObject extends cssClasses {
 						<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
 						<br /><font size=-1><?=_("<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung selbstst&auml;ndig aufheben. Sie k&ouml;nnen die Belegung aber auch frei eingeben.")?></font>
 						<input type ="HIDDEN" name="change_schedule_assign_user_id" value="<? echo $resAssign->getAssignUserId(); ?>" />
+						<input type ="HIDDEN" name="change_schedule_repeat_mode" value="<? echo $resAssign->getRepeatMode(); ?>" />
 					<?
 					}
 					?>
 				</font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" valign="top">
-				<? if (($resAssign->getRepeatMode() != "na") && ($resAssign->getOwnerType() != "sem") && ($resAssign->getOwnerType() != "date")) {?>
+				<? if (($resAssign->getRepeatMode() != "na") && ($resAssign->getRepeatMode() != "sd") && ($resAssign->getOwnerType() != "sem") && ($resAssign->getOwnerType() != "date")) {?>
 				<font size=-1><?=_("Wiederholungsturnus:")?></font><br />				
 				<font size=-1>
 					<?

@@ -80,24 +80,69 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 		$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
-	
+	} elseif ($assign_object->getRepeatMode() == "sd") {
+		// several days mode, we create multiple assigns
+		
+		//first day
+		$temp_ts_end=mktime(23, 59, 59,
+					date("n",$assign_object -> getBegin()), 
+					date("j",$assign_object -> getBegin()),
+					date("Y",$assign_object -> getBegin()));
+
+		$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $temp_ts_end,
+								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
+								$assign_object->getUserFreeName());
+		//in between days
+		for ($d=date("j",$assign_object -> getBegin())+1; $d<=date("j",$assign_object -> getRepeatEnd())-1; $d++) {
+			$temp_ts=mktime(0, 0, 0,
+					date("n",$assign_object -> getBegin()), 
+					$d,
+					date("Y",$assign_object -> getBegin()));
+
+			$temp_ts_end=mktime(23, 59, 59,
+					date("n",$assign_object -> getBegin()), 
+					$d,
+					date("Y",$assign_object -> getBegin()));
+
+			$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
+								$assign_object->getUserFreeName());
+		}
+				
+		//last_day
+		$temp_ts=mktime(0, 0, 0,
+					date("n",$assign_object -> getRepeatEnd()), 
+					date("j",$assign_object -> getRepeatEnd()),
+					date("Y",$assign_object -> getRepeatEnd()));
+
+		$temp_ts_end=mktime(date("G",$assign_object -> getEnd()), 
+					date("i",$assign_object -> getEnd()), 
+					0, 
+					date("n",$assign_object -> getRepeatEnd()), 
+					date("j",$assign_object -> getRepeatEnd()),
+					date("Y",$assign_object -> getRepeatEnd()));
+
+		$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
+								$assign_object->getUserFreeName());
+		
 	} elseif ((($assign_object -> getRepeatEnd() >= $begin) && ($assign_object -> getBegin() <= $end)) ||
 			(($begin == -1) &&($end == -1) && ($assign_object->getRepeatQuantity() >0)))
 		do { 
 
 		//create a temp_ts to try every possible repeatation
 		$temp_ts=mktime(date("G",$assign_object -> getBegin()), 
-						date("i",$assign_object -> getBegin()), 
-						0, 
-						date("n",$assign_object -> getBegin())+($month_offset * $assign_object ->getRepeatInterval()), 
-						date("j",$assign_object -> getBegin())+($week_offset * $assign_object ->getRepeatInterval() * 7) + ($day_offset * $assign_object ->getRepeatInterval()), 
-						date("Y",$assign_object -> getBegin())+($year_offset * $assign_object ->getRepeatInterval()));
+					date("i",$assign_object -> getBegin()), 
+					0, 
+					date("n",$assign_object -> getBegin())+($month_offset * $assign_object ->getRepeatInterval()), 
+					date("j",$assign_object -> getBegin())+($week_offset * $assign_object ->getRepeatInterval() * 7) + ($day_offset * $assign_object ->getRepeatInterval()), 
+					date("Y",$assign_object -> getBegin())+($year_offset * $assign_object ->getRepeatInterval()));
 		$temp_ts_end=mktime(date("G",$assign_object -> getEnd()), 
-						date("i",$assign_object -> getEnd()), 
-						0, 
-						date("n",$assign_object -> getBegin()) + ($month_offset * $assign_object ->getRepeatInterval()), 
-						date("j",$assign_object -> getEnd())+($week_offset * $assign_object ->getRepeatInterval() * 7)  + ($day_offset * $assign_object ->getRepeatInterval()),  
-						date("Y",$assign_object -> getEnd())+($year_offset * $assign_object ->getRepeatInterval()));
+					date("i",$assign_object -> getEnd()), 
+					0, 
+					date("n",$assign_object -> getBegin()) + ($month_offset * $assign_object ->getRepeatInterval()), 
+					date("j",$assign_object -> getEnd())+($week_offset * $assign_object ->getRepeatInterval() * 7)  + ($day_offset * $assign_object ->getRepeatInterval()),  
+					date("Y",$assign_object -> getEnd())+($year_offset * $assign_object ->getRepeatInterval()));
 		//change the offsets
 		if ($assign_object->getRepeatMode() == "y") $year_offset++;
 		if ($assign_object->getRepeatMode() == "w") $week_offset++;
