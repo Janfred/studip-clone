@@ -229,26 +229,33 @@ class studip_news {
 			. "<br><br>" . _("Im unteren Bereich k&ouml;nnen Sie ausw&auml;hlen, in welchen Bereichen Ihre News angezeigt wird.");
 		echo "\n<br><br>" . _("Klicken Sie danach hier, um die &Auml;nderungen zu &uuml;bernehmen.") . "<br><br><center>"
 			. "<INPUT TYPE=\"IMAGE\" name=\"news_submit\" " . makeButton("uebernehmen","src") . tooltip(_("Änderungen übernehmen")) ."  border=\"0\" ></center></td></tr>";
-		$news_date = ($this->news_query['date'] > $aktuell) ? $this->news_query['date'] : $aktuell;
+		if ($this->news_query['date'] > $aktuell) {
+			$news_date = $this->news_query['date'];
+			$date_offset = 0;
+		} else {
+			$news_date = $aktuell;
+			$date_offset = 1;
+		}
+		
 		echo "\n<tr><td class=\"blank\" colspan=\"2\">" . _("Einstelldatum:") . " <select name=\"date\"><option value=\"".$news_date."\" selected>".strftime("%d.%m.%y", $news_date)."</option>";
-		for ($i=1; $i<=14; $i++) {
-			$temp=$aktuell+$i*86400;
+		for ($i = $date_offset; $i <= $date_offset+13; ++$i) {
+			$temp = $aktuell+$i*86400;
 			echo "\n<option value=\"".$temp."\">".strftime("%d.%m.%y",$temp)."</option>";
 		}
 		echo "</select>&nbsp;&nbsp;&nbsp;" . _("G&uuml;ltigkeitsdauer:") . " <select name=\"expire\">";
-		if ($this->news_query["news_id"]!="new_entry"){
-			$this->news_query["expire"]=($this->news_query["date"]+$this->news_query["expire"])-$aktuell;
-			echo "\n<option value=\"".$this->news_query["expire"]."\" selected>";
-			printf(_("bis zum %s"), strftime("%d.%m.%y",($this->news_query["expire"]+$aktuell)));
+		if ($this->news_query["news_id"] != "new_entry"){
+			$this->news_query["expire"] = ($this->news_query["date"] + $this->news_query["expire"]) - $aktuell;
+			echo "\n<option value=\"" . $this->news_query["expire"] . "\" selected>";
+			printf(_("bis zum %s"), strftime("%d.%m.%y",($this->news_query["expire"] + $aktuell)));
 			echo "</option>";
 		}
-		for ($i=2; $i<=12; $i+=2) {
-			$temp=$i*604800;
-			echo "\n<option value=\"".$temp."\" ";
-			if ($this->news_query["expire"]==$temp) 
+		for ($i = 2; $i <= 12; $i += 2) {
+			$temp = $i * 604800;
+			echo "\n<option value=\"" . $temp . "\" ";
+			if ($this->news_query["expire"] == $temp) 
 				echo"selected";
 			echo ">";
-			printf(_("%s Wochen (%s)"),$i ,strftime("%d.%m.%y",($temp+$aktuell)));
+			printf(_("%s Wochen (%s)"),$i ,strftime("%d.%m.%y",($temp + $news_date)));
 			echo "</option>";
 		}
 		echo "</select></td></tr></table></td></tr>";
