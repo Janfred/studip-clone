@@ -177,7 +177,7 @@ if ($chatInput) {
 							<?=makeButton("absenden","src") . tooltip(_("Nachricht senden"))?> border="0" value="senden">
 					</td>
 					<td align="right" valign="center">
-						<a href="javascript:doQuit();"><img <?=tooltip(_("Chat verlassen")) . makeButton("abbrechen","src")?> border="0"></a>
+						<a href="javascript:doQuit();"><img <?=tooltip(_("Chat verlassen")) . makeButton("chatbeenden","src")?> border="0"></a>
 					</td>
 				</tr>
 			</table>
