@@ -61,7 +61,9 @@ function check_terms($userid, $_language_path) {
 		<?=_("Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:")?><br><br>
 		<? include("./locale/$_language_path/LC_HELP/pages/nutzung.html"); ?>
 		<center><a href="index.php?i_accept_the_terms=yes"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a></center>
-		<br/>	
+		<br/>
+		</blockquote>
+		</table>	
 		<? page_close();
 		$db2->query("DELETE FROM active_sessions WHERE sid = '".$userid."'");
 		die;
