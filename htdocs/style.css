@@ -1,3 +1,5 @@
+/* <!-- $Id$ --> */
+
 A:visited {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
 A:link {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
 A:hover {	color: #FF3333; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
@@ -159,5 +161,8 @@ table.tabdaterow {background-color: white; }
 td.tddaterowp {border-style: solid; border-color: #FFFFFF;  border-width: 1px; background-image: url('pictures/steelcal.jpg'); font-family: Arial, Helvetica, sans-serif; font-weight: bold; color: #009900;font-size:8pt;}
 td.tddaterowpx {border-style: solid; border-color: #D00000;  border-width: 1px; background-image: url('pictures/steelcal.jpg'); font-family: Arial, Helvetica, sans-serif;font-weight: bold; color: #009900;font-size:8pt;}
 
+
+td.smiley_th   { border:0px solid #000000; background:#B5B5B5 url('pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; font-weight: bold; text-align: center; background-color:#B5B5B5  }
+td.smiley_redborder {border:1px solid #D00000;}
 
 code  { font-size:10pt; }
