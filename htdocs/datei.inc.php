@@ -95,7 +95,7 @@ function edit_item ($item_id, $type, $name, $description) {
 	if ($type)
 		$db->query("UPDATE folder SET name='$name', description='$description'  WHERE folder_id ='$item_id'");
 	else
-		$db->query("UPDATE dokumente SET description='$description'  WHERE dokument_id ='$item_id'");	
+		$db->query("UPDATE dokumente SET name='$name', description='$description'  WHERE dokument_id ='$item_id'");	
 	
 	if ($db->affected_rows())
 		return TRUE;
@@ -116,10 +116,10 @@ function create_folder ($name, $description, $parent_id) {
 ## Upload Funktionen ################################################################################
 
 //Ausgabe des Formulars
-function form() {
+function form($refresh = FALSE) {
 	global $PHP_SELF,$UPLOAD_TYPES,$range_id,$SessSemName,$SemUserStatus,$user;
 	
-	//Hier kommt wohl ein root oder admin, der nicht in der Smeinartabelle steht... also uebernehmen wir globale Rechte
+	//Hier kommt wohl ein root oder admin, der nicht in der Seminartabelle steht... also uebernehmen wir globale Rechte
 	if (!$SemUserStatus) {
 		$db=new DB_Seminar;
 		$db->query("SELECT perms FROM auth_user_md5 WHERE user_id = '".$user->id."'");
@@ -127,7 +127,7 @@ function form() {
 		$SemUserStatus=$db->f("perms");
 		}
 		
-	//erlaubte Dategroesse aus Regelliste der Config.inc.php auslesen
+	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
 	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
 		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$SemUserStatus];
 		}
@@ -137,7 +137,10 @@ function form() {
 	
 	$c=1;
 	
-	$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	if (!$refresh)
+		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	else
+		$print="\n<br /><br />" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";	
 	$print.="\n";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
 	
@@ -194,13 +197,18 @@ function form() {
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
-	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Beschreibung der Datei ein.") . "</font></td></tr>";
-	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
-	$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
-	$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
-	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";
+	if (!$refresh) {
+		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name") . "&nbsp;</font><br>";
+		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
+		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
+	} else
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
+	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";	
 	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\">";
-	$print.="&nbsp;<a href=\"$PHP_SELF?abbrechen=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
+	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
 	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"upload\">";	
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";	
 	$print.= "\n</form></table><br /></center>";
@@ -223,7 +231,7 @@ function getFileExtension($str) {
 function validate_upload($the_file) {
 	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName,$SemUserStatus, $user, $auth;
 
-	//Hier kommt wohl ein root oder admin, der nicht in der Smeinartabelle steht... also uebernehmen wir globale Rechte
+	//Hier kommt wohl ein root oder admin, der nicht in der Seminartabelle steht... also uebernehmen wir globale Rechte
 	if (!$SemUserStatus) {
 		$db=new DB_Seminar;
 		$db->query("SELECT perms FROM auth_user_md5 WHERE user_id = '".$user->id."'");
@@ -231,7 +239,7 @@ function validate_upload($the_file) {
 		$SemUserStatus=$db->f("perms");
 		}
 	
-	//erlaubte Dategroesse aus Regelliste der Config.inc.php auslesen
+	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
 	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
 		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$SemUserStatus];
 		}
@@ -388,19 +396,31 @@ function upload($the_file) {
 
 
 //Erzeugen des Datenbankeintrags zur Datei
-function insert_entry_db($range_id, $sem_id=0) {
-	global $the_file_name, $the_file_size, $dokument_id, $description, $user, $upload_seminar_id;
+function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
+	global $the_file_name, $the_file_size, $dokument_id, $description, $name, $user, $upload_seminar_id;
 	
-	$date = time();						//Systemzeit
-	$user_id = $user->id;				 // user_id erfragen...
-	$range_id = trim($range_id);  // laestige white spaces loswerden
-	$description = trim($description);  // laestige white spaces loswerden
+	$date = time();				//Systemzeit
+	$user_id = $user->id;			// user_id erfragen...
+	$range_id = trim($range_id); 		// laestige white spaces loswerden
+	$description = trim($description);  	// laestige white spaces loswerden
+	$name = trim($name);  			// laestige white spaces loswerden
 	$db=new DB_Seminar;
-	$query	 = "INSERT INTO dokumente "
-			. " (dokument_id, description, mkdate, chdate, range_id, filename, user_id, seminar_id, filesize, autor_host) "
-			. " values('$dokument_id','$description','$date', '$date', '$range_id','$the_file_name','$user_id','$upload_seminar_id', '$the_file_size', '".getenv("REMOTE_ADDR")."') ";
+
+	if (!$refresh)
+		$query	 = sprintf ("INSERT INTO dokumente SET dokument_id='%s', description='%s', mkdate='%s', chdate='%s', range_id='%s', filename='%s', name='%s', "
+				. "user_id='%s', seminar_id='%s', filesize='%s', autor_host='%s'",
+				$dokument_id, $description, $date, $date, $range_id, $the_file_name, $name, 
+				$user_id, $upload_seminar_id, $the_file_size, getenv("REMOTE_ADDR"));
+	else	
+		$query	 = sprintf ("UPDATE dokumente SET dokument_id='%s', chdate='%s', filename='%s', "
+				. "user_id='%s', filesize='%s', autor_host='%s' WHERE dokument_id = '%s' ",
+				$dokument_id, $date, $the_file_name, $user_id, $the_file_size, getenv("REMOTE_ADDR"), $refresh);
+
 	$db->query($query);
-	return;
+	if ($db->affected_rows())
+		return TRUE;
+	else
+		return FALSE;
 }
 
 function JS_for_upload() {
@@ -533,32 +553,30 @@ function JS_for_upload() {
 
 
 //Steuerungsfunktion 
-function upload_item ($range_id, $create = FALSE, $echo = FALSE) {
-
+function upload_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE) {
 	global $the_file;
 
 	if ($create) {
 		if (upload($the_file))
-			insert_entry_db($range_id);
+			if (insert_entry_db($range_id, 0, $refresh))
+				if ($refresh)
+					delete_document($refresh, TRUE);
 		return;
 		} 
 	 else {
 		if ($echo) {
-			echo form();
+			echo form($refresh);
 			return;
 			}
 		else
-			return form();
+			return form($refresh);
 		}
 	}
+	
+## Ende Upload Funktionen ################################################################################
 
-
-
-## Ende der Upload Funktionen ################################################################################
-
-function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all) {
-
-
+//create the folder-system
+function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all, $refresh=FALSE) {
 	global $_fullname_sql,$SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $rechte, $anfang, $PHP_SELF, $user, $SemSecLevelWrite, $SemUserStatus;
 
 	if (!$anfang)
@@ -681,8 +699,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			//Contentbereich erstellen
 			if ($change == $db->f("folder_id")) { //Aenderungsmodus, zweiter Teil
 				$content.="<textarea name=\"change_description\" rows=3 cols=40>".htmlReady($db->f("description"))."</textarea><br /><br />";
-				$content.="<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"&Auml;nderungen speichern\">&nbsp;";
-				$content.="<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" value=\"Abbrechen\">";
+				$content.="<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\""._("&Auml;nderungen speichern")."\">&nbsp;";
+				$content.="<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
 				$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
 				$content.="<input type=\"hidden\" name=\"type\" value=1 />";
 				}
@@ -695,7 +713,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$content.="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 			
 			if ($upload == $db->f("folder_id")) {
-				$content.=upload_item ($upload,FALSE,FALSE);
+				$content.=upload_item ($upload,FALSE,FALSE,$refresh);
 				}
 
 			$content.= "\n";
@@ -758,24 +776,31 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$link=$PHP_SELF."?open=".$db3->f("dokument_id")."#anker";
 				
 				//Titelbereich erstellen
-				$tmp_titel=mila($db3->f("filename"));
+				if ($change == $db3->f("dokument_id"))
+					$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
+				else {
+					if ($db3->f("name"))
+						$tmp_titel=mila($db3->f("name"));
+					else
+						$tmp_titel=mila($db3->f("filename"));					
 				
-				//create a link onto the titel, too
-				if ($link)
-					$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
-
-				//add the size
-				if (($db3->f("filesize") /1024 / 1024) >= 1)
-					$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024 / 1024)." MB";
-				else
-					$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024)." kB";
+					//create a link onto the titel, too
+					if ($link)
+						$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
+	
+					//add the size
+					if (($db3->f("filesize") /1024 / 1024) >= 1)
+						$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024 / 1024)." MB";
+					else
+						$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024)." kB";
+						
+					//add number of downloads
+					$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 					
-				//add number of downloads
-				$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
-				
-				//Zusatzangaben erstellen
-				$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
-
+					//Zusatzangaben erstellen
+					$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
+				}
+	
 				?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?
 				
 				if (!$all) echo $striche.$striche3;
@@ -814,8 +839,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 								
 					if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
 						$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
-						$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\"&Auml;nderungen speichern\" />";
-						$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 value=\"Abbrechen\" />";						
+						$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+						$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
 						$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
 						$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
 						}
@@ -830,20 +855,26 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					if ($move == $db3->f("dokument_id"))
 						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 										
-					$content.= "\n";	
+					$content.= "\n";
+					
+					if ($upload == $db3->f("dokument_id")) {
+						$content.=upload_item ($upload,FALSE,FALSE,$refresh);
+					}
 										
 					//Editbereich ertstellen
 					$edit='';
 					if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id"))) {
-						if (($rechte) || ($db3->f("user_id")==$user->id)) {
-							$edit= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
-							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
-							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
-							}
-						$edit.= "&nbsp;<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
+						$edit= "&nbsp;<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
 						if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz"))
-							$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";						
-						}
+							$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
+
+						if (($rechte) || ($db3->f("user_id")==$user->id)) {
+							$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
+							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
+							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
+							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
+							}
+					}
 	
 					
 					//Dokument-Content ausgeben
@@ -923,13 +954,15 @@ Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
 dies muss das aufrufende Script sicherstellen.
 */
 
-function delete_document ($dokument_id) {
+function delete_document ($dokument_id, $delete_only_file = FALSE) {
 	global $UPLOAD_PATH, $msg; // brauchen wir fuer den Pfad zu den Dokumenten
 
 	$db = new DB_Seminar;
 	
 	if (!unlink("$UPLOAD_PATH/$dokument_id"))
 		return FALSE;
+	elseif ($delete_only_file)
+		return TRUE;
 		
 	// eintrag aus der Datenbank werfen
 	$db->query("DELETE FROM dokumente WHERE dokument_id='$dokument_id'");

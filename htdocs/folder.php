@@ -38,7 +38,7 @@ JS_for_upload();
 //we need this <body> tag, sad but true :)
 echo "\n<body onUnLoad=\"upload_end()\">"; 
 
-//Switch fuerr die Ansichten
+//Switch fuer die Ansichten
 if ($cmd=="tree") {
 	$folder_system_data='';
 	$folder_system_data["cmd"]="tree";
@@ -64,7 +64,10 @@ if ((!$rechte) && strpos($open, "_")) {
 	$db->next_record();
 	if (($db->f("user_id") == $user->id) && ($db->f("user_id") != "nobody"))
 		$owner=TRUE;
-	}
+	else
+		$owner=FALSE;
+} else
+	$owner=FALSE;
 
 if (($rechte) || ($owner)) {
 	//wurde Code fuer Anlegen von Ordnern ubermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
@@ -106,7 +109,7 @@ if (($rechte) || ($owner)) {
 		$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
 		}
 
-	//Loeschen von Datein im wirklich-ernst Mode
+	//Loeschen von Dateien im wirklich-ernst Mode
 	if (strpos($open, "_rm_")) {
 		if (delete_document(substr($open, (strpos($open, "_rm_"))-32, (strpos($open, "_rm_")))))
 			$msg.="msg§" . _("Die Datei wurde gel&ouml;scht") . "§";
@@ -120,12 +123,12 @@ if (($rechte) || ($owner)) {
 		}
 
 	//wurde Code fuer Speichern von Aenderungen uebermittelt (=id+"_sc_"), wird entsprechende Funktion aufgerufen
-	if ((strpos($open, "_sc_")) && (!$Abbrechen)) {
+	if ((strpos($open, "_sc_")) && (!$cancel_x)) {
 		edit_item (substr($open, (strpos($open, "_sc_"))-32, (strpos($open, "_sc_"))), $type, $change_name, $change_description);
 		}
 
 	//wurde Code fuer Verschieben-Vorwaehlen uebermittelt (=id+"_m_"), wird entsprechende Funktion aufgerufen
-	if ((strpos($open, "_m_")) && (!$Abbrechen)) {
+	if ((strpos($open, "_m_")) && (!$cancel_c)) {
 		$folder_system_data["move"]=substr($open, (strpos($open, "_m_"))-32, (strpos($open, "_m_")));
 		}
 	}
@@ -133,25 +136,35 @@ if (($rechte) || ($owner)) {
 
 //Upload, Check auf Konsistenz mit Seminar-Schreibberechtigung
 if (($SemUserStatus == "autor") || ($rechte)) {
-	//wurde Code fuer Hochladen uebermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
-	if ((strpos($open, "_u_")) && (!$Abbrechen)) {
+	//wurde Code fuer Hochladen uebermittelt (=id+"_u_"), wird entsprechende Variable gesetzt
+	if ((strpos($open, "_u_")) && (!$cancel_x)) {
 		$folder_system_data["upload"]=substr($open, (strpos($open, "_u_"))-32, (strpos($open, "_u_")));
 		}	
+
+	//wurde Code fuer Aktualisieren-Hochladen uebermittelt (=id+"_rfu_"), wird entsprechende Variable gesetzt
+	if ((strpos($open, "_rfu_")) && (!$cancel_x)) {
+		$folder_system_data["upload"]=substr($open, (strpos($open, "_rfu_"))-32, (strpos($open, "_rfu_")));
+		$folder_system_data["refresh"]=substr($open, (strpos($open, "_rfu_"))-32, (strpos($open, "_rfu_")));
+		}	
 	
-	//wurde eine Datei hochgeladen? 
-	if (($cmd=="upload") && (!$abbrechen)) {
-		upload_item ($folder_system_data["upload"], TRUE, FALSE);
+	//wurde eine Datei hochgeladen/aktualisiert?
+	if (($cmd=="upload") && (!$cancel_x)) {
+		upload_item ($folder_system_data["upload"], TRUE, FALSE, $folder_system_data["refresh"]);
+		$open = $dokument_id;
+		$close = $folder_system_data["refresh"];
 		$folder_system_data["upload"]='';
+		$folder_system_data["refresh"]='';		
 		unset($cmd);
 		}
-	if ($abbrechen)  {
+	if ($cancel_x)  {
 		$folder_system_data["upload"]='';
+		$folder_system_data["refresh"]='';
 		unset($cmd);
-		}
 	}
+}
 	
 //wurde Code fuer Starten der Verschiebung uebermittelt (=id+"_md_"), wird entsprechende Funktion aufgerufen (hier kein Rechtecheck noetig, da Dok_id aus Sess_Variable.
-if ((strpos($open, "_md_")) && (!$Abbrechen)) {
+if ((strpos($open, "_md_")) && (!$cancel_x)) {
 	move_item ($folder_system_data["move"], substr($open, (strpos($open, "_md_"))-32, (strpos($open, "_md_"))));
 	$folder_system_data["move"]='';
 	}
@@ -243,7 +256,7 @@ if ($close) {
 	//Treeview
 	if ($folder_system_data["cmd"]=="tree") {
 		//Seminar...
-		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE);
+		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"]);
 		while ($db->next_record()) {
 			//und einzelne Termine	
 			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE);
