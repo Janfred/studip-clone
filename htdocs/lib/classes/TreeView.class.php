@@ -85,7 +85,21 @@ class TreeView {
 	*/
 	var $root_content;
 	
+	/**
+	* the maximum amount of columns in a title
+	*
+	* @access	public
+	* @var	string	$max_cols
+	*/
 	var	$max_cols = 80;
+	
+	/**
+	* draw red icons
+	*
+	* @access	public
+	* @var	boolean	$use_aging
+	*/
+	var $use_aging = false;
 	
 	/**
 	* constructor
@@ -100,6 +114,8 @@ class TreeView {
 		$this->tree_class_name = $tree_class_name;
 		$this->class_name = get_class($this);
 		$this->tree =& TreeAbstract::GetInstance($tree_class_name,$args);
+		$this->pic_open = ($this->use_aging) ? "forumgraurunt2.gif" : "forumrotrunt.gif";
+		$this->pic_close = ($this->use_aging) ? "forumgrau2.gif" : "forumgrau.gif";
 		if (is_object($sess)){
 			$sess->register("_open_ranges_" . $this->class_name);
 			$sess->register("_open_items_" . $this->class_name);
@@ -236,9 +252,8 @@ class TreeView {
 	* @param	string	$item_id
 	*/
 	function printItemOutput($item_id){
-		echo "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
 		echo $this->getItemHeadPics($item_id);
-		echo "\n</td><td class=\"printhead\" nowrap width=\"1\" valign=\"middle\">";
+		echo "\n<td class=\"printhead\" nowrap width=\"1\" valign=\"middle\">";
 		if ($this->anchor == $item_id)
 			echo "<a name=\"anchor\">";
 		echo "<img src=\"pictures/forumleer.gif\"  border=\"0\" height=\"20\" width=\"1\">";
@@ -295,15 +310,8 @@ class TreeView {
 	* @return	string
 	*/
 	function getItemHeadPics($item_id){
-		$head = "";
-		$head .= "<a href=\"";
-		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
-											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= "<img src=\"pictures/";
-		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
-		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"2\">";
-		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures/forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
-		$head .= "</a>";
+		$head = $this->getItemHeadFrontPic($item_id);
+		$head .= "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
 		if ($this->tree->hasKids($item_id)){
 			$head .= "<a href=\"";
 			$head .= ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}"); 
@@ -317,7 +325,27 @@ class TreeView {
 			$head .= ($this->open_items[$item_id]) ? "cont_folder4.gif" : "cont_folder2.gif";
 			$head .= "\" " . tooltip(_("Dieses Element hat keine Unterelemente")) . "border=\"0\">";
 		}
-	return $head;
+	return $head . "</td>";
+	}
+	
+	function getItemHeadFrontPic($item_id){
+		if ($this->use_aging){
+			$head = "<td bgcolor=\"" . $this->getAgingColor($item_id) . "\" class=\""
+			. (($this->open_items[$item_id]) ? 'printhead3' : 'printhead2')
+			. "\" nowrap width=\"1%\"  align=\"left\" valign=\"top\">";
+		} else {
+			$head = "<td class=\"printhead\" nowrap  align=\"left\" valign=\"top\">";
+		}
+		$head .= "<a href=\"";
+		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
+											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
+		$head .= "<img src=\"pictures/";
+		$head .= ($this->open_items[$item_id]) ? $this->pic_open : $this->pic_close;
+		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"4\">";
+		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures/forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
+		$head .= "</a>";
+		$head .= '</td>';
+		return $head;
 	}
 	
 	/**
@@ -355,6 +383,27 @@ class TreeView {
 		$content .= "\n<tr><td class=\"blank\" align=\"left\">Inhalt für Element <b>{$this->tree->tree_data[$item_id]['name']} ($item_id)</b><br>".formatReady($this->tree->tree_data[$item_id]['description'])."</td></tr>";
 		$content .= "</table>";
 		return $content;
+	}
+	
+	function getAgingColor($item_id){
+		$the_time = time();
+		$chdate = $this->tree->tree_data[$item_id]['chdate'];
+		if ($chdate == 0){
+			$timecolor = "#BBBBBB";
+		} else {
+			if (($the_time - $chdate) < 86400){
+				$timecolor = "#FF0000";
+			} else {
+				$timediff = (int) log(($the_time - $chdate) / 86400 + 1) * 15;
+				if ($timediff >= 68){
+					$timediff = 68;
+				}
+				$red = dechex(255 - $timediff);
+				$other = dechex(119 + $timediff);
+				$timecolor = "#" . $red . $other . $other;
+			}
+		}
+		return $timecolor;
 	}
 	
 	/**
