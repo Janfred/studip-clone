@@ -80,24 +80,25 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 
 	?>
 	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">
-		<tr><td colspan="2" class="topic" valign="middle"><img src="pictures/logout.gif" border="0" style="vertical-align:middle"><b>&nbsp;Stud.IP - Logout</b></td></tr>
+		<tr><td colspan="2" class="topic" valign="middle"><img src="pictures/logout.gif" border="0" style="vertical-align:middle"><b>&nbsp;<? print _("Stud.IP - Logout");?></b></td></tr>
 		<tr>
 			<td width="99%"  class="blank" valign="middle">
 				<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0">
 	<?
-					parse_msg ("info§Sie sind nun aus dem System abgemeldet", "§", "blank", 1)
+					$msg= _("Sie sind nun aus dem System abgemeldet");
+					parse_msg ("info§$msg","§","blank", 1);
 	?>
 					<tr>
-					<td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Startseite.
-					</font></td></tr>
+					<td class="blank"><blockquote><font size=-1><a href="index.php"><b>&nbsp;<? print _("Hier</b></a> geht es wieder zur Startseite.");?>
+					</font></blockquote></td></tr>
 					
 				<? if ($UNI_LOGOUT_ADD) {
-					echo "<tr><td class=\"blank\"><font size=-1>&nbsp;$UNI_LOGOUT_ADD</font></td></tr>";
+					echo "<tr><td class=\"blank\"><blockquote><font size=-1>&nbsp;$UNI_LOGOUT_ADD</font></blockquote></td></tr>";
 					}
 				?>
 				</table>
 			</td>
-			<td  >
+			<td class="blank">
 			<img src="pictures/maus.jpg" style="vertical-align:top" border="0">
 			</td>
 		</tr>
