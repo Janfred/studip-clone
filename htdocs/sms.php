@@ -240,12 +240,9 @@ if ($msg)	{
 	$n=0;
 	while ($db->next_record()) {
 		//Chateinladung
-		if (ereg(("chat_with_me"), $db->f("message")))  {
+		if (preg_match("/chat_with_me/i", $db->f("message")))  {
 			if (count($online)) {
-				reset($online);
-					while (list($index)=each($online)) {
-						list(,,,$temp_sms_uname)=$online[$index];
-						if ($db->f("user_id_snd")==$temp_sms_uname) { //Nachricht liegt vor und kann angezegt werden (Absender ist im Chat)
+				if ($online[$db->f("user_id_snd")]) { //Nachricht liegt vor und kann angezegt werden (Absender ist online)
 							$open="open";
 							$neu=TRUE;
 							$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
@@ -269,7 +266,6 @@ if ($msg)	{
 							}
  						}
 			}
-		}
 		//Keine Chateinladung
 		else {
 			//Kopfzeile erstellen
