@@ -50,16 +50,16 @@ var $auth_user = array();        // assoziatives Array, enthält die Userdaten au
 var $user_info = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_info
 var $user_inst = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_inst
 var $user_studiengang = array(); // assoziatives Array, enthält die Userdaten aus der Tabelle user_studiengang
-var $check="";    //Hilfsvariable für den Rechtecheck
-var $special_user=FALSE;  // Hilfsvariable für bes. Institutsfunktionen
+var $check = "";    //Hilfsvariable für den Rechtecheck
+var $special_user = FALSE;  // Hilfsvariable für bes. Institutsfunktionen
 var $msg = ""; //enthält evtl Fehlermeldungen
 var $max_file_size = 100; //max Größe der Bilddatei in KB
 var $img_max_h = 250; // max picture height
 var $img_max_w = 200; // max picture width
 var $uploaddir = "./user"; //Uploadverzeichnis für Bilder
 var $logout_user = FALSE; //Hilfsvariable, zeigt an, ob der User ausgeloggt werden muß
-var $priv_msg="";  //Änderungsnachricht bei Adminzugriff
-var $default_url="http://www"; //default fuer private URL
+var $priv_msg = "";  //Änderungsnachricht bei Adminzugriff
+var $default_url = "http://www"; //default fuer private URL
 
 
 function about($username,$msg) {  // Konstruktor, prüft die Rechte
@@ -69,9 +69,12 @@ function about($username,$msg) {  // Konstruktor, prüft die Rechte
 	$this->get_auth_user($username);
 	$this->DataFields = new DataFields($this->auth_user["user_id"]);	
 	$this->msg = rawurldecode($msg); //Meldungen restaurieren
-
-	if ($auth->auth["uname"] == $username AND $perm->have_perm("autor")) $this->check="user"; // der user selbst natürlich auch
-	elseif ($auth->auth["perm"]=="admin") {     //bei admins schauen wir mal
+	
+	// der user selbst natürlich auch
+	if ($auth->auth["uname"] == $username AND $perm->have_perm("autor"))
+		$this->check="user";
+	//bei admins schauen wir mal
+	elseif ($auth->auth["perm"]=="admin") {
 		$this->db->query("SELECT a.user_id FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.inst_perms='admin' AND b.user_id='$user->id') AND (a.user_id='".$this->auth_user["user_id"]."' AND a.inst_perms IN ('dozent','tutor','autor'))");
 		if ($this->db->num_rows()) 
 			$this->check="admin";
@@ -82,20 +85,22 @@ function about($username,$msg) {  // Konstruktor, prüft die Rechte
 				$this->check="admin";
 		}
 	}
+	//root darf mal wieder alles
 	elseif ($auth->auth["perm"]=="root")
-		$this->check="admin";  //root darf mal wieder alles
+		$this->check="admin";
 	else
 		$this->check="";
-
+	//hier ist wohl was falschgelaufen...
 	if ($this->auth_user["username"]=="")
-		$this->check="";    //hier ist wohl was falschgelaufen...
+		$this->check="";
 
 	return;
 }
 
 
 function get_auth_user($username) {
-	$this->db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");  //ein paar userdaten brauchen wir schon mal
+	//ein paar userdaten brauchen wir schon mal
+	$this->db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
 	if ($this->db->next_record()) {
 		$fields = $this->db->metadata();
 		for ($i=0; $i<count($fields); $i++) {
@@ -108,7 +113,8 @@ function get_auth_user($username) {
 	}
 }
 
-function get_user_details() {       // füllt die arrays  mit Daten
+// füllt die arrays  mit Daten
+function get_user_details() {
 	$this->db->query("SELECT * FROM user_info WHERE user_id = '".$this->auth_user["user_id"]."'");
 	if ($this->db->next_record()) {
 		$fields = $this->db->metadata();
@@ -122,13 +128,21 @@ function get_user_details() {       // füllt die arrays  mit Daten
 
 	$this->db->query("SELECT user_studiengang.*,studiengaenge.name FROM user_studiengang LEFT JOIN studiengaenge USING (studiengang_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY studiengang_id");
 	while ($this->db->next_record()) {
-		$this->user_studiengang[$this->db->f("studiengang_id")] = array ("name" => $this->db->f("name"));
+		$this->user_studiengang[$this->db->f("studiengang_id")] = array("name" => $this->db->f("name"));
 	}
 
 
-	$this->db->query("SELECT user_inst.*,Institute.Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY Institut_id");
+	$this->db->query("SELECT user_inst.*,Institute.Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY priority ASC, Institut_id ASC");
 	while ($this->db->next_record()) {
-		$this->user_inst[$this->db->f("Institut_id")] = array ("inst_perms" => $this->db->f("inst_perms"), "sprechzeiten" => $this->db->f("sprechzeiten"), "raum" => $this->db->f("raum"), "Telefon" => $this->db->f("Telefon"), "Fax" => $this->db->f("Fax"), "Name" => $this->db->f("Name"));
+		$this->user_inst[$this->db->f("Institut_id")] =
+				array("inst_perms" => $this->db->f("inst_perms"),
+				"sprechzeiten" => $this->db->f("sprechzeiten"),
+				"raum" => $this->db->f("raum"),
+				"Telefon" => $this->db->f("Telefon"),
+				"Fax" => $this->db->f("Fax"),
+				"Name" => $this->db->f("Name"),
+				"externdefault" => $this->db->f("externdefault"),
+				"priority" => $this->db->f("priority"));
 		if ($this->db->f("inst_perms")!="user")
 			$this->special_user=TRUE;
 	}
@@ -274,10 +288,14 @@ function inst_edit($inst_delete,$new_inst) {
 	return;
 }
 
-function special_edit($raum,$sprech,$tel,$fax,$name) {
+function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst) {
 	if (is_array($raum)) {
-		while (list($inst_id,$detail) = each ($raum)) {
-			$this->db->query("UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', Telefon='$tel[$inst_id]', Fax='$fax[$inst_id]' WHERE Institut_id='$inst_id' AND user_id='".$this->auth_user["user_id"]."'");
+		while (list($inst_id, $detail) = each($raum)) {
+			$query = "UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', ";
+			$query .= "Telefon='$tel[$inst_id]', Fax='$fax[$inst_id]', externdefault=";
+			$query .= $default_inst == $inst_id ? '1' : '0';
+			$query .= " WHERE Institut_id='$inst_id' AND user_id='" . $this->auth_user["user_id"] . "'";
+			$this->db->query($query);
 			if ($this->db->affected_rows()) {
 				$this->msg = $this->msg . "msg§" . sprintf(_("Ihre Daten an der Einrichtung %s wurden ge&auml;ndert"), $name[$inst_id]) . "§";
 				setTempLanguage($this->auth_user["user_id"]);
@@ -609,7 +627,39 @@ function parse_msg($long_msg,$separator="§") {
 	return;
 }
 
-
+function move ($inst_id, $direction) {
+	if ($this->check == 'user' || $this->check == 'admin') {
+		$db = new DB_Seminar();
+		$query = "SELECT * FROM user_inst WHERE user_id = '{$this->auth_user['user_id']}' ";
+		$query .= "AND inst_perms != 'user' ORDER BY priority ASC";
+		$db->query($query);
+		$i = 1;
+		while ($db->next_record()) {
+			$to_order[$i] = $db->f('Institut_id');
+			if ($to_order[$i] == $inst_id)
+				$pos = $i;
+			$i++;
+		}
+		if ($direction == 'up') {
+			$a = $to_order[$pos - 1];
+			$to_order[$pos - 1] = $to_order[$pos];
+			$to_order[$pos] = $a;
+		}
+		else {
+			$a = $to_order[$pos + 1];
+			$to_order[$pos + 1] = $to_order[$pos];
+			$to_order[$pos] = $a;
+		}
+		$i--;
+		for (;$i > 0; $i--) {
+			$query = "UPDATE user_inst SET priority = $i WHERE user_id = '{$this->auth_user['user_id']}' ";
+			$query .= "AND Institut_id = '{$to_order[$i]}'";
+			$db->query($query);
+		}
+	}
+}
+			
+		
 } // ende Klassendefinition
 
 
@@ -666,31 +716,36 @@ if (!$my_about->check)
 	}
 
 //ein Bild wurde hochgeladen
-if ($cmd=="copy")
+if ($cmd == "copy")
  {
 	$my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
 	}
 
 //Veränderungen an Studiengängen
-if ($cmd=="studiengang_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
+if ($cmd == "studiengang_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
  {
 	$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
 	}
 
 //Veränderungen an Instituten für Studies
-if ($cmd=="inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
+if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
  {
 	$my_about->inst_edit($inst_delete,$new_inst);
 	}
 
 //Veränderungen an Raum, Sprechzeit, etc
-if ($cmd=="special_edit")
+if ($cmd == "special_edit")
  {
-	$my_about->special_edit($raum,$sprech,$tel,$fax,$name);
+	$my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst);
 	}
 
+// change order of institutes
+if ($cmd == 'move') {
+	$my_about->move($move_inst, $direction);
+}
+
 //Veränderungen der pers. Daten
-if ($cmd=="edit_pers") {
+if ($cmd == "edit_pers") {
 	//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
 	if (($email && $my_about->auth_user["Email"] != $email)
 		&& (($response && $response != md5("*****")) || ($password && $password != "*****"))) {
@@ -1130,32 +1185,80 @@ if ($view=="Karriere") {
 	 		echo "<a name=\"inst_data\"></a>";   
 	 		echo "<tr><td class=\"blank\">";
 	 		echo "<b>&nbsp; " . _("Ich arbeite an folgenden Einrichtungen:") . "</b>";
-	 		echo "<table cellspacing=0 cellpadding=2 border=0 align=\"center\" width=\"99%\" border=\"0\">";
+	 		echo "<table cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\" width=\"99%\" border=\"0\">";
 	 		echo "<form action=\"$PHP_SELF?cmd=special_edit&username=$username&view=$view\" method=\"POST\">";
-
-	 		while (list ($inst_id,$details) = each ($my_about->user_inst)) {
+			
+			$i = 1;
+	 		while (list($inst_id, $details) = each($my_about->user_inst)) {
 				$cssSw->resetClass();
 				$cssSw->switchClass();    
-				if ($details["inst_perms"]!= "user") {
-	 				echo "<tr><td class=\"blank\">&nbsp; </td></tr>";
-	 				echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <b>".htmlReady($details["Name"])."</b>";
+				if ($details["inst_perms"] != "user") {
+	 				echo "<tr><td class=\"blank\" colspan=\"3\" width=\"100%\">&nbsp; </td></tr>";
+	 				echo "<tr><td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
+					echo "&nbsp; <b>" . htmlReady($details["Name"]) . "</b></td>";
+					echo "<td class=\"" . $cssSw->getClass() . "\" width=\"30%\" align=\"left\">&nbsp; ";
+					echo _("Standard-Adresse:") . "&nbsp;<input type=\"radio\" name=\"default_inst\" ";
+					echo "value=\"$inst_id\"";
+					echo ($details['externdefault'] ? ' checked="checked"' : '') . ">&nbsp;";
+					echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/info.gif\"";
+					$info = _("Angaben, die im Adressbuch und auf den externen Seiten als Standard benutzt werden.");
+					echo tooltip($info, TRUE, TRUE) . "></td>\n";
+					echo "<td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
+					if ($i != 1) {
+						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
+						echo "&direction=up&move_inst=$inst_id\">";
+						echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/move_up.gif\" ";
+						echo "border=\"0\"" . tooltip(_("nach oben")) . "></a>";
+					}
+					if ($i != sizeof($my_about->user_inst)) {
+						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
+						echo "&direction=down&move_inst=$inst_id\">";
+						echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/move_down.gif\" ";
+						echo "border=\"0\"" . tooltip(_("nach unten")) . "></a>";
+					}
+					$i++;
+					echo "</tr>\n";
 					//statusgruppen
 					if ($gruppen = GetStatusgruppen($inst_id, $my_about->auth_user["user_id"])) {
-						echo ",&nbsp;" . _("Funktion(en):") . " " . htmlReady(join(", ", array_values($gruppen)));
+						$cssSw->switchClass();
+						echo "<tr><td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
+						echo _("Funktion(en):") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
+						echo "width=\"80%\" align=\"left\">&nbsp; " . htmlReady(join(", ", array_values($gruppen)));
+						echo "</td></tr>\n";
 					}
-					echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"".htmlReady($details["Name"])."\"></td></tr>";
+					echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"";
+					echo htmlReady($details["Name"]) . "\">";
 	 				$cssSw->switchClass();
-	 				echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Raum:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"raum[$inst_id]\" value=\"".htmlReady($details["raum"])."\"></td></tr>";
+	 				echo "<tr><td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
+					echo _("Raum:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
+					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
+					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\" name=\"raum[$inst_id]\" ";
+					echo "value=\"" . htmlReady($details["raum"]) . "\"></td></tr>";
 	 				$cssSw->switchClass();
-	 				echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Sprechzeit:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"sprech[$inst_id]\" value=\"".htmlReady($details["sprechzeiten"])."\"></td></tr>";
+	 				echo "<td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
+					echo _("Sprechzeit:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
+					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
+					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\" name=\"sprech[$inst_id]\" ";
+					echo "value=\"" . htmlReady($details["sprechzeiten"]) . "\"></td></tr>";
 	 				$cssSw->switchClass();
-	 				echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Telefon:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"tel[$inst_id]\" value=\"".htmlReady($details["Telefon"])."\"></td></tr>";
+	 				echo "<td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
+					echo _("Telefon:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
+					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
+					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\" name=\"tel[$inst_id]\" ";
+					echo "value=\"" . htmlReady($details["Telefon"]) . "\"></td></tr>";
 	 				$cssSw->switchClass();
-	 				echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Fax:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"fax[$inst_id]\" value=\"".htmlReady($details["Fax"])."\"></td></tr>";
+	 				echo "<td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
+					echo _("Fax:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
+					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
+					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\"   name=\"fax[$inst_id]\" ";
+					echo "value=\"" . htmlReady($details["Fax"]) . "\"></td></tr>";
 				}
 			}
 	 		$cssSw->switchClass();
-	 		echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\">&nbsp; <input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></td></table><br />&nbsp; </form></td></tr>";
+	 		echo "<tr><td class=\"" . $cssSw->getClass() . "\">&nbsp; </td>";
+			echo "<td class=\"" . $cssSw->getClass() . "\" colspan=\"2\">&nbsp; <input type=\"IMAGE\" ";
+			echo makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\">";
+			echo "</td></table><br />&nbsp; </form></td></tr>";
 		}
 	}
 
