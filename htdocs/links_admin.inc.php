@@ -257,10 +257,10 @@ if ($perm->have_perm("dozent")) {
 	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE);
 }
 if ($perm->have_perm("admin")) {
-	$structure["visibility"]=array (topKat=>"veranstaltungen", name=>_("Sichtbarkeit"), link=>"admin_visibility.php?list=TRUE&new_session=TRUE", active=>FALSE);
+	$structure["visibility"]=array (topKat=>"veranstaltungen", name=>_("Sichtbarkeit"), link=>"admin_visibility.php?list=TRUE&new_session=TRUE", active=>FALSE, newline=>TRUE);
 	if ($SEMINAR_LOCK_ENABLE)
 		$structure["lock"]=array (topKat=>"veranstaltungen", name=>_("Sperren"), link=>"admin_lock.php?list=TRUE&new_session=TRUE", active=>FALSE);
-	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE, newline=>TRUE);
+	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
 } 
 
 //
