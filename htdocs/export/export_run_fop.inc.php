@@ -1,4 +1,16 @@
 <?
+/**
+* Export-Subfile that calls the FOP.
+* 
+* This file calls the Formatting-Objects-Processor to generate PDF-Files. 
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export
+* @package		Export
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export_run_fop.inc.php
@@ -27,6 +39,15 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
 
+/**
+* Checks given parameters
+*
+* This function checks the given parameters. If some are missing
+* it returns false and adds a warning to $export_error.
+*
+* @access	public        
+* @return		boolean
+*/
 function CheckParamRUN_FOP()
 {
 global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_formats, $choose, $xslt_files, $export_error, $export_error_num, $export_o_modes, $export_ex_types, $result_file;

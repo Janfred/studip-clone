@@ -1,4 +1,16 @@
 <?
+/**
+* Export-Subfile that contains the first page of the export-module.
+* 
+* This file shows the first page of the export-module where the type of export and the institute can be chosen. 
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export
+* @package		Export
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export_run_xslt.inc.php

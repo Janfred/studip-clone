@@ -1,4 +1,17 @@
 <?
+/**
+* Export-subfile. Choses which XSL-Script to use.
+* 
+* In this file there are several forms which help choosing the proper XSL-Script 
+* to transform the export-data into a specific file-format.
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export
+* @package		Export
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export_choose_xslt.inc.php
@@ -30,6 +43,15 @@ $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 
 
+/**
+* Checks given parameters
+*
+* This function checks the given parameters. If some are missing or refer to a XSL-file that 
+* doesn't exist it returns false and adds a warning to export_error.
+*
+* @access	public        
+* @return		boolean
+*/
 function CheckParamXSLT()
 {
 global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $export_o_modes, $export_ex_types, $export_error, $export_error_num;

@@ -1,5 +1,31 @@
 <?
+/**
+* Export-functions to create links to the export-module.
+* 
+* In this file there are three functions which help to include the export-module into Stud.IP-pages. 
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export
+* @package		Export
+*/
 
+/**
+* Generates a form that can be put into Stud.IP-pages to link to the export-module.
+*
+* This function returns a string with a HTML-form that links to the export-module. 
+* It passes the given parameters in order to allow to jump to a specific part of the export-module.
+*
+* @access	public        
+* @param		string	$range_id	export-range
+* @param		string	$ex_type	type of data to be exported
+* @param		string	$filename	filename for data-file
+* @param		string	$format	file-format for export
+* @param		string	$filter	grouping-category for export
+* @return		string
+*/
 function export_form($range_id, $ex_type = "", $filename = "", $format = "", $filter = "")
 {
 	global $output_formats, $ABSOLUTE_PATH_STUDIP , $PATH_EXPORT, $xslt_filename;
@@ -33,6 +59,20 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "", $fi
 	return $export_string;
 }
 	
+/**
+* Generates a link to the export-module that can be put into Stud.IP-pages.
+*
+* This function returns a string with a  link to the export-module. 
+* It passes the given parameters in order to allow to jump to a specific part of the export-module.
+*
+* @access	public        
+* @param		string	$range_id	export-range
+* @param		string	$ex_type	type of data to be exported
+* @param		string	$filename	filename for data-file
+* @param		string	$format	file-format for export
+* @param		string	$filter	grouping-category for export
+* @return		string
+*/
 function export_link($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "")
 {
 	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT, $xslt_filename, $i_page;
@@ -50,6 +90,20 @@ function export_link($range_id, $ex_type = "", $filename = "", $format = "", $ch
 	return $export_string;
 }
 	
+/**
+* Generates a Button with a link to the export-module that can be put into Stud.IP-pages.
+*
+* This function returns a string containing an export-button with a link to the export-module. 
+* It passes the given parameters in order to allow to jump to a specific part of the export-module.
+*
+* @access	public        
+* @param		string	$range_id	export-range
+* @param		string	$ex_type	type of data to be exported
+* @param		string	$filename	filename for data-file
+* @param		string	$format	file-format for export
+* @param		string	$filter	grouping-category for export
+* @return		string
+*/
 function export_button($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "")
 {
 	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT, $xslt_filename, $i_page;

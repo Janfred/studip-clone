@@ -1,4 +1,16 @@
 <?
+/**
+* Export-Subfile that calls the XSLT-Process.
+* 
+* This file calls the XSLT-Process to convert XML-Files into other file-formats. 
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export
+* @package		Export
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export_run_xslt.inc.php
@@ -26,6 +38,15 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xslt_vars.inc.php");   // Liste der XSLT-Skripts
 
+/**
+* Checks given parameters
+*
+* This function checks the given parameters. If some are missing
+* it returns false and adds a warning to $export_error.
+*
+* @access	public        
+* @return		boolean
+*/
 function CheckParamRUN()
 {
 global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_formats, $choose, $xslt_files, $export_error, $export_error_num, $export_o_modes, $export_ex_types;
