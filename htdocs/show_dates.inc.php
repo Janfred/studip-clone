@@ -320,10 +320,14 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				$zusatz .= '<font size="-1">' . _("Raum:") . ' ';
 				$zusatz .= htmlReady($termin->getLocation()) . '&nbsp;</font>';
 			}
-				
+			
 			$titel = "";
-			$titel = substr(strftime("%a", $termin->getStart()),0,2);
-			$titel .= date(". d.m.Y, H:i", $termin->getStart());
+			if (date("Ymd", $termin->getStart()) == date("Ymd", time()))
+				$titel .= _("Heute") . date(", H:i", $termin->getStart());
+			else {
+				$titel = substr(strftime("%a", $termin->getStart()),0,2);
+				$titel .= date(". d.m.Y, H:i", $termin->getStart());
+			}
 			
 			if ($termin->getStart() < $termin->getEnd()) {
 				if (date("Ymd", $termin->getStart()) < date("Ymd", $termin->getEnd())) {
