@@ -24,7 +24,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
 <table border=0 align="center" cellspacing=0 cellpadding=0 width=100%>
 <tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;Im System gespeicherte Sessions</b></td>
+	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Im System gespeicherte Sessions")?></b></td>
 </tr>
 <tr>
 	<td class="blank" colspan=2>
@@ -40,7 +40,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 ## Handle gc: manual garbage collection
 if( !isset( $gc ) ) { $gc = ""; };
 if ($gc != "") {
-    parse_msg ("msg§Manueller Garbage-Collect ausgef&uuml;hrt...");
+    parse_msg ("msg§" . _("Manueller Garbage-Collect ausgef&uuml;hrt..."));
   $sess->gc();  
 }
 
@@ -60,7 +60,7 @@ if ($del) {
     }
   }
   
-  parse_msg ("msg§$sum Sessions gel&ouml;sct...§");
+  parse_msg ("msg§" . sprintf(_("%s Sessions gel&ouml;scht..."), $sum) . "§");
   
 }
 
@@ -72,12 +72,12 @@ if ($del) {
 <tr><td class="blank" colspan=2 align=center>
 <form method=post action="<?php $sess->pself_url() ?>">
 
-<table width=50%>
+<table width=60%>
  <tr >
   <td  class="blank" >
-  <input type="submit" name="refresh" value="Neu laden">&nbsp; 
-  <input type="submit" name="gc"      value="Garbage Collect">&nbsp; 
-  <input type="submit" name="del"     value="ausgew&auml;hlte Session l&ouml;schen">
+  <input type="submit" name="refresh" value="<?=_("Neu laden")?>">&nbsp; 
+  <input type="submit" name="gc"      value="<?=_("Garbage Collect")?>">&nbsp; 
+  <input type="submit" name="del"     value="<?=_("ausgew&auml;hlte Session l&ouml;schen")?>">
  </tr>
 </table>
 <?php
@@ -88,12 +88,12 @@ if ($del) {
 
   $t->show_result($db, "data");
 ?>
-<table width=50%>
+<table width=60%>
  <tr >
   <td  class="blank" >
-  <input type="submit" name="refresh" value="Neu laden">&nbsp; 
-  <input type="submit" name="gc"      value="Garbage Collect">&nbsp; 
-  <input type="submit" name="del"     value="ausgew&auml;hlte Session l&ouml;schen">
+  <input type="submit" name="refresh" value="<?=_("Neu laden")?>">&nbsp; 
+  <input type="submit" name="gc"      value="<?=_("Garbage Collect")?>">&nbsp; 
+  <input type="submit" name="del"     value="<?=_("ausgew&auml;hlte Session l&ouml;schen")?>">
  </tr>
 </table>
 </form>
