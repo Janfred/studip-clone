@@ -180,7 +180,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
           //Version f¸r neuen Chat (vorl‰ufig)
   	if ($CHAT_ENABLE) {
     	if (($chatm) && ($i_page != "sms.php") && (!$chatServer->isActiveUser($user->id,"studip"))) {
-				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();",_("Chat"),_("Sie wurden zum Chatten eingeladen!"),40,"_top","left");
+				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();",_("Chat"),_("Sie wurden zum Chatten eingeladen!"),30,"_top","left");
 			} else {
 		      	$chatter=$chatServer->getActiveUsers("studip");
    			if ($chatter == 1)
@@ -202,9 +202,9 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),60, "_top","left");
 		else {
 			if (count($online)==1) {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Auﬂer Ihnen ist eine Person online"),60, "_top");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Auﬂer Ihnen ist eine Person online"),60, "_top","left");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind auﬂer Ihnen %s Personen online"), count($online)),60, "_top");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind auﬂer Ihnen %s Personen online"), count($online)),60, "_top","left");
 			}
 		}
 
