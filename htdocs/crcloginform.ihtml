@@ -16,6 +16,7 @@
     document.login.password.value = "";
     document.login.resolution.value = screen.width+"x"+screen.height;
     document.login.submit();
+	return false;
   }
   
 <? if (CLOSE_ON_LOGIN_SCREEN === true) echo "self.close();";?>
@@ -104,7 +105,7 @@
 	<?php endif;?>
 
 
-	<FORM NAME="login" METHOD=POST ACTION="<?php print $this->url() ?>">
+	<FORM NAME="login" METHOD=POST ACTION="<?php print $this->url() ?>" onSubmit="return doChallengeResponse();">
 
 	<!-- Set up the form with the challenge value and an empty reply value -->
 	<input type="hidden" name="challenge" value="<?php print $challenge ?>">
@@ -125,7 +126,7 @@
 
 		<tr>
 			<td class="steel1">&nbsp;</td>
-			<td align=right class="steel1"><input type="submit" onClick="doChallengeResponse(); return false;"  name="submitbtn" src="./pictures/buttons/login-button.gif" border="0" value=" Login "></td>
+			<td align=right class="steel1"><input type="image"  name="submitbtn" src="./pictures/buttons/login-button.gif" alt="Login" title="Login" value=" Login "></td>
 		</tr>
 
 	</table></blockquote></td><td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr><tr><td class=blank colspan=2 align=center><br><br><img src="pictures/willkommen.gif"><br>&nbsp;</td></tr></table>
@@ -134,7 +135,7 @@
 </td></tr></table>
 
 </body>
-<script language="JavaScript">
+<script type="text/javascript" language="javascript">
 <!--
   // Activate the appropriate input form field.
   if (document.login.username.value == '') {
