@@ -52,14 +52,9 @@ $sess->register("admin_modules_data");
 $messaging=new messaging;
 $amodules=new AdminModules;
 
+
 if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
-
-	if (!$admin_modules_data["range_id"]){
-		echo "</tr></td></table>";
-		die;
-	}
-	
 	if ($default_x) {
 		$admin_modules_data["changed_bin"] = $amodules->getDefaultBinValue($admin_modules_data["range_id"]);
 	}
@@ -150,7 +145,6 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 		$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
 		$msg.= "msg§Die ver&auml;nderte Modulkonfiguration wurde &uuml;bernommen";
 	}
-
 }
 
 // Start of Output
