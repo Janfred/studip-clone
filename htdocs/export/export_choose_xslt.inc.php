@@ -221,7 +221,7 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	if ($XSLT_ENABLE) 
 	{
 		$export_pagecontent .= _("Um die Daten mit dem installierten XSLT-Prozessor in das gewünschte Format zu bringen, klicken Sie bitte auf 'weiter'") . "<br><br>";
-		$export_weiter_button .= "<input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\">";
+		$export_weiter_button .= "<input type=\"IMAGE\"" . makeButton("weiter", "src") . " onClick=\"return export_start();\" name=\"\">";
 	}
 	else
 		$export_pagecontent .= "<br><br><br>";
