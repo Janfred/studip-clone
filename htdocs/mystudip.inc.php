@@ -72,7 +72,7 @@ function select_language($selected_language = "") {
 * @access	public        
 */
 function change_general_view() {
-	global $PHP_SELF, $_language, $auth, $forum, $user, $my_studip_settings;
+	global $PHP_SELF, $_language, $auth, $perm, $forum, $user, $my_studip_settings;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;
@@ -125,6 +125,9 @@ function change_general_view() {
 						</font><br><br>
 					</td>
 				</tr>
+				<?
+				if (!$perm->have_perm("root")) {
+				?>
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
 						<font size="-1"><?print _("pers&ouml;nliche Startseite");?></font><br />
@@ -144,6 +147,9 @@ function change_general_view() {
 						</select>
 					</td>
 				</tr>
+				<?
+				}
+				?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
 						<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp;	

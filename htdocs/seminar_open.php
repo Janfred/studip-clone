@@ -207,7 +207,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		}
 	
 		//redirect user to another page if he want to
-		if (($my_studip_settings["startpage_redirect"]) && ($i_page == "index.php"))
+		if (($my_studip_settings["startpage_redirect"]) && ($i_page == "index.php") && (!$perm->have_perm("root")))
 			startpage_redirect($my_studip_settings["startpage_redirect"]);
 			$seminar_open_redirected = TRUE;
 	}
@@ -217,6 +217,4 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 // init of output via I18N
 
 $_language_path = init_i18n($_language);
-
-//include "tracking.inc.php"; //temporaer. hier wird der User getrackt. 
 ?>
