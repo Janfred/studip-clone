@@ -63,12 +63,6 @@ INSERT INTO folder VALUES ('7426e2ce8fb9fff852062710d923841f', '71d22e1dd7e9dbe1
 INSERT INTO folder VALUES ('4d927a73f23c71af7360ad1d07dfd5b9', 'b4b9f08454b3871e697caea84f8f22c2', '76ed43ef286fb55cf9e41beadb484a9f', 'Allgemeiner Dateiordner', 'Ablage für allgemeine Ordner und Dokumente der Veranstaltung', 1067425274, 1067425274);
 
 #
-# Daten für Tabelle `literatur`
-#
-
-INSERT INTO literatur VALUES ('d7939111c6ab813d84808256b95a7e0d', '0df1d0586ad3a160dd00d4e2789cf8e8', '76ed43ef286fb55cf9e41beadb484a9f', 'Schüpbach, Evi: Didaktischer Leitfaden für E-Learning. Bern 2003', 'www.studip.de\r\nwww.data-quest.de\r\n', 1067424264, 1067424264);
-
-#
 # Daten für Tabelle `news`
 #
 
@@ -167,19 +161,19 @@ INSERT INTO seminare VALUES ('b4b9f08454b3871e697caea84f8f22c2', '', 'd9a2cb6778
 # Daten für Tabelle `statusgruppe_user`
 #
 
-INSERT INTO statusgruppe_user VALUES ('345b175099d24bcd080b8bfc1b0b4512', '205f3efb7997a0fc9755da2b535038da');
-INSERT INTO statusgruppe_user VALUES ('9522b28753171e55b86f0dbe4b642678', '7e81ec247c151c02ffd479511e24cc03');
-INSERT INTO statusgruppe_user VALUES ('9ce36c46083003cd7cbec361c7cd6e51', '205f3efb7997a0fc9755da2b535038da');
+INSERT INTO statusgruppe_user VALUES ('345b175099d24bcd080b8bfc1b0b4512', '205f3efb7997a0fc9755da2b535038da', 0);
+INSERT INTO statusgruppe_user VALUES ('9522b28753171e55b86f0dbe4b642678', '7e81ec247c151c02ffd479511e24cc03', 0);
+INSERT INTO statusgruppe_user VALUES ('9ce36c46083003cd7cbec361c7cd6e51', '205f3efb7997a0fc9755da2b535038da', 0);
 
 #
 # Daten für Tabelle `statusgruppen`
 #
 
-INSERT INTO statusgruppen VALUES ('f5f06f1a820d875dbd1d4b19346dab1a', 'unbenannt', 'd9a2cb67781cb478caef29fd14a0653a', 1, 0, 1067423651, 1067423651);
-INSERT INTO statusgruppen VALUES ('74619a019a5f6bc3c4cf1ef0abf62b9c', 'unbenannt', 'd9a2cb67781cb478caef29fd14a0653a', 2, 0, 1067423656, 1067423656);
-INSERT INTO statusgruppen VALUES ('345b175099d24bcd080b8bfc1b0b4512', 'DirektorIn', '6a1f27ed3c07b1cff22f467e8bd20868', 1, 0, 1067423716, 1067423740);
-INSERT INTO statusgruppen VALUES ('9ce36c46083003cd7cbec361c7cd6e51', 'HochschullehrerIn', '6a1f27ed3c07b1cff22f467e8bd20868', 2, 0, 1067423719, 1067423754);
-INSERT INTO statusgruppen VALUES ('9522b28753171e55b86f0dbe4b642678', 'stud. Hilfskraft', '6a1f27ed3c07b1cff22f467e8bd20868', 3, 0, 1067423787, 1067423787);
+INSERT INTO statusgruppen VALUES ('f5f06f1a820d875dbd1d4b19346dab1a', 'unbenannt', 'd9a2cb67781cb478caef29fd14a0653a', 1, 0, 0, 1067423651, 1067423651);
+INSERT INTO statusgruppen VALUES ('74619a019a5f6bc3c4cf1ef0abf62b9c', 'unbenannt', 'd9a2cb67781cb478caef29fd14a0653a', 2, 0, 0, 1067423656, 1067423656);
+INSERT INTO statusgruppen VALUES ('345b175099d24bcd080b8bfc1b0b4512', 'DirektorIn', '6a1f27ed3c07b1cff22f467e8bd20868', 1, 0, 0, 1067423716, 1067423740);
+INSERT INTO statusgruppen VALUES ('9ce36c46083003cd7cbec361c7cd6e51', 'HochschullehrerIn', '6a1f27ed3c07b1cff22f467e8bd20868', 2, 0, 0, 1067423719, 1067423754);
+INSERT INTO statusgruppen VALUES ('9522b28753171e55b86f0dbe4b642678', 'stud. Hilfskraft', '6a1f27ed3c07b1cff22f467e8bd20868', 3, 0, 0, 1067423787, 1067423787);
 
 #
 # Daten für Tabelle `studiengaenge`
@@ -225,12 +219,12 @@ INSERT INTO termine VALUES ('71d22e1dd7e9dbe188e1884aebbad8a6', '0df1d0586ad3a16
 # Daten für Tabelle `user_info`
 #
 
-INSERT IGNORE INTO user_info VALUES ('76ed43ef286fb55cf9e41beadb484a9f', '', NULL, '', '', '', '', '', 0, 0, 0, 0, '', '', NULL);
-INSERT INTO user_info VALUES ('a4ab271addc1d902e2f2d6e03d747632', '', NULL, '', '', '', '', '', 0, 0, 1066887991, 0, '', 'M.A.', NULL);
-INSERT INTO user_info VALUES ('205f3efb7997a0fc9755da2b535038da', '', NULL, '', '', '', '', '', 0, 0, 1066998899, 1067423409, '', '', NULL);
-INSERT INTO user_info VALUES ('6235c46eb9e962866ebdceece739ace5', '', NULL, '', '', '', '', '', 0, 0, 1067423390, 1067423390, '', '', NULL);
-INSERT INTO user_info VALUES ('7e81ec247c151c02ffd479511e24cc03', '', NULL, '', '', '', '', '', 0, 0, 1067423435, 1067423470, '', '', NULL);
-INSERT INTO user_info VALUES ('e7a0a84b161f3e8c09b4a0a2e8a58147', '', NULL, '', '', '', '', '', 0, 0, 1067423459, 1067423459, '', '', NULL);
+INSERT IGNORE INTO user_info VALUES ('76ed43ef286fb55cf9e41beadb484a9f', '', NULL, '', '', '', '', '', 0, 0, 0, 0, '', '', NULL, 1, '', 1);
+INSERT INTO user_info VALUES ('a4ab271addc1d902e2f2d6e03d747632', '', NULL, '', '', '', '', '', 0, 0, 1066887991, 0, '', 'M.A.', NULL, 1, '', 1);
+INSERT INTO user_info VALUES ('205f3efb7997a0fc9755da2b535038da', '', NULL, '', '', '', '', '', 0, 0, 1066998899, 1067423409, '', '', NULL, 1, '', 1);
+INSERT INTO user_info VALUES ('6235c46eb9e962866ebdceece739ace5', '', NULL, '', '', '', '', '', 0, 0, 1067423390, 1067423390, '', '', NULL, 1, '', 1);
+INSERT INTO user_info VALUES ('7e81ec247c151c02ffd479511e24cc03', '', NULL, '', '', '', '', '', 0, 0, 1067423435, 1067423470, '', '', NULL, 1, '', 1);
+INSERT INTO user_info VALUES ('e7a0a84b161f3e8c09b4a0a2e8a58147', '', NULL, '', '', '', '', '', 0, 0, 1067423459, 1067423459, '', '', NULL, 1, '', 1);
 
 #
 # Daten für Tabelle `user_inst`
@@ -243,36 +237,21 @@ INSERT INTO user_inst VALUES ('205f3efb7997a0fc9755da2b535038da', '6a1f27ed3c07b
 # Daten für Tabelle `vote`
 #
 
-INSERT INTO vote VALUES ('2a3dd58230afd8b4618fd48b40951b0c', '76ed43ef286fb55cf9e41beadb484a9f', '0df1d0586ad3a160dd00d4e2789cf8e8', 'vote', 'Nutzen Sie bereits Stud.IP?', 'Haben Sie Stud.IP bereits im Einsatz, planen sie es einzusetzen?', 'active', 1067424988, NULL, NULL, 1067424501, 1067424988, 'delivery', 0, 1, 0, NULL, 0);
-INSERT INTO vote VALUES ('6634a62af213b1fa79ab68b5ef4d1457', '76ed43ef286fb55cf9e41beadb484a9f', 'studip', 'vote', 'Nutzen Sie bereits Stud.IP?', 'Haben Sie Stud.IP bereits im Einsatz, planen sie es einzusetzen?', 'active', 1067424840, NULL, NULL, 1067424848, 1067424947, 'delivery', 0, 1, 0, NULL, 0);
-
-#
-# Daten für Tabelle `vote_user`
-#
-
-INSERT INTO vote_user VALUES ('2a3dd58230afd8b4618fd48b40951b0c', '76ed43ef286fb55cf9e41beadb484a9f', 1067424512);
-INSERT INTO vote_user VALUES ('6634a62af213b1fa79ab68b5ef4d1457', '76ed43ef286fb55cf9e41beadb484a9f', 1067425003);
+INSERT INTO vote VALUES ('b5329b23b7f865c62028e226715e1914', '76ed43ef286fb55cf9e41beadb484a9f', 'studip', 'vote', 'Nutzen Sie bereits Stud.IP?', 'Haben Sie Stud.IP bereits im Einsatz oder planen Sie, es einzusetzen?', 'active', 1076337204, NULL, NULL, 1076337205, 1076337205, 'delivery', 1, 0, 1, NULL, 0);
 
 #
 # Daten für Tabelle `voteanswers`
 #
 
-INSERT INTO voteanswers VALUES ('c258787df2805e86c78574a2d78d0ebd', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.7.5', 0, 0, 0);
-INSERT INTO voteanswers VALUES ('a3384aa48e8c0dfc522271b5b908442e', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.8.0', 1, 0, 0);
-INSERT INTO voteanswers VALUES ('5d9a8dd52e7f053a1ca59299c3c4d60c', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.8.15', 2, 0, 0);
-INSERT INTO voteanswers VALUES ('37cf657122dc4b3ad1001d6c59afa16b', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.9.0', 3, 0, 0);
-INSERT INTO voteanswers VALUES ('98b61a589dadddbb9533ab9c8ad978b1', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich nutze die Version 0.9.5', 4, 1, 0);
-INSERT INTO voteanswers VALUES ('7abce26bb6614f400065296069abdcd4', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich plane, es demnächst einzusetzen', 5, 0, 0);
-INSERT INTO voteanswers VALUES ('2a63482ac998c5f2b936b04aca0d965f', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich schaue mich nur mal um', 6, 0, 0);
-INSERT INTO voteanswers VALUES ('7400ebd6befe3168b5cb6ff1f216962e', '2a3dd58230afd8b4618fd48b40951b0c', 'Ich bin nicht interessiert', 7, 0, 0);
-INSERT INTO voteanswers VALUES ('98d5ecf7356e488ffc09bd515eced5fe', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich schaue mich nur mal um', 6, 0, 0);
-INSERT INTO voteanswers VALUES ('cb139549f83b18d9bd8e49f4d869ecc6', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich plane, es demnächst einzusetzen', 5, 0, 0);
-INSERT INTO voteanswers VALUES ('0580b0b5f70eccde3a8b252ca7c73cca', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.9.5', 4, 1, 0);
-INSERT INTO voteanswers VALUES ('3431d7b9d720ce96a66b928efdba8300', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.9.0', 3, 0, 0);
-INSERT INTO voteanswers VALUES ('d53b24842074b0647fed67676b718ba7', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.8.15', 2, 0, 0);
-INSERT INTO voteanswers VALUES ('5593a50b22dff96b7c29112380d04511', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.8.0', 1, 0, 0);
-INSERT INTO voteanswers VALUES ('cdb86f7c957cdda1c2573fb7026741ac', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich nutze die Version 0.7.5', 0, 0, 0);
-INSERT INTO voteanswers VALUES ('a2558597e1d5d1ef0abcf062e54aa2ed', '6634a62af213b1fa79ab68b5ef4d1457', 'Ich bin nicht interessiert', 7, 0, 0);
+INSERT INTO voteanswers VALUES ('112f7c8f52b0a2a6eff9cddf93b419c7', 'b5329b23b7f865c62028e226715e1914', 'Ich nutze die Version 0.7.5', 0, 0, 0);
+INSERT INTO voteanswers VALUES ('c8ade4c7f3bbe027f6c19016dd3e001c', 'b5329b23b7f865c62028e226715e1914', 'Ich nutze die Version 0.8.0', 1, 0, 0);
+INSERT INTO voteanswers VALUES ('58281eda805a0fe5741c74a2c612cb05', 'b5329b23b7f865c62028e226715e1914', 'Ich nutze die Version 0.8.15', 2, 0, 0);
+INSERT INTO voteanswers VALUES ('ddfd889094a6cea75703728ee7b48806', 'b5329b23b7f865c62028e226715e1914', 'Ich nutze die Version 0.9.0', 3, 0, 0);
+INSERT INTO voteanswers VALUES ('dc1b49bf35e9cfbfcece807b21cec0ef', 'b5329b23b7f865c62028e226715e1914', 'Ich nutze die Version 0.9.5', 4, 0, 0);
+INSERT INTO voteanswers VALUES ('8502e4b4600a12b2d5d43aecf2930be4', 'b5329b23b7f865c62028e226715e1914', 'Ich nutze die Version 1.0', 5, 0, 0);
+INSERT INTO voteanswers VALUES ('dddf684fbcac58f7ffd0804b7095c71b', 'b5329b23b7f865c62028e226715e1914', 'Ich plane, es demnächst einzusetzen', 6, 0, 0);
+INSERT INTO voteanswers VALUES ('03bce9c940fc76f5eb90ab7b151cf34d', 'b5329b23b7f865c62028e226715e1914', 'Ich schaue mich nur mal um', 7, 0, 0);
+INSERT INTO voteanswers VALUES ('5fb01b6623c848c3bf33cce70675b91a', 'b5329b23b7f865c62028e226715e1914', 'Ich bin nicht interessiert', 8, 0, 0);
 
 #
 # Daten für Tabelle `resources_assign`
