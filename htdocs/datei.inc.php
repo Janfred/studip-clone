@@ -52,7 +52,7 @@ function url_ftp($url) {
 }
 */
 function parse_link($link) {
-	global $name;
+	global $name, $the_file_name, $the_link;
 	if (substr($link,0,6) == "ftp://") {
 		// Parsing an FTF-Adress		
 		$url_parts = @parse_url( $link );
@@ -101,6 +101,12 @@ function parse_link($link) {
 	}
 	$parsed_link = parse_header($response);
 	//print_r ($parsed_link);
+	if (($parsed_link["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) && $parsed_link["Location"]) {
+		$url_parts = @parse_url( $parsed_link["Location"] );
+		$documentpath = $url_parts["path"];
+		$the_file_name = basename($url_parts["path"]);
+		$the_link = $parsed_link["Location"];
+	}
 	return $parsed_link;
 	}
 }
@@ -835,7 +841,7 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE)
 
 	if ($create) {
 		$link_data = parse_link($the_link);
-		if ($link_data["HTTP/1.0 200 OK"] || $link_data["HTTP/1.1 200 OK"]) {
+		if ($link_data["HTTP/1.0 200 OK"] || $link_data["HTTP/1.1 200 OK"] || $link_data["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) {
 			if (insert_link_db($range_id, $link_data["Content-Length"], $refresh))
 				if ($refresh)
 					delete_link($refresh, TRUE);
