@@ -54,7 +54,7 @@ class SemBrowse {
 			$this->sem_browse_data['default_sem'] = $_REQUEST[$this->search_obj->form_name . "_sem"];
 		}
 		
-		if (isset($_REQUEST['keep_result_set']) || $this->sem_browse_data['sset']){
+		if (isset($_REQUEST['keep_result_set']) || $this->sem_browse_data['sset'] || (count($this->sem_browse_data['search_result']) && $this->sem_browse_data['show_entries'])){
 			$this->show_result = true;
 		}
 		
@@ -111,7 +111,7 @@ class SemBrowse {
 			$this->search_obj->override_sem = $this->sem_number;
 			$this->search_obj->doSearch();
 			if ($this->search_obj->found_rows){
-				$this->sem_browse_data['search_result'] = $this->search_obj->search_result->getDistinctRows("seminar_id");
+				$this->sem_browse_data['search_result'] = array_flip($this->search_obj->search_result->getRows("seminar_id"));
 			} else {
 				$this->sem_browse_data['search_result'] = array();
 			}
@@ -284,7 +284,7 @@ class SemBrowse {
 		global $PHP_SELF, $_language_path;
 		echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		if ($this->sem_browse_data['level'] == "f"){
-			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\">";
+			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\"><div style=\"margin-top:10px\"><font size=\"-1\">";
 			printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
 			if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
 				printf(_(" / %sVorlesungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=vv&cmd=qs&sset=0\">","</a>");
@@ -293,8 +293,9 @@ class SemBrowse {
 				echo "<br /><br />";
 				printf ("<a href=\"%s?level=ev&cmd=qs&sset=0\"><img src=\"./locale/%s/LC_PICTURES/institute_index.jpg\" border=\"0\" /></a>", $PHP_SELF, $_language_path);
 				if ($this->sem_browse_data['show_class'] == "1" || $this->sem_browse_data['show_class']== "all"){
-					printf ("&nbsp; &nbsp; <a href=\"%s?level=vv&cmd=qs&sset=0\"><img src=\"./locale/%s/LC_PICTURES/course_index.jpg\" border=\"0\" /></a><br />&nbsp; ", $PHP_SELF, $_language_path);
+					printf ("&nbsp; &nbsp; <a href=\"%s?level=vv&cmd=qs&sset=0\"><img src=\"./locale/%s/LC_PICTURES/course_index.jpg\" border=\"0\" /></a>", $PHP_SELF, $_language_path);
 				}
+				echo "<br>&nbsp;</font></div>"; 
 			}
 		}
 		if ($this->sem_browse_data['level'] == "vv"){
@@ -395,9 +396,10 @@ class SemBrowse {
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						if (is_array($doz_name)){
-							sort($doz_name, SORT_STRING);
-							for ($i = 0; $i < count($doz_name); ++$i){
-								echo "<a href=\"about.php?username=" . $doz_uname[$i] ."\">" . htmlReady($doz_name[$i]) . "</a>";
+							asort($doz_name, SORT_STRING);
+							$i = 0;
+							foreach ($doz_name as $index => $value){
+								echo "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
 								if($i != count($doz_name)-1){
 									echo ", ";
 								}
@@ -405,6 +407,7 @@ class SemBrowse {
 									echo "...&nbsp;<a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">(mehr) </a>";
 									break;
 								}
+								++$i;
 							}
 							echo ") </font></td></tr>";
 						}
