@@ -1200,7 +1200,9 @@ if ($forum["view"]=="search") {
 	$addon = " AND x.chdate > '$datumtmp'";
 }
 
-$query = "SELECT x.topic_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.Seminar_id = '$SessionSeminar'".$addon."";
+$query = "SELECT x.topic_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.Seminar_id = '$SessionSeminar' "
+	."AND (x.chdate>=x.mkdate OR x.user_id='$user->id' OR x.author='unbekannt')"
+	.$addon."";
 $db->query($query);
 if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	$forum["forumsum"] = $db->num_rows();
