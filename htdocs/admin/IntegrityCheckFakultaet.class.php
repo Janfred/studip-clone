@@ -46,10 +46,10 @@ class IntegrityCheckFakultaet extends IntegrityCheckAbstract{
 		$baseclass = get_parent_class($this);
 		//parent::$baseclass(); //calling the baseclass constructor 
 		$this->$baseclass(); //calling the baseclass constructor PHP < 4.1.0
-		$this->master_table = "fakultaeten";
+		$this->master_table = "Fakultaeten";
 		$this->checklist[] = array('detail_table' => 'fakultaet_user',
 									'query' => 'view:FAK_USER:');
-		$this->checklist[] = array('detail_table' => 'institute',
+		$this->checklist[] = array('detail_table' => 'Institute',
 									'query' => 'view:FAK_INST:');
 	}
 
