@@ -104,8 +104,8 @@ class getList extends printThread {
 	var $db;
 	var $db2;
 	var $recurse_levels;			//How much Levels should the List recurse
-	var $supress_hierachy_levels;	//Show only resources with a category or show also the hierarhy-levels (that are resources too)
-
+	var $supress_hierachy_levels;	//show only resources with a category or show also the hierarhy-levels (that are resources too)
+	var $admin_buttons;			//show admin buttons or not
 
 	function getList() {
 		$this->recurse_levels=-1;
@@ -115,6 +115,10 @@ class getList extends printThread {
 	function setRecurseLevels($levels) {
 		$this->recurse_levels=$levels;
 	}
+
+	function setAdminButtons($value) {
+		$this->admin_buttons=$value;
+	}
 	
 	function setViewHiearchyLevels($mode) {
 		if ($mode)
@@ -123,7 +127,7 @@ class getList extends printThread {
 			$this->supress_hierachy_levels=TRUE;
 	}
 	
-	function createListObject ($resource_id) {
+	function createListObject ($resource_id, $admin_buttons=FALSE) {
 		global $resources_data, $edit_structure_object;
 	
 		//Object erstellen
@@ -162,11 +166,16 @@ class getList extends printThread {
 		} else {
 			$content=htmlReady($resObject->getDescription());
 		}
-		if (!$weitere) {
-			$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\"><img src=\"./pictures/buttons/loeschen-button.gif\" border=0></a>";
-		} 
-		$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\"><img src=\"./pictures/buttons/neuesobjekt-button.gif\" border=0></a>";
-		$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\"><img src=\"./pictures/buttons/bearbeiten-button.gif\" border=0></a>";
+		if ($admin_buttons) {
+			if (!$weitere) {
+				$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
+			} 
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobject")."</a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("bearbeiten")."</a>";
+		} else {
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("details")."</a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>";
+		}
 
 		//Daten an Ausgabemodul senden (aus resourcesVisual)
 		$this->printRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
@@ -186,7 +195,7 @@ class getList extends printThread {
 			return FALSE;
 			
 		while ($db->next_record()) {
-			$this->createListObject($db->f("resource_id"));
+			$this->createListObject($db->f("resource_id"), $this->admin_buttons);
 							
 			//in weitere Ebene abtauchen
 			if (($recurse_levels == -1) || ($recurse_levels < $levels + 1)) {
@@ -792,6 +801,105 @@ class editSettings extends cssClasses {
 	}	
 }
 
+class viewObject {
+	var $resObject;		//Das Oject an dem gearbeitet wird
+	
+	//Konstruktor
+	function viewObject($resource_id) {
+		$this->db = new DB_Seminar;
+		$this->db2 = new DB_Seminar;
+		$this->resObject = new resourceObject($resource_id);
+		$this->cssSw = new cssClassSwitcher;
+	}
+
+	function selectProperties() {
+		$this->db->query ("SELECT resources_properties.name, resources_properties.description, resources_properties.type, resources_properties.options, resources_properties.system, resources_properties.property_id  FROM resources_properties LEFT JOIN resources_categories_properties USING (property_id) LEFT JOIN resources_objects USING (category_id) WHERE resources_objects.resource_id = '".$this->resObject->getId()."' ");
+		if (!$this->db->affected_rows())
+			return FALSE;
+		else
+			return TRUE;
+	}
+	
+	function view_properties() {
+		global $PHP_SELF;
+			
+		?>
+		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
+		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_properties=<? echo $this->resObject->getId() ?>">
+			<input type="HIDDEN" name="view" value="edit_object_properties" />
+			<tr>
+				<td class="<? echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>"><font size=-1><b>Name:</b></font><br />
+				<font size=-1><? echo $this->resObject->getName()." (".$this->resObject->getCategory().")" ?>
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>" width="60%" valign="top"><font size=-1><b>Besitzer:</b></font><br />
+				<font size=-1><a href="<? echo $this->resObject->getOwnerLink?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>" valign="top" colspan=2><font size=-1><b>Beschreibung:</b></font><br />
+				<font size=-1><? echo $this->resObject->getDescription() ?></font>
+				<cho
+			</tr>
+			<tr>
+				<td class="<? $this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>" colspan=2><font size=-1><b>Eigenschaften:</b></font>
+				</td>
+			</tr>
+			<? 
+			if ($this->resObject->getCategoryId()) {
+				$this->selectProperties();
+				while ($this->db->next_record()) {
+					?>
+			<tr>
+				<td class="<? 	$this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>">
+					&nbsp; &nbsp; <font size=-1>&bull;&nbsp;<? echo $this->db->f("name"); ?></font>
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>" width="40%">
+				<font size=-1>
+				<?
+					$this->db2->query("SELECT * FROM resources_objects_properties WHERE resource_id = '".$this->resObject->getId()."' AND property_id = '".$this->db->f("property_id")."' ");
+					$this->db2->next_record();
+					switch ($this->db->f("type")) {
+						case "bool":
+							print htmlReady($this->db->f("options"));
+						break;
+						case "num":
+						case "text";
+							print htmlReady($this->db2->f("state"));
+						break;
+						case "select";
+							$options=explode (";",$this->db->f("options"));
+							foreach ($options as $a) {
+								if ($this->db2->f("state") == $a) 
+									print htmlReady($a);
+							}
+						break;
+					}
+				?></td>
+			</tr><?
+				}
+			} else { ?>
+			<tr>
+				<td class="<? echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $this->cssSw->getClass() ?>" colspan=2>
+				<font size=-1 color="red">Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!</font>
+				</td>
+			</tr>
+			<? } ?>
+		</table>
+		<?
+	}	
+}
+
+
 /*****************************************************************************
 editObject, Darstellung der unterschiedlichen Forms zur 
 Bearbeitung eines Objects
@@ -1007,7 +1115,6 @@ class editObject extends cssClasses {
 			</tr>
 			</form>
 		</table>
-		<br /><br />
 		<?
 	}	
 
@@ -1051,7 +1158,7 @@ class editObject extends cssClasses {
 				<font size=-1><textarea name="change_description" rows=3 cols=60><? echo $this->resObject->getDescription() ?></textarea>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%" valign="top"><font size=-1>Besitzer:</font><br />
-				<font size=-1><? echo $this->resObject->getOwnerName() ?></font>
+				<font size=-1><a href="<? echo $this->resObject->getOwnerLink?>"><? $this->resObject->getOwnerName(TRUE) ?></a></font>
 				</td>
 			</tr>
 			<tr>
@@ -1201,7 +1308,6 @@ class editObject extends cssClasses {
 			</tr>
 			</form>
 		</table>
-		<br /><br />
 		<?
 	}	
 }
@@ -1304,7 +1410,6 @@ class ViewSchedules extends cssClasses {
 				</td>
 			</tr>
 		</table>
-		<br /><br />
 	<?
 	}
 }

@@ -497,6 +497,9 @@ if ($resources_data["view"]=="search") {
 	}
 }
 
+if ($resources_data["view"] == "openobject_details" || $resources_data["view"] == "openobject_schedules" || $resources_data["view"] == "openobject_assign")
+	$resources_data["structure_open"]=$show_object;
+
 /*****************************************************************************
 Kopf der Ausgabe
 /*****************************************************************************/
@@ -508,6 +511,9 @@ if ($SessSemName[1])
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 else
 	include ("$RELATIVE_PATH_RESOURCES/views/links_ressources.inc.php");
+
+include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
+
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
@@ -530,6 +536,7 @@ Treeview, die Strukturdarstellung, views: resources, _resources, make_hierarchie
 /*****************************************************************************/
 if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources"){
 
+	closeObject();
 
 	if ($edit_structure_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
@@ -558,12 +565,14 @@ if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources
 }
 
 /*****************************************************************************
-Listview, die Listendarstellung, views: resources, _resources, make_hierarchie
+Listview, die Listendarstellung, views: lists, _lists, openobject_main
 /*****************************************************************************/
 if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $resources_data["view"]=="openobject_main") {
 
 	$list=new getList();
 	$list->setRecurseLevels(-1);
+	if ($resources_data["view"] != "openobject_main")
+		$list->setAdminButtons(TRUE);
 	
 	if ($edit_structure_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
@@ -600,6 +609,21 @@ if ($resources_data["view"]=="edit_object_properties" || $resources_data["view"]
 	}
 }
 
+
+/*****************************************************************************
+Objecteigenschaften anzeigen, views: openobject_details
+/*****************************************************************************/
+if ($resources_data["view"]=="openobject_details") {
+
+	if ($resources_data["structure_open"]) {
+		$viewObject=new viewObject($resources_data["structure_open"]);
+		$viewObject->view_properties();
+	} else {
+		echo "</td></tr>";
+		parse_msg ("info§Sie haben kein Objekt zum Anzeigen ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie in der \"&Uuml;bersicht\"  ein Objekt aus.");
+	}
+}
+
 /*****************************************************************************
 Objectberechtigungen bearbeiten, views: edit_object_perms
 /*****************************************************************************/
@@ -617,7 +641,7 @@ if ($resources_data["view"]=="edit_object_perms") {
 /*****************************************************************************
 Objectbelegung bearbeiten, views: edit_object_schedules
 /*****************************************************************************/
-if ($resources_data["view"]=="edit_object_schedules") {
+if ($resources_data["view"]=="edit_object_schedules" || $resources_data["view"]=="openobject_assign") {
 
 	if ($resources_data["structure_open"]) {
 		$editObject=new editObject($resources_data["structure_open"]);
@@ -660,7 +684,7 @@ if ($resources_data["view"]=="edit_perms") {
 /*****************************************************************************
 Belegungen ausgeben, views: view_schedule
 /*****************************************************************************/
-if ($resources_data["view"]=="view_schedule") {
+if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openobject_schedule") {
 	
 	$ViewSchedules=new ViewSchedules($resources_data["structure_open"]);
 	$ViewSchedules->navigator();
@@ -699,7 +723,13 @@ if ($resources_data["view"]=="search") {
 /*****************************************************************************
 Seite abschliessen
 /*****************************************************************************/
-		?></td>
+		?>
+			</td>
+		<tr>
+			<td class="blank">
+			&nbsp; 
+			</td>
+		</tr>
 	</tr>
 </table>
 <?

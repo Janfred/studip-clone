@@ -1,4 +1,4 @@
-<?
+	<?
 /*
 resourcesClass.php - 0.8
 Klassen fuer Ressourcenverwaltung von Stud.IP.
