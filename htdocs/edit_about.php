@@ -385,6 +385,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
       $hashpass=md5($newpass);
       ## Mail abschicken...
   $from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+  $env_from="wwwrun@".$smtp->host_name;
   $abuse="abuse@".$smtp->host_name;
   $to=$email;
   $url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -408,7 +409,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 ;
 
   $smtp->SendMessage(
-  $from, array($to),
+  $env_from, array($to),
   array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Passwort-Änderung Stud.IP"),
   $mailbody);
 
