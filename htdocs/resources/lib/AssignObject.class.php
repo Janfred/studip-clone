@@ -176,7 +176,7 @@ class AssignObject {
 			$id=$this->assign_user_id;
 			
 		switch (get_object_type($id)) {
-			case "user";
+			case "user":
 				if (!$explain)
 					return get_fullname($id);
 				else
