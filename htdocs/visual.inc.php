@@ -241,7 +241,7 @@ function quotes_decode ($description) {
 	$description = " ".$description;
 	$stack = Array();
 	$curr_pos = 1;
-	while ($curr_pos && ($curr_pos < strlen($description))) {        
+	while ($curr_pos && ($curr_pos < strlen($description))) {
 		$curr_pos = strpos($description, "[", $curr_pos);
 		if ($curr_pos) {
 			$possible_start = substr($description, $curr_pos, 6);
@@ -316,68 +316,89 @@ function quotes_encode ($description,$author) {
 	return $description;
 }
 
+// Hilfsfunktion für formatReady
+function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
+		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
+		if ($wiki == TRUE)
+			$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		else
+			$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		$what = explode('ö', $what);
+		$i = 0; $all = '';
+		foreach ($what as $w) {
+			if ($matches[1][$i] == '') {
+				$all .= $w;
+			} else {
+				$a = preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i]);
+				$all .= $w . (($wiki == TRUE)? "<nowikilink> $a </nowikilink>\n" : $a);
+			}
+			$i++;
+		}
+		return $all;
+	}
+	if ($wiki == TRUE)
+		return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+	else
+		return symbol(smile(FixLinks(format(latex($what, $extern)),FALSE, TRUE, TRUE, $extern), $extern), $extern);
+}
 
 /**
 * universal and very usable functions to get all the special stud.ip formattings
 *
-* 
-* @access       public        
+*
+* @access       public
 * @param        string $what		what to format
 * @param        boolean $trim		should the output trimmed?
 * @param        boolean $extern TRUE if called from external pages ('externe Seiten')
+* @param	boolean $wiki		if TRUE format for wiki
 * @return       string
 */
-function formatReady ($what, $trim = TRUE, $extern = FALSE) {
-	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
+function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE) {
+
+	if (preg_match_all("'\[code\](.+)\[/code\]'isU", $what, $match_code)) {
 		$what = htmlReady($what, $trim, FALSE);
-		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
-		$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
-		$what = explode('ö', $what);
+		$what = preg_replace("'\[code\].+\[/code\]'isU", 'ü', $what);
+		$what = format_help($what, $trim, $extern, $wiki);
+		$what = explode('ü', $what);
 		$i = 0;
-		foreach ($what as $w)	
-			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', htmlReady($matches[1][$i++]));
-			
+		$all = '';
+		foreach ($what as $w) {
+			if ($match_code[1][$i] == ''){
+				$all .=  $w ;
+			} else {
+				$a = highlight_string( $match_code[1][$i] , TRUE);
+				$all .= $w . (($wiki == TRUE)? "<nowikilink> $a </nowikilink>\n":$a );
+			}
+			$i++;
+		}
 		return $all;
+	} else {
+		$what = htmlReady($what, $trim, FALSE);
+		return format_help($what, $trim, $extern, $wiki);
 	}
-	
-	return symbol(smile(FixLinks(format(latex(htmlReady($what, $trim, FALSE), $extern)),
-			FALSE, TRUE, TRUE, $extern), $extern), $extern);
 }
 
 
 /**
 * the special version of formatReady for Wiki-Webs
 *
-* 
-* @access       public        
+*
+* @access       public
 * @param        string $what		what to format
 * @param        string $trim		should the output trimmed?
 * @param        boolean $extern TRUE if called from external pages ('externe Seiten')
 * @return       string
 */
 function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
-	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
-		$what = htmlReady($what, $trim, FALSE);
-		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
-		$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
-		$what = explode('ö', $what);
-		$i = 0;
-		foreach ($what as $w)
-			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', htmlReady($matches[1][$i++]));
-	
-		return $all;
-	}
-	
-	return symbol(smile(FixLinks(wiki_format(format(latex(htmlReady($what, $trim, FALSE),
-			$extern))), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+	return formatReady ($what, $trim, $extern, TRUE);
 }
-
 
 /**
 * a special wiki formatting routine (unused the moment)
 *
-* 
-* @access       public        
+*
+* @access       public
 * @param        string $text		what to format
 */
 function wiki_format ($text) {
@@ -604,6 +625,9 @@ function preg_call_table_format ($content) {
 */
 function kill_format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
+	// wir wandeln [code] einfach in [pre][nop] um und sind ein Problem los ... :-)
+	$text = preg_replace_callback ( "|(\[/?code\])|isU", create_function('$a', 'return ($a[0] == "[code]")? "[pre][nop]":"[/nop][/pre]";'), $text);
+
 	$pattern = array(
 					"'(^|\n)\!{1,4}(.+)$'m",      // Ueberschriften
 					"'(\n|\A)(-|=)+ (.+)$'m",     // Aufzaehlungslisten
@@ -628,7 +652,8 @@ function kill_format ($text) {
 					"'\[pre\](.+?)\[/pre\]'is" ,        // praeformatierter Text
 					"'\[.+?\](((http://|https://|ftp://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 					"'\[quote=.+?quote\]'is",    // quoting
-					"':[^\s]+?:'s"               // smileys
+					"':[^\s]+?:'s"              // smileys
+
 					);
 	$replace = array(
 					"\\1\\2", "\\1\\3",
@@ -642,7 +667,7 @@ function kill_format ($text) {
 					"'\\1'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1)",
 					"\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
 					"\\1", "\\1", "\n\\1\n", "", "\\1", "", "", "");
-	
+
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $text, $matches)) {
 		$text = preg_replace("'\[nop\].+\[/nop\]'isU", '[nop].[/nop]', $text);
 		$text = preg_replace($pattern, $replace, $text);
@@ -769,7 +794,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 /**
 * create smileys
 *
-* This functions converts the smileys codes (":name:") notation an the shorts, 
+* This functions converts the smileys codes (":name:") notation an the shorts,
 * located in the config.inc into the assigned pictures. 
 * On every smiley a link to show_smiley.php overview is given (only if $extern
 * is FALSE). A tooltip which shows the smiley code is given, too.
