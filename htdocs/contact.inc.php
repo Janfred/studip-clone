@@ -119,6 +119,18 @@ function GetSizeofBook()
 	return $size;
 }
 
+function GetSizeOfBookByLetter(){
+	global $user;
+	$ret = false;
+	$db = new DB_Seminar();
+	$db->query("SELECT LCASE(LEFT(TRIM(Nachname),1)) AS first_letter, count(*) AS anzahl FROM contact LEFT JOIN auth_user_md5 USING(user_id)
+				WHERE owner_id='$user->id' AND NOT ISNULL(Nachname) GROUP BY first_letter");
+	while ($db->next_record()){
+		$ret[$db->f('first_letter')] = $db->f('anzahl');
+	}
+	return $ret;
+}
+
 function AddBuddy($username)
 { global $user;
 
@@ -285,7 +297,7 @@ function SearchResults ($search_exp)
 { global $SessSemName, $_fullname_sql,$_range_type;
 	$db=new DB_Seminar;
 	$query = "SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, username, perms ".
-		"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
+		"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) ".
 		"WHERE (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
 
 	$db->query($query); // results all users which are not in the seminar
