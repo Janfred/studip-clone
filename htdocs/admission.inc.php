@@ -257,8 +257,8 @@ function check_admission ($send_message=TRUE) {
 			//Check, if locked
 			$db2->query("SELECT admission_selection_take_place FROM seminare WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
 			$db2->next_record();
-			if ($db2->f("admission_selection_take_place") == '-1')
-				break; //Someone has locked the Veranstaltung in the meanwhile
+			if (($db2->f("admission_selection_take_place") == '-1') ||  ($db2->f("admission_selection_take_place") == '1'))
+				break; //Someone has locked or checked the Veranstaltung in the meanwhile
 				
 			//Veranstaltung locken
 			$db2->query("UPDATE seminare SET admission_selection_take_place ='-1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
