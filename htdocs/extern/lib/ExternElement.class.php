@@ -34,6 +34,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."visual.inc.php");
 
 class ExternElement {
 	
@@ -301,9 +302,9 @@ class ExternElement {
 		global $HTTP_POST_VARS;
 		$fault = array();
 		
-		$HTTP_POST_VARS['Main_copyright'] = htmlentities(html_entity_decode(
+		$HTTP_POST_VARS['Main_copyright'] = htmlentities(decodeHTML(
 				$HTTP_POST_VARS['Main_copyright'], ENT_QUOTES), ENT_QUOTES);
-		$HTTP_POST_VARS['Main_author'] = htmlentities(html_entity_decode(
+		$HTTP_POST_VARS['Main_author'] = htmlentities(decodeHTML(
 				$HTTP_POST_VARS['Main_author'], ENT_QUOTES), ENT_QUOTES);
 		
 		foreach ($this->attributes as $attribute) {
