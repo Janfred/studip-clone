@@ -56,13 +56,19 @@ if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],$db->f("fullnam
 	 ?><html>
 	 <head>
 		 <title>Stud.IP</title>
-			  <style type="text/css">
-			  <!--
-			  <?php
-			  include $ABSOLUTE_PATH_STUDIP."style.css";
-			  ?>
-			  -->
-			  </style>
+		<style type="text/css">
+	   <!--
+	   A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	   A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	   A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	   A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
+	   TABLE.blank {	background-color: white;}
+	   TD.blank {background-color: #FFFFFF;}
+	   th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
+	   p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
+	   h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
+	   -->
+	   </style>
 	 </head>
 	 <body>
 	 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
