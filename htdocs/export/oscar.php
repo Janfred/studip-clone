@@ -59,11 +59,12 @@ elseif ($perm->have_perm("admin"))
 		$endung = $file_parts[ sizeof($file_parts)-1 ];
 		echo $endung;
 		if (filemtime($dirstr . "/" . $file) < (time() - 60*60 * 24) AND ($file != ".") AND ($file != "..") AND !is_dir($dirstr . "/" . $file) 
-		AND (in_array($endung, array("xml", "pdf", "fo", "htm", "html", "rtf"))) AND (strlen($file) > 30))
+		AND (in_array($endung, array("xml", "pdf", "fo", "htm", "html", "rtf"))) AND (strlen($file_parts[0]) == 32))
 		{
 //			echo "<font color=\"FF0000#\">" . date("h:i d. m. y", filemtime($dirstr . "/" . $file)) . " $file</font><br>";
-			if (unlink($dirstr . "/" . $file)) 
-				$deleted++;
+			if (is_writeable($dirstr . "/" . $file)) 
+				if (unlink($dirstr . "/" . $file)) 
+					$deleted++;
 		}
 //		else
 //			echo date("h:i d. m. y", filemtime($dirstr . "/" . $file)) . " $file<br>";
