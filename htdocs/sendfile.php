@@ -325,8 +325,8 @@ if (substr($path_file,0,6) != "ftp://") {
 	header("Expires: 0");
 
 	header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
-	// if ($type != 6)
-		// header("Content-length: $filesize");
+	if ($type != 6)
+		header("Content-length: $filesize");
 	header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
 	if ($type != 5){
 		readfile($path_file);
