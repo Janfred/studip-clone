@@ -128,8 +128,8 @@ $reiter->create($structure, $view);
 		<td class="steel1"colspan=2>
 			<br>&nbsp; &nbsp; <?=_("<b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:")?><br>
 			<blockquote>
-			<font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> <?=_("(Hilfe)")?></font>
-			<br><font size=-1><b>Oliver Brakel</b>, E-Mail: <a href="mailto:obrakel@studip.de">obrakel@studip.de</a> <?=_("(Distribution)")?></font>
+			<font size=-1><b>Alexander Berg</b>, E-Mail: <a href="mailto:berg@data-quest.de">berg@data-quest.de</a> <?=_("(Projektmanagement)")?></font>
+			<br><font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> <?=_("(Hilfe)")?></font>
 			<br><font size=-1><b>Philipp H&uuml;gelmeyer</b>, E-Mail: <a href="mailto:phuegelm@uos.de">phuegelm@uos.de</a> <?=_("(Distribution)")?></font>
 			<br><font size=-1><b>Cornelis Kater</b>, E-Mail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> <?=_("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)")?></font>
 			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)")?></font>
