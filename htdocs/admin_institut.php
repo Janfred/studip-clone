@@ -218,7 +218,18 @@ while ( is_array($HTTP_POST_VARS)
 		}
 		
 		//kill the datafields
-		$DataFields->killAllEntries($i_id);		
+		$DataFields->killAllEntries($i_id);
+		
+		//kill all wiki-pages
+		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $i_id);
+		$db->query($query);
+
+		$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $i_id);
+		$db->query($query);
+
+		$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $i_id);
+		$db->query($query);
+	
 		
 		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
 		if ($RESOURCES_ENABLE) {

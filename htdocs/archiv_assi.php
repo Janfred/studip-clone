@@ -192,6 +192,16 @@ if (is_array($archiv_sem)) {
 						$DataFields = new DataFields($s_id);
 						$DataFields->killAllEntries();
 						
+						//kill all wiki-pages
+						$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $s_id);
+						$db->query($query);
+				
+						$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $s_id);
+						$db->query($query);
+				
+						$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $s_id);
+						$db->query($query);
+						
 						// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
 						if ($RESOURCES_ENABLE) {
 							$killAssign = new DeleteResourcesUser($s_id);
@@ -229,9 +239,7 @@ if (is_array($archiv_sem)) {
 					} 
 				} 
 
-
-
-// Outputs...
+	// Outputs...
 	if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0)) {
 		$db->query("SELECT * FROM seminare WHERE Seminar_id = '" . $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"] . "' ");
 		$db->next_record();
