@@ -1,82 +1,163 @@
 <?php
 
+
+
 /*
-adminaea_stat.php - Dummy zum Einstieg in Adminbeeich
-Copyight (C) 2001 Conelis Kate <ckate@gwdg.de>
 
-This pogam is fee softwae; you can edistibute it and/o
-modify it unde the tems of the GNU Geneal Public License
-as published by the Fee Softwae Foundation; eithe vesion 2
-of the License, o (at you option) any late vesion.
+adminarea_start.php - Dummy zum Einstieg in Adminbereich
 
-This pogam is distibuted in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied waanty of
-MERCHANTABILITY o FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Geneal Public License fo moe details.
+Copyright (C) 2001 Cornelis Kater <ckater@gwdg.de>
 
-You should have eceived a copy of the GNU Geneal Public License
-along with this pogam; if not, wite to the Fee Softwae
+
+
+This program is free software; you can redistribute it and/or
+
+modify it under the terms of the GNU General Public License
+
+as published by the Free Software Foundation; either version 2
+
+of the License, or (at your option) any later version.
+
+
+
+This program is distributed in the hope that it will be useful,
+
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+
+GNU General Public License for more details.
+
+
+
+You should have received a copy of the GNU General Public License
+
+along with this program; if not, write to the Free Software
+
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 */
 
-        page_open(aay("sess" => "Semina_Session", "auth" => "Semina_Auth", "pem" => "Semina_Pem", "use" => "Semina_Use"));
-         $pem->check("tuto");
+
+
+        page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+
+         $perm->check("tutor");
+
         ?>
+
 <html>
+
 <head>
+
         <title>Stud.IP</title>
-        <link el="stylesheet" hef="style.css" type="text/css">
-        <META HTTP-EQUIV="REFRESH" CONTENT="<?php pint $auth->lifetime*60;?>; URL=logout.php">
-        <body bgcolo=white>
+
+        <link rel="stylesheet" href="style.css" type="text/css">
+
+        <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
+
+        <body bgcolor=white>
+
 </head>
 
 
+
+
+
 <?php
-        include "semina_open.php"; //hie weden die sessions initialisiet
+
+        include "seminar_open.php"; //hier werden die sessions initialisiert
+
 ?>
 
-<!-- hie muessen Seiten-Initialisieungen passieen -->
+
+
+<!-- hier muessen Seiten-Initialisierungen passieren -->
+
+
 
 <?php
-        include "heade.php";   //hie wid de "Kopf" nachgeladen
-				equie_once("visual.inc.php");
+
+        include "header.php";   //hier wird der "Kopf" nachgeladen
+
+				require_once("visual.inc.php");
+
+
 
         include "links_admin.inc.php";
+
         
+
         if ($links_admin_data["sem_id"]) {
-        $db=new DB_Semina;
-        $db->quey("SELECT Name FROM seminae WHERE Semina_id ='".$links_admin_data["sem_id"]."'");
-        $db->next_ecod();
+
+        $db=new DB_Seminar;
+
+        $db->query("SELECT Name FROM seminare WHERE Seminar_id ='".$links_admin_data["sem_id"]."'");
+
+        $db->next_record();
+
         ?>
-      	<table cellspacing="0" cellpadding="0" bode="0" width="100%">
-	<t><td class="blank" colspan=2>&nbsp;</td></t>
-	<t><td class="topic" colspan=2><img sc="pictues/blank.gif" width="5" height="5" bode="0"><b>Veanstaltung vogew&auml;hlt</b></td></t>
-	<t><td class="blank" colspan=2>&nbsp;</td></t>
-	<t><td class="blank" colspan=2>
+
+      	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+
+	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
+
+	<tr><td class="topic" colspan=2><img src="pictures/blank.gif" width="5" height="5" border="0"><b>Veranstaltung vorgew&auml;hlt</b></td></tr>
+
+	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
+
+	<tr><td class="blank" colspan=2>
+
 		<blockquote>
+
 		<?
+
 		if ($SessSemName[1]) {
+
 		?>
-		Sie k&ouml;nnen hie diekt die Daten de Veanstaltung <b><? echo htmlReady($db->f("Name")) ?></b> beabeiten.<b>
-		Wenn Sie die Daten eine andeen Veanstaltung beabeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<b />&nbsp; 
+
+		Sie k&ouml;nnen hier direkt die Daten der Veranstaltung <b><? echo htmlReady($db->f("Name")) ?></b> bearbeiten.<br>
+
+		Wenn Sie die Daten einer anderen Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<br />&nbsp; 
+
 		<?
+
 			}
+
 		else
+
 			{
+
 		?>
-		Sie haben die Veanstaltung <b><? echo htmlReady($db->f("Name")) ?></b> vogew&auml;hlt. Sie k&ouml;nnen nun diekt die einzelnen Beeiche diese Veanstaltung beabeiten, in dem Sie die entspechenden Menupunkte w&auml;hlen.<b>
-		Wenn Sie eine andee Veanstaltung beabeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<b />&nbsp; 
+
+		Sie haben die Veranstaltung <b><? echo htmlReady($db->f("Name")) ?></b> vorgew&auml;hlt. Sie k&ouml;nnen nun direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, in dem Sie die entsprechenden Menupunkte w&auml;hlen.<br>
+
+		Wenn Sie eine andere Veranstaltung bearbeiten wollen, klicken Sie bitte auf das Schl&uuml;sselsymbol.<br />&nbsp; 
+
 		<?
+
 			}
+
 		?>
+
 		</blockquote>
+
 		</td>
-	</t>
+
+	</tr>
+
 </table>
+
 <?		
+
 	}
+
 	page_close();
+
  ?>
- </t></td></table>
+
+ </tr></td></table>
+
 </body>
+
 </html>
