@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 class Guestbook {
 	var $active;	// user has activated the guestbook
 	var $number;	// number of entrys in the guestbook
-	var $rights;	// do i have admin-rights fpr the guestbook
+	var $rights;	// do i have admin-rights for the guestbook
 	var $user_id;	// user_id of the guestbook
 	var $username;	// username
 	var $msg_guest; // Output Message
@@ -30,11 +30,12 @@ class Guestbook {
 
 	// Konstruktor
 	
-	function Guestbook ($user_id) {
+	function Guestbook ($user_id,$rights) {
 		$this->user_id = $user_id;
 		$this->username = get_username($user_id);
 		$this->checkGuestbook();
 		$this->numGuestbook();
+		$this->rights = $rights;
 		$this->getRightsGuestbook();
 		$this->msg_guest = "";
 		$this->anchor = FALSE;
@@ -60,24 +61,24 @@ class Guestbook {
 		}
 	
 	function getRightsGuestbook () {
-		global	$user, $admin_darf;
-		if ($this->user_id == $user->id || $admin_darf == TRUE)
+		global	$user;
+		if ($this->user_id == $user->id || $this->rights == TRUE)
 			$this->rights = TRUE;
 		else
 			$this->rights = FALSE;
 	}
 	
 	function showGuestbook () {
-		global $perm,$PHP_SELF;
+		global $perm, $PHP_SELF;
 		if ($this->rights == TRUE)
 			if ($this->active==TRUE)
 				$active = " ("._("aktiviert").")";
 			else
 				$active = " ("._("deaktiviert").")";
 		if ($this->openclose == "close")
-			$link = $PHP_SELF."?guestbook=open#guest";
+			$link = $PHP_SELF."?guestbook=open&username=$this->username#guest";
 		else
-			$link = $PHP_SELF."?guestbook=close#guest";
+			$link = $PHP_SELF."?guestbook=close&username=$this->username#guest";
 		
 		// set Anchor
 		if ($this->anchor == TRUE)
@@ -174,15 +175,14 @@ class Guestbook {
 		return $buttons;	
 	}
 
-	function actionsGuestbook ($guestbook) {
-		global $post;
+	function actionsGuestbook ($guestbook,$post="",$deletepost="") {
 		if ($this->rights == TRUE) {
 			if ($guestbook=="switch")
 				$this->msg_guest = $this->switchGuestbook();
 			if ($guestbook=="erase")
 				$this->msg_guest = $this->eraseGuestbook();
 			if ($guestbook=="delete")
-				$this->msg_guest = $this->deleteGuestbook();
+				$this->msg_guest = $this->deleteGuestbook($deletepost);
 		}
 		
 		if ($post) {
@@ -214,8 +214,7 @@ class Guestbook {
 		return $tmp;
 	}
 	
-	function deleteGuestbook () {
-		global $deletepost;
+	function deleteGuestbook ($deletepost) {
 		if ($this->getRangeGuestbook($deletepost)==TRUE) {
 			$db=new DB_Seminar;
 			$db->query("DELETE FROM guestbook WHERE post_id = '$deletepost'");	
@@ -244,7 +243,7 @@ class Guestbook {
 		$tmp_id=md5(uniqid($hash_secret));
 		$db->query ("SELECT post_id FROM guestbook WHERE post_id = '$tmp_id'");	
 		if ($db->next_record()) 	
-			$tmp_id = MakeUniqueID(); //ID gibt es schon, also noch mal
+			$tmp_id = $this->makeuniqueGuestbook(); //ID gibt es schon, also noch mal
 		return $tmp_id;
 	}
 	
@@ -257,8 +256,6 @@ class Guestbook {
 		$db->query("INSERT INTO guestbook (post_id,range_id,user_id,mkdate,content) values ('$post_id', '$range_id', '$user_id', '$now', '$content')");	
 		return $post_id;
 	}
-	
-	
 }
 
 /*

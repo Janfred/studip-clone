@@ -281,10 +281,10 @@ if ($GLOBALS['VOTE_ENABLE']) {
 
 // show Guestbook
 
-$guest = new Guestbook($user_id);
+$guest = new Guestbook($user_id,$admin_darf);
 
 if ($guestbook)
-	$guest->actionsGuestbook($guestbook);
+	$guest->actionsGuestbook($guestbook,$post,$deletepost);
 
 if ($guest->active == TRUE || $guest->rights == TRUE) {
 	$guest->showGuestbook();
