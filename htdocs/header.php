@@ -43,8 +43,8 @@ require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
 
 //nur sinnvoll wenn chat eingeschaltet
-if ($CHAT_ENABLE) {
-	$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
+if ($GLOBALS['CHAT_ENABLE']) {
+	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = TRUE;
 	echo "\t\t<script type=\"text/javascript\">\n";
 	echo "\t\tfunction open_chat() {\n";
@@ -174,7 +174,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		// wurde ich zum Chat eingeladen? Wenn nicht, nachsehen ob wer im Chat ist
           //Version für neuen Chat (vorläufig)
-  	if ($CHAT_ENABLE) {
+  	if ($GLOBALS['CHAT_ENABLE']) {
     	if (($chatm) && ($i_page != "sms.php") && (!$chatServer->isActiveUser($user->id,"studip"))) {
 				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();",_("Chat"),_("Sie wurden zum Chatten eingeladen!"),30,"_top","left");
 			} else {
