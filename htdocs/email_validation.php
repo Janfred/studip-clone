@@ -41,7 +41,6 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 <br>
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="blank" colspan=2 width=100%">&nbsp;</td></tr>
 <tr>
 	<td class="topic" colspan=2><b>&nbsp;Best&auml;tigung der Email-Adresse</b></td>
 </tr>
