@@ -158,7 +158,13 @@ if ($cmd=="write") {
 	<tr>
 		<td class="blank">
 		<blockquote>Schreiben Sie hier eine Nachricht an einen anderen Benutzer:
-		<? if ($SessSemName[0]) echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur Veranstaltung</a>"; ?></blockquote>
+		<?
+		if ($SessSemName[0] && $SessSemName["class"] == "inst")
+			echo "<br /><br /><a href=\"$sms_source_page\">Zur&uuml;ck zur Einrichtung</a>";
+		elseif ($SessSemName[0])
+			echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur Veranstaltung</a>";
+		?>
+		</blockquote>
 		</td>
 		<td class="blank" align = right><img src="pictures/brief.jpg" border="0"></td>
 	</tr>
@@ -228,11 +234,15 @@ if ($msg)	{
 	<td class="blank">
 	<blockquote><br />Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie verschickt wurden.<br />
 	Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt.
-	<? if ($SessSemName[0]) echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur Veranstaltung</a>"; else echo "<br />&nbsp; ";  ?>
+	<? 
+	if ($SessSemName[0] && $SessSemName["class"] == "inst")
+		echo "<br /><br /><a href=\"$sms_source_page\">Zur&uuml;ck zur Einrichtung</a>";
+	elseif ($SessSemName[0])
+		echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur Veranstaltung</a>";
+	else echo "<br />&nbsp; ";
 
-	<?
 	if ($db->affected_rows())
-		{?><form action="<? echo $PHP_SELF ?>"> <input type="HIDDEN" name="cmd" value="delete_all" /> <input type="IMAGE"  align ="absmiddle" src="pictures/buttons/alleloeschen-button.gif" border=0 />&nbsp; <br /><br /><input type="CHECKBOX" name="delete_unread" checked /><font size=-1>Nachrichten seit letztem Login nicht l&ouml;schen</font></form><?}
+		{?><form action="<? echo $PHP_SELF ?>"> <input type="hidden" name="cmd" value="delete_all" /> <input type="IMAGE"  align ="absmiddle" src="pictures/buttons/alleloeschen-button.gif" border=0 />&nbsp; <br /><br /><input type="CHECKBOX" name="delete_unread" checked /><font size=-1>Nachrichten seit letztem Login nicht l&ouml;schen</font></form><?}
 	?>
 	</blockquote>
 	</td>
