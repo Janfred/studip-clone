@@ -19,9 +19,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 */
 
-require_once("visual.inc.php");
-require_once("dates.inc.php");
-require_once("config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	
 function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=false, $show_admin=FALSE, $open) { 
 	Global $PHP_SELF, $loginfilelast, $SessSemName, $user, $TERMIN_TYP, $username;	
