@@ -58,41 +58,48 @@ $chatServer->caching = true;
 ?>
 <html>
 <head>
-       <title>Chat Nicklist</title>
-       <link rel="stylesheet" href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>style.css" type="text/css">
+	   <title>Chat Nicklist</title>
+	   <style type="text/css">
+<!--
+<?php
+ include $ABSOLUTE_PATH_STUDIP."style.css";
+?>
+-->
+</style>
+
 </head>
 <body style="background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');">
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
-     ?><table width="100%"><tr><?
-     my_error("Du bist nicht in diesem Chat angemeldet!",$class="blank",$colspan=1);
-     ?></tr></table></body></html><?
-     page_close();
-     die;
+	 ?><table width="100%"><tr><?
+	 my_error("Du bist nicht in diesem Chat angemeldet!",$class="blank",$colspan=1);
+	 ?></tr></table></body></html><?
+	 page_close();
+	 die;
 }
 ?>
 <div align="center">
 <table align="center" border="0" bgcolor="#FFFFFF" cellpadding="0" cellspacing="2"  width="95%">
   <tr>
-     <td align="center">
-          <table align="center" border="0" cellpadding="1" cellspacing="1" width="100%">
-               <tr>
-                    <td class="topic" align="center"><b>Nicklist</b></td>
-               </tr>
-               <?
-               foreach ($chatServer->chatUser as $chatUserId => $chatUserDetail){
-                    if ($chatUserDetail[$chatid]["action"]){
-                         echo "\n<tr><td><span style=\"font-size:10pt\">";
-                         if ($chatUserDetail[$chatid]["perm"])  echo "<b>";
-                         echo "<a href=\"javascript:parent.coming_home('{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$chatUserDetail[$chatid]["nick"]."')\">".$chatUserDetail[$chatid]["fullname"]."</a><br>(".$chatUserDetail[$chatid]["nick"].")";
-                         if ($chatUserDetail[$chatid]["perm"])  echo "</b>";
-                         echo "</span></td></tr>";
-                    }
-               }
-               ?>
-          </table>
-     </td>
+	 <td align="center">
+		  <table align="center" border="0" cellpadding="1" cellspacing="1" width="100%">
+			   <tr>
+					<td class="topic" align="center"><b>Nicklist</b></td>
+			   </tr>
+			   <?
+			   foreach ($chatServer->chatUser as $chatUserId => $chatUserDetail){
+					if ($chatUserDetail[$chatid]["action"]){
+						 echo "\n<tr><td><span style=\"font-size:10pt\">";
+						 if ($chatUserDetail[$chatid]["perm"])  echo "<b>";
+						 echo "<a href=\"javascript:parent.coming_home('{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$chatUserDetail[$chatid]["nick"]."')\">".$chatUserDetail[$chatid]["fullname"]."</a><br>(".$chatUserDetail[$chatid]["nick"].")";
+						 if ($chatUserDetail[$chatid]["perm"])  echo "</b>";
+						 echo "</span></td></tr>";
+					}
+			   }
+			   ?>
+		  </table>
+	 </td>
   </tr>
 </table>
 </div>

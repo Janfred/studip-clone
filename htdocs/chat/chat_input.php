@@ -51,37 +51,44 @@ $chatServer->caching = true;
 ?>
 <html>
 <head>
-       <title>ChatInput</title>
-<link rel="stylesheet" href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>style.css" type="text/css">
+	   <title>ChatInput</title>
+	   <style type="text/css">
+<!--
+<?php
+ include $ABSOLUTE_PATH_STUDIP."style.css";
+?>
+-->
+</style>
+
 <script type="text/javascript">
 /**
 * JavaScript 
 */
    function doQuit(){
-	    document.inputform.chatInput.value="/quit bye";
-	    document.inputform.submit();
-    }
+		document.inputform.chatInput.value="/quit bye";
+		document.inputform.submit();
+	}
 
 /**
 * JavaScript 
 */
-    function doColorChange(){
-    	for(i=0;i<document.inputform.chatColor.length;++i)
-     		if(document.inputform.chatColor.options[i].selected == true){
+	function doColorChange(){
+		for(i=0;i<document.inputform.chatColor.length;++i)
+			if(document.inputform.chatColor.options[i].selected == true){
 			document.inputform.chatInput.value="/color " +
 			document.inputform.chatColor.options[i].value;
 			document.inputform.submit();
-    		}
+			}
 	}
 </script>
 <script type="text/javascript">
 /**
 * JavaScript 
 */
-    function printhelp(){
-	    document.inputform.chatInput.value="/help";
-	    document.inputform.submit();
-    }
+	function printhelp(){
+		document.inputform.chatInput.value="/help";
+		document.inputform.submit();
+	}
  </script>
 
 </head>
@@ -89,26 +96,26 @@ $chatServer->caching = true;
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
-     ?><table width="100%"><tr><?
-     my_error("Du bist nicht in diesem Chat
-     angemeldet!",$class="blank",$colspan=1,false);
-     ?></tr></table></body></html><?
-     page_close();
-     die;
+	 ?><table width="100%"><tr><?
+	 my_error("Du bist nicht in diesem Chat
+	 angemeldet!",$class="blank",$colspan=1,false);
+	 ?></tr></table></body></html><?
+	 page_close();
+	 die;
 }
 
 
 //neue chatnachricht einfügen
 if ($chatInput) {
 	if ($chatServer->isActiveUser($user->id,$chatid)){
-          $chatInput=stripslashes($chatInput);
-          $chatServer->addMsg($user->id,$chatid,$chatInput);
-          //evtl Farbe umstellen
-          $cmdStr=trim(substr($chatInput." ",1,strpos($chatInput," ")-1));
-          $msgStr=trim(strstr($chatInput," "));
-          if ($cmdStr=="color" AND $msgStr!="" AND $msgStr!="\n" AND $msgStr!="\r")
-               $chatServer->chatUser[$user->id][$chatid]["color"]=$msgStr;
-          }
+		  $chatInput=stripslashes($chatInput);
+		  $chatServer->addMsg($user->id,$chatid,$chatInput);
+		  //evtl Farbe umstellen
+		  $cmdStr=trim(substr($chatInput." ",1,strpos($chatInput," ")-1));
+		  $msgStr=trim(strstr($chatInput," "));
+		  if ($cmdStr=="color" AND $msgStr!="" AND $msgStr!="\n" AND $msgStr!="\r")
+			   $chatServer->chatUser[$user->id][$chatid]["color"]=$msgStr;
+		  }
 
 }
 
@@ -116,52 +123,52 @@ if ($chatInput) {
 <form method="post" action="<?=$PHP_SELF?>" name="inputform">
 <input type="hidden" name="chatid" value="<?=$chatid?>">
 <div align="center">
-       <table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">
-          <tr>
-                  <td width="80%" align="left" class="topic" ><b>&nbsp;Chat -
+	   <table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">
+		  <tr>
+				  <td width="80%" align="left" class="topic" ><b>&nbsp;Chat -
 		  <?=$chatServer->chatDetail[$chatid]["name"]?></b></td><td width="20%" align="right" class="topic" ><a href="javascript:printhelp();"><img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/hilfe.gif" border=0 align="texttop" <?=tooltip("zur Hilfe")?>></a>&nbsp; <a href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>show_smiley.php" target=new><img src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/smile/smile.gif" border=0 align="absmiddle" <?=tooltip("Alle verfügbaren Smileys anzeigen")?>></a>&nbsp; </td>
-           </tr>
-           <tr>
-               <td align="center" colspan=2 valign="center">
+		   </tr>
+		   <tr>
+			   <td align="center" colspan=2 valign="center">
 
-                    <table width="100%" border="0" cellspacing="3">
-                      <tr valign="middle">
-                              <td align="left" valign="center">Message:</td>
-                              <td width="60%" valign="center">
+					<table width="100%" border="0" cellspacing="3">
+					  <tr valign="middle">
+							  <td align="left" valign="center">Message:</td>
+							  <td width="60%" valign="center">
 			<div align="center" valign="center">
-                          <input type="text" name="chatInput" size=18
+						  <input type="text" name="chatInput" size=18
 			  style="width: 100%" >
 			  </div>
-                              </td>
-                              <td align="left" valign="center">
-			      <select name="chatColor" onChange="doColorChange();">
-			      <?
-			      foreach($chatColors as $c){
-			      	print "<option style=\"color:$c;\" value=\"$c\" ";
-                         if ($chatServer->chatUser[$user->id][$chatid]["color"]==$c){
-                         $selected=true;
-                         print " selected ";
-                         }
+							  </td>
+							  <td align="left" valign="center">
+				  <select name="chatColor" onChange="doColorChange();">
+				  <?
+				  foreach($chatColors as $c){
+					print "<option style=\"color:$c;\" value=\"$c\" ";
+						 if ($chatServer->chatUser[$user->id][$chatid]["color"]==$c){
+						 $selected=true;
+						 print " selected ";
+						 }
 				print ">$c</option>\n";
 				}
-                    if (!$selected) print "<option style=\"color:".$chatServer->chatUser[$user->id][$chatid]["color"].";\" value=\"".$chatServer->chatUser[$user->id][$chatid]["color"]."\" selected>user</option>\n";
+					if (!$selected) print "<option style=\"color:".$chatServer->chatUser[$user->id][$chatid]["color"].";\" value=\"".$chatServer->chatUser[$user->id][$chatid]["color"]."\" selected>user</option>\n";
 				?>	
-			      </select>
-			      </td>
-			      <td align="center" valign="center">
-			        <input type="IMAGE" name="Submit"
+				  </select>
+				  </td>
+				  <td align="center" valign="center">
+					<input type="IMAGE" name="Submit"
 				src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/buttons/absenden-button.gif" <?=tooltip("Nachricht senden")?> border="0" value="senden">
-                		</td>
+						</td>
 				<td align="right" valign="center">
-                    		<a href="javascript:doQuit();"><img <?=tooltip("Chat verlassen")?> src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/buttons/abbrechen-button.gif" border="0"></a>
-                   		</td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
+							<a href="javascript:doQuit();"><img <?=tooltip("Chat verlassen")?> src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/buttons/abbrechen-button.gif" border="0"></a>
+						</td>
+					  </tr>
+					</table>
+				  </td>
+				</tr>
+			  </table>
 </div>
-    </form>
+	</form>
 <script>
 document.inputform.chatInput.focus();
 </script>

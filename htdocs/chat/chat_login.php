@@ -53,29 +53,35 @@ $db=new DB_Seminar("SELECT CONCAT(Vorname,' ',Nachname) as fullname FROM auth_us
 $db->next_record();
 $chatServer->addChat($chatid);
 if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],$db->f("fullname"),$perm->have_perm("root"))){
-     ?><html>
-     <head>
-         <title>Stud.IP</title>
-	    <link rel="stylesheet" href="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>style.css" type="text/css">
-     </head>
-     <body>
-     <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
-          <tr valign=top align=middle>
-	         <td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
-          </tr>
-          <tr><td class="blank">&nbsp;</td></tr>
-	    <?
+	 ?><html>
+	 <head>
+		 <title>Stud.IP</title>
+			  <style type="text/css">
+			  <!--
+			  <?php
+			  include $ABSOLUTE_PATH_STUDIP."style.css";
+			  ?>
+			  -->
+			  </style>
+	 </head>
+	 <body>
+	 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
+		  <tr valign=top align=middle>
+			 <td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
+		  </tr>
+		  <tr><td class="blank">&nbsp;</td></tr>
+		<?
 		parse_msg ("error§Chatlogin nicht möglich <br/><font size=-1 color=black>Vermutlich sind sie noch aus einer früheren Chat Session angemeldet. Es dauert ca. 3-5 s bis sie automatisch aus dem Chat entfernt werden. Versuchen sie es etwas später noch einmal.</font>", "§", "blank", 1);
-	    ?>
-	    <tr><td class="blank"><font size=-1>&nbsp;Fenster <a href="javascript:window.close()"><b>schließen</b></a><br />&nbsp;</font>
-               </td>
-          </tr>
-     </table>
-     </body>
-     </html>
-     <?
-     page_close();
-     die;
+		?>
+		<tr><td class="blank"><font size=-1>&nbsp;Fenster <a href="javascript:window.close()"><b>schließen</b></a><br />&nbsp;</font>
+			   </td>
+		  </tr>
+	 </table>
+	 </body>
+	 </html>
+	 <?
+	 page_close();
+	 die;
 }
 //evtl Chateinladungen löschen
 $sms=new messaging();
@@ -84,26 +90,26 @@ $sms->delete_chatinv($auth->auth["uname"]);
 ?>
 <html>
 <head>
-       <title>Chat(<?=$auth->auth["uname"]?>) -
-       <?=$chatServer->chatDetail[$chatid]["name"]?></title>
-       <script type="text/javascript">
+	   <title>Chat(<?=$auth->auth["uname"]?>) -
+	   <?=$chatServer->chatDetail[$chatid]["name"]?></title>
+	   <script type="text/javascript">
 	/**
 	* JavaScript 
 	*/
 	function coming_home(url)
 	{
-          if (opener.closed) alert('Das Hauptfenster wurde geschlossen,\ndiese Funktion kann nicht mehr ausgeführt werden!');
-          else {
-               opener.location.href = url;
-               opener.focus();
-          }
+		  if (opener.closed) alert('Das Hauptfenster wurde geschlossen,\ndiese Funktion kann nicht mehr ausgeführt werden!');
+		  else {
+			   opener.location.href = url;
+			   opener.focus();
+		  }
 
 	}
-     </script>
+	 </script>
 <frameset rows="83%,*" border=0>
   <frameset cols="75%,25%" border=0>
-    <frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1 frameborder=0>
-    <frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1 frameborder=0>
+	<frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1 frameborder=0>
+	<frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1 frameborder=0>
   </frameset>
 <frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 frameborder=0>
 </frameset>
