@@ -763,6 +763,7 @@ function forum_print_toolbar ($id="") {
 				}
 				$print .= "</select>&nbsp;&nbsp;";
 				$print .= "<input type=hidden name=flatviewstartposting value='".$flatviewstartposting."'>";
+				$print .= "<input type=hidden name=view value='".$forum["view"]."'>";
 				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" align=\"middle\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
 			}
 			$print .= "&nbsp;&nbsp;|&nbsp;&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/forumgrau3.gif\" align=\"middle\" border=\"0\"></a>&nbsp;";
