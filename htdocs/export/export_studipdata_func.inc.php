@@ -127,7 +127,10 @@ function export_inst($inst_id, $ex_sem_id = "all")
 		export_sem($inst_id, $ex_sem_id); 
 		break;
 	case "person": 
-		export_pers($inst_id); 
+		if ($ex_sem_id == "all")
+			export_pers($inst_id); 
+		else
+			export_teilis($inst_id, $ex_sem_id); 
 		break;
 	default: 
 		echo "</td></tr>";
@@ -260,6 +263,56 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$data_object = "";
 }
 
+function export_teilis($inst_id, $ex_sem_id = "no")
+{
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter, $SEM_CLASS, $SEM_TYPE, $SessSemName;
+
+	$db=new DB_Seminar;
+
+	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
+		$gruppe = array ("dozent" => _("DozentInnen"),
+			  "tutor" => _("TutorInnen"),
+			  "autor" => _("AutorInnen"),
+			  "user" => _("LeserInnen"));
+	else
+		$gruppe = array ("dozent" => _("LeiterInnen"),
+			  "tutor" => _("Mitglieder"),
+			  "autor" => _("AutorInnen"),
+			  "user" => _("LeserInnen"));
+
+	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
+
+	while (list ($key, $val) = each ($gruppe)) 
+	{
+		$db->query ("SELECT * FROM seminar_user  
+			LEFT JOIN user_info USING(user_id) 
+			LEFT JOIN auth_user_md5 USING(user_id) 
+			WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key . "'");
+		if ($db->num_rows())
+		{
+			$data_object .= xml_open_tag($xml_groupnames_person["subgroup1"], $val);
+			while ($db->next_record()) 
+			{
+				$object_counter++;
+				$data_object .= xml_open_tag($xml_groupnames_person["object"], $db->f("username"));
+				while ( list($key, $val) = each($xml_names_person))
+				{
+					if ($val == "") $val = $key;
+					if ($db->f($key) != "") 
+						$data_object .= xml_tag($val, $db->f($key));
+				}
+				$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
+				reset($xml_names_person);
+			}
+			$data_object .= xml_close_tag($xml_groupnames_person["subgroup1"]);
+		}
+	}
+
+	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
+	output_data($data_object, $o_mode);
+	$data_object = "";
+}
+
 function export_pers($inst_id)
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter;
@@ -312,7 +365,6 @@ function export_pers($inst_id)
 		}
 		$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
 		reset($xml_names_person);
-//		echo nl2br(htmlentities($data_object));
 		output_data($data_object, $o_mode);
 		$data_object = "";
 	}
