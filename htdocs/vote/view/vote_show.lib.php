@@ -263,14 +263,24 @@ function createVoteForm (&$vote, $userID) {
 
    /* Questions ------------------------------------------------------------ */
    $i = 0;
+   $html .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"3\">\n";
    foreach ($answers as $key => $value) {
-       $html .= "&nbsp;&nbsp;&nbsp;<input type=\"".$type."\" ".
-	   "name=\"answer[".$i."]\" value=\"".$key."\">&nbsp;";
-       $html .= "<font size=-1>".formatReady($value["text"])."</font><br>\n";
+       $html .= " <tr valign=\"middle\">\n";
+       $html .= "  <td>\n";
+       $html .= "   <input ".
+	  "type=\"".$type."\" ".
+	  "name=\"answer[".$i."]\" ".
+	  "value=\"".$key."\" />\n";
+       $html .= "  </td>\n";
+       $html .= "  <td>\n";
+       $html .= "   <font size=-1>".formatReady($value["text"])."</font>\n";
+       $html .= "  </td>\n";
+       $html .= " </tr>\n";
 
        if ($vote->isMultipleChoice ())
 	   $i++;
    }
+   $html .= "</table>\n";
    /* ---------------------------------------------------------------------- */
    $html .= "<br>";
    return $html;
