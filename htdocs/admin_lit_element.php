@@ -20,6 +20,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
@@ -93,6 +94,10 @@ if ($_REQUEST['cmd'] == "delete_element" && $_the_element->isChangeable() && !$_
 	$_the_element->deleteElement();
 }
 
+if ($_REQUEST['cmd'] == "in_clipboard" && $_catalog_id != "new_entry"){
+		$_the_clipboard->insertElement($_catalog_id);
+}
+
 if ($_the_form->IsClicked("send")){
 	$_the_element->setValuesFromForm();
 	if ($_the_element->checkValues()){
@@ -149,7 +154,13 @@ if ($_the_element->isChangeable()){
 echo  $_the_form->getFormButton("reset");
 echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
-	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a></td></tr>";
+	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a>";
+if ($_catalog_id != "new_entry" && !$_the_clipboard->isInClipboard($_catalog_id)){
+	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+	echo "<a href=\"$PHP_SELF?cmd=in_clipboard&_catalog_id=$_catalog_id\"><img border=\"0\" "
+		. makeButton('merkliste','src') . tooltip(_("Eintrag in Merkliste aufnehmen")) ."></a>";
+}
+echo "</td></tr>";
 
 foreach ($_the_element->fields as $field_name => $field_detail){
 	if ($field_detail['caption']){
@@ -176,7 +187,8 @@ foreach ($_the_element->fields as $field_name => $field_detail){
 	$class_changer->switchClass();
 }
 $class_changer->switchClass();
-echo "<tr><td align=\"left\" " . $class_changer->getFullClass() . " width=\"40%\" style=\"font-size:10pt;\">&nbsp;</td>";
+echo "<tr><td " . $class_changer->getFullClass() . " align=\"left\" width=\"40%\" style=\"font-size:10pt;\">"
+	. sprintf(_("Anzahl an Referenzen für diesen Eintrag: %s"), (int)$_the_element->reference_count) ."</td>";
 echo "<td " . $class_changer->getFullClass() . " align=\"center\">";
 if ($_the_element->isChangeable()){
 	echo $_the_form->getFormButton("send") .  $_the_form->getFormButton("delete") ;
@@ -184,7 +196,13 @@ if ($_the_element->isChangeable()){
 echo  $_the_form->getFormButton("reset");
 echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
 echo "<a href=\"$PHP_SELF?cmd=new_entry\"><img border=\"0\" "
-	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a></td></tr>";
+	. makeButton('neuanlegen','src') . tooltip(_("Neuen Eintrag anlegen")) ."></a>";
+if ($_catalog_id != "new_entry" && !$_the_clipboard->isInClipboard($_catalog_id)){
+	echo "<img src=\"pictures/blank.gif\"  height=\"28\" width=\"15\" border=\"0\">";
+	echo "<a href=\"$PHP_SELF?cmd=in_clipboard&_catalog_id=$_catalog_id\"><img border=\"0\" "
+		. makeButton('merkliste','src') . tooltip(_("Eintrag in Merkliste aufnehmen")) ."></a>";
+}
+echo "</td></tr>";
 ?>
 </table>
 </td>

@@ -20,7 +20,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-
+// $Id$
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitSearch.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitClipBoard.class.php");
@@ -224,6 +224,11 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 		$edit = "<a href=\"admin_lit_element.php?_catalog_id=" . $element->getValue("catalog_id") . "\">"
 				. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
 				. " border=\"0\"></a>&nbsp;";
+		if (!$_the_clipboard->isInClipboard($element->getValue("catalog_id"))){
+			$edit .= "&nbsp;<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id")
+				. "\"><img " . makeButton("merkliste","src") . " border=\"0\" " . 
+				tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
+		}
 		echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
 		$content .= "<b>" . _("Titel:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_title"),true,true) . "<br>";
 		$content .= "<b>" . _("Autor; weitere Beteiligte:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("authors"),true,true) . "<br>";

@@ -20,6 +20,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
@@ -84,14 +85,6 @@ $_the_clipboard =& StudipLitClipBoard::GetInstance();
 $_the_clip_form =& $_the_clipboard->getFormObject();
 
 
-if ( ($lists = $_the_tree->getListIds()) && $_the_clipboard->getNumElements()){
-	for ($i = 0; $i < count($lists); ++$i){
-		$_the_clip_form->form_fields['clip_cmd']['options'][] 
-		= array('name' => htmlReady(my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50)),
-		'value' => 'ins_' . $lists[$i]);
-	}
-}
-
 if ($_the_clip_form->isClicked("clip_ok")){
 	$clip_cmd = explode("_",$_the_clip_form->getFormFieldValue("clip_cmd"));
 	if ($clip_cmd[0] == "ins"){
@@ -108,6 +101,14 @@ if ($_the_clip_form->isClicked("clip_ok")){
 		}
 	}
 	$_the_clipboard->doClipCmd();
+}
+
+if ( ($lists = $_the_tree->getListIds()) && $_the_clipboard->getNumElements()){
+	for ($i = 0; $i < count($lists); ++$i){
+		$_the_clip_form->form_fields['clip_cmd']['options'][] 
+		= array('name' => htmlReady(my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50)),
+		'value' => 'ins_' . $lists[$i]);
+	}
 }
 
 $_msg .= $_the_clipboard->msg;

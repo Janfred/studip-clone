@@ -398,6 +398,13 @@ class StudipLitListViewAdmin extends TreeView{
 					$content .= "<a href=\"" . $this->getSelf("cmd=$cmd&item_id=$item_id") . "\">"
 					. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
 					. " border=\"0\"></a>&nbsp;";
+					if ($this->tree->isElement($item_id)){
+						if (!$this->clip_board->isInClipboard($this->tree->tree_data[$item_id]["catalog_id"])){
+							$content .= "<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") . "\">"
+										. "<img " . makeButton("merkliste","src") . " border=\"0\" " . 
+										tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
+						}
+					}
 				}
 			}
 			$content .= "</td></tr></table>";
