@@ -17,12 +17,30 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-function my_session_var($var, $id = false){
+function my_session_open($id = false){
 	if (!$id){
 		$id = md5(basename($GLOBALS['PHP_SELF']));
 	}
 	if (!$GLOBALS['sess']->is_registered($id)){
 		$GLOBALS['sess']->register($id);
+	}
+	if (isset($GLOBALS[$id])){
+		$GLOBALS[$id] = unserialize($GLOBALS[$id]);
+	}
+}
+
+function my_session_close($id = false){
+	if (!$id){
+		$id = md5(basename($GLOBALS['PHP_SELF']));
+	}
+	if (isset($GLOBALS[$id])){
+		$GLOBALS[$id] = serialize($GLOBALS[$id]);
+	}
+}
+
+function my_session_var($var, $id = false){
+	if (!$id){
+		$id = md5(basename($GLOBALS['PHP_SELF']));
 	}
 	if (is_array($var)){
 		foreach ($var as $name){
@@ -44,6 +62,7 @@ function my_session_var($var, $id = false){
 }
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+my_session_open(md5('admin_literatur_overview.php'));
 $perm->check('admin');
 
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitCatElement.class.php");
@@ -57,10 +76,10 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 $element = new StudipLitCatElement();
 $db = new DB_Seminar();
 my_session_var(array('_semester_id','_inst_id','_lit_data','_lit_data_id'),md5('admin_literatur_overview.php'));
-
+$header = get_object_name($_inst_id, 'inst');
 ?>
 <h1>
-<?=htmlReady(sprintf(_("Literaturliste %s"), getHeaderLine($_inst_id)))?>
+<?=htmlReady(sprintf(_("Literaturliste %s"), $header['type'] . ": " . $header['name']))?>
 </h1>
 <?
 if (is_array($_lit_data)){
@@ -125,6 +144,7 @@ if (is_array($_lit_data)){
 </html>
 <?
 // Save data back to database.
+my_session_close(md5('admin_literatur_overview.php'));
 page_close()
 ?>
 <!-- $Id$ -->

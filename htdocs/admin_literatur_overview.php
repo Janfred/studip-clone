@@ -1,5 +1,6 @@
 <?php
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+my_session_open();
 $perm->check("admin");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/dbviews/literatur.view.php");
@@ -7,6 +8,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitCatElement.class.php")
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitSearch.class.php");
 
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
@@ -14,12 +16,30 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 
-function my_session_var($var, $id = false){
+function my_session_open($id = false){
 	if (!$id){
 		$id = md5(basename($GLOBALS['PHP_SELF']));
 	}
 	if (!$GLOBALS['sess']->is_registered($id)){
 		$GLOBALS['sess']->register($id);
+	}
+	if (isset($GLOBALS[$id])){
+		$GLOBALS[$id] = unserialize($GLOBALS[$id]);
+	}
+}
+
+function my_session_close($id = false){
+	if (!$id){
+		$id = md5(basename($GLOBALS['PHP_SELF']));
+	}
+	if (isset($GLOBALS[$id])){
+		$GLOBALS[$id] = serialize($GLOBALS[$id]);
+	}
+}
+
+function my_session_var($var, $id = false){
+	if (!$id){
+		$id = md5(basename($GLOBALS['PHP_SELF']));
 	}
 	if (is_array($var)){
 		foreach ($var as $name){
@@ -64,6 +84,15 @@ function get_lit_admin_ids($user_id = false){
 	}
 }
 
+foreach ($GLOBALS['SEM_CLASS'] as $key => $value){
+	if ($value['bereiche']){
+		foreach($GLOBALS['SEM_TYPE'] as $type_key => $type_value){
+			if($type_value['class'] == $key)
+				$allowed_sem_status[] = $type_key;
+		}
+	}
+}
+$_sem_status_sql = ((is_array($allowed_sem_status)) ? " s.status IN('" . join("','",$allowed_sem_status) . "') AND " : "");
 
 $db = new DB_Seminar();
 $db2 = new DB_Seminar();
@@ -118,7 +147,7 @@ if ($_REQUEST['cmd'] == 'check' && is_array($_check_list) && is_array($_lit_data
 }
  	
 if (isset($_REQUEST['_semester_id']) && $_REQUEST['_semester_id'] != 'all'){
-	$_sem_sql = "  LEFT JOIN seminare s ON (c.seminar_id=s.Seminar_id)
+	$_sem_sql = "  LEFT JOIN seminare s ON ($_sem_status_sql c.seminar_id=s.Seminar_id)
 				LEFT JOIN semester_data sd
 				ON (( s.start_time <= sd.beginn AND sd.beginn <= ( s.start_time + s.duration_time )
 				OR ( s.start_time <= sd.beginn AND s.duration_time =  - 1 )) AND semester_id='" . $_REQUEST['_semester_id'] . "') 
@@ -127,7 +156,8 @@ if (isset($_REQUEST['_semester_id']) && $_REQUEST['_semester_id'] != 'all'){
 				ON (( s.start_time <= sd.beginn AND sd.beginn <= ( s.start_time + s.duration_time )
 				OR ( s.start_time <= sd.beginn AND s.duration_time =  - 1 )) AND semester_id='" . $_REQUEST['_semester_id'] . "') ";
 } else {
-	$_sem_sql = " LEFT JOIN lit_list d ON (c.seminar_id = d.range_id) ";
+	$_sem_sql = "  LEFT JOIN seminare s ON ($_sem_status_sql c.seminar_id=s.Seminar_id)
+				LEFT JOIN lit_list d ON (s.Seminar_id = d.range_id) ";
 	$_sem_sql2 = "";
 }
 
@@ -265,14 +295,14 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 	if ($_is_fak){
 		$sql = "SELECT f.*
 				FROM Institute a INNER JOIN seminar_inst c USING (Institut_id)
-				INNER JOIN seminare s USING(seminar_id)
+				INNER JOIN seminare s ON ($_sem_status_sql c.seminar_id=s.Seminar_id)
 				$_sem_sql2
 				INNER JOIN lit_list d ON (c.seminar_id = d.range_id)
 				INNER JOIN lit_list_content e USING(list_id)
 				INNER JOIN lit_catalog f USING(catalog_id)
 				WHERE fakultaets_id='" . $_REQUEST['_inst_id'] . "' GROUP BY e.catalog_id ORDER BY dc_date";
 		$sql2 = "SELECT s.Name,s.Seminar_id,admission_turnout, COUNT(DISTINCT(su.user_id)) AS participants FROM Institute a INNER JOIN seminar_inst c USING (Institut_id)
-				INNER JOIN seminare s USING(seminar_id)
+				INNER JOIN seminare s ON ($_sem_status_sql c.seminar_id=s.Seminar_id)
 				$_sem_sql2
 				INNER JOIN lit_list d ON (c.seminar_id = d.range_id)
 				INNER JOIN lit_list_content e USING(list_id)
@@ -281,14 +311,14 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 	} else {
 		$sql = "SELECT f.*
 				FROM seminar_inst c 
-				INNER JOIN seminare s USING(seminar_id)
+				INNER JOIN seminare s ON ($_sem_status_sql c.seminar_id=s.Seminar_id)
 				$_sem_sql2
 				INNER JOIN lit_list d ON (c.seminar_id = d.range_id)
 				INNER JOIN lit_list_content e USING(list_id)
 				INNER JOIN lit_catalog f USING(catalog_id)
 				WHERE c.institut_id='" . $_REQUEST['_inst_id'] . "' GROUP BY e.catalog_id ORDER BY dc_date";
 		$sql2 = "SELECT s.Name,s.Seminar_id, admission_turnout, COUNT(DISTINCT(su.user_id)) AS participants FROM seminar_inst c 
-				INNER JOIN seminare s USING(seminar_id)
+				INNER JOIN seminare s ON ($_sem_status_sql c.seminar_id=s.Seminar_id)
 				$_sem_sql2
 				INNER JOIN lit_list d ON (c.seminar_id = d.range_id)
 				INNER JOIN lit_list_content e USING(list_id)
@@ -351,6 +381,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 						$db->query("SELECT Nachname,username,su.user_id FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id) 
 									WHERE status='dozent' AND seminar_id IN('" . join("','", array_keys($_lit_data[$cid]['sem_data'])) . "')
 									ORDER BY Nachname");
+						$_lit_data[$cid]['doz_data'] = array();
 						while ($db->next_record()){
 							$_lit_data[$cid]['doz_data'][$db->f('user_id')] = $db->Record;
 						}
@@ -439,5 +470,6 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 	</table>
 	</form>
 <?
+my_session_close();
 page_close();
 ?>
