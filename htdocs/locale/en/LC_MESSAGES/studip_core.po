@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
 "POT-Creation-Date: 2003-02-17 18:16+0100\n"
-"PO-Revision-Date: 2003-02-19 01:46+0100\n"
+"PO-Revision-Date: 2003-02-19 01:54+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -2665,9 +2665,9 @@ msgid "Kein Objekt gew&auml;hlt"
 msgstr ""
 
 #: details.php:63 seminar_main.php:76 teilnehmer.php:51
-#, fuzzy, c-format
+#, c-format
 msgid "%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."
-msgstr "back to start page"
+msgstr ""
 
 #: details.php:81
 #, fuzzy
@@ -2702,9 +2702,9 @@ msgid "Sie sind als Teilnehmer der Veranstaltung eingetragen"
 msgstr "Type of course"
 
 #: details.php:168
-#, fuzzy, c-format
+#, c-format
 msgid "Sie sind in die %s der Veranstaltung eingetragen"
-msgstr "public courses"
+msgstr ""
 
 #: details.php:168 teilnehmer.php:618
 msgid "Anmeldeliste"
@@ -2870,9 +2870,9 @@ msgid "Angemeldete Teilnehmer:"
 msgstr ""
 
 #: details.php:534
-#, fuzzy, c-format
+#, c-format
 msgid "%s Teilnehmerzahl:"
-msgstr "Type of course"
+msgstr ""
 
 #: details.php:534
 msgid "max."
@@ -4068,19 +4068,19 @@ msgid "%s Postings, %s neue"
 msgstr ""
 
 #: meine_einrichtungen.php:80 meine_seminare.php:77
-#, fuzzy, c-format
+#, c-format
 msgid "%s Postings"
-msgstr "postings"
+msgstr "%s postings"
 
 #: meine_einrichtungen.php:85 meine_seminare.php:82
-#, fuzzy, c-format
+#, c-format
 msgid "%s Dokumente, %s neue"
-msgstr "documents"
+msgstr ""
 
 #: meine_einrichtungen.php:87 meine_seminare.php:84
-#, fuzzy, c-format
+#, c-format
 msgid "%s Dokumente"
-msgstr "documents"
+msgstr "%s documents"
 
 #: meine_einrichtungen.php:93 meine_seminare.php:90
 #, c-format
@@ -4088,9 +4088,9 @@ msgid "%s News, %s neue"
 msgstr ""
 
 #: meine_einrichtungen.php:95 meine_seminare.php:92
-#, fuzzy, c-format
+#, c-format
 msgid "%s News"
-msgstr "news"
+msgstr "%s news"
 
 #: meine_einrichtungen.php:103 meine_seminare.php:100
 #, fuzzy
