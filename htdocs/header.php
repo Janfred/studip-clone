@@ -42,7 +42,7 @@ require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php
 require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
 
-function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target,$align="center",$toolwindow="FALSE")
+function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE")
 {
 	if ($toolwindow == "FALSE") {
 		$tool = tooltip($tooltip);
