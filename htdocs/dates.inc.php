@@ -299,7 +299,7 @@ Die Funktion Seminartermin ueberpueft, ob der erste Veranstaltungstermin bereits
 und gibt entweder Datum und Zeit des ersten Termins oder Wochentage und Uhrzeiten als String zurueck.
 */
 
-function seminartermin($seminar_id, $short = TRUE)
+function seminartermin($seminar_id, $short = TRUE, $br = TRUE)
 {
 global $SEMESTER;
 	$return_string = "";
@@ -417,7 +417,8 @@ global $SEMESTER;
 						$return_string.=" - ".date("G:i", $dates[$i]["end_time"]);
 					if ($i+1 != sizeof ($dates))
 						$return_string.=",";
-					$return_string .= "<br>";
+					if($br)
+						$return_string .= "<br>";
 					}
 				}
 		}
@@ -460,7 +461,8 @@ global $SEMESTER;
 						}
 					else
 						$return_string.=" ";
-					$return_string .= "<br>";
+					if($br)
+						$return_string .= "<br>";
 					}
 				}
 			else {
