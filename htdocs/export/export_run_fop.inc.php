@@ -23,7 +23,7 @@
 
 $FOP_ENABLE = true;
 
-$perm->check("dozent");
+$perm->check("tutor");
 
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
 
