@@ -226,7 +226,7 @@ if ($delete_id)
 									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")
 								);
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/move.gif" ,
-									"text"  => _("In Gruppe mit diesem Symbol können Sie sich selbst eintragen. Klicken Sie auf das jeweilige Symbol um sich einzutragen.")
+									"text"  => _("In Gruppen mit diesem Symbol können Sie Sich selbst eintragen. Klicken Sie auf das jeweilige Symbol um sich einzutragen.")
 								);	
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/trash.gif" ,
 									"text"  => _("Aus diesen Gruppen können Sie Sich selbst austragen.")
@@ -237,7 +237,7 @@ if ($delete_id)
 								);
 	if ($anzahltext > 0) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/mailnachricht.gif" ,
-									"text"  => _("Mit dem erweiterten Briefsymbol k&ouml;nnen Sie eine E-Mail an alle Gruppenmitglieder verschicken.")
+									"text"  => _("Mit dem erweiterten Briefsymbol können Sie eine E-Mail an alle Gruppenmitglieder verschicken.")
 								);
 	}
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
