@@ -42,7 +42,7 @@ class ExternElementMainDownload extends ExternElementMain {
 	var $attributes = array("name", "order", "visible", "aliases", "width", "sort",
 			"wholesite", "lengthdesc", "nameformat", "urlcss", "title", "nodatatext", "dateformat",
 			"language", "iconpic", "icontxt", "iconpdf", "iconppt", "iconxls",
-			"iconrtf", "iconzip", "icondefault");
+			"iconrtf", "iconzip", "icondefault", "copyright", "author");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -83,7 +83,10 @@ class ExternElementMainDownload extends ExternElementMain {
 			"iconxls" => "",
 			"iconrtf" => "",
 			"iconzip" => "",
-			"icondefault" => ""
+			"icondefault" => "",
+			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
+					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
+			"author" => ""
 		);
 		
 		return $config;
@@ -163,6 +166,14 @@ class ExternElementMainDownload extends ExternElementMain {
 		$title = _("Keine Dateien:");
 		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfügbar sind.");
 		$table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
+		
+		$title = _("Copyright:");
+		$info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
+		
+		$title = _("Autor:");
+		$info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();

@@ -41,7 +41,7 @@ class ExternElementMainNews extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
 			"width_pp", "sort", "studiplink", "wholesite", "nameformat", "dateformat", "language",
-			"urlcss", "title", "nodatatext");
+			"urlcss", "title", "nodatatext", "copyright", "author");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -73,7 +73,10 @@ class ExternElementMainNews extends ExternElementMain {
 			"language" => "",
 			"urlcss" => "",
 			"title" => _("News"),
-			"nodatatext" => _("Keine aktuellen News")
+			"nodatatext" => _("Keine aktuellen News"),
+			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
+					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
+			"author" => ""
 		);
 		
 		return $config;
@@ -153,6 +156,14 @@ class ExternElementMainNews extends ExternElementMain {
 		$title = _("Keine News:");
 		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfügbar sind.");
 		$table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
+		
+		$title = _("Copyright:");
+		$info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
+		
+		$title = _("Autor:");
+		$info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();

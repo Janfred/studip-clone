@@ -42,7 +42,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 	var $attributes = array("name", "genericdatafields", "order", "visible", "aliases",
 			"aliaspredisc", "aliasfirstmeeting", "headlinerow", "rangepathlevel", "studipinfo" ,
 			"studiplink", "studiplinktarget", "wholesite", "nameformat", "urlcss", "title",
-			"language");
+			"language", "copyright", "author");
 	
 	/**
 	* Constructor
@@ -77,7 +77,10 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			"nameformat" => "",
 			"urlcss" => "",
 			"title" => _("Veranstaltungsdaten"),
-			"language" => ""
+			"language" => "",
+			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
+					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
+			"author" => ""
 		);
 		
 		get_default_generic_datafields($config, "sem");
@@ -187,6 +190,14 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		$title = _("Seitentitel:");
 		$info = _("Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im Web-Browser in der Titelzeile des Anzeigefensters angezeigt.");
 		$table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
+		
+		$title = _("Copyright:");
+		$info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
+		
+		$title = _("Autor:");
+		$info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();

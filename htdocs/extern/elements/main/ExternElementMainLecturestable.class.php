@@ -43,7 +43,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			"grouping", "semstart", "semrange", "semswitch", "allseminars", "rangepathlevel",
 			"addinfo", "time", "lecturer", "repeatheadrow", "semclasses", "textlectures",
 			"textgrouping", "textnogroups", "aliasesgrouping", "wholesite", "nameformat",
-			"language", "urlcss", "title");
+			"language", "urlcss", "title", "copyright", "author");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -88,7 +88,10 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			"nameformat" => "",
 			"language" => "",
 			"urlcss" => "",
-			"title" => _("Lehrveranstaltungen")
+			"title" => _("Lehrveranstaltungen"),
+			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
+					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
+			"author" => ""
 		);
 		
 		get_default_generic_datafields($config, "sem");
@@ -268,6 +271,14 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		$title = _("Seitentitel:");
 		$info = _("Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im Web-Browser in der Titelzeile des Anzeigefensters angezeigt.");
 		$table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
+		
+		$title = _("Copyright:");
+		$info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
+		
+		$title = _("Autor:");
+		$info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();

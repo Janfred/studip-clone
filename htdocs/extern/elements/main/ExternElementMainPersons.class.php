@@ -41,7 +41,8 @@ class ExternElementMainPersons extends ExternElementMain {
 
 	var $attributes = array("name", "genericdatafields", "order", "visible", "aliases", "width",
 			"width_pp", "sort", "groupsalias", "groupsvisible", "grouping", "wholesite",
-			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass");
+			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass",
+			"copyright", "author");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -80,7 +81,10 @@ class ExternElementMainPersons extends ExternElementMain {
 			"title" => _("MitarbeiterInnen"),
 			"nodatatext" => "",
 			"config" => "",
-			"srilink" => ""
+			"srilink" => "",
+			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
+					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
+			"author" => ""
 		);
 		
 		get_default_generic_datafields($config, "user");
@@ -142,7 +146,7 @@ class ExternElementMainPersons extends ExternElementMain {
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
 		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer, Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
@@ -165,6 +169,14 @@ class ExternElementMainPersons extends ExternElementMain {
 		$title = _("Seitentitel:");
 		$info = _("Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im Web-Browser in der Titelzeile des Anzeigefensters angezeigt.");
 		$table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
+		
+		$title = _("Copyright:");
+		$info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
+		
+		$title = _("Autor:");
+		$info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();

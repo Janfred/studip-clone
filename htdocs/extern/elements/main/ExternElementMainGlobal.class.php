@@ -42,7 +42,7 @@ require_once($ABSOLUTE_PATH_STUDIP."dates.inc.php");
 class ExternElementMainGlobal extends ExternElementMain {
 
 	var $attributes = array("name", "semstart", "semrange", "semswitch",
-			"nameformat", "language", "wholesite", "urlcss");
+			"nameformat", "language", "wholesite", "urlcss", 'copyright', 'author');
 	
 	/**
 	* Constructor
@@ -67,6 +67,9 @@ class ExternElementMainGlobal extends ExternElementMain {
 			"nameformat" => "",
 			"language" => "",
 			"urlcss" => "",
+			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
+					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
+			"author" => ''
 		);
 				
 		return $config;
@@ -165,6 +168,14 @@ class ExternElementMainGlobal extends ExternElementMain {
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
 		$table .= $edit_form->editTextfieldGeneric("urlcss", $title, $info, 50, 200);
 		
+		$title = _("Copyright:");
+		$info = _("Geben Sie hier einen Copyright-Vermerk an. Dieser wird im Meta-Tag \"copyright\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("copyright", $title, $info, 50, 200);
+		
+		$title = _("Autor:");
+		$info = _("Geben Sie hier den Namen des Seitenautors an. Dieser wird im Meta-Tag \"author\" ausgegeben, wenn Sie die Option \"HTML-Header/Footer\" angewählt haben.");
+		$table .= $edit_form->editTextfieldGeneric("author", $title, $info, 50, 200);
+		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
@@ -177,6 +188,8 @@ class ExternElementMainGlobal extends ExternElementMain {
 	}
 	
 	function checkFormValues () {
+		global $HTTP_POST_VARS;
+				
 		if ($fault = parent::checkFormValues()) {
 		
 			if ($HTTP_POST_VARS["Main_nameformat"] == ""

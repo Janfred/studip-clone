@@ -107,7 +107,9 @@ class ExternModulePersondetails extends ExternModule {
 		if ($this->config->getValue("Main", "wholesite")) {
 			echo html_header($this->config->getValue("Main", "title"),
 					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
+					$this->config->getAttributes("Body", "body"),
+					$this->config->getValue("Main", "copyright"),
+					$this->config->getValue("Main", "author"));
 		}
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
@@ -124,7 +126,9 @@ class ExternModulePersondetails extends ExternModule {
 		if ($this->config->getValue("Main", "wholesite")) {
 			echo html_header($this->config->getValue("Main", "title"),
 					$this->config->getValue("Main", "urlcss"),
-					$this->config->getAttributes("Body", "body"));
+					$this->config->getAttributes("Body", "body"),
+					$this->config->getValue("Main", "copyright"),
+					$this->config->getValue("Main", "author"));
 		}
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";

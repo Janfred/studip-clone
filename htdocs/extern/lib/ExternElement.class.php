@@ -301,6 +301,11 @@ class ExternElement {
 		global $HTTP_POST_VARS;
 		$fault = array();
 		
+		$HTTP_POST_VARS['Main_copyright'] = htmlentities(html_entity_decode(
+				$HTTP_POST_VARS['Main_copyright'], ENT_QUOTES), ENT_QUOTES);
+		$HTTP_POST_VARS['Main_author'] = htmlentities(html_entity_decode(
+				$HTTP_POST_VARS['Main_author'], ENT_QUOTES), ENT_QUOTES);
+		
 		foreach ($this->attributes as $attribute) {
 			$form_name = $this->name . "_" . $attribute;
 			
