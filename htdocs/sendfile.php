@@ -399,7 +399,6 @@ if ($type != 5){
 	echo $the_data;
 }
 
-*/
 
 //remove temporary file after zipping
 if ($zip) {
