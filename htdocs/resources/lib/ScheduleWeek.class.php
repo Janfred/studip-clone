@@ -40,15 +40,23 @@ class ScheduleWeek {
 	var $start_hour;			//First hour to display from
 	var $end_hour;			//Last hout to display to
 	var $show_days;			//Arrays of the days that should be shown
+	var $show_dates;			//If setted, the dates of each day will be shown
+	var $start_date;			//the timestamp of the first day (monday) of the viewed week 
 	
 	
 	//Kontruktor
-	function ScheduleWeek ($start_hour = '', $end_hour = '', $show_days = '') {
+	function ScheduleWeek ($start_hour = '', $end_hour = '', $show_days = '', $show_dates = '', $start_date = '') {
 		
 		if (!$start_hour)
 			$this->start_hour=8; //set 8:00 as default start
+		else
+			$this->start_hour=$start_hour;
+
 		if (!$end_hour)
 			$this->end_hour=20; //set 20:00 as default start
+		else
+			$this->end_hour=$start_hour;
+			
 		if (!$show_days) {
 			$this->show_days[1]=TRUE;
 			$this->show_days[2]=TRUE;
@@ -57,7 +65,15 @@ class ScheduleWeek {
 			$this->show_days[5]=TRUE;
 			$this->show_days[6]=TRUE;
 			$this->show_days[7]=TRUE;
-		}
+		} else
+			$this->show_days=show_days;
+			
+		if ($show_dates)
+			$this->show_dates=$show_dates;
+		if ($start_date)
+			$this->start_date=$start_date;
+		if ((!$show_dates) && ($start_date))
+			$this->show_dates=TRUE;	
 	}
 
 
@@ -185,24 +201,31 @@ class ScheduleWeek {
 				</td>
 				<? if ($this->show_days[1]) {?>
 				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Montag
+				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", $this->start_date)."</font>" ?>
 				</td><?}
 				if ($this->show_days[2]) {?>
 				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Dienstag
+				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+1, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[3]) {?>
 				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Mittwoch
+				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+2, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[4]) {?>
 				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Donnerstag
+				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+3, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[5]) {?>
 				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Freitag
+				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+4, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[6]) {?>
 				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Samstag
+				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+5, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}
 				if ($this->show_days[7]) {?>
 				<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Sonntag
+				<? if ($this->show_dates) print "<br /><font size=-1>".date("d.m.y", mktime (0,0,0,date("n",$this->start_date), date("j",$this->start_date)+6, date("Y",$this->start_date)))."</font>" ?>
 				</td><?}?>
 			</tr>
 		<?
