@@ -320,11 +320,12 @@ function ForumGetName($id)  {
 }
 
 function forum_get_buttons ($forumposting) {
-	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar;	
+	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar, $view;	
 
 	{ if (!(have_sem_write_perm())) { // nur mit Rechten...	
-		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+		if ($view=="search") $tmp = "&view=tree";
+		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
 		if ($forumposting["lonely"]==TRUE && ($rechte || $forumposting["perms"]=="write")) // ich darf bearbeiten
 			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?edit_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\">"
 			. makeButton("bearbeiten", "img") . "</a>";
