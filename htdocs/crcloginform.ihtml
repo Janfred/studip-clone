@@ -1,4 +1,5 @@
 <?
+// first of all init I18N because seminar_open is not called here...
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 global $_language;
 $_language_path = init_i18n($_language);
