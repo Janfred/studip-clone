@@ -863,7 +863,6 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 	ob_end_flush();
 }
 
-
 //Uebersicht ueber die Institute einer Fakultaet
 if (($sem_browse_data["level"]=="i") && (!$hide_bereich))
 	{
@@ -877,14 +876,14 @@ if (($sem_browse_data["level"]=="i") && (!$hide_bereich))
 			if ($i % 2 == 0)
 				{
 				echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), " (", $db->f("number_seminare"), ")</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), "</b></a><br>";
 				$i++;
 				echo "</td>\n";
 				}
 			else
 				{
 				echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), " (", $db->f("number_seminare"), ")</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=s&id=", $db->f("Institut_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("Name")), "</b></a><br>";
 				$i++;
 				echo "</td></tr>\n";
 				}
@@ -894,7 +893,7 @@ if (($sem_browse_data["level"]=="i") && (!$hide_bereich))
 	echo "<br>Es werden alle Einrichtungen angezeigt, die Veranstaltungen in Stud.IP anbieten.</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
 	}
 
-//Uerbersicht ueber die Fachbereiche eines Studienbereichs
+//Uerbersicht ueber die Studienbereiche eines Studienfaches
 if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 	{
 	
@@ -908,21 +907,21 @@ if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 			if ($i % 2 == 0)
 				{
 				echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), " (", $db->f("number_seminare"), ")</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), "</b></a><br>";
 				$i++;
 				echo "</td>\n";
 				}
 			else
 				{
 				echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), " (", $db->f("number_seminare"), ")</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=sbb&id=", $db->f("bereich_id"), "&oid=".$sem_browse_data["id"]."&oid2=".$sem_browse_data["oid"]."\"><b>", htmlReady($db->f("name")), "</b></a><br>";
 				$i++;
 				echo "</td></tr>\n";
 				}
 			
 	echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><font size=-1>";
 	if (!$sem_browse_data["extern"]=="yes") echo "<a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid"]."\">eine Ebene zur&uuml;ck</a>";
-	echo "<br>Es werden alle Fachbereiche angezeigt, die Veranstaltungen in Stud.IP anbieten.</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
+	echo "<br>Es werden nur Studienbereiche angezeigt, zu denen Veranstaltungen in Stud.IP existieren.</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
 	}
 
 //Uebersucht ueber die Studienfaecher einer Fakult&auml;t
@@ -939,31 +938,34 @@ if (($sem_browse_data["level"]=="sb") && (!$hide_bereich))
 			if ($i % 2 == 0)
 				{
 				echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), " (", $db->f("number_seminare"), ")</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "</b></a><br>";
 				$i++;
 				echo "</td>\n";
 				}
 			else
 				{
 				echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), " (", $db->f("number_seminare"), ")</b></a><br>";
+				echo "<a href=\"$PHP_SELF?level=b&id=", $db->f("fach_id"), "&oid=".$sem_browse_data["id"]."\"><b>", htmlReady($db->f("name")), "	</b></a><br>";
 				$i++;
 				echo "</td></tr>\n";
 				}
 			
 	echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><font size=-1>";
 	if (!$sem_browse_data["extern"]=="yes") echo "<a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">eine Ebene zur&uuml;ck</a>";
-	echo "<br>Es werden alle Studienf&auml;cher angezeigt, die Veranstaltungen in Stud.IP anbieten.</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
+	echo "<br>Es werden nur Studienf&auml;cher angezeigt, zu denen Veranstaltungen in Stud.IP existieren.</font></td></tr><tr><td class=\"blank\">&nbsp;<br></td></tr>";
 	}
 
-
+echo $sem_browse_data["s_class"];
 //Uebersicht Studienbereichebereiche/Institute
 if (($sem_browse_data["level"]=="sbi")  && (!$hide_bereich))
 	{
 	echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
 	echo "<a href=\"$PHP_SELF?level=i&id=", $sem_browse_data["id"], "\"><b>Einrichtungen</b></a><br></td>";
 	echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-	echo "<a href=\"$PHP_SELF?level=sb&id=",$sem_browse_data["id"], "\"><b>Studienf&auml;cher</b></a><br>";
+	if (($SEM_CLASS[$sem_browse_data["s_class"]]["bereiche"]) ||  ($SEM_CLASS[$show_class]["bereiche"]))
+		echo "<a href=\"$PHP_SELF?level=sb&id=",$sem_browse_data["id"], "\"><b>Studienf&auml;cher</b></a><br>";
+	else
+		echo "<font size=-1>(keine Studienf&auml;cher vorhanden.)</font><br>";
 	echo "</td></tr>\n";
 	echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><font size=-1><a href=\"$PHP_SELF?level=f\">eine Ebene zur&uuml;ck</a></font></td></tr><tr><td class=\"blank\">&nbsp;</td></tr>";
 	}
