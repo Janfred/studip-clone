@@ -165,7 +165,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		} else if ($altm == "1") {
 			$tip = _("Sie haben eine alte empfangene Nachricht.");
 		} else {
-			$tip = _("Sie keine alten empfangenen Nachrichten.");
+			$tip = _("Sie haben keine alten empfangenen Nachrichten.");
 		}
 	}
 	echo MakeToolbar($icon,$link,$text,$tip,40, "_top");
