@@ -51,7 +51,7 @@ class ResourcesUserRoomsList {
 		if (!$user_id){
 			$user_id = $GLOBALS['auth']->auth['uid'];
 		}
-		if($GLOBALS['perm']->have_perm('root') || GetGlobalPerms($user_id) == 'admin'){
+		if($GLOBALS['perm']->have_perm('root') || getGlobalPerms($user_id) == 'admin'){
 			return true;
 		}
 		if (!isset($resources_list[$user_id])){
@@ -68,7 +68,7 @@ class ResourcesUserRoomsList {
 		$this->user_id = $user_id;
 		if (!$this->user_id)
 			$this->user_id = $user->id;
-		$this->global_perms = GetGlobalPerms($this->user_id);
+		$this->global_perms = getGlobalPerms($this->user_id);
 		$this->return_objects = $return_objects;
 		$this->only_rooms = $only_rooms;
 		//$this->category_id = $category_id;
