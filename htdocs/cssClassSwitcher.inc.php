@@ -1,3 +1,4 @@
+<?
 /**
 * cssClassSwitcher.inc.php
 * 
@@ -133,3 +134,4 @@ class cssClassSwitcher {
 		return $ret;
 	}
 }
+?>
