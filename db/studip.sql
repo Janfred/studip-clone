@@ -1022,18 +1022,6 @@ CREATE TABLE `seminar_user` (
 # --------------------------------------------------------
 
 #
-# Tabellenstruktur für Tabelle `seminar_user_number`
-#
-
-CREATE TABLE `seminar_user_number` (
-  `user_id` varchar(32) NOT NULL default '',
-  `user_number` int(11) NOT NULL auto_increment,
-  `seminar_id` varchar(32) NOT NULL default '',
-  PRIMARY KEY  (`user_number`)
-) TYPE=MyISAM;
-# --------------------------------------------------------
-
-#
 # Tabellenstruktur für Tabelle `seminare`
 #
 
