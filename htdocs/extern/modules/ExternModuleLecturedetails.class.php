@@ -43,8 +43,9 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."language.inc.php");
 class ExternModuleLecturedetails extends ExternModule {
 
 	var $field_names = array();
-	var $data_fields = array("subtitle", "lecturer", "art", "status", "description", "location",
-			"time", "teilnehmer", "requirements", "lernorga", "leistung", "range_path", "misc");
+	var $data_fields = array("subtitle", "lecturer", "art", "status", "description",
+			"location", "semester", "time", "number", "teilnehmer", "requirements",
+			"lernorga", "leistung", "range_path", "misc", "ects");
 	var $registered_elements = array(
 			"ReplaceTextSemType",
 			"Body",
@@ -68,13 +69,16 @@ class ExternModuleLecturedetails extends ExternModule {
 				_("Veranstaltungstyp"),
 				_("Beschreibung"),
 				_("Ort"),
+				_("Semester"),
 				_("Zeiten"),
+				_("Veranstaltungsnummer"),
 				_("TeilnehmerInnen"),
 				_("Voraussetzungen"),
 				_("Lernorganisation"),
 				_("Leistungsnachweis"),
 				_("Bereichseinordnung"),
-				_("Sonstiges"));
+				_("Sonstiges"),
+				_("ECTS-Kreditpunkte"));
 	}
 	
 	function setup () {

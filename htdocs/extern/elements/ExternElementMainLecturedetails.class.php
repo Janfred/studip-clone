@@ -59,12 +59,13 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 	function getDefaultConfig () {
 		$config = array(
 			"name" => "",
-			"order" => "|0|1|2|3|4|5|6|7|8|9|10|11|12",
-			"visible" => "|1|1|1|1|1|1|1|1|1|1|1|1|1",
+			"order" => "|0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15",
+			"visible" => "|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1",
 			"aliases" => "|"._("Untertitel:")." |"._("DozentIn:")." |"._("Veranstaltungsart:")
-				." |"._("Veranstaltungstyp:")." |"._("Beschreibung:")." |"._("Ort:")." |"._("Zeiten:")
-				." |"._("TeilnehmerInnen:")." |"._("Voraussetzungen:")." |"._("Lernorganisation:")
-				." |"._("Leistungsnachweis:")." |"._("Bereichseinordnung:")." |"._("Sonstiges:"),
+				." |"._("Veranstaltungstyp:")." |"._("Beschreibung:")." |"._("Ort:")." |"._("Semester:")
+				." |"._("Zeiten:")." |"." |"._("Veranstaltungsnummer:")." |"._("TeilnehmerInnen:")
+				." |"._("Voraussetzungen:")." |"._("Lernorganisation:")." |"._("Leistungsnachweis:")
+				." |"._("Bereichseinordnung:")." |"._("Sonstiges:")." |"._("ECTS-Kreditpunkte:"),
 			"aliaspredisc" => _("Vorbesprechung:") . " ",
 			"aliasfirstmeeting" => _("Erster Termin:") . " ",
 			"headlinerow" => "1",

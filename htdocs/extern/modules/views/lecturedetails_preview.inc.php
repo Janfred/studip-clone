@@ -39,13 +39,16 @@ $data_sem["art"] = _("Testveranstaltung");
 $data_sem["semtype"] = 1;
 $data_sem["description"] = str_repeat(_("Beschreibung") . " ", 10);
 $data_sem["location"] = _("A 123, 1. Stock");
+$data_sem["semester"] = "WS 2003/2004";
 $data_sem["time"] = _("Di. 8:30 - 13:30, Mi. 8:30 - 13:30, Do. 8:30 - 13:30");
+$data_sem["number"] = "1234";
 $data_sem["teilnehmer"] = str_repeat(_("Teilnehmer") . " ", 6);
 $data_sem["requirements"] = str_repeat(_("Voraussetzungen") . " ", 6);
 $data_sem["lernorga"] = str_repeat(_("Lernorganisation") . " ", 6);
 $data_sem["leistung"] = str_repeat(_("Leistungsnachweis") . " ", 6);
 $data_sem["range_path"] = _("Fakult&auml;t &gt; Studiengang &gt; Bereich");
 $data_sem["misc"] = str_repeat(_("Sonstiges") . " ", 6);
+$data_sem["ects"] = "4";
 
 
 setlocale(LC_TIME, $this->config->getValue("Main", "timelocale"));

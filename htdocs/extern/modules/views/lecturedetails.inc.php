@@ -62,18 +62,26 @@ if ($db->next_record()) {
 	}
 	
 	if ($visible[++$j] && $db->f("Beschreibung"))
-		$data["description"] = htmlReady($db->f("Beschreibung"));
+		$data["description"] = formatReady($db->f("Beschreibung"));
 	
 	if ($visible[++$j])
 		$data["location"] = getRoom($seminar_id, FALSE);
 	
+	if ($visible[++$j])
+		$data["semester"] = get_semester($seminar_id);
+	
 	if ($visible[++$j]) {
-		$data["time"] .= view_turnus($seminar_id, FALSE, FALSE);
-		if ($first_app = vorbesprechung($seminar_id))
+		$data["time"] = htmlReady(view_turnus($seminar_id, FALSE, FALSE));
+		if ($first_app = vorbesprechung($seminar_id)) {
 			$data["time"] .= "<br>" . $this->config->getValue("Main", "aliaspredisc") . $first_app;
-		if ($begin = veranstaltung_beginn($seminar_id))
+		}
+		if ($begin = veranstaltung_beginn($seminar_id)) {
 			$data["time"] .= "<br>" . $this->config->getValue("Main", "aliasfirstmeeting") . $begin;
+		}
 	}
+	
+	if ($visible[++$i] && $db->f("VeranstaltungsNummer"))
+		$data["number"] = htmlReady($db->f("VeranstaltungsNummer");
 	
 	if ($visible[++$j] && $db->f("teilnehmer"))
 		$data["teilnehmer"] = htmlReady($db->f("teilnehmer"));
@@ -114,7 +122,10 @@ if ($db->next_record()) {
 	}
 	
 	if ($visible[$i++] && $db->f("Sonstiges"))
-		$data["misc"] = htmlReady($db->f("Sonstiges"));
+		$data["misc"] = formatReady($db->f("Sonstiges"));
+	
+	if ($visible[++$i] && $db->f("ects"))
+		$data["ects"] = htmlReady($db->f("ects"));
 	
 	if ($this->config->getValue("Main", "studiplink")) {
 		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
