@@ -56,13 +56,13 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	if ($RESOURCES_ENABLE) {
 	?>
 	<br><a href="resources.php?view=search&view_mode=no_nav&new_search=TRUE"><b><?=_("Suchen nach Ressourcen")?></b></a></br>
-	<font size=-1><?=_("Hier finden Ressourcen wie etwa R&auml;ume, Geb&auml;uder oder Ger&auml;te.")?></font>
+	<font size=-1><?=_("Hier finden Ressourcen wie etwa R&auml;ume, Geb&auml;ude oder Ger&auml;te.")?></font>
 	<br>
 	<?
 	}
 	?>
 	<br><a href="archiv.php"><b><?=_("Suchen im Archiv")?></b></a></br>
-	<font size=-1><?=_("Hier finden sie alle Veranstaltungen vergangener Semester.")?></font>
+	<font size=-1><?=_("Hier finden sie alle archivierten Veranstaltungen vergangener Semester.")?></font>
 	<br>
 	<br>
 </td>
