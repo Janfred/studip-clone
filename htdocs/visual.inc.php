@@ -624,26 +624,4 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 }
 
 
-/**
-* create the img tag for graphic buttons
-*
-* This function creates the html text for a button.
-* Decides, which button (folder)
-* is used for international buttons.
-*
-* @access	public        
-* @param		string	the (german) button name
-* @param		string	if mode = img, the functions return the full tag, if mode = src, it return only the src-part (for graphic submits)
-* @return		string	html output of the button
-*/
-function makeButton ($name, $mode="img") {
-	global $_language_path;
-	$path = "./locale/$_language_path/LC_BUTTONS";
-	if ($mode == "img")
-		$tag = sprintf ("<img src=\"%s/%s-button.gif\" border=\"0\" />", $path, $name);
-	else
-		$tag = sprintf ("src=\"%s/%s-button.gif\"", $path, $name);
-
-	return $tag;
-}
 ?>
