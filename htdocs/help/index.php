@@ -27,8 +27,9 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 		<meta http-equiv="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
-		<title>Stud.IP - Hilfe</title>
 <?
+echo "<title>" . _("Stud.IP - Hilfe") . "</title>";
+
 if (!isset($druck))
 	print("\t\t<link rel=\"stylesheet\" href=\"help_style.css\" type=\"text/css\">\n");
 else
@@ -60,15 +61,15 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 
 	if (!isset($druck)) { // die Hilfe-Seite in eine Tabelle packen
 		print("\n<table cellspacing=0 cellpadding=10 border=0 width=\"100%\"><tr><td class=\"blank\">");
-		include("pages/$help_page");
+		include("../locale/$_language_path/LC_HELP/pages/$help_page");
 		print("\n</td></tr></table>");
 	} else {	// die Hilfeseite nackt ausgeben
-		include("pages/$help_page");
+		include("../locale/$_language_path/LC_HELP/pages/$help_page");
 
 		//Studipinfozeile
 		echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
 		echo "<tr><td colspan=2><hr></td></tr>";
-		echo "<tr><td><i><font size=-1>Stand: ".date("d.m.y",time()).", ".date("G:i", time())." Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"../pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
+		echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." " . _("Uhr.") . "</font></i></td><td align=\"right\"><font size=-2><img src=\"../pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 		echo  "</table>\n";
 	}	
 
@@ -94,7 +95,7 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 	} else { // die komplette Hilfe in druckbarer Form ausgeben
 
 		// erstmal die Gliederung
-		print("<div align=\"center\"><font size=\"+2\"><b>Inhaltsverzeichnis</b></font></div><br><br>\n");
+		print("<div align=\"center\"><font size=\"+2\"><b>" . _("Inhaltsverzeichnis") . "</b></font></div><br><br>\n");
 		for ($i = 0; $i < count($pages); $i++) {
 			if ($pages[$i]["perm"] == "" || $perm->have_perm($pages[$i]["perm"])) {
 			printf("\n<a href=\"#%d\"><font size=\"+1\"><b>%d. %s</b></font></a><br>\n<i>%s</i><br>\n", $i+1, $i+1, htmlReady($pages[$i]["name"]), htmlReady($pages[$i]["text"]));
@@ -115,14 +116,14 @@ if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 				for ($j = 0; $j < count($pages[$i]["kategorien"]); $j++) {
 					printf("<a name=\"%d.%d\"><div align=\"center\"><br><br><font size=\"+1\"><b>%d.%d %s</b></font><br>\n<i>%s</i><br><br></div>\n", $i+1, $j+1, $i+1, $j+1, htmlReady($pages[$i]["kategorien"][$j]["name"]), htmlReady($pages[$i]["kategorien"][$j]["text"]));
 					$temp_page = $pages[$i]["kategorien"][$j]["page"];
-					include("pages/$temp_page");
+					include("../locale/$_language_path/LC_HELP/pages/$temp_page");
 				}
 				print("<br>");
 			}
 		//Studipinfozeile
 		echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
 		echo "<tr><td colspan=2><hr></td></tr>";
-		echo "<tr><td><i><font size=-1>Stand: ".date("d.m.y",time()).", ".date("G:i", time())." Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"../pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
+		echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." " . _("Uhr.") . "</font></i></td><td align=\"right\"><font size=-2><img src=\"../pictures/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 		echo  "</table>\n";
 		}	
 	}
