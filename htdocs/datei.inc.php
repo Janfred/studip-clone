@@ -144,7 +144,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 	$zip_file_id = false;
 	if (file_exists($ZIP_PATH) && is_array($file_ids)){
 		$db = new DB_Seminar();
-		$zip_file_id = md5(uniqid("jabba"),1);
+		$zip_file_id = md5(uniqid("jabba",1));
 
 		//create temporary Folder
 		$tmp_full_path = "$TMP_PATH/$zip_file_id";
@@ -165,7 +165,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' *');
 		@chdir($ABSOLUTE_PATH_STUDIP);
 		rmdirr($tmp_full_path);
-		@rename($tmp_full_path .".zip " , $tmp_full_path);
+		@rename($tmp_full_path .".zip" , $tmp_full_path);
 	}
  	return $zip_file_id;
 }
@@ -175,7 +175,7 @@ function createFolderZip ($folder_id) {
 	$zip_file_id = false;
 	if (file_exists($ZIP_PATH)){
 		
-		$zip_file_id = md5(uniqid("jabba"),1);
+		$zip_file_id = md5(uniqid("jabba",1));
 		
 		//create temporary Folder
 		$tmp_full_path = "$TMP_PATH/$zip_file_id";
@@ -190,7 +190,7 @@ function createFolderZip ($folder_id) {
 		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' * ');
 		chdir($ABSOLUTE_PATH_STUDIP);
 		rmdirr($tmp_full_path);
-		@rename($tmp_full_path .".zip " , $tmp_full_path);
+		@rename($tmp_full_path .".zip" , $tmp_full_path);
 	}
  	return $zip_file_id;
 }
@@ -1554,7 +1554,9 @@ function rmdirr($dirname){
     // Simple delete for a file
     if (is_file($dirname)) {
         return @unlink($dirname);
-    }
+    } else if (!is_dir($dirname)){
+		return false;
+	}
 
     // Loop through the folder
     $dir = dir($dirname);

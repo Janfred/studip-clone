@@ -626,7 +626,7 @@ function in_archiv ($sem_id) {
 	$query = sprintf ("SELECT dokument_id FROM dokumente WHERE seminar_id = '%s' AND url = ''", $seminar_id);
 	$db->query ($query);
 	if (file_exists($ZIP_PATH) && $db->affected_rows()) {
-		$archiv_file_id = md5(uniqid($hash_secret),1);
+		$archiv_file_id = md5(uniqid($hash_secret,1));
 		$docs = 0;	
 		
 		//temporaeres Verzeichnis anlegen
