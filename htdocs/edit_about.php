@@ -39,7 +39,6 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-$ALLOW_ADMIN_USERACCESS = FALSE;
 if (!isset($ALLOW_CHANGE_NAME)) $ALLOW_CHANGE_NAME = TRUE; //wegen Abwärtskompatibilität, erst ab 1.1 bekannt
 
 // Klassendefinition
@@ -313,7 +312,7 @@ function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $data
 
 function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view) {
 	global $UNI_NAME_CLEAN, $_language_path, $auth, $perm; 
-	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_ADMIN_USERACCESS, $ALLOW_CHANGE_NAME;
+	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME;
   
 	//erstmal die "unwichtigen" Daten
 	if ($home == $this->default_url)
@@ -361,7 +360,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 	$email = trim($email);
 	
 	//nur nötig wenn der user selbst seine daten ändert
-	if ($this->check == "user" || ($perm->have_perm("root") && $ALLOW_ADMIN_USERACCESS)) {
+	if ($this->check == "user") {
 		//erstmal die Syntax checken $validator wird in der local.inc.php benutzt, sollte also funzen
 		$validator=new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
 		$validator->timeout=10;
@@ -456,12 +455,10 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 				}
 				
 				if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
-					if (!($perm->have_perm("root") && $ALLOW_ADMIN_USERACCESS)) { //Generate only password, if user changes his own E-Mail
-						$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
-						if ($this->db->next_record()) {
-							$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
-							return false;
-						}
+					$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
+					if ($this->db->next_record()) {
+						$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
+						return false;
 						//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
 						$newpass=$this->generate_password(6);
 						$hashpass=md5($newpass);
@@ -967,7 +964,7 @@ if ($view=="Daten") {
 		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
 	}
 	 
-	if (($my_about->check=="user") || ($perm->have_perm("root") && $ALLOW_ADMIN_USERACCESS)) {
+	if ($my_about->check=="user") {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
 		if (($ALLOW_CHANGE_USERNAME && !StudipAuthAbstract::CheckField("auth_user_md5.username",$my_about->auth_user['auth_plugin'])) ) {
 			echo "&nbsp;<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
