@@ -131,16 +131,16 @@ class DbCalendarEventList {
 		if ($db->num_rows() != 0) {
 			while ($db->next_record()) {
 				$event =& new SeminarEvent($db->f('termin_id'), array(
-						'DTSTART'       => $db->f('date'),
-						'DTEND'         => $db->f('end_time'),
-						'SUMMARY'       => $db->f('content'),
-						'CATEGORIES'    => $db->f('date_typ'),
-						'LOCATION'      => $db->f('raum'),
-						'DESCRIPTION'   => $db->f('description'),
-						'CLASS'         => 'PRIVATE',
-						'SEMNAME'       => $db->f('Name'),
-						'CREATED'       => $db->f('mkdate'),
-						'LAST-MODIFIED' => $db->f('chdate')),
+						'DTSTART'         => $db->f('date'),
+						'DTEND'           => $db->f('end_time'),
+						'SUMMARY'         => $db->f('content'),
+						'STUDIP_CATEGORY' => $db->f('date_typ'),
+						'LOCATION'        => $db->f('raum'),
+						'DESCRIPTION'     => $db->f('description'),
+						'CLASS'           => 'PRIVATE',
+						'SEMNAME'         => $db->f('Name'),
+						'CREATED'         => $db->f('mkdate'),
+						'LAST-MODIFIED'   => $db->f('chdate')),
 						$db->f('range_id'));
 						
 				$event->setWritePermission($db->f('status') == 'tutor' || $db->f('status') == 'dozent');
