@@ -90,7 +90,7 @@ class StudipRangeTreeView extends TreeView{
 		return $content;
 	}
 }
-//test
+//test 
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 //include "html_head.inc.php";
 //$test = new StudipRangeTreeView();

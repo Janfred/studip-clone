@@ -76,5 +76,4 @@ $_views["CAT_DEL"] = array("query" => "DELETE FROM kategorien WHERE kategorie_id
 $_views["CAT_DEL_RANGE"] = array("query" => "DELETE FROM kategorien WHERE range_id IN (&)");
 
 $_views["STATUS_COUNT"] = array("query"=>"SELECT count(DISTINCT user_id) AS anzahl FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id=?");
-
 ?>

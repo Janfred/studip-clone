@@ -205,7 +205,6 @@ $the_tree->showSemTree();
 	<input border="0" type="image" <?=makeButton("ok","src") . tooltip(_("Gewählte Aktion starten"))?> >
 	</div>
 	</form>
-	
 </td></tr>
 </td></tr>
 </table>

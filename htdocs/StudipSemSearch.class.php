@@ -375,6 +375,5 @@ class StudipSemSearch {
 		}
 		return;
 	}
-		
 }
 ?>

@@ -714,7 +714,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 	return $url;
 	}
 }
-//test
+//test 
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 //include "html_head.inc.php";
 //$test = new StudipRangeTreeViewAdmin();
@@ -722,4 +722,3 @@ class StudipRangeTreeViewAdmin extends TreeView{
 //echo "</table>";
 //page_close();
 ?>
-

@@ -57,7 +57,6 @@ class StudipSemTreeSearch {
 	
 	var $selected = array();
 	
-		
 	function StudipSemTreeSearch($seminar_id,$form_name = "search_sem_tree"){
 		global $_REQUEST;
 		$this->view = new DbView();

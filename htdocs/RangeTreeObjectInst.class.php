@@ -66,5 +66,4 @@ class RangeTreeObjectInst extends RangeTreeObject {
 	}
 	
 }
-
 ?>

@@ -88,9 +88,7 @@ $_views["SEM_GET_FAKS"] = array("query" => "SELECT DISTINCT b.fakultaets_id,d.se
 $_views["SEM_GET_INST"] = array("query" => "SELECT Institut_id FROM seminare WHERE Seminar_id=?");
 
 $_views["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id," . $_views['sem_number_sql'] . " AS sem_number FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE a.Institut_id IN (&)
-												§ §  ");
-												
-		
+												§ § ");
 unset($allowed_sem_status);
 unset($sem_start_times);
 ?>

@@ -374,5 +374,5 @@ class TreeView {
 //include "html_head.inc.php";
 //$test = new TreeView("SemTree");
 //$test->showTree();
-//page_close();
+//page_close(); 
 ?>

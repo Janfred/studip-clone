@@ -50,5 +50,4 @@ class RangeTreeObjectFak extends RangeTreeObject {
 	
 	}
 }
-
 ?>

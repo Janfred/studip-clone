@@ -51,7 +51,6 @@ include($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
 include($ABSOLUTE_PATH_STUDIP."header.php");   //hier wird der "Kopf" nachgeladen 
 include($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");  //Linkleiste fuer admins
 
-
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
 	<tr><td class="topic" align="left">&nbsp; <b><?=$UNI_NAME . " - " . _("Bereiche verwalten")?></b></td></tr>
