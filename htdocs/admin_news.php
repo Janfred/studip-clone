@@ -649,7 +649,7 @@ class studip_news {
 			$this->db->query("SELECT username FROM auth_user_md5 WHERE user_id='$user_id'");
 			$this->db->next_record();
 			$user_name=$this->db->f("username");
-			$msg_object->insert_message(mysql_escape_string($msg), $user_name, "____%system%____", FALSE, FALSE, "1");
+			$msg_object->insert_message(mysql_escape_string($msg), $user_name, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("News geändert"));
 		}
 	}
 
