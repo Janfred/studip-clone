@@ -8,7 +8,7 @@
 * @version		$Id$
 * @access		public
 * @modulegroup		elearning_modules
-* @module		account_migration
+* @module		seminar_lermodule
 * @package		ELearning
 */
 // +---------------------------------------------------------------------------+

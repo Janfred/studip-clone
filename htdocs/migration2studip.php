@@ -36,7 +36,7 @@
 /**
 * Asks for ILIAS-user-authentification
 *
-* This function echos a question for unsername and password of an ILIAS-Account.
+* This function echos a question for username and password of an ILIAS-Account.
 *
 * @access	public        
 */
@@ -81,7 +81,7 @@ function check_ilias_auth()
 /**
 * Stud.IP-user-authentification
 *
-* This function checks if the given password and unsername are correct.
+* This function checks if the given password and username are correct.
 *
 * @access	public        
 */
@@ -106,7 +106,7 @@ function check_studip_auth()
 /**
 * Asks for Stud.IP-user-authentification
 *
-* This function echos a question for unsername and password of a Stud.IP-Account.
+* This function echos a question for username and password of a Stud.IP-Account.
 *
 * @access	public        
 */
