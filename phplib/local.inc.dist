@@ -10,6 +10,8 @@ please note the CONFIG.INC.PHP in the system folder for the indivual settings of
 $UNI_NAME_CLEAN = "Studip 0.9";
 //create the html-version
 $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
+//the length of a session in seconds
+$AUTH_LIFETIME=60;
 
 
 /*settings for database access
