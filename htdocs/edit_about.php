@@ -751,94 +751,97 @@ if (!$my_about->check)
 	page_close();
 	die;
 	}
-
-//ein Bild wurde hochgeladen
-if ($cmd == "copy")
- {
-	$my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
+	
+if(check_ticket($ticket)){
+	//ein Bild wurde hochgeladen
+	if ($cmd == "copy")
+	 {
+		$my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
+		}
+	
+	//Veränderungen an Studiengängen
+	if ($cmd == "studiengang_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
+	 {
+		$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
+		}
+	
+	//Veränderungen an Instituten für Studies
+	if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
+	 {
+		$my_about->inst_edit($inst_delete,$new_inst);
+		}
+	
+	//Veränderungen an Raum, Sprechzeit, etc
+	if ($cmd == "special_edit")
+	 {
+		$my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible);
+		}
+	
+	// change order of institutes
+	if ($cmd == 'move') {
+		$my_about->move($move_inst, $direction);
 	}
-
-//Veränderungen an Studiengängen
-if ($cmd == "studiengang_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
- {
-	$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
+	
+	//Veränderungen der pers. Daten
+	if ($cmd == "edit_pers") {
+		//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
+		if (($email && $my_about->auth_user["Email"] != $email)
+			&& (($response && $response != md5("*****")) || ($password && $password != "*****"))) {
+			$my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
+			
+		} else {
+		$my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
+			if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
+			else $my_about->get_auth_user($username);
+			$username = $my_about->auth_user["username"];
+		}
 	}
-
-//Veränderungen an Instituten für Studies
-if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm("admin")))
- {
-	$my_about->inst_edit($inst_delete,$new_inst);
+	
+	if ($cmd=="edit_leben")  {
+		$my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id);
+		$my_about->get_auth_user($username);
 	}
-
-//Veränderungen an Raum, Sprechzeit, etc
-if ($cmd == "special_edit")
- {
- 	$my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible);
+	
+	// general settings from mystudip: language
+	if ($cmd=="change_general") {
+		$my_about->db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='" . $my_about->auth_user["user_id"] ."'");
+		$_language = $forced_language;
+		$forum["jshover"]=$jshover; 
+		$my_studip_settings["startpage_redirect"] = $personal_startpage;
 	}
-
-// change order of institutes
-if ($cmd == 'move') {
-	$my_about->move($move_inst, $direction);
+	
+	if ($my_about->logout_user)
+	 {
+		$sess->delete();  // User logout vorbereiten
+		$auth->logout();
+	
+	 $timeout=(time()-300);
+		 $sqldate = date("YmdHis", $timeout);
+		$query = "UPDATE active_sessions SET changed = '$sqldate' WHERE sid = '$user->id'";
+		$my_about->db->query($query);
+		$msg = rawurlencode($my_about->msg);
+		header("Location: $PHP_SELF?username=$username&msg=$msg&logout=1&view=$view"); //Seite neu aufrufen, damit user nobody wird...
+		page_close();
+		die;
+		}
+	
+	if ($cmd) {
+		if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
+			$m_id=md5(uniqid("smswahn"));
+			setTempLanguage($my_about->auth_user["user_id"]);
+			$priv_msg = _("Ihre persönliche Seite wurde von einer Administratorin oder einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \n").$my_about->priv_msg;
+			restoreLanguage();
+			$my_about->insert_message($priv_msg, $my_about->auth_user["username"], "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("persönliche Homepage verändert"));
+		}
+		$msg = rawurlencode($my_about->msg);
+		header("Location: $PHP_SELF?username=$username&msg=$msg&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
+		page_close();
+		die;
+	}
+	
+} else {
+	unset($cmd);
 }
-
-//Veränderungen der pers. Daten
-if ($cmd == "edit_pers") {
-	//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
-	if (($email && $my_about->auth_user["Email"] != $email)
-		&& (($response && $response != md5("*****")) || ($password && $password != "*****"))) {
-		$my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
-		
-	} else {
-	$my_about->edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view);
-		if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
-		else $my_about->get_auth_user($username);
-		$username = $my_about->auth_user["username"];
-	}
-}
-
-if ($cmd=="edit_leben")  {
-	$my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id);
-	$my_about->get_auth_user($username);
-}
-
-// general settings from mystudip: language
-if ($cmd=="change_general") {
-	$my_about->db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='" . $my_about->auth_user["user_id"] ."'");
-	$_language = $forced_language;
-	$forum["jshover"]=$jshover; 
-	$my_studip_settings["startpage_redirect"] = $personal_startpage;
-}
-
-if ($my_about->logout_user)
- {
-	$sess->delete();  // User logout vorbereiten
-	$auth->logout();
-
- $timeout=(time()-300);
-	 $sqldate = date("YmdHis", $timeout);
-	$query = "UPDATE active_sessions SET changed = '$sqldate' WHERE sid = '$user->id'";
-	$my_about->db->query($query);
-	$msg = rawurlencode($my_about->msg);
-	header("Location: $PHP_SELF?username=$username&msg=$msg&logout=1&view=$view"); //Seite neu aufrufen, damit user nobody wird...
-	page_close();
-	die;
-	}
-
-if ($cmd) {
-	if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
-		$m_id=md5(uniqid("smswahn"));
-		setTempLanguage($my_about->auth_user["user_id"]);
-		$priv_msg = _("Ihre persönliche Seite wurde von einer Administratorin oder einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \n").$my_about->priv_msg;
-		restoreLanguage();
-		$my_about->insert_message($priv_msg, $my_about->auth_user["username"], "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("persönliche Homepage verändert"));
-	}
-	$msg = rawurlencode($my_about->msg);
-	header("Location: $PHP_SELF?username=$username&msg=$msg&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
-	page_close();
-	die;
-}
-
-
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -925,19 +928,19 @@ function checkemail(){
 function checkdata(){
  // kompletter Check aller Felder vor dem Abschicken
  var checked = true;
- if (!checkusername())
+ if (document.pers.new_username && !checkusername())
 	checked = false;
- if (!checkpassword())
+ if (document.pers.password && !checkpassword())
 	checked = false;
- if (!checkvorname())
+ if (document.pers.vorname && !checkvorname())
 	checked = false;
- if (!checknachname())
+ if (document.pers.nachname && !checknachname())
 	checked = false;
- if (!checkemail())
+ if (document.pers.email && !checkemail())
 	checked = false;
  if (checked) {
 	 document.pers.method = "post";
-	 document.pers.action = "<?php print ("$PHP_SELF?cmd=edit_pers&username=$username&view=$view") ?>";
+	 document.pers.action = "<?php print ("$PHP_SELF?cmd=edit_pers&username=$username&view=$view&ticket=".get_ticket()) ?>";
 	 document.pers.response.value = MD5(document.pers.password.value);
 	 document.pers.password.value = "*****";
 	 document.pers.check_pass.value = "*****";
@@ -1031,7 +1034,7 @@ if ($view=="Bild") {
 	}
 			
 	echo "</td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote>";
-	echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username&view=Bild\" method=\"POST\">";
+	echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username&view=Bild&ticket=".get_ticket()."\" method=\"POST\">";
 	echo "<br />" . _("Hochladen eines Bildes:") . "<br><br>" . _("1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.") . "<br><br>";
 	echo "&nbsp;&nbsp;<input name=\"imgfile\" type=\"file\" style=\"width: 80%\" cols=".round($max_col*0.7*0.8)."><br><br>";
 	echo _("2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen.") . "<br><br>";
@@ -1050,10 +1053,10 @@ if ($view=="Daten") {
 	}
 	echo "<br><br></td></tr>\n<tr><td class=blank><table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>";
 	//Keine JavaScript überprüfung bei adminzugriff
-	if ($my_about->check=="user" && $auth->auth["jscript"] && $my_about->auth_user['auth_plugin'] != "standard") {
-		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
+	if ($my_about->check=="user" && $auth->auth["jscript"] ) {
+		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view&ticket=".get_ticket()."\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
 	} else {
-		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
+		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view&ticket=".get_ticket()."\" method=\"POST\" name=\"pers\">";
 	}
 	 
 	if ($my_about->check=="user") {
@@ -1223,7 +1226,7 @@ if ($view=="Karriere") {
 	 		echo "<tr><td class=\"blank\">";
 	 		echo "<b>&nbsp; " . _("Ich arbeite an folgenden Einrichtungen:") . "</b>";
 	 		echo "<table cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\" width=\"99%\" border=\"0\">";
-	 		echo "<form action=\"$PHP_SELF?cmd=special_edit&username=$username&view=$view\" method=\"POST\">";
+	 		echo "<form action=\"$PHP_SELF?cmd=special_edit&username=$username&view=$view&ticket=".get_ticket()."\" method=\"POST\">";
 			
 			$i = 1;
 	 		while (list($inst_id, $details) = each($my_about->user_inst)) {
@@ -1312,7 +1315,7 @@ if ($view=="Karriere") {
 		echo "<tr><td class=\"blank\">";
 		echo "<b>&nbsp; " . _("Ich bin in folgenden Studieng&auml;ngen eingeschrieben:") . "</b>";
 		echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
-		echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view#studiengaenge\" method=\"POST\">";
+		echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view&ticket=".get_ticket()."#studiengaenge\" method=\"POST\">";
 		echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
 		reset ($my_about->user_studiengang);
 		$flag=FALSE;
@@ -1352,7 +1355,7 @@ if ($view=="Karriere") {
 		echo "<tr><td class=\"blank\">";
 		echo "<br><b>&nbsp; " . _("Ich studiere an folgenden Einrichtungen:") . "</b>";
 		echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
-		echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view#einrichtungen\" method=\"POST\">";
+		echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view&ticket=".get_ticket()."#einrichtungen\" method=\"POST\">";
 		echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
 		reset ($my_about->user_inst);
 		$flag=FALSE;
@@ -1393,7 +1396,7 @@ if ($view=="Lebenslauf") {
 		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier k&ouml;nnen Sie Ihren Lebenslauf bearbeiten.");
 	}  
 	echo "<br>&nbsp; </td></tr>\n<tr><td class=blank><table align=\"center\" width=\"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>";
-	echo "<tr><form action=\"$PHP_SELF?cmd=edit_leben&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
+	echo "<tr><form action=\"$PHP_SELF?cmd=edit_leben&username=$username&view=$view&ticket=".get_ticket()."\" method=\"POST\" name=\"pers\">";
 	echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>" . _("Lebenslauf:") . "</b><br>";
 	echo "<textarea  name=\"lebenslauf\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["lebenslauf"])."</textarea><a name=\"lebenslauf\"></a></td></tr>\n";
 	if ($my_about->auth_user["perms"] == "dozent") {
