@@ -96,7 +96,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 
 	if (!empty($message)) {
 		if ($user_id != "____%system%____") {
-			$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE user_id = '".$user_id."' ");
+			$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id = '".$user_id."' ");
 			$db->next_record();
 			$snd_uname=$db->f("username");
 		} else
@@ -142,7 +142,7 @@ function insert_chatinv ($rec_uname, $user_id='') {
 	if (!$user_id)
 		$user_id = $user->id;
 
-	$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE user_id = '".$user_id."' ");
+	$db->query ("SELECT username," . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id = '".$user_id."' ");
 	$db->next_record();
 
 	$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
