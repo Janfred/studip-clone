@@ -2,7 +2,7 @@
 /**
 * admission.inc.php
 * 
-* edit the setting for the admission system
+* the basic library for the admisson system
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
