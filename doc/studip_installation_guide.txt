@@ -10,6 +10,7 @@ Inhalt:
 1.3.1 Anpassen der local.inc
 1.3.2 grundlegende Modulkonfiguration
 1.3.3 weitere optionale Paramter in der local.inc
+1.3.4 Zusätzliche LaTeX-Formate definieren
 1.4 Anpassung der php.ini Werte
 1.4.1 Eintragen der Werte in die php.ini
 1.4.2 Verändern der php.ini Werte über eine <Directory>-Anweisung
@@ -212,7 +213,23 @@ local.inc optional festgelegt werden können:
 - Weitere Optionen zur Authentifizierung: $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, 
   $ENABLE_SELF_REGISTRATION können in Verbindung mit der Standard-Authentifiezierung
   (also dem Auslierfurngszustand) angepasst werden,
-  
+
+1.3.4 Zusätzliche LaTeX-Formate definieren
+
+Der LaTeX-Renderer ist standardmäßig so konfiguriert, dass damit mathema-
+tische Formeln gesetzt und angezeigt werden können. Es ist möglich, weitere 
+Formate selbst zu definieren und damit z.B. phonetische Zeichensätze, 
+arabische, hebräische, kyrillische Schrift, bestimmte Diagrammtypen etc. 
+zur Verfügung zu stellen.
+
+Dazu sind zwei Punkte zu beachten:
+
+- Die Variable $LATEX_FORMATS muss um einen Eintrag für das zusätzliche 
+  Format erweitert werden. (Die genaue Syntax und zwei Beispiele sind in 
+  der Datei local.inc.dist angegeben.)
+- Die zusätzlich benötigten LaTeX-Packages müssen in der lokalen Installation
+  verfügbar sein.
+
 1.4 Anpassung der php.ini Werte
 
 Um Stud.IP ordnungegemäß zum laufen zu bringen, müssen einige der Werte der php.ini
