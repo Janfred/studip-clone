@@ -191,7 +191,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			if ($open == $db->f("termin_id")) {
 				$content='';			
 				if ($db->f("description"))
-					$content.= htmlReady($db->f("description"))."<br /><br />";
+					$content.= htmlReady($db->f("description"), TRUE, TRUE)."<br /><br />";
 				else
 					$content.="Keine Beschreibung vorhanden<br /><br />";
 
@@ -314,7 +314,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			if($open == $app_ident) {
 				$content = '';			
 				if($termin->getDescription())
-					$content .= sprintf("%s<br /><br />", htmlReady($termin->getDescription()));
+					$content .= sprintf("%s<br /><br />", htmlReady($termin->getDescription(), TRUE, TRUE));
 				else
 					$content .= "Keine Beschreibung vorhanden<br /><br />";
 				
@@ -471,7 +471,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			if($open == $app_ident) {
 				$content = "";
 				if($termin->getDescription())
-					$content .= sprintf("%s<br /><br />", htmlReady($termin->getDescription()));
+					$content .= sprintf("%s<br /><br />", htmlReady($termin->getDescription(), TRUE, TRUE));
 				else
 					$content .= "Keine Beschreibung vorhanden<br /><br />";
 					
