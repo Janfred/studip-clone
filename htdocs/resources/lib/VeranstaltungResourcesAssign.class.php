@@ -101,9 +101,10 @@ class VeranstaltungResourcesAssign {
 		} else
 			$sem_begin = $term_data["start_termin"];
 			
-                //if there happens a mistake with the $sem_beginn, cancel.
-                if (!$sem_beginn)
-                        return FALSE;
+		//if there happens a mistake with the $sem_beginn, cancel.
+		if ($sem_begin <= 0) {
+			return FALSE;
+		}
 
 		$dow = date("w", $sem_begin);
 	
