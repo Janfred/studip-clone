@@ -122,14 +122,14 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Klarnamen fuer den Veranstaltungsstatus
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); 		// htmlReady fuer die Veranstaltungsnamen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Semester-Namen fuer Admins
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php"); 		// Semester-Namen fuer Admins
 
 $cssSw=new cssClassSwitcher;                          					// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db=new DB_Seminar;
 
-// we are defintely not in an lexture or institute$SessSemName[0] = "";
-$SessSemName[0] = "";
-$SessSemName[1] = "";
+// we are defintely not in an lexture or institute
+closeObject();
 $links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 // Start of Output
