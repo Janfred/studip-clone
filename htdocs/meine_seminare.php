@@ -163,7 +163,7 @@ if ($cmd=="kill") {
 }
 
 //bei Bedarf aus admission_seminar_user austragen
-if ($cmd=="admission_kill") {
+if ($cmd=="kill_admission") {
 	$db->query("DELETE FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='$auswahl'");
 	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 	else {
@@ -311,7 +311,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	     	printf ("<td class=\"%s\">&nbsp;</td>",$cssSw->getClass());
 	     	printf ("<td class=\"%s\">",$cssSw->getClass());
 		print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";
-		print  "<td width=\"10%%\" align=center class=".$cssSw->getClass().">".date("d.m.Y", $db->f("admission_endtime"))."</td>";
+		printf ("<td align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.Y", $db->f("admission_endtime")) : "-");
 		printf ("<td align=\"center\" class=\"%s\">%s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? "100%" : $db->f("position"));
 		printf ("<td align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
 		printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(),$db->f("seminar_id"));

@@ -328,7 +328,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						}
 						if (($db2->f("admission_type") == 2) || ($chrono_after_selection)) { //Variante chronologisches Eintragen oder chronologisches Eintragen nach dem Losen
 							$db->query("SELECT user_id FROM seminar_user WHERE seminar_id = '$id' AND admission_studiengang_id = '$sem_verify_suggest_studg'"); //Wieviel user sind schon in diesem Kontingent eingetragen
-							if ($db->num_rows() <= round ($db2->f("admission_turnout") * ($db->f("quota") / 100))) {//noch Platz in dem Kontingent --> direkt in seminar_user
+							if ($db->num_rows() >= round ($db2->f("admission_turnout") * ($db->f("quota") / 100))) {//noch Platz in dem Kontingent --> direkt in seminar_user
 							 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
 								parse_msg ("msg§Sie wurden mit dem Status <b>autor</b> in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
 								echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; Hier kommen Sie zu der Veranstaltung</a>";
