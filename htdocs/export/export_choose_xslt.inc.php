@@ -82,7 +82,6 @@ if (($format == "xml") AND ($page == 1))
 {
 	$o_mode = "file";
 	$page = 3;
-	$export_error .= $xml_file_id;	
 }
 
 elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
