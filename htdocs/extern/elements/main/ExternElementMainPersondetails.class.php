@@ -177,9 +177,9 @@ class ExternElementMainPersondetails extends ExternElementMain {
 	}
 	
 	function checkValue ($attribute, $value) {
-		if ($attribute == "showcontact") {
-			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_showcontact"])) {
-				$GLOBALS["HTTP_POST_VARS"]["Main_showcontact"] = 0;
+		if ($attribute == "showcontact" || $attribute == "showimage") {
+			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_$attribute"])) {
+				$GLOBALS["HTTP_POST_VARS"]["Main_$attribute"] = 0;
 				return FALSE;
 			}
 				
