@@ -372,9 +372,10 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 	//after every change, we have to do this check (and we create the msgs...)
 	if ($RESOURCES_ENABLE) {
 		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		$updateAssign->updateAssign();
+		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign());
 	}
 }  // end if ($edit_x)
+
 if ($kill_date)
 	$kill_termin = $kill_date;
 if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
@@ -491,7 +492,7 @@ if ($admin_dates_data["assi"]) {
 }
 
 if (!sizeof($term_data["turnus_data"])) {
-	$result.= "info§"._("Sie haben bislang noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplan-Assisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen.")."§";
+	$result.= "info§"._("Sie haben bislang noch keine <b>allgemeinen</b> (regelm&auml;&szlig;ige) Veranstaltungszeiten eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplan-Assisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen.")."§";
 }
 						
 
