@@ -1341,12 +1341,9 @@ function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
 function isMetadateCorrespondingDate ($termin_id, $begin = '', $end = '', $seminar_id='') {
 	$db = new DB_Seminar;
 	
-	//first, we the date
+	//first, we load the date
 	$query = sprintf("SELECT termin_id, date, end_time, range_id FROM termine WHERE termin_id ='%s' ", $termin_id);
 	$db->query($query);
-	if (!$db->next_record()){
-		return false;
-	}
 
 	if ((!$begin) && (!$end) && (!$seminar_id)) {
 		$begin = $db->f("date");
