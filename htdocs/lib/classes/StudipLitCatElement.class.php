@@ -336,6 +336,9 @@ class StudipLitCatElement {
 				$link = StudipLitSearch::GetExternalLink($plugin_name);
 				if ($link){
 					$ret = preg_replace('/({[a-z0-9_]+})/e', "\$this->getValue(substr('\\1',1,strlen('\\1')-2))", $link);
+					if ($ret == preg_replace('/({[a-z0-9_]+})/', "", $link)) {
+						$ret = "";
+					}
 				}
 				break;
 				default:

@@ -154,7 +154,7 @@ class StudipLitSearch {
 	
 	function GetExternalLink($plugin_name){
 		global $_lit_search_plugins;
-		$et = "";
+		$ret = "";
 		for ($i = 0; $i < count($_lit_search_plugins); ++$i){
 			if ($_lit_search_plugins[$i]['name'] == $plugin_name){
 				$ret = $_lit_search_plugins[$i]['link'];

@@ -66,7 +66,7 @@ class StudipForm {
 			$this->form_values =& $GLOBALS["_" . $this->form_name . "_values"];
 		}
 		if ($this->isSended()){
-			foreach ($this->form_fields as $name => $value){
+			foreach ($this->form_fields as $name => $foo){
 				if (isset($_REQUEST[$this->form_name . "_" . $name])){
 					if (is_array($_REQUEST[$this->form_name . "_" . $name])){
 						foreach ($_REQUEST[$this->form_name . "_" . $name] as $key => $value){
@@ -94,7 +94,8 @@ class StudipForm {
 											. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_month"])) . "-" 
 											. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_day"]));
 				}
-				if (isset($this->form_values[$name]) && $this->form_values[$name] != $new_form_values[$name]){
+				if ( (isset($this->form_values[$name]) && $this->form_values[$name] != $new_form_values[$name])
+				|| (!isset($this->form_values[$name]) && $new_form_values[$name] != $this->form_fields[$name]['default_value']) ){
 					$this->value_changed[$name] = true;
 				}
 			}

@@ -140,7 +140,7 @@ class StudipLitList extends TreeAbstract {
 			}
 			$this->cat_element->fields['note']['value'] = $this->tree_data[$item_id]['note'];
 			$content = preg_replace('/({[a-z0-9_]+})/e', "(\$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2))) ? \$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2)) : '???'", $format);
-			$content = preg_replace('/\|.[^|]*\?\?\?.*?\|/' , "", $content);
+			$content = preg_replace('/\|.?[^|]*\?\?\?.*?\|/' , "", $content);
 			$content = str_replace('|','', $content);
 			return $content;
 		} else {
