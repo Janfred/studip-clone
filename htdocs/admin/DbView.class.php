@@ -42,6 +42,15 @@ class DbView {
 	*/
 	var $query_list = array();
 	/**
+	* list of parameters
+	*
+	* 
+	* @access	public
+	* @var		array	$params	
+	*/
+	var $params = array();
+	
+	/**
 	* Database Object 
 	*
 	* 
@@ -75,6 +84,14 @@ class DbView {
 	* @see		get_temp_table()
 	*/
 	var $pk = "";
+	/**
+	* delete the params array after each query execution
+	*
+	* 
+	* @access	public
+	* @var		boolean	$auto_free_params
+	*/
+	var $auto_free_params = true;
 	/**
 	* turn on/off debugging
 	*
@@ -132,7 +149,7 @@ class DbView {
 		if(count($this->query_list) == 1){
 			$spl = explode(":",$this->query_list[0]);
 			if ($spl[0] == "view"){
-				$this->query_list = $this->get_view(trim($spl[1]),$spl[2]);
+				$this->query_list = $this->get_view(trim($spl[1]));
 			}
 		}
 		$this->parse_query($this->query_list);
@@ -212,7 +229,7 @@ class DbView {
 		return $value_list;
 	}
 	
-	function get_view($name,$param){
+	function get_view($name){
 		if ($GLOBALS["_views"][$name]["pk"]) 
 			$this->pk = $GLOBALS["_views"][$name]["pk"];
 		if ($GLOBALS["_views"][$name]["temp_table_type"])
@@ -237,43 +254,28 @@ class DbView {
 					break;
 				}
 			}
-			$ptemp = split("[{}]",$param);
-			$param = array();
-			if(count($ptemp) > 1){
-				for ($i=0;$i < count($ptemp);++$i){
-					if($ptemp[$i]{strlen($ptemp[$i])-1}==","){
-						$param = array_merge($param,explode(",",substr($ptemp[$i],0,strlen($ptemp[$i])-1)));
-					}
-					elseif($ptemp[$i]{0}==","){
-						$param = array_merge($param,explode(",",substr($ptemp[$i],1)));
-					}
-					elseif($ptemp[$i]!="") {
-						$param[] = $ptemp[$i];
-					}
-				}
-			} else {
-				$param = explode(",",$ptemp[0]);
-			}
-			if (count($param) != count($types)) 
+			if (count($this->params) != count($types)) 
 				$this->halt("Wrong parameter count in view: $name");
 			$query = "";
-			for($i = 0; $i < count($param);++$i){
+			for($i = 0; $i < count($this->params); ++$i){
 				$query .= $tokens[$i];
 				switch ($types[$i]) {
 					case 1:
-					$query .= "'$param[$i]'";
+					$query .= "'" . $this->params[$i] . "'";
 					break;
 					case 2:
-					$query .= $param[$i];
+					$query .= $this->params[$i];
 					break;
 					case 3:
-					$query .= "'".join("','",explode(",",$param[$i]))."'";
+					$query .= "'".join("','",explode(",",$this->params[$i]))."'";
 					break;
 				}
 			}
 			$query .= $tokens[$i];
 		}
 		(is_array($query_list)) ? $query_list[0] = $query  : $query_list = $query;
+		if ($this->auto_free_params)
+			$this->params = array();
 		return $query_list;
 		
 	}
