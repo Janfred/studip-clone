@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_support\n"
-"POT-Creation-Date: 2003-07-18 18:52+0200\n"
+"POT-Creation-Date: 2003-07-25 17:31+0200\n"
 "PO-Revision-Date: 2003-07-25 17:23+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -57,7 +57,8 @@ msgstr "Please enter a processor for the processing time!"
 msgid ""
 "Bitte w&auml;hlen Sie zun&auml;chst einen Vertrag aus, um die Anfragen "
 "einzusehen oder zu bearbeiten!"
-msgstr "Please first select a contract in order to see the request or to edit it!"
+msgstr ""
+"Please first select a contract in order to see the request or to edit it!"
 
 #: support/views/msgs_support.inc.php:63
 msgid ""
@@ -99,8 +100,8 @@ msgid ""
 "Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag "
 "(wie den Punktestand oder die Laufzeit) einsehen."
 msgstr ""
-"Here you view details of your completed support contract "
-"(e.g. point status or the validity period)."
+"Here you view details of your completed support contract (e.g. point status "
+"or the validity period)."
 
 #: support/views/page_intros.inc.php:41
 msgid "&Uuml;berblick &uuml;ber ihre Supportvertr&auml;ge"
@@ -131,8 +132,8 @@ msgid ""
 "Sie sehen hier die letzten Anfragen, die im Rahmen des Supportvertrages vom "
 "<b>%s</b> bis <b>%s</b> gestellt wurden."
 msgstr ""
-"Here you can see the last requests made from <b>%s</b> until <b>%s</b> made within "
-"the context of the support contract."
+"Here you can see the last requests made from <b>%s</b> until <b>%s</b> made "
+"within the context of the support contract."
 
 #: support/views/page_intros.inc.php:56
 msgid "Anfragen"
@@ -148,8 +149,8 @@ msgid ""
 "Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es "
 "liegen keine Themen vor."
 msgstr ""
-"At the moment all topics in the forum are linked with requests or "
-"no topics are presented."
+"At the moment all topics in the forum are linked with requests or no topics "
+"are presented."
 
 #: support/views/page_intros.inc.php:61
 #, c-format
@@ -279,4 +280,3 @@ msgstr "Process request"
 #: support/views/ShowTreeRow.class.php:15
 msgid "Keine Beschreibung"
 msgstr "No description"
-

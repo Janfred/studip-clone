@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-07-18 18:52+0200\n"
+"POT-Creation-Date: 2003-07-25 17:31+0200\n"
 "PO-Revision-Date: 2003-07-25 16:17+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -259,8 +259,8 @@ msgid ""
 "Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, "
 "die in diesem Raum stattfindet."
 msgstr ""
-"This allocation is a regular appointment of the course %s, "
-"which takes place in this room."
+"This allocation is a regular appointment of the course %s, which takes place "
+"in this room."
 
 #: resources/resourcesVisual.inc.php:1076
 msgid ""
@@ -274,16 +274,16 @@ msgid ""
 "Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum "
 "stattfindet."
 msgstr ""
-"This allocation is a single appointment of the course %s, "
-"which takes place in this room."
+"This allocation is a single appointment of the course %s, which takes place "
+"in this room."
 
 #: resources/resourcesVisual.inc.php:1085
 msgid ""
 "Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den entsprechenden "
 "Termin in der Veranstaltung"
 msgstr ""
-"In order to change the allocation, please change the corresponding "
-"course appointment"
+"In order to change the allocation, please change the corresponding course "
+"appointment"
 
 #: resources/resourcesVisual.inc.php:1089
 msgid "Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."
@@ -572,7 +572,8 @@ msgid "Nächste Woche anzeigen"
 msgstr "Show next week"
 
 #: resources/resourcesVisual.inc.php:1847
-msgid "folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
+msgid ""
+"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
 msgstr ""
 "The resource should possess the following properties (empty means that it "
 "doesn't matter):"
@@ -779,7 +780,8 @@ msgstr "The resource has been moved"
 msgid ""
 "Bitte geben Sie eineN NutzerIn f&uuml;r die Belegung an, um diese Belegung "
 "zu speichern!"
-msgstr "In order to save this allocation, please enter a user for the allocation!"
+msgstr ""
+"In order to save this allocation, please enter a user for the allocation!"
 
 #: resources/views/msgs_resources.inc.php:78
 msgid ""
@@ -791,7 +793,8 @@ msgstr ""
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
-msgstr "There are no resources or levels in existence to which you have access."
+msgstr ""
+"There are no resources or levels in existence to which you have access."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid ""
@@ -812,7 +815,8 @@ msgid ""
 msgstr "No resources exist which you may allocate in respect to this course."
 
 #: resources/views/msgs_resources.inc.php:87
-msgid "Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
+msgid ""
+"Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
 msgstr "You have not selected a level. Therefore no list can be created."
 
 #: resources/views/msgs_resources.inc.php:87
@@ -840,7 +844,8 @@ msgstr "You have not selected an object to display."
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der "
 "Belegung an!"
-msgstr "Please enter valid values for the date, begin and end of the allocation!"
+msgstr ""
+"Please enter valid values for the date, begin and end of the allocation!"
 
 #: resources/views/msgs_resources.inc.php:99
 msgid ""
@@ -875,7 +880,8 @@ msgid ""
 msgstr "The weekly repetition may occur a maximum of 50 times!"
 
 #: resources/views/msgs_resources.inc.php:117
-msgid "Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
+msgid ""
+"Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
 msgstr "The daily repetition may occur a maximum of 100 times!"
 
 #: resources/views/msgs_resources.inc.php:121
@@ -1138,9 +1144,9 @@ msgid ""
 "auch bearbeiten, falls Sie entsprechende Rechte besitzen, oder eine neue "
 "Belegung erstellen."
 msgstr ""
-"Display the allocations for the resource %s. Should you possess the "
-"required access authorisations, you can also edit the allocation, "
-"or create a new one. "
+"Display the allocations for the resource %s. Should you possess the required "
+"access authorisations, you can also edit the allocation, or create a new "
+"one. "
 
 #: resources/views/page_intros.inc.php:181
 #, c-format
@@ -1179,4 +1185,3 @@ msgstr ""
 
 #~ msgid "Bearbeiten von Belegungen der Ressource %s"
 #~ msgstr "Edit the allocation of the resource %s"
-
