@@ -158,14 +158,14 @@ class studip_news {
 			return FALSE;
 		}
 		if ($this->news_perm[$id]["perm"]<2 AND $auth->auth["perm"]!="root") {
-			$this->msg .= "error§" . _("Sie d&uuml;rfen diesen News Bereich nicht administrieren!") . "§";
+			$this->msg .= "error§" . _("Sie d&uuml;rfen diesen News-Bereich nicht administrieren!") . "§";
 			return FALSE;
 		}
 		echo "\n<tr><td width=\"100%\" class=\"blank\"><blockquote>";
 		echo "\n<form action=\"".$this->p_self("cmd=kill")."\" method=\"POST\">";
 		echo "<table class=\"blank\" align=\"left\" width=\"".round(0.88*$this->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
 		echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\" style=\"vertical-align:middle;\"><font size=-1 >" . _("Vorhandene News im gew&auml;hlten Bereich:") . "<br>";
-		echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\" style=\"vertical-align:middle;\"><font size=-1 >" . _("markierte News l&ouml;schen");
+		echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\" style=\"vertical-align:middle;\"><font size=-1 >" . _("Markierte News l&ouml;schen");
 		echo "\n<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"kill\" " . makeButton("loeschen","src") . tooltip(_("Markierte News löschen")) . " border=\"0\" >&nbsp;&nbsp;</td></tr>";
 		echo "\n<tr><th width=\"15%\">" . _("&Uuml;berschrift") . "</th><th width=\"20%\">" . _("Inhalt") . "</th><th width=\"20%\">"
 			. _("Autor") . "</th><th width=\"10%\">" . _("Einstelldatum") . "</th><th width=\"10%\">" . _("Ablaufdatum") . "</th><th width=\"15%\">"
@@ -182,7 +182,7 @@ class studip_news {
 				. makeButton("bearbeiten","src") . tooltip(_("Diese News bearbeiten")) . " border=\"0\"></a></td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">";
 			if ($this->news_perm[$id]["perm"]==3 OR $auth->auth["perm"]=="root" OR $details["user_id"]==$this->user_id) 
-				echo "<input type=\"CHECKBOX\" name=\"kill_news[]\" value=\"$news_id\" " . tooltip(_("Diese News zum löschen vormerken"),false) . ">";
+				echo "<input type=\"CHECKBOX\" name=\"kill_news[]\" value=\"$news_id\" " . tooltip(_("Diese News zum Löschen vormerken"),false) . ">";
 			else 
 				echo "<font color=\"red\">" . _("Nein") . "</font>";
 			echo "</td></tr>";
@@ -219,9 +219,9 @@ class studip_news {
 		list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
 		echo "\n<br><b>" . _("Inhalt") . "</b><br><textarea name=\"body\" style=\"width: 100%\" cols=\"".floor($this->max_col*.8*.8)."\" rows=\"10\"	  wrap=\"virtual\">"
 			.htmlReady($body)."</textarea><br></td>";
-		echo "\n<td class=\"steelgraulight\" width=\"30%\">" . _("Geben sie hier die &Uuml;berschrift und den Inhalt ihrer News ein.") 
-			. "<br><br>" . _("Im unteren Bereich k&ouml;nnen sie ausw&auml;hlen, in welchen Bereichen ihre News angezeigt wird.");
-		echo "\n<br><br>" . _("Klicken sie danach hier, um die &Auml;nderungen zu &uuml;bernehmen.") . "<br><br><center>"
+		echo "\n<td class=\"steelgraulight\" width=\"30%\">" . _("Geben Sie hier die &Uuml;berschrift und den Inhalt Ihrer News ein.") 
+			. "<br><br>" . _("Im unteren Bereich k&ouml;nnen Sie ausw&auml;hlen, in welchen Bereichen Ihre News angezeigt wird.");
+		echo "\n<br><br>" . _("Klicken Sie danach hier, um die &Auml;nderungen zu &uuml;bernehmen.") . "<br><br><center>"
 			. "<INPUT TYPE=\"IMAGE\" name=\"news_submit\" " . makeButton("uebernehmen","src") . tooltip(_("Änderungen übernehmen")) ."  border=\"0\" ></center></td></tr>";
 		echo "\n<tr><td class=\"blank\" colspan=\"2\">" . _("Einstelldatum:") . " <select name=\"date\"><option value=\"".$aktuell."\" selected>".strftime("%d.%m.%y", $aktuell)."</option>";
 		for ($i=1; $i<=14; $i++) {
@@ -251,8 +251,8 @@ class studip_news {
 		$cssSw=new cssClassSwitcher;
 		$cssSw->enableHover();
 		if ($perm->have_perm("root")) {
-			echo "\n<tr><th width=\"90%\" align=\"left\">" . _("System Bereich:") . "</th><th align=\"center\" width=\"10%\">" . _("Anzeigen ?") . "</th></tr>";
-			echo "\n<tr ".$cssSw->getHover()."><td	".$cssSw->getFullClass()." width=\"90%\">" . _("StudIP System News") . "</td>";
+			echo "\n<tr><th width=\"90%\" align=\"left\">" . _("System-Bereich:") . "</th><th align=\"center\" width=\"10%\">" . _("Anzeigen ?") . "</th></tr>";
+			echo "\n<tr ".$cssSw->getHover()."><td	".$cssSw->getFullClass()." width=\"90%\">" . _("Systemweite News") . "</td>";
 			echo "\n<td	".$cssSw->getFullClass()." width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"studip\"";
 			if ($this->range_detail["studip"]["type"] OR ($this->news_range=="studip" AND $news_id=="new_entry")) 
 				echo "checked";
@@ -283,7 +283,7 @@ class studip_news {
 			echo "<table class=\"blank\" width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
 			echo "\n<form action=\"".$this->p_self("cmd=edit")."\" method=\"POST\"><input type=\"HIDDEN\" name=\"edit_news\" value=\"".$this->news_query["news_id"]."\">";
 			echo "\n<tr><td class=\"blank\"><b>" . _("Einen weiteren Bereich hinzuf&uuml;gen:") . "<br /></td></tr>";
-			echo "\n<tr><td class=\"steel1\"><font size=-1>" . _("Hier k&ouml;nnen Sie weitere Bereiche, auf die sie Zugriff haben, der Auswahl hinzuf&uuml;gen") . "</font><br />";
+			echo "\n<tr><td class=\"steel1\"><font size=-1>" . _("Hier k&ouml;nnen Sie weitere Bereiche, auf die Sie Zugriff haben, der Auswahl hinzuf&uuml;gen") . "</font><br />";
 			echo "<br><input style=\"vertical-align:middle;\" type=\"TEXT\"  name=\"search\" size=\"20\">&nbsp; <input type=\"IMAGE\" name=\"submit\""
 				. makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " border=\"0\" style=\"vertical-align:middle;\"></div></td></tr></form></table><br />";
 		}
@@ -305,7 +305,7 @@ class studip_news {
 						$date=time();
 					$this->db->query("INSERT INTO news (news_id,author,topic,body,user_id,date,expire) VALUES ('$news_id','$author','$topic','$body','$user_id','$date','$expire')");
 					if ($this->db->affected_rows()) 
-					$this->msg .= "msg§" . _("Ok, ihre neue News wurde gespeichert!") . "§";
+					$this->msg .= "msg§" . _("Ok, Ihre neue News wurde gespeichert!") . "§";
 				} else {
 					if ($this->news_query["topic"]!=stripslashes($topic) 
 					OR $this->news_query["body"]!=stripslashes($body) 
@@ -318,10 +318,10 @@ class studip_news {
 						}
 						$this->db->query("UPDATE news SET topic='$topic',body='$body',date='$date',expire='$expire' WHERE news_id='$news_id'");
 						if ($this->db->affected_rows()) {
-							$this->msg .= "msg§ " . _("Ok, die News wurde ver&auml;ndert!") . "§";
+							$this->msg .= "msg§ " . _("Die News wurde ver&auml;ndert!") . "§";
 							if ($this->modus=="admin" AND $user_id!=$this->user_id) {
 								setTempLanguage($user_id);
-								$this->sms[$user_id] = sprintf(_("Ihre News \"%s\" wurde von einem Administrator verändert!"),$this->news_query["topic"]) ."\n";
+								$this->sms[$user_id] = sprintf(_("Ihre News \"%s\" wurde von einer Administratorin oder einem Administrator verändert!"),$this->news_query["topic"]) ."\n";
 								restoreLanguage();
 							}
 						}
@@ -347,7 +347,7 @@ class studip_news {
 					}
 				}
 				if (!$add_range) {
-					$this->msg="info§" . _("Sie haben keinen Bereich für ihre News ausgew&auml;hlt! Ihre News ist so nicht sichtbar.")."§";
+					$this->msg="info§" . _("Sie haben keinen Bereich für Ihre News ausgew&auml;hlt. Ihre News wird damit nirgends angezeigt!")."§";
 					return $news_id;
 				} else {
 					for ($i=0;$i<count($add_range);$i++) {
@@ -378,7 +378,7 @@ class studip_news {
 				}
 			}
 		} else {
-			$this->msg="error§" . _("Keine news_id &uuml;bergeben!") . "§";
+			$this->msg="error§" . _("Fehler: Keine news_id &uuml;bergeben!") . "§";
 		}
 		return FALSE;
 	}
@@ -394,7 +394,7 @@ class studip_news {
 					$this->db->query("DELETE FROM news_range WHERE news_id='$kill_news[$i]'");
 					if ($this->modus=="admin" AND $this->news_query["user_id"]!=$this->user_id) {
 						setTempLanguage($this->news_query["user_id"]);
-						$this->sms[$this->news_query["user_id"]] .= sprintf(_("Ihre News \"%s\" wurde von einem Administrator gelöscht!"),$this->news_query["topic"]) ."\n";
+						$this->sms[$this->news_query["user_id"]] .= sprintf(_("Ihre News \"%s\" wurde von einer Administratorin oder einem Administrator gelöscht!"),$this->news_query["topic"]) ."\n";
 						restoreLanguage();
 					}
 					$kill_count++;
@@ -403,7 +403,7 @@ class studip_news {
 			}
 			$this->msg.="msg§" . sprintf(_("Es wurden %s News gel&ouml;scht!"),$kill_count) . "§";
 		}
-		else $this->msg.="error§" . _("Keine News zum l&ouml;schen ausgew&auml;hlt!") . "§";
+		else $this->msg.="error§" . _("Sie haben keine News zum l&ouml;schen ausgew&auml;hlt!") . "§";
 	}
 
 	function search_range($search_str) {
@@ -609,14 +609,14 @@ class studip_news {
 		if ($this->news_query["user_id"]==$this->user_id) 
 			return TRUE;
 		elseif ($this->modus!="admin") 
-			$this->msg.="error§" . _("Sie d&uuml;rfen nur ihre eigenen News ver&auml;ndern") . "§";
+			$this->msg.="error§" . _("Sie d&uuml;rfen nur Ihre eigenen News ver&auml;ndern") . "§";
 		if ($this->modus=="admin") {
 			reset($this->range_detail);
 			while (list ($range,$details) = each ($this->range_detail)) {
 				if ($this->news_perm[$range]["perm"]>=$check)
 					return TRUE;
 			}
-			$this->msg.="error§" . _("Sie haben keine Berechtigung für diese News") . "§";
+			$this->msg.="error§" . _("Sie haben keine Berechtigung diese News zu bearbeiten") . "§";
 		}
 		return FALSE;
 	}
@@ -666,7 +666,7 @@ $news = new studip_news();
 if ($perm->have_perm("admin"))	{
 	if ($cmd=="search") {
 		if (!$search) {
-			$news->msg .= "error§" . _("Der Suchbegriff fehlt!") . "§";
+			$news->msg .= "error§" . _("Sie haben keinen Suchbegriff eingegeben!") . "§";
 			$cmd="";
 		} else {
 			$news->search_range($search);

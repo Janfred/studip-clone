@@ -306,7 +306,7 @@ class TreeView {
 			$head .= "\"><img border=\"0\"  src=\"pictures/";
 			$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
 			$head .= "\" ";
-			$head .= (!$this->open_ranges[$item_id])? tooltip(_("Alle Unterelement öffnen")) : tooltip(_("Alle Unterelemente schliessen"));
+			$head .= (!$this->open_ranges[$item_id])? tooltip(_("Alle Unterelemente öffnen")) : tooltip(_("Alle Unterelemente schließen"));
 			$head .= "></a>";
 		} else { 
 			$head .= "<img src=\"pictures/";

@@ -118,7 +118,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip(_("zurück zur Startseite"))?> width="24" height="21"></a>
+					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip(_("Zurück zur Startseite"))?> width="24" height="21"></a>
 					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip(_("Hilfe"))?> width="24" height="21"></a>
 					&nbsp;<a href="meine_seminare.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip(_("Meine Veranstaltungen & Einrichtungen"))?> width="24" height="21"></a>
 				<?
@@ -153,7 +153,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
       	$chatter=$chatServer->getActiveUsers("studip");
    			if ($chatter == 1)
    		  	if ($chatServer->isActiveUser($user->id,"studip"))	
-						printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat3.gif' ".tooltip(_("Nur Sie sind im Chat"))."></a>");
+						printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat3.gif' ".tooltip(_("Sie sind alleine im Chat"))."></a>");
 					else
 						printf ("<a href=\"javascript:open_chat();\"><img border='0' src='pictures/chat2.gif' ".tooltip(_("Es ist eine Person im Chat"))."></a>");
 				elseif ($chatter > 1)
@@ -172,9 +172,9 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		if (!count($online))
 			print "<a href=\"online.php\"><img src='pictures/nutzer.gif' ".tooltip(_("Nur Sie sind online"))." border='0'></a>";
 		else {
-			if (count($online)==1) print "<a href=\"online.php\"><img src='pictures/nutzeronline.gif' ".tooltip(_("Ausser Ihnen ist eine Person online"))." border='0'></a>";
+			if (count($online)==1) print "<a href=\"online.php\"><img src='pictures/nutzeronline.gif' ".tooltip(_("Außer Ihnen ist eine Person online"))." border='0'></a>";
 			else {
-				print("<a href=\"online.php\"><img src=\"pictures/nutzeronline.gif\" " . tooltip(sprintf(_("Es sind ausser Ihnen %s Personen online"), count($online))) . " border='0'></a>");
+				print("<a href=\"online.php\"><img src=\"pictures/nutzeronline.gif\" " . tooltip(sprintf(_("Es sind außer Ihnen %s Personen online"), count($online))) . " border='0'></a>");
 			}
 		}
 
@@ -189,7 +189,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			<? //create (javascript) info tooltip/window
 				$infotext = sprintf (_("Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"),
 								$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
-								($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript abgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
+								($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
 				print tooltip($infotext, TRUE, TRUE);
 			?>
 			>

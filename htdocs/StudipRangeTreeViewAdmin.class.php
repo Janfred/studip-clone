@@ -165,7 +165,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			$rs = $view->get_query("view:TREE_UPD_PRIO");
 		}
 		$this->mode = "";
-		$this->msg[$item_id] = "msg§" . (($direction == "up") ? _("Element wurde eine Position nach oben verschoben.") : _("Element wurde eine Position nach unten verschoben."));
+		$this->msg[$item_id] = "msg§" . (($direction == "up") ? _("Element wurde um eine Position nach oben verschoben.") : _("Element wurde um eine Position nach unten verschoben."));
 		return true;
 	}
 	
@@ -187,7 +187,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			$this->open_ranges[$item_id] = true;
 			$this->open_items[$new_item_id] = true;
 			if ($this->mode != "NewItem")
-				$this->msg[$new_item_id] = "info§" . _("W&auml;hlen sie einen Namen für dieses Element, oder verlinken sie es mit einer Stud.IP Einrichtung");
+				$this->msg[$new_item_id] = "info§" . _("W&auml;hlen Sie einen Namen für dieses Element, oder verlinken Sie es mit einer Einrichtung in Stud.IP");
 			$this->mode = "NewItem";
 		}
 		return false;
@@ -236,7 +236,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			$this->mode = "EditItem";
 			$this->anchor = $item_id;
 			$this->edit_item_id = $item_id;
-			$this->msg[$item_id] = "info§" . _("W&auml;hlen sie einen Namen für dieses Element, oder verlinken sie es mit einer Stud.IP Einrichtung");
+			$this->msg[$item_id] = "info§" . _("W&auml;hlen Sie einen Namen für dieses Element, oder verlinken Sie es mit einer Einrichtung in Stud.IP");
 		}
 		return false;
 	}
@@ -291,9 +291,9 @@ class StudipRangeTreeViewAdmin extends TreeView{
 		$item_id = $_REQUEST['item_id'];
 		if ($this->isParentAdmin($item_id)){
 			$this->mode = "AssertDeleteItem";
-			$this->msg[$item_id] = "info§" ._("Sie beabsichtigen dieses Element inklusive aller Unterelemente zu l&ouml;schen. ")
-						. sprintf(_("Es werden insgesamt %s Elemente gel&ouml;scht !"),count($this->tree->getKidsKids($item_id))+1)
-						. "<br>" . _("Wollen sie diese Elemente wirklich l&ouml;schen ?") . "<br>"
+			$this->msg[$item_id] = "info§" ._("Sie beabsichtigen dieses Element, inklusive aller Unterelemente, zu l&ouml;schen. ")
+						. sprintf(_("Es werden insgesamt %s Elemente gel&ouml;scht!"),count($this->tree->getKidsKids($item_id))+1)
+						. "<br>" . _("Wollen Sie diese Elemente wirklich l&ouml;schen?") . "<br>"
 						. "<a href=\"" . $this->getSelf("cmd=DeleteItem&item_id=$item_id") . "\">"
 						. "<img " .makeButton("ja2","src") . tooltip(_("löschen"))
 						. " border=\"0\"></a>&nbsp;"
@@ -320,7 +320,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			if ($deleted = $rs->affected_rows()){
 				$this->msg[$this->anchor] = "msg§" . sprintf(_("Das Element <b>%s</b> und alle Unterelemente (insgesamt %s) wurden gel&ouml;scht. "),htmlReady($item_name),$deleted);
 			} else {
-				$this->msg[$this->anchor] = "error§" . _("Fehler, es konnten keine Elemente gel&ouml;scht werden !");
+				$this->msg[$this->anchor] = "error§" . _("Fehler, es konnten keine Elemente gel&ouml;scht werden!");
 			}
 			$deleted = 0;
 			$rs = $view->get_query("view:CAT_DEL_RANGE");
@@ -508,7 +508,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 		if ($item_id == $this->edit_item_id )
 			return $this->getEditItemContent();
 		if ($item_id == $this->move_item_id){
-			$this->msg[$item_id] = "info§" . sprintf(_("Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus,"
+			$this->msg[$item_id] = "info§" . sprintf(_("Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen Sie ein Einfügesymbol %s aus,"
 								." um das Element zu verschieben."), "<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">");
 			}
 		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
@@ -560,7 +560,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			$content .= "&nbsp;";
 		} elseif (!$range_object->item_data['studip_object']){
 			$content .= "\n<tr><td class=\"blank\" align=\"left\" style=\"font-size:10pt\">" .
-						_("Dieses Element ist keine Stud.IP Einrichtung, es hat daher keine Grunddaten.");
+						_("Dieses Element ist keine Stud.IP-Einrichtung, es hat daher keine Grunddaten.");
 		} else {
 			$content .= "\n<tr><td class=\"blank\" align=\"left\" style=\"font-size:10pt\">" . _("Keine Grunddaten vorhanden!");
 		}
@@ -606,12 +606,12 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			if (!$this->tree->isFirstKid($item_id)){
 				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=up&item_id=$item_id") .
 				"\"><img src=\"pictures/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " . 
-				tooltip(_("Element nach oben")) ."></a>";
+				tooltip(_("Element nach oben verschieben")) ."></a>";
 			}
 			if (!$this->tree->isLastKid($item_id)){
 				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=down&item_id=$item_id") . 
 				"\"><img src=\"pictures/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " . 
-				tooltip(_("Element nach unten")) . "></a>";
+				tooltip(_("Element nach unten verschieben")) . "></a>";
 			}
 			$head .= "&nbsp;";
 		}
@@ -623,7 +623,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
 		$content .= "\n<table width=\"90%\" border =\"0\" style=\"border-style: solid; border-color: #000000;  border-width: 1px;font-size: 10pt;\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\">";
 		$content .=  $this->getItemMessage($this->edit_item_id,2);
-		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\" ><b>". _("Element editieren") . "</b></td></tr>";
+		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\" ><b>". _("Element bearbeiten") . "</b></td></tr>";
 		$content .= "\n<tr><td class=\"steel1\" width=\"60%\">". _("Name des Elements:") . "&nbsp;"
 				. "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" value=\"" . $this->tree->tree_data[$this->edit_item_id]['name']
 				. "\"></td><td class=\"steel1\" align=\"left\"><input type=\"image\" "
@@ -632,8 +632,8 @@ class StudipRangeTreeViewAdmin extends TreeView{
 				. (($this->mode == "NewItem") ? $this->tree->tree_data[$this->edit_item_id]['parent_id'] : $this->edit_item_id) ) . "\">"
 				. "<img " .makeButton("abbrechen","src") . tooltip(_("Aktion abbrechen"))
 				. " border=\"0\"></a></td></tr>";
-		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\"><b>". _("Element mit Stud.IP Einrichtung verlinken") . "</b></td></tr>";
-		$content .= "\n<tr><td colspan=\"2\" class=\"steel1\">" . _("Stud.IP Einrichtung:") . "&nbsp;";
+		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\"><b>". _("Element mit einer Stud.IP-Einrichtung verlinken") . "</b></td></tr>";
+		$content .= "\n<tr><td colspan=\"2\" class=\"steel1\">" . _("Stud.IP-Einrichtung:") . "&nbsp;";
 		$content .= "\n<select name=\"edit_studip_object\" onChange=\"document.item_form.edit_name.value=document.item_form.edit_studip_object.options[document.item_form.edit_studip_object.selectedIndex].text;\">";
 		$content .= "\n<option value=\"none\" ";
 		$content .= ($this->tree->tree_data[$this->edit_item_id]['studip_object']) ? ">" : "selected >";
@@ -649,7 +649,7 @@ class StudipRangeTreeViewAdmin extends TreeView{
 			}
 		}
 		$content .= "</select></td></tr></form>";
-		$content .= "\n<form name=\"link_form\" action=\"" . $this->getSelf("cmd=SearchStudIP&item_id={$this->edit_item_id}") . "\" method=\"POST\"><tr><td class=\"steel1\">" . _("Stud.IP Einrichtung suchen:") . "&nbsp;";
+		$content .= "\n<form name=\"link_form\" action=\"" . $this->getSelf("cmd=SearchStudIP&item_id={$this->edit_item_id}") . "\" method=\"POST\"><tr><td class=\"steel1\">" . _("Stud.IP-Einrichtung suchen:") . "&nbsp;";
 		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
 		$content .= "\n<input type=\"TEXT\" name=\"edit_search\" size=\"30\"></td><td class=\"steel1\" align=\"left\"><input type=\"image\" "
 				. makeButton("suchen","src") . tooltip("Einrichtung suchen") . " border=\"0\"></td></tr>";

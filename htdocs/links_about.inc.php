@@ -54,7 +54,7 @@ if ($perm->have_perm ("dozent")) {
 	$structure["schwerpunkte"]=array (topKat=>"lebenslauf", name=>_("Schwerpunkte"), link=>"edit_about.php?view=Lebenslauf&username=$username#schwerpunkte", active=>FALSE);
 	$structure["publikationen"]=array (topKat=>"lebenslauf", name=>_("Publikationen"), link=>"edit_about.php?view=Lebenslauf&username=$username#publikationen", active=>FALSE);
 }
-$structure["_sonstiges"]=array (topKat=>"sonstiges", name=>_("eigene Kategorien bearbeiten"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
+$structure["_sonstiges"]=array (topKat=>"sonstiges", name=>_("Eigene Kategorien bearbeiten"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
 $structure["allgemein"]=array (topKat=>"mystudip", name=>_("Allgemeines"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
 $structure["forum"]=array (topKat=>"mystudip", name=>_("Forum"), link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
 if (!$perm->have_perm("admin")) {

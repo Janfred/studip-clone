@@ -72,7 +72,7 @@ class StudipRangeTreeView extends TreeView{
 			
 		} elseif (!$range_object->item_data['studip_object']){
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">" .
-						_("Dieses Element ist keine Stud.IP Einrichtung, es hat daher keine Grunddaten.") . "</td></tr>";
+						_("Dieses Element ist keine Stud.IP-Einrichtung, es hat daher keine Grunddaten.") . "</td></tr>";
 		} else {
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">" . _("Keine Grunddaten vorhanden!") . "</td></tr>";
 		}
