@@ -125,7 +125,9 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 		if (!$validator->ValidateEmailHost($Email)) {     ## Mailserver nicht erreichbar, ablehnen
 			echo "nicht versand";
 			return false;
-		} 
+		} else {
+			echo "versand";
+		}
 
 
 		## Abschicken der Bestaetigungsmail
