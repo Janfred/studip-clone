@@ -390,8 +390,8 @@ function head (&$this, $db) {
 	
 	$out .=  "<td" . $this->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
 	if (file_exists("{$GLOBALS['ABSOLUTE_PATH_STUDIP']}/user/" . $db->f("user_id").".jpg")) {
-		$out .=  "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
-		$out .=  $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname")));
+		$out .=  "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}user/";
+		$out .=  $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 		$out .=  $this->config->getAttributes("PersondetailsHeader", "img") . ">";
 	}
 	else
