@@ -183,8 +183,6 @@ if (!$type) {
 		$skip_check=TRUE;
 }
 
-echo $skip_check;
-
 //permcheck
 if (($type != 2) && (!$skip_check)) { //if type 2 we donload from the tmp directory and skip permchecks
 	if (!$perm->have_perm ("user")) {
