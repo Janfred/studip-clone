@@ -232,9 +232,9 @@ class ShowToolsRequests {
 								}
 
 								if ($semObj->getCycle() == 1)
-									print _("w&ouml;chentlich");
+									print "<br />"._("w&ouml;chentlich");
 								elseif ($semObj->getCycle() == 2)
-									print _("zweiw&ouml;chentlich");
+									print "<br />"._("zweiw&ouml;chentlich");
 								print ", "._("ab:")." ".date("d.m.Y", $semObj->getFirstDate());
 							} else
 								print _("nicht angegeben");
@@ -247,7 +247,7 @@ class ShowToolsRequests {
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key=>$val) {
 										if ($val["termin_id"] == $this->db->f("termin_id")) {
 											$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$key]["resource_id"]);
-											if ($link == $resObj->getFormattedLink(TRUE, TRUE, TRUE))
+											if ($link = $resObj->getFormattedLink(TRUE, TRUE, TRUE))
 												print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 										}
 									}
@@ -504,7 +504,7 @@ class ShowToolsRequests {
 					if ($resources_data["skip_closed_requests"])
 						while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) && ($resources_data["requests_working_pos"] + $d > 0))
 							$d--;
-					if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]])) || (!$resources_data["skip_closed_requests"]))
+					if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) || (!$resources_data["skip_closed_requests"])))
 						$inc_possible = TRUE;
 				} 
 				if ($inc_possible) {
@@ -519,9 +519,10 @@ class ShowToolsRequests {
 					if ($resources_data["skip_closed_requests"])
 						while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) && ($resources_data["requests_working_pos"] + $i < sizeof($resources_data["requests_working_on"])-1))
 							$i++;
-					if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]])) || (!$resources_data["skip_closed_requests"]))
+					if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) || (!$resources_data["skip_closed_requests"])))
 						$dec_possible = TRUE;
 				} 
+								
 				if ($dec_possible) {
 					print("&nbsp;<input type=\"IMAGE\" name=\"inc_request\" ".makeButton("weiter", "src")." border=\"0\" />");
 				} 

@@ -105,6 +105,6 @@ if ($perm->have_perm("root")) { //Rechtezuweisungen nur fuer Root
 //$structure["edit_personal_settings"]=array (topKat=>"settings", name=>_("pers&ouml;nliche&nbsp;Einstellungen"), link=>"resources.php?view=edit_personal_settings", active=>FALSE);
 //
 
-$reiter->create($structure, $resources_data["view"]);
+$reiter->create($structure, $view);
 
 ?>

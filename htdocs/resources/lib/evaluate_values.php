@@ -1012,6 +1012,8 @@ if ($save_state_x) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
 	
+	echo $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"];
+	
 	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
 	$semObj = new Seminar($reqObj->getSeminarId());
 	$semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
@@ -1048,69 +1050,92 @@ if ($save_state_x) {
 				$resObj = new ResourceObject($val["resource_id"]);
 				if (!$val["overlap_assigns"]) {
 					$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assignObjects[$i]->getId()]["resource_id"] = $resObj->getId();
 					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
 					$succesful_assigned++;
-				} else
+				} else {
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assignObjects[$i]->getId()]["resource_id"] = FALSE;				
 					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+				}
 				$i++;
 			}
-		print_r ($semObj->metadata["turnus_data"]);
+
 		//create msgs (single date request)
 		} elseif ($reqObj->getTerminId()) {
 			$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
 			if (!$val["overlap_assigns"]) {
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assignObjects[0]->getId()]["resource_id"] = $resObj->getId();			
 				$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
 				$succesful_assigned++;
-			} else
+			} else {
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assignObjects[0]->getId()]["resource_id"] = FALSE;			
 				$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+			}
 		//create msgs (multiple	dates, a irregular seminar)
 		} else {
 			$i=0;
 			foreach ($result as $key=>$val) {
 				$resObj = new ResourceObject($val["resource_id"]);
 				if (!$val["overlap_assigns"]) {
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assignObjects[$result_termin_id[$i]]->getId()]["resource_id"] = $resObj->getId();							
 					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 					$succesful_assigned++;;
-				} else
+				} else {
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assignObjects[$result_termin_id[$i]]->getId()]["resource_id"] = FALSE;							
 					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+				}
 				$i++;
 			}
 		}
 		
-		echo lala, $succesful_assigned, sizeof($assignObjects);
-		
+		//update seminar-date (save the new resource_ids)
 		if ($succesful_assigned) {
-			//update seminar-date (save the new resource_ids)
 			if ($semObj->getMetaType == 0)
 				$semObj->store();
-		
-			//set request to closed, if we have a room for every assign_object
-			if ($succesful_assigned == sizeof($assignObjects)) {
-				$reqObj->setClosed(TRUE);
-				echo timetoclose;
-				$resources_data["requests_open"][$reqObj->getId()] = TRUE;
-				print_r ($reqObj);
-				$reqObj->store();
-			}
 		}
-	
+		
 		//create msg's
 		if ($good_msg)
 			$msg->addMsg(33, array($good_msg));
 		if ($bad_msg)
 			$msg->addMsg(34, array($bad_msg));
 	}
+	
+	//set request to closed, if we have a room for every assign_object
+	$assigned_resources = 0;
+	foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $val) {
+		if ($val["resource_id"])
+			$assigned_resources++;
+	}
+	
+	if ($assigned_resources == sizeof($assignObjects)) {
+		$reqObj->setClosed(TRUE);
+		$reqObj->store();
+		unset($resources_data["requests_open"][$reqObj->getId()]);
+		if (sizeof($resources_data["requests_open"]) == 0) {
+			$view = "requests_start";
+			$resources_data["requests_working_on"] = FALSE;
+			$save_state_x = FALSE;
+		} else  {
+			echo $resources_data["requests_working_pos"];
+			if ($resources_data["requests_working_pos"] == sizeof($resources_data["requests_working_on"])-1) {
+				$dec_request_x = TRUE;
+			} else {
+				$inc_request_x = TRUE;
+			}
+		}
+	}
 }
 
 
 // inc if we have requests left in the upper
-if ($inc_request_x)
-	if ($resources_data["requests_working_pos"] < sizeof($resources_data["requests_open"])-1) {
+if ($inc_request_x) 
+	if ($resources_data["requests_working_pos"] < sizeof($resources_data["requests_working_on"])-1) {
 		$i = 1;
 		if ($resources_data["skip_closed_requests"])
 			while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) && ($resources_data["requests_working_pos"] + $i < sizeof($resources_data["requests_open"])-1))
 				$i++;
-		if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]])) || (!$resources_data["skip_closed_requests"])){
+		if ((sizeof($resources_data["requests_open"]) >= 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) || (!$resources_data["skip_closed_requests"]))){
 			$resources_data["requests_working_pos"] = $resources_data["requests_working_pos"] + $i;
 		}
 	} 
@@ -1122,7 +1147,7 @@ if ($dec_request_x)
 		if ($resources_data["skip_closed_requests"])
 			while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) && ($resources_data["requests_working_pos"] + $d > 0))
 				$d--;
-		if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]])) || (!$resources_data["skip_closed_requests"])) {
+		if ((sizeof($resources_data["requests_open"]) >= 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) || (!$resources_data["skip_closed_requests"]))) {
 			$resources_data["requests_working_pos"] = $resources_data["requests_working_pos"] + $d;
 		}
 	}
