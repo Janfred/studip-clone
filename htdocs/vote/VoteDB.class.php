@@ -488,7 +488,7 @@ class VoteDB extends StudipObject {
 	    "WHERE".
 	    " b.vote_id = '".$voteID."' LIMIT 1";
 	 $this->db->query ($sql);
-	 return ($this->db->next_record()) ? NO : YES;
+	 return ($this->db->next_record()) ? YES : NO;
       }
       /* ------------------------------------------------------------------- */
    }
