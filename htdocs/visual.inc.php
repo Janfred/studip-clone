@@ -487,4 +487,11 @@ function printcontent ($breite,$write=FALSE,$inhalt,$edit) {
 	$print.="</td>";
 	echo $print;
 	}
+
+//alt und title tag zurückgeben
+function tooltip($text,$only_title=FALSE){
+	$text = htmlReady($text);
+	$ret = " title=\"$text\" ";
+	return ($only_title) ? $ret : " alt=\"$text\" ".$ret;
+}
 ?>
