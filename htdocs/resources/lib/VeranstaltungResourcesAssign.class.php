@@ -2,8 +2,8 @@
 /**
 * VeranstaltungResourcesAssign.class.php
 * 
-* updates the saved setting from dates and metadates from a Veranstaltung
-* ans the linked resources (rooms)
+* updates the saved settings from dates and metadates from a Veranstaltung
+* and the linked resources (rooms)
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
@@ -44,7 +44,7 @@ class VeranstaltungResourcesAssign {
 	var $assign_id;
 	
 	//Konstruktor
-	function VeranstaltungResourcesAssign ($seminar_id) {
+	function VeranstaltungResourcesAssign ($seminar_id='') {
 		global $RELATIVE_PATH_RESOURCES;
 	 	//make shure to load all the classes from resources, if this class is extern used °change if the classes are storen in own scripts
 	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -82,21 +82,25 @@ class VeranstaltungResourcesAssign {
 		if (!$course_session)
 			$this->changeMetaAssigns();
 	}
-
-	function changeMetaAssigns($resource_id='') {
+	
+	function changeMetaAssigns($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='', $check_only=FALSE) {
 		global $SEMESTER;
 
 		//load data of the Veranstaltung
-		$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $this->seminar_id);
-		$this->db->query($query);
-		$this->db->next_record();
+		if (!$term_data) {
+			$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $this->seminar_id);
+			$this->db->query($query);
+			$this->db->next_record();
 
-		$term_data = unserialize ($this->db->f("metadata_dates"));
+			$term_data = unserialize ($this->db->f("metadata_dates"));
+			$veranstaltung_start_time = $this->db->f("start_time");
+			$veranstaltung_duration_time = $this->db->f("duration_time");
+		}
 
 		//determine first day of the start-week as sem_begin
 		if ($term_data["start_woche"] >= 0) {
 			foreach ($SEMESTER as $val)
-				if (($this->db->f("start_time") >= $val["beginn"]) AND ($this->db->f("start_time") <= $val["ende"]))
+				if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"]))
 					$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
 					$val["vorles_beginn"];
 		} else  {
@@ -116,74 +120,117 @@ class VeranstaltungResourcesAssign {
 
 		//determine the last day as sem_end
 		foreach ($SEMESTER as $val)
-			if  ((($this->db->f("start_time") + $this->db->f("duration_time") + 1) >= $val["beginn"]) AND (($this->db->f("start_time") + $this->db->f("duration_time") +1) <= $val["ende"])) {
+			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"])) {
 				$sem_end=$val["vorles_ende"];
 			}
 		
 		$interval = $term_data["turnus"] + 1;
 				
 		//create the assigns
+		$i=0;
 		if (is_array($term_data["turnus_data"]))
 			foreach ($term_data["turnus_data"] as $val) {
-				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
-				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
-			
-				$day_of_week = date("w", $start_time);
-				if ($day_of_week == 0)
-					$day_of_week = 7;
+				if ($val["resource_id"]) {
+					$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
+					$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
+				
+					$day_of_week = date("w", $start_time);
+					if ($day_of_week == 0)
+						$day_of_week = 7;
+	
+					$createAssign=new AssignObject(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
+												$start_time, $end_time, $sem_end,
+												-1, $interval, 0, 0, 0, 
+												0, $day_of_week, 0);
+	
+					//check if there are overlaps (resource isn't free!)
+					$overlaps = $createAssign->checkOverlap();
+					if ($overlaps)
+						$created_ids[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$val["resource_id"]);
+					$i++;
 
-				$createAssign=new AssignObject(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
-											$start_time, $end_time, $sem_end,
-											-1, $interval, 0, 0, 0, 
-											0, $day_of_week, 0);
-				$createAssign->create();
-				$created_ids[] = $createAssign->getId();
+					if ((!$check_only) && (!$overlaps)) {
+						$createAssign->create();
+						$created_ids[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$val["resource_id"]);
+					}
+					
+				}
 			}
-	
-	if ($created_ids)
 		return $created_ids;
-	else
-		return FALSE;
 	}
 	
-	function changeDateAssign($termin_id, $resource_id='') {
-		$query = sprintf("SELECT date, content, end_time, assign_id FROM termine LEFT JOIN resources_assign ON (assign_user_id = termin_id) WHERE termin_id = '%s'", $termin_id);
-		$this->db->query($query);
-		if ($this->db->next_record()) {
-			if (!$this->db->f("assign_id"))
-				 $this->insertDateAssign($termin_id, $resource_id);
-			else {
-				$changeAssign=new AssignObject($this->db->f("assign_id"));
-	
-				if ($resource_id)
-					$changeAssign->setResourceId($resource_id);
-	
-				$changeAssign->setBegin($this->db->f("date"));
-				$changeAssign->setEnd($this->db->f("end_time"));
-				$changeAssign->setRepeatEnd($this->db->f("end_date"));
-				$changeAssign->setRepeatQuantity(0);
-				$changeAssign->setRepeatInterval(0);
-				$changeAssign->setRepeatMonthOfYear(0);
-				$changeAssign->setRepeatDayOfMonth(0);
-				$changeAssign->setRepeatWeekOfMonth(0);
-				$changeAssign->setRepeatDayOfWeek(0);
-				//createAssign->checkIsFree ° should performed here			
+	function changeDateAssign($termin_id, $resource_id='', $begin='', $end='', $check_only=FALSE) {
+		if (!$begin) {
+			$query = sprintf("SELECT date, content, end_time, assign_id FROM termine LEFT JOIN resources_assign ON (assign_user_id = termin_id) WHERE termin_id = '%s'", $termin_id);
+			$this->db->query($query);
+			if ($this->db->next_record()) {
+				$assign_id=$this->db->f("assign_id");
+				$begin=$this->db->f("date");
+				$end=$this->db->f("end_time");
+			}
+		} else {
+			if (!$end)
+				$end=$begin;
+		}
+		if ((!$assign_id) && (!$check_only))
+			 $this->insertDateAssign($termin_id, $resource_id);
+		else {
+			$changeAssign=new AssignObject($assign_id);
+
+			if ($resource_id)
+				$changeAssign->setResourceId($resource_id);
+
+			$changeAssign->setBegin($begin);
+			$changeAssign->setEnd($end);
+			$changeAssign->setRepeatEnd($end);
+			$changeAssign->setRepeatQuantity(0);
+			$changeAssign->setRepeatInterval(0);
+			$changeAssign->setRepeatMonthOfYear(0);
+			$changeAssign->setRepeatDayOfMonth(0);
+			$changeAssign->setRepeatWeekOfMonth(0);
+			$changeAssign->setRepeatDayOfWeek(0);
+			
+			//check if there are overlaps (resource isn't free!)
+			$overlaps = $changeAssign->checkOverlap();
+			if ($overlaps)
+				$changed_id[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+			
+			if ((!$check_only) && (!$overlaps)) {
 				$changeAssign->store();
+				$changed_id[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
 			}
 		}
+		return $changed_id;
 	}
 	
-	function insertDateAssign($termin_id, $resource_id) {
-		$query = sprintf("SELECT date, content, end_time FROM termine WHERE termin_id = '%s'", $termin_id);
-		$this->db->query($query);
-		while ($this->db->next_record()) {
-			$createAssign=new AssignObject(FALSE, $resource_id, $termin_id, '', 
-										$this->db->f("date"), $this->db->f("end_time"), $this->db->f("end_time"),
-										0, 0, 0, 0, 0, 0, 0, 0);
-			//createAssign->checkIsFree ° should performed here
-			$createAssign->create();
-			$created_ids[] = $createAssign->getId();
+	function insertDateAssign($termin_id, $resource_id, $begin='', $end='', $check_only=FALSE) {
+		if (!$begin) {
+			$query = sprintf("SELECT date, content, end_time FROM termine WHERE termin_id = '%s'", $termin_id);
+			$this->db->query($query);
+			if ($this->db->next_record()) {
+				$begin=$this->db->f("date");
+				$end=$this->db->f("end_time");
+			}
+		} else {
+			if (!$end)
+				$end=$begin;
 		}
+		if ($begin) {
+			$createAssign=new AssignObject(FALSE, $resource_id, $termin_id, '', 
+										$begin, $end, $end,
+										0, 0, 0, 0, 0, 0, 0, 0);
+
+			//check if there are overlaps (resource isn't free!)
+			$overlaps = $createAssign->checkOverlap();
+			if ($overlaps)
+				$created_id[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+
+			if ((!$check_only) && (!$overlaps)) {
+				$createAssign->create();
+				$created_id[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
+			}
+		}
+		return $created_id;
 	}
 
 	function killDateAssign($termin_id) {

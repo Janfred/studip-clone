@@ -225,7 +225,7 @@ class AssignObject {
 	}
 	
 	function getRepeatMode() {
-		if ((!$this->repeat_month_of_year) && (!$this->repeat_week_of_moth) && (!$this->repeat_day_of_month) && (!$this->repeat_day_of_week) && (!$this->repeat_quantity))
+		if ((!$this->repeat_month_of_year) && (!$this->repeat_week_of_month) && (!$this->repeat_day_of_month) && (!$this->repeat_day_of_week) && (!$this->repeat_quantity))
 			return "na";
 		elseif ($this->repeat_month_of_year)
 			return "y";
@@ -256,12 +256,14 @@ class AssignObject {
 			$end = mktime (23,59,59, date("n", $this->end), date("j", $this->end), date("Y", $this->end));
 			
 		list_restore_assign($this, $this->resource_id, $start, $end);
-		
-		if ($this->isNewObject)
+	
+		if ($this->isNewObject) {
 			create_assigns($this, $this);
+		}
 		
 		if (is_array($this->events))
 			$keys=array_keys($this->events);
+		
 
 		//ok, a very heavy algorhytmus do detect the overlaps...
 		for ($i1=0; $i1<count($this->events); $i1++) {
@@ -274,7 +276,7 @@ class AssignObject {
 					|| (($val2->getEnd() >= $val->getBegin()) &&($val2->getEnd() <= $val->getEnd()))
 					|| (($val2->getBegin() >= $val->getBegin()) &&($val2->getBegin() <= $val->getEnd()))) {
 						if (($val2->getAssignId()	 != $this->getId()) &&($val->getAssignId() == $this->getId()))
-							$overlaps[$val2->getAssignId()] =$val2->getAssignId();
+							$overlaps[$val2->getAssignId()] = array("begin" =>$val2->getBegin(), "end"=>$val2->getEnd());
 				}
 			}
 		}
@@ -706,6 +708,13 @@ class ResourcesUserRoomsList {
 				return $ret;
 		return FALSE;
 	}
+
+	// public
+	function reset() {
+		if (is_array($this->resources))
+			reset($this->resources);
+	}
+	
 	
 	function sort(){
 		if ($this->resources) 
