@@ -709,7 +709,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$extern = $extern ? 'TRUE' : 'FALSE';
 	
 	// add protocol type and transform the domain names of links within Stud.IP
-	$studip_urls = '';
+	$domains = '';
 	foreach ($STUDIP_DOMAINS as $studip_domain)
 		$domains .= '|' . preg_quote($studip_domain);
 	$domains = substr($domains, 1);
