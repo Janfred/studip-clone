@@ -1,4 +1,4 @@
-<?php
+<?php
 
 /*
 dates.inc.php - basale Routinen zur Terminveraltung.
