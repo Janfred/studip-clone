@@ -91,8 +91,12 @@ function forum_parse_edit ($description) {
 function editarea($forumposting) {
 	global $forum, $view, $user, $PHP_SELF, $auth;
 	
-	if ($auth->auth["jscript"]) 
+	if ($auth->auth["jscript"]) {
 		$max_col = round($auth->auth["xres"] / 12 );
+		echo "Xres:".$auth->auth["xres"];
+		echo " / Breite:".$max_col;
+		echo " / cols:".round($max_col*0.45);
+	}
 	else 
 		$max_col =  64 ; //default für 640x480
 	
