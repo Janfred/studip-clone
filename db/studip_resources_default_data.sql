@@ -2,37 +2,47 @@
 # Dumping data for table 'resources_categories'
 #
 
-INSERT INTO resources_categories VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "Raum", "", "1", "3");
-INSERT INTO resources_categories VALUES("82bdd20907e914de72bbfc8043dd3a46", "Gebäude", "", "0", "1");
-INSERT INTO resources_categories VALUES("891662c701078186c857fca25d34ade6", "Gerät", "", "0", "2");
-
+INSERT INTO `resources_categories` VALUES ('3cbcc99c39476b8e2c8eef5381687461', 'Gebäude', '', 0, 0, 1);
+INSERT INTO `resources_categories` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', 'Hörsaäle', '', 0, 1, 1);
+INSERT INTO `resources_categories` VALUES ('f3351baeca8776d4ffe4b672f568cbed', 'Geräte', '', 0, 0, 1);
+INSERT INTO `resources_categories` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', 'Übungsräume', '', 0, 1, 1);
 
 #
 # Dumping data for table 'resources_categories_properties'
 #
 
-INSERT INTO resources_categories_properties VALUES("82bdd20907e914de72bbfc8043dd3a46", "8772d6757457c8b4a05b180e1c2eba9c", "0");
-INSERT INTO resources_categories_properties VALUES("82bdd20907e914de72bbfc8043dd3a46", "5753ab43945ae787f983f5c8a036712d", "0");
-INSERT INTO resources_categories_properties VALUES("891662c701078186c857fca25d34ade6", "1b86b5026052fd3d8624fead31204cba", "0");
-INSERT INTO resources_categories_properties VALUES("891662c701078186c857fca25d34ade6", "9c0658891b95fe962d013f1308feb80d", "0");
-INSERT INTO resources_categories_properties VALUES("891662c701078186c857fca25d34ade6", "7bff1a7d45bc37280e988f6e8d007bad", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "0ef8a73d95f335cdfbaec50cae92762a", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "5753ab43945ae787f983f5c8a036712d", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "31abad810703df361d793361bf6b16e5", "0");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "ef4ba565e635b45c3f43ecdc69fb4aca", "1");
-INSERT INTO resources_categories_properties VALUES("1cf2a34de92c06137ecdfcef4a29e4bc", "648b8579ffca64a565459fd6ea0313c5", "0");
+INSERT INTO `resources_categories_properties` VALUES ('3cbcc99c39476b8e2c8eef5381687461', 'c4f13691419a6c12d38ad83daa926c7c', 0, 0);
+INSERT INTO `resources_categories_properties` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', 'afb8675e2257c03098aa34b2893ba686', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', '7c1a8f6001cfdcb9e9c33eeee0ef343d', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('3cbcc99c39476b8e2c8eef5381687461', 'b79b77f40706ed598f5403f953c1f791', 0, 0);
+INSERT INTO `resources_categories_properties` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', '1f8cef2b614382e36eaa4a29f6027edf', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', '44fd30e8811d0d962582fa1a9c452bdd', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', '613cfdf6aa1072e21a1edfcfb0445c69', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', '28addfe18e86cc3587205734c8bc2372', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', '7c1a8f6001cfdcb9e9c33eeee0ef343d', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', 'afb8675e2257c03098aa34b2893ba686', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', 'b79b77f40706ed598f5403f953c1f791', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', '1f8cef2b614382e36eaa4a29f6027edf', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', '44fd30e8811d0d962582fa1a9c452bdd', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', '613cfdf6aa1072e21a1edfcfb0445c69', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', '28addfe18e86cc3587205734c8bc2372', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', 'b79b77f40706ed598f5403f953c1f791', 1, 0);
+INSERT INTO `resources_categories_properties` VALUES ('f3351baeca8776d4ffe4b672f568cbed', 'cb8140efbc2af5362b1159c65deeec9e', 0, 0);
+INSERT INTO `resources_categories_properties` VALUES ('f3351baeca8776d4ffe4b672f568cbed', 'c4352a580051a81830ef5980941c9e06', 0, 0);
+INSERT INTO `resources_categories_properties` VALUES ('f3351baeca8776d4ffe4b672f568cbed', '39c73942e1c1650fa20c7259be96b3f3', 0, 0);
 
 #
 # Dumping data for table 'resources_properties'
 #
 
-INSERT INTO resources_properties VALUES("ef4ba565e635b45c3f43ecdc69fb4aca", "Sitzplätze", "", "num", "", "1");
-INSERT INTO resources_properties VALUES("8772d6757457c8b4a05b180e1c2eba9c", "Adresse", "", "text", "", "0");
-INSERT INTO resources_properties VALUES("0ef8a73d95f335cdfbaec50cae92762a", "Ausstattung", "", "text", "", "0");
-INSERT INTO resources_properties VALUES("7bff1a7d45bc37280e988f6e8d007bad", "Seriennummer", "", "num", "", "0");
-INSERT INTO resources_properties VALUES("31abad810703df361d793361bf6b16e5", "Raumtyp", "", "select", "Hörsaal;Übungsraum;Sitzungszimmer", "0");
-INSERT INTO resources_properties VALUES("5753ab43945ae787f983f5c8a036712d", "behindertengerecht", "", "bool", "", "0");
-INSERT INTO resources_properties VALUES("648b8579ffca64a565459fd6ea0313c5", "Verdunklung", "", "bool", "vorhanden", "0");
-INSERT INTO resources_properties VALUES("9c0658891b95fe962d013f1308feb80d", "Hersteller", "", "num", "", "0");
-INSERT INTO resources_properties VALUES("1b86b5026052fd3d8624fead31204cba", "Kaufdatum", "", "num", "", "0");
-
+INSERT INTO `resources_properties` VALUES ('44fd30e8811d0d962582fa1a9c452bdd', 'Sitzplätze', '', 'num', '', 2);
+INSERT INTO `resources_properties` VALUES ('c4f13691419a6c12d38ad83daa926c7c', 'Adresse', '', 'text', '', 0);
+INSERT INTO `resources_properties` VALUES ('7c1a8f6001cfdcb9e9c33eeee0ef343d', 'Beamer', '', 'bool', 'vorhanden', 0);
+INSERT INTO `resources_properties` VALUES ('b79b77f40706ed598f5403f953c1f791', 'behindertengerecht', '', 'bool', 'vorhanden', 0);
+INSERT INTO `resources_properties` VALUES ('613cfdf6aa1072e21a1edfcfb0445c69', 'Tageslichtprojektor', '', 'bool', 'vorhanden', 0);
+INSERT INTO `resources_properties` VALUES ('afb8675e2257c03098aa34b2893ba686', 'Dozentenrechner', '', 'bool', 'vorhanden', 0);
+INSERT INTO `resources_properties` VALUES ('1f8cef2b614382e36eaa4a29f6027edf', 'Audio-Anlage', '', 'bool', 'vorhanden', 0);
+INSERT INTO `resources_properties` VALUES ('c4352a580051a81830ef5980941c9e06', 'Seriennummer', '', 'num', '', 0);
+INSERT INTO `resources_properties` VALUES ('cb8140efbc2af5362b1159c65deeec9e', 'Hersteller', '', 'select', 'Sony;Philips;Technics;Telefunken;anderer', 0);
+INSERT INTO `resources_properties` VALUES ('39c73942e1c1650fa20c7259be96b3f3', 'Inventarnummer', '', 'num', '', 0);
+INSERT INTO `resources_properties` VALUES ('28addfe18e86cc3587205734c8bc2372', 'Verdunklung', '', 'bool', 'vorhanden', 0);
