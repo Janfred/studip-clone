@@ -319,7 +319,7 @@ function dump_sem($sem_id) {
 				$db->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
 				$db->next_record();
 				if ($db->f("url")!="")
-					$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.<br>");
+					$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.");
 				else
 					$linktxt = "";	
 				$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$linktxt.$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
@@ -335,7 +335,7 @@ function dump_sem($sem_id) {
 					$db2->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
 					$db2->next_record();
 					if ($db2->f("url")!="")
-						$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.<br>");
+						$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.");
 					else
 						$linktxt = "";	
 					$dbresult[$i]=array("mkdate"=>$db2->f("mkdate"), "dokument_id"=>$db2->f("dokument_id"), "description"=>$linktxt.$db2->f("description"), "filename"=>$db2->f("filename"), "filesize"=>$db2->f("filesize"),"user_id"=> $db2->f("user_id"), "username"=>$db2->f("username"), "nachname"=>$db2->f("Nachname"));	
