@@ -1487,8 +1487,8 @@ if ($level==2)
 										printf ("<option value=\"%s\">%s </option>", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname"), 0, 30));
 									}
 									print "</select></font>";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/add_buddy.gif\" border=\"0\" name=\"add_doz\" />";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/suchen.gif\" border=\"0\" name=\"reset_search\" />";									
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_doz\" />";
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("Neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
 								}
 							}
 							if ((!$search_exp_doz) || (($search_exp_doz) && (!$db->num_rows()))) {
@@ -1497,7 +1497,7 @@ if ($level==2)
 								<? printf ("%s %s", (($search_exp_doz) && (!$db->num_rows())) ? "Keinen Nutzer gefunden." : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "DozentIn hinzuf&uuml;gen" : "LeiterIn hinzuf&uuml;gen"  : "");?>
 								</font><br />
 								<input type="TEXT" size="30" maxlength="255" name="search_exp_doz" />&nbsp; 
-								<input type="IMAGE" src="./pictures/suchen.gif" border="0" name="search_doz" />
+								<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip("Suche starten") ?> border="0" name="search_doz" />
 								<?
 							}
 							?>
@@ -1554,8 +1554,8 @@ if ($level==2)
 										printf ("<option value=\"%s\">%s </option>", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname"), 0, 30));
 									}
 									print "</select></font>";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/add_buddy.gif\" border=\"0\" name=\"add_tut\" />";
-									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/suchen.gif\" border=\"0\" name=\"reset_search\" />";									
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/move_left.gif\" ".tooltip("Den Benutzer hinzufügen")." border=\"0\" name=\"add_tut\" />";
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip("neue Suche starten")." border=\"0\" name=\"reset_search\" />";									
 								}
 							}
 							if ((!$search_exp_tut) || (($search_exp_tut) && (!$db->num_rows()))) {
@@ -1564,7 +1564,7 @@ if ($level==2)
 								<? printf ("%s %s", (($search_exp_tut) && (!$db->num_rows())) ? "Keinen Nutzer gefunden." : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "TutorIn hinzuf&uuml;gen" : "Mitglied hinzuf&uuml;gen"  : "");?>
 								</font><br />
 								<input type="TEXT" size="30" maxlength="255" name="search_exp_tut" />&nbsp; 
-								<input type="IMAGE" src="./pictures/suchen.gif" border="0" name="search_tut" /><br />
+								<input type="IMAGE" src="./pictures/suchen.gif" <? echo tooltip("Suche starten") ?> border="0" name="search_tut" /><br />
 								<font size=-1>Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.</font>
 								<?
 							}
