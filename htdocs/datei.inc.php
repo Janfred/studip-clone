@@ -18,6 +18,53 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+function parse_header($header){
+	if (!is_array($header)){
+		$header = explode("\n",trim($header));
+	}
+	for($i = 0; $i < count($header); ++$i){
+		$parts = null;
+		$matches = preg_match('/^\S+:/', $header[$i], $parts);
+		if ($matches){
+			$key = trim(substr($parts[0],0,-1));
+			$value = trim(substr($header[$i], strlen($parts[0])));
+			$ret[$key] = $value;
+		} else {
+			$ret[trim($header[$i])] = trim($header[$i]);
+		}
+	}
+	return $ret;
+}
+
+function parse_link($link) {
+	$url_parts = @parse_url( $link );
+	if (!empty( $url_parts["path"])){
+		$documentpath = $url_parts["path"];
+	} else {
+		$documentpath = "/";
+	}
+	if ( !empty( $url_parts["query"] ) ) {
+		$documentpath .= "?" . $url_parts["query"];
+	}
+	$host = $url_parts["host"];
+	$port = $url_parts["port"];
+	if (empty( $port ) ) $port = "80";
+	$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
+	if (!$socket) {
+		echo "$errstr ($errno)<br />\n";
+	} else {
+   		fputs($socket, "HEAD ".$documentpath." HTTP/1.0\nHost: $host\nCookie: Seminar_Session=".$sess->id."\n\n");
+   		socket_set_timeout($socket,2);
+   		while (!feof($socket)) {
+	       		$response .= fgets($socket,4096);
+	   	}
+	   	fclose($socket);
+	}
+	$parsed_link = parse_header($response);
+	return $parsed_link;
+}
+
+
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
 	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName;
 	$db = new DB_Seminar();
@@ -701,8 +748,8 @@ function upload_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALS
 }
 
 
-function insert_link_db($range_id, $sem_id=0, $refresh = FALSE) {
-	global $the_file_name, $the_link, $the_file_size, $description, $name, $user, $upload_seminar_id, $protect;
+function insert_link_db($range_id, $the_file_size, $refresh = FALSE) {
+	global $the_file_name, $the_link, $description, $name, $user, $upload_seminar_id, $protect;
 	
 	$date = time();				//Systemzeit
 	$user_id = $user->id;			// user_id erfragen...
@@ -746,8 +793,9 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE)
 	global $the_link;
 
 	if ($create) {
-		if (linkcheck($the_link)) {
-			if (insert_link_db($range_id, 0, $refresh))
+		$link_data = parse_link($the_link);
+		if ($link_data["HTTP/1.0 200 OK"]) {
+			if (insert_link_db($range_id, $link_data["Content-Length"], $refresh))
 				if ($refresh)
 					delete_link($refresh, TRUE);
 		} else {
@@ -764,6 +812,7 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE)
 	}
 }
 
+/*
 function linkcheck ($URL) {
 	$fp = @fopen($URL, "r");
 	if (!$fp) {
@@ -773,6 +822,8 @@ function linkcheck ($URL) {
 		return TRUE;
 	}
 }
+*/
+
 
 function link_form ($range_id) {
 	global $SessSemName;
