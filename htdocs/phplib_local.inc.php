@@ -176,7 +176,7 @@ class Seminar_Session extends Session {
 				$db->query("DELETE FROM news WHERE news_id IN $kill_news");
 				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
 			}
-			
+			/*
 			$result = array();
 			//unsichtbare forenbeiträge die älter als 2 Stunden sind löschen
 			$db->query("SELECT a.topic_id, count( b.topic_id ) AS kinder FROM px_topics a
@@ -199,6 +199,7 @@ class Seminar_Session extends Session {
 				$db->query("UPDATE px_topics SET chdate=mkdate WHERE topic_id IN('" . join("','",$result['with_kids']) . "')");
 			}
 			unset($result);
+			*/
 		}
 		
 		//weiter mit gc() in der Super Klasse
