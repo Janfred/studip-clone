@@ -85,30 +85,49 @@ if ($this->config->getValue("Main", "studiplink") == "top") {
 	echo "</td></tr>";
 }
 
+// generic data fields
+/*
+if ($generic_datafields = $this->config->getValue("Main", "genericdatafields")) {
+	$datafields_obj =& new DataFields($db->f("user_id"));
+	$datafields = $datafields_obj->getLocalFields($db->f("user_id"));
+}
+*/
+
 $order = $this->config->getValue("Main", "order");
 foreach ($order as $position) {
 
 	$data_field = $this->data_fields["content"][$position];
 
 	if ($visible_content[$position]) {
-		if (($data_field == "lebenslauf" || $data_field == "schwerp"
-				|| $data_field == "publi")) {
-			if ($db->f($data_field) != "") {
-				echo "<tr><td width=\"100%\">\n";
-				echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
-				echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
-				echo "><td" . $this->config->getAttributes("TableParagraphHeadline", "td");
-				echo "><font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">\n";
-				echo $aliases_content[$position] . "</font></td></tr>\n";
-				echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-				echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-				echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-				echo FixLinks(format(htmlReady($db->f($data_field))));
-				echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
-			}
+		switch ($data_field) {
+			case "lebenslauf" :
+			case "schwerp" :
+			case "publi" :
+				if ($db->f($data_field) != "") {
+					echo "<tr><td width=\"100%\">\n";
+					echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
+					echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
+					echo "><td" . $this->config->getAttributes("TableParagraphHeadline", "td");
+					echo "><font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">\n";
+					echo $aliases_content[$position] . "</font></td></tr>\n";
+					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
+					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
+					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
+					echo FixLinks(format(htmlReady($db->f($data_field))));
+					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
+				}
+				break;
+			case "news" :
+			case "termine" :
+			case "kategorien" :
+			case "lehre" :
+			case "head" :
+				$data_field($this, $db, $aliases_content[$position], $text_div, $text_div_end);
+				break;
+			// generic data fields
+			default :
+				// include generic datafields
 		}
-		else
-			$data_field($this, $db, $aliases_content[$position], $text_div, $text_div_end);
 	}
 }
 
