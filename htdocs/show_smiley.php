@@ -102,13 +102,13 @@ if ($sm->error) { // old code is used
 
 	echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0" >', "\n";
 	echo '<tr><td class="topic"><b>&nbsp;' . _('Smiley-&Uuml;bersicht') . '</b></td></tr>', "\n";
-	echo '<tr><td class="blank" valig="top" align="center">';
+	echo '<tr><td class="blank" valign="top" align="center">';
 
 
 
 	$txt = sprintf(_('%s Smileys vorhanden - Auswahl:'),$info['count_all']);
 	$sm->user_menue($txt);
-	echo '</td></tr><tr><td class="blank" valig="top" align="center">', "\n";
+	echo '</td></tr><tr><td class="blank" valign="top" align="center">', "\n";
 	$sm->user_smiley_list();
 	echo '<br>&nbsp;</td></tr></table>', "\n";
 
