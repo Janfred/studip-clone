@@ -60,7 +60,6 @@ if ($oid) $sem_browse_data["oid"]=$oid;
 if ($oid2) $sem_browse_data["oid2"]=$oid2;
 if ($extern) $sem_browse_data["extern"]=$extern;
 if ($extend) $sem_browse_data["extend"]=$extend;
-if ($sortby) $sem_browse_data["sortby"]=$sortby;
 if ($sset) $sem_browse_data["sset"]=$sset;
 if ($cmd) $sem_browse_data["cmd"]=$cmd;
 if ($level) $sem_browse_data["level"]=$level;
@@ -72,10 +71,6 @@ if ((!$sem_browse_data["cmd"]) && ($root_mode))
 //default group_by mode
 if (!$sem_browse_data["group_by"])
 	$sem_browse_data["group_by"]="semester";
-
-if (!$sem_browse_data["sortby"] || $sem_browse_data["sortby"] == "")
-	$sem_browse_data["sortby"]="Name";
-
 
 if (($i_page=="show_bereich.php") && (!$extern))
 	$sem_browse_data["extern"]=TRUE;
@@ -93,229 +88,156 @@ if (!isset ($sem_browse_data["level"])) $sem_browse_data["level"]="f";
 if ($level==0) $sem_browse_data["extern"] == FALSE;
 
 
-//Quicksort Formular... fuer die eiligen oder die DAUs....
-if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_data["level"]=="f")){
-
-if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset($sem_browse_data["cmd"])))
-	{
-	echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-	echo "<form action=\"$PHP_SELF?send=yes&sset=qs\" method=\"post\">\n";
-	echo "<tr><td class=\"steel1\" align=\"center\" colspan=2>Schnellsuche:&nbsp;<select name=s_range size=1>";
-	if ($sem_browse_data["s_range"] == "alles")
-		echo "<option selected>alles</option>";
-	else
-		echo "<option>alles</option>";
-	if ($sem_browse_data["s_range"] == "Titel")
-		echo "<option selected>Titel</option>";
-	else
-		echo "<option>Titel</option>";
-	if ($sem_browse_data["s_range"] == "Dozent")
-		echo "<option selected>Dozent</option>";
-	else
-		echo "<option>Dozent</option>";
-		
-	if ($sem_browse_data["s_range"] == "Kommentar")
-		echo "<option selected>Kommentar</option>";
-	else
-		echo "<option>Kommentar</option>";
-	echo "</select>&nbsp;<input name=qs_string type=textarea size=20 maxlength=255 value=\"".htmlReady($sem_browse_data["qs_string"])."\">\n";
-	echo "<input type=\"IMAGE\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">&nbsp;<a href=\"$PHP_SELF?reset_all=true\"><img src=\"pictures/buttons/neuesuche-button.gif\" border=0></a>\n";
-	echo "<a href=\"$PHP_SELF?cmd=xts";
-	if (isset($sem_browse_data["sset"])) echo "&sset=", $sem_browse_data["sset"];
-	echo "\"><img src=\"pictures/buttons/erweitertesuche-button.gif\" border=0></a></td></tr>";
-	echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><hr></td></tr>";
-	echo "</form></table>\n";
-	}
+//We want to show the search forms only in non-browsing mode
+if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_data["level"]=="f")) {
 	
-
-//Extended Sortformular, fuer Leute mit mehr GRiPS...
-if (($sem_browse_data["cmd"]=="xts"))
-	{
-	echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-	echo "<form action=\"$PHP_SELF?send=yes&sset=xts\" method=\"post\">\n";
-	echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Titel: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_titel type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_titel"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Typ:</td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_art size=1>";
-	if ($sem_browse_data["s_art"]=="alle")
-		echo "<option selected>alle</option>";
-	else
-		echo "<option>alle</option>";
-	for ($i=1; $i <= sizeof($SEM_TYPE); $i++)
-		{
-		if (($show_class) && ($show_class == $SEM_TYPE[$i]["class"])) {
-			echo "<option";
-			if ($sem_browse_data["s_art"]==$i)
-				echo" selected";
-			echo " value=\"$i\">", my_substr($SEM_TYPE[$i]["name"], 0, 30), "</option>";
-			}
-		elseif (!$show_class) {
-			echo "<option";
-			if ($sem_browse_data["s_art"]==$i)
-				echo" selected";
-			echo " value=\"$i\">", my_substr($SEM_TYPE[$i]["name"], 0, 30), " (", $SEM_CLASS[$SEM_TYPE[$i]["class"]]["name"],")</option>";
-			}
-		}
-	echo "</select></td></tr>\n";
-	echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Untertitel: </td><td  class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_untert type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_untert"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Semester: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_sem size=1>";
-		$i=1;
-		for ($i; $i <= sizeof($SEMESTER); $i++)
-			{
-			echo "<option";			
-			if (($sem_browse_data["s_sem"]==$SEMESTER[$i]["name"]) || 
-				((!$sem_browse_data["s_sem"]) && ((($SEMESTER[$i]["name"] == $SEM_NAME_NEXT) && ($VORLES_ENDE < time())) ||  (($SEMESTER[$i]["name"] == $SEM_NAME) && ($VORLES_ENDE > time())))))
-				echo" selected";
-			echo ">", $SEMESTER[$i]["name"], "</option>";
-			}
-	if ($sem_browse_data["s_sem"]=="alle")
-		echo "<option selected>alle</option>";
-	else
-		echo "<option>alle</option>";
-	echo "</select>";
-	echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Kommentar: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_kommentar type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_kommentar"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">&nbsp;</td><td class=\"steel1\" align=\"left\" width=\"35%\">&nbsp; </td></tr>\n";
-	echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">DozentIn: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_dozent type=textarea size=20 maxlength=255 value=\"".htmlReady($sem_browse_data["s_dozent"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Verkn&uuml;pfung: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_bool size=1><option selected>UND<option>ODER</select></td></tr>\n";
-	
-	$tmp_cs=4;
-	echo "<tr>";
-	
-	if (!$hide_bereich) {
-		$tmp_cs=2;
-		echo "<td class=\"steel1\" align=\"right\" width=\"15%\">Bereich: </td><td class=\"steel1\" align=\"left\" width\"35%\"><select name=s_bereich>";
-	
-	if ($sem_browse_data["s_bereich"]=="alle")
-		echo "<option selected>alle</option>";
-	else
-		echo "<option>alle</option>";
-
-
-	//bauen des Bereichspulldownfeld
-	$fachtmp="0";
-	$db->query("SELECT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) ORDER BY bereich_fach.fach_id");
-	while ($db->next_record()) 
-		{
-			if ($fachtmp != $db->f("fach_id"))
-				{
-			// Hier werden die Faecherueberschriften ausgegeben 
-			   $fachtmp = $db->f("fach_id");
-			   $db2->query("SELECT name from faecher WHERE fach_id = '$fachtmp'"); 
-			   while ($db2->next_record()) 
-					{
-					echo "<option value = nix>------------------------------------------------------------</option>";
-					echo "<option value = nix>".htmlReady(my_substr($db2->f("name"), 0,30))."</option>";
-					echo "<option value = nix>------------------------------------------------------------</option>";
-					}
-				}
-				$bereichtmp =  $db->f("bereich_id");
-			if($sem_browse_data["s_bereich"]==$db->f("bereich_id"))
-			echo "<option selected VALUE=\"".$db->f("bereich_id")."\">&nbsp;".htmlReady(my_substr($db->f("name"), 0, 30))."</option>";
+	//Quicksort Formular... fuer die eiligen oder die DAUs....
+	if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset($sem_browse_data["cmd"]))) {
+		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+		echo "<form action=\"$PHP_SELF?send=yes&sset=qs\" method=\"post\">\n";
+		echo "<tr><td class=\"steel1\" align=\"center\" colspan=2>Schnellsuche:&nbsp;<select name=s_range size=1>";
+		if ($sem_browse_data["s_range"] == "alles")
+			echo "<option selected>alles</option>";
 		else
-			echo "<option  VALUE=\"".$db->f("bereich_id")."\">&nbsp;".htmlReady(my_substr($db->f("name"), 0, 30))."</option>";
-		  $fachtmp = $db->f("fach_id");
-		  }
-	echo "</select></td>";
-	}
-	if (!$show_class) {
-		echo "<td class=\"steel1\" align =\"right\"width =\"15%\">Kategorie: </td><td class=\"steel1\" width=\"35%\"><select name=\"s_class\"><option";
-		if (!$sem_browse_data["s_class"])
-			echo " selected";
-		echo " value=0>alle</option>";
-		$i=1;
-		foreach ($SEM_CLASS as $a) {
-			echo "<option value=$i";
-			if ($sem_browse_data["s_class"]==$i)
-				echo " selected";
-			echo ">",$a["name"], "</option>";
-			$i++;
-			}
-		echo "</select>";
-		}
-	else
-		echo "<td class=\"steel1\" width =\"100%\" colspan=$tmp_cs>&nbsp; </td>";
-	echo "</tr>";
-	echo "<tr><td class=\"steel1\">&nbsp</td><td class=\"steel1\" align=\"left\"><input  type=\"IMAGE\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">&nbsp;<a href=\"$PHP_SELF?reset_all=true\"><img src=\"pictures/buttons/neuesuche-button.gif\" border=0></a></td><td class=\"steel1\">&nbsp;</td><td class=\"steel1\"><a href=\"$PHP_SELF?cmd=qs";
+			echo "<option>alles</option>";
+		if ($sem_browse_data["s_range"] == "Titel")
+			echo "<option selected>Titel</option>";
+		else
+			echo "<option>Titel</option>";
+		if ($sem_browse_data["s_range"] == "Dozent")
+			echo "<option selected>Dozent</option>";
+		else
+			echo "<option>Dozent</option>";
+		
+		if ($sem_browse_data["s_range"] == "Kommentar")
+			echo "<option selected>Kommentar</option>";
+		else
+			echo "<option>Kommentar</option>";
+		echo "</select>&nbsp;<input name=qs_string type=textarea size=20 maxlength=255 value=\"".htmlReady($sem_browse_data["qs_string"])."\">\n";
+		echo "<input type=\"IMAGE\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">&nbsp;<a href=\"$PHP_SELF?reset_all=true\"><img src=\"pictures/buttons/neuesuche-button.gif\" border=0></a>\n";
+		echo "<a href=\"$PHP_SELF?cmd=xts";
 		if (isset($sem_browse_data["sset"])) echo "&sset=", $sem_browse_data["sset"];
-	echo  "\"><img src=\"pictures/buttons/schnellsuche-button.gif\" border=0></a></td></tr>\n";
-	echo "<tr><td class=\"steel1\" colspan=4 align=\"center\"><hr></td></tr>";
-	echo "</form></table>\n";
-	}
+		echo "\"><img src=\"pictures/buttons/erweitertesuche-button.gif\" border=0></a></td></tr>";
+		echo "<tr><td class=\"steel1\" colspan=2 align=\"center\"><hr></td></tr>";
+		echo "</form></table>\n";
+		}
+	
+	//Extended Sortformular, fuer Leute mit mehr GRiPS...
+	if (($sem_browse_data["cmd"]=="xts"))
+		{
+		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+		echo "<form action=\"$PHP_SELF?send=yes&sset=xts\" method=\"post\">\n";
+		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Titel: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_titel type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_titel"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Typ:</td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_art size=1>";
+		if ($sem_browse_data["s_art"]=="alle")
+			echo "<option selected>alle</option>";
+		else
+			echo "<option>alle</option>";
+		for ($i=1; $i <= sizeof($SEM_TYPE); $i++)
+			{
+			if (($show_class) && ($show_class == $SEM_TYPE[$i]["class"])) {
+				echo "<option";
+				if ($sem_browse_data["s_art"]==$i)
+					echo" selected";
+				echo " value=\"$i\">", my_substr($SEM_TYPE[$i]["name"], 0, 30), "</option>";
+				}
+			elseif (!$show_class) {
+				echo "<option";
+				if ($sem_browse_data["s_art"]==$i)
+					echo" selected";
+				echo " value=\"$i\">", my_substr($SEM_TYPE[$i]["name"], 0, 30), " (", $SEM_CLASS[$SEM_TYPE[$i]["class"]]["name"],")</option>";
+				}
+			}
+		echo "</select></td></tr>\n";
+		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Untertitel: </td><td  class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_untert type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_untert"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Semester: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_sem size=1>";
+			$i=1;
+			for ($i; $i <= sizeof($SEMESTER); $i++)
+				{
+				echo "<option";			
+				if (($sem_browse_data["s_sem"]==$SEMESTER[$i]["name"]) || 
+					((!$sem_browse_data["s_sem"]) && ((($SEMESTER[$i]["name"] == $SEM_NAME_NEXT) && ($VORLES_ENDE < time())) ||  (($SEMESTER[$i]["name"] == $SEM_NAME) && ($VORLES_ENDE > time())))))
+					echo" selected";
+				echo ">", $SEMESTER[$i]["name"], "</option>";
+				}
+		if ($sem_browse_data["s_sem"]=="alle")
+			echo "<option selected>alle</option>";
+		else
+			echo "<option>alle</option>";
+		echo "</select>";
+		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">Kommentar: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_kommentar type=textarea size=40 maxlength=255 value=\"".htmlReady($sem_browse_data["s_kommentar"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">&nbsp;</td><td class=\"steel1\" align=\"left\" width=\"35%\">&nbsp; </td></tr>\n";
+		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">DozentIn: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><input name=s_dozent type=textarea size=20 maxlength=255 value=\"".htmlReady($sem_browse_data["s_dozent"])."\"></td><td class=\"steel1\" align=\"right\" width=\"15%\">Verkn&uuml;pfung: </td><td class=\"steel1\" align=\"left\" width=\"35%\"><select name=s_bool size=1><option selected>UND<option>ODER</select></td></tr>\n";
+	
+		$tmp_cs=4;
+		echo "<tr>";
+	
+		if (!$hide_bereich) {
+			$tmp_cs=2;
+			echo "<td class=\"steel1\" align=\"right\" width=\"15%\">Bereich: </td><td class=\"steel1\" align=\"left\" width\"35%\"><select name=s_bereich>";
+	
+			if ($sem_browse_data["s_bereich"]=="alle")
+				echo "<option selected>alle</option>";
+			else
+				echo "<option>alle</option>";
+
+			//bauen des Bereichspulldownfeld
+			$fachtmp="0";
+			$db->query("SELECT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) ORDER BY bereich_fach.fach_id");
+			while ($db->next_record()) 
+				{
+				if ($fachtmp != $db->f("fach_id"))
+					{
+					// Hier werden die Faecherueberschriften ausgegeben 
+				   $fachtmp = $db->f("fach_id");
+				   $db2->query("SELECT name from faecher WHERE fach_id = '$fachtmp'"); 
+				   while ($db2->next_record()) 
+						{
+						echo "<option value = nix>------------------------------------------------------------</option>";
+						echo "<option value = nix>".htmlReady(my_substr($db2->f("name"), 0,30))."</option>";
+						echo "<option value = nix>------------------------------------------------------------</option>";
+						}
+					}
+					$bereichtmp =  $db->f("bereich_id");
+				if($sem_browse_data["s_bereich"]==$db->f("bereich_id"))
+				echo "<option selected VALUE=\"".$db->f("bereich_id")."\">&nbsp;".htmlReady(my_substr($db->f("name"), 0, 30))."</option>";
+			else
+				echo "<option  VALUE=\"".$db->f("bereich_id")."\">&nbsp;".htmlReady(my_substr($db->f("name"), 0, 30))."</option>";
+			  $fachtmp = $db->f("fach_id");
+		  	}
+			echo "</select></td>";
+		}
+		if (!$show_class) {
+			echo "<td class=\"steel1\" align =\"right\"width =\"15%\">Kategorie: </td><td class=\"steel1\" width=\"35%\"><select name=\"s_class\"><option";
+			if (!$sem_browse_data["s_class"])
+				echo " selected";
+			echo " value=0>alle</option>";
+			$i=1;
+			foreach ($SEM_CLASS as $a) {
+				echo "<option value=$i";
+				if ($sem_browse_data["s_class"]==$i)
+					echo " selected";
+				echo ">",$a["name"], "</option>";
+				$i++;
+				}
+			echo "</select>";
+			}
+		else
+			echo "<td class=\"steel1\" width =\"100%\" colspan=$tmp_cs>&nbsp; </td>";
+		echo "</tr>";
+		echo "<tr><td class=\"steel1\">&nbsp</td><td class=\"steel1\" align=\"left\"><input  type=\"IMAGE\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">&nbsp;<a href=\"$PHP_SELF?reset_all=true\"><img src=\"pictures/buttons/neuesuche-button.gif\" border=0></a></td><td class=\"steel1\">&nbsp;</td><td class=\"steel1\"><a href=\"$PHP_SELF?cmd=qs";
+			if (isset($sem_browse_data["sset"])) echo "&sset=", $sem_browse_data["sset"];
+		echo  "\"><img src=\"pictures/buttons/schnellsuche-button.gif\" border=0></a></td></tr>\n";
+		echo "<tr><td class=\"steel1\" colspan=4 align=\"center\"><hr></td></tr>";
+		echo "</form></table>\n";
 	}
 
-
+//header to reset (start a new) search
+} elseif (!$sem_browse_data["extern"]) {
+	echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
+	echo "<tr><td class=\"steel1\" align=\"center\">";
+	echo "<a href=\"$PHP_SELF?reset_all=true\">".makeButton("neuesuche")."</a>\n";
+	echo "</table>\n";
+}
 
 echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-
-//Anzeige der Hierarchiezeile
-if ((!isset($sem_browse_data["sset"])) && (!$hide_bereich))
-	{
-	echo "<tr><td class=\"steel1\" ";
-	if (($sem_browse_data["level"]<>"s") && ($sem_browse_data["level"]<>"sbb"))
-		echo "colspan=2";
-	else
-		if ($sem_browse_data["extend"]=="yes")
-			{
-			echo "colspan=4";
-			}
-		else
-			{
-			echo "colspan=3";
-			}
-	echo ">";
-	
-	if ($sem_browse_data["extern"]<>"yes")
-	{
-	switch ($sem_browse_data["level"])
-		{
-		case "f":
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > Fakult&auml;ten</font>";
-			break;
-		case "sbi":
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > Einrichtungen/Studienf&auml;cher</font>";
-			break;
-		case "sb":
-			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
-			$db->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Studienf&auml;cher</font>";
-			break;
-		case "i":
-			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
-			$db->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Einrichtungen </font>";
-			break;
-		case "s";
-			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["oid"]."'");
-			$db2->query("SELECT Name, Institut_id FROM Institute WHERE Institut_id ='".$sem_browse_data["id"]."'");
-			$db->next_record();
-			$db2->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=i&id=".$sem_browse_data["oid"]."\">Einrichtungen</a> > ", htmlReady($db2->f("Name")), "</font>";
-			break;
-		case "b";
-			$db2->query("SELECT name FROM faecher WHERE fach_id ='".$sem_browse_data["id"]."'");
-			$db2->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid"]."\">Studienf&auml;cher</a> > ", htmlReady($db2->f("name")), "</font>";
-			break;
-		case "sbb";
-			$db2->query("SELECT name FROM faecher WHERE fach_id ='".$sem_browse_data["oid"]."'");
-			$db3->query("SELECT name FROM bereiche WHERE bereich_id='".$sem_browse_data["id"]."'");			
-			$db2->next_record();
-			$db3->next_record();
-			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid2"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid2"]."\">Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=b&id=".$sem_browse_data["oid"]."&oid=".$sem_browse_data["oid2"]."\">", htmlReady($db2->f("name")), "</a> > ", htmlReady($db3->f("name")), "</font>";
-			break;
-		}
-	}
-	echo"</td>";
-	if ((($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) && (!$sem_browse_data["extern"]))
-		{
-		echo"<td class=\"steel1\" align=\"right\" ";
-		if ($sem_browse_data["extend"]=="yes")
-			{
-			echo "colspan=3";
-			}
-		else
-			{
-			echo "colspan=1";
-			}
-		echo"><a href=\"", $PHP_SELF; if ($sem_browse_data["extend"]<>"yes") { echo "?extend=yes\"><img src=\"pictures/buttons/erweiterteansicht-button.gif\" border=0>"; } else {echo "?extend=no\"><img src=\"pictures/buttons/normaleansicht-button.gif\" border=0>"; } echo "</a></font></td>";
-		}
-	echo "</tr>";
-	echo "</tr>";
-	}
 
 //Parser zur Auswertung des Suchstrings
 if (!$sem_browse_data["extern"]) {
@@ -460,22 +382,75 @@ switch ($sem_browse_data["group_by"]) {
 	break;
 }
 
-//Expressions for ordering by Nachname or Einrichtung
-switch ($sem_browse_data["sortby"]) {
-	case "Nachname":
-		$select_add.=", auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.Username";
-	break;
-	case "Institut":
-		$select_add.=", Institute.Name as Institut";
-	break;
+//calculate colspans
+$rows = ($sem_browse_data["extend"] == "yes") ? 8 : 5;
+$rightspan = ($sem_browse_data["extend"] == "yes") ? 3 : 2;
+$leftspan = $rows-$rightspan; 
+if (($sem_browse_data["group_by"] == "einrichtung" || $sem_browse_data["group_by"] == "semester" || $sem_browse_data["group_by"] == "dozent")
+	|| ($sem_browse_data["group_by"] == "einrichtung" && $sem_browse_data["estend"] == "yes")) {
+	$leftspan--;
+	$rows--;
 }
 
 ob_start(); //Outputbuffering start
 
+//Anzeige der Hierarchiezeile
+if ((!isset($sem_browse_data["sset"])) && (!$hide_bereich))
+	{
+	echo "<tr><td class=\"steel1\" ";
+	if (($sem_browse_data["level"]<>"s") && ($sem_browse_data["level"]<>"sbb"))
+		echo "colspan=2";
+	else
+		echo "colspan=$rows";
+	echo ">";
+	
+	if ($sem_browse_data["extern"]<>"yes")
+	{
+	switch ($sem_browse_data["level"])
+		{
+		case "f":
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > Fakult&auml;ten</font>";
+			break;
+		case "sbi":
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > Einrichtungen/Studienf&auml;cher</font>";
+			break;
+		case "sb":
+			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
+			$db->next_record();
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Studienf&auml;cher</font>";
+			break;
+		case "i":
+			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
+			$db->next_record();
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Einrichtungen </font>";
+			break;
+		case "s";
+			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["oid"]."'");
+			$db2->query("SELECT Name, Institut_id FROM Institute WHERE Institut_id ='".$sem_browse_data["id"]."'");
+			$db->next_record();
+			$db2->next_record();
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=i&id=".$sem_browse_data["oid"]."\">Einrichtungen</a> > ", htmlReady($db2->f("Name")), "</font>";
+			break;
+		case "b";
+			$db2->query("SELECT name FROM faecher WHERE fach_id ='".$sem_browse_data["id"]."'");
+			$db2->next_record();
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid"]."\">Studienf&auml;cher</a> > ", htmlReady($db2->f("name")), "</font>";
+			break;
+		case "sbb";
+			$db2->query("SELECT name FROM faecher WHERE fach_id ='".$sem_browse_data["oid"]."'");
+			$db3->query("SELECT name FROM bereiche WHERE bereich_id='".$sem_browse_data["id"]."'");			
+			$db2->next_record();
+			$db3->next_record();
+			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["oid2"]."\">Einrichtungen/Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=sb&id=".$sem_browse_data["oid2"]."\">Studienf&auml;cher</a> > <a href=\"$PHP_SELF?level=b&id=".$sem_browse_data["oid"]."&oid=".$sem_browse_data["oid2"]."\">", htmlReady($db2->f("name")), "</a> > ", htmlReady($db3->f("name")), "</font>";
+			break;
+		}
+	}
+	echo"</td></tr>";
+}
 
 //Query for view by Bereich or Einrichtung
 if (($sem_browse_data["level"]=="s") && ((!isset($sem_browse_data["sset"])) || $sem_browse_data["extern"]))
-	$sql_where_query_seminare="(seminare.Institut_id = '".$sem_browse_data["id"]."' OR seminar_inst.institut_id = '".$sem_browse_data["id"]."') $class_query";
+	$sql_where_query_seminare="seminar_inst.institut_id = '".$sem_browse_data["id"]."' $class_query";
 
 if (($sem_browse_data["level"]=="sbb") && ((!isset($sem_browse_data["sset"])) || $sem_browse_data["extern"]))
 	$sql_where_query_seminare="seminar_bereich.bereich_id = '".$sem_browse_data["id"]."' $class_query";
@@ -489,25 +464,14 @@ if (!$dont_search)
 				LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id) 
 				LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) 
 				LEFT JOIN Institute ON (seminar_inst.Institut_id = Institute.Institut_id) 
-				WHERE $sql_where_query_seminare $group_by_exp ORDER BY $order_by_exp, ".$sem_browse_data["sortby"]." ASC");
-
-
-//calculate colspans
-$rows = ($sem_browse_data["extend"] == "yes") ? 8 : 5;
-$rightspan = ($sem_browse_data["extend"] == "yes") ? 3 : 2;
-$leftspan = $rows-$rightspan; 
-if (($sem_browse_data["group_by"] == "einrichtung" || $sem_browse_data["group_by"] == "semester" || $sem_browse_data["group_by"] == "dozent")
-	|| ($sem_browse_data["group_by"] == "einrichtung" && $sem_browse_data["estend"] == "yes")) {
-	$leftspan--;
-	$rows--;
-}
+				WHERE $sql_where_query_seminare ORDER BY $order_by_exp ");
 
 //Anzeige des Suchergebnis (=Seminarebene)
 if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 	$db->query($query);
 
 	if ($db->num_rows()) {
-		if (($sem_browse_data["sset"]) || ($sem_browse_data["extern"]))
+		if (($sem_browse_data["sset"]) || ($sem_browse_data["extern"]) ||  $sem_browse_data["level"] !="f")
 			{
 			printf ("<form action=\"$PHP_SELF\" method=\"POST\"><tr><td class=\"steel1\" colspan=%s>", $leftspan);
 			//Change/view the group method
@@ -560,7 +524,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 			<tr align="center">
 				<td class="steel" align="left"><font size="-1">
 					<img src="pictures/blank.gif" width="1" height="20" valign="top">
-					<b><a href="<? echo $PHP_SELF;?>?sortby=Name">Name</a></b></font>
+					<b>Name</b></font>
 				</td>
 				<td class="steel" valign="bottom">
 					<font size="-1"><b>Zeit</b></font>
@@ -569,21 +533,21 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 				if ($sem_browse_data["group_by"] != "einrichtung") {
 				?>
 				<td class="steel" valign="bottom">
-					<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Institut">Einrichtungen</a></b></font>
+					<font size="-1"><b>Einrichtungen</b></font>
 				</td>
 				<?
 				}
 				if ($sem_browse_data["group_by"] != "dozent") {
 				?>
 				<td class="steel" valign="bottom">
-					<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=Nachname">DozentIn</a></b></font>
+					<font size="-1"><b>DozentInnen</b></font>
 				</td>
 				<?
 				}
 				if ($sem_browse_data["group_by"] != "semester") {
 				?>
 				<td class="steel" valign="bottom">
-					<font size="-1"><b><a href="<? echo $PHP_SELF;?>?sortby=start_time">Semester</a></b></font>
+					<font size="-1"><b>Semester</b></font>
 				</td>
 				<?
 				}
@@ -591,13 +555,13 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 			if ($sem_browse_data["group_by"] != "typ") {
 				?>		
 				<td class="steel" valign="bottom">
-					<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=art">Typ</a></b></font>
+					<font size=-1><b>Typ</b></font>
 				</td>
 				<?
 				}
 				?>
 				<td class="steel" valign="bottom">
-					<font size=-1><b><a href="<? echo $PHP_SELF;?>?sortby=Lesezugriff">Lesen</a></b> / <b><font size=-1><a href="<? echo $PHP_SELF;?>?sortby=Schreibzugriff">Schreiben</a></b></font>
+					<font size=-1><b>Lesen</b> / <b><font size=-1>Schreiben</b></font>
 				</td>
 				<td class="steel" valign="bottom">
 					<font size=-1><b>Mein Status</b></font>
@@ -708,52 +672,40 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 				
 		//create the Einrichtungen Colummn
 		if ($sem_browse_data["group_by"] != "einrichtung") {			
-			if ($sem_browse_data["sortby"] == "Institut") { // so it's easy
-				$einrichtungen = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Institut"))."</a>";
-				if ($einrichtungen == "") $einrichtungen = "- - -";
-			} else {
-				//Create Einrichtungen-field
-				$sem_id=$db->f("Seminar_id");
-				$einrichtungen ="";
-				$i=0;
-				$db2->query("SELECT Name FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE Seminar_id = '$sem_id' ORDER BY Name");
-				while (($db2->next_record()) && ($i<=3)) {
-					if ($i) $einrichtungen .= ", ";
-					$einrichtungen .= "<a href=\"institut_main.php?auswahl=".$db2->f("institut_id")."\">".htmlReady($db2->f("Name"))."</a>";
-					//more than 2 Einrichtungen are two much, link to the details.php for more info
-					if ($i==3)
-						$einrichtungen .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
-					$i++;
-				}
-				if ($einrichtungen == "") $einrichtungen = "- - -";
+			$sem_id=$db->f("Seminar_id");
+			$einrichtungen ="";
+			$i=0;
+			$db2->query("SELECT Name FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE Seminar_id = '$sem_id' ORDER BY Name");
+			while (($db2->next_record()) && ($i<=3)) {
+				if ($i) $einrichtungen .= ", ";
+				$einrichtungen .= "<a href=\"institut_main.php?auswahl=".$db2->f("institut_id")."\">".htmlReady($db2->f("Name"))."</a>";
+				//more than 2 Einrichtungen are two much, link to the details.php for more info
+				if ($i==2)
+					$einrichtungen .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
+				$i++;
 			}
-			echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$einrichtungen,"&nbsp;</font></td>";
+			if ($einrichtungen == "") $einrichtungen = "- - -";
+		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$einrichtungen,"&nbsp;</font></td>";
 		}
 	
 		//----------------------
 			
 		//create the Dozenten Colummn
 		if ($sem_browse_data["group_by"] != "dozent") {		
-			if ($sem_browse_data["sortby"] == "Nachname") { // so it's easy
-				$dozname = "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("Vorname"))." ".htmlReady($db->f("Nachname"))."</a>";
-				if ($dozname == "") $dozname = "- - -";
-			} else {
-				//Create Dozenten-field
-				$sem_id=$db->f("Seminar_id");
-				$dozname ="";
-				$i=0;
-				$db2->query("SELECT username, Vorname, Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
-				while (($db2->next_record()) && ($i<=3)) {
-					if ($i) $dozname .= ", ";
-					$dozname .= "<a href=\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname"))."</a>";
-					//more than 3 Dozenten are two much, link to the details.php for more info
-					if ($i==3)
-						$dozname .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
-					$i++;
-				}
-				if ($dozname == "") $dozname = "- - -";
+			$sem_id=$db->f("Seminar_id");
+			$dozname ="";
+			$i=0;
+			$db2->query("SELECT username, Vorname, Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
+			while (($db2->next_record()) && ($i<=3)) {
+				if ($i) $dozname .= ", ";
+				$dozname .= "<a href=\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname"))."</a>";
+				//more than 3 Dozenten are two much, link to the details.php for more info
+				if ($i==3)
+					$dozname .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
+				$i++;
 			}
-			echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$dozname,"&nbsp;</font></td>";
+			if ($dozname == "") $dozname = "- - -";
+		echo"<td class=\"".$cssSw->getClass()."\" align=center><font size=-1>",$dozname,"&nbsp;</font></td>";
 		}
 		
 		//----------------------
@@ -962,7 +914,7 @@ if (($sem_browse_data["level"]=="sbi")  && (!$hide_bereich))
 	echo "<tr><td class=\"blank\" width=\"50%\" valign=\"_top\">";
 	echo "<a href=\"$PHP_SELF?level=i&id=", $sem_browse_data["id"], "\"><b>Einrichtungen</b></a><br></td>";
 	echo "<td class=\"blank\" width=\"50%\" valign=\"_top\">";
-	if (($SEM_CLASS[$sem_browse_data["s_class"]]["bereiche"]) ||  ($SEM_CLASS[$show_class]["bereiche"]))
+	if ((($SEM_CLASS[$sem_browse_data["s_class"]]["bereiche"]) || ($SEM_CLASS[$show_class]["bereiche"])) || ((!$sem_browse_data["s_class"]) && (!$show_class)))
 		echo "<a href=\"$PHP_SELF?level=sb&id=",$sem_browse_data["id"], "\"><b>Studienf&auml;cher</b></a><br>";
 	else
 		echo "<font size=-1>(keine Studienf&auml;cher vorhanden.)</font><br>";
