@@ -37,8 +37,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-
-
 /*
  * This functions is used for printing a message, that the user can decide whether really to sign in to the seminar or not
  * @param	$sem_id		Seminar_id
@@ -356,14 +354,14 @@ $db6=new DB_Seminar;
 	if ($perm->have_perm("user")) {
 
 		//Sonderfall, Passwort fuer Schreiben nicht eingegeben, Lesen aber erlaubt
-		if ($SemIDtemp<>"") {
-			$db->query("SELECT Lesezugriff, Name FROM seminare WHERE Seminar_id LIKE '$SemIDtemp'");
+		if ($EntryMode == "read_only"){
+			$db->query("SELECT Lesezugriff, Name FROM seminare WHERE Seminar_id LIKE '$id'");
 			$db->next_record();
 			if ($db->f("Lesezugriff") <= 1 && $perm->have_perm("autor")) {
 				if (!seminar_preliminary($id,$user->id)) {  // we have to change behaviour, depending on preliminary
-					$db->query("INSERT INTO seminar_user SET Seminar_id = '$SemIDtemp', user_id = '$user->id', status = 'user', gruppe = '$group', mkdate = '".time()."'");
-					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b> Leser </b> in die Veranstaltung %s eingetragen."), $db->f("Name")));
-					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$SemIDtemp\">&nbsp; &nbsp; "._("Hier </a>kommen Sie zu der Veranstaltung");
+					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'user', gruppe = '$group', mkdate = '".time()."'");
+					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Leser</b> in die Veranstaltung <b>%s</b> eingetragen."), $db->f("Name")));
+					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 				} else {
 					parse_msg (sprintf("msg§"._("Die Veranstaltung **%s** ist teilnahmebeschränkt. Sie können sich nicht als Leser eintragen lassen."),$db->f("Name")));
 				}
@@ -397,7 +395,7 @@ $db6=new DB_Seminar;
 			if (($SemUserStatus=="user") && ($perm->have_perm("autor"))){
 				$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
 				parse_msg (sprintf("msg§"._("Sie wurden in der Veranstaltung <b>%s</b> auf den Status <b> Autor </b> hochgestuft."), $SeminarName));
-				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Weiter zu der Veranstaltung")."</a>";
+				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 			    	if ($send_from_search)
 				    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 				echo "<br><br></td></tr></table>";
@@ -408,7 +406,7 @@ $db6=new DB_Seminar;
 				if (!seminar_preliminary($id,$user->id)) {
 					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'autor', gruppe = '$group', mkdate = '".time()."'");
 					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung <b>%s</b> eingetragen."), $SeminarName));
-					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Weiter zur Veranstaltung")."</a>";
+					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 					if ($send_from_search) echo "&nbsp; |";
 				} else {
 					temporaly_accepted($SeminarName, $user->id, $id, $ask, $sem_verify_suggest_studg, $temp_url);
@@ -434,11 +432,11 @@ $db6=new DB_Seminar;
 						?>
 						</td></tr>
 						<tr><td class="blank" colspan=2>
-						<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST">
+						<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST" onSubmit="verifySeminar();return true;">
 						&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
 						<input type="HIDDEN" name="id" value="<? echo $id;?>">
 						<input type="HIDDEN" name="hashpass" value="">
-						<input type="submit" onClick="verifySeminar();return true;" value="abschicken">
+						<input type="IMAGE" <?=makeButton("abschicken", "src")?> border="0" value="<?=_("abschicken") ?>">
 						</form>
 						</td></tr>
 						<?
@@ -463,7 +461,7 @@ $db6=new DB_Seminar;
 					if ($perm->have_perm("autor")) {
 						$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
 						parse_msg(sprintf("info§"._("Sie wurden in der Veranstaltung <b>%s</b> hochgestuft auf den Status <b>Autor</b>."), $SeminarName));
-						echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Weiter zu der Veranstaltung")."</a>";
+						echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 						echo "<br><br></td></tr></table>";
@@ -471,7 +469,7 @@ $db6=new DB_Seminar;
 						die;
 					} else {//wenn nicht, informieren
 						parse_msg(sprintf("info§"._("Sie sind nur mit der Berechtigung <b>Leser</b> f&uuml;r die Veranstaltung <b>%s</b> freigeschaltet. Wenn Sie auf die Registrierungsmail antworten, k&ouml;nnen Sie in dieser Veranstaltung auch schreiben."), $SeminarName));
-						echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">"._("Weiter zu der Veranstaltung")."</a>";
+						echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">"._("Hier kommen Sie zu der Veranstaltung")."</a>";
 						if ($send_from_search)
 						    	echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 						echo "<br><br></td></tr></table>";
@@ -481,7 +479,7 @@ $db6=new DB_Seminar;
 				}
 			} else { //User ist schon Autor oder hoeher, soll den Quatsch mal lassen und weiter ins Seminar
 				parse_msg(sprintf("info§"._("Sie sind schon mit der Berechtigung <b>%s</b> f&uuml;r die Veranstaltung <b>%s</b> freigeschaltet."), $SemUserStatus, $SeminarName));
-				echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Weiter zu der Veranstaltung")."</a>";
+				echo"<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; <a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 				if ($send_from_search)
 					echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 				echo "<br><br></td></tr></table>";
@@ -596,7 +594,7 @@ $db6=new DB_Seminar;
 								if (!seminar_preliminary($id,$user->id)) {
 								 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', admission_studiengang_id = '$sem_verify_suggest_studg', status='autor', gruppe='$group', mkdate='".time()."' ");
 									parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung <b>%s</b> eingetragen. Damit sind Sie zugelassen."), $SeminarName));
-									echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Weiter zu der Veranstaltung")."</a>";
+									echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 									if ($send_from_search) echo "&nbsp; |";
 								} else {
 									temporaly_accepted($SeminarName, $user->id, $id, $ask, $sem_verify_suggest_studg, $temp_url);
@@ -644,7 +642,7 @@ $db6=new DB_Seminar;
 								 	if (!seminar_preliminary($id,$user->id)) {
 										$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
 										parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung <b>%s</b> eingetragen. Damit sind Sie zugelassen."), $SeminarName));
-										echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Weiter zu der Veranstaltung")."</a>";
+										echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 										if ($send_from_search) echo "&nbsp; |";
 									} else {
 										temporaly_accepted($SeminarName, $user->id, $id, $ask, $sem_verify_suggest_studg, $temp_url);
@@ -676,11 +674,11 @@ $db6=new DB_Seminar;
 					?>
 					</td></tr>
 					<tr><td class="blank" colspan=2>
-					<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST" >
+					<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST" onSubmit="verifySeminar();return true;">
 					&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
 					<input type="HIDDEN" name="id" value="<? echo $id;?>">
 					<input type="HIDDEN" name="hashpass" value="">
-					<input onClick="verifySeminar();return true;" type="SUBMIT" value="abschicken">
+					<input type="IMAGE" <?=makeButton("abschicken", "src")?> border="0" value="<?=_("abschicken") ?>">
 					</form>
 					</td></tr>
 					<?
@@ -695,19 +693,39 @@ $db6=new DB_Seminar;
 					die;
 				}
 				elseif ($SemSecLevelWrite==2) {//nur passwort fuer Schreiben, User koennte ohne Passwort als 'User' in das Seminar
-					printf ("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Bitte geben Sie das Passwort f&uuml;r die Veranstaltung <b>%s</b> ein.")."<br><br></td></tr>", $SeminarName);
-					print "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Falls Sie das Passwort jetzt noch nicht eingeben m&ouml;chten, k&ouml;nnen Sie mit Leseberechtigung an der Veranstaltung teilnehmen.")."<br><br></td></tr>";
-					printf ("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Bitte klicken Sie dazu %s hier</a>!")."<br><br></td></tr>", "<a href=\"sem_verify.php?SemIDtemp=$id\">");
+					print "<form name=\"details\" action=\"".$sess->self_url()."\" method=\"POST\" onSubmit=\"verifySeminar();return true;\">";
+					print "<tr><td class=\"blank\" colspan=\"2\">";
+					print "<table width=\"97%\" align=\"center\" border=\"0\" cellapdding=\"2\" cellspacing=\"0\">";
+					print "<tr><td width=\"48%\" class=\"blank\">";
+					print _("Wenn Sie mit Lese- und Schreibberechtigung an der Veranstaltung teilnehmen wollen, geben Sie hier bitte das Passwort f&uuml;r diese Veranstaltung ein:");
+					print "</td><td width=\"4%\" class=\"blank\">&nbsp;";
+					print "</td><td width=\"48%\" class=\"blank\" >";
+					print _("Sie k&ouml;nnen auch ohne Eingabe eines Passwortes an der Veranstaltung teilnehmen. Sie haben in diesem Fall jedoch nur Leseberechtigung.");
+					print "</td></tr>";	
+					print "<tr><td width=\"48%\" class=\"blank\" valign=\"top\">";
+					print "<br /><input type=\"RADIO\" name=\"EntryMode\" checked value=\"pass\">&nbsp;"._("Ich kenne das Passwort dieser Veranstaltung");
+					print "</td><td width=\"4%\" class=\"blank\">&nbsp;";
+					print "</td><td width=\"48%\" class=\"blank\" valign=\"top\">";
+					print "<br /><input type=\"RADIO\" name=\"EntryMode\" value=\"read_only\">&nbsp;"._("Ich m&ouml;chte an der Veranstaltung nur mit Leseberechtigung teilnehmen.");
+					print "<br />&nbsp;</td></tr>";	
 					?>
-					</td></tr>
-					<tr><td class="blank" colspan=2>
-					<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST" >
-					&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
+					<tr><td class="blank">
+					<font size="-1"><?=_("Bitte geben Sie hier das Passwort ein:")?></font><br />
+					<input type="PASSWORD" name="pass" size="20">
 					<input type="HIDDEN" name="id" value="<? echo $id;?>">
 					<input type="HIDDEN" name="hashpass" value="">
-					<input onClick="verifySeminar(); return true;" type="SUBMIT" value="abschicken">
+					</td>
+					<td class="blank">&nbsp;</td>
+					<td class="blank" valign="top">
+						<font size="-1">
+							<?=_("(Sie k&ouml;nnen das Passwort sp&auml;ter unter &raquo;Details&laquo; innerhalb der Veranstaltung eingeben.)") ?>
+							</font>
+						</td>
+					</tr>
+					<tr><td class="blank" colspan="3" align="center">
+					<input type="IMAGE" <?=makeButton("ok", "src")?> border="0" value="<?=_("abschicken") ?>"><br />&nbsp;
+					</td></tr></table>
 					</form>
-					</td></tr>
 					<?
 					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 				    	if ($send_from_search)
@@ -758,9 +776,9 @@ $db6=new DB_Seminar;
 	}
 
   if ($SemSecLevelRead==0) {//nur wenn das Seminar wirklich frei ist geht's hier weiter
-	printf("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Um zu der Veranstaltung <b>%s</b> zu gelangen, klicken Sie bitte%s hier</a>!")."<br><br></td></tr></table>", $SeminarName, "<a href=\"seminar_main.php?auswahl=$id\">");
+	printf("<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Die Veranstaltung <b>%s</b> erfordert keine Anmeldung. %sHier kommen Sie zu der Veranstaltung</a>!")."<br><br></td></tr></table>", $SeminarName, "<a href=\"seminar_main.php?auswahl=$id\">");
   }	else {//keine Rechte f&uuml;r das Seminar
-		parse_msg (sprintf("error§"._("Sie habe nicht die erforderlichen Rechte, um an der Veranstaltung <b>%s</b> teilnehmen zu d&uuml;rfen!"), $SeminarName));
+		parse_msg (sprintf("error§"._("Sie haben nicht die erforderlichen Rechte, um an der Veranstaltung <b>%s</b> teilnehmen zu d&uuml;rfen!"), $SeminarName));
 		echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 		if ($send_from_search)
 	    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
