@@ -546,7 +546,7 @@ if ($delete_turnus_field)
 	for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
 		if ($i != ($delete_turnus_field-1))
 			{
-			$temp_term_turnus_date[]=$sem_create_data["term_turnus_date"][$i];
+			$tmp_term_turnus_date[]=$sem_create_data["term_turnus_date"][$i];
 			$tmp_term_turnus_start_stunde[]=$sem_create_data["term_turnus_start_stunde"][$i];
 			$tmp_term_turnus_start_minute[]=$sem_create_data["term_turnus_start_minute"][$i]; 
 			$tmp_term_turnus_end_stunde[]=$sem_create_data["term_turnus_end_stunde"][$i]; 
@@ -554,7 +554,7 @@ if ($delete_turnus_field)
 			$tmp_term_turnus_resource_id[]=$sem_create_data["term_turnus_resource_id"][$i]; 
 			$tmp_term_turnus_room[]=$sem_create_data["term_turnus_room"][$i]; 
 			}
-	$sem_create_data["term_turnus_date"]=$temp_term_turnus_date;
+	$sem_create_data["term_turnus_date"]=$tmp_term_turnus_date;
 	$sem_create_data["term_turnus_start_stunde"]=$tmp_term_turnus_start_stunde;
 	$sem_create_data["term_turnus_start_minute"]=$tmp_term_turnus_start_minute;
 	$sem_create_data["term_turnus_end_stunde"]=$tmp_term_turnus_end_stunde;
@@ -1009,7 +1009,7 @@ if ($cmd_f_x)
     					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
     					$updateResult=$updateAssign->updateAssign();
 
-	    				//are there overlaps, in the meanwhile since the check at step 3? I case the sem is regular, we have to touch the metadata
+	    				//are there overlaps, in the meanwhile since the check at step 3? In this case the sem is regular, we have to touch the metadata
 					if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
 						$overlaps_detected=FALSE;
 						foreach ($updateResult as $key=>$val)
@@ -2084,7 +2084,7 @@ if ($level==3) {
 										<?
 										if ($sem_create_data["turnus_count"]>1) {
 											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
+											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 										}
 										print "<br /><font size=-1>&nbsp; Raum: ";
@@ -2143,7 +2143,7 @@ if ($level==3) {
 										if ($sem_create_data["term_count"]>1) 
 											{
 											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
+											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 											}
 										print "<br /><font size=-1>&nbsp; Raum: ";
@@ -2203,7 +2203,7 @@ if ($level==3) {
 							?>
 							&nbsp; <input type="text" name="vor_raum" size=15 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>&nbsp; 
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.", TRUE, TRUE) ?>
+								<? echo tooltip(_("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt."), TRUE, TRUE) ?>
 							>
 						</td>
 					</tr>
