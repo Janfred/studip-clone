@@ -344,7 +344,7 @@ class AssignEventList{
 	
 	// Konstruktor
 	// if activated without timestamps, we take the current semester
-	function AssignEventList($start = -1, $end = -1, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
+	function AssignEventList($start = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
 	 	global $RELATIVE_PATH_RESOURCES, $SEMESTER, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
@@ -453,10 +453,9 @@ class resourceObject {
 			$this->parent_id = func_get_arg(5);
 			$this->category_id = func_get_arg(6);
 			$this->owner_id = func_get_arg(7);
-			if (!$this->id)
-				$this->id=$this->createId();
+			$this->id=$this->createId();
 			if (!$this->root_id)
-				$this->root_id = $this->id;
+			$this->root_id = $this->id;
 			$this->changeFlg=FALSE;
 		}
 	}
@@ -1134,7 +1133,7 @@ class ResourcesError {
 	
 	function displayMsg($msg_code) {
 		parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "zZ. NA");
-	}
+2	}
 }
 	
 	//Konstruktor
