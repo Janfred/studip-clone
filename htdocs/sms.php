@@ -200,7 +200,7 @@ if ($cmd=="write") {
 		$titel.="<a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$fullname."</font></a><b>";				
 	$content="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 wrap=\"virtual\">";
 	if ($quote)
-		$content.=quotes_encode($tmp_sms_content, $fullname);
+		$content .= htmlReady(quotes_encode($tmp_sms_content, $fullname));
 	$content.="</textarea><br />\n";
 	if ((GetNumberOfBuddies()) && (!$group_id))
 		$content.="<font size=-1><input type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; " . _("Diese Nachricht (auch) an alle meine Buddies versenden") . "</font><br />\n";
