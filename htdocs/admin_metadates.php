@@ -424,7 +424,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$term_metadata["sem_id"]."'");
 		
 		//update the dates in the assi.... (we update if user wants to or the changes to times/rooms/request-system causes killing all the date-assigns)
-		if (($term_metadata["update_dates"]) || ($update_dates_kill_resources)) {
+		if (($term_metadata["update_dates"]) || (($term_metadata["update_dates"]) && ($update_dates_kill_resources))) {
 			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
 			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"], TRUE, $update_resources);
 			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
