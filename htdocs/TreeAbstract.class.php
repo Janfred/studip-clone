@@ -90,10 +90,15 @@ class TreeAbstract {
 	*/
 	function &GetInstance($class_name, $args = null){
 		static $tree_instance;
-		if (!is_object($tree_instance[$class_name])){
-			$tree_instance[$class_name] = new $class_name($args);
+		if ($args){
+			$class_hash = md5($class_name . serialize($args));
+		} else {
+		$class_hash = md5($class_name);
 		}
-		return $tree_instance[$class_name];
+		if (!is_object($tree_instance[$class_hash])){
+			$tree_instance[$class_hash] = new $class_name($args);
+		}
+		return $tree_instance[$class_hash];
 	}
 	
 	/**
@@ -116,6 +121,7 @@ class TreeAbstract {
 	*/
 	function init(){
 		$this->tree_childs = array();
+		$this->tree_num_childs = array();
 		$this->tree_data = array();
 		$this->tree_data['root'] = array('parent_id' => null, 'name' => $this->root_name);
 	}

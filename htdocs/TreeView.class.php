@@ -220,7 +220,7 @@ class TreeView {
 					$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"pictures/forumstrich.gif\"  border=\"0\" ></td>" . $level_output; //vertical line
 			}
 		}
-		$level_output = "<td class=\"blank\" valign=\"top\" width=\"20\" heigth=\"21\" nowrap><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
+		//$level_output = "<td class=\"blank\" valign=\"top\" width=\"20\" heigth=\"21\" nowrap><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		echo "\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr>$level_output";
 		return;
 	}
@@ -260,7 +260,7 @@ class TreeView {
 		else 
 			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		
-		if ($this->tree->isLastKid($item_id) || (!$this->open_ranges[$item_id] && $item_id == $this->start_item_id)) 
+		if (($this->tree->isLastKid($item_id) && !($item_id == $this->start_item_id)) || (!$this->open_ranges[$item_id] && $item_id == $this->start_item_id)) 
 			$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		else 
 			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
@@ -274,7 +274,7 @@ class TreeView {
 					$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //vertical line
 			}
 		}
-		$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
+		//$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
 	
 		echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>$level_output";
 		echo "<td class=\"printcontent\" width=\"100%\"><br>";
@@ -360,18 +360,19 @@ class TreeView {
 	* @param	string	$param	
 	* @return	string
 	*/
-	function getSelf($param){
-		$url = $GLOBALS['PHP_SELF'];
+	function getSelf($param = ""){
 		if ($param)
-			$url .= "?" . $param . "#anchor";
+			$url = $GLOBALS['PHP_SELF'] . "?" . $param . "#anchor";
+		else
+			$url = $GLOBALS['PHP_SELF'] . "#anchor";
 		return $url;
 	}
 }
 //test
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-//include "ForumTree.class.php";
+//include "SemTree.class.php";
 //include "html_head.inc.php";
-//$test = new TreeView("ForumTree",array('seminar_id' => '3f43debe372cfd7d4da6afa4ca40616f'));
+//$test = new TreeView("SemTree");
 //$test->showTree();
 //page_close();
 ?>
