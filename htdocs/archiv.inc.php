@@ -624,7 +624,7 @@ function in_archiv ($sem_id) {
 	}
 	$list.= ")";
 	//copy documents in the temporary folder-system
-	$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN %s ORDER BY name", $arr);
+	$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN %s ORDER BY name", $list);
 	$db->query ($query);
 	$folder = 0;
 	while ($db->next_record()) {
