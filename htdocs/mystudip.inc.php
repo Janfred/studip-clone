@@ -1,5 +1,39 @@
 <?
 /**
+* personal settings
+* 
+* helper functions for handling personal settings
+* 
+*
+* @author		Stefan Suchi <suchi@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	library
+* @module		mystudip.inc
+* @package		studip_core
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// mystudip.inc.php
+// helper functions for handling personal settings
+// Copyright (c) 2003 Stefan Suchi <suchi@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+/**
 * generates drop-down box for language selection
 *
 * This function generates a drop-down box for language selection.
@@ -30,10 +64,15 @@ function select_language($selected_language = "") {
 }
 
 
-//Anpassen der Ansicht
+/**
+* generates first page of personal settings
+*
+* This function generates the first page of personal settings.
+*
+* @access	public        
+*/
 function change_general_view() {
 	global $PHP_SELF, $_language, $auth, $forum, $user, $my_studip_settings;
-;
 		
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;

@@ -40,6 +40,7 @@
 * This function tries to find the preferred language.
 * It returns the first accepted language from browser settings, which is installed.
 * 
+* @access	public        
 * @return		string	preferred user language, given in "en_GB"-style	
 *
 */
@@ -67,6 +68,7 @@ function get_accepted_languages() {
 * This function starts output via i18n system in the given language.
 * It returns the path to the choosen language.
 * 
+* @access	public        
 * @param		string	the language to use for output, given in "en_GB"-style
 * @return		string	the path to the language file, given in "en"-style	
 *
