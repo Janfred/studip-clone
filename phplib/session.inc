@@ -106,7 +106,12 @@ class Session {
         break;
       }
     }
- 
+	if($id != "") {
+		if ( strlen($id) != 32 || ereg('[^0-9a-f]+', $id) ) {
+			// id ungültig -> neue erzeugen ...
+			$id = "";
+		}
+	} 
     if ( "" == $id ) {
       $newid=true;
       while (!$id = $this->that->ac_newid(md5(uniqid($this->magic, TRUE)), $this->name)) {
