@@ -1711,7 +1711,7 @@ class ViewSchedules extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="96%" align="center"><br />
-					<? echo "<b>Anzeige vom ", date ("j.m.Y", $this->start_time), " bis ", date ("j.m.Y", $this->end_time)."</b><br />";?>
+					<? echo "<b>Anzeige vom ", date ("d.m.Y", $this->start_time), " bis ", date ("d.m.Y", $this->end_time)."</b><br />";?>
 					<br />
 				</td>
 			</tr>
@@ -1754,7 +1754,7 @@ class ViewSchedules extends cssClasses {
 			$view = "edit_object_assign";
 		 
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
- 		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
+ 		$end_time = mktime (23, 59, 59, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
 
 	 	$schedule=new ScheduleWeek(FALSE, FALSE, FALSE, TRUE, $start_time) ;
 		
@@ -1768,7 +1768,7 @@ class ViewSchedules extends cssClasses {
 					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&previous_week=TRUE"><img src="pictures/calendar_previous.gif" <? echo tooltip (_("Vorherige Woche anzeigen")) ?>border="0" /></a>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="76%" align="center">
-					<? echo "<b>Anzeige der Woche vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b> (".strftime("%V", $start_time).". "._("Woche").")";?>
+					<? echo "<b>Anzeige der Woche vom ", date ("d.m.Y", $start_time), " bis ", date ("d.m.Y", $end_time)."</b> (".strftime("%V", $start_time).". "._("Woche").")";?>
 					<br />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="10%" align="center">&nbsp;

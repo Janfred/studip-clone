@@ -701,7 +701,7 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 		$resources_data["schedule_week_offset"]--;
 	if ($start_time) {
 		$resources_data["schedule_start_time"] = $start_time;
-		$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60);		
+		$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60) + 59;		
 		$resources_data["schedule_mode"] = "graphical";
 	}
 	elseif ($navigate) {
@@ -724,20 +724,20 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 					$resources_data["schedule_end_time"] =mktime(23,59,59,date("n",$resources_data["schedule_start_time"]), date("j", $resources_data["schedule_start_time"])+($resources_data["schedule_length_factor"] * 7), date("Y",$resources_data["schedule_start_time"]));
 				break;
 				case "d" :
-					$resources_data["schedule_end_time"] =mktime(23,59,59,date("n",$resources_data["schedule_start_time"]), date("j", $resources_data["schedule_start_time"])+$resources_data["schedule_length_factor"], date("Y",$resources_data["schedule_start_time"]));
+					$resources_data["schedule_end_time"] =mktime(23,59,59,date("n",$resources_data["schedule_start_time"]), date("j", $resources_data["schedule_start_time"])+$resources_data["schedule_length_factor"]-1, date("Y",$resources_data["schedule_start_time"]));
 				break;
 			}
 			if ($resources_data["schedule_end_time"]  < 1)
-				$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+1, date("Y", time()));
+				$resources_data["schedule_end_time"] = mktime (23, 59, 59, date("n", time()), date("j", time())+1, date("Y", time()));
 		} elseif (($start_graphical_x) || (!$resources_data["schedule_mode"]) || (($jump_x) && ($resources_data["schedule_mode"] == "graphical"))) {
-			$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60);
+			$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60) + 59;
 			$resources_data["schedule_mode"] = "graphical";			
 		}
 	} else {
 		if (!$resources_data["schedule_start_time"])
 			$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
 		if (!$resources_data["schedule_end_time"])
-			$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+7, date("Y", time()));
+			$resources_data["schedule_end_time"] = mktime (23, 59, 59, date("n", time()), date("j", time())+7, date("Y", time()));
 		if (!$resources_data["schedule_mode"])
 			$resources_data["schedule_mode"] = "graphical";		
 	}

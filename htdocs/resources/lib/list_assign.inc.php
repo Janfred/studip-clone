@@ -74,7 +74,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 		$begin = $assign_object->getBegin();
 	if (!$end)
 		$end = $assign_object->getRepeatEnd();
-
+		
 	if ($assign_object->getRepeatMode() == "na") {
 		// date without repeatation, we have to create only one event (object = event)
 		$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
@@ -89,7 +89,8 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 					date("j",$assign_object -> getBegin()),
 					date("Y",$assign_object -> getBegin()));
 
-		$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $temp_ts_end,
+		if (($temp_ts_end <= $end) && ($assign_object->getBegin() >= $begin))
+			$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
 		//in between days
@@ -104,7 +105,8 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 					$d,
 					date("Y",$assign_object -> getBegin()));
 
-			$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+			if (($temp_ts_end <= $end) && ($temp_ts >= $begin))
+				$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
 		}
@@ -122,7 +124,8 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 					date("j",$assign_object -> getRepeatEnd()),
 					date("Y",$assign_object -> getRepeatEnd()));
 
-		$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+		if (($temp_ts_end <= $end) && ($temp_ts >= $begin))
+			$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
 		
