@@ -243,7 +243,7 @@ class ExternEdit {
 		
 		$out = "\n<!-- BEGIN Content -->\n";
 		$out .= "<tr><td class=\"$class\" width=\"100%\" align=\"left\">\n";
-		$out .= "<form action=\"{$GLOBALS['PHP_SELF']}?com=store#anker\" method=\"post\">\n";
+		$out .= "<form name=\"edit_form\" action=\"{$GLOBALS['PHP_SELF']}?com=store#anker\" method=\"post\">\n";
 		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 		$out .= "<tr>" . printcontent("100%", FALSE, $content, "", FALSE) . "</tr>";
 		$out .= "$submit</table>\n</form>\n</td></tr>\n";
