@@ -62,8 +62,15 @@ if (($SessSemName[1] <>"") && (!isset($sem_id))) {
 }
 
 // nachfragen, ob das Seminar abonniert werden soll
-if (($sem_id) && (!$perm->have_perm("admin"))) {
-	if ($perm->have_perm("user")) { //Add lecture only if logged in	
+if ($sem_id) {
+	if ($perm->have_perm("admin")) {
+		$db->query("SELECT inst_perms FROM seminar_inst LEFT JOIN user_inst USING (institut_id) WHERE user_id ='$user->id' AND inst_perms = 'admin' AND Seminar_id = '$sem_id'");
+		$db->next_record();
+			if ($db->f("inst_perms") == "admin") {
+				$abo_msg="direkt zur Veranstaltung";
+				$skip_verify=TRUE;
+			}
+	} elseif ($perm->have_perm("user")) { //Add lecture only if logged in	
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		$db->next_record();
 		if (!$db->num_rows()) {
@@ -181,11 +188,15 @@ else
 
 if ($abo_msg || $back_msg) {
 	$infobox[2]["kategorie"] = "Aktionen:";
-	if ($abo_msg) {
+	if (($abo_msg) && (!$skip_verify)) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/meinesem.gif" ,
 									"text"  => "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">".$abo_msg. "</a>"
 								);
-	}
+	} elseif ($abo_msg) {
+		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/meinesem.gif" ,
+									"text"  => "<a href=\"seminar_main.php?auswahl=".$sem_id."\">".$abo_msg. "</a>"
+								);
+	}	
 	if ($back_msg) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "./pictures/suchen.gif" ,
 									"text"  => "<a href=\"$send_from_search_page\">".$back_msg. "</a>"
@@ -233,7 +244,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 				<?
-				printf ("<font size=-1><b>Erster Termin:</b></font><br /><font size=-1>%s</font>",veranstaltung_beginn($sem_id));
+				printf ("<font size=-1><b>	:</b></font><br /><font size=-1>%s</font>",veranstaltung_beginn($sem_id));
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="25%">
