@@ -52,19 +52,22 @@ $EXTERN_MODULE_TYPES[1] = array("module" => "Download", "name" => _("Download"),
 $EXTERN_MODULE_TYPES[2] = array("module" => "Persons", "name" => _("Personal"), "level" => 1,
 													"description" => _("Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
 
-/*$EXTERN_MODULE_TYPES[3] = array("module" => "Lectures", "name" => _("Veranstaltungen"), "level" => 1,
-													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
+//$EXTERN_MODULE_TYPES[3] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
+	//												"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[4] = array("module" => "News", "name" => _("News"), "level" => 1,
+//$EXTERN_MODULE_TYPES[4] = array("module" => "Rangelecturetree", "name" => _("Einrichtungsbaum Veranstaltungen"), "level" => 1,
+	//												"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
+
+$EXTERN_MODULE_TYPES[3] = array("module" => "News", "name" => _("News"), "level" => 1,
 													"description" => _("Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[5] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,
+$EXTERN_MODULE_TYPES[4] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
+													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."));
+/*
+$EXTERN_MODULE_TYPES[7] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,
 													"description" => _("Das Modul &quot;Veranstaltungsdetails&uot; gibt alle allgemeinen Daten einer Veranstaltung aus."));
 
-$EXTERN_MODULE_TYPES[6] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
-													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."));
-
-$EXTERN_MODULE_TYPES[7] = array("module" => "Tree", "name" => _("Bereichsbaum"), "level" => 1,
+$EXTERN_MODULE_TYPES[8] = array("module" => "Tree", "name" => _("Bereichsbaum"), "level" => 1,
 													"description" => _("Das Modul &quot;Bereichsbaum&quot; gibt die Struktur einer Einrichtung aus, wenn diese im Bereichsbaum eingefügt wurde. Die Ausgabe erfolgt jeweils vor der Datenausgabe eines anderen Moduls."));
 */
 // Don't allow more than 10 configuration files for each module!
@@ -78,5 +81,11 @@ $EXTERN_ENABLE_ERROR_LOGGING = FALSE;
 
 // Not yet implemented!
 $EXTERN_LOG_FILE = "";
+
+// don't edit below this line
+//==============================================================================
+
+if (substr($EXTERN_SERVER_NAME, -1) != "/")
+	$EXTERN_SERVER_NAME .= "/";
 
 ?>
