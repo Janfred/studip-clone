@@ -130,7 +130,7 @@ own risk :) */
 $ALLOW_GROUPING_SEMINARS = TRUE;			//if true, administrators can group seminars - students
 							//will only be able to register for one of the grouped seminars
 
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 			//if true, students aren't allowed to set or change 
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 			//if true, students are allowed to set or change 
 							//their studycourse (studiengang)
 
 $SHOW_TERMS_ON_FIRST_LOGIN = FALSE;			//if true, the user has to accept the terms on his first login
@@ -226,8 +226,8 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 //some additional authification-settings
 //NOTE: you MUST enable Standard authentication-plugin for this settings to take effect!
 
-$ALLOW_CHANGE_USERNAME = TRUE;				//if true, users are not allowed to change their username
-$ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are not allowed to change their email-address
+$ALLOW_CHANGE_USERNAME = TRUE;				//if true, users are allowed to change their username
+$ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are allowed to change their email-address
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself 
 
 //IDs of courses, in which users were entered when they were promoted to 'autor'
