@@ -204,7 +204,7 @@ class studip_news {
 		if ($news_id AND $news_id!="new_entry")
 			$this->get_one_news($news_id);
 		else {
-			$this->news_query = array("news_id"=>"new_entry", "topic" => "", "body" => "", "date" => $aktuell, "user_id" =>$this->user_id, "author" =>$this->full_username, "expire" => "604800");
+			$this->news_query = array("news_id"=>"new_entry", "topic" => "", "body" => "", "date" => $aktuell, "user_id" =>$this->user_id, "author" =>htmlReady($this->full_username), "expire" => "604800");
 			if ($perm->have_perm("admin")){
 				$this->search_range(mysql_escape_string($this->range_name));
 			}
@@ -219,7 +219,7 @@ class studip_news {
 		echo "\n</td></tr>";
 		echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
 		echo "\n<table width=\"99%\" cellspacing=\"0\" cellpadding=\"6\" border=\"0\">";
-		echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>" . _("Autor:") . "</b>&nbsp;".htmlReady($this->news_query["author"])."<br><br><b>" . _("&Uuml;berschrift")
+		echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>" . _("Autor:") . "</b>&nbsp;". $this->news_query["author"] ."<br><br><b>" . _("&Uuml;berschrift")
 			. "</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\" maxlength=\"255\" name=\"topic\" value=\""
 			.htmlReady($this->news_query["topic"])."\"><br>";
 		list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
@@ -277,7 +277,7 @@ class studip_news {
 			echo "></td></tr>";
 		}
 		echo "\n<tr><th width=\"90%\" align=\"left\">" . _("Pers&ouml;nlicher Bereich:") . "</th><th align=\"center\" width=\"10%\">" . _("Anzeigen ?") . "</th></tr>";
-		echo "\n<tr ".$cssSw->getHover()."><td ".$cssSw->getFullClass()." width=\"90%\">".htmlReady($this->news_query["author"])."</td>";
+		echo "\n<tr ".$cssSw->getHover()."><td ".$cssSw->getFullClass()." width=\"90%\">".$this->news_query["author"]."</td>";
 		echo "\n<td	 ".$cssSw->getFullClass()." width=\"10%\" align=\"center\">";
 		if ($this->news_perm[$this->news_query["user_id"]]["perm"] OR $this->news_query["user_id"]==$this->user_id) {
 			echo"<input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->news_query["user_id"]."\"";
