@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-13 17:36+0100\n"
+"POT-Creation-Date: 2004-02-14 18:58+0100\n"
 "PO-Revision-Date: 2004-02-14 17:29+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -596,7 +596,8 @@ msgid "pers&ouml;nliche Ressourcen"
 msgstr "Personal resources"
 
 #: resources/resourcesVisual.inc.php:1908
-msgid "folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
+msgid ""
+"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
 msgstr ""
 "The resource should possess the following properties (empty means that it "
 "doesn't matter):"
@@ -803,7 +804,8 @@ msgstr "The resource has been moved"
 msgid ""
 "Bitte geben Sie eineN NutzerIn f&uuml;r die Belegung an, um diese Belegung "
 "zu speichern!"
-msgstr "In order to save this allocation, please enter a user for the allocation!"
+msgstr ""
+"In order to save this allocation, please enter a user for the allocation!"
 
 #: resources/views/msgs_resources.inc.php:78
 msgid ""
@@ -815,7 +817,8 @@ msgstr ""
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
-msgstr "There are no resources or levels in existence to which you have access."
+msgstr ""
+"There are no resources or levels in existence to which you have access."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid ""
@@ -836,7 +839,8 @@ msgid ""
 msgstr "No resources exist which you may allocate in respect to this course."
 
 #: resources/views/msgs_resources.inc.php:87
-msgid "Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
+msgid ""
+"Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
 msgstr "You have not selected a level. Therefore no list can be created."
 
 #: resources/views/msgs_resources.inc.php:87
@@ -864,7 +868,8 @@ msgstr "You have not selected an object to display."
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der "
 "Belegung an!"
-msgstr "Please enter valid values for the date, begin and end of the allocation!"
+msgstr ""
+"Please enter valid values for the date, begin and end of the allocation!"
 
 #: resources/views/msgs_resources.inc.php:99
 msgid ""
@@ -899,7 +904,8 @@ msgid ""
 msgstr "The weekly repetition may occur a maximum of 50 times!"
 
 #: resources/views/msgs_resources.inc.php:117
-msgid "Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
+msgid ""
+"Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
 msgstr "The daily repetition may occur a maximum of 100 times!"
 
 #: resources/views/msgs_resources.inc.php:121
@@ -1033,8 +1039,8 @@ msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen  und "
 "auf unterschiedliche Art darstellen lassen."
 msgstr ""
-"Here you can display the resource allocation times and represent them in different "
-"ways."
+"Here you can display the resource allocation times and represent them in "
+"different ways."
 
 #: resources/views/page_intros.inc.php:113
 msgid "Belegungszeiten ausgeben"
@@ -1200,4 +1206,3 @@ msgstr ""
 
 #~ msgid "zur&uuml;ck zur &Uuml;bersicht"
 #~ msgstr "Back to overview"
-

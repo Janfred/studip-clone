@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-13 17:36+0100\n"
+"POT-Creation-Date: 2004-02-14 18:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgid "Bitte Vor- und/oder Nachnamen eingeben."
 msgstr ""
 
 #: wap/event_news.php:57 wap/inst_news.php:58 wap/login_index.php:83
-#: wap/news.php:56 wap/show_event.php:104 wap/show_institute.php:111
+#: wap/news.php:56 wap/show_event.php:104 wap/show_institute.php:112
 msgid "News"
 msgstr ""
 
@@ -122,20 +122,20 @@ msgstr ""
 msgid "Keine neuen News oder Termine seit letztem Web-Besuch."
 msgstr ""
 
-#: wap/show_institute.php:128 wap/show_institute.php:140
+#: wap/show_institute.php:129 wap/show_institute.php:141
 #: wap/show_private.php:73
 msgid "Tel:"
 msgstr ""
 
-#: wap/show_institute.php:134 wap/show_institute.php:146
+#: wap/show_institute.php:135 wap/show_institute.php:147
 msgid "Fax:"
 msgstr ""
 
-#: wap/show_institute.php:164
+#: wap/show_institute.php:165
 msgid "Raum:"
 msgstr ""
 
-#: wap/show_institute.php:170
+#: wap/show_institute.php:171
 msgid "Sprechzeiten:"
 msgstr ""
 
@@ -143,11 +143,11 @@ msgstr ""
 msgid "Vom"
 msgstr ""
 
-#: wap/show_sms.php:85
+#: wap/show_sms.php:91 wap/show_sms.php:108
 msgid "Von"
 msgstr ""
 
-#: wap/show_user.php:94
+#: wap/show_user.php:102
 msgid "Privat"
 msgstr ""
 

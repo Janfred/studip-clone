@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-13 17:36+0100\n"
+"POT-Creation-Date: 2004-02-14 18:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Benutzer nicht gefunden"
 msgstr ""
 
-#: about.php:172 forum.inc.php:1113
+#: about.php:172 forum.inc.php:1122
 msgid "kein persönliches Bild vorhanden"
 msgstr ""
 
@@ -1959,12 +1959,12 @@ msgid "&Uuml;berschrift"
 msgstr ""
 
 #: admin_news.php:176 admin_news.php:226 contact.inc.php:423 contact.php:112
-#: forum.inc.php:1614 freie.php:169 meine_seminare.php:438
+#: forum.inc.php:1623 freie.php:169 meine_seminare.php:438
 #: meine_seminare.php:621 meine_seminare.php:905 my_archiv.php:94
 msgid "Inhalt"
 msgstr ""
 
-#: admin_news.php:177 forum.inc.php:810 forum.inc.php:1600
+#: admin_news.php:177 forum.inc.php:819 forum.inc.php:1609
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginStudip.class.php:102
 msgid "Autor"
 msgstr ""
@@ -2073,7 +2073,7 @@ msgstr ""
 
 #: admin_news.php:306 admin_news.php:773 admin_seminare1.php:593
 #: admin_seminare1.php:658 admin_seminare_assi.php:1771
-#: admin_seminare_assi.php:1838 archiv.php:517 forum.inc.php:1620
+#: admin_seminare_assi.php:1838 archiv.php:517 forum.inc.php:1629
 #: institut_browse.php:103 pers_browse.inc.php:136
 #: lib/classes/StudipLitSearch.class.php:76
 #: lib/classes/StudipSemSearch.class.php:217
@@ -3735,7 +3735,7 @@ msgid "Markierte Personen dieser Gruppe zuordnen"
 msgstr ""
 
 #: admin_statusgruppe.php:158
-msgid "Peronen können sich dieser Gruppe selbst zuordnen"
+msgid "Personen können sich dieser Gruppe selbst zuordnen"
 msgstr ""
 
 #: admin_statusgruppe.php:158 contact_statusgruppen.php:92
@@ -4627,7 +4627,7 @@ msgstr ""
 msgid "Suchbereich:"
 msgstr ""
 
-#: browse_lernmodule.php:89 forum.inc.php:812 sem_browse.inc.php:195
+#: browse_lernmodule.php:89 forum.inc.php:821 sem_browse.inc.php:195
 #: wiki.inc.php:618 lib/classes/SemBrowse.class.php:44
 #: lib/classes/StudipLitCatElement.class.php:59
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginStudip.class.php:101
@@ -5284,11 +5284,11 @@ msgstr ""
 msgid "%d Eintr&auml;ge"
 msgstr ""
 
-#: contact.php:133 forum.inc.php:1273
+#: contact.php:133 forum.inc.php:1282
 msgid "Alle aufklappen"
 msgstr ""
 
-#: contact.php:135 forum.inc.php:1270
+#: contact.php:135 forum.inc.php:1279
 msgid "Alle zuklappen"
 msgstr ""
 
@@ -6898,97 +6898,97 @@ msgstr ""
 msgid "weiter"
 msgstr ""
 
-#: forum.inc.php:702
+#: forum.inc.php:711
 msgid "Fehler beim Anlegen eines Postings."
 msgstr ""
 
-#: forum.inc.php:725
+#: forum.inc.php:734
 msgid "<p>Aktualisieren des Postings fehlgeschlagen</p>\n"
 msgstr ""
 
-#: forum.inc.php:783
+#: forum.inc.php:792
 msgid "Indikator:"
 msgstr ""
 
-#: forum.inc.php:809
+#: forum.inc.php:818
 msgid "Favoriten"
 msgstr ""
 
-#: forum.inc.php:811 forum.inc.php:1405
+#: forum.inc.php:820 forum.inc.php:1414
 msgid "Thema"
 msgstr ""
 
-#: forum.inc.php:821
+#: forum.inc.php:830
 msgid "Sortierung durchführen"
 msgstr ""
 
-#: forum.inc.php:823
+#: forum.inc.php:832
 msgid "Toolbar einfahren"
 msgstr ""
 
-#: forum.inc.php:832
+#: forum.inc.php:841
 msgid "Toolbar ausfahren"
 msgstr ""
 
-#: forum.inc.php:900
+#: forum.inc.php:909
 msgid "editiert von: "
 msgstr ""
 
-#: forum.inc.php:914 links_about.inc.php:66 links_openobject.inc.php:79
+#: forum.inc.php:923 links_about.inc.php:66 links_openobject.inc.php:79
 #: links_openobject.inc.php:101 lib/classes/AdminModules.class.php:54
 msgid "Forum"
 msgstr ""
 
-#: forum.inc.php:916
+#: forum.inc.php:925
 msgid "Look & Feel anpassen"
 msgstr ""
 
-#: forum.inc.php:1034
+#: forum.inc.php:1043
 msgid "aus den Favoriten entfernen"
 msgstr ""
 
-#: forum.inc.php:1037
+#: forum.inc.php:1046
 msgid "zu den Favoriten hinzufügen"
 msgstr ""
 
-#: forum.inc.php:1046
+#: forum.inc.php:1055
 msgid "Hier klicken um in einem neuen Fenster zu antworten"
 msgstr ""
 
-#: forum.inc.php:1414
+#: forum.inc.php:1423
 msgid "<b>Postings</b> / letzter Eintrag"
 msgstr ""
 
-#: forum.inc.php:1443
+#: forum.inc.php:1452
 msgid "Neues Thema anlegen"
 msgstr ""
 
-#: forum.inc.php:1583
+#: forum.inc.php:1592
 msgid "Suchbegriff:"
 msgstr ""
 
-#: forum.inc.php:1591
+#: forum.inc.php:1600
 msgid "Suchen in den Feldern:"
 msgstr ""
 
-#: forum.inc.php:1607
+#: forum.inc.php:1616
 msgid "Überschrift"
 msgstr ""
 
-#: forum.inc.php:1674
+#: forum.inc.php:1683
 #, c-format
 msgid "Als Thema verschieben (zusammen mit %s Antworten):"
 msgstr ""
 
-#: forum.inc.php:1684
+#: forum.inc.php:1693
 msgid "in anderes Forum:"
 msgstr ""
 
-#: forum.inc.php:1688 forum.inc.php:1710
+#: forum.inc.php:1697 forum.inc.php:1719
 msgid "dahin verschieben"
 msgstr ""
 
-#: forum.inc.php:1706
+#: forum.inc.php:1715
 msgid "in andere Einrichtung:"
 msgstr ""
 
@@ -7018,49 +7018,55 @@ msgid ""
 "navigieren."
 msgstr ""
 
-#: forum.php:217 forum.php:227
+#: forum.php:217 forum.php:227 forum.php:237
 msgid ""
 "Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu "
 "vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu "
 "verwenden."
 msgstr ""
 
-#: forum.php:218 forum.php:228
+#: forum.php:218 forum.php:228 forum.php:238
 msgid "zuviele Browserfenster im Forenbereich!"
 msgstr ""
 
-#: forum.php:278
+#: forum.php:237
+msgid ""
+"Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Stud.IP "
+"Bereiche zu navigieren."
+msgstr ""
+
+#: forum.php:288
 msgid "das untenstehende Thema"
 msgstr ""
 
-#: forum.php:280
+#: forum.php:290
 msgid "das untenstehende Posting"
 msgstr ""
 
-#: forum.php:283
+#: forum.php:293
 #, c-format
 msgid "Wollen Sie %s %s von %s wirklich löschen?"
 msgstr ""
 
-#: forum.php:285
+#: forum.php:295
 #, c-format
 msgid "Alle %s Antworten auf diesen Beitrag werden ebenfalls gelöscht!"
 msgstr ""
 
-#: forum.php:368
+#: forum.php:378
 msgid "Dieser Beitrag wird gerade bearbeitet."
 msgstr ""
 
-#: forum.php:392
+#: forum.php:402
 msgid "Name des Themas"
 msgstr ""
 
-#: forum.php:438
+#: forum.php:448
 #, c-format
 msgid "%s Posting(s) gel&ouml;scht"
 msgstr ""
 
-#: forum.php:439
+#: forum.php:449
 #, c-format
 msgid "%s Posting(s) verschoben."
 msgstr ""
@@ -10290,7 +10296,7 @@ msgstr ""
 
 #: recordofstudy.php:368
 msgid ""
-"Um eine Druckansicht ihrer Veranstaltungen zu erstellen, wählen Sie bitte "
+"Um eine Druckansicht Ihrer Veranstaltungen zu erstellen, wählen Sie bitte "
 "zunächst das entsprechende Semester aus und engen gegebenenfalls ihre "
 "Suchabfrage ein."
 msgstr ""
