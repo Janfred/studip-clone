@@ -77,9 +77,18 @@ class StudipAuthLdap extends StudipAuthAbstract {
 			$this->error_msg = _("Setzen der LDAP Protokolversion fehlgeschlagen.");
 			return false;
 		}
+		if ($this->start_tls) {
+			if ($this->protocol_version != 3) {
+				$this->error_msg = _("LDAP Protokolversion 3 wird für \"Start TLS\" benötigt.");
+				return false;
+			} elseif (!ldap_start_tls($this->conn)) {
+				$this->error_msg = _("\"Start TLS\" fehlgeschlagen.");
+				return false;
+			}
+		}
 		return true;
 	}
-	
+
 	function getUserDn($username){
 		$user_dn = "";
 		if ($this->anonymous_bind){
