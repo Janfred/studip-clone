@@ -71,7 +71,7 @@ class StartupChecks {
 		$this->registered_checks["myAdminInstitute"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->registered_checks["dozent"]["msg"] = _("Sie ben&ouml;tigen mindestens einen Dozentenaccount, um Veranstaltungen anlegen zu k&ouml;nnen. Nutzen sie die globale Nutzerverwaltung, um einen neuen Nutzer mit dem Status Dozent anzulegen oder den Status eines bestehenden Nutzers auf &raquo;dozent&laquo; zu setzen.");
-		$this->registered_checks["dozent"]["link"] = "new_user_md5";
+		$this->registered_checks["dozent"]["link"] = "new_user_md5.php";
 		$this->registered_checks["dozent"]["link_name"] = _("Dozentenaccount anlegen oder anderen Account hochstufen");
 
 		$this->registered_checks["institutesDozent"]["msg"] = _("Um Veranstaltungen anlegen zu k&ouml;nnen, muss der Einrichtung, f&uuml;r die Sie eine Veranstaltung anlegen m&ouml;chten, mindestens ein Dozentenaccount zugeordnet werden. Nutzen Sie daf&uuml;r die Mitarbeiterverwaltung f&uuml;r Einrichtungen.");
