@@ -315,17 +315,17 @@ class SemBrowse {
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name 
-				, Institute.Name AS Institut,Institute.Institut_id,
+				, Institute.Name AS Institut,Institute.Institut_id,sem_tree.parent_id,sem_tree.priority,
 				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
 				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
 				LEFT JOIN auth_user_md5 USING (user_id) 
 				LEFT JOIN user_info USING (user_id) 
 				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
+				LEFT JOIN sem_tree USING (sem_tree_id)
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN Institute USING (Institut_id) 
-				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "') ORDER BY 
-				 seminare.Name ");
+				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "') ORDER BY parent_id,priority");
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
 			$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
@@ -350,10 +350,10 @@ class SemBrowse {
 								if ($this->sem_number === false || (is_array($this->sem_number) && in_array($i,$this->sem_number))){
 									if ($group_by_data[$i] && !$tmp_group_by_data[$i]){
 										foreach($group_by_data[$i]['Seminar_id'] as $id => $bar){
-											$tmp_group_by_data[$i]['Seminar_id'][$id] = key($sem_data[$id]["Name"]);
+											$tmp_group_by_data[$i]['Seminar_id'][$id] = true;
 										}
 									}
-									$tmp_group_by_data[$i]['Seminar_id'][$seminar_id] = key($sem_data[$seminar_id]["Name"]);
+									$tmp_group_by_data[$i]['Seminar_id'][$seminar_id] = true;
 								}
 							}
 						}
@@ -365,13 +365,21 @@ class SemBrowse {
 					}
 					foreach ($tmp_group_by_data as $start_sem => $detail){
 						$group_by_data[$start_sem] = $detail;
-						uasort($group_by_data[$start_sem]['Seminar_id'], 'strnatcasecmp');
 					}
 				}
-				krsort($group_by_data, SORT_NUMERIC);
-			} else {
-				uksort($group_by_data, 'strnatcasecmp');
 			}
+			
+			foreach ($group_by_data as $group_field => $sem_ids){
+				foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
+					$name = strtolower(key($sem_data[$seminar_id]["Name"]));
+					$name = str_replace("ä","ae",$name);
+					$name = str_replace("ö","oe",$name);
+					$name = str_replace("ü","ue",$name);
+					$group_by_data[$group_field]['Seminar_id'][$seminar_id] = $name;
+				}
+				uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcasecmp');
+			}
+			
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 			echo "\n<tr><td class=\"steelgraulight\" colspan=\"2\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
 				. sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
@@ -383,6 +391,28 @@ class SemBrowse {
 			} else {
 				$the_tree =& $this->sem_tree->tree;
 			}
+			
+			switch ($this->sem_browse_data["group_by"]){
+					case 0:
+					krsort($group_by_data, SORT_NUMERIC);
+					break;
+					
+					case 1:
+							
+					break;
+					
+					case 3:
+					uksort($group_by_data, create_function('$a,$b',
+							'global $SEM_CLASS,$SEM_TYPE;
+							return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
+												$SEM_TYPE[$b]["name"]." (". $SEM_CLASS[$SEM_TYPE[$b]["class"]]["name"].")");'));
+					break;
+					default:
+					uksort($group_by_data, 'strnatcasecmp');
+					break;
+					
+			}
+			
 			foreach ($group_by_data as $group_field => $sem_ids){
 				echo "\n<tr><td class=\"steelkante\" colspan=\"2\"><font size=-1><b>";
 				switch ($this->sem_browse_data["group_by"]){
@@ -398,15 +428,11 @@ class SemBrowse {
 					}
 					break;
 					
-					case 2:
-					echo htmlReady($group_field);
-					break;
-					
 					case 3:
 					echo htmlReady($SEM_TYPE[$group_field]["name"]." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")");
 					break;
 					
-					case 4:
+					default:
 					echo htmlReady($group_field);
 					break;
 					
