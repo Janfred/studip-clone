@@ -57,6 +57,9 @@ ACHTUNG: Zum Ausführen der SQL-Befehle und Updatescripte müssen Datenbank und We
   ACHTUNG: Dieser Schritt kann bei einer großen Installation eine Zeit dauern (etwa 1 Minute)
 * Konvertierungen für Betreffzeilen im Messaging vornehmen
   Script: convert_sms_subject.php als root ausführen (#5)
+  ACHTUNG: Da dieses Script sehr viel Speicher verbraucht, wenn eine große Anzahl an Nachrichten im System vorliegen,
+  muß entweder das Speicherlimit von PHP temporär sehr hoch gesetzt werden (etwa 50 MB) oder das Script mehrfach ausgeführt 
+  werden, bis alle Einträge konvertiert sind.
 * Konvertierungen für Einstellungen der Weiterleitung im Messaging vornehmen
   Script: convert_sms_user_info.php als root ausführen (#6)
 * Änderungen am Wiki (#7)
