@@ -68,8 +68,9 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
 	$db->query("SELECT Seminar_id, Name FROM seminare WHERE seminar_id = '$seminar_id' AND ((admission_type = '1'  AND admission_selection_take_place = '1') OR (admission_type = '2'))");
+		echo jaa, $seminar_id;
+
 	if ($db->next_record()) {
-		echo jaa;
 		//Liste einlesen
 		$db2->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id =  '".$db->f("Seminar_id")."' AND status = 'awaiting' ORDER BY position ");
 		$position=1;
@@ -103,11 +104,9 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	$db4=new DB_Seminar;
 	$db5=new DB_Seminar;
 	$messaging=new messaging;
-	echo $seminar_id;
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
 	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE seminar_id = '$seminar_id' AND admission_selection_take_place = '1' ");
 	if ($db->next_record()) {
-		echo ja;
 		//anzahl der freien Plaetze holen
 		$count=get_free_admission($db->f("Seminar_id"));
 		
