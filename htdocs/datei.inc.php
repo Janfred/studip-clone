@@ -1222,8 +1222,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					else
 						$neue_datei = FALSE;
 					
-					if ($db3->f("protected")==1)
-						$icon .= "<img src=\"pictures/ausruf_small3.gif\" ".tooltip(_("Diese Datei ist urheberrechtlich geschützt!")).">";
+					if ($db3->f("protected")==1) 
+						$zusatz .= "&nbsp;<img src=\"pictures/ausruf_small3.gif\" ".tooltip(_("Diese Datei ist urheberrechtlich geschützt!")).">";
+					if ($db3->f("url")!="") 
+						$zusatz .= "&nbsp;<img src=\"pictures/link_extern.gif\" ".tooltip(_("Diese Datei wird von einem externen Server geladen!")).">";
 					
 					//Dokumenttitelzeile ausgeben
 					if (strstr($open,$db3->f("dokument_id"))) 
