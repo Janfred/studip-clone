@@ -47,7 +47,7 @@ function export_inst($inst_id)
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
-	$db->query('SELECT Fakultaeten.Name FROM Fakultaeten LEFT JOIN Institute USING(fakultaets_id) WHERE Institut_id = "' . $inst_id . '"');
+	$db->query('SELECT Name FROM Institute WHERE Institut_id = "' . $inst_id . '"' AND fakultaets_id = "' . $inst_id . '"');
 	$db->next_record();
 	{
 		if ($db->f("Name") != "") 

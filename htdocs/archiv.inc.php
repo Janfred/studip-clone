@@ -145,7 +145,7 @@ function dump_sem($sem_id)
 
 // Fakultaeten...
 
-	$db3->query("SELECT DISTINCT Fakultaeten.Name FROM Fakultaeten LEFT JOIN Institute USING (Fakultaets_id) LEFT JOIN seminar_inst USING (institut_id) LEFT JOIN seminare USING (Institut_id) WHERE seminare.Seminar_id = '$sem_id' OR seminar_inst.seminar_id = '$sem_id'");
+	$db3->query("SELECT DISTINCT b.Name FROM seminar_inst a Institute LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND a.Institut_id=b.fakultaets_id) WHERE a.seminar_id = '$sem_id'");
 	IF ($db3->affected_rows() > 0)
 		{
 		$dump.= "<tr><td width=\"15%\"><b>Fakult&auml;t:&nbsp;</b></td><td>";
@@ -574,11 +574,11 @@ function in_archiv ($sem_id)
 		$dozenten=$dozenten.", ".$db2->f("fullname");
 		}
 
-	$db2->query("SELECT Fakultaeten.Fakultaets_id FROM Fakultaeten LEFT JOIN Institute USING (Fakultaets_id)  LEFT JOIN seminare USING (Institut_id) WHERE seminare.Seminar_id = '$seminar_id'");
+	$db2->query("SELECT fakultaets_id FROM seminare LEFT JOIN Institute USING (Institut_id) WHERE seminare.Seminar_id = '$seminar_id'");
 	$db2->next_record();
 	$fakultaet_id=$db2->f("Fakultaets_id");
 
-	$db2->query("SELECT DISTINCT Fakultaeten.Name FROM Fakultaeten LEFT JOIN Institute USING (Fakultaets_id) LEFT JOIN seminar_inst USING (institut_id) WHERE seminar_inst.seminar_id = '$seminar_id'");
+	$db2->query("SELECT DISTINCT b.Name FROM seminar_inst a Institute LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND a.Institut_id=b.fakultaets_id) WHERE a.seminar_id = '$sem_id'");
 	$db2->next_record();
 	$fakultaet=$db2->f("Name");
 	while ($db2->next_record())

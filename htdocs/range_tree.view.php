@@ -24,43 +24,42 @@
 $_views["TREE_KIDS"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT item_id FROM range_tree WHERE parent_id=? ORDER BY priority");
 $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.*, b.Name AS fak_name, c.Name as inst_name, c.fakultaets_id FROM range_tree a LEFT JOIN Fakultaeten b ON (a.studip_object = 'fak' AND a.studip_object_id = b.Fakultaets_id)
-LEFT JOIN Institute c ON (a.studip_object = 'inst' AND a.studip_object_id = c.Institut_id) ORDER BY priority");
+							"query"=>"SELECT a.*, b.Name AS studip_object_name, b.fakultaets_id FROM range_tree a 
+									LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) ORDER BY priority");
 $_views["TREE_OBJECT_NAME"] = array("pk"=>"","temp_table_type"=>"HEAP",
-							"query"=>"SELECT Name FROM ! WHERE ! LIKE ? ");
+							"query"=>"SELECT Name FROM § WHERE § LIKE ? ");
 $_views["TREE_OBJECT_DETAIL"] = array("pk"=>"","temp_table_type"=>"HEAP",
-							"query"=>"SELECT * FROM ! WHERE ! LIKE ? ");
+							"query"=>"SELECT * FROM § WHERE § LIKE ? ");
 $_views["TREE_OBJECT_CAT"] = array("pk"=>"kategorie_id","temp_table_type"=>"MyISAM",
 							"query"=>"SELECT * FROM kategorien WHERE range_id LIKE ? ORDER BY priority");
 $_views["TREE_INST_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
 							"query"=>"SELECT Institut_id FROM user_inst WHERE Institut_id IN(&) AND user_id=? AND inst_perms='admin'");
 $_views["TREE_FAK_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.Fakultaets_id,Institut_id FROM fakultaet_user a LEFT JOIN Institute USING(Fakultaets_id) WHERE a.Fakultaets_id IN(&) AND user_id=? AND status='admin'");
+							"query"=>"SELECT b.fakultaets_id,a.Institut_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id = b.Institut_id AND b.Institut_id=b.fakultaets_id) WHERE a.Institut_id IN(&) AND NOT ISNULL(b.Institut_id) AND user_id=? AND inst_perms='admin'");
 $_views["TREE_ITEMS_OBJECT"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT item_id FROM range_tree WHERE studip_object_id LIKE ?");
 
-$_views["TREE_UPD_PRIO"] = array("query" => "UPDATE range_tree SET priority=! WHERE item_id=?");
-$_views["TREE_INS_ITEM"] = array("query" => "INSERT INTO range_tree (item_id,parent_id,name,priority,studip_object,studip_object_id) VALUES (?,?,?,!,?,?)");
+$_views["TREE_UPD_PRIO"] = array("query" => "UPDATE range_tree SET priority=§ WHERE item_id=?");
+$_views["TREE_INS_ITEM"] = array("query" => "INSERT INTO range_tree (item_id,parent_id,name,priority,studip_object,studip_object_id) VALUES (?,?,?,§,?,?)");
 $_views["TREE_UPD_ITEM"] = array("query" => "UPDATE range_tree SET name=?, studip_object=?, studip_object_id=? WHERE item_id=?");
-$_views["TREE_MOVE_ITEM"] = array("query" => "UPDATE range_tree SET parent_id=?, priority=! WHERE item_id=?");
+$_views["TREE_MOVE_ITEM"] = array("query" => "UPDATE range_tree SET parent_id=?, priority=§ WHERE item_id=?");
 $_views["TREE_DEL_ITEM"] = array("query" => "DELETE FROM range_tree WHERE item_id IN (&)");
 
-$_views["TREE_SEARCH_INST"] = array("query" => "SELECT Name,Institut_id FROM Institute WHERE Name LIKE '%!%'");
-$_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Fakultaets_id FROM Fakultaeten WHERE Name LIKE '%!%'");
+$_views["TREE_SEARCH_INST"] = array("query" => "SELECT Name,Institut_id FROM Institute WHERE fakultaets_id!=Institut_id AND Name LIKE '%§%'");
+$_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Institut_id AS Fakultaets_id FROM Institute WHERE fakultaets_id=Institut_id AND Name LIKE '%§%'");
 $_views["TREE_SEARCH_ITEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.item_id FROM range_tree a LEFT JOIN Fakultaeten b ON (a.studip_object = 'fak' AND a.studip_object_id = b.Fakultaets_id)
-LEFT JOIN Institute c ON (a.studip_object = 'inst' AND a.studip_object_id = c.Institut_id) WHERE a.name LIKE ?");
+							"query"=>"SELECT a.item_id FROM range_tree a LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) WHERE a.name LIKE ?");
 $_views["TREE_SEARCH_USER"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT rt.item_id FROM auth_user_md5 a LEFT JOIN user_inst b USING (user_id) LEFT JOIN fakultaet_user c ON (a.user_id=c.user_id)
-LEFT JOIN range_tree rt ON (rt.studip_object_id=b.Institut_id OR rt.studip_object_id=c.Fakultaets_id) WHERE NOT ISNULL(rt.item_id) AND CONCAT(a.username,' ',a.Vorname,' ',a.Nachname) LIKE ?");
+							"query"=>"SELECT rt.item_id FROM auth_user_md5 a LEFT JOIN user_inst b USING (user_id) 
+LEFT JOIN range_tree rt ON (rt.studip_object_id=b.Institut_id ) WHERE NOT ISNULL(rt.item_id) AND CONCAT(a.username,' ',a.Vorname,' ',a.Nachname) LIKE ?");
 $_views["TREE_SEARCH_SEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT rt.item_id FROM seminare a LEFT JOIN seminar_inst b USING (Seminar_id)LEFT JOIN range_tree rt ON (rt.studip_object_id=b.institut_id) 
 							WHERE NOT ISNULL(rt.item_id) AND a.Name LIKE ?");
 
 
-$_views["CAT_UPD_PRIO"] = array("query" => "UPDATE kategorien SET priority=!,chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
+$_views["CAT_UPD_PRIO"] = array("query" => "UPDATE kategorien SET priority=§,chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
 $_views["CAT_UPD_CONTENT"] = array("query" => "UPDATE kategorien SET name=?, content=?, chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
-$_views["CAT_INS_ALL"] = array("query" => "INSERT INTO kategorien (kategorie_id,range_id,name,content,priority,mkdate,chdate)VALUES (?,?,?,?,!,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())");
+$_views["CAT_INS_ALL"] = array("query" => "INSERT INTO kategorien (kategorie_id,range_id,name,content,priority,mkdate,chdate)VALUES (?,?,?,?,§,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())");
 $_views["CAT_DEL"] = array("query" => "DELETE FROM kategorien WHERE kategorie_id IN (&)");
 $_views["CAT_DEL_RANGE"] = array("query" => "DELETE FROM kategorien WHERE range_id IN (&)");
 

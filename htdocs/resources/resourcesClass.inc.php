@@ -118,7 +118,7 @@ class AssignObject {
 						return $this->db->f("Name")." (Einrichtung)";
 			break;
 			case "fak":
-				$query = sprintf("SELECT Name FROM Fakultaeten WHERE Fakultaets_id='%s' ",$id);
+				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' AND fakultaets_id='%s' ",$id,$id);
 				$this->db->query($query);
 				if ($this->db->next_record())
 					if (!$explain)
@@ -881,7 +881,7 @@ class ResourceObject {
 			return "inst";
 
 		//Ist es eine Fakultaet?
-		$query = sprintf("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id='%s' ",$id);
+		$query = sprintf("SELECT fakultaets_id FROM Institute WHERE fakultaets_id='%s' AND Institut_id='%s'",$id,$id);
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "fak";
@@ -923,7 +923,7 @@ class ResourceObject {
 						return $this->db->f("Name")." (Einrichtung)";
 			break;
 			case "fak":
-				$query = sprintf("SELECT Name FROM Fakultaeten WHERE Fakultaets_id='%s' ",$id);
+				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' AND fakultaets_id='%s' ",$id,$id);
 				$this->db->query($query);
 				if ($this->db->next_record())
 					if (!$explain)

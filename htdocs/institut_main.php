@@ -96,7 +96,7 @@ if ($SessSemName[1] =="")
 	</b></td></tr>
 	<tr><td class="blank">
 	<br><blockquote><?
-	$db->query ("SELECT *, Fakultaeten.Name AS fakultaet_name  FROM Institute LEFT JOIN Fakultaeten using (Fakultaets_id) WHERE Institut_id='$auswahl'");
+	$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
 	$db->next_record();
 
 	if ($db->f("Strasse")) {
@@ -124,7 +124,7 @@ if ($SessSemName[1] =="")
 	}
 
 	if ($db->f("fakultaet_name")) {
-		echo "<b>Fakultaet: </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br>";
+		echo "<b>Fakult&auml;t: </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br>";
 	}
 		
 	?>

@@ -412,17 +412,17 @@ if ((!isset($sem_browse_data["sset"])) && (!$hide_bereich))
 			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > Einrichtungen/Studienf&auml;cher</font>";
 			break;
 		case "sb":
-			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
+			$db->query("SELECT Name FROM Institute WHERE Institut_id='".$sem_browse_data["id"]."' AND fakultaets_id='".$sem_browse_data["id"]."'");
 			$db->next_record();
 			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Studienf&auml;cher</font>";
 			break;
 		case "i":
-			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["id"]."'");
+			$db->query("SELECT Name FROM Institute WHERE Institut_id='".$sem_browse_data["id"]."' AND fakultaets_id='".$sem_browse_data["id"]."'");
 			$db->next_record();
 			echo "<font size=-1>> <a href=\"$UNI_URL\" target=\"_new\">$UNI_NAME</a> > <a href=\"$PHP_SELF?level=f\">Fakult&auml;ten</a> > <a href=\"$PHP_SELF?level=sbi&id=".$sem_browse_data["id"]."\">Einrichtungen/Studienf&auml;cher</a> > Einrichtungen </font>";
 			break;
 		case "s";
-			$db->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id ='".$sem_browse_data["oid"]."'");
+			$db->query("SELECT Name FROM Institute WHERE Institut_id='".$sem_browse_data["oid"]."' AND fakultaets_id='".$sem_browse_data["oid"]."'");
 			$db2->query("SELECT Name, Institut_id FROM Institute WHERE Institut_id ='".$sem_browse_data["id"]."'");
 			$db->next_record();
 			$db2->next_record();
@@ -937,8 +937,15 @@ if (($sem_browse_data["level"]=="sbi")  && (!$hide_bereich))
 //Uebersicht ueber alle Fakultaeten mit einigen Instituten
 if ((($sem_browse_data["level"]=="f") || (!isset($sem_browse_data["level"])))  && (!$hide_bereich))
 	{
-	$db->query("SELECT Fakultaeten.Name, Fakultaeten.Fakultaets_id, count(seminare.Seminar_id) AS number_seminare FROM Fakultaeten LEFT JOIN Institute ON (Institute.fakultaets_id=Fakultaeten.Fakultaets_id) LEFT JOIN seminar_inst USING (Institut_id) LEFT JOIN seminare USING (Seminar_id) WHERE Fakultaeten.Name NOT LIKE '%- - -%' $class_query GROUP BY Fakultaeten.Fakultaets_id ORDER BY number_seminare DESC");
-	$db2->query("SELECT Institute.Name, Institute.Institut_id, Institute.fakultaets_id, count(seminare.Seminar_id) AS number_seminare FROM Institute LEFT JOIN seminar_inst USING(Institut_id) LEFT JOIN seminare USING (Seminar_id) WHERE Institute.Name NOT LIKE '%- - -%' $class_query GROUP BY Institute.Institut_id ORDER BY number_seminare DESC");
+	$db->query("SELECT a.Name, a.Institut_id AS Fakultaets_id, count(d.Seminar_id) AS number_seminare FROM Institute a 
+				LEFT JOIN Institute b ON (b.fakultaets_id=a.Institut_id) 
+				LEFT JOIN seminar_inst c USING (Institut_id) 
+				LEFT JOIN seminare d USING (Seminar_id) 
+				WHERE a.Name NOT LIKE '%- - -%' AND a.Institut_id=b.fakultaets_id $class_query GROUP BY a.Institut_id ORDER BY number_seminare DESC");
+	$db2->query("SELECT Institute.Name, Institute.Institut_id, Institute.fakultaets_id, count(seminare.Seminar_id) AS number_seminare 
+				FROM Institute LEFT JOIN seminar_inst USING(Institut_id) 
+				LEFT JOIN seminare USING (Seminar_id) 
+				WHERE Institute.Name NOT LIKE '%- - -%' AND Institute.Institut_id!=fakultaets_id  $class_query GROUP BY Institute.Institut_id ORDER BY number_seminare DESC");
 	
 	$i=0;
 	

@@ -183,7 +183,8 @@ function openInst ($inst_id) {
 		$SessSemName["fak"] = $db->f("fakultaets_id");
 		
 		$SessSemName["header_line"] = getHeaderLine ($inst_id);		
-
+		
+		$nr = $db->f("Institut_id");
 		$loginfilelast["$nr"] = $loginfilenow["$nr"];
 		$loginfilenow["$nr"] = time();
 	}
@@ -430,6 +431,7 @@ function get_global_perm($user_id="") {
 */
 function get_perm($range_id,$user_id="")
 {
+ /*
  global $user,$auth;
  $status="";
  if (!($user_id)) $user_id=$user->id;
@@ -467,7 +469,9 @@ function get_perm($range_id,$user_id="")
 		$status="admin";
 		}
 	}
-
+ */
+ global $perm;
+ $status = $perm->get_studip_perm($range_id,$user_id);
  if (!($status)) $status="fehler!";
 
  return $status;

@@ -130,10 +130,10 @@ function get_one_news($news_id)
 				{
 				$this->news_query = array("news_id"=>$news_id, "topic" => $this->db->f("topic"), "body" => $this->db->f("body"), "date" => $this->db->f("date"), "user_id" =>$this->db->f("user_id"), "author" =>$this->db->f("author"), "expire" =>$this->db->f("expire"));
 				$query="SELECT a.range_id,b.user_id, ". $_fullname_sql['full'] ." AS author,".
-						  " c.Seminar_id, c.Name AS seminar_name,d.Institut_id,d.Name AS institut_name, e.Fakultaets_id,e.Name AS fakultaet_name ".
+						  " c.Seminar_id, c.Name AS seminar_name,d.Institut_id,d.Name AS institut_name, IF(d.Institut_id=d.fakultaets_id,'fak','inst') AS inst_type ".
 						  " FROM news_range AS a LEFT JOIN auth_user_md5 AS b ON (b.user_id=a.range_id) LEFT JOIN user_info USING(user_id) ".
 						  " LEFT JOIN seminare AS c ON (c.Seminar_id=a.range_id)  LEFT JOIN Institute AS d ON (d.Institut_id=a.range_id) ".
-						  " LEFT JOIN Fakultaeten AS e ON (e.Fakultaets_id=a.range_id) WHERE news_id='$news_id'";
+						  " WHERE news_id='$news_id'";
 				//echo "<br>$query<br>";
 				$this->db->query($query);
 				while ($this->db->next_record())
@@ -148,11 +148,7 @@ function get_one_news($news_id)
 						 }
 						 if ($this->db->f("Institut_id"))
 						 {
-						 $this->range_detail[$this->db->f("range_id")]= array("type"=>"inst","name"=>$this->db->f("institut_name"));
-						 }
-						 if ($this->db->f("Fakultaets_id"))
-						 {
-						 $this->range_detail[$this->db->f("range_id")]= array("type"=>"fak","name"=>$this->db->f("fakultaet_name"));
+						 $this->range_detail[$this->db->f("range_id")]= array("type"=>$this->db->f("inst_type"),"name"=>$this->db->f("institut_name"));
 						 }
 					  }
 				if ($perm->have_perm("root"))

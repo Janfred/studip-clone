@@ -566,8 +566,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		$content .= "\n<div class=\"blank\" align=\"left\" style=\"font-size:10pt\"><b>" . _("Mitarbeiter: ") . "</b>" . $range_object->getNumStaff() . "</b></div>";
 		if ($this->isItemAdmin($item_id) && $range_object->item_data['studip_object']){
 			$content .= "\n<div class=\"blank\" align=\"center\" style=\"font-size:10pt\"><a href=\""
-					. (($range_object->item_data['studip_object'] == "inst") ? "admin_institut.php?admin_inst_id=" . $range_object->item_data['studip_object_id']
-																			: "admin_fakultaet.php")
+					. "admin_institut.php?admin_inst_id=" . $range_object->item_data['studip_object_id']
 					. "\"><img " . makeButton("bearbeiten","src") . tooltip(_("Grunddaten in Stud.IP bearbeiten")) . " border=\"0\"></a></div>";
 		}
 		$content .= "</td></tr><tr><td>&nbsp;</td></tr>";

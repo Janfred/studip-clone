@@ -204,13 +204,13 @@ IF ($view=="statistik") {?>
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
 			$cssSw->switchClass();	
-			$db->query("SELECT count(*) FROM Institute");
+			$db->query("SELECT count(*) FROM Institute WHERE Institut_id != fakultaets_id");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">beteiligte Einrichtungen:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) FROM Fakultaeten");
+			$db->query("SELECT count(*) FROM Institute WHERE Institut_id = fakultaets_id");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">beteiligte Fakult&auml;ten:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 

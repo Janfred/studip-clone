@@ -23,16 +23,14 @@
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipRangeTreeView.class.php");
 
-// -- here you have to put initialisations for the current page
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
-require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipRangeTreeView.class.php");
 
 $view = new DbView();
 $the_tree = new StudipRangeTreeView();

@@ -96,7 +96,7 @@ class StudipRangeTree {
 		$this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
 		$this->view = new DbView();
 		$this->studip_objects['inst'] = array('pk' => 'Institut_id', 'table' => 'Institute');
-		$this->studip_objects['fak'] = array('pk' => 'Fakultaets_id', 'table' => 'Fakultaeten');
+		$this->studip_objects['fak'] = array('pk' => 'Institut_id', 'table' => 'Institute');
 		$this->init();
 		}
 
@@ -111,18 +111,16 @@ class StudipRangeTree {
 		$db = $this->view->get_query("view:TREE_GET_DATA");
 		while ($db->next_record()){
 			$item_name = $db->f("name");
-			if ($db->f("studip_object") == "fak"){
-				$item_name = $db->f("fak_name");
-			} elseif ($db->f("studip_object") == "inst"){
-				$item_name = $db->f("inst_name");
+			if ($db->f("studip_object")){
+				$item_name = $db->f("studip_object_name");
 			}
-		$this->tree_data[$db->f("item_id")] = array("parent_id" => $db->f("parent_id"), 
+			$this->tree_data[$db->f("item_id")] = array("parent_id" => $db->f("parent_id"), 
 													"priority" => $db->f("priority"), "name" => $item_name,
 													"studip_object" => $db->f("studip_object"),
 													"studip_object_id" => $db->f("studip_object_id"),
 													"fakultaets_id" => $db->f("fakultaets_id"));
 
-		$this->tree_childs[$db->f("parent_id")][] = $db->f("item_id");
+			$this->tree_childs[$db->f("parent_id")][] = $db->f("item_id");
 		}
 		$item_kids = count($this->tree_childs['root']);
 		$this->tree_data['root'] = array('parent_id' => null, 'name' => $this->root_name, 'studip_object_id' => 'root');

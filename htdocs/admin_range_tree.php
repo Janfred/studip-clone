@@ -45,6 +45,7 @@ $perm->check("autor");
 require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."StudipRangeTreeViewAdmin.class.php");
 
+
 include($ABSOLUTE_PATH_STUDIP."seminar_open.php"); //hier werden die sessions initialisiert
 include($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
 include($ABSOLUTE_PATH_STUDIP."header.php");   //hier wird der "Kopf" nachgeladen 
