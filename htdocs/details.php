@@ -39,7 +39,6 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 	include "header.php";   //hier wird der "Kopf" nachgeladen
 	require_once "msg.inc.php";
 	require_once "dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
-	require_once "datei.inc.php"; //Funktionen zum Zugriff auf das Stud.IP Dateissystem
 	require_once "config.inc.php";
 	require_once "visual.inc.php"; // wir brauchen htmlReady
 ?>
