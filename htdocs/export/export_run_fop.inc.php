@@ -47,7 +47,7 @@ global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_fo
 if (!CheckParamRUN_FOP()) 
 {
 	$infobox = array(			
-	array ("kategorie"  => "Information:",
+	array ("kategorie"  => _("Information:"),
 		"eintrag" => array	(	
 						array (	"icon" => "pictures/ausruf_small.gif",
 								"text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
@@ -120,7 +120,7 @@ else
 	
 
 		$infobox = array	(			
-		array ("kategorie"  => "Information:",
+		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
 									"text"  => $xslt_info
@@ -129,7 +129,7 @@ else
 			)
 		);
 		{
-			$infobox[1]["kategorie"] = "Aktionen:";
+			$infobox[1]["kategorie"] = _("Aktionen:");
 				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
 											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."), $link2, "</a>")
 										);
