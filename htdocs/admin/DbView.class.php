@@ -82,7 +82,7 @@ class DbView {
 	* @access	public
 	* @var		boolean	$debug
 	*/
-	var $debug = true;
+	var $debug = false;
 	
 	/**
 	* Constructor
