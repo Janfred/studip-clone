@@ -54,7 +54,7 @@ function show_seminar_modules($seminar_id)
 		{
 			$cssSw->switchClass();
 			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
-			$link_del = $PHP_SELF . "?seminar_id=" . $seminar_id . "&do_op=clear&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"];
+			$link_del = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=clear&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"];
 			echo "<tr><td class=\"" . $cssSw->getClass() . "\"><b>" . $module_info["title"] . "</b> - " . $module_info["description"] . "</td><td align=\"center\" class=\"" . $cssSw->getClass() . "\">" .
 			"<a href=\"" . $link_del . "\"><img src='pictures/trash.gif' border=0 alt=\"" .  _("Verknüpfung aufheben") . "\" title=\"" . _("Verknüpfung aufheben") . "\"></a></td></tr>";
 			$module_count ++;
@@ -83,13 +83,14 @@ function show_all_modules($seminar_id)
 		while ($module_count < sizeof($mod_array))
 		{
 			$cssSw->switchClass();
-			$link_con = $PHP_SELF . "?seminar_id=" . $seminar_id . "&do_op=connect&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"];
+			$link_con = $PHP_SELF . "?view=edit&seminar_id=" . $seminar_id . "&do_op=connect&op_co_inst=" . $mod_array[$module_count]["inst"] . "&op_co_id=". $mod_array[$module_count]["id"];
 			?><tr><td class="<? echo $cssSw->getClass(); ?>"><? echo "<b>" . $mod_array[$module_count]["title"] . "</b> - " . $mod_array[$module_count]["description"]; ?>
 			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
 			<a href="<? echo $link_con;?>"><img src='pictures/icon-posting.gif' border=0  alt="<? echo _("Hinzufügen") ?>" title="<? echo _("Hinzufügen") ?>" ></a>&nbsp; 
 			</td></tr><?
 			$module_count ++;
 		}
+		echo "</table>";
 	}
 	else
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
@@ -140,14 +141,28 @@ function show_seminar_modules_links($seminar_id)
  	}
  	else
  	{
+		if (sizeof($out_str)<2)
+			echo "<font size=-1><b>" . _("Diese Veranstaltung ist mit einem Lernmodul verbunden:") . "</b></font><br /><br />";
+		else
+			echo "<font size=-1><b>" . _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:") . "</b></font><br /><br />";
 	 	?>
-		<tr>
-			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
-			</td>
-			<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top"><?
-			echo "<font size=-1><b>" . _("Diese Veranstaltung ist mit folgenden Lernmodulen verbunden:") . "</b></font><br />". $out_str;
+		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+			<tr align="center" valign="top">
+				<th width="1%" align="left">&nbsp;</th>
+				<th width="99%" align="left"><b><? echo _("Name und Beschreibung"); ?></b></th>
+			</tr>		
+			<?
+			for ($i=0; $i<sizeof($out_str); $i++) 
+			{
+				$cssSw->switchClass();
+				echo "<tr><td class=\"". $cssSw->getClass() ." width=\"1%\">&nbsp;</td>";
+				echo "<td class=\"" . $cssSw->getClass() . " width=\"99%\" valign=\"center\"><br>";
+				echo $out_str[$i];
+				echo "<br></td></tr>";
+			}
 			?></td>
 		</tr>
+		</table>
 		<?
 	}
 }

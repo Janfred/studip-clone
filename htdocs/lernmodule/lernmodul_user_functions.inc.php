@@ -11,11 +11,22 @@ function get_password_md5()
 		return false;
 }
 
+function get_ilias_user($benutzername)
+{
+	global $auth, $username_prefix;
+	$db = New DB_Seminar;
+	$query_string = "SELECT ilias_username FROM studip_ilias WHERE studip_username = '$benutzername'";
+	$db->query($query_string);
+	if ($db->next_record())
+		return $db->f("ilias_username");
+	else
+		return false;
+}
+
 function get_ilias_user_id($benutzername)
 {
-	global $username_prefix;
 	$ilias_db = New DB_Ilias;
-	$ilias_db->query("SELECT id FROM benutzer WHERE benutzername='" . $username_prefix . mysql_escape_string($benutzername)."'");
+	$ilias_db->query("SELECT id FROM benutzer WHERE benutzername='" . mysql_escape_string($benutzername)."'");
 	
 	if ($ilias_db->next_record())
 		return $ilias_db->f("id");
@@ -26,11 +37,10 @@ function get_ilias_user_id($benutzername)
 function get_ilias_logindata()
 {
 	global $auth, $username_prefix;
-//	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5()."&SID=" . md5(uniqid(rand())) . "&USER_ENV=" . serialize(array("id" => get_ilias_user_id($auth->auth["uname"])));
 	$ilias_db = New DB_Ilias;
-	$ilias_db->query("SELECT * FROM benutzer WHERE benutzername='" . $username_prefix . mysql_escape_string($auth->auth["uname"])."'");
+	$ilias_db->query("SELECT * FROM benutzer WHERE benutzername='" . get_ilias_user(mysql_escape_string($auth->auth["uname"]))."'");
 	if ($ilias_db->next_record())
-		return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=en";
+		return "&acct_name=" . $ilias_db->f("benutzername") . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=en";
 	else
 		return false;
 }
@@ -103,23 +113,54 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 		$ilias_db->query($query_string);
 //		echo $query_string . "<br>";
 	}
+	return true;
 }
 
 function create_ilias_user($benutzername)
 {
-	global $auth;
+	global $auth, $username_prefix;
 	$db = new DB_Seminar;
 	$query_string = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.username = '". $benutzername . "'";
 	$db->query($query_string);
 	if ($db->next_record())
 	{
-		return new_ilias_user($db->f("username"), md5($db->f("password")), $db->f("geschlecht"), 
+		if (new_ilias_user($db->f("username"), md5($db->f("password")), $db->f("geschlecht"), 
 			$db->f("Vorname"), $db->f("Nachname"), $db->f("title_front"), 
 			"Stud.IP", $db->f("privatnr"), $db->f("Email"), 
-			$db->f("perms"), $db->f("preferred_language"));
+			$db->f("perms"), $db->f("preferred_language")))
+		{
+			connect_users($db->f("username"), $username_prefix . $benutzername);
+			return true;
+		}
 	}
-	else 
-		return false;
+	return false;
+}
+
+function create_studip_user($benutzername)
+{
+	global $auth;
+	$db = new DB_Ilias;
+	$query_string = "SELECT * FROM benutzer WHERE benutzername = '". $benutzername . "'";
+	$db->query($query_string);
+	if ($db->next_record())
+	{
+		connect_users($benutzername, $db->f("benutzername"));
+		return true;
+	}
+	return false;
+}
+
+function connect_users($studipname, $iliasname)
+{
+	$db = new DB_Seminar;
+	$query_string = "SELECT * FROM studip_ilias WHERE studip_username = '$studipname'";
+	$db->query($query_string);
+	if ($db->next_record())
+		$query_string = "UPDATE studip_ilias SET studip_username = '$studipname', ilias_username = '$iliasname' WHERE studip_username = '$studipname'";
+	else
+		$query_string = "INSERT INTO studip_ilias (studip_username, ilias_username) VALUES ('$studipname', '$iliasname')";
+	$db->query($query_string);
+	return true;
 }
 
 function edit_ilias_user ($u_id, $benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)

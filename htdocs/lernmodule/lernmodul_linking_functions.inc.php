@@ -13,11 +13,11 @@ function link_seminar_modules($seminar_id)
 		for ($i=0; $i<sizeof($mod_array); $i ++)
 		{
 			$mod_info = get_module_info($mod_array[$i]["inst"], $mod_array[$i]["id"]);
-			$link_str .= "<a href=\"";
-			$link_str .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
-			$link_str .= "\" target=\"_blank\">";
-			$link_str .= "<b>" . $mod_info["title"] . "</b> - " . $mod_info["description"] . "<br>";
-			$link_str .= "</a>";
+			$link_str[$i] .= "<a href=\"";
+			$link_str[$i] .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
+			$link_str[$i] .= "\" target=\"_blank\">";
+			$link_str[$i] .= "<b>" . $mod_info["title"] . "</b> - " . $mod_info["description"] . "<br>";
+			$link_str[$i] .= "</a>";
 		}
 		return $link_str;
 	}

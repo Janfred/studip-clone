@@ -29,14 +29,14 @@ function get_user_modules($benutzername)
 	{
 //		$firstname = $db->f("Vorname");
 //		$surname = $db->f("Nachname");
-		$ilias_user_id = get_ilias_user_id($benutzername);
+		$ilias_user_id = get_ilias_user_id(get_ilias_user($benutzername));
 	}
 	else
 	{		
 		printf(_("Stud.IP-User '%s' wurde nicht gefunden.") . "<br>", $benutzername);
 		return false;
 	}
-	if (get_ilias_user_id($benutzername) == false)
+	if (get_ilias_user($benutzername) == false)
 	{		
 		echo _("Sie sind nicht als User im angebundenen ILIAS-System eingetragen. Wenden Sie sich bitte an den/die AdministratorIn.") . "<br>";
 		return false;
