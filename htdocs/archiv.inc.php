@@ -25,6 +25,8 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
+
 
 
 // Liefert den dump des Seminars
@@ -32,20 +34,20 @@ function dump_sem($sem_id) {
 	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS,$_fullname_sql,$AUTO_INSERT_SEM;
 	
 	$dump = "";
+	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
 	$DataFields = new DataFields($sem_id);
+	$Modules = new Modules;	
+	$Modules = $Modules->getLocalModules($sem_id);	
 
 	$db2->query ("SELECT * FROM seminare WHERE Seminar_id='$sem_id'");
 	$db2->next_record();
 
-		
-//////////////////		
-
-		$dump.="\n<table width=100% border=1 cellpadding=2 cellspacing=0>";
-		$dump .= " <tr><td colspan=2 align=left class=\"topic\">";
-		$dump .= "<H1 class=\"topic\">&nbsp;".htmlReady($db2->f('Name'),1,1)."</H1>";
-		$dump.= "</td></tr>\n";
+	$dump.="\n<table width=100% border=1 cellpadding=2 cellspacing=0>";
+	$dump .= " <tr><td colspan=2 align=left class=\"topic\">";
+	$dump .= "<H1 class=\"topic\">&nbsp;".htmlReady($db2->f('Name'),1,1)."</H1>";
+	$dump.= "</td></tr>\n";
 
 	//Grunddaten des Seminars, wie in den seminar_main
 
@@ -68,7 +70,6 @@ function dump_sem($sem_id) {
 		$dump.="<tr><td width=\"15%\"><b>" . _("Ort:") . " </b></td><td>".getRoom($sem_id, FALSE)."</td></tr>\n";
 
 	//wer macht den Dozenten?
-	$db=new DB_Seminar;
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 
 	if ($db->affected_rows() > 1)
@@ -155,8 +156,7 @@ function dump_sem($sem_id) {
 		$dump.= htmlReady($db2->f("Sonstiges"),1,1)."</td></tr>\n";
 		}
 
-// Fakultaeten...
-
+	// Fakultaeten...
 	$db3->query("SELECT DISTINCT c.Name FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN Institute c ON(c.Institut_id=b.fakultaets_id)  WHERE a.seminar_id = '$sem_id'");
 	IF ($db3->affected_rows() > 0)
 		{
@@ -219,194 +219,188 @@ function dump_sem($sem_id) {
 
 	$dump.= "</table>\n";
 
-// Ablaufplan
-
-    $db->query("SELECT *  FROM termine WHERE (range_id='$sem_id' AND date_typ ='1') ORDER BY date");
-    if ($db->num_rows())
-	{
-	$dump.="<br>";	  
-	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-	$dump .= " <tr><td colspan=2 align=left class=\"topic\">";
-	$dump .= "<H2 class=\"topic\">&nbsp;" . _("Ablaufplan") . "</H2>";
-	$dump.= "</td></tr>\n";
-
-	while ($db->next_record())
-		   {
-		   $dump.="<tr align=\"center\"> ";
-		   $dump.= "<td width=\"25%\" align=\"left\" >";
-		   $dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
-		   $dump.= "</td>";
-		   $dump.= "<td width=\"75%\" align=\"left\"> ";
-		   $dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("content"),1,1);
-		   $dump.= "&nbsp;</td></tr>\n";
-		   if ($db->f("description")) {
-		   	$dump.="<tr><td width=\"25%\">&nbsp;</td>";
-		   	$dump.= "<td width=\"75%\">".htmlReady($db->f("description"),1,1)."</td></tr>\n";
-		   	}
-		   }
-	$dump .= "</table>\n";
-	}
-	
-// zusaetzliche Termine
-
-    $db->query("SELECT *  FROM termine WHERE (range_id='$sem_id' AND date_typ!='1') ORDER BY date");
-    if ($db->num_rows())
-	{
-	$dump.="<br>";	  
-	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-	$dump .= " <tr><td colspan=2 align=left class=\"topic\">";
-	$dump .= "<H2 class=\"topic\">&nbsp;" . _("zus&auml;tzliche Termine") . "</H2>";
-	$dump.= "</td></tr>\n";
-
-	while ($db->next_record())
-		   {
-		   $dump.="<tr align=\"center\"> ";
-		   $dump.= "<td width=\"25%\" align=\"left\" >";
-		   $dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
-		   $dump.= "</td>";
-		   $dump.= "<td width=\"75%\" align=\"left\"> ";
-		   $dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("content"),1,1);
-		   $dump.= "&nbsp;</td></tr>\n";
-		   if ($db->f("description")) {
-		   	$dump.="<tr><td width=\"25%\">&nbsp;</td>";
-		   	$dump.= "<td width=\"75%\">".htmlReady($db->f("description"),1,1)."</td></tr>\n";
-		   	}
-		   }
-	$dump .= "</table>\n";
-	}
-	
-// Literatur & Links
-
-	$db->query("SELECT * FROM literatur WHERE range_id='$sem_id'");
-	if ($db->num_rows()) {
-  	$db->next_record();
-  	$literatur=$db->f("literatur");
-  	$literatur=FixLinks(htmlReady($literatur)); // /newline fixen
-  	$links=$db->f("links");
-  	$links=FixLinks(htmlReady($links)); // /newline fixen
-     
-  	IF(!empty($literatur)) {
- 			$dump.="<br>";	  
-  		$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-			$dump .= " <tr><td align=left class=\"topic\">";
-			$dump .= "<H2 class=\"topic\">&nbsp;" . _("Literatur:") . "</H2>";
+	// Ablaufplan
+	if ($Modules["schedule"]) {
+		$db->query("SELECT *  FROM termine WHERE (range_id='$sem_id' AND date_typ ='1') ORDER BY date");
+		if ($db->num_rows()) {
+			$dump.="<br>";	  
+			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+			$dump .= " <tr><td colspan=2 align=left class=\"topic\">";
+			$dump .= "<H2 class=\"topic\">&nbsp;" . _("Ablaufplan") . "</H2>";
 			$dump.= "</td></tr>\n";
-			$dump.="<tr><td align=\"left\" width=\"100%\"><br>".$literatur."<br></td></tr>\n";
-			$dump .= "</table>\n";
-		}
-    
-		IF(!empty($links)) {
-  		$dump.="<br>";	  
-    	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-			$dump .= " <tr><td align=left class=\"topic\">";
-			$dump .= "<H2 class=\"topic\">&nbsp;" . _("Links:") . "</H2>";
-			$dump.= "</td></tr>\n";
-			$dump.="<tr><td align=\"left\" width=\"100%\"><br>".$links."<br></td></tr>\n";
-			$dump .= "</table>\n";
-		}
-	}
-
-// Dateien anzeigen
-
-
-	$db=new DB_Seminar;
-	$i=0;
-	
-//Auslesen aller allgemeine Dokumente zum Seminar
-	$doc_ids=doc_challenge($sem_id);
-	if (count($doc_ids))
-		foreach ($doc_ids as $a) {
-			$db->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
-			$db->next_record();
-			$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
-			$i++;
+		
+			while ($db->next_record()) {
+				$dump.="<tr align=\"center\"> ";
+				$dump.= "<td width=\"25%\" align=\"left\" >";
+				$dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
+				$dump.= "</td>";
+				$dump.= "<td width=\"75%\" align=\"left\"> ";
+				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("content"),1,1);
+				$dump.= "&nbsp;</td></tr>\n";
+				if ($db->f("description")) {
+					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
+					$dump.= "<td width=\"75%\">".htmlReady($db->f("description"),1,1)."</td></tr>\n";
+				}
+			}
+		$dump .= "</table>\n";
 		}
 		
-//Auslesen der Dokumente zu Terminen
-	$db->query ("SELECT termin_id FROM termine WHERE range_id ='$sem_id'");
-	while ($db->next_record()) {
-		$doc_ids=doc_challenge($db->f("termin_id"));
+		// zusaetzliche Termine
+		$db->query("SELECT *  FROM termine WHERE (range_id='$sem_id' AND date_typ!='1') ORDER BY date");
+		if ($db->num_rows()) {
+			$dump.="<br>";	  
+			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+			$dump .= " <tr><td colspan=2 align=left class=\"topic\">";
+			$dump .= "<H2 class=\"topic\">&nbsp;" . _("zus&auml;tzliche Termine") . "</H2>";
+			$dump.= "</td></tr>\n";
+
+			while ($db->next_record()) {
+				$dump.="<tr align=\"center\"> ";
+				$dump.= "<td width=\"25%\" align=\"left\" >";
+				$dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
+				$dump.= "</td>";
+				$dump.= "<td width=\"75%\" align=\"left\"> ";
+				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("content"),1,1);
+				$dump.= "&nbsp;</td></tr>\n";
+				if ($db->f("description")) {
+					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
+					$dump.= "<td width=\"75%\">".htmlReady($db->f("description"),1,1)."</td></tr>\n";
+				}
+			}
+		$dump .= "</table>\n";
+		}
+	}
+	
+	//Literatur & Links
+	if ($Modules["literature"]) {	
+		$db->query("SELECT * FROM literatur WHERE range_id='$sem_id'");
+		if ($db->num_rows()) {
+		  	$db->next_record();
+		  	$literatur=$db->f("literatur");
+		  	$literatur=FixLinks(htmlReady($literatur)); // /newline fixen
+		  	$links=$db->f("links");
+		  	$links=FixLinks(htmlReady($links)); // /newline fixen
+		     
+		  	IF(!empty($literatur)) {
+		 		$dump.="<br>";	  
+		  		$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+				$dump .= " <tr><td align=left class=\"topic\">";
+				$dump .= "<H2 class=\"topic\">&nbsp;" . _("Literatur:") . "</H2>";
+				$dump.= "</td></tr>\n";
+				$dump.="<tr><td align=\"left\" width=\"100%\"><br>".$literatur."<br></td></tr>\n";
+				$dump .= "</table>\n";
+			}
+			IF(!empty($links)) {
+		  		$dump.="<br>";	  
+			    	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+				$dump .= " <tr><td align=left class=\"topic\">";
+				$dump .= "<H2 class=\"topic\">&nbsp;" . _("Links:") . "</H2>";
+				$dump.= "</td></tr>\n";
+				$dump.="<tr><td align=\"left\" width=\"100%\"><br>".$links."<br></td></tr>\n";
+				$dump .= "</table>\n";
+			}
+		}
+	}
+	
+	// Dateien anzeigen
+	if ($Modules["documents"]) {
+		$i=0;
+	
+		//Auslesen aller allgemeine Dokumente zum Seminar
+		$doc_ids=doc_challenge($sem_id);
 		if (count($doc_ids))
 			foreach ($doc_ids as $a) {
-				$db2->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
-				$db2->next_record();
-				$dbresult[$i]=array("mkdate"=>$db2->f("mkdate"), "dokument_id"=>$db2->f("dokument_id"), "description"=>$db2->f("description"), "filename"=>$db2->f("filename"), "filesize"=>$db2->f("filesize"),"user_id"=> $db2->f("user_id"), "username"=>$db2->f("username"), "nachname"=>$db2->f("Nachname"));	
+				$db->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
+				$db->next_record();
+				$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
 				$i++;
 			}
-	}
-	
-	if (!sizeof($dbresult)==0) {
-		$dump.="<br>";	  
-  	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-		$dump .= " <tr><td align=left colspan=3 class=\"topic\">";
-		$dump .= "<H2 class=\"topic\">&nbsp;" . _("Dateien:") . "</H2>";
-		$dump.= "</td></tr>\n";
-
-		rsort ($dbresult);
-		
-		for ($i=0; $i<sizeof($dbresult); $i++) {
-			$doc_id = $dbresult[$i]["dokument_id"];
-			$sizetmp = $dbresult[$i]["filesize"];
-			$sizetmp = ROUND($sizetmp / 1024);
-			$size = "(".$sizetmp." KB)";
-
-      $dump.="<tr><td width='100%'><b>".htmlReady($dbresult[$i]["filename"])."</b><br>".htmlReady($dbresult[$i]["description"])."&nbsp;".$size."</td><td>".
-	    $dbresult[$i]["nachname"] .
-	    "&nbsp;</td><td>&nbsp;".date("d.m.Y", $dbresult[$i]["mkdate"])."</td></tr>\n";
-		}
-		$dump.="</table>\n";
-	}
-
-
-// Teilnehmer
-
-	if (is_array($AUTO_INSERT_SEM) && !in_array($sem_id, $AUTO_INSERT_SEM)) {
-
-		$gruppe = array ("dozent" => _("DozentInnen"),
-		  "tutor" => _("TutorInnen"),
-		  "autor" => _("AutorInnen"),
-		  "user" => _("LeserInnen"));
-		$dump.="<br>";	  
-		while (list ($key, $val) = each ($gruppe)) {	  
-
-// die eigentliche Teil-Tabelle
-
-			$sortby = "doll DESC";
-			$db=new DB_Seminar;
-			$db2=new DB_Seminar;
-			$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
-
-			if (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
-	  		$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-				$dump .= " <tr><td align=left colspan=4 class=\"topic\">";
-				$dump .= "<H2 class=\"topic\">&nbsp;".$val."</H2>";
-				$dump.= "</td></tr>\n";
-				$dump.="<th width=\"30%%\">" . _("Name") . "</th>";
-				$dump.="<th width=\"10%%\">" . _("Postings") . "</th>";
-				$dump.="<th width=10%><b>" . _("Dokumente") . "</b></th></tr>\n";
 			
-				while ($db->next_record()) {
-					$dump.="<tr><td>";
-					$dump.= $db->f("fullname");
-					$dump.="</td><td align=center>";
-					$dump.= $db->f("doll");
-					$dump.="</td><td align=center>";
-
-					$Dokumente = 0;
-					$UID = $db->f("user_id");
-					$db2->query ("SELECT count(dokument_id) AS doll FROM dokumente WHERE dokumente.Seminar_id = '$sem_id' AND dokumente.user_id = '$UID'");
-					while ($db2->next_record()) {
-						$Dokumente += $db2->f("doll");
-					}
-					$dump.= $Dokumente;
-					$dump.="</td>";
-					$dump.="</tr>\n";
+		//Auslesen der Dokumente zu Terminen
+		$db->query ("SELECT termin_id FROM termine WHERE range_id ='$sem_id'");
+		while ($db->next_record()) {
+			$doc_ids=doc_challenge($db->f("termin_id"));
+			if (count($doc_ids))
+				foreach ($doc_ids as $a) {
+					$db2->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
+					$db2->next_record();
+					$dbresult[$i]=array("mkdate"=>$db2->f("mkdate"), "dokument_id"=>$db2->f("dokument_id"), "description"=>$db2->f("description"), "filename"=>$db2->f("filename"), "filesize"=>$db2->f("filesize"),"user_id"=> $db2->f("user_id"), "username"=>$db2->f("username"), "nachname"=>$db2->f("Nachname"));	
+					$i++;
+				}
+		}
+		
+		if (!sizeof($dbresult)==0) {
+			$dump.="<br>";	  
+  			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+			$dump .= " <tr><td align=left colspan=3 class=\"topic\">";
+			$dump .= "<H2 class=\"topic\">&nbsp;" . _("Dateien:") . "</H2>";
+			$dump.= "</td></tr>\n";
 	
-				} // eine Zeile zuende
-
-				$dump.= "</table>\n";
+			rsort ($dbresult);
+			
+			for ($i=0; $i<sizeof($dbresult); $i++) {
+				$doc_id = $dbresult[$i]["dokument_id"];
+				$sizetmp = $dbresult[$i]["filesize"];
+				$sizetmp = ROUND($sizetmp / 1024);
+				$size = "(".$sizetmp." KB)";
+	
+     				$dump.="<tr><td width='100%'><b>".htmlReady($dbresult[$i]["filename"])."</b><br>".htmlReady($dbresult[$i]["description"])."&nbsp;".$size."</td><td>".
+					$dbresult[$i]["nachname"] . "&nbsp;</td><td>&nbsp;".date("d.m.Y", $dbresult[$i]["mkdate"])."</td></tr>\n";
 			}
-		} // eine Gruppe zuende
+			$dump.="</table>\n";
+		}
+	}
+
+
+	// Teilnehmer
+	if ($Modules["participants"]) {
+		if (is_array($AUTO_INSERT_SEM) && !in_array($sem_id, $AUTO_INSERT_SEM)) {
+			$gruppe = array ("dozent" => _("DozentInnen"),
+				"tutor" => _("TutorInnen"),
+				"autor" => _("AutorInnen"),
+				"user" => _("LeserInnen"));
+			$dump.="<br>";	  
+			while (list ($key, $val) = each ($gruppe)) {	  
+	
+			// die eigentliche Teil-Tabelle
+	
+				$sortby = "doll DESC";
+				$db=new DB_Seminar;
+				$db2=new DB_Seminar;
+				$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
+	
+				if (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
+		  			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+					$dump .= " <tr><td align=left colspan=4 class=\"topic\">";
+					$dump .= "<H2 class=\"topic\">&nbsp;".$val."</H2>";
+					$dump.= "</td></tr>\n";
+					$dump.="<th width=\"30%%\">" . _("Name") . "</th>";
+					$dump.="<th width=\"10%%\">" . _("Postings") . "</th>";
+					$dump.="<th width=10%><b>" . _("Dokumente") . "</b></th></tr>\n";
+				
+					while ($db->next_record()) {
+						$dump.="<tr><td>";
+						$dump.= $db->f("fullname");
+						$dump.="</td><td align=center>";
+						$dump.= $db->f("doll");
+						$dump.="</td><td align=center>";
+	
+						$Dokumente = 0;
+						$UID = $db->f("user_id");
+						$db2->query ("SELECT count(dokument_id) AS doll FROM dokumente WHERE dokumente.Seminar_id = '$sem_id' AND dokumente.user_id = '$UID'");
+						while ($db2->next_record()) {
+							$Dokumente += $db2->f("doll");
+						}
+						$dump.= $Dokumente;
+						$dump.="</td>";
+						$dump.="</tr>\n";
+		
+					} // eine Zeile zuende
+	
+					$dump.= "</table>\n";
+				}
+			} // eine Gruppe zuende
+		}
 	}
 
  	return $dump;
