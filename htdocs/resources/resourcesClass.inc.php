@@ -885,9 +885,9 @@ class ResourceObject {
 			break;
 			case "global":
 				if (!$explain)
-					return "Gloabal";
+					return "Global";
 				else
-					return "Gloabal (zentral Verwaltet)";
+					return "Global (zentral verwaltet)";
 			break;
 			case "user";
 				if (!$explain)

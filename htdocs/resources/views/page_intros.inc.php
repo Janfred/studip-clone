@@ -1,18 +1,21 @@
 <?
-
-$currentObject=new ResourceObject($resources_data["actual_object"]);
-$currentObjectTitelAdd=$currentObject->getCategoryName();
-if ($currentObjectTitelAdd)
-	$currentObjectTitelAdd=": ";
-$currentObjectTitelAdd=$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
+if ($resources_data["actual_object"]) {
+	$currentObject=new ResourceObject($resources_data["actual_object"]);
+	$currentObjectTitelAdd=": ".$currentObject->getCategoryName();
+	if ($currentObjectTitelAdd)
+		$currentObjectTitelAdd=": ";
+	$currentObjectTitelAdd=". ".$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
+}
 
 switch ($resources_data["view"]) {
 	//Reiter "Uebersicht"
 	case "resources":
 	case "_resources":
-	case "create_hierachie":
+		$page_intro="Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen suchen oder sich durch die Ebenen navigieren.";
+		$title="Suche nach Ressourcen";
+	break;
 	case "search":
-		$page_intro="Auf dieser Seite k&ouml;nnen Sie Ressourcen, auf die Sie Zugriff haben, Ebenen zuordnen. ";
+		$page_intro="Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die Sie Zugriff haben, navigieren und Ressourcen verwalten.";
 		$title="&Uuml;bersicht der Ressourcen";
 	break;
 	
@@ -40,25 +43,35 @@ switch ($resources_data["view"]) {
 	//Reiter "Objekt"
 	case "objects":
 	case "edit_object_assign":
+		$page_intro="Hier k&ouml;nnen Sie Ressourcen-Belegungen bearbeiten und neue anlegen.";
+		$title="Belegungen bearbeiten".$currentObjectTitelAdd;
+	break;
 	case "edit_object_properties":
-	case "edit_object_schedules":
-	case "view_schedule":
-	case "search_object":
-		$page_intro="Hier k&ouml;nnen Sie einzelen Objekte verwalten. Sie k&ouml;nnen Eigenschaften, Berechtigungen und Belegung verwalten.";
-		$title="Objekt bearbeiten: ".$currentObjectTitelAdd;
+		$page_intro="Hier k&ouml;nnen Sie Ressourcen-Eigenschaften bearbeiten.";
+		$title="Eigenschaften bearbeiten".$currentObjectTitelAdd;
+	break;
+	case "edit_object_perms":
+		$page_intro="Hier k&ouml;nnen Sie Berechtigungen f&uuml;r den Zugriff auf die Ressource vergeben oder den Besitzer &auml;ndern. <br /><font size=\"-1\"><b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls f&uuml;r die Ressourcen, die der gew&auml;hlten Ressource untergeordnetet sind!</font>";
+		$title="Eigenschaften bearbeiten".$currentObjectTitelAdd;
 	break;
 	case "view_schedule":
-		$page_intro="Hier k&ouml;nnen Sie sich den Belegungsplan des Objektes ausgeben lassen. Bitte w&auml;hlen Sie daf&uuml;r den Zeitraum aus.";
-		$title="Belegung ausgeben - Objekt: ".$currentObjectTitelAdd;
+		$page_intro="Hier k&ouml;nnen Sie sich die Belegunszeiten der Ressource anzeigen lassen und auf unterschiedliche Art und Weise darstellen lassen.";
+		$title="Belegungszeiten ausgeben".$currentObjectTitelAdd;
 	break;
 	
 	//Reiter "Anpassen"	
 	case "settings":
 	case "edit_types":
+		$page_intro="Verwalten Sie auf dieser Seite die Ressourcen-Typen, wie etwa R&auml;ume, Ger&auml;te oder Geb&auml;ude. Sie k&ouml;nnen jedem Typ beliebig viele Eigenschaften zuordnen.";
+		$title="Typen bearbeiten";
+	break;
 	case "edit_properties":
+		$page_intro="Verwalten Sie auf dieser Seite die eizelnen Eigenschaften. Diese Eigenschaften k&ouml;nnen Sie beliebigen Ressourcen-Typen zuweisen.";
+		$title="Eigenschaften verwalten bearbeiten";
+	break;
 	case "edit_perms":
-		$page_intro="Hier k&ouml;nnen Sie grundlegen Einstellungen der Ressourcenverwaltung vornehmen.";
-		$title="Einstellungen bearbeiten";
+		$page_intro="Verwalten Sie hier alle Administratoren, die administrative Rechte oder Belegungsrechte &uuml;ber &uuml;ber alle Ressourcen besitzen.";
+		$title="Ressourcen-Administratoren bearbeiten";
 	break;
 	
 	//all the intros in an open object (Veranstaltung, Einrichtung)
@@ -84,7 +97,7 @@ switch ($resources_data["view"]) {
 	case "edit_object_perms":
 		if ($resources_data["actual_object"])
 			$page_intro="Vergeben von Rechten auf die Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").";
-		$title="Vergeben von Berechtigungen - Objekt: ".$currentObjectTitelAdd;
+		$title="Vergeben von Berechtigungen - Objekt".$currentObjectTitelAdd;
 	break;
 	//default
 	default:

@@ -159,7 +159,7 @@ if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $re
 	} else {
 		if (!$list->showList($resources_data["list_open"])) {
 			echo "</td></tr>";
-			parse_msg ("info§Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Startpunkt in der Hierachie aus.");
+			parse_msg ("info§Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Ebene bzw. Ressource in der Hierachie aus.");
 		}
 	}
 	
@@ -229,7 +229,7 @@ if ($resources_data["view"]=="edit_object_assign" || $resources_data["view"]=="o
 /*****************************************************************************
 Typen verwalten, views: edit_types
 /*****************************************************************************/
-if (($resources_data["view"]=="edit_types") || ($resources_data["view"]=="settings")) {
+if ($resources_data["view"]=="edit_types") {
 	
 	$editSettings=new editSettings;
 	$editSettings->showTypesForms();

@@ -28,17 +28,17 @@ $reiter=new reiter;
 $structure["resources"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"resources.php?view=resources#a", active=>FALSE);
 $structure["lists"]=array (topKat=>"", name=>"Listen", link=>"resources.php?view=lists#a", active=>FALSE);
 $structure["objects"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=objects", active=>FALSE);
-$structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=settings", active=>FALSE);
+//$structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=settings", active=>FALSE);
 
 //Reiter "Uebersicht"
 $structure["_resources"]=array (topKat=>"resources", name=>"Struktur", link=>"resources.php?view=_resources#a", active=>FALSE);
-//$structure["search"]=array (topKat=>"resources", name=>"Suchen", link=>"resources.php?view=search&new_search=TRUE", active=>FALSE);
-//$structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchieebene erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
+$structure["search"]=array (topKat=>"resources", name=>"Suchen", link=>"resources.php?view=search&new_search=TRUE", active=>FALSE);
+$structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchieebene erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
 
 //Reiter "Listen"
 $structure["_lists"]=array (topKat=>"lists", name=>"Listenausgabe", link=>"resources.php?view=_lists#a", active=>FALSE);
-$structure["search_lists"]=array (topKat=>"lists", name=>"Suchen", link=>"resources.php?view=search_lists", active=>FALSE);
-$structure["export_lists"]=array (topKat=>"lists", name=>"Listen exportieren", link=>"resources.php?view=export_lists", active=>FALSE);
+//$structure["search_lists"]=array (topKat=>"lists", name=>"Suchen", link=>"resources.php?view=search_lists", active=>FALSE);
+//$structure["export_lists"]=array (topKat=>"lists", name=>"Listen exportieren", link=>"resources.php?view=export_lists", active=>FALSE);
 
 //Reiter "Objekt"
 $structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
@@ -54,7 +54,7 @@ if (($my_perms->getGlobalPerms() == "admin") || ($perm->have_perm("root"))){ //G
 if ($perm->have_perm("root")) { //Rechtezuweisungen nur fuer Root
 	$structure["edit_perms"]=array (topKat=>"settings", name=>"globale Rechte verwalten", link=>"resources.php?view=edit_perms", active=>FALSE);
 }
-$structure["edit_personal_settings"]=array (topKat=>"settings", name=>"pers&ouml;nliche Einstellungen", link=>"resources.php?view=edit_personal_settings", active=>FALSE);
+//$structure["edit_personal_settings"]=array (topKat=>"settings", name=>"pers&ouml;nliche Einstellungen", link=>"resources.php?view=edit_personal_settings", active=>FALSE);
 //
 
 $reiter->create($structure, $resources_data["view"]);
