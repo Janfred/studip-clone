@@ -111,7 +111,13 @@ class StudipLitSearchPluginStudip extends StudipLitSearchPluginAbstract{
 			$this->addError("error",_("Suchergebnis existiert nicht."));
 			return false;
 		} else {
-			return new StudipLitCatElement($this->search_result[$num_hit-1]);
+			$cat_element = new StudipLitCatElement($this->search_result[$num_hit-1]);
+			if ($cat_element->isNewEntry()){
+				array_splice($this->search_result, $num_hit-1,1);
+				return false;
+			} else {
+				return $cat_element;
+			}
 		}
 	}
 }
