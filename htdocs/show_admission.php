@@ -51,7 +51,7 @@ $db3=new DB_Seminar;
 		<td class="blank"align="center"><br><br>
 <?
 
-	  	$query = "SELECT Name, seminar_id, admission_turnout, admission_endtime FROM seminare WHERE admission_turnout > 0 ORDER BY Name";
+	  	$query = "SELECT Name, seminar_id, admission_turnout, admission_endtime FROM seminare WHERE admission_type > 0 ORDER BY Name";
 		$db->query($query);
 		print ("<table width=\"90%\" border=1 cellspacing=0 cellpadding=2>");
 		print ("<tr>");
