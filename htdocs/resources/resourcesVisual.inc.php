@@ -1083,7 +1083,7 @@ class EditObject extends cssClasses {
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
 							print "<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den entsprechenden Termin in der Veranstaltung");
 						print "</font>";
-					} else
+					} elseif (!$lockedAssign)
 						printf (_("Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."));
 				}
 				?>
