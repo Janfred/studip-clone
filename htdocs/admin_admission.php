@@ -153,11 +153,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	if (!$admin_admission_data["admission_type"]) { 
 		$admin_admission_data["read_level"]=$read_level;
 		$admin_admission_data["write_level"]=$write_level;
+
+	if (!$commit_no_admission_data)
+			$admin_admission_data["admission_turnout"]=$admission_turnout;	
 		
 	//Alles was mit der Anmeldung zu tun hat ab hier
 	} elseif (!$delete_studg) { 
-		if (!$commit_no_admission_data)
-			$admin_admission_data["admission_turnout"]=$admission_turnout;	
 
 		//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
 		if ($all_ratio_old != $all_ratio) {
@@ -492,6 +493,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="left">
 				<font size=-1><b>Berechtigungen:</b><br /></font>
 				<font size=-1>Legen Sie hier fest, welche Teilnehmer Zugriff auf die Veranstaltung haben.<br /></font>
+				<input type="HIDDEN" name="admisision_turnout" value="<? echo $admin_admission_data["admission_turnout"] ?>">
 			</td>
 		</tr>
 		<tr>
