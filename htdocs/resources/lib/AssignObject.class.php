@@ -33,6 +33,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
+
 /*****************************************************************************
 AssignObject, zentrale Klasse der Objekte der Belegung
 /*****************************************************************************/
@@ -285,9 +287,10 @@ class AssignObject {
 	}
 	
 	function isRepeatEndSemEnd() {
-		global $SEMESTER;
+		$semester = new SemesterData; 
+		$all_semester = $semester->getAllSemesterData(); 
 
-		foreach ($SEMESTER as $a)	
+		foreach ($all_semester as $a)	
 			if (($this->begin >= $a["beginn"]) &&($this->begin <= $a["ende"]))
 				if ($this->repeat_end==$a["vorles_ende"])
 					return true;

@@ -33,6 +33,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
+
 /*****************************************************************************
 AssignEventList, creates a event-list for an assignobject
 /*****************************************************************************/
@@ -48,16 +50,18 @@ class AssignEventList{
 	// Konstruktor
 	// if activated without timestamps, we take the current semester
 	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
-	 	global $RELATIVE_PATH_RESOURCES, $SEMESTER, $SEM_ID, $user;
+	 	global $RELATIVE_PATH_RESOURCES, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
 	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	 	
+	 	$semester = new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
 	 	
 		if (!$begin)
-			$begin = $SEMESTER[$SEM_ID]["beginn"];
+			$begin = $all_semester[$SEM_ID]["beginn"];
 		if (!$end )
-			$end = $SEMESTER[$SEM_ID]["ende"];
+			$end = $all_semester[$SEM_ID]["ende"];
 		
 		
 		$this->begin = $begin;
