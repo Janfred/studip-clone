@@ -86,15 +86,14 @@ $TMP_PATH ="/tmp";									//the system temp path
 
 //paths to the command line tools, used in Stud.IP
 $ZIP_PATH = "/usr/bin/zip";								//zip tool
-$DJPEG_PATH = "/usr/bin/djpeg";								//djpeg tool for imaging
-$GIFTOPNM_PATH = "/usr/bin/giftopnm";							//giftopnm tool for imaging
-$PNMSCALE_PATH = "/usr/bin/pnmscale";							//pnmscaletool for imaging
-$CJPEG_PATH = "/usr/bin/cjpeg";								//cjpeg tool for imaging
 
 //latexrender settings
 $TEXCACHE_PATH = "pictures/tex";
 $LATEX_PATH = "/usr/bin/latex";
 $DVIPS_PATH = "/usr/bin/dvips";
+
+//ImageMagick, used by latexrender modul and for resizing of pictures uploaded by users
+//if the convert utility is not found, an attempt to use gd (must be > 2.01) is made
 $CONVERT_PATH = "/usr/bin/convert";
 $IDENTIFY_PATH = "/usr/bin/identify";
 
