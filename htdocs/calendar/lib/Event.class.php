@@ -281,7 +281,7 @@ class Event {
 		if($title)
 			$this->txt = $title;
 		else
-			$this->txt = "Kein Titel";
+			$this->txt = _("Kein Titel");
 		$this->chng_flag = TRUE;
 	}
 	

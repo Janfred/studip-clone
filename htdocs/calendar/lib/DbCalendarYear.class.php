@@ -94,6 +94,6 @@ class DbCalendarYear extends CalendarYear{
 		return serialize($this);
 	}
 	
-} // class DB_Year
+} // class DBCalendarYear
 
 ?>
