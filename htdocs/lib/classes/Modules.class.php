@@ -68,19 +68,30 @@ class Modules {
 		return $modules_list;
 	}
 	
-	function getDefaultBinValue($type, $range_id) {
+	function getDefaultBinValue($range_id) {
 		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
+	
+		$db = new DB_Seminar;
+		
+		if (get_object_type($range_id) == "sem") {
+			$query = sprintf ("SELECT status AS type FROM seminare WHERE Seminar_id ='%s'", $range_id);
+		} else {
+			$query = sprintf ("SELECT type FROM Institute WHERE Institut_id ='%s'", $range_id);
+		}
+
+		$db->query($query);
+		$db->next_record();
 		
 		if (get_object_type($range_id) == "sem") {
 			foreach ($this->registered_modules as $key=>$val) {
-				if (($SEM_CLASS[$SEM_TYPE[$type]["class"]][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"]))) {
+				if (($SEM_CLASS[$SEM_TYPE[$db->f("type")]["class"]][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"]))) {
 					$this->setBit($bitmask, $val["id"]);
 				} else
 					$this->clearBit($bitmask, $val["id"]);
 			}
 		} else {
 			foreach ($this->registered_modules as $key=>$val) {
-				if (($INST_MODULES[($INST_MODULES[$type]) ? $type : "default"][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"])))
+				if (($INST_MODULES[($INST_MODULES[$db->f("type")]) ? $type : "default"][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"])))
 					$this->setBit($bitmask, $val["id"]);
 				else
 					$this->clearBit($bitmask, $val["id"]);

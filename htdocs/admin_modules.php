@@ -84,6 +84,10 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 		die;
 	}
 	
+	if ($default_x) {
+		$admin_modules_data["changed_bin"] = $amodules->getDefaultBinValue($admin_modules_data["range_id"]);
+	}
+	
 	if ($uebernehmen_x) {
 		foreach ($amodules->registered_modules as $key => $val) {
 			$tmp_key = $key."_value";
@@ -167,7 +171,8 @@ if ($admin_modules_data["range_id"]) {
 			<br />
 			<blockquote>
 			<b><?=_("Module konfigurieren") ?></b><br /><br />
-			<?=_("Sie k&ouml;nnen hier einzelne Module nachtr&auml;glich aktivieren oder deaktivieren.")?> <br /><br />
+			<?=_("Sie k&ouml;nnen hier einzelne Module nachtr&auml;glich aktivieren oder deaktivieren.")?> <br />
+			<?=_("Mit &raquo;zur&uuml;cksetzten&laquo; k&ouml;nnen Sie die Ausgangs-Modulkonfiguartion wieder herstellen.")?> <br /><br />
 			</blockqoute>
 		</td>
 		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
@@ -181,6 +186,7 @@ if ($admin_modules_data["range_id"]) {
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="4">		
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">
+				&nbsp;<input type="IMAGE" name="default" <?=makeButton("zuruecksetzen", "src")?> border=0 value="uebernehmen">
 				<? if ($admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"]) {
 					?> <br /><img src="pictures/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br /> <?
 					}
@@ -217,7 +223,7 @@ if ($admin_modules_data["range_id"]) {
 				&nbsp;
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>"  align="left">
-				<font size=-1><b><?=_("Dateien:")?></b><br /></font>
+				<font size=-1><b><?=_("Dateiordner:")?></b><br /></font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="16%">
 				<input type="RADIO" name="documents_value" value="TRUE" <?=($amodules->isBit($admin_modules_data["changed_bin"], 1)) ? "checked" : "" ?>>
@@ -250,7 +256,7 @@ if ($admin_modules_data["range_id"]) {
 				<font size=-1><?=_("aus")?><br /></font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
-				<font size=-1><?=($admin_modules_data["modules_list"]) ? _("Die Anbindung zu Ilias Lernmodulen kann jederzeit deaktiviert werden.") : _("Die Anbindung zu Ilias Lernmodulen  kann jederzeit aktiviert werden.")?></font>
+				<font size=-1><?=($admin_modules_data["modules_list"]["ilias-connect"]) ? _("Die Anbindung zu Ilias Lernmodulen kann jederzeit deaktiviert werden.") : _("Die Anbindung zu Ilias Lernmodulen  kann jederzeit aktiviert werden.")?></font>
 			</td>
 		</tr>
 		<? }
@@ -269,7 +275,7 @@ if ($admin_modules_data["range_id"]) {
 				<font size=-1><?=_("aus")?><br /></font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
-				<font size=-1><?=($admin_modules_data["modules_list"]) ? _("Der Chat kann jederzeit deaktiviert werden.") : _("Der Chat kann jederzeit aktiviert werden.")?></font>
+				<font size=-1><?=($admin_modules_data["modules_list"]["chat"]) ? _("Der Chat kann jederzeit deaktiviert werden.") : _("Der Chat kann jederzeit aktiviert werden.")?></font>
 			</td>
 		</tr>
 		<? }
@@ -288,7 +294,7 @@ if ($admin_modules_data["range_id"]) {
 				<font size=-1><?=_("aus")?><br /></font>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
-				<font size=-1><?=($admin_modules_data["modules_list"]) ? _("Die SupportDB kann jederzeit deaktiviert werden.") : _("Die SupportDB kann jederzeit aktiviert werden.")?></font>
+				<font size=-1><?=($admin_modules_data["modules_list"]["support"]) ? _("Die SupportDB kann jederzeit deaktiviert werden.") : _("Die SupportDB kann jederzeit aktiviert werden.")?></font>
 			</td>
 		</tr>
 		<? } ?>
