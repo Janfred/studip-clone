@@ -66,7 +66,6 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 						$vorles_beginn=$sem["vorles_beginn"];
 				$start_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);
 				$end_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["end_stunde"]*60*60)+($term_data["turnus_data"][0]["end_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);;
-				echo $start_termin;
 				$return_string=date ("d.m.Y, G:i", $start_termin);
 				$return_int=$start_termin;
 				if ($start_termin != $end_termin) 
