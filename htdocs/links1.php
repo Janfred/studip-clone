@@ -56,7 +56,7 @@ if ($entry_level=="inst") {
 	$structure["teilnehmer"]=array (topKat=>"seminar_main", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
 	$structure["druckansicht_s"]=array (topKat=>"seminar_main", name=>"Druckansicht", link=>"print_seminar.php", target=>"_new", active=>FALSE);
 	if ($rechte)
-		$structure["administration_v"]=array (topKat=>"seminar_main", name=>"Administration dieser Veranstaltung", link=>"admin_seminare1.php?new_sem=TRUE".$SessSemName[1], active=>FALSE);
+		$structure["administration_v"]=array (topKat=>"seminar_main", name=>"Administration dieser Veranstaltung", link=>"admin_seminare1.php?new_sem=TRUE", active=>FALSE);
 }
 //
 $structure["_forum"]=array (topKat=>"forum", name=>"Themen", link=>"forum.php", active=>FALSE);
