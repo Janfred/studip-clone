@@ -39,7 +39,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"; 
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"); 
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -217,6 +217,9 @@ while ( is_array($HTTP_POST_VARS)
 			$msg .= "msg§" . sprintf(_("%s Funktionen/Gruppen gel&ouml;scht"), $db_ar) . ".§";
 		}
 		
+		//kill the datafields
+		$DataFields->killAllEntries($i_id);		
+		
 		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
 		if ($RESOURCES_ENABLE) {
 			$killAssign = new DeleteResourcesUser($i_id);
@@ -377,7 +380,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Emailadresse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Homepage:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
 	<?
-	//add the free adminstrable datafields
+	//add the free administrable datafields
 	$localFields = $DataFields->getLocalFields($SessSemName[1], ($SessSemName["class"]) ? $SessSemName["class"] : "inst");
 	
 	foreach ($localFields as $val) {

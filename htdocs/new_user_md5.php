@@ -50,6 +50,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -579,11 +580,17 @@ while ( is_array($HTTP_POST_VARS)
 				else
 					$msg .= "error§" . _("Bild konnte nicht gel&ouml;scht werden.") . "§";
 			}
+			
+			//kill the datafields
+			$DataFields = new DataFields($u_id);
+			$DataFields->killAllEntries();				
+			
 			//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
 			if ($RESOURCES_ENABLE) {
 				$killAssign = new DeleteResourcesUser($u_id);
 				$killAssign->delete();
 			}
+			
 			//kill ILIAS-Account if it was automatically generated)
 			if ($ILIAS_CONNECT_ENABLE) {
 				$this_ilias_id = get_connected_user_id($u_id);
