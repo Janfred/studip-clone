@@ -54,7 +54,7 @@ if (!empty($err)) {
 }
 
 echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-echo "<form action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
+echo "<form name=\"Formular\" action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
 echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">\n";
 
 if (isset($atermin) && get_class($atermin) == "seminarevent")
@@ -82,12 +82,19 @@ if (!$set_recur_x) {
 
 	echo "<tr>\n<td class=\"" . $css_switcher->getClass() . "\" width=\"100%\">\n";
 	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
-	echo "<tr valign=\"center\">\n<td><font size=\"-1\">";
+	echo "<tr>\n<td><font size=\"-1\">";
 	echo _("Beginn:") . " </font></td>\n<td><font size=\"-1\"> &nbsp;";
 	echo _("Tag");
-	echo " <input type=\"text\" name=\"start_day\" size=\"2\" maxlength=\"2\" value=\"$start_day\"$disabled>\n";
-	echo " . <input type=\"text\" name=\"start_month\" size=\"2\" maxlength=\"2\" value=\"$start_month\"\"$disabled>\n";
+	echo " <input type=\"text\" name=\"start_day\" size=\"2\" maxlength=\"2\" value=\"";
+	echo ((strlen($start_day) < 2) ? '0' . $start_day : $start_day) . "\"$disabled>\n";
+	echo " . <input type=\"text\" name=\"start_month\" size=\"2\" maxlength=\"2\" value=\"";
+	echo ((strlen($start_month) < 2) ? '0' . $start_month : $start_month) . "\"\"$disabled>\n";
 	echo " . <input type=\"text\" name=\"start_year\" size=\"4\" maxlength=\"4\" value=\"$start_year\"$disabled>\n";
+	echo "&nbsp;";
+	echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/edit_transparent.gif\" border=\"0\" ";
+	echo "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
+	echo "/views/insert_date_popup.php', 'InsertDate', ";
+	echo "'dependent=yes, width=210, height=210, left=500, top=150')\">";
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
 	echo " <select name=\"start_h\" size=\"1\"$disabled>\n";
@@ -124,11 +131,13 @@ if (!$set_recur_x) {
 	echo tooltip($info, TRUE, TRUE) . ">\n";
 	echo "</font></td>\n</tr>\n";
 	echo "<tr><td colspan=\"2\"><font size=\"-1\">&nbsp;</font></td></tr>\n";
-	echo "<tr valign=\"center\"><td><font size=\"-1\">";
+	echo "<tr><td><font size=\"-1\">";
 	echo _("Ende:") . " </font></td>\n<td><font size=\"-1\"> &nbsp;";
 	echo _("Tag");
-	echo " <input type=\"text\" name=\"end_day\" size=\"2\" maxlength=\"2\" value=\"$end_day\"$disabled>\n";
-	echo " . <input type=\"text\" name=\"end_month\" size=\"2\" maxlength=\"2\" value=\"$end_month\"$disabled>\n";
+	echo " <input type=\"text\" name=\"end_day\" size=\"2\" maxlength=\"2\" value=\"";
+	echo ((strlen($end_day) < 2) ? '0' . $end_day : $end_day) . "\"$disabled>\n";
+	echo " . <input type=\"text\" name=\"end_month\" size=\"2\" maxlength=\"2\" value=\"";
+	echo ((strlen($end_month) < 2) ? '0' . $end_month : $end_month) . "\"$disabled>\n";
 	echo " . <input type=\"text\" name=\"end_year\" size=\"4\" maxlength=\"4\" value=\"$end_year\"$disabled>\n";
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
@@ -656,7 +665,7 @@ else {
 				"<a href=\"$PHP_SELF?cmd=changeview&atime=$atime\">",
 				"</a>");
 	}
-	elseif ($count_events >= ($CALENDAR_MAX_EVENTS / 20)) {
+	elseif ($count_events >= ($CALENDAR_MAX_EVENTS - $CALENDAR_MAX_EVENTS / 20)) {
 		// only 5% of max number of events free
 		$info_box['count'] = sprintf(_("Sie k&ouml;nnen noch %s Termine speichern."),
 				$CALENDAR_MAX_EVENTS - $count_events);
