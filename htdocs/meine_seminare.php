@@ -360,7 +360,9 @@ else {  // es sind keine Veranstaltungen abboniert
 			ECHO "<th width=\"10%\" nowrap><b>Position/Chance</b></th>";
 			ECHO "<th width=\"10%\"><b>Art</b></th>";
 			ECHO "<th width=\"3%\">X&nbsp; </tr></th>";
-
+			
+	$cssSw->resetClass();
+	
 	WHILE ($db->next_record()) {
 		IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
 				 $db2=new DB_Seminar;
@@ -381,7 +383,6 @@ else {  // es sind keine Veranstaltungen abboniert
 		}
 	
 	//$cssSw->disableHover();
-	$cssSw->resetClass();
 	$cssSw->switchClass();
 	printf ("<tr".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12></td>",$chance_color);
 	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
