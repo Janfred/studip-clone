@@ -1042,14 +1042,25 @@ class ResourceObject {
 		if(($this->chng_flag) || ($create)) {
 			$chdate = time();
 			$mkdate = time();
-			if($create)
+			
+			if($create) {
+				//create level value
+				if (!$this->parent_id)
+					$level=0;
+				else {
+					$query = sprintf("SELECT level FROM resources_objects WHERE resource_id = '%s'", $this->parent_id);
+					$this->db->query($query);
+					$this->db->next_record();
+					$level = $this->db->f("level") +1;
+				}
+
 				$query = sprintf("INSERT INTO resources_objects SET resource_id='%s', root_id='%s', " 
-					."parent_id='%s', category_id='%s', owner_id='%s', name='%s', description='%s', "
+					."parent_id='%s', category_id='%s', owner_id='%s', level='%s', name='%s', description='%s', "
 					."inventar_num='%s', parent_bind='%s', mkdate='%s', chdate='%s' "
-							 , $this->id, $this->root_id, $this->parent_id, $this->category_id, $this->owner_id
+							 , $this->id, $this->root_id, $this->parent_id, $this->category_id, $this->owner_id, $level
 							 , $this->name, $this->description, $this->inventar_num, $this->parent_bind
 							 , $mkdate, $chdate);
-			else
+			} else
 				$query = sprintf("UPDATE resources_objects SET root_id='%s'," 
 					."parent_id='%s', category_id='%s', owner_id='%s', name='%s', description='%s', "
 					."inventar_num='%s', parent_bind='%s' WHERE resource_id='%s' "
@@ -1104,7 +1115,7 @@ class ResourcesPerms {
 }
 
 /*****************************************************************************
-ResourcesObjectPerms, stellt Perms zum Ressourcen Object zur 
+AssignObjectPerms, stellt Perms zum Ressourcen Object zur 
 Verfuegung
 /*****************************************************************************/
 
@@ -1307,7 +1318,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 	}
 
 	function getId () {
-		return $this->$this->resource_id;	
+		return $this->resource_id;	
 	}
 
 	function getUserId () {
@@ -1352,98 +1363,78 @@ class ResourcesRootThreads {
 			else
 				$global_perm=$this->user_global_perm;
 		}
+		
+		//root or resoures root are able to see all resources (roots in tree)
+		if ($global_perm == "root") {
+			$db->query("SELECT resource_id FROM resources_objects WHERE parent_id='0'");
+			while ($db->next_record())
+				$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
+		} else {
+			$my_objects=search_administrable_objects();
+			$my_objects[$user->id]=TRUE;
 			
-		//Bestimmen aller Root Straenge auf die ich Zugriff habe
-		switch ($global_perm) {
-			case "root": 
-				 //Root hat Zugriff auf alles, also alle Stamm-Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE parent_id='0'");
-				while ($db->next_record())
-					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
-			break;
-			case "admin": 
-				//Alle meine Institute...
-				$db->query("SELECT Institut_id, inst_perms FROM user_inst WHERE inst_perms IN ('tutor', 'dozent', 'admin') AND user_inst.user_id='".$this->range_id."' ");
-				while ($db->next_record()) {
-					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Institut_id")."' AND parent_id='0'");
-					while ($db2->next_record())
-						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
-					if ($db->f("inst_perms") == "admin") {
-						//...alle Seminare meiner Institute, in denen ich Admin bin....
-						$db2->query("SELECT Seminar_id FROM seminar_inst WHERE institut_id = '".$db->f("Institut_id")."' ");
-						while ($db2->next_record()) {
-							$db3->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db2->f("Seminar_id")."' AND parent_id='0'");
-								while ($db3->next_record())
-									$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
+			//create the clause with all my id's
+			$i=0;
+			$clause = " (";
+			foreach ($my_objects as $key=>$val) {
+				if ($i)
+					$clause .= ", ";
+				$clause .= "'$key'";
+				$i++;
+			}
+			$clause .= ") ";
+			
+			//all objects where i'am having owner perms...
+			$query = sprintf ("SELECT resource_id, parent_id, root_id, level FROM resources_objects WHERE owner_id IN %s ORDER BY level DESC", $clause);
+			$db->query($query);
+			while ($db->next_record()) {
+				$my_resources[$db->f("resource_id")]=array("root_id" =>$db->f("root_id"), "parent_id" =>$db->f("parent_id"), "level" =>$db->f("level"));
+				$roots[$db->f("root_id")][]=$db->f("resource_id");
+			}
+			
+			//...and all objects where i'am having add perms...
+			$query = sprintf ("SELECT resources_objects.resource_id, parent_id, root_id, level FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id IN %s ORDER BY level DESC", $clause);
+			$db->query($query);
+			while ($db->next_record()) {
+				$my_resources[$db->f("resource_id")]=array("root_id" =>$db->f("root_id"), "parent_id" =>$db->f("parent_id"), "level" =>$db->f("level"));
+				$roots[$db->f("root_id")][]=$db->f("resource_id");
+			}
+
+			foreach ($my_resources as $key => $val) {
+				if (!$this->my_roots[$key]) {
+				if (sizeof($roots[$val["root_id"]]) == 1)
+					$this->my_roots[$key] = $key;
+				//there are more than 2 resources in one thread...
+				else {
+					$query = sprintf ("SELECT resource_id, parent_id, name FROM resources_objects WHERE resource_id = '%s' ", $key);
+					$db->query($query);
+					$db->next_record();
+					$superordinated_id=$db->f("parent_id");
+					$top=FALSE;
+					$last_found=$key;
+					while ((!$top) && ($superordinated_id)) {
+						$query = sprintf ("SELECT resource_id, parent_id, name FROM resources_objects WHERE resource_id = '%s' ", $db->f("parent_id"));
+						$db->query($query);
+						$db->next_record();
+
+						if ($my_resources[$db->f("resource_id")]) {
+							if ($last_found)
+								unset ($my_resources[$last_found]);
+							$last_found= $db->f("resource_id");
 						}
-						//...alle Mitarbeiter meiner Institute, in denen ich Admin bin....
-						$db2->query("SELECT user_id FROM user_inst WHERE Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ");
-						while ($db2->next_record()) {
-							$db3->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db2->f("user_id")."' AND parent_id='0'");
-								while ($db3->next_record())
-									$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
-						}
+
+						$superordinated_id=$db->f("parent_id");
+						if ($db->f("parent_id") == "0")
+							$top = TRUE;
 						
 					}
+
+					$this->my_roots[$last_found] = $last_found;
 				}
-				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
-				while ($db->next_record())
-					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");					
-			break;
-			case "dozent": 
-				//Alle meine Institute...
-				$db->query("SELECT Institut_id FROM user_inst WHERE inst_perms IN ('tutor', 'dozent') AND user_id='".$this->range_id."' ");
-				while ($db->next_record()) {
-					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Institut_id")."' AND parent_id='0'");
-					while ($db2->next_record())
-						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
 				}
-				//..und alle meine Seminare
-				$db->query("SELECT Seminar_id FROM seminar_user WHERE status IN ('tutor', 'dozent') AND user_id='".$this->range_id."' ");
-				while ($db->next_record()) {
-					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Seminar_id")."' AND parent_id='0'");
-					while ($db2->next_record())
-						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
-				}
-				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
-				while ($db->next_record())
-					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
-			break;
-			case "tutor": 
-				//Alle meine Institute...
-				$db->query("SELECT Institut_id FROM user_inst WHERE inst_perms='tutor' AND user_id='".$this->range_id."' ");
-				while ($db->next_record()) {
-					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Institut_id")."' AND parent_id='0'");
-					while ($db2->next_record())
-						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
-				}
-				//..und alle meine Seminare
-				$db->query("SELECT Seminar_id FROM seminar_user WHERE status='tutor' AND user_id='".$this->range_id."' ");
-				while ($db->next_record()) {
-					$db2->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$db->f("Seminar_id")."' AND parent_id='0'");
-					while ($db2->next_record())
-						$this->my_roots[$db->f("resource_id")]=$db2->f("resource_id");
-				}
-				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
-				while ($db->next_record())
-					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
-			break;
-			case "autor": 
-			default:
-				//Alle meine Ressourcen
-				$db->query("SELECT resource_id FROM resources_objects WHERE owner_id='".$this->range_id."' AND parent_id='0'");
-				while ($db->next_record())
-					$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
-			break;
+			}
 		}
-		//Bestimmen aller weiteren Straenge, die nicht oben schon ausgewaehlt wurden
-		$db->query("SELECT resources_objects.resource_id, root_id FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id='".$this->range_id."' ");
-		while ($db->next_record())
-			if (!$this->my_roots[$db->f("root_id")])
-				$this->my_roots[$db->f("resource_id")]=$db->f("resource_id");
+	
 	}
 	
 	//public
