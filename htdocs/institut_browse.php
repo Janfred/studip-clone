@@ -44,6 +44,7 @@ include ($ABSOLUTE_PATH_STUDIP."header.php");   //hier wird der "Kopf" nachgelad
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 
 $sess->register("institut_browse_data");
+$cssSw=new cssClassSwitcher;
 
 if ($send) {	
 	$institut_browse_data["fak_id"]=$fak_id;
@@ -70,46 +71,46 @@ if ($sortby)
 	}
 	?>
 	<tr>
-		<td class="blank" width=100%">
+		<td class="blank" width="60%" align="center">
 			<blockquote>
 			<br />
 				<p>
 				<form  name="search" method="post" action="<? echo $PHP_SELF?>" >
-					<table border=0>
-						<tr>
-							<td colspan=2>
+					<table border=0 cellspacing=0 cellpadding=2>
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" colspan=2>
 							<b><font size=-1>Bitte geben Sie hier Ihre Suchkriterien ein:</font></b><br /><font size=-1>Wenn Sie keinen Suchbegriff angeben, werden alle Einrichtungen angezeigt.</font>
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Name der Einrichtung:</font>
 							</td>
-							<td  width="90%">
+							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text" size=30 maxlength=255 name="s_string" value="<? echo $institut_browse_data["s_string"] ?>">
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Einrichtung dieses Mitarbeiters:</font>
 							</td>
-							<td  width="90%">
+							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="s_mitarbeiter" value="<? echo $institut_browse_data["s_mitarbeiter"] ?>">
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Einrichtung dieser Veranstaltung:</font>
 							</td>
-							<td  width="90%">
+							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="s_sem" value="<? echo $institut_browse_data["s_sem"] ?>">
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Fakult&auml;t</font>
 							</td>
-							<td  width="90%">
+							<td  class="<? echo $cssSw->getClass() ?>" width="90%">
 								<font size=-1>
 								<select name="fak_id">
 								<option selected value=0>alle</option>
@@ -126,7 +127,7 @@ if ($sortby)
 							</td>
 						</tr>						
 						<?/*
-						<tr>
+						<tr <? $cssSw->switchClass() ?>>
 							<td width="10%">
 								&nbsp; 
 							</td>
@@ -136,11 +137,11 @@ if ($sortby)
 							</td>
 						</tr>
 						*/?>
-					   	<tr>
-					   		<td  width="10%">
+					   	<tr <? $cssSw->switchClass() ?>>
+					   		<td class="<? echo $cssSw->getClass() ?>" width="10%">
 					   			&nbsp; 
 					   		</td>
-					   		<td width="90%">
+					   		<td class="<? echo $cssSw->getClass() ?>" width="90%">
 					   			<center>
 					   				<input type="IMAGE" border=0 src="pictures/buttons/suchestarten-button.gif" value="Suche starten">
 					   			</center
@@ -198,9 +199,9 @@ echo "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"pictures/blank.
 $c=0;
 while ($db->next_record()) {
   	if ($c % 2)
-		$class="steel1";
+		$class="steelgraulight";
 	else
-		$class="steelgraulight"; 
+		$class="steel1"; 
 	$c++;
 	
 	echo "<tr><td class=\"$class\" WIDTH=\"1%\">&nbsp;</td>";

@@ -46,6 +46,7 @@ require_once "functions.php";
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
+$cssSw=new cssClassSwitcher;
 $sess->register("archiv_data");
 
 //Daten des Suchformulars uebernehmen oder loeschen
@@ -225,45 +226,47 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 		<td class="topic" colspan=2><img valign="top" src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Suche im Archiv</>
 		</td>
 	</tr>
-		<td class="blank" colspan=2>&nbsp;
-			<?
-			if ($msg) 
-				parse_msg($msg);
-			?>
-		</td>
+	<?
+	if ($msg) { ?>
 	<tr>
-		<td class="blank" width=100%">
+		<td class="blank" colspan=2>&nbsp;
+		<? parse_msg($msg); ?>
+		</td>
+	</tr>
+	<? } ?>
+	<tr>
+		<td class="blank" width="60%" align="left">
 			<blockquote>
 			<br />
 				<p>
 				<form  name="search" method="post" action="<?echo $PHP_SELF?>" >
-					<table border=0>
-						<tr>
-							<td colspan=2>
+					<table border=0 cellspacing=0 cellpadding=2>
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" colspan=2>
 							<b><font size=-1>Bitte geben Sie hier Ihre Suchkriterien ein:</font></b><br /><font size=-1>Wenn Sie keinen Suchbegriff angeben, werden alle Veranstaltungen angezeigt.</font>
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Name der Veranstaltung:</font>
 							</td>
-							<td  width="90%">
+							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="name" value="<? echo $archiv_data["name"] ?>">
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>DozentIn der Veranstaltung:</font>
 							</td>
-							<td  width="90%">
+							<td  class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="doz" value="<? echo $archiv_data["doz"] ?>">
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>"  width="10%">
 								<font size=-1>Semester </font>
 							</td>
-							<td  width="90%">
+							<td class="<? echo $cssSw->getClass() ?>"  width="90%">
 								<font size=-1>
 								<select name="sem">
 								<option selected value=0>alle</option>
@@ -280,11 +283,11 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 								</font>
 							</td>
 						</tr>						
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Heimat-Institut </font>
 							</td>
-							<td  width="90%">
+							<td class="<? echo $cssSw->getClass() ?>"  width="90%">
 								<font size=-1>
 								<select name="inst">
 								<option selected value=0>alle</option>
@@ -304,37 +307,36 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 								</font>
 							</td>
 						</tr>
-
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Beschreibung:</font>
 							</td>
-							<td  width="90%">
+							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="desc" value="<? echo $archiv_data["desc"] ?>">
 							</td>
 						</tr>
-						<tr>
-							<td  width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								<font size=-1>Suche &uuml;ber <b>alle</b> Felder:</font>
 							</td>
-							<td width="90%">
+							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="all" value="<? echo $archiv_data["all"] ?>">
 							</td>
 						</tr>
-						<tr>
-							<td width="10%">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
 								&nbsp; 
 							</td>
-							<td width="90%">
+							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="checkbox" name="pers" <? if ($archiv_data["pers"]) echo "checked" ?>>
 								<font size=-1>Nur Veranstaltungen anzeigen, an denen ich teilgenommen habe</font>
 							</td>
 						</tr>
-					   	<tr>
-					   		<td  width="10%">
+					   	<tr <? $cssSw->switchClass() ?>>
+					   		<td class="<? echo $cssSw->getClass() ?>" width="10%">
 					   			&nbsp; 
 					   		</td>
-					   		<td width="90%">
+					   		<td class="<? echo $cssSw->getClass() ?>" width="90%">
 					   			<center>
 					   				<input type="IMAGE" border=0 src="pictures/buttons/suchestarten-button.gif" value="Suche starten">
 					   			</center
@@ -446,9 +448,9 @@ IF ($archiv_data["perform_search"]) {
  		  	}
  	  	else {
 	 	  	if ($c % 2)
-  				$class="steel1";
+  				$class="steelgraulight";
 			else
-				$class="steelgraulight"; 
+				$class="steel1"; 
 			$c++;
 			}
 
