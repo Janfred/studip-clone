@@ -189,12 +189,12 @@ ob_start();
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
 	
 		if (is_array($n_buddies)) {
-			echo "\n<td class=\"steelgraudunkel\" width=\"65%\"  colspan=2><font size=-1 color=\"white\"><b>Name</b></font></td><td class=\"steelgraudunkel\" colspan=3 width=\"20%\"><font size=-1 color=\"white\"><b>letztes Lebenszeichen</b></font></td></tr>\n";
+			echo "\n<td class=\"steelgraudunkel\"  colspan=2><font size=-1 color=\"white\"><b>Name</b></font></td><td class=\"steelgraudunkel\" colspan=3 ><font size=-1 color=\"white\"><b>letztes Lebenszeichen</b></font></td></tr>\n";
 			reset($n_buddies);
 			while (list($index)=each($n_buddies)) {
 				list($fullname,$zeit,$tmp_online_uname)=$n_buddies[$index];
-				printf("\n<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" ".tooltip("zu den Buddies hinzufügen")." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"69%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
-				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"5%\"align=center>";
+				printf("\n<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" ".tooltip("zu den Buddies hinzufügen")." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"67%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
+				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"6%\"align=center>";
 				if ($CHAT_ENABLE){
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
 							echo "<img src=\"pictures/chat2.gif\" ".tooltip("Dieser User befindet sich im Chat")." border=\"0\">";
@@ -202,7 +202,7 @@ ob_start();
 							echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip("zum Chatten einladen")." border=\"0\"></a>";
 					}
 				else echo "&nbsp;";
-				echo "\n</td><td class=\"".$cssSw->getClass()."\" align=center width=\"5%\"><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\"></a></td></tr>";
+				echo "\n</td><td class=\"".$cssSw->getClass()."\" align=center width=\"6%\"><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\"></a></td></tr>";
 				$cssSw->switchClass();					
 				}
 			
