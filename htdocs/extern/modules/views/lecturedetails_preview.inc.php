@@ -144,7 +144,10 @@ if ($this->config->getValue("Main", "studiplink")) {
 	echo "</font></div>";
 }
 
-echo "<div" . $this->config->getAttributes("SemName", "div") . ">";
+if ($margin = $this->config->getValue("SemName", "margin"))
+	echo "<div style=\"margin-left:{$margin}px;\">";
+else
+	echo "<div>";
 echo "<font" . $this->config->getAttributes("SemName", "font") . ">";
 echo $data["name"] . "</font></div></td></tr>\n";
 
