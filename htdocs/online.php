@@ -109,9 +109,9 @@ ob_start();
 			$user_id = $value["userid"];
 			$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
 			if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
-				$db2->query ("SELECT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id'");	
+				$db2->query ("SELECT position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY position ASC");	
 				if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
-					$group_buddies[]=array($db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
+					$group_buddies[]=array($db2->f("position"), $db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
 				} else {	// buddy, aber keine Gruppe
 					$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
 				}
@@ -122,7 +122,7 @@ ob_start();
 	}
 	
 	
-if (is_array($group_buddies))
+ if (is_array($group_buddies))
 	sort ($group_buddies);
 
 if (is_array($non_group_buddies))
@@ -168,7 +168,7 @@ if (is_array($n_buddies))
 			$lastgroup = "";
 			$groupcount = 0;
 			while (list($index)=each($group_buddies)) {
-				list($gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id,$tmp_user_id)=$group_buddies[$index];
+				list($position,$gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id,$tmp_user_id)=$group_buddies[$index];
 				if ($gruppe != $lastgroup) {// Ueberschrift fuer andere Gruppe
 					printf("\n<tr><td colspan=\"6\" align=\"middle\" class=\"steelkante\"><a href=\"contact.php?view=gruppen&filter=%s\"><font size=\"2\" color=\"#555555\">%s</font></a></td></tr>",$statusgruppe_id, htmlready($gruppe));
 					$groupcount++;
