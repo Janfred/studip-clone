@@ -60,7 +60,8 @@ include($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");  //Linkleiste fuer admins
 	<td align="center" class="blank">
 <?
 $the_tree = new StudipRangeTreeViewAdmin();
-$_open_ranges['root'] = true;
+$the_tree->open_ranges['root'] = true;
+
 $the_tree->showTree();
 page_close();
 ?>
