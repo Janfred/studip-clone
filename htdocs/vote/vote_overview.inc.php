@@ -97,13 +97,13 @@ if ($showrangeID){
 	else{
 		printSafeguard("Ausruf",_("Sie haben kein Berechtigung für diesen Bereich oder der Bereich existiert nicht."
 				. "Es werden Votings und Tests ihrer persönlichen Homepage angezeigt."));
-		$showrangeID = $userID;
+		$showrangeID = get_username ($userID);
 	}
 }
 else{
 	printSafeguard("Ausruf",_("Kein Bereich ausgewählt. Es werden"
 				. "Votings und Tests ihrer persönlichen Homepage angezeigt."));
-	$showrangeID = $userID;
+	$showrangeID = get_username ($userID);
 	}
 
 /* ************************************************************************** *
