@@ -40,9 +40,13 @@ class Modules {
 	var $registered_modules = array (
 		"forum" => array("id" => 0, "const" => ""),
 		"documents" => array("id" => 1, "const" => ""),
-		"ilias_connect" => array("id" => 2, "const" => "ILIAS_CONNECT_ENABLE"),
-		"chat" => array("id" => 3, "const" => "CHAT_ENABLE"),
-		"support" => array("id" => 4, "const" => "SUPPORT_ENABLE")
+		"schedule" => array("id" => 2, "const" => ""),
+		"participants" => array("id" => 3, "const" => ""),
+		"literature" => array("id" => 4, "const" => ""),
+		"ilias_connect" => array("id" => 5, "const" => "ILIAS_CONNECT_ENABLE"),
+		"chat" => array("id" => 6, "const" => "CHAT_ENABLE"),
+		"support" => array("id" => 7, "const" => "SUPPORT_ENABLE"),
+		"wikki" => array("id" => 8, "const" => "WIKKI_ENABLE")
 	);
 	var $db;
 	
