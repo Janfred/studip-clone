@@ -78,7 +78,7 @@ class StudipSemRangeTreeViewSimple {
 			echo "<span style=\"font-size:10pt;\">" . htmlReady($this->tree->tree_data[$kids[$i]]['name']);
 			echo "&nbsp;($num_entries)</span>";
 			echo "</a></b>";
-			if ($i == floor($num_kids / 2)){
+			if ($i == ceil($num_kids / 2)-1){
 				echo "</td>\n<td class=\"steel1\" align=\"left\" valign=\"top\">";
 			} else {
 				echo "<br>";
@@ -88,6 +88,10 @@ class StudipSemRangeTreeViewSimple {
 			echo "<p style=\"font-size:10pt\"><b>";
 			echo _("Auf dieser Ebene existieren keine weiteren Unterebenen.");
 			echo "</b></p>";
+		}
+		if ($item_id != "root"){
+			echo "\n<div align=\"right\" style=\"font-size:10pt;\"><a href=\"" .$this->getSelf("start_item_id={$this->tree->tree_data[$item_id]['parent_id']}", false) . "\">
+			<img src=\"pictures/move_left.gif\" border=\"0\" style=\"vertical-align:bottom;margin-right:3px;\">" . _("eine Ebene zur&uuml;ck") . "</a></div>";
 		}
 		echo "\n</td></tr></table>";
 	}
