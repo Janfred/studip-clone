@@ -1,7 +1,14 @@
 # translation of studip_core.po to 
 # translation of studip_core.po to
 # translation of studip_core.po to
+# translation of studip_core.po to
+# translation of studip_core.po to
 # Copyright (C) 2003 Free Software Foundation, Inc.
+# , 2003
+# , 2003
+# , 2003
+# , 2003
+# , 2003
 # , 2003
 # , 2003
 # , 2003
@@ -12,8 +19,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
-"POT-Creation-Date: 2003-10-01 19:59+0200\n"
-"PO-Revision-Date: 2003-10-01 18:42+GMT\n"
+"POT-Creation-Date: 2003-10-02 12:13+0200\n"
+"PO-Revision-Date: 2003-10-02 12:12+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -125,30 +132,30 @@ msgstr "Stud.IP-Score:"
 msgid "Rang:"
 msgstr "Rank:"
 
-#: about.php:272 links_about.inc.php:52 help/structure.inc.php:125
+#: about.php:275 links_about.inc.php:52 help/structure.inc.php:125
 msgid "Lebenslauf"
 msgstr "CV"
 
-#: about.php:279
+#: about.php:282
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: about.php:286 links_about.inc.php:55
+#: about.php:289 links_about.inc.php:55
 msgid "Publikationen"
 msgstr "Publications"
 
-#: about.php:293
+#: about.php:296
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
-#: about.php:325 lib/classes/StudipRangeTree.class.php:63
+#: about.php:328 lib/classes/StudipRangeTree.class.php:63
 #: lib/classes/StudipSemSearch.class.php:91
 #: lib/classes/StudipSemTree.class.php:56
 #, c-format
 msgid "vor dem %s"
 msgstr "for the %s"
 
-#: about.php:343 admin_metadates.php:685 admin_metadates.php:687
+#: about.php:346 admin_metadates.php:685 admin_metadates.php:687
 #: admin_seminare_assi.php:1500 admin_seminare_assi.php:1502
 #: admin_sem_tree.php:194 lib/classes/SemBrowse.class.php:463
 #: lib/classes/StudipSemTreeViewAdmin.class.php:560
@@ -156,7 +163,7 @@ msgstr "for the %s"
 msgid "unbegrenzt"
 msgstr "unlimited"
 
-#: about.php:350 admin_news.php:498 admin_studiengang.php:260
+#: about.php:353 admin_news.php:498 admin_studiengang.php:260
 #: admin_test_fak.php:349 browse.php:126 header.php:146
 #: links_admin.inc.php:206 links_admin.inc.php:208
 #: links_openobject.inc.php:127
@@ -11674,7 +11681,7 @@ msgstr ""
 
 #: sms_box.php:311
 msgid "im Posteingang"
-msgstr "in the inbox."
+msgstr "in your inbox"
 
 #: sms_box.php:313 sms_box.php:410
 msgid "gesendete systeminterne Nachrichten anzeigen"
@@ -11689,7 +11696,7 @@ msgstr ""
 
 #: sms_box.php:315
 msgid "im Postausgang"
-msgstr "in the outbox."
+msgstr "in your outbox"
 
 #: sms_box.php:319
 msgid "Sie sehen alle Ihre Nachrichten."
@@ -11698,7 +11705,7 @@ msgstr "You can see all your messages"
 #: sms_box.php:321
 #, c-format
 msgid "Es liegen keine systeminternen Nachrichten %s vor."
-msgstr "No internal system messages %s are available."
+msgstr "No internal system messages are available %s."
 
 #: sms_box.php:324
 msgid "Sie sehen nur neue Nachrichten."
@@ -11707,7 +11714,7 @@ msgstr "You can see only new messages."
 #: sms_box.php:330
 #, c-format
 msgid "Es liegen keine neuen systeminternen Nachrichten %s vor."
-msgstr "No are new internal system messages %s. "
+msgstr "No new internal system messages are available %s. "
 
 #: sms_box.php:333
 msgid "Sie sehen nur Nachrichten der letzten 24 Stunden."

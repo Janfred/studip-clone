@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-01 19:59+0200\n"
+"POT-Creation-Date: 2003-10-02 12:13+0200\n"
 "PO-Revision-Date: 2003-10-01 13:49+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -7949,11 +7949,11 @@ msgstr "Stud.IP-Score:"
 msgid "Rang:"
 msgstr "Rank:"
 
-#: about.php:279
+#: about.php:282
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: about.php:293
+#: about.php:296
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
@@ -18731,7 +18731,7 @@ msgstr ""
 
 #: sms_box.php:311
 msgid "im Posteingang"
-msgstr "in the inbox."
+msgstr "in your inbox"
 
 #: sms_box.php:313 sms_box.php:410
 msgid "gesendete systeminterne Nachrichten anzeigen"
@@ -18746,7 +18746,7 @@ msgstr ""
 
 #: sms_box.php:315
 msgid "im Postausgang"
-msgstr "in the outbox."
+msgstr "in your outbox"
 
 #: sms_box.php:319
 msgid "Sie sehen alle Ihre Nachrichten."
@@ -18755,7 +18755,7 @@ msgstr "You can see all your messages"
 #: sms_box.php:321
 #, c-format
 msgid "Es liegen keine systeminternen Nachrichten %s vor."
-msgstr "No internal system messages %s are available."
+msgstr "No internal system messages are available %s."
 
 #: sms_box.php:324
 msgid "Sie sehen nur neue Nachrichten."
@@ -18764,7 +18764,7 @@ msgstr "You can see only new messages."
 #: sms_box.php:330
 #, c-format
 msgid "Es liegen keine neuen systeminternen Nachrichten %s vor."
-msgstr "No are new internal system messages %s. "
+msgstr "No new internal system messages are available %s. "
 
 #: sms_box.php:333
 msgid "Sie sehen nur Nachrichten der letzten 24 Stunden."
