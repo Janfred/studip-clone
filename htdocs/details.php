@@ -614,7 +614,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 			<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 			<?
 				$all_cont_user = false;
-				$db3->query("SELECT a.studiengang_id, name, quota, count(b.user_id) AS sem_user_count, count(c.user_id) AS accepted_user_count FROM admission_seminar_studiengang a 
+				$db3->query("SELECT a.studiengang_id, name, quota, count(distinct(b.user_id)) AS sem_user_count, count(distinct(c.user_id)) AS accepted_user_count FROM admission_seminar_studiengang a 
 							LEFT JOIN studiengaenge USING (studiengang_id) 
 							LEFT JOIN seminar_user b ON (a.seminar_id = b.Seminar_id AND a.studiengang_id = b.admission_studiengang_id) 
 							LEFT JOIN admission_seminar_user c ON (a.seminar_id=c.seminar_id AND a.studiengang_id = c.studiengang_id AND c.status='accepted') 
