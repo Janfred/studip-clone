@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2003-09-30 21:32+0200\n"
+"POT-Creation-Date: 2003-10-01 13:55+0200\n"
 "PO-Revision-Date: 2003-10-01 11:52+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -126,8 +126,9 @@ msgid ""
 "alle Module gelten, solange sie nicht in den jeweiligen Modulen &uuml;"
 "berschrieben werden."
 msgstr ""
-"The module &quot;global configuration&quot; contains settings, that are valid for all modules, "
-"as long as they are not overwritten in the different modules."
+"The module &quot;global configuration&quot; contains settings, that are "
+"valid for all modules, as long as they are not overwritten in the different "
+"modules."
 
 #: extern/extern_config.inc.php:48
 msgid "Mitarbeiter"
@@ -137,7 +138,8 @@ msgstr "Staff member"
 msgid ""
 "Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer "
 "Einrichtung aus."
-msgstr "The module &quot;staff member&quot; provides a staff index of an institute."
+msgstr ""
+"The module &quot;staff member&quot; provides a staff index of an institute."
 
 #: extern/extern_config.inc.php:51
 msgid "Mitarbeiterdetails"
@@ -202,7 +204,9 @@ msgstr "New sticker"
 msgid ""
 "Das Modul &quot;Newsticker&quot; gibt alle News einer Einrichtung in einem "
 "Ticker aus."
-msgstr "The module &quot;News sticker&quot; provides all news from an institute in one ticker."
+msgstr ""
+"The module &quot;News sticker&quot; provides all news from an institute in "
+"one ticker."
 
 #: extern/extern_config.inc.php:75
 msgid "Veranstaltungen (Tabelle)"
@@ -212,7 +216,9 @@ msgstr "Courses (table)"
 msgid ""
 "Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer "
 "Einrichtung a Tabelle aus."
-msgstr "The module &quot;Courses&quot; provides all the courses from an institute in table format."
+msgstr ""
+"The module &quot;Courses&quot; provides all the courses from an institute in "
+"table format."
 
 #: extern/views/ExternEditGeneric.class.php:56
 #: extern/views/ExternEditHtml.class.php:243
@@ -285,8 +291,10 @@ msgstr ""
 "field, or choose a colour from the drop down menu."
 
 #: extern/views/ExternEditHtml.class.php:161
-msgid "Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
-msgstr "This colour will be used as the second colour when Zebra Effect is activated."
+msgid ""
+"Diese Farbe wird als zweite Farbe bei aktiviertem Zebra-Effekt ausgegeben."
+msgstr ""
+"This colour will be used as the second colour when Zebra Effect is activated."
 
 #: extern/views/ExternEditHtml.class.php:162
 msgid "2. Hintergrundf.:"
@@ -311,7 +319,8 @@ msgid "Linkfarbe (nicht besucht):"
 msgstr "Link colour (not visited):"
 
 #: extern/views/ExternEditHtml.class.php:206
-msgid "Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt."
+msgid ""
+"Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt."
 msgstr "This colour is used page-wide for links to lines already used."
 
 #: extern/views/ExternEditHtml.class.php:207
@@ -327,8 +336,10 @@ msgid "Linkfarbe (aktiviert):"
 msgstr "Link colour (activated):"
 
 #: extern/views/ExternEditHtml.class.php:336
-msgid "Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
-msgstr "Enter the distance, in pixels, between the cell contents and the cell border."
+msgid ""
+"Geben Sie den Abstand zwischen Zelleninhalt und Zellenrand in Pixeln an."
+msgstr ""
+"Enter the distance, in pixels, between the cell contents and the cell border."
 
 #: extern/views/ExternEditHtml.class.php:348
 msgid "Cellpadding:"
@@ -453,7 +464,8 @@ msgstr "Page title:"
 msgid ""
 "Aktivieren Sie einen vertikalen oder horizontalen Zebra-Effekt für "
 "Tabellenzeilen/-spalten. "
-msgstr "Activate a vertical or horizontal Zebra Effect for table rows / columns. "
+msgstr ""
+"Activate a vertical or horizontal Zebra Effect for table rows / columns. "
 
 #: extern/views/ExternEditHtml.class.php:609
 #: extern/views/ExternEditHtml.class.php:626
@@ -614,7 +626,8 @@ msgstr ""
 msgid ""
 "Die eingegebenen Werte wurden übernommen und der Name der Konfiguration "
 "geändert."
-msgstr "The given value has been accepted and the name of the configuration changed."
+msgstr ""
+"The given value has been accepted and the name of the configuration changed."
 
 #: extern/views/extern_edit_module.inc.php:134
 msgid "Die eingegebenen Werte wurden übernommen."
@@ -1209,7 +1222,8 @@ msgstr "Course name 3"
 
 #: extern/modules/views/lectures_preview.inc.php:33
 #: extern/modules/views/lecturestable_preview.inc.php:32
-msgid "Termine am 31.7. 14:00 - 16:00, 17.8. 11:00 - 14:30, 6.9. 14:00 - 16:00,..."
+msgid ""
+"Termine am 31.7. 14:00 - 16:00, 17.8. 11:00 - 14:30, 6.9. 14:00 - 16:00,..."
 msgstr ""
 "Appointments on 31.7. 14.00 - 16.00, 17.8. 11.00 - 14.30, 6.9. 14.00 - "
 "16.00,..."
@@ -1481,7 +1495,8 @@ msgstr "Address add-on:"
 
 #: extern/elements/ExternElementContact.class.php:98
 msgid "Zusatz zur Adresse der Einrichtung, z.B. Universitätsname."
-msgstr "Additional address information for the institute, e.g. university name."
+msgstr ""
+"Additional address information for the institute, e.g. university name."
 
 #: extern/elements/ExternElementContact.class.php:114
 msgid "Schriftformatierung der &Uuml;berschrift"
@@ -2647,4 +2662,3 @@ msgstr ""
 
 #~ msgid "Umschlie&szlig;ende Tabelle"
 #~ msgstr "Enclosed table"
-
