@@ -64,17 +64,20 @@ function getRoom ($range_id, $link=TRUE) {
 							}
 						if (($RESOURCES_ENABLE) && ($data["resource_id"])) {
 							if ($link)
-								$ret .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=res\">%s</a>", $data["resource_id"], htmlReady(getResourceObjectName($data["resource_id"])));
+								$ret .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $data["resource_id"], htmlReady(getResourceObjectName($data["resource_id"])));
 							else
 								$ret .= getResourceObjectName($data["resource_id"]);
 						}
-						elseif (!$data["room"]) 
+						elseif ((!$data["room"]) && (sizeof($term_data["turnus_data"]) >1))
 							$ret .=_("n. A.");
 						else
 							$ret .= htmlReady($data["room"]);
 						$i++;
 					}
-					return $ret;
+					if ($ret)
+						return $ret;
+					else
+						return _("nicht angegeben");
 				} else {
 					//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
 					$i=0;
@@ -93,25 +96,28 @@ function getRoom ($range_id, $link=TRUE) {
 					$db->query($query);
 					$i=0;
 					while ($db->next_record()) {
-						if ($i)
-							$ret .= ", ";
-						if ($db->nf() > 1)
-							$ret .= date ("d.m", $db->f("date")).": ";
+						$tmp_room='';
 						if ($RESOURCES_ENABLE) {
-							if ($link)
-								$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=res\">%s</a>", getDateAssigenedRoom($db->f("termin_id")), htmlReady(getResourceObjectName(getDateAssigenedRoom($db->f("termin_id")))));
-							else
-								$tmp_room .= getResourceObjectName(getDateAssigenedRoom($range_id));
+							if (getDateAssigenedRoom($db->f("termin_id")))
+								if ($link) 
+									$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", getDateAssigenedRoom($db->f("termin_id")), htmlReady(getResourceObjectName(getDateAssigenedRoom($db->f("termin_id")))));
+								else
+									$tmp_room .= getResourceObjectName(getDateAssigenedRoom($range_id));
+						}
+						if (($tmp_room) || ($db->f("raum"))) {
+							if ($i)
+								$ret .= ", ";
+							$i++;
 						}
 						if ($tmp_room)
-							$ret .= $tmp_room;
-						elseif (!$db->f("raum"))
-							$ret .=_("n. A.");
-						else
-							$ret .= htmlReady($db->f("raum"));
-						$i++;
+							$ret .= date ("d.m", $db->f("date")).": ".$tmp_room;
+						elseif ($db->f("raum"))
+							$ret .= date ("d.m", $db->f("date")).": ".htmlReady($db->f("raum"));
 					}
-					return $ret;
+					if ($ret)
+						return $ret;
+					else
+						return _("nicht angegeben");
 				}
 			} else
 				return FALSE;
@@ -122,10 +128,11 @@ function getRoom ($range_id, $link=TRUE) {
 			$db->next_record();
 
 			if ($RESOURCES_ENABLE) {
-				if ($link)
-					$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=res\">%s</a>", getDateAssigenedRoom($range_id), htmlReady(getResourceObjectName(getDateAssigenedRoom($range_id))));
-				else
-					$tmp_room .= getResourceObjectName(getDateAssigenedRoom($range_id));
+				if (getDateAssigenedRoom($range_id))
+					if ($link)
+						$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", getDateAssigenedRoom($range_id), htmlReady(getResourceObjectName(getDateAssigenedRoom($range_id))));
+					else
+						$tmp_room .= getResourceObjectName(getDateAssigenedRoom($range_id));
 			}
 			if ($tmp_room)
 				$ret .= $tmp_room;
