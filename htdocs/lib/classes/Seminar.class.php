@@ -72,7 +72,7 @@ class Seminar {
 	* @return	string	the unique id
 	*/
 	function createId() {
-		return md5(uniqid("SeminarSissi"));
+		return md5(uniqid("SeminarSissi",1));
 	}
 	
 	/**
@@ -80,8 +80,8 @@ class Seminar {
 	*
 	*/
 	function unserializeMetadata() {
+		$this->meta_times = array();
 		$this->metadata = unserialize($this->serialized_metadata);
-		
 		$this->metadate_type = $this->metadata["art"];
 		$this->start_date = $this->metadata["start_termin"];
 		$this->start_week = $this->metadata["start_woche"];
@@ -140,7 +140,7 @@ class Seminar {
 	}
 
 	function getFormattedTurnus($short = FALSE) {
-		return view_turnus ($this->seminar_id, $short, $this->serialized_metadata, $this->start_time);
+		return view_turnus($this->seminar_id, $short, $this->serialized_metadata, $this->start_time);
 	}
 	
 	function getFormattedTurnusDates($short = FALSE) {
