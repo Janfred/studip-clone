@@ -1,4 +1,7 @@
-12.10.2002 v 0.8.15 ;-)
+13.10.2002 v 0.8.15 ;-)
+- Neue Übersicht der persönlichen Termine auf der Startseite
+- Terminkalender überarbeitet
+- Kürzel für Symbole wie Pfeile oder Copyright-Zeichen eingebaut
 - neue Verwaltungsebene "Funktionen / Gruppen", verwendbar für Einrichtungen und Veranstaltungen
 - Anpassungen für die Funktionalität von Veranstaltungen als "Work Groups"
 - weitere Detailverbesserungen und Bugfixes
@@ -23,7 +26,8 @@
 - neue Einrichtungssuche eingebaut
 - Selbstbezeichnung für Einrichtungen kann nun verändert werden
 - Einrichtungen können nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarbeiterlisten und
-  Veranstaltungsübersicht an jedem Institut innerhalb des Systems 
+  Veranstaltungsübersicht an jedem Institut innerhalb des Systems
+- leichte Veränderung des Designs, neues Hintergrundbild
 - Geschwindigkeitsoptimierungen
 - weitere Detailverbesserungen und Bugfixes
 
@@ -123,15 +127,15 @@
 - Bereichs- und Fachverwaltung
 - v.2.0 der Dateiverwaltung: Upload nun über grafische Oberfläche, orientiert am Explorerlook
 - kontextsensitives Hilfesystem
-- Gruppierung von "Meine Seminare" über Farbcodes
+- Gruppierung von "Meine Veranstaltungen" über Farbcodes
 - v.2.0 des Newssystems 
-- Facelifting beim Design: Neue Buttons, konsequenter Fensterlook
+- Facelifting beim Design: neue Buttons, konsequenter Fensterlook
 
 19.03.2001 v.0.3.0 beta 1
 - erster Release bei Sourceforge
 - unzählige Buxfixes
-- alle Detail-Verbesserungen, die sich im laufenden Betrieb gezeigt haben
-- diese Version hat den Betrieb über ein Semester im Ernstfall am Zentrum für interdisziplinäre Medien-
+- viele Detail-Verbesserungen, die sich im laufenden Betrieb ergeben haben
+- diese Version hat den Betrieb über ein Semester als Produktivsystem am Zentrum für interdisziplinäre Medien-
   wissenschaft ohne Probleme überstanden 
 
 15.12.2000
@@ -139,14 +143,14 @@
 
 16.10.2000 v.0.2.0 alpha 
 - In letzter Sekunde wird pünktlich zum Start des WS 2000/01 die erste Version im öffentlichen Einsatz fertig gestellt
-- Neue Funktionen: Dateiordner, Chat, SMS-System, Anzeige von Personen, die ebenfalls Online sind,
+- Neue Funktionen: Dateiordner, Chat, SMS-System, Anzeige von Personen, die Online sind,
   Terminplaner, Personensuche und persönliche Homepage
 - Erste Version mit durchgängiger CI
 - Navigation per Reitersystem
 - Anbindung an externe Seiten
 
 07.08.2000
-- sechsstufiges Rechtessystem fertig gestellt
+- sechsstufiges Rechtessystem wird fertig gestellt
 
 05.08.2000
 - Das Chatmodul wird eingefügt
@@ -164,22 +168,22 @@ Sommer 2000
   das personalisierte Forum zur Entwicklung von Drehbüchern
 
 07.01.2000
-- Umstellung auf PHP-Lib und damit Einführung des Sessionmanagements
+- Umstellung auf PHP-Lib und damit Einführung des Sessionmanagements und der Userverwaltung
 
 Dezember 1999
-- Die Arbeiten an Stud.IP beginnen. Noch ist der Name allerdings nicht erfunden
+- Die Arbeiten an Stud.IP beginnen. Noch ist der Name allerdings nicht erfunden :)
 - Die Entwickler der ersten Stunde: Stefan Suchi (Core) und Ralf Stockmann (Forum)
 - Grundstein des Systems: Ein Forensystem, realisiert in PHP
 
 03.12.1999
-- Der Stud.IP Server, der nach wie vor läuft, wird installiert
+- Der Stud.IP Server, der inzwischen die Göttinger Installation bereitstellt, wird installiert.
 
 27.11.1999
 - Die ersten Projektentwürfe von Stud.IP entstehen. Es soll ein internetbasiertes System zur Unterstützung
-  von Lehrveranstaltungen werden. Personalisiert, mit Seminarverwaltung, Dateiupload, Terminen, News,
-  Forum und Literatur- und Linklisten
-- Das Konzept wird maßgeblich von der bis heute bestehenden Stud.IP-Crew Oliver Brakel, Cornelis Kater, Ralf 
-  Stockmann und Stefan Suchi entworfen
+  von Lehrveranstaltungen entstehen. Es soll personalisiert sein, mit Seminarverwaltung, Dateiupload, Terminen, News,
+  Forum und Literatur- und Linklisten.
+- Das Konzept wird maßgeblich Oliver Brakel, Cornelis Kater, Ralf Stockmann und Stefan Suchi entworfen. Aus diesen Entwicklern
+  entsteht die Stud.IP-Crew, die die das System unabhängig weiterentwickelt
 - Schnell wird klar, das die Technologie der Wahl ein LAMP Server-System ist
 
 Herbst 1999
