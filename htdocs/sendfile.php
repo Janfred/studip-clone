@@ -399,6 +399,7 @@ if ($type == 6) {
 } else {
 	$filesize = strlen($the_data);
 }
+
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1

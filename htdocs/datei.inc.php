@@ -39,19 +39,21 @@ function parse_header($header){
 function parse_link($link) {
 	global $name, $the_file_name, $the_link, $locationheader, $parsed_link;
 	if (substr($link,0,6) == "ftp://") {
-		// Parsing an FTF-Adress		
+		// Parsing an FTF-Adress	
 		$url_parts = @parse_url( $link );
 		$documentpath = $url_parts["path"];
 		$ftp = ftp_connect($url_parts["host"]);
+		
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) $url_parts["pass"] = "wwwrun@".$GLOBALS['MAIL_LOCALHOST'];
 		if (!ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
       			ftp_quit($ftp);
-      			// die("Error: can't login");
+      			die("Error: can't login");
       			return FALSE;
-   		}
+   		} 
+   		echo ftp_size($ftp, $documentpath);
    		$parsed_link["Content-Length"] = ftp_size($ftp, $documentpath);
-		ftp_quit($ftp);
+   		ftp_quit($ftp);
 		if ($parsed_link["Content-Length"] != "-1")
 			$parsed_link["HTTP/1.0 200 OK"] = "HTTP/1.0 200 OK";
 		else
