@@ -258,8 +258,8 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	
 	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
 	$now = time();
-	$i = -1;
-	$max = -1;
+	$i = 1;
+	$min = 0;
 	if ($sem_range == "current") {
 		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
 			if ($sem["beginn"] >= $now) {
@@ -267,26 +267,24 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 				break;
 			}
 		}
-		if ($i == 0 || $i == -1)
-			return;
+		if ($i < 1)
+			return NULL;
 	}
 	else if ($sem_range == "three") {
 		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
 			if ($sem["beginn"] >= $now) {
-				$max = $key + 1;
+				$i = $key;
+				$min = $key - 3;
 				break;
 			}
-			if ($sem["beginn"] <= $now)
-				$i = $key - 1;
 		}
-		if ($i == -1 || $max == -1)
-			return;
-		if ($i == 0)
-			$i = 1;
+		if ($i < 1)
+			return NULL;
+		if ($min < 0)
+			$min = 0;
 	}
 	else {
-		$max = sizeof($GLOBALS["SEMESTER"]) + 1;
-		$i = 1;
+		$i = sizeof($GLOBALS["SEMESTER"]);
 	}
 	
 	$lnk_sdet = $this->getModuleLink("Lecturedetails",
@@ -295,7 +293,7 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	
 	if ($sem_range != "current") {
 		$out = "";
-		for (;$i < $max; $i++) {
+		for (;$min < $i; $i--) {
 			$start = $GLOBALS["SEMESTER"][$i]["beginn"];
 			$end = $GLOBALS["SEMESTER"][$i]["ende"];
 			$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "

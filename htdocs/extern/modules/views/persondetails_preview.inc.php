@@ -294,17 +294,10 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	}
 	$types = implode("','", $types);
 	
-	// current semester
-	/* $now = time();
-	foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
-		if ($sem["beginn"] >= $now)
-			break;
-	}*/
-	
 	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
 	$now = time();
-	$i = -1;
-	$max = -1;
+	$i = 1;
+	$min = 0;
 	if ($sem_range == "current") {
 		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
 			if ($sem["beginn"] >= $now) {
@@ -312,46 +305,29 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 				break;
 			}
 		}
-		if ($i == 0 || $i == -1)
-			return;
+		if ($i < 1)
+			return NULL;
 	}
 	else if ($sem_range == "three") {
 		foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
 			if ($sem["beginn"] >= $now) {
-				$max = $key + 1;
+				$i = $key;
+				$min = $key - 3;
 				break;
 			}
-			if ($sem["beginn"] <= $now)
-				$i = $key - 1;
 		}
-		if ($i == -1 || $max == -1)
-			return;
-		if ($i == 0)
-			$i = 1;
+		if ($i < 1)
+			return NULL;
+		if ($min < 0)
+			$min = 0;
 	}
 	else {
-		$max = sizeof($GLOBALS["SEMESTER"]) + 1;
-		$i = 1;
+		$i = sizeof($GLOBALS["SEMESTER"]);
 	}
 	
 	if ($sem_range != "current") {
-	/*	if ($sem_range == "three") {
-			if ($key > 1)
-				$i = -1;
-			else
-				$i = 0;
-			if ((sizeof($GLOBALS["SEMESTER"]) - $key) > 0)
-				$max = 2;
-			else
-				$max = 1;
-		}
-		else {
-			$i = 1 - $key;
-			$max = sizeof($GLOBALS["SEMESTER"]) - $key + 1;
-		}*/
-		
 		$out = "";
-		for (;$i < $max; $i++) {
+		for (;$min < $i; $i--) {
 			$start = $GLOBALS["SEMESTER"][$i]["beginn"];
 			$end = $GLOBALS["SEMESTER"][$i]["ende"];
 				
