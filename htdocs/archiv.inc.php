@@ -28,7 +28,7 @@ require_once "datei.inc.php";
 
 function dump_sem($sem_id)  
 {
-	global $TERMIN_TYP;
+	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS;
 	
 	require_once("visual.inc.php");
 
@@ -49,31 +49,31 @@ function dump_sem($sem_id)
 	//Grunddaten des Seminars, wie in den seminar_main
 
 	if ($db2->f('Untertitel')!="")  
-		$dump.="<tr><td><b>Untertitel: </b></td><td>".htmlReady($db2->f('Untertitel'),1,1)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>Untertitel: </b></td><td>".htmlReady($db2->f('Untertitel'),1,1)."</td></tr>\n";
 	
 	if (view_turnus($sem_id, FALSE))
-		$dump.="<tr><td><b>Zeit: </b></td><td>".view_turnus($sem_id, FALSE)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>Zeit: </b></td><td>".view_turnus($sem_id, FALSE)."</td></tr>\n";
 	
 	if (get_semester($sem_id))
-		$dump.="<tr><td><b>Semester: </b></td><td>".get_semester($sem_id)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>Semester: </b></td><td>".get_semester($sem_id)."</td></tr>\n";
 
 	if (veranstaltung_beginn($sem_id))
-		$dump.="<tr><td><b>Erster Termin: </b></td><td>".veranstaltung_beginn($sem_id)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>Erster Termin: </b></td><td>".veranstaltung_beginn($sem_id)."</td></tr>\n";
 		
 	if (vorbesprechung($sem_id))
-		$dump.="<tr><td><b>Vorbesprechung: </b></td><td>".vorbesprechung($sem_id)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>Vorbesprechung: </b></td><td>".vorbesprechung($sem_id)."</td></tr>\n";
 		
 	if ($db2->f('Ort')!="")  
-		$dump.="<tr><td><b>Ort: </b></td><td>".htmlReady($db2->f('Ort'),1,1)."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>Ort: </b></td><td>".htmlReady($db2->f('Ort'),1,1)."</td></tr>\n";
 
 	//wer macht den Dozenten?
 	$db=new DB_Seminar;
 	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 
 	if ($db->affected_rows() > 1)
-		$dump.= "<tr><td><b>DozentInnen: </b></td><td>";
+		$dump.= "<tr><td width=\"15%\"><b>DozentInnen: </b></td><td>";
 	else
-		$dump.= "<tr><td><b>DozentIn: </b></td><td>";
+		$dump.= "<tr><td width=\"15%\"><b>DozentIn: </b></td><td>";
 	while ($db->next_record()) 
 		$dump.= $db->f("Vorname") ." ". $db->f("Nachname") ."<br>  ";
 	$dump.="</td></tr>\n";
@@ -82,9 +82,9 @@ function dump_sem($sem_id)
 	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
 
 	if ($db->affected_rows() > 1)
-		$dump.="<tr><td><b>TutorInnen: </b></td><td>";
+		$dump.="<tr><td width=\"15%\"><b>TutorInnen: </b></td><td>";
 	elseif ($db->affected_rows() == 1)
-		$dump.="<tr><td><b>TutorIn: </b></td><td>";
+		$dump.="<tr><td width=\"15%\"><b>TutorIn: </b></td><td>";
 	while ($db->next_record()) 
 		$dump.= $db->f("Vorname") ." ". $db->f("Nachname")."<br>";
 	if ($db->affected_rows())
@@ -92,54 +92,54 @@ function dump_sem($sem_id)
 		
 	if ($db2->f("status")!="")
 		{
-		$dump.="<tr><td align=left><b>Typ der Veranstaltung:&nbsp;</b></td><td align=left>";
-		$dump.= $db2->f("status")."</td></tr>\n";
+		$dump.="<tr><td width=\"15%\"><b>Typ der Veranstaltung:&nbsp;</b></td><td align=left>";
+		$dump.= $SEM_TYPE[$db2->f("status")]["name"]." in der Kategorie <b>".$SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["name"]."</b></td></tr>\n";
 		}
 	if ($db2->f("art")!="")
 		{
-		$dump.="<tr><td align=left><b>Art der Veranstaltung:&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>Art der Veranstaltung:&nbsp;</b></td><td align=left>";
 		$dump .= htmlReady($db2->f("art"),1,1)."</td></tr>\n";
 		}
-	if ($db2->f("VeranstaltungsNummer")!="")
+	if ($db2->f("VeranstaltungsNummer"))
 		{
-		$dump .="<tr><td>";
+		$dump .="<tr><td width=\"15%\">";
 		$dump .="<b>Veranstaltungsnummer:&nbsp;</b></td><td width=75% align=left>";
 		$dump.= $db2->f("VeranstaltungsNummer")."</td></tr>\n";
 		}
 	if ($db2->f("ects")!="")
 		{
-		$dump .="<tr><td>";
+		$dump .="<tr><td width=\"15%\">";
 		$dump .="<b>ECTS-Punkte:&nbsp;</b></td><td width=75% align=left>";
 		$dump.= $db2->f("ects")."</td></tr>\n";
 		}
 	if ($db2->f("Beschreibung")!="")
 		{
-		$dump.="<tr><td align=left><b>Beschreibung:&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>Beschreibung:&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("Beschreibung"),1,1)."</td></tr>\n";
 		}
 	if ($db2->f("teilnehmer")!="")
 		{
-		$dump.="<tr><td align=left><b>Teilnehmer:&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>Teilnehmer:&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("teilnehmer"),1,1)."</td></tr>\n";
 		}
 	if ($db2->f("vorrausetzungen")!="")
 		{
-		$dump.="<tr><td align=left><b>Voraussetzungen:&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>Voraussetzungen:&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("vorrausetzungen"),1,1)."</td></tr>\n";
 		}
 	if ($db2->f("lernorga")!="")
 		{
-		$dump.="<tr><td align=left><b>Lernorganisation:&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>Lernorganisation:&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("lernorga"),1,1)."</td></tr>\n";
 		}
 	if ($db2->f("leistungsnachweis")!="")
 		{
-		$dump.="<tr><td align=left><b>Leistungsnachweis:&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>Leistungsnachweis:&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("leistungsnachweis"),1,1)."</td></tr>\n";
 		}
 	if ($db2->f("Sonstiges")!="")
 		{
-		$dump.="<tr><td align=left><b>Sonstiges:&nbsp;</b></td><td align=left>";
+		$dump.="<tr><td width=\"15%\"><b>Sonstiges:&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("Sonstiges"),1,1)."</td></tr>\n";
 		}
 
@@ -148,7 +148,7 @@ function dump_sem($sem_id)
 	$db3->query("SELECT DISTINCT Fakultaeten.Name FROM Fakultaeten LEFT JOIN Institute USING (Fakultaets_id) LEFT JOIN seminar_inst USING (institut_id) LEFT JOIN seminare USING (Institut_id) WHERE seminare.Seminar_id = '$sem_id' OR seminar_inst.seminar_id = '$sem_id'");
 	IF ($db3->affected_rows() > 0)
 		{
-		$dump.= "<tr><td><b>Fakult&auml;t:&nbsp;</b></td><td>";
+		$dump.= "<tr><td width=\"15%\"><b>Fakult&auml;t:&nbsp;</b></td><td>";
 		WHILE ($db3->next_record())
 			$dump.= htmlReady($db3->f("Name"))."<br>";
 		$dump.= "</td></tr>\n";
@@ -159,7 +159,7 @@ function dump_sem($sem_id)
 	$db3->query("SELECT DISTINCT faecher.name FROM faecher LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) WHERE seminar_id = '$sem_id'");
 	IF ($db3->affected_rows() > 0)
 		{
-		$dump.= "<tr><td><b>F&auml;cher:&nbsp;</b></td><td>";
+		$dump.= "<tr><td width=\"15%\"><b>F&auml;cher:&nbsp;</b></td><td>";
 		WHILE ($db3->next_record())
 			$dump.= htmlReady($db3->f("name"))."<br>";
 		$dump.= "</td></tr>\n";
@@ -170,7 +170,7 @@ function dump_sem($sem_id)
 	$db3->query("SELECT bereiche.* FROM bereiche LEFT JOIN seminar_bereich USING(bereich_id) WHERE seminar_id = '$sem_id'");
 	IF ($db3->affected_rows() > 0)
 		{
-		$dump.= "<tr><td><b>Studienbereiche:&nbsp;</b></td><td>";
+		$dump.= "<tr><td width=\"15%\"><b>Studienbereiche:&nbsp;</b></td><td>";
 		WHILE ($db3->next_record())
 			$dump.= htmlReady($db3->f("name"))."<br>";
 		$dump.= "</td></tr>\n";
@@ -179,13 +179,13 @@ function dump_sem($sem_id)
 	$iid=$db2->f("Institut_id");
 	$db3->query("SELECT Name, url FROM Institute WHERE Institut_id = '$iid'");
 	$db3->next_record();
-	$dump.="<tr><td><b>Heimat-Einrichtung:&nbsp;</b></td><td>".$db3->f("Name")."</td></tr>\n";
+	$dump.="<tr><td width=\"15%\"><b>Heimat-Einrichtung:&nbsp;</b></td><td>".$db3->f("Name")."</td></tr>\n";
 	$db3->query("SELECT Name, url FROM seminar_inst LEFT JOIN Institute USING (institut_id) WHERE seminar_id = '$sem_id' AND Institute.institut_id != '$iid'");
 	$cd=$db3->affected_rows();
 	if ($db3->affected_rows() == 1)
-		$dump.="<tr><td><b>beteiligte Einrichtung:&nbsp;</b></td><td>";
+		$dump.="<tr><td width=\"15%\"><b>beteiligte Einrichtung:&nbsp;</b></td><td>";
 	else if ($db3->affected_rows() >= 2)
-		$dump.="<tr><td><b>beteiligte Einrichtungen:&nbsp;</b></td><td>";
+		$dump.="<tr><td width=\"15%\"><b>beteiligte Einrichtungen:&nbsp;</b></td><td>";
 	
 	while ($db3->next_record()) {
 		$cd--;
@@ -195,24 +195,23 @@ function dump_sem($sem_id)
 	if ($db3->affected_rows())
 		$dump.="</td></tr>\n";
 
-	     //Statistikfunktionen
+	//Teilnehmeranzahl
+	$dump.= "<tr><td width=\"15%\"><b>max. Teilnehmeranzahl:&nbsp;</b></td><td>".$db2->f("admission_turnout")."</td></tr>\n";
+
+	//Statistikfunktionen
 
 	$db3->query("SELECT count(*) as anzahl FROM seminar_user WHERE Seminar_id = '$sem_id'");
 	$db3->next_record();
-	$dump.= "<tr><td><b>Anzahl der angemeldeten Teilnehmer:&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
+	$dump.= "<tr><td width=\"15%\"><b>Anzahl der angemeldeten Teilnehmer:&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
 
 	$db3->query("SELECT count(*) as anzahl FROM px_topics WHERE Seminar_id = '$sem_id'");
 	$db3->next_record();
-	$dump.= "<tr><td><b>Postings:&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
+	$dump.= "<tr><td width=\"15%\"><b>Postings:&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
 
 	$db3->query("SELECT count(*) as anzahl FROM dokumente WHERE Seminar_id='$sem_id'");
 	$db3->next_record();
 	$docs=$db3->f("anzahl");
-	// ????!!
-	//$db3->query("SELECT count(*) as anzahl FROM dokumente, termine WHERE termine.range_id = '$sem_id' AND dokumente.range_id=termin_id");
-	//$db3->next_record();
-	//$docs=$docs + $db3->f("anzahl");
-	$dump.= "<tr><td><b>Dokumente:&nbsp;</b></td><td>".$docs."</td></tr>\n";
+	$dump.= "<tr><td width=\"15%\"><b>Dokumente:&nbsp;</b></td><td>".$docs."</td></tr>\n";
 
 	$dump.= "</table>\n";
 
