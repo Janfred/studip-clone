@@ -42,7 +42,7 @@ class ChatServer {
 	function &GetInstance($class_name){
 		static $object_instance;
 		if (!is_object($object_instance[$class_name])){
-			$object_instance[$class_name] =& new $class_name();
+			$object_instance[$class_name] = new $class_name();
 		}
 		return $object_instance[$class_name];
 	}
