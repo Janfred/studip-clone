@@ -50,6 +50,20 @@ class RangeTreeObjectInst extends RangeTreeObject {
 		
 	}
 	
+	/**
+	* Returns true, if fakultaets_id of the item is found in its parents
+	*
+	* @access	public
+	* @return	bool
+	*/
+	function isInCorrectBranch(){
+		$parents = $this->tree->getParents($this->tree_item_id);
+		if (is_array($parents) && in_array($this->item_data['fakultaets_id'],$parents)){
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }
 

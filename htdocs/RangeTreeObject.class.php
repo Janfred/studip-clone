@@ -163,15 +163,25 @@ class RangeTreeObject {
 	}
 	
 	/**
-	* Returns Stud.IP range_id of the next "real" object
+	* Returns array of Stud.IP range_ids of "real" objects
 	*
 	* This function is a wrapper for the according function in StudipRangeTree
 	* @see StudipRangeTree::getAdminRange()
-	* @access public
-	* @return	string	is primary key from table "institute" or "fakultaeten"
+	* @access	public
+	* @return	array	of primary keys from table "institute" 
 	*/
 	function getAdminRange(){
 		return $this->tree->getAdminRange($this->tree_item_id);
+	}
+	
+	/**
+	* Only useful in RangeTreeObjectInst ,all other items are always in the correct branch
+	*
+	* @access	public
+	* @return	bool
+	*/
+	function isInCorrectBranch(){
+		return true;
 	}
 	
 	/**
