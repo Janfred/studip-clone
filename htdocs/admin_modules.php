@@ -102,7 +102,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 		//check for documents
 		if (($amodules->isBit($admin_modules_data["orig_bin"],  $amodules->registered_modules["documents"]["id"])) &&
 			(!$amodules->isBit($admin_modules_data["changed_bin"],  $amodules->registered_modules["documents"]["id"])) &&
-			($amodules->getModuleForumExistingItems($SessSemName[1]))) {
+			($amodules->getModuleDocumentsExistingItems($SessSemName[1]))) {
 			$msg.="info§"._("Wollen Sie wirklich den Dateiordner deaktivieren und damit alle Dateien l&ouml;schen?");
 			$msg.="<br /><a href=\"".$PHP_SELF."?delete_documents=TRUE\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 			$msg.="<a href=\"".$PHP_SELF."?cancel=TRUE\">" . makeButton("nein", "img") . "</a>\n§";
@@ -113,6 +113,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 			$amodules->writeBin($SessSemName[1], $admin_modules_data["changed_bin"]);
 			$admin_modules_data["orig_bin"] = $admin_modules_data["changed_bin"];
 			$admin_modules_data["modules_list"] = $amodules->getLocalModules($SessSemName[1]);
+			$msg.= "msg§Die ver&auml;nderte Modulkonfiguration wurde &uuml;bernommen";
 		}
 	}
 	
@@ -158,8 +159,8 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 			<?=_("Sie k&ouml;nnen hier einzelne Module nachtr&auml;glich aktivieren oder deaktivieren.")?> <br /><br />
 			</blockqoute>
 		</td>
-		<td class="blank" align="right" valign="top"><br />
-			<img src="pictures/modules.jpg" border="0">&nbsp;
+		<td class="blank" align="right" valign="top"><img src="pictures/blank.gif" height="10" width="5" /><br />
+			<img src="pictures/modules.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" />
 		</td>		
 	</tr>
 	<tr>

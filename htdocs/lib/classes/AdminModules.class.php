@@ -36,6 +36,7 @@
 require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
 require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/Modules.class.php");
+require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");
 
 class AdminModules extends Modules {
 	var $db;
@@ -57,7 +58,7 @@ class AdminModules extends Modules {
 		$db = new DB_Seminar;
 		$db2 = new DB_Seminar;
 		
-		$query = sprintf ("SELECT topic_ic FROM px_topics WHERE Seminar_id='%s'", $range_id);
+		$query = sprintf ("SELECT topic_id FROM px_topics WHERE Seminar_id='%s'", $range_id);
 		$db->query($query);
 		
 		while ($db->next_record()) {
@@ -79,6 +80,19 @@ class AdminModules extends Modules {
 	}
 
 	function moduleDocumentsDeactivate($range_id) {
+		$db = new DB_Seminar;
+
+		//first, delete the folders with parent = range
+		recursiv_folder_delete($range_id);
+		
+		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s' ", $range_id);
+		
+		$db->query($query);
+		
+		//then delete the folder with parent = termin_id
+		while ($db->next_record()) {
+			recursiv_folder_delete($db->f("termin_id"));
+		}
 	}
 	
 }
