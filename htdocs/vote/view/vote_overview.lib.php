@@ -20,7 +20,7 @@ function printSiteTitle(){
 	global $label;
    	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
     	  . "	<tr valign=top align=center>\n"
-    	  . "    <td class=topic align=left colspan=\"2\"><img src=\"pictures/vote-icon.gif\">&nbsp;<b>".$label["sitetitle_title"]."</b>\n"
+    	  . "    <td class=topic align=left colspan=\"2\"><img src=\"".VOTE_PATH_PICTURES."vote-icon.gif\" alt=\"Vote-Icon\">&nbsp;<b>".$label["sitetitle_title"].":</b>\n"
     	  . "     </td>\n"
     	  . "    </tr>\n"
     	  . "</table>\n";
@@ -37,17 +37,20 @@ function printSiteTitle(){
  * @param voteID string needed if you want to delete a vote (not needed)
  */
 function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID = NULL){
-	$html = "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">\n"
+	global $label;
+/*	$html = "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">\n"
 		  . " <tr>\n"
 		  . "  <td class=\"blank\">&nbsp;\n"
-		  . "   <table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>\n"
-		  . "	<tr>\n"
+
 		  . "	 <td width=\"34\" style=\"vertical-align:top;\">\n";
-		  
-	if ($sign != "")	$html .="	  <img src=\"pictures/$sign.gif\">\n";
+*/
+	$html = "   <table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>\n"
+		  . "	<tr>\n"
+	 	  . "	 <td width=\"34\" style=\"vertical-align:top;\">\n";		  
+	if ($sign != "")	$html .="	  <img src=\"".VOTE_PATH_PICTURES."$sign.gif\" alt=\"$sign.gif\">\n";
 	$html .="	 </td>\n";
-	$html .="	 <td style=\"vertical-align:bottom;\">\n";
-	$html .="	  $text<br><br>\n";
+	$html .="	 <td align=\"left\" style=\"vertical-align:bottom;\">\n";
+	$html .="	  <font size=\"-1\">$text</font><br><br>\n";
 
 	if (($mode == "delete_request") || ($mode == "NeverResultvisibility")){
 		if ($mode == "delete_request"){
@@ -58,30 +61,17 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 			$value1 = "setResultvisibility_confirmed";
 			$value2 = "setResultvisibility_aborted";
 		}
-		$html .="	  <table cellspacing=0 cellpadding=0 border=0><tr><td>\n"
-			  . "	   <form action=\"".VOTE_FILE_ADMIN."?page=overview\" method=post>\n"
-			  . "		<input type=\"hidden\" name=\"voteaction\" value=\"".$value1."\">\n"
-			  . "		<input type=\"hidden\" name=\"voteID\" value=\"".$voteID."\">\n"
-			  . "		<input type=\"hidden\" name=\"showrangeID\" value=\"".$showrangeID."\">\n"
-			  . "		<input type=\"image\"  "
-			  . "		".makeButton("ja2","src").">&nbsp&nbsp\n"
-			  . "	   </form></td><td>  \n"
-			  . "	   <form action=\"".VOTE_FILE_ADMIN."?page=overview\" method=post>\n"
-			  . "		<input type=\"hidden\" name=\"voteaction\" value=\"".$value2."\">\n"
-			  . "		<input type=\"hidden\" name=\"voteID\" value=\"".$voteID."\">\n"
-			  . "		<input type=\"hidden\" name=\"showrangeID\" value=\"".$showrangeID."\">\n"
-			  . "		<input type=\"image\" "
-			  . "		".makeButton("nein","src").">\n"
-			  . "	   </form></td></tr></tabel>\n";
+		global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
+		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP . VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID."\" title=\"".$label["yes"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/ja2-button.gif\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP.VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID."\" title=\"".$label["no"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/nein-button.gif\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
 	}
-
 	$html .="	 </td>\n"
 		  . "	</tr>\n"
-		  . "   </table>\n"
-		  . "  </td>\n"
+		  . "   </table>\n";
+		/*  . "  </td>\n"
 		  . " </tr>\n"
-		  . "</table>\n";
-	echo $html;
+		  . "</table>\n";*/
+	return $html;
 }
 
 function printSearchResults($rangeAR,$searchString){
@@ -176,26 +166,28 @@ $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
  * @param $range	array An array with alle accessable rangeIDs [0] and the titles [1]
  * @param $sarchRange	string The ID of the range to display
  */
-function printSelections($range,$sarchRange = ""){
+function printSelections($range,$sarchRange = "",$safeguard = NULL){
 	global $rangemode,$label,$showrangeID;
 	$arraysize = count($range);
 
+	$bgimage = "	 <td class=\"blank\" width=\"270\" rowspan=\"4\" align=\"center\" valign=\"top\" style=\"vertical-align:top;\">"
+	 	 . "	  <img src=\"".VOTE_PATH_PICTURES."/voting.jpg\" alt=\"".$label["sitetitle_title"]."\" border=\"0\">\n"
+		 . "	 </td>\n";
+	
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
 		  . " <tr valign=\"top\">\n"
 		  . "  <td width=\"99%\" NOWRAP class=\"blank\"><br>"
 	  	  . "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
 		  . "	  "
-		  . "	<tr>\n";
+		  . "	<tr><td>".$safeguard."</td>".$bgimage."</tr><tr>\n";
 	
 	// create new vote/test
-	$html .= makeNewVoteSelectForm($range, VOTE_FILE_ADMIN."?page=edit");
+$html .= makeNewVoteSelectForm(VOTE_FILE_ADMIN."?page=edit");
 
 
 	// background-image
-	$html.="	 <td class=\"blank\" width=\"270\" rowspan=\"3\" align=\"center\" valign=\"top\" style=\"vertical-align:top;\">"
-	 	 . "	  <img src=\"pictures/voting.jpg\" border=\"0\">\n"
-		 . "	 </td>\n"
-		 . "	</tr>\n"
+
+	$html.="	</tr>\n"
 		 . "	<tr>\n";
 
 	if (($rangemode == "root" ) || ($rangemode == "admin") || ($rangemode == "dozent"))
@@ -254,24 +246,25 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 	  $no_votes_message = $label["no_votes_message_stopped"];
 	  break;
 	 case "start_table":
-	  print "<table class=\"blank\" cellspacing=0 cellpadding=2 border=0 width=\"100%\"><div style=\"vertical-align:middle;\">\n";
+	  print "<table class=\"blank\" cellspacing=0 cellpadding=2 border=0 width=\"100%\">\n";
 	  return;
 	  break;
 	 case "end_table":
 	  print "</div></table>";
 	  return;
 	 case "printTitle":
-	  print " <tr>\n";
-	  print "  <td class=blank>\n";
-	  print "   <table align=\"center\" width=99% class=\"blank\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
-	  print "	<tr>\n";
-	  print "	 <td colspan=\"9\" align=\"left\" valign=\"top\" class=\"blank\" style=\"vertical-align:middle;\">\n";
-	  print "	  <font size=\"2\" style=\"vertical-align:middle;\"><br><b>".$label["table_title"]." \"".$votes."\":</b></font>\n";
-	  print "	 </td>\n";
-	  print "   </tr>\n";
-	  print "   </table>\n";
-	  print "  </td>\n";
-	  print " </tr>\n";
+	  $html= " <tr>\n"
+	  	   . "  <td class=blank>\n"
+	  	   . "   <table align=\"center\" width=99% class=\"blank\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n"
+	  	   . "	<tr>\n"
+	  	   . "	 <td colspan=\"9\" align=\"left\" valign=\"top\" class=\"blank\" style=\"vertical-align:middle;\">\n"
+	  	   . "	  <font size=\"2\" style=\"vertical-align:middle;\"><br><b>".$label["table_title"]." \"".$votes."\":</b></font>\n"
+	  	   . "	 </td>\n"
+	  	   . "   </tr>\n"
+	  	   . "   </table>\n"
+	  	   . "  </td>\n"
+	  	   . " </tr>\n";
+	   echo $html;
 	  return;
 	  break;        
 	 default:
@@ -347,7 +340,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 
 // displays the vote/test-icon
 	  $html.="	 "//</td>\n"
-		   . "	 <td class=$displayclass width=\"18\" align=\"middle\">\n"
+		   . "	 <td class=$displayclass width=\"18\" align=\"center\">\n"
 		   . "	  <img src=\"";
 	  ($votes[$counter]["type"] == INSTANCEOF_VOTE) ? $html.= VOTE_ICON_VOTE : $html.= VOTE_ICON_TEST;
 	  $html.="\" align=\"middle\" style=\"vertical-align:middle;\" width=\"18\" alt=\"".INSTANCEOF_VOTE."\">\n"
@@ -460,15 +453,11 @@ reset($votes);
 	    else						$html .="	 <td class=\"steelkante\" colspan=\"9\">\n";
 	    $html .="	 <center>\n";
 		if (($mode == VOTE_STATE_ACTIVE) && ($openID == ("openallactive")))
-			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" ".tooltip(_("Alle Votes schliessen!"))." border=0></a> \n";
+			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";   
 		elseif (($mode == VOTE_STATE_STOPPED) && ($openID == ("openallstopped")))
-			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" ".tooltip(_("Alle Votes schliessen!"))." border=0></a> \n";
+			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";
 		else
-			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID&openID=openall".$mode."#openvote\"><img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\" ".tooltip(_("Alle Votes öffnen!"))." border=0></a> \n";
-//		elseif ($mode == VOTE_STATE_STOPPED)
-//			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" ".tooltip(_("Alle Votes schliessen!"))." border=0></a> \n";
-//		else
-//			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID&openID=openall".$mode."#openvote\"><img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\" ".tooltip(_("Alle Votes öffnen!"))." border=0></a> \n";
+			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID&openID=openall".$mode."#openvote\"><img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\" alt=\"".$label["arrow_open_all"]."\" title=\"".$label["arrow_open_all"]."\" border=0></a> \n";
 		$html .="	 </center></td>\n"
 	    	  . "	</tr>\n";
 	}	 
@@ -485,11 +474,11 @@ reset($votes);
 	 . makeTableDataCell("blindgif","steel1kante","center","18","1")
 	 . makeTableDataCell($fontstart.$no_votes_message.$fontend,"steel1kante","left","","1")
 	 . makeTableDataCell("blindgif","steel1kante","center","120")
-	 . makeTableDataCell("blindgif","steel1kante","","93")
-	 . makeTableDataCell("blindgif","steel1kante","","93")
-	 . makeTableDataCell("blindgif","steel1kante","","93")
-	 . makeTableDataCell("blindgif","steel1kante","","93")
-	 . makeTableDataCell("blindgif","steel1kante","","93")
+	 . makeTableDataCell("blindgif","steel1kante","center","93")
+	 . makeTableDataCell("blindgif","steel1kante","center","93")
+	 . makeTableDataCell("blindgif","steel1kante","center","93")
+	 . makeTableDataCell("blindgif","steel1kante","center","93")
+	 . makeTableDataCell("blindgif","steel1kante","center","93")
 	 . "	</tr>\n"
 	 . "   </table>\n"
 	 . "  </td>\n"
@@ -518,11 +507,7 @@ reset($votes);
  */
 
 function makeTableHeaderCell($text = "&nbsp;", $width = "5%", $align = "center", $colspan = "1"){
-//   if ($text == "blindgif") $text = "<img width=\"$width\" height=\"1\" src=\"pictures/blank.gif\" alt=\"\">";
- //  $html = "	 <th colspan=\"$colspan\" align=\"$align\" width=\"$width\">\n"
-//     . "	  $text\n"
-//      . "	 </th>\n";
-   if ($text == "blindgif") $text = "<img width=\"$width\" align=\"$align\" height=\"1\" src=\"pictures/blank.gif\" alt=\"\">";
+   if ($text == "blindgif") $text = "<img width=\"$width\" align=\"middle\" height=\"1\" src=\"pictures/blank.gif\" alt=\"\">";
    $html = "	 <td class=\"steel\" style=\"vertical-align:bottom;\" colspan=\"$colspan\" align=\"$align\" width=\"$width\" height=\"26\">\n"
       . "	  <font size=-1 style=\"vertical-align:bottom;\"><b>$text</b></font>\n"
       . "	 </td>\n";
@@ -538,7 +523,7 @@ function makeTableHeaderCell($text = "&nbsp;", $width = "5%", $align = "center",
  * @return string a string with a table-head
 */ 
 function makeTableDataCell($text = "&nbsp;", $class = "steel1", $align = "center", $width = "5%", $colspan = "1"){
-	if ($text == "blindgif") $text = "<img width=\"$width\" height=\"1\" src=\"pictures/blank.gif\" alt=\"\">";
+	if ($text == "blindgif") $text = "<img width=\"$width\" height=\"1\" src=\"".VOTE_PATH_PICTURES."blank.gif\" alt=\"\">";
 	$html = "	 <td class=\"$class\" align=\"$align\" width=\"$width\" colspan=\"$colspan\">\n"
 		  . "	  <font size=\"-1\">$text</font>\n"
 		  . "	 </td>\n";
@@ -559,7 +544,7 @@ function makeTableDataCellLink ($username, $text = "&nbsp;",
 				$width = "5%", $colspan = "1") {
    $link = "{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$username;
    $html = "	 <td class=\"$class\" align=\"$align\" width=\"$width\" colspan=\"$colspan\">\n"
-      . "	  <font size=\"-1\"><a href=\"$link\" alt=\"".$text."\" title=\"".$text."\">$text</a></font>\n"
+      . "	  <font size=\"-1\"><a href=\"$link\" title=\"".$text."\">$text</a></font>\n"
       . "	 </td>\n";
    return $html;
 }
@@ -631,12 +616,11 @@ function makeTableDataCellForm( $displayclass = "steel1",
  * @param 
  * @return 
 */
-function makeNewVoteSelectForm($range2, $action){
+function makeNewVoteSelectForm($action){
 	global $rangemode, $label,$range, $showrangeID;
 	$arraysize = count($range);
-	$html = "	 <form action=\"$action\" method=post size=\"-1\">\n"
-		  . "	  <td class=\"steel1\" style=\"vertical-align:middle;\" nowrap><br>&nbsp;\n"
-//		  . "	   ".$text."\n"
+	$html = "	 <td class=\"steel1\" style=\"vertical-align:middle;\" nowrap>\n"
+		  . "	  <form action=\"$action\" method=post><br>&nbsp;\n"
 		  
 		  // vote/test selection
 		  . "	  <select name=\"type\" style=\"vertical-align:middle;\">"
@@ -646,7 +630,7 @@ function makeNewVoteSelectForm($range2, $action){
 	 // Auswahlliste erstellen
 
 	if ($rangemode != "autor"){
-		$html .="<font size=\"-1\"> in </font>";
+		$html .="<font size=\"-1\"> "._("in")." </font>";
 		$html .="	   <select name=\"rangeID\" style=\"vertical-align:middle;\">\n";
 		if($hidden1_name == "all_ranges")
 			$html .="	   <option value=\"$hidden1_name\" selected>$hidden1_value</option>\n";
@@ -663,14 +647,14 @@ function makeNewVoteSelectForm($range2, $action){
 		$html .="	   </select>\n";
 	}
 	else{
-		$html .= $range[0][1]."\n"
+		$html .= "<font size=\"-1\">".$range[0][1]."</font>\n"
 			  . "	   <input type=\"hidden\" name=\"rangeID\" value=\"".$range[0][0]."\">\n";
 	}
 
 	$html .="	   <input type=image name=new style=\"vertical-align:middle;\""
-		  . 	    makeButton($label["selections_button"],"src") . tooltip($label["selections_tooltip"]) . ">\n"
-		  . "	  <br><br></td>\n"
-		  . "	</form>\n";
+		  . 	    makeButton($label["selections_button"],"src") ." alt=\"".$label["selections_tooltip"]."\" title=\"".$label["selections_tooltip"]."\" border=0>\n"
+		  . "	  <br>&nbsp;</form>\n"
+		  . "	</td>\n";
 	reset($range);
 	return $html;
 }
@@ -687,8 +671,8 @@ function makeNewVoteSelectForm($range2, $action){
 function makeDisplaySelectForm($action){
 	global $rangemode, $label,  $range, $showrangeID;
 	$arraysize = count($range);
-	$html .="	  <form action=\"$action\" method=post>\n"
-		  . "		<td class=\"steelkante\" style=\"vertical-align:middle;\" nowrap><br>&nbsp;<font size=\"-1\">\n"
+	$html .="	  <td class=\"steelkante\" style=\"vertical-align:middle;\" nowrap>\n"
+		  . "		<form action=\"$action\" method=post><font size=\"-1\"><br>&nbsp;\n"
 		  . "	   ".$label["selections_selectrange_text"]."\n"
 	 // Auswahlliste erstellen
 		  . "	   <select name=\"showrangeID\" style=\"vertical-align:middle;\">\n";
@@ -710,8 +694,9 @@ function makeDisplaySelectForm($action){
 	//$html .="	   ".$label["selections_text_end"]."\n";
 
 	$html .="	   <input type=image name=new style=\"vertical-align:middle;\" "
-		  . 	    makeButton($label["selections_selectrange_button"],"src") . tooltip($label["selections_selectrange_tooltip"]) . ">\n"
-		  . "	  </font></div></form></td>\n";
+		  . 	    makeButton($label["selections_selectrange_button"],"src") . " title=\"".$label["selections_selectrange_tooltip"]."\" alt=\"".$label["selections_selectrange_tooltip"]."\">\n"
+		  . "	   <br></font></form>\n"
+		  . "	  </td>\n";
 	reset($range);
 	return $html;
 }
@@ -723,14 +708,15 @@ function makeDisplaySelectForm($action){
 */
 function makeSearchForm(){
 	global $label, $searchRange;
-	$html .="	  <form action=\"$action\" method=post>\n"
-		  . "		<td class=\"steelgraulight\" style=\"vertical-align:middle;\" nowrap>&nbsp;\n"
-		  . "	     <font size=\"-1\" style=\"vertical-align:middle;\">".$label["search_text"]."\n"
+	$html .="	  <td class=\"steelgraulight\" style=\"vertical-align:middle;\" nowrap>\n"
+		  . "		<form action=\"$action\" method=post><font size=\"-1\" style=\"vertical-align:middle;\"><br>&nbsp;\n"
+		  . "	     ".$label["search_text"]."\n"
 		  . "	     <input type=\"text\" name=\"searchRange\"  value=\"$searchRange\" size=\"30\" style=\"vertical-align:middle;\">"
 		  . "	     <input type=\"hidden\" name=\"voteaction\" value=\"search\">"
 		  . "	     <input type=\"image\" style=\"vertical-align:middle;\""
-		  .			makeButton($label["search_button"],"src") . tooltip($label["search_tooltip"]) . ">\n"
-		  . "	  </font></form></div></td>\n";
+		  .			makeButton($label["search_button"],"src") . " title=\"".$label["search_tooltip"]."\" alt=\"".$label["search_tooltip"]."\">\n"
+		  . "	  <br>&nbsp;</font></form>\n"
+		  . "	  </td>\n";
 	return $html;
 }
 
@@ -741,32 +727,7 @@ function makeSearchForm(){
 */
 function makeArrow($timestmp,$open,$displayclass,$mode,$voteID = NULL){
 	global $label, $showrangeID;
-	//$timestmp = 0;
-//	print "\$timestmp: $timestmp<br>";
-/*
-$width  = 1;
-$height = 10;
-
-$image = imageCreate( $width, $height );
-
-$redVal = 235;
-if ( $_GET["percent"] < 50 )
-     $otherVal = 220 - $_GET["percent"] * 4;
-
-$borderCol  = imageColorAllocate( $image, 0, 0, 0 );
-$contentCol = imageColorAllocate( $image, $redVal, $otherVal, $otherVal );
-
-#imagefill( $image, 0, 0, $borderCol );
-imageline( $image, 0, 1, 0, $height-2, $contentCol );
-
-#imageInterlace( $image, 0 );
-header( "Content-Type: image/png" );
-imagepng( $image );
-print "$image<br>";
-
-*/
-
-
+	
 	switch ($mode){
 	 case "new":
 			$icon = "gelb";
@@ -786,11 +747,10 @@ print "$image<br>";
 	$html.= "	  <a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=$showrangeID";
 	if ($open == "closed")
 		$html.= "&openID=".$voteID."#openvote"
-			 .  "\" alt=\"".$label["arrow_openthis"]."\" title=\"".$label["arrow_openthis"]."\">\n";
+			 .  "\" title=\"".$label["arrow_openthis"]."\">\n";
 	else
-		$html.= "\" alt=\"".$label["arrow_closethis"]."\" title=\"".$label["arrow_closethis"]."\">\n";
+		$html.= "\" title=\"".$label["arrow_closethis"]."\">\n";
 	
-//	$html .= "<img src=\"pictures/blank\"";//pfeil100.gif\"";
 
 	$html.= "	  <img src=\"pictures/forum".$icon.".gif\" border=\"0\" align=\"middle\" style=\"vertical-align:middle;\" alt=\"";
 	if ($open == "closed")
@@ -799,68 +759,6 @@ print "$image<br>";
 		$html.= $label["arrow_closethis"];
 	$html.= "\"></a>\n"
 		 .  "	 </td>\n";
-	
-/*	
-	$new = FALSE;
-	if ($timestmp == 0)
-		$timecolor = "#BBBBBB";
-	else {
-		$timediff = (int) log((time() - $timestmp) / 86400 + 1) * 15;
-		if ($timediff >= 68)
-			$timediff = 68;
-		
-		$red = dechex(255 - $timediff);
-		$other = dechex(119 + $timediff);
-		$timecolor= "#" . $red . $other . $other;
-	}
-//	print "\$timecolor: $timecolor<br><nr>";
-
-	$html = "<td bgcolor=\"".$timecolor."\" class=\"".$displayclass."FAKE\" nowrap width=\"10\"";
-	$html.= "align=\"center\" valign=\"top\" style=\"vertical-align:middle;\">";
-	
-*/	
-	
-	
-/*	
-	if ($link) {
-		if ($open == "close" AND $new != TRUE)
-			$html .= "pictures/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen"));
-	
-		if ($open == "open" AND $new != TRUE)
-			$html .= "pictures/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen"));
-		
-		if ($open == "close" AND $new == TRUE)
-			$html .= "pictures/forumrot.gif\"" . tooltip(_("Objekt aufklappen"));
-		
-		if ($open == "open" AND $new == TRUE)
-			$html .= "pictures/forumrotrunt.gif\"" . tooltip(_("Objekt zuklappen"));
-		
-	}
-	else {
-		if ($open == "close") {
-			if (!$new)
-				$html .= "pictures/forumgrau2.gif\"";
-			
-			if ($new)
-				$html .= "pictures/forumrot.gif\"";
-		}
-		else {
-			if (!$new)
-				$html .= "pictures/forumgraurunt2.gif\"";
-			
-			if ($new)
-				$html .= "pictures/forumrotrunt.gif\"";
-		}
-	}
-*/	
-//	$html .= " border=\"0\" style=\"vertical-align:middle;\">";
-//	if ($link) {
-//		$html .= "</a>\n";
-//	}
-//	$html .= "</td>\n";//<td class=\"printhead\" nowrap width=\"1%\" valign=\"middle\">$icon</td>";
-//	$html .= "<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;";
-//	$html .= $titel."</td>"."<td align=\"right\" class=\"printhead\" width=\"99%\" valign='bottom'>";
-//	$html .= $zusatz."&nbsp;</td></tr></table>";
 	return $html;
 }
 ?>

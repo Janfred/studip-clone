@@ -66,10 +66,6 @@ $openID										= $HTTP_GET_VARS['openID'];
 $searchRange 								= htmlready($HTTP_POST_VARS['searchRange']);
 	if(empty($searchRange))		$searchRange= NULL;
 
-
-
-
-
 /* **END*of*initialize*post/get*variables*********************************** */
 
 // creates an array with all the labels
@@ -77,7 +73,7 @@ $label = createLabel();
 
 // Displays the title
 printSiteTitle();
-
+$safeguard = "";
 /* ************************************************************************** *
 /*																			  *
 /* check permission															  *
@@ -96,23 +92,20 @@ elseif ($perm->have_perm("tutor"))
 elseif ($perm->have_perm("autor"))
 	$rangemode = "autor";
 else
-	printSafeguard("ausruf",_("Fehler: Sie haben keine Berechtigung"
-				. "f&uuml;r diese Seite."));
+	printSafeguard("ausruf",_("Fehler: Sie haben keine Berechtigung f&uuml;r diese Seite."));
 
 $userID = $user->id;
-if ($showrangeID){
-	if (($perm->have_studip_perm("tutor",$showrangeID)) ||
+if (($showrangeID) && ($voteaction != "search")){
+	if (($perm->have_studip_perm("admin",$showrangeID)) ||
 		(get_username($userID) == $showrangeID)){
-		}
+	}
 	else{
-		printSafeguard("ausruf",_("Sie haben kein Berechtigung für diesen Bereich oder der Bereich existiert nicht."
-				. "Es werden Votings und Tests ihrer persönlichen Homepage angezeigt."));
+		$safeguard = printSafeguard("ausruf",_("Sie haben kein Berechtigung für diesen Bereich oder der Bereich existiert nicht. Es werden Votings und Tests ihrer persönlichen Homepage angezeigt."));
 		$showrangeID = get_username ($userID);
 	}
 }
-else{
-	printSafeguard("ausruf",_("Kein Bereich ausgewählt. Es werden "
-				. "Votings und Tests ihrer persönlichen Homepage angezeigt."));
+elseif ($voteaction != "search"){
+	$safeguard = printSafeguard("ausruf",_("Kein Bereich ausgewählt. Es werden Votings und Tests ihrer persönlichen Homepage angezeigt."));
 	$showrangeID = get_username ($userID);
 	}
 
@@ -145,10 +138,8 @@ elseif ($rangemode == "dozent" OR $rangemode == "tutor") {
 	$rangeARUser = $voteDB->search_range("");
 	if(!empty($rangeARUser)){
 	foreach ($rangeARUser as $k => $v) {
-		while (list($typen_key,$typen_value)=each ($typen)) {
-       		if ($v["type"]==$typen_key){
-				//$html.= "\$type: ".$v["type"]." || ID=$k -> Name=".$v["name"]."\n";
-				//$range[]=array($k,["$typen_key"].":".$v["name"]);
+		while (list($typen_key,$typen_value)=each($typen)){
+       		if ($v["type"] == $typen_key){
 				$range[] = array($k,$typen_value.":".$v["name"]);
 				}
 		}
@@ -159,9 +150,7 @@ elseif ($rangemode == "dozent" OR $rangemode == "tutor") {
 elseif ($rangemode == "autor"){
 	$range[] = array(get_username($userID),_(" auf der pers&ouml;nlichen Homepage"));
 }
-else{
-	$range[] = array("hallo",_("Fehler: Kein gültiger User"));
-}
+
 
 /* ************************************************************************** *
 /*																			  *
@@ -170,18 +159,18 @@ else{
 /* ************************************************************************* */
 
 // If a votes attribute(s) is to be modified, the action will be execute here.
-if ($voteaction)	callSafeguard($voteaction, $voteID, $showrangeID, $searchRange);
-
+if ($voteaction && $voteaction != "search") $safeguard .= callSafeguard($voteaction, $voteID, $showrangeID, $searchRange);
+//print "<table><tr>$safeguard</tr></table>";
 // Displays the Options to create a new Vote or Test
 // and the selection of displayed votes/tests
-printSelections($range,$searchRange);
-$voteDB = &new VoteDB();
+printSelections($range,$searchRange,$safeguard);
+
 
 // starting waiting votes
+$voteDB = &new VoteDB();
 $voteDB->startWaitingVotes ();
 	if ($voteDB->isError ())
-		printSafeguard("ausruf",_("Fehler beim starten der wartenden"
-				. "Votings und Tests."));
+		printSafeguard("ausruf",_("Fehler beim starten der wartenden Votings und Tests."));
 
 if ($voteaction != "search"){
 	// reads the vote data into arrays
@@ -206,6 +195,7 @@ elseif (($voteaction == "search") && (($rangemode == "root") || ($rangemode == "
 	else
 		printSearchResults(NULL,NULL);
 }
+
 /* **END*of*displays*the*site*********************************************** */
 
 
@@ -224,22 +214,16 @@ elseif (($voteaction == "search") && (($rangemode == "root") || ($rangemode == "
 function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search = NULL){
 	$voteDB = &new voteDB;
 	$votechanged = NULL;
-	
-	if ($type = $voteDB->getType($voteID) == "vote"){
+	$safeguard = "";
+	if ($type = $voteDB->getType($voteID) == "vote")
 		$vote = &new Vote($voteID);
-		$typename = _("Das Voting");
-	}
-	else{
+	else
 		$vote = &new TestVote($voteID);
-		$typename = ($voteaction != "delete_request") 
-			? _("Der Test")
-			: _("Den Test");
-	}
 	
 	// If theres an error ... print it and return
 	if ($vote->isError()){
 		createErrorReport ($vote);
-		printSafeguard("",createErrorReport($vote));
+		$safeguard .= printSafeguard("",createErrorReport($vote));
 		//return;
 	}
 	$votename = htmlReady($vote->getTitle($voteID));
@@ -250,31 +234,27 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			if ($vote->getResultvisibility() != VOTE_RESULTS_NEVER){
 				if($vote->isVisible()){
 					$vote->executeSetVisible(NO);
-					printSafeguard("ok","$typename \"$votename\" "
-						. _("wurde für die Teilnehmer unsichtbar gemacht."));
+					$type
+					? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde für die Teilnehmer unsichtbar gemacht."),$votename))
+					: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde für die Teilnehmer unsichtbar gemacht."),$votename));
 				}
 				else{
 					$vote->executeSetVisible(YES);
 						if ($vote->isError()){
 							createErrorReport ($vote);
-							printSafeguard("",createErrorReport($vote));
+							$safeguard .= printSafeguard("",createErrorReport($vote));
 							return;
 						}
-					printSafeguard("ok","$typename \"$votename\" "
-						. _("wurde für die Teilnehmer sichtbar gemacht."));
+					$type
+					? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde für die Teilnehmer sichtbar gemacht."),$votename))
+					: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde für die Teilnehmer sichtbar gemacht."),$votename));
 				}
 				$votechanged = 1;
 			}
 			else{
-				printSafeguard("ausruf","$typename \"$votename\""._(" wurde beim "
-						. "Erstellen auf \"Der Teilnehmer sieht die (Zwischen-"
-						. ")Ergebnisse: Nie\" eingestellt.<br> Sollen die End"
-						. "ergebnisse jetzt trotzdem f&uuml;r die Teilnehmer "
-						. "sichtbar gemacht werden? (Wenn dieser Eintrag "					
-						. "fortgesetzt werden sollte, werden die Ergebnisse nach "
-						. "Ablauf ohne weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"),
-						  "NeverResultvisibility",$voteID, $showrangeID);
-				
+				$type
+				? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde beim Erstellen auf \"Der Teilnehmer sieht die (Zwischen-)Ergebnisse: Nie\" eingestellt.<br> Sollen die Endergebnisse jetzt trotzdem f&uuml;r die Teilnehmer sichtbar gemacht werden? (Wenn dieser Eintrag fortgesetzt werden sollte, werden die Ergebnisse nach Ablauf ohne weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"),$votename),"NeverResultvisibility",$voteID, $showrangeID)
+				: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde beim Erstellen auf \"Der Teilnehmer sieht die (Zwischen-)Ergebnisse: Nie\" eingestellt.<br> Sollen die Endergebnisse jetzt trotzdem f&uuml;r die Teilnehmer sichtbar gemacht werden? (Wenn dieser Eintrag fortgesetzt werden sollte, werden die Ergebnisse nach Ablauf ohne weitere Nachfrage für die Teilnehmer sichtbar gemacht!)"),$votename),"NeverResultvisibility",$voteID, $showrangeID);
 			}
 			break;
 		case "setResultvisibility_confirmed":
@@ -282,33 +262,37 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			// error_ausgabe
 			if ($vote->isError()){
 				createErrorReport ($vote);
-				printSafeguard("",createErrorReport($vote));
+				$safeguard .= printSafeguard("",createErrorReport($vote));
 				return;
 			}
 			$vote->executeWrite();
 			$vote->executeSetVisible(YES);
 			if ($vote->isError()){
 				createErrorReport ($vote);
-				printSafeguard("",createErrorReport($vote));
+				$safeguard .= printSafeguard("",createErrorReport($vote));
 				return;
-			} 
-			printSafeguard("ok","$typename \"$votename\""._(" wurde jetzt f&uuml;r "
-				. "die Teilnehmer sichtbar gemacht."));
+			}
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde jetzt f&uuml;r die Teilnehmer sichtbar gemacht."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde jetzt f&uuml;r die Teilnehmer sichtbar gemacht."),$votename));
 			$votechanged = 1;
 			break;
 		case "setResultvisibility_aborted":
-			printSafeguard("ausruf","$typename \"$votename\""._(" wurde f&uuml;r die "
-				. "Teilnehmer nicht sichtbar gemacht."));
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde f&uuml;r die Teilnehmer nicht sichtbar gemacht."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde f&uuml;r die Teilnehmer nicht sichtbar gemacht."),$votename));
 			break;
 		case "start":
 			$vote->executeStart();
 			// error_ausgabe
 			if ($vote->isError()){
 				createErrorReport ($vote);
-				printSafeguard("",createErrorReport($vote));
+				$safeguard .= printSafeguard("",createErrorReport($vote));
 				return;
-			} 
-			printSafeguard("ok","$typename \"$votename\""._(" wurde gestartet."));
+			}
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gestartet."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde gestartet."),$votename));
 			$votechanged = 1;
 			break;
 		case "stop":
@@ -316,10 +300,12 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			// error_ausgabe
 			if ($vote->isError()){
 				createErrorReport ($vote);
-				printSafeguard("",createErrorReport($vote));
+				$safeguard .= printSafeguard("",createErrorReport($vote));
 				return;
-			} 
-			printSafeguard("ok","$typename \"$votename\""._(" wurde gestoppt."));
+			}
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gestoppt."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde gestoppt."),$votename));
 			$votechanged = 1;
 			break;
 		case "continue":
@@ -327,11 +313,12 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			// error_ausgabe
 			if ($vote->isError()){
 				createErrorReport ($vote);
-				printSafeguard("",createErrorReport($vote));
+				$safeguard .= printSafeguard("",createErrorReport($vote));
 				return;
-			} 
-			printSafeguard("ok","$typename \"$votename\" "
-				. _("wurde fortgesetzt."));
+			}
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde fortgesetzt."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde fortgesetzt."),$votename));
 			$votechanged = 1;
 			break;
 		case "restart":
@@ -339,46 +326,49 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			// error_ausgabe
 			if ($vote->isError()){
 				createErrorReport ($vote);
-				printSafeguard("",createErrorReport($vote));
+				$safeguard .= printSafeguard("",createErrorReport($vote));
 				return;
-			} 
-			printSafeguard("ok","$typename \"$votename\" "
-				. _("wurde zur&uuml;ckgesetzt."));
+			}
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde zur&uuml;ckgesetzt."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde zur&uuml;ckgesetzt."),$votename));
 			$votechanged = 1;
 			break;
 		case "delete_request":
-			printSafeguard("ausruf","$typename \"$votename\" "
-				. _("wirklich l&ouml;schen?"),"delete_request",$voteID, $showrangeID);
+			$type
+			? $safeguard .= printSafeguard("ausruf", sprintf(_("Das Voting \"%s\" wirklich l&ouml;schen?"),$votename),"delete_request",$voteID, $showrangeID)
+			: $safeguard .= printSafeguard("ausruf", sprintf(_("Den Test \"%s\" wirklich l&ouml;schen?"),$votename),"delete_request",$voteID, $showrangeID);
 			break;
 		case "delete_confirmed":
 			$vote->executeRemove();
 			// error_ausgabe
 			if ($vote->isError()){
 				createErrorReport ($vote);
-				printSafeguard("",createErrorReport($vote));
+				$safeguard .= printSafeguard("",createErrorReport($vote));
 				return;
-			} 
-			printSafeguard("ok","$typename \"$votename\" "
-				. _("wurde gel&ouml;scht."));
+			}
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gel&ouml;scht."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde gel&ouml;scht."),$votename));
 			$votechanged = 1;
 			break;
 		case "delete_aborted":
-			printSafeguard("ok","$typename \"$votename\" "
-				. _("wurde nicht gel&ouml;scht."));
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde nicht gel&ouml;scht."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde nicht gel&ouml;scht."),$votename));
 			break;
 		case "created":
-			printSafeguard("ok","$typename \"$votename\""._(" wurde angelegt."));
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde angelegt."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde angelegt."),$votename));
 			break;
 		case "saved":
-			printSafeguard("ok","$typename \"$votename\" "
-				. _("wurde mit den Ver&auml;nderungen gespeichert."));
-			break;
-		case "search":
-			//nothing
+			$type
+			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde mit den Ver&auml;nderungen gespeichert."),$votename))
+			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde mit den Ver&auml;nderungen gespeichert."),$votename));
 			break;
 		default:
-			printSafeguard("ausruf",_("Fehler bei 'voteaction'! Es wurde versucht, eine "
-				. "nicht vorhandene Aktion auszuführen."));
+			$safeguard .= printSafeguard("ausruf",_("Fehler bei 'voteaction'! Es wurde versucht, eine nicht vorhandene Aktion auszuführen."));
 			break;
 	}
 	global $auth;
@@ -395,7 +385,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			      "____%system%____" );
 	}
 	
-
+	return $safeguard;
 }
 
 /**
@@ -446,14 +436,14 @@ function createVoteArray($mode){
 */
 		switch ($mode){
 			case VOTE_STATE_NEW:
-					$votearrays = $voteDB->getNewUserVotes($userID);
+					$votearrays = $voteDB->getNewVotes($userID);
 				break;
 			case VOTE_STATE_ACTIVE:
-					$votearrays = $voteDB->getActiveUserVotes($userID,
+					$votearrays = $voteDB->getActiveVotes($userID,
 						$showrangeID);
 				break;
 			case VOTE_STATE_STOPPED:
-					$votearrays = $voteDB->getStoppedUserVotes($userID,
+					$votearrays = $voteDB->getStoppedVotes($userID,
 						$showrangeID);
 				break;
 			default:
@@ -467,7 +457,7 @@ function createVoteArray($mode){
 
 		// extract the voteID
 		$voteID = $votearray["voteID"];
-		
+
 		// create an object of the current vote
 		if 
 		 ($votearray["type"] == "vote")
@@ -485,6 +475,7 @@ function createVoteArray($mode){
 		$changedate = $vote->getChangedate();
 		$title = htmlready($vote->getTitle());
 		$rangeID = $vote->getRangeID();
+		
 		if (($rangemode == "root" ) || ($rangemode == "admin") || ($rangemode == "dozent")){
 			$authID = $vote->getAuthorID();
 			$rangetitle = $voteDB->getAuthorRealname($authID);
@@ -493,7 +484,7 @@ function createVoteArray($mode){
 		else{
 			$rangetitle = $voteDB->getRangename($rangeID);
 			$username = $voteDB->getAuthorUsername ($authID);
-			if($rangeID == "studip") $rangetitle = "Startseite: studip";
+			if($rangeID == "studip") $rangetitle = _("Systemweite Votings/Tests");
 		}
 		$votemode = $votearray["type"];
 
@@ -552,7 +543,7 @@ function createVoteArray($mode){
 function createLabel(){
 	$label = array(
 		// labels for printSiteTitle
-		"sitetitle_title" => _("Voting-Verwaltung:"),
+		"sitetitle_title" => _("Voting-Verwaltung"),
 
 		// labels for printSelections
 		"selections_text_vote" => _("Ein neues Voting"),
@@ -564,29 +555,34 @@ function createLabel(){
 		"selections_selectrange_text_end" => "",
 		"selections_allranges" => _("allen Bereichen"),
 		"selections_selectrange_button" => _("anzeigen"),
-		"selections_selectrange_tooltip" => _("Bereich der angezeigten "
-			. "Votings ausw&auml;hlen."),
+		"selections_selectrange_tooltip" => _("Bereich der angezeigten Votings und Tests ausw&auml;hlen."),
 			
 		// labels for printSearchResults
 		"searchresults_title" => _("Suchergebnisse"),
 		"searchresults_no_string" => _("Bitte geben sie ein l&auml;ngeres Suchmuster ein."),
 		"searchresults_no_results" => _("Keine Suchergebnisse."),
 		"searchresults_no_results_range" => _("Keine Suchergebnisse in diesem Bereich."),
+
+		// labels for printSafeguard
+		"yes" => _("Ja!"),
+		"no" => _("Nein!"),
+		
 		
 		// labels for printSearch
 		"search_text" => _("Nach weiteren Bereichen suchen: "),
 		"search_button" => _("suchen"),
-		"search_tooltip" => _("Hier k&ouml;nnen Sie nach weiteren Bereichen suchen."),
+		"search_tooltip" => _("Hier können Sie nach weiteren Bereichen suchen."),
 		
 		// labels for printVoteTable
-		
 		"table_title" => _("Votings und Tests aus dem Bereich"),
 		"table_title_new" => _("Noch nicht gestartete Votings/Tests:"),
 		"table_title_active" => _("Laufende Votings/Tests:"),
 		"table_title_stopped" => _("Gestoppte Votings/Tests:"),	
 		
-		"arrow_openthis" => _("Aufklappen"),
-		"arrow_closethis" => _("Zuklappen"),
+		"arrow_openthis" => _("Diesen Eintrag aufklappen."),
+		"arrow_closethis" => _("Diesen Eintrag zuklappen."),
+		"arrow_open_all" => _("Alle Votings und Tests &ouml;ffnen!"),
+		"arrow_close_all" => _("Alle Votings und Tests schliessen!"),
 		
 
 		"title" => _("Titel"),
@@ -613,11 +609,11 @@ function createLabel(){
 		"status_tooltip_stopped" => _("Diesen Eintrag jetzt fortsetzen."),
 
 		"restart_button" => _("zuruecksetzen"),	
-		"restart_tooltip" => _("Alle bisherig abgegebenen Antworten l&ouml;schen"),		
+		"restart_tooltip" => _("Alle abgegebenen Stimmen l&ouml;schen."),		
 
 		"edit" => _("Bearbeiten"),
 		"edit_button" => _("bearbeiten"),
-		"edit_tooltip" => _("Diesen Eintrag bearbeiten"),
+		"edit_tooltip" => _("Diesen Eintrag bearbeiten."),
 
 		"makecopy" => "",
 		"makecopy_button" => _("kopieerstellen"),
@@ -625,12 +621,10 @@ function createLabel(){
 
 		"delete" => _("L&ouml;schen"),
 		"delete_button" => _("loeschen"),
-		"delete_tooltip" => _("Diesen Eintrag l&ouml;schen"),
+		"delete_tooltip" => _("Diesen Eintrag l&ouml;schen."),
 		"no_votes_message_new" => _("Keine nicht gestarteten Votings oder Tests vorhanden."),
-		"no_votes_message_active" => _("Keine laufenden Votings oder Tests "
-			. "vorhanden."),
-		"no_votes_message_stopped" => _("Keine gestoppten Votings oder Tests "
-			. "vorhanden."),
+		"no_votes_message_active" => _("Keine laufenden Votings oder Tests vorhanden."),
+		"no_votes_message_stopped" => _("Keine gestoppten Votings oder Tests vorhanden."),
 	);
 	return $label;
 }
