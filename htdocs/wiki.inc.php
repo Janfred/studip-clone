@@ -817,7 +817,7 @@ function showPageFrameStart() {
 function showPageFrameEnd($infobox) {
 	// start of infobox area
 	echo "<td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
-	print_infobox ($infobox,"pictures/details.jpg");
+	print_infobox ($infobox,"pictures/wiki.jpg");
 	echo "</td></tr><tr><td colspan=3 class=\"blank\">&nbsp;</td></tr>";
 	echo "</table>"; // end infoframe (content+box)
 	echo "</td></tr></table>"; // end page box
@@ -1132,7 +1132,7 @@ function showComboDiff($keyword, $db=NULL) {
 			$count++;
 		}
 	}
-	echo "<tr><td colspan=2>";
+	echo "<tr><td class=\"steel1\" colspan=2>";
 	echo "<p><font size=-1>&nbsp;<br>";
 	echo _("Legende der AutorInnenfarben:");
 	echo "<table cellpadding=6 cellspacing=6>$content</table>\n";
