@@ -37,17 +37,20 @@
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 
 class DeleteResourcesUser {
 	var $db;
 	var $db2;
 	var $range_id;
+	var $object_type;
 	
 	//Konstruktor
 	function DeleteResourcesUser ($range_id) {
 		global $RELATIVE_PATH_RESOURCES;
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
+		$this->object_type = get_object_type($this->range_id);
 		
 		$this->range_id = $range_id;
 	}
@@ -63,12 +66,31 @@ class DeleteResourcesUser {
 				$killAssign->delete();
 			}
 		}
-		if (get_object_type($this->range_id) == "sem") {
+		if ($this->object_type == "sem") {
 			$query = sprintf("SELECT assign_id FROM termine LEFT JOIN resources_assign ON (resources_assign.assign_user_id = termine.termin_id) WHERE range_id = '%s' ", $this->range_id);
 			$this->db->query($query);
 			while ($this->db->next_record()) {
 				$killAssign = new AssignObject ($this->db->f("assign_id"));
 				$killAssign->delete();
+			}
+		}
+	}
+	
+	//private
+	function deleteRequests() {
+		if ($this->object_type == "sem") {
+			$query = sprintf("SELECT request_id FROM resources_requests WHERE seminar_id = '%s' ", $this->range_id);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$killRequest = new RoomRequest ($this->db->f("request_id"));
+				$killRequest->delete();
+			}
+		} elseif ($this->object_type == "date") {
+			$query = sprintf("SELECT request_id FROM resources_requests WHERE termin_id = '%s' ", $this->range_id);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$killRequest = new RoomRequest ($this->db->f("request_id"));
+				$killRequest->delete();
 			}
 		}
 	}
@@ -92,6 +114,7 @@ class DeleteResourcesUser {
 	function delete() {
 		if ($this->range_id) {
 			$this->deleteForeignAssigns();
+			$this->deleteRequests();
 			$this->deleteForeignPerms();
 			$this->deleteOwnerResources();
 		}
