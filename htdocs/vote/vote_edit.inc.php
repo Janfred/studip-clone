@@ -119,7 +119,7 @@ if ($type=="test") { $vote = &new TestVote( $voteID ); }
 else               { $vote = &new Vote    ( $voteID ); }
 
 if( $voteID && !$makeACopy ) {
-    if( $vote->isInUse( $voteID ) )  # && ! $perm->have_perm ("root") )
+    if( $vote->isInUse( $voteID ) )  // && ! $perm->have_perm ("root") )
 	$pageMode = MODE_RESTRICTED;
     else
 	$pageMode = MODE_MODIFY;
@@ -329,8 +329,8 @@ if( isset( $saveButton_x ) ) {
     }
 
     if ( ! $vote->isError() ) {
-if ($GLOBALS["pageMode"] == MODE_RESTRICTED)
-     $vote->question = addslashes ($vote->question);
+	if ($pageMode == MODE_RESTRICTED)
+	    $vote->addSlashesToText(); // prevent mysql from crashing...
 
 	// save vote to database!
 	$vote->executeWrite();

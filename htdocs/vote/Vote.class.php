@@ -298,6 +298,16 @@ class Vote extends StudipObject {
    }
 
    /**
+    * make mysql happy
+    */
+   function addSlashesToText () {
+       $this->question = addslashes ($this->question);
+       for ($i=0; $i<count($this->getAnswers()); $i++ ) {
+	   $this->answerArray[$i]["text"] = addslashes( $this->answerArray[$i]["text"] );
+       }
+   }
+
+   /**
     * Gets the answers
     * @access  public
     * @return  array   The answers.

@@ -218,7 +218,7 @@ function printQuestionField ( $question = "" ) {
 	$js .= " onBlur='restoreField( this, \"".$question."\" );'";
     }
 
-    if( strpos($_SERVER["HTTP_REFERER"], "page=edit") )
+    if( strpos($_SERVER["HTTP_REFERER"], "page=edit") && $pageMode != MODE_RESTRICTED )
        $question = stripslashes($question);
 
     $html = "<font size=-1><b>" . _("Frage:")	. "</b></font><br>";
