@@ -27,12 +27,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include "$ABSOLUTE_PATH_STUDIP/html_head.inc.php"; // Output of html head
+	include "$ABSOLUTE_PATH_STUDIP/header.php";   // Output of Stud.IP head
+	include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php"; //Output the nav
 
-	require_once("visual.inc.php");
-
-	include "links_admin.inc.php";
+	require_once"$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 	
 	if ($links_admin_data["sem_id"]) {
 	$db=new DB_Seminar;
