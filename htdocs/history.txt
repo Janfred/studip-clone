@@ -1,4 +1,7 @@
 31.03.2003 v 0.9
+- Ablaufplanverwaltung überarbeitet
+- neue Titelverwaltung für Nutzernamen
+- weitere Detailverbesserungen und Bugfixes
 
 13.10.2002 v 0.8.15 ;-)
 - Neue Übersicht der persönlichen Termine auf der Startseite
