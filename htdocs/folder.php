@@ -93,7 +93,7 @@ if (($rechte) || ($owner)) {
 			$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
 			}
 			
-		$change=create_folder($titel, $description, substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))));
+		$change=create_folder(addslashes($titel), $description, substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))));
 		}
 
 	//wurde Code fuer Loeschen von Ordnern ubermittelt (=id+"_d_"), wird entsprechende Funktion aufgerufen
