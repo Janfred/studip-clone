@@ -76,7 +76,6 @@ $visible_content = $this->config->getValue("Main", "visible");
 
 echo head($this, $db);
 
-//while (list(,$detail_daten) = each($rf_mit_detail)) {
 $order = $this->config->getValue("Main", "order");
 foreach ($order as $position) {
 
@@ -358,25 +357,31 @@ function lehre (&$this, $db, $alias_content) {
 
 function head (&$this, $db) {
 	$out = "";
-	/*if (!$change_link){
-			$change_link_out = "";
-	}
-	else {
-		$change_link_out = "<div align=\"right\">";
-		$change_link_out .= "<a href=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}edit_about.php?login=yes&view=Daten&usr_name=";
-		$change_link_out .= $db->f("username") . "\">";
-		
-		if (!$no_link_text) {
-			$change_link_out .= "<font>$change_link</font>";
-			$change_link_out .= "</a>&nbsp;<a href=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}edit_about.php?login=yes&usr_name=";
-			$change_link_out .= $db->f("username") . "\">";
-		}
-		$change_link_out .= "<img border=\"0\" src=\"./pfeillink.gif\" alt=\"$change_link\"></a><br><br></div>\n";
-	}*/
 	$out .= "<table" . $this->config->getAttributes("PersondetailsHeader", "table") . ">\n";
 	$out .= "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
-	$out .= "<td colspan=\"2\" width=\"100%\"" . $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
-  $out .= "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
+	$out .= "<td colspan=\"2\" width=\"100%\"";
+	$out .= $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
+  if ($this->config->getValue("Main", "studiplink")) {
+		$out .= "<div" . $this->config->getAttributes("StudipLink", "div") . ">";
+		$out .= "<font" . $this->config->getAttributes("StudipLink", "font") . ">";
+		$lnk = "http://{$GLOBALS['EXTERN_SERVER_NAME']}edit_about.php?login=yes&view=Daten";
+		$lnk .= "&usr_name=" . $db->f("username");
+		$out .= sprintf("<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
+				$this->config->getAttributes("StudipLink", "a"),
+				$this->config->getValue("StudipLink", "linktext"));
+		if ($this->config->getValue("StudipLink", "image")) {
+			if ($image_url = $this->config->getValue("StudipLink", "imageurl"))
+				$img = "&nbsp;<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
+			else {
+				$img = "&nbsp;<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
+				$img .= "pictures/login.gif\" align=\"absmiddle\">";
+			}
+			$out .= sprintf("<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
+				$this->config->getAttributes("StudipLink", "a"), $img);
+		}
+		$out .= "</font></div>";
+	}
+	$out .= "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
 	$out .= htmlReady($db->f("fullname"), TRUE);
 	$out .= "</font></td></tr>\n";
 	

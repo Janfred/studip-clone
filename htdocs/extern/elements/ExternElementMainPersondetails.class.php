@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainPersonDetails extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
-			"wholesite", "nameformat", "urlcss", "title");
+			"wholesite", "nameformat", "studiplink", "urlcss", "title");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -65,6 +65,7 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 					._("Aktuell")."|"._("Termine")."|"._("Publikationen"),
 			"wholesite" => "0",
 			"nameformat" => "no_title",
+			"studiplink" => "1",
 			"urlcss" => "",
 			"title" => _("Mitarbeiter"),
 		);
@@ -106,10 +107,15 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Vorname Nachname"), _("Nachname Vorname"),
-				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
+		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
+		
+		$title = _("Stud.IP-Link:");
+		$info = _("Anwählen, wenn ein Link angezeigt werden soll, der direkt zum Stud.IP-Administrationsbereich verweisen soll.");
+		$value = "1";
+		$table .= $edit_form->editCheckboxGeneric("studiplink", $title, $info, $value, "");
 		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");

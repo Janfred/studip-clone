@@ -46,7 +46,7 @@ class ExternModulePersondetails extends ExternModule {
 			"news", "termine", "publi", "kategorien"));
 	var $registered_elements = array("Body", "PersondetailsHeader", "Contact", "PersondetailsLectures",
 					"TableParagraph", "TableParagraphHeadline", "TableParagraphSubHeadline",
-					"TableParagraphText", "List", "LinkIntern");
+					"TableParagraphText", "List", "LinkIntern", "StudipLink");
 	var $args = array("username");
 
 	/**

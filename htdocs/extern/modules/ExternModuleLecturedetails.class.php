@@ -45,13 +45,14 @@ class ExternModuleLecturedetails extends ExternModule {
 	var $data_fields = array("subtitle", "lecturer", "art", "status", "description", "location",
 			"time", "teilnehmer", "requirements", "lernorga", "leistung", "range_path", "misc");
 	var $registered_elements = array(
-			"Body" => "Body",
-			"TableHeader" => "TableHeader",
+			"Body",
+			"TableHeader",
 			"SemName" => "TableParagraphText",
 			"Headline" => "TableParagraphText",
 			"Content" => "TableParagraphText",
-			"LinkInternSimple" => "LinkInternSimple",
-			"TableFooter" => "TableFooter");
+			"LinkInternSimple",
+			"StudipInfo",
+			"StudipLink");
 	var $args = array("seminar_id");
 
 	/**

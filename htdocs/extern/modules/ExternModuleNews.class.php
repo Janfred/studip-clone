@@ -43,7 +43,7 @@ class ExternModuleNews extends ExternModule {
 	var $field_names = array();
 	var $data_fields = array("date", "topic");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableRow",
-																		"ContentNews", "LinkIntern", "TableFooter");
+																		"ContentNews", "LinkIntern", "StudipLink");
 
 	/**
 	*
