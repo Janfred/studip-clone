@@ -45,13 +45,13 @@ define("PHPDOC_DUMMY",true);
 	A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
 	TABLE.blank {	background-color: white;}
 	TD.blank {background-color: #FFFFFF;}
-	th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
+	th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
 	p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
 	h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
-	table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
-	TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-	BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif;color: #000000;}
-	.chat {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif;color: #000000;}
+	table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/pictures/fill1.gif');}
+	TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+	BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif;color: #000000;}
+	.chat {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif;color: #000000;}
 	-->
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
