@@ -36,11 +36,14 @@
 
 
 $info = get_config_info($range_id, $config_id);
+$css_switcher =& new CssClassSwitcher("", "");
 
 echo "<tr><td class=\"blank\" width=\"100%\">";
-//echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">" . makeButton("zurueck");
-//echo "</a>&nbsp;</td></tr>\n";
-echo "&nbsp;</td></tr>\n<tr><td" . $css_switcher->getFullClass() . " width=\"100%\">\n";
+echo "&nbsp;</td></tr>\n";
+echo "<tr><td class=\"" . $css_switcher->getHeaderClass() . "\" height=\"20\" valign=\"bottom\">\n";
+echo "<font size=\"2\"><b>&nbsp;" . _("Allgemeine Daten") . "</b></font></td></tr>\n";
+$css_switcher->switchClass();
+echo "<tr><td" . $css_switcher->getFullClass() . ">\n";
 echo "<blockquote><font size=\"2\"><br><b>";
 echo _("Modulname:");
 echo "</b>&nbsp " . $info["module_name"];
@@ -54,22 +57,23 @@ echo "&nbsp; &nbsp; &nbsp; <b>";
 echo _("Letzte &Auml;nderung:");
 echo "</b>&nbsp " . $info["change_date"];
 echo "<br></font></blockquote>\n</td></tr>\n";
-
-$css_switcher->switchClass();
+echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
 
 if ($info["level"] == 1) {
+	echo "<tr><td class=\"" . $css_switcher->getHeaderClass() . "\" height=\"20\" valign=\"bottom\">\n";
+	echo "<font size=\"2\"><b>&nbsp;" . _("Direkter Link") . "</b></font></td></tr>\n";
 	echo "<tr><td" . $css_switcher->getFullClass() . ">\n";
 	echo "<blockquote><font size=\"2\"><br>\n";
 	echo _("Der folgende Link verweist auf die von Stud.IP generierte HTML-Seite.");
-	echo "<blockquote>\n<a href=\"" . $info["link"] . "\" target=\"_blank\"><b>";
-	printf (_("Ausgabe des Moduls %s mit der Konfiguration %s."), $info["module_name"], $info["name"]);
-	echo "</b></a><br>" . $info["link_br"] . "</blockquote>\n";
+	echo "<blockquote>\n";
+	echo "<br>" . $info["link_br"] . "</blockquote>\n";
 	echo _("Die Adresse dieses Links k&ouml;nnen Sie in Ihre Website kopieren.");
 	echo "<br></font></blockquote>\n</td></tr>\n";
-
-	$css_switcher->switchClass();
+	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
 }
 
+echo "<tr><td class=\"" . $css_switcher->getHeaderClass() . "\" height=\"20\" valign=\"bottom\">\n";
+echo "<font size=\"2\"><b>&nbsp;" . _("Stud.IP-Remote-Include (SRI)  Schnittstelle") . "</b></font></td></tr>\n";
 echo "<tr><td" . $css_switcher->getFullClass() . ">\n";
 echo "<blockquote>\n<font size=\"2\"><br>";
 echo _("Der unten aufgef&uuml;hrte Textblock erm&ouml;glicht Ihnen den Zugriff auf die Stud.IP-Remote-Include-Schnittstelle (SRI).");
@@ -78,9 +82,10 @@ echo _("Kopieren Sie dieses Code-Schnipsel in eine beliebige Stelle im HTML-Quel
 echo "\n<br>";
 echo _("Durch eine spezielle Art des Seitenaufrufs, wird an dieser Stelle die Ausgabe des Moduls eingef&uuml;gt.");
 echo "<br></font></blockquote>\n</td></tr>\n";
+echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
 
-$css_switcher->switchClass();
-
+echo "<tr><td class=\"" . $css_switcher->getHeaderClass() . "\" height=\"20\" valign=\"bottom\">\n";
+echo "<font size=\"2\"><b>&nbsp;" . _("Link zur SRI-Schnittstelle") . "</b></font></td></tr>\n";
 echo "<tr><td" . $css_switcher->getFullClass() . ">\n";
 echo "<blockquote>\n<font size=\"2\"><br>";
 echo _("Über diesen Link erreichen Sie die SRI-Schnittstelle:");
