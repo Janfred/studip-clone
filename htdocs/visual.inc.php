@@ -319,16 +319,29 @@ function quotes_encode ($description,$author) {
 
 
 /**
-* universal an very usable functions to get all the special stud.ip formattings
+* universal and very usable functions to get all the special stud.ip formattings
 *
 * 
 * @access       public        
 * @param        string $what		what to format
-* @param        string $trim		should the output trimmed?
+* @param        boolean $trim		should the output trimmed?
+* @param        boolean $extern TRUE if called from external pages ('externe Seiten')
 * @return       string
 */
-function formatReady ($what, $trim = TRUE) {
-	return symbol(smile(FixLinks(format(latex(htmlReady($what, $trim, FALSE))), FALSE)));
+function formatReady ($what, $trim = TRUE, $extern = FALSE) {
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", htmlReady($what, $trim, FALSE), $matches)) {
+		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
+		$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, $extern), $extern), $extern);
+		$what = explode('ö', $what);
+		$i = 0;
+		foreach ($what as $w)
+			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
+	
+		return $all;
+	}
+	
+	return symbol(smile(FixLinks(format(latex(htmlReady($what, $trim, FALSE), $extern)),
+			FALSE, TRUE, $extern), $extern), $extern);
 }
 
 
@@ -341,8 +354,20 @@ function formatReady ($what, $trim = TRUE) {
 * @param        string $trim		should the output trimmed?
 * @return       string
 */
-function wikiReady ($what, $trim = TRUE) {
-	return symbol(smile(FixLinks(wiki_format(format(latex(htmlReady($what, $trim, FALSE))), FALSE))));
+function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", htmlReady($what, $trim, FALSE), $matches)) {
+		$what = preg_replace("'\[nop\].+\[/nop\]'isU", 'ö', $what);
+		$what = symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), FALSE), $extern), $extern), $extern);
+		$what = explode('ö', $what);
+		$i = 0;
+		foreach ($what as $w)
+			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
+	
+		return $all;
+	}
+	
+	return symbol(smile(FixLinks(wiki_format(format(latex(htmlReady($what, $trim, FALSE),
+			$extern)), FALSE), FALSE, TRUE, $extern), $extern), $extern);
 }
 
 
@@ -360,13 +385,20 @@ function wiki_format ($text) {
 ////////////////////////////////////////////////////////////////////////////////
 
 
-function latex($text) {
+function latex($text, $extern = FALSE) {
 	global $ABSOLUTE_PATH_STUDIP,$CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH, $LATEX_FORMATS;
+	global $EXTERN_SERVER_NAME;
 	
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
-		$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
+		if ($extern) {
+			$extern_path = 'http://' . substr($EXTERN_SERVER_NAME, 0, -1);
+			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $extern_path . $TEXCACHE_PATH);
+		}
+		else {
+			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
+		}
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
 		$latex->_convert_path = $CONVERT_PATH;
@@ -391,8 +423,12 @@ function latex($text) {
 			
 				if ($url != false) {
 					$text = substr_replace($text, "<img src='".$url."'>",$pos,strlen($tex_matches[0][$i]));
-				} else {
-					$text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
+				}
+				else {
+					if ($extern)
+						$text = '';
+					else
+						$text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
 				}
 			}	
 		}
@@ -422,7 +458,6 @@ function decodeHTML ($string) {
 */
 function format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
-	
 	$pattern = array(
 					"'^--+(\d?)$'m",               // Trennlinie
 					"'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
@@ -477,6 +512,7 @@ function format ($text) {
 					"'<blockquote>'.format('\\1').'</blockquote>'",
 					"\\1"
 					);
+		
 	$text = preg_replace($pattern, $replace, $text);
 	
 	return $text;
@@ -533,7 +569,7 @@ function preg_call_format_list ($content) {
 			$ret .= "<li>{$items[$i]['content']}<" . $list_tags[$i + 1] . ">";
 			$stack[] = $list_tags[$i + 1];
 		}
-		else if ($level_diff == 0)
+		else
 			$ret .= "<li>{$items[$i]['content']}";
 		
 		if ($level_diff >= 0)
@@ -554,8 +590,8 @@ function preg_call_format_list ($content) {
 * @return	string
 */
 function preg_call_table_format ($content) {
-	return preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se", "'<tr><td>'.preg_
-replace('/\|/','</td><td>','\\1').'</td></tr>'", $tbr);
+	return preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se",
+			"'<tr><td>'.preg_replace('/\|/','</td><td>','\\1').'</td></tr>'", $tbr);
 }
 
 
@@ -591,8 +627,8 @@ function kill_format ($text) {
 					"'(?<=\n|^)--+(\d?)(\n|$|(?=<))'m", // Trennlinie
 					"'\[pre\](.+?)\[/pre\]'is" ,        // praeformatierter Text
 					"'\[.+?\](((http://|https://|ftp://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
-					"'\[quote=.+?quote\]'is",
-					"':[^\s]+?:'s"
+					"'\[quote=.+?quote\]'is",    // quoting
+					"':[^\s]+?:'s"               // smileys
 					);
 	$replace = array(
 					"\\1\\2", "\\1\\3",
@@ -607,8 +643,19 @@ function kill_format ($text) {
 					"\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
 					"\\1", "\\1", "\n\\1\n", "", "\\1", "", "", "");
 	
-	$text = preg_replace($pattern, $replace, $text);
-	return $text;
+	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", htmlReady($text, $trim, FALSE), $matches)) {
+		$text = preg_replace("'\[nop\].+\[/nop\]'isU", '[nop].[/nop]', $text);
+		$text = preg_replace($pattern, $replace, $text);
+		$text = explode('[nop].[/nop]', $text);
+		$i = 0;
+		$all = '';
+		foreach ($text as $w)
+			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
+		
+		return $all;
+	}
+	
+	return preg_replace($pattern, $replace, $text);
 }
 
 /**
@@ -620,22 +667,28 @@ function kill_format ($text) {
 * @param	boolean	TRUE if newlines have to be converted into <br>
 * @return	string
 */
-function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
+function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE) {
 	if (empty($data)) {
 		return $data;
 	}
 	if ($fix_nl)
 		$data = preg_replace("/\n?\r\n?/", "\n", $data); // newline fixen
 	
+	$extern = $extern ? 'TRUE' : 'FALSE';
+	
 	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
-	
-	 $pattern = array(
-					"'(\[([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
+	//"'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
+		//			"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
+	$pattern = array(
+					"'((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:(.+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*))'ie",
+			//		"'(\[([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'ie",
 					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 					);
-	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
+	$replace = array("preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $extern)",
+		//	"preg_call_link(array('\\2', '\\3'), 'LINK')",
+			"preg_call_link(array('\\2', '\\3'), 'MAIL', $extern)");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 	
 	if ($nl_to_br)
@@ -653,19 +706,59 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 * @param	string "LINK" if it is a normal url, "MAIL" if it is an email-address
 * @return	string
 */
-function preg_call_link ($name, $link, $mod) {
-	if ($mod == "LINK") {
-		if ($name == "")
-			$name = $link;
-		$link = str_replace("&amp;", "&", $link);
-		$tbr = "<a href=\"$link\" target=\"_blank\"><img src=\"pictures/link_extern.gif\" border=\"0\" />$name</a>";
+function preg_call_link ($params, $mod, $extern = FALSE) {
+	global $auth;
+	
+	if ($extern) {
+		$link_pic = '';
+	else
+		$link_pic = "<img src=\"pictures/link_extern.gif\" border=\"0\" />";
+	
+	if ($mod == 'LINK') {
+		if ($params[5] != 'img') {
+			if ($params[3] == '')
+				$params[3] = $params[4];
+			$params[4] = str_replace('&amp;', '&', $params[4]);
+			$tbr = "<a href=\"{$params[4]}\" target=\"_blank\">$link_pic{$params[3]}</a>";
+		}
+		else {
+			if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:', $params[0]))
+				$tbr = $params[0];
+			else {
+				if ($params[2]) {
+					$width = '';
+					// width in percent
+					if (!substr($params[2], -1) == '?') {
+						$width = (int) substr($params[2], 0, -1) < 100 ? " width=\"{$params[2]}\"" : ' width="100%"';
+					}
+					else {
+						// width of image in pixels
+						if (is_object($auth) && $auth->auth['xres'])
+							// 80% of x-resolution maximal
+							$max_width = floor($auth->auth['xres'] * 0.5);
+						else
+							$max_width = 400;
+						$width = $params[2] < $max_width ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
+					}
+				}
+				$tbr = "<img src=\"{$params[4]}\"$width border=\"0\"$style alt=\"{$params[1]}\">";
+				
+				if (preg_match("'(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'i",
+						$params[7])) {
+					$tbr = "<a href=\"{$params[7]}\" target=\"_blank\">$tbr</a>";
+				if ($params[6])
+					$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
+				}
+			}
+		}
 	}
-	else {
-		if ($name != "")
-			$tbr = "<a href=\"mailto:$link\"><img src=\"pictures/link_extern.gif\" border=\"0\" />$name</a>";
+	elseif ($mod == 'MAIL') {
+		if ($params[0] != '')
+			$tbr = "<a href=\"mailto:{$params[1]}\">$link_pic{$params[0]}</a>";
 		else
-			$tbr = "<a href=\"mailto:$link\"><img src=\"pictures/link_extern.gif\" border=\"0\" />$link</a>";
+			$tbr = "<a href=\"mailto:{$params[1]}\">$link_pic{$params[1]}</a>";
 	}
+
 	return $tbr;
 }
 
@@ -679,11 +772,12 @@ function preg_call_link ($name, $link, $mod) {
 *
 * @access	public        
 * @param		string	the text to convert
-* @param		boolean	TRUE if function is called from extern pages
+* @param		boolean	TRUE if function is called from external pages
 * @return		string	convertet text
 */
 function smile ($text = "", $extern = FALSE) {
 	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
+	global $EXTERN_SERVER_NAME;
 	
 	if(empty($text))
 		return $text;
@@ -698,7 +792,7 @@ function smile ($text = "", $extern = FALSE) {
 	}
 	else {
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-		$replace .= "http://$SERVER_NAME/$SMILE_PATH/\\2.gif\"></a>\\3";
+		$replace .= "http://$EXTERN_SERVER_NAME$SMILE_PATH/\\2.gif\">\\3";
 	}
 	$text = preg_replace($pattern, $replace, $text);
 	
@@ -725,18 +819,25 @@ function smile ($text = "", $extern = FALSE) {
 *
 * @access	public        
 * @param		string	the text to convert
+* @param		boolean	TRUE if function is called from external pages
 * @return		string	convertet text
 */
-function symbol ($text = "") {
+function symbol ($text = "", $extern = FALSE) {
 	global $SYMBOL_SHORT, $SYMBOL_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
+	global $EXTERN_SERVER_NAME;
 	
 	if(empty($text))
 		return $text;
-
+	
+	if ($extern)
+		$path = "http://$EXTERN_SERVER_NAME";
+	else
+		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
 	//symbols in short notation
 	reset($SYMBOL_SHORT);
 	while (list($key, $value) = each($SYMBOL_SHORT)) {
-		$text=str_replace($key,"<img ".tooltip($key)." border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP$SYMBOL_PATH/$value.gif\">",$text);
+		$text = str_replace($key, "<img " . tooltip($key)
+				. " border=\"0\" src=\"$path$SYMBOL_PATH/$value.gif\">",$text);
 	}
 	
 	return $text;
