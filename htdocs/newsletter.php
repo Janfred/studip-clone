@@ -119,8 +119,6 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 		$REMOTE_ADDR=getenv("REMOTE_ADDR");
 		$Zeit=date("H:i:s, d.m.Y",time());
 
-		$Email = "hhkgkyx@vsfbgrgs.de";
-
 		$validator=new email_validation_class;	## Klasse zum Ueberpruefen der Eingaben
 		$validator->timeout=10;									## Wie lange warten wir auf eine Antwort des Mailservers?
 
@@ -150,12 +148,12 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
 			."damit der Eintrag aus der Datenbank gelöscht wird.\n";
 
-			echo $to;
-
 			$smtp->SendMessage(
 			$env_from, array($to),
 			array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Newsletter"),
-			$mailbody);
+			"hallo");
+
+//			$mailbody);
 		}
 }
 
