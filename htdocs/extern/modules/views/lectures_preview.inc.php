@@ -24,11 +24,15 @@ foreach ($SEMESTER as $key => $sem) {
 }
 
 $data_sem[0]["group"] = 1;
-$data_sem[1]["group"] = 2;
+$data_sem[1]["group"] = 1;
+$data_sem[2]["group"] = 2;
 $data_sem[0]["name"] = _("Name der Veranstaltung 1");
 $data_sem[1]["name"] = _("Name der Veranstaltung 2");
+$data_sem[2]["name"] = _("Name der Veranstaltung 3");
 $data_sem[0]["time"] = _("Di. 8:30 - 13:30, Mi. 8:30 - 13:30, Do. 8:30 - 13:30");
 $data_sem[1]["time"] = _("Termine am 31.7. 14:00 - 16:00, 17.8. 11:00 - 14:30, 6.9. 14:00 - 16:00,...");
+$data_sem[2]["time"] = _("Di. 8:30 - 13:30, Mi. 8:30 - 13:30, Do. 8:30 - 13:30");
+
 switch ($this->config->getValue("Main", "nameformat")) {
 	case "no_title_short" :
 		$data_sem[0]["lecturer"] = _("Meyer, P.");
@@ -47,6 +51,7 @@ switch ($this->config->getValue("Main", "nameformat")) {
 		break;
 }
 $data_sem[1]["lecturer"] = $data_sem[0]["lecturer"];
+$data_sem[2]["lecturer"] = $data_sem[0]["lecturer"];
 
 $show_time = $this->config->getValue("Main", "time");
 $show_lecturer = $this->config->getValue("Main", "lecturer");
@@ -80,23 +85,33 @@ if ($this->config->getValue("Main", "addinfo")) {
 	echo $group_by_name[3];
 	echo "</font></td></tr>";
 }
-
+$i = 0;
+$group = "";
 foreach ($data_sem as $dat) {
-	echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
-	echo "<td" . $this->config->getAttributes("Grouping", "td") . ">";
-	echo "<font" . $this->config->getAttributes("Grouping", "font") . ">";
-	
 	$aliases_sem_type = $this->config->getValue("ReplaceTextSemType",
 			"class_{$SEM_TYPE[$dat['group']]['class']}");
 	if ($aliases_sem_type[$sem_types_position[$dat['group']] - 1])
-		echo $aliases_sem_type[$sem_types_position[$dat['group']] - 1];
+		$group2 = $aliases_sem_type[$sem_types_position[$dat['group']] - 1];
 	else {
-		echo htmlReady($SEM_TYPE[$dat['group']]["name"]
+		$group2 = htmlReady($SEM_TYPE[$dat['group']]["name"]
 				." (". $SEM_CLASS[$SEM_TYPE[$dat['group']]["class"]]["name"].")");
 	}
 	
-	echo "\n</td></tr>\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
-	echo "<td width=\"100%\"" . $this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
+	if ($group != $group2) {
+		echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
+		echo "<td" . $this->config->getAttributes("Grouping", "td") . ">";
+		echo "<font" . $this->config->getAttributes("Grouping", "font") . ">";
+		echo $group2;
+		echo "\n</td></tr>\n";
+		$group = $group2;
+	}
+	
+	echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
+	if ($i % 2 && $this->config->getValue("LecturesInnerTable", "td_bgcolor2_"))
+		echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td", TRUE)."\">\n";
+	else
+		echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
+	$i++;
 	echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 	echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr1") . ">";
 	echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
