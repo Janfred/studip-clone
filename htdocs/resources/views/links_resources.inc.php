@@ -42,7 +42,7 @@ $structure["export_lists"]=array (topKat=>"lists", name=>"Listen exportieren", l
 
 //Reiter "Objekt"
 $structure["view_schedule"]=array (topKat=>"objects", name=>"Belegung ausgeben", link=>"resources.php?view=view_schedule", active=>FALSE);
-$structure["edit_object_schedules"]=array (topKat=>"objects", name=>"Belegung bearbeiten", link=>"resources.php?view=edit_object_schedules", active=>FALSE);
+$structure["edit_object_assign"]=array (topKat=>"objects", name=>"Belegung bearbeiten", link=>"resources.php?view=edit_object_assign", active=>FALSE);
 $structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
 $structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
 
