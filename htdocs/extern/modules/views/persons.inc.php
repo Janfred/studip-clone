@@ -75,14 +75,23 @@ $db = new DB_Seminar();
 $grouping = $this->config->getValue("Main", "grouping");
 if (!$nameformat = $this->config->getValue("Main", "nameformat"))
 	$nameformat = "full_rev";
-if(!$grouping){
+if(!$grouping) {
 	$groups_ids = implode("','", $this->config->getValue("Main", "groupsvisible"));
 	
 	$query = "SELECT DISTINCT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
 	$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
-	$query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
-	$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-	$query .= "WHERE statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id'$query_order";
+	if ($query_order) {
+		$query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
+		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
+		$query .= "WHERE statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id'$query_order";
+	}
+	else {
+		$query .= "FROM statusgruppen s LEFT JOIN statusgruppe_user su USING(statusgruppe_id) ";
+		$query .= "LEFT JOIN auth_user_md5 aum USING(user_id) ";
+		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
+		$query .= "WHERE su.statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id' ORDER BY ";
+		$query .= "s.position ASC, su.position ASC";
+	}
 	
 	$db->query($query);
 	$visible_groups = array("");
@@ -101,12 +110,15 @@ $data["data_fields"] = $this->data_fields;
 $out = "";
 $first_loop = TRUE;
 foreach ($visible_groups as $group_id => $group) {
-	if($grouping){
+
+	if ($grouping) {
+		if (!$query_order)
+			$query_order = ' ORDER BY su.position';
 		$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
 		$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
-		$query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
+		$query .= "FROM statusgruppe_user su LEFT JOIN auth_user_md5 aum USING(user_id) ";
 		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-		$query .= "WHERE statusgruppe_id='$group_id' AND Institut_id = '$range_id'$query_order";
+		$query .= "WHERE su.statusgruppe_id='$group_id' AND Institut_id = '$range_id'$query_order";
 		
 		$db->query($query);
 		
@@ -127,7 +139,7 @@ foreach ($visible_groups as $group_id => $group) {
 		if ($grouping && $repeat_headrow != "beneath")
 			$out .= $this->elements["TableGroup"]->toString(array("content" => htmlReady($group)));
 
-		while($db->next_record()){
+		while ($db->next_record()) {
 		
 			$data["content"] = array(
 				"Nachname"			=> $this->elements["LinkIntern"]->toString(array("content" =>
