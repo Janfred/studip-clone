@@ -97,10 +97,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			
 			if ($db->next_record()) {
 				$SemUserStatus=$db->f("inst_perms");
-				if ($SemUserStatus!="admin") { //normaler Betrachter (=user-dozent)
+				if (($SemUserStatus =="user") || ($SemUserStatus =="autor")) { //eingetragen im Institut aber nur user oder autor = keine Rechte
 					$rechte=FALSE;
 				}
-				elseif ($SemUserStatus=="admin") {    // evtl ein Instadmin ?
+				else { // ein ordentlicher Mitarbeiter
 					$rechte=TRUE;
 				}
 			}
@@ -110,7 +110,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				$SemUserStatus="autor"; //wenn gar nichts wird man hier autor
 		}
 
-		elseif($entry_level=="fak") {
+		elseif($entry_level=="fak") { //Fakultaetsbereich, mehr als Platzhalter, daher nur rudimentaer ausgebaut.
 			if (!$perm->have_perm("admin")){
 			}
 			elseif ($auth->auth["perm"]=="admin") {    // evtl ein Instadmin ?
