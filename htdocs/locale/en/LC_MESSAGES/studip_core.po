@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-09-05 16:46+0200\n"
+"PO-Revision-Date: 2002-09-05 16:54+GMT\n"
+"Last-Translator: \n"
+"Language-Team:  <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 0.8\n"
+
+#: freie.php:107
+msgid "Es gibt in dieser Installation keine &ouml;ffentlichen Veranstaltungen!"
+msgstr "There are no public courses in this system!"
+
+#: freie.php:111
+msgid "&Ouml;ffentliche Veranstaltungen"
+msgstr "Public courses"
+
+#: freie.php:115
+msgid ""
+"Die folgenden Veranstaltungen k&ouml;nnen Sie betreten, ohne sich im System "
+"registriert zu haben."
+msgstr "The following courses can be entered without registration."
+
+#: freie.php:118
+#, c-format
+msgid ""
+"In den %s blau markierten Veranstaltungen d&uuml;rfen Sie nur Lesen und "
+"Dokumente herunterladen."
+msgstr "In courses marked %s blue you only can read and download documents."
+
+#: freie.php:120
+#, c-format
+msgid ""
+"In den %s orange markierten Veranstaltungen k&ouml;nnen Sie sich zus&auml;"
+"tzlich mit eigenen Beitr&auml;gen im Forum beteiligen."
+msgstr "In courses marked %s orange you may also write postings."
+
+#: freie.php:123
+msgid ""
+"In der rechten Spalte erfahren Sie, was in den einzelnen Veranstaltungen an "
+"Inhalten vorhanden ist."
+msgstr "In the right column you can see the content of every course."
+
+#: freie.php:147
+msgid "Name"
+msgstr "Name"
+
+#: freie.php:148
+msgid "Veranstaltungstyp"
+msgstr "Type of course"
+
+#: freie.php:149
+msgid "Einrichtung"
+msgstr "Institution"
+
+#: freie.php:150
+msgid "Inhalt"
+msgstr "Content"
+

@@ -110,15 +110,43 @@ if ($SessionStart==0) {
 	$sess->register("SessionStart");
 	$sess->register("SessionSeminar");
 	$sess->register("SessSemName");
+	// Language Settings
+	$sess->register("_language");
+	// First set default value
+	$_language = $DEFAULT_LANGUAGE;
+	// try to get accepted languages from browser
+	$accepted_languages = explode(",", getenv("HTTP_ACCEPT_LANGUAGE"));
+	if (count($accepted_languages)) {
+		foreach ($accepted_languages as $temp_accepted_language) {
+			foreach ($INSTALLED_LANGUAGES as $temp_language => $temp_language_settings) {
+				if (substr(trim($temp_accepted_language), 0, 2) == substr($temp_language, 0, 2)) {
+					$_language = $temp_language;
+					break 2;
+				}
+			}
+		}
+	}
 }		
 	
+// I18N functions
+
+if (isset($_language_domain) && isset($_language)) {
+	$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
+	if ($_language != "de_DE") { // German is the original languages, so we need no I18N
+		putenv("LANG=$_language");
+		setlocale(LC_ALL, "");
+		bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
+		textdomain($_language_domain);
+	}
+}
+
 // Funktion, um den Namen der eigenen Seite zu bekommen:
 
-	$url=parse_url($PHP_SELF);
-	$i_page_array = explode("/" , $url[path]);
-	end ($i_page_array);
-	$i_page = current($i_page_array);
-	unset($url); unset($i_page_array);
+$url=parse_url($PHP_SELF);
+$i_page_array = explode("/" , $url[path]);
+end ($i_page_array);
+$i_page = current($i_page_array);
+unset($url); unset($i_page_array);
 
 // steht jetzt lesbar in $i_page
 	

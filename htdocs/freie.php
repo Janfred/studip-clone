@@ -81,12 +81,11 @@ function print_seminar_content($semid,$my_sem_values) {
 
 } // Ende function print_seminar_content
 
-
+$_language_domain = "studip_core";
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
-
 $SessSemName[0] = "";
 $SessSemName[1] = "";
 
@@ -105,16 +104,25 @@ $db2=new DB_Seminar;
   if (!isset($sortby)) $sortby="Name";
 	$db->query("SELECT seminare.*, Institute.Name AS Institut, Institute.Institut_id AS id FROM seminare LEFT JOIN Institute USING (institut_id) WHERE Lesezugriff='0' ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
-  if (!$num_my_sem) $meldung="error§Es gibt in dieser Installation keine &ouml;ffentlichen Veranstaltungen!§".$meldung;
+  if (!$num_my_sem) $meldung="error§". _("Es gibt in dieser Installation keine &ouml;ffentlichen Veranstaltungen!")."§".$meldung;
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 align=center>
-<tr><td class="topic" colspan="2">&nbsp;<b>&Ouml;ffentliche Veranstaltungen - <? echo $UNI_NAME ?></b></td></tr>
+<tr><td class="topic" colspan="2">&nbsp;<b><? echo _("&Ouml;ffentliche Veranstaltungen"); echo " - "; echo $UNI_NAME ?></b></td></tr>
 <tr><td class="blank" width="99%"><br>
-	<blockquote>Die folgenden Veranstaltungen k&ouml;nnen Sie betreten, ohne sich im System registriert zu haben.<br></blockquote>
-	<blockquote>In den <font class="gruppe6">&nbsp;&nbsp;</font> blau markierten Veranstaltungen d&uuml;rfen Sie nur Lesen und Dokumente herunterladen.<br>
-	In den <font class="gruppe2">&nbsp;&nbsp;</font> orange markierten Veranstaltungen k&ouml;nnen Sie sich zus&auml;tzlich mit eigenen Beitr&auml;gen im Forum beteiligen.</blockquote>
-	<blockquote>In der rechten Spalte erfahren Sie, was in den einzelnen Veranstaltungen an Inhalten vorhanden ist.</blockquote>
+<?
+	print("<blockquote>");
+	print( _("Die folgenden Veranstaltungen k&ouml;nnen Sie betreten, ohne sich im System registriert zu haben."));
+	print("<br></blockquote>");
+	print("<blockquote>");
+	printf( _("In den %s blau markierten Veranstaltungen d&uuml;rfen Sie nur Lesen und Dokumente herunterladen."), "<font class=\"gruppe6\">&nbsp;&nbsp;</font>");
+	print("<br>");
+	printf( _("In den %s orange markierten Veranstaltungen k&ouml;nnen Sie sich zus&auml;tzlich mit eigenen Beitr&auml;gen im Forum beteiligen."), "<font class=\"gruppe2\">&nbsp;&nbsp;</font>");
+	print("</blockquote>");
+	print("<blockquote>");
+	print( _("In der rechten Spalte erfahren Sie, was in den einzelnen Veranstaltungen an Inhalten vorhanden ist."));
+	print("</blockquote>");
+?>
 	</td>
 	<td class="blank"  width="1%" align="right" valign="top"><img src="pictures/board1.jpg" border="0"></td>
 </tr>
@@ -136,10 +144,10 @@ if ($num_my_sem){
 	<table border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
 	<tr valign"top" align="center">
 		<th width="2%" colspan=2>&nbsp;</th>
-		<th width="70%"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
-		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Veranstaltungstyp</a></th>
-		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=Institut">Einrichtung</a></th>
-		<th width="10%">Inhalt</th>
+		<th width="70%"><a href="<? echo $PHP_SELF . "?sortby=Name\">" . _("Name")?></a></th>
+		<th width="70%"><a href="<? echo $PHP_SELF . "?sortby=status\">" . _("Veranstaltungstyp")?></a></th>
+		<th width="70%"><a href="<? echo $PHP_SELF . "?sortby=Institut\">" . _("Einrichtung")?></a></th>
+		<th width="10%"><? echo _("Inhalt") ?></th>
 	</tr>
 	<?
 
