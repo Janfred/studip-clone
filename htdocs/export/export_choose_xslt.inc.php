@@ -84,6 +84,7 @@ if (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	Name der Datei (z.B. "Test"):
 	<input type="text" name="xslt_filename" value="<? echo $xslt_filename;?>">
 	<input type="hidden" name="page" value="1"><br><br><br><br>
+	<input type="hidden" name="o_mode" value="<? echo $o_mode; ?>">
 	<input type="hidden" name="ex_type" value="<? echo $ex_type; ?>">
 	<input type="hidden" name="xml_file_id" value="<? echo $xml_file_id;?>">
 	<center><input type="IMAGE" <? echo makeButton("weiter", "src"); ?> name=""></center>
@@ -140,6 +141,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	<br>
 	<input type="hidden" name="page" value="2">
 	<input type="hidden" name="format" value="<? echo $format;?>">
+	<input type="hidden" name="o_mode" value="<? echo $o_mode; ?>">
 	<input type="hidden" name="ex_type" value="<? echo $ex_type; ?>">
 	<input type="hidden" name="xml_file_id" value="<? echo $xml_file_id;?>">
 	<input type="hidden" name="xslt_filename" value="<? echo $xslt_filename;?>">
@@ -190,6 +192,7 @@ elseif ($page == 2)  // Seite 3 : dudeldadel
 	<input type="hidden" name="page" value="3">
 	<input type="hidden" name="choose" value="<? echo $choose;?>">
 	<input type="hidden" name="format" value="<? echo $format;?>">
+	<input type="hidden" name="o_mode" value="<? echo $o_mode; ?>">
 	<input type="hidden" name="ex_type" value="<? echo $ex_type; ?>">
 	<input type="hidden" name="xml_file_id" value="<? echo $xml_file_id;?>">
 	<input type="hidden" name="xslt_filename" value="<? echo $xslt_filename;?>">

@@ -92,7 +92,7 @@ if ($o_mode == "file")
 	if ($object_counter>0) 
 	{
 		?>
-		<center><a href="<? echo $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type;?>"><? echo makeButton("weiter"); ?></a></center>
+		<center><a href="<? echo $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type . "&o_mode=" . $o_mode;?>"><? echo makeButton("weiter"); ?></a></center>
 		<?
 	}
 	?>
