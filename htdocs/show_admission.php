@@ -108,7 +108,7 @@ $db3=new DB_Seminar;
 		}
 		
 	  	while ($db->next_record()) {
-				$seminar_id = $db->f("seminar_id");
+				$seminar_id = $db->f("Seminar_id");
 	  			$query2 = "SELECT * FROM seminar_user WHERE seminar_id='$seminar_id'";
 				$db2->query($query2);
 				$teilnehmer = $db2->num_rows();
@@ -131,7 +131,7 @@ $db3=new DB_Seminar;
 					$datum = 1;
 				ECHO "<tr>";
 				printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\"><font size=\"-1\">%s%s</font></a></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td>", 
-					$cssSw->getClass(), $db->f("seminar_id"), htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "", $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, $datum < time() ? "steelgroup4" : "steelgroup1", date("d.m.Y, G:i", $datum));	 
+					$cssSw->getClass(), $db->f("Seminar_id"), htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "", $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, $datum < time() ? "steelgroup4" : "steelgroup1", date("d.m.Y, G:i", $datum));	 
 				print ("</tr>");
 			}
 		
