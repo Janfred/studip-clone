@@ -159,7 +159,6 @@ function imaging($img,$img_size,$img_name)
     		{ system($GIFTOPNM_PATH ." $newfile >$tmpimg"); }
     	system($PNMSCALE_PATH ." -xysize 200 250 $tmpimg | ". $CJPEG_PATH ." -smoo 10 -qual 60 >$newfile");
    	}
-	 }
 
    $this->msg = "msg§Die Bilddatei wurde erfolgreich hochgeladen! Eventuell sehen Sie das neue Bild erst nach einem Reload dieser Seite.";
    $this->priv_msg= "Eine neue Bilddatei wurde hochgeladen.";
