@@ -286,7 +286,7 @@ if ( !$perm->have_perm("root")) {
 				if ($mod_count) {
 					echo "<a href=\"seminar_lernmodule.php?view=show&seminar_id=$semid\">&nbsp;";
 					echo "<img src=\"pictures/icon-lern.gif\" ".tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
-					echo "</a>";
+					echo "</a>&nbsp;";
 				}
 				else
 					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" border=\"0\">";
