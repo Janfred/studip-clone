@@ -42,11 +42,6 @@
 */
 define("PHPDOC_DUMMY",true);
 
-$EXTERN_SERVER_NAME = "test.studip.de/studip";
-
-$EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
-
-
 $EXTERN_MODULE_TYPES[1] = array("module" => "Persons", "name" => _("Mitarbeiter"), "level" => 1,
 													"description" => _("Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
 
