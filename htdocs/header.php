@@ -260,11 +260,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
 				($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
 		
-		echo MakeToolbar("pictures/info_header.gif","#",$auth->auth["uname"],$infotext,68, "","left","TRUE");
 
+		echo MakeToolbar("pictures/info_header.gif","#",mila($auth->auth["uname"],7),$infotext,68, "","left","TRUE");
 ?>
 <?		
-
 		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
 		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
 
