@@ -806,7 +806,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		$db->query("UPDATE  termine SET autor_id='$user->id', content='$titel', date= '$start_time', end_time='$end_time', date_typ='$art', raum='$raum', description='$description'  WHERE termin_id='$termin_id'");
 		if ($db->affected_rows()) {
 			$db->query ("UPDATE termine SET chdate='".time()."' WHERE termin_id='$termin_id'"); //Nur wenn Daten geaendert wurden, schreiben wir auch ein chdate
-			$result.= sprintf ("msg§" ._("Der Termin <b>%s</b> wurde ge&auml;ndert!")."§", htmlReady($titel));
+			$result.= sprintf ("msg§" ._("Der Termin <b>%s</b> wurde ge&auml;ndert!")."§", htmlReady(stripslashes($titel)));
 			$date_changed = TRUE;
 		}
 			
@@ -854,7 +854,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		}
 		
 	} else
-		$result.= sprintf ("error§" ._("Der Termin <b>%s</b> wurde <u>nicht</u> ge&auml;ndert!")."§", htmlReady($titel));
+		$result.= sprintf ("error§" ._("Der Termin <b>%s</b> wurde <u>nicht</u> ge&auml;ndert!")."§", htmlReady(stripslashes($titel)));
 
 	$result_a["changed"]=$date_changed;
 	$result_a["msg"]=$result;
@@ -994,12 +994,12 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 
 
 //Erstellt automatisch einen Ablaufplan oder aktualisiert ihn
-function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE, $update_resources = TRUE, $presence_dates_only = TRUE) {
+function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE, $update_resources = TRUE, $presence_dates_only = TRUE) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $user;
 	
 	if ($RESOURCES_ENABLE)	{
 	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+		$insertAssign = new VeranstaltungResourcesAssign($sem_id);
 	}
 
 	$hash_secret = "blubbersuppe";
@@ -1181,10 +1181,10 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 						$db->next_record();
 						
 						//change topic
-						$db2->query("UPDATE px_topics SET name='".$TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." " . _("am") . " ".date("d.m.Y ", $start_time)."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
+						$db2->query("UPDATE px_topics SET name='". mysql_escape_string($TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." " . _("am") . " ".date("d.m.Y ", $start_time)) ."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
 					
 						//change folder
-						$titel = sprintf (_("%s: %s am %s"), $TERMIN_TYP[$date_typ]["name"], $db->f("content"), date("d.m.Y", $start_time));
+						$titel = mysql_escape_string(sprintf (_("%s: %s am %s"), $TERMIN_TYP[$date_typ]["name"], $db->f("content"), date("d.m.Y", $start_time)));
 						$db2->query("UPDATE folder SET name='$titel', chdate='$aktuell' WHERE range_id = '".$saved_dates[$affected_dates-1]."' ");
 					}
 				}
