@@ -1278,7 +1278,10 @@ $sem_create_data["level"]=$level;
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  		//Linkleiste fuer admins
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  		//Linkleiste fuer admins
+
+if (!$sem_create_data["sem_class"])
+	include ("$ABSOLUTE_PATH_STUDIP/startup_checks.inc.php");
 
 ?>
 	<script type="text/javascript" language="javascript" src="md5.js"></script>
