@@ -80,7 +80,7 @@ if ($db->next_record()) {
 		}
 	}
 	
-	if ($visible[++$i] && $db->f("VeranstaltungsNummer"))
+	if ($visible[++$j] && $db->f("VeranstaltungsNummer"))
 		$data["number"] = htmlReady($db->f("VeranstaltungsNummer"));
 	
 	if ($visible[++$j] && $db->f("teilnehmer"))
@@ -121,10 +121,10 @@ if ($db->next_record()) {
 		*/
 	}
 	
-	if ($visible[$i++] && $db->f("Sonstiges"))
+	if ($visible[++$j] && $db->f("Sonstiges"))
 		$data["misc"] = formatReady($db->f("Sonstiges"));
 	
-	if ($visible[++$i] && $db->f("ects"))
+	if ($visible[++$j] && $db->f("ects"))
 		$data["ects"] = htmlReady($db->f("ects"));
 	
 	if ($this->config->getValue("Main", "studiplink")) {

@@ -90,9 +90,14 @@ if ($visible[++$j])
 if ($visible[++$j])
 	$data["location"] = $data_sem["location"];
 
-if ($visible[++$j]) {
+if ($visible[++$j])
+	$data["semester"] = $data_sem["semester"];
+
+if ($visible[++$j])
 	$data["time"] = $data_sem["time"];
-}
+
+if ($visible[++$j])
+	$data["number"] = $data_sem["number"];
 
 if ($visible[++$j])
 	$data["teilnehmer"] = $data_sem["teilnehmer"];
@@ -121,8 +126,11 @@ if ($visible[++$j]) {
 	}
 }
 
-if ($visible[$i++])
+if ($visible[++$j])
 	$data["misc"] = $data_sem["misc"];
+
+if ($visible[++$j])
+	$data["ects"] = $data_sem["ects"];
 
 if ($this->config->getValue("Main", "studiplink")) {
 	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" ";
