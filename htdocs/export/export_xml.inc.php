@@ -69,7 +69,7 @@ if (isset($ex_sem_class))
 
 if ($o_mode != "direct")
 {
-	if (!($handle=opendir( $TMP_PATH."/export" )))
+	if (!($handle=readdir( $TMP_PATH."/export" )))
 	{
 		exec("md $TMP_PATH/export");
 	}
