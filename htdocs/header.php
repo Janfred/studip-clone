@@ -51,11 +51,11 @@ function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cent
 	}
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
 
-	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"30\"><br>"
+	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"40\"><br>"
 			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"30\"><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"4\" width=\"$size\"><br>"
 			  ."<b>$text</b></a><br>"
-			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"30\">";
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"40\">";
 	$toolbar .= "</td>\n";
 	return $toolbar;
 }
@@ -139,7 +139,11 @@ if ($auth->auth["uid"] == "nobody") { ?>
 <?
 				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zurück zur Startseite"),40,"_top");
 				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),40, "_top","left");
-
+?>
+			<td class="toolbar" width="99%">
+			&nbsp; 
+			</td>
+<?
 
 				if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
 					echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Meine Termine und Kontakte"),40, "_top");
@@ -193,12 +197,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		// Ist sonst noch wer da?
 		if (!count($online))
-			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),40, "_top","left");
+			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),60, "_top","left");
 		else {
 			if (count($online)==1) {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),40, "_top");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),60, "_top");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), count($online)),40, "_top");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), count($online)),60, "_top");
 			}
 		}
 
@@ -232,6 +236,13 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top");
 		}
 		echo MakeToolbar("pictures/info.gif","",$auth->auth["uname"],$infotext,40, "","left","TRUE");
+
+?>
+			<td class="toolbar" width="99%">
+			&nbsp; 
+			</td>
+<?		
+
 		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfestellung"),_("Hilfe zu dieser Seite"),40, "_new","right");
 		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
 
