@@ -32,13 +32,13 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 <table width="70%" border=0 cellpadding=0 cellspacing=0 align="center">
 
 <tr>
-	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Suchen in Stud.IP</b></td>
+	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suchen in Stud.IP")?></b></td>
 </tr>
 <tr>
 <td class="blank" width="100%">
 <blockquote>
-	<br><a href="browse.php"><b>Suchen nach Personen</b></a></br>
-	<font size=-1>Hier k&ouml;nnen sie nach ihren in Stud.IP angemeldeten Kommiltonen und Dozenten suchen.</font>
+	<br><a href="browse.php"><b><?=_("Suchen nach Personen")?></b></a></br>
+	<font size=-1><?=_("Hier k&ouml;nnen sie nach ihren in Stud.IP angemeldeten Kommilitonen und Dozenten suchen.")?></font>
 	<br>
 	<br>
 	<? if (!$perm->have_perm("root"))
@@ -46,23 +46,23 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	else
 		print "<a href=\"meine_seminare.php\">";
 	?>
-	<b>Suchen nach Veranstaltungen</b></a></br>
-	<font size=-1>Hier finden sie alle Veranstaltungen in Stud.IP.</font>
+	<b><?=_("Suchen nach Veranstaltungen")?></b></a></br>
+	<font size=-1><?=_("Hier finden sie alle Veranstaltungen in Stud.IP.")?></font>
 	<br>
-	<br><a href="institut_browse.php"><b>Suchen nach Einrichtungen</b></a></br>
-	<font size=-1>Hier finden sie alle Einrichtungen in Stud.IP.</font>
+	<br><a href="institut_browse.php"><b><?=_("Suchen nach Einrichtungen")?></b></a></br>
+	<font size=-1><?=_("Hier finden sie alle Einrichtungen in Stud.IP.")?></font>
 	<br>
 	<?
 	if ($RESOURCES_ENABLE) {
 	?>
-	<br><a href="resources.php?view=search&view_mode=no_nav&new_search=TRUE"><b>Suchen nach Ressourcen</b></a></br>
-	<font size=-1>Hier finden Ressourcen wie etwa R&auml;ume, Geb&auml;uder oder Ger&auml;te.</font>
+	<br><a href="resources.php?view=search&view_mode=no_nav&new_search=TRUE"><b><?=_("Suchen nach Ressourcen")?></b></a></br>
+	<font size=-1><?=_("Hier finden Ressourcen wie etwa R&auml;ume, Geb&auml;uder oder Ger&auml;te.")?></font>
 	<br>
 	<?
 	}
 	?>
-	<br><a href="archiv.php"><b>Suchen im Archiv</b></a></br>
-	<font size=-1>Hier finden sie alle Veranstaltungen vergangener Semester.</font>
+	<br><a href="archiv.php"><b><?=_("Suchen im Archiv")?></b></a></br>
+	<font size=-1><?=_("Hier finden sie alle Veranstaltungen vergangener Semester.")?></font>
 	<br>
 	<br>
 </td>

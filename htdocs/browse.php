@@ -59,7 +59,7 @@ if ($reset)
 <body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Suche nach Personen</td>
+	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche nach Personen")?></td>
 </tr>
 <?
 if ($sms_msg)
@@ -71,8 +71,12 @@ if ($sms_msg)
 ?>
 <tr>
 <td class="blank" align = left width="60%"><br /><blockquote>
-Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registriert sind. <br />Sie erhalten auf den Nutzerhomepages von Mitarbeitern an Einrichtungen auch weiterf&uuml;hrende Informationen wie Sprechstunden und R&auml;ume.<br />W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach einem Namen!
-<br><br><a href='score.php'>Zur Stud.IP Rangliste</a>
+<?
+echo _("Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registriert sind.") . "<br />";
+echo _("Sie erhalten auf den Nutzerhomepages von Mitarbeitern an Einrichtungen auch weiterf&uuml;hrende Informationen wie Sprechstunden und R&auml;ume.") . "<br />";
+echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach einem Namen!");
+?>
+<br><br><a href="score.php"><?=_("Zur Stud.IP Rangliste")?></a>
 </blockquote></td>
 <td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
 </tr>
@@ -85,7 +89,7 @@ Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registrie
 <form action="browse.php" method="POST">
 <tr>
 	<td width="20%" class="steel1" align="left">
-		&nbsp;<b><font size=-1>Einrichtungen</font></b>
+		&nbsp;<b><font size=-1><?=_("Einrichtungen")?></font></b>
 	</td>
 	<td align="left" class="steel1" colspan=3>
 		<font size=-1><SELECT Name="inst_id" size="1">
@@ -107,7 +111,7 @@ Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registrie
 	<td width="10%" class="steel1" align="center">
 		<input type="HIDDEN" name="group" value="Institut">
 		<input type="HIDDEN" name="send" value="TRUE">
- 		<input type="IMAGE" value="Anzeigen" src="pictures/buttons/anzeigen-button.gif" border=0>
+ 		<input type="IMAGE" value="Anzeigen" <?=makeButton("anzeigen", "src")?> border=0>
  	</td>
 </tr>
 </form>
@@ -116,7 +120,7 @@ Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registrie
 <form action="browse.php" method="POST">
 <tr> 
 	<td width="20%" class="steel1" align="left">
-		&nbsp;<b><font size=-1>Veranstaltungen</font></b>
+		&nbsp;<b><font size=-1><?=_("Veranstaltungen")?></font></b>
 	</td>
   	<td align="left" class="steel1" colspan=3>
   		<font size=-1><SELECT Name="sem_id" size="1">
@@ -139,7 +143,7 @@ Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registrie
 	</select></font></td>
 	<td width="10%" class="steel1" align="center">
 		<input type="HIDDEN" name="group" value="Seminar">
-  		<input type="IMAGE" value="Anzeigen" src="pictures/buttons/anzeigen-button.gif" border=0>
+  		<input type="IMAGE" value="Anzeigen" <?=makeButton("anzeigen", "src")?> border=0>
 		<input type="HIDDEN" name="send" value="TRUE">  		
   	</td>
 </tr>
@@ -149,20 +153,20 @@ Hier k&ouml;nnen Sie die Homepages aller Nutzer abrufen, die im System registrie
 <form action="browse.php" method="POST">
 <tr> 
 	<td width="20%" class="steel1" align="left">
-		<b><font size=-1>&nbsp;Vorname</font></b>
+		<b><font size=-1>&nbsp;<?=_("Vorname")?></font></b>
 	</td>
   	<td width="30%" class="steel1" align="left">
 		<input type="text" style="width: 75%" size=10 length=255 name="Vorname" value="<? echo htmlReady(stripslashes($browse_data["Vorname"])) ?>">
 	</td>
 	<td width="10%" class="steel1" align="left">
-		<b><font size=-1>&nbsp;Nachname</font></b>
+		<b><font size=-1>&nbsp;<?=_("Nachname")?></font></b>
 	</td>
   	<td width="30%" class="steel1" align="left">
 		<input type="text" style="width: 75%" size=10 maxlength=255 name="Nachname" value="<? echo htmlReady(stripslashes($browse_data["Nachname"])) ?>">
 	</td>
 	<td width="10%" class="steel1" align="center">
 		<input type="HIDDEN" name="group" value="Search">
-		<input type="IMAGE" value="Suchen" src="pictures/buttons/suchen-button.gif" border=0>
+		<input type="IMAGE" value="Suchen" <?=makeButton("suchen", "src")?> border=0>
 		<input type="HIDDEN" name="send" value="TRUE">		
 	</td>
 </tr></form>
@@ -174,11 +178,11 @@ if ($perm->have_perm("admin")):
 <form action="browse.php" method="POST">
 <tr> 
 	<td class="steel1" align="left"width="80%" colspan=4>
-		&nbsp;<b><font size=-1>Alle Benutzer</font></b>
+		&nbsp;<b><font size=-1><?=_("Alle Benutzer")?></font></b>
 	</td>
 	<td class="steel1" width="20%" align="left">
 		<input type="HIDDEN" name="group" value="All">
-  		<input type="IMAGE" value="Anzeigen" src="pictures/buttons/anzeigen-button.gif" border=0>
+  		<input type="IMAGE" value="Anzeigen" <?=makeButton("anzeigen", "src")?> border=0>
 		<input type="HIDDEN" name="send" value="TRUE">  		
   	</td>
 </tr></form>
@@ -187,7 +191,7 @@ endif;
 ?>
 <tr> 
 	<td class="steel1" align="left"width="100%" colspan=5>
-		<a href="<? echo $PHP_SELF ?>?reset=TRUE"><image src="./pictures/buttons/neuesuche-button.gif" border=0/></a></font>
+		<a href="<? echo $PHP_SELF ?>?reset=TRUE"><?=makeButton("neuesuche", "img")?></a></font>
   	</td>
 </tr></form>
 
@@ -261,23 +265,23 @@ if (isset($query)):
 // wir haben ein Ergebnis
 		switch ($browse_data["group"]) {
 			case "Seminar":
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"25%\"><a href=\"browse.php?sortby=status\"><b>Status in der Veranstaltung</b></a></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>" . _("Name") . "</b></a></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"25%\"><a href=\"browse.php?sortby=status\"><b>" . _("Status in der Veranstaltung") . "</b></a></td>";
 			break;
 			case "Institut":
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"44%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
-				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><b>Funktion an der Einrichtung</b></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"44%\"><a href=\"browse.php?sortby=Nachname\"><b>" . _("Name") . "</b></a></td>";
+				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><b>" . _("Funktion an der Einrichtung") . "</b></td>";
 			break;
 			case "Search":
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>globaler Status</b></a></td>";
+				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>" . _("Name") . "</b></a></td>";
+				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>" . _("globaler Status") . "</b></a></td>";
 			break;
 			default:
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>Name</b></a></td>";
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>globaler Status</b></a></td>";
+				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>" . _("Name") . "</b></a></td>";
+				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>" . _("globaler Status") . "</b></a></td>";
 			break;
 		}
-		echo "<td class=\"steel\" nowrap width=\"25%\" valign=bottom align=\"center\"><b>Nachricht verschicken</b><img src=\"pictures/blank.gif\" width=1 height=20></td>";
+		echo "<td class=\"steel\" nowrap width=\"25%\" valign=bottom align=\"center\"><b>" . _("Nachricht verschicken") . "</b><img src=\"pictures/blank.gif\" width=1 height=20></td>";
 		echo  "</tr>";
   	
 		//anfuegen der daten an tabelle in schleife...
@@ -302,7 +306,7 @@ if (isset($query)):
 					else {
 						//statusgruppen
 						$gruppen = GetStatusgruppen($db->f("Institut_id"),$db->f("user_id"));
-						(is_array($gruppen)) ? printf("<td class=\"$class\"><font size=-1> &nbsp;%s &nbsp;</font></td>", htmlReady(join(", ", array_values($gruppen)))) : printf("<td class=\"$class\"><font size=-1> &nbsp;keiner Funktion zugeordnet&nbsp;</font></td>");
+						(is_array($gruppen)) ? printf("<td class=\"$class\"><font size=-1> &nbsp;%s &nbsp;</font></td>", htmlReady(join(", ", array_values($gruppen)))) : printf("<td class=\"$class\"><font size=-1> &nbsp;" . _("keiner Funktion zugeordnet") . "&nbsp;</font></td>");
 					}
 					break;
 				default:
@@ -311,18 +315,18 @@ if (isset($query)):
 					printf("<td class=\"$class\"><font size=-1> &nbsp;%s</font></td>", $db->f("perms"));
 					break;
 			}
-			echo "<td class=\"$class\" align=\"center\"><a href=\"sms.php?sms_source_page=browse.php&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=0></a></td></tr>";
+			echo "<td class=\"$class\" align=\"center\"><a href=\"sms.php?sms_source_page=browse.php&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0></a></td></tr>";
 		}
 		print("</table><br /><br />");
 	else: // wir haben kein Ergebnis
-		printf("<th nowrap>Niemand gefunden!</th></tr></table><br /><br />");
+		printf("<th nowrap>" . _("Niemand gefunden!") . "</th></tr></table><br /><br />");
 	endif;
 endif;
 ?>
 
 </table>
 <?
-          page_close()
- ?>
+  page_close()
+?>
 </body>
 </html>
