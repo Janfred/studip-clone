@@ -274,7 +274,7 @@ if ($msg)
 	}
 // Anzeige der Seminare
 
-	$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' ORDER BY start_time");
+	$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' ORDER BY start_time DESC");
 	if ($db2->num_rows()) {
 		echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Veranstaltungen</b></td></tr><tr><td class=\"steel1\"><blockquote>";
 		while ($db2->next_record()) {
