@@ -245,7 +245,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			</td>
 <?		
 
-		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfestellung"),_("Hilfe zu dieser Seite"),40, "_new","right");
+		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
 		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
 
 ?>
