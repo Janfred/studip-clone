@@ -265,7 +265,7 @@ class AssignObject {
 			$keys=array_keys($this->events);
 		
 
-		//ok, a very heavy algorhytmus do detect the overlaps...
+		//ok, a very heavy algorythmus do detect the overlaps...
 		for ($i1=0; $i1<count($this->events); $i1++) {
 			$val = $this->events[$keys[$i1]];
 			for ($i2=0; $i2<count($this->events); $i2++) {
@@ -275,8 +275,9 @@ class AssignObject {
 					|| (($val->getBegin() >= $val2->getBegin()) &&($val->getBegin() <= $val2->getEnd()))
 					|| (($val2->getEnd() >= $val->getBegin()) &&($val2->getEnd() <= $val->getEnd()))
 					|| (($val2->getBegin() >= $val->getBegin()) &&($val2->getBegin() <= $val->getEnd()))) {
-						if (($val2->getAssignId()	 != $this->getId()) &&($val->getAssignId() == $this->getId()))
-							$overlaps[$val2->getAssignId()] = array("begin" =>$val2->getBegin(), "end"=>$val2->getEnd());
+						if (($val2->getAssignId()	 != $this->getId()) &&($val->getAssignId() == $this->getId())) {
+							$overlaps[$val2->getAssignId()] = array("begin" =>$val->getBegin(), "end"=>$val->getEnd());
+							}
 				}
 			}
 		}
