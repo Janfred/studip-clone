@@ -66,7 +66,7 @@ function fullNick($userid) {
 }
 
 //Hilfsfunktion, unterscheidet zwischen öffentlichen und privaten System Nachrichten
-function chatSystemMsg(&$msg,&$output){
+function chatSystemMsg($msg){
 	global $user,$chatServer;
 	$id = substr(strrchr ($msg[0],":"),1);
 	if (!$id) {
@@ -75,10 +75,10 @@ function chatSystemMsg(&$msg,&$output){
 	} elseif ($user->id == $id){
 		$output = strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
 	}
-	return;
+	return $output;
 }
 //Die Funktionen für die Chatkommandos, für jedes Kommando in $chatCmd muss es eine Funktion geben
-function chatCommand_color($msgStr,&$output){
+function chatCommand_color($msgStr){
 	global $user,$chatServer,$chatid;
 	if (!$msgStr || $msgStr == "\n" || $msgStr == "\r")
 		return;
@@ -88,7 +88,7 @@ function chatCommand_color($msgStr,&$output){
 	return;
 }
 
-function chatCommand_quit($msgStr,&$output){
+function chatCommand_quit($msgStr){
 	global $user,$chatServer,$chatid,$userQuit;
 	$full_nick = fullNick($user->id);
 	$chatServer->removeUser($user->id,$chatid);
@@ -102,12 +102,12 @@ function chatCommand_quit($msgStr,&$output){
 
 }
 
-function chatCommand_me($msgStr,&$output){
+function chatCommand_me($msgStr){
 	global $user,$chatServer,$chatid;
 	$chatServer->addMsg("system",$chatid,"<b>".htmlReady(fullNick($user->id))." ".formatReady($msgStr)."</b>");
 }
 
-function chatCommand_help($msgStr,&$output){
+function chatCommand_help($msgStr){
 	global $user,$chatServer,$chatid,$chatCmd;
 	$str = _("Mögliche Chat Kommandos:");
 	foreach($chatCmd as $cmd => $text)
@@ -115,7 +115,7 @@ function chatCommand_help($msgStr,&$output){
 	$chatServer->addMsg("system:$user->id",$chatid,$str);
 }
 
-function chatCommand_private($msgStr,&$output){
+function chatCommand_private($msgStr){
 	global $user,$chatServer,$chatid;
 	$recnick = trim(substr($msgStr." ",0,strpos($msgStr," ")));
 	$recid = $chatServer->getIdFromNick($chatid,$recnick);
@@ -132,7 +132,7 @@ function chatCommand_private($msgStr,&$output){
 	}
 }
 
-function chatCommand_kick($msgStr,&$output){
+function chatCommand_kick($msgStr){
 	global $user,$chatServer,$chatid;
 	$kicknick = trim(substr($msgStr." ",0,strpos($msgStr," ")-1));
 	if ($chatServer->getPerm($user->id,$chatid) && $kicknick){
@@ -145,7 +145,13 @@ function chatCommand_kick($msgStr,&$output){
 		} else {
 			$kickids = $chat_users;
 		}
-		unset($kickids[$user->id]);
+		if (is_array($kickids)){
+			foreach ($kickids as $kickid => $detail){
+				if ($chatServer->getPerm($kickid,$chatid)){
+					unset($kickids[$kickid]);
+				}
+			}
+		}
 		if (is_array($kickids) && count($kickids)){
 			foreach ($kickids as $kickid => $detail){
 				if ($chatServer->removeUser($kickid,$chatid)){
@@ -162,7 +168,7 @@ function chatCommand_kick($msgStr,&$output){
 	}
 }
 
-function chatCommand_sms($msgStr,&$output){
+function chatCommand_sms($msgStr){
 	global $user,$chatServer,$chatid;
 	$recUserName = trim(substr($msgStr." ",0,strpos($msgStr," ")));
 	$smsMsgStr = trim(strstr($msgStr," "));
@@ -170,15 +176,36 @@ function chatCommand_sms($msgStr,&$output){
 		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, falsche Kommandosyntax!"));
 		return;
 	}
-	if (messaging::insert_sms($recUserName,$smsMsgStr))
+	$msging = new messaging();
+	if ($msging->insert_sms($recUserName,$smsMsgStr))
 		$chatServer->addMsg("system:$user->id",$chatid,sprintf(_("Ihre SMS an <b>%s</b> wurde &uuml;bermittelt."),$recUserName));
 	else
 		$chatServer->addMsg("system:$user->id",$chatid,_("Fehler, deine SMS konnte nicht &uuml;bermittelt werden!"));
 }
 
+function chatCommand_password($msgStr){
+	global $user,$chatServer,$chatid;
+	$password = trim(substr($msgStr." ",0,strpos($msgStr," ")-1));
+	if ($chatServer->getPerm($user->id,$chatid)){
+		if ($password){
+			$chatServer->addMsg("system",$chatid,sprintf(_("Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert."),htmlReady(fullNick($user->id))));
+			$chatServer->chatDetail[$chatid]['password'] = $password;
+			$chatServer->store();
+		} elseif ($chatServer->chatDetail[$chatid]['password']){
+			$chatServer->addMsg("system",$chatid,sprintf(_("Der Passwortschutz f&uuml; diesen Chat wurde soeben von <b>%s</b> aufgehoben."),htmlReady(fullNick($user->id))));
+			$chatServer->chatDetail[$chatid]['password'] = false;
+			$chatServer->store();
+		} else {
+			$chatServer->addMsg("system:$user->id",$chatid,_("Dieser Chat ist nicht mit einem Passwort gesichert."));
+		}
+	} else {
+		$chatServer->addMsg("system:$user->id",$chatid,_("Sie d&uuml;rfen hier kein Passwort setzen!"));
+	}
+	
+}
 	 
 //Simpler Kommandoparser
-function chatCommand(&$msg,&$output){
+function chatCommand($msg){
 	global $user,$chatServer,$chatCmd,$chatid;
 	$cmdStr = trim(substr($msg[1]." ",1,strpos($msg[1]," ")-1));
 	$msgStr = trim(strstr($msg[1]," "));
@@ -187,7 +214,7 @@ function chatCommand(&$msg,&$output){
 		return;
 	}
 	$chatFunc = "chatCommand_" . $cmdStr;
-	$chatFunc($msgStr,&$output);       //variabler Funktionsaufruf!
+	$chatFunc($msgStr);       //variabler Funktionsaufruf!
 }
 
 
@@ -214,12 +241,12 @@ function outputLoop($chatid){
 			foreach($newMsg as $msg){
 				$output = "";
 				if (substr($msg[0],0,6) == "system") {
-					 chatSystemMsg(&$msg,&$output);
-					 if (!$output) 
-					 	continue;
+					$output = chatSystemMsg($msg);
+					if (!$output) 
+						continue;
 				} elseif (substr($msg[1],0,1) == "/") {
 					if ($msg[0] == $user->id) 
-						chatCommand(&$msg,&$output);
+						chatCommand($msg);
 					if (!$output) 
 						continue;
 				}

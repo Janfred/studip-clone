@@ -42,8 +42,9 @@ class ChatServer {
 		static $object_instance;
 		if (!is_object($object_instance[$class_name])){
 			$object_instance[$class_name] = new $class_name();
-		}
+		} else {
 		$object_instance[$class_name]->restore();
+		}
 		return $object_instance[$class_name];
 	}
 	
@@ -70,6 +71,7 @@ class ChatServer {
 		$this->chatDetail[$rangeid]["messages"] = array();
 		$this->chatDetail[$rangeid]["password"] = $password;
 		$this->chatDetail[$rangeid]["users"] = array();
+		$this->chatDetail[$rangeid]["id"] = md5(uniqid("chat",1));
 		$this->store();
 		return true;
 	}

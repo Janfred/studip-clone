@@ -64,11 +64,12 @@ if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),
 	<head>
 	 <title>Stud.IP</title>
 	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
-	 </head>
-	 <body>
-	 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
-		<tr valign=top align=middle>
-			<td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
+	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/md5.js"></script>
+	</head>
+	<body>
+	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
+	<tr valign=top align=middle>
+		<td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
 		</tr>
 		<tr><td class="blank">&nbsp;</td></tr>
 		<?
@@ -93,11 +94,12 @@ $sms->delete_chatinv($auth->auth["uname"]);
 <head>
 	<title>Chat(<?=$auth->auth["uname"]?>) -
 	<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></title>
-
+	<script type="text/javascript" language="javascript" src="<?=$CANONICAL_RELATIVE_PATH_STUDIP?>/md5.js"></script>
 <script type="text/javascript">
 	/**
 	* JavaScript 
 	*/
+	var chatuniqid = '<?=$chatServer->chatDetail[$chatid]["id"]?>';
 	function coming_home(url) {
 		if (opener.closed) alert('<?=_("Das Hauptfenster wurde geschlossen,\\ndiese Funktion kann nicht mehr ausgeführt werden!")?>');
 		else {
