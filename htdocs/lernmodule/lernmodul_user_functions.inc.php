@@ -62,10 +62,21 @@ function get_ilias_user_id($benutzername)
 function get_ilias_logindata()
 {
 	global $auth, $username_prefix;
+	$db = New DB_Seminar;
+	$db->query("SELECT preferred_language FROM user_info WHERE user_id='" . $auth->auth["uid"] . "'");
+	if ($db->next_record()) 
+		$preferred_language = $db->f("preferred_language");
+	if ($preferred_language != "")
+	{
+		$language = explode("_", $preferred_language);
+		$language = $language[0];
+	}
+	else
+		$language = "de";
 	$ilias_db = New DB_Ilias;
 	$ilias_db->query("SELECT * FROM benutzer WHERE id='" . mysql_escape_string(get_connected_user_id($auth->auth["uid"]))."'");
 	if ($ilias_db->next_record())
-		return "&acct_name=" . $ilias_db->f("benutzername") . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=en";
+		return "&acct_name=" . $ilias_db->f("benutzername") . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=";
 	else
 		return false;
 }
@@ -89,6 +100,8 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 		$lang_arr = explode("_", $preferred_language);
 		$u_lang = $lang_arr[0];
 		$land = $lang_arr[1];
+		if ($preferred_language == "")
+			$u_lang = "de";
 		if ($inst == "")
 			$inst = "1";
 		if ($geschlecht == 0)
@@ -213,7 +226,7 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 	$atitel = $title_front;
 	$u_status = $ilias_status[$status];
 	if ($preferred_language == "")
-		$u_lang = "en";
+		$u_lang = "de";
 
 // Datenbankzugriff: BENUTZER
 	$query_string = "UPDATE benutzer ".
