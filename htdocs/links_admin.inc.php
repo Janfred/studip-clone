@@ -20,19 +20,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 if ($perm->have_perm("tutor")):	// Navigationsleiste ab status "Tutor"
 
-require_once "config.inc.php";
-require_once "dates.inc.php";
-require_once "msg.inc.php";
-require_once "visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $db4=new DB_Seminar;
+$cssSw=new cssClassSwitcher;
 
-$sess->register("links_admin_data");
-$sess->register("sem_create_data");
-$sess->register("admin_dates_data");
+$sess->register("$ABSOLUTE_PATH_STUDIP/links_admin_data");
+$sess->register("$ABSOLUTE_PATH_STUDIP/sem_create_data");
+$sess->register("$ABSOLUTE_PATH_STUDIP/admin_dates_data");
 
 
 //neue Admin-Seminar-Sitzung, ich komme mit einer seminar_id rein
@@ -411,12 +412,11 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 		die;
 		}
 	
-
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
-if ((!$links_admin_data["sem_id"]) && ($list) &&
+if ((!$links_admin_data["sem_id"] || ($i_page == "archiv_assi.php")) && ($list) &&
 	(( $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))) {
-	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 
+	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -571,7 +571,6 @@ if ((!$links_admin_data["sem_id"]) && ($list) &&
 
 
 //Zusammenbasteln der Seminar-Query
-
 if (($links_admin_data["srch_on"]) || ($auth->auth["perm"] =="tutor") || ($auth->auth["perm"] == "dozent")){
 $query="SELECT DISTINCT seminare.*, Institute.Name AS Institut, Fakultaeten.Name AS Fakultaet FROM seminare LEFT JOIN Institute USING (institut_id) LEFT JOIN Fakultaeten USING (Fakultaets_id) LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') LEFT JOIN auth_user_md5 USING (user_id)";
 $conditions=0;
@@ -661,18 +660,13 @@ while ($db->next_record()) {
   	 if ($perm->have_perm("root") ||
 		($perm->have_perm("admin") && $db3->next_record()) || 
 		($db2->next_record()) ) {
-	
-	  	if ($c % 2)
-	  		$class="steel1";
-  		else
-  			$class="steelgraulight"; 
-  		$c++;
-  		
+		
+		$c++;
   		//Titelzeile wenn erste Veranstaltung angezeigt werden soll
   		if ($c==0) {
   			?>
 				<tr height=28>
-				 	<td  width="60%" class="steel" valign=bottom>
+				 	<td width="60%" class="steel" valign=bottom>
 				 		<img src="pictures/blank.gif" width=1 height=20>
 				 		&nbsp; <a href="<? echo $PHP_SELF ?>?sortby=Name"><b>Name</b></a>
 				 	</td>
@@ -690,12 +684,12 @@ while ($db->next_record()) {
 				//more Options for archiving
 				if ($i_page == "archiv_assi.php") {
 				?>
-				<tr>
-					<td class="steel1" colspan=2>
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
 						&nbsp; <font size=-1>Alle ausgew&auml;hlten Veranstaltungen&nbsp;<input type="IMAGE" src="./pictures/buttons/archivieren-button.gif" border=0 /></font><br />
 						&nbsp; <font size=-1 color="red">Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> r&uuml;ckg&auml;ngig gemacht werden kann!</font>
 					</td>
-					<td class="steel1" colspan=2 align="right">
+					<td class="<? echo $cssSw->getClass() ?>" colspan=2 align="right">
 						<? if ($auth->auth["jscript"]) {?>
 						<font size=-1><image src="./pictures/buttons/alleauswaehlen-button.gif" onclick="selectAll(links_admin_action,0);" />&nbsp; 
 						<font size=-1><image src="./pictures/buttons/auswahlumkehr-button.gif" onclick="selectAll(links_admin_action,1);" />
@@ -704,12 +698,12 @@ while ($db->next_record()) {
 				</tr>
 				<? }
 			}
-
-		echo "<tr><td class=\"$class\">".htmlReady(substr($db->f("Name"),0,100));
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\">".htmlReady(substr($db->f("Name"),0,100));
 		if (strlen ($db->f("Name")) > 100)
 			echo "(...)";
 		echo "</td>";
-		echo "<td align=\"center\" class=\"$class\"><font size=-1>";
+		echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
 		$db4->query("SELECT Vorname, Nachname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent'");
 		$k=0;
 		while ($db4->next_record()) {
@@ -719,8 +713,8 @@ while ($db->next_record()) {
 			$k++; 
 			}
 		echo "</font></td>";
-		echo "<td class=\"$class\" align=\"center\"><font size=-1>".$SEM_TYPE[$db->f("status")]["name"]."<br />Kategorie: <b>".$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"]."</b><font></td>";
-		echo "<td class=\"$class\" nowrap align=\"center\">";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"center\"><font size=-1>".$SEM_TYPE[$db->f("status")]["name"]."<br />Kategorie: <b>".$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"]."</b><font></td>";
+		echo "<td class=\"".$cssSw->getClass()."\" nowrap align=\"center\">";
 		//Kommandos fuer die jeweilgen Seiten
 		switch ($i_page) {
 			case "adminarea_start.php":
