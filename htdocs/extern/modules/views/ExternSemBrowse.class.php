@@ -61,14 +61,14 @@ class ExternSemBrowse extends SemBrowse {
 					$current_sem = $this->config->getValue("Main", "semstart");
 		}
 		
-		$last_sem = $current_sem + $this->config->getValue("Main", "semrange") - 1;
+		$last_sem = $current_sem + $this->config->getValue("Main", "semrange");
 		if ($last_sem < $current_sem)
 			$last_sem = $current_sem;
 		if (!isset($all_semester[$last_sem]))
 			$last_sem = sizeof($all_semester);
 		
-		for ($i = $last_sem; $i >= $current_sem; $i--)
-			$this->sem_number[] = $i;
+		for ($i = $last_sem; $i > $current_sem; $i--)
+			$this->sem_number[] = $i - 1;
 		
 		$semclasses = $this->config->getValue("Main", "semclasses");
 		foreach ($SEM_TYPE as $key => $type) {
@@ -99,7 +99,7 @@ class ExternSemBrowse extends SemBrowse {
 			if (!$nameformat = $this->config->getValue("Main", "nameformat"))
 				$nameformat = "no_title_short";
 			$query = "SELECT seminare.Seminar_id, seminare.status, seminare.Name, seminare.metadata_dates 
-				, Institute.Name AS Institut,Institute.Institut_id,
+				, seminare.Institut_id, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, "
 				. $_fullname_sql[$nameformat]
 				. " AS fullname, auth_user_md5.username,
@@ -111,8 +111,9 @@ class ExternSemBrowse extends SemBrowse {
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN Institute USING (Institut_id) 
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result']))
-				 . "') $sem_inst_query";
-			
+				 . "')$sem_inst_query";
+				 
+			echo "<br>$query<br>";
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
 			$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
@@ -126,7 +127,7 @@ class ExternSemBrowse extends SemBrowse {
 			if ($this->sem_browse_data['group_by'] == 0){
 				$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
 				foreach ($group_by_duration as $sem_number_end => $detail){
-					if ($sem_number_end != -1 && ($detail['sem_number'][$sem_number_end] && count($detail['sem_number']) == 1)){
+					if ($sem_number_end != -1 && ($detail['sem_number'][$sem_number_end - 1] && count($detail['sem_number']) == 1)){
 						continue;
 					} else {
 						foreach ($detail['Seminar_id'] as $seminar_id => $foo){
@@ -135,7 +136,7 @@ class ExternSemBrowse extends SemBrowse {
 								if (is_array($this->sem_number)){
 									$sem_number_end = $this->sem_number[0];
 								} else {
-									$sem_number_end = count($this->sem_dates)-1;
+									$sem_number_end = count($this->sem_dates) - 1;
 								}
 							}
 							for ($i = $start_sem; $i <= $sem_number_end; ++$i){
@@ -238,6 +239,11 @@ class ExternSemBrowse extends SemBrowse {
 				echo $group_by_name[$this->sem_browse_data['group_by']];
 				echo "</font></td></tr>";
 			}
+			
+			echo "<pre>";
+			print_r($group_by_data);
+			echo "</pre>";
+			
 			
 			foreach ($group_by_data as $group_field => $sem_ids) {
 				echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
