@@ -37,7 +37,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbView.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/dbviews/sem_tree.view.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/guestbook.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/guestbook.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
@@ -137,11 +137,6 @@ if ($perm->is_fak_admin()){
 	$admin_darf = TRUE;
 }
 
-//Guestbook actions
-if ($guestbook)
-	actions_guestbook($guestbook);
-if ($deletepost)
-	delete_post_guestbook($user_id, $deletepost);
 
 //Her mit den Daten...
 $db->query("SELECT user_info.* , auth_user_md5.*,". $_fullname_sql['full'] . " AS fullname FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$user_id'");
@@ -279,23 +274,28 @@ if ($temp_user_perm != "root" && $temp_user_perm != "admin") {
 		echo "<br>";
 }
 
-// show chat info
-if ($GLOBALS['CHAT_ENABLE']){
-	if (chat_show_info($user_id))
-		echo "<br>";
-}
-
 // include and show votes and tests
 if ($GLOBALS['VOTE_ENABLE']) {
 	show_votes ($username, $auth->auth["uid"], $perm, YES);
 }
 
 // show Guestbook
-if (($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) || check_guestbook($user_id)==TRUE || $admin_darf == TRUE) {
-	print_guestbook($user_id);
-	echo "<br>";	
+
+$guest = new Guestbook($user_id);
+
+if ($guestbook)
+	$guest->actionsGuestbook($guestbook);
+
+if ($guest->active == TRUE || $guest->rights == TRUE) {
+	$guest->showGuestbook();
+	echo "<br>";
 }
 
+// show chat info
+if ($GLOBALS['CHAT_ENABLE']){
+	if (chat_show_info($user_id))
+		echo "<br>";
+}
 
 // Hier wird der Lebenslauf ausgegeben:
 if ($db->f("lebenslauf")!="") {
