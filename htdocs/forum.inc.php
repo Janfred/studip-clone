@@ -1111,11 +1111,11 @@ function printposting ($forumposting) {
 				if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
 					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
 					$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1";
-					$addon .= "<input type=radio name=rate value=1>";
-					$addon .= "<input type=radio name=rate value=2>";
-					$addon .= "<input type=radio name=rate value=3>";
-					$addon .= "<input type=radio name=rate value=4>";
-					$addon .= "<input type=radio name=rate value=5>5&nbsp;";
+					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=1>";
+					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=2>";
+					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=3>";
+					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=4>";
+					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=5>5&nbsp;";
 					$addon .= "<br><br>";
 					$addon .= "<input type=hidden name=open value='".$forumposting["id"]."'>";
 					$addon .= "<input type=hidden name=flatviewstartposting value='".$forum["flatviewstartposting"]."'>";

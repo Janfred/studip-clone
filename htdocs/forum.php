@@ -396,8 +396,11 @@ if ($zitat==TRUE)
 if ($edit_id) 
 	$open = $edit_id;
 
-if ($rate && $sidebar) // Objekt bewerten
-	$txt = object_add_rate ($sidebar, $rate);
+if ($rate) { // Objekt bewerten
+	while(list($key,$value) = each($rate)) {
+		$txt = object_add_rate ($key, $value);
+	}
+}
 
 if ($fav)   // zu den Favoriten hinzufügen/entfernen
 	$fav = object_switch_fav($fav);
