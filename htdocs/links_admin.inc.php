@@ -285,7 +285,7 @@ if ($perm->have_perm("admin")) {
 	}
 	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="admin_institut.php?list=TRUE"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR$i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
+	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR$i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php" OR $i_page == "admin_db_integrity.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
 	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="new_user_md5.php"><font color="#000000" size=2><b>&nbsp; &nbsp; globale Einstellungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 }
 
@@ -354,7 +354,7 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_pa
 	}
 }
 
-if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR $i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php")
+if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR $i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page == "admin_bereich.php" OR $i_page == "admin_studiengang.php" OR $i_page == "view_sessions.php" OR $i_page == "new_user_md5.php" OR $i_page == "admin_db_integrity.php")
 {
 	IF ($i_page == "new_user_md5.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="new_user_md5.php">Benutzer&nbsp; &nbsp; </a> <?}
@@ -369,7 +369,7 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR $i_
 		IF ($i_page == "admin_bereich.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_bereich.php">Bereiche&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_bereich.php">Bereiche&nbsp; &nbsp; </a> <?}
 
-  		IF ($i_page == "admin_studiengang.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
+		IF ($i_page == "admin_studiengang.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
 
 		IF ($i_page == "admin_news.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_news.php?view=globalt">News&nbsp; &nbsp; </a> <?}
@@ -377,6 +377,10 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR $i_
 
 		IF ($i_page == "view_sessions.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
+		
+		IF ($i_page == "admin_db_integrity.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_db_integrity.php">DB Integrit&auml;t&nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_db_integrity.php">DB Integrit&auml;t&nbsp; &nbsp; </a> <?}
+	
 	}
 }
 //Reitersystem Ende
@@ -695,32 +699,32 @@ $c=-1;
 while ($db->next_record()) {
 	//weitere Abfragen, falls nur eingeschraenkter Zugriff moeglich
 	$seminar_id = $db->f("Seminar_id");
-  	$user_id = $auth->auth["uid"];
+	$user_id = $auth->auth["uid"];
 	$db2->query("select * from seminar_user WHERE Seminar_id = '$seminar_id' and user_id = '$user_id' AND (status = 'dozent' OR status = 'tutor')");
-  	$db3->query("select * from seminare LEFT JOIN user_inst USING (Institut_id) where Seminar_id = '$seminar_id' and user_id = '$user_id' AND inst_perms = 'admin'");
+	$db3->query("select * from seminare LEFT JOIN user_inst USING (Institut_id) where Seminar_id = '$seminar_id' and user_id = '$user_id' AND inst_perms = 'admin'");
 	
-  	 if ($perm->have_perm("root") ||
+	 if ($perm->have_perm("root") ||
 		($perm->have_perm("admin") && $db3->next_record()) || 
 		($db2->next_record()) ) {
 		
 		$c++;
-  		//Titelzeile wenn erste Veranstaltung angezeigt werden soll
-  		if ($c==0) {
-  			?>
+		//Titelzeile wenn erste Veranstaltung angezeigt werden soll
+		if ($c==0) {
+			?>
 				<tr height=28>
-				 	<td width="60%" class="steel" valign=bottom>
-				 		<img src="pictures/blank.gif" width=1 height=20>
-				 		&nbsp; <a href="<? echo $PHP_SELF ?>?sortby=Name"><b>Name</b></a>
-				 	</td>
+					<td width="60%" class="steel" valign=bottom>
+						<img src="pictures/blank.gif" width=1 height=20>
+						&nbsp; <a href="<? echo $PHP_SELF ?>?sortby=Name"><b>Name</b></a>
+					</td>
 					<td width="15%" align="center" class="steel" valign=bottom>
 						<B>Dozent</b></a>
 					</td>
 					<td width="25%"align="center" class="steel" valign=bottom>
 						<a href="<? echo $PHP_SELF ?>?sortby=status"><B>Status</b></a>
 					</td>
-				 	<td width="10%" align="center" class="steel" valign=bottom>
-				 		<b><? printf ("%s", ($i_page=="archiv_assi.php") ?  "Archivieren": "Aktion") ?></b> 
-				 	</td>
+					<td width="10%" align="center" class="steel" valign=bottom>
+						<b><? printf ("%s", ($i_page=="archiv_assi.php") ?  "Archivieren": "Aktion") ?></b> 
+					</td>
 				 </tr>
 				<? 
 				//more Options for archiving
