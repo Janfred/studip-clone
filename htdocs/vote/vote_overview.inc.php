@@ -27,10 +27,7 @@
 /* including needed files													  *
 /*																			  *
 /* ************************************************************************* */
-require_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
-require_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "header.php");
-require_once($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");
+
 ob_start(); // start output buffering
 include_once($ABSOLUTE_PATH_STUDIP . "vote/view/visual.inc.php");
 include_once($ABSOLUTE_PATH_STUDIP . "vote/Vote.class.php");
