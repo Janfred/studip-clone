@@ -177,25 +177,35 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	<tr>
 		<td class="topic" colspan="2"><img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Einrichtungen</></td>
 	</tr>
-	<tr>
-		<td class="blank" colspan="2">&nbsp;</td>
-	</tr>
 	<?
 	if ($meldung) parse_msg($meldung);
 	?>
 	 <?
 	 if ($num_my_inst){
 	 ?>
-	 <tr><td class="blank" colspan=2>
-	<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class="blank">
-	<tr valign="top" align="center">
-		<th width="1%">&nbsp; </th>
-		<th width="65%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
-		<th width="10%"><b>besucht</b></th>
-		<th width="10%"><b>Inhalt</b></th>
-		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
-		<th width="3%"><b>X</b></th>
-	</tr>
+	 	<tr>
+	 		<td class="blank">
+				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+					<tr valign="top" align="center">
+						<td align="center">
+							<table border="0" cellpadding="2" cellspacing="0" width="98%" align="center" class="blank">
+								<tr>
+									<td class="blank" colspan="2">&nbsp;
+									
+									</td>
+								</tr>
+								<tr valign="top" align="center">
+									<th width="1%">&nbsp; </th>
+									<th width="86%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
+									<th width="10%"><b>Inhalt</b></th>
+									<?
+									if ($view=="ext") { 
+									?>
+										<th width="10%"><b>besucht</b></th>
+										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
+									<? }?>
+									<th width="3%"><b>X</b></th>
+								</tr>
 	<?
 	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 	ob_start();
@@ -214,73 +224,113 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
   foreach ($my_inst as $instid=>$values){
 
 		$cssSw->switchClass();
-
-		$lastVisit = $loginfilenow[$instid];
-
+		$lastVisit = $loginfilenow[$semid];
 		ECHO "<tr ".$cssSw->getHover().">";
 		ECHO "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
+// Name-field		
 		ECHO "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
-		ECHO htmlReady($values["name"]);
+		ECHO "<font size=-1>".htmlReady($values["name"])."</font>";
 		print ("</a></td>");
-
-		IF ($loginfilenow[$instid]==0)
-			{
-			echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>nicht besucht</td>";
-			}
-		ELSE
-			 {
-			 echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap>", date("d.m.Y", $loginfilenow[$instid]),"</td>";
-			}
-
-// Inhalt
+// Content-field
 		echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
 		print_institut_content($instid, $values);
 		echo "</td>";
-		echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
+
+// Extendet views:
+
+	// last visited-field
+		IF ($view=="ext") {
+			IF ($loginfilenow[$instid]==0) {
+				echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap>nicht besucht</td>";
+			} ELSE  {
+				 echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m", $loginfilenow[$instid]),"</font></td>";
+			}
+	// Status-field
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
+		}
+
+// delete Entry from List:
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin"))
 			echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
 		else
 			printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Einrichtung austragen")." border=\"0\"></a></td>", $instid);
 		 echo "</tr>\n";
 		}
-	echo "</table></td></tr>";
-
 	 }
 
-//Fusstext
- $db->query("SELECT count(*) as count  FROM Institute");
- $db->next_record();
-  ?>
-	<tr>
-		<td class="blank" colspan=2>
-			<table width="99%" border=0 cellpadding=0 cellspacing=0 align="center">
-				<tr>
-					<td align="right"><br />
-						<font size=-1>Es sind  <? echo ($db->f("count")-$num_my_inst) ?> weitere Einrichtungen vorhanden.</font><br />&nbsp; 
-					</td>
-				</tr>
-				<tr>
-					<td>
-					<? if (!$perm->have_perm("dozent"))
-						echo "Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufzunehmen m&ouml;chten, <br />k&ouml;nnen sie sich hier <a href=\"edit_about.php?view=Karriere#einrichtungen\">zuordnen.</a><br /><br />";
-					?>
-					Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen<br /> nutzen Sie die <a href="institut_browse.php">Suchfunktion.</a><br />
-					</td>
-				</tr>
-				<tr>
-					<td align="right">
-						&nbsp;
-					</td>
-				</tr>
+//Info-field on the right side
+?>
 			</table>
 		</td>
-	</tr>
-</td></tr></table></body></html>
-<?	
+			<td class="blank">
+				&nbsp;&nbsp;
+			</td>
+			<td class="blank" width="240" valign="top">
+				<table "center" width="100%" border=0 cellpadding=0 cellspacing=0>
+					<tr>
+						<td class="blank" width="100%" align="right" colspan=2>
+							<img src="pictures/seminare.jpg">
+						</td>
+					</tr>
+					<tr>
+						<td class="angemeldet" width="100%" colspan=2>
+							<table "center" width="99%" border=0 cellpadding=4 cellspacing=0>
+								<tr>
+									<td class="blank" width="100%" colspan=2>
+										<font size=-1><b><? print "Information" ?>:</b></font>
+										<br>
+									</td>
+								</tr>
+								<tr>
+									<td width="1%" valign="top">
+										<img src="./pictures/ausruf_small.gif">
+									</td>
+									<td class="blank" width="100%">
+									 	<?  $db->query("SELECT count(*) as count  FROM Institute");
+										 $db->next_record();?>
+										<font size=-1>Es sind <? echo ($db->f("count")-$num_my_sem) ?> weitere Einrichtungen vorhanden.</font><br>
+									</td>
+								</tr>
+								<tr>
+									<td class="blank" width="100%" colspan=2>
+										<font size=-1><b><? print "Aktionen" ?>:</b></font>
+										<br>
+									</td>
+								</tr>
+								<tr>
+									<td width="1%" valign="top">
+										<img src="./pictures/suchen.gif">
+									</td>
+									<td class="blank" width="100%">
+										<font size=-1>Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die <a href="institut_browse.php">Suchfunktion.</a><br /></font>
+									</td>
+								</tr>
+							<?  if (!$perm->have_perm("dozent")) {  ?>
+								<tr>
+									<td width="1%" valign="top">
+										<img src="./pictures/einst.gif">
+									</td>
+									<td class="blank" width="100%">
+										<? echo "<font size=-1>Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufzunehmen m&ouml;chten, k&ouml;nnen sie sich hier <a href=\"edit_about.php?view=Karriere#einrichtungen\">zuordnen.</a></font>"; ?>
+									</td>
+								</tr>  
+							 <? }  ?>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<br />
+			</td>
+		</tr>
+	  </table>
+     </td>
+    </tr>
 
+<?
 }
 // Save data back to database.
 ob_end_flush(); //Outputbuffering beenden
 page_close();
-  ?>
+ ?>
+</table>
 <!-- $Id$ -->
