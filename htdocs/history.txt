@@ -1,3 +1,25 @@
+30.09.2003 v 0.9.5
+- neues Modul für Votings und Tests
+- neues Wiki-Web-Modul zum kollaborativen Erstellen von verlinkten Dokumenten
+- komplette Überarbeitung der Engine für Forensysteme, um neue Funktionen erweitert (Flatview,   
+  Indikatoren, Sortierung, Favoriten, AutoShrink)
+- komplette Überarbeitung des Bereichs zum Versenden von systeminternen-Nachrichten: Mehrere
+- StartUp-Checker: Überprüft vor dem Anlegen von Veranstaltungen, ob alle Voraussetzungen zum Anlegen
+  gegebenen sind und bietet gegebenenfalls Hilfestellungen.
+- Erweiterungen am Dateisystem: Angabe eines freien Namens für Dateien, Möglichkeit zur
+  Aktualisierung bestehenden Dateien
+- Erweiterungen am Anmeldesystem: Einstellen des Anmeldezeitraumes, Verfahren um Nutzer vorläufig
+  in Veranstaltungen aufzunehmen.
+- neues Verfahren zur Erweiterung der Metadaten von Veranstaltungen, Einrichtungen und Nutzer um
+  generische Felder
+- Modularisierung von Veranstaltungen und Einrichtungen: Alle Bereiche können jederzeit für einzelne
+  Veranstaltungen und Einrichtungen an- bzw. abgeschaltet werden.
+- externe Authentifizierungen (LDAP, Radius, andere Stud.IP Installationen) sind über eine Plug-In-
+  Architektur möglich
+- Internationalisierung: Die Internationalisierung und Erstellung einer englischen Sprachversion ist
+  komplett abgeschlossen.
+- weitere Detailverbesserungen und Bugfixes
+
 31.03.2003 v 0.9
 - erweitertes Chatsystem: eigene Chaträume für Veranstaltungen, Personen und Einrichtungen, Protokoll-
   Funktion, Chaträume können mit einem Passwort gesichert werden
