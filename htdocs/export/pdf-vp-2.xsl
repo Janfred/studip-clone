@@ -66,7 +66,7 @@ MitarbeiterInnenliste
 						<xsl:for-each select="studip/institut">
 							<fo:block space-after="10pt">
 						</fo:block>
-							<fo:block font-size="14pt" text-align-last="justify">
+							<fo:block font-size="12pt" text-align-last="justify">
 								<fo:inline font-weight="bold">
 									<xsl:value-of select="name"/>
 									<fo:leader leader-pattern="space"/>
@@ -76,7 +76,7 @@ MitarbeiterInnenliste
 							<xsl:choose>
 								<xsl:when test="seminare/gruppe">
 									<xsl:for-each select="seminare/gruppe">
-										<fo:block font-size="12pt" text-align-last="justify">
+										<fo:block font-size="10pt" text-align-last="justify">
 											<fo:inline font-weight="bold">
 												<xsl:value-of select="@key"/>
 												<fo:leader leader-pattern="space"/>
@@ -153,7 +153,7 @@ MitarbeiterInnenliste
 								</fo:inline>
 							</fo:block>
 							<fo:block>
-								<fo:inline font-weight="bold">Fakultaet: </fo:inline>
+								<fo:inline font-weight="bold">Fakult&#228;t: </fo:inline>
 								<xsl:value-of select="fakultaet"/>
 							</fo:block>
 							<fo:block>
