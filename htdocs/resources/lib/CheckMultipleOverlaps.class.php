@@ -89,21 +89,24 @@ class CheckMultipleOverlaps {
 	}
 	
 	function checkOverlap ($events, &$result, $index_mode = "assign_id") {
-		foreach ($events as $obj) {
-			$clause = sprintf ("((begin <= %s AND end > %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());
-			$cases.= sprintf(" WHEN %s THEN '%s'", $clause, $obj->getId());
-			$clauses[] = $clause;
-		}
-	
-		$clause = join(" OR ",$clauses);
-		$in = "('".join("','",$this->resource_ids)."')";
+		if ($this->resource_id) {
+			foreach ($events as $obj) {
+				$clause = sprintf ("((begin <= %s AND end > %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());
+				$cases.= sprintf(" WHEN %s THEN '%s'", $clause, $obj->getId());
+				$clauses[] = $clause;
+			}
 		
-		$query = sprintf ("SELECT *, CASE %s END AS event_id FROM resources_temporary_events WHERE 1 AND (%s) AND resource_id IN %s ORDER BY begin", $cases, $clause, $in);
-		$this->db->query($query);
-		while ($this->db->next_record()) {
-			$result[$this->db->f("resource_id")][($index_mode == "assign_id") ? $events[$this->db->f("event_id")]->getAssignId() : $events[$this->db->f("event_id")]->getAssignUserId()][] = array("begin"=>$this->db->f("begin"), "end"=>$this->db->f("end"), "event_id"=>$this->db->f("event_id"), "own_begin" =>$events[$this->db->f("event_id")]->getBegin(), "own_end" =>$events[$this->db->f("event_id")]->getEnd());
+			$clause = join(" OR ",$clauses);
+			$in = "('".join("','",$this->resource_ids)."')";
+			
+			$query = sprintf ("SELECT *, CASE %s END AS event_id FROM resources_temporary_events WHERE 1 AND (%s) AND resource_id IN %s ORDER BY begin", $cases, $clause, $in);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$result[$this->db->f("resource_id")][($index_mode == "assign_id") ? $events[$this->db->f("event_id")]->getAssignId() : $events[$this->db->f("event_id")]->getAssignUserId()][] = array("begin"=>$this->db->f("begin"), "end"=>$this->db->f("end"), "event_id"=>$this->db->f("event_id"), "own_begin" =>$events[$this->db->f("event_id")]->getBegin(), "own_end" =>$events[$this->db->f("event_id")]->getEnd());
+			}
+			return;
 		}
-		return;
+		$result = array();
 	}
 }
 ?>
