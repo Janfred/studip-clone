@@ -483,7 +483,9 @@ if ($rechte) {
 
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus dem Institut berufen...
 if ($rechte AND $SemUserStatus!="tutor") {
-?>
+	$query="SELECT auth_user_md5.user_id, username, Vorname, Nachname, inst_perms FROM user_inst LEFT JOIN auth_user_md5  USING(user_id) LEFT JOIN seminar_user ON (seminar_user.user_id=user_inst.user_id AND seminar_id='$SessSemName[1]')  WHERE Institut_id = '$SessSemName[5]' AND inst_perms IN ('tutor','dozent') AND ISNULL(seminar_id) ORDER BY Nachname";
+	$db->query($query);
+	?>
 
 	<tr>
 		<td class=blank colspan=2>&nbsp; 
@@ -497,7 +499,6 @@ if ($rechte AND $SemUserStatus!="tutor") {
 		<td class="steel1" width="30%" align="left">&nbsp; <font size=-1><b>MitarbeiterInnen der Einrichtung</b></font></td>
 		<td class="steel1" width="40%" align="center"><SELECT Name="u_id" size="1">
 		<?
-		$db->query("SELECT auth_user_md5.user_id, username, Vorname, Nachname, inst_perms FROM user_inst NATURAL LEFT JOIN auth_user_md5 WHERE Institut_id = '$SessSemName[5]' AND (inst_perms = 'tutor' OR inst_perms = 'dozent') ORDER BY Nachname");
 		printf ("<option value=\"0\">- -  bitte ausw&auml;hlen - -\n");
 		while ($db->next_record())
 			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,40).")", $db->f("inst_perms"));
