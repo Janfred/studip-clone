@@ -302,7 +302,7 @@ function ShowUserInfo ($contact_id)
 
 function ShowContact ($contact_id)
 {	// Ausgabe eines Kontaktes
-	global $PHP_SELF, $open, $filter, $forum, $auth;
+	global $PHP_SELF, $open, $filter, $forum, $auth, $view;
 	$db=new DB_Seminar;
 	$db->query ("SELECT contact_id, user_id, buddy FROM contact WHERE contact_id = '$contact_id'");	
 	if ($db->next_record()) {
@@ -345,7 +345,7 @@ function ShowContact ($contact_id)
 					}
 				}
 
-				$hoverlink = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\" ";
+				$hoverlink = "<a href=\"$PHP_SELF?view=$view&filter=$filter&open=".$contact_id."#anker\" ";
 				$name = "huhu";
 				$txt = "<hr>"._("Klicken zum Bearbeiten");
 				$bild = "pictures/forumgraurunt.gif";
@@ -357,7 +357,7 @@ function ShowContact ($contact_id)
 						."', CAPTION, '&nbsp; &nbsp; &nbsp; "._("Weitere Informationen:")."', NOCLOSE, CSSOFF)\" "
 						." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 			} else {
-				$link = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
+				$link = "<a href=\"$PHP_SELF?view=$view&filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
 			}
 
 			$lastrow = "<tr><td colspan=\"3\" class=\"steelgraulight\" align=\"center\">".$link."</td></tr>";

@@ -140,14 +140,21 @@ if ($open != "all" && $size_of_book>0) {
 echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
-	$search_exp = trim($search_exp);
-	if (SearchResults($search_exp)) {
-		printf ("<input type=\"IMAGE\" name=\"addsearch\" src=\"pictures/move_down.gif\" border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
-		echo SearchResults($search_exp);
+	$search_exp = str_replace("%","\%",$search_exp);
+	$search_exp = str_replace("_","\_",$search_exp);
+	if (strlen(trim($search_exp))<3) {
+		echo "&nbsp; <font size=\"-1\">"._("Ihr Suchbegriff muss mindestens 3 Zeichen umfassen! ");
+		printf ("<a href=\"$PHP_SELF\"><img src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 	} else {
-		echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
+		$search_exp = trim($search_exp);
+		if (SearchResults($search_exp)) {
+			printf ("<input type=\"IMAGE\" name=\"addsearch\" src=\"pictures/move_down.gif\" border=\"0\" value=\"" . _("In Adressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Adressbuch eintragen")));
+			echo SearchResults($search_exp);
+		} else {
+			echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
+		}
+		printf ("<a href=\"$PHP_SELF\"><img src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 	}
-	printf ("<a href=\"$PHP_SELF\"><img src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 } else {
 	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Adressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
@@ -191,7 +198,7 @@ if (($contact["view"])=="alpha") {
 		}
 		echo "<td width=\"3%\"  align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\""
 		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? _("1 Eintrag") : (($size_of_book_by_letter[chr($i)] > 1 ) ? sprintf(_("%d Einträge"),$size_of_book_by_letter[chr($i)]) : _("keine Einträge")),false)
-		."><a href=\"$PHP_SELF?filter=".chr($i)."\" "
+		."><a href=\"$PHP_SELF?view=$view&filter=".chr($i)."\" "
 		. ">".$character."</a>"
 		."</td>";
 		if ($filter==chr($i)) {
@@ -226,7 +233,7 @@ if (($contact["view"])=="gruppen") {
 			$maillink ="";
 		}
 		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>$maillink"
+		."<a href=\"$PHP_SELF?view=$view&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>$maillink"
 		."&nbsp; </td>";
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();

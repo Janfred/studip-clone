@@ -137,7 +137,7 @@ function PrintSearchResults ($search_exp, $range_id)
 	if (!$db->num_rows()) {
 		echo "&nbsp; " . _("keine Treffer") . "&nbsp; ";
 	} else {
-		echo "&nbsp; <select name=\"Freesearch[]\" size=\"4\" multiple>";
+		echo "&nbsp; <select name=\"Freesearch[]\" size=\"4\" >";
 		while ($db->next_record()) {
 			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
 		}
@@ -294,8 +294,18 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
        	   <br><br>
 		<?
 		if ($search_exp) {
-			PrintSearchResults($search_exp, $range_id);
-			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  ", _("neue Suche"), tooltip(_("neue Suche")));
+			
+			$search_exp = str_replace("%","\%",$search_exp);
+			$search_exp = str_replace("_","\_",$search_exp);
+			if (strlen(trim($search_exp))<3) {
+				echo "&nbsp; <font size=\"-1\">"._("Ihr Suchbegriff muss mindestens 3 Zeichen umfassen!");
+				echo "<br><br><font size=\"-1\">&nbsp; " . _("freie Personensuche (wird in Adressbuch übernommen)") . "</font><br>";
+				echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
+				printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  ", _("Person suchen"), tooltip(_("Person suchen")));
+			} else { 
+				PrintSearchResults($search_exp, $range_id);
+				printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  ", _("neue Suche"), tooltip(_("neue Suche")));
+			}
 		} else {
 			echo "<font size=\"-1\">&nbsp; " . _("freie Personensuche (wird in Adressbuch &uuml;bernommen)") . "</font><br>";
 			echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
