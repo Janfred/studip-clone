@@ -40,7 +40,7 @@ include_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
 include_once($ABSOLUTE_PATH_STUDIP . "header.php");
 $the_range = isset($showrangeID) ? $showrangeID : $rangeID;
 	
-if ($the_range != $auth->auth['uname'] && $the_range != 'studip'){
+if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 'studip'){
 	$view_mode = get_object_type($the_range);
 	if ($view_mode == "fak"){
 		$view_mode = "inst";
