@@ -31,6 +31,14 @@ if ($SessSemName["class"]=="inst") {
 	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
+	if ($ILIAS_CONNECT_ENABLE) {
+		include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_config.inc.php");
+		include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
+		if (get_seminar_modules($SessSemName[1]) != false)
+			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
+		elseif ($perm->have_perm("dozent"))
+			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
+	}
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvaiableResources ($SessSemName[1]))
@@ -113,6 +121,13 @@ if ($RESOURCES_ENABLE) {
 	$structure["resources_assign"]=array (topKat=>"resources", name=>_("Belegungen bearbeiten"), link=>"resources.php?view=openobject_assign", active=>FALSE);
 	if ($rechte)
 		$structure["resources_admin"]=array (topKat=>"resources", name=>_("Ressourcen verwalten"), link=>"resources.php", active=>FALSE);
+}
+
+if ($ILIAS_CONNECT_ENABLE) {
+	if (get_seminar_modules($SessSemName[1]) != false)
+		$structure["lernmodule_use"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=use&seminar_id=" . $SessSemName[1], active=>FALSE);
+	if  ($perm->have_perm("dozent"))
+		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lenmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
 }
 
 
@@ -217,6 +232,16 @@ switch ($i_page) {
 	break;	
 	case "literatur.php": 
 		$reiter_view="literatur";
+	break;
+	case "seminar_lernmodule.php": 
+		switch ($view) {
+			case "edit":
+				$reiter_view="lernmodule_edit";
+			break;
+			default :
+				$reiter_view="lernmodule_use";
+			break;
+		}
 	break;
 	case "resources.php": 
 		switch ($view) {
