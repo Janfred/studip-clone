@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-17 12:39+0100\n"
+"POT-Creation-Date: 2003-03-17 18:22+0100\n"
 "PO-Revision-Date: 2003-03-17 18:18+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -20,8 +20,8 @@ msgid ""
 "Für dieses Format sind keine Ausgabemodule installiert.<br>Bitte wählen Sie "
 "ein anderes Ausgabeformat."
 msgstr ""
-"There is no export module installed for this format.<br>Please "
-"select another export format."
+"There is no export module installed for this format.<br>Please select "
+"another export format."
 
 #: export/export_choose_xslt.inc.php:59 export/export_run_xslt.inc.php:47
 #: export/export_xml.inc.php:42
@@ -49,7 +49,9 @@ msgstr "Information:"
 msgid ""
 "Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft oder "
 "unvollständig."
-msgstr "The parameters with which this page has been loaded, are defective or incomplete."
+msgstr ""
+"The parameters with which this page has been loaded, are defective or "
+"incomplete."
 
 #: export/export_choose_xslt.inc.php:83
 msgid "Auswahl des Dateiformats"
@@ -89,8 +91,8 @@ msgid ""
 "Bitte w&auml;hlen Sie das Dateiformat, in dem Ihre Daten ausgegeben werden "
 "sollen. Klicken Sie anschließend auf 'weiter'."
 msgstr ""
-"Please choose the file format in which your data should be exported. "
-"Finally click on 'continue'."
+"Please choose the file format in which your data should be exported. Finally "
+"click on 'continue'."
 
 #: export/export_choose_xslt.inc.php:142
 msgid "Auswahl des Ausgabemoduls"
@@ -100,7 +102,8 @@ msgstr "Selection of export module"
 msgid ""
 "W&auml;hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf "
 "'weiter'"
-msgstr "Please select one of the following XSLT- files and click on 'continue' "
+msgstr ""
+"Please select one of the following XSLT- files and click on 'continue' "
 
 #: export/export_choose_xslt.inc.php:151
 msgid "Ausgabemodul"
@@ -119,7 +122,9 @@ msgstr "This page prepares data for export. %s Step 2/3 %s"
 msgid ""
 "W&auml;hlen Sie bitte eines der zur Verf&uuml;gung stehenden Ausgabemodule. "
 "Klicken Sie dann auf 'weiter'."
-msgstr "Please select one of the existing export modules for use. Then click on 'continue'."
+msgstr ""
+"Please select one of the existing export modules for use. Then click on "
+"'continue'."
 
 #: export/export_choose_xslt.inc.php:209
 msgid "Download der Dateien"
@@ -140,8 +145,8 @@ msgid ""
 "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können "
 "mit einem XSLT-Script verarbeitet werden."
 msgstr ""
-"In this file the data saved as XML tags. These tags can be "
-"processed with a XSLT script."
+"In this file the data saved as XML tags. These tags can be processed with a "
+"XSLT script."
 
 #: export/export_choose_xslt.inc.php:221 export/export_run_xslt.inc.php:142
 msgid "XSLT-Datei"
@@ -160,8 +165,8 @@ msgid ""
 "Um die Daten mit dem installierten XSLT-Prozessor in das gew&uuml;nschte "
 "Format zu bringen, klicken Sie bitte auf 'weiter'"
 msgstr ""
-"Please click on 'continue' in order to convert the data to "
-"the desired format with the installed XSLT processor."
+"Please click on 'continue' in order to convert the data to the desired "
+"format with the installed XSLT processor."
 
 #: export/export_choose_xslt.inc.php:250
 #, c-format
@@ -177,15 +182,16 @@ msgid ""
 "Wenn Sie auf 'weiter' klicken, wird mit dem installierten XSLT-Prozessor die "
 "Ausgabedatei erzeugt."
 msgstr ""
-"When you click on 'continue', the export files will be created with the installed XSLT "
-"processor."
+"When you click on 'continue', the export files will be created with the "
+"installed XSLT processor."
 
 #: export/export_run_fop.inc.php:37 export/export_run_xslt.inc.php:38
 msgid "Fehlende Parameter!"
 msgstr "Defective parameter!"
 
 #: export/export_run_fop.inc.php:53 export/export_xml.inc.php:54
-msgid "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
+msgid ""
+"Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr "The parameters, with which this page has been loaded are defective."
 
 #: export/export_run_fop.inc.php:62
@@ -216,8 +222,8 @@ msgid ""
 "Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. "
 "<br>Fehlermeldung: %s <br>Datei: %s"
 msgstr ""
-"An error occurred while the PDF file was being created. "
-"<br>Error message: %s<br>File: %s"
+"An error occurred while the PDF file was being created. <br>Error message: %"
+"s<br>File: %s"
 
 #: export/export_run_fop.inc.php:114
 msgid ""
@@ -235,7 +241,9 @@ msgstr "Formatting objects file"
 msgid ""
 "In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei "
 "gespeichert."
-msgstr "In this file, the formatting objects are saved for the creation of a PDF file. "
+msgstr ""
+"In this file, the formatting objects are saved for the creation of a PDF "
+"file. "
 
 #: export/export_run_fop.inc.php:134
 #, c-format
@@ -255,7 +263,9 @@ msgstr "The parameters with which this page was loaded, are defective."
 msgid ""
 "Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die "
 "Ausgabedatei jetzt herunterladen. %s"
-msgstr "The files were successfully converted. %s You can now download the export file. %s"
+msgstr ""
+"The files were successfully converted. %s You can now download the export "
+"file. %s"
 
 #: export/export_run_xslt.inc.php:84
 msgid "Die Daten sind nun im gew&auml;hlten Format verf&uuml;gbar."
@@ -267,8 +277,8 @@ msgid ""
 "Bei der Konvertierung ist ein Fehler aufgetreten. %sDer XSLT-Prozessor "
 "meldet den Fehler Nr. %s: %s %s"
 msgstr ""
-"An error has occurred while converting. %s The XSLT processor "
-"registered the error nr. %s: %s %s"
+"An error has occurred while converting. %s The XSLT processor registered the "
+"error nr. %s: %s %s"
 
 #: export/export_run_xslt.inc.php:92
 msgid "Bei der Konvertierung ist ein Fehler aufgetreten."
@@ -279,8 +289,8 @@ msgid ""
 "Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den "
 "Dateinamen, um die Datei zu öffnen."
 msgstr ""
-"This is the XSLT script for conversion of the data. Click on the file name in order to "
-"open the file."
+"This is the XSLT script for conversion of the data. Click on the file name "
+"in order to open the file."
 
 #: export/export_run_xslt.inc.php:149
 msgid "Ausgabe-Datei"
@@ -335,8 +345,8 @@ msgid ""
 "Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in "
 "den Formaten %s und XML ausgeben."
 msgstr ""
-"This is the Stud.IP export module. The data can be exported in the "
-"formats %s and XML with this module."
+"This is the Stud.IP export module. The data can be exported in the formats %"
+"s and XML with this module."
 
 #: export/export_start.inc.php:98
 msgid ""
@@ -562,4 +572,3 @@ msgstr ""
 #: export/oscar.php:50
 msgid "Das Verzeichnis existiert nicht!"
 msgstr ""
-

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-17 12:39+0100\n"
+"POT-Creation-Date: 2003-03-17 18:22+0100\n"
 "PO-Revision-Date: 2003-03-17 16:10+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -134,7 +134,8 @@ msgstr "Customise settings for my appointment calendar"
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr "Here you can customise the lay out of your personal appointment calendar."
+msgstr ""
+"Here you can customise the lay out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:62
 msgid "Startansicht einstellen:"
@@ -295,7 +296,9 @@ msgstr "Information:"
 msgid ""
 "Termine aus den ausgew&auml;hlten Veranstaltungen werden in Ihren "
 "Terminkalender &uuml;bernommen."
-msgstr "Appointments from the chosen courses will be applied to your appointment calendar."
+msgstr ""
+"Appointments from the chosen courses will be applied to your appointment "
+"calendar."
 
 #: calendar/views/day.inc.php:68 calendar/views/week.inc.php:66
 #: calendar/views/week.inc.php:76
@@ -341,8 +344,8 @@ msgid ""
 "Private Termine sind nur für Sie sichtbar. Öffentliche Termine werden auf "
 "ihrer internen Homepage auch anderen Nutzern bekanntgegeben."
 msgstr ""
-"Private appointments can only be seen by you. Public appointments "
-"will be made known to other users via your internal homepage."
+"Private appointments can only be seen by you. Public appointments will be "
+"made known to other users via your internal homepage."
 
 #: calendar/views/edit.inc.php:196
 msgid "Sichtbarkeit:"
@@ -517,8 +520,8 @@ msgid ""
 "Dieser Termin geh&ouml;rt zur Veranstaltung:<p>%s</p>Veranstaltungstermine "
 "k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden."
 msgstr ""
-"These appointments belong to the course:<p>%s</p>course meetings can not "
-"be edited in your personal appointment calendar."
+"These appointments belong to the course:<p>%s</p>course meetings can not be "
+"edited in your personal appointment calendar."
 
 #: calendar/views/edit.inc.php:483
 #, c-format
@@ -527,15 +530,16 @@ msgid ""
 "Veranstaltungstermine automatisch in Ihrem Terminkalender angezeigt werden "
 "sollen."
 msgstr ""
-"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should "
-"automatically be displayed in your appointment calendar."
+"<a href=\"%s?cmd=bind\">Choose</a>which course meetings should automatically "
+"be displayed in your appointment calendar."
 
 #: calendar/views/edit.inc.php:488
 #, c-format
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr "To edit this appointment, please switch to the %s Course administration</a> "
+msgstr ""
+"To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:498
 msgid "Aktion:"
@@ -565,8 +569,8 @@ msgid ""
 "eintragen, &auml;ndern, gruppieren und sich &uuml;bersichtlich anzeigen "
 "lassen."
 msgstr ""
-"This appointment calendar administers your appointments. You can enter appointments "
-"as well as edit, group and concisely display them."
+"This appointment calendar administers your appointments. You can enter "
+"appointments as well as edit, group and concisely display them."
 
 #: calendar/views/week.inc.php:53
 #, c-format
@@ -581,4 +585,3 @@ msgstr "%s appointments"
 #: calendar/views/year.inc.php:147
 msgid "1 Termin"
 msgstr "1. appointment"
-
