@@ -321,7 +321,7 @@ class studip_news {
 					$author=$this->full_username;
 					if (!$date) 
 						$date=time();
-					$this->db->query("INSERT INTO news (news_id,author,topic,body,user_id,date,expire) VALUES ('$news_id','$author','$topic','$body','$user_id','$date','$expire')");
+					$this->db->query("INSERT INTO news (news_id,author,topic,body,user_id,date,expire) VALUES ('$news_id','".mysql_escape_string($author)."','$topic','$body','$user_id','$date','$expire')");
 					if ($this->db->affected_rows()) 
 					$this->msg .= "msg§" . _("Ok, Ihre neue News wurde gespeichert!") . "§";
 				} else {
