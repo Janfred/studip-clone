@@ -183,7 +183,7 @@ if (($contact["view"])=="alpha") {
 			$character = chr($i);
 		}
 		echo "<td width=\"3%\"  align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\""
-		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? _("1 Eintrag") : (($size_of_book_by_letter[chr($i)] ) ? sprintf(_("%s Einträge"),$size_of_book_by_letter[chr($i)]) : _("keine Einträge")),false)
+		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? _("1 Eintrag") : (($size_of_book_by_letter[chr($i)] > 1 ) ? sprintf(_("%s Einträge"),$size_of_book_by_letter[chr($i)]) : _("keine Einträge")),false)
 		."><a href=\"$PHP_SELF?filter=".chr($i)."\" "
 		. ">".$character."</a>"
 		."</td>";
