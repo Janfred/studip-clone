@@ -115,6 +115,14 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		echo "</tr></td></table>";
 		die;
 	}
+	
+	//Umschalter zwischen den Typen
+	if ($adm_null_x)
+		$admin_admission_data["admission_type"]=0;
+	if ($adm_los_x)
+		$admin_admission_data["admission_type"]=1;
+	if ($adm_chrono_x)
+		$admin_admission_data["admission_type"]=2;
 
 	//Aenderungen ubernehmen
 	$admin_admission_data["admission_binding"]=$admission_binding;
@@ -123,7 +131,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["read_level"]=$read_level;
 		$admin_admission_data["write_level"]=$write_level;
 		
-	//Alles was mit der Anmeldung zu tun ab hier
+	//Alles was mit der Anmeldung zu tun hat ab hier
 	} elseif (!$delete_studg) { 
 		$admin_admission_data["admission_turnout"]=$admission_turnout;	
 
@@ -196,11 +204,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		unset($admin_admission_data["studg"][$delete_studg]);
  
 	//Checks performen
-	if (($admin_admission_data["admission_turnout"] < 5) && ($admin_admission_data["admission_type"])) {
-		$errormsg=$errormsg."error§Wenn Sie sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen sie wenigsten 5 Teilnehmer zulassen.§";
-		$admin_admission_data["admission_turnout"] =5;
-	}
-
 	if (!$admin_admission_data["admission_type"]) {
 		if (($admin_admission_data["write_level"]) <($admin_admission_data["read_level"])) 
 			$errormsg=$errormsg."error§Es macht keinen Sinn, die Sicherheitsstufe f&uuml;r den Lesezugriff h&ouml;her zu setzen als f&uuml;r den Schreibzugriff!§";
@@ -229,7 +232,13 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		}
 
 	//Checks bei Anmeldeverfahren
-	} else {
+	} elseif ((!$adm_chrono_x) && (!$adm_los_x))  {
+		//max. Teilnehmerzahl checken
+		if (($admin_admission_data["admission_turnout"] < 5) && ($admin_admission_data["admission_type"])) {
+			$errormsg=$errormsg."error§Wenn Sie sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen sie wenigsten 5 Teilnehmer zulassen.§";
+			$admin_admission_data["admission_turnout"] =5;
+		}
+	
 		//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
 		if (($add_studg_x) || ($delete_studg) || ($uebernehmen_x)) {
 			if ($admin_admission_data["admission_type"]) {
@@ -255,7 +264,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		}
 	
 		//Ende der Anmeldung checken
-		if ($admin_admission_data["admission_type"]) {
+		if (($admin_admission_data["admission_type"]) && ($admin_admission_data["admission_endtime"])) {
 			if ($admin_admission_data["admission_type"] == 1)
 				$end_date_name="Losdatum";
 			else
@@ -275,16 +284,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			}
 		}
 	}
-
-	//Umschalter zwischen den Typen
-	if ($adm_null_x)
-		$admin_admission_data["admission_type"]=0;
-	if ($adm_los_x)
-		$admin_admission_data["admission_type"]=1;
-	if ($adm_chrono_x)
-		$admin_admission_data["admission_type"]=2;
-		
-		
 
 	//Meldung beim Wechseln des Modis
 	if ($adm_type_old != $admin_admission_data["admission_type"])
@@ -339,10 +338,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	}
 }
 
- if (($errormsg) && (($open_reg_x) || ($open_ureg_x) || ($enter_start_termin_x) || ($nenter_start_termin_x) || ($add_turnus_field_x) || ($delete_turnus_field)))
+//Beim Umschalten keine Fehlermeldung
+ if (($errormsg) && ((!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)))
  	$errormsg='';	
  
-
 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -403,7 +402,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					printf ("<font size=-1>Sie haben das Anmeldeverfahren %s aktiviert. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an einen der Administratoren.<br /></font>", ($admin_admission_data["admission_type_org"] == 1) ? "per Los" : "in Anmeldereihenfolge");
 				} else { ?>
 				<font size=-1>Sie k&ouml;nnen hier eine Teilnehmerbeschr&auml;nkung per Anmeldeverfahren festlegen. Sie k&ouml;nnen per Losverfahren beschr&auml;nken oder chronologisches Anmelden zulassen.<br /></font>
-				<br />&nbsp;<input type="IMAGE" name="adm_null" src="./pictures/buttons/keins<? if ($admin_admission_data["admission_type"] == 0) echo "2" ?>-button.gif" border=0 value="keins">&nbsp; 
+				<br /><input type="IMAGE" name="adm_null" src="./pictures/buttons/keins<? if ($admin_admission_data["admission_type"] == 0) echo "2" ?>-button.gif" border=0 value="keins">&nbsp; 
 				<input type="IMAGE" name="adm_los" src="./pictures/buttons/los<? if ($admin_admission_data["admission_type"] == 1) echo "2" ?>-button.gif" border=0 value="los">&nbsp; 
 				<input type="IMAGE" name="adm_chrono" src="./pictures/buttons/chronolog<? if ($admin_admission_data["admission_type"] == 2) echo "2" ?>-button.gif" border=0 value="chronolog">
 				<input type="HIDDEN" name="adm_type_old" value="<? echo $admin_admission_data["admission_type"] ?>" />
