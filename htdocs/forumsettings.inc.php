@@ -110,7 +110,7 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 	</tr>	
 	<tr>
 		<td align=right class=blank style="border-bottom:1px dotted black;">
-			<font size=-1>Sortierung der Themenanzeige</font>&nbsp;&nbsp;
+			<font size=-1>Sortierung der Themenanzeige</font>
 		</td>
 		<td align=left class=steelgraulight>
 			<font size=-1>

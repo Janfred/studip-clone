@@ -264,7 +264,7 @@ function ForumIcon ($forumposting) {
 			$bild = "pictures/cont_folder2.gif";
 	} else {
 		if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
-			$bild = "pictures/zip-icon.gif";
+			$bild = "pictures/forum_shrink.gif";
 		else
 			$bild = "pictures/cont_blatt.gif";
 	}
@@ -669,8 +669,9 @@ function printposting ($forumposting) {
 		
 		// die Favoritenanzeige
 		
-		if ($forumposting["fav"]!="") $color = "color=\"#FF0000\"";
-		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$open&flatviewstartposting=".$forum["flatviewstartposting"]."\"><font $color>&nbsp;[!]&nbsp;</font></a>";
+		if ($forumposting["fav"]!="") $favicon = "pictures/forum_fav.gif";
+		else $favicon = "pictures/forum_fav2.gif";
+		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$open&flatviewstartposting=".$forum["flatviewstartposting"]."\"><img src=\"".$favicon."\" border=\"0\">&nbsp;</a>";
 		
 		// Antwort-Pfeil
 		
@@ -1115,9 +1116,7 @@ function DisplayKids ($forumposting, $level=0) {
 		
 		$age = "";
 		
-		//echo $forum["shrinkopenlist"];
-		
-		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE) {
+		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE && $forum["shrink"]!=0) {
 			$age = ForumCheckShrink($forumposting["id"]);
 			$age = explode(";",$age);
 			$count = sizeof($age)-1;
@@ -1127,7 +1126,7 @@ function DisplayKids ($forumposting, $level=0) {
 		}
 			
 		
-		if ($age[0] > time()-$forum["shrink"]) {
+		if ($age[0] >= time()-$forum["shrink"]) {
 			$forumposting["shrink"]=FALSE;
 			$forumposting = printposting($forumposting);
 			DisplayKids($forumposting, $level+1);
