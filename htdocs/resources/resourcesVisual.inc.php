@@ -232,9 +232,6 @@ class ShowList extends ShowTreeRow{
 			
 			$i=0;
 			foreach ($search_array["properties"] as $key => $val) {
-				if ($val == "on")
-					$val = 1;
-				
 				//let's create some possible wildcards
 				if (ereg("<", $val)) {
 					$val = trim(substr($val, strpos($val, "<")+1, strlen($val)));
