@@ -486,7 +486,7 @@ else
 					if ($db2->f("admission_type") == 1)
 						printf ("<font size=-1>Die Teilnehmerauswahl wurde nach dem Losverfahren am %s Uhr festgelegt. Weitere Teilnehmer k&ouml;nnen per Warteliste einen Platz bekommen.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 					else
-						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurd am %s aufgehoben.Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurde am %s aufgehoben.Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 				} else {
 					if ($db2->f("admission_type") == 1)
 						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
