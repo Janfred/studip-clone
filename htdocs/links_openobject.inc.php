@@ -53,6 +53,7 @@ $Modules=new Modules;
 function scm_tab_name() {
 	global $SessSemName;
 	static $tab_name="";
+	$db=new DB_Seminar;
 	if (!$tab_name) {
 		$db->query("SELECT tab_name FROM scm WHERE range_id='$SessSemName[1]'");
 		$db->next_record();
