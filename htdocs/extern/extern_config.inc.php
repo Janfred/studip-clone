@@ -53,11 +53,11 @@ $EXTERN_MODULE_TYPES[1] = array("module" => "Persons", "name" => _("Mitarbeiter"
 $EXTERN_MODULE_TYPES[2] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
 													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[3] = array("module" => "Lectures", "name" => _("Veranstaltungs&uuml;bersicht"), "level" => 1,
+$EXTERN_MODULE_TYPES[3] = array("module" => "Lectures", "name" => _("Veranstaltungen"), "level" => 1,
 													"description" => _("Das Modul &quot;Veranstaltungs&uuml;bersicht&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
 $EXTERN_MODULE_TYPES[4] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,
-													"description" => _("Das Modul &quot;Veranstaltungsdetails&uot; gibt alle allgemeinen Daten einer Veranstaltung aus."));
+													"description" => _("Das Modul &quot;Veranstaltungsdetails&quot; gibt alle allgemeinen Daten einer Veranstaltung aus."));
 
 $EXTERN_MODULE_TYPES[5] = array("module" => "News", "name" => _("News"), "level" => 1,
 													"description" => _("Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."));
