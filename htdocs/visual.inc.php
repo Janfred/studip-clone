@@ -687,7 +687,7 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 	$ret .= " title=\"$text\" ";
 	return $ret;
 }
-<<<<<<< visual.inc.php
+// <<<<<<< visual.inc.php         //was soll das hier???
 
 
 /**
