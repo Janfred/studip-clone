@@ -814,6 +814,7 @@ class VoteDB extends StudipObject {
     * @param   int      $creationTime   Creation time of thevote
     * @param   int      $changeTime     Time of last modifications
     * @param   int      $resultview     Visibility of the results
+	* @param   int		$namesvisibility Visibility of the participants
     * @param   string   $multianswer    Single or multianswering
     * @param   string   $anonymous      Democratic or totalitarian vote
     * @param   array    $answerArray    The answers
