@@ -83,26 +83,41 @@ if ($error_message) {
 else {
 	$data["data_fields"] = $this->data_fields;
 	$dateform = $this->config->getValue("Main", "dateformat");
+	$show_date_author = $this->config->getValue("Main", "showdateauthor");
+	$not_author_link = $this->config->getValue("Main", "notauthorlink");
 	
 	while($db->next_record()){
 		list ($content,$admin_msg) = explode("<admin_msg>",$db->f("body"));
 		if ($admin_msg) 
 			$content.="\n--%%{$admin_msg}%%--";
-			
-		$data["content"] = array(
-				// !!! LinkInternSimple is not the type of this element,
-				// the type of this element is LinkIntern !!!
-				// this is for compatibiliy reasons only
-				"date" => strftime($dateform, $db->f("date")) . "<br>" .
-									$this->elements["LinkInternSimple"]->toString(array(
-									"content" => "(" . htmlReady($db->f("name")) . ")",
-									"link_args" => "username=" . $db->f("username"),
-									"module" => "Persondetails")),
+		
+		// !!! LinkInternSimple is not the type of this element,
+		// the type of this element is LinkIntern !!!
+		// this is for compatibiliy reasons only
+		if ($show_date_author != 'date') {
+			if ($not_author_link)
+				$author_name = htmlReady($db->f("name"));
+			else
+				$author_name = $this->elements["LinkInternSimple"]->toString(array(
+										"content" => htmlReady($db->f("name")),
+										"link_args" => "username=" . $db->f("username"),
+										"module" => "Persondetails"));
+		}
+		
+		switch ($show_date_author) {
+			case 'date' :
+				$data["content"]["date"] = strftime($dateform, $db->f("date"));
+				break;
+			case 'author' :
+				$data["content"]["date"] = $author_name;
+				break;
+			default :
+				$data["content"]["date"] = strftime($dateform, $db->f("date")) . "<br>" . $author_name;
+		}
 				
-				"topic" => $this->elements["ContentNews"]->toString(array("content" =>
+		$data["content"]["topic"] = $this->elements["ContentNews"]->toString(array("content" =>
 									array("topic" => htmlReady($db->f("topic")),
-									"body" => formatReady($content, TRUE, TRUE, TRUE))))
-		);
+									"body" => formatReady($content, TRUE, TRUE, TRUE))));
 		
 		$this->elements["TableRow"]->printout($data);
 	}

@@ -121,21 +121,40 @@ $attr_font_body = $this->config->getAttributes("ContentNews", "fontbody");
 $set_1 = $this->config->getAttributes("TableRow", "td");
 $set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
 $zebra = $this->config->getValue("TableRow", "td_zebratd_");
+$show_date_author = $this->config->getValue("Main", "showdateauthor");
+$not_author_link = $this->config->getValue("Main", "notauthorlink");
 
 foreach ($content_data as $dat) {
 	list ($content,$admin_msg) = explode("<admin_msg>",$dat["body"]);
 	if ($admin_msg) 
 		$content.="\n--%%{$admin_msg}%%--";
-		
-	$data = array(
-			"date" => sprintf("<font%s>%s<br><a href=\"\"%s>(%s)</a></font>",
-													$attr_font, strftime($dateform, $dat["date"]),
-													$attr_a, $dat["fullname"]),
-			"topic" => sprintf("<div%s><font%s>%s</font></div><div%s><font%s>%s</font></div>",
-													$attr_div_topic, $attr_font_topic,
-													$dat["topic"], $attr_div_body,
-													$attr_font_body, $content)
-	);
+	
+	$data['date'] = $attr_font ? "<font$attr_font>" : '';
+	
+	if ($show_date_author != 'date') {
+		if ($not_author_link)
+			$author_name = $dat["fullname"];
+		else
+			$author_name = sprintf("<a href=\"\"%s>%s</a>", $attr_a, $dat["fullname"]);
+	}
+	
+	switch ($show_date_author) {
+		case 'date' :
+			$data['date'] .= strftime($dateform, $dat["date"]);
+			break;
+		case 'author' :
+			$data['date'] .= $author_name;
+			break;
+		default:
+			$data['date'] .= strftime($dateform, $dat["date"]) . '<br>' . $author_name;
+	}
+	
+	$data['date'] .= $attr_font ? '</font>' : '';
+	
+	$data['topic'] = sprintf("<div%s><font%s>%s</font></div><div%s><font%s>%s</font></div>",
+												$attr_div_topic, $attr_font_topic,
+												$dat["topic"], $attr_div_body,
+												$attr_font_body, $content);
 	
 	// "horizontal zebra"
 	if ($zebra == "HORIZONTAL") {
