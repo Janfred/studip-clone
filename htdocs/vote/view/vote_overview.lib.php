@@ -193,7 +193,7 @@ function printSelections($range,$sarchRange = ""){
 
 	// background-image
 	$html.="	 <td class=\"blank\" width=\"270\" rowspan=\"3\" align=\"center\" valign=\"top\" style=\"vertical-align:top;\">"
-	 	 . "	  <img src=\"pictures/votinguebersicht.jpg\" alt=\"votinguebersicht\" border=\"0\">\n"
+	 	 . "	  <img src=\"pictures/voting.jpg\" border=\"0\">\n"
 		 . "	 </td>\n"
 		 . "	</tr>\n"
 		 . "	<tr>\n";
