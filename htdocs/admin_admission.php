@@ -128,6 +128,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 	//Aenderungen ubernehmen
 	$admin_admission_data["admission_binding"]=$admission_binding;
+	if ($admin_admission_data["admission_binding"])
+		$admin_admission_data["admission_binding"]=TRUE;
 	
 	if (!$admin_admission_data["admission_type"]) { 
 		$admin_admission_data["read_level"]=$read_level;
