@@ -352,13 +352,12 @@ class StudipSemSearch {
 		if ((isset($_REQUEST[$this->form_name . "_title"]) && strlen($_REQUEST[$this->form_name . "_title"]) > 2) ||
 			(isset($_REQUEST[$this->form_name . "_sub_title"]) && strlen($_REQUEST[$this->form_name . "_sub_title"]) > 2) ||
 			(isset($_REQUEST[$this->form_name . "_comment"]) && strlen($_REQUEST[$this->form_name . "_comment"]) > 2)){
-			$this->view->params[0] = $this->visible_only ? " visible=1 AND" : "";
 			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_title"]) ? " Name LIKE '%".trim($_REQUEST[$this->form_name . "_title"])."%' " : " ";
 			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_title"] && $_REQUEST[$this->form_name . "_sub_title"]) ? $combination : " ";
 			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_sub_title"]) ? " Untertitel LIKE '%".trim($_REQUEST[$this->form_name . "_sub_title"])."%' " : " ";
 			$this->view->params[0] .= (($_REQUEST[$this->form_name . "_title"] || $_REQUEST[$this->form_name . "_sub_title"]) && $_REQUEST[$this->form_name . "_comment"]) ? $combination : " ";
 			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_comment"]) ? " Beschreibung LIKE '%".trim($_REQUEST[$this->form_name . "_comment"])."%' " : " ";
-			$this->view->params[0] = "(" . $this->view->params[0] .")";
+			$this->view->params[0] = ($this->visible_only ? " visible=1 AND " : "") . "(" . $this->view->params[0] .")";
 			$this->view->params[1] =  $and_clause . $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_SEARCH_SEM"));
 			if ($this->found_rows === false){
