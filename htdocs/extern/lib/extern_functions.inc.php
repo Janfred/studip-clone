@@ -146,7 +146,7 @@ function get_configuration ($range_id, $config_id) {
 	$db->query($query);
 	
 	if ($db->next_record()) {
-		$module_name = $GLOBALS["EXTERN_MODULE_TYPES"][$db->f("config_type")]["name"];
+		$module_name = $GLOBALS["EXTERN_MODULE_TYPES"][$db->f("config_type")]["module"];
 		if ($module_name)
 			$config = array("name" => $db->f("name"), "module_name" => $module_name,
 					"id" => $db->f("config_id"), "is_default" => $db->f("is_standard"),
@@ -381,6 +381,13 @@ function get_standard_config ($range_id, $type) {
 		return $db->f("config_id");
 	
 	return FALSE;
+}
+
+function mila_extern ($string, $length) {
+	if ($length > 0 && strlen($string) > $length) 
+		$string = substr($string, 0, $length) . "... ";
+	
+	return $string;
 }
 
 ?>
