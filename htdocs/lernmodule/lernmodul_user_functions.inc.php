@@ -26,7 +26,7 @@ function get_ilias_user_id($benutzername)
 function get_ilias_logindata()
 {
 	global $auth, $username_prefix;
-	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5() . "&acct_id=".get_ilias_user_id($auth->auth["uname"])."&u_id=".get_ilias_user_id($auth->auth["uname"]);
+	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5() . "&acct_id=".get_ilias_user_id($auth->auth["uname"])."&u_id=".get_ilias_user_id($auth->auth["uname"])."&submitbtn=%20Login%20";
 }
 
 function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)
