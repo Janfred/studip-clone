@@ -27,12 +27,14 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
-
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
-$db4=new DB_Seminar;	
+$db4=new DB_Seminar;
+$Modules=new Modules;
+	
 
 //Defaults, die fuer DAUS (<admin) gesetzt werden
 $default_description= _("Bitte geben Sie hier nur weiterführende Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.");
@@ -75,6 +77,7 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
+checkObjectModule("schedule");
 
 if ($SessSemName[1])
 	$admin_dates_data["range_id"]=$SessSemName[1]; 
@@ -85,6 +88,9 @@ if (!$admin_dates_data["range_id"]) {
 	echo "</tr></td></table>";
 	die;
 }
+
+//load module-config
+$modules = $Modules->getLocalModules($admin_dates_data["range_id"]);
 
 //Einpflegen neu angekommender Daten/Schalter
 if ($assi) 
@@ -232,6 +238,7 @@ if ($new) {
 		if (($resource_id) && ($RESOURCES_ENABLE))
 			$raum=getResourceObjectName($resource_id);
 
+
 		if ($topic)  //Forumseintrag erzeugen
 			$topic_id=CreateTopic($TERMIN_TYP[$art]["name"].": ".$tmp_titel." " . _("am") . " ".date("d.m.Y ", $start_time), $author, _("Hier kann zu diesem Termin diskutiert werden"), 0, 0, $admin_dates_data["range_id"]);
 		if ($folder) { //Dateiordner erzeugen
@@ -241,6 +248,7 @@ if ($new) {
 			$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description_f', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
 		} else
 			$f_id='';
+	
 		$db->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
 		if ($db->affected_rows()) {
 			//insert a entry for the linked resource, if resource management activ
@@ -474,9 +482,16 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			<td class="rahmen_steel">
 				<font size="-1"><b><?=_("Ablaufplan-Assistent")?></b><br /><br /></font>
 				<font size="-1"><?=_("generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:")?><br /></font>
+				//only, if the forum is active
+				<? if ($modules["forum"]) { ?>
 				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="pfad"> <?=_("Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.")?></font><br>
+				<? } 
+				//only, if the documents-folder is active
+				if ($modules["documents"]) { ?>
 				&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="folder"> <?=_("Zu jedem Termin einen Dateiordner f&uuml;r Dokumente anlegen.")?> </font>
-				<? if ($db->f("duration_time") != 0) {
+				<?
+				} 
+				if ($db->f("duration_time") != 0) {
 					?>
 					<br />&nbsp; &nbsp; <font size="-1"><input type="checkbox" name="full"> <?=_("Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt: nur f&uuml;r das erste Semester)")?> </font>
 					<?
@@ -631,8 +646,12 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				$content.= "<option value=$i>".$TERMIN_TYP[$i]["name"]."</option>";
 		$content.="</select><br><br>\n";
 
-		$content.="<input type=\"CHECKBOX\" name=\"topic\"/><font size=-1>" . _("Thema im Forum anlegen") . "</font><br />\n";
-		$content.="<input type=\"CHECKBOX\" name=\"folder\"/><font size=-1>" . _("Dateiordner anlegen") . "</font>\n";
+		//only, if the forum is active
+		if ($modules["forum"])
+			$content.="<input type=\"CHECKBOX\" name=\"topic\"/><font size=-1>" . _("Thema im Forum anlegen") . "</font><br />\n";
+		//only, if the docuements-folder is active
+		if ($modules["documents"])
+			$content.="<input type=\"CHECKBOX\" name=\"folder\"/><font size=-1>" . _("Dateiordner anlegen") . "</font>\n";
 				
 		$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 		$content.="<input type=\"IMAGE\" name=\"send\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"speichern\">&nbsp;";
@@ -759,16 +778,22 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 						$content.= "<option value=$i>".$TERMIN_TYP[$i]["name"]."</option>";
 				$content.="</select><br><br>\n";
 
-				if ($db->f("topic_id")) 
-					$content.= "<font size=-1>&nbsp; " . _("Forenthema vorhanden") . "</font><br>";
-				else
-					$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_topic[]\"/>" . _("Thema im Forum anlegen") . "</font><br />\n";
-
-				if ($folder)
-					$content.= "<font size=-1>&nbsp; " . _("Dateiordner vorhanden") . "</font>";
-				else
-					$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_folder[]\"/>" . _("Dateiordner anlegen") . "</font>\n";
-				
+				//only, if the forum is active
+				if ($modules["forum"]) {
+					if ($db->f("topic_id")) 
+						$content.= "<font size=-1>&nbsp; " . _("Forenthema vorhanden") . "</font><br>";
+					else
+						$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_topic[]\"/>" . _("Thema im Forum anlegen") . "</font><br />\n";
+				}
+	
+				//only, if the documents-folder is active
+				if ($modules["documents"]) {
+					if ($folder)
+						$content.= "<font size=-1>&nbsp; " . _("Dateiordner vorhanden") . "</font>";
+					else
+						$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_folder[]\"/>" . _("Dateiordner anlegen") . "</font>\n";
+				}
+					
 				$content.="</td></tr></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
