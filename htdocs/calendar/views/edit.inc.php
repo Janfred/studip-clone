@@ -391,7 +391,7 @@ else {
 														array("icon" => "pictures/admin.gif",
 																	"text" => "Um diesen Termin zu bearbeiten, wechseln Sie bitte "
 																		. "in die <a href=\"./admin_dates.php?range_id="
-																		. $atermin->getSeminarId() . "&manuel_edit=yes&show_id="
+																		. $atermin->getSeminarId() . "&show_id="
 																		. $atermin->getId()."\">Terminverwaltung</a>."
 																	)
 														)
