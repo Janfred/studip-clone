@@ -116,8 +116,8 @@ class ShowList extends ShowTreeRow{
 		$new=TRUE;
 		if ($edit_structure_object==$resObject->id) {
 			$content= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
-			$content.= "<input type=\"image\" name=\"send\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-			$content.= "&nbsp;<input type=\"image\" name=\"cancel\" ".makeButton("abbrechen", "src")." border=0 value=\""._("Abbrechen")."\" />";						
+			$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+			$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
 			$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
 			$open="open";
 		} else {
@@ -299,8 +299,8 @@ class ShowThread extends ShowTreeRow {
 			$new=TRUE;
 			if ($edit_structure_object==$resObject->id) {
 				$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
-				$content.= "<input type=\"image\" name=\"send\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-				$content.= "&nbsp;<input type=\"image\" name=\"cancel\" ".makeButton("abbrechen", "src")." border=0 value=\""._("Abbrechen")."\" />";						
+				$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+				$content.= "&nbsp;<a href=\"$PHP_SELF?cancel_edit=$resObject->id\">".makeButton("abbrechen", "img")."</a>";						
 				$content.= "<input type=\"hidden\" name=\"change_structure_object\" value=\"".$resObject->getId()."\" />";
 				$open="open";
 			} else {
@@ -313,7 +313,10 @@ class ShowThread extends ShowTreeRow {
 			} else {
 				$edit.= "&nbsp;<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
 			}
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?pre_move_object=$resObject->id\">".makeButton("verschieben", "img")."</a>";
+			if ($resources_data["move_object"] == $resObject->id) 
+				$edit.= "&nbsp;<a href=\"$PHP_SELF?cancel_move=TRUE\">".makeButton("abbrechen", "img")."</a>";			
+			else
+				$edit.= "&nbsp;<a href=\"$PHP_SELF?pre_move_object=$resObject->id\">".makeButton("verschieben", "img")."</a>";			
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt", "img")."</a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_hierachie_level=$resObject->id\">".makeButton("neueebene", "img")."</a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details", "img")."</a>";
@@ -1327,7 +1330,12 @@ class EditObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src")?> border=0 name="submit" value="<?=_("Zuweisen")?>"><br />&nbsp; 
+				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" align="absmiddle" <?=makeButton("uebernehmen", "src")?> border=0 name="submit" value="<?=_("Zuweisen")?>">
+			 	<?
+				if ($this->resObject->isUnchanged())
+					print "&nbsp;<a href=\"$PHP_SELF?cancel_edit=".$this->resObject->id."\">".makeButton("abbrechen", "img")."</a>";
+			 	?>
+				<br />&nbsp; 
 				</td>
 			</tr>
 			</form>

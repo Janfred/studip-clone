@@ -995,6 +995,13 @@ class ResourceObject {
 		}
 	}
 	
+	function isUnchanged() {
+		if ($this->mkdate == $this->chdate)
+			return TRUE;
+		else
+			return FALSE;
+	}
+	
 	function flushProperties() {
 		$query = sprintf("DELETE FROM resources_objects_properties WHERE resource_id='%s' ",$this->id);
 		$this->db->query($query);
@@ -1072,6 +1079,8 @@ class ResourceObject {
 			$this->inventar_num = $this->db->f("inventar_num");
 			$this->parent_id =$this->db->f("parent_id");
 			$this->root_id =$this->db->f("root_id");
+			$this->mkdate =$this->db->f("mkdate");
+			$this->chdate =$this->db->f("chdate");
 			
 			if ($this->db->f("parent_bind"))
 				$this->parent_bind = TRUE;

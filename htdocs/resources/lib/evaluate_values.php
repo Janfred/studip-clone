@@ -115,6 +115,11 @@ if ($pre_move_object) {
 	$resources_data["move_object"]=$pre_move_object;
 }
 
+//cancel move mode
+if ($cancel_move) {
+	$resources_data["move_object"]='';
+}
+
 //Listenstartpunkt festlegen
 if ($open_list) {
 	$resources_data["list_open"]=$open_list;
@@ -154,6 +159,7 @@ if ($create_object) {
 	$resources_data["actual_object"]=$new_Object->getId();
 	}
 
+
 //Object loeschen
 if ($kill_object) {
 	$ObjectPerms = new ResourcesObjectPerms($kill_object);
@@ -167,6 +173,20 @@ if ($kill_object) {
 		die;
 	}
 }
+
+//cancel a just created object
+if ($cancel_edit) {
+	$ObjectPerms = new ResourcesObjectPerms($cancel_edit);
+	if ($ObjectPerms->getUserPerm () == "admin") {
+		$cancel_edit = new ResourceObject($cancel_edit);
+		$cancel_edit->delete();
+		$resources_data["view"]="resources";
+	} else {
+		$msg->displayMsg(1);
+		die;
+	}
+}
+
 
 //move an object
 if ($target_object) {
