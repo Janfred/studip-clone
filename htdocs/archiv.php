@@ -38,35 +38,6 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
-function archiv_check_perm($seminar_id){
-	static $archiv_perms;
-	global $perm,$auth;
-	$u_id = $auth->auth['uid'];
-	$db = new DB_Seminar();
-	if ($perm->have_perm("root")){  // root darf sowieso ueberall dran
-		return "admin";
-	}
-	if (!is_array($archiv_perms)){
-		$db->query("SELECT seminar_id,status FROM archiv_user WHERE user_id = '$u_id'");
-		while ($db->next_record()) {
-			$archiv_perms[$db->f("seminar_id")] = $db->f("status");
-		}
-		if ($perm->have_perm("admin")){
-			$db->query("SELECT archiv.seminar_id FROM archiv LEFT  JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
-			while ($db->next_record()) {
-				$archiv_perms[$db->f("seminar_id")] = "admin";
-			}
-		}
-		if ($perm->is_fak_admin()){
-			$db->query("SELECT archiv.seminar_id FROM archiv LEFT JOIN Institute ON  (archiv.heimat_inst_id = Institute.institut_id) LEFT JOIN user_inst ON (user_inst.institut_id = Institute.fakultaets_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
-			while($db->next_record()){
-				$archiv_perms[$db->f("seminar_id")] = "admin";
-			}
-		}
-	}
-	return $archiv_perms[$seminar_id]; 
-}
-
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
