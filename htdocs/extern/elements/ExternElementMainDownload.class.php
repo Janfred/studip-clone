@@ -2,7 +2,7 @@
 /**
 * ExternElementMainDownload.class.php
 * 
-* This class defines 
+*  
 * 
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainDownload extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width", "width_pp", "sort",
-			"wholesite", "lengthdesc", "nametitle", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext",
+			"wholesite", "lengthdesc", "nameformat", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext",
 			"iconpic", "icontxt", "iconpdf", "iconppt",
 			"iconxls", "iconrtf", "iconzip", "icondefault");
 	var $edit_function = "editMainSettings";
@@ -70,8 +70,6 @@ class ExternElementMainDownload extends ExternElementMain {
 			"nametitle" => "1",
 			"urlcss" => "",
 			"title" => "",
-			"bodystyle" => "",
-			"bodyclass" => "",
 			"nodatatext" => "",
 			"iconpic" => "",
 			"icontxt" => "",
@@ -129,12 +127,12 @@ class ExternElementMainDownload extends ExternElementMain {
 		$info = _("Geben Sie an, wieviele Zeichen der Beschreibung der Datei ausgegeben werden sollen.");
 		$table .= $edit_form->editTextfieldGeneric("lengthdesc", $title, $info, 3, 3);
 		
-		$title = _("Personennamen:");
+		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
 		$nametitle_values = array("no_title", "no_title_rev", "full", "full_rev");
 		$nametitle_names = array(_("Vorname Nachname"), _("Nachname Vorname"),
 				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
-		$table .= $edit_form->editOptionGeneric("nametitle", $title, $info, $nametitle_values, $nametitle_names);
+		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $nametitle_values, $nametitle_names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
@@ -143,14 +141,6 @@ class ExternElementMainDownload extends ExternElementMain {
 		$title = _("Seitentitel:");
 		$info = _("Geben Sie hier den Titel der Seite ein. Der Titel wird bei der Anzeige im Web-Browser in der Titelzeile des Anzeigefensters angezeigt.");
 		$table .= $edit_form->editTextfieldGeneric("title", $title, $info, 50, 200);
-		
-		$title = _("Style f&uuml;r &lt;body&gt;:");
-		$info = _("Sie können hier eine Stylesheet-Definition für das <body>-Tag eingeben.");
-		$table .= $edit_form->editTextfieldGeneric("bodystyle", $title, $info, 50, 250);
-		
-		$title = _("Class f&uuml;r &lt;body&gt;:");
-		$info = _("Sie können hier eine Stylesheet-Klasse für das <body>-Tag eingeben.");
-		$table .= $edit_form->editTextfieldGeneric("bodyclass", $title, $info, 30, 128);
 		
 		$title = _("Keine Dateien:");
 		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfügbar sind.");
