@@ -541,8 +541,11 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 		$resources_data["schedule_week_offset"]++;
 	if ($previous_week)
 		$resources_data["schedule_week_offset"]--;
-	if ($start_time)
+	if ($start_time) {
 		$resources_data["schedule_start_time"] = $start_time;
+		$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60);		
+		$resources_data["schedule_mode"] = "graphical";
+	}
 	elseif ($navigate) {
 		$resources_data["schedule_length_factor"] = $schedule_length_factor;
 		$resources_data["schedule_length_unit"] = $schedule_length_unit;
