@@ -216,6 +216,16 @@ class Seminar_Auth extends Auth {
 			$this->lifetime = $AUTH_LIFETIME;
 	}	
 	
+	function login_if($ok){
+		if ($ok){
+			Auth::login_if($ok);
+			if (is_object($GLOBALS['user'])){
+				$GLOBALS['user']->start($this->auth['uid']);
+			}
+		}
+		return true;
+	}
+	
 	function auth_preauth() {
 		global $auto_user,$auto_response,$auto_id,$resolution;
 		
@@ -339,6 +349,10 @@ class Seminar_Default_Auth extends Seminar_Auth {
 	var $classname = "Seminar_Default_Auth";
 	
 	var $nobody    = true;
+	
+	function Seminar_Default_Auth(){
+		Seminar_Auth::Seminar_Auth();
+	}
 }
 
 
