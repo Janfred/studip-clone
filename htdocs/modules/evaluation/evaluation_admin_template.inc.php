@@ -579,7 +579,7 @@ if( $command ) {
 	  for( $i = 0 ; $i < 4 ; $i++ ){ 
 	     $answer = &new EvaluationAnswer();
 	     $answer->setParentID($question->getObjectID());
-	     $answer->setText(_(""));
+	     $answer->setText((""));
 	     $answer->setPosition(1);
 	     $question->addChild($answer);
 	  }
