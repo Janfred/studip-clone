@@ -461,7 +461,7 @@ if (!$dont_search)
 				LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id) 
 				LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) 
 				LEFT JOIN Institute ON (seminar_inst.Institut_id = Institute.Institut_id) 
-				WHERE $sql_where_query_seminare ORDER BY $order_by_exp ");
+				WHERE $sql_where_query_seminare ORDER BY $order_by_exp, seminare.Name ");
 
 //Anzeige des Suchergebnis (=Seminarebene)
 if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
@@ -801,10 +801,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 	
 	if ((!$sem_browse_data["sset"]) && ($sem_browse_data["extern"] <> "yes")) {
 		echo "<tr><td class=\"steel1\" ";
-		if ($sem_browse_data["extend"]=="yes") 
-			echo "colspan=7"; 
-		else 
-			echo "colspan=4";
+		echo "colspan=$rows"; 
 		echo " align=\"center\"><font size=-1>&nbsp;";
 		if ($sem_browse_data["level"]=="s")
 			echo"<a href=\"$PHP_SELF?level=i&id=".$sem_browse_data["oid"]."\">eine Ebene zur&uuml;ck</a>";
