@@ -488,6 +488,9 @@ Das Chat Modul benötigt die PHP Module sysvshm und sysvsem. Sollten diese Module
 nicht verfügbar sein, kann man auch $CHAT_SERVER_NAME auf "ChatFileServer"
 umstellen, in diesem Fall läuft die Datenspeicherung dateibasiert (sehr
 schlechte Performance, nicht für größere Installationen zu empfehlen!).
+Eine weitere Möglichkeit ist die Speicherung in einer Tabelle der Datenbank,
+in diesem Fall sollte $CHAT_SERVER_NAME auf "ChatMysqlServer" umgestellt werden.
+
 
 Ilias-Connect-Modul:
 Für das Modul "Ilias Connect", dass die Verbindung zu Ilias Lernmodulen
@@ -500,22 +503,21 @@ $ABSOLUTE_PATH_ILIAS muss die komplette URL der Ilias Installation eingetragen
 werden.
 
 Literaturverwaltung:
-Die Literaturverwaltung kann nicht in der local.inc angepasst werden, wohl aber gibt
-es einige Konfigurationsmöglichkeiten.
 Zunächst ist sicherzustellen, dass PHP mit der Yaz-Erweiterung kompiliert wurde.
 (Eine kurze Erklärung finden sie unter http://www.php.net/yaz)
 Diese dient dazu, externe Literaturkataloge über die Z39.50-Schnittstelle abzufragen.
 Sie können neben den mitgelieferten Plugins weitere Plugins im Verzeichnis 
 <Document-Root>/lib/classes/lit_search_plugins für ihre Bibliothek(en) anlegen.
 Bitte nutzen Sie die mitgelieferten Plugins für den GVK (Gemeinsamer Verbundkatalog
-Niedersachen) und die SUB Göttingen (Niedersächsische Staats- und Universitätsbibliothek)
+des GBV) und die SUB Göttingen (Niedersächsische Staats- und Universitätsbibliothek)
 als Vorlage für weitere Plugins und erkundigen sie sich bei Ihrer Bibliothek
 nach Einzelheiten für die Anbindung. Falls ihre Bibliothek Mitglied im GBV ist, können
-sie einfach das Plugin StudipLitSearchPluginGvk.class.php benutzen, und müssen nur die Felder
-z_host und z_profile anpassen. Der Name ihres Plugins muss mit StudipLitSearchPlugin beginnen.
-Dann können sie das Plugin in der Datei /lib/classes/StudipLitSearch.class.php aktivieren, indem
-sie es in das array $_lit_search_plugins eintragen. Hier können sie zusätzlich einen Link
-eintragen, der in den Web Opac ihrer Bibliothek verweist.
+sie einfach eine neue Klasse von StudipLitSearchPluginGvk.class.php ableiten,
+und müssen nur die Felder z_host und z_profile anpassen. Der Name ihres Plugins muss mit 
+StudipLitSearchPlugin beginnen.
+Dann können sie das Plugin in der Datei local.inc unterhalb von "literature search plugins"
+aktivieren, indem sie es in das array $_lit_search_plugins eintragen. Hier können sie 
+zusätzlich einen Link eintragen, der in den Web Opac ihrer Bibliothek verweist.
 
 Weitere Module wie der Kalender, die Ressourcenverwaltung, das Wiki- oder die
 Vote- und Evaluations-Module benötigen keine spezielle Konfiguration oder Zusatzsoftware.
