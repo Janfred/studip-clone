@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
 "POT-Creation-Date: 2003-07-18 18:52+0200\n"
-"PO-Revision-Date: 2003-07-25 15:08+0200\n"
+"PO-Revision-Date: 2003-07-25 15:21+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -7445,7 +7445,7 @@ msgstr "In order to add people as staff, use the search."
 
 #: inst_admin.php:344
 msgid "bitte geben Sie Vornamen, Nachnamen oder den Usernamen ein:"
-msgstr "Please enter a first name, surname %s or username to search"
+msgstr "Please enter a first name, surname or username to search:"
 
 #: inst_admin.php:374
 msgid "Bereits der Einrichtung zugeordnet:"
@@ -7781,7 +7781,7 @@ msgstr "Modules"
 
 #: links_admin.inc.php:233
 msgid "archivieren"
-msgstr "archive"
+msgstr "Archive"
 
 #: links_admin.inc.php:235
 msgid "neue&nbsp;Veranstaltung"
