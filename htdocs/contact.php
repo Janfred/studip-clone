@@ -144,7 +144,7 @@ if ($search_exp) {
 	SearchResults($search_exp);
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
 } else {
-	echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
+	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Addressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
 } 
 echo "</form>";
