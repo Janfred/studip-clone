@@ -402,7 +402,7 @@ msgstr "Zebra Effect:"
 #: extern/views/ExternEditHtml.class.php:546
 #: extern/views/ExternEditHtml.class.php:563
 msgid "aus"
-msgstr "from"
+msgstr "off"
 
 #: extern/views/ExternEditHtml.class.php:546
 msgid "horizontal"
@@ -418,7 +418,7 @@ msgstr "Activate a Zebra Effect for the column heading."
 
 #: extern/views/ExternEditHtml.class.php:563
 msgid "an"
-msgstr "at"
+msgstr "on"
 
 #: extern/views/ExternEditHtml.class.php:577
 msgid ""
