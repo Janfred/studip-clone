@@ -324,7 +324,7 @@ class SemBrowse {
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN Institute USING (Institut_id) 
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "') ORDER BY 
-				 seminare.Name,fullname ");
+				 seminare.Name ");
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
 			$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
@@ -358,7 +358,11 @@ class SemBrowse {
 					break;
 					
 					case 1:
-					echo htmlReady($the_tree->getShortPath($group_field));
+					if ($the_tree->getShortPath($group_field)){
+						echo htmlReady($the_tree->getShortPath($group_field));
+					} else {
+						echo _("keine Studienbereiche eingetragen");
+					}
 					break;
 					
 					case 2:
@@ -383,14 +387,15 @@ class SemBrowse {
 						$temp_turnus_string=view_turnus($seminar_id, TRUE);
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) >70) {
-							$temp_turnus_string=substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
-							$temp_turnus_string.="...&nbsp;<a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">(mehr) </a>";
+							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
+							$temp_turnus_string .= "...&nbsp;<a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">(mehr) </a>";
 						}
 						echo "</font><font size=\"-2\">" . $temp_turnus_string . "</font></td>";
 						echo "<td class=\"steel1\" align=\"right\"><font size=-1>(";
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						if (is_array($doz_name)){
+							sort($doz_name, SORT_STRING);
 							for ($i = 0; $i < count($doz_name); ++$i){
 								echo "<a href=\"about.php?username=" . $doz_uname[$i] ."\">" . htmlReady($doz_name[$i]) . "</a>";
 								if($i != count($doz_name)-1){
