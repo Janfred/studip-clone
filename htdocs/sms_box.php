@@ -69,56 +69,61 @@ function show_icon($sms_show, $value) {
 
 // print_snd_message
 
-function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_data_view) {
+function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_data_view, $dont_delete, $folder) {
 	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF, $msging, $cmd_show;	
-	//Kopfzeile erstellen
+
+	// make message_header
 	$icon = "&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-	$x = "0";
+	$x = "0"; // how many receivers are there?
 	$query = "SELECT * FROM message_user WHERE message_id = '".$message_id."' AND snd_rec = 'rec'";
 	$db7->query($query);
 	while ($db7->next_record()) {
 		$x = $x+1;
 	}
+	if ($dont_delete == "1") { // disable the checkbox if message is locked
+		$disable = "disabled";
+		$tmp_cmd = "open_selected";
+		$tmp_picture = "closelock2";
+		$tmp_tooltip = tooltip(_("Löschschutz deaktivieren."));
+	} else {
+		$tmp_cmd = "safe_selected";
+		$tmp_picture = "openlock2";
+		$tmp_tooltip = tooltip(_("Diese Nachricht nicht löschen."));
+	}
 	$zusatz = "<font size=-1>";
-	if ($x == "1") {
-		$query = "SELECT message_user.* 
-		FROM message_user 
-			LEFT JOIN auth_user_md5 USING(user_id) 
-			WHERE message_user.message_id = '".$message_id."' 
-			AND message_user.snd_rec = 'rec'";
+	if ($x == "1") { // if only one receiver
+		$query = "SELECT message_user.* FROM message_user LEFT JOIN auth_user_md5 USING(user_id) WHERE message_user.message_id = '".$message_id."' AND message_user.snd_rec = 'rec'";
 		$db7->query($query);
 		while ($db7->next_record()) {
 			$rec_userid = $db7->f("user_id");
 		}
-		$zusatz .= sprintf(_("gesendet an %s am %s %s"), "</font><a href=\"about.php?username=".get_username($rec_userid)."\"><font size=-1 color=\"#333399\">".get_fullname($rec_userid)."</font></a><font size=-1>", date("d.m.Y, H:i",$mkdate), "<input type=\"checkbox\" name=\"sel_delsms[]\" value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">");
-	} else if ($x >= "2") {
-		$zusatz .= sprintf(_("gesendet an %s Empf&auml;nger am %s %s"), $x, date("d.m.Y, H:i",$mkdate), "<input type=\"checkbox\" name=\"sel_delsms[]\" value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">");
+		$zusatz .= sprintf(_("gesendet an %s am %s %s"), "</font><a href=\"about.php?username=".get_username($rec_userid)."\"><font size=-1 color=\"#333399\">".get_fullname($rec_userid)."</font></a><font size=-1>", date("d.m.Y, H:i",$mkdate), "<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\"><img src=\"./pictures/cont_folder_sms.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a><a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$message_id."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><input type=\"checkbox\" name=\"sel_delsms[]\" ".$disable." value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">");
+	} else if ($x >= "2") { // if more than one receiver
+		$zusatz .= sprintf(_("gesendet an %s Empf&auml;nger am %s %s"), $x, date("d.m.Y, H:i",$mkdate), "<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\"><img src=\"./pictures/cont_folder_sms.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a><a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$message_id."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><input type=\"checkbox\" name=\"sel_delsms[]\" ".$disable." value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">");
 	}
-	$zusatz .= "</font>";		
-
+	$zusatz .= "</font>";
+	
+	// tread content
 	if (strpos($message,$msging->sig_string)) {
 		$titel = mila(kill_format(substr($message, 0, strpos($message,$msging->sig_string))));
 	} else {
 		$titel = mila(kill_format($message));
 	}
-	
 	$content = quotes_decode(formatReady($message));
-	
-	if ($x >= "2") {
+	if ($x >= "2") { // if more than one receiver add appendix
 		$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
-		$query = "SELECT message_user.* 
-		FROM message_user 
-			LEFT JOIN auth_user_md5 USING(user_id) 
-			WHERE message_user.message_id = '".$message_id."' 
-			AND message_user.snd_rec = 'rec'";
+		$query = "SELECT message_user.* FROM message_user LEFT JOIN auth_user_md5 USING(user_id) WHERE message_user.message_id = '".$message_id."' AND message_user.snd_rec = 'rec'";
 		$db7->query($query);
 		while ($db7->next_record()) {
 			$content .= "<a href=\"about.php?username=".get_username($db7->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname($db7->f("user_id"))."</font></a>,&nbsp;";
 		}
 	}
 
-	$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a><br><br>";
+	// buttons
+	$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\" ".tooltip(_("Diese Nachricht löschen.")).">".makeButton("loeschen", "img")."</a>&nbsp;";
+	$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
 	
+	// open?!
 	if ($sms_data_open == $message_id) {
 		$open = "open";
 		$link = $PHP_SELF."?mclose=TRUE";
@@ -129,16 +134,18 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 		$open = "close";
 		$link = $PHP_SELF."?mopen=".$message_id."#".$message_id;
 	}
+	
+	// mk titel
 	if (strlen($titel) >= "50") {
 		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a></a>";
 	} else {
 		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".$titel."</a></a>";
 	}	
-	// ausgabe der ueberschrift		
+	// print message_header		
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
 	printhead(0, 0, $link, $open, FALSE, $icon, $titel, $zusatz, $mkdate);
 	echo "</tr></table>	";
-	// ausgabe des content
+	// print content
 	if (($open == "open") || ($sms_data_open == $message_id)) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 		printcontent("99%",0, $content, $edit);
@@ -149,11 +156,11 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 
 // print_rec_message
 
-function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullname, $sms_data_open, $read) {
+function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullname, $sms_data_open, $read, $dont_delete, $folder) {
 	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF, $msging, $cmd_show, $sms_show;	
 	$uname_snd = get_username($user_id_snd);
-	// open if unread
-	if ($read != "1" && ($my_messaging_settings["opennew"] == "1" || $sms_show['sort'] != "no")) {
+	// build
+	if ($read != "1" && ($my_messaging_settings["opennew"] == "1" || $sms_show['sort'] != "no")) { // open if unread
 		$open = "open";
 		$link = $PHP_SELF."?mclose=TRUE";
 	} else if ($sms_data_open == $message_id) {
@@ -166,8 +173,7 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 		$open = "close";
 		$link = $PHP_SELF."?mopen=".$message_id."#".$message_id;
 	}
-	// unread=new ... is message new? if new and opened=set readed
-	if ($read == "1") {
+	if ($read == "1") { // unread=new ... is message new? if new and opened=set readed
 		$red = FALSE;
 		$icon = "&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
 	} else {
@@ -176,23 +182,27 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 		if ($open == "open") {
 			set_read($message_id);		
 		}
-	}
-
-	if ($user_id_snd == "____%system%____") {
-		$zusatz = "<font size=-1>";
-		$zusatz .= sprintf(_("automatische Systemnachricht, gesendet am %s %s"), date("d.m.Y, H:i", $mkdate), "<input type=\"checkbox\" name=\"sel_delsms[]\" value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">");
-		$zusatz .= "</font>";
+	}	
+	if ($dont_delete == "1") { // disable the checkbox if message is locked
+		$disable = "disabled";
+		$tmp_cmd = "open_selected";
+		$tmp_picture = "closelock2";
+		$tmp_tooltip = tooltip(_("Löschschutz deaktivieren."));
 	} else {
-		if ($cmd == "select_all") {
-			$checked = "checked";
-		} else {
-			$checked = "";
-		}
+		$tmp_cmd = "safe_selected";
+		$tmp_picture = "openlock";	
+		$tmp_tooltip = tooltip(_("Diese Nachricht nicht löschen."));
+	}
+	if ($user_id_snd == "____%system%____") { // if message from system
 		$zusatz = "<font size=-1>";
-		$zusatz .= sprintf(_("gesendet von %s am %s %s"), "</font><a href=\"about.php?username=".$uname_snd."\"><font size=-1 color=\"#333399\">".$fullname."</font></a><font size=-1>", date("d.m.Y, H:i", $mkdate), "<input type=\"checkbox\" name=\"sel_delsms[]\" value=\"".$message_id."\" ".$checked.">");
+		$zusatz .= sprintf(_("automatische Systemnachricht, gesendet am %s %s"), date("d.m.Y, H:i", $mkdate), "<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\"><img src=\"./pictures/cont_folder_sms.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a><a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$message_id."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><input type=\"checkbox\" name=\"sel_delsms[]\" ".$disable." value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">");
+		$zusatz .= "</font>";
+	} else { // if message from user
+		$zusatz = "<font size=-1>";
+		$zusatz .= sprintf(_("gesendet von %s am %s %s"), "</font><a href=\"about.php?username=".$uname_snd."\"><font size=-1 color=\"#333399\">".$fullname."</font></a><font size=-1>", date("d.m.Y, H:i", $mkdate), "<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\"><img src=\"./pictures/cont_folder_sms.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a><a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$message_id."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><input type=\"checkbox\" name=\"sel_delsms[]\" ".$disable." value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">");
 		$zusatz .= "</font>";			
 	}
-	
+	// tread message_header and content
 	if (strpos($message,$msging->sig_string)) {
 		$titel = mila(kill_format(substr($message, 0, strpos($message,$msging->sig_string))));
 	} else {
@@ -203,21 +213,21 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 	} else {
 		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".$titel."</a></a>";
 	}	
-
 	$content = quotes_decode(formatReady($message));
-
+	// mk buttons
 	$edit = "";
 	if ($user_id_snd != "____%system%____") {
 		$edit .= "<a href=\"sms_send.php?cmd=write&rec_uname=".$uname_snd."\">".makeButton("antworten", "img")."</a>";
 		$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$message_id."&rec_uname=".$uname_snd."\">".makeButton("zitieren", "img")."</a>";
 	}
-	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a><br><br>";
+	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a>";
+	$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
 
-	// ausgabe der ueberschrift		
+	// print message_header
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
 	printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $mkdate);
 	echo "</tr></table>	";
-	// ausgabe des content
+	// print message content
 	if (($open == "open") || ($sms_data_open == $message_id)) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 		printcontent("99%",0, $content, $edit);
@@ -255,13 +265,13 @@ $db = new DB_Seminar;
 $db6 = new DB_Seminar;
 $db7 = new DB_Seminar;
 
-if ($cmd_sort) {
+if ($cmd_sort) { // sortierung
 	$sms_show['sort'] = $cmd_sort;
 } else if (empty($sms_show['sort'])) {
 	$sms_show['sort'] = "no";
 }
 
-if (empty($my_messaging_settings["timefilter"])) {
+if (empty($my_messaging_settings["timefilter"])) { // set timefilter
 	$my_messaging_settings["timefilter"] ="all";
 }
 
@@ -287,20 +297,25 @@ if ($cmd == "delete_selected") {
 
 if ($mclose) {
 	$sms_data["open"] = '';
-}
-if ($mopen) {
+} else if ($mopen) {
 	$sms_data["open"] = $mopen;
 }
+
 if ($sms_inout) {
 	$sms_data["view"] = $sms_inout;
 } else if ($sms_data["view"] == "") {
 	$sms_data["view"] = "in";
 }
-if (empty($my_messaging_settings["openall"])) {
+
+if ($show_folder_button_x) { // set choosen folder
+	$sms_show['folder'][$sms_data['view']] = $show_folder;
+}
+
+if (empty($my_messaging_settings["openall"])) { // openall festlegen
 	$my_messaging_settings["openall"] = "2";
 }
 
-if ($sms_time) {
+if ($sms_time) { // zeitfilter festlegen
 	$sms_data["time"] = $sms_time;
 } else if ($sms_data["time"] == "" && empty($my_messaging_settings["timefilter"])) {
 	$sms_data["time"] = "all";
@@ -313,16 +328,56 @@ if ($sms_data['view'] == "in") {
 	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
 	$info_text_002 = _("Alle systeminternen Nachrichten, die an Sie gesendet wurden werden hier angezeigt.<br>");
 	$no_message_text_box = _("im Posteingang");
+	$tmp_snd_rec = "rec";
 } else if ($sms_data['view'] == "out") {
 	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("gesendete systeminterne Nachrichten anzeigen")."</b>";
 	$info_text_002 = _("Alle systeminternen Nachrichten, die Sie gesendet haben werden hier angezeigt.<br>");
 	$no_message_text_box = _("im Postausgang");
+	$tmp_snd_rec = "snd";
+}
+
+if ($sms_show['folder'][$sms_data['view']]) { // folder festlegen
+	if ($sms_show['folder'][$sms_data['view']] != "all") {
+		if ($sms_show['folder'][$sms_data['view']] == "free") {
+			$query_showfolder = "AND message_user.folder=''";
+		} else {
+			$query_showfolder = "AND message_user.folder='".$sms_show['folder'][$sms_data['view']]."'";
+		}
+	}
+	$infotext_folder = "&nbsp;("._("Ordner").":&nbsp;".$sms_show['folder'][$sms_data['view']].")";
+} else {
+	$infotext_folder = "&nbsp;("._("Ordner").":&nbsp;"._("Alle Nachrichten").")";
+	$sms_show['folder'][$sms_data['view']] = "all";
+}
+
+if ($sel_lock) { // nachricht loesch-schuetzen bzw. diesen aufheben
+	if ($cmd == "safe_selected") { // close lock message delete
+		$tmp_dont_delete = "1";
+	} else if ($cmd == "open_selected") { // open lock message delete
+		$tmp_dont_delete = "0";
+	}	
+	$db->query("UPDATE message_user SET dont_delete='".$tmp_dont_delete."' WHERE user_id='".$user->id."' AND message_id='".$sel_lock."' AND snd_rec='".$tmp_snd_rec."'");
+	$tmp_dont_delete = "";
+	$tmp_snd_rec = "";
+}
+
+if ($move_msg_folder_button_x) { // action: nachricht in ordner verschieben
+	$query = "UPDATE message_user SET folder='".$move_folder."' WHERE message_id='".$move_to_folder."' AND user_id='".$user->id."' AND snd_rec='".$tmp_snd_rec."'";
+	$db->query($query);
+	$move_folder = "";
+	$move_to_folder = "";
+	$tmp_snd_rec = "";
+} 
+
+if ($move_to_folder) {
+	$sms_data["open"] = $move_to_folder; // nachricht wird geoeffnet
+	$query_movetofolder = "AND message.message_id='".$move_to_folder."'"; // es wird nur diese nachricht angezeigt
 }
 
 if ($sms_data["time"] == "all") {
 	$info_text_003 = _("Sie sehen alle Ihre Nachrichten.");
 	$query_time = " ORDER BY message.mkdate DESC";
-	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten %s vor."), $no_message_text_box);
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "new") {
 	$info_text_003 = _("Sie sehen nur neue Nachrichten.");
 	if ($sms_data["view"] == "in") {
@@ -331,12 +386,12 @@ if ($sms_data["time"] == "all") {
 	} else {
 		$query_time = " AND message.mkdate > '".$CurrentLogin."' ORDER BY message.mkdate DESC";
 	}
-	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten %s vor."), $no_message_text_box);
+	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "24h") {
 	$info_text_003 = _("Sie sehen nur Nachrichten der letzten 24 Stunden.");
 	$query_time = " AND message.mkdate > '".(date("U")-86400)."' ORDER BY message.mkdate DESC";
 	$query_time_sort = " AND message.mkdate > '".(date("U")-86400)."'";
-	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 24 Stunden %s vor."), $no_message_text_box);
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s aus den letzten 24 Stunden %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "7d") {
 	$info_text_003 = _("Sie sehen alle Nachrichten der letzten 7 Tage.");
 	$query_time = " AND message.mkdate > '".(date("U")-(7*86400))."' ORDER BY message.mkdate DESC";
@@ -364,29 +419,50 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	echo "</td></tr></table>";
 	page_close();
 	die;
-}
+} ?>
 
-?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-	<td class="topic" colspan="2"><?
-		echo $info_text_001;
-	?></td>
-</tr>
-<tr>
-	<td class="blank" colspan="2">&nbsp;
-	</td>
-</tr>
+<tr><td class="topic" colspan="2"><? echo $info_text_001; ?></td></tr>
+<tr><td class="blank" colspan="2">&nbsp;</td></tr>
 <tr>	
 	<td class="blank" valign="top"> <? 
-	if ($msg) {
+	if ($msg) { // if info ($msg) for user
 		print ("<table cellpadding=\"5\" cellspacing=\"0\" border=\"0\" width=\"99%\"><tr><td valign=\"top\">");
 		parse_msg($msg); 
 		print ("</td></tr></table>");
 	}
 	print("<table cellpadding=\"5\" border=\"0\" width=\"100%\"><tr><td colspan=\"2\" valign=\"top\">");
-	print("<font size=-1>".$info_text_002.$info_text_003);
-	print("</font></td><td class=\"blank\" align=\"right\" valign=\"bottom\">");
+	print("<font size=-1>".$info_text_002.$info_text_003."<br><br>");
+	printf("<form method=\"post\" action=\"%s\"style=\"display: inline\">", $PHP_SELF);
+	if ($move_to_folder) {
+		$tmp_folder = "move_folder";
+		printf("<img src=\"./pictures/gruen.gif\">&nbsp;&nbsp;&nbsp;&nbsp;");
+	} else {
+		$tmp_folder = "show_folder";
+	}	
+	printf("<b>"._("Ordneransicht:")."</b>&nbsp;");
+	if (!empty($my_messaging_settings["folder"][$sms_data['view']])) {
+		printf("<select name=\"%s\" style=\"width:175px\">", $tmp_folder);
+		if (!$move_to_folder) {
+			printf("<option value=\"all\" %s>%s</option>", CheckSelected("all", $sms_show['folder'][$sms_data['view']]), _("Alle Nachrichten"));
+			printf("<option value=\"free\" %s>%s</option>", CheckSelected("free", $sms_show['folder'][$sms_data['view']]), _("Unzugeordnet"));
+		}
+		for($x="0";$x<sizeof($my_messaging_settings["folder"][$sms_data['view']]);$x++) {
+			printf("<option %s>%s</option>", CheckSelected($my_messaging_settings["folder"][$sms_data['view']][$x], $sms_show['folder'][$sms_data['view']]), $my_messaging_settings["folder"][$sms_data['view']][$x]);
+		}
+		printf("</select>&nbsp;");
+		if ($move_to_folder) {
+			printf("<input type=\"image\" name=\"move_msg_folder_button\" %s src=\"./pictures/move_left.gif\" border=\"0\">&nbsp;", tooltip(_("Nachricht in diesen Ordner verschieben.")));
+			printf("<input type=\"hidden\" name=\"move_to_folder\" value=\"%s\">", $move_to_folder);
+		} else {
+			printf("<input type=\"image\" name=\"show_folder_button\" %s src=\"./pictures/haken_transparent.gif\" border=\"0\">", tooltip(_("Nur Nachrichten des gewählten Ordners werden angezeigt.")));
+		}
+		print("</form>");
+	} else {
+		print("<a href=\"".$PHP_SELF."?change_view=TRUE\"><img src=\"./pictures/cont_folder_add.gif\" border=\"0\"></a>Ordner erstellen.</a>");
+	}
+	print("</font></td>");
+	print("<td class=\"blank\" align=\"right\" valign=\"bottom\">");
 	print("<a href=\"".$PHP_SELF."?cmd=select_all\">".makeButton("alleauswaehlen", "img")."</a><br><br>");
 	print("&nbsp;&nbsp;");
 	print("<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">");
@@ -397,13 +473,10 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 
 	$n=0;
 	$query = "";
-	if ($sms_data['view'] == "in") {
-
+	if ($sms_data['view'] == "in") { // postbox in
 		$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
 		$info_text_002 = _("Alle systeminternen Nachrichten, die an Sie gesendet wurden werden hier angezeigt.<br>");
-
-		if ($sms_show['sort'] == "snd_rec") {
-			
+		if ($sms_show['sort'] == "snd_rec") { // wenn nach absender sortieren
 			$query = "
 				SELECT message.*, message_user.*, auth_user_md5.* 
 				FROM message_user 
@@ -412,16 +485,14 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				WHERE message_user.user_id = '".$user->id."' 
 					AND message_user.snd_rec = 'rec' 
 					AND message_user.deleted = '0' 
-					".$query_time_sort."
+					".$query_showfolder." ".$query_time_sort."
 				GROUP BY message.autor_id 
 				ORDER BY auth_user_md5.Nachname ASC";
 			$db->query($query);		
-			while ($db->next_record()) {
+			while ($db->next_record()) { // die verschiednen absender heraussuchen
 				$tmp_rec_snd[] = $db->f("autor_id");	
 			}
-
-			for ($x=0; $x < sizeof($tmp_rec_snd); $x++) {
-
+			for ($x=0; $x < sizeof($tmp_rec_snd); $x++) { // die gefundenen absender durchgehen
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
 				echo "<tr><td width=\"1px\" class=\"blank\"></td><td width=\"99%\" height=\"4\" class=\"blank\"></td><td width=\"1px\" class=\"blank\"></td></tr>";
 				echo "<tr><td width=\"1px\" class=\"blank\"></td><td width=\"99%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;";
@@ -442,17 +513,14 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					AND message_user.snd_rec = 'rec' 
 					AND message.autor_id = '".$tmp_rec_snd[$x]."' 
 					AND message_user.deleted = '0' 
-				".$query_time;		
+				".$query_showfolder." ".$query_time;		
 				$db->query($query);		
-				while ($db->next_record()) {
+				while ($db->next_record()) { // die messages des jeweiligen absenders anzeigen
 					$tmp_x = "1";	
-					print_rec_message($db->f("autor_id"), $db->f("mkdate"), $db->f("message_id"), $db->f("message"), get_fullname($db->f("autor_id")), $sms_data["open"], $db->f("readed"));	
+					print_rec_message($db->f("autor_id"), $db->f("mkdate"), $db->f("message_id"), $db->f("message"), get_fullname($db->f("autor_id")), $sms_data["open"], $db->f("readed"), $db->f("dont_delete"), $db->f("folder"));	
 				}
-
 			}
-
-		} else {
-
+		} else { // nicht nach absender sortieren
 			$query .= "
 			SELECT message.*, message_user.*, ".$_fullname_sql['full']." AS fullname 
 			FROM message_user 
@@ -461,31 +529,26 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				LEFT JOIN user_info USING(user_id) 
 			WHERE message_user.user_id = '".$user->id."' 
 				AND message_user.snd_rec = 'rec' 
-				AND message_user.deleted = '0' ".$query_time;		
+				AND message_user.deleted = '0' ".$query_movetofolder." ".$query_showfolder." ".$query_time;		
 			$db->query($query);		
 			while ($db->next_record()) {
-				print_rec_message($db->f("autor_id"), $db->f("mkdate"), $db->f("message_id"), $db->f("message"), get_fullname($db->f("autor_id")), $sms_data["open"], $db->f("readed"));	
+				print_rec_message($db->f("autor_id"), $db->f("mkdate"), $db->f("message_id"), $db->f("message"), get_fullname($db->f("autor_id")), $sms_data["open"], $db->f("readed"), $db->f("dont_delete"), $db->f("folder"));	
 			}
-
 		}
-
-	} else if ($sms_data['view'] == "out") {
-
+	} else if ($sms_data['view'] == "out") { // postbox out
 		$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("gesendete systeminterne Nachrichten anzeigen")."</b>";
 		$info_text_002 = _("Alle systeminternen Nachrichten, die Sie gesendet haben werden hier angezeigt.<br>");
-
 		$query .= "
 			SELECT message.*, message_user.* 
 			FROM message_user 
 				LEFT JOIN message USING (message_id) 
 			WHERE message_user.user_id = '".$user->id."' 
 				AND message_user.snd_rec = 'snd' 
-				AND message_user.deleted = '0' ".$query_time;
+				AND message_user.deleted = '0' ".$query_movetofolder." ".$query_showfolder." ".$query_time;
 		$db->query($query);
 		while ($db->next_record()) {
-			print_snd_message($db->f("mkdate"), $db->f("message_id"), $db->f("message"), $sms_data["open"], $sms_data["view"]);		
+			print_snd_message($db->f("mkdate"), $db->f("message_id"), $db->f("message"), $sms_data["open"], $sms_data["view"], $db->f("dont_delete"), $db->f("folder"));		
 		}	
-
 	}
 	echo "</form>"; // close form "delete selected messages"
 
@@ -538,7 +601,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 			array("icon" => "pictures/suchen.gif", "text" => $time_by_links)
 		)),
 		array("kategorie" => _("Weitere M&ouml;glichkeiten:"),"eintrag" => array(
-			array("icon" => "pictures/blank", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen.")."</a>", $PHP_SELF))
+			array("icon" => "pictures/blank", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen.")."</a><br><a href=\"%s?change_view=TRUE\">"._("Weitere Ordner hinzufügern.")."</a>", $PHP_SELF, $PHP_SELF))
 		))
 	);
 
