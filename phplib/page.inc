@@ -9,7 +9,7 @@
  *
  */ 
 
-function page_open($feature, $order ="") {
+function page_open($feature) {
   global $_PHPLIB;
 
   # enable sess and all dependent features.
@@ -21,11 +21,13 @@ function page_open($feature, $order ="") {
     # the auth feature depends on sess
     if (isset($feature["auth"])) {
       global $auth;
-      
-      if (!isset($auth)) {
-        $auth = new $feature["auth"];
+      if (!isset($auth)){
+		  $auth = new $feature['auth'];
+	  } else if ($auth->classname != $feature['auth']) {
+        $save_ps = $auth->auth;
+		$auth = new $feature['auth'];
+		$auth->auth = $save_ps;
       }
-      if ($order == "cancel") $auth->logout();
       $auth->start();
   
       
@@ -41,7 +43,6 @@ function page_open($feature, $order ="") {
       # the user feature depends on auth and sess
       if (isset($feature["user"])) {
         global $user;
-        
         if (!isset($user)) {
           $user = new $feature["user"];
         }
@@ -58,6 +59,7 @@ function page_open($feature, $order ="") {
       }
     } 
   }
+
 }
 
 function page_close() {
