@@ -94,7 +94,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 	
 	$export_pagecontent .= "";
-	$export_pagecontent .= _("Ausgabeformat:") .  "<select name=\"format\">";
+	$export_pagecontent .= "<b><font size=\"-1\">"._("Ausgabeformat:") .  "</font></b><br /><select name=\"format\">";
 
 	while (list($key, $val) = each($output_formats))
 	{
@@ -102,17 +102,17 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 		if ($format==$key) $export_pagecontent .= " selected";
 		$export_pagecontent .= ">" . $val;
 	}
-	$export_pagecontent .= "</select><br>	<br>	<br>	<br>";
+	$export_pagecontent .= "</select><br>	<br>";
 	
-	$export_pagecontent .= _("Name der Datei (z.B. 'Test'):");
-	
+	$export_pagecontent .= "<b><font size=\"-1\">"._("Name der Datei (z.B. &raquo;Test&laquo;):")."</font></b><br />";
 	$export_pagecontent .= "<input type=\"text\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
+	$export_pagecontent .= "<br /><br /><br /><input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"1\"><br><br><br>";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 
-	$export_weiter_button = "<center><input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\"></center></form>";
+	$export_weiter_button = "</form>";
 
 	$infobox = array	(			
 	array ("kategorie"  => _("Information:"),
@@ -125,7 +125,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
 									"text"  => _("Bitte wählen Sie das Dateiformat, in dem ihre Daten ausgegeben werden sollen. Klicken Sie anschließend auf 'weiter'.")
 								);
 }
@@ -172,7 +172,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
 	
-	$export_weiter_button = "<center><input type=\"IMAGE\" " . makeButton("weiter", "src") . " name=\"\"></center></form>";
+	$export_weiter_button = "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " name=\"\"></form>";
 
 	
 	$infobox = array	(			
@@ -186,7 +186,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	);
 	$link = "<a href=\"./test.xml"."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
 									"text"  => _("Wählen Sie bitte eines der zur Verfügung stehenden Ausgabemodule. Klicken Sie dann auf 'weiter'.")
 								);
 }
@@ -221,7 +221,7 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	if ($XSLT_ENABLE) 
 	{
 		$export_pagecontent .= _("Um die Daten mit dem installierten XSLT-Prozessor in das gewünschte Format zu bringen, klicken Sie bitte auf 'weiter'") . "<br><br>";
-		$export_weiter_button .= "<center><input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\"></center>";
+		$export_weiter_button .= "<input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\">";
 	}
 	else
 		$export_pagecontent .= "<br><br><br>";
@@ -244,7 +244,7 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 								);
 	if ($XSLT_ENABLE) 
 	{
-		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
 									"text"  => _("Wenn Sie auf 'weiter' klicken, wird mit dem installierten XSLT-Prozessor die Ausgabedatei erzeugt.")
 								);
 	}

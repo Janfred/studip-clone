@@ -34,25 +34,24 @@ $export_pagename = _("Datenexport - Startseite");
 
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 
-	$export_pagecontent .= "<br><br>";
-	$export_pagecontent .= _("Art der auszugebenden Daten: ") .  "<select name=\"ex_type\">";
+	$export_pagecontent .= "<br /><b><font size=\"-1\">"._("Art der auszugebenden Daten: ") .  "</font></b><br /><select name=\"ex_type\">";
 	$export_pagecontent .= "<option value=\"veranstaltung\">" . _("Veranstaltungsdaten") .  "";
 	$export_pagecontent .= "<option value=\"person\">" . _("MitarbeiterInnendaten") .  "";
 //	$export_pagecontent .= "<option value=\"forschung\">" . _("Forschungsberichte") .  "";
-	$export_pagecontent .= "</select><br><br><br><br>";
+	$export_pagecontent .= "</select><br><br>";
 	
-	$export_pagecontent .= _("Bitte wählen Sie eine Einrichtung: ") .  "<select name=\"range_id\">";
+	$export_pagecontent .="<b><font size=\"-1\">". _("Bitte wählen Sie eine Einrichtung: ") .  "</font></b><br /><select name=\"range_id\">";
 	
 	$db->query("SELECT Institute.Institut_id, Institute.Name FROM Institute WHERE Institut_id <> fakultaets_id ORDER BY Institute.Name");
 	while ($db->next_record())
 	{
-		$export_pagecontent .= "<option value=\"" . $db->f("Institut_id") . "\">" . $db->f("Name");
+		$export_pagecontent .= "<option value=\"" . $db->f("Institut_id") . "\">" . htmlReady(my_substr($db->f("Name"), 0, 60));
 	}
-	$export_pagecontent .= "</select><br><br><br>";
+	$export_pagecontent .= "</select><br>";
 	
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"choose\">";
 
-	$export_weiter_button = "<center><input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\"></center></form>";
+	$export_weiter_button = "<input type=\"IMAGE\"" . makeButton("weiter", "src") . " name=\"\"></center></form>";
 		$infobox = array	(			
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
@@ -64,7 +63,7 @@ $export_pagename = _("Datenexport - Startseite");
 		);
 		{
 			$infobox[1]["kategorie"] = _("Aktionen:");
-				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumrot.gif" ,
 											"text"  => sprintf(_("Wählen Sie die Art der Daten, die Sie exportieren wollen, und die Einrichtung, aus der die Daten gelesen werden sollen. Klicken Sie dann auf 'weiter.'"), $link2, "</a>")
 										);
 		}
