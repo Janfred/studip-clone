@@ -179,11 +179,11 @@ class DbCalendarDay extends CalendarDay{
 			while($db->next_record()){
 				$repeat = $db->f("date").",,,,,,SINGLE,#";
 				$expire = 2114377200; //01.01.2037 00:00:00 Uhr
-				$app = new Termin($db->f("date"), $db->f("end_time"), $db->f("content"), $repeat, $expire,
+				$app = new CalendarEvent($db->f("date"), $db->f("end_time"), $db->f("content"), $repeat, $expire,
 				                  $db->f("date_typ"), $db->f("priority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 				$app->setSeminarId($db->f("Seminar_id"));
 				$app->setColor($color[$db->f("gruppe")]);
-				$app->setKategorie($db->f("date_typ"));
+				$app->setCategory($db->f("date_typ"));
 				$this->app[] = $app;
 			}
 			$this->sort();

@@ -135,7 +135,7 @@ class DbCalendarMonth extends DbCalendarYear{
 															  $db->f("priority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
 			$app->setSeminarId($db->f("Seminar_id"));
 			$app->setColor($color[$db->f("gruppe")]);
-			$app->setKategorie($db->f("date_typ"));
+			$app->setCategory($db->f("date_typ"));
 			$this->apps["$adate"][] = $app;
 		}
 	}
