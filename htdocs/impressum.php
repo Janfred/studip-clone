@@ -130,9 +130,10 @@ $reiter->create($structure, $view);
 			<blockquote>
 			<font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> <?=_("(Hilfe)")?></font>
 			<br><font size=-1><b>Oliver Brakel</b>, E-Mail: <a href="mailto:obrakel@studip.de">obrakel@studip.de</a> <?=_("(Distribution)")?></font>
+			<br><font size=-1><b>Philipp H&uuml;gelmeyer</b>, E-Mail: <a href="mailto:phuegelm@uos.de">phuegelm@uos.de</a> <?=_("(Distribution)")?></font>
 			<br><font size=-1><b>Cornelis Kater</b>, E-Mail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> <?=_("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)")?></font>
 			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)")?></font>
-			<br><font size=-1><b>Arne Schröder</b>, E-Mail: <a href="mailto:23arne@web.de">schroeder@data-quest.de</a> <?=_("(Export-Schnittstellen, ILIAS-Anbindung)")?></font>
+			<br><font size=-1><b>Arne Schr&ouml;der</b>, E-Mail: <a href="mailto:23arne@web.de">schroeder@data-quest.de</a> <?=_("(Export-Schnittstellen, ILIAS-Anbindung)")?></font>
 			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@gwdg.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)")?></font>
 			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)")?></font>
 			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb)")?></font>
