@@ -34,43 +34,8 @@
 // +---------------------------------------------------------------------------+
 
 
-
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
-
-function print_seminar_content($semid,$my_sem_values) {
-
-  //News
-  if ($my_sem_values["neuenews"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip(sprintf(_("%s News, %s neue"), $my_sem_values["news"], $my_sem_values["neuenews"]))."></a>";
-  elseif ($my_sem_values["news"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 ".tooltip(sprintf(_("%s News"), $my_sem_values["news"]))."></a>";
-  else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-
-  //Literatur
-  if ($my_sem_values["literatur"]) {
-		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
-		if ($my_sem_values["neueliteratur"])
-	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste (geändert)"))."></a>";
-		else
-		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste"))."></a>";
-  }
-  else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-
-  // Termine
-  if ($my_sem_values["neuetermine"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_sem_values["termine"], $my_sem_values["neuetermine"]))."></a>";
-  elseif ($my_sem_values["termine"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_sem_values["termine"]))."></a>";
-  else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
-
-  echo "&nbsp;";
-
-} // Ende function print_seminar_content
-
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
@@ -140,7 +105,7 @@ if ($num_my_sem) {
 		echo "<tr ".$cssSw->getHover()." >";
 		echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 		// name-field
-		echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"archiv.php?dump_id=".$db->f('seminar_id')."\">";
+		echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"archiv.php?dump_id=".$db->f('seminar_id')."\" target=\"new\">";
 		echo "<font size=-1>".htmlReady($db->f("name"))."</font>";
 		print ("</a></td>");
 		// content-field
