@@ -151,7 +151,7 @@ function GetScoreContent($user_id) {
 			$tmp = _("Gästebuch aktiviert mit 1 Eintrag");
 		else 
 			$tmp = _("Gästebuch aktiviert mit $gaeste Einträgen");
-		$content .= "<a href=\"about.php?username=$username&guestbook=open#guest\"><img src=\"pictures/icon-posting.gif\" border=\"0\"".tooltip("$tmp")."></a>&nbsp;";
+		$content .= "<a href=\"about.php?username=$username&guestbook=open#guest\"><img src=\"pictures/icon-guest.gif\" border=\"0\"".tooltip("$tmp")."></a>&nbsp;";
 	} else {
 		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
 	}

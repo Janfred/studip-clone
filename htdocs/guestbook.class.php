@@ -85,7 +85,7 @@ class Guestbook {
 			echo "<a name=\"guest\">";
 			
 		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		echo "\n<tr valign=\"baseline\"><td class=\"topic\">&nbsp;<img src=\"./pictures/nutzer.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
+		echo "\n<tr valign=\"baseline\"><td class=\"topic\"><img src=\"./pictures/guestbook.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
 		echo _("Gästebuch").$active;
 		print("</b></td></tr>");
 				
@@ -101,7 +101,7 @@ class Guestbook {
 		//
 		$titel = "<a href=\"$link\" class=\"tree\" >".$this->number."&nbsp;"._(" Einträge")."</a>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printhead ("100%","0",$link,$this->openclose,$new,"<img src=\"pictures/cont_blatt.gif\">",$titel,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);	
+		printhead ("100%","0",$link,$this->openclose,$new,"<img src=\"pictures/icon-guest.gif\">",$titel,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);	
 			
 		echo "</tr></table>";
 		if ($this->openclose == "open") {
