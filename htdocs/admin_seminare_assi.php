@@ -1299,13 +1299,13 @@ if (!$sem_create_data["sem_class"]) {
 		<tr>
 			<td class="blank">&nbsp;
 				<blockquote>
-					<table cellpadding=0>
+					<table cellpadding=0 cellspacing=2 width="100%" border="0">
 					<?
 					foreach ($SEM_CLASS as $key=>$val) {
 						echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"pictures/forumrot.gif\" border=0 /></a><td>";
 						echo "<td width=\"97%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\">".$val["name"]."</a><td></tr>";
 						echo "<tr><td width=\"3%\" class=\"blank\">&nbsp; <td>";
-						echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$val["create_description"]."<td></tr>";
+						echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$val["create_description"]."</font><td></tr>";
 					}
 					?>
 					</table>
@@ -1702,7 +1702,7 @@ if ($level==2)
 							>
 							<font color="red" size=+2>*</font>
 						</td>
-						<td <? echo $cssSw->getFullClass() ?> width="50%">
+						<td <? echo $cssSw->getFullClass() ?> width="50%" colspan="2">
 							<?
 							if (($search_exp_doz) && ($search_doz_x)) {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"]) {
@@ -1769,7 +1769,7 @@ if ($level==2)
 								?>
 							>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="50%">
+						<td class="<? echo $cssSw->getClass() ?>" width="50%" colspan="2">
 							<?
 							if (($search_exp_tut) && ($search_tut_x)) {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"]) {
@@ -2034,7 +2034,7 @@ if ($level==3) {
 										$sem_create_data["turnus_count"]=1;
 									for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
 										if ($i>0) echo "<br>";
-										?>&nbsp; <select name="term_turnus_date[<?echo $i?>]">
+										?>&nbsp; <font size=-1><select name="term_turnus_date[<?echo $i?>]">
 										<?
 										if (($sem_create_data["term_turnus_date"][$i]==1) || (empty($sem_create_data["term_turnus_date"][$i])))
 											echo "<option selected value=1>"._("Montag")."</option>";
@@ -2066,21 +2066,21 @@ if ($level==3) {
 											echo "<option value=7>"._("Sonntag")."</option>";
 										echo "</select>\n";
 										?>
-										<font size=-1>&nbsp; <input type="text" name="term_turnus_start_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_start_stunde"][$i]) echo $sem_create_data["term_turnus_start_stunde"][$i] ?>"> :
+										&nbsp; <input type="text" name="term_turnus_start_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_start_stunde"][$i]) echo $sem_create_data["term_turnus_start_stunde"][$i] ?>"> :
 										<input type="text" name="term_turnus_start_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_start_minute"][$i]) && ($sem_create_data["term_turnus_start_minute"][$i] >0)) { if ($sem_create_data["term_turnus_start_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_start_minute"][$i]; else echo $sem_create_data["term_turnus_start_minute"][$i];  } elseif ($sem_create_data["term_turnus_start_stunde"][$i]) echo "00"; ?>">&nbsp;<?=_("Uhr bis");?>
 										&nbsp; <input type="text" name="term_turnus_end_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_end_stunde"][$i]) echo $sem_create_data["term_turnus_end_stunde"][$i] ?>"> :
-										<input type="text" name="term_turnus_end_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) { if ($sem_create_data["term_turnus_end_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_end_minute"][$i]; else echo $sem_create_data["term_turnus_end_minute"][$i];  } elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo "00"; ?>">&nbsp;<?=_("Uhr");?></font>
+										<input type="text" name="term_turnus_end_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) { if ($sem_create_data["term_turnus_end_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_end_minute"][$i]; else echo $sem_create_data["term_turnus_end_minute"][$i];  } elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo "00"; ?>">&nbsp;<?=_("Uhr");?>
 										<?
 										if ($sem_create_data["turnus_count"]>1) {
 											?>
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 										}
-										print "<br /><font size=-1>&nbsp; "._("Raum:")." ";
+										print "<br />&nbsp; "._("Raum:")."";
 										if ($RESOURCES_ENABLE) {
 											$resList->reset();
 											if ($resList->numberOfEvents()) {
-												print " &nbsp;<select name=\"term_turnus_resource_id[]\"></font>";
+												print " &nbsp;<select name=\"term_turnus_resource_id[]\">";
 												printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
 												while ($resObject = $resList->nextEvent()) {
 													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
