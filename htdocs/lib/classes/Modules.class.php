@@ -50,7 +50,7 @@ class Modules {
 		"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE),
 		"vips" => array("id" => 10, "const" => "VIPS_ENABLE", "sem" => TRUE, "inst" => FALSE),
 		"impuls_ec" => array("id" => 11, "const" => "IMPULS_EC_ENABLE", "sem" => TRUE, "inst" => FALSE),
-		"scm" => array("id" => 12, "const" => "", "sem" => TRUE, "inst" => TRUE)
+		"scm" => array("id" => 12, "const" => "SCM_ENABLE", "sem" => TRUE, "inst" => TRUE)
 	);
 	var $db;
 	
