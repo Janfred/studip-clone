@@ -327,36 +327,41 @@ function lastActivity ($sem_id) {
 *
 */
 function get_object_type($id) {
-	 $db=new DB_Seminar;
-
-	$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$id' ");
-	if ($db->next_record())
-		return "sem";
-
-	$db->query("SELECT Institut_id,IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM Institute WHERE Institut_id = '$id' ");
-	if ($db->next_record())
-		return ($db->f("is_fak")) ? "fak" : "inst";
-
-	$db->query("SELECT user_id FROM auth_user_md5 WHERE user_id = '$id' ");
-	if ($db->next_record())
-		return "user";
-
-	$db->query("SELECT item_id FROM range_tree WHERE item_id = '$id' ");
-	if ($db->next_record())
-		return "range_tree";
-
-	$db->query("SELECT termin_id FROM termine WHERE termin_id = '$id' ");
-	if ($db->next_record())
-		return "date";
-
-	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
-	if ($db->next_record())
-		return "group";
-
-	$db->query("SELECT dokument_id FROM dokumente WHERE dokument_id = '$id' ");
-	if ($db->next_record())
-		return "dokument";
-
+	static $object_type_cache;
+	if ($id){
+		if (!$object_type_cache[$id]){
+			$db=new DB_Seminar;
+			$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$id' ");
+			if ($db->next_record())
+				return $object_type_cache[$id] = "sem";
+	
+			$db->query("SELECT Institut_id,IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM Institute WHERE Institut_id = '$id' ");
+			if ($db->next_record())
+				return $object_type_cache[$id] = ($db->f("is_fak")) ? "fak" : "inst";
+		
+			$db->query("SELECT termin_id FROM termine WHERE termin_id = '$id' ");
+			if ($db->next_record())
+				return $object_type_cache[$id] = "date";
+			
+			$db->query("SELECT user_id FROM auth_user_md5 WHERE user_id = '$id' ");
+			if ($db->next_record())
+				return $object_type_cache[$id] = "user";
+			
+			$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
+			if ($db->next_record())
+				return $object_type_cache[$id] = "group";
+		
+			$db->query("SELECT dokument_id FROM dokumente WHERE dokument_id = '$id' ");
+			if ($db->next_record())	
+				return $object_type_cache[$id] = "dokument";
+		
+			$db->query("SELECT item_id FROM range_tree WHERE item_id = '$id' ");
+			if ($db->next_record())
+				return $object_type_cache[$id] = "range_tree";
+		} else {
+			return $object_type_cache[$id];
+		}
+	}
 	return FALSE;
 }
 
