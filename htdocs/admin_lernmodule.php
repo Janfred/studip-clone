@@ -53,14 +53,17 @@ if ($ILIAS_CONNECT_ENABLE)
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="2"><b>Administration von Lernmodulen</b>
+		<td class="topic" colspan="3">&nbsp;<b>Administration von Lernmodulen</b>
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="2">&nbsp; 
+		<td class="blank" colspan="3">&nbsp; 
 		</td>
 	</tr>
 	<tr valign="top">
+                <td width="1%" class="blank">
+                	&nbsp; 
+                </td>
      		<td width="90%" class="blank">
 		<?
 	//neuen ILIAS-User anlegen, wenn noch nicht vorhanden.
@@ -99,6 +102,10 @@ if ($ILIAS_CONNECT_ENABLE)
 			print_infobox ($infobox,"pictures/lernmodule.jpg");
 		?>		
 		</td>		
+	</tr>
+	<tr>
+		<td class="blank" colspan="3">&nbsp; 
+		</td>
 	</tr>
 	</table>
 <?

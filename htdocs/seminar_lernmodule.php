@@ -73,7 +73,7 @@ if ($ILIAS_CONNECT_ENABLE)
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="2"><b>
+		<td class="topic" colspan="3">&nbsp;<b>
 		<?   if ($view=="edit") 
 				echo _("Verbindung von Veranstaltungen und Lernmodulen"); 
 			else
@@ -82,12 +82,15 @@ if ($ILIAS_CONNECT_ENABLE)
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan="2">&nbsp; 
+		<td class="blank" colspan="3">&nbsp; 
 		</td>
 	</tr>
 	<tr valign="top">
-		<td width="90%" class="blank"><?
-     				
+                <td width="1%" class="blank">
+                	&nbsp; 
+                </td>
+		<td width="90%" class="blank">
+<?     				
 	if (($view == "edit") AND ($perm->have_perm("dozent")))
 	{
 		$infobox = array	(			
@@ -157,6 +160,10 @@ if ($ILIAS_CONNECT_ENABLE)
 		print_infobox ($infobox,"pictures/lernmodule.jpg");
 	?>		
 	</td>		
+</tr>
+<tr>
+	<td class="blank" colspan="3">&nbsp; 
+	</td>
 </tr>
 </table>
 <?
