@@ -186,7 +186,7 @@ IF ($db->f("privatnr")!="") echo "<b>&nbsp;" . _("Telefon (privat):") . " </b>".
 IF ($db->f("privadr")!="") echo "<b>&nbsp;" . _("Adresse (privat):") . " </b>". htmlReady($db->f("privadr"))."<br>";
 IF ($db->f("Home")!="") {
 	$home=$db->f("Home");
-	$home=FixLinks($home);
+	$home=FixLinks(htmlReady($home));
 	echo "<b>&nbsp;" . _("Homepage:") . " </b>".$home."<br>";
 }
 

@@ -279,7 +279,7 @@ function dump_sem($sem_id) {
 		if ($db->num_rows()) {
 		  	$db->next_record();
 		  	$content = $db->f("content");
-		  	$content = FixLinks(format($content)); // /newline fixen
+		  	$content = FixLinks(format(htmlReady($content))); // /newline fixen
 		  	$tab_name = $db->f("tab_name");
 		  	$tab_name = htmlReady($tab_name); // /newline fixen
 		     
@@ -296,14 +296,14 @@ function dump_sem($sem_id) {
 	}
 	
 	if ($Modules['literature']){
-		$lit = StudipLitList::GetFormattedListsByRange($sem_id, false);
+		$lit = StudipLitList::GetFormattedListsByRange($sem_id, false, false);
 		if ($lit){
 			$dump.="<br>";	  
 		  	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
 			$dump .= " <tr><td align=left class=\"topic\">";
 			$dump .= "<H2 class=\"topic\">&nbsp;" . _("Literaturlisten") . "</H2>";
 			$dump.= "</td></tr>\n";
-			$dump.="<tr><td align=\"left\" width=\"100%\"><br>". format($lit) ."<br></td></tr>\n";
+			$dump.="<tr><td align=\"left\" width=\"100%\"><br>". $lit ."<br></td></tr>\n";
 			$dump .= "</table>\n";
 		}
 	}
@@ -394,7 +394,7 @@ function dump_sem($sem_id) {
 				
 					while ($db->next_record()) {
 						$dump.="<tr><td>";
-						$dump.= $db->f("fullname");
+						$dump.= htmlReady($db->f("fullname"));
 						$dump.="</td><td align=center>";
 						$dump.= $db->f("doll");
 						$dump.="</td><td align=center>";

@@ -566,7 +566,7 @@ function kontakt ($this, $db) {
 		}
         	
 		if($data_field == "Home" && $db->f("Home")){
-			$home = trim(FixLinks($db->f("Home"), TRUE, TRUE, FALSE, TRUE));
+			$home = trim(FixLinks(htmlReady($db->f("Home")), TRUE, TRUE, FALSE, TRUE));
 			$out .= "<tr$attr_tr>";
 			$out .= "<td$attr_td>";
 			$out .= "<font$attr_fonttitle>";

@@ -631,7 +631,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 			if ($db->f("Home")) {
 				$home = mila($db->f("Home"), 20);
 				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
-					$css_switcher->getFullClass(), FixLinks($db->f("Home"), FALSE));
+					$css_switcher->getFullClass(), FixLinks(htmlReady($db->f("Home")), FALSE));
 			}
 			else
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
