@@ -931,7 +931,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					printf("<font size=-1>" . _("News") . "<br /><a href=\"admin_news.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
 					break;
 				case "copy_assi.php": 
-					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("kopieren"));
 					break;
 				case "admin_visibility.php": 
 					if ($perm->have_perm("admin")) {
