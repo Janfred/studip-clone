@@ -269,11 +269,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 <?
 
-	}
+}
 	
-	echo"<body>\n";
-	ob_end_flush();
+ob_end_flush();
 
-	include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft
+include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft
 ?>
 <!-- $Id$ -->
