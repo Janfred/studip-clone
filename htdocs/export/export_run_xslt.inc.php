@@ -76,7 +76,7 @@ else
 	$result_file = md5(uniqid(rand())) . "." . $format;
 	$result = "" . $TMP_PATH . "/" . $result_file;
 	$xml_process_file = "" . $TMP_PATH . "/" . $xml_file_id;
-	$xslt_process_file = "" . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
+	$xslt_process_file = "" . $ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
 	if (xslt_process($xh, $xml_process_file , $xslt_process_file, $result) AND ($o_mode != "passthrough")) 
 	{
 		$export_msg .= sprintf(_("Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die Ausgabedatei jetzt herunterladen. %s"), "<br>", "<br>");
