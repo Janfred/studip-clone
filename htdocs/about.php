@@ -234,6 +234,10 @@ echo "</blockquote></td></tr>"
 <?
 echo "<font size=\"-1\">&nbsp;"._("Besucher dieser Homepage:")."&nbsp;".object_return_views($user_id)."</font><br>";
 
+// Export dieses Users als Vcard
+echo "<font size=\"-1\">&nbsp;"._("User als vCard exportieren:")."&nbsp;<a href=\"contact_export.php?username=$username\"><img src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Als vCard exportieren"))."></a></font><br>";
+
+
 if ($username==$auth->auth["uname"]) {
 	if ($auth->auth["jscript"])
 		echo "<br>&nbsp; <a href='javascript:open_im();'>" . _("Stud.IP Messenger starten") . "</a>";
