@@ -53,7 +53,7 @@ if (!($_range_type == "sem" && $perm->have_studip_perm("tutor",$range_id)) &&
 function GetPresetGroups ($view, $veranstaltung_class)
 { 	global $INST_STATUS_GROUPS, $SEM_STATUS_GROUPS;
         echo "<select name=\"move_old_statusgruppe\">";
-	if ($view == "statusgruppe_inst") {
+	if ($view == "statusgruppe_inst" || $view == "statusgruppe_fak") {
 		for ($i=0; $i<sizeof($INST_STATUS_GROUPS["default"]); $i++) {
 			printf ("<option>%s</option>",$INST_STATUS_GROUPS["default"][$i]);
 		}
@@ -481,7 +481,6 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 // Ende Gruppenuebersicht
 
 // Ende Darstellungsteil
-
 page_close();
 ?>
 </body>

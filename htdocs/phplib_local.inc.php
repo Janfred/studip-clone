@@ -553,19 +553,28 @@ class Seminar_Perm extends Perm {
 		include($ABSOLUTE_PATH_STUDIP . "perminvalid.ihtml");
 	}
 	
-	function get_studip_perm($range_id) {
+	function get_studip_perm($range_id, $user_id = false) {
 		global $auth;
 		if (!$range_id){
 			return false;
 		}
 		$db=new DB_Seminar;
 		$status = false;
-		$user_id = $auth->auth["uid"];
-		$user_perm = $auth->auth["perm"];
+		if (!$user_id){
+			$user_id = $auth->auth["uid"];
+			$user_perm = $auth->auth["perm"];
+		} else {
+			$db->query("SELECT perms FROM auth_user_md5 WHERE user_id = '$user_id'");
+			if (!$db->next_record()){
+				return false;
+			} else {
+				$user_perm = $db->f(0);
+			}
+		}
 		if ($user_perm == "root") {
 			return "root";
-		} elseif (isset($this->studip_perms[$range_id])) {
-			return $this->studip_perms[$range_id];
+		} elseif (isset($this->studip_perms[$range_id][$user_id])) {
+			return $this->studip_perms[$range_id][$user_id];
 		} elseif ($user_perm == "admin") {
 			$db->query("SELECT seminare.Seminar_id FROM user_inst 
 						LEFT JOIN seminare USING (Institut_id)
@@ -588,7 +597,7 @@ class Seminar_Perm extends Perm {
 		}
 		
 		if ($status) {
-			$this->studip_perms[$range_id] = $status;
+			$this->studip_perms[$range_id][$user_id] = $status;
 			return $status;
 		}
 		
@@ -601,7 +610,7 @@ class Seminar_Perm extends Perm {
 				$status=$db->f("inst_perms");
 			}
 		}
-		$this->studip_perms[$range_id] = $status;
+		$this->studip_perms[$range_id][$user_id] = $status;
 		return $status;
 	}
 	
