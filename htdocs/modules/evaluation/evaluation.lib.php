@@ -128,46 +128,40 @@ class EvalCommon {
   }
 
   /**
-   * Creates a link, which will open an evaluation popup
+   * Creates the Javascript function, which will open an evaluation popup
    */
-
-  function createEvalShowLink ($evalID, $content, $isPreview = NO, $as_object = YES) {
-      static $firstCall = YES;
-      
+  function createEvalShowJS( $isPreview = NO, $as_object = YES ) {
       $html = "";
-      /*
-      $html .=
-	  "<script type=\"text/javascript\" language=\"JavaScript\">" .
-	  "document.write('<a href=\"javascript:void();\" " .
-	  "onClick=\"window.open(\'show_evaluation.php?evalID=".$evalID."&isPreview=".$isPreview."\', " .
-	  "\'_blank\', \'width=790,height=500,scrollbars=yes,resizable=yes\');\">" .
-	  (is_object($content) ? str_replace("\n", "", $content->createContent()) : $content) .
-	  "</a>');" .
-	  "</script>\n" .
-
-	  "<noscript>".
-	  "<a href=\"show_evaluation.php?evalID=".$evalID."&isPreview=".$isPreview."\" target=\"_blank\">" .
-	  (is_object($content) ? str_replace("\n", "", $content->createContent()) : $content) .
-	  "</a></noscript>";
-      */
-      
-      $html .=
-	  "<script type=\"text/javascript\" language=\"JavaScript\">";
-
-      $html .= $firstCall
-	  ? "function openEval( evalID ) {" .
+      $html .= 
+	  "<script type=\"text/javascript\" language=\"JavaScript\">".
+	  "  function openEval( evalID ) {" .
 	  "    evalwin = window.open('show_evaluation.php?evalID=' + evalID + '&isPreview=".$isPreview."', " .
 	  "                          evalID, 'width=790,height=500,scrollbars=yes,resizable=yes');" .
 	  "    evalwin.focus();".
-	  "  }\n"
-	  : "";
+	  "  }\n".
+	  "</script>\n";
+
+      $div = new HTML ("div");
+#      $div->addAttr( "style", "display:inline;" );
+      $div->addHTMLContent( $html );
+      
+      if ( $as_object )
+          return $div;
+      else
+          return $html;
+  }
+
+  /**
+   * Creates a link, which will open an evaluation popup
+   */
+  function createEvalShowLink ($evalID, $content, $isPreview = NO, $as_object = YES) {
+      $html = "";
       
       $html .=
+	  "<script type=\"text/javascript\" language=\"JavaScript\">".
 	  "document.write('<a href=\"javascript:openEval(\'".$evalID."\');\">" .
 	  (is_object($content) ? str_replace("\n", "", $content->createContent()) : $content) .
-	  "</a>');";
-
-      $html .=
+	  "</a>');".
 	  "</script>\n";
 
       $html .=
@@ -180,8 +174,6 @@ class EvalCommon {
 #      $div->addAttr( "style", "display:inline;" );
       $div->addHTMLContent( $html );
       
-      $firstCall = NO;
-
       if ( $as_object )
           return $div;
       else

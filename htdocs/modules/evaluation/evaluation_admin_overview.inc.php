@@ -85,6 +85,10 @@ $templates_search = $_REQUEST["templates_search"];
 $search = $templates_search;
 /* ---------------------------------------------------------- end: variables */
 
+/* Javascript function ----------------------------------------------------- */
+$js = EvalCommon::createEvalShowJS( YES );
+echo $js->createContent();
+
 /* Blue title -------------------------------------------------------------- */
 $title = EvalCommon::createTitle (EVAL_TITLE, EVAL_PIC_ICON);
 echo $title->createContent ();

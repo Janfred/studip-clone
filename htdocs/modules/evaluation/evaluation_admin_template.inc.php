@@ -619,8 +619,11 @@ if( $command ) {
     
 }
 
+/* Javascript function for preview-link */
+$js = EvalCommon::createEvalShowJS( YES );
+
 /* --------------------------------------------------------------------- */
-return $tableA->createContent();
+return $js->createContent() . $tableA->createContent();
 /* --------------------------------------------------------------------- */
 
 
