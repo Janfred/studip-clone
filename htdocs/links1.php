@@ -43,7 +43,7 @@ if ($entry_level=="inst") {
 //Bottomkats
 if ($entry_level=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>"Info", link=>"institut_main.php", active=>FALSE);
-	$structure["institut_mitarbeiter"]=array (topKat=>"institut_main", name=>"Mitarbeiter", link=>"institut_mitarbeiter.php", active=>FALSE);
+	$structure["institut_mitarbeiter"]=array (topKat=>"institut_main", name=>"MitarbeiterInnen", link=>"institut_mitarbeiter.php", active=>FALSE);
 	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>"Veranstaltungen", link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
 	$structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
 	if ($rechte)
@@ -52,7 +52,7 @@ if ($entry_level=="inst") {
 //
 	$structure["_seminar_main"]=array (topKat=>"seminar_main", name=>"Kurzinfo", link=>"seminar_main.php", active=>FALSE);
 	$structure["details"]=array (topKat=>"seminar_main", name=>"Details", link=>"details.php", active=>FALSE);
-	$structure["teilnehmer"]=array (topKat=>"seminar_main", name=>"Teilnehmer", link=>"teilnehmer.php", active=>FALSE);
+	$structure["teilnehmer"]=array (topKat=>"seminar_main", name=>"TeilnehmerInnen", link=>"teilnehmer.php", active=>FALSE);
 	$structure["druckansicht_s"]=array (topKat=>"seminar_main", name=>"Druckansicht", link=>"print_seminar.php", target=>"_new", active=>FALSE);
 	if ($rechte)
 		$structure["administration_v"]=array (topKat=>"seminar_main", name=>"Administration dieser Veranstaltung", link=>"admin_seminare1.php?new_sem=TRUE".$SessSemName[1], active=>FALSE);
