@@ -628,26 +628,28 @@ function in_archiv ($sem_id)
 	
 	//globale Seminardokumente unter richtigem Namen ins temporaere Verzeichnis kopieren
 	$doc_ids=doc_challenge ($seminar_id);
-	foreach ($doc_ids as $a) {
-		$db->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id = '$a'");
-		if ($db->next_record()) {
-			$docs++;
-			exec ("cp '$UPLOAD_PATH/".$a."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
+	if (is_array($doc_ids))
+		foreach ($doc_ids as $a) {
+			$db->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id = '$a'");
+			if ($db->next_record()) {
+				$docs++;
+				exec ("cp '$UPLOAD_PATH/".$a."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
+				}
 			}
-		}
 
 	//Dokumente zu Terminen unter richtigem Namen ins temporaere Verzeichnis kopieren
 	$db->query ("SELECT termin_id FROM termine WHERE range_id='$seminar_id'");
 	while ($db->next_record()) {
 		$doc_ids=doc_challenge ($db->f("termin_id"));
-		foreach ($doc_ids as $a) {
-			$db2->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id = '$a'");
-			if ($db2->next_record()) {
-				$docs++;
-				exec ("cp '$UPLOAD_PATH/".$a."' '$tmp_full_path/[".($docs)."] ".$db2->f("filename") ."'");
+		if (is_array($doc_ids))
+			foreach ($doc_ids as $a) {
+				$db2->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id = '$a'");
+				if ($db2->next_record()) {
+					$docs++;
+					exec ("cp '$UPLOAD_PATH/".$a."' '$tmp_full_path/[".($docs)."] ".$db2->f("filename") ."'");
+					}
 				}
 			}
-		}
 
 	//Alles zippen
 	if ($docs) {
