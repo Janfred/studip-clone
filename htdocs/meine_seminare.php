@@ -205,6 +205,7 @@ require_once ($ABSOLUTE_PATH_STUDIP."dates.inc.php");			// Semester-Namen fuer A
 require_once ($ABSOLUTE_PATH_STUDIP."admission.inc.php");		// Funktionen der Teilnehmerbegrenzung
 require_once ($ABSOLUTE_PATH_STUDIP."messaging.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Modules.class.php");	// modul-config class
+require_once ($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");		// Funktionen für Statusgruppen
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
@@ -280,12 +281,15 @@ if ($cmd=="kill") {
 		if ($db->affected_rows() == 0)
 			$meldung="error§" . _("Datenbankfehler!");
 		else {
-		  //Pruefen, ob es Nachruecker gibt
-		  update_admission($auswahl);
+		  	// Löschen aus Statusgruppen
+		  	RemovePersonStatusgruppeComplete ($user->username, $auswahl);
+		 	
+		  	//Pruefen, ob es Nachruecker gibt
+		  	update_admission($auswahl);
 	  
-	  	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
-		  $db->next_record();
-		  $meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."), htmlReady($db->f("Name")));
+	  		$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
+		  	$db->next_record();
+		  	$meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."), htmlReady($db->f("Name")));
 		}
 	}
 }
