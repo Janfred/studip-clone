@@ -42,7 +42,7 @@ if ($CHAT_ENABLE) {
      
 <?}?>
 
-<body bgcolor="#333366" background="pictures/bathtile.jpg">
+<body>
 <?
 
 	// Initialisierung der Hilfe
