@@ -280,7 +280,7 @@ $db5=new DB_Seminar;
 									$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
 								if ($db->f("studiengang_id") == $sem_verify_possible_studg)
 									print "<b>";
-								printf ("&nbsp; &nbsp; <font size=-1 color=\"%s\">"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</font>", ($db->f("studiengang_id") == $sem_verify_possible_studg)  ? "black" : "#888888", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
+								printf ("&nbsp; &nbsp; <font size=-1 color=\"%s\">"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</font>", ($db->f("studiengang_id") == $sem_verify_possible_studg)  ? "black" : "#888888", ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), $tmp_sem_verify_quota);
 								if ($db->f("studiengang_id") == $sem_verify_possible_studg) {
 									printf ("</b>&nbsp; <input type=\"HIDDEN\" name=\"sem_verify_suggest_studg\" value=\"%s\">", $db->f("studiengang_id"));
 								}
@@ -330,9 +330,9 @@ $db5=new DB_Seminar;
 									else
 										$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
 									if (($db3->num_rows()) || ($db->f("studiengang_id") == "all"))
-										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_studg\" value=\"%s\">&nbsp; <font size=-1><b>"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</b></font><br />", $db->f("studiengang_id"), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
+										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_studg\" value=\"%s\">&nbsp; <font size=-1><b>"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</b></font><br />", $db->f("studiengang_id"), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), $tmp_sem_verify_quota);
 									else
-										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
+										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</font><br />", ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), $tmp_sem_verify_quota);
 									}
 							       ?>
 							<br />&nbsp; &nbsp; <input type="IMAGE" <?=makeButton("ok", "src")?> border=0 value="abschicken">
