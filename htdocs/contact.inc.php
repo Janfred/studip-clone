@@ -316,6 +316,7 @@ function ShowContact ($contact_id)
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						.$buddy		
 						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" ".tooltip(_("Editieren"))."></a>&nbsp; "
+						."<a href=\"contact_export.php?contactid=$contact_id\"><img src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Als vCard exportieren"))."></a>&nbsp; "
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Kontakt löschen"))."></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schließen"))."></a></td></tr>";
 		} else {
@@ -370,7 +371,10 @@ function ShowContact ($contact_id)
 					<tr>
 						<td class=\"topic\" width=\"99%\"><font size=\"2\"><b>"
 							.get_fullname($db->f("user_id"), $format = "full_rev" )."</b></font></td>"
-							."<td class=\"topic\"><a href=\"sms_send.php?sms_source_page=contact.php&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachrichtsmall.gif\" border=\"0\" ".tooltip(_("Nachricht schreiben"))." align=\"right\"></a>"
+							. "<td class=\"topic\">"
+							// export to vcf
+//							."<a href=\"sms_send.php?sms_source_page=contact.php&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/meinetermine.gif\" border=\"0\" ".tooltip(_("Nachricht schreiben"))." align=\"right\"></a>"
+							."<a href=\"sms_send.php?sms_source_page=contact.php&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachrichtsmall.gif\" border=\"0\" ".tooltip(_("Nachricht schreiben"))." align=\"right\"></a>"
 							."</td>"
 							."
 						</td>

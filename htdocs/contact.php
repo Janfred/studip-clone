@@ -208,7 +208,7 @@ if (($contact["view"])=="gruppen") {
 	}
 	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
 		."<a href=\"$PHP_SELF?filter=all\"><font size=\"2\">" . _("Alle Gruppen") . "</font></a>"
-		."&nbsp; </td>";
+		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a>&nbsp; </td>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
@@ -220,6 +220,7 @@ if (($contact["view"])=="gruppen") {
 			$cssSw->switchClass();
 			$color = "color=\"#FF0000\"";
 			$maillink = "&nbsp; <a href=\"sms_send.php?sms_source_page=contact.php&group_id=$filter\"><img src=\"pictures/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
+			$maillink .= "&nbsp; <a href=\"contact_export.php?groupid=".$db->f("statusgruppe_id")."\"><img src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Diese Gruppe als vCard exportieren"))."></a>";			
 		} else {
 			$color = "";
 			$maillink ="";
@@ -258,6 +259,7 @@ if (!$edit_id) {
 	if ($open && $size_of_book>0) {
 		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/nutzer.gif\">&nbsp; "._("Buddystatus");
 		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/einst.gif\">&nbsp; "._("Eigene Rubriken");
+		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/vcardexport.gif\">&nbsp; "._("Als vCard exportieren");
 		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/trash.gif\">&nbsp; "._("Kontakt löschen");
 	}
 	echo 	"<br><font size=\"2\" color=\"#555555\">"._("Bedienung:").$hints;
