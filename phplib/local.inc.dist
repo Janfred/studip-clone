@@ -74,7 +74,7 @@ $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
 /*paths
 ----------------------------------------------------------------
-configurre Stud.IP folders*/
+configure Stud.IP folders*/
 
 $ABSOLUTE_PATH_STUDIP = "/srv/www/htdocs/studip/";
 //where ro store documents and the archive
@@ -111,6 +111,8 @@ $RELATIVE_PATH_EXTERN = "extern"; 							//Stud.IP module: SRI-System for includ
 $RELATIVE_PATH_LEARNINGMODULES = "lernmodule";						//Stud.IP module: Ilias lerningmodules-connection
 $RELATIVE_PATH_SUPPORT = "./support";							//Stud.IP module: SupportDB (not part of the main distribution)
 $PATH_EXPORT = "export";								//Stud.IP module: export
+
+$FAVICON = "http://www.studip.de/favicon.ico";
 
 
 /*mail settings
