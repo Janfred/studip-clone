@@ -322,7 +322,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				if (($metadata_termin["turnus_data"][$key]["start_stunde"] != $term_metadata["original_turnus"][$key]["start_stunde"])
 					|| ($metadata_termin["turnus_data"][$key]["start_minute"] != $term_metadata["original_turnus"][$key]["start_minute"])
 					|| ($metadata_termin["turnus_data"][$key]["end_stunde"] != $term_metadata["original_turnus"][$key]["end_stunde"])
-					|| ($metadata_termin["turnus_data"][$key]["end_minute"] != $term_metadata["original_turnus"][$key]["end_minute"])) {
+					|| ($metadata_termin["turnus_data"][$key]["end_minute"] != $term_metadata["original_turnus"][$key]["end_minute"])
+					|| ($metadata_termin["turnus_data"][$key]["day"] != $term_metadata["original_turnus"][$key]["day"])) {
 				$metadates_changed[$key] = TRUE;
 				}
 			}
