@@ -277,7 +277,7 @@ class studip_news {
 			echo "></td></tr>";
 		}
 		echo "\n<tr><th width=\"90%\" align=\"left\">" . _("Pers&ouml;nlicher Bereich:") . "</th><th align=\"center\" width=\"10%\">" . _("Anzeigen ?") . "</th></tr>";
-		echo "\n<tr ".$cssSw->getHover()."><td ".$cssSw->getFullClass()." width=\"90%\">".$this->news_query["author"]."</td>";
+		echo "\n<tr ".$cssSw->getHover()."><td ".$cssSw->getFullClass()." width=\"90%\">".htmlReady($this->news_query["author"])."</td>";
 		echo "\n<td	 ".$cssSw->getFullClass()." width=\"10%\" align=\"center\">";
 		if ($this->news_perm[$this->news_query["user_id"]]["perm"] OR $this->news_query["user_id"]==$this->user_id) {
 			echo"<input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$this->news_query["user_id"]."\"";
