@@ -151,10 +151,19 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 				}
 			echo "\n";
 		}
-	
+
 		// Ausgabe der Daten
 		echo "\n<tr><td class=\"blank\" colspan=$colspan>";
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
+		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
+
+		//open/close all
+		print "\n<tr><td class=\"steelgraulight\" align=\"center\">";
+		if ($open == "all")
+			print "<a href=\"$PHP_SELF?dclose=1\"><img style=\"vertical-align:middle;\" src=\"pictures\close_all.gif\" ".tooltip(_("Alle schließen"))." border=\"0\"></a>";
+		else
+			print "<a href=\"$PHP_SELF?dopen=all\"><img style=\"vertical-align:middle;\" src=\"pictures\open_all.gif\" ".tooltip(_("Alle öffnen"))."border=\"0\"></a>";
+		print "\n</tr></td>\n<tr><td class=\"blank\">";
+
 
 		if ($username) 
 			$add_to_link = "&username=$username";
@@ -211,8 +220,15 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 					$zusatz .= "#anker\"><img src=\"pictures/file1b.gif\" ";
 					$zusatz .= tooltip(sprintf(_("%s Dokument(e) vorhanden"), $num_docs));
 					$zusatz .= " border=\"0\" align=\"absmiddle\"></a>";
-				}			
+				}
 			}
+
+			//calendar jump
+			$zusatz .= "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $db->f("date");
+			$zusatz .= "\"><img src=\"pictures/antwortnew.gif\" ";
+			$zusatz .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("d.m.Y", $db->f("date"))));
+			$zusatz .= " border=\"0\" align=\"absmiddle\"></a>";
+
 			
 			if ($open != $db->f("termin_id"))
 				$link=$PHP_SELF."?dopen=".$db->f("termin_id").$add_to_link."#a";
@@ -226,13 +242,13 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 			
-			if ($open == $db->f("termin_id"))
+			if (($open == $db->f("termin_id")) || ($open == "all") || ($new))
 				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz, $db->f("chdate"));
 			else
 				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz, $db->f("chdate"));
 
 			echo "</tr></table>	";
-			if ($open == $db->f("termin_id")) {
+			if (($open == $db->f("termin_id")) || ($open == "all") || ($new)) {
 				echo "<a name=\"a\"></a>";
 			
 				$content='';			
