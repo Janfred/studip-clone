@@ -349,9 +349,9 @@ if ($archiv_data["perform_search"]) {
 		|| ((strlen($archiv_data["name"]) < 4) && ($archiv_data["name"]))
 		|| ((strlen($archiv_data["desc"]) < 4) && ($archiv_data["desc"]))
 		|| ((strlen($archiv_data["doz"]) < 4) && ($archiv_data["doz"])))
-		&& (!$archiv_data["pers"]))
+		&& (!$archiv_data["pers"]) && (!$archiv_data["inst"]))
 		$string_too_short = TRUE;
-	if ((!$archiv_data["all"]) && (!$archiv_data["name"]) && (!$archiv_data["desc"]) && (!$archiv_data["doz"]) && (!$archiv_data["pers"]))
+	if ((!$archiv_data["all"]) && (!$archiv_data["name"]) && (!$archiv_data["desc"]) && (!$archiv_data["doz"]) && (!$archiv_data["pers"]) && (!$archiv_data["inst"]))
 		$string_too_short = TRUE;
 		
 	if (!$archiv_data["sortby"])
