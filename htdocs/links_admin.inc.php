@@ -570,8 +570,7 @@ if ((!$links_admin_data["sem_id"] || ($i_page == "archiv_assi.php")) && ($list) 
 					<tr>
 						<td class="steel1" colspan=5>
 							<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo checked ?> />&nbsp;nur alte Veranstaltungen ausw&auml;hlen (Endsemester verstrichen) </font><br />
-							<? //&nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als 6 Monaten) </font>
-							?>
+							<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo checked ?> />&nbsp;nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als 6 Monaten) </font> -->
 						</td>
 					</tr>
 					<? } else {?>

@@ -156,7 +156,7 @@ $db=new DB_Seminar;
 if ($cmd=="no_kill") {
 	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	$meldung="info§Die Veranstaltung <b>".htmlReady($db->f("Name"))."</b> ist als <b>bindend</b> angelegt. Wenn sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung  wenden.<br />";
+	$meldung="info§Die Veranstaltung <b>".htmlReady($db->f("Name"))."</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden.<br />";
 }
 
 //Sicherheitsabfrage fuer abonnierte Veranstaltungen
