@@ -50,7 +50,7 @@ $xml_names_lecture = array(
 	"lernorga"		=>		"lernorga",
 	"leistungsnachweis"=>		"schein",
 	"ects"			=>		"ects",
-	"name"			=>		"bereich",
+	"bereich"			=>		"bereich",
 	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin")
 );
 
