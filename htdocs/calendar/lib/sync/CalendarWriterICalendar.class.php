@@ -83,21 +83,18 @@ class CalendarWriteriCalendar extends CalendarWriter {
 		$match_pattern_2 = array('\\', '\n', ';');
 		$replace_pattern_2 = array('\\\\', '\\n', '\;');
 		
-		if ($event->properties["RRULE"]["rtype"] != "SINGLE")
-			$event->properties["RRULE"]["expire"] = $event->properties["EXPIRE"];
-		
 		$safe_categories = $event->properties['CATEGORIES'];
 		$event->properties['CATEGORIES'] = str_replace($match_pattern_2, $replace_pattern_2,
 				$event->toStringCategories());
 		
-		$result	= "BEGIN:VEVENT" . $this->newline;
+		$result	= 'BEGIN:VEVENT' . $this->newline;
 		
 		foreach ($event->properties as $name => $value) {
 			$name = $name;
 			$params = array();
 			$params_str = '';
 
-			if ($value === "")
+			if ($value === '')
 				continue;
 			
 			switch ($name) {
@@ -242,7 +239,7 @@ class CalendarWriteriCalendar extends CalendarWriter {
 				// Recursion fields
 				case 'EXRULE':
 				case 'RRULE':
-					if ($event->properties["RRULE"]["rtype"] != "SINGLE")
+					if ($event->properties['RRULE']['rtype'] != 'SINGLE')
 						$value = $this->_exportRecurrence($value);
 					else
 						continue 2;
