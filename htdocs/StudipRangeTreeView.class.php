@@ -218,7 +218,7 @@ class StudipRangeTreeView {
 		echo "<a href=\"";
 		echo ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true)
 											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true);
-		echo "\"  >";
+		echo " >";
 		echo $this->getItemHead($item_id);
 		echo "</a></td></tr></table>";
 		if ($this->open_items[$item_id])
