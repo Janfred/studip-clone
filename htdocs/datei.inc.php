@@ -105,7 +105,7 @@ function parse_link($link, $level=0) {
 			$out = $IDN->encode(utf8_encode($host)); // false by error
 			$host = ($out)? $out : $host;
 			$pwtxt = ($url_parts['user'] && $url_parts['pass'])? $url_parts['user'].':'. $url_parts['pass'].'@':'';
-			echo $the_link = $url_parts['scheme'].'://'.$pwtxt.$host.':'.$port.$documentpath; // https noch berücksichtigen !
+			$the_link = $url_parts['scheme'].'://'.$pwtxt.$host.':'.$port.$documentpath; 
 		}
 
 		$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
