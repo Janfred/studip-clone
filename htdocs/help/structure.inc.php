@@ -24,55 +24,55 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 $pages = array	(	
-array	(	"name" => "Allgemeines",
-				"text" => "Einige generelle Informationen zu Stud.IP ",
+array	(	"name" => _("Allgemeines"),
+				"text" => _("Einige generelle Informationen zu Stud.IP"),
 				"perm" =>	"",
 				"kategorien" => array	(	
-																array	(	"name" => "Einleitung",
-																				"text" => "Das Ziel von Stud.IP",
+																array	(	"name" => _("Einleitung"),
+																				"text" => _("Das Ziel von Stud.IP"),
 																				"page" => "help1.html"
 																			),
-																array	(	"name" => "Hilfe zur Hilfe",
-																				"text" => "Was Sie über diese Hilfefunktion wissen sollten",
+																array	(	"name" => _("Hilfe zur Hilfe"),
+																				"text" => _("Was Sie über diese Hilfefunktion wissen sollten"),
 																				"page" => "help_help.html"
 																			),
-																array	(	"name" => "Nutzungsbedingungen",
-																				"text" => "Die rechtlichen Grundlagen",
+																array	(	"name" => _("Nutzungsbedingungen"),
+																				"text" => _("Die rechtlichen Grundlagen"),
 																				"page" => "nutzung.html"
 																			),
-																array	(	"name" => "neue Funktionen in Stud.IP",
-																				"text" => "neue Funktionen in jeder Version",
+																array	(	"name" => _("neue Funktionen in Stud.IP"),
+																				"text" => _("neue Funktionen in jeder Version"),
 																				"page" => "whatsnew.htm"
 																			)
 															)
 			),
 			
-array	(	"name" => "Die Anmeldung",
-				"text" => "Alles, was Sie über die Anmeldung wissen müssen",
+array	(	"name" => _("Die Anmeldung"),
+				"text" => _("Alles, was Sie über die Anmeldung wissen müssen"),
 				"perm" =>	"",
 				"kategorien" => array	(	
-																array	(	"name" => "Zugang zum System",
-																				"text" => "Wie komme ich in Stud.IP?",
+																array	(	"name" => _("Zugang zum System"),
+																				"text" => _("Wie komme ich in Stud.IP?"),
 																				"page" => "ii_zugang.htm"
 																			),
-																array	(	"name" => "Vorteile der Anmeldung",
-																				"text" => "Warum soll ich mich anmelden?",
+																array	(	"name" => _("Vorteile der Anmeldung"),
+																				"text" => _("Warum soll ich mich anmelden?"),
 																				"page" => "ii_vorteile_anmeldung.htm"
 																			),
-																array	(	"name" => "Die Registrierung",
-																				"text" => "Was muss ich tun um mich anzumelden?",
+																array	(	"name" => _("Die Registrierung"),
+																				"text" => _("Was muss ich tun um mich anzumelden?"),
 																				"page" => "ii_anmeldeformular.htm"
 																			),
-																array	(	"name" => "Die Bestätigungsmail",
-																				"text" => "nur noch ein kleiner Schritt...",
+																array	(	"name" => _("Die Bestätigungsmail"),
+																				"text" => _("nur noch ein kleiner Schritt..."),
 																				"page" => "ii_bestaetigungsmail.htm"
 																			),
-																array	(	"name" => "Die Login-Seite",
-																				"text" => "Der erste Login",
+																array	(	"name" => _("Die Login-Seite"),
+																				"text" => _("Der erste Login"),
 																				"page" => "ii_login.htm"
 																			),
-																array	(	"name" => "Passwort vergessen?",
-																				"text" => "Nur keine Panik...",
+																array	(	"name" => _("Passwort vergessen?"),
+																				"text" => _("Nur keine Panik..."),
 																				"page" => "ii_passwort.htm"
 																			)
 															)
@@ -80,21 +80,21 @@ array	(	"name" => "Die Anmeldung",
 
 
 
-array	(	"name" => "Erste Schritte",
-				"text" => "Eine Kurzeinweisung speziell für Neulinge",
+array	(	"name" => _("Erste Schritte"),
+				"text" => _("Eine Kurzeinweisung speziell für Neulinge"),
 				"perm" =>	"",
 				"kategorien" => array	(	
-																array	(	"name" => "Die Startseite",
-																				"text" => "Ihre Übersichtsseite nach jedem Login",
+																array	(	"name" => _("Die Startseite"),
+																				"text" => _("Ihre Übersichtsseite nach jedem Login"),
 																				"page" => "startseite.html"
 																			),
 																
-																array	(	"name" => "Schnelleinstieg",
-																				"text" => "Das Wichtigste in Kürze",
+																array	(	"name" => _("Schnelleinstieg"),
+																				"text" => _("Das Wichtigste in Kürze"),
 																				"page" => "schnelleinstieg.htm"
 																			),
-																array	(	"name" => "Die eigene Homepage",
-																				"text" => "Erzählen Sie der Welt von sich...",
+																array	(	"name" => _("Die eigene Homepage"),
+																				"text" => _("Erzählen Sie der Welt von sich..."),
 																				"page" => "iii_homepage.htm"
 																			)
 																
@@ -102,125 +102,122 @@ array	(	"name" => "Erste Schritte",
 			),
 
 
-array	(	"name" => "Die eigene Homepage",
-				"text" => "Ihre private Ecke in Stud.IP",
-				"perm" =>	"user",
+array	(	"name" => _("Die eigene Homepage"),
+				"text" => _("Ihre private Ecke in Stud.IP"),
+				"perm" =>	"autor",
 				"kategorien" => array	(	
-																array	(	"name" => "Persönliche Homepage",
-																				"text" => "In 5 Minuten eingerichtet!",
+																array	(	"name" => _("Persönliche Homepage"),
+																				"text" => _("In 5 Minuten eingerichtet!"),
 																				"page" => "iii_homepage.htm"
 																			),
-																array	(	"name" => "Eigenes Bild",
-																				"text" => "Bleiben Sie nicht im Dunkeln",
+																array	(	"name" => _("Eigenes Bild"),
+																				"text" => _("Bleiben Sie nicht im Dunkeln"),
 																				"page" => "iii_homepagea.htm"
 																			),
-																array	(	"name" => "Persönlichen Daten",
-																				"text" => "Was muß, was kann?",
+																array	(	"name" => _("Persönlichen Daten"),
+																				"text" => _("Was muß, was kann?"),
 																				"page" => "iii_homepageb.htm"
 																			),
-																array	(	"name" => "Karriere",
-																				"text" => "Was tun Sie so an der Uni?",
+																array	(	"name" => _("Universitäre Daten"),
+																				"text" => _("Was tun Sie so an der Uni?"),
 																				"page" => "iii_homepagec.htm"
 																			),
-																array	(	"name" => "Lebenslauf",
-																				"text" => "Und was machen Sie sonst noch? ",
+																array	(	"name" => _("Lebenslauf"),
+																				"text" => _("Und was machen Sie sonst noch?"),
 																				"page" => "iii_homepaged.htm"
 																			),
-																array	(	"name" => "Sonstiges",
-																				"text" => "Eigene Kategorien anlegen",
+																array	(	"name" => _("Sonstiges"),
+																				"text" => _("Eigene Kategorien anlegen"),
 																				"page" => "iii_homepagee.htm"
 																			),
-																			
-																
-																			
 															)
 			),
 			
 			
 
-array	(	"name" => "Interaktion",
-				"text" => "Wie man mit anderen Nutzern des Systems interagieren kann ",
+array	(	"name" => _("Interaktion"),
+				"text" => _("Wie man mit anderen Nutzern des Systems interagieren kann"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																array	(	"name" => "Die Homepages der anderen",
-																				"text" => "Wie Sie die Homepages anderer Nutzer finden können",
+																array	(	"name" => _("Die Homepages der anderen"),
+																				"text" => _("Wie Sie die Homepages anderer Nutzer finden können"),
 																				"page" => "iv_interaktion.htm"
 																			),
-																array	(	"name" => "Wer ist online?",
-																				"text" => "Wie Sie herausfinden, wer ausser Ihnen gerade im System ist",
+																array	(	"name" => _("Wer ist online?"),
+																				"text" => _("Wie Sie herausfinden, wer ausser Ihnen gerade im System ist"),
 																				"page" => "iv_online.htm"
 																			),
-																array	(	"name" => "Systeminterne SMS",
-																				"text" => "Wie Sie Nachrichten an andere Nutzer schicken können",
+																array	(	"name" => _("Systeminterne SMS"),
+																				"text" => _("Wie Sie Nachrichten an andere Nutzer schicken können"),
 																				"page" => "iv_sms.htm"
 																			),
-																array	(	"name" => "Der Chatbereich",
-																				"text" => "Wo und wie Sie in Stud.IP chatten können",
+																array	(	"name" => _("Der Chatbereich"),
+																				"text" => _("Wo und wie Sie in Stud.IP chatten können"),
 																				"page" => "iv_chat.htm"
 																			)
 															)
 			),
-array	(	"name" => "Meine Veranstaltungen",
-				"text" => "Meine Veranstaltungen - hinzufügen, löschen, verwalten",
+array	(	"name" => _("Meine Veranstaltungen"),
+				"text" => _("Meine Veranstaltungen - hinzufügen, löschen, verwalten"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																array	(	"name" => "Veranstaltungen abonnieren",
-																				"text" => "Wie Sie Veranstaltungen zu 'Meine Veranstaltungen' hinzufügen",
+																array	(	"name" => _("Veranstaltungen abonnieren"),
+																				"text" => _("Wie Sie Veranstaltungen zu 'Meine Veranstaltungen' hinzufügen"),
 																				"page" => "v_abonnieren.htm"
 																			),
-																array	(	"name" => "Der Veranstaltungs-Browser",
-																				"text" => "Die Veranstaltungssuchmaschine",
+																array	(	"name" => _("Der Veranstaltungs-Browser"),
+																				"text" => _("Die Veranstaltungssuchmaschine"),
 																				"page" => "v_sembrowse.htm"
 																			),
-																array	(	"name" => "Was ist neu?",
-																				"text" => "Alle Neuigkeiten im Blick",
+																array	(	"name" => _("Was ist neu?"),
+																				"text" => _("Alle Neuigkeiten im Blick"),
 																				"page" => "v_neu.htm"
 																			),
-																array	(	"name" => "Veranstaltungen ordnen",
-																				"text" => "Ordnung in die Veranstaltungsübersicht bringen",
+																array	(	"name" => _("Veranstaltungen ordnen"),
+																				"text" => _("Ordnung in die Veranstaltungsübersicht bringen"),
 																				"page" => "v_ordnen.htm"
 																			),
-																array	(	"name" => "Abonnements kündigen",
-																				"text" => "Wie Sie Veranstaltungen aus 'Meine Veranstaltungen' entfernen",
+																array	(	"name" => _("Abonnements kündigen"),
+																				"text" => _("Wie Sie Veranstaltungen aus 'Meine Veranstaltungen' entfernen"),
 																				"page" => "v_kuendigen.htm"
 																			)																		
 															)
 			),
-array	(	"name" => "In der Veranstaltung: grundlegende Funktionen",
-				"text" => "Wie Sie sich im Veranstaltungsbereich zurechtfinden",
+array	(	"name" => _("In der Veranstaltung: grundlegende Funktionen"),
+				"text" => _("Wie Sie sich im Veranstaltungsbereich zurechtfinden"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																array	(	"name" => "Navigation",
-																				"text" => "Die Bedienlogik des Veranstaltungsbereichs",
+																array	(	"name" => _("Navigation"),
+																				"text" => _("Die Bedienlogik des Veranstaltungsbereichs"),
 																				"page" => "vi_navi.htm"
 																			),
-																array	(	"name" => "Kurzinfo",
-																				"text" => "Die Startseite im Veranstaltungsbereich",
+																array	(	"name" => _("Kurzinfo"),
+																				"text" => _("Die Startseite im Veranstaltungsbereich"),
 																				"page" => "vi_kurz.htm"
 																			),
-																array	(	"name" => "Detailansicht",
-																				"text" => "Erweiterte Informationen",
+																array	(	"name" => _("Detailansicht"),
+																				"text" => _("Erweiterte Informationen"),
 																				"page" => "vi_detail.htm"
 																			),
-																array	(	"name" => "Druckansicht",
-																				"text" => "alles auf einen Blick",
+																array	(	"name" => _("Druckansicht"),
+																				"text" => _("alles auf einen Blick"),
 																				"page" => "vi_druckansicht.htm"
 																			),
-																array	(	"name" => "Teilnehmer",
-																				"text" => "Personen in der Veranstaltung",
+																array	(	"name" => _("Teilnehmer"),
+																				"text" => _("Personen in der Veranstaltung"),
 																				"page" => "vi_teilnehmer.htm"
 																			),
-																array	(	"name" => "Funktionen / Gruppen",
-																				"text" => "Nutzer in Gruppen organisieren",
+																array	(	"name" => _("Funktionen / Gruppen"),
+																				"text" => _("Nutzer in Gruppen organisieren"),
 																				"page" => "vi_statusgruppen_show.htm"
 																			),
 
-																array	(	"name" => "Ablaufplan",
-																				"text" => "Termine finden",
+																array	(	"name" => _("Ablaufplan"),
+																				"text" => _("Termine finden"),
 																				"page" => "vi_ablauf.htm"
 																			),
-																array	(	"name" => "Literatur & Links",
-																				"text" => "Materialien für die Veranstaltung",
+																array	(	"name" => _("Literatur & Links"),
+																				"text" => _("Materialien für die Veranstaltung"),
 																				"page" => "vi_literatur.htm"
 																			)																		
 															)
@@ -228,30 +225,30 @@ array	(	"name" => "In der Veranstaltung: grundlegende Funktionen",
 			
 			
 			
-array	(	"name" => "In der Veranstaltung: das Forum",
-				"text" => "Diskutieren & streiten",
+array	(	"name" => _("In der Veranstaltung: das Forum"),
+				"text" => _("Diskutieren & streiten"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
 																
 																			
-																array	(	"name" => "Funktionen des Forums",
-																				"text" => "Bedienlogik, Ansichten, Postings verfassen",
+																array	(	"name" => _("Funktionen des Forums"),
+																				"text" => _("Bedienlogik, Ansichten, Postings verfassen"),
 																				"page" => "ix_forum1.htm"
 																			),
-																array	(	"name" => "Einstellungen des Forums",
-																				"text" => "Schonen Sie Ihr Modem ",
+																array	(	"name" => _("Einstellungen des Forums"),
+																				"text" => _("Schonen Sie Ihr Modem"),
 																				"page" => "iii_homepagef2.htm"
 																			),
-																array	(	"name" => "Neue Beiträge",
-																				"text" => "Was gibt´s Neues?",
+																array	(	"name" => _("Neue Beiträge"),
+																				"text" => _("Was gibt´s Neues?"),
 																				"page" => "ix_forum2.htm"
 																			),
-																			array	(	"name" => "Letzte 5 Beiträge",
-																				"text" => "Was als letztes los war",
+																			array	(	"name" => _("Letzte 5 Beiträge"),
+																				"text" => _("Was als letztes los war"),
 																				"page" => "ix_forum3.htm"
 																			),
-																array	(	"name" => "Suchen",
-																				"text" => "Finden eines bestimmten Postings",
+																array	(	"name" => _("Suchen"),
+																				"text" => _("Finden eines bestimmten Postings"),
 																				"page" => "ix_forum4.htm"
 																			)
 																
@@ -261,20 +258,20 @@ array	(	"name" => "In der Veranstaltung: das Forum",
 																			
 															)
 			),
-array	(	"name" => "In der Veranstaltung: die Dateiverwaltung",
-				"text" => "Wie Sie Dateien in das System einstellen und herunterladen",
+array	(	"name" => _("In der Veranstaltung: die Dateiverwaltung"),
+				"text" => _("Wie Sie Dateien in das System einstellen und herunterladen"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																array	(	"name" => "Dateien herunterladen",
-																				"text" => "Die Dateiverwaltung und wie Sie Dateien herunterladen",
+																array	(	"name" => _("Dateien herunterladen"),
+																				"text" => _("Die Dateiverwaltung und wie Sie Dateien herunterladen"),
 																				"page" => "vii_download.htm"
 																			),
-																array	(	"name" => "Dateien einstellen",
-																				"text" => "Wie Sie neue Dateien ins System einstellen",
+																array	(	"name" => _("Dateien einstellen"),
+																				"text" => _("Wie Sie neue Dateien ins System einstellen"),
 																				"page" => "vii_upload.htm"
 																			),
-																array	(	"name" => "Dateien bearbeiten",
-																				"text" => "Verschieben, löschen oder die Beschreibung ändern",
+																array	(	"name" => _("Dateien bearbeiten"),
+																				"text" => _("Verschieben, löschen oder die Beschreibung ändern"),
 																				"page" => "vii_move.htm"
 																			)
 																
@@ -284,244 +281,225 @@ array	(	"name" => "In der Veranstaltung: die Dateiverwaltung",
 			
 			
 			
-			array	(	"name" => "Der Veranstaltungs-Assistent",
-				"text" => "Veranstaltungen anlegen -ganz einfach!",
-				"perm" =>	"tutor",
+			array	(	"name" => _("Der Veranstaltungs-Assistent"),
+				"text" => _("Veranstaltungen anlegen -ganz einfach!"),
+				"perm" =>	"dozent",
 				"kategorien" => array	(	
-																array	(	"name" => "Grunddaten",
-																				"text" => "Name, Beschreibung, Raum u.a.",
+																array	(	"name" => _("Grunddaten"),
+																				"text" => _("Name, Beschreibung, Raum u.a."),
 																				"page" => "va_assi1.htm"
 																			),
-																array	(	"name" => "Personendaten, Typ und Sicherheit",
-																				"text" => "DozentInnen, TutorInnen und Passwörter",
+																array	(	"name" => _("Personendaten, Typ und Sicherheit"),
+																				"text" => _("DozentInnen, TutorInnen und Passwörter"),
 																				"page" => "va_assi2.htm"
 																			),
-																array	(	"name" => "Termindaten",
-																				"text" => "Wann finden Sitzungen statt?",
+																array	(	"name" => _("Termindaten"),
+																				"text" => _("Wann finden Sitzungen statt?"),
 																				"page" => "va_assi3.htm"
 																			),
-																array	(	"name" => "Sonstiges",
-																				"text" => "Voraussetzungen, Lernorganisation, Leistungsnachweis, Sonstiges",
+																array	(	"name" => _("Sonstiges"),
+																				"text" => _("Voraussetzungen, Lernorganisation, Leistungsnachweis, Sonstiges"),
 																				"page" => "va_assi4.htm"
 																			),
-																array	(	"name" => "Bereit zum anlegen",
-																				"text" => "Fast fertig!",
+																array	(	"name" => _("Bereit zum anlegen"),
+																				"text" => _("Fast fertig!"),
 																				"page" => "va_assi5.htm"
 																			), 
-																array	(	"name" => "Literatur- und Linkliste",
-																				"text" => "Bücher und Webquellen anlegen",
+																array	(	"name" => _("Literatur- und Linkliste"),
+																				"text" => _("Bücher und Webquellen anlegen"),
 																				"page" => "va_assi6.htm"
 																			), 
-																array	(	"name" => "Ablaufplan und Termine",
-																				"text" => "Manuell oder automatisch anlegen",
+																array	(	"name" => _("Ablaufplan und Termine"),
+																				"text" => _("Manuell oder automatisch anlegen"),
 																				"page" => "va_assi7.htm"
 																			) 
 															)
 			),
 			
-array	(	"name" => "Veranstaltungen verwalten",
-				"text" => "Wie Sie Ihre Veranstaltungen anlegen und aktuell halten",
+array	(	"name" => _("Veranstaltungen verwalten"),
+				"text" => _("Wie Sie Ihre Veranstaltungen anlegen und aktuell halten"),
 				"perm" =>	"tutor",
 				"kategorien" => array	(	
-																array	(	"name" => "Die Administrierungsseite",
-																				"text" => "Zugang zur Veranstaltungsverwaltung",
+																array	(	"name" => _("Die Administrierungsseite"),
+																				"text" => _("Zugang zur Veranstaltungsverwaltung"),
 																				"page" => "x_adminarea.htm"
 																			),
 																
-																array	(	"name" => "Basisdaten ändern",
-																				"text" => "Wie Sie die Basisdaten einer Veranstaltung ändern können",
+																array	(	"name" => _("Basisdaten ändern"),
+																				"text" => _("Wie Sie die Basisdaten einer Veranstaltung ändern können"),
 																				"page" => "x_aendern.htm"
 																			),
-																array	(	"name" => "Literatur / Links",
-																				"text" => "Wie Sie die Literatur und Linklisten Ihrer Veranstaltungen anpassen",
+																array	(	"name" => _("Literatur / Links"),
+																				"text" => _("Wie Sie die Literatur und Linklisten Ihrer Veranstaltungen anpassen"),
 																				"page" => "x_literatur.htm"
 																			),
-																array	(	"name" => "Ablaufplan eingeben / ändern",
-																				"text" => "Wie Sie den Ablaufplan einer Veranstaltung verwalten können",
+																array	(	"name" => _("Ablaufplan eingeben / ändern"),
+																				"text" => _("Wie Sie den Ablaufplan einer Veranstaltung verwalten können"),
 																				"page" => "x_ablauf.htm"
 																			),
-																array	(	"name" => "Zeiten ändern",
-																				"text" => "Wie Sie die Veranstaltungszeiten ändern können",
+																array	(	"name" => _("Zeiten ändern"),
+																				"text" => _("Wie Sie die Veranstaltungszeiten ändern können"),
 																				"page" => "x_metadates.htm"
 																			),
-																array	(	"name" => "Zugangsberechtigungen ändern",
-																				"text" => "Wie Sie die Zugangsberechtigungen für Veranstaltungen ändern können",
+																array	(	"name" => _("Zugangsberechtigungen ändern"),
+																				"text" => _("Wie Sie die Zugangsberechtigungen für Veranstaltungen ändern können"),
 																				"page" => "x_admission.htm"
 																			),
-																array	(	"name" => "Themen anlegen",
-																				"text" => "Wie Sie Debattenthemen für das Forum vorgeben können",
+																array	(	"name" => _("Themen anlegen"),
+																				"text" => _("Wie Sie Debattenthemen für das Forum vorgeben können"),
 																				"page" => "x_themen.htm"
 																			), 
-																array	(	"name" => "Teilnehmer verwalten",
-																				"text" => "Wie Sie Teilnehmer verwalten und Tutoren ernennen können",
+																array	(	"name" => _("Teilnehmer verwalten"),
+																				"text" => _("Wie Sie Teilnehmer verwalten und Tutoren ernennen können"),
 																				"page" => "x_teil.htm"
 																			), 
-																array	(	"name" => "Funktionen / Gruppen verwalten",
-																				"text" => "Wie Sie Teilnehmer mit Funktionen oder Gruppen organisieren",
+																array	(	"name" => _("Funktionen / Gruppen verwalten"),
+																				"text" => _("Wie Sie Teilnehmer mit Funktionen oder Gruppen organisieren"),
 																				"page" => "x_statusgruppen_admin.htm"
 																			), 
 
-																array	(	"name" => "Dateiordner verwalten",
-																				"text" => "Wie Sie Dateiordner verwalten können",
+																array	(	"name" => _("Dateiordner verwalten"),
+																				"text" => _("Wie Sie Dateiordner verwalten können"),
 																				"page" => "x_datei.htm"
 																			), 
-																array	(	"name" => "News anlegen und verwalten",
-																				"text" => "Wie Sie die neuesten Neuigkeiten unters Volk bringen",
+																array	(	"name" => _("News anlegen und verwalten"),
+																				"text" => _("Wie Sie die neuesten Neuigkeiten unters Volk bringen"),
 																				"page" => "x_admin_news.htm"
 																			) 
 															)
 			),
 			
-			array	(	"name" => "Terminkalender und Stundenplan",
-				"text" => "Ihr Timeplaner im Netz",
+			array	(	"name" => _("Terminkalender und Stundenplan"),
+				"text" => _("Ihr Timeplaner im Netz"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																array	(	"name" => "Der Stundenplan",
-																				"text" => "Praktisch und einfach",
+																array	(	"name" => _("Der Stundenplan"),
+																				"text" => _("Praktisch und einfach"),
 																				"page" => "stupla.htm"
 																			),
-																array	(	"name" => "Der Terminkalender",
-																				"text" => "Bedienung und Ansichten",
+																array	(	"name" => _("Der Terminkalender"),
+																				"text" => _("Bedienung und Ansichten"),
 																				"page" => "termin1.htm"
 																			),
-																array	(	"name" => "Termine bearbeiten",
-																				"text" => "Anlegen und Ändern von Terminen",
+																array	(	"name" => _("Termine bearbeiten"),
+																				"text" => _("Anlegen und Ändern von Terminen"),
 																				"page" => "termin2.htm"
 																			),
-																array	(	"name" => "Termine einbinden",
-																				"text" => "Veranstaltungstermine im Terminkalender anzeigen",
+																array	(	"name" => _("Termine einbinden"),
+																				"text" => _("Veranstaltungstermine im Terminkalender anzeigen"),
 																				"page" => "termin3.htm"
 																			),
-																array	(	"name" => "Ansicht anpassen",
-																				"text" => "Optionen des Terminkalenders",
+																array	(	"name" => _("Ansicht anpassen"),
+																				"text" => _("Optionen des Terminkalenders"),
 																				"page" => "iii_homepagef3.htm"
 																			)
 																
 															)
 			),
 			
-			
-			array	(	"name" => "MyStud.IP",
-				"text" => "Stud.IP anpassen",
+			array	(	"name" => _("MyStud.IP"),
+				"text" => _("Stud.IP anpassen"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																
-																			
-																array	(	"name" => "Autlogin",
-																				"text" => "Wenn es bequem sein soll",
+																array	(	"name" => _("Autologin"),
+																				"text" => _("Wenn es bequem sein soll"),
 																				"page" => "iii_homepagef1.htm"
 																			),
-																array	(	"name" => "Einstellungen des Forums",
-																				"text" => "Schonen Sie Ihr Modem ",
+																array	(	"name" => _("Einstellungen des Forums"),
+																				"text" => _("Schonen Sie Ihr Modem"),
 																				"page" => "iii_homepagef2.htm"
 																			),
-																array	(	"name" => "Einstellungen des Terminkalenders",
-																				"text" => "Die Zeit läuft -aber wie schnell?",
+																array	(	"name" => _("Einstellungen des Terminkalenders"),
+																				"text" => _("Die Zeit läuft -aber wie schnell?"),
 																				"page" => "iii_homepagef3.htm"
 																			),
-																			array	(	"name" => "Einstellungen des Stundenplans",
-																				"text" => "Haben Sie heute frei? ",
+																array	(	"name" => _("Einstellungen des Stundenplans"),
+																				"text" => _("Haben Sie heute frei?"),
 																				"page" => "iii_homepagef4.htm"
 																			),
-																array	(	"name" => "Einstellungen des Messaging",
-																				"text" => "So bleiben Sie in Kontakt",
+																array	(	"name" => _("Einstellungen des Messaging"),
+																				"text" => _("So bleiben Sie in Kontakt"),
 																				"page" => "iii_homepagef5.htm"
 																			)
-																			
 															)
 			),
 			
-			
-			
-			
-			
-			array	(	"name" => "Suchen",
-				"text" => "Was möchten Sie finden?",
+			array	(	"name" => _("Suchen"),
+				"text" => _("Was möchten Sie finden?"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																
-																			
-																array	(	"name" => "Die Suchauswahl",
-																				"text" => "Was genau suchen Sie?",
+																array	(	"name" => _("Die Suchauswahl"),
+																				"text" => _("Was genau suchen Sie?"),
 																				"page" => "xii_suchen1.htm"
 																			),
-																array	(	"name" => "Suchen nach Personen",
-																				"text" => "DozentInnen und KommilitonInnen",
+																array	(	"name" => _("Suchen nach Personen"),
+																				"text" => _("DozentInnen und KommilitonInnen"),
 																				"page" => "personensuche.htm"
 																			),
-																array	(	"name" => "Suchen nach Veranstaltungen",
-																				"text" => "Veranstaltungen des aktuellen und kommenden Semesters",
+																array	(	"name" => _("Suchen nach Veranstaltungen"),
+																				"text" => _("Veranstaltungen des aktuellen und kommenden Semesters"),
 																				"page" => "v_abonnieren.htm"
 																			),
-																			array	(	"name" => "Suchen im Archiv",
-																				"text" => "Veranstaltungen vergangener Semester",
+																array	(	"name" => _("Suchen im Archiv"),
+																				"text" => _("Veranstaltungen vergangener Semester"),
 																				"page" => "xii_suchen3.htm"
 																			)
-																
-																			
 															)
 			),
-			array	(	"name" => "Verschiedenes",
-				"text" => "Textformatierungen, FAQ u.a.",
+
+			array	(	"name" => _("Verschiedenes"),
+				"text" => _("Textformatierungen, FAQ u.a."),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																
-																			
-																array	(	"name" => "Formatierungen von Text",
-																				"text" => "Fett, kursiv, Aufzählungen und mehr",
+																array	(	"name" => _("Formatierungen von Text"),
+																				"text" => _("Fett, kursiv, Aufzählungen und mehr"),
 																				"page" => "ix_forum6.htm"
 																			),
-																array	(	"name" => "Smilies",
-																				"text" => "Zeigen Sie Gefühl",
+																array	(	"name" => _("Smilies"),
+																				"text" => _("Zeigen Sie Gefühl"),
 																				"page" => "ix_forum7.htm"
 																			),
-																array	(	"name" => "Score-Liste",
-																				"text" => "Die Stud.IP-Rangliste",
+																array	(	"name" => _("Score-Liste"),
+																				"text" => _("Die Stud.IP-Rangliste"),
 																				"page" => "score.htm"
 																			),
-																array	(	"name" => "Glossar",
-																				"text" => "Kurze Erklärungen",
+																array	(	"name" => _("Glossar"),
+																				"text" => _("Kurze Erklärungen"),
 																				"page" => "glossar.htm"
 																			),
-																array	(	"name" => "FAQ",
-																				"text" => "Oft gestellte Fragen",
+																array	(	"name" => _("FAQ"),
+																				"text" => _("Oft gestellte Fragen"),
 																				"page" => "faq.htm"
 																			)
-																			
 															)
 			)
 );
+
 //show help for resources management, if available
 if ($GLOBALS["RESOURCES_ENABLE"]) {
-	$pages[] = array	(	"name" => "Ressourcenverwaltung",
-				"text" => "Verwaltung unterschiedlicher Ressourcen in Stud.IP",
+	$pages[] = array	(	"name" => _("Ressourcenverwaltung"),
+				"text" => _("Verwaltung unterschiedlicher Ressourcen in Stud.IP"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																
-																			
-																array	(	"name" => "Einführung",
-																				"text" => "Was fange ich mit der Ressourcenverwaltung an?",
+																array	(	"name" => _("Einführung"),
+																				"text" => _("Was fange ich mit der Ressourcenverwaltung an?"),
 																				"page" => "resources_intro.htm"
 																			)
 															)
 			);
-	
 }
 
 //show help for resources management, if available
 if ($GLOBALS["ILIAS_CONNECT_ENABLE"]) {
-	$pages[] = array	(	"name" => "ILIAS Lernmodule in Stud.IP",
-				"text" => "Einrichten und Nutzen von Lernmodulen aus ILIAS Open Source",
+	$pages[] = array	(	"name" => _("ILIAS Lernmodule in Stud.IP"),
+				"text" => _("Einrichten und Nutzen von Lernmodulen aus ILIAS Open Source"),
 				"perm" =>	"user",
 				"kategorien" => array	(	
-																
-																			
-																array	(	"name" => "Was ist ILIAS",
-																				"text" => "Was ist ILIAS und was sind ILIAS Lernmodule",
+																array	(	"name" => _("Was ist ILIAS"),
+																				"text" => _("Was ist ILIAS und was sind ILIAS Lernmodule"),
 																				"page" => "what_is_ilias.php"
 																			)
 															)
 			);
-	
 }
 ?>
