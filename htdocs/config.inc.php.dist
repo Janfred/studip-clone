@@ -47,12 +47,12 @@ $SOFTWARE_VERSION="0.9";
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
 $UNI_URL = "http://www.studip.de";
-$UNI_LOGOUT_ADD=sprintf(_("Und hier geht's direkt zum %sStud.IP Portalsete%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
+$UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
 $UNI_CONTACT = "info@studip.de";
-$UNI_INFO = "Stud.IP 0.9 - Studienbegleitender Internetsuppoert von Pr&auml;senzlehre"; 
+$UNI_INFO = "Stud.IP 0.9 - Studienbegleitender Internetsupport von Präsenzlehre"; 
 
 //die IDs der Veranstaltungen, die beim Hochstufen auf autor eingetragen werden
-//$AUTO_INSERT_SEM[1]="c2aae30732fe32178f40e86ef130fd17";
+//$AUTO_INSERT_SEM[1]="<seminar_id>";
 //weitere Veranstaltungen koennen mit ihren IDs hier angefuegt werden
 
 
@@ -72,7 +72,7 @@ $SEMESTER[4]=array("name"=>"SS 2004", "beginn"=>mktime(0,0,0,4,1,2004), "ende"=>
 
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
-$SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezechnung (=Veranstaltung ersetzt)
+$SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezeichnung (=Veranstaltung ersetzt)
 $SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);
 $SEM_TYPE[2]=array("name"=>_("Seminar"),  "class"=>1);
 $SEM_TYPE[3]=array("name"=>_("&Uuml;bung"),  "class"=>1);
@@ -265,10 +265,10 @@ $SYMBOL_SHORT = array( //use this shorts to insert an symbols (filename + ".gif"
 	" tm "=>"symbol08");
 	
 
-/*configuration for additional moduls
+/*configuration for additional modules
 ----------------------------------------------------------------
-this options are only needed, if you are using the addional modules (please see in local.inc
-which modules are activated). It's a good idea to leave them untouched...*/
+this options are only needed, if you are using the addional Stud.IP modules (please see in local.inc
+which modules are activated). It's a good idea to leave this settings untouched...*/
 
 
 // <<-- EXPORT-EINSTELLUNGEN
