@@ -177,7 +177,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			
 			
 			if ($open != $db->f("termin_id"))
-				$link=$PHP_SELF."?dopen=".$db->f("termin_id").$add_to_link;
+				$link=$PHP_SELF."?dopen=".$db->f("termin_id").$add_to_link."#a";
 			else
 				$link=$PHP_SELF."?dclose=true".$add_to_link;
 					
@@ -196,6 +196,8 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			echo "</tr></table>	";
 					
 			if ($open == $db->f("termin_id")) {
+				echo "<a name='anker'></a>";
+			
 				$content='';			
 				if ($db->f("description"))
 					$content.= formatReady($db->f("description"), TRUE, TRUE)."<br /><br />";
@@ -310,7 +312,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			// gleiche ID besitzt.
 			$app_ident = $termin->getId() . $termin->getStart();
 			if ($open != $app_ident)
-				$link = $PHP_SELF."?dopen=".$app_ident.$add_to_link;
+				$link = $PHP_SELF."?dopen=".$app_ident.$add_to_link."#a";
 			else
 				$link = $PHP_SELF."?dclose=true".$add_to_link;
 			
@@ -327,6 +329,8 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			echo "</tr></table>	";
 			
 			if($open == $app_ident) {
+				echo "<a name='anker'></a>";
+
 				$content = '';			
 				if($termin->getDescription())
 					$content .= sprintf("%s<br /><br />", formatReady($termin->getDescription(), TRUE, TRUE));
@@ -469,7 +473,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			// gleiche ID besitzt.
 			$app_ident = $termin->getId() . $termin->getStart();
 			if ($open != $app_ident)
-				$link = $PHP_SELF."?dopen=".$app_ident;
+				$link = $PHP_SELF."?dopen=".$app_ident."#a";
 			else
 				$link = $PHP_SELF."?dclose=true";
 			
@@ -486,6 +490,8 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			echo "</tr></table>	";
 					
 			if($open == $app_ident) {
+				echo "<a name='anker'></a>";
+
 				$content = "";
 				if($termin->getDescription())
 					$content .= sprintf("%s<br /><br />", formatReady($termin->getDescription(), TRUE, TRUE));
