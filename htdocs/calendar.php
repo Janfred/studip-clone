@@ -21,7 +21,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Default_Auth
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$perm->check("user"); //Noch anpassen!!!
+if ($perm->have_perm("admin")) {
+	$perm->perm_invalid($auth->auth["perm"], "");
+	exit;
+}
+$perm->check("user");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
