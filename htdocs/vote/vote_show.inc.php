@@ -27,6 +27,8 @@ require_once (EVAL_FILE_EVAL);
 require_once (EVAL_LIB_SHOW);
 # ====================================================== end: including files #
 
+// don't use evaluation.css here
+unset ($_include_extra_stylesheet);
 
 # Define public functions =================================================== #
 
@@ -191,6 +193,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
             $td->addContent( new HTMLempty ("br") );
          }
          
+	 $td->addAttr("style", "font-size:0.8em;");
          $td->addHTMLContent(formatReady($eval->getText ()));
          $td->addContent(new HTMLempty ("br"));
          $td->addContent(new HTMLempty ("br"));
@@ -348,7 +351,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
             $table->addAttr("border", "0");
             $tr = new HTML ("tr");
             $td = new HTML ("td");
-            $td->addHTMLContent (formatReady($eval->getText ()));
+	    $td->addAttr ("style", "font-size:0.8em;");
+	    $td->addHTMLContent(formatReady($eval->getText ()));
             $tr->addContent ($td);
             $table->addContent ($tr);
             $table->addContent (EvalShow::createEvalMetaInfo ($eval, $hasVoted));

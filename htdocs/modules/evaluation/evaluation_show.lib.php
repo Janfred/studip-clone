@@ -178,6 +178,7 @@ class EvalShow {
       $tr = new HTM( "tr" );
       $td = new HTM( "td" );
       $td->attr( "align", "left" );
+      $td->attr( "style", "font-size:0.8em;" );
       $td->html( $html );
       $tr->cont( $td );
       return $tr;
