@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("admin");
@@ -96,7 +97,7 @@ if (isset($details)) {
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;<?=_("Name:")?></b></td>
-				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo $db->f("fullname") ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo htmlReady($db->f("fullname")) ?></td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;<?=_("Status in der Einrichtung:")?>&nbsp;</b></td>
@@ -176,7 +177,7 @@ else {
 			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$u_id'");
 			while ($db->next_record()) {
 				$scherge=$db->f("perms");
-				$Fullname = $db->f("fullname");
+				$Fullname = htmlReady($db->f("fullname"));
 			}
 
 			// Hier darf fast keiner was:
@@ -190,7 +191,7 @@ else {
 					// remove from all Statusgruppen
 					RemovePersonStatusgruppeComplete (get_username($u_id), $ins_id);
 				}
-			} 
+			}
 
 			if (isset($u_edit_x)) {
 				if (!($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) && $scherge=='admin' && $u_id != $auth->auth["uid"])
@@ -239,7 +240,7 @@ else {
 			} else {  // mal nach dem globalen Status sehen
 				$db3->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$u_id'");
 				$db3->next_record();
-				$Fullname = $db3->f("fullname");
+				$Fullname = htmlReady($db3->f("fullname"));
 				if ($db3->f("perms") == "root")
 					my_error("<b>" . _("ROOTs k&ouml;nnen nicht berufen werden!") . "</b>");
 				elseif ($db3->f("perms") == "admin") {
@@ -308,7 +309,7 @@ if ($inst_id != "" && $inst_id !="0") {
 						//Alle User auswaehlen, auf die der Suchausdruck passt und die im Institut nicht schon was sind. Selected werden hierdurch 
 //						printf ("<option value=\"0\">-- bitte ausw&auml;hlen --\n");
 						while ($db->next_record())
-							printf ("<option value=\"%s\">%s (%s) - %s\n", $db->f("user_id"), $db->f("fullname"), $db->f("username"), $db->f("perms"));
+							printf ("<option value=\"%s\">%s (%s) - %s\n", $db->f("user_id"), htmlReady($db->f("fullname")), $db->f("username"), $db->f("perms"));
 							?>
 							</select>&nbsp;
 						<input type="hidden" name="ins_id" value="<?echo $inst_id;?>"><br />
@@ -396,10 +397,10 @@ if ($inst_id != "" && $inst_id !="0") {
 				echo "<tr valign=middle align=left>";
 				
 				if ((!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"])) || $perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
-					printf ("<td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("fullname"));	 
+					printf ("<td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), htmlReady($db->f("fullname")));
 				else
-					printf ("<td class=\"%s\">&nbsp;%s</td>", $cssSw->getClass(), $db->f("fullname"));	 ?>
-	
+					printf ("<td class=\"%s\">&nbsp;%s</td>", $cssSw->getClass(), htmlReady($db->f("fullname")));	 ?>
+
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo $db->f("inst_perms"); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>"  align="left"><?
 				
@@ -442,4 +443,3 @@ if ($inst_id != "" && $inst_id !="0") {
 ?>
 </body>
 </html>
-<!-- $Id$ -->
