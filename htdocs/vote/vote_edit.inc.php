@@ -59,6 +59,9 @@ global $auth, $perm;
 if ($voteID) {
    $vote = new Vote ($voteID);
    $rangeID = $vote->getRangeID ();
+   // convert userID to username
+   if ($id = get_username($rangeID))
+	$rangeID = $id;
 }
 if (!($perm->have_studip_perm ("tutor", $rangeID) OR
       get_username($userID) == $rangeID)
