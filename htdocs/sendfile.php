@@ -390,7 +390,7 @@ if ($type == 6) {
 	$db->query("SELECT filesize FROM dokumente WHERE dokument_id = '$file_id'");
 	if ($db->next_record())
 		$filesize = $db->f("filesize");
-	if (!$filesize)
+	if (!$filesize || $filesize==0)
 		$filesize = FALSE;
 } elseif ($type != 5){
 	$filesize = filesize($path_file);
