@@ -1065,9 +1065,6 @@ class Vote extends StudipObject {
 	  $this->resultvisibility != VOTE_RESULTS_NEVER)
 	 $this->throwError (13, _("Objekt besitzt ungültigen Status für die Ergebnissichtbarkeit!"));
 
-      if (empty ($this->namesvisibility))
-	 $this->throwError (5, _("Objekt besitzt keine Teilnehmersichtbarkeit."));	 
-
       if ($this->state != VOTE_NEW &&
 	  $this->state != VOTE_ACTIVE &&
 	  $this->state != VOTE_STOPPED_VISIBLE &&
