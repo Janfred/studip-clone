@@ -170,24 +170,31 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID,
    /* ---------------------------------------------------------------------- */
 
    /* 'Show names'-button -------------------------------------------------- */
-   if ( ! $vote->isAnonymous() &&
-	($isAssociated || $isPreview) &&
-	$vote->isInUse() && 
-	! (($vote->getResultVisibility() == VOTE_RESULTS_AFTER_END ||
-	    $vote->getResultVisibility() == VOTE_RESULTS_NEVER) &&
-	   $vote->isActive()) &&
-	(
-	 $GLOBALS["perm"]->have_studip_perm ("tutor", $vote->getRangeID ())
-	OR
-	$userID == $vote->getAuthorID ()
-	)
+   $haveShowPerms = 
+      $GLOBALS["perm"]->have_studip_perm ("tutor", $vote->getRangeID ())
+      OR
+      $userID == $vote->getAuthorID ();
+	
+   if ( ! $vote->isAnonymous()
+	&& ($isAssociated || $isPreview)
+	&& $vote->isInUse()
+	&& ! (($vote->getResultVisibility() == VOTE_RESULTS_AFTER_END
+	       || $vote->getResultVisibility() == VOTE_RESULTS_NEVER)
+	      && $vote->isActive())
+	&& $haveShowPerms
 	)
        {
        $link_reveal = $link."&sortAnswers=".($_GET["sortAnswers"] ? YES : NO);
-       $link_reveal .= "&revealNames=".($_GET["revealNames"] ? NO : YES);
+
+       if ($GLOBALS["voteopenID"] != $vote->getVoteID ())
+	  $link_reveal .= "&revealNames=".YES;
+       else
+	  $link_reveal .= "&revealNames=".($_GET["revealNames"] ? NO : YES);
+       
        $link_reveal .= ($vote->isStopped()) ? "#stoppedVotes" : "#openvote";
        
-       if( $_GET["revealNames"] )
+       if( $_GET["revealNames"] && 
+	   $GLOBALS["voteopenID"] == $vote->getVoteID ())
 	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
 	       "<img style=\"vertical-align:middle;\" ".
 	       makeButton (_("normaleansicht"), "src"). 
