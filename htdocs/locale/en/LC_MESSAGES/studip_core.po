@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-03-13 14:09+0100\n"
+"POT-Creation-Date: 2003-03-13 19:13+0100\n"
 "PO-Revision-Date: 2003-03-11 23:42+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -878,17 +878,17 @@ msgstr "Delete selected news"
 msgid "Markierte News löschen"
 msgstr "Delete selected news"
 
-#: admin_news.php:170 admin_news.php:216 suchen.inc.php:171
+#: admin_news.php:170 admin_news.php:216 suchen.inc.php:172
 msgid "&Uuml;berschrift"
 msgstr "Headline"
 
 #: admin_news.php:170 admin_news.php:220 freie.php:169
 #: meine_einrichtungen.php:203 meine_seminare.php:257 meine_seminare.php:586
-#: my_archiv.php:94 suchen.inc.php:179
+#: my_archiv.php:94 suchen.inc.php:180
 msgid "Inhalt"
 msgstr "Content"
 
-#: admin_news.php:171 institut_members.php:451 suchen.inc.php:163
+#: admin_news.php:171 institut_members.php:451 suchen.inc.php:164
 msgid "Autor"
 msgstr "Author"
 
@@ -2708,7 +2708,7 @@ msgstr "Please choose an institute:"
 msgid "Diesen Benutzer hinzuf&uuml;gen"
 msgstr "Enter user"
 
-#: archiv.php:505 suchen.inc.php:258
+#: archiv.php:505 suchen.inc.php:259
 #, fuzzy
 msgid "Neue Suche"
 msgstr "New search"
@@ -3183,7 +3183,7 @@ msgstr "1 entry"
 msgid "%s Eintr&auml;ge"
 msgstr "%s entries"
 
-#: contact.php:135 forum.inc.php:775 suchen.inc.php:228
+#: contact.php:135 forum.inc.php:775 suchen.inc.php:229
 msgid "Alle aufklappen"
 msgstr "Open all"
 
@@ -3985,7 +3985,8 @@ msgstr "Contigent groups:"
 msgid "Kontingent f&uuml;r %s (%s Pl&auml;tze)"
 msgstr "Contigent for %s (%s places)"
 
-#: details.php:500 teilnehmer.php:572 teilnehmer.php:645
+#: details.php:500 sem_verify.php:283 sem_verify.php:333 sem_verify.php:335
+#: teilnehmer.php:572 teilnehmer.php:645
 msgid "alle Studieng&auml;nge"
 msgstr "all subject areas"
 
@@ -7698,39 +7699,39 @@ msgstr "Send message"
 msgid "Vorgang abbrechen"
 msgstr "Cancel procedure"
 
-#: suchen.inc.php:132
+#: suchen.inc.php:133
 #, fuzzy
 msgid "Bitte geben Sie hier Ihren Suchbegriff ein:"
 msgstr "Please enter your search criteria here:"
 
-#: suchen.inc.php:144
+#: suchen.inc.php:145
 #, fuzzy
 msgid "Suchbegriff:"
 msgstr "Search area:"
 
-#: suchen.inc.php:152
+#: suchen.inc.php:153
 msgid "Suchen in den Feldern:"
 msgstr ""
 
-#: suchen.inc.php:200
+#: suchen.inc.php:201
 msgid "Ergebnis der Suche nach"
 msgstr ""
 
-#: suchen.inc.php:217
+#: suchen.inc.php:218
 #, fuzzy, c-format
 msgid "Ihre Suche ergab %s Treffer"
 msgstr "Your search revealed %s matches."
 
-#: suchen.inc.php:219
+#: suchen.inc.php:220
 #, fuzzy
 msgid "Ihre Suche ergab leider keine Treffer"
 msgstr "The search did not reveal with any matches!"
 
-#: suchen.inc.php:251
+#: suchen.inc.php:252
 msgid "zeig mir die Neuesten"
 msgstr ""
 
-#: suchen.inc.php:254
+#: suchen.inc.php:255
 #, fuzzy
 msgid "zeig mit alle Treffer"
 msgstr "no matches"
