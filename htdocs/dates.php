@@ -63,7 +63,7 @@ if ($dclose)
 	$show_docs=TRUE;
 	$name = rawurlencode($SessSemName[0]);
 	($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]" : $show_admin=FALSE;
-	if (show_dates($SessSemName[1], 0, 0, $show_not,$show_docs, $show_admin, $dates_data["open"]))
+	if (show_dates(0, 0, $dates_data["open"], $SessSemName[1], $show_not, $show_docs, $show_admin))
 		echo"<br>";
 
 ?>
