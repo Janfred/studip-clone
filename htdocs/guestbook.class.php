@@ -167,9 +167,9 @@ class Guestbook {
 		global $PHP_SELF;
 		$buttons = "";
 		if ($this->active == TRUE) {
-			$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username&rnd=".rand()."#guest\">" . makeButton("entfernen", "img") . "</a>";
+			$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username&rnd=".rand()."#guest\">" . makeButton("deaktivieren", "img") . "</a>";
 		} else {
-			$buttons .= "<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username#guest\">" . makeButton("anlegen", "img") . "</a>";
+			$buttons .= "<a href=\"".$PHP_SELF."?guestbook=switch&username=$this->username#guest\">" . makeButton("aktivieren", "img") . "</a>";
 		}
 		$buttons .= "&nbsp;&nbsp;<a href=\"".$PHP_SELF."?guestbook=erase&username=$this->username#guest\">" . makeButton("alleloeschen", "img") . "</a>";
 		return $buttons;	
