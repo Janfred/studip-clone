@@ -105,7 +105,7 @@ else
 	
 		if ($xslt_process)
 		{
-			$export_pagecontent .= "<center><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr><td>";
+			$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr><td>";
 			$export_pagecontent .= "<b>" . _("Ausgabe-Datei: ") . "</b>";
 			$export_pagecontent .= "</td><td>" . $link2 . $result_file . "</a>";
 //			$export_pagecontent .= "</td></tr><tr><td colspan=\"2\">";
