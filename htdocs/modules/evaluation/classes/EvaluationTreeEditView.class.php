@@ -58,6 +58,18 @@ define ("NO_QUESTION_GROUP_TITLE", _("*Fragenblock*"));
 define ("NO_TEMPLATE", _("*unbekannt*"));
 
 /**
+ * @const NEW_EVALUATION_TITLE  title of a new question block
+ * @access public
+ */
+define ("NEW_EVALUATION_TITLE", _("Neue Evaluation"));
+
+/**
+ * @const FIRST_ARRANGMENT_BLOCK_TITLE  title of a new arrangment block
+ * @access public
+ */
+define ("FIRST_ARRANGMENT_BLOCK_TITLE", _("Erster Gruppierungsblock"));
+
+/**
  * @const NEW_ARRANGMENT_BLOCK_TITLE  title of a new arrangment block
  * @access private
  */
@@ -2236,10 +2248,10 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 	$number_of_childs = $this->tree->eval->getNumberChildren();
    if ($number_of_childs == 1 &&
 		$this->itemID == ROOT_BLOCK &&
-		$this->tree->eval->getTitle(QUOTED) == _("Neue Evaluation") &&
+		$this->tree->eval->getTitle(QUOTED) == NEW_EVALUATION_TITLE &&
 		$this->tree->eval->getText(QUOTED) == "" &&
 		$child &&
-		$child->getTitle(QOUTED) == _("Erster Gruppierungsblock") &&
+		$child->getTitle(QOUTED) == FIRST_ARRANGMENT_BLOCK_TITLE &&
 		$child->getChildren() == NULL &&
 		$child->getText == ""){
 	
