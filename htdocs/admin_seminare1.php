@@ -556,6 +556,7 @@ if (($s_id) && (auth_check())) {
 					<?
 					$no_doz_found=TRUE;
 					if (($search_exp_doz) && ($search_doz_x)) {
+						$search_exp_doz = trim($search_exp_doz);
 						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) {
 							$query3 = sprintf("SELECT institut_id FROM seminar_inst WHERE seminar_id = '%s'", $s_id);
 							$db3->query($query3);
@@ -620,6 +621,7 @@ if (($s_id) && (auth_check())) {
 					<?
 					$no_tut_found=TRUE;
 					if (($search_exp_tut) && ($search_tut_x)) {
+						$search_exp_tut = trim($search_exp_tut);
 						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) {
 							$query3 = sprintf("SELECT institut_id FROM seminar_inst WHERE seminar_id = '%s'", $s_id);
 							$db3->query($query3);

@@ -446,7 +446,7 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
        	   <br><br>
 		<?
 		if ($search_exp) {
-			PrintSearchResults($search_exp, $range_id);
+			PrintSearchResults(trim($search_exp), $range_id);
 			printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip(_("neue Suche")));
 		} else {
 			echo "<font size=\"-1\">&nbsp; " . _("freie Personensuche") . "</font><br>";

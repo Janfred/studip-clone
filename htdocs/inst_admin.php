@@ -281,6 +281,7 @@ if ($inst_id != "" && $inst_id !="0") {
 
 	$inst_name = $SessSemName[0];
 	if (isset($search_exp) && strlen($search_exp) > 2) {
+		$search_exp = trim($search_exp);
 		// Der Admin will neue Sklaven ins Institut berufen...
 		$db->query ("SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] . " AS fullname, username, perms  FROM auth_user_md5 LEFT JOIN user_info USING(user_id)LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' WHERE perms !='root' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ");		
 		printf("<blockquote>" . _("Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung %s zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben."), "<b>" . htmlReady($inst_name) . "</b>");

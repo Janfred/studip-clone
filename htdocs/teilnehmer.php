@@ -825,6 +825,7 @@ if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["a
 //insert autors via free search form
 if ($rechte) {
 	if ($search_exp) {
+		$search_exp = trim($search_exp);
 		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
 			"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
 			"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
