@@ -278,9 +278,8 @@ IF ($view=="ansprechpartner") {?>
 	
 	
 	<tr>
-		<td class="blank" valign="top" colspan=2><br><br>
-		<blockquote><b>F&uuml;r diese Stud.IP-Installation sind folgende Administratoren zust&auml;ndig:</b><br>
-		<blockquote><blockquote>
+		<td class="blank" valign="top" colspan=2>
+		<blockquote><b>F&uuml;r diese Stud.IP-Installation sind folgende Administratoren zust&auml;ndig:</b><br><br />
 <?
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
