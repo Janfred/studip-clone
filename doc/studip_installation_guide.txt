@@ -1,5 +1,5 @@
 Stud.IP Installation Guide
-
+Version 0.9.0
 
 1 Installation
 
@@ -16,6 +16,24 @@ PHP interpreter and database server completely. They are not suitable
 for a web hosting setup where you have only limited to no control
 over the installation.
 
+1.1 Datei entpacken
+
+Die heruntergeladene Datei mit bunzip2 in ein temporäres Verzeichnis
+entpacken. Dieses Verzeichnis kann nach erfolgreicher Installation
+gelöscht oder als Referenz aufbewahrt werden.
+
+Kurzübersicht der Verzeichnisse:
+- db             SQL-Dateien für mysql-Datenbankeinrichtung
+- doc            This quick installation guide ;-)
+- install        Installations-Skript, getestet mit SuSe 8.0
+- studip-config  Default-Konfigurationsdateien (local.inc, config.inc.php)
+- studip-htdocs  Der Stud.IP-Kern, später sichtbar für Webserver
+- studip-phplib  Angepasste phplib-Version für Stud.IP
+- studip-update  Migrationsskripte für ältere Stud.IP-Versionen
+                 (Für Versionsupgrade bitte README lesen!)
+- studip-varlib  Rumpfstruktur für Datenverzeichnisse außerhalb
+                 des Apache-Document-Root-Verzeichnisses.
+
 1.1 Konfiguration von Apache und PHP
 
 Für Stud.IP werden der Apache Webserver in der Version 1.3.9 oder höher
@@ -25,40 +43,42 @@ php läßt sich mit einem einfachen <?php phpinfo() ?> Skript feststellen.
 
 1.2 phplib - studip-phplib
 
-Stud.IP verwendet die phplib-7.2d mit leichten Modifikationen. Das orginal
+Stud.IP verwendet die phplib-7.2d mit leichten Modifikationen. Das Orginal
 ist unter http://phplib.sourceforge.net/ zu finden.
 
-
-
-  folgende Dateien wurden hinzugefügt:
-
+Folgende Dateien wurden hinzugefügt:
   - email-validation.inc (check von Email-Adressen und anderen Angaben)
-
   - smtp.inc (versenden von Mails auf einem Linux-System)
 
-
-
-  folgende Dateien wurden verändert:
-
+Folgende Dateien wurden verändert:
   - prepend.php (autoinclude der beiden obigen)
-
   - perminvalid.ihtml (etwas verschönert)
 
+Die Datei local.inc ist auf unser System zugeschnitten und
+muss bis auf die lokale Anpassung folgender Punkte so übernommen werden:
+- Setzen von Datenbankrechner, -benutzer, -passwort und -name
+  ($DB_STUDIP_HOST, $DB_STUDIP_USER, $DB_STUDIP_PASSWORD, $DB_STUDIP_DATABASE)
+- Anpassung des Mailhostes, wenn Mails nicht über ein lokales Sendmail,
+  sondern einen externen Rechner verschickt werden sollen. ($MAIL_HOST_NAME)
+- Absoluter Pfad zu Stud.IP-Dateien, sichtbar für den Webserver
+  ($ABSOLUTE_PATH_STUDIP)
+- Absoluter Pfad zum Upload-Verzeichnis, muss nicht für den Webserver
+  sichtbar sein ($UPLOAD_PATH)
+- Absoluter Pfad zum Archiv-Verzeichnis, muss nicht für den Webserver
+  sichtbar sein ($ARCHIV_PATH)
+- Evtl. Setzen der Datenbankparameter und Aktivierung der ILIAS-Anbindung
 
-
-Die Datei local.inc ist komplett auf unser System zugeschnitten und
-muss so übernommen werden! (Benutzername und Passwort sollten natürlich angepasst
-werden ;-)
-
-Die angepasst Version der phplib befindet sich im Verzeichnis /php
-und sollte ins Root Verzeichnis des Webservers kopiert werden. Ist
-dies z.B. /usr/local/httpd, dann sind die Dateien folglich nach /usr/local/httpd/php
-zu kopieren. Bitte dieses include Verzeichnis nicht unterhalb des
-document root des Webservers einfügen!
+Die angepasste Version der phplib befindet sich im Verzeichnis /studip-phplib
+und sollte in das Apache-Root-Verzeichnis kopiert werden. Ist dies z.B.
+/usr/local/httpd, dann sind die Dateien folglich nach /usr/local/httpd/php
+zu kopieren. Bitte dieses Include-Verzeichnis nicht unterhalb des
+Document-Root des Webservers einfügen!
 Seit SuSE 8.1 befindet sich das Root-Verzeichnis des Webservers in /srv/www .
+Für debian-Linux 3.0 ist z.B. das Verzeichnis /usr/lib/apache eine gute Wahl.
 
-Jetzt muss nur noch der php.ini file angepasst werden, der sich nach
-der Installation von php in /etc/httpd/ (bzw. bei SuSE ab 7.2 in /etc) befinden sollte.
+Jetzt muss nur noch die Datei php.ini angepasst werden, der sich nach
+der Installation von php in /etc/httpd/ (bzw. bei SuSE ab 7.2 in /etc,
+bei debian in /etc/php4/apache) befinden sollte.
 
 Dabei muss auto_prepend_file auf prepend.php zeigen:
 
@@ -75,10 +95,18 @@ include_path            =       /usr/local/httpd/php
 
 Desweiteren sollte track_vars auf ON stehen und magic_quotes_gpc ebenfals.
 
-Damit das Registrierungsmodul von Stud.IP funktioniert ist noch ein
+Damit das Registrierungsmodul von Stud.IP funktioniert, ist noch ein
 Blick auf sendmail_path nötig. Damit aus dem Stud.IP Programm E-Mails
-verschickt werden können, muss der sendmail_path angepasst werden.
-Auf den meisten Systemen sollte /usr/lib/sendmail -t funktionieren.
+über den lokalen Rechner verschickt werden können, muss der sendmail_path
+angepasst werden.  Auf den meisten Systemen sollte /usr/lib/sendmail -t
+funktionieren.
+
+Für den Export von Daten als HTML, PDF etc. wird die XSLT-Unterstützung
+für PHP benötigt. Falls die in der verwendeten PHP-Installation nicht
+vorhanden ist, sind die Sablotron und expat Bibliotheken zu installieren
+(www.gingerall.com) und PHP entsprechend neu zu konfigurieren (configure
+--enable-xslt --with-xslt-sablot). Für Debian erledigt beides das Paket 
+php4-xslt (apt-get install php4-xslt).
 
 1.3 Anlegen der MySQL Datenbank >>studip<<
 
@@ -100,36 +128,54 @@ Desweiteren muss ein Datenbankbenutzer für studip angelegt werden.
 In der phplib Datei local.inc, die auf Stud.IP angepasst wurde, ist
 dieser als user = www mit dem password = www eingetragen
 und sollte auch erstmal so angelegt werden (später aber auf alle Fälle
-ändern!). Dieser Datenbankbenutzer benötigt SELECT, INSERT, UPDATE
-und DELETE zugriff.
+ändern!). Dieser Datenbankbenutzer benötigt die Rechte: SELECT, INSERT, UPDATE,
+DELETE, CREATE (letzteres für temporäre Tabellen).
 
-Die Datei db/DefaultValues.sql enthält legt ein BeispielSeminar (FAQ
+Die Datei db/DefaultValues.sql enthält ein BeispielSeminar (FAQ
 - StudIP). Wer Lust hat, kann diese importieren und so bereits auf
 Inhalte treffen ;-)
 
 Nicht vergessen, die MySQL Datenbank neu zu starten (reload!).
 
-Als einfach zu bediente Tools hat sich bei uns kmysqladmin und phpMyAdmin
-(http://www.phpwizard.net/projects/phpMyAdmin/) bewährt.
+Als einfach zu bedienende Tools haben sich bei uns kmysqladmin und
+phpMyAdmin (http://www.phpwizard.net/projects/phpMyAdmin/) bewährt.
 
 1.4 Konfiguration von Stud.IP
 
-Die Dateien von Stud.IP befinden sich im Verzeichnis /studip. Dieses
-sollten ins DocumentRoot Verzeichnis des Apache Webservers kopiert
-werden. In unserem Beispiel also nach /usr/local/httpd/htdocs/studip.
-Wer einen anderen Verzeichnisnamen als /studip benutzt, muss daran denken in der
-local.inc $RELATIVE_PATH_STUDIP = "studip"; auch zu ändern.
+Die Dateien von Stud.IP befinden sich im Verzeichnis /studip-htdocs. Dieses
+sollte ins Document-Root-Verzeichnis des Webservers kopiert werden.
+In unserem Beispiel also nach /usr/local/httpd/htdocs/studip.
+Wer einen anderen Verzeichnisnamen als benutzt, muss daran denken in der
+local.inc $ABSOLUTE_PATH_STUDIP entsprechend zu ändern.
 
-Die Verzeichnisse studip/archiv; studip/tmp ; studip/user ; studip/upload_doc
-müssen mit den Rechten des Webserver-User versehen werden. Zumeist
+Die Verzeichnisse studip/archiv; studip/tmp; studip/user; studip/upload_doc und
+studip/pictures müssen mit den Rechten des Webserver-User versehen werden. Zumeist
 ist das wwwrun.nogroup, zur Sicherheit am besten in der httpd.conf
-nachsehen. Mit der Version 0.7.5 können die Verzeichniss upload_doc und archiv auch ausserhalb
-des DocumentRoot angelegt werden. Die Konfiguration in der local.inc erwartet diese beiden
-Verzeichnisse in '/var/lib/studip'.
+nachsehen. Seit der Version 0.7.5 können die Verzeichniss upload_doc und archiv
+auch ausserhalb des DocumentRoot angelegt werden. Die Default-Konfiguration in
+der local.inc erwartet diese beiden Verzeichnisse in '/var/lib/studip'.
 
 1.5 Benötigte Libaries und sonstige Packete
-In der local.inc (php/local.inc) sind weitergehende Libaries dokumentiert, die für Stud.IP
+
+In der local.inc (s.o.) sind Pfade zu weitergehenden Libraries zu setzen, die für Stud.IP
 notwendig sind.
+
+Benötigt für die Grundfunktionalität:
+- zip
+- giftopnm, pnmscale, djpeg, cjpeg (Konvertierung von hochgeladenen Benutzerbildern)
+  (Bei debian 3.0 befinden sich die notwendigen Binaries in den packages netpbm,
+   und libjpeg-progs)
+
+Benötigt für den LaTeX-Renderer:
+- Vollständig konfiguriertes LaTeX-System
+- dvips
+- ImageMagick
+
+Der LaTeX-Renderer kann in der local.inc unter $LATEXRENDER_ENABLE ein- bzw.
+ausgeschaltet werden (default: ein). Wenn er eingeschaltet ist, können an
+verschiedenen Stellen in Stud.IP LaTex-Formeln durch [tex]...[/tex] gesetzt
+werden.
+
 
 2 Start Stud.IP
 
@@ -145,13 +191,12 @@ Also einfach auf login, Benutzername und Passwort des root eingeben
 Zum Anlegen neuer BenutzerInnen auf der Startseite >>Registrierung<<
 auswählen. Die zu registrierende BenutzerIn wird zunächst mit der
 Berechtigung ``user'' angelegt, abgeschlossen wird der Registrierungsprozeß
-erst durch eine Bestätigungsmail (und das setzt einen zumindest local
-laufenden Mail-Server voraus!), wodurch die BenutzerIn die Berechtigung
->>author<< und damit auch weitergehende Lese/Schreibrechte erhält.
+erst durch eine Bestätigungsmail (und das setzt eine korrekte Mail-Server-
+Konfiguration voraus!), wodurch die BenutzerIn die Berechtigung >>author<<
+und damit auch weitergehende Lese/Schreibrechte erhält.
 
 
 
 - The Stud.IP Crew <crew@studip.de>
-
 
 
