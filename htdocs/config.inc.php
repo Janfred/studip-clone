@@ -93,29 +93,29 @@ $INST_TYPE[6]=array("name"=>"Seminar", "en"=>"Seminar");
 
 
 //Festlegen von zulaessigen Funktion fuer Institutsmitarbeiter
-$INST_FUNKTION[1]=array("name"=>"Student", "en"=>"Student");
-$INST_FUNKTION[2]=array("name"=>"stud. Vertreter", "en"=>"Collegiate representative");
+$INST_FUNKTION[1]=array("name"=>"StudentIn", "en"=>"Student");
+$INST_FUNKTION[2]=array("name"=>"stud. VertreterIn", "en"=>"Collegiate representative");
 $INST_FUNKTION[3]=array("name"=>"Sekretariat / Verwaltung", "en"=>"Secretariate");
 $INST_FUNKTION[4]=array("name"=>"stud. Hilfskraft", "en"=>"Student assistant");
 $INST_FUNKTION[5]=array("name"=>"wiss. Hilfskraft", "en"=>"Teaching assistant");
 $INST_FUNKTION[6]=array("name"=>"wiss. Mitarbeiter", "en"=>"Scientific assistant");
-$INST_FUNKTION[7]=array("name"=>"Lehrbeauftragter", "en"=>"Assistant professor");
+$INST_FUNKTION[7]=array("name"=>"Lehrbeauftragte", "en"=>"Assistant professor");
 $INST_FUNKTION[8]=array("name"=>"Zweitmitglied", "en"=>"Lecturers from other institutes");
 $INST_FUNKTION[9]=array("name"=>"Akademischer Rat", "en"=>"Academic council");
 $INST_FUNKTION[10]=array("name"=>"Akademischer Oberrat", "en"=>"Academic chiefcouncil");
 $INST_FUNKTION[11]=array("name"=>"Akademischer Direktor", "en"=>"Academic principal");
-$INST_FUNKTION[12]=array("name"=>"Hochschullehrer", "en"=>"Lecturer");
-$INST_FUNKTION[13]=array("name"=>"Direktor", "en"=>"Principal");
+$INST_FUNKTION[12]=array("name"=>"HochschullehrerIn", "en"=>"Lecturer");
+$INST_FUNKTION[13]=array("name"=>"DirektorIn", "en"=>"Principal");
 $INST_FUNKTION[14]=array("name"=>"Admin", "en"=>"Admin");
-$INST_FUNKTION[15]=array("name"=>"techn. Mitarbeiter", "en"=>"Technical assistant");
-$INST_FUNKTION[16]=array("name"=>"sonstiges", "en"=>"Miscellaneous");
-$INST_FUNKTION[17]=array("name"=>"Doktorand", "en"=>"Doctoral Candidate");
-$INST_FUNKTION[18]=array("name"=>"Diplomand", "en"=>"Graduand");
-$INST_FUNKTION[19]=array("name"=>"freier Mitarbeiter", "en"=>"assoziated member");
+$INST_FUNKTION[15]=array("name"=>"techn. MitarbeiterIn", "en"=>"Technical assistant");
+$INST_FUNKTION[16]=array("name"=>"Sonstige", "en"=>"Miscellaneous");
+$INST_FUNKTION[17]=array("name"=>"DoktorandIn", "en"=>"Doctoral Candidate");
+$INST_FUNKTION[18]=array("name"=>"DiplomandIn", "en"=>"Graduand");
+$INST_FUNKTION[19]=array("name"=>"freie(r) MitarbeiterIn", "en"=>"assoziated member");
 $INST_FUNKTION[20]=array("name"=>"Bibliothek", "en"=>"Library");
 $INST_FUNKTION[21]=array("name"=>"Emeriti", "en"=>"Emeriti");
 $INST_FUNKTION[22]=array("name"=>"ausserdem am Institut tätig", "en"=>"assoziated member");
-$INST_FUNKTION[23]=array("name"=>"Dozent institutsübergreifender Veranstaltungen", "en"=>"Lecturer of interinstitutional courses");
+$INST_FUNKTION[23]=array("name"=>"DozentIn institutsübergreifender Veranstaltungen", "en"=>"Lecturer of interinstitutional courses");
 //weitere Funktionen koennen hier angefuegt werden
 
 $INST_FUNKTION_ORDER = array(21,13,11,12,10,9,6,3,20,7,23,8,2,15,14,23,19,17,5,18,4,22,16);
