@@ -48,14 +48,29 @@ class CT_Sql {
     }
   }
 
-  function ac_gc($gc_time, $name) {
+   function ac_gc($gc_time, $name) {
     $timeout = time();
     $sqldate = date("YmdHis", $timeout - ($gc_time * 60));
-    $this->db->query(sprintf("DELETE FROM %s WHERE changed < '%s' AND name = '%s'",
-                    $this->database_table,
+	$this->db->query(sprintf("SELECT sid FROM %s WHERE changed < '%s' AND name = '%s'",
+    				$this->database_table,
                     $sqldate,
                     addslashes($name)));
-    }
+	while($this->db->next_record()){
+		$sessions_to_delete[] = $this->db->f(0);
+	}
+	if (is_array($sessions_to_delete)){
+		$i = 0;
+		$max = count($sessions_to_delete);
+		while($i <= $max){
+			$to_delete = array_slice($sessions_to_delete, $i, 50);
+			$this->db->query(sprintf("DELETE FROM %s WHERE sid IN('%s') AND name = '%s'",
+        		            $this->database_table,
+							join("','" , $to_delete),
+							addslashes($name)));
+			$i += 50;
+		}
+	}
+  }
 
   function ac_store($id, $name, $str) {
     $ret = true;
