@@ -516,7 +516,7 @@ function DeleteContact ($contact_id)
 	$db->query ("SELECT owner_id, user_id FROM contact WHERE contact_id = '$contact_id'");	
 	if ($db->next_record()) {
 		if ($db->f("owner_id")!=$user->id) {
-			$ouput = _("Sie haben kein Zugriffsrecht auf diesen Kontakt!");	
+			$output = _("Sie haben kein Zugriffsrecht auf diesen Kontakt!");	
 		} else {
 			$user_id = $db->f("user_id");
 			$owner_id = $db->f("owner_id");
