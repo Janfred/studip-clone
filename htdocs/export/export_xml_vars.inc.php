@@ -14,6 +14,8 @@ $xml_names_fak = array(
 $xml_groupnames_inst = array(
 	"object"			=>		"institut",
 	"childobject"		=>		"fakultaet"
+	"childgroup2"		=>		"datenfelder",
+	"childobject2"		=>		"datenfeld"
 );
 
 $xml_names_inst = array( 
@@ -35,7 +37,9 @@ $xml_groupnames_lecture = array(
 	"childgroup1"		=>		"termine",
 	"childgroup2"		=>		"dozenten",
 	"childobject2"		=>		"dozent",
-	"childgroup3"		=>		"bereiche"
+	"childgroup3"		=>		"bereiche",
+	"childgroup4"		=>		"datenfelder",
+	"childobject4"		=>		"datenfeld"
 );
 
 $xml_names_lecture = array( 
@@ -53,13 +57,15 @@ $xml_names_lecture = array(
  	"VeranstaltungsNummer"	=>		"veranstaltungsnummer",
  	"ects"			=>		"ects",
 	"bereich"			=>		"bereich",
-	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin")
+	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin"),
 );
 
 $xml_groupnames_person = array(
 	"group"			=>		"personen",
 	"subgroup1"		=>		"gruppe",
 	"object"			=>		"person"
+	"childgroup1"		=>		"datenfelder",
+	"childobject1"		=>		"datenfeld"
 );
 
 $xml_names_person = array( 

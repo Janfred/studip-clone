@@ -267,6 +267,22 @@ function export_sem($inst_id, $ex_sem_id = "all")
 					$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $content_string);
 				}
 			$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup2"] );
+		// freie Datenfelder ausgeben
+			$DataFields = new DataFields($db->f("Seminar_id"));
+			$localFields = $DataFields->getLocalFields();
+			if (sizeof($localFields) > 0)
+			{
+				$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup4"] );
+				foreach ($localFields as $val) 
+					if ($val["content"]) 
+					{
+						$data_object .= xml_open_tag($xml_groupnames_lecture["childobject4"] , $val["name"]);
+						$data_object .= $val["content"];
+						$data_object .= xml_close_tag($xml_groupnames_lecture["childobject4"]);
+					}
+				$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup4"] );
+			}
+
 			$data_object .= xml_close_tag( $xml_groupnames_lecture["object"] );
 			reset($xml_names_lecture);
 			output_data($data_object, $o_mode);
@@ -356,6 +372,21 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 							$data_object .= xml_tag($val, $studiengang[$db->f($key)]);
 						elseif ($db->f($key) != "") 
 							$data_object .= xml_tag($val, $db->f($key));
+					}
+				// freie Datenfelder ausgeben
+					$DataFields = new DataFields($db->f("user_id"));
+					$localFields = $DataFields->getLocalFields();
+					if (sizeof($localFields) > 0)
+					{
+						$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
+						foreach ($localFields as $val) 
+							if ($val["content"]) 
+							{
+								$data_object .= xml_open_tag($xml_groupnames_person["childobject1"] , $val["name"]);
+								$data_object .= $val["content"];
+								$data_object .= xml_close_tag($xml_groupnames_person["childobject1"]);
+							}
+						$data_object .= xml_close_tag( $xml_groupnames_person["childgroup1"] );
 					}
 					$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
 					reset($xml_names_person);

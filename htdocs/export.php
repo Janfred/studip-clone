@@ -54,6 +54,7 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/DataFields.class.php");
 
 require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 
