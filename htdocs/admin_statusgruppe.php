@@ -86,6 +86,51 @@ function GetPresetGroups ($view, $veranstaltung_class)
 	echo "</select>";
 }
 
+
+function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="")
+{ global $HTTP_POST_VARS;
+		while (list($key, $val) = each ($HTTP_POST_VARS)) {
+			$statusgruppe_id = substr($key, 0, -2);
+		}
+		echo $statusgruppe_id;
+		echo "hallo";
+		$db=new DB_Seminar;
+		$db2=new DB_Seminar;
+		$mkdate = time();
+		if ($AktualMembers != "") {
+			for ($i  = 0; $i < sizeof($AktualMembers); $i++) {
+				$user_id = get_userid($AktualMembers[$i]);
+				InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+			}
+		}
+		if (isset($InstitutMembers) && $InstitutMembers != "---") {
+			$user_id = get_userid($InstitutMembers);
+			$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+			if ($writedone ==TRUE) {
+				$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+			}
+		}
+		if ($Freesearch != "") {
+			for ($i  = 0; $i < sizeof($Freesearch); $i++) {
+				$user_id = get_userid($Freesearch[$i]);
+				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+				if ($writedone==TRUE) {
+					if (get_object_type($range_id) == "sem") {
+						$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+					} elseif (get_object_type($range_id) == "inst") {
+						$globalperms = get_global_perm($user_id);
+						if (get_perm($range_id, $user_id) =="fehler!") {
+							$db2->query("INSERT INTO user_inst SET Institut_id = '$range_id', user_id = '$user_id', inst_perms = '$globalperms'");
+						}
+						if (get_perm($range_id, $user_id) =="user") {
+							$db2->query("UPDATE user_inst SET inst_perms = '$globalperms' WHERE user_id = '$user_id' AND Institut_id = '$range_id'");
+						}
+					}
+				}
+			}
+		}
+}
+
 function GetAllSelected ($range_id)
 {	
 	$zugeordnet[] = "";
@@ -389,11 +434,11 @@ function PrintInstitutMembers ($range_id)
 $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	?><table width="100%" border="0" cellspacing="0">
-	<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
 <tr>
 	<?
 	printf ("<td class=\"steel1\" valign=\"top\" width=\"50%%\"><br>\n");
-	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
+?>	<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
+<? echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
 	if ($db->num_rows() > 0) {
 		$nogroups = 1;
@@ -429,10 +474,9 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	PrintAktualStatusgruppen ($range_id, $view, $edit_id);
 	?>
 	<br>&nbsp; 
-
+   </form>
   </td>
  </tr>
-  </form>
 </table>
 <?
 } else { // es sind noch keine Gruppen angelegt, daher Infotext

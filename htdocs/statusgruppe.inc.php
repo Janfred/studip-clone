@@ -95,49 +95,6 @@ function InsertPersonStatusgruppe ($user_id, $statusgruppe_id)
 }
 
 
-function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="")
-{ global $HTTP_POST_VARS;
-		while (list($key, $val) = each ($HTTP_POST_VARS)) {
-			$statusgruppe_id = substr($key, 0, -2);
-		}
-		echo $statusgruppe_id;
-		echo "hallo";
-		$db=new DB_Seminar;
-		$db2=new DB_Seminar;
-		$mkdate = time();
-		if ($AktualMembers != "") {
-			for ($i  = 0; $i < sizeof($AktualMembers); $i++) {
-				$user_id = get_userid($AktualMembers[$i]);
-				InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
-			}
-		}
-		if (isset($InstitutMembers) && $InstitutMembers != "---") {
-			$user_id = get_userid($InstitutMembers);
-			$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
-			if ($writedone ==TRUE) {
-				$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
-			}
-		}
-		if ($Freesearch != "") {
-			for ($i  = 0; $i < sizeof($Freesearch); $i++) {
-				$user_id = get_userid($Freesearch[$i]);
-				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
-				if ($writedone==TRUE) {
-					if (get_object_type($range_id) == "sem") {
-						$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
-					} elseif (get_object_type($range_id) == "inst") {
-						$globalperms = get_global_perm($user_id);
-						if (get_perm($range_id, $user_id) =="fehler!") {
-							$db2->query("INSERT INTO user_inst SET Institut_id = '$range_id', user_id = '$user_id', inst_perms = '$globalperms'");
-						}
-						if (get_perm($range_id, $user_id) =="user") {
-							$db2->query("UPDATE user_inst SET inst_perms = '$globalperms' WHERE user_id = '$user_id' AND Institut_id = '$range_id'");
-						}
-					}
-				}
-			}
-		}
-}
 
 function RemovePersonStatusgruppe ($username, $statusgruppe_id)
 {
