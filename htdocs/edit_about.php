@@ -33,6 +33,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // Klassendefinition
 
@@ -544,9 +545,6 @@ $cssSw = new cssClassSwitcher;
 
 if ($logout)  // wir wurden gerade ausgeloggt...
 	{
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-
-	// -- here you have to put initialisations for the current page
 	
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -575,8 +573,6 @@ if ($logout)  // wir wurden gerade ausgeloggt...
 //No Permission to change userdata
 if (!$my_about->check)
  {
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-
 	// -- here you have to put initialisations for the current page
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -657,7 +653,7 @@ if ($my_about->logout_user)
 if ($cmd) {
 	if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
 		$m_id=md5(uniqid("smswahn"));
-		setTempLanguage($this->auth_user["user_id"]);
+		setTempLanguage($my_about->auth_user["user_id"]);
 		$priv_msg = _("Ihre persönliche Seite wurde von einem Administrator verändert.\n Folgende Veränderungen wurden vorgenommen:\n \n").$my_about->priv_msg;
 		restoreLanguage();
 		$my_about->insert_sms($my_about->auth_user["username"], $priv_msg);
@@ -668,9 +664,7 @@ if ($cmd) {
 	die;
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-// -- here you have to put initialisations for the current page
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
