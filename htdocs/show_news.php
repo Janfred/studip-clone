@@ -41,7 +41,7 @@ if ($QUERY_STRING) {
 } else
 	$self=$PHP_SELF."?";
 
-$query="SELECT * FROM news_range LEFT JOIN news USING (news_id) WHERE news_range.range_id='$range_id' AND date < $aktuell AND (date+expire) > $aktuell ORDER BY date,topic DESC";
+$query="SELECT * FROM news_range LEFT JOIN news USING (news_id) WHERE news_range.range_id='$range_id' AND date < $aktuell AND (date+expire) > $aktuell ORDER BY date DESC, topic ASC";
 if ($limit)
 	$query=$query." LIMIT $limit";
 $db->query($query);
@@ -107,7 +107,6 @@ if (!$db->num_rows()) {
 			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
 
 		$tempnew = (($db->f("date") >= object_get_visit($db->f("news_id"),'news',false)) && ($db->f("user_id") != $auth->auth["uid"]));
-
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 		if ($open == $db->f("news_id"))
 			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $db->f("date"));
