@@ -153,8 +153,8 @@ function PrintAktualStatusgruppen ()
 		$i++;
 		echo "</table>";
 		if ($i < $AnzahlStatusgruppen) {
-			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a>",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen")); 
-			printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\&view=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a> </p>",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"));
+			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><br><img src=\"pictures/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"), tooltip("Gruppenreihenfolge tauschen")); 
+			//printf ("&nbsp; &nbsp; &nbsp; <a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s\&view=%s\"><img src=\"pictures/move_down.gif\" width=\"13\" height=\"11\" border=\"0\" %s></a> </p>",$statusgruppe_id, $range_id, $view, tooltip("Gruppenreihenfolge tauschen"));
 		}
 	}
 }
