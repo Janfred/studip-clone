@@ -89,16 +89,16 @@ class messaging {
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 
-		$db->query("UPDATE message_user SET deleted = '1' WHERE message_id = '".$message_id."' AND user_id = '".$user_id."'");
-		$db2->query("SELECT message_id FROM message_user WHERE message_id = '".$message_id."' AND deleted = '0'");
-		if (!$db2->num_rows()) {
-			$db2->query("DELETE FROM message WHERE message_id = '".$message_id."'");
-			$db2->query("DELETE FROM message_user WHERE message_id = '".$message_id."'");
-		}
+		$db->query("UPDATE message_user SET deleted = '1' WHERE message_id = '".$message_id."' AND user_id = '".$user_id."' AND dont_delete='0' AND deleted='0'");
 		if ($db->affected_rows()) {
 			return TRUE;
 		} else {
 			return FALSE;
+		}
+		$db2->query("SELECT message_id FROM message_user WHERE message_id = '".$message_id."' AND deleted = '0'");
+		if (!$db2->num_rows()) {
+			$db2->query("DELETE FROM message WHERE message_id = '".$message_id."'");
+			$db2->query("DELETE FROM message_user WHERE message_id = '".$message_id."'");
 		}
 	}
 
@@ -115,6 +115,29 @@ class messaging {
 		$db->query("$query");
 		while ($db->next_record()) {
 			$this->delete_message($db->f("message_id"));
+		}
+	}
+
+	// update messages as readed
+	function set_read_message($message_id) {
+		global $user;
+		$db=new DB_Seminar;
+		$user_id = $user->id;
+		$query = "UPDATE IGNORE message_user SET readed=1 WHERE user_id = '$user_id' AND message_id = '$message_id'";
+		$db->query($query);
+	}
+
+	// delete all messages from user
+	function set_read_all_messages() {
+		global $user;
+		$db=new DB_Seminar;
+		
+		$user_id = $user->id;
+		
+		$query = "SELECT message_id FROM message_user WHERE readed = '0' AND deleted='0' and user_id = '".$user_id."' AND snd_rec = 'rec'";
+		$db->query("$query");
+		while ($db->next_record()) {
+			$this->set_read_message($db->f("message_id"));
 		}
 	}
 
@@ -142,13 +165,14 @@ class messaging {
 			$db4->next_record();
 
 			if ($user_id != "____%system%____")  {
-				$db5->query("SELECT smsforward_active, smsforward_rec FROM user_info WHERE user_id='".$db4->f("user_id")."'");
+				$db5->query("SELECT smsforward_rec FROM user_info WHERE user_id='".$db4->f("user_id")."'");
 				$db5->next_record();
 				$snd_user_id = $user_id;
 				if ($my_messaging_settings["save_snd"] != "1") {
 					$set_deleted = "1";
 				}
 				// personal-signatur
+
 				if ($sms_data["sig"] == "1") { 
 					$message .= $this->sig_string.$signature;
 				}
@@ -160,7 +184,7 @@ class messaging {
 				restoreLanguage();
 			}
 
-			if ($db5->f("smsforward_active") == "1" && $db5->f("smsforward_rec") != "") {
+			if ($db5->f("smsforward_rec") != "") {
 				$message .= $this->sig_string.sprintf(_("Diese Nachricht wurde automatisch an %s weitergeleitet."), get_fullname($db5->f("smsforward_rec")));
 			}
 			
@@ -174,7 +198,7 @@ class messaging {
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
 			}
 			// insert rec
-			if ($db5->f("smsforward_active") == "1" && $db5->f("smsforward_rec") != "") {
+			if ($db5->f("smsforward_rec") != "") {
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db5->f("smsforward_rec")."', snd_rec='rec' ");
 			}
 			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");

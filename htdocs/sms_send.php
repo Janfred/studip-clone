@@ -101,7 +101,6 @@ if ($cmd_insert_x) {
 		if ($count >= "2") {
 			$msg .= sprintf(_("Ihre Nachricht wurde an %s Empf&auml;nger verschickt!"), $count)."<br />";
 		}
-		unset($sms_data["p_rec"]);
 		unset($signature);
 		unset($message);
 		$sms_data["sig"] = $my_messaging_settings["addsignature"];
@@ -123,6 +122,7 @@ if ($cmd_insert_x) {
 		header ($header_info);
 		die;
 	}
+	unset($sms_data["p_rec"]);
 }
 
 // falls antwort
@@ -362,8 +362,9 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	if (sizeof($sms_data["p_rec"]) > "0") { 
 		echo "<input type=\"image\" ".makeButton("abschicken", "src")." name=\"cmd_insert\" border=0 align=\"absmiddle\">";
 	}
-	echo "&nbsp;<a href=\"sms_box.php\">".makeButton("abbrechen", "img")."</a><br>&nbsp;";	
-	echo "</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";	
+	echo "&nbsp;<a href=\"sms_box.php\">".makeButton("abbrechen", "img")."</a>";
+	echo "<br><br>";	
+	echo "</div>";	
 	
 	echo "</td>\n";
 	echo "</tr>\n";
