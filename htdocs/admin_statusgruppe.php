@@ -426,7 +426,7 @@ function PrintInstitutMembers ()
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
 	        <font size="2">Name: </font>
-	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlready($statusgruppe_name);?>">
+	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlready(stripslashes($statusgruppe_name));?>">
 	        &nbsp; &nbsp; &nbsp; <font size="2">Anzahl:</font> 
 	        <input name="new_statusgruppe_size" type="text" value="" size="3">
 	        &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
@@ -449,7 +449,7 @@ function PrintInstitutMembers ()
 	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
 	        <font size="2">Name: </font>
-	        <input type="text" name="new_statusgruppe_name" value="<? echo $gruppe_name;?>">
+	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlReady($gruppe_name);?>">
 	        &nbsp; &nbsp; &nbsp; <font size="2">Anzahl:</font> 
 	        <input name="new_statusgruppe_size" type="text" value="<? echo $gruppe_anzahl;?>" size="3">
 	        &nbsp; &nbsp; &nbsp; <b>&Auml;ndern</b>&nbsp; 

@@ -65,7 +65,7 @@ function PrintAktualStatusgruppen ()
 		$size = $db->f("size");
 		echo "<table width=\"99%\" cellpadding=\"1\" cellspacing=\"0\" align=\"center\" border=\"0\">
 			        <tr height=28> ";
-		printf ("	          <td width=\"100%%\" colspan=\"2\" class=\"steel\"><font size=\"-1\"><b>%s</b></font><img src=\"pictures/blank.gif\"height=\"22\"></td>",$db->f("name"));
+		printf ("	          <td width=\"100%%\" colspan=\"2\" class=\"steel\"><font size=\"-1\"><b>%s</b></font><img src=\"pictures/blank.gif\"height=\"22\"></td>",htmlReady($db->f("name")));
 		echo 	"</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, Vorname, Nachname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
@@ -77,7 +77,7 @@ function PrintAktualStatusgruppen ()
 				$class="steelgraulight"; 
 			}
 			printf ("     <tr>");
-			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp; %s</a></font></td>",$class, $db2->f("username"), $db2->f("Vorname"), $db2->f("Nachname"));
+			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s&nbsp; %s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("Vorname")), htmlReady($db2->f("Nachname")));
 			printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
 			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $db2->f("username")); 
 			printf ("	   </td>");
