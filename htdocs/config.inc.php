@@ -36,14 +36,14 @@
 
 
 //Generische Systemeinstellungen
-$AUTH_LIFETIME=30;						//Zeit bis zu einem automatischem Logout in Minuten (wird zur Zeit nur zu Anzeigezwecken verwendet...)
+$AUTH_LIFETIME=60;						//Zeit bis zu einem automatischem Logout in Minuten (wird zur Zeit nur zu Anzeigezwecken verwendet...)
 $SOFTWARE_VERSION="0.9 rc 4";
 
 
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
 $UNI_URL="http://www.uni-goettingen.de";
-$UNI_LOGOUT_ADD="Und hier geht's direkt zum <a href=\"http://studentenwerk.stud.uni-goettingen.de/mensa/mensen/alle_heute.php\"><b>Mensaplan</b></a>&nbsp;;-)";
+$UNI_LOGOUT_ADD=sprintf(_("Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"), "<a href=\"http://studentenwerk.stud.uni-goettingen.de/mensa/mensen/alle_heute.php\"><b>", "</b></a>");
 $UNI_CONTACT="goettingen@studip.de";
 
 //die IDs der Veranstaltungen, die beim Hochstufen auf autor eingetragen werden
@@ -72,35 +72,35 @@ $SEMESTER[7]=array("name"=>"WS 2003/04", "beginn"=>mktime(0,0,0,10,1,2003), "end
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
 $SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezechnung (=Veranstaltung ersetzt)
-$SEM_TYPE[1]=array("name"=>"Vorlesung", "en"=>"Lecture", "class"=>1);
-$SEM_TYPE[2]=array("name"=>"Grundstudium", "en"=>"Basic classes", "class"=>1);
-$SEM_TYPE[3]=array("name"=>"Hauptstudium", "en"=>"Advanced classes", "class"=>1);
-$SEM_TYPE[4]=array("name"=>"Seminar", "en"=>"Seminar", "class"=>1);
-$SEM_TYPE[5]=array("name"=>"Praxisveranstaltung", "en"=>"Practical course", "class"=>1);
-$SEM_TYPE[6]=array("name"=>"Colloquium", "en"=>"Colloqia", "class"=>1);
-$SEM_TYPE[7]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>1);
-$SEM_TYPE[8]=array("name"=>"Arbeitsgruppe", "en"=>"Workgroup", "class"=>5);
-$SEM_TYPE[9]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>1); 
-$SEM_TYPE[10]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>2); 
-$SEM_TYPE[11]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>2); 
-$SEM_TYPE[12]=array("name"=>"Gremiumsveranstaltung", "en"=>"Board meeting", "class"=>3); 
-$SEM_TYPE[13]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>3); 
-$SEM_TYPE[14]=array("name"=>"Kulturforum", "en"=>"Cultural forum", "class"=>4); 
-$SEM_TYPE[15]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>4); 
-$SEM_TYPE[16]=array("name"=>"Praktikum", "en"=>"Practical course", "class"=>1); 
-$SEM_TYPE[17]=array("name"=>"Lehrveranstaltung nach PVO-Lehr I", "en"=>"", "class"=>1); 
-$SEM_TYPE[18]=array("name"=>"Anleitung zu selbständigen wissenschaftlichen Arbeiten", "en"=>"", "class"=>1); 
-$SEM_TYPE[19]=array("name"=>"Sprachkurs", "en"=>"Language Course", "class"=>1);
-$SEM_TYPE[20]=array("name"=>"Fachdidaktik", "en"=>"Didactics", "class"=>1);
-$SEM_TYPE[21]=array("name"=>"Übung", "en"=>"Exercise Course", "class"=>1);
-$SEM_TYPE[22]=array("name"=>"Proseminar", "en"=>"Proseminar", "class"=>1);
-$SEM_TYPE[23]=array("name"=>"Oberseminar", "en"=>"Oberseminar", "class"=>1);
-$SEM_TYPE[24]=array("name"=>"Arbeitsgemeinschaft", "en"=>"Workgroup", "class"=>1);
+$SEM_TYPE[1]=array("name"=>_("Vorlesung"), "en"=>"Lecture", "class"=>1);
+$SEM_TYPE[2]=array("name"=>_("Grundstudium"), "en"=>"Basic classes", "class"=>1);
+$SEM_TYPE[3]=array("name"=>_("Hauptstudium"), "en"=>"Advanced classes", "class"=>1);
+$SEM_TYPE[4]=array("name"=>_("Seminar"), "en"=>"Seminar", "class"=>1);
+$SEM_TYPE[5]=array("name"=>_("Praxisveranstaltung"), "en"=>"Practical course", "class"=>1);
+$SEM_TYPE[6]=array("name"=>_("Colloquium"), "en"=>"Colloqia", "class"=>1);
+$SEM_TYPE[7]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>1);
+$SEM_TYPE[8]=array("name"=>_("Arbeitsgruppe"), "en"=>"Workgroup", "class"=>5);
+$SEM_TYPE[9]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>1); 
+$SEM_TYPE[10]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>2); 
+$SEM_TYPE[11]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>2); 
+$SEM_TYPE[12]=array("name"=>_("Gremiumsveranstaltung"), "en"=>"Board meeting", "class"=>3); 
+$SEM_TYPE[13]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>3); 
+$SEM_TYPE[14]=array("name"=>_("Kulturforum"), "en"=>"Cultural forum", "class"=>4); 
+$SEM_TYPE[15]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>4); 
+$SEM_TYPE[16]=array("name"=>_("Praktikum"), "en"=>"Practical course", "class"=>1); 
+$SEM_TYPE[17]=array("name"=>_("Lehrveranstaltung nach PVO-Lehr I"), "en"=>"", "class"=>1); 
+$SEM_TYPE[18]=array("name"=>_("Anleitung zu selbständigen wissenschaftlichen Arbeiten"), "en"=>"", "class"=>1); 
+$SEM_TYPE[19]=array("name"=>_("Sprachkurs"), "en"=>"Language Course", "class"=>1);
+$SEM_TYPE[20]=array("name"=>_("Fachdidaktik"), "en"=>"Didactics", "class"=>1);
+$SEM_TYPE[21]=array("name"=>_("Übung"), "en"=>"Exercise Course", "class"=>1);
+$SEM_TYPE[22]=array("name"=>_("Proseminar"), "en"=>"Proseminar", "class"=>1);
+$SEM_TYPE[23]=array("name"=>_("Oberseminar"), "en"=>"Oberseminar", "class"=>1);
+$SEM_TYPE[24]=array("name"=>_("Arbeitsgemeinschaft"), "en"=>"Workgroup", "class"=>1);
 //weitere Typen koennen hier angefuegt werden
 
 
 //Festlegen der zulaessigen Klassen fuer Veranstaltungen. Jeder sem_type referenziert auf eine dieser Klassen
-$SEM_CLASS[1]=array("name"=>"Lehre", 					 	//the name of the class
+$SEM_CLASS[1]=array("name"=>_("Lehre"), 					 	//the name of the class
 					"compact_mode"=>FALSE, 			//indicates, if all fields are used in the creation process or only the fields that are necessary for workgroups
 					"workgroup_mode"=>FALSE, 			//indicates, if the workgroup mode is used (to use different declarations)
 					"only_inst_user"=>TRUE,				//indicates, that olny staff from the Einrichtungen which own the Veranstaltung, are allowed for tutor and dozent
@@ -110,10 +110,10 @@ $SEM_CLASS[1]=array("name"=>"Lehre", 					 	//the name of the class
 					"bereiche"=>TRUE,					//indicates, if bereiche should be used
 					"show_browse"=>TRUE, 				//indicates, if the hierachy-system should be shown in the search-process
 					"write_access_nobody"=>FALSE, 		//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
-					"description"=>"Hier finden Sie alle im System registrierten Lehrveranstaltungen", 						//the description
-					"create_description"=>"Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen");		//the description in the creation process
+					"description"=>_("Hier finden Sie alle im System registrierten Lehrveranstaltungen"), 						//the description
+					"create_description"=>_("Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"));		//the description in the creation process
 
-$SEM_CLASS[2]=array("name"=>"Forschung", 
+$SEM_CLASS[2]=array("name"=>_("Forschung"), 
 					"compact_mode"=>TRUE, 
 					"workgroup_mode"=>TRUE, 
 					"only_inst_user"=>TRUE,
@@ -123,10 +123,10 @@ $SEM_CLASS[2]=array("name"=>"Forschung",
 					"bereiche"=>FALSE, 
 					"show_browse"=>TRUE,
 					"write_access_nobody"=>FALSE, 
-					"description"=>"Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t",
-					"create_description"=>"In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r Forschungsprojekte anlegen.");
+					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t"),
+					"create_description"=>_("In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r Forschungsprojekte anlegen."));
 
-$SEM_CLASS[3]=array("name"=>"Organisation", 
+$SEM_CLASS[3]=array("name"=>_("Organisation"), 
 					"compact_mode"=>TRUE, 
 					"workgroup_mode"=>TRUE, 
 					"only_inst_user"=>FALSE,
@@ -136,10 +136,10 @@ $SEM_CLASS[3]=array("name"=>"Organisation",
 					"bereiche"=>FALSE, 
 					"show_browse"=>TRUE,
 					"write_access_nobody"=>TRUE, 
-					"description"=>"Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Uni-Gremien",
-					"create_description"=>"Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie diese Kategorie");
+					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Uni-Gremien"),
+					"create_description"=>_("Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie diese Kategorie"));
 
-$SEM_CLASS[4]=array("name"=>"Community", 
+$SEM_CLASS[4]=array("name"=>_("Community"), 
 					"compact_mode"=>TRUE, 
 					"workgroup_mode"=>FALSE, 
 					"only_inst_user"=>FALSE,
@@ -149,10 +149,10 @@ $SEM_CLASS[4]=array("name"=>"Community",
 					"bereiche"=>FALSE, 
 					"show_browse"=>FALSE,
 					"write_access_nobody"=>TRUE, 
-					"description"=>"Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen",
-					"create_description"=>"Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen anlegen m&ouml;chten, verwenden Sie diese Kategorie.");
+					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen"),
+					"create_description"=>_("Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen anlegen m&ouml;chten, verwenden Sie diese Kategorie."));
 
-$SEM_CLASS[5]=array("name"=>"Arbeitsgruppen", 
+$SEM_CLASS[5]=array("name"=>_("Arbeitsgruppen"), 
 					"compact_mode"=>FALSE, 
 					"workgroup_mode"=>FALSE, 
 					"only_inst_user"=>TRUE,
@@ -162,8 +162,8 @@ $SEM_CLASS[5]=array("name"=>"Arbeitsgruppen",
 					"bereiche"=>FALSE, 
 					"show_browse"=>FALSE,
 					"write_access_nobody"=>FALSE, 
-					"description"=>"Hier finden Sie verschiedene Arbeitsgruppen an der $UNI_NAME",
-					"create_description"=>"Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen.");
+					"description"=>sprintf(_("Hier finden Sie verschiedene Arbeitsgruppen an der %s"), $UNI_NAME),
+					"create_description"=>_("Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."));
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
@@ -179,8 +179,8 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 													"nobody" => 1.38 * 1048576													
 												)
 							),
-						"7" =>													//Kommentar: Leider wird der Sem_type noch immer alphanumerisch gespeichert, daher 
-						array(	"type"=>"allow", 									//Bezeichnung ueber Namen und nicht ueber die jeweilige Nummer.... muss mal angepasst werden!
+						"7" =>													 
+						array(	"type"=>"allow", 									
 								"file_types" => array ("exe"),
 								"file_sizes" => array (	"root" => 7 * 1048576,			
 													"admin" => 7 * 1048576,
@@ -261,13 +261,13 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 
 
 //Festlegen von zulaessigen Bezeichnungen fuer Einrichtungen (=Institute)
-$INST_TYPE[1]=array("name"=>"Einrichtung", "en"=>"Institute");
-$INST_TYPE[2]=array("name"=>"Zentrum", "en"=>"Center");
-$INST_TYPE[3]=array("name"=>"Lehrstuhl", "en"=>"Lehrstuhl");
-$INST_TYPE[4]=array("name"=>"Abteilung", "en"=>"Unit");
-$INST_TYPE[5]=array("name"=>"Fachbereich", "en"=>"Fachbereich");
-$INST_TYPE[6]=array("name"=>"Seminar", "en"=>"Seminar");
-$INST_TYPE[7]=array("name"=>"Fakultät");
+$INST_TYPE[1]=array("name"=>_("Einrichtung"), "en"=>"Institute");
+$INST_TYPE[2]=array("name"=>_("Zentrum"), "en"=>"Center");
+$INST_TYPE[3]=array("name"=>_("Lehrstuhl"), "en"=>"Lehrstuhl");
+$INST_TYPE[4]=array("name"=>_("Abteilung"), "en"=>"Unit");
+$INST_TYPE[5]=array("name"=>_("Fachbereich"), "en"=>"Fachbereich");
+$INST_TYPE[6]=array("name"=>_("Seminar"), "en"=>"Seminar");
+$INST_TYPE[7]=array("name"=>_("Fakultät"));
 $INST_TYPE_FAKULTAET_DEFAULT = 7;
 //weitere Typen koennen hier angefuegt werden
 
@@ -288,59 +288,33 @@ $INST_STATUS_GROUPS["default"] = array ("DirektorIn", "HochschullehrerIn", "Lehr
 //you can add more specifig presets for the different types 
 
 
-//Festlegen von zulaessigen Funktion fuer Institutsmitarbeiter !!!!wird im Prinzip ersetzt durch die Statusgruppen und kann daher eigentlich weg!!!!
-$INST_FUNKTION[1]=array("name"=>"StudentIn", "en"=>"Student");
-$INST_FUNKTION[2]=array("name"=>"stud. VertreterIn", "en"=>"Collegiate representative");
-$INST_FUNKTION[3]=array("name"=>"Sekretariat / Verwaltung", "en"=>"Secretariate");
-$INST_FUNKTION[4]=array("name"=>"stud. Hilfskraft", "en"=>"Student assistant");
-$INST_FUNKTION[5]=array("name"=>"wiss. Hilfskraft", "en"=>"Teaching assistant");
-$INST_FUNKTION[6]=array("name"=>"wiss. Mitarbeiter", "en"=>"Scientific assistant");
-$INST_FUNKTION[7]=array("name"=>"Lehrbeauftragte", "en"=>"Assistant professor");
-$INST_FUNKTION[8]=array("name"=>"Zweitmitglied", "en"=>"Lecturers from other institutes");
-$INST_FUNKTION[9]=array("name"=>"Akademischer Rat", "en"=>"Academic council");
-$INST_FUNKTION[10]=array("name"=>"Akademischer Oberrat", "en"=>"Academic chiefcouncil");
-$INST_FUNKTION[11]=array("name"=>"Akademischer Direktor", "en"=>"Academic principal");
-$INST_FUNKTION[12]=array("name"=>"HochschullehrerIn", "en"=>"Lecturer");
-$INST_FUNKTION[13]=array("name"=>"DirektorIn", "en"=>"Principal");
-$INST_FUNKTION[14]=array("name"=>"Admin", "en"=>"Admin");
-$INST_FUNKTION[15]=array("name"=>"techn. MitarbeiterIn", "en"=>"Technical assistant");
-$INST_FUNKTION[16]=array("name"=>"Sonstige", "en"=>"Miscellaneous");
-$INST_FUNKTION[17]=array("name"=>"DoktorandIn", "en"=>"Doctoral Candidate");
-$INST_FUNKTION[18]=array("name"=>"DiplomandIn", "en"=>"Graduand");
-$INST_FUNKTION[19]=array("name"=>"freie(r) MitarbeiterIn", "en"=>"assoziated member");
-$INST_FUNKTION[20]=array("name"=>"Bibliothek", "en"=>"Library");
-$INST_FUNKTION[21]=array("name"=>"Emeriti", "en"=>"Emeriti");
-$INST_FUNKTION[22]=array("name"=>"ausserdem am Institut tätig", "en"=>"assoziated member");
-$INST_FUNKTION[23]=array("name"=>"DozentIn institutsübergreifender Veranstaltungen", "en"=>"Lecturer of interinstitutional courses");
-//weitere Funktionen koennen hier angefuegt werden
-
 
 //Festlegen der Veranstaltungs Termin Typen
-$TERMIN_TYP[1]=array("name"=>"Sitzung", "sitzung"=>1, "color"=>"#FF7F50"); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
-$TERMIN_TYP[2]=array("name"=>"Vorbesprechung", "sitzung"=>0, "color"=>"#DC143C"); 	//dieser Termin Typ wird immer als Vorbesprechung verwendet. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten fuer Vorbesprechungen bekommen jedoch immer diesen Typ
-$TERMIN_TYP[3]=array("name"=>"Klausur", "sitzung"=>0, "color"=>"#FF0000");
-$TERMIN_TYP[4]=array("name"=>"Exkursion", "sitzung"=>0, "color"=>"#FFA500");
-$TERMIN_TYP[5]=array("name"=>"anderer Termin", "sitzung"=>0, "color"=>"#B8660B");
-$TERMIN_TYP[6]=array("name"=>"Sondersitzung", "sitzung"=>0, "color"=>"#FFA500");
-$TERMIN_TYP[7]=array("name"=>"Vorlesung", "sitzung"=>1, "color"=>"#FF7F50");
+$TERMIN_TYP[1]=array("name"=>_("Sitzung"), "sitzung"=>1, "color"=>"#FF7F50"); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
+$TERMIN_TYP[2]=array("name"=>_("Vorbesprechung"), "sitzung"=>0, "color"=>"#DC143C"); 	//dieser Termin Typ wird immer als Vorbesprechung verwendet. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten fuer Vorbesprechungen bekommen jedoch immer diesen Typ
+$TERMIN_TYP[3]=array("name"=>_("Klausur"), "sitzung"=>0, "color"=>"#FF0000");
+$TERMIN_TYP[4]=array("name"=>_("Exkursion"), "sitzung"=>0, "color"=>"#FFA500");
+$TERMIN_TYP[5]=array("name"=>_("anderer Termin"), "sitzung"=>0, "color"=>"#B8660B");
+$TERMIN_TYP[6]=array("name"=>_("Sondersitzung"), "sitzung"=>0, "color"=>"#FFA500");
+$TERMIN_TYP[7]=array("name"=>_("Vorlesung"), "sitzung"=>1, "color"=>"#FF7F50");
 //weitere Typen koennen hier angefuegt werden
 
 
 // Festlegen der Kategorien für persönlichen Terminkalender
-$PERS_TERMIN_KAT[1]=array("name"=>"Sonstiges", "color"=>"#B8660B");
-$PERS_TERMIN_KAT[2]=array("name"=>"Sitzung", "color"=>"#FF7F50");
-$PERS_TERMIN_KAT[3]=array("name"=>"Vorbesprechung", "color"=>"#DC143C");
-$PERS_TERMIN_KAT[4]=array("name"=>"Klausur", "color"=>"#FF0000");
-$PERS_TERMIN_KAT[5]=array("name"=>"Exkursion", "color"=>"#FFA500");
-$PERS_TERMIN_KAT[6]=array("name"=>"Sondersitzung", "color"=>"#FFA500");
-$PERS_TERMIN_KAT[7]=array("name"=>"Prüfung", "color"=>"#FF0000");
-$PERS_TERMIN_KAT[8]=array("name"=>"Telefonat", "color"=>"#6B8E23");
-$PERS_TERMIN_KAT[9]=array("name"=>"Besprechung", "color"=>"#32CD23");
-$PERS_TERMIN_KAT[10]=array("name"=>"Verabredung", "color"=>"#228B22");
-$PERS_TERMIN_KAT[11]=array("name"=>"Geburtstag", "color"=>"#9932CC");
-$PERS_TERMIN_KAT[12]=array("name"=>"Familie", "color"=>"#191970");
-$PERS_TERMIN_KAT[13]=array("name"=>"Urlaub", "color"=>"#DB7093");
-$PERS_TERMIN_KAT[14]=array("name"=>"Reise", "color"=>"#C71585");
+$PERS_TERMIN_KAT[1]=array("name"=>_("Sonstiges"), "color"=>"#B8660B");
+$PERS_TERMIN_KAT[2]=array("name"=>_("Sitzung"), "color"=>"#FF7F50");
+$PERS_TERMIN_KAT[3]=array("name"=>_("Vorbesprechung"), "color"=>"#DC143C");
+$PERS_TERMIN_KAT[4]=array("name"=>_("Klausur"), "color"=>"#FF0000");
+$PERS_TERMIN_KAT[5]=array("name"=>_("Exkursion"), "color"=>"#FFA500");
+$PERS_TERMIN_KAT[6]=array("name"=>_("Sondersitzung"), "color"=>"#FFA500");
+$PERS_TERMIN_KAT[7]=array("name"=>_("Prüfung"), "color"=>"#FF0000");
+$PERS_TERMIN_KAT[8]=array("name"=>_("Telefonat"), "color"=>"#6B8E23");
+$PERS_TERMIN_KAT[9]=array("name"=>_("Besprechung"), "color"=>"#32CD23");
+$PERS_TERMIN_KAT[10]=array("name"=>_("Verabredung"), "color"=>"#228B22");
+$PERS_TERMIN_KAT[11]=array("name"=>_("Geburtstag"), "color"=>"#9932CC");
+$PERS_TERMIN_KAT[12]=array("name"=>_("Familie"), "color"=>"#191970");
+$PERS_TERMIN_KAT[13]=array("name"=>_("Urlaub"), "color"=>"#DB7093");
+$PERS_TERMIN_KAT[14]=array("name"=>_("Reise"), "color"=>"#C71585");
 // weitere Kategorien können hier angefügt werden
 
 //Vorgaben für die Titelauswahl
