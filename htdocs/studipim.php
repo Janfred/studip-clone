@@ -86,7 +86,7 @@ if ($auth->auth["uid"]!="nobody"){
 	while ($db->next_record()){
 		if ($cmd=="read")
 			if ($msg_id==$db->f("message_id")){
-				// "open" the message (display it in the messenger
+				// "open" the message (display it in the messenger)
 				$msg_text=$db->f("message");
 				$msg_snd=$db->f("autor_id");
 			}
@@ -95,7 +95,7 @@ if ($auth->auth["uid"]!="nobody"){
 			if ($db->f("autor_id") == "____%system%____"){
 				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 			} else {
-				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 			}
 		}
 		$refresh+=10;
@@ -212,7 +212,7 @@ if ($cmd=="read" AND $msg_text){
 		. _("automatisch erzeugte Systemnachricht:") . " </b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	else
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname_from_uname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
+		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	if ($msg_snd != "____%system%____")
 		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>"
 		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
