@@ -308,20 +308,20 @@ function kill_format($text){
 					"'(^|\s)#(?!#)(\S+#)+'e",     // SL-diktengleich
 					"'(^|\s)\+(?!\+)(\S+\+)+'e",  // SL-groesser
 					"'(^|\s)-(?!-)(\S+-)+'e",     // SL-kleiner
-					"'(^|\s)>(?!>)(\S+>)+'e",  // SL-hochgestellt
-					"'(^|\s)<(?!<)(\S+<)+'e",  // SL-tiefgestellt
-					"'%%(\S|\S.*?\S)%%'s",              // ML-kursiv
-					"'\*\*(\S|\S.*?\S)\*\*'s",          // ML-fett
-					"'__(\S|\S.*?\S)__'s",              // ML-unterstrichen
-					"'##(\S|\S.*?\S)##'s",              // ML-diktengleich
+					"'(^|\s)>(?!>)(\S+>)+'e",     // SL-hochgestellt
+					"'(^|\s)<(?!<)(\S+<)+'e",     // SL-tiefgestellt
+					"'%%(\S|\S.*?\S)%%'s",        // ML-kursiv
+					"'\*\*(\S|\S.*?\S)\*\*'s",    // ML-fett
+					"'__(\S|\S.*?\S)__'s",        // ML-unterstrichen
+					"'##(\S|\S.*?\S)##'s",        // ML-diktengleich
 					"'\+\+(((\+\+)*)(\S|\S.*?\S)?\\2)\+\+'s",  // ML-groesser
 					"'--(((--)*)(\S|\S.*?\S)?\\2)--'s",        // ML-kleiner
 					"'>>(\S|\S.*?\S)>>'is",  // ML-hochgestellt
-					"'<<(\S|\S.*?\S)<<'is",        // ML-tiefgestellt
-					"'\n\n\t(((\n\n)\t)*(.+?))(\Z|\n\n(?!\t))'s",        // Absatz eingerueckt
+					"'<<(\S|\S.*?\S)<<'is",  // ML-tiefgestellt
+					"'\n\n\t(((\n\n)\t)*(.+?))(\Z|\n\n(?!\t))'s",  // Absatz eingerueckt
 					"'(?<=\n|^)--+(\d?)(\n|$|(?=<))'m",                                                                          // Trennlinie
-					"'\n((-(.+?)(\n|\Z))+?)(\n|\Z)'s",            // Aufzaehlungsliste
-					"'\[pre\](.+?)\[/pre\]'is" ,                                          // praeformatierter Text
+					"'\n((-(.+?)(\n|\Z))+?)(\n|\Z)'s",  // Aufzaehlungsliste
+					"'\[pre\](.+?)\[/pre\]'is" ,        // praeformatierter Text
 					"'\[.+?\](((http://|https://|ftp://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 					"'\[quote=.+?quote\]'is",
 					"':[^\s]+?:'s"
@@ -459,7 +459,7 @@ function printhead($breite,$left,$link,$open,$new,$icon,$titel,$zusatz,$timestmp
 		if ($timestmp==0) {
 			$timecolor = "#BBBBBB";
 		} else {
-			$timediff = log((time()-$timestmp)/86400 + 1) * 15;
+			$timediff = (int) log((time()-$timestmp)/86400 + 1) * 15;
 			if ($timediff >= 68) {
 				$timediff = 68;
 			}
@@ -562,18 +562,18 @@ array  ("kategorie" => "Aktionen:",
 /*****************************************************************************/
 
 function print_infobox ($content, $picture="") {
-
+	global $CANONICAL_RELATIVE_PATH_STUDIP;
 $print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 IF ($picture!="") {
 	$print .= "<tr>
 				<td class=\"blank\" width=\"100%\" align=\"right\">
-					<img src=\"".$picture."\">
+					<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$picture."\">
 				</td>
 			</tr>";
 		}
 	$print .= "<tr>
 				<td class=\"angemeldet\" width=\"100%\">
-					<table background=\"pictures/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
+					<table background=\"".$CANONICAL_RELATIVE_PATH_STUDIP."pictures/white.gif\" align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
 for ($i = 0; $i < count($content); $i++) { $print .= "
 						<tr>
 							<td class=\"blank\" width=\"100%\" colspan=\"2\">
@@ -584,7 +584,7 @@ for ($i = 0; $i < count($content); $i++) { $print .= "
 	for ($j = 0; $j < count($content[$i]["eintrag"]); $j++) { $print .= "
 						<tr>
 							<td class=\"blank\" width=\"1%\" valign=\"top\">
-								<img src=\"".$content[$i]["eintrag"][$j]["icon"]."\">
+								<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$content[$i]["eintrag"][$j]["icon"]."\">
 							</td>
 							<td class=\"blank\" width=\"99%\">
 								<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>
