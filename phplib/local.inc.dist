@@ -4,14 +4,8 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-//the name of your master-faculty (e.g. "University of Göttingen")
-
-// (without html-entities, used for mail-system!)
-$UNI_NAME_CLEAN = "Studip 0.9.5";
-//create the html-version
-$UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
-//the length of a session in minutes, zero means unlimited lifetime
-$AUTH_LIFETIME = 60;
+$UNI_NAME_CLEAN = "Studip 0.9.5";	//the clean-name of your master-faculty (e.g. University of Goettingen), without html-entities (used for mail-system)
+$AUTH_LIFETIME = 60;			//the length of a session in minutes, zero means unlimited lifetime
 
 
 /*settings for database access
@@ -40,85 +34,18 @@ $DB_INSTITUT_PASSWORD = "<password>";
 $DB_INSTITUT_DATABASE = "studip"; 
 
 
-/*mail settings
+/*system functions
 ----------------------------------------------------------------
-leave blank if localhost is also the mailserver*/
-$MAIL_LOCALHOST = "";	// name of the mail sending machine (the web server) defaults to SERVER_NAME
-$MAIL_HOST_NAME = "";	// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+activate or deactivate some basic system-functions here*/
 
+$LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
+$WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
 
-/*paths
-----------------------------------------------------------------
-the Stud.IP system-folder*/
-
-$ABSOLUTE_PATH_STUDIP = "/srv/www/htdocs/studip/";
-//where ro store documents and the archive
-$UPLOAD_PATH = "/var/lib/studip/upload_doc";						//path to uploaded documents (wwwrun needs write-perm there)
-$ARCHIV_PATH = "/var/lib/studip/archiv";						//path to Stud.IP archive (wwwrun needs write-perm there)
-
-//path to smileys and symbols
-$SMILE_PATH = "pictures/smile";								//smileys
-$SYMBOL_PATH = "pictures/symbol";							//symbols
-
-//path to the temporary folder
-$TMP_PATH ="/tmp";									//the system temp path
-
-//paths to the command line tools, used in Stud.IP
-$ZIP_PATH = "/usr/bin/zip";								//zip tool
-$DJPEG_PATH = "/usr/bin/djpeg";								//djpeg tool for imaging
-$GIFTOPNM_PATH = "/usr/bin/giftopnm";							//giftopnm tool for imaging
-$PNMSCALE_PATH = "/usr/bin/pnmscale";							//pnmscaletool for imaging
-$CJPEG_PATH = "/usr/bin/cjpeg";								//cjpeg tool for imaging
-
-//latexrender settings
-$LATEXRENDER_ENABLE = TRUE;
-$TEXCACHE_PATH = "pictures/tex";
-$LATEX_PATH = "/usr/bin/latex";
-$DVIPS_PATH = "/usr/bin/dvips";
-$CONVERT_PATH = "/usr/bin/convert";
-$IDENTIFY_PATH = "/usr/bin/identify";
-
-// Format templates for LaTex renderer
-//
-$LATEX_FORMATS = array(
- "math" => array("tag" => "tex", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{amsmath}\n \usepackage{amsfonts}\n \usepackage{amssymb}\n \pagestyle{empty}\n \begin{document}\n $%s$\n \end{document}\n"));
-
-/*
-   Format of entries:
-   Internal format name => array ( 
-  	Format tag (e.g. "tex" --> [tex]...[/tex])
-  	Format template (must contain structure of an entire valid LaTeX-document and must contain exactly one %s placeholder that will be replaced be the code entered between [tag]....[/tag].
-   )
-  
-   Examples for additional formats:
-  
-   IPA Phonetic font (needs LaTeX package tipa installed):
-  
-   "ipa" => array("tag" => "ipa", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{tipa}\n \pagestyle{empty}\n \begin{document}\n \\textipa{%s}\n \end{document}\n")
-  
-   Arab font (needs LaTeX package arabtex installed):
-  
-   "arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
-  
-*/
- 
 
 /*Stud.IP modules
 ----------------------------------------------------------------
-enable or disable the Stud.IP internal modules, set the path
-to the modules and basic settings*/
+enable or disable the Stud.IP internal modules, set and basic settings*/
 
-//path to Stud.IP modules
-$RELATIVE_PATH_RESOURCES = "./resources";						//Stud.IP module: resourge management
-$RELATIVE_PATH_CALENDAR = "./calendar";							//Stud.IP module: calendar
-$RELATIVE_PATH_CHAT = "chat"; 								//Stud.IP module: chat
-$RELATIVE_PATH_ADMIN_MODULES = "admin";				 			//Stud.IP module: admin tools
-$RELATIVE_PATH_EXTERN = "extern"; 							//Stud.IP module: SRI-System for including Stud.IP data in other websites
-$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";						//Stud.IP module: Ilias lerningmodules-connection
-$RELATIVE_PATH_SUPPORT = "./support";							//Stud.IP module: SupportDB (not part of the main distribution)
-$PATH_EXPORT = "export";								//Stud.IP module: export
-
-//module config
 $RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
 
 $CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar 
@@ -142,27 +69,77 @@ $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				//path to store 
 
 $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
 
-$WIKI_ENABLE = TRUE;									//Stud.IP module: Wiki-Web
-
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
-$BANNER_ADS_ENABLE = FALSE;
-	//Stud.IP module: Banner ads (config as root in "global settings")
 
-/*system settings
+/*paths
+----------------------------------------------------------------
+configurre Stud.IP folders*/
+
+$ABSOLUTE_PATH_STUDIP = "/srv/www/htdocs/studip/";
+//where ro store documents and the archive
+$UPLOAD_PATH = "/var/lib/studip/upload_doc";						//path to uploaded documents (wwwrun needs write-perm there)
+$ARCHIV_PATH = "/var/lib/studip/archiv";						//path to Stud.IP archive (wwwrun needs write-perm there)
+
+//path to smileys and symbols
+$SMILE_PATH = "pictures/smile";								//smileys
+$SYMBOL_PATH = "pictures/symbol";							//symbols
+
+//path to the temporary folder
+$TMP_PATH ="/tmp";									//the system temp path
+
+//paths to the command line tools, used in Stud.IP
+$ZIP_PATH = "/usr/bin/zip";								//zip tool
+$DJPEG_PATH = "/usr/bin/djpeg";								//djpeg tool for imaging
+$GIFTOPNM_PATH = "/usr/bin/giftopnm";							//giftopnm tool for imaging
+$PNMSCALE_PATH = "/usr/bin/pnmscale";							//pnmscaletool for imaging
+$CJPEG_PATH = "/usr/bin/cjpeg";								//cjpeg tool for imaging
+
+//latexrender settings
+$TEXCACHE_PATH = "pictures/tex";
+$LATEX_PATH = "/usr/bin/latex";
+$DVIPS_PATH = "/usr/bin/dvips";
+$CONVERT_PATH = "/usr/bin/convert";
+$IDENTIFY_PATH = "/usr/bin/identify";
+
+//path to Stud.IP modules (this folders only have to exist, if the corresponcing module is active)
+$RELATIVE_PATH_RESOURCES = "./resources";						//Stud.IP module: resourge management
+$RELATIVE_PATH_CALENDAR = "./calendar";							//Stud.IP module: calendar
+$RELATIVE_PATH_CHAT = "chat"; 								//Stud.IP module: chat
+$RELATIVE_PATH_ADMIN_MODULES = "admin";				 			//Stud.IP module: admin tools
+$RELATIVE_PATH_EXTERN = "extern"; 							//Stud.IP module: SRI-System for including Stud.IP data in other websites
+$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";						//Stud.IP module: Ilias lerningmodules-connection
+$RELATIVE_PATH_SUPPORT = "./support";							//Stud.IP module: SupportDB (not part of the main distribution)
+$PATH_EXPORT = "export";								//Stud.IP module: export
+
+
+/*mail settings
+----------------------------------------------------------------
+leave blank if localhost is also the mailserver*/
+
+$MAIL_LOCALHOST = "";	// name of the mail sending machine (the web server) defaults to SERVER_NAME
+$MAIL_HOST_NAME = "";	// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+
+
+/*advanced system settings
 ----------------------------------------------------------------
 this are some settings to activate some special features, special
 behaviour of some features and other advanced options. Change on your 
 own risk :) */
 
-$ALLOW_GROUPING_SEMINARS = TRUE;			// if true, administrators can group seminars - students
-							// will only be able to register for one of the grouped seminars
+$ALLOW_GROUPING_SEMINARS = TRUE;			//if true, administrators can group seminars - students
+							//will only be able to register for one of the grouped seminars
 
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 			// if true, students aren't allowed to set or change 
-							// their studycourse (studiengang)
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 			//if true, students aren't allowed to set or change 
+							//their studycourse (studiengang)
 
-$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;			// if true, the user has to accept the terms on his first login
-							// (this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
+$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;			//if true, the user has to accept the terms on his first login
+							//(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
+							
+$BANNER_ADS_ENABLE = FALSE; 				//enable the Banner ads functions (config as root in "global settings")
+							//you'll need an additional folder in the pictures folder named banner. The Webserver
+							//needs write accees for this folder.
+							
 
 
 /*language settings
@@ -179,19 +156,19 @@ $_language_domain = "studip";  // the name of the language file. Should not be c
 ----------------------------------------------------------------
 the following plugins are available:
 Standard 		authentication using the local Stud.IP database
-StandardExtern  authentication using an alternative Stud.IP database, e.g. another installation
+StandardExtern  	authentication using an alternative Stud.IP database, e.g. another installation
 Ldap  			authentication using an LDAP server, this plugin uses anonymous bind against LDAP to retrieve the user dn,
-				then it uses the submitted password to authenticate with this user dn
+			then it uses the submitted password to authenticate with this user dn
 LdapReader		authentication using an LDAP server, this plugin binds to the server using a given dn and a password,
-				this account must have read access to gather the attributes for the user who tries to authenticate.
-				Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
-				hash of the user password is available in LDAP
+			this account must have read access to gather the attributes for the user who tries to authenticate.
+			Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
+			hash of the user password is available in LDAP
 
-if you write your own plugin put it in 
-studip-htdocs/lib/classes/auth_plugins and enable it here
-the name of the plugin is the classname excluding "StudipAuth"
-you could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>, all uppercase
-each item of the configuration array will become a member of your plugin class
+If you write your own plugin put it in studip-htdocs/lib/classes/auth_plugins 
+and enable it here. The name of the plugin is the classname excluding "StudipAuth". 
+
+You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>, 
+all uppercase each item of the configuration array will become a member of your plugin class.
 ----------------------*/
 
 //$STUDIP_AUTH_PLUGIN[] = "LdapReader";
@@ -200,7 +177,7 @@ each item of the configuration array will become a member of your plugin class
 $STUDIP_AUTH_PLUGIN[] = "Standard";
 
 /*
-$STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
+$STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
 										"username_attribute" => "uid",
@@ -212,7 +189,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
 												
-$STUDIP_AUTH_CONFIG_LDAP = array(	"host" => "localhost",
+$STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
 										"protocol_version" => 3,
 										"username_attribute" => "uid",
@@ -223,41 +200,64 @@ $STUDIP_AUTH_CONFIG_LDAP = array(	"host" => "localhost",
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
 
 $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
-											"db_username" => "extern",
-											"db_name" => "extern_studip",
-											"db_password" => "<password>",
-											"error_head" =>	"Stud.IP extern plugin",
-											"user_data_mapping" =>
-											array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-													"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
-													"auth_user_md5.Email" => array("callback" => "doExternMap", "map_args" => "Email"),
-													"auth_user_md5.Nachname" => array("callback" => "doExternMap", "map_args" => "Nachname"),
-													"auth_user_md5.Vorname" => array("callback" => "doExternMap", "map_args" => "Vorname"),
-													"auth_user_md5.perms" => array("callback" => "doExternMapPerms", "map_args" => "perms"),
-													"user_info.privatnr" => array("callback" => "doExternMap", "map_args" => "privatnr"),
-													"user_info.privadr" => array("callback" => "doExternMap", "map_args" => "privadr"),
-													"user_info.geschlecht" => array("callback" => "doExternMap", "map_args" => "geschlecht"),
-													"user_info.hobby" => array("callback" => "doExternMap", "map_args" => "hobby"),
-													"user_info.lebenslauf" => array("callback" => "doExternMap", "map_args" => "lebenslauf"),
-													"user_info.title_front" => array("callback" => "doExternMap", "map_args" => "title_front"),
-													"user_info.title_rear" => array("callback" => "doExternMap", "map_args" => "title_rear"),
-													"user_info.publi" => array("callback" => "doExternMap", "map_args" => "publi"),
-													"user_info.schwerp" => array("callback" => "doExternMap", "map_args" => "schwerp"),
-													"user_info.Home" => array("callback" => "doExternMap", "map_args" => "Home")));
-
-												
+										"db_username" => "extern",
+										"db_name" => "extern_studip",
+										"db_password" => "<password>",
+										"error_head" =>	"Stud.IP extern plugin",
+										"user_data_mapping" =>
+										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
+												"auth_user_md5.Email" => array("callback" => "doExternMap", "map_args" => "Email"),
+												"auth_user_md5.Nachname" => array("callback" => "doExternMap", "map_args" => "Nachname"),
+												"auth_user_md5.Vorname" => array("callback" => "doExternMap", "map_args" => "Vorname"),
+												"auth_user_md5.perms" => array("callback" => "doExternMapPerms", "map_args" => "perms"),
+												"user_info.privatnr" => array("callback" => "doExternMap", "map_args" => "privatnr"),
+												"user_info.privadr" => array("callback" => "doExternMap", "map_args" => "privadr"),
+												"user_info.geschlecht" => array("callback" => "doExternMap", "map_args" => "geschlecht"),
+												"user_info.hobby" => array("callback" => "doExternMap", "map_args" => "hobby"),
+												"user_info.lebenslauf" => array("callback" => "doExternMap", "map_args" => "lebenslauf"),
+												"user_info.title_front" => array("callback" => "doExternMap", "map_args" => "title_front"),
+												"user_info.title_rear" => array("callback" => "doExternMap", "map_args" => "title_rear"),
+												"user_info.publi" => array("callback" => "doExternMap", "map_args" => "publi"),
+												"user_info.schwerp" => array("callback" => "doExternMap", "map_args" => "schwerp"),
+												"user_info.Home" => array("callback" => "doExternMap", "map_args" => "Home")));
 */
 
 //some additional authification-settings
-//NOTE: you MUST enable Standard authentication-plugin or this settings takes no effect!
+//NOTE: you MUST enable Standard authentication-plugin for this settings to take effect!
 
-$ALLOW_CHANGE_USERNAME = TRUE;				// if true, users are not allowed to change their username
-$ALLOW_CHANGE_EMAIL = TRUE;				// if true, users are not allowed to change their email-address
+$ALLOW_CHANGE_USERNAME = TRUE;				//if true, users are not allowed to change their username
+$ALLOW_CHANGE_EMAIL = TRUE;				//if true, users are not allowed to change their email-address
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself 
 
 //IDs of courses, in which users were entered when they were promoted to 'autor'
 //$AUTO_INSERT_SEM[1]="<seminar_id>";
 //further courses can be added with their IDs here
+
+/*format templates for LaTex renderer
+-----------------------------------------------------------------
+you can define specified templates, e.g. phonetic or arab fonts*/
+
+$LATEX_FORMATS = array(
+	"math" => array("tag" => "tex", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{amsmath}\n \usepackage{amsfonts}\n \usepackage{amssymb}\n \pagestyle{empty}\n \begin{document}\n $%s$\n \end{document}\n"));
+/*
+	Format of entries:
+	------------------
+	
+	Internal format name => array ( 
+		Format tag (e.g. "tex" --> [tex]...[/tex])
+		Format template (must contain structure of an entire valid LaTeX-document and must contain exactly one %s placeholder that will be replaced be the code entered between [tag]....[/tag].
+	)
+  	
+  	Examples for additional formats:
+  	--------------------------------
+
+	IPA Phonetic font (needs LaTeX package tipa installed):  
+		"ipa" => array("tag" => "ipa", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{tipa}\n \pagestyle{empty}\n \begin{document}\n \\textipa{%s}\n \end{document}\n")
+
+	Arab font (needs LaTeX package arabtex installed):
+  		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
+*/
 
 /*path generation 
 -----------------------------------------------------------------
@@ -271,6 +271,10 @@ $CANONICAL_RELATIVE_PATH_STUDIP = substr($ABSOLUTE_PATH_STUDIP,strlen(getenv("DO
 if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
 	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
 }
+
+//create the html-version of $UNI_NAME clean
+$UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
+
 
 require_once $ABSOLUTE_PATH_STUDIP . "/phplib_local.inc.php";
 ?>
