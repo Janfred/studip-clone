@@ -30,10 +30,10 @@ require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der St
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
 // Start  of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head	
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
 
 checkObject();
@@ -45,7 +45,6 @@ $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
 
 
-	
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
 
@@ -59,14 +58,13 @@ $db4=new DB_Seminar;
 
 echo "<table cellspacing=\"0\" border=\"0\" width=\"100%\">";
 
-// Somebody wants more infos about a student
+// get user_id if somebody wants more infos about an user
 
-/*if ($cmd == "moreinfo") {
-	//first we have to check if he is really "Dozent" of this seminar
-	if ($rechte) {
-		$info_open = 1;
-	}
-}	*/
+if (($cmd == "moreinfos") && ($rechte)) {
+	$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
+	$db->next_record();
+	$user_id = $db->f("user_id");
+}
 
 // edit special seminar_info of an user
 
@@ -77,6 +75,7 @@ if ($cmd == "change_userinfo") {
 		$db->query("UPDATE seminar_user SET comment = '$userinfo' WHERE Seminar_id = '$id' AND user_id = '$user_id'");
 		$msg = "msg§" . _("Die Zusatzinformationen wurden ge&auml;ndert.") . "§";
 	}
+	$cmd = "moreinfos";
 }
 
 // Aktivitaetsanzeige an_aus
@@ -177,7 +176,7 @@ if ($cmd=="raus") {
 		$userchange=$db->f("user_id");
 		$fullname = $db->f("fullname");
 		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		
+
 		setTempLanguage($userchange);
 		if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 			$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r LeiterIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
@@ -187,7 +186,7 @@ if ($cmd=="raus") {
 		restoreLanguage();
 
 		$messaging->insert_sms ($username, $message, "____%system%____");
-		
+
 		// raus aus allen Statusgruppen
 		RemovePersonStatusgruppeComplete ($username, $id);
 
@@ -228,12 +227,12 @@ if ($cmd=="admission_raus") {
 		restoreLanguage();
 
 		$messaging->insert_sms ($username, $message, "____%system%____");
-		
+
 		//Warteliste neu sortieren
 		renumber_admission($id);
 		if ($accepted)
 			update_admission($id);
-		
+
 		$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Anmelde bzw. Warteliste entfernt."), $fullname) . "§";
 	}
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -255,13 +254,13 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 			$db4->query("SELECT studiengang_id, comment FROM admission_seminar_user WHERE user_id = '$userchange' AND seminar_id = '$id'");
 			if ($db4->next_record()) {
 				$studiengang = "admission_studiengang_id = '".$db4->f("studiengang_id")."',";
-			}	
+			}
 		}
 		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s' ", $id, $userchange, (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && ($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) ? "tutor" : "autor", $studiengang, $db4->f("comment"), $group);
 		$db2->query($query2);
 		if ($db2->affected_rows())
 			$db3->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
-		
+
 		//Only if user was on the waiting list
 		if ($db3->affected_rows()) {
 			setTempLanguage($userchange);
@@ -284,7 +283,7 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 
 		//Warteliste neu sortieren
 		renumber_admission($id);
-		
+
 		if ($cmd=="add_user")
 			$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung eingetragen."), $fullname) . "§";
 		else
@@ -293,7 +292,7 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 			} else {
 				$msg = "msg§" . sprintf(_("NutzerIn %s wurde endgültig akzeptiert."), $fullname) . "§";
 			}
-	} 
+	}
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 }
 
@@ -366,7 +365,7 @@ if (isset($add_tutor_x)) {
 
 //Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
 check_admission();
- 
+
 
 if ($perm->have_perm("dozent")) {
 	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
@@ -400,7 +399,7 @@ if ($perm->have_perm("dozent")) {
 		<td class="topic" ><b>&nbsp;<? echo $SessSemName["header_line"] . " - " . _("TeilnehmerInnen"); ?></b>
 		</td>
 		<td align="right" class="topic"> <?
-		
+
 			$db3->query ("SELECT showscore  FROM seminare WHERE Seminar_id = '$SessionSeminar'");
 			while ($db3->next_record()) {
 				if ($db3->f("showscore") == 1) {
@@ -431,7 +430,7 @@ if ($perm->have_perm("dozent")) {
 	</tr>
 <tr>
 	<td class="blank" colspan="2">
-	
+
 	<table width="99%" border="0"  cellpadding="2" cellspacing="0" align="center">
 
 <?
@@ -458,11 +457,11 @@ while (list ($key, $val) = each ($gruppe)) {
 	if (!isset($sortby) || $sortby=="") {
 		if ($showscore) {
 			$sortby = "doll DESC";
-		} else { 
+		} else {
 			$sortby = "Nachname";
 		}
 	}
-	
+
 	$counter=1;
 
 	if ($key == "accepted") {  // modify query if user is in admission_seminar_user and not in seminar_user
@@ -473,12 +472,13 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tbl = "seminar_user";
 		$tbl2 = "admission_";
 		$tbl3 = "S";
-	}	
+	}
 
 	$db->query ("SELECT $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id AS studiengang_id FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id) LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id) WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' AND status = '$key'  GROUP by ".$tbl.".user_id ORDER BY $sortby");
 
 	if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
+
 	echo "<tr height=28>";
 	if ($showscore==TRUE)
 		echo "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
@@ -494,7 +494,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			$width=15;
 		else
 			$width=20;
-						
+
 		if ($key == "dozent") {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
@@ -512,7 +512,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			if ($db3->f("admission_type"))
 				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
-		
+
 		if ($key == "autor") {
 			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 				printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>",  $width, _("als Mitglied eintragen"));
@@ -534,21 +534,21 @@ while (list ($key, $val) = each ($gruppe)) {
 		if ($key == "accepted") {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", $width, _("Akzeptieren"));
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", $width, _("BenutzerIn entfernen"));
-			if ($db3->f("admission_type")) 
+			if ($db3->f("admission_type"))
 				print"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
-													 
+
 		}
 	}
-	
+
 	echo "</tr>";
 	$c=1;
 	while ($db->next_record()) {
 
-	if ($c % 2) {   // switcher fuer die Klassen 
+	if ($c % 2) {   // switcher fuer die Klassen
 		$class="steel1";
 		$class2="colorline";
 	} else {
-		$class="steelgraulight"; 
+		$class="steelgraulight";
 		$class2="colorline2";
 	}
 
@@ -599,19 +599,21 @@ while (list ($key, $val) = each ($gruppe)) {
 		printf("<td bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
 		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip(_("Aktivität: ").round($aktivity_index_user)."%"));
 	}
-	
+
 	if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) {
 		$link = $PHPSELF."?cmd=lessinfos";
 		$img = "forumgraurunt.gif";
 	} else {
-		$link = $PHPSELF."?cmd=moreinfos&user_id=".$db->f("user_id");
-		$img = "forumgrau.gif";		
-	}	
-	
+		$link = $PHPSELF."?cmd=moreinfos&username=".$db->f("username")."#info";
+		$img = "forumgrau.gif";
+	}
 	printf ("<td class=\"%s\" nowrap><font size=\"-1\">&nbsp;%s.</td>", $class, $c);
 	printf ("<td class=\"%s\">", $class);
 	if ($perm->have_perm("dozent"))
-		printf ("<A href=\"%s\"><img src=\"pictures/%s\" border=\"0\">&nbsp;</A>", $link, $img);
+	if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) echo "<A name=\"info\"></A>";
+	printf ("<A href=\"%s\"><img src=\"pictures/%s\" border=\"0\"", $link, $img);
+	echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
+	echo ">&nbsp;</A>",
 	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
 	print (htmlReady($db->f("fullname")) ."</a>");
 	print ("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
@@ -619,19 +621,19 @@ while (list ($key, $val) = each ($gruppe)) {
 	print ("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
 	print $Dokumente;
 	print ("</font></td>");
-	
+
 	echo "<td class=\"$class\" align=\"center\">";
 	if ($GLOBALS['CHAT_ENABLE']){
 		echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$SessSemName[1]) . "&nbsp;";
 	}
-	printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken"))); 
+	printf ("<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a>", $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 	echo "</td>";
 
 // Befoerderungen und Degradierungen
 	$username=$db->f("username");
 	if ($rechte) {
 
-		// Tutor entlassen	
+		// Tutor entlassen
 		if ($key == "tutor" AND $SemUserStatus!="tutor") {
 			echo "<td class=\"$class\">&nbsp</td>";
 			echo "<td class=\"$class\" align=\"center\">";
@@ -641,10 +643,10 @@ while (list ($key, $val) = each ($gruppe)) {
 		elseif ($key == "autor") {
 			// zum Tutor befördern
 			if ($SemUserStatus!="tutor") {
-				if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) 
-					$db2->query ("SELECT DISTINCT user_id FROM seminar_inst LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$UID' AND seminar_id ='$SessSemName[1]' AND inst_perms!='user' AND inst_perms!='autor'");		
+				if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"])
+					$db2->query ("SELECT DISTINCT user_id FROM seminar_inst LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$UID' AND seminar_id ='$SessSemName[1]' AND inst_perms!='user' AND inst_perms!='autor'");
 				else
-					$db2->query ("SELECT user_id FROM auth_user_md5  WHERE perms IN ('tutor', 'dozent') AND user_id = '$UID' ");						
+					$db2->query ("SELECT user_id FROM auth_user_md5  WHERE perms IN ('tutor', 'dozent') AND user_id = '$UID' ");
 				if ($db2->next_record()) {
 					echo "<td class=\"$class\" align=\"center\">";
 					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
@@ -657,7 +659,7 @@ while (list ($key, $val) = each ($gruppe)) {
 
 		// Schreibrecht erteilen
 		elseif ($key == "user") {
-			$db2->query ("SELECT perms, user_id FROM auth_user_md5 WHERE user_id = '$UID' AND perms != 'user'");		
+			$db2->query ("SELECT perms, user_id FROM auth_user_md5 WHERE user_id = '$UID' AND perms != 'user'");
 			if ($db2->next_record()) { // Leute, die sich nicht zurueckgemeldet haben duerfen auch nicht schreiben!
 				echo "<td class=\"$class\" align=\"center\">";
 				echo "<a href=\"$PHP_SELF?cmd=schreiben&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
@@ -665,8 +667,8 @@ while (list ($key, $val) = each ($gruppe)) {
 			// aus dem Seminar werfen
 			echo "<td class=\"$class\" align=\"center\">";
 			echo "<a href=\"$PHP_SELF?cmd=raus&username=$username\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
-		} 
-	
+		}
+
 		elseif ($key == "accepted") { // temporarily accepted students
 			// forward to autor
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&accepted=1\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $class, $username);
@@ -674,31 +676,32 @@ while (list ($key, $val) = each ($gruppe)) {
 			echo "<td class=\"$class\" align=\"center\">";
 			echo "<a href=\"$PHP_SELF?cmd=admission_raus&username=$username&accepted=1\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>";
 		}
-	
+
 		else { // hier sind wir bei den Dozenten
 			echo "<td class=\"$class\" >&nbsp;</td>";
 			echo "<td class=\"$class\">&nbsp;</td>";
 		}
-		
+
 		if ($db3->f("admission_type")) {
-			if ($key== "autor" || $key== "user")
+			if ($key == "autor" || $key == "user")
 				printf ("<td width=\"80%%\" align=\"center\" class=\"%s\"><font size=-1>%s%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), (!$db->f("name") && !$db->f("studiengang_id") == "all") ?  "&nbsp; ": "");
 			else
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
 		}
-		
-		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id"))) {
-			printf ("<tr><td class=\"%s\" colspan=9><form action=\"%s\" method=\"POST\">", $class, $PHPSELF);
+
+		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id")) && $perm->have_perm("dozent")) {
+			printf ("<tr><td class=\"%s\" colspan=9><form action=\"%s%s\" method=\"POST\">", $class, $PHPSELF, "#info");
 			printf("<table border=\"0\"><tr><td width=\"%s\"><font size=\"-1\">Bemerkungen:&nbsp;</font></td><td><TEXTAREA name=\"userinfo\" rows=3 cols=30>%s</TEXTAREA></td>", "10%", $db->f("comment"));
 			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>Anmeldedatum: %s</font></td>",$class, "50%", date("d.m. Y",$db->f("mkdate")));
 			echo "<td class=\"$class\" align=\"center\" width=\"20%\"><font size=\"-1\">&Auml;nderungen</font><br /><INPUT type=\"image\" ".makeButton("uebernehmen", "src").">";
 			echo "<INPUT type=\"hidden\" name=\"user_id\" value=\"".$db->f("user_id")."\">";
-			echo "<INPUT type=\"hidden\" name=\"cmd\" value=\"change_userinfo\">";			
+			echo "<INPUT type=\"hidden\" name=\"cmd\" value=\"change_userinfo\">";
+			echo "<INPUT type=\"hidden\" name=\"username\" value=\"".$db->f("username")."\">";
 			echo "</td></tr>";
 			echo "</table>";
-			echo "</form>";  ###
+			echo "</form>";
 		}
-			
+
 	} // Ende der Dozenten/Tutorenspalten
 
 	print("</tr>\n");
@@ -741,7 +744,7 @@ if ($rechte) {
 		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("eintragen"));
 		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("entfernen"));
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td></tr>\n", _("Kontingent"));
-		
+
 
 		while ($db->next_record()) {
 			if ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
@@ -752,18 +755,18 @@ if ($rechte) {
 				$db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
 				if ($db2->next_record())
 					$wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
-						 if ($plaetze >= $wartende) 
+						 if ($plaetze >= $wartende)
 							$admission_chance = 100;   // ich komm auf jeden Fall rein
-				else 
+				else
 					$admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
 			}
-		
-			$cssSw->switchClass(); 
+
+			$cssSw->switchClass();
 			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("fullname"));
 			if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken"))); 
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
@@ -784,7 +787,7 @@ if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["a
 	?>
 
 	<tr>
-		<td class=blank colspan=2>&nbsp; 
+		<td class=blank colspan=2>&nbsp;
 		</td>
 	</tr>
 	<tr><td class=blank colspan=2>
@@ -810,7 +813,7 @@ if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["a
 //insert autors via free search form
 if ($rechte) {
 	if ($search_exp) {
-		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".		
+		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
 			"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
 			"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
 			"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
@@ -819,7 +822,7 @@ if ($rechte) {
 		?>
 
 	<tr>
-		<td class="blank" colspan="2">&nbsp; 
+		<td class="blank" colspan="2">&nbsp;
 		</td>
 	</tr>
 	<tr><td class=blank colspan=2>
@@ -836,14 +839,14 @@ if ($rechte) {
 		?>
 		</select></td>
 		<td class="steel1" width="20%" align="center"><font size=-1><? if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) print _("als AutorIn") ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><br />
-		<input type="IMAGE" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value=" <?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<? echo $PHP_SELF ?>"><?=makeButton("neuesuche")?></a></td> 
-		
+		<input type="IMAGE" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value=" <?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<? echo $PHP_SELF ?>"><?=makeButton("neuesuche")?></a></td>
+
 	</tr></form></table>
 		<?
 	} else { //create a searchform
 		?>
 	<tr>
-		<td class=blank colspan=2>&nbsp; 
+		<td class=blank colspan=2>&nbsp;
 		</td>
 	</tr>
 	<tr><td class=blank colspan=2>
@@ -865,11 +868,11 @@ if ($rechte) {
 //			echo "<table width=\"99%\"><tr><td colspan=$colspan align=right class=\"steel1\"><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</td></tr></table>";
 			echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-teiln") . "</font></b>";
 		}
-		
+
 	}
 	?>
 	<tr>
-		<td class=blank colspan=2>&nbsp; 
+		<td class=blank colspan=2>&nbsp;
 		</td>
 	</tr>
 	<?
