@@ -50,11 +50,11 @@ if ($cmd=="delete_all") {
 	$count_deleted_sms = $msging->delete_all_sms ($user->id, ($delete_unread) ? $GLOBALS['LastLogin'] : false);
 	if ($count_deleted_sms)
 		if ($count_deleted_sms==1)
-			$msg="msg§Es wurde eine Nachricht gel&ouml;scht.";
+			$msg="msg§" . _("Es wurde eine Nachricht gel&ouml;scht.");
 		else
-			$msg="msg§Es wurden ".$count_deleted_sms." Nachrichten gel&ouml;scht.";
+			$msg="msg§" . sprintf(_("Es wurden %s Nachrichten gel&ouml;scht."), $count_deleted_sms);
 	else
-		$msg="error§Es liegen keine Nachrichten vor, die gel&ouml;scht werden konnten.";
+		$msg="error§" . _("Es liegen keine Nachrichten vor, die gel&ouml;scht werden konnten.");
 	}
 	
 //Nachricht loeschen
@@ -67,12 +67,12 @@ if ($cmd=="delete") {
 			}
 	if ($l)
 		if ($l==1)
-			$msg="msg§Es wurde eine Nachricht gel&ouml;scht.";
+			$msg="msg§" . _("Es wurde eine Nachricht gel&ouml;scht.");
 		else
-			$msg="msg§Es wurden $l Nachrichten gel&ouml;scht.";
+			$msg="msg§" . sprintf(_("Es wurden %s Nachrichten gel&ouml;scht."), $l);
 		}
 	else
-		$msg="error§Es konnten keine Nachrichten gel&ouml;scht werden.";
+		$msg="error§" . _("Es konnten keine Nachrichten gel&ouml;scht werden.");
 	}
  
 //Geschriebene Nachricht einfuegen
@@ -90,16 +90,16 @@ if ($cmd=="insert") {
 	if (($count) || ($buddy_count) || ($group_count)) {
 		$msg="msg§";
 		if ($count > 0)	
-			$msg.="Ihre Nachricht an ".get_fullname_from_uname($rec_uname)." wurde verschickt! <br />";
+			$msg.= sprintf(_("Ihre Nachricht an %s wurde verschickt!"), get_fullname_from_uname($rec_uname)) . "<br />";
 		if ($buddy_count > 0)	
-			$msg.="Die Nachricht wurde an alle $buddy_count Buddies verschickt!";
+			$msg.= sprintf(_("Die Nachricht wurde an alle %s Buddies verschickt!"), $buddy_count);
 		if ($group_count > 0)	
-			$msg.="Die Nachricht wurde an $group_count Gruppenmitglieder verschickt!";
+			$msg.= sprintf(_("Die Nachricht wurde an %s Gruppenmitglieder verschickt!"), $group_count);
 	}
 	if ($count < 0)
-		$msg="error§Ihre Nachricht konnte nicht gesendet werden, die Nachricht ist leer.";
+		$msg="error§" . _("Ihre Nachricht konnte nicht gesendet werden, die Nachricht enth&auml;lt keinen Text.");
 	elseif ((!$count) && (!$buddy_count) && (!$group_count))
-		$msg="error§Ihre Nachricht konnte nicht gesendet werden.";
+		$msg="error§" . _("Ihre Nachricht konnte nicht gesendet werden.");
 		
 	$sms_msg=rawurlencode ($msg);
 
@@ -113,9 +113,9 @@ if ($cmd=="insert") {
 if ($cmd=="chatinsert") {
 	$count=$msging->insert_chatinv ($rec_uname, $message);
 	if ($count)
-		$msg="msg§Ihre Einladung zum Chatten an ".get_fullname_from_uname($rec_uname)." wurde verschickt.";
+		$msg="msg§" . sprintf(_("Ihre Einladung zum Chatten an %s wurde verschickt."), get_fullname_from_uname($rec_uname));
 	else
-		$msg="error§Ihre Einladung zum Chatten an ".get_fullname_from_uname($rec_uname)." konnte nicht verschickt werden";
+		$msg="error§" . sprintf(_("Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"), get_fullname_from_uname($rec_uname));
 
 	$sms_msg=rawurlencode ($msg);
 
@@ -131,7 +131,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	change_messaging_view();
-	echo "</tr></td></table>";
+	echo "</td></tr></table>";
 	page_close();
 	die;
 	}
@@ -141,16 +141,17 @@ if ($cmd=="write") {
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;Systeminterne Nachricht schreiben</b></td>
+		<td class="topic" colspan=2><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Systeminterne Nachricht schreiben")?></b></td>
 	</tr>
 	<tr>
 		<td class="blank">
-		<blockquote>Schreiben Sie hier eine Nachricht an einen anderen Benutzer:
+		<blockquote>
 		<?
+		echo _("Schreiben Sie hier eine Nachricht an einen anderen Benutzer:");
 		if ($SessSemName[0] && $SessSemName["class"] == "inst")
-			echo "<br /><br /><a href=\"institut_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Einrichtung</a>";
+			echo "<br /><br /><a href=\"institut_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung") . "</a>";
 		elseif ($SessSemName[0])
-			echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung</a>";
+			echo "<br /><br /><a href=\"seminar_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung") . "</a>";
 		?>
 		</blockquote>
 		</td>
@@ -171,9 +172,9 @@ if ($cmd=="write") {
 		}
 	
 	$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-	$titel="</b>Nachricht schreiben an ";
+	$titel="</b>" . _("Nachricht schreiben an") . " ";
 	if ($group_id)
-		$titel.="alle Mitglieder der Gruppe: ".htmlReady(GetStatusgruppeName($group_id))." (".CountMembersPerStatusgruppe($group_id)." Person(en))";
+		$titel.= sprintf(_("alle Mitglieder der Gruppe: %s (%s Person(en))"), htmlReady(GetStatusgruppeName($group_id)), CountMembersPerStatusgruppe($group_id));
 	else
 		$titel.="<a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$fullname."</font></a><b>";				
 	$content="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 wrap=\"virtual\">";
@@ -181,9 +182,9 @@ if ($cmd=="write") {
 		$content.=quotes_encode($tmp_sms_content, $fullname);
 	$content.="</textarea><br />\n";
 	if ((GetNumberOfBuddies()) && (!$group_id))
-		$content.="<font size=-1><input type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; Diese Nachricht (auch) an alle meine Buddies versenden</font><br />\n";
-	$edit="<input type=\"IMAGE\" src=\"pictures/buttons/abschicken-button.gif\" border=0>";
-	$edit.="&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/abbrechen-button.gif\" border=0></a>";	
+		$content.="<font size=-1><input type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; " . _("Diese Nachricht (auch) an alle meine Buddies versenden") . "</font><br />\n";
+	$edit="<input type=\"IMAGE\" " . makeButton("abschicken", "src") . " border=0 align=\"absmiddle\">";
+	$edit.="&nbsp; <a href=\"$PHP_SELF\">" . makeButton("abbrechen", "img") . "</a><br>&nbsp;";	
 	
 	echo"<form action=\"$PHP_SELF\" method=\"POST\">\n";
 	echo"<input type=\"HIDDEN\" name=\"rec_uname\" value=\"$rec_uname\">\n";
@@ -200,10 +201,10 @@ if ($cmd=="write") {
 
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 	printcontent("99%",0, $content, $edit);
-	echo "</tr></table>	";
+	echo "</tr></table>";
 	
 	echo"</form>\n";
-	}
+}
 
 //Ausgabe von vorhandenen Nachrichten
 else {
@@ -212,8 +213,8 @@ else {
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic"><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;Systeminterne Nachrichten anzeigen</b></td>
-	<td nowrap class="topic" align="right">Einstellungen &auml;ndern&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="pictures/pfeillink.gif" border=0></a>
+	<td class="topic"><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Systeminterne Nachrichten anzeigen")?></b></td>
+	<td nowrap class="topic" align="right"><?=_("Einstellungen &auml;ndern")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="pictures/pfeillink.gif" border=0></a>
 	</td>
 	
 </tr>
@@ -226,16 +227,22 @@ if ($msg)	{
 ?>
 <tr>
 	<td class="blank">
-	<blockquote><br />Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie verschickt wurden.<br />
-	Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt.
+	<blockquote><br />
 	<?
-	if ($SessSemName[0] && $SessSemName["class"] == "inst")
-		echo "<br /><br /><a href=\"institut_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Einrichtung</a>";
-	elseif ($SessSemName[0])
-		echo "<br /><br /><a href=\"seminar_main.php\">Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung</a>";
+	echo _("Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie verschickt wurden.") . "<br />";
+	echo _("Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt.") . "<br>";
 
-	if ($db->affected_rows())
-		{?><form action="<? echo $PHP_SELF ?>"> <input type="hidden" name="cmd" value="delete_all" /> <input type="IMAGE"  align ="absmiddle" src="pictures/buttons/alleloeschen-button.gif" border=0 />&nbsp; <br /><br /><input type="CHECKBOX" name="delete_unread" checked /><font size=-1>Nachrichten seit letztem Login nicht l&ouml;schen</font></form><?}
+	if ($SessSemName[0] && $SessSemName["class"] == "inst")
+		echo "<br /><a href=\"institut_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung") . "</a><br>";
+	elseif ($SessSemName[0])
+		echo "<br /><a href=\"seminar_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung") . "</a><br>";
+
+	if ($db->affected_rows()) {
+		echo "<br><form action=\"$PHP_SELF\"> <input type=\"hidden\" name=\"cmd\" value=\"delete_all\" />";
+		echo "<input type=\"IMAGE\"  align =\"absmiddle\" " . makeButton("alleloeschen", "src") . " border=0 />&nbsp; <br /><br />";
+		echo "<input type=\"CHECKBOX\" name=\"delete_unread\" checked /><font size=-1>";
+		echo _("Nachrichten seit letztem Login nicht l&ouml;schen") . "</font></form>";
+	}
 	?>
 	</blockquote>
 	</td>
@@ -254,7 +261,7 @@ if ($msg)	{
 							$open="open";
 							$neu=TRUE;
 							$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-							$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("fullname")."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";				
+							$zusatz= sprintf("<font size=-1>" . "gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("fullname")."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>");				
 							$titel="Einladung zum Chat";
 							$content=$db->f("fullname")." hat Sie am ".date("d.m.Y",$db->f("mkdate"))." um ".date("H:i",$db->f("mkdate"))." Uhr in den Chat eingeladen.\n";
 							$content.="Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in der Kopfzeile.";
@@ -278,11 +285,15 @@ if ($msg)	{
 		else {
 			//Kopfzeile erstellen
 			$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-			if ($db->f("user_id_snd") == "____%system%____")
-				$zusatz="<font size=-1>automatische Systemnachricht, gesendet";
-			else
-				$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("fullname")."</font></a><font size=-1>";
-			$zusatz.=" am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";
+			if ($db->f("user_id_snd") == "____%system%____") {
+				$zusatz="<font size=-1>";
+				$zusatz.= sprintf(_("automatische Systemnachricht, gesendet am %s"), date("d.m.Y, H:i",$db->f("mkdate")));
+				$zusatz.="</font>";
+			} else {
+				$zusatz="<font size=-1>";
+				$zusatz.= sprintf(_("gesendet von %s am %s"), "</font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("fullname")."</font></a><font size=-1>", date("d.m.Y, H:i",$db->f("mkdate")));
+				$zusatz.="</font>";
+			}
 			if (strpos($db->f("message"),$msging->sig_string))
 				$titel=mila(kill_format(substr($db->f("message"), 0, strpos($db->f("message"),$msging->sig_string))));
 			else
@@ -292,10 +303,10 @@ if ($msg)	{
 
 			$edit='';
 			if ($db->f("user_id_snd") != "____%system%____") {
-				$edit="<a href=\"$PHP_SELF?cmd=write&rec_uname=".$db->f("user_id_snd")."\"><img src=\"pictures/buttons/antworten-button.gif\" border=0></a>";
-				$edit.="&nbsp;<a href=\"$PHP_SELF?cmd=write&quote=".$db->f("message_id")."&rec_uname=".$db->f("user_id_snd")."\"><img src=\"pictures/buttons/zitieren-button.gif\" border=0></a>";
+				$edit="<a href=\"$PHP_SELF?cmd=write&rec_uname=".$db->f("user_id_snd")."\">" . makeButton("antworten", "img") . "</a>";
+				$edit.="&nbsp;<a href=\"$PHP_SELF?cmd=write&quote=".$db->f("message_id")."&rec_uname=".$db->f("user_id_snd")."\">" . makeButton("zitieren", "img") . "</a>";
 			}
-			$edit.="&nbsp;<a href=\"$PHP_SELF?cmd=delete&delete_msg[1]=".$db->f("message_id")."\"><img src=\"pictures/buttons/loeschen-button.gif\" border=0></a>";
+			$edit.="&nbsp;<a href=\"$PHP_SELF?cmd=delete&delete_msg[1]=".$db->f("message_id")."\">" . makeButton("loeschen", "img") . "</a>";
 
 			//Alle seit letztem Login (=aufgeklappt)
 			if ($db->f("mkdate") > $LastLogin) 
@@ -338,7 +349,7 @@ if ($msg)	{
 		}
 	if (!$n) {
 		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\">";
-		$srch_result="info§<font size=-1><b>Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor. ";
+		$srch_result="info§<font size=-1><b>" . _("Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor.") . "</b></font>";
 		parse_msg ($srch_result, "§", "steel1", 2, FALSE);
 		echo "</td></tr></table><br />";
 		}
@@ -348,7 +359,7 @@ if ($msg)	{
 	}
 
 ?>
-</tr></table></td></tr></table>
+</td></tr></table>
 <?
 
 // Save data back to database.
