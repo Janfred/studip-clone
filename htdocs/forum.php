@@ -229,6 +229,16 @@ if ($topic_id AND !$update) {
 				"");
 		die;
 	}
+} elseif ($answer_id) {
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM px_topics WHERE topic_id='$answer_id' AND Seminar_id ='$SessSemName[1]'");
+	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
+		echo "<br><br>";
+		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Stud.IP Bereiche zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
+				_("zuviele Browserfenster im Forenbereich!"), 
+				"");
+		die;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////

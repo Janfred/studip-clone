@@ -691,10 +691,19 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 		while ($db->next_record())
 			$user_id = $db->f("user_id");
 	}
+	
+	if ($root_id != "0")	{
+		$db->query ("SELECT seminar_id FROM px_topics WHERE topic_id = '$root_id'");
+		while ($db->next_record())
+			if ($db->f("seminar_id") != $tmpSessionSeminar)
+				$tmpSessionSeminar = $db->f("seminar_id");
+	}
+	
 	$topic_id = MakeUniqueID();
 	if ($root_id == "0")	{
 		$root_id = $topic_id;
 		}
+	
 	$query = "INSERT INTO px_topics (topic_id,name,description, parent_id, root_id , author, author_host, Seminar_id, user_id, mkdate, chdate) values ('$topic_id', '$name', '$description', '$parent_id', '$root_id', '$author', '".getenv("REMOTE_ADDR")."', '$tmpSessionSeminar', '$user_id', '$mkdate', '$chdate') ";
 	$db=new DB_Seminar;
 	$db->query ($query);
