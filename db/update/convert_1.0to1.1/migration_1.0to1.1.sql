@@ -42,11 +42,6 @@ PRIMARY KEY (holiday_id)
 ) TYPE=MyISAM;
 
 # #3
-# >>>please use the script convert_semester.php at this point!
-#
-
-
-# #4
 # create new configuration table
 #
 
@@ -59,6 +54,10 @@ CREATE TABLE `config` (
 `comment` text NOT NULL ,
 PRIMARY KEY ( `config_id` )
 ) TYPE = MYISAM
+
+# #4
+# >>>please use the script convert_semester.php at this point!
+#
 
 # #5
 # changes to the resources-management

@@ -50,13 +50,13 @@ Migrationsscripts):
 
 * neue Tabelle für Semesterverwaltung in der Datenbank anlegen (#1)
 * neue Tabelle für die Ferien in der Datenbank anlegen (#2)
+* neue Tabelle für Konfiguratiuonssystem (zur Zeit noch im Aufbau) anlegen (#3)
 * Konvertierungen für das Eintragen der alten Semester- und Feriendaten in die Datenbank
-  Script: convert_semester.php (#3)
+  Script: convert_semester.php (#4)
   Nach dem Ausführen sollten die konvertierten Semestereinträge überprüft werden und das Funktionieren
   der Semestereinbindung nun aus der Datenbank mit einigen Veranstaltungen gestetet werden.
   ACHTUNG: Wenn die Konvertierung erfolgreich vorgenommen wurde, müssen die Einträge zu Semestern und Ferien
   aus der config.inc.php entfernt werden.
-* neue Tabelle für Konfiguratiuonssystem (zur Zeit noch im Aufbau) anlegen (#4)
 * Änderungen an den Tabellen der Ressourcenverwaltung vornehmen (#5)
   ACHTUNG: Wenn die neue Funktionalität für eine zentrale Raumverwaltung/Raumwünsche genutzt werden soll,
   müssen weitere Konfigurationsoptionen in der Ressourcenverwaltung unter "Anpassen" vorngenommen werden.
