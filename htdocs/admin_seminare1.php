@@ -30,6 +30,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen 
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -142,6 +143,7 @@ if ($delete_doz) {
 			if ($db2->affected_rows()) {
 				$msg .= "msg§Der Nutzer <b>".htmlReady(get_fullname_from_uname($delete_doz))."</b> wurde aus der Veranstaltung gel&ouml;scht.§";
 				$user_deleted=TRUE;
+				RemovePersonStatusgruppeComplete ($delete_doz, $s_id);
 			}
 		}
 	} else
@@ -154,6 +156,7 @@ if ($delete_tut) {
 		if ($db2->affected_rows()) {
 			$msg .= "msg§Der Nutzer <b>".htmlReady(get_fullname_from_uname($delete_tut))."</b> wurde aus der Veranstaltung gel&ouml;scht.§";
 			$user_deleted=TRUE;
+			RemovePersonStatusgruppeComplete ($delete_tut, $s_id);
 		}
 
 		$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
