@@ -254,15 +254,18 @@ function change_messaging_view() {
 						&nbsp;<textarea name="sms_sig" rows=3 cols=30><? echo htmlready($my_messaging_settings["sms_sig"]); ?></textarea>
 					</td>
 				</tr>
-				<tr <? $cssSw->switchClass() ?>>
+				<tr <? $cssSw->resetClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Stud.IP-Messenger")?></b></font></td>
-				</tr <? $cssSw->switchClass() ?>>
+				</tr>
+				<tr <? $cssSw->switchClass() ?>>
 					<td align="right" class="blank">
 						<font size=-1><?=_("Stud.IP-Messenger automatisch nach dem Login starten")?></font>
 					</td>
 					<td <?=$cssSw->getFullClass()?>>
 						<input type="checkbox" name="start_messenger_at_startup" <? if ($my_messaging_settings["start_messenger_at_startup"]) echo " checked"; ?> >
 					</td>
+				</tr>
+
 				<tr <? $cssSw->switchClass() ?>>
 					<td colspan="2" align="center" class="steelgraulight" style="border-bottom:1px dotted black;border-top:1px dotted black;"><font size="-1"><b><?=_("Buddies/ Wer ist online?")?></b></font></td>
 				</tr>
