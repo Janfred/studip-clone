@@ -22,11 +22,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //****************************************************************************
 
-require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
-require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
-require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
-require_once($RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
-require_once($RELATIVE_PATH_CALENDAR . "/lib/driver/$CALENDAR_DRIVER/list_driver.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+		. "/lib/CalendarEvent.class.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+		. "/lib/SeminarEvent.class.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+		. "/lib/calendar_misc_func.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+		. "/lib/driver/{$GLOBALS['CALENDAR_DRIVER']}/list_driver.inc.php");
 
 class AppList{
 
