@@ -74,11 +74,8 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	die;
 } 
 
-// sortierung festlegen
-if ($cmd_sort) { 
-	$sms_show['sort'] = $cmd_sort;
-} else if (empty($sms_show['sort'])) {
-	$sms_show['sort'] = "no";
+if ($sms_data['tmp']['move_to_folder'] && !$move_folder) {
+	unset($sms_data['tmp']['move_to_folder']);
 }
 
 // delete selected messages
@@ -118,7 +115,7 @@ $count_newsms = count_messages_from_user($sms_data['view'], "AND deleted='0' AND
 if ($show_folder == "close") { // folder schliessen
 	$sms_show['folder'][$sms_data['view']] = "close";
 	unset($my_messaging_settings["folder"]['active'][$sms_data['view']]);
-} else if ($show_folder != "") { // neunen aktiven ordner setzen
+} else if ($show_folder != "") { // neuen aktiven ordner setzen
 	$sms_show['folder'][$sms_data['view']] = $show_folder;
 	$my_messaging_settings["folder"]['active'][$sms_data['view']] = $sms_show['folder'][$sms_data['view']];
 }
@@ -128,18 +125,16 @@ if (empty($sms_show['folder'][$sms_data['view']])) { // waehle den letzten besuc
 }
 
 // folder festlegen
-if ($sms_show['folder'][$sms_data['view']]) { // wir haben einen aktiven folder
-	if ($sms_show['folder'][$sms_data['view']] != "all") { // ist ein persoenlicher
-		$query_showfolder = "AND message_user.folder='".$sms_show['folder'][$sms_data['view']]."'";
-		$infotext_folder = "&nbsp;("._("Ordner").":&nbsp;".htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"][$sms_data["view"]], $sms_show['folder'][$sms_data['view']]))).")";
-	} else { // ist der allgemeine
-		$query_showfolder = "AND message_user.folder=''";
-		$infotext_folder = "&nbsp;("._("Ordner: Posteingang").")";
-	}
-} else { // nein kein aktiver ordner ... also ...
-	$infotext_folder = "&nbsp;("._("Ordner: Alle Nachrichten").")";
-	$sms_show['folder'][$sms_data['view']] = "all";
+if ($sms_show['folder'][$sms_data['view']] != "all") { // ist ein persoenlicher
+	$query_showfolder = "AND message_user.folder='".$sms_show['folder'][$sms_data['view']]."'";
+	$infotext_folder = "&nbsp;("._("Ordner").":&nbsp;".htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"][$sms_data["view"]], $sms_show['folder'][$sms_data['view']]))).")";
+} else { // ist der allgemeine
 	$query_showfolder = "AND message_user.folder=''";
+	if ($sms_data["view"] == "in") {
+		$infotext_folder = "&nbsp;("._("Ordner: Posteingang").")";
+	} else {
+		$infotext_folder = "&nbsp;("._("Ordner: Postausgang").")";
+	}
 }
 
 // folder anlegen
@@ -194,12 +189,7 @@ if ($sms_time) {
 // texte definieren
 if ($sms_data['view'] == "in") {
 	$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
-	
-	if ($count_newsms == "0") {
-		$info_text_002 = sprintf(_("Posteingang"), $count_newsms);
-	} else if ($count_newsms >= "1") {
-		$info_text_002 = sprintf(_("Posteingang (%s ungelesene)"), $count_newsms);
-	}
+	$info_text_002 = _("Posteingang");
 	$no_message_text_box = _("im Posteingang");
 	$tmp_snd_rec = "rec";
 } else if ($sms_data['view'] == "out") {
@@ -281,13 +271,14 @@ if ($sms_data['tmp']['move_to_folder']) {
 
 if ($sms_data["time"] == "all") {
 	$query_time = " ORDER BY message.mkdate DESC";
-	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
+	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);		
 } else if ($sms_data["time"] == "new") {
 	if ($sms_data["view"] == "in") {
 		$query_time = " AND message.mkdate > '".$LastLogin."' ORDER BY message.mkdate DESC";
 		$query_time_sort = " AND message.mkdate > '".$LastLogin."'";
 	} else {
 		$query_time = " AND message.mkdate > '".$CurrentLogin."' ORDER BY message.mkdate DESC";
+		$query_time_sort = " AND message.mkdate > '".$CurrentLogin."'";
 	}
 	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "24h") {
@@ -323,11 +314,12 @@ if ($sms_data["time"] == "all") {
 		<table cellpadding="3" cellspacing="0" border="0" width="100%">
 			<tr>
 				<td class="blank" align="left" valign="bottom">&nbsp; <? 
-					if ($cmd != "admin_folder") {
+					if ($cmd != "admin_folder" && !$sms_data['tmp']['move_to_folder']) {
 						echo "<a href=\"".$PHP_SELF."?cmd=admin_folder&cmd_2=new\">".makeButton("neuerordner", "img")."</a>";
-					} else if ($cmd == "admin_folder") {
-						echo "<a href=\"".$PHP_SELF."?cmd=\">".makeButton("zurueck", "img")."</a>";
-					} ?>
+					} else {
+						echo "<a href=\"".$PHP_SELF."?cmd=\">".makeButton("abbrechen", "img")."</a>";
+					}
+					?>
 				</td>
 			</tr>
 		</table> <?
@@ -414,6 +406,7 @@ if ($sms_data["time"] == "all") {
 						$picture = "move.gif";
 						$link = $PHP_SELF."?move_folder=".$x;
 					} else {
+						$link = $PHP_SELF."?cmd=";
 						$picture = showfoldericon($x, $count);
 					}
 					if (!$sms_data['tmp']['move_to_folder']) {
@@ -483,7 +476,9 @@ if ($sms_data["time"] == "all") {
 		}
 
 		$show_message_count = sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), ($altm+$neum), count_messages_from_user("snd"));
-		if ($neum) {
+		if ($neum == "1") {
+			$show_message_count .= "<br>"._("Eine Nachricht ist ungelesen.");
+		} else if ($neum > "1") {
 			$show_message_count .= "<br>".sprintf(_("%s Nachrichten sind ungelesen."), ($neum));
 		}
 		$infobox = array($tmp_array_1,
