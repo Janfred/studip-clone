@@ -77,10 +77,16 @@ if (($admin_inst_id) && ($admin_inst_id != "NULL")){
 	reset_all_data();
 	closeObject();
 	openInst($admin_inst_id);
-//a Enrichtung which was already open should be administrated
+//a Einrichtung which was already open should be administrated
 } elseif (($SessSemName[1]) && ($new_inst))  {
 	reset_all_data();
 	$links_admin_data["referred_from"]="inst";
+}
+
+//Veranstaltung was selected but it is on his way to hell....
+if (($archive_kill) && ($SessSemName[1] == $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) {
+	reset_all_data();
+	closeObject();
 }
 
 //a new session in the adminarea...
