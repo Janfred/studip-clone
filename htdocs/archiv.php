@@ -415,9 +415,9 @@ if ($archiv_data["perform_search"]) {
 	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"pictures/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
 				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\">".htmlReady($db->f("name"))."</a></font></td>";
 			}
-	    echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("dozenten")."</font></td>";
-	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("institute")."</font></td>";
-	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("semester")."</font></td>";
+	    echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("dozenten"))."</font></td>";
+	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("institute"))."</font></td>";
+	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("semester"))."</font></td>";
 			
 			if (archiv_check_perm($db->f("seminar_id")))
 				$view = 1;
