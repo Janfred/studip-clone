@@ -336,6 +336,7 @@ class Vote extends StudipObject {
 	 return $this->throwError (3, 
 				   _("Startdatum ist größer als Enddatum."));
       
+      
       $this->startdate = $timestamp;
       if (!$this->isNew ())
 	 $this->state = VOTE_STATE_NEW;
@@ -366,6 +367,7 @@ class Vote extends StudipObject {
       if ($timestamp != NULL && $timestamp < $this->startdate)
 	 return $this->throwError (3, 
 				   _("Das Enddatum ist vor dem Startdatum."));
+
       $this->stopdate = $timestamp;
    }
 
@@ -1071,6 +1073,9 @@ class Vote extends StudipObject {
 
 
       /* Running Vote with invalid stopdate? ------------------------------- */
+      /*
+musste ich rausnehmen, da man sonst einem laufenden Vote kein Enddatum mehr
+geben konnte das in der Vergangenheit liegt
       if ($this->state == VOTE_ACTIVE && (
 					  (!empty ($this->stopdate) && 
 					   $this->stopdate < time ()) ||
@@ -1079,6 +1084,7 @@ class Vote extends StudipObject {
 					   $this->timespan < time ())) )
 	 $this->throwError (18, _("Laufender Vote hätte bereits beendet ".
 				  "werden müssen!"));
+      */
       /* ------------------------------------------------------------------- */
 
       /* What about all the dates? ----------------------------------------- */
