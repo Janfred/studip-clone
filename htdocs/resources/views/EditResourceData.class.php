@@ -169,6 +169,8 @@ class EditResourceData {
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_month" value="<? echo $resAssign->getRepeatDayOfMonth() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_week_of_month" value="<? echo $resAssign->getRepeatWeekOfMonth() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_week" value="<? echo $resAssign->getRepeatDayOfWeek() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_interval" value="<? echo $resAssign->getRepeatInterval() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_quantity" value="<? echo $resAssign->getRepeatQuantity() ?>" />
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
