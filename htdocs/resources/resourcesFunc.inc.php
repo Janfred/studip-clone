@@ -1,24 +1,38 @@
 <?
-
-/*
-ressourcesFunctions.php - 0.8
-Hilfsfunktionen fuer Ressourcenverwaltung von Stud.IP.
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* resourcesFunc.php
+* 
+* functions for resources
+* 
+*
+* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	resources
+* @module		resourcesFunc.php
+* @package		resources
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// resourcesFunc.php
+// Funktionen der Ressourcenverwaltung
+// Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 
 /*****************************************************************************
 a quick function to get the resource_id (only rooms!) for a assigned date
@@ -163,7 +177,7 @@ function checkObjektAdminstrablePerms ($resource_object_owner_id, $user_id='') {
 search_administrable_objects searches in all the (for me!) adminstrable objects
 /*****************************************************************************/
 
-function search_administrable_objects ($search_string='', $user_id='') {
+function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE) {
 	global $user, $perm, $auth, $_fullname_sql;
 
 	$db=new DB_Seminar;
@@ -182,21 +196,23 @@ function search_administrable_objects ($search_string='', $user_id='') {
 			//Alle Personen...
 			$db->query("SELECT a.user_id,". $_fullname_sql['full_rev'] ." AS fullname , username FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 			while ($db->next_record())
-					$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>"Personen", "perms" => "admin");
+					$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>_("Personen"), "perms" => "admin");
 			//Alle Seminare...
-			$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
-			while ($db->next_record())
-				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen", "perms" => "admin");
+			if ($sem) {
+				$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
+				while ($db->next_record())
+					$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+			}
 			//Alle Institute...
 			$db->query("SELECT Institut_id, Name FROM Institute WHERE Name LIKE '%$search_string%' OR Institut_id = '$search_string' ORDER BY Name");
 			while ($db->next_record())
-				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen", "perms" => "admin");
+				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin");
 		break;
 		case "admin": 
 			//Alle meine Institute (Suche)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms = 'admin' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record()) {
-				$my_objects_inst[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen", "perms" => "admin");
+				$my_objects_inst[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin");
 			}
 			//Alle meine Institute (unabhaengig von Suche fuer Rechte)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE inst_perms = 'admin' AND user_inst.user_id='$user_id' ");
@@ -204,12 +220,14 @@ function search_administrable_objects ($search_string='', $user_id='') {
 				//...alle Mitarbeiter meiner Institute, in denen ich Admin bin....
 				$db2->query ("SELECT auth_user_md5.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string') AND Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ORDER BY Nachname");
 				while ($db2->next_record()) {
-					$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>"Personen", "perms" => "admin");
+					$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
 				}
 				//...alle Seminare meiner Institute, in denen ich Admin bin....
-				$db2->query("SELECT seminare.Seminar_id, Name FROM seminar_inst LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
-				while ($db2->next_record()) {
-					$my_objects_sem[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>"Veranstaltungen", "perms" => "admin");
+				if ($sem) {
+					$db2->query("SELECT seminare.Seminar_id, Name FROM seminar_inst LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
+					while ($db2->next_record()) {
+						$my_objects_sem[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+					}
 				}
 			}
 			if (is_array ($my_objects_user))
@@ -227,28 +245,32 @@ function search_administrable_objects ($search_string='', $user_id='') {
 		break;
 		case "dozent": 
 			//Alle meine Seminare
-			$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status IN ('tutor', 'dozent')  AND seminar_user.user_id='$user_id' ORDER BY Name");
-			while ($db->next_record())
-				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen", "perms" => "admin");
+			if ($sem) {
+				$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status IN ('tutor', 'dozent')  AND seminar_user.user_id='$user_id' ORDER BY Name");
+				while ($db->next_record())
+					$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+			}
 			//Alle meine Institute...
 			$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms IN ('tutor', 'dozent')  AND user_inst.user_id='$user_id'  ORDER BY Name");
 			while ($db->next_record())
-				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen", "perms" => $db->f("inst_perms"));
-			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Personen",  "perms" => "admin");
+				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => $db->f("inst_perms"));
+			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>_("Personen"),  "perms" => "admin");
 		break;
 		case "tutor": 
 			//Alle meine Seminare
-			$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE  (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status='tutor' AND seminar_user.user_id='$user_id' ORDER BY Name");
-			while ($db->next_record())
-				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen",  "perms" => "tutor");
+			if ($sem) {
+				$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE  (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status='tutor' AND seminar_user.user_id='$user_id' ORDER BY Name");
+				while ($db->next_record())
+					$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"),  "perms" => "tutor");
+			}
 			//Alle meine Institute...
 			$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id)  WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms='tutor' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record())
-				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen", "perms" => "tutor");
-			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Personen",  "perms" => "admin");
+				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "tutor");
+			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>_("Personen"),  "perms" => "admin");
 		break;
 		case "autor": 
-			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Personen",  "perms" => "admin");
+			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>_("Personen"),  "perms" => "admin");
 		break;
 	}
 	return $my_objects;
@@ -265,7 +287,7 @@ function search_admin_user ($search_string='') {
 	//In allen Admins suchen...
 	$db->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM auth_user_md5  a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 	while ($db->next_record())
-			$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>"Personen");
+			$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>_("Personen"));
 	
 	return $my_objects;
 }
@@ -275,7 +297,7 @@ function search_admin_user ($search_string='') {
 search_objects searches in all objects
 /*****************************************************************************/
 
-function search_objects ($search_string='', $user_id='') {
+function search_objects ($search_string='', $user_id='', $sem=TRUE) {
 	global $user, $perm, $auth, $_fullname_sql;
 
 	$db=new DB_Seminar;
@@ -288,15 +310,17 @@ function search_objects ($search_string='', $user_id='') {
 	//Alle Personen...
 	$db->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR a.user_id = '$search_string' ORDER BY Nachname");
 	while ($db->next_record())
-		$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>"Personen");
+		$my_objects[$db->f("user_id")]=array("name"=>$db->f("fullname")." (".$db->f("username").")", "art"=>_("Personen"));
 	//Alle Seminare...
-	$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
-	while ($db->next_record())
-		$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen");
+	if ($sem) {
+		$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
+		while ($db->next_record())
+			$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"));
+	}
 	//Alle Institute...
 	$db->query("SELECT Institut_id, Name FROM Institute WHERE Name LIKE '%$search_string%' OR Institut_id = '$search_string' ORDER BY Name");
 	while ($db->next_record())
-		$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen");
+		$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"));
 
 	return $my_objects;
 }
@@ -307,7 +331,7 @@ Searchform, zur Erzeugung der oft gebrauchten Personen-Auswahl
 u.a. Felder
 /*****************************************************************************/
 
-function showSearchForm($name, $search_string='', $user_only=FALSE, $administrable_objects_only=FALSE, $admins=FALSE, $allow_all=FALSE) {
+function showSearchForm($name, $search_string='', $user_only=FALSE, $administrable_objects_only=FALSE, $admins=FALSE, $allow_all=FALSE, $sem=TRUE) {
 
 	if ($search_string) {
 		if ($user_only) //Nur in Personen suchen
@@ -316,16 +340,16 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 			else //auch andere...
 				;
 		elseif ($administrable_objects_only)
-			$my_objects=search_administrable_objects($search_string);
+			$my_objects=search_administrable_objects($search_string, FALSE, $sem);
 		else //komplett in allen Objekten suchen
-			$my_objects=search_objects($search_string);
+			$my_objects=search_objects($search_string, FALSE, $sem);
 			
 		?>
 		<input type="HIDDEN" name="<? echo "search_string_".$name ?>" value="<? echo $search_string ?>" />
 		<select name="<? echo "submit_".$name ?>">
 		<?
 		if ($allow_all)
-			print "<option value=\"all\">Jeder</option>";
+			print "<option value=\"all\">"._("jeder")."</option>";
 
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
@@ -340,13 +364,13 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 			$old_art=$val["art"];
 		}
 		?></select>
-			<font size=-1><input type="IMAGE" name="<? echo "send_".$name ?>" <?=makeButton("uebernehmen", "src") ?> value="&uuml;bernehmen"  /></font>
-			<font size=-1><input type="IMAGE" name="<? echo "reset_".$name ?>" <?=makeButton("neuesuche", "src") ?> border=0 value="neue Suche" /></font>
+			<font size=-1><input type="IMAGE" name="<? echo "send_".$name ?>" <?=makeButton("uebernehmen", "src") ?> value="<?=_("&uuml;bernehmen")?>"  /></font>
+			<font size=-1><input type="IMAGE" name="<? echo "reset_".$name ?>" <?=makeButton("neuesuche", "src") ?> border=0 value="<?=_("neue Suche")?>" /></font>
 		<?
 	} else {
 		?>
 		<font size=-1><input type="TEXT" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
-		<font size=-1><input type="IMAGE" name="<? echo "do_".$name ?>" <?=makeButton("suchestarten", "src") ?> border=0 value="suchen" /></font>
+		<font size=-1><input type="IMAGE" name="<? echo "do_".$name ?>" <?=makeButton("suchestarten", "src") ?> border=0 value="<?=_("suchen")?>" /></font>
 		<?
 	}
 }
