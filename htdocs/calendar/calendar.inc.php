@@ -76,6 +76,15 @@ if($cmd_cal == "chng_cal_settings"){
 	);
 }
 
+
+$db_bind_check = new DB_Seminar;
+$db_bind_check->query("SELECT Seminar_id, mkdate FROM seminar_user WHERE user_id='$user->id' ORDER BY mkdate DESC");
+while ($db_bind_check->next_record()
+			&& $db_bind_check->f("mkdate") > $calendar_user_control_data["ts_bind_seminare"]) {
+	$calendar_user_control_data["bind_seminare"][$db_bind_check->f("Seminar_id")] = "TRUE";
+}
+$calendar_user_control_data["ts_bind_seminare"] = time();
+
 // Wenn "Einbinden-Formular" abgeschickt wurde, dann ...["bind_seminare"] erneuern
 if($sem)
 	$calendar_user_control_data["bind_seminare"] = $sem;
@@ -83,14 +92,6 @@ if(is_array($calendar_user_control_data["bind_seminare"]))
 	$bind_seminare = array_keys($calendar_user_control_data["bind_seminare"], "TRUE");
 else
 	$bind_seminare = "";
-
-$db_bind_check = new DB_Seminar;
-$db_bind_check->query("SELECT Seminar_id, mkdate FROM seminar_user WHERE user_id='$user->id' ORDER BY mkdate DESC");
-while ($db_bind_check->next_record()
-				&& $db_bind_check->f("mkdate") > $calendar_user_control_data["ts_bind_seminare"]) {
-	$calendar_user_control_data["bind_seminare"][$db_bind_check->f("Seminar_id")] = TRUE;
-}
-$calendar_user_control_data["ts_bind_seminare"] = time();
 
 // Wenn Termin-Anlegen oder -Bearbeiten beendet ist, vergiss die Formulardaten
 if(isset($calendar_sess_forms_data) && $cmd != "edit"){
