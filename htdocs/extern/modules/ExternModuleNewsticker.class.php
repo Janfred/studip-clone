@@ -73,7 +73,10 @@ class ExternModuleNewsticker extends ExternModule {
 	}
 	
 	function toString ($args = NULL) {
-		$out = "<script type=\"text/javascript\">\n<!--\nvar newsticker_max = 0;\n";
+		$js_only = $this->config->getValue("Main", "jsonly");
+		if (!$js_only)
+			$out = "<script type=\"text/javascript\">\n<!--\n";
+		$out .= "var newsticker_max = 0;\n\n";
 		$out .= "function textlist() {\n\tnewsticker_max = textlist.arguments.length;\n\t";
 		$out .= "for (i = 0; i < newsticker_max; i++)\n\t\tthis[i] = textlist.arguments[i];\n}\n\n";
 		$out .= "newsticker_tl = new textlist(";
@@ -107,17 +110,20 @@ class ExternModuleNewsticker extends ExternModule {
 		
 		$out .= ceil(1000 / $this->config->getValue("Main", "frequency"));
 		
-		$out .= ");\n}\n//-->\n</script>\n";
-		$out .= "<form name=\"tickform\">\t\n<textarea name=\"tickfield\" rows=\"";
+		$out .= ");\n}\n";
+		if (!$js_only) {
+			$out .= "//-->\n</script>\n";
+			$out .= "<form name=\"tickform\">\t\n<textarea name=\"tickfield\" rows=\"";
 		
-		$out .= $this->config->getValue("Main", "rows") . "\" cols=\"";
-		$out .= $this->config->getValue("Main", "length") . "\" style=\"";
-		$out .= $this->config->getValue("Main", "style") . "\" wrap=\"virtual\">";
-		$out .= $this->config->getValue("Main", "starttext");
-		$out .= "</textarea>\n</form>\n";
+			$out .= $this->config->getValue("Main", "rows") . "\" cols=\"";
+			$out .= $this->config->getValue("Main", "length") . "\" style=\"";
+			$out .= $this->config->getValue("Main", "style") . "\" wrap=\"virtual\">";
+			$out .= $this->config->getValue("Main", "starttext");
+			$out .= "</textarea>\n</form>\n";
 		
-		if ($this->config->getValue("Main", "automaticstart"))
-			$out .= "<script type=\"text/javascript\">\n\tnewsticker();\n</script>\n";
+			if ($this->config->getValue("Main", "automaticstart"))
+				$out .= "<script type=\"text/javascript\">\n\tnewsticker();\n</script>\n";
+		}
 		
 		return $out;
 	}
