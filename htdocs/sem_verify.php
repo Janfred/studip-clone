@@ -271,9 +271,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
 						       <?
 							while ($db->next_record()) {
+								if ($db->f("studiengang_id") == "all")
+									$tmp_sem_verify_quota=get_all_quota($id);
+								else
+									$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
 								if ($db->f("studiengang_id") == $sem_verify_possible_studg)
 									print "<b>";
-								printf ("&nbsp; &nbsp; <font size=-1 color=\"%s\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</font>", ($db->f("studiengang_id") == $sem_verify_possible_studg)  ? "black" : "#888888", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), round ($db2->f("admission_turnout") * ($db->f("quota") / 100)));
+								printf ("&nbsp; &nbsp; <font size=-1 color=\"%s\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</font>", ($db->f("studiengang_id") == $sem_verify_possible_studg)  ? "black" : "#888888", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
 								if ($db->f("studiengang_id") == $sem_verify_possible_studg) {
 									printf ("</b>&nbsp; <input type=\"HIDDEN\" name=\"sem_verify_suggest_studg\" value=\"%s\">", $db->f("studiengang_id"));
 								}
@@ -309,10 +313,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 									printf ("<input type=\"HIDDEN\" name=\"sem_verify_suggest_arr[]\" value=\"%s\">", $db->f("studiengang_id"));
 									$db3->query("SELECT studiengang_id FROM user_studiengang WHERE studiengang_id = '".$db->f("studiengang_id")."' AND user_id = '$user->id' "); // Darf ich diesen auswaehlen?
 									$db3->next_record();
-									if (($db3->num_rows()) || ($db->f("studiengang_id") == "all"))
-										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_arr[]\">&nbsp; <font size=-1><b>Kontingent f&uuml;r %s (%s Pl&auml;tze)</font></b><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), round ($db2->f("admission_turnout") * ($db->f("quota") / 100)));
+									if ($db3->f("studiengang_id") == "all")
+										$tmp_sem_verify_quota=get_all_quota($id);
 									else
-										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), round ($db2->f("admission_turnout") * ($db->f("quota") / 100)));
+										$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
+									if (($db3->num_rows()) || ($db->f("studiengang_id") == "all"))
+										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_arr[]\">&nbsp; <font size=-1><b>Kontingent f&uuml;r %s (%s Pl&auml;tze)</font></b><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
+									else
+										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
 									}
 							       ?>
 							<br />&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
@@ -368,7 +376,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								die;
 							}
 						} else { //noch nicht gelost oder Enddatum, also Kontingentierung noch aktiv
-							$db3->query("SELECT name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id LIKE '$id' AND admission_seminar_studiengang.studiengang_id = '$sem_verify_suggest_studg' "); //Nochmal die Daten des quotas fuer diese Veranstaltung
+							$db3->query("SELECT name, quota, studiengang_id FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id LIKE '$id' AND admission_seminar_studiengang.studiengang_id = '$sem_verify_suggest_studg' "); //Nochmal die Daten des quotas fuer diese Veranstaltung
 							$db3->next_record();
 							if ($db2->f("admission_type") == 1) { //Variante Losverfahren
 								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position heruasfinden
@@ -381,9 +389,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								echo "<br	><br></td></tr></table>";
 								page_close();
 								die;
-							} else { //Variante Chronologisches Anmelden
+							} else { //Variante chronologisches Anmelden
 								$db->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '$id' AND admission_studiengang_id = '$sem_verify_suggest_studg'"); //Wieviel user sind schon in diesem Kontingent eingetragen
-								if ($db->num_rows() < round ($db2->f("admission_turnout") * ($db3->f("quota") / 100))) {//noch Platz in dem Kontingent --> direkt in seminar_user
+								if ($db3->f("studiengang_id") == "all")
+									$tmp_sem_verify_quota=get_all_quota($id);
+								else
+									$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db3->f("quota") / 100));
+								if ($db->num_rows() < $tmp_sem_verify_quota) {//noch Platz in dem Kontingent --> direkt in seminar_user
 								 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
 									parse_msg ("msg§Sie wurden mit dem Status <b>autor</b> in die Veranstaltung <b>$SeminarName</b> eingetragen und sind damit zugelassen..");
 								echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; weiter zu der Veranstaltung</a>";

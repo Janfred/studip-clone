@@ -35,12 +35,15 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 
 <?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-	include "header.php";   //hier wird der "Kopf" nachgeladen
-	require_once "msg.inc.php";
-	require_once "dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
-	require_once "config.inc.php";
-	require_once "visual.inc.php"; // wir brauchen htmlReady
+	include "$ABSLOUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
+	include "$ABSLOUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
+	
+	require_once "$ABSLOUTE_PATH_STUDIP/msg.inc.php";
+	require_once "$ABSLOUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
+	require_once "$ABSLOUTE_PATH_STUDIP/config.inc.php";
+	require_once "$ABSLOUTE_PATH_STUDIP/visual.inc.php"; // wir brauchen htmlReady
+	require_once "$ABSLOUTE_PATH_STUDIP/admission.inc.php"; // wir brauchen htmlReady
+
 ?>
 <body>
 <?
@@ -497,7 +500,11 @@ else
 					<?
 					$db3->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$sem_id' "); //Alle  moeglichen Studiengaenge anziegen
 					while ($db3->next_record()) {
-						printf ("<font size=-1>Kontingent f&uuml;r %s (%s Pl&auml;tze)</font>",  ($db3->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db3->f("name"), round ($db2->f("admission_turnout") * ($db3->f("quota") / 100)));
+						if ($db3->f("studiengang_id") == "all")
+							$tmp_details_quota=get_all_quota($sem_id);
+						else
+							$tmp_details_quota=round ($db2->f("admission_turnout") * ($db3->f("quota") / 100));
+						printf ("<font size=-1>Kontingent f&uuml;r %s (%s Pl&auml;tze)</font>",  ($db3->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db3->f("name"), $tmp_details_quota);
 						print "<br />";
 					}
 				       ?>
