@@ -89,7 +89,7 @@ if ($my_schedule_settings["glb_days"]["so"]) $glb_colspan++;
 //persoenlichen Eintrag wegloeschen
 if ($cmd=="delete")
  {
-    unset ($my_personal_sems[$d_sem_id]);
+	unset ($my_personal_sems[$d_sem_id]);
 }
 
 
@@ -148,7 +148,7 @@ if ($inst_id) {
 		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
 		$view="inst_admin";
 	} else {
-		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE user_id = '$user_id'");
+		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM  seminar_user LEFT JOIN seminare USING (seminar_id) WHERE user_id = '$user_id'");
 		$view="user";
 	}
 }
@@ -211,7 +211,7 @@ while ($db->next_record())
 	if (($use_this) && (!$term_data["art"]) && (is_array($term_data["turnus_data"])))
 		{
 		//Zusammenbasteln Dozentenfeld
-		$db2->query("SELECT Vorname, Nachname, username FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE status='dozent' AND Seminar_id ='".$db->f("Seminar_id")."'");
+		$db2->query("SELECT Vorname, Nachname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status='dozent' AND Seminar_id ='".$db->f("Seminar_id")."'");
 		$dozenten='';
 		$i=1;
 		while ($db2->next_record())
@@ -568,42 +568,42 @@ if ((!$print_view) && (!$inst_id)) {
 			</select>
 			Beginn: 
 			<?	    
-	   		echo"<select name=\"start_stunde\">";
-	   		for ($i=$global_start_time; $i<=$global_end_time; $i++)
-		  		{
-		  		if ($i==9) echo "<option selected value=".$i.">".$i."</option>";
-		       		else echo "<option value=".$i.">".$i."</option>";
-		  		}
-	    		echo"</select>";
-	    		echo"<select name=\"start_minute\">";
-	     		for ($i=0; $i<=45; $i=$i+15)
-		  		{
-		  		if ($i==0) echo "<option selected value=".$i.">0".$i."</option>";
-		       		else echo "<option value=".$i.">".$i."</option>";
-		  		}
-	    		echo"</select> Uhr";
-	    		?>
+			echo"<select name=\"start_stunde\">";
+			for ($i=$global_start_time; $i<=$global_end_time; $i++)
+				{
+				if ($i==9) echo "<option selected value=".$i.">".$i."</option>";
+					else echo "<option value=".$i.">".$i."</option>";
+				}
+				echo"</select>";
+				echo"<select name=\"start_minute\">";
+				for ($i=0; $i<=45; $i=$i+15)
+				{
+				if ($i==0) echo "<option selected value=".$i.">0".$i."</option>";
+					else echo "<option value=".$i.">".$i."</option>";
+				}
+				echo"</select> Uhr";
+				?>
 			Ende:
 			<?	    
-	   		echo"<select name=\"ende_stunde\">";
-	   		for ($i=$global_start_time; $i<=$global_end_time; $i++)
-		  		{
-		  		if ($i==9) echo "<option selected value=".$i.">".$i."</option>";
-		       		else echo "<option value=".$i.">".$i."</option>";
-		  		}
-	    		echo"</select>";
-	    		echo"<select name=\"ende_minute\">";
-	     		for ($i=0; $i<=45; $i=$i+15)
-		  		{
-		  		if ($i==0) echo "<option selected value=".$i.">0".$i."</option>";
-		  		elseif ($i==45) echo "<option selected value=".$i.">".$i."</option>";
-		       		else echo "<option value=".$i.">".$i."</option>";
-		  		}
-	    		echo"</select> Uhr";
-	    		?>
-	    		Beschreibung:
-	    		<input name="beschreibung" type="text" size=40 maxlength=255>
-	    		<input name="submit" type="submit" value="Eintragen">
+			echo"<select name=\"ende_stunde\">";
+			for ($i=$global_start_time; $i<=$global_end_time; $i++)
+				{
+				if ($i==9) echo "<option selected value=".$i.">".$i."</option>";
+					else echo "<option value=".$i.">".$i."</option>";
+				}
+				echo"</select>";
+				echo"<select name=\"ende_minute\">";
+				for ($i=0; $i<=45; $i=$i+15)
+				{
+				if ($i==0) echo "<option selected value=".$i.">0".$i."</option>";
+				elseif ($i==45) echo "<option selected value=".$i.">".$i."</option>";
+					else echo "<option value=".$i.">".$i."</option>";
+				}
+				echo"</select> Uhr";
+				?>
+				Beschreibung:
+				<input name="beschreibung" type="text" size=40 maxlength=255>
+				<input name="submit" type="submit" value="Eintragen">
 		</form>
 	</td>
 </tr>
