@@ -1180,7 +1180,7 @@ class EditObject extends cssClasses {
 						 else
 							print _("einen User (NutzerIn oder Einrichtung) eintragen:");						 
 						?><br /></font><font size=-1>
-						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE) ?> <br/>
+						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE, "up") ?> <br/>
 						<?=_("freie Eingabe zur Belegung:")?><br /></font>
 						<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
 						<br /><font size=-1><?=_("<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung selbstst&auml;ndig aufheben. Sie k&ouml;nnen die Belegung aber auch frei eingeben.")?></font>
@@ -1474,7 +1474,7 @@ class EditObject extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" colspan=2 valign="top"><font size=-1><?=_("Berechtigungen:")?></font><br />
-				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1<?=_("Berechtigung hinzuf&uuml;gen")?></font><br />
+				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1><?=_("Berechtigung hinzuf&uuml;gen")?></font><br />
 				<? showSearchForm("search_perm_user", $search_string_search_perm_user, FALSE, FALSE, FALSE, TRUE) ?>
 				</td>
 			</tr>
@@ -1489,7 +1489,7 @@ class EditObject extends cssClasses {
 					<input type="HIDDEN" name="change_user_id[]" value="<? echo $this->db->f("user_id")?>" />
 					<font size=-1><a href="<? echo $this->resObject->getOwnerLink($this->db->f("user_id"))?>"><? echo htmlReady($this->resObject->getOwnerName(TRUE, $this->db->f("user_id"))) ?></a></font>
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="*">
+				<td class="<? echo $this->getClass() ?>" width="*" nowrap>
 					<font size=-1>&nbsp; 
 					<?
 					if (($admin_perms) && ((($this->db->f("perms") == "autor") || ($owner_perms))))

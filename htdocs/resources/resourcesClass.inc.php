@@ -913,6 +913,10 @@ class ResourceObject {
 		if (!$id)
 			$id=$this->owner_id;
 
+		//Is it a global?
+		if ($id == "global")
+			return "global";
+
 		//Is it a entry for "everyone"?
 		if ($id == "all")
 			return "all";
@@ -946,9 +950,6 @@ class ResourceObject {
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "fak";
-		
-		//dann wohl global
-		return "global";
 	}
 	
 	function getOwnerName($explain=FALSE, $id='') {

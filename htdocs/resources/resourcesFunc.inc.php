@@ -180,15 +180,19 @@ search_administrable_objects searches in all the (for me!) adminstrable objects
 function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE) {
 	global $user, $perm, $auth, $_fullname_sql;
 
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$db3=new DB_Seminar;
+	$db = new DB_Seminar;
+	$db2 = new DB_Seminar;
+	$db3 = new DB_Seminar;
+	$resPerm = new ResourcesPerms;
 	
 	if (!$user_id)
 		$user_id = $user->id;
 		
 	if (!$search_string)
 		$search_string = "_";
+	
+	if ($resPerm->getGlobalPerms() == "admin")
+		$my_objects["global"]=array("name"=>_("Global"), "perms" => "admin");
 		
 	$user_global_perm=get_global_perm($this->user_id);
 		switch ($user_global_perm) {
@@ -331,7 +335,7 @@ Searchform, zur Erzeugung der oft gebrauchten Personen-Auswahl
 u.a. Felder
 /*****************************************************************************/
 
-function showSearchForm($name, $search_string='', $user_only=FALSE, $administrable_objects_only=FALSE, $admins=FALSE, $allow_all=FALSE, $sem=TRUE) {
+function showSearchForm($name, $search_string='', $user_only=FALSE, $administrable_objects_only=FALSE, $admins=FALSE, $allow_all=FALSE, $sem=TRUE, $img_dir="left") {
 
 	if ($search_string) {
 		if ($user_only) //Nur in Personen suchen
@@ -349,7 +353,7 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 		<select name="<? echo "submit_".$name ?>">
 		<?
 		if ($allow_all)
-			print "<option tyle=\"{vertikal-align: middle;}\" value=\"all\">"._("jedeR")."</option>";
+			print "<option style=\"vertical-align: middle;\" value=\"all\">"._("jedeR")."</option>";
 
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
@@ -364,13 +368,13 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 			$old_art=$val["art"];
 		}
 		?></select>
-			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "send_".$name ?>" src="./pictures/move_up.gif" <?=tooltip (_("diesen Eintrag übernehmen")) ?> border="0" value="<?=_("&uuml;bernehmen")?>"  /></font>
-			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "reset_".$name ?>" src="./pictures/rewind.gif" <?=tooltip (_("Suche zurücksetzen")) ?> border="0" value="<?=_("neue Suche")?>" /></font>
+			<font size=-1><input type="IMAGE" style="vertical-align:middle;"name="<? echo "send_".$name ?>" src="./pictures/move_<?=$img_dir.".gif\" ".tooltip (_("diesen Eintrag übernehmen")) ?> border="0" value="<?=_("&uuml;bernehmen")?>"  /></font>
+			<font size=-1><input type="IMAGE" style="vertical-align:middle;" name="<? echo "reset_".$name ?>" src="./pictures/rewind.gif" <?=tooltip (_("Suche zurücksetzen")) ?> border="0" value="<?=_("neue Suche")?>" /></font>
 		<?
 	} else {
 		?>
-		<font size=-1><input type="TEXT" tyle="{vertikal-align: middle;}" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
-		<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "do_".$name ?>" src="./pictures/suchen.gif" <?=tooltip (_("Starten Sie hier eine ihre Suche")) ?> border=0 value="<?=_("suchen")?>" /></font>
+		<font size=-1><input type="TEXT" style="vertical-align: middle;" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
+		<font size=-1><input type="IMAGE" style="vertical-align:middle;" name="<? echo "do_".$name ?>" src="./pictures/suchen.gif" <?=tooltip (_("Starten Sie hier eine ihre Suche")) ?> border=0 value="<?=_("suchen")?>" /></font>
 		<?
 	}
 }

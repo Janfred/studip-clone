@@ -106,9 +106,11 @@ else
 						?>
 						<tr>
 							<td class="blank"><? (!$infobox) ? print "<br />":"" ?>
-								<blockquote>
-								<? echo $page_intro ?>
-								&nbsp; </blockquote>
+								<table width="99%" align="center" border="0" cellpadding="2" cellspacing ="0">
+									<tr><td>
+										<font size="-1"><? echo $page_intro ?></font><br />&nbsp; 
+									</td></tr>
+								</table>
 							</td>
 						</tr>	
 						<?
