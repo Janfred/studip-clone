@@ -119,7 +119,7 @@ class ExternModuleLecturestable extends ExternModule {
 					$this->config->getAttributes("Body", "body"));
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
-				. "/modules/views/lectures_table_preview.inc.php");
+				. "/modules/views/lecturestable_preview.inc.php");
 				
 		echo html_footer();
 	}
