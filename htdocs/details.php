@@ -419,27 +419,26 @@ print_infobox ($infobox,"pictures/details.jpg");
 			<? }
 			// Anzeige der Bereiche  
 			if ($SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
-				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
-				$view = new DbView();
+				$sem_path = get_sem_tree_path($sem_id);
 			?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
-				$view->params[0] = $sem_id;
-				$db3 = $view->get_query("view:SEMINAR_SEM_TREE_GET_IDS");
-				if ($db3->num_rows() ==1)
+				if (is_array($sem_path)){
+					if (count($sem_path) ==1)
 					printf ("<font size=-1><b>" . _("Studienbereich:") . "</b></font><br />");
-				elseif ($db3->num_rows() >=2)
+					else
 					printf ("<font size=-1><b>" . _("Studienbereiche:") . "</b></font><br />");
-				while ($db3->next_record()) {
-					if ($db3->num_rows() >= 2)
+					foreach ($sem_path as $sem_tree_id => $path_name) {
+						if (count($sem_path) >= 2)
 						print "<li>";
-						printf ("<font size=-1><a href=\"show_bereich.php?level=sbb&id=%s\">%s</a></font>",$db3->f('sem_tree_id'),
-								htmlReady($the_tree->getShortPath($db3->f('sem_tree_id'))));
-					if ($db3->num_rows() > 2)
+						printf ("<font size=-1><a href=\"show_bereich.php?level=sbb&id=%s\">%s</a></font>",$sem_tree_id,
+						htmlReady($path_name));
+						if (count($sem_path) >= 2)
 						print "</li>";
+					}
 				}
 				?>&nbsp; 
 				</td>
