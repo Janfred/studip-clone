@@ -11,11 +11,11 @@ switch ($resources_data["view"]) {
 	//Reiter "Uebersicht"
 	case "resources":
 	case "_resources":
-		$page_intro="Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen suchen oder sich durch die Ebenen navigieren.";
+		$page_intro="Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die Sie Zugriff haben, navigieren und Ressourcen verwalten.";
 		$title="Suche nach Ressourcen";
 	break;
 	case "search":
-		$page_intro="Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die Sie Zugriff haben, navigieren und Ressourcen verwalten.";
+		$page_intro="Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen suchen oder sich durch die Ebenen navigieren.";
 		$title="&Uuml;bersicht der Ressourcen";
 	break;
 	
@@ -102,7 +102,6 @@ switch ($resources_data["view"]) {
 	break;
 	//default
 	default:
-		$resources_data["view"]="resources";
 		$page_intro="Sie befinden sich in der Ressurcenverwaltung von Stud.IP. Sie k&ouml;nnen hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten.";
 		$title="&Uuml;bersicht der Ressourcen";
 	break;
