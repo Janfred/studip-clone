@@ -37,7 +37,7 @@
 
 //Generische Systemeinstellungen
 $AUTH_LIFETIME=60;						//Zeit bis zu einem automatischem Logout in Minuten (wird zur Zeit nur zu Anzeigezwecken verwendet...)
-$SOFTWARE_VERSION="0.9 rc 4";
+$SOFTWARE_VERSION="0.9";
 
 
 //Daten ueber die Uni
