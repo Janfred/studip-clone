@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 ob_start();
 //Daten fuer Onlinefunktion einbinden
-if (!$perm->have_perm("user")) ;
+if (!$perm->have_perm("user"))
 	$my_messaging_settings["active_time"]=5;
 
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
