@@ -109,18 +109,16 @@ class ExternElementMain extends ExternElement {
 			case "show" :
 				$visible = $this->config->getValue("Main", "visible");
 				if ($value >= 0 || $value < sizeof($visible)) {
-					$visible[$value] = "TRUE";
+					$visible[$value] = "1";
 					$this->config->setValue("Main", "visible", $visible);
-					$this->config->store();
 				}
 				break;
 				
 			case "hide" :
 				$visible = $this->config->getValue("Main", "visible");
 				if ($value >= 0 || $value < sizeof($visible)) {
-					$visible[$value] = "FALSE";
+					$visible[$value] = "0";
 					$this->config->setValue("Main", "visible", $visible);
-					$this->config->store();
 				}
 				break;
 				
@@ -139,7 +137,6 @@ class ExternElementMain extends ExternElement {
 						$order[$value] = $b;
 					}
 					$this->config->setValue("Main", "order", $order);
-					$this->config->store();
 				}
 				break;
 				
@@ -158,10 +155,49 @@ class ExternElementMain extends ExternElement {
 						$order[$value] = $b;
 					}
 					$this->config->setValue("Main", "order", $order);
-					$this->config->store();
 				}
 				break;
+			
+			case "show_group" :
+				$visible = $this->config->getValue("Main", "groupsvisible");
+				$groups = $this->config->getValue("Main", "groups");
+				// initialize groupsvisible if it isn't set in the config file
+				// all groups are visible (1)
+				if (!$visible && !$groups) {
+					if($groups = get_all_statusgruppen($this->config->range_id))
+						$groups = array_keys($groups);
+					else
+						break;
+					global $HTTP_POST_VARS;
+					$visible = $HTTP_POST_VARS["Main_groups"];
+				}
+				if (!$groups) {
+					if($groups = get_all_statusgruppen($this->config->range_id))
+						$groups = array_keys($groups);
+					else
+						break;
+				}
 				
+				if (in_array($value, $groups)) {
+					$visible[] = $value;
+					$visible = array_unique($visible);
+					$this->config->setValue("Main", "groupsvisible", $visible);
+				}
+				
+				break;
+			
+			case "hide_group" :
+				$visible = $this->config->getValue("Main", "groupsvisible");
+				// initialize groupsvisible if it isn't set in the config file
+				// all groups are visible (1)
+				if (!$visible) {
+					global $HTTP_POST_VARS;
+					$visible = $HTTP_POST_VARS["Main_groups"];
+				}
+				$visible = array_diff($visible, array($value));
+				$this->config->setValue("Main", "groupsvisible", $visible);
+				break;
+			
 			default :
 				return FALSE;
 		}

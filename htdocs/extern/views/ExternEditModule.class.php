@@ -45,7 +45,6 @@ class ExternEditModule extends ExternEditHtml {
 	}
 	
 	function editMainSettings ($field_names, $no_sort = "") {
-		
 		$order = $this->getValue("order");
 		$aliases = $this->getValue("aliases");
 		$visible = $this->getValue("visible");
@@ -66,7 +65,7 @@ class ExternEditModule extends ExternEditHtml {
 		$out .= "</tr>\n";
 		$this->css->switchClass();
 		
-		for ($i = 0; $i < sizeof($order); $i++) {
+		for ($i = 0; $i < sizeof($field_names); $i++) {
 			
 			// name of column
 			$out .= "<tr" . $this->css->getFullClass() . ">\n";
@@ -116,7 +115,7 @@ class ExternEditModule extends ExternEditHtml {
 			$out .= "border=\"0\" align=\"bottom\">\n&nbsp;";
 			
 			// visible
-			if ($visible[$order[$i]] == "TRUE") {
+			if ($visible[$order[$i]]) {
 				$out .= "<input type=\"image\" name=\"hide[{$order[$i]}]\" ";
 				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/on_small.gif\"";
 				$out .= tooltip(_("Spalte ausblenden"));
@@ -161,6 +160,77 @@ class ExternEditModule extends ExternEditHtml {
 		$info = _("Geben Sie den Namen der Konfiguration an.");
 		
 		return $this->editTextfieldGeneric($attribute, "", $info, 40, 40);
+	}
+	
+	function editGroups () {
+		$groups_db = get_statusgruppen_by_name($this->config->range_id, "''", TRUE);
+		
+		if (!$groups_db)
+			return FALSE;
+		
+		$title = _("Gruppen auswählen:");
+		$info = _("Wählen sie die Statusgruppen aus, die ausgegeben werden sollen.");
+		$groups_config = $this->getValue("groups");
+		
+		// initialize groups if this value isn't set in the config file
+		if (!$groups_config)
+			$groups_config = array_keys($groups_db);
+			
+		$groups_aliases = $this->getValue("groupsalias");
+		$groups_visible = $this->getValue("groupsvisible");
+		if (!$groups_visible)
+			$groups_visible = array();
+		
+		for ($i = 0; $i < sizeof($groups_config); $i++)
+			$groups[$groups_config[$i]] = $groups_aliases[$i];
+
+		$this->css->resetClass();
+		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
+		$out .= "<tr" . $this->css->getFullClass() . ">\n";
+		$out .= "<td width=\"42%\"><font size=\"2\"><b>" . _("Gruppenname") . "</b></font></td>\n";
+		$out .= "<td width=\"48%\"><font size=\"2\"><b>" . _("alternativer Gruppenname") . "</b></font>$error_sign</td>\n";
+		$out .= "<td width=\"1%\"><font size=\"2\"><b>" . _("Sichtbarkeit") . "</b></font></td>\n";
+		$out .= "<td width=\"9%\"><font size=\"2\">&nbsp;</font></td>\n";
+		$out .= "</tr>\n";
+		$this->css->switchClass();
+		
+		reset($groups_db);
+		foreach ($groups_db as $id => $name) {
+		
+			// name of group
+			if (strlen($name) > 30)
+				$name = substr($name, 0, 14) . "[...]" . substr($name, -10);
+			$out .= "<tr" . $this->css->getFullClass() . ">\n";
+			$out .= "<td nowrap=\"nowrap\"><font size=\"2\">&nbsp;" . htmlReady($name) . "</font></td>";
+			
+			// column headline
+			$out .= "<td nowrap=\"nowrap\"><input type=\"text\" name=\"Main_groupsalias[]\"";
+			$out .= "\" size=\"25\" maxlength=\"150\" value=\"";
+			$out .= $groups[$id] . "\"></td>\n";
+			
+			// visible
+			if (in_array($id, $groups_visible)) {
+				$out .= "<td align=\"center\"><input type=\"image\" name=\"hide_group[$id]\" ";
+				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/on_small.gif\"";
+				$out .= tooltip(_("Spalte ausblenden"));
+				$out .= "border=\"0\" align=\"middle\">\n</td>\n";
+			}
+			else {
+				$out .= "<td align=\"center\"><input type=\"image\" name=\"show_group[$id]\" ";
+				$out .= "img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/off_small.gif\"";
+				$out .= tooltip(_("Spalte einblenden"));
+				$out .= "border=\"0\" align=\"middle\">\n</td>\n";
+			}
+			$out .= "<td>&nbsp;</td></tr>\n";
+			$this->css->switchClass();
+		}
+		reset($groups_db);
+		foreach ($groups_db as $id => $name)
+			$out .= "<input type=\"hidden\" name=\"Main_groups[]\" value=\"$id\">\n";
+			
+		$out .= "</table>\n</td></tr>\n";
+		
+		return $out;
 	}
 	
 }
