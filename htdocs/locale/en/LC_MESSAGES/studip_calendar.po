@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-06 17:50+0100\n"
+"POT-Creation-Date: 2003-03-07 12:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -239,18 +239,54 @@ msgstr ""
 msgid "Kein Titel"
 msgstr ""
 
-#: calendar/views/bind.inc.php:45
+#: calendar/views/bind.inc.php:53
+msgid "Gruppe ändern"
+msgstr ""
+
+#: calendar/views/bind.inc.php:57
+msgid "Name"
+msgstr ""
+
+#: calendar/views/bind.inc.php:59
+msgid "Termine"
+msgstr ""
+
+#: calendar/views/bind.inc.php:60
+msgid "besucht"
+msgstr ""
+
+#: calendar/views/bind.inc.php:62
+msgid "Status"
+msgstr ""
+
+#: calendar/views/bind.inc.php:85
 msgid "nicht besucht"
 msgstr ""
 
-#: calendar/views/bind.inc.php:75
+#: calendar/views/bind.inc.php:116
 msgid "Information:"
 msgstr ""
 
-#: calendar/views/bind.inc.php:78
+#: calendar/views/bind.inc.php:119
 msgid ""
 "Termine aus den ausgew&auml;hlten Veranstaltungen werden in Ihren "
 "Terminkalender &uuml;bernommen."
+msgstr ""
+
+#: calendar/views/day.inc.php:49
+msgid "zurück"
+msgstr ""
+
+#: calendar/views/day.inc.php:61
+msgid "vor"
+msgstr ""
+
+#: calendar/views/day.inc.php:68
+msgid "zeig davor"
+msgstr ""
+
+#: calendar/views/day.inc.php:80
+msgid "zeig danach"
 msgstr ""
 
 #: calendar/views/edit.inc.php:8

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-06 17:50+0100\n"
+"POT-Creation-Date: 2003-03-07 12:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,7 +80,8 @@ msgstr ""
 
 #: chat/chat_client.php:191
 #, c-format
-msgid "Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert."
+msgid ""
+"Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert.$password"
 msgstr ""
 
 #: chat/chat_client.php:195
@@ -118,7 +119,7 @@ msgstr ""
 msgid "Hier</a> k&oumlnnen sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
-#: chat/chat_client.php:310 chat/chat_input.php:99 chat/chat_nicklist.php:76
+#: chat/chat_client.php:310 chat/chat_input.php:128 chat/chat_nicklist.php:76
 msgid "Sie sind nicht in diesem Chat angemeldet!"
 msgstr ""
 
@@ -164,19 +165,19 @@ msgid ""
 "ein eventuell vorhandenes Paßwort gelöscht"
 msgstr ""
 
-#: chat/chat_input.php:130
+#: chat/chat_input.php:159
 msgid "Chat Kommandos einblenden"
 msgstr ""
 
-#: chat/chat_input.php:133
+#: chat/chat_input.php:162
 msgid "Alle verfügbaren Smileys anzeigen"
 msgstr ""
 
-#: chat/chat_input.php:166
+#: chat/chat_input.php:195
 msgid "Nachricht senden"
 msgstr ""
 
-#: chat/chat_input.php:169
+#: chat/chat_input.php:198
 msgid "Chat verlassen"
 msgstr ""
 
