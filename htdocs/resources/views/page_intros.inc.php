@@ -160,7 +160,7 @@ switch ($resources_data["view"]) {
 	break;
 	case "openobject_schedule":
 		if ($resources_data["actual_object"])
-			$page_intro=sprintf(_("Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s"), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().") ausgeben lassen.");
+			$page_intro=sprintf(_("Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s ausgeben lassen"), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().")");
 		$title=$SessSemName["header_line"]." - "._("Ressourcenbelegung");
 	break;
 	case "openobject_assign":
