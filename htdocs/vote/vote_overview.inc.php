@@ -243,7 +243,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 						if ($vote->isError()){
 							createErrorReport ($vote);
 							$safeguard .= printSafeguard("",createErrorReport($vote));
-							return;
+							return $safeguard;
 						}
 					$type
 					? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde für die Teilnehmer sichtbar gemacht."),$votename))
@@ -263,14 +263,14 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			if ($vote->isError()){
 				createErrorReport ($vote);
 				$safeguard .= printSafeguard("",createErrorReport($vote));
-				return;
+				return $safeguard;
 			}
 			$vote->executeWrite();
 			$vote->executeSetVisible(YES);
 			if ($vote->isError()){
 				createErrorReport ($vote);
 				$safeguard .= printSafeguard("",createErrorReport($vote));
-				return;
+				return $safeguard;
 			}
 			$type
 			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde jetzt f&uuml;r die Teilnehmer sichtbar gemacht."),$votename))
@@ -288,7 +288,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			if ($vote->isError()){
 				createErrorReport ($vote);
 				$safeguard .= printSafeguard("",createErrorReport($vote));
-				return;
+				return $safeguard;
 			}
 			$type
 			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gestartet."),$votename))
@@ -301,7 +301,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			if ($vote->isError()){
 				createErrorReport ($vote);
 				$safeguard .= printSafeguard("",createErrorReport($vote));
-				return;
+				return $safeguard;
 			}
 			$type
 			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gestoppt."),$votename))
@@ -314,7 +314,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			if ($vote->isError()){
 				createErrorReport ($vote);
 				$safeguard .= printSafeguard("",createErrorReport($vote));
-				return;
+				return $safeguard;
 			}
 			$type
 			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde fortgesetzt."),$votename))
@@ -327,7 +327,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			if ($vote->isError()){
 				createErrorReport ($vote);
 				$safeguard .= printSafeguard("",createErrorReport($vote));
-				return;
+				return $safeguard;
 			}
 			$type
 			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde zur&uuml;ckgesetzt."),$votename))
@@ -345,7 +345,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			if ($vote->isError()){
 				createErrorReport ($vote);
 				$safeguard .= printSafeguard("",createErrorReport($vote));
-				return;
+				return $safeguard;
 			}
 			$type
 			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde gel&ouml;scht."),$votename))
