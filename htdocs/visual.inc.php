@@ -329,6 +329,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 			$what = wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
 		else
 			$what = symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		//	$what = symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
 		$what = explode('ü', $what);
 		$i = 0;
 		$all = '';
@@ -349,6 +350,7 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 		return wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
 	else
 		return symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+	//	return symbol(smile(latex(FixLinks(format($what), FALSE, FALSE, TRUE, $extern), $extern), $extern), $extern);
 }
 
 /**
@@ -445,7 +447,7 @@ function latex($text, $extern = FALSE) {
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
 		if ($extern) {
-			$extern_path = 'http://' . substr($EXTERN_SERVER_NAME, 0, -1);
+			$extern_path = $EXTERN_SERVER_NAME;
 			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $extern_path . $TEXCACHE_PATH);
 		}
 		else {
