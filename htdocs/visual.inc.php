@@ -376,7 +376,7 @@ function latex($text) {
 		// There can be many formatting tags that are
 		// handled by the latex renderer
 		// The tags and their LaTex templates are set in the
-		// vairable $LATEX_FORMATS (in config.inc.php)
+		// variable $LATEX_FORMATS (in local.inc)
 		//
 		foreach( $LATEX_FORMATS as $formatname => $format) {
 			$latex->setFormat($formatname, $format["template"]);
