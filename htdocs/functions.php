@@ -952,4 +952,28 @@ function get_users_online($active_time = 5){
 	return $online;
 }
 
+function get_ticket(){
+	global $sess, $last_ticket;
+	static $ticket;
+	if (!$sess->is_registered('last_ticket')){
+		$sess->register('last_ticket');
+	}
+	if (!$ticket){
+		$ticket = $last_ticket = md5(uniqid('ticket',1));
+	}
+
+	return $ticket;
+}
+
+function check_ticket($ticket){
+	global $sess, $last_ticket;
+	if (!$sess->is_registered('last_ticket')){
+		$sess->register('last_ticket');
+		$last_ticket = null;
+	}
+	$check = ($last_ticket && $last_ticket == $ticket);
+	$last_ticket = null;
+	return $check;
+}
+
 ?>
