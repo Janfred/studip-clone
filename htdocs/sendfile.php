@@ -179,10 +179,11 @@ if (!$type) {
 	$db->query("SELECT seminar_id AS object_id FROM dokumente WHERE dokument_id = '".$file_id."' ");
 	$db->next_record();
 	$object_type = get_object_type($db->f("object_id"));
-	echo $object_type;
 	if ($object_type == "inst")
 		$skip_check=TRUE;
 }
+
+echo $skip_check;
 
 //permcheck
 if (($type != 2) || ($skip_check)) { //if type 2 we donload from the tmp directory and skip permchecks
