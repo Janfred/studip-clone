@@ -240,7 +240,7 @@ if ($perm->have_perm("tutor")) {
 }
 
 if (/*($CHAT_ENABLE) || */ ($RESOURCES_ENABLE)) {
-	$structure["modules"]=array (topKat=>"", name=>"Tools", link=>"admin_modules_start.php", active=>FALSE);
+	$structure["modules"]=array (topKat=>"", name=>"Tools", link=>"export.php", active=>FALSE);
 }
 
 if ($perm->have_perm("admin")) {
