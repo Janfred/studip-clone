@@ -285,7 +285,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		<tr><td>
 		<br>
 		<!--<input type="IMAGE" <? echo makeButton("zurueck", "src"); ?> name="back" value="<? echo _("Zur&uuml;ck"); ?>">-->
-		<? if ($auth_mode == false) { ?>
+		<? if (($auth_mode == false) AND (!isset($delete))) { ?>
 		<input type="IMAGE" <? echo makeButton("weiter", "src"); ?> name="next" value="<? echo _("Weiter"); ?>">
 		<? }
 /*		else
