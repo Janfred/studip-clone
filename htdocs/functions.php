@@ -389,7 +389,7 @@ if (!($perm->have_perm("root"))) {
 				break;
 			case 1 :
 				if ($perm->have_perm("autor"))
-					$error_msg=$error_msg."info§" . _("Sie müssen sich erneut für diese Veranstaltung anmelden, um schreiben zu können!") . "<br>" . sprintf(_("Hier kommen sie zur %sFreischaltung%s der Veranstaltung."), "<a href=\"sem_verify.php\">", "</a>") . "§";
+					$error_msg=$error_msg."info§" . _("Sie müssen sich erneut für diese Veranstaltung anmelden, um Dateien hochzuladen und Beitr&auml;ge im Forum schreiben zu können!") . "<br>" . sprintf(_("Hier kommen sie zur %sFreischaltung%s der Veranstaltung."), "<a href=\"sem_verify.php\">", "</a>") . "§";
 				elseif ($perm->have_perm("user"))
 					$error_msg=$error_msg."info§" . _("Bitte folgen Sie den Anweisungen in der Registrierungsmail.") . "§";
 				else

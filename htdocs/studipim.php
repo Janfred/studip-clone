@@ -66,7 +66,7 @@ if ($auth->auth["uid"]!="nobody"){
 			}
 		} else {
 			if (preg_match("/chat_with_me/i", $db->f("message")) && $online[$db->f("user_id_snd")]){
-				$new_msg[] = date("H:i",$db->f("mkdate")). sprintf(_(" Sie wurden von <b>%s</b> zum chatten eingeladen!"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))));
+				$new_msg[] = date("H:i",$db->f("mkdate")). sprintf(_(" Sie wurden von <b>%s</b> zum Chatten eingeladen!"),htmlReady(get_fullname_from_uname($db->f("user_id_snd"))));
 			} else {
 				if ($db->f("user_id_snd") == "____%system%____"){
 					$new_msg[]=date("H:i",$db->f("mkdate")) . sprintf(_(" Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>","</a>");

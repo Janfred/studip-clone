@@ -76,9 +76,9 @@ if ($msg)
 	<tr>
 		<td class="blank"><br><blockquote>
 		<?
-		print(_("Hier k&ouml;nnen Sie sehen, wer ausser Ihnen im Moment online ist.") . "<p>");
-		printf(_("Sie k&ouml;nnen den Usern eine Nachricht schicken %s oder ihn zum Chatten %s einladen."), sprintf("<img src=\"pictures/nachricht1.gif\" width=\"24\" height=\"21\" %s border=\"0\"><br>", tooltip(_("Nachricht an User verschicken"))), sprintf("<img src=\"pictures/chat1.gif\" width=\"24\" height=\"21\" %s border=\"0\">", tooltip(_("zum Chatten einladen"))));
-		print("\n<br>" . "Wenn Sie auf den Namen klicken, kommen Sie zu seiner Homepage.");
+		print(_("Hier k&ouml;nnen Sie sehen, wer au&szlig;er Ihnen im Moment online ist.") . "<p>");
+		printf(_("Sie k&ouml;nnen diesen Usern eine Nachricht schicken %s oder sie zum Chatten %s einladen."), sprintf("<img src=\"pictures/nachricht1.gif\" width=\"24\" height=\"21\" %s border=\"0\"><br>", tooltip(_("Nachricht an User verschicken"))), sprintf("<img src=\"pictures/chat1.gif\" width=\"24\" height=\"21\" %s border=\"0\">", tooltip(_("zum Chatten einladen"))));
+		print("\n<br>" . _("Wenn Sie auf den Namen klicken, kommen Sie zur Homepage des Users."));
 
 		if ($SessSemName[0] && $SessSemName["class"] == "inst")
 			echo "<br /><br /><a href=\"institut_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung") . "</a>";
@@ -146,7 +146,7 @@ if (is_array($n_buddies))
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
 		echo "\n<td class=\"steel1\" width=\"50%\" align=\"center\" colspan=5><font size=-1>";
 		echo _("Sie haben keine Buddies ausgew&auml;hlt.") . "<br />";
-		printf(_("Zum Addressbuch (%d Eintr&auml;ge) klicken Sie %shier%s"), GetSizeofBook(), "<a href=\"contact.php\">", "</a>");
+		printf(_("Zum Adressbuch (%d Eintr&auml;ge) klicken Sie %shier%s"), GetSizeofBook(), "<a href=\"contact.php\">", "</a>");
 		echo "</font></td>";
 		echo "\n</tr></table></td>";
 
@@ -183,7 +183,7 @@ if (is_array($n_buddies))
 				} else {
 					echo "&nbsp;";
 				}
-				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddylist entfernen"))." border=\"0\"></a></td></tr>";
+				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
 				$cssSw->switchClass();					
 			}
 		}
@@ -202,7 +202,7 @@ if (is_array($n_buddies))
 						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
 				}
 				else echo "&nbsp;";
-				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddylist entfernen"))." border=\"0\"></a></td></tr>";
+				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
 			}
 		}
 		echo "\n<tr><td class=\"blank\" width=\"50%\" align=\"center\" colspan=6><font size=-1><br>Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";

@@ -447,7 +447,7 @@ if ($institut_members_data["show"] == "funktion") {
 	}
 }
 elseif ($institut_members_data["show"] == "status") {
-	$inst_permissions = array("admin" => _("Admin"), "dozent" => _("Dozent"), "tutor" => _("Tutor"),
+	$inst_permissions = array("admin" => _("Admin"), "dozent" => _("Dozent(in)"), "tutor" => _("Tutor(in)"),
 														"autor" => _("Autor"), "user" => _("User"));
 	foreach ($inst_permissions as $key => $permission) {
 		$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.raum, ui.sprechzeiten, ui.Telefon,

@@ -39,7 +39,7 @@ if ($forumsend=="bla"){
 <td class="blank" width="100%">
 
 
-<blockquote><br><?print _("Auf dieser Seite können Sie die Bedienung des Stud.IP Forensystems an Ihre Bedürfnisse anpassen.");?>
+<blockquote><br><?print _("Auf dieser Seite k&ouml;nnen Sie die Bedienung des Stud.IP-Forensystems an Ihre Bed&uuml;rfnisse anpassen.");?>
 </blockquote><p>
 <table width="99%" border=0 cellpadding=2 cellspacing=0 align="center"  border=0>
 <form action="<?echo $PHP_SELF?>?view=Forum" method="POST">

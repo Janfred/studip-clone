@@ -35,7 +35,7 @@ function change_messaging_view() {
 	?>
 	<table width ="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr>
-		<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<?=_("Einstellungen f&uuml;r das Stud.IP Messaging anpassen")?></b>
+		<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<?=_("Einstellungen f&uuml;r das Stud.IP-Messaging anpassen")?></b>
 		</td>
 	</tr>
 	<tr>
@@ -77,7 +77,7 @@ function change_messaging_view() {
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-					&nbsp; &nbsp; <b><?=_("Stud.IP Messenger")?></b>
+					&nbsp; &nbsp; <b><?=_("Stud.IP-Messenger")?></b>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
@@ -109,7 +109,7 @@ function change_messaging_view() {
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["show_only_buddys"]) echo " checked"; ?>
 					 name="show_only_buddys">
-					&nbsp; <font size=-1><?=_("Nur Buddys in der &Uuml;bersicht der aktiven Benutzer anzeigen")?></font>
+					&nbsp; <font size=-1><?=_("Nur Buddies in der &Uuml;bersicht der aktiven Benutzer anzeigen")?></font>
 					</td>
 				</tr>
 				<?
@@ -132,13 +132,13 @@ function change_messaging_view() {
 							}
 					?>
 					</select>
-					&nbsp; <font size=-1><?=_("Anzahl der Minuten, nach denen ein Nutzer nicht mehr angezeigt wird")?></font>
+					&nbsp; <font size=-1><?=_("Anzahl der Minuten, nach denen ein(e) Nutzer(in) nicht mehr angezeigt wird")?></font>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<?echo _("Buddys verwalten:");?>
+					<?echo _("Buddies verwalten:");?>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>"><font size=-1>&nbsp;&nbsp;
 					<?

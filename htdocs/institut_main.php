@@ -98,7 +98,7 @@ if ($nclose)
 	$db->next_record();
 
 	if ($db->f("Strasse")) {
-		echo "<b>" . _("Strasse:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br>";
+		echo "<b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br>";
 	}
 		
 	if ($db->f("Plz")) {

@@ -101,7 +101,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 					$message.=$this->sig_string.$my_messaging_settings["sms_sig"];
 			} else {
 				setTempLanguage($db2->f("user_id"));
-				$message.=$this->sig_string. _("Diese Nachricht wurde automatisch vom System generiert. Sie können darauf nicht antworten.");
+				$message.=$this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
 			}
 			$db3->query("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='$snd_uname', mkdate='".time()."', message='$message' ");
@@ -110,7 +110,7 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 			if ($CHAT_ENABLE) {
 				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 				setTempLanguage($db2->f("user_id"));
-				$chatMsg = sprintf(_("Du hast eine SMS von <b>%s</b> erhalten!"),htmlReady($db->f("fullname")." (".$db->f("username").")"));
+				$chatMsg = sprintf(_("Sie haben eine SMS von <b>%s</b> erhalten!"),htmlReady($db->f("fullname")." (".$db->f("username").")"));
 				restoreLanguage();
 				$chatMsg .= "<br></i>" . formatReady(stripslashes($message))."<i>";
 				foreach($chatServer->chatDetail as $chatid => $wert)
@@ -174,14 +174,14 @@ function insert_chatinv ($rec_uname, $chat_id, $msg = "", $user_id = false) {
 		$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
 		$db2->next_record();
 		setTempLanguage($db2->f("user_id"));
-		$message = sprintf(_("Du wurdest von %s in den Chatraum %s eingeladen !"),$db->f("fullname")." (".$db->f("username").")",$chatServer->chatDetail[$chat_id]['name']) 
+		$message = sprintf(_("Sie wurden von %s in den Chatraum %s eingeladen!"),$db->f("fullname")." (".$db->f("username").")",$chatServer->chatDetail[$chat_id]['name']) 
 			. "\n - - - \n" . stripslashes($msg);
 		
 		$m_id = md5(uniqid("voyeurism"));
 		$db3->query ("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='".$db->f("username")."', mkdate='".time()."', message='" . mysql_escape_string($message) . "', chat_id='$chat_uniqid' ");
 		
 		//Benachrichtigung in alle Chaträume schicken
-		$chatMsg = sprintf(_("Du wurdest von <b>%s</b> in den Chatraum <b>%s</b> eingeladen !"),htmlReady($db->f("fullname")." (".$db->f("username").")"),htmlReady($chatServer->chatDetail[$chat_id]['name']));
+		$chatMsg = sprintf(_("Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"),htmlReady($db->f("fullname")." (".$db->f("username").")"),htmlReady($chatServer->chatDetail[$chat_id]['name']));
 		$chatMsg .= "<br></i>" . formatReady(stripslashes($msg))."<i>";
 		restoreLanguage();
 		foreach($chatServer->chatDetail as $chatid => $wert){

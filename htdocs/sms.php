@@ -54,7 +54,7 @@ if ($cmd=="delete_all") {
 		else
 			$msg="msg§" . sprintf(_("Es wurden %s Nachrichten gel&ouml;scht."), $count_deleted_sms);
 	else
-		$msg="error§" . _("Es liegen keine Nachrichten vor, die gel&ouml;scht werden konnten.");
+		$msg="error§" . _("Es liegen keine Nachrichten zum L&ouml;schen vor.");
 	}
 	
 //Nachricht loeschen
@@ -97,7 +97,7 @@ if ($cmd=="insert") {
 			$msg.= sprintf(_("Die Nachricht wurde an %s Gruppenmitglieder verschickt!"), $group_count);
 	}
 	if ($count < 0)
-		$msg="error§" . _("Ihre Nachricht konnte nicht gesendet werden, die Nachricht enth&auml;lt keinen Text.");
+		$msg="error§" . _("Ihre Nachricht konnte nicht gesendet werden. Die Nachricht enth&auml;lt keinen Text.");
 	elseif ((!$count) && (!$buddy_count) && (!$group_count))
 		$msg="error§" . _("Ihre Nachricht konnte nicht gesendet werden.");
 		
@@ -147,7 +147,7 @@ if ($cmd=="write") {
 		<td class="blank">
 		<blockquote>
 		<?
-		echo _("Schreiben Sie hier eine Nachricht an einen anderen Benutzer:");
+		echo _("Schreiben Sie hier eine Nachricht an eine(n) anderen Benutzer(in):");
 		if ($SessSemName[0] && $SessSemName["class"] == "inst")
 			echo "<br /><br /><a href=\"institut_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung") . "</a>";
 		elseif ($SessSemName[0])
