@@ -55,6 +55,7 @@ $lib = new EvalTemplateGUI();
 
 /* Set variables ----------------------------------------------------------- */
 $rangeID = ($rangeID) ? $rangeID : $SessSemName[1];
+
 if (empty ($rangeID)) {
     $rangeID = $user->id;
 }

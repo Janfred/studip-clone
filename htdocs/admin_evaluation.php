@@ -47,13 +47,22 @@ include_once($ABSOLUTE_PATH_STUDIP . "header.php");
 
 
 
-$the_range = $rangeID;
+$the_range = $_REQUEST['rangeID'];
 
-if (get_Username($the_range))
-	$the_range = get_Username($the_range);
+if ($the_range){
+	if (get_Username($the_range))
+		$the_range = get_Username($the_range);
+	if (get_Userid($the_range))
+		$isUserrange = 1;
+} elseif ($_REQUEST['view']){
+	$the_range = $SessSemName[1];
+}
 
-if (get_Userid($the_range))
+if (empty($the_range)) {
+	$the_range = $user->id;
 	$isUserrange = 1;
+}
+
 
 if ($the_range != $auth->auth['uname'] && $the_range != 'studip' && !$isUserrange){
 	$view_mode = get_object_type($the_range);

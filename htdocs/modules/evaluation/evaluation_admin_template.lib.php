@@ -1022,6 +1022,12 @@ class EvalTemplateGUI {
       $infoPreview =  array ("icon" => EVAL_PIC_PREVIEW,
               "text" => $previewLink);
 
+      if (get_Username($rangeID))
+          $rangeID = get_Username($rangeID);
+
+      if (empty ($rangeID))
+          $rangeID = get_Username($user->id);
+
       $infoOverviewText = sprintf(_("Zurück zur %s Evaluations-Verwaltung %s"),
 				  "<a href=\"admin_evaluation.php?page=overview".
 				  "&check_abort_creation_button_x=1".

@@ -66,7 +66,11 @@ $lib = new EvalOverview ($db, $perm, $user);
 if( $sess->is_registered("evalID") )   $sess->unregister("evalID");
 if( $sess->is_registered("rangeID") )  $sess->unregister("rangeID");
 
+if (!empty($the_range))
+     $rangeID = $the_range;
+
 $rangeID = ($rangeID) ? $rangeID : $SessSemName[1];
+
 if (empty ($rangeID) || ($rangeID == get_username ($user->id)))
      $rangeID = $user->id;
 

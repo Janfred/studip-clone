@@ -763,8 +763,12 @@ class EvalOverview {
     /* --------------------------------------------------------------------- */
 
 #$form->addContent ($select);
-
     $form->addContent (EvalCommon::createSubmitButton ("erstellen", _("Neue Evaluation erstellen")));
+    $input = new  HTMLempty ("input");
+    $input->addAttr ("type","hidden");
+    $input->addAttr ("name","rangeID");
+    $input->addAttr ("value",$currentRangeID);
+    $form->addContent ($input);
     $form->addContent (new HTMLempty ("br"));
     $form->addContent (new HTMLempty ("br"));
 
