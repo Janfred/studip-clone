@@ -327,7 +327,7 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	           ."WHERE user_id='".$db->f("user_id")."' AND "
 			       ."su.status LIKE 'dozent' AND ((start_time >= {$all_semester[$last_sem]['beginn']} "
 			       ."AND start_time <= {$all_semester[$last_sem]['beginn']}) OR (start_time <= {$all_semester[$last_sem]['ende']} "
-						 ."AND duration_time = -1)) AND s.status IN ('$types') "
+						 ."AND duration_time = -1)) AND s.status IN ('$types') AND s.visible = 1 "
 						 ."ORDER BY s.mkdate DESC";
 			
 		$db1->query($query);
@@ -428,10 +428,6 @@ function head (&$this, $db, $a) {
 		$pic_max_width = $pic_width;
 		$pic_max_height = $pic_height;
 	}
-/*	else {
-		$pic_max_width = "";
-		$pic_max_height = "";
-	}*/
 
 	$this->config->config["PersondetailsHeader"]["img_width"] = $pic_max_width;
 	$this->config->config["PersondetailsHeader"]["img_height"] = $pic_max_height;
