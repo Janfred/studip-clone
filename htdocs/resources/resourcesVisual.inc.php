@@ -93,7 +93,6 @@ class ShowList extends ShowTreeRow{
 			$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
 			$open="close";
 		}
-				//create a link onto the titel, too
 
 		$titel='';
 		if ($resObject->getCategoryName())
@@ -133,7 +132,7 @@ class ShowList extends ShowTreeRow{
 				$content=htmlReady($resObject->getDescription());
 			}
 			if (($admin_buttons) && ($perms == "admin")) {
-				if (!$weitere) {
+				if ($resObject->isDeletable()) {
 					$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
 				} 
 				$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
@@ -331,7 +330,7 @@ class ShowThread extends ShowTreeRow {
 	
 				if ($weitere)
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
-				elseif ($perms == "admin")
+				elseif (($perms == "admin") && ($resObject->isDeletable()))
 					$edit.= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen", "img")."</a>";
 				
 				if ($resources_data["move_object"] == $resObject->id) 
