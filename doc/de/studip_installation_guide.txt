@@ -530,6 +530,10 @@ Password: 	testing
 
 Also einfach auf login, Benutzername und Passwort des root eingeben
 
-- The Stud.IP Crew <crew@studip.de>
+Neue Nutzeraccounts können entwender über die globale Nutzerverwaltung (Schlüssel-
+Symbol in der Kopfzeile des Systems) oder über die Selbstregistrierung (wenn diese
+in der local.inc aktiviert wurde) erstellt werden.
+
+- The Stud.IP Crew <crew@studip.de> 2004
 
 $Id$
