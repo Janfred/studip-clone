@@ -123,7 +123,8 @@ if (is_array ($online)) {
 			else
 				$inactive_buddies[]=array(get_nachname(get_userid($a["username"])), $a["username"]);
 			}
-		sort ($inactive_buddies);
+		if (is_array($inactive_buddies))
+			sort ($inactive_buddies);
 		}
 	
 	//Erzeugen der Liste anderer Nutzer	
