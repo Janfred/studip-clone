@@ -220,10 +220,10 @@ function PrintInstitutMembers ()
 	echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Institute</font><br>";
 	echo "&nbsp; <select name=\"InstitutMembers\">";
 	$db=new DB_Seminar;
-	$query = "SELECT DISTINCT b.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
+	$query = "SELECT a.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
 			"LEFT JOIN auth_user_md5  b USING(user_id) ".
 			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$range_id')  ".
-			"WHERE d.seminar_id = '$range_id' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
+			"WHERE d.seminar_id = '$range_id' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) GROUP BY a.user_id ORDER BY Nachname";
 	$db->query($query); // ergibt alle berufbaren Personen
 		printf ("<option>---</option>");
 	while ($db->next_record()) {
