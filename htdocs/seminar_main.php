@@ -69,9 +69,11 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 if ($SessSemName[1] =="") {
-	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Kein Objekt gew&auml;hlt",
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+	parse_window ("error§" . _("Sie haben kein Objekt gew&auml;hlt.") . " <br><br><font size=-1 color=black>"
+				. _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.") . "<br /><br /> "
+				. sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "</font>", "§",
+				_("Kein Objekt gew&auml;hlt"),
+				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
 	die;
 } else {
 	include "links_openobject.inc.php";
@@ -94,27 +96,27 @@ if ($SessSemName[1] =="") {
 
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]), " - Kurzinfo"; ?>
+	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]), " - " . _("Kurzinfo"); ?>
 	</b></td></tr>
 	<tr><td class="blank" valign="top"><blockquote>
 	<?
 
 	if ($SessSemName[3]) {
-		echo "<br /><b>Untertitel: </b>"; echo htmlReady($SessSemName[3]); echo"<br>";
+		echo "<br /><b>" . _("Untertitel:") . " </b>"; echo htmlReady($SessSemName[3]); echo"<br>";
 	}
 
-	echo "<br><b>Zeit: </b>", view_turnus($SessionSeminar, FALSE);
+	echo "<br><b>" . _("Zeit:") . " </b>", view_turnus($SessionSeminar, FALSE);
 
 	if (getRoom($SessSemName[1])) {
-		echo "<br><b>Ort: </b>".getRoom($SessSemName[1]);
+		echo "<br><b>" . _("Ort:") . " </b>".getRoom($SessSemName[1]);
 	}
 
 	$db=new DB_Seminar;
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY Nachname");
 	if ($db->affected_rows() > 1)
-		printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterInnen" : "DozentInnen");
+		printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterInnen") : _("DozentInnen"));
 	else
-		printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "LeiterIn" : "DozentIn");
+		printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterIn") : _("DozentIn"));
 
 	$i=0;
 	while ($db->next_record()) {
