@@ -87,6 +87,7 @@ function start_messenger() {
 	{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
 	</script>
 	<?
+	// $messenger_started = TRUE;
 }
 
 //redirect the user whre he want to go today....
@@ -136,6 +137,7 @@ if ($SessionStart==0) {
 	$sess->register("SessionStart");
 	$sess->register("SessionSeminar");
 	$sess->register("SessSemName");
+	$sess->register("messenger_started");
 
 	// Language Settings
 	$sess->register("_language");
@@ -196,10 +198,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		//redirect user to another page if he want to
 		if (($my_studip_settings["startpage_redirect"]) && ($i_page == "index.php"))
 			startpage_redirect($my_studip_settings["startpage_redirect"]);
-
-		//start messenger, if set
-		if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]))
-			start_messenger();
+			$redirected = TRUE;
 	}
 }
 
@@ -207,6 +206,14 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 // init of output via I18N
 
 $_language_path = init_i18n($_language);
+
+
+//start messenger, if set
+if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$messenger_started) && (!$redirected)) {
+	start_messenger();
+	$messenger_started = TRUE;
+}
+
 
 //include "tracking.inc.php"; //teomporaer. hier wird der User getrackt. 
 ?>
