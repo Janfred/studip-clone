@@ -67,6 +67,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $isPreview = ($_GET["previewResults"] || $_POST["previewButton_x"]) &&
        ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
    $isAssociated = $vote->voteDB->isAssociated ($vote->getVoteID(), $userID);
+   $isStopped = $vote->isStopped();
 
    $revealNames = $_GET["revealNames"] &&
        $vote->getVoteID() == $_GET["voteopenID"] &&
@@ -94,7 +95,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $html .= "<div align=\"center\">\n";
    
    /* Submitbutton --------------------------------------------------------- */
-   if (!($isAssociated || $isPreview)) {
+   if (!($isAssociated || $isPreview || $isStopped)) {
       $html .= 
 	 "<input type=\"image\" style=\"vertical-align:middle;\" " .
 	 "name=\"voteButton\" " .
@@ -105,7 +106,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    /* ---------------------------------------------------------------------- */
 
    /* Viewbutton ----------------------------------------------------------- */
-   if ( ! ($isAssociated || $isPreview) &&
+   if ( ! ($isAssociated || $isPreview || $isStopped) &&
 	($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm)
 	) {
       $html .= 
@@ -148,7 +149,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 
    /* Sortbutton ----------------------------------------------------------- */
    if ( count($vote->getAnswers()) > 2 && 
-	($isAssociated || $isPreview) &&
+	($isAssociated || $isPreview || $isStopped) &&
 	$vote->isInUse() &&
 	! (($vote->getResultVisibility() == VOTE_RESULTS_AFTER_END ||
 	    $vote->getResultVisibility() == VOTE_RESULTS_NEVER) &&
@@ -174,7 +175,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 
    /* 'Show names'-button -------------------------------------------------- */
    if ( ! $vote->isAnonymous()
-	&& ($isAssociated || $isPreview)
+	&& ($isAssociated || $isPreview || $isStopped)
 	&& $vote->isInUse()
 	&& ! (($vote->getResultVisibility() == VOTE_RESULTS_AFTER_END
 	       || $vote->getResultVisibility() == VOTE_RESULTS_NEVER)
