@@ -80,15 +80,18 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 	// Die Generierung der Tabellenansicht erfolgt mit Hilfe geklonter Termine,
 	// da die Anfangs- und Endzeiten zur korrekten Darstellung evtl. angepasst
 	// werden muessen
-	for ($i = 0;$i < sizeof($day_obj->events);$i++) {
+	for ($i = 0; $i < sizeof($day_obj->events); $i++) {
 		if (($day_obj->events[$i]->getEnd() >= $day_obj->getStart() + $start)
 				&& ($day_obj->events[$i]->getStart() < $day_obj->getStart() + $end + 3600)) {
-				
-			if ($day_obj->events[$i]->isDayEvent()) {
+			
+			if ($day_obj->events[$i]->isDayEvent()
+					|| ($day_obj->events[$i]->getStart() <= $day_obj->getStart()
+					&& $day_obj->events[$i]->getEnd() >= $day_obj->getEnd())) {
 				$cloned_day_event = $day_obj->events[$i];
 				$cloned_day_event->setStart($day_obj->getStart());
-				$cloned_day_event->setEnd($day_obj->getEnd() - 59);
+				$cloned_day_event->setEnd($day_obj->getEnd());
 				$tmp_day_event[] = $cloned_day_event;
+				$map_day_events[] = $i;
 			}
 			else {
 				$cloned_event = $day_obj->events[$i];
@@ -184,13 +187,14 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		$day_event_row[0] .= " valign=\"bottom\"><table width=\"100%\" border=\"0\" cellpadding=\"";
 		//$day_event_row[0] .= ($padding / 2) . "\" cellspacing=\"1\">\n";
 		$day_event_row[0] .= "0\" cellspacing=\"0\">";
+		$i = 0;
 		foreach ($tmp_day_event as $day_event) {
 			$category_style = $day_event->getCategoryStyle($bg_image);
 			$title = fit_title($day_event->getTitle(), 1, 1, $title_length);
 			$title_str = sprintf("<a style=\"color: #FFFFFF; font-size:10px;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%s%s\" %s>"
 													, $day_event->getId(), $day_event->getStart()
-													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
-													, js_hover($day_event));
+													, get_class($day_event) == 'seminarevent' ? '&evtype=sem' : ''
+													, js_hover($day_obj->events[$map_day_events[$i]]));
 			$title_str .= $title . '</a>';
 			$day_event_row[0] .= "<tr><td height=\"20\" valign=\"top\" style=\"border-style:solid; border-width:1px; border-color:";
 			$day_event_row[0] .= $category_style['color'] . "; background-image:url(";
@@ -202,6 +206,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				$day_event_row[0] .= "border=\"0\"" . tooltip($day_event->toStringRecurrence()) . "></div>";
 			}
 			$day_event_row[0] .= "</td>";
+			$i++;
 		}
 		if ($link_edit) {
 			$tooltip = tooltip(_("neuer Tagestermin"));
@@ -744,27 +749,38 @@ function js_hover ($aterm) {
 	if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // Hovern
 		$jscript_text = array();
 		
-		$jscript_title = JSReady($aterm->getTitle());
+		$jscript_text = '<b>' . _("Zusammenfassung:") . ' </b>'
+				. htmlReady($aterm->getTitle()) . '<hr>';
 		
-		if (get_class($aterm) == 'seminarevent')
-			$jscript_text[] = '<b>' . _("Veranstaltung:") . ' </b> ' . $aterm->getSemName();
-		if ($aterm->getDescription())
-			$jscript_text[] = '<b>' . _("Beschreibung:") . ' </b> ' . $aterm->getDescription();
-		if ($categories = $aterm->toStringCategories())
-			$jscript_text[] = '<b>' . _("Kategorie:") . " </b> $categories";
-		if ($aterm->getProperty('LOCATION'))
-			$jscript_text[] = '<b>' . _("Ort:") . ' </b> ' . $aterm->getProperty('LOCATION');
-		if (get_class($aterm) != 'seminarevent') {
-			$jscript_text[] = '<b>' . _("Priorit&auml;t:") . ' </b>' . $aterm->toStringPriority();
-			$jscript_text[] = '<b>' . _("Zugriff:") . ' </b>' . $aterm->toStringAccessibility();
-			$jscript_text[] = '<b>' . _("Wiederholung:") . ' </b>' . $aterm->toStringRecurrence();
+		if (get_class($aterm) == 'seminarevent') {
+			$jscript_text .= '<b>' . _("Veranstaltung:") . ' </b> '
+					. htmlReady($aterm->getSemName()) . '<br>';
 		}
-			
-		$jscript_text = "'" . JSReady(implode('<br />', $jscript_text), 'contact')
+		if ($aterm->getDescription()) {
+			$jscript_text .= '<b>' . _("Beschreibung:") . ' </b> '
+					. htmlReady($aterm->getDescription()) . '<br>';
+		}
+		if ($categories = $aterm->toStringCategories()) {
+			$jscript_text .= '<b>' . _("Kategorie:") . ' </b> '
+					. htmlReady($categories) . '<br>';
+		}
+		if ($aterm->getProperty('LOCATION')) {
+			$jscript_text .= '<b>' . _("Ort:") . ' </b> '
+					. htmlReady($aterm->getProperty('LOCATION')) . '<br>';
+		}
+		if (get_class($aterm) != 'seminarevent') {
+			$jscript_text .= '<b>' . _("Priorit&auml;t:") . ' </b>'
+					. htmlReady($aterm->toStringPriority()) . '<br>';
+			$jscript_text .= '<b>' . _("Zugriff:") . ' </b>'
+					. htmlReady($aterm->toStringAccessibility()) . '<br>';
+			$jscript_text .= '<b>' . _("Wiederholung:") . ' </b>'
+					. htmlReady($aterm->toStringRecurrence()) . '<br>';
+		}
+		
+		$jscript_text = "'" . JSReady($jscript_text, 'contact')
 								. "',CAPTION,'"
-								. strftime("%H:%M-",$aterm->getStart())
-								. strftime("%H:%M",$aterm->getEnd())
-								. "&nbsp; &nbsp; ". $jscript_title
+								. JSReady($aterm->toStringDate('SHORT_DAY'))
+							//	. "&nbsp; &nbsp; ". $jscript_title
 								. "',NOCLOSE,CSSOFF";
 		
 		return " onmouseover=\"return overlib($jscript_text);\" onmouseout=\"return nd();\"";
