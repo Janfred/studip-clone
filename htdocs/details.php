@@ -436,7 +436,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 					if ($db3->num_rows() > 2)
 						print "</li>";
 				}
-				?>
+				?>&nbsp; 
 				</td>
 			</tr>
 			<? } ?>
