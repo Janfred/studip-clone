@@ -60,6 +60,7 @@ $xml_groupnames_person = array(
 );
 
 $xml_names_person = array( 
+	"title"			=>		"titel",
 	"Vorname"		=>		"vorname",
 	"Nachname"		=>		"nachname",
 	"geschlecht"		=>		"geschlecht",

@@ -135,7 +135,7 @@ function export_sem($inst_id)
 			elseif ($db->f($key) != "") 
 				$data_object .= xml_tag($val, $db->f($key));
 		}
-		$db2->query('SELECT * FROM auth_user_md5 
+		$db2->query('SELECT auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title FROM auth_user_md5 
 					LEFT JOIN user_info USING(user_id) 
 					LEFT JOIN seminar_user USING(user_id) 
 					LEFT JOIN seminare USING(seminar_id) 
@@ -143,7 +143,10 @@ function export_sem($inst_id)
 		$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
 		while ($db2->next_record()) 
 			{
-				$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $db2->f("Vorname") . " " . $db2->f("Nachname"));
+				$content_string = $db2->f("Vorname") . " " . $db2->f("Nachname");
+				if ($db2->f("title") != "") 
+					$content_string = $db2->f("title") . " " . $content_string;
+				$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $content_string);
 			}
 		$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup2"] );
 		$data_object .= xml_close_tag( $xml_groupnames_lecture["object"] );
@@ -182,7 +185,7 @@ function export_pers($inst_id)
 
 	$db->query('SELECT statusgruppen.name, aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
 		ui.sprechzeiten, ui.Telefon, ui.Fax, aum.Email, 
-		aum.username, info.Home, info.geschlecht FROM statusgruppen 
+		aum.username, info.Home, info.geschlecht, info.title FROM statusgruppen 
 		LEFT JOIN statusgruppe_user USING(statusgruppe_id) 
 		LEFT JOIN auth_user_md5 aum USING(user_id) 
 		LEFT JOIN user_info info USING(user_id) 
