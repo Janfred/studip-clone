@@ -147,25 +147,19 @@ function imaging($img,$img_size,$img_name)
    }
   else
    {
-    //Tempr&auml;re Datei
-   $tmpimg = "/tmp/tmp.pnm";
-   //Konvertierung nach PNM
-   if ($ext == "jpg")
-     { system($DJPEG_PATH ." $newfile >$tmpimg"); }
-   else if ($ext == "gif")
-    { system($GIFTOPNM_PATH ." $newfile >$tmpimg"); }
-
     $imgsize = GetImageSize($img);
-   //Bildgr&ouml;&szlig;e &uuml;berpf&uuml;fen
-   if (($imgsize[0] > 200) || ($imgsize[1] > 250))
-    {
-    //Neues Bild
-    system($PNMSCALE_PATH ." -xysize 200 250 $tmpimg | ". $CJPEG_PATH ." -smoo 10 -qual 60 >$newfile");
-    }
-  else
-   {
-      system($CJPEG_PATH ." -smoo 10 -qual 60 -outfile $newfile $tmpimg");
-     }
+   	// Check picture size
+   	if (($imgsize[0] > 200) || ($imgsize[1] > 250)) {
+    	//Temporaere Datei
+   		$tmpimg = "/tmp/tmp.pnm";
+   		//Konvertierung nach PNM
+   		if ($ext == "jpg")
+    		{ system($DJPEG_PATH ." $newfile >$tmpimg"); }
+   		else if ($ext == "gif")
+    		{ system($GIFTOPNM_PATH ." $newfile >$tmpimg"); }
+    	system($PNMSCALE_PATH ." -xysize 200 250 $tmpimg | ". $CJPEG_PATH ." -smoo 10 -qual 60 >$newfile");
+   	}
+	 }
 
    $this->msg = "msg§Die Bilddatei wurde erfolgreich hochgeladen! Eventuell sehen Sie das neue Bild erst nach einem Reload dieser Seite.";
    $this->priv_msg= "Eine neue Bilddatei wurde hochgeladen.";
