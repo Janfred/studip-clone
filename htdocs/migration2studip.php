@@ -181,8 +181,8 @@ if ($ILIAS_CONNECT_ENABLE)
 		echo "<tr><td>";
 		if ($this_ilias_id != false)
 		{
-			show_user_modules($auth->auth["uname"]);
-			echo "<br>";
+			show_user_modules($auth->auth["uid"]);
+			echo "";
 		}
 		echo "<br><b>" . _("Sie k&ouml;nnen einen neuen Account anlegen oder einen bestehenden einbinden:") . "</b><br><br>";
 //		echo "<input type=\"RADIO\" name=\"mode\" value=\"i2s\">&nbsp;";
