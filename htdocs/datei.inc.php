@@ -101,6 +101,9 @@ function parse_link($link) {
 	}
 	$parsed_link = parse_header($response);
 	//print_r ($parsed_link);
+	
+	// Weg über einen Locationheader:
+	
 	if (($parsed_link["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) && $parsed_link["Location"]) {
 		$url_parts = @parse_url( $parsed_link["Location"] );
 		$documentpath = $url_parts["path"];
