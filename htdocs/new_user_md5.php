@@ -41,15 +41,16 @@ function generate_password($length) {
 }
 
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); // Funktionen fuer Nachrichtenmeldungen
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Wir brauchen die Funktionen zum Loeschen von Terminen...
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); // Wir brauchen den Namen der Uni
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 		// initialise Stud.IP-Session
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); 		// Funktionen fuer Nachrichtenmeldungen
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 		// Wir brauchen die Funktionen zum Loeschen von Terminen...
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Wir brauchen den Namen der Uni
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); 		// Wir brauchen die Funktionen zum Loeschen der folder
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
-require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
+require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	// Enthaelt Funktionen zum Updaten der Wartelisten
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	// Enthaelt Funktionen fuer Statusgruppen
+require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 	// Enthaelt Funktionen fuer Adressbuchverwaltung
+require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 	// Enthaelt Funktionen fuer Nachrichtenubermittlung
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 if ($RESOURCES_ENABLE) {
@@ -61,6 +62,7 @@ if ($ILIAS_CONNECT_ENABLE) {
 }
 
 $cssSw=new cssClassSwitcher;
+$messaging=new messaging;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
@@ -571,9 +573,10 @@ while ( is_array($HTTP_POST_VARS)
 			$db->query($query);
 			$query = "delete from active_sessions where sid = '$u_id'";
 			$db->query($query);
-			$query = "delete from globalmessages where user_id_rec = '$username'";
-			$db->query($query);
-			$query = "delete from globalmessages where user_id_snd = '$username'";
+			
+			// delete all messeges send or received by this user
+			$messaging->delete_all_messages($u_id);
+			
 			$db->query($query);
 			$query = "delete from user_info where user_id= '$u_id'";
 			$db->query($query);
