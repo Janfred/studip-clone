@@ -104,7 +104,12 @@ if ($form==1)
 	$sem_create_data["sem_ort"]=$sem_ort;
 	$sem_create_data["sem_desc"]=$sem_desc;
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
-	$sem_create_data["term_art"]=$term_art;	
+	$sem_create_data["term_art"]=$term_art;
+	if ($sem_create_data["term_art"] == -1) {
+		$sem_create_data["sem_start_time"]=$SEM_BEGINN;
+		$sem_create_data["sem_duration_time"]=-1;
+	}
+
 	$sem_create_data["sem_turnout"]=$sem_turnout;	
 	//Anmeldeverfahren festlegen
 	$sem_create_data["sem_admission"]=$sem_admission;
@@ -733,14 +738,14 @@ if ($cmd_e_x)
 			$end_date_name="Enddatum der Kontingentierung";		
 		if ($sem_create_data["sem_admission_date"] == -1) 
 			$errormsg.="error§Bitte geben Sie einen Termin f&uuml;r das $end_date_name an!§";	
-		elseif ($sem_create_data["term_art"]==0) {
+		elseif ($sem_create_data["term_art"]==0){
 			$tmp_first_date=veranstaltung_beginn ($sem_create_data["term_art"], $sem_create_data["sem_start_time"], $sem_create_data["term_start_woche"], $sem_create_data["sem_start_termin"], $sem_create_data["metadata_termin"]["turnus_data"], "int");
-			if ($sem_create_data["sem_admission_date"] > $tmp_first_date) {
+			if (($sem_create_data["sem_admission_date"] > $tmp_first_date) && ($tmp_first_date >0)){
 				if ($tmp_first_date > 0)
 					$errormsg.= sprintf ("error§Das $end_date_name liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern sie das $end_date_name!§", date ("d.m.Y", $tmp_first_date));
 				$level=4;
 			}
-		} elseif ($sem_create_data["sem_admission_date"] > $sem_create_data["term_first_date"]) {
+		} elseif (($sem_create_data["sem_admission_date"] > $sem_create_data["term_first_date"]) && ($sem_create_data["term_first_date"])){
 				$errormsg.=sprintf ("error§Das $end_date_name liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte &auml;ndern sie das $end_date_name!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
 				$level=4;
 		} 
@@ -831,7 +836,10 @@ if ($cmd_f_x)
 		$sem_create_data["sem_id"]=md5(uniqid($hash_secret));
     		
 		//Termin-Metadaten-Array zusammenmatschen zum besseren speichern in der Datenbank
-		$serialized_metadata=serialize($sem_create_data["metadata_termin"]);
+		if ($sem_create_data["term_art"] == -1)
+			$serialized_metadata='';
+		else
+			$serialized_metadata=serialize($sem_create_data["metadata_termin"]);
 
 		//for admission it have to always 3
 		if ($sem_create_data["sem_admission"]) {
