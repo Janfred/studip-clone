@@ -70,7 +70,7 @@ class ExternModuleDownload extends ExternModule {
 		return FALSE;
 	}
 	
-	function printout ($start, $end) {
+	function printout ($args) {
 		if ($this->config->getValue("Main", "wholesite")) {
 			if ($body_class = $this->config->getValue("Main", "bodyclass"))
 				$body_class = "class=\"$body_class\" ";
