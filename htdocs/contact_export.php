@@ -146,7 +146,7 @@ function printSiteTitle(){
    	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
     	  . "	<tr valign=top align=center>\n"
     	  . "    <td class=topic align=left colspan=\"2\">\n"
-		  . "	  <img src=\"pictures/nutzer.gif\" alt=\"export\" align=\"texttop\">&nbsp;<b>\n"
+		  . "	  &nbsp;<img src=\"pictures/vcardexport.gif\" alt=\"export\" align=\"texttop\">&nbsp;<b>\n"
 		  . _("Adressbuch exportieren")."\n"
 		  . "	  </b>\n"
     	  . "    </td>\n"
