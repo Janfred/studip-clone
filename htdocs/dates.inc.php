@@ -1423,12 +1423,13 @@ function Termin_Eingabe_javascript ($t = 0, $n = 0, $atime=0, $ss = '', $sm = ''
 
 	$km = ($auth->auth["xres"] > 650)? 8 : 6;
 	$kx = ($auth->auth["xres"] > 650)? 780 : 600;
-
+	$ky = ($auth->auth["yres"] > 490)? 500 : 480;
+	$sb = ($auth->auth["yres"] > 490)? '' : ',scrollbars=yes ';
 	$txt = '&nbsp;';
 	$at = ($atime)? '&atime='.$atime:'';
 	$q = ($ss !== '')? "&ss={$ss}&sm={$sm}&es={$es}&em={$em}":'';
 	$txt .= "<a href=\"javascript:window.open('".$CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR;
-	$txt .= "/views/insert_date_popup.php?mcount={$km}&element_switch={$t}&c={$n}{$at}{$q}', 'kalender', 'dependent=yes, width=$kx, height=480');void(0);";
+	$txt .= "/views/insert_date_popup.php?mcount={$km}&element_switch={$t}&c={$n}{$at}{$q}', 'kalender', 'dependent=yes $sb, width=$kx, height=$ky');void(0);";
 	$txt .= '"><img src="pictures/popupkalender.gif" width="17" height="18" border="0" align="middle" ';
 	$txt .= tooltip(_('Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken.'),TRUE,FALSE);
 	$txt .= '></a>';
