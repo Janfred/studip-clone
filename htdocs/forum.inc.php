@@ -889,6 +889,16 @@ function forum_check_edit($forumposting) {
 	return $forumposting;
 }
 
+function forum_draw_topicline() {
+	global $user, $SessSemName;
+	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+	echo "<tr><td class=\"topic\" width=\"99%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"1%\" align=\"right\" nowrap>";
+	if ($user->id != "nobody")
+		echo "<a href='forum.php?forumsend=anpassen&view=$view'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a>";
+	echo "</td></tr>";	
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
