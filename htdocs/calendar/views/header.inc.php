@@ -1,17 +1,16 @@
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-	<tr>
-		<td class="topic">&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt="Termine"><b>&nbsp;<? echo $title; ?></b></td>
-	</tr>
-<? if($intro){ ?>
-	<tr><td class="blank">&nbsp;
-		<blockquote>
-			Dieser Terminkalender verwaltet Ihre Termine. Sie k&ouml;nnen Termine eintragen, &auml;ndern, 
-			gruppieren und sich &uuml;bersichtlich anzeigen lassen.
-		</blockquote>
-	</td></tr>
-<? }
-else
-	echo '<tr><td class="blank" height="15" width="100%">&nbsp;</td></tr>';
-echo "</table>";
+<html>
+	<head>
+		<title>Stud.IP</title>
+		<link rel="stylesheet" href="style.css" type="text/css">
+	</head>
+	<body bgcolor="#FFFFFF">
+<?
+
+if($cmd == "showmonth"){
+	echo '<div ID="overDiv" STYLE="position:absolute; visibility:hidden;z-index:1000;"></div>';
+	echo "<script language=\"JavaScript\" src=\"overlib.js\"></script>\n";
+}
+	
+require("header.php");
 
 ?>

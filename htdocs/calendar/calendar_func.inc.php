@@ -1,7 +1,7 @@
 <?
 
 /*
-kalenderFunc.inc.php - 0.8-20020701
+calendar_func.inc.php - 0.8-20020709
 Grundlegende Terminkalenderfunktionen fuer
 persoenlichen Terminkalender in Stud.IP.
 Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
@@ -210,7 +210,7 @@ function holiday($tmstamp, $mod = ""){
 
 // ueberprueft eine Datumsangabe, die in einen Timestamp gewandelt werden soll
 function check_date($month, $day, $year){
-	if(!preg_match("/^\d{1,2}$/", $day) || !preg_match("/^\d{1,2}$/", $month) ||!preg_match("/^\d{4}$/", $year))
+	if(!preg_match("/^\d{1,2}$/", $day) || !preg_match("/^\d{1,2}$/", $month) || !preg_match("/^\d{4}$/", $year))
 		return FALSE;
 	if($year < 1970 || $year > 2036)
 		return FALSE;

@@ -22,10 +22,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // User-Variablen initialisieren
 //if(!isset($calendar_user_control_data)){
-	$user->register("calendar_user_control_data");
+//	$user->register("calendar_user_control_data");
 //}
 
-// Default-Werte speichern
+require_once("visual.inc.php");
+
+// store default-values
 if(empty($calendar_user_control_data["view"])){
 	$calendar_user_control_data = array(
 		"view"           => "showweek",
@@ -40,7 +42,7 @@ if(empty($calendar_user_control_data["view"])){
 	);
 }
 
-// Benutzereinstellungen uebernehmen
+// store user-settings
 if($cmd_cal == "chng_cal_settings"){
 	$calendar_user_control_data = array(
 		"view"           => $cal_view,
@@ -55,31 +57,31 @@ if($cmd_cal == "chng_cal_settings"){
 	);
 }
 
-// Formular ausgeben
+$css_switcher = new cssClassSwitcher();
+
+// print out form
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
-		<tr>
-			<td class="topic">&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt=""><b>&nbsp;Einstellungen f&uuml;r meinen Terminkalender anpassen</b>
-			</td>
+	<tr>
+		<td class="topic">&nbsp;<img src="pictures/meinetermine.gif" border="0" align="absmiddle" alt=""><b>&nbsp;Einstellungen f&uuml;r meinen Terminkalender anpassen</b>
 		</td>
 	</tr>
 	<tr>
 		<td class="blank">&nbsp;
 			<blockquote>
-			Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders nach Ihren Vorstellungen anpassen.
+			Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders anpassen.
 			<br>
 			</blockquote>
-		</td>
-	</tr>	
+			<table width="99%" border="0" cellpadding="0" cellspacing="0" border="0" align="center">
 	<tr>
 		<td class="blank">
 			<form method="post" action="<? echo $PHP_SELF ?>?cmd_cal=chng_cal_settings">
-			<table width ="100%" cellspacing="1" cellpadding="1" border=0>
+			<table width ="100%" cellspacing="0" cellpadding="2" border="0">
 				<tr>
-					<td width="10%">
-						<blockquote><br><b>Startansicht einstellen:</b></blockquote>
+					<td class="<? echo $css_switcher->getClass(); ?>" width="10%">
+						<blockquote><p><b>Startansicht einstellen:</b></p></blockquote>
 					</td>
-					<td width="90%">
+					<td class="<? echo $css_switcher->getClass(); ?>" width="90%">
 						<select name="cal_view" size="1">
 							<option value="showweek"<? if($calendar_user_control_data["view"] == "showweek") echo " selected"; ?>>Wochenansicht</option>
 							<option value="showday"<? if($calendar_user_control_data["view"] == "showday") echo " selected"; ?>>Tagesansicht</option>
@@ -88,10 +90,11 @@ if($cmd_cal == "chng_cal_settings"){
 						</select>
 					</td>
 				</tr>
-				<td>
-					<blockquote><br><b>Zeitraum der Tages- und Wochensansicht:</b></blockquote>
+				<tr><? $css_switcher->switchClass(); ?>
+				<td class="<? echo $css_switcher->getClass(); ?>">
+					<blockquote><p><b>Zeitraum der Tages- und Wochensansicht:</b></p></blockquote>
 				</td>
-				<td>
+				<td class="<? echo $css_switcher->getClass(); ?>">
 					<?	    
 			   		echo"<select name=\"cal_start\">";
 	   					for ($i=0; $i<=23; $i++)
@@ -138,11 +141,11 @@ if($cmd_cal == "chng_cal_settings"){
 					&nbsp;Uhr.
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<blockquote><br><b>Zeitintervall der Tagesansicht:</b></blockquote>
+				<tr><? $css_switcher->switchClass(); ?>
+					<td class="<? echo $css_switcher->getClass(); ?>">
+						<blockquote><p><b>Zeitintervall der Tagesansicht:</b></p></blockquote>
 					</td>
-					<td>
+					<td class="<? echo $css_switcher->getClass(); ?>">
 						<select name="cal_step_day" size="1">
 							<option value="600"<? if($calendar_user_control_data["step_day"] == 600) echo " selected"; ?>>10 Minuten</option>
 							<option value="900"<? if($calendar_user_control_data["step_day"] == 900) echo " selected"; ?>>15 Minuten</option>
@@ -152,11 +155,11 @@ if($cmd_cal == "chng_cal_settings"){
 						</select>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<blockquote><br><b>Zeitintervall der Wochenansicht:</b></blockquote>
+				<tr><? $css_switcher->switchClass(); ?>
+					<td class="<? echo $css_switcher->getClass(); ?>">
+						<blockquote><p><b>Zeitintervall der Wochenansicht:</b></p></blockquote>
 					</td>
-					<td>
+					<td class="<? echo $css_switcher->getClass(); ?>">
 						<select name="cal_step_week" size="1">
 							<option value="1800"<? if($calendar_user_control_data["step_week"] == 1800) echo " selected"; ?>>30 Minuten</option>
 							<option value="3600"<? if($calendar_user_control_data["step_week"] == 3600) echo " selected"; ?>>1 Stunde</option>
@@ -164,34 +167,36 @@ if($cmd_cal == "chng_cal_settings"){
 						</select>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<blockquote><br><b>Wochenansicht definieren:</b></blockquote>
+				<tr><? $css_switcher->switchClass(); ?>
+					<td class="<? echo $css_switcher->getClass(); ?>">
+						<blockquote><p><b>Wochenansicht definieren:</b></p></blockquote>
 					</td>
-					<td>
+					<td class="<? echo $css_switcher->getClass(); ?>">
 						<input type="radio" name="cal_type_week" value="LONG"<? if($calendar_user_control_data["type_week"] == "LONG") echo " checked"; ?>>&nbsp;7 Tage-Woche<br>
 						<input type="radio" name="cal_type_week" value="SHORT"<? if($calendar_user_control_data["type_week"] == "SHORT") echo " checked"; ?>>&nbsp;5 Tage-Woche
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<blockquote><br><b>Feiertage/Semesterdaten:</b></blockquote>
+				<tr><? $css_switcher->switchClass(); ?>
+					<td class="<? echo $css_switcher->getClass(); ?>">
+						<blockquote><p><b>Feiertage/Semesterdaten:</b></p></blockquote>
 					</td>
-					<td>
+					<td class="<? echo $css_switcher->getClass(); ?>">
 						<input type="checkbox" name="cal_holidays" value="TRUE"<? if($calendar_user_control_data["holidays"]) echo " checked"; ?>>&nbsp;Feiertage anzeigen<br>
 						<input type="checkbox" name="cal_sem_data" value="5"<? if($calendar_user_control_data["sem_data"]) echo " checked"; ?>>&nbsp;Semesterdaten anzeigen
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<blockquote><br><b>Komfortfunktionen</b></blockquote>
+				<tr><? $css_switcher->switchClass(); ?>
+					<td class="<? echo $css_switcher->getClass(); ?>">
+						<blockquote><p><b>Komfortfunktionen</b></p></blockquote>
 					</td>
-					<td>
+					<td class="<? echo $css_switcher->getClass(); ?>">
 						<input type="checkbox" name="cal_link_edit" value="TRUE"<? if($calendar_user_control_data["link_edit"]) echo " checked"; ?>>&nbsp;Bearbeiten-Link in Wochenansicht
 					</td>
 				</tr>
-				<tr>
-					<td colspan="2" align="center">
+				<tr><? $css_switcher->switchClass(); ?>
+					<td class="<? echo $css_switcher->getClass(); ?>">&nbsp;
+					</td>
+					<td class="<? echo $css_switcher->getClass(); ?>">
 					<?
 						// sorgt fuer Ruecksprung in letzte Ansicht in kalender.php
 						if(substr(strrchr($PHP_SELF, "/"), 1) == "calendar.php" && !empty($calendar_sess_control_data["view_prv"]))
@@ -199,9 +204,13 @@ if($cmd_cal == "chng_cal_settings"){
 						if($atime)
 							echo '<input type="hidden" name="atime" value="'.$atime.'">';
 					?>
-						<input type="hidden" name="view" value="Terminkalender">
-						<input type="submit" value="&Auml;nderungen &uuml;bernehmen">
+						<input type="hidden" name="view" value="calendar">
+						<p><input type="submit" value="&Auml;nderungen &uuml;bernehmen"></p>
 					</td>
 				</tr>
 			</table>
+			<br />
+		</td>
+	</tr>
+</table>
 		</form>
