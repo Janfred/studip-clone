@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
 "POT-Creation-Date: 2003-03-07 20:32+0100\n"
-"PO-Revision-Date: 2003-03-09 17:11+GMT\n"
+"PO-Revision-Date: 2003-03-09 18:40+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3141,7 +3141,7 @@ msgstr "(%s documents)"
 
 #: datei.inc.php:624 datei.inc.php:871
 msgid "(1 Dokument)"
-msgstr "(1.Document)"
+msgstr "(1 Document)"
 
 #: datei.inc.php:675 datei.inc.php:809 show_dates.inc.php:201
 #: show_dates.inc.php:329 show_dates.inc.php:485
@@ -3185,7 +3185,7 @@ msgstr ""
 
 #: datei.inc.php:814
 msgid "Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen"
-msgstr "Click this symbol to paste these files into another folder"
+msgstr "Click this symbol to paste this file into another folder"
 
 #: datei.inc.php:950
 #, c-format
@@ -4223,7 +4223,7 @@ msgstr ""
 
 #: forum.inc.php:559
 msgid "Thema"
-msgstr "Topics"
+msgstr "Topic"
 
 #: forum.inc.php:559
 msgid "<b>Postings</b> / letzter Eintrag"
@@ -4376,7 +4376,7 @@ msgid ""
 "Die folgenden Veranstaltungen k&ouml;nnen Sie betreten, ohne sich im System "
 "registriert zu haben."
 msgstr ""
-"You can sign on for the following course without being registered in the "
+"You can enter the following courses without being registered in the "
 "system."
 
 #: freie.php:137
