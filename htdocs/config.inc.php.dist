@@ -142,7 +142,7 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 //Festlegen der erlaubten oder verbotenen Dateitypen
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
 						array(	"type"=>"deny", 									//Type bezeichnet den grundsetzlichen Typ der Deklaration: deny verbietet alles ausser den angegebenen file_types, allow erlaubt alle ausser den angegebenen file_types
-								"file_types" => array ("rtf", "xls", "ppt", "zip", "pdf", "txt"),	//verbotene bzw. erlaubte Dateitypen
+								"file_types" => array ("rtf", "xls", "ppt", "zip", "pdf", "txt", "tgz", "gz", "bz2"),	//verbotene bzw. erlaubte Dateitypen
 								"file_sizes" => array (	"root" => 7 * 1048576,			//Erlaubte Groesse je nach Rechtestufe
 													"admin" => 7 * 1048576,
 													"dozent" => 7 * 1048576,
