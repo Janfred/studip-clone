@@ -23,8 +23,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	
-function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=false, $show_admin=FALSE, $open) { 
-	Global $PHP_SELF, $loginfilelast, $SessSemName, $user, $TERMIN_TYP, $username;	
+function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=TRUE, $show_admin=FALSE, $open) { 
+	global $PHP_SELF, $loginfilelast, $SessSemName, $user, $TERMIN_TYP, $username;	
 	
 	// wenn man keinen Start und Endtag angibt, soll wohl alles angezeigt werden
 	// "0" bedeutet jeweils "open end"
