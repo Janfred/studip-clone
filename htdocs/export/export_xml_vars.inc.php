@@ -72,6 +72,8 @@ $xml_names_person = array(
 	"Fax"			=>		"fax",
 	"Email"			=>		"email",
 	"Home"			=>		"homepage",
-	"name"			=>		"statusgruppe"
+	"name"			=>		"statusgruppe",
+	"privadr"			=>		"adresse",
+	"privatnr"			=>		"privatnummer"
 );
 ?>
