@@ -81,7 +81,6 @@ function print_seminar_content($semid,$my_sem_values) {
 
 } // Ende function print_seminar_content
 
-$_language_domain = "studip_core";
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
