@@ -32,7 +32,7 @@ class reiter {
 	var $closerTopkatPic="pictures/reiter4.jpg";		//Closer fuer Reiter
 	var $closerInfo="";					//generic Closer for Info
 	var $activeBottomkatPic="pictures/forumrot.gif";	//Aktiver Pfeil
-	var $inactiveBottomkatPic="pictures/forumgrau.gif";	//Inaktiver Pfeil
+	var $inactiveBottomkatPic="pictures/pfeilweiss.gif";	//Inaktiver Pfeil
 	var $bottomPic="pictures/reiter3.jpg";			//Unterer Abschluss
 	//Width's
 	var $infoWidth="";					//Width of the Infoarea
