@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 /*****************************************************************************
-AssignObject, zentrale Klasse der Objecte der Belegung
+AssignObject, zentrale Klasse der Objekte der Belegung
 /*****************************************************************************/
 class AssignObject {
 	var $db;					//Datenbankanbindung;
@@ -1245,6 +1245,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 		//else check all the other possibilities
 		if ($this->perm != "admin") {
 			$my_objects=search_administrable_objects();
+			$my_objects["all"]=TRUE;
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			foreach ($my_objects as $key=>$val) {
 				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$this->resource_id' ");
