@@ -444,7 +444,7 @@ class ExternConfig {
 					case "icondefault" :
 						$fault[$form_name] = ($value[$i] != ""
 								&& (preg_match("/(<|>|\"|script|php)/i", $value[$i])
-								|| !preg_match("/^[^./\\].*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
+								|| !preg_match('/^[^./\\].*\.(png|jpg|jpeg|gif)$/i', $value[$i])));
 						break;
 					case "wholesite" :
 						// This is especially for checkbox-values. If there is no checkbox
