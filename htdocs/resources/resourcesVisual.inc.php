@@ -1062,7 +1062,7 @@ class EditObject extends cssClasses {
 						$this->db->query($query);
 						$this->db->next_record();
 					} elseif ($resAssign->getOwnerType() == "date") {
-						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN seminare ON (termine.range_id = Seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
+						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN seminare ON (termine.range_id = seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
 						$this->db->query($query);
 						$this->db->next_record();
 					}
@@ -1178,7 +1178,7 @@ class EditObject extends cssClasses {
 						 if ($user_name) 
 						 	print _("einen anderen User (NutzerIn oder Einrichtung) eintragen:");
 						 else
-							print _("einen User (NutzerIn oder Einrichtung) eintragen:");						 
+							print _("einen Nutzer (Person oder Einrichtung) eintragen:");						 
 						?><br /></font><font size=-1>
 						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE, "up") ?> <br/>
 						<?=_("freie Eingabe zur Belegung:")?><br /></font>
