@@ -121,7 +121,6 @@ if ($cmd_cal == 'chng_cal_settings') {
 		'link_edit'        => $cal_link_edit,
 		'bind_seminare'    => $calendar_user_control_data['bind_seminare'],
 		'ts_bind_seminare' => $calendar_user_control_data['ts_bind_seminare'],
-		'number_of_events' => $calendar_user_control_data['number_of_events'],
 		'delete'           => $cal_delete
 	);
 }
