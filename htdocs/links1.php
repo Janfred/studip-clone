@@ -90,7 +90,7 @@ if ($rechte)
 	if ($entry_level=="sem")
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 	else
-		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=inst&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
 //Infofenstereintraege erzeugen
 if ($entry_level=="inst") {
