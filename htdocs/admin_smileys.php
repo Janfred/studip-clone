@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("root");
 
 if (!$SMILEYADMIN_ENABLE) {
@@ -126,7 +126,7 @@ function show_smiley_list() {
 		$urlname=urlencode($smiley[1]);
 		echo $table->openRow();
 		echo $table->cell($count, array("align"=>"right"));
-		echo $table->cell("<img src=\"."$GLOBALS["SMILE_PATH"].".$smiley[0]."\" alt=\"".$name."\">", array("align"=>"center"));
+		echo $table->cell('<img src="'.$GLOBALS['SMILE_PATH'].'/'.$smiley[0].'" alt="'.$smiley[1].'">', array("align"=>"center"));
 		echo $table->cell("<input name=\"rename_$urlname\" value=\"$smiley[1]\" size=20>");
 		echo $table->cell("<input readonly name=\"short_$urlname\" value=\"".$SMILE_SHORT_R[$smiley[1]]."\" size=\"5\">");
 		echo $table->cell("&nbsp;<a href=\"$PHP_SELF?cmd=delete&img=$urlname\"><img src=\"pictures/trash.gif\" border=0></a>&nbsp;", array("align"=>"center"));
