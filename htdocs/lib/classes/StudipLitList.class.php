@@ -39,6 +39,7 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/functions.php");
 class StudipLitList extends TreeAbstract {
 	
 	var $format_default = "**{authors}** - {dc_title} - %%{published}%%";
+	var $cat_element;
 	
 	/**
 	* constructor
@@ -55,6 +56,7 @@ class StudipLitList extends TreeAbstract {
 			$object_name = get_object_name($range_id, $this->range_type);
 			$this->root_name = $object_name['type'] . ": " . $object_name['name'];
 		}
+		$this->cat_element = new StudipLitCatElement();
 		parent::TreeAbstract(); //calling the baseclass constructor 
 	}
 
@@ -128,12 +130,16 @@ class StudipLitList extends TreeAbstract {
 		return  md5(uniqid("elementbla",1));
 	}
 	
-	function getFormattedEntry($item_id){
+	function getFormattedEntry($item_id, $fields = null){
 		if ($this->isElement($item_id)){
 			$format = $this->tree_data[$this->tree_data[$item_id]['parent_id']]['format'];
-			$cat_element = new StudipLitCatElement($this->tree_data[$item_id]['catalog_id']);
+			if (is_array($fields)){
+				$this->cat_element->setValues($fields);
+			} else {
+				$this->cat_element->getElementData($this->tree_data[$item_id]['catalog_id']);
+			}
 			$cat_element->fields['note']['value'] = $this->tree_data[$item_id]['note'];
-			$content = preg_replace('/({[a-z0-9_]+})/e', "(\$cat_element->getValue(substr('\\1',1,strlen('\\1')-2))) ? \$cat_element->getValue(substr('\\1',1,strlen('\\1')-2)) : '...'", $format);
+			$content = preg_replace('/({[a-z0-9_]+})/e', "(\$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2))) ? \$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2)) : '...'", $format);
 			return $content;
 		} else {
 			return false;
@@ -288,18 +294,23 @@ class StudipLitList extends TreeAbstract {
 	
 	function GetFormattedListsByRange($range_id){
 		$ret = false;
+		$dbv = new DbView();
 		$tree =& TreeAbstract::GetInstance("StudipLitList", $range_id);
-		$lists = $tree->getVisibleListIds();
-		for ($i = 0; $i < count($lists); ++$i){
-			$ret .= "<p><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b>"
-			. "&nbsp;&nbsp;(<a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
-			. "&nbsp;Literaturliste kopieren</a>)</p>";
-			$ret .= "<span style=\"font-size:10pt\">";
-			$elements = $tree->getListEntries($lists[$i]);
-			for ($j = 0; $j < count($elements); ++$j){
-				$ret .=  formatReady($tree->getFormattedEntry($elements[$j])) . "<br>";
+		if ( ($lists = $tree->getVisibleListIds()) ){
+			for ($i = 0; $i < count($lists); ++$i){
+				$ret .= "<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>"
+				. "<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"pictures/link_intern.gif\" border=\"0\">"
+				. "&nbsp;Literaturliste kopieren</a></div>";
+				$ret .= "<span style=\"font-size:10pt\">";
+				if ($tree->hasKids($lists[$i])){
+					$dbv->params[0] = $lists[$i];
+					$rs = $dbv->get_query("view:LIT_LIST_GET_ELEMENTS");
+					while ($rs->next_record()){
+						$ret .=  formatReady($tree->getFormattedEntry($rs->f('list_element_id'), $rs->Record)) . "<br>";
+					}
+				}
+				$ret .= "</span><br>";
 			}
-			$ret .= "</span>";
 		}
 		return $ret;
 	}
