@@ -21,7 +21,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 // $Id$
-
 // User
 $_views["USER_USERINFO"]= array("pk"=>"user_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT a.user_id FROM user_info a LEFT JOIN auth_user_md5 b USING(user_id) WHERE ISNULL(b.user_id)");

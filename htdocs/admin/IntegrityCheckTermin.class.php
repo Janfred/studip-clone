@@ -53,6 +53,5 @@ class IntegrityCheckTermin extends IntegrityCheckAbstract{
 									." b USING(range_id) WHERE ISNULL(b.range_id)",
 									'key' => 'termin_id');
 	}
-
 }
 ?>
