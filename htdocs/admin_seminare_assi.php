@@ -37,6 +37,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	$resAssign = new VeranstaltungResourcesAssign();
 }
 
 // Get a database connection and Stuff
@@ -155,8 +156,8 @@ if ($form==3)
 
 	//The room for the prelimary discussion
 	$sem_create_data["sem_vor_raum"]=$vor_raum; 
-	$sem_create_data["sem_vor_resource_id"]=$vor_resource_id; 
-	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource_id"] != "FALSE") {
+	$sem_create_data["sem_vor_resource_id"]=($vor_resource_id == "FALSE") ? FALSE : $vor_resource_id; 
+	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource_id"]) {
 		$resObject=new ResourceObject($sem_create_data["sem_vor_resource_id"]);
 		$sem_create_data["sem_vor_raum"]=$resObject->getName();
 	}
@@ -178,8 +179,8 @@ if ($form==3)
 			$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i]; 
 			$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i]; 
 			$sem_create_data["term_turnus_room"][$i]=$term_turnus_room[$i]; 
-			$sem_create_data["term_turnus_resource_id"][$i]=$term_turnus_resource_id[$i]; 
-			if ($RESOURCES_ENABLE && $sem_create_data["term_turnus_resource_id"][$i] != "FALSE") {
+			$sem_create_data["term_turnus_resource_id"][$i]=($term_turnus_resource_id[$i] == "FALSE") ? FALSE : $term_turnus_resource_id[$i];
+			if ($RESOURCES_ENABLE && $sem_create_data["term_turnus_resource_id"][$i]) {
 				$resObject=new ResourceObject($sem_create_data["term_turnus_resource_id"][$i]);
 				$sem_create_data["term_turnus_room"][$i]=$resObject->getName();
 			}
@@ -211,12 +212,7 @@ if ($form==3)
 					if ($sem_create_data["term_turnus_start_minute"][$i] < 10)
 						$tmp_idx.="0";
 					$tmp_idx.=$sem_create_data["term_turnus_start_minute"][$i];						
-					
-					//if we have a resource_id, we flush the room name
-					if ($sem_create_data["term_turnus_resource_id"][$i])
-						$sem_create_data["term_turnus_room"][$i]='';
-
-					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>$sem_create_data["term_turnus_room"][$i], "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
+					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>($sem_create_data["term_turnus_resource_id"][$i]) ? $sem_create_data["term_turnus_room"][$i] : "", "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
 				}	
 			if (is_array($tmp_metadata_termin["turnus_data"])) {
 
@@ -253,8 +249,8 @@ if ($form==3)
 			$sem_create_data["term_end_stunde"][$i]=$term_end_stunde[$i]; 
 			$sem_create_data["term_end_minute"][$i]=$term_end_minute[$i]; 
 			$sem_create_data["term_room"][$i]=$term_room[$i]; 
-			$sem_create_data["term_resource_id"][$i]=$term_resource_id[$i]; 
-			if ($RESOURCES_ENABLE && $sem_create_data["term_resource_id"][$i] != "FALSE") {
+			$sem_create_data["term_resource_id"][$i]=($term_resource_id[$i] == "FALSE") ? FALSE : $term_resource_id[$i];
+			if ($RESOURCES_ENABLE && $sem_create_data["term_resource_id"][$i]) {
 				$resObject=new ResourceObject($sem_create_data["term_resource_id"][$i]);
 				$sem_create_data["term_room"][$i]=$resObject->getName();
 			}
@@ -625,11 +621,36 @@ if ($cmd_d_x)
 						$errormsg=$errormsg."error§Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt, bitte korrigieren sie dies!§";
 						$just_informed4=TRUE;
 						}
+			//check overlaps...
+			if ($RESOURCES_ENABLE) {
+				$resAssign = new VeranstaltungResourcesAssign();
+				$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
+				if (is_array($checkResult)) {
+					$overlaps_detected=FALSE;
+					foreach ($checkResult as $key=>$val)
+						if ($val["overlap_assigns"] == TRUE)
+							$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
+					}
+				if ($overlaps_detected) {
+					$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+					$i=0;
+					foreach ($overlaps_detected as $key=>$val) {
+						$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+						//show the first overlap
+						list(, $val2) = each($val);
+						$errormsg.=date("d.m, h:i",$val2["begin"])." - ".date("h:i",$val2["end"]);
+						if (sizeof($val) >1)
+							$errormsg.=", ... ("._("und weitere").")";
+						$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
+						$i++;
+					}
+					$errormsg.="</font>§";
+				}
+			}
 		}
 	else {
 		for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-			if ((($sem_create_data["term_start_stunde"][$i]) || ($sem_create_data["term_end_stunde"][$i])) && (($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_jahr"][$i])))
-				{
+			if ((($sem_create_data["term_start_stunde"][$i]) || ($sem_create_data["term_end_stunde"][$i])) && (($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_jahr"][$i]))) {
 				if ((($sem_create_data["term_start_stunde"][$i]) && (!$sem_create_data["term_end_stunde"][$i])) || ((!$sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])))
 						{
 						if (!$just_informed)
@@ -653,22 +674,69 @@ if ($cmd_d_x)
 						$errormsg=$errormsg."error§Die jeweilige Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!§";
 						$just_informed5=TRUE;				
 					}
+				if ((!$errormsg) && ($RESOURCES_ENABLE)) {
+					$tmp_chk_date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+					$tmp_chk_end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+					$checkResult = array_merge($checkResult, $resAssign->insertDateAssign(FALSE, $sem_create_data["term_resource_id"][$i], $tmp_chk_date, $tmp_chk_end_time, TRUE));
 				}
-				elseif(!$just_informed4) 
-					if ((!$sem_create_data["term_tag"][$i]) && (!$sem_create_data["term_monat"][$i]) && (!$sem_create_data["term_jahr"][$i]) && (!$sem_create_data["term_start_stunde"][$i]) && (!$sem_create_data["term_start_minute"][$i]) && (!$sem_create_data["term_end_stunde"][$i]) && (!$sem_create_data["term_end_minute"][$i]))
-						$empty_fields++;
-					else
-						{
-						$errormsg=$errormsg."error§Sie haben nicht alle Felder bei der Termineingabe ausgef&uuml;llt, bitte korrigieren sie dies!§";
-						$just_informed4=TRUE;
-						}
+			}
+			elseif(!$just_informed4) 
+				if ((!$sem_create_data["term_tag"][$i]) && (!$sem_create_data["term_monat"][$i]) && (!$sem_create_data["term_jahr"][$i]) && (!$sem_create_data["term_start_stunde"][$i]) && (!$sem_create_data["term_start_minute"][$i]) && (!$sem_create_data["term_end_stunde"][$i]) && (!$sem_create_data["term_end_minute"][$i]))
+					$empty_fields++;
+				else {
+					$errormsg=$errormsg."error§Sie haben nicht alle Felder bei der Termineingabe ausgef&uuml;llt, bitte korrigieren sie dies!§";
+					$just_informed4=TRUE;
+					}
 
+			if (is_array($checkResult)) {
+				$overlaps_detected=FALSE;
+				foreach ($checkResult as $key=>$val)
+					if ($val["overlap_assigns"] == TRUE)
+						$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
+				}
+			if ($overlaps_detected) {
+				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+				foreach ($overlaps_detected as $key=>$val) {
+					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+					//show first overlap
+					list(, $val2) = each($val);
+					$errormsg.=date("d.m, h:i",$val2["begin"])." - ".date("h:i",$val2["end"]);
+					if (sizeof($val) >1)
+						$errormsg.=", ... ("._("und weitere").")";
+					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
+				}
+				$errormsg.="</font>§";
+			}
 	} 
 	if ($sem_create_data["sem_vor_termin"] == -1);
-	else
+	else {
 		if ((($vor_stunde) && (!$vor_end_stunde)) || ((!$vor_stunde) && ($vor_end_stunde)))
 			$errormsg=$errormsg."error§Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der Vorbesprechung aus!§";	
-	
+		//check overlaps...
+		if ($RESOURCES_ENABLE) {
+			$resAssign = new VeranstaltungResourcesAssign();
+			$checkResult = $resAssign->insertDateAssign(FALSE, $sem_create_data["sem_vor_resource_id"], $sem_create_data["sem_vor_termin"], $sem_create_data["sem_vor_end_termin"],TRUE);
+			if (is_array($checkResult)) {
+				$overlaps_detected=FALSE;
+				foreach ($checkResult as $key=>$val)
+					if ($val["overlap_assigns"] == TRUE)
+						$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
+				}
+			if ($overlaps_detected) {
+				$errormsg=$errormsg."error§"._("Der gew&uuml;nschte Raum der Vorbesprechung &uuml;berschneidet sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie den Raum oder die Zeit!");
+				foreach ($overlaps_detected as $key=>$val) {
+					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+					//show first overlap
+					list(, $val2) = each($val);
+					$errormsg.=date("d.m, h:i",$val2["begin"])." - ".date("h:i",$val2["end"]);
+					if (sizeof($val) >1)
+						$errormsg.=", ... ("._("und weitere").")";
+					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
+				}
+				$errormsg.="</font>§";
+			}
+		}
+	}
 	if (!$errormsg)
 		$level=4;
 	else
@@ -858,7 +926,7 @@ if ($cmd_f_x)
 		if ($sem_create_data["term_art"] == -1)
 			$serialized_metadata='';
 		else
-			$serialized_metadata=serialize($sem_create_data["metadata_termin"]);
+			$serialized_metadata=mysql_escape_string(serialize($sem_create_data["metadata_termin"]));
 
 		//for admission it have to always 3
 		if ($sem_create_data["sem_admission"]) {
@@ -1835,8 +1903,9 @@ if ($level==2)
 	}
 
 //Level 3: Metadaten &uuml;ber Terminstruktur
-if ($level==3)
-	{
+if ($level==3) {
+	if ($RESOURCES_ENABLE)
+		$resList = new ResourcesUserRoomsList($user_id);
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
@@ -1856,7 +1925,7 @@ if ($level==3)
 				<b>Schritt 3: Daten &uuml;ber die Termine</b><br><br>
 				<? if ($sem_create_data["term_art"] ==0) 
 					{?>
-					Bitte geben Sie hier ein, an welchen Tagen das Seminar stattfindet. Wenn Sie nur einen Wochentag wissen, brauchen Sie nur diesen angeben.<br>Sie haben sp&auml;ter die M&ouml;glichkeit, weitere Einzelheiten zu diesen Terminen anzugeben.<br><br>
+					Bitte geben Sie hier ein, an welchen Tagen die Veranstaltung stattfindet. Wenn Sie nur einen Wochentag wissen, brauchen Sie nur diesen angeben.<br>Sie haben sp&auml;ter die M&ouml;glichkeit, weitere Einzelheiten zu diesen Terminen anzugeben.<br><br>
 					<?
 					}
 				else
@@ -1977,10 +2046,10 @@ if ($level==3)
 										}
 										print "<br /><font size=-1>&nbsp; Raum: ";
 										if ($RESOURCES_ENABLE) {
-											$resList = new ResourcesUserRoomsList($user_id);
+											$resList->reset();
 											if ($resList->numberOfEvents()) {
 												print " &nbsp;<select name=\"term_turnus_resource_id[]\"></font>";
-												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
+												printf ("<option %s value=\"FALSE\">[wie Eingabe -->]</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
 												while ($resObject = $resList->nextEvent()) {
 													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 												}
@@ -1990,7 +2059,7 @@ if ($level==3)
 										?>
 										&nbsp; <font size=-1><input type="text" name="term_turnus_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_turnus_room"][$i]) ?>"/></font>&nbsp; 
 										<?
-										print "<br />";
+											print "<br />";
 									}
 										?>
 										<br />&nbsp; <input type="IMAGE" name="add_turnus_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
@@ -2036,10 +2105,10 @@ if ($level==3)
 											}
 										print "<br /><font size=-1>&nbsp; Raum: ";
 										if ($RESOURCES_ENABLE) {
-											$resList = new ResourcesUserRoomsList($user_id);
+											$resList->reset();
 											if ($resList->numberOfEvents()) {
 												print "&nbsp;<select name=\"term_resource_id[]\">";
-												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_resource_id"][$i]) ? "selected" : "");
+												printf ("<option %s value=\"FALSE\">[wie Eingabe -->]</option>", (!$sem_create_data["term_resource_id"][$i]) ? "selected" : "");
 												while ($resObject = $resList->nextEvent()) {
 													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 												}
@@ -2078,10 +2147,10 @@ if ($level==3)
 							<?
 							print "<font size=-1>&nbsp; Raum: ";
 							if ($RESOURCES_ENABLE) {
-								$resList = new ResourcesUserRoomsList($user_id);
+								$resList->reset();
 								if ($resList->numberOfEvents()) {
 									print "&nbsp;<select name=\"vor_resource_id\">";
-									printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["sem_vor_resource_id"]) ? "selected" : "");
+									printf ("<option %s value=\"FALSE\">[wie Eingabe -->]</option>", (!$sem_create_data["sem_vor_resource_id"]) ? "selected" : "");
 									while ($resObject = $resList->nextEvent()) {
 										printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 									}
