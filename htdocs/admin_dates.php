@@ -1,7 +1,7 @@
 <?php
 /*
 admin_dates.php - Terminverwaltung von Stud.IP
-Copyright (C) 2000 Andr‚ Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>
+Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	//Defaults, die fuer DAUS (<admin) gesetzt werden
 	$default_description="Bitte geben Sie hier nur optionale Angaben (genauere Terminbeschreibung, Referatsthemen usw.) ein.";
-	$default_titel="Kurztitel, bitte ausfüllen";
+	$default_titel="Kurztitel, bitte ausfllen";
 	if ((!$perm->have_perm ("admin")) && (!$perm->have_perm ("root"))) {
 		$temp_default[1]="tt";
 		$temp_default[2]="mm";
@@ -98,7 +98,7 @@ else
 if ($auth->auth["jscript"]) 
 	$max_col = round($auth->auth["xres"] / 10 );
 else 
-	$max_col =  64 ; //default fr 640x480
+	$max_col =  64 ; //default für 640x480
 	
 if ($admin_dates_data["range_id"] && !$perm->have_perm("root"))
 	{
@@ -193,7 +193,7 @@ if ($make_dates)
 					//Titel basteln
 					$titel_f=$TERMIN_TYP[1]["name"].": Kein Titel";
 					$titel_f.=" am ".date("d.m.Y ", $insert_termin_start[$i]);
-					$description="Ablage fr Ordner und Dokumente zu diesem Termin";
+					$description="Ablage für Ordner und Dokumente zu diesem Termin";
 					$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
 					}
 				else
@@ -223,7 +223,7 @@ if ($make_dates)
 		
 	while ($insert_termin_start[0] <=$vorles_ende);
 
-	$result="msgºDer Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.º";
+	$result="msgDer Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.";
 	$admin_dates_data["manuel_edit"]=TRUE;
 	}
 
@@ -233,14 +233,14 @@ if ($new)
 	if (!checkdate($monat,$tag,$jahr))
 		{
 		$do=FALSE;
-		$result="errorºBitte geben Sie ein g&uuml;ltiges Datum ein!º";
+		$result="errorBitte geben Sie ein g&uuml;ltiges Datum ein!";
 		}
 
 	if ($do)		
 		if ((!$stunde) && (!end_stunde))
 			{
 			$do=FALSE;	
-			$result.="errorºBitte geben Sie eine g&uuml;eltige Start- und Endzeit an!º";
+			$result.="errorBitte geben Sie eine g&uuml;eltige Start- und Endzeit an!";
 			}
 		
 	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
@@ -250,7 +250,7 @@ if ($new)
 		if ($start_time > $end_time)
 			{
 			$do=FALSE;	
-			$result.="errorºDer Endzeitpunkt muss nach dem Startzeitpunkt liegen!º";
+			$result.="errorDer Endzeitpunkt muss nach dem Startzeitpunkt liegen!";
 			}
 	
 	//Check auf Konsistenz mt Metadaten, Semestercheck
@@ -266,7 +266,7 @@ if ($new)
 			}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$result.="infoºDer eingegebene Termine liegt ausserhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.º";
+			$result.="infoDer eingegebene Termine liegt ausserhalb des Semesters, in dem die Veranstaltung stattfindet. Es wird empfohlen, den Termin anzupassen.";
 		
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewaehlt ist
 		if (!$term_data["art"]) {
@@ -285,7 +285,7 @@ if ($new)
 					}
 				}
 			if (!$ok)
-				$result.="infoºDer eingegebene Termin findet nicht zu allgemeinen Veranstaltungszeiten statt. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.º";
+				$result.="infoDer eingegebene Termin findet nicht zu allgemeinen Veranstaltungszeiten statt. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.";
 			}
 		}
 	
@@ -315,7 +315,7 @@ if ($new)
 			$titel_f=$TERMIN_TYP[$art]["name"].": $tmp_titel";
 			$titel_f.=" am ".date("d.m.Y ", $start_time);
 			$titel_f=$titel_f;
-			$description_f="Ablage fr Ordner und Dokumente zu diesem Termin";		
+			$description_f="Ablage für Ordner und Dokumente zu diesem Termin";		
 			$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description_f', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
 			}
 		else
@@ -325,7 +325,7 @@ if ($new)
 		$db->query("INSERT INTO termine SET termin_id='$t_id', range_id='".$admin_dates_data["range_id"]."', autor_id='$user->id', content='$tmp_titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$art', topic_id='$topic_id', end_time='$end_time', raum='$raum', description='$description'");
 
 		if ($db->affected_rows()) {
-			$result.="msgºIhr Termin wurde eingef&uuml;gt!º";
+			$result.="msgIhr Termin wurde eingef&uuml;gt!";
 			$admin_dates_data["termin_id"]=FALSE;
 			}
 		}
@@ -374,7 +374,7 @@ if (($edit) && (!$admin_dates_data["termin_id"]))
 				$titel_f=$TERMIN_TYP[$art[$t_id]]["name"].": $tmp_titel";
 				$titel_f.=" am $tmp_datum";
 				$titel_f=$titel_f;
-				$description_f="Ablage fr Ordner und Dokumente zu diesem Termin";		
+				$description_f="Ablage für Ordner und Dokumente zu diesem Termin";		
 				$db3->query("INSERT INTO folder SET folder_id='$f_id', range_id='$t_id', description='$description_f', user_id='$user->id', name='$titel_f', mkdate='$aktuell', chdate='$aktuell'");
 				}
 		 	
@@ -397,9 +397,9 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		}
 	if ($del_count)
 		if ($del_count ==1)
-			$result="msgº$del_count Termin wurde gel&ouml;scht!";
+			$result="msg$del_count Termin wurde gel&ouml;scht!";
 		else
-			$result="msgº$del_count Termine wurden gel&ouml;scht!";
+			$result="msg$del_count Termine wurden gel&ouml;scht!";
 	$beschreibung='';
 	}
 
@@ -572,13 +572,13 @@ if (($kill) && ($admin_dates_data["range_id"]))
 					}
 				?>
 				<img  src="./pictures/info.gif" 
-					onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wie m÷glich Feiertage und Ferienzeiten bersprungen. Anschliessend k÷nnen Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
+					onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wie m”glich Feiertage und Ferienzeiten übersprungen. Anschliessend k”nnen Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
 					alt="Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wir m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschliessend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben.">
 				<hr>
 				<font size=-1>&nbsp; Sie k&ouml;nnen auch direkt zur Verwaltung der Termine springen und Termine manuell anlegen</font><br><br>
 				&nbsp; <input type="SUBMIT" name="manuel_edit_set" value="Termine manuell anlegen >> ">
 				<img  src="./pictures/info.gif" 
-					onClick="alert('In diesem Bearbeitungsmodus k÷nnen Sie alle Termine einzeln von Hand anlegen.');" 
+					onClick="alert('In diesem Bearbeitungsmodus k”nnen Sie alle Termine einzeln von Hand anlegen.');" 
 					alt="'In diesem Bearbeitungsmodus k&ouml;nnen Sie alle Termine einzeln von Hand anlegen.">
 				</form>
 			</td>
@@ -598,13 +598,13 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				<font size=-1>&nbsp; Sie haben noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplanassisten benutzen, wenn Sie vorher die allgemeinen Zeiten der Veranstaltung festgelegt haben.<br />
 				Bitte klicken Sie daf&uuml;r auf dieser Seite auf "Die allgemeinen Zeiten der Veranstaltung bearbeiten".</font>
 				<img  src="./pictures/info.gif" 
-					onClick="alert('Die Terminverwaltung gestattet es, alle Termine automatisch mit Hilfe des Ablaufplanassistenten anzulegen. Dafr mssen Sie jedoch die allgemeinen Zeiten der Veranstaltung vorher festgelegt haben.');" 
+					onClick="alert('Die Terminverwaltung gestattet es, alle Termine automatisch mit Hilfe des Ablaufplanassistenten anzulegen. Dafür müssen Sie jedoch die allgemeinen Zeiten der Veranstaltung vorher festgelegt haben.');" 
 					alt="'Die Terminverwaltung gestattet es, alle Termine automatisch mit Hilfe des Ablaufplanassistenten anzulegen. Daf&uuml;r m&uuml;ssen Sie jedoch die allgemeinen Zeiten der Veranstaltung vorher festgelegt haben.">
 				<hr>
 				<font size=-1>&nbsp; Sie k&ouml;nnen auch direkt zur Verwaltung der Termine springen und Termine manuell anlegen</font><br><br>
 				&nbsp; <input type="SUBMIT" name="manuel_edit_set" value="Termine manuell anlegen >> ">
 				<img  src="./pictures/info.gif" 
-					onClick="alert('In diesem Bearbeitungsmodus k÷nnen Sie alle Termine einzeln von Hand anlegen.');" 
+					onClick="alert('In diesem Bearbeitungsmodus k”nnen Sie alle Termine einzeln von Hand anlegen.');" 
 					alt="'In diesem Bearbeitungsmodus k&ouml;nnen Sie alle Termine einzeln von Hand anlegen.">
 				</form>
 				
@@ -652,13 +652,13 @@ if (($kill) && ($admin_dates_data["range_id"]))
 			<?
 				if (!$show_all) {
 				?>
-			<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="l÷schen">&nbsp; &nbsp; 
+			<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="l”schen">&nbsp; &nbsp; 
 				<?
 				}
 			}
 		if ($show_all) {
 			?>
-			<input type="IMAGE" name="send" border=0 src="pictures/buttons/termineaendern-button.gif" value="ver„ndern">&nbsp; &nbsp; 
+			<input type="IMAGE" name="send" border=0 src="pictures/buttons/termineaendern-button.gif" value="verändern">&nbsp; &nbsp; 
 			<?
 			}
 			?>
@@ -846,7 +846,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				
 				if (!$show_all)
-					$content.="<input type=\"IMAGE\" name=\"send\" border=0 src=\"pictures/buttons/terminaendern-button.gif\" value=\"ver„ndern\"><br /><br />";
+					$content.="<input type=\"IMAGE\" name=\"send\" border=0 src=\"pictures/buttons/terminaendern-button.gif\" value=\"verändern\"><br /><br />";
 				printcontent(0,1, $content, '');
 				}
 		
@@ -869,13 +869,13 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		<?
 			if (!$show_all) {
 			?>
-		<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="l÷schen">&nbsp; &nbsp; 
+		<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="l”schen">&nbsp; &nbsp; 
 			<?
 			}
 		}
 	if ($show_all) {
 		?>
-		<input type="IMAGE" name="send" border=0 src="pictures/buttons/termineaendern-button.gif" value="ver„ndern">&nbsp; &nbsp; 
+		<input type="IMAGE" name="send" border=0 src="pictures/buttons/termineaendern-button.gif" value="verändern">&nbsp; &nbsp; 
 		<?
 		}
 	}
