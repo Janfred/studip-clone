@@ -9,7 +9,7 @@
 * @version		$Id$
 * @access		public
 * @modulegroup		export_modules
-* @module		export
+* @module		export_choose_xslt
 * @package		Export
 */
 // +---------------------------------------------------------------------------+

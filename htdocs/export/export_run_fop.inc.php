@@ -8,7 +8,7 @@
 * @version		$Id$
 * @access		public
 * @modulegroup		export_modules
-* @module		export
+* @module		export_run_fop
 * @package		Export
 */
 // +---------------------------------------------------------------------------+
