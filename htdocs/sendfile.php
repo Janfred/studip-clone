@@ -305,8 +305,10 @@ if ($no_access) {
 	die;
 }
 
-if (substr($path_file,0,6) != "ftp://") {
+echo "hallo";
 
+if (substr($path_file,0,6) != "ftp://") {
+	echo "bin da";
 	//Datei per HTTP verschicken
 	if ($type != 5 && $type != 6){
 		$filesize = filesize($path_file);
@@ -337,6 +339,7 @@ if (substr($path_file,0,6) != "ftp://") {
 	echo "<hr>$path_file<hr>";
 	echo "<hr>$file_name<hr>";
 } else {
+	echo "nein";
 	//Datei von FTP verschicken
 	$url_parts = @parse_url($path_file);
 	$documentpath = $url_parts["path"];
