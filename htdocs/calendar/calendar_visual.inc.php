@@ -544,29 +544,36 @@ function includeMonth(){
 	$width = "25";
 	$height = "25";
 
-	$ret = '<table class="blank" border="0" cellspacing="1" cellpadding="0">';
-	$ret .= '<tr><th>';
-	$ret .= '<table border="0" cellspacing="1" cellpadding="1">';
-	$ret .= '<tr>';
-	$ret .= '<th valign="top"><a href="'.$href.$ptime.'&imt='.($amonth->getStart()-1).'"><img border="0" src="./pictures/forumrotlinks.gif" alt="zur&uuml;ck"></a></th>';
-	$ret .= '<th class="cal" colspan="';
+	$ret = "<table class=\"blank\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\">";
+	$ret .= "<tr><th>";
+	$ret .= "<table border=\"0\" cellspacing=\"1\" cellpadding=\"1\">";
+	$ret .= "<tr>";
+	$ret .= sprintf("<th valign=\"top\"><a href=\"%s%s&imt=%s\">",
+						$href, $ptime, ($amonth->getStart()-1));
+	$ret .= "<img border=\"0\" src=\"./pictures/forumrotlinks.gif\" alt=\"zur&uuml;ck\"></a></th>";
+	$ret .= "<th class=\"cal\" colspan=\"";
 	if($mod == "nokw")
 		$ret .= "5";
 	else
 		$ret .= "6";
-	$ret .= '" align="center">';
-	$ret .= month($amonth->getStart())." ".$amonth->getYear()."</th>\n";
-	$ret .= '<th valign="top"><a href="'.$href.$ptime.'&imt='.($amonth->getEnd()+1).'"><img border="0" src="./pictures/forumrot.gif" alt="vor"></a></th>';
+	$ret .= "\" align=\"center\">";
+	$ret .= sprintf("%s %s</th>\n", month($amonth->getStart()), $amonth->getYear());
+	$ret .= sprintf("<th valign=\"top\"><a href=\"%s%s&imt=%s\">",
+						$href, $ptime, ($amonth->getEnd()+1));
+	$ret .= "<img border=\"0\" src=\"./pictures/forumrot.gif\" alt=\"vor\"></a></th>";
 	$ret .= "</tr>\n";
 	$ret .= "<tr>\n";
-	$ret .= "<th class=\"inccal\" width=\"$width\">Mo</th><th class=\"inccal\" width=\"$width\">Di</th><th class=\"inccal\" width=\"$width\">Mi</th><th class=\"inccal\" width=\"$width\">Do</th>\n";
-	$ret .= "<th class=\"inccal\" width=\"$width\">Fr</th><th class=\"inccal\" width=\"$width\">Sa</th><th class=\"inccal\" width=\"$width\">So</th>";
+	$ret .= "<th class=\"inccal\" width=\"$width\">Mo</th>";
+	$ret .= "<th class=\"inccal\" width=\"$width\">Di</th>";
+	$ret .= "<th class=\"inccal\" width=\"$width\">Mi</th>";
+	$ret .= "<th class=\"inccal\" width=\"$width\">Do</th>\n";
+	$ret .= "<th class=\"inccal\" width=\"$width\">Fr</th>";
+	$ret .= "<th class=\"inccal\" width=\"$width\">Sa</th>";
+	$ret .= "<th class=\"inccal\" width=\"$width\">So</th>";
 	if($mod != "nokw")
 		$ret .= "<th class=\"inccal\" width=\"$width\">KW</th>";
-	$ret .= "</tr>\n"
-			 ."</table></th></tr>"
-			 .'<tr><td class="blank">'
-			 .'<table class="blank" border="0" cellspacing="1" cellpadding="1">';
+	$ret .= "</tr>\n</table></th></tr>\n<tr><td class=\"blank\">";
+	$ret .= "<table class=\"blank\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">";
 
 	// Im Kalenderblatt ist links oben immer Montag. Das muss natuerlich nicht der
 	// Monatserste sein. Es muessen evtl. noch Tage des vorangegangenen Monats
@@ -598,20 +605,25 @@ function includeMonth(){
 		$hday = holiday($i);
 		
 		if($j % 7 == 0)
-			$ret .= '<tr>';
+			$ret .= "<tr>";
 		if($now == $i)
-			$ret .= '<td class="current" ';
+			$ret .= "<td class=\"current\" ";
+		elseif (abs($atime - $i) < 3601)
+			$ret .= "<td class=\"month\" ";
 		else
-			$ret .= '<td class="steel1"';
-		$ret .= 'align="center" width="'.$width.'" height="'.$height.'">';
+			$ret .= "<td class=\"steel1\"";
+		$ret .= sprintf("align=\"center\" width=\"%s\" height=\"%s\">", $width, $height);
 		
 		if(($j + 1) % 7 == 0){
-			$ret .= '<a class="' . $style . 'sdaymin" href="' . $href . $i . '"' . $js_include . '>'
-				  	   . $aday . "</a>";
+			$ret .= sprintf("<a class=\"%ssdaymin\" href=\"%s%s\"%s>%s</a>",
+								$style, $href, $i, $js_include, $aday);
 			$ret .= "</td>";
-			if($mod != "nokw")
-				$ret .= '<td class="steel1" align="center" width="'.$width.'" height="'.$height.'"><font class="kwmin">'
-				 		 . strftime("%V", $i)."</font></td>";
+			if ($mod != "nokw") {
+				$ret .= sprintf("<td class=\"steel1\" align=\"center\" width=\"%s\" height=\"%s\">",
+									$width, $height);
+				$ret .= "<a href=\"./calendar.php?cmd=showweek&atime=$i\">";
+				$ret .= sprintf("<font class=\"kwmin\">%s</font></a></td>", strftime("%V", $i));
+			}
 			$ret .= "</tr>\n";
 		}
 		else{
