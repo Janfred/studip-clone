@@ -396,13 +396,14 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				}
 			}
 		}
-		$value_list = substr($value_list,0,-1);
-		$db->query("CREATE  TEMPORARY TABLE if NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
-		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
-		$db->query($ins_query);
-		get_my_obj_values($my_obj);
-		$db->query("DROP TABLE loginfilenow_".$user->id);
-	
+		if (($num_my_sem + $num_my_inst) > 0){
+			$value_list = substr($value_list,0,-1);
+			$db->query("CREATE  TEMPORARY TABLE if NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
+			$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
+			$db->query($ins_query);
+			get_my_obj_values($my_obj);
+			$db->query("DROP TABLE loginfilenow_".$user->id);
+		}
 	if ($GLOBALS['CHAT_ENABLE']){
 		if (is_array($active_chats)){
 			$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
