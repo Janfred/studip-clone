@@ -750,7 +750,7 @@ if ($rechte) {
 
 } // end insert autor
 
-if (($EXPORT_ENABLE) AND ($perm->have_studip_perm($SessSemName[1], "tutor")))
+if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1])))
 {
 	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 	echo "</td></tr><tr><td colspan=$colspan align=right><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln");
