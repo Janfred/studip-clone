@@ -75,6 +75,16 @@ if ($ILIAS_CONNECT_ENABLE)
 	//neuen ILIAS-User anlegen, wenn noch nicht vorhanden.
 //	create_ilias_user($auth->auth["uname"]);
 
+		if (isset($delete))
+		{	
+			my_info( _("Wenn Sie fortfahren, wird das gew&auml;hlte Lernmodul unwiderruflich gel&ouml;scht. Soll dieses Lernmodul wirklich gel&ouml;scht werden?"));
+			?>
+			<tr><td><br><br><center>
+			<a href="<? echo link_delete_module($del_inst, $del_id); ?>"><? echo makeButton("ja", "img"); ?>&nbsp;
+			<a href="<? echo $PHP_SELF; ?>"><? echo makeButton("nein", "img"); ?></center>
+			<?
+		}
+
 		if (get_connected_user_id($auth->auth["uid"]) != false)
 			echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
 
