@@ -158,11 +158,10 @@ function export_sem($inst_id)
 			elseif ($db->f($key) != "") 
 				$data_object .= xml_tag($val, $db->f($key));
 		}
-		$db2->query('SELECT auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM auth_user_md5 
+		$db2->query('SELECT auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
 					LEFT JOIN user_info USING(user_id) 
-					LEFT JOIN seminar_user USING(user_id) 
-					LEFT JOIN seminare USING(seminar_id) 
-					WHERE (seminar_user.status = "dozent") AND (seminare.Seminar_id = "' . $db->f("Seminar_id") . '")');
+					LEFT JOIN auth_user_md5 USING(user_id) 
+					WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("Seminar_id") . '")');
 		$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
 		while ($db2->next_record()) 
 			{
@@ -208,14 +207,15 @@ function export_pers($inst_id)
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
-	$db->query('SELECT statusgruppen.name, aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+	$db->query('SELECT statusgruppen.name, 
+		aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
 		ui.sprechzeiten, ui.Telefon, ui.Fax, aum.Email, 
-		aum.username, info.Home, info.geschlecht, info.title_front, info.title_rear FROM statusgruppen 
-		LEFT JOIN statusgruppe_user USING(statusgruppe_id) 
+		aum.username, info.Home, info.geschlecht, info.title_front, info.title_rear FROM statusgruppen
+		LEFT JOIN statusgruppe_user sgu USING(statusgruppe_id)
+		LEFT JOIN user_inst ui ON (ui.user_id = sgu.user_id AND ui.Institut_id = range_id AND ui.inst_perms!="user")
 		LEFT JOIN auth_user_md5 aum USING(user_id) 
 		LEFT JOIN user_info info USING(user_id) 
-		LEFT JOIN user_inst ui USING(user_id)
-		WHERE ui.Institut_id = "' . $inst_id . '" AND ui.inst_perms != "user"
+		WHERE range_id = "' . $inst_id . ' "
 		ORDER BY ' . $order);
 
 	while ($db->next_record()) 
