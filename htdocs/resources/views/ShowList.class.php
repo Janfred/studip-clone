@@ -190,7 +190,7 @@ class ShowList extends ShowTreeRow{
 				}
 				
 				//clipboard in/out
-				if (is_object($clipObj) && $simple_perms)
+				if (is_object($clipObj) && $simple_perms && $resObject->getCategoryId())
 					if ($clipObj->isInClipboard($resObject->getId()))
 						$edit .= "&nbsp;<a href=\"".$PHP_SELF."?clip_out=".$resObject->getId().$link_add."\"><img ".makeButton("merkliste", "src")." border=\"0\" ".tooltip(_("Aus der Merkliste entfernen"))." align=\"absmiddle\"/></a>";
 					else
