@@ -69,7 +69,8 @@ else
 	escapeshellcmd ( $result_file );
 	escapeshellcmd ( $TMP_PATH );
 //	$str = "java -cp \\php3\\fop\\build\\fop.jar;\\php3\\fop\\lib\\batik.jar;\\php3\\fop\\lib\\xalan-2.3.1.jar;\\php3\\fop\\lib\\xercesImpl-2.0.1.jar;\\php3\\fop\\lib\\xml-apis.jar;\\php3\\fop\\lib\\avalon-framework-cvs-20020315.jar;\\php3\\fop\\lib\\logkit-1.0.jar;\\php3\\fop\\lib\\jimi-1.0.jar org.apache.fop.apps.Fopjava -cp \\php3\\fop\\build\\fop.jar;\\php3\\fop\\lib\\batik.jar;\\php3\\fop\\lib\\xalan-2.3.1.jar;\\php3\\fop\\lib\\xercesImpl-2.0.1.jar;\\php3\\fop\\lib\\xml-apis.jar;\\php3\\fop\\lib\\avalon-framework-cvs-20020315.jar;\\php3\\fop\\lib\\logkit-1.0.jar;\\php3\\fop\\lib\\jimi-1.0.jar org.apache.fop.apps.Fop tmp\\$result_file tmp\\studip.pdf";
-	$str = "/usr/local/fop-0.20.5rc/fop.sh $TMP_PATH/$result_file $TMP_PATH/studip.pdf";
+	$pdf_file = md5(uniqid(rand())) .".pdf";
+	$str = "/usr/local/fop-0.20.5rc/fop.sh $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
 //	$out = system( ( $str ) );
 	$out = exec( ( $str ) );
 //echo $out;
@@ -78,11 +79,11 @@ else
 	unlink( $TMP_PATH . "/" . $result_file);
 */	
 		{
-			$link2 = "<a href=\"sendfile.php?type=2&file_id=" . $xslt_filename . ".pdf"  . "&file_name=" . $xslt_filename . ".pdf\">";
+			$link2 = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file  . "&file_name=" . $xslt_filename . ".pdf\">";
 	
-			$export_pagecontent .= "<center><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr align=\"center\"><td>";
+			$export_pagecontent = "<center><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr align=\"center\"><td>";
 			$export_pagecontent .= "<b>" . _("Ausgabe-Datei: ") . "</b>";
-			$export_pagecontent .= "</td><td>" . $link2 . $result_file . "</a>";
+			$export_pagecontent .= "</td><td>" . $link2 . $pdf_file . "</a>";
 //			$export_pagecontent .= "</td><td>" . $result_file . "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
@@ -99,8 +100,8 @@ else
 		$xslt_printdesc = _("Formatting-Objects-Datei");
 		$xslt_printcontent = _("In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei gespeichert.") . "<br>";	
 	
-		$result_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . ".pdf" . "\"><img src=\"./pictures/" . $export_icon["pdf"] . "\" border=0></a>";
-		$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . ".pdf" . "\">" . $xslt_filename . ".pdf" . "</a>";
+		$result_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\"><img src=\"./pictures/" . $export_icon["pdf"] . "\" border=0></a>";
+		$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\">" . $xslt_filename . ".pdf" . "</a>";
 		$result_printdesc = _("PDF-Datei");
 		$result_printcontent = _("Dies ist die fertige PDF-Datei.") . "<br>";	
 
