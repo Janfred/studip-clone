@@ -25,6 +25,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 }
 
+// 
 function CheckChecked($a, $b) {
 	if ($a == $b) {
 		return "checked";
@@ -33,12 +34,36 @@ function CheckChecked($a, $b) {
 	}
 }
 
+// 
 function CheckSelected($a, $b) {
 	if ($a == $b) {
 		return "selected";
 	} else {
 		return FALSE;
 	}
+}
+
+// 
+function array_add_value($add, $array) {
+	foreach ($add as $a) {
+		if (!empty($array)) {
+			if (!in_array($a, $array)) {
+				$x = array_push($array, $a);
+			}
+		} else {
+			$array = array($a);
+		}
+	}
+	return $array;
+}
+
+// 
+function array_delete_value($array, $value) {
+	for ($i=0;$i<count($array);$i++) {
+		if ($array[$i] == $value) 
+			array_splice($array, $i, 1);
+		}
+	return $array;
 }
 
 class messaging {
@@ -77,22 +102,43 @@ class messaging {
 		}
 	}
 
+/*
 	// delete all messages from user
-	function delete_all_messages($user_id = FALSE) {
+	function delete_all_messages($user_id = FALSE, $time="") {
 		global $user;
-		$db=new DB_Seminar;
-		
+		$db = new DB_Seminar;
+		echo $time;
 		if (!$user_id) {
 			$user_id = $user->id;
 		}
-		
-		$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."' AND deleted='0'";
+		if ($time == "all") {
+			$query = "SELECT message_id FROM message_user WHERE user_id = '".$user_id."' AND deleted='0'";
+		} else if ($time == "7d") {
+			$query = "
+			SELECT m_u.message_id, m.mkdate 
+			FROM message_user AS m_u
+				LEFT JOIN message AS m ON m.message_id
+			WHERE user_id = '".$user_id."' 
+				AND m.mkdate < '".(date("U")-(7*86400))."' 
+				AND m_u.deleted='0'";
+			echo $query;
+		} else if ($time == "30d") {
+			$query = "
+			SELECT m_u.message_id, m.mkdate 
+			FROM message_user AS m_u
+				LEFT JOIN message AS m ON m.message_id
+			WHERE user_id = '".$user_id."' 
+				AND m.mkdate < '".(date("U")-(30*86400))."' 
+				AND m_u.deleted='0'";
+	echo $query;
+			#$query = "SELECT message_id, mkdate FROM message_user WHERE user_id = '".$user_id."' AND mkdate < '".(date("U")-(30*86400))."' AND deleted='0'";
+		}
 		$db->query("$query");
 		while ($db->next_record()) {
 			$this->delete_message($db->f("message_id"));
 		}
 	}
-
+*/
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='') {
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
 
@@ -102,28 +148,23 @@ class messaging {
 		$db4 = new DB_Seminar;
 		$db5 = new DB_Seminar;
 		
-		if (!$time) {
+		if (!$time) { // wenn keine zeit uebergeben
 			$time = time();
 		}
-
-		if (!$tmp_message_id) {
+		if (!$tmp_message_id) { // wenn keine id uebergeben
 			$tmp_message_id = md5(uniqid("321losgehtes"));
 		}
-
-		if (!$user_id) {
+		if (!$user_id) { // wenn keine user_id uebergeben
 			$user_id = $user->id;
 		}
 
-		if (!empty($message)) {
-
+		if (!empty($message)) { // wenn $message nicht empty
 			$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
 			$db4->next_record();
 
 			if ($user_id != "____%system%____")  {
-				
 				$db5->query("SELECT smsforward_active, smsforward_rec FROM user_info WHERE user_id='".$db4->f("user_id")."'");
 				$db5->next_record();
-
 				$snd_user_id = $user_id;
 				if ($my_messaging_settings["save_snd"] != "1") {
 					$set_deleted = "1";
@@ -139,31 +180,25 @@ class messaging {
 				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
 			}
-			
-			if ($db5->f("smsforward_active") == "1") {
-				$message .= $this->sig_string.sprintf(_("Weiterleitung: Die automatische Nachrichten-Weiterleitung von %s hat diese Nachricht an %s weitergeleitet."), get_fullname($db4->f("user_id")), get_fullname($db5->f("smsforward_rec")));
+
+			if ($db5->f("smsforward_active") == "1" && $db5->f("smsforward_rec") != "") {
+				$message .= $this->sig_string.sprintf(_("Diese Nachricht wurde automatisch an %s weitergeleitet."), get_fullname($db5->f("smsforward_rec")));
 			}
 			
 			// insert message
 			$db3->query("INSERT IGNORE message SET message_id='".$tmp_message_id."', mkdate='".$time."', message='".$message."', autor_id='".$snd_user_id."'");
 			
-	
-			
-			// insert link snd
-			if (!$set_deleted) {
+			// insert snd
+			if (!$set_deleted) { 
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd' ");
-			} else {
+			} else { // wenn als geloescht
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
 			}
-			
-			if ($db5->f("smsforward_active") == "1") {
+			// insert rec
+			if ($db5->f("smsforward_active") == "1" && $db5->f("smsforward_rec") != "") {
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db5->f("smsforward_rec")."', snd_rec='rec' ");
 			}
-
-			// insert link rec
 			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
-
-
 
 			//Benachrichtigung in alle Chaträume schicken	 
 			$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
@@ -180,7 +215,7 @@ class messaging {
 				}	 
 			}
 			return 1;
-		} else {
+		} else { // wenn $message empty
 			return 0;
 		}
 	}
