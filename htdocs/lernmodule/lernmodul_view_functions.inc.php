@@ -145,7 +145,7 @@ function show_seminar_modules_links($seminar_id)
 			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top"><?
-			printf ("<font size=-1><b>" . _("Diese Veranstaltung ist mit folgenden Lernmodulen verbunden:") . "</b></font><br />". $out_str);
+			echo "<font size=-1><b>" . _("Diese Veranstaltung ist mit folgenden Lernmodulen verbunden:") . "</b></font><br />". $out_str;
 			?></td>
 		</tr>
 		<?
