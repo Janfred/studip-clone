@@ -25,76 +25,68 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 define("CLOSE_ON_LOGIN_SCREEN",true);
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-	require_once ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
+	require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
+	require_once ($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP . "messaging.inc.php");
+	require_once ($ABSOLUTE_PATH_STUDIP . "sms_functions.inc.php");
 
-if ($auth->auth["uid"]!="nobody"){
-	($cmd=="write") ? $refresh=0 : $refresh=30;
-	
-	$db = new DB_Seminar;
-	$db2 = new DB_Seminar;
-	$sess->register("messenger_data");
-	$sms= new messaging;
-	
-	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
+
+	if ($auth->auth["uid"]!="nobody"){
+		($cmd=="write") ? $refresh=0 : $refresh=30;
+		
+		$db = new DB_Seminar;
+		$sess->register("messenger_data");
+		$sms= new messaging;
+		
+		$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
+		$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
 		FROM active_sessions LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id) 
 		LEFT JOIN contact ON (owner_id='".$auth->auth["uid"]."' AND contact.user_id=a.user_id AND buddy=1)
 		WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' 
 		AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' 
 		AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
-	$db->query($query);
-	while ($db->next_record()){
-		$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"is_buddy" => $db->f("contact_id"));      
-	}
-
-	//set a msg to readed
-	if ($cmd=="read") {
-		$query2 = sprintf ("UPDATE message_user SET readed = '1' WHERE message_id = '%s' AND user_id ='%s'", $msg_id, $user->id);
-		$db2->query($query2);
-	}
-
-	//Count new and old msg's
-	$query =  "SELECT COUNT(IF(message_user.readed = '0', message.message_id, NULL)) AS new_msg,
-		   COUNT(IF(message_user.readed = '1', message.message_id, NULL)) AS old_msg
-		   FROM message_user LEFT JOIN message USING (message_id)
-		   WHERE deleted = '0' AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."'";
-
-	$db->query($query);
-	$db->next_record();
-	$old_msg = $db->f("old_msg");
-        $new_msg = $db->f("new_msg");
-
-	//load the data from new messages
-	$query =  "SELECT message.message_id, mkdate, autor_id, message, subject 
-		   FROM message_user LEFT JOIN message USING (message_id)
-		   WHERE deleted = '0' AND (message_user.readed = '0' OR message.message_id = '".$msg_id."' ) AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."' 
-		   ORDER BY mkdate";
-	$db->query($query);
-		
-	while ($db->next_record()){
-		if ($cmd=="read")
-			if ($msg_id==$db->f("message_id")){
-				// "open" the message (display it in the messenger)
-				$msg_text=$db->f("message");
-				$msg_snd=get_username($db->f("autor_id"));
-				$msg_autor_id = $db->f("autor_id");
-			}
-		//this is a new msg, will be shown as new msg until the user wants to see it
-		if (!$db->f("readed") && $db->f("message_id")!=$msg_id) {
-			if ($db->f("autor_id") == "____%system%____"){
-				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
-			} else {
-				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."&msg_subject=".$db->f("subject")."'>","</a>");
-			}
+		$db->query($query);
+		while ($db->next_record()){
+			$online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"),"is_buddy" => $db->f("contact_id"));      
 		}
-		$refresh+=10;
+		
+		//Count new and old msg's
+		$old_msg = count_messages_from_user('in', " AND message_user.readed = 1 ");
+		$new_msg = count_messages_from_user('in', " AND message_user.readed = 0 ");
+		
+		if ($new_msg){
+			//load the data from new messages
+			$query =  "SELECT message.message_id, message_user.mkdate, autor_id, message, subject 
+			FROM message_user LEFT JOIN message USING (message_id)
+			WHERE deleted = 0 AND message_user.readed = 0 AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."' 
+			ORDER BY message.mkdate";
+			$db->query($query);
+			
+			while ($db->next_record()){
+				if ($cmd=="read" && $msg_id==$db->f("message_id")){
+					// "open" the message (display it in the messenger)
+					$msg_text = $db->f("message");
+					$msg_snd = get_username($db->f("autor_id"));
+					$msg_autor_id = $db->f("autor_id");
+					$msg_subject = $db->f("subject");
+				} 
+				if ($db->f("autor_id") == "____%system%____"){
+					$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+				} else {
+					$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+				}
+			}
+			$refresh+=10;
+		}
+		//set a msg to readed
+		if ($cmd=="read") {
+			$query = sprintf ("UPDATE message_user SET readed = 1 WHERE message_id = '%s' AND user_id ='%s'", $msg_id, $user->id);
+			$db->query($query);
+		}
 	}
-}
-
+	
 
 // Start of Output
 $_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
@@ -129,7 +121,7 @@ function again_and_again()
 
 setTimeout('again_and_again();',<? print($refresh*1000);?>);
 <?
-($new_msgs[0] OR $cmd) ? print ("focus();\n") : print ("blur();\n");
+($new_msgs[0] OR $cmd) ? print ("self.focus();\n") : print ("self.blur();\n");
 ?>
 //-->
 </script>
@@ -205,26 +197,26 @@ if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 
 
 if ($cmd=="read" AND $msg_text){
-	if ($msg_autor_id == "____%system%____")
+	if ($msg_autor_id == "____%system%____"){
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1><b>"
 		. _("automatisch erzeugte Systemnachricht:") . " </b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
-	else
+	} else {
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
 		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname_from_uname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
-	if ($msg_autor_id != "____%system%____")
 		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>"
-		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd&msg_subject=".$msg_subject."'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
+		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd&msg_subject=".rawurlencode($msg_subject)."'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
 		. "&nbsp;<a href='$PHP_SELF?cmd=cancel'><img " . makeButton("abbrechen","src") . tooltip(_("Vorgang abbrechen")) . " border=0></a></td></tr>";
+	}
 }
 
 if ($cmd=="write" AND $msg_rec){
-
+	$msg_subject = rawurldecode($msg_subject);
 	echo "\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>";
 	echo	sprintf(_("Ihre Nachricht an <b>%s:</b>"),htmlReady(get_fullname_from_uname($msg_rec))) . "</font>";
 	echo "</td></tr>";
 	echo "\n<FORM  name='eingabe' action='$PHP_SELF?cmd=send_msg' method='POST'>";
 	echo "<INPUT TYPE='HIDDEN'  name='msg_rec' value='$msg_rec'>";
-	echo "<INPUT TYPE='HIDDEN'  name='msg_subject' value='$msg_subject'>";
+	echo "<INPUT TYPE='HIDDEN'  name='msg_subject' value='".HtmlReady($msg_subject)."'>";
 	echo "\n<tr><td class='blank' colspan='2' valign='middle'>";
 	echo "<TEXTAREA  style=\"width: 100%\" name='nu_msg' rows='4' cols='44' wrap='virtual'></TEXTAREA></font><br>";
 	echo "<font size=-1><a target=\"_new\" href=\"show_smiley.php\">" . _("Smileys</a> k&ouml;nnen verwendet werden") . " </font>\n</td></tr>";
