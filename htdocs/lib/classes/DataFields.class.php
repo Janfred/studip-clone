@@ -51,16 +51,19 @@ class DataFields {
 	function DataFields($range_id = '') {
 		$this->range_id = $range_id;
 		$this->db = new DB_Seminar;
-		$this->db2 = new DB_Seminar;		
+		$this->db2 = new DB_Seminar;
 	}
 
 	function getLocalFields($range_id = '', $object_class='', $object_type='') {
+		$local_datafields = array();
+		
 		if (!$range_id)
 			$range_id = $this->range_id;
 			
 		if ((!$object_class) && ($range_id))
 			$object_class = get_object_type($range_id);
-		
+			
+	
 		if ($object_class) {
 			if (!$object_type) {
 				switch ($object_class) {
@@ -96,6 +99,7 @@ class DataFields {
 				break;
 			}
 			
+
 			if ($object_type == "fak")
 				$object_type = "inst";
 	
@@ -114,9 +118,6 @@ class DataFields {
 			while ($this->db2->next_record()) {
 				$local_datafields[$this->db2->f("datafield_id")] = $this->db2->Record;
 			}
-			
-		} else {
-			$local_datafields = array();
 		}
 		
 		return $local_datafields;		
