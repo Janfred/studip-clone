@@ -263,14 +263,16 @@
 			</tr>
 		</xsl:if>
 		<xsl:if test="teilnehmerzahl">
-			<tr>
-				<td bgcolor="#EEEEEE">
-					<b><xsl:value-of select="teilnehmerzahl@key"/> TeilnehmerInnenzahl: </b>
-				</td>
-				<td bgcolor="#EEEEEE">
-					<xsl:value-of select="teilnehmerzahl"/>
-				</td>
-			</tr>
+			<xsl:for-each select="teilnehmerzahl">
+				<tr>
+					<td bgcolor="#EEEEEE">
+						<b><xsl:value-of select="@key"/> TeilnehmerInnenzahl: </b>
+					</td>
+					<td bgcolor="#EEEEEE">
+						<xsl:value-of select="."/>
+					</td>
+				</tr>
+			</xsl:for-each>
 		</xsl:if>
 		<xsl:if test="voraussetzung">
 			<tr>

@@ -164,9 +164,9 @@
 		<xsl:if test="teilnehmer">
 					Teilnahme: <xsl:value-of select="teilnehmer"/>
 		</xsl:if>
-		<xsl:if test="teilnehmerzahl"><xsl:text>
-					</xsl:text><xsl:value-of select="teilnehmerzahl@key"/> TeilnehmerInnenzahl: <xsl:text>						</xsl:text><xsl:value-of select="teilnehmerzahl"/>
-		</xsl:if>
+		<xsl:if test="teilnehmerzahl">	<xsl:for-each select="teilnehmerzahl"><xsl:text>
+					</xsl:text><xsl:value-of select="@key"/> TeilnehmerInnenzahl: <xsl:text>						</xsl:text><xsl:value-of select="."/>
+		</xsl:for-each></xsl:if>
 		<xsl:if test="voraussetzung">
 					Voraussetzungen: <xsl:value-of select="voraussetzung"/>
 		</xsl:if>
