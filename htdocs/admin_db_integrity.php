@@ -57,25 +57,25 @@ $_csw = new cssClassSwitcher();
 
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
-	<tr><td class="topic" align="left">&nbsp; <b>Datenbank Integrit&auml;t pr&uuml;fen</b></td></tr>
+	<tr><td class="topic" align="left">&nbsp; <b><?=_("Datenbank Integrit&auml;t pr&uuml;fen")?></b></td></tr>
 	<tr><td  align="center">
 		
 <?
 //check, if a plugin is activated
-if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
+if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)) {
 	
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheck".$_REQUEST['plugin'].".class.php";
 	$plugin_name = "IntegrityCheck".$_REQUEST['plugin'];
 	$plugin_obj = new $plugin_name;
 	
 	//query the user, if he really wants to delete
-	if($_REQUEST['cmd'] == "assure" AND isset($_REQUEST['checkid'])){
+	if($_REQUEST['cmd'] == "assure" AND isset($_REQUEST['checkid'])) {
 		$result = $plugin_obj->doCheck($_REQUEST['checkid']);
 		$anzahl = $result->num_rows();
-		$msg = "info§Sie beabsichtigen $anzahl Datens&auml;tze der Tabelle <b>".$plugin_obj->getCheckDetailTable($_REQUEST['checkid'])."</b> zu l&ouml;schen.<br>"
-		."Dieser Schritt kann <u>nicht</u> r&uuml;ckg&auml;ngig gemacht werden! Sind sie sicher ? <br />\n"
-		."<br><a href=\"$PHP_SELF?plugin={$_REQUEST['plugin']}&cmd=delete&checkid={$_REQUEST['checkid']}\"><img src=\"pictures/buttons/ja2-button.gif\" border=0></a>&nbsp;"
-		."<a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0></a>\n";
+		$msg = "info§" . sprintf(_("Sie beabsichtigen %s Datens&auml;tze der Tabelle <b>%s</b> zu l&ouml;schen."), $anzahl, $plugin_obj->getCheckDetailTable($_REQUEST['checkid'])) . "<br>"
+		._("Dieser Schritt kann <u>nicht</u> r&uuml;ckg&auml;ngig gemacht werden! Sind sie sicher?") . " <br />\n"
+		."<br><a href=\"$PHP_SELF?plugin={$_REQUEST['plugin']}&cmd=delete&checkid={$_REQUEST['checkid']}\">" . makeButton("ja2", "img") . "</a>&nbsp;"
+		."<a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>\n";
 		?><table border="0" width="80%" cellpadding="2" cellspacing="0" class="steel1">
 		<tr><td class="blank">&nbsp; </td></tr>
 		<?
@@ -85,23 +85,28 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
 		</table><?
 	
 	//delete the rows in the according table
-	} elseif($_REQUEST['cmd'] == "delete" AND isset($_REQUEST['checkid'])){
+	} elseif($_REQUEST['cmd'] == "delete" AND isset($_REQUEST['checkid'])) {
 		$result = $plugin_obj->doCheckDelete($_REQUEST['checkid']);
-		if ($result === false){
-			$msg = "error§Beim L&ouml;schen der Datens&auml;tze trat ein Fehler auf!";
+		if ($result === false) {
+			$msg = "error§" . _("Beim L&ouml;schen der Datens&auml;tze trat ein Fehler auf!");
 		} else {
-			$msg = "msg§Es wurden $result Datens&auml;tze der Tabelle <b>".$plugin_obj->getCheckDetailTable($_REQUEST['checkid'])."</b> gelöscht!";
+			$msg = "msg§" . sprintf(_("Es wurden %s Datens&auml;tze der Tabelle <b>%s</b> gelöscht!"), $result, $plugin_obj->getCheckDetailTable($_REQUEST['checkid']));
 		}
 		unset($_REQUEST['plugin']);
 	
 	//show the found rows in the according table
-	} elseif($_REQUEST['cmd'] == "show" AND isset($_REQUEST['checkid'])){
+	} elseif($_REQUEST['cmd'] == "show" AND isset($_REQUEST['checkid'])) {
 		?>
 		<table border="0" width="80%" cellpadding="2" cellspacing="2">
 		<tr><td class="blank" colspan="2">&nbsp; </td></tr>
-		<tr><td class="blank"><b>Bereich: <i><?=$_REQUEST['plugin']?></i> Datens&auml;tze der Tabelle <?=$plugin_obj->getCheckDetailTable($_REQUEST['checkid'])?></b></td>
-		<td class="blank" align="center"><a href="<?="$PHP_SELF?plugin={$_REQUEST['plugin']}&cmd=assure&checkid={$_REQUEST['checkid']}"?>"><img src="pictures/buttons/loeschen-button.gif" border="0"></a>
-		<a href="<?=$PHP_SELF?>"><img src="pictures/buttons/abbrechen-button.gif" border="0"></a></td></tr>
+		<tr><td class="blank"><b>
+		<?
+		printf(_("Bereich: <i>%s</i> Datens&auml;tze der Tabelle %s</b></td>"), $_REQUEST['plugin'], $plugin_obj->getCheckDetailTable($_REQUEST['checkid']));
+		printf("<td class=\"blank\" align=\"center\"><a href=\"%s?plugin=%s&cmd=assure&checkid=%s\">", $PHP_SELF, $_REQUEST['plugin'], $_REQUEST['checkid']);
+		print(makeButton("loeschen", "img")) . "</a> ";
+		printf("<a href=\"%s\">", $PHP_SELF);
+		print(makeButton("abbrechen", "img")) . "</a></td></tr>";
+		?> 
 		<tr><td class="blank" colspan="2">&nbsp; </td></tr>
 		<tr><td class="steel1" align="center" colspan="2">
 		<?
@@ -112,7 +117,7 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
 			echo "<th>" . $meta[$i]['name'] . "</th>";
 		}
 		echo "</tr>";
-		while ($db->next_record()){
+		while ($db->next_record()) {
 			echo"<tr>";
 			for($i = 0;$i < count($meta);++$i){ 
 				echo "<td>&nbsp;".htmlReady(substr($db->f($i),0,50))."</td>";
@@ -128,22 +133,26 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
 		?>
 		<table border="0" width="80%" cellpadding="2" cellspacing="0">
 		<tr><td class="blank" colspan="3">&nbsp; </td></tr>
-		<tr><td class="blank" colspan="2"><b>Bereich: <i><?=$_REQUEST['plugin']?></i> der Datenbank wird gepr&uuml;ft!</b></td>
-		<td class="blank" align="center"><a href="<?=$PHP_SELF?>"><img src="pictures/buttons/abbrechen-button.gif" border="0"></a></td> </tr>
+		<tr><td class="blank" colspan="2"><b>
+		<?
+		printf(_("Bereich: <i>%s</i> der Datenbank wird gepr&uuml;ft!"), $_REQUEST['plugin']);
+		?>
+		</b></td>
+		<td class="blank" align="center"><a href="<?=$PHP_SELF?>"><?=makeButton("abbrechen", "img")?></a></td> </tr>
 		<tr><td class="blank" colspan="3">&nbsp; </td></tr>
-		<tr><th width="20%">Tabelle</th><th width="60%">Ergebnis</th><th width="20%">Aktion</th></tr>
+		<tr><th width="20%"><?=_("Tabelle")?></th><th width="60%"><?=_("Ergebnis")?></th><th width="20%"><?=_("Aktion")?></th></tr>
 		<?
 		for($i=0; $i < $plugin_obj->getCheckCount(); ++$i){
 			echo "\n<tr><td ".$_csw->getFullClass().">".$plugin_obj->getCheckDetailTable($i)."</td>";
 			echo "\n<td ".$_csw->getFullClass().">";
 			$result = $plugin_obj->doCheck($i);
 			$anzahl = $result->num_rows();
-			echo "\n$anzahl Datensätze gefunden</td>";
+			printf("\n" . _("%s Datensätze gefunden") . "</td>", $anzahl);
 			echo "\n<td ".$_csw->getFullClass().">";
 			echo ($anzahl==0) ? "&nbsp;" : "<a href=\"{$PHP_SELF}?plugin={$_REQUEST['plugin']}&cmd=show&checkid={$i}\">"
-				."<img src=\"pictures/buttons/anzeigen-button.gif\" border=\"0\" align=\"middle\"></a>&nbsp;"
+				. makeButton("anzeigen", "img") . "</a>&nbsp;"
 				."<a href=\"{$PHP_SELF}?plugin={$_REQUEST['plugin']}&cmd=assure&checkid={$i}\">"
-				."<img src=\"pictures/buttons/loeschen-button.gif\" border=\"0\" align=\"middle\"></a></td></tr>";
+				. makeButton("loeschen", "img") . "</a></td></tr>";
 			$_csw->switchClass();
 		}
 		?><tr><td colspan="3">&nbsp;</td></tr></table><?
@@ -151,7 +160,7 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
 }
 
 //show all available plugins
-if(!$_REQUEST['plugin']){
+if(!$_REQUEST['plugin']) {
 	for($i=0; $i < count($_integrity_plugins); ++$i){
 		include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheck".$_integrity_plugins[$i].".class.php";
 	}
@@ -163,18 +172,18 @@ if(!$_REQUEST['plugin']){
 	}
 	?>
 	<tr><td class="blank" colspan="4">&nbsp; </td></tr>
-	<tr><td class="blank" colspan="4"><b>Folgende Bereiche der Datenbank k&ouml;nnen gepr&uuml;ft werden:</b><br />&nbsp; </td></tr>
-	<tr><th width="20%">Bereich</th><th width="60%">Beschreibung</th><th width="10%">Anzahl</th><th width="10%">Aktion</th></tr>
+	<tr><td class="blank" colspan="4"><b><?=_("Folgende Bereiche der Datenbank k&ouml;nnen gepr&uuml;ft werden:")?></b><br />&nbsp; </td></tr>
+	<tr><th width="20%"><?=_("Bereich")?></th><th width="60%"><?=_("Beschreibung")?></th><th width="10%"><?=_("Anzahl")?></th><th width="10%"><?=_("Aktion")?></th></tr>
 	<?
-	for($i=0; $i < count($_integrity_plugins); ++$i){
+	for($i=0; $i < count($_integrity_plugins); ++$i) {
 		$plugin_name = "IntegrityCheck".$_integrity_plugins[$i];
 		$plugin_obj = new $plugin_name;
 		echo "\n<tr><td ".$_csw->getFullClass().">&nbsp; ".$_integrity_plugins[$i]."</td>";
-		echo "\n<td ".$_csw->getFullClass()." style=\"font-size:smaller\">Testet Tabelle: <b>".$plugin_obj->getCheckMasterTable()
-			."</b> gegen <i>".join(", ",$plugin_obj->getCheckDetailList())."</i></td>";
+		echo "\n<td ".$_csw->getFullClass()." style=\"font-size:smaller\">" . _("Testet Tabelle:") . " <b>".$plugin_obj->getCheckMasterTable()
+			."</b> " . _("gegen") . " <i>".join(", ",$plugin_obj->getCheckDetailList())."</i></td>";
 		echo "\n<td align=\"center\" ".$_csw->getFullClass().">".$plugin_obj->getCheckCount()."</td>";
 		echo "\n<td align=\"center\" ".$_csw->getFullClass()."><a href=$PHP_SELF?plugin=".$_integrity_plugins[$i]
-			."><img src=\"pictures/buttons/jetzttesten-button.gif\" border=\"0\" align=\"middle\" hspace=\"10\" vspace=\"10\"></a></td></tr>";
+			."><img " . makeButton("jetzttesten", "src") . " border=\"0\" align=\"middle\" hspace=\"10\" vspace=\"10\"></a></td></tr>";
 		$_csw->switchClass();
 	}
 	?><tr><td colspan="3">&nbsp;</td></tr></table><?
