@@ -354,14 +354,14 @@ if ($change_object_schedules) {
 		} else
 			$msg->addMsg(2);
 	}
-
+		
 	if ($ObjectPerms->havePerm("autor")) {
 		if ($kill_assign_x) {
 			$killAssign =& AssignObject::Factory($change_object_schedules);
 			$killAssign->delete();
 			$new_assign_object='';
 			$msg ->addMsg(5);
-		} elseif (!$return_schedule) {
+		} elseif (!$return_schedule && !isset($search_room_x) && !isset($reset_room_search_x)) {
 			if ($change_object_schedules == "NEW")
 				$change_schedule_id=FALSE;
 			else
@@ -506,20 +506,36 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_day_of_week=7;
 
 			//give data to the assignobject
-			$changeAssign =& AssignObject::Factory(
-				$change_schedule_id,
-				$change_schedule_resource_id,
-				$change_schedule_assign_user_id,
-				$change_schedule_user_free_name,
-				$change_schedule_begin,
-				$change_schedule_end,
-				$change_schedule_repeat_end,
-				$change_schedule_repeat_quantity,
-				$change_schedule_repeat_interval,
-				$change_schedule_repeat_month_of_year,
-				$change_schedule_repeat_day_of_month, 
-				$change_schedule_repeat_week_of_month,
-				$change_schedule_repeat_day_of_week);
+			if (!$change_schedule_id){
+				$changeAssign =& AssignObject::Factory(
+					$change_schedule_id,
+					$change_schedule_resource_id,
+					$change_schedule_assign_user_id,
+					$change_schedule_user_free_name,
+					$change_schedule_begin,
+					$change_schedule_end,
+					$change_schedule_repeat_end,
+					$change_schedule_repeat_quantity,
+					$change_schedule_repeat_interval,
+					$change_schedule_repeat_month_of_year,
+					$change_schedule_repeat_day_of_month, 
+					$change_schedule_repeat_week_of_month,
+					$change_schedule_repeat_day_of_week);
+			} else {
+				$changeAssign =& AssignObject::Factory($change_schedule_id);
+				$changeAssign->setResourceId($change_schedule_resource_id);
+				$changeAssign->setUserFreeName($change_schedule_user_free_name);
+				$changeAssign->setAssignUserId($change_schedule_assign_user_id);
+				$changeAssign->setBegin($change_schedule_begin);
+				$changeAssign->setEnd($change_schedule_end);
+				$changeAssign->setRepeatEnd($change_schedule_repeat_end);
+				$changeAssign->setRepeatQuantity($change_schedule_repeat_quantity);
+				$changeAssign->setRepeatInterval($change_schedule_repeat_interval);
+				$changeAssign->setRepeatMonthOfYear($change_schedule_repeat_month_of_year);
+				$changeAssign->setRepeatDayOfMonth($change_schedule_repeat_day_of_month);
+				$changeAssign->setRepeatWeekOfMonth($change_schedule_repeat_week_of_month);
+				$changeAssign->setRepeatDayOfWeek($change_schedule_repeat_day_of_week);
+			}
 			
 			//if isset quantity, we calculate the correct end date
 			if ($changeAssign->getRepeatQuantity() >0)
@@ -565,7 +581,11 @@ if ($change_object_schedules) {
 			}
 
 			if ($illegal_dates) {
-				$new_assign_object=serialize($changeAssign);
+				if ($changeAssign->isNew()){
+					$new_assign_object=serialize($changeAssign);
+				} else {
+					$changeAssign->restore();
+				}
 			} elseif (($change_object_schedules == "NEW") || ($new_assign_object)) {
 				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name))
 					$overlaps = $changeAssign->checkOverlap();
@@ -594,8 +614,10 @@ if ($change_object_schedules) {
 						$new_assign_object='';						
 						}
 					$resources_data["actual_assign"]=$changeAssign->getId();
-				} else
+				} else {
 					$msg->addMsg(11);
+					$changeAssign->restore();
+				}
 					
 			}
 		}
