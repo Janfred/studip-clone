@@ -54,10 +54,10 @@ while ($db->next_record())
           }
       if ($db->f("mkdate") <= ($now-$refresh))
          {
-         if ($db->f("message")!="chat_with_me") $old_msg++;
+         if (!preg_match("/chat_with_me/i", $db->f("message"))) $old_msg++;
          }
       else
-          if ($db->f("message")=="chat_with_me" AND $online[$db->f("user_id_snd")])
+          if (preg_match("/chat_with_me/i", $db->f("message")) AND $online[$db->f("user_id_snd")])
            {
            $new_msg[]=date("H:i",$db->f("mkdate"))." Sie wurden von <b>".get_fullname_from_uname($db->f("user_id_snd"))."</b> zum Chatten eingeladen!";
            }
