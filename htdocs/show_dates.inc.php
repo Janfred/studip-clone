@@ -397,7 +397,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			$zusatz = "";
 			if($termin->getType() == 1)
 				$zusatz .= "<a href=\"seminar_main.php?auswahl=" . $termin->getSeminarId()
-								. "\"><font size=\"-2\">".htmlReady(mila($termin->getSemName(), 28))
+								. "\"><font size=\"-1\">".htmlReady(mila($termin->getSemName(), 22))
 								. "&nbsp;</font></a>";
 			
 			$titel = "";
