@@ -60,7 +60,7 @@ class studip_news {
 		}
 		$this->user_id=$auth->auth["uid"];
 		$this->db = new DB_Seminar;
-		$this->full_username = get_fullname();
+		$this->full_username = get_fullname(false, 'full', false);
 		$this->get_news_perm();
 
 		if ($this->news_perm[$news_range_id]["perm"]>=2 OR $perm->have_perm("root")) {
@@ -80,18 +80,18 @@ class studip_news {
 					$this->db->next_record();
 					$news_range_name = $this->db->f("Name");
 					break;
-					
+
 					case "inst":
 					case "fak":
 					$query="SELECT Name FROM Institute WHERE Institut_id='$news_range_id'";
 					$this->db->query($query);
 					$this->db->next_record();
-					$news_range_name=$this->db->f("Name");
+					$news_range_name = $this->db->f("Name");
 					break;
-					
+
 					default:
-					$news_range_name = get_fullname($news_range_id);
-				}	
+					$news_range_name = get_fullname($news_range_id, 'full', false);
+				}
 			} else {
 				$this->news_range=$news_range_id=$this->user_id;
 				$this->range_name=$news_range_name=$this->full_username;
@@ -181,7 +181,7 @@ class studip_news {
 			echo "\n<tr ".$cssSw->getHover()."><td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><font size=\"-1\"><b>".htmlReady($details["topic"])."</b></font></td>";
 			list ($body,$admin_msg)=explode("<admin_msg>",$details["body"]);
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"center\"><font size=\"-1\">".htmlready(mila($body))."</font></td>";
-			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><font size=\"-1\">".htmlReady($details["author"])."</font></td>";
+			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><font size=\"-1\">".$details["author"]."</font></td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", $details["date"])."</td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", ($details["date"]+$details["expire"]))."</td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><a href=\"".$this->p_self("cmd=edit&edit_news=$news_id")."\"><img "
@@ -219,7 +219,7 @@ class studip_news {
 		echo "\n</td></tr>";
 		echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
 		echo "\n<table width=\"99%\" cellspacing=\"0\" cellpadding=\"6\" border=\"0\">";
-		echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>" . _("Autor:") . "</b>&nbsp;".htmlReady($this->news_query["author"])."<br><br><b>" . _("&Uuml;berschrift") 
+		echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>" . _("Autor:") . "</b>&nbsp;".htmlReady($this->news_query["author"])."<br><br><b>" . _("&Uuml;berschrift")
 			. "</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\" maxlength=\"255\" name=\"topic\" value=\""
 			.htmlReady($this->news_query["topic"])."\"><br>";
 		list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
@@ -318,14 +318,14 @@ class studip_news {
 					$news_id=md5(uniqid($seed));
 					$flag=TRUE;
 					$user_id=$this->user_id;
-					$author=$this->full_username;
+					$author=htmlReady($this->full_username);
 					if (!$date) 
 						$date=time();
 					$this->db->query("INSERT INTO news (news_id,author,topic,body,user_id,date,expire) VALUES ('$news_id','$author','$topic','$body','$user_id','$date','$expire')");
 					if ($this->db->affected_rows()) 
 					$this->msg .= "msg§" . _("Ok, Ihre neue News wurde gespeichert!") . "§";
 				} else {
-					if ($this->news_query["topic"]!=stripslashes($topic) 
+					if ($this->news_query["topic"]!=stripslashes($topic)
 					OR $this->news_query["body"]!=stripslashes($body) 
 					OR $this->news_query["date"]!=$date 
 					OR $this->news_query["expire"]!=$expire) {
