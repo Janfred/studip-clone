@@ -631,7 +631,8 @@ function createVoteResult ($vote, $preview = NO) {
    foreach ($answers as $answer) {
       $val = $answer["counter"];
       $percent = round ($val / $totalNumber * 100);
-
+      // Prozentangaben müssen auf 100% gebracht werden. 99% bzw. 101% 
+      // sind möglich
       $html .= "<tr>\n";
       $html .= "<td".$extraStyle." width=".$leftCellWidth." align=right valign=middle nowrap>";
       $html .= "<font size=-1><b>".$percent."%</b></font>\n";
