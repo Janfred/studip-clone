@@ -300,6 +300,14 @@ class Seminar_Auth extends Auth {
 	
 	function auth_validatelogin() {
 		global $username, $password, $challenge, $response, $resolution;
+		global $_language, $_language_path;
+		
+		// check for direct link  
+		if (!isset($_language) || $_language == "") {
+			$_language = get_accepted_languages();
+		}		
+		
+		$_language_path = init_i18n($_language);
 		
 		$this->auth["uname"]=$username;	// This provides access for "loginform.ihtml"
 		
@@ -403,7 +411,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		
 		// check for direct link to register2.php 
 		if (!isset($_language) || $_language == "") {
-			$_language = $DEFAULT_LANGUAGE;
+			$_language = get_accepted_languages();
 		}		
 		
 		$_language_path = init_i18n($_language);
