@@ -62,6 +62,8 @@ include("kartei.inc.php");
 
 if (isset($help_page)) { // ok, eine normale Hilfeseite ausgeben
 
+	$help_page = basename($help_page);
+	
 	if (!isset($druck)) { // die Hilfe-Seite in eine Tabelle packen
 		print("\n<table cellspacing=0 cellpadding=10 border=0 width=\"100%\"><tr><td class=\"blank\">");
 		include("../locale/$_language_path/LC_HELP/pages/$help_page");
