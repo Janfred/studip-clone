@@ -346,7 +346,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
 				<?		
 				//wer macht den Dozenten?
-				$db2->query ("SELECT Vorname, Nachname, seminar_user.user_id, username, status FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE seminar_user.Seminar_id = '".$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]."' AND status = 'dozent' ORDER BY Nachname");
+				$db2->query ("SELECT " . $_fullname_sql['full'] . " AS fullname, seminar_user.user_id, username, status FROM seminar_user  LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '".$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]."' AND status = 'dozent' ORDER BY Nachname");
 				if ($db2->num_rows() > 1)
 					printf ("<font size=-1><b>DozentInnen:</b></font><br />");
 				else
@@ -354,7 +354,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				while ($db2->next_record()) {
 					if ($db2->num_rows() > 1)
 						print "<li>";
-					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db2->f("username"), htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname")) );
+					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db2->f("username"), htmlReady($db2->f("fullname")) );
 					if ($db2->num_rows() > 1)
 						print "</li>";
 				}
@@ -363,7 +363,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
 				<?		
 				//und wer ist Tutor?
-				$db2->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE seminar_user.Seminar_id = '".$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]."' AND status = 'tutor' ORDER BY Nachname");
+				$db2->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user  LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '".$archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]."' AND status = 'tutor' ORDER BY Nachname");
 				if ($db2->num_rows() > 1)
 					printf ("<font size=-1><b>TutorInnen:</b></font><br />");
 				elseif ($db2->num_rows() == 0)
@@ -373,7 +373,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 				while ($db2->next_record()) {
 					if ($db2->num_rows() > 1)
 						print "<li>";
-					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db2->f("username"), htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname")) );
+					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db2->f("username"), htmlReady($db2->f("fullname")) );
 					if ($db2->num_rows() > 1)
 						print "</li>";
 				}

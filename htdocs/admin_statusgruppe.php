@@ -151,7 +151,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 
 
 function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
-{	global $PHP_SELF;
+{	global $PHP_SELF, $_fullname_sql;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
@@ -168,7 +168,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
 		echo 	"\n\t</tr>";
 
-		$db2->query ("SELECT statusgruppe_user.user_id, Vorname, Nachname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
+		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
 		$k = 1;
 		while ($db2->next_record()) {
 			if ($k > $size) {
@@ -182,7 +182,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 				$class="steelgraulight"; 
 			}
 			printf ("\n\t<tr>\n\t\t<td><font color=\"%s\">$k</font></td>", $farbe);
-			printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\"> %s&nbsp;%s</font></td>",$class, $db2->f("Vorname"), $db2->f("Nachname"));
+			printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\">%s</font></td>",$class, htmlReady($db2->f("fullname")));
 			printf ("<td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip("Person aus der Gruppe entfernen"));
 			echo "\n\t</tr>";
 			$k++;
@@ -202,17 +202,17 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 }
 
 function PrintSearchResults ($search_exp, $range_id)
-{ global $SessSemName;
+{ global $SessSemName, $_fullname_sql;
 	$db=new DB_Seminar;
 	if (get_object_type($range_id) == "sem") {
-		$query = "SELECT a.user_id, username, Vorname, Nachname, perms FROM auth_user_md5 a ".		
-		"LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$range_id')  ".
+		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".		
+		"LEFT JOIN user_info USING (user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$range_id')  ".
 		"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
 		"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
 		"ORDER BY Nachname";
 	} else {
-		$query = "SELECT DISTINCT auth_user_md5.user_id, Vorname, Nachname, username, perms ".
-		"FROM auth_user_md5 LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
+		$query = "SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, username, perms ".
+		"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
 		"WHERE perms !='root' AND perms !='admin' AND perms !='user' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
 		"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
 	}
@@ -222,7 +222,7 @@ function PrintSearchResults ($search_exp, $range_id)
 	} else {
 		echo "&nbsp; <select name=\"Freesearch[]\" size=\"4\" multiple>";
 		while ($db->next_record()) {
-			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
+			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
 		}
 		echo "</select>";
 	}
@@ -230,13 +230,14 @@ function PrintSearchResults ($search_exp, $range_id)
 
 function PrintAktualMembers ($range_id)
 {	
+	global $_fullname_sql;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	if (get_object_type($range_id) == "sem") {
 		echo "<font size=\"-1\">&nbsp; TeilnehmerInnen der Veranstaltung</font><br>";
-		$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
+		$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	} else {
 		echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Einrichtung</font><br>";
-		$query = "SELECT user_inst.user_id, username, Nachname, Vorname, inst_perms AS perms FROM user_inst LEFT JOIN auth_user_md5 USING(user_id)  WHERE Institut_id = '$range_id' AND inst_perms != 'user' AND inst_perms != 'admin' ORDER BY Nachname ASC";
+		$query = "SELECT user_inst.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, inst_perms AS perms FROM user_inst LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE Institut_id = '$range_id' AND inst_perms != 'user' AND inst_perms != 'admin' ORDER BY Nachname ASC";
 	}
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
@@ -247,24 +248,25 @@ function PrintAktualMembers ($range_id)
 		} else {
 			$tmpcolor = "#000000";
 		}
-		printf ("<option style=\"color:%s;\" value=\"%s\">%s - %s\n", $tmpcolor, $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
+		printf ("<option style=\"color:%s;\" value=\"%s\">%s - %s\n", $tmpcolor, $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
 	}
 	echo "</select>";
 }
 
 function PrintInstitutMembers ($range_id)
 {	
+	global $_fullname_sql;
 	echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Einrichtungen</font><br>";
 	echo "&nbsp; <select name=\"InstitutMembers\">";
 	$db=new DB_Seminar;
-	$query = "SELECT a.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
-			"LEFT JOIN auth_user_md5  b USING(user_id) ".
+	$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
+			"LEFT JOIN auth_user_md5  b USING(user_id) LEFT JOIN user_info USING (user_id) ".
 			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$range_id')  ".
 			"WHERE d.seminar_id = '$range_id' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) GROUP BY a.user_id ORDER BY Nachname";
 	$db->query($query); // ergibt alle berufbaren Personen
 		printf ("<option>---</option>");
 	while ($db->next_record()) {
-		printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
+		printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
 	}
 	echo "</select>";
 }

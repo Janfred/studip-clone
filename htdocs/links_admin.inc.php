@@ -416,7 +416,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($vie
 					if ($perm->have_perm("root"))
 						$db->query("SELECT Institut_id, Name  FROM Institute ORDER BY Name");
 					else
-						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms IN ('admin', 'dozent', 'tutor') ORDER BY Name");
+						$db->query("SELECT DISTINCT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user->id' AND inst_perms IN ('admin', 'dozent', 'tutor') ORDER BY Name");
 					
 					printf ("<option value=\"NULL\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
 					while ($db->next_record())
@@ -493,7 +493,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 							if ($perm->have_perm("root"))
 								$db->query("SELECT * FROM Institute ORDER BY Name");
 							else
-								$db->query("SELECT * FROM Institute LEFT JOIN user_inst USING (Institut_id) WHERE user_id = '".$user->id."' AND inst_perms = 'admin' ORDER BY Name");
+								$db->query("SELECT DISTINCT b.Institut_id,Name FROM user_inst  LEFT JOIN Institute b USING (Institut_id) WHERE user_id = '".$user->id."' AND inst_perms = 'admin' ORDER BY Name");
 							if ($db->num_rows() >1) {
 							?>
 							<font size=-1>Einrichtung:</font><br /><select name="srch_inst">
@@ -523,7 +523,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 							<font size=-1>Dozent:</font><br /><select name="srch_doz">
 								<option value=0>alle</option>
 								<?
-								$query="SELECT DISTINCT * FROM auth_user_md5 LEFT JOIN user_inst USING(user_id) WHERE inst_perms='dozent' AND institut_id IN (";
+								$query="SELECT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, Institut_id FROM user_inst  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms='dozent' AND institut_id IN (";
 								$i=0;
 								foreach ($my_inst as $a) {
 									if ($i)
@@ -531,14 +531,14 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 									$query.="'".$a."'"; 
 									$i++;
 									}
-								$query.=") ORDER BY Nachname";
+								$query.=") GROUP BY auth_user_md5.user_id ORDER BY Nachname ";
 								$db->query($query);
 								if ($db->num_rows() >1) 
 									while ($db->next_record()) {
 										if ($links_admin_data["srch_doz"] == $db->f("user_id"))
-											echo"<option selected value=".$db->f("user_id").">".$db->f("Nachname").", ".$db->f("Vorname")."</option>";
+											echo"<option selected value=".$db->f("user_id").">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
 										else
-											echo"<option value=".$db->f("user_id").">".$db->f("Nachname").", ".$db->f("Vorname")."</option>";
+											echo"<option value=".$db->f("user_id").">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
 										}										
 								?>								
 							</select>
@@ -739,14 +739,14 @@ while ($db->next_record()) {
 			echo "(...)";
 		echo "</td>";
 		echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
-		$db4->query("SELECT Vorname, Nachname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent'");
+		$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent'");
 		$k=0;
 		if (!$db4->num_rows())
 			echo "&nbsp; ";
 		while ($db4->next_record()) {
 			if ($k)
 				echo ", ";
-			echo "<a href=\"about.php?username=".$db4->f("username")."\">".$db4->f("Vorname")." ".$db4->f("Nachname")."</a>";
+			echo "<a href=\"about.php?username=".$db4->f("username")."\">".htmlReady($db4->f("fullname"))."</a>";
 			$k++; 
 			}
 		echo "</font></td>";

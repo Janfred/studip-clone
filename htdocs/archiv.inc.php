@@ -28,7 +28,7 @@ require_once "datei.inc.php";
 
 function dump_sem($sem_id)  
 {
-	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS;
+	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS,$_fullname_sql;
 	
 	require_once("visual.inc.php");
 
@@ -68,25 +68,25 @@ function dump_sem($sem_id)
 
 	//wer macht den Dozenten?
 	$db=new DB_Seminar;
-	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
+	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 
 	if ($db->affected_rows() > 1)
 		$dump.= "<tr><td width=\"15%\"><b>DozentInnen: </b></td><td>";
 	else
 		$dump.= "<tr><td width=\"15%\"><b>DozentIn: </b></td><td>";
 	while ($db->next_record()) 
-		$dump.= $db->f("Vorname") ." ". $db->f("Nachname") ."<br>  ";
+		$dump.= $db->f("fullname") ."<br>  ";
 	$dump.="</td></tr>\n";
 		
 	//und wer ist Tutor?
-	$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
+	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY Nachname");
 
 	if ($db->affected_rows() > 1)
 		$dump.="<tr><td width=\"15%\"><b>TutorInnen: </b></td><td>";
 	elseif ($db->affected_rows() == 1)
 		$dump.="<tr><td width=\"15%\"><b>TutorIn: </b></td><td>";
 	while ($db->next_record()) 
-		$dump.= $db->f("Vorname") ." ". $db->f("Nachname")."<br>";
+		$dump.= $db->f("fullname")."<br>";
 	if ($db->affected_rows())
 		$dump.="</td></tr>\n";
 		
@@ -368,7 +368,7 @@ function dump_sem($sem_id)
 		$sortby = "doll DESC";
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
-		$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id)  WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
+		$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
 		IF (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
 	  	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
@@ -381,7 +381,7 @@ function dump_sem($sem_id)
 			
 			while ($db->next_record()) {
 				$dump.="<tr><td>";
-				$dump.= $db->f("Vorname") ." ". $db->f("Nachname");
+				$dump.= $db->f("fullname");
 				$dump.="</td><td align=center>";
 				$dump.= $db->f("doll");
 				$dump.="</td><td align=center>";
@@ -510,7 +510,7 @@ RETURN $forum_dumb;
 //Funktion zum archivieren eines Seminars, sollte in der Regel vor dem Loeschen ausgfuehrt werden.
 function in_archiv ($sem_id)
 {
-	global $SEMESTER, $ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH;
+	global $SEMESTER, $ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $_fullname_sql;
 	
 	$hash_secret="frauen";
 
@@ -566,12 +566,12 @@ function in_archiv ($sem_id)
 		$institute=$institute.", ".$db2->f("Name");
 		}
 	
-	$db2->query("SELECT Vorname, Nachname FROM auth_user_md5 LEFT JOIN seminar_user USING (user_id) WHERE seminar_id = '$seminar_id' AND seminar_user.status='dozent'");
+	$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname FROM seminar_user  LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '$seminar_id' AND seminar_user.status='dozent'");
 	$db2->next_record();
-	$dozenten=$db2->f("Vorname")." ". $db2->f("Nachname");
+	$dozenten=$db2->f("fullname");
 	while ($db2->next_record())
 		{
-		$dozenten=$dozenten.", ".$db2->f("Vorname")." ". $db2->f("Nachname");
+		$dozenten=$dozenten.", ".$db2->f("fullname");
 		}
 
 	$db2->query("SELECT Fakultaeten.Fakultaets_id FROM Fakultaeten LEFT JOIN Institute USING (Fakultaets_id)  LEFT JOIN seminare USING (Institut_id) WHERE seminare.Seminar_id = '$seminar_id'");
