@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 function CheckPersonInNewsletter ($username, $newsletter_id)    // Ist jemand aufgrund der SQL-Clause im Versand?
 { global $newsletter;
 	$user_id = get_userid($username);
@@ -81,4 +82,22 @@ function RemovePersonNewsletter ($username, $newsletter_id)    // Funktion, mit 
 	}
 	return $msg;
 }
+
+// Newsletter arrays
+
+	// Standard
+
+	$newsletter[0]["name"] = "Stud.IP Newsletter";
+	$newsletter[0]["SQL"] = "WHERE username = 'rstockm'";
+//		$newsletter[0]["SQL"] = "WHERE perms != 'user' AND perms != 'autor'";
+	$newsletter[0]["text"] = "Hallo dies ist ein Text";
+
+	// weitere
+
+	$newsletter[1]["name"] = "Stud.IP Admin-Newsletter";
+	$newsletter[1]["SQL"] = "WHERE perms = 'admin'";
+	$newsletter[1]["text"] = "Hallo dies ist ein noch ein Text";
+
+
+
 ?>
