@@ -449,6 +449,9 @@ if (($s_id) && (auth_check())) {
 						while ($db3->next_record()) {
 							printf ("<option %s style=\"%s\" value=\"%s\"> %s</option>", $db3->f("Institut_id") == $db->f("Institut_id") ? "selected" : "",
 								($db3->f("is_fak")) ? "font-weight:bold;" : "", $db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
+							if ($db3->f("Institut_id") == $db->f("Institut_id")){
+								$found_home_inst = true;
+							}
 							if ($db3->f("is_fak") && $db3->f("inst_perms") == "admin"){
 								$db2->query("SELECT a.Institut_id, a.Name FROM Institute a 
 											 WHERE fakultaets_id='" . $db3->f("Institut_id") . "' AND a.Institut_id!='" .$db3->f("Institut_id") . "' ORDER BY Name");
@@ -458,13 +461,17 @@ if (($s_id) && (auth_check())) {
 								}
 							}
 						}
+						if ($perm->get_perm() == 'dozent' && !$found_home_inst){
+							printf("<option selected value=\"%s\"> %s</option>", $db->f("Institut_id") , htmlReady(my_substr($db->f("Institut"),0,60)));
+						}
+						echo "</select>";
 					} else {
 						echo "<td class=\"".$cssSw->getClass()."\" align=right>" . _("Heimat-Einrichtung") . "</td>";
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
 						echo "<input type=\"HIDDEN\" name=\"Institut\" value=\"".$db->f("Institut_id")."\" />";
 						echo "<b>".htmlReady($db->f("Institut"))."</b>";
 					}
-					echo "</select>";
+
 				?>
 				</td>
 			</tr>				
