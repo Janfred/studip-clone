@@ -17,43 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-/*
-function doc_count ($parent_id) {
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	
-	$db2->query ("SELECT count(*) as count FROM dokumente WHERE range_id='$parent_id'");
-	$db2->next_record();
-	$count = $db2->f("count");
-		
-	$db->query ("SELECT folder_id FROM folder WHERE range_id='$parent_id'");
-	 
-	while ($db->next_record()) {
-		$count += doc_count ($db->f("folder_id"));
-	} 
-	
-	return $count;
-}
-
-
-function doc_challenge ($parent_id, $doc_ids=array()) {
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;	
-	
-	$db->query ("SELECT folder_id FROM folder WHERE range_id='$parent_id'");
-	 
-	while ($db->next_record()) {
-		$doc_ids=doc_challenge ($db->f("folder_id"), $doc_ids);
-
-		$db2->query ("SELECT dokument_id FROM dokumente WHERE range_id='".$db->f("folder_id")."'");
-
-		while ($db2->next_record()) {	 		 	
-			$doc_ids[]=$db2->f("dokument_id");
-			}
-		} 
-	return $doc_ids;
-	}
-*/
 	
 function getFolderId(&$folders,$parent_id){
 	if(!$folders) $folders[]=$parent_id;
