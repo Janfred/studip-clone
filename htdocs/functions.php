@@ -613,6 +613,9 @@ function get_userid($username="") {
 	static $cache;
 	global $auth;
 	$author = "";
+	if ($username == 'studip'){
+		return 'studip';
+	}
 	if (!$username || $username == $auth->auth['uname'])
 		return $auth->auth['uid'];
 	if (isset($cache[$username])){
