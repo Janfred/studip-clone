@@ -52,8 +52,6 @@ $UNI_CONTACT = "goettingen@studip.de";
 $UNI_INFO = "Kontakt:\nGeorg-August-Universität\nWilhelmsplatz 1 (Aula)\n37073 Göttingen\nTel. +49 (0)551 / 39-0\nFax +49 (0)551 / 39-4135\npoststelle@uni-goettingen.de"; 
 
 //die IDs der Veranstaltungen, die beim Hochstufen auf autor eingetragen werden
-//$AUTO_INSERT_SEM[1]="3f43debe372cfd7d4da6afa4ca40616f";  Seminare des HS
-//$AUTO_INSERT_SEM[2]="db3ef283064dc8b34aa8e8df579998da";  (zum reaktivieren bei Update)
 $AUTO_INSERT_SEM[1]="28e888802838a57bc1fbac4e39f0b13a";
 $AUTO_INSERT_SEM[2]="07dfaf1c72df7e862367f1a15b33129c";
 $AUTO_INSERT_SEM[3]="33c5231502fa410bcefbd5c751d7210e";
