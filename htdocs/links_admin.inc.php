@@ -52,6 +52,12 @@ if (($i_page== "adminarea_start.php") && ($admin_sem_id)) {
 elseif ($admin_inst_id) {
 	$links_admin_data='';
 	$links_admin_data["inst_id"]=$admin_inst_id;
+	$sem_create_data='';
+	$admin_dates_data='';
+	$admin_admission_data='';
+	$archiv_assi_data='';
+	$term_metadata='';
+	$admin_dates_data='';
 	$SessSemName[0] = "";
 	$SessSemName[1] = "";
 	}
