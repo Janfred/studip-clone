@@ -89,11 +89,13 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");	//basale Funktionen
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");	//Darstellungsfunktionen
 require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Nachrichtenfunktionen
 
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
-$cssSw=new cssClassSwitcher;
+$db = new DB_Seminar;
+$db2 = new DB_Seminar;
+$db3 = new DB_Seminar;
+$db4 = new DB_Seminar;
+$cssSw = new cssClassSwitcher;
 $sess->register("admin_admission_data");
-$messaging=new messaging;
+$messaging = new messaging;
 
 
 /**
@@ -116,7 +118,10 @@ function get_snapshot() {
 			serialize($admin_admission_data["read_level"]).
 			serialize($admin_admission_data["write_level"]).
 			serialize($admin_admission_data["studg"]).
-			serialize($admin_admission_data["all_ratio"]);
+			serialize($admin_admission_data["all_ratio"]).
+			serialize($admin_admission_data["admission_prelim"]).
+			serialize($admin_admission_data["sem_admission_start_date"]).
+			serialize($admin_admission_data["sem_admission_end_date"]);
 }
 
 //get ID
@@ -125,7 +130,7 @@ if ($SessSemName[1])
 	
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)) {
-	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Institut_id, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$seminar_id' ");
+	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$seminar_id' ");
 	$db->next_record();
 	$admin_admission_data='';	
 	$admin_admission_data["metadata_dates"]=unserialize($db->f("metadata_dates"));
@@ -143,7 +148,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["status"]=$db->f("status");	
 	$admin_admission_data["start_time"]=$db->f("start_time");	
 	$admin_admission_data["read_level"]=$db->f("Lesezugriff");	
-	$admin_admission_data["write_level"]=$db->f("Schreibzugriff");	
+	$admin_admission_data["write_level"]=$db->f("Schreibzugriff");
+	$admin_admission_data["admission_prelim"]=$db->f("admission_prelim");
+	$admin_admission_data["sem_admission_start_date"]=$db->f("admission_starttime");
+	$admin_admission_data["sem_admission_end_date"]=$db->f("admission_endtime_sem");
 	if (!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] =-1;
 	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id'");
 	while ($db->next_record()) {
@@ -161,6 +169,15 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		echo "</tr></td></table>";
 		die;
 	}
+
+	//check start / enddate
+	$admin_admission_data["sem_admission_start_date"] = mktime($adm_s_stunde,$adm_s_minute,59,$adm_s_monat,$adm_s_tag,$adm_s_jahr);
+	$admin_admission_data["sem_admission_end_date"] = mktime($adm_e_stunde,$adm_e_minute,59,$adm_e_monat,$adm_e_tag,$adm_e_jahr);
+	if (($admin_admission_data["sem_admission_end_date"] < time()) && ($admin_admission_data["sem_admission_end_date"] != -1)) {
+		$errormsg=$errormsg."error§"._("Das Enddatum liegt in der Verangenheit. Bitte geben Sie ein g&uuml;ltiges Enddatum ein!")."§"; 
+		$check=FALSE;
+	}
+
 	//Umschalter zwischen den Typen
 	if ($adm_null_x)
 		$admin_admission_data["admission_type"]=0;
@@ -233,7 +250,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Losdatum ein!")."§";
 				else
 					$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Enddatum der Kontingentierung ein!")."§";				
-				$check=FALSE;			
+				$check=FALSE;
 			} else
 				$check=TRUE;
 
@@ -264,7 +281,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	//Studiengang loeschen
 	if ($delete_studg)
 		unset($admin_admission_data["studg"][$delete_studg]);
- 
+
 	//Checks performen
 	if (!$admin_admission_data["admission_type"]) {
 		if (($admin_admission_data["write_level"]) <($admin_admission_data["read_level"])) 
@@ -346,7 +363,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				if (!$admin_admission_data["admission_selection_take_place"]) {
 					if (($admin_admission_data["admission_endtime"] < time()) && ($admin_admission_data["admission_endtime"] != -1)) {
 						if ($admin_admission_data["admission_type"] == 1)						
-							$errormsg.=sprintf ("error§"._("Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern Sie das Losdatum!")."§");	
+							$errormsg.=sprintf ("error§"._("Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern Sie das Losdatum!")."§");
 						else
 							$errormsg.=sprintf ("error§"._("Das Enddatum der Kontingentierung liegt in der Vergangenheit. Bitte &auml;ndern Sie das Datum!")."§");							
 					} elseif (($admin_admission_data["admission_endtime"] < (time() + (24 * 60 *60))) && ($admin_admission_data["admission_endtime"] != -1)) {
@@ -367,6 +384,46 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	//Daten speichern
 	if (($uebernehmen_x) && (!$errormsg)) {
 		//for admission it have to be always 3
+
+		if ($admission_prelim == 1) {
+			if ($admin_admission_data["admission_prelim"] == 0) { //we have to move the students to status "temporaly accepted", if put on
+				$db3->query("SELECT *,auth_user_md5.username FROM seminar_user,auth_user_md5 WHERE seminar_user.Seminar_id = '".$admin_admission_data["sem_id"]."' AND seminar_user.status='autor' AND seminar_user.user_id = auth_user_md5.user_id");
+				while ($db3->next_record()) {
+					$db4->query("INSERT INTO admission_seminar_user SET user_id ='".$db3->f("user_id")."', seminar_id = '".$db3->f("Seminar_id")."', studiengang_id ='".$db3->f("admission_studiengang_id")."', mkdate='".$db3->f("mkdate")."', status ='accepted'");
+					$db4->query("DELETE FROM seminar_user WHERE user_id='".$db3->f("user_id")."' AND Seminar_id='".$db3->f("Seminar_id")."'");
+					$message="Sie wurden in der Veranstaltung **".$admin_admission_data["name"]."** in den Status **vorläufig akzeptiert** befördert, da das Anmeldeverfahren geändert wurde.";
+					$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
+				}
+				$db3->query("SELECT *, auth_user_md5.username FROM seminar_user, auth_user_md5 WHERE seminar_user.Seminar_id = '".$admin_admission_data["sem_id"]."' AND seminar_user.status='user' AND seminar_user.user_id = auth_user_md5.user_id");
+				$db4->query("DELETE FROM seminar_user WHERE Seminar_id = '".$admin_admission_data["sem_id"]."' AND status='user'");
+				if ($db4->affected_rows()) {
+					while ($db3->next_record()) {
+						$message="Ihr Abonnement der Veranstaltung **".$admin_admission_data["name"]."** wurde aufgehoben, da die Veranstaltung mit einem teilnahmebeschränkten Anmeldeverfahren versehen wurde. \nWenn Sie einen Platz in der Veranstaltung bekommen wollen, melden Sie sich bitte erneut an.";
+						$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
+					}
+				}
+				$db4->query("UPDATE seminare SET admission_prelim = 1 WHERE Seminar_id = '".$admin_admission_data["sem_id"]."'");
+				$admin_admission_data["admission_prelim"] = 1;
+			}				
+		} elseif ($admission_prelim == 0) { 
+			if ($admin_admission_data["admission_prelim"] == 1) { //we have to move the students again
+				if (!$perm->have_perm("admin")) {
+					$errormsg.=sprintf ("error§"._("Sie dürfen den Anmeldemodus nicht mehr verändern! Wenden Sie sich ggf. an den zuständigen Admin.")."§");
+				} else {
+					$db3->query("SELECT *, auth_user_md5.username FROM admission_seminar_user, auth_user_md5 WHERE admission_seminar_user.seminar_id = '".$admin_admission_data["sem_id"]."' AND admission_seminar_user.status='accepted' AND admission_seminar_user.user_id = auth_user_md5.user_id");
+					while ($db3->next_record()) {
+						$db4->query("INSERT INTO seminar_user SET user_id ='".$db3->f("user_id")."', Seminar_id = '".$db3->f("seminar_id")."', admission_studiengang_id ='".$db3->f("studiengang_id")."', mkdate='".$db3->f("mkdate")."', status='autor'");
+						$db4->query("DELETE FROM admission_seminar_user WHERE user_id='".$db3->f("user_id")."' AND seminar_id='".$db3->f("seminar_id")."'");
+						$message="Sie wurden in der Veranstaltung **".$admin_admission_data["name"]."** in den Status **Autor** versetzt, da das Anmeldeverfahren geändert wurde.";
+						$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
+		
+					}
+					$db4->query("UPDATE seminare SET admission_prelim = 0 WHERE Seminar_id = '".$admin_admission_data["sem_id"]."'");
+					$admin_admission_data["admission_prelim"] = 0;
+				}
+			}
+		}
+
 		if ($admin_admission_data["admission_type"]) {
 			$admin_admission_data["read_level"]=3;
 			$admin_admission_data["write_level"]=3;
@@ -377,6 +434,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				admission_type = '".$admin_admission_data["admission_type"]."', 
 				admission_endtime= '".$admin_admission_data["admission_endtime"]."', 
 				admission_binding = '".$admin_admission_data["admission_binding"]."', 
+				admission_starttime = '".$admin_admission_data["sem_admission_start_date"]."',
+				admission_endtime_sem = '".$admin_admission_data["sem_admission_end_date"]."',
 				Passwort = '".$admin_admission_data["passwort"]."',
 				Lesezugriff = '".$admin_admission_data["read_level"]."', 
 				Schreibzugriff  = '".$admin_admission_data["write_level"]."' 
@@ -513,7 +572,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					if  (!$db->num_rows())
 						printf ("<font size=-1>"._("Sie haben ein Anmeldeverfahren aktiviert. Dieser Schritt kann %s nicht %s r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an eine Administratorin oder einen Administrator.")."<br /></font>", "</font><font size=-1 color=\"red\"><b>", "</b></font><font size=-1>");
 					else
-						printf ("<font size=-1>"._("Sie haben ein Anmeldeverfahren aktiviert. Dieser Schritt kann %s nicht %s r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an eineN der hier aufgef&uuml;hrten AdministratorInnen.")."<br /></font>", "</font><font size=-1 color=\"red\"><b>", "</b></font><font size=-1>");					
+						printf ("<font size=-1>"._("Sie haben ein Anmeldeverfahren aktiviert. Dieser Schritt kann %s nicht %s r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an eineN der hier aufgef&uuml;hrten AdministratorInnen.")."<br /></font>", "</font><font size=-1 color=\"red\"><b>", "</b></font><font size=-1>");
 					printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\" />");
 					while ($db->next_record()) {
 						printf ("<li><font size=-1><a href=\"about?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
@@ -523,8 +582,81 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				<br /><input type="IMAGE" name="adm_null" <? if  ($admin_admission_data["admission_type"] == 0) print makeButton ("keins2", "src");  else print makeButton ("keins", "src") ?> border=0 value="keins">&nbsp; 
 				<input type="IMAGE" name="adm_los" <? if  ($admin_admission_data["admission_type"] == 1) print makeButton ("los2", "src");  else print makeButton ("los", "src") ?> border=0 value="los">&nbsp; 
 				<input type="IMAGE" name="adm_chrono" <? if  ($admin_admission_data["admission_type"] == 2) print makeButton ("chronolog2", "src");  else print makeButton ("chronolog", "src") ?>border=0 value="chronolog">
-				<input type="HIDDEN" name="adm_type_old" value="<? echo $admin_admission_data["admission_type"] ?>" />
-				<? } ?>
+				<input type="HIDDEN" name="adm_type_old" value="<? echo $admin_admission_data["admission_type"] ?>" /><br />
+				<? 
+				} 
+				?>
+			</td>
+		</tr>
+
+		<tr <? $cssSw->switchClass() ?>>
+			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right" rowspan=2>
+					&nbsp;
+			</td>
+			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
+					<font size=-1><b>&nbsp;<?= _("Start- und Endzeit:") ?></b><br /></font>
+					<font size=-1>&nbsp;<?= _("Sie k&ouml;nnen hier angeben, in welchem Zeitraum eine Anmeldung f&uuml;r die Veranstaltung m&ouml;glich ist.") ?><br /></font>
+			</td>
+		</tr>	
+		
+		<tr>
+			<td class="<? echo $cssSw->getClass() ?>" colspan="2">
+				<table border=0 cellpadding=2 cellspacing=0 align="center" width="100%">
+				<tr>
+					<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
+						<font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
+						<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo date("d") ?>">.
+						<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo date("m") ?>">.
+						<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo date("Y") ?>"><?=_("um");?>&nbsp;</font><br />
+						<font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo date("H") ?>">:
+						<input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else echo date("i") ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
+						<img  src="./pictures/info.gif" <? echo tooltip(_("Teilnehmer dürfen sich erst ab diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
+						<font size=-1><? echo _("Enddatum f&uuml;r Anmeldungen");?>:</font>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
+						<font size=-1>&nbsp; <input type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_end_date"]); else echo "" ?>">.
+						<input type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_end_date"]); else echo "" ?>">.
+						<input type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_end_date"]); else echo "" ?>"><?=_("um");?>&nbsp;</font><br />
+						<font size=-1>&nbsp; <input type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_end_date"]); else echo "" ?>">:
+						<input type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_end_date"]); else echo "" ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
+						<img  src="./pictures/info.gif" <? echo tooltip(_("Teilnehmer dürfen sich nur bis zu diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>>
+					</td>
+				</tr>
+				</table>
+			</td>
+		</tr>		
+
+		<tr <? $cssSw->switchClass() ?> rowspan=2>
+			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
+				&nbsp;
+			</td>
+			<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
+				<font size=-1>
+					<?
+					if ((!$perm->have_perm("admin")) && ($admin_admission_data["admission_prelim"] == 1)) {
+						$db->query("SELECT username, ". $_fullname_sql['full'] . "  as fullname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE institut_id ='".$admin_admission_data["heimat_inst_id"]."' AND perms = 'admin'");
+						echo "<b>"._("Anmeldemodus:")."</b><br />";
+						echo _("Sie haben den Anmeldemodus \"Vorl&auml;ufiger Eintrag\" aktiviert. ");
+						printf ("<font size=-1>"._("Dieser Schritt kann %s nicht %s r&uuml;ckg&auml;ngig gemacht werden! ")."</font>", "</font><font size=-1 color=\"red\"><b>", "</b></font><font size=-1>");
+						if  (!$db->num_rows())
+							echo _("Bei Problemen wenden sie sich bitte an eine Administratorin oder einen Administrator.");
+						else
+							echo _("Bei Problemen wenden sie sich bitte an eineN der hier aufgef&uuml;hrten AdministratorInnen.");
+						printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\" />");
+						while ($db->next_record()) {
+							printf ("<li><font size=-1><a href=\"about?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
+						}
+					} else { ?>
+						<b><?=_("Anmeldemodus:")?></b><br />
+						<? echo _("Bitte wählen Sie sie hier einen Anmeldemodus aus:"); ?><br/>
+						<input type="RADIO"  name="admission_prelim" value="0" <? if ($admin_admission_data["admission_prelim"] == 0) echo "checked"; ?> /><?=_("Direkter Eintrag")?>&nbsp;
+						<input type="RADIO"  name="admission_prelim" value="1" <? if ($admin_admission_data["admission_prelim"] == 1) echo "checked"; ?> /><?=_("Vorl&auml;ufiger Eintrag")?>
+					<? } ?>
+				</font>
 			</td>
 		</tr>
 		<?
@@ -768,3 +900,7 @@ page_close();
 </table>
 </body>
 </html>
+
+
+
+

@@ -107,6 +107,7 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
+$db5 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
 
 $user_id = $auth->auth["uid"];
@@ -233,8 +234,12 @@ if ($s_send) {
 			status='$Status', Beschreibung='$Beschreibung', 
 			Sonstiges='$Sonstiges', art='$art', teilnehmer='$teilnehmer', 
 			vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
-			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout'
-			WHERE Seminar_id='$s_id'";
+			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout'";
+	if ($db->f("admission_prelim") == 1)
+		$query .= ", admission_prelim_txt='$paytxt'";
+		
+	$query .= "WHERE Seminar_id='$s_id'";
+
     $db->query($query);
     
     if ($do_update_admission)
@@ -261,7 +266,7 @@ if ($s_send) {
 			if ($db2->next_record())					//User schon da
 				$query = "UPDATE seminar_user SET status = \"dozent\" WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
 			else								//User noch nicht da
-				$query = "INSERT INTO seminar_user values('$s_id','$add_doz_id',\"dozent\",'$group', '', '".time()."')";
+				$query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_doz_id', status = 'dozent', gruppe = '$group', admission_studiengang_id = '', mkdate = '".time()."'";
 			$db3->query($query);					//Dozent eintragen
 			$user_added=TRUE;		
 		}
@@ -278,7 +283,7 @@ if ($s_send) {
 			else							//User schon da aber was anderes (unterhalb Tutor), also Hochstufen.
 				$query = "UPDATE seminar_user SET status = \"tutor\" WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
 			} else								//User noch nicht da
-				$query = "INSERT INTO seminar_user values('$s_id','$add_tut_id',\"tutor\",'$group', '', '".time()."')";
+				$query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_tut_id', status = 'tutor', gruppe = '$group', mkdate = '".time()."'";
 			if ($query) {
 				$db3->query($query);				//Tutor eintragen
 				$user_added=TRUE;
@@ -747,7 +752,13 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=3><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
 			</tr>
+			<? if ($db->f("admission_prelim") == 1) {i ?>
+				<tr>
+					<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Hinweistext bei vorl&auml;ufigen Eintragungen")?></td>
+					<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="paytxt" cols=58 rows=4><?php echo htmlReady($db->f("admission_prelim_txt")) ?></textarea></td>
+				</tr>
 			<?
+			} 
 			$mkstring=date ("d.m.Y, G:i", $db->f("mkdate"));
 			if (!$db->f("mkdate"))
 				$mkstring=_("unbekannt");
@@ -782,3 +793,7 @@ page_close();
 </body>
 </html>
 <!-- $Id$ -->
+
+
+
+

@@ -221,9 +221,9 @@ if ($cmd == "no_kill") {
 
 //Sicherheitsabfrage fuer abonnierte Veranstaltungen
 if ($cmd == "suppose_to_kill") {
-	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
+	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	if ($db->f("admission_type")) {
+	if ($db->f("admission_type") || ($db->f("admission_prelim") == 1)) {
 		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
@@ -430,7 +430,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
 				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
 			else
-				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td>", $semid);			
+				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td>", $semid);
 			echo "</tr>\n";
 		}
 		echo "</table><br><br>";
@@ -455,7 +455,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	}
 
 // Anzeige der Wartelisten
-
   $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
   if ($db->num_rows()) {
 
@@ -502,7 +501,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			print "<a href=details.php?sem_id=".$db->f("seminar_id")."&send_from_search_page=meine_seminare.php&send_from_search=TRUE><font size=-1>".htmlReady($db->f("Name"))."</font></a></td>";
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? _("Los") : _("Wartel."));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? _("Los") : ($db->f("status") == "accepted") ? _("Vorl.") :_("Wartel."));
 			printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
 		}
 		print "</table>";
@@ -806,3 +805,8 @@ ELSEIF ($perm->have_perm("root")){
 ob_end_flush(); //Outputbuffering beenden
 page_close();
   ?>
+
+
+
+
+

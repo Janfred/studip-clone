@@ -91,6 +91,9 @@ if (((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60) || ($new_sess
 	$sem_create_data["sem_vor_end_termin"]=-1;
 	$sem_create_data["sem_admission_date"]=-1;
 	$sem_create_data["sem_admission_ratios_changed"]=FALSE;
+	$sem_create_data["sem_admission_start_date"]=-1;
+	$sem_create_data["sem_admission_end_date"]=-1;
+	$sem_create_data["sem_payment"]=0;
 		
 	$sem_create_data["timestamp"]=time();
 	}
@@ -109,9 +112,7 @@ if (($sem_create_data["sem_entry"]) && (!$form))
 //empfangene Variablen aus diversen Formularen auswerten
 if ($start_level) { //create defaults
 	$Modules = new Modules;
-	
 	$sem_create_data["sem_class"]=$class;
-	
 	foreach ($SEM_TYPE as $key => $val) {
 		if ($val["class"] == $class) {
 			$sem_create_data["modules_list"] = $Modules->getLocalModules("", "sem", false, $key);
@@ -152,7 +153,10 @@ if ($form==1)
 	$sem_create_data["sem_turnout"]=$sem_turnout;	
 	//Anmeldeverfahren festlegen
 	$sem_create_data["sem_admission"]=$sem_admission;
-	
+
+	//accept only temporaly?
+	$sem_create_data["sem_payment"]=$sem_payment;
+
 	if ($sem_bet_inst)
 		{
 		foreach ($sem_bet_inst as $tmp_array)
@@ -166,6 +170,9 @@ if ($form==1)
 
 if ($form==2)
 	{
+
+	$sem_create_data["sem_paytxt"]=$sem_paytxt;
+
 	if(isset($sem_bereich_chooser) && !$st_search->search_done){
 		$st_search->sem_tree_ranges = array();
 		$st_search->sem_tree_ids = array();
@@ -355,7 +362,7 @@ if ($form==3)
 
 	if ((!checkdate($vor_monat, $vor_tag, $vor_jahr) && ($vor_monat) && ($vor_tag) && ($vor_jahr)) && ($check)) {
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!")."§";
-		$check=FALSE;			
+		$check=FALSE;
 	} else
 		$check=TRUE;
 
@@ -376,22 +383,36 @@ if ($form==3)
 
 if ($form==4)
 	{
+	
+	// create a timestamp for begin and end of the seminar
+	$sem_create_data["sem_admission_start_date"] = mktime($adm_s_stunde,$adm_s_minute,59,$adm_s_monat,$adm_s_tag,$adm_s_jahr);
+	$sem_create_data["sem_admission_end_date"] = mktime($adm_e_stunde,$adm_e_minute,59,$adm_e_monat,$adm_e_tag,$adm_e_jahr);
+
+
+	if (($adm_e_stunde) && ($adm_e_minute) && ($admin_e_monat) && ($admin_e_tag) && ($admin_e_jahr)) { 
+		if ($sem_create_data["sem_admission_end_date"] != -1) {
+			if ($sem_create_data["sem_admission_end_date"] < time())
+			{
+				$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Teilnahmeverfahrens ein!")."§";
+				$check=FALSE;
+			}
+		}
+	}
+
 	$sem_create_data["sem_teiln"]=$sem_teiln;
 	$sem_create_data["sem_voraus"]=$sem_voraus;
 	$sem_create_data["sem_orga"]=$sem_orga;
 	$sem_create_data["sem_leistnw"]=$sem_leistnw;
 	$sem_create_data["sem_sonst"]=$sem_sonst;
-	
-	$sem_create_data["sem_datafields"]='';
-	
-	if (is_array($sem_datafield_id)) {
-		foreach ($sem_datafield_id as $key=>$val) {
-			$sem_create_data["sem_datafields"][$val] = $sem_datafield_content[$key];
-			}
-		}
+  $sem_create_data["sem_datafields"]='';
+   
+  if (is_array($sem_datafield_id)) {
+	  foreach ($sem_datafield_id as $key=>$val) {
+    	 $sem_create_data["sem_datafields"][$val] = $sem_datafield_content[$key];
+    }
+  }
 
-	
-	//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
+	//Hat der User an den automatischen Werte rumgepfuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
 	if ($sem_all_ratio_old != $sem_all_ratio) {
 		$sem_create_data["sem_admission_ratios_changed"]=TRUE;
 		$sem_create_data["sem_all_ratio"]=$sem_all_ratio;
@@ -482,7 +503,6 @@ if ($form==4)
 		}
 	 }
 	}	 
-
 
 if ($form==7)
 	{
@@ -865,7 +885,7 @@ if ($cmd_e_x)
      			$level=4;
 	          	}
 	}
-	
+		
 	//Ende der Anmeldung checken
 	if ($sem_create_data["sem_admission"]) {
 		if ($sem_create_data["sem_admission_date"] == -1) 
@@ -910,7 +930,6 @@ if ($cmd_e_x)
 	else
 		if ((($stunde) && (!$end_stunde)) || ((!$stunde) && ($end_stunde)))
 			$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit des ersten Termins aus!")."§";	
-
 	//create overlap array
 	if (is_array($checkResult)) {
 		$overlaps_detected=FALSE;
@@ -936,7 +955,6 @@ if ($cmd_e_x)
 		$errormsg.="</font>§";
 		unset($overlaps_detected);		
 	}
-
 
 	if (!$errormsg)
 		$level=5;
@@ -1010,39 +1028,45 @@ if ($cmd_f_x)
 
 		if ($Schreibzugriff < $Lesezugriff) // hier wusste ein Dozent nicht, was er tat
 			$Schreibzugriff = $Lesezugriff;
-		
-						
-		$query = "INSERT INTO seminare values('".
-				$sem_create_data["sem_id"]."', '".			//Feld Seminar_id 
-				$sem_create_data["sem_nummer"]."', '".			//Feld VeranstaltungsNummer
-				$sem_create_data["sem_inst_id"]."', '".			//Feld Institut_id 
-				$sem_create_data["sem_name"]."', '".			//Feld Name 
-				$sem_create_data["sem_untert"]."', '".			//Feld Untertitel 
-				$sem_create_data["sem_status"]."', '".			//Feld status 
-				$sem_create_data["sem_desc"]."', '".			//Feld Beschreibung 
-				$sem_create_data["sem_ort"]."', '".			//Feld Ort 
-				$sem_create_data["sem_sonst"]."', '".			//Feld Sonstiges
-				$sem_create_data["sem_pw"]."', '".			//Feld Passwort 
-				$sem_create_data["sem_sec_lese"]."', '".		//Feld Lesezugriff 
-				$sem_create_data["sem_sec_schreib"]."', '".		//Feld Schreibzugriff
-				$sem_create_data["sem_start_time"]."', '".		//Feld start_time 
-				$sem_create_data["sem_duration_time"]."', '".		//Feld duration_time 
-				$sem_create_data["sem_art"]."', '".			//Feld art 
-				$sem_create_data["sem_teiln"]."', '".			//Feld teilnehmer 
-				$sem_create_data["sem_voraus"]."', '".			//Feld vorrausetzungen 
-				$sem_create_data["sem_orga"]."', '".			//Feld lernorga 
-				$sem_create_data["sem_leistnw"]."', '".			//Feld leistungsnachweis 
-				$serialized_metadata."', '".				//Feld metadata_dates 
-				time()."', '".						//Feld mkdate 
-				time()."', '".						//Feld chdate 
-				$sem_create_data["sem_ects"]."', '".			//Feld ects
-				$sem_create_data["sem_admission_date"]."', '".		//Feld admission_endtime 
-				$sem_create_data["sem_turnout"]."', '".			//Feld admission_turnout 
-				"', '".							//Feld admission_binding
-				$sem_create_data["sem_admission"]."', '".		//Feld admission_type 
-				"0' ,'".						//Feld admission_selection_take_place
-				"0' ,'".						//Feld showscore
-				"')";							//Feld modules
+
+		$query = "INSERT INTO seminare SET
+				Seminar_id = '".			$sem_create_data["sem_id"]."', 
+				VeranstaltungsNummer = '".		$sem_create_data["sem_nummer"]."', 
+				Institut_id = '".			$sem_create_data["sem_inst_id"]."', 
+				Name = '".				$sem_create_data["sem_name"]."', 
+				Untertitel = '".			$sem_create_data["sem_untert"]."',
+				status = '".				$sem_create_data["sem_status"]."', 
+				Beschreibung = '".			$sem_create_data["sem_desc"]."', 
+				Ort = '".				$sem_create_data["sem_ort"]."', 
+				Sonstiges = '".				$sem_create_data["sem_sonst"]."', 
+				Passwort= '".				$sem_create_data["sem_pw"]."', 
+				Lesezugriff = '".			$sem_create_data["sem_sec_lese"]."', 
+				Schreibzugriff = '".			$sem_create_data["sem_sec_schreib"]."', 
+				start_time = '".			$sem_create_data["sem_start_time"]."', 
+				duration_time = '".			$sem_create_data["sem_duration_time"]."', 
+				art = '".				$sem_create_data["sem_art"]."', 
+				teilnehmer = '".			$sem_create_data["sem_teiln"]."', 
+				vorrausetzungen = '".			$sem_create_data["sem_voraus"]."', 
+				lernorga = '".				$sem_create_data["sem_orga"]."', 
+				leistungsnachweis = '".			$sem_create_data["sem_leistnw"]."', 
+				metadata_dates= '".			$serialized_metadata."', 
+				mkdate = '".				time()."', 
+				chdate = '".				time()."', 
+				ects = '".				$sem_create_data["sem_ects"]."', 
+				admission_endtime = '".			$sem_create_data["sem_admission_date"]."', 
+				admission_turnout = '".			$sem_create_data["sem_turnout"]."', 
+				admission_binding = 			NULL , 	
+				admission_type = '".			$sem_create_data["sem_admission"]."', 
+				admission_selection_take_place = 	'0', 
+				admission_group = 			NULL , 				
+				admission_prelim = '".			$sem_create_data["sem_payment"]."', 
+				admission_prelim_txt = '".		$sem_create_data["sem_paytxt"]."', 
+				admission_starttime = '".		$sem_create_data["sem_admission_start_date"]."',  
+				admission_endtime_sem = '".		$sem_create_data["sem_admission_end_date"]."', 
+				visible =  				'1', 
+				showscore =				'0', 
+				modules = 				NULL";
+				
 
 		//und jetzt wirklich eintragen
 		if (!$sem_create_data["sem_entry"]) {
@@ -1113,9 +1137,9 @@ if ($cmd_f_x)
 				
 				if ($key == $user_id)
 					$self_included=TRUE;
-				$query = "insert into seminar_user  values('".
-					$sem_create_data["sem_id"]."', '".
-					$key."', 'dozent', '$group', '', '".time()."')";
+				$query = "insert into seminar_user SET Seminar_id = '".
+					$sem_create_data["sem_id"]."', user_id = '".
+					$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
 				$db3->query($query);// Dozenten eintragen
 				if ($db3->affected_rows() >=1)
 					$count_doz++;
@@ -1126,9 +1150,9 @@ if ($cmd_f_x)
 			{
 			$group=select_group($user_id, $sem_create_data["sem_start_time"]);
 
-			$query = "insert into seminar_user  values('".
-				$sem_create_data["sem_id"]."', '".
-				$user_id."', 'dozent', '$group', '', '".time()."')";
+			$query = "insert into seminar_user SET Seminar_id = '".
+				$sem_create_data["sem_id"]."', user_id = '".
+				$user_id."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
 			$db3->query($query);
 			if ($db3->affected_rows() >=1)
 				$count_doz++;
@@ -1148,9 +1172,9 @@ if ($cmd_f_x)
 					;
 				else // User noch nicht da
 					{
-					$query = "insert into seminar_user  values('".
-						$sem_create_data["sem_id"]."', '".
-						$key."', 'tutor', '$group', '', '".time()."')";
+					$query = "insert into seminar_user SET Seminar_id = '".
+						$sem_create_data["sem_id"]."', user_id = '".
+						$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."'";
 					$db3->query($query);			     // Tutor eintragen
 						if ($db3->affected_rows() >= 1)
 							$count_tut++;
@@ -1472,6 +1496,23 @@ elseif ((!$level) || ($level==1))
 							&nbsp; <input type="int" name="sem_turnout" size=6 maxlength=5 value="<? echo $sem_create_data["sem_turnout"] ?>">
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Geben Sie hier die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldeverfahren starten, wenn Sie »Teilnahmebeschränkung: per Losverfahren / nach Anmeldereihenfolge« benutzen."), TRUE, TRUE) ?>
+							>
+						</td>
+					</tr>
+					<tr<? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							<?=_("Anmeldemodus:"); ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" nowrap width="90%" colspan=3>
+	 						&nbsp; <input type="RADIO" name="sem_payment" value=0 <? if ($sem_create_data["sem_payment"]=="0") echo checked?>>
+ 							<?=_("direkter Eintrag"); ?>&nbsp; 
+							<img  src="./pictures/info.gif" 
+ 								<? echo tooltip(_("Neue Teilnehmer werden direkt in die Veranstaltung eingetragen."), TRUE, TRUE) ?>
+							>
+	 						&nbsp; <input type="RADIO" name="sem_payment" value=1 <? if ($sem_create_data["sem_payment"]=="1") echo checked?>>
+ 							<?=_("vorl&auml;ufiger Eintrag"); ?>&nbsp; 
+							<img  src="./pictures/info.gif" 
+ 								<? echo tooltip(_("Neue Teilnehmer bekommen den Status \"vorläufig aktzeptiert\". Sie können von Hand die zugelassenen Teilnehmer auswählen. Vorläufig akzeptierte Teilnehmer haben keinen Zugriff auf die Veranstaltung."), TRUE, TRUE) ?>
 							>
 						</td>
 					</tr>
@@ -1851,6 +1892,20 @@ if ($level==2)
 							?>
 						</td>
 					</tr>
+					<? if ($sem_create_data["sem_payment"]=="1") { ?>
+					<tr<?$cssSw->switchClass()?>>
+						<td class ="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							<? echo _("Hinweistext bei vorl&auml;ufigen Eintr&auml;gen:"); ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" colspan=3>
+							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für di Veranstaltung zugelassen zu werden. ".
+								"Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
+							>
+						</td>
+					</tr>
+					<? } ?>	
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?=_("Typ der Veranstaltung:"); ?>
@@ -2304,6 +2359,51 @@ if ($level==4)
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
 							&nbsp; <input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="cmd_<? if ($sem_create_data["term_art"]== -1) echo "b"; else echo "c" ?>">&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_e">
+						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" witdh="10%" align="right">
+							<?= _("Anmeldezeitraum:"); ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" witdh="90%" colspan=3>
+							<font size=-1>&nbsp;
+								<? print _("Bitte geben Sie hier ein Datum an, ab wann und bis wann sich Teilnehmer für die Veranstaltung eintragen d&uuml;rfen."); ?>
+								<br />&nbsp;
+								<? print _("Wenn sich die Teilnehmer sofort nach erstellen dieser Veranstaltung eintragen d&uuml;rfen, lassen Sie das Datum einfach unver&auml;ndert."); ?>
+								<br/>&nbsp;
+								<? print _("Wenn es kein Ende der Anmeldefrist geben soll, lassen Sie das Enddatum unver&auml;ndert."); ?>
+								<br /><br />
+							</font>
+							<table border=0 cellpadding=2 cellspacing=0>
+								<tr>
+									<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
+										<font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
+									</td>
+									<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
+										<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("d",$sem_create_data["sem_admission_start_date"]); else echo date("d") ?>">.
+										<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("m",$sem_create_data["sem_admission_start_date"]); else echo date("m") ?>">.
+										<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_start_date"]); else echo date("Y") ?>"><?=_("um");?>&nbsp;</font><br />
+										<font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("H",$sem_create_data["sem_admission_start_date"]); else echo date("H") ?>">:
+										<input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("i",$sem_create_data["sem_admission_start_date"]); else echo date("i") ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
+										<img  src="./pictures/info.gif" 
+											<? echo tooltip(_("Teilnehmer dürfen sich erst ab diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>
+										>
+									</td>
+									<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
+										<font size=-1><? echo _("Enddatum f&uuml;r Anmeldungen");?>:</font>
+									</td>
+									<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
+										<font size=-1>&nbsp; <input type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("d",$sem_create_data["sem_admission_end_date"]); else echo "" ?>">.
+										<input type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("m",$sem_create_data["sem_admission_end_date"]); else echo "" ?>">.
+										<input type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_end_date"]); else echo "" ?>"><?=_("um");?>&nbsp;</font><br />
+										<font size=-1>&nbsp; <input type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("H",$sem_create_data["sem_admission_end_date"]); else echo "" ?>">:
+										<input type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_end_date"]<>-1) echo date("i",$sem_create_data["sem_admission_end_date"]); else echo "" ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
+										<img  src="./pictures/info.gif" 
+											<? echo tooltip(_("Teilnehmer dürfen sich nur bis zu diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>
+										>
+									</td>
+								</tr>
+							</table>	
 						</td>
 					</tr>
 					<?

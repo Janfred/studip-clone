@@ -3,6 +3,19 @@
 require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."cssClassSwitcher.inc.php");
 
+/*****************************************************************************
+get_ampel_state is a helper function for get_ampel_write and get_ampel_read.
+It checks if the new parameters lead to a "lower" trafficlight. If so, the new
+level and the new text are set and returned.
+/*****************************************************************************/
+
+function get_ampel_state ($cur_ampel_state, $new_level, $new_text) {
+	if ($cur_ampel_state["access"] < $new_level) {
+		$cur_ampel_state["access"] = $new_level;
+		$cur_ampel_state["text"] = $new_text;
+	}
+	return $cur_ampel_state;
+}
 
 /*****************************************************************************
 get_ampel_write, waehlt die geeignete Grafik in der Ampel Ansicht 
@@ -10,39 +23,76 @@ get_ampel_write, waehlt die geeignete Grafik in der Ampel Ansicht
 und auf der Anmeldeliste und den read_level der Veranstaltung
 /*****************************************************************************/
 
-function get_ampel_write ($mein_status, $admission_status, $write_level, $print="TRUE") {
+function get_ampel_write ($mein_status, $admission_status, $write_level, $print="TRUE", $start = -1, $ende = -1, $temporaly = 0) {
 	global $perm;
 	
+	$ampel_state["access"] = 0;		// the current "lowest" access-level. If already yellow, it can't be green again, etc.
+	$ampel_state["text"] = "";			// the text for the reason, why the "ampel" has the current color
+	/*
+	 * 0 : green
+	 * 1 : yellow
+	 * 2 : red
+	 */
+
 	if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
-		$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
-	} else {
-		switch($write_level){
+		$ampel_state = get_ampel_state($ampel_state,0,"");
+		//echo $ampel_state["access"]."<br/>";
+		//echo $ampel_state["text"]."<br/>";
+	} else {	  
+		if ($temporaly != 0) {
+			$ampel_state = get_ampel_state($ampel_state,1,_("(Vorl. Eintragung)"));
+		}
+
+		if (($start != -1) && ($start > time())) {
+			$ampel_state = get_ampel_state($ampel_state,1,_("(Starttermin)"));
+		}
+
+		if (($ende != -1) && ($ende < time())) {
+			$ampel_state = get_ampel_state($ampel_state,2,_("(Beendet)"));
+		}
+		
+		switch($write_level) {
 			case 0 : //Schreiben darf jeder
-				$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
+				$ampel_state = get_ampel_state($ampel_state,0,"");
 			break;
 			case 1 : //Schreiben duerfen nur registrierte Stud.IP Teilnehmer
 				if ($perm->have_perm("autor"))
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
+					$ampel_state = get_ampel_state($ampel_state,0,"");
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
+					$ampel_state = get_ampel_state($ampel_state,2,_("(Registrierungsmail beachten!)"));
 			break;
 			case 2 : //Schreiben nur mit Passwort
 				if ($perm->have_perm("autor"))
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(mit Passwort)") . "</font>";
+					$ampel_state = get_ampel_state($ampel_state,1,_("(mit Passwort)"));
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
+					$ampel_state = get_ampel_state($ampel_state,2,_("(Registrierungsmail beachten!)"));
 			break;
 			case 3 : //Schreiben nur nach Anmeldeverfaren
 				if ($perm->have_perm("autor"))
 					if ($admission_status)
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmelde-/Warteliste)") . "</font>";
+						$ampel_state = get_ampel_state($ampel_state,1,_("(Anmelde-/Warteliste)"));
 					else
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmeldeverfahren)") . "</font>";
+						$ampel_state = get_ampel_state($ampel_state,1, _("(Anmeldeverfahren)"));
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
+					$ampel_state = get_ampel_state($ampel_state,2, _("(Registrierungsmail beachten!)"));
 			break;
 		}
 	}
+	
+	switch ($ampel_state["access"]) {
+		case 0 :
+			$color = "gruen";
+			break;
+		case 1 :
+			$color = "gelb";
+			break;
+		case 2 :
+			$color = "rot";
+			break;
+	}
+	
+	$ampel_status="<img border=\"0\" src=\"pictures/ampel_$color.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>". $ampel_state["text"] ."</font>";
+	
 	if ($print==TRUE) {
 		echo $ampel_status;
 	}
@@ -55,39 +105,74 @@ get_ampel_read, waehlt die geeignete Grafik in der Ampel Ansicht
 und auf der Anmeldeliste und den read_level der Veranstaltung
 /*****************************************************************************/
 
-function get_ampel_read ($mein_status, $admission_status, $read_level, $print="TRUE") {
+function get_ampel_read ($mein_status, $admission_status, $read_level, $print="TRUE", $start = -1, $ende = -1, $temporaly = 0) {
 	global $perm;
 
+	$ampel_state["access"] = 0;		// the current "lowest" access-level. If already yellow, it can't be green again, etc.
+	$ampel_state["text"] = "";			// the text for the reason, why the "ampel" has the current color
+	/*
+	 * 0 : green
+	 * 1 : yellow
+	 * 2 : red
+	 */
+
 	if ($mein_status) { // wenn ich im Seminar schon drin bin, darf ich auf jeden Fall lesen
-		$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
+		$ampel_state = get_ampel_state($ampel_state,0,"");
 	} else {
+			if ($temporaly != 0) {
+				$ampel_state = get_ampel_state($ampel_state,1,_("(Vorl. Eintragung)"));
+			}
+			
+			if (($start != -1) && ($start > time())) {
+				$ampel_state = get_ampel_state($ampel_state,1,_("(Starttermin)"));
+			}
+	
+			if (($ende != -1) && ($ende < time())) {
+				$ampel_state = get_ampel_state($ampel_state,2,_("(Beendet)"));
+			}
+
 		switch($read_level){
-			case 0 : //Lesen darf jeder
-				$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
+			case 0 :	//Lesen darf jeder
+				$ampel_state = get_ampel_state($ampel_state,0,"");
 			break;
-			case 1 : //Lesen duerfen registrierte nur Stud.IP Teilnehmer
+			case 1 :	//Lesen duerfen registrierte nur Stud.IP Teilnehmer
 				if ($perm->have_perm("autor"))
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">";
+					$ampel_state = get_ampel_state($ampel_state,0,"");
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
-			break; //Lesen nur mit Passwort
-			case 2 :
-				if ($perm->have_perm("autor"))
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(mit Passwort)") . "</font>";
-				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
+					$ampel_state = get_ampel_state($ampel_state,2,_("(Registrierungsmail beachten!)"));
 			break;
-			case 3 : //Lesen nur nach Anmeldeverfaren
+			case 2 :	//Lesen nur mit Passwort
+				if ($perm->have_perm("autor"))
+					$ampel_state = get_ampel_state($ampel_state,1,_("(mit Passwort)"));
+				else
+					$ampel_state = get_ampel_state($ampel_state,2,_("(Registrierungsmail beachten!)"));
+			break;
+			case 3 :	//Lesen nur nach Anmeldeverfaren
 				if ($perm->have_perm("autor"))
 					if ($admission_status)
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmelde-/Warteliste)") . "</font>";
+						$ampel_state = get_ampel_state($ampel_state,1,_("(Anmelde-/Warteliste)"));
 					else
-						$ampel_status="<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Anmeldeverfahren)") . "</font>";
+						$ampel_state = get_ampel_state($ampel_state,1,_("(Anmeldeverfahren)"));
 				else
-					$ampel_status="<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>" . _("(Registrierungsmail beachten!)") . "</font>";
+					$ampel_state = get_ampel_state($ampel_state,2,_("(Registrierungsmail beachten!)"));
 			break;
 		}
 	}
+	
+	switch ($ampel_state["access"]) {
+		case 0 :
+			$color = "gruen";
+			break;
+		case 1 :
+			$color = "gelb";
+			break;
+		case 2 :
+			$color = "rot";
+			break;
+	}
+		
+	$ampel_status="<img border=\"0\" src=\"pictures/ampel_$color.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>". $ampel_state["text"] ."</font>";
+	
 	if ($print==TRUE) {
 		echo $ampel_status;
 	}
@@ -431,6 +516,13 @@ function preg_call_format_list ($content_str) {
 	
 	return $ret;
 }
+
+
+function preg_call_table_format($tbr){
+        return preg_replace("'\|(.+?)(\|\s*\n(?=\|)|\|\Z)'se", "'<tr><td>'.preg_
+replace('/\|/','</td><td>','\\1').'</td></tr>'", $tbr);
+}
+
 
 // entfernt alle Schnellformatierungszeichen aus $text
 // zurückgegeben wird reiner Text (für HTML-Ausgabe (Druckansicht)
