@@ -263,7 +263,10 @@ function ForumIcon ($forumposting) {
 		else
 			$bild = "pictures/cont_folder2.gif";
 	} else {
-		$bild = "pictures/cont_blatt.gif";
+		if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
+			$bild = "pictures/zip-icon.gif";
+		else
+			$bild = "pictures/cont_blatt.gif";
 	}
 	
 	if ($forum["jshover"]==1 AND $auth->auth["jscript"] AND $forumposting["description"]!="" && $forumposting["openclose"]=="close") {      
@@ -559,6 +562,42 @@ function forum_get_index ($forumposting) {
 	if ($forum["indikator"] == "age" && $i != 1) $tmp = "";
 	return $tmp;
 }
+
+function ForumCheckShrink($id)  {
+
+
+/*	
+// Hilfsfunktion, das Alter des jüngsten Postings raussucht
+	global $forum, $agecount;
+	$ar[]=0;
+	$db=new DB_Seminar;
+	$db->query("SELECT topic_id, chdate FROM px_topics WHERE parent_id='$id'");
+	while ($db->next_record()) {
+		$tmpage = $db->f("chdate");
+		// echo $tmpage."<br>";
+		ForumCheckShrink($db->f("topic_id"));
+	}
+	if ($tmpage > $agecount)
+		$agecount = $tmpage;
+	// echo $tmpage."<br>";
+	return $agecount;
+}
+*/
+global $age;
+
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM px_topics WHERE parent_id='$id'");
+	while ($db->next_record()) {
+		$next_topic=$db->f("topic_id");
+		// echo $db->f("chdate")."<br>";
+		$age .= ";".$db->f("chdate");
+		ForumCheckShrink($next_topic);
+	}
+	// echo "<i>".$age."</i><br>";
+	return $age;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function printposting ($forumposting) {
@@ -1022,7 +1061,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 /////////////////////////////////
 
 function DisplayKids ($forumposting, $level=0) {
-	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user;
+	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user, $age;
 
 // stellt im Treeview alle Postings dar, die NICHT Thema sind
 
@@ -1059,7 +1098,7 @@ function DisplayKids ($forumposting, $level=0) {
 		$forumposting["rating"] = $db->f("rating");
 		$forumposting["score"] = $db->f("score");
 		$forumposting["fav"] = $db->f("fav");
-					
+		
 		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class=\"blank\" nowrap valign=\"top\" ><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'>";
 
 	//Hier eine bezaubernde Routine um die Striche exakt wiederzugeben - keine Bange ich verstehe sie auch nicht mehr
@@ -1078,8 +1117,27 @@ function DisplayKids ($forumposting, $level=0) {
 			echo $striche;
 		}
 		echo "</td>";
-		$forumposting = printposting($forumposting);
-		DisplayKids($forumposting, $level+1);
+		
+		$age = "";
+		$age = ForumCheckShrink($forumposting["id"]);
+		// echo $age;
+		$age = explode(";",$age);
+		$count = sizeof($age)-1;
+		rsort($age);
+		// echo "<b>".$age[0]."</b><br>";
+		if ($age[0] > time()-$forum["shrink"]) {
+			$forumposting["shrink"]=FALSE;
+			$forumposting = printposting($forumposting);
+			DisplayKids($forumposting, $level+1);
+		} else {
+			$forumposting["shrink"]=TRUE;
+			if ($count > 0) $forumposting["name"] = "($count) ".$forumposting["name"];
+			$forumposting = printposting($forumposting);
+			//DisplayKids($forumposting, $level+1);
+		}
+		$age = "";
+		
+		
 	}
 }
 

@@ -119,6 +119,24 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 			<input type=radio value="last" name=sortthemes <?if ($forum["sortthemes"]=="last") echo "checked";?>> Alter des neuesten Beitrags - neue oben<br>
 		</td>
 	</tr>
+	<tr>
+		<td align=right class=blank style="border-bottom:1px dotted black;">
+			<font size=-1><?echo _("ForumAutoShrink(TM) Engine aktivieren");?></font>
+		</td>
+		<td align=left >
+			<font size=-1>
+			&nbsp;<select name="shrink">
+			<?
+			for ($i=1;$i<20;$i+=1) {
+				echo "<option value=\"$i\"";
+				if ($i == $forum["postingsperside"]) echo " selected";
+				echo ">$i Wochen";
+			}
+			?>
+			</select>
+		</td>
+	</tr>
+
 
 	<input type="HIDDEN" name="forumsend" value="bla">
 	<tr  <? $cssSw->switchClass() ?>>

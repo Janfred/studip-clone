@@ -345,6 +345,7 @@ if ($forumsend) {
 		$forum["rateallopen"] = $rateallopen;
 		$forum["showimages"] = $showimages;
 		$forum["sortthemes"] = $sortthemes;
+		$forum["shrink"] = $shrink*604800; // Anzahl der Sekunden pro Woche
 		$forum["changed"] = "TRUE";
 		$txt = _("Anpassungen durchgeführt.");
 	} else
