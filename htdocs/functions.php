@@ -282,7 +282,7 @@ function get_object_type($id) {
 	if ($db->next_record())
 		return "sem";
 
-	$db->query("SELECT Institut_id,IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM institute WHERE Institut_id = '$id' ");
+	$db->query("SELECT Institut_id,IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM Institute WHERE Institut_id = '$id' ");
 	if ($db->next_record())
 		return ($db->f("is_fak")) ? "fak" : "inst";
 

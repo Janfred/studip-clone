@@ -442,7 +442,7 @@ if ($perm->have_perm("root"))
 	 $this->db->query($query);
 	 while($this->db->next_record())
 			 {
-		  $this->search_result[$this->db->f("Institut_id")]=array("type"=>$db->f("inst_type"),"name"=>$this->db->f("Name"));
+		  $this->search_result[$this->db->f("Institut_id")]=array("type"=>$this->db->f("inst_type"),"name"=>$this->db->f("Name"));
 		  }
 	 }
 
@@ -461,21 +461,21 @@ elseif ($perm->have_perm("admin"))
 		$this->search_result[$this->db->f("Institut_id")]=array("type"=>"inst","name"=>$this->db->f("Name"));
 		}
 	if ($perm->is_fak_admin()){
-		$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
-			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
+		$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
 			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND d.Name LIKE '%$search_str%'";
 		$this->db->query($query);
 		while($this->db->next_record()){
 		$this->search_result[$this->db->f("Seminar_id")]=array("type"=>"sem","name"=>$this->db->f("Name"));
 		}
-		$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
-			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
+		$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
 			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND c.Name LIKE '%$search_str%'";
 		$this->db->query($query);
 		while($this->db->next_record()){
 		$this->search_result[$this->db->f("Institut_id")]=array("type"=>"inst","name"=>$this->db->f("Name"));
 		}
-		$query = "SELECT b.Institut_id,b.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+		$query = "SELECT b.Institut_id,b.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
 			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND b.Name LIKE '%$search_str%'";
 		$this->db->query($query);
 		while($this->db->next_record()){
@@ -528,8 +528,8 @@ $output[0]="\n<tr><th width=\"90%\" align=\"left\">";
 switch ($type)
 		{
 		case "sem" : $output[0].="Veranstaltungen";break;
-		case "inst" : $output[0].= "Einrichtungen"; $query="SELECT institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN institute ON(user_inst.Institut_id=institute.Institut_id AND institute.Institut_id!=fakultaets_id) WHERE NOT ISNULL(institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
-		case "fak" : $output[0].= "Fakult&auml;ten"; $query="SELECT institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN institute ON(user_inst.Institut_id=institute.Institut_id AND institute.Institut_id=fakultaets_id) WHERE NOT ISNULL(institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
+		case "inst" : $output[0].= "Einrichtungen"; $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id!=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
+		case "fak" : $output[0].= "Fakult&auml;ten"; $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
 		}
 $output[0].= "</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
 $not_in="";
@@ -624,7 +624,7 @@ while($this->db->next_record())
 	 if ($this->db->f("status")=="tutor" OR $this->db->f("status")=="autor" OR $this->db->f("status")=="dozent") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>2);
 	 if ($this->db->f("status")=="admin") $this->news_perm[$this->db->f("id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
 	 }
-$query = "SELECT b.Institut_id,b.Name,a.inst_perms AS status FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+$query = "SELECT b.Institut_id,b.Name,a.inst_perms AS status FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
 			WHERE a.user_id='$this->user_id' AND a.inst_perms IN ('admin','autor') AND NOT ISNULL(b.Institut_id)";
 		
 $this->db->query($query);
@@ -635,15 +635,15 @@ while($this->db->next_record())
 	 }
 
 if ($perm->is_fak_admin()){
-	$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
-			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
+	$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id) 
 			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
 	$this->db->query($query);
 	while($this->db->next_record()){
 		$this->news_perm[$this->db->f("Seminar_id")]=array("name"=>$this->db->f("Name"),"perm"=>3);
 	}
-	$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
-			LEFT JOIN institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
+	$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) 
 			WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
 	$this->db->query($query);
 	while($this->db->next_record()){

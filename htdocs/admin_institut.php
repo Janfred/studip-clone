@@ -296,9 +296,9 @@ if ($i_view=="delete") {
 if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 
 	if ($i_view != "new") {
-		$db->query("SELECT a.*,b.Name AS fak_name, count(Seminar_id) AS number FROM institute a LEFT JOIN institute b ON (b.Institut_id=a.fakultaets_id) LEFT JOIN seminare c ON (a.Institut_id=c.Institut_id) WHERE a.Institut_id ='$i_view' GROUP BY a.Institut_id");
+		$db->query("SELECT a.*,b.Name AS fak_name, count(Seminar_id) AS number FROM Institute a LEFT JOIN Institute b ON (b.Institut_id=a.fakultaets_id) LEFT JOIN seminare c ON (a.Institut_id=c.Institut_id) WHERE a.Institut_id ='$i_view' GROUP BY a.Institut_id");
 		$db->next_record();
-		$db2->query("SELECT a.Institut_id,a.Name,count(b.Institut_id) as num_inst FROM institute a LEFT JOIN institute b ON (a.Institut_id=b.fakultaets_id) WHERE a.Institut_id ='$i_view' AND b.Institut_id!='$i_view' AND a.Institut_id=a.fakultaets_id GROUP BY a.Institut_id ");
+		$db2->query("SELECT a.Institut_id,a.Name,count(b.Institut_id) as num_inst FROM Institute a LEFT JOIN Institute b ON (a.Institut_id=b.fakultaets_id) WHERE a.Institut_id ='$i_view' AND b.Institut_id!='$i_view' AND a.Institut_id=a.fakultaets_id GROUP BY a.Institut_id ");
 		$db2->next_record();
 		$_num_inst = $db2->f("num_inst");
 	}

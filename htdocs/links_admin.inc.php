@@ -431,17 +431,17 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($vie
 					if ($auth->auth['perm'] == "root"){
 						$db->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
 					} elseif ($auth->auth['perm'] == "admin") {
-						$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN institute b USING (Institut_id)  
+						$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
 									WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
 					} else {
-						$db->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id'");
+						$db->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id'");
 					}
 						
 					printf ("<option value=\"NULL\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
 					while ($db->next_record()){
 						printf ("<option value=\"%s\">%s </option>\n", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 70)));
 						if ($db->f("is_fak")){
-							$db2->query("SELECT Institut_id, Name FROM institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
+							$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
 							while ($db2->next_record()){
 								printf("<option value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", $db2->f("Institut_id"), htmlReady(substr($db2->f("Name"), 0, 70)));
 							}
@@ -519,7 +519,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 							if ($perm->have_perm("root")){
 								$db->query("SELECT Institut_id, Name FROM Institute WHERE Institut_id!=fakultaets_id ORDER BY Name");
 							} else {
-								$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN institute b USING (Institut_id)  
+								$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
 									WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
 							}
 							?>
@@ -533,7 +533,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 									else
 										echo"<option value=".$db->f("Institut_id").">".substr($db->f("Name"), 0, 30)."</option>";
 									if ($db->f("is_fak")){
-										$db2->query("SELECT Institut_id, Name FROM institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
+										$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
 										while ($db2->next_record()){
 											if ($links_admin_data["srch_inst"] == $db2->f("Institut_id"))
 												echo"<option selected value=".$db2->f("Institut_id").">&nbsp;&nbsp;&nbsp;".substr($db2->f("Name"), 0, 30)."</option>";
