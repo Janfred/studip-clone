@@ -24,57 +24,48 @@ $perm->check("user");
 ob_start(); //Outputbuffering für maximal Performance
 
 function get_my_sem_values(&$my_sem) {
-	 global $user,$loginfilenow;
+	 global $user;
 	 $db2 = new DB_seminar;
-	 $my_semids="('".implode("','",array_keys($my_sem))."')";
 // Postings
-	 $db2->query ("SELECT Seminar_id,count(*) as count FROM px_topics WHERE Seminar_id IN ".$my_semids." GROUP BY Seminar_id");
-	 while($db2->next_record()) {
-	 $my_sem[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
-	 }
-	 $db2->query ("SELECT a.Seminar_id,count(*) as count FROM px_topics a LEFT JOIN loginfilenow_".$user->id." b USING (Seminar_id) WHERE a.Seminar_id IN ".$my_semids." AND chdate > b.loginfilenow AND user_id !='$user->id' GROUP BY a.Seminar_id");
-	 while($db2->next_record()) {
-	 $my_sem[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("count");
-	 }
+	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
+				FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
+	while($db2->next_record()) {
+		$my_sem[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
+		$my_sem[$db2->f("Seminar_id")]["postings"]=$db2->f("count");
+	}
 
 //dokumente
-	 $db2->query ("SELECT seminar_id , count(*) as count FROM dokumente WHERE seminar_id IN ".$my_semids." GROUP BY seminar_id");
-	 while($db2->next_record()) {
-	 $my_sem[$db2->f("seminar_id")]["dokumente"]=$db2->f("count");
-	 }
-	 $db2->query ("SELECT a.seminar_id , count(*) as count  FROM dokumente a LEFT JOIN loginfilenow_".$user->id." b USING (seminar_id) WHERE a.seminar_id IN ".$my_semids." AND chdate > b.loginfilenow AND user_id !='$user->id' GROUP BY a.seminar_id");
-	 while($db2->next_record()) {
-	 $my_sem[$db2->f("seminar_id")]["neuedokumente"]=$db2->f("count");
-	 }
+	$db2->query("SELECT b.Seminar_id,count(dokument_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.dokument_id,NULL)) AS neue 
+				FROM loginfilenow_".$user->id." b  LEFT JOIN dokumente a USING (Seminar_id) GROUP BY b.Seminar_id");
+	while($db2->next_record()) {
+		$my_sem[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
+		$my_sem[$db2->f("Seminar_id")]["dokumente"]=$db2->f("count");
+	}
 
 //News
-	 $db2->query ("SELECT range_id,count(*) as count  FROM news_range  LEFT JOIN news USING(news_id) WHERE range_id IN ".$my_semids." GROUP BY range_id");
-	 while($db2->next_record()) {
-	 $my_sem[$db2->f("range_id")]["news"]=$db2->f("count");
-	 }
-	 $db2->query ("SELECT range_id,count(*) as count  FROM news_range LEFT JOIN news  USING(news_id)  LEFT JOIN loginfilenow_".$user->id." b ON (b.Seminar_id=range_id) WHERE range_id IN ".$my_semids." AND date > b.loginfilenow AND user_id !='$user->id' GROUP BY range_id");
-	 while($db2->next_record()) {
-	 $my_sem[$db2->f("range_id")]["neuenews"]=$db2->f("count");
-	 }
-// Literatur?
-	 $db2->query ("SELECT range_id,chdate,user_id FROM literatur WHERE range_id IN ".$my_semids." AND literatur !='' AND links != '' ");
+	$db2->query("SELECT b.Seminar_id,count(range_id) as count, count(IF((date > b.loginfilenow AND user_id !='".$user->id."'),range_id,NULL)) AS neue 
+				FROM loginfilenow_".$user->id." b  LEFT JOIN news_range ON (b.Seminar_id=range_id) LEFT JOIN news  USING(news_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
-	  if ($db2->f("chdate")>$loginfilenow[$db2->f("range_id")] AND $db2->f("user_id")!=$user->id){
-		$my_sem[$db2->f("range_id")]["neueliteratur"]=TRUE;
-		$my_sem[$db2->f("range_id")]["literatur"]=TRUE;
-		}
-	 else $my_sem[$db2->f("range_id")]["literatur"]=TRUE;
-	 }
-	 $db2->query ("SELECT range_id,count(*) as count FROM termine WHERE range_id IN ".$my_semids." GROUP BY range_id");
-	 while($db2->next_record()) {
-	 $my_sem[$db2->f("range_id")]["termine"]=$db2->f("count");
-	 }
-	 $db2->query ("SELECT range_id,count(*) as count  FROM termine LEFT JOIN loginfilenow_".$user->id." b ON (b.Seminar_id=range_id) WHERE range_id IN ".$my_semids." AND chdate > b.loginfilenow AND autor_id !='$user->id' GROUP BY range_id");
-	  while($db2->next_record()) {
-	 $my_sem[$db2->f("range_id")]["neuetermine"]=$db2->f("count");
-	 }
+		$my_sem[$db2->f("Seminar_id")]["neuenews"]=$db2->f("neue");
+		$my_sem[$db2->f("Seminar_id")]["news"]=$db2->f("count");
+	}
+// Literatur?
+	$db2->query("SELECT b.Seminar_id,IF(literatur !='' OR links != '',1,0) AS literatur,
+			IF((chdate > b.loginfilenow AND user_id !='".$user->id."' AND (literatur !='' OR links != '')),1,0) AS neue 
+			FROM loginfilenow_".$user->id." b  LEFT JOIN literatur ON (range_id = b.Seminar_id)");
+	while($db2->next_record()) {
+		$my_sem[$db2->f("Seminar_id")]["neueliteratur"]=$db2->f("neue");
+		$my_sem[$db2->f("Seminar_id")]["literatur"]=$db2->f("literatur");
+	}
 
-	 return;
+	$db2->query("SELECT b.Seminar_id,count(termin_id) as count, count(IF((chdate > b.loginfilenow AND autor_id !='".$user->id."'),a.termin_id,NULL)) AS neue 
+				FROM loginfilenow_".$user->id." b  LEFT JOIN termine a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
+	while($db2->next_record()) {
+		$my_sem[$db2->f("Seminar_id")]["neuetermine"]=$db2->f("neue");
+		$my_sem[$db2->f("Seminar_id")]["termine"]=$db2->f("count");
+	}
+	
+	return;
 }
 
 
@@ -263,7 +254,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 	 }
 	 $value_list=substr($value_list,0,-1);
-	 $db->query("CREATE  TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
+	 $db->query("CREATE TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
 	 $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
 	 $db->query($ins_query);
 	 get_my_sem_values($my_sem);
