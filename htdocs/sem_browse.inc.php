@@ -81,13 +81,13 @@ elseif (!$extern)
 if (($reset_all)  || $search_obj->new_search_button_clicked){
 	$tmp_cmd = $sem_browse_data["cmd"];	
 	$default_sem = $sem_browse_data["default_sem"];
-	$sem_browse_data = null;
+	$sem_browse_data = array();
 	$sem_browse_data["cmd"] = $tmp_cmd;	
 	$sem_browse_data["default_sem"] = $default_sem;
 	$_marked_sem = array();
 }
 
-if (!isset ($sem_browse_data["level"])) $sem_browse_data["level"]="f";
+
 if ($level==0) $sem_browse_data["extern"] == FALSE;
 //Zuruecksetzen
 if (($reset_all)  || $search_obj->new_search_button_clicked){
@@ -98,6 +98,11 @@ if (($reset_all)  || $search_obj->new_search_button_clicked){
 	$sem_browse_data["default_sem"] = $default_sem;
 	$_marked_sem = array();
 }
+
+if (!isset ($sem_browse_data["level"])) {
+	$sem_browse_data["level"]="f";
+}
+
 if ($sem_browse_data['level'] == "vv" || $level=="vv"){
 	$sem_tree = new StudipSemTreeView($_REQUEST['start_item_id'], (($sem_browse_data['default_sem'] == 'all') ? false : $sem_browse_data['default_sem']));
 	$sem_browse_data['cmd'] = "qs";
@@ -680,7 +685,6 @@ echo "</form></table>";
 	}
 	echo "</td></tr>\n</table>";
 }
-
 if ($sem_browse_data['level'] == "vv"){
 	echo "\n<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 	echo "\n<tr><td align=\"center\">";
