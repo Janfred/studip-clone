@@ -409,7 +409,7 @@ class editSettings extends cssClasses {
 	
 	function selectProperties($category_id='', $all=FALSE) {
 		if (!$all)
-			$this->db2->query ("SELECT *  FROM resources_properties LEFT JOIN resources_categories_properties USING (property_id) WHERE category_id = '$category_id' ORDER BY name");
+			$this->db2->query ("SELECT *  FROM resources_categories_properties LEFT JOIN resources_properties USING (property_id) WHERE category_id = '$category_id' ORDER BY name");
 		else
 			$this->db2->query ("SELECT *  FROM resources_properties ORDER BY name");		
 		if (!$this->db->affected_rows())
@@ -595,9 +595,19 @@ class editSettings extends cssClasses {
 								</font><br />
 							</td>
 							<td class="<? echo $this->getClass() ?>" width="34%">
-								<a href="<? echo $PHP_SELF ?>?delete_type_property_id=<? echo $this->db2->f("property_id") ?>&delete_type_category_id=<? echo $this->db2->f("category_id") ?>">
-									<img src="pictures/trash.gif" <?=tooltip(_("Eigenschaft löschen"))?> 
-								</a>
+								<? 
+								if (!$this->db2->f("system")) { 
+									?>
+									<a href="<? echo $PHP_SELF ?>?delete_type_property_id=<? echo $this->db2->f("property_id") ?>&delete_type_category_id=<? echo $this->db2->f("category_id") ?>">
+									<img src="pictures/trash.gif" border="0" <?=tooltip(_("Eigenschaft löschen"))?> 
+									</a>										
+									<?
+								} else {
+									?>
+									<img src="pictures/lighttrash.gif" border="0" <?=tooltip(_("Löschen der Eigenschaft nicht möglich, systemobjekt!"))?> 
+									<?
+								}
+								?>
 							</td>
 						</tr>
 						<? } ?>
@@ -683,7 +693,7 @@ class editSettings extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" colspan=2 align="left" valign="bottom">
 					<font size=-1><input type="TEXT" name="add_property" size=50 maxlength=255 value="<bitte geben Sie hier den Namen ein>" /></font>
 					<select name="add_property_type">
-						<font size=-1><option value="bool"<?=_("Zustand")?></option></font>
+						<font size=-1><option value="bool"><?=_("Zustand")?></option></font>
 						<font size=-1><option value="num"><?=_("einzeiligesTextfeld")?></option></font>
 						<font size=-1><option value="text"><?=_("mehrzeiligesTextfeld")?></option></font>
 						<font size=-1><option value="select"><?=_("Auswahlfeld")?></option></font>
@@ -722,7 +732,7 @@ class editSettings extends cssClasses {
 							<?
 							if ($this->db2->f("type") == "bool") {
 								printf ("<font size=-1>"._("Bezeichnung:")."</font><br />");
-								printf ("<font size=-1><input type=\"TEXT\" name=\"send_property_bool_desc[%s]\" value=\"%s\" size=30 maxlength=255 /></font><br />", $this->db2->f("property_id"), htmlReady(($this->db2->f("options"))) ? $this->db2->f("options") : _("vorhanden"));
+								printf ("<font size=-1><input type=\"TEXT\" name=\"send_property_bool_desc[%s]\" value=\"%s\" size=30 maxlength=255 /></font><br />", $this->db2->f("property_id"), htmlReady($this->db2->f("options")));
 							}
 							if ($this->db2->f("type") == "select") {
 								printf ("<font size=-1>"._("Optionen:")."</font><br />");
