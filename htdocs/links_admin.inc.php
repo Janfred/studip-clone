@@ -28,7 +28,6 @@ require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php";
 require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php";
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/LockRules.class.php";
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -37,8 +36,6 @@ $db4=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 $Modules=new Modules;
 $semester=new SemesterData;
-$lock_rules=new LockRules;
-$all_lock_rules=$lock_rules->getAllLockRules();
 
 $sess->register("links_admin_data");
 $sess->register("sem_create_data");
@@ -158,7 +155,6 @@ if ($i_page == "admin_seminare1.php"
 		OR ($i_page == "admin_lit_list.php" AND $links_admin_data["view"]=="literatur_sem")
 		OR $i_page == "archiv_assi.php"
 		OR $i_page == "admin_visibility.php"
-		OR $i_page == "admin_lock.php"
 		OR $i_page == "copy_assi.php"
 		OR $i_page == "adminarea_start.php"
 		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_sem")		
@@ -257,9 +253,6 @@ if ($perm->have_perm("dozent")) {
 }
 if ($perm->have_perm("admin")) {
 	$structure["visibility"]=array (topKat=>"veranstaltungen", name=>_("Sichtbarkeit"), link=>"admin_visibility.php?list=TRUE&new_session=TRUE", active=>FALSE, newline=>TRUE);
-	if ($SEMINAR_LOCK_ENABLE)
-		$structure["lock"]=array (topKat=>"veranstaltungen", name=>_("Sperren"), link=>"admin_lock.php?list=TRUE&new_session=TRUE", active=>FALSE);
-	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
 } 
 
 //
@@ -316,8 +309,6 @@ if ($perm->have_perm("root")) {
 	}
 		
 	$structure["semester"]=array (topKat=>"global", name=>_("Semester"), link=>"admin_semester.php", active=>FALSE);
-	if ($SEMINAR_LOCK_ENABLE) {
-		$structure["lock_adjust"]=array (topKat=>"global", name=>("Sperrebenen anpassen"), link=>"admin_lock_adjust.php", active=>FALSE);
 	}
 }
 //Reitersystem Ende
@@ -425,9 +416,6 @@ switch ($i_page) {
 		else
 			$reiter_view="modules_inst";
 	break;
-	case "admin_lock_adjust.php":
-		$reiter_view="lock_adjust";
-	break;
 	case "admin_studiengang.php": 
 		$reiter_view="studiengang"; 
 	break;
@@ -439,9 +427,6 @@ switch ($i_page) {
 	break;
 	case "admin_visibility.php": 
 		$reiter_view="visibility"; 
-	break;
-	case "admin_lock.php":
-		$reiter_view="lock";
 	break;
 	case "copy_assi.php": 
 		$reiter_view="copysem"; 
@@ -833,8 +818,6 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 						echo _("Archivieren");
 					} elseif ($i_page=="admin_visibility.php") {
 						echo _("Sichtbarkeit");
-					} elseif ($i_page=="admin_lock.php") {
-						echo _("Sperrebene");
 					} else {
 						echo _("Aktion");
 					}
@@ -872,37 +855,6 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 				<?
 				if ($auth->auth["jscript"]) {
 					printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
-					// echo "&nbsp;<br>";
-					// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
-				}
-				?>&nbsp; 
-				</td>
-			</tr>
-			<?
-		} 
-		//more Options for lock changing
-		if ($i_page == "admin_lock.php") {
-			?>
-			<tr <? $cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=3>
-					&nbsp; <font size=-1><?=_("Sperrebene der angezeigten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br />
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
-				<?
-				if ($auth->auth["jscript"]) {
-					printf("<select name=\"lock_all\" size=1>");
-					printf("<option value='-1'>"._("Bitte w&auml;hlen")."</option>");
-					for ($i=0;$i<count($all_lock_rules);$i++) {
-						printf("<option value=\"".$all_lock_rules[$i]["lock_id"]."\" ");
-						if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
-							printf(" selected ");
-						}
-						printf(">".$all_lock_rules[$i]["name"]."</option>");
-					}
-					// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
-					printf("</select>");
-					printf("<input type=\"IMAGE\" ".makeButton("uebernehmen","general_lock")." name=\"general_lock\">");
-					
 					// echo "&nbsp;<br>";
 					// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
 				}
@@ -980,30 +932,6 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 			case "copy_assi.php": 
 				printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
 				break;
-			case "admin_lock.php":
-				$db5 = new Db_Seminar;
-				$db5->query("SELECT lock_rule from seminare WHERE Seminar_id='".$seminar_id."'");
-				$db5->next_record();
-				if ($perm->have_perm("admin")) {
-					?>
-					<input type="hidden" name="make_lock" value=1>
-					<select name=lock_sem[<? echo $seminar_id ?>]>
-					<?
-						for ($i=0;$i<count($all_lock_rules);$i++) {
-							echo "<option value=".$all_lock_rules[$i]["lock_id"]."";
-							if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
-								echo " selected ";
-							} elseif (!isset($lock_all) && ($all_lock_rules[$i]["lock_id"]==$db5->f("lock_rule"))) {
-								echo " selected ";
-							}
-							echo ">".$all_lock_rules[$i]["name"]."</option>";
-						}	
-					?>
-					</select>
-					
-				<?	
-				}
-				break;
 			case "admin_visibility.php": 
 				if ($perm->have_perm("admin")) {
 				?>
@@ -1049,6 +977,5 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 <?
 	page_close();
 	die;
-}
 }
 ?>
