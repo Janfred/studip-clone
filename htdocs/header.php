@@ -134,7 +134,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			<tr>
 <?
 				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top");
-				echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),100, "_top","left");
+				echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left");
 
 
 
@@ -194,12 +194,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		// Ist sonst noch wer da?
 		if (!count($online))
-			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),60, "_top","left");
+			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),55, "_top","left");
 		else {
 			if (count($online)==1) {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),60, "_top","left");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),55, "_top","left");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), count($online)),60, "_top","left");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), count($online)),55, "_top","left");
 			}
 		}
 
@@ -216,7 +216,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr align="center">
 <? //create (javascript) info tooltip/window
-				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),_("Informationen zu dieser Installation"), "_top");
+				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),_("Informationen zu dieser Installation"),112, "_top");
 ?>
 	</tr>
 	</table>
@@ -248,7 +248,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
 				($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
 		
-		echo MakeToolbar("pictures/info_header.gif","#",$auth->auth["uname"],$infotext,83, "","left","TRUE");
+		echo MakeToolbar("pictures/info_header.gif","#",$auth->auth["uname"],$infotext,68, "","left","TRUE");
 
 ?>
 <?		
