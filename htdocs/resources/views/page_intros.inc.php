@@ -4,7 +4,7 @@ if ($resources_data["actual_object"]) {
 	$currentObjectTitelAdd=": ".$currentObject->getCategoryName();
 	if ($currentObjectTitelAdd)
 		$currentObjectTitelAdd=": ";
-	$currentObjectTitelAdd=". ".$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
+	$currentObjectTitelAdd=": ".$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
 }
 
 switch ($resources_data["view"]) {
