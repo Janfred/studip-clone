@@ -2313,19 +2313,18 @@ if ($level==4)
 							</font>
 							<table align="right" width="98%" border="0" cellpadding="2" cellspacing="0">
 								<tr>
-									<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
-										<font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
-									</td>
-									<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
-										<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("d",$sem_create_data["sem_admission_start_date"]); else echo date("d") ?>">.
-										<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("m",$sem_create_data["sem_admission_start_date"]); else echo date("m") ?>">.
-										<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_start_date"]); else echo date("Y") ?>"><?=_("um");?>&nbsp;</font><br />
-										<font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("H",$sem_create_data["sem_admission_start_date"]); else echo date("H") ?>">:
-										<input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("i",$sem_create_data["sem_admission_start_date"]); else echo date("i") ?>">&nbsp;<?=_("Uhr");?></font>&nbsp; 
-										<img  src="./pictures/info.gif" 
-											<? echo tooltip(_("Teilnehmer dürfen sich erst ab diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>
-										>
-									</td>
+
+<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
+    <font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
+</td>
+<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
+    <font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("d",$sem_create_data["sem_admission_start_date"]); else echo date("d") ?>">.
+    <input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("m",$sem_create_data["sem_admission_start_date"]); else echo date("m") ?>">.
+    <input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_start_date"]); else echo date("Y") ?>"><?=_("um");?>&nbsp;</font><br />
+    <font size=-1>&nbsp; <input type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("H",$sem_create_data["sem_admission_start_date"]); else echo date("H") ?>">:
+    <input type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_start_date"]<>-1) echo date("i",$sem_create_data["sem_admission_start_date"]); else echo date("i") ?>">&nbsp;<?=_("Uhr");?></font>&nbsp;     <img  src="./pictures/info.gif"     <? echo tooltip(_("Teilnehmer dürfen sich erst ab diesem Datum in die Veranstaltung eintragen."), TRUE, TRUE) ?>
+    >
+</td>
 									<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
 										<font size=-1><? echo _("Enddatum f&uuml;r Anmeldungen");?>:</font>
 									</td>
