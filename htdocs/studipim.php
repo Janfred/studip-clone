@@ -21,7 +21,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 
 if ($auth->auth["uid"]!="nobody"){
 
-($cmd=="write") ? $refresh=0 : $refresh=20;
+($cmd=="write") ? $refresh=0 : $refresh=30;
 
 require_once ("seminar_open.php");
 require_once ("visual.inc.php");
@@ -32,15 +32,12 @@ require_once ("messaging.inc.php");
 $db = new DB_Seminar;
 $sms= new messaging;
 
-$now = time();
-$sqldate = date("YmdHis", ($now - ($my_messaging_settings["active_time"] * 60)));
-
-$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,changed,username FROM active_sessions LEFT JOIN auth_user_md5 ON user_id=sid WHERE changed > '$sqldate' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
+$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
+$query = "SELECT CONCAT(Vorname,' ',Nachname) AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,username,user_id FROM active_sessions LEFT JOIN auth_user_md5 ON user_id=sid WHERE changed > '".date("YmdHis",$now - ($my_messaging_settings["active_time"] * 60))."' AND sid != 'nobody' AND sid != '".$auth->auth["uid"]."' AND active_sessions.name = 'Seminar_User' ORDER BY changed DESC";
 $db->query($query);
 while ($db->next_record())
       {
-      $stamp=mktime(substr($db->f("changed"),8,2),substr($db->f("changed"),10,2),substr($db->f("changed"),12,2),substr($db->f("changed"),4,2),substr($db->f("changed"),6,2),substr($db->f("changed"),0,4));
-      $online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>($now-$stamp));      
+      $online[$db->f("username")] = array("name"=>$db->f("full_name"),"last_action"=>$db->f("lastaction"),"userid"=>$db->f("user_id"));      
       }
 
 $query =  "SELECT message_id,mkdate,user_id_snd,message,user_id_snd FROM globalmessages WHERE user_id_rec='".$auth->auth["uname"]."'";
@@ -79,7 +76,7 @@ while ($db->next_record())
 <script language="JavaScript">
 <!--
 
-<?if ($auth->auth["uid"]=="nobody") echo "self.close();"; //als nobody macht der IM keinen Sinn?>
+<?if ($auth->auth["uid"]=="nobody") echo "close();"; //als nobody macht der IM keinen Sinn?>
 
 function coming_home(url)
 	{
@@ -104,7 +101,7 @@ function again_and_again()
 
 setTimeout('again_and_again();',<? print($refresh*1000);?>);
 <?
-($new_msg[0] OR $cmd) ? print ("self.focus();\n") : print ("self.blur();\n");
+($new_msg[0] OR $cmd) ? print ("focus();\n") : print ("blur();\n");
 ?>
 //-->
 </script>
@@ -129,7 +126,7 @@ if ((is_array($online)) && (is_array ($my_buddies))) {
 				if (!$c)
 					printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>Buddies:</b></td></tr>");					
 				echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a href=\"javascript:coming_home('about.php?username=$key');\">".$value["name"]."</a></font></td>\n";
-				echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$key'><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
+				echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$key'><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
 				$c++;
       				}
       			}
@@ -182,7 +179,7 @@ if ($cmd=="write" AND $msg_rec)
      echo"\n<FORM  name='eingabe' action='$PHP_SELF?cmd=send_msg' method='POST'><INPUT TYPE='HIDDEN'  name='msg_rec' value='$msg_rec'>";
      echo"\n<tr><td class='blank' colspan='2' valign='middle'><TEXTAREA  style=\"width: 100%\" name='nu_msg' rows='4' cols='44' wrap='virtual'></TEXTAREA></font><br>";
      echo "<font size=-1><a target=\"_new\" href=\"show_smiley.php\">Smileys</a> k&ouml;nnen verwendet werden</font>\n</td></tr>";
-     echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>&nbsp;<INPUT TYPE='IMAGE'  name='none' src=\"pictures/buttons/absenden-button.gif\" border=0value='senden'>&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/abbrechen-button.gif\" border=0 /></a></FORM></font></td></tr>";
+     echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>&nbsp;<INPUT TYPE='IMAGE'  name='none' src=\"pictures/buttons/absenden-button.gif\" border=0 value='senden'>&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/abbrechen-button.gif\" border=0 /></a></FORM></font></td></tr>";
      echo"\n<script language=\"JavaScript\">\n<!--\ndocument.eingabe.nu_msg.focus();\n//-->\n</script>";
      }
 ?>
