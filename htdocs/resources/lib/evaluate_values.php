@@ -327,6 +327,7 @@ if ($change_object_schedules) {
 		
 		$resultAssi = dateAssi ($assObj->getAssignUserId(), "insert", FALSE, FALSE, FALSE, FALSE);
 		if ($resultAssi["changed"]) {
+			$return_schedule = TRUE;
 			header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_schedule" : "view_schedule", $view_mode));
 		}
 	}
@@ -341,6 +342,7 @@ if ($change_object_schedules) {
 				$msg->addMsg(11);
 			} else {
 				$changeAssign->store();
+				$return_schedule = TRUE;
 				header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=38&msg_resource_id=%s", ($view_mode == "oobj") ? "openobject_schedule" : "view_schedule", $view_mode, $select_change_resource));
 			}
 		} else
@@ -353,7 +355,8 @@ if ($change_object_schedules) {
 			$killAssign->delete();
 			$new_assign_object='';
 			$msg ->addMsg(5);
-		} elseif ($sumbit_x) {
+		} elseif (!$return_schedule) {
+			echo gaga;
 			if ($change_object_schedules == "NEW")
 				$change_schedule_id=FALSE;
 			else
