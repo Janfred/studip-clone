@@ -193,7 +193,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	}
 	if ($admin_admission_data["sem_admission_end_date"] != "-1") {
 		if ($admin_admission_data["sem_admission_end_date"] < time()) {
-			$errormsg=$errormsg."error§"._("Das Enddatum liegt in der Verangenheit. Bitte geben Sie ein g&uuml;ltiges Enddatum ein!")."§"; 
+			$errormsg=$errormsg."error§"._("Das Enddatum liegt in der Vergangenheit. Bitte geben Sie ein g&uuml;ltiges Enddatum ein!")."§"; 
 		}
 		if ($admin_admission_data["sem_admission_end_date"] <= $admin_admission_data["sem_admission_start_date"]) {
 			$errormsg=$errormsg."error§"._("Das Startdatum muss vor dem Enddatum liegen!")."§"; 
@@ -457,11 +457,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$admin_admission_data["sem_id"]."'");
 			}
 
-		//Save the current state as snapshot to compare with current data
-		$admin_admission_data["original"] = get_snapshot();
-		$admin_admission_data["admission_turnout_org"] = $admin_admission_data["admission_turnout"];
-		$admin_admission_data["admission_type_org"] = $admin_admission_data["admission_type"];		
-		
 		//Variante nachtraeglich Anmeldeverfahren starten, alle alten Teilnehmer muessen raus
 		if (($admin_admission_data["admission_type"] >$admin_admission_data["admission_type_org"]) && ($admin_admission_data["admission_type_org"]==0)) {	
 			$db->query("SELECT seminar_user.user_id, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id ='".$admin_admission_data["sem_id"]."' AND status IN ('autor', 'user') ");
@@ -520,6 +515,11 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$admin_admission_data["original"]=get_snapshot();
 			}
 		}
+		
+		//Save the current state as snapshot to compare with current data
+		$admin_admission_data["original"] = get_snapshot();
+		$admin_admission_data["admission_turnout_org"] = $admin_admission_data["admission_turnout"];
+		$admin_admission_data["admission_type_org"] = $admin_admission_data["admission_type"];		
 	}
 }
 
