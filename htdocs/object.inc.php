@@ -1,22 +1,120 @@
 <?
-/*
-object.inc.php - Verwaltung des Objecttrackings
-Copyright (C) 2003 Ralf Stockmann <rstockm@gwdg.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* resourcesFunc.php
+* 
+* functions for objectoperation as get/set viewdate, rates, favourites and more
+* 
+*
+* @author		Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <kater@data-quest.de>, data-quest GmbH <info@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		functions
+* @module		object.inc.php
+* @package		studip_core
 */
+
+//object.inc.php - Verwaltung von Objektoperationen
+//Copyright (C) 2004 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <kater@data-quest.de>, data-quest GmbH <info@data-quest.de>
+// This file is part of Stud.IP
+// resourcesFunc.php
+// Funktionen der Ressourcenverwaltung
+// Copyright (C) 2003 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+/**
+* This function saves the actual time as last visitdate for the given object, user and type
+*
+* @param	string	the id of the object (i.e. seminar_id, news_id, vote_id)
+* @param	string	the type of visited object or module (i.e. news, documents, wiki - see /lib/classes/Modules.class.php for definitions)
+* @param	string	the user who visited the object - if not given, the actual user is used
+*
+*/
+function object_set_visit($object_id, $type, $user_id = '') {
+	global $user;
+	
+	$now = time();
+	if (!$user_id)
+		$user_id = $user->id;
+
+	$last_visit = object_get_visit($object_id, $type, FALSE, $user_id);
+	
+	$db=new DB_Seminar;
+	$query = sprintf ("REPLACE INTO object_user_visits SET object_id = '%s', user_id ='%s', type='%s', visitdate='%s', last_visitdate = '%s'",
+				$object_id, $user_id, $type, $now, $last_visit);
+	$db->query($query);
+	
+	return TRUE;
+}
+
+/**
+* This function gets the (last) visit time for an object or module. If no information is found, the last visit of the open-object can bes used
+*
+* @param	string	the id of the object (i.e. seminar_id, news_id, vote_id)
+* @param	string	the type of visited object or module (i.e. news, documents, wiki - see /lib/classes/Modules.class.php for definitions OR sem/inst, if the visit for the whole seminar was saved)
+* @param	string	the return-mode: 'last' for the last visit, other for actual-visit
+* @param	string	the user who visited the object - if not given, the actual user is used
+* @param	string	the id of an open-object (seminar or inst), to gather information for last visit from the visit of the whole open-object
+* @return	int	the timestamp of the last visit or FALSE
+*
+*/
+function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '', $user_id = '') {
+	global $user;
+	static $cache;
+	
+	if (!$user_id)
+		$user_id = $user->id;
+	if (!$open_object_id)
+		$open_object_id = $object_id;
+	
+	if ($cache[$object_id][$type][$user_id]) {
+		if ($mode == "last")
+			return $cache[$object_id][$type][$user_id]["last_visitdate"];
+		else
+			return $cache[$object_id][$type][$user_id]["visitdate"];
+	}
+	
+	$db=new DB_Seminar;
+	$query = sprintf ("SELECT visitdate, last_visitdate FROM object_user_visits WHERE object_id = '%s' AND user_id = '%s' AND type = '%s'",
+			$object_id, $user_id, $type);
+	$db->query($query);
+
+	if ($db->next_record()) {
+		$cache[$object_id][$type][$user_id] = array("last_visitdate" => $db->f("last_visitdate"), "visitdate" =>$db->f("visitdate"));
+		if ($mode == "last")
+			return $db->f("last_visitdate");
+		else
+			return $db->f("visitdate");
+	//no visitdate for the object or modul - we have to gather the information from the studip-object (seminar or institute)
+	} elseif ($open_object_id) {
+		$query = sprintf ("SELECT visitdate FROM object_user_visits WHERE object_id = '%s' AND user_id = '%s' AND (type = 'sem' OR type = 'inst')",
+				$open_object_id, $user_id);
+		$db->query($query);
+		if ($db->next_record()) {
+			$cache[$object_id][$type][$user_id] = array("last_visitdate" => $db->f("last_visitdate"), "visitdate" =>$db->f("visitdate"));
+			if ($mode == "last")
+				return $db->f("last_visitdate");
+			else
+				return $db->f("visitdate");
+		} else
+			return FALSE;
+		
+	} else
+		return FALSE;
+}
+
 
 function object_add_view ($object_id) {
 	global $object_cache;
