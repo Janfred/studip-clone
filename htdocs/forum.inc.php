@@ -926,6 +926,30 @@ function forum_draw_topicline() {
 	echo "</td></tr>";	
 }
 
+/**
+* prints the rating-bar
+*
+**/
+function print_rating($rate) {
+	 
+	 if ($rate == "?")
+	 	$bar = "<img src=\"pictures/rate_leer\" width=\"50\" height=\"11\">";
+	 elseif ($rate > 3) {
+		 $grau = (5-$rate)*10;
+		 $rot = 25 - $grau;
+		 $bar = "<img src=\"pictures/rate_leer\" width=25 height=11><img src=\"pictures/rate_rot\" width=\"$rot\" height=\"11\"><img src=\"pictures/rate_leer\" width=\"$grau\" height=11>";
+	 } elseif ($rate < 3) {
+		 $grau = ($rate-1)*10;
+		 $gruen = 25 - $grau;
+		 $bar = "<img src=\"pictures/rate_leer\" width=\"$grau\" height=\"11\"><img src=\"pictures/rate_gruen\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer\" width=25 height=11>";
+	 } else {
+		$bar = "<img src=\"pictures/rate_neutral\" width=\"50\" height=\"11\">"; 
+	 }
+		 
+	 $bar .= " | ";
+		
+	return $bar;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1034,6 +1058,12 @@ function printposting ($forumposting) {
   		}
   		if ($printindex=="" && ($forum["sort"]=="score" || $forum["indikator"]=="score")) $printindex="0";
   		if ($printindex!= "") $forumhead[] = "| <font color=\"$color\">$printindex</font> | ";
+		
+		
+	// Die Bewertungsanzeige
+
+		$forumhead[] = print_rating($forumposting["rating"]);
+		
 		
 		
 	// die Favoritenanzeige
