@@ -42,6 +42,9 @@
 */
 define("PHPDOC_DUMMY",true);
 
+$EXTERN_MODULE_TYPES[0] = array("module" => "Global", "name" => _("globale Konfiguration"), "level" => 1,
+													"description" => _("Das Modul &quot;globale Konfiguration&quot; enthält Einstellungen, die für alle Module gelten, solange sie nicht in den jeweiligen Modulen &uuml;berschrieben werden."));
+
 $EXTERN_MODULE_TYPES[1] = array("module" => "Persons", "name" => _("Mitarbeiter"), "level" => 1,
 													"description" => _("Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
 
@@ -60,16 +63,17 @@ $EXTERN_MODULE_TYPES[5] = array("module" => "News", "name" => _("News"), "level"
 $EXTERN_MODULE_TYPES[6] = array("module" => "Download", "name" => _("Download"), "level" => 1,
 													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."));
 /*
-$EXTERN_MODULE_TYPES[7] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
+$EXTERN_MODULE_TYPES[8] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[8] = array("module" => "Rangelecturetree", "name" => _("Einrichtungsbaum Veranstaltungen"), "level" => 1,
+$EXTERN_MODULE_TYPES[9] = array("module" => "Rangelecturetree", "name" => _("Einrichtungsbaum Veranstaltungen"), "level" => 1,
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 */
-
 $EXTERN_MODULE_TYPES[7] = array("module" => "Newsticker", "name" => _("Newsticker"), "level" => 1,
 													"description" => _("Das Modul &quot;Newsticker&quot; gibt alle News einer Einrichtung in einem Ticker aus."));
 
+$EXTERN_MODULE_TYPES[8] = array("module" => "Lecturestable", "name" => _("Veranstaltungen (Tabelle)"), "level" => 1,
+													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung a Tabelle aus."));
 
 // Don't allow more than 10 configuration files for each module!
 $EXTERN_MAX_CONFIGURATIONS = 6;
