@@ -45,10 +45,6 @@ if (!$EXTERN_ENABLE) {
 	exit;
 }
 
-// check the name of the server
-if (preg_match('#^(http://)?(.+?)(/)?$#', $EXTERN_SERVER_NAME, $matches))
-	$EXTERN_SERVER_NAME  = $matches[2] . '/';
-
 include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/extern.inc.php");
 
 ?>
