@@ -1,3 +1,18 @@
+26.09.2004 v.1.1.5
+- Neue Messaging-Funktionen: Betreff für systeminterne Nachrichten, erzwungene eMail-
+  Weiterleitung, Lesebestätigung und besseres Handling in der Ordneransicht
+- Neue Art der Erfassung von besuchten Bereichen in Veranstaltungen, so dass nun für
+  jeden Bereich einzeln angezeigt werden kann, ob neue Inhalte vorliegen.
+- Optische Kennzeichnung von neuen Inhalten auf der Startseite (News, Evaluationen
+  und Votes)
+- Darstellung von Smileys nach Kategorie und eigenen Favoriten, 
+  Statistik für die Smileyverwaltung
+- Verbesserte Eingabe von Bewertungen im Forum
+- Termineingabehilfe/Minikalender für die Eingabe von Terminen an vielen Stellen im
+  System, Konfigurierbare Standardzeiten zum Auswählen für regelmäßige Termine
+- Verbesserte Bedienung der Ablaufplansicht und Ablaufplanverwaltung
+- weitere Detailverbesserungen und Bugfixes
+
 08.04.2004 v 1.1
 - Evaluations und Umfragemodul zur Erstellung empirischer Online-Fragebögen
 - Möglichkeit der Dateiverlinkung auf geschützte Dokumente auf externen Servern
