@@ -96,15 +96,20 @@ if ($_REQUEST['cmd'] == "MarkList"){
 		}
 	}
 }
-if ($the_tree->mode == "MoveItem"){
+if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
 	if ($_msg){
 		$_msg .= "§";
 	}
-	$_msg .= "info§" . sprintf(_("Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu verschieben.%s"),
+	if ($the_tree->mode == "MoveItem"){
+		$text = _("Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu verschieben.%s");
+	} else {
+		$text = _("Der Kopiermodus ist aktiviert. Bitte w&auml;hlen Sie ein Einfügesymbol %s aus, um das Element <b>%s</b> an diese Stelle zu kopieren.%s");
+	}
+	$_msg .= "info§" . sprintf($text ,
 								"<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">",
 								htmlReady($the_tree->tree->tree_data[$the_tree->move_item_id]['name']),
 								"<div align=\"right\"><a href=\"" . $the_tree->getSelf("cmd=Cancel&item_id=$the_tree->move_item_id") . "\">"
-								. "<img " .makeButton("abbrechen","src") . tooltip(_("Verschieben abbrechen"))
+								. "<img " .makeButton("abbrechen","src") . tooltip(_("Verschieben / Kopieren abbrechen"))
 								. " border=\"0\" align=\"top\"></a></div>");
 }
 		
@@ -134,7 +139,6 @@ $the_tree->showSemTree();
 	</div>
 	<?
 	$search_obj->attributes_default = array('style' => 'width:100%;font-size:10pt;');
-	$search_obj->search_fields['type']['class'] = 1;
 	$search_obj->search_fields['type']['size'] = 30 ;
 	echo $search_obj->getFormStart($the_tree->getSelf());
 	?>
