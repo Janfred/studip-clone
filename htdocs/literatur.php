@@ -71,7 +71,7 @@ if ($db->num_rows()) {
 		echo "</tr></table>	";
 	
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printcontent(0,0, FixLinks(htmlReady($literatur)), FALSE);	
+		printcontent(0,0, formatReady($literatur), FALSE);	
 		echo "</tr></table>	";		
 		}
 
@@ -82,7 +82,7 @@ if ($db->num_rows()) {
 		echo "</tr></table>	";
 	
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printcontent(0,0, FixLinks(htmlReady($links)), FALSE);	
+		printcontent(0,0, formatReady($links), FALSE);	
 		echo "</tr></table>	";		
 		}
 	}
