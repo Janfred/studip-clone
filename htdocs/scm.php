@@ -141,7 +141,11 @@ function scm_show_content($range_id, $msg) {
 		echo $content_table->openCell();
 		$printcontent_table=new Table(array("width"=>"100%"));
 		echo $printcontent_table->open();
-		$edit = "<a href=\"$PHP_SELF?i_view=edit\">".makeButton("bearbeiten")."</a>";
+		if ($rechte) {
+			$edit = "<a href=\"$PHP_SELF?i_view=edit\">".makeButton("bearbeiten")."</a>";
+		} else {
+			$edit = "";
+		}
 		printcontent(0,0, formatReady($result["content"]), $edit);	
 		echo $printcontent_table->close();
 		echo $content_table->closeRow();
