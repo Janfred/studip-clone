@@ -26,7 +26,7 @@ ob_start(); //Outputbuffering für maximal Performance
 
 function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $type = false, $add_fields = false, $add_on = false, $object_field = false){
 	
-	$type = ($type) ? $type : "sem','inst";
+	$type_sql = ($type) ? "='$type'" : "IN('sem','inst')";
 	$object_field = ($object_field) ? $object_field : "my.object_id";
 	$on_clause = " ON(my.object_id=a.{$range_field} $add_on) ";
 	if (strpos($table_name,'{ON_CLAUSE}') !== false){
@@ -35,7 +35,7 @@ function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $ty
 		$table_name .= $on_clause;
 	}
 	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " my.object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue 
-	FROM myobj_".$GLOBALS['user']->id." my LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '".$GLOBALS['user']->id."' AND b.type IN ('$type')) INNER JOIN $table_name 
+	FROM myobj_".$GLOBALS['user']->id." my LEFT JOIN object_user_visits b ON (b.object_id = $object_field AND b.user_id = '".$GLOBALS['user']->id."' AND b.type $type_sql) INNER JOIN $table_name 
 	GROUP BY my.object_id";
 	
 }
