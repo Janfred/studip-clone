@@ -474,25 +474,25 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$content .= "\n<table border=\"0\" width=\"90%\" cellpadding=\"2\" cellspacing=\"0\" align=\"center\" style=\"font-size:10pt\">";
 		if ($item_id == "root"){
 			$content .= "\n<tr><td  class=\"topic\" align=\"left\" style=\"font-size:10pt;\">" . htmlReady($this->tree->root_name) ." </td></tr>";
-			$content .= "\n<tr><td  class=\"blank\" align=\"left\" style=\"font-size:10pt;\">" . htmlReady($this->root_content) ." </td></tr>";
+			$content .= "\n<tr><td  class=\"steel1\" align=\"left\" style=\"font-size:10pt;\">" . htmlReady($this->root_content) ." </td></tr>";
 			$content .= "\n</table>";
 			return $content;
 		}
 		if ($this->tree->tree_data[$item_id]['info']){
-			$content .= "\n<tr><td style=\"font-size:10pt;\" class=\"blank\" align=\"left\" colspan=\"3\">";
+			$content .= "\n<tr><td style=\"font-size:10pt;\" class=\"steel1\" align=\"left\" colspan=\"3\">";
 			$content .= formatReady($this->tree->tree_data[$item_id]['info']) . "</td></tr>";
 		}
 		$content .= "<tr><td style=\"font-size:10pt;\"colspan=\"3\">&nbsp;</td></tr>";
 		if ($this->tree->getNumEntries($item_id) - $this->tree->tree_data[$item_id]['lonely_sem']){
-			$content .= "<tr><td class=\"blank\" style=\"font-size:10pt;\" align=\"left\" colspan=\"3\"><b>" . _("Eintr&auml;ge auf dieser Ebene:");
+			$content .= "<tr><td class=\"steel1\" style=\"font-size:10pt;\" align=\"left\" colspan=\"3\"><b>" . _("Eintr&auml;ge auf dieser Ebene:");
 			$content .= "</b>\n</td></tr>";
 			$entries = $this->tree->getSemData($item_id);
 			$content .= $this->getSemDetails($entries->getGroupedResult("seminar_id"),$item_id);
 		} else {
-			$content .= "\n<tr><td class=\"blank\" style=\"font-size:10pt;\" colspan=\"3\">" . _("Keine Eintr&auml;ge auf dieser Ebene vorhanden!") . "</td></tr>";
+			$content .= "\n<tr><td class=\"steel1\" style=\"font-size:10pt;\" colspan=\"3\">" . _("Keine Eintr&auml;ge auf dieser Ebene vorhanden!") . "</td></tr>";
 		}
 		if ($this->tree->tree_data[$item_id]['lonely_sem']){
-			$content .= "<tr><td class=\"blank\" align=\"left\" style=\"font-size:10pt;\" colspan=\"3\"><b>" . _("Nicht zugeordnete Veranstaltungen auf dieser Ebene:");
+			$content .= "<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt;\" colspan=\"3\"><b>" . _("Nicht zugeordnete Veranstaltungen auf dieser Ebene:");
 			$content .= "</b>\n</td></tr>";
 			$entries = $this->tree->getLonelySemData($item_id);
 			$content .= $this->getSemDetails($entries->getGroupedResult("seminar_id"),$item_id,true);
@@ -509,12 +509,12 @@ class StudipSemTreeViewAdmin extends TreeView {
 		foreach($sem_data as $seminar_id => $data){
 				if (key($data['sem_number']) != $sem_number){
 					$sem_number = key($data['sem_number']);
-					$content .= "\n<tr><td class=\"steelkante\" colspan=\"3\ style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
+					$content .= "\n<tr><td class=\"steelkante\" colspan=\"3\" style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
 				}
-				$content .= "<tr><td class=\"blank\" width=\"1%\"><input type=\"checkbox\" name=\"marked_sem[]\" value=\"$seminar_id\" style=\"vertical-align:middle\">
-							</td><td class=\"blank\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id 
+				$content .= "<tr><td class=\"steel1\" width=\"1%\"><input type=\"checkbox\" name=\"marked_sem[]\" value=\"$seminar_id\" style=\"vertical-align:middle\">
+							</td><td class=\"steel1\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id 
 						."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady(key($data["Name"])) . "</a>
-						 </td><td class=\"blank\" align=\"right\" style=\"font-size:10pt;\">(";
+						 </td><td class=\"steel1\" align=\"right\" style=\"font-size:10pt;\">(";
 				for ($i = 0; $i < count($data["doz_name"]); ++$i){
 					$content .= "<a href=\"about.php?username=" . key($data["doz_uname"]) ."\">" . htmlReady(key($data["doz_name"])) . "</a>";
 					if($i != count($data["doz_name"])-1) {
@@ -525,9 +525,9 @@ class StudipSemTreeViewAdmin extends TreeView {
 				}
 				$content .= ") </td></tr>";
 			}
-			$content .= "<tr><td class=\"blank\" colspan=\"2\"><a href=\"#\" onClick=\"invert_selection('$form_name');return false;\">
+			$content .= "<tr><td class=\"steel1\" colspan=\"2\"><a href=\"#\" onClick=\"invert_selection('$form_name');return false;\">
 						<img " . makeButton("auswahlumkehr","src") . "border=\"0\" align=\"middle\" hspace=\"3\""
-						. tooltip(_("Auswahl umkehren")) . "></a></td><td class=\"blank\" align=\"right\">
+						. tooltip(_("Auswahl umkehren")) . "></a></td><td class=\"steel1\" align=\"right\">
 						<select name=\"sem_aktion\" style=\"font-size:8pt;vertical-align:bottom;\" " . tooltip(_("Aktion auswählen"),true) . ">
 						<option value=\"mark\">" . _("in Merkliste &uuml;bernehmen") . "</option>";
 			if (!$lonely_sem && $this->isItemAdmin($item_id)){
