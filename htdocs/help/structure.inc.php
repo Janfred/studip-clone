@@ -334,6 +334,10 @@ array	(	"name" => "Veranstaltungen verwalten",
 																				"text" => "Wie Sie die Veranstaltungszeiten &auml;ndern k&ouml;nnen",
 																				"page" => "x_metadates.htm"
 																			),
+																array	(	"name" => "Zugangsberechtigungen &auml;ndern",
+																				"text" => "Wie Sie die Zugangsberechtigungen f&uuml;r Veranstaltungen &auml;ndern k&ouml;nnen",
+																				"page" => "x_admission.htm"
+																			),
 																array	(	"name" => "Themen anlegen",
 																				"text" => "Wie Sie Debattenthemen f&uuml;r das Forum vorgeben k&ouml;nnen",
 																				"page" => "x_themen.htm"

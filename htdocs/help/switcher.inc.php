@@ -40,6 +40,12 @@ switch($referrer_page) {
 		if ($perm->have_perm("tutor"))
 		    $help_page = "x_metadates.htm";
 		break;
+
+	case "admin_admission.php" :
+		if ($perm->have_perm("tutor"))
+		    $help_page = "x_admission.htm";
+		break;
+		
 	case "register1.php" :
 	case "register2.php" :
 		$help_page = "ii_anmeldeformular.htm";
@@ -249,7 +255,7 @@ switch($referrer_page) {
 	
 	case "admin_seminare1.php" :
 	if ($perm->have_perm("tutor"))
-		$help_page = "ix_basisdaten.htm";
+		$help_page = "x_aendern.htm";
 		break;
 	
 	case "admin_literatur.php" :
