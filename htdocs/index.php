@@ -78,6 +78,13 @@ if ($dclose)
 	$index_data["dopen"]='';
 	
 // Start of Output
+
+//Achtung, nur fuer Testzwecke!
+//
+$auth->auth["jscript"] = TRUE;
+//
+// hier muesste vielmehr ein Aufruf an eine modifizierte Variante der GetHoverJSFunction(), da wir noch nicht wissen ob JS an ist oder nicht
+
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
@@ -132,14 +139,31 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 
 <table class="blank" width="600" border=0 cellpadding=0 cellspacing=0 align=center>
 <tr><td colspan=3 class="topic">&nbsp;<b><? echo $UNI_NAME;?></b></td></tr>
-<tr><td class="blank" colspan=3><img src="./locale/<?=$_language_path?>/LC_PICTURES/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>" width="669" height="320" usemap="#Map" border="0">
-<map name="Map">
-  <area shape="rect" coords="23,43,291,92" href="index.php?again=yes">
-  <area shape="rect" coords="22,103,291,152" href="register1.php">
-  <area shape="rect" coords="22,187,290,236" href="freie.php">
-  <area shape="rect" coords="23,246,290,299" href="help/index.php" target="_new">
-</map>
+<tr> 
+	<td colspan=3 background="./locale/<?=$_language_path?>/LC_PICTURES/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
+	<table cellspacing="20">
+		<tr>
+			<?
 
+			echo "<td class=\"steelkante\"><a href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Login</b></font><br><font size=\"2\" color=#555555>&nbsp; f&uuml;r registrierte NuterInnen</font></a>&nbsp; </td>";
+			?>
+		</tr>
+		<tr>
+			<?
+			echo "<td class=\"steelkante\"><a href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Registrieren</b></font><br><font size=\"2\" color=#555555>&nbsp; um NuterIn zu werden</font></a>&nbsp; </td>";
+			?>
+		</tr>
+				<tr>
+			<?
+			echo "<td class=\"steelkante\"><a href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Freier Zugang</b></font><br><font size=\"2\" color=#555555>&nbsp; ohne Registrierung</font></a>&nbsp; </td>";
+			?>
+		</tr>
+				<tr>
+			<?
+			echo "<td class=\"steelkante\"><a href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Hilfe</b></font><br><font size=\"2\" color=#555555>&nbsp; zu Bedienung und Funktionsumfang&nbsp; &nbsp; </font></a>&nbsp; </td>";
+			?>
+		</tr>
+	</table>
 </td></tr>
 
 <tr><td class="blank" colspan="3" align="right">
