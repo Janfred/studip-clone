@@ -73,7 +73,9 @@ function check_calendar_default(){
 			"sem_data"         => TRUE,
 			"link_edit"        => FALSE,
 			"bind_seminare"    => "",
-			"ts_bind_seminare" => 0
+			"ts_bind_seminare" => 0,
+			"number_of_events" => 0,
+			"delete"           => 6
 		);
 	}
 }
