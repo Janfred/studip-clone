@@ -159,7 +159,14 @@ function keywordExists($str) {
 			$keywords[$db->f(0)] = true;
 		}
 	}
-	return $keywords[$str];
+	// retranscode html entities to ascii values (as stored in db)
+	// (nessecary for umlauts)
+	// BUG: other special chars like accented vowels don't work yet!
+	//
+	$trans_tbl = array_flip(get_html_translation_table (HTML_ENTITIES));
+	$nonhtmlstr = strtr($str, $trans_tbl);
+
+	return $keywords[$nonhtmlstr];
 }
 
 
@@ -172,7 +179,7 @@ function keywordExists($str) {
 **/
 function isKeyword($str, $page){
 	if (keywordExists($str) == NULL) {
-		return ' <a href="wiki.php?keyword='.$str.'&view=editnew&lastpage='.$page.'">'.$str.'(?)</a>';
+		return ' <a href="wiki.php?keyword=' . $str . '&view=editnew&lastpage='.$page.'">' . $str . '(?)</a>';
 	} else {
 		return ' <a href="wiki.php?keyword='.$str.'">'.$str.'</a>';
 	}
@@ -259,7 +266,7 @@ function releasePageLocks($keyword) {
 // IMPORTANT: Wiki Keyword has to be in 2nd paranthesed pattern!!
 // Make sure to change routines below if this changes
 //
-$wiki_keyword_regex="(^|\s|\A|\>)([A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]+)";
+$wiki_keyword_regex="(^|\s|\A|\>)(([A-Z]|&[AOU]uml;)([a-z0-9]|&[aou]uml;|&szlig;)+([A-Z]|&[AOU]uml;)([a-zA-Z0-9]|&[aouAOU]uml;|&szlig;)+)";
 
 /**
 * Replace WikiWords with appropriate links in given string
@@ -797,7 +804,7 @@ function printAllWikiPages($range_id, $header) {
 			}
 		} 
 	}
-	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
+	echo "<hr><p><font size=-1>exportiert vom Stud.IP Wiki-Modul, ";
 	echo date("d.m.Y, H:i", time());
 	echo " </font></p>";
 	echo "</body></html>";
@@ -1163,7 +1170,7 @@ function showComboDiff($keyword, $db=NULL) {
 				echo "<tr bgcolor=$col>";
 				echo "<td width=30 align=center valign=top>";
 				echo "<img src=\"pictures/blank.gif\" height=3 width=3><br>";
-				echo "<img src=\"pictures/info.gif\" ". tooltip(get_fullname($last_author)). ">";
+				echo "<img src=\"pictures/info.gif\" ". tooltip("Änderung von " . get_fullname($last_author), TRUE, TRUE). ">";
 				echo "</td>";
 				echo "<td><font size=-1>";
 				echo wikiReady($collect);
@@ -1253,15 +1260,15 @@ class line_diff
 		$str = '';
 		$lastdiff = "";
 		$textaccu = "";
-		$template = "<tr>%s<td width=\"10\">&nbsp;</td><td><font size=-1>%s</font></td></tr>";
+		$template = "<tr>%s<td width=\"10\">&nbsp;</td><td><font size=-1>%s</font>&nbsp;</td></tr>";
 		foreach ($this->toArray() as $obj)
 		{
 			if ($show_equal || $obj->get('diff') != $this->equal) {
-				$textaccu .= $obj->text();
 				if ($lastdiff && $obj->get("diff") != $lastdiff) {
 					$str .= sprintf($template, $lastdiff, wikiReady($textaccu));
 					$textaccu="";
 				}
+				$textaccu .= $obj->text();
 				$lastdiff = $obj->get("diff");
 			}
 		}
