@@ -26,8 +26,8 @@ $sess->register("save_banner_data");
 $sess->register("banner_data");
 
 if (!$BANNER_ADS_ENABLE) {
-	print "<p>Module disabled.</p>";
-	print "</body></html>";
+	echo '<p>', _('Banner-Modul abgeschaltet.'), "</p>\n";
+	echo "</body></html>\n";
 	page_close();
 	die;
 }
@@ -54,7 +54,7 @@ $db2 = new DB_Seminar;
 
 function imaging($img, $img_size, $img_name) {
 	global $banner_data;
-
+	$msg = '';
 	if (!$img_name) { //keine Datei ausgewählt!
 		return "error§" . _("Sie haben keine Datei zum Hochladen ausgewählt!");
 	}
@@ -72,8 +72,8 @@ function imaging($img, $img_size, $img_name) {
 	}
 
 	//na dann kopieren wir mal...
-	$uploaddir="./pictures/smile";
-	$md5hash=md5($img_name+time());
+	$uploaddir = "./pictures/banner";
+	$md5hash = md5($img_name+time());
 	$newfile = $uploaddir . "/" . $md5hash . "." . $ext;
 	$banner_data["banner_path"] = $md5hash . "." . $ext;
 	if(!@copy($img,$newfile)) {
@@ -104,7 +104,7 @@ function view_probability($prio) {
 	}
 	return "1/" . (1/(pow(2,$prio)/$sum));
 }
-	
+
 
 function show_banner_list($table) {
 	global $db;
@@ -113,12 +113,12 @@ function show_banner_list($table) {
 	$count=0;
 	while ($db->next_record($result)) {
 		$count++;
-		print $table->row(array("Banner","<img src=\"./pictures/banner/".$db->f("banner_path")."\" alt=\"".$db->f("alttext")."\">"),"",1);
-		print $table->row(array("Beschreibung",$db->f("description")),"",0);
-		print $table->row(array("Ziel","(".$db->f("target_type").") " . $db->f("target")),"",0);
-		print $table->row(array("Anzeigezeitraum", ($db->f("startdate") ? date("d.m.Y, h:i") : _("sofort")) . " " . _("bis") . " " . ($db->f("enddate") ? date("d.m.Y, h:i") : _("unbegrenzt"))),"",0);
-		print $table->row(array("Views", $db->f("views")),"",0);
-		print $table->row(array("Priorität (Wahrscheinlichkeit)", $db->f("priority") . " (" . view_probability($db->f("priority")) . ")"),"",0);
+		print $table->row(array(_("Banner"),"<img src=\"./pictures/banner/".$db->f("banner_path")."\" alt=\"".$db->f("alttext")."\">"),"",1);
+		print $table->row(array(_("Beschreibung"),$db->f("description")),"",0);
+		print $table->row(array(_("Ziel"),"(".$db->f("target_type").") " . $db->f("target")),"",0);
+		print $table->row(array(_("Anzeigezeitraum"), ($db->f("startdate") ? date("d.m.Y, H:i",$db->f("startdate")) : _("sofort")) . " " . _("bis") . " " . ($db->f("enddate") ? date("d.m.Y, H:i",$db->f("enddate")) : _("unbegrenzt"))),"",0);
+		print $table->row(array(_("Views"), $db->f("views")),"",0);
+		print $table->row(array(_("Priorität (Wahrscheinlichkeit)"), $db->f("priority") . " (" . view_probability($db->f("priority")) . ")"),"",0);
 		print $table->row(array("", "<a href=\"$PHP_SELF?cmd=editdb&ad_id=".$db->f("ad_id")."\"><img " . makeButton("bearbeiten","src") . " border=0/></a> <a href=\"$PHP_SELF?cmd=delete&ad_id=".$db->f("ad_id")."\"><img " . makeButton("loeschen","src") . "\" border=0></a>"),"",0);
 		print $table->row(array("&nbsp;","&nbsp"),array("class"=>"blank", "bgcolor"=>"white"),0);
 	}
@@ -127,10 +127,10 @@ function show_banner_list($table) {
 	}
 }
 
-function check_data($banner_data) {
+function check_data(&$banner_data) {
 	$msg="";
 	function valid_date($h,$m,$d,$mo,$y) {
-		if ($h==_("hh") && $m==_("mm") && $d==_("tt") && $mo==_("mm") && $y==_("jjjj")) {
+		if (($h==_("hh") && $m==_("mm") && $d==_("tt") && $mo==_("mm") && $y==_("jjjj"))|| ($h+$m+$d+$mo+$y == 0)) {
 			return 0; // 0= forever
 		}
 		// mktime return -1 if date is invalid (and does some strange
@@ -139,50 +139,50 @@ function check_data($banner_data) {
 		return $x;
 	}
 
-	if (!$banner_data["banner_path"]) 
-		$msg .= "error§"._("Es wurde kein Bild ausgewählt.§");
+	if (!$banner_data['banner_path'])
+		$msg .= 'error§' . _('Es wurde kein Bild ausgewählt.') . '§';
 
-	if (!$banner_data["target"] && $banner_data["target_type"]!="none") 
-		$msg .= "error§"._("Es wurde kein Verweisziel angegeben.§");
+	if (!$banner_data['target'] && $banner_data['target_type'] != 'none')
+		$msg .= 'error§' . _('Es wurde kein Verweisziel angegeben.') . '§';
 
-	if ($x=valid_date($banner_data["start_hour"], $banner_data["start_minute"], $banner_data["start_day"], $banner_data["start_month"], $banner_data["start_year"])==-1) 
-		$msg .= "error§Bitte geben Sie einen gültiges Startdatum ein.§";
-	else 
-		$banner_data["startdate"]=$x;
+	if (($x=valid_date($banner_data['start_hour'], $banner_data['start_minute'], $banner_data['start_day'], $banner_data['start_month'], $banner_data['start_year']))==-1)
+		$msg .= 'error§' . _('Bitte geben Sie einen gültiges Startdatum ein.') . '§';
+	else
+		$banner_data['startdate']=$x;
 
-	if ($x=valid_date($banner_data["end_hour"], $banner_data["end_minute"], $banner_data["end_day"], $banner_data["end_month"], $banner_data["end_year"])==-1) 
-		$msg .= "error§Bitte geben Sie einen gültiges Startdatum ein.§";
-	else 
-		$banner_data["enddate"]=$x;
+	if (($x=valid_date($banner_data["end_hour"], $banner_data["end_minute"], $banner_data["end_day"], $banner_data["end_month"], $banner_data["end_year"]))==-1)
+		$msg .= 'error§' . _('Bitte geben Sie einen gültiges Enddatum ein.') . '§';
+	else
+		$banner_data['enddate']=$x;
 
-	switch ($banner_data["target_type"]) {
-		case "url":
-			// if (!preg_match("#http://#", $banner_data["target"])) $msg .= "error§Das Verweisziel muss eine gültige URL sein.§";
+	switch ($banner_data['target_type']) {
+		case 'url':
+			 if (!eregi('^(https?)|(ftp)://', $banner_data['target'])) $msg .= "error§" . _('Das Verweisziel muss eine gültige URL sein (incl. http://).') . "§";
 			break;
-		case "inst":
-			$msg .= "error§Der Verweistyp \"Einrichtung\" wird in dieser Installation nicht unterstützt.§";
+		case 'inst':
+			$msg .= 'error§' . _('Der Verweistyp "Einrichtung" wird in dieser Installation nicht unterstützt.') . '§';
 			break;
-		case "user":
-			$db=new DB_Seminar;
-			$q="SELECT * FROM auth_user_md5 WHERE username='" . $banner_data["target"] . "'";
+		case 'user':
+			$db = new DB_Seminar;
+			$q = 'SELECT * FROM auth_user_md5 WHERE username="' . $banner_data["target"] . '"';
 			$db->query($q);
 			if (!$db->next_record()) {
-				$msg .= "error§" . _("Der angegebene Benutzername existiert nicht.§");
+				$msg .= "error§" . _("Der angegebene Benutzername existiert nicht.") ."§";
 			}
 			break;
-		case "seminar":
-			$db=new DB_Seminar;
-			$q="SELECT * FROM seminare WHERE Seminar_id='" . $banner_data["target"] . "'";
+		case 'seminar':
+			$db = new DB_Seminar;
+			$q = "SELECT * FROM seminare WHERE Seminar_id='" . $banner_data["target"] . "'";
 			$db->query($q);
 			if (!$db->next_record()) {
-				$msg .= "error§" . _("Die angegebene Veranstaltung existiert nicht.§");
+				$msg .= "error§" . _("Die angegebene Veranstaltung existiert nicht. Bitte geben Sie eine gültige Veranstaltungs-ID ein.") . "§";
 			}
 			break;
 		case "special":
-			$msg .= "error§Der Verweistyp \"speziell\" wird in dieser Installation nicht unterstützt.§";
+			$msg .= 'error§' . _('Der Verweistyp "speziell" wird in dieser Installation nicht unterstützt.') . '§';
 			break;
 		case "none":
-			$banner_data["target"]="";
+			$banner_data['target'] = '';
 			break;
 	}
 	return $msg;
@@ -237,8 +237,8 @@ function edit_banner_pic($banner_data) {
 	echo $table->closeRow();
 
 	print "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=upload&view=edit\" method=\"POST\">";
-	print $table->row(array("1. Bilddatei auswählen: <input name=\"imgfile\" type=\"file\" cols=45>"),"",0);
-	print $table->row(array("2. Bilddatei hochladen: <input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\">"),"",0);
+	print $table->row(array(_("1. Bilddatei auswählen:")." <input name=\"imgfile\" type=\"file\" cols=45>"),"",0);
+	print $table->row(array(_("2. Bilddatei hochladen:")." <input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"absenden\">"),"",0);
 	print "</form>";
 	echo $table->close();
 
@@ -266,9 +266,9 @@ function edit_banner_data($banner_data) {
 	} else {
 		$path_info = _("Noch kein Bild ausgewählt");
 	}
-	print $table->row(array("Pfad:",$path_info),0);
-	print $table->row(array("Beschreibung","<input type=text name=\"description\" size=\"40\" maxlen=\"254\" value=\"" . $banner_data["description"] . "\">"),0);
-	print $table->row(array("Alternativtext","<input type=text name=\"alttext\" size=\"40\" maxlen=\"254\" value=\"". $banner_data["alttext"] . "\">"),0);
+	print $table->row(array(_("Pfad:"),$path_info),0);
+	print $table->row(array(_("Beschreibung"),"<input type=text name=\"description\" size=\"40\" maxlen=\"254\" value=\"" . $banner_data["description"] . "\">"),0);
+	print $table->row(array(_("Alternativtext"),"<input type=text name=\"alttext\" size=\"40\" maxlen=\"254\" value=\"". $banner_data["alttext"] . "\">"),0);
 	$type_selector = "<select name=\"target_type\">";
 	$type_selector .= select_option("url",_("URL"), $banner_data["target_type"]);
 	$type_selector .= select_option("seminar",_("Veranstaltung"), $banner_data["target_type"]);
@@ -277,23 +277,23 @@ function edit_banner_data($banner_data) {
 	$type_selector .= select_option("none",_("Kein Verweis"), $banner_data["target_type"]);
 	//$type_selector .= select_option("special",_("speziell"), $banner_data["target_type"]);
 	$type_selector .= "</select>";
-	print $table->row(array("Verweis-Typ",$type_selector),0);
+	print $table->row(array(_("Verweis-Typ"),$type_selector),0);
 
-	print $table->row(array("Verweis-Ziel","<input type=text name=\"target\" size=40 maxlength=254 value=\"". $banner_data["target"] . "\">"),0);
+	print $table->row(array(_("Verweis-Ziel"),"<input type=text name=\"target\" size=40 maxlength=254 value=\"". $banner_data["target"] . "\">"),0);
 
-	$startdate_fields = "<input name=\"start_day\" value=\"tt\" size=2>. ";
-	$startdate_fields .= "<input name=\"start_month\" value=\"mm\" size=2>. ";
-	$startdate_fields .= "<input name=\"start_year\" value=\"jjjj\" size=4> &nbsp; &nbsp;";
-	$startdate_fields .= "<input name=\"start_hour\" value=\"hh\" size=2>:";
-	$startdate_fields .= "<input name=\"start_minute\" value=\"mm\" size=2> ";
-	print $table->row(array("Anzeigen ab:", $startdate_fields),0);
+	$startdate_fields = "<input name=\"start_day\" value=\"$banner_data[start_day]\" size=2 maxlength=2>. ";
+	$startdate_fields .= "<input name=\"start_month\" value=\"$banner_data[start_month]\" size=2 maxlength=2>. ";
+	$startdate_fields .= "<input name=\"start_year\" value=\"$banner_data[start_year]\" size=4 maxlength=4> &nbsp; &nbsp;";
+	$startdate_fields .= "<input name=\"start_hour\" value=\"$banner_data[start_hour]\" size=2 maxlength=2>:";
+	$startdate_fields .= "<input name=\"start_minute\" value=\"$banner_data[start_minute]\" size=2 maxlength=2> ";
+	print $table->row(array(_("Anzeigen ab:"), $startdate_fields),0);
 
-	$enddate_fields = "<input name=\"end_day\" value=\"tt\" size=2>. ";
-	$enddate_fields .= "<input name=\"end_month\" value=\"mm\" size=2>. ";
-	$enddate_fields .= "<input name=\"end_year\" value=\"jjjj\" size=4> &nbsp; &nbsp;";
-	$enddate_fields .= "<input name=\"end_hour\" value=\"hh\" size=2>:";
-	$enddate_fields .= "<input name=\"end_minute\" value=\"mm\" size=2> ";
-	print $table->row(array("Anzeigen bis:", $enddate_fields),0);
+	$enddate_fields = "<input name=\"end_day\" value=\"$banner_data[end_day]\" size=2 maxlength=2>. ";
+	$enddate_fields .= "<input name=\"end_month\" value=\"$banner_data[end_month]\" size=2 maxlength=2>. ";
+	$enddate_fields .= "<input name=\"end_year\" value=\"$banner_data[end_year]\" size=4 maxlength=4> &nbsp; &nbsp;";
+	$enddate_fields .= "<input name=\"end_hour\" value=\"$banner_data[end_hour]\" size=2 maxlength=2>:";
+	$enddate_fields .= "<input name=\"end_minute\" value=\"$banner_data[end_minute]\" size=2 maxlength=2> ";
+	print $table->row(array(_("Anzeigen bis:"), $enddate_fields),0);
 
 	$prio_selector = "<select name=\"priority\">";
 	$prio_selector .= select_option("0", _("0 (nicht anzeigen)"), $banner_data[priority]);
@@ -326,7 +326,7 @@ echo $container->openCell();
 $content=new ContentTable();
 echo $content->open();
 echo $content->openRow();
-echo $content->cell("<b><a href=\"$PHP_SELF\"?i_view=new\">&nbsp;"._("Neues Banner anlegen")."</a><b><br><br>", array("colspan"=>"2"));
+echo $content->cell("<b><a href=\"$PHP_SELF?i_view=new\">&nbsp;"._("Neues Banner anlegen")."</a><b><br><br>", array("colspan"=>"2"));
 echo $content->openRow();
 echo $content->openCell(array("colspan"=>"2"));
 
@@ -335,10 +335,10 @@ $banner_data=array();
 if ($cmd=="upload") {
 	$msg=imaging($imgfile,$imgfile_size,$imgfile_name);
 	parse_msg($msg);
-	parse_msg("msg§" . _("Die Daten wurden noch nicht in die Datenbank geschrieben."));
-	$banner_path=$banner_data["banner_path"];
-	$banner_data=$save_banner_data;
-	$banner_data["banner_path"]=$banner_path;
+	parse_msg("info§" . _("Die Daten wurden noch nicht in die Datenbank geschrieben."));
+	$banner_path = $banner_data["banner_path"];
+	$banner_data = $save_banner_data;
+	if ($banner_path != '' ) $banner_data["banner_path"] = $banner_path;
 	$i_view="edit";
 } elseif ($cmd=="delete") {
 	$q="DELETE FROM banner_ads WHERE ad_id='".$ad_id."'";
@@ -356,17 +356,17 @@ if ($cmd=="upload") {
 		$banner_data["alttext"]=$db->f("alttext");
 		$banner_data["banner_path"]=$db->f("banner_path");
 		$starttime=$db->f("startdate");
-		$banner_data["start_minute"] = date("i", $starttime);
-		$banner_data["start_hour"] = date("h", $starttime);
-		$banner_data["start_day"] = date("d", $starttime);
-		$banner_data["start_month"] = date("m", $starttime);
-		$banner_data["start_year"] = date("Y", $starttime);
+		$banner_data["start_minute"] = ($starttime == 0)? _('mm'):date("i", $starttime);
+		$banner_data["start_hour"]   = ($starttime == 0)? _('hh'):date("H", $starttime);
+		$banner_data["start_day"]    = ($starttime == 0)? _('tt'):date("d", $starttime);
+		$banner_data["start_month"]  = ($starttime == 0)? _('mm'):date("m", $starttime);
+		$banner_data["start_year"]   = ($starttime == 0)? _('jjjj'):date("Y", $starttime);
 		$endtime = $db->f("enddate");
-		$banner_data["end_minute"] = date("i", $endtime);
-		$banner_data["end_hour"] = date("h", $endtime);
-		$banner_data["end_day"] = date("d", $endtime);
-		$banner_data["end_month"] = date("m", $endtime);
-		$banner_data["end_year"] = date("Y", $endtime);
+		$banner_data["end_minute"] = ($endtime == 0)? _('mm'):date("i", $endtime);
+		$banner_data["end_hour"]   = ($endtime == 0)? _('hh'):date("H", $endtime);
+		$banner_data["end_day"]    = ($endtime == 0)? _('tt'):date("d", $endtime);
+		$banner_data["end_month"]  = ($endtime == 0)? _('mm'):date("m", $endtime);
+		$banner_data["end_year"]   = ($endtime == 0)? _('jjjj'):date("Y", $endtime);
 		$banner_data["priority"]= $db->f("priority");
 
 		$i_view="edit";
@@ -399,7 +399,7 @@ if ($cmd=="upload") {
 		$i_view="edit";
 	} else {
 		write_data_to_db($banner_data);
-		parse_msg("msg§Die Daten wurden erfolgreich in die Datenbank geschrieben.");
+		parse_msg("msg§" . _("Die Daten wurden erfolgreich in die Datenbank geschrieben."));
 		$i_view="list";
 	}
 }
@@ -423,7 +423,7 @@ if ($i_view=="new") {
 	$banner_data["end_month"]=_("mm");
 	$banner_data["end_year"]=_("jjjj");
 	$banner_data["priority"]="1";
-	edit_banner_pic($banner_data["banner_path"]);
+	edit_banner_pic($banner_data);
 	print "<p>&nbsp;</p>";
 	edit_banner_data($banner_data);
 } else if ($i_view=="edit") {
