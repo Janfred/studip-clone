@@ -51,7 +51,7 @@ if (!$db->num_rows())
      			echo"\n<td align = 'right' class='topic'>";
      			printf ("&nbsp;<a href='admin_news.php?%s&cmd=new_entry'><img src='./pictures/pfeillink.gif' border='0' alt='News einstellen'></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=sem" : "new_inst=TRUE&view=inst");
      			echo"\n</td></tr>";
-			echo "\n<tr><td class='steel1' colspan=3><blockquote><br /><font size=-1>Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken sie auf die Doppelpfeile.</font></blockquote>";
+			echo "\n<tr><td class='steel1' colspan=3><blockquote><br /><font size=-1>Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken sie auf die Doppelpfeile.<br />&nbsp; </font></blockquote>";
      			echo "\n</td></tr></table>";
      			return TRUE;
 			 }

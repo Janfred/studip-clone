@@ -209,7 +209,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr><td class='topic' width=\"99%\"><img src='./pictures/icon-uhr.gif' border='0' align=\"texttop\"><b>&nbsp;&nbsp;Termine</b></td>";
 		echo "\n<td align = 'right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine einstellen'></a>&nbsp;</td></tr>";
-		echo "\n<tr><td class='steel1' colspan=2><blockquote><br /><font size=-1>Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.</blockquote>";
+		echo "\n<tr><td class='steel1' colspan=2><blockquote><br /><font size=-1>Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.<br />&nbsp; </blockquote>";
 		echo "\n</td></tr></table>";
 		return TRUE;
 	}
@@ -334,7 +334,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr><td class='topic' width=\"99%\"><img src=\"./pictures/icon-uhr.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;Termine</b></td>";
 		echo "\n<td align = 'right' class='topic'>&nbsp;$admin_link<img src='./pictures/pfeillink.gif' border='0' alt='Termine einstellen'></a>&nbsp;</td></tr>";
-		echo "\n<tr><td class='steel1' colspan=2><blockquote><br /><font size=-1>Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.</blockquote>";
+		echo "\n<tr><td class='steel1' colspan=2><blockquote><br /><font size=-1>Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.<br />&nbsp; </blockquote>";
 		echo "\n</td></tr></table>";
 		return TRUE;
 	}
