@@ -217,7 +217,7 @@ $db->next_record();
 $skip_check=FALSE;
 if (!$type) {
 	$object_type = get_object_type($db->f("object_id"));
-	if ($object_type == "inst")
+	if ($object_type == "inst" || $object_type == "fak")
 		$skip_check=TRUE;
 }
 
