@@ -38,7 +38,7 @@ function xml_close_tag($tag_name)
 function xml_tag($tag_name, $tag_content)
 {
 	$xml_tag_string = "<" . $tag_name . $xml_tag_string .  ">" 
-		. htmlspecialchars (kill_format( $tag_content ) )
+		. htmlspecialchars ( $tag_content )
 		. "</" . $tag_name .  ">\n";
 	return $xml_tag_string;
 }
