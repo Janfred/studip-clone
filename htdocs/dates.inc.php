@@ -199,7 +199,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 		else {
 			//kein gueltiger Termin bekannt
 			if ($term_data["start_termin"]<1) {
-				$return_string.="nicht angegeben";
+				$return_string.= _("nicht angegeben");
 				$return_int=-1;
 			//gueltiger Termin bekannt
 			} else {
@@ -257,7 +257,7 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 			$return_string=date ("d.m.Y, G:i", $db2->f("date"))." - ".date ("G:i",  $db2->f("end_time"));
 			$return_int=$db2->f("date");
 		} else {
-			$return_string.="nicht angegeben";
+			$return_string.= _("nicht angegeben");
 			$return_int=-1;
 		
 		}
@@ -309,15 +309,15 @@ function view_turnus ($seminar_id, $short = FALSE) {
 		if ($db2->affected_rows() == 0)
 			{
 			if ($short)
-				$return_string="Termin: n. A.";
+				$return_string= _("Termin: n. A.");
 			else
-				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest. ";
+				$return_string= _("unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest.") . " ";
 			}
 		else
 			if ($short)
-				$return_string="Termine am ";
+				$return_string= _("Termine am") . " ";
 			else
-				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung am ";
+				$return_string= _("unregelmässige Veranstaltung oder Blockveranstaltung am") . " ";
 
 			while ($db2->next_record())
 				$dates[]=array("start_time"=>$db2->f("date"), "end_time"=>$db2->f("end_time"), "conjuncted"=>FALSE, "time_match"=>FALSE);
@@ -370,13 +370,13 @@ function view_turnus ($seminar_id, $short = FALSE) {
 					$k++;
 					switch ($data["day"])
 						{
-						case "1": $return_string.="Mo."; break;
-						case "2": $return_string.="Di."; break;
-						case "3": $return_string.="Mi."; break;
-						case "4": $return_string.="Do."; break;
-						case "5": $return_string.="Fr."; break;
-						case "6": $return_string.="Sa."; break;
-						case "7": $return_string.="So."; break;
+						case "1": $return_string.= _("Mo."); break;
+						case "2": $return_string.= _("Di."); break;
+						case "3": $return_string.= _("Mi."); break;
+						case "4": $return_string.= _("Do."); break;
+						case "5": $return_string.= _("Fr."); break;
+						case "6": $return_string.= _("Sa."); break;
+						case "7": $return_string.= _("So."); break;
 						}
 					$return_string.=" ".$data["start_stunde"].":";
 					if (!$data["start_minute"])
@@ -400,7 +400,7 @@ function view_turnus ($seminar_id, $short = FALSE) {
 					}
 				}
 			else {
-				$return_string="Zeiten: n. A.";
+				$return_string= _("Zeiten: n. A.");
 				}
 		else
 			if (sizeof($term_data["turnus_data"])) {
@@ -412,13 +412,13 @@ function view_turnus ($seminar_id, $short = FALSE) {
 					$k++;
 					switch ($data["day"])
 						{
-						case "1": $return_string.="Montag"; break;
-						case "2": $return_string.="Dienstag"; break;
-						case "3": $return_string.="Mittwoch"; break;
-						case "4": $return_string.="Donnerstag"; break;
-						case "5": $return_string.="Freitag"; break;
-						case "6": $return_string.="Samstag"; break;
-						case "7": $return_string.="Sonntag"; break;
+						case "1": $return_string.= _("Montag"); break;
+						case "2": $return_string.= _("Dienstag"); break;
+						case "3": $return_string.= _("Mittwoch"); break;
+						case "4": $return_string.= _("Donnerstag"); break;
+						case "5": $return_string.= _("Freitag"); break;
+						case "6": $return_string.= _("Samstag"); break;
+						case "7": $return_string.= _("Sonntag"); break;
 						}
 					$return_string.=" ".$data["start_stunde"].":";
 					if (!$data["start_minute"])
@@ -442,248 +442,14 @@ function view_turnus ($seminar_id, $short = FALSE) {
 					}
 				}
 			else {
-				$return_string="Die Zeiten der Veranstaltung stehen nicht fest.";
+				$return_string= _("Die Zeiten der Veranstaltung stehen nicht fest.");
 				}			
 			if ($term_data["turnus"] == 1)
-				$return_string.=" (zweiwöchentlich)";
+				$return_string.= " " . _("(zweiwöchentlich)");
 		}
 	return $return_string;
 	}
 
-/*
-Die Funktion Seminartermin ueberpueft, ob der erste Veranstaltungstermin bereits vergangen ist 
-und gibt entweder Datum und Zeit des ersten Termins oder Wochentage und Uhrzeiten als String zurueck.
-*/
-
-function seminartermin($seminar_id, $short = TRUE, $br = TRUE) {
-	global $SEMESTER, $TERMIN_TYP;
-	
-	//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
-	$i=0;
-	$typ_clause = "(";
-	foreach ($TERMIN_TYP as $key=>$val) {
-		if ($val["sitzung"]) {
-			if ($i)
-				$typ_clause .= ", ";
-			$typ_clause .= "'".$key."' ";
-			$i++;
-		}
-	}
-	$typ_clause .= ")";
-
-	$return_string = "";
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;	
-	
-	$db->query("SELECT metadata_dates, start_time, duration_time FROM seminare WHERE seminar_id='$seminar_id'");
-	$db->next_record();
-	$term_data=unserialize($db->f("metadata_dates"));
-
-	if ($term_data["art"]==0)
-		{
-		if (($term_data["start_woche"] ==0) || ($term_data["start_woche"] ==1))
-			if (sizeof($term_data["turnus_data"])) {
-				foreach ($SEMESTER as $sem)
-					if (($db->f("start_time") >= $sem["beginn"]) AND ($db->f("start_time") <= $sem["ende"]))
-						$vorles_beginn=$sem["vorles_beginn"];
-				$start_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);
-				$end_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["end_stunde"]*60*60)+($term_data["turnus_data"][0]["end_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);;
-				if (time() <$end_termin)
-					$return_string=date ("d.m.Y, G:i", $start_termin)." - ".date ("G:i", $end_termin);
-				}
-			else {
-				if ($term_data["start_woche"]==0)
-					$return_string="1. Semesterwoche";
-				else
-					$return_string="2. Semesterwoche";
-				}
-		else
-			{
-			if (time() < ($term_data["start_termin"]+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60)))
-				{
-				$return_string.=date ("d.m.Y", $term_data["start_termin"]). ", ". $term_data["turnus_data"][0]["start_stunde"]. ":";
-				if (($term_data["turnus_data"][0]["start_minute"] > 0)  &&  ($term_data["turnus_data"][0]["start_minute"] < 10))
-					$return_string.="0". $term_data["turnus_data"][0]["start_minute"];
-				elseif ($term_data["turnus_data"][0]["start_minute"] > 10)
-					$return_string.=$term_data["turnus_data"][0]["start_minute"];
-				if (!$term_data["turnus_data"][0]["start_minute"])
-					$return_string.="00";
-				$return_string.= " - ". $term_data["turnus_data"][0]["end_stunde"]. ":";
-				if (($term_data["turnus_data"][0]["end_minute"] > 0)  &&  ($term_data["turnus_data"][0]["end_minute"] < 10))
-					$return_string.="0".$term_data["turnus_data"][0]["end_minute"];
-				elseif ($term_data["turnus_data"][0]["end_minute"] > 10)
-					$return_string.=$term_data["turnus_data"][0]["end_minute"];
-				if (!$term_data["turnus_data"][0]["end_minute"])
-					$return_string.="00";
-				}
-			}
-		}
-	else
-		{
-		$db2->query("SELECT date, end_time FROM termine WHERE date_typ IN $typ_clause AND range_id='$seminar_id' ORDER BY date");
-		$db2->next_record();
-		if ($db->affected_rows())
-			{
-			if (time() < $db2->f("end_time"))
-				$return_string=date ("d.m.Y, G:i", $db2->f("date"))." - ".date ("G:i",  $db2->f("end_time"));
-			}
-		}
-
-	if ($return_string <> "") 
-		 return $return_string;
-
-
-	if ($term_data["art"] == 1)
-		{
-		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ IN $typ_clause  ORDER BY date");
-		if ($db2->affected_rows() == 0)
-			{
-			if ($short)
-				$return_string="Termin: n. A.";
-			else
-				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest. ";
-			}
-		else
-			if ($short)
-				$return_string="Termine am ";
-			else
-				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung am ";
-
-			while ($db2->next_record())
-				$dates[]=array("start_time"=>$db2->f("date"), "end_time"=>$db2->f("end_time"), "conjuncted"=>FALSE, "time_match"=>FALSE);
-			
-			for ($i=1; $i<sizeof($dates); $i++)
-				{
-				if (((date("G", $dates[$i-1]["start_time"])) == date("G", $dates[$i]["start_time"])) && ((date("i", $dates[$i-1]["start_time"])) == date("i", $dates[$i]["start_time"])) && ((date("G", $dates[$i-1]["end_time"])) == date("G", $dates[$i]["end_time"])) && ((date("i", $dates[$i-1]["end_time"])) == date("i", $dates[$i]["end_time"])))
-					$dates[$i]["time_match"]=TRUE;
-					
-				if (((date ("z", $dates[$i]["start_time"])-1) == date ("z", $dates[$i-1]["start_time"])) || ((date ("z", $dates[$i]["start_time"]) == 0) && (date ("j", $dates[$i-1]["start_time"]) == 0)))
-					if ($dates[$i]["time_match"])
-						$dates[$i]["conjuncted"]=TRUE;
-				}
-			
-			for ($i=0; $i<sizeof($dates); $i++)
-				{
-				if (!$dates[$i]["conjuncted"])
-					$conjuncted=FALSE;				
-					
-				if ((!$dates[$i]["conjuncted"]) || (!$dates[$i+1]["conjuncted"]))
-					$return_string.=date (" j.n.", $dates[$i]["start_time"]);
-				
-				if ((!$conjuncted) && ($dates[$i+1]["conjuncted"]))
-					{
-					$return_string.=" -";	
-					$conjuncted=TRUE;
-					}
-				elseif ((!$dates[$i+1]["conjuncted"]) && ($dates[$i+1]["time_match"]))
-					$return_string.=",";
-					
-				if (!$dates[$i+1]["time_match"])
-					{
-					$return_string.=" ".date("G:i", $dates[$i]["start_time"]);
-					if (date("G:i", $dates[$i]["start_time"]) != date("G:i", $dates[$i]["end_time"])) 
-						$return_string.=" - ".date("G:i", $dates[$i]["end_time"]);
-					if ($i+1 != sizeof ($dates))
-						$return_string.=",";
-					if($br)
-						$return_string .= "<br>";
-					}
-				}
-		}
-	else
-		{
-		if ($short)
-			if (sizeof($term_data["turnus_data"])) {
-				$k=0;
-				foreach ($term_data["turnus_data"] as $data)
-					{
-					if ($k) 
-						$return_string.=", ";
-					$k++;
-					switch ($data["day"])
-						{
-						case "1": $return_string.="Mo."; break;
-						case "2": $return_string.="Di."; break;
-						case "3": $return_string.="Mi."; break;
-						case "4": $return_string.="Do."; break;
-						case "5": $return_string.="Fr."; break;
-						case "6": $return_string.="Sa."; break;
-						case "7": $return_string.="So."; break;
-						}
-					$return_string.=" ".$data["start_stunde"].":";
-					if (!$data["start_minute"])
-						$return_string.="00";
-					elseif (($data["start_minute"] <10) && ($data["start_minute"] >0))
-						$return_string.="0".$data["start_minute"];
-					else
-						$return_string.=$data["start_minute"];
-					if (!(($data["end_stunde"] == $data["start_stunde"]) && ($data["end_minute"] == $data["start_minute"])))
-						{
-						$return_string.=" - ".$data["end_stunde"].":";
-						if (!$data["end_minute"])
-							$return_string.="00";
-						elseif (($data["end_minute"] <10) && ($data["end_minute"] >0))
-							$return_string.="0".$data["end_minute"];
-						else
-							$return_string.=$data["end_minute"];
-						}
-					else
-						$return_string.=" ";
-					if($br)
-						$return_string .= "<br>";
-					}
-				}
-			else {
-				$return_string="Zeiten: n. A.";
-				}
-		else
-			if (sizeof($term_data["turnus_data"])) {			
-				$k=0;
-				foreach ($term_data["turnus_data"] as $data)
-					{
-					if ($k) 
-						$return_string.=", ";
-					$k++;
-					switch ($data["day"])
-						{
-						case "1": $return_string.="Montag"; break;
-						case "2": $return_string.="Dienstag"; break;
-						case "3": $return_string.="Mittwoch"; break;
-						case "4": $return_string.="Donnerstag"; break;
-						case "5": $return_string.="Freitag"; break;
-						case "6": $return_string.="Samstag"; break;
-						case "7": $return_string.="Sonntag"; break;
-						}
-					$return_string.=" ".$data["start_stunde"].":";
-					if (!$data["start_minute"])
-						$return_string.="00";
-					elseif (($data["start_minute"] <10) && ($data["start_minute"] >0))
-						$return_string.="0".$data["start_minute"];
-					else
-						$return_string.=$data["start_minute"];
-					if (!(($data["end_stunde"] == $data["start_stunde"]) && ($data["end_minute"] == $data["start_minute"])))
-						{
-						$return_string.=" - ".$data["end_stunde"].":";
-						if (!$data["end_minute"])
-							$return_string.="00";
-						elseif (($data["end_minute"] <10) && ($data["end_minute"] >0))
-							$return_string.="0".$data["end_minute"];
-						else
-							$return_string.=$data["end_minute"];
-						}
-					else
-						$return_string.=" ";
-					}
-				}
-			else {
-				$return_string="Die Zeiten der Veranstaltung stehen nicht fest.";
-				}			
-			if ($term_data["turnus"] == 1)
-				$return_string.=" (zweiwöchentlich)";
-		}
-
-	return $return_string;	
-}
 
 /*
 Die Funktion Vorbesprechung ueberpueft, ob es eine Vorbesprechung gibt und gibt in diesem
