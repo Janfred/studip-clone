@@ -200,7 +200,9 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 				else
 					$content.=_("Keine Beschreibung vorhanden") . "<br /><br />";
 
-				$content.="<b>" . _("Art des Termins:") . "</b> ".$TERMIN_TYP[$db->f("date_typ")]["name"]."<br /><br />";
+				$content.="<b>" . _("Art des Termins:") . "</b> ".$TERMIN_TYP[$db->f("date_typ")]["name"].",&nbsp;";
+
+				$content.="<b>" . _("angelegt von:") . "</b> ".get_fullname($db->f("autor_id"))."<br />";
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				printcontent(0,0, $content, $edit);
