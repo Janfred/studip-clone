@@ -38,7 +38,7 @@ if ($QUERY_STRING)
      else $self=$PHP_SELF."?";
      }
 else $self=$PHP_SELF."?";
-$query="SELECT * FROM news_range LEFT JOIN news USING (news_id) WHERE news_range.range_id='$range_id' AND date < $aktuell AND (date+expire) > $aktuell ORDER BY date DESC";
+$query="SELECT *, date FROM news_range LEFT JOIN news USING (news_id) WHERE news_range.range_id='$range_id' AND date < $aktuell AND (date+expire) > $aktuell ORDER BY date DESC";
 if ($limit) $query=$query." LIMIT $limit";
 $db->query($query);
 
@@ -105,9 +105,9 @@ else
 			
 		$tempnew = ($db->f("date") >= $last_visited);
 		if ($open == $db->f("news_id"))
-			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz);
+			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $db->f("date"));
 		else
-			printhead(0, 0, $link, "close", $tempnew, $icon, $titel, $zusatz);
+			printhead(0, 0, $link, "close", $tempnew, $icon, $titel, $zusatz, $db->f("date"));
 		
 		echo "</tr></table>	";
 
