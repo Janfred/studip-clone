@@ -80,7 +80,6 @@ $zebra_td = $this->config->getValue("TableRow", "td_zebratd_");
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 
 $first_loop = TRUE;
-reset($group_data);
 foreach ($group_data as $groups) {
 	$statusgruppe = $groups["group_name"];
 	
@@ -130,7 +129,6 @@ foreach ($group_data as $groups) {
 	$first_loop = FALSE;
 	
 	$i = 0;
-	reset($groups["persons"]);
 	foreach ($groups["persons"] as $data) {
 					
 		$wert_daten = array(
@@ -171,7 +169,6 @@ foreach ($group_data as $groups) {
 		echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">";
 		
 		$j = 0;
-		reset($order);
 		foreach ($order as $column) {
 			if ($visible[$column]) {
 				
