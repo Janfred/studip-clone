@@ -480,8 +480,11 @@ function export_pers($inst_id)
 		WHERE range_id = "' . $inst_id . ' "
 		ORDER BY ' . $order);
 
+	$data_found = false;
+
 	while ($db->next_record()) 
 	{
+		$data_found = true;
 		$group_string = "";
 		if (($do_group) AND ($group != $db->f($group_tab_zelle)))
 		{
@@ -522,7 +525,7 @@ function export_pers($inst_id)
 		$data_object = "";
 	}
 
-	if (($do_group) AND ($group_string != ""))
+	if (($do_group) AND ($data_found))
 		$data_object .= xml_close_tag($xml_groupnames_person["subgroup1"]);
 
 	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
