@@ -791,7 +791,7 @@ class viewObject {
 				<td class="<? echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>"><font size=-1><b>Name:</b></font><br />
-				<font size=-1><? echo $this->resObject->getName()." (".$this->resObject->getCategoryName().")" ?>
+				<font size=-1><? echo $this->resObject->getName()." (".(($this->resObject->getCategoryName()) ? $this->resObject->getCategoryName() : _("Hierachieebene")).")" ?>
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>" width="60%" valign="top"><font size=-1><b>Besitzer:</b></font><br />
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE);  ?></a></font>
@@ -804,17 +804,17 @@ class viewObject {
 				<font size=-1><? echo $this->resObject->getDescription() ?></font>
 				<cho
 			</tr>
+			<? 
+			if ($this->resObject->getCategoryId()) {
+				$this->selectProperties();
+				while ($this->db->next_record()) {
+					?>
 			<tr>
 				<td class="<? $this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>" colspan=2><font size=-1><b>Eigenschaften:</b></font>
 				</td>
 			</tr>
-			<? 
-			if ($this->resObject->getCategoryId()) {
-				$this->selectProperties();
-				while ($this->db->next_record()) {
-					?>
 			<tr>
 				<td class="<? 	$this->cssSw->switchClass(); echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
@@ -845,15 +845,7 @@ class viewObject {
 				?></td>
 			</tr><?
 				}
-			} else { ?>
-			<tr>
-				<td class="<? echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
-				</td>
-				<td class="<? echo $this->cssSw->getClass() ?>" colspan=2>
-				<font size=-1 color="red">Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!</font>
-				</td>
-			</tr>
-			<? } ?>
+			}  ?>
 		</table>
 		<?
 	}	

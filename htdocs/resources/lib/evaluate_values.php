@@ -62,6 +62,10 @@ if ($structure_open) {
 	$resources_data["actual_object"]=$structure_open;
 }
 
+if ($edit_object)
+	$resources_data["actual_object"]=$edit_object;
+
+
 //Select an object to work with
 if ($actual_object) {
 	$resources_data["actual_object"]=$actual_object;
@@ -115,12 +119,6 @@ if ($create_object) {
 	$resources_data["actual_object"]=$new_Object->getId();
 	}
 
-//Object bearbeiten
-if ($edit_object) {
-	$resources_data["view"]="edit_object_properties";
-	$resources_data["actual_object"]=$edit_object;
-	}
-	
 //Object loeschen
 if ($kill_object) {
 	$ObjectPerms = new ResourcesObjectPerms($kill_object);
@@ -631,7 +629,7 @@ if ($resources_data["view"]=="search") {
 //show object, this object will be edited or viewed
 if ($show_object)
 	$resources_data["actual_object"]=$show_object;
-	
+
 //if ObjectPerms for actual user and actual object are not loaded, load them!
 if ($ObjectPerms) {
 	if (($ObjectPerms->getId() == $resources_data["actual_object"]) && ($ObjectPerms->getUserId()  == $user->id))
@@ -640,4 +638,13 @@ if ($ObjectPerms) {
 		$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
 } else
 	$ActualObjectPerms = new ResourcesObjectPerms($resources_data["actual_object"]);
+	
+//edit or view object
+if ($edit_object) {
+	if ($ActualObjectPerms->getUserPerm() == "admin")
+		$resources_data["view"]="edit_object_properties";
+	else
+		$resources_data["view"]="view_details";
+}
+
 ?>

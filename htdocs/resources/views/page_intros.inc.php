@@ -1,7 +1,7 @@
 <?
 if ($resources_data["actual_object"]) {
 	$currentObject=new ResourceObject($resources_data["actual_object"]);
-	$currentObjectTitelAdd=": ".$currentObject->getCategoryName();
+	$currentObjectTitelAdd=": ".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene"));
 	if ($currentObjectTitelAdd)
 		$currentObjectTitelAdd=": ";
 	$currentObjectTitelAdd=": ".$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
@@ -83,7 +83,7 @@ switch ($resources_data["view"]) {
 	case "openobject_details":
 	case "view_details":
 		if ($resources_data["actual_object"])
-			$page_intro="Hier sehen Sie detaillierte Informationen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").";
+			$page_intro="Hier sehen Sie detaillierte Informationen der Ressource <b>".$currentObject->getName()."</b> (".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene")).").";
 		if ($resources_data["view_mode"] == "oobj")
 			$title=$SessSemName["header_line"]." - Ressourcendetails";
 		else
@@ -92,9 +92,8 @@ switch ($resources_data["view"]) {
 					array  ("kategorie" => "Aktionen:", 
 							"eintrag" => array (
 								array	("icon" => "pictures/suchen.gif",
-									"text"  => ($resources_data["view_mode"] == "no_nav") ? "<a href=\"$PHPSELF?view=search\">zur&uuml;ck zur Suche</a>" : "<a href=\"$PHPSELF\">zur&uuml;ck zur &Uuml;bersichtSuche</a>"),
-								array	("icon" => "pictures/blank.gif",
-									"text"  => "<a href=\"$PHPSELF?view=view_schedule\">Belegungsplan anzeigen</a>"))));
+									"text"  => ($resources_data["view_mode"] == "no_nav") ? "<a href=\"$PHP_SELF?view=search\">zur&uuml;ck zur Suche</a>" : "<a href=\"$PHP_SELF\">zur&uuml;ck zur &Uuml;bersicht</a>"),
+)));
 		$infopic = "pictures/schedule.jpg";
 	break;
 	case "openobject_schedule":
