@@ -201,7 +201,7 @@ function JSReady ($what = "", $target = "overlib") {
 		$what = str_replace("\r","",$what);
 		return $what;
 	break;
-	
+
 	case "alert" :
 		$what = addslashes(htmlentities($what,ENT_COMPAT));
 		$what = str_replace("\r","",$what);
@@ -209,19 +209,12 @@ function JSReady ($what = "", $target = "overlib") {
 		return $what;
 	break;
 
-	case "forum" :
-
-		$what = htmlentities($what,ENT_COMPAT);
-		$what = format($what);
-		$what = str_replace("\r","",$what);
-		$what = smile($what);
-		$what = symbol($what);
-		$what = str_replace("\n","<br /> ",$what);
-		if (ereg("\[quote",$what) AND ereg("\[/quote\]",$what))
+	case 'forum' :
+		$what = str_replace("\r",'',formatReady($what));
+		if (ereg('\[quote',$what) AND ereg('\[/quote\]',$what))
 			$what = quotes_decode($what);
-		$what = "<p width=\"100%\"class=\"printcontent\">" . $what . "</p>";
-		$what = addslashes(htmlentities($what,ENT_COMPAT));
-		return $what;
+		$what = '<p width="100%"class="printcontent">' . $what . '</p>';
+		return addslashes(htmlentities($what,ENT_COMPAT));
 		break;
 
 	case "overlib" :
