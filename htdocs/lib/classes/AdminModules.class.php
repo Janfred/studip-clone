@@ -36,8 +36,9 @@
 require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
 require_once $ABSOLUTE_PATH_STUDIP.("forum.inc.php");
 require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/Modules.class.php");
 require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");
+require_once $ABSOLUTE_PATH_STUDIP.("dates.inc.php");
+require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/Modules.class.php");
 
 class AdminModules extends Modules {
 	var $db;
@@ -59,6 +60,8 @@ class AdminModules extends Modules {
 		$this->registered_modules["documents"]["msg_deactivate"] = _("Der Dateiordner kann jederzeit deaktiviert werden.");
 
 		$this->registered_modules["schedule"]["name"] = _("Ablaufplan");
+		$this->registered_modules["schedule"]["msg_warning"] = _("Wollen Sie wirklich den Ablaufplan deaktivieren und damit alle Termine l&ouml;schen?");
+		$this->registered_modules["schedule"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Ablaufplans werden <b>%s</b> Termine ebenfalls gel&ouml;scht!");
 		$this->registered_modules["schedule"]["msg_activate"] = _("Die Ablaufplanverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["schedule"]["msg_deactivate"] = _("Die Ablaufplanverwaltung kann jederzeit deaktiviert werden.");
 
@@ -71,6 +74,8 @@ class AdminModules extends Modules {
 		$this->registered_modules["personal"]["msg_deactivate"] = _("Die Personalliste kann jederzeit deaktiviert werden.");
 
 		$this->registered_modules["literature"]["name"] = _("Literatur");
+		$this->registered_modules["literature"]["msg_warning"] = _("Wollen Sie wirklich den Literaturverwaltung deaktivieren und damit die erfasste Literatur und Links l&ouml;schen?");
+		$this->registered_modules["literature"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Literaturverwaltung werden die eingestellte Literatur und Links ebenfalls gel&ouml;scht!");
 		$this->registered_modules["literature"]["msg_activate"] = _("Die Literaturverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["literature"]["msg_deactivate"] = _("Die Literaturverwaltung kann jederzeit deaktiviert werden.");
 
@@ -169,6 +174,35 @@ class AdminModules extends Modules {
 		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$range_id."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
 	}	
 
+	function getModuleScheduleExistingItems($range_id) {
+		$query = sprintf ("SELECT COUNT(termin_id) as items FROM termine WHERE range_id = '%s' ", $range_id);
+
+		$this->db->query($query);
+		$this->db->next_record();
+		
+		return $this->db->f("items");
+	}
+
+	function moduleScheduleDeactivate($range_id) {
+		delete_range_of_dates($range_id, TRUE);
+	}
+
+	function getModuleLiteratureExistingItems($range_id) {
+		$query = sprintf ("SELECT COUNT(literatur_id) as items FROM literatur WHERE range_id = '%s' ", $range_id);
+
+		$this->db->query($query);
+		$this->db->next_record();
+		
+		return $this->db->f("items");
+	}
+
+	function moduleLiteratureDeactivate($range_id) {
+		$db = new DB_Seminar;
+
+		$query = sprintf ("DELETE FROM literatur WHERE range_id='%s'", $range_id);
+		$db->query($query);
+	}
+
 	function getModuleIlias_ConnectExistingItems($range_id) {
 		$query = sprintf ("SELECT COUNT(seminar_id) as items FROM seminar_lernmodul WHERE seminar_id = '%s' ", $range_id);
 
@@ -195,7 +229,14 @@ class AdminModules extends Modules {
 	}
 
 	function moduleWikiDeactivate($range_id) {
-		return 0;
+		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $range_id);
+		$this->db->query($query);
+
+		$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $range_id);
+		$this->db->query($query);
+
+		$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $range_id);
+		$this->db->query($query);
 	}
 
 	function moduleImpuls_ECDeactivate($range_id) {
