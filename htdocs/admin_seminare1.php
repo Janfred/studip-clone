@@ -460,12 +460,12 @@ if (($s_id) && (auth_check())) {
 					<?php
 					$db3->query("SELECT Name,a.Institut_id,b.Institut_id as beteiligt FROM Institute a LEFT JOIN seminar_inst b ON(a.Institut_id=b.Institut_id AND Seminar_id='$s_id') WHERE a.Institut_id=a.fakultaets_id ORDER BY Name");
 					while ($db3->next_record()) {
-						printf ("<option %s style=\"font-weight:bold;\" value=\"%s\"> %s</option>", $db3->f("beteiligt") ? "selected" : "",
+						printf ("<option %s style=\"font-weight:bold;\" value=\"%s\"> %s</option>", ($db3->f("beteiligt") && ($db3->f("beteiligt") != $db->f("Institut_id"))) ? "selected" : "",
 								$db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
 						$db2->query("SELECT a.Institut_id, a.Name,b.Institut_id as beteiligt FROM Institute a LEFT JOIN seminar_inst b ON(a.Institut_id=b.Institut_id AND Seminar_id='$s_id')
 						WHERE fakultaets_id='" . $db3->f("Institut_id") . "' AND a.Institut_id!='" .$db3->f("Institut_id") . "' ORDER BY Name" );
 						while($db2->next_record()){
-							printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("beteiligt") ? "selected" : "",
+							printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", ($db2->f("beteiligt") && ($db2->f("beteiligt") != $db->f("Institut_id"))) ? "selected" : "",
 								$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
 						}
 					}
