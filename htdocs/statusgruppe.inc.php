@@ -80,7 +80,8 @@ function CheckSelfAssign ($statusgruppe_id) {
 }
 
 function CheckAssignRights($statusgruppe_id, $user_id) {
-	if (CheckSelfAssign($statusgruppe_id) && !CheckUserStatusgruppe($statusgruppe_id, $user_id)) 
+	global $perm;
+	if (CheckSelfAssign($statusgruppe_id) && !CheckUserStatusgruppe($statusgruppe_id, $user_id) && !$perm->have_perm("admin")) 
 		$assign = TRUE;
 	else
 		$assign = FALSE;
