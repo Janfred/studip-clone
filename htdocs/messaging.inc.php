@@ -121,6 +121,34 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 		return -1;
 }
 
+//send mail to a group of users
+function circular_sms ($message, $mode, $group_id=0) {
+	global $user;
+	
+	$db=new DB_Seminar;
+	
+	switch ($mode) {
+		case "buddy" :
+			$query = sprintf ("SELECT user_id, username FROM contact LEFT JOIN auth_user_md5 USING (user_id) WHERE owner_id = '%s' AND buddy = '1' ", $user->id);
+			$db->query ($query);
+
+			while ($db->next_record()) {
+				$count+=$this->insert_sms($db->f("username"), $message);
+			}
+		break;
+		case "group" :
+			$query = sprintf ("SELECT statusgruppe_user.user_id, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING (user_id) WHERE statusgruppe_id = '%s' ", $group_id);
+			$db->query($query);
+
+			while ($db->next_record()) {
+				$count+=$this->insert_sms($db->f("username"), $message);
+			}
+		break;
+	}
+
+	return $count;
+} 
+
 //Chateinladung absetzen
 function insert_chatinv ($rec_uname, $user_id='') {
 	global $user,$_fullname_sql;
@@ -164,12 +192,12 @@ function delete_chatinv($username){
 //Buddy aus der Buddyliste loeschen        
 function delete_buddy ($username) {
 	RemoveBuddy($username);
-	}
+}
 
 //Buddy zur Buddyliste hinzufuegen
 function add_buddy ($username) {
-		AddNewContact (get_userid($username));
-		AddBuddy($username);
-	}
+	AddNewContact (get_userid($username));
+	AddBuddy($username);
+}
 }
 ?>
