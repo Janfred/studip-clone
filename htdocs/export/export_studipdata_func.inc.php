@@ -149,7 +149,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 
 function export_sem($inst_id, $ex_sem_id = "all")
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $filter, $SEMESTER, $ex_sem;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $SEMESTER, $ex_sem;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -159,25 +159,19 @@ function export_sem($inst_id, $ex_sem_id = "all")
 		case "seminar":
 			$order = " seminare.Name";
 		break;
-		case "bereich":
-			$order = "sem_tree.priority, seminare.Name";
-			$group = "FIRSTGROUP";
-			$group_tab_zelle = "name";
-			$do_group = true;
-		break;
 		case "status":
-			$order = "seminare.status, sem_tree.priority, seminare.Name";
+			$order = "seminare.status, seminare.Name";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "status";
-			$subgroup = "FIRSTGROUP";
-			$subgroup_tab_zelle = "name";
+//			$subgroup = "FIRSTGROUP";
+//			$subgroup_tab_zelle = "name";
 			$do_group = true;
-			$do_subgroup = true;
+//			$do_subgroup = true;
 		break;
 		default:
-			$order = "sem_tree.priority, seminare.Name";
+			$order = "seminare.status, seminare.Name";
 			$group = "FIRSTGROUP";
-			$group_tab_zelle = "name";
+			$group_tab_zelle = "status";
 			$do_group = true;
 	}
 	if (isset($SEMESTER[ $ex_sem]["beginn"] ) )
@@ -222,6 +216,13 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			if ($val == "") $val = $key;
 			if ($key == "status") 
 				$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
+			elseif ($key == "bereich") 
+			{
+				if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) {
+					$sem_path = get_sem_tree_path($db->f("Seminar_id"));
+					$data_object .= xml_tag($val, implode($sem_path, "\n"));
+				}
+			}
 			elseif ($key == "ort") 
 				$data_object .= xml_tag($val, getRoom($db->f("Seminar_id")));
 			elseif ($key == "metadata_dates") 
