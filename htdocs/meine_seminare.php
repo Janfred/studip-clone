@@ -202,6 +202,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<tr>
 		<td class="topic" colspan="2"><img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</></td>
 	</tr>
+	<tr>
+		<td class="blank" colspan="2">&nbsp;</td>
+	</tr>
 	<?
 	if ($meldung) parse_msg($meldung);
 	?>
@@ -296,12 +299,12 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
       	<?
         ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"blank\">";
         ECHO "<tr>";
-            ECHO "<th width=\"2%\" nowrap colspan=2>&nbsp";
-		    ECHO "<th width=\"64%\"><b>Name</b>";
-		    ECHO "<th width=\"10%\"><b>Losdatum</b>";
-   		    ECHO "<th width=\"10%\"><b>Position</b>";
-   		    ECHO "<th width=\"10%\"><b>Art</b>";
-       	    ECHO "<th width=\"3%\">X</tr>";
+            ECHO "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
+		    ECHO "<th width=\"64%\"><b>Name</b></th>";
+		    ECHO "<th width=\"10%\"><b>Losdatum</b></th>";
+   		    ECHO "<th width=\"10%\"><b>Position</b></th>";
+   		    ECHO "<th width=\"10%\"><b>Art</b></th>";
+       	    ECHO "<th width=\"3%\">X</tr></th>";
       }
 	WHILE ($db->next_record()) {
         IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
@@ -325,14 +328,14 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
             ELSE $chance_color = dechex(255-($db->f("position")*6)); // da gibts vielleicht noch Hoffnung, also grün
         }
 		$cssSw->switchClass();
-	    printf ("<tr><td bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
-	    printf ("<td class=\"%s\">&nbsp;</td>",$cssSw->getClass());
-	    printf ("<td class=\"%s\">",$cssSw->getClass());
+	    printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
+	    printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
+	    printf ("<td width=\"64%%\" class=\"%s\">",$cssSw->getClass());
 		print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";
-		printf ("<td align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.Y", $db->f("admission_endtime")) : "-");
-		printf ("<td align=\"center\" class=\"%s\">%s %s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
-		printf ("<td align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
-		printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(),$db->f("seminar_id"));
+		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.Y", $db->f("admission_endtime")) : "-");
+		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s %s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
+		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
+		printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr></table>", $cssSw->getClass(),$db->f("seminar_id"));
 	}
 
 
