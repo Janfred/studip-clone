@@ -432,7 +432,8 @@ if (!$suppress_infobox) {
 				if ($infobox) {
 					if (is_object($clipObj))  {
 						$formObj = $clipObj->getFormObject();
-						print $formObj->getFormStart();
+						$clip_form_action = ($quick_view) ? $PHP_SELF . "?quick_view=$quick_view&quick_view_mode=$quick_view_mode" : $PHP_SELF;
+						print $formObj->getFormStart($clip_form_action);
 					} 
 					?>
 					<td class="blank" width="270" align="center" valign="top">
