@@ -44,7 +44,6 @@ require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/reiter.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/sms_functions.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
@@ -63,11 +62,7 @@ check_messaging_default();
 ###########################################################
 
 if($answer_to) {
-	$query = "
-		UPDATE message_user SET
-			answered = '1'
-			WHERE message_id = '".$answer_to."' AND user_id='".$user->id."' AND snd_rec = 'rec'
-		";
+	$query = "UPDATE message_user SET	answered = '1' WHERE message_id = '".$answer_to."' AND user_id='".$user->id."' AND snd_rec = 'rec'";
 	$db->query ($query);
 }
 
@@ -93,26 +88,16 @@ if(!$sms_data["tmpsavesnd"]) {
 }
 
 // email-forwarding?
-if ($rmv_tmpemailsnd_button_x) {
-	$sms_data['tmpemailsnd'] = "";
-}
-if ($add_tmpemailsnd_button_x) {
-	$sms_data['tmpemailsnd'] = 1;
-}
+if ($rmv_tmpemailsnd_button_x) { $sms_data['tmpemailsnd'] = ""; }
+if ($add_tmpemailsnd_button_x) { $sms_data['tmpemailsnd'] = 1; }
 
 //reading-confirmation?
-if ($rmv_tmpreadsnd_button_x) {
-	$sms_data["tmpreadsnd"] = "";
-}
-if ($add_tmpreadsnd_button_x) {
-	$sms_data["tmpreadsnd"] = 1;
-}
+if ($rmv_tmpreadsnd_button_x) { $sms_data["tmpreadsnd"] = ""; }
+if ($add_tmpreadsnd_button_x) { $sms_data["tmpreadsnd"] = 1; }
 
 
 // check if active chat avaiable
-if (($cmd == "write_chatinv") && (!is_array($admin_chats))) {
-	$cmd='';
-}
+if (($cmd == "write_chatinv") && (!is_array($admin_chats))) $cmd='';
 
 // send message
 if ($cmd_insert_x) {
@@ -186,9 +171,7 @@ if ($cmd_insert_x) {
 	unset($sms_data["tmpemailsnd"]);
 	unset($messagesubject);
 
-	if($my_messaging_settings["save_snd"] == "1") {
-		$sms_data["tmpsavesnd"]  = "1";
-	}
+	if($my_messaging_settings["save_snd"] == "1") $sms_data["tmpsavesnd"]  = "1";
 
 }
 
@@ -196,17 +179,10 @@ if ($cmd_insert_x) {
 // do we answer someone and did we came from somewhere != sms-page
 if ($answer_to) {
 
-	$query = "
-		SELECT auth_user_md5.username as rec_uname, message.autor_id 
-			FROM message
-			LEFT JOIN auth_user_md5 ON(message.autor_id = auth_user_md5.user_id) 
-			WHERE message.message_id = '".$answer_to."' 
-		";
+	$query = "SELECT auth_user_md5.username as rec_uname, message.autor_id FROM message LEFT JOIN auth_user_md5 ON(message.autor_id = auth_user_md5.user_id) WHERE message.message_id = '".$answer_to."'";
 	$db->query ($query);
 	while ($db->next_record()) {
-		if($quote) {
-			$quote_username = $db->f("rec_uname");
-		}
+		if($quote) $quote_username = $db->f("rec_uname");
 		$sms_data["p_rec"] = array($db->f("rec_uname"));
 	}
 
@@ -216,9 +192,7 @@ if ($answer_to) {
 
 
 if($rec_uname) {
-	if(get_userid($rec_uname) != "") {
-		$sms_data["p_rec"] = array($rec_uname);
-	}
+	if(get_userid($rec_uname) != "") $sms_data["p_rec"] = array($rec_uname);
 	unset($rec_uname);
 }
 
@@ -227,14 +201,10 @@ if($rec_uname) {
 if ($group_id) {
 	
 	// be sure to send it as email
-	if($emailrequest == 1) {
-		$sms_data['tmpemailsnd'] = 1;
-	}
+	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
 
 	// predefine subject
-	if($subject) {
-		$messagesubject = $subject;	
-	}
+	if($subject) $messagesubject = $subject;
 
 	$query = sprintf("SELECT statusgruppe_user.user_id, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING (user_id) WHERE statusgruppe_id = '%s' ", $group_id);
 	$db->query($query);
@@ -259,14 +229,10 @@ if ($group_id) {
 if ($course_id) {
 
 	// be sure to send it as email
-	if($emailrequest == 1) {
-		$sms_data['tmpemailsnd'] = 1;
-	}
+	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
 	
 	// predefine subject
-	if($subject) {
-		$messagesubject = $subject;	
-	}
+	if($subject) $messagesubject = $subject;	
 	$db = new DB_Seminar;
 	if ($filter=="all") {
 		$db->query ("SELECT username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '".$course_id."'");
@@ -299,27 +265,19 @@ if (!isset($sms_data["sig"])) {
 
 
 // add a reciever from adress-members
-if ($add_receiver_button_x && !empty($add_receiver)) {
-	$sms_data["p_rec"] = array_add_value($add_receiver, $sms_data["p_rec"]);
-}
+if ($add_receiver_button_x && !empty($add_receiver)) { $sms_data["p_rec"] = array_add_value($add_receiver, $sms_data["p_rec"]); }
 
 
 // add all reciever from adress-members
 if ($add_allreceiver_button_x) {
 
-	$query_for_adresses = "
-		SELECT contact.user_id, username, ".$_fullname_sql['full_rev']." AS fullname 
-			FROM contact LEFT JOIN auth_user_md5 USING(user_id) 
-			LEFT JOIN user_info USING (user_id) 
-			WHERE owner_id = '".$user->id."' ORDER BY Nachname ASC";
+	$query_for_adresses = "SELECT contact.user_id, username, ".$_fullname_sql['full_rev']." AS fullname 	FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE owner_id = '".$user->id."' ORDER BY Nachname ASC";
 	$db->query($query_for_adresses);
 	while ($db->next_record()) {
 		if (empty($sms_data["p_rec"])) {
 			$add_rec[] = $db->f("username");
 		} else {	
-			if (!in_array($db->f("username"), $sms_data["p_rec"])) {
-				$add_rec[] = $db->f("username");
-			}
+			if (!in_array($db->f("username"), $sms_data["p_rec"])) { $add_rec[] = $db->f("username"); }
 		}
 	}
 
@@ -330,15 +288,11 @@ if ($add_allreceiver_button_x) {
 
 
 // add receiver from freesearch
-if ($add_freesearch_x && !empty($freesearch)) {
-	$sms_data["p_rec"] = array_add_value($freesearch, $sms_data["p_rec"]);
-}
+if ($add_freesearch_x && !empty($freesearch)) { $sms_data["p_rec"] = array_add_value($freesearch, $sms_data["p_rec"]); }
 
 
 // remove all from receiverlist
-if ($del_allreceiver_button_x) {
-	unset($sms_data["p_rec"]);
-}
+if ($del_allreceiver_button_x) { unset($sms_data["p_rec"]); }
 
 
 // aus empfaengerliste loeschen
@@ -355,9 +309,7 @@ function show_precform() {
 
 	if ($my_messaging_settings["send_view"] == "1") {
 		$tmp_01 = sizeof($sms_data["p_rec"]);
-		if (sizeof($sms_data["p_rec"]) >= "12") {
-			$tmp_01 = "12";
-		}
+		if (sizeof($sms_data["p_rec"]) >= "12") { $tmp_01 = "12"; }
 	} else {
 		$tmp_01 = "5";
 	}
@@ -429,9 +381,7 @@ function show_addrform() {
 			
 			if ($my_messaging_settings["send_view"] == "1") {
 				$tmp_01 = $tmp_count;
-				if ($tmp_count >= "12") {
-					$tmp_01 = "12";
-				}
+				if ($tmp_count >= "12") { $tmp_01 = "12"; }
 			} else {
 				$tmp_01 = "3";
 			}
@@ -454,14 +404,7 @@ function show_addrform() {
 
 		$search_exp = str_replace("%", "\%", $search_exp);
 		$search_exp = str_replace("_", "\_", $search_exp);	
-		$query = "
-			SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms 
-				FROM auth_user_md5 
-					LEFT JOIN user_info USING(user_id) 
-				WHERE (username LIKE '%$search_exp%' 
-					OR Vorname LIKE '%$search_exp%' 
-					OR Nachname LIKE '%$search_exp%') 
-				ORDER BY Nachname ASC";
+		$query = "SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
 		$db->query($query); //
 		if (!$db->num_rows()) {
 
@@ -502,21 +445,15 @@ function show_msgform() {
 	global $PHP_SELF, $sms_data, $user, $quote, $tmp_sms_content, $quote_username, $message, $messagesubject;
 	
 	$tmp = "&nbsp;<font size=\"-1\"><b>"._("Betreff:")."</b></font>";
-	$tmp .= "<div align=\"center\"><input type=\"text\" name=\"messagesubject\" value=\"".trim(quotes_decode(formatReady(stripslashes($messagesubject))))."\"style=\"width: 99%\"></div>";
+	$tmp .= "<div align=\"center\"><input type=\"text\" name=\"messagesubject\" value=\"".trim(htmlready(stripslashes($messagesubject)))."\"style=\"width: 99%\"></div>";
 
 	$tmp .= "<br>&nbsp;<font size=\"-1\"><b>"._("Nachricht:")."</b></font>";
 	$tmp .= "<div align=\"center\"><textarea name=\"message\" style=\"width: 99%\" cols=80 rows=10 wrap=\"virtual\">\n";
-	if ($quote) {
-		$tmp .= quotes_encode($tmp_sms_content, get_fullname_from_uname($quote_username));
-	}
-	if ($message) {
-		$tmp .= stripslashes($message);
-	}
+	if ($quote) { $tmp .= quotes_encode($tmp_sms_content, get_fullname_from_uname($quote_username)); }
+	if ($message) { $tmp .= stripslashes($message); }
 	$tmp .= "</textarea>\n<br><br>";	
 	// send/ break-button
-	if (sizeof($sms_data["p_rec"]) > "0") { 
-		$tmp .= "<input type=\"image\" ".makeButton("abschicken", "src")." name=\"cmd_insert\" border=0 align=\"absmiddle\">";
-	}
+	if (sizeof($sms_data["p_rec"]) > "0") { $tmp .= "<input type=\"image\" ".makeButton("abschicken", "src")." name=\"cmd_insert\" border=0 align=\"absmiddle\">"; }
 	$tmp .= "&nbsp;<a href=\"sms_box.php\">".makeButton("abbrechen", "img")."</a>&nbsp;";
 	$tmp .= "<input type=\"image\" ".makeButton("vorschau", "src")." name=\"cmd\" border=0 align=\"absmiddle\">";
 	$tmp .= "<br><br>";	
@@ -530,7 +467,7 @@ function show_previewform() {
 	global $sms_data, $message, $signature, $my_messaging_settings, $messagesubject;
 
 	$tmp = "<input type=\"image\" name=\"refresh_message\" src=\"./pictures/rewind3.gif\" border=\"0\" ".tooltip(_("aktualisiert die Vorschau der aktuellen Nachricht.")).">&nbsp;"._("Vorschau erneuern.")."<br><br>";
-	$tmp .= "<b>"._("Betreff:")."</b><br>".quotes_decode(formatReady(stripslashes($messagesubject)));
+	$tmp .= "<b>"._("Betreff:")."</b><br>".htmlready(stripslashes($messagesubject));
 	$tmp .= "<br><br><b>"._("Nachricht:")."</b><br>";
 	$tmp .= quotes_decode(formatReady(stripslashes($message)));
 	if ($sms_data["sig"] == "1") {
@@ -580,7 +517,7 @@ function show_msgsaveoptionsform() {
 
 	if($sms_data["tmpsavesnd"] == 1) {
 
-		$tmp .= "<input type=\"image\" name=\"rmv_tmpsavesnd_button\" src=\"./pictures/smssave_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht nicht zu speichern.")).">&nbsp;"._("Die Nachricht wird gespeichert.");
+		$tmp .= "<input type=\"image\" name=\"rmv_tmpsavesnd_button\" src=\"./pictures/smssave_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht nicht zu speichern.")).">&nbsp;"._("Klicken Sie das Icon um die Nachricht nicht zu speichern.");
 		// do we have any personal folders? if, show them here
 		if (have_msgfolder("out") == TRUE) {
 			// walk throw personal folders
@@ -598,7 +535,7 @@ function show_msgsaveoptionsform() {
 
 	} else {
 
-		$tmp .= "<input type=\"image\" name=\"add_tmpsavesnd_button\" src=\"./pictures/smssave.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht zu speichern.")).">&nbsp;"._("Die Nachricht wird nicht gespeichert.");
+		$tmp .= "<input type=\"image\" name=\"add_tmpsavesnd_button\" src=\"./pictures/smssave.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht zu speichern.")).">&nbsp;"._("Klicken Sie das Icon um die Nachricht zu speichern.");
 
 	}
 
@@ -612,13 +549,9 @@ function show_msgemailoptionsform() {
 	global $sms_data, $my_messaging_settings;
 
 	if($sms_data["tmpemailsnd"] == 1) {
-
-		$tmp .= "<input type=\"image\" name=\"rmv_tmpemailsnd_button\" src=\"./pictures/emailrequest_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht nicht (auch) als Email zu versenden.")).">&nbsp;"._("Die Nachricht wird auch als Email versendet.");
-
+		$tmp .= "<input type=\"image\" name=\"rmv_tmpemailsnd_button\" src=\"./pictures/emailrequest_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht nicht (auch) als Email zu versenden.")).">&nbsp;"._("Klicken Sie das Icon um die Nachricht nicht (auch) als Email zu versenden.");
 	} else {
-
-		$tmp .= "<input type=\"image\" name=\"add_tmpemailsnd_button\" src=\"./pictures/emailrequest.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht (auch) als Email zu versenden.")).">&nbsp;"._("Die Nachricht wird nicht als Email versendet.");
-
+		$tmp .= "<input type=\"image\" name=\"add_tmpemailsnd_button\" src=\"./pictures/emailrequest.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um die Nachricht (auch) als Email zu versenden.")).">&nbsp;"._("Klicken Sie das Icon um die Nachricht (auch) als Email zu versenden.");
 	}
 
 	$tmp = "<font size=\"-1\">".$tmp."</font>";
@@ -631,13 +564,9 @@ function show_msgreadconfirmoptionsform() {
 	global $sms_data, $my_messaging_settings;
 
 	if($sms_data["tmpreadsnd"] == 1) {
-
-		$tmp .= "<input type=\"image\" name=\"rmv_tmpreadsnd_button\" src=\"./pictures/lesebst_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um für diese Nachricht keine Lesebestätigung anzufordern.")).">&nbsp;"._("Es wird eine Lesebestätigung angefordert.");
-
+		$tmp .= "<input type=\"image\" name=\"rmv_tmpreadsnd_button\" src=\"./pictures/lesebst_red.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um für diese Nachricht keine Lesebestätigung anzufordern.")).">&nbsp;"._("Klicken Sie das Icon um keine Lesebestätigung anzufordern.");
 	} else {
-
-		$tmp .= "<input type=\"image\" name=\"add_tmpreadsnd_button\" src=\"./pictures/lesebst.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um für diese Nachricht eine Lesebestätigung anzufordern.")).">&nbsp;"._("Es wird keine Lesebestätigung angefordert.");
-
+		$tmp .= "<input type=\"image\" name=\"add_tmpreadsnd_button\" src=\"./pictures/lesebst.gif\" border=\"0\" ".tooltip(_("Klicken Sie hier um für diese Nachricht eine Lesebestätigung anzufordern.")).">&nbsp;"._("Klicken Sie das Icon um eine Lesebestätigung anzufordern.");
 	}
 
 	$tmp = "<font size=\"-1\">".$tmp."</font>";
@@ -924,12 +853,17 @@ if ($send_view) {
 		$tmp_link_02 = _("Standard-Ansicht");
 	}
 
-	$switch_sendview = sprintf(_("Wählen Sie hier zwischen Experten- und Standard-Ansicht."))."<br><a href=\"".$PHP_SELF."?send_view=".$tmp_link_01."\">".$tmp_link_02."</a>";
+	
+	$switch_sendview = sprintf(_("Wählen Sie hier zwischen Experten- und Standard-Ansicht."))."<br><img src=\"pictures/link_intern.gif\" width=\"15\" height=\"15\" border=0 alt=\"\">&nbsp;<a href=\"".$PHP_SELF."?send_view=".$tmp_link_01."\">".$tmp_link_02."</a>";
+	if($my_messaging_settings["send_view"] == 1) {
+		$switch_sendview .= "<br>"._("In der Experten-Ansicht sind weitere Optionen wie z. B. Emailweiterleitung und Lesebestätigung wählbar.");
+	}
+
 
 	if($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"] == TRUE) {
 		if($sms_data["tmpemailsnd"] == 1) {
 			$emailforwardinfo = _("Ihre Nachricht wird auch als Email versand.");
-			if($GLOBALS["MESSAGING_FORWARD_DEFAULT"] == 3) $emailforwardinfo .= "<br>"._(" Diese Emailweiterleitung ist auch abhängig von den Einstellungen des Adressaten");
+			if($GLOBALS["MESSAGING_FORWARD_DEFAULT"] == 3) $emailforwardinfo .= "<br>"._(" Die Nachricht wird auch als E-Mail weitergeleitet, sofern die EmpfängerIn sich nicht ausdrücklich gegen die E-Mail-Weiterleitung entschieden hat.");
 		} else {
 			$emailforwardinfo = _("Ihre Nachricht wird nicht auch als Email versand.");
 		}
@@ -938,7 +872,8 @@ if ($send_view) {
 	}
 
 	$smsinfos = "";
-
+	
+	// emailforwarding?!
 	if($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"] == TRUE) {
 		if($sms_data["tmpemailsnd"] == 1) {
 			$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
@@ -948,7 +883,7 @@ if ($send_view) {
 		$smsinfos .= "&nbsp;"._("Emailweiterleitung")."<br>";
 	}
 
-
+	// readingconfirmation?!
 	if($sms_data["tmpreadsnd"] == 1) {
 		$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
 	} else {
@@ -956,6 +891,7 @@ if ($send_view) {
 	}
 	$smsinfos .= "&nbsp;"._("Lesebestätigung")."<br>";
 
+	// save the message?!
 	if($sms_data["tmpsavesnd"] == 1) {
 		$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
 	} else {
@@ -963,6 +899,7 @@ if ($send_view) {
 	}
 	$smsinfos .= "&nbsp;"._("Speichern")."<br>";
 	
+	// signature?!
 	if($sms_data["sig"] == 1) {
 		$smsinfos .= "<img src=\"pictures/vote_answer_correct.gif\" width=\"16\" height=\"16\" border=0 alt=\"\">";
 	} else {
