@@ -51,18 +51,18 @@ the Stud.IP system-folder*/
 
 $ABSOLUTE_PATH_STUDIP = "/srv/www/htdocs/studip/";
 //where ro store documents and the archive
-$UPLOAD_PATH = "/var/lib/studip/upload_doc";					//uploaded documents
-$ARCHIV_PATH = "/var/lib/studip/archiv";							//Stud.IP archive
+$UPLOAD_PATH = "/var/lib/studip/upload_doc";						//path to uploaded documents (wwwrun needs write-perm there)
+$ARCHIV_PATH = "/var/lib/studip/archiv";						//path to Stud.IP archive (wwwrun needs write-perm there)
 
 //path to smileys and symbols
-$SMILE_PATH = "pictures/smile";									//smileys
-$SYMBOL_PATH = "pictures/symbol";								//symbols
+$SMILE_PATH = "pictures/smile";								//smileys
+$SYMBOL_PATH = "pictures/symbol";							//symbols
 
 //path to the temporary folder
-$TMP_PATH ="/tmp";											//the system temp path
+$TMP_PATH ="/tmp";									//the system temp path
 
 //paths to the command line tools, used in Stud.IP
-$ZIP_PATH = "/usr/bin/zip";										//zip tool
+$ZIP_PATH = "/usr/bin/zip";								//zip tool
 $DJPEG_PATH = "/usr/bin/djpeg";								//djpeg tool for imaging
 $GIFTOPNM_PATH = "/usr/bin/giftopnm";							//giftopnm tool for imaging
 $PNMSCALE_PATH = "/usr/bin/pnmscale";							//pnmscaletool for imaging
@@ -83,22 +83,22 @@ enable or disable the Stud.IP internal modules, set the path
 to the modules and basic settings*/
 
 //path to Stud.IP modules
-$RELATIVE_PATH_RESOURCES = "./resources";					//Stud.IP module: resourge management
-$RELATIVE_PATH_CALENDAR = "./calendar";						//Stud.IP module: calendar
+$RELATIVE_PATH_RESOURCES = "./resources";						//Stud.IP module: resourge management
+$RELATIVE_PATH_CALENDAR = "./calendar";							//Stud.IP module: calendar
 $RELATIVE_PATH_CHAT = "chat"; 								//Stud.IP module: chat
-$RELATIVE_PATH_ADMIN_MODULES = "admin";				 	//Stud.IP module: admin tools
+$RELATIVE_PATH_ADMIN_MODULES = "admin";				 			//Stud.IP module: admin tools
 $RELATIVE_PATH_EXTERN = "extern"; 							//Stud.IP module: SRI-System for including Stud.IP data in other websites
-$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";				//Stud.IP module: Ilias lerningmodules-connection
-$RELATIVE_PATH_SUPPORT = "./support";						//Stud.IP module: SupportDB (not part of the main distribution)
-$PATH_EXPORT = "export";										//Stud.IP module: export
-$ABSOLUTE_PATH_ILIAS = "http://<your.server.name>/ilias/";
+$RELATIVE_PATH_LEARNINGMODULES = "lernmodule";						//Stud.IP module: Ilias lerningmodules-connection
+$RELATIVE_PATH_SUPPORT = "./support";							//Stud.IP module: SupportDB (not part of the main distribution)
+$PATH_EXPORT = "export";								//Stud.IP module: export
 
+//module config
 $RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
 
-$CALENDAR_ENABLE = TRUE;									//Stud.IP module: calendar 
+$CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar 
 $CALENDAR_DRIVER = "MySQL"; 								/*calendar driver: database to use (MySQL in default installation)*/
 
-$CHAT_ENABLE = TRUE;										//Stud.IP module: chat
+$CHAT_ENABLE = TRUE;									//Stud.IP module: chat
 $CHAT_SERVER_NAME = "ChatShmServer";
 
 $EXPORT_ENABLE = TRUE;									//Stud.IP module: export
@@ -107,12 +107,14 @@ $FOP_ENABLE = TRUE;
 $FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					/*path to fop*/
 $JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					/*used to set environment for JRE*/
 
-$ILIAS_CONNECT_ENABLE = FALSE;							//Stud.IP module: ilias connect
+$ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias connect
+$ABSOLUTE_PATH_ILIAS = "http://<your.server.name>/ilias/";
 
 $EXTERN_ENABLE = TRUE;									//Stud.IP module: SRI-System
-//(See extern_config.inc.php in the specified path for further settings)
+$EXTERN_SERVER_NAME = "http://<your.server.name>/";
+$EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				/*path to store configs (wwwrun needs write-perm there)		
 
-$SUPPORT_ENABLE = FALSE;									//Stud.IP module: SupportDB (not part of the main distribution)
+$SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
 
 
 /*language settings
