@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-04 19:13+0200\n"
+"POT-Creation-Date: 2003-04-15 18:45+0200\n"
 "PO-Revision-Date: 2003-03-28 16:23+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -338,7 +338,8 @@ msgid "einen anderen User (NutzerIn oder Einrichtung) eintragen:"
 msgstr "Enter another user (person or institute):"
 
 #: resources/resourcesVisual.inc.php:1181
-msgid "einen User (NutzerIn oder Einrichtung) eintragen:"
+#, fuzzy
+msgid "einen Nutzer (Person oder Einrichtung) eintragen:"
 msgstr "Enter a user (person or institute):"
 
 #: resources/resourcesVisual.inc.php:1184

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-04-04 19:13+0200\n"
+"POT-Creation-Date: 2003-04-15 18:45+0200\n"
 "PO-Revision-Date: 2003-04-04 09:45+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -141,13 +141,13 @@ msgstr "for the %s"
 
 #: about.php:324 admin_metadates.php:654 admin_metadates.php:656
 #: admin_seminare_assi.php:1444 admin_seminare_assi.php:1446
-#: admin_sem_tree.php:194 lib/classes/SemBrowse.class.php:422
-#: lib/classes/StudipSemTreeViewAdmin.class.php:519
+#: admin_sem_tree.php:194 lib/classes/SemBrowse.class.php:462
+#: lib/classes/StudipSemTreeViewAdmin.class.php:549
 #: lib/classes/StudipSemTreeView.class.php:187
 msgid "unbegrenzt"
 msgstr "unlimited"
 
-#: about.php:331 admin_news.php:491 admin_test_fak.php:351 browse.php:126
+#: about.php:331 admin_news.php:497 admin_test_fak.php:351 browse.php:126
 #: header.php:137 links_openobject.inc.php:60
 msgid "Veranstaltungen"
 msgstr "Courses"
@@ -611,7 +611,7 @@ msgstr "Add new learning module"
 #: meine_einrichtungen.php:374 meine_seminare.php:476 meine_seminare.php:499
 #: migration2studip.php:165 migration2studip.php:198 my_archiv.php:165
 #: seminar_lernmodule.php:171 seminar_lernmodule.php:207
-#: seminar_lernmodule.php:270 sem_portal.php:249 statusgruppen.php:196
+#: seminar_lernmodule.php:270 sem_portal.php:253 statusgruppen.php:196
 msgid "Information:"
 msgstr "Information:"
 
@@ -664,7 +664,7 @@ msgstr ""
 msgid "Lernmodule nicht eingebunden"
 msgstr "Learning module not connected"
 
-#: admin_metadates.php:169 admin_seminare_assi.php:429 dates.inc.php:586
+#: admin_metadates.php:169 admin_seminare_assi.php:429 dates.inc.php:596
 msgid "Bitte geben Sie ein g&uuml;ltiges Datum ein!"
 msgstr "Please enter a valid date!"
 
@@ -781,49 +781,49 @@ msgid "Ablaufplantermine aktualisieren"
 msgstr "Update schedule "
 
 #: admin_metadates.php:484 admin_metadates.php:486
-#: admin_seminare_assi.php:1988 admin_seminare_assi.php:1990 dates.inc.php:451
+#: admin_seminare_assi.php:1988 admin_seminare_assi.php:1990 dates.inc.php:460
 #: mein_stundenplan.php:452 mein_stundenplan.php:594
 #: ms_stundenplan.inc.php:195
 msgid "Montag"
 msgstr "Monday"
 
 #: admin_metadates.php:488 admin_metadates.php:490
-#: admin_seminare_assi.php:1992 admin_seminare_assi.php:1994 dates.inc.php:452
+#: admin_seminare_assi.php:1992 admin_seminare_assi.php:1994 dates.inc.php:461
 #: mein_stundenplan.php:455 mein_stundenplan.php:595
 #: ms_stundenplan.inc.php:196
 msgid "Dienstag"
 msgstr "Tuesday"
 
 #: admin_metadates.php:492 admin_metadates.php:494
-#: admin_seminare_assi.php:1996 admin_seminare_assi.php:1998 dates.inc.php:453
+#: admin_seminare_assi.php:1996 admin_seminare_assi.php:1998 dates.inc.php:462
 #: mein_stundenplan.php:458 mein_stundenplan.php:596
 #: ms_stundenplan.inc.php:197
 msgid "Mittwoch"
 msgstr "Wednesday"
 
 #: admin_metadates.php:496 admin_metadates.php:498
-#: admin_seminare_assi.php:2000 admin_seminare_assi.php:2002 dates.inc.php:454
+#: admin_seminare_assi.php:2000 admin_seminare_assi.php:2002 dates.inc.php:463
 #: mein_stundenplan.php:461 mein_stundenplan.php:597
 #: ms_stundenplan.inc.php:198
 msgid "Donnerstag"
 msgstr "Thursday"
 
 #: admin_metadates.php:500 admin_metadates.php:502
-#: admin_seminare_assi.php:2004 admin_seminare_assi.php:2006 dates.inc.php:455
+#: admin_seminare_assi.php:2004 admin_seminare_assi.php:2006 dates.inc.php:464
 #: mein_stundenplan.php:464 mein_stundenplan.php:598
 #: ms_stundenplan.inc.php:199
 msgid "Freitag"
 msgstr "Friday"
 
 #: admin_metadates.php:504 admin_metadates.php:506
-#: admin_seminare_assi.php:2008 admin_seminare_assi.php:2010 dates.inc.php:456
+#: admin_seminare_assi.php:2008 admin_seminare_assi.php:2010 dates.inc.php:465
 #: mein_stundenplan.php:467 mein_stundenplan.php:599
 #: ms_stundenplan.inc.php:200
 msgid "Samstag"
 msgstr "Saturday"
 
 #: admin_metadates.php:508 admin_metadates.php:510
-#: admin_seminare_assi.php:2012 admin_seminare_assi.php:2014 dates.inc.php:457
+#: admin_seminare_assi.php:2012 admin_seminare_assi.php:2014 dates.inc.php:466
 #: mein_stundenplan.php:470 mein_stundenplan.php:600
 #: ms_stundenplan.inc.php:201
 msgid "Sonntag"
@@ -905,177 +905,177 @@ msgstr "1 semester"
 msgid "bis"
 msgstr "until"
 
-#: admin_news.php:157
+#: admin_news.php:163
 msgid "Keine News vorhanden!"
 msgstr "No news included!"
 
-#: admin_news.php:161
+#: admin_news.php:167
 msgid "Sie d&uuml;rfen diesen News-Bereich nicht administrieren!"
 msgstr "You are not allowed to administer this news report!"
 
-#: admin_news.php:167
+#: admin_news.php:173
 msgid "Vorhandene News im gew&auml;hlten Bereich:"
 msgstr "News included in the selected area:"
 
-#: admin_news.php:168
+#: admin_news.php:174
 msgid "Markierte News l&ouml;schen"
 msgstr "Delete selected news"
 
-#: admin_news.php:169
+#: admin_news.php:175
 msgid "Markierte News löschen"
 msgstr "Delete selected news"
 
-#: admin_news.php:170 admin_news.php:216 suchen.inc.php:172
+#: admin_news.php:176 admin_news.php:222 suchen.inc.php:172
 msgid "&Uuml;berschrift"
 msgstr "Headline"
 
-#: admin_news.php:170 admin_news.php:220 contact.inc.php:418 contact.php:114
+#: admin_news.php:176 admin_news.php:226 contact.inc.php:418 contact.php:114
 #: freie.php:169 meine_einrichtungen.php:214 meine_seminare.php:270
 #: meine_seminare.php:632 my_archiv.php:94 suchen.inc.php:180
 msgid "Inhalt"
 msgstr "Content"
 
-#: admin_news.php:171 institut_members.php:453 suchen.inc.php:164
+#: admin_news.php:177 institut_members.php:453 suchen.inc.php:164
 msgid "Autor"
 msgstr "Author"
 
-#: admin_news.php:171
+#: admin_news.php:177
 msgid "Einstelldatum"
 msgstr "Creation date"
 
-#: admin_news.php:171
+#: admin_news.php:177
 msgid "Ablaufdatum"
 msgstr "Expiration date"
 
-#: admin_news.php:172
+#: admin_news.php:178
 msgid "Bearbeiten"
 msgstr "Edit"
 
-#: admin_news.php:172 admin_test_fak.php:329 admin_test_fak.php:356
+#: admin_news.php:178 admin_test_fak.php:329 admin_test_fak.php:356
 msgid "L&ouml;schen"
 msgstr "Delete"
 
-#: admin_news.php:182
+#: admin_news.php:188
 msgid "Diese News bearbeiten"
 msgstr "Edit this news item"
 
-#: admin_news.php:185
+#: admin_news.php:191
 msgid "Diese News zum Löschen vormerken"
 msgstr "Select this news for deletion"
 
-#: admin_news.php:187 admin_news.php:273
+#: admin_news.php:193 admin_news.php:279
 msgid "Nein"
 msgstr "No"
 
-#: admin_news.php:216
+#: admin_news.php:222
 msgid "Autor:"
 msgstr "Author:"
 
-#: admin_news.php:222
+#: admin_news.php:228
 msgid "Geben Sie hier die &Uuml;berschrift und den Inhalt Ihrer News ein."
 msgstr "Enter the headline and contents of your news here."
 
-#: admin_news.php:223
+#: admin_news.php:229
 msgid ""
 "Im unteren Bereich k&ouml;nnen Sie ausw&auml;hlen, in welchen Bereichen Ihre "
 "News angezeigt wird."
 msgstr ""
 "In the area below you can choose in which areas your news will be shown."
 
-#: admin_news.php:224
+#: admin_news.php:230
 msgid "Klicken Sie danach hier, um die &Auml;nderungen zu &uuml;bernehmen."
 msgstr "When you are finished, click here to apply your changes."
 
-#: admin_news.php:225 edit_about.php:932 edit_about.php:982
+#: admin_news.php:231 edit_about.php:932 edit_about.php:982
 #: edit_about.php:1020 edit_about.php:1060 edit_about.php:1085
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:681
 msgid "Änderungen übernehmen"
 msgstr "Changes applied"
 
-#: admin_news.php:226
+#: admin_news.php:232
 msgid "Einstelldatum:"
 msgstr "Creation date:"
 
-#: admin_news.php:231
+#: admin_news.php:237
 msgid "G&uuml;ltigkeitsdauer:"
 msgstr "Validity period:"
 
-#: admin_news.php:235
+#: admin_news.php:241
 #, c-format
 msgid "bis zum %s"
 msgstr "until %s"
 
-#: admin_news.php:244
+#: admin_news.php:250
 #, c-format
 msgid "%s Wochen (%s)"
 msgstr "%s Weeks (%s)"
 
-#: admin_news.php:249
+#: admin_news.php:255
 msgid "In diesen Bereichen wird die News angezeigt:"
 msgstr "The news will be shown in these areas:"
 
-#: admin_news.php:254
+#: admin_news.php:260
 msgid "System-Bereich:"
 msgstr "System area:"
 
-#: admin_news.php:254 admin_news.php:261 admin_news.php:495
+#: admin_news.php:260 admin_news.php:267 admin_news.php:501
 msgid "Anzeigen ?"
 msgstr "Display ?"
 
-#: admin_news.php:255
+#: admin_news.php:261
 msgid "Systemweite News"
 msgstr "System wide news"
 
-#: admin_news.php:261
+#: admin_news.php:267
 msgid "Pers&ouml;nlicher Bereich:"
 msgstr "Personal area:"
 
-#: admin_news.php:271 admin_news.php:506
+#: admin_news.php:277 admin_news.php:512
 msgid "Ja"
 msgstr "Yes"
 
-#: admin_news.php:285
+#: admin_news.php:291
 msgid "Einen weiteren Bereich hinzuf&uuml;gen:"
 msgstr "Add another area:"
 
-#: admin_news.php:286
+#: admin_news.php:292
 msgid ""
 "Hier k&ouml;nnen Sie weitere Bereiche, auf die Sie Zugriff haben, der "
 "Auswahl hinzuf&uuml;gen"
 msgstr "Here you can choose other areas to which you have access."
 
-#: admin_news.php:288 admin_news.php:741 admin_seminare_assi.php:1682
+#: admin_news.php:294 admin_news.php:748 admin_seminare_assi.php:1682
 #: admin_seminare_assi.php:1750 archiv.php:517 institut_browse.php:103
 #: lib/classes/StudipSemSearch.class.php:217
 msgid "Suche starten"
 msgstr "Start search"
 
-#: admin_news.php:308
+#: admin_news.php:314
 msgid "Ok, Ihre neue News wurde gespeichert!"
 msgstr "Ok, your new news has been saved!"
 
-#: admin_news.php:316
+#: admin_news.php:322
 #, c-format
 msgid "Zuletzt aktualisiert von %s (%s) am %s"
 msgstr "Last update from %s (%s) on %s"
 
-#: admin_news.php:321
+#: admin_news.php:327
 msgid "Die News wurde ver&auml;ndert!"
 msgstr "The news has been changed!"
 
-#: admin_news.php:324
+#: admin_news.php:330
 #, c-format
 msgid ""
 "Ihre News \"%s\" wurde von einer Administratorin oder einem Administrator "
 "verändert!"
 msgstr "Your news \"%s\" has been edited by an administrator!"
 
-#: admin_news.php:338 admin_news.php:341
+#: admin_news.php:344 admin_news.php:347
 #, c-format
 msgid "Der Bereich: %s wurde gelöscht."
 msgstr "The area: %s has been deleted."
 
-#: admin_news.php:350
+#: admin_news.php:356
 msgid ""
 "Sie haben keinen Bereich für Ihre News ausgew&auml;hlt. Ihre News wird damit "
 "nirgends angezeigt!"
@@ -1083,129 +1083,129 @@ msgstr ""
 "You haven't choosen an area for your news. Your news will therefore not be "
 "displayed anywhere!"
 
-#: admin_news.php:360 admin_news.php:363
+#: admin_news.php:366 admin_news.php:369
 #, c-format
 msgid "Der Bereich: %s wurde hinzugefügt."
 msgstr "The area: %s has been added."
 
-#: admin_news.php:375
+#: admin_news.php:381
 #, c-format
 msgid "Ihre News \"%s\" wurde von einem Administrator verändert!"
 msgstr "Your news \"%s\" has been edited by an administrator!"
 
-#: admin_news.php:381
+#: admin_news.php:387
 msgid "Fehler: Keine news_id &uuml;bergeben!"
 msgstr "Error: No news_id has been entered!"
 
-#: admin_news.php:397
+#: admin_news.php:403
 #, c-format
 msgid ""
 "Ihre News \"%s\" wurde von einer Administratorin oder einem Administrator "
 "gelöscht!"
 msgstr "Your news \"%s\" has been deleted by an administrator!"
 
-#: admin_news.php:404
+#: admin_news.php:410
 #, c-format
 msgid "Es wurden %s News gel&ouml;scht!"
 msgstr "%s news have been deleted!"
 
-#: admin_news.php:406
+#: admin_news.php:412
 msgid "Sie haben keine News zum l&ouml;schen ausgew&auml;hlt!"
 msgstr "You haven't selected any news to be deleted!"
 
-#: admin_news.php:492 archiv.php:405 browse.php:95 sem_browse.inc.php:437
+#: admin_news.php:498 archiv.php:405 browse.php:95 sem_browse.inc.php:437
 msgid "Einrichtungen"
 msgstr "Institutes"
 
-#: admin_news.php:493
+#: admin_news.php:499
 msgid "Fakult&auml;ten"
 msgstr "Faculties"
 
-#: admin_news.php:612
+#: admin_news.php:618
 msgid "Sie d&uuml;rfen nur Ihre eigenen News ver&auml;ndern"
 msgstr "You are only allowed to edit your own news!"
 
-#: admin_news.php:619
+#: admin_news.php:625
 msgid "Sie haben keine Berechtigung diese News zu bearbeiten"
 msgstr "You don't have any authorisation to edit this news item"
 
-#: admin_news.php:663
+#: admin_news.php:670
 msgid "Newsverwaltung"
 msgstr "News administration"
 
-#: admin_news.php:663 admin_news.php:795
+#: admin_news.php:670 admin_news.php:802
 msgid "gew&auml;hlter Bereich:"
 msgstr "Selected area:"
 
-#: admin_news.php:669
+#: admin_news.php:676
 msgid "Sie haben keinen Suchbegriff eingegeben!"
 msgstr "You have not entered any search criteria!"
 
-#: admin_news.php:674 admin_news.php:702
+#: admin_news.php:681 admin_news.php:709
 msgid "Die Suche ergab keine Treffer!"
 msgstr "The search did not reveal with any matches!"
 
-#: admin_news.php:734
+#: admin_news.php:741
 msgid "Bereichsauswahl"
 msgstr "area selection"
 
-#: admin_news.php:739
+#: admin_news.php:746
 msgid "Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!"
 msgstr "Enter a search keyword to find other areas!"
 
-#: admin_news.php:750
+#: admin_news.php:757
 msgid "verf&uuml;gbare Bereiche"
 msgstr "available areas"
 
-#: admin_news.php:752
+#: admin_news.php:759
 msgid "Benutzer"
 msgstr "User"
 
-#: admin_news.php:752 details.php:92 functions.php:63 functions.php:68
+#: admin_news.php:759 details.php:92 functions.php:63 functions.php:68
 #: functions.php:131 functions.php:135 gruppe.php:48
 msgid "Veranstaltung"
 msgstr "Course"
 
-#: admin_news.php:752 config.inc.php:266 contact.inc.php:219
+#: admin_news.php:759 config.inc.php:266 contact.inc.php:219
 #: edit_about.php:1041 freie.php:168 functions.php:84 functions.php:178
-#: sem_browse.inc.php:377 show_bereich.php:73
+#: sem_browse.inc.php:377 show_bereich.php:77
 #: lib/classes/SemBrowse.class.php:30
 msgid "Einrichtung"
 msgstr "Institute"
 
-#: admin_news.php:752
+#: admin_news.php:759
 msgid "Fakult&auml;t"
 msgstr "Faculty"
 
-#: admin_news.php:756
+#: admin_news.php:763
 msgid "Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b> bearbeiten"
 msgstr "You can edit your &nbsp; <b>Personal news<b>"
 
-#: admin_news.php:757
+#: admin_news.php:764
 msgid "Persönliche News bearbeiten"
 msgstr "Edit personal news"
 
-#: admin_news.php:761
+#: admin_news.php:768
 msgid "<i>oder</i> <b>Systemweite News</b> bearbeiten"
 msgstr "<i>or</i> edit <b>System wide news<b>"
 
-#: admin_news.php:762
+#: admin_news.php:769
 msgid "Systemweite News bearbeiten"
 msgstr "Edit system wide news"
 
-#: admin_news.php:765
+#: admin_news.php:772
 msgid "<i>oder</i> <b>hier</b> einen der gefundenen Bereiche ausw&auml;hlen:"
 msgstr "<i>or</i> choose one of the areas found <b>here</b>"
 
-#: admin_news.php:796
+#: admin_news.php:803
 msgid "Eine neue News im gew&auml;hlten Bereich erstellen"
 msgstr "Create a new news item in the choosen area"
 
-#: admin_news.php:797
+#: admin_news.php:804
 msgid "Eine neue News erstellen"
 msgstr "Create a new news item"
 
-#: admin_news.php:801
+#: admin_news.php:808
 msgid "Im gew&auml;hlten Bereich sind keine News vorhanden!"
 msgstr "No news is included in the choosen area!"
 
@@ -2505,7 +2505,7 @@ msgstr "Enter in \"%s\""
 msgid "Aus Merkliste l&ouml;schen"
 msgstr "Delete from clipboard"
 
-#: admin_sem_tree.php:215 lib/classes/StudipSemTreeViewAdmin.class.php:544
+#: admin_sem_tree.php:215 lib/classes/StudipSemTreeViewAdmin.class.php:586
 msgid "Gewählte Aktion starten"
 msgstr "Start selected action"
 
@@ -2767,7 +2767,7 @@ msgstr "Postings"
 msgid "Dokumente"
 msgstr "Documents"
 
-#: archiv.inc.php:433 dates.inc.php:686 dates.inc.php:976 dates.inc.php:1018
+#: archiv.inc.php:433 dates.inc.php:696 dates.inc.php:986 dates.inc.php:1028
 #: folder.php:88
 msgid "am"
 msgstr "on"
@@ -4161,82 +4161,82 @@ msgstr "n.a"
 msgid "nicht angegeben"
 msgstr "Not entered"
 
-#: dates.inc.php:348
+#: dates.inc.php:357
 msgid "Termin: n. A."
 msgstr "Appointments: n.a"
 
-#: dates.inc.php:350
+#: dates.inc.php:359
 msgid ""
 "unregelmäßige Veranstaltung oder Blockveranstaltung. Die Termine stehen "
 "nicht fest."
 msgstr "Irregular or block course. The dates are not yet decided upon."
 
-#: dates.inc.php:354
+#: dates.inc.php:363
 msgid "Termine am"
 msgstr "Appointments on"
 
-#: dates.inc.php:356
+#: dates.inc.php:365
 msgid "unregelmäßige Veranstaltung oder Blockveranstaltung am"
 msgstr "irregular course or block course on "
 
-#: dates.inc.php:409
+#: dates.inc.php:418
 msgid "Mo."
 msgstr "Mon."
 
-#: dates.inc.php:410
+#: dates.inc.php:419
 msgid "Di."
 msgstr "Tues."
 
-#: dates.inc.php:411
+#: dates.inc.php:420
 msgid "Mi."
 msgstr "Wed."
 
-#: dates.inc.php:412
+#: dates.inc.php:421
 msgid "Do."
 msgstr "Thurs."
 
-#: dates.inc.php:413
+#: dates.inc.php:422
 msgid "Fr."
 msgstr "Fri."
 
-#: dates.inc.php:414
+#: dates.inc.php:423
 msgid "Sa."
 msgstr "Sat."
 
-#: dates.inc.php:415
+#: dates.inc.php:424
 msgid "So."
 msgstr "Sun."
 
-#: dates.inc.php:439
+#: dates.inc.php:448
 msgid "Zeiten: n. A."
 msgstr "Times: n.a"
 
-#: dates.inc.php:481
+#: dates.inc.php:490
 msgid "Die Zeiten der Veranstaltung stehen nicht fest."
 msgstr "The course times are not yet decided upon."
 
-#: dates.inc.php:484
+#: dates.inc.php:493
 msgid "(zweiwöchentlich)"
 msgstr "(fortnightly)"
 
-#: dates.inc.php:502
+#: dates.inc.php:512
 #, c-format
 msgid "Ort: %s"
 msgstr "Place: %s"
 
-#: dates.inc.php:562
+#: dates.inc.php:572
 msgid "bis unbegrenzt"
 msgstr "until unlimited"
 
-#: dates.inc.php:592
+#: dates.inc.php:602
 msgid "Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!"
 msgstr "Please enter a valid start and end time!"
 
-#: dates.inc.php:601
+#: dates.inc.php:611
 msgid "Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!"
 msgstr "The end time must be after the start time!"
 
-#: dates.inc.php:616
+#: dates.inc.php:626
 msgid ""
 "Sie haben einen oder mehrere Termine eingegeben, der ausserhalb des "
 "Semesters liegt, in dem die Veranstaltung stattfindet. Es wird empfohlen, "
@@ -4245,7 +4245,7 @@ msgstr ""
 "You have entered one or more appointments which lie outside of the semester. "
 "We would recommend that you alter these dates."
 
-#: dates.inc.php:635
+#: dates.inc.php:645
 msgid ""
 "Sie haben einen oder mehrere Termine eingegeben, der nicht zu den "
 "allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, "
@@ -4256,38 +4256,38 @@ msgstr ""
 "normal course hours. It is recommended that course meetings of regular "
 "courses should take place within general teaching hours. "
 
-#: dates.inc.php:640
+#: dates.inc.php:650
 #, c-format
 msgid "Der Termin <b>%s</b> konnte nicht ge&auml;ndert werden."
 msgstr "The appointment <b>%s</b> could not be changed."
 
-#: dates.inc.php:787
+#: dates.inc.php:797
 msgid "Dateiordner zu gelöschtem Termin"
 msgstr "Folder of deleted appointments"
 
-#: dates.inc.php:787
+#: dates.inc.php:797
 msgid "Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins"
 msgstr ""
 "This folder contains documents and appointments of deleted appointments"
 
-#: dates.inc.php:976
+#: dates.inc.php:986
 msgid "Hier kann zu diesem Termin diskutiert werden"
 msgstr "Here you can discuss this appointment."
 
-#: dates.inc.php:980
+#: dates.inc.php:990
 #, c-format
 msgid "%s am %s"
 msgstr "%s at %s"
 
-#: dates.inc.php:981 folder.php:89
+#: dates.inc.php:991 folder.php:89
 msgid "Ablage für Ordner und Dokumente zu diesem Termin"
 msgstr "Clipboard for folders and documents for this appointment"
 
-#: dates.inc.php:990
+#: dates.inc.php:1000
 msgid "Kein Titel"
 msgstr "No title"
 
-#: dates.inc.php:1021
+#: dates.inc.php:1031
 #, c-format
 msgid "%s: %s am %s"
 msgstr "%s: %s at %s"
@@ -7759,16 +7759,16 @@ msgstr "My Status"
 msgid "Es wurden keine Veranstaltungen gefunden."
 msgstr "No course was found."
 
-#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:461
+#: sem_browse.inc.php:729 lib/classes/SemBrowse.class.php:501
 msgid "(Der Suchbegriff fehlt oder ist zu kurz)"
 msgstr "(The search keyword is missing or is too short)"
 
-#: sem_browse.inc.php:737 lib/classes/SemBrowse.class.php:288
+#: sem_browse.inc.php:737 lib/classes/SemBrowse.class.php:289
 #, c-format
 msgid "Suche im %sEinrichtungsverzeichnis%s"
 msgstr "Search in %sInstitute index%s"
 
-#: sem_browse.inc.php:739 lib/classes/SemBrowse.class.php:290
+#: sem_browse.inc.php:739 lib/classes/SemBrowse.class.php:291
 #, c-format
 msgid " / %sVorlesungsverzeichnis%s"
 msgstr "/%sCourse index%s"
@@ -7954,46 +7954,50 @@ msgstr ""
 msgid "Erweitertes Suchformular aufrufen"
 msgstr "Use advanced search form"
 
-#: sem_portal.php:203
+#: sem_portal.php:180
+msgid "zurücksetzen"
+msgstr ""
+
+#: sem_portal.php:207
 msgid "Suchergebnis gruppieren:"
 msgstr "Group search results:"
 
-#: sem_portal.php:223 sem_portal.php:240
+#: sem_portal.php:227 sem_portal.php:244
 msgid "neueste Veranstaltungen"
 msgstr "Latest courses"
 
-#: sem_portal.php:226 sem_portal.php:242
+#: sem_portal.php:230 sem_portal.php:246
 msgid "Teilnehmeranzahl"
 msgstr "Number of participants"
 
-#: sem_portal.php:230 sem_portal.php:244
+#: sem_portal.php:234 sem_portal.php:248
 msgid "die meisten Materialien"
 msgstr "The most material"
 
-#: sem_portal.php:234 sem_portal.php:246
+#: sem_portal.php:238 sem_portal.php:250
 msgid "aktivste Veranstaltungen"
 msgstr "Most active courses"
 
-#: sem_portal.php:252
+#: sem_portal.php:256
 #, c-format
 msgid "Gew&auml;hlte Kategorie: <b>%s</b>"
 msgstr "Chosen category: <b>%s</b>"
 
-#: sem_portal.php:252
+#: sem_portal.php:256
 #, c-format
 msgid "%s Veranstaltungen vorhanden"
 msgstr "%s courses available"
 
-#: sem_portal.php:253
+#: sem_portal.php:257
 #, c-format
 msgid "Alle Veranstaltungen %sanzeigen%s"
 msgstr "%sShow%s all courses."
 
-#: sem_portal.php:257
+#: sem_portal.php:261
 msgid "Topliste:"
 msgstr "Top list:"
 
-#: sem_portal.php:265
+#: sem_portal.php:269
 msgid "weitere Toplisten:"
 msgstr "Other top lists:"
 
@@ -8329,15 +8333,15 @@ msgstr "You don't have any access authorisation for this download!"
 msgid "Download nicht m&ouml;glich"
 msgstr "Download not possible"
 
-#: show_bereich.php:59
+#: show_bereich.php:62
 msgid "Studienbereich"
 msgstr "Subject area"
 
-#: show_bereich.php:60
+#: show_bereich.php:63
 msgid "&Uuml;bersicht aller Veranstaltungen eines Studienbereichs"
 msgstr "Overview of all courses in a subject area"
 
-#: show_bereich.php:61
+#: show_bereich.php:64
 #, c-format
 msgid ""
 "Alle Veranstaltungen, die dem Studienbereich: <br><b>%s</b><br> zugeordnet "
@@ -8345,20 +8349,20 @@ msgid ""
 msgstr ""
 "All courses which are allocated to the subject area: <br><b>%s</b><br>."
 
-#: show_bereich.php:76
+#: show_bereich.php:80
 msgid "&Uuml;bersicht aller Veranstaltungen einer Einrichtung"
 msgstr "Overview of all courses in an institute"
 
-#: show_bereich.php:77
+#: show_bereich.php:81
 #, c-format
 msgid "Alle Veranstaltungen der Einrichtung <b>%s</b>"
 msgstr "All courses in the institute <b>%s</b>"
 
-#: show_bereich.php:113
+#: show_bereich.php:117
 msgid "Anzeige gruppieren:"
 msgstr "Group list:"
 
-#: show_bereich.php:120
+#: show_bereich.php:124
 msgid "Daten ausgeben:"
 msgstr "Export data:"
 
@@ -9180,28 +9184,28 @@ msgstr ""
 msgid "Schreiben nicht m&ouml;glich"
 msgstr "Writing not possible"
 
-#: lib/classes/SemBrowse.class.php:293
+#: lib/classes/SemBrowse.class.php:294
 msgid "Suche im Einrichtungsverzeichnis"
 msgstr "Search in institute index"
 
-#: lib/classes/SemBrowse.class.php:295
+#: lib/classes/SemBrowse.class.php:296
 msgid "Suche im Vorlesungsverzeichnis"
 msgstr "Search in course index"
 
-#: lib/classes/SemBrowse.class.php:377
+#: lib/classes/SemBrowse.class.php:400
 #, c-format
 msgid " %s Veranstaltungen gefunden %s, Gruppierung: %s"
 msgstr "%s courses found %s, grouping:%s "
 
-#: lib/classes/SemBrowse.class.php:378
+#: lib/classes/SemBrowse.class.php:401
 msgid "(Suchergebnis)"
 msgstr "(search results)"
 
-#: lib/classes/SemBrowse.class.php:397
+#: lib/classes/SemBrowse.class.php:441
 msgid "keine Studienbereiche eingetragen"
 msgstr "No subject areas added"
 
-#: lib/classes/SemBrowse.class.php:459
+#: lib/classes/SemBrowse.class.php:499
 msgid "Ihre Suche ergab keine Treffer"
 msgstr "The search did not reveal any matches"
 
@@ -9371,7 +9375,7 @@ msgid "Keine weiteren Daten vorhanden!"
 msgstr "No further data included!"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:594
-#: lib/classes/StudipSemTreeViewAdmin.class.php:608
+#: lib/classes/StudipSemTreeViewAdmin.class.php:650
 msgid "An dieser Stelle einfügen"
 msgstr "Insert in this position"
 
@@ -9388,12 +9392,12 @@ msgid "Element bearbeiten"
 msgstr "Edit element"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:620
-#: lib/classes/StudipSemTreeViewAdmin.class.php:555
+#: lib/classes/StudipSemTreeViewAdmin.class.php:597
 msgid "Name des Elements:"
 msgstr "Name of the element:"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:626
-#: lib/classes/StudipSemTreeViewAdmin.class.php:567
+#: lib/classes/StudipSemTreeViewAdmin.class.php:609
 msgid "Aktion abbrechen"
 msgstr "Cancel action"
 
@@ -9661,39 +9665,39 @@ msgstr "Entries on this level:"
 msgid "Nicht zugeordnete Veranstaltungen auf dieser Ebene:"
 msgstr "Non-allocated courses on this level:"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:537
+#: lib/classes/StudipSemTreeViewAdmin.class.php:579
 msgid "Auswahl umkehren"
 msgstr "Undo choice"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:538
+#: lib/classes/StudipSemTreeViewAdmin.class.php:580
 msgid "Aktion auswählen"
 msgstr "Choose action"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:539
+#: lib/classes/StudipSemTreeViewAdmin.class.php:581
 msgid "in Merkliste &uuml;bernehmen"
 msgstr "Add to clipboard"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:541
+#: lib/classes/StudipSemTreeViewAdmin.class.php:583
 msgid "l&ouml;schen und in Merkliste &uuml;bernehmen"
 msgstr "Delete and add to clipboard."
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:542
+#: lib/classes/StudipSemTreeViewAdmin.class.php:584
 msgid "l&ouml;schen"
 msgstr "Delete"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:554
+#: lib/classes/StudipSemTreeViewAdmin.class.php:596
 msgid "Bereich editieren"
 msgstr "Edit area"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:561
+#: lib/classes/StudipSemTreeViewAdmin.class.php:603
 msgid "Infotext:"
 msgstr "Info text:"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:619
+#: lib/classes/StudipSemTreeViewAdmin.class.php:661
 msgid "Element nach oben"
 msgstr "Element to top"
 
-#: lib/classes/StudipSemTreeViewAdmin.class.php:624
+#: lib/classes/StudipSemTreeViewAdmin.class.php:666
 msgid "Element nach unten"
 msgstr "Element to bottom"
 
