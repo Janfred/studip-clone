@@ -258,7 +258,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				echo "<br><br><font size=\"-1\"><b>"._("Freie Suche:")."</b></font><br>";
 				if ($search_exp != "") {
 					$query = "
-					SELECT username, ".$_fullname_sql['full_rev']." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('autor', 'tutor', 'dozent') AND (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
+					SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE perms IN ('autor', 'tutor', 'dozent') AND (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
 					$db->query($query); //
 					if (!$db->num_rows()) {
 						echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
@@ -269,11 +269,11 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 						while ($db->next_record()) {
 							if (empty($sms_data["p_rec"])) {
 								if (get_username($user->id) != $db->f("username")) {
-									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))." (".$db->f("username").") - ".$db->f("perms")."</option>";
 								}							
 							} else {
 								if (!in_array($db->f("username"), $sms_data["p_rec"]) && get_username($user->id) != $db->f("username")) {
-									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+									echo "<option value=\"".$db->f("username")."\">".htmlReady(my_substr($db->f("fullname"),0,35))." (".$db->f("username").") - ".$db->f("perms")."</option>";
 								}
 							}
 						}
