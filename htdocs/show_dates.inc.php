@@ -128,12 +128,12 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			if (!$show_whole_time) {
 				printf("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")));
 				printf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $date_start), strftime("%d. %B %Y", $date_end));
-				printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Termine bearbeiten")));
+				printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Neuen Termin anlegen")));
 				} 
 			else {
 				printf("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" %s align=\"texttop\"><b>&nbsp;&nbsp;", tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")));
 				printf(_("Termine"));
-				printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Termine bearbeiten")));
+				printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" %s ></a>&nbsp;</td></tr>", tooltip(_("Neuen Termin anlegen")));
 				}
 			}
 		else
@@ -296,7 +296,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			echo "\n<tr><td class=\"topic\" width=\"99%\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" " . tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")) . " align='absmiddle'><b>&nbsp;&nbsp;";
 			printf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $list->getStart()), strftime("%d. %B %Y", $list->getEnd()));
 			echo "</b></td>";
-			echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" " . tooltip(_("Termine bearbeiten")) . "></a>&nbsp;</td></tr>";
+			echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" " . tooltip(_("Neuen Termin anlegen")) . "></a>&nbsp;</td></tr>";
 		}
 		else {
 			echo "\n<tr><td class=\"topic\">&nbsp;<img src=\"./pictures/meinetermine.gif\" border=\"0\" " . tooltip(_("Termine. Klicken Sie auf den Pfeil, um eine Beschreibung des Termins anzuzeigen.")) . " align=\"absmiddle\"><b>&nbsp;&nbsp;";
@@ -442,7 +442,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 		echo " align=\"absmiddle\"><b>&nbsp;&nbsp;";
 		echo _("Meine aktuellen Termine");
 		echo "</b></td>";
-		echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" " . tooltip(_("Termine bearbeiten")) . "></a>&nbsp;</td></tr>\n";
+		echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"./pictures/pfeillink.gif\" border=\"0\" " . tooltip(_("Neuen Termin anlegen")) . "></a>&nbsp;</td></tr>\n";
 
 		// Ausgabe der Daten
 		echo "<tr><td class=\"blank\" colspan=\"2\">";
