@@ -173,20 +173,20 @@ class StudipRangeTreeView {
 		$level_output = "";
 		if ($item_id != $this->start_item_id){
 			if ($this->tree->isLastKid($item_id)) 
-				$level_output = "<img src=\"pictures/forumstrich2.gif\"  border=\"0\" >"; //last
+				$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"pictures/forumstrich2.gif\"  border=\"0\" ></td>"; //last
 			else 
-				$level_output = "<img src=\"pictures/forumstrich3.gif\"  border=\"0\" >"; //crossing
+				$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"pictures/forumstrich3.gif\"  border=\"0\" ></td>"; //crossing
 			$parent_id = $item_id;
 			while($this->tree->tree_data[$parent_id]['parent_id'] != $this->start_item_id){
 				$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
 				if ($this->tree->isLastKid($parent_id))
-					$level_output = "<img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" >" . $level_output; //nothing
+					$level_output = "<td class=\"blank\" valign=\"top\" width=\"10\" heigth=\"21\" nowrap><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //nothing
 				else
-					$level_output = "<img src=\"pictures/forumstrich.gif\"  border=\"0\" >" . $level_output; //vertical line
+					$level_output = "<td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap><img src=\"pictures/forumstrich.gif\"  border=\"0\" ></td>" . $level_output; //vertical line
 			}
 		}
-		$level_output = "<img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" >" . $level_output;
-		echo "\n<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"blank\" valign=\"top\"  heigth=\"21\" nowrap>$level_output</td>";
+		$level_output = "<td class=\"blank\" valign=\"top\" width=\"20\" heigth=\"21\" nowrap><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
+		echo "\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr>$level_output";
 		return;
 	}
 	
@@ -198,32 +198,29 @@ class StudipRangeTreeView {
 	*/
 	function printItemOutput($item_id){
 		global $PHP_SELF;
-		echo "\n<td  class=\"printhead\" nowrap width=\"20\" align=\"left\" valign=\"top\">";
+		echo "\n<td  class=\"printhead\" nowrap width=\"20\" align=\"left\" valign=\"bottom\">";
 		if ($this->tree->hasKids($item_id)){
 			echo "<a href=\"";
 			echo ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}"); 
-			echo "\"><img border=\"0\" src=\"pictures/cont_folder.gif\" " .
-					tooltip(count($this->tree->getKids($item_id)) . " " . _("Unterelement(e)")) . " ></a>";
+			echo "\"><img border=\"0\" src=\"pictures/";
+			echo ($this->open_ranges[$item_id]) ? "minus.gif" : "plus.gif";
+			echo "\" " . tooltip(count($this->tree->getKids($item_id)) . " " . _("Unterelement(e)")) . " ></a>";
 		} else { 
 			echo "<img src=\"pictures/forumleer.gif\"  border=\"0\">";
 		}
-		echo "\n</td><td class=\"printhead\" nowrap width=\"10\" valign=\"middle\">";
-		if (true){
-			echo "<a href=\"";
-			echo ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") : $this->getSelf("open_item={$item_id}");
-			echo "\"><img border=\"0\" src=\"pictures/";
-			echo ($this->open_items[$item_id]) ? "forumgraurunt.gif\" " . tooltip(_("Element schließen")) : "forumgrau.gif\" " . tooltip(_("Element öffnen"));
-			echo " align=\"absmiddle\"></a>";
-		} else {
-			echo "<img src=\"pictures/forumleer.gif\"  border=\"0\" height=\"20\" width=\"10\">";
-		}
-		echo "\n</td><td class=\"printhead\" align=\"left\" width=\"100%\" nowrap valign=\"bottom\">";
+		echo "\n</td><td class=\"printhead\" nowrap width=\"1\" valign=\"middle\">";
 		if ($this->anchor == $item_id)
 			echo "<a name=\"anchor\">";
-		echo $this->getItemHead($item_id);
+		echo "<img src=\"pictures/forumleer.gif\"  border=\"0\" height=\"20\" width=\"1\">";
 		if ($this->anchor == $item_id)
 			echo "</a>";
-		echo "</td></tr></table>";
+		echo "\n</td><td class=\"printhead\" align=\"left\" width=\"100%\" nowrap valign=\"bottom\">";
+		echo "<a href=\"";
+		echo ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true)
+											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true);
+		echo "\"  >";
+		echo $this->getItemHead($item_id);
+		echo "</a></td></tr></table>";
 		if ($this->open_items[$item_id])
 			$this->printItemDetails($item_id);
 		return;
@@ -242,7 +239,7 @@ class StudipRangeTreeView {
 			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		
 		if ($this->tree->isLastKid($item_id) || (!$this->open_ranges[$item_id] && $item_id == $this->start_item_id)) 
-			$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output;
+			$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		else 
 			$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output;
 		if ($item_id != $this->start_item_id){			
@@ -250,7 +247,7 @@ class StudipRangeTreeView {
 			while($this->tree->tree_data[$parent_id]['parent_id'] != $this->start_item_id){
 				$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
 				if ($this->tree->isLastKid($parent_id))
-					$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"20\" height=\"20\" border=\"0\" ></td>" . $level_output; //nothing
+					$level_output = "<td class=\"blank\" background=\"pictures/forumleer.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //nothing
 				else
 					$level_output = "<td class=\"blank\" background=\"pictures/forumstrich.gif\" ><img src=\"pictures/forumleer.gif\" width=\"10\" height=\"20\" border=\"0\" ></td>" . $level_output; //vertical line
 			}

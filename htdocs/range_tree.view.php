@@ -49,5 +49,6 @@ $_views["TREE_SEARCH_FAK"] = array("query" => "SELECT Name,Fakultaets_id FROM Fa
 $_views["CAT_UPD_PRIO"] = array("query" => "UPDATE kategorien SET priority=!,chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
 $_views["CAT_UPD_CONTENT"] = array("query" => "UPDATE kategorien SET name=?, content=?, chdate=UNIX_TIMESTAMP() WHERE kategorie_id=?");
 $_views["CAT_INS_ALL"] = array("query" => "INSERT INTO kategorien (kategorie_id,range_id,name,content,priority,mkdate,chdate)VALUES (?,?,?,?,!,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())");
-
-							?>
+$_views["CAT_DEL"] = array("query" => "DELETE FROM kategorien WHERE kategorie_id IN (&)");
+$_views["CAT_DEL_RANGE"] = array("query" => "DELETE FROM kategorien WHERE range_id IN (&)");
+?>
