@@ -416,4 +416,16 @@ function mila_extern ($string, $length) {
 	return $string;
 }
 
+function get_start_item_id ($object_id) {
+	$db =& new DB_Seminar();
+	$query = "SELECT item_id FROM range_tree WHERE studip_object_id='$object_id'";
+	
+	$db->query($query);
+	
+	if ($db->next_record())
+		return $db->f("item_id");
+	
+	return FALSE;
+}
+
 ?>
