@@ -18,18 +18,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-  $perm->check("admin");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+$perm->check("admin");
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 ## Set this to something, just something different...
   $hash_secret = "hgeisgczwgebt";
   
- ## If is set 'cancel', we leave the adminstration form...
- if (isset($cancel)) unset ($i_view);
+## If is set 'cancel', we leave the adminstration form...
+if (isset($cancel)) unset ($i_view);
 
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
@@ -47,194 +47,209 @@ if ($EXTERN_ENABLE) {
 	require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 }
 	
-###
-### Submit Handler
-###
 
-## Get a database connection
+// Get a database connection
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
 
-## Check if there was a submission
+// Check if there was a submission
 while ( is_array($HTTP_POST_VARS) 
      && list($key, $val) = each($HTTP_POST_VARS)) {
+
   switch ($key) {
  	
-  ## Create a new Institut
-  case "create_x":
-  if (!$perm->is_fak_admin()){
-	  $msg = "error§<b>Sie haben nicht die Berechtigung, um neue Einrichtungen zu erstellen!</b>";
-	  break;
-  }
-  ## Do we have all necessary data?
-	if (empty($Name)) {
-      $msg="error§<b>Bitte geben sie eine Bezeichnung f&uuml;r die Einrichtung ein!</b>";
-      $i_view="new";
-      break;
-    }
-    
-    ## Does the Institut already exist?
-    ## NOTE: This should be a transaction, but it is not...
-    $db->query("select * from Institute where Name='$Name'");
-    if ($db->nf()>0) {
-      $msg="error§<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" existiert bereits!";
-      break;
-    }
-
-    ## Create an id
-    $i_id=md5(uniqid($hash_secret));
-	if (!$Fakultaet){
-		if ($perm->have_perm("root")){
-		$Fakultaet = $i_id;
-		} else {
-			$msg = "error§<b>Sie haben nicht die Berechtigung neue Fakult&auml;ten zu erstellen";
+	// Create a new Institut
+	case "create_x":
+	  if (!$perm->is_fak_admin()) {
+		  $msg = "error§<b>" . _("Sie haben nicht die Berechtigung, um neue Einrichtungen zu erstellen!") . "</b>";
+		  break;
+	  }
+	  // Do we have all necessary data?
+		if (empty($Name)) {
+			$msg="error§<b>" . _("Bitte geben sie eine Bezeichnung f&uuml;r die Einrichtung ein!") . "</b>";
+			$i_view="new";
 			break;
 		}
-	}
-	## insert the Institut...
-	if ($home == "")
-		$home = "http://www.studip.de";
-    $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','".time()."', '".time()."')";
-    $db->query($query);
-    if ($db->affected_rows() == 0) {
-      $msg="error§<b>Datenbankoperation gescheitert: $query </b>";
-      break;
-    }
-       ## Create default folder and discussion
-    CreateTopic('Allgemeine Diskussionen', " ", 'Hier ist Raum für allgemeine Diskussionen', 0, 0, $i_id, 0);
-    $db->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$i_id."',name='Allgemeiner Dateiordner', description='Ablage für allgemeine Ordner und Dokumente der Einrichtung', mkdate='".time()."', chdate='".time()."'");
+    
+		// Does the Institut already exist?
+		// NOTE: This should be a transaction, but it is not...
+		$db->query("select * from Institute where Name='$Name'");
+		if ($db->nf()>0) {
+			$msg="error§<b>" . sprintf(_("Die Einrichtung \"%s\" existiert bereits!"), htmlReady(stripslashes($Name)));
+			break;
+		}
+
+		// Create an id
+		$i_id=md5(uniqid($hash_secret));
+		if (!$Fakultaet) {
+			if ($perm->have_perm("root")) {
+				$Fakultaet = $i_id;
+			} else {
+				$msg = "error§<b>" . _("Sie haben nicht die Berechtigung neue Fakult&auml;ten zu erstellen");
+				break;
+			}
+		}
+	
+		// insert the Institut...
+		if ($home == "")
+			$home = "http://www.studip.de";
+	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','".time()."', '".time()."')";
+	  $db->query($query);
+	  if ($db->affected_rows() == 0) {
+	  	$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
+			break;
+		}
+
+		// Create default folder and discussion
+		CreateTopic(_('Allgemeine Diskussionen'), " ", _('Hier ist Raum für allgemeine Diskussionen'), 0, 0, $i_id, 0);
+		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$i_id."', name='" . _("Allgemeiner Dateiordner") . "', description='" . _("Ablage für allgemeine Ordner und Dokumente der Einrichtung") . "', mkdate='".time()."', chdate='".time()."'");
  
-    $msg="msg§<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde angelegt.</b>";
+		$msg="msg§<b>" . sprintf(_("Die Einrichtung \"%s\" wurde angelegt."), htmlReady(stripslashes($Name))) . "</b>";
    
-   $i_view = $i_id;
+		$i_view = $i_id;
 
-   //This will select the new institute later for navisgation (=>links_admin.inc.php)
-   $admin_inst_id = $i_id;
-   openInst($i_id);
-  break;
+		//This will select the new institute later for navigation (=>links_admin.inc.php)
+		$admin_inst_id = $i_id;
+		openInst($i_id);
+	  break;
 
-  ## Change Institut name
-  case "i_edit_x":
+	// Change Institut name
+	case "i_edit_x":
 
-  if (!$perm->have_studip_perm("admin",$i_id)){
-	$msg = "error§<b>Sie haben nicht die Berechtigung diese Einrichtungen zu ver&auml;ndern!</b>";
-	break;
-  }
+		if (!$perm->have_studip_perm("admin",$i_id)){
+			$msg = "error§<b>" . _("Sie haben nicht die Berechtigung diese Einrichtungen zu ver&auml;ndern!") . "</b>";
+			break;
+		}
 	  
-	## Do we have all necessary data?
-    if (empty($Name)) {
-      $msg="error§<b>Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!</b>";
-      break;
-    }
+		// Do we have all necessary data?
+		if (empty($Name)) {
+			$msg="error§<b>" . _("Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!") . "</b>";
+			break;
+		}
 
-    ## Update Institut information.
-    $query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type' ,chdate=".time()." where Institut_id = '$i_id'";
-    $db->query($query);
-    if ($db->affected_rows() == 0) {
-      	$msg="error§<b>Datenbankoperation gescheitert: $query</b>";
-      	break;
-     	}
+		// Update Institut information.
+		$query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type' ,chdate=".time()." where Institut_id = '$i_id'";
+		$db->query($query);
+		if ($db->affected_rows() == 0) {
+			$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
+			break;
+		}
     
     
-    $msg="msg§<b>Die Daten der Einrichtung \"".htmlReady(stripslashes($Name))."\" wurden ver&auml;ndert.</b>";
-  break;
+		$msg="msg§<b>" . sprintf(_("Die Daten der Einrichtung \"%s\" wurden ver&auml;ndert."), htmlReady(stripslashes($Name))) . "</b>";
+		break;
 
-  ## Delete the Institut
+	// Delete the Institut
   case "i_kill_x":
 
-    ## Institut in use?
-	$db->query("SELECT * FROM seminare WHERE Institut_id = '$i_id'");
-    if ($db->next_record()) {
-      $msg="error§<b>Diese Einrichtung kann nicht gel&ouml;scht werden, da noch Veranstaltungen an dieser Einrichtung existieren!</b>";
-      break;
-    }
-	$db->query("SELECT a.Institut_id,a.Name, IF(a.Institut_id=a.fakultaets_id,1,0) AS is_fak, count(b.Institut_id) as num_inst FROM Institute a LEFT JOIN Institute b ON (a.Institut_id=b.fakultaets_id) WHERE a.Institut_id ='$i_id' AND b.Institut_id!='$i_id' AND a.Institut_id=a.fakultaets_id GROUP BY a.Institut_id ");
-	$db->next_record();
-	if($db->f("num_inst")){
-		$msg="error§<b>Diese Einrichtung kann nicht gel&ouml;scht werden, da sie den Status Fakult&auml;t hat, und noch andere Einrichtungen zugeordnet sind!</b>";
-		break;
-	}
-	if ($db->f("is_fak") && !$perm->have_perm("root")){
-		$msg="error§<b>Sie haben nicht die Berechtigung Fakult&auml;ten zu l&oumlschen!</b>";
-		break;
-	}
-	
-	// delete users in user_inst
-	$query = "DELETE FROM user_inst WHERE Institut_id='$i_id'";
-	$db->query($query);
-	if (($db_ar = $db->affected_rows()) > 0) {
-		$msg.="msg§$db_ar Mitarbeiter gel&ouml;scht.§";
-	}
-	
-	// delete facher in seminar_inst
-	$query = "DELETE FROM seminar_inst WHERE Institut_id='$i_id'";
-	$db->query($query);
-	if (($db_ar = $db->affected_rows()) > 0) {
-		$msg.="msg§$db_ar beteiligte Veranstaltungen gel&ouml;scht.§";
-	}
-	
-	// delete literatur in literatur
-	$query = "DELETE FROM literatur WHERE range_id='$i_id'";
-	$db->query($query);
-	if (($db_ar = $db->affected_rows()) > 0) {
-		$msg.="msg§Literatur / Links gel&ouml;scht.§";
-	}
-	
-	//deleting news is done by the garbage collector in local.inc
-	
-	//updating range_tree
-	$query = "UPDATE range_tree SET name='$Name (in Stud.IP gelöscht)',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";
-	$db->query($query);
-	if (($db_ar = $db->affected_rows()) > 0) {
-		$msg.="msg§$db_ar Bereiche im Einrichtungsbaum angepasst§";
-	}
-	// Statusgruppen entfernen
-	 if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
-		$msg .= "msg§$db_ar Funktionen / Gruppen gel&ouml;scht.§";
-	}
-	//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
-	if ($RESOURCES_ENABLE) {
-		$killAssign = new DeleteResourcesUser($u_id);
-		$killAssign->delete();
-	}
-  
-	// delete all configuration files for the "extern modules"
-	if ($EXTERN_ENABLE) {
-		$counts = delete_all_configs($i_id);
-		if ($counts["records"]) {
-			$msg .= "msg§" . sprintf(_("%s Konfigurations-Dateien gel&ouml;scht."), $counts["records"]);
-			$msg .= "§";
+		// Institut in use?
+		$db->query("SELECT * FROM seminare WHERE Institut_id = '$i_id'");
+		if ($db->next_record()) {
+			$msg="error§<b>" . _("Diese Einrichtung kann nicht gel&ouml;scht werden, da noch Veranstaltungen an dieser Einrichtung existieren!") . "</b>";
+			break;
 		}
-	}
-    ## delete folders and discussions
-    $query = "DELETE from px_topics where Seminar_id='$i_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
-      $msg.="msg§$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.§";
-    }
-    $db_ar = recursiv_folder_delete($i_id);
-    if ($db_ar > 0)
-     $msg.="msg§$db_ar Dokumente gel&ouml;scht.§";
-
-    $msg.="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!§";
-  	$i_view="delete";
-
-    ## Delete that Institut.
-    $query = "delete from Institute where Institut_id='$i_id'";
-    $db->query($query);
-    if ($db->affected_rows() == 0) {
-      $msg="error§<b>Datenbankoperation gescheitert: </b> $query</b>";
-      break;
-    }
-    
-	//We deleted that intitute, so we have to unset the selection 
-	closeObject();
-	break;
+		
+		$db->query("SELECT a.Institut_id,a.Name, IF(a.Institut_id=a.fakultaets_id,1,0) AS is_fak, count(b.Institut_id) as num_inst FROM Institute a LEFT JOIN Institute b ON (a.Institut_id=b.fakultaets_id) WHERE a.Institut_id ='$i_id' AND b.Institut_id!='$i_id' AND a.Institut_id=a.fakultaets_id GROUP BY a.Institut_id ");
+		$db->next_record();
+		if($db->f("num_inst")) {
+			$msg="error§<b>" . _("Diese Einrichtung kann nicht gel&ouml;scht werden, da sie den Status Fakult&auml;t hat, und noch andere Einrichtungen zugeordnet sind!") . "</b>";
+			break;
+		}
+		
+		if ($db->f("is_fak") && !$perm->have_perm("root")){
+			$msg="error§<b>" . _("Sie haben nicht die Berechtigung Fakult&auml;ten zu l&oumlschen!") . "</b>";
+			break;
+		}
 	
-  default:
-  break;
- }
+		// delete users in user_inst
+		$query = "DELETE FROM user_inst WHERE Institut_id='$i_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$msg.="msg§" . sprintf(_("%s Mitarbeiter gel&ouml;scht."), $db_ar) . "§";
+		}
+	
+		// delete participations in seminar_inst
+		$query = "DELETE FROM seminar_inst WHERE Institut_id='$i_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$msg.="msg§" . sprintf(_("%s Beteiligungen an Veranstaltungen gel&ouml;scht"), $db_ar) . ".§";
+		}
+	
+		// delete literatur in literatur
+		$query = "DELETE FROM literatur WHERE range_id='$i_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$msg.="msg§" . _("Literatur / Links gel&ouml;scht.") . "§";
+		}
+	
+		// delete news-links
+	  $query = "DELETE FROM news_range where range_id='$i_id'";
+    $db->query($query);
+		// check News, if there are now entries without range...
+	  $query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
+    $db->query($query);
+		while ($db->next_record()) {			  // this News are unconnected...
+			$tempNews_id = $db->f("news_id");
+		  $query = "DELETE FROM news where news_id = '$tempNews_id'";
+	    $db2->query($query);
+		}
+	
+		//updating range_tree
+		$query = "UPDATE range_tree SET name='$Name " . _("(in Stud.IP gelöscht)") . "',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$msg.="msg§" . sprintf(_("%s Bereiche im Einrichtungsbaum angepasst."), $db_ar) . "§";
+		}
+		
+		// Statusgruppen entfernen
+		if ($db_ar = DeleteAllStatusgruppen($i_id) > 0) {
+			$msg .= "msg§" . sprintf(_("%s Funktionen / Gruppen gel&ouml;scht"), $db_ar) . ".§";
+		}
+		
+		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
+		if ($RESOURCES_ENABLE) {
+			$killAssign = new DeleteResourcesUser($i_id);
+			$killAssign->delete();
+		}
+  
+		// delete all configuration files for the "extern modules"
+		if ($EXTERN_ENABLE) {
+			$counts = delete_all_configs($i_id);
+			if ($counts["records"]) {
+				$msg .= "msg§" . sprintf(_("%s Konfigurations-Dateien gel&ouml;scht."), $counts["records"]);
+				$msg .= "§";
+			}
+		}
+		
+		// delete folders and discussions
+		$query = "DELETE from px_topics where Seminar_id='$i_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$msg.="msg§" . sprintf(_("%s Postings aus dem Forum der Einrichtung gel&ouml;scht."), $db_ar) . "§";
+    }
+		$db_ar = recursiv_folder_delete($i_id);
+		if ($db_ar > 0)
+			$msg.="msg§" . sprintf(_("%s Dokumente gel&ouml;scht."), $db_ar) . "§";
+
+		// Delete that Institut.
+		$query = "DELETE FROM Institute WHERE Institut_id='$i_id'";
+		$db->query($query);
+		if ($db->affected_rows() == 0) {
+			$msg="error§<b>" . _("Datenbankoperation gescheitert:") . "</b> " . $query;
+			break;
+		} else {
+			$msg.="msg§" . sprintf(_("Die Einrichtung \"%s\" wurde gel&ouml;scht!"), htmlReady(stripslashes($Name))) . "§";
+			$i_view="delete";
+		}
+    
+		// We deleted that intitute, so we have to unset the selection 
+		closeObject();
+		break;
+	
+	default:
+		break;
+	}
 }
 
 //workaround
@@ -254,11 +269,11 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 	<td class="topic"colspan=2 align="left"><b>&nbsp;<b>
 	<?
 	if ($i_view == "new") {
-		echo "Anlegen einer neuen Einrichtung";
+		echo _("Anlegen einer neuen Einrichtung");
 	} elseif ($i_view == "delete"){
-		echo "Einrichtung gel&ouml;scht";
+		echo _("Einrichtung gel&ouml;scht");
 	} else {
-		print getHeaderLine($i_view)." -  Grunddaten";
+		print getHeaderLine($i_view)." -  " . _("Grunddaten");
 	}
 	?></b></td>
 </tr>
@@ -280,9 +295,9 @@ if (isset($msg)) {
 <?
 if ($i_view=="delete") {
 	echo "<tr><td class=\"blank\" colspan=\"2\"><table width=\"70%\" align=\"center\" class=\"steelgraulight\" >";
-	echo "<tr><td><br>Die ausgewählte Einrichtung wurde gel&ouml;scht.<br> Bitte wählen Sie über das Schlüsselsymbol ";
-	echo "<a href=\"admin_institut.php?list=TRUE\"><img " . tooltip("Neue Auswahl") . " align=\"absmiddle\" src=\"pictures/admin.gif\" border=\"0\"></a>";
-	echo " eine andere Einrichtung aus.<br><br></td></tr></table><br><br></td></tr></table></html>";
+	echo "<tr><td><br>" . _("Die ausgewählte Einrichtung wurde gel&ouml;scht.") . "<br>";
+	printf(_("Bitte wählen Sie über das Schlüsselsymbol %s eine andere Einrichtung aus."), "<a href=\"admin_institut.php?list=TRUE\"><img " . tooltip(_("Neue Auswahl")) . " align=\"absmiddle\" src=\"pictures/admin.gif\" border=\"0\"></a>");
+	echo "<br><br></td></tr></table><br><br></td></tr></table></html>";
 	page_close();
 	die;
 }
@@ -302,19 +317,19 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 <tr><td class="blank" colspan=2>
 <table border=0 align="center" width="50%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Name: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Name" size=50 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Fakult&auml;t:</td>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Name:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Name" size=50 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Fakult&auml;t:")?></td>
 		<td class="<? echo $cssSw->getClass() ?>" align=left>
 		<?php
-		if ($perm->is_fak_admin() && ($perm->have_studip_perm("admin",$db->f("fakultaets_id")) || $i_view == "new")){
-			if ($_num_inst){
-				echo "\n<font size=\"-1\"><b>Diese Einrichtung hat den Status einer Fakult&auml;t.<br>";
-				echo "Es wurden bereits $_num_inst andere Einrichtungen zugeordnet.</b></font>";
+		if ($perm->is_fak_admin() && ($perm->have_studip_perm("admin",$db->f("fakultaets_id")) || $i_view == "new")) {
+			if ($_num_inst) {
+				echo "\n<font size=\"-1\"><b>" . _("Diese Einrichtung hat den Status einer Fakult&auml;t.") . "<br>";
+				printf(_("Es wurden bereits %s andere Einrichtungen zugeordnet."), $_num_inst) . "</b></font>";
 				echo "\n<input type=\"hidden\" name=\"Fakultaet\" value=\"$i_id\">";
 			} else {
 				echo "\n<select name=\"Fakultaet\">";
 				if ($perm->have_perm("root")) {
-					printf ("<option %s value=\"%s\">Diese Einrichtung hat den Status einer Fakult&auml;t</option>", ($db->f("fakultaets_id") == $db->f("Institut_id")) ? "selected" : "", $db->f("Institut_id"));
+					printf ("<option %s value=\"%s\">" . _("Diese Einrichtung hat den Status einer Fakult&auml;t") . "</option>", ($db->f("fakultaets_id") == $db->f("Institut_id")) ? "selected" : "", $db->f("Institut_id"));
 					$db2->query("SELECT Institut_id,Name FROM Institute WHERE Institut_id=fakultaets_id AND fakultaets_id !='". $db->f("institut_id") ."' ORDER BY Name");
 				} else {
 					$db2->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute USING (Institut_id) WHERE user_id='$user->id' AND inst_perms='admin' AND a.Institut_id=fakultaets_id AND fakultaets_id !='". $db->f("institut_id") ."' ORDER BY Name");
@@ -330,7 +345,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 			
 		?>
 	</td>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Bezeichnung: </td><td class="<? echo $cssSw->getClass() ?>" ><select name="type">
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Bezeichnung:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><select name="type">
 	<? 
 	$i=0;
 	foreach ($INST_TYPE as $a) {
@@ -339,35 +354,32 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 			echo "<option selected value=\"$i\">".$INST_TYPE[$i]["name"]."</option>";
 		else
 			echo "<option value=\"$i\">".$INST_TYPE[$i]["name"]."</option>";		
-		}
+	}
 	?></select></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Strasse: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="strasse" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Strasse")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Ort: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="plz" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Plz")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Telefonnummer: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="telefon" size=32 maxlength=254 value="<?php echo htmlReady($db->f("telefon")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Faxnummer: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="fax" size=32 maxlength=254 value="<?php echo htmlReady($db->f("fax")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Emailadresse: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Homepage: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Strasse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="strasse" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Strasse")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Ort:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="plz" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Plz")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Telefonnummer:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="telefon" size=32 maxlength=254 value="<?php echo htmlReady($db->f("telefon")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Faxnummer:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="fax" size=32 maxlength=254 value="<?php echo htmlReady($db->f("fax")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Emailadresse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Homepage:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
 	
 	
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 	
 	<? 
-	if ($i_view != "new")
-		{
+	if ($i_view != "new") {
 		?>
 		<input type="hidden" name="i_id"   value="<?php $db->p("Institut_id") ?>">
-		<input type="IMAGE" name="i_edit" src="./pictures/buttons/uebernehmen-button.gif" border=0 value=" Ver&auml;ndern ">
+		<input type="IMAGE" name="i_edit" <?=makeButton("uebernehmen", "src")?> border=0 value=" Ver&auml;ndern ">
 		<?
-		if ($db->f("number") < 1 && !$_num_inst){
+		if ($db->f("number") < 1 && !$_num_inst) {
 			?>
-			&nbsp;<input type="IMAGE" name="i_kill" src="./pictures/buttons/loeschen-button.gif" border=0 value=" L&ouml;schen ">
+			&nbsp;<input type="IMAGE" name="i_kill" <?=makeButton("loeschen", "src")?> border=0 value=" L&ouml;schen ">
 			<?
 		}
-		}
-	else
-		{
-		echo "<input type=\"IMAGE\" name=\"create\" src=\"./pictures/buttons/anlegen-button.gif\" border=0 value=\"Anlegen\">";
-		}
+	} else {
+		echo "<input type=\"IMAGE\" name=\"create\" " . makeButton("anlegen", "src") . " border=0 value=\"Anlegen\">";
+	}
 	?>
 	<input type="hidden" name="i_view" value="<? printf ("%s", ($i_view=="new") ? "create" : $i_view);  ?>">
 	</td></tr></table>
