@@ -289,7 +289,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 <?
 // Anzeige der Wartelisten
 
-      $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) WHERE user_id = '$user->id'");
+      $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) WHERE user_id = '$user->id'");
       IF ($db->num_rows()) {
       	?>
        	<tr>
@@ -306,17 +306,44 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
        	    ECHO "<th width=\"3%\">X</tr>";
       }
 	WHILE ($db->next_record()) {
+        IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
+                 $db2=new DB_Seminar;
+                 $admission_studiengang_id = $db->f("studiengang_id");
+                 $admission_seminar_id = $db->f("seminar_id");
+                 $db2->query("SELECT quota FROM admission_seminar_studiengang WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
+                 IF ($db2->next_record()) {
+                    $plaetze = round ($db->f("admission_turnout") * ($db2->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
+                 }
+                 $db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
+                 IF ($db2->next_record()) {
+                    $wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
+                 }
+                 IF ($plaetze >= $wartende) $admission_chance = 100;   // ich komm auf jeden Fall rein
+                 ELSE $admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
+                 $chance_color = dechex(255-(200-($admission_chance*2)));  // Gruen der Farbe nimmt mit Wahrscheinlichkeit ab
+        }
+        ELSE {  // wir sind in einer Warteliste
+            IF ($db->f("position") >= 30) $chance_color = 44; // das wird wohl nix mehr mit nachrücken
+            ELSE $chance_color = dechex(255-($db->f("position")*6)); // da gibts vielleicht noch Hoffnung, also grün
+        }
 		$cssSw->switchClass();
-	     	printf ("<tr><td bgcolor=\"%s\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>","#880000");
-	     	printf ("<td class=\"%s\">&nbsp;</td>",$cssSw->getClass());
-	     	printf ("<td class=\"%s\">",$cssSw->getClass());
+	    printf ("<tr><td bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
+	    printf ("<td class=\"%s\">&nbsp;</td>",$cssSw->getClass());
+	    printf ("<td class=\"%s\">",$cssSw->getClass());
 		print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";
 		printf ("<td align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.Y", $db->f("admission_endtime")) : "-");
-		printf ("<td align=\"center\" class=\"%s\">%s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? "100%" : $db->f("position"));
+		printf ("<td align=\"center\" class=\"%s\">%s %%</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"));
 		printf ("<td align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
 		printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(),$db->f("seminar_id"));
 	}
+
+
+ // Ende Wartelisten
+
 ?>
+
+
+
 
 	</table><table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank"><tr>
 	<td class="blank" align = left width="90%"><blockquote>
