@@ -35,14 +35,14 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 
 <?php
-	include "$ABSLOUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
-	include "$ABSLOUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
+	include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
+	include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
 	
-	require_once "$ABSLOUTE_PATH_STUDIP/msg.inc.php";
-	require_once "$ABSLOUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
-	require_once "$ABSLOUTE_PATH_STUDIP/config.inc.php";
-	require_once "$ABSLOUTE_PATH_STUDIP/visual.inc.php"; // wir brauchen htmlReady
-	require_once "$ABSLOUTE_PATH_STUDIP/admission.inc.php"; // wir brauchen htmlReady
+	require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
+	require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
+	require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
+	require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; // wir brauchen htmlReady
+	require_once "$ABSOLUTE_PATH_STUDIP/admission.inc.php"; // wir brauchen htmlReady
 
 ?>
 <body>
