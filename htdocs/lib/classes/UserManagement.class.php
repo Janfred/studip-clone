@@ -478,5 +478,71 @@ class UserManagement {
 	}
 
 
+	/**
+	* Create a new password and mail it to the user
+	*
+	* @access	public
+	* @return	bool Creation successful?
+	*/
+	function setPassword() {
+		global $perm, $auth;
+	
+		// Do we have permission to do so?
+		if (!$perm->have_perm("admin")) {
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung Accounts zu ver&auml;ndern.") . "§";
+			return FALSE;
+		}
 
+		if (!$perm->have_perm("root")) {
+			if ($this->user_data['auth_user_md5.perms'] == "root") {
+				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
+				return FALSE;
+			}
+			if ($perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin"){
+				$this->db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '" . $auth->auth["uid"] . "' AND c.inst_perms='admin') 
+							WHERE a.user_id ='" . $this->user_data['auth_user_md5.user_id'] . "' AND a.inst_perms = 'admin'");
+				$this->db->next_record();
+				if (!$this->db->f("admin_ok")) {
+					$this->msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu ver&auml;ndern.") . "§";
+					return FALSE;
+				}
+			}
+		}
+
+		// Can we reach the email?
+		if (!$this->checkMail($this->user_data['auth_user_md5.Email'])) {
+			return FALSE;
+		}
+		
+		$password = $this->generate_password(6);
+		$this->user_data['auth_user_md5.password'] = md5($password);
+
+		if (!$this->storeToDatabase()) {
+			$this->msg .= "error§" . _("Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden.") . "§";
+			return FALSE;
+		}
+		
+		$this->msg .= "msg§" . sprintf(_("Passwort von User \"%s\" neu gesetzt."), $this->user_data['auth_user_md5.username']) . "§";
+
+		// include language-specific subject and mailbody
+		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
+		$Zeit=date("H:i:s, d.m.Y",time());
+		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/password_mail.inc.php");
+
+		// send mail
+		$this->smtp->SendMessage(
+				$this->smtp->env_from,
+				array($this->user_data['auth_user_md5.Email']),
+				array("From: " . $this->smtp->from,
+						"Reply-To:" . $this->smtp->abuse,
+						"To: " . $this->user_data['auth_user_md5.Email'],
+						"Subject: " . $subject),
+				$mailbody);
+		
+		return TRUE;
+
+	}
+	
 }
