@@ -36,7 +36,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbView.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/dbviews/sem_tree.view.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
-
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 	
@@ -60,10 +60,14 @@ function open_im()
 
 <?php
 
+$db = new DB_Seminar;
+$db2 = new DB_Seminar;
+$db3 = new DB_Seminar;
+
 $sess->register("about_data");
 $msging=new messaging;
 
-//Typen zu den Buddies beipacken
+//Buddie hinzufuegen
 if ($cmd=="add_user")
 	$msging->add_buddy ($add_uname, 0);
 
@@ -85,13 +89,9 @@ if ($sms_msg)
 $msg=rawurldecode($sms_msg);
 
 //Wenn kein Username uebergeben wurde, wird der eigene genommen:
-
 if (!isset($username) || $username == "")
 	$username = $auth->auth["uname"];
 
-$db = new DB_Seminar;
-$db2 = new DB_Seminar;
-$db3 = new DB_Seminar;
 
 //3 zeilen wegen username statt id zum aufruf... in $user_id steht jetzt die user_id (sic)
 $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
@@ -101,6 +101,8 @@ if (!$db->nf()) {
 	die;
 } else
 	$user_id=$db->f("user_id");
+	
+$DataFields = new DataFields($user_id);
 
 //Wenn er noch nicht in user_info eingetragen ist, kommt er ohne Werte rein
 $db->query("SELECT * FROM user_info WHERE user_id ='$user_id'");
@@ -286,8 +288,17 @@ if ($db->f("schwerp")!="") {
 	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("schwerp")));
 }
 
-// Ausgabe der eigenen Kategorien
+//add the free administrable datafields (these field are system categories - the user is not allowed to change the catgeories)
+$localFields = $DataFields->getLocalFields();
+	
+foreach ($localFields as $val) {
+	if ($val["content"]) {
+		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . htmlReady($val["name"]) . " </b></td></tr>";
+		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($val["content"]));
+	}
+}
 
+//add the own categories - this ones are self created by the user
 $db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY priority");
 while ($db2->next_record())  {
 	$head=$db2->f("name");
