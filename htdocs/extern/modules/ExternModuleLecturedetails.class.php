@@ -231,8 +231,8 @@ class ExternModuleLecturedetails extends ExternModule {
 			if ($visible[++$j] && $this->db->f("teilnehmer"))
 				$data["teilnehmer"] = htmlReady($this->db->f("teilnehmer"));
 			
-			if ($visible[++$j] && $this->db->f("voraussetzungen"))
-				$data["requirements"] = htmlReady($this->db->f("voraussetzungen"));
+			if ($visible[++$j] && $this->db->f("vorrausetzungen"))
+				$data["requirements"] = htmlReady($this->db->f("vorrausetzungen"));
 			
 			if ($visible[++$j] && $this->db->f("lernorga"))
 				$data["lernorga"] = htmlReady($this->db->f("lernorga"));
