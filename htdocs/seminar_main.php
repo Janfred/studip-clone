@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 	include "seminar_open.php"; //hier werden die sessions initialisiert
 	require_once "dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
-	require_once "datei.inc.php";
 	require_once "config.inc.php";
 	require_once "visual.inc.php"; 
 
