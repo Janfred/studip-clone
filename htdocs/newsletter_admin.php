@@ -126,11 +126,11 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 			$mailbody = $newsletter[$newsletter_id]["text"];
 			$mailbody.="\n---------------------------------------\n"
 			."Dies ist ein Newsletter des Systems\n"
-			."\"Stud.IP - Studienbegleitender Internetsupport Präsenzlehre\"\n"
+			."\"Stud.IP - Studienbegleitender Internetsupport von Präsenzlehre\"\n"
 			."- $UNI_NAME_CLEAN -\n\n"
-			."Dieser Newsletter wurde Ihnen aufgrund Ihres Status im System,\n\n"
-			."zugesand. Wenn Sie Sich aus dem Newsletter austragen m&ouml;chten,\n"
-			.", dann öffnen Sie bitte den Link\n\n"
+			."Dieser Newsletter wurde Ihnen aufgrund Ihres Status im System zugesand.\n\n"
+			."Wenn Sie Sich aus diesem Newsletter austragen möchten,\n"
+			."öffnen Sie bitte den Link\n\n"
 			."$url\n\n"
 			."in Ihrem Browser.\n"
 			."Möglicherweise unterstützt Ihr Mail-Programm ein einfaches Anklicken des Links.\n";
