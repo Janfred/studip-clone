@@ -7,6 +7,10 @@ class ShowTreeRow {
 
 	function ShowRow($icon, $link, $titel, $zusatz, $level='', $lines='', $weitere, $new=FALSE, $open="close", $content='Keine Beschreibung', $edit='', $breite="99%") {
 		
+		//create a link onto the titel, too
+		if ($link)
+			$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
+		
 		?><table border=0 cellpadding=0 cellspacing=0 width="100%">
 			<tr>
 				<td class="blank" valign="top" heigth=21 nowrap><img src="pictures/forumleer.gif"><img src="pictures/forumleer.gif"><?

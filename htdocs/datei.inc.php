@@ -612,6 +612,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db->f("name"))."\" />";
 				}
 			else {
+				//create a link onto the titel, too
+				if ($link)
+					$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
+
 				if ($dok_letzter > 1)
 					$titel= $tmp_titel."&nbsp;&nbsp;($dok_letzter Dokumente)";
 				elseif ($dok_letzter)
@@ -619,6 +623,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				else
 					$titel= $tmp_titel;		
 				}
+			
 			
 			//Zusatzangaben erstellen
 			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"))."";			
@@ -735,8 +740,17 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				
 				//Titelbereich erstellen
 				$tmp_titel=mila($db3->f("filename"));
-				$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024)." kB)";
 				
+				//create a link onto the titel, too
+				if ($link)
+					$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
+
+				//add the size
+				if (($db3->f("filesize") /1024 / 1024) >= 1)
+					$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024 / 1024)." MB)";
+				else
+					$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024)." kB)";
+					
 				//Zusatzangaben erstellen
 				$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
 
@@ -841,12 +855,21 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			
 			//Titelbereich erstellen
 			$tmp_titel=htmlReady(mila($db->f("name")));
+
+			//create a link onto the titel, too
+			if ($link)
+				$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
+			
 			if ($dok_letzter > 1)
 				$titel= $tmp_titel."&nbsp;&nbsp;($dok_letzter Dokumente)";
 			elseif ($dok_letzter)
 				$titel= $tmp_titel." &nbsp;&nbsp;($dok_letzter Dokument)";
 			else
-				$titel= $tmp_titel;		
+				$titel= $tmp_titel;
+
+			//create a link onto the titel, too
+			if ($link)
+				$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
 
 			//Zusatzangaben erstellen
 			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db->f("mkdate"));

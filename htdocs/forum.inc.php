@@ -191,9 +191,14 @@ function topic_liste ($eintrag, $root_id, $open, $name, $author, $create_dt, $ro
 			."</a>"
 			."&nbsp; ";
 		IF (!(have_sem_write_perm()))  $zusatz .= "<a href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$eintrag."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 alt='Klicken um in einem neuen Fenster zu antworten'></a>"; // Antwort-Pfeil
-		
+		//create a link onto the titel, too
+		if ($link)
+			$name = "<a href=\"$link\" class=\"tree\" >".htmlReady(mila($name))."</a>";
+		else
+			$name = htmlReady(mila($name));
+			
 		echo "<table width=\"90%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
-		printhead ("90%","0",$link,"close",$neuer_beitrag,$icon,htmlReady(mila($name)),$zusatz,$create_dt);
+		printhead ("90%","0",$link,"close",$neuer_beitrag,$icon,$name,$zusatz,$create_dt);
 		echo "</tr></table>\n";	
 		}
 	ELSE { 
@@ -234,6 +239,10 @@ function topic_liste ($eintrag, $root_id, $open, $name, $author, $create_dt, $ro
 		ELSE {
 			$name = htmlReady(mila($name));
 			}
+		//create a link onto the titel, too
+		if ($link)
+			$name = "<a href=\"$link\" class=\"tree\" >$name</a>";
+		
 		printhead ("90%","0",$link,"open",$neuer_beitrag,$icon,$name,$zusatz,$create_dt);
 		echo "</tr></table>\n";	
 		echo "<table width=\"90%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
@@ -428,6 +437,9 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="")
 	// Anker setzen
 				IF ($all==TRUE AND $open==$r_topic_id) echo "<a name='anker'></a>";  
 				ELSEIF (strpos($open,$r_topic_id)==0 AND !$write AND $all!=TRUE) echo "<a name='anker'></a>";  //es wird ein Anker gesetzt wenn der erste aufgeklapte Beitrag angespringen wird, etwa aus letzte5;		
+				//create a link onto the titel, too
+				if ($link)
+					$r_name = "<a href=\"$link\" class=\"tree\" >$r_name</a>";
 
 				printhead ("100%","0",$link,"open",$neuer_beitrag,$icon,$r_name,$zusatz,$r_mkdate);
 // hier prozent
@@ -467,7 +479,13 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="")
 				$zusatz .= "&nbsp;".date("d.m.Y - H:i", $r_mkdate)
 					."&nbsp; ";
 				IF (!(have_sem_write_perm())) $zusatz .= "<a class=\"printhead\" href=\"write_topic.php?write=1&root_id=".$root_id."&topic_id=".$r_topic_id."\" target=\"_new\"><img src=\"pictures/antwortnew.gif\" border=0 alt='Klicken um in einem neuen Fenster zu antworten'></a>"; // haben user Rechte? 
-				printhead ("100%","0",$link,"close",$neuer_beitrag,$icon,htmlReady(mila($r_name)),$zusatz,$r_mkdate);
+				//create a link onto the titel, too
+				if ($link)
+					$r_name = "<a href=\"$link\" class=\"tree\" >".htmlReady(mila($r_name))."</a>";
+				else
+					$r_name = htmlReady(mila($r_name));
+				
+				printhead ("100%","0",$link,"close",$neuer_beitrag,$icon,$r_name,$zusatz,$r_mkdate);
 //zweiter Prozent
 				echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td></tr></table>\n";			
 				}	
@@ -570,6 +588,8 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 						echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr>";
 						IF (leer($r_topic_id)==FALSE) $icon ="<a href='forum.php?topic_id=".$r_topic_id."&all=TRUE#anker'><img src=\"pictures/cont_folder.gif\" border=0 alt=\"alle Postings im Ordner &ouml;ffnen\"></a>";
 						ELSE $icon ="<a href='forum.php?topic_id=".$r_topic_id."&all=TRUE#anker'><img src=\"pictures/cont_folder2.gif\" border=0 alt=\"alle Postings im Ordner &ouml;ffnen\"></a>";
+						//create a link onto the titel, too
+						$name = "<a href=\"forum.php\" class=\"tree\" >$name</a>";
 
 						printhead ("100%","0","forum.php","open",$neuer_beitrag,$icon,$name,$zusatz,$mkdate);
 
@@ -594,8 +614,14 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 //nicht aufgeklappt
 
 					ELSE {
+						//create a link onto the titel, too
+						if ($link)
+							$name = "<a href=\"$link\" class=\"tree\" >".htmlReady(mila($name))."</a>";
+						else
+							$name = htmlReady(mila($name));
+							
 						echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr>";
-						printhead ("100%","0",$link,"close",$neuer_beitrag,$icon,htmlReady(mila($name)),$zusatz,$last);
+						printhead ("100%","0",$link,"close",$neuer_beitrag,$icon,$name,$zusatz,$last);
 						echo "</tr></table>\n";
 						}
 					$neuer_beitrag = FALSE;

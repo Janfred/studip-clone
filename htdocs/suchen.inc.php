@@ -41,7 +41,13 @@ function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt
 			."#anker\" class=\"printhead\">".htmlReady(mila($root_name,20))
 			."</a>";
 		echo "<table width=90% border=0 cellpadding=0 cellspacing=0 align=center><tr>";
-		printhead ("100%","0",$link,"close",$neuer_beitrag,$icon,htmlReady(mila($name)),$zusatz);
+		//create a link onto the titel, too
+		if ($link)
+			$name = "<a href=\"$link\" class=\"tree\" >".htmlReady(mila($name))."</a>";
+		else
+			$name = htmlReady(mila($name));
+		
+		printhead ("100%","0",$link,"close",$neuer_beitrag,$icon,$name,$zusatz);
 		echo "</tr></table>";	
 		}
 	ELSE { 
@@ -71,6 +77,9 @@ function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt
 		} else {
 			$name = htmlReady(mila($name));
 		}
+		//create a link onto the titel, too
+		$name = "<a href=\"$link\" class=\"tree\" >".$name."</a>";
+		
 		printhead ("100%","0",$link,"open",$neuer_beitrag,$icon,$name,$zusatz);
 		echo "</tr></table>";	
 		echo "<table width=90% border=0 cellpadding=0 cellspacing=0 align=center><tr>";
