@@ -2655,7 +2655,7 @@ function createQuestionFeatures(){
 	if (!$group->isMandatory()) $input->addAttr ("checked","checked");
 	
 	$td->addContent($input);
-	$td->addContent("nein");
+	$td->addContent(_("nein"));
 	$td->addContent(new HTMLempty ("br"));
 	
 	$input = new HTMLempty ("input");
@@ -2665,7 +2665,7 @@ function createQuestionFeatures(){
 	if ($group->isMandatory()) $input->addAttr ("checked","checked");
 	
 	$td->addContent($input);
-	$td->addContent("ja");
+	$td->addContent(_("ja"));
 	
 	$tr->addContent ($td);
 	$table->addContent ($tr);
