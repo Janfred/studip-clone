@@ -62,7 +62,7 @@ class Modules {
 			return FALSE;
 	}
 
-	function getLocalModules($range_id, $range_type = '', $modules = false) {
+	function getLocalModules($range_id, $range_type = '', $modules = false, $type = false) {
 		if (!$range_type)
 			$range_type = get_object_type($range_id);
 
@@ -78,7 +78,7 @@ class Modules {
 			$modules = $db->f("modules");
 		}
 		if ($modules === null){
-			$modules = $this->getDefaultBinValue($range_id, $range_type);	
+			$modules = $this->getDefaultBinValue($range_id, $range_type, $type);	
 		}
 
 		foreach ($this->registered_modules as $key => $val) {
@@ -91,32 +91,35 @@ class Modules {
 		return $modules_list;
 	}
 	
-	function getDefaultBinValue($range_id, $range_type = '') {
+	function getDefaultBinValue($range_id, $range_type = '', $type = false) {
 		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
 
 		$db = new DB_Seminar;
 		$bitmask = 0;
 		if (!$range_type)
 			$range_type = get_object_type($range_id);
-		
-		if ($range_type == "sem") {
-			$query = sprintf ("SELECT status AS type FROM seminare WHERE Seminar_id ='%s'", $range_id);
-		} else {
-			$query = sprintf ("SELECT type FROM Institute WHERE Institut_id ='%s'", $range_id);
-		}
 
-		$db->query($query);
-		$db->next_record();
+		if ($type === false){
+			if ($range_type == "sem") {
+				$query = sprintf ("SELECT status AS type FROM seminare WHERE Seminar_id ='%s'", $range_id);
+			} else {
+				$query = sprintf ("SELECT type FROM Institute WHERE Institut_id ='%s'", $range_id);
+			}
+
+			$db->query($query);
+			$db->next_record();
+			$type = $db->f("type");
+		}
 		
 		if ($range_type == "sem") {
 			foreach ($this->registered_modules as $key=>$val) {
-				if (($SEM_CLASS[$SEM_TYPE[$db->f("type")]["class"]][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"]))) {
+				if (($SEM_CLASS[$SEM_TYPE[$type]["class"]][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"]))) {
 					$this->setBit($bitmask, $val["id"]);
 				} 
 			}
 		} else {
 			foreach ($this->registered_modules as $key=>$val) {
-				if (($INST_MODULES[($INST_MODULES[$db->f("type")]) ? $db->f("type") : "default"][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"])))
+				if (($INST_MODULES[($INST_MODULES[$type]) ? $type : "default"][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"])))
 					$this->setBit($bitmask, $val["id"]);
 			}
 		}
