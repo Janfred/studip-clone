@@ -197,7 +197,7 @@ if (is_array($n_buddies))
 			$cssSw->switchClass();
 			}
 		if (!sizeof($non_group_buddies) && !sizeof($group_buddies) ) { // gar keine Buddies online
-			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"50%\" align=\"center\" colspan=6><font size=-1>Es sind keine Ihrer Buddies online.</font></td></tr><tr>";		
+			echo "\n<td class=\"steelgraudunkel\" width=\"50%\" align=\"center\" colspan=6><font size=-1 color=\"white\"><b>Es sind keine Ihrer Buddies online.</b></font></td></tr><tr>";		
 		}
 		echo "\n<td class=\"".$cssSw->getClass()."\" width=\"50%\" align=\"center\" colspan=6><font size=-1>Zum Addressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
 		echo "\n</tr></table></td>";
