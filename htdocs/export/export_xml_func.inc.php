@@ -7,11 +7,11 @@ global $UNI_NAME_CLEAN, $SEMESTER, $SEM_ID, $ex_type, $ex_sem, $range_name;
 	//encoding=\"ISO-8859-1\" encoding=\"UTF-8\";
 //	$xml_tag_string .= "<!DOCTYPE StudIP SYSTEM \"http://goettingen.studip.de/studip.dtd\">\n";
 	$xml_tag_string .= "<studip";
-	if ($range_name != "") $xml_tag_string .= " range=\"" . $range_name . "\"";
-	if ($UNI_NAME_CLEAN != "") $xml_tag_string .= " uni=\"" . $UNI_NAME_CLEAN . "\"";
+	if ($range_name != "") $xml_tag_string .= " range=\"" . htmlspecialchars ($range_name) . "\"";
+	if ($UNI_NAME_CLEAN != "") $xml_tag_string .= " uni=\"" . htmlspecialchars ($UNI_NAME_CLEAN) . "\"";
 	if ($ex_type !="veranstaltung") 
-		$xml_tag_string .= " zeitraum=\"" . $SEMESTER[$SEM_ID]["name"] . "\"";
-	elseif ($SEMESTER[$ex_sem]["name"] != "") $xml_tag_string .= " zeitraum=\"" . $SEMESTER[$ex_sem]["name"] . "\"";
+		$xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($SEMESTER[$SEM_ID]["name"]) . "\"";
+	elseif ($SEMESTER[$ex_sem]["name"] != "") $xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($SEMESTER[$ex_sem]["name"]) . "\"";
 	$xml_tag_string .= ">\n";
 	return $xml_tag_string;
 }
