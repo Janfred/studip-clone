@@ -16,6 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+$Id$
 */
 
 // set default Values for messaging
@@ -125,6 +127,7 @@ function startpage_redirect($page_code) {
 	}
 	page_close();
 	header ("location: $jump_page");
+	exit;
 }
 
 
@@ -188,9 +191,10 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		}
 	
 		//redirect user to another page if he want to
-		if (($my_studip_settings["startpage_redirect"]) && ($i_page == "index.php") && (!$perm->have_perm("root")))
-			startpage_redirect($my_studip_settings["startpage_redirect"]);
+		if (($my_studip_settings["startpage_redirect"]) && ($i_page == "index.php") && (!$perm->have_perm("root"))){
 			$seminar_open_redirected = TRUE;
+			startpage_redirect($my_studip_settings["startpage_redirect"]);
+		}
 	}
 }
 
