@@ -36,9 +36,9 @@ function list_restore_assign(&$this){
 		$day_offset=0;
 		$quantity=0;
 		$temp_ts=0;
-	
+		
 		$assign_object = new AssignObject($db->f("assign_id"));
-		if ($assign_object->getRepeatMode() == "na"){
+		if ($assign_object->getRepeatMode() == "na") {
 			// date without repeatation, we have to create only one event (object = event)
 			$event = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
 									$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
@@ -68,7 +68,7 @@ function list_restore_assign(&$this){
 			//check if we want to show the event and if it is not outdated
 			if ($temp_ts >= $start) {
 				 if (($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && (($quantity < $assign_object->getRepeatQuantity()) || ($assign_object->getRepeatQuantity() == -1)))  {
-					$event = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+				 	$event = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 											$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 											$assign_object->getUserFreeName());
 				
