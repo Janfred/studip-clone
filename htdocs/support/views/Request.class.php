@@ -90,16 +90,19 @@ class Request extends ShowTreeRow {
 		
 		//request user
 		if (($edit_req_object == $reqObject->id) && ($rechte)) {
-			$zusatz =  _("von: ")."<select name=\"req_user_id\" style=\"{font-size:8 pt;};\">\n";
 			$this->db->query("SELECT " . $_fullname_sql['no_title_rev'] . ", auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status IN ('tutor','autor')  AND Seminar_id='".$SessSemName[1]."' ORDER BY Nachname");
-			while ($this->db->next_record()) {
-				$zusatz .= sprintf ("<option %s style=\"{font-size:8 pt;}\" value=\"%s\">%s</option>\n", $this->db->f("user_id") == $reqObject->getUserId() ? "selected" : "", $this->db->f("user_id"), htmlReady(my_substr($this->db->f(0),0,30)));
-			}
-
-			$zusatz .= "</select>\n";
-		} else {
-			$zusatz = sprintf(_("von: ")."<a href=\"about.php?username=%s\"><font color=\"#333399\">%s</font></a>", get_username($reqObject->getUserId()), get_fullname($reqObject->getUserId()));
-		}
+			if ($this->db->nf()) {
+				$zusatz =  _("von:")." <select name=\"req_user_id\" style=\"{font-size:8 pt;};\">\n";
+				while ($this->db->next_record()) {
+					$zusatz .= sprintf ("<option %s style=\"{font-size:8 pt;}\" value=\"%s\">%s</option>\n", $this->db->f("user_id") == $reqObject->getUserId() ? "selected" : "", $this->db->f("user_id"), htmlReady(my_substr($this->db->f(0),0,30)));
+				}
+				$zusatz .= "</select>\n";
+			} else
+				$zusatz = _("von:")." "._("unbekannt");
+		} elseif ($reqObject->getUserId()) {
+			$zusatz = sprintf(_("von:")." <a href=\"about.php?username=%s\"><font color=\"#333399\">%s</font></a>", get_username($reqObject->getUserId()), get_fullname($reqObject->getUserId()));
+		} else
+			$zusatz = _("von:")." "._("unbekannt");
 
 		$new=TRUE;
 		if ($open == "open") {

@@ -124,7 +124,7 @@ class Overview extends ShowTreeRow {
 			$this->db->query($query);
 			$this->db->next_record();
 		
-			$zusatz = sprintf("<a href=\institut_main.php?auswahl=%s\"><font color=\"#333399\">%s</font></a>", $conObject->getInstitutId(), $this->db->f("Name"));
+			$zusatz = sprintf("<a href=\institut_main.php?auswahl=%s\"><font color=\"#333399\">%s</font></a>", $conObject->getInstitutId(), htmlReady($this->db->f("Name")));
 			$zusatz .= sprintf("&nbsp;(%s / %s)", $conObject->getRemainingPoints(), $conObject->getGivenPoints());
 		}
 
