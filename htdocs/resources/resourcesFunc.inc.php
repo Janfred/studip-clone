@@ -560,7 +560,7 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 							WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string')
 							AND  a.inst_perms='admin' AND a.user_id='$user_id' GROUP BY seminar_inst.seminar_id ORDER BY Name");
 				while ($db2->next_record()) {
-					$my_objects[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+					$my_objects[$db2->f("seminar_id")]=array("name"=>$db2->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
 				}
 			}
 			
@@ -595,6 +595,7 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".$username.")", "art"=>_("Personen"),  "perms" => "admin");
 		break;
 	}
+	
 	return $my_objects;
 }
 
