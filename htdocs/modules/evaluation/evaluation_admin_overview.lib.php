@@ -453,7 +453,7 @@ class EvalOverview {
    * @param  object  Evaluation  $eval  The evaluation
    */
   function createEvalContent ($eval, $number, $state, $safeguard) {
-
+      
       /* initialize variables -------- */
       $evalID = $eval->getObjectID();
 
@@ -529,32 +529,34 @@ class EvalOverview {
       $td2->addHTMLContent ($safeguard);
 
       $globalperm =  EvaluationObjectDB::getGlobalPerm();
+      
       $no_permission = EvaluationObjectDB::getEvalUserRangesWithNoPermission ($eval);
 
-      if (($globalperm == "root" || $globalperm == "admin") &&
-          !$_REQUEST["search"] &&
-          $eval->isTemplate () )
-       // no RuntimeSettings and Save-Button for Template if there are no ranges
-       $td2->addHTMLContent( $this->createDomainSettings( $eval, $state,
+      if (($globalperm == "root" || $globalperm == "admin") && 
+          !$_REQUEST["search"] && $eval->isTemplate () ) {
+         // no RuntimeSettings and Save-Button for Template if there are no ranges
+         $td2->addHTMLContent( $this->createDomainSettings( $eval, $state,
          $number % 2 ? "steel_with_graulight_bg" : "steel_with_steel1_bg" ) );
-      elseif ( $no_permission ){
-       // no RuntimeSettings if there are ranges with no permission
-       $td2->addHTMLContent( $this->createDomainSettings( $eval, $state,
+      } elseif ( $no_permission ){
+         // no RuntimeSettings if there are ranges with no permission
+         $td2->addHTMLContent( $this->createDomainSettings( $eval, $state,
          $number % 2 ? "steel_with_graulight_bg" : "steel_with_steel1_bg" ) );
-      $td2->addContent( new HTMLEmpty( "br" ) );
-      $saveButton = EvalCommon::createSubmitButton( "uebernehmen", _("Einstellungen speichern"), "save_button" );
-      $td2->addContent ($saveButton);
+         
+         $td2->addContent( new HTMLEmpty( "br" ) );
+         
+         $saveButton = EvalCommon::createSubmitButton( "uebernehmen", _("Einstellungen speichern"), "save_button" );
+         $td2->addContent ($saveButton);
       } else {
-       $td2->addHTMLContent( $this->createRuntimeSettings( $eval, $state,
+         $td2->addHTMLContent( $this->createRuntimeSettings( $eval, $state,
          $number % 2 ? "steel_with_graulight_bg" : "steel_with_steel1_bg" ) );
 
-      $td2->addHTMLContent( $this->createDomainSettings( $eval, $state,
+         $td2->addHTMLContent( $this->createDomainSettings( $eval, $state,
          $number % 2 ? "steel_with_graulight_bg" : "steel_with_steel1_bg" ) );
-      $td2->addContent( new HTMLEmpty( "br" ) );
+         $td2->addContent( new HTMLEmpty( "br" ) );
 
-      $saveButton = EvalCommon::createSubmitButton( "uebernehmen", _("Einstellungen speichern"), "save_button" );
+         $saveButton = EvalCommon::createSubmitButton( "uebernehmen", _("Einstellungen speichern"), "save_button" );
 
-      $td2->addContent ($saveButton);
+         $td2->addContent ($saveButton);
       }
 
       if (!$eval->isTemplate ()) {
@@ -1887,15 +1889,15 @@ class EvalOverview {
    * @return  string   the domain settings (html)
    */
   function createDomainSettings( $eval, $state, $style ) {
-    global $user;
-   $db  = &new EvaluationObjectDB ();
-   $evalDB  = &new EvaluationDB ();
-   $evalID = $eval->getObjectID();
-   $globalperm = $db->getGlobalPerm();
+      global $user;
+      $db         = &new EvaluationObjectDB ();
+      $evalDB     = &new EvaluationDB ();
+      $evalID     = $eval->getObjectID();
+      $globalperm = $db->getGlobalPerm();
 
-   // linked ranges
-   $rangeIDs = $eval->getRangeIDs();
-
+      // linked ranges
+      $rangeIDs = $eval->getRangeIDs();
+      
    // search results
    if ($_REQUEST["search"])
       $results = $evalDB->search_range($_REQUEST["search"]);
@@ -1975,11 +1977,10 @@ class EvalOverview {
    $table_r->addContent ($tr_r);
 
    if ($rangeIDs){
+      
       $cssSw->switchClass();
       // die verknüpften bereiche
       foreach($rangeIDs as $k => $assigned_rangeID){
-
-         $assigned_range = new Evaluation ($assigned_rangeID);
          $cssClass = substr($cssSw->getClass(), 3)."\"";
 
          $tr_r = new HTML ("tr");
