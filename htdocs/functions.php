@@ -66,7 +66,9 @@ if (!($perm->have_perm("root"))) {
 return $error_msg;
 }
 //////////////////////////////////////////////////////////////////////////
-
+////
+// !Returns global perm
+// deprecated	use $auth->auth["perm"]
 function get_global_perm($user_id="") {
 	 global $user;
 
@@ -79,6 +81,7 @@ function get_global_perm($user_id="") {
 	 else
 	 	return ("Fehler");
 }
+// TABLES: perms
 
 //////////////////////////////////////////////////////////////////////////
 
