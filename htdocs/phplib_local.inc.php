@@ -48,8 +48,8 @@ if ( (! isset($_REQUEST)) && (! isset($_GET)) ) {
 reset($HTTP_POST_VARS);
 reset($HTTP_GET_VARS);
 
-if (strstr( PHP_OS,"WIN")) 									//DON'T TOUCH: disable the chat for windows installations
-	$CHAT_ENABLE=FALSE;
+if (strstr( PHP_OS,"WIN") && $CHAT_ENABLE == true) 						//Attention: file based chat for windows installations (slow)
+	$CHAT_SERVER_NAME = "ChatFileServer";
 
 	
 /*classes for database access
