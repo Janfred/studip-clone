@@ -87,6 +87,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	$db->query("SELECT start_time FROM seminare WHERE Seminar_id = '$t_id'");
 	$db->next_record();
 	$group = select_group ($db->f("start_time"), $user->id);
+	
+	 //check stuff for admission 
+	 check_admission();
 	 
 	//nobody darf sogar durch (wird spaeter schon abgefangen)
 	if ($perm->have_perm("user")) {
