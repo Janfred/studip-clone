@@ -709,7 +709,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE
 function preg_call_link ($params, $mod, $extern = FALSE) {
 	global $auth;
 	
-	if ($extern) {
+	if ($extern)
 		$link_pic = '';
 	else
 		$link_pic = "<img src=\"pictures/link_extern.gif\" border=\"0\" />";
