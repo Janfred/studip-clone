@@ -26,7 +26,7 @@
 
 <body bgcolor="#ffffff">
 <table width="75%" align="center" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;Stud.IP - Login</b></td></tr>
+<tr><td class="topic"><img src="pictures/login.gif" border="0"><b>&nbsp;<?=_("Stud.IP - Login")?></b></td></tr>
 <tr><td class="blank">
 
 	<? 
@@ -43,35 +43,33 @@
 			&nbsp;  
 			</td>
 		</tr>
-		<? parse_msg ("error§<b>Cookies sind nicht aktiviert!</b>§info§Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den <a href=\"".$this->url()."\">Login</a>", "§", "blank", 1, TRUE);?>
+		<? parse_msg ("error§<b>" . _("Cookies sind nicht aktiviert!") . "</b>§info§" . sprintf(_("Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den %sLogin"), "<a href=\"".$this->url()."\">") . "</a>", "§", "blank", 1, TRUE);?>
 		<tr>
 			<td class="blank">
 			
-			<b>&nbsp; Was sind Cookies?</b><br /><br />
+			<b>&nbsp; <?=_("Was sind Cookies?")?></b><br /><br />
 			<blockquote>
-			<font size =-1>Cookies werden normalerweise benutzt, damit der Browser den Benutzer der Seiten beim wiederholten Aufrufen dieser Seiten wiederekennen kann <br />
-			Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten des angemeldeten Benutzers auf jeder Seite neu verf&uuml;gbar zu machen.<br />
-			Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!<br></font></blockquote>
+			<font size =-1><?=_("Cookies werden normalerweise benutzt, damit der Browser den Benutzer der Seiten beim wiederholten Aufrufen dieser Seiten wiederekennen kann <br>Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten des angemeldeten Benutzers auf jeder Seite neu verf&uuml;gbar zu machen.<br>Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!")?>
+			<br></font></blockquote>
 			
-			<b>&nbsp; Sind Cookies gefahrlich?</b><br /><br />
+			<b>&nbsp; <?=_("Sind Cookies gefahrlich?")?></b><br /><br />
 			<blockquote>
-			<font size =-1>Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken integriert sind, die ein deutlich gr&ouml;sseres Sicherheitsririko darstellen (etwa AktiveX-Elemente).<br />
-			Ausserdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie sie die entsprechenden Seiten benutzen.<br />
-			Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speicher des Browser befinden und danach automatisch verschwinden.<br>
-			Sie brauchen sich also keine Sorgen zu machen!<br /></font></blockquote>
+			<font size =-1><?=_("Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken integriert sind, die ein deutlich gr&ouml;sseres Sicherheitsririko darstellen (etwa AktiveX-Elemente).<br>Ausserdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie sie die entsprechenden Seiten benutzen.<br>Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speicher des Browser befinden und danach automatisch verschwinden.<br>Sie brauchen sich also keine Sorgen zu machen!")?>
+			<br></font></blockquote>
 
-			<b>&nbsp; Hinweise f&uuml;r Benutzer des Netscape Navigator 4.x</b><br /><br />
+			<b>&nbsp; <?=_("Hinweise f&uuml;r Benutzer des Netscape Navigator 4.x")?></b><br /><br />
 			<blockquote>
-			<font size =-1>Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:<br />
+			<font size =-1><?=_("Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:")?>
+			<br />
 			<ol type="1" start="1">
-				<li>&Ouml;ffnen Sie das Menu "Bearbeiten" in der Kopfzeile des Browsers
-				<li>Gehen Sie auf "Einstellungen"
-				<li>Wählen sie jetzt auf der linken Seite der Einstellungsseite den Menüpunkt "Erweitert"
-				<li>Aktivieren sie jetzt auf der rechten Seite die Punkte:
+				<li><?=_("&Ouml;ffnen Sie das Menu \"Bearbeiten\" in der Kopfzeile des Browsers")?>
+				<li><?=_("Gehen Sie auf \"Einstellungen\"")?>
+				<li><?=_("Wählen sie jetzt auf der linken Seite der Einstellungsseite den Menüpunkt \"Erweitert\"")?>
+				<li><?=_("Aktivieren sie jetzt auf der rechten Seite die Punkte:")?>
 					<ul type="disc">
-					<li>"Benutze JavaScript"
-					<li>"Benutze Style Sheets"
-					<li>"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt"
+					<li><?=_("\"Benutze JavaScript\"")?>
+					<li><?=_("\"Benutze Style Sheets\"")?>
+					<li><?=_("\"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt\"")?>
 					</ul>
 			</ol>
 			</font></blockquote>
@@ -90,7 +88,7 @@
 	?>
 	<table width=100% class=blank border=0 cellpadding=0 cellspacing=0><tr><td class=blank><blockquote>
 	<br>
-	Bitte identifizieren Sie sich mit Benutzername und Passwort:<br />&nbsp; 
+	<?=_("Bitte identifizieren Sie sich mit Benutzername und Passwort:")?><br />&nbsp; 
 	
 	<?
 	if  (isset($this->auth["uname"]) && $this->error_msg):
@@ -98,7 +96,7 @@
 	<!-- failed login code -->
 	<table>
 		<tr>
-			<? parse_msg ("error§Bei der Anmeldung trat ein Fehler auf: <br /><b>".$this->error_msg."</b>Versuchen Sie es noch einmal!</b>", "§", "blank", 1, FALSE );?>
+			<? parse_msg ("error§" . _("Bei der Anmeldung trat ein Fehler auf:") . " <br /><b>".$this->error_msg."</b>" . _("Versuchen Sie es noch einmal!") . "</b>", "§", "blank", 1, FALSE );?>
 		</tr>
 	</table>
 
@@ -115,12 +113,12 @@
 	<table border=0 class="steel1" align="left" cellspacing=0 cellpadding=4>
 
 		<tr valign=top align=left>
-			<td class="steel1">Benutzername: </td>
+			<td class="steel1"><?=_("Benutzername:")?> </td>
 			<td class="steel1"><input type="text" name="username" value="<?php print (isset($this->auth["uname"]) ? $this->auth["uname"] : "" ) ?>" size=20 maxlength=63></td>
 		</tr>
 
 		<tr valign=top align=left>
-			<td class="steel1">Passwort: </td>
+			<td class="steel1"><?=_("Passwort:")?> </td>
 			<td class="steel1"><input type="password" name="password" size=20 maxlength=31></td> 
 		</tr>
 
@@ -129,7 +127,7 @@
 			<td align=right class="steel1"><input type="image"  name="submitbtn" src="./pictures/buttons/login-button.gif" border="0" alt="Login" title="Login" value=" Login "></td>
 		</tr>
 
-	</table></blockquote></td><td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr><tr><td class=blank colspan=2 align=center><br><br><img src="pictures/willkommen.gif"><br>&nbsp;</td></tr></table>
+	</table></blockquote></td><td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr><tr><td class=blank colspan=2 align=center><br><br><font size =+2><b><?=_("Herzlich Willkommen!")?></b></font><br>&nbsp;</td></tr></table>
 	</form>
 
 </td></tr></table>
