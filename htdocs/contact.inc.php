@@ -243,21 +243,21 @@ function ShowUserInfo ($contact_id)
 	if ($open == $contact_id || $open == "all" || $edit_id) {
 
 		$userinfo = GetUserInfo($user_id);
-		if (sizeof($userinfo)>0) {
+		if (is_array($userinfo)) {
 			while(list($key,$value) = each($userinfo)) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
 		}
 
 		$userinstinfo = GetInstInfo($user_id);
-		if (sizeof($userinstinfo)>0) {
+		if (is_array($userinstinfo)) {
 			while(list($key,$value) = each($userinfo)) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
 		}
 
 		$extra = GetExtraUserinfo ($contact_id);
-		if (sizeof($extra)>0) {
+		if (is_array($extra)) {
 			while(list($key,$value) = each($extra)) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".htmlReady($key).":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".formatReady($value)."</font></td></tr>";
 			}
