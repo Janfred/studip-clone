@@ -150,7 +150,7 @@ if ($nclose)
 		if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
 				echo"<br>";
 		//show chat info
-		if (($GLOBALS['CHAT_ENABLE']) && ($modules["forum"])){
+		if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
 				if (chat_show_info($auswahl))
 						echo "<br>";
 		}
