@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
 "POT-Creation-Date: 2003-07-18 18:52+0200\n"
-"PO-Revision-Date: 2003-07-25 12:31+0200\n"
+"PO-Revision-Date: 2003-07-25 15:08+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -198,7 +198,7 @@ msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Enddatum der "
 "Kontingentierung ein!"
 msgstr ""
-"Please enter a valid value for the date from which the contigent groups "
+"Please enter a valid value for the date from which the contingent groups "
 "should no longer be considered!"
 
 #: admin_admission.php:233 admin_seminare_assi.php:425
@@ -212,7 +212,7 @@ msgid ""
 "Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Enddatum der "
 "Kontingentierung ein!"
 msgstr ""
-"Please enter a valid date from which the contigent groups should no longer "
+"Please enter a valid date from which the contingent groups should no longer "
 "be considered!"
 
 #: admin_admission.php:242 admin_seminare_assi.php:434
@@ -224,7 +224,7 @@ msgid ""
 "Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das Enddatum der "
 "Kontingentierung ein!"
 msgstr ""
-"Please enter valid times for the date from which the contigent groups should "
+"Please enter valid times for the date from which the contingent groups should "
 "not be considered!"
 
 #: admin_admission.php:271 admin_seminare_assi.php:577
@@ -276,9 +276,9 @@ msgid ""
 "Das Enddatum der Kontingentierung liegt nach dem ersten Veranstaltungstermin "
 "am %s. Bitte &auml;ndern Sie das Enddatum!"
 msgstr ""
-"The date after which the contigent groups should no longer be considered is "
+"The date after which the contingent groups should no longer be considered is "
 "after the first course meeting on %s. Please change the date after which the "
-"contigent groups should not be considered!"
+"contingent groups should not be considered!"
 
 #: admin_admission.php:349
 msgid "Das Losdatum liegt in der Vergangenheit. Bitte &auml;ndern Sie das Losdatum!"
@@ -291,7 +291,7 @@ msgid ""
 "Das Enddatum der Kontingentierung liegt in der Vergangenheit. Bitte &auml;"
 "ndern Sie das Datum!"
 msgstr ""
-"The date after which the contigent groups should no longer be considered is "
+"The date after which the contingent groups should no longer be considered is "
 "in the past. Please change this date!"
 
 #: admin_admission.php:354 admin_seminare_assi.php:887
@@ -307,7 +307,7 @@ msgid ""
 "Das Enddatum der Kontingentierung liegt zu nah am aktuellen Datum. Bitte "
 "&auml;ndern Sie das Enddatum!"
 msgstr ""
-"The date after which the contigent groups should no longer be considered is "
+"The date after which the contingent groups should no longer be considered is "
 "too close to the current date. Please change this date!"
 
 #: admin_admission.php:365
@@ -451,23 +451,23 @@ msgstr "Participants "
 
 #: admin_admission.php:621
 msgid "zugelassenene Studieng&auml;nge:"
-msgstr "admitted subject areas:"
+msgstr "admitted programs of study:"
 
 #: admin_admission.php:623
 msgid ""
 "Bitte geben Sie hier ein, welche Studieng&auml;nge im Anmeldeverfahren "
 "zugelassen sind."
 msgstr ""
-"Please enter here which subject areas are admitted to the registration "
+"Please enter here which programs of study are admitted to the registration "
 "procedure."
 
 #: admin_admission.php:630 admin_seminare_assi.php:2333
 msgid "Alle anderen Studieng&auml;nge"
-msgstr "All other subject areas"
+msgstr "All other programs of study"
 
 #: admin_admission.php:630 admin_seminare_assi.php:2333
 msgid "Alle Studieng&auml;nge"
-msgstr "All subject areas"
+msgstr "All programs of study"
 
 #: admin_admission.php:663 admin_seminare_assi.php:2387
 msgid "Den Studiengang aus der Liste löschen"
@@ -484,7 +484,7 @@ msgstr "Random selection procedure date"
 
 #: admin_admission.php:716 admin_seminare_assi.php:2344
 msgid "Enddatum der Kontingentierung"
-msgstr "Date after which the contigent groups will no longer be considered"
+msgstr "Date after which the contingent groups will no longer be considered"
 
 #: admin_admission.php:720
 msgid ""
@@ -500,7 +500,7 @@ msgid ""
 "aufheben soll."
 msgstr ""
 "Please enter here when the registration procedure should cease to consider "
-"the contigent grouping system. "
+"the contingent grouping system. "
 
 #: admin_admission.php:733 admin_literatur.php:115 admin_literatur.php:135
 #: admin_seminare_assi.php:2151 admin_seminare_assi.php:2200
@@ -554,7 +554,7 @@ msgstr "Course selected"
 #: adminarea_start.php:45
 #, c-format
 msgid "Hier k&ouml;nnen Sie die Daten der Veranstaltung <b>%s</b> direkt bearbeiten."
-msgstr ""
+msgstr "Here you can edit the course data <b>%s</b>."
 
 #: adminarea_start.php:46
 msgid ""
@@ -571,7 +571,7 @@ msgid ""
 "direkt die einzelnen Bereiche dieser Veranstaltung bearbeiten, indem Sie die "
 "entsprechenden Men&uuml;punkte w&auml;hlen."
 msgstr ""
-"You have selected the course <b>%s</b>. You can now edit the seperate areas "
+"You have selected the course <b>%s</b>. You can now edit the separate areas "
 "of this course, by selecting the appropriate menu tab."
 
 #: adminarea_start.php:49
@@ -768,7 +768,7 @@ msgstr "First meeting:"
 msgid ""
 "Sie haben die M&ouml;glichkeit, diesen Schritt des Veranstaltungs-"
 "Assistenten jederzeit nachzuholen."
-msgstr "You can come back to this step of the course assistantat any time."
+msgstr "You can come back to this step of the course assistant any time."
 
 #: admin_dates.php:473
 #, c-format
@@ -891,48 +891,42 @@ msgid "Datenbank Integrit&auml;t pr&uuml;fen"
 msgstr "Verify database integrity"
 
 #: admin_db_integrity.php:75
-#, fuzzy, c-format
+#, c-format
 msgid "Sie beabsichtigen %s Datens&auml;tze der Tabelle <b>%s</b> zu l&ouml;schen."
-msgstr "You intend to delete this area including all sub-areas."
+msgstr "You intend to delete %s data rows from the table <b>%s</b>."
 
 #: admin_db_integrity.php:76
-#, fuzzy
 msgid ""
 "Dieser Schritt kann <u>nicht</u> r&uuml;ckg&auml;ngig gemacht werden! Sind "
 "sie sicher?"
-msgstr ""
-"%sPlease note:%s once you have started a registration procedure, you can not "
-"undo it."
+msgstr "This step can <u>not</u> be reversed! Are you sure?"
 
 #: admin_db_integrity.php:91
-#, fuzzy
 msgid "Beim L&ouml;schen der Datens&auml;tze trat ein Fehler auf!"
-msgstr "An error occurred during registration:"
+msgstr "An error occurred while deleting the data row!"
 
 #: admin_db_integrity.php:93
 #, c-format
 msgid "Es wurden %s Datens&auml;tze der Tabelle <b>%s</b> gelöscht!"
-msgstr ""
+msgstr "%s data rows have been deleted from the table <b>%s</b>!"
 
 #: admin_db_integrity.php:104
 #, c-format
 msgid "Bereich: <i>%s</i> Datens&auml;tze der Tabelle %s</b></td>"
-msgstr ""
+msgstr "Area: <i>%s</i> data row of the table %s</b></td>"
 
 #: admin_db_integrity.php:138
 #, c-format
 msgid "Bereich: <i>%s</i> der Datenbank wird gepr&uuml;ft!"
-msgstr ""
+msgstr "Area: <i>%s</i> the data base is being verified!"
 
 #: admin_db_integrity.php:143
-#, fuzzy
 msgid "Tabelle"
-msgstr "All"
+msgstr "Table"
 
 #: admin_db_integrity.php:143
-#, fuzzy
 msgid "Ergebnis"
-msgstr "(search results)"
+msgstr "Result"
 
 #: admin_db_integrity.php:143 admin_db_integrity.php:176 archiv.php:407
 #: links_admin.inc.php:751
@@ -940,13 +934,13 @@ msgid "Aktion"
 msgstr "Action"
 
 #: admin_db_integrity.php:150
-#, fuzzy, c-format
+#, c-format
 msgid "%s Datensätze gefunden"
-msgstr "No user found. "
+msgstr "%s data rows found"
 
 #: admin_db_integrity.php:175
 msgid "Folgende Bereiche der Datenbank k&ouml;nnen gepr&uuml;ft werden:"
-msgstr ""
+msgstr "The following areas of the data base can be verified:"
 
 #: admin_db_integrity.php:176 sem_browse.inc.php:374
 #: lib/classes/SemBrowse.class.php:27
@@ -962,55 +956,47 @@ msgid "Anzahl"
 msgstr "Number"
 
 #: admin_db_integrity.php:182
-#, fuzzy
 msgid "&Uuml;berpr&uuml;ft Tabelle:"
-msgstr "Check access authorisation"
+msgstr "Verified table:"
 
 #: admin_db_integrity.php:183
-#, fuzzy
 msgid "gegen"
-msgstr "Display ?"
+msgstr "against"
 
 #: admin_extern.php:58
-#, fuzzy
 msgid ""
 "Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie "
 "diese in den Systemeinstellungen, oder wenden Sie sich an den oder die "
 "SystemadministratorIn."
 msgstr ""
-"The resource administration is not connected. Please activate it in the "
+"The external pages administration is not connected. Please activate it in the "
 "system settings or contact the system administrators."
 
 #: admin_extern.php:59
-#, fuzzy
 msgid "Modul \"externe Seiten\" nicht eingebunden"
-msgstr "Learning module not connected"
+msgstr "Module \"external pages\" not connected"
 
 #: admin_institut.php:67
-#, fuzzy
 msgid "Sie haben nicht die Berechtigung, um neue Einrichtungen zu erstellen!"
-msgstr "You don't have any authorisation to add courses for this institute."
+msgstr "You do not have the authorisation to create new institutes!"
 
 #: admin_institut.php:72
-#, fuzzy
 msgid "Bitte geben sie eine Bezeichnung f&uuml;r die Einrichtung ein!"
-msgstr "Please enter a name for the course!"
+msgstr "Please enter a description of the institute!"
 
 #: admin_institut.php:81
-#, fuzzy, c-format
+#, c-format
 msgid "Die Einrichtung \"%s\" existiert bereits!"
-msgstr "This institute is allocated a learning module."
+msgstr "The institute \"%s\" already exists!"
 
 #: admin_institut.php:91
-#, fuzzy
 msgid "Sie haben nicht die Berechtigung neue Fakult&auml;ten zu erstellen"
-msgstr "You don't have any authorisation to enter this course!"
+msgstr "You do not have the authorisation to create new faculties"
 
 #: admin_institut.php:99 admin_institut.php:137 admin_institut.php:241
 #: admin_studiengang.php:89 admin_studiengang.php:140
-#, fuzzy
 msgid "Datenbankoperation gescheitert:"
-msgstr "File transmission aborted!"
+msgstr "Data base operation aborted:"
 
 #: admin_institut.php:108 admin_seminare_assi.php:1193 folder.php:79
 #: folder.php:203 lib/classes/AdminModules.class.php:161
@@ -1018,88 +1004,82 @@ msgid "Allgemeiner Dateiordner"
 msgstr "General folder"
 
 #: admin_institut.php:108
-#, fuzzy
 msgid "Ablage für allgemeine Ordner und Dokumente der Einrichtung"
-msgstr "Clipboard for general file and documents of %s"
+msgstr "Clipboard for general file and documents for the institute"
 
 #: admin_institut.php:110
-#, fuzzy, c-format
+#, c-format
 msgid "Die Einrichtung \"%s\" wurde angelegt."
-msgstr "The allocation to institute %s has been removed."
+msgstr "The institute \"%s\" has been added."
 
 #: admin_institut.php:123
-#, fuzzy
 msgid "Sie haben nicht die Berechtigung diese Einrichtungen zu ver&auml;ndern!"
-msgstr ""
-"You don't have any authorisation to change the learning module allocation "
-"for thisinstitute."
+msgstr "You do not have the authorisation to change these institutes!"
 
 #: admin_institut.php:129
-#, fuzzy
 msgid "Bitte geben Sie eine Bezeichnung f&uuml;r die Einrichtung ein!"
-msgstr "Please enter a name for the course!"
+msgstr "Please enter a description for the institute!"
 
 #: admin_institut.php:142
-#, fuzzy, c-format
+#, c-format
 msgid "Die Daten der Einrichtung \"%s\" wurden ver&auml;ndert."
-msgstr "Your data in the institute %s have been changed"
+msgstr "Your data for the institute \"%s\" has been changed."
 
 #: admin_institut.php:151
 msgid ""
 "Diese Einrichtung kann nicht gel&ouml;scht werden, da noch Veranstaltungen "
 "an dieser Einrichtung existieren!"
-msgstr ""
+msgstr "This institute can not be deleted, since courses still exist at this institute!"
 
 #: admin_institut.php:158
 msgid ""
 "Diese Einrichtung kann nicht gel&ouml;scht werden, da sie den Status "
 "Fakult&auml;t hat, und noch andere Einrichtungen zugeordnet sind!"
 msgstr ""
+"This institute can not be deleted, since it has the status of a faculty and so other "
+"institutes are allocated to it!"
 
 #: admin_institut.php:163
-#, fuzzy
 msgid "Sie haben nicht die Berechtigung Fakult&auml;ten zu l&oumlschen!"
-msgstr "You don't have any authorisation to enter this course!"
+msgstr "You do not have the authorisation to delete faculties! "
 
 #: admin_institut.php:171
-#, fuzzy, c-format
+#, c-format
 msgid "%s Mitarbeiter gel&ouml;scht."
-msgstr "%s Subject areas deleted."
+msgstr "%s staff members deleted."
 
 #: admin_institut.php:178
-#, fuzzy, c-format
+#, c-format
 msgid "%s Beteiligungen an Veranstaltungen gel&ouml;scht"
-msgstr "%s courses were deleted."
+msgstr "%s course participants deleted"
 
 #: admin_institut.php:185
-#, fuzzy
 msgid "Literatur/Links gel&ouml;scht."
-msgstr "The file has been deleted"
+msgstr "Literature / Links deleted."
 
 #: admin_institut.php:201
-#, fuzzy
 msgid "(in Stud.IP gelöscht)"
-msgstr "logged on in Stud.IP"
+msgstr "(deleted in Stud.IP)"
 
 #: admin_institut.php:204
 #, c-format
 msgid "%s Bereiche im Einrichtungsbaum angepasst."
-msgstr ""
+msgstr "%s areas in the institute tree have been modified. "
 
 #: admin_institut.php:209
-#, fuzzy, c-format
+#, c-format
 msgid "%s Funktionen/Gruppen gel&ouml;scht"
-msgstr "Administer functions / groups"
+msgstr "%s functions / groups have been deleted."
 
 #: admin_institut.php:222
-#, fuzzy, c-format
+#, c-format
 msgid "%s Konfigurationsdateien gel&ouml;scht."
-msgstr "%s configuration files deleted."
+msgstr "%s configuration files have been deleted."
 
 #: admin_institut.php:231
 #, c-format
 msgid "%s Postings aus dem Forum der Einrichtung gel&ouml;scht."
-msgstr ""
+msgstr "%s postings from the institute forum have been deleted."
 
 #: admin_institut.php:235 new_user_md5.php:502
 #, c-format
@@ -1154,7 +1134,7 @@ msgstr "This institute has the status of a faculty."
 #: admin_institut.php:332
 #, c-format
 msgid "Es wurden bereits %s andere Einrichtungen zugeordnet."
-msgstr ""
+msgstr "It has already been allocated to %s other institutes."
 
 #: admin_institut.php:353
 msgid "Bezeichnung:"
@@ -1478,7 +1458,7 @@ msgstr "as entered"
 msgid ""
 "Bitte geben Sie die einzelnen Sitzungstermine unter dem Men&uuml;punkt "
 "Ablaufplan ein!"
-msgstr "Please enter the course meetings under the menu tab lebelled schedule!"
+msgstr "Please enter the course meetings under the menu tab labelled schedule!"
 
 #: admin_metadates.php:597
 msgid "Veranstaltungsbeginn"
@@ -1728,7 +1708,7 @@ msgid ""
 "Sie haben keinen Bereich für Ihre News ausgew&auml;hlt. Ihre News wird damit "
 "nirgends angezeigt!"
 msgstr ""
-"You haven't choosen an area for your news. Your news will therefore not be "
+"You haven't chosen an area for your news. Your news will therefore not be "
 "displayed anywhere!"
 
 #: admin_news.php:367 admin_news.php:370
@@ -1843,7 +1823,7 @@ msgstr "<i>or</i> choose one of the areas found <b>here</b>"
 
 #: admin_news.php:804
 msgid "Eine neue News im gew&auml;hlten Bereich erstellen"
-msgstr "Create a new news item in the choosen area"
+msgstr "Create a new news item in the chosen area"
 
 #: admin_news.php:805
 msgid "Eine neue News erstellen"
@@ -1851,7 +1831,7 @@ msgstr "Create a new news item"
 
 #: admin_news.php:809
 msgid "Im gew&auml;hlten Bereich sind keine News vorhanden!"
-msgstr "No news is included in the choosen area!"
+msgstr "No news is included in the chosen area!"
 
 #: admin_range_tree.php:56
 msgid "Einrichtungshierarchie bearbeiten"
@@ -2277,7 +2257,7 @@ msgstr ""
 #: admin_seminare_assi.php:862
 msgid "Bitte geben Sie einen Termin f&uuml;r das Enddatum der Kontingentierung an!"
 msgstr ""
-"Please enter a date after which the contigent groups should no longer be "
+"Please enter a date after which the contingent groups should no longer be "
 "considered!"
 
 #: admin_seminare_assi.php:870
@@ -2286,9 +2266,9 @@ msgid ""
 "Das Enddatum der Kontingentierung liegt nach dem ersten Veranstaltungstermin "
 "am %s. Bitte &auml;ndern Sie das Enddatum der Kontingentierung!"
 msgstr ""
-"The date after which the contigent groups cease to be considered is after "
+"The date after which the contingent groups cease to be considered is after "
 "the first course meeting on %s. Please change the date after which the "
-"contigent groups should cease to be considered!"
+"contingent groups should cease to be considered!"
 
 #: admin_seminare_assi.php:874
 #, c-format
@@ -2306,8 +2286,8 @@ msgid ""
 "Veranstaltungsbeginn am %s. Bitte &auml;ndern Sie das Enddatum der "
 "Kontingentierung!"
 msgstr ""
-"The date after which the contigent groups cease to be considered is after "
-"the course begins on %s. Please change the date after which the contigent "
+"The date after which the contingent groups cease to be considered is after "
+"the course begins on %s. Please change the date after which the contingent "
 "groups should no longer be considered! "
 
 #: admin_seminare_assi.php:881
@@ -2321,8 +2301,8 @@ msgid ""
 "Das Enddatum der Kontingentierung liegt in der Vergangenheit. Bitte &auml;"
 "ndern Sie das Enddatum der Kontingentierung!"
 msgstr ""
-"The date after which the contigent groups cease to be considered is in the "
-"past. Please change the date after which the contigent groups should no "
+"The date after which the contingent groups cease to be considered is in the "
+"past. Please change the date after which the contingent groups should no "
 "longer considered!"
 
 #: admin_seminare_assi.php:889
@@ -2330,8 +2310,8 @@ msgid ""
 "Das Enddatum der Kontingentierung liegt zu nah am aktuellen Datum. Bitte "
 "&auml;ndern sie das Enddatum der Kontingentierung!"
 msgstr ""
-"The date after which the contigent groups cease to be considered is too near "
-"the current date. Please change the date after which the contigent groups "
+"The date after which the contingent groups cease to be considered is too near "
+"the current date. Please change the date after which the contingent groups "
 "should no longer be considered!"
 
 #: admin_seminare_assi.php:942
@@ -2341,7 +2321,7 @@ msgid ""
 "&raquo;Dozent&laquo;. Bitte kontaktieren Sie den/die f&uuml;r Sie zust&auml;"
 "ndigeN AdministratorIn."
 msgstr ""
-"You have no authorisaation to set up a course. In order to set up a course, "
+"You have no authorisation to set up a course. In order to set up a course, "
 "note the global status of the &raquo;lecturer&laquo;. Please contact the "
 "appropriate administrator."
 
@@ -2521,7 +2501,7 @@ msgid ""
 "Losverfahren / nach Anmeldereihenfolge« benutzen."
 msgstr ""
 "Enter the expected number of participants here. Stud.IP can start a "
-"registration procedure if you select » participant limititation: by random "
+"registration procedure if you select » participant limitation: by random "
 "selection procedure / according to order of registration«."
 
 #: admin_seminare_assi.php:1462
@@ -2600,7 +2580,7 @@ msgid ""
 "Die Heimat-Einrichtung ist die Einrichtung, die offiziell für die "
 "Veranstaltung zuständig ist."
 msgstr ""
-"The home institute is the institute which is officially repsonsible for the "
+"The home institute is the institute which is officially responsible for the "
 "course."
 
 #: admin_seminare_assi.php:1599 archiv_assi.php:432 archiv.inc.php:182
@@ -2941,7 +2921,7 @@ msgid ""
 "Bitte geben Sie hier an, welche Studieng&auml;nge mit welchen Kontingenten "
 "zugelassen sind und wann das Losdatum ist:"
 msgstr ""
-"Please enter which subject areas with which contigent groups are admitted, "
+"Please enter which programs of study with which contingent groups are admitted, "
 "and when the random selection procedure date is:"
 
 #: admin_seminare_assi.php:2326
@@ -2949,8 +2929,8 @@ msgid ""
 "Bitte geben Sie hier an, welche Studieng&auml;nge mit welchen Kontingenten "
 "zugelassen sind und wann das Enddatum der Kontingentierung ist:"
 msgstr ""
-"Please enter here which subject areas with which contigent groups are "
-"admitted, and after which date the contigent grouping system should no "
+"Please enter here which program of study with which contingent groups are "
+"admitted, and after which date the contingent grouping system should no "
 "longer be considered:"
 
 #: admin_seminare_assi.php:2356
@@ -2970,7 +2950,7 @@ msgid ""
 "Personen aus der Warteliste vergeben."
 msgstr ""
 "Please state here when the registration procedure should cease to consider "
-"the contigent grouping system. After this date spare places will be "
+"the contingent grouping system. After this date spare places will be "
 "allocated to people on the waiting list."
 
 #: admin_seminare_assi.php:2423
@@ -2979,7 +2959,7 @@ msgid ""
 "welchen Kontingenten beschränkt sein soll und bis wann eine Anmeldung über "
 "das Stud.IP Anmeldeverfahren möglich ist."
 msgstr ""
-"Please enter here for which subject areas with which contigent groups the "
+"Please enter here for which programs of study with which contingent groups the "
 "course should be limited, and until when registration via the Stud.IP "
 "registration procedure is possible."
 
@@ -3038,7 +3018,7 @@ msgstr "Performance accreditation:"
 
 #: admin_seminare_assi.php:2489
 msgid "Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."
-msgstr "Please enter here what performance accreditation can be acheived."
+msgstr "Please enter here what performance accreditation can be achieved."
 
 #: admin_seminare_assi.php:2498 archiv.inc.php:144 details.php:394
 msgid "Sonstiges:"
@@ -3344,7 +3324,7 @@ msgstr "Edit course hierarchy"
 
 #: admin_sem_tree.php:130
 msgid "Veranstaltungssuche:"
-msgstr "Seach for course:"
+msgstr "Search for course:"
 
 #: admin_sem_tree.php:146 sem_browse.inc.php:252
 #: lib/classes/SemBrowse.class.php:244
@@ -3520,7 +3500,7 @@ msgstr "Read about further service tips in the %sHelp%s!"
 
 #: admin_studiengang.php:46
 msgid "Verwaltung der Studieng&auml;nge"
-msgstr "Subject area administration"
+msgstr "Program of study administration"
 
 #: admin_studiengang.php:72
 msgid "Bitte geben Sie eine Bezeichnung f&uuml;r das Fach ein!"
@@ -3864,7 +3844,7 @@ msgstr "Participating institute:"
 #: archiv_assi.php:478
 #, c-format
 msgid "noch <b>%s</b> von <b>%s</b> Veranstaltungen zum Archivieren ausgew&auml;hlt."
-msgstr ""
+msgstr "<b>%s</b> from <b>%s</b> courses selected for archiving."
 
 #: archiv_assi.php:494
 msgid "Die Veranstaltung wurde archiviert."
@@ -3918,7 +3898,7 @@ msgstr "Schedule"
 
 #: archiv.inc.php:248
 msgid "zus&auml;tzliche Termine"
-msgstr "Aditional appointments"
+msgstr "Additional appointments"
 
 #: archiv.inc.php:282
 msgid "Literatur:"
@@ -3969,13 +3949,13 @@ msgstr "The course %s has been removed from the archive."
 
 #: archiv.php:131
 msgid "Das Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht."
-msgstr "The course zip achive has been deleted from the archive."
+msgstr "The course zip archive has been deleted from the archive."
 
 #: archiv.php:133
 msgid ""
 "Das Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht "
 "werden."
-msgstr "The course zip achive could not be deleted from the archive."
+msgstr "The course zip archive could not be deleted from the archive."
 
 #: archiv.php:138
 #, c-format
@@ -4451,7 +4431,7 @@ msgstr "Fachdidaktik"
 
 #: config.inc.php:103 config.inc.php.dist:78
 msgid "Übung"
-msgstr "Excercise"
+msgstr "Exercise"
 
 #: config.inc.php:104
 msgid "Proseminar"
@@ -4923,7 +4903,7 @@ msgid ""
 msgstr ""
 "The acceptance of cookies unfortunately represents a small security risk.  "
 "However you should be aware that in most browsers, techniques are integrated "
-"which clearly represent a greater security risk (e.g.Aktive X-Elements). "
+"which clearly represent a greater security risk (e.g.Active X-Elements). "
 "<br>In addition there are two types of cookies: those which are saved on the "
 "hard drive and stay in the computer and those which are only active as long "
 "as the corresponding page is used. <br> The Stud.IP-system uses only these "
@@ -5080,7 +5060,7 @@ msgstr "E-mail:"
 
 #: datei.inc.php:140
 msgid "Sie haben diesen Ordner zum Upload ausgew&auml;hlt:"
-msgstr "You have choosen to upload a document into this folder:"
+msgstr "You have chosen to upload a document into this folder:"
 
 #: datei.inc.php:148 datei.inc.php:170
 msgid "Unzul&auml;ssige Dateitypen:"
@@ -5539,7 +5519,7 @@ msgid ""
 "noch &uuml;ber Wartelisten vergeben werden."
 msgstr ""
 "The choice of participant was conducted according to the order of "
-"registration. The contigent groups ceased to be considered after the %s. "
+"registration. The contingent groups ceased to be considered after the %s. "
 "Further places can now be allocated according to the waiting list."
 
 #: details.php:485
@@ -5554,21 +5534,21 @@ msgid ""
 "Kontingentierung wird am %s aufgehoben."
 msgstr ""
 "The participants were chosen according to the order of registration. The "
-"contigent groups will cease to be considered after the %s. "
+"contingent groups will cease to be considered after the %s. "
 
 #: details.php:492
 msgid "Kontingente:"
-msgstr "Contigent groups:"
+msgstr "Contingent groups:"
 
 #: details.php:500 sem_verify.php:283 sem_verify.php:333 sem_verify.php:335
 #, c-format
 msgid "Kontingent f&uuml;r %s (%s Pl&auml;tze)"
-msgstr "Contigent for %s (%s places)"
+msgstr "Contingent for %s (%s places)"
 
 #: details.php:500 sem_verify.php:283 sem_verify.php:333 sem_verify.php:335
 #: teilnehmer.php:578 teilnehmer.php:651
 msgid "alle Studieng&auml;nge"
-msgstr "all subject areas"
+msgstr "all programs of study"
 
 #: details.php:515
 msgid "Anzahl der Teilnehmenden:"
@@ -5642,11 +5622,11 @@ msgstr "Error while inserting in user_studiengang at ID=%s"
 
 #: edit_about.php:198
 msgid "Die Zuordnung zu Studiengängen wurde ge&auml;ndert."
-msgstr "Subject areas allocation has been changed."
+msgstr "Program of study allocation has been changed."
 
 #: edit_about.php:200
 msgid "Die Zuordnung zu Studiengängen wurde geändert!\n"
-msgstr "Subject area allocation has been changed!\n"
+msgstr "Programs of study allocation has been changed!\n"
 
 #: edit_about.php:214
 #, c-format
@@ -5948,11 +5928,11 @@ msgstr "Function(s):"
 
 #: edit_about.php:992
 msgid "Ich bin in folgenden Studieng&auml;ngen eingeschrieben:"
-msgstr "I am registered in the following subject areas:"
+msgstr "I am registered in the following programs of study:"
 
 #: edit_about.php:1002
 msgid "Studiengang"
-msgstr "Subject area"
+msgstr "Program of study"
 
 #: edit_about.php:1002 edit_about.php:1042
 msgid "austragen"
@@ -5960,7 +5940,7 @@ msgstr "remove"
 
 #: edit_about.php:1011
 msgid "Sie haben sich noch keinem Studiengang zugeordnet."
-msgstr "You have not allocated yourself a subject area."
+msgstr "You have not allocated yourself a program of study."
 
 #: edit_about.php:1011
 msgid "Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!"
@@ -5970,14 +5950,14 @@ msgstr "Please enter here the information contained in your student ID!"
 msgid ""
 "Wählen Sie die Studiengänge in Ihrem Studierendenausweis aus der folgenden "
 "Liste aus:"
-msgstr "Select the subject areas included in your student ID from the following list:"
+msgstr "Select the programs of study included in your student ID from the following list:"
 
 #: edit_about.php:1019
 msgid ""
 "Wenn Sie einen Studiengang wieder austragen möchten, markieren Sie die "
 "entsprechenden Felder in der linken Tabelle."
 msgstr ""
-"If you want to remove another subject area, select the corresponding field "
+"If you want to remove another program of study, select the corresponding field "
 "in the left-hand side table. "
 
 #: edit_about.php:1020 edit_about.php:1060
@@ -6052,7 +6032,7 @@ msgstr ""
 
 #: edit_about.php:1127
 msgid "Dann wird die Datei erstellt und zu Ihrem Rechner geschickt."
-msgstr "The file will then be generated and sent to your computor."
+msgstr "The file will then be generated and sent to your computer."
 
 #: edit_about.php:1128
 msgid "Auto-Login-Datei erzeugen"
@@ -6095,7 +6075,7 @@ msgid ""
 "Verantwortung!"
 msgstr ""
 "As administrator, you are not allowed to use this feature - you have "
-"responsibilites!"
+"responsibilities!"
 
 #: email_validation.php:46
 msgid "Best&auml;tigung der E-Mail-Adresse"
@@ -7317,7 +7297,7 @@ msgstr "Message to user"
 msgid ""
 "Sie haben keine Berechtigung Administrierende dieser Einrichtung zu l&ouml;"
 "schen."
-msgstr ""
+msgstr "You do not have authorisation to delete this institute's administrators."
 
 #: inst_admin.php:189
 #, c-format
@@ -7325,13 +7305,10 @@ msgid "%s wurde aus der Einrichtung ausgetragen."
 msgstr "%s has been removed from the institute."
 
 #: inst_admin.php:197
-#, fuzzy
 msgid ""
 "Sie haben keine Berechtigung andere Administrierende dieser Einrichtung zu "
 "ver&auml;ndern."
-msgstr ""
-"You don't have any authorisation to change the learning module allocation "
-"for thisinstitute."
+msgstr "You do not have authorisation to change other administrators of this institute."
 
 #: inst_admin.php:201
 msgid ""
@@ -7519,7 +7496,7 @@ msgid ""
 "Einrichtung bearbeiten k&ouml;nnen, m&uuml;ssen Sie der Einrichtung zuerst "
 "MitarbeiterInnen zuordnen."
 msgstr ""
-"Noone was found! Before you can edit the staff list for this institute, you "
+"No-one was found! Before you can edit the staff list for this institute, you "
 "must allocate some staff members to the institute."
 
 #: institut_browse.php:64
@@ -7735,7 +7712,7 @@ msgstr "Edit user data"
 
 #: links_about.inc.php:49
 msgid "Zuordnung zu Studieng&auml;ngen"
-msgstr "Allocate subject areas"
+msgstr "Allocate programs of study"
 
 #: links_about.inc.php:50
 msgid "Zuordnung zu Einrichtungen"
@@ -7845,7 +7822,7 @@ msgstr "Course hierarchy"
 
 #: links_admin.inc.php:270
 msgid "Studieng&auml;nge"
-msgstr "Subject areas"
+msgstr "Programs of study"
 
 #: links_admin.inc.php:271
 msgid "Sessions"
@@ -7869,7 +7846,7 @@ msgstr "To cancel the selection, please use the key symbol."
 
 #: links_admin.inc.php:292
 msgid "Ausgewählte Einrichtung:"
-msgstr "Choosen institute:"
+msgstr "Chosen institute:"
 
 #: links_admin.inc.php:294
 msgid "Keine Veranstaltung oder Einrichtung ausgewählt"
@@ -9047,7 +9024,7 @@ msgstr ""
 #: new_user_md5.php:492
 #, c-format
 msgid "%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."
-msgstr "%s allocations to study areas have been deleted."
+msgstr "%s allocations to programs of study have been deleted."
 
 #: new_user_md5.php:519
 msgid " leere Ordner gel&ouml;scht."
@@ -9147,7 +9124,7 @@ msgstr "Create new user account"
 
 #: new_user_md5.php:902
 msgid "Es wurden keine Personen gefunden, auf die die obigen Kriterien zutreffen."
-msgstr "Noone was found, who met the criteria given above."
+msgstr "No-one was found, who met the criteria given above."
 
 #: new_user_md5.php:909
 msgid "Suchergebnis: Es wurde <b>1</b> Person gefunden."
@@ -9674,7 +9651,7 @@ msgstr "Your account has not yet been connected with the linked ILIAS system."
 msgid ""
 "Hier k&ouml;nnen Sie Ihrem Stud.IP-Account einen %s ILIAS-Account zuweisen. %"
 "s"
-msgstr "Here you can%s allocate an ILIAS account %sto your Stud.IP account."
+msgstr "Here you can%s allocate an ILIAS account %s to your Stud.IP account."
 
 #: seminar_lernmodule.php:206
 msgid "Auf dieser Seite können Sie einer Einrichtung Lernmodule zuordnen."
@@ -9829,7 +9806,7 @@ msgstr "back to start page "
 msgid ""
 "Bitte w&auml;hlen Sie einen Studiengang zur Anmeldung f&uuml;r diese "
 "Veranstaltung aus!"
-msgstr "Please choose a subject area to register for this course!"
+msgstr "Please choose a program of study to register for this course!"
 
 #: sem_verify.php:110
 #, c-format
@@ -9847,7 +9824,7 @@ msgid ""
 "hochgestuft."
 msgstr ""
 "Within the course <b>%s</b>, you have been promoted to the status of "
-"<b>Autor</b>."
+"<b>Author</b>."
 
 #: sem_verify.php:142 sem_verify.php:203 sem_verify.php:211 sem_verify.php:221
 #: sem_verify.php:382 sem_verify.php:423
@@ -9932,8 +9909,8 @@ msgid ""
 "view=Karriere#studiengaenge\">pers&ouml;nlichen Homepage</a> ein!"
 msgstr ""
 "The course <b>%s</b> is participant limited. In order to be able to enter "
-"yourself for a participant limited course, you must first enter your subject "
-"area! <b>Please enter your subject area in your <a href=\"edit_about.php?"
+"yourself for a participant limited course, you must first enter your programs of study! "
+"<b>Please enter your programs of study in your <a href=\"edit_about.php?"
 "view=Karriere#studiengaenge\">Personal homepage</a>!"
 
 #: sem_verify.php:253
@@ -9945,7 +9922,7 @@ msgid ""
 "bersicht ihrer Veranstaltungen."
 msgstr ""
 "You are already on the registration / waiting list for the course<b>%s</b>. "
-"<br /> If you want to be entered for a new or another contigent group, "
+"<br /> If you want to be entered for a new or another contingent group, "
 "please first delete the current allocation seen on the course overview "
 
 #: sem_verify.php:270 sem_verify.php:317
@@ -9958,14 +9935,14 @@ msgid ""
 "Von den folgenden m&ouml;glichen Kontingenten kommt nur das <b>fett</b>  "
 "ausgegebene Kontingent f&uuml;r Sie in Frage."
 msgstr ""
-"From the following possible contigent groups, only the <b>bold</b> applies "
+"From the following possible contingent groups, only the <b>bold</b> applies "
 "to you."
 
 #: sem_verify.php:271
 msgid ""
 "Bitte best&auml;tigen Sie, wenn Sie sich in dieses Kontingent eintragen "
 "wollen:"
-msgstr "Please confirm if you would like to be added to this contigent group:"
+msgstr "Please confirm if you would like to be added to this contingent group:"
 
 #: sem_verify.php:297 sem_verify.php:345
 #, c-format
@@ -9984,7 +9961,7 @@ msgid ""
 "In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze "
 "pro Kontingent angegeben."
 msgstr ""
-"The number in brackets is the <b>total</b> available places per contigent "
+"The number in brackets is the <b>total</b> available places per contingent "
 "group."
 
 #: sem_verify.php:299 sem_verify.php:347
@@ -10010,12 +9987,12 @@ msgstr "The choice of participants followed the order of registration."
 msgid ""
 "Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente "
 "anmelden."
-msgstr "You can register for <b>one</b> of the possible contigent groups."
+msgstr "You can register for <b>one</b> of the possible contingent groups."
 
 #: sem_verify.php:318
 msgid "Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus:"
 msgstr ""
-"Please choose the contigent group which is best suited to you from the "
+"Please choose the contingent group which is best suited to you from the "
 "following list:"
 
 #: sem_verify.php:367
@@ -10145,7 +10122,7 @@ msgstr "Quota"
 msgid ""
 "Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten "
 "Veranstaltungen."
-msgstr "There are no participant restricted courses in the choosen area."
+msgstr "There are no participant restricted courses in the chosen area."
 
 #: show_bereich.php:62
 msgid "Studienbereich"
@@ -10879,7 +10856,7 @@ msgstr "Cancel writing access"
 
 #: teilnehmer.php:445 teilnehmer.php:625
 msgid "Kontingent"
-msgstr "Contigent group"
+msgstr "Contingent group"
 
 #: teilnehmer.php:449
 msgid "Schreibrecht erteilen"
@@ -11154,7 +11131,7 @@ msgid ""
 "Achtung: Beim Deaktivieren des Wiki-Webs werden <b>%s</b> einzelen Wiki-Webs "
 "gel&ouml;scht!"
 msgstr ""
-"Warning!: By deactivating the Wiki-Web, <b>%s</b> seperate Wiki-Webs will be "
+"Warning!: By deactivating the Wiki-Web, <b>%s</b> separate Wiki-Webs will be "
 "deleted! "
 
 #: lib/classes/AdminModules.class.php:94
@@ -11231,7 +11208,7 @@ msgstr "No changes applied."
 msgid ""
 "Sie beabsichtigen dieses Element, inklusive aller Unterelemente, zu l&ouml;"
 "schen. "
-msgstr "You intend to delete this element inlcuding all sub-elements."
+msgstr "You intend to delete this element including all sub-elements."
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:294
 #, c-format
