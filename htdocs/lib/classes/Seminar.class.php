@@ -290,8 +290,8 @@ class Seminar {
 			$this->visible = $this->db->f("visible");
 			$this->showscore = $this->db->f("showscore");
 			$this->modules = $this->db->f("modules");
-			return TRUE;
 			$this->is_new = false;
+			return TRUE;
 		}
 		return FALSE;
 	}
