@@ -116,33 +116,35 @@ function get_my_sem_values(&$my_sem) {
 }
 
 
-function print_seminar_content($semid,$my_sem_values) {
+function print_seminar_content($semid,$my_sem_values, $type="seminar") {
+  $link = $type."_main.php";
+  
   // Postings
   if ($my_sem_values["neuepostings"])
-		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php&view=neue&sort=age\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"), $my_sem_values["postings"], $my_sem_values["neuepostings"]))."></a>";
+		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=neue&sort=age\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"), $my_sem_values["postings"], $my_sem_values["neuepostings"]))."></a>";
   elseif ($my_sem_values["postings"])
-		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php&view=reset&sort=age\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_sem_values["postings"]))."></a>";
+		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=reset&sort=age\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_sem_values["postings"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
   if ($my_sem_values["neuedokumente"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 ".tooltip(sprintf(_("%s Dokumente, %s neue"), $my_sem_values["dokumente"], $my_sem_values["neuedokumente"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 ".tooltip(sprintf(_("%s Dokumente, %s neue"), $my_sem_values["dokumente"], $my_sem_values["neuedokumente"]))."></a>";
   elseif ($my_sem_values["dokumente"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 ".tooltip(sprintf(_("%s Dokumente"), $my_sem_values["dokumente"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 ".tooltip(sprintf(_("%s Dokumente"), $my_sem_values["dokumente"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //News
   if ($my_sem_values["neuenews"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip(sprintf(_("%s News, %s neue"), $my_sem_values["news"], $my_sem_values["neuenews"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip(sprintf(_("%s News, %s neue"), $my_sem_values["news"], $my_sem_values["neuenews"]))."></a>";
   elseif ($my_sem_values["news"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 ".tooltip(sprintf(_("%s News"), $my_sem_values["news"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 ".tooltip(sprintf(_("%s News"), $my_sem_values["news"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //SCM
   if ($my_sem_values["scmcontent"]) {
-		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=scm.php\">";
+		echo "<a href=\"$link?auswahl=$semid&redirect_to=scm.php\">";
 		if ($my_sem_values["neuscmcontent"])
 	  	echo "&nbsp; <img src=\"pictures/icon-cont2.gif\" border=0 ".tooltip(_("Zur freien Kursseite (geändert)"))."></a>";
 		else
@@ -153,17 +155,17 @@ function print_seminar_content($semid,$my_sem_values) {
 	
 	// Literaturlisten
   if ($my_sem_values["neuelitlist"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit2.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten, %s neue"), $my_sem_values["litlist"], $my_sem_values["neuelitlist"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit2.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten, %s neue"), $my_sem_values["litlist"], $my_sem_values["neuelitlist"]))."></a>";
   elseif ($my_sem_values["litlist"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten"), $my_sem_values["litlist"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='pictures/icon-lit.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten"), $my_sem_values["litlist"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   
   // Termine
   if ($my_sem_values["neuetermine"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_sem_values["termine"], $my_sem_values["neuetermine"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_sem_values["termine"], $my_sem_values["neuetermine"]))."></a>";
   elseif ($my_sem_values["termine"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_sem_values["termine"]))."></a>";
+		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_sem_values["termine"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 	
@@ -171,9 +173,9 @@ function print_seminar_content($semid,$my_sem_values) {
   // Wikiseiten
   if ($GLOBALS['WIKI_ENABLE']) {  
 	  if ($my_sem_values["neuewikiseiten"])
-			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
+			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
 	  elseif ($my_sem_values["wikiseiten"])
-			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
+			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
 	  else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"20\" border=\"0\">";
   }
@@ -181,9 +183,9 @@ function print_seminar_content($semid,$my_sem_values) {
   //votes
   if ($GLOBALS['VOTE_ENABLE']) {
   	if ($my_sem_values["neuevotes"])
-			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_sem_values["votes"], $my_sem_values["neuevotes"]))."></a>";
+			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_sem_values["votes"], $my_sem_values["neuevotes"]))."></a>";
 	  elseif ($my_sem_values["votes"])
-			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
+			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
 	  else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   }
@@ -300,6 +302,20 @@ if ($cmd=="kill_admission") {
 	  $meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen Sie sich erneut bewerben."), htmlReady($db->f("Name")));
 	}
 }
+
+//bei Bedarf aus seminar_user austragen
+if ($cmd=="inst_kill") {
+	$db->query("DELETE FROM user_inst WHERE user_id='$user->id' AND Institut_id='$auswahl'");
+	if ($db->affected_rows() == 0)
+		$meldung="error§" . _("Datenbankfehler!");
+	else {
+	  
+	  $db->query("SELECT Name FROM Institute WHERE Institut_id = '$auswahl'");
+	  $db->next_record();
+	  $meldung="msg§" . sprintf(_("Die Zuordnung zur Einrichtung %s wurde aufgehoben."), "<b>".$db->f("Name")."</b>");
+	}
+}
+
 
 // Update der Gruppen
 if ($gruppesent=="1"){
@@ -537,19 +553,177 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		<?	
 	}	 // Ende Wartelisten
  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//Info-field on the right side
+//This view is only for users up to admin
+if ( !$perm->have_perm("root")) {
+
+	// if (!isset($sortby))
+	$sortby="Name";
+	$value_list = "";
+	if ($sortby == "count")
+		$sortby = "count DESC";
+	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,if(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,modules FROM user_inst LEFT JOIN Institute b USING (Institut_id) WHERE user_inst.user_id = '$user->id' GROUP BY Institut_id ORDER BY $sortby");
+	$num_my_inst=$db->num_rows();
+	if (!$num_my_inst)
+		if ($perm->have_perm("dozent"))
+			$meldung="info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§".$meldung;
+		else
+			$meldung="info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"universit&auml;re Daten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>") . "§".$meldung;
+
+	if ($num_my_inst) {
+	 ?>
+
+							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
+								<tr valign="top" align="center">
+									<th width="1%">&nbsp; </th>
+									<th width="86%" align="left"><a href="<?=$PHP_SELF?>?sortby=Name&view=<?=$view?>"><?=_("Meine Einrichtungen")?></a></th>
+									<th width="10%"><b><?=_("Inhalt")?></b></th>
+									<?
+									if ($view=="ext") { 
+									?>
+										<th width="10%"><b>&nbsp;<?=_("besucht")?>&nbsp;</b></th>
+										<th width="10%"><b>&nbsp;<?=_("Status")?>&nbsp;</b></th>
+									<? }?>
+									<th width="3%"><b>&nbsp;X&nbsp;</b></th>
+								</tr>
+		<?
+		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
+		ob_start();
+		while ($db->next_record()) {
+			$my_inst[$db->f("Institut_id")]=array(name=>$db->f("Name"),status=>$db->f("inst_perms"),type=>($db->f("type")) ? $db->f("type") : 1, modules =>$Modules->getLocalModules($db->f("Institut_id"), "inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)));
+			$value_list.="('".$db->f("Institut_id")."',0".$loginfilenow[$db->f("Institut_id")]."),";
+			if (($GLOBALS['CHAT_ENABLE']) && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])) {
+				$chatter = $chatServer->isActiveChat($db->f("Institut_id"));
+				$chat_info[$db->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Institut_id")]["id"],
+												"is_active" => $chatServer->isActiveUser($user->id,$db->f("Institut_id")));
+				if ($chatter){
+					$active_chats[$chatServer->chatDetail[$db->f("Institut_id")]["id"]] = $db->f("Institut_id");
+				}
+			}
+			if ($db->f("is_fak") && $db->f("inst_perms") == "admin") {
+				$db2->query("SELECT a.Institut_id, a.Name, a.type FROM Institute a 
+					 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
+					 ORDER BY $sortby");
+				while($db2->next_record()) {
+					$my_inst[$db2->f("Institut_id")]=array(name=>$db2->f("Name"),status=>"admin",type=>($db2->f("type")) ? $db2->f("type") : 1,modules =>$Modules->getLocalModules($db->f("Institut_id"), "inst",$db->f("modules"),($db->f("type") ? $db->f("type") : 1)));
+					$value_list.="('".$db2->f("Institut_id")."',0".$loginfilenow[$db2->f("Institut_id")]."),";
+					if ($GLOBALS['CHAT_ENABLE'] && ($my_inst[$db->f("Institut_id")]["modules"]["chat"])){
+						$chatter = $chatServer->isActiveChat($db2->f("Institut_id"));
+						$chat_info[$db2->f("Institut_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db2->f("Institut_id")]["id"],
+						"is_active" => $chatServer->isActiveUser($user->id,$db2->f("Institut_id")));
+						if ($chatter){
+							$active_chats[$chatServer->chatDetail[$db2->f("Institut_id")]["id"]] = $db2->f("Institut_id");
+						}
+					}
+				}
+			}
+		}
+		$value_list=substr($value_list,0,-1);
+		$db->query("CREATE  TEMPORARY TABLE if NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
+		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id, loginfilenow) VALUES ".$value_list;
+		$db->query($ins_query);
+		get_my_sem_values($my_inst);
+		$db->query("DROP TABLE loginfilenow_".$user->id);
+		if ($GLOBALS['CHAT_ENABLE']){
+			if (is_array($active_chats)){
+				$chat_invs = $sms->check_list_of_chatinv(array_keys($active_chats));
+			}
+		}
+		foreach ($my_inst as $instid=>$values) {
+
+			$cssSw->switchClass();
+			$lastVisit = $loginfilenow[$instid];
+			echo "<tr ".$cssSw->getHover().">";
+			echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
+			// Name-field		
+			echo "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
+			echo "<font size=-1>".htmlReady($INST_TYPE[$values["type"]]["name"] . ": " . $values["name"])."</font>";
+			print ("</a></td>");
+			// Content-field
+			echo "<td class=\"".$cssSw->getClass()."\"  align=\"left\" nowrap>";
+			print_seminar_content($instid, $values, "institut");
+			if (($GLOBALS['CHAT_ENABLE']) && ($values["modules"]["chat"])) {
+				echo "<a href=\"".((!$auth->auth["jscript"]) ? "chat_online.php" : "#")."\" onClick=\"return open_chat(" . (($chat_info[$instid]['is_active']) ? "false" : "'$instid'") . ");\">&nbsp;";
+				echo chat_get_chat_icon($chat_info[$instid]['chatter'], $chat_invs[$chat_info[$instid]['chatuniqid']], $chat_info[$instid]['is_active'],true);
+				echo "</a>&nbsp;";
+			} else
+				echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"15\" height=\"17\" border=0>";
+				
+			if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
+				$mod_count = get_seminar_modules($instid);
+				if ($mod_count) {
+					echo "<a href=\"institut_main.php?view=show&auswahl=$instid&redirect_to=seminar_lernmodule.php\">&nbsp;";
+					echo "<img src=\"pictures/icon-lern.gif\" ";
+					if (sizeof($mod_count) == 1)
+						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
+					else
+						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
+					echo "</a>&nbsp;";
+				}
+				else
+					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
+			}
+			echo "</td>";
+
+			// Extendet views:
+
+			// last visited-field
+			if ($view=="ext") {
+				if ($loginfilenow[$instid]==0) {
+					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>n.b.</font></td>";
+				} else  {
+				 	echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$instid]),"</font></td>";
+				}
+			// Status-field
+			echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
+			}
+
+			// delete Entry from List:
+			if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
+				echo "<td class=\"".$cssSw->getClass()."\" align=center>&nbsp;</td>";
+			else
+				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"pictures/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\"></a></td>", $instid);
+		 	echo "</tr>\n";
+		}
+	} else {
+	 ?>
+	 <tr>
+	 	<td class="blank" colspan="2">&nbsp; 
+	 	</td>
+	 </tr>
+	 <tr>
+		 <td valign="top" class="blank">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+				<?
+				
+	}
+	echo "	</table></td>";
+}
+
+////////////////////
+
+
+
+
+
+
+//Info-field on the right side
 	?>
 
 	</td>
 	<td class="blank" width="270" align="right" valign="top">
 	<?
 
-	// Berechnung der uebrigen Seminare
+	// Berechnung der uebrigen Seminare und Einrichtungen
+
+	$db->query("SELECT count(*) as count  FROM Institute");
+	$db->next_record();
+	$anzahlinst = $db->f("count")-$num_my_inst;
 
 	$db->query("SELECT count(*) as count  FROM seminare");
 	$db->next_record(); 
-	$anzahltext = sprintf(_("Es sind noch %s weitere Veranstaltungen vorhanden."), ($db->f("count")-$num_my_sem));
+	$anzahltext = sprintf(_("Es sind noch %s weitere Veranstaltungen sowie %s weitere Einrichtungen vorhanden."), ($db->f("count")-$num_my_sem),$anzahlinst);
 
 
 	// View for Teachers
@@ -563,13 +737,20 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					)
 				)
 			),
-			array  ("kategorie" => _("Aktionen:"),
+			array  ("kategorie" => _("Veranstaltungen:"),
 				"eintrag" => array	(	
 					array	 (	"icon" => "pictures/suche2.gif",
 										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion%s"), "<a href=\"sem_portal.php\">", "</a>")
 					),
 					array	 (	"icon" => "pictures/admin.gif",
 										"text"  => sprintf(_("Um Veranstaltungen anzulegen, nutzen Sie bitte den %sVeranstaltungs-Assistenten%s"), "<a href=\"admin_seminare_assi.php?new_session=TRUE\">", "</a>")
+					)
+				)
+			),
+			array  ("kategorie" => _("Einrichtungen:"),
+				"eintrag" => array	(	
+					array	 (	"icon" => "resources/pictures/cont_res1.gif",
+										"text"  => sprintf(_("Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die %sEinrichtungssuche%s."), "<a href=\"institut_browse.php\">", "</a>")
 					)
 				)
 			)
@@ -590,6 +771,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				"eintrag" => array	(	
 					array	 (	"icon" => "pictures/suche2.gif",
 										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion%s"), "<a href=\"sem_portal.php\">", "</a>")
+					),
+					array	 (	"icon" => "resources/pictures/cont_res1.gif",
+										"text"  => sprintf(_("Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die %sEinrichtungssuche%s."), "<a href=\"institut_browse.php\">", "</a>")
+					),
+					array	 (	"icon" => "pictures/meinesem.gif",
+										"text"  => sprintf(_("Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufnehmen m&ouml;chten, k&ouml;nnen sie sich hier %szuordnen%s."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>")
 					)
 				)
 			)
@@ -830,8 +1017,3 @@ ELSEIF ($perm->have_perm("root")){
 ob_end_flush(); //Outputbuffering beenden
 page_close();
   ?>
-
-
-
-
-
