@@ -91,16 +91,23 @@ $SEM_TYPE[13]=array("name"=>_("sonstige"), "class"=>3);
 
 //Festlegen der zulaessigen Klassen fuer Veranstaltungen. Jeder sem_type referenziert auf eine dieser Klassen
 $SEM_CLASS[1]=array("name"=>_("Lehre"), 					//the name of the class
-					"compact_mode"=>FALSE, 				//indicates, if all fields are used in the creation process or only the fields that are necessary for workgroups
-					"workgroup_mode"=>FALSE, 				//indicates, if the workgroup mode is used (to use different declarations)
-					"only_inst_user"=>TRUE,				//indicates, that olny staff from the Einrichtungen which own the Veranstaltung, are allowed for tutor and dozent
-					"turnus_default"=>0	, 					//indicates, whether the turnus field is default set to "regulary" (0), "not regulary" (1) or "no dates" (-1) in the creation process
-					"default_read_level"=>1, 				//the default read acces level. "without signed in" (0), "signed in" (1), "password" (2)
-					"default_write_level" =>1, 				//the default write acces level. "without signed in" (0), "signed in" (1), "password" (2)
-					"bereiche"=>TRUE,					//indicates, if bereiche should be used
-					"show_browse"=>TRUE, 				//indicates, if the hierachy-system should be shown in the search-process
-					"write_access_nobody"=>FALSE, 			//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
-					"topic_create_autor"=>FALSE,			//indicates, if global autor is allowed to create topic in the forums 
+					"compact_mode"=>FALSE, 			//indicates, if all fields are used in the creation process or only the fields that are necessary for workgroups
+					"workgroup_mode"=>FALSE, 		//indicates, if the workgroup mode is used (to use different declarations)
+					"only_inst_user"=>TRUE,			//indicates, that olny staff from the Einrichtungen which own the Veranstaltung, are allowed for tutor and dozent
+					"turnus_default"=>0	, 		//indicates, whether the turnus field is default set to "regulary" (0), "not regulary" (1) or "no dates" (-1) in the creation process
+					"default_read_level"=>1, 		//the default read acces level. "without signed in" (0), "signed in" (1), "password" (2)
+					"default_write_level" =>1, 		//the default write acces level. "without signed in" (0), "signed in" (1), "password" (2)
+					"bereiche"=>TRUE,			//indicates, if bereiche should be used
+					"show_browse"=>TRUE, 			//indicates, if the hierachy-system should be shown in the search-process
+					"write_access_nobody"=>FALSE, 		//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
+					"topic_create_autor"=>FALSE,		//indicates, if global autor is allowed to create topic in the forums 
+					//modules, select the active modules for this class
+					"forum"=>TRUE,				//forum, this modul is stud_ip core; always avaiable
+					"documents"=>TRUE,			//documents, this modul is stud_ip core; always avaiable
+					"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
+					"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
+					"support"=>FALSE,			//support, only, if the modul is global activated; see local.inc (this modul is not part of the main distribution)
+					//descriptions
 					"description"=>_("Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"), 						//the description
 					"create_description"=>_("Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"));		//the description in the creation process
 
@@ -112,6 +119,9 @@ $SEM_CLASS[2]=array("name"=>_("Organisation"),
 					"default_read_level"=>2, 
 					"default_write_level" =>2, 
 					"show_browse"=>TRUE,
+					"forum"=>TRUE,
+					"documents"=>TRUE,
+					"chat"=>TRUE,					
 					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der Universit&auml;t"),
 					"create_description"=>_("In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r Forschungsprojekte anlegen."));
 
@@ -122,6 +132,9 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 					"default_write_level" =>1, 
 					"show_browse"=>TRUE,
 					"write_access_nobody"=>TRUE, 
+					"forum"=>TRUE,
+					"documents"=>TRUE,
+					"chat"=>TRUE,					
 					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der Universit&auml;t"),
 					"create_description"=>_("Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie diese Kategorie"));
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
@@ -192,15 +205,25 @@ $INST_TYPE[8]=array("name"=>_("Arbeitsgruppe"));
 $SEM_STATUS_GROUPS["default"] = array ("DozentInnen", "TutorInnen", "AutorInnen", "LeserInnen", "sonstige"); 	//the default. Don't delete this entry!
 $SEM_STATUS_GROUPS["2"] = array ("Organisatoren", "Mitglieder", "Ausschußmitglieder", "sonstige");
 $SEM_STATUS_GROUPS["3"] = array ("Moderatoren des Forums","Mitglieder", "sonstige");
-//you can add more specifig presets for the different classes 
+//you can add more specific presets for the different classes 
 
 
 //define the presets of statusgroups for Einrichtungen (refers to the key of the $INST_TYPE array)
 $INST_STATUS_GROUPS["default"] = array ("DirektorIn", "HochschullehrerIn", "Lehrbeauftragte", "Zweitmitglied", "wiss. Hilfskraft","wiss. MitarbeiterIn",
 									"stud. Hilfskraft", "Frauenbeauftragte", "Internetbeauftragte(r)", "StudentIn", "techn. MitarbeiterIn", "Sekretariat / Verwaltung", 
 									"stud. VertreterIn");
-//you can add more specifig presets for the different types 
+//you can add more specific presets for the different types 
 
+
+//define the used modules for instiutes
+$INST_MODULES["default"] = array(
+			"forum"=>TRUE,				//forum, this modul is stud_ip core; always avaiable
+			"documents"=>TRUE,			//documents, this modul is stud_ip core; always avaiable
+			"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
+			"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
+			"support"=>FALSE,			//support, only, if the modul is global activated; see local.inc (this modul is not part of the main distribution)
+			);
+//you can add more specific presets for the different types 			
 
 
 //Festlegen der Veranstaltungs Termin Typen
@@ -231,7 +254,7 @@ $PERS_TERMIN_KAT[13]=array("name"=>_("Urlaub"), "color"=>"#DB7093");
 $PERS_TERMIN_KAT[14]=array("name"=>_("Reise"), "color"=>"#C71585");
 // weitere Kategorien können hier angefügt werden
 
-//Vorgaben für die Titelauswahl
+//preset for titles, insert your own titles in the array
 $TITLE_FRONT_TEMPLATE = array("","Prof.","Prof. Dr.","Dr.","PD Dr.","Dr. des.","Dr. med.","Dr. rer. nat.","Dr. forest.",
 							"Dr. sc. agr.","Dipl.-Biol.","Dipl.-Chem.","Dipl.-Ing.","Dipl.-Sozw.","Dipl.-Geogr.",
 							"Dipl.-Geol.","Dipl.-Geophys.","Dipl.-Ing. agr.","Dipl.-Kfm.","Dipl.-Math.","Dipl.-Phys.",
@@ -326,5 +349,6 @@ $ilias_systemgroup = array(
 "dozent" => "2",
 "admin" => "1",
 "root" => "1",
-);	
+);
+// LERNMODULE -->>
 ?>
