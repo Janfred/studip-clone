@@ -200,11 +200,6 @@ if( !isset( $stopMode ) ) {
 if( !isset( $voteID ) )   $voteID = $vote->getVoteID();
 if( !isset( $rangeID ) )  $rangeID = $vote->getRangeID();
 
-// special case: creator wants to modify things in a running vote,
-// but in the meantime the first user has voted...
-if( $pageMode == MODE_RESTRICTED && !empty( $_POST["question"]) )
-     $vote->throwError(666, _("Inzwischen hat jemand abgestimmt! Sie k&ouml;nnen daher die meisten &Auml;nderungen nicht mehr vornehmen."), __LINE__, __FILE__);
-
 /*******************************************************************/
 /******************** page commands ********************************/
 
@@ -243,7 +238,13 @@ if( $pageMode != MODE_RESTRICTED ) {
 /**** Command: SAVE VOTE ****/
 /* -------------------------------------------------------- */
 if( isset( $saveButton_x ) ) {
+    $vote->errorArray = array();
 
+    // special case: creator wants to modify things in a running vote,
+    // but in the meantime the first user has voted...
+    if( $pageMode == MODE_RESTRICTED && !empty( $_POST["question"]) )
+	$vote->throwError(666, _("Inzwischen hat jemand abgestimmt! Sie k&ouml;nnen daher die meisten &Auml;nderungen nicht mehr vornehmen."), __LINE__, __FILE__);
+    
     if( $title == NULL )
 	if( $question != NULL )
 	    $title = my_substr( $question, 0, 50 );
@@ -326,14 +327,14 @@ if( isset( $saveButton_x ) ) {
 	}
     }
 
-    if ( ! $vote->isError() ) {
+    if( ! $vote->isError() ) {
 	if ($pageMode == MODE_RESTRICTED)
 	    $vote->addSlashesToText(); // prevent mysql from crashing...
-
+	
 	// save vote to database!
 	$vote->executeWrite();
 
-	if ( ! $vote->isError() ) {
+	if( ! $vote->isError() ) {
 
 	    // clear outbut buffer, as we are leaving the edit page
 	    ob_end_clean();
