@@ -56,8 +56,6 @@ function check_messaging_default() {
 		$my_messaging_settings['folder']['in'][0] = "dummy";
 	if (!$my_messaging_settings['folder']['out'])
 		$my_messaging_settings['folder']['out'][0] = "dummy";
-	if (!isset($my_messaging_settings['send_as_email']))
-		$my_messaging_settings['send_as_email'] = $GLOBALS["MESSAGING_FORWARD_DEFAULT"];
 }
 	
 // set default Values for schedule (timetable)	
