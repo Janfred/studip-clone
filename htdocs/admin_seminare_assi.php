@@ -34,10 +34,10 @@ require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen 
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 
-if ($RESOURCES_ENABLE)
+if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-
+}
 
 // Get a database connection and Stuff
 $db = new DB_Seminar;
@@ -187,7 +187,6 @@ if ($form==3)
 				$resObject=new ResourceObject($sem_create_data["term_turnus_resource_id"][$i]);
 				$sem_create_data["term_turnus_room"][$i]=$resObject->getName();
 			}
-				
 
 			//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
 			settype($sem_create_data["term_turnus_start_stunde"][$i], "integer");
@@ -216,6 +215,10 @@ if ($form==3)
 					if ($sem_create_data["term_turnus_start_minute"][$i] < 10)
 						$tmp_idx.="0";
 					$tmp_idx.=$sem_create_data["term_turnus_start_minute"][$i];						
+					
+					//if we have a resource_id, we flush the room name
+					if ($sem_create_data["term_turnus_resource_id"][$i])
+						$sem_create_data["term_turnus_room"][$i]='';
 
 					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>$sem_create_data["term_turnus_room"][$i], "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
 				}	
@@ -920,19 +923,19 @@ if ($cmd_f_x)
 				$sem_create_data["sem_entry"]=FALSE;
 				die;
     			} else {
-    				//update/insert the assigned roomes
-    				if ($RESOURCES_ENABLE) {
-    					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-    					$updateAssign->updateAssign();
-    				}
-    				die;
     				//completing the internal settings....
     				$successful_entry=1;
 				$sem_create_data["sem_entry"]=TRUE;
 				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 				$links_admin_data["referred_from"]="assi";
 				$links_admin_data["assi"]=FALSE; //protected Assi-mode off
-				}
+
+    				//update/insert the assigned roomes
+    				if ($RESOURCES_ENABLE) {
+    					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+    					$updateAssign->updateAssign();
+    				}
+			}
 		} else {
 			$errormsg .= "error§<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!§";
     			$successful_entry=2;			
@@ -1051,8 +1054,14 @@ if ($cmd_f_x)
 		//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
 		if ($sem_create_data["sem_vor_termin"] <>-1) {
 			$termin_id=md5(uniqid($hash_secret));
-			$mkdate=time();		
+			$mkdate=time();
+			
+			//if we have a resource_id, we flush the room name
+			if ($sem_create_data["sem_vor_resource_id"])
+				$sem_create_data["sem_vor_raum"]='';
+	
 			$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', topic_id=0, end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
+	
 			//update/insert the assigned roomes
 			if ($RESOURCES_ENABLE && $db->affected_rows()) {
 				$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
@@ -1068,7 +1077,14 @@ if ($cmd_f_x)
 					$mkdate=time();
 					$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
 					$end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+					
+					//if we have a resource_id, we flush the room name
+					if ($sem_create_data["term_resource_id"][$i])
+						$sem_create_data["term_room"][$i]='';
+
 					$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
+		
+					//update/insert the assigned roomes
 					if ($RESOURCES_ENABLE && $db->affected_rows()) {
 						$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
 						$updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]);
@@ -1954,20 +1970,21 @@ if ($level==3)
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
 											<?
 										}
-										?>
-										<br />&nbsp; <font size=-1>Raum:&nbsp; <input type="text" name="term_turnus_room[]" size="15" maxlength="255" value="<?= $sem_create_data["term_turnus_room"][$i] ?>"/></font>&nbsp; 
-										<?
+										print "<br /><font size=-1>&nbsp; Raum: ";
 										if ($RESOURCES_ENABLE) {
 											$resList = new ResourcesUserRoomsList($user_id);
 											if ($resList->numberOfEvents()) {
-												print "<font size=-1><select name=\"term_turnus_resource_id[]\"></font>";
+												print " &nbsp;<select name=\"term_turnus_resource_id[]\"></font>";
 												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
 												while ($resObject = $resList->nextEvent()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 												}
 												print "</select></font>";
 											}
 										}
+										?>
+										&nbsp; <font size=-1><input type="text" name="term_turnus_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_turnus_room"][$i]) ?>"/></font>&nbsp; 
+										<?
 										print "<br />";
 									}
 										?>
@@ -2012,19 +2029,20 @@ if ($level==3)
 											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
 											<?
 											}
-										?>
-										<br />&nbsp; <font size=-1>Raum:&nbsp; <input type="text" name="term_room[]" size="15" maxlength="255" value="<?= $sem_create_data["term_room"][$i] ?>"/></font>&nbsp; 
-										<?
+										print "<br /><font size=-1>&nbsp; Raum: ";
 										if ($RESOURCES_ENABLE) {
 											$resList = new ResourcesUserRoomsList($user_id);
 											if ($resList->numberOfEvents()) {
-												print "<font size=-1><select name=\"term_resource_id[]\">";
+												print "&nbsp;<select name=\"term_resource_id[]\">";
 												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_resource_id"][$i]) ? "selected" : "");
 												while ($resObject = $resList->nextEvent()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 												}
 												print "</select></font>";
 											}
+										?>
+										&nbsp; <font size=-1><input type="text" name="term_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_room"][$i]) ?>"/></font>&nbsp; 
+										<?
 										}
 										print "<br />";
 										}
@@ -2052,20 +2070,21 @@ if ($level==3)
 							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); ?>">&nbsp;Uhr bis
 							<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_end_termin"]); ?>"> :
 							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); ?>">&nbsp;Uhr<br />
-							&nbsp; Raum: &nbsp;<input type="text" name="vor_raum" size=15 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>&nbsp; 
 							<?
+							print "<font size=-1>&nbsp; Raum: ";
 							if ($RESOURCES_ENABLE) {
 								$resList = new ResourcesUserRoomsList($user_id);
 								if ($resList->numberOfEvents()) {
-									print "<font size=-1><select name=\"vor_resource_id\">";
+									print "&nbsp;<select name=\"vor_resource_id\">";
 									printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["sem_vor_resource_id"]) ? "selected" : "");
 									while ($resObject = $resList->nextEvent()) {
-										printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+										printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 									}
 									print "</select></font>";
 								}
 							}
 							?>
+							&nbsp; <input type="text" name="vor_raum" size=15 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>&nbsp; 
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.", TRUE, TRUE) ?>
 							>
