@@ -2594,12 +2594,13 @@ if ($level==6)
 								printf ("<li>"._("<b>%s</b> Bereiche f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_bereich);
 							//Show the result from the resources system
 							if ($RESOURCES_ENABLE) {
-								foreach ($updateResult as $key=>$val) {
-									if ($val["overlap_assigns"] == TRUE)
-										$resources_failed[$val["resource_id"]]=TRUE;
-									else
-										$resources_booked[$val["resource_id"]]=TRUE;
-								}
+								if (is_array($updateResult))
+									foreach ($updateResult as $key=>$val) {
+										if ($val["overlap_assigns"] == TRUE)
+											$resources_failed[$val["resource_id"]]=TRUE;
+										else
+											$resources_booked[$val["resource_id"]]=TRUE;
+									}
 								if ($resources_booked) {
 									$i=0;
 									$rooms='';
