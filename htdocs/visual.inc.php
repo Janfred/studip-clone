@@ -88,26 +88,25 @@ function get_ampel_read ($mein_status, $admission_status, $read_level) {
 cssClassSwitcher, Klasse um cssClasses fuer Zebra auszuwaehlen
 /*****************************************************************************/
 class cssClassSwitcher {
-	var $class=array
-		(1=>"steelgraulight", 
-		2=>"steel1"); 		//Klassen
+	var $class = array("steelgraulight", "steel1"); 		//Klassen
 	var $headerClass="steel";
-	var $classcnt=1;		//Counter
-	var	$hoverclass="";
+	var $classcnt=0;		//Counter
+	var	$hoverclass = array("hover2","hover1");
 	var $JSenabled=FALSE;
+	var $hoverenabled=FALSE;
 	
 	function cssClassSwitcher($class="",$headerClass="",$hoverclass=""){
 		if ($GLOBALS["auth"]->auth["jscript"]) $this->JSenabled = TRUE;
 		if (is_array($class)) $this->class = $class;
 		if ($headerClass) $this->headerClass = $headerClass;
-		if ($hoverclass) $this->hoverclass = $hoverclass;
+		if (is_array($hoverclass)) $this->hoverclass = $hoverclass;
 	}
 	
 	function getHover(){
 		$ret = $this->getFullClass();
-		if($this->hoverclass AND $this->JSenabled){
-			$ret .=" onMouseOver='doHover(this,\"".$this->class[$this->classcnt]."\",\"".$this->hoverclass."\")'".
-				" onMouseOut='doHover(this,\"".$this->hoverclass."\",\"".$this->class[$this->classcnt]."\")' ";
+		if($this->hoverenabled AND $this->JSenabled){
+			$ret .=" onMouseOver='doHover(this,\"".$this->class[$this->classcnt]."\",\"".$this->hoverclass[$this->classcnt]."\")'".
+				" onMouseOut='doHover(this,\"".$this->hoverclass[$this->classcnt]."\",\"".$this->class[$this->classcnt]."\")' ";
 		}
 		return $ret;
 	}
@@ -125,13 +124,13 @@ class cssClassSwitcher {
 	}
 
 	function resetClass() {
-		return $this->classcnt=1;
+		return $this->classcnt=0;
 	}
 
 	function switchClass() {
 		$this->classcnt++;
-		if ($this->classcnt >sizeof($this->class))
-			$this->classcnt=1;
+		if ($this->classcnt >= sizeof($this->class))
+			$this->classcnt=0;
 	}
 	
 	function GetHoverJSFunction(){

@@ -176,7 +176,7 @@ function show_news($id)
 global $auth;
 
 $cssSw= new cssClassSwitcher;
-$cssSw->hoverclass = "hover1";
+$cssSw->hoverenabled = TRUE;
  $this->get_news_by_range($id,$limit=100);
  if (!is_array($this->news_query))
 		 {
@@ -269,7 +269,7 @@ echo "\n<tr><td class=\"blank\"><hr width=\"99%\"></td></tr>";
 echo "\n<tr><td class=\"blank\">&nbsp; <b>In diesen Bereichen wird die News angezeigt:</b><br /><br /></td></tr>";
 echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"99%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
 $cssSw=new cssClassSwitcher;
-$cssSw->hoverclass="hover1";
+$cssSw->hoverenabled = TRUE;
 if ($perm->have_perm("root"))
 	{
 	 echo "\n<tr><th width=\"90%\" align=\"left\">System Bereich:</th><th align=\"center\" width=\"10%\">Anzeigen ?</th></tr>";
@@ -520,7 +520,7 @@ function list_range_details($type)
 {
 global $auth,$perm;
 $cssSw=new cssClassSwitcher;
-$cssSw->hoverclass="hover1";
+$cssSw->hoverenabled = TRUE;
 $output="";
 $output[0]="\n<tr><th width=\"90%\" align=\"left\">";
 switch ($type)
@@ -819,7 +819,8 @@ Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_na
 			echo "\n<tr><td class=\"blank\"><br /><blockquote>";
 			echo "<table width=\"".round(0.89*$this->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
 			$css = new CssClassSwitcher(array("steel1","steel1"));
-			$css->hoverclass = "hover1";
+			$css->hoverenabled = TRUE;
+			$css->switchClass();
 			 while (list($typen_key,$typen_value)=each ($typen))
 					  {
 					  if (!$perm->have_perm("root") AND $typen_key=="user") continue;
