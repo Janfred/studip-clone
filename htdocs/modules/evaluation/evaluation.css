@@ -1,0 +1,69 @@
+/**
+ * Cascading Style Sheets for the evaluationmodule
+ *
+ * @author  Alexander Willner <mail@AlexanderWillner.de>
+ * @version $Id$
+ *
+ * @copyright   2004 Stud.IP-Project
+ * @access      public
+ * @package     evaluation
+ * @modulegroup evaluation_modules
+ *
+ */
+
+/*
+body,td,div,span,b,i,a,dir,li,p,strong,u,em,input,option {
+  font-size: 0.8em;
+}
+*/
+
+td, th, input, select  { font-size: 0.8em; }
+
+.eval_title {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #213499;
+}
+
+.eval_error {
+  color: #E00000;
+}
+
+.eval_success {
+  color: #008000;
+}
+
+.eval_info {
+  color: #333333;
+}
+
+.eval_metainfo {
+   font-size: 0.8em;
+}
+
+.topic {
+  font-size: 0.9em;
+  color: #EFFFFF;
+}
+
+.eval_highlight {
+  background-image:url('../../pictures/steelgraulight_hover.gif');
+}
+
+.steel_with_graulight_bg {
+  background-image: url('../../pictures/steel_with_graulight_bg.jpg');
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.steel_with_steel1_bg {
+  background-image: url('../../pictures/steel_with_steel1_bg.jpg');
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.steel3 {
+  background-image: url('../../pictures/steel3.jpg');
+}
+
+.steelblau4 {
+  background-image: url('../../pictures/steelblau4.jpg');
+}
