@@ -76,7 +76,7 @@ if ($ILIAS_CONNECT_ENABLE)
 
 	if (($perm->have_studip_perm("autor",$seminar_id)) AND ($view=="edit"))
 	{		
-		if (($do_op == "clear")  AND ($op_status == 2))
+		if (($do_op == "clear")  AND (($op_status == 2) OR ($perm->have_studip_perm("tutor",$seminar_id))))
 		{
 			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
 			$op_string= _("Die Zuordnung wurde aufgehoben.");
