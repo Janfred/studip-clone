@@ -33,6 +33,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+/*basic settings for Stud.IP
+----------------------------------------------------------------
+you find here the indivual settings for your installation. 
+please note the LOCAL.INC.PHP in the php-lib folder for the basic system settings!*/
 
 
 //Generische Systemeinstellungen
@@ -346,6 +350,13 @@ $SYMBOL_SHORT = array( //use this shorts to insert an symbols (filename + ".gif"
 	"(r)"=>"symbol06" , 
 	" tm "=>"symbol08");
 
+	
+/*configuration for additional moduls
+----------------------------------------------------------------
+this options are only needed, if you are using the addional modules (please see in local.inc
+which modules are activated). It's a good idea to leave them untouched...*/
+
+
 // <<-- EXPORT-EINSTELLUNGEN
 // Ausgabemodi für den Export
 $export_o_modes = array("start","file","choose", "direct","processor","passthrough");
@@ -356,14 +367,14 @@ $skip_page_3 = true;
 // Name der erzeugten XML-Datei
 $xml_filename = "data.xml";
 // Name der erzeugten Ausgabe-Datei
-if ($xslt_filename == "") $xslt_filename = "studip";
+$xslt_filename = "studip";
 
 // Vorhandene Ausgabeformate
 $output_formats = array(
 	"html"		=>		"Hypertext (HTML)", 
-	"rtf"			=>		"Rich Text Format (RTF)", 
-	"txt"			=>		"Text (TXT)", 
-	"fo"			=>		"Adobe Postscript (PDF)", 
+	"rtf"		=>		"Rich Text Format (RTF)", 
+	"txt"		=>		"Text (TXT)", 
+	"fo"		=>		"Adobe Postscript (PDF)", 
 	"xml"		=>		"Extensible Markup Language (XML)"
 );
 
@@ -379,6 +390,8 @@ $export_icon["htm"] = "txt-icon.gif";
 $export_icon["txt"] = "txt-icon.gif";
 // weitere Icons und Formate können hier angefügt werden
 // EXPORT -->>
+
+
 
 // <<-- LERNMODULE
 // Zeichenkette, die vor Ilias-Usernamen gesetzt wird:
@@ -405,7 +418,5 @@ $ilias_systemgroup = array(
 "dozent" => "2",
 "admin" => "1",
 "root" => "1",
-);
-// LERNMODULE -->>
-
+);	
 ?>
