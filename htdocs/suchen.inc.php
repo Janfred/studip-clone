@@ -22,7 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt, $root_name, $description, $username, $mehr, $show,$write=0,$modify_dt) {
 	global $PHP_SELF,$loginfilelast,$SessSemName,$forum,$view,$davor,$check_author,$check_cont,$check_name,$suchbegriff,$mehr,$tmp,$open,$show,$anfang,$auth,$user;
-
+	
+	$suchbegriff = rawurlencode($suchbegriff);
 	$meineseite = $PHP_SELF;
 	$datumtmp = $loginfilelast[$SessSemName[1]];
 	IF ($datumtmp < $modify_dt) $neuer_beitrag = TRUE;  //ist der Beitrag neu?
@@ -108,7 +109,8 @@ function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt
 function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$check_cont) {
 	global $SessionSeminar,$SessSemName, $PHP_SELF;
 
-
+	// $suchbegriff = rawurldecode($suchbegriff);
+	
 	if(!$mehr) 
 		$mehr=5;
 
@@ -218,6 +220,7 @@ if ($anzahl)
 	echo "<b>" . sprintf(_("Ihre Suche ergab %s Treffer"), $anzahl) . "</b><p>";
 else
 	echo "<b>" . _("Ihre Suche ergab leider keine Treffer") . "</b><p>";
+$suchbegriff = rawurlencode($suchbegriff);
 if ($anzahl > 0):
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 class="blank">
@@ -233,7 +236,6 @@ if ($anzahl > 0):
 <?
 if($anzahl<$mehr)
 	$mehr=$anzahl;
-$suchbegriff=rawurlencode($suchbegriff);
 
 while($i<=$mehr) {
 	$db->next_record();
