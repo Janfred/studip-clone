@@ -250,7 +250,7 @@ class StudipAuthAbstract {
 	* 
 	*/
 	function StudipAuthAbstract() {
-		$this->plugin_name = substr(get_class($this),10);
+		$this->plugin_name = strtolower(substr(get_class($this),10));
 		//get configuration array set in local inc
 		$config_var = $GLOBALS["STUDIP_AUTH_CONFIG_" . strtoupper($this->plugin_name)];
 		//assign each key in the config array as a member of the plugin object
