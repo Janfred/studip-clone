@@ -658,13 +658,13 @@ function preg_call_link ($name, $link, $mod) {
 		if ($name == "")
 			$name = $link;
 		$link = str_replace("&amp;", "&", $link);
-		$tbr = "<a href=\"$link\" target=\"_blank\">$name</a>";
+		$tbr = "<a href=\"$link\" target=\"_blank\"><img src=\"pictures/link_extern.gif\" border=\"0\" />$name</a>";
 	}
 	else {
 		if ($name != "")
-			$tbr = "<a href=\"mailto:$link\">$name</a>";
+			$tbr = "<a href=\"mailto:$link\"><img src=\"pictures/link_extern.gif\" border=\"0\" />$name</a>";
 		else
-			$tbr = "<a href=\"mailto:$link\">$link</a>";
+			$tbr = "<a href=\"mailto:$link\"><img src=\"pictures/link_extern.gif\" border=\"0\" />$link</a>";
 	}
 	return $tbr;
 }
