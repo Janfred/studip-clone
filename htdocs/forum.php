@@ -105,7 +105,6 @@ if ($view) {
 		$forum["view"] = $forum["presetview"];
 	else
 		$forum["view"] = $view;
-	echo "view gesetzt auf ".$view."<br>";
 }
 
 if (!$forum["view"]) {
