@@ -25,31 +25,31 @@ $reiter=new reiter;
 //Create Reitersystem
 
 //Topkats
-$structure["meine_veranstaltungen"]=array (topKat=>"", name=>"Meine Veranstaltungen", link=>"meine_seminare.php", active=>FALSE);
+$structure["meine_veranstaltungen"]=array (topKat=>"", name=>_("Meine Veranstaltungen"), link=>"meine_seminare.php", active=>FALSE);
 if (!$perm->have_perm("admin"))
-	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>"Veranstaltungen suchen / hinzuf&uuml;gen", link=>"sem_portal.php?view=Alle", active=>FALSE);
+	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen suchen / hinzuf&uuml;gen"), link=>"sem_portal.php?view=Alle", active=>FALSE);
 else
-	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>"Veranstaltungen suchen ", link=>"sem_portal.php?view=Alle", active=>FALSE);
+	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen suchen"), link=>"sem_portal.php?view=Alle", active=>FALSE);
 
-$structure["meine_einrichtungen"]=array (topKat=>"", name=>"Meine Einrichtungen", link=>"meine_einrichtungen.php", active=>FALSE);
+$structure["meine_einrichtungen"]=array (topKat=>"", name=>_("Meine Einrichtungen"), link=>"meine_einrichtungen.php", active=>FALSE);
 
 //Bottomkats
-$structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>"&Uuml;bersicht", link=>"meine_seminare.php", active=>FALSE);
+$structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>_("&Uuml;bersicht"), link=>"meine_seminare.php", active=>FALSE);
 if (!$perm->have_perm("admin"))
-	$structure["meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>"erweiterte &Uuml;bersicht", link=>"meine_seminare.php?view=ext", active=>FALSE);
+	$structure["meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>_("erweiterte &Uuml;bersicht"), link=>"meine_seminare.php?view=ext", active=>FALSE);
 if ($perm->have_perm("admin"))
-	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>"Veranstaltungs Timetable", link=>"mein_stundenplan.php", active=>FALSE);
+	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>_("Veranstaltungs Timetable"), link=>"mein_stundenplan.php", active=>FALSE);
 //
-$structure["Alle"]=array (topKat=>"veranstaltungen_suche", name=>"Alle", link=>"sem_portal.php?view=Alle", active=>FALSE);
+$structure["Alle"]=array (topKat=>"veranstaltungen_suche", name=>_("Alle"), link=>"sem_portal.php?view=Alle", active=>FALSE);
 foreach ($SEM_CLASS as $key=>$val)  {
 	$structure["class_".$key]=array (topKat=>"veranstaltungen_suche", name=>$val["name"], link=>"sem_portal.php?view=$key&reset_all=TRUE&cmd=qs", active=>FALSE);
 }
 //
-$structure["_meine_einrichtungen"]=array (topKat=>"meine_einrichtungen", name=>"&Uuml;bersicht", link=>"meine_einrichtungen.php", active=>FALSE);
-$structure["meine_einrichtungen_extendet"]=array (topKat=>"meine_einrichtungen", name=>"erweiterte &Uuml;bersicht", link=>"meine_einrichtungen.php?view=ext", active=>FALSE);
+$structure["_meine_einrichtungen"]=array (topKat=>"meine_einrichtungen", name=>_("&Uuml;bersicht"), link=>"meine_einrichtungen.php", active=>FALSE);
+$structure["meine_einrichtungen_extendet"]=array (topKat=>"meine_einrichtungen", name=>_("erweiterte &Uuml;bersicht"), link=>"meine_einrichtungen.php?view=ext", active=>FALSE);
 
 if ($perm->have_perm("admin")) {
-	$structure["einrichtung_admin"]=array (topKat=>"meine_einrichtungen", name=>"Einrichtungen verwalten", link=>"admin_institut.php?list=TRUE", active=>FALSE);
+	$structure["einrichtung_admin"]=array (topKat=>"meine_einrichtungen", name=>_("Einrichtungen verwalten"), link=>"admin_institut.php?list=TRUE", active=>FALSE);
 }
 
 //View festlegen
