@@ -2048,6 +2048,14 @@ if ($level==4)
 								</table>
 						</td>
 					</tr>
+					<tr>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							&nbsp; 
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
+							<font size=-1 color="red">&nbsp; Achtung: </font><font size=-1>Wenn Sie ein Anmeldeverfahren starten, so kann dieser Schritt sp&auml;ter nicht r&uuml;ckg&auml;ngig gemacht werden. <br />&nbsp; Sie k&ouml;nnen jedoch die Anzahl der Teilnehmer jederzeit anpassen.</font>
+						</td>
+					</tr>
 					<?
 					}
 					?>
