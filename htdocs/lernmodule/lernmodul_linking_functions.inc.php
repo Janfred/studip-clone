@@ -2,7 +2,7 @@
 function link_new_module()
 {
 	global $ABSOLUTE_PATH_ILIAS;
-	return $ABSOLUTE_PATH_ILIAS . "ed_le.php?cmd=nl&acct_name=$benutzername&acct_pass=$passwort";
+	return $ABSOLUTE_PATH_ILIAS . "ed_le.php?cmd=nl" . get_ilias_logindata();
 }
 
 function link_seminar_modules($seminar_id)
