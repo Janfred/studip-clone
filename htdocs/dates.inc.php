@@ -155,7 +155,7 @@ function view_turnus ($seminar_id, $short = FALSE)
 			if ($short)
 				$return_string="Termin: n. A.";
 			else
-				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen noch nicht fest ";
+				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest. ";
 			}
 		else
 			if ($short)
@@ -286,7 +286,7 @@ function view_turnus ($seminar_id, $short = FALSE)
 					}
 				}
 			else {
-				$return_string="Die Zeiten der Veranstaltung stehen noch nicht fest";
+				$return_string="Die Zeiten der Veranstaltung stehen nicht fest.";
 				}			
 			if ($term_data["turnus"] == 1)
 				$return_string.=" (zweiwöchentlich)";
@@ -373,7 +373,7 @@ global $SEMESTER;
 			if ($short)
 				$return_string="Termin: n. A.";
 			else
-				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen noch nicht fest ";
+				$return_string="unregelmässige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest. ";
 			}
 		else
 			if ($short)
@@ -508,7 +508,7 @@ global $SEMESTER;
 					}
 				}
 			else {
-				$return_string="Die Zeiten der Veranstaltung stehen noch nicht fest";
+				$return_string="Die Zeiten der Veranstaltung stehen nicht fest.";
 				}			
 			if ($term_data["turnus"] == 1)
 				$return_string.=" (zweiwöchentlich)";
