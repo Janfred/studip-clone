@@ -1007,7 +1007,7 @@ class ResourceObject {
 		//neuer Eintrag	
 		if (!$this->db->num_rows()) {
 			if (!$perms)
-				$perms="user";
+				$perms="autor";
 			$query = sprintf("INSERT INTO resources_user_resources SET perms='%s', user_id='%s', resource_id='%s'",$perms, $user_id, $this->id);
 			$this->db->query($query);
 			if ($this->db->affected_rows())
@@ -1130,7 +1130,7 @@ class ResourcesPerms {
 		if ($this->db->next_record() && $this->db->f("perms")) 
 			return $this->db->f("perms");
 		else
-			return "user";
+			return "autor";
 	}
 }
 
@@ -1257,7 +1257,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 					if ($val["perms"] == "admin")
 						$this->perm="admin";
 					else
-						$this->perm="user";
+						$this->perm="autor";
 				
 				if ($this->perm=="admin")
 					break;
@@ -1288,7 +1288,7 @@ class ResourcesObjectPerms extends ResourcesPerms {
 						if ($val["perms"] == "admin")
 							$this->perm="admin";
 						else
-							$this->perm="user";
+							$this->perm="autor";
 					}
 					$k++;
 					if ($this->perm=="admin")
@@ -1322,8 +1322,8 @@ class ResourcesObjectPerms extends ResourcesPerms {
 		if ($perm == "admin") {
 			if ($this->getUserPerm () == "admin")
 				return TRUE;
-		} elseif ($perm == "user") {
-			if (($this->getUserPerm () == "admin") || ($this->getUserPerm () == "user"))
+		} elseif ($perm == "autor") {
+			if (($this->getUserPerm () == "admin") || ($this->getUserPerm () == "autor"))
 				return TRUE;
 		} else
 			return FALSE;

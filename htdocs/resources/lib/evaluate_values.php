@@ -185,7 +185,7 @@ if ($change_object_schedules) {
 	if (($ObjectPerms->getUserPerm () != "admin") && ($change_object_schedules != "NEW") || ($change_schedule_assign_user_id))
 		$ObjectPerms = new AssignObjectPerms($change_object_schedules);
 	
-	if ($ObjectPerms->getUserPerm () == "user" || $ObjectPerms->getUserPerm () == "admin") {
+	if ($ObjectPerms->getUserPerm () == "autor" || $ObjectPerms->getUserPerm () == "admin") {
 		if ($kill_assign_x) {
 			$killAssign=new AssignObject($change_object_schedules);
 			$killAssign->delete();
@@ -202,7 +202,7 @@ if ($change_object_schedules) {
 				//Check if this user is able to reach the resource (and this assign), to provide, that the owner of the resources foists assigns to others
 				$ForeignObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id, $submit_search_user);
 				//echo 
-				if (($ForeignObjectPerms->getUserPerm() == "user") || ($ForeignObjectPerms-> getUserPerm() == "admin"))
+				if (($ForeignObjectPerms->getUserPerm() == "autor") || ($ForeignObjectPerms-> getUserPerm() == "admin"))
 					$change_schedule_assign_user_id=$submit_search_user;
 				else
 					$msg -> addMsg(2);
@@ -520,7 +520,7 @@ if (($add_root_user) || ($delete_root_user_id)){
 			$search_string_search_root_user=FALSE;
 
 		if (($send_search_root_user_x) && ($submit_search_root_user !="FALSE") && (!$reset_search_root_user_x))
-			$db->query("INSERT resources_user_resources SET user_id='$submit_search_root_user', resource_id='all', perms='user' ");
+			$db->query("INSERT resources_user_resources SET user_id='$submit_search_root_user', resource_id='all', perms='autor' ");
 
 		if ($delete_root_user_id)		
 			$db->query("DELETE FROM resources_user_resources WHERE user_id='$delete_root_user_id' AND resource_id='all' ");

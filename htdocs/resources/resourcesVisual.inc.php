@@ -445,7 +445,7 @@ class editSettings extends cssClasses {
 				<input type="HIDDEN" name="change_root_user_id[]" value="<? echo $this->db->f("user_id") ?>" />
 				<td class="<? echo $this->getClass() ?>" width="10%" valign="middle">
 					<select name="change_root_user_perms[]">
-						<font size=-1><option <? ($this->db->f("perms")=="user") ? printf ("selected") : printf (""); ?>>user</option></font>
+						<font size=-1><option <? ($this->db->f("perms")=="autor") ? printf ("selected") : printf (""); ?>>autor</option></font>
 						<font size=-1><option <? ($this->db->f("perms")=="admin") ? printf ("selected"): printf (""); ?>>admin</option></font>
 					</select>
 				</td>
@@ -1346,17 +1346,17 @@ class EditObject extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="*">
 					<font size=-1>&nbsp; 
 					<?
-					if (($admin_perms) && ((($this->db->f("perms") == "user") || ($owner_perms))))
-						printf ("<input type=\"RADIO\" name=\"change_user_perms[%s]\" value=\"user\" %s />user", $i, ($this->db->f("perms") == "user") ? "checked" : "");
+					if (($admin_perms) && ((($this->db->f("perms") == "autor") || ($owner_perms))))
+						printf ("<input type=\"RADIO\" name=\"change_user_perms[%s]\" value=\"autor\" %s />autor", $i, ($this->db->f("perms") == "autor") ? "checked" : "");
 					else
-						printf ("<input type=\"RADIO\" disabled name=\"FALSE\" %s /><font color=\"#888888\">user</font>", ($this->db->f("perms") == "user") ? "checked" : "");
+						printf ("<input type=\"RADIO\" disabled name=\"FALSE\" %s /><font color=\"#888888\">autor</font>", ($this->db->f("perms") == "autor") ? "checked" : "");
 					
 					if (($this->resObject->getOwnerType($this->db->f("user_id")) == "user") && ($owner_perms))
 						printf ("<input type=\"RADIO\" name=\"change_user_perms[%s]\" value=\"admin\" %s />admin", $i, ($this->db->f("perms") == "admin") ? "checked" : "");
 					else
 						printf ("<input type=\"RADIO\" disabled name=\"FALSE\" %s /><font color=\"#888888\">admin</font>", ($this->db->f("perms") == "admin") ? "checked" : "");
 
-					if (($owner_perms) || (($admin_perms) && ($this->db->f("perms") == "user")))
+					if (($owner_perms) || (($admin_perms) && ($this->db->f("perms") == "autor")))
 						printf ("&nbsp; <a href=\"%s?change_object_perms=%s&delete_user_perms=%s\"><img src=\"pictures/trash.gif\" ".tooltip(_("Berechtigung l&ouml;schen"))." border=0></a>", $PHP_SELF, $this->resObject->getId(), $this->db->f("user_id"));
 					else
 						print "&nbsp; <img src=\"pictures/lighttrash.gif\" ".tooltip(_("Sie d&uuml;rfen diese Berechtigung leider nichtl&ouml;schen"))." border=0>";

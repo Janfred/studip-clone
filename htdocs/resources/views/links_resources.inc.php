@@ -47,7 +47,7 @@ if ($resources_data["list_open"]) {
 
 //Reiter "Objekt"
 if ($resources_data["actual_object"]) {
-	if ($ActualObjectPerms ->havePerm ("user")) {
+	if ($ActualObjectPerms ->havePerm ("autor")) {
 		if ($ActualObjectPerms ->havePerm ("admin")) {
 			$structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
 			$structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
