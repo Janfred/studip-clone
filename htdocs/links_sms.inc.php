@@ -29,8 +29,9 @@ $reiter=new reiter;
 $reiter=new reiter;
 //Topkats
 if (!$perm->have_perm("admin")) {
-$structure["calender"]=array ("topKat"=>"", "name"=>_("Terminkalender"), "link"=>"calendar.php", "active"=>FALSE);
-$structure["timetable"]=array ("topKat"=>"", "name"=>_("Stundenplan"), "link"=>"mein_stundenplan.php", "active"=>FALSE);
+	if ($GLOBALS['CALENDAR_ENABLE'])
+		$structure["calendar"]=array ("topKat"=>"", "name"=>_("Terminkalender"), "link"=>"calendar.php", "active"=>FALSE);
+	$structure["timetable"]=array ("topKat"=>"", "name"=>_("Stundenplan"), "link"=>"mein_stundenplan.php", "active"=>FALSE);
 }
 $structure["contact"]=array ("topKat"=>"", "name"=>_("Adressbuch"), "link"=>"contact.php", "active"=>FALSE);
 $structure["post"]=array ("topKat"=>"", "name"=>_("Nachrichten"), "link"=>"sms_box.php", "active"=>FALSE);
@@ -45,13 +46,16 @@ $structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreib
 $structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), "link"=>"".$PHP_SELF."?change_view=TRUE", "active"=>FALSE);
 $structure["online2"] = array ("topKat"=>"online", "name"=>_("Wer ist online?"), "link"=>"online.php", "active"=>FALSE);
 $structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), "link"=>"".$PHP_SELF."?change_view=TRUE", "active"=>FALSE);
-$structure["calendar_day"] = array ("topKat"=>"calender", "name"=>_("Tag"), "link"=>"calendar.php?cmd=showday&atime=$atime", "active"=>FALSE);
-$structure["calendar_week"] = array ("topKat"=>"calender", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
-$structure["calendar_month"] = array ("topKat"=>"calender", "name"=>_("Monat"), "link"=>"calendar.php?cmd=showmonth&atime=$atime", "active"=>FALSE);
-$structure["calendar_year"] = array ("topKat"=>"calender", "name"=>_("Jahr"), "link"=>"calendar.php?cmd=showyear&atime=$atime", "active"=>FALSE);
-$structure["calendar_edit"] = array ("topKat"=>"calender", "name"=>_("Bearbeiten"), "link"=>"calendar.php?cmd=edit&atime=$atime", "active"=>FALSE);
-$structure["calendar_bind"] = array ("topKat"=>"calender", "name"=>_("Veranstaltungstermine"), "link"=>"calendar.php?cmd=bind&atime=$atime", "active"=>FALSE);
-$structure["calendar_changeview"] = array ("topKat"=>"calender", "name"=>_("Ansicht anpassen"), "link"=>"calendar.php?cmd=changeview&atime=$atime", "active"=>FALSE);
+if ($GLOBALS['CALENDAR_ENABLE']) {
+	$structure["calendar_day"] = array ("topKat"=>"calendar", "name"=>_("Tag"), "link"=>"calendar.php?cmd=showday&atime=$atime", "active"=>FALSE);
+	$structure["calendar_week"] = array ("topKat"=>"calendar", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
+	$structure["calendar_month"] = array ("topKat"=>"calendar", "name"=>_("Monat"), "link"=>"calendar.php?cmd=showmonth&atime=$atime", "active"=>FALSE);
+	$structure["calendar_year"] = array ("topKat"=>"calendar", "name"=>_("Jahr"), "link"=>"calendar.php?cmd=showyear&atime=$atime", "active"=>FALSE);
+	$structure["calendar_edit"] = array ("topKat"=>"calendar", "name"=>_("Neuer Termin"), "link"=>"calendar.php?cmd=edit&atime=$atime", "active"=>FALSE);
+	$structure["calendar_bind"] = array ("topKat"=>"calendar", "name"=>_("Veranstaltungstermine"), "link"=>"calendar.php?cmd=bind&atime=$atime", "active"=>FALSE);
+	$structure["calendar_export"] = array ("topKat"=>"calendar", "name"=>_("Export"), "link"=>"calendar.php?cmd=export&atime=$atime", "active"=>FALSE);
+	$structure["calendar_changeview"] = array ("topKat"=>"calendar", "name"=>_("Ansicht anpassen"), "link"=>"calendar.php?cmd=changeview&atime=$atime", "active"=>FALSE);
+}
 $structure["timetable_timetable"] = array ("topKat"=>"timetable", "name"=>_("Stundenplan"), "link"=>"mein_stundenplan.php", "active"=>FALSE);
 $structure["timetable_printview"] = array ("topKat"=>"timetable", "name"=>_("Druckansicht"), "link"=>"mein_stundenplan.php?print_view=TRUE", target=>"_new", "active"=>FALSE);
 $structure["timetable_changeview"] = array ("topKat"=>"timetable", "name"=>_("Ansicht anpassen"), "link"=>"mein_stundenplan.php?change_view=TRUE", "active"=>FALSE);
@@ -95,7 +99,9 @@ switch ($i_page) {
 			$reiter_view = "contact_viewalpha";
 		}
 	break;
-	case "calendar.php" : 
+	case "calendar.php" :
+		if (!$GLOBALS['CALENDAR_ENABLE'])
+			break; 
 		switch($cmd) {
 			case "showday":
 				$reiter_view = "calendar_day"; 
@@ -114,6 +120,9 @@ switch ($i_page) {
 			break;
 			case "bind":
 				$reiter_view = "calendar_bind"; 
+			break;
+			case "export":
+				$reiter_view = "calendar_export";
 			break;
 			case "changeview":
 				$reiter_view = "calendar_changeview"; 
