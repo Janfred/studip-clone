@@ -291,7 +291,7 @@ FUNCTION gettitel($score)
 	IF ($score>8192) $titel =	"Meister";
 	IF ($score>16384) $titel =	"Gro&szlig;meister";
 	IF ($score>32768) $titel =	"Guru";
-	IF ($score>65536) $titel =	"Lichtgestallt";
+	IF ($score>65536) $titel =	"Lichtgestalt";
 	IF ($score>131072) $titel =	"Gott";
 
 	RETURN $titel;
