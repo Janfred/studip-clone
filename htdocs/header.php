@@ -194,7 +194,11 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		} else {
 //			echo MakeToolbar("pictures/blank.gif","","","",40,"_top");
 		}
-
+?>
+			<td class="toolbar">
+				<img border="0" src="pictures/blank.gif" height="7" width="6">
+			</td>
+<?
 		// Ist sonst noch wer da?
 		if (!count($online))
 			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),60, "_top","left");
@@ -217,7 +221,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				$infotext = sprintf (_("Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"),
 								$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
 								($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
-				echo MakeToolbar("pictures/logo2.gif","Impressum.php",_("Impressum"),_("Informationen zu dieser Installation"), "_top");
+				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),_("Informationen zu dieser Installation"), "_top");
 ?>
 	</tr>
 	</table>
