@@ -130,7 +130,7 @@ switch ($i_page) {
 	case "contact_statusgruppen.php":
 		$reiter_view = "contact_statusgruppen";
 	break;
-	case "ccontact_export.php":
+	case "contact_export.php":
 		$reiter_view = "contact_export";
 	break;
 	default :
