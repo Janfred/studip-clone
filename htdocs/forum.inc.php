@@ -93,12 +93,12 @@ function editarea($forumposting) {
 	
 	if ($auth->auth["jscript"]) {
 		$max_col = round($auth->auth["xres"] / 12 );
-		echo "Xres:".$auth->auth["xres"];
-		echo " / Breite:".$max_col;
-		echo " / cols:".round($max_col*0.45);
 	}
 	else 
 		$max_col =  64 ; //default für 640x480
+
+	$cols = round($max_col*0.45);
+	if ($cols < 28) $cols = 28;
 	
 	if ($forumposting["writestatus"] == "new") // Abbrechen Button unterscheidet ob Anlegen abgebrochen oder Bearbeiten abgebrochen
 		$zusatz = "<a href=\"".$PHP_SELF."?really_kill=".$forumposting["id"]."&nurneu=1#anker\">" . makeButton("abbrechen", "img") . "</a>";
@@ -120,13 +120,13 @@ function editarea($forumposting) {
 	}
 	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben
 		$description =	"<b>" . _("Ihr Name:") . "</b>&nbsp; <input type=text size=50 name=nobodysname onchange=\"pruefe_name()\" value=\"" . _("unbekannt") . "\"><br><br><input type=hidden name=update value='".$forumposting["id"]."'>"
-				."<div align=center><textarea name=description style=\"width:70%\" cols=\"". round($max_col*0.45)."\" rows=12 wrap=virtual>"
+				."<div align=center><textarea name=description style=\"width:70%\" cols=\"". $cols."\" rows=12 wrap=virtual>"
 				.htmlReady($description)
 				.htmlReady($zitat)
 				."</textarea>";
 	} else {
 		$description =	"<input type=hidden name=update value='".$forumposting["id"]."'>"
-				."<div align=center><textarea name=description style=\"width:70%\" cols=\"". round($max_col*0.45)."\"  rows=12 wrap=virtual>"
+				."<div align=center><textarea name=description style=\"width:70%\" cols=\"". $cols."\"  rows=12 wrap=virtual>"
 				.htmlReady($description)
 				.htmlReady($zitat)
 				."</textarea>";
