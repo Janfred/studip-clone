@@ -75,7 +75,7 @@ $user_id = $auth->auth["uid"];
 $errormsg='';
 
 //initialisations for room-requests
-if ($RESOURCES_ENABLE && get_config("RESOURCES_ALLOW_ROOM_REQUESTS") || get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS")) {
+if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS && $form <7) {
 	if (!$sem_create_data["resRequest"]) {
 		$sem_create_data["resRequest"] = new RoomRequest();
 	} else {
@@ -580,7 +580,7 @@ if ((!$jump_back_x) && (!$jump_next_x) && (!$add_doz) && (!$add_tut) && (!$delet
 	&& (!$add_studg_x) && (!$delete_studg_x) && (!$search_doz) && (!$search_tut) && (!$search_room_x) && (!$reset_room_search_x)
 	&& (!$send_room_x) && (!$search_properties_x) && (!$send_room_type_x) && (!$reset_room_type_x) 	&& (!$reset_resource_id_x))
 	$jump_next_x=TRUE;
-
+	
 	
 //Check auf korrekte Eingabe und Sprung in naechste Level, hier auf Schritt 2
 if (($form == 1) && ($jump_next_x))
@@ -1384,6 +1384,11 @@ if (($form == 6) && ($jump_next_x))
 					$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
 				}
 			}
+			
+			//if room-reqquest stored in the session, destroy (we don't need it anymore)
+			if (is_object($sem_create_data["resRequest"]))
+				$sem_create_data["resRequest"] = '';
+
 			//end of the seminar-creation process
 		} else {
 			$errormsg .= "error§"._("<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!")."§";
@@ -1392,7 +1397,6 @@ if (($form == 6) && ($jump_next_x))
 	}
 	$level=7;
 }
-
 
 //Nur der Form halber... es geht weiter zur SCM-Seite
 if (($form == 7) && ($jump_next_x)) {
@@ -3275,7 +3279,7 @@ if ($level == 7)
 					<b><?=_("Die Veranstaltung konnte nicht angelegt werden."); ?></b><br><br>
 					<?=_("Bitte korrigieren Sie die Daten."); ?>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
-						<input type="HIDDEN" name="form" value=6>
+						<input type="HIDDEN" name="form" value=7>
 						<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">
 					</form>
 					</blockqoute>
@@ -3304,7 +3308,7 @@ if ($level == 7)
 					?>
 					<br /><br />
 					<form method="POST" action="<? echo $PHP_SELF ?>">
-						<input type="HIDDEN" name="form" value=6>
+						<input type="HIDDEN" name="form" value=7>
 						<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">
 						<?
 						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
@@ -3342,7 +3346,7 @@ if ($level == 7)
 					}
 					?><br><br>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
-						<input type="HIDDEN" name="form" value=6>
+						<input type="HIDDEN" name="form" value=7>
 						<?
 						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
 							?>
