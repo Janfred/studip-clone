@@ -178,10 +178,11 @@ function keywordExists($str) {
 *
 **/
 function isKeyword($str, $page){
+	global $PHP_SELF;
 	if (keywordExists($str) == NULL) {
-		return ' <a href="wiki.php?keyword=' . $str . '&view=editnew&lastpage='.$page.'">' . $str . '(?)</a>';
+		return " <a href=\"".$PHP_SELF."?keyword=" . $str . "&view=editnew&lastpage=".$page."\">" . $str . "(?)</a>";
 	} else {
-		return ' <a href="wiki.php?keyword='.$str.'">'.$str.'</a>';
+		return " <a href=\"".$PHP_SELF."?keyword=".$str."\">".$str."</a>";
 	}
 }
 
@@ -371,8 +372,8 @@ function getZusatz($wikiData) {
 *
 **/
 function showDeleteDialog($keyword, $version) {
-	global $perm, $SessSemName;
-	if (!$perm->have_perm("dozent")) {
+	global $perm, $SessSemName, $PHP_SELF;
+	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -408,7 +409,7 @@ function showDeleteDialog($keyword, $version) {
 	$lnk = "?keyword=$keyword"; // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version"; 
 	$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
-	$msg.="<p>Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie <a href=\"wiki.php?cmd=delete_all&keyword=$keyword\">hier</a>.";
+	$msg.="<p>Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie <a href=\"".$PHP_SELF."?cmd=delete_all&keyword=$keyword\">hier</a>.";
 	parse_msg($msg, '§', 'blank', '1', FALSE);
 	end_blank_table();
 	return $version;
@@ -421,8 +422,8 @@ function showDeleteDialog($keyword, $version) {
 *
 **/
 function showDeleteAllDialog($keyword) {
-	global $perm, $SessSemName;
-	if (!$perm->have_perm("dozent")) {
+	global $perm, $SessSemName, $PHP_SELF;
+	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -465,7 +466,7 @@ function showDeleteAllDialog($keyword) {
 **/
 function deleteWikiPage($keyword, $version, $range_id) {
 	global $perm, $SessSemName;
-	if (!$perm->have_perm("dozent")) {
+	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -514,7 +515,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 **/
 function deleteAllWikiPage($keyword, $range_id) {
 	global $perm, $SessSemName;
-	if (!$perm->have_perm("dozent")) {
+	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -540,17 +541,17 @@ function deleteAllWikiPage($keyword, $range_id) {
 * @param  sortby  string  Different sortings of entries.
 **/
 function listPages($mode, $sortby=NULL) {
-	global $SessSemName, $user_id, $loginfilelast;
+	global $SessSemName, $user_id, $loginfilelast, $PHP_SELF;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
 	if ($mode=="all") {
-		$selfurl = "wiki.php?view=listall";
+		$selfurl = $PHP_SELF."?view=listall";
 		$sort = "ORDER by keyword"; // default sort order for "all pages"
 		$nopages = _("In dieser Veranstaltung wurden noch keine WikiSeiten angelegt.");
 	} else if ($mode=="new") {
-		$selfurl = "wiki.php?view=listnew";
+		$selfurl = $PHP_SELF."?view=listnew";
 		$sort = "ORDER by lastchange"; // default sort order for "new pages"
 		$nopages = _("Seit Ihrem letzten Login gab es keine Änderungen.");
 	} else {
@@ -635,13 +636,13 @@ function listPages($mode, $sortby=NULL) {
 		$tdheadcenter="<td class=\"$class\" align=\"center\"><font size=\"-1\">";
 		$tdtail="</font></td>";
 		print("<tr>".$tdheadleft."&nbsp;"."$tdtail");
-		printf($tdheadleft."<a href = wiki.php?keyword=" . $keyword . ">");
+		printf($tdheadleft."<a href=\"".$PHP_SELF."?keyword=" . $keyword . "\">");
 		print(htmlReady($keyword) ."</a>");
 		print($tdtail);
 		print($tdheadcenter.$db2->f("version").$tdtail);
 		print($tdheadleft.date("d.m.Y, H:i", $lastchange));
 		if ($mode=="new" && $db2->f("version")>1) {
-			print("&nbsp;(<a href=\"wiki.php?view=diff&keyword=$keyword&versionssince=$lastlogindate\">"._("Änderungen")."</a>)");
+			print("&nbsp;(<a href=\"".$PHP_SELF."?view=diff&keyword=$keyword&versionssince=$lastlogindate\">"._("Änderungen")."</a>)");
 		}
 		print($tdtail);
 		print($tdheadleft.get_fullname($userid).$tdtail."</tr>");
@@ -689,6 +690,7 @@ function wikiSinglePageHeader($wikiData, $keyword) {
 *
 **/
 function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
+	global $PHP_SELF;
 
 	showPageFrameStart();
 	wikiSinglePageHeader($wikiData, $keyword);
@@ -715,7 +717,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	$cont .= "<input type=\"hidden\" name=\"version\" value=\"$version\">";
 	$cont .= "<input type=\"hidden\" name=\"submit\" value=\"true\">";
 	$cont .= "<input type=\"hidden\" name=\"cmd\" value=\"show\">";
-	$cont .= "<br><br><input type=image name=\"submit\" value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0 >&nbsp;<a href=\"wiki.php?cmd=abortedit&keyword=$keyword$lastpage\"><img " . makeButton("abbrechen", "src") . " align=\"absmiddle\" border=0></a>";
+	$cont .= "<br><br><input type=image name=\"submit\" value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0 >&nbsp;<a href=\"".$PHP_SELF."?cmd=abortedit&keyword=$keyword$lastpage\"><img " . makeButton("abbrechen", "src") . " align=\"absmiddle\" border=0></a>";
 	$cont .= "</form>\n";
 	printcontent(0,0,$cont,"");
 	$infobox = array ();
@@ -755,13 +757,14 @@ function printWikiPage($keyword, $version) {
 *
 **/
 function exportWiki() {
+	global $PHP_SELF;
 	showPageFrameStart();
 	begin_blank_table();
 	parse_msg("info§"._("Alle Wiki-Seiten werden als große HTML-Datei zusammengefügt und in einem neuen Fenster angezeigt. Von dort aus können Sie die Datei abspeichern."));
 	$infobox = array ();
 	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Die Wiki-Seiten werden als eine zusammenhängende HTML-Datei ohne Links exportiert."))));
 	print "</tr><tr align=center><td>";
-	print "<a href=\"wiki.php?view=wikiprintall\" target=\"_new\"><img ".makebutton("weiter","src"). " border=0></a></td></tr>";
+	print "<a href=\"".$PHP_SELF."?view=wikiprintall\" target=\"_new\"><img ".makebutton("weiter","src"). " border=0></a></td></tr>";
 	end_blank_table();
 	echo "</td>"; // end of content area
 	showPageFrameEnd($infobox);
@@ -847,23 +850,24 @@ function showPageFrameEnd($infobox) {
 *
 **/
 function getShowPageInfobox($keyword, $latest_version) {
+	global $PHP_SELF;
 
 	$versions=getWikiPageVersions($keyword);
-	$versiontext="<a href=\"wiki.php?keyword=".$keyword."\">Aktuelle Version</a><br>";
+	$versiontext="<a href=\"".$PHP_SELF."?keyword=".$keyword."\">Aktuelle Version</a><br>";
 	if ($versions) {
 		foreach ($versions as $v) {
-			$versiontext .= "<a href=\"wiki.php?keyword=$keyword&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
+			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=$keyword&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
 		}
 	}
 	if (!$versiontext) {
 		$versiontext=_("Keine alten Versionen.");
 	}
 
-	$viewtext="<a href=\"wiki.php?keyword=".$keyword."&view=show\">"._("Standard")."</a><br>";
-	$viewtext .= "<a href=\"wiki.php?keyword=".$keyword."&view=wikiprint&version=$version\" target=\"_new\">"._("Druckansicht")."</a>";
+	$viewtext="<a href=\"".$PHP_SELF."?keyword=".$keyword."&view=show\">"._("Standard")."</a><br>";
+	$viewtext .= "<a href=\"".$PHP_SELF."?keyword=".$keyword."&view=wikiprint&version=$version\" target=\"_new\">"._("Druckansicht")."</a>";
 	if (count($versions)>=1) {
-		$viewtext .= "<br><a href=\"wiki.php?keyword=".$keyword."&cmd=showdiff&view=diff\">"._("Textänderungen anzeigen")."</a>";
-		$viewtext .= "<br><a href=\"wiki.php?keyword=".$keyword."&cmd=showcombo&view=combodiff\">"._("Text mit AutorInnenzuordnung anzeigen")."</a>";
+		$viewtext .= "<br><a href=\"".$PHP_SELF."?keyword=".$keyword."&cmd=showdiff&view=diff\">"._("Textänderungen anzeigen")."</a>";
+		$viewtext .= "<br><a href=\"".$PHP_SELF."?keyword=".$keyword."&cmd=showcombo&view=combodiff\">"._("Text mit AutorInnenzuordnung anzeigen")."</a>";
 	}
 	$views=array(array("icon" => "pictures/blank.gif", "text" => $viewtext));
 
@@ -876,7 +880,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 		} else {
 			$first=0;
 		}
-		$backlinktext .= "<a href=\"wiki.php?keyword=$b\">$b</a>";
+		$backlinktext .= "<a href=\"".$PHP_SELF."?keyword=$b\">$b</a>";
 	}
 	if (empty($backlinktext)) {
 		$backlinktext = _("Keine Verweise vorhanden.");
@@ -885,7 +889,7 @@ function getShowPageInfobox($keyword, $latest_version) {
  $backlinktext));
 	$infobox = array ();
 	if (!$latest_version) {
-		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die <a href=\"wiki.php?keyword=$keyword\">aktuelle Version</a>."))));
+		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die <a href=\"".$PHP_SELF."?keyword=$keyword\">aktuelle Version</a>."))));
 	}
 	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
 	if ($latest_version) { 
@@ -905,19 +909,20 @@ function getShowPageInfobox($keyword, $latest_version) {
 *
 **/
 function getDiffPageInfobox($keyword) {
+	global $PHP_SELF;
 
 	$versions=getWikiPageVersions($keyword);
-	$versiontext="<a href=\"wiki.php?keyword=".$keyword."\">Aktuelle Version</a><br>";
+	$versiontext="<a href=\"".$PHP_SELF."?keyword=".$keyword."\">Aktuelle Version</a><br>";
 	if ($versions) {
 		foreach ($versions as $v) {
-			$versiontext .= "<a href=\"wiki.php?keyword=$keyword&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
+			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=$keyword&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
 		}
 	}
 	if (!$versiontext) {
 		$versiontext=_("Keine alten Versionen.");
 	}
 
-	$viewtext="<a href=\"wiki.php?keyword=".$keyword."&view=show\">"._("Aktuelle Version")."</a><br>";
+	$viewtext="<a href=\"".$PHP_SELF."?keyword=".$keyword."&view=show\">"._("Aktuelle Version")."</a><br>";
 	$views=array(array("icon" => "pictures/blank.gif", "text" => $viewtext));
 
 	$infobox = array ();
@@ -939,7 +944,7 @@ function getDiffPageInfobox($keyword) {
 *
 **/
 function showWikiPage($keyword, $version, $special="") {
-	global $perm;
+	global $perm, $SessSemName, $PHP_SELF;
 
 	showPageFrameStart();
 
@@ -964,16 +969,16 @@ function showWikiPage($keyword, $version, $special="") {
 	//
 	wikiSinglePageHeader($wikiData, $keyword);
 
-	if ($perm->have_perm("autor")) { 
+	if ($perm->have_studip_perm("autor", $SessSemName[1])) { 
 		if (!$latest_version) {
 			$edit="<img src=\"pictures/ausruf_small2.gif\"> Ältere Version, nicht bearbeitbar!";
 		} else {
 			$edit="";
-			if ($perm->have_perm("autor")) {
-				$edit.="<a href=\"?keyword=$keyword&view=edit\"><img ".makeButton("bearbeiten","src")." border=\"0\"></a>";
+			if ($perm->have_studip_perm("autor", $SessSemName[1])) {
+				$edit.="<a href=\"".$PHP_SELF."?keyword=$keyword&view=edit\"><img ".makeButton("bearbeiten","src")." border=\"0\"></a>";
 			}
-			if ($perm->have_perm("dozent")) {
-				$edit.="&nbsp;<a href=\"?keyword=$keyword&cmd=delete&version=latest\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
+			if ($perm->have_studip_perm("dozent", $SessSemName[1])) {
+				$edit.="&nbsp;<a href=\"".$PHP_SELF."?keyword=$keyword&cmd=delete&version=latest\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
 			}
 		}
 		$edit .= "<br>&nbsp;";

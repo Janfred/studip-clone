@@ -105,13 +105,23 @@ if ($view=="listall") {
 	//
 	// show page for editing
 	//
-	if (!$perm->have_perm("autor")) {
+	if (!$perm->have_studip_perm("autor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
 		end_blank_table();
 		echo "</td></tr></table></body></html>";
 		die;
 	}
+
+	// prevent malformed urls: keword must be set
+	if (!$keyword) {
+		begin_blank_table();
+		parse_msg("error§" . _("Es wurde keine zu editierende Seite übergeben!"));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
+
 	$wikiData=getWikiPage($keyword,0); // always get newest page
 
 	// set lock
@@ -122,7 +132,7 @@ if ($view=="listall") {
 
 } else if ($view=='editnew') { // edit a new page
 
-	if (!$perm->have_perm("autor")) {
+	if (!$perm->have_studip_perm("autor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
 		end_blank_table();
