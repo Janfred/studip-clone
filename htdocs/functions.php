@@ -732,4 +732,60 @@ function get_range_tree_path($institut_id, $depth = false, $delimeter = ">"){
 	return $ret;
 }
 
+
+/**
+ * check_and_set_date
+ *
+ * Checks if given date is valid and sets field in array accordingly.
+ * (E.g. $admin_admission_data['admission_enddate'])
+ *
+ * @param	mixed	day or placeholder for day
+ * @param	mixed	month or placeholder for month
+ * @param	mixed	year or placeholder for year
+ * @param	mixed	hours or placeholder for hours
+ * @param	mixed	minutes or placeholder for minutes
+ * @param	array	Reference to array to update. If NULL, only check is performed
+ * @param	mixed	Name of field in array to be set
+ *
+ * @return	bool	true if date was valid, false else
+ *
+ **/
+function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field) {
+
+	$check=TRUE; // everything ok?
+	if (($jahr>0) && ($jahr<100))
+		$jahr=$jahr+2000;
+
+	if ($monat == _("mm")) $monat=0;
+	if ($tag == _("tt")) $tag=0;
+	if ($jahr == _("jjjj")) $jahr=0;	
+	if ($stunde == _("hh")) $stunde=0;
+	if ($minute == _("mm")) $minute=0;
+
+	if (($monat) && ($tag) && ($jahr)) {
+		if ($stunde==_("hh")) {
+			$check=FALSE;
+		} 
+
+		settype($stunde, "integer");
+		settype($minute, "integer");
+
+		if ((!checkdate($monat, $tag, $jahr) && ($monat) && ($tag) && ($jahr))) {
+			$check=FALSE;
+		}
+
+		if (($stunde > 24) || ($minute > 59)) {
+			$check=FALSE;			
+		}
+
+		if ($arr) {
+			if ($check) {
+				$arr[$field] = mktime($stunde,$minute,59,$monat,$tag,$jahr);
+			} else {
+				$arr[$field] = -1;
+			}
+		}
+	}
+	return $check;
+}
 ?>
