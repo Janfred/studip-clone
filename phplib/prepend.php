@@ -9,12 +9,8 @@
  *
  */ 
 
-if (!is_array($_PHPLIB)) {
-# Aren't we nice? We are prepending this everywhere 
-# we require or include something so you can fake
-# include_path  when hosted at provider that sucks.
-  $_PHPLIB["libdir"] = ""; 
-}
+$_PHPLIB = array();
+$_PHPLIB["libdir"] = ""; 
 
 require($_PHPLIB["libdir"] . "db_mysql.inc");  /* Change this to match your database. */
 require($_PHPLIB["libdir"] . "ct_sql_patched.inc");    /* Change this to match your data storage container */
