@@ -487,7 +487,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			<td class="rahmen_steel">
 				<font size="-1"><b><?=_("Ablaufplan-Assistent")?></b><br /><br /></font>
 				<?
-				if (($modules["forum"]) && ($modules["documents"]) && ($db->f("duration_time") != 0)) {
+				if (($modules["forum"]) || ($modules["documents"]) || ($db->f("duration_time") != 0)) {
 					?>
 					<font size="-1"><?=_("generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:")?><br /></font>
 					<?
