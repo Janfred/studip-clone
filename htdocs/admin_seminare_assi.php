@@ -1487,11 +1487,8 @@ if ($level==2)
 										foreach($sem_create_data["sem_bet_inst"] as $val)
 											$clause.=",'$val'";
 									$clause.=")";
-								} else
-									$clause='';
-								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])									
 									$db->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
-								else
+								} else
 									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
@@ -1555,11 +1552,8 @@ if ($level==2)
 										foreach($sem_create_data["sem_bet_inst"] as $val)
 											$clause.=",'$val'";
 									$clause.=")";
-								} else
-									$clause='';
-								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])
 									$db->query ("SELECT DISTINCT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
-								else
+								} else
 									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
 								if ($db->num_rows()) {
 									print "<a name=\"anker\"></a>";
