@@ -1,7 +1,7 @@
 <?
 /*
 archiv_Assi.php - Archivierungs-Assistent von Stud.IP.
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>
+Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -45,12 +45,12 @@ function JS_checkbox_tricks () {
 	<?
 }
 
-include "seminar_open.php"; // hier werden die sessions initialisiert
-require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once("archiv.inc.php");
-require_once("functions.php");
-require_once("visual.inc.php");
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; // hier werden die sessions initialisiert
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); // Funktionen zum Loeschen von Terminen
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once("$ABSOLUTE_PATH_STUDIP/archiv.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 ## Get a database connection
 $db = new DB_Seminar;
