@@ -216,10 +216,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				if (($SemSecLevelWrite==3) && ($SemSecLevelRead==3)) {//Teilnehmerbeschraenkte Veranstaltung, naehere Uberpruefungen erforderlich
 					$db2->query("SELECT admission_endtime, admission_turnout, admission_type, admission_selection_take_place FROM seminare WHERE Seminar_id LIKE '$id'"); //Wir brauchen in diesem Fall mehr Daten
 					$db2->next_record();
-					$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN user_studiengang USING (studiengang_id) WHERE seminar_id LIKE '$id' AND (user_id = '$user->id' OR admission_seminar_studiengang.studiengang_id = 'all')"); //Hat der Studi passende Studiengaenge ausgewaehlt?
-					if ($db->num_rows() ==1) //Nur einen passenden gefunden? Dann nehmen wir den
-						$sem_verify_suggest_studg=$db->f("studiengang_id");
 					if (!$sem_verify_suggest_studg) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
+						$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN user_studiengang USING (studiengang_id) WHERE seminar_id LIKE '$id' AND (user_id = '$user->id' OR admission_seminar_studiengang.studiengang_id = 'all')"); //Hat der Studi passende Studiengaenge ausgewaehlt?
+						if ($db->num_rows() ==1) //Nur einen passenden gefunden? Dann nehmen wir den
+							$sem_verify_suggest_studg=$db->f("studiengang_id");
 						elseif ($db->num_rows() >1) { //Mehrere gefunden, fragen welcher es denn sein soll
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt.<br><br></td></tr>";
 							echo "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente anmelden.<br/><br />&nbsp; &nbsp; Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus: <br><br></td></tr>";
@@ -267,8 +267,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								die;
 							}
 						}
-						page_close();
-						die;
 					}
 					if ($sem_verify_suggest_studg) { //User hat einen Studiengang angegeben oeder wir haben genau einen passenden gefunden, mit dem er jetzt rein will/kann
 						$db3->query("SELECT name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id LIKE '$id' AND admission_seminar_studiengang.studiengang_id = '$sem_verify_suggest_studg' "); //Nochmal die Daten des quotas fuer diese Veranstaltung
