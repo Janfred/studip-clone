@@ -32,10 +32,10 @@ function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 ?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
-			<table border=0 align="left" cellspacing=0 cellpadding=2>
+			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td class="<? echo $class?>" align="center" width=50><img src="pictures/x.gif"></td>
-					<td class="<? echo $class?>" align="left"><font color=#FF2020><?php print $msg ?></font></td>
+					<td class="<? echo $class?>" align="left"><font color="#FF2020"><?php print $msg ?></font></td>
 				</tr>
 			</table>
 		</td>
@@ -54,10 +54,10 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 ?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
-			<table border=0 align="left" cellspacing=0 cellpadding=2>
+			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td class="<? echo $class?>" align="center" width=50><img src="pictures/ok.gif"></td>
-					<td class="<? echo $class?>" align="left"><font color=#008000><?php print $msg ?></font></td>
+					<td class="<? echo $class?>" align="left"><font color="#008000"><?php print $msg ?></font></td>
 				</tr>
 			</table>
 		</td>
@@ -75,10 +75,10 @@ function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE) {
 ?>
 	<tr>
 		<td class="<? echo $class?>" colspan=<? echo $colspan?>>
-			<table border=0 align="left" cellspacing=0 cellpadding=2>
+			<table border=0 cellspacing=0 cellpadding=2>
 				<tr>
 					<td class="<? echo $class?>" align="center" width=50><img src="pictures/ausruf.gif"></td>
-					<td class="<? echo $class?>" align="left"><font color=#000000><?php print $msg ?></font></td>
+					<td class="<? echo $class?>" align="left"><font color="#000000"><?php print $msg ?></font></td>
 				</tr>
 			</table>
 		</td>

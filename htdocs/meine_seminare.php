@@ -248,11 +248,11 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 						<td align="center">
 							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
 								<tr>
-									<td class="blank" colspan="2">&nbsp;
+									<td class="blank" colspan="4">&nbsp;
 									</td>
 								</tr>
 								<tr align="center">
-									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" ".tooltip("Gruppe ändern")." border="0"></a></th>
+									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" <? echo tooltip("Gruppe ändern") ?> border="0"></a></th>
 									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
 									<? 
@@ -343,7 +343,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	}
 	?>
 	<tr>
-		<td class="blank" colspan=2>&nbsp;
+		<td class="blank">&nbsp;
 		</td>
 	</tr>
 	<?
@@ -423,7 +423,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				&nbsp;&nbsp;
 			</td>
 			<td class="blank" width="240" valign="top">
-				<table "center" width="100%" border=0 cellpadding=0 cellspacing=0>
+				<table align="center" width="100%" border=0 cellpadding=0 cellspacing=0>
 					<tr>
 						<td class="blank" width="100%" align="right" colspan=2>
 							<img src="pictures/seminare.jpg">
@@ -431,7 +431,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					</tr>
 					<tr>
 						<td class="angemeldet" width="100%" colspan=2>
-							<table "center" width="99%" border=0 cellpadding=4 cellspacing=0>
+							<table align="center" width="99%" border=0 cellpadding=4 cellspacing=0>
 								<tr>
 									<td class="blank" width="100%" colspan=2>
 										<font size=-1><b><? print "Information" ?>:</b></font>
