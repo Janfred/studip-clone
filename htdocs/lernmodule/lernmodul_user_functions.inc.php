@@ -248,7 +248,7 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 	{
 		$query_string = "UPDATE object2 "
 			."SET own_id='" . $ilias_systemgroup[$status] . "' "
-			."WHERE own_id=$old_own_id vri_id=$u_id AND vri_typ='user' AND vri_inst=1";
+			."WHERE own_id=$old_own_id AND vri_id=$u_id AND vri_typ='user' AND vri_inst=1";
 		$ilias_db->query($query_string);
 	}
 	else 
