@@ -134,7 +134,6 @@ function print_seminar_content($semid,$my_sem_values) {
 		$links_admin_data =''; 	//Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.		
 
 		include "header.php";   //hier wird der "Kopf" nachgeladen
-		require_once "datei.inc.php"; //brauchen wir fuers Dateizaehlen
 		require_once "config.inc.php"; // Klarnamen fuer den Veranstaltungsstatus
 		require_once "visual.inc.php"; // htmlReady fuer die Veranstaltungsnamen
 		require_once "dates.inc.php"; // Semester-Namen fuer Admins
