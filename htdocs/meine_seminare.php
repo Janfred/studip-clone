@@ -292,7 +292,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ECHO "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 		if ($lastVisit <= $values["chdate"])
 			print ("<font color=\"red\">");    // red color for new metadates
-		ECHO htmlReady($values["name"]);
+		ECHO "&nbsp;".htmlReady($values["name"]);
 		if ($lastVisit <= $values["chdate"])
 			print ("</font>");
 		print ("</a></td>");
