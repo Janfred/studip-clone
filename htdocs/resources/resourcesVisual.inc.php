@@ -127,9 +127,8 @@ class ShowList extends ShowTreeRow{
 			
 		while ($db->next_record()) {
 			$this->showListObject($db->f("resource_id"), $this->admin_buttons);
-							
 			//in weitere Ebene abtauchen
-			if (($recurse_levels == -1) || ($recurse_levels < $levels + 1)) {
+			if (($this->recurse_levels == -1) || ($level + 1 < $this->recurse_levels)) {
 				//Untergeordnete Objekte laden
 				$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ");
 				

@@ -13,8 +13,8 @@ if ($resources_data["view"] == "resources")
 
 //Open a level/resource
 if ($structure_open) {
-	$resources_data["actual_object"]=$structure_open;
 	$resources_data["structure_opens"][$structure_open] =TRUE;
+	$resources_data["actual_object"]=$structure_open;
 }
 
 //Close a level/resource
@@ -32,6 +32,13 @@ if ($open_list) {
 	$resources_data["list_open"]=$open_list;
 	$resources_data["view"]="_lists";
 	}
+
+if ($recurse_list) 
+	$resources_data["list_recurse"]=TRUE;
+
+if ($nrecurse_list) 
+	$resources_data["list_recurse"]=FALSE;
+
 
 //Neue Hierachieebene oder Unterebene anlegen
 if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {

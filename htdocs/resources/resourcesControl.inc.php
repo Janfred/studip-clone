@@ -84,14 +84,18 @@ include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
 							print "<tr><td class=\"blank\">&nbsp; </td></tr>";
 							$msg->displayAllMsg($view_mode = "line");
 						}
+						if ($page_intro) {
 						?>
 						<tr>
-							<td class="blank"><br />
+							<td class="blank"><? (!$infobox) ? print "<br />":"" ?>
 								<blockquote>
 								<? echo $page_intro ?>
 								&nbsp; </blockquote>
 							</td>
 						</tr>	
+						<?
+						}
+						?>
 						<tr>
 							<td class="blank" valign ="top">
 	
@@ -134,7 +138,12 @@ Listview, die Listendarstellung, views: lists, _lists, openobject_main
 if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $resources_data["view"]=="openobject_main") {
 
 	$list=new ShowList();
-	$list->setRecurseLevels(-1);
+
+	if ($resources_data["list_recurse"])
+		$list->setRecurseLevels(-1);
+	else
+		$list->setRecurseLevels(0);
+		
 	if ($resources_data["view"] != "openobject_main")
 		$list->setAdminButtons(TRUE);
 	
