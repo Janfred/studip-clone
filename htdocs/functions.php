@@ -229,47 +229,29 @@ $user_id=$user->id; //damit keiner schummelt...
 ///// Werte holen...
 
 $db=new DB_Seminar;
-$db->query("SELECT count(topic_id) as postings FROM px_topics WHERE user_id = '$user_id' GROUP BY user_id");
-if ($db->num_rows()) {
-	while ($db->next_record()) {
-		$postings=$db->f("postings");
-		}
-	}
-$db=new DB_Seminar;
-$db->query("SELECT count(dokument_id) as dokumente FROM dokumente WHERE user_id = '$user_id' GROUP BY user_id");
-if ($db->num_rows()) {
-	while ($db->next_record()) {
-		$dokumente=$db->f("dokumente");
-		}
-	}
-$db=new DB_Seminar;
-$db->query("SELECT count(Seminar_id) as seminare FROM seminar_user WHERE user_id = '$user_id' GROUP BY user_id");
-if ($db->num_rows()) {
-	while ($db->next_record()) {
-		$seminare=$db->f("seminare");
-		}
-	}
-$db=new DB_Seminar;
-$db->query("SELECT count(seminar_id) as archiv FROM archiv_user WHERE user_id = '$user_id' GROUP BY user_id");
-if ($db->num_rows()) {
-	while ($db->next_record()) {
-		$archiv=$db->f("archiv");
-		}
-	}
-$db=new DB_Seminar;
-$db->query("SELECT count(institut_id) as institut FROM user_inst WHERE user_id = '$user_id' GROUP BY user_id");
-if ($db->num_rows()) {
-	while ($db->next_record()) {
-		$institut=$db->f("institut");
-		}
-	}
-$db=new DB_Seminar;
-$db->query("SELECT count(news_id) as news FROM news WHERE user_id = '$user_id' GROUP BY user_id");
-if ($db->num_rows()) {
-	while ($db->next_record()) {
-		$news=$db->f("news");
-		}
-	}
+$db->query("SELECT count(*) as postings FROM px_topics WHERE user_id = '$user_id' ");
+$db->next_record();
+$postings=$db->f("postings");
+
+$db->query("SELECT count(*) as dokumente FROM dokumente WHERE user_id = '$user_id' ");
+$db->next_record();
+$dokumente=$db->f("dokumente");
+
+$db->query("SELECT count(*) as seminare FROM seminar_user WHERE user_id = '$user_id' ");
+$db->next_record();
+$seminare=$db->f("seminare");
+
+$db->query("SELECT count(*) as archiv FROM archiv_user WHERE user_id = '$user_id' ");
+$db->next_record();
+$archiv=$db->f("archiv");
+
+$db->query("SELECT count(*) as institut FROM user_inst WHERE user_id = '$user_id' ");
+$db->next_record();
+$institut=$db->f("institut");
+
+$db->query("SELECT count(*) as news FROM news WHERE user_id = '$user_id' ");
+$db->next_record();
+$news=$db->f("news");
 
 
 ///////////////////////// Die HOCHGEHEIME Formel:
@@ -279,11 +261,11 @@ if(file_exists("./user/".$user_id.".jpg")) $score *=10;
 
 /// Schreiben wenn hoeher
 
-	$db=new DB_Seminar;
-	$query = "UPDATE user_info "
-		." SET score = \"$score\""
-		." WHERE user_id = '$user_id' AND score > 0";
-		$result = mysql_query($query);
+	
+$query = "UPDATE user_info "
+	." SET score = '$score'"
+	." WHERE user_id = '$user_id' AND score > 0";
+$db->query($query);
 	
 RETURN $score;
 }
