@@ -120,25 +120,38 @@ $reiter->create($structure, $view);
 	</table>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
+		<td class="blank" colspan=4>
+			 <br />&nbsp; &nbsp; <font size=-1><b>Entwicklung und Support: </b></font><br />&nbsp; 
+		</td>
 		<td class="blank" colspan=3>
-			<blockquote>
-				 <br>&nbsp;<font size=-1>gef&ouml;rdert von </font><br>
-			</blockquote>
+			 <br /><font size=-1><b>gef&ouml;rdert von: </b></font><br />&nbsp; 
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="blank" width="15%">
-			<blockquote>
-				<a target="_new" href="http://www.bmbf.de/"><img src="pictures/bmbf.gif" border="0" /></a>
-			</blockquote>
+		<td class="blank" width="4%">&nbsp; 
 		</td>
-		<td align="left" class="blank" width="15%">
-			<blockquote>
-				<a target="_new" href="http://www.campussource.de/"><img src="pictures/cslogotransparent.jpg" border="0" /></a>
-			</blockquote>
+		<td align="left" class="blank" width="15%" align="center">
+			<a target="_new" href="http://www.zim.uni-goettingen.de/"><img src="pictures/zim.gif" border="0" /></a>
 		</td>
-		<td align="center" class="blank" width="70%">
+		<td align="left" class="blank" width="15%" align="center">
+			<a target="_new" href="http://www.data-quest.de/"><img src="pictures/dataquest.gif" border="0" /></a>
+		</td>
+		<td align="left" class="blank" width="15%" align="center">
 			&nbsp; 
+		</td>
+		<td align="left" class="blank" width="15%" align="center">
+			<a target="_new" href="http://www.bmbf.de/"><img src="pictures/bmbf.gif" border="0" /></a>
+		</td>
+		<td align="left" class="blank" width="15%" align="center">
+			<a target="_new" href="http://www.campussource.de/"><img src="pictures/cslogotransparent.jpg" border="0" /></a>
+		</td>
+		<td align="center" class="blank" width="25%">
+			&nbsp; 
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" colspan=7>
+			<br />
 		</td>
 	</tr>
 	<?}
