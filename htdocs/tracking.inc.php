@@ -33,7 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-
+/*
 $db = new DB_Seminar;
 
 $query = sprintf ("SELECT user_id FROM tracking_user WHERE user_id = '%s'", $user->id);
@@ -44,5 +44,5 @@ if ($db->next_record()) {
 	$query = sprintf ("INSERT INTO tracking_data SET entry_id = '%s', user_id = '%s', page = '%s', params = '%s', timestamp = '%s', open_object = '%s', user_ip = '%s', user_agent = '%s' ", md5(uniqid(rand())), $user->id, $i_page, $QUERY_STRING, time(), $SessSemName[1], $REMOTE_ADDR, $HTTP_USER_AGENT);
 	$db->query($query);
 }
-
+*/
 ?>
