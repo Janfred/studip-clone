@@ -122,9 +122,9 @@ if (($edit_x) && (!$admin_dates_data["show_all"]))
 
 
 //save the edit-arrays (if sent from from) in a persistent varaiable
-if (is_array ($termin_id)) {
+if ((is_array ($termin_id)) || (is_array ($kill_termin))){
 	$admin_dates_data["form_data"] = '';
-	foreach ($termin_id as $key=>$val) {
+	if (is_array ($termin_id)) foreach ($termin_id as $key=>$val) {
 		$admin_dates_data["form_data"][$val]["termin_id"] = $termin_id[$key];
 		$admin_dates_data["form_data"][$val]["topic_id"] = $topic_id[$key];
 		$admin_dates_data["form_data"][$val]["tag"] = $tag[$key];
@@ -142,7 +142,10 @@ if (is_array ($termin_id)) {
 		$admin_dates_data["form_data"][$val]["resource_id"] = $resource_id[$key];
 		$admin_dates_data["form_data"][$val]["raum"] = $raum[$key];
 	}
-}
+	if (is_array ($kill_termin)) foreach ($kill_termin as $key=>$val) {
+		$admin_dates_data["form_data"][$val]["kill_termin"] = $kill_termin[$key];
+	}
+}	
 
 if ($reset_edit)
 	$admin_dates_data["form_data"] = '';
@@ -297,26 +300,29 @@ if ($new) {
 		$result.="error§" . _("Der Termin wurde <u>nicht</u> eingef&uuml;gt!");
 }  // end if ($new)
 
-if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_id"])) {
-	//reload the temporaray data, if user want to resent (and create a request)
-	if ($save_changes_with_request) {
-		foreach ($admin_dates_data["form_data"] as $key=>$val) {
-			$termin_id [] = $key;
-			$tag[] = $val["tag"];
-			$monat[] = $val["monat"];
-			$jahr[] = $val["jahr"];
-			$stunde[] = $val["stunde"];
-			$minute[] = $val["minute"];
-			$end_stunde[] = $val["end_stunde"];
-			$end_minute[] = $val["end_minute"];
-			$titel[] = $val["t_titel"];
-			$description[] = $val["description"];
-			$insert_topic[] = $val["insert_topic"];
-			$insert_folder[] = $val["insert_folder"];
-			$art[] = $val["art"];
-			$raum[] = $val["raum"];
-		}
+//reload the temporaray data, if user want to resent (and create a request)
+if (($save_changes_with_request) || ($delete_confirm)) {
+	foreach ($admin_dates_data["form_data"] as $key=>$val) {
+		$termin_id [] = $key;
+		$tag[] = $val["tag"];
+		$monat[] = $val["monat"];
+		$jahr[] = $val["jahr"];
+		$stunde[] = $val["stunde"];
+		$minute[] = $val["minute"];
+		$end_stunde[] = $val["end_stunde"];
+		$end_minute[] = $val["end_minute"];
+		$titel[] = $val["t_titel"];
+		$description[] = $val["description"];
+		$insert_topic[] = $val["insert_topic"];
+		$insert_folder[] = $val["insert_folder"];
+		$art[] = $val["art"];
+		$raum[] = $val["raum"];
+		$kill_termin[] = $val["kill_termin"];
 	}
+}
+
+
+if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_id"])) {
 	if (is_array($termin_id)) {
 		for ($i=0; $i < sizeof($termin_id); $i++) {
 		 	$t_id=$termin_id[$i];
@@ -377,14 +383,26 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 		$updateAssign->updateAssign();
 	}
 }  // end if ($edit_x)
-
-if (($kill_x) && ($admin_dates_data["range_id"])) {
+if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 	if (is_array($kill_termin)) {
-		for ($i=0; $i < count($kill_termin); $i++) {
+		for ($i=0; $i < count($kill_termin); $i++) {		
 			$teile = explode("&",$kill_termin[$i]);
-	 		$del_count=$del_count+delete_date($teile[0], $teile[1], TRUE, $admin_dates_data["range_id"]);
+			$do_delete = TRUE;
+			if (($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$delete_confirm)){
+				if ($assigned_room = getDateAssigenedRoom($teile[0])) {
+					$resObjPrm = new ResourceObjectPerms($assigned_room);
+					if (!$resObjPrm->havePerm("autor")) {
+						$result .= "info§" . sprintf(_("Sie wollen einen Termin l&ouml;schen, dem ein Raum zugewiesen ist. Beim L&ouml;schen verlieren Sie diese Raumbuchung. Wollen Sie den Termin wirklich l&ouml;schen?"));
+						$result .= "<br /><a href=\"$PHP_SELF?delete_confirm=1\">".makeButton("ja2")."</a>&nbsp;<a href=\"$PHP_SELF?reset_edit=1\">".makeButton("nein")."</a>§";
+						$do_delete = FALSE;
+					}
+				}
+			}
+			if ($do_delete) {
+		 		delete_date($teile[0], $teile[1], TRUE, $admin_dates_data["range_id"]);
+		 		$del_count++;
+		 	}
 		}
-		$del_count=count($kill_termin);
 	}
 
 	//after every change, we have to do this check (and we create the msgs...)
@@ -395,9 +413,9 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 	
 	if ($del_count)
 		if ($del_count == 1)
-			$result="msg§" . _("1 Termin wurde gel&ouml;scht!");
+			$result.="msg§" . _("1 Termin wurde gel&ouml;scht!");
 		else
-			$result="msg§" . sprintf(_("%s Termine wurden gel&ouml;scht!"), $del_count);
+			$result.="msg§" . sprintf(_("%s Termine wurden gel&ouml;scht!"), $del_count);
 	$beschreibung='';
 
 }  // end if ($kill_x)
@@ -653,6 +671,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	
 	//Wenn insert gesetzt, neuen Anlegen...
 	if ($admin_dates_data["insert_id"]) {
+		$kill_termin = '';
 				
 		//Titel erstellen
 		$titel='';
@@ -758,6 +777,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$art = $admin_dates_data["form_data"][$db->f("termin_id")]["art"];
 			$resource_id = getDateAssigenedRoom($db->f("termin_id"));
 			$raum = $admin_dates_data["form_data"][$db->f("termin_id")]["raum"];
+			$kill_termin = $admin_dates_data["form_data"][$db->f("termin_id")]["kill_termin"];
 		//otherwise, we use the saved state
 		} else {
 			$topic_id = $db->f("topic_id");
@@ -791,7 +811,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		
 		//Zusatz erstellen
 		if ((!$admin_dates_data["insert_id"]) && ($show_id  != $db->f("termin_id")) && (!$show_all))
-			$zusatz="<input type=\"CHECKBOX\" ".(($mark_all_x) ? "checked" : "")." name=\"kill_termin[]\" value=\"". $db->f("termin_id")."&". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
+			$zusatz="<input type=\"CHECKBOX\" ".((($mark_all_x) || ($kill_termin)) ? "checked" : "")." name=\"kill_termin[]\" value=\"". $db->f("termin_id")."&". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
 		else
 			$zusatz='';
 
