@@ -2085,11 +2085,11 @@ if ($level==3) {
 												while ($resObject = $resList->nextEvent()) {
 													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 												}
-												print "</select></font>";
+												print "</select>";
 											}
 										}
 										?>
-										&nbsp; <font size=-1><input type="text" name="term_turnus_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_turnus_room"][$i]) ?>"/></font>&nbsp; 
+										&nbsp; <input type="text" name="term_turnus_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_turnus_room"][$i]) ?>"/></font>&nbsp; 
 										<?
 											print "<br />";
 									}
