@@ -251,7 +251,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	
 		//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
 		if (($add_studg_x) || ($delete_studg) || ($uebernehmen_x)) {
-			if ($admin_admission_data["admission_type"]) {
+			if (($admin_admission_data["admission_type"]) && (!$admin_admission_data["admission_type_org"])) {
 				if ((!$admin_admission_data["admission_ratios_changed"]) && (!$add_ratio)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
 					if (is_array($admin_admission_data["studg"]))
 						foreach ($admin_admission_data["studg"] as $key=>$val)
@@ -328,6 +328,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					$messaging->insert_sms ($db->f("username"), $message, "____%system%____");
 					}
 			}
+
+			//Kill old data
+			$db2->query ("DELETE FROM admission_seminar_studiengang WHERE seminar_id= '".$admin_admission_data["sem_id"]."' ");
+			$admin_admission_data["write_level"]='';
+			$admin_admission_data["read_level"]='';
+			$admin_admission_data["passwort"]='';
 		}
 
 		//Variante nachtraeglich Anmeldeverfahren beenden, alle aus Warteliste kommen in die Veranstaltung
@@ -341,6 +347,13 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			}
 			if ($db->num_rows())
 				$db2->query("DELETE FROM admission_seminar_user  WHERE seminar_id ='".$admin_admission_data["sem_id"]."' ");
+			
+			//Kill old Studiengang entries and data
+			$db2->query ("DELETE FROM admission_seminar_studiengang WHERE seminar_id= '".$admin_admission_data["sem_id"]."' ");
+			$admin_admission_data["studg"]='';
+			$admin_admission_data["all_ratio"]='';
+			$admin_admission_data["admission_ratios_changed"]='';
+			$admin_admission_data["admission_endtime"]='';
 		}
 		
 		//Eintrag der zugelassen Studienbereiche
