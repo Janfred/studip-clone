@@ -255,12 +255,13 @@ class AssignObject {
 		else
 			$end = mktime (23,59,59, date("n", $this->end), date("j", $this->end), date("Y", $this->end));
 			
+		//load the existing assigns for the given resource...
 		list_restore_assign($this, $this->resource_id, $start, $end);
 	
-		if ($this->isNewObject) {
-			create_assigns($this, $this);
-		}
+		//...and add the planned assign to perform the checks ...
+		create_assigns($this, $this);
 		
+		//..so we have a  "virtual" set of assign-events in the given resource. Now we can check...
 		if (is_array($this->events))
 			$keys=array_keys($this->events);
 		
