@@ -24,20 +24,30 @@ $perm->check("user");
 
 ob_start(); //Outputbuffering für maximal Performance
 
-function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $type, $obj_ids, $add_fields = false){
-	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " a.{$range_field} as object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue 
-	FROM $table_name LEFT JOIN object_user_visits b ON (b.object_id = a.{$range_field} AND b.user_id = '".$GLOBALS['user']->id."' AND b.type IN ('$type'))
-	WHERE a.{$range_field} IN $obj_ids GROUP BY a.{$range_field}";
+function get_obj_clause($table_name, $range_field, $count_field, $if_clause, $type = false, $add_fields = false, $add_on = false){
+	
+	$type = ($type) ? $type : "sem','inst";
+	$on_clause = " ON(my.object_id=a.{$range_field} $add_on) ";
+	if (strpos($table_name,'{ON_CLAUSE}') !== false){
+		$table_name = str_replace('{ON_CLAUSE}', $on_clause, $table_name);
+	} else {
+		$table_name .= $on_clause;
+	}
+	return "SELECT " . ($add_fields ? $add_fields . ", " : "" ) . " my.object_id, COUNT($count_field) as count, COUNT(IF($if_clause, $count_field, NULL)) AS neue 
+	FROM myobj_".$GLOBALS['user']->id." my LEFT JOIN object_user_visits b ON (b.object_id = my.object_id AND b.user_id = '".$GLOBALS['user']->id."' AND b.type IN ('$type')) INNER JOIN $table_name 
+	GROUP BY my.object_id";
+	
 }
+
 
 function get_my_obj_values(&$my_obj) {
 	
 	$user_id = $GLOBALS['user']->id;
 	$db2 = new DB_seminar;
-	$obj_ids = "('" . join("','",array_keys($my_obj)) . "')" ;
-	
+	$db2->query("CREATE  TABLE IF NOT EXISTS myobj_".$user_id." ( object_id char(32) NOT NULL ) TYPE=HEAP");
+	$db2->query("REPLACE INTO  myobj_" . $user_id . " (object_id) VALUES ('" . join("'),('", array_keys($my_obj)) . "')");
 	// Postings
-	$db2->query(get_obj_clause('px_topics a','Seminar_id','topic_id',"(chdate > IFNULL(b.visitdate,0) AND chdate >= mkdate AND a.user_id !='$user_id')", 'forum', $obj_ids));
+	$db2->query(get_obj_clause('px_topics a','Seminar_id','topic_id',"(a.chdate > IFNULL(b.visitdate,0) AND a.chdate >= a.mkdate AND a.user_id !='$user_id')", 'forum'));
 	while($db2->next_record()) {
 		if ($my_obj[$db2->f("object_id")]["modules"]["forum"]) {
 			$my_obj[$db2->f("object_id")]["neuepostings"]=$db2->f("neue");
@@ -46,7 +56,7 @@ function get_my_obj_values(&$my_obj) {
 	}
 	
 	//dokumente
-	$db2->query(get_obj_clause('dokumente a','Seminar_id','dokument_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'documents', $obj_ids));
+	$db2->query(get_obj_clause('dokumente a','Seminar_id','dokument_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'documents'));
 	while($db2->next_record()) {
 		if ($my_obj[$db2->f("object_id")]["modules"]["documents"]) {
 			$my_obj[$db2->f("object_id")]["neuedokumente"]=$db2->f("neue");
@@ -56,14 +66,14 @@ function get_my_obj_values(&$my_obj) {
 
 	//News
 	
-	$db2->query(get_obj_clause('news_range a LEFT JOIN news nw USING(news_id)','range_id','(IF(date < UNIX_TIMESTAMP(),range_id,NULL))',"(date > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')", "sem','inst", $obj_ids));
+	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw USING(news_id)','range_id','(IF(date < UNIX_TIMESTAMP(),range_id,NULL))',"(date > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')"));
 	while($db2->next_record()) {
 		$my_obj[$db2->f("object_id")]["neuenews"]=$db2->f("neue");
 		$my_obj[$db2->f("object_id")]["news"]=$db2->f("count");
 	}
 	
 	// scm?
-	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", "scm", $obj_ids, 'tab_name'));
+	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", "scm", 'tab_name'));
 	while($db2->next_record()) {
 		if ($my_obj[$db2->f("object_id")]["modules"]["scm"]) {	
 			$my_obj[$db2->f("object_id")]["neuscmcontent"]=$db2->f("neue");
@@ -73,7 +83,7 @@ function get_my_obj_values(&$my_obj) {
 	}
 	
 	//Literaturlisten
-	$db2->query(get_obj_clause('lit_list a','range_id','list_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'literature', $obj_ids . " AND a.visibility=1"));
+	$db2->query(get_obj_clause('lit_list a','range_id','list_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'literature', false, " AND a.visibility=1"));
 	while($db2->next_record()) {
 		if ($my_obj[$db2->f("object_id")]["modules"]["literature"]) {	
 			$my_obj[$db2->f("object_id")]["neuelitlist"]=$db2->f("neue");
@@ -82,7 +92,7 @@ function get_my_obj_values(&$my_obj) {
 	}
 	
 	//Termine?
-	$db2->query(get_obj_clause('termine a','range_id','termin_id',"(chdate > IFNULL(b.visitdate,0) AND autor_id !='$user_id')", 'schedule', $obj_ids));
+	$db2->query(get_obj_clause('termine a','range_id','termin_id',"(chdate > IFNULL(b.visitdate,0) AND autor_id !='$user_id')", 'schedule'));
 	while($db2->next_record()) {
 		if ($my_obj[$db2->f("object_id")]["modules"]["schedule"]) {	
 			$my_obj[$db2->f("object_id")]["neuetermine"]=$db2->f("neue");
@@ -92,7 +102,7 @@ function get_my_obj_values(&$my_obj) {
 	
 	//Wiki-Eintraege?
         if ($GLOBALS['WIKI_ENABLE']) {
-		$db2->query(get_obj_clause('wiki a','range_id','keyword',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'wiki', $obj_ids,"COUNT(DISTINCT keyword) as count_d"));
+		$db2->query(get_obj_clause('wiki a','range_id','keyword',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'wiki', "COUNT(DISTINCT keyword) as count_d"));
 		while($db2->next_record()) {
 			if ($my_obj[$db2->f("object_id")]["modules"]["wiki"]) {	
 				$my_obj[$db2->f("object_id")]["neuewikiseiten"]=$db2->f("neue");
@@ -104,20 +114,20 @@ function get_my_obj_values(&$my_obj) {
 	//Umfragen
 	if ($GLOBALS['VOTE_ENABLE']) {
 		$db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate,0) AND a.author_id !='$user_id')",
-									"sem','inst", $obj_ids . " AND a.state IN('active','stopvis')"));
+									false, false , " AND a.state IN('active','stopvis')"));
 		while($db2->next_record()) {
 				$my_obj[$db2->f("object_id")]["neuevotes"] = $db2->f("neue");
 				$my_obj[$db2->f("object_id")]["votes"] = $db2->f("count");
 		}
 		
-		$db2->query(get_obj_clause('eval_range a INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate IS NOT NULL AND (d.stopdate > UNIX_TIMESTAMP() OR d.stopdate IS NULL) )',
-									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id')",
-									"sem','inst", $obj_ids));
+		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate IS NOT NULL AND (d.stopdate > UNIX_TIMESTAMP() OR d.stopdate IS NULL) )',
+									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id')"));
 		while($db2->next_record()) {
 				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
 				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
 		}
 	}
+	$db2->query("DROP TABLE myobj_" . $user_id);
 	
 	return;
 }
@@ -830,9 +840,9 @@ elseif ($auth->auth["perm"]=="admin") {
 		if ($sortby == "teilnehmer")
 		$sortby = "teilnehmer DESC";
 		$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate
-					FROM Institute LEFT JOIN seminare USING(Institut_id) LEFT JOIN seminar_user USING(Seminar_id) 
+					FROM Institute INNER JOIN seminare USING(Institut_id) INNER JOIN seminar_user USING(Seminar_id) 
 					LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminare.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
-					WHERE Institute.Institut_id='$_my_admin_inst_id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
+					WHERE Institute.Institut_id='$_my_admin_inst_id' GROUP BY seminare.Seminar_id ORDER BY $sortby");
 		$num_my_sem=$db->num_rows();
 		if (!$num_my_sem) 
 			$meldung = "msg§"
