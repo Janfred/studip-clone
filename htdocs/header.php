@@ -96,7 +96,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				echo MakeToolbar("pictures/login.gif","index.php?again=yes",_("Login"),_("Am System anmelden"),40,"_top","right");
 
 ?>
-				</td></tr></table></td>
+			</td></tr></table></td>
 			</tr>
 		</table>
 
@@ -171,6 +171,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			$active_chats = count($chatServer->chatDetail);
 			if (!$chatter){
 				$chat_tip = _("Es ist niemand im Chat");
+			} elseif ($chatter == 1 && $chatServer->chatUser[$user->id]){
+				$chat_tip =_("Nur Sie sind im Chat");
 			} elseif ($chatter == 1){
 				$chat_tip =_("Es ist eine Person im Chat");
 			} else {
@@ -183,6 +185,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			}
 			if ($chatm){
 				echo MakeToolbar("pictures/chateinladung.gif","chat_online.php",_("Chat"),(($chatm == 1) ? _("Sie haben eine Chateinladung") : sprintf(_("Sie haben %s Chateinladungen"),$chatm)) . ", " . $chat_tip,30,"_top","left");
+			} elseif ($chatter == 1 && $chatServer->chatUser[$user->id]){
+				echo MakeToolbar("pictures/chat3.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
 			} elseif ($chatter) {
 				echo MakeToolbar("pictures/chat2.gif","chat_online.php",_("Chat"),$chat_tip,40,"_top","left");
 			} else {
