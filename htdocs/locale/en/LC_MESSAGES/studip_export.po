@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-02-17 18:16+0100\n"
+"POT-Creation-Date: 2003-03-02 19:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,7 @@ msgstr ""
 
 #: export/export_choose_xslt.inc.php:70 export/export_choose_xslt.inc.php:122
 #: export/export_choose_xslt.inc.php:191 export/export_choose_xslt.inc.php:247
+#: export/export_run_fop.inc.php:50 export/export_run_fop.inc.php:123
 #: export/export_run_xslt.inc.php:62 export/export_run_xslt.inc.php:155
 #: export/export_start.inc.php:87 export/export_xml.inc.php:51
 #: export/export_xml.inc.php:113
@@ -75,8 +76,9 @@ msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 1/3 %s"
 msgstr ""
 
 #: export/export_choose_xslt.inc.php:131 export/export_choose_xslt.inc.php:200
-#: export/export_choose_xslt.inc.php:256 export/export_run_xslt.inc.php:165
-#: export/export_start.inc.php:96 export/export_xml.inc.php:124
+#: export/export_choose_xslt.inc.php:256 export/export_run_fop.inc.php:132
+#: export/export_run_xslt.inc.php:165 export/export_start.inc.php:96
+#: export/export_xml.inc.php:124
 msgid "Aktionen:"
 msgstr ""
 
@@ -319,33 +321,37 @@ msgid ""
 "'weiter.'"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:137
+#: export/export_studipdata_func.inc.php:135
+msgid "KEINE BERECHTIGUNG!"
+msgstr ""
+
+#: export/export_studipdata_func.inc.php:139
 msgid "Der gewählte Exportmodus wird nicht unterstützt."
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:276
+#: export/export_studipdata_func.inc.php:278
 msgid "DozentInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:277
+#: export/export_studipdata_func.inc.php:279
 msgid "TutorInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:278
-#: export/export_studipdata_func.inc.php:283
+#: export/export_studipdata_func.inc.php:280
+#: export/export_studipdata_func.inc.php:285
 msgid "AutorInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:279
-#: export/export_studipdata_func.inc.php:284
+#: export/export_studipdata_func.inc.php:281
+#: export/export_studipdata_func.inc.php:286
 msgid "LeserInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:281
+#: export/export_studipdata_func.inc.php:283
 msgid "LeiterInnen"
 msgstr ""
 
-#: export/export_studipdata_func.inc.php:282
+#: export/export_studipdata_func.inc.php:284
 msgid "Mitglieder"
 msgstr ""
 
