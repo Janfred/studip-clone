@@ -1,4 +1,17 @@
 <?
+/**
+* Administration of learning-modules in the connected ILIAS-Installation.
+* 
+* This file includes administration tools for learning-modules. 
+* It allows to delete or edit learning-modules and to create new ones. 
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		admin_lernmodule
+* @package		ELearning
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // admin_lernmodule.php

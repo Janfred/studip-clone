@@ -1,4 +1,16 @@
 <?
+/**
+* Learning-modules that are connected to a lecture
+* 
+* This file shows a list of ilias learning-modules that are connected to the chosen lecture.
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		account_migration
+* @package		ELearning
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // seminar_lernmodul.php

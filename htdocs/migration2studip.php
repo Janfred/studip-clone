@@ -1,6 +1,6 @@
 <?
 /**
-* Account-Migration from Stud.IP.
+* Account-Migration from Stud.IP to ILIAS.
 * 
 * This file calls functions to create ILIAS-Useraccounts 
 * and to connect them with Stud.IP-Accounts.
@@ -33,6 +33,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+/**
+* Asks for ILIAS-user-authentification
+*
+* This function echos a question for unsername and password of an ILIAS-Account.
+*
+* @access	public        
+*/
 function ilias_auth_user()
 {
 	global $ilias_uname, $ilias_pw, $auth_mode;
@@ -45,6 +52,13 @@ function ilias_auth_user()
 	$auth_mode = false;
 }
 
+/**
+* ILIAS-user-authentification
+*
+* This function checks if the given password and unsername are correct.
+*
+* @access	public        
+*/
 function check_ilias_auth()
 {
 	global $ilias_uname, $ilias_pw, $out;
@@ -64,6 +78,13 @@ function check_ilias_auth()
  	return false;
 }
 
+/**
+* Stud.IP-user-authentification
+*
+* This function checks if the given password and unsername are correct.
+*
+* @access	public        
+*/
 function check_studip_auth()
 {
 	global $studip_uname, $studip_pw;
@@ -82,6 +103,13 @@ function check_studip_auth()
 	return false;
 }
 
+/**
+* Asks for Stud.IP-user-authentification
+*
+* This function echos a question for unsername and password of a Stud.IP-Account.
+*
+* @access	public        
+*/
 function studip_auth_user()
 {
 	global $studip_uname, $studip_pw, $auth_mode;

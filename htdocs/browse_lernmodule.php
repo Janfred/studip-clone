@@ -1,4 +1,16 @@
 <?
+/**
+* Browse learning-modules in the connected ILIAS-Installation.
+* 
+* This file allows to search for ILIAS-learning modules. The search-results are shown in a result-table.
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		browse_lernmodule
+* @package		ELearning
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // browse_lernmodule.php
