@@ -92,7 +92,7 @@ array	(	"name" => _("Erste Schritte"),
 				"kategorien" => array	(	
 																array	(	"name" => _("Die Startseite"),
 																				"text" => _("Ihre Übersichtsseite nach jedem Login"),
-																				"page" => "startseite.html"
+																				"page" => "startseite.htm"
 																			),
 																
 																array	(	"name" => _("Schnelleinstieg"),
