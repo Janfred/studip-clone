@@ -96,15 +96,17 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 			}
 			if($cloned_event->getStart() < ($day_obj->getStart() + $start))
 				$cloned_event->setStart($day_obj->getStart() + $start);
-			if($cloned_event->getEnd() > ($day_obj->getStart() + $end))
+			if($cloned_event->getEnd() > ($day_obj->getStart() + $end + 3600))
 				$cloned_event->setEnd($day_obj->getStart() + $end + 3600);
+				
 			if($day_obj->app[$i]->isDayEvent())
 				$tmp_day_event[] = $cloned_event;
 			else
 				$tmp_event[] = $cloned_event;
 		}
 	}
-	// maximale Spaltenzahl ermitteln
+	
+	// calculate maximum number of columns
 	$w = 0;
 	for($i = $start / $step;$i < $end / $step + 3600 / $step;$i++){
 		$spalte = 0;
@@ -159,16 +161,16 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 	// Zeile fuer Tagestermine
 	if($precol){
 		if($step >= 3600){
-			$day_event_row[0] = "<th width=\"$width_precol_1%\">&nbsp;</th>";
-			$day_event_row[0] .= "<td width=\"".(100 - $width_precol_1)."%\"";
+			$day_event_row[0] = "<th class=\"steel1\" width=\"$width_precol_1%\">&nbsp;</th>";
+			$day_event_row[0] .= "<td class=\"steel1\" width=\"".(100 - $width_precol_1)."%\"";
 		}
 		else{
 			$day_event_row[0] = "<th width=\"".($width_precol_1 + $width_precol_2)."\" colspan=\"2\">Tag</th>";
-			$day_event_row[0] .= "<td width=\"".(100 - $width_precol_1 - $width_precol_2)."%\"";
+			$day_event_row[0] .= "<td class=\"steel1\" width=\"".(100 - $width_precol_1 - $width_precol_2)."%\"";
 	  }
 	}
 	else
-		$day_event_row[0] = "<td";
+		$day_event_row[0] = "<td class=\"steel1\"";
 	
 	if($link_edit){
 		if($max_spalte  > 0)
@@ -181,7 +183,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 	
 	if($tmp_day_event){
 		if($link_edit)
-			$link_edit_str = "<td align=\"right\"><a href=\"calendar.php?cmd=edit&atime=".$day_obj->getTs()
+			$link_edit_str = "<td class=\"steel1\" align=\"right\"><a href=\"calendar.php?cmd=edit&atime=".$day_obj->getTs()
 											."\"><img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"neuer Tagestermin\"></a></td>\n";
 			
 		$day_event_row[0] .= '><table width="100%" border="0" cellpadding="'.($padding / 2).'" cellspacing="1">';
@@ -193,7 +195,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 			$day_event_row[0] .= sprintf('<tr><td bgcolor="%s" style="background-color:%s">'
 																.'<table width="100%%" border="0" cellpadding="1" cellspacing="0"><tr>'
 																, $day_event->getColor(), $day_event->getColor());
-			$day_event_row[0] .= "<td width=\"100%\">$title_str</td>";
+			$day_event_row[0] .= "<td class=\"steel1\" width=\"100%\">$title_str</td>";
 			$day_event_row[0] .= "\n</tr></table></td>$link_edit_str</tr>\n";
 		}
 		$day_event_row[0] .= "</table></td>";
@@ -246,19 +248,19 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 		if(!$term[$zeile]){
 			if($link_edit){
 				if($max_spalte > 0)
-					$tab[$zeile] .= '<td align="right" colspan="'.($max_spalte + 1)
+					$tab[$zeile] .= '<td class="steel1" align="right" colspan="'.($max_spalte + 1)
 												.'"><a href="calendar.php?cmd=edit&atime='.($day_obj->getStart() + $i * $step)
 												.'"><img src="./pictures/cal-link.gif" border="0" alt="'.$link_edit_alt.'"></a>'."</td>\n";
 				else
-					$tab[$zeile] .= "<td align=\"right\"><a href=\"calendar.php?cmd=edit&atime="
+					$tab[$zeile] .= "<td class=\"steel1\" align=\"right\"><a href=\"calendar.php?cmd=edit&atime="
 												.($day_obj->getStart() + $i * $step)
 												."\"><img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n";
 			}
 			else{
 				if($max_spalte > 1)
-					$tab[$zeile] .= '<td colspan="'.$max_spalte.'"><font class="inday">&nbsp;</font>'."</td>\n";
+					$tab[$zeile] .= '<td class="steel1" colspan="'.$max_spalte.'"><font class="inday">&nbsp;</font>'."</td>\n";
 				else
-					$tab[$zeile] .= "<td><font class=\"inday\">&nbsp;</font></td>\n";
+					$tab[$zeile] .= "<td class=\"steel1\"><font class=\"inday\">&nbsp;</font></td>\n";
 			}
 			
 			$height = "";
@@ -271,12 +273,14 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 				$cspan = (int) ($max_spalte / $colsp[$zeile]);
 			else
 				$cspan = 0;
+				
 			$cspan_new = 0;
 			for($j = 0;$j < $colsp[$zeile];$j++){
 				$sp = 0;
 				$n = 0;
 				if($j + 1 == $colsp[$zeile])
 					$cspan += $max_spalte % $colsp[$zeile];
+					
 				if(is_object($term[$zeile][$j])){
 					
 					// Wieviele Termine sind zum aktuellen Termin zeitgleich?
@@ -311,6 +315,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 					$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
 					if($rows == 1){
 						$title = fit_title($term[$zeile][$j]->getTitle(),$colsp[$zeile],$rows,$title_length - 6);
+						// calculating the correct height of the event-cell if the cell has 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
 													, $height_event - $padding);
 						$tab[$zeile] .= sprintf('<a href="calendar.php?cmd=edit&termin_id=%s&atime=%d">'
@@ -321,8 +326,9 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 					}
 					else{
 						$title = fit_title($term[$zeile][$j]->getTitle(),$colsp[$zeile],$rows - 1,$title_length);
+						// calculating the correct height of the event-cell if the cell has _more_ than 1 row
 						$tab[$zeile] .= sprintf("<tr><td class=\"steel1\" height=\"%s\">\n"
-													, ($height_event * ($rows - 1) + $spacing * ($rows - 2) - $padding));
+													, ($height_event * ($rows - 1) + $spacing * ($rows - 1) - (2 * $padding)));
 						$tab[$zeile] .= sprintf('<a href="calendar.php?cmd=edit&termin_id=%s&atime=%d">'
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400));
@@ -357,11 +363,11 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 						$colspan_attr = "";
 						
 					if($link_edit)
-						$tab[$zeile] .= sprintf('<td%s align="right"><a href="calendar.php?cmd=edit&atime=%s">'
+						$tab[$zeile] .= sprintf('<td class="steel1"%s align="right"><a href="calendar.php?cmd=edit&atime=%s">'
 																."<img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n"
 																, $colspan_attr, $day_obj->getStart() + $i * $step);
 					else
-						$tab[$zeile] .= "<td$colspan_attr><font class=\"inday\">&nbsp;</font></td>\n";
+						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr><font class=\"inday\">&nbsp;</font></td>\n";
 						
 					$height = "";
 				}
@@ -376,11 +382,11 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 						$colspan_attr = "";
 					
 					if($link_edit)
-						$tab[$zeile] .= sprintf('<td%s align="right"><a href="calendar.php?cmd=edit&atime=%s">'
+						$tab[$zeile] .= sprintf('<td class="steel1"%s align="right"><a href="calendar.php?cmd=edit&atime=%s">'
 															."<img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n"
 															, $colspan_attr, $day_obj->getStart() + $i * $step);
 					else
-						$tab[$zeile] .= "<td$colspan_attr><font class=\"inday\">&nbsp;</font></td>\n";
+						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr><font class=\"inday\">&nbsp;</font></td>\n";
 					
 					$link_notset = FALSE;
 					$height = "";
@@ -392,7 +398,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 		}
 		
 		if($link_edit && $link_notset)
-			$tab[$zeile] .= "<td width=\"1\" align=\"right\"><a href=\"calendar.php?cmd=edit&atime="
+			$tab[$zeile] .= "<td class=\"steel1\" width=\"1\" align=\"right\"><a href=\"calendar.php?cmd=edit&atime="
 										. ($day_obj->getStart() + $i * $step)
 										. "\"><img src=\"./pictures/cal-link.gif\" border=\"0\" alt=\"".$link_edit_alt."\"></a></td>\n";	
 		
@@ -448,18 +454,17 @@ function createWeekTable($week_obj, $start = 6, $end = 21, $step = 3600, $compac
 	$tab = "";
 	$max_columns = 0;
 	$rows = ($end - $start + 1) * 3600 / $step;
-	// berechnen der maximalen Titellaenge
+	// calculating the maximum title length
 	$length = ceil(125 / $week_obj->getType());
 	
 	for($i = 0;$i < $week_obj->type;$i++)
 		$tab_arr[$i] = createDayTable($week_obj->wdays[$i],$start,$end,$step,FALSE,FALSE,$link_edit,$length,20,4,1);
 		
-	// Wochentag und Datum als Spaltenueberschriften
+	// weekday and date as title for each column
 	for($i = 0;$i < $week_obj->getType();$i++){
-		// Summe aller Spalten
+		// add up all colums of each day
 		$max_columns += $tab_arr[$i]["max_columns"];
 		$dtime = $week_obj->wdays[$i]->getTs();
-		// Spaltenbreiten festlegen
 		if($week_obj->getType() == 5)
 			$tab[0] .= '<th width="18%"';
 		else
@@ -473,7 +478,7 @@ function createWeekTable($week_obj, $start = 6, $end = 21, $step = 3600, $compac
 	if($compact)
 		$tab[0] = '<tr>'.$tab[0].'</tr>';
 		
-	// Zusammensetzen der Tabellenzeilen
+	// put the table together
 	for($i = 1;$i < $rows + 2;$i++){
 		if($compact)
 			$tab[$i] .= '<tr>';
@@ -597,7 +602,7 @@ function includeMonth(){
 		if($now == $i)
 			$ret .= '<td class="current" ';
 		else
-			$ret .= '<td ';
+			$ret .= '<td class="steel1"';
 		$ret .= 'align="center" width="'.$width.'" height="'.$height.'">';
 		
 		if(($j + 1) % 7 == 0){
@@ -605,7 +610,7 @@ function includeMonth(){
 				  	   . $aday . "</a>";
 			$ret .= "</td>";
 			if($mod != "nokw")
-				$ret .= '<td align="center" width="'.$width.'" height="'.$height.'"><font class="kwmin">'
+				$ret .= '<td class="steel1" align="center" width="'.$width.'" height="'.$height.'"><font class="kwmin">'
 				 		 . strftime("%V", $i)."</font></td>";
 			$ret .= "</tr>\n";
 		}

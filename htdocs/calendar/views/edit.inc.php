@@ -6,7 +6,7 @@
 if(!empty($err)){
 	$error_sign = "<font color='FF0000' size='+2'><b>&nbsp;*&nbsp;</b></font>";
 	$error_message = "Bitte korrigieren Sie die mit $error_sign gekennzeichneten Felder.".$err_message;
-	my_info($error_message);
+	my_info($error_message, "blank", 0);
 }
 ?>
 
@@ -30,12 +30,12 @@ $css_switcher->switchClass();
 				<tr>
 				 <td class="<? echo $css_switcher->getClass(); ?>">
 					<p>
-						<table border="0">
-							<tr valign="baseline">
+						<table border="0" cellspacing="2" cellpadding="2">
+							<tr valign="bottom">
 								<td><b>Beginn: </b></td>
 								<td>am <input type="text" name="start_day" size="2" maxlength="2" value="<? echo $start_day; ?>">
 								.&nbsp;<input type="text" name="start_month" size="2" maxlength="2" value="<? echo $start_month; ?>">
-								.&nbsp;<input type="text" name="start_year" size="4" maxlength="4" value="<? echo $start_year; ?>">&nbsp;um&nbsp;<select name="start_h" size=1>
+								.&nbsp;<input type="text" name="start_year" size="4" maxlength="4" value="<? echo $start_year; ?>">&nbsp;um&nbsp;<select name="start_h" size="1">
 <?
 		for($i = 0;$i <= 23;$i++){
 			echo "<option";
@@ -44,7 +44,7 @@ $css_switcher->switchClass();
 			echo ">$i";
 		}
 		
-		echo "</select>&nbsp;:&nbsp;</td><td><select name=\"start_m\" size=1>";
+		echo "</select>&nbsp;:&nbsp;<select name=\"start_m\" size=\"1\">";
 		
 		for($i = 0;$i <= 55;$i += 5){
 			echo "<option";
@@ -54,11 +54,11 @@ $css_switcher->switchClass();
 		}
 ?>	
 								</select> Uhr<? echo $err["start_time"]?$error_sign:""; ?></td>
-							</tr><tr valign="baseline">
+							</tr><tr valign="bottom">
 								<td><b>Ende: </b></td>
-								<td>am <input name="end_day" size=2 value="<? echo $end_day; ?>">
-								.&nbsp;<input name="end_month" size=2 value="<? echo $end_month; ?>">
-								.&nbsp;<input name="end_year" size=4 value="<? echo $end_year; ?>">&nbsp;um&nbsp;<select name="end_h" size=1>
+								<td>am <input type="text" name="end_day" size="2" maxlength="2" value="<? echo $end_day; ?>">
+								.&nbsp;<input type="text" name="end_month" size="2" maxlength="2" value="<? echo $end_month; ?>">
+								.&nbsp;<input type="text" name="end_year" size="4" maxlength="4" value="<? echo $end_year; ?>">&nbsp;um&nbsp;<select name="end_h" size="1">
 <?
 		for($i = 0;$i <= 23;$i++){
 			echo "<option";
@@ -67,7 +67,7 @@ $css_switcher->switchClass();
 			echo ">$i";
 		}
 		
-		echo "</select>&nbsp;:&nbsp;</td><td><select name=\"end_m\" size=1>";
+		echo "</select>&nbsp;:&nbsp;<select name=\"end_m\" size=\"1\">";
 		
 		for($i = 0;$i <= 55;$i += 5){
 			echo "<option";
@@ -368,31 +368,31 @@ $css_switcher->switchClass();
 	else{
 ?>
 			<tr><td class="steel1" align="center"><b>Wiederholung</b></td></tr>
-			<tr><td class="steel1" valign="middle">
+			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "SINGLE" || $mod == "SINGLE")
 					echo '<input type="image" name="mod_s" src="./pictures/buttons/keine2-button.gif" border="0">';
 				 else
 					echo '<input type="image" name="mod_s" src="./pictures/buttons/keine-button.gif" border="0">'; ?>
 			</td></tr>
-			<tr><td class="steel1" valign="middle">
+			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "DAYLY" || $mod == "DAYLY")
 					echo '<input type="image" name="mod_d" src="./pictures/buttons/jedentag2-button.gif" border="0">';
 				 else
 					echo '<input type="image" name="mod_d" src="./pictures/buttons/jedentag-button.gif" border="0">'; ?>
 			</td></tr>
-			<tr><td class="steel1" valign="middle">
+			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "WEEKLY" || $mod == "WEEKLY")
 					echo '<input type="image" name="mod_w" src="./pictures/buttons/jedewoche2-button.gif" border="0">';
 				 else
 					echo '<input type="image" name="mod_w" src="./pictures/buttons/jedewoche-button.gif" border="0">'; ?>
 			</td></tr>
-			<tr><td class="steel1" valign="middle">
+			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "MONTHLY" || $mod == "MONTHLY")
 					echo '<input type="image" name="mod_m" src="./pictures/buttons/jedenmonat2-button.gif" border="0">';
 				 else
 					echo '<input type="image" name="mod_m" src="./pictures/buttons/jedenmonat-button.gif" border="0">'; ?>
 			</td></tr>
-			<tr><td class="steel1" valign="middle">
+			<tr><td class="steel1" align="center">
 			<? if($repeat["type"] == "YEARLY" || $mod == "YEARLY")
 					echo '<input type="image" name="mod_y" src="./pictures/buttons/jedesjahr2-button.gif" border="0">';
 				 else

@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once("visual.inc.php");
 
-// store default-values
+/*// store default-values
 if(empty($calendar_user_control_data["view"])){
 	$calendar_user_control_data = array(
 		"view"           => "showweek",
@@ -40,7 +40,7 @@ if(empty($calendar_user_control_data["view"])){
 		"sem_data"       => TRUE,
 		"link_edit"      => FALSE
 	);
-}
+}*/
 
 // store user-settings
 if($cmd_cal == "chng_cal_settings"){

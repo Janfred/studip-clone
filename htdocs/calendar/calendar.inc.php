@@ -28,8 +28,6 @@ if(!$cmd && !$atime)
 $SessSemName[0] = "";
 $SessSemName[1] = "";
 
-// including the calendar header (it includes the studip main header)
-require($RELATIVE_PATH_CALENDAR . "/views/header.inc.php");
 require_once("config.inc.php"); //Daten laden
 require_once("visual.inc.php");
 require_once("functions.php");
@@ -100,7 +98,8 @@ if($cmd == ""){
 		$cmd = $calendar_user_control_data["view"];
 }
 
-$sess->register("calendar_sess_control_data");
+if(!$calendar_sess_control_data)
+	$sess->register("calendar_sess_control_data");
 
 if($cmd == "add" || $cmd == "edit"){
 	if(!isset($calendar_sess_forms_data))
@@ -131,6 +130,11 @@ if($cmd == "add" || $cmd == "edit"){
 	}
 	else
 		$calendar_sess_control_data["mod"] = "";
+	
+}
+
+if($source_page && ($cmd == "edit" || $cmd == "add" || $cmd == "delete")){
+	$calendar_sess_control_data["source"] = rawurldecode($source_page);
 }
 
 // Seitensteuerung
@@ -159,6 +163,14 @@ switch($cmd){
 		$title = "Mein pers&ouml;nlicher Terminkalender - Tagesansicht";
 		$atermin = new DbCalendarEvent($termin_id);
 		$atermin->delete();
+		
+		if($calendar_sess_control_data["source"]){
+			$destination = $calendar_sess_control_data["source"];
+			$calendar_sess_control_data["source"] = "";
+			header("Location: $destination");
+			die;
+		}
+		
 		if(!empty($calendar_sess_control_data["view_prv"]))
 			$cmd = $calendar_sess_control_data["view_prv"];
 		else
@@ -186,10 +198,10 @@ switch($cmd){
 		if($termin_id && !$mod){
 			require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
 			$atermin = new DbCalendarEvent($termin_id);
-			//$repeat = $atermin->getRepeat();
+			$repeat = $atermin->getRepeat();
 		//	$translate = array("SINGLE"=>"keine", "DAYLY"=>"taeglich", "WEEKLY"=>"woechentlich",
 			//	                 "MONTHLY"=>"monatlich", "YEARLY"=>"jaehrlich");
-			$mod = $atermin->getRepeat("type");
+			$mod = $repeat["type"];
 		//	if(empty($HTTP_POST_VARS))
 			//	$calendar_sess_control_data["mod"] = $mod;
 		}
@@ -323,6 +335,13 @@ if($cmd == "add"){
 			$atermin->setId($termin_id);
 		$atermin->save();
 		
+		if($calendar_sess_control_data["source"]){
+			$destination = $calendar_sess_control_data["source"];
+			$calendar_sess_control_data["source"] = "";
+			header("Location: $destination");
+			die;
+		}
+		
 		if(!empty($calendar_sess_control_data["view_prv"]))
 			$cmd = $calendar_sess_control_data["view_prv"];
 		else
@@ -337,6 +356,8 @@ if($cmd == "add"){
 	}
 }
 
+// including the calendar header (it includes the studip main header)
+require($RELATIVE_PATH_CALENDAR . "/views/header.inc.php");
 require($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 
 // Tagesuebersicht anzeigen ***************************************************
@@ -363,7 +384,7 @@ if($cmd == "showday"){
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
 	$aday = new DbCalendarDay($atime);
 	$aday->bindSeminarTermine($bind_seminare);
-	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"], TRUE, TRUE);
+	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"], TRUE, TRUE, FALSE, 70, 20, 3, 1);
 	
 	include($RELATIVE_PATH_CALENDAR . "/views/day.inc.php");
 
