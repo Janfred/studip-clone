@@ -82,10 +82,10 @@ class FileHandler {
 	*/
 	function store(&$what,$key) {
 		$file_name = $this->file_path . "/" . $this->file_name . $key;
-		$contents = serialize($what);
+		$contents = serialize($what) . "\n";
 		$handle = fopen ($file_name, "wb");
 		if (flock($handle, LOCK_EX)){
-			fwrite ($handle, $contents);
+			fwrite ($handle, $contents,strlen($contents));
 			flock($handle, LOCK_UN);
 			fclose ($handle);
 		} else {
@@ -108,7 +108,7 @@ class FileHandler {
 			$handle = fopen ($file_name, "rb");
 			if (flock($handle, LOCK_SH)){
 				while(!feof($handle)){
-					$contents .= fread($handle,4096);
+					$contents .= fgets($handle,4096);
 				}
 				flock($handle, LOCK_UN);
 				fclose ($handle);
