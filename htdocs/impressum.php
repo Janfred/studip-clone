@@ -300,6 +300,12 @@ if ($view=="statistik") {?>
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("News:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 			
+			$cssSw->switchClass();
+			$db->query("SELECT count(*) from user_info WHERE guestbook='1'");
+			$db->next_record();
+			$anzahl = $db->f(0);
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Gästebücher:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			
 			if ($GLOBALS['VOTE_ENABLE']) {
 				$cssSw->switchClass();
 				$db->query("SELECT count(*) from vote WHERE type='vote'");
