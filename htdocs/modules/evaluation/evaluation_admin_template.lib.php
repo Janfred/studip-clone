@@ -330,22 +330,29 @@ class EvalTemplateGUI {
      if( $onthefly ) {
 	$tdA->html( _("<b>Freie Antworten definieren</b>") );
      } else {
+	$isCreate = strstr($this->getPageCommand(), "create");
+	$tdA->html("<b>");
 	switch ($type){
 	  case EVALQUESTION_TYPE_MC:
 	   //$answer = $question->getChild();
 	   //if ($answer->isFreetext ()) {}
 	   //else
-	   $tdA->html( _("<b>Multiple Choice</b>") );
+	   $tdA->html( $isCreate
+		       ? _("Multiple Choice erstellen")
+		       : _("Multiple Choice bearbeiten") );
 	   break;
 	  case EVALQUESTION_TYPE_LIKERT:
-	   $tdA->html( _("<b>Likertskala</b>") );
+	   $tdA->html( $isCreate
+		       ? _("Likertskala erstellen")
+		       : _("Likertskala bearbeiten") );
 	   break;
 	  case EVALQUESTION_TYPE_POL: 
-	   $tdA->html( _("<b>Polskala</b>") );
+	   $tdA->html( $isCreate
+		       ? _("Polskala erstellen")
+		       : _("Polskala bearbeiten") );
 	   break;
 	}
-	$tdA->html( strstr($this->getPageCommand(),
-			      "create") ? _("erstellen") : _("bearbeiten") );
+	$tdA->html("</b>");
      }
      $trA->cont( $tdA );
      $tableA->cont( $trA );
@@ -368,6 +375,7 @@ class EvalTemplateGUI {
        $input->attr( "style", "vertical-align:middle;" );
        $input->attr( "size", 22 );
        $input->attr( "maxlength", 22 );
+       $input->attr( "tabindex", 1 );
        $form->cont( $input );
     }
     else{
@@ -419,11 +427,7 @@ class EvalTemplateGUI {
        $img->attr( "src", PATH_PICTURES."info.gif" );
        $img->attr( "align", "middle" );
        $img->attr( "border", 0 );
-       $img->stri( tooltip( _("Geben Sie hier einen Namen für Ihre Vorlage ".
-			      "ein .".
-			      "Wenn Sie eine systemweite Vorlage bearbeiten, ".
-			      "und speichern, wird eine neue Vorlage für Sie ".
-			      "persönlich angelegt." ),
+       $img->stri( tooltip( _("Geben Sie hier einen Namen für Ihre Vorlage ein. Wenn Sie eine systemweite Vorlage bearbeiten, und speichern, wird eine neue Vorlage für Sie persönlich angelegt."),
 			    FALSE, TRUE ) );
        $form->cont( $img );
        $form->cont( $this->BR );
@@ -461,6 +465,7 @@ class EvalTemplateGUI {
 	  $input->attr( "name", "template_answers[".$i."][text]" );
 	  $input->attr( "value", $answer->getText(UNQUOTED) );
 	  $input->attr( "size", 23 );
+	  $input->attr( "tabindex", $i+2 );
 	  $form->cont( $input );
 	  $input = new HTMpty( "input" );
 	  $input->attr( "type", "checkbox" );
@@ -618,6 +623,7 @@ class EvalTemplateGUI {
 		$input->attr( "name", "template_answers[".$i."][text]" );
 		$input->attr( "value", $answer->getText( UNQUOTED ) );
 		$input->attr( "size", 23 );
+		$input->attr( "tabindex", $i+2 );
 		$form->cont( $input );
 		$input = new HTMpty( "input" );
 		$input->attr( "type", "checkbox" );
@@ -811,10 +817,10 @@ class EvalTemplateGUI {
      $trA = new HTM( "tr" );
      $tdA = new HTM( "td" );
      $tdA->attr( "class", "topic" );
-     $tdA->attr ("align","left");
-     $tdA->html( _("<b>Freitextvorlage</b>") );
-     $tdA->html( strstr($this->getPageCommand(), "create") ?
-		 _("erstellen") : _("bearbeiten") );
+     $tdA->attr( "align","left" );
+     $tdA->html( "<b>" . ( strstr($this->getPageCommand(), "create")
+			   ? _("Freitextvorlage erstellen")
+			   : _("Freitextvorlage bearbeiten") ) . "</b>" );
      $trA->cont( $tdA );
      $tableA->cont( $trA );
 
@@ -1013,14 +1019,13 @@ class EvalTemplateGUI {
       $infoPreview =  array ("icon" => EVAL_PIC_PREVIEW,
               "text" => $previewLink);
 
-       $infoOverviewText = _("Zurück zur ")
-           . "<a href=\"admin_evaluation.php?page=overview"
-           .  "&check_abort_creation_button_x=1"
-           .  "&evalID=$evalID"
-           .  "&rangeID=$rangeID"
-           .  "\">"
-            . _("Evaluations-Verwaltung")
-            . "</a>";
+      $infoOverviewText = sprintf(_("Zurück zur %s Evaluations-Verwaltung %s"),
+				  "<a href=\"admin_evaluation.php?page=overview".
+				  "&check_abort_creation_button_x=1".
+				  "&evalID=$evalID".
+				  "&rangeID=$rangeID".
+				  "\">",
+				  "</a>");
 
       $infoOverview =  array ("icon" => EVAL_PIC_BACK,
                 "text" => $infoOverviewText);
