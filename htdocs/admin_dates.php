@@ -68,8 +68,8 @@ include "links_admin.inc.php";
 require_once("dates.inc.php"); //ben&ouml;tigete Funktionen der Terminverwaltung
 require_once("functions.php");//*urgs* das brauchen wir leider auch
 require_once("forum.inc.php");//Was solls....
-require_once("visual.inc.php");//was solls...
-require_once("$RELATIVE_PATH_CALENDAR/kalenderFunc.inc.php");//was solls....
+require_once("visual.inc.php");//was solls...^
+require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");//was solls....
 
 //Einpflegen neu angekommender Daten/Schalter
 if ($manuel_edit) $admin_dates_data["manuel_edit"]=$manuel_edit;
@@ -551,9 +551,9 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		?>
 		<table border="0" cellpadding="0" cellspacing="2" width="100%" align="center">
 		<tr>
-			<td width="5%">&nbsp; 
+			<td class="steel1" width="5%">&nbsp; 
 			</td>
-			<td width="95%">
+			<td class="steel1" width="95%">
 				<font size=-1>&nbsp; Sie haben noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen nun den Ablaufplanassisten benutzen, um automatisch einen Ablaufplan f&uuml;r das Semester zu generieren.</font>
 				<br>
 				<form method="POST" action="<? echo $PHP_SELF?>">
@@ -586,9 +586,9 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		?>
 		<table border="0" cellpadding="0" cellspacing="2" width="100%" align="center">
 		<tr>
-			<td width="5%">&nbsp; 
+			<td class="steel1" width="5%">&nbsp; 
 			</td>
-			<td width="95%">
+			<td class="steel1"width="95%">
 				<form method="POST" action="<? echo $PHP_SELF?>">
 				<input type="HIDDEN" name="assi" value="<? echo $admin_dates_data["assi"] ?>">
 				<font size=-1>&nbsp; Sie haben noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplanassisten benutzen, wenn Sie vorher die allgemeinen Zeiten der Veranstaltung festgelegt haben.<br />
