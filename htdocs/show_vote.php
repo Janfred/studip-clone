@@ -41,19 +41,5 @@
 include ($ABSOLUTE_PATH_STUDIP."vote/vote_show.inc.php");
 
 
-if (!$voteID) {
-   /* Get session data ----------------------------------------------------- */
-#   page_open (array ("sess" => "Seminar_Session", 
-#		     "auth" => "Seminar_Default_Auth", 
-#		     "perm" => "Seminar_Perm", 
-#		     "user" => "Seminar_User"));
-   /* ---------------------------------------------------------------------- */
-#   page_close ();
-} else {
-   // $vote->checkPerm (); // oder ähnliches
-   // createImage ($voteID);
-
-}
-
 
 ?>
