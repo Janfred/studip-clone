@@ -1,4 +1,15 @@
 <?
+function get_ilias_inst_id()
+{
+	$ilias_db = New DB_Ilias;
+	$ilias_db->query("SELECT inst_id FROM cust'");
+	
+	if ($ilias_db->next_record())
+		return $ilias_db->f("inst_id");
+	else
+		return false;
+}
+
 function get_password_md5()
 {
 	global $auth;
@@ -102,8 +113,6 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 		$land = $lang_arr[1];
 		if ($preferred_language == "")
 			$u_lang = "de";
-		if ($inst == "")
-			$inst = "1";
 		if ($geschlecht == 0)
 			$anrede = "Herr";
 		else	
@@ -111,6 +120,8 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 		$passwort = (crypt($passwort,substr($passwort,0,2)));
 		$atitel = $title_front;
 		$u_status = $ilias_status[$status];
+
+	 	$inst_id = get_ilias_inst_id();
 	 
 // Datenbankzugriff: BENUTZER
 		$query_string = "INSERT INTO benutzer (ctime,benutzername,passwort,anrede,vorname,nachname,atitel,institution,strasse, plz, ort, land,telefon,email,inst,status,zustimmung,ibo_kat,lang) ".
@@ -127,7 +138,7 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 			.mysql_escape_string($land)."','"
 			.mysql_escape_string($telefon)."','"
 			.mysql_escape_string($email)."','"
-			.mysql_escape_string($inst)."','"
+			.mysql_escape_string($inst_id)."','"
 			.mysql_escape_string($u_status)."','"
 			."J',"
 			."0,'"
@@ -147,7 +158,7 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 
 // Datenbankzugriff: OBJECT2
 		$query_string = "INSERT INTO object2 (own_id, own_typ, own_inst,vri_id,vri_typ,vri_inst,recht,start,end,deleted) "
-			."VALUES ('". $ilias_systemgroup[$status]."', 'grp', 1, '" . $u_id . "','user', '1', 132, '0000-00-00', '0000-00-00', '0000-00-00 00:00:00')";
+			."VALUES ('". $ilias_systemgroup[$status]."', 'grp', '" . $inst_id . "', '" . $u_id . "','user', '" . $inst_id . "', 132, '0000-00-00', '0000-00-00', '0000-00-00 00:00:00')";
 		$ilias_db->query($query_string);
 //		echo $query_string . "<br>";
 	}
@@ -228,6 +239,8 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 	if ($preferred_language == "")
 		$u_lang = "de";
 
+	$inst_id = get_ilias_inst_id();
+	 
 // Datenbankzugriff: BENUTZER
 	$query_string = "UPDATE benutzer ".
 			"SET benutzername='" . $benutzername . "',".
@@ -252,7 +265,7 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 // Datenbankzugriff: OBJECT2
 	$old_own_id = 0;
 	$query_string = "SELECT own_id FROM object2 "
-		."WHERE vri_id=$u_id AND vri_typ='user' AND vri_inst=1";
+		."WHERE vri_id=$u_id AND vri_typ='user' AND vri_inst=" . $inst_id;
 	$ilias_db->query($query_string);
 	while ($ilias_db->next_record())
 		if ($ilias_db->f("own_id") < 5)
@@ -261,7 +274,7 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 	{
 		$query_string = "UPDATE object2 "
 			."SET own_id='" . $ilias_systemgroup[$status] . "' "
-			."WHERE own_id=$old_own_id AND vri_id=$u_id AND vri_typ='user' AND vri_inst=1";
+			."WHERE own_id=$old_own_id AND vri_id=$u_id AND vri_typ='user' AND vri_inst=" . $inst_id;
 		$ilias_db->query($query_string);
 	}
 	else 
@@ -278,10 +291,13 @@ function delete_ilias_user($ilias_id)
 	}
 	else/**/
 	{
+
+	 	$inst_id = get_ilias_inst_id();
+	 
 		$ilias_db = New DB_Ilias;
 
 // Datenbankzugriff: OBJECT2
-		$query_string = "UPDATE object2 SET deleted=now(), recht=1 WHERE vri_id=$ilias_id AND vri_typ='user' AND vri_inst=1 AND own_typ='grp'";
+		$query_string = "UPDATE object2 SET deleted=now(), recht=1 WHERE vri_id=$ilias_id AND vri_typ='user' AND vri_inst=" . $inst_id . " AND own_typ='grp'";
 		$ilias_db->query($query_string);
 
 // Datenbankzugriff: BENUTZER
