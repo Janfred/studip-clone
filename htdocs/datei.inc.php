@@ -890,7 +890,7 @@ function link_form ($range_id) {
 	$print.= "\n</tr>";
 	if (!$refresh) {
 
-		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. aktivieren Sie eine Anzeige, dass es sich um eine urheberrechtlich geschützte Datei handelt.") . "</font></td></tr>";
+		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Sie können hier angeben, ob es sich um eine urheberrechtlich geschützte Datei handelt.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Geschützt:") . "&nbsp;</font>";
 		$print.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"protect\" $protect></td></tr>";
 
@@ -1074,10 +1074,11 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if (($change != $db->f("folder_id")) && ($upload != $db->f("folder_id")) && ($filelink != $db->f("folder_id"))) {
 				if (($rechte) || ($SemUserStatus == "autor")) {
 					$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_#anker\">" . makeButton("dateihochladen", "img") . "</a>";
-					if ($documents_count)
-						$edit.= "&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
-					if ($rechte) {
+					if ($rechte)
 						$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_l_#anker\">" . makeButton("link", "img") . "</a>";
+					if ($documents_count)
+						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
+					if ($rechte) {
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>"; 
 						if (($letzter == 0) && ($dok_letzter==0) && ($db->f("range_id") != $SessSemName[1])) {						
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
