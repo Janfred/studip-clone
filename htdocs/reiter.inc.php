@@ -23,16 +23,17 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 class reiter {
 	//Classes
-	var $classActive = "links1b";				//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
+	var $classActive = "links1c";				//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
 	var $classInactive="links1";				//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
+	var $class2nd = "links1b";				//Klasse fuer Zellen in der zweiten Reiterebene
 	//Pics
 	var $infoPic="pictures/info.gif";			//Bild das als Info Click/Alt-Text verwendet wird
 	var $toActiveTopkatPic="pictures/reiter1.jpg";		//Trenner fuer Reiter
 	var $toInactiveTopkatPic="pictures/reiter2.jpg";	//Trenner auf Inactive fuer Reiter
 	var $closerTopkatPic="pictures/reiter4.jpg";		//Closer fuer Reiter
 	var $closerInfo="";					//generic Closer for Info
-	var $activeBottomkatPic="pictures/forumrot.gif";	//Aktiver Pfeil
-	var $inactiveBottomkatPic="pictures/pfeilweiss.gif";	//Inaktiver Pfeil
+	var $activeBottomkatPic="pictures/forumrot3.gif";	//Aktiver Pfeil
+	var $inactiveBottomkatPic="pictures/pfeilweiss2.gif";	//Inaktiver Pfeil
 	var $bottomPic="pictures/reiter3.jpg";			//Unterer Abschluss
 	//Width's
 	var $infoWidth="";					//Width of the Infoarea
@@ -96,17 +97,17 @@ class reiter {
 	}
 	
 	function bottomkatStart() {
-		printf ("<table width=\"100%%\" cellspacing=0 cellpadding=4 border=0>\n<tr><td class=\"%s\" width=\"2%%\">&nbsp; </td><td class=\"%s\">",  $this->classActive, $this->classActive);
+		printf ("<table width=\"100%%\" cellspacing=0 cellpadding=4 border=0>\n<tr><td class=\"%s\" width=\"2%%\">&nbsp; </td><td class=\"%s\">",  $this->class2nd, $this->class2nd);
 		return;
 	}
 
 	function bottomkat($text,$link,$active=FALSE, $target="") {
 		if (($active) && (!$this->noAktiveBottomkat))
 			printf("<span style=\"white-space:nowrap;\"><img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"pictures/blank.gif\" width=\"15\"></span>\n",
-				$this->activeBottomkatPic, $this->classActive, $target, $link, $text);
+				$this->activeBottomkatPic, $this->class2nd, $target, $link, $text);
 		else
 			printf("<span style=\"white-space:nowrap;\"><img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s</a><img src=\"pictures/blank.gif\" width=\"15\"></span>\n",
-				$this->inactiveBottomkatPic, $this->classActive, $target, $link, $text);
+				$this->inactiveBottomkatPic, $this->class2nd, $target, $link, $text);
 	}
 
 	function bottomkatCloseRow() {
