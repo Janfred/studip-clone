@@ -288,10 +288,10 @@ if ($view=="statistik") {?>
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Tests:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from wiki");
+			$db->query("SELECT COUNT(DISTINCT keyword) as count from wiki");
 			$db->next_record();
 			$anzahl = $db->f(0);
-			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWebs:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWeb Seiten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	
 	}
 	
 if ($view=="history") {?>
