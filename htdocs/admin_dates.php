@@ -41,6 +41,7 @@ if ((!$perm->have_perm ("admin")) && (!$perm->have_perm ("root"))) {
 	$temp_default[7]="mm";
 }
 
+
 $sess->register("term_data");
 $sess->register("admin_dates_data");
 	
@@ -73,14 +74,23 @@ if (!$admin_dates_data["range_id"]) {
 }
 
 //Einpflegen neu angekommender Daten/Schalter
-if ($manuel_edit) 
-	$admin_dates_data["manuel_edit"]=$manuel_edit;
-if ($manuel_edit_set) 
-	$admin_dates_data["manuel_edit"]=TRUE;
 if ($assi) 
 	$admin_dates_data["assi"]=$assi;
 if ($show_id) 
 	$admin_dates_data["show_id"]=$show_id;
+
+//Content of the Infobox
+$infobox = array(
+		array  ("kategorie"  => "Information:", 
+			"eintrag" => array (
+					array ("icon" => "pictures/ausruf_small.gif", 	
+						"text"  => ($admin_dates_data["assi"]) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Sie haben hier die M&ouml;glichkeit, den Ablaufplan und weitere Termine der Veranstaltung zu ver&auml;ndern.")))),
+		array  ("kategorie" => "Aktionen:", 
+				"eintrag" => array (
+					array	("icon" => "pictures/meinetermine.gif",
+						"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Menupunkt %s Zeiten %s"), "<a href=\"admin_metadates.php?$seminar_id".$admin_dates_data["range_id"]."\">", "</a>")))));
+
+
 
 if ($insert_new) {
 	$hash_secret = "blubbelsupp";
@@ -109,7 +119,7 @@ if ($kill)
 	$edit="yes";
 
 //Assistent zum automatischen generieren eines Ablaufplans
-if ($make_dates) {
+if ($make_dates_x) {
 	//Initialisierungen
 	$hash_secret = "blubbelsupp";
 	$date_typ=1; //hier setzen wir den Typ, den automatisch generierte Termine haben sollen. "1" steht fuer Sitzungstermine.
@@ -231,7 +241,6 @@ if ($make_dates) {
 		$insertAssign->updateAssign();
 
 	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.§";
-	$admin_dates_data["manuel_edit"]=TRUE;
 	}
 
 if ($new)
@@ -345,8 +354,6 @@ if ($new)
 			$admin_dates_data["termin_id"]=FALSE;
 			}
 		}
-	else
-		$manuel_edit_set=TRUE;
 	}
 
 
@@ -421,7 +428,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 //Ab hier Ausgaben....
 
 	//Bereich wurde ausgewaehlt (aus linksadmin) oder wir kommen aus dem Seminar Assistenten
-	$db->query("SELECT metadata_dates, Name, start_time, duration_time, Ort, status FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
+	$db->query("SELECT metadata_dates, Name, start_time, duration_time, Ort, status, Seminar_id FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
 	$db->next_record();
 	if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) 	
 		$tmp_typ = "Veranstaltung"; 
@@ -432,40 +439,39 @@ if (($kill) && ($admin_dates_data["range_id"]))
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2>&nbsp; 
+		<td class="topic">&nbsp; 
 		<b>
 	 <?
 	 if ($admin_dates_data["assi"]) {
-	  	echo "Schritt 7: Ablaufplan und Termin der Veranstaltung: ",htmlReady(substr($db->f("Name"), 0, 40));
+	  	echo "Schritt 7: Ablaufplan und Termine der Veranstaltung: ",htmlReady(substr($db->f("Name"), 0, 40));
 		if (strlen($db->f("Name")) > 40)
 			echo "... ";
-		}
-	else {
-		echo  $tmp_typ, ": ", htmlReady(my_substr($db->f("Name"), 0, 60));
-		if (strlen($db->f("Name")) > 60)
-			echo "... ";
-		echo " - Ablaufplan und Termine";
-		}
+	} else
+		echo  getHeaderLine($db->f("Seminar_id"))." - Ablaufplan und Termine";
 	?>
 		</b>
 		</td>
 	</tr>
 	<tr>
-		<td class="blank"colspan=2>&nbsp; <br>
-	 <?
-	     if (isset($result)) 
-	     	{
-	     	$result=rawurldecode($result);
-		echo "<a href=\"anchor\"></a>";
-		parse_msg($result);
-		//$result="";
-		}
-	 ?>
+		<td class="blank">
+		&nbsp; 
  		</td>
  	</tr>
  	<tr>
-		<td class="blank" width="99%">
-			<blockquote>
+		<td class="blank">
+			<table width="100%" border=0 cellpadding=0 cellspacing=0>
+				<tr>
+					<td valign="top">
+						<table width="100%" border=0 cellpadding=0 cellspacing=0>
+							<?
+							if ($result) {
+								parse_msg($result);
+								print "<a href=\"anchor\"></a>";
+							}
+							?>
+							<tr>
+								<td>
+									<blockquote>
 	<?
 	
 
@@ -473,15 +479,6 @@ if (($kill) && ($admin_dates_data["range_id"]))
 	$term_data=unserialize($db->f("metadata_dates"));
 	$term_data["start_time"]=$db->f("start_time");
 	$term_data["duration_time"]=$db->f("duration_time");
-	if ($admin_dates_data["assi"]) {
-		?>
-		Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die eben angelegte Veranstaltung eingeben.<br><br>
-		<?
-	} else {
-		?>
-		Sie haben hier die M&ouml;glichkeit, den Ablaufplan und weitere Termine der Veranstaltung zu ver&auml;ndern.<br><br>
-		<?
-	}
 
 	if ($term_data["art"] ==1) {
 		?>
@@ -491,8 +488,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 			echo "<br /><b>Semester:</b> ", get_semester($admin_dates_data["range_id"]);
 		}
 		?>
-		<br><br>
-		<font size=-1>Die allgemeinen Zeiten der Veranstaltung <a href="admin_metadates.php?seminar_id=<? echo $admin_dates_data["range_id"] ?>&source_page=<? echo $PHP_SELF?>"><img src="./pictures/buttons/bearbeiten-button.gif" align="absmiddle" border=0 valign="middle" alt="Allgemeine Zeiten der Veranstaltung bearbeiten"></a><br>
+		<br>
 		<?
 	} else {
 		?>
@@ -505,129 +501,80 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		if (get_semester($admin_dates_data["range_id"]))
 			echo "<br /><b>Semester:</b> ", get_semester($admin_dates_data["range_id"]);
 		?>
-		</font><br><br>
-		<font size=-1>Die allgemeinen Zeiten der Veranstaltung <a href="admin_metadates.php?seminar_id=<? echo $admin_dates_data["range_id"] ?>&source_page=<? echo $PHP_SELF?>"><img src="./pictures/buttons/bearbeiten-button.gif" align="absmiddle" border=0 valign="middle" alt="Allgemeine Zeiten der Veranstaltung bearbeiten"></a><br>
+		</font><br /><br />
 		<?
 	}
 	if ($admin_dates_data["assi"]) {
 		?>
-		<br />Sie haben jederzeit die M&ouml;glichkeit, diesen Schritt des Veranstaltungs-Assistenten sp&auml;ter nachzuholen.<br>
+		<font size="-1">Sie haben jederzeit die M&ouml;glichkeit, diesen Schritt des Veranstaltungs-Assistenten sp&auml;ter nachzuholen.</font><br>
 		<?
 	}
-		?><font size=-1>Einen Termin <a href="admin_dates.php?insert_new=TRUE#anchor"><img src="./pictures/buttons/neuanlegen-button.gif" align="absmiddle" border=0 valign="middle" alt="Neuen Termin anlegen"></a><br><?
+		?>
+		<form method="POST" action="<? echo $PHP_SELF?>">
+		<font size=-1>Einen neuen Termin <a href="admin_dates.php?insert_new=TRUE#anchor"><img <?=makeButton("anlegen", "src")?> align="absmiddle" border=0 valign="middle" alt="Neuen Termin anlegen"></a><br><?
 
 		$db2->query("SELECT count(*) AS anzahl FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' AND date_typ ='1'");
 		$db2->next_record();
-		if ($db2->f("anzahl"))
-			$admin_dates_data["manuel_edit"]=TRUE;
-		else
-			$admin_dates_data["manuel_edit"]=FALSE;
-	
-		if ($manuel_edit_set) {
-			if (!$db2->f("anzahl")) {
-				$hash_secret = "blubbelsupp";
-				$t_id=md5(uniqid($hash_secret));   //termin_id erzeugen
-				//Insert Modus AN
-				$admin_dates_data["insert_id"]=$t_id;
-				}
-			$admin_dates_data["manuel_edit"]=TRUE;
-			}
-		
+
 		$default_room=$db->f("Ort");
 
-
-	?>
-		</blockquote>
-		</td>
-		<td class="blank" align="right">
-		<?
-		if ($admin_dates_data["assi"]) {
-			?>			
-			<img src="pictures/hands07.jpg" border="0">
-			<?
-			}
-		else {
-			?>			
-			<img src="pictures/board2.jpg" border="0">
-			<?
-			}
-		?>		
-		</td>
-	</tr>
-	<tr>
-		<td class="blank" width="100%" colspan=2>
-
-	
-	<?
 	//Fenster zum Starten des Terminassistenten einblenden
-	if ((!$term_data["art"]) && (!$db2->f("anzahl")) && (!$admin_dates_data["manuel_edit"]) && (!$admin_dates_data["insert_id"]))
+	if ((!$term_data["art"]) && (!$db2->f("anzahl"))) {
 		if (sizeof($term_data["turnus_data"])) { //Ablaufplanassistent nur wenn allgemeine Zeiten vorhanden moeglich
 		?>
-		<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
+		<br />
+		<table border="0" cellpadding="6" cellspacing="0" width="80%">
 		<tr>
-			<td class="steel1" width="5%">&nbsp; 
-			</td>
-			<td class="steel1" width="95%">
-				<font size=-1>&nbsp; Sie haben noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen nun den Ablaufplanassisten benutzen, um automatisch einen Ablaufplan f&uuml;r das Semester zu generieren.</font>
-				<br>
-				<form method="POST" action="<? echo $PHP_SELF?>">
-				&nbsp; <input type="SUBMIT" name="make_dates" value="Ablaufplanassistenten ausf&uuml;hren >> "><br><br>
-				<font size=-1><input type="checkbox" name="pfad"> Zu jedem Termin automatisch einen Themenordner im Forum der Veranstaltung anlegen.</font><br>
-				<font size=-1><input type="checkbox" name="folder"> Zu jedem Termin automatisch einen Dateiordner zum Upload anlegen. </font>
-				<? if ($db->f("duration_time") >0)
-					{
-				?>
-				<font size=-1><br><br><input type="checkbox" name="full"> Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt nur f&uuml;r das erste Semester) </font>
-				<?
+			<td class="rahmen_steel">
+				<font size="-1"><b>Ablaufplanassistent</b><br /><br /></font>
+				<font size="-1">generieren Sie automatisch Sitzungstermine mit folgenden Einstellungen:<br /></font>
+				&nbsp; &nbsp; <font size=-1><input type="checkbox" name="pfad"> Zu jedem Termin einen Themenordner im Forum der Veranstaltung anlegen.</font><br>
+				&nbsp; &nbsp; <font size=-1><input type="checkbox" name="folder"> Zu jedem Termin einen Dateiordner zum Upload anlegen. </font>
+				<? if ($db->f("duration_time") >0) {
+					?>
+					<br />&nbsp; &nbsp; <font size=-1><input type="checkbox" name="full"> Ablaufplan f&uuml;r alle Semester anlegen (wenn nicht gesetzt nur f&uuml;r das erste Semester) </font>
+					<?
 					}
-				?>
-				<img  src="./pictures/info.gif" 
-					onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden  - soweit wie möglich  - Feiertage und Ferienzeiten übersprungen. Anschliessend können Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
-					alt="Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semesters, je nach Auswahl. Dabei werden soweit wir m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschliessend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben.">
-				<hr>
-				<font size=-1>&nbsp; Sie k&ouml;nnen auch direkt zur Verwaltung der Termine springen und Termine manuell anlegen</font><br><br>
-				&nbsp; <input type="SUBMIT" name="manuel_edit_set" value="Termine manuell anlegen >> ">
-				<img  src="./pictures/info.gif" 
-					onClick="alert('In diesem Bearbeitungsmodus können Sie alle Termine einzeln von Hand anlegen.');" 
-					alt="'In diesem Bearbeitungsmodus k&ouml;nnen Sie alle Termine einzeln von Hand anlegen.">
-				</form>
-			</td>
-		</tr>	
+					?>
+					<img  src="./pictures/info.gif" 
+						onClick="alert('Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden  - soweit wie möglich  - Feiertage und Ferienzeiten übersprungen. Anschliessend können Sie jedem Termin einen Titel und eine Beschreibung geben.');" 
+						alt="Der Ablaufplanassistent erstellt automatisch alle Termine des ersten oder aller Semester, je nach Auswahl. Dabei werden soweit wir m&ouml;glich Feiertage und Ferienzeiten &uuml;bersprungen. Anschliessend k&ouml;nnen Sie jedem Termin einen Titel und eine Beschreibung geben.">
+					<br /><br />
+					<font size=-1>Assistent <input type="IMAGE" align ="absmiddle" name="make_dates" <?=makeButton("starten", "src")?> border="0" value="Ablaufplanassistenten ausf&uuml;hren >> "></font><br>
+				</td>
+			</tr>
 		</table>
 		<?
 		}
-	else {
+	} else {
 		?>
-		<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
-		<tr>
-			<td class="steel1" width="5%">&nbsp; 
-			</td>
-			<td class="steel1"width="95%">
-				<form method="POST" action="<? echo $PHP_SELF?>">
-				<input type="HIDDEN" name="assi" value="<? echo $admin_dates_data["assi"] ?>">
-				<font size=-1>&nbsp; Sie haben noch keine Sitzungstermine eingegeben. Sie k&ouml;nnen an dieser Stelle den Ablaufplanassisten benutzen, wenn Sie vorher die allgemeinen Zeiten der Veranstaltung festgelegt haben.<br />
-				Bitte klicken Sie daf&uuml;r auf dieser Seite auf "Die allgemeinen Zeiten der Veranstaltung bearbeiten".</font>
-				<img  src="./pictures/info.gif" 
-					onClick="alert('Die Terminverwaltung gestattet es, alle Termine automatisch mit Hilfe des Ablaufplanassistenten anzulegen. Dafür müssen Sie jedoch die allgemeinen Zeiten der Veranstaltung vorher festgelegt haben.');" 
-					alt="'Die Terminverwaltung gestattet es, alle Termine automatisch mit Hilfe des Ablaufplanassistenten anzulegen. Daf&uuml;r m&uuml;ssen Sie jedoch die allgemeinen Zeiten der Veranstaltung vorher festgelegt haben.">
-				<hr>
-				<font size=-1>&nbsp; Sie k&ouml;nnen auch direkt zur Verwaltung der Termine springen und Termine manuell anlegen</font><br><br>
-				&nbsp; <input type="SUBMIT" name="manuel_edit_set" value="Termine manuell anlegen >> ">
-				<img  src="./pictures/info.gif" 
-					onClick="alert('In diesem Bearbeitungsmodus können Sie alle Termine einzeln von Hand anlegen.');" 
-					alt="'In diesem Bearbeitungsmodus k&ouml;nnen Sie alle Termine einzeln von Hand anlegen.">
-				</form>
-				
-				<br>
-			</td>
-		</tr>	
-		</table>
-		
+		<br /><br />
+		<font size="-1">Sie haben bislang noch keine Sitzungstermine eingegeben.  Sie k&ouml;nnen an dieser Stelle den Ablaufplanassisten benutzen, wenn Sie f&uuml;r die Veranstaltung einen regelm&auml;&szlig;igen Turnus festlegen.
 		<?
 		}
 	
-	else
-		{		
+	?>
+									</form>
+									</blockquote>
+									</td>
+								</tr>
+							</td>
+						</tr>
+					</table>
+				</td>
+			<?
+			if ($infobox) {
+			?>
+				<td class="blank" width="270" align="right" valign="top">
+				<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "pictures/hands07.jpg" : "pictures/schedules.jpg"); ?>
+				<br />
+			</td>
+			<?
+			}
+			?>
+		</tr>
+	</table>
+	<?
 	
 	 //Vorhandene Termine holen und anzeigen und nach Bedarf bearbeiten
 	 
@@ -658,11 +605,12 @@ if (($kill) && ($admin_dates_data["range_id"]))
 			<?
 		if (!$admin_dates_data["insert_id"]) {
 			?>
-		<td class="steelgraulight" align="right">
+		<td class="steelgraulight" align="right" nowrap>
 			<?
 				if (!$show_all) {
 				?>
-			<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; &nbsp; 
+				<input type="IMAGE" name="mark_all" border=0 src="pictures/buttons/alleauswaehlen-button.gif" value="löschen">&nbsp;
+				<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; 
 				<?
 				}
 			}
@@ -696,7 +644,6 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_stunde\" maxlength=2 size=2 value=\"".$temp_default[6]."\"><font size=-1> :</font>";
 		$titel.="<input type=\"TEXT\" style=\"font-size:8 pt;\" name=\"end_minute\" maxlength=2 size=2 value=\"".$temp_default[7]."\"><font size=-1> Uhr.</font>";
 		$titel.="<input type=\"HIDDEN\" name=\"termin_id\" value=\"".$admin_dates_data["insert_id"]."\">";
-	 	$titel.= "<a name=\"anchor\"></a>";
 		
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 		$link=$PHP_SELF."?cancel=TRUE";
@@ -748,6 +695,8 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 		$content.="<input type=\"IMAGE\" name=\"send\" border=0 src=\"pictures/buttons/terminspeichern-button.gif\" value=\"speichern\">&nbsp;";
 		$content.="<a href=\"$PHP_SELF?cancel=TRUE\"><img  border=0 src=\"pictures/buttons/abbrechen-button.gif\"><br /><br />";
+	 	$content.= "<a name=\"anchor\"></a>";
+		
 
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 		printcontent(0,1, $content, '');
@@ -770,14 +719,15 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		else
 			$folder=FALSE;
 			
-		if (($show_id  == $db->f("termin_id")) || ($show_all)) 
+		if (($show_id  == $db->f("termin_id")) || ($show_all)) {
+			print "<a name=\"#anchor\"></a>";
 			$edit=TRUE;
-		else	
+		} else	
 			$edit=FALSE;
 		
 		//Zusatz erstellen
 		if ((!$admin_dates_data["insert_id"]) && ($show_id  != $db->f("termin_id")) && (!$show_all))
-			$zusatz="<input type=\"CHECKBOX\" name=\"kill_termin[]\" value=\"". $db->f("termin_id")."&". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
+			$zusatz="<input type=\"CHECKBOX\" ".(($mark_all_x) ? "checked" : "")." name=\"kill_termin[]\" value=\"". $db->f("termin_id")."&". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
 		else
 			$zusatz='';
 		
@@ -808,9 +758,9 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		
 		//Link erstellen
 		if (($show_id  == $db->f("termin_id")) || ($show_all))
-			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"]."&manuel_edit=yes&show_id=";			
+			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"]."&show_id=";			
 		else
-			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"]."&manuel_edit=yes&show_id=".$db->f("termin_id");
+			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&assi=".$admin_dates_data["assi"]."&show_id=".$db->f("termin_id")."#anchor";
 			
 		//Icon erstellen
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
@@ -891,38 +841,46 @@ if (($kill) && ($admin_dates_data["range_id"]))
 	}
 	?>
 		<tr>
-			<td class="blank" colspan=2>
-			&nbsp; 
+			<td class="blank" >	&nbsp; 
 			</td>
 		</tr>
 	<?	
 	if ((!$admin_dates_data["insert_id"]) && (($show_all) || ($c>10))) {
 		?>
 		<tr align="left" height="22">
-			<td width="82%" class="steelgraulight">&nbsp; 
-			</td>
-		<td class="steelgraulight" align="right">
-		<?
-			if (!$show_all) {
-			?>
-		<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; &nbsp; 
+			<td class="steelgraulight" align="right" nowrap>
 			<?
+			if (!$show_all) {
+				?>
+				<input type="IMAGE" name="mark_all" border=0 src="pictures/buttons/alleauswaehlen-button.gif" value="löschen">&nbsp;
+				<input type="IMAGE" name="send" border=0 src="pictures/buttons/loeschen-button.gif" value="löschen">&nbsp; 
+				<?
 			}
-		}
+	}
 	if ($show_all) {
 		?>
 		<input type="IMAGE" name="send" border=0 src="pictures/buttons/termineaendern-button.gif" value="verändern">&nbsp; &nbsp; 
 		<?
-		}
 	}
-	?>
+}
+?>
+						</tr>
+						<tr>
+								<td class="blank" >	&nbsp; 
+								</td>
+						</tr>
+						</td>
+					</table>
+					</form>
+				
+			</tr>
+		</table>
+		</tr>
+	</td>
 	</table>
-	</form>
-	<?
 
-	}
-
-	page_close();
+<?	
+page_close();
  ?>
 </td></tr></table>
 </body>
