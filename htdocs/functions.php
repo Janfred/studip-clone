@@ -286,6 +286,12 @@ function lastActivity ($sem_id) {
 	if ($db->f("date") > $timestamp)
 		$timestamp = $db->f("date");
 	
+	//Literature
+	$db->query("SELECT MAX(chdate) as chdate FROM lit_list WHERE range_id='$sem_id' GROUP BY range_id");
+	$db->next_record();
+	if ($db->f("chdate") > $timestamp)
+			$timestamp = $db->f("chdate");
+	
 	//Votes
 	if ($GLOBALS['VOTE_ENABLE']) {
 		$db->query("SELECT chdate FROM vote WHERE range_id = '$sem_id' ORDER BY chdate DESC LIMIT 1");
@@ -447,22 +453,15 @@ return $error_msg;
 * but the function is useful, if you want to query an user_id from another user
 * (which ist not the current user)
 * 
+* @deprecated	use $GLOBALS['perm']->get_perm($user_id)
 * @param		string	if omitted, current user_id is used
 * @return		string	the perm level or an error msg
 *
 */
 function get_global_perm($user_id="") {
-	 global $auth;
-
-	 if (!$user_id || $user_id == $auth->auth['uid'])
-	 	return $auth->auth['perm'];
-	
-	 $db=new DB_Seminar;
-	 $db->query("SELECT perms FROM auth_user_md5 WHERE user_id='$user_id'");
-	 if ($db->next_record())
-	 	return $db->f("perms");
-	 else
-	 	return (_("Fehler!"));
+	global $perm;
+	$status = $perm->get_perm($user_id);
+	return (!$status) ? _("Fehler!") : $status;
 }
 
 /**
@@ -471,16 +470,16 @@ function get_global_perm($user_id="") {
 * Function works for Veranstaltungen, Einrichtungen, Fakultaeten.
 * admins get status 'admin' if range_id is a seminar
 * 
+* @deprecated	use $GLOBALS['perm']->get_studip_perm($range_id, $user_id)
 * @param		string	an id a Veranstaltung, Einrichtung or Fakultaet
 * @param		string	if omitted,current user_id is used
 * @return		string	the perm level
 *
 */
 function get_perm($range_id,$user_id="") {
- global $perm;
- $status = $perm->get_studip_perm($range_id,$user_id);
- if (!($status)) $status= _("Fehler!");
- return $status;
+	global $perm;
+	$status = $perm->get_studip_perm($range_id,$user_id);
+	return (!$status) ? _("Fehler!") : $status;
 }
 
 
