@@ -8,7 +8,7 @@
 //Generische Systemeinstellungen
 $AUTH_LIFETIME=30;						//Zeit bis zu einem automatischem Logout in Minuten (wird zur Zeit nur zu Anzeigezwecken verwendet...)
 $SOFTWARE_VERSION="0.8 rc 3";
-
+	
 
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
@@ -118,7 +118,6 @@ $TERMIN_TYP[8]=array("name"=>"Vorlesung", "sitzung"=>1);
 
 
 // Festlegen der Kategorien für persönlichen Terminkalender
-// Diese Kategorien dürfen nicht verändert werden !!
 $PERS_TERMIN_KAT[1]=array("name"=>"Sonstiges", "color"=>"#B8660B");
 $PERS_TERMIN_KAT[2]=array("name"=>"Sitzung", "color"=>"#FF7F50");
 $PERS_TERMIN_KAT[3]=array("name"=>"Vorbesprechung", "color"=>"#DC143C");
