@@ -60,6 +60,7 @@ function generate_password($length) {
 	require_once("config.inc.php"); // Wir brauchen den Namen der Uni
 	require_once("datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
 	require_once("visual.inc.php");
+	require_once("admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
 	$cssSw=new cssClassSwitcher;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
@@ -292,29 +293,40 @@ while ( is_array($HTTP_POST_VARS)
 
 			// Hochstufung auf admin oder root?
 			if (addslashes(implode($perms,",")) == "admin" || addslashes(implode($perms,",")) == "root") {
+				//Eintraege aus Veranstaltungen loeschen
 				$query = "delete from seminar_user where user_id='$u_id'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.§";
+					$msg .= "info§$db_ar Eintr&auml;ge aus Veranstaltungen gel&ouml;scht.§";
+				}
+				//Eintraege aus Wartelisten loeschen
+				$query2 = "SELECT seminar_id FROM admission_seminar_user where user_id='$u_id'";
+				$query = "delete from admission_seminar_user where user_id='$u_id'";
+				$db->query($query);
+				$db2->query($query2);
+				if (($db_ar = $db->affected_rows()) > 0) {
+					$msg .= "info§$db_ar Eintr&auml;ge aus Wartelisten gel&ouml;scht.§";
+				while ($db2->next_record()) 
+					update_admission($db2->f("seminar_id"));
 				}
 			}
 			if (addslashes(implode($perms,",")) == "admin") {
 				$query = "delete from user_inst where user_id='$u_id' AND inst_perms != 'admin'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.§";
+					$msg .= "info§$db_ar Eintr&auml;ge aus Mitarbeiterlisten gel&ouml;scht.§";
 				}
 			}
 			if (addslashes(implode($perms,",")) == "root") {
 				$query = "delete from user_inst where user_id='$u_id'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.§";
+					$msg .= "info§$db_ar Eintr&auml;ge aus Mitarbeiterlisten gel&ouml;scht.§";
 				}
 				$query = "delete from fakultaet_user where user_id='$u_id'";
 				$db->query($query);
 				if (($db_ar = $db->affected_rows()) > 0) {
-					$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"fakultaet_user\" gel&ouml;scht.§";
+					$msg .= "info§$db_ar Eintr&auml;ge aus den Fakult&auml;tsangeh&ouml;rigen gel&ouml;scht.§";
 				}
 			}
 		}
@@ -428,7 +440,17 @@ while ( is_array($HTTP_POST_VARS)
 			$query = "delete from seminar_user where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.§";
+				$msg .= "info§$db_ar Eintr&auml;ge aus Veranstaltungen gel&ouml;scht.§";
+			}
+			## user aus den Wartelisten rauswerfen
+			$query2 = "SELECT seminar_id FROM admission_seminar_user where user_id='$u_id'";
+			$query = "delete from admission_seminar_user where user_id='$u_id'";
+			$db->query($query);
+			$db2->query($query2);
+			if (($db_ar = $db->affected_rows()) > 0) {
+				$msg .= "info§$db_ar Eintr&auml;ge aus Wartelisten gel&ouml;scht.§";
+			while ($db2->next_record()) 
+				update_admission($db2->f("seminar_id"));
 			}
 			## Dokumente des users loeschen
 			$temp_count = 0;
@@ -469,23 +491,23 @@ while ( is_array($HTTP_POST_VARS)
 			$query = "delete from user_inst where user_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"user_inst\" gel&ouml;scht.§";
+				$msg .= "info§$db_ar Eintr&auml;ge aus Mitarbeirerlisten gel&ouml;scht.§";
 			}
 			## user aus den Fakultaeten rauswerfen
 			$query = "delete from fakultaet_user where user_id='$u_id'";
  			$db->query($query);
 		 	if (($db_ar = $db->affected_rows()) > 0) {
-			 	$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"fakultaet_user\" gel&ouml;scht.§";
+			 	$msg .= "info§$db_ar Eintr&auml;ge der Fakult&auml;tsangeh&ouml;rigen gel&ouml;scht.§";
 	 		}
 			## Alle persoenlichen Termine dieses users löschen
 		 	if ($db_ar = delete_range_of_dates($u_id, FALSE) > 0) {
-				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"termine\" gel&ouml;scht.§";
+				$msg .= "info§$db_ar Eintr&auml;ge aus den Terminen gel&ouml;scht.§";
 			}
 			## Alle persoenlichen News-Verweise auf diesen user löschen
 		 	$query = "DELETE FROM news_range where range_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news_range\" gel&ouml;scht.§";
+				$msg .= "info§$db_ar Eintr&auml;ge aus  den News gel&ouml;scht.§";
 			}
 			## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
 		 	$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
@@ -496,13 +518,13 @@ while ( is_array($HTTP_POST_VARS)
 				$db2->query($query);
 			}
 			if (($db_ar = $db->num_rows()) > 0) {
-				$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news\" gel&ouml;scht.§";
+				$msg .= "info§$db_ar Eintr&auml;ge aus den News gel&ouml;scht.§";
 			}
 			## user aus dem Archiv werfen
 			$query = "delete from archiv_user where user_id='$u_id'";
  			$db->query($query);
 		 	if (($db_ar = $db->affected_rows()) > 0) {
-			 	$msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"archiv_user\" gel&ouml;scht.§";
+			 	$msg .= "info§$db_ar Eintr&auml;ge aus dem Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht.§";
 	 		}
 			## alle Daten des lusers löschen
 			$query = "delete from kategorien where range_id = '$u_id'";
@@ -682,7 +704,7 @@ if (isset($details)) {
 			<tr><td colspan=2 class="blank">&nbsp;</td></tr>
 			
 			<? // links to everywhere
-			print "<tr><td class=\"steel2\" colspan=2 align=\"center\">";
+			print "<tr><td class=\"steelgraulight\" colspan=2 align=\"center\">";
 				printf("&nbsp;pers&ouml;nliche Homepage <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
 				printf("&nbsp;Nachricht an Benutzer <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
@@ -771,11 +793,11 @@ if (isset($details)) {
 				print "</b> Benutzer gefunden.</td></tr>\n";
 			?>
 			 <tr valign="top" align="middle">
-				<th><a href="new_user_md5.php?sortby=username">Benutzername</a></th>
-				<th><a href="new_user_md5.php?sortby=perms">Status</a></th>
-				<th><a href="new_user_md5.php?sortby=Vorname">Vorname</a></th>
-				<th><a href="new_user_md5.php?sortby=Nachname">Nachname</a></th>
-				<th><a href="new_user_md5.php?sortby=Email">E-Mail</a></th>
+				<th align="left"><a href="new_user_md5.php?sortby=username">Benutzername</a></th>
+				<th align="left"><a href="new_user_md5.php?sortby=perms">Status</a></th>
+				<th align="left"><a href="new_user_md5.php?sortby=Vorname">Vorname</a></th>
+				<th align="left"><a href="new_user_md5.php?sortby=Nachname">Nachname</a></th>
+				<th align="left"><a href="new_user_md5.php?sortby=Email">E-Mail</a></th>
 				<th><a href="new_user_md5.php?sortby=changed">inaktiv</a></th>
 				<th><a href="new_user_md5.php?sortby=mkdate">registriert seit</a></th>				
 			 </tr>
@@ -795,8 +817,8 @@ if (isset($details)) {
 					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Vorname") ?>&nbsp;</td>
 					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Nachname") ?>&nbsp;</td>
 					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Email")?></td>
-					<td class="<? echo $cssSw->getClass() ?>"><?php echo $inactive ?></td>
-					<td class="<? echo $cssSw->getClass() ?>"><? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>
+					<td class="<? echo $cssSw->getClass() ?>" align="center"><?php echo $inactive ?></td>
+					<td class="<? echo $cssSw->getClass() ?>" align="center"><? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>
 				</tr>
 				<?
 			endwhile;
