@@ -146,9 +146,8 @@ if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)
 	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 }
 if ($modules["forum"]) {
-	$structure["_forum"]=array (topKat=>"forum", name=>_("Baumansicht"), link=>"forum.php?view=tree", active=>FALSE);
+	$structure["_forum"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=reset", active=>FALSE);
 	if ($user->id != "nobody") {
-		$structure["mixed"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=mixed", active=>FALSE);
 		$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue", active=>FALSE);
 		$structure["flat"]=array (topKat=>"forum", name=>_("alle Beiträge"), link=>"forum.php?view=flat", active=>FALSE);
 	}
@@ -286,10 +285,10 @@ switch ($i_page) {
 				$reiter_view="forum";
 			break;
 			case "mixed":
-				$reiter_view="mixed";
+				$reiter_view="forum";
 			break;
 			case "flatfolder":
-				$reiter_view="mixed";
+				$reiter_view="forum";
 			break;
 			case "neue":
 				$reiter_view="neue";

@@ -69,8 +69,20 @@ function pruefe_name(){
 	checkObject();
 
 
-if ($view)
-	$forum["view"] = $view;
+if ($view) {
+	if ($view=="reset") {
+		if ($forum["view"]=="tree" || $forum["view"]=="mixed")
+			$view = $forum["view"];
+		elseif ($forum["view"]=="flatfolder") {
+			$view = "mixed";
+			$forum["view"]="mixed";
+		} else {
+			$view = "tree";
+			$forum["view"]="tree";
+		}
+	} else
+		$forum["view"] = $view;
+}
 if (!$forum["view"]) {
 	$view = "tree";
 	$forum["view"] = $view;
@@ -362,17 +374,25 @@ if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 //Titel-Zeile
 if (!$forumsend=="anpassen") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
-	echo "<tr><td class=\"topic\" width=\"95%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"5%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
+	echo "<tr><td class=\"topic\" width=\"50%\"><b>&nbsp;<img src='pictures/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"50%\" align=\"right\"><a href='forum.php?forumsend=anpassen'><img src='pictures/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
 	if ($message=="kill") echo parse_msg("msg§" . sprintf(_("%s Posting(s) gel&ouml;scht"), $count));
 	if ($message=="move") echo parse_msg("msg§" . sprintf(_("%s Posting(s) verschoben."), $verschoben));
-	echo "<tr><td class=\"blank\" colspan=2>&nbsp;";
-	echo " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 
-	<img src='pictures/forumrot.gif'> Alter 
-	<img src='pictures/forumgrau.gif'> Views 
-	<img src='pictures/forumgrau.gif'> Bewertung 
-	<img src='pictures/forumgrau.gif'> Relevanz 
-	</font></td></tr>\n";
-	echo "</table>\n";
+	echo "<tr><td class=\"blank\">&nbsp;";
+	?>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font size=-1>Indikator: 
+	<img src="pictures/forumrot.gif">Alter &nbsp; 
+	<img src="pictures/forumgrau.gif">Views &nbsp;
+	<img src="pictures/forumgrau.gif">Bewertung &nbsp;
+	<img src="pictures/forumgrau.gif">Relevanz &nbsp;
+	</font></td><td class="blank" align="right"><font size="-1">Sortierung:&nbsp;&nbsp;</font>
+	<select name="username" size="1">
+	<option value="">Alter
+	<option value="">Views
+	<option value="">Bewertungen
+	<option value="">Relevanz
+	</select>&nbsp;<img src="pictures/forumgraurunt.gif">&nbsp;
+	<?
+	echo "</td></tr>\n</table>\n";
 }
 
 if ($forumsend) {

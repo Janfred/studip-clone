@@ -551,13 +551,11 @@ function printposting ($forumposting) {
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
   		
   		
-  		if (!($forum["view"] == "tree" && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")) {
-	  		if (!$auth->is_authenticated() || $user->id == "nobody" || $forumposting["author"]=="unbekannt" || $forumposting["username"]=="") // Nobody darf nicht auf die about...
-				$forumhead[] = htmlReady($forumposting["author"]);
-			else
-				$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
-  		}
-  		
+  		if (!$auth->is_authenticated() || $user->id == "nobody" || $forumposting["author"]=="unbekannt" || $forumposting["username"]=="") // Nobody darf nicht auf die about...
+			$forumhead[] = htmlReady($forumposting["author"]);
+		else
+			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
+  		  		
   		$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
   		
   		if ($forum["view"] != "flatfolder")
@@ -696,11 +694,11 @@ if ($forum["view"]!="neue")
 
 ?>	
 <table border=0 width="100%" cellspacing="0" cellpadding="0" align="center"><tr>
-<td class="steelgraudunkel" valign= "top" align="left" width="33%">
+<td class="steelgraudunkel" valign= "top" align="left" width="45%">
 <?
 if ($forum["view"]=="flatfolder")
-	echo "<img src=\"pictures/cont_folder.gif\" align=\"baseline\"><font size=-1><b> Thema:</b> ".ForumGetName($forum["flatfolder"]);
-echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"33%\">";
+	echo "<img src=\"pictures/cont_folder.gif\" align=\"baseline\"><font size=-1><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40);
+echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
 if ($forum["flatallopen"]=="TRUE")
 	echo "<a href=\"".$PHP_SELF
 		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE\"><img src='pictures/forumleer.gif' border=0 height='10' align=middle><img src='pictures/forumgraurauf.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
@@ -708,7 +706,7 @@ else
 	echo "<a href=\"".$PHP_SELF
 		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE\"><img src='pictures/forumleer.gif' border=0 height='10' align=middle><img src='pictures/forumgraurunt.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='pictures/forumleer.gif' border=0></a>";
 
-echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"33%\">";
+echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"45%\">";
 echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;";
 echo "</td></tr></table>";
 
@@ -817,7 +815,14 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 			else echo "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">\n";
 		}
 		echo "</td></tr><tr>";
-		echo "<td class=\"steelgraudunkel\"><b><font size=\"-1\">&nbsp;" . _("Thema") . "</font></b></td><td class=\"steelgraudunkel\"><img src=\"pictures/forumleer.gif\" border=0 height=\"20\"></td><td class=\"steelgraudunkel\" align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;</font></td></tr></table>\n";
+		echo "<td class=\"steelgraudunkel\" width=\"33%\"><b><font size=\"-1\">&nbsp;" . _("Thema") . "</font></b></td>";
+		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"center\"><font size=\"-1\">";
+		if ($forum["view"] == "tree")
+			echo "treeview / <a href=\"".$PHP_SELF."?view=mixed\">flatview</a>";
+		else
+			echo "<a href=\"".$PHP_SELF."?view=tree\">treeview</a> / flatview";
+		echo "</font><img src=\"pictures/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
+		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;</font></td></tr></table>\n";
 		while ($db->next_record()) {
 			$forumposting["id"] = $db->f("topic_id");
 			$forumposting["name"] = $db->f("name");
