@@ -150,7 +150,7 @@ function PrintAktualContacts ($range_id)
 	global $_fullname_sql;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	echo "<font size=\"-1\">&nbsp; " . _("Personen im Adressbuch") . "</font><br>";
-	$query = "SELECT contact.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE owner_id = '$range_id' ORDER BY Nachname ASC";
+	$query = "SELECT contact.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE owner_id = '$range_id' ORDER BY Nachname ASC";
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
 	$db->query ($query);
