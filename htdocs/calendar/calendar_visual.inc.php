@@ -173,7 +173,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$tooltip = tooltip(_("neuer Tagestermin"));
 			$link_edit_str = "<td class=\"steel1\" align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 			$link_edit_str .= $day_obj->getTs();
-			$link_edit_str .= "\"><img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/cal-link.gif\" ";
+		$link_edit_str .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
 			$link_edit_str .= "border=\"0\" $tooltip></a></td>\n";
 		}
 			
@@ -200,7 +200,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$tooltip = tooltip(_("neuer Tagestermin"));
 			$day_event_row[0] .= " align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 			$day_event_row[0] .= $day_obj->getTs();
-			$day_event_row[0] .= "\"><img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/cal-link.gif\" ";
+			$day_event_row[0] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
 			$day_event_row[0] .= "border=\"0\" $tooltip></a></td>\n";
 		}
 		else
@@ -253,13 +253,13 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					$tab[$zeile] .= "<td class=\"steel1\" align=\"right\" colspan=\"";
 					$tab[$zeile] .= ($max_spalte + 1) . "\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 					$tab[$zeile] .= ($day_obj->getStart() + $i * $step);
-					$tab[$zeile] .= "\"><img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/cal-link.gif\" ";
+					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
 					$tab[$zeile] .= "border=\"0\" $link_edit_tooltip></a></td>\n";
 				}
 				else {
 					$tab[$zeile] .= "<td class=\"steel1\" align=\"right\"><a href=\"$PHP_SELF?cmd=edit&atime=";
 					$tab[$zeile] .=	($day_obj->getStart() + $i * $step);
-					$tab[$zeile] .= "\"><img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/cal-link.gif\"";
+					$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\"";
 					$tab[$zeile] .= "border=\"0\" $link_edit_tooltip></a></td>\n";
 				}
 			}
@@ -387,7 +387,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr align=\"right\">";
 						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&atime=%s\">"
 																, $day_obj->getStart() + $i * $step);
-						$tab[$zeile] .= "<img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/cal-link.gif\" ";
+						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
 						$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 						$tab[$zeile] .= "</a></td>\n";
 					}
@@ -412,7 +412,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= "<td class=\"steel1\"$colspan_attr align=\"right\">";
 						$tab[$zeile] .= sprintf("<a href=\"$PHP_SELF?cmd=edit&atime=%s\">"
 															, $day_obj->getStart() + $i * $step);
-						$tab[$zeile] .= "<img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/cal-link.gif\" ";
+						$tab[$zeile] .= "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
 						$tab[$zeile] .= "border=\"0\" $link_edit_tooltip\">";
 						$tab[$zeile] .= "</a></td>\n";
 					}
@@ -433,7 +433,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		if ($link_edit && $link_notset) {
 			$tab[$zeile] .= "<td class=\"steel1\" width=\"1\" align=\"right\">";
 			$tab[$zeile] .= "<a href=\"$PHP_SELF?cmd=edit&atime=" . ($day_obj->getStart() + $i * $step);
-			$tab[$zeile] .= "\"><img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/cal-link.gif\" ";
+			$tab[$zeile] .= "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/cal-link.gif\" ";
 			$tab[$zeile] .= "border=\"0\" $link_edit_tooltip>";
 			$tab[$zeile] .= "</a></td>\n";
 		}
@@ -594,7 +594,7 @@ function includeMonth () {
 	$ret .= "<tr>";
 	$ret .= sprintf("<th valign=\"top\"><a href=\"%s%s&imt=%s\">",
 						$href, $ptime, ($amonth->getStart()-1));
-	$ret .= "<img border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/forumrotlinks.gif\" ";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotlinks.gif\" ";
 	$ret .= tooltip(_("zurück")) . "></a></th>";
 	$ret .= "<th class=\"cal\" colspan=\"";
 	if ($mod == "nokw")
@@ -606,7 +606,7 @@ function includeMonth () {
 			htmlentities(strftime("%B", $amonth->getStart()), ENT_QUOTES), $amonth->getYear());
 	$ret .= sprintf("<th valign=\"top\"><a href=\"%s%s&imt=%s\">",
 						$href, $ptime, ($amonth->getEnd()+1));
-	$ret .= "<img border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/forumrot.gif\" ";
+	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrot.gif\" ";
 	$ret .= tooltip(_("vor")) . "></a></th>";
 	$ret .= "</tr>\n";
 	$ret .= "<tr>\n";

@@ -46,13 +46,13 @@ echo "<tr><td class=\"blank\">\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><th align=\"center\" width=\"10%\">\n";
 echo "<a href=\"$PHP_SELF?cmd=showyear&atime=" . ($ayear->getStart() - 1) . "\">";
-echo "<img border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/forumrotlinks.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotlinks.gif\" ";
 echo tooltip(_("zurück")) . ">&nbsp;</a></th>\n";
 echo "<th class=\"cal\" align=\"center\" width=\"80%\">\n";
 echo "<font size=\"+2\"><b>" . $ayear->getYear() . "</b></font></th>\n";
 echo "<th align=\"center\" width=\"10%\"><a href=\"$PHP_SELF?cmd=showyear&atime=";
 echo ($ayear->getEnd() + 1) . "\">\n";
-echo "<img border=\"0\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/forumrot.gif\" ";
+echo "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrot.gif\" ";
 echo tooltip(_("vor")) . ">&nbsp;</a></th>\n";
 echo "</tr></table>\n</td></tr>\n";
 echo "<tr><td class=\"blank\"><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\">\n";
@@ -137,13 +137,13 @@ for ($i = 1; $i < 32; $i++) {
 					if	($apps) {
 						if	($apps > 1) {
 							echo "</td><td$weekend align=\"right\">";
-							echo "<img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/icon-uhr.gif\" ";
+							echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/icon-uhr.gif\" ";
 							echo tooltip(sprintf(_("%s Termine"), $apps)) . " border=\"0\">";
 							echo "</td></tr></table>\n";
 						}
 						else {
 							echo "</td><td$weekend align=\"right\">";
-							echo "<img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/icon-uhr.gif\" ";
+							echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/icon-uhr.gif\" ";
 							echo tooltip(_("1 Termin")) . " border=\"0\">";
 							echo "</td></tr></table>";
 						}

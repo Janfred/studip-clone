@@ -230,7 +230,7 @@ function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
 			$tooltip = tooltip($tooltip);
 			echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
 			echo ($step + $max_events) . "\">";
-			echo "<img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/forumrotrunt.gif\" ";
+			echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotrunt.gif\" ";
 			echo $tooltip . " border=\"0\"></a>\n";
 			$spacer = FALSE;
 		}
@@ -241,7 +241,7 @@ function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
 			$tooltip = tooltip($tooltip);
 			echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
 			echo ($step - $max_events) . "\">";
-			echo "<img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/forumrotrauf.gif\" ";
+			echo "<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotrauf.gif\" ";
 			echo $tooltip . " border=\"0\"></a>\n";
 			$month_obj->setPointer($atime, $step);
 		}
@@ -252,7 +252,7 @@ function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
 				$month_obj->numberOfEvents($day_timestamp) - $max_events);
 		$tooltip = tooltip($tooltip);
 		echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
-		echo ($max_events) . "\"><img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/forumrotrunt.gif\" ";
+		echo ($max_events) . "\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/forumrotrunt.gif\" ";
 		echo $tooltip . " border=\"0\"></a>\n";
 	}
 }

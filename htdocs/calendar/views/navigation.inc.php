@@ -44,7 +44,7 @@ require($RELATIVE_PATH_CALENDAR . "/calendar_links.inc.php");
 if ($cmd != "changeview") {
 	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
 	echo "<tr>\n";
-	echo "<td class=\"topic\">&nbsp;<img src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/meinetermine.gif\" ";
+	echo "<td class=\"topic\">&nbsp;<img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/meinetermine.gif\" ";
 	$tooltip = tooltip(_("Termine"));
 	echo "border=\"0\" align=\"absmiddle\" $tooltip><b>&nbsp;";
 	echo $title . "</b></td></tr>\n";
