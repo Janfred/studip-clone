@@ -117,7 +117,7 @@ $reiter->create($structure, $view);
 			<br></blockquote>
 			&nbsp; &nbsp; <?=_("Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:")?></b><br>
 			<blockquote>
-			<font size=-1><b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler")?></font><br />
+			<font size=-1><b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler - bitte <u>keine</u> Passwort Anfragen!")?></font><br />
 			<font size=-1><b><?=_("Developer-Mailingliste")?></b>, E-Mail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-devel">studip-devel@lists.sourceforge.net</a>: <?=_("Mailingliste f&uuml;r alle Entwickler (Eintragung notwendig)")?></font><br />
 			<font size=-1><b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?></font><br />
 			</blockquote>
