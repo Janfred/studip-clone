@@ -63,7 +63,7 @@ function get_my_obj_values(&$my_obj) {
 	}
 	
 	// scm?
-	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > b.visitdate AND a.user_id !='$user_id')", "scm", $obj_ids, 'tab_name'));
+	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", "scm", $obj_ids, 'tab_name'));
 	while($db2->next_record()) {
 		if ($my_obj[$db2->f("object_id")]["modules"]["scm"]) {	
 			$my_obj[$db2->f("object_id")]["neuscmcontent"]=$db2->f("neue");
