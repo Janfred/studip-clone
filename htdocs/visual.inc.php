@@ -1036,7 +1036,7 @@ array  ("kategorie" => "Aktionen:",
 );
 /*****************************************************************************/
 
-function print_infobox ($content, $picture="") {
+function print_infobox ($content, $picture="", $html = FALSE) {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
 	
 	$print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
@@ -1081,7 +1081,10 @@ function print_infobox ($content, $picture="") {
 				</tr>
 			</table>";
 	
-	echo $print;
+	if ($html)
+		return $print;
+	else
+		echo $print;
 }
 
 /**
