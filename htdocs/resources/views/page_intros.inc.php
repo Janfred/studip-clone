@@ -23,6 +23,15 @@ switch ($resources_data["view"]) {
 	case "search_list":
 		$page_intro="Hier k&ouml;nnen Sie Listen verwalten. Angezeigt wird jeweils die Liste einer ausgew&auml;hlten Ebene oder alle Ressourcen, auf die sie Zugriff haben.";
 		$title="Bearbeiten und Ausgeben von Listen";
+		$infobox = array(
+					array  ("kategorie"  => "Information:", 
+							"eintrag" => array (
+								array ("icon" => "pictures/ausruf_small.gif", 	
+									"text"  => "Hier k&ouml;nnen Sie Zeugs irgendwie in Listen anschauen!"))),
+					array  ("kategorie" => "Aktionen:", 
+							"eintrag" => array (
+								array	("icon" => "pictures/admin.gif",
+									"text"  => "Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a>"))));
 	break;
 
 	//Reiter "Objekt"
