@@ -43,6 +43,8 @@ class StudipSemTreeSearch {
 	
 	var $num_inserted;
 	
+	var $num_deleted;
+	
 	var $form_name;
 	
 	var $tree;

@@ -206,8 +206,8 @@ class StudipSemSearch {
 	}
 	
 	function getHiddenField($name, $value = false){
-		if (!$value && $this->search_field[$name]){
-			$value = $this->search_field[$name]['default_value'];
+		if (!$value && $this->search_fields[$name]){
+			$value = $this->search_fields[$name]['default_value'];
 		}
 		return "\n<input type=\"hidden\" name=\"{$this->form_name}_{$name}\" value=\"{$value}\"";
 	}
