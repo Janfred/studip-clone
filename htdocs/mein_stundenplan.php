@@ -148,7 +148,7 @@ if ($cmd=="insert") {
 
 //meine Seminare einlesen
 if ($inst_id) {
-	$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
+	$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' AND visible='1'");
 	$view="inst";
 } else {
 	$user_id=$user->id;

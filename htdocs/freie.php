@@ -150,7 +150,7 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
   if (!isset($sortby)) $sortby="Name";
-	$db->query("SELECT seminare.*, Institute.Name AS Institut, Institute.Institut_id AS id FROM seminare LEFT JOIN Institute USING (institut_id) WHERE Lesezugriff='0' ORDER BY $sortby");
+	$db->query("SELECT seminare.*, Institute.Name AS Institut, Institute.Institut_id AS id FROM seminare LEFT JOIN Institute USING (institut_id) WHERE Lesezugriff='0' AND seminare.visible='1' ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
   if (!$num_my_sem) $meldung="error§". _("Es gibt keine Veranstaltungen, die einen freien Zugriff erlauben!")."§".$meldung;
 

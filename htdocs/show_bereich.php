@@ -78,7 +78,8 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 			$db->next_record();
 			$head_text = "&nbsp;" . _("&Uuml;bersicht aller Veranstaltungen einer Einrichtung");
 			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"),$db->f("Name"));
-			$db->query("SELECT seminar_id FROM seminar_inst WHERE Institut_id='".$show_bereich_data["id"]."'");
+			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id) WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."' AND seminare.visible='1'");
+
 			$sem_browse_obj->sem_browse_data['search_result'] = array();
 			while ($db->next_record()){
 				$sem_browse_obj->sem_browse_data['search_result'][$db->f("seminar_id")] = true;
