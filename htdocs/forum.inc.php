@@ -31,11 +31,51 @@
 // +---------------------------------------------------------------------------+
 
 
-
+/**
+* deletes the edit-string from content
+*
+* @param	string	description
+* 
+* @return	string	description
+*
+**/
 function forum_kill_edit ($description) {
-	if (ereg("%%\[edit-",$description)) { // wurde schon mal editiert
-		$postmp = strpos($description,"%%[edit-");
+	if (ereg("<admin_msg",$description)) { // wurde schon mal editiert
+		$postmp = strrpos($description,"<admin_msg");
 		$description = substr_replace($description,"",$postmp);
+	}
+	return $description;
+}
+
+/**
+* adds the edit-string to a content
+*
+* @param	string	description
+* 
+* @return	string	description
+*
+**/
+function forum_append_edit ($description) {
+	$edit = "<admin_msg autor=\"".get_fullname()."\" chdate=\"".time()."\">";
+	$description = forum_kill_edit2($description).$edit;
+	return $description;
+}
+
+/**
+* parses content for output with added edit-string
+*
+* @param	string	description
+* 
+* @return	string	description
+*
+**/
+function forum_parse_edit ($description) {
+	if (ereg("<admin_msg",$description)) { // wurde schon mal editiert
+		$postmp = strrpos($description,"<admin_msg");
+		$edittmp = substr($description,$postmp);
+		$tmp = explode("\"",$edittmp);
+		$append = "\n\n%%["._("Zuletzt editiert von ").$tmp[1]." - ".date ("d.m.y - H:i", $tmp[3])."]%%";
+		$description = forum_kill_edit($description).$append;
 	}
 	return $description;
 }
@@ -1007,8 +1047,7 @@ function printposting ($forumposting) {
 		if ($forumposting["writestatus"] != "none") { // Posting wird geschrieben
 			$description = editarea($forumposting);
 		} else {
-			
-			$forumposting["description"] = forum_check_edit($forumposting["description"]);
+			$forumposting["description"] = forum_parse_edit($forumposting["description"]);
 			$description = formatReady($forumposting["description"]);
 			if ($forumposting["buttons"] == "no" || $forum["update"]) {
 				$edit = "<br>";

@@ -334,15 +334,8 @@ if ($answer_id) {
 //////////////////////////////////////////////////////////////////////////////////
 
 if ($update) {
-	$author = get_fullname();
-	$now = date ("d.m.y - H:i", time());
-	if (ereg("%%\[edit-",$description)) { // wurde schon mal editiert
-		$postmp = strpos($description,"editiert von");
-		$description = substr_replace($description,"edit-".$author." - ".$now."]%%",$postmp);
-	} else {
-		if (ForumFreshPosting($update)==FALSE) // editiert von nur dranhängen wenn nicht frisch erstellt
-			$description.="\n\n%%[edit-".$author." - ".$now."]%%";
-	}
+	if (ForumFreshPosting($update)==FALSE) // editiert von nur dranhängen wenn nicht frisch erstellt
+		$description = forum_append_edit($description);
 	UpdateTopic ($titel, $update, $description);
 	$open = $update; //gerade bearbeiteten Beitrag aufklappen
 	$forum["lostposting"] = "";
