@@ -35,39 +35,6 @@ function MessageIcon ($message_hovericon) {
 	return $hovericon;
 }
 
-// functions
-function count_snd_messages_from_user($user_id, $where="") {
-	global $db;
-	$x = "0";
-	$query = "SELECT DISTINCT message_id 
-		FROM message_user 
-			WHERE snd_rec = 'snd'
-			AND user_id = '".$user_id."' 
-			AND deleted = '0' ".$where;
-	$db->query($query);
-	while ($db->next_record()) {
-		$x = $x+1;
-	}
-	return $x;
-}
-
-function count_rec_messages_from_user($user_id, $where="") {
-	global $db;
-	$x = "0";
-	if (!$time) {
-		$query = "SELECT DISTINCT message_id 
-			FROM message_user 
-				WHERE snd_rec = 'rec'
-				AND user_id = '".$user_id."' 
-				".$where;	
-	}
-	$db->query($query);
-	while ($db->next_record()) {
-		$x = $x+1;
-	}
-	return $x;
-}
-
 function count_x_messages_from_user($snd_rec, $folder, $where="") {
 	global $db, $user;
 	if ($snd_rec == "in" || $snd_rec == "out") {
@@ -316,7 +283,7 @@ function print_rec_message($prm) {
 	} else {
 		$red = TRUE;
 		$picture = "cont_nachricht_rot.gif";
-		if ($open == "open") $msging->set_read($prm['message_id']);
+		if ($open == "open") $msging->set_read_message($prm['message_id']);
 	}	
 	if ($prm['dont_delete'] == "1") { // disable the checkbox if message is locked
 		$tmp_cmd = "open_selected";
