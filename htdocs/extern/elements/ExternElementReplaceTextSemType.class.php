@@ -51,8 +51,8 @@ class ExternElementReplaceTextSemType extends ExternElement {
 			$this->config = $config;
 		
 		$this->name = "ReplaceTextSemType";
-		$this->real_name = _("Textersetzungen f&uuml;r Art der Veranstaltung");
-		$this->description = _("Ersetzt die Bezeichnung der Art der Veranstaltung.");
+		$this->real_name = _("Textersetzungen f&uuml;r Veranstaltungstypen");
+		$this->description = _("Ersetzt die Bezeichnung der Veranstaltungstypen.");
 		for ($i = 1; $i <= sizeof($GLOBALS["SEM_CLASS"]); $i++)
 			$this->attributes[] = "class_" . $i;
 	}
@@ -91,7 +91,7 @@ class ExternElementReplaceTextSemType extends ExternElement {
 		foreach ($GLOBALS["SEM_CLASS"] as $key => $class) {
 			$titles = NULL;
 			$info = NULL;
-			$headline = $edit_form->editHeadline(sprintf(_("Veranstaltungsarten der Kategorie &quot;%s&quot;"),
+			$headline = $edit_form->editHeadline(sprintf(_("Veranstaltungstypen der Kategorie &quot;%s&quot;"),
 					$class["name"]));
 			
 			foreach ($GLOBALS["SEM_TYPE"] as $type) {
@@ -100,7 +100,7 @@ class ExternElementReplaceTextSemType extends ExternElement {
 						$titles[] = htmlReady(substr($type["name"], 0, 22)) . "...";
 					else
 						$titles[] = htmlReady($type["name"]);
-					$info[] = sprintf(_("Geben Sie eine Bezeichnung für die Veranstaltungsart \"%s\" ein. Diese wird an Stelle der ursprünglichen Bezeichnung ausgegeben."),
+					$info[] = sprintf(_("Geben Sie eine Bezeichnung für den Veranstaltungstyp \"%s\" ein. Diese wird an Stelle der ursprünglichen Bezeichnung ausgegeben."),
 							$type["name"]);
 				}
 			}
