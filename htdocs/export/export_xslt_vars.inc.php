@@ -14,11 +14,11 @@ $xslt_files["txt-noformat"]["txt"] = true;
 $xslt_files["txt-noformat"]["person"] = true;
 $xslt_files["txt-noformat"]["veranstaltung"] = true;
 
-$xslt_files["txt-standard-2"]["name"] = _("Standardmodul mit Veranstaltungsnummern");
-$xslt_files["txt-standard-2"]["desc"] = _("Standardmodul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die Daten werden nur mit Tabulatoren und Bindestrichen formatiert. Es werden auch die Veranstaltungsnummern ausgegeben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
-$xslt_files["txt-standard-2"]["file"] = "txt-v-3.xsl";
-$xslt_files["txt-standard-2"]["txt"] = true;
-$xslt_files["txt-standard-2"]["veranstaltung"] = true;
+$xslt_files["txt-noformat-2"]["name"] = _("Unformatiert mit Veranstaltungsnummern");
+$xslt_files["txt-noformat-2"]["desc"] = _("Modul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die Daten werden nicht formatiert. Es werden auch die Veranstaltungsnummern ausgegeben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
+$xslt_files["txt-noformat-2"]["file"] = "txt-v-3.xsl";
+$xslt_files["txt-noformat-2"]["txt"] = true;
+$xslt_files["txt-noformat-2"]["veranstaltung"] = true;
 
 
 
