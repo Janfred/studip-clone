@@ -168,7 +168,7 @@ if ($cmd=="kill_admission") {
 	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 	else {
 	  //Warteliste neu sortieren
-	  update_admission($auswahl);
+	  renumber_admission($auswahl);
 	  
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
