@@ -546,6 +546,10 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 		return FALSE;
 }
 
+
+
+
+
 function JS_for_upload() {
 
 	global $UPLOAD_TYPES, $SessSemName;
@@ -694,12 +698,121 @@ function upload_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALS
 		else
 			return form($refresh);
 		}
-	}
+}
+
+
+function insert_link_db($range_id, $sem_id=0, $refresh = FALSE) {
+	global $the_file_name, $the_link, $the_file_size, $description, $name, $user, $upload_seminar_id, $protect;
 	
+	$date = time();				//Systemzeit
+	$user_id = $user->id;			// user_id erfragen...
+	$range_id = trim($range_id); 		// laestige white spaces loswerden
+	$description = trim($description);  	// laestige white spaces loswerden
+	$name = trim($name);  			// laestige white spaces loswerden
+	$dokument_id=md5(uniqid(rand()));
+	
+	$the_file_name = substr(strrchr($the_link,"/"), 1);
+	
+	if ($protect=="on")
+		$protect = 1;
+	
+	if (!$name)
+		$name = $the_file_name;
+	
+	$db=new DB_Seminar;
+	
+		if (!$refresh)
+			$query	 = sprintf ("INSERT INTO dokumente SET dokument_id='%s', description='%s', mkdate='%s', chdate='%s', range_id='%s', filename='%s', name='%s', "
+					. "user_id='%s', seminar_id='%s', filesize='%s', autor_host='%s', url='%s', protected='$protect'",
+					$dokument_id, $description, $date, $date, $range_id, $the_file_name, $name, 
+					$user_id, $upload_seminar_id, $the_file_size, getenv("REMOTE_ADDR"), $the_link);
+		else	
+			$query	 = sprintf ("UPDATE dokumente SET dokument_id='%s', chdate='%s', filename='%s', "
+					. "user_id='%s', filesize='%s', autor_host='%s' WHERE dokument_id = '%s' ",
+					$dokument_id, $date, $the_file_name, $user_id, $the_file_size, getenv("REMOTE_ADDR"), $refresh);
+	
+		$db->query($query);
+		if ($db->affected_rows())
+			return TRUE;
+		else
+			return FALSE;
+}
+
+
+function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE) {
+	global $the_link;
+
+	if ($create) {
+		if (linkcheck($the_link)) {
+			if (insert_link_db($range_id, 0, $refresh))
+				if ($refresh)
+					delete_link($refresh, TRUE);
+		} else {
+			echo "Link nicht aktiv!";	
+		}
+		return;
+	} else {
+		if ($echo) {
+			echo link_form($refresh);
+			return;
+		} else {
+			return link_form($refresh);
+		}
+	}
+}
+
+function linkcheck ($URL) {
+	$fp = @fopen($URL, "r");
+	if (!$fp) {
+		return FALSE;
+	} else {
+		fclose($fp);
+		return TRUE;
+	}
+}
+
+function link_form ($range_id) {
+	global $SessSemName;
+
+	$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+
+	$print.="</font></td></tr>";
+	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"link_form\" action=\"" . $PHP_SELF . "\" method=\"post\">";
+	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie verlinken wollen.") . " </font></td></tr>";
+	$print.= "\n<tr>";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
+	$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
+	$print.= "\n</tr>";
+	if (!$refresh) {
+
+		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. aktivieren Sie eine Anzeige, dass es sich um eine urheberrechtlich geschützte Datei handelt.") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Geschützt:") . "&nbsp;</font>";
+		$print.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"protect\"></td></tr>";
+
+		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein.") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
+		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
+						
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
+		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("4. Klicken Sie auf <b>'absenden'</b>, um die Datei zu verlinken") . "</font></td></tr>";
+	} else
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
+	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";	
+	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\" border=\"0\">";
+	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
+	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link\">";	
+	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";	
+	$print.= "\n</form></table><br /></center>";
+
+	return $print;
+	
+}
+
 ## Ende Upload Funktionen ################################################################################
 
 //create the folder-system
-function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all, $refresh=FALSE) {
+function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all, $refresh=FALSE, $filelink="") {
 	global $_fullname_sql,$SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $rechte, $anfang, $PHP_SELF, 
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all;
 
@@ -842,17 +955,24 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if ($upload == $db->f("folder_id")) {
 				$content.=upload_item ($upload,FALSE,FALSE,$refresh);
 				}
+				
+			// Abfrage ob Dateilink eingeleitet
+
+			if ($filelink == $db->f("folder_id")) {
+				$content .= link_item($range_id);
+			}
 
 			$content.= "\n";
 			$edit='';
 					
 			//Editbereich erstellen
-			if (($change != $db->f("folder_id")) && ($upload != $db->f("folder_id"))) {
+			if (($change != $db->f("folder_id")) && ($upload != $db->f("folder_id")) && ($filelink != $db->f("folder_id"))) {
 				if (($rechte) || ($SemUserStatus == "autor")) {
 					$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_#anker\">" . makeButton("dateihochladen", "img") . "</a>";
 					if ($documents_count)
 						$edit.= "&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
 					if ($rechte) {
+						$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_l_#anker\">" . makeButton("link", "img") . "</a>";
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>"; 
 						if (($letzter == 0) && ($dok_letzter==0) && ($db->f("range_id") != $SessSemName[1])) {						
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
@@ -888,21 +1008,27 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					else
 					$striche3="<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumstrich3.gif'></td>"; //Verzweigung
 					
-					//Icon auswaehlen
-					if ((getFileExtension(strtolower($db3->f("filename"))) == "rtf") || (getFileExtension(strtolower($db3->f("filename"))) == "doc"))
-					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/rtf-icon.gif' border=0></a>";
-					elseif (getFileExtension(strtolower($db3->f("filename"))) == "xls")
-					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/xls-icon.gif' border=0></a>";
-					elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "gz") || (getFileExtension(strtolower($db3->f("filename"))) == "bz2"))
-					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/zip-icon.gif' border=0></a>";
-					elseif (getFileExtension(strtolower($db3->f("filename"))) == "ppt")
-					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/ppt-icon.gif' border=0></a>";
-					elseif (getFileExtension(strtolower($db3->f("filename"))) == "pdf")
-					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pdf-icon.gif' border=0></a>";
-					elseif ((getFileExtension(strtolower($db3->f("filename"))) == "gif") || (getFileExtension(strtolower($db3->f("filename"))) == "jpg") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpe") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpeg") || (getFileExtension(strtolower($db3->f("filename"))) == "png") || (getFileExtension(strtolower($db3->f("filename"))) == "bmp"))
-					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pic-icon.gif' border=0></a>";
-					else
-					$icon="<a href=\"sendfile.php/?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/txt-icon.gif' border=0></a>";
+					if ($db3->f("url")!="") {
+						$type = 6;
+					} else {
+						$type = 0;
+					}
+										
+						//Icon auswaehlen
+						if ((getFileExtension(strtolower($db3->f("filename"))) == "rtf") || (getFileExtension(strtolower($db3->f("filename"))) == "doc"))
+						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/rtf-icon.gif' border=0></a>";
+						elseif (getFileExtension(strtolower($db3->f("filename"))) == "xls")
+						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/xls-icon.gif' border=0></a>";
+						elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "gz") || (getFileExtension(strtolower($db3->f("filename"))) == "bz2"))
+						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/zip-icon.gif' border=0></a>";
+						elseif (getFileExtension(strtolower($db3->f("filename"))) == "ppt")
+						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/ppt-icon.gif' border=0></a>";
+						elseif (getFileExtension(strtolower($db3->f("filename"))) == "pdf")
+						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pdf-icon.gif' border=0></a>";
+						elseif ((getFileExtension(strtolower($db3->f("filename"))) == "gif") || (getFileExtension(strtolower($db3->f("filename"))) == "jpg") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpe") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpeg") || (getFileExtension(strtolower($db3->f("filename"))) == "png") || (getFileExtension(strtolower($db3->f("filename"))) == "bmp"))
+						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pic-icon.gif' border=0></a>";
+						else
+						$icon="<a href=\"sendfile.php/?type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/txt-icon.gif' border=0></a>";
 					
 					//Link erstellen
 					if (strstr($open,$db3->f("dokument_id"))) 
@@ -951,6 +1077,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$neue_datei = TRUE;
 					else
 						$neue_datei = FALSE;
+					
+					if ($db3->f("protected")==1)
+						$icon .= "<img src=\"pictures/ausruf_small3.gif\" ".tooltip(_("Diese Datei ist urheberrechtlich geschützt!")).">";
 					
 					//Dokumenttitelzeile ausgeben
 					if (strstr($open,$db3->f("dokument_id"))) 
@@ -1003,13 +1132,19 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						//Editbereich ertstellen
 						$edit='';
 						if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id"))) {
-							$edit= "&nbsp;<a href=\"sendfile.php/?type=0&force_download=TRUE&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
-							if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz") && (getFileExtension(strtolower($db3->f("filename"))) != "bz2"))
-							$edit.= "&nbsp;<a href=\"sendfile.php/?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
+							if ($db3->f("url")!="") {
+								$type = 6;
+							} else {
+								$type = 0;
+							}
+							$edit= "&nbsp;<a href=\"sendfile.php/?type=$type&force_download=TRUE&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
+							if (($type != "6") && (getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz") && (getFileExtension(strtolower($db3->f("filename"))) != "bz2"))
+								$edit.= "&nbsp;<a href=\"sendfile.php/?zip=TRUE&type=$type&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
 							
 							if (($rechte) || ($db3->f("user_id")==$user->id)) {
 								$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
-								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
+								if ($type != "6")
+									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
 								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
 								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
 							}
@@ -1022,6 +1157,13 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						else {
 							?><td class="blank" width="*">&nbsp;</td><?
 						}
+						
+						if ($db3->f("protected")) {
+							$content .= "<br><br><hr><table><tr><td><img src=\"pictures/ausruf.gif\" valign=\"middle\"></td><td><font size=\"2\"><b>"
+							._("Diese Datei ist urheberrechtlich geschützt.<br>Sie darf nur im Rahmen dieser Veranstaltung verwendet werden, jede weitere Verbreitung ist strafbar!")
+							."</td></tr></table>";
+						}
+						
 						printcontent ("100%",TRUE, $content, $edit);
 					}
 				}
@@ -1084,9 +1226,20 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 		//Rekursiv mit Unterordnern weitermachen	
 		if (!$all)
-			display_folder_system ($db->f("folder_id"), $level+1, $open, $lines, $change, $move, $upload, $all, $refresh);
+			display_folder_system ($db->f("folder_id"), $level+1, $open, $lines, $change, $move, $upload, $all, $refresh, $filelink);
 		}
 	}
+}
+
+
+function getLinkPath($file_id) {
+	$db = new DB_Seminar;
+	$db->query("SELECT url FROM dokumente WHERE dokument_id='$file_id'");
+	if ($db->next_record())
+		$url = $db->f("url");
+	else
+		$url = FALSE;
+	return $url;	
 }
 
 /*
@@ -1118,6 +1271,16 @@ function delete_document ($dokument_id, $delete_only_file = FALSE) {
 		return FALSE;
 	}
 
+
+function delete_link ($dokument_id) {
+	$db = new DB_Seminar;
+	// eintrag aus der Datenbank werfen
+	$db->query("DELETE FROM dokumente WHERE dokument_id='$dokument_id'");
+	if ($db->affected_rows())
+		return TRUE;
+	else 
+		return FALSE;
+}
 
 /*
 Die function delete_folder löscht einen kompletten Dateiordner.

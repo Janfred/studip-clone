@@ -129,9 +129,14 @@ if (($rechte) || ($owner)) {
 	if (strpos($open, "_fd_")) {
 		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."'");
 		$db->next_record();
-		$msg="info§" . sprintf("Wollen sie die Datei <b>%s</b> von %s wirklich l&ouml;schen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>") . "<br>";
-		$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+		if (getLinkPath(substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_"))))) {
+			$msg="info§" . sprintf("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>") . "<br>";
+			$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rl_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+		} else {
+			$msg="info§" . sprintf("Wollen sie die Datei <b>%s</b> von %s wirklich löschen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>") . "<br>";
+			$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
 		}
+	}
 
 	//Loeschen von Dateien im wirklich-ernst Mode
 	if (strpos($open, "_rm_")) {
@@ -140,6 +145,14 @@ if (($rechte) || ($owner)) {
 		else
 			$msg.="error§" . _("Die Datei konnte nicht gel&ouml;scht werden") . "§";
 		} 
+
+	//Loeschen von verlinkten Dateien im wirklich-ernst Mode
+	if (strpos($open, "_rl_")) {
+		if (delete_link(substr($open, (strpos($open, "_rl_"))-32, (strpos($open, "_rl_")))))
+			$msg.="msg§" . _("Die Verlinkung wurde gelöscht") . "§";
+		else
+			$msg.="error§" . _("Die Verlinkung konnte nicht gelöscht werden") . "§";
+		}
 
 	//wurde Code fuer Aendern des Namens und der Beschreibung von Ordnern oder Dokumenten ubermittelt (=id+"_c_"), wird entsprechende Funktion aufgerufen
 	if (strpos($open, "_c_")) {
@@ -165,6 +178,11 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		$folder_system_data["upload"]=substr($open, (strpos($open, "_u_"))-32, (strpos($open, "_u_")));
 		}	
 
+	//wurde Code fuer Verlinken uebermittelt (=id+"_l_"), wird entsprechende Variable gesetzt
+	if ((strpos($open, "_l_")) && (!$cancel_x)) {
+		$folder_system_data["link"]=substr($open, (strpos($open, "_l_"))-32, (strpos($open, "_l_")));
+	}
+
 	//wurde Code fuer Aktualisieren-Hochladen uebermittelt (=id+"_rfu_"), wird entsprechende Variable gesetzt
 	if ((strpos($open, "_rfu_")) && (!$cancel_x)) {
 		$folder_system_data["upload"]=substr($open, (strpos($open, "_rfu_"))-32, (strpos($open, "_rfu_")));
@@ -180,9 +198,21 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		$folder_system_data["refresh"]='';		
 		unset($cmd);
 		}
+		
+	//wurde eine Datei verlinkt?
+	if (($cmd=="link") && (!$cancel_x) && ($folder_system_data["link"])) {
+		link_item ($folder_system_data["link"], TRUE, FALSE, $folder_system_data["refresh"]);
+		$open = $dokument_id;
+		$close = $folder_system_data["refresh"];
+		$folder_system_data["link"]='';
+		$folder_system_data["refresh"]='';		
+		unset($cmd);
+		}
+		
 	if ($cancel_x)  {
 		$folder_system_data["upload"]='';
 		$folder_system_data["refresh"]='';
+		$folder_system_data["link"]='';
 		unset($cmd);
 	}
 }
@@ -275,7 +305,7 @@ if ($close) {
 		<? printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); ?>
 		</blockquote>
 		<?
-		if (!$folder_system_data["upload"])
+		if (!$folder_system_data["upload"] && !$folder_system_data["link"])
 			print ("<div align=\"right\"><a href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");		
 		}
 		
@@ -285,17 +315,17 @@ if ($close) {
 	//Treeview
 	if ($folder_system_data["cmd"]=="tree") {
 		//Seminar...
-		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"]);
+		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 		while ($db->next_record()) {
 			//und einzelne Termine	
-			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"]);
+			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 			}
 		}
 	
 	//Alle / Listview
 	else {
 		?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><?
-		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE, $folder_system_data["refresh"]);		
+		display_folder_system($range_id, 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], TRUE, $folder_system_data["refresh"], $folder_system_data["link"]);		
 		?><td class="blank" width="*">&nbsp;</td></tr></table><?
 		}
 	

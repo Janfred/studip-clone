@@ -46,6 +46,7 @@ require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.clas
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
+
 switch ($type) {
 	//We want to download from the archive (this mode performs perm checks)
 	case 1: 
@@ -66,6 +67,10 @@ switch ($type) {
 	//download lit list as tab delimited text file
 	case 5:
 		$path_file = false;
+	break;
+	//download linked file
+	case 6:
+		$path_file = getLinkPath($file_id);
 	break;
 	//we want to download from the regular upload-folder (this mode performs perm checks)
 	default:
@@ -213,6 +218,15 @@ if (!$type) {
 	if ($object_type == "inst")
 		$skip_check=TRUE;
 }
+
+// Rechteckeck
+
+if ($type == 6){
+	$skip_check = true;
+}
+
+//////////////
+
 if ($type == 5){
 	$skip_check = true;
 	if (!($range_id == $user->id) && !$perm->have_studip_perm('tutor', $range_id)){
@@ -292,7 +306,7 @@ if ($no_access) {
 }
 
 //Datei verschicken
-if ($type != 5){
+if ($type != 5 && $type != 6){
 	$filesize = filesize($path_file);
 } else {
 	$filesize = strlen($the_data);
@@ -309,7 +323,8 @@ header("Cache-Control: private");
 header("Expires: 0");
 
 header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
-header("Content-length: $filesize");
+if ($type != 6)
+	header("Content-length: $filesize");
 header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
 if ($type != 5){
 	readfile($path_file);
