@@ -16,7 +16,7 @@ function search_modules($key, $area = 4)
 		$ilias_db -> query("SELECT DISTINCT lerneinheit.id, lerneinheit.inst, meta.title, meta.description".
 			" FROM lerneinheit LEFT JOIN meta USING(inst, id)  LEFT JOIN meta_author USING(inst, id, typ) ".
 			" WHERE meta.status='final' ".
-			" AND public = 'y' ".
+			" AND public IN('y','f') ".
 			" AND meta.typ = 'le' " .
 			" AND lerneinheit.deleted='0000-00-00 00:00:00'". $add_query);
 		while ($ilias_db->next_record())
@@ -41,7 +41,7 @@ function get_module_info($co_inst, $co_id)
 	$ilias_db -> query("SELECT DISTINCT meta.id, meta.inst, meta.title, meta.description ".
 			" FROM lerneinheit LEFT JOIN meta USING (id, inst)".
 			" WHERE meta.status='final' ".
-			" AND public = 'y' ".
+			" AND public IN('y','f') ".
 			" AND meta.typ = 'le' ".
 			" AND lerneinheit.deleted='0000-00-00 00:00:00'".
 			" AND lerneinheit.id = '$co_id' ".
@@ -155,7 +155,7 @@ function get_all_modules($hide_mod = false)
 	$ilias_db -> query("SELECT lerneinheit.id, lerneinheit.inst, meta.title, meta.description".
 			" FROM lerneinheit, meta ".
 			" WHERE meta.status='final' ".
-			" AND public = 'y' ".
+			" AND public IN('y','f') ".
 			" AND meta.typ = 'le' " .
 			" AND lerneinheit.deleted='0000-00-00 00:00:00'".
 			" AND lerneinheit.id = meta.id ".
