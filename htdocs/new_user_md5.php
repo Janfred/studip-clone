@@ -86,7 +86,7 @@ while ( is_array($HTTP_POST_VARS)
 	switch ($key) {
 
 	// Create a new user
-	case "create":
+	case "create_x":
 
 		$run = TRUE;
 		// Do we have permission to do so?
@@ -184,7 +184,7 @@ while ( is_array($HTTP_POST_VARS)
 		break;
 
 	// Change user parameters
-	case "u_edit":
+	case "u_edit_x":
 
 		$run = TRUE;
 		// Do we have permission to do so?
@@ -361,7 +361,7 @@ while ( is_array($HTTP_POST_VARS)
 		break;
 
 	// Change user password
-	case "u_pass":
+	case "u_pass_x":
 	
 		$run = TRUE;
 		// Do we have permission to do so?
@@ -432,7 +432,7 @@ while ( is_array($HTTP_POST_VARS)
 		break;
 
 	// Delete the user
-	case "u_kill":
+	case "u_kill_x":
 	
 		$run = TRUE;
 		// Do we have permission to do so?
@@ -698,8 +698,8 @@ if (isset($details)) {
 					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="">&nbsp;</td>
 				</tr>
 				<td colspan=3 align=center>&nbsp;
-				<input type="submit" name="create" value=" <?=_("Benutzer anlegen")?> ">&nbsp;
-				<input type="submit" name="nothing" value=" <?=_("Abbrechen")?> ">
+				<input type="IMAGE" name="create" <?=makeButton("anlegen", "src")?> value=" <?=_("Benutzer anlegen")?> ">&nbsp;
+				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
 				&nbsp;</td></tr>
 			</form></table>
 			
@@ -805,13 +805,13 @@ if (isset($details)) {
 					($db->f("perms") != "admin" && $db->f("perms") != "root") ||
 					$db2->f("admin_ok") ) {
 					?>
-					<input type="submit" name="u_edit" value=" <?=_("Ver&auml;ndern")?> ">&nbsp;
-					<input type="submit" name="u_pass" value=" <?=_("Passwort neu setzen")?> ">&nbsp;
-					<input type="submit" name="u_kill" value=" <?=_("L&ouml;schen")?> ">&nbsp;
+					<input type="IMAGE" name="u_edit" <?=makeButton("uebernehmen", "src")?> value=" <?=_("Ver&auml;ndern")?> ">&nbsp;
+					<input type="IMAGE" name="u_pass" <?=makeButton("neuespasswort", "src")?> value=" <?=_("Passwort neu setzen")?> ">&nbsp;
+					<input type="IMAGE" name="u_kill" <?=makeButton("loeschen", "src")?> value=" <?=_("L&ouml;schen")?> ">&nbsp;
 					<?
 		 		}
 				?>
-				<input type="submit" name="nothing" value=" <?=_("Abbrechen")?> ">
+				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
 				&nbsp;</td></tr>
 			</form>
 			
