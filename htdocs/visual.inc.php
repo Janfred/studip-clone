@@ -151,10 +151,14 @@ class cssClassSwitcher {
 						} else {
 							return false;
 						}
-						var rowCellsCnt  = theCells.length;
-						for (var c = 0; c < rowCellsCnt; c++) {
-							if (theCells[c].className == theFromClass) {
-								theCells[c].className = theToClass;
+						if (theRow.tagName.toLowerCase() != 'tr'){
+							theRow.className = theToClass;
+						} else {
+							var rowCellsCnt  = theCells.length;
+							for (var c = 0; c < rowCellsCnt; c++) {
+								if (theCells[c].className == theFromClass) {
+									theCells[c].className = theToClass;
+								}
 							}
 						}
 						return true;
