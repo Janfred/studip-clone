@@ -462,16 +462,24 @@ if (($s_id) && (auth_check())) {
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
 						echo "<select name=\"Institut\">";
 						if (!$perm->have_perm("admin"))
-							$db3->query("SELECT Name,a.Institut_id FROM user_inst a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND (inst_perms = 'dozent' OR inst_perms = 'tutor')) ORDER BY Name");
+							$db3->query("SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND (inst_perms = 'dozent' OR inst_perms = 'tutor')) ORDER BY is_fak,Name");
 						else if (!$perm->have_perm("root"))
-							$db3->query("SELECT Name,a.Institut_id FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'admin') GROUP BY a.institut_id ORDER BY Name");
+							$db3->query("SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'admin') ORDER BY is_fak,Name");
 						else
-							$db3->query("SELECT Name,Institut_id FROM Institute ORDER BY Name");
+							$db3->query("SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
 						while ($db3->next_record()) {
-							printf ("<option %s value=%s> %s</option>", $db3->f("Institut_id") == $db->f("Institut_id") ? "selected" : "", $db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
+							printf ("<option %s style=\"%s\" value=\"%s\"> %s</option>", $db3->f("Institut_id") == $db->f("Institut_id") ? "selected" : "",
+								($db3->f("is_fak")) ? "font-weight:bold;" : "", $db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
+							if ($db3->f("is_fak") && $db3->f("inst_perms") == "admin"){
+								$db2->query("SELECT a.Institut_id, a.Name FROM Institute a 
+											 WHERE fakultaets_id='" . $db3->f("Institut_id") . "' AND a.Institut_id!='" .$db3->f("Institut_id") . "' ORDER BY Name");
+								while($db2->next_record()){
+									printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("Institut_id") == $db->f("Institut_id") ? "selected" : "",
+										$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
+								}
 							}
 						}
-					else {
+					} else {
 						echo "<td class=\"".$cssSw->getClass()."\" align=right>Heimat-Einrichtung</td>";
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
 						echo "<input type=\"HIDDEN\" name=\"Institut\" value=\"".$db->f("Institut_id")."\" />";
@@ -485,13 +493,15 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=right>beteiligte Einrichtungen</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <select  name="b_institute[]" MULTIPLE SIZE=8>
 					<?php
-					$db3->query("SELECT Name,a.Institut_id,b.Institut_id as beteiligt FROM Institute a LEFT JOIN seminar_inst b ON(a.Institut_id=b.Institut_id AND Seminar_id='$s_id') ORDER BY Name");
+					$db3->query("SELECT Name,a.Institut_id,b.Institut_id as beteiligt FROM Institute a LEFT JOIN seminar_inst b ON(a.Institut_id=b.Institut_id AND Seminar_id='$s_id') WHERE a.Institut_id=a.fakultaets_id ORDER BY Name");
 					while ($db3->next_record()) {
-						$tempInstitut_id = $db3->f("Institut_id");
-						if ($db3->f("beteiligt")) {
-							printf ("<option selected value=%s> %s</option>", $tempInstitut_id, htmlReady(my_substr($db3->f("Name"),0,60)));
-						} else {
-							printf ("<option value=%s> %s</option>", $tempInstitut_id, htmlReady(my_substr($db3->f("Name"),0,60)));
+						printf ("<option %s style=\"font-weight:bold;\" value=\"%s\"> %s</option>", $db3->f("beteiligt") ? "selected" : "",
+								$db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
+						$db2->query("SELECT a.Institut_id, a.Name,b.Institut_id as beteiligt FROM Institute a LEFT JOIN seminar_inst b ON(a.Institut_id=b.Institut_id AND Seminar_id='$s_id')
+						WHERE fakultaets_id='" . $db3->f("Institut_id") . "' AND a.Institut_id!='" .$db3->f("Institut_id") . "' ORDER BY Name" );
+						while($db2->next_record()){
+							printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("beteiligt") ? "selected" : "",
+								$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
 						}
 					}
 					?>

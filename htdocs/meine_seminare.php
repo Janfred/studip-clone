@@ -552,7 +552,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 				}
 				?>
 				</select>&nbsp;
-				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" style="vertical-align:middle;">
+				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
 				<br>&nbsp;
 			</div>
 		</td>

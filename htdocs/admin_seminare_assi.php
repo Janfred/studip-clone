@@ -805,15 +805,11 @@ if ($cmd_f_x)
 		$errormsg .= "error§Sie haben keine Berechtigung Veranstaltungen anzulegen Um eine Veranstaltung anlegen zu k&ouml;nnen, ben&ouml;tigen Sie mindestens den globalen Status \"Dozent\". Bitte kontaktieren Sie den f&uuml;r Sie zust&auml;ndigen Administrator.§";
 		$run = FALSE;
 		}
-	if (!$perm->have_perm("root"))
+	if (!$perm->have_studip_perm("dozent",$sem_create_data["sem_inst_id"]))
 		{
-		$db3->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_inst.Institut_id = '".$sem_create_data["sem_inst_id"]."' AND user_id = '$user_id') AND (inst_perms = 'dozent' OR inst_perms = 'admin')");
-		if (!$db3->next_record())
-			{
-      			$errormsg .= "error§Sie haben keine Berechtigung f&uuml;r diese Einrichtung Veranstaltungen anzulegen.§";
-      			$run = FALSE;
-			}
-    		}
+		$errormsg .= "error§Sie haben keine Berechtigung f&uuml;r diese Einrichtung Veranstaltungen anzulegen.§";
+			$run = FALSE;
+		}
 
 	//Nochmal Checken, ob wirklich alle Daten vorliegen. Kann zwar eigentlich hier nicht mehr vorkommen, aber sicher ist sicher.
 	if (empty($sem_create_data["sem_name"]))
@@ -1406,24 +1402,32 @@ elseif ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp;
 							<?
-								if (!$perm->have_perm("admin")) //Alles unter Admin bekommt Institut, in denen er Dozent ist
-									$db->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'dozent') GROUP BY Institute.institut_id ORDER BY Name");
-								else if (!$perm->have_perm("root")) //Alles unter root (=Admin) bekommt alles wo er Admin isr
-									$db->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'admin') GROUP BY Institute.institut_id ORDER BY Name");
-								else //als Root alles
-									$db->query("SELECT * FROM Institute ORDER BY Name");
-								if ($db->affected_rows())
+							if (!$perm->have_perm("admin"))
+								$db->query("SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'dozent' ) ORDER BY is_fak,Name");
+							else if (!$perm->have_perm("root"))
+								$db->query("SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'admin') ORDER BY is_fak,Name");
+							else
+								$db->query("SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
+							if ($db->affected_rows())
 									{
 									echo "<select name=\"sem_inst_id\">";
 									while ($db->next_record()) {
-										printf ("<option %s value=%s> %s</option>", $db->f("Institut_id") == $sem_create_data["sem_inst_id"] ? "selected" : "", $db->f("Institut_id"), my_substr($db->f("Name"),0,60));
+										printf ("<option %s style=\"%s\" value=%s>%s</option>", $db->f("Institut_id") == $sem_create_data["sem_inst_id"] ? "selected" : "",
+											($db->f("is_fak")) ? "font-weight:bold;" : "",$db->f("Institut_id"), my_substr($db->f("Name"),0,60));
+										if ($db->f("is_fak") && $db->f("inst_perms") == "admin"){
+											$db2->query("SELECT a.Institut_id, a.Name FROM Institute a 
+											 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' ORDER BY Name");
+											while($db2->next_record()){
+												printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("Institut_id") == $sem_create_data["sem_inst_id"] ? "selected" : "",
+													$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
+											}
 										}
+									}
 									echo "</select>";
 									}
 								else
 									echo "Ihr Account wurde noch keiner Einrichtung als Dozent zugeordnet. Bitte wenden Sie sich an Ihren Administrator der Einrichtung oder einen der <a href=\"impressum.php\">Entwickler</a>";
 							?>
-							</select>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip("Die Heimateinrichtung ist die Einrichtung, die offiziell f&uuml;r die Veranstaltung zuständig ist.", TRUE, TRUE) ?>
 							>
@@ -1437,19 +1441,25 @@ elseif ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <select  name="sem_bet_inst[]" MULTIPLE SIZE=7>
 							<?
-								$db->query("SELECT * FROM Institute  WHERE Name NOT LIKE '%- - -%' ORDER BY Name");
+								$db->query("SELECT Institut_id,Name FROM Institute WHERE Institut_id = fakultaets_id ORDER BY Name");
 								while ($db->next_record()) {
-									$tempInstitut_id = $db->f("Institut_id");
-									$selected=FALSE;
-									$i=0;
-									for ($i; $i<sizeof($sem_create_data["sem_bet_inst"]); $i++)
-										if ($sem_create_data["sem_bet_inst"][$i] == $tempInstitut_id) $selected=TRUE;
-									if ($selected) {
-										printf ("<option selected value=%s> %s</option>", $tempInstitut_id, my_substr($db->f("Name"),0,60));
-									} else {
-										printf ("<option value=%s> %s</option>", $tempInstitut_id, my_substr($db->f("Name"),0,60));
-										}
+									$selected="";
+									if(is_array($sem_create_data["sem_bet_inst"]) && in_array($db->f("Institut_id"),$sem_create_data["sem_bet_inst"])){
+										$selected = "selected";
 									}
+									printf ("<option %s style=\"font-weight:bold;\" value=\"%s\">%s</option>",$selected,$db->f("Institut_id")
+										, htmlReady(my_substr($db->f("Name"),0,60)));
+									$db2->query("SELECT Institut_id, Name FROM Institute 
+										WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND Institut_id!='" .$db->f("Institut_id") . "' ORDER BY Name" );
+									while($db2->next_record()){
+										$selected="";
+										if(is_array($sem_create_data["sem_bet_inst"]) && in_array($db2->f("Institut_id"),$sem_create_data["sem_bet_inst"])){
+										$selected = "selected";
+										}
+										printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $selected,
+											$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
+									}
+								}
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
