@@ -82,78 +82,93 @@ include "show_dates.inc.php";
 $sess->register("smain_data");
 //Auf und Zuklappen Termine
 if ($dopen)
-		$smain_data["dopen"]=$dopen;
+	$smain_data["dopen"]=$dopen;
 
 if ($dclose)
-		$smain_data["dopen"]='';
+	$smain_data["dopen"]='';
 
 //Auf und Zuklappen News
 if ($nopen)
-		$smain_data["nopen"]=$nopen;
+	$smain_data["nopen"]=$nopen;
 
 if ($nclose)
-		$smain_data["nopen"]='';
+	$smain_data["nopen"]='';
+	
+//calculate a "quarter" year, to avoid showing dates that are older than a quarter year (only for irregular dates)
+$quarter_year = 60 * 60 * 24 * 90;
 
 ?>
-		<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?>
-		</b></td></tr>
-		<tr><td class="blank" valign="top"><blockquote>
-		<?
-
-		if ($SessSemName[3]) {
-				echo "<br /><b>" . _("Untertitel:") . " </b>"; echo htmlReady($SessSemName[3]); echo"<br>";
-		}
-
-		echo "<br><b>" . _("Zeit:") . " </b>", view_turnus($SessionSeminar, FALSE);
-
-		if (getRoom($SessSemName[1])) {
-				echo "<br><b>" . _("Ort:") . " </b>".getRoom($SessSemName[1]);
-		}
-
-		$db=new DB_Seminar;
-		$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY Nachname");
-		if ($db->affected_rows() > 1)
-				printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterInnen") : _("DozentInnen"));
-		else
-				printf ("<br><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterIn") : _("DozentIn"));
-
-		$i=0;
-		while ($db->next_record()) {
-				if ($i)
-						print( ", <a href = about.php?username=" . $db->f("username") . ">");
-				else
-						print( "<a href = about.php?username=" . $db->f("username") . ">");
-				print(htmlReady($db->f("fullname")) ."</a>");
-				$i++;
-		}
-		?>
-		</blockquote><br><br>
+<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?></b>
 		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign="top">
+		<blockquote>
+	<?
 
-		<td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
-		</tr></table><br>
+	if ($SessSemName[3]) {
+		echo "<br /><b><font size=\"-1\">" . _("Untertitel:") . " </b>"; 
+		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
+	}
 
+	echo "<br><font size=\"-1\"><b>" . _("Zeit:") . " </b>".view_turnus($SessionSeminar, FALSE, FALSE, (time() - $quarter_year))."</font>";
 
-		<?php
+	if (getRoom($SessSemName[1])) {
+		echo "<br><font size=\"-1\"><b>" . _("Ort:") . " </b>".getRoom($SessSemName[1], TRUE, (time() - $quarter_year))."</font>";
+	}
 
-		// Anzeige von News
+	$db=new DB_Seminar;
+	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY Nachname");
+	if ($db->affected_rows() > 1)
+		printf ("<br><font size=\"-1\"><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterInnen") : _("DozentInnen"));
+	else
+		printf ("<br><font size=\"-1\"><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterIn") : _("DozentIn"));
 
-		($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
-		if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
-				echo"<br>";
-		// Anzeige von Terminen
-		$start_zeit=time();
-		$end_zeit=$start_zeit+1210000;
-		$name = rawurlencode($SessSemName[0]);
-		($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
-		if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
-				echo"<br>";
-		//show chat info
-		if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
-				if (chat_show_info($auswahl))
-						echo "<br>";
-		}
+	$i=0;
+	while (($db->next_record()) && ($i <= 10)) {
+		if ($i)
+			print( ", <a href = about.php?username=" . $db->f("username") . ">");
+		else
+			print( "<a href = about.php?username=" . $db->f("username") . ">");
+		print(htmlReady($db->f("fullname")) ."</a>");
+		$i++;
+	}
+
+	if ($i >= 10)
+		print ", ... <a href=\"details.php\">"._("(mehr)")."</a>";
+	?>
+		</font>
+		</blockquote><br />
+		</td>
+		<td class="blank" align="right" valign="top">
+			<img src="pictures/blank.gif" height="10" width="5" /><br />
+			<img src="pictures/seminare.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" />
+		</td>
+	</tr>
+	</table>
+<br>
+
+<?php
+
+// Anzeige von News
+
+($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
+if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
+		echo"<br>";
+// Anzeige von Terminen
+$start_zeit=time();
+$end_zeit=$start_zeit+1210000;
+$name = rawurlencode($SessSemName[0]);
+($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
+if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
+		echo"<br>";
+//show chat info
+if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
+		if (chat_show_info($auswahl))
+				echo "<br>";
+}
 
 ?>
 </body>
