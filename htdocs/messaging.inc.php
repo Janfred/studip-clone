@@ -304,12 +304,10 @@ class messaging {
 
 				$title = $this->rfc_string($title . $snd_fullname);
 				// Generate "Header" of the message
-				$message = _("Von:")." $snd_fullname\n".
-					_("An:")." $rec_fullname\n".
-					_("Datum: ").date("d.m. Y, H:i",time())."\n\n".$message.
+				$message = _("Von:") . " $snd_fullname\n".
+					_("An:") . " $rec_fullname\n" .
+					_("Datum: ") . date("d.m. Y, H:i",time()) . "\n\n" . kill_format($message) .
 					"\n-- \n";
-
-				$message = kill_format($message);
 				
 				// generate signature of the message
 				$message .=	sprintf(_("Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP an %s versendet wurde."),$rec_fullname)."\n".
@@ -318,7 +316,7 @@ class messaging {
 				$message = stripslashes($message);
 			
 				restoreLanguage();
-			
+				
 				// Now, let us send the message
 				$smtp->SendMessage(
 						$smtp->env_from, array($to),
