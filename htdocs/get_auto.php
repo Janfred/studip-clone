@@ -1,11 +1,15 @@
 <?
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
+
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
 if (!$HTTP_POST_VARS["pass"])
    {
     ?>
 		<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-    <html><head><title>Autlogin Datei erzeugen</title>
+    <html><head><title><?=_("Autologin Datei erzeugen")?></title>
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
     <script type="text/javascript">
     function doSubmit(){
@@ -16,9 +20,10 @@ if (!$HTTP_POST_VARS["pass"])
     <body style="background-image: url('pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif;">
     <?
     echo "<div align=\"center\"><form action=\"$PHP_SELF\" method=\"post\" >";
-    echo "Bitte Passwort eingeben für User: <b>".$auth->auth["uname"]."</b><br><br>";
-    echo "<input type=\"password\" size=\"15\" name=\"pass\"><br><br><a href=\"javascript:doSubmit();\"><img alt=\"Die heruntergeladene Datei bitte mit Endung .html speichern!\" src=\"pictures/buttons/herunterladen-button.gif\" border=\"0\"></a>";
-    echo "&nbsp;&nbsp;<a href=\"javascript:window.close()\"><img alt=\"Fenster schließen\" src=\"pictures/buttons/abbrechen-button.gif\" border=\"0\"></a></form></div></body></html>";
+    printf(_("Bitte Passwort eingeben für User: <b>%s</b>"), $auth->auth["uname"]);
+		echo "<br><br>";
+    echo "<input type=\"password\" size=\"15\" name=\"pass\"><br><br><a href=\"javascript:doSubmit();\"><img " . makeButton("herunterladen", "src") . " border=\"0\" " . tooltip(_("Die heruntergeladene Datei bitte mit der Endung .html speichern!")) . "></a>";
+    echo "&nbsp;&nbsp;<a href=\"javascript:window.close()\"><img " . makeButton("abbrechen", "src") . " border=\"0\" " . tooltip(_("Fenster schließen")) . "></a></form></div></body></html>";
     ?><script type="text/javascript">document.forms[0].pass.focus();</script><?
     page_close();
     die;
@@ -29,7 +34,7 @@ ob_start();
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<title>Autologin</title>
+	<title><?=_("Autologin")?></title>
 	<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 <script src="http://<? echo $HTTP_SERVER_VARS["HTTP_HOST"].$CANONICAL_RELATIVE_PATH_STUDIP;?>get_key.php" type="text/javascript">
 </script>
