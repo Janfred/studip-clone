@@ -56,9 +56,8 @@ function parse_link($link,$level=0) {
 				
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) $url_parts["pass"] = "wwwrun@".$GLOBALS['MAIL_LOCALHOST'];
-		if (!ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
+		if (!@ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
       			ftp_quit($ftp);
-      			die("Error: can't login");
       			return FALSE;
    		} 
    		$parsed_link["Content-Length"] = ftp_size($ftp, $documentpath);
