@@ -1,6 +1,6 @@
 <?
 /*
-sms.php - Verwaltung von systeminternen Kurznachrichten
+sms_send.php - Verwaltung von systeminternen Kurznachrichten
 Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <info@nkwindisch.de>
 
 This program is free software; you can redistribute it and/or
@@ -43,6 +43,8 @@ $msging=new messaging;
 
 $db=new DB_Seminar;
 
+# FUNCTIONS
+###########################################################
 
 //
 function array_add_value($add, $array) {
@@ -67,6 +69,30 @@ function array_delete_value($array, $value) {
 	return $array;
 }
 
+// checkt ob alle adressbuchmitglieder in der empaengerliste stehen
+function CheckAllAdded($adresses_array, $rec_array) {
+	$x = sizeof($adresses_array);
+	if (!empty($rec_array)) {
+		foreach ($rec_array as $a) {
+			if (in_array($a, $adresses_array)) {
+				$x = ($x-1);
+			}
+		}
+	}
+	if ($x != "0") {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
+}
+
+# ACTION
+###########################################################
+
+if (empty($my_messaging_settings["addsignature"])) {
+	$my_messaging_settings["addsignature"] ="0";
+}
+
 // check if active chat avaiable
 if (($cmd == "write_chatinv") && (!is_array($admin_chats)))
 	$cmd='';
@@ -82,7 +108,7 @@ if ($cmd_insert_x) {
 			if ($chat_id) {
 				$count = ($count+$msging->insert_chatinv($message, $a, $chat_id));
 			} else {
-				$count = ($count+$msging->insert_message($message, $a, FALSE, $time, $tmp_message_id));
+				$count = ($count+$msging->insert_message($message, $a, FALSE, $time, $tmp_message_id, FALSE, $signature));
 			}
 		}
 	}
@@ -95,6 +121,10 @@ if ($cmd_insert_x) {
 		if ($count >= "2") {
 			$msg .= sprintf(_("Ihre Nachricht wurde an %s Empf&auml;nger verschickt!"), $count)."<br />";
 		}
+		unset($sms_data["p_rec"]);
+		unset($signature);
+		unset($message);
+		$sms_data["sig"] = $my_messaging_settings["addsignature"];
 	}
 	if ($count < 0) {
 		$msg = "error§" . _("Ihre Nachricht konnte nicht gesendet werden. Die Nachricht enth&auml;lt keinen Text.");
@@ -117,9 +147,8 @@ if ($cmd_insert_x) {
 
 // falls antwort
 if ($rec_uname) {
-	if (get_username($user->id) != $rec_uname) {
-		$sms_data["p_rec"] = array($rec_uname);
-	}
+	$sms_data["p_rec"] = array($rec_uname);
+	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 }
 
 //
@@ -131,6 +160,16 @@ if ($group_id) {
 	}
 	$sms_data["p_rec"] = "";
 	$sms_data["p_rec"] = array_add_value($add_group_members, $sms_data["p_rec"]);
+	$sms_data["sig"] = $my_messaging_settings["addsignature"];
+}
+
+// 
+if (!isset($sms_data["sig"])) {
+	$sms_data["sig"] = $my_messaging_settings["addsignature"];
+} else if ($add_sig_button_x) {
+	$sms_data["sig"] = "1";
+} else if ($rmv_sig_button_x) {
+	$sms_data["sig"] = "0";
 }
 
 // add a reciever from adress-members
@@ -138,9 +177,31 @@ if ($add_receiver_button_x && !empty($add_receiver)) {
 	$sms_data["p_rec"] = array_add_value($add_receiver, $sms_data["p_rec"]);
 }
 
+// add all reciever from adress-members
+if ($add_allreceiver_button_x) {
+	$query_for_adresses = "SELECT contact.user_id, username, ".$_fullname_sql['full_rev']." AS fullname FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE owner_id = '".$user->id."' ORDER BY Nachname ASC";
+	$db->query($query_for_adresses);
+	while ($db->next_record()) {
+		if (empty($sms_data["p_rec"])) {
+			$add_rec[] = $db->f("username");
+		} else {	
+			if (!in_array($db->f("username"), $sms_data["p_rec"])) {
+				$add_rec[] = $db->f("username");
+			}
+		}
+	}
+	$sms_data["p_rec"] = array_add_value($add_rec, $sms_data["p_rec"]);
+	unset($add_rec);
+}
+
 // add receiver from freesearch
 if ($add_freesearch_x && !empty($freesearch)) {
 	$sms_data["p_rec"] = array_add_value($freesearch, $sms_data["p_rec"]);
+}
+
+// remove all from receiverlist
+if ($del_allreceiver_button_x) {
+	unset($sms_data["p_rec"]);
 }
 
 // aus empfaengerliste loeschen
@@ -150,7 +211,9 @@ if ($del_receiver_button_x && !empty($del_receiver)) {
 	}
 }
 
-// Start of Output
+# OUTPUT
+###########################################################
+
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
@@ -198,49 +261,34 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 					}
 					echo "</font>";
 				} else {
-					echo "<select size=\"5\" name=\"del_receiver[]\" multiple style=\"width: 200\">";
+					echo "<select size=\"5\" name=\"del_receiver[]\" multiple style=\"width: 250\">";
 					if ($sms_data["p_rec"]) {
 						foreach ($sms_data["p_rec"] as $a) {
 							echo "<option value=\"$a\">".get_fullname_from_uname($a)."</option>";
 						}
 					}
 					echo "</select><br>";	
-					echo "<input type=\"image\" name=\"del_receiver_button\" src=\"./pictures/trash.gif\" ".tooltip(_("löscht alle ausgewähtlen EmpfängerInnen"))." border=\"0\">";
-					echo " <font size=\"-1\">"._("ausgew&auml;hlte l&ouml;schen")."</font>";
+					echo "<input type=\"image\" name=\"del_receiver_button\" src=\"./pictures/trash.gif\" ".tooltip(_("löscht alle ausgewählten EmpfängerInnen"))." border=\"0\">";
+					echo " <font size=\"-1\">"._("ausgew&auml;hlte l&ouml;schen")."</font><br>";
+					echo "<input type=\"image\" name=\"del_allreceiver_button\" src=\"./pictures/trash.gif\" ".tooltip(_("Empf&auml;ngerliste leeren"))." border=\"0\">";
+					echo " <font size=\"-1\">"._("Empf&auml;ngerliste leeren")."</font>";
 				}
 				echo "</td><td class=\"printcontent\" align=\"left\" valign=\"top\" width=\"70%\">";
 				// list of adresses
-				$query_for_adresses = "
-				SELECT contact.user_id, username, ".$_fullname_sql['full_rev']." AS fullname 
-				FROM contact 
-				LEFT JOIN auth_user_md5 USING(user_id) 
-				LEFT JOIN user_info USING (user_id) 
-				WHERE owner_id = '".$user->id."' 
-				ORDER BY Nachname ASC";
-				
+				$query_for_adresses = "SELECT contact.user_id, username, ".$_fullname_sql['full_rev']." AS fullname FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE owner_id = '".$user->id."' ORDER BY Nachname ASC";
 				$db->query($query_for_adresses);
-
 				while ($db->next_record()) {
 					$adresses_array[] = $db->f("username");
 				}
-
 				echo "<b><font size=\"-1\">"._("Adressbuch-Liste:")."</font></b><br>";
 
 				if (empty($adresses_array)) { // user with no adress-members at all
 					echo sprintf("Sie haben noch keine Personen in ihrem Adressbuch. %s Klicken sie %s hier %s um dorthin zu gelangen.", "<br>", "<a href=\"contact.php\">", "</a>");
 				} else if (!empty($adresses_array)) { // test if all adresses are added?
-					$x = sizeof($adresses_array);
-					if (!empty($sms_data["p_rec"])) {
-						foreach ($sms_data["p_rec"] as $a) {
-							if (in_array($a, $adresses_array)) {
-								$x = ($x-1);
-							}
-						}
-					}
-					if ($x == "0") { // all adresses already added
+					if (CheckAllAdded($adresses_array, $sms_data["p_rec"]) == TRUE) { // all adresses already added
 						print("Bereits alle Personen des Adressbuchs hinzugef&uuml;gt!");
 					} else { // show adresses-select
-						echo "<select size=\"3\" name=\"add_receiver[]\" multiple style=\"width: 200\">";
+						echo "<select size=\"3\" name=\"add_receiver[]\" multiple style=\"width: 250\">";
 						$db->query($query_for_adresses);
 						while ($db->next_record()) {
 							if (empty($sms_data["p_rec"])) {
@@ -251,14 +299,13 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 								}
 							}
 						}
-						echo "</select><br><input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/move_left.gif\" border=\"0\" ".tooltip(_("fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu")).">&nbsp;<font size=\"-1\">"._("ausgew&auml;hlte hinzufügen")."</font>";
+						echo "</select><br><input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/move_left.gif\" border=\"0\" ".tooltip(_("fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu")).">&nbsp;<font size=\"-1\">"._("ausgew&auml;hlte hinzufügen")."&nbsp;<br><input type=\"image\" name=\"add_allreceiver_button\" src=\"./pictures/move_left.gif\" border=\"0\" ".tooltip(_("fügt alle Personen der EmpfängerInnenliste hinzu")).">&nbsp;<font size=\"-1\">"._("alle hinzuf&uuml;gen")."</font>";
 					}
 				}
 				// free search
 				echo "<br><br><font size=\"-1\"><b>"._("Freie Suche:")."</b></font><br>";
 				if ($search_exp != "") {
-					$query = "
-					SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
+					$query = "SELECT username, ".$_fullname_sql['full_rev']." AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ORDER BY Nachname ASC";
 					$db->query($query); //
 					if (!$db->num_rows()) {
 						echo "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
@@ -288,10 +335,8 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	?></table>
 	<table cellpadding="5" cellspacing="0" border="0" width="99%">
 		<tr>
-			<td colspan="2" valign="top" width="30%" class="steelgraudunkel">
-			<?
-			echo "<font size=\"-1\" color=\"#FFFFFF\"><b>".(($cmd=="write_chatinv") ? _("Chateinladung") : _("Nachricht"))."</b></font>";
-			?>
+			<td colspan="2" valign="top" width="80%" class="steelgraudunkel">
+			<? echo "<font size=\"-1\" color=\"#FFFFFF\"><b>".(($cmd=="write_chatinv") ? _("Chateinladung") : _("Nachricht"))."</b></font>"; ?>
 			</td>
 		</tr>
 	</table><?
@@ -316,31 +361,83 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 			if ($_REQUEST['selected_chat_id'] == $chat_id){
 				echo " selected ";
 			}
-			echo ">" . htmlReady($chat_name) . "</option>";
+			echo ">".htmlReady($chat_name)."</option>";
 		}
 		echo "</select>";
 		echo "</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";
 		echo "</td></tr>";	
 	}
-	echo "<td class=\"steelgraulight\" width=\"100%\" valign=\"center\"><div align=\"center\">";
-	echo "<textarea name=\"message\" style=\"width: 99%\" cols=80 rows=10 wrap=\"virtual\">";
+	// message-input
+	echo "<td class=\"steelgraulight\" width=\"80%\" valign=\"center\"><div align=\"center\">\n";
+	echo "<textarea name=\"message\" style=\"width: 99%\" cols=80 rows=10 wrap=\"virtual\">\n";
 	if ($quote) {
 		echo quotes_encode($tmp_sms_content, get_fullname_from_uname($rec_uname));
 	}
 	if ($message) {
 		echo stripslashes($message);
 	}
-	echo "</textarea><br><br>";	
-	if (sizeof($sms_data["p_rec"]) > "0") {
+	echo "</textarea>\n<br><br>";	
+	// send/ break-button
+	if (sizeof($sms_data["p_rec"]) > "0") { 
 		echo "<input type=\"image\" ".makeButton("abschicken", "src")." name=\"cmd_insert\" border=0 align=\"absmiddle\">";
 	}
 	echo "&nbsp;<a href=\"sms_box.php\">".makeButton("abbrechen", "img")."</a><br>&nbsp;";	
-	echo "</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";
-	echo "</td>";	
+	echo "</div><img src=\"pictures/blank.gif\" height=\"6\" border=\"0\">";	
+	
+	echo "</td>\n";
+	echo "</tr>\n";
 
-	echo"</form>";
+	echo "</table>\n";
+	echo "<table border=\"0\" cellpadding=\"5\" cellspacing=\"0\" width=\"99%\" align=\"center\">";
+	// 
+	echo "<tr>\n";
+	echo "<td class=\"steelgraudunkel\"  width=\"30%\" valign=\"top\">\n";
+	echo "<font size=\"-1\" color=\"#FFFFFF\"><b>"._("Signatur")."</b></font>";
+	echo "</td>\n";
+	echo "<td class=\"steelgraudunkel\"  width=\"70%\" valign=\"top\">\n";
+	echo "<font size=\"-1\" color=\"#FFFFFF\"><b>"._("Vorschau")."</b></font>";
+	echo "</td>\n";
+	echo "</tr>\n";
+	// 
+	echo "<tr>\n";
+	echo "<td class=\"steelgraulight\"  width=\"20%\" valign=\"top\">\n";
+	if ($sms_data["sig"] == "1") {
+			echo "<font size=\"-1\">";
+			echo _("Dieser Nachricht wird eine Signatur angehängt");
+			echo "<br><input type=\"image\" name=\"rmv_sig_button\" src=\"./pictures/rmv_sig.gif\" border=\"0\" ".tooltip(_("entfernt die Signatur von der aktuellen Nachricht.")).">&nbsp;"._("Signatur entfernen.");
+			echo "</font><br>";
+			echo "<textarea name=\"signature\" style=\"width: 250px\" cols=20 rows=7 wrap=\"virtual\">\n";
+			if (!$signature) {
+				echo htmlready($my_messaging_settings["sms_sig"]);
+			} else {
+				echo htmlready($signature);
+			}
+			echo "</textarea>\n";
+	} else {
+		echo "<font size=\"-1\">";
+		echo _("Dieser Nachricht wird keine Signatur angehängt");
+			echo "<br><input type=\"image\" name=\"add_sig_button\" src=\"./pictures/add_sig.gif\" border=\"0\" ".tooltip(_("fügt der aktuellen Nachricht eine Signatur an.")).">&nbsp;"._("Signatur anhängen.");
+		echo "</font>";
+	}
+	echo "</td>\n";
+	// 
+	echo "<td class=\"printcontent\" width=\"20%\" valign=\"top\">\n";
+	echo _("Vorschau der Nachricht:")."<br><br>";
 
-	echo "</td></tr></table>";
+	echo quotes_decode(formatReady($message));
+	if ($sms_data["sig"] == "1") {
+		echo "<br><br>--<br>";
+		if ($signature) {
+			echo quotes_decode(formatReady($signature));
+		} else {
+			echo quotes_decode(formatReady($my_messaging_settings["sms_sig"]));
+		}
+	}
+
+	echo "</td>\n";
+	echo "</tr>\n</table>\n";
+
+	echo"</form>\n";
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 	$infobox = array(
 		array("kategorie" => _("Empf&auml;nger hinzuf&uuml;gen:"),"eintrag" => array(
