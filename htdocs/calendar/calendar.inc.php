@@ -262,6 +262,7 @@ switch ($cmd) {
 	
 	case 'export':
 		$title = _("Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren und synchronisieren");
+		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 		
 	case 'bind':
