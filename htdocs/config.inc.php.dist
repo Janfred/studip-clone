@@ -47,21 +47,6 @@ $UNI_CONTACT = "<please insert your generel contact mail-adress here>";
 $UNI_INFO = "Stud.IP 1.0 - Studienbegleitender Internetsupport von Präsenzlehre"; 
 
 
-//Daten ueber Uniferien
-$HOLIDAY[1]=array("beginn"=>mktime(0,0,0,12,21,2002), "ende"=>mktime (23,59,59,1,5,2003));		# Beginn und Ende der Weihnachtsferien 2002
-$HOLIDAY[2]=array("beginn"=>mktime(0,0,0,6,9,2003), "ende"=>mktime (23,59,59,6,15,2003));		# Beginn und Ende der Pfingstferien 2003
-$HOLIDAY[3]=array("beginn"=>mktime(0,0,0,12,20,2003), "ende"=>mktime (23,59,59,1,4,2004));		# Beginn und Ende der Weihnachtsferien 2003
-//weitere Feiertage und Ferien koennen hier angefuegt werden
-
-
-//Daten ueber Semester
-$SEMESTER[1]=array("name"=>"WS 2003/04", "beginn"=>mktime(0,0,0,10,1,2003), "ende"=>mktime(23,59,59,3,31,2004), "vorles_beginn"=>mktime(0,0,0,10,20,2003), "vorles_ende"=>mktime(23,59,59,2,8,2004)); 		# Daten ueber das WS 2003/04
-$SEMESTER[2]=array("name"=>"SS 2004", "beginn"=>mktime(0,0,0,4,1,2004), "ende"=>mktime(23,59,59,9,30,2004), "vorles_beginn"=>mktime(0,0,0,4,5,2004), "vorles_ende"=>mktime(23,59,59,7,11,2004)); 		# Daten ueber das SS 2004
-$SEMESTER[3]=array("name"=>"WS 2004/05", "beginn"=>mktime(0,0,0,10,1,2004), "ende"=>mktime(23,59,59,3,31,2005), "vorles_beginn"=>mktime(0,0,0,10,18,2004), "vorles_ende"=>mktime(23,59,59,2,6,2005)); 		# Daten ueber das SS 2004
-$SEMESTER[4]=array("name"=>"SS 2005", "beginn"=>mktime(0,0,0,4,1,2005), "ende"=>mktime(23,59,59,9,30,2005), "vorles_beginn"=>mktime(0,0,0,4,11,2005), "vorles_ende"=>mktime(23,59,59,7,15,2005)); 		# Daten ueber das SS 2004
-//weitere Semester koennen hier angefuegt werden
-
-
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
 $SEM_TYPE_MISC_NAME=_("sonstige"); //dieser Name wird durch die allgemeine Bezeichnung (=Veranstaltung ersetzt)
 $SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);
@@ -92,6 +77,7 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					//the name of the class
 					"show_browse"=>TRUE, 			//indicates, if the hierachy-system should be shown in the search-process
 					"write_access_nobody"=>FALSE, 		//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
 					"topic_create_autor"=>FALSE,		//indicates, if global autor is allowed to create topic in the forums 
+					"visible"=>TRUE,			//indicates, if the seminar is visible throughout the systems, if FALSE, it is hidden!
 					//modules, select the active modules for this class
 					"forum"=>TRUE,				//forum, this module is stud_ip core; always available
 					"documents"=>TRUE,			//documents, this module is stud_ip core; always available
@@ -115,6 +101,7 @@ $SEM_CLASS[2]=array("name"=>_("Organisation"),
 					"default_read_level"=>2, 
 					"default_write_level" =>2, 
 					"show_browse"=>TRUE,
+					"visible"=>TRUE,
 					"forum"=>TRUE,
 					"documents"=>TRUE,
 					"schedule"=>TRUE,
@@ -133,6 +120,7 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 					"default_write_level" =>1, 
 					"show_browse"=>TRUE,
 					"write_access_nobody"=>TRUE, 
+					"visible"=>TRUE,
 					"forum"=>TRUE,
 					"documents"=>TRUE,
 					"schedule"=>TRUE,
