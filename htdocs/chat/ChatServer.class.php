@@ -21,6 +21,7 @@
 require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/chat_config.php";
 require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/ChatFileServer.class.php";
 require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
+require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/ChatMysqlServer.class.php";
 require_once $ABSOLUTE_PATH_STUDIP . "/visual.inc.php";
 /**
 *  Chat Server Klasse
