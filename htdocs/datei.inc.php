@@ -451,8 +451,8 @@ function form($refresh = FALSE) {
 
 //kill the forbidden characters, shorten filename to 31 Characters
 function prepareFilename($filename, $shorten = FALSE) {
-	$bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?", " ", "(", ")", "&");
-	$replacements = array ("", "", "", "'", "", "", "", "", "", "_", "[", "]", "+");
+	$bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?", " ", "(", ")", "&", "[", "]", "#", chr(36), "'", "*", ";", "^", "`", "{", "}", "|", "~", chr(255));
+	$replacements = array ("", "", "", "", "", "", "", "", "", "_", "", "", "+", "", "", "", "", "", "", ",", "", "", "", "", ",", "", "");
 
 	$filename=str_replace($bad_characters, $replacements, $filename);
 
