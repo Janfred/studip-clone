@@ -1437,7 +1437,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		$comma = ", ";
 	}
 	
-	$query .= ", count(*) as count, max(s.chdate) as last "
+	$query .= ", count(distinct s.topic_id) as count, max(s.chdate) as last "
 	.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating "
 	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-t.mkdate)/604800)+1)) as score "
 	.", IF(object_user.object_id!='',1,0) as fav "
