@@ -26,6 +26,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
 
@@ -154,6 +155,9 @@ if ($cmd=="raus") {
 ;
 		$messaging->insert_sms ($username, $message, "____%system%____");
 		
+		// raus aus allen Statusgruppen
+		RemovePersonStatusgruppeComplete ($username, $id);
+
 		//Pruefen, ob es Nachruecker gibt
 		update_admission($id);
 

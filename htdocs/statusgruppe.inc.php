@@ -114,6 +114,16 @@ function RemovePersonStatusgruppe ($username, $statusgruppe_id)
 	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 }
 
+function RemovePersonStatusgruppeComplete ($username, $range_id)
+{
+	$user_id = get_userid($username);
+	$db=new DB_Seminar;
+	$db->query("SELECT DISTINCT statusgruppe_user.statusgruppe_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id' AND user_id = '$user_id'");	
+	while ($db->next_record()) {
+		RemovePersonStatusgruppe($username, $db->f("statusgruppe_id"));
+	}
+}
+
 function DeleteStatusgruppe ($statusgruppe_id)
 {
 	$db=new DB_Seminar;
