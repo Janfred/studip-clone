@@ -175,8 +175,7 @@ class DbView {
 	
 	
 	function get_temp_table($sub_query) {
-		mt_srand((double)microtime()*1000000);
-		$id = md5(uniqid (mt_rand()));
+		$id = $this->get_uniqid();
 		$pk = ($this->pk)? "PRIMARY KEY($this->pk)" : "auto_".$id." INT NOT NULL AUTO_INCREMENT PRIMARY KEY";
 		$query = "CREATE TEMPORARY TABLE temp_$id ($pk)TYPE=$this->temp_table_type $sub_query";
 		$this->db->query($query);
@@ -198,6 +197,11 @@ class DbView {
 				$value_list = "'".join("','",$result)."'";
 		}
 		return $value_list;
+	}
+	
+	function get_uniqid(){
+		mt_srand((double)microtime()*1000000);
+		return md5(uniqid (mt_rand()));
 	}
 	
 	function get_view($name,$param){
