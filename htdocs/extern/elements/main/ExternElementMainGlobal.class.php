@@ -39,7 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainGlobal extends ExternElementMain {
 
-	var $attributes = array("name", "nameformat", "wholesite", "urlcss");
+	var $attributes = array("name", "nameformat", "language", "wholesite", "urlcss");
 	
 	/**
 	* Constructor
@@ -59,6 +59,7 @@ class ExternElementMainGlobal extends ExternElementMain {
 			"name" => "",
 			"wholesite" => "",
 			"nameformat" => "no_title",
+			"language" => "de_DE",
 			"urlcss" => "",
 		);
 				
