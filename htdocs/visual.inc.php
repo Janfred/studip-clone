@@ -738,7 +738,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	if ($extern)
 		$link_pic = '';
 	else
-		$link_pic = "<img src=\"pictures/link_extern.gif\" border=\"0\" />";
+	$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
 	
 	if ($mod == 'LINK') {
 		if ($params[5] != 'img') {
