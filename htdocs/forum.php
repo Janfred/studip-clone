@@ -129,7 +129,7 @@ IF ($SessSemName[1] =="")
 	}
 
 // Rekursives Löschen von Postings, Warnung
-IF ($cmd == "kill" && $topic_id !="" && $rechte) {
+IF ($cmd == "kill" && $topic_id !="") {
 	$db=new DB_Seminar;
 	$mutter = suche_kinder($topic_id);
 	$mutter = explode (";",$mutter);
@@ -137,34 +137,36 @@ IF ($cmd == "kill" && $topic_id !="" && $rechte) {
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
 	if ($db->num_rows()) { // wir sind im richtigen Seminar!
 		$db->next_record();
-		$root = $db->f("root_id");
-		echo "\n\n<table class=\"blank\" cellspacing=0 cellpadding=5 border=0 width=\"100%\"><colgroup span=1></colgroup>\n";
-		$msg="info§Wollen Sie das untenstehende Posting <b>".htmlReady($db->f("name"))."</b> von <b>".$db->f("author")."</b> wirklich l&ouml;schen?<br>\n";
-		if ($count)
-			$msg.="Alle $count Antworten darauf werden ebenfalls gel&ouml;scht!<br />\n<br />\n";
-		$msg.="<a href=\"".$PHP_SELF."?cmd=really_kill&topic_id=$topic_id&view=$view&mehr=$mehr#anker\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
-		$msg.="<a href=\"".$PHP_SELF."?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
-		parse_msg($msg, '§', 'blank', '1', FALSE);
-		echo "</table>";
+		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
+			$root = $db->f("root_id");
+			echo "\n\n<table class=\"blank\" cellspacing=0 cellpadding=5 border=0 width=\"100%\"><colgroup span=1></colgroup>\n";
+			$msg="info§Wollen Sie das untenstehende Posting <b>".htmlReady($db->f("name"))."</b> von <b>".$db->f("author")."</b> wirklich l&ouml;schen?<br>\n";
+			if ($count)
+				$msg.="Alle $count Antworten darauf werden ebenfalls gel&ouml;scht!<br />\n<br />\n";
+			$msg.="<a href=\"".$PHP_SELF."?cmd=really_kill&topic_id=$topic_id&view=$view&mehr=$mehr#anker\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
+			$msg.="<a href=\"".$PHP_SELF."?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
+			parse_msg($msg, '§', 'blank', '1', FALSE);
+			echo "</table>";
 
-	// Darstellung des zu loeschenden Postings
+		// Darstellung des zu loeschenden Postings
 	
-		$parent_description = formatReady($db->f("description")); // erst mal die Anzeige des zu l&ouml;schenden Postings verschoenern...
-	  	IF (ereg("\[quote",$parent_description) AND ereg("\[/quote\]",$parent_description))
-			$parent_description = quotes_decode($parent_description);
-		echo "<table width=\"100%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank><br><br>";	
-		echo "<table width=\"80%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
-		$icon = NTForum("topic",$topic_id,"","",$neuer_beitrag,$db->f("root_id"));			
-		printhead ("100%","0","","close","",$icon,(mila(htmlReady($db->f("name")))),"");			
-		echo "</tr></table>\n";	
-		echo "<table width=\"80%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
-		printcontent ("100%","",$parent_description,"");
-		echo "</tr></table>\n<br><br></td></tr></table>";	
-//		printf ("<tr><td class=blank><br><table width=80%% align=center border=0 cellpadding=5><tr><td class=\"steel1\">%s</td></tr></table><br />&nbsp;</td></tr></table>", $parent_description);
-		page_close();
-		die;
+			$parent_description = formatReady($db->f("description")); // erst mal die Anzeige des zu l&ouml;schenden Postings verschoenern...
+		  	IF (ereg("\[quote",$parent_description) AND ereg("\[/quote\]",$parent_description))
+				$parent_description = quotes_decode($parent_description);
+			echo "<table width=\"100%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank><br><br>";	
+			echo "<table width=\"80%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
+			$icon = NTForum("topic",$topic_id,"","",$neuer_beitrag,$db->f("root_id"));			
+			printhead ("100%","0","","close","",$icon,(mila(htmlReady($db->f("name")))),"");			
+			echo "</tr></table>\n";	
+			echo "<table width=\"80%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";	
+			printcontent ("100%","",$parent_description,"");
+			echo "</tr></table>\n<br><br></td></tr></table>";	
+	//		printf ("<tr><td class=blank><br><table width=80%% align=center border=0 cellpadding=5><tr><td class=\"steel1\">%s</td></tr></table><br />&nbsp;</td></tr></table>", $parent_description);
+			page_close();
+			die;
 		}
 	}
+}
 
 // loeschen von nicht zuende getippten Postings
 
@@ -180,21 +182,27 @@ IF ($writemode!="" AND !isset($update)) {
 
 // Rekursives Löschen von Postings, jetzt definitiv!
 
-if ($cmd == "really_kill" && $topic_id !="" && $rechte) {
+if ($cmd == "really_kill" && $topic_id !="") {
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
 	if ($db->num_rows()) { // wir sind im richtigen Seminar!
-		$count = 0;
-		delete_topic($topic_id, $count);
 		$db->next_record();
-		$topic_id = $db->f("root_id");
-		IF ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
-			echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
-			parse_msg("msg§$count Posting(s) gel&ouml;scht");
-			echo "</table>";
+		$mutter = suche_kinder($topic_id);
+		$mutter = explode (";",$mutter);
+		$count = sizeof($mutter)-2;
+		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
+			$count = 0;
+			delete_topic($topic_id, $count);
+			$db->next_record();
+			$topic_id = $db->f("root_id");
+			IF ($nurneu!=1) { // es wurde wirklich was gel&ouml;scht und nicht nur ein Anlegen unterbrochen
+				echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
+				parse_msg("msg§$count Posting(s) gel&ouml;scht");
+				echo "</table>";
 			}
-		}
+		}		
 	}
+}
 
 // Verschieben von Postings
 

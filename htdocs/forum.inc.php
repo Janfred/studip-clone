@@ -323,7 +323,7 @@ function NTForum ($what, $r_topic_id, $description="", $name="", $neu="FALSE", $
 					$edit .= "&nbsp;<a href=\"forum.php?topic_id=".$anfang."&open=".$r_topic_id."&write=-1&view=".$view."&mehr=".$mehr."#anker\">"
 					."<img src='pictures/buttons/bearbeiten-button.gif' border=0></a>";
 
-				IF ($rechte)  // ich darf l&ouml;schen 
+				IF ($rechte || $lonely==FALSE)  // ich darf l&ouml;schen 
 					$edit .= "&nbsp;<a href=\"forum.php?cmd=kill&topic_id=$r_topic_id&view=$view&mehr=$mehr\">"
 					."<img src='pictures/buttons/loeschen-button.gif' border=0></a>";
 
@@ -363,10 +363,21 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="")
 // stellt im Treeview alle Postings dar, die NICHT Thema sind
 
 	IF (!isset($anfang)) $anfang = $topic_id;
+
+	// Test um mal zu sehen ob eine umgekehrte Sortierung mit Aktualitaett nach oben die Usability erhoeht...
+
+	if ($level > 1) {
+		$sort = "ASC";
+	} else {
+		$sort = "DESC";
+	}
+
+	// testende
+
 	$query = "select topic_id, name, author "
 		.", mkdate, chdate, description, root_id, username from px_topics LEFT JOIN auth_user_md5 USING(user_id) where "
 		." parent_id = '$topic_id'"
-		." order by mkdate";
+		." order by mkdate $sort";
 	$db=new DB_Seminar;
 	$db->query($query);
 	$lines[$level] = $db->num_rows();
