@@ -128,7 +128,7 @@ class Request extends ShowTreeRow {
 			} else
 				$zusatz = _("von:")." "._("unbekannt");
 		} elseif ($reqObject->getUserId()) {
-			$zusatz = sprintf(_("von:")." <a href=\"about.php?username=%s\"><font color=\"#333399\">%s</font></a>", get_username($reqObject->getUserId()), get_fullname($reqObject->getUserId()));
+			$zusatz = sprintf(_("von:")." <a href=\"about.php?username=%s\"><font color=\"#333399\">%s</font></a>", get_username($reqObject->getUserId()), get_fullname($reqObject->getUserId(),'full',1));
 		} else
 			$zusatz = _("von:")." "._("unbekannt");
 

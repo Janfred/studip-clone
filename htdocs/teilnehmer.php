@@ -360,9 +360,9 @@ if (isset($add_tutor_x)) {
 						// gehen wir ihn halt hier hochstufen
 						$db2->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
 						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-							$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id)) . "§";
+							$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
 						} else {
-							$msg = "msg§" . sprintf (_("%s wurde auf den Status 'Tutor' bef&ouml;rdert."), get_fullname($u_id)) . "§";
+							$msg = "msg§" . sprintf (_("%s wurde auf den Status 'Tutor' bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
 						}
 						//kill from waiting user
 						$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
@@ -376,9 +376,9 @@ if (isset($add_tutor_x)) {
 					insert_seminar_user($id, $u_id, "tutor", FALSE);
 
 					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-						$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id));
+						$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
 					} else {
-						$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id));
+						$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
 					}
 
 					setTempLanguage($userchange);

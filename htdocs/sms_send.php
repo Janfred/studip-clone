@@ -133,7 +133,7 @@ if ($cmd_insert_x) {
 	if ($count) {
 
 		$msg = "msg§";
-		if ($count == "1") $msg .= sprintf(_("Ihre Nachricht an %s wurde verschickt!"), get_fullname_from_uname($sms_data["p_rec"][0]))."<br />";
+		if ($count == "1") $msg .= sprintf(_("Ihre Nachricht an %s wurde verschickt!"), get_fullname_from_uname($sms_data["p_rec"][0],'full',true))."<br />";
 		if ($count >= "2") $msg .= sprintf(_("Ihre Nachricht wurde an %s Empf&auml;nger verschickt!"), $count)."<br />";
 		unset($signature);
 		unset($message);
@@ -315,7 +315,7 @@ function show_precform() {
 		$tmp .= "<select size=\"$tmp_01\" name=\"del_receiver[]\" multiple style=\"width: 250\">";
 		if ($sms_data["p_rec"]) {
 			foreach ($sms_data["p_rec"] as $a) {
-				$tmp .= "<option value=\"$a\">".get_fullname_from_uname($a)."</option>";
+				$tmp .= "<option value=\"$a\">".get_fullname_from_uname($a,'full',true)."</option>";
 			}
 		}
 		$tmp .= "</select><br>";	

@@ -58,7 +58,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 		$db->next_record();
 		$usame=$db->f("username");
 		echo "<td class=\"angemeldet\" width=\"25%\" align=\"center\" valign=\"center\"><a href=\"about.php?username=", $usame, "\"><img border=0 src=\"user/", $file[$i-5]["file"],"\"></a><br />";
-		echo "<font size=-1>".get_fullname($usid)."<br/>".date("d.m.Y", $file [$i-5]["time"])."</font></td>";
+		echo "<font size=-1>".get_fullname($usid,'full',true)."<br/>".date("d.m.Y", $file [$i-5]["time"])."</font></td>";
 		if ((($i % 4) ==0)  && (!$i==0))  echo"</tr><tr>";
 		}
 	echo "</tr></table>";

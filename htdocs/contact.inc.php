@@ -374,7 +374,7 @@ function ShowContact ($contact_id)
 		$output .= "<table border=\"0\" cellspacing=\"0\" width=\"280\" class=\"blank\">
 					<tr>
 						<td class=\"topic\" width=\"99%\"><font size=\"2\"><b>"
-							.get_fullname($db->f("user_id"), $format = "full_rev" )."</b></font></td>"
+							.get_fullname($db->f("user_id"), $format = "full_rev",true )."</b></font></td>"
 							. "<td class=\"topic\">"
 							// export to vcf
 //							."<a href=\"sms_send.php?sms_source_page=contact.php&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/meinetermine.gif\" border=\"0\" ".tooltip(_("Nachricht schreiben"))." align=\"right\"></a>"
@@ -431,7 +431,7 @@ function ShowEditContact ($contact_id)
 		$output = "<table cellspacing=\"0\" cellpadding=\"3\" width=\"700\" class=\"blank\">
 					<tr>
 						<td class=\"topicwrite\" colspan=\"3\">"
-							.get_fullname($db->f("user_id"), $format = "full_rev" )."</td>"
+							.get_fullname($db->f("user_id"), $format = "full_rev",true )."</td>"
 							."
 						</td>
 					</tr>"

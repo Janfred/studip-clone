@@ -48,7 +48,7 @@ function getWikiPage($keyword, $version, $db=NULL) {
 **/
 function completeWikiComments($body) {
 	global $auth;
-	return preg_replace("/\[comment\]/","\[comment=".addslashes(get_fullname($auth->auth[uid],'full',false))."\]",$body);
+	return preg_replace("/\[comment\]/","\[comment=".addslashes(get_fullname($auth->auth['uid'],'full',false))."\]",$body);
 }
 
 /**
@@ -385,8 +385,8 @@ function getZusatz($wikiData) {
 		return "";
 	}
 	$s = "<font size=-1>";
-	$s .=  _("Version ") . $wikiData['version'];
-	$s .= sprintf(_(", ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=". get_username($wikiData['user_id']) ."\"><font size=-1 color=\"#333399\">". get_fullname($wikiData['user_id'],'full', true) ."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData['chdate'])."<font size=-1>&nbsp;"."</font>");
+	$s .=  _("Version ") . $wikiData[version];
+	$s .= sprintf(_(", ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($wikiData[user_id])."\"><font size=-1 color=\"#333399\">".get_fullname ($wikiData[user_id],'full',1)."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData[chdate])."<font size=-1>&nbsp;"."</font>");
 	return $s;
 }
 
@@ -673,7 +673,7 @@ function listPages($mode, $sortby=NULL) {
 			print("&nbsp;(<a href=\"".$PHP_SELF."?view=diff&keyword=$keyword&versionssince=$lastlogindate\">"._("Änderungen")."</a>)");
 		}
 		print($tdtail);
-		print($tdheadleft.get_fullname($userid).$tdtail."</tr>");
+		print($tdheadleft.get_fullname($userid,'full',1).$tdtail."</tr>");
 	}
 	echo "</table><p>&nbsp;</p>";
 	end_blank_table();
@@ -771,7 +771,7 @@ function printWikiPage($keyword, $version) {
 	echo "<h1>$keyword</h1>";
 	echo "<p><em>"._("Version")." ".$wikiData['version'];
 	echo ", "._("letzte Änderung")." ".date("d.m.Y, H:i", $wikiData['chdate']);
-	echo " "._("von")." ".get_fullname($wikiData['user_id']).".</em></p>";
+	echo " "._("von")." ".get_fullname($wikiData['user_id'],'full',1).".</em></p>";
 	echo "<hr>";
 	echo wikiReady($wikiData['body'],TRUE,FALSE,"none");
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
@@ -829,7 +829,7 @@ function printAllWikiPages($range_id, $header) {
 				echo "<hr><h1>$pagename</h1>";
 				echo "<p><em>Version ".$pagedata['version'];
 				echo ", letzte Änderung ".date("d.m.Y, h:i", $pagedata['chdate']);
-				echo " von ".get_fullname($pagedata['user_id']).".</em></p>";
+				echo " von ".get_fullname($pagedata['user_id'],'full',1).".</em></p>";
 				// output is html without WikiLinks and comments
 				echo wikiReady($pagedata['body'],TRUE,FALSE,"none");
 			}
@@ -1194,7 +1194,7 @@ function showComboDiff($keyword, $db=NULL) {
 			if ($count % 4 == 0) {
 				$content.= "<tr width=\"100%\">";
 			}
-			$content.= "<td bgcolor=".create_color($count)." width=14><img src=\"pictures/blank.gif\" width=12 height=12></td><td><font size=-1>".get_fullname($i->who)."</font></td><td><img src=\"pictures/blank.gif\" width=12 height=12></td>";
+			$content.= "<td bgcolor=".create_color($count)." width=14><img src=\"pictures/blank.gif\" width=12 height=12></td><td><font size=-1>".get_fullname($i->who,'full',1)."</font></td><td><img src=\"pictures/blank.gif\" width=12 height=12></td>";
 			if ($count % 4 == 3) {
 				$content .= "</tr>";
 			}

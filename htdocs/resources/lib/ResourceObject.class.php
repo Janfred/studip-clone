@@ -294,9 +294,9 @@ class ResourceObject {
 			break;
 			case "user":
 				if (!$explain)
-					return get_fullname($id);
+					return get_fullname($id,'full',1);
 				else
-					return get_fullname($id)." ("._("NutzerIn").")";
+					return get_fullname($id,'full',1)." ("._("NutzerIn").")";
 			break;
 			case "inst":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);

@@ -55,7 +55,7 @@ function forum_kill_edit ($description) {
 *
 **/
 function forum_append_edit ($description) {
-	$edit = "<admin_msg autor=\"".addslashes(get_fullname('', 'full', false))."\" chdate=\"".time()."\">";
+	$edit = "<admin_msg autor=\"".addslashes(get_fullname())."\" chdate=\"".time()."\">";
 	//$description = forum_kill_edit($description).$edit;
 	return $description . $edit;
 }
@@ -1068,9 +1068,9 @@ function printposting ($forumposting) {
   		
   		
   		if (!$auth->is_authenticated() || $user->id == "nobody" || $forumposting["author"]=="unbekannt" || $forumposting["username"]=="") // Nobody darf nicht auf die about...
-			$forumhead[] = $forumposting["author"];
+			$forumhead[] = htmlReady($forumposting["author"]);
 		else
-			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". $forumposting["author"] ."&nbsp;</a>";
+			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
     		
   	// Alter ausgeben
   		

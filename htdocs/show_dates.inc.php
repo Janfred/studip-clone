@@ -259,7 +259,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 					$content.=_("Keine Beschreibung vorhanden") . "<br /><br />";
 
 				$content.="<b>" . _("Art des Termins:") . "</b> ".$TERMIN_TYP[$db->f("date_typ")]["name"].",&nbsp;";
-				$content.="<b>" . _("angelegt von:") . "</b> ".get_fullname($db->f("autor_id"))."<br />";
+				$content.="<b>" . _("angelegt von:") . "</b> ".get_fullname($db->f("autor_id"),'full',true)."<br />";
 	
 				if ($show_admin)
 					$content .= sprintf("<br /><div align=\"center\"><a href=\"./admin_dates.php?show_id=%s#anchor\">"

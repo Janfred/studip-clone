@@ -241,7 +241,7 @@ class ShowToolsRequests {
 						<?
 						$this->selectSemInstituteNames($semObj->getInstitutId());
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstaltung") : (($semObj->getMetaDateType() == 1) ?_("alle Termine einer unregelm&auml;&szlig;igen Veranstaltung") :_("regelm&auml;&szlig;ige Veranstaltungszeiten")))."<br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".get_fullname($reqObj->getUserId())."</a><br />";
+						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".get_fullname($reqObj->getUserId(),'full',true)."</a><br />";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Einrichtung:")." ".htmlReady($this->db->f("inst_name"))."<br />";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakult&auml;t:")." ".htmlReady($this->db->f("fak_name"))."<br />&nbsp;";
 						?>
@@ -625,10 +625,10 @@ class ShowToolsRequests {
 										/*printf ("%s", ($val["state"]) ?  htmlReady($val["options"]) : " - ");*/
 									break;
 									case "num":
-									case "text";
+									case "text":
 										print htmlReady($val["state"]);
 									break;
-									case "select";
+									case "select":
 										$options=explode (";",$val["options"]);
 										foreach ($options as $a) {
 											if ($val["state"] == $a) 

@@ -139,7 +139,7 @@ if ($delete_doz) {
 		else {
 			$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_doz)."' ");
 			if ($db2->affected_rows()) {
-				$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), get_fullname_from_uname($delete_doz)) . "§";
+				$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), get_fullname_from_uname($delete_doz,'full',true)) . "§";
 				$user_deleted=TRUE;
 				RemovePersonStatusgruppeComplete ($delete_doz, $s_id);
 			}
@@ -152,7 +152,7 @@ if ($delete_tut) {
 	if ($perm->have_studip_perm("dozent",$s_id)) {
 		$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_tut)."' ");
 		if ($db2->affected_rows()) {
-			$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), get_fullname_from_uname($delete_tut)) . "§";
+			$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), get_fullname_from_uname($delete_tut,'full',true)) . "§";
 			$user_deleted=TRUE;
 			RemovePersonStatusgruppeComplete ($delete_tut, $s_id);
 		}

@@ -115,7 +115,7 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 		print ("<input type=\"hidden\" name=\"author\" value = \"");
 		$db=new DB_Seminar;
 		$tmp = $auth->auth["uname"];
-		echo get_fullname();
+		echo htmlReady(get_fullname());
 		print ("\" size=\"20\"><br><br>");
 		if  ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben
 			$description =	"<b>" . _("Ihr Name:") . "</b>&nbsp; <input type=text size=50 name=nobodysname onchange=\"return pruefe_name()\" value=\"" . _("unbekannt") . "\"><br><br><input type=hidden name=update value='".$write."'>";

@@ -277,7 +277,7 @@ echo "</td></tr>";
 $infobox[0] = array ("kategorie" => _("Information:"),
 					"eintrag" =>	array(	
 									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie Literatur / Quellen erfassen, oder von Ihnen erfasste Einträge ändern.")),
-									array("icon" => "pictures/blank.gif","text"  =>	($_the_element->getValue("user_id") == "studip" ? "<b>" . _("Systemeintrag:") . "</b><br>" . _("Dies ist ein vom System generierter Eintrag.") : "<b>" . _("Eingetragen von:") . "</b><br>" . get_fullname($_the_element->getValue("user_id")))),
+									array("icon" => "pictures/blank.gif","text"  =>	($_the_element->getValue("user_id") == "studip" ? "<b>" . _("Systemeintrag:") . "</b><br>" . _("Dies ist ein vom System generierter Eintrag.") : "<b>" . _("Eingetragen von:") . "</b><br>" . get_fullname($_the_element->getValue("user_id"),'full',true))),
 									array("icon" => "pictures/blank.gif","text"  =>	"<b>" . _("Letzte Änderung am:") . "</b><br>" . strftime("%d.%m.%Y",$_the_element->getValue("chdate")))
 									)
 					);

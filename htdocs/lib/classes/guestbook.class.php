@@ -188,7 +188,7 @@ function guest_navi () {
 		while ($db->next_record()) {  
 			$position = $this->number - ($this->guestpage+$i);
 			$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\">#$position - <a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">";
-			$output .= sprintf(_("%s hat am %s geschrieben:"), get_fullname($db->f("user_id"))."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
+			$output .= sprintf(_("%s hat am %s geschrieben:"), get_fullname($db->f("user_id"),'full',true)."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
 			$output .= "</font></b></td></tr>"
 				. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".quotes_decode(formatready($db->f("content")))."</font><p align=\"right\">";
 			if ($this->rights == TRUE)

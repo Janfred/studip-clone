@@ -391,7 +391,7 @@ function createVoteHeadline (&$vote, $open, $openID, $evalDB = "", $isHomepage =
      $icon = EVAL_PIC_ICON;
    $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\">";
    $voteInfo = $number." / <a href=\"about.php?username=".$authorUsername."\">\n"
-      . "  <font size=\"-1\" color=\"#333399\">".$authorName."</font>\n"
+      . "  <font size=\"-1\" color=\"#333399\">".htmlReady($authorName)."</font>\n"
       . " </a>\n"
       . " <font size=\"-1\">&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
 
@@ -468,7 +468,7 @@ function createStoppedVoteHeader (&$vote, $evalDB = NULL) {
     $html .= "</td>";
     $html .= "<td class=toolbar align=right>\n";
     $html .= "<a href=\"about.php?username=".$authorUsername."\">\n";
-    $html .= "<font size=\"-1\" color=\"#EEEEEE\">".$authorName."</font>";
+    $html .= "<font size=\"-1\" color=\"#EEEEEE\">".htmlReady($authorName)."</font>";
     $html .= "</a>\n";
     $html .= "<font size=\"-1\" color=white>&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
     $html .= "</td>\n";

@@ -292,7 +292,7 @@ if ($perm->have_perm("admin"))
 			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2">
 				<font size="-1"><b><?=("gew&uuml;nschter Raum:")?></b><br /><br />
 					<?
-					print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".htmlReady($resObject->getOwnerName())."</a>";
+					print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".$resObject->getOwnerName()."</a>";
 					print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("den ausgewählten Raum löschen"))." border=\"0\" name=\"reset_resource_id\" />";
 
 					?>

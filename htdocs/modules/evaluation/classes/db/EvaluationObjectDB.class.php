@@ -108,7 +108,7 @@ class EvaluationObjectDB extends DatabaseObject {
 
        if ($this->db->f ("user_id") != $user->id){
           $rangename = _("Homepage: ")
-            . get_fullname($this->db->f ("user_id"))
+            . get_fullname($this->db->f ("user_id"),'full',1)
              . " (".$this->db->f ("username").")";
 
        } else

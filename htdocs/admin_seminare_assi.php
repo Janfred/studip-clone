@@ -1952,7 +1952,7 @@ if ($level == 2)
 							<?
 							if (sizeof($sem_create_data["sem_doz"]) >0) {
 								foreach($sem_create_data["sem_doz"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev"), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev",true), get_username($key));
 								}
 							} else {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
@@ -2020,7 +2020,7 @@ if ($level == 2)
 							<?
 							if (sizeof($sem_create_data["sem_tut"]) >0) {
 								foreach($sem_create_data["sem_tut"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev"), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev",true), get_username($key));
 								}
 							} else {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
@@ -2547,7 +2547,7 @@ if ($level == 4) {
 						<td class="<? echo $cssSw->getClass() ?>" width="96%">
 							<br /><font size="-1"><b><?=("gew&uuml;nschter Raum:")?></b><br /><br />
 							<?
-							print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".htmlReady($resObject->getOwnerName())."</a>";
+							print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".$resObject->getOwnerName()."</a>";
 							print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"./pictures/rewind.gif\" ".tooltip(_("den ausgewählten Raum löschen"))." border=\"0\" name=\"reset_resource_id\" />";
 							?>
 							</font>

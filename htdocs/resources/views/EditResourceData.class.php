@@ -784,7 +784,7 @@ class EditResourceData {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<input type="HIDDEN" name="change_user_id[]" value="<? echo $this->db->f("user_id")?>" />
-					<font size=-1><a href="<? echo $this->resObject->getOwnerLink($this->db->f("user_id"))?>"><? echo htmlReady($this->resObject->getOwnerName(TRUE, $this->db->f("user_id"))) ?></a></font>
+					<font size=-1><a href="<? echo $this->resObject->getOwnerLink($this->db->f("user_id"))?>"><? echo $this->resObject->getOwnerName(TRUE, $this->db->f("user_id")) ?></a></font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="*" >
 					<font size=-1>&nbsp; 
