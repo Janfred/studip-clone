@@ -192,27 +192,11 @@ else {   // Benutzer angemeldet
 			<font color="#000080">angemeldet als	<? printf ("%s", $auth->auth["uname"]);?>
 
 			<img border="0" src="pictures/info.gif"
-			<? //JavaScript Infofenster aufbauen
-				ob_end_flush();
-				ob_start();
-				print "Sie sind angemeldet als ";
-				printf ("%s", $auth->auth["uname"]);
-				print " mit der Berechtigung ";
-				printf ("%s.", $auth->auth["perm"]);
-				print " Beginn der Session: ";
-				print date ("d. M Y, H:i:s", $SessionStart);
-				print ", Letztes Login: ";
-				print date ("d. M Y, H:i:s", $LastLogin);
-				if ($auth->auth["jscript"]) print " JavaScript eingeschaltet, ";
-				if ($auth->auth["xres"]) print "Auflösung :".$auth->auth["xres"]."x".$auth->auth["yres"];
-				$infotext=ob_get_contents();
-				ob_end_clean();
-				ob_start();	
-				if ($auth->auth["jscript"])
-					{
-					echo " onClick=\"alert('$infotext');\" ";
-					}
-			echo tooltip($infotext);
+			<? //create (javascript) info tooltip/window
+				$infotext = sprintf (_("Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"),
+								$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
+								($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript abgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
+				print tooltip($infotext, TRUE, TRUE);
 			?>
 			>
 			</font>
