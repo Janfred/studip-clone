@@ -91,10 +91,14 @@ else {
 	exit;
 }
 
+// check for standard global configuration
+if (!$global_id && ($global_configuration = get_global_config($range_id)))
+	$global_id = $global_configuration;
+
 // all parameters ok, instantiate module and print data
 foreach ($EXTERN_MODULE_TYPES as $type) {
 	if ($type["module"] == $module)
-		$module_obj =& new ExternModule($range_id, $module, $config_id, $default);
+		$module_obj =& new ExternModule($range_id, $module, $config_id, $default, $global_id);
 }
 
 

@@ -151,29 +151,46 @@ echo "</table></td></tr></table>\n</td>\n<td width=\"10%\" class=\"blank\" valig
 echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"5\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
-$info_edit_element = _("Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den &quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements.");
-$info_preview = _("Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:");
-$info_preview .= "<br>&nbsp;<div align=\"center\">";
-$info_preview .= "<a target=\"_blank\" href=\"{$GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"]}extern.php";
-$info_preview .= "?module=" . $module->getName() . "&range_id=" . $module->config->range_id;
-$info_preview .= "&preview=1&config_id=" . $module->config->getId() . "\">";
-$info_preview .= makeButton("vorschau") . "</a></div><br>";
-$info_preview .= _("Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet.") . "<br>";
-$info_preview .= _("Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt.");
 
-$info_content = array(	
-								array("kategorie" => "Information:",
-											"eintrag" => array(	
-												array("icon" => "pictures/ausruf_small.gif",
-															"text" => $info_edit_element
-												)
-								)),
-								array("kategorie" => "Aktion:",
-	   									"eintrag" => array(	
-												array("icon" => "pictures/ausruf_small.gif",
-															"text" => $info_preview,
-												)
-								)));
+$info_edit_element = _("Um die Werte eines einzelnen Elements zu &auml;ndern, klicken Sie bitte den &quot;&Uuml;bernehmen&quot;-Button innerhalb des jeweiligen Elements.");
+// the type of this module is not Global
+if ($module->getType() != 0) {
+	$info_preview = _("Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:");
+	$info_preview .= "<br>&nbsp;<div align=\"center\">";
+	$info_preview .= "<a target=\"_blank\" href=\"{$GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"]}extern.php";
+	$info_preview .= "?module=" . $module->getName() . "&range_id=" . $module->config->range_id;
+	$info_preview .= "&preview=1&config_id=" . $module->config->getId();
+	if ($global_config = get_global_config($module->config->range_id))
+		$info_preview .= "&global_id=$global_config";
+	$info_preview .= "\">";
+	$info_preview .= makeButton("vorschau") . "</a></div><br>";
+	$info_preview .= _("Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet.") . "<br>";
+	$info_preview .= _("Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt.");
+
+	$info_content = array(	
+									array("kategorie" => "Information:",
+												"eintrag" => array(	
+													array("icon" => "pictures/ausruf_small.gif",
+																"text" => $info_edit_element
+													)
+									)),
+									array("kategorie" => "Aktion:",
+	   										"eintrag" => array(	
+													array("icon" => "pictures/ausruf_small.gif",
+																"text" => $info_preview,
+													)
+									)));
+}
+// the type is Global -> no preview
+else {
+	$info_content = array(	
+									array("kategorie" => "Information:",
+												"eintrag" => array(	
+													array("icon" => "pictures/ausruf_small.gif",
+																"text" => $info_edit_element
+													)
+									)));
+}
 
 print_infobox($info_content, "pictures/einrichtungen.jpg");
 ?>
