@@ -30,7 +30,12 @@ require_once ("visual.inc.php");
 require_once ("messagingSettings.inc.php");
 require_once ("messaging.inc.php");
 require_once ("contact.inc.php");
-
+if ($GLOBALS['CHAT_ENABLE']){
+	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
+	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+	$chatServer->caching = true;
+	$admin_chats = $chatServer->getAdminChats($auth->auth['uid']);
+}
 $msging=new messaging;
 $cssSw=new cssClassSwitcher;
 
@@ -179,7 +184,7 @@ if (is_array($n_buddies))
 						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
 							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
 							." border=\"0\"></a></td>";
-					} elseif ($chatServer->chatUser[$auth->auth['uid']]) {
+					} elseif (is_array($admin_chats)) {
 						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
 					} else {
 						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
@@ -204,7 +209,7 @@ if (is_array($n_buddies))
 						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
 							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
 							." border=\"0\"></a></td>";
-					} elseif ($chatServer->chatUser[$auth->auth['uid']]) {
+					} elseif (is_array($admin_chats)) {
 						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
 					} else {
 						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
@@ -239,7 +244,7 @@ ob_start();
 						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
 							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
 							." border=\"0\"></a></td>";
-					} elseif ($chatServer->chatUser[$auth->auth['uid']]) {
+					} elseif (is_array($admin_chats)) {
 						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
 					} else {
 						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
