@@ -378,10 +378,6 @@ while ($db2->next_record())  {
 $all_semester = $semester->getAllSemesterData();
 array_unshift($all_semester,array("name" => sprintf(_("vor dem %s"),$all_semester[0]['name'])));
 
-/*if (!isset($SEMESTER[0])){
-	$SEMESTER[0] = array("name" => sprintf(_("vor dem %s"),$SEMESTER[1]['name']));
-}*/
-
 $view = new DbView();
 for ($i = count($all_semester)-1; $i >= 0; --$i){
 	$view->params[0] = $user_id;
