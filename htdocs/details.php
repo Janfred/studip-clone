@@ -64,7 +64,7 @@ IF (($SessSemName[1] =="") && (!isset($sem_id)))
 	}
 
 //wenn externer Aufruf, nachfragen, ob das Seminar abonniert werden soll
-if (($sem_id) && (!$perm->have_perm("admin"))) {
+if (($sem_id) && (!$perm->have_perm("admin"))) 
 	if ($perm->have_perm("user")) { //Add lecture only if logged in	
 	 {
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
