@@ -968,26 +968,42 @@ class EditObject extends cssClasses {
 	function showScheduleForms($assign_id='') {
 		global $PHP_SELF, $resources_data, $new_assign_object, $search_user, $search_string_search_user;
 
+		$killButton = TRUE;
+		
 		if ($new_assign_object)
 			$resAssign = unserialize($new_assign_object);
 		else
 			$resAssign=new AssignObject($assign_id);
 
+		//it is not allowed to edit or kill assigns for rooms here
 		if (($resAssign->getOwnerType() == "sem") || ($resAssign->getOwnerType() == "date")) {
 			$resObject=new ResourceObject ($resAssign->getResourceId());
-			if ($resObject->getCategoryName() == "Raum")
+			if ($resObject->getCategoryName() == "Raum") {
 				$lockedAssign=TRUE;
+				$killButton = FALSE;
+			}
 		}
 
-		if  ($resAssign->getAssignUserId() && !$resAssign->isNewObject) {
-			$ObjectPerms = new AssignObjectPerms($resAssign->getId());
-			if ($ObjectPerms->getUserPerm() == "admin")
-				$killButton=FALSE;
-			elseif ($ObjectPerms->getUserPerm() != "autor")
-				$lockedAssign=TRUE;
+		//load the object perms
+		$ObjectPerms = new ResourcesObjectPerms($resAssign->getResourceId());
+		
+		//in some case, we load the perms from the assign object, if it has an owner
+		if (($ObjectPerms->getUserPerm() != "admin") && (!$resAssign->isNew()) && (!$new_assign_object)) {
+			//load the assign-object perms of a saved object
+			$SavedStateAssignObject = new AssignObject($resAssign->getId());
+			if ($SavedStateAssignObject->getAssignUserId())
+				$ObjectPerms = new AssignObjectPerms($resAssign->getId());
 		}
 
 
+		if ((!$ObjectPerms->getUserPerm() == "admin") && (!$resAssign->isNew()) && (!$new_assign_object)) {
+			$killButton = FALSE;
+			$lockedAssign = TRUE;
+		}
+
+		if ($resAssign->isNew())
+			$killButton = FALSE;
+		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
@@ -1007,9 +1023,9 @@ class EditObject extends cssClasses {
 				if (!$lockedAssign) {
 				?>
 					<input type="IMAGE" align="absmiddle"  <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
-					&nbsp;<a href="<?=$PHP_SELF."?view=".$this->used_view ?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				}
+				?>&nbsp;<a href="<?=$PHP_SELF."?view=".$this->used_view ?>"><?=makeButton("abbrechen", "img") ?></a><?
 				if ($killButton) {
 					?>&nbsp;<input type="IMAGE"align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
 				}
@@ -1025,7 +1041,7 @@ class EditObject extends cssClasses {
 						$this->db->query($query);
 						$this->db->next_record();
 					}
-					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+					print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 					if ($resAssign->getOwnerType() == "sem")
 						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in diesem Raum stattfindet.")."<br />"._("Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
 					elseif ($resAssign->getOwnerType() == "date")
@@ -1153,8 +1169,12 @@ class EditObject extends cssClasses {
 				<? if (($resAssign->getRepeatMode() != "na") && ($resAssign->getOwnerType() != "sem") && ($resAssign->getOwnerType() != "date")) {?>
 				<font size=-1><?=_("Wiederholungsturnus:")?></font><br />				
 				<font size=-1>
+					<?
+					if (!$lockedAssign) {
+					?>				
 					<select name="change_schedule_repeat_interval"> value="<? echo $resAssign->getRepeatInterval(); ?>" size=2 maxlength="2" />
 					<?
+					}
 					switch ($resAssign->getRepeatMode()) {
 						case "d": 
 							$str[1]= _("jeden Tag");
@@ -1194,21 +1214,30 @@ class EditObject extends cssClasses {
 							$max=5;
 						break;
 					}
-					for ($i=1; $i<=$max; $i++) {
-						if ($resAssign->getRepeatInterval() == $i)
-							printf ("<option value=\"%s\" selected>%s</option>", $i, $str[$i]);
-						else
-							printf ("<option value=\"%s\">%s</option>", $i, $str[$i]);						
-					}
+					if (!$lockedAssign) {
+						for ($i=1; $i<=$max; $i++) {
+							if ($resAssign->getRepeatInterval() == $i)
+								printf ("<option value=\"%s\" selected>%s</option>", $i, $str[$i]);
+							else
+								printf ("<option value=\"%s\">%s</option>", $i, $str[$i]);
+						}
+						print "</select>";
+					} else
+						print "<b>".$str[$resAssign->getRepeatInterval()]."</b>";
 					?>
-					</select><br />
+					<br />
 					</font>
 					<font size=-1><?=_("begrenzte Anzahl der Wiederholungen:")?></font><br />
 					<font size=-1>
-					max.&nbsp;<input name="change_schedule_repeat_quantity" value="<?  if ($resAssign->getRepeatQuantity() != -1) echo $resAssign->getRepeatQuantity(); ?>" size=2 maxlength="2" />&nbsp; <?=_("Mal wiederholen")?>
 					<?
-					if ($resAssign->getRepeatQuantity() == -1) 
-						{ ?> <input type="HIDDEN" name="change_schedule_repeat_quantity_infinity" value="TRUE" /> <? }
+					if (!$lockedAssign) {
+						printf (_("max. %s Mal wiederholen"), "&nbsp;<input name=\"change_schedule_repeat_quantity\" value=\"".(($resAssign->getRepeatQuantity() != -1) ? $resAssign->getRepeatQuantity() : "")."\" size=\"2\" maxlength=\"2\" />&nbsp;");
+						if ($resAssign->getRepeatQuantity() == -1) 
+							{ ?> <input type="HIDDEN" name="change_schedule_repeat_quantity_infinity" value="TRUE" /> <? }
+					} elseif ($resAssign->getRepeatQuantity() != -1) 
+						printf ("<b>"._("max. %s Mal wiederholen")." </b>",$resAssign->getRepeatQuantity());
+					else
+						print ("<b>"._("unbegrenzt")."</b>");
 					?>
 					</font>
 				</font>

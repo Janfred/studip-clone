@@ -88,6 +88,10 @@ if ((sizeof ($_REQUEST) == 2) && ($view == "view_schedule")) {
 if ((sizeof ($_REQUEST) == 2) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
 	$new_assign_object=FALSE;
 }
+if ((sizeof ($_REQUEST) == 3) && ($edit_assign_object) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
+	$new_assign_object=FALSE;
+}
+
 
 //send the user to index, if he want to use studip-object based modul but has no object set!
 if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="openobject_assign") || ($view=="openobject_schedule"))
@@ -273,6 +277,7 @@ if ($change_object_schedules) {
 		if ($kill_assign_x) {
 			$killAssign=new AssignObject($change_object_schedules);
 			$killAssign->delete();
+			$new_assign_object='';			
 		} else {
 			if ($change_object_schedules == "NEW")
 				$change_schedule_id=FALSE;
@@ -440,17 +445,17 @@ if ($change_object_schedules) {
 									$msg -> addMsg(21);
 								}
 						break;
-						case "m" : if (($change_schedule_repeat_end - $change_schedule_begin) > (60 * 60 * 24 *7 * 52)) {
+						case "m" : if ((date("Y",$change_schedule_repeat_end) - date("Y", $change_schedule_begin)) > 10) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(22);
 								}
 						break;
-						case "w" : if ((($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24 *7)) > 50) {
+						case "w" : if ((($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24 *7) / $changeAssign->getRepeatInterval()) > 50) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(23);
 								}
 						break;
-						case "d" : if ((($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24)) > 30) {
+						case "d" : if ((int)(($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24) / $changeAssign->getRepeatInterval()) > 100) {
 									$illegal_dates=TRUE;
 									$msg -> addMsg(24);
 								}

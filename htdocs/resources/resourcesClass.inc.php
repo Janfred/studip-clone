@@ -71,7 +71,8 @@ class AssignObject {
 
 		if(func_num_args() == 1) {
 			$this->id = func_get_arg(0);
-			$this->restore($this->id);
+			if (!$this->restore($this->id))
+				$this->isNewObject =TRUE;
 		} elseif(func_num_args() == 15) {
 			$this->id=func_get_arg(0);
 			$this->resource_id = func_get_arg(1);
@@ -256,6 +257,10 @@ class AssignObject {
 			return "w";
 		else
 			return "d";
+	}
+	
+	function isNew() {
+		return $this->isNewObject;
 	}
 	
 	function isRepeatEndSemEnd() {
