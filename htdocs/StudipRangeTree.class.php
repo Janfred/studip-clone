@@ -95,7 +95,7 @@ class StudipRangeTree {
 	function StudipRangeTree() {
 		$this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
 		$this->view = new DbView();
-		$this->studip_objects['inst'] = array('pk' => 'Institut_id', 'table' => 'institute');
+		$this->studip_objects['inst'] = array('pk' => 'Institut_id', 'table' => 'Institute');
 		$this->studip_objects['fak'] = array('pk' => 'Fakultaets_id', 'table' => 'Fakultaeten');
 		$this->init();
 		}
@@ -256,7 +256,6 @@ class StudipRangeTree {
 	
 }
 
-
 //$test = new StudipRangeTree();
 //$test->init();
 //echo "<pre>";
@@ -264,4 +263,3 @@ class StudipRangeTree {
 //print_r($test->tree_childs);
 //print_r($test->getKidsKids("c4ca4238a06f75849b"));
 ?>
-
