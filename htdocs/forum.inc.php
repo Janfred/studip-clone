@@ -722,7 +722,7 @@ function printposting ($forumposting) {
 				if(!file_exists("./user/".$forumposting["userid"].".jpg")) {
 					$addon .= "<br><div align=\"center\"><img border=1 src=\"./user/nobody.jpg\" width=\"80\" " .tooltip(_("kein persönliches Bild vorhanden"))."></div>";
 				} else {
-					$addon .= "<br><div align=\"center\"><img src=\"./user/".$forumposting["userid"].".jpg\" border=\"1\" ".tooltip($forumposting["author"])."></div>";
+					$addon .= "<br><div align=\"center\"><img src=\"./user/".$forumposting["userid"].".jpg\" width=\"80\" border=\"1\" ".tooltip($forumposting["author"])."></div>";
 				}
 			}
 						
@@ -911,12 +911,11 @@ echo "</tr>";
 echo "</table><br>";
 
 
-echo DebugForum($forum);
 /*
+echo DebugForum($forum);
 echo "<hr>";
 echo DebugForum($forumposting);
 */
-
 
 if ($update)
 	echo "</form>\n";
