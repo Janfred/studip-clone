@@ -343,10 +343,10 @@ if ($form==3)
 if ($form==4) {
 	
 	// create a timestamp for begin and end of the seminar
-        if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_minute, $adm_s_stunde, $sem_create_data, "sem_admission_start_date")) {
+        if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $sem_create_data, "sem_admission_start_date")) {
         $errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r den Start des Anmeldezeitraums ein!")."§";
 	}
-        if (!check_and_set_date($adm_e_tag, $adm_e_monat, $adm_e_jahr, $adm_e_minute, $adm_e_stunde, $sem_create_data, "sem_admission_end_date")) {
+        if (!check_and_set_date($adm_e_tag, $adm_e_monat, $adm_e_jahr, $adm_e_stunde, $adm_e_minute, $sem_create_data, "sem_admission_end_date")) {
         $errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Anmeldezeitraums ein!")."§";
 	}
 	if ($sem_create_data["sem_admission_end_date"] != -1) {
@@ -364,7 +364,7 @@ if ($form==4) {
 	$sem_create_data["sem_orga"]=$sem_orga;
 	$sem_create_data["sem_leistnw"]=$sem_leistnw;
 	$sem_create_data["sem_sonst"]=$sem_sonst;
-  $sem_create_data["sem_datafields"]='';
+  	$sem_create_data["sem_datafields"]='';
    
   if (is_array($sem_datafield_id)) {
 	  foreach ($sem_datafield_id as $key=>$val) {
