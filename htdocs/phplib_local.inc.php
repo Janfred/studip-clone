@@ -68,7 +68,7 @@ $_fullname_sql['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname
 
 //software version - please leave it as it as!
 $SOFTWARE_VERSION="1.0.1 alpha cvs";
-	
+
 /*classes for database access
 ----------------------------------------------------------------
 please note: Stud.IP uses the class DB_Seminar*/
@@ -80,19 +80,6 @@ class DB_Seminar extends DB_Sql {
 		$this->Database = $GLOBALS['DB_STUDIP_DATABASE'];
 		$this->User = $GLOBALS['DB_STUDIP_USER'];
 		$this->Password = $GLOBALS['DB_STUDIP_PASSWORD'];
-		if ($query){
-			$this->query($query);
-		}
-	}
-}
-
-//additional class, for your own purpose!
-class DB_Institut extends DB_Sql {
-	function DB_Institut($query = false){
-		$this->Host = $GLOBALS['DB_INSTITUT_HOST'];
-		$this->Database = $GLOBALS['DB_INSTITUT_DATABASE'];
-		$this->User = $GLOBALS['DB_INSTITUT_USER'];
-		$this->Password = $GLOBALS['DB_INSTITUT_PASSWORD'];
 		if ($query){
 			$this->query($query);
 		}
@@ -112,6 +99,17 @@ class DB_Ilias extends DB_Sql {
 	}
 }
 
+
+/*get params from the CONFIG table
+----------------------------------------------------------------*/
+$db = new DB_Seminar;
+$query = ("SELECT * FROM CONFIG");
+$db->query($query);
+while ($db->next_record()) {
+	$variable_key = $db->f("key");
+	$$variable_key = $db->f("value");
+}
+unset ($db);
 
 /*mail settings
 ----------------------------------------------------------------*/
