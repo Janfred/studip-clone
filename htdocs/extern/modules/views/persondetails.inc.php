@@ -305,10 +305,6 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	if (!isset($SEMESTER[$last_sem]))
 		$last_sem = sizeof($SEMESTER);
 	
-	$lnk_sdet = $this->getModuleLink("Lecturedetails",
-			$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
-	$lnk_sdet .= "&seminar_id=";
-	
 	$out = "";
 	for (;$current_sem - 1 < $last_sem; $last_sem--) {
 		$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
@@ -345,11 +341,10 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 			if ($this->config->getValue("PersondetailsLectures", "aslist")) {
 				$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">\n";
 				while ($db1->next_record()) {
-					$lnk = $lnk_sdet . $db1->f("Seminar_id");
 					$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
-					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-					$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
-					$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
+					$out .= $this->elements["LinkIntern"]->toString(array("module" => "Lecturedetails",
+							"link_args" => "seminar_id=" . $db1->f("Seminar_id"),
+							"content" => htmlReady($db1->f("Name"), TRUE)));
 					if ($db1->f("Untertitel") != "") {
 						$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . "><br>";
 						$out .= htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
