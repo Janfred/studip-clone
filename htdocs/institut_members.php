@@ -410,7 +410,7 @@ if ($institut_members_data["show"] == "funktion") {
 								
 			$db_institut_members->query($query);
 			if ($db_institut_members->num_rows() > 0) {
-				echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
+				echo "<tr><td class=\"steelkante\" colspan=\"$colspan\" height=\"20\">";
 				echo "<font size=\"-1\"><b>&nbsp;";
 				echo htmlReady($statusgruppe_name);
 				echo "<b></font></td></tr>\n";
@@ -441,7 +441,7 @@ if ($institut_members_data["show"] == "funktion") {
 										
 		$db_residual->query($query);
 		if ($db_residual->num_rows() > 0) {
-			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
+			echo "<tr><td class=\"steelkante\" colspan=\"$colspan\" height=\"20\">";
 			echo "<font size=\"-1\"><b>&nbsp;";
 			echo _("keiner Funktion zugeordnet") . "<b></font></td></tr>\n";
 			table_body($db_residual, $auswahl, $table_structure, $css_switcher);
@@ -461,7 +461,7 @@ elseif ($institut_members_data["show"] == "status") {
 											$institut_members_data["sortby"], $institut_members_data["direction"]);
 		$db_institut_members->query($query);
 		if ($db_institut_members->num_rows() > 0) {
-			echo "<tr><td class=\"steelgroup1\" colspan=\"$colspan\" height=\"20\">";
+			echo "<tr><td class=\"steelkante\" colspan=\"$colspan\" height=\"20\">";
 			echo "<font size=\"-1\"><b>&nbsp;$permission<b></font></td></tr>\n";
 			table_body($db_institut_members, $auswahl, $table_structure, $css_switcher);
 		}
