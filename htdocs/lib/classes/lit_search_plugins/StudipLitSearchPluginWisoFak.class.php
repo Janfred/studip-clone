@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract.class.php");
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php");
 
 /**
 * Plugin for retrieval using Z39.50 
@@ -32,18 +32,13 @@ require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/lit_search_plugin
 * @version	$Id$
 * @package	
 **/
-class StudipLitSearchPluginWisoFak extends StudipLitSearchPluginZ3950Abstract{
+class StudipLitSearchPluginWisoFak extends StudipLitSearchPluginGvk{
 	
 	
 	function StudipLitSearchPluginWisoFak(){
-		parent::StudipLitSearchPluginZ3950Abstract();
+		parent::StudipLitSearchPluginGvk();
 		$this->description = "Bibliotheken der Wirtschafts- und Sozialwiss. Fakultäten";
 		$this->z_host = "z3950.gbv.de:20010/wisof_opc";
-		$this->z_options = array('user' => '999', 'password' => 'abc');
-		$this->z_syntax = "MARC";
-		$this->convert_umlaute = true;
-		$this->z_accession_bib = "12";
-		$this->z_accession_re = '/[0-9]{9}/';
 		$this->z_profile = array('1016' => _("Basisindex [ALL]"), '4' => _("Titelstichwörter [TIT]"),
 								'5' => _("Serienstichwörter [SER]"), '21' => _("alle Klassifikationen [SYS]"),
 								'1004' => _("Person, Author [PER]"), '1005' => _("Körperschaften [KOR]"),
