@@ -49,14 +49,25 @@ switch ($supportdb_data["view"]) {
 	break;
 	case "requests":
 		$conObject = new ContractObject ($supportdb_data["actual_con"]);
-		$page_intro=sprintf (_("Sie sehen hier die letzten 10 Anfragen, die im Rahmen des Supportvertrages vom <b>%s</b> bis <b>%s</b> gestellt wurden. Nutzen Sie f&uuml;r &auml;ltere Anfragen die Suchfunktion."), date("d.m.Y", $conObject->getContractBegin()), date("d.m.Y", $conObject->getContractEnd()));
+		$request_count = Request::getRequestsCount ($supportdb_data["actual_con"]);
+		$page_intro=sprintf (_("Sie sehen hier die letzten Anfragen, die im Rahmen des Supportvertrages vom <b>%s</b> bis <b>%s</b> gestellt wurden."), date("d.m.Y", $conObject->getContractBegin()), date("d.m.Y", $conObject->getContractEnd()));
+		if ($request_count > 10 )
+			$page_intro.=sprintf(" ".("Nutzen Sie f&uuml;r &auml;ltere Anfragen die Suchfunktion."));
 		$title=_("Anfragen");
 		$infobox[0]["kategorie"]=_("Information:");
 		$infobox[0]["eintrag"][] = array ("icon" => "pictures/ausruf_small.gif", "text"  =>(countUnassignedTopics ($SessSemName[1]) ? sprintf(_("Es liegen noch <b>%s</b> unbeantwortete Themen im Forum vor"), countUnassignedTopics ($SessSemName[1])) : _("Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es liegen keine Themen vor.")));
 		if ($supporter) {
 			$infobox[1]["kategorie"]=_("Aktionen:");
 			$infobox[1]["eintrag"][] = array ("icon" => "pictures/forumrot.gif", "text"  =>sprintf (_("Eine neue Anfrage %sanlegen%s"), "<a href=\"$PHP_SELF?view=requests&create_req=TRUE#a\">", "</a>"));
-		}							
+		}
+		if ($supportdb_data["req_search_exp"]) {
+			$infobox[1]["kategorie"]=_("Aktionen:");
+			$infobox[1]["eintrag"][] = array ("icon" => "pictures/blank.gif", "text"  => "<input type=\"IMAGE\" align=\"absmiddle\" ".makeButton ("zuruecksetzen", "src")." name=\"reset_search\" border=0 value=\""._("neue Suche")."\"");
+		}								
+		if (($request_count > 10) && (!$supportdb_data["req_show_all"])) {
+			$infobox[1]["kategorie"]=_("Aktionen:");
+			$infobox[1]["eintrag"][] = array ("icon" => "pictures/forumrot.gif", "text"  =>sprintf (_("%sAlle%s Anfragen anzeigen."), "<a href=\"$PHP_SELF?view=requests&show_all=TRUE#a\">", "</a>"));
+		}								
 		$infopic = $RELATIVE_PATH_SUPPORT."/pictures/help.jpg";
 	break;
 	}
