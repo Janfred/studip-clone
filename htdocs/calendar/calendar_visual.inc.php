@@ -144,11 +144,11 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$zeile += maxValue($term[$zeile], $step) - 1;
 		
 		$size = 0;
-		for ($j = $zeile_min;$j <= $zeile;$j++)
+		for ($j = $zeile_min; $j <= $zeile; $j++)
 			if (sizeof($term[$j]) > $size)
 					$size = sizeof($term[$j]);
 					
-		for ($j = $zeile_min;$j <= $zeile;$j++)
+		for ($j = $zeile_min; $j <= $zeile; $j++)
 			$colsp[$j] = $size;
 			
 		$i = $zeile + $start / $step;
@@ -385,7 +385,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					
 					if ($sp > 0) {
 						for ($m = $zeile;$m < $rows + $zeile;$m++) {
-							$colsp[$m] = $colsp[$m] - $sp-1;
+							$colsp[$m] = $colsp[$m] - $sp + 1;
 							$v = $j;
 							while ($term[$m][$v] == "#")
 								$term[$m][$v] = 1;
@@ -395,7 +395,9 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 				}
 				
 				elseif ($term[$zeile][$j] == "#") {
-					$csp = $link_edit_column - 1;
+					$csp = $link_edit_column;
+					if ($link_edit)
+						$csp--;
 					while ($term[$zeile][$j] == "#") {
 						$csp += $cspan;
 						$j++;
