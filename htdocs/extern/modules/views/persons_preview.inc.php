@@ -55,8 +55,6 @@ array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donners
 array("name" => "Vorname Nachname", "raum" => "M 23", "sprechzeiten" => "Donnerstags, 12.00 - 13.00",
 		"telefon" => "38-374982", "email" => "bla@bla.com")));
 
-$count = 0;
-
 $order = $this->config->getValue("Main", "order");
 $width = $this->config->getValue("Main", "width");
 $alias = $this->config->getValue("Main", "aliases");
