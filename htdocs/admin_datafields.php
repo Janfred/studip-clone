@@ -329,7 +329,7 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					&nbsp;
 				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
+				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					&nbsp;&nbsp;<input type="IMAGE" name="send" src="pictures/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
 					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="pictures/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
 				</td>			
@@ -539,7 +539,7 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					&nbsp;
 				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
+				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					&nbsp;&nbsp;<input type="IMAGE" name="send" src="pictures/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
 					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="pictures/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
 				</td>			
@@ -756,7 +756,7 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					&nbsp;
 				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
+				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					&nbsp;&nbsp;<input type="IMAGE" name="send" src="pictures/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
 					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="pictures/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
 				</td>			
