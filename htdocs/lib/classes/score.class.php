@@ -32,7 +32,9 @@ class Score {
 	
 	function Score ($user_id) {
 		$this->ismyscore = $this->CheckOwner($user_id);
-		$this->myscore = $this->GetMyScore();
+		if ($this->ismyscore){
+			$this->myscore = $this->GetMyScore();
+		}
 		$this->mygender = $this->GetGender($user_id);
 		$this->title = $this->gettitel($this->myscore, $this->mygender);
 		$this->publik = $this->CheckScore($user_id);
