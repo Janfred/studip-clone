@@ -57,7 +57,7 @@ $db2 = new DB_Seminar;
 
 // Check if there was a submission
 
-reset $HTTP_POST_VARS;
+reset($HTTP_POST_VARS);
 
 
 while ( is_array($HTTP_POST_VARS) 
