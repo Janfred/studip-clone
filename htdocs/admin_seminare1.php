@@ -474,6 +474,7 @@ if (($s_id) && (auth_check())) {
 					else {
 						echo "<td class=\"".$cssSw->getClass()."\" align=right>Heimat-Einrichtung</td>";
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
+						echo "<input type=\"HIDDEN\" name=\"Institut\" value=\"".$db->f("Institut_id")."\" />";
 						echo "<b>".htmlReady($db->f("Institut"))."</b>";
 						}
 					echo "</select>";
