@@ -31,6 +31,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+if(ini_get('zlib.output_compression'))
+      ini_set('zlib.output_compression', 'Off');
 
 $dont_put_headers=TRUE;
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
@@ -84,101 +86,106 @@ $file_name=str_replace("*", "", rawurldecode($file_name));
 $file_name=str_replace("|", "", rawurldecode($file_name));
 $file_name=str_replace("?", "", rawurldecode($file_name));
 
-switch (strtolower(getFileExtension ($file_name))) {
-	case "txt": 
-		$content_type="text/plain";
-		$content_disposition="inline";
-	break;
-	case "css": 
-		$content_type="text/css";
-		$content_disposition="inline";		
-	break;
-	case "gif": 
-		$content_type="image/gif";
-		$content_disposition="inline";		
-	break;
-	case "jpeg": 
-		$content_type="image/jpeg";
-		$content_disposition="inline";		
-	break;
-	case "jpg": 
-		$content_type="image/jpeg";
-		$content_disposition="inline";		
-	break;
-	case "jpe": 
-		$content_type="image/jpeg";
-		$content_disposition="inline";		
-	break;
-	case "bmp": 
-		$content_type="image/x-ms-bmp";
-		$content_disposition="inline";		
-	break;
-	case "wav": 
-		$content_type="audio/x-wav";
-		$content_disposition="inline";		
-	break;
-	case "ra": 
-		$content_type="application/x-pn-realaudio";
-		$content_disposition="inline";		
-	break;
-	case "ram": 
-		$content_type="application/x-pn-realaudio";
-		$content_disposition="inline";		
-	break;
-	case "mpeg": 
-		$content_type="video/mpeg";
-		$content_disposition="inline";		
-	break;
-	case "mpg": 
-		$content_type="video/mpeg";
-		$content_disposition="inline";		
-	break;
-	case "mpe": 
-		$content_type="video/mpeg";
-		$content_disposition="inline";		
-	break;
-	case "qt": 
-		$content_type="video/quicktime";
-		$content_disposition="inline";		
-	break;
-	case "mov": 
-		$content_type="video/quicktime";
-		$content_disposition="inline";		
-	break;
-	case "avi": 
-		$content_type="video/x-msvideo";
-		$content_disposition="inline";		
-	break;
-	case "rtf": 
-		$content_type="application/rtf";
-		$content_disposition="inline";		
-	break;
-	case "pdf": 
-		$content_type="application/pdf";
-		$content_disposition="inline";
-	break;
-	case "doc": 
-		$content_type="application/msword";
-		$content_disposition="inline";		
-	break;
-	case "xls": 
-		$content_type="application/ms-excel";
-		$content_disposition="inline";		
-	break;
-	case "ppt": 
-		$content_type="application/ms-powerpoint";
-		$content_disposition="inline";		
-	break;
-	case "zip": 
-	case "tgz": 
-	case "gz": 	
-		$content_type="application/zip";
-		$content_disposition="inline";		
-	break;
-	default:
-		$content_type="application/octet-stream";
-		$content_disposition="inline";		
-	break;
+if ($force_download) {
+	$content_type="application/octet-stream";
+	$content_disposition="inline";
+} else {
+	switch (strtolower(getFileExtension ($file_name))) {
+		case "txt": 
+			$content_type="text/plain";
+			$content_disposition="inline";
+		break;
+		case "css": 
+			$content_type="text/css";
+			$content_disposition="inline";		
+		break;
+		case "gif": 
+			$content_type="image/gif";
+			$content_disposition="inline";		
+		break;
+		case "jpeg": 
+			$content_type="image/jpeg";
+			$content_disposition="inline";		
+		break;
+		case "jpg": 
+			$content_type="image/jpeg";
+			$content_disposition="inline";		
+		break;
+		case "jpe": 
+			$content_type="image/jpeg";
+			$content_disposition="inline";		
+		break;
+		case "bmp": 
+			$content_type="image/x-ms-bmp";
+			$content_disposition="inline";		
+		break;
+		case "wav": 
+			$content_type="audio/x-wav";
+			$content_disposition="inline";		
+		break;
+		case "ra": 
+			$content_type="application/x-pn-realaudio";
+			$content_disposition="inline";		
+		break;
+		case "ram": 
+			$content_type="application/x-pn-realaudio";
+			$content_disposition="inline";		
+		break;
+		case "mpeg": 
+			$content_type="video/mpeg";
+			$content_disposition="inline";		
+		break;
+		case "mpg": 
+			$content_type="video/mpeg";
+			$content_disposition="inline";		
+		break;
+		case "mpe": 
+			$content_type="video/mpeg";
+			$content_disposition="inline";		
+		break;
+		case "qt": 
+			$content_type="video/quicktime";
+			$content_disposition="inline";		
+		break;
+		case "mov": 
+			$content_type="video/quicktime";
+			$content_disposition="inline";		
+		break;
+		case "avi": 
+			$content_type="video/x-msvideo";
+			$content_disposition="inline";		
+		break;
+		case "rtf": 
+			$content_type="application/rtf";
+			$content_disposition="inline";		
+		break;
+		case "pdf": 
+			$content_type="application/pdf";
+			$content_disposition="inline";
+		break;
+		case "doc": 
+			$content_type="application/msword";
+			$content_disposition="inline";		
+		break;
+		case "xls": 
+			$content_type="application/ms-excel";
+			$content_disposition="inline";		
+		break;
+		case "ppt": 
+			$content_type="application/ms-powerpoint";
+			$content_disposition="inline";		
+		break;
+		case "zip": 
+		case "tgz": 
+		case "gz": 	
+			$content_type="application/zip";
+			$content_disposition="inline";		
+		break;
+		default:
+			$content_type="application/octet-stream";
+			$content_disposition="inline";		
+		break;
+		}
 	}
 
 //override disposition, if available
@@ -272,8 +279,10 @@ $filesize = filesize($path_file);
 
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
-header("Cache-Control: no-cache, must-revalidate");
+header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
+header("Cache-Control: private");
 header("Expires: 0");
 
 header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
