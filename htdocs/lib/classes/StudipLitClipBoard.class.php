@@ -75,6 +75,7 @@ class StudipLitClipBoard {
 		} else if ($inserted){
 			$this->msg .= "msg§" . sprintf(_("Es wurden %s Literaturverweise in ihre Merkliste aufgenommen."), $inserted) . "§";
 		}
+		$this->setDefaultValue();
 		return $inserted;
 	}
 	
@@ -94,11 +95,12 @@ class StudipLitClipBoard {
 		} else if ($deleted){
 			$this->msg .= "msg§" . sprintf(_("Es wurden %s Literaturverweise aus ihrer Merkliste gel&ouml;scht."), $deleted) . "§";
 		}
+		$this->setDefaultValue();
 		return $deleted;
 	}
 	
 	function getNumElements(){
-		return count($this->elements);
+		return (is_array($this->elements)) ? count($this->elements) : 0;
 	}
 	
 	function isInClipboard($catalog_id){
@@ -123,9 +125,19 @@ class StudipLitClipBoard {
 		if (!is_object($this->form_obj)){
 			$this->setFormObject();
 		}
+		$this->setDefaultValue();
 		return $this->form_obj;
 	}
 	
+	function setDefaultValue(){
+		if ($this->getNumElements() == 1 && is_object($this->form_obj)){
+			reset($this->elements);
+			$this->form_obj->form_fields['clip_content']['default_value'] = key($this->elements);
+			return true;
+		}
+		return false;
+	}
+		
 	function setFormObject(){
 		$form_name = $this->form_name;
 		$form_fields['clip_content'] = array('type' => 'select', 'multiple' => true, 'options_callback' => array(&$this, "getClipOptions"));
@@ -160,6 +172,7 @@ class StudipLitClipBoard {
 				$selected = $this->form_obj->getFormFieldValue("clip_content");
 				if (is_array($selected)){
 					$this->deleteElement($selected);
+					$this->form_obj->doFormReset();
 				}
 				break;
 		}
