@@ -763,7 +763,8 @@ function forum_print_toolbar ($id="") {
 		global $user, $PHP_SELF, $forum, $open, $flatviewstartposting, $indexvars;
 		$print = "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">";
 		if ($forum["toolbar"] == "open") {
-			$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."\">";
+			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
+				$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."#anker\">";
 			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
 			$print .= "<td class=\"steelkante2\" valign=\"middle\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"5\"></td>";
 			$print .= "<td class=\"steelkante2\" valign=\"middle\"><font size=\"-1\">"._("Indikator:")."&nbsp;";
@@ -807,13 +808,16 @@ function forum_print_toolbar ($id="") {
 				$print .= "<input type=image name=create value=\"abschicken\" src=\"pictures/haken_transparent.gif\" align=\"middle\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
 			}
 			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"pictures/griff.jpg\" align=\"middle\" border=\"0\"></a>&nbsp;";
+			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
+				$print .= "</form>";
 			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr><tr><td class=\"blank\" colspan=\"9\">&nbsp;</td></tr></table>";
 		} else {
 			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"pictures/blank.gif\" height=\"22\" width=\"1\"></td>";
-			$print .= "</form><td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
+			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"pictures/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
 			$print .= "</td></tr></table>";
 		}
 		if ($id) {  // Schreibmodus, also form einbauen
+			//$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."?test=s#anker\">";
 			$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
 		}
 		
