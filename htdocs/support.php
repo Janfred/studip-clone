@@ -38,7 +38,7 @@ $perm->check("user");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 if ($SUPPORT_ENABLE) {
-	//Steuerung der Ressourcenverwaltung einbinden
+	//Steuerung der Supportverwaltung einbinden
 	include ("$RELATIVE_PATH_SUPPORT/support.inc.php");
 } else {
 	// Start of Output
