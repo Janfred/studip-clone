@@ -97,27 +97,27 @@ if (isset($details)) {
 		?>
 		<tr>
 		<td class="blank" colspan=2>
-		<table border=0 bgcolor="#eeeeee" align="center" cellspacing=1 cellpadding=2 class=blank>
+		<table border=0 align="center" cellspacing=0 cellpadding=2>
 			<form method="POST" name="edit" action="inst_admin.php">
-			<tr>
-				<td height="30"><b>&nbsp;Einrichtung:</b></td>
-				<td><?php  echo htmlReady($db->f("Name")) ?></td>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;Einrichtung:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo htmlReady($db->f("Name")) ?></td>
 			</tr>
-			<tr>
-				<td height="30"><b>&nbsp;Name:</b></td>
-				<td><?php  echo $db->f("Vorname") . "   " . $db->f("Nachname") ?></td>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" height="30"><b>&nbsp;Name:</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><?php  echo $db->f("Vorname") . "   " . $db->f("Nachname") ?></td>
 			</tr>
-			<tr>
-				<td><b>&nbsp;Status in der Einrichtung:&nbsp;</b></td>
-				<td>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Status in der Einrichtung:&nbsp;</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" >
 				<?
 				perm_select("perms",$db->f("perms"),$db->f("inst_perms"));
 				?>
 				</td>
 			</tr>
-			<tr>
-				<td><b>&nbsp;Funktion in der Einrichtung:&nbsp;</b></td>
-				<td>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Funktion in der Einrichtung:&nbsp;</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" >
 				<select name="inst_funktion">
 				<?
 				if ($db->f("Funktion")=="0") 
@@ -137,28 +137,36 @@ if (isset($details)) {
 				?>
 				</select></td>
 			</tr>
-
-				<tr><td><b>&nbsp;Raum:</b></td>
-			  	<td><input type="text" name="raum" size=24 maxlength=31 value="<?php echo htmlReady($db->f("raum")) ?>"></td></tr>
-				<tr><td><b>&nbsp;Sprechstunde:</b></td>
-			  	<td><input type="text" name="sprechzeiten" size=24 maxlength=63 value="<?php echo htmlReady($db->f("sprechzeiten")) ?>"></td></tr>
-				<tr><td><b>&nbsp;Telefon:</b></td>
-			  	<td><input type="text" name="Telefon" size=24 maxlength=31 value="<?php echo htmlReady($db->f("Telefon")) ?>"></td></tr>
-				<tr><td><b>&nbsp;Fax:</b></td>
-			  	<td><input type="text" name="Fax" size=24 maxlength=31 value="<?php echo htmlReady($db->f("Fax")) ?>"></td></tr>
-
-			<tr><td colspan=2 align=center>&nbsp;
-				<input type="hidden" name="u_id"   value="<?php $db->p("user_id") ?>">
-				<input type="hidden" name="ins_id"   value="<?php $db->p("Institut_id") ?>">
-				<input type="submit" name="u_edit" value="ver&auml;ndern">&nbsp;
-				<input type="submit" name="u_kill" value=" L&ouml;schen ">&nbsp;
-				<input type="submit" name="nothing" value=" Abbrechen ">
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Raum:</b></td>
+			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="raum" size=24 maxlength=31 value="<?php echo htmlReady($db->f("raum")) ?>"></td>
+			</tr>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Sprechstunde:</b></td>
+			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="sprechzeiten" size=24 maxlength=63 value="<?php echo htmlReady($db->f("sprechzeiten")) ?>"></td>
+			</tr>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Telefon:</b></td>
+			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Telefon" size=24 maxlength=31 value="<?php echo htmlReady($db->f("Telefon")) ?>"></td>
+			</tr>
+			<tr <?$cssSw->switchClass() ?> >
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Fax:</b></td>
+			  	<td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Fax" size=24 maxlength=31 value="<?php echo htmlReady($db->f("Fax")) ?>"></td>
+			</tr>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align=center>&nbsp;
+				<input type="hidden" name="u_id"  value="<?php $db->p("user_id") ?>">
+				<input type="hidden" name="ins_id"  value="<?php $db->p("Institut_id") ?>">
+				<input type="IMAGE" name="u_edit" src="pictures/buttons/uebernehmen-button.gif" border=0 value="ver&auml;ndern">&nbsp;
+				<input type="IMAGE" name="u_kill"  src="pictures/buttons/loeschen-button.gif" border=0  value=" l&ouml;schen ">&nbsp;
+				<input type="IMAGE" name="nothing"  src="pictures/buttons/abbrechen-button.gif" border=0  value="abbrechen ">
 				</td>
 			</tr>
-			<tr><td colspan=2 class="blank">&nbsp;</td></tr>
+			<tr>
+				<td class="blank"  colspan=2 class="blank">&nbsp;</td></tr>
 			
 			<? // links to everywhere
-			print "<tr><td colspan=2 align=\"center\">";
+			print "<tr><td  class=\"steel1\" colspan=2 align=\"center\">";
 				printf("&nbsp;pers&ouml;nliche Homepage <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
 				printf("&nbsp;Nachricht an Benutzer <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
@@ -184,7 +192,7 @@ else {
 
 			// Hier darf fast keiner was:
 
-			if (isset($u_kill)) {
+			if (isset($u_kill_x)) {
 				if (!$perm->have_perm("root") && $scherge=='admin')
 					my_error("<b>Sie haben keine Berechtigung einen Administrator dieser Einrichtung zu l&ouml;schen.</b>");
 				else {
@@ -193,7 +201,7 @@ else {
 				}
 			} 
 
-			if (isset($u_edit)) {
+			if (isset($u_edit_x)) {
 				if (!$perm->have_perm("root") && $scherge=='admin' && $u_id != $auth->auth["uid"])
 					my_error("<b>Sie haben keine Berechtigung einen anderen Administrator dieser Einrichtung zu ver&auml;ndern.</b>");
 				else {
