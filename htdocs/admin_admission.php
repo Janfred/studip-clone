@@ -607,7 +607,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
 						printf ("<font size=-1>%s "._("Teilnehmende")." </font>", $admin_admission_data["admission_turnout"]);
 					} else { ?>
-					<font size=-1><input type="TEXT" name="admission_turnout" size=2 maxlength=2 value="<? echo $admin_admission_data["admission_turnout"]; ?>" /> <?=_("Teilnehmende")?></font>
+					<font size=-1><input type="TEXT" name="admission_turnout" size=2 maxlength=5 value="<? echo $admin_admission_data["admission_turnout"]; ?>" /> <?=_("Teilnehmende")?></font>
 					<? } ?>
 				</td>
 			</tr>
