@@ -164,11 +164,10 @@ class VeranstaltungResourcesAssign {
 			return FALSE;
 	}
 
-	function getDateAssignObjects() {
-		$query2 = sprintf("SELECT termin_id FROM termine WHERE range_id = '%s' ORDER BY date, content", $this->seminar_id);
+	function getDateAssignObjects($presence_dates_only = FALSE) {
+		$query2 = sprintf("SELECT termin_id FROM termine WHERE range_id = '%s' %s ORDER BY date, content", $this->seminar_id, ($presence_dates_only) ? "AND date_typ IN ".getPresenceTypeClause() : "");
 		$this->db2->query($query2);
 		
-
 		while ($this->db2->next_record()) {
 			$assignObjects[$this->db2->f("termin_id")] = $this->getDateAssignObject($this->db2->f("termin_id"));
 		}
@@ -218,8 +217,9 @@ class VeranstaltungResourcesAssign {
 			$assignObjects = func_get_arg(0);
 		
 		//load the assign-objects, if not given
-		if (!$assignObjects)
+		if (!$assignObjects) {
 			$assignObjects = $this->getMetaAssignObjects($term_data, $veranstaltung_start_time, $veranstaltung_duration_time);
+		}
 
 		//check and save the assigns
 		$i=0;
@@ -284,13 +284,13 @@ class VeranstaltungResourcesAssign {
 				$overlaps = $changeAssign->checkOverlap();
 
 			if ($overlaps) {
-				$result[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+				$result[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
 				$this->killDateAssign($termin_id);
 			}
 			
 			if ((!$check_only) && (!$overlaps)) {
 				$changeAssign->store();
-				$result[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
+				$result[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
 			}
 		}
 		return $result;
@@ -319,11 +319,11 @@ class VeranstaltungResourcesAssign {
 					$overlaps = $createAssign->checkOverlap();
 					
 				if ($overlaps)
-					$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+					$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
 	
 				if ((!$check_only) && (!$overlaps)) {
 					$createAssign->create();
-					$result[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
+					$result[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
 				}
 			}
 		}
