@@ -232,31 +232,32 @@ $INST_MODULES["default"] = array(
 
 
 //Festlegen der Veranstaltungs Termin Typen
-$TERMIN_TYP[1]=array("name"=>_("Sitzung"), "sitzung"=>1, "color"=>"#FF7F50"); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
-$TERMIN_TYP[2]=array("name"=>_("Vorbesprechung"), "sitzung"=>0, "color"=>"#DC143C"); 	//dieser Termin Typ wird immer als Vorbesprechung verwendet. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten fuer Vorbesprechungen bekommen jedoch immer diesen Typ
-$TERMIN_TYP[3]=array("name"=>_("Klausur"), "sitzung"=>0, "color"=>"#FF0000");
-$TERMIN_TYP[4]=array("name"=>_("Exkursion"), "sitzung"=>0, "color"=>"#FFA500");
-$TERMIN_TYP[5]=array("name"=>_("anderer Termin"), "sitzung"=>0, "color"=>"#B8660B");
-$TERMIN_TYP[6]=array("name"=>_("Sondersitzung"), "sitzung"=>0, "color"=>"#FFA500");
-$TERMIN_TYP[7]=array("name"=>_("Vorlesung"), "sitzung"=>1, "color"=>"#FF7F50");
+$TERMIN_TYP[1]=array("name"=>_("Sitzung"), "sitzung"=>1, "color"=>"#2D2C64"); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
+$TERMIN_TYP[2]=array("name"=>_("Vorbesprechung"), "sitzung"=>0, "color"=>"#5C2D64"); 	//dieser Termin Typ wird immer als Vorbesprechung verwendet. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten fuer Vorbesprechungen bekommen jedoch immer diesen Typ
+$TERMIN_TYP[3]=array("name"=>_("Klausur"), "sitzung"=>0, "color"=>"#526416");
+$TERMIN_TYP[4]=array("name"=>_("Exkursion"), "sitzung"=>0, "color"=>"#505064");
+$TERMIN_TYP[5]=array("name"=>_("anderer Termin"), "sitzung"=>0, "color"=>"#41643F");
+$TERMIN_TYP[6]=array("name"=>_("Sondersitzung"), "sitzung"=>0, "color"=>"#64372C");
+$TERMIN_TYP[7]=array("name"=>_("Vorlesung"), "sitzung"=>1, "color"=>"#627C95");
 //weitere Typen koennen hier angefuegt werden
 
 
 // Festlegen der Kategorien für persönlichen Terminkalender
-$PERS_TERMIN_KAT[1]=array("name"=>_("Sonstiges"), "color"=>"#B8660B");
-$PERS_TERMIN_KAT[2]=array("name"=>_("Sitzung"), "color"=>"#FF7F50");
-$PERS_TERMIN_KAT[3]=array("name"=>_("Vorbesprechung"), "color"=>"#DC143C");
-$PERS_TERMIN_KAT[4]=array("name"=>_("Klausur"), "color"=>"#FF0000");
-$PERS_TERMIN_KAT[5]=array("name"=>_("Exkursion"), "color"=>"#FFA500");
-$PERS_TERMIN_KAT[6]=array("name"=>_("Sondersitzung"), "color"=>"#FFA500");
-$PERS_TERMIN_KAT[7]=array("name"=>_("Prüfung"), "color"=>"#FF0000");
-$PERS_TERMIN_KAT[8]=array("name"=>_("Telefonat"), "color"=>"#6B8E23");
-$PERS_TERMIN_KAT[9]=array("name"=>_("Besprechung"), "color"=>"#32CD23");
-$PERS_TERMIN_KAT[10]=array("name"=>_("Verabredung"), "color"=>"#228B22");
-$PERS_TERMIN_KAT[11]=array("name"=>_("Geburtstag"), "color"=>"#9932CC");
-$PERS_TERMIN_KAT[12]=array("name"=>_("Familie"), "color"=>"#191970");
-$PERS_TERMIN_KAT[13]=array("name"=>_("Urlaub"), "color"=>"#DB7093");
-$PERS_TERMIN_KAT[14]=array("name"=>_("Reise"), "color"=>"#C71585");
+$PERS_TERMIN_KAT[1]=array("name"=>_("Sonstiges"), "color"=>"#41643F");
+$PERS_TERMIN_KAT[2]=array("name"=>_("Sitzung"), "color"=>"#2D2C64");
+$PERS_TERMIN_KAT[3]=array("name"=>_("Vorbesprechung"), "color"=>"#5C2D64");
+$PERS_TERMIN_KAT[4]=array("name"=>_("Klausur"), "color"=>"#526416");
+$PERS_TERMIN_KAT[5]=array("name"=>_("Exkursion"), "color"=>"#505064");
+$PERS_TERMIN_KAT[6]=array("name"=>_("Sondersitzung"), "color"=>"#64372C");
+$PERS_TERMIN_KAT[7]=array("name"=>_("Prüfung"), "color"=>"#64541E");
+$PERS_TERMIN_KAT[8]=array("name"=>_("Telefonat"), "color"=>"#48642B");
+$PERS_TERMIN_KAT[9]=array("name"=>_("Besprechung"), "color"=>"#957C29");
+$PERS_TERMIN_KAT[10]=array("name"=>_("Verabredung"), "color"=>"#956D42");
+$PERS_TERMIN_KAT[11]=array("name"=>_("Geburtstag"), "color"=>"#66954F");
+$PERS_TERMIN_KAT[12]=array("name"=>_("Familie"), "color"=>"#2C5964");
+$PERS_TERMIN_KAT[13]=array("name"=>_("Urlaub"), "color"=>"#951408");
+$PERS_TERMIN_KAT[14]=array("name"=>_("Reise"), "color"=>"#18645C");
+$PERS_TERMIN_KAT[15]=array("name"=>_("Vorlesung"), "color"=>"#627C95");
 // weitere Kategorien können hier angefügt werden
 
 //preset for titles, insert your own titles in the array
