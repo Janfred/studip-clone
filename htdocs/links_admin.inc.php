@@ -284,7 +284,6 @@ if ($perm->have_perm("admin")) {
 	$structure["range_tree"]=array (topKat=>"global", name=>"Bereichsbaum", link=>"admin_range_tree.php", active=>FALSE);
 }
 if ($perm->have_perm("root")) {
-	$structure["fakultaet"]=array (topKat=>"global", name=>"Fakult&auml;ten", link=>"admin_fakultaet.php", active=>FALSE);
 	$structure["studiengang"]=array (topKat=>"global", name=>"Studieng&auml;nge", link=>"admin_studiengang.php", active=>FALSE);
 	$structure["fach"]=array (topKat=>"global", name=>"Studienf&auml;cher", link=>"admin_fach.php", active=>FALSE);
 	$structure["bereich"]=array (topKat=>"global", name=>"Bereiche", link=>"admin_bereich.php", active=>FALSE);
@@ -336,9 +335,7 @@ switch ($i_page) {
 	case "admin_fach.php" : 
 		$reiter_view="fach"; 
 	break;
-	case "admin_fakultaet.php" : 
-		$reiter_view="fakultaet"; 
-	break;
+
 	case "admin_institut.php" : 
 		$reiter_view="grunddaten_inst"; 
 	break;
