@@ -539,7 +539,6 @@ function update_generic_datafields (&$config, &$data_fields, &$field_names, $obj
 			$config_generic_datafields = array_merge($config_generic_datafields,
 					$diff_generic_datafields);
 			foreach ($diff_generic_datafields as $datafield) {
-			echo "<br>$order";
 				$visible[] = "0";
 				$order[] = sizeof($order);
 				$aliases[] = $generic_datafields["ids_names"][$datafield];
