@@ -74,41 +74,6 @@ else {
 	$text_div_end = "";
 }
 
-$pic_max_width = $this->config->getValue("PersondetailsHeader", "img_width");
-$pic_max_height = $this->config->getValue("PersondetailsHeader", "img_height");
-
-// fit size of image
-if ($pic_max_width && $pic_max_height) {
-	$pic_size = @getimagesize($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . "user/"
-			. $db->f("user_id") . ".jpg");
-	
-	if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
-		$fak_width = $pic_size[0] / $pic_max_width;
-		$fak_height = $pic_size[1] / $pic_max_height;
-		if ($fak_width > $fak_height) {
-			$pic_width = (int) ($pic_size[0] / $fak_width);
-			$pic_height = (int) ($pic_size[1] / $fak_width);
-		}
-		else {
-			$pic_height = (int) ($pic_size[1] / $fak_height);
-			$pic_width = (int) ($pic_size[0] / $fak_height);
-		}
-	}
-	else {
-		$pic_width = $pic_size[0];
-		$pic_height = $pic_size[1];
-	}
-	$pic_max_width = $pic_width;
-	$pic_max_height = $pic_height;
-}
-else {
-	$pic_max_width = "";
-	$pic_max_height = "";
-}
-
-$this->config->config["PersondetailsHeader"]["img_width"] = $pic_max_width;
-$this->config->config["PersondetailsHeader"]["img_height"] = $pic_max_height;
-
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 
 $studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}edit_about.php";
@@ -265,7 +230,7 @@ function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
 
 function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	global $attr_text_td, $end, $start;
-	$db1 = new DB_Institut;
+	$db1 = new DB_Seminar();
 	
 	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
@@ -294,7 +259,7 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	// current semester
 	$now = time();
 	foreach ($GLOBALS["SEMESTER"] as $key => $sem) {
-		if ($sem["beginn"] >= $now)
+		if ($now >= $sem["beginn"])
 			break;
 	}
 	
@@ -327,7 +292,8 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 		           ."WHERE user_id='".$db->f("user_id")."' AND "
 				       ."su.status LIKE 'dozent' AND ((start_time >= $start "
 				       ."AND start_time <= $end) OR (start_time <= $end "
-							 ."AND duration_time = -1)) AND s.status IN ('$types') ORDER BY s.mkdate DESC";
+							 ."AND duration_time = -1)) AND s.status IN ('$types') "
+							 ."ORDER BY s.mkdate DESC";
 				
 			$db1->query($query);
 				
@@ -385,7 +351,7 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 			}
 		}
 	}
-	else{
+	else {
 		$start = $GLOBALS["SEMESTER"][$key]["beginn"];
 		$end = $GLOBALS["SEMESTER"][$key]["ende"];
 		$out = "";
@@ -393,7 +359,8 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 		  	        ."WHERE user_id LIKE '".$db->f("user_id")."' AND "
 					      ."su.status LIKE 'dozent' AND ((start_time >= $start "
 				       	."AND start_time <= $end) OR (start_time <= $end "
-							 	."AND duration_time = -1)) AND s.status IN ('$types') ORDER BY s.mkdate DESC");
+							 	."AND duration_time = -1)) AND s.status IN ('$types') "
+								."ORDER BY s.mkdate DESC");
 
 		if ($db1->num_rows()) {
 			$out .= "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
@@ -446,6 +413,41 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 }
 
 function head (&$this, $db, $a) {
+	$pic_max_width = $this->config->getValue("PersondetailsHeader", "img_width");
+	$pic_max_height = $this->config->getValue("PersondetailsHeader", "img_height");
+
+	// fit size of image
+	if ($pic_max_width && $pic_max_height) {
+		$pic_size = @getimagesize($GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "user/"
+				. $db->f("user_id") . ".jpg");
+	
+		if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
+			$fak_width = $pic_size[0] / $pic_max_width;
+			$fak_height = $pic_size[1] / $pic_max_height;
+			if ($fak_width > $fak_height) {
+				$pic_width = (int) ($pic_size[0] / $fak_width);
+				$pic_height = (int) ($pic_size[1] / $fak_width);
+			}
+			else {
+				$pic_height = (int) ($pic_size[1] / $fak_height);
+				$pic_width = (int) ($pic_size[0] / $fak_height);
+			}
+		}
+		else {
+			$pic_width = $pic_size[0];
+			$pic_height = $pic_size[1];
+		}
+		$pic_max_width = $pic_width;
+		$pic_max_height = $pic_height;
+	}
+	else {
+		$pic_max_width = "";
+		$pic_max_height = "";
+	}
+
+	$this->config->config["PersondetailsHeader"]["img_width"] = $pic_max_width;
+	$this->config->config["PersondetailsHeader"]["img_height"] = $pic_max_height;
+	
 	if ($this->config->getValue("Main", "showcontact")
 			&& $this->config->getValue("Main", "showimage"))
 		$colspan = " colspan=\"2\"";
