@@ -36,6 +36,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 
 $view = new DbView();
 $the_tree = new StudipSemTreeViewAdmin($_REQUEST['start_item_id']);
@@ -110,7 +111,7 @@ if ($the_tree->mode == "MoveItem"){
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><img src="pictures/einst.gif" border="0" align="absbottom"><b>&nbsp;<?=_("Vorlesungsverzeichnis bearbeiten")?></b></td>
+		<td class="topic" colspan="2"><b>&nbsp;<?=$UNI_NAME." - "._("Veranstaltungshierarchie bearbeiten")?></b></td>
 	</tr>
 	<tr>
 	<td class="blank" width="75%" align="left" valign="top">
@@ -216,4 +217,3 @@ $the_tree->showSemTree();
 <?
 page_close()
 ?>
-
