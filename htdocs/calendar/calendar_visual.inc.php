@@ -200,7 +200,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$day_event_row[0] .= $category_style['color'] . "; background-image:url(";
 			$day_event_row[0] .= $category_style['image'] . ");\">";
 			$day_event_row[0] .= $title_str;
-			$day_event_row[0] .= to_string_info_icons($day_event);
+			$day_event_row[0] .= info_icons($day_event);
 			$day_event_row[0] .= "</td>";
 			$i++;
 		}
@@ -384,7 +384,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 													, js_hover($day_obj->events[$mapping[$zeile][$j]]));
 						$tab[$zeile] .= $title . "</a>";
 					}
-					$tab[$zeile] .= to_string_info_icons($term[$zeile][$j]);
+					$tab[$zeile] .= info_icons($term[$zeile][$j]);
 					$tab[$zeile] .= "</td>\n";
 					
 					if ($sp > 0) {
@@ -781,7 +781,7 @@ function js_hover ($aterm) {
 	return "";
 }
 
-function to_string_info_icons (&$event) {
+function info_icons (&$event) {
 	global $CANONICAL_RELATIVE_PATH_STUDIP;
 	
 	$ret = '';
