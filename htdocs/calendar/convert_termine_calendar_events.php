@@ -89,8 +89,8 @@ while ($db_read->next_record()) {
 	
 	$query  = sprintf("REPLACE calendar_events (event_id, range_id, autor_id, uid, start, end, summary, description,"
 					. "class, categories, category_intern, priority, location, ts, linterval, sinterval, wdays, month, day, rtype,"
-					. "duration, expire, exceptions, mkdate, chdate) VALUES ('%s','%s','%s','%s',%s,%s,'%s',"
-					. "'%s','%s','%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
+					. "duration, count, expire, exceptions, mkdate, chdate) VALUES ('%s','%s','%s','%s',%s,%s,'%s',"
+					. "'%s','%s','%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s)",
 					$db_read->f("termin_id"),
 					$db_read->f("range_id"),
 					$db_read->f("autor_id"),
@@ -112,6 +112,7 @@ while ($db_read->next_record()) {
 					(int) $rep["day"],
 					$rep["rtype"],
 					$rep["duration"],
+					0,
 					$expire,
 					"",
 					$db_read->f("mkdate"),
