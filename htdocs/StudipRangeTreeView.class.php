@@ -218,7 +218,7 @@ class StudipRangeTreeView {
 			echo "<a href=\"";
 			echo ($this->open_ranges[$item_id]) ? $this->getSelf("close_range={$item_id}") : $this->getSelf("open_range={$item_id}"); 
 			echo "\"><img border=\"0\" src=\"pictures/";
-			echo ($this->open_ranges[$item_id]) ? "minus.gif" : "plus.gif";
+			echo ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
 			echo "\" " . tooltip(count($this->tree->getKids($item_id)) . " " . _("Unterelement(e)")) . " ></a>";
 		} else { 
 			echo "<img src=\"pictures/forumleer.gif\"  border=\"0\">";
@@ -277,8 +277,11 @@ class StudipRangeTreeView {
 		$head .= "<a class=\"tree\" href=\"";
 		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . "><b>"
 											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
+		$head .= "<img src=\"pictures/";
+		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
+		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"1\">";
 		$head .= htmlReady($this->tree->tree_data[$item_id]['name']);
-		$head .= ($this->open_items[$item_id])? "</b></a>" : "<a/>";
+		$head .= ($this->open_items[$item_id]) ? "</b></a>" : "<a/>";
 		return $head;
 	}
 	
@@ -297,8 +300,10 @@ class StudipRangeTreeView {
 		if (is_array($range_object->item_data_mapping)){
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">";
 			foreach ($range_object->item_data_mapping as $key => $value){
-				$content .= "<b>" . htmlReady($value) . ":</b>&nbsp;";
-				$content .= fixLinks(htmlReady($range_object->item_data[$key])) . "&nbsp; ";
+				if ($range_object->item_data[$key]){
+					$content .= "<b>" . htmlReady($value) . ":</b>&nbsp;";
+					$content .= fixLinks(htmlReady($range_object->item_data[$key])) . "&nbsp; ";
+				}
 			}
 			$content .= "</td></tr><tr><td class=\"blank\" align=\"left\"><a href=\"institut_main.php?auswahl="
 						. $range_object->item_data['studip_object_id'] ."\"". tooltip(_("Seite dieser Einrichtung in Stud.IP aufrufen"))

@@ -97,12 +97,12 @@ $infobox = array(array("kategorie"  => "Information:",
 				);
 $such_form = "<form action=\"$PHP_SELF?cmd=suche\" method=\"post\">" . _("Bitte geben Sie hier Ihre Suchkriterien ein:") . "<br>
 			" . _("Name der Einrichtung:") . "<br>
-			<input type=\"text\" name=\"search_name\" style=\"width:100%;\"><br>
+			<input type=\"text\" name=\"search_name\" style=\"width:95%;\"><br>
 			" . _("Einrichtung dieses Mitarbeiters:") . "<br>
-			<input type=\"text\" name=\"search_user\" style=\"width:100%;\"><br>
+			<input type=\"text\" name=\"search_user\" style=\"width:95%;\"><br>
 			" . _("Einrichtung dieser Veranstaltung:") . "<br>
-			<input type=\"text\" name=\"search_sem\" style=\"width:100%;\">
-			<div align=\"right\"><input type=\"image\" border=\"0\" " . makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " vspace=\"3\" >
+			<input type=\"text\" name=\"search_sem\" style=\"width:95%;\">
+			<div align=\"right\" style=\"width:95%;\"><input type=\"image\" border=\"0\" " . makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " vspace=\"3\" >
 			</div></form>
 			";
 $infobox[1]["kategorie"] = "Suchen";

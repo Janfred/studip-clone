@@ -62,8 +62,8 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	function StudipRangeTreeViewAdmin(){
 		global $sess,$_marked_item;
 		$base_class = get_parent_class($this);
-		//parent::$base_class($item_id); //calling the baseclass constructor 
-		$this->$base_class(); //calling the baseclass constructor PHP < 4.1.0
+		parent::$base_class($item_id); //calling the baseclass constructor 
+		//$this->$base_class(); //calling the baseclass constructor PHP < 4.1.0
 		if (is_object($sess)){
 			$sess->register("_marked_item");
 			$this->marked_item =& $_marked_item;
@@ -600,11 +600,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			$head .= "<a href=\"" . $this->getSelf("cmd=DoMoveItem&item_id=$item_id") . "\">"
 			. "<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("An dieser Stelle einfügen")) . "></a>&nbsp;";
 		}
-		$head .= "<a class=\"tree\" href=\"";
-		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . "><b>"
-											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= htmlReady($this->tree->tree_data[$item_id]['name']);
-		$head .= ($this->open_items[$item_id])? "</b></a>" : "<a/>";
+		$head .= parent::getItemHead($item_id);
 		if ($item_id != $this->start_item_id && $this->isParentAdmin($item_id) && $item_id != $this->edit_item_id){
 			$head .= "</td><td align=\"rigth\" valign=\"bottom\" class=\"printhead\">";
 			if (!$this->tree->isFirstKid($item_id)){
