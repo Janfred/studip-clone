@@ -644,10 +644,16 @@ function printposting ($forumposting) {
 		else
 			$forumhead[] = "<a class=\"printhead\" href=\"about.php?username=".$forumposting["username"]."\">". htmlReady($forumposting["author"]) ."&nbsp;</a>";
   		  		
-  		if ($forumposting["type"] == "folder")
+  		
+  		// Alter ausgeben
+  		
+  		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed"))
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["folderlast"])."&nbsp;";
   		else
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
+  		
+  		// Themennamen ausgeben (ausser Flatview)
+  		
   		
   		if ($forum["view"] != "flatfolder")
   			$forumhead[] =	"<a href=\"".$PHP_SELF."?open=".$forumposting["id"]
