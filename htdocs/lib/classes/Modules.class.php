@@ -62,8 +62,25 @@ class Modules {
 	}
 
 	function getLocalModules($range_id, $range_type = '') {
+		if (!$range_type)
+			$range_type = get_object_type($range_id);
+
+		$db = new DB_Seminar;
+		
+		if ($range_type == "sem") {
+			$query = sprintf ("SELECT modules FROM seminare WHERE Seminar_id ='%s'", $range_id);
+		} else {
+			$query = sprintf ("SELECT modules FROM Institute WHERE Institut_id ='%s'", $range_id);
+		}
+		
+		$db->query($query);
+		$db->next_record();
+		
+		if (!$modules)
+			$modules = $this->getDefaultBinValue($range_id, $range_type);	
+	
 		foreach ($this->registered_modules as $key => $val) {
-			if ($this->isBit($this->getBin($range_id, $range_type),$val["id"]))
+			if ($this->isBit($modules,$val["id"]))
 				$modules_list[$key]= TRUE;
 			else
 				$modules_list[$key]= FALSE;
