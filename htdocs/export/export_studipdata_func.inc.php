@@ -59,10 +59,10 @@ function export_range($range_id)
 
 //	Ist die Range-ID eine Fakultaets-ID? Dann auch untergeordnete Institute exportieren!
 	$db->query('SELECT * FROM Institute WHERE fakultaets_id = "' . $range_id . '" ');
-	if (($db->next_record()) And ($db->f("Name") != "") And ($db->f("Institut_id") != $range_id)) 
+	while (($db->next_record()) And ($db->f("Name") != "") And ($db->f("Institut_id") != $range_id)) 
 	{
 //		output_data ( xml_header(), $o_mode);
-		export_inst( $range_id );
+		export_inst( $db->f("Institut_id") );
 		
 	}
 
