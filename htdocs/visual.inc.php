@@ -638,8 +638,10 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		if ($index == "0") {
 			$timecolor = "#BBBBBB";
 		} else {
-			if ($index >= 68)
+			if ($index > 68)
 				$tmp = 68;
+			else
+				$tmp = $index;
 			$tmpb = 68-$tmp;
 			$blue = dechex(255 - $tmpb);
 			echo $blue;
