@@ -39,8 +39,9 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainPersonDetails extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases", "width",
-			"wholesite", "nameformat", "dateformat", "language", "studiplink", "urlcss", "title");
+	var $attributes = array("name", "order", "visible", "aliases", "width", "showcontact",
+			"showimage", "wholesite", "nameformat", "dateformat", "language",
+			"studiplink", "urlcss", "title");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -63,6 +64,8 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 			"visible" => "|1|1|1|1|1|1|1|1",
 			"aliases" => "||"._("Lebenslauf")."|"._("Schwerpunkte")."|"._("Lehrveranstaltungen")."|"
 					._("Aktuell")."|"._("Termine")."|"._("Publikationen")."|",
+			"showcontact" => "1",
+			"showimage" => "1",
 			"wholesite" => "0",
 			"nameformat" => "no_title",
 			"dateformat" => "%d. %b. %Y",
@@ -107,12 +110,24 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
+		$title = _("Kontaktdaten anzeigen:");
+		$info = _("Anwählen, wenn die Kontaktdaten (Anschrift, Email, Telefon usw.) angezeigt werden sollen.");
+		$values = "1";
+		$names = "";
+		$table = $edit_form->editCheckboxGeneric("showcontact", $title, $info, $values, $names);
+		
+		$title = _("Bild anzeigen:");
+		$info = _("Wählen Sie, ob ein vom Nutzer in Stud.IP eingestelltes Bild links oder rechts neben den Kontaktdaten angezeigt werden soll.");
+		$value = array("left", "right", "0");
+		$names = array(_("links"), _("rechts"), _("nicht anzeigen"));
+		$table .= $edit_form->editRadioGeneric("showimage", $title, $info, $value, $names);
+		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
 		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
 		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
-		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
+		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Datumsformat:");
 		$info = _("Wählen Sie, wie Datumsangaben formatiert werden sollen.");
