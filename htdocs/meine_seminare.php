@@ -597,14 +597,14 @@ elseif ($auth->auth["perm"]=="admin") {
 	$db2=new DB_Seminar();
 
 	$db->query("SELECT a.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,count(seminar_id) AS num_sem FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
-				LEFT JOIN seminare using(Institut_id)	WHERE a.user_id='$user->id' AND a.inst_perms='admin' GROUP BY a.Institut_id ORDER BY is_fak,num_sem DESC,Name");
+				LEFT JOIN seminare using(Institut_id)	WHERE a.user_id='$user->id' AND a.inst_perms='admin' GROUP BY a.Institut_id ORDER BY is_fak,Name,num_sem DESC");
 
 	while($db->next_record()){
 		$_my_inst[$db->f("Institut_id")] = array("name" => $db->f("Name"), "is_fak" => $db->f("is_fak"), "num_sem" => $db->f("num_sem"));
 		if ($db->f("is_fak")){
 			$db2->query("SELECT a.Institut_id, a.Name,count(seminar_id) AS num_sem FROM Institute a 
 					LEFT JOIN seminare USING(Institut_id) WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' 
-					GROUP BY a.Institut_id ORDER BY num_sem DESC, a.Name");
+					GROUP BY a.Institut_id ORDER BY a.Name,num_sem DESC");
 			$num_inst = 0;
 			while ($db2->next_record()){
 				if(!$_my_inst[$db2->f("Institut_id")]){

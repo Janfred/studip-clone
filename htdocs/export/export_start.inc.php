@@ -74,7 +74,7 @@ $export_pagename = _("Datenexport - Startseite");
 		$export_pagecontent .= " value=\"" . $db->f("Institut_id") . "\">" . htmlReady(my_substr($db->f("Name"), 0, 60)) . "</option>";
 		if ($db->f("fakultaets_id") == $db->f("Institut_id"))
 		{
-			$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "'");
+			$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "' ORDER BY Name");
 			while ($db2->next_record())
 			{
 				$export_pagecontent .= sprintf("<option value=\"%s\"", $db2->f("Institut_id"));
