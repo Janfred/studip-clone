@@ -71,18 +71,9 @@ class ExternModulePersons extends ExternModule {
 	
 	function printout ($args) {
 		if ($this->config->getValue("Main", "wholesite")) {
-			if ($body_class = $this->config->getValue("Main", "bodyclass"))
-				$body_class = "class=\"$body_class\" ";
-			else
-				 $body_class = "";
-				 
-			if ($body_style = $this->config->getValue("Main", "bodystyle"))
-				$body_style = "style=\"$body_style\"";
-			else
-				$body_style = "";
-				
 			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"), $body_class . $body_style);
+					$this->config->getValue("Main", "urlcss"),
+					$this->config->getAttributes("Body", "body"));
 		}
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
@@ -94,18 +85,9 @@ class ExternModulePersons extends ExternModule {
 	
 	function printoutPreview () {
 		if ($this->config->getValue("Main", "wholesite")) {
-			if ($body_class = $this->config->getValue("Main", "bodyclass"))
-				$body_class = "class=\"$body_class\" ";
-			else
-				 $body_class = "";
-				 
-			if ($body_style = $this->config->getValue("Main", "bodystyle"))
-				$body_style = "style=\"$body_style\"";
-			else
-				$body_style = "";
-				
 			echo html_header($this->config->getValue("Main", "title"),
-					$this->config->getValue("Main", "urlcss"), $body_class . $body_style);
+					$this->config->getValue("Main", "urlcss"),
+					$this->config->getAttributes("Body", "body"));
 		}
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
