@@ -257,13 +257,17 @@ function get_object_type($id) {
 	if ($db->next_record())
 		return "sem";
 
-	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
-	if ($db->next_record())
-		return "group";
-
 	$db->query("SELECT Institut_id FROM Institute WHERE Institut_id = '$id' ");
 	if ($db->next_record())
 		return "inst";
+
+	$db->query("SELECT user_id FROM auth_user_md5 WHERE user_id = '$id' ");
+	if ($db->next_record())
+		return "user";
+
+	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
+	if ($db->next_record())
+		return "group";
 
 	$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$id' ");
 	if ($db->next_record())
