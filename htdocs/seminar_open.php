@@ -166,5 +166,6 @@ unset($url); unset($i_page_array);
 // function to get the parameters of the current page in array $i_query
 
 $i_query = explode('&',getenv("QUERY_STRING"));
-	
+
+//include "tracking.inc.php"; //teomporaer. hier wird der User getrackt. 
 ?>
