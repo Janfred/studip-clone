@@ -145,12 +145,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 		<tr>
 			<?
 
-			echo "<td class=\"steelkante\"><a href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Login</b></font><br><font size=\"2\" color=#555555>&nbsp; f&uuml;r registrierte NuterInnen</font></a>&nbsp; </td>";
+			echo "<td class=\"steelkante\"><a href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Login</b></font><br><font size=\"2\" color=#555555>&nbsp; f&uuml;r registrierte NutzerInnen</font></a>&nbsp; </td>";
 			?>
 		</tr>
 		<tr>
 			<?
-			echo "<td class=\"steelkante\"><a href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Registrieren</b></font><br><font size=\"2\" color=#555555>&nbsp; um NuterIn zu werden</font></a>&nbsp; </td>";
+			echo "<td class=\"steelkante\"><a href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>Registrieren</b></font><br><font size=\"2\" color=#555555>&nbsp; um NutzerIn zu werden</font></a>&nbsp; </td>";
 			?>
 		</tr>
 				<tr>
