@@ -2608,7 +2608,7 @@ if ($level==6)
 									foreach ($resources_booked as $key=>$val) {
 										if ($i)
 											$rooms.=", ";
-										$rooms.= sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+										$rooms.= sprintf ("<a target=\"_blank\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
 										$i++;
 									}
 									if (sizeof($resources_booked) == 1)
@@ -2622,7 +2622,7 @@ if ($level==6)
 									foreach ($resources_failed as $key=>$val) {
 										if ($i)
 											$rooms.=", ";
-										$rooms.= sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+										$rooms.= sprintf ("<a target=\"_blank\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
 										$i++;
 									}
 									if (sizeof($resources_failed) == 1)
