@@ -762,7 +762,11 @@ while (list ($key, $val) = each ($gruppe)) {
 	printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
 	echo htmlReady($db->f("fullname")) ."</a></font></td>";
 	if ($key != "dozent" && $rechte) {
-		echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".date("d.m.y,",$db->f("mkdate"))."&nbsp;".date("H:i:s",$db->f("mkdate"))."</font></td>";
+		if ($db->f("mkdate")) {
+			echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".date("d.m.y,",$db->f("mkdate"))."&nbsp;".date("H:i:s",$db->f("mkdate"))."</font></td>";
+		} else {
+			echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">"._("unbekannt")."</font></td>";
+		}
 	} else if ($key == "dozent" && $rechte) {
 		echo "<td class=\"$class\" align=\"center\">&nbsp;</td>";
 	}
