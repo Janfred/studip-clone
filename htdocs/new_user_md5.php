@@ -522,7 +522,7 @@ while ( is_array($HTTP_POST_VARS)
 		 	$query = "DELETE FROM news_range where range_id='$u_id'";
 			$db->query($query);
 			if (($db_ar = $db->affected_rows()) > 0) {
-				$msg .= "info§$db_ar Eintr&auml;ge aus  den News gel&ouml;scht.§";
+				$msg .= "info§$db_ar Eintr&auml;ge aus den News gel&ouml;scht.§";
 			}
 			## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
 		 	$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
