@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
-"POT-Creation-Date: 2003-09-17 11:43+0200\n"
+"POT-Creation-Date: 2003-09-29 21:56+0200\n"
 "PO-Revision-Date: 2003-07-25 15:21+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -36,7 +36,7 @@ msgstr ""
 msgid "Benutzer nicht gefunden"
 msgstr "User not found"
 
-#: about.php:156 forum.inc.php:1076
+#: about.php:156 forum.inc.php:1086
 msgid "kein persönliches Bild vorhanden"
 msgstr "no personal photo is included"
 
@@ -95,7 +95,7 @@ msgstr "Message to user:"
 
 #: about.php:223 browse.php:325 institut_members.php:648
 #: institut_members.php:649 online.php:85 online.php:187 online.php:204
-#: online.php:231 studipim.php:160 teilnehmer.php:631 teilnehmer.php:773
+#: online.php:231 studipim.php:152 teilnehmer.php:636 teilnehmer.php:778
 msgid "Nachricht an User verschicken"
 msgstr "Send message to user"
 
@@ -566,8 +566,8 @@ msgstr "All programs of study"
 msgid "Den Studiengang aus der Liste löschen"
 msgstr "Delete program of study from the list."
 
-#: admin_admission.php:794 admin_seminare_assi.php:2432 teilnehmer.php:806
-#: teilnehmer.php:841
+#: admin_admission.php:794 admin_seminare_assi.php:2432 teilnehmer.php:811
+#: teilnehmer.php:846
 msgid "bitte ausw&auml;hlen"
 msgstr "Please select"
 
@@ -844,7 +844,7 @@ msgstr "hh"
 #: meine_einrichtungen.php:427 meine_seminare.php:538 meine_seminare.php:561
 #: migration2studip.php:165 migration2studip.php:198 my_archiv.php:165
 #: seminar_lernmodule.php:183 seminar_lernmodule.php:219
-#: seminar_lernmodule.php:292 sem_portal.php:253 sms_box.php:452
+#: seminar_lernmodule.php:292 sem_portal.php:253 sms_box.php:441
 #: statusgruppen.php:203
 msgid "Information:"
 msgstr "Information:"
@@ -1857,18 +1857,17 @@ msgstr "Delete selected news"
 msgid "Markierte News löschen"
 msgstr "Delete selected news"
 
-#: admin_news.php:176 admin_news.php:222 suchen.inc.php:172
+#: admin_news.php:176 admin_news.php:222
 msgid "&Uuml;berschrift"
 msgstr "Headline"
 
 #: admin_news.php:176 admin_news.php:226 contact.inc.php:419 contact.php:114
-#: forum.inc.php:1563 freie.php:169 meine_einrichtungen.php:265
+#: forum.inc.php:1573 freie.php:169 meine_einrichtungen.php:265
 #: meine_seminare.php:330 meine_seminare.php:703 my_archiv.php:94
-#: suchen.inc.php:180
 msgid "Inhalt"
 msgstr "Content"
 
-#: admin_news.php:177 forum.inc.php:796 forum.inc.php:1549 suchen.inc.php:164
+#: admin_news.php:177 forum.inc.php:796 forum.inc.php:1559
 msgid "Autor"
 msgstr "Author"
 
@@ -1974,7 +1973,7 @@ msgstr "Here you can choose other areas to which you have access."
 
 #: admin_news.php:295 admin_news.php:748 admin_seminare1.php:592
 #: admin_seminare1.php:656 admin_seminare_assi.php:1740
-#: admin_seminare_assi.php:1807 archiv.php:517 forum.inc.php:1569
+#: admin_seminare_assi.php:1807 archiv.php:517 forum.inc.php:1579
 #: institut_browse.php:103 pers_browse.inc.php:136
 #: lib/classes/StudipSemSearch.class.php:217
 msgid "Suche starten"
@@ -2394,7 +2393,8 @@ msgstr "Miscellaneous"
 
 #: admin_seminare1.php:756 admin_seminare1.php:759 forum.inc.php:113
 #: functions.php:487 functions.php:507 functions.php:531 functions.php:551
-#: new_user_md5.php:873 new_user_md5.php:1036 write_topic.php:117
+#: new_user_md5.php:873 new_user_md5.php:1036 teilnehmer.php:703
+#: write_topic.php:117
 msgid "unbekannt"
 msgstr "unknown"
 
@@ -3860,7 +3860,7 @@ msgstr "Remove user from the group"
 msgid "Gruppenreihenfolge tauschen"
 msgstr "Change group order"
 
-#: admin_statusgruppe.php:211 contact_statusgruppen.php:138 sms_send.php:262
+#: admin_statusgruppe.php:211 contact_statusgruppen.php:138 sms_send.php:265
 msgid "keine Treffer"
 msgstr "no matches"
 
@@ -4649,7 +4649,7 @@ msgstr "Please select a user from the list: "
 msgid "Diese Person hinzuf&uuml;gen"
 msgstr "Add this user "
 
-#: archiv.php:505 suchen.inc.php:260
+#: archiv.php:505
 msgid "Neue Suche"
 msgstr "New search"
 
@@ -5360,11 +5360,11 @@ msgstr "1 entry"
 msgid "%d Eintr&auml;ge"
 msgstr "%d entries "
 
-#: contact.php:135 forum.inc.php:1232 suchen.inc.php:231
+#: contact.php:135 forum.inc.php:1242
 msgid "Alle aufklappen"
 msgstr "Open all"
 
-#: contact.php:137 forum.inc.php:1229
+#: contact.php:137 forum.inc.php:1239
 msgid "Alle zuklappen"
 msgstr "Close all"
 
@@ -6100,11 +6100,11 @@ msgstr ""
 msgid "Sie sind in die %s der Veranstaltung eingetragen."
 msgstr "You have been entered for the course %s"
 
-#: details.php:166 show_admission.php:154 teilnehmer.php:742
+#: details.php:166 show_admission.php:154 teilnehmer.php:747
 msgid "Anmeldeliste"
 msgstr "Registration list"
 
-#: details.php:166 show_admission.php:155 teilnehmer.php:742
+#: details.php:166 show_admission.php:155 teilnehmer.php:747
 msgid "Warteliste"
 msgstr "Waiting list"
 
@@ -6250,8 +6250,8 @@ msgstr "Contingent groups:"
 msgid "Kontingent f&uuml;r %s (%s Pl&auml;tze)"
 msgstr "Contingent for %s (%s places)"
 
-#: details.php:595 sem_verify.php:549 sem_verify.php:551 teilnehmer.php:690
-#: teilnehmer.php:777
+#: details.php:595 sem_verify.php:549 sem_verify.php:551 teilnehmer.php:695
+#: teilnehmer.php:782
 msgid "alle Studieng&auml;nge"
 msgstr "all programs of study"
 
@@ -7064,7 +7064,7 @@ msgstr ""
 msgid "Favoriten"
 msgstr "Edit"
 
-#: forum.inc.php:797 forum.inc.php:1363
+#: forum.inc.php:797 forum.inc.php:1373
 msgid "Thema"
 msgstr "Topic"
 
@@ -7085,55 +7085,64 @@ msgstr ""
 msgid "editiert von: "
 msgstr "Registered tutors:"
 
-#: forum.inc.php:997
+#: forum.inc.php:895 links_about.inc.php:59 links_openobject.inc.php:63
+#: links_openobject.inc.php:83 lib/classes/AdminModules.class.php:48
+msgid "Forum"
+msgstr "Forum"
+
+#: forum.inc.php:897
+msgid "Look & Feel anpassen"
+msgstr "Customise Look & Feel"
+
+#: forum.inc.php:1007
 #, fuzzy
 msgid "aus den Favoriten entfernen"
 msgstr "Remove from buddy list "
 
-#: forum.inc.php:1000
+#: forum.inc.php:1010
 #, fuzzy
 msgid "zu den Favoriten hinzufügen"
 msgstr "Add to buddies "
 
-#: forum.inc.php:1009
+#: forum.inc.php:1019
 msgid "Hier klicken um in einem neuen Fenster zu antworten"
 msgstr "Click here to reply in a new window"
 
-#: forum.inc.php:1372
+#: forum.inc.php:1382
 msgid "<b>Postings</b> / letzter Eintrag"
 msgstr "<b>Postings</b>/last posting"
 
-#: forum.inc.php:1401
+#: forum.inc.php:1411
 msgid "Neues Thema anlegen"
 msgstr "Add a new topic"
 
-#: forum.inc.php:1532 suchen.inc.php:145
+#: forum.inc.php:1542
 msgid "Suchbegriff:"
 msgstr "Search keyword:"
 
-#: forum.inc.php:1540 suchen.inc.php:153
+#: forum.inc.php:1550
 msgid "Suchen in den Feldern:"
 msgstr "Search in the fields:"
 
-#: forum.inc.php:1556
+#: forum.inc.php:1566
 #, fuzzy
 msgid "Überschrift"
 msgstr "Headline"
 
-#: forum.inc.php:1623
+#: forum.inc.php:1633
 #, c-format
 msgid "Als Thema verschieben (zusammen mit %s Antworten):"
 msgstr "Moved as topic (together with %s replies):"
 
-#: forum.inc.php:1633
+#: forum.inc.php:1643
 msgid "in anderes Forum:"
 msgstr "In another forum:"
 
-#: forum.inc.php:1637 forum.inc.php:1659
+#: forum.inc.php:1647 forum.inc.php:1669
 msgid "dahin verschieben"
 msgstr "Move there"
 
-#: forum.inc.php:1655
+#: forum.inc.php:1665
 msgid "in andere Einrichtung:"
 msgstr "In another institute:"
 
@@ -7180,45 +7189,36 @@ msgstr ""
 msgid "zuviele Browserfenster im Forenbereich!"
 msgstr "Too many browser windows in forum area!"
 
-#: forum.php:236
-#, c-format
-msgid "Wollen Sie das untenstehende Posting %s von %s wirklich l&ouml;schen?"
+#: forum.php:238
+#, fuzzy, c-format
+msgid "Wollen Sie das untenstehende Posting %s von %s wirklich löschen?"
 msgstr "Do you really want to delete the below posting %s from %s?"
 
-#: forum.php:238
-#, c-format
-msgid "Alle %s Antworten auf diesen Beitrag werden ebenfalls gel&ouml;scht!"
+#: forum.php:240
+#, fuzzy, c-format
+msgid "Alle %s Antworten auf diesen Beitrag werden ebenfalls gelöscht!"
 msgstr "All %s replies to this contribution will be deleted!"
 
-#: forum.php:328
+#: forum.php:330
 #, fuzzy
 msgid "Dieser Beitrag wird gerade bearbeitet."
 msgstr "Edit this news item"
 
-#: forum.php:352
+#: forum.php:354
 msgid "Name des Themas"
 msgstr "Name of the topic"
 
-#: forum.php:398
+#: forum.php:400
 #, fuzzy
 msgid "Anpassungen durchgeführt."
 msgstr "Nothing has been moved."
 
-#: forum.php:410 links_about.inc.php:59 links_openobject.inc.php:63
-#: links_openobject.inc.php:83 lib/classes/AdminModules.class.php:48
-msgid "Forum"
-msgstr "Forum"
-
-#: forum.php:412
-msgid "Look & Feel anpassen"
-msgstr "Customise Look & Feel"
-
-#: forum.php:416
+#: forum.php:414
 #, c-format
 msgid "%s Posting(s) gel&ouml;scht"
 msgstr "%s posting(s) deleted."
 
-#: forum.php:417
+#: forum.php:415
 #, c-format
 msgid "%s Posting(s) verschoben."
 msgstr "%s posting(s) moved."
@@ -7989,7 +7989,31 @@ msgstr "Appointments:"
 msgid "News:"
 msgstr "News:"
 
-#: impressum.php:304
+#: impressum.php:283
+#, fuzzy
+msgid "Umfragen:"
+msgstr "Inquires"
+
+#: impressum.php:289
+msgid "Tests:"
+msgstr ""
+
+#: impressum.php:297
+#, fuzzy
+msgid "WikiWeb Seiten:"
+msgstr "New postings "
+
+#: impressum.php:305
+#, fuzzy
+msgid "ILIAS-Lernmodule:"
+msgstr "Learning modules"
+
+#: impressum.php:312
+#, fuzzy
+msgid "Ressourcen-Objekte:"
+msgstr "Resources"
+
+#: impressum.php:343
 #, c-format
 msgid ""
 "F&uuml;r diese Stud.IP-Installation (%s) sind folgende Administratoren "
@@ -7998,21 +8022,21 @@ msgstr ""
 "The following administrators are responsible for this Stud.IP installation (%"
 "s):"
 
-#: impressum.php:310
+#: impressum.php:349
 msgid "keine. Na sowas. Das kann ja eigentlich gar nicht sein..."
 msgstr "none. Now there's a thing. That really can't be right..."
 
-#: impressum.php:318
+#: impressum.php:357
 msgid ""
 "<b>allgemeine Anfragen</b> wie Passwort-Anforderungen u.a. richten Sie bitte "
 "an:"
 msgstr "<b>General queries</b> e.g., password queries, please contact:"
 
-#: impressum.php:332
+#: impressum.php:371
 msgid "Folgende Einrichtungen sind beteiligt:"
 msgstr "The following institutes participate:"
 
-#: impressum.php:332
+#: impressum.php:371
 msgid ""
 "(Genannt werden die jeweiligen Administratoren der Einrichtungen f&uuml;r "
 "entsprechende Anfragen)"
@@ -8020,7 +8044,7 @@ msgstr ""
 "(Named are the institute administrators responsible for the corresponding "
 "query areas)"
 
-#: impressum.php:376
+#: impressum.php:415
 #, c-format
 msgid ""
 "Stud IP ist ein Open-Source Projekt und steht unter der GNU General Public "
@@ -8031,7 +8055,7 @@ msgstr ""
 "(GPL). All files necessary for operation can be downloaded from %shttp://"
 "sourcefolge.net/projects/studip/%s."
 
-#: impressum.php:378
+#: impressum.php:417
 msgid ""
 "Die technische Grundlage bietet ein LINUX-System mit Apache Webserver sowie "
 "eine MySQL Datenbank, die über PHP gesteuert wird."
@@ -8039,7 +8063,7 @@ msgstr ""
 "The technical basis can be provided by a LINUX system with Apache Webserver "
 "and a MySQL database, which is then controlled by PHP."
 
-#: impressum.php:380
+#: impressum.php:419
 msgid ""
 "Im System findet ein 6-stufiges Rechtesystem Verwendung, das individuell auf "
 "verschiedenen Ebenen wirkt - etwa in Veranstaltungen, Einrichtungen, "
@@ -8049,7 +8073,7 @@ msgstr ""
 "individuals on different levels - in courses, institutes, faculties or "
 "system wide."
 
-#: impressum.php:382
+#: impressum.php:421
 msgid ""
 "Seminare oder Arbeitsgruppen können mit Passwörtern geschützt werden - die "
 "Verschlüsselung erfolgt mit einem MD5 one-way-hash."
@@ -8057,7 +8081,7 @@ msgstr ""
 "Seminars or work groups can be secured with passwords - the encryption of "
 "which uses a MD5 one-way-hash."
 
-#: impressum.php:384
+#: impressum.php:423
 msgid ""
 "Das System ist zu 100% über das Internet administrierbar, es sind keine "
 "zusätzlichen Werkzeuge nötig. Ein Webbrowser der 5. Generation wird "
@@ -8066,7 +8090,7 @@ msgstr ""
 "The system is capable of being administrated 100% over the internet - no "
 "additional tools are necessary. A 5th generation web browser is recommended."
 
-#: impressum.php:386
+#: impressum.php:425
 #, c-format
 msgid ""
 "Das System wird ständig weiterentwickelt und an die Wünsche unserer Nutzer "
@@ -8502,8 +8526,8 @@ msgstr "Tel.:"
 #: institut_members.php:119 institut_members.php:140 institut_members.php:160
 #: institut_members.php:181 institut_members.php:200 institut_members.php:223
 #: institut_members.php:240 institut_members.php:256 institut_members.php:273
-#: institut_members.php:288 sms_send.php:284 teilnehmer.php:490
-#: teilnehmer.php:746
+#: institut_members.php:288 sms_send.php:293 teilnehmer.php:490
+#: teilnehmer.php:751
 msgid "Nachricht"
 msgstr "Message"
 
@@ -10292,11 +10316,11 @@ msgstr "Invite to chat"
 msgid "Wenn Sie auf den Namen klicken, kommen Sie zur Homepage des Users."
 msgstr "When you click on a name, you will go to the user's homepage."
 
-#: online.php:89 sms_box.php:397 sms.php:173 sms.php:241 sms.php:322
+#: online.php:89 sms_box.php:386 sms.php:173 sms.php:241 sms.php:322
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Einrichtung"
 msgstr "Back to selected institute"
 
-#: online.php:91 sms_box.php:399 sms.php:175 sms.php:243 sms.php:324
+#: online.php:91 sms_box.php:388 sms.php:175 sms.php:243 sms.php:324
 msgid "Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung"
 msgstr "Back to selected course"
 
@@ -11586,19 +11610,19 @@ msgstr "&nbsp;<b>System message</b>%s[read]%s"
 msgid "&nbsp;Nachricht von <br /><b>%s</b> %s[lesen]%s"
 msgstr "&nbsp;Message from <br /><b>%s</b> %s[read]%s"
 
-#: sidebar_im.php:146 studipim.php:165
+#: sidebar_im.php:146 studipim.php:157
 msgid "Kein Nutzer ist online."
 msgstr "No user is online."
 
-#: sidebar_im.php:151 studipim.php:170
+#: sidebar_im.php:151 studipim.php:162
 msgid "Es ist ein anderer Nutzer online."
 msgstr "There is one other buddy online."
 
-#: sidebar_im.php:152 sidebar_im.php:156 studipim.php:171 studipim.php:175
+#: sidebar_im.php:152 sidebar_im.php:156 studipim.php:163 studipim.php:167
 msgid "Wer?"
 msgstr "Who?"
 
-#: sidebar_im.php:155 studipim.php:174
+#: sidebar_im.php:155 studipim.php:166
 #, c-format
 msgid "Es sind %s anderere Nutzer online."
 msgstr "There are %s other users online."
@@ -11608,11 +11632,11 @@ msgstr "There are %s other users online."
 msgid "%s alte Nachricht(en) %s[lesen]%s"
 msgstr "%s old message(s) %s[read]%s"
 
-#: sidebar_im.php:165 studipim.php:184
+#: sidebar_im.php:165 studipim.php:176
 msgid "Keine Nachrichten"
 msgstr "No messages"
 
-#: sidebar_im.php:167 studipim.php:186
+#: sidebar_im.php:167 studipim.php:178
 msgid "Keine alten Nachrichten"
 msgstr "No old messages"
 
@@ -11620,38 +11644,38 @@ msgstr "No old messages"
 msgid "neue Nachrichten:"
 msgstr "New messages:"
 
-#: sidebar_im.php:183 studipim.php:202
+#: sidebar_im.php:183 studipim.php:194
 #, c-format
 msgid "Ihre Nachricht an <b>%s</b> wurde verschickt!"
 msgstr "Your message has been sent to <b>%s</b>!"
 
-#: sidebar_im.php:186 studipim.php:205
+#: sidebar_im.php:186 studipim.php:197
 msgid "Ihre Nachricht konnte nicht verschickt werden!"
 msgstr "Your message could not be sent!"
 
-#: sidebar_im.php:193 studipim.php:212
+#: sidebar_im.php:193 studipim.php:204
 msgid "automatisch erzeugte Systemnachricht:"
 msgstr "Automatically created system message:"
 
-#: sidebar_im.php:196 studipim.php:215
+#: sidebar_im.php:196 studipim.php:207
 #, c-format
 msgid "Nachricht von: <b>%s</b>"
 msgstr "Message from: <b>%s</b>"
 
-#: sidebar_im.php:199 studipim.php:218
+#: sidebar_im.php:199 studipim.php:210
 msgid "Diese Nachricht direkt beantworten"
 msgstr "Reply immediately to this message"
 
-#: sidebar_im.php:204 studipim.php:224
+#: sidebar_im.php:204 studipim.php:216
 #, c-format
 msgid "Ihre Nachricht an <b>%s:</b>"
 msgstr "Your message to <b>%s:</b>"
 
-#: sidebar_im.php:209 studipim.php:229
+#: sidebar_im.php:209 studipim.php:221
 msgid "Nachricht versenden"
 msgstr "Send message"
 
-#: sidebar_im.php:210 studipim.php:219 studipim.php:230
+#: sidebar_im.php:210 studipim.php:211 studipim.php:222
 msgid "Vorgang abbrechen"
 msgstr "Cancel procedure"
 
@@ -11680,25 +11704,25 @@ msgstr "automatic system message sent to %s."
 msgid "gesendet von %s am %s %s"
 msgstr "Sent from %s at %s."
 
-#: sms_box.php:289 sms.php:58 sms.php:75
+#: sms_box.php:279 sms.php:58 sms.php:75
 msgid "Es wurde eine Nachricht gel&ouml;scht."
 msgstr "A message has been deleted."
 
-#: sms_box.php:291 sms.php:60 sms.php:77
+#: sms_box.php:281 sms.php:60 sms.php:77
 #, c-format
 msgid "Es wurden %s Nachrichten gel&ouml;scht."
 msgstr "%s messages have been deleted."
 
-#: sms_box.php:294 sms.php:80
+#: sms_box.php:284 sms.php:80
 msgid "Es konnten keine Nachrichten gel&ouml;scht werden."
 msgstr "No messages could be deleted."
 
-#: sms_box.php:319 sms_box.php:413
+#: sms_box.php:309 sms_box.php:402
 #, fuzzy
 msgid "empfangene systeminterne Nachrichten anzeigen"
 msgstr "Show internal system messages"
 
-#: sms_box.php:320 sms_box.php:414
+#: sms_box.php:310 sms_box.php:403
 #, fuzzy
 msgid ""
 "Alle systeminternen Nachrichten, die an Sie gesendet wurden werden hier "
@@ -11707,17 +11731,17 @@ msgstr ""
 "You can see here all the internal system messages (SMS) that you have "
 "received."
 
-#: sms_box.php:321
+#: sms_box.php:311
 #, fuzzy
 msgid "im Posteingang"
 msgstr "Postings"
 
-#: sms_box.php:323 sms_box.php:421
+#: sms_box.php:313 sms_box.php:410
 #, fuzzy
 msgid "gesendete systeminterne Nachrichten anzeigen"
 msgstr "Show internal system messages"
 
-#: sms_box.php:324 sms_box.php:422
+#: sms_box.php:314 sms_box.php:411
 #, fuzzy
 msgid ""
 "Alle systeminternen Nachrichten, die Sie gesendet haben werden hier "
@@ -11726,108 +11750,108 @@ msgstr ""
 "You can see here all the internal system messages (SMS) that you have "
 "received."
 
-#: sms_box.php:325
+#: sms_box.php:315
 #, fuzzy
 msgid "im Postausgang"
 msgstr "Postings"
 
-#: sms_box.php:329
+#: sms_box.php:319
 #, fuzzy
 msgid "Sie sehen alle Ihre Nachrichten."
 msgstr "You have %s old messages!"
 
-#: sms_box.php:331
+#: sms_box.php:321
 #, fuzzy, c-format
 msgid "Es liegen keine systeminternen Nachrichten %s vor."
 msgstr "At present there are no internal system messages for you."
 
-#: sms_box.php:334
+#: sms_box.php:324
 #, fuzzy
 msgid "Sie sehen nur neue Nachrichten."
 msgstr "You have %s new messages!"
 
-#: sms_box.php:341
+#: sms_box.php:330
 #, fuzzy, c-format
 msgid "Es liegen keine neuen systeminternen Nachrichten %s vor."
 msgstr "At present there are no internal system messages for you."
 
-#: sms_box.php:344
+#: sms_box.php:333
 msgid "Sie sehen nur Nachrichten der letzten 24 Stunden."
 msgstr ""
 
-#: sms_box.php:346
+#: sms_box.php:335
 #, fuzzy, c-format
 msgid ""
 "Es liegen keine systeminternen Nachrichten aus den letzten 24 Stunden %s vor."
 msgstr "At present there are no internal system messages for you."
 
-#: sms_box.php:349
+#: sms_box.php:338
 #, fuzzy
 msgid "Sie sehen alle Nachrichten der letzten 7 Tage."
 msgstr "You have %s old messages!"
 
-#: sms_box.php:351
+#: sms_box.php:340
 #, fuzzy, c-format
 msgid ""
 "Es liegen keine systeminternen Nachrichten aus den letzten 7 Tagen %s vor."
 msgstr "At present there are no internal system messages for you."
 
-#: sms_box.php:354
+#: sms_box.php:343
 msgid "Sie sehen alle Nachrichten der letzten 30 Tage."
 msgstr ""
 
-#: sms_box.php:356
+#: sms_box.php:345
 #, fuzzy, c-format
 msgid ""
 "Es liegen keine systeminternen Nachrichten aus den letzten 30 Tagen %s vor."
 msgstr "At present there are no internal system messages for you."
 
-#: sms_box.php:359
+#: sms_box.php:348
 msgid "Sie sehen nur Nachrichten, die &auml;lter als 30 Tage sind."
 msgstr ""
 
-#: sms_box.php:361
+#: sms_box.php:350
 #, fuzzy, c-format
 msgid ""
 "Es liegen keine systeminternen Nachrichten %s vor, die &auml;lter als 30 "
 "Tage sind."
 msgstr "At present there are no internal system messages for you."
 
-#: sms_box.php:444
+#: sms_box.php:433
 #, fuzzy
 msgid "neue Nachrichten"
 msgstr "New messages:"
 
-#: sms_box.php:445
+#: sms_box.php:434
 #, fuzzy
 msgid "alle Nachrichten"
 msgstr "New messages:"
 
-#: sms_box.php:446
+#: sms_box.php:435
 #, fuzzy
 msgid "letzte 24 Stunden"
 msgstr "Last changes on "
 
-#: sms_box.php:447
+#: sms_box.php:436
 #, fuzzy
 msgid "letzte 7 Tage"
 msgstr "Last 5 postings "
 
-#: sms_box.php:448
+#: sms_box.php:437
 #, fuzzy
 msgid "letzte 30 Tage"
 msgstr "Last 5 postings "
 
-#: sms_box.php:449
+#: sms_box.php:438
 msgid "&auml;lter als 30 Tage"
 msgstr ""
 
-#: sms_box.php:453
+#: sms_box.php:442
 #, fuzzy, c-format
 msgid "Sie haben %s empfangene und %s gesendete Nachrichten."
 msgstr "You have %s new messages!"
 
-#: sms_box.php:456
+#: sms_box.php:445
 #, fuzzy
 msgid "Anzeigezeitraum ausw&auml;hlen:"
 msgstr "Select chat room:"
@@ -11917,7 +11941,7 @@ msgstr ""
 msgid "Chateinladung verschicken an"
 msgstr "Send chat invitation to"
 
-#: sms.php:258 sms_send.php:303
+#: sms.php:258 sms_send.php:312
 msgid "Chatraum ausw&auml;hlen:"
 msgstr "Select chat room:"
 
@@ -12015,60 +12039,60 @@ msgstr "Delete from clipboard"
 msgid "Adressbuch-Liste:"
 msgstr "Address book"
 
-#: sms_send.php:250
+#: sms_send.php:254
 msgid "fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu"
 msgstr ""
 
-#: sms_send.php:250
+#: sms_send.php:254
 #, fuzzy
 msgid "ausgew&auml;hlte hinzufügen"
 msgstr "To selected institute"
 
-#: sms_send.php:254
+#: sms_send.php:258
 #, fuzzy
 msgid "Freie Suche:"
 msgstr "Free search:"
 
-#: sms_send.php:261 sms_send.php:272
+#: sms_send.php:264 sms_send.php:281
 #, fuzzy
 msgid "Suche zur&uuml;cksetzen"
 msgstr "reset"
 
-#: sms_send.php:261 sms_send.php:272
+#: sms_send.php:264 sms_send.php:281
 msgid "setzt die Suche zurück"
 msgstr ""
 
-#: sms_send.php:264
+#: sms_send.php:267
 #, fuzzy
 msgid "zu Empfängerliste hinzufügen"
 msgstr "Add to buddies "
 
-#: sms_send.php:264
+#: sms_send.php:267
 #, fuzzy
 msgid "zu Empf&auml;ngerliste hinzuf&uuml;gen"
 msgstr "Add to Buddies"
 
-#: sms_send.php:284
+#: sms_send.php:293
 #, fuzzy
 msgid "Chateinladung"
 msgstr "Send chat invitation "
 
-#: sms_send.php:341
+#: sms_send.php:346
 #, fuzzy
 msgid "Empf&auml;nger hinzuf&uuml;gen:"
 msgstr "Add course"
 
-#: sms_send.php:342
+#: sms_send.php:347
 msgid ""
 "Nutzen Sie die Adressbuch-Liste oder freie Suche um Empf&auml;ngerInnen "
 "hinzuf&uuml;gen."
 msgstr ""
 
-#: sms_send.php:344
+#: sms_send.php:349
 msgid "Smilies & Textformatierung:"
 msgstr ""
 
-#: sms_send.php:345
+#: sms_send.php:350
 #, c-format
 msgid ""
 "%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung "
@@ -12145,63 +12169,38 @@ msgid ""
 "klicken Sie %shier%s."
 msgstr "Click %shere%s to send an E-mail to all course participants ."
 
-#: studipim.php:96
+#: studipim.php:88
 #, c-format
 msgid " <b>Systemnachricht</b> %s[lesen]%s"
 msgstr "<b>System message</b>%s[read]%s"
 
-#: studipim.php:98
+#: studipim.php:90
 #, c-format
 msgid " von <b>%s</b> %s[lesen]%s"
 msgstr "from <br>%s</b> %s[read]%s"
 
-#: studipim.php:157
+#: studipim.php:149
 msgid "Buddies:"
 msgstr "Buddies:"
 
-#: studipim.php:159
+#: studipim.php:151
 #, c-format
 msgid "letztes Lebenszeichen: %s"
 msgstr "Last signs of life: %s"
 
-#: studipim.php:182
+#: studipim.php:174
 #, c-format
 msgid "%s alte Nachricht(en)&nbsp;%s[lesen]%s"
 msgstr "%s old message(s) &nbsp;%s[read]%s"
 
-#: studipim.php:189
+#: studipim.php:181
 #, fuzzy, c-format
 msgid "%s neue Nachrichten:"
 msgstr "New messages:"
 
-#: studipim.php:227
+#: studipim.php:219
 msgid "Smileys</a> k&ouml;nnen verwendet werden"
 msgstr "Smileys</a>can be used"
-
-#: suchen.inc.php:133
-msgid "Bitte geben Sie hier Ihren Suchbegriff ein:"
-msgstr "Please enter your search criteria here: "
-
-#: suchen.inc.php:202
-msgid "Ergebnis der Suche nach"
-msgstr "Result of the search for "
-
-#: suchen.inc.php:219
-#, c-format
-msgid "Ihre Suche ergab %s Treffer"
-msgstr "Your search revealed %s matches"
-
-#: suchen.inc.php:221
-msgid "Ihre Suche ergab leider keine Treffer"
-msgstr "Unfortunately your search did not reveal any matches"
-
-#: suchen.inc.php:253
-msgid "zeig mir die Neuesten"
-msgstr "Show me the most up to date"
-
-#: suchen.inc.php:256
-msgid "zeig mit alle Treffer"
-msgstr "Show me all matches"
 
 #: support.php:48
 msgid ""
@@ -12494,7 +12493,7 @@ msgstr "Enter as tutor"
 msgid "Schreibrecht entziehen"
 msgstr "Cancel writing access"
 
-#: teilnehmer.php:525 teilnehmer.php:749
+#: teilnehmer.php:525 teilnehmer.php:754
 msgid "Kontingent"
 msgstr "Contingent group"
 
@@ -12515,48 +12514,62 @@ msgstr "Register"
 msgid "Aktivität: "
 msgstr "Activity:"
 
-#: teilnehmer.php:616
-#, fuzzy, c-format
-msgid "Weitere Informationen über %s"
-msgstr "Other Information:"
+#: teilnehmer.php:620
+msgid "Notizen zum Teilnehmerstatus des Nutzers erfassen/anzeigen"
+msgstr ""
 
-#: teilnehmer.php:744
+#: teilnehmer.php:702
+#, fuzzy
+msgid "Bemerkungen:"
+msgstr "Allocation"
+
+#: teilnehmer.php:703
+#, fuzzy
+msgid "Anmeldedatum:"
+msgstr "Registration list"
+
+#: teilnehmer.php:704
+#, fuzzy
+msgid "&Auml;nderungen"
+msgstr "changes %s "
+
+#: teilnehmer.php:749
 msgid "Position"
 msgstr "Position"
 
-#: teilnehmer.php:747
+#: teilnehmer.php:752
 msgid "eintragen"
 msgstr "Enter"
 
-#: teilnehmer.php:748
+#: teilnehmer.php:753
 msgid "entfernen"
 msgstr "Remove"
 
-#: teilnehmer.php:803
+#: teilnehmer.php:808
 msgid "MitarbeiterInnen der Einrichtung(en)"
 msgstr "Staff at the institute(s)"
 
-#: teilnehmer.php:811
+#: teilnehmer.php:816
 msgid "als TutorIn"
 msgstr "As tutor"
 
-#: teilnehmer.php:811
+#: teilnehmer.php:816
 msgid "als Mitglied"
 msgstr "As member"
 
-#: teilnehmer.php:838
+#: teilnehmer.php:843
 msgid "Gefundene Nutzer"
 msgstr "User found"
 
-#: teilnehmer.php:846
+#: teilnehmer.php:851
 msgid "als AutorIn"
 msgstr "As author"
 
-#: teilnehmer.php:862
+#: teilnehmer.php:867
 msgid "Nutzer in die Veranstaltung eintragen"
 msgstr "Enter user in the course"
 
-#: teilnehmer.php:863
+#: teilnehmer.php:868
 #, c-format
 msgid "Bitte geben Sie den Vornamen, Nachnamen %s oder Usernamen zur Suche ein"
 msgstr "Please enter a first name, surname %s or username to search"
@@ -14421,6 +14434,28 @@ msgstr "What is ILIAS?"
 #: help/structure.inc.php:499
 msgid "Was ist ILIAS und was sind ILIAS Lernmodule"
 msgstr "what is ILIAS and what are ILIAS learning modules"
+
+#~ msgid "Bitte geben Sie hier Ihren Suchbegriff ein:"
+#~ msgstr "Please enter your search criteria here: "
+
+#~ msgid "Ergebnis der Suche nach"
+#~ msgstr "Result of the search for "
+
+#~ msgid "Ihre Suche ergab %s Treffer"
+#~ msgstr "Your search revealed %s matches"
+
+#~ msgid "Ihre Suche ergab leider keine Treffer"
+#~ msgstr "Unfortunately your search did not reveal any matches"
+
+#~ msgid "zeig mir die Neuesten"
+#~ msgstr "Show me the most up to date"
+
+#~ msgid "zeig mit alle Treffer"
+#~ msgstr "Show me all matches"
+
+#, fuzzy
+#~ msgid "Weitere Informationen über %s"
+#~ msgstr "Other Information:"
 
 #~ msgid "Sie haben eine SMS von <b>%s</b> erhalten!"
 #~ msgstr "You have received a SMS from <b>%s</b>!"

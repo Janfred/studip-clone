@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-09-17 11:43+0200\n"
+"POT-Creation-Date: 2003-09-29 21:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,7 +143,7 @@ msgstr ""
 msgid "Vom"
 msgstr ""
 
-#: wap/show_sms.php:84
+#: wap/show_sms.php:85
 msgid "Von"
 msgstr ""
 
@@ -151,17 +151,17 @@ msgstr ""
 msgid "Privat"
 msgstr ""
 
-#: wap/sms.php:100
+#: wap/sms.php:104
 #, c-format
 msgid "%s neue Nachrichten."
 msgstr ""
 
-#: wap/sms.php:102
+#: wap/sms.php:106
 #, c-format
 msgid "%s neue Nachricht."
 msgstr ""
 
-#: wap/sms.php:156
+#: wap/sms.php:160
 msgid "Keine neuen Kurznachrichten seit letztem Web-Besuch."
 msgstr ""
 

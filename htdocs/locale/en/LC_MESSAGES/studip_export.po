@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-09-17 11:43+0200\n"
+"POT-Creation-Date: 2003-09-29 21:56+0200\n"
 "PO-Revision-Date: 2003-03-24 17:56+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -36,8 +36,8 @@ msgstr "Data conversion:"
 msgid "Es ist ein Fehler aufgetreten "
 msgstr "An error has occurred"
 
-#: export/export_choose_xslt.inc.php:69 export/export_choose_xslt.inc.php:139
-#: export/export_choose_xslt.inc.php:209 export/export_choose_xslt.inc.php:266
+#: export/export_choose_xslt.inc.php:69 export/export_choose_xslt.inc.php:140
+#: export/export_choose_xslt.inc.php:210 export/export_choose_xslt.inc.php:267
 #: export/export_run_fop.inc.php:49 export/export_run_fop.inc.php:127
 #: export/export_run_xslt.inc.php:61 export/export_run_xslt.inc.php:158
 #: export/export_start.inc.php:144 export/export_xml.inc.php:50
@@ -53,41 +53,41 @@ msgstr ""
 "The parameters with which this page has been loaded, are defective or "
 "incomplete."
 
-#: export/export_choose_xslt.inc.php:88
+#: export/export_choose_xslt.inc.php:89
 msgid "Auswahl des Dateiformats"
 msgstr "Selection of file format"
 
-#: export/export_choose_xslt.inc.php:107
+#: export/export_choose_xslt.inc.php:108
 msgid "Bitte wählen Sie, in welchem Format die Daten ausgegeben werden sollen!"
 msgstr "Please select in which format the data should be exported!"
 
-#: export/export_choose_xslt.inc.php:112
+#: export/export_choose_xslt.inc.php:113
 msgid "Ausgabeformat:"
 msgstr "Export format:"
 
-#: export/export_choose_xslt.inc.php:122
+#: export/export_choose_xslt.inc.php:123
 msgid "Name der Datei (z.B. &raquo;Test&laquo;):"
 msgstr "File name (e.g &raquo;Test&laquo;)"
 
-#: export/export_choose_xslt.inc.php:133 export/export_choose_xslt.inc.php:201
-#: export/export_choose_xslt.inc.php:254 export/export_run_xslt.inc.php:123
+#: export/export_choose_xslt.inc.php:134 export/export_choose_xslt.inc.php:202
+#: export/export_choose_xslt.inc.php:255 export/export_run_xslt.inc.php:123
 #: export/export_xml.inc.php:129
 msgid "Zur&uuml;ck"
 msgstr "Back"
 
-#: export/export_choose_xslt.inc.php:142
+#: export/export_choose_xslt.inc.php:143
 #, c-format
 msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 1/3 %s"
 msgstr "This page prepares the data for export. %s Step 1/3 %s"
 
-#: export/export_choose_xslt.inc.php:148 export/export_choose_xslt.inc.php:218
-#: export/export_choose_xslt.inc.php:275 export/export_run_fop.inc.php:136
+#: export/export_choose_xslt.inc.php:149 export/export_choose_xslt.inc.php:219
+#: export/export_choose_xslt.inc.php:276 export/export_run_fop.inc.php:136
 #: export/export_run_xslt.inc.php:168 export/export_start.inc.php:153
 #: export/export_xml.inc.php:148
 msgid "Aktionen:"
 msgstr "Actions:"
 
-#: export/export_choose_xslt.inc.php:150
+#: export/export_choose_xslt.inc.php:151
 msgid ""
 "Bitte w&auml;hlen Sie das Dateiformat, in dem Ihre Daten ausgegeben werden "
 "sollen. Klicken Sie anschließend auf 'weiter'."
@@ -95,31 +95,31 @@ msgstr ""
 "Please choose the file format in which your data should be exported. Finally "
 "click on 'continue'."
 
-#: export/export_choose_xslt.inc.php:159
+#: export/export_choose_xslt.inc.php:160
 msgid "Auswahl des Ausgabemoduls"
 msgstr "Selection of export module"
 
-#: export/export_choose_xslt.inc.php:161
+#: export/export_choose_xslt.inc.php:162
 msgid ""
 "W&auml;hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf "
 "'weiter'"
 msgstr ""
 "Please select one of the following XSLT- files and click on 'continue' "
 
-#: export/export_choose_xslt.inc.php:168
+#: export/export_choose_xslt.inc.php:169
 msgid "Ausgabemodul"
 msgstr "Export module"
 
-#: export/export_choose_xslt.inc.php:169
+#: export/export_choose_xslt.inc.php:170
 msgid "Beschreibung"
 msgstr "Description"
 
-#: export/export_choose_xslt.inc.php:212
+#: export/export_choose_xslt.inc.php:213
 #, c-format
 msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 2/3 %s"
 msgstr "This page prepares data for export. %s Step 2/3 %s"
 
-#: export/export_choose_xslt.inc.php:220
+#: export/export_choose_xslt.inc.php:221
 msgid ""
 "W&auml;hlen Sie bitte eines der zur Verf&uuml;gung stehenden Ausgabemodule. "
 "Klicken Sie dann auf 'weiter'."
@@ -127,20 +127,20 @@ msgstr ""
 "Please select one of the existing export modules for use. Then click on "
 "'continue'."
 
-#: export/export_choose_xslt.inc.php:227
+#: export/export_choose_xslt.inc.php:228
 msgid "Download der Dateien"
 msgstr "Download the files"
 
-#: export/export_choose_xslt.inc.php:229
+#: export/export_choose_xslt.inc.php:230
 msgid "Die ben&ouml;tigten Dateien liegen nun zum Download bereit."
 msgstr "The required files are ready to download."
 
-#: export/export_choose_xslt.inc.php:234 export/export_run_fop.inc.php:117
+#: export/export_choose_xslt.inc.php:235 export/export_run_fop.inc.php:117
 #: export/export_run_xslt.inc.php:140 export/export_xml.inc.php:132
 msgid "XML-Daten"
 msgstr "XML data"
 
-#: export/export_choose_xslt.inc.php:235 export/export_run_xslt.inc.php:141
+#: export/export_choose_xslt.inc.php:236 export/export_run_xslt.inc.php:141
 #: export/export_xml.inc.php:133
 msgid ""
 "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können "
@@ -149,11 +149,11 @@ msgstr ""
 "In this file the data saved as XML tags. These tags can be processed with a "
 "XSLT script."
 
-#: export/export_choose_xslt.inc.php:239 export/export_run_xslt.inc.php:145
+#: export/export_choose_xslt.inc.php:240 export/export_run_xslt.inc.php:145
 msgid "XSLT-Datei"
 msgstr "XSLT file"
 
-#: export/export_choose_xslt.inc.php:240
+#: export/export_choose_xslt.inc.php:241
 msgid ""
 "Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den "
 "Dateinamen, um die Datei zu &ouml;ffnen."
@@ -161,7 +161,7 @@ msgstr ""
 "This is the XSLT script for conversion of the data. Click on the file name "
 "to open the file."
 
-#: export/export_choose_xslt.inc.php:257
+#: export/export_choose_xslt.inc.php:258
 msgid ""
 "Um die Daten mit dem installierten XSLT-Prozessor in das gew&uuml;nschte "
 "Format zu bringen, klicken Sie bitte auf 'weiter'"
@@ -169,16 +169,16 @@ msgstr ""
 "Please click on 'continue' in order to convert the data to the desired "
 "format with the installed XSLT processor."
 
-#: export/export_choose_xslt.inc.php:269
+#: export/export_choose_xslt.inc.php:270
 #, c-format
 msgid "Diese Seite bereitet die Datenausgabe vor. %s Schritt 3/3 %s"
 msgstr "This page prepares the data for export. %s Step 3/3 %s."
 
-#: export/export_choose_xslt.inc.php:277
+#: export/export_choose_xslt.inc.php:278
 msgid "Sie können sich die XML-Daten und das XSLT-Skript herunterladen."
 msgstr "You can download the XML data and the XSLT script."
 
-#: export/export_choose_xslt.inc.php:282
+#: export/export_choose_xslt.inc.php:283
 msgid ""
 "Wenn Sie auf 'weiter' klicken, wird mit dem installierten XSLT-Prozessor die "
 "Ausgabedatei erzeugt."

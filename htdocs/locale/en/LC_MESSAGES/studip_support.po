@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_support\n"
-"POT-Creation-Date: 2003-09-17 11:43+0200\n"
+"POT-Creation-Date: 2003-09-29 21:56+0200\n"
 "PO-Revision-Date: 2003-07-25 17:23+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -66,32 +66,32 @@ msgid ""
 "verkn&uuml;pft werden k&ouml;nnten."
 msgstr "No tutors or authors exist with which the request could be linked."
 
-#: support/views/Overview.class.php:86
+#: support/views/Overview.class.php:87
 msgid "Laufzeit: "
 msgstr "Validity period:"
 
-#: support/views/Overview.class.php:94
+#: support/views/Overview.class.php:95
 #, c-format
 msgid "Supportvertrag vom %s bis %s"
 msgstr "Support contract from %s to %s"
 
-#: support/views/Overview.class.php:138
+#: support/views/Overview.class.php:139
 msgid "Punkte in diesem Vertrag:"
 msgstr "Credit points in this contract:"
 
-#: support/views/Overview.class.php:140
+#: support/views/Overview.class.php:141
 msgid "Anfragen:"
 msgstr "Requests:"
 
-#: support/views/Overview.class.php:141
+#: support/views/Overview.class.php:142
 msgid "verbrauchte Punkte:"
 msgstr "Spent credit points:"
 
-#: support/views/Overview.class.php:142
+#: support/views/Overview.class.php:143
 msgid "Bearbeitungen:"
 msgstr "Processing:"
 
-#: support/views/Overview.class.php:144
+#: support/views/Overview.class.php:145
 msgid "verbleibende Punkte:"
 msgstr "Remaining points:"
 
@@ -166,114 +166,114 @@ msgstr "new search"
 msgid "%sAlle%s Anfragen anzeigen."
 msgstr "Show %sall%s requests."
 
-#: support/views/Request.class.php:108
+#: support/views/Request.class.php:113
 msgid "kein Titel"
 msgstr "no title"
 
-#: support/views/Request.class.php:118 support/views/Request.class.php:124
-#: support/views/Request.class.php:126 support/views/Request.class.php:128
+#: support/views/Request.class.php:123 support/views/Request.class.php:129
+#: support/views/Request.class.php:131 support/views/Request.class.php:133
 msgid "von:"
 msgstr "from:"
 
-#: support/views/Request.class.php:124 support/views/Request.class.php:128
-#: support/views/Request.class.php:136 support/views/Request.class.php:157
-#: support/views/Request.class.php:247
+#: support/views/Request.class.php:129 support/views/Request.class.php:133
+#: support/views/Request.class.php:141 support/views/Request.class.php:162
+#: support/views/Request.class.php:252
 msgid "unbekannt"
 msgstr "unknown"
 
-#: support/views/Request.class.php:133
+#: support/views/Request.class.php:138
 msgid "Medium:"
 msgstr "Medium:"
 
-#: support/views/Request.class.php:137
+#: support/views/Request.class.php:142
 msgid "E-Mail"
 msgstr "E-mail"
 
-#: support/views/Request.class.php:138 support/views/Request.class.php:148
+#: support/views/Request.class.php:143 support/views/Request.class.php:153
 msgid "Telefon"
 msgstr "Telephone"
 
-#: support/views/Request.class.php:139
+#: support/views/Request.class.php:144
 msgid "Feedback-Forum"
 msgstr "Feedback forum"
 
-#: support/views/Request.class.php:140 support/views/Request.class.php:154
+#: support/views/Request.class.php:145 support/views/Request.class.php:159
 msgid "Support-Forum"
 msgstr "Support forum"
 
-#: support/views/Request.class.php:145
+#: support/views/Request.class.php:150
 msgid "eMail"
 msgstr "E-mail"
 
-#: support/views/Request.class.php:151
+#: support/views/Request.class.php:156
 msgid "Feedback-Forum der Installation"
 msgstr "Feedback forum for the installation"
 
-#: support/views/Request.class.php:161
+#: support/views/Request.class.php:166
 msgid "Datum:"
 msgstr "Date:"
 
-#: support/views/Request.class.php:167
+#: support/views/Request.class.php:172
 msgid "Uhr"
 msgstr "."
 
-#: support/views/Request.class.php:178 support/views/Request.class.php:192
+#: support/views/Request.class.php:183 support/views/Request.class.php:197
 msgid "Beitrag im Forum:"
 msgstr "Entry in forum:"
 
-#: support/views/Request.class.php:184
+#: support/views/Request.class.php:189
 msgid "kein Forenthema"
 msgstr "no forum topic"
 
-#: support/views/Request.class.php:203
+#: support/views/Request.class.php:208
 msgid "Bearbeitungszeiten:"
 msgstr "Processing times:"
 
-#: support/views/Request.class.php:211
+#: support/views/Request.class.php:216
 msgid "Beginn:"
 msgstr "Begin:"
 
-#: support/views/Request.class.php:211
+#: support/views/Request.class.php:216
 msgid "Ende:"
 msgstr "End:"
 
-#: support/views/Request.class.php:211
+#: support/views/Request.class.php:216
 msgid "Punkte:"
 msgstr "Points:"
 
-#: support/views/Request.class.php:211
+#: support/views/Request.class.php:216
 msgid "bearbeitet von:"
 msgstr "Edited by:"
 
-#: support/views/Request.class.php:242
+#: support/views/Request.class.php:247
 msgid "werden automatisch berechnet"
 msgstr "automatically calculated"
 
-#: support/views/Request.class.php:256
+#: support/views/Request.class.php:261
 msgid "Diesen Eintrag speichern"
 msgstr "Save this entry"
 
-#: support/views/Request.class.php:257 support/views/Request.class.php:265
+#: support/views/Request.class.php:262 support/views/Request.class.php:270
 msgid "Diesen Eintrag löschen"
 msgstr "Delete this entry"
 
-#: support/views/Request.class.php:265
+#: support/views/Request.class.php:270
 msgid "Diesen Eintrag bearbeiten"
 msgstr "Edit this entry"
 
-#: support/views/Request.class.php:271
+#: support/views/Request.class.php:276
 msgid "Diese Anfrage wurde noch nicht bearbeitet"
 msgstr "These requests have not yet been processed"
 
-#: support/views/Request.class.php:274
+#: support/views/Request.class.php:279
 msgid "Bearbeitungszeit hinzufügen"
 msgstr "Processing time to be added"
 
-#: support/views/Request.class.php:278
+#: support/views/Request.class.php:283
 msgid "Daten der Anfrage übernehmen"
 msgstr "Apply request data"
 
-#: support/views/Request.class.php:285
+#: support/views/Request.class.php:290
 msgid "Die Anfrage bearbeiten"
 msgstr "Process request"
 

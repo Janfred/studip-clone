@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-09-17 11:43+0200\n"
+"POT-Creation-Date: 2003-09-29 21:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1192,198 +1192,198 @@ msgstr ""
 msgid "Dieses Voting löschen."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:340
+#: vote/view/vote_show.lib.php:342
 msgid "Alle Votings und Tests öffnen!"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:349
+#: vote/view/vote_show.lib.php:351
 msgid "Alle Votings und Tests schließen!"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:425
+#: vote/view/vote_show.lib.php:427
 msgid "Abgelaufene Votings und Tests"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:509
+#: vote/view/vote_show.lib.php:511
 #, c-format
 msgid "Die Ergebnisse werden Ihnen ab dem <b>%s</b>, %s Uhr angezeigt."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:515
+#: vote/view/vote_show.lib.php:517
 msgid ""
 "Die Ergebnisse werden Ihnen angezeigt, sobald der Test vom Ersteller beendet "
 "worden ist."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:516
+#: vote/view/vote_show.lib.php:518
 msgid ""
 "Die Ergebnisse werden Ihnen angezeigt, sobald das Voting vom Ersteller "
 "beendet worden ist."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:524
+#: vote/view/vote_show.lib.php:526
 msgid ""
 "Die Ergebnisse werden Ihnen nicht angezeigt, da dies vom Ersteller nicht "
 "erwünscht ist."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:547
+#: vote/view/vote_show.lib.php:549
 #, c-format
 msgid "Leider haben Sie keine der %s richtigen Antwort(en) gew&auml;hlt."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:554
+#: vote/view/vote_show.lib.php:556
 #, c-format
 msgid ""
 "Gl&uuml;ckwunsch! Sie haben alle der %s richtigen Antwort(en) gew&auml;hlt."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:560
+#: vote/view/vote_show.lib.php:562
 #, c-format
 msgid ""
 "Sie haben von %s richtigen Antwort(en) %s gefunden und dar&uuml;ber hinaus %"
 "s falsche Antwort(en) gegeben."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:567
+#: vote/view/vote_show.lib.php:569
 #, c-format
 msgid "Sie haben von %s richtigen Antwort(en) %s gefunden."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:576
+#: vote/view/vote_show.lib.php:578
 msgid "Gl&uuml;ckwunsch! Ihre Antwort war richtig."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:580
+#: vote/view/vote_show.lib.php:582
 msgid "Ihre Antwort war leider falsch."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:585
+#: vote/view/vote_show.lib.php:587
 msgid "Ihre Antwort wurde registriert."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:591
+#: vote/view/vote_show.lib.php:593
 msgid "Ihre Stimme wurde gez&auml;hlt."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:645
+#: vote/view/vote_show.lib.php:647
 msgid "An diesem Test hat noch niemand teilgenommen."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:646
+#: vote/view/vote_show.lib.php:648
 msgid "Bei diesem Voting hat noch niemand abgestimmt."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:694
+#: vote/view/vote_show.lib.php:699
 msgid "Richtige Antwort"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:695
+#: vote/view/vote_show.lib.php:700
 msgid "Falsche Antwort"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:704
+#: vote/view/vote_show.lib.php:709
 msgid "Stimme"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:704
+#: vote/view/vote_show.lib.php:709
 msgid "Stimmen"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:760
+#: vote/view/vote_show.lib.php:765
 msgid "Sie konnten mehrere Antworten ausw&auml;hlen."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:761
+#: vote/view/vote_show.lib.php:766
 msgid "Sie k&ouml;nnen mehrere Antworten ausw&auml;hlen."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:769
+#: vote/view/vote_show.lib.php:774
 #, c-format
 msgid "Es haben insgesamt <b>%s</b> Personen teilgenommen"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:772
+#: vote/view/vote_show.lib.php:777
 msgid "Sie waren der/die einzigste TeilnehmerIn"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:773
+#: vote/view/vote_show.lib.php:778
 msgid "Es hat insgesamt <b>eine</b> Person teilgenommen"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:777
+#: vote/view/vote_show.lib.php:782
 #, c-format
 msgid "Es haben bisher <b>%s</b> Personen teilgenommen"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:780
+#: vote/view/vote_show.lib.php:785
 msgid "Sie waren bisher der/die einzigste TeilnehmerIn"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:781
+#: vote/view/vote_show.lib.php:786
 msgid "Es hat bisher insgesamt <b>eine</b> Person teilgenommen"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:790
+#: vote/view/vote_show.lib.php:795
 msgid ", Sie ebenfalls"
 msgstr ""
 
-#: vote/view/vote_show.lib.php:801
+#: vote/view/vote_show.lib.php:806
 #, c-format
 msgid "Der Test wurde beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:804
+#: vote/view/vote_show.lib.php:809
 #, c-format
 msgid "Das Voting wurde beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:811
+#: vote/view/vote_show.lib.php:816
 #, c-format
 msgid ""
 "Sie k&ouml;nnen Ihre Antwort &auml;ndern bis zum <b>%s</b> um <b>%s</b> Uhr."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:817
+#: vote/view/vote_show.lib.php:822
 #, c-format
 msgid "Der Test wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:820
+#: vote/view/vote_show.lib.php:825
 #, c-format
 msgid "Das Voting wird voraussichtlich beendet am <b>%s</b> um <b>%s</b> Uhr."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:826
+#: vote/view/vote_show.lib.php:831
 #, c-format
 msgid "Sie k&ouml;nnen abstimmen bis zum <b>%s</b> um <b>%s</b> Uhr."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:834
+#: vote/view/vote_show.lib.php:839
 msgid "Der Endzeitpunkt dieses Tests steht noch nicht fest."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:835
+#: vote/view/vote_show.lib.php:840
 msgid "Der Endzeitpunkt dieses Votings steht noch nicht fest."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:843
+#: vote/view/vote_show.lib.php:848
 msgid "Die Teilnahme war anonym."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:844
+#: vote/view/vote_show.lib.php:849
 msgid "Die Teilnahme war <b>nicht</b> anonym."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:847
+#: vote/view/vote_show.lib.php:852
 msgid "Die Teilnahme ist anonym."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:848
+#: vote/view/vote_show.lib.php:853
 msgid "Die Teilnahme ist <b>nicht</b> anonym."
 msgstr ""
 
-#: vote/view/vote_show.lib.php:868
+#: vote/view/vote_show.lib.php:873
 msgid ""
 "Es sind keine aktuellen Votes vorhanden. Um neue Votes zu erstellen, klicken "
 "Sie auf die Doppelpfeile."
