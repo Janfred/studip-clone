@@ -855,8 +855,7 @@ if ($send_view) {
 
 	if($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"] == TRUE) {
 		if($sms_data["tmpemailsnd"] == 1) {
-			$emailforwardinfo = _("Ihre Nachricht wird auch als Email versand.");
-			if($GLOBALS["MESSAGING_FORWARD_DEFAULT"] == 3) $emailforwardinfo .= "<br>"._(" Die Nachricht wird auch als E-Mail weitergeleitet, sofern die EmpfängerIn sich nicht ausdrücklich gegen die E-Mail-Weiterleitung entschieden hat.");
+			$emailforwardinfo .= _("Die Nachricht wird auch als E-Mail weitergeleitet, sofern die EmpfängerIn sich nicht ausdrücklich gegen die E-Mail-Weiterleitung entschieden hat.");
 		} else {
 			$emailforwardinfo = _("Ihre Nachricht wird nicht auch als Email versand.");
 		}
