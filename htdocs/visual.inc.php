@@ -697,7 +697,7 @@ function kill_format ($text) {
 * @return	string
 */
 function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $extern = FALSE) {
-	global $STUDIP_DOMAINS, $_SERVER, $_SERVER;
+	global $STUDIP_DOMAINS;
 	
 	if (empty($data)) {
 		return $data;
