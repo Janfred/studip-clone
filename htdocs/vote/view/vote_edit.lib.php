@@ -3,12 +3,13 @@
 /**
  * The page to create/edit votes (HTML generation) ... vote_edit.lib.php
  *
- * @author     Michael Cohrs <michael@cohrs.de>
- * @version    $Id$
- * @copyright  2003 Stud.IP-Project
- * @access     public
- * @module     vote_edit_lib
- * @package    vote
+ * @author      Michael Cohrs <michael@cohrs.de>
+ * @version     $Id$
+ * @copyright   2003 Stud.IP-Project
+ * @access      public
+ * @module      vote_edit_lib
+ * @package     vote
+ * @modulegroup vote_modules
  *
  */
 
@@ -309,20 +310,25 @@ function printAnswerFields ( $answers ) {
 	// textfield for the answer
 
 #	if( $auth->auth["jscript"] )
-#	    $inputSize = round( $auth->auth["xres"] / 18 );
+#	    $inputSize = round( $auth->auth["xres"] / 16 );
 #	else 
-#	    $inputSize = 60 ; //default
+#	    $inputSize = 60 ; // default
 #	if( $type == "vote" )
-#	    $inputSize += 6;
+#	    $inputSize += 6;  // we have no column for the checkbox 'correct'
+
+	if( strlen($answers[$i]['text']) > 80 )
+	    $inputSize = "size=".($type=="test" ? 60 : 65)." "; // prevent IE from breaking the page layout
+	else
+	    $inputSize = "style=\"width:100%;\" ";
 
 	$html .= "<td align=left>";
 	if( $pageMode != MODE_RESTRICTED ) {
-
+	    
 	    if( strpos($_SERVER["HTTP_REFERER"], "page=edit") )
 		$answers[$i]['text'] = stripslashes($answers[$i]['text']);
 
-	    $html .= "<input type=text size=60 style=\"width:100%;\" "
-	        . "name=\"answers[$i][text]\" value=\""	. htmlReady($answers[$i]['text'])."\" tabindex=".(3+$i).">"
+	    $html .= "<input type=text " . $inputSize
+		. "name=\"answers[$i][text]\" value=\""	. htmlReady($answers[$i]['text'])."\" tabindex=".(3+$i).">"
 		. "<input type=hidden name=\"answers[$i][answer_id]\" value=\"".$answers[$i]['answer_id']."\">"
 		. "<input type=hidden name=\"answers[$i][counter]\" value=\"".$answers[$i]['counter']."\">";
 	}
