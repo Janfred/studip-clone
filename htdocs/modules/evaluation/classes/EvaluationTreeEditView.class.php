@@ -2674,7 +2674,7 @@ function createQuestionFeatures(){
 	
 	$td = new HTML ("td");
     $td->addAttr ("style","border-bottom:0px dotted black;");
-    $td->addHTMLContent (sprintf(_("Diesem Fragenblock ist die Antwortvorlage <b>%s</b> zugewiesen."),
+    $td->addHTMLContent (sprintf(_("Diesem Fragenblock ist die Antwortenvorlage <b>%s</b> zugewiesen."),
 				$templateTitle));
 	$text = _("Das Zuweisen einer Antwortenvorlage ändert alle Antwortenmöglichkeiten der Fragen dieses Fragenblocks.");
 	if ($templateTitle == NO_TEMPLATE_GROUP)
