@@ -435,10 +435,11 @@ if ($form == 4) {
 	//The room for the prelimary discussion
 	$sem_create_data["sem_vor_raum"]=$vor_raum; 
 	$sem_create_data["sem_vor_resource_id"]=($vor_resource_id == "FALSE") ? FALSE : $vor_resource_id; 
-	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource_id"]) {
+	//if we have a resource_id, we take the room name from resource_id (deprecated at the moment)
+	/*if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource_id"]) {
 		$resObject =& ResourceObject::Factory($sem_create_data["sem_vor_resource_id"]);
 		$sem_create_data["sem_vor_raum"]=$resObject->getName();
-	}
+	}*/
 	
 	if (($RESOURCES_ENABLE) && (is_object($sem_create_data["resRequest"]))) {
 		//Room-Requests 
@@ -474,7 +475,6 @@ if ($form == 4) {
 
 	if ($sem_create_data["term_art"]==0) {
 		//get incoming room-data
-
 		if (is_array($sem_create_data["metadata_termin"]["turnus_data"]))
 			foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $key=>$val) {
 				//echo $term_turnus_room[$key], $term_turnus_resource_id[$key];
@@ -482,20 +482,21 @@ if ($form == 4) {
 				$sem_create_data["metadata_termin"]["turnus_data"][$key]["room"] = $term_turnus_room[$key]; 
 				$sem_create_data["metadata_termin"]["turnus_data"][$key]["resource_id"] = ($term_turnus_resource_id[$key] == "FALSE") ? FALSE : $term_turnus_resource_id[$key];
 			
-				if ($RESOURCES_ENABLE && $sem_create_data["metadata_termin"]["turnus_data"][$key]["resource_id"]) {
+				//if we have a resource_id, we take the room name from resource_id (deprecated at the moment)
+				/*if ($RESOURCES_ENABLE && $sem_create_data["metadata_termin"]["turnus_data"][$key]["resource_id"]) {
 					$resObject =& ResourceObject::Factory($sem_create_data["metadata_termin"]["turnus_data"][$key]["resource_id"]);
 					$sem_create_data["metadata_termin"]["turnus_data"][$key]["room"]=$resObject->getName();
-				}
+				}*/
 			}
 	} else {
 		for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
 			$sem_create_data["term_room"][$i]=$term_room[$i]; 
 			$sem_create_data["term_resource_id"][$i]=($term_resource_id[$i] == "FALSE") ? FALSE : $term_resource_id[$i];
-			//get incoming room-data
-			if ($RESOURCES_ENABLE && $sem_create_data["term_resource_id"][$i]) {
+			//if we have a resource_id, we take the room name from resource_id (deprecated at the moment)
+			/*if ($RESOURCES_ENABLE && $sem_create_data["term_resource_id"][$i]) {
 				$resObject =& ResourceObject::Factory($sem_create_data["term_resource_id"][$i]);
 				$sem_create_data["term_room"][$i]=$resObject->getName();
-			}
+			}*/
 		}
 	}
 }

@@ -265,9 +265,9 @@ if ($new) {
 		if ($description==$default_description)
 			$description='';
 			
-		//if we have a resource_id, we take the room name from resource_id
-		if (($resource_id) && ($RESOURCES_ENABLE))
-			$raum=getResourceObjectName($resource_id);
+		//if we have a resource_id, we take the room name from resource_id (deprecated at the moment)
+		/*if (($resource_id) && ($RESOURCES_ENABLE))
+			$raum=getResourceObjectName($resource_id);*/
 
 
 		if ($topic)  //Forumseintrag erzeugen
@@ -628,10 +628,11 @@ if (!sizeof($term_data["turnus_data"])) {
 							//room
 							$content.="<td class=\"steel1\" width=\"30%\" valign=\"top\" rowspan=\"2\">\n";
 							$content.="<font size=-1><b>" . _("Raum:") . "</b></font>";
-							if ((is_array($term_data["turnus_data"])) && (sizeof($term_data["turnus_data"]) == 1)) {
+							//load the defaul from metatdata (regular times) (deprecated at the moment)
+							/*if ((is_array($term_data["turnus_data"])) && (sizeof($term_data["turnus_data"]) == 1)) {
 								$new_date_resource_id = $term_data["turnus_data"][0]["resource_id"];
 								$new_date_room = $term_data["turnus_data"][0]["room"];
-							}
+							}*/
 							if ($RESOURCES_ENABLE) {
 								$resList -> reset();
 								if ($resList->numberOfRooms()) {

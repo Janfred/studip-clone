@@ -188,10 +188,12 @@ if ($turnus_refresh)
 		} else
 			$term_metadata["turnus_data"][$i]["resource_id"] = $temp_turnus_data[$i]["resource_id"];
 		
-		if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"]) {
+		
+		//if we have a resource_id, we take the room name from resource_id (deprecated at the moment)
+		/*if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"]) {
 			$resObject =& ResourceObject::Factory($term_metadata["turnus_data"][$i]["resource_id"]);
 			$term_metadata["turnus_data"][$i]["room"]=$resObject->getName();
-		}
+		}*/
 		
 		//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
 		settype($term_metadata["turnus_data"][$i]["start_stunde"], "integer");
