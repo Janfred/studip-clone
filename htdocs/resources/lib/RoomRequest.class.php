@@ -224,7 +224,7 @@ class RoomRequest {
 		if ($properties) {
 			$availalable_properties = $this->getAvailableProperties();
 			$setted_properties = $this->getSettedPropertiesCount();
-			$query = sprintf ("SELECT a.resource_id, b.name %s FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) WHERE %s ", ($setted_properties) ? ", COUNT(a.resource_id) AS resource_id_count" : "", ($permitted_resources_clause) ? "1 ".$permitted_resources_clause." AND " : "");
+			$query = sprintf ("SELECT DISTINCT a.resource_id, b.name %s FROM resources_objects_properties a LEFT JOIN resources_objects b USING (resource_id) WHERE %s ", ($setted_properties) ? ", COUNT(a.resource_id) AS resource_id_count" : "", ($permitted_resources_clause) ? "1 ".$permitted_resources_clause." AND " : "");
 
 			$i=0;
 			if ($setted_properties) {
@@ -268,6 +268,8 @@ class RoomRequest {
 		}
 
 		$this->db->query($query);
+		
+		echo $query;
 
 		if ($this->db->affected_rows()) {
 			while ($this->db->next_record()) {
