@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-24 18:08+0100\n"
+"POT-Creation-Date: 2003-03-24 18:32+0100\n"
 "PO-Revision-Date: 2003-03-24 17:28+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -116,21 +116,3 @@ msgstr "This institute is connected to the following learning modules:"
 #: lernmodule/lernmodul_view_functions.inc.php:283
 msgid "Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:"
 msgstr "This course is connected to the following learning modules:"
-
-#~ msgid "Auf folgende Lernmodule haben Sie Zugriff:"
-#~ msgstr "You have access to following learning modules:"
-
-#~ msgid "Name"
-#~ msgstr "Name"
-
-#~ msgid "Bearbeiten"
-#~ msgstr "Edit"
-
-#~ msgid "Entfernen"
-#~ msgstr "Remove"
-
-#~ msgid "Verknüpfung aufheben"
-#~ msgstr "Delete link"
-
-#~ msgid "Hinzufügen"
-#~ msgstr "Add"

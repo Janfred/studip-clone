@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-03-24 18:08+0100\n"
+"POT-Creation-Date: 2003-03-24 18:32+0100\n"
 "PO-Revision-Date: 2003-03-24 17:08+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -9563,22 +9563,3 @@ msgstr "Open all sub-elements"
 #: lib/classes/TreeView.class.php:309
 msgid "Alle Unterelemente schlieﬂen"
 msgstr "Close all sub-elements"
-
-#~ msgid "Kein Buddy ist online."
-#~ msgstr "No buddy is online."
-
-#~ msgid " Sie wurden von <b>%s</b> zum Chatten eingeladen!"
-#~ msgstr "<b>%s</b> has invited you to chat!"
-
-#~ msgid ""
-#~ " Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s"
-#~ "[lesen]%s"
-#~ msgstr ""
-#~ "You have received an automatically created <b>system message</b>! %s"
-#~ "[read]%s"
-
-#~ msgid " Sie haben eine Nachricht von <b>%s</b> erhalten! %s[lesen]%s"
-#~ msgstr "You have received a message from <b>%s</b>! %s[read]%s"
-
-#~ msgid "Keine neuen Nachrichten"
-#~ msgstr "No new messages"
