@@ -112,14 +112,14 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 		if (!$validator->ValidateEmailHost($Email)) {     ## Mailserver nicht erreichbar, ablehnen
 			echo "nicht versand";
 			return false;
-		} elseif (!$validator->ValidateEmailBox($Email)) {    ## aber user unbekannt. Mail an abuse@puk!
+		} elseif (!$validator->ValidateEmailBox($Email)) {    ## aber user unbekannt.
 			echo "nicht erreichbar";
 			return false;
 		} else {
 			// Newsletter los
-			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="wwwrun@".$smtp->host_name;
-			$abuse="abuse@".$smtp->host_name;
+			$from="\"Stud.IP\" <crew@".$smtp->host_name.">";
+			$env_from="crew@".$smtp->host_name;
+			$abuse="crew@".$smtp->host_name;
 			$to=$Email;
 			$secret= md5("$username:$magic");
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "newsletter.php?username=$username&cmd=remove&newsletter_id=$newsletter_id&secret=" . $secret;
