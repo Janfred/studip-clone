@@ -86,7 +86,7 @@ function GetPresetGroups ($view, $veranstaltung_class)
 	echo "</select>";
 }
 
-function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="")
+function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="", $workgroup_mode=FALSE)
 { global $HTTP_POST_VARS;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
@@ -104,7 +104,16 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 			$user_id = get_userid($InstitutMembers);
 			$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
 			if ($writedone ==TRUE) {
-				$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+				if ($workgroup_mode == TRUE) {
+					$globalperms = get_global_perm($user_id);
+					if ($globalperms == "tutor" || $globalperms == "dozent") {
+						$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'tutor', gruppe = '6' , mkdate = '$mkdate'");
+					} else {
+						$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+					}
+				} else {
+					$db->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+				}
 			}
 		}
 		if ($Freesearch != "") {
@@ -113,7 +122,16 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
 				if ($writedone==TRUE) {
 					if (get_object_type($range_id) == "sem") {
-						$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+						if ($workgroup_mode == TRUE) {
+							$globalperms = get_global_perm($user_id);
+							if ($globalperms == "tutor" || $globalperms == "dozent") {
+								$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'tutor', gruppe = '6' , mkdate = '$mkdate'");
+							} else {
+								$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+							}
+						} else {
+							$db2->query("INSERT INTO seminar_user SET Seminar_id = '$range_id', user_id = '$user_id', status = 'autor', gruppe = '6' , mkdate = '$mkdate'");
+						}
 					} elseif (get_object_type($range_id) == "inst") {
 						$globalperms = get_global_perm($user_id);
 						if (get_perm($range_id, $user_id) =="fehler!") {
@@ -218,7 +236,7 @@ function PrintAktualMembers ($range_id)
 		$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	} else {
 		echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Einrichtung</font><br>";
-		$query = "SELECT user_inst.user_id, username, Nachname, Vorname, inst_perms AS perms FROM auth_user_md5 LEFT JOIN user_inst USING(user_id)  WHERE Institut_id = '$range_id' AND inst_perms != 'user' ORDER BY Nachname ASC";
+		$query = "SELECT user_inst.user_id, username, Nachname, Vorname, inst_perms AS perms FROM auth_user_md5 LEFT JOIN user_inst USING(user_id)  WHERE Institut_id = '$range_id' AND inst_perms != 'user' AND inst_perms != 'admin' ORDER BY Nachname ASC";
 	}
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
 	$db=new DB_Seminar;
@@ -256,6 +274,32 @@ function PrintInstitutMembers ($range_id)
 
 	reset($HTTP_POST_VARS);
 
+// fehlende Werte holen
+
+	if (get_object_type($range_id) == "sem") {
+		$view = "statusgruppe_sem";
+	} elseif (get_object_type($range_id) == "inst") {
+		$view = "statusgruppe_inst";
+	}
+
+	$db=new DB_Seminar;
+	$db->query ("SELECT Name, status FROM seminare WHERE Seminar_id = '$range_id'");
+	if (!$db->next_record()) {
+		$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$range_id'");
+			if ($db->next_record()) {
+				$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+			}
+	} else {
+		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) {
+			$tmp_typ = "Veranstaltung"; 
+		} else {
+			$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
+			$veranstaltung_class = $SEM_TYPE[$db->f("status")]["class"];
+		}
+	}
+	$workgroup_mode = $SEM_CLASS[$veranstaltung_class][workgroup_mode];  // are we in a workgroup?
+	$tmp_name=$db->f("Name");
+
 // Abfrage der Formulare und Aktionen
 
 	// neue Statusgruppe hinzufuegen
@@ -280,7 +324,7 @@ function PrintInstitutMembers ($range_id)
 
 	// zuordnen von Personen zu einer Statusgruppe
 	if ($cmd=="move_person" && ($AktualMembers !="" || $InstitutMembers !="---" || $Freesearch !=""))  {
-		MovePersonStatusgruppe ($range_id, $AktualMembers, $InstitutMembers, $Freesearch);
+		MovePersonStatusgruppe ($range_id, $AktualMembers, $InstitutMembers, $Freesearch, $workgroup_mode);
 	}
 
 	// Entfernen von Personen aus einer Statusgruppe
@@ -305,32 +349,7 @@ function PrintInstitutMembers ($range_id)
 // Ende Abfrage Formulare
 
 
-// fehlende Werte holen
 
-
-	if (get_object_type($range_id) == "sem") {
-		$view = "statusgruppe_sem";
-	} elseif (get_object_type($range_id) == "inst") {
-		$view = "statusgruppe_inst";
-	}
-
-	$db=new DB_Seminar;
-	$db->query ("SELECT Name, status FROM seminare WHERE Seminar_id = '$range_id'");
-	if (!$db->next_record()) {
-		$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$range_id'");
-			if ($db->next_record()) {
-				$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-			}
-	} else {
-		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) {
-			$tmp_typ = "Veranstaltung"; 
-		} else {
-			$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
-			$veranstaltung_class = $SEM_TYPE[$db->f("status")]["class"];
-		}
-	}
-
-	$tmp_name=$db->f("Name");
 
 // Beginn Darstellungsteil
 
