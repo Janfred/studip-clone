@@ -64,18 +64,15 @@ class VeranstaltungResourcesAssign {
 
 		$query = sprintf("SELECT termin_id, date_typ FROM termine WHERE range_id = '%s' ", $this->seminar_id);
 		$db->query($query);
-		$course_session=FALSE;
 		while ($db->next_record()) {
-			if ($TERMIN_TYP[$db->f("date_typ")]["sitzung"])
-				$course_session=TRUE;
 			$result = array_merge($result, $this->changeDateAssign($db->f("termin_id")));
 		}
 
 		//kill all assigned rooms (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
 		$this->deleteAssignedRooms();
 		
-		//if no course session date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
-		if (!$course_session)
+		//if no schedule-date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
+		if (!isSchedule($this->seminar_id))
 			$result = array_merge($result, $this->changeMetaAssigns());
 		return $result;
 	}
