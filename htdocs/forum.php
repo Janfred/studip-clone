@@ -49,6 +49,7 @@ function pruefe_name(){
 // -->
 </SCRIPT>
 <?
+
 }
 
 	if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
@@ -237,13 +238,15 @@ if ($topic_id AND !$update) {
 if ($forum["lostposting"]!="" AND !isset($update)) {
 	$writemode = $forum["lostposting"];
 	$db=new DB_Seminar;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$writemode'");
+	$db->query("SELECT topic_id FROM px_topics WHERE topic_id='$writemode' AND mkdate=chdate+1");
 	if ($db->num_rows()) { 
 		$count = 0;
-		if (forum_lonely($writemode)==TRUE) // nur löschen wenn noch keine Antworten, sonst stehenlassen
+		$result = forum_lonely(array('id'=>$writemode));
+		if ($result['lonely']==TRUE) // nur löschen wenn noch keine Antworten, sonst stehenlassen
 			delete_topic($writemode,$count);
-		$forum["lostposting"]="";
+		unset($result);
 	}
+	$forum["lostposting"]="";
 }
 
 //////////////////////////////////////////////////////////////////////////////////

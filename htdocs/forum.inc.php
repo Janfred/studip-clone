@@ -1193,6 +1193,7 @@ if ($forum["view"]=="search") {
 	} else {
 		echo forum_search_field()."<br><br>";
 		$nomsg="TRUE";
+		page_close(); //Niemals vergessen, wenn Session oder Uservariablen benutzt werden !!!
 		die;
 	}
 } elseif ($forum["view"]=="neue") {
@@ -1212,6 +1213,7 @@ if ($db->num_rows() > 0) {  // Forum ist nicht leer
 		echo ForumNoPostings();
 		echo "</table>";
 	}
+	page_close(); //Niemals vergessen, wenn Session oder Uservariablen benutzt werden !!!
 	die;
 }
 
@@ -1361,6 +1363,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		echo ForumEmpty();
 		echo "</table>";
+		page_close(); //Niemals vergessen, wenn Session oder Uservariablen benutzt werden !!!
 		die;
 	} else {
 		
