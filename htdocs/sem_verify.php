@@ -300,7 +300,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 							?>
 							<tr><td class="blank" colspan=2>
 							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
-								<input type="HIDDEN" name="sem_verity_selection_send" value="TRUE" />
+								<input type="HIDDEN" name="sem_verify_selection_send" value="TRUE" />
 							       <?
 								while ($db->next_record()) {
 									$db3->query("SELECT studiengang_id FROM user_studiengang WHERE studiengang_id = '".$db->f("studiengang_id")."' AND user_id = '$user->id' "); // Darf ich diesen auswaehlen?
