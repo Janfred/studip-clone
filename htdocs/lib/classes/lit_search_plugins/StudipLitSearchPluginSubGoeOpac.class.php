@@ -41,6 +41,7 @@ class StudipLitSearchPluginSubGoeOpac extends StudipLitSearchPluginZ3950Abstract
 		$this->z_host = "z3950.gbv.de:20010/subgoe_opc";
 		$this->z_options = array('user' => '999', 'password' => 'abc');
 		$this->z_syntax = "UNIMARC";
+		$this->convert_umlaute = true;
 		$this->z_profile = array('1016' => _("Basisindex [ALL]"), '4' => _("Titelstichwörter [TIT]"),
 								'5' => _("Serienstichwörter [SER]"), '21' => _("alle Klassifikationen [SYS]"),
 								'1004' => _("Person, Author [PER]"), '1005' => _("Körperschaften [KOR]"),
@@ -60,11 +61,11 @@ class StudipLitSearchPluginSubGoeOpac extends StudipLitSearchPluginZ3950Abstract
 								'463' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$t, $v'),
 								'606' => array('field' => 'dc_subject', 'callback' => 'simpleMap', 'cb_args' => ' $a '),
 								'700' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a, $b'),
-								'701' => array('field' => 'dc_contributor', 'callback' => 'simpleMap', 'cb_args' => '$a, $b;'),
-								'702' => array('field' => 'dc_contributor', 'callback' => 'simpleMap', 'cb_args' => '$a, $b;'),
+								'701' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+								'702' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
 								'710' => array('field' => 'dc_creator', 'callback' => 'simpleMap', 'cb_args' => '$a, $b'),
-								'711' => array('field' => 'dc_contributor', 'callback' => 'simpleMap', 'cb_args' => '$a, $b;'),
-								'712' => array('field' => 'dc_contributor', 'callback' => 'simpleMap', 'cb_args' => '$a, $b;'),
+								'711' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
+								'712' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
 								'856' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'URL: $u '),
 								);
 	}
