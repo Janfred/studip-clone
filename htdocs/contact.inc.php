@@ -198,13 +198,13 @@ function GetUserInfo($user_id)
 	while ($db->next_record()) {	
 		$userinfo["Einrichtung"] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
 		if ($db->f("raum")!="")
-			$userinfo["Raum"] = $db->f("raum");
+			$userinfo["Raum"] = FormatReady($db->f("raum"));
 		if ($db->f("sprechzeiten")!="")
-			$userinfo["Sprechzeiten"] = $db->f("sprechzeiten");
+			$userinfo["Sprechzeiten"] = FormatReady($db->f("sprechzeiten"));
 		if ($db->f("telefon")!="")
-			$userinfo["Dienst Tel."] = $db->f("telefon");			
+			$userinfo["Dienst Tel."] =FormatReady($db->f("telefon"));			
 		if ($db->f("fax")!="")
-			$userinfo["Dienst Fax"] = $db->f("fax");
+			$userinfo["Dienst Fax"] = FormatReady($db->f("fax"));
 	}
 	return $userinfo;
 }
@@ -254,7 +254,7 @@ function ShowUserInfo ($contact_id)
 		$owner_id = $user->id;
 		$db->query ("SELECT DISTINCT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE user_id = '$user_id' AND range_id= '$owner_id'");	
 		while ($db->next_record()) {		
-			$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">Gruppe:</font></td><td class=\"steel1\" width=\"250\"><a href=\"$PHP_SELF?view=gruppen&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".htmlready($db->f("name"))."</font></a></td></tr>";		
+			$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">"._("Gruppe").":</font></td><td class=\"steel1\" width=\"250\"><a href=\"$PHP_SELF?view=gruppen&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".htmlready($db->f("name"))."</font></a></td></tr>";		
 		}		
 	}
 	return $output;	
@@ -268,16 +268,16 @@ function ShowContact ($contact_id)
 	if ($db->next_record()) {
 		if ($open == $contact_id || $open == "all") {
 			if ($db->f("buddy")=="1") {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\"></a>&nbsp; ";
+				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\" =".tooltip(_("Als Buddie entfernen"))."></a>&nbsp; ";
 			} else {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\"></a>&nbsp; ";			
+				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\" =".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
 			}
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						.$buddy		
-						."<a href=\"sms.php?sms_source_page=contact.php&cmd=write&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachricht1.gif\" border=\"0\"></a>&nbsp; "
-						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\"></a>&nbsp; "
-						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id\"><img src=\"pictures/trash_att.gif\" border=\"0\"></a></td></tr>"
-						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\"></a></td></tr>";
+						."<a href=\"sms.php?sms_source_page=contact.php&cmd=write&rec_uname=".get_username($db->f("user_id"))."\"><img src=\"pictures/nachricht1.gif\" border=\"0\" =".tooltip(_("Nachricht schreiben"))."></a>&nbsp; "
+						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" =".tooltip(_("Editieren"))."></a>&nbsp; "
+						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash_att.gif\" border=\"0\" =".tooltip(_("Kontakt löschen"))."></a></td></tr>"
+						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" =".tooltip(_("Kontakte schliessen"))."></a></td></tr>";
 		} else {
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
 				$description = "";	
@@ -328,7 +328,7 @@ function ShowContact ($contact_id)
 						. $lastrow
 				."</table>";
 	} else {
-		$output = "Fehler!";
+		$output = _("Fehler!");
 	}
 	return $output;
 }
@@ -342,7 +342,7 @@ function SearchResults ($search_exp)
 
 	$db->query($query); // results all users which are not in the seminar
 	if (!$db->num_rows()) {
-		echo "&nbsp; keine Treffer&nbsp; ";
+		echo "&nbsp; "._("keine Treffer")."&nbsp; ";
 	} else {
 		echo "&nbsp; <select name=\"Freesearch\">";
 		while ($db->next_record()) {
@@ -497,7 +497,7 @@ function PrintAllContact($filter="")
 		$db->query ("SELECT nachname, contact_id FROM contact LEFT JOIN statusgruppe_user USING(user_id) LEFT JOIN auth_user_md5 USING(user_id)  WHERE statusgruppe_id = '$filter' AND owner_id =  '$owner_id' ORDER BY nachname");		
 	$middle = round($db->num_rows()/2);
 	if ($middle == 0) {
-		echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">Keine Eintr&auml;ge in diesem Bereich.";	
+		echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">"._("Keine Einträge in diesem Bereich")."";	
 		echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
 	} else {
 		echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">";

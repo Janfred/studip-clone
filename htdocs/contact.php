@@ -94,7 +94,9 @@ if ($cmd == "delete") {
 
 if ($cmd == "changebuddy") {
 	changebuddy($contact_id);
-	$open = $contact_id;
+	if (!$open) {
+		$open = $contact_id;
+	}
 }
 
 // delete a single userinfo
@@ -123,12 +125,18 @@ if ($existingowninfolabel) {
 
 ?>
 <table width = "100%" cellspacing="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch <font size="2">(<?echo $size_of_book = GetSizeofBook();?> Eintr&auml;ge)</size></b>
+	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Addressbuch");?> <font size="2">(<?echo $size_of_book = GetSizeofBook()." "._("Eintr&auml;ge");?>)</size></b>
 	</td>
 </tr><tr><td class="blank" align="left" valign="absmiddle">
 
-	<form action="<? echo $PHP_SELF ?>?cmd=search" method="POST"><?
-echo "&nbsp; <a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">Alle aufklappen</font></a></td>";
+	<form action="<? echo $PHP_SELF ?>?cmd=search#anker" method="POST"><?
+
+if ($open != "all") {
+	echo "&nbsp; <a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen")."</font></a></td>";
+} else {
+	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen")."</font></a></td>";
+}
+
 echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
@@ -180,10 +188,15 @@ if (($contact["view"])=="alpha") {
 		if ($filter==chr($i)) {
 			$cssSw->switchClass();
 		}
+		if ($size_of_book_by_letter[chr($i)]==0) {
+			$character = "<font color=\"#999999\">".chr($i)."</font>";
+		} else {
+			$character = chr($i);
+		}
 		echo "<td width=\"3%\"  align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\""
 		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? ("1 Eintrag") : sprintf(_("%s Einträge"),($size_of_book_by_letter[chr($i)]) ? $size_of_book_by_letter[chr($i)] : "keine"),false)
 		."><a href=\"$PHP_SELF?filter=".chr($i)."\" "
-		. ">".chr($i)."</a>"
+		. ">".$character."</a>"
 		."</td>";
 		if ($filter==chr($i)) {
 			$cssSw->switchClass();
@@ -229,7 +242,7 @@ if ($edit_id) {
 	PrintAllContact($filter);
 }
 
-echo "</td></tr></table>";
+echo "<br><br></td></tr></table>";
 
 page_close()
 
