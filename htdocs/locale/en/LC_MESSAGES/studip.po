@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2004-03-31 18:32+0200\n"
+"POT-Creation-Date: 2004-04-01 13:48+0200\n"
 "PO-Revision-Date: 2004-03-31 18:28+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -222,12 +222,14 @@ msgstr "Preview of this public evaluation template"
 #: modules/evaluation/evaluation_admin_overview.lib.php:240
 #: modules/evaluation/evaluation_admin_template.lib.php:446
 #: modules/evaluation/evaluation_admin_template.lib.php:706
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2668
 msgid "ja"
 msgstr "yes"
 
 #: modules/evaluation/evaluation_admin_overview.lib.php:241
 #: modules/evaluation/evaluation_admin_template.lib.php:455
 #: modules/evaluation/evaluation_admin_template.lib.php:729
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2658
 msgid "nein"
 msgstr "no"
 
@@ -3175,9 +3177,8 @@ msgid "Vote-Datenbankfehler"
 msgstr "Vote data base error."
 
 #: vote/vote_show.inc.php:52
-#, fuzzy
 msgid "Evaluation-Datenbankfehler"
-msgstr "Vote data base error."
+msgstr "Evaluation data base error"
 
 #: vote/vote_show.inc.php:63
 msgid "Datenbankfehler bei Voteaktivierung"
@@ -3185,26 +3186,23 @@ msgstr "Data base error while activating votes."
 
 #: vote/vote_show.inc.php:79 vote/vote_show.inc.php:86
 msgid "Datenbankfehler beim Auslesen der EvaluationsIDs."
-msgstr ""
+msgstr "Database error while reading EvaluationID."
 
 #: vote/vote_show.inc.php:109 vote/vote_show.inc.php:118
 msgid "Umfragen"
-msgstr ""
+msgstr "Surveys"
 
 #: vote/vote_show.inc.php:111 vote/vote_show.inc.php:120
-#, fuzzy
 msgid "Umfragen und mehr..."
-msgstr "Votes and tests. Surveys and more..."
+msgstr "Surveys and more..."
 
 #: vote/vote_show.inc.php:116
-#, fuzzy
 msgid "Umfragen bearbeiten"
-msgstr "Edit this entry."
+msgstr "Edit surveys."
 
 #: vote/vote_show.inc.php:140
-#, fuzzy
 msgid "Fehler beim Einlesen der Evaluation"
-msgstr "Error while reading the votes"
+msgstr "Error while reading the evaluation"
 
 #: vote/vote_show.inc.php:247
 msgid "Fehler beim Einlesen des Votes"
@@ -3580,7 +3578,7 @@ msgstr "Close all votes and tests!"
 
 #: vote/view/vote_show.lib.php:439
 msgid "Abgelaufene Umfragen"
-msgstr ""
+msgstr "Finished surveys"
 
 #: vote/view/vote_show.lib.php:527
 #, c-format
@@ -6578,7 +6576,7 @@ msgstr ""
 #: extern/elements/main/ExternElementMainPersondetails.class.php:172
 #: extern/elements/main/ExternElementMainPersons.class.php:173
 msgid "Copyright:"
-msgstr ""
+msgstr "Copyright:"
 
 #: extern/elements/main/ExternElementMainDownload.class.php:171
 #: extern/elements/main/ExternElementMainGlobal.class.php:175
@@ -6594,7 +6592,14 @@ msgid ""
 "angewählt haben."
 msgstr ""
 
-#: admin_news.php:222
+#: extern/elements/main/ExternElementMainDownload.class.php:174
+#: extern/elements/main/ExternElementMainGlobal.class.php:178
+#: extern/elements/main/ExternElementMainLecturedetails.class.php:198
+#: extern/elements/main/ExternElementMainLectures.class.php:269
+#: extern/elements/main/ExternElementMainLecturestable.class.php:285
+#: extern/elements/main/ExternElementMainNews.class.php:164
+#: extern/elements/main/ExternElementMainPersondetails.class.php:176
+#: extern/elements/main/ExternElementMainPersons.class.php:177
 msgid "Autor:"
 msgstr "Author:"
 
@@ -7238,9 +7243,8 @@ msgstr ""
 "group / function."
 
 #: extern/elements/main/ExternElementMainPersons.class.php:149
-#, fuzzy
 msgid "Meyer, Peter"
-msgstr "Meyer Peter"
+msgstr "Meyer, Peter"
 
 #: extern/elements/main/ExternElementMainPersons.class.php:156
 msgid "unter Gruppenname"
@@ -10619,7 +10623,7 @@ msgid ""
 "Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren "
 "und synchronisieren"
 msgstr ""
-"My personal appointment calender - import, export and synchronise "
+"My personal appointment calender - import, export and synchronize "
 "appointment data."
 
 #: calendar/calendar.inc.php:273
@@ -10660,18 +10664,18 @@ msgstr "Create appointment on %s"
 
 #: calendar/calendar_settings.inc.php:52
 msgid "Einstellungen des Terminkalenders anpassen"
-msgstr "Customise settings for the appointment calendar"
+msgstr "Customize settings for the appointment calendar"
 
 #: calendar/calendar_settings.inc.php:62
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
 msgstr ""
-"Here you can customise the lay-out of your personal appointment calendar."
+"Here you can customize the lay-out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:72
 msgid "Startansicht anpassen:"
-msgstr "Customise start page:"
+msgstr "Customize start page:"
 
 #: calendar/calendar_settings.inc.php:79
 msgid "Wochenansicht"
@@ -10734,7 +10738,7 @@ msgstr "Time interval of the week view:"
 
 #: calendar/calendar_settings.inc.php:200
 msgid "Wochenansicht anpassen:"
-msgstr "Customise week view:"
+msgstr "Customize week view:"
 
 #: calendar/calendar_settings.inc.php:207
 msgid "7 Tage-Woche"
@@ -10827,9 +10831,8 @@ msgid "Wiederholung:"
 msgstr "Repetition:"
 
 #: calendar/calendar_visual.inc.php:789
-#, fuzzy
 msgid "Öffentlicher Termin"
-msgstr "public "
+msgstr "public appointment "
 
 #: calendar/lib/CalendarEvent.class.php:133 calendar/views/edit.inc.php:245
 msgid "hoch"
@@ -10973,7 +10976,6 @@ msgid "Der Termin wird nicht wiederholt."
 msgstr "The appointment will not be repeated."
 
 #: calendar/lib/CalendarEvent.class.php:567
-#, fuzzy
 msgid "ganztägig"
 msgstr "full-time"
 
@@ -11143,23 +11145,21 @@ msgid "Ausnahmen:"
 msgstr "Exception:"
 
 #: calendar/views/edit.inc.php:553
-#, fuzzy
 msgid "Ausnahme hinzufügen"
-msgstr "Exception:"
+msgstr "Add exception"
 
 #: calendar/views/edit.inc.php:563
-#, fuzzy
 msgid "ausgewählte Ausnahme löschen"
-msgstr "Delete selection"
+msgstr "delete selected exception"
 
 #: calendar/views/edit.inc.php:564
 msgid "ausgew&auml;hlte l&ouml;schen"
 msgstr "Delete selection"
 
 #: calendar/views/edit.inc.php:583
-#, fuzzy, c-format
+#, c-format
 msgid "Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."
-msgstr "You can save %s more appointments."
+msgstr "You can edit this appointment %sseperately%s."
 
 #: calendar/views/edit.inc.php:598
 #, c-format
@@ -11231,7 +11231,7 @@ msgstr ""
 #: calendar/views/export.inc.php:122
 #, c-format
 msgid "Stud.IP hat %s Termine synchronisiert."
-msgstr "Stud.IP has synchronised %s appointments."
+msgstr "Stud.IP has synchronized %s appointments."
 
 #: calendar/views/export.inc.php:126
 msgid ""
@@ -11239,7 +11239,7 @@ msgid ""
 "konnten."
 msgstr ""
 "Your iCalendar-file does not contain any appointments which can be "
-"synchronised."
+"synchronized."
 
 #: calendar/views/export.inc.php:130
 #, c-format
@@ -11259,7 +11259,7 @@ msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
 msgstr ""
-"Click the button in order to download the file with the synchronised "
+"Click the button in order to download the file with the synchronized "
 "calendar data."
 
 #: calendar/views/export.inc.php:147
@@ -11272,7 +11272,7 @@ msgstr ""
 
 #: calendar/views/export.inc.php:159
 msgid "Herunterladen der synchronisierten Kalenderdaten"
-msgstr "Download the synchronised calendar data."
+msgstr "Download the synchronized calendar data."
 
 #: calendar/views/export.inc.php:169
 msgid "Exportieren Ihrer Kalenderdaten"
@@ -11328,13 +11328,13 @@ msgstr "Click on \"Browse\" to select a file."
 
 #: calendar/views/export.inc.php:229
 msgid "Synchronisieren Ihrer Kalenderdaten"
-msgstr "Synchronise your calendar data"
+msgstr "Synchronize your calendar data"
 
 #: calendar/views/export.inc.php:233
 msgid ""
 "Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei "
 "befinden."
-msgstr "You can synchronise appointments which are in a iCalendar file."
+msgstr "You can synchronize appointments which are in a iCalendar file."
 
 #: calendar/views/export.inc.php:243
 #, c-format
@@ -11348,7 +11348,7 @@ msgstr "No appointments have been imported."
 #: calendar/views/export.inc.php:258
 msgid ""
 "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
-msgstr "You can import, export and synchronise appointment data."
+msgstr "You can import, export and synchronize appointment data."
 
 #: calendar/views/export.inc.php:295
 msgid "Der Export konnte nicht durchgef&uuml;hrt werden!"
@@ -11368,11 +11368,11 @@ msgstr "The file to import contains too many appointments."
 
 #: calendar/views/export.inc.php:358
 msgid "Die Synchronisation konnte nicht durgef&uuml;hrt werden!"
-msgstr "The synchronisation could not be carried out!"
+msgstr "The synchronization could not be carried out!"
 
 #: calendar/views/export.inc.php:369
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
-msgstr "The synchronisation was successfully carried out!"
+msgstr "The synchronization was successfully carried out!"
 
 #: calendar/views/month.inc.php:71
 msgid "einen Monat zurück"
@@ -11438,7 +11438,7 @@ msgstr "The export index could not be created!"
 msgid ""
 "Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht ge&auml;ndert "
 "werden!"
-msgstr "The access authorisation to the export index could not be changed!"
+msgstr "The access authorization to the export index could not be changed!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:135
 msgid "Eine bestehende Export-Datei konnte nicht gel&ouml;scht werden!"
@@ -11476,11 +11476,11 @@ msgstr "The file is not a valid iCalendar file!"
 msgid ""
 "Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
 msgstr ""
-"The file can not be synchronised with the Stud.IP appointment calendar."
+"The file can not be synchronized with the Stud.IP appointment calendar."
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:146
 msgid "Die zu synchronisierende Datei enth&auml;lt zu viele Termine."
-msgstr "The file to be synchronised contains too many appointments."
+msgstr "The file to be synchronized contains too many appointments."
 
 #: about.php:110
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
@@ -12119,14 +12119,12 @@ msgid "Die Bilddatei wurde erfolgreich hochgeladen."
 msgstr "A new photo has been successfully uploaded."
 
 #: admin_banner_ads.php:116
-#, fuzzy
 msgid "Banner"
-msgstr "Beginner"
+msgstr "Banner"
 
 #: admin_banner_ads.php:118
-#, fuzzy
 msgid "Ziel"
-msgstr "Title"
+msgstr "Target"
 
 #: admin_banner_ads.php:119
 #, fuzzy
@@ -12152,9 +12150,8 @@ msgid "hh"
 msgstr "hh"
 
 #: admin_banner_ads.php:170
-#, fuzzy
 msgid "Der angegebene Benutzername existiert nicht."
-msgstr "The given username does not exist.§"
+msgstr "The given username does not exist."
 
 #: admin_banner_ads.php:178
 #, fuzzy
@@ -12187,7 +12184,7 @@ msgstr "No picture selected"
 
 #: admin_banner_ads.php:269
 msgid "Pfad:"
-msgstr ""
+msgstr "Path:"
 
 #: admin_banner_ads.php:271
 msgid "Alternativtext"
@@ -13094,23 +13091,25 @@ msgstr ""
 msgid "Wollen Sie diesen Eintrag wirklich l&ouml;schen?"
 msgstr "Do you really want to delete this entry?"
 
-#: admin_lit_element.php:124 admin_literatur_overview.php:351
+#: admin_lit_element.php:124 admin_literatur_overview.php:370
+#: lit_overview_print_view.php:102
 msgid "Verf&uuml;gbarkeit in externen Katalogen:"
 msgstr ""
 
 #: admin_lit_element.php:128 admin_literatur_overview.php:291
-#: admin_literatur_overview.php:355
+#: admin_literatur_overview.php:374 lit_overview_print_view.php:106
 #, fuzzy
 msgid "gefunden"
 msgstr "No-one found!"
 
 #: admin_lit_element.php:133 admin_lit_element.php:236
-#: admin_literatur_overview.php:330 admin_literatur_overview.php:360
+#: admin_literatur_overview.php:344 admin_literatur_overview.php:379
 #: lit_search.php:247
 msgid "(Kein externer Link vorhanden.)"
 msgstr "(No external link available.)"
 
-#: admin_lit_element.php:138 admin_literatur_overview.php:365
+#: admin_lit_element.php:138 admin_literatur_overview.php:384
+#: lit_overview_print_view.php:111
 #, fuzzy
 msgid "<u>nicht</u> gefunden"
 msgstr "User not found"
@@ -13134,7 +13133,7 @@ msgid "Neuen Eintrag anlegen"
 msgstr "Create new entry"
 
 #: admin_lit_element.php:209 admin_lit_element.php:260
-#: admin_literatur_overview.php:315
+#: admin_literatur_overview.php:329
 msgid "Verfügbarkeit überprüfen"
 msgstr ""
 
@@ -13225,6 +13224,13 @@ msgstr "Close all appointments"
 msgid "Alle Einträge aufklappen"
 msgstr "Open all appointments"
 
+#: admin_literatur_overview.php:277 links_openobject.inc.php:160
+#: links_openobject.inc.php:181 links_openobject.inc.php:206
+#: links_seminare.inc.php:43 links_sms.inc.php:71 wiki.inc.php:879
+#: help/kartei.inc.php:32 help/structure.inc.php:240
+msgid "Druckansicht"
+msgstr "Print view"
+
 #: admin_literatur_overview.php:294
 #, fuzzy
 msgid "keine automatische Suche möglich"
@@ -13235,28 +13241,36 @@ msgstr "Automatically system message,"
 msgid "nicht gefunden"
 msgstr "User not found"
 
-#: admin_literatur_overview.php:318 lit_search.php:229
+#: admin_literatur_overview.php:332 lit_search.php:229
 #: lib/classes/StudipLitListViewAdmin.class.php:387
 msgid "Detailansicht dieses Eintrages ansehen."
 msgstr "Show detailed view of this entry."
 
-#: admin_literatur_overview.php:322 lit_search.php:238
+#: admin_literatur_overview.php:336 lit_overview_print_view.php:79
+#: lit_search.php:238
 msgid "Autor; weitere Beteiligte:"
 msgstr "Author, further participants:"
 
-#: admin_literatur_overview.php:323 lit_search.php:239
+#: admin_literatur_overview.php:337 lit_overview_print_view.php:80
+#: lit_search.php:239
 msgid "Erschienen:"
 msgstr "Publication:"
 
-#: admin_literatur_overview.php:324 lit_search.php:240
+#: admin_literatur_overview.php:338 lit_overview_print_view.php:81
+#: lit_search.php:240
 msgid "Identifikation:"
 msgstr "Identification:"
 
-#: admin_literatur_overview.php:326 lit_search.php:243
+#: admin_literatur_overview.php:340 lit_search.php:243
 msgid "Externer Link:"
 msgstr "External link:"
 
-#: admin_literatur_overview.php:343
+#: admin_literatur_overview.php:356 lit_overview_print_view.php:91
+#, fuzzy
+msgid "Dozenten:"
+msgstr "Lecturers"
+
+#: admin_literatur_overview.php:362 lit_overview_print_view.php:97
 #, fuzzy
 msgid "Teilnehmeranzahl (erwartet/angemeldet):"
 msgstr "Administer participants"
@@ -19321,11 +19335,11 @@ msgid "Zuletzt editiert von "
 msgstr "Last edited by "
 
 #: forum.inc.php:108 links_admin.inc.php:316 write_topic.php:133
-#: lib/classes/guestbook.class.php:223
+#: lib/classes/guestbook.class.php:225
 msgid "Smileys"
 msgstr "Smilies "
 
-#: forum.inc.php:108 write_topic.php:133 lib/classes/guestbook.class.php:223
+#: forum.inc.php:108 write_topic.php:133 lib/classes/guestbook.class.php:225
 msgid "Formatierungshilfen"
 msgstr "Help for text formatting"
 
@@ -19387,7 +19401,7 @@ msgstr "There are no postings in this view."
 msgid "Zu Ihrem Suchbegriff gibt es keine Treffer."
 msgstr "Your search did not reveal any matches."
 
-#: forum.inc.php:655 lib/classes/guestbook.class.php:173
+#: forum.inc.php:655 lib/classes/guestbook.class.php:175
 msgid "weiter"
 msgstr "Continue"
 
@@ -20897,6 +20911,10 @@ msgstr "Allocate programs of study"
 msgid "Zuordnung zu Einrichtungen"
 msgstr "Allocate institutes"
 
+#: links_about.inc.php:63 links_admin.inc.php:247
+msgid "Votings und Tests"
+msgstr "Votes and tests"
+
 #: links_about.inc.php:66 help/structure.inc.php:27 help/structure.inc.php:460
 msgid "Allgemeines"
 msgstr "General"
@@ -21161,12 +21179,6 @@ msgstr "Course time table"
 msgid "Administration der Einrichtung"
 msgstr "Institute administration"
 
-#: links_openobject.inc.php:160 links_openobject.inc.php:181
-#: links_openobject.inc.php:206 links_seminare.inc.php:43 links_sms.inc.php:71
-#: wiki.inc.php:879 help/kartei.inc.php:32 help/structure.inc.php:240
-msgid "Druckansicht"
-msgstr "Print view"
-
 #: links_openobject.inc.php:162
 msgid "Administration dieser Veranstaltung"
 msgstr "Administration of this course"
@@ -21378,6 +21390,11 @@ msgid ""
 msgstr ""
 "You can copy all of these lists into your own personal literature area, in "
 "order to obtain further information about the entries."
+
+#: lit_overview_print_view.php:63
+#, fuzzy, c-format
+msgid "Literaturliste %s"
+msgstr "Literature lists"
 
 #: lit_print_view.php:38
 #, c-format
@@ -23856,6 +23873,11 @@ msgstr ""
 msgid "Termin"
 msgstr "Appointment"
 
+#: show_dates.inc.php:387 show_dates.inc.php:570
+#: lib/classes/StudipLitListViewAdmin.class.php:356
+msgid "Sichtbarkeit:"
+msgstr "Visibility:"
+
 #: show_dates.inc.php:443
 msgid "Meine aktuellen Termine"
 msgstr "All current appointments"
@@ -25567,48 +25589,48 @@ msgstr ""
 msgid "Die RangeID darf nicht leer sein."
 msgstr "Do not delete this message."
 
-#: lib/classes/guestbook.class.php:79
+#: lib/classes/guestbook.class.php:81
 msgid "aktiviert"
 msgstr "activated"
 
-#: lib/classes/guestbook.class.php:81
+#: lib/classes/guestbook.class.php:83
 msgid "deaktiviert"
 msgstr "deactivated"
 
-#: lib/classes/guestbook.class.php:93
+#: lib/classes/guestbook.class.php:95
 msgid "Gästebuch"
 msgstr "Guest book"
 
-#: lib/classes/guestbook.class.php:106
+#: lib/classes/guestbook.class.php:108
 msgid " Einträge"
 msgstr "Entries "
 
-#: lib/classes/guestbook.class.php:189
+#: lib/classes/guestbook.class.php:191
 #, fuzzy, c-format
 msgid "%s hat am %s geschrieben:"
 msgstr "%s wrote:"
 
-#: lib/classes/guestbook.class.php:214
+#: lib/classes/guestbook.class.php:216
 msgid "Geben Sie hier Ihren Gästebuchbeitrag ein!"
 msgstr "Enter your guest book entry here!"
 
-#: lib/classes/guestbook.class.php:263
+#: lib/classes/guestbook.class.php:265
 msgid "Sie haben das Gästebuch deaktiviert. Es ist nun nicht mehr sichtbar."
 msgstr "You have deactivated the guest book. It is no longer visible."
 
-#: lib/classes/guestbook.class.php:266
+#: lib/classes/guestbook.class.php:268
 msgid "Sie haben das Gästebuch aktiviert: Besucher können nun schreiben!"
 msgstr "You have activated the guest book: Visitors can now write in it!"
 
-#: lib/classes/guestbook.class.php:274
+#: lib/classes/guestbook.class.php:276
 msgid "Sie haben alle Beiträge des Gästebuchs gelöscht!"
 msgstr "You have deleted all postings in the guest book!"
 
-#: lib/classes/guestbook.class.php:282
+#: lib/classes/guestbook.class.php:284
 msgid "Sie haben einen Beitrag im Gästebuch gelöscht!"
 msgstr "You have deleted one posting from the guest book!"
 
-#: lib/classes/guestbook.class.php:284
+#: lib/classes/guestbook.class.php:286
 msgid "Netter Versuch!"
 msgstr "Nice try!"
 
@@ -26933,9 +26955,8 @@ msgid "E-Mail an <b>%s</b> ist nicht zustellbar!"
 msgstr "E-mail to <b>%s</b> is undeliverable!"
 
 #: lib/classes/UserManagement.class.php:208
-#, fuzzy
 msgid "Sie haben keine Berechtigung diesen Account zu ver&auml;ndern."
-msgstr "You don't have any authorisation to change this admin account."
+msgstr "You don't have any authorisation to change this account."
 
 #: lib/classes/UserManagement.class.php:225
 #, c-format
@@ -27069,9 +27090,8 @@ msgid "Passwort von User \"%s\" neu gesetzt."
 msgstr "New password for user \"%s\" has been generated. "
 
 #: lib/classes/UserManagement.class.php:574
-#, fuzzy
 msgid "Sie haben keine Berechtigung Accounts zu l&ouml;schen."
-msgstr "You don't have any authorisation to delete <b>Root Accounts</b>"
+msgstr "You don't have any authorisation to delete user accounts."
 
 #: lib/classes/UserManagement.class.php:580
 msgid "Sie haben keine Berechtigung <b>Root-Accounts</b> zu l&ouml;schen."
@@ -30735,105 +30755,3 @@ msgid ""
 msgstr ""
 "The allocation of rooms %s has been sent to the resources administration."
 
-#~ msgid "Votings und Tests"
-#~ msgstr "Votes and tests"
-
-#~ msgid "Votings/Tests bearbeiten"
-#~ msgstr "Edit votes/tests"
-
-#~ msgid "Abgelaufene Votings und Tests"
-#~ msgstr "Finished votes and tests"
-
-#~ msgid ""
-#~ "Diese NutzerInnen sind als Ressourcen-Roots eingetragen, sie haben damit "
-#~ "Zugriff auf alle globalen Ressourcen"
-#~ msgstr ""
-#~ "These users are entered as resource roots and therefore have access to "
-#~ "all global resources."
-
-#~ msgid ""
-#~ "Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den "
-#~ "entsprechenden Termin in der Veranstaltung"
-#~ msgstr ""
-#~ "In order to change the allocation, please change the corresponding course "
-#~ "appointment"
-
-#~ msgid "Sichtbarkeit:"
-#~ msgstr "Visibility:"
-
-#~ msgid ""
-#~ "Der eingegebene Termin findet nicht zu allgemeinen Veranstaltungszeiten "
-#~ "statt. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen "
-#~ "Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen."
-#~ msgstr ""
-#~ "The given appointments that do not take place during the normal course "
-#~ "hours. It is recommended that course meetings of regular courses should "
-#~ "take place within general teaching hours. "
-
-#~ msgid "[eingeben oder aus Liste]"
-#~ msgstr "[enter or choose from list]"
-
-#, fuzzy
-#~ msgid "Raumwunsch f&uuml;r diesen Termin bearbeiten"
-#~ msgstr "Data concerning the course dates:"
-
-#~ msgid "hat am"
-#~ msgstr "had at"
-
-#~ msgid "geschrieben:"
-#~ msgstr "wrote:"
-
-#~ msgid "%s Votes, %s neue"
-#~ msgstr "%s Votes, %s new"
-
-#~ msgid "Es wurde kein Bild ausgewählt.§"
-#~ msgstr "No picture has been selected.§"
-
-#~ msgid "Es wurde kein Verweisziel angegeben.§"
-#~ msgstr "No link target has been entered.§"
-
-#~ msgid "wie Eingabe"
-#~ msgstr "as entered"
-
-#~ msgid "Durchsuche Archiv-Tabelle auf Veranstalungsnummer"
-#~ msgstr "Search through archive table for course numbers"
-
-#~ msgid " ... besitzt keine Veranstalungsnummer!"
-#~ msgstr "... have no course number!"
-
-#~ msgid " ... Veranstalungsnummer (%s) gefunden"
-#~ msgstr "... course number (%s) found"
-
-#~ msgid " und in Spalte 'VeranstaltungsNummer' geschrieben.<br>"
-#~ msgstr "and has been written in the 'course number' column.<br>"
-
-#~ msgid ""
-#~ "Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. "
-#~ "Die Kontingentierung wird am %s aufgehoben."
-#~ msgstr ""
-#~ "The participants were chosen according to the order of registration. The "
-#~ "contingent groups will cease to be considered after the %s. "
-
-#~ msgid "Zur Literatur- und Linkliste"
-#~ msgstr "go to literature and links list"
-
-#~ msgid "&nbsp;Chateinladung von <b>%s</b>"
-#~ msgstr "&nbsp;Chat invitation from <b>%s</b> "
-
-#~ msgid "&nbsp;<b>Systemnachricht</b> %s[lesen]%s"
-#~ msgstr "&nbsp;<b>System message</b>%s[read]%s"
-
-#~ msgid "&nbsp;Nachricht von <br /><b>%s</b> %s[lesen]%s"
-#~ msgstr "&nbsp;Message from <br /><b>%s</b> %s[read]%s"
-
-#~ msgid "%s alte Nachricht(en) %s[lesen]%s"
-#~ msgstr "%s old message(s) %s[read]%s"
-
-#~ msgid "neue Nachrichten:"
-#~ msgstr "New messages:"
-
-#~ msgid "Notizen zum Teilnehmerstatus des Nutzers erfassen/anzeigen"
-#~ msgstr "Add/show notes concerning participant status."
-
-#~ msgid "TeilnehmerIn der Veranstaltung seit:<br />"
-#~ msgstr "Course participant since <br />"

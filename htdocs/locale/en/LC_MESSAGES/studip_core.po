@@ -1,19 +1,23 @@
-# Copyright (C) 2003 Free Software Foundation, Inc.
+# translation of studip_core.po to 
+# translation of studip_core.po to
+# Copyright (C) 2003,2004 Free Software Foundation, Inc.
 # , 2003
+# , 2004
+# , 2004
 #
 #: admin_lock_adjust.inc.php:32 admin_lock_adjust.inc.php:33
 #: admin_lock_adjust.inc.php:64 admin_lock_adjust.inc.php:65
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
-"POT-Creation-Date: 2004-03-31 18:32+0200\n"
-"PO-Revision-Date: 2004-02-15 13:53+0100\n"
-"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
-"Language-Team: english\n"
+"POT-Creation-Date: 2004-04-01 13:48+0200\n"
+"PO-Revision-Date: 2004-04-01 13:44+GMT\n"
+"Last-Translator: \n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.0.1\n"
 
 #: about.php:110
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
@@ -727,9 +731,8 @@ msgid "Die Bilddatei wurde erfolgreich hochgeladen."
 msgstr "A new photo has been successfully uploaded."
 
 #: admin_banner_ads.php:116
-#, fuzzy
 msgid "Banner"
-msgstr "Beginner"
+msgstr "Banner"
 
 #: admin_banner_ads.php:117 admin_banner_ads.php:270
 #: admin_db_integrity.php:176 admin_lock_adjust.inc.php:31
@@ -740,9 +743,8 @@ msgid "Beschreibung"
 msgstr "Description"
 
 #: admin_banner_ads.php:118
-#, fuzzy
 msgid "Ziel"
-msgstr "Title"
+msgstr "Target"
 
 #: admin_banner_ads.php:119
 #, fuzzy
@@ -798,9 +800,8 @@ msgid "jjjj"
 msgstr "yyyy"
 
 #: admin_banner_ads.php:170
-#, fuzzy
 msgid "Der angegebene Benutzername existiert nicht."
-msgstr "The given username does not exist.§"
+msgstr "The given username does not exist."
 
 #: admin_banner_ads.php:178
 #, fuzzy
@@ -833,7 +834,7 @@ msgstr "No picture selected"
 
 #: admin_banner_ads.php:269
 msgid "Pfad:"
-msgstr ""
+msgstr "Path:"
 
 #: admin_banner_ads.php:271
 msgid "Alternativtext"
@@ -1390,10 +1391,10 @@ msgstr "Close all appointments"
 msgid "von"
 msgstr "from"
 
-#: admin_dates.php:700 admin_dates.php:879 admin_literatur_overview.php:321
+#: admin_dates.php:700 admin_dates.php:879 admin_literatur_overview.php:335
 #: admin_seminare_assi.php:3532 admin_sem_tree.php:143 crcregister.ihtml:218
-#: edit_about.php:1019 lit_search.php:237 new_user_md5.php:165
-#: new_user_md5.php:275 sem_browse.inc.php:239
+#: edit_about.php:1019 lit_overview_print_view.php:78 lit_search.php:237
+#: new_user_md5.php:165 new_user_md5.php:275 sem_browse.inc.php:239
 #: lib/classes/SemBrowse.class.php:231
 msgid "Titel:"
 msgstr "Title:"
@@ -1885,23 +1886,25 @@ msgstr "Delete"
 msgid "abbrechen"
 msgstr "Cancel"
 
-#: admin_lit_element.php:124 admin_literatur_overview.php:351
+#: admin_lit_element.php:124 admin_literatur_overview.php:370
+#: lit_overview_print_view.php:102
 msgid "Verf&uuml;gbarkeit in externen Katalogen:"
 msgstr ""
 
 #: admin_lit_element.php:128 admin_literatur_overview.php:291
-#: admin_literatur_overview.php:355
+#: admin_literatur_overview.php:374 lit_overview_print_view.php:106
 #, fuzzy
 msgid "gefunden"
 msgstr "No-one found!"
 
 #: admin_lit_element.php:133 admin_lit_element.php:236
-#: admin_literatur_overview.php:330 admin_literatur_overview.php:360
+#: admin_literatur_overview.php:344 admin_literatur_overview.php:379
 #: lit_search.php:247
 msgid "(Kein externer Link vorhanden.)"
 msgstr "(No external link available.)"
 
-#: admin_lit_element.php:138 admin_literatur_overview.php:365
+#: admin_lit_element.php:138 admin_literatur_overview.php:384
+#: lit_overview_print_view.php:111
 #, fuzzy
 msgid "<u>nicht</u> gefunden"
 msgstr "User not found"
@@ -1925,7 +1928,7 @@ msgid "Neuen Eintrag anlegen"
 msgstr "Create new entry"
 
 #: admin_lit_element.php:209 admin_lit_element.php:260
-#: admin_literatur_overview.php:315
+#: admin_literatur_overview.php:329
 msgid "Verfügbarkeit überprüfen"
 msgstr ""
 
@@ -2016,6 +2019,13 @@ msgstr "Close all appointments"
 msgid "Alle Einträge aufklappen"
 msgstr "Open all appointments"
 
+#: admin_literatur_overview.php:277 links_openobject.inc.php:160
+#: links_openobject.inc.php:181 links_openobject.inc.php:206
+#: links_seminare.inc.php:43 links_sms.inc.php:71 wiki.inc.php:879
+#: help/kartei.inc.php:32 help/structure.inc.php:240
+msgid "Druckansicht"
+msgstr "Print view"
+
 #: admin_literatur_overview.php:294
 #, fuzzy
 msgid "keine automatische Suche möglich"
@@ -2026,40 +2036,50 @@ msgstr "Automatically system message,"
 msgid "nicht gefunden"
 msgstr "User not found"
 
-#: admin_literatur_overview.php:318 lit_search.php:229
+#: admin_literatur_overview.php:332 lit_search.php:229
 #: lib/classes/StudipLitListViewAdmin.class.php:387
 msgid "Detailansicht dieses Eintrages ansehen."
 msgstr "Show detailed view of this entry."
 
-#: admin_literatur_overview.php:322 lit_search.php:238
+#: admin_literatur_overview.php:336 lit_overview_print_view.php:79
+#: lit_search.php:238
 msgid "Autor; weitere Beteiligte:"
 msgstr "Author, further participants:"
 
-#: admin_literatur_overview.php:323 lit_search.php:239
+#: admin_literatur_overview.php:337 lit_overview_print_view.php:80
+#: lit_search.php:239
 msgid "Erschienen:"
 msgstr "Publication:"
 
-#: admin_literatur_overview.php:324 lit_search.php:240
+#: admin_literatur_overview.php:338 lit_overview_print_view.php:81
+#: lit_search.php:240
 msgid "Identifikation:"
 msgstr "Identification:"
 
-#: admin_literatur_overview.php:326 lit_search.php:243
+#: admin_literatur_overview.php:340 lit_search.php:243
 msgid "Externer Link:"
 msgstr "External link:"
 
-#: admin_literatur_overview.php:335 meine_seminare.php:784
+#: admin_literatur_overview.php:348 lit_overview_print_view.php:83
+#: meine_seminare.php:784
 msgid "Veranstaltungen:"
 msgstr "Courses:"
 
-#: admin_literatur_overview.php:343
+#: admin_literatur_overview.php:356 lit_overview_print_view.php:91
+#, fuzzy
+msgid "Dozenten:"
+msgstr "Lecturers"
+
+#: admin_literatur_overview.php:362 lit_overview_print_view.php:97
 #, fuzzy
 msgid "Teilnehmeranzahl (erwartet/angemeldet):"
 msgstr "Administer participants"
 
-#: admin_literatur_overview.php:344 admin_seminare1.php:865
+#: admin_literatur_overview.php:363 admin_seminare1.php:865
 #: admin_seminare1.php:868 forum.inc.php:122 functions.php:498
-#: functions.php:518 functions.php:542 functions.php:562 new_user_md5.php:356
-#: new_user_md5.php:519 write_topic.php:121
+#: functions.php:518 functions.php:542 functions.php:562
+#: lit_overview_print_view.php:98 new_user_md5.php:356 new_user_md5.php:519
+#: write_topic.php:121
 msgid "unbekannt"
 msgstr "unknown"
 
@@ -8691,11 +8711,11 @@ msgid "Zuletzt editiert von "
 msgstr "Last edited by "
 
 #: forum.inc.php:108 links_admin.inc.php:316 write_topic.php:133
-#: lib/classes/guestbook.class.php:223
+#: lib/classes/guestbook.class.php:225
 msgid "Smileys"
 msgstr "Smilies "
 
-#: forum.inc.php:108 write_topic.php:133 lib/classes/guestbook.class.php:223
+#: forum.inc.php:108 write_topic.php:133 lib/classes/guestbook.class.php:225
 msgid "Formatierungshilfen"
 msgstr "Help for text formatting"
 
@@ -8757,11 +8777,11 @@ msgstr "There are no postings in this view."
 msgid "Zu Ihrem Suchbegriff gibt es keine Treffer."
 msgstr "Your search did not reveal any matches."
 
-#: forum.inc.php:634 lib/classes/guestbook.class.php:152
+#: forum.inc.php:634 lib/classes/guestbook.class.php:154
 msgid "zurück"
 msgstr "back"
 
-#: forum.inc.php:655 lib/classes/guestbook.class.php:173
+#: forum.inc.php:655 lib/classes/guestbook.class.php:175
 msgid "weiter"
 msgstr "Continue"
 
@@ -10635,12 +10655,6 @@ msgstr "Course time table"
 msgid "Administration der Einrichtung"
 msgstr "Institute administration"
 
-#: links_openobject.inc.php:160 links_openobject.inc.php:181
-#: links_openobject.inc.php:206 links_seminare.inc.php:43 links_sms.inc.php:71
-#: wiki.inc.php:879 help/kartei.inc.php:32 help/structure.inc.php:240
-msgid "Druckansicht"
-msgstr "Print view"
-
 #: links_openobject.inc.php:162
 msgid "Administration dieser Veranstaltung"
 msgstr "Administration of this course"
@@ -10864,6 +10878,11 @@ msgid ""
 msgstr ""
 "You can copy all of these lists into your own personal literature area, in "
 "order to obtain further information about the entries."
+
+#: lit_overview_print_view.php:63
+#, fuzzy, c-format
+msgid "Literaturliste %s"
+msgstr "Literature lists"
 
 #: lit_print_view.php:38
 #, c-format
@@ -15156,48 +15175,48 @@ msgstr "Do not delete this message."
 msgid "Der Titel darf nicht leer sein."
 msgstr ""
 
-#: lib/classes/guestbook.class.php:79
+#: lib/classes/guestbook.class.php:81
 msgid "aktiviert"
 msgstr "activated"
 
-#: lib/classes/guestbook.class.php:81
+#: lib/classes/guestbook.class.php:83
 msgid "deaktiviert"
 msgstr "deactivated"
 
-#: lib/classes/guestbook.class.php:93
+#: lib/classes/guestbook.class.php:95
 msgid "Gästebuch"
 msgstr "Guest book"
 
-#: lib/classes/guestbook.class.php:106
+#: lib/classes/guestbook.class.php:108
 msgid " Einträge"
 msgstr "Entries "
 
-#: lib/classes/guestbook.class.php:189
+#: lib/classes/guestbook.class.php:191
 #, fuzzy, c-format
 msgid "%s hat am %s geschrieben:"
 msgstr "%s wrote:"
 
-#: lib/classes/guestbook.class.php:214
+#: lib/classes/guestbook.class.php:216
 msgid "Geben Sie hier Ihren Gästebuchbeitrag ein!"
 msgstr "Enter your guest book entry here!"
 
-#: lib/classes/guestbook.class.php:263
+#: lib/classes/guestbook.class.php:265
 msgid "Sie haben das Gästebuch deaktiviert. Es ist nun nicht mehr sichtbar."
 msgstr "You have deactivated the guest book. It is no longer visible."
 
-#: lib/classes/guestbook.class.php:266
+#: lib/classes/guestbook.class.php:268
 msgid "Sie haben das Gästebuch aktiviert: Besucher können nun schreiben!"
 msgstr "You have activated the guest book: Visitors can now write in it!"
 
-#: lib/classes/guestbook.class.php:274
+#: lib/classes/guestbook.class.php:276
 msgid "Sie haben alle Beiträge des Gästebuchs gelöscht!"
 msgstr "You have deleted all postings in the guest book!"
 
-#: lib/classes/guestbook.class.php:282
+#: lib/classes/guestbook.class.php:284
 msgid "Sie haben einen Beitrag im Gästebuch gelöscht!"
 msgstr "You have deleted one posting from the guest book!"
 
-#: lib/classes/guestbook.class.php:284
+#: lib/classes/guestbook.class.php:286
 msgid "Netter Versuch!"
 msgstr "Nice try!"
 
@@ -16539,9 +16558,8 @@ msgid "E-Mail an <b>%s</b> ist nicht zustellbar!"
 msgstr "E-mail to <b>%s</b> is undeliverable!"
 
 #: lib/classes/UserManagement.class.php:208
-#, fuzzy
 msgid "Sie haben keine Berechtigung diesen Account zu ver&auml;ndern."
-msgstr "You don't have any authorisation to change this admin account."
+msgstr "You don't have any authorisation to change this account."
 
 #: lib/classes/UserManagement.class.php:225
 #, c-format
@@ -16675,9 +16693,8 @@ msgid "Passwort von User \"%s\" neu gesetzt."
 msgstr "New password for user \"%s\" has been generated. "
 
 #: lib/classes/UserManagement.class.php:574
-#, fuzzy
 msgid "Sie haben keine Berechtigung Accounts zu l&ouml;schen."
-msgstr "You don't have any authorisation to delete <b>Root Accounts</b>"
+msgstr "You don't have any authorisation to delete user accounts."
 
 #: lib/classes/UserManagement.class.php:580
 msgid "Sie haben keine Berechtigung <b>Root-Accounts</b> zu l&ouml;schen."
@@ -17821,80 +17838,3 @@ msgstr "What is ILIAS?"
 #: help/structure.inc.php:584
 msgid "Was ist ILIAS und was sind ILIAS Lernmodule"
 msgstr "What is ILIAS and what are ILIAS learning modules"
-
-#~ msgid ""
-#~ "Der eingegebene Termin findet nicht zu allgemeinen Veranstaltungszeiten "
-#~ "statt. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen "
-#~ "Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen."
-#~ msgstr ""
-#~ "The given appointments that do not take place during the normal course "
-#~ "hours. It is recommended that course meetings of regular courses should "
-#~ "take place within general teaching hours. "
-
-#~ msgid "[eingeben oder aus Liste]"
-#~ msgstr "[enter or choose from list]"
-
-#, fuzzy
-#~ msgid "Raumwunsch f&uuml;r diesen Termin bearbeiten"
-#~ msgstr "Data concerning the course dates:"
-
-#~ msgid "hat am"
-#~ msgstr "had at"
-
-#~ msgid "geschrieben:"
-#~ msgstr "wrote:"
-
-#~ msgid "%s Votes, %s neue"
-#~ msgstr "%s Votes, %s new"
-
-#~ msgid "Es wurde kein Bild ausgewählt.§"
-#~ msgstr "No picture has been selected.§"
-
-#~ msgid "Es wurde kein Verweisziel angegeben.§"
-#~ msgstr "No link target has been entered.§"
-
-#~ msgid "wie Eingabe"
-#~ msgstr "as entered"
-
-#~ msgid "Durchsuche Archiv-Tabelle auf Veranstalungsnummer"
-#~ msgstr "Search through archive table for course numbers"
-
-#~ msgid " ... besitzt keine Veranstalungsnummer!"
-#~ msgstr "... have no course number!"
-
-#~ msgid " ... Veranstalungsnummer (%s) gefunden"
-#~ msgstr "... course number (%s) found"
-
-#~ msgid " und in Spalte 'VeranstaltungsNummer' geschrieben.<br>"
-#~ msgstr "and has been written in the 'course number' column.<br>"
-
-#~ msgid ""
-#~ "Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. "
-#~ "Die Kontingentierung wird am %s aufgehoben."
-#~ msgstr ""
-#~ "The participants were chosen according to the order of registration. The "
-#~ "contingent groups will cease to be considered after the %s. "
-
-#~ msgid "Zur Literatur- und Linkliste"
-#~ msgstr "go to literature and links list"
-
-#~ msgid "&nbsp;Chateinladung von <b>%s</b>"
-#~ msgstr "&nbsp;Chat invitation from <b>%s</b> "
-
-#~ msgid "&nbsp;<b>Systemnachricht</b> %s[lesen]%s"
-#~ msgstr "&nbsp;<b>System message</b>%s[read]%s"
-
-#~ msgid "&nbsp;Nachricht von <br /><b>%s</b> %s[lesen]%s"
-#~ msgstr "&nbsp;Message from <br /><b>%s</b> %s[read]%s"
-
-#~ msgid "%s alte Nachricht(en) %s[lesen]%s"
-#~ msgstr "%s old message(s) %s[read]%s"
-
-#~ msgid "neue Nachrichten:"
-#~ msgstr "New messages:"
-
-#~ msgid "Notizen zum Teilnehmerstatus des Nutzers erfassen/anzeigen"
-#~ msgstr "Add/show notes concerning participant status."
-
-#~ msgid "TeilnehmerIn der Veranstaltung seit:<br />"
-#~ msgstr "Course participant since <br />"

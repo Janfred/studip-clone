@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-03-31 18:32+0200\n"
+"POT-Creation-Date: 2004-04-01 13:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,12 +213,14 @@ msgstr ""
 #: modules/evaluation/evaluation_admin_overview.lib.php:240
 #: modules/evaluation/evaluation_admin_template.lib.php:446
 #: modules/evaluation/evaluation_admin_template.lib.php:706
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2668
 msgid "ja"
 msgstr ""
 
 #: modules/evaluation/evaluation_admin_overview.lib.php:241
 #: modules/evaluation/evaluation_admin_template.lib.php:455
 #: modules/evaluation/evaluation_admin_template.lib.php:729
+#: modules/evaluation/classes/EvaluationTreeEditView.class.php:2658
 msgid "nein"
 msgstr ""
 

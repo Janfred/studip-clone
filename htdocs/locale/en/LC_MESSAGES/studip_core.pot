@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-03-31 18:32+0200\n"
+"POT-Creation-Date: 2004-04-01 13:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1277,10 +1277,10 @@ msgstr ""
 msgid "von"
 msgstr ""
 
-#: admin_dates.php:700 admin_dates.php:879 admin_literatur_overview.php:321
+#: admin_dates.php:700 admin_dates.php:879 admin_literatur_overview.php:335
 #: admin_seminare_assi.php:3532 admin_sem_tree.php:143 crcregister.ihtml:218
-#: edit_about.php:1019 lit_search.php:237 new_user_md5.php:165
-#: new_user_md5.php:275 sem_browse.inc.php:239
+#: edit_about.php:1019 lit_overview_print_view.php:78 lit_search.php:237
+#: new_user_md5.php:165 new_user_md5.php:275 sem_browse.inc.php:239
 #: lib/classes/SemBrowse.class.php:231
 msgid "Titel:"
 msgstr ""
@@ -1743,22 +1743,24 @@ msgstr ""
 msgid "abbrechen"
 msgstr ""
 
-#: admin_lit_element.php:124 admin_literatur_overview.php:351
+#: admin_lit_element.php:124 admin_literatur_overview.php:370
+#: lit_overview_print_view.php:102
 msgid "Verf&uuml;gbarkeit in externen Katalogen:"
 msgstr ""
 
 #: admin_lit_element.php:128 admin_literatur_overview.php:291
-#: admin_literatur_overview.php:355
+#: admin_literatur_overview.php:374 lit_overview_print_view.php:106
 msgid "gefunden"
 msgstr ""
 
 #: admin_lit_element.php:133 admin_lit_element.php:236
-#: admin_literatur_overview.php:330 admin_literatur_overview.php:360
+#: admin_literatur_overview.php:344 admin_literatur_overview.php:379
 #: lit_search.php:247
 msgid "(Kein externer Link vorhanden.)"
 msgstr ""
 
-#: admin_lit_element.php:138 admin_literatur_overview.php:365
+#: admin_lit_element.php:138 admin_literatur_overview.php:384
+#: lit_overview_print_view.php:111
 msgid "<u>nicht</u> gefunden"
 msgstr ""
 
@@ -1780,7 +1782,7 @@ msgid "Neuen Eintrag anlegen"
 msgstr ""
 
 #: admin_lit_element.php:209 admin_lit_element.php:260
-#: admin_literatur_overview.php:315
+#: admin_literatur_overview.php:329
 msgid "Verfügbarkeit überprüfen"
 msgstr ""
 
@@ -1862,6 +1864,13 @@ msgstr ""
 msgid "Alle Einträge aufklappen"
 msgstr ""
 
+#: admin_literatur_overview.php:277 links_openobject.inc.php:160
+#: links_openobject.inc.php:181 links_openobject.inc.php:206
+#: links_seminare.inc.php:43 links_sms.inc.php:71 wiki.inc.php:879
+#: help/kartei.inc.php:32 help/structure.inc.php:240
+msgid "Druckansicht"
+msgstr ""
+
 #: admin_literatur_overview.php:294
 msgid "keine automatische Suche möglich"
 msgstr ""
@@ -1870,39 +1879,48 @@ msgstr ""
 msgid "nicht gefunden"
 msgstr ""
 
-#: admin_literatur_overview.php:318 lit_search.php:229
+#: admin_literatur_overview.php:332 lit_search.php:229
 #: lib/classes/StudipLitListViewAdmin.class.php:387
 msgid "Detailansicht dieses Eintrages ansehen."
 msgstr ""
 
-#: admin_literatur_overview.php:322 lit_search.php:238
+#: admin_literatur_overview.php:336 lit_overview_print_view.php:79
+#: lit_search.php:238
 msgid "Autor; weitere Beteiligte:"
 msgstr ""
 
-#: admin_literatur_overview.php:323 lit_search.php:239
+#: admin_literatur_overview.php:337 lit_overview_print_view.php:80
+#: lit_search.php:239
 msgid "Erschienen:"
 msgstr ""
 
-#: admin_literatur_overview.php:324 lit_search.php:240
+#: admin_literatur_overview.php:338 lit_overview_print_view.php:81
+#: lit_search.php:240
 msgid "Identifikation:"
 msgstr ""
 
-#: admin_literatur_overview.php:326 lit_search.php:243
+#: admin_literatur_overview.php:340 lit_search.php:243
 msgid "Externer Link:"
 msgstr ""
 
-#: admin_literatur_overview.php:335 meine_seminare.php:784
+#: admin_literatur_overview.php:348 lit_overview_print_view.php:83
+#: meine_seminare.php:784
 msgid "Veranstaltungen:"
 msgstr ""
 
-#: admin_literatur_overview.php:343
+#: admin_literatur_overview.php:356 lit_overview_print_view.php:91
+msgid "Dozenten:"
+msgstr ""
+
+#: admin_literatur_overview.php:362 lit_overview_print_view.php:97
 msgid "Teilnehmeranzahl (erwartet/angemeldet):"
 msgstr ""
 
-#: admin_literatur_overview.php:344 admin_seminare1.php:865
+#: admin_literatur_overview.php:363 admin_seminare1.php:865
 #: admin_seminare1.php:868 forum.inc.php:122 functions.php:498
-#: functions.php:518 functions.php:542 functions.php:562 new_user_md5.php:356
-#: new_user_md5.php:519 write_topic.php:121
+#: functions.php:518 functions.php:542 functions.php:562
+#: lit_overview_print_view.php:98 new_user_md5.php:356 new_user_md5.php:519
+#: write_topic.php:121
 msgid "unbekannt"
 msgstr ""
 
@@ -7971,11 +7989,11 @@ msgid "Zuletzt editiert von "
 msgstr ""
 
 #: forum.inc.php:108 links_admin.inc.php:316 write_topic.php:133
-#: lib/classes/guestbook.class.php:223
+#: lib/classes/guestbook.class.php:225
 msgid "Smileys"
 msgstr ""
 
-#: forum.inc.php:108 write_topic.php:133 lib/classes/guestbook.class.php:223
+#: forum.inc.php:108 write_topic.php:133 lib/classes/guestbook.class.php:225
 msgid "Formatierungshilfen"
 msgstr ""
 
@@ -8031,11 +8049,11 @@ msgstr ""
 msgid "Zu Ihrem Suchbegriff gibt es keine Treffer."
 msgstr ""
 
-#: forum.inc.php:634 lib/classes/guestbook.class.php:152
+#: forum.inc.php:634 lib/classes/guestbook.class.php:154
 msgid "zurück"
 msgstr ""
 
-#: forum.inc.php:655 lib/classes/guestbook.class.php:173
+#: forum.inc.php:655 lib/classes/guestbook.class.php:175
 msgid "weiter"
 msgstr ""
 
@@ -9806,12 +9824,6 @@ msgstr ""
 msgid "Administration der Einrichtung"
 msgstr ""
 
-#: links_openobject.inc.php:160 links_openobject.inc.php:181
-#: links_openobject.inc.php:206 links_seminare.inc.php:43 links_sms.inc.php:71
-#: wiki.inc.php:879 help/kartei.inc.php:32 help/structure.inc.php:240
-msgid "Druckansicht"
-msgstr ""
-
 #: links_openobject.inc.php:162
 msgid "Administration dieser Veranstaltung"
 msgstr ""
@@ -10029,6 +10041,11 @@ msgid ""
 "Sie k&ouml;nnen jede dieser Listen in ihren pers&ouml;nlichen "
 "Literaturbereich kopieren, um erweiterte Informationen über die Eintr&auml;"
 "ge zu erhalten."
+msgstr ""
+
+#: lit_overview_print_view.php:63
+#, c-format
+msgid "Literaturliste %s"
 msgstr ""
 
 #: lit_print_view.php:38
@@ -13933,48 +13950,48 @@ msgstr ""
 msgid "Der Titel darf nicht leer sein."
 msgstr ""
 
-#: lib/classes/guestbook.class.php:79
+#: lib/classes/guestbook.class.php:81
 msgid "aktiviert"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:81
+#: lib/classes/guestbook.class.php:83
 msgid "deaktiviert"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:93
+#: lib/classes/guestbook.class.php:95
 msgid "Gästebuch"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:106
+#: lib/classes/guestbook.class.php:108
 msgid " Einträge"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:189
+#: lib/classes/guestbook.class.php:191
 #, c-format
 msgid "%s hat am %s geschrieben:"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:214
+#: lib/classes/guestbook.class.php:216
 msgid "Geben Sie hier Ihren Gästebuchbeitrag ein!"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:263
+#: lib/classes/guestbook.class.php:265
 msgid "Sie haben das Gästebuch deaktiviert. Es ist nun nicht mehr sichtbar."
 msgstr ""
 
-#: lib/classes/guestbook.class.php:266
+#: lib/classes/guestbook.class.php:268
 msgid "Sie haben das Gästebuch aktiviert: Besucher können nun schreiben!"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:274
+#: lib/classes/guestbook.class.php:276
 msgid "Sie haben alle Beiträge des Gästebuchs gelöscht!"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:282
+#: lib/classes/guestbook.class.php:284
 msgid "Sie haben einen Beitrag im Gästebuch gelöscht!"
 msgstr ""
 
-#: lib/classes/guestbook.class.php:284
+#: lib/classes/guestbook.class.php:286
 msgid "Netter Versuch!"
 msgstr ""
 

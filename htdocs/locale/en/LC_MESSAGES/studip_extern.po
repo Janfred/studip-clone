@@ -1,18 +1,19 @@
+# translation of studip_extern.po to 
 # translation of studip_extern.po to
 # This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003,2004
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2004-03-31 18:32+0200\n"
-"PO-Revision-Date: 2004-02-15 14:01+0100\n"
-"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
-"Language-Team: english\n"
+"POT-Creation-Date: 2004-04-01 13:48+0200\n"
+"PO-Revision-Date: 2004-04-01 13:29+GMT\n"
+"Last-Translator: \n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.0.1\n"
 
 #: extern/admin_extern.inc.php:63
 msgid "Verwaltung der externen Anzeigemodule"
@@ -2669,7 +2670,7 @@ msgstr ""
 #: extern/elements/main/ExternElementMainPersondetails.class.php:172
 #: extern/elements/main/ExternElementMainPersons.class.php:173
 msgid "Copyright:"
-msgstr ""
+msgstr "Copyright:"
 
 #: extern/elements/main/ExternElementMainDownload.class.php:171
 #: extern/elements/main/ExternElementMainGlobal.class.php:175
@@ -2694,7 +2695,7 @@ msgstr ""
 #: extern/elements/main/ExternElementMainPersondetails.class.php:176
 #: extern/elements/main/ExternElementMainPersons.class.php:177
 msgid "Autor:"
-msgstr ""
+msgstr "Author:"
 
 #: extern/elements/main/ExternElementMainDownload.class.php:175
 #: extern/elements/main/ExternElementMainGlobal.class.php:179
@@ -3340,9 +3341,8 @@ msgstr ""
 "group / function."
 
 #: extern/elements/main/ExternElementMainPersons.class.php:149
-#, fuzzy
 msgid "Meyer, Peter"
-msgstr "Meyer Peter"
+msgstr "Meyer, Peter"
 
 #: extern/elements/main/ExternElementMainPersons.class.php:156
 msgid "unter Gruppenname"

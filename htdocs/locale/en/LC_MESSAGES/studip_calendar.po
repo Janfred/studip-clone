@@ -1,19 +1,18 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# translation of studip_calendar.po to 
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-03-31 18:32+0200\n"
-"PO-Revision-Date: 2004-02-15 13:48+0100\n"
-"Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
-"Language-Team: english\n"
+"Project-Id-Version: studip_calendar\n"
+"POT-Creation-Date: 2004-04-01 13:48+0200\n"
+"PO-Revision-Date: 2004-04-01 13:20+GMT\n"
+"Last-Translator: \n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.6\n"
+"X-Generator: KBabel 1.0.1\n"
 
 #: calendar/calendar.inc.php:213 calendar/calendar.inc.php:218
 #: calendar/calendar.inc.php:231
@@ -37,7 +36,7 @@ msgid ""
 "Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren "
 "und synchronisieren"
 msgstr ""
-"My personal appointment calender - import, export and synchronise "
+"My personal appointment calender - import, export and synchronize "
 "appointment data."
 
 #: calendar/calendar.inc.php:273
@@ -78,14 +77,14 @@ msgstr "Create appointment on %s"
 
 #: calendar/calendar_settings.inc.php:52
 msgid "Einstellungen des Terminkalenders anpassen"
-msgstr "Customise settings for the appointment calendar"
+msgstr "Customize settings for the appointment calendar"
 
 #: calendar/calendar_settings.inc.php:62
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
 msgstr ""
-"Here you can customise the lay-out of your personal appointment calendar."
+"Here you can customize the lay-out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:67
 msgid "Option"
@@ -97,7 +96,7 @@ msgstr "Choice"
 
 #: calendar/calendar_settings.inc.php:72
 msgid "Startansicht anpassen:"
-msgstr "Customise start page:"
+msgstr "Customize start page:"
 
 #: calendar/calendar_settings.inc.php:79
 msgid "Wochenansicht"
@@ -160,7 +159,7 @@ msgstr "Time interval of the week view:"
 
 #: calendar/calendar_settings.inc.php:200
 msgid "Wochenansicht anpassen:"
-msgstr "Customise week view:"
+msgstr "Customize week view:"
 
 #: calendar/calendar_settings.inc.php:207
 msgid "7 Tage-Woche"
@@ -265,9 +264,8 @@ msgid "Wiederholung:"
 msgstr "Repetition:"
 
 #: calendar/calendar_visual.inc.php:789
-#, fuzzy
 msgid "Öffentlicher Termin"
-msgstr "public "
+msgstr "public appointment "
 
 #: calendar/lib/CalendarEvent.class.php:133 calendar/views/edit.inc.php:245
 msgid "hoch"
@@ -446,7 +444,6 @@ msgid "Der Termin wird nicht wiederholt."
 msgstr "The appointment will not be repeated."
 
 #: calendar/lib/CalendarEvent.class.php:567
-#, fuzzy
 msgid "ganztägig"
 msgstr "full-time"
 
@@ -655,23 +652,21 @@ msgid "Ausnahmen:"
 msgstr "Exception:"
 
 #: calendar/views/edit.inc.php:553
-#, fuzzy
 msgid "Ausnahme hinzufügen"
-msgstr "Exception:"
+msgstr "Add exception"
 
 #: calendar/views/edit.inc.php:563
-#, fuzzy
 msgid "ausgewählte Ausnahme löschen"
-msgstr "Delete selection"
+msgstr "delete selected exception"
 
 #: calendar/views/edit.inc.php:564
 msgid "ausgew&auml;hlte l&ouml;schen"
 msgstr "Delete selection"
 
 #: calendar/views/edit.inc.php:583
-#, fuzzy, c-format
+#, c-format
 msgid "Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."
-msgstr "You can save %s more appointments."
+msgstr "You can edit this appointment %sseperately%s."
 
 #: calendar/views/edit.inc.php:598
 #, c-format
@@ -743,7 +738,7 @@ msgstr ""
 #: calendar/views/export.inc.php:122
 #, c-format
 msgid "Stud.IP hat %s Termine synchronisiert."
-msgstr "Stud.IP has synchronised %s appointments."
+msgstr "Stud.IP has synchronized %s appointments."
 
 #: calendar/views/export.inc.php:126
 msgid ""
@@ -751,7 +746,7 @@ msgid ""
 "konnten."
 msgstr ""
 "Your iCalendar-file does not contain any appointments which can be "
-"synchronised."
+"synchronized."
 
 #: calendar/views/export.inc.php:130
 #, c-format
@@ -771,7 +766,7 @@ msgid ""
 "Klicken Sie auf den Button, um die Datei mit den synchronisierten "
 "Kalenderdaten herunterzuladen."
 msgstr ""
-"Click the button in order to download the file with the synchronised "
+"Click the button in order to download the file with the synchronized "
 "calendar data."
 
 #: calendar/views/export.inc.php:147
@@ -784,7 +779,7 @@ msgstr ""
 
 #: calendar/views/export.inc.php:159
 msgid "Herunterladen der synchronisierten Kalenderdaten"
-msgstr "Download the synchronised calendar data."
+msgstr "Download the synchronized calendar data."
 
 #: calendar/views/export.inc.php:169
 msgid "Exportieren Ihrer Kalenderdaten"
@@ -840,13 +835,13 @@ msgstr "Click on \"Browse\" to select a file."
 
 #: calendar/views/export.inc.php:229
 msgid "Synchronisieren Ihrer Kalenderdaten"
-msgstr "Synchronise your calendar data"
+msgstr "Synchronize your calendar data"
 
 #: calendar/views/export.inc.php:233
 msgid ""
 "Sie k&ouml;nnen Termine synchronisieren, die sich in einer iCalendar-Datei "
 "befinden."
-msgstr "You can synchronise appointments which are in a iCalendar file."
+msgstr "You can synchronize appointments which are in a iCalendar file."
 
 #: calendar/views/export.inc.php:243
 #, c-format
@@ -860,7 +855,7 @@ msgstr "No appointments have been imported."
 #: calendar/views/export.inc.php:258
 msgid ""
 "Sie k&ouml;nnen Termindaten importieren, exportieren und synchronisieren."
-msgstr "You can import, export and synchronise appointment data."
+msgstr "You can import, export and synchronize appointment data."
 
 #: calendar/views/export.inc.php:295
 msgid "Der Export konnte nicht durchgef&uuml;hrt werden!"
@@ -880,11 +875,11 @@ msgstr "The file to import contains too many appointments."
 
 #: calendar/views/export.inc.php:358
 msgid "Die Synchronisation konnte nicht durgef&uuml;hrt werden!"
-msgstr "The synchronisation could not be carried out!"
+msgstr "The synchronization could not be carried out!"
 
 #: calendar/views/export.inc.php:369
 msgid "Die Synchronisation wurde erfolgreich durchgef&uuml;hrt!"
-msgstr "The synchronisation was successfully carried out!"
+msgstr "The synchronization was successfully carried out!"
 
 #: calendar/views/month.inc.php:71
 msgid "einen Monat zurück"
@@ -954,7 +949,7 @@ msgstr "The export index could not be created!"
 msgid ""
 "Die Zugriffsrechte auf das Export-Verzeichnis konnten nicht ge&auml;ndert "
 "werden!"
-msgstr "The access authorisation to the export index could not be changed!"
+msgstr "The access authorization to the export index could not be changed!"
 
 #: calendar/lib/sync/CalendarExportFile.class.php:135
 msgid "Eine bestehende Export-Datei konnte nicht gel&ouml;scht werden!"
@@ -992,11 +987,8 @@ msgstr "The file is not a valid iCalendar file!"
 msgid ""
 "Die Datei kann nicht mit dem Stud.IP-Terminkalender synchronisiert werden."
 msgstr ""
-"The file can not be synchronised with the Stud.IP appointment calendar."
+"The file can not be synchronized with the Stud.IP appointment calendar."
 
 #: calendar/lib/sync/CalendarSynchronizer.class.php:146
 msgid "Die zu synchronisierende Datei enth&auml;lt zu viele Termine."
-msgstr "The file to be synchronised contains too many appointments."
-
-#~ msgid "Sichtbarkeit:"
-#~ msgstr "Visibility:"
+msgstr "The file to be synchronized contains too many appointments."
