@@ -46,6 +46,20 @@ class ResourcesUserRoomsList {
 	var $return_objects;	// should the complete objects be returned?
 	var $only_rooms;	// we can do this stuff for rooms ar for all resources
 	
+	function CheckUserResource($resource_id, $user_id = false){
+		static $resources_list;
+		if (!$user_id){
+			$user_id = $GLOBALS['auth']->auth['uid'];
+		}
+		if($GLOBALS['perm']->have_perm('root') || GetGlobalPerms($user_id) == 'admin'){
+			return true;
+		}
+		if (!isset($resources_list[$user_id])){
+			$resources_list[$user_id] =& new ResourcesUserRoomsList($user_id, false, false, false);
+		}
+		return $resources_list[$user_id]->checkResource($resource_id);
+	}
+	
 	// Konstruktor
 	function ResourcesUserRoomsList ($user_id ='', $sort= TRUE, $return_objects = TRUE, $only_rooms = TRUE) {
 	 	global $RELATIVE_PATH_RESOURCES, $user;
@@ -174,6 +188,10 @@ class ResourcesUserRoomsList {
 	//public
 	function roomsExist() {
 		return sizeof($this->resources) > 0 ? TRUE : FALSE;
+	}
+	
+	function checkResource($resource_id){
+		return ($resource_id && is_array($this->resources) && isset($this->resources[$resource_id])) ? true : false;
 	}
 	
 	//public
