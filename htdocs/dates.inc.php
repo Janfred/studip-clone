@@ -494,8 +494,8 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
 				}			
 			if ($term_data["turnus"] == 1)
 				$return_string.= " " . _("(zweiwöchentlich)");
+		$turnus_cache[$seminar_id][$short] = $return_string;
 		}
-	$turnus_cache[$seminar_id][$short] = $return_string;
 	return $return_string;
 	}
 
