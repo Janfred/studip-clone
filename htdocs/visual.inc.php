@@ -651,7 +651,7 @@ function kill_format ($text) {
 					"'(?<=\n|^)--+(\d?)(\n|$|(?=<))'m", // Trennlinie
 					"'\[pre\](.+?)\[/pre\]'is" ,        // praeformatierter Text
 					"'\[nop\].+\[/nop\]'isU",
-					"'\[.+?\](((http://|https://|ftp://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
+					"'\[.+?\](((http\://|https\://|ftp\://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 			//		"'\[quote=.+?quote\]'is",    // quoting
 					"':[^\s]+?:'s"              // smileys
 
@@ -692,11 +692,13 @@ function kill_format ($text) {
 * @param	string	text to convert
 * @param	string	TRUE if all forms of newlines have to be converted in single \n
 * @param	boolean	TRUE if newlines have to be converted into <br>
-* @param boolean	TRUE if pictures should be displayed
+* @param	boolean	TRUE if pictures should be displayed
 * @param	boolean TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
 function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $extern = FALSE) {
+	global $STUDIP_DOMAINS, $_SERVER, $_SERVER;
+	
 	if (empty($data)) {
 		return $data;
 	}
@@ -706,15 +708,24 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$img = $img ? 'TRUE' : 'FALSE';
 	$extern = $extern ? 'TRUE' : 'FALSE';
 	
-	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
-	$replace = array("\\1http://www.", "\\1ftp://ftp.");
+	// add protocol type and transform the domain names of links within Stud.IP
+	$studip_urls = '';
+	foreach ($STUDIP_DOMAINS as $studip_domain)
+		$domains .= '|' . preg_quote($studip_domain);
+	$domains = substr($domains, 1);
+	$user_domain = preg_replace("'(https?\://($domains))(.*)'i", "\\1", $_SERVER['HTTP_REFERER']);
+	$pattern = array("/([ \t\]\n]|^)www\./i",
+				"/([ \t\]\n]|^)ftp\./i",
+				"'https?\://($domains)((/[^<\s]*[^\.\s<])*)'i");
+	$replace = array("\\1http://www.", "\\1ftp://ftp.", "$user_domain\\2");
 	$fixed_text = preg_replace($pattern, $replace, $data);
+	
 	$pattern = array(
-					"'((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)*(/[^<\s]*[^\.\s<])*))'ie",
+					"'((\[(img)(\=([^\n\f\[\:]+))?(\:(\d{1,3}%?))?(\:(center|right))?(\:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?\://|ftp\://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)*(/[^<\s]*[^\.\s<])*))'ie",
 					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
 					);
-	$replace = array("preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
-		//	"preg_call_link(array('\\2', '\\3'), 'LINK')",
+	$replace = array(
+			"preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
 			"preg_call_link(array('\\2', '\\3'), 'MAIL', $extern)");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 	
@@ -730,7 +741,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 * @access	private
 * @param	array $params	parameters extracted by the regular expression
 * @param	string	$mod	type of lin ('LINK' or 'MAIL')
-* @param boolean	$img	TRUE to handle image-links
+* @param	boolean	$img	TRUE to handle image-links
 * @param	boolean	$extern	TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
@@ -740,7 +751,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	if ($extern)
 		$link_pic = '';
 	else
-	$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
+		$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
 	
 	if ($mod == 'LINK') {
 		if ($params[5] != 'img') {
@@ -771,7 +782,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 				}
 				$tbr = "<img src=\"{$params[4]}\"$width border=\"0\"$style alt=\"{$params[1]}\" title=\"{$params[1]}\">";
 				
-				if (preg_match("'(((https?://|ftp://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)+(/[^<\s]*[^\.\s<])*)'i",
+				if (preg_match("'(((https?\://|ftp\://)([_a-z0-9-\:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-\:]+)+(/[^<\s]*[^\.\s<])*)'i",
 						$params[7])) {
 					$tbr = "<a href=\"{$params[7]}\" target=\"_blank\">$tbr</a>";
 				}
