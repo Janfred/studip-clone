@@ -685,7 +685,7 @@ function printAllWikiPages($range_id, $header) {
 	echo "<body>";
 	echo "<p><em>$header</em></p>";
 	while (! empty($tovisit)) { // while there are still pages left to visit
-		$pagename=array_shift($tÖöovisit);
+		$pagename=array_shift($tovisit);
 		if (!in_array($pagename,$visited)){
 			$pagedata=getLatestVersion($pagename, $range_id);
 			if ($pagedata) { // consider only pages with content
