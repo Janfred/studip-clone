@@ -106,7 +106,7 @@ if ($SessSemName[1] =="") {
 	echo "<br><b>Zeit: </b>", view_turnus($SessionSeminar, FALSE);
 
 	if (getRoom($SessSemName[1])) {
-		echo "<br><b>Ort: </b>".htmlReady(getRoom($SessSemName[1]));
+		echo "<br><b>Ort: </b>".getRoom($SessSemName[1]);
 	}
 
 	$db=new DB_Seminar;

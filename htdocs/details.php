@@ -259,7 +259,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?
-				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>", (getRoom ($sem_id)) ? htmlReady(getRoom ($sem_id)) : "nicht angegeben.");
+				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>", (getRoom ($sem_id)) ? getRoom ($sem_id) : "nicht angegeben.");
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%"  align="top">

@@ -132,7 +132,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 
 			$zusatz='';
 			if (getRoom($db->f("termin_id")))
-				$zusatz.= "Raum: ".htmlReady(getRoom($db->f("termin_id")))."&nbsp;";
+				$zusatz.= "Raum: ".getRoom($db->f("termin_id"))."&nbsp;";
 			
 			//Dokumente zaehlen
 			$num_docs='';
