@@ -1,5 +1,5 @@
 <?php
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("admin");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/dbviews/literatur.view.php");
@@ -37,6 +37,30 @@ function my_session_var($var, $id = false){
 			$_REQUEST[$var] = $GLOBALS[$id][$var];
 		}
 		$GLOBALS[$var] =& $GLOBALS[$id][$var];
+	}
+}
+
+function get_lit_admin_ids($user_id = false){
+	if (!$user_id){
+		$user_id = $GLOBALS['auth']->auth['uid'];
+	}
+	$db = new DB_Seminar("SHOW TABLES");
+	$found = false;
+	while ($db->next_record()){
+		if ($db->f(0) == "admin_perms"){
+			$found = true;
+			break;
+		}
+	}
+	if (!$found){
+		return false;
+	} else {
+		$db->query("SELECT range_id FROM admin_perms WHERE perms='lit_admin' AND user_id='$user_id'");
+		$ret = false;
+		while($db->next_record()){
+			$ret[] = $db->f(0);
+		}
+		return $ret;
 	}
 }
 
@@ -108,6 +132,8 @@ if (isset($_REQUEST['_semester_id']) && $_REQUEST['_semester_id'] != 'all'){
 }
 
 $_is_fak = false;
+$_lit_admin_ids = get_lit_admin_ids();
+$_is_lit_admin = (is_array($_lit_admin_ids) && count($_lit_admin_ids));
 
 $_search_plugins = StudipLitSearch::GetAvailablePlugins();
 if (in_array('Studip', $_search_plugins)){
@@ -153,7 +179,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 									LEFT JOIN lit_list_content e USING(list_id)
 									WHERE a.Institut_id=a.fakultaets_id
 									GROUP BY a.Institut_id ORDER BY Name");
-					} elseif ($auth->auth['perm'] == "admin") {
+					} elseif (!$_is_lit_admin) {
 						$db->query("SELECT a.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,COUNT(DISTINCT(catalog_id)) as anzahl
 									FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
 									LEFT JOIN Institute f ON (f.fakultaets_id=b.institut_id OR f.Institut_id=b.Institut_id)
@@ -161,7 +187,16 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 									$_sem_sql
 									LEFT JOIN lit_list_content e USING(list_id)
 									WHERE a.user_id='$user->id' AND a.inst_perms='admin' 
-									GROUP BY a.Institut_id ORDER BY is_fak,Name");
+									GROUP BY a.Institut_id ORDER BY is_fak,b.Name");
+					} else {
+						$db->query("SELECT b.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,COUNT(DISTINCT(catalog_id)) as anzahl
+									FROM Institute b 
+									LEFT JOIN Institute f ON (f.fakultaets_id=b.institut_id OR f.Institut_id=b.Institut_id)
+									LEFT JOIN seminar_inst c USING(Institut_id)
+									$_sem_sql
+									LEFT JOIN lit_list_content e USING(list_id)
+									WHERE b.Institut_id IN('" . join("','", $_lit_admin_ids) . "')
+									GROUP BY b.Institut_id ORDER BY is_fak,b.Name");
 					}
 				
 					printf ("<option value=\"-1\">%s</option>\n", _("-- bitte Einrichtung ausw&auml;hlen --"));
