@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-	$perm->check("admin");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+$perm->check("admin");
 
 ## Set this to something, just something different...
 	$hash_secret = "jdfiuwenxclka";
@@ -40,15 +40,20 @@ function generate_password($length) {
 	return $pass;
 }
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); // Funktionen fuer Nachrichtenmeldungen
-	require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Wir brauchen die Funktionen zum Loeschen von Terminen...
-	require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); // Wir brauchen den Namen der Uni
-	require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
-	require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-	require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
-	require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
-	$cssSw=new cssClassSwitcher;
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); // Funktionen fuer Nachrichtenmeldungen
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Wir brauchen die Funktionen zum Loeschen von Terminen...
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); // Wir brauchen den Namen der Uni
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
+require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
+
+if ($RESOURCES_ENABLE) {
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesAssign.class.php");
+}
+
+$cssSw=new cssClassSwitcher;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
@@ -686,7 +691,7 @@ if (isset($details)) {
 
 	} else { // alten Benutzer bearbeiten
 	
-		$db->query("SELECT auth_user_md5.*, changed, user_info.* FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
+		$db->query("SELECT auth_user_md5.*, changed, title_rear, title_front, geschlecht FROM auth_user_md5 LEFT JOIN active_sessions ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
 		while ($db->next_record()) {
 			if ($db->f("changed") != "") {
 				$stamp = mktime(substr($db->f("changed"),8,2),substr($db->f("changed"),10,2),substr($db->f("changed"),12,2),substr($db->f("changed"),4,2),substr($db->f("changed"),6,2),substr($db->f("changed"),0,4));
@@ -768,7 +773,7 @@ if (isset($details)) {
 				</tr>
 				
 				<td class="steel1" colspan=3 align=center>&nbsp;
-				<input type="hidden" name="u_id"	 value="<?php $db->p("user_id") ?>">
+				<input type="hidden" name="u_id"	 value="<?= $db->f("user_id") ?>">
 				<?
 				if ($perm->have_perm("root") || 
 					($db->f("perms") != "admin" && $db->f("perms") != "root")) {
