@@ -42,10 +42,10 @@ $SOFTWARE_VERSION="0.9";
 
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
-$UNI_URL = "http://www.studip.de";
-$UNI_LOGOUT_ADD=sprintf(_("Und hier geht's direkt zum %sStud.IP Portalsete%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
-$UNI_CONTACT = "info@studip.de";
-$UNI_INFO = "Stud.IP 0.9 - Studienbegleitender Internetsuppoert von Pr&auml;senzlehre"; 
+$UNI_URL = "http://www.uni-goettingen.de";
+$UNI_LOGOUT_ADD=sprintf(_("Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"), "<a href=\"http://studentenwerk.stud.uni-goettingen.de/mensa/mensen/alle_heute.php\"><b>", "</b></a>");
+$UNI_CONTACT = "goettingen@studip.de";
+$UNI_INFO = "Kontakt:\nGeorg-August-Universität\nWilhelmsplatz 1 (Aula)\n37073 Göttingen\nTel. +49 (0)551 / 39-0\nFax +49 (0)551 / 39-4135\npoststelle@uni-goettingen.de"; 
 
 //die IDs der Veranstaltungen, die beim Hochstufen auf autor eingetragen werden
 $AUTO_INSERT_SEM[1]="3f43debe372cfd7d4da6afa4ca40616f";
@@ -74,19 +74,30 @@ $SEMESTER[8]=array("name"=>"SS 2004", "beginn"=>mktime(0,0,0,4,1,2004), "ende"=>
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
 $SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezechnung (=Veranstaltung ersetzt)
-$SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);
-$SEM_TYPE[2]=array("name"=>_("Seminar"),  "class"=>1);
-$SEM_TYPE[3]=array("name"=>_("&Uuml;bung"),  "class"=>1);
-$SEM_TYPE[4]=array("name"=>_("Praktikum"), "class"=>1);
-$SEM_TYPE[5]=array("name"=>_("Colloquium"),  "class"=>1);
-$SEM_TYPE[6]=array("name"=>_("Forschungsgruppe"), "class"=>1);
-$SEM_TYPE[7]=array("name"=>_("sonstige"), "class"=>1); 
-$SEM_TYPE[8]=array("name"=>_("Gremium"), "class"=>2); 
-$SEM_TYPE[9]=array("name"=>_("Projektgruppe"), "class"=>2); 
-$SEM_TYPE[10]=array("name"=>_("sonstige"), "class"=>2); 
-$SEM_TYPE[11]=array("name"=>_("Kulturforum"), "class"=>3); 
-$SEM_TYPE[12]=array("name"=>_("Veranstaltungsboard"), "class"=>1); 
-$SEM_TYPE[13]=array("name"=>_("sonstige"), "class"=>1); 
+$SEM_TYPE[1]=array("name"=>_("Vorlesung"), "en"=>"Lecture", "class"=>1);
+$SEM_TYPE[2]=array("name"=>_("Grundstudium"), "en"=>"Basic classes", "class"=>1);
+$SEM_TYPE[3]=array("name"=>_("Hauptstudium"), "en"=>"Advanced classes", "class"=>1);
+$SEM_TYPE[4]=array("name"=>_("Seminar"), "en"=>"Seminar", "class"=>1);
+$SEM_TYPE[5]=array("name"=>_("Praxisveranstaltung"), "en"=>"Practical course", "class"=>1);
+$SEM_TYPE[6]=array("name"=>_("Kolloquium"), "en"=>"Colloqia", "class"=>1);
+$SEM_TYPE[7]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>1);
+$SEM_TYPE[8]=array("name"=>_("Arbeitsgruppe"), "en"=>"Workgroup", "class"=>5);
+$SEM_TYPE[9]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>1); 
+$SEM_TYPE[10]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>2); 
+$SEM_TYPE[11]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>2); 
+$SEM_TYPE[12]=array("name"=>_("Gremiumsveranstaltung"), "en"=>"Board meeting", "class"=>3); 
+$SEM_TYPE[13]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>3); 
+$SEM_TYPE[14]=array("name"=>_("Community-Forum"), "en"=>"Community forum", "class"=>4); 
+$SEM_TYPE[15]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>4); 
+$SEM_TYPE[16]=array("name"=>_("Praktikum"), "en"=>"Practical course", "class"=>1); 
+$SEM_TYPE[17]=array("name"=>_("Lehrveranstaltung nach PVO-Lehr I"), "en"=>"", "class"=>1); 
+$SEM_TYPE[18]=array("name"=>_("Anleitung zu selbständigen wissenschaftlichen Arbeiten"), "en"=>"", "class"=>1); 
+$SEM_TYPE[19]=array("name"=>_("Sprachkurs"), "en"=>"Language Course", "class"=>1);
+$SEM_TYPE[20]=array("name"=>_("Fachdidaktik"), "en"=>"Didactics", "class"=>1);
+$SEM_TYPE[21]=array("name"=>_("Übung"), "en"=>"Exercise Course", "class"=>1);
+$SEM_TYPE[22]=array("name"=>_("Proseminar"), "en"=>"Proseminar", "class"=>1);
+$SEM_TYPE[23]=array("name"=>_("Oberseminar"), "en"=>"Oberseminar", "class"=>1);
+$SEM_TYPE[24]=array("name"=>_("Arbeitsgemeinschaft"), "en"=>"Workgroup", "class"=>1);
 //weitere Typen koennen hier angefuegt werden
 
 
@@ -129,6 +140,32 @@ $SEM_CLASS[3]=array("name"=>_("Organisation"),
 					"write_access_nobody"=>TRUE, 
 					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der Universit&auml;t"),
 					"create_description"=>_("Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie diese Kategorie"));
+
+$SEM_CLASS[4]=array("name"=>_("Community"), 
+					"compact_mode"=>TRUE, 
+					"workgroup_mode"=>FALSE, 
+					"only_inst_user"=>FALSE,
+					"turnus_default"=>-1, 
+					"default_read_level"=>0, 
+					"default_write_level" =>0, 
+					"bereiche"=>FALSE, 
+					"show_browse"=>FALSE,
+					"write_access_nobody"=>TRUE, 
+					"description"=>_("Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen"),
+					"create_description"=>_("Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen anlegen m&ouml;chten, verwenden Sie diese Kategorie."));
+
+$SEM_CLASS[5]=array("name"=>_("Arbeitsgruppen"), 
+					"compact_mode"=>FALSE, 
+					"workgroup_mode"=>FALSE, 
+					"only_inst_user"=>TRUE,
+					"turnus_default"=>1, 
+					"default_read_level"=>1, 
+					"default_write_level" =>1, 
+					"bereiche"=>FALSE, 
+					"show_browse"=>FALSE,
+					"write_access_nobody"=>FALSE, 
+					"description"=>sprintf(_("Hier finden Sie verschiedene Arbeitsgruppen an der %s"), $UNI_NAME),
+					"create_description"=>_("Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."));
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
@@ -144,13 +181,24 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 													"nobody" => 1.38 * 1048576													
 												)
 							),
-						"8" =>													 
+						"7" =>													 
 						array(	"type"=>"allow", 									
 								"file_types" => array ("exe"),
 								"file_sizes" => array (	"root" => 7 * 1048576,			
 													"admin" => 7 * 1048576,
 													"dozent" => 7 * 1048576,
 													"tutor" => 7 * 1048576,													
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"8" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
 													"autor" => 7 * 1048576,
 													"nobody" => 1.38 * 1048576													
 												)
@@ -167,6 +215,39 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 												)
 							),
 						"10" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"11" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"12" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"13" =>									
 						array(	"type"=>"allow",
 								"file_types" => array ("exe"),
 								"file_sizes" => array (	"root" => 7 * 1048576,			
