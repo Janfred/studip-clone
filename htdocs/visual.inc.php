@@ -595,6 +595,7 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 * @return		string	html output of the button
 */
 function makeButton ($name, $mode="img") {
+	global $_language_path;
 	switch ($_language_path) {
 		case "de":
 			$path="./pictures/buttons";
