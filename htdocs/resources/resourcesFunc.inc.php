@@ -51,12 +51,26 @@ function getResourceObjectCategory($id){
 
 
 /*****************************************************************************
-sort function to sort the AssignEvents
+sort function to sort the AssignEvents by date
 /*****************************************************************************/
 
 function cmp_assign_events($a, $b){
 	$start_a = $a->getBegin();
 	$start_b = $b->getBegin();
+	if($start_a == $start_b)
+		return 0;
+	if($start_a < $start_b)
+		return -1;
+	return 1;
+}
+
+/*****************************************************************************
+sort function to sort the ResourceObject by name
+/*****************************************************************************/
+
+function cmp_resources($a, $b){
+	$name_a = $a->getName();
+	$name_b = $b->getName();
 	if($start_a == $start_b)
 		return 0;
 	if($start_a < $start_b)

@@ -417,7 +417,118 @@ class AssignEventList{
 			usort($this->events,"cmp_assign_events");
 	}
 	
-} // class AppList 
+} 
+
+/*****************************************************************************
+ResourcesInstituteList, creates a list for all resources for one user
+/*****************************************************************************/
+
+class ResourcesUserRoomsList {
+	var $user_id;    	// userId from PhpLib (String)
+	var $resources;	// the results
+	
+	// Konstruktor
+	function ResourcesUserRoomsList ($user_id ='', $category = '', $sort= TRUE) {
+	 	global $RELATIVE_PATH_RESOURCES, $user;
+
+		$this->user_id = $user_id;
+		if (!$this->user_id)
+			$this->user_id = $user->id;
+		
+		$this->category_id = $category_id;	
+		$this->restore();
+		if($sort)
+			$this->sort();
+	}
+	
+	function walkThread ($resource_id) {
+		$db=new DB_Seminar;	
+		$db2=new DB_Seminar;
+		
+		$query = sprintf ("SELECT resource_id FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.name = 'Raum' AND resources_objects.resource_id = '%s' ", $resource_id);
+		$db->query($query);
+		if ($db->nf()) {
+			$resource_object = new ResourceObject ($resource_id);
+			$this->resources[$resource_id] = $resource_object;
+		}
+
+		//subcurse
+		$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$resource_id."' ");
+		while ($db2->next_record())
+			$this->walkThread($db2->f("resource_id"));
+	}
+	
+	
+	// private
+	function restore() {
+		global $perm;
+		
+		$db = new DB_Seminar;
+		$db2 = new DB_Seminar;
+		
+		//if perm is root, load all rooms
+		if ($perm->have_perm ("root")) {
+			$query = sprintf ("SELECT resource_id FROM resources_categoriesres LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.name = 'Raum' ");
+			$db->query($query);
+			while ($db->next_record()) {
+				$resource_object = new ResourceObject ($db->f("resource_id"));
+				$this->resources[$db->f("resource_id")] = $resource_object;
+			}
+		//if tutor, dozent or admin, load all the rooms of all the Einrichtungen he is member of
+		} elseif  ($perm->have_perm ("tutor")) {
+			$query = sprintf ("SELECT Institut_id FROM user_inst  WHERE inst_perms IN ('tutor', 'dozent', 'admin') AND user_id = '%s' ", $this->user_id);
+			$db->query($query);
+			while ($db->next_record()) {
+				$query2 = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $db->f("Institut_id"));
+				$db2->query($query2);
+				while ($db2->next_record()) {
+					$this->walkThread($db2->f("resource_id"));
+				}
+				$query2 = sprintf ("SELECT resource_id FROM resources_user_resources WHERE user_id = '%s' ", $db->f("Institut_id"));
+				$db2->query($query2);
+				while ($db2->next_record()) {
+					$this->walkThread($db2->f("resource_id"));
+				}
+			}
+		}
+		
+		if (!$perm->have_perm("admin")) {
+			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $this->user_id);
+			$db->query($query);
+
+			while ($db->next_record()) {
+				$this->walkThread($db->f("resource_id"));
+			}
+			$query = sprintf ("SELECT resource_id FROM resources_user_resources WHERE user_id = '%s' ", $this->user_id);
+			$db->query($query2);
+			while ($db->next_record()) {
+				$this->walkThread($db->f("resource_id"));
+			}
+		}
+	}
+	
+	// public
+	function numberOfEvents() {
+		return sizeof($this->resources);
+	}
+	
+	function existEvent() {
+		return sizeof($this->resources) > 0 ? TRUE : FALSE;
+	}
+	
+	// public
+	function nextEvent() {
+		if (is_array($this->resources))
+			if(list(,$ret) = each($this->resources));
+				return $ret;
+		return FALSE;
+	}
+	
+	function sort(){
+		if($this->resources)
+			usort($this->resources,"cmp_resources");
+	}
+} 
 
 
 /*****************************************************************************
@@ -1127,13 +1238,25 @@ class ResourcesError {
 		$this->codes[]=$msg_code;
 	}
 	
-	function displayAllMsg() {
-		parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "zZ. NA");
+	function displayAllMsg($view_mode = "window") {
+		global $RELATIVE_PATH_STUDIP;
+		
+		foreach ($this->codes as $val)
+			$collected_msg.=($this->msg[$val]["mode"]."§".$this->msg[$val]["msg"]."§");
+		if ($view_mode == "window")
+			parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"$RELATIVE_PATH_STUDIP/resources.php\">"._("zur&uuml;ck")."</a>");
+		else
+			parse_msg($collected_msg);
 	}
 	
-	function displayMsg($msg_code) {
-		parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "zZ. NA");
-2	}
+	function displayMsg($msg_code, $view_mode = "window") {
+		global $RELATIVE_PATH_STUDIP;
+		
+		if ($view_mode == "window")
+			parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "<a href=\"$RELATIVE_PATH_STUDIP/resources.php\">"._("zur&uuml;ck")."</a>");
+		else
+			parse_msg($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"]);
+	}
 }
 	
 	//Konstruktor

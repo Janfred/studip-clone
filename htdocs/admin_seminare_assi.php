@@ -1215,6 +1215,15 @@ elseif ((!$level) || ($level==1))
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip("Der Raum, in dem die Veranstaltung stattfindet", TRUE, TRUE) ?>
 							>
+							<?
+							if ($RESOURCES_ENABLE) {
+								require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+								$resList = new ResourcesUserRoomsList($user_id);
+								while ($resObject = $resList->nextEvent()) {
+									echo $resObject->getName();
+								}
+							}
+							?>
 						</td>
 						<?
 						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
