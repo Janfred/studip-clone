@@ -136,7 +136,7 @@ if ($i_view=="new")
 
 //Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
 if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
+	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
 	if ($perm->have_perm("root"))
 		$db->query("SELECT Institut_id  FROM Institute ORDER BY Name");
 	else
@@ -166,6 +166,12 @@ if ($links_admin_data["sem_id"]) {
 				$ebene="sem";
 			}
 		break;
+		case "admin_statusgruppe.php":
+			if ($links_admin_data["view"]=="sem") {
+				$range_id=$links_admin_data["sem_id"];
+				$ebene="sem";
+			}
+		break;
 		case "archiv_assi.php": 
 			$archiv_sem[]="_id_".$links_admin_data["sem_id"];
 			$archiv_sem[]="on";
@@ -180,6 +186,7 @@ if ($links_admin_data["sem_id"]) {
 
 //Wenn Institut_id gesetzt ist oder vorgewaehlt wurde, werden die spaeteren Seiten mit entsprechend gesetzten Werten aufgerufen
 if ($links_admin_data["inst_id"]) {
+
 	switch ($i_page) {
 		case "admin_institut.php": 
 			$i_view=$links_admin_data["inst_id"];
@@ -188,6 +195,12 @@ if ($links_admin_data["inst_id"]) {
 			$inst_id=$links_admin_data["inst_id"];
 		break;
 		case "admin_literatur.php": 
+			if ($links_admin_data["view"]=="inst") {
+				$range_id=$links_admin_data["inst_id"];
+				$ebene="inst";
+				}
+		break;
+		case "admin_statusgruppe.php": 
 			if ($links_admin_data["view"]=="inst") {
 				$range_id=$links_admin_data["inst_id"];
 				$ebene="inst";
@@ -238,9 +251,9 @@ if ($links_admin_data["inst_id"]) {
 	elseif ($links_admin_data["inst_id"])
 		echo " <a href=\"adminarea_start.php?list=TRUE\"><img alt=\"Auswahl der Einrichtung ", htmlReady($db->f("Name")), " aufheben\" align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 					
-	if ($i_page != "admin_dates.php" AND $i_page != "admin_literatur.php" AND $i_page != "admin_news.php" AND $i_page != "admin_seminare1.php" AND $i_page != "admin_seminare_assi.php" AND $i_page != "admin_metadates.php" AND $i_page != "admin_admission.php" AND $i_page != "adminarea_start.php" AND $i_page != "archiv_assi.php" 
+	if ($i_page != "admin_dates.php" AND $i_page != "admin_statusgruppe.php" AND $i_page != "admin_literatur.php" AND $i_page != "admin_news.php" AND $i_page != "admin_seminare1.php" AND $i_page != "admin_seminare_assi.php" AND $i_page != "admin_metadates.php" AND $i_page != "admin_admission.php" AND $i_page != "adminarea_start.php" AND $i_page != "archiv_assi.php" 
 		OR ($links_admin_data["sem_id"] AND !$archive_kill)
-		OR (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")))
+		OR (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")))
 		echo "&nbsp; <img src=\"pictures/reiter2.jpg\" align=absmiddle>";
 	else
 		echo "&nbsp; <img src=\"pictures/reiter1.jpg\" align=absmiddle>";
@@ -269,7 +282,7 @@ if (($links_admin_data["sem_id"]) || ($links_admin_data["inst_id"])) {
 
 //Veranstaltungen...
 if ($perm->have_perm("tutor")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php" OR $i_page == "admin_seminare_assi.php" OR $i_page == "adminarea_start.php" OR $i_page == "archiv_assi.php" OR $i_page == "admin_statusgruppe.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="<? if ($links_admin_data["sem_id"]) echo "admin_seminare1.php"; else echo "adminarea_start.php?list=TRUE" ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Veranstaltungen&nbsp; &nbsp; </b></font></a><?
+	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php" OR $i_page == "admin_seminare_assi.php" OR $i_page == "adminarea_start.php" OR $i_page == "archiv_assi.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="sem")) {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="<? if ($links_admin_data["sem_id"]) echo "admin_seminare1.php"; else echo "adminarea_start.php?list=TRUE" ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Veranstaltungen&nbsp; &nbsp; </b></font></a><?
 		if ($perm->have_perm("tutor")) {
 			?><img src="pictures/reiter2.jpg" align=absmiddle></td><? }
 		ELSE {
@@ -280,7 +293,7 @@ if ($perm->have_perm("tutor")) {
 
 //Einrichtungen...
 if ($perm->have_perm("tutor")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")) {
+	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "admin_institut.php" OR $i_page == "inst_admin.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst")) {
 		?> 
 		<td class="links1b" align=right nowrap><a  class="links1b" href="<? if ($perm->have_perm("admin")) echo "admin_institut.php?list=TRUE"; else echo "admin_literatur.php?list=true&view=inst"; ?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a>
 		<? if ($perm->have_perm("admin")) {
@@ -309,7 +322,7 @@ if ($perm->have_perm("admin")) {
 <tr>
 	<td class="steel1">&nbsp; &nbsp; 
 <?
-if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare_assi.php" OR $i_page == "archiv_assi.php"  OR $i_page == "adminarea_start.php" OR $i_page == "admin_statusgruppe.php")
+if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "admin_seminare_assi.php" OR $i_page == "archiv_assi.php"  OR $i_page == "adminarea_start.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="sem"))
 {
 	IF ($i_page == "admin_seminare1.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_seminare1.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_seminare1.php?list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
@@ -344,7 +357,7 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="sem") OR $i_pag
 
 }
 
-if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php" OR $i_page == "admin_institut.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst"))
+if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php" OR $i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst"))
 {
 
 	IF ($i_page == "admin_literatur.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_literatur.php?view=inst&list=TRUE">Literatur/Links&nbsp; &nbsp; </a> <?}
@@ -359,6 +372,9 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_pa
 
 		IF ($i_page == "inst_admin.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
+
+		IF ($i_page == "admin_statusgruppe.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_statusgruppe.php?list=TRUE&view=inst">Statusgruppen&nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_statusgruppe.php?list=TRUE&view=inst">Statusgruppen&nbsp; &nbsp; </a> <?}
 	}
 
 	if ($perm->have_perm("root")) {
@@ -407,7 +423,7 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="global") OR $i_
 <?
 //Einheitliches Auswahlmenu fuer Einrichtungen
 if ((!$links_admin_data["inst_id"]) && ($list) &&
-	(($i_page == "admin_institut.php" OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
+	(($i_page == "admin_institut.php" OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="inst") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="inst") OR $i_page == "inst_admin.php"))) {
 	?>
 	<table width="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr valign=top align=middle>
@@ -469,7 +485,7 @@ if ((!$links_admin_data["inst_id"]) && ($list) &&
 	
 //Einheitliches Seminarauswahlmenu, wenn kein Seminar gewaehlt ist
 if ((!$links_admin_data["sem_id"]) && ($list) &&
-	(( $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))) {
+	(( $i_page == "admin_seminare1.php" OR $i_page == "admin_dates.php" OR $i_page == "admin_metadates.php" OR $i_page == "admin_admission.php"  OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="sem") OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="sem") OR $i_page == "archiv_assi.php" OR $i_page == "adminarea_start.php"))) {
 
 	//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 	?>
@@ -800,6 +816,11 @@ while ($db->next_record()) {
 			case "admin_literatur.php": 
 			?>
 				<font size=-1>Literatur/Links<br /><a href="admin_literatur.php?range_id=<? echo $seminar_id ?>&ebene=sem"><img src="pictures/buttons/bearbeiten-button.gif" border=0></a></font> 
+			<?
+			break;
+			case "admin_statusgruppe.php": 
+			?>
+				<font size=-1>Statusgruppen<br /><a href="admin_statusgruppe.php?range_id=<? echo $seminar_id ?>&ebene=sem"><img src="pictures/buttons/bearbeiten-button.gif" border=0></a></font> 
 			<?
 			break;
 			case "admin_seminare1.php": 
