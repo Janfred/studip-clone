@@ -74,8 +74,8 @@ class getList extends CreateTreeRow{
 			$open="close";
 		}
 		$titel='';
-		if ($resObject->getCategory())
-			$titel=$resObject->getCategory().": ";
+		if ($resObject->getCategoryName())
+			$titel=$resObject->getCategoryName().": ";
 		if ($edit_structure_object==$resObject->id) {
 			echo "<a name=\"a\"></a>";
 			$titel.="<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($resObject->getName())."\" />";
@@ -244,8 +244,8 @@ class getThread extends CreateTreeRow {
 				$link=$PHP_SELF."?structure_open=".$resObject->id."#a";
 				$open="close";
 			}
-			if ($resObject->getCategory())
-				$titel=$resObject->getCategory().": ";
+			if ($resObject->getCategoryName())
+				$titel=$resObject->getCategoryName().": ";
 			if ($edit_structure_object==$resObject->id) {
 				echo "<a name=\"a\"></a>";
 				$titel.="<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($resObject->getName())."\" />";
@@ -763,7 +763,7 @@ class viewObject {
 				<td class="<? echo $this->cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>"><font size=-1><b>Name:</b></font><br />
-				<font size=-1><? echo $this->resObject->getName()." (".$this->resObject->getCategory().")" ?>
+				<font size=-1><? echo $this->resObject->getName()." (".$this->resObject->getCategoryName().")" ?>
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>" width="60%" valign="top"><font size=-1><b>Besitzer:</b></font><br />
 				<font size=-1><? echo $this->resObject->getName()?><? echo $this->resObject->getOwnerName(TRUE);  ?></font>
@@ -1092,24 +1092,30 @@ class editObject extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>"><font size=-1>Name:</font><br />
-				<font size=-1><input name="change_name" value="<? echo $this->resObject->getName() ?>" size=60 maxlength="255" />
+				<font size=-1><input name="change_name" value="<? echo htmlReady($this->resObject->getName()) ?>" size=60 maxlength="255" />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%"><font size=-1>Typ des Objekts:</font><br />
 				<font size=-1>
-					<select name="change_category_id">
 					<?
-					$this->selectCategories();
-					if (!$this->resObject->getCategoryId())
-						echo "<option select value=\"\">nicht zugeordnet</option>";
-					while ($this->db->next_record()) {
-						if ($this->db->f("category_id")==$this->resObject->getCategoryId()) {
-							echo "<option selected value=\"".$this->db->f("category_id")."\">".$this->db->f("name")."</option>";
-							}
-						else
-							echo "<option value=\"".$this->db->f("category_id")."\">".$this->db->f("name")."</option>";
-					}
+					if (!checkAssigns($this->resObject->getId())) {
+						?>
+						<select name="change_category_id">
+						<?
+						$this->selectCategories();
+						if (!$this->resObject->getCategoryId())
+							echo "<option select value=\"\">nicht zugeordnet</option>";
+						while ($this->db->next_record()) {
+							if ($this->db->f("category_id")==$this->resObject->getCategoryId()) {
+								echo "<option selected value=\"".$this->db->f("category_id")."\">".htmlReady($this->db->f("name"))."</option>";
+							} else
+								echo "<option value=\"".$this->db->f("category_id")."\">".htmlReady($this->db->f("name"))."</option>";
+						}
+						?>
+						</select><img src="./pictures/pfeiltransparent.gif" border=0><input type="IMAGE" name="assign" value="Zuweisen"src="./pictures/buttons/zuweisen-button.gif" border=0>
+					<?
+					} else
+						print "<b>".htmlReady($this->resObject->getCategoryName())."</b>";
 					?>
-					</select><img src="./pictures/pfeiltransparent.gif" border=0><input type="IMAGE" name="assign" value="Zuweisen"src="./pictures/buttons/zuweisen-button.gif" border=0>
 				</td>
 			</tr>
 			<tr>
@@ -1117,7 +1123,7 @@ class editObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>"><font size=-1>Beschreibung:</font><br />
 			
-				<font size=-1><textarea name="change_description" rows=3 cols=60><? echo $this->resObject->getDescription() ?></textarea>
+				<font size=-1><textarea name="change_description" rows=3 cols=60><? echo htmlReady($this->resObject->getDescription()) ?></textarea>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%" valign="top"><font size=-1>Besitzer:</font><br />
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>

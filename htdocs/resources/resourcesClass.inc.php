@@ -792,7 +792,7 @@ class resourceObject {
 		return $this->name;
 	}
 
-	function getCategory() {
+	function getCategoryName() {
 		$query = sprintf("SELECT name FROM resources_categories WHERE category_id='%s' ",$this->category_id);
 		$this->db->query($query);
 		if ($this->db->next_record())
@@ -801,16 +801,16 @@ class resourceObject {
 			return FALSE;
 	}
 
+	function getCategoryId() {
+		return $this->category_id;
+	}
+
 	function getDescription() {
 		return $this->description;
 	}
 
 	function getOwnerId() {
 		return $this->owner_id;
-	}
-
-	function getCategoryId() {
-		return $this->category_id;
 	}
 
 	function getInventarNum() {

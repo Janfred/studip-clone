@@ -112,6 +112,19 @@ function checkAvaiableResources($id) {
 	return FALSE;	
 }
 
+/*****************************************************************************
+checkAssigns, a quick function to check if for a ressource
+exists assigns
+/*****************************************************************************/
+
+function checkAssigns($id) {
+	$db = new DB_Seminar;
+	
+	$db->query("SELECT assign_id FROM resources_assign WHERE resource_id='$id' ");
+	if ($db->nf())
+		return TRUE;
+	return FALSE;	
+}
 
 /*****************************************************************************
 checkChangeOwnerOption checks, if I have the chance to change
