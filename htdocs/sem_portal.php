@@ -224,9 +224,9 @@ if (!count($_marked_sem)) {
 	
 	//toplist link switcher
 	if ($sem_portal["toplist"])
-		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=1\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("neueste Veranstaltungen")."</a><br />";
+		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=0\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("neueste Veranstaltungen")."</a><br />";
 	if ($sem_portal["toplist"] != 1)
-		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=0\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("Teilnehmeranzahl")."</a><br />";
+		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=1\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("Teilnehmeranzahl")."</a><br />";
 	if ($sem_portal["toplist"] != 2)
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=2\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("die meisten Materialien")."</a><br />";
 	if ($sem_portal["toplist"] != 3)
