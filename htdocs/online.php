@@ -179,7 +179,7 @@ else
 			while (list($index)=each($active_buddies)) {
 				list($gruppe,$vor,$nach,$zeit,$tmp_online_uname)=$active_buddies[$index];
 				printf("<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $gruppe, $tmp_online_uname, htmlReady($vor), htmlReady($nach), date("i",$zeit), date("s",$zeit));
-				echo "<td width=\"5%\" align=center>";
+				echo "<td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
 				    		echo "<img src=\"pictures/chat2.gif\" alt=\"Dieser User befindet sich im Chat\" border=\"0\">";
