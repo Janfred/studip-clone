@@ -237,10 +237,22 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 //	echo $query_string . "<br>";
 
 // Datenbankzugriff: OBJECT2
-	$query_string = "UPDATE object2 "
-		."SET own_id='" . $ilias_systemgroup[$status] . "' "
+	$old_own_id = 0;
+	$query_string = "SELECT own_id FROM object2 "
 		."WHERE vri_id=$u_id AND vri_typ='user' AND vri_inst=1";
 	$ilias_db->query($query_string);
+	while ($ilias_db->next_record())
+		if ($ilias_db->f("own_id") < 5)
+			$old_own_id = $ilias_db->f("own_id");
+	if ($old_own_id != "0") 
+	{
+		$query_string = "UPDATE object2 "
+			."SET own_id='" . $ilias_systemgroup[$status] . "' "
+			."WHERE own_id=$old_own_id vri_id=$u_id AND vri_typ='user' AND vri_inst=1";
+		$ilias_db->query($query_string);
+	}
+	else 
+		return false;
 //	echo $query_string . "<br>";
 }
 
