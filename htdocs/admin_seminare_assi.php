@@ -379,7 +379,7 @@ if ($cmd_b_x)
 	if (!$sem_create_data["sem_inst_id"])
 		{
 		$level=1;
-		$errormsg=$errormsg."error§Da Ihr Account keinem Institut zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den zust&auml;ndigen Instituts-Administrator oder einen der <a href=\"impressum.php\">Entwickler</a>!§";
+		$errormsg=$errormsg."error§Da Ihr Account keiner Einrichtung zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den zust&auml;ndigen Administrator der Einrichtung oder einen der <a href=\"impressum.php\">Entwickler</a>!§";
 		}
 	if (($sem_create_data["sem_turnout"] < 5) && ($sem_create_data["sem_admission"]))
  		{
@@ -723,7 +723,7 @@ if ($cmd_f_x)
 		$db3->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_inst.Institut_id = '".$sem_create_data["sem_inst_id"]."' AND user_id = '$user_id') AND (inst_perms = 'dozent' OR inst_perms = 'admin')");
 		if (!$db3->next_record())
 			{
-      			$errormsg .= "error§Sie haben keine Berechtigung f&uuml;r dieses Institut Veranstaltungen anzulegen.§";
+      			$errormsg .= "error§Sie haben keine Berechtigung f&uuml;r diese Einrichtung Veranstaltungen anzulegen.§";
       			$run = FALSE;
 			}
     		}
@@ -737,7 +737,7 @@ if ($cmd_f_x)
 
 	if (empty($sem_create_data["sem_inst_id"]))
 		{
-		$errormsg .= "error§Bitte geben Sie ein Heimat Institut f&uuml;r die Veranstaltung an!§";
+		$errormsg .= "error§Bitte geben Sie ein Heimat-Einrichtung f&uuml;r die Veranstaltung an!§";
 		$run = FALSE;
 		}
 	if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"])  {
@@ -1213,7 +1213,7 @@ if ((!$level) || ($level==1))
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							Heimatinstitut:
+							Heimat-Einrichtung:
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp;
@@ -1233,18 +1233,18 @@ if ((!$level) || ($level==1))
 									echo "</select>";
 									}
 								else
-									echo "Ihr Account wurde noch keinem Institut als Dozent zugeordnet. Bitte wenden Sie sich an Ihren Instituts-Administrator oder einen der <a href=\"impressum.php\">Entwickler</a>";
+									echo "Ihr Account wurde noch keiner Einrichtung als Dozent zugeordnet. Bitte wenden Sie sich an Ihren Administrator der Einrichtung oder einen der <a href=\"impressum.php\">Entwickler</a>";
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Das Heimatinstitut ist das Institut, das tatsächlich f&uuml;r die Veranstaltung zuständig ist.');" 
-									alt="Das Heimatinstitut ist das Isntitut, das tats&auml;chlich f&uuml;r die Veranstaltung zust&auml;ndig ist.">
+									onClick="alert('Die Heimateinrichtung ist die Einrichtung, die offiziell f&uuml;r die Veranstaltung zuständig ist.');" 
+									alt="'Die Heimateinrichtung ist die Einrichtung, die offiziell f&uuml;r die Veranstaltung zust&auml;ndig ist.">
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							beteiligte Institute:
+							beteiligte Einrichtungen:
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <select  name="sem_bet_inst[]" MULTIPLE SIZE=7>
@@ -1265,8 +1265,8 @@ if ((!$level) || ($level==1))
 							?>
 							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte markieren Sie hier alle Institute, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie können später nur DozentInnen aus den Instituten auswählen, die entweder als Heimt- oder beteiligtes Institut markiert worden sind. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.');" 
-									alt="Bitte markieren Sie hier alle Institute, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie k&ouml;nnen sp&auml;ter nur DozentInnen aus den Instituten ausw&auml;hlen, die entweder als Heimt- oder beteiligtes Institut markiert worden sind. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
+									onClick="alert('Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie können später nur DozentInnen aus den Einrichtungen auswählen, die entweder als Heimt- oder beteiligte Einrichtung markiert worden sind. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.');" 
+									alt="Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie k&ouml;nnen sp&auml;ter nur DozentInnen aus den Einrichtungen ausw&auml;hlen, die entweder als Heimt- oder beteiligte Einrichtung markiert worden sind. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -2249,9 +2249,9 @@ if ($level==6)
 							<?
 							echo "<br><br><ul><li>Veranstaltung \"<b>".htmlReady(stripslashes($sem_create_data["sem_name"]))."</b>\"erfolgreich angelgt.<br><br>";
 							if ($count_bet_inst==1)
-								echo "<li>Veranstaltung f&uuml;r <b>1</b> beteiligtes Institut angelegt.<br><br>";
+								echo "<li>Veranstaltung f&uuml;r <b>1</b> beteiligte Einrichtung angelegt.<br><br>";
 							elseif ($count_bet_inst>1)
-								echo "<li>Veranstaltung f&uuml;r <b>$count_bet_inst</b> beteiligte Institute angelegt.<br><br>";
+								echo "<li>Veranstaltung f&uuml;r <b>$count_bet_inst</b> beteiligte Einrichtungen angelegt.<br><br>";
 							if ($count_doz==1)
 								echo "<li><b>1</b> DozentIn f&uuml;r die Veranstaltung eingetragen.<br><br>";
 							else
