@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-07-25 17:31+0200\n"
+"POT-Creation-Date: 2003-08-28 18:07+0200\n"
 "PO-Revision-Date: 2003-03-24 17:28+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -80,54 +80,75 @@ msgid "Sie haben Zugriff auf folgende Lernmodule:"
 msgstr "You have access to the following learning modules:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:113
-msgid "Sie haben keinen Zugriff auf bestehende ILIAS-Lernmodule."
+#, fuzzy
+msgid "Sie haben bisher keine ILIAS-Lernmodule angelegt."
 msgstr "You do not have access to the current ILIAS learning modules."
 
 #: lernmodule/lernmodul_view_functions.inc.php:173
-#: lernmodule/lernmodul_view_functions.inc.php:311
+#: lernmodule/lernmodul_view_functions.inc.php:332
 msgid "Es sind keine Lernmodule vorhanden."
 msgstr "There are no learning modules available."
 
-#: lernmodule/lernmodul_view_functions.inc.php:185
-msgid "Der Einrichtung sind folgende Lernmodule zugeordnet:"
-msgstr "The institute is allocated the following learning modules:"
-
 #: lernmodule/lernmodul_view_functions.inc.php:187
-msgid "Der Veranstaltung sind folgende Lernmodule zugeordnet:"
-msgstr "The course is allocated the following learning modules:"
+msgid "Offizielle Lernmodule dieser Einrichtung:"
+msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:239
-msgid "Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft."
-msgstr "No ILIAS learning modules are linked to this institute."
+#: lernmodule/lernmodul_view_functions.inc.php:189
+msgid "Offizielle Lernmodule dieser Veranstaltung:"
+msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:241
-msgid "Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft."
-msgstr "No ILIAS learning modules are linked to this course."
+#: lernmodule/lernmodul_view_functions.inc.php:194
+msgid "Inoffizielle Lernmodule zu dieser Einrichtung:"
+msgstr ""
 
-#: lernmodule/lernmodul_view_functions.inc.php:255
+#: lernmodule/lernmodul_view_functions.inc.php:196
+msgid "Inoffizielle Lernmodule zu dieser Veranstaltung:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:273
 msgid "Folgende Lernmodule können eingebunden werden:"
 msgstr "The following learning modules can be connected:"
 
-#: lernmodule/lernmodul_view_functions.inc.php:305
+#: lernmodule/lernmodul_view_functions.inc.php:326
 msgid "Alle verf&uuml;gbaren Lernmodule sind der Einrichtung zugeordnet."
 msgstr "All available learning modules are allocated to the institute."
 
-#: lernmodule/lernmodul_view_functions.inc.php:307
+#: lernmodule/lernmodul_view_functions.inc.php:328
 msgid "Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet."
 msgstr "All available learning modules are allocated to the course."
 
-#: lernmodule/lernmodul_view_functions.inc.php:327
+#: lernmodule/lernmodul_view_functions.inc.php:348
 msgid "Diese Einrichtung ist mit einem Lernmodul verbunden:"
 msgstr "This institute is connected to a learning module:"
 
-#: lernmodule/lernmodul_view_functions.inc.php:329
+#: lernmodule/lernmodul_view_functions.inc.php:350
 msgid "Diese Veranstaltung ist mit einem Lernmodul verbunden:"
 msgstr "This course is connected to a learning module:"
 
-#: lernmodule/lernmodul_view_functions.inc.php:335
+#: lernmodule/lernmodul_view_functions.inc.php:356
 msgid "Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:"
 msgstr "This institute is connected to the following learning modules:"
 
-#: lernmodule/lernmodul_view_functions.inc.php:337
+#: lernmodule/lernmodul_view_functions.inc.php:358
 msgid "Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:"
 msgstr "This course is connected to the following learning modules:"
+
+#: lernmodule/lernmodul_view_functions.inc.php:366
+msgid "Offizielle Lernmodule:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:368
+msgid "Inoffizielle Lernmodule:"
+msgstr ""
+
+#~ msgid "Der Einrichtung sind folgende Lernmodule zugeordnet:"
+#~ msgstr "The institute is allocated the following learning modules:"
+
+#~ msgid "Der Veranstaltung sind folgende Lernmodule zugeordnet:"
+#~ msgstr "The course is allocated the following learning modules:"
+
+#~ msgid "Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft."
+#~ msgstr "No ILIAS learning modules are linked to this institute."
+
+#~ msgid "Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft."
+#~ msgstr "No ILIAS learning modules are linked to this course."

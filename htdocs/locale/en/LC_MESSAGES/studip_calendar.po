@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-07-25 17:31+0200\n"
+"POT-Creation-Date: 2003-08-28 18:07+0200\n"
 "PO-Revision-Date: 2003-03-28 14:21+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -73,7 +73,7 @@ msgid "Stundenplan"
 msgstr "Time table"
 
 #: calendar/calendar_links.inc.php:76 calendar/calendar_links.inc.php:83
-#: calendar/calendar_visual.inc.php:155 calendar/views/edit.inc.php:76
+#: calendar/calendar_visual.inc.php:160 calendar/views/edit.inc.php:76
 #: calendar/views/edit.inc.php:110 calendar/views/week.inc.php:83
 #: calendar/views/week.inc.php:84
 msgid "Tag"
@@ -215,25 +215,25 @@ msgstr "Extras:"
 msgid "Bearbeiten-Link in Wochenansicht"
 msgstr "Edit link in week view"
 
-#: calendar/calendar_visual.inc.php:173 calendar/calendar_visual.inc.php:200
+#: calendar/calendar_visual.inc.php:179 calendar/calendar_visual.inc.php:206
 msgid "neuer Tagestermin"
 msgstr "New day appointment"
 
-#: calendar/calendar_visual.inc.php:219
+#: calendar/calendar_visual.inc.php:225
 msgid "neuer Termin um %R Uhr"
 msgstr "New appointment at %R."
 
-#: calendar/calendar_visual.inc.php:550
+#: calendar/calendar_visual.inc.php:555
 msgid "Gehe zu:"
 msgstr "Go to:"
 
-#: calendar/calendar_visual.inc.php:598 calendar/views/day.inc.php:49
+#: calendar/calendar_visual.inc.php:603 calendar/views/day.inc.php:49
 #: calendar/views/month.inc.php:53 calendar/views/week.inc.php:51
 #: calendar/views/year.inc.php:50
 msgid "zurück"
 msgstr "back"
 
-#: calendar/calendar_visual.inc.php:610 calendar/views/day.inc.php:61
+#: calendar/calendar_visual.inc.php:615 calendar/views/day.inc.php:61
 #: calendar/views/month.inc.php:60 calendar/views/week.inc.php:59
 #: calendar/views/year.inc.php:56
 msgid "vor"

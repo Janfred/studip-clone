@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2003-07-25 17:31+0200\n"
+"POT-Creation-Date: 2003-08-28 18:07+0200\n"
 "PO-Revision-Date: 2003-07-25 17:14+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -180,6 +180,17 @@ msgid ""
 msgstr ""
 "The module &quot;download&quot; provides all files from the file area of an "
 "institute for downloading."
+
+#: extern/extern_config.inc.php:70
+msgid "Newsticker"
+msgstr ""
+
+#: extern/extern_config.inc.php:71
+#, fuzzy
+msgid ""
+"Das Modul &quot;Newsticker&quot; gibt alle News einer Einrichtung in einem "
+"Ticker aus."
+msgstr "The module &quot;News&quot; provides all news from an institute."
 
 #: extern/views/ExternEditGeneric.class.php:56
 #: extern/views/ExternEditHtml.class.php:183
@@ -812,6 +823,10 @@ msgstr "Message"
 msgid "Datenzeilen, Schrift von Name und Datum"
 msgstr "Data rows, font for name and date."
 
+#: extern/modules/ExternModuleNewsticker.class.php:69
+msgid "Newsticker - Vorschau"
+msgstr ""
+
 #: extern/modules/ExternModulePersondetails.class.php:61
 #: extern/modules/ExternModulePersons.class.php:56
 #: extern/elements/ExternElementContact.class.php:90
@@ -1111,6 +1126,11 @@ msgstr "Description of the news item nr. %s"
 msgid "Meyer"
 msgstr "Meyer"
 
+#: extern/modules/views/newsticker_preview.inc.php:17
+#, fuzzy, c-format
+msgid "Das ist News Nummer %s!"
+msgstr "That is new item nr. 1"
+
 #: extern/modules/views/persondetails_preview.inc.php:36
 msgid "Das ist mein Lebenslauf."
 msgstr "That is my C.V."
@@ -1251,6 +1271,7 @@ msgstr "Information about element %s"
 #: extern/elements/ExternElementMainLecturedetails.class.php:52
 #: extern/elements/ExternElementMainLectures.class.php:54
 #: extern/elements/ExternElementMainNews.class.php:52
+#: extern/elements/ExternElementMainNewsticker.class.php:51
 #: extern/elements/ExternElementMainPersondetails.class.php:52
 #: extern/elements/ExternElementMainPersons.class.php:52
 #: extern/elements/ExternElementMainRangelecturetree.class.php:53
@@ -1370,6 +1391,7 @@ msgstr "News description arrangement (HTML - Tag &lt;div&gt;)"
 #: extern/elements/ExternElementMainLecturedetails.class.php:129
 #: extern/elements/ExternElementMainLectures.class.php:228
 #: extern/elements/ExternElementMainNews.class.php:111
+#: extern/elements/ExternElementMainNewsticker.class.php:97
 #: extern/elements/ExternElementMainPersondetails.class.php:111
 #: extern/elements/ExternElementMainPersons.class.php:137
 #: extern/elements/ExternElementMainRangelecturetree.class.php:94
@@ -1532,6 +1554,7 @@ msgstr ""
 #: extern/elements/ExternElementMainLecturedetails.class.php:53
 #: extern/elements/ExternElementMainLectures.class.php:55
 #: extern/elements/ExternElementMainNews.class.php:53
+#: extern/elements/ExternElementMainNewsticker.class.php:52
 #: extern/elements/ExternElementMainPersondetails.class.php:53
 #: extern/elements/ExternElementMainPersons.class.php:53
 #: extern/elements/ExternElementMainRangelecturetree.class.php:54
@@ -1553,6 +1576,7 @@ msgstr "No files available"
 #: extern/elements/ExternElementMainLecturedetails.class.php:103
 #: extern/elements/ExternElementMainLectures.class.php:106
 #: extern/elements/ExternElementMainNews.class.php:97
+#: extern/elements/ExternElementMainNewsticker.class.php:91
 #: extern/elements/ExternElementMainPersondetails.class.php:96
 #: extern/elements/ExternElementMainPersons.class.php:104
 #: extern/elements/ExternElementMainRangelecturetree.class.php:81
@@ -2200,8 +2224,106 @@ msgid "Geben Sie eine Bezeichnung für die entsprechende Gruppierungsart ein."
 msgstr "Enter a notation for the corresponding grouping style."
 
 #: extern/elements/ExternElementMainNews.class.php:76
+#: extern/elements/ExternElementMainNewsticker.class.php:68
 msgid "Keine aktuellen News"
 msgstr "No current news"
+
+#: extern/elements/ExternElementMainNewsticker.class.php:66
+msgid "Der Ticker wird geladen..."
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:67
+msgid "Ende des Tickers."
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:99
+msgid "Tick-Frequenz:"
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:100
+#, fuzzy
+msgid "Geben Sie an, wieviele Zeichen pro Sekunde ausgegeben werden sollen."
+msgstr "Enter how many characters the file description should display."
+
+#: extern/elements/ExternElementMainNewsticker.class.php:103
+msgid "Pause zwischen News:"
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:104
+msgid ""
+"Geben Sie an, wie lange der Ticker warten soll (in Millisekunden), bis er "
+"die nächste News ausgiebt."
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:107
+msgid "Text am Anfang der Ausgabe:"
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:108
+msgid ""
+"Dieser Text wird ausgegeben, während die News in den Ticker geladen werden, "
+"also am Anfang des ersten Durchlaufs."
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:111
+msgid "Text am Ende der Ausgabe:"
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:112
+msgid ""
+"Dieser Text wird ausgegeben, nachdem alle News angezeigt wurden, also am "
+"Ende jedes Durchlaufs."
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:115
+#, fuzzy
+msgid "Keine News:"
+msgstr "No current news"
+
+#: extern/elements/ExternElementMainNewsticker.class.php:116
+#, fuzzy
+msgid "Dieser Text wird ausgegeben, wenn keine News verfügbar sind."
+msgstr ""
+"This text will be displayed in place of a table, when no files are available "
+"for downloading."
+
+#: extern/elements/ExternElementMainNewsticker.class.php:119
+msgid "Ticker sofort starten?"
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:120
+msgid ""
+"Wählen Sie diese Option, wenn das Modul den Ticker automatisch starten soll. "
+"Bei längeren Ladezeiten der Seite, in der Sie den Ticker integriert haben, "
+"kann es sinnvoll sein, den Ticker erst zu starten, wenn die Seite komplett "
+"geladen ist. Deaktivieren Sie dafür diese Option, und fügen Sie z.B. im "
+"<body>-Tag der Seite das Attribut onLoad=\"newsticker\" ein."
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:126
+#, fuzzy
+msgid "Angaben zum HTML-Tag &lt;textarea&gt;"
+msgstr "Information about HTML Tag &lt;tr&gt;"
+
+#: extern/elements/ExternElementMainNewsticker.class.php:128
+msgid "Anzahl Zeilen im Ausgabefenster:"
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:129
+msgid ""
+"Geben Sie die Anzahl der Zeilen an. Es sind nur Werte zwischen 1 und 10 "
+"erlaubt."
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:132
+msgid "Anzahl der Zeichen pro Zeile:"
+msgstr ""
+
+#: extern/elements/ExternElementMainNewsticker.class.php:133
+msgid ""
+"Geben Sie die Anzahl der Zeichen pro Zeile an. Es sind nur Werte zwischen 10 "
+"und 200 erlaubt."
+msgstr ""
 
 #: extern/elements/ExternElementMainPersondetails.class.php:66
 msgid "Aktuell"
