@@ -217,7 +217,6 @@ class Seminar_Auth extends Auth {
 	}	
 	
 	function auth_preauth() {
-		echo $lifetime;
 		global $auto_user,$auto_response,$auto_id,$resolution;
 		
 		if (!$auto_user OR !$auto_response OR !$auto_id){
