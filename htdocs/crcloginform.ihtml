@@ -38,7 +38,7 @@ $_language_path = init_i18n($_language);
 	global $HTTP_COOKIE_VARS, $username;
 	
 	require_once("msg.inc.php");
-	
+		
 	if ($username && !$HTTP_COOKIE_VARS[$sess->name])
 	{
 		?>
@@ -132,7 +132,7 @@ $_language_path = init_i18n($_language);
 			<td align=right class="steel1"><input type="image"  name="submitbtn" src="./pictures/buttons/login-button.gif" border="0" alt="Login" title="Login" value=" Login "></td>
 		</tr>
 
-	</table></blockquote></td><td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr><tr><td class=blank colspan=2 align=center><br><br><font size =+2><b><?=_("Herzlich Willkommen!")?></b></font><br>&nbsp;</td></tr></table>
+	</table></blockquote></td><td align=right class=blank valign=top><img src="pictures/maus.jpg"></td></tr><tr><td class=blank colspan=2 align=center><br><br><img src="./locale/<?=$_language_path ?>/LC_PICTURES/willkommen.gif" /></td></tr></table>
 	</form>
 
 </td></tr></table>
