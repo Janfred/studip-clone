@@ -248,15 +248,15 @@ if (($type != 2) && ($type != 3) && (!$skip_check)) { //if type 2 or type 3 we d
 //Nachricht bei verbotenem Download
 if ($no_access) {
 	if ($type)
-		$add_msg="<a href=\"archiv.php?back=TRUE\"><b>&nbsp;Zur&uuml;ck</b></a> zum Archiv<br />&nbsp;" ;
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Archiv"), "<a href=\"archiv.php?back=TRUE\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;" ;
 	else
-		$add_msg="<a href=\"folder.php\"><b>&nbsp;Zur&uuml;ck</b></a> zum Downloadbereich<br />&nbsp;";
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), "<a href=\"archiv.php?back=TRUE\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;" ;
 
 	// Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-	parse_window("error§Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!", "§", "Download nicht m&ouml;glich", $add_msg);
+	parse_window("error§" . _("Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"), "§", _("Download nicht m&ouml;glich"), $add_msg);
 	page_close();
 	echo "</body>";
 	die;
