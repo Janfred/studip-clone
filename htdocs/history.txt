@@ -1,6 +1,8 @@
 31.08.2002 v 0.8 release candidate 3
-- Äusserst umfangreiche und flexible Funktionen zur Teilnehmerbegrenzung von Veranstaltungen. Veranstaltungen könnn 
-  mit einem eigen Losverfahren oder nach chronologischer Anmeldung mit unterschiedlichen Kontigenten für beliebig viele
+- Umstrukturierung der Reiter im Adminbereich in logische Einheiten
+- neue Übersichtsseite "Meine Einrichtungen" für direkten Zugriff auf Einrichtungsobjekte eingebaut. 
+- Äusserst umfangreiche und flexible Funktionen zur Teilnehmerbegrenzung von Veranstaltungen. Veranstaltungen können
+  mit einem eigenen Losverfahren oder nach chronologischer Anmeldung mit unterschiedlichen Kontigenten für beliebig viele
   Studiengänge begrenzt werden
 - Neue Ebene "Studienfach" eingebaut. Studenten können nun im System hinterlegen, welche Studienfächer sie
   studieren
@@ -14,6 +16,7 @@
 - Einrichtungen können nun als eigenes Objekt betrachtet werden: Damit gibt es eigene Foren, Dateibereich, Mitarberlisten und
   Veranstaltungsübersicht an jedem Institut innerhalb des Systems 
 - weitere Detailverbesserungen und Bugfixes
+- Geschschwindigkeitsoptimierungen
 
 10.03.2002 v.0.7.5 release candidate 2
 - bessere Performance der Veranstaltungsübersicht
