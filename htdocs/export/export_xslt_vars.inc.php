@@ -50,7 +50,7 @@ $xslt_files["html-druck"]["veranstaltung"] = true;
 
 $xslt_files["html-liste"]["name"] = _("&Uuml;bersicht");
 $xslt_files["html-liste"]["desc"] = _("Modul zur Ausgabe von Personen- oder Veranstaltungsdaten als HTML-Seite. 
-	Es werden nur die Grunddaten der Veranstaltungen / Personen in eine Tabelle geschrieben. 
+	Es werden nur die Veranstaltungs-Grunddaten bzw. Namen, Telefonnummern und E-Mail-Adressen in eine Tabelle geschrieben. 
 	Die Ausgabe-Datei kann in einem Web-Browser angezeigt werden.");
 $xslt_files["html-liste"]["file"] = "html-vp-3.xsl";
 $xslt_files["html-liste"]["htm"] = true;
