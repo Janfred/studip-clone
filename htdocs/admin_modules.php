@@ -58,17 +58,28 @@ $sess->register("admin_modules_data");
 $messaging=new messaging;
 $amodules=new AdminModules;
 
-
+//get ID
+if ($SessSemName[1])
+	$range_id=$SessSemName[1]; 
+	
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents)) {
-	$admin_modules_data["modules_list"] = $amodules->getLocalModules($SessSemName[1]);
-	$admin_modules_data["orig_bin"] = $amodules->getBin($SessSemName[1]);
-	$admin_modules_data["changed_bin"] = $amodules->getBin($SessSemName[1]);
+if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents)) {
+	$admin_modules_data["modules_list"] = $amodules->getLocalModules($range_id);
+	$admin_modules_data["orig_bin"] = $amodules->getBin($range_id);
+	$admin_modules_data["changed_bin"] = $amodules->getBin($range_id);
+	$admin_modules_data["range_id"] = $range_id;
+} else {
+	//Sicherheitscheck ob &uuml;berhaupt was zum Bearbeiten gewaehlt ist.
+	if (!$admin_modules_data["range_id"]) {
+		echo "</tr></td></table>";
+		die;
+	}
+}
 
-//nur wenn wir schon Daten haben kann was zurueckkommen
-} elseif ($perm->have_studip_perm("tutor", $SessSemName[1])) {
+if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
-	if (!$SessSemName[1]){
+
+	if (!$admin_modules_data["range_id"]){
 		echo "</tr></td></table>";
 		die;
 	}
@@ -92,7 +103,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 		//check for forum
 		if (($amodules->isBit($admin_modules_data["orig_bin"],  $amodules->registered_modules["forum"]["id"])) &&
 			(!$amodules->isBit($admin_modules_data["changed_bin"],  $amodules->registered_modules["forum"]["id"])) &&
-			($amodules->getModuleForumExistingItems($SessSemName[1]))) {
+			($amodules->getModuleForumExistingItems($admin_modules_data["range_id"]))) {
 			$msg.="info§"._("Wollen Sie wirklich das Forum deaktivieren und damit alle Diskussionbeitr&auml;ge l&ouml;schen?");
 			$msg.="<br /><a href=\"".$PHP_SELF."?delete_forum=TRUE\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 			$msg.="<a href=\"".$PHP_SELF."?cancel=TRUE\">" . makeButton("nein", "img") . "</a>\n§";
@@ -102,7 +113,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 		//check for documents
 		if (($amodules->isBit($admin_modules_data["orig_bin"],  $amodules->registered_modules["documents"]["id"])) &&
 			(!$amodules->isBit($admin_modules_data["changed_bin"],  $amodules->registered_modules["documents"]["id"])) &&
-			($amodules->getModuleDocumentsExistingItems($SessSemName[1]))) {
+			($amodules->getModuleDocumentsExistingItems($range_id))) {
 			$msg.="info§"._("Wollen Sie wirklich den Dateiordner deaktivieren und damit alle Dateien l&ouml;schen?");
 			$msg.="<br /><a href=\"".$PHP_SELF."?delete_documents=TRUE\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 			$msg.="<a href=\"".$PHP_SELF."?cancel=TRUE\">" . makeButton("nein", "img") . "</a>\n§";
@@ -110,36 +121,36 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 		}
 
 		if (!$dont_save) {
-			$amodules->writeBin($SessSemName[1], $admin_modules_data["changed_bin"]);
+			$amodules->writeBin($admin_modules_data["range_id"], $admin_modules_data["changed_bin"]);
 			$admin_modules_data["orig_bin"] = $admin_modules_data["changed_bin"];
-			$admin_modules_data["modules_list"] = $amodules->getLocalModules($SessSemName[1]);
+			$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
 			$msg.= "msg§Die ver&auml;nderte Modulkonfiguration wurde &uuml;bernommen";
 		}
 	}
 	
 	if ($delete_forum) {
-		$amodules->moduleForumDeactivate($SessSemName[1]);
-		$amodules->writeStatus("forum", $SessSemName[1], FALSE);
-		$admin_modules_data["modules_list"] = $amodules->getLocalModules($SessSemName[1]);
-		$admin_modules_data["orig_bin"] = $amodules->getBin($SessSemName[1]);
+		$amodules->moduleForumDeactivate($admin_modules_data["range_id"]);
+		$amodules->writeStatus("forum", $admin_modules_data["range_id"], FALSE);
+		$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
+		$admin_modules_data["orig_bin"] = $amodules->getBin($admin_modules_data["range_id"]);
 	}
 
 	if ($delete_documents) {
-		$amodules->moduleDocumentsDeactivate($SessSemName[1]);
-		$amodules->writeStatus("documents", $SessSemName[1], FALSE);
-		$admin_modules_data["modules_list"] = $amodules->getLocalModules($SessSemName[1]);
-		$admin_modules_data["orig_bin"] = $amodules->getBin($SessSemName[1]);
+		$amodules->moduleDocumentsDeactivate($admin_modules_data["range_id"]);
+		$amodules->writeStatus("documents", $admin_modules_data["range_id"], FALSE);
+		$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
+		$admin_modules_data["orig_bin"] = $amodules->getBin($admin_modules_data["range_id"]);
 	}
-
 }
 
+if ($admin_modules_data["range_id"]) {
 
 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
 		<td class="topic" colspan=2>&nbsp; <b>
 		<?
-		echo getHeaderLine($SessSemName[1])." -  "._("Module konfigurieren");
+		echo getHeaderLine($admin_modules_data["range_id"])." -  "._("Module konfigurieren");
 		?>
 		</td>		
 	</tr>
@@ -176,7 +187,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 				?>
 			</td>
 		</tr>
-		<? if ($amodules->isEnableable("forum", $SessSemName[1])) { ?>
+		<? if ($amodules->isEnableable("forum", $admin_modules_data["range_id"])) { ?>
 		<tr <? $cssSw->switchClass() ?> rowspan=2>
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
@@ -192,15 +203,15 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
 				<font size=-1><?
-				if ($amodules->getModuleForumExistingItems($SessSemName[1]))
-					print ($admin_modules_data["modules_list"]) ? printf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Forums werden <b>%s</b> Postings ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleForumExistingItems($SessSemName[1])) : print _("Das Forum jederzeit aktiviert werden.");
+				if ($amodules->getModuleForumExistingItems($admin_modules_data["range_id"]))
+					print ($admin_modules_data["modules_list"]) ? printf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Forums werden <b>%s</b> Postings ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleForumExistingItems($admin_modules_data["range_id"])) : print _("Das Forum jederzeit aktiviert werden.");
 				else
 					print ($admin_modules_data["modules_list"]) ? printf(_("Das Forum kann jederzeit deaktiviert werden.")) : print _("Das Forum kann jederzeit aktiviert werden.");
 				?></font>
 			</td>
 		</tr>
 		<? }
-		if ($amodules->isEnableable("documents", $SessSemName[1])) { ?>
+		if ($amodules->isEnableable("documents", $admin_modules_data["range_id"])) { ?>
 		<tr <? $cssSw->switchClass() ?> rowspan=2>
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
@@ -216,15 +227,15 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" width="70%">
 				<font size=-1><?
-				if ($amodules->getModuleDocumentsExistingItems($SessSemName[1]))
-					print ($admin_modules_data["modules_list"]) ? printf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Dateiordners werden <b>%s</b> Dateien ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleDocumentsExistingItems($SessSemName[1])) : print _("Das Forum jederzeit aktiviert werden.");
+				if ($amodules->getModuleDocumentsExistingItems($admin_modules_data["range_id"]))
+					print ($admin_modules_data["modules_list"]) ? printf("<font color=\"red\">"._("Achtung: Beim Deaktivieren des Dateiordners werden <b>%s</b> Dateien ebenfalls gel&ouml;scht!")."</font>", $amodules->getModuleDocumentsExistingItems($admin_modules_data["range_id"])) : print _("Das Forum jederzeit aktiviert werden.");
 				else
 					print ($admin_modules_data["modules_list"]) ? printf(_("Der Dateiordner kann jederzeit deaktiviert werden.")) : print _("Der Dateiordner kann jederzeit aktiviert werden.");
 				?></font>
 			</td>
 		</tr>
 		<? }
-		if ($amodules->isEnableable("ilias_connect", $SessSemName[1])) { ?>
+		if ($amodules->isEnableable("ilias_connect", $admin_modules_data["range_id"])) { ?>
 		<tr <? $cssSw->switchClass() ?> rowspan=2>
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
@@ -243,7 +254,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 			</td>
 		</tr>
 		<? }
-		if ($amodules->isEnableable("chat", $SessSemName[1])) { ?>
+		if ($amodules->isEnableable("chat", $admin_modules_data["range_id"])) { ?>
 		<tr <? $cssSw->switchClass() ?> rowspan=2>
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
@@ -262,7 +273,7 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 			</td>
 		</tr>
 		<? }
-		if ($amodules->isEnableable("support", $SessSemName[1])) { ?>
+		if ($amodules->isEnableable("support", $admin_modules_data["range_id"])) { ?>
 		<tr <? $cssSw->switchClass() ?> rowspan=2>
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
@@ -286,7 +297,11 @@ if (($SessSemName[1]) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_docu
 			</td>
 		</tr>
 		<?
-page_close();
+	page_close();		
+	}
+else
+	die;
+
 ?>
 	</table>
 </td>
