@@ -1,5 +1,26 @@
 <?
+/**
+* Presentation of a set of learning-modules.
+* 
+* This file contains several functions to show a set of learning-modules.
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		lernmodul_view_functions
+* @package		ELearning
+*/
 
+/**
+* Shows array of learning-modules
+*
+* Shows a set of learning-modules specified by $mod_array using the printhead/printcontent functions of Stud.IP.
+*
+* @access	public        
+* @param		string	$mod_array	Array of learning-module-data
+* @return		boolean	returns false if array is empty
+*/
 function show_these_modules($mod_array)
 {
 	global $PHP_SELF, $print_open_search, $SessSemName, $search_key;
@@ -54,6 +75,14 @@ function show_these_modules($mod_array)
 	return true;
 }
 
+/**
+* Shows array of learning-modules that belong to the given username
+*
+* Shows a set of learning-modules that belong to the given username using the printhead/printcontent functions of Stud.IP.
+*
+* @access	public        
+* @param		string	$benutzername	Username
+*/
 function show_user_modules($benutzername)
 {
 	global $print_open_admin;
@@ -113,6 +142,14 @@ function show_user_modules($benutzername)
 		echo "<b>" . _("Sie haben bisher keine ILIAS-Lernmodule angelegt.") . "</b><br><br>";
 }
 
+/**
+* Shows array of learning-modules with administration buttons
+*
+* Shows all learning-modules for the administraion screen using the printhead/printcontent functions of Stud.IP. 
+* Depending on if the user has acces to the shown modules there are also administration options to the learning-modules.
+*
+* @access	public        
+*/
 function show_admin_modules()
 {
 	global $print_open_admin;
@@ -173,6 +210,16 @@ function show_admin_modules()
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }
 
+/**
+* Shows learning-modules that belong to a lecture / institute
+*
+* Shows a set of learning-modules belonging to $seminar_id using the printhead/printcontent functions of Stud.IP.
+* $status defines if the modules are all to be shown (status=0) or only those modules that are rated official (1) or those rated inofficial (2).
+*
+* @access	public        
+* @param		string	$seminar_id	id of the lecture / institute
+* @param		string	$status	all learning-modules or officials or inofficials?
+*/
 function show_seminar_modules($seminar_id, $status = 0)
 {
 	global $PHP_SELF, $print_open, $SessSemName, $perm;
@@ -261,6 +308,14 @@ function show_seminar_modules($seminar_id, $status = 0)
 	return true;
 }
 	
+/**
+* Shows all learning-modules
+*
+* Shows all learning modules. This function is used to connect a specific learning-module to a lecture.
+*
+* @access	public        
+* @param		string	$seminar_id	id of the lecture
+*/
 function show_all_modules($seminar_id)
 {
 	global $PHP_SELF, $print_open, $SessSemName, $perm;
@@ -332,6 +387,15 @@ function show_all_modules($seminar_id)
 		echo "<b>" . _("Es sind keine Lernmodule vorhanden.") . "</b><br><br>";
 }
 	
+/**
+* Shows linked learning-modules that belong to a lecture / institute
+*
+* Shows a set of learning-modules belonging to $seminar_id using the printhead/printcontent functions of Stud.IP.
+*
+* @access	public        
+* @param		string	$seminar_id	id of the lecture / institute
+* @return		boolean	returns false if no learning-modules were found
+*/
 function show_seminar_modules_links($seminar_id)
 {
 	global $PHP_SELF, $print_open, $SessSemName;

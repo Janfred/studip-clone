@@ -1,4 +1,17 @@
 <?php
+/**
+* ILIAS-User authentification.
+* 
+* This file opens an ILIAS-Session and redirects to an ILIAS-page in order to view or edit a learning-module.
+* It must be copied to the ILIAS-directory!
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		studip2ilias
+* @package		ELearning
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // studip2ilias.php
