@@ -285,6 +285,39 @@ class StudipLitList extends TreeAbstract {
 		return $rs->affected_rows();
 	}
 	
+	function GetTabbedList($range_id, $list_id){
+		$end_note_map = array(	'dc_type' => 'Reference Type', 'dc_title' => 'Title', 'dc_creator' => 'Author',
+								'year' => 'Year', 'dc_contributor' => 'Secondary Author', 'dc_publisher' => 'Publisher',
+								'dc_identifier' => 'ISBN/ISSN', 'dc_source' => 'Original Publication', 'dc_subject' => 'Keywords',
+								'dc_description' => 'Abstract', 'accession_number' => 'Accession Number', 'note' => 'Notes', 'external_link' => 'URL');
+		$dbv = new DbView();
+		$tree =& TreeAbstract::GetInstance("StudipLitList", $range_id);
+		$ret = "*Generic\n";
+		foreach ($end_note_map as $fields){
+			$ret .= $fields . "\t";
+		}
+		$ret .= "\n";
+		if ($tree->hasKids($list_id)){
+			$dbv->params[0] = $list_id;
+			$rs = $dbv->get_query("view:LIT_LIST_GET_ELEMENTS");
+			while ($rs->next_record()){
+				$tree->cat_element->setValues($rs->Record);
+				$tree->cat_element->fields['note']['value'] = $tree->tree_data[$rs->f('list_element_id')]['note'];
+				foreach ($end_note_map as $studip_field => $end_note_field){
+					$value = $tree->cat_element->getValue($studip_field);
+					if ($studip_field == 'dc_type' 
+					&& ($value == '' || !in_array($value, $tree->cat_element->fields['dc_type']['select_list']))){
+						$value = "Book";
+					}
+					$value = str_replace(array("\n","\r","\t"),'',$value);
+					$ret .= $value . "\t";
+				}
+				$ret .= "\n";
+			}
+		}
+		return $ret;
+	}
+	
 	function DeleteListsByRange($range_id){
 		$deleted = null;
 		$view = new DbView();

@@ -360,6 +360,9 @@ class StudipLitListViewAdmin extends TreeView{
 						$content .= "<a href=\"" . $this->getSelf("cmd=CopyList&item_id=$item_id") . "\">"
 						. "<img " .makeButton("kopieerstellen","src") . tooltip(_("Eine Kopie dieser Liste erstellen"))
 						. " border=\"0\"></a>&nbsp;";
+						$content .= "<a href=\"sendfile.php?range_id={$this->tree->range_id}&list_id=$item_id&type=5&force_download=1&file_name=".rawurlencode($this->tree->tree_data[$item_id]['name'] . ".txt")."\">"
+						. "<img " .makeButton("export","src") . tooltip(_("Export der Liste in EndNote kompatiblem Format"))
+						. " border=\"0\"></a>&nbsp;";
 					}
 					$content .= "<a href=\"" . $this->getSelf("cmd=$cmd&item_id=$item_id") . "\">"
 					. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
