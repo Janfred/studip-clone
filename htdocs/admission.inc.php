@@ -131,8 +131,10 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	$messaging=new messaging;
 	
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
-	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE Seminar_id = '$seminar_id' AND admission_selection_take_place = '1' ");
-	if ($db->next_record()) {
+	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time, admission_selection_take_place FROM seminare WHERE Seminar_id = '$seminar_id' ");
+	$db->next_record())
+	//Veranstaltung einfach auffuellen (nach Lostermin und Ender der Kontingentierung)
+	if ($db->f("admission_selection_take_place")) {
 		//anzahl der freien Plaetze holen
 		$count=get_free_admission($seminar_id);
 		
@@ -153,11 +155,42 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 
 		//Warteposition der restlichen User neu eintragen
 		renumber_admission($seminar_id, $send_message);
+		
+	//Nachruecken in einzelnen Kontingenten veranlassen (nur bei chronologischer Anmeldung)
+	} elseif ($db->f("admission_type") == 2) {
+		//Alle zugelassenen Studiengaenge einzeln bearbeiten
+		$db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '".$db->f("Seminar_id")."' ");
+		while ($db2->next_record()) {
+			//Wenn Kontingent "alle" bearbeitet wird, wird die Teilnehmerzahl aus den anderen Kontingenten gebildet
+			if ($db2->f("studiengang_id") == "all")
+				$tmp_admission_quota=get_all_quota($db->f("Seminar_id"));
+			else
+				$tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
+			//belegte Plaetze zaehlen
+			$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id"));
+			$free_quota=$tmp_admission_quota - $db3->num_rows();
+			//Studis auswaehlen, die jetzt aufsteigen koennen
+			$db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $free_quota");
+			while ($db4->next_record()) {
+				$group = select_group ($db->f("start_time"), $db4->f("user_id"));			
+				$db5->query("INSERT INTO seminar_user SET user_id = '".$db4->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db2->f("studiengang_id")."', mkdate = '".time()."' ");
+				if ($db5->affected_rows()) {
+					$db6->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db4->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
+					//User benachrichten
+					if (($db6->affected_rows()) && ($send_message)) {
+						$message="Sie sind als Teilnehmer der Veranstaltung **".$db->f("Name")."** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen.";
+						$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
+					}
+				}
+			}
+		}
+		//Warteposition der restlichen User neu eintragen
+		renumber_admission($seminar_id, $send_message);
 	}
 }
 
 /*
-Die Funktion check_admissionueberprueft, ob Veranstaltungen gelost oder das Kontingent geoefftnet
+Die Funktion check_admission ueberprueft, ob Veranstaltungen gelost oder das Kontingent geoefftnet
 werden muss. Die Teilnehmer bekommen eine SMS ob es geklappt hat oder nicht, wenn der Parameter
 gesetzt ist.
 */
