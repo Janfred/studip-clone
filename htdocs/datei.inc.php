@@ -142,7 +142,7 @@ function parse_link($link, $level=0) {
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
 	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName, $ABSOLUTE_PATH_STUDIP;
 	$zip_file_id = false;
-	if (file_exists($ZIP_PATH) && is_array($file_ids)){
+	if ((file_exists($ZIP_PATH) || ini_get('safe_mode')) && is_array($file_ids)){
 		$db = new DB_Seminar();
 		$zip_file_id = md5(uniqid("jabba",1));
 
@@ -160,7 +160,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		}
 
 		//zip stuff
-		$zippara = (ini_get('safe_mode')) ? ' -9 -R ':' -9 -r ';
+		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		@chdir($tmp_full_path);
 		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' *');
 		@chdir($ABSOLUTE_PATH_STUDIP);
@@ -173,19 +173,19 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 function createFolderZip ($folder_id) {
 	global $TMP_PATH, $ZIP_PATH, $ABSOLUTE_PATH_STUDIP;
 	$zip_file_id = false;
-	if (file_exists($ZIP_PATH)){
-		
+	if (file_exists($ZIP_PATH) || ini_get('safe_mode')){
+
 		$zip_file_id = md5(uniqid("jabba",1));
-		
+
 		//create temporary Folder
 		$tmp_full_path = "$TMP_PATH/$zip_file_id";
 		mkdir($tmp_full_path);
-		
+
 		//create folder comntent
 		createTempFolder($folder_id, $tmp_full_path);
 		
 		//zip stuff
-		$zippara = (ini_get('safe_mode')) ? ' -9 -R ':' -9 -r ';
+		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		chdir ($tmp_full_path);
 		exec ($ZIP_PATH . $zippara . $tmp_full_path . ' * ');
 		chdir($ABSOLUTE_PATH_STUDIP);
