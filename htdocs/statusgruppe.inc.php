@@ -101,6 +101,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 			$statusgruppe_id = substr($key, 0, -2);
 		}
 		echo $statusgruppe_id;
+		echo "hallo";
 		$db=new DB_Seminar;
 		$db2=new DB_Seminar;
 		$mkdate = time();
