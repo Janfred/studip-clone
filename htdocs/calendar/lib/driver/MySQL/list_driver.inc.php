@@ -50,7 +50,7 @@ function list_restore(&$this){
 			
 			// wöchentliche Wiederholung
 			case "WEEKLY" :
-				if($db->f("date") > $start){
+				if($db->f("date") >= $start){
 					$adate = mktime(12,0,0,date("n",$db->f("date")),date("j",$db->f("date")),date("Y",$db->f("date")),0);
 					if($rep["ts"] != $adate){
 						$real_date = mktime(date("G", $db->f("date")), date("i", $db->f("date")),0,date("n", $adate),date("j", $adate),date("Y", $adate));
@@ -70,14 +70,13 @@ function list_restore(&$this){
 				}
 				if($rep["ts"] < $start){
 					// Brauche den Montag der angefangenen Woche
-					$start_ts = $this->ts;
-					$adate = $start_ts - (strftime("%u",$start_ts) - 1) * 86400;
+					$adate = $this->ts - (strftime("%u", $this->ts) - 1) * 86400;
 					$adate += (($rep["lintervall"] - (($adate - $rep["ts"]) / 604800) % $rep["lintervall"]) % $rep["lintervall"]) * 604800;
 				}
 				else
 					$adate = $rep["ts"];
-					
-				while($adate <= $expire && $adate <= $end && $adate >= $start){
+				
+				while($adate <= $expire && $adate <= $end){
 					// Termin kann innerhalb der Woche an verschiedenen Wochentagen wiederholt werden
 					for($i = 0;$i < strlen($rep["wdays"]);$i++){
 						$awday = (int) substr($rep["wdays"], $i, 1) - 1;
