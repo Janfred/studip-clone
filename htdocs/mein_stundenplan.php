@@ -521,7 +521,7 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 </tr>
 <?
 echo "</table></td></tr>";
-if (!$print_view) {
+if ((!$print_view) && (!$inst_id)) {
 ?>
 <tr>
 	<td colspan=<? echo $glb_colspan+1?> class="blank">
