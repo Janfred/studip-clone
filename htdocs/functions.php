@@ -1,6 +1,6 @@
 <?
 /**
-* function.php
+* functions.php
 * 
 * The Stud.IP-Core functions. Look to the descriptions to get further details
 * 

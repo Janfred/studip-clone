@@ -2,20 +2,20 @@
 /**
 * mein_stundenplan.php
 * 
-* edit the setting for the admission system
+* view of personal timetable
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de> Suchi & Berg GmbH <info@data-quest.de>
-* @version		1.0
+* @version		$Id$
 * @access		public
-* @modulegroup	system_core
-* @module		admission.inc.php
+* @package		studip_core
+* @modulegroup	views
+* @module		mein_stundenplan.php
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // mein_stundenplan.php - Persoenliche Stundenplanansicht in Stud.IP.
-// Funktionen die zur Teilnehmerbeschraenkung benoetigt werden
 // Copyright (C) 2001-2002 Cornelis Kater <ckater@gwdg.de> Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
