@@ -461,20 +461,20 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 		$overlaps_detected=FALSE;
 		foreach ($resources_result as $key=>$val)
 			if ($val["overlap_assigns"] == TRUE)
-				$overlaps_detected[$val["resource_id"]] = $val["overlap_assigns"];
+				$overlaps_detected[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
 
 		//create bad msg
 		if ($overlaps_detected) {
 			$result.="error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 			$i=0;
-			foreach ($overlaps_detected as $key=>$val) {
-				$result.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+			foreach ($overlaps_detected as $val) {
+				$result.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($val["resource_id"])).": ";
 				//show the first overlap
-				list(, $val2) = each($val);
+				list(, $val2) = each($val["overlap_assigns"]);
 				$result.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
 				if (sizeof($val) >1)
 					$result.=", ... ("._("und weitere").")";
-				$result.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
+				$result.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["resource_id"], $val2["begin"]);
 				$i++;
 			}
 			$result.="</font>§";
