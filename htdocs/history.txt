@@ -1,20 +1,19 @@
-08.4.2004 v 1.1
+08.04.2004 v 1.1
 - Evaluations und Umfragemodul zur Erstellung empirischer Online-Fragebögen
 - Möglichkeit der Dateiverlinkung auf geschützte Dokumente auf externen Servern
 - Administrationsebene für Literaturnachweise mit integriertem Bibliothekscheck
-- Gruppieren von Veranstaltungen
+- Erweiterte Raumverwaltung für zentrale Raumvergabe über Raumwünsche
 - Funktion zum Kopieren von Veranstaltungen
-- Mechanismus zum Verstecken und sichtbar machen von Veranstaltungen
+- Mechanismus zum Verstecken und Sichtbarmachen von Veranstaltungen
 - Weiterleitung interner Mail an E-Mail-Adresse schaltbar 
 - Verschiedene Sortierungen der Teilnehmerliste
 - Anzeige von Veranstaltsungnsummern in verschiedenen Listen
 - Blätternavigation in Gästebüchern
 - Smiley-Verwaltung
-- Semester-Verwaltung
+- Semester und Ferien-Verwaltung nun mit eigenem Frontend
 - Neue Berechnungsformel der Stud.IP Score ;)
+- neues Sytaxhighlighting für php-Code
 - weitere Detailverbesserungen und Bugfixes
-
-
 
 29.12.2003 v 1.0
 - neue WAP-Schnittstelle
