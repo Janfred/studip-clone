@@ -178,6 +178,24 @@ class messaging {
 		return $n_title;
 	}
 
+	function user_wants_email($userid) {
+		$db = new DB_Seminar("SELECT email_forward FROM user_info a, auth_user_md5 b WHERE a.user_id = b.user_id AND (b.username = '$userid' OR b.user_id = '$userid')");
+		$db->next_record();
+		switch ($db->f("email_forward")) {
+			case -1:
+				return FALSE;
+				break;
+
+			case 1:
+				return TRUE;
+				break;
+
+			default:
+				return $GLOBALS["MESSAGING_FORWARD_DEFAULT"];
+				break;
+		}
+	}
+
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='') {
 		global $_fullname_sql, $user, $my_messaging_settings, $sms_data;
 
@@ -260,7 +278,7 @@ class messaging {
 			}
 
 			//PH & TG: e-mail-forward of the message to the user
-			if (($my_messaging_settings["send_as_email"] == 1) && ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"])) {
+			if (($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) && ($this->user_wants_email($rec_uname))) {
 				$db4 = new DB_Seminar("SELECT user_id, Email FROM auth_user_md5 WHERE username = '$rec_uname' OR user_id = '$rec_uname';");
 				$db4->next_record();
 				$to = $db4->f("Email");				
@@ -286,9 +304,9 @@ class messaging {
 
 				$title = $this->rfc_string($title . $snd_fullname);
 				// Generate "Header" of the message
-				$message = _("Von: ")." $snd_fullname\n".
-					_("An: ")." $rec_fullname\n".
-					_("Datum: ").date("d.m.Y, H:i",time())."\n\n".$message.
+				$message = _("Von:")." $snd_fullname\n".
+					_("An:")." $rec_fullname\n".
+					_("Datum: ").date("d.m. Y, H:i",time())."\n\n".$message.
 					"\n-- \n";
 
 				$message = kill_format($message);
