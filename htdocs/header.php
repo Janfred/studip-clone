@@ -236,7 +236,15 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		if ($perm->have_perm("tutor")) {
 			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top");
+		} else {
+			?>
+			<td class="toolbar">
+				<img border="0" src="pictures/blank.gif" heigth="5" width="12"> 
+			</td>
+			<?
 		}
+		
+		
 		echo MakeToolbar("pictures/info.gif","",$auth->auth["uname"],$infotext,40, "","left","TRUE");
 
 ?>
@@ -245,7 +253,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			</td>
 <?		
 
-		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right");
+		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfestellung"),_("Hilfe zu dieser Seite"),40, "_new","right");
 		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
 
 ?>
