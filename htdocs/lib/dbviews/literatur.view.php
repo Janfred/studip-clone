@@ -27,6 +27,7 @@ $GLOBALS['_views']['element_name_short_sql'] = " CONCAT(IF ( RIGHT( SUBSTRING_IN
 									SUBSTRING_INDEX( TRIM(dc_creator),  ',', 1  )  ) ,'(', YEAR( dc_date ),')-',
 									dc_title) "; 
 $GLOBALS['_views']["LIT_GET_ELEMENT"] = array("query" => "SELECT * FROM lit_catalog WHERE catalog_id=?");
+$GLOBALS['_views']["LIT_CHECK_ELEMENT"] = array("query" => "SELECT catalog_id FROM lit_catalog WHERE accession_number=? AND user_id='studip'");
 $GLOBALS['_views']["LIT_LIST_GET_ELEMENTS"] = array("query" => "SELECT list_element_id, b.* FROM lit_list_content LEFT JOIN lit_catalog b USING (catalog_id) WHERE list_id=? ORDER BY priority");
 $GLOBALS['_views']["LIT_GET_REFERENCE_COUNT"] = array("query" => "SELECT count(*) AS anzahl FROM lit_list_content WHERE catalog_id=?");
 $GLOBALS['_views']["LIT_GET_CATALOG_COUNT"] = array("query" => "SELECT count(*) AS anzahl FROM lit_catalog");
@@ -61,5 +62,11 @@ $GLOBALS['_views']["LIT_INS_LIST_CONTENT_COPY"] = array("query" => array("INSERT
 														SELECT * FROM {1}","view:LIT_INS_HELPER"));
 $GLOBALS['_views']["LIT_LIST_TOGGLE_VISIBILITY"] = array("query" => "UPDATE lit_list SET visibility=IF(visibility=0,1,0) WHERE list_id=?");
 $GLOBALS['_views']["LIT_LIST_TRIGGER_UPDATE"] = array("query" => "UPDATE lit_list SET chdate=UNIX_TIMESTAMP(),user_id=? WHERE list_id=?");
+
+$GLOBALS['_views']["LIT_GET_FAK_LIT_PLUGIN"] = array("query" => "SELECT f.fakultaets_id, f.lit_plugin_name FROM user_inst
+																INNER JOIN Institute i
+																USING ( institut_id )
+																INNER JOIN Institute f ON ( f.institut_id = i.fakultaets_id )
+																WHERE user_id = ? AND inst_perms IN ('admin','dozent','tutor') ORDER BY inst_perms ASC");
 
 ?>
