@@ -333,7 +333,7 @@ if ($cmd=="inst_kill") {
 	  
 	  $db->query("SELECT Name FROM Institute WHERE Institut_id = '$auswahl'");
 	  $db->next_record();
-	  $meldung="msg§" . sprintf(_("Die Zuordnung zur Einrichtung %s wurde aufgehoben."), "<b>".$db->f("Name")."</b>");
+	  $meldung="msg§" . sprintf(_("Die Zuordnung zur Einrichtung %s wurde aufgehoben."), "<b>".htmlReady($db->f("Name"))."</b>");
 	}
 }
 
