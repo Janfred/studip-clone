@@ -1,12 +1,23 @@
 <?
+function string_to_unicode ($xml_string) 
+{
+	for ($x=0; $x<strlen($xml_string); $x++) 
+	{
+		$char = substr($xml_string, $x, 1);
+		$dosc = ord($char);
+		$ret .= ($dosc > 127) ?
+		"&#".$dosc.";" : $char;
+	}
+	return $ret;
+}
 
 function output_data($object_data, $output_mode = "file")
 {
 	global $xml_file;
 	if (($output_mode == "file") OR ($output_mode == "processor") OR ($output_mode == "passthrough") OR ($output_mode == "choose"))
-		fputs($xml_file, $object_data);
+		fputs($xml_file, string_to_unicode( $object_data ));
 	elseif ($output_mode == "direct")
-		echo $object_data;
+		echo string_to_unicode( $object_data );
 }
 
 function export_range($range_id)
@@ -61,7 +72,7 @@ function export_inst($inst_id)
 
 function export_sem($inst_id)
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $filter;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $filter, $SEMESTER, $ex_sem;
 
 	switch ($filter)
 	{
@@ -86,11 +97,12 @@ function export_sem($inst_id)
 		default:
 			$order = "bereiche.name, seminare.Name";
 	}
-
+	if (isset($SEMESTER[ $ex_sem]["beginn"] ) )
+		$addquery = " AND seminare.start_time <=".$SEMESTER[$ex_sem]["beginn"]." AND (".$SEMESTER[$ex_sem]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
 	$db->query('SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_bereich USING(Seminar_id) 
 				LEFT JOIN bereiche USING(bereich_id) 
-				WHERE seminar_inst.Institut_id = "' . $inst_id . '" 
+				WHERE seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
 				ORDER BY ' . $order);
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
@@ -157,9 +169,9 @@ function export_sem($inst_id)
 		$data_object = "";
 	}
 
-	if ($do_subgroup)
+	if (($do_subgroup) AND ($subgroup != "FIRSTGROUP"))
 		$data_object .= xml_close_tag($xml_groupnames_lecture["subgroup2"]);
-	if ($do_group)
+	if (($do_group) AND ($group != "FIRSTGROUP"))
 		$data_object .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
 
 	$data_object .= xml_close_tag($xml_groupnames_lecture["group"]);
