@@ -107,13 +107,19 @@ function write_toplist($rubrik,$query) {
 			Stud.IP steht unter der GNU General Public License, Version 2 oder neuer.<br /><br />
 			Weitere Informationen finden sie auf <a target="_new" href="http://www.studip.de">www.studip.de</a><br />
 		</td>
-		<td class="blank" align="right">
-			<a target="_new" href="http://www.studip.de"><img src="pictures/studipanim.gif" border="0"></a><br /><b>Version: </b><? echo $SOFTWARE_VERSION?>
-			&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-			<font size=-1>gef&ouml;rdert von </font>&nbsp; &nbsp; &nbsp; &nbsp; <br />
-			<a target="_new" href="http://www.bmbf.de/"><img src="pictures/bmbf.gif" border="0" /></a>&nbsp; &nbsp; &nbsp; &nbsp; 
-			
+		<td class="blank" align="left" valign="top">
+			<a target="_new" href="http://www.studip.de"><img src="pictures/studipanim.gif" border="0"></a>
 		</td>
+	</tr>
+	<tr>
+		<td valign="top" align="right" class="blank">
+			&nbsp; 
+ 		</td>
+		<td class="blank" align="left" valign="top">
+			&nbsp; &nbsp;<b>Version: </b><? echo $SOFTWARE_VERSION?>		
+		</td>
+	</tr>
+	
 	<tr>
 		<td class="steel1"colspan=2>
 			<br>&nbsp; &nbsp; <b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:<br><br><blockquote>
@@ -126,6 +132,24 @@ function write_toplist($rubrik,$query) {
 			<br><b>Stefan Suchi</b>, eMail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> (Kernentwicklung, Datenbankstruktur, Rechtesystem, Adminbereich)
 			<br><b>Peter Thienel</b>, eMail: <a href="mailto:rabeiri@gmx.de">rabeiri@gmx.de</a> (Externe Seiten, Terminplaner)
 			<br></blockquote>
+		</td>
+	</tr>
+	</table>
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td class="blank" colspan=2>
+			&nbsp; 
+		</td>
+	</tr>
+	<tr>
+		<td align="left" class="blank" width="17%">
+			<blockquote>
+				 &nbsp;<font size=-1>gef&ouml;rdert von </font><br />
+				<a target="_new" href="http://www.bmbf.de/"><img src="pictures/bmbf.gif" border="0" /></a>
+			</blockquote>
+		</td>
+		<td align="center" class="blank" width="83%">
+			&nbsp; 
 		</td>
 	</tr>
 	<?}

@@ -402,7 +402,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		
 		if ($db3->f("admission_type")) {
 			if ($key== "autor" || $key== "user")
-				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
+				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), (!$db->f("name") && !$db->f("studiengang_id") == "all") ?  "&nbsp; ": "");
 			else
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
 		}
@@ -445,7 +445,7 @@ if ($rechte) {
 		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Nachricht</b></font></td>");
 		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=-1><b>eintragen</b></font></td>");
 		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=-1><b>entfernen</b></font></td>");
-		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Kontingent</b></font></td></tr>");
+		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Kontingent</b></font></td></tr>\n");
 		
 
 		WHILE ($db->next_record()) {
@@ -470,8 +470,8 @@ if ($rechte) {
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username")); 
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></tr>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td></tr>", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
 		}
 		print "</table>";
 	}
