@@ -150,6 +150,7 @@ if ($SessionStart==0) {
 	$sess->register("SessSemName");
 	$sess->register("messenger_started");
 	$sess->register("object_cache");
+	$sess->register("contact");
 	$object_cache[] = " ";
 	
 	// Language Settings

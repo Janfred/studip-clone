@@ -309,16 +309,16 @@ function ShowContact ($contact_id)
 		if ($open == $contact_id || $open == "all") {
 			$rnd = rand(0,10000);
 			if ($db->f("buddy")=="1") {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\" ".tooltip(_("Als Buddie entfernen"))."></a>&nbsp; ";
+				$buddy = "<a href=\"$PHP_SELF?view=$view&cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\" ".tooltip(_("Als Buddie entfernen"))."></a>&nbsp; ";
 			} else {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\" ".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
+				$buddy = "<a href=\"$PHP_SELF?view=$view&cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\" ".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
 			}
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						.$buddy		
 						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" ".tooltip(_("Editieren"))."></a>&nbsp; "
 						."<a href=\"contact_export.php?contactid=$contact_id\"><img src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Als vCard exportieren"))."></a>&nbsp; "
-						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Kontakt löschen"))."></a></td></tr>"
-						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schließen"))."></a></td></tr>";
+						."<a href=\"$PHP_SELF?view=$view&cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Kontakt löschen"))."></a></td></tr>"
+						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?view=$view&filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schließen"))."></a></td></tr>";
 		} else {
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
 				$description = "";	

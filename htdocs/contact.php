@@ -52,8 +52,6 @@ $cssSw->switchClass();
 
 // include "links_openobject.inc.php";
 
-$sess->register("contact");
-
 if (!$contact["filter"])
 	$contact["filter"]="all";
 if ($view) {
@@ -132,7 +130,7 @@ if ($existingowninfolabel) {
 	<form action="<? echo $PHP_SELF ?>?cmd=search#anker" method="POST"><?
 
 if ($open != "all" && $size_of_book>0) {
-	echo "&nbsp; <a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen")."</font></a></td>";
+	echo "&nbsp; <a href=\"$PHP_SELF?view=$view&open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen")."</font></a></td>";
 } elseif ($size_of_book>0) {
 	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen")."</font></a></td>";
 }
@@ -268,7 +266,7 @@ if (!$edit_id) {
 		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/einst.gif\">&nbsp; "._("Eigene Rubriken");
 		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/trash.gif\">&nbsp; "._("Kontakt löschen");
 	}
-	if (($open || $contact["view"]="gruppen") && $size_of_book>0) {
+	if (($open || $contact["view"]=="gruppen") && $size_of_book>0) {
 		$hints .= "&nbsp; |&nbsp; <img style=\"vertical-align:middle;\" src= \"./pictures/vcardexport.gif\">&nbsp; "._("als vCard exportieren");
 	}
 	echo 	"<br><font size=\"2\" color=\"#555555\">"._("Bedienung:").$hints;
