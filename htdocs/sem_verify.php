@@ -164,25 +164,21 @@ $db6=new DB_Seminar;
 	    die;
 	    }
 
-	 //Gruppe auswaehlen, falls wir den User eintragen
-	if ($SemIDtemp)
-		$t_id=$SemIDtemp;
-	else
-		$t_id=$id;
-	$db->query("SELECT start_time FROM seminare WHERE Seminar_id = '$t_id'");
+	//Gruppe auswaehlen, falls wir den User eintragen
+	$db->query("SELECT start_time FROM seminare WHERE Seminar_id = '$id'");
 	$db->next_record();
 	$group = select_group ($db->f("start_time"), $user->id);
 
-	 //check stuff for admission
-	 check_admission();
+	//check stuff for admission
+	check_admission();
 
-	 if ($sem_verify_selection_send && !$sem_verify_suggest_studg)
+	if ($sem_verify_selection_send && !$sem_verify_suggest_studg)
 	 	parse_msg ("error§"._("Bitte w&auml;hlen Sie einen Studiengang zur Anmeldung f&uuml;r diese Veranstaltung aus!"));
 
 	//check if entry is allowed
 
 	// Check the start and end-times of the current seminar and print an adequate message
-	$db2->query("SELECT admission_starttime, admission_endtime_sem FROM seminare WHERE Seminar_id = '$t_id'");
+	$db2->query("SELECT admission_starttime, admission_endtime_sem FROM seminare WHERE Seminar_id = '$id'");
 	$db2->next_record();
 	if ($db2->f("admission_starttime") > time()) {
 		echo"<tr><td class=\"blank\">&nbsp;&nbsp;&nbsp;&nbsp;</td><td class=\"blank\">";
@@ -206,7 +202,7 @@ $db6=new DB_Seminar;
 	//check if seminar is grouped
 	$db6->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
 	if ($db6->num_rows()) { // yes, he did.
-		$db6->query("SELECT Seminar_id,admission_group FROM seminare WHERE Seminar_id='$t_id'");
+		$db6->query("SELECT Seminar_id,admission_group FROM seminare WHERE Seminar_id='$id'");
 		$db6->next_record();
 		$admission_group = $db6->f("admission_group");
 		$db6->free();
@@ -214,8 +210,8 @@ $db6=new DB_Seminar;
 			//get some infos about the current status of the seminar (admission-list, user-list, seminar-name)
 			$db5->query("SELECT * FROM seminar_user, seminare WHERE seminare.admission_group='$admission_group' AND seminare.Seminar_id = seminar_user.Seminar_id AND seminar_user.user_id='$user->id'");
 			$db6->query("SELECT * FROM admission_seminar_user, seminare WHERE seminare.admission_group='$admission_group' AND seminare.Seminar_id = admission_seminar_user.seminar_id AND admission_seminar_user.user_id='$user->id'");
-			$db4->query("SELECT Name FROM seminare WHERE Seminar_id='$t_id'");
-			$sem_id = $t_id;
+			$db4->query("SELECT Name FROM seminare WHERE Seminar_id='$id'");
+			$sem_id = $id;
 			$db4->next_record();
 			$current_name = $db4->f("Name");
 			$db4->free();
@@ -233,7 +229,7 @@ $db6=new DB_Seminar;
 			$db6->free();
 			$db6->query("SELECT count(*) as anzahl FROM seminar_user WHERE Seminar_id = '$sem_id'");
 			$db6->next_record();
-			if (get_free_admission($t_id)) $platz = 1;
+			if (get_free_admission($id)) $platz = 1;
 			$db6->free();
 
 			/* now we know the following:
