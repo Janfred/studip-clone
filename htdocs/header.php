@@ -239,6 +239,10 @@ if ($auth->auth["uid"] == "nobody") { ?>
 <?
 
 	}
+	
+	if ($auth->auth["uid"] == "nobody") { 
+		echo "<br><br>";
+	}
 	echo"<body>\n";
 	ob_end_flush();
 
