@@ -83,8 +83,9 @@ $reiter->create($structure, $view);
 	<tr>
 		<td valign="top" class="blank">
 			<blockquote><br />
-			Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;senzlehre an der Universit&auml;t G&ouml;ttingen. <br>
-			Das System wird federf&uuml;hrend entwickelt vom Zentrum f&uuml;r interdisziplin&auml;re Medienwissenschaft (ZiM) G&ouml;ttingen.<br>
+			Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;senzlehre an der Universit&auml;t G&ouml;ttingen.<br>
+			Das System wird entwickelt vom Zentrum f&uuml;r interdisziplin&auml;re Medienwissenschaft (ZiM),
+			Universit&auml;t G&ouml;ttingen und der Suchi &amp; Berg GmbH (data-quest), G&ouml;ttingen.<br>
 			Stud.IP steht unter der GNU General Public License, Version 2 oder neuer.<br /><br />
 			Weitere Informationen finden sie auf <a target="_new" href="http://www.studip.de">www.studip.de</a><br />
 		</td>
@@ -106,8 +107,8 @@ $reiter->create($structure, $view);
 			<br>&nbsp; &nbsp; <b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:<br><br><blockquote>
 			<b>Marco Bohnsack</b>, eMail: <a href="mailto:mbohnsa@stud.uni-goettingen.de">mbohnsa@stud.uni-goettingen.de</a> (Hilfe)
 			<br><b>Oliver Brakel</b>, eMail: <a href="mailto:obrakel@gwdg.de">obrakel@gwdg.de</a> (Distribution)
-			<br><b>Cornelis Kater</b>, eMail: <a href="mailto:ckater@gwdg.de">ckater@gwdg.de</a> (Kernentwicklung, Terminverwaltung, Adminbereich, Design)
-			<br><b>André Noack</b>, eMail: <a href="mailto:andre.noack@gmx.net">andre.noack@gmx.net</a> (Kernentwicklung, Newsverwaltung, Chat)
+			<br><b>Cornelis Kater</b>, eMail: <a href="mailto:kater@data-quest.de">kater@data-quest.de</a> (Kernentwicklung, Terminverwaltung, Adminbereich, Design)
+			<br><b>André Noack</b>, eMail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> (Kernentwicklung, Newsverwaltung, Chat)
 			<br><b>Arne Schröder</b>, eMail: <a href="mailto:23arne@web.de">23arne@web.de</a> (Externe Seiten)
 			<br><b>Ralf Stockmann</b>, eMail: <a href="mailto:rstockm@gwdg.de">rstockm@gwdg.de</a> (Kernentwicklung, Forensystem, pers&ouml;nliche Seiten, Design)
 			<br><b>Stefan Suchi</b>, eMail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> (Kernentwicklung, Datenbankstruktur, Rechtesystem, Adminbereich)
