@@ -127,6 +127,7 @@ function JSReady ($what = "", $target = "overlib") {
 		$what = format($what);
 		$what = str_replace("\r","",$what);
 		$what = smile($what);
+		$what = symbol($what);		
 		$what = str_replace("\n","<br /> ",$what);
 		if (ereg("\[quote",$what) AND ereg("\[/quote\]",$what))
 			$what = quotes_decode($what);
