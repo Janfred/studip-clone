@@ -45,7 +45,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php"); //Daten laden
 	require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 	require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
-	include("kalenderFunc.inc.php)";
+	include("kalenderFunc.inc.php");
 	include("./lib/kalenderClass.inc.php");
 	include("kalenderVisual.inc.php");
 		
