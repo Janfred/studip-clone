@@ -95,12 +95,12 @@ $db3=new DB_Seminar;
 		//first show warning
 		if (isset($group) && (!$real) && ($ALLOW_GROUPING_SEMINARS)) {
 			printf("<form action=\"%s\" method=\"post\">",$PHP_SELF);
-			printf("<table>");
+			printf("<table border=0 cellspacing=0 cellpadding=0 width=\"99%%\">");
 			if ($group == "group") {
-				my_info("Beachten Sie, dass ein Teilnehmer bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt heran keine Änderungen vor!");
+				my_info("Beachten Sie, dass ein Teilnehmer bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine Änderungen vor!");
 				my_info("Wollen Sie die ausgewählten Veranstaltungen gruppieren?");
 			} else { 
-				my_info("Beachten Sie, dass für bereits eingetragenen / auf der Warteliste stehende Teilnehmer keine Änderungen vorgenommen werden.");
+				my_info("Beachten Sie, dass für bereits eingetragene / auf der Warteliste stehende Teilnehmer keine Änderungen vorgenommen werden.");
 				my_info("Wollen Sie die Gruppierung für die ausgewählte Gruppe auflösen?");
 			}
 			echo "<tr><td>\n";
@@ -108,7 +108,7 @@ $db3=new DB_Seminar;
 			//	echo _("Gruppieren?");
 			//else
 			//	echo _("Gruppierung aufheben?");
-			printf("<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja","src"),tooltip(_("Änderung durchfuehren")));
+			printf("&nbsp;&nbsp;<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja2","src"),tooltip(_("Änderung durchfuehren")));
 			print("<input type=\"hidden\" name=\"real\" value=\"1\">\n");
 			printf("<input type=\"hidden\" name=\"group\" value=\"%s\">\n",$group);
 			printf("<input type=\"hidden\" name=\"institut_id\" value=\"%s\">\n",$institut_id);
@@ -144,7 +144,7 @@ $db3=new DB_Seminar;
 		$db->query($query);
 		$tag = 0;
 		if ($db->nf()) {
-			print ("<table width=\"95%\" border=0 cellspacing=0 cellpadding=2>");
+			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2 align=\"center\">");
 			print ("<tr>");	
 			if ($ALLOW_GROUPING_SEMINARS) {
 				echo "<th width=\"5%\">". _("Gruppieren") ."</th>";
