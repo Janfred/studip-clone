@@ -100,7 +100,7 @@ if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="open
 		die;	
 	}
 	
-//we take a serach as long with us, as no other overview modul is used
+//we take a search as long with us, as no other overview modul is used
 if (($view=="openobject_main") || ($view=="_lists") || ($view=="lists") || ($view=="resources") || ($view=="_resources"))
 	$resources_data["search_array"]='';
 

@@ -457,6 +457,25 @@ class AssignObject {
 	}
 
 	function delete() {
+		//update the owner in the case it is a Veranstaltung (delete resource_id from the metadata array)
+		if ($this->getOwnerType() == "sem") {
+			$query ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->assign_user_id);
+			$this->db->query($query);
+			$this->db->next_record();
+			
+			$metadata_termin = unserialize ($this->db->f("metadata_dates"));
+			
+			foreach ($metadata_termin["turnus_data"] as $key =>$val)
+				if ($val["resource_id"] == $this->resource_id) {
+					$metadata_termin["turnus_data"][$key]["resource_id"]='';
+					$metadata_termin["turnus_data"][$key]["room"]='';
+				}
+			
+			$serialized_metadata = serialize($metadata_termin);
+			$query ("UPDATE seminare SET metadata_dates ='%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $this->assign_user_id);
+			$this->db->query($query);
+		}
+		
 		$query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
 		if($this->db->query($query))
 			return TRUE;
@@ -1179,12 +1198,49 @@ class ResourceObject {
 		return FALSE;
 	}
 
-	function delete() {
-		$query = sprintf("DELETE FROM resources_objects WHERE resource_id='%s'", $this->id);
-		if($this->db->query($query))
-			return TRUE;
-		return FALSE;
+	function delete($recursive = TRUE) {
+		$this->deleteResourceRecursive ($this->id, $recursive);
 	}
+	
+	//delete section, very privat :)
+	
+	//private
+	function deleteAllAssigns($id) {
+		$query = sprintf("SELECT assign_id FROM resources_assign WHERE resource_id = '%s' ", $id);
+		$this->db->query($query);
+		while ($this->db->next_record()) {
+			$killAssign = new AssignObject ($this->db->f("assign_id"));
+			$killAssign->delete();
+		}
+	}
+
+	//private
+	function deleteAllPerms($id) {
+		$query = sprintf("DELETE FROM resources_user_resources WHERE resource_id = '%s' ", $id);
+		$this->db->query($query);			
+	}
+
+	function deleteResourceRecursive($id, $recursive = TRUE) {
+		$db = new DB_Seminar;
+		$db2 = new DB_Seminar;
+		
+		//subcurse to subordinated resource-levels
+		if ($recursive) {
+			$query = sprintf("SELECT resource_id FROM resources_objects WHERE parent_id = '%s' ", $id);
+			$db->query($query);
+			
+			while ($db->next_record()) 
+				$this->deleteResourceRecursive($db->f("resource_id"), $recursive);
+		}
+
+		$this->deleteAllAssigns($id);
+		$this->deleteAllPerms($id);
+	
+		$query2 = sprintf("DELETE FROM resources_objects WHERE resource_id = '%s' ", $id);
+		$db2->query($query2);			
+	}
+
+	
 }
 
 /*****************************************************************************

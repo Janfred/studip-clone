@@ -34,6 +34,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
 
 class DeleteResourcesUser {
@@ -49,15 +50,25 @@ class DeleteResourcesUser {
 		$this->db2 = new DB_Seminar;
 		
 		$this->range_id = $range_id;
-		
-		//execute constructor from DeleteResources
-		$this->DeleteResources($recurse);
 	}
 	
 	//private
 	function deleteForeignAssigns() {
-		$query = sprintf("DELETE FROM resources_assign WHERE assign_user_id = '%s' ", $this->range_id);
-		$this->db->query($query);			
+		//all assigns linked to resource
+		$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_user_id = '%s' ", $this->range_id);
+		$this->db->query($query);
+		while ($this->db->next_record()) {
+			$killAssign = new AssignObject ($this->db->f("assign_id"));
+			$killAssign->delete();
+		}
+		if (get_object_type($this->range_id == "sem")) {
+			$query = sprintf("SELECT assign_id FROM termine LEFT JOIN resources_assign ON (resources_assign.assign_user_id = termne.termin_id) WHERE range_id = '%s' ", $this->range_id);
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$killAssign = new AssignObject ($this->db->f("assign_id"));
+				$killAssign->delete();
+			}
+		}
 	}
 
 	//private
@@ -70,8 +81,8 @@ class DeleteResourcesUser {
 	function deleteOwnerResources() {
 		$query = sprintf("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $this->range_id);
 		while ($this->db->next_record()) {
-			$killResource = new ResourceObject ($this->db->f("resource_id");
-			$killResource->delete()
+			$killResource = new ResourceObject ($this->db->f("resource_id"));
+			$killResource->delete();
 		}
 	}
 	

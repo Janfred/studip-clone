@@ -190,8 +190,8 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 		
 	if (!$search_string)
 		$search_string = "_";
-	
-	if ($resPerm->getGlobalPerms() == "admin")
+
+	if ($resPerm->getGlobalPerms() == "admin") 
 		$my_objects["global"]=array("name"=>_("Global"), "perms" => "admin");
 		
 	$user_global_perm=get_global_perm($this->user_id);

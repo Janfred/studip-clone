@@ -56,15 +56,6 @@ class VeranstaltungResourcesAssign {
 		$this->dont_check=FALSE;
 	}
 	
-	function deleteAssignedRooms() {
-		$query = sprintf("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE resources_assign.assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $this->seminar_id);
-		$this->db->query($query);
-		while ($this->db->next_record()) {
-			$query2 = sprintf("DELETE FROM resources_assign WHERE assign_id = '%s'  ", $this->db->f("assign_id"));
-			$this->db2->query($query2);			
-		}
-	}
-
 	function updateAssign() {
 		global $TERMIN_TYP;
 		$query = sprintf("SELECT termin_id, date_typ FROM termine WHERE range_id = '%s' ", $this->seminar_id);
@@ -252,5 +243,13 @@ class VeranstaltungResourcesAssign {
 		}
 	}
 	
+	function deleteAssignedRooms() {
+		$query = sprintf("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE resources_assign.assign_user_id = '%s' AND resources_categories.name = 'Raum' ", $this->seminar_id);
+		$this->db->query($query);
+		while ($this->db->next_record()) {
+			$query2 = sprintf("DELETE FROM resources_assign WHERE assign_id = '%s'  ", $this->db->f("assign_id"));
+			$this->db2->query($query2);			
+		}
+	}
 }
 ?>
