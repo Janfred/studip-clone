@@ -27,6 +27,7 @@ class ChatShmServer {
      var $shmCt; // Container Objekt
      var $chatUser=array();
      var $chatDetail=array();
+	 var $caching = FALSE;
      
      function ChatShmServer(){
           $this->shmCt=new ShmHandler($key=CHAT_SHM_KEY,$size=CHAT_SHM_SIZE*1024);
@@ -34,7 +35,8 @@ class ChatShmServer {
      }
      
      function restore(){
-          $this->shmCt->restore(&$this->chatUser,CHAT_USER_KEY);
+          if ($this->caching) return;
+		  $this->shmCt->restore(&$this->chatUser,CHAT_USER_KEY);
           if (!is_array($this->chatUser)) $this->chatUser=array();
           $this->shmCt->restore(&$this->chatDetail,CHAT_DETAIL_KEY);
           if (!is_array($this->chatDetail)) $this->chatDetail=array();
@@ -62,9 +64,11 @@ class ChatShmServer {
      
      function getActiveUsers($rangeid){
           $this->restore();
+		$a_time=time();
           $anzahl=0;
           foreach($this->chatUser as $userid => $detail){
-                    if ($detail[$rangeid]["action"]) $anzahl++;
+                    if (($a_time-$detail[$rangeid]["action"]) > CHAT_IDLE_TIMEOUT) $this->removeUser($userid,$rangeid); 
+					else $anzahl++;
           }
           return $anzahl;
      }

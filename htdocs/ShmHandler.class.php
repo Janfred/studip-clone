@@ -56,9 +56,9 @@ class ShmHandler {
       }
       
       function restore(&$what,$key) {
-          //$this->getLock();
+          $this->getLock();
           $what = @shm_get_var($this->shmid, $key);
-          //$this->releaseLock();
+          $this->releaseLock();
           return true;
      }
 
