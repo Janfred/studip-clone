@@ -258,6 +258,9 @@ while ( is_array($HTTP_POST_VARS)
 				$run = FALSE;
 				}
 			if ($ILIAS_CONNECT_ENABLE) {
+				$db->query("SELECT preferred_language FROM user_info WHERE user_id='$u_id'");
+				if ($db->next_record()) 
+					$preferred_language = $db->f("preferred_language");
 				$this_ilias_id = get_connected_user_id($u_id);
 				if ($this_ilias_id != false) 
 					edit_ilias_user($this_ilias_id, $username, $geschlecht, $Vorname, $Nachname, $title_front, "Stud.IP", $Email, $permlist, $preferred_language);
