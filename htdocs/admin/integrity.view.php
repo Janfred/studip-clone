@@ -96,16 +96,13 @@ $_views["FACH_INST"]= array("pk"=>"fach_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT   a.fach_id FROM fach_inst a LEFT JOIN faecher b USING(fach_id) WHERE ISNULL(b.fach_id)");
 
 
-//Termine
+//UNION Termine
 
 $_views["TERMINE_USER"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT DISTINCT range_id FROM termine  INNER JOIN  auth_user_md5  ON (range_id=user_id)");
 $_views["TERMINE_SEM"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT DISTINCT range_id FROM termine  INNER JOIN  seminare  ON (range_id=Seminar_id)");
-$_views["TERMINE_INST"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT DISTINCT range_id FROM termine  INNER JOIN  Institute  ON (range_id=institut_id)");
-$_views["TERMINE_FAK"]= array("pk"=>"range_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT DISTINCT range_id FROM termine  INNER JOIN  Fakultaeten  ON (range_id=fakultaets_id)");
+
 
 //$_views["DOCS_FAK"]= array("pk"=>"dokument_id","temp_table_type"=>"HEAP",
 //							"query"=>"SELECT dokument_id FROM dokumente  INNER JOIN  Fakultaeten b ON (range_id=b.fakultaets_id)");
