@@ -146,7 +146,7 @@ class ExternElementMainDownload extends ExternElementMain {
 		$content_table .= $edit_form->editBlankContent();
 		
 		$headline = $edit_form->editHeadline(_("Eigene Icons"));
-		$icon_attributes = array("iconjpg", "icontxt", "iconpdf", "iconppt",
+		$icon_attributes = array("iconpic", "icontxt", "iconpdf", "iconppt",
 				"iconxls", "iconrtf", "iconzip", "icondefault");
 		$icon_titles = array(
 				_("Bilder:"),

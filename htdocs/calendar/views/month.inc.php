@@ -50,10 +50,11 @@ echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n"
 echo "<tr>\n";
 printf("<th>&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getStart() - 1);
-$tooltip = tooltip(_("zur&uuml;ck"));
+$tooltip = tooltip(_("zurück"));
 echo "<img border=\"0\" src=\"./pictures/forumrotlinks.gif\" $tooltip></a>&nbsp;</th>\n";
 printf("<th colspan=%s class=\"cal\">\n", $mod == "nokw" ? "5" : "6");
-printf("%s %s</th>\n", month($amonth->getStart()), $amonth->getYear());
+echo htmlentities(strftime("%B ", $amonth->getStart()), ENT_QUOTES) . $amonth->getYear();
+echo "</th>\n";
 printf("<th>&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getEnd() + 1);
 $tooltip = tooltip(_("vor"));

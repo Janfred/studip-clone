@@ -1,8 +1,8 @@
 <?
 /**
+* calendar.php
+* 
 * Calendar-mainfile. Calls the submodules.
-* 
-* 
 *
 * @author		Peter Thienel <pthienel@data.quest.de>
 * @version		$Id$

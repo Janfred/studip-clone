@@ -56,7 +56,8 @@ class ExternElementMain extends ExternElement {
 		
 		if ($module_name != "") {
 			$main_class_name = "ExternElementMain" . $module_name;
-			require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/elements/$main_class_name.class.php");
+			require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+					. "/elements/$main_class_name.class.php");
 			$this = new $main_class_name();
 		}
 		$this->name = "Main";

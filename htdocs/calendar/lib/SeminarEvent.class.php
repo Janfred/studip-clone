@@ -68,6 +68,10 @@ class SeminarEvent extends Event {
 		return $TERMIN_TYP[$this->cat]["color"];
 	}
 	
+	function getTitle () {
+		return $this->txt;
+	}
+	
 	// public
 	function getSeminarId () {
 		return $this->sem_id;

@@ -1,8 +1,8 @@
 <?
 /**
+* admin_extern.php
+* 
 * Extern-admin-pages-mainfile. Calls the submodules.
-* 
-* 
 *
 * @author		Peter Thienel <pthienel@data.quest.de>
 * @version		$Id$
@@ -20,7 +20,7 @@
 define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// extern_admin.php
+// admin_extern.php
 //
 // Copyright (c) 2003 Peter Tienel <pthienel@data-quest.de> 
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -39,6 +39,7 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User", "ses" => "ses"));
 $perm->check("admin");
 
@@ -48,4 +49,5 @@ else {
 	$perm->check("GOTT");
 	page_close();
 }
+page_close();
 ?>

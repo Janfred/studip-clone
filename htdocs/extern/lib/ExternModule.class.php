@@ -69,10 +69,8 @@ class ExternModule {
 		
 		// the module is called via extern.php (not via the admin area) and there is
 		// no config_id so it's necessary to check the range_id
-		if (!$config_id && !$this->checkRangeId($range_id)) {
-		echo "<BR>SJHFLKSJHFLSjksdhfskjhfsfhsfhsdfls";
+		if (!$config_id && !$this->checkRangeId($range_id))
 			$this->printError();
-		}
 		
 		foreach ($GLOBALS["EXTERN_MODULE_TYPES"] as $type => $module) {
 			if ($module["module"] == $module_name) {

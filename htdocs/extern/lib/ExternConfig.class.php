@@ -244,26 +244,29 @@ class ExternConfig {
 				reset($module_elements);
 				foreach ($module_elements as $element_name => $element_obj) {
 				
-					$attributes = $element_obj->getAttributes();
+					if ($element_obj->isEditable()) {
+				
+						$attributes = $element_obj->getAttributes();
 					
-					reset($attributes);
-					foreach ($attributes as $attribute) {
-						$form_name = $element_name . "_" . $attribute;
+						reset($attributes);
+						foreach ($attributes as $attribute) {
+							$form_name = $element_name . "_" . $attribute;
 						
-						if (isset($values[$form_name])) {
-							if (is_array($values[$form_name])) {
-								ksort($values[$form_name], SORT_NUMERIC); 
-								$form_value = "|" . implode("|", $values[$form_name]);
-								$config_tmp[$attribute] =
-										htmlentities(stripslashes($form_value), ENT_QUOTES);
-							}
-							else {
-								$config_tmp[$attribute] =
-										htmlentities(stripslashes($values[$form_name]), ENT_QUOTES);
+							if (isset($values[$form_name])) {
+								if (is_array($values[$form_name])) {
+									ksort($values[$form_name], SORT_NUMERIC); 
+									$form_value = "|" . implode("|", $values[$form_name]);
+									$config_tmp[$attribute] =
+											htmlentities(stripslashes($form_value), ENT_QUOTES);
+								}
+								else {
+									$config_tmp[$attribute] =
+											htmlentities(stripslashes($values[$form_name]), ENT_QUOTES);
+								}
 							}
 						}
+						$this->config[$element_name] = $config_tmp;
 					}
-					$this->config[$element_name] = $config_tmp;
 				}
 			}
 		}
@@ -352,9 +355,6 @@ class ExternConfig {
 		print_r($HTTP_POST_VARS);
 		echo "</pre>";
 	*/	
-		// these two values are included in every "main"-element
-		$HTTP_POST_VARS["Main_order"] = $this->config["Main"]["order"];
-		$HTTP_POST_VARS["Main_visible"] = $this->config["Main"]["visible"];
 		
 		// Check for an alternative input field. All names of alternative input
 		// fields begin with an underscore. The alternative input field overwrites
@@ -439,7 +439,7 @@ class ExternConfig {
 						$fault[$form_name] = ($value[$i] != ""
 								&& preg_match("/^.*(<|>|\"|script|\?|php).*$/i", $value[$i]));
 						break;
-					case "iconjpg" :
+					case "iconpic" :
 					case "icontxt" :
 					case "iconpdf" :
 					case "iconppt" :
@@ -480,6 +480,10 @@ class ExternConfig {
 	
 		if (in_array(TRUE, $fault))
 			return $fault;
+		
+		// these two values are included in every "main"-element
+		$HTTP_POST_VARS["Main_order"] = $this->config["Main"]["order"];
+		$HTTP_POST_VARS["Main_visible"] = $this->config["Main"]["visible"];
 		
 		return FALSE;
 	}

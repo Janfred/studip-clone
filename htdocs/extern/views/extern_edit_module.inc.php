@@ -38,6 +38,7 @@
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_EXTERN/lib/ExternModule.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "msg.inc.php");
 
+$EXTERN_SESSION_OPEN_ELEMENTS = array();
 $sess->register("EXTERN_SESSION_OPEN_ELEMENTS");
 
 echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
@@ -146,11 +147,11 @@ $info_preview .= "?module=" . $module->getName() . "&range_id=" . $module->confi
 $info_preview .= "&preview=1&config_id=" . $module->config->getId() . "\">";
 $info_preview .= makeButton("vorschau") . "</a></div><br>";
 $info_preview .= _("Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet.");
-/* echo "<br>";
+/*echo "<br>";
  print_r($EXTERN_SESSION_OPEN_ELEMENTS);
  echo "<br>";
-$open_elements = $EXTERN_SESSION_OPEN_ELEMENTS;
-if ($open_elements["Main"] == 1) {
+//$open_elements = $EXTERN_SESSION_OPEN_ELEMENTS;
+if ($EXTERN_SESSION_OPEN_ELEMENTS["Main"]) {
 	$info_name = _("Verwenden Sie für den Namen der Konfiguration keine Sonderzeichen oder Umlaute.");
 	$info_content = array(	
 									array("kategorie" => "Information:",

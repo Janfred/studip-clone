@@ -64,8 +64,10 @@ if (date("L", $ayear->getStart()))
 echo "<tr>";
 for ($i = 1; $i < 13; $i++) {
 	$ts_month += ($days_per_month[$i] - 1) * 86400;
-	printf("<th width=\"8%%\"><a class=\"precol1\" href=\"%s?cmd=showmonth&atime=%s\">%s</a></th>",
-				$PHP_SELF, ($ayear->getStart() + $ts_month), month($ts_month));
+	printf("<th width=\"8%%\"><a class=\"precol1\" href=\"%s?cmd=showmonth&atime=%s\">"
+			,$PHP_SELF, ($ayear->getStart() + $ts_month));
+	echo htmlentities(strftime("%B", $ts_month), ENT_QUOTES);
+	echo "</a></th>\n";
 }
 echo "</tr>\n";
 
@@ -90,6 +92,8 @@ for ($i = 1; $i < 32; $i++) {
 						echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr>";
 						echo "<td$weekend>";
 					}
+					
+					$weekday = "<font size=\"2\">" . wday($aday, "SHORT") . "</font>";
 						
 					// noch wird nicht nach Wichtigkeit bestimmter Feiertage unterschieden
 					$hday = holiday($aday);
@@ -98,35 +102,35 @@ for ($i = 1; $i < 32; $i++) {
 						case "1":
 							if (date("w", $aday) == "0") {
 								echo "<a class=\"sday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . wday($aday, "SHORT");
+								echo "<b>$i</b></a> " . $weekday;
 								$count++;
 								}
 							else {
 								echo "<a class=\"day\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . wday($aday, "SHORT");
+								echo "<b>$i</b></a> " . $weekday;
 							}
 							break;
 						case "2":
 						case "3":
 							if (date("w", $aday) == "0") {
 								echo "<a class=\"sday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . wday($aday, "SHORT");
+								echo "<b>$i</b></a> " . $weekday;
 								$count++;
 							}
 							else {
 								echo "<a class=\"hday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . wday($aday, "SHORT");
+								echo "<b>$i</b></a> " . $weekday;
 							}
 							break;
 						default:
 							if (date("w", $aday) == "0") {
 								echo "<a class=\"sday\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . wday($aday, "SHORT");
+								echo "<b>$i</b></a> " . $weekday;
 								$count++;
 								}
 							else {
 								echo "<a class=\"day\" href=\"$PHP_SELF?cmd=showday&atime=$aday\">";
-								echo "<b>$i</b></a> " . wday($aday, "SHORT");
+								echo "<b>$i</b></a> " . $weekday;
 							}
 					}
 					
@@ -157,7 +161,8 @@ for ($i = 1; $i < 32; $i++) {
 		for ($i = 1; $i < 13; $i++){ 
 			$ts_month += ($days_per_month[$i] - 1) * 86400;
 			echo "<th width=\"8%\"><a class=\"precol1\" href=\"$PHP_SELF?cmd=showmonth&atime=";
-			echo ($ayear->getStart() + $ts_month) . "\">" . month($ts_month) . "</a></th>\n";
+			echo ($ayear->getStart() + $ts_month) . "\">"
+					. htmlentities(strftime("%B", $ts_month), ENT_QUOTES) . "</a></th>\n";
 		}
 		echo "</tr></table>\n</td></tr>\n";
 		jumpTo($jmp_m, $jmp_d, $jmp_y);

@@ -39,9 +39,10 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementTableRow extends ExternElement {
 
-	var $attributes = array("td_align", "td_valign", "td_bgcolor", "td_bgcolor2_", "td_zebratd_",
-			"td_class", "td_style", "tr_height", "tr_class", "tr_style", "font_face",
-			"font_size", "font_color", "font_class", "font_style");
+	var $attributes = array("tr_height", "tr_class", "tr_style","td_align",
+			"td_valign", "td_bgcolor", "td_bgcolor2_", "td_zebratd_",
+			"td_class", "td_style", "font_face", "font_size", "font_color",
+			"font_class", "font_style");
 
 	/**
 	* Constructor

@@ -66,6 +66,9 @@ class Event {
 	* @return String the title of this event
 	*/
 	function getTitle () {
+		if ($this->txt == "")
+			return _("Keine Titel");
+		
 		return $this->txt;
 	}
 	
@@ -278,10 +281,7 @@ class Event {
 	* @param String $title title of this event
 	*/
 	function setTitle ($title = "") {
-		if($title)
-			$this->txt = $title;
-		else
-			$this->txt = _("Kein Titel");
+		$this->txt = $title;
 		$this->chng_flag = TRUE;
 	}
 	

@@ -66,9 +66,9 @@ function wday ($tmstamp = "", $mode = "LONG", $day_german = "") {
 	}
 	
 	// For the rest of the world strftime() should be OK ;-)
-		if ($mode="SHORT")
-			return htmlentities(strftime("%a", $tmstamp), ENT_QUOTES);
-		return htmlentities(strftime("%A", $tmstamp), ENT_QUOTES);
+	if ($mode == "SHORT")
+		return htmlentities(strftime("%a", $tmstamp), ENT_QUOTES);
+	return htmlentities(strftime("%A", $tmstamp), ENT_QUOTES);
 	
 }
 
