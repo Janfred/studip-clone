@@ -96,7 +96,23 @@ function getLatestVersion($keyword, $range_id) {
 	$db=new DB_Seminar;
 	$q = "SELECT * FROM wiki WHERE ";
 	$q .= "keyword='$keyword' AND range_id='$range_id' ";
-	$q .= "ORDER BY version DESC";
+	$q .= "ORDER BY version DESC LIMIT 1";
+	$db->query($q);
+	$db->next_record();
+	return $db->Record;
+}
+
+/**
+* Retrieve oldest version for a given keyword
+*
+* @param	string	WikiPage name
+*
+**/
+function getFirstVersion($keyword, $range_id) {
+	$db=new DB_Seminar;
+	$q = "SELECT * FROM wiki WHERE ";
+	$q .= "keyword='$keyword' AND range_id='$range_id' ";
+	$q .= "ORDER BY version ASC LIMIT 1";
 	$db->query($q);
 	$db->next_record();
 	return $db->Record;
@@ -141,7 +157,7 @@ function keywordExists($str) {
 	global $SessSemName;
 	if (is_null($keywords)){
 		$db = new DB_Seminar;
-		$db->query("SELECT DISTINCT keyword FROM wiki WHERE  range_id='$SessSemName[1]' ");
+		$db->query("SELECT DISTINCT keyword FROM wiki WHERE range_id='$SessSemName[1]' ");
 		while($db->next_record()){
 			$keywords[$db->f(0)] = true;
 		}
@@ -244,7 +260,7 @@ function releasePageLocks($keyword) {
 
 // wiki regex pattern
 // IMPORTANT: Wiki Keyword has to be in 2nd paranthesed pattern!!
-// change routines below if this changes
+// Make sure to change routines below if this changes
 //
 $wiki_keyword_regex="(^|\s|\A|\>)([A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]+)";
 
@@ -279,7 +295,7 @@ function getWikiLinks($str) {
 /**
 * Return list of WikiPages containing links to given page
 *
-* @param	string 	str	
+* @param	string 	Wiki keyword
 *
 **/
 function getBacklinks($keyword) {
@@ -381,10 +397,50 @@ function showDeleteDialog($keyword, $version) {
 	$lnk = "?keyword=$keyword"; // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version"; 
 	$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
+	$msg.="<p>Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie <a href=\"wiki.php?cmd=delete_all&keyword=$keyword\">hier</a>.";
 	parse_msg($msg, '§', 'blank', '1', FALSE);
 	end_blank_table();
 	return $version;
 }
+
+/**
+* Display yes/no dialog to confirm complete WikiPage deletion.
+*
+* @param	string	WikiPage name
+*
+**/
+function showDeleteAllDialog($keyword) {
+	global $perm, $SessSemName;
+	if (!$perm->have_perm("dozent")) {
+		begin_blank_table();
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
+	begin_blank_table();
+	$msg="info§" . sprintf(_("Wollen Sie die Seite %s wirklich vollständig - mit allen Versionen - l&ouml;schen?"), "<b>".$keyword."</b>") . "<br>\n";
+	if ($keyword=="WikiWikiWeb") {
+		$msg .= "<p>" . _("Sie sind im Begriff die Startseite zu löschen, die dann durch einen leeren Text ersetzt wird. Damit wären auch alle anderen Seiten nicht mehr direkt erreichbar.") . "</p>";
+	} else {
+		$numbacklinks=count(getBacklinks($keyword));
+		if ($numbacklinks == 0) {
+			$msg .= "<p>"._("Auf diese Seite verweist keine andere Seite.")."</p>";
+		} else if ($numbacklinks == 1) {
+			$msg .= "<p>"._("Auf diese Seite verweist 1 andere Seite.")."</p>";
+		} else {
+			$msg .= "<p>" . sprintf(_("Auf diese Seite verweisen %s andere Seiten."), count(getBacklinks($keyword))) . "</p>";
+		}
+	}
+	$msg.="<a href=\"".$PHP_SELF."?cmd=really_delete_all&keyword=$keyword\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+	$lnk = "?keyword=$keyword"; // what to do when delete is aborted
+	if (!$islatest) $lnk .= "&version=$version"; 
+	$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
+	parse_msg($msg, '§', 'blank', '1', FALSE);
+	end_blank_table();
+}
+
+
 
 /**
 * Delete WikiPage version and adjust backlinks.
@@ -429,6 +485,34 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	}
 	return $newkeyword;
 }
+
+/**
+* Delete complete WikiPage with all versions and adjust backlinks.
+*
+* @param	string	WikiPage name
+* @param	string  ID of seminar/einrichtung
+*
+**/
+function deleteAllWikiPage($keyword, $range_id) {
+	global $perm, $SessSemName;
+	if (!$perm->have_perm("dozent")) {
+		begin_blank_table();
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
+	$q="DELETE FROM wiki WHERE keyword='$keyword' AND range_id='$range_id'";
+	$db=new DB_Seminar;
+	$db->query($q);
+	begin_blank_table();
+	parse_msg("info§" . sprintf(_("Die Seite <b>%s</b> wurde mit allen Versionen gel&ouml;scht."), $keyword));
+	end_blank_table();
+	refreshBacklinks($keyword, "");
+	return "WikiWikiWeb";
+}
+
+
 
 /**
 * List all topics in this seminar's wiki
@@ -538,7 +622,7 @@ function listPages($mode, $sortby=NULL) {
 		print($tdheadcenter.$db2->f("version").$tdtail);
 		print($tdheadleft.date("d.m.Y, H:i", $lastchange));
 		if ($mode=="new" && $db2->f("version")>1) {
-			print("&nbsp;(<a href=\"wiki.php?view=diff&keyword=$keyword&versionssince=$lastlogindate\">Diff</a>)");
+			print("&nbsp;(<a href=\"wiki.php?view=diff&keyword=$keyword&versionssince=$lastlogindate\">"._("Änderungen")."</a>)");
 		}
 		print($tdtail);
 		print($tdheadleft.get_fullname($userid).$tdtail."</tr>");
@@ -659,7 +743,7 @@ function printWikiPage($keyword, $version) {
 function exportWiki() {
 	showPageFrameStart();
 	begin_blank_table();
-	parse_msg("info§Alle Wiki-Seiten werden als große HTML-Datei zusammengfügt und in einem neuen Fenster angezeigt. Von dort aus können Sie die Datei abspeichern.");
+	parse_msg("info§"._("Alle Wiki-Seiten werden als große HTML-Datei zusammengefügt und in einem neuen Fenster angezeigt. Von dort aus können Sie die Datei abspeichern."));
 	$infobox = array ();
 	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Die Wiki-Seiten werden als eine zusammenhängende HTML-Datei ohne Links exportiert."))));
 	print "</tr><tr align=center><td>";
@@ -707,7 +791,7 @@ function printAllWikiPages($range_id, $header) {
 		} 
 	}
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
-	echo date("d.m.Y, h:i", time());
+	echo date("d.m.Y, H:i", time());
 	echo " </font></p>";
 	echo "</body></html>";
 }
@@ -761,9 +845,12 @@ function getShowPageInfobox($keyword, $latest_version) {
 		$versiontext=_("Keine alten Versionen.");
 	}
 
-	$viewtext="<a href=\"wiki.php?keyword=".$keyword."&view=show\">Standard</a><br>";
-	$viewtext .= "<a href=\"wiki.php?keyword=".$keyword."&view=wikiprint&version=$version\" target=\"_new\">Druckansicht</a><br>";
-	$viewtext .= "<a href=\"wiki.php?keyword=".$keyword."&cmd=showdiff&view=diff\">Änderungen am Text verfolgen</a>";
+	$viewtext="<a href=\"wiki.php?keyword=".$keyword."&view=show\">"._("Standard")."</a><br>";
+	$viewtext .= "<a href=\"wiki.php?keyword=".$keyword."&view=wikiprint&version=$version\" target=\"_new\">"._("Druckansicht")."</a>";
+	if (count($versions)>1) {
+		$viewtext .= "<br><a href=\"wiki.php?keyword=".$keyword."&cmd=showdiff&view=diff\">"._("Textänderungen anzeigen")."</a>";
+		$viewtext .= "<br><a href=\"wiki.php?keyword=".$keyword."&cmd=showcombo&view=combodiff\">"._("Text mit AutorInnenzuordnung anzeigen")."</a>";
+	}
 	$views=array(array("icon" => "pictures/blank.gif", "text" => $viewtext));
 
 	$backlinktext="";
@@ -795,6 +882,39 @@ function getShowPageInfobox($keyword, $latest_version) {
 			"eintrag" => array(array("icon"=>"pictures/blank.gif","text"=>$versiontext)));
 	return $infobox;
 }
+
+/**
+* Returns an infobox string holding information and action links for
+* diff view of current page.
+*
+* @param	string	WikiPage name
+*
+**/
+function getDiffPageInfobox($keyword) {
+
+	$versions=getWikiPageVersions($keyword);
+	$versiontext="<a href=\"wiki.php?keyword=".$keyword."\">Aktuelle Version</a><br>";
+	if ($versions) {
+		foreach ($versions as $v) {
+			$versiontext .= "<a href=\"wiki.php?keyword=$keyword&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
+		}
+	}
+	if (!$versiontext) {
+		$versiontext=_("Keine alten Versionen.");
+	}
+
+	$viewtext="<a href=\"wiki.php?keyword=".$keyword."&view=show\">"._("Aktuelle Version")."</a><br>";
+	$views=array(array("icon" => "pictures/blank.gif", "text" => $viewtext));
+
+	$infobox = array ();
+	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Sie betrachten die Änderungsgeschichte eines Dokumentes. Falls einzelne Versionen gelöscht wurden, kann es zu falschen AutorInnenzuordnungen kommen."))));
+	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
+	$infobox[] = array("kategorie" => _("Alte Versionen dieser Seite:"),
+			"eintrag" => array(array("icon"=>"pictures/blank.gif","text"=>$versiontext)));
+	return $infobox;
+}
+
+
 
 /**
 * Display wiki page.
@@ -882,7 +1002,7 @@ function end_blank_table() {
 * Display Page diffs, restrictable to recent versions
 *
 * @param	string	WikiPage name
-* @param	string	Only show versions never than this timestamp
+* @param	string	Only show versions newer than this timestamp
 *
 **/
 function showDiffs($keyword, $versions_since) {
@@ -918,6 +1038,9 @@ function showDiffs($keyword, $versions_since) {
 		$diffarray .= "</table>\n";
 		printcontent(0,0, $diffarray, "");
 		echo "</tr>";
+		//echo "<tr><td>";
+		//combodiff($keyword, $lastversion, $currentversion);
+		//echo "</td></tr>";
 		$last = $current;
 		$lastversion = $currentversion;
 		$zusatz=getZusatz($db->Record);
@@ -926,7 +1049,8 @@ function showDiffs($keyword, $versions_since) {
 		}
 	}
 	echo "</table>     ";
-	showPageFrameEnd($keyword, 1);
+	$infobox=getDiffPageInfobox($keyword);
+	showPageFrameEnd($infobox);
 }
    
 /////////////////////////////////////////////////
@@ -940,10 +1064,125 @@ function do_diff($strlines1,$strlines2)
 {
 	$plus="<td width=\"3\" bgcolor=\"green\">&nbsp;</td>";
 	$minus="<td width=\"3\" bgcolor=\"red\">&nbsp;</td>";
-	$equal="<td width=\"3\" bgcolor=\"grey\">&nbsp;</td>";
+	//$equal="<td width=\"3\" bgcolor=\"grey\">&nbsp;</td>";
+	$equal="=";
 	$obj = new line_diff($plus, $minus, $equal);
 	$str = $obj->str_compare($strlines1,$strlines2);
 	return $str;
+}
+
+function toDiffLineArray($lines, $who) {
+	$dla = array();
+    $lines = explode("\n",preg_replace("/\r/",'',$lines));
+    foreach ($lines as $l) {
+    	$dla[] = new DiffLine($l, $who);
+    }
+    return $dla; 
+}
+
+function showComboDiff($keyword, $db=NULL) {
+
+	global $SessSemName;
+
+	$version2=getLatestVersion($keyword, $SessSemName[1]);
+	$version1=getFirstVersion($keyword, $SessSemName[1]);
+	$version2=$version2["version"];
+	$version1=$version1["version"];
+
+	showPageFrameStart();
+	wikiSinglePageHeader($wikiData, $keyword);
+
+	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
+
+	// create combodiff
+	if (!$db) {
+		$db=new DB_Seminar();
+	}
+	$wd1 = getWikiPage($keyword, $version1, $db);
+	$diffarray1 = toDiffLineArray($wd1['body'], get_fullname($wd1['user_id']));
+	$current_version = $version1 + 1;
+	$differ = new line_diff();
+	while ($current_version <= $version2) {
+		$wd2 = getWikiPage($keyword, $current_version, $db);
+		$diffarray2 = toDiffLineArray($wd2['body'], get_fullname($wd2['user_id']));
+		$newarray = $differ->arr_compare("diff", $diffarray1, $diffarray2);
+		$diffarray1=array();
+		foreach ($newarray as $i) {
+			if ($i->status["diff"] != "-") {
+				$diffarray1[]=$i;
+			}
+		}
+		$current_version++;
+	}
+	$content="<table>";
+	$count=0;
+	$authors=array();
+	foreach ($diffarray1 as $i) {
+		if ($i && !in_array($i->who, $authors)) {
+			$authors[]=$i->who;
+			if ($count % 4 == 0) {
+				$content.= "<tr width=\"100%\">";
+			}
+			$content.= "<td bgcolor=".create_color($count)." width=14><img src=\"pictures/blank.gif\" width=12 height=12></td><td><font size=-1>$i->who</font></td><td><img src=\"pictures/blank.gif\" width=12 height=12></td>";
+			if ($count % 4 == 3) {
+				$content .= "</tr>";
+			}
+			$count++;
+		}
+	}
+	echo "<tr><td colspan=2>";
+	echo "<p><font size=-1>&nbsp;<br>";
+	echo _("Legende:");
+	echo "<table cellpadding=6 cellspacing=6>$content</table>\n";
+	echo "</p>";
+	echo "<table cellpadding=0 cellspacing=0 width=\"100%\">";
+	$last_author=None;
+	$collect="";
+	$diffarray[]=NULL;
+	foreach ($diffarray1 as $i) {
+		$idx=array_search($i->who, $authors);
+		$col=create_color($idx);
+		if ($last_author != $i->who) {
+			if (trim($collect)!="") {
+				echo "<tr bgcolor=$col>";
+				echo "<td width=30 align=center valign=top>";
+				echo "<img src=\"pictures/blank.gif\" height=3 width=3><br>";
+				echo "<img src=\"pictures/info.gif\" ". tooltip($i->who). ">";
+				echo "</td>";
+				echo "<td><font size=-1>";
+				echo wikiReady($collect);
+				echo "</font></td>";
+				echo "</tr>";
+			}
+			$collect="";
+		}
+		if ($i) {
+			$last_author = $i->who;
+			$collect .= $i->text;
+		}
+	}
+	echo "</table></td></tr>";
+	echo "</table>     ";
+	$infobox=getDiffPageInfobox($keyword);
+	showPageFrameEnd($infobox);
+}
+
+function create_color($index) {
+	$shades=array("d","a","7","c","9","7","b","8","6");
+	switch ($index % 6) {
+		case 0:
+			return "#ffd0d0";
+		case 1:
+			return "#d0ffd0";
+		case 2: 
+			return "#d0d0ff";
+		case 3:
+			return "#ffffd0";
+		case 4:
+			return "#ffd0ff";
+		case 5:
+			return "#d0ffff";
+	} 
 }
 
 /*
@@ -984,14 +1223,14 @@ class line_diff
 		$str2 = preg_replace("/\r/",'',$str2);
 		foreach (explode("\n",$str1) as $line)
 		{
-			$this->arr1[] = new DiffLine($line);
+			$this->arr1[] = new DiffLine($line, 'nobody');
 		}
 		foreach (explode("\n",$str2) as $line)
 		{
-			$this->arr2[] = new DiffLine($line);
+			$this->arr2[] = new DiffLine($line, 'nobody');
 		}
 	}
-	function str_compare($str1,$str2)
+	function str_compare($str1, $str2, $show_equal=FALSE)
 	{
 		$this->set_str('diff',$str1,$str2);
 		$this->compare();
@@ -999,7 +1238,9 @@ class line_diff
 		$str = '';
 		foreach ($this->toArray() as $obj)
 		{
-			$str .= "<tr>".$obj->get('diff')."<td width=\"10\">&nbsp;</td><td>".$obj->text()."</td></tr>";
+			if ($show_equal || $obj->get('diff') != $this->equal) {
+				$str .= "<tr>".$obj->get('diff')."<td width=\"10\">&nbsp;</td><td><font size=-1>".$obj->text()."&nbsp;</font></td></tr>";
+			}
 		}
 		return $str;
 	}
@@ -1115,7 +1356,7 @@ class line_diff
 			{
 				$arr1[$x]->merge($arr2[$y]);
 				$arr1[$x]->set($this->key,$this->equal);
-				// $arr[] = $arr1[$x];
+				$arr[] = $arr1[$x];
 			}
 			$x++; $y++;
 		}
@@ -1127,11 +1368,13 @@ class DiffLine
 {
 	var $text;
 	var $status;
+    var $who; // who originally wrote this line?
 	
-	function DiffLine($text)
+	function DiffLine($text, $who=NULL)
 	{
 		$this->text = "$text\n";
 		$this->status = array();
+        $this->who = $who;
 	}
 	function compare($obj)
 	{
@@ -1156,4 +1399,3 @@ class DiffLine
 }
 
 ?>
-

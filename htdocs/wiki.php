@@ -83,6 +83,12 @@ if ($view=="listall") {
 	//
 	showDiffs($keyword, $versionssince);
 
+} else if ($view=="combodiff") {
+	//
+	// show one large diff-file containing all changes
+	//
+	showComboDiff($keyword);
+
 } else if ($view=="diffselect") {
 	// 
 	// show only last changes in a diff
@@ -146,7 +152,7 @@ if ($view=="listall") {
 		$show_page=TRUE;
 		$version=""; // $version="" means: get latest 
 
-	} else if ($cmd=="abortedit") { // Editieren abgebrochen
+	} else if ($cmd == "abortedit") { // Editieren abgebrochen
 		// 
 		// Editing page was aborted
 		//
@@ -156,14 +162,14 @@ if ($view=="listall") {
 		}
 		$showpage=true;
 
-	} else if ($cmd=="delete") {
+	} else if ($cmd == "delete") {
 		// 
 		// Delete request sent -> confirmdialog and current page
 		//
 		$version=showDeleteDialog($keyword, $version);
 		$showpage=true;
 
-	} else if ($cmd=="really_delete") {
+	} else if ($cmd == "really_delete") {
 		// 
 		// Delete was confirmed -> really delete
 		//
@@ -172,7 +178,20 @@ if ($view=="listall") {
 		$version=""; // show latest version
 		$show_page=true;    
 
-	} // end really delete
+	} else if ($cmd == "delete_all") {
+		//
+		// Delete all request sent -> confirmdialog and current page
+		//
+		showDeleteAllDialog($keyword);
+		$showpage=true;
+	} else if ($cmd == "really_delete_all") {
+		//
+		// Delete all was confirmed -> delete entire page
+		//
+		$keyword=deleteAllWikiPage($keyword, $SessSemName[1]);
+		$version=""; // show latest version
+		$show_page=true;    
+	}
   
 	if ($show_page) {
 		//
