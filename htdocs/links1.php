@@ -51,7 +51,7 @@ if ($entry_level=="inst") {
 	// $structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
 	if ($rechte)
 		if ($perm->have_perm("admin"))
-			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_institut.php?new_inst=TRUE&view=inst", active=>FALSE);
+			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_institut.php?new_inst=TRUE", active=>FALSE);
 		else
 			$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_literatur.php?new_inst=TRUE&view=inst", active=>FALSE);		
 } else {
