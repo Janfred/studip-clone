@@ -38,9 +38,6 @@ JS_for_upload();
 //we need this <body> tag, sad but true :)
 echo "\n<body onUnLoad=\"upload_end()\">"; 
 
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
-
 //Switch fuerr die Ansichten
 if ($cmd=="tree") {
 	$folder_system_data='';
@@ -50,6 +47,8 @@ if ($cmd=="all") {
 	$folder_system_data='';
 	$folder_system_data["cmd"]="all";
 	}
+
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 IF ($SessSemName[1] =="")
 	{

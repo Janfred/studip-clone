@@ -192,7 +192,7 @@ switch ($i_page) {
 		}
 	break;
 	case "folder.php": 
-		switch ($cmd) {
+		switch ($folder_system_data["cmd"]) {
 			case "":
 				$reiter_view="folder";
 			break;
