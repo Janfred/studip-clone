@@ -121,60 +121,59 @@ function checkdata_without_bereich(command){
 
  </head>
 
-<body bgcolor="#ffffff">
-
-<?php
-	include "seminar_open.php"; // hier werden die sessions initialisiert
-
-// -- hier muessen Seiten-Initialisierungen passieren --
-
-	include "header.php";   // hier wird der "Kopf" nachgeladen
-?>
 <body>
 
 <?
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; // hier werden die sessions initialisiert
+include "$ABSOLUTE_PATH_STUDIP/header.php";   // hier wird der "Kopf" nachgeladen
 	
-	require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
-	require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-	require_once("functions.php");
-	require_once("visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); // Funktionen zum Loeschen von Terminen
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
 	
 ## Get a database connection
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
+$cssSw = new cssClassSwitcher;
 
 $user_id = $auth->auth["uid"];
 $msg = "";
 
 ## Change Seminar parameters
-if (($s_command=="edit") && ($s_send)){
-		$run = TRUE;
-		## Do we have permission to do so?
-		$db2->query("select * from seminar_user where Seminar_id = '$s_id' AND user_id = '$user_id'");
-		$db2->next_record();
-		$my_perms=$db2->f("status");
+if (($s_command=="edit") && ($s_send)) {
+	$run = TRUE;
+	## Do we have permission to do so?
+	$db2->query("select * from seminar_user where Seminar_id = '$s_id' AND user_id = '$user_id'");
+	$db2->next_record();
+	$my_perms=$db2->f("status");
 
-		if ((!$perm->have_perm("admin")) && ($db2->f("status") != "dozent") && ($db2->f("status") != "tutor")) {
-			$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.§";
-			$run = FALSE;
-			}
+	if ((!$perm->have_perm("admin")) && ($db2->f("status") != "dozent") && ($db2->f("status") != "tutor")) {
+		$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.§";
+		$run = FALSE;
+	}
 			
-		if ($perm->have_perm("admin") && !$perm->have_perm("root")) {
-			$db2->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
-				if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
-      					$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.§";
-      					$run = FALSE;
-					}
-    }
+	if ($perm->have_perm("admin") && !$perm->have_perm("root")) {
+		$db2->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
+			if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
+      				$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.§";
+      				$run = FALSE;
+			}
+    	}
+    	
+    //Load necessary data from the saved lecture
+   $db->query("SELECT * FROM seminare WHERE Seminar_id = '$s_id' ");
+   $db->next_record();
 
     ## Do we have all necessary data?
     if (empty($Name)) {
       $msg .= "error§Bitte geben Sie den <B>Namen der Veranstaltung</B> ein!§";
       $run = FALSE;
     }
-    
+
     if ((empty($Institut)) && (!$my_perms== "tutor")) {
       $msg .= "error§Bitte geben Sie eine <B>Heimat-Einrichtung</B> an!§";
       $run = FALSE;
@@ -201,7 +200,21 @@ if (($s_command=="edit") && ($s_send)){
       $run = FALSE;
       }
      
-	if ($run) { // alle Angaben ok
+    //Checks for admission turnout (only important if an admission is set)
+    if ($db->f("admission_type")) {
+    	if ($turnout < 1) {
+		$msg .= "error§Diese Veranstaltung ist teilnehmerbeschr&auml;nkt. Daher m&uuml;ssen Sie wenigstens einen Teilnehmer zulassen!§";
+		$run=FALSE;
+	}
+    	if (($run) &&($turnout < $db->f("admission_turnout")))
+		$msg .= "info§Diese Veranstaltung ist teilnehmerbeschr&auml;nkt. Wenn Sie die Teilnehmerzahl verringern, m&uuml;ssen Sie evtl. Nutzer, die bereits einen Platz in der Veranstaltung erhalten haben, manuell entfernen!§";
+
+	if ($turnout > $db->f("admission_turnout"))
+		$do_update_admission=TRUE;
+    	
+    }
+
+    if ($run) { // alle Angaben ok
     ## Create timestamps
     $start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
     $duration=mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr)-$start_time;
@@ -211,17 +224,22 @@ if (($s_command=="edit") && ($s_send)){
 	
     ## Update Seminar information.
     $query = "UPDATE seminare SET Veranstaltungsnummer='$VeranstaltungsNummer',";
-    if (!$my_perms == "tutor")
+    if ($my_perms != "tutor")
 	$query .="Institut_id='$Institut', ";
     $query .= "Name='$Name', Untertitel='$Untertitel',
 			status='$Status', Beschreibung='$Beschreibung',  Ort='$Ort',
 			Sonstiges='$Sonstiges', Lesezugriff='$Lesezugriff', Schreibzugriff='$Schreibzugriff',
 			art='$art', teilnehmer='$teilnehmer', vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
-			leistungsnachweis='$leistungsnachweis', ects='$ects'
+			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout'
 			WHERE Seminar_id='$s_id'";
     $db->query($query);
+    
+    if ($do_update_admission)
+    	update_admission($s_id);
+
+    
     if ($db->affected_rows()) {
-	$msg .= "msg§Die Grund-Daten der Veranstaltung \"" . stripslashes($Name) . "\" wurden ver&auml;ndert.§";
+	$msg .= "msg§Die Grund-Daten der Veranstaltung wurden ver&auml;ndert.§";
 	$db->query("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id='$s_id'");
 	}
 	
@@ -281,6 +299,10 @@ if (($s_command=="edit") && ($s_send)){
 					} else										// User noch nicht da
 						$query = "insert into seminar_user values('$s_id','$tempTutor_id',\"tutor\",'$group', '', '".time()."')";
 					$db3->query($query);							// Tutor eintragen
+					$query = "DELETE FROM admission_seminar_user WHERE seminar_id = '$s_id' AND user_id = '$tempTutor_id' ";
+					$db3->query($query);							//delete possible entrys in wainting list
+					if ($db3->affected_rows())
+						renumber_admission($s_id);
 				}
 			}
 		}
@@ -365,8 +387,7 @@ if ($s_command) {
   
 	?>
 
-	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
+	<table border=0 align="center" cellspacing=0 cellpadding=0 width=100%>
 	<tr valign=top align=middle>
 		<?
 		echo "<td class=\"topic\"colspan=2 align=\"left\"><b>&nbsp;", $tmp_typ, ": ",htmlReady(substr($db->f("Name"), 0, 60));
@@ -380,13 +401,13 @@ if ($s_command) {
 	<tr><td class="blank" colspan=2><br>
 	<?
 	if ($s_command=="edit") {
-		$msg.="info§Achtung: alle <b>FETT</b> gedruckten Kategorien M&Uuml;SSEN ausgef&uuml;llt werden!<br>Wenn Sie unsicher bei den m&ouml;glichen Eingaben sind, finden Sie in der Kopfzeile <img src='pictures/hilfe.gif' border=0> Hilfe§";
+		$msg.="info§<font size=-1>Achtung: alle <b>FETT</b> gedruckten Kategorien M&Uuml;SSEN ausgef&uuml;llt werden!<br>Wenn Sie unsicher bei den m&ouml;glichen Eingaben sind, finden Sie in der Kopfzeile auf dem Symbol <img src='pictures/hilfe.gif' border=0> Hilfe</font>§";
 		parse_msg($msg);
 		echo "</td></tr><tr><td class=\"blank\" colspan=2>";
 	}
 	
 	?>
-	<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=1 width=98%>
+	<table border=0 align="center" cellspacing=0 cellpadding=2 width=99%>
 
 <?
 
@@ -399,19 +420,36 @@ if ($s_command) {
 	
 ?>
 			<input type="hidden" name="s_id"   value="<?php $db->p("Seminar_id") ?>">
-
-			<tr>
-				<td align=right><b>Name der Veranstaltung</b> &nbsp;</td>
-				<td align=left colspan=3><input type="text" name="Name" onchange="checkname()" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td>
+			<tr>   
+				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
+					<?
+					if ($s_id != "" && $s_command=="edit" &&
+							($perm->have_perm("admin") ||
+							($my_perms == "dozent" || $my_perms == "tutor"))):
+						?>
+						<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" src="pictures/buttons/uebernehmen-button.gif" border=0 name="s_edit" value=" Ver&auml;ndern ">
+						<?php
+					else:
+						?>
+						&nbsp;
+						<?php
+					endif;
+					?>
+				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
+				<input type="hidden" name="s_send" value="TRUE">
+				</td>
 			</tr>
-
-			<tr>
-				<td align=right>Untertitel der Veranstaltung &nbsp;</td>
-				<td align=left colspan=3><input type="text" name="Untertitel" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Untertitel")) ?>"></td>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Name der Veranstaltung</b> &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="Name" onchange="checkname()" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td>
 			</tr>
 			<tr>
-				<td align=right><b>Typ der Veranstaltung</b> &nbsp;</td>
-				<td align=left colspan=3><Select name="Status">
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Untertitel der Veranstaltung &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="Untertitel" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Untertitel")) ?>"></td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Typ der Veranstaltung</b> &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2><Select name="Status">
 				<?
 				if (!$perm->have_perm("admin")) {
 					$i=0;
@@ -434,31 +472,34 @@ if ($s_command) {
 				?>
 			</tr>
 			<tr>
-				<td align=right>Art der Veranstaltung &nbsp;</td>
-				<td align=left colspan=3><input type="text" name="art" size=30 maxlength=254 value="<?php echo htmlReady($db->f("art")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Art der Veranstaltung &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="art" size=30 maxlength=254 value="<?php echo htmlReady($db->f("art")) ?>"></td>
 			</tr>
 			<tr>
-				<td align=right>Veranstaltungs-Nummer &nbsp;</td>
-				<td align=left colspan=3><input type="int" name="VeranstaltungsNummer" size=6 maxlength=6 value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Veranstaltungs-Nummer &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="int" name="VeranstaltungsNummer" size=6 maxlength=6 value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
 			</tr>
 			<tr>
-				<td align=right>ECTS-Punkte &nbsp;</td>
-				<td align=left colspan=3><input type="int" name="ects" size=6 maxlength=32 value="<?php echo htmlReady($db->f("ects")) ?>"></td>
-			</tr>
-			
-			<tr>
-				<td align=right>Raum &nbsp;</td>
-				<td align=left colspan=3><input type="text" name="Ort" size=20 maxlength=254 value="<?php echo htmlReady($db->f("Ort")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>ECTS-Punkte &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="int" name="ects" size=6 maxlength=32 value="<?php echo htmlReady($db->f("ects")) ?>"></td>
 			</tr>
 			<tr>
-				<td align=right>Beschreibung &nbsp;</td>
-				<td align=left colspan=3><textarea name="Beschreibung" cols=58 rows=6><?php echo htmlReady($db->f("Beschreibung")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%smax. Teilnehmeranzahl%s &nbsp;", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2><input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>"></td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Raum &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="Ort" size=20 maxlength=254 value="<?php echo htmlReady($db->f("Ort")) ?>"></td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Beschreibung &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="Beschreibung" cols=58 rows=6><?php echo htmlReady($db->f("Beschreibung")) ?></textarea></td>
 			</tr>			
 			<tr>
 				<?
 					if ($my_perms != "tutor") {
-						echo "<td align=right><b>Heimat-Einrichtung</b> &nbsp;</td>";
-						echo "<td align=left colspan=3>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=right><b>Heimat-Einrichtung</b> &nbsp;</td>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>";
 						echo "<select name=\"Institut\">";
 						if (!$perm->have_perm("admin"))
 							$db3->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_id = '$user_id' AND (inst_perms = 'dozent' OR inst_perms = 'tutor')) GROUP BY Institute.institut_id ORDER BY Name");
@@ -471,8 +512,8 @@ if ($s_command) {
 							}
 						}
 					else {
-						echo "<td align=right>Heimat-Einrichtung &nbsp;</td>";
-						echo "<td align=left colspan=3>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=right>Heimat-Einrichtung &nbsp;</td>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>";
 						echo "<b>".htmlReady($db->f("Institut"))."</b>";
 						}
 					echo "</select>";
@@ -480,8 +521,8 @@ if ($s_command) {
 				</td>
 			</tr>				
 			<tr>
-				<td align=right>beteiligte Einrichtungen &nbsp;</td>
-				<td align=left colspan=3><select  name="b_institute[]" MULTIPLE SIZE=8>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>beteiligte Einrichtungen &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select  name="b_institute[]" MULTIPLE SIZE=8>
 					<?php
 					$db3->query("SELECT * FROM Institute ORDER BY Name");
 					while ($db3->next_record()) {
@@ -496,19 +537,33 @@ if ($s_command) {
 					?>
 				</select></td>
 			</tr>
-			<tr>
-				<td colspan=4><hr>
+			<tr <?$cssSw->switchClass() ?>>   
+				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
+					<?
+					if ($s_id != "" && $s_command=="edit" &&
+							($perm->have_perm("admin") ||
+							($my_perms == "dozent" || $my_perms == "tutor"))):
+						?>
+						<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" src="pictures/buttons/uebernehmen-button.gif" border=0 name="s_edit" value=" Ver&auml;ndern ">
+						<?php
+					else:
+						?>
+						&nbsp;
+						<?php
+					endif;
+					?>
+				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
+				<input type="hidden" name="s_send" value="TRUE">
 				</td>
-			</td>			
-
-			<tr>     <!-- Dozenten und Tutoren -->
-<?
+			</tr>
+			<tr <?$cssSw->switchClass() ?>>     <!-- Dozenten und Tutoren -->				
+			<?
 			//Fuer Tutoren eine Sonderregelung, da sie nicht alle Daten aendern duerfen
 			if ($my_perms == "tutor") {
 				?>
-				<td align=right>DozentInnen &nbsp;
+				<td class="<? echo $cssSw->getClass() ?>" align=right>DozentInnen &nbsp;
 				</td>
-				<td align=left colspan=3>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
 				<?
 				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'dozent' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
@@ -525,9 +580,9 @@ if ($s_command) {
 				?>
 			</tr>
 			<tr>
-				<td align=right>TutorInnen &nbsp;
+				<td class="<? echo $cssSw->getClass() ?>" align=right>TutorInnen &nbsp;
 				</td>
-				<td align=left colspan=3>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
 				<?
 				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'tutor' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
@@ -544,23 +599,38 @@ if ($s_command) {
 				?>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
-				<td align=left colspan=3><font color="#FF0000">Die Personendaten k&ouml;nnen Sie mit Ihrem Status (Tutor) nicht bearbeiten!</font></td>
-			<tr>
-				<td colspan=4><hr>
+				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><font color="#FF0000">Die Personendaten k&ouml;nnen Sie mit Ihrem Status (Tutor) nicht bearbeiten!</font></td>
+			<tr <?$cssSw->switchClass() ?>>   
+				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
+					<?
+					if ($s_id != "" && $s_command=="edit" &&
+							($perm->have_perm("admin") ||
+							($my_perms == "dozent" || $my_perms == "tutor"))):
+						?>
+						<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" src="pictures/buttons/uebernehmen-button.gif" border=0 name="s_edit" value=" Ver&auml;ndern ">
+						<?php
+					else:
+						?>
+						&nbsp;
+						<?php
+					endif;
+					?>
+				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
+				<input type="hidden" name="s_send" value="TRUE">
 				</td>
-			</td>			
-			<tr>
+			</tr>
+			<tr <?$cssSw->switchClass() ?>>
 				<?
 				}
 			else
 				{
 				if ($perm->have_perm("admin"))
-					echo "<td align=right><b>DozentInnen &nbsp;</b></td>";
+					echo "<td class=\"".$cssSw->getClass()."\" align=right><b>DozentInnen &nbsp;</b></td>";
 				else
-					echo "<td align=right>DozentInnen &nbsp;</td>";
+					echo "<td class=\"".$cssSw->getClass()."\" align=right>DozentInnen &nbsp;</td>";
 ?>
-				<td align=left colspan=3><select name="Dozenten[]" MULTIPLE SIZE=10>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select name="Dozenten[]" MULTIPLE SIZE=10>
 					<?php
 					unset($tempDozent_id);
 					$db4->query("SELECT seminar_user.user_id,status FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status IN('dozent','tutor')");
@@ -579,8 +649,8 @@ if ($s_command) {
 				</select></td>
 			</tr>
 			<tr>
-				<td align=right>TutorInnen &nbsp;</td>
-				<td align=left colspan=3><select name="Tutoren[]" MULTIPLE SIZE=10>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>TutorInnen &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select name="Tutoren[]" MULTIPLE SIZE=10>
 					<?php
 					$db3->query("SELECT * FROM auth_user_md5 WHERE perms = 'tutor' OR perms = 'dozent' ORDER BY Nachname");
 					while ($db3->next_record()) {
@@ -601,8 +671,8 @@ if ($s_command) {
 			if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) {
 			?>
 			<tr>
-				<td align=right><b>Studienbereich(e)</b> &nbsp;</td>
-				<td align=left colspan=3><select MULTIPLE name="bereich[]" onchange="checkbereich()" SIZE=12>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Studienbereich(e)</b> &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select MULTIPLE name="bereich[]" onchange="checkbereich()" SIZE=12>
 					<?php
 					$fachtmp="0";
 					//Anzeige der eigenen Faecher
@@ -670,87 +740,8 @@ if ($s_command) {
 			<?
 			}
 			?>
-			<tr>
-				<td colspan=4><hr>
-				</td>
-			</td>			
-			<tr>
-				<td align=right>Zeit &nbsp;</td>
-				<td align=left colspan=3><b><? echo htmlReady(view_turnus ($s_id)) ?></b>&nbsp; </td>
-			</td>
-			<tr>
-				<td align=right>Semester &nbsp;</td>
-				<td align=left colspan=3><b><? echo get_semester ($s_id) ?></b>&nbsp; </td>
-			</td>
-
-			<tr>
-				<td align=right>Erster Termin &nbsp;</td>
-				<td align=left colspan=3><b><? echo veranstaltung_beginn ($s_id) ?></b>&nbsp; </td>
-			</td>
-			</tr>
-						
-			<?
-			if (vorbesprechung ($s_id)) {
-			?>
-			<tr>
-				<td align=right>Vorbesprechung &nbsp;</td>
-				<td align=left colspan=3><b><? echo vorbesprechung ($s_id) ?></b>&nbsp; </td>
-			</td>
-			<?
-			}
-			?>
-			<tr>
-				<td>&nbsp;</td>
-				<td align=left colspan=3><font color="#FF0000">Bitte nutzen Sie den Menupunkt <? echo "<a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>" ?>, um diese Angaben zu ver&auml;ndern!</font></td>
-			<tr>
-				<td colspan=4><hr>
-				</td>
-			</td>			
-			<tr>
-				<td align=right>Teilnehmer &nbsp;</td>
-				<td align=left colspan=3><textarea name="teilnehmer" cols=58 rows=2><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
-			</tr>
-
-			<tr>
-				<td align=right>Voraussetzungen &nbsp;</td>
-				<td align=left colspan=3><textarea name="vorrausetzungen" cols=58 rows=2><?php echo htmlReady($db->f("vorrausetzungen")) ?></textarea></td>
-			</tr>
-
-			<tr>
-				<td align=right>Lernorganisation &nbsp;</td>
-				<td align=left colspan=3><textarea name="lernorga" cols=58 rows=2><?php echo htmlReady($db->f("lernorga")) ?></textarea></td>
-			</tr>
-
-			<tr>
-				<td align=right>Leistungsnachweis &nbsp;</td>
-				<td align=left colspan=3><textarea name="leistungsnachweis" cols=58 rows=2><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea></td>
-			</tr>
-
-			<tr>
-				<td align=right>Sonstiges &nbsp;</td>
-				<td align=left colspan=3><textarea name="Sonstiges" cols=58 rows=4><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
-			</tr>
-			<tr>
-				<td colspan=4><hr></td>
-			</tr>
-			<?
-			$mkstring=date ("d.m.Y, G:i", $db->f("mkdate"));
-			if (!$db->f("mkdate"))
-				$mkstring="unbekannt";
-			$chstring=date ("d.m.Y, G:i", $db->f("chdate"));
-			if (!$db->f("chdate"))
-				$chstring="unbekannt";
-			?>	
-			<tr>
-				<td colspan=4 align="right">
-					<?
-					echo "<font size=-1><i>Veranstaltung angelegt am <b>$mkstring</b>, letzte &Auml;nderung der Veranstaltungsdaten am <b>$chstring</b></font><br />&nbsp; ";
-					?>
-				</td>
-			</tr>
-			<tr>   
-				<td align="center" colspan=4>
-			<!-- Was wollen wir und was duerfen wir? -->
+			<tr <?$cssSw->switchClass() ?>>   
+				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
 					<?
 					if ($s_id != "" && $s_command=="edit" &&
 							($perm->have_perm("admin") ||
@@ -764,13 +755,110 @@ if ($s_command) {
 						<?php
 					endif;
 					?>
-				<a href="<? echo $PHP_SELF ?>?list=TRUE"><img src="pictures/buttons/abbrechen-button.gif" border=0>
 				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
 				<input type="hidden" name="s_send" value="TRUE">
 				</td>
-				<td colspan=2> &nbsp;</td>
+			</tr>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Zeit &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo htmlReady(view_turnus ($s_id)) ?></b>&nbsp; </td>
+			</td>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Semester &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo get_semester ($s_id) ?></b>&nbsp; </td>
+			</td>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Erster Termin &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo veranstaltung_beginn ($s_id) ?></b>&nbsp; </td>
+			</td>
+			</tr>
+			<?
+			if (vorbesprechung ($s_id)) {
+			?>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Vorbesprechung &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo vorbesprechung ($s_id) ?></b>&nbsp; </td>
+			</td>
+			<?
+			}
+			?>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>">&nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><font color="#FF0000">Bitte nutzen Sie den Menupunkt <? echo "<a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>" ?>, um diese Angaben zu ver&auml;ndern!</font></td>
+			<tr <?$cssSw->switchClass() ?>>   
+				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
+					<?
+					if ($s_id != "" && $s_command=="edit" &&
+							($perm->have_perm("admin") ||
+							($my_perms == "dozent" || $my_perms == "tutor"))):
+						?>
+						<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" src="pictures/buttons/uebernehmen-button.gif" border=0 name="s_edit" value=" Ver&auml;ndern ">
+						<?php
+					else:
+						?>
+						&nbsp;
+						<?php
+					endif;
+					?>
+				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
+				<input type="hidden" name="s_send" value="TRUE">
+				</td>
+			</tr>
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Teilnehmer &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="teilnehmer" cols=58 rows=2><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
 			</tr>
 
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Voraussetzungen &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="vorrausetzungen" cols=58 rows=2><?php echo htmlReady($db->f("vorrausetzungen")) ?></textarea></td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Lernorganisation &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="lernorga" cols=58 rows=2><?php echo htmlReady($db->f("lernorga")) ?></textarea></td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Leistungsnachweis &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="leistungsnachweis" cols=58 rows=2><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea></td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Sonstiges &nbsp;</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="Sonstiges" cols=58 rows=4><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
+			</tr>
+			<?
+			$mkstring=date ("d.m.Y, G:i", $db->f("mkdate"));
+			if (!$db->f("mkdate"))
+				$mkstring="unbekannt";
+			$chstring=date ("d.m.Y, G:i", $db->f("chdate"));
+			if (!$db->f("chdate"))
+				$chstring="unbekannt";
+			?>	
+			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
+					<?
+					echo "<font size=-1><i>Veranstaltung angelegt am <b>$mkstring</b>, letzte &Auml;nderung der Veranstaltungsdaten am <b>$chstring</b></font>&nbsp; <br />&nbsp; ";
+					?>
+				</td>
+			</tr>
+			<tr>   
+				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
+					<?
+					if ($s_id != "" && $s_command=="edit" &&
+							($perm->have_perm("admin") ||
+							($my_perms == "dozent" || $my_perms == "tutor"))):
+						?>
+						<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" src="pictures/buttons/uebernehmen-button.gif" border=0 name="s_edit" value=" Ver&auml;ndern ">
+						<?php
+					else:
+						?>
+						&nbsp;
+						<?php
+					endif;
+					?>
+				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
+				<input type="hidden" name="s_send" value="TRUE">
+				</td>
+			</tr>
 		</form>
 	</table>
 	</td></tr>
