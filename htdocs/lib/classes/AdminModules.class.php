@@ -93,6 +93,14 @@ class AdminModules extends Modules {
 		$this->registered_modules["wiki"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Wiki-Webs werden <b>%s</b> Seiten ebenfalls gel&ouml;scht!");
 		$this->registered_modules["wiki"]["msg_activate"] = _("Das Wiki-Web kann jederzeit aktiviert werden.");
 		$this->registered_modules["wiki"]["msg_deactivate"] = _("Das Wiki-Web kann jederzeit deaktiviert werden.");
+
+		$this->registered_modules["impuls_ec"]["name"] = _("Impuls EC");
+		$this->registered_modules["impuls_ec"]["msg_activate"] = _("Die Impuls-Module können jederzeit aktiviert werden.");
+		$this->registered_modules["impuls_ec"]["msg_deactivate"] = _("Die Impuls-Module können jederzeit deaktiviert werden.");
+
+		$this->registered_modules["vips"]["name"] = _("ViPS (Virtuelles Prüfungssystem)");
+		$this->registered_modules["vips"]["msg_activate"] = _("ViPS kann jederzeit aktiviert werden.");
+		$this->registered_modules["vips"]["msg_deactivate"] = _("ViPS kann jederzeit deaktiviert werden.");
 	}
 	
 	function getModuleForumExistingItems($range_id) {
@@ -187,6 +195,10 @@ class AdminModules extends Modules {
 	}
 
 	function moduleWikiDeactivate($range_id) {
+		return 0;
+	}
+
+	function moduleImpuls_ECDeactivate($range_id) {
 		return 0;
 	}
 }

@@ -47,7 +47,9 @@ class Modules {
 		"ilias_connect" => array("id" => 6, "const" => "ILIAS_CONNECT_ENABLE", "sem" => TRUE, "inst" => TRUE),
 		"chat" => array("id" => 7, "const" => "CHAT_ENABLE", "sem" => TRUE, "inst" => TRUE),
 		"wiki" => array("id" => 8, "const" => "WIKI_ENABLE", "sem" => TRUE, "inst" => TRUE),
-		"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE)
+		"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE),
+		"vips" => array("id" => 10, "const" => "VIPS_ENABLE", "sem" => TRUE, "inst" => FALSE),
+		"impuls_ec" => array("id" => 11, "const" => "IMPULS_EC_ENABLE", "sem" => TRUE, "inst" => FALSE)
 	);
 	var $db;
 	
