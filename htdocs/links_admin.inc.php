@@ -838,7 +838,7 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 		if ($i_page == "archiv_assi.php") {
 			?>
 			<tr <? $cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=3>
 					&nbsp; <font size=-1><?=_("Alle ausgew&auml;hlten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("archivieren", "src")?> border=0 align="absmiddle" /></font><br />
 					&nbsp; <font size=-1 color="red"><?=_("Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> r&uuml;ckg&auml;ngig gemacht werden kann!")?></font>
 				</td>
