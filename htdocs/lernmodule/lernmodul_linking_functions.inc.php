@@ -2,7 +2,7 @@
 function link_new_module()
 {
 	global $ABSOLUTE_PATH_ILIAS;
-	return $ABSOLUTE_PATH_ILIAS . "ed_le.php?cmd=nl" . get_ilias_logindata();
+	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=new" . get_ilias_logindata();
 }
 
 function link_seminar_modules($seminar_id)
@@ -34,12 +34,13 @@ function link_use_module($co_inst, $co_id)
 function link_edit_module($co_inst, $co_id)
 {
 	global $ABSOLUTE_PATH_ILIAS;
-	return $ABSOLUTE_PATH_ILIAS . "ed_gliederung.php?back=&le=$co_id&le_inst=$co_inst" . get_ilias_logindata();
+	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=edit&le=$co_id&le_inst=$co_inst" . get_ilias_logindata();
 }
 
 function link_delete_module($co_inst, $co_id)
 {
-// ??????????
+	global $ABSOLUTE_PATH_ILIAS;
+	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=delete&le=$co_id" . get_ilias_logindata();
 }
 
 

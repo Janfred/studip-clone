@@ -27,8 +27,8 @@ function get_user_modules($benutzername)
 	$db->query("SELECT * FROM auth_user_md5  WHERE username ='$benutzername'");
 	if ($db->next_record())
 	{
-		$firstname = $db->f("Vorname");
-		$surname = $db->f("Nachname");
+//		$firstname = $db->f("Vorname");
+//		$surname = $db->f("Nachname");
 		$ilias_user_id = get_ilias_user_id($benutzername);
 	}
 	else
@@ -46,10 +46,10 @@ function get_user_modules($benutzername)
 	$ilias_db -> query("SELECT DISTINCT meta.id, meta.inst, meta.title, meta.description ".
 			" FROM lerneinheit LEFT JOIN meta USING(id, inst) LEFT JOIN meta_author USING(id, inst, typ) LEFT JOIN meta_contrib USING(id, inst, typ)".
 			" WHERE meta.status='final' ".
-			" AND public = 'y' ".
+			" AND lerneinheit.public = 'y' ".
 			" AND meta.typ = 'le' ".
-			" AND (((meta_author.author_firstname = '$firstname') AND (meta_author.author_surname = '$surname')  AND (meta_author.author_local_id = '$ilias_user_id')) ".
-			" OR ((meta_contrib.contrib_firstname = '$firstname')  AND (meta_contrib.contrib_surname = '$surname') AND (meta_contrib.contrib_local_id = '$ilias_user_id')))"
+			" AND ((meta_author.author_local_id = '$ilias_user_id') ".
+			" OR (meta_contrib.contrib_local_id = '$ilias_user_id'))"
 			);
 	while ($ilias_db->next_record())
 	{

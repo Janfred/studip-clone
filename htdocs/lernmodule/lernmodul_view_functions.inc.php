@@ -23,9 +23,9 @@ function show_user_modules($benutzername)
 			$cssSw->switchClass();
 			?><tr><td class="<? echo $cssSw->getClass(); ?>"><? echo "<b>" . $mod_array[$module_count]["title"] . "</b> - " . $mod_array[$module_count]["description"]; ?>
 			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $edit_link;?>"><img src='pictures/icon-posting.gif' border=0  alt="<? echo _("Bearbeiten") ?>" title="<? echo _("Bearbeiten") ?>"  target="_blank"></a>&nbsp; 
+			<a href="<? echo $edit_link;?>" target="_blank"><img src='pictures/icon-posting.gif' border=0  alt="<? echo _("Bearbeiten") ?>" title="<? echo _("Bearbeiten") ?>"></a>&nbsp; 
 			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $delete_link;?>"><img src='pictures/trash.gif' border=0 alt="<? echo _("Löschen") ?>" title="<? echo _("Löschen") ?>"></a>
+			<a href="<? echo $delete_link;?>" target="_blank"><img src='pictures/trash.gif' border=0 alt="<? echo _("Löschen") ?>" title="<? echo _("Löschen") ?>"></a>
 			</td></tr><?
 			$module_count ++;
 		}
@@ -118,9 +118,9 @@ function show_all_modules_admin()
 			$cssSw->switchClass();
 			?><tr><td class="<? echo $cssSw->getClass(); ?>"><? echo "<b>" . $mod_array[$module_count]["title"] . "</b> - " . $mod_array[$module_count]["description"]; ?>
 			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $edit_link; ?>"><img src='pictures/icon-posting.gif' border=0  alt="<? echo _("Bearbeiten") ?>" title="<? echo _("Bearbeiten") ?>"  target="_blank"></a>&nbsp; 
+			<a href="<? echo $edit_link; ?>" target="_blank"><img src='pictures/icon-posting.gif' border=0  alt="<? echo _("Bearbeiten") ?>" title="<? echo _("Bearbeiten") ?>"></a>&nbsp; 
 			</td><td class="<? echo $cssSw->getClass(); ?>" align="center">
-			<a href="<? echo $delete_link; ?>"><img src='pictures/trash.gif' border=0 alt="<? echo _("Löschen") ?>" title="<? echo _("Löschen") ?>" target="_blank"></a>
+			<a href="<? echo $delete_link; ?>" target="_blank"><img src='pictures/trash.gif' border=0 alt="<? echo _("Löschen") ?>" title="<? echo _("Löschen") ?>"></a>
 			</td></tr><?
 			$module_count ++;
 		}
