@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once("visual.inc.php");
 	require_once("messaging.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+	require_once ("$ABSOLUTE_PATH_STUDIP/newsletter.inc.php");
 
 
 // Newsletter arrays
@@ -37,7 +38,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	// Standard
 
 	$newsletter[0]["name"] = "Stud.IP Newsletter";
-	$newsletter[0]["SQL"] = "WHERE perms != 'user' AND perms != 'autor'";
+	$newsletter[0]["SQL"] = "WHERE username = 'rstockm'";
+//		$newsletter[0]["SQL"] = "WHERE perms != 'user' AND perms != 'autor'";
 	$newsletter[0]["text"] = "Hallo dies ist ein Text";
 
 	// weitere
@@ -47,72 +49,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	$newsletter[1]["text"] = "Hallo dies ist ein noch ein Text";
 	
 // Hilfsfunktionen
-
-
-function CheckPersonInNewsletter ($username, $newsletter_id)    // Funktion, mit der man innerhalb einer Newsletter-Personengruppe suchen kann
-{ global $newsletter;
-	$user_id = get_userid($username);
-	$db=new DB_Seminar;
-	$query = "SELECT * ".
-		"FROM auth_user_md5 ".
-		$newsletter[$newsletter_id]["SQL"].
-		" AND user_id = '$user_id'";
-	$db->query($query); 
-	if ($db->next_record()) {
-		$status = "letter";
-	} else {
-		$status = FALSE;
-	}
-	return $status;
-}
-
-function CheckPersonNewsletter ($username, $newsletter_id)    // Funktion, mit der man die Ausnahmeliste durchsucht
-{ global $newsletter;
-	$user_id = get_userid($username);
-	$db=new DB_Seminar;
-	$query = "SELECT status FROM newsletter WHERE user_id = '$user_id' AND newsletter_id = '$newsletter_id'";
-	$db->query($query); 
-	if ($db->next_record()) {
-		if ($db->f("status") == 1) {
-			$status = "added";
-		} else {
-			 $status = "removed";
-		}
-	} else {
-		$status = FALSE;
-	}
-	return $status;
-}
-
-function AddPersonNewsletter ($username, $newsletter_id)    // Funktion, mit der man Personen auf die Positivliste setzt
-{ global $newsletter;
-	$db=new DB_Seminar;
-	$user_id = get_userid($username);
-	$status = CheckPersonNewsletter ($username, $newsletter_id);
-	if ($status == "removed") {
-		$db->query("DELETE FROM newsletter WHERE user_id = '$user_id' AND newsletter_id = '$newsletter_id'"); 
-		$msg = "msg§Der Nutzer $username wurde wieder in den Newsletter aufgenommen.§";
-	} elseif (CheckPersonInNewsletter($username, $newsletter_id) != "letter" AND $status != "added")  {
-		$db->query("INSERT INTO newsletter SET user_id = '$user_id', status = '1', newsletter_id = '$newsletter_id'");
-		$msg = "msg§Der Nutzer $username wurde in den Newsletter aufgenommen.§";
-	}
-	return $msg;
-}
-
-function RemovePersonNewsletter ($username, $newsletter_id)    // Funktion, mit der man Personen auf die Negativliste setzt
-{ global $newsletter;
-	$db=new DB_Seminar;
-	$user_id = get_userid($username);
-	$status = CheckPersonNewsletter ($username, $newsletter_id);
-	if ($status == "added") {
-		$db->query("DELETE FROM newsletter WHERE user_id = '$user_id' AND newsletter_id = '$newsletter_id'"); 
-		$msg = "msg§Der Nutzer $username wurde wieder aus dem Newsletter gel&ouml;scht.§";
-	} elseif ($status != "removed") {
-		$db->query("INSERT INTO newsletter SET user_id = '$user_id', status = '0', newsletter_id = '$newsletter_id'");
-		$msg = "msg§Der Nutzer $username wurde aus dem Newsletter gel&ouml;scht.§";
-	}
-	return $msg;
-}
 
 function PrintRemoveSearch ($search_exp, $newsletter_id)    // Funktion, mit der man innerhalb einer Newsletter-Personengruppe suchen kann
 { global $newsletter;
@@ -173,6 +109,39 @@ function PrintExclusions($newsletter_id)
 	echo "</table>";
 }
 
+function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
+{ global $newsletter,  $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN;
+
+		$magic     = "ddvedvgngda";  ## Challenge seed
+		$smtp=new smtp_class;		     ## Einstellungen fuer das Verschicken der Mails
+		$smtp->host_name=getenv("SERVER_NAME");
+		$smtp->localhost="localhost";
+		$REMOTE_ADDR=getenv("REMOTE_ADDR");
+		$Zeit=date("H:i:s, d.m.Y",time());
+
+		## Abschicken der Bestaetigungsmail
+		$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
+		$env_from="wwwrun@".$smtp->host_name;
+		$abuse="abuse@".$smtp->host_name;
+		$to=$Email;
+		$secret= md5("$username:$magic");
+		$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "email_validation.php?username=$username&secret=" . $secret;
+		$mailbody="Dies ist ein Newsletter des Systems\n"
+		."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
+		."- $UNI_NAME_CLEAN -\n\n"
+		."Diese Mail wurde Ihnen zugesandt um sicherzustellen,\n"
+		."daß die angegebene Email-Adresse tatsächlich Ihnen gehört.\n\n"
+		."Wenn diese Angaben korrekt sind, dann öffnen Sie bitte den Link\n\n"
+		."$url\n\n"
+		."in Ihrem Browser.\n"
+		."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
+		."damit der Eintrag aus der Datenbank gelöscht wird.\n";
+		$smtp->SendMessage(
+		$env_from, array($to),
+		array("From: $from", "Reply-To: $abuse", "To: $to", "Subject: Newsletter"),
+		$mailbody);
+}
+
 function SendLetter($newsletter_id)
 { global $newsletter, $cssSw;
 	$db=new DB_Seminar;
@@ -186,6 +155,7 @@ function SendLetter($newsletter_id)
 		} else {
 			echo "eingetragen";
 		}
+		SendMail($newsletter_id,$db->f("username"),$db->f("Vorname"),$db->f("Nachname"),$db->f("Email"));
 		echo "</td>";
 	}
 	
