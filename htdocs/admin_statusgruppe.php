@@ -340,7 +340,7 @@ function PrintInstitutMembers ()
 		if (strlen($tmp_name) > 60)
 			echo "... ";
 		echo " -  Statusgruppen";
-	?></b></td></tr><tr><td class="blank">&nbsp; </td></tr></table>
+	?></b></td></tr><tr><td class="steel1">&nbsp; </td></tr></table>
 
 <table class="steel1" width="100%" border="0" cellspacing="0">
   <tr>
