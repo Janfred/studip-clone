@@ -1,4 +1,3 @@
- 
 <?
 /**
 * ExternElementTableFooter.class.php
