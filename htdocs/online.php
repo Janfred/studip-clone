@@ -160,7 +160,7 @@ else
 	if ($my_messaging_settings["show_only_buddys"]) 
 		echo "<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>Buddies</b></font></td></tr>\n";
 	else
-		echo "<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>Buddies</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><font size=-1><b>andere  Nutzer</b></font></td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>Buddies</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>andere  Nutzer</b></font></td></tr>\n";
 	echo "<tr>";
 
 	//Buddiespalte
