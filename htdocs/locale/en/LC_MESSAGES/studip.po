@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-16 20:08+0100\n"
+"POT-Creation-Date: 2003-03-17 12:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -477,7 +477,8 @@ msgstr ""
 msgid "Letzte &Auml;nderung:"
 msgstr ""
 
-#: archiv.php:299 archiv.php:459 datei.inc.php:198 mein_stundenplan.php:632
+#: resources/resourcesVisual.inc.php:895
+#: resources/resourcesVisual.inc.php:1343
 msgid "Beschreibung:"
 msgstr "Description:"
 
@@ -561,14 +562,7 @@ msgstr ""
 msgid "Upload durch"
 msgstr ""
 
-#: archiv.php:403 browse.php:268 browse.php:272 browse.php:276 browse.php:280
-#: freie.php:166 institut_members.php:100 institut_members.php:122
-#: institut_members.php:144 institut_members.php:164 institut_members.php:184
-#: institut_members.php:208 institut_members.php:226 institut_members.php:244
-#: institut_members.php:260 institut_members.php:276
-#: meine_einrichtungen.php:209 meine_seminare.php:264 meine_seminare.php:389
-#: meine_seminare.php:610 my_archiv.php:93 online.php:158 online.php:221
-#: sem_browse.inc.php:428
+#: resources/resourcesVisual.inc.php:485
 msgid "Name"
 msgstr "Name"
 
@@ -1439,9 +1433,7 @@ msgid ""
 "in einem Web-Browser angezeigt und ausgedruckt werden."
 msgstr ""
 
-#: links_openobject.inc.php:21 links_openobject.inc.php:32
-#: links_openobject.inc.php:125 links_seminare.inc.php:37
-#: links_seminare.inc.php:50
+#: resources/views/links_resources.inc.php:44
 msgid "&Uuml;bersicht"
 msgstr "Overview"
 
@@ -1540,56 +1532,56 @@ msgstr ""
 #: resources/resourcesClass.inc.php:131 resources/resourcesClass.inc.php:975
 #: resources/resourcesVisual.inc.php:536
 msgid "NutzerIn"
-msgstr ""
+msgstr "User"
 
-#: admin_news.php:752 config.inc.php:264 edit_about.php:1041 freie.php:168
-#: functions.php:84 functions.php:178 sem_browse.inc.php:377
-#: show_bereich.php:64
+#: resources/resourcesClass.inc.php:140 resources/resourcesClass.inc.php:984
 msgid "Einrichtung"
 msgstr "Institute"
 
-#: admin_news.php:752
+#: resources/resourcesClass.inc.php:149 resources/resourcesClass.inc.php:993
 msgid "Fakult&auml;t"
 msgstr "Faculty"
 
-#: admin_news.php:752 details.php:92 functions.php:63 functions.php:68
-#: functions.php:131 functions.php:135
+#: resources/resourcesClass.inc.php:158 resources/resourcesClass.inc.php:1002
 msgid "Veranstaltung"
 msgstr "Course"
 
 #: resources/resourcesClass.inc.php:961
 msgid "jederR"
-msgstr ""
+msgstr "everyone"
 
 #: resources/resourcesClass.inc.php:963
 msgid "jedeR (alle Nutzenden)"
-msgstr ""
+msgstr "everyone (all users)"
 
 #: resources/resourcesClass.inc.php:967
 msgid "Global"
-msgstr ""
+msgstr "global"
 
 #: resources/resourcesClass.inc.php:969
 msgid "Global (zentral verwaltet)"
-msgstr ""
+msgstr "global (central administrated)"
 
 #: resources/resourcesClass.inc.php:1580 resources/resourcesClass.inc.php:1588
 msgid "zur&uuml;ck"
-msgstr ""
+msgstr "back"
 
 #: resources/resourcesFunc.inc.php:199 resources/resourcesFunc.inc.php:223
 #: resources/resourcesFunc.inc.php:257 resources/resourcesFunc.inc.php:270
 #: resources/resourcesFunc.inc.php:273 resources/resourcesFunc.inc.php:290
 #: resources/resourcesFunc.inc.php:313
 msgid "Personen"
-msgstr ""
+msgstr "People"
 
-#: about.php:295 admin_news.php:491 browse.php:123 header.php:137
-#: links_openobject.inc.php:60
+#: resources/resourcesFunc.inc.php:204 resources/resourcesFunc.inc.php:229
+#: resources/resourcesFunc.inc.php:251 resources/resourcesFunc.inc.php:264
+#: resources/resourcesFunc.inc.php:318
 msgid "Veranstaltungen"
 msgstr "Courses"
 
-#: admin_news.php:492 archiv.php:405 browse.php:92 sem_browse.inc.php:437
+#: resources/resourcesFunc.inc.php:209 resources/resourcesFunc.inc.php:215
+#: resources/resourcesFunc.inc.php:256 resources/resourcesFunc.inc.php:269
+#: resources/resourcesFunc.inc.php:323
 msgid "Einrichtungen"
 msgstr "Institutes"
 
@@ -1599,30 +1591,30 @@ msgstr ""
 
 #: resources/resourcesFunc.inc.php:367
 msgid "diesen Eintrag übernehmen"
-msgstr ""
+msgstr "Apply this entry"
 
 #: resources/resourcesFunc.inc.php:368
 msgid "Suche zurücksetzen"
-msgstr ""
+msgstr "New search"
 
 #: resources/resourcesFunc.inc.php:373
 msgid "Starten Sie hier eine ihre Suche"
-msgstr ""
+msgstr "Start your search here"
 
 #: resources/resourcesVisual.inc.php:112 resources/resourcesVisual.inc.php:114
 #: resources/resourcesVisual.inc.php:888
 #: resources/resourcesVisual.inc.php:1347
 #: resources/resourcesVisual.inc.php:1458
 msgid "verantwortlich:"
-msgstr ""
+msgstr "Responsible:"
 
 #: resources/resourcesVisual.inc.php:126 resources/resourcesVisual.inc.php:342
 msgid "&Auml;nderungen speichern"
-msgstr ""
+msgstr "Save changes"
 
 #: resources/resourcesVisual.inc.php:301
 msgid "Objekt in diese Ebene verschieben"
-msgstr ""
+msgstr "Move object to this level"
 
 #: resources/resourcesVisual.inc.php:350
 #, c-format
@@ -1630,104 +1622,108 @@ msgid ""
 "Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das "
 "Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."
 msgstr ""
+"This object has been selected to move.  Please select the insertion symbol %"
+"s in order to move to the desired level."
 
 #: resources/resourcesVisual.inc.php:350
 msgid ""
-"Klicken Sie suf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
+"Klicken Sie auf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
 "verschieben"
 msgstr ""
 
 #: resources/resourcesVisual.inc.php:488
 msgid "Berechtigungen"
-msgstr ""
+msgstr "Authorisation"
 
 #: resources/resourcesVisual.inc.php:491 resources/resourcesVisual.inc.php:577
 #: resources/resourcesVisual.inc.php:734
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: resources/resourcesVisual.inc.php:497
 msgid "Suchen/hinzuf&uuml;gen"
-msgstr ""
+msgstr "Search/insert"
 
 #: resources/resourcesVisual.inc.php:504
 msgid ""
 "Diese NutzerInnen sind als Ressourcen-Roots eingetragen, sie haben damit "
 "Zugriff auf alle globalen Ressourcen"
 msgstr ""
+"These users are entered as resource roots and therefore have access to all "
+"global resources."
 
 #: resources/resourcesVisual.inc.php:512
 msgid "NutzerInnen hinzuf&uuml;gen"
-msgstr ""
+msgstr "Add users"
 
-#: sem_browse.inc.php:376 sem_browse.inc.php:459
+#: resources/resourcesVisual.inc.php:571
 msgid "Typ"
 msgstr "Type"
 
 #: resources/resourcesVisual.inc.php:574
 msgid "zugeordnete Eigenschaften"
-msgstr ""
+msgstr "Assigned properties"
 
 #: resources/resourcesVisual.inc.php:585
 msgid "neuer Typ:"
-msgstr ""
+msgstr "New type:"
 
 #: resources/resourcesVisual.inc.php:606
 #, c-format
 msgid "wird von <b>%s</b> Objekten verwendet"
-msgstr ""
+msgstr "Is used by <b>%s</b> objects"
 
 #: resources/resourcesVisual.inc.php:607 resources/resourcesVisual.inc.php:768
 msgid "(systemobjekt)"
-msgstr ""
+msgstr "(system object)"
 
 #: resources/resourcesVisual.inc.php:633
 msgid "Zustand Ja/Nein"
-msgstr ""
+msgstr "Status yes/no"
 
 #: resources/resourcesVisual.inc.php:636 resources/resourcesVisual.inc.php:779
 msgid "mehrzeiliges Textfeld"
-msgstr ""
+msgstr "Multiline text field"
 
 #: resources/resourcesVisual.inc.php:639 resources/resourcesVisual.inc.php:778
 msgid "einzeiliges Textfeld"
-msgstr ""
+msgstr "Single text field"
 
 #: resources/resourcesVisual.inc.php:642
 msgid "definiertes Auswahlfeld"
-msgstr ""
+msgstr "Defined selection field"
 
 #: resources/resourcesVisual.inc.php:653
 msgid "Eigenschaft löschen"
-msgstr ""
+msgstr "Delete character"
 
 #: resources/resourcesVisual.inc.php:658
 msgid "Löschen der Eigenschaft nicht möglich, Systemobjekt!"
-msgstr ""
+msgstr "Not possible to delete the character, system object!"
 
 #: resources/resourcesVisual.inc.php:728
 msgid "Eigenschaft"
-msgstr ""
+msgstr "Character"
 
 #: resources/resourcesVisual.inc.php:731
 msgid "Art der Eigenschaft"
-msgstr ""
+msgstr "Type of property"
 
 #: resources/resourcesVisual.inc.php:747 resources/resourcesVisual.inc.php:777
 msgid "Zustand"
-msgstr ""
+msgstr "Status"
 
 #: resources/resourcesVisual.inc.php:748
 msgid "einzeiligesTextfeld"
-msgstr ""
+msgstr "Single line text field"
 
 #: resources/resourcesVisual.inc.php:749
 msgid "mehrzeiligesTextfeld"
-msgstr ""
+msgstr "Multiline text field"
 
 #: resources/resourcesVisual.inc.php:750 resources/resourcesVisual.inc.php:780
 msgid "Auswahlfeld"
-msgstr ""
+msgstr "Selection field"
 
 #: resources/resourcesVisual.inc.php:774
 msgid "Art:"
@@ -1735,17 +1731,18 @@ msgstr ""
 
 #: resources/resourcesVisual.inc.php:785
 msgid "Bezeichnung:"
-msgstr ""
+msgstr "Description:"
 
 #: resources/resourcesVisual.inc.php:789
 msgid "Optionen:"
-msgstr ""
+msgstr "Options:"
 
 #: resources/resourcesVisual.inc.php:825
 msgid "diese Eigenschaft"
-msgstr ""
+msgstr "This character"
 
-#: edit_about.php:870 edit_about.php:879
+#: resources/resourcesVisual.inc.php:885
+#: resources/resourcesVisual.inc.php:1311
 msgid "Name:"
 msgstr "Name:"
 
@@ -1753,71 +1750,73 @@ msgstr "Name:"
 #: resources/views/page_intros.inc.php:39
 #: resources/views/page_intros.inc.php:139
 msgid "Hierachieebene"
-msgstr ""
+msgstr "Hierarchy level"
 
 #: resources/resourcesVisual.inc.php:905
 msgid "Eigenschaften:"
-msgstr ""
+msgstr "Characters:"
 
 #: resources/resourcesVisual.inc.php:1058
 msgid "Sie erstellen eine neue Belegung"
-msgstr ""
+msgstr "Create a new allocation"
 
 #: resources/resourcesVisual.inc.php:1071
 msgid ""
 "Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in "
 "diesem Raum stattfindet."
 msgstr ""
+"This allocation is a regular course appointment which takes place in this "
+"room."
 
 #: resources/resourcesVisual.inc.php:1071
 #, c-format
 msgid ""
 "Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %"
 "s bearbeiten!"
-msgstr ""
+msgstr "You can only edit the times of this allocation within the course %s!"
 
 #: resources/resourcesVisual.inc.php:1073
 msgid ""
 "Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum "
 "stattfindet."
 msgstr ""
+"This allocation is a single appointment of a course which takes place in "
+"this room."
 
 #: resources/resourcesVisual.inc.php:1073
 #, c-format
 msgid ""
 " Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %"
 "s bearbeiten!"
-msgstr ""
+msgstr "You can only edit the times of this allocation within the course %s!"
 
 #: resources/resourcesVisual.inc.php:1075
 msgid "Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."
-msgstr ""
+msgstr "You do not have the authorisation to edit this allocation."
 
 #: resources/resourcesVisual.inc.php:1083
 msgid "Datum/erster Termin:"
-msgstr ""
+msgstr "Date/first appointment:"
 
 #: resources/resourcesVisual.inc.php:1098
 msgid "Art der Wiederholung:"
-msgstr ""
+msgstr "Type of repetition:"
 
-#: admin_metadates.php:453 admin_metadates.php:455
-#: admin_seminare_assi.php:1956 admin_seminare_assi.php:1958
+#: resources/resourcesVisual.inc.php:1104
 msgid "zweiw&ouml;chentlich"
 msgstr "fortnightly"
 
-#: admin_metadates.php:449 admin_metadates.php:451
-#: admin_seminare_assi.php:1952 admin_seminare_assi.php:1954
+#: resources/resourcesVisual.inc.php:1106
 msgid "w&ouml;chentlich"
 msgstr "weekly"
 
 #: resources/resourcesVisual.inc.php:1108
 msgid "keine Wiederholung (Einzeltermin)"
-msgstr ""
+msgstr "no repetition (single appointment)"
 
 #: resources/resourcesVisual.inc.php:1125
 msgid "Beginn/Ende:"
-msgstr ""
+msgstr "Begin/end:"
 
 #: admin_admission.php:731 admin_metadates.php:516
 #: admin_seminare_assi.php:2019 admin_seminare_assi.php:2077
@@ -1828,23 +1827,23 @@ msgstr "     "
 
 #: resources/resourcesVisual.inc.php:1143
 msgid "Wiederholung bis sp&auml;testens:"
-msgstr ""
+msgstr "Repetition until:"
 
 #: resources/resourcesVisual.inc.php:1154
 msgid "Ende der Vorlesungszeit"
-msgstr ""
+msgstr "End of lecture period"
 
 #: resources/resourcesVisual.inc.php:1168
 msgid "eingetragen f&uuml;r die Belegung:"
-msgstr ""
+msgstr "Registered for the allocation:"
 
 #: resources/resourcesVisual.inc.php:1175
 msgid "keinE Stud.IP NutzerIn eingetragen"
-msgstr ""
+msgstr "No Stud.IP user entered"
 
 #: resources/resourcesVisual.inc.php:1179
 msgid "einen anderen User (NutzerIn oder Einrichtung) eintragen:"
-msgstr ""
+msgstr "Enter another user (person or institute):"
 
 #: resources/resourcesVisual.inc.php:1181
 msgid "einen User (NutzerIn oder Einrichtung) eintragen:"
@@ -1852,7 +1851,7 @@ msgstr ""
 
 #: resources/resourcesVisual.inc.php:1184
 msgid "freie Eingabe zur Belegung:"
-msgstr ""
+msgstr "Free description for allocation:"
 
 #: resources/resourcesVisual.inc.php:1186
 msgid ""
@@ -1864,361 +1863,348 @@ msgstr ""
 
 #: resources/resourcesVisual.inc.php:1195
 msgid "Wiederholungsturnus:"
-msgstr ""
+msgstr "Repetition regularity:"
 
 #: resources/resourcesVisual.inc.php:1205
 msgid "jeden Tag"
-msgstr ""
+msgstr "Every day"
 
 #: resources/resourcesVisual.inc.php:1206
 msgid "jeden zweiten Tag"
-msgstr ""
+msgstr "Every other day"
 
 #: resources/resourcesVisual.inc.php:1207
 msgid "jeden dritten Tag"
-msgstr ""
+msgstr "Every third day"
 
 #: resources/resourcesVisual.inc.php:1208
 msgid "jeden vierten Tag"
-msgstr ""
+msgstr "Every fourth day"
 
 #: resources/resourcesVisual.inc.php:1209
 msgid "jeden f&uuml;nften Tag"
-msgstr ""
+msgstr "Every fifth day"
 
 #: resources/resourcesVisual.inc.php:1210
 msgid "jeden sechsten Tag"
-msgstr ""
+msgstr "Every sixth day"
 
 #: resources/resourcesVisual.inc.php:1214
 msgid "jede Woche"
-msgstr ""
+msgstr "Every week"
 
 #: resources/resourcesVisual.inc.php:1215
 msgid "jede zweite Woche"
-msgstr ""
+msgstr "Every other week"
 
 #: resources/resourcesVisual.inc.php:1216
 msgid "jede dritte Woche"
-msgstr ""
+msgstr "Every third week"
 
 #: resources/resourcesVisual.inc.php:1220
 msgid "jeden Monat"
-msgstr ""
+msgstr "Every month"
 
 #: resources/resourcesVisual.inc.php:1221
 msgid "jeden zweiten Monat"
-msgstr ""
+msgstr "Every other month"
 
 #: resources/resourcesVisual.inc.php:1222
 msgid "jeden dritten Monat"
-msgstr ""
+msgstr "Every third month"
 
 #: resources/resourcesVisual.inc.php:1223
 msgid "jeden vierten Monat"
-msgstr ""
+msgstr "Every fourth month"
 
 #: resources/resourcesVisual.inc.php:1224
 msgid "jeden f&uuml;nften Monat"
-msgstr ""
+msgstr "Every fifth month"
 
 #: resources/resourcesVisual.inc.php:1225
 msgid "jeden sechsten Monat"
-msgstr ""
+msgstr "Every sixth month"
 
 #: resources/resourcesVisual.inc.php:1226
 msgid "jeden siebten Monat"
-msgstr ""
+msgstr "Every seventh month"
 
 #: resources/resourcesVisual.inc.php:1227
 msgid "jeden achten Monat"
-msgstr ""
+msgstr "Every eighth month"
 
 #: resources/resourcesVisual.inc.php:1228
 msgid "jeden neunten Monat"
-msgstr ""
+msgstr "Every ninth month"
 
 #: resources/resourcesVisual.inc.php:1229
 msgid "jeden zehnten Monat"
-msgstr ""
+msgstr "Every tenth month"
 
 #: resources/resourcesVisual.inc.php:1230
 msgid "jeden elften Monat"
-msgstr ""
+msgstr "Every eleventh month"
 
 #: resources/resourcesVisual.inc.php:1234
 msgid "jedes Jahr"
-msgstr ""
+msgstr "Every year"
 
 #: resources/resourcesVisual.inc.php:1235
 msgid "jedes zweite Jahr"
-msgstr ""
+msgstr "Every other year"
 
 #: resources/resourcesVisual.inc.php:1236
 msgid "jedes dritte Jahr"
-msgstr ""
+msgstr "Every third year"
 
 #: resources/resourcesVisual.inc.php:1237
 msgid "jedes vierte Jahr"
-msgstr ""
+msgstr "Every fourth year"
 
 #: resources/resourcesVisual.inc.php:1238
 msgid "jedes f&uuml;nfte Jahr"
-msgstr ""
+msgstr "Every fifth year"
 
 #: resources/resourcesVisual.inc.php:1255
 msgid "begrenzte Anzahl der Wiederholungen:"
-msgstr ""
+msgstr "Limited number of repetitions:"
 
 #: resources/resourcesVisual.inc.php:1259
 #: resources/resourcesVisual.inc.php:1263
 #, c-format
 msgid "max. %s Mal wiederholen"
-msgstr ""
+msgstr "Repeat max. %s times"
 
-#: admin_metadates.php:654 admin_metadates.php:656
-#: admin_seminare_assi.php:1443 admin_seminare_assi.php:1445
+#: resources/resourcesVisual.inc.php:1265
 msgid "unbegrenzt"
-msgstr "unlimited"
+msgstr "Unlimited"
 
 #: resources/resourcesVisual.inc.php:1314
 msgid "Typ des Objektes:"
-msgstr ""
+msgstr "Object type:"
 
 #: resources/resourcesVisual.inc.php:1323
 msgid "nicht zugeordnet"
-msgstr ""
+msgstr "Not allocated"
 
 #: resources/resourcesVisual.inc.php:1367
 #: resources/views/links_resources.inc.php:67
 msgid "Eigenschaften"
-msgstr ""
+msgstr "Characters"
 
 #: resources/resourcesVisual.inc.php:1420
 msgid ""
 "Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu "
 "k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!"
 msgstr ""
+"The object has not been assigned a type. In order to edit the characters, "
+"you must first determine a type!"
 
 #: resources/resourcesVisual.inc.php:1465
 msgid "verantworlicheN NutzerIn &auml;ndern:"
-msgstr ""
+msgstr "Change responsible user:"
 
 #: resources/resourcesVisual.inc.php:1468
 msgid "Sie k&ouml;nnen den/die verantwortlicheN NutzerIn nicht &auml;ndern."
-msgstr ""
+msgstr "You can not change the responsible user."
 
-#: admin_admission.php:534 details.php:171
+#: resources/resourcesVisual.inc.php:1476
 msgid "Berechtigungen:"
 msgstr "Authorisation:"
 
 #: resources/resourcesVisual.inc.php:1477
 msgid "Berechtigung hinzuf&uuml;gen"
-msgstr ""
+msgstr "Add authorisation"
 
 #: resources/resourcesVisual.inc.php:1506
 msgid "Berechtigung löschen"
-msgstr ""
+msgstr "Delete authorisation"
 
 #: resources/resourcesVisual.inc.php:1508
 msgid "Sie d&uuml;rfen diese Berechtigung leider nicht löschen"
-msgstr ""
+msgstr "Unfortunately you are not allowed to delete this authorisation"
 
 #: resources/resourcesVisual.inc.php:1523
 msgid "Es sind keine weiteren Berechtigungen eingetragen"
-msgstr ""
+msgstr "There are no further authorisations entered"
 
 #: resources/resourcesVisual.inc.php:1605
 msgid "Zeitraum:"
-msgstr ""
+msgstr "Time period:"
 
 #: resources/resourcesVisual.inc.php:1621
 msgid "Tag(e)"
-msgstr ""
+msgstr "Day(s)"
 
 #: resources/resourcesVisual.inc.php:1622
 msgid "Woche(n)"
-msgstr ""
+msgstr "Week(s)"
 
 #: resources/resourcesVisual.inc.php:1623
 msgid "Monat(e)"
-msgstr ""
+msgstr "Month(s)"
 
 #: resources/resourcesVisual.inc.php:1624
 msgid "Jahre(e)"
-msgstr ""
+msgstr "Year(s)"
 
 #: resources/resourcesVisual.inc.php:1665
 #: resources/resourcesVisual.inc.php:1724
 msgid "Anzahl der Belegungen in diesem Zeitraum:"
-msgstr ""
+msgstr "Number of allocations in this time period:"
 
 #: resources/resourcesVisual.inc.php:1669
 #, c-format
 msgid "Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>"
-msgstr ""
+msgstr "Allocation is from <b>%s</b> until <b>%s</b>, allocated by <b>%s</b>"
 
 #: resources/resourcesVisual.inc.php:1708
 msgid "Vorherige Woche anzeigen"
-msgstr ""
+msgstr "Display previous week"
 
 #: resources/resourcesVisual.inc.php:1711
 msgid "Woche"
-msgstr ""
+msgstr "Week"
 
 #: resources/resourcesVisual.inc.php:1715
 msgid "Nächste Woche anzeigen"
-msgstr ""
+msgstr "Show next week"
 
 #: resources/resourcesVisual.inc.php:1830
 msgid ""
 "folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
 msgstr ""
+"The resource should include the following characters (empty means that it "
+"doesn't matter):"
 
-#: lib/classes/StudipSemRangeTreeViewSimple.class.php:94
-#: lib/classes/StudipSemTreeViewSimple.class.php:92
+#: resources/resourcesVisual.inc.php:1940
 msgid "eine Ebene zur&uuml;ck"
-msgstr "Back one level"
+msgstr "Back a level"
 
 #: resources/resourcesVisual.inc.php:1949
 msgid "Auf dieser Ebene existieren keine weiteren Unterebenen"
-msgstr ""
+msgstr "No further sub-levels exist on this level"
 
 #: resources/resourcesVisual.inc.php:1974
 msgid "Ressourcen auf dieser Ebene:"
-msgstr ""
+msgstr "Resources on this level:"
 
 #: resources/resourcesVisual.inc.php:1988
 msgid "Es existieren keine Eintr&auml;ge auf dieser Ebene."
-msgstr ""
+msgstr "No entries exist on this level."
 
 #: resources/resourcesVisual.inc.php:2003
 msgid "Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden."
-msgstr ""
+msgstr "No entry was found for your search criteria."
 
-#: sem_browse.inc.php:431
+#: resources/lib/ScheduleWeek.class.php:200
 msgid "Zeit"
 msgstr "Time"
 
-#: admin_metadates.php:484 admin_metadates.php:486
-#: admin_seminare_assi.php:1987 admin_seminare_assi.php:1989 dates.inc.php:415
-#: mein_stundenplan.php:448 mein_stundenplan.php:590
+#: resources/lib/ScheduleWeek.class.php:203
 msgid "Montag"
 msgstr "Monday"
 
-#: admin_metadates.php:488 admin_metadates.php:490
-#: admin_seminare_assi.php:1991 admin_seminare_assi.php:1993 dates.inc.php:416
-#: mein_stundenplan.php:451 mein_stundenplan.php:591
+#: resources/lib/ScheduleWeek.class.php:207
 msgid "Dienstag"
 msgstr "Tuesday"
 
-#: admin_metadates.php:492 admin_metadates.php:494
-#: admin_seminare_assi.php:1995 admin_seminare_assi.php:1997 dates.inc.php:417
-#: mein_stundenplan.php:454 mein_stundenplan.php:592
+#: resources/lib/ScheduleWeek.class.php:211
 msgid "Mittwoch"
 msgstr "Wednesday"
 
-#: admin_metadates.php:496 admin_metadates.php:498
-#: admin_seminare_assi.php:1999 admin_seminare_assi.php:2001 dates.inc.php:418
-#: mein_stundenplan.php:457 mein_stundenplan.php:593
+#: resources/lib/ScheduleWeek.class.php:215
 msgid "Donnerstag"
 msgstr "Thursday"
 
-#: admin_metadates.php:500 admin_metadates.php:502
-#: admin_seminare_assi.php:2003 admin_seminare_assi.php:2005 dates.inc.php:419
-#: mein_stundenplan.php:460 mein_stundenplan.php:594
+#: resources/lib/ScheduleWeek.class.php:219
 msgid "Freitag"
 msgstr "Friday"
 
-#: admin_metadates.php:504 admin_metadates.php:506
-#: admin_seminare_assi.php:2007 admin_seminare_assi.php:2009 dates.inc.php:420
-#: mein_stundenplan.php:463 mein_stundenplan.php:595
+#: resources/lib/ScheduleWeek.class.php:223
 msgid "Samstag"
 msgstr "Saturday"
 
-#: admin_metadates.php:508 admin_metadates.php:510
-#: admin_seminare_assi.php:2011 admin_seminare_assi.php:2013 dates.inc.php:421
-#: mein_stundenplan.php:466 mein_stundenplan.php:596
+#: resources/lib/ScheduleWeek.class.php:227
 msgid "Sonntag"
 msgstr "Sunday"
 
 #: resources/lib/ScheduleWeek.class.php:301
 msgid "Erstellt am"
-msgstr ""
+msgstr "Created on"
 
 #: resources/lib/ShowTreeRow.class.php:15
 msgid "Keine Beschreibung"
-msgstr ""
+msgstr "No description"
 
 #: resources/views/links_resources.inc.php:46
 msgid "Liste"
-msgstr ""
+msgstr "List"
 
 #: resources/views/links_resources.inc.php:48
 msgid "Ressource"
-msgstr ""
+msgstr "Resource"
 
 #: resources/views/links_resources.inc.php:50
 msgid "Anpassen"
-msgstr ""
+msgstr "Customise"
 
 #: resources/views/links_resources.inc.php:53
 msgid "Struktur"
-msgstr ""
+msgstr "Structure"
 
-#: index.php:100 index.php:230 index.php:267 index.php:300
-#: links_openobject.inc.php:84
+#: resources/views/links_resources.inc.php:54
 msgid "Suchen"
 msgstr "Search"
 
 #: resources/views/links_resources.inc.php:55
 msgid "Neue&nbsp;Hierarchieebene&nbsp;erzeugen"
-msgstr ""
+msgstr "Create&nbsp;a&nbsp;new&nbsp;Hierarchy&nbsp;level&nbsp;"
 
 #: resources/views/links_resources.inc.php:59
 msgid "Listenausgabe"
-msgstr ""
+msgstr "List view"
 
 #: resources/views/links_resources.inc.php:69
 msgid "Eigenschaften&nbsp;bearbeiten"
-msgstr ""
+msgstr "Edit&nbsp;characters"
 
 #: resources/views/links_resources.inc.php:70
 msgid "Rechte&nbsp;bearbeiten"
-msgstr ""
+msgstr "Edit&nbsp;access&nbsp;authorisation"
 
 #: resources/views/links_resources.inc.php:73
 msgid "Belegungsplan"
-msgstr ""
+msgstr "Allocation plan"
 
 #: resources/views/links_resources.inc.php:74
 msgid "Belegung&nbsp;bearbeiten"
-msgstr ""
+msgstr "Edit&nbsp;allocation"
 
 #: resources/views/links_resources.inc.php:81
 msgid "Typen&nbsp;verwalten"
-msgstr ""
+msgstr "Administer&nbsp;types"
 
 #: resources/views/links_resources.inc.php:82
 msgid "Eigenschaften&nbsp;verwalten"
-msgstr ""
+msgstr "Administer&nbsp;characters"
 
 #: resources/views/links_resources.inc.php:85
 msgid "globale&nbsp;Rechte&nbsp;verwalten"
-msgstr ""
+msgstr "Administer&nbsp;global&nbsp;access"
 
 #: resources/views/msgs_resources.inc.php:39
 #: resources/views/msgs_resources.inc.php:120
 msgid "Fehlende Berechtigung"
-msgstr ""
+msgstr "Defective authorisation"
 
 #: resources/views/msgs_resources.inc.php:40
 msgid "Sie haben leider keine Berechtigung, das Objekt zu bearbeiten!"
-msgstr ""
+msgstr "Unfortunately you do not have authorisation to edit the object!"
 
 #: resources/views/msgs_resources.inc.php:43
 msgid "NutzerIn hat keine Berechtigung"
-msgstr ""
+msgstr "User has no authorisation"
 
 #: resources/views/msgs_resources.inc.php:44
 msgid ""
@@ -2226,54 +2212,56 @@ msgid ""
 "ist, die Belegung zu bearbeiten oder zu l&ouml;schen. Sie k&ouml;nnen dieseN "
 "NutzerIn leider nicht eintragen"
 msgstr ""
+"You are trying to enter a user, who personally can not edit or delete an "
+"allocation. Unfortunately you can not enter this user."
 
 #: resources/views/msgs_resources.inc.php:47
 msgid "Belegung eingetragen"
-msgstr ""
+msgstr "Allocation entered"
 
 #: resources/views/msgs_resources.inc.php:48
 msgid "Die Belegung wurde eingetragen"
-msgstr ""
+msgstr "The allocation has been entered"
 
 #: resources/views/msgs_resources.inc.php:51
 msgid "Belegung ver&auml;ndert"
-msgstr ""
+msgstr "Allocation changed"
 
 #: resources/views/msgs_resources.inc.php:52
 msgid "Die Belegung wurde ver&auml;ndert"
-msgstr ""
+msgstr "The allocation has been changed"
 
 #: resources/views/msgs_resources.inc.php:55
 msgid "Belegung gel&ouml;scht"
-msgstr ""
+msgstr "Allocation deleted"
 
 #: resources/views/msgs_resources.inc.php:56
 msgid "Die Belegung wurde gel&ouml;scht"
-msgstr ""
+msgstr "The allocation has been deleted"
 
 #: resources/views/msgs_resources.inc.php:59
 msgid "Eigenschaften ver&auml;ndert"
-msgstr ""
+msgstr "Property changed"
 
 #: resources/views/msgs_resources.inc.php:60
 msgid "Die Eigenschaften der Ressource wurden ver&auml;ndert"
-msgstr ""
+msgstr "The resource properties have been changed "
 
 #: resources/views/msgs_resources.inc.php:63
 msgid "Ressource gel&ouml;scht"
-msgstr ""
+msgstr "Resource deleted"
 
 #: resources/views/msgs_resources.inc.php:64
 msgid "Die Ressource wurde gel&ouml;scht"
-msgstr ""
+msgstr "The resoure has been deleted"
 
 #: resources/views/msgs_resources.inc.php:67
 msgid "Berechtigungen ver&auml;ndert"
-msgstr ""
+msgstr "Authorisation changed"
 
 #: resources/views/msgs_resources.inc.php:68
 msgid "Die Berechtigungseinstellungen der Ressource wurden ver&auml;ndert"
-msgstr ""
+msgstr "The resource authorisation settings have been changed"
 
 #: resources/views/msgs_resources.inc.php:71
 msgid "Ressource verschoben"
@@ -2288,22 +2276,27 @@ msgid ""
 "Bitte geben Sie eineN NutzerIn f&uuml;r die Belegung an, um diese Belegung "
 "zu speichern!"
 msgstr ""
+"Please enter a user for the allocation, in order to save this allocation!"
 
 #: resources/views/msgs_resources.inc.php:78
 msgid ""
 "Die Belegung konnte nicht gespeichert werden, da Sie sich mit einer anderen "
 "Belegung &uuml;berschneidet!"
 msgstr ""
+"This allocation could not be saved because it coincides with another "
+"allocation!"
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
-msgstr ""
+msgstr "There are no resources or levels to which you have access."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid ""
 "Um Ressourcen anzulegen, erzeugen Sie zun&auml;chst eine neue Ebene, indem "
 "sie &raquo;Neue Hierarchie erzeugen&laquo; anw&auml;hlen."
 msgstr ""
+"In order to set up resources, first create a new level, in which you the "
+"select &raquo;New Hierarchy&laquo;."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Anschließend k&ouml;nnen auf dieser Ebene Ressourcen anlegen"
@@ -2318,52 +2311,57 @@ msgstr ""
 #: resources/views/msgs_resources.inc.php:87
 msgid ""
 "Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
-msgstr ""
+msgstr "You have not selected a level. Therefore no list can be created."
 
 #: resources/views/msgs_resources.inc.php:87
 msgid ""
 "Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter &raquo;&Uuml;"
 "bersicht&laquo; einen Ebene bzw. Ressource in der Hierarchie aus."
 msgstr ""
+"Use the search function or select a level or resource from the hierarchy "
+"from under &raquo;Overview&laquo;."
 
 #: resources/views/msgs_resources.inc.php:90
 msgid "Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt."
-msgstr ""
+msgstr "You have not selected an object to edit."
 
 #: resources/views/msgs_resources.inc.php:90
 #: resources/views/msgs_resources.inc.php:93
 msgid "Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus."
-msgstr ""
+msgstr "Firstly, please choose an object."
 
 #: resources/views/msgs_resources.inc.php:93
 msgid "Sie haben keine Objekt zum Anzeigen ausgew&auml;hlt."
-msgstr ""
+msgstr "You have not selected an object to display."
 
 #: resources/views/msgs_resources.inc.php:96
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der "
 "Belegung an!"
 msgstr ""
+"Please enter valid values for the date, begin and end of the allocation!"
 
 #: resources/views/msgs_resources.inc.php:99
 msgid ""
 "Bitte geben Sie einen g&uuml;ltigen Wert f&uuml;r das Ende der Wiederholung "
 "an!"
-msgstr ""
+msgstr "Please enter a valid value for the end of the repetition!"
 
 #: resources/views/msgs_resources.inc.php:102
 msgid ""
 "Das Ende der Wiederholung darf nicht vor dem ersten Termin der Wiederholung "
 "liegen!"
 msgstr ""
+"The end of the repetition may not be before the first appointment of the "
+"repetition!"
 
 #: resources/views/msgs_resources.inc.php:105
 msgid "Die Startzeit darf nicht vor der Endzeit liegen!"
-msgstr ""
+msgstr "The start time may not be before the end time!"
 
 #: resources/views/msgs_resources.inc.php:108
 msgid "Die j&auml;hrliche Wiederholung darf maximal 10 Jahre dauern!"
-msgstr ""
+msgstr "The yearly repetition may take place for a maximum of 10 years!"
 
 #: resources/views/msgs_resources.inc.php:111
 msgid "Die monatliche Wiederholung darf maximal 10 Jahre dauern!"
@@ -2451,7 +2449,7 @@ msgstr ""
 msgid "Hier k&ouml;nnen Sie Ressourcen-Belegungen bearbeiten und neue anlegen."
 msgstr ""
 
-#: links_openobject.inc.php:128
+#: links_openobject.inc.php:129
 msgid "Belegungen bearbeiten"
 msgstr "Edit allocations"
 
@@ -2611,16 +2609,16 @@ msgid ""
 msgstr ""
 
 #: chat/chat_client.php:106
-msgid "Das Chatfenster wird in 3 s geschlossen!"
+msgid "Das Chatfenster wird in 3 Sekunden geschlossen!"
 msgstr ""
 
 #: chat/chat_client.php:122
-msgid "Mögliche Chat Kommandos:"
+msgid "Mögliche Chat-Kommandos:"
 msgstr ""
 
 #: chat/chat_client.php:134
 #, c-format
-msgid "Ihre Botschaft an %s wurde &uuml;bermittelt."
+msgid "Ihre Botschaft an %s wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:137
@@ -2635,7 +2633,7 @@ msgstr ""
 
 #: chat/chat_client.php:143 chat/chat_client.php:178 chat/chat_client.php:189
 #: chat/chat_client.php:205 chat/chat_client.php:292
-msgid "Fehler, falsche Kommandosyntax!"
+msgid "Fehler: Falsche Kommandosyntax!"
 msgstr ""
 
 #: chat/chat_client.php:171
@@ -2644,7 +2642,7 @@ msgid "%s wurde von %s aus dem Chat geworfen!"
 msgstr ""
 
 #: chat/chat_client.php:175
-msgid "Kein Nutzer gefunden, der entfernt werden k&ouml;nnte."
+msgid "Kein(e) Nutzer(in) zum entfernen gefunden."
 msgstr ""
 
 #: chat/chat_client.php:180
@@ -2653,20 +2651,20 @@ msgstr ""
 
 #: chat/chat_client.php:194
 #, c-format
-msgid "Ihre SMS an <b>%s</b> wurde &uuml;bermittelt."
+msgid "Ihre SMS an <b>%s</b> wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:196
-msgid "Fehler, ihre SMS konnte nicht &uuml;bermittelt werden!"
+msgid "Fehler: Ihre SMS konnte nicht verschickt werden!"
 msgstr ""
 
 #: chat/chat_client.php:210
 #, c-format
-msgid "Ihre Einladung an <b>%s</b> wurde &uuml;bermittelt."
+msgid "Ihre Einladung an <b>%s</b> wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:212
-msgid "Fehler, ihre Einladung konnte nicht &uuml;bermittelt werden!"
+msgid "Fehler: Ihre Einladung konnte nicht verschickt werden!"
 msgstr ""
 
 #: chat/chat_client.php:214
@@ -2703,7 +2701,7 @@ msgstr ""
 
 #: chat/chat_client.php:264
 #, c-format
-msgid "Sie lassen bereits seit %s eine Aufzeichnug laufen."
+msgid "Sie lassen bereits seit %s eine Aufzeichnung laufen."
 msgstr ""
 
 #: chat/chat_client.php:266
@@ -2717,19 +2715,19 @@ msgid "Die Aufzeichnung von <b>%s</b> wurde beendet."
 msgstr ""
 
 #: chat/chat_client.php:274
-msgid "Ihre Aufzeichnug wurde beendet und wird zu ihrem Browser geschickt."
+msgid "Ihre Aufzeichnug wurde beendet und wird zu Ihrem Browser geschickt."
 msgstr ""
 
 #: chat/chat_client.php:282
-msgid "Sie haben keine Aufzeichnug gestartet."
+msgid "Sie haben keine Aufzeichnung gestartet."
 msgstr ""
 
 #: chat/chat_client.php:286
-msgid "Ihre Aufzeichnug wird zu ihrem Browser geschickt."
+msgid "Ihre Aufzeichnung wird zu Ihrem Browser geschickt."
 msgstr ""
 
 #: chat/chat_client.php:289
-msgid "Sie haben keine gespeicherte Aufzeichnug."
+msgid "Sie haben keine gespeicherte Aufzeichnung."
 msgstr ""
 
 #: chat/chat_client.php:295
@@ -2746,15 +2744,15 @@ msgid "Sie mussten den Chat verlassen..."
 msgstr ""
 
 #: chat/chat_client.php:374
-msgid "Hier</a> k&ouml;nnen sie versuchen wieder einzusteigen.<br>"
+msgid "Hier</a> k&ouml;nnen Sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
 #: chat/chat_client.php:382
-msgid "<b>IDLE TIMOUT</b> - sie wurden aus dem Chat entfernt!<br>"
+msgid "<b>IDLE TIMOUT</b> - Sie wurden aus dem Chat entfernt!<br>"
 msgstr ""
 
 #: chat/chat_client.php:385
-msgid "Hier</a> k&oumlnnen sie versuchen wieder einzusteigen.<br>"
+msgid "Hier</a> k&oumlnnen Sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
 #: chat/chat_client.php:413 chat/chat_input.php:121 chat/chat_nicklist.php:77
@@ -2790,42 +2788,43 @@ msgstr ""
 
 #: chat/chat_config.php:106
 msgid ""
-" [username] - Wirft [username] aus dem Chat wenn sie Chatadmin sind, mit /"
+" [username] - Wirft [username] aus dem Chat wenn sie Chat-Admin sind, mit /"
 "kick all werfen sie alle anderen Nutzer aus dem Chat"
 msgstr ""
 
 #: chat/chat_config.php:107
-msgid " [username][msg] - Verschickt eine Studip SMS [msg] an [username]"
+msgid ""
+" [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
 msgstr ""
 
 #: chat/chat_config.php:108
 msgid ""
-" [username][msg] - Verschickt eine Chat Einladung an [username] mit "
+" [username][msg] - Verschickt eine Chat-Einladung an [username] mit "
 "optionaler Nachricht [msg]"
 msgstr ""
 
 #: chat/chat_config.php:109
 msgid ""
-" - Setzt ein zufälliges Paßwort und wirft alle Nutzer aus dem Chat, die "
-"nicht Chatadmins sind."
+" - Setzt ein zufälliges Paßwort und wirft alle NutzerInnen aus dem Chat, die "
+"nicht Chat-Admins sind."
 msgstr ""
 
 #: chat/chat_config.php:110
 msgid ""
-" - Ein eventuell gesetztes Paßwort wird gelöscht, der Chat wird damit wieder "
-"frei zugänglich."
+" - Ein eventuell gesetztes Passwort wird gelöscht, der Chat wird damit "
+"wieder frei zugänglich."
 msgstr ""
 
 #: chat/chat_config.php:111
 msgid ""
-" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird "
-"ein eventuell vorhandenes Paßwort gelöscht"
+" [password] - Setzt das Passwort für den Chat, wenn [password] leer ist wird "
+"ein eventuell vorhandenes Passwort gelöscht"
 msgstr ""
 
 #: chat/chat_config.php:112
 msgid ""
-" [start | stop | send] - Startet,beendet oder versendet eine Aufzeichnung, "
-"wenn sie Chatadmin sind"
+" [start | stop | send] - Startet, beendet oder versendet eine Aufzeichnung, "
+"wenn sie Chat-Admin sind"
 msgstr ""
 
 #: chat/chat_dummy.php:61
@@ -2938,9 +2937,9 @@ msgstr ""
 
 #: chat/chat_login.php:94
 msgid ""
-"Vermutlich sind sie noch aus einer fr&uuml;heren Chat Session angemeldet. Es "
-"dauert ca. 3-5 s bis sie automatisch aus dem Chat entfernt werden. Versuchen "
-"sie es etwas sp&auml;ter noch einmal."
+"Vermutlich sind sie noch aus einer fr&uuml;heren Chat-Session angemeldet. Es "
+"dauert ca. 3-5 Sekunden bis sie automatisch aus dem Chat entfernt werden. "
+"Versuchen Sie es etwas sp&auml;ter noch einmal."
 msgstr ""
 
 #: perminvalid.ihtml:23 perminvalid.ihtml:28
@@ -2952,15 +2951,15 @@ msgid "Fenster schließen"
 msgstr ""
 
 #: chat/chat_nicklist.php:98
-msgid "Homepage dieses Nutzers aufrufen"
+msgid "Homepage aufrufen"
 msgstr ""
 
 #: chat/chat_nicklist.php:103
-msgid "diesen Nutzer aus dem Chat werfen"
+msgid "diesen Nutzer / diese Nutzerin aus dem Chat werfen"
 msgstr ""
 
 #: chat/chat_nicklist.php:107
-msgid "diesem Nutzer eine private Botschaft senden"
+msgid "diesem Nutzer / dieser Nutzerin eine private Botschaft senden"
 msgstr ""
 
 #: chat/ChatServer.class.php:136
@@ -2975,7 +2974,7 @@ msgstr ""
 
 #: chat/ChatServer.class.php:226
 #, c-format
-msgid "%s hat sich aus StudIP ausgeloggt!"
+msgid "%s hat sich aus Stud.IP ausgeloggt!"
 msgstr ""
 
 #: chat/chat_status.php:121
@@ -3598,8 +3597,7 @@ msgstr "Message to user:"
 
 #: about.php:209 browse.php:318 institut_members.php:637
 #: institut_members.php:638 online.php:80 online.php:186 online.php:205
-#: online.php:234 sidebar_im.php:148 studipim.php:134 teilnehmer.php:522
-#: teilnehmer.php:642
+#: online.php:234 studipim.php:135 teilnehmer.php:522 teilnehmer.php:642
 msgid "Nachricht an User verschicken"
 msgstr "Send message to user"
 
@@ -5770,6 +5768,8 @@ msgid ""
 "Der Verschiebemodus ist aktiviert. Bitte w&auml;hlen sie ein Einfügesymbol %"
 "s aus, um das Element <b>%s</b> zu verschieben.%s"
 msgstr ""
+"The movement module is activated. Please select an insertion symbol %s, in "
+"order to move the element <b>%s</b>. %s"
 
 #: admin_sem_tree.php:101 lib/classes/StudipRangeTreeViewAdmin.class.php:503
 #: lib/classes/StudipSemTreeViewAdmin.class.php:433
@@ -6462,7 +6462,7 @@ msgstr "Add to buddies"
 msgid "Editieren"
 msgstr "Edit"
 
-#: contact.inc.php:313 contact.php:254
+#: contact.inc.php:313 contact.php:259
 msgid "Kontakt löschen"
 msgstr "Delete contact"
 
@@ -6491,14 +6491,12 @@ msgid "Fehler!"
 msgstr "Error!"
 
 #: contact.inc.php:432 contact.inc.php:434
-#, fuzzy
 msgid "Diesen Eintrag löschen"
-msgstr "Delete this appointment"
+msgstr "Delete this entry"
 
 #: contact.inc.php:434
-#, fuzzy
 msgid "Diesen Eintrag nach oben schieben"
-msgstr "Move this element up"
+msgstr "Move this entry to the top"
 
 #: contact.inc.php:439
 msgid "Sie können hier eigene Rubriken für diesen Kontakt anlegen:"
@@ -6520,7 +6518,7 @@ msgstr "No entries in this area"
 msgid "Mein Addressbuch"
 msgstr "My address book"
 
-#: contact.php:128 contact.php:174 contact.php:191
+#: contact.php:128 contact.php:174 contact.php:193
 msgid "1 Eintrag"
 msgstr "1 entry"
 
@@ -6542,9 +6540,8 @@ msgid "In Addressbuch eintragen"
 msgstr "Add to address book"
 
 #: contact.php:147
-#, fuzzy
 msgid "keine Treffer zum Suchbegriff:"
-msgstr "no matches"
+msgstr "no matches for these search criteria"
 
 #: contact.php:150
 msgid "neue Suche"
@@ -6562,46 +6559,42 @@ msgstr "User search"
 msgid "Person suchen"
 msgstr "User search "
 
-#: contact.php:174 contact.php:191
+#: contact.php:174 contact.php:193
 #, c-format
 msgid "%s Einträge"
 msgstr "%s entries"
 
-#: contact.php:191
+#: contact.php:193
 msgid "keine Einträge"
 msgstr "%s entries "
 
-#: contact.php:208
+#: contact.php:210
 msgid "Alle Gruppen"
 msgstr "All groups"
 
-#: contact.php:246
-#, fuzzy
+#: contact.php:251
 msgid "Nachricht an Kontakt"
-msgstr "Message to user:"
-
-#: contact.php:248
-#, fuzzy
-msgid "Kontakt zuklappen"
-msgstr "Close object"
-
-#: contact.php:250
-#, fuzzy
-msgid "Kontakt aufklappen"
-msgstr "Open object"
-
-#: contact.php:252
-msgid "Buddystatus"
-msgstr ""
+msgstr "Message to contact:"
 
 #: contact.php:253
+msgid "Kontakt zuklappen"
+msgstr "Close contact"
+
+#: contact.php:255
+msgid "Kontakt aufklappen"
+msgstr "Open contact"
+
+#: contact.php:257
+msgid "Buddystatus"
+msgstr "Buddy status"
+
+#: contact.php:258
 msgid "Eigene Rubriken"
 msgstr ""
 
-#: contact.php:256
-#, fuzzy
+#: contact.php:261
 msgid "Bedienung:"
-msgstr "Allocation"
+msgstr ""
 
 #: crcloginform.ihtml:46
 msgid "Stud.IP - Login"
@@ -8396,26 +8389,25 @@ msgstr "There are %s people in the chat"
 
 #: header.php:180
 msgid "ein aktiver Chatraum"
-msgstr ""
+msgstr "An active chat room"
 
 #: header.php:182
 #, c-format
 msgid "%s aktive Chaträume"
-msgstr ""
+msgstr "%s active chat rooms"
 
 #: header.php:185 header.php:187 header.php:189
 msgid "Chat"
 msgstr "Chat"
 
 #: header.php:185
-#, fuzzy
 msgid "Sie haben eine Chateinladung"
-msgstr "You have a new message!"
+msgstr "You have a chat invitation"
 
 #: header.php:185
-#, fuzzy, c-format
+#, c-format
 msgid "Sie haben %s Chateinladungen"
-msgstr "You have %s old messages!"
+msgstr "You have %s chat invitations"
 
 #: header.php:197 header.php:200 header.php:202
 msgid "Online"
@@ -8946,23 +8938,23 @@ msgstr "Edit literature and links"
 msgid "Belegung"
 msgstr "Allocation"
 
-#: links_openobject.inc.php:130
+#: links_openobject.inc.php:131
 msgid "Ressourcen verwalten"
 msgstr "Administer resources"
 
-#: links_openobject.inc.php:137
+#: links_openobject.inc.php:138
 msgid "Lernmodule dieser Veranstaltung"
 msgstr "Learning modules for this course"
 
-#: links_openobject.inc.php:139
+#: links_openobject.inc.php:140
 msgid "Lernmodule hinzuf&uuml;gen / entfernen"
 msgstr "Add / delete learning modules"
 
-#: links_openobject.inc.php:142
+#: links_openobject.inc.php:143
 msgid "Mein ILIAS-Account"
 msgstr "My ILIAS-Account"
 
-#: links_openobject.inc.php:148
+#: links_openobject.inc.php:149
 #, c-format
 msgid ""
 "Sie befinden sich in der Einrichtung: %s, letzter Besuch: %s, Ihr Status in "
@@ -8971,7 +8963,7 @@ msgstr ""
 "You are in the institute: %s, last visit: %s, your status in this institute: "
 "%s"
 
-#: links_openobject.inc.php:150
+#: links_openobject.inc.php:151
 #, c-format
 msgid ""
 "Sie befinden sich in der Veranstaltung: %s, letzter Besuch: %s, Ihr Status "
@@ -9410,7 +9402,7 @@ msgstr "Here you can change the settings for the Stud.IP messaging."
 
 #: messagingSettings.inc.php:55
 msgid "Systeminterne Kurznachrichten (SMS)"
-msgstr ""
+msgstr "Internal system message (SMS)"
 
 #: messagingSettings.inc.php:61
 msgid "automatisches L&ouml;schen:"
@@ -10637,96 +10629,89 @@ msgstr ""
 msgid "News bearbeiten"
 msgstr "Edit news"
 
-#: sidebar_im.php:69 studipim.php:69
+#: sidebar_im.php:79
 #, c-format
-msgid " Sie wurden von <b>%s</b> zum chatten eingeladen!"
-msgstr "<b>%s</b> has invited you to chat! "
-
-#: sidebar_im.php:72 studipim.php:72
-#, c-format
-msgid ""
-" Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s"
-"[lesen]%s"
+msgid "&nbsp;Chateinladung von <b>%s</b>"
 msgstr ""
-"You have received an automatically created <b>system message</b>! %s[read]%s"
 
-#: sidebar_im.php:74 studipim.php:74
-#, c-format
-msgid " Sie haben eine Nachricht von <b>%s</b> erhalten! %s[lesen]%s"
+#: sidebar_im.php:82
+#, fuzzy, c-format
+msgid "&nbsp;<b>Systemnachricht</b> %s[lesen]%s"
+msgstr "%s old message(s) %s[read]%s"
+
+#: sidebar_im.php:84
+#, fuzzy, c-format
+msgid "&nbsp;Nachricht von <br /><b>%s</b> %s[lesen]%s"
 msgstr "You have received a message from <b>%s</b>! %s[read]%s"
 
-#: sidebar_im.php:145 studipim.php:131
-msgid "Buddies:"
-msgstr "Buddies:"
+#: sidebar_im.php:146 studipim.php:140
+msgid "Kein Buddy ist online."
+msgstr "No buddy is online."
 
-#: sidebar_im.php:147 studipim.php:133
-#, c-format
-msgid "letztes Lebenszeichen: %s"
-msgstr "Last signs of life: %s"
-
-#: sidebar_im.php:153 studipim.php:139
-#, fuzzy
-msgid "Kein Nutzer ist online."
-msgstr "No other user is online."
-
-#: sidebar_im.php:158 studipim.php:144
+#: sidebar_im.php:151 studipim.php:145
 msgid "Es ist ein anderer Nutzer online."
 msgstr "There is one other buddy online."
 
-#: sidebar_im.php:159 sidebar_im.php:163 studipim.php:145 studipim.php:149
+#: sidebar_im.php:152 sidebar_im.php:156 studipim.php:146 studipim.php:150
 msgid "Wer?"
 msgstr "Who?"
 
-#: sidebar_im.php:162 studipim.php:148
+#: sidebar_im.php:155 studipim.php:149
 #, c-format
 msgid "Es sind %s anderere Nutzer online."
 msgstr "There are %s other users online."
 
-#: sidebar_im.php:169
-#, fuzzy, c-format
+#: sidebar_im.php:163
+#, c-format
 msgid "%s alte Nachricht(en) %s[lesen]%s"
-msgstr "%s old message(s) &nbsp;%s[read]%s"
+msgstr "%s old message(s) %s[read]%s"
 
-#: sidebar_im.php:170 studipim.php:156
+#: sidebar_im.php:165
+#, fuzzy
+msgid "Keine Nachrichten"
+msgstr "No new messages"
+
+#: sidebar_im.php:167 studipim.php:157
 msgid "Keine alten Nachrichten"
 msgstr "No old messages"
 
-#: sidebar_im.php:175 studipim.php:161
-msgid "Keine neuen Nachrichten"
+#: sidebar_im.php:170
+#, fuzzy
+msgid "neue Nachrichten:"
 msgstr "No new messages"
 
-#: sidebar_im.php:186 studipim.php:172
+#: sidebar_im.php:183 studipim.php:173
 #, c-format
 msgid "Ihre Nachricht an <b>%s</b> wurde verschickt!"
 msgstr "Your message to <b>%s</b> has been sent!"
 
-#: sidebar_im.php:189 studipim.php:175
+#: sidebar_im.php:186 studipim.php:176
 msgid "Ihre Nachricht konnte nicht verschickt werden!"
 msgstr "Your message could not be sent!"
 
-#: sidebar_im.php:196 studipim.php:182
+#: sidebar_im.php:193 studipim.php:183
 msgid "automatisch erzeugte Systemnachricht:"
 msgstr "Automatically created system message:"
 
-#: sidebar_im.php:199 studipim.php:185
+#: sidebar_im.php:196 studipim.php:186
 #, c-format
 msgid "Nachricht von: <b>%s</b>"
 msgstr "Message from: <b>%s</b>"
 
-#: sidebar_im.php:202 studipim.php:188
+#: sidebar_im.php:199 studipim.php:189
 msgid "Diese Nachricht direkt beantworten"
 msgstr "Reply immediately to this message"
 
-#: sidebar_im.php:207 studipim.php:193
+#: sidebar_im.php:204 studipim.php:194
 #, c-format
 msgid "Ihre Nachricht an <b>%s:</b>"
 msgstr "Your message to <b>%s:</b>"
 
-#: sidebar_im.php:212 studipim.php:198
+#: sidebar_im.php:209 studipim.php:199
 msgid "Nachricht versenden"
 msgstr "Send message"
 
-#: sidebar_im.php:213 studipim.php:199
+#: sidebar_im.php:210 studipim.php:200
 msgid "Vorgang abbrechen"
 msgstr "Cancel procedure"
 
@@ -10797,7 +10782,7 @@ msgstr "Message written to"
 #: sms.php:177
 #, c-format
 msgid "alle Mitglieder der Gruppe: %s (%s Person(en))"
-msgstr ""
+msgstr "all members of the group: %s (%s user(s))"
 
 #: sms.php:185
 msgid "Diese Nachricht (auch) an alle meine Buddies versenden"
@@ -10830,7 +10815,7 @@ msgstr "automatic system message sent to %s."
 #: sms.php:294
 #, c-format
 msgid "gesendet von %s am %s"
-msgstr "Sent from %s to %s."
+msgstr "Sent from %s at %s."
 
 #: sms.php:352
 msgid "Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor."
@@ -10845,33 +10830,32 @@ msgid "Systemnachricht an alle Gruppenmitglieder verschicken"
 msgstr "Send system message to all group members."
 
 #: statusgruppen.php:101 statusgruppen.php:133
-#, fuzzy
 msgid "Systemnachricht an User verschicken"
-msgstr "Send message to user"
+msgstr "Send system message to user"
 
 #: statusgruppen.php:120
-#, fuzzy
 msgid "keiner Funktion oder Gruppe zugeordnet"
-msgstr "no function allocated"
+msgstr "Not allocated to a function or group"
 
 #: statusgruppen.php:179
 msgid "Nicht alle Personen sind einer Funktion / Gruppe zugeordnet."
-msgstr ""
+msgstr "Not all users are allocated to a function / group."
 
 #: statusgruppen.php:182
 msgid "Alle Personen sind mindestens einer Funktion / Gruppe zugeordnet."
-msgstr ""
+msgstr "All users are allocated to at least one function / group."
 
 #: statusgruppen.php:185
-#, fuzzy
 msgid "Niemand ist einer Funktion / Gruppe zugeordnet."
-msgstr "no function allocated"
+msgstr "Noone is allocated to a function / group."
 
 #: statusgruppen.php:207
 msgid ""
 "Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie das "
 "normale Briefsymbol."
 msgstr ""
+"In order to send an internal system message to users, use the normal letter "
+"symbol."
 
 #: statusgruppen.php:211
 #, c-format
@@ -10879,65 +10863,95 @@ msgid ""
 "Um Gruppen anzulegen und Personen zuzuordnen nutzen Sie %sFunktionen / "
 "Gruppen verwalten%s."
 msgstr ""
+"In order to add groups and allocate users, use %sadminister functions / "
+"groups%s."
 
 #: statusgruppen.php:215
 msgid ""
 "Mit dem erweiterten Briefsymbol k&ouml;nnen Sie allen Gruppenmitgliedern "
 "eine Mail schicken."
 msgstr ""
+"You can send all group members a mail with the following letter symbol."
 
 #: statusgruppen.php:219
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Um eine Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken "
 "Sie %shier%s."
-msgstr "You have been entered as participant for this course "
+msgstr "Click %shere%s in order to send all course participants a mail."
 
-#: studipim.php:155
+#: studipim.php:69
+#, c-format
+msgid " Sie wurden von <b>%s</b> zum chatten eingeladen!"
+msgstr "<b>%s</b> has invited you to chat! "
+
+#: studipim.php:72
+#, c-format
+msgid ""
+" Sie haben eine automatisch erzeugte <b>Systemnachricht</b> erhalten! %s"
+"[lesen]%s"
+msgstr ""
+"You have received an automatically created <b>system message</b>! %s[read]%s"
+
+#: studipim.php:74
+#, c-format
+msgid " Sie haben eine Nachricht von <b>%s</b> erhalten! %s[lesen]%s"
+msgstr "You have received a message from <b>%s</b>! %s[read]%s"
+
+#: studipim.php:132
+msgid "Buddies:"
+msgstr "Buddies:"
+
+#: studipim.php:134
+#, c-format
+msgid "letztes Lebenszeichen: %s"
+msgstr "Last signs of life: %s"
+
+#: studipim.php:156
 #, c-format
 msgid "%s alte Nachricht(en)&nbsp;%s[lesen]%s"
 msgstr "%s old message(s) &nbsp;%s[read]%s"
 
-#: studipim.php:196
+#: studipim.php:162
+msgid "Keine neuen Nachrichten"
+msgstr "No new messages"
+
+#: studipim.php:197
 msgid "Smileys</a> k&ouml;nnen verwendet werden"
 msgstr "Smileys</a>can be used"
 
 #: suchen.inc.php:133
-#, fuzzy
 msgid "Bitte geben Sie hier Ihren Suchbegriff ein:"
-msgstr "Please enter your search criteria here:"
+msgstr "Please enter your search criteria here: "
 
 #: suchen.inc.php:145
-#, fuzzy
 msgid "Suchbegriff:"
-msgstr "Search area:"
+msgstr "Search criteria:"
 
 #: suchen.inc.php:153
 msgid "Suchen in den Feldern:"
-msgstr ""
+msgstr "Search in the fields:"
 
 #: suchen.inc.php:201
 msgid "Ergebnis der Suche nach"
-msgstr ""
+msgstr "Result of the search for "
 
 #: suchen.inc.php:218
-#, fuzzy, c-format
+#, c-format
 msgid "Ihre Suche ergab %s Treffer"
-msgstr "Your search revealed %s matches."
+msgstr "Your search revealed %s matches"
 
 #: suchen.inc.php:220
-#, fuzzy
 msgid "Ihre Suche ergab leider keine Treffer"
-msgstr "The search did not reveal with any matches!"
+msgstr "Unfortunately your search did not reveal any matches"
 
 #: suchen.inc.php:252
 msgid "zeig mir die Neuesten"
-msgstr ""
+msgstr "Show me the most up to date"
 
 #: suchen.inc.php:255
-#, fuzzy
 msgid "zeig mit alle Treffer"
-msgstr "no matches"
+msgstr "Show me all matches"
 
 #: teilnehmer.php:65
 msgid "Die Aktivit&auml;tsanzeige wurde aktiviert."
@@ -11370,13 +11384,13 @@ msgid "Ein Datenfeld wurde gel&ouml;scht."
 msgstr "A data field has been deleted"
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:503
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen Sie ein "
 "Einfügesymbol %s aus, um das Element zu verschieben."
 msgstr ""
 "This element has been selected to be moved. Please select an insertion "
-"symbol %s,"
+"symbol %s, in order to move the element."
 
 #: lib/classes/StudipRangeTreeViewAdmin.class.php:510
 #: lib/classes/StudipSemTreeViewAdmin.class.php:440
@@ -11677,12 +11691,13 @@ msgid "Dieses Element hat keine Unterelemente"
 msgstr "This element has no sub-elements"
 
 #: lib/classes/StudipSemTreeViewAdmin.class.php:433
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen sie ein "
 "Einfügesymbol %s aus, um das Element zu verschieben."
 msgstr ""
-"This element has been marked to move. Please select an insertion symbol %s."
+"This element has been marked to move. Please select an insertion symbol %s, "
+"in order to move the element."
 
 #: lib/classes/StudipSemTreeViewAdmin.class.php:464
 msgid "Stud.IP Fakult&auml;t einf&uuml;gen:"
@@ -11751,6 +11766,149 @@ msgstr "Open all sub-elements"
 #: lib/classes/TreeView.class.php:309
 msgid "Alle Unterelemente schließen"
 msgstr "Close all sub-elements"
+
+#: resources/resourcesVisual.inc.php:350
+msgid ""
+"Klicken Sie suf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
+"verschieben"
+msgstr ""
+
+#: chat/chat_client.php:106
+msgid "Das Chatfenster wird in 3 s geschlossen!"
+msgstr ""
+
+#: chat/chat_client.php:122
+msgid "Mögliche Chat Kommandos:"
+msgstr ""
+
+#: chat/chat_client.php:134
+#, c-format
+msgid "Ihre Botschaft an %s wurde &uuml;bermittelt."
+msgstr ""
+
+#: chat/chat_client.php:143 chat/chat_client.php:178 chat/chat_client.php:189
+#: chat/chat_client.php:205 chat/chat_client.php:292
+msgid "Fehler, falsche Kommandosyntax!"
+msgstr ""
+
+#: chat/chat_client.php:175
+msgid "Kein Nutzer gefunden, der entfernt werden k&ouml;nnte."
+msgstr ""
+
+#: chat/chat_client.php:194
+#, c-format
+msgid "Ihre SMS an <b>%s</b> wurde &uuml;bermittelt."
+msgstr ""
+
+#: chat/chat_client.php:196
+msgid "Fehler, ihre SMS konnte nicht &uuml;bermittelt werden!"
+msgstr ""
+
+#: chat/chat_client.php:210
+#, c-format
+msgid "Ihre Einladung an <b>%s</b> wurde &uuml;bermittelt."
+msgstr ""
+
+#: chat/chat_client.php:212
+msgid "Fehler, ihre Einladung konnte nicht &uuml;bermittelt werden!"
+msgstr ""
+
+#: chat/chat_client.php:264
+#, c-format
+msgid "Sie lassen bereits seit %s eine Aufzeichnug laufen."
+msgstr ""
+
+#: chat/chat_client.php:274
+msgid "Ihre Aufzeichnug wurde beendet und wird zu ihrem Browser geschickt."
+msgstr ""
+
+#: chat/chat_client.php:282
+msgid "Sie haben keine Aufzeichnug gestartet."
+msgstr ""
+
+#: chat/chat_client.php:286
+msgid "Ihre Aufzeichnug wird zu ihrem Browser geschickt."
+msgstr ""
+
+#: chat/chat_client.php:289
+msgid "Sie haben keine gespeicherte Aufzeichnug."
+msgstr ""
+
+#: chat/chat_client.php:374
+msgid "Hier</a> k&ouml;nnen sie versuchen wieder einzusteigen.<br>"
+msgstr ""
+
+#: chat/chat_client.php:382
+msgid "<b>IDLE TIMOUT</b> - sie wurden aus dem Chat entfernt!<br>"
+msgstr ""
+
+#: chat/chat_client.php:385
+msgid "Hier</a> k&oumlnnen sie versuchen wieder einzusteigen.<br>"
+msgstr ""
+
+#: chat/chat_config.php:106
+msgid ""
+" [username] - Wirft [username] aus dem Chat wenn sie Chatadmin sind, mit /"
+"kick all werfen sie alle anderen Nutzer aus dem Chat"
+msgstr ""
+
+#: chat/chat_config.php:107
+msgid " [username][msg] - Verschickt eine Studip SMS [msg] an [username]"
+msgstr ""
+
+#: chat/chat_config.php:108
+msgid ""
+" [username][msg] - Verschickt eine Chat Einladung an [username] mit "
+"optionaler Nachricht [msg]"
+msgstr ""
+
+#: chat/chat_config.php:109
+msgid ""
+" - Setzt ein zufälliges Paßwort und wirft alle Nutzer aus dem Chat, die "
+"nicht Chatadmins sind."
+msgstr ""
+
+#: chat/chat_config.php:110
+msgid ""
+" - Ein eventuell gesetztes Paßwort wird gelöscht, der Chat wird damit wieder "
+"frei zugänglich."
+msgstr ""
+
+#: chat/chat_config.php:111
+msgid ""
+" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird "
+"ein eventuell vorhandenes Paßwort gelöscht"
+msgstr ""
+
+#: chat/chat_config.php:112
+msgid ""
+" [start | stop | send] - Startet,beendet oder versendet eine Aufzeichnung, "
+"wenn sie Chatadmin sind"
+msgstr ""
+
+#: chat/chat_login.php:94
+msgid ""
+"Vermutlich sind sie noch aus einer fr&uuml;heren Chat Session angemeldet. Es "
+"dauert ca. 3-5 s bis sie automatisch aus dem Chat entfernt werden. Versuchen "
+"sie es etwas sp&auml;ter noch einmal."
+msgstr ""
+
+#: chat/chat_nicklist.php:98
+msgid "Homepage dieses Nutzers aufrufen"
+msgstr ""
+
+#: chat/chat_nicklist.php:103
+msgid "diesen Nutzer aus dem Chat werfen"
+msgstr ""
+
+#: chat/chat_nicklist.php:107
+msgid "diesem Nutzer eine private Botschaft senden"
+msgstr ""
+
+#: chat/ChatServer.class.php:226
+#, c-format
+msgid "%s hat sich aus StudIP ausgeloggt!"
+msgstr ""
 
 #: lernmodule/lernmodul_linking_functions.inc.php:36
 msgid "Es gibt eine Test-Frage zu der Lerneinheit."
@@ -14427,11 +14585,11 @@ msgstr ""
 msgid "Unterelement(e) ffnen"
 msgstr ""
 
+#~ msgid "Kein Nutzer ist online."
+#~ msgstr "No user is online."
+
 #~ msgid "Sie wurden zum Chatten eingeladen!"
 #~ msgstr "You have been invited to the chat!"
 
 #~ msgid "Sie sind alleine im Chat"
 #~ msgstr "You are alone in the chat"
-
-#~ msgid "Kein Buddy ist online."
-#~ msgstr "No buddy is online."

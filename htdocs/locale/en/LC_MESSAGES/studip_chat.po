@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-16 20:08+0100\n"
+"POT-Creation-Date: 2003-03-17 12:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,16 +36,16 @@ msgid ""
 msgstr ""
 
 #: chat/chat_client.php:106
-msgid "Das Chatfenster wird in 3 s geschlossen!"
+msgid "Das Chatfenster wird in 3 Sekunden geschlossen!"
 msgstr ""
 
 #: chat/chat_client.php:122
-msgid "Mögliche Chat Kommandos:"
+msgid "Mögliche Chat-Kommandos:"
 msgstr ""
 
 #: chat/chat_client.php:134
 #, c-format
-msgid "Ihre Botschaft an %s wurde &uuml;bermittelt."
+msgid "Ihre Botschaft an %s wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:137
@@ -60,7 +60,7 @@ msgstr ""
 
 #: chat/chat_client.php:143 chat/chat_client.php:178 chat/chat_client.php:189
 #: chat/chat_client.php:205 chat/chat_client.php:292
-msgid "Fehler, falsche Kommandosyntax!"
+msgid "Fehler: Falsche Kommandosyntax!"
 msgstr ""
 
 #: chat/chat_client.php:171
@@ -69,7 +69,7 @@ msgid "%s wurde von %s aus dem Chat geworfen!"
 msgstr ""
 
 #: chat/chat_client.php:175
-msgid "Kein Nutzer gefunden, der entfernt werden k&ouml;nnte."
+msgid "Kein(e) Nutzer(in) zum entfernen gefunden."
 msgstr ""
 
 #: chat/chat_client.php:180
@@ -78,20 +78,20 @@ msgstr ""
 
 #: chat/chat_client.php:194
 #, c-format
-msgid "Ihre SMS an <b>%s</b> wurde &uuml;bermittelt."
+msgid "Ihre SMS an <b>%s</b> wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:196
-msgid "Fehler, ihre SMS konnte nicht &uuml;bermittelt werden!"
+msgid "Fehler: Ihre SMS konnte nicht verschickt werden!"
 msgstr ""
 
 #: chat/chat_client.php:210
 #, c-format
-msgid "Ihre Einladung an <b>%s</b> wurde &uuml;bermittelt."
+msgid "Ihre Einladung an <b>%s</b> wurde verschickt."
 msgstr ""
 
 #: chat/chat_client.php:212
-msgid "Fehler, ihre Einladung konnte nicht &uuml;bermittelt werden!"
+msgid "Fehler: Ihre Einladung konnte nicht verschickt werden!"
 msgstr ""
 
 #: chat/chat_client.php:214
@@ -128,7 +128,7 @@ msgstr ""
 
 #: chat/chat_client.php:264
 #, c-format
-msgid "Sie lassen bereits seit %s eine Aufzeichnug laufen."
+msgid "Sie lassen bereits seit %s eine Aufzeichnung laufen."
 msgstr ""
 
 #: chat/chat_client.php:266
@@ -142,19 +142,19 @@ msgid "Die Aufzeichnung von <b>%s</b> wurde beendet."
 msgstr ""
 
 #: chat/chat_client.php:274
-msgid "Ihre Aufzeichnug wurde beendet und wird zu ihrem Browser geschickt."
+msgid "Ihre Aufzeichnug wurde beendet und wird zu Ihrem Browser geschickt."
 msgstr ""
 
 #: chat/chat_client.php:282
-msgid "Sie haben keine Aufzeichnug gestartet."
+msgid "Sie haben keine Aufzeichnung gestartet."
 msgstr ""
 
 #: chat/chat_client.php:286
-msgid "Ihre Aufzeichnug wird zu ihrem Browser geschickt."
+msgid "Ihre Aufzeichnung wird zu Ihrem Browser geschickt."
 msgstr ""
 
 #: chat/chat_client.php:289
-msgid "Sie haben keine gespeicherte Aufzeichnug."
+msgid "Sie haben keine gespeicherte Aufzeichnung."
 msgstr ""
 
 #: chat/chat_client.php:295
@@ -171,15 +171,15 @@ msgid "Sie mussten den Chat verlassen..."
 msgstr ""
 
 #: chat/chat_client.php:374
-msgid "Hier</a> k&ouml;nnen sie versuchen wieder einzusteigen.<br>"
+msgid "Hier</a> k&ouml;nnen Sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
 #: chat/chat_client.php:382
-msgid "<b>IDLE TIMOUT</b> - sie wurden aus dem Chat entfernt!<br>"
+msgid "<b>IDLE TIMOUT</b> - Sie wurden aus dem Chat entfernt!<br>"
 msgstr ""
 
 #: chat/chat_client.php:385
-msgid "Hier</a> k&oumlnnen sie versuchen wieder einzusteigen.<br>"
+msgid "Hier</a> k&oumlnnen Sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
 #: chat/chat_client.php:413 chat/chat_input.php:121 chat/chat_nicklist.php:77
@@ -215,42 +215,43 @@ msgstr ""
 
 #: chat/chat_config.php:106
 msgid ""
-" [username] - Wirft [username] aus dem Chat wenn sie Chatadmin sind, mit /"
+" [username] - Wirft [username] aus dem Chat wenn sie Chat-Admin sind, mit /"
 "kick all werfen sie alle anderen Nutzer aus dem Chat"
 msgstr ""
 
 #: chat/chat_config.php:107
-msgid " [username][msg] - Verschickt eine Studip SMS [msg] an [username]"
+msgid ""
+" [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
 msgstr ""
 
 #: chat/chat_config.php:108
 msgid ""
-" [username][msg] - Verschickt eine Chat Einladung an [username] mit "
+" [username][msg] - Verschickt eine Chat-Einladung an [username] mit "
 "optionaler Nachricht [msg]"
 msgstr ""
 
 #: chat/chat_config.php:109
 msgid ""
-" - Setzt ein zufälliges Paßwort und wirft alle Nutzer aus dem Chat, die "
-"nicht Chatadmins sind."
+" - Setzt ein zufälliges Paßwort und wirft alle NutzerInnen aus dem Chat, die "
+"nicht Chat-Admins sind."
 msgstr ""
 
 #: chat/chat_config.php:110
 msgid ""
-" - Ein eventuell gesetztes Paßwort wird gelöscht, der Chat wird damit wieder "
-"frei zugänglich."
+" - Ein eventuell gesetztes Passwort wird gelöscht, der Chat wird damit "
+"wieder frei zugänglich."
 msgstr ""
 
 #: chat/chat_config.php:111
 msgid ""
-" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird "
-"ein eventuell vorhandenes Paßwort gelöscht"
+" [password] - Setzt das Passwort für den Chat, wenn [password] leer ist wird "
+"ein eventuell vorhandenes Passwort gelöscht"
 msgstr ""
 
 #: chat/chat_config.php:112
 msgid ""
-" [start | stop | send] - Startet,beendet oder versendet eine Aufzeichnung, "
-"wenn sie Chatadmin sind"
+" [start | stop | send] - Startet, beendet oder versendet eine Aufzeichnung, "
+"wenn sie Chat-Admin sind"
 msgstr ""
 
 #: chat/chat_dummy.php:61
@@ -363,9 +364,9 @@ msgstr ""
 
 #: chat/chat_login.php:94
 msgid ""
-"Vermutlich sind sie noch aus einer fr&uuml;heren Chat Session angemeldet. Es "
-"dauert ca. 3-5 s bis sie automatisch aus dem Chat entfernt werden. Versuchen "
-"sie es etwas sp&auml;ter noch einmal."
+"Vermutlich sind sie noch aus einer fr&uuml;heren Chat-Session angemeldet. Es "
+"dauert ca. 3-5 Sekunden bis sie automatisch aus dem Chat entfernt werden. "
+"Versuchen Sie es etwas sp&auml;ter noch einmal."
 msgstr ""
 
 #: chat/chat_login.php:122
@@ -377,15 +378,15 @@ msgid "Fenster schließen"
 msgstr ""
 
 #: chat/chat_nicklist.php:98
-msgid "Homepage dieses Nutzers aufrufen"
+msgid "Homepage aufrufen"
 msgstr ""
 
 #: chat/chat_nicklist.php:103
-msgid "diesen Nutzer aus dem Chat werfen"
+msgid "diesen Nutzer / diese Nutzerin aus dem Chat werfen"
 msgstr ""
 
 #: chat/chat_nicklist.php:107
-msgid "diesem Nutzer eine private Botschaft senden"
+msgid "diesem Nutzer / dieser Nutzerin eine private Botschaft senden"
 msgstr ""
 
 #: chat/ChatServer.class.php:136
@@ -400,7 +401,7 @@ msgstr ""
 
 #: chat/ChatServer.class.php:226
 #, c-format
-msgid "%s hat sich aus StudIP ausgeloggt!"
+msgid "%s hat sich aus Stud.IP ausgeloggt!"
 msgstr ""
 
 #: chat/chat_status.php:121

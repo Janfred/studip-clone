@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-16 20:08+0100\n"
+"POT-Creation-Date: 2003-03-17 12:39+0100\n"
 "PO-Revision-Date: 2003-03-17 12:33+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -108,12 +108,12 @@ msgid ""
 "Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das "
 "Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."
 msgstr ""
-"This object has been selected to move.  Please select the insertion symbol "
-"%s in order to move to the desired level."
+"This object has been selected to move.  Please select the insertion symbol %"
+"s in order to move to the desired level."
 
 #: resources/resourcesVisual.inc.php:350
 msgid ""
-"Klicken Sie suf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
+"Klicken Sie auf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
 "verschieben"
 msgstr ""
 
@@ -259,7 +259,9 @@ msgstr "Create a new allocation"
 msgid ""
 "Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in "
 "diesem Raum stattfindet."
-msgstr "This allocation is a regular course appointment which takes place in this room."
+msgstr ""
+"This allocation is a regular course appointment which takes place in this "
+"room."
 
 #: resources/resourcesVisual.inc.php:1071
 #, c-format
@@ -272,7 +274,9 @@ msgstr "You can only edit the times of this allocation within the course %s!"
 msgid ""
 "Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum "
 "stattfindet."
-msgstr "This allocation is a single appointment of a course which takes place in this room."
+msgstr ""
+"This allocation is a single appointment of a course which takes place in "
+"this room."
 
 #: resources/resourcesVisual.inc.php:1073
 #, c-format
@@ -561,8 +565,11 @@ msgid "N‰chste Woche anzeigen"
 msgstr "Show next week"
 
 #: resources/resourcesVisual.inc.php:1830
-msgid "folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
-msgstr "The resource should include the following characters (empty means that it doesn't matter):"
+msgid ""
+"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
+msgstr ""
+"The resource should include the following characters (empty means that it "
+"doesn't matter):"
 
 #: resources/resourcesVisual.inc.php:1940
 msgid "eine Ebene zur&uuml;ck"
@@ -703,8 +710,8 @@ msgid ""
 "ist, die Belegung zu bearbeiten oder zu l&ouml;schen. Sie k&ouml;nnen dieseN "
 "NutzerIn leider nicht eintragen"
 msgstr ""
-"You are trying to enter a user, who personally can not edit or delete an allocation. "
-"Unfortunately you can not enter this user."
+"You are trying to enter a user, who personally can not edit or delete an "
+"allocation. Unfortunately you can not enter this user."
 
 #: resources/views/msgs_resources.inc.php:47
 msgid "Belegung eingetragen"
@@ -766,13 +773,16 @@ msgstr ""
 msgid ""
 "Bitte geben Sie eineN NutzerIn f&uuml;r die Belegung an, um diese Belegung "
 "zu speichern!"
-msgstr "Please enter a user for the allocation, in order to save this allocation!"
+msgstr ""
+"Please enter a user for the allocation, in order to save this allocation!"
 
 #: resources/views/msgs_resources.inc.php:78
 msgid ""
 "Die Belegung konnte nicht gespeichert werden, da Sie sich mit einer anderen "
 "Belegung &uuml;berschneidet!"
-msgstr "This allocation could not be saved because it coincides with another allocation!"
+msgstr ""
+"This allocation could not be saved because it coincides with another "
+"allocation!"
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
@@ -783,8 +793,8 @@ msgid ""
 "Um Ressourcen anzulegen, erzeugen Sie zun&auml;chst eine neue Ebene, indem "
 "sie &raquo;Neue Hierarchie erzeugen&laquo; anw&auml;hlen."
 msgstr ""
-"In order to set up resources, first create a new level, in which "
-"you the select &raquo;New Hierarchy&laquo;."
+"In order to set up resources, first create a new level, in which you the "
+"select &raquo;New Hierarchy&laquo;."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Anschlieﬂend k&ouml;nnen auf dieser Ebene Ressourcen anlegen"
@@ -797,7 +807,8 @@ msgid ""
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:87
-msgid "Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
+msgid ""
+"Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
 msgstr "You have not selected a level. Therefore no list can be created."
 
 #: resources/views/msgs_resources.inc.php:87
@@ -825,7 +836,8 @@ msgstr "You have not selected an object to display."
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der "
 "Belegung an!"
-msgstr "Please enter valid values for the date, begin and end of the allocation!"
+msgstr ""
+"Please enter valid values for the date, begin and end of the allocation!"
 
 #: resources/views/msgs_resources.inc.php:99
 msgid ""
@@ -837,7 +849,9 @@ msgstr "Please enter a valid value for the end of the repetition!"
 msgid ""
 "Das Ende der Wiederholung darf nicht vor dem ersten Termin der Wiederholung "
 "liegen!"
-msgstr "The end of the repetition may not be before the first appointment of the repetition!"
+msgstr ""
+"The end of the repetition may not be before the first appointment of the "
+"repetition!"
 
 #: resources/views/msgs_resources.inc.php:105
 msgid "Die Startzeit darf nicht vor der Endzeit liegen!"
@@ -858,7 +872,8 @@ msgid ""
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:117
-msgid "Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
+msgid ""
+"Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:121
@@ -1079,4 +1094,3 @@ msgid ""
 "Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen "
 "hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."
 msgstr ""
-
