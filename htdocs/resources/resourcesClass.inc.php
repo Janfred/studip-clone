@@ -1388,7 +1388,7 @@ class ResourcesRootThreads {
 			}
 			$clause .= ") ";
 			
-			//all objects where i'am having owner perms...
+			//all objects where I have owner perms...
 			$query = sprintf ("SELECT resource_id, parent_id, root_id, level FROM resources_objects WHERE owner_id IN %s ORDER BY level DESC", $clause);
 			$db->query($query);
 			while ($db->next_record()) {
@@ -1396,7 +1396,7 @@ class ResourcesRootThreads {
 				$roots[$db->f("root_id")][]=$db->f("resource_id");
 			}
 			
-			//...and all objects where i'am having add perms...
+			//...and all objects where I have add perms...
 			$query = sprintf ("SELECT resources_objects.resource_id, parent_id, root_id, level FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id IN %s ORDER BY level DESC", $clause);
 			$db->query($query);
 			while ($db->next_record()) {
@@ -1405,36 +1405,35 @@ class ResourcesRootThreads {
 			}
 
 			foreach ($my_resources as $key => $val) {
-				if (!$this->my_roots[$key]) {
-				if (sizeof($roots[$val["root_id"]]) == 1)
-					$this->my_roots[$key] = $key;
-				//there are more than 2 resources in one thread...
-				else {
-					$query = sprintf ("SELECT resource_id, parent_id, name FROM resources_objects WHERE resource_id = '%s' ", $key);
-					$db->query($query);
-					$db->next_record();
-					$superordinated_id=$db->f("parent_id");
-					$top=FALSE;
-					$last_found=$key;
-					while ((!$top) && ($superordinated_id)) {
-						$query = sprintf ("SELECT resource_id, parent_id, name FROM resources_objects WHERE resource_id = '%s' ", $db->f("parent_id"));
+				if (!$this->checked[$key]) {
+					if (sizeof($roots[$val["root_id"]]) == 1)
+						$this->my_roots[$key] = $key;
+					//there are more than 2 resources in one thread...
+					else {
+						$query = sprintf ("SELECT resource_id, parent_id, name FROM resources_objects WHERE resource_id = '%s' ", $key);
 						$db->query($query);
 						$db->next_record();
-
-						if ($my_resources[$db->f("resource_id")]) {
-							if ($last_found)
-								unset ($my_resources[$last_found]);
-							$last_found= $db->f("resource_id");
-						}
-
 						$superordinated_id=$db->f("parent_id");
-						if ($db->f("parent_id") == "0")
-							$top = TRUE;
-						
+						$top=FALSE;
+						$last_found=$key;
+						while ((!$top) && ($superordinated_id)) {
+							$query = sprintf ("SELECT resource_id, parent_id, name FROM resources_objects WHERE resource_id = '%s' ", $db->f("parent_id"));
+							$db->query($query);
+							$db->next_record();
+	
+							if ($my_resources[$db->f("resource_id")]) {
+								$checked[$last_found]=TRUE;
+								$last_found= $db->f("resource_id");
+							}
+	
+							$superordinated_id=$db->f("parent_id");
+							if ($db->f("parent_id") == "0")
+								$top = TRUE;
+							
+						}
+	
+						$this->my_roots[$last_found] = $last_found;
 					}
-
-					$this->my_roots[$last_found] = $last_found;
-				}
 				}
 			}
 		}
