@@ -112,11 +112,9 @@ if ($rechte)
 
 //Infofenstereintraege erzeugen
 if ($entry_level=="inst") {
-	$js="Sie befinden sich in der Einrichtung: ".JSReady($SessSemName[0],"popup").", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Einrichtung: ".$SemUserStatus;
-	$alt="Sie befinden sich in der Einrichtung: ".htmlReady($SessSemName[0]).", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Einrichtung: ".$SemUserStatus;
+	$tooltip="Sie befinden sich in der Einrichtung: ".$SessSemName.", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Einrichtung: ".$SemUserStatus;
 } else {
-	$js="Sie befinden sich in der Veranstaltung: ".JSReady($SessSemName[0],"popup").", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Veranstaltung: ".$SemUserStatus;
-	$alt="Sie befinden sich in der Veranstaltung: ".htmlReady($SessSemName[0]).", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Veranstaltung: ".$SemUserStatus;
+	$tooltip="Sie befinden sich in der Veranstaltung: ".$SessSemName.", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Veranstaltung: ".$SemUserStatus;
 }
 
 //View festlegen
@@ -222,6 +220,6 @@ switch ($i_page) {
 	break;
 }
 
-$reiter->create($structure, $reiter_view, $alt, $js);
+$reiter->create($structure, $reiter_view, $tooltip);
 }
 ?>
