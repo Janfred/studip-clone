@@ -106,7 +106,7 @@ class ShowList extends ShowTreeRow{
 				$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
 			} 
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("bearbeiten")."</a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details")."</a>";
 		} else {
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("details")."</a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>";
@@ -288,7 +288,7 @@ class ShowThread extends ShowTreeRow {
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?pre_move_object=$resObject->id\"><img src=\"./pictures/buttons/verschieben-button.gif\" border=0></a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\"><img src=\"./pictures/buttons/neuesobjekt-button.gif\" border=0></a>";
 			$edit.= "&nbsp;<a href=\"$PHP_SELF?create_hierachie_level=$resObject->id\"><img src=\"./pictures/buttons/neueebene-button.gif\" border=0></a>";
-			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\"><img src=\"./pictures/buttons/bearbeiten-button.gif\" border=0></a>";
+			$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\"><img src=\"./pictures/buttons/details-button.gif\" border=0></a>";
 			
 
 			//Daten an Ausgabemodul senden (aus resourcesVisual)
@@ -1530,7 +1530,7 @@ class ViewSchedules extends cssClasses {
 					echo "<br /><font size=-1>Anzahl der Belegungen in diesem Zeitraum	: ", $assign_events->numberOfEvents()."</font>";
 					echo "<br /><br />";
 					while ($event=$assign_events->nextEvent()) {
-						echo "<a href=\"$PHP_SELF?view=".$view."&edit_assign_object=".$event->getAssignId()."\">".makeButton("bearbeiten")."</a>";
+						echo "<a href=\"$PHP_SELF?view=".$view."&edit_assign_object=".$event->getAssignId()."\">".makeButton("details")."</a>";
 						echo "&nbsp; <font size=-1>Belegung ist von <b>", date("d.m.Y H:i", $event->getBegin()), "</b> bis <b>", date("d.m.Y H:i", $event->getEnd()), "</b></font>";
 						echo "&nbsp; <font size=-1>belegt von <b>".$event->getName()."</b></font><br />";
 					}

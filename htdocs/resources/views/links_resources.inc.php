@@ -52,7 +52,7 @@ if ($resources_data["actual_object"]) {
 			$structure["edit_object_properties"]=array (topKat=>"objects", name=>"Eigenschaften bearbeiten", link=>"resources.php?view=edit_object_properties", active=>FALSE);
 			$structure["edit_object_perms"]=array (topKat=>"objects", name=>"Rechte bearbeiten", link=>"resources.php?view=edit_object_perms", active=>FALSE);
 		} else {
-			$structure["view_properties"]=array (topKat=>"objects", name=>"Details", link=>"resources.php?view=openobject_details", active=>FALSE);
+			$structure["view_details"]=array (topKat=>"objects", name=>"Details", link=>"resources.php?view=view_details", active=>FALSE);
 		}
 		if (getResourceObjectCategory($resources_data["actual_object"])) {
 			$structure["view_schedule"]=array (topKat=>"objects", name=>"Belegungsplan", link=>"resources.php?view=view_schedule", active=>FALSE);
