@@ -49,11 +49,10 @@ if (isset($auswahl) && $auswahl!="") {
 	// dieses Seminar wurde gerade eben betreten
 	$SessionSeminar="$auswahl";
 	$db=new DB_Seminar;
-	$db->query ("SELECT Institut_id, Name, Seminar_id, Ort, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$auswahl'");
+	$db->query ("SELECT Institut_id, Name, Seminar_id, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$auswahl'");
 	if ($db->next_record()) {
 		$SessSemName[0] = $db->f("Name");
 		$SessSemName[1] = $db->f("Seminar_id");
-		$SessSemName[2] = $db->f("Ort");
 		$SessSemName[3] = $db->f("Untertitel");
 		$SessSemName[4] = $db->f("start_time");
 		$SessSemName[5] = $db->f("Institut_id");

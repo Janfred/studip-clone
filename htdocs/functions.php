@@ -34,6 +34,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+
 /**
 * This function creates the header line for studip-objects
 *
@@ -117,11 +118,10 @@ function openSem ($sem_id) {
 	$db=new DB_Seminar;
 
 	$SessionSeminar="$sem_id";
-	$db->query ("SELECT Institut_id, Name, Seminar_id, Ort, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$sem_id'");
+	$db->query ("SELECT Institut_id, Name, Seminar_id, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$sem_id'");
 	while ($db->next_record()) {
 		$SessSemName[0] = $db->f("Name");
 		$SessSemName[1] = $db->f("Seminar_id");
-		$SessSemName[2] = $db->f("Ort");
 		$SessSemName[3] = $db->f("Untertitel");
 		$SessSemName[4] = $db->f("start_time");
 		$SessSemName[5] = $db->f("Institut_id");
@@ -287,6 +287,10 @@ function get_object_type($id) {
 	$db->query("SELECT user_id FROM auth_user_md5 WHERE user_id = '$id' ");
 	if ($db->next_record())
 		return "user";
+
+	$db->query("SELECT termin_id FROM termine WHERE termin_id = '$id' ");
+	if ($db->next_record())
+		return "date";
 
 	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
 	if ($db->next_record())
