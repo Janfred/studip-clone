@@ -41,6 +41,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -61,6 +62,10 @@ switch ($type) {
 	//we want to download from the studip-tmp folder (this mode performs perm checks)
 	case 4:
 		$path_file=$TMP_PATH . "/".$file_id;
+	break;
+	//download lit list as tab delimited text file
+	case 5:
+		$path_file = false;
 	break;
 	//we want to download from the regular upload-folder (this mode performs perm checks)
 	default:
@@ -208,7 +213,14 @@ if (!$type) {
 	if ($object_type == "inst")
 		$skip_check=TRUE;
 }
-
+if ($type == 5){
+	$skip_check = true;
+	if (!($range_id == $user->id) && !$perm->have_studip_perm($range_id, 'tutor')){
+		$no_access = true;
+	} else {
+		$the_data = StudipLitList::GetTabbedList($range_id, $list_id);
+	}
+}
 //permcheck
 if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 2, 3 or 4 we download from some tmp directory and skip permchecks
 	if (!$perm->have_perm ("user")) {
@@ -280,8 +292,11 @@ if ($no_access) {
 }
 
 //Datei verschicken
-$filesize = filesize($path_file);
-
+if ($type != 5){
+	$filesize = filesize($path_file);
+} else {
+	$filesize = strlen($the_data);
+}
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
@@ -296,9 +311,12 @@ header("Expires: 0");
 header("Content-type: $content_type; name=\"".rawurldecode($file_name)."\"");
 header("Content-length: $filesize");
 header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
-
-readfile($path_file);
-TrackAccess ($file_id);
+if ($type != 5){
+	readfile($path_file);
+	TrackAccess ($file_id);
+} else {
+	echo $the_data;
+}
 
 //remove temporary file after zipping
 if ($zip) {
