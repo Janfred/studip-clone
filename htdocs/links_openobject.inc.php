@@ -146,9 +146,10 @@ if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)
 	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 }
 if ($modules["forum"]) {
-	$structure["_forum"]=array (topKat=>"forum", name=>_("Themen"), link=>"forum.php", active=>FALSE);
-	$structure["neue"]=array (topKat=>"forum", name=>_("neue Beitr&auml;ge"), link=>"forum.php?view=neue", active=>FALSE);
-	$structure["letzte"]=array (topKat=>"forum", name=>_("letzte 5 Beitr&auml;ge"), link=>"forum.php?view=letzte&mehr=1", active=>FALSE);
+	$structure["_forum"]=array (topKat=>"forum", name=>_("Baumansicht"), link=>"forum.php?view=tree", active=>FALSE);
+	$structure["mixed"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=mixed", active=>FALSE);
+	$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue", active=>FALSE);
+	$structure["flat"]=array (topKat=>"forum", name=>_("alle Beiträge"), link=>"forum.php?view=flat", active=>FALSE);
 	$structure["suchen"]=array (topKat=>"forum", name=>_("Suchen"), link=>"suchen.php", active=>FALSE);
 	$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
@@ -282,11 +283,17 @@ switch ($i_page) {
 			case "":
 				$reiter_view="forum";
 			break;
+			case "mixed":
+				$reiter_view="mixed";
+			break;
+			case "flatfolder":
+				$reiter_view="mixed";
+			break;
 			case "neue":
 				$reiter_view="neue";
 			break;
-			case "letzte":
-				$reiter_view="letzte";
+			case "flat":
+				$reiter_view="flat";
 			break;
 			default :
 				$reiter_view="forum";
