@@ -132,7 +132,6 @@ function month_restore (&$this) {
 			
 			// monatliche Wiederholung
 			case 'MONTHLY' :
-				
 				if($db->f('start') > $start){
 					$adate = mktime(12,0,0,date('n',$db->f('start')),date('j',$db->f('start')),date('Y',$db->f('start')),0);
 					$count = $duration;
@@ -149,7 +148,7 @@ function month_restore (&$this) {
 				
 				if($rep['ts'] < $start){
 					// brauche ersten Monat in dem der Termin wiederholt wird
-			  	$amonth = ($rep['linterval'] - ((($year - date('Y',$rep['ts'])) * 12) - (date('n',$rep['ts']))) % $rep['linterval']) % $rep['linterval'];
+			  	$amonth = ($rep['linterval'] - ((($year - date('Y',$rep['ts'])) * 12) - date('n',$rep['ts'])) % $rep['linterval']) % $rep['linterval'];
 					// ist Wiederholung am X. Wochentag des X. Monats...
 					if(!$rep['day']){
 						$adate = mktime(12,0,0,$amonth,1,$year,0) + ($rep['sinterval'] - $cor) * 604800;
@@ -177,7 +176,7 @@ function month_restore (&$this) {
 				}
 				
 				// Termine, die die Jahresgrenze überbrücken
-				if($duration > 1 && $rep['ts'] < $start_ts){
+				if($duration > 1 && $rep['ts'] < $this->ts){
 					if(!$rep['day']){
 						$xdate = mktime(12,0,0,$amonth - $rep['linterval'],1,$year,0) + ($rep['sinterval'] - $cor) * 604800;
 						$aday = strftime('%u',$xdate);
@@ -197,22 +196,21 @@ function month_restore (&$this) {
 						$xdate = mktime(12,0,0,date('n',$adate) - $rep['linterval'],date('j',$adate) + $duration,date('Y',$adate),0);
 					
 					$xdate++;
-					$md_date = $start_ts;
+					$md_date = $this->ts;
 					while($md_date < $xdate && $md_date <= $db->f('expire')){
 						new_event($this, $db, $md_date);
 						$md_date += 86400;
 					}
 				}
 				
-				while($rep['ts'] < $start && $adate <= $db->f('expire') && $adate <= $end){
+				while($adate <= $db->f('expire') && $adate <= $end){
 					$md_date = $adate;
 					$count = $duration;
 					while($count--){
 						// verhindert die Anzeige an Tagen, die außerhalb des Monats liegen (am 29. bis 31.)
 						if(!$rep['wdays'] ? date('j', $adate) == $rep['day'] : TRUE
-							&& $md_date <= $db->f('expire') && $md_date <= $end){
+							&& $md_date <= $db->f('expire') && $md_date <= $end)
 								new_event($this, $db, $md_date);
-						}
 						$md_date += 86400;
 					}
 					$amonth += $rep['linterval'];
@@ -235,7 +233,7 @@ function month_restore (&$this) {
 						$adate = mktime(12,0,0,$amonth,$rep['day'],$year,0);
 				}
 				break;
-				
+			
 			// jährliche Wiederholung
 			case 'YEARLY' :
 				if ($db->f('start') > $start + 1 && $db->f('start') < $end + 1){
