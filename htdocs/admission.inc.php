@@ -108,9 +108,6 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	if ($db->next_record()) {
 		//anzahl der freien Plaetze holen
 		$count=get_free_admission($seminar_id);
-		echo $count;
-		die;
-		
 		
 		//Studis auswaehlen, die jetzt aufsteigen koennen
 		$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count");

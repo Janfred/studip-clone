@@ -172,16 +172,16 @@ if ($cmd=="suppose_to_kill_admission") {
 
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
-	//$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
-//	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
-//	else {
+	$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
+	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
+	else {
 	  //Pruefen, ob es Nachruecker gibt
 	  update_admission($auswahl);
 	  
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
 	  $meldung="msg§Das Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
-//	}
+	}
 }
 
 //bei Bedarf aus admission_seminar_user austragen
