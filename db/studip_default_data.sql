@@ -1,4 +1,4 @@
-# #6
+# 
 # create default config entries for resources-management
 #
 
@@ -13,10 +13,10 @@ INSERT INTO `config` VALUES ('5b4b20d9d2c1556ff1b42503d38a8bc6', 'RESOURCES_ALLO
 
 
 #
-# Defaults für Evaluation
+# defaults for evaluation
 #
 
-## Wertung 1-5
+# Wertung 1-5
 
 INSERT INTO `evalquestion` VALUES ('ef227e91618878835d52cfad3e6d816b', '0', 'polskala', 0, 'Wertung 1-5', 0);
 
@@ -27,7 +27,7 @@ INSERT INTO `evalanswer` VALUES ('3a3ab5307f39ea039d41fb6f2683475e', 'ef227e9161
 INSERT INTO `evalanswer` VALUES ('6115b19f694ccd3d010a0047ff8f970a', 'ef227e91618878835d52cfad3e6d816b', 4, 'Sehr Schlecht', 5, 0, 0, 0);
 INSERT INTO `evalanswer` VALUES ('be4c3e5fe0b2b735bb3b2712afa8c490', 'ef227e91618878835d52cfad3e6d816b', 5, 'Keine Meinung', 6, 0, 0, 1);
 
-## Schulnoten
+# Schulnoten
 
 INSERT INTO `evalquestion` VALUES ('724244416b5d04a4d8f4eab8a86fdbf8', '0', 'likertskala', 0, 'Schulnoten', 0);
 
@@ -38,7 +38,7 @@ INSERT INTO `evalanswer` VALUES ('fa2bf667ba73ae74794df35171c2ad2e', '724244416b
 INSERT INTO `evalanswer` VALUES ('0be387b9379a05c5578afce64b0c688f', '724244416b5d04a4d8f4eab8a86fdbf8', 4, 'Mangelhaft', 5, 0, 0, 0);
 INSERT INTO `evalanswer` VALUES ('aec07dd525f2610bdd10bf778aa1893b', '724244416b5d04a4d8f4eab8a86fdbf8', 5, 'Nicht erteilt', 6, 0, 0, 1);
 
-## Wertung (trifft zu, ...)
+# Wertung (trifft zu, ...)
 
 INSERT INTO `evalquestion` VALUES ('95bbae27965d3404f7fa3af058850bd3', '0', 'likertskala', 0, 'Wertung (trifft zu, ...)', 0);
 
@@ -49,7 +49,7 @@ INSERT INTO `evalanswer` VALUES ('7c36d074f2cc38765c982c9dfb769afc', '95bbae2796
 INSERT INTO `evalanswer` VALUES ('5c4827f903168ed4483db5386a9ad5b8', '95bbae27965d3404f7fa3af058850bd3', 4, 'trifft gar nicht zu', 5, 0, 0, 0);
 INSERT INTO `evalanswer` VALUES ('c10a3f4e97f8badc5230a9900afde0c7', '95bbae27965d3404f7fa3af058850bd3', 5, 'kann ich nicht beurteilen', 6, 0, 0, 1);
 
-## Werktage
+# Werktage
 
 INSERT INTO `evalquestion` VALUES ('6fddac14c1f2ac490b93681b3da5fc66', '0', 'multiplechoice', 0, 'Werktage', 0);
 
@@ -59,7 +59,7 @@ INSERT INTO `evalanswer` VALUES ('63f5011614f45329cc396b90d94a7096', '6fddac14c1
 INSERT INTO `evalanswer` VALUES ('ccd1eaddccca993f6789659b36f40506', '6fddac14c1f2ac490b93681b3da5fc66', 3, 'Donnerstag', 4, 0, 0, 0);
 INSERT INTO `evalanswer` VALUES ('48842cedeac739468741940982b5fe6d', '6fddac14c1f2ac490b93681b3da5fc66', 4, 'Freitag', 5, 0, 0, 0);
 
-## Werktage-mehrfach
+# Werktage-mehrfach
 
 INSERT INTO `evalquestion` VALUES ('12e508079c4770fb13c9fce028f40cac', '0', 'multiplechoice', 0, 'Werktage-mehrfach', 1);
 
@@ -69,13 +69,13 @@ INSERT INTO `evalanswer` VALUES ('c88242b50ff0bb43df32c1e15bdaca22', '12e508079c
 INSERT INTO `evalanswer` VALUES ('b39860f6601899dcf87ba71944c57bc7', '12e508079c4770fb13c9fce028f40cac', 3, 'Donnerstag', 4, 0, 0, 0);
 INSERT INTO `evalanswer` VALUES ('568d6fd620642cb7395c27d145a76734', '12e508079c4770fb13c9fce028f40cac', 4, 'Freitag', 5, 0, 0, 0);
 
-## Freitext-Mehrzeilig
+# Freitext-Mehrzeilig
 
 INSERT INTO `evalquestion` VALUES ('a68bd711902f23bd5c55a29f1ecaa095', '0', 'multiplechoice', 0, 'Freitext-Mehrzeilig', 0);
 
 INSERT INTO `evalanswer` VALUES ('39b98a5560d5dabaf67227e2895db8da', 'a68bd711902f23bd5c55a29f1ecaa095', 0, '', 1, 5, 0, 0);
 
-## Freitext-Einzeilig
+# Freitext-Einzeilig
 
 INSERT INTO `evalquestion` VALUES ('442e1e464e12498bd238a7767215a5a2', '0', 'multiplechoice', 0, 'Freitext-Einzeilig', 0);
 
