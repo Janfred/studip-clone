@@ -226,13 +226,13 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 	
 	setlocale ("LC_TIME","de_DE");
 	
-	//wenn persoenliche Termine angezeigt werden und nicht ich selber draufschau, dann die privaten wegblenden
+	//wenn persoenliche Termine angezeigt werden und nicht ich selber draufschau, dann die privaten ausblenden
 	if($username && $range_id != $user->id)
 		$show_private = FALSE;
 		
 	if($show_admin && $range_id == $user->id){
 		$show_private = TRUE;
-		$admin_link = "<a href=\"./calendar.php?cmd=edit\">";
+		$admin_link = sprintf("<a href=\"./calendar.php?cmd=edit&source_page=%s\">", rawurlencode($PHP_SELF));
 	}
 
 	$list = new AppList($range_id, $show_private, $date_start, $date_end, TRUE);
@@ -317,9 +317,9 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 					$content .= sprintf("<b>Art des Termins:</b> %s<br /><br />", $PERS_TERMIN_KAT[$termin->getCategory()]["name"]);
 				
 				if($show_admin)
-					$content .= sprintf("<div align=\"center\"><a href=\"./calendar.php?cmd=edit&termin_id=%s&atime=%s\">"
+					$content .= sprintf("<div align=\"center\"><a href=\"./calendar.php?cmd=edit&termin_id=%s&atime=%s&source_page=%s\">"
 										. "<img src=\"./pictures/buttons/terminaendern-button.gif\" border=\"0\" alt=\"Termin &auml;ndern\">"
-										. "</a></div>", $termin->getId(), $termin->getStart());
+										. "</a></div>", $termin->getId(), $termin->getStart(), rawurlencode($PHP_SELF));
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				printcontent(0,0, $content, $edit);
