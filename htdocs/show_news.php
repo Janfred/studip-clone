@@ -126,9 +126,9 @@ if (!$db->num_rows()) {
 			else
 				$content.="<br>";
 
-			if ($auth->auth["uid"]==$db->f("user_id")) {
-				$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$db->f("news_id")."\">" . makeButton("bearbeiten") . "</a>";
-				$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$db->f("news_id")."\">" . makeButton("loeschen") . "</a>";
+			if ($auth->auth["uid"]==$db->f("user_id") || $show_admin) {
+				$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$db->f("news_id")."&$admin_link\">" . makeButton("bearbeiten") . "</a>";
+				$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$db->f("news_id")."&$admin_link\">" . makeButton("loeschen") . "</a>";
 			}
 			
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
