@@ -50,7 +50,9 @@ function createFormHeader (&$vote) {
       " <input type=\"hidden\" name=\"voteopenID\" ".
       "value=\"".$vote->getVoteID (). "\">\n".
       " <input type=\"hidden\" name=\"answerChanged\" ".
-      "value=\"".(isset($_POST["changeAnswerButton_x"]) ? YES : NO). "\">\n";
+      "value=\"".(isset($_POST["changeAnswerButton_x"]) ||
+		  (isset($_POST["answerChanged"]) && !isset($_POST["answer"])) 
+		  ? YES : NO). "\">\n";
 
    return $html;
 }
@@ -79,7 +81,10 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
        && ! $vote->isAnonymous();
 
    $sortAnswers = $_GET["sortAnswers"] && $vote->getVoteID() == $_GET["voteopenID"];
-	
+
+   $changeAnswer = isset ($_POST["changeAnswerButton_x"]) ||
+       ($_POST["answerChanged"] && !isset($_POST["answer"]));
+
    $link  = $GLOBALS["PHP_SELF"];
    $link .= "?voteopenID=".$vote->getVoteID();
    $link .= ($_GET["openAllVotes"]) ? "&openAllVotes=".YES : "";
@@ -96,10 +101,11 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $html .= "<div align=\"center\">\n";
    
    /* Submitbutton --------------------------------------------------------- */
-   if (!($isAssociated || $isPreview || $isStopped)) {
+   if ( ! ($isAssociated || $isPreview || $isStopped)
+	|| $changeAnswer ) {
       $html .= 
 	 "<input type=\"image\" style=\"vertical-align:middle;\" " .
-	 "name=\"voteButton\" " .
+	 "name=\"voteButton\" border=\"0\" " .
 	 makeButton ("abschicken", "src") . 
 	 tooltip(_("Geben Sie hier Ihre Stimme ab!")) .
 	 ">";
@@ -107,12 +113,12 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    /* ---------------------------------------------------------------------- */
 
    /* Viewbutton ----------------------------------------------------------- */
-   if ( ! ($isAssociated || $isPreview || $isStopped) &&
+   if ( (! ($isAssociated || $isPreview || $isStopped) || $changeAnswer) &&
 	($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm)
 	) {
       $html .= 
 	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
-	 "name=\"previewButton\" " .
+	 "name=\"previewButton\" border=\"0\" " .
 	 makeButton ("ergebnisse", "src") . 
 	 tooltip(_("Hier können Sie sich die Ergebnisse im Voraus ansehen.")) .
 	 ">";
@@ -128,7 +134,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
        ) {
       $html .= 
 	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
-	 "name=\"changeAnswerButton\" " .
+	 "name=\"changeAnswerButton\" border=\"0\" " .
 	 makeButton ("antwortaendern", "src") . 
 	 tooltip(_("Hier können Sie Ihre Antwort nochmal ändern.")) .
 	 ">";
@@ -140,7 +146,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    elseif ($isPreview) {
       $html .= 
 	 "&nbsp;<input type=\"image\" style=\"vertical-align:middle;\" " .
-	 "name=\"escapePreviewButton\" " .
+	 "name=\"escapePreviewButton\" border=\"0\" " .
 	 makeButton ("zurueck", "src") . 
 	 tooltip(_("Zurück zum Abstimmen.")) .
 	 ">";
@@ -182,6 +188,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	       || $vote->getResultVisibility() == VOTE_RESULTS_NEVER)
 	      && $vote->isActive() && !$haveFullPerm)
 	&& $haveFullPerm
+	&& ! $changeAnswer
 	)
        {
        $link_reveal = $link."&sortAnswers=".($_GET["sortAnswers"] ? YES : NO);

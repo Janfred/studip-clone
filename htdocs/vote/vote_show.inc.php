@@ -114,7 +114,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	 echo createErrorReport ($vote, _("Fehler beim Einlesen des Votes"));
       }
 
-      $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) || $userID == $vote->getAuthorID();
+      $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) ||
+	  $userID == $vote->getAuthorID();
 
       /* Get post and get-variables ---------------------------------------- */
       $formID = $_REQUEST["voteformID"];
@@ -126,7 +127,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       $answerChanged = $_POST["answerChanged"];
       $previewResults = isset( $_POST["previewButton_x"] );
       if ( !$previewResults ) $previewResults = $_GET["previewResults"];
-      $previewResults = $previewResults && ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
+      $previewResults = $previewResults &&
+	  ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
       /* ------------------------------------------------------------------- */
 
       /* Show headlines ---------------------------------------------------- */
@@ -138,9 +140,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	 echo createFormHeader ($vote);
 
 	 if ($_GET["voteaction"]=="saved" && $voteID == $_GET["voteID"])
-	    echo createReportMessage
-	       (_("Die &Auml;nderungen wurden gespeichert"),
-		VOTE_ICON_SUCCESS, VOTE_COLOR_SUCCESS).
+	    echo createReportMessage (_("Die &Auml;nderungen wurden gespeichert"),
+				      VOTE_ICON_SUCCESS, VOTE_COLOR_SUCCESS).
 		"<br>\n";
 					 
 	 /* User has already used the vote --------------------------------- */
@@ -160,8 +161,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 		 ) {
 	    $vote->executeAssociate ($userID, $_POST["answer"]);
 	    if ($vote->isError ()) {
-	       echo createErrorReport ($vote, 
-				       _("Fehler bei der Abstimmung"));
+	       echo createErrorReport ($vote, _("Fehler bei der Abstimmung"));
 	       echo createVoteForm ($vote, $userID);
 	    } else {
 	       if ($answerChanged)
