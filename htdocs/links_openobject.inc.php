@@ -146,7 +146,7 @@ if ($modules["forum"]) {
 	$structure["suchen"]=array (topKat=>"forum", name=>_("Suchen"), link=>"suchen.php", active=>FALSE);
 	$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["topic_create_autor"]))
-		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema"), link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
+		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema anlegen"), link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
 }
 //
 if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
