@@ -166,7 +166,6 @@ function checkObjektAdministrablePerms ($resource_object_owner_id, $user_id='') 
 	unset ($my_objects[$user_id]);
 	if (sizeof ($my_objects)) {
 		if (($my_objects[$resource_object_owner_id]["perms"] == "admin") || ($resource_object_owner_id == $user_id)) {
-			print_r($my_objects[$resource_object_owner_id]);
 			return TRUE;
 		} else {
 			return FALSE;
