@@ -998,10 +998,13 @@ function printposting ($forumposting) {
     		
   	// Alter ausgeben
   		
-  		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed") && !$delete_id && $forumposting["openclose"] == "close")
+  		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed") && !$delete_id && $forumposting["openclose"] == "close") {
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["folderlast"])."&nbsp;";
-  		else
+  			$age_tmp = $forumposting["folderlast"];
+  		} else {
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
+  			$age_tmp = $forumposting["chdate"];
+  		}
   		
   	// Themennamen ausgeben (ausser Flatview)
     		
@@ -1076,7 +1079,7 @@ function printposting ($forumposting) {
   			echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
   		if ($forum["anchor"] == $forumposting["id"])
   			echo "<a name='anker'></a>";
-		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);
+		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$age_tmp,"TRUE",$index,$forum["indikator"]);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
 		echo "</tr></table>\n";	
