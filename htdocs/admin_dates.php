@@ -66,6 +66,7 @@ $sess->register("term_data");
 $sess->register("admin_dates_data");
 
 if ($RESOURCES_ENABLE) {
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
@@ -432,13 +433,14 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$result.="error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 		$i=0;
 		foreach ($overlaps_detected as $val) {
-			$result.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($val["resource_id"])).": ";
+			$resObj = new ResourceObject($val["resource_id"]);
+			$result.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
 			//show the first overlap
 			list(, $val2) = each($val["overlap_assigns"]);
 			$result.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
 			if (sizeof($val["overlap_assigns"]) >1)
 				$result.=", ... ("._("und weitere").")";
-			$result.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["resource_id"], $val2["begin"]);
+			$result.=", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
 			$i++;
 		}
 		$result.="</font>§";
@@ -451,10 +453,11 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			
 	if (is_array($rooms_id))
 		foreach ($rooms_id as $key=>$val) {
-			if ($key) {				
+			if ($key) {	
+				$resObj = new ResourceObject($key);			
 				if ($i)
 					$rooms_booked.=", ";
-				$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+				$rooms_booked.= $resObj->getFormattedLink();
 				$i++;
 			}
 		}

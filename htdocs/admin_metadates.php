@@ -423,13 +423,14 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 				$i=0;
 				foreach ($overlaps_detected as $val) {
-					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($val["resource_id"])).": ";
+					$resObj = new ResourceObject($val["resource_id"]);
+					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
 					//show the first overlap
 					list(, $val2) = each($val["overlap_assigns"]);
 					$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
 					if (sizeof($val["overlap_assigns"]) >1)
 						$errormsg.=", ... ("._("und weitere").")";
-					$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$val["resource_id"], $val2["begin"]);
+					$errormsg.= ", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
 					$i++;
 				}
 				$errormsg.="</font>§";
@@ -443,9 +444,10 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			if (is_array($rooms_id))
 				foreach ($rooms_id as $key=>$val) {
 					if ($key) {
+						$resObj = new ResourceObject($key);
 						if ($i)
 							$rooms_booked.=", ";
-						$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+						$rooms_booked.=$resObj->getFormattedLink();
 						$i++;
 					}
 				}
