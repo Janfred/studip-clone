@@ -84,10 +84,10 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="middle">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Meine Veranstaltungen</a><br />&nbsp; &nbsp; <font size=-1><a href="sem_portal.php">Veranstaltung hinzuf&uuml;gen</a></td></tr>
-		<tr><td class="blank"><a href="calendar/kalender.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size=-1><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
-		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size=-1><a href="edit_about.php?view=Daten">Benutzerdaten</a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size=-1><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size=-1><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
+		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Meine Veranstaltungen</a><br />&nbsp; &nbsp; <font size="-1"><a href="sem_portal.php">Veranstaltung hinzuf&uuml;gen</a></td></tr>
+		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
+		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=Daten">Benutzerdaten</a></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
 		</table>
 	</td>
@@ -141,10 +141,10 @@ ELSEIF ($auth->auth["perm"]=="dozent"){
 	<td width="90%" class="blank" valign="middle">
 		<table cellpadding=4>
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Meine Veranstaltungen</a></td></tr>
-		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungs-Verwaltung</a><br />&nbsp; &nbsp; <font size=-1><a href="admin_seminare_assi.php?new_session=TRUE">neue Veranstaltung anlegen</a></font></td></tr>
-		<tr><td class="blank"><a href="calendar/kalender.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size=-1><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
-		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size=-1><a href="edit_about.php?view=Daten">Benutzerdaten</a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size=-1><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size=-1><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
+		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungs-Verwaltung</a><br />&nbsp; &nbsp; <font size="-1"><a href="admin_seminare_assi.php?new_session=TRUE">neue Veranstaltung anlegen</a></font></td></tr>
+		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></font></td></tr>
+		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=Daten">Benutzerdaten</a></font></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php">Veranstaltungsuche</a></font></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
 		</table>
 	</td>
@@ -172,10 +172,10 @@ ELSEIF ($auth->auth["perm"]=="admin"){
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="middle">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungen an meinen Einrichtungen</a><br />&nbsp; &nbsp; <font size=-1><a href="mein_stundenplan.php">Veranstaltungs Timetable</a></font></td></tr>
+		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungen an meinen Einrichtungen</a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php">Veranstaltungs Timetable</a></font></td></tr>
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungs-Verwaltung</a></td></tr>
 		<tr><td class="blank"><a href="inst_admin.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Mitarbeiter an meinen Einrichtungen</a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size=-1><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size=-1><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<a href="sem_portal.php">Veranstaltungsuche</a></font></td></tr>
 		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;globale Benutzerverwaltung</a></td></tr>
 		</table>
 	</td>
@@ -206,7 +206,7 @@ ELSEIF ($perm->have_perm("root")){
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungs-&Uuml;bersicht</a></td></tr>
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungs-Verwaltung</a></td></tr>
 		<tr><td class="blank"><a href="inst_admin.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Mitarbeiterlisten von Einrichtungen</a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size=-1><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size=-1><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<a href="sem_portal.php">Veranstaltungsuche</a></font></td></tr>
 		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;globale Benutzerverwaltung</a></td></tr>
 		</table>
 	</td>
