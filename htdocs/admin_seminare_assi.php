@@ -86,11 +86,7 @@ if ($form==1)
 	$sem_create_data["term_art"]=$term_art;	
 	$sem_create_data["sem_turnout"]=$sem_turnout;	
 	//Anmeldeverfahren festlegen
-	$sem_create_data["sem_admission"]='';
-	if ($sem_admission_chrono)
-		$sem_create_data["sem_admission"]="2";
-	if ($sem_admission_los)
-		$sem_create_data["sem_admission"]="1";
+	$sem_create_data["sem_admission"]=$sem_admission;
 	
 	if ($sem_bet_inst)
 		{
@@ -126,6 +122,9 @@ if ($form==2)
 	if (!$sem_create_data["sem_admission"]) {
 		$sem_create_data["sem_sec_lese"]=$sem_sec_lese;
 		$sem_create_data["sem_sec_schreib"]=$sem_sec_schreib;
+	} else {
+		$sem_create_data["sem_sec_lese"]=3;
+		$sem_create_data["sem_sec_schreib"]=3;
 	}
 	$sem_create_data["sem_status"]=$sem_status;
 	$sem_create_data["sem_art"]=$sem_art;
@@ -406,13 +405,13 @@ if ($cmd_c_x)
 				$badly_dozent_is_tutor=TRUE;
 	if ($badly_dozent_is_tutor) {
 		$level=2; //wir bleiben auf der zweiten Seite
-		$errormsg=$errormsg."error§Sie d&uuml;rfen DozentInnen nicht gleichzeitig als TutorInnen eintragen!!§";
+		$errormsg=$errormsg."error§Sie d&uuml;rfen die selben DozentInnen nicht gleichzeitig als TutorInnen eintragen!!§";
 	}
 	
  	if (sizeof($sem_create_data["sem_doz"])==0)
 		{
 		$level=2; //wir bleiben auf der zweiten Seite
-		$errormsg=$errormsg."error§Bitte geben Sie mindestens einen DozentIn f&uuml;r die Veranstaltung an!§";
+		$errormsg=$errormsg."error§Bitte geben Sie mindestens einen Dozent oder eine Dozentin f&uuml;r die Veranstaltung an!§";
 		}
 	elseif ((!$perm->have_perm("root")) && (!$perm->have_perm("admin")))
 		{
@@ -845,7 +844,7 @@ if ($cmd_f_x)
 					$self_included=TRUE;
 				$query = "insert into seminar_user  values('".
 					$sem_create_data["sem_id"]."', '".
-					$tmp_array."', 'dozent', '$group', '')";
+					$tmp_array."', 'dozent', '$group', '', '".time()."')";
 				$db3->query($query);// Dozenten eintragen
 				if ($db3->affected_rows() >=1)
 					$count_doz++;
@@ -858,7 +857,7 @@ if ($cmd_f_x)
 
 			$query = "insert into seminar_user  values('".
 				$sem_create_data["sem_id"]."', '".
-				$user_id."', 'dozent', '$group', '')";
+				$user_id."', 'dozent', '$group', '', '".time()."')";
 			$db3->query($query);
 			if ($db3->affected_rows() >=1)
 				$count_doz++;
@@ -880,7 +879,7 @@ if ($cmd_f_x)
 					{
 					$query = "insert into seminar_user  values('".
 						$sem_create_data["sem_id"]."', '".
-						$tmp_array."', 'tutor', '$group', '')";
+						$tmp_array."', 'tutor', '$group', '', '".time()."')";
 					$db3->query($query);			     // Tutor eintragen
 						if ($db3->affected_rows() >= 1)
 							$count_tut++;
@@ -1119,14 +1118,13 @@ if ((!$level) || ($level==1))
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Hier legen Sie fest, ob Sie eine Lehrveranstaltung anlegen möchten, oder ob die Veranstaltungen einer anderen Kategorie zugeordnet wird. Im Normalfall sollten sie eine Lehrveranstaltung anlegen.');" 
 									alt="Hier legen Sie fest, ob Sie eine Lehrveranstaltung anlegen möchten, oder ob die Veranstaltungen einer anderen Kategorie zugeordnet wird. Im Normalfall sollten sie eine Lehrveranstaltungen anlegen.">
-							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Raum:
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="30%" colspan=1>
+						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
 							&nbsp; <input type="text" name="sem_ort" size=20 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_ort"]))  ?>">
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Der Raum, in dem die Veranstaltung stattfindet.');" 
@@ -1146,7 +1144,7 @@ if ((!$level) || ($level==1))
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Turnus:
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="30%" colspan=1>
+						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
 							&nbsp; <select  name="term_art">
 							<?
 							if ($sem_create_data["term_art"] == 0) 
@@ -1177,14 +1175,16 @@ if ((!$level) || ($level==1))
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							Anmeldung:
+							Teilnehmer- begrenzung:
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
- 							&nbsp; <input type="CHECKBOX" name="sem_admission_chron" <? if ($sem_create_data["sem_admission"]=="2") echo checked?>>
- 							Teilnehmerzahl beschr&auml;nken <i>oder</i><br />
- 							&nbsp; <input type="CHECKBOX" name="sem_admission_los" <? if ($sem_create_data["sem_admission"]=="1") echo checked?>>
- 							Teilnehmerbeschr&auml;nkung per Losverfahren
-							<img  src="./pictures/info.gif" 
+ 							&nbsp; <input type="RADIO" name="sem_admission" value=0 <? if (!$sem_create_data["sem_admission"]) echo checked?>>
+ 							keine &nbsp; <br />
+							&nbsp; <input type="RADIO" name="sem_admission" value=2 <? if ($sem_create_data["sem_admission"]=="2") echo checked?>>
+ 							nach Anmeldereihenfolge <br />
+ 							&nbsp; <input type="RADIO" name="sem_admission" value=1 <? if ($sem_create_data["sem_admission"]=="1") echo checked?>>
+ 							per Losverfahren&nbsp; 
+ 							<img  src="./pictures/info.gif" 
 									onClick="alert('Sie können die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie können später Angaben über zugelassene Teilnehmer machen.');" 
 									alt="Sie k&ouml;nnen die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie k&ouml;nnen sp&auml;ter Angaben &uuml;ber zugelassene Teilnehmer machen.">
 						</td>
@@ -1517,7 +1517,8 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<?					
 							if (!$sem_create_data["sem_admission"]) {
-								if (!isset($sem_create_data["sem_sec_lese"])) $sem_create_data["sem_sec_lese"] = "1";	//Vorgabe: nur angemeldet
+								if (!isset($sem_create_data["sem_sec_lese"]) || $sem_create_data["sem_sec_lese"]==3)
+									$sem_create_data["sem_sec_lese"] = "1";	//Vorgabe: nur angemeldet oder es war Teilnahmebegrenzung gesetzt
 							?>
 								<input type="radio" name="sem_sec_lese" value="0" <?php print $sem_create_data["sem_sec_lese"] == 0 ? "checked" : ""?>> freier Zugriff &nbsp;
 								<input type="radio" name="sem_sec_lese" value="1" <?php print $sem_create_data["sem_sec_lese"] == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;
@@ -1538,7 +1539,8 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<?
 							if (!$sem_create_data["sem_admission"]) {
-								if (!isset($sem_create_data["sem_sec_schreib"])) $sem_create_data["sem_sec_schreib"] = "1";	//Vorgabe: nur angemeldet
+								if (!isset($sem_create_data["sem_sec_schreib"]) || $sem_create_data["sem_sec_schreib"]==3)
+									$sem_create_data["sem_sec_schreib"] = "1";	//Vorgabe: nur angemeldet
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["write_access_nobody"]) {
 									?>
 								<input type="radio" name="sem_sec_schreib" value="0" <?php print $sem_create_data["sem_sec_schreib"] == 0 ? "checked" : ""?>> freier Zugriff &nbsp;
