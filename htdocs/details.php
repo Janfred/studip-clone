@@ -28,11 +28,11 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	
-require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zum Anzeigen der Terminstruktur
-require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; // wir brauchen htmlReady
-require_once "$ABSOLUTE_PATH_STUDIP/admission.inc.php"; // wir brauchen htmlReady
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Funktionen zum Anzeigen der Terminstruktur
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); // wir brauchen htmlReady
+require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php"); // wir brauchen htmlReady
 
 ?>
 <body>
