@@ -122,8 +122,8 @@ $export_pagename = _("Datenexport - Startseite");
 
 	$export_pagecontent .="<b><font size=\"-1\">". _("Welche Arten von Veranstaltungen sollen exportiert werden? ") .  "</font></b><br />";
 	
-	if ($ex_sem_class = "") 
-		$ex_sem_class[0] = "1";
+	if ($ex_sem_class == "") 
+		$ex_sem_class = "1000";
 	$count = 0;
 	foreach ($SEM_CLASS as $key=>$val) 
 	{
