@@ -297,6 +297,16 @@ if ($view=="statistik") {?>
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWeb Seiten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 			}
 			
+			if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
+				$cssSw->switchClass();
+				$db->query("SELECT COUNT(DISTINCT co_id) as count from seminar_lernmodul");
+				$db->next_record();
+				$anzahl = $db->f(0);
+				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("ILIAS-Lernmodule:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			}
+			
+			
+			
 			echo "</blockquote></table></td></tr>";
 	}
 	
