@@ -10,7 +10,6 @@ function event_get_description($id){
 }
 
 function event_save($this){
-	global $TERMIN_TYP;
 	// Natuerlich nur Speichern, wenn sich was geaendert hat
 	// und es sich um einen persoenlichen Termin handelt
 	if($this->chng_flag && ($this->type == -1 || $this->type == -2)){
@@ -72,14 +71,14 @@ function event_restore($id, &$this){
 			return FALSE;
 			
 		// bei Seminar-Terminen ist kein expire gesetzt
-		if($TERMIN_TYP[$this->type]["ebene"] == "" && !$this->setExpire($db->f("expire")))
+		if(!$TERMIN_TYP[$this->type] && !$this->setExpire($db->f("expire")))
 			return FALSE;
 	
 		$this->rep = $db->f("repeat");
 		
 		if($this->type == -1 || $this->type == -2)
 			$this->cat = $db->f("color");
-		else if($TERMIN_TYP[$this->type]["ebene"] == "sem"){
+		else if($TERMIN_TYP[$this->type]){
 			$color = array("#000000","#FF0000","#FF9933","#FFCC66","#99FF99","#66CC66","#6699CC","#666699");
 			$this->cat = $this->type;
 			if($PERS_TERMIN_KAT[$this->type][color] == "")

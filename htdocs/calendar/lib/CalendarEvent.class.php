@@ -82,7 +82,7 @@ class CalendarEvent{
 			// handelt es sich um einen Veranstaltungs-Termin ist die Kategorie gleich dem Typ
 			if($this->type == -1 || $this->type == -2)
 				$this->cat = $category;
-			else if($TERMIN_TYP[$this->type]["ebene"] == "sem")
+			else if($TERMIN_TYP[$this->type])
 				$this->cat = $this->type;
 				
 			$this->chng_flag = TRUE;
@@ -183,7 +183,7 @@ class CalendarEvent{
 	function setSeminarId($id){
 		global $TERMIN_TYP;
 		// Seminar-Typ muss vorher gesetzt werden
-		if($TERMIN_TYP[$this->type]["ebene"] == "sem")
+		if($TERMIN_TYP[$this->type])
 			$this->sem_id = $id;
 		else
 			$this->sem_id = "";
@@ -191,7 +191,6 @@ class CalendarEvent{
 	
 	// public
 	function setType($type){
-		global $TERMIN_TYP;
 		// nur fuer private Termine
 		if($type == -2 || $type == -1){
 			$this->type = $type;
