@@ -1,4 +1,12 @@
 <?
+/**
+* Gets ILIAS-Inst-ID
+*
+* This function gets the ILIAS-Installation-ID from the ILIAS-db.
+*
+* @access	public        
+* @return		string	returns Inst_id or false
+*/
 function get_ilias_inst_id()
 {
 	$ilias_db = New DB_Ilias;
@@ -10,6 +18,14 @@ function get_ilias_inst_id()
 		return false;
 }
 
+/**
+* Gets MD5-Hash of the Stud.IP-password of the current user
+*
+* This function gets the Stud.IP-password of the current user and creates the md5-Hash of it.
+*
+* @access	public        
+* @return		string	returns MD5 or false
+*/
 function get_password_md5()
 {
 	global $auth;
@@ -22,6 +38,15 @@ function get_password_md5()
 		return false;
 }
 
+/**
+* Gets the Stud.IP-username connected to the given ILIAS-User-ID
+*
+* This function gets the Stud.IP-username connected to the given ILIAS-User-ID.
+*
+* @access	public        
+* @param		string	ILIAS-User-ID
+* @return		string	returns username or false
+*/
 function get_studip_user($ilias_id)
 {
 	global $auth, $username_prefix;
@@ -35,6 +60,15 @@ function get_studip_user($ilias_id)
 		return false;
 }
 
+/**
+* Checks if user was automatically created
+*
+* This function checks if the ILIAS-user linked to the given Stud.IP-user-ID was automatically created.
+*
+* @access	public        
+* @param		string	Stud.IP-User-ID
+* @return		boolean
+*/
 function is_created_user($studip_id)
 {
 	global $auth, $username_prefix;
@@ -47,6 +81,15 @@ function is_created_user($studip_id)
 		return false;
 }
 
+/**
+* Gets connected User-ID
+*
+* This function gets the ILIAS-user-ID linked to the given Stud.IP-user-ID.
+*
+* @access	public        
+* @param		string	Stud.IP-User-ID
+* @return		string	returns ID or false
+*/
 function get_connected_user_id($studip_id)
 {
 	global $auth, $username_prefix;
@@ -59,6 +102,15 @@ function get_connected_user_id($studip_id)
 		return false;
 }
 
+/**
+* Gets ILIAS-User-ID
+*
+* This function gets the ILIAS-user-ID that belongs to the given ILIAS-Username.
+*
+* @access	public        
+* @param		string	ILIAS-Username
+* @return		string	returns ID or false
+*/
 function get_ilias_user_id($benutzername)
 {
 	$ilias_db = New DB_Ilias;
@@ -70,6 +122,14 @@ function get_ilias_user_id($benutzername)
 		return false;
 }
 
+/**
+* Gets ILIAS-Login-data for user authentification
+*
+* This function gets the ILIAS-Login-data that belongs to the current Stud.IP-User. It returns an string that can be added to the studip2ilias.php-Call.
+*
+* @access	public        
+* @return		string	returns string or false
+*/
 function get_ilias_logindata()
 {
 	global $auth, $username_prefix;
@@ -92,6 +152,25 @@ function get_ilias_logindata()
 		return false;
 }
 
+/**
+* Creates new ILIAS-user-account with the given values
+*
+* This function creates new ILIAS-user-account with the given values in case it doesn't exist already.
+*
+* @access	public        
+* @param		string	ILIAS-Username
+* @param		string	ILIAS-password
+* @param		string	sex
+* @param		string	first name
+* @param		string	name
+* @param		string	title
+* @param		string	institution
+* @param		string	phone number
+* @param		string	email
+* @param		string	status
+* @param		string	language
+* @return		string	returns error-string or true
+*/
 function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)
 {
 	global $ilias_status, $ilias_systemgroup, $username_prefix;
@@ -165,6 +244,15 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 	return true;
 }
 
+/**
+* Creates new ILIAS-user-account connected to the given Stud.IP-User-ID
+*
+* This function creates a new ILIAS-user-account connected to the given Stud.IP-User-ID. User-Data for the account is equal to the date in Stud.IP-Database.
+*
+* @access	public        
+* @param		string	Stud.IP-User-ID
+* @return		string	returns error-string or true
+*/
 function create_ilias_user($studip_id)
 {
 	global $auth, $username_prefix;
@@ -202,6 +290,18 @@ function create_studip_user($benutzername)
 	return false;
 }
 /**/
+
+/**
+* Connects ILIAS-user-account with Stud.IP-User-Account
+*
+* This function connects an existing ILIAS-user-account with an existing Stud.IP-User-Account. If there isn't already an entry in table 'studip_ilias' the field 'is_created' will be set to 1.
+*
+* @access	public        
+* @param		string	Stud.IP-User-ID
+* @param		string	ILIAS-User-ID
+* @param		string	Stud.IP-User-ID
+* @return		string	returns error-string or true
+*/
 function connect_users($studip_id, $ilias_id, $is_created = 0)
 {
 	$db = new DB_Seminar;
@@ -215,6 +315,24 @@ function connect_users($studip_id, $ilias_id, $is_created = 0)
 	return true;
 }
 
+/**
+* Updates an existing ILIAS-user-account with the given values
+*
+* This function updates an existing ILIAS-user-account with the given values and sets group rights for it.
+*
+* @access	public        
+* @param		string	ILIAS-User-ID
+* @param		string	ILIAS-Username
+* @param		string	sex
+* @param		string	first name
+* @param		string	name
+* @param		string	title
+* @param		string	institution
+* @param		string	email
+* @param		string	status
+* @param		string	language
+* @return		boolean	returns true or false
+*/
 function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname, $title_front, $institution, /*$telefon,*/ $email, $status, $preferred_language)
 {
 	global $ilias_status, $ilias_systemgroup, $username_prefix;
@@ -306,6 +424,15 @@ function edit_ilias_user ($u_id, $benutzername, $geschlecht, $vorname, $nachname
 //	echo $query_string . "<br>";
 }
 
+/**
+* Deletes ILIAS-user-account
+*
+* This function deletes the ILIAS-user-account connected to the given ILIAS-User-ID.
+*
+* @access	public        
+* @param		string	Stud.IP-User-ID
+* @return		boolean	returns true
+*/
 function delete_ilias_user($ilias_id)
 {
 /*	if (get_studip_user($ilias_id) == false)
