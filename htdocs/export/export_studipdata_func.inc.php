@@ -22,8 +22,38 @@ function output_data($object_data, $output_mode = "file")
 
 function export_range($range_id)
 {
-global $tree_object;
+	global $db, $o_mode;
 
+	output_data ( xml_header(), $o_mode);
+
+//    Ist die Range-ID eine Instituts-ID?
+	$db=new DB_Seminar;
+
+	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $range_id . '"');
+	if (($db->next_record()) And ($db->f("Name") != "")) 
+	{
+		export_inst( $range_id );
+	}
+	
+	$db=new DB_Seminar;
+
+//    Ist die Range-ID eine Seminar-ID?
+	$db->query('SELECT * FROM seminare WHERE Seminar_id = "' . $range_id . '"');
+	if (($db->next_record()) And ($db->f("Name") != ""))
+	{
+		export_inst( $db->f("Institut_id"), $db->f("Seminar_id") );
+	}
+
+
+//    Ist die Range-ID ein Range-Tree-Item?
+	$tree_object = new RangeTreeObject($range_id);
+	$range_name = $tree_object->item_data["name"];
+
+//    Tree-Item ist ein Institut:
+	if ($tree_object->item_data['studip_object'] == 'inst')
+		export_inst( $tree_object->item_data['studip_object_id'] );
+
+//    Tree-Item hat Institute als Kinder:
 	$inst_array = $tree_object->GetInstKids();
 	
 	while (list($key, $inst_ids) = each($inst_array))
@@ -31,11 +61,15 @@ global $tree_object;
 		export_inst($inst_ids);
 	}
 
+	output_data ( xml_footer(), $o_mode);
 }
 
-function export_inst($inst_id)
+
+function export_inst($inst_id, $ex_sem_id = "all")
 {
 	global $db, $ex_type, $o_mode, $xml_file, $xml_names_inst, $xml_groupnames_inst;
+
+	$db=new DB_Seminar;
 
 	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $inst_id . '"');
 	$db->next_record();
@@ -47,7 +81,7 @@ function export_inst($inst_id)
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
-	$db->query('SELECT Name FROM Institute WHERE Institut_id = "' . $inst_id . '"' AND fakultaets_id = "' . $inst_id . '"');
+	$db->query('SELECT Name FROM Institute WHERE Institut_id = "' . $inst_id . '" AND fakultaets_id = "' . $inst_id . '"');
 	$db->next_record();
 	{
 		if ($db->f("Name") != "") 
@@ -60,7 +94,7 @@ function export_inst($inst_id)
 	switch ($ex_type)
 	{
 	case "veranstaltung": 
-		export_sem($inst_id); 
+		export_sem($inst_id, $ex_sem_id); 
 		break;
 	case "person": 
 		export_pers($inst_id); 
@@ -78,9 +112,12 @@ function export_inst($inst_id)
 	$data_object = "";
 }
 
-function export_sem($inst_id)
+function export_sem($inst_id, $ex_sem_id = "all")
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $filter, $SEMESTER, $ex_sem;
+
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
 
 	switch ($filter)
 	{
@@ -107,6 +144,8 @@ function export_sem($inst_id)
 	}
 	if (isset($SEMESTER[ $ex_sem]["beginn"] ) )
 		$addquery = " AND seminare.start_time <=".$SEMESTER[$ex_sem]["beginn"]." AND (".$SEMESTER[$ex_sem]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+	if ($ex_sem_id != "all")
+		$addquery .= " AND seminare.Seminar_id = '" . $ex_sem_id . "' ";
 	$db->query('SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_bereich USING(Seminar_id) 
 				LEFT JOIN bereiche USING(bereich_id) 
@@ -192,6 +231,8 @@ function export_sem($inst_id)
 function export_pers($inst_id)
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_person, $xml_groupnames_person, $object_counter, $filter;
+
+	$db=new DB_Seminar;
 
 	switch ($filter)
 	{
