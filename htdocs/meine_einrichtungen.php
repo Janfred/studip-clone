@@ -293,7 +293,7 @@ if ( !$perm->have_perm("root")) {
 					echo "</a>&nbsp;";
 				}
 				else
-					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" border=\"0\">";
+					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
 			}
 			echo "</td>";
 

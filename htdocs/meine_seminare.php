@@ -340,7 +340,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					echo "</a>&nbsp;";
 				}
 				else
-					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" border=\"0\">";
+					echo "&nbsp;<img src=\"pictures/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
 			}
 			echo "</td>";
 
