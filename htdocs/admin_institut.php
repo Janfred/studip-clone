@@ -91,9 +91,6 @@ while ( is_array($HTTP_POST_VARS)
 			}
 		}
 	
-		// insert the Institut...
-		if ($home == "")
-			$home = "http://www.studip.de";
 	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','".time()."', '".time()."')";
 	  $db->query($query);
 	  if ($db->affected_rows() == 0) {
