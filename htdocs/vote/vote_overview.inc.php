@@ -495,7 +495,7 @@ function createVoteArray($mode){
 		
 		// read out the required data
 		$changedate = $vote->getChangedate();
-		$title = htmlready($vote->getTitle());
+		$title = htmlready (my_substr ($vote->getTitle(), 0, 35));
 		$rangeID = $vote->getRangeID();
 		
 		if (($rangemode == "root" ) || ($rangemode == "admin") || ($rangemode == "dozent")){
