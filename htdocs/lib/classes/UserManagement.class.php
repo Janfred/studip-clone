@@ -389,11 +389,21 @@ class UserManagement {
 			
 		// Is the username correct?
 		if (isset($newuser['auth_user_md5.username'])) {
-			if (!$this->validator->ValidateUsername($newuser['auth_user_md5.username'])) {
-				$this->msg .= "error§" .  _("Der gewählte Username ist zu kurz oder enthält unzulässige Zeichen!") . "§";
-				return FALSE;
-			}
-		}														
+			if ($this->user_data['auth_user_md5.username'] != $newuser['auth_user_md5.username']) {
+				if (!$this->validator->ValidateUsername($newuser['auth_user_md5.username'])) {
+					$this->msg .= "error§" .  _("Der gewählte Username ist zu kurz oder enthält unzulässige Zeichen!") . "§";
+					return FALSE;
+				}
+				$check_uname = StudipAuthAbstract::CheckUsername($newuser['auth_user_md5.username']);
+				if ($check_uname['found']) {
+					$this->msg .= "error§" . _("Der Username wird bereits von einem anderen User verwendet. Bitte wählen sie einen anderen Usernamen!") . "§";
+					return false;
+				} else {
+					//$this->msg .= "info§" . $check_uname['error'] ."§";
+				}
+			} else
+			unset($newuser['auth_user_md5.username']);
+		} 														
 
 		// Can we reach the email?
 		if (isset($newuser['auth_user_md5.Email'])) {
@@ -473,7 +483,7 @@ class UserManagement {
 				$this->msg .= "info§" . sprintf(_("%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."), $db_ar) . "§";
 			}
 			// delete all private appointments of this user
-		 	if ($db_ar = delete_range_of_dates($this->user_data['auth_user_md5.user_id'], FALSE) > 0) {
+			if ($db_ar = delete_range_of_dates($this->user_data['auth_user_md5.user_id'], FALSE) > 0) {
 				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Terminen gel&ouml;scht."), $db_ar) . "§";
 			}
 		}
@@ -628,7 +638,7 @@ class UserManagement {
 		while ($this->db->next_record()) {
 			$query = "SELECT count(*) AS count FROM folder WHERE range_id = '".$this->db->f("folder_id")."'";
 			$this->db2->query($query);
- 			$this->db2->next_record();
+			$this->db2->next_record();
 			if (!$this->db2->f("count") && !doc_count($this->db->f("folder_id"))) {
 				$query = "DELETE FROM folder WHERE folder_id ='".$this->db->f("folder_id")."'";
 				$this->db2->query($query);
@@ -642,7 +652,7 @@ class UserManagement {
 		// folder left?
 		$query = "SELECT count(*) AS count FROM folder WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
- 		$this->db->next_record();
+		$this->db->next_record();
 		if ($this->db->f("count")) {
 			$this->msg .= sprintf("info§" . _("%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer BenutzerInnen enthalten.") . "§", $this->db->f("count"));
 		}
@@ -686,21 +696,21 @@ class UserManagement {
 		// delete user from archiv
 		$query = "DELETE FROM archiv_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
-	 	if (($db_ar = $this->db->affected_rows()) > 0) {
-		 	$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht."), $db_ar) . "§";
- 		}
+		if (($db_ar = $this->db->affected_rows()) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht."), $db_ar) . "§";
+		}
 
 		// delete links to all personal news from this user
-	 	$query = "DELETE FROM news_range WHERE range_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$query = "DELETE FROM news_range WHERE range_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
 		if (($db_ar = $this->db->affected_rows()) > 0) {
 			$this->msg .= "info§" . sprintf(_("%s Verweise auf News gel&ouml;scht."), $db_ar) . "§";
 		}
 		// check news for unlinked entries
-	 	$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
+		$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
 		$this->db->query($query);
 		while ($this->db->next_record()) {	// this news are not linked any longer...
-		 	$query = "DELETE FROM news WHERE news_id = '" . $this->db->f("news_id") . "'";
+			$query = "DELETE FROM news WHERE news_id = '" . $this->db->f("news_id") . "'";
 			$this->db2->query($query);
 		}
 		if (($db_ar = $this->db->num_rows()) > 0) {
@@ -734,13 +744,13 @@ class UserManagement {
 			$this->msg .= "info§" . $msg . "§";
 		}
 
- 		// delete all guestbook entrys
+		// delete all guestbook entrys
 		$query = "DELETE FROM guestbook WHERE range_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
-	 	if (($db_ar = $this->db->affected_rows()) > 0) {
-		 	$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus dem Gästebuch gel&ouml;scht."), $db_ar) . "§";
- 		}
-	 		
+		if (($db_ar = $this->db->affected_rows()) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus dem Gästebuch gel&ouml;scht."), $db_ar) . "§";
+		}
+			
 		// delete the datafields
 		$DataFields = new DataFields($this->user_data['auth_user_md5.user_id']);
 		$DataFields->killAllEntries();				
@@ -774,7 +784,7 @@ class UserManagement {
 		$this->db->query($query);
 		if (!$this->db->affected_rows()) {
 			$this->msg .= "error§<b>" . _("Fehlgeschlagen:") . "</b> " . $query . "§";
-     	return FALSE;
+		return FALSE;
 		} else {
 			$this->msg .= "msg§" . sprintf(_("User \"%s\" gel&ouml;scht."), $this->user_data['auth_user_md5.username']) . "§";
 		}
