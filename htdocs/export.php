@@ -98,7 +98,7 @@ if ($EXPORT_ENABLE)
 		array ("kategorie"  => "Information:",
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => _("Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
+									"text"  => _("Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
 								 )
 							)
 			)
