@@ -50,9 +50,24 @@ if ($com == "new")
 
 $module = FALSE;
 if ($com == "new") {
-	foreach ($EXTERN_MODULE_TYPES as $type) {
-	if ($type["module"] == $mod)
-		$module =& new ExternModule($range_id, $mod, "", "NEW");
+	foreach ($EXTERN_MODULE_TYPES as $key => $type) {
+		if ($type["module"] == $mod) {
+			$configurations = get_all_configurations($range_id, $key);
+			if (sizeof($configurations[$type["module"]]) < $EXTERN_MAX_CONFIGURATIONS)
+				$module =& new ExternModule($range_id, $mod, "", "NEW");
+			else {
+				$message = sprintf(_("Es wurden bereits %s Konfigurationen angelegt. Sie k&ouml;nnen f&uuml;r dieses Module keine weiteren Konfigurationen anlegen.")
+						, $EXTERN_MAX_CONFIGURATIONS);
+				my_error($message, "blank", 1);
+				echo "<tr><td class=\"blank\" align=\"center\">\n";
+				echo "<a href=\"$PHP_SELF??list=TRUE&view=extern_inst\">";
+				echo makeButton("zurueck");
+				echo "</a>\n</td></tr>\n";
+				print_footer();
+				page_close();
+				exit;
+			}
+		}
 	}
 }
 else {
