@@ -182,7 +182,7 @@ Dezember 1999
 - Die ersten Projektentwürfe von Stud.IP entstehen. Es soll ein internetbasiertes System zur Unterstützung
   von Lehrveranstaltungen entstehen. Es soll personalisiert sein, mit Seminarverwaltung, Dateiupload, Terminen, News,
   Forum und Literatur- und Linklisten.
-- Das Konzept wird maßgeblich Oliver Brakel, Cornelis Kater, Ralf Stockmann und Stefan Suchi entworfen. Aus diesen Entwicklern
+- Das Konzept wird maßgeblich von Oliver Brakel, Cornelis Kater, Ralf Stockmann und Stefan Suchi entworfen. Aus diesen Entwicklern
   entsteht die Stud.IP-Crew, die die das System unabhängig weiterentwickelt
 - Schnell wird klar, das die Technologie der Wahl ein LAMP Server-System ist
 
