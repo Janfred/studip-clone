@@ -18,6 +18,47 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+function createFolderZip ($folder_id) {
+	global $TMP_PATH, $ZIP_PATH;
+	$zip_file_id=md5(uniqid("jabba"));
+	
+	//create temporary Folder
+	exec ("mkdir $TMP_PATH/$zip_file_id");
+	$tmp_full_path="$TMP_PATH/$zip_file_id";
+	
+	//create folder structure
+	createTempFolder ($folder_id, $tmp_full_path);
+
+	//zip stuff
+	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$TMP_PATH."/".$zip_file_id." * ");
+ 	exec ("rm -r $tmp_full_path");
+ 	exec ("mv ".$TMP_PATH."/".$zip_file_id.".zip ".$TMP_PATH."/".$zip_file_id);
+ 	
+ 	return $zip_file_id;
+}
+
+function createTempFolder ($folder_id,$tmp_full_path) {
+	global $UPLOAD_PATH;
+	$db = new DB_Seminar();
+
+	//copy all documents from this folder to the temporary folder
+	$db->query("SELECT dokument_id, filename FROM dokumente WHERE range_id = '$folder_id' ORDER BY name");
+	while ($db->next_record()) {
+		$docs++;
+		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
+	}
+	$db->query("SELECT folder_id, name FROM folder WHERE range_id = '$folder_id' ORDER BY name");
+	while ($db->next_record()) {
+		$folders++;
+		$tmp_sub_full_path = $tmp_full_path."/[".$folders."]".$db->f("name");
+		exec ("mkdir '$tmp_sub_full_path' ");
+		createTempFolder($db->f("folder_id"),$tmp_sub_full_path);
+	}
+	return TRUE;
+}
+
+
+
 function getFolderChildren($folder_id){
 	static $folder_children;
 	static $folder_num_children;
@@ -752,8 +793,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if (($change != $db->f("folder_id")) && ($upload != $db->f("folder_id"))) {
 				if (($rechte) || ($SemUserStatus == "autor")) {
 					$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_#anker\">" . makeButton("dateihochladen", "img") . "</a>";
+					if ($documents_count)
+						$edit.= "&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
 					if ($rechte) {
-						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>"; 
+						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>"; 
 						if (($letzter == 0) && ($dok_letzter==0)) {
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
 							}

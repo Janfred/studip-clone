@@ -46,7 +46,7 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
 switch ($type) {
-	//We want to download from the archive
+	//We want to download from the archive (this mode performs perm checks)
 	case 1: 
 		$path_file=$ARCHIV_PATH."/".$file_id;
 	break;
@@ -58,7 +58,11 @@ switch ($type) {
 	case 3:
 		$path_file=$ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/".$file_id;
 	break;
-	//We want to download from the regular upload-folder
+	//we want to download from the studip-tmp folder (this mode performs perm checks)
+	case 4:
+		$path_file=$TMP_PATH . "/".$file_id;
+	break;
+	//we want to download from the regular upload-folder (this mode performs perm checks)
 	default:
 		$path_file=$UPLOAD_PATH."/".$file_id;
 	break;
@@ -222,11 +226,10 @@ if (($type != 2) && ($type != 3) && (!$skip_check)) { //if type 2 or type 3 we d
 			$db->next_record();
 			if ($db->f("Lesezugriff") != 0)
 				$no_access=TRUE;
-			}
-		else
+		} else {
 			$no_access=TRUE; //nobody darf nie an das Archiv
 		}
-	elseif (!$perm->have_perm("root")) {
+	} elseif (!$perm->have_perm("root")) {
 		if ($type) {
 			if ($perm->have_perm("admin") && !$perm->have_perm("root"))
 				$db->query ("SELECT archiv.seminar_id FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE archiv_file_id = '".$file_id."' ");

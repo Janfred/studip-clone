@@ -18,13 +18,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
+if ($folderzip) {
+	$zip_file_id = createFolderZip($folderzip);
+	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=Ordner.zip");
+	die;
+}
+
+
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 	
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
