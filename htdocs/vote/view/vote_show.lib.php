@@ -359,7 +359,7 @@ function createVoteHeadline (&$vote, $open, $openID) {
       VOTE_ICON_VOTE;
    $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\" ".
       "style=\"vertical-align:bottom;\">";
-   $voteInfo = "<a href=\"about.php?username=".$authorUsername."\">\n"
+   $voteInfo = "<b>".$number."</b> / <a href=\"about.php?username=".$authorUsername."\">\n"
       . "  <font size=\"-1\" color=\"#333399\">".$authorName."</font>\n"
       . " </a>\n"
       . " <font size=\"-1\">&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
@@ -376,7 +376,7 @@ function createVoteHeadline (&$vote, $open, $openID) {
       $link .= "#openvote";
    }
 
-   $title = "<a href=\"$link\" class=\"tree\" >".$title." (".$number.")</a>";
+   $title = "<a href=\"$link\" class=\"tree\" >".$title."</a>";
    if ($vote->getVoteID() == $openID)
       $title .= "<a name=\"openvote\">&nbsp;</a>";
 
