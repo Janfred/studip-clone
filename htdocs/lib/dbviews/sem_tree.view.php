@@ -43,10 +43,9 @@ $_views['sem_number_end_sql'] = "IF(duration_time=-1,-1,INTERVAL(start_time+dura
 
 $_views["SEM_TREE_GET_DATA"] = array("pk"=>"sem_tree_id","temp_table_type"=>"MyISAM",
 							"query"=>"SELECT a.*, c.Name AS studip_object_name, c.Institut_id, count(§) AS entries 
-							 FROM sem_tree a LEFT JOIN seminar_sem_tree b USING(sem_tree_id)
-							LEFT JOIN seminare USING(seminar_id) LEFT JOIN Institute c ON (a.studip_object_id = c.Institut_id)
+							 FROM sem_tree a LEFT JOIN seminar_sem_tree st USING(sem_tree_id)
+							LEFT JOIN seminare b ON(st.seminar_id = b.Seminar_id AND b.visible=1) LEFT JOIN Institute c ON (a.studip_object_id = c.Institut_id)
 							GROUP BY a.sem_tree_id ORDER BY priority");
-//							WHERE seminare.visible='1' GROUP BY a.sem_tree_id ORDER BY priority");
 $_views["SEM_TREE_GET_SEMIDS"] = array("pk"=>"seminar_id","temp_table_type"=>"HEAP",
 							"query" => "SELECT  b.seminar_id, " . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_sem_tree b LEFT JOIN seminare c USING(seminar_id) WHERE c.visible='1' AND sem_tree_id IN(&) §");
 $_views["SEM_TREE_GET_SEMDATA"] = array("query" => "SELECT a.seminar_id,Name,username AS doz_uname, Nachname AS doz_name, " . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end
@@ -95,7 +94,7 @@ $_views["SEM_GET_INST"] = array("query" => "SELECT Institut_id FROM seminare WHE
 $_views["SEM_TREE_GET_FAK"] = array("query" => "SELECT sem_tree_id FROM Institute LEFT JOIN sem_tree ON (fakultaets_id=studip_object_id) WHERE Institut_id=? AND NOT ISNULL(sem_tree_id)");
 
 
-$_views["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id," . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE c.visible='1' AND a.Institut_id IN (&) AND c.visible='1' AND c.Seminar_id IS NOT NULL 
+$_views["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id," . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE c.visible='1' AND a.Institut_id IN (&) AND c.Seminar_id IS NOT NULL 
 												§ § ");
 
 $_views["SEM_USER_GET_SEM"] = array("query" =>"SELECT b.Seminar_id,b.Name, " . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_user a LEFT JOIN seminare b USING(Seminar_id)
