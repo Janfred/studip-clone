@@ -620,8 +620,9 @@ function in_archiv ($sem_id) {
 	$db->query ($query);
 	$list = "('".$seminar_id."'";
 	while ($db->next_record()) {
-		$arr .= ", '".$db->f("termin_id")."' ";
+		$list .= ", '".$db->f("termin_id")."' ";
 	}
+	$list.= ")";
 	//copy documents in the temporary folder-system
 	$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN %s ORDER BY name", $arr);
 	$db->query ($query);
