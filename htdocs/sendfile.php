@@ -219,7 +219,7 @@ if (!$type) {
 }
 
 //permcheck
-if (($type != 2) && ($type != 3) && (!$skip_check)) { //if type 2 or type 3 we download from the tmp directory and skip permchecks
+if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 2, 3 or 4 we download from some tmp directory and skip permchecks
 	if (!$perm->have_perm ("user")) {
 		if (!$type) {
 			$db->query("SELECT Lesezugriff FROM seminare LEFT JOIN dokumente USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
@@ -309,9 +309,14 @@ header("Content-disposition: $content_disposition; filename=\"".rawurldecode($fi
 readfile($path_file);
 TrackAccess ($file_id);
 
-//temporare Datein fuer zippen loeschen
+//remove temporary file after zipping
 if ($zip) {
 	exec ("rm $tmp_file_name");
+	exec ("rm $path_file");
+	}
+
+//remove temporary file after multiple-dwonload (as zip)
+if ($type == 4) {
 	exec ("rm $path_file");
 	}
 

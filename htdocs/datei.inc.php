@@ -18,6 +18,33 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+function createSelectedZip ($file_ids) {
+	global $TMP_PATH, $ZIP_PATH, $SessSemName;
+	$db = new DB_Seminar();
+		
+	$zip_file_id=md5(uniqid("jabba"));
+	
+	//create temporary Folder
+	exec ("mkdir $TMP_PATH/$zip_file_id");
+	$tmp_full_path="$TMP_PATH/$zip_file_id";
+	
+	//create folder content
+	$in="('".join("','",$file_ids)."')";	
+	$db->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN $in AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename");
+	while ($db->next_record()) {
+		$docs++;
+		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
+	}
+
+	//zip stuff
+	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -j ".$TMP_PATH."/".$zip_file_id." * ");
+ 	exec ("rm -r $tmp_full_path");
+ 	exec ("mv ".$TMP_PATH."/".$zip_file_id.".zip ".$TMP_PATH."/".$zip_file_id);
+ 	
+ 	return $zip_file_id;
+}
+
+
 function createFolderZip ($folder_id) {
 	global $TMP_PATH, $ZIP_PATH;
 	$zip_file_id=md5(uniqid("jabba"));
@@ -26,7 +53,7 @@ function createFolderZip ($folder_id) {
 	exec ("mkdir $TMP_PATH/$zip_file_id");
 	$tmp_full_path="$TMP_PATH/$zip_file_id";
 	
-	//create folder structure
+	//create folder comntent
 	createTempFolder ($folder_id, $tmp_full_path);
 
 	//zip stuff
@@ -38,11 +65,11 @@ function createFolderZip ($folder_id) {
 }
 
 function createTempFolder ($folder_id,$tmp_full_path) {
-	global $UPLOAD_PATH;
+	global $UPLOAD_PATH, $SessSemName;
 	$db = new DB_Seminar();
 
 	//copy all documents from this folder to the temporary folder
-	$db->query("SELECT dokument_id, filename FROM dokumente WHERE range_id = '$folder_id' ORDER BY name");
+	$db->query("SELECT dokument_id, filename FROM dokumente WHERE range_id = '$folder_id' AND seminar_id = '".$SessSemName[1]."' ORDER BY name, filename");
 	while ($db->next_record()) {
 		$docs++;
 		exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
@@ -475,22 +502,25 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 	if (!$name)
 		$name = $the_file_name;
 	
-	$db=new DB_Seminar;
-
-	if (!$refresh)
-		$query	 = sprintf ("INSERT INTO dokumente SET dokument_id='%s', description='%s', mkdate='%s', chdate='%s', range_id='%s', filename='%s', name='%s', "
-				. "user_id='%s', seminar_id='%s', filesize='%s', autor_host='%s'",
-				$dokument_id, $description, $date, $date, $range_id, $the_file_name, $name, 
-				$user_id, $upload_seminar_id, $the_file_size, getenv("REMOTE_ADDR"));
-	else	
-		$query	 = sprintf ("UPDATE dokumente SET dokument_id='%s', chdate='%s', filename='%s', "
-				. "user_id='%s', filesize='%s', autor_host='%s' WHERE dokument_id = '%s' ",
-				$dokument_id, $date, $the_file_name, $user_id, $the_file_size, getenv("REMOTE_ADDR"), $refresh);
-
-	$db->query($query);
-	if ($db->affected_rows())
-		return TRUE;
-	else
+	if ($the_file_size > 0) {
+		$db=new DB_Seminar;
+	
+		if (!$refresh)
+			$query	 = sprintf ("INSERT INTO dokumente SET dokument_id='%s', description='%s', mkdate='%s', chdate='%s', range_id='%s', filename='%s', name='%s', "
+					. "user_id='%s', seminar_id='%s', filesize='%s', autor_host='%s'",
+					$dokument_id, $description, $date, $date, $range_id, $the_file_name, $name, 
+					$user_id, $upload_seminar_id, $the_file_size, getenv("REMOTE_ADDR"));
+		else	
+			$query	 = sprintf ("UPDATE dokumente SET dokument_id='%s', chdate='%s', filename='%s', "
+					. "user_id='%s', filesize='%s', autor_host='%s' WHERE dokument_id = '%s' ",
+					$dokument_id, $date, $the_file_name, $user_id, $the_file_size, getenv("REMOTE_ADDR"), $refresh);
+	
+		$db->query($query);
+		if ($db->affected_rows())
+			return TRUE;
+		else
+			return FALSE;
+	} else
 		return FALSE;
 }
 
@@ -648,7 +678,8 @@ function upload_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALS
 
 //create the folder-system
 function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all, $refresh=FALSE) {
-	global $_fullname_sql,$SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $rechte, $anfang, $PHP_SELF, $user, $SemSecLevelWrite, $SemUserStatus;
+	global $_fullname_sql,$SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $rechte, $anfang, $PHP_SELF, 
+		$user, $SemSecLevelWrite, $SemUserStatus, $check_all;
 
 	if (!$anfang)
 		$anfang = $folder_id;
@@ -876,7 +907,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 						
 						//Zusatzangaben erstellen
-						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
+						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));
+						if ($all) {
+							$zusatz.=sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
+						}
 					}
 					
 					?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?

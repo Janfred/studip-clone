@@ -18,17 +18,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
-if ($folderzip) {
-	$zip_file_id = createFolderZip($folderzip);
-	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=Ordner.zip");
-	die;
-}
-
-
-
+ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-	
+
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
@@ -38,6 +31,23 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 $sess->register("folder_system_data");
+
+if ($folderzip) {
+	$zip_file_id = createFolderZip($folderzip);
+	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=Ordner.zip");
+	page_close();
+	die;
+}
+
+if ($download_selected_x) {
+	print_r($download_ids);
+	if (is_array($download_ids)) {
+		$zip_file_id = createSelectedZip($download_ids);
+		//header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=SelectedOrdner.zip");
+		//die;
+		page_close();
+	}
+}
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -213,8 +223,7 @@ if ($close) {
 				?>
 			</td>
 		</tr>
-<tr>
-<td class="blank" colspan="2" width="100%">
+
 
 <?
 	//Ordner die fehlen, anlegen: Allgemeiner, wenn nicht da, Ordner zu Terminen, die keinen Ordner haben
@@ -230,6 +239,8 @@ if ($close) {
 
 		if ($select) {
 			?>
+			<tr>
+			<td class="blank" colspan="2" width="100%">			
 			<blockquote>
 			<p valign="middle">
 			<form action="<? echo $PHP_SELF?>" method="POST">
@@ -244,22 +255,25 @@ if ($close) {
 			}
 		}
 		
+	//when changing, uploading or show all (for download selector), create a form
+	if (($change) || ($folder_system_data["cmd"]=="all")) {
+		echo "<form method=\"post\" action=\"$PHP_SELF\">";
+		}
+	
+	print "<tr><td class=\"blank\" colspan=\"2\" width=\"100%\">";
+
+
 	if ($folder_system_data["cmd"]=="all") {
 		?>
 		<blockquote>
 		<? printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); ?>
 		</blockquote>
 		<?
+		print ("<div align=\"right\"><a style=\"{vertikal-align: middle;}\" href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."&nbsp;<input align=\"absmiddle\" style=\"{vertikal-align: middle;}\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");		
 		}
 		
 	//Alle Termine der Veranstaltung holen
 	$db->query("SELECT termin_id FROM termine INNER JOIN folder ON(termin_id=folder.range_id) WHERE termine.range_id='$range_id' ORDER BY date");
-	
-	//Bei Veraenderung Form beginnen
-	if ($change) {
-		echo "<form method=\"post\" action=\"$PHP_SELF\">";
-		echo "<br />";	
-		}
 	
 	//Treeview
 	if ($folder_system_data["cmd"]=="tree") {
