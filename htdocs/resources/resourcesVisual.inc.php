@@ -906,12 +906,17 @@ Bearbeitung eines Objects
 /*****************************************************************************/
 class editObject extends cssClasses {
 	var $resObject;		//Das Oject an dem gearbeitet wird
+	var $used_view;		//the used view
 	
 	//Konstruktor
 	function editObject($resource_id) {
 		$this->db=new DB_Seminar;
 		$this->db2=new DB_Seminar;
 		$this->resObject=new resourceObject($resource_id);
+	}
+	
+	function setUsedView ($value) {
+		$this->used_view = $value;
 	}
 	
 	function selectCategories() {
@@ -941,7 +946,7 @@ class editObject extends cssClasses {
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
-			<input type="HIDDEN" name="view" value="edit_object_schedule" />
+			<input type="HIDDEN" name="view" value="<?=$this->used_view ?>" />
 			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", ($assign_id) ? $resAssign->getResourceId() : $resources_data["structure_open"]); ?>" />			
 			<input type="HIDDEN" name="change_schedule_repeat_month_of_year" value="<? echo $resAssign->getRepeatMonthOfYear() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_month" value="<? echo $resAssign->getRepeatDayOfMonth() ?>" />
@@ -1325,6 +1330,7 @@ class ViewSchedules extends cssClasses {
 	var $length_factor;		//the used length factor for calculations, only used for viewing
 	var $length_unit;		//the used length unit for calculations, only used for viewing
 	var $week_offset;		//offset for the week view
+	var $used_view;		//the used view, submitted to the sub classes
 		
 	//Konstruktor
 	function ViewSchedules($resource_id='', $user_id='', $range_id='') {
@@ -1356,10 +1362,14 @@ class ViewSchedules extends cssClasses {
 		$this->week_offset = $value;
 	}
 	
+	function setUsedView($value) {
+		$this->used_view = $value;
+	}
+	
 	function navigator () {
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?view=view_schedule&navigate=TRUE">
+		<form method="POST" action="<?echo $PHP_SELF ?>?navigate=TRUE">
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
 				</td>
@@ -1443,11 +1453,17 @@ class ViewSchedules extends cssClasses {
 	 	$dow = date ("w", $this->start_time);
 	 	if (date ("w", $this->start_time) >1)
 	 		$offset = 1 - date ("w", $this->start_time);
-	 	if (!date ("w", $this->start_time) >1)
+	 	if (date ("w", $this->start_time) <1)
 		 	$offset = -6;
-		 	
+
+		 //select view to jump from the schedule
+		 if ($this->used_view == "openobject_schedule")
+		 	$view = "openobject_assign";
+		 else
+			$view = "edit_object_assign";
+		 
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
- 		$end_time = mktime (23, 59, 0, date("n",$this->start_time), date("j", $this->start_time)+7+($this->week_offset*7), date("Y", $this->start_time));
+ 		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6+($this->week_offset*7), date("Y", $start_time));
 		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -1455,7 +1471,7 @@ class ViewSchedules extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $this->getClass() ?>"  width="10%" align="left">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?previous_week=TRUE"><img src="pictures/forumrotlinks.gif" <? echo tooltip ("Vorherige Woche anzeigen") ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&previous_week=TRUE"><img src="pictures/forumrotlinks.gif" <? echo tooltip ("Vorherige Woche anzeigen") ?>border="0" /></a>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="76%" align="center"><br />
 					<a href="anker"></a>
@@ -1463,7 +1479,7 @@ class ViewSchedules extends cssClasses {
 					<br /><br />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="10%" align="center">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?next_week=TRUE"><img src="pictures/forumrot.gif" <? echo tooltip ("Nächste Woche anzeigen") ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&next_week=TRUE"><img src="pictures/forumrot.gif" <? echo tooltip ("Nächste Woche anzeigen") ?>border="0" /></a>
 				</td>
 			</tr>
 			<tr>
@@ -1476,7 +1492,7 @@ class ViewSchedules extends cssClasses {
 					echo "<br />&nbsp; ";
 					while ($event=$assign_events->nextEvent()) {
 						$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 
-											"$PHP_SELF?view=edit_object_schedules&edit_assign_object=".$event->getAssignId());
+											"$PHP_SELF?view=$view&edit_assign_object=".$event->getAssignId());
 					}
 					$schedule->createSchedule("html");
 					echo "<br />&nbsp; ";

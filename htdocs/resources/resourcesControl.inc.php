@@ -45,7 +45,7 @@ empfangene Werte auswerten und Befehle ausfuehren
 //View uebernehmen
 if ($view)
 	 $resources_data["view"]=$view;
-
+	
 //If we start the admin mode, kill open objects
 if ($resources_data["view"] == "resources")
 	closeObject();
@@ -282,8 +282,6 @@ if ($change_object_schedules) {
 		$error->displayMsg(1);
 		die;
 	}
-		
-	$resources_data["view"]="edit_object_schedules";
 }
 
 //Objekteigenschaften aendern
@@ -457,9 +455,10 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 	if ($navigate) {
 		$resources_data["schedule_length_factor"] = $schedule_length_factor;
 		$resources_data["schedule_length_unit"] = $schedule_length_unit;
-		$resources_data["week_offset"] = 0;
+		$resources_data["schedule_week_offset"] = 0;
 		$resources_data["schedule_start_time"] = mktime (0,0,0,$schedule_begin_month, $schedule_begin_day, $schedule_begin_year);
-		if ($start_list_x) {
+		if (($start_list_x) || (($jump_x) && ($resources_data["schedule_mode"] == "list"))){
+			$resources_data["schedule_mode"] = "list";
 			if ($resources_data["schedule_start_time"] < 1)
 				$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
 			switch ($resources_data["schedule_length_unit"]) {
@@ -478,8 +477,10 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 			}
 			if ($resources_data["schedule_end_time"]  < 1)
 				$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+1, date("Y", time()));
-		} else
+		} elseif (($start_graphical_x) || (!$resources_data["schedule_mode"]) || (($jump_x) && ($resources_data["schedule_mode"] == "graphical"))) {
 			$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60);
+			$resources_data["schedule_mode"] = "graphical";			
+		}
 	} else {
 		$resources_data["schedule_start_time"] = mktime (0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
 		$resources_data["schedule_end_time"] = mktime (23, 59, 0, date("n", time()), date("j", time())+7, date("Y", time()));
@@ -513,7 +514,8 @@ if ($resources_data["view"]=="search") {
 	}
 }
 
-if ($resources_data["view"] == "openobject_details" || $resources_data["view"] == "openobject_schedules" || $resources_data["view"] == "openobject_assign")
+//show object, this object will be edited or viewed
+if ($show_object)
 	$resources_data["structure_open"]=$show_object;
 
 /*****************************************************************************
@@ -653,12 +655,13 @@ if ($resources_data["view"]=="edit_object_perms") {
 }
 
 /*****************************************************************************
-Objectbelegung bearbeiten, views: edit_object_schedules
+Objectbelegung bearbeiten, views: edit_object_assign, openobject_assign
 /*****************************************************************************/
-if ($resources_data["view"]=="edit_object_schedules" || $resources_data["view"]=="openobject_assign") {
+if ($resources_data["view"]=="edit_object_assign" || $resources_data["view"]=="openobject_assign") {
 
 	if ($resources_data["structure_open"]) {
 		$editObject=new editObject($resources_data["structure_open"]);
+		$editObject->setUsedView($resources_data["view"]);
 		if ($edit_assign_object)
 			$assign_id=$edit_assign_object;
 		$editObject->create_schedule_forms($assign_id);
@@ -706,11 +709,12 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 	$ViewSchedules->setLengthFactor($resources_data["schedule_length_factor"]);
 	$ViewSchedules->setLengthUnit($resources_data["schedule_length_unit"]);	
 	$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);	
-
+	$ViewSchedules->setUsedView($resources_data["view"]);	
+		
 	$ViewSchedules->navigator();
 	
 	if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
-		if ($start_list_x) //view List
+		if ($resources_data["schedule_mode"] == "list") //view List
 			$ViewSchedules->create_schedule_list($schedule_start_time, $schedule_end_time);
 		else
 			$ViewSchedules->create_schedule_graphical($schedule_start_time, $schedule_end_time);
