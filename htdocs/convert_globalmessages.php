@@ -26,7 +26,7 @@ while ($db->next_record()) {
 		$user_id_snd = get_userid($db->f("user_id_snd"));
 		echo $user_id_snd;
 	} else {
-		$user_id_snd != "____%system%____";
+		$user_id_snd = "____%system%____";
 	}
 	$user_id_rec = get_userid($db->f("user_id_rec"));
 
