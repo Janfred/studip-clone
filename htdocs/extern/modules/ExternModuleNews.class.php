@@ -43,7 +43,7 @@ class ExternModuleNews extends ExternModule {
 	var $field_names = array();
 	var $data_fields = array("date", "topic");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableRow",
-																		"ContentNews", "Link", "TableFooter");
+																		"ContentNews", "LinkIntern", "TableFooter");
 
 	/**
 	*
@@ -55,6 +55,11 @@ class ExternModuleNews extends ExternModule {
 				_("Nachricht")
 		);
 		
+	}
+	
+	function setup () {
+		$this->elements["LinkIntern"]->link_module_type = 6;
+		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Mitarbeiterdetails");
 	}
 	
 	function checkRangeId ($range_id) {

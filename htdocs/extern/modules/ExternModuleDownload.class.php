@@ -43,7 +43,7 @@ class ExternModuleDownload extends ExternModule {
 	var $field_names = array();
 	var $data_fields = array("icon", "filename", "description", "mkdate", "filesize", "fullname");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow",
-																	 "TableRow", "Link", "TableFooter");
+																	 "TableRow", "Link", "LinkIntern", "TableFooter");
 
 	/**
 	*
@@ -59,6 +59,12 @@ class ExternModuleDownload extends ExternModule {
 				_("Upload durch")
 		);
 		
+	}
+	
+	function setup () {
+		$this->elements["LinkIntern"]->link_module_type = 6;
+		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Mitarbeiterdetails");
+		$this->elements["Link"]->real_name = _("Link zum Dateidownload");
 	}
 	
 	function checkRangeId ($range_id) {

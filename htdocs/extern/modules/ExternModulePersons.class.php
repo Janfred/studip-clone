@@ -43,7 +43,7 @@ class ExternModulePersons extends ExternModule {
 	var $field_names = array();
 	var $data_fields = array("fullname", "Telefon", "raum", "Email", "sprechzeiten");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableGroup",
-																	 "TableRow", "Link", "TableFooter");
+																	 "TableRow", "LinkIntern", "TableFooter");
 
 	/**
 	*
@@ -57,7 +57,11 @@ class ExternModulePersons extends ExternModule {
 				_("Email"),
 				_("Sprechzeiten")
 		);
-		
+	}
+	
+	function setup () {
+		$this->elements["LinkIntern"]->link_module_type = 6;
+		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Mitarbeiterdetails");
 	}
 	
 	function checkRangeId ($range_id) {

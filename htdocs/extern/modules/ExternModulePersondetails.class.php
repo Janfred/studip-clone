@@ -46,7 +46,7 @@ class ExternModulePersondetails extends ExternModule {
 			"news", "termine", "publi", "kategorien"));
 	var $registered_elements = array("Body", "PersondetailsHeader", "Contact", "PersondetailsLectures",
 					"TableParagraph", "TableParagraphHeadline", "TableParagraphSubHeadline",
-					"TableParagraphText", "List", "Link");
+					"TableParagraphText", "List", "LinkIntern");
 	var $args = array("username");
 
 	/**
@@ -76,6 +76,11 @@ class ExternModulePersondetails extends ExternModule {
 			)
 		);
 		
+	}
+	
+	function setup () {
+		$this->elements["LinkIntern"]->link_module_type = 7;
+		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Veranstaltungsdetails");
 	}
 	
 	function checkRangeId ($range_id) {

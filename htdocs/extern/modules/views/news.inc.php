@@ -101,7 +101,10 @@ else {
 	$attr_div_body = $this->config->getAttributes("ContentNews", "divbody");
 	$attr_font_topic = $this->config->getAttributes("ContentNews", "fonttopic");
 	$attr_font_body = $this->config->getAttributes("ContentNews", "fontbody");
-
+	
+	$link_persondetails = $this->getModuleLink("Persondetails",
+			$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
+	
 	$set_1 = $this->config->getAttributes("TableRow", "td");
 	$set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
 	$zebra = $this->config->getValue("TableRow", "td_zebratd_");
@@ -112,9 +115,9 @@ else {
 			$content.="\n--%%{$admin_msg}%%--";
 			
 		$data = array(
-				"date" => sprintf("%s<br><a%s><font%s>(%s)</font></a>",
-														strftime($dateform, $db->f("date")),
-														$attr_a, $attr_font, htmlReady($db->f("name"))),
+				"date" => sprintf("%s<br><a href=\"%s&username=%s\"%s><font%s>(%s)</font></a>",
+														strftime($dateform, $db->f("date")), $link_persondetails,
+														$db->f("username"),$attr_a, $attr_font, htmlReady($db->f("name"))),
 				"topic" => sprintf("<div%s><font%s>%s</font></div><div%s><font%s>%s</font></div>",
 														$attr_div_topic, $atrr_font_topic,
 														$db->f("topic"), $attr_div_body,

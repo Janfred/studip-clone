@@ -129,7 +129,7 @@ if ($error_message) {
 }
 else {
 	$link_persondetails = $this->getModuleLink("Persondetails",
-			$this->config->getValue("Main", "config"), $this->config->getValue("Main", "srilink"));
+			$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
 	
 	while($db->next_record()){
 	
@@ -209,9 +209,9 @@ else {
 												: round($db->f("filesize") / 1024, 1) . " kB"),
 													
 			"fullname"    => sprintf("<font%s><a href=\"%s&username=%s\"%s>%s</a></font>"
-												, $this->config->getAttributes("Link", "font")
+												, $this->config->getAttributes("LinkIntern", "font")
 												, $link_persondetails, $db->f("username")
-												, $this->config->getAttributes("Link", "a")
+												, $this->config->getAttributes("LinkIntern", "a")
 												, htmlReady($db->f("fullname")))
 		);
 		

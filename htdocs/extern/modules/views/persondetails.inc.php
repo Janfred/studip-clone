@@ -210,15 +210,25 @@ function lehre (&$this, $db, $alias_content) {
 			break;
 	}
 	
+	$lnk_sdet = $this->getModuleLink("Lecturedetails",
+			$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
+	$lnk_sdet .= "&seminar_id=";
+	
 	$sem_range = $this->config->getValue("PersondetailsLectures", "semrange");
 	if ($sem_range != "current") {
 		if ($sem_range == "three") {
-			$i = -1;
-			$max = 2;
+			if ($key > 1)
+				$i = -1;
+			else
+				$i = 0;
+			if ((sizeof($GLOBALS["SEMESTER"]) - $key) > 0)
+				$max = 2;
+			else
+				$max = 1;
 		}
 		else {
 			$i = 1 - $key;
-			$max = sizeof($GLOBALS["SEMESTER"]) - $key;
+			$max = sizeof($GLOBALS["SEMESTER"]) - $key + 1;
 		}
 		
 		$out = "";
@@ -253,13 +263,17 @@ function lehre (&$this, $db, $alias_content) {
 
 				if ($this->config->getValue("PersondetailsLectures", "aslist")) {
 					$out .= "<div style=\"margin-left:" . $this->config->getValue("List", "margin") . ";\">";
-					$out .= "<ul>\n";
+					$out .= "<ul" . $this->config->getAttributes("List", "ul") . ">\n";
 					while ($db1->next_record()) {
 						$lnk = $lnk_sdet . $db1->f("Seminar_id");
-						$out .= "<li><font><a href=\"$lnk\">";
+						$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
+						$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
+						$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
 						$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
-						if ($db1->f("Untertitel") != "")
-							$out .= "<font><br>" . htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
+						if ($db1->f("Untertitel") != "") {
+							$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . "><br>";
+							$out .= htmlReady($db1->f("Untertitel"), TRUE) . "</font>\n";
+						}
 					}
 					$out .= "</ul>";
 				}
@@ -269,7 +283,8 @@ function lehre (&$this, $db, $alias_content) {
 					while ($db1->next_record()) {
 						if ($j) $out .= "<br><br>";
 						$lnk = $lnk_sdet . $db1->f("Seminar_id");
-						$out .= "<font><a href=\"%s\">";
+						$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
+						$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
 						$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
 						if($db1->f("Untertitel") != "") {
 							$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
@@ -298,10 +313,12 @@ function lehre (&$this, $db, $alias_content) {
 			
 			if ($this->config->getValue("PersondetailsLectures", "aslist")) {
 				$out .= "<div style=\"margin-left:" . $this->config->getValue("List", "margin") . ";\">";
-				$out .= "<ul>";
+				$out .= "<ul" . $this->config->getAttributes("List", "ul") . ">";
 				while ($db1->next_record()) {
 					$lnk = $lnk_sdet . $db1->f("Seminar_id");
-					$out .= "<li><font><a href=\"%s\">";
+					$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
+					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
+					$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
 					$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font>\n";
 					if($db1->f("Untertitel") != "") {
 						$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
@@ -316,7 +333,8 @@ function lehre (&$this, $db, $alias_content) {
 				while ($db1->next_record()) {
 					if ($j) $out .= "<br><br>";
 					$lnk = $lnk_sdet . $db1->f("Seminar_id");
-					$out .= "<font><a href=\"%s\">";
+					$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
+					$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
 					$out .= htmlReady($db1->f("Name"), TRUE) . "</a></font><br>\n";
 					if($db1->f("Untertitel") != "") {
 						$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";

@@ -91,7 +91,7 @@ $set_td_2 = $this->config->getAttributes("TableRow", "td", TRUE);
 $zebra_td = $this->config->getValue("TableRow", "td_zebratd_");
 
 $link_persondetails = $this->getModuleLink("Persondetails",
-		$this->config->getValue("Main", "config"), $this->config->getValue("Main", "srilink"));
+		$this->config->getValue("LinkIntern", "config"), $this->config->getValue("LinkIntern", "srilink"));
 
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 
