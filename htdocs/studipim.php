@@ -124,30 +124,6 @@ setTimeout('again_and_again();',<? print($refresh*1000);?>);
 <?php
 
 $c=0;
-/*
-$owner_id = $user->id;
-if (is_array ($online)) { // wenn jemand online ist
-	foreach($online as $username=>$value) { //ale durchgehen die online sind
-		$user_id = get_userid($username);
-		$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
-		if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
-			$buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
-		}
-	}
-}
-
-if ((is_array($online)) && (is_array ($buddies))) {
-	printf ("<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>Buddies:</b></td></tr>");					
-	while (list($index)=each($buddies)) {
-		list($fullname,$zeit,$tmp_online_uname)=$buddies[$index];
-		echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a href=\"javascript:coming_home('about.php?username=$tmp_online_uname');\">".$fullname."</a></font></td>\n";
-		echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_online_uname'><img src=\"pictures/nachricht1.gif\" ".tooltip("Nachricht an User verschicken")." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
-		$c++;
-	}
- } else {
-	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Buddy ist online.") . "</font><br />&nbsp; ";
-}
-*/
 
 if (is_array($online)) {
 	foreach($online as $tmp_uname => $detail){
