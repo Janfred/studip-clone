@@ -23,7 +23,7 @@ CREATE table wap_sessions (user_id CHAR(32) NOT NULL, session_id CHAR(32) NOT NU
 
 ALTER TABLE `message_user` DROP PRIMARY KEY, ADD PRIMARY KEY (user_id,message_id,snd_rec);
 ALTER TABLE `user_info` ADD `smsforward_copy` TINYINT( 1 ) DEFAULT '1' NOT NULL ;
-ALTER TABLE `user_info` ADD `smsforward_rec` VARCHAR( 32 ) DEFAULT '0' NOT NULL ;
+ALTER TABLE `user_info` ADD `smsforward_rec` VARCHAR( 32 ) NOT NULL ;
 ALTER TABLE `message_user` ADD `dont_delete` TINYINT( 1 ) DEFAULT '0' NOT NULL; 
 ALTER TABLE `message_user` ADD `folder` INT( 5 ) DEFAULT '0' NOT NULL;
 
