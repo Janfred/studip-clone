@@ -124,7 +124,8 @@ function wiki_newstep($template_name) {
 	eval("\$text=\"".$template['template']."\";");
 // print "<p>Generierter Text:<br>$text"; // debug
 	$db=new DB_Seminar();
-	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".addslashes($text)."', chdate='".time()."', version='1'";
+	$userid=$auth->auth['uid'];
+	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".addslashes($text)."', user_id='$userid', chdate='".time()."', version='1'";
 	$db->query($query);
 	$wiki_plugin_messages[]="msg§"._("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder <a href=\"$PHP_SELF?keyword=$keyword\">zurück zur Ausgangsseite</a> gehen.");
 	$view='show';
