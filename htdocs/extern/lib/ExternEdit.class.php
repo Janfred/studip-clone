@@ -100,25 +100,11 @@ class ExternEdit {
 		return $out;
 	}
 	
-	/**
-	* Prints out a text field for entering the height of a table-row
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
-	
 	function editFooter () {
 		$out = "</table>\n";
 		
 		return $out;
 	}
-	
-	/**
-	* Prints out a text field for entering the thickness of a table border
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
 	
 	function editSubmit ($module_name, $config_id, $element_name = "") {
 		$this->css->resetClass();
@@ -140,13 +126,6 @@ class ExternEdit {
 		return $out;
 	}
 	
-	/**
-	* Prints out a text field for entering the thickness of a table border
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
-	
 	function editHeadline ($headline) {
 		$headline = "&nbsp; $headline";
 		
@@ -160,13 +139,6 @@ class ExternEdit {
 		return $out;
 	}
 	
-	/**
-	* Prints out a text field for entering the thickness of a table border
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
-	
 	function editTagHeadline ($tag) {
 		$headline = "&nbsp; " . sprintf(_("Angaben zum HTML-Tag %s"), "&lt;$tag&gt;");
 		
@@ -179,13 +151,6 @@ class ExternEdit {
 		
 		return $out;
 	}
-	
-	/**
-	* Prints out a text field for entering the thickness of a table border
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
 	
 	function editElementHeadline ($element_real_name, $module_name, $config_id,
 			$open = TRUE, $anker = "") {
@@ -235,13 +200,6 @@ class ExternEdit {
 		return $out;
 	}
 	
-	/**
-	* Prints out a text field for entering the thickness of a table border
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
-	
 	function editContent ($content, $submit) {
 		$out = "\n<!-- BEGIN Content -->\n";
 		$out .= "<tr><td class=\"blank\" width=\"100%\" align=\"left\">\n";
@@ -253,13 +211,6 @@ class ExternEdit {
 		
 		return $out;
 	}
-	
-	/**
-	* Prints out a text field for entering the thickness of a table border
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
 	
 	function editBlankContent ($class = "") {
 		if (!$class) {
@@ -274,13 +225,6 @@ class ExternEdit {
 		
 		return $out;
 	}
-	
-	/**
-	* Prints out a text field for entering the thickness of a table border
-	*
-	* @param string name the name of the text field
-	* @param string value the value for the text pre-emption
-	*/
 	
 	function editBlankContentTable ($class = "") {
 		if (!$class) {
