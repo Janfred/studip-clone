@@ -194,7 +194,7 @@ function search_administrable_objects ($search_string='', $user_id='') {
 		break;
 		case "admin": 
 			//Alle meine Institute (Suche)...
-			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms = 'admin' AND user_inst.user_id='$user_id' ORDER BY Name");
+			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms = 'admin' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record()) {
 				$my_objects_inst[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen", "perms" => "admin");
 			}
@@ -207,7 +207,7 @@ function search_administrable_objects ($search_string='', $user_id='') {
 					$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>"Personen", "perms" => "admin");
 				}
 				//...alle Seminare meiner Institute, in denen ich Admin bin....
-				$db2->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_inst USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
+				$db2->query("SELECT seminare.Seminar_id, Name FROM seminar_inst LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_inst.institut_id = '".$db->f("Institut_id")."' ORDER BY Name");
 				while ($db2->next_record()) {
 					$my_objects_sem[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>"Veranstaltungen", "perms" => "admin");
 				}
@@ -227,22 +227,22 @@ function search_administrable_objects ($search_string='', $user_id='') {
 		break;
 		case "dozent": 
 			//Alle meine Seminare
-			$db->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status IN ('tutor', 'dozent')  AND seminar_user.user_id='$user_id' ORDER BY Name");
+			$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status IN ('tutor', 'dozent')  AND seminar_user.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen", "perms" => "admin");
 			//Alle meine Institute...
-			$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms IN ('tutor', 'dozent')  AND user_inst.user_id='$user_id'  ORDER BY Name");
+			$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms IN ('tutor', 'dozent')  AND user_inst.user_id='$user_id'  ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen", "perms" => $db->f("inst_perms"));
 			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Personen",  "perms" => "admin");
 		break;
 		case "tutor": 
 			//Alle meine Seminare
-			$db->query("SELECT seminare.Seminar_id, Name FROM seminare LEFT JOIN seminar_user USING (seminar_id) WHERE  (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status='tutor' AND seminar_user.user_id='$user_id' ORDER BY Name");
+			$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE  (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status='tutor' AND seminar_user.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen",  "perms" => "tutor");
 			//Alle meine Institute...
-			$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING (institut_id)  WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms='tutor' AND user_inst.user_id='$user_id' ORDER BY Name");
+			$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id)  WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms='tutor' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Einrichtungen", "perms" => "tutor");
 			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>"Personen",  "perms" => "admin");
