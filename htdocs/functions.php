@@ -406,9 +406,10 @@ return $error_msg;
 *
 */
 function get_global_perm($user_id="") {
-	 global $user;
+	 global $auth;
 
-	 if (!($user_id)) $user_id=$user->id;
+	 if (!$user_id || $user_id == $auth->auth['uid'])
+	 	return $auth->auth['perm'];
 	
 	 $db=new DB_Seminar;
 	 $db->query("SELECT perms FROM auth_user_md5 WHERE user_id='$user_id'");
@@ -481,6 +482,7 @@ function get_perm($range_id,$user_id="")
 $_fullname_sql['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(title_rear!='',CONCAT(', ',title_rear),'')))";
 $_fullname_sql['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title_front!='',CONCAT(', ',title_front),''),IF(title_rear!='',CONCAT(', ',title_rear),'')))";
 $_fullname_sql['no_title'] = "CONCAT(Vorname ,' ', Nachname)";
+$_fullname_sql['no_title_rev'] = "CONCAT(Nachname ,' ', Vorname)";
 
 /**
 * Retrieves the fullname for a given user_id
