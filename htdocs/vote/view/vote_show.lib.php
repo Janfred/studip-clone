@@ -384,7 +384,7 @@ function createVoteHeadline (&$vote, $open, $openID, $evalDB = "", $isHomepage =
      $number       = $evalDB->getNumberOfVotes ($vote->getObjectID ());
 
    $openStr = ($open) ? "open" : "close";
-#   $isNew = ($date >= $last_visited);
+   $isNew = (($date >= object_get_visit($vote->getObjectID(),($vote->instanceof() == INSTANCEOF_EVAL ? 'eval' : 'vote'),false)) && ($vote->getAuthorID() != $GLOBALS['auth']->auth["uid"]));
    $icon = ($vote->instanceof () == INSTANCEOF_TEST) ? VOTE_ICON_TEST : 
       VOTE_ICON_VOTE;
    if ($vote->instanceof () == INSTANCEOF_EVAL)
