@@ -89,6 +89,8 @@ function getMsTime(){
 
 if ($forumsend) {
 	if ($forumsend=="bla"){
+		if ($presetview == "theme")
+			$presetview = $themetview;
 		$forum["neuauf"] = $neuauf;
 		$forum["postingsperside"] = $postingsperside;
 		$forum["flatallopen"] = $flatallopen;
@@ -96,6 +98,7 @@ if ($forumsend) {
 		$forum["showimages"] = $showimages;
 		$forum["sortthemes"] = $sortthemes;
 		$forum["themeview"] = $themeview;
+		$forum["presetview"] = $presetview;
 		$forum["shrink"] = $shrink*604800; // Anzahl der Sekunden pro Woche
 		$forum["changed"] = "TRUE";
 		$txt = _("Anpassungen durchgeführt.");

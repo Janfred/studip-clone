@@ -1048,7 +1048,8 @@ function printposting ($forumposting) {
 			if ($forum["neuauf"]==1 AND $forumposting["newold"]=="new")
 				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt	
   		}
-  				  		
+  		
+  		  				  		
   	// Views hochzählen
   	
   		if ($forumposting["openclose"] == "open" && $user->id != $forumposting["userid"])  // eigene Postings werden beim view nicht gezählt
