@@ -122,7 +122,7 @@ if ($SessSemName[1] =="") {
 			print( ", <a href = about.php?username=" . $db->f("username") . ">");
 		else
 			print( "<a href = about.php?username=" . $db->f("username") . ">");
-		print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>  ");
+		print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a> ");
 		$i++;
 	}
 	?>
