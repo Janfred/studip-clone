@@ -63,7 +63,7 @@ echo "<br><br><a href='score.php?cmd=write'>Diesen Wert hier ver&ouml;ffentliche
 
 $rang = 1;
 $db=new DB_Seminar;
-$db->query("SELECT b.*,score FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 ORDER BY score DESC");
+$db->query("SELECT a.user_id,username,score, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 ORDER BY score DESC");
 if ($db->num_rows()) {
 	echo "<table width=\"99%\" align=\"center\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 	while ($db->next_record()) {
@@ -73,7 +73,7 @@ if ($db->num_rows()) {
 			$kill = "&nbsp; &nbsp; <a href='score.php?cmd=kill'>[l&ouml;schen]</a>";
 		}
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
-		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("Vorname")."&nbsp; ".$db->f("Nachname")."</a></td>"
+		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("fullname")."</a></td>"
 		."<td class=\"".$cssSw->getClass()."\" width=\"30%\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\">".gettitel($db->f("score"))
 		.$kill
 		."</td></tr>\n";

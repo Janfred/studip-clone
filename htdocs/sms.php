@@ -157,8 +157,7 @@ if ($cmd=="write") {
 	<tr>
 		<td class="blank" colspan="2">
 	<?
-	$db->query ("SELECT Vorname, Nachname FROM auth_user_md5 WHERE username = '$rec_uname' ");
-	$db->next_record();
+	$fullname = get_fullname_from_uname($rec_uname);
 
 	if ($quote) {
 		$db2->query ("SELECT message FROM globalmessages WHERE message_id = '$quote' ");
@@ -170,7 +169,7 @@ if ($cmd=="write") {
 		}
 	
 	$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-	$titel="</b>Nachricht schreiben an: <a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a><b>";				
+	$titel="</b>Nachricht schreiben an: <a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$fullname."</font></a><b>";				
 	$content="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 wrap=\"virtual\">";
 	if ($quote)
 		$content.=quotes_encode($tmp_sms_content, $db->f("Vorname")." ".$db->f("Nachname"));
@@ -199,7 +198,7 @@ if ($cmd=="write") {
 
 //Ausgabe von vorhandenen Nachrichten
 else {
-	$db->query("SELECT user_id_snd, user_id_rec, mkdate, message, message_id, Vorname, Nachname  FROM globalmessages LEFT JOIN auth_user_md5 ON (username = user_id_snd) WHERE globalmessages.user_id_rec LIKE '".get_username($user->id)."' ORDER BY globalmessages.mkdate DESC");
+	$db->query("SELECT globalmessages.*, ". $_fullname_sql['full'] ." AS fullname  FROM globalmessages LEFT JOIN auth_user_md5 ON (username = user_id_snd) LEFT JOIN user_info USING(user_id) WHERE globalmessages.user_id_rec LIKE '".get_username($user->id)."' ORDER BY globalmessages.mkdate DESC");
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -246,9 +245,9 @@ if ($msg)	{
 							$open="open";
 							$neu=TRUE;
 							$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-							$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";				
+							$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("fullname")."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";				
 							$titel="Einladung zum Chat";
-							$content=$db->f("Vorname")." ".$db->f("Nachname")." hat Sie am ".date("d.m.Y",$db->f("mkdate"))." um ".date("H:i",$db->f("mkdate"))." Uhr in den Chat eingeladen.\n";
+							$content=$db->f("fullname")." hat Sie am ".date("d.m.Y",$db->f("mkdate"))." um ".date("H:i",$db->f("mkdate"))." Uhr in den Chat eingeladen.\n";
 							$content.="Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in der Kopfzeile.";
 
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
@@ -273,7 +272,7 @@ if ($msg)	{
 			if ($db->f("user_id_snd") == "____%system%____")
 				$zusatz="<font size=-1>automatische Systemnachricht, gesendet";
 			else
-				$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("Vorname")." ".$db->f("Nachname")."</font></a><font size=-1>";
+				$zusatz="<font size=-1>gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("fullname")."</font></a><font size=-1>";
 			$zusatz.=" am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>";
 			if (strpos($db->f("message"),$msging->sig_string))
 				$titel=mila(kill_format(substr($db->f("message"), 0, strpos($db->f("message"),$msging->sig_string))));

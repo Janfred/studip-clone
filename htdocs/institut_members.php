@@ -26,6 +26,7 @@ require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."functions.php");
 
 $css_switcher = new CssClassSwitcher();
 echo $css_switcher->GetHoverJSFunction();
@@ -396,19 +397,19 @@ if ($institut_members_data["show"] == "funktion") {
 	if ($all_statusgruppen) {
 		foreach ($all_statusgruppen as $statusgruppe_id => $statusgruppe_name) {
 			if ($institut_members_data["extend"] == "yes")
-				$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+				$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.inst_perms, ui.raum,
 								ui.sprechzeiten, ui.Telefon, ui.inst_perms, aum.Email, aum.user_id,
 								aum.username, info.Home, statusgruppe_id
-								FROM statusgruppe_user LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN
+								FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN
 								user_info info USING(user_id) LEFT JOIN user_inst ui USING(user_id)
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND statusgruppe_id = '%s' ORDER BY %s %s", $auswahl, $statusgruppe_id,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
 			else
-				$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
+				$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, user_inst.raum, user_inst.sprechzeiten, user_inst.Telefon, inst_perms,
 								Email, auth_user_md5.user_id, username, statusgruppe_id
 								FROM statusgruppe_user  LEFT JOIN	auth_user_md5 USING(user_id)
-								LEFT JOIN user_inst USING(user_id)
+								LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst USING(user_id)
 								WHERE Institut_id = '%s' AND statusgruppe_id = '%s'
 								AND inst_perms != 'user' ORDER BY %s %s", $auswahl, $statusgruppe_id,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
@@ -425,18 +426,18 @@ if ($institut_members_data["show"] == "funktion") {
 		$assigned = implode("','", GetAllSelected($auswahl));
 		$db_residual = new DB_Seminar();
 		if ($institut_members_data["extend"] == "yes")
-			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+			$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.inst_perms, ui.raum,
 								ui.sprechzeiten, ui.Telefon, aum.Email, aum.user_id,
 								aum.username
-								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id) 
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND ui.user_id NOT IN('%s') ORDER BY %s %s",
 								$auswahl, $assigned, $institut_members_data["sortby"],
 								$institut_members_data["direction"]);
 		else
-			$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
+			$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.inst_perms, ui.raum,
 								ui.Telefon, aum.user_id, aum.username
-								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id) 
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND ui.user_id NOT IN('%s')ORDER BY %s %s", $auswahl,
 								$assigned,
@@ -455,10 +456,11 @@ elseif ($institut_members_data["show"] == "status") {
 	$inst_permissions = array("admin" => "Admin", "dozent" => "Dozent", "tutor" => "Tutor",
 														"autor" => "Autor", "user" => "User");
 	foreach ($inst_permissions as $key => $permission) {
-		$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon,
+		$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.raum, ui.sprechzeiten, ui.Telefon,
 											inst_perms, Email, auth_user_md5.user_id,
-											username FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
-											WHERE user_inst.Institut_id = '%s' AND inst_perms = '%s'
+											username FROM user_inst ui LEFT JOIN	auth_user_md5 USING(user_id) 
+											LEFT JOIN user_info USING(user_id)
+											WHERE ui.Institut_id = '%s' AND inst_perms = '%s'
 											ORDER BY %s %s", $auswahl, $key,
 											$institut_members_data["sortby"], $institut_members_data["direction"]);
 		$db_institut_members->query($query);
@@ -473,7 +475,7 @@ else {
 	if ($institut_members_data["extend"] == "yes") {
 		if($perm->have_perm("admin"))
 			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon, ui.inst_perms,
-							aum.user_id, info.Home, aum.Nachname, aum.Vorname,aum.Email, aum.username
+							aum.user_id, info.Home, ". $_fullname_sql['full_rev'] ." AS fullname,aum.Email, aum.username
 							FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id)
 							LEFT JOIN user_info info USING(user_id)
 							WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
@@ -482,7 +484,7 @@ else {
 		else
 			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
 							aum.user_id, info.Home, 
-							aum.Nachname, aum.Vorname, aum.Email, aum.username, Institut_id
+							". $_fullname_sql['full_rev'] ." AS fullname, aum.Email, aum.username, Institut_id
 							FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id)
 							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
 							LEFT JOIN user_info info USING(user_id)
@@ -492,17 +494,19 @@ else {
 	}
 	else {
 		if($perm->have_perm("admin"))
-			$query = sprintf("SELECT raum, sprechzeiten, Telefon, Nachname, Vorname,
+			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon, ". $_fullname_sql['full_rev'] ." AS fullname,
 							inst_perms, username, ui.user_id
 							FROM user_inst ui LEFT JOIN	auth_user_md5 USING(user_id)
+							LEFT JOIN user_info USING(user_id)
 							WHERE ui.Institut_id = '%s' AND inst_perms != 'user'
 							ORDER BY %s %s", $auswahl, $institut_members_data["sortby"],
 							$institut_members_data["direction"]);
 		else
 			$query = sprintf("SELECT ui.raum, ui.sprechzeiten, ui.Telefon,
-							aum.user_id, aum.Nachname, aum.Vorname, aum.username, Institut_id
+							aum.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, aum.username, Institut_id
 							FROM statusgruppen LEFT JOIN statusgruppe_user su USING(statusgruppe_id)
 							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
+							LEFT JOIN user_info USING(user_id)
 							WHERE range_id = '%s' AND Institut_id = '%s' GROUP BY user_id
 							ORDER BY %s %s", $auswahl, $auswahl, $institut_members_data["sortby"],
 							$institut_members_data["direction"]);
@@ -557,11 +561,11 @@ function table_boddy ($db, $range_id, $structure, $css_switcher) {
 		
 		$css_switcher->switchClass();
 		printf("<tr%s>\n", $css_switcher->getHover());
-		if($db->f("Nachname") && $db->f("Vorname")) {
+		if($db->f("fullname")) {
 			printf("<td%s>", $css_switcher->getFullClass());
 			echo "<img src=\"pictures/blank.gif\" width=\"2\" height=\"1\">";
 			printf("<a href=\"about.php?username=%s\"><font size=\"-1\">%s</font></a></td>\n",
-				$db->f("username"), htmlReady($db->f("Nachname") . ", " . $db->f("Vorname")));
+				$db->f("username"), htmlReady($db->f("fullname")));
 		}
 		else
 			printf("<td%s>&nbsp;</td>", $css_switcher->getFullClass());

@@ -84,11 +84,12 @@ if ($cmd=="hidescore") {
 if ($cmd=="pleasure") {
 	//erst mal sehen, ob er hier wirklich Dozent ist... Tutoren d&uuml;rfen andere nicht zu Tutoren befoerdern!
 	if ($rechte AND $SemUserStatus!="tutor")  {
-		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username' AND perms!='user' AND perms!='autor'");
+		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username' AND perms!='user' AND perms!='autor'");
 		if ($db->next_record()) {
 			$userchange=$db->f("user_id");
+			$fullname = $db->f("fullname");
 			$db->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-			$msg = "msg§Bef&ouml;rderung von ".$db->f("Vorname")." ". $db->f("Nachname")." durchgef&uuml;hrt§";
+			$msg = "msg§Bef&ouml;rderung von ".$fullname." durchgef&uuml;hrt§";
 		}
 		else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 	}
@@ -100,11 +101,12 @@ if ($cmd=="pleasure") {
 if ($cmd=="pain") {
 	//erst mal sehen, ob er hier wirklich Dozent ist... Tutoren d&uuml;rfen andere Tutoren nicht rauskicken!
 	if ($rechte AND $SemUserStatus!="tutor") {
-		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
+		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
+		$fullname = $db->f("fullname");
 		$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		$msg = sprintf ("msg§%s %s wurde entlassen und auf Autor zur&uuml;ckgestuft.§", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Das Mitglied" : "Der Tutor", get_fullname($userchange));
+		$msg = sprintf ("msg§%s %s wurde entlassen und auf Autor zur&uuml;ckgestuft.§", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Das Mitglied" : "Der Tutor", $fullname);
 	}
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
@@ -114,11 +116,12 @@ if ($cmd=="pain") {
 if ($cmd=="schreiben") {
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
-		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username' AND perms != 'user'");
+		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username' AND perms != 'user'");
 		if ($db->next_record()) {
 			$userchange=$db->f("user_id");
+			$fullname = $db->f("fullname");
 			$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-			$msg = "msg§Der User ".$db->f("Vorname")." ". $db->f("Nachname")." wurde als Autor in die Veranstaltung aufgenommen.§";
+			$msg = "msg§Der User ".$fullname." wurde als Autor in die Veranstaltung aufgenommen.§";
 		}
 		else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 	}
@@ -130,11 +133,12 @@ if ($cmd=="schreiben") {
 if ($cmd=="lesen") {
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
-		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
+		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
+		$fullname = $db->f("fullname");
 		$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange'");
-		$msg = "msg§Der Autor ".$db->f("Vorname")." ". $db->f("Nachname")." wurde auf Leser zur&uuml;ckgestuft.§";
+		$msg = "msg§Der Autor ".$fullname ." wurde auf Leser zur&uuml;ckgestuft.§";
 		$msg.= "info§Um jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
 				."Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.§";
 	}
@@ -146,9 +150,10 @@ if ($cmd=="lesen") {
 if ($cmd=="raus") {
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
-		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
+		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
+		$fullname = $db->f("fullname");
 		$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange'");
 		
 		$message= sprintf ("Ihr Abonnement der Veranstaltung **%s** wurde von einem %s oder Administrator aufgehoben.", $SessSemName[0], ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozent");
@@ -161,7 +166,7 @@ if ($cmd=="raus") {
 		//Pruefen, ob es Nachruecker gibt
 		update_admission($id);
 
-		$msg = "msg§Der Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Veranstaltung entfernt.§";
+		$msg = "msg§Der Leser ".$fullname." wurde aus der Veranstaltung entfernt.§";
 		$msg.= "info§Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
 				."Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.§";
 	}
@@ -172,9 +177,10 @@ if ($cmd=="raus") {
 if ($cmd=="admission_raus") {
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
-		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
+		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
+		$fullname = $db->f("fullname");
 		$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 
 		$message= sprintf ("Sie wurden vom einem %s oder Administrator von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden.", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozent", $SessSemName[0]);
@@ -183,7 +189,7 @@ if ($cmd=="admission_raus") {
 		//Warteliste neu sortieren
 		 renumber_admission($id);
 		
-		$msg = "msg§Der Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste entfernt.§";
+		$msg = "msg§Der Leser ".$fullname." wurde aus der Anmelde bzw. Warteliste entfernt.§";
 	}
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
@@ -192,10 +198,10 @@ if ($cmd=="admission_raus") {
 if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
-		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
+		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
-
+		$fullname = $db->f("fullname");
 		$db2->query("SELECT start_time FROM seminare WHERE Seminar_id = '$id'");
 		$db2->next_record();
 		$group=select_group ($db2->f("start_time"),$db->f("user_id"));		
@@ -214,9 +220,9 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		 renumber_admission($id);
 		
 		if ($cmd=="add_user")
-			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde in die Veranstaltung eingetragen.§";
+			$msg = "msg§Der Nutzer ".$fullname." wurde in die Veranstaltung eingetragen.§";
 		else
-			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste in die Veranstaltung hochgestuft.§";
+			$msg = "msg§Der Nutzer ".$fullname." wurde aus der Anmelde bzw. Warteliste in die Veranstaltung hochgestuft.§";
 	} 
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
@@ -354,7 +360,7 @@ while (list ($key, $val) = each ($gruppe)) {
 if (!isset($sortby) || $sortby=="") 
 	$sortby = "doll DESC";
 
-$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll,  studiengaenge.name, admission_studiengang_id AS studiengang_id FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN studiengaenge ON (seminar_user.admission_studiengang_id = studiengaenge.studiengang_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
+$db->query ("SELECT seminar_user.user_id, ". $_fullname_sql['full'] ." AS fullname, username, status, count(topic_id) AS doll,  studiengaenge.name, admission_studiengang_id AS studiengang_id FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (seminar_user.admission_studiengang_id = studiengaenge.studiengang_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
 if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
@@ -463,7 +469,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td>", tooltip("Aktivität: ".round($aktivity_index_user)."%"));
 	}
 	printf("<td class=\"%s\"><font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">", $class);
-	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
+	print(htmlReady($db->f("fullname")) ."</a>");
 	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
 	print( $db->f("doll"));
 	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
@@ -553,7 +559,7 @@ echo "</td></tr>\n";  // Auflistung zuende
 
 // Warteliste
 if ($rechte) {
-	$db->query ("SELECT admission_seminar_user.user_id, Vorname, Nachname, username, studiengaenge.name, position, admission_seminar_user.studiengang_id, status FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN studiengaenge ON (admission_seminar_user.studiengang_id=studiengaenge.studiengang_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' ORDER BY position, name");
+	$db->query ("SELECT admission_seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username, studiengaenge.name, position, admission_seminar_user.studiengang_id, status FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (admission_seminar_user.studiengang_id=studiengaenge.studiengang_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' ORDER BY position, name");
 	if ($db->num_rows()) { //Only if Users were found...
 
 		// die eigentliche Teil-Tabelle
@@ -586,7 +592,7 @@ if ($rechte) {
 			}
 		
 			$cssSw->switchClass(); 
-			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("Vorname"), $db->f("Nachname"));
+			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("fullname"));
 			if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
@@ -602,8 +608,8 @@ if ($rechte) {
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus der(n) Einrichtung(en) berufen...
 //Note the option "only_inst_user" from the config.inc. If it is NOT setted, this Option is disabled (the functionality will do in this case do seachform below)
 if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) {
-	$query = "SELECT a.user_id, username, Vorname, Nachname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
-	"LEFT JOIN auth_user_md5  b USING(user_id) ".
+	$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, inst_perms, perms FROM seminar_inst d LEFT JOIN user_inst a USING(Institut_id) ".
+	"LEFT JOIN auth_user_md5  b USING(user_id) LEFT JOIN user_info USING(user_id) ".
 	"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
 	"WHERE d.seminar_id = '$SessSemName[1]' AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) GROUP BY a.user_id ORDER BY Nachname";
 
@@ -624,7 +630,7 @@ if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["a
 		<?
 		printf ("<option value=\"0\">- -  bitte ausw&auml;hlen - -\n");
 		while ($db->next_record())
-			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("inst_perms"));
+			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("fullname")." (".$db->f("username"),0,35).")", $db->f("inst_perms"));
 		?>
 		</select></td>
 		<td class="steel1" width="20%" align="center"><font size=-1><? if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) print "als TutorIn"; else print "als Mitglied" ?></font><br />
@@ -637,8 +643,8 @@ if ($rechte AND $SemUserStatus!="tutor" AND $SEM_CLASS[$SEM_TYPE[$SessSemName["a
 //insert autors via free search form
 if ($rechte) {
 	if ($search_exp) {
-		$query = "SELECT a.user_id, username, Vorname, Nachname, perms FROM auth_user_md5 a ".		
-			"LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
+		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".		
+			"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
 			"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
 			"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
 			"ORDER BY Nachname";
@@ -659,7 +665,7 @@ if ($rechte) {
 		<?
 		printf ("<option value=\"0\">- -  bitte ausw&auml;hlen - -\n");
 		while ($db->next_record())
-			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
+			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("fullname")." (".$db->f("username"),0,35).")", $db->f("perms"));
 		?>
 		</select></td>
 		<td class="steel1" width="20%" align="center"><font size=-1><? if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) print "als AutorIn" ?>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </font><br />

@@ -367,7 +367,7 @@ switch ($sem_browse_data["group_by"]) {
 	break;
 	case "dozent":
 		$order_by_exp="Nachname ASC";
-		$select_add=", auth_user_md5.Nachname, auth_user_md5.Vorname, auth_user_md5.Username";
+		$select_add=", " . $_fullname_sql['full_rev'] ." AS fullname, auth_user_md5.Username";
 	break;
 	case "semester":
 		$order_by_exp="start_time DESC";
@@ -459,6 +459,7 @@ if (!$dont_search)
 				LEFT JOIN seminar_bereich ON (seminare.Seminar_id = seminar_bereich.Seminar_id) 
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
 				LEFT JOIN auth_user_md5 ON (seminar_user.user_id = auth_user_md5.user_id) 
+				LEFT JOIN user_info USING (user_id) 
 				LEFT JOIN bereiche ON (bereiche.bereich_id=seminar_bereich.bereich_id) 
 				LEFT JOIN Institute ON (seminar_inst.Institut_id = Institute.Institut_id) 
 				WHERE $sql_where_query_seminare ORDER BY $order_by_exp, seminare.Name ");
@@ -625,14 +626,14 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 			break;
 			case "dozent":
 				if ((($sem_browse_data["cmd"] != "qs") && ($sem_browse_data["s_dozent"])) || ($sem_browse_data["level"] == "s") || ($sem_browse_data["level"] == "sbb")|| ($sem_browse_data["level"]=="b")) {
-					$tmp_dozent=$db->f("Vorname")." ".$db->f("Nachname");
-					if ($last_dozent != $db->f("Vorname")." ".$db->f("Nachname")) {
-						$group_header_name=$db->f("Vorname")." ".$db->f("Nachname");
+					$tmp_dozent=$db->f("fullname");
+					if ($last_dozent != $db->f("fullname")) {
+						$group_header_name=$db->f("fullname");
 						$group_header_class=$group;
 						$group++;
 					} else
 						$group_header_name=FALSE;
-					$last_dozent=$db->f("Vorname")." ".$db->f("Nachname");
+					$last_dozent=$db->f("fullname");
 				}
 			break;
 			case "einrichtung":
@@ -696,10 +697,10 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb")) {
 			$sem_id=$db->f("Seminar_id");
 			$dozname ="";
 			$i=0;
-			$db2->query("SELECT username, Vorname, Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
+			$db2->query("SELECT username, ". $_fullname_sql['full'] ." AS fullname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY Nachname");
 			while (($db2->next_record()) && ($i<=3)) {
 				if ($i) $dozname .= ", ";
-				$dozname .= "<a href=\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Vorname"))." ".htmlReady($db2->f("Nachname"))."</a>";
+				$dozname .= "<a href=\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("fullname"))."</a>";
 				//more than 3 Dozenten are two much, link to the details.php for more info
 				if ($i==3)
 					$dozname .= ",...&nbsp;<a href=\"".$target_url."?".$target_id."=".$db->f("Seminar_id")."&send_from_search=true&send_from_search_page=$PHP_SELF\">(mehr) </a>";
