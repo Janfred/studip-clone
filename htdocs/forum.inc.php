@@ -937,11 +937,11 @@ function print_rating($rate, $id, $username) {
 	 elseif ($rate > 3) {
 		 $grau = (5-$rate)*10;
 		 $rot = 25 - $grau;
-		 $bar = "<img src=\"pictures/rate_leer.gif\" width=25 height=11 border=\"0\"><img src=\"pictures/rate_rot\" width=\"$rot\" border=\"0\" height=\"11\"><img src=\"pictures/rate_leer\" width=\"$grau\" border=\"0\" height=11>";
+		 $bar = "<img src=\"pictures/rate_leer.gif\" width=25 height=11 border=\"0\"><img src=\"pictures/rate_rot.gif\" width=\"$rot\" border=\"0\" height=\"11\"><img src=\"pictures/rate_leer.gif\" width=\"$grau\" border=\"0\" height=11>";
 	 } elseif ($rate < 3) {
 		 $grau = ($rate-1)*10;
 		 $gruen = 25 - $grau;
-		 $bar = "<img src=\"pictures/rate_leer.gif\" width=\"$grau\" height=\"11\" border=\"0\"><img src=\"pictures/rate_gruen\" border=\"0\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer\" border=\"0\" width=25 height=11>";
+		 $bar = "<img src=\"pictures/rate_leer.gif\" width=\"$grau\" height=\"11\" border=\"0\"><img src=\"pictures/rate_gruen.gif\" border=\"0\" width=\"$gruen\" height=11><img src=\"pictures/rate_leer.gif\" border=\"0\" width=25 height=11>";
 	 } else {
 		$bar = "<img src=\"pictures/rate_neutral.gif\" width=\"50\" height=\"11\" border=\"0\">"; 
 	 }
