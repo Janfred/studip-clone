@@ -20,12 +20,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-?>
-
-<table cellpadding="0" cellspacing="0" border="0">
-	<tr>
-
-<?
+echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr>\n";
 	
 	if ($i_page == "calendar.php") {
 		echo '<td class="links1b" align="right" nowrap>';
@@ -66,14 +61,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		echo '</a><img src="pictures/reiter4.jpg" align="absmiddle"></td>';
 	}
 
-?>
-	</tr>
-</table>
-
-<table cellspacing="0" cellpadding="4" border="0" width="100%">
-
-<?
-
+echo "</tr>\n</table>\n";
+echo "<table cellspacing=\"0\" cellpadding=\"4\" border=\"0\" width=\"100%\">\n";
 
 if ($i_page == "calendar.php") {
 
