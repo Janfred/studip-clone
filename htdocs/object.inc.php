@@ -62,7 +62,7 @@ function object_print_rate ($object_id) {
 	$db=new DB_Seminar;
 	$db->query("SELECT avg(rate) as mittelwert FROM object_rate WHERE object_id = '$object_id'");
 	if ($db->next_record())
-		$tmp = round($db->f("mittelwert"),2);
+		$tmp = $db->f("mittelwert");
 		if ($tmp == 0)
 			$tmp = "?";
 	return $tmp;
