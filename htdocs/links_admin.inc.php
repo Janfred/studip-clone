@@ -169,7 +169,6 @@ if ($links_admin_data["sem_id"]) {
 		break;
 		case "admin_statusgruppe.php":
 			if ($links_admin_data["view"]=="statusgruppe_sem") {
-				echo lala;
 				$range_id=$links_admin_data["sem_id"];
 				$ebene="sem";
 			}
