@@ -397,7 +397,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 
 		while($termin = $list->nextEvent()){
 			$icon = '&nbsp;<img src="./pictures/termin-icon.gif" border="0" alt="Termin">';
-			$have_wright_permission = (($termin->getType() == 1 && $termin->haveWrightPermission())
+			$have_wright_permission = (($termin->getType() == 1 && $termin->haveWritePermission())
 					|| ($termin->getType() != 1));
 					
 			$zusatz = "";
