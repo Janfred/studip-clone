@@ -186,7 +186,7 @@ if (!$type) {
 echo $skip_check;
 
 //permcheck
-if (($type != 2) || (!$skip_check)) { //if type 2 we donload from the tmp directory and skip permchecks
+if (($type != 2) && (!$skip_check)) { //if type 2 we donload from the tmp directory and skip permchecks
 	if (!$perm->have_perm ("user")) {
 		if (!$type) {
 			$db->query("SELECT Lesezugriff FROM seminare LEFT JOIN dokumente USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
