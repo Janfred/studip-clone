@@ -244,34 +244,31 @@ function get_my_administrable_objects($user_id='') {
 * This function determines, which from which type an id is from.
 *
 * The function recognizes the following types at this moment:
-* Einrichtungen, Veranstaltungen and Fakultaeten
+* Einrichtungen, Veranstaltungen, Statusgruppen and Fakultaeten
 * 
-* @param		string	seminar_id	the seminar_id of the seminar to calculate
-* @return		string	return "ins" (Einrichtung), "sem" (Veranstaltung), "fak" (Fakultaeten)
+* @param		string	id	the id of the object
+* @return		string	return "ins" (Einrichtung), "sem" (Veranstaltung), "fak" (Fakultaeten), "group" (Statusgruppe)
 *
 */
-function get_object_type($seminar_id) {
+function get_object_type($id) {
 	 $db=new DB_Seminar;
-	
-	$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$seminar_id' ");
+
+	$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$id' ");
 	if ($db->next_record())
 		return "sem";
 
-	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$seminar_id' ");
+	$db->query("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$id' ");
 	if ($db->next_record())
 		return "group";
 
-	if (!$entry_level) {
-		$db->query("SELECT Institut_id FROM Institute WHERE Institut_id = '$seminar_id' ");
-		if ($db->next_record())
-			return "inst";
-	}
+	$db->query("SELECT Institut_id FROM Institute WHERE Institut_id = '$id' ");
+	if ($db->next_record())
+		return "inst";
 
-	if (!$entry_level) {
-		$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$seminar_id' ");
-		if ($db->next_record())
-			return "fak";
-	}
+	$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$id' ");
+	if ($db->next_record())
+		return "fak";
+
 	return FALSE;
 }
 
