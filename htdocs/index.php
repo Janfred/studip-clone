@@ -81,9 +81,27 @@ if ($GLOBALS['BANNER_ADS_ENABLE'] && $auth->is_authenticated() && $user->id != "
 
 //Anzeigemodul fuer studentische Startseite (nur wenn man angemeldet und nicht global dozent oder hoeher ist!)
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("dozent")) {
-
+if (!$perm->have_perm("autor")) {  // Warning for Users
 ?>
-
+<div align="center">
+<table width="70%" border=0 cellpadding=0 cellspacing=0 >
+<tr><td class="topicwrite" colspan=3><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Bestätigungsgsmail beachten!")?></b></td></tr>
+<tr>
+	<td width="5%" class="blank" valign="middle">&nbsp;</td>
+	<td width="90%" class="blank" valign="top">
+		<table cellpadding=2>
+			<tr><td class="blank" colspan=2>
+			<? my_info(_("<font size=-1>Sie haben noch nicht auf Ihre <a href=\"help/index.php?help_page=ii_bestaetigungsmail.htm\" target=\"new\">Bestätigungsmail</a> geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: <a href=\"mailto:$UNI_CONTACT\">$UNI_CONTACT	</a>")); ?>
+			</td></tr>
+		</table>
+	</td>
+	<td class="blank" align="right" valign="top" background="pictures/sms3.jpg"><img src="pictures/blank.gif" width="235" height="1"></td>
+</tr>
+</table>
+<br><br>
+<?
+}
+?>
 <div align="center">
 <table width="70%" border=0 cellpadding=0 cellspacing=0 >
 <tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;<?=_("Ihre pers&ouml;nliche Startseite bei Stud.IP")?></b></td></tr>
