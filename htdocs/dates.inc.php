@@ -32,7 +32,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/calendar_func.inc.ph
 *
 */
 
-function getRoom ($range_id, $link=TRUE, $start_time = 0) {
+function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 	global $RESOURCES_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
 	
 	if ($RESOURCES_ENABLE)	
@@ -40,8 +40,10 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0) {
 	
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
-	
-	switch (get_object_type($range_id)) {
+	if (!$range_typ){
+		$range_typ = get_object_type($range_id);
+	}
+	switch ($range_typ) {
 		case ("sem"):
 			$query = sprintf ("SELECT metadata_dates, ort FROM seminare WHERE Seminar_id = '%s'", $range_id);
 			$db->query($query);
@@ -103,11 +105,11 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0) {
 					while ($db->next_record()) {
 						$tmp_room='';
 						if ($RESOURCES_ENABLE) {
-							if (getDateAssigenedRoom($db->f("termin_id")))
+							if ($assigned_room = getDateAssigenedRoom($db->f("termin_id")))
 								if ($link) 
-									$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", getDateAssigenedRoom($db->f("termin_id")), htmlReady(getResourceObjectName(getDateAssigenedRoom($db->f("termin_id")))));
+									$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $assigned_room, htmlReady(getResourceObjectName($assigned_room)));
 								else
-									$tmp_room .= getResourceObjectName(getDateAssigenedRoom($range_id));
+									$tmp_room .= getResourceObjectName(getDateAssigenedRoom($db->f("termin_id")));
 						}
 						if (($tmp_room) || ($db->f("raum"))) {
 							if ($i)
@@ -133,11 +135,11 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0) {
 			$db->next_record();
 
 			if ($RESOURCES_ENABLE) {
-				if (getDateAssigenedRoom($range_id))
+				if ($assigned_room = getDateAssigenedRoom($range_id))
 					if ($link)
-						$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", getDateAssigenedRoom($range_id), htmlReady(getResourceObjectName(getDateAssigenedRoom($range_id))));
+						$tmp_room .= sprintf ("<a href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $assigned_room, htmlReady(getResourceObjectName($assigned_room)));
 					else
-						$tmp_room .= htmlReady(getResourceObjectName(getDateAssigenedRoom($range_id)));
+						$tmp_room .= htmlReady(getResourceObjectName($assigned_room));
 			}
 			if ($tmp_room)
 				$ret .= $tmp_room;

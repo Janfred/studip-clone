@@ -49,8 +49,10 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 		if ($range_id == $user->id)
 			// Für persönliche Termine Einsprung in Terminkalender
 			$admin_link="<a href=\"calendar.php?cmd=edit\">";
-		else
+		else {
 			$admin_link="<a href=\"admin_dates.php?new_sem=TRUE&ebene=sem&range_id=".$range_id."\">";
+			$range_typ = "sem";
+		}
 		}
 		
 	$db = new DB_Seminar;
@@ -93,7 +95,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 			$show_query.=") ";
 		}
 	
-	$db->query("SELECT *	FROM termine WHERE (range_id='$range_id' $show_query $tmp_query ) ORDER BY date");
+	$db->query("SELECT * FROM termine WHERE (range_id='$range_id' $show_query $tmp_query ) ORDER BY date");
 	
 	if ($db->num_rows()) {
 		
@@ -137,8 +139,8 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 		while ($db->next_record()) {
 
 			$zusatz='';
-			if (getRoom($db->f("termin_id")))
-				$zusatz.= _("Raum:") . " ".getRoom($db->f("termin_id"))."&nbsp;";
+			if ($range_typ == "sem" && ($room_desc = getRoom($db->f("termin_id"),1,0,"date")))
+				$zusatz.= _("Raum:") . " ".$room_desc."&nbsp;";
 			
 			//Dokumente zaehlen
 			$num_docs='';
