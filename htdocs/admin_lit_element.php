@@ -33,6 +33,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
+//html attributes for form
 $_attributes['text'] = array('style' => 'width:100%');
 $_attributes['textarea'] = array('style' => 'width:100%','rows'=>2);
 $_attributes['select'] = array();
@@ -40,12 +41,14 @@ $_attributes['date'] = array();
 $_attributes['combo'] = array('style' => 'width:45%');
 $_attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
 
+
 if ($_REQUEST['cmd'] == "new_entry"){
 	$_catalog_id = "new_entry";
 } else {
 	$_catalog_id = isset($_REQUEST['_catalog_id']) ? $_REQUEST['_catalog_id'] : "new_entry";
 }
 
+//dump data into db if $_catalog_id points to a search result
 if ($_catalog_id{0} == "_"){
 		$parts = explode("__", $_catalog_id);
 		if ( ($fields = $GLOBALS[$parts[0]][$parts[1]]) ){
