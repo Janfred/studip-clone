@@ -26,7 +26,7 @@ $sess->register("save_banner_data");
 $sess->register("banner_data");
 
 if (!$SMILEYADMIN_ENABLE) {
-	print "<p>Module disabled.</p>";
+	print '<p>' . _('Smiley-Modul abgeschaltet.'). '</p>';
 	print "</body></html>";
 	page_close();
 	die;
@@ -83,10 +83,10 @@ function show_upload_form() {
 	global $PHP_SELF;
 
 	$table=new ZebraTable(array("bgcolor"=>"#eeeeee", "align"=>"center", "padding"=>"2"));
-	print $table->headerRow(array("<b>Neues Smiley hochladen</b>"));
+	print $table->headerRow(array('<b>' . _('Neues Smiley hochladen') . '</b>'));
 	print "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=upload&view=edit\" method=\"POST\">";
-	print $table->row(array("1. Bilddatei auswählen: <input name=\"imgfile\" type=\"file\" cols=45>"));
-	print $table->row(array("2. Bilddatei hochladen: <input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\">"));
+	print $table->row(array(_('1. Bilddatei auswählen:')." <input name=\"imgfile\" type=\"file\" cols=45>"));
+	print $table->row(array(_('2. Bilddatei hochladen:')." <input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\">"));
 	print "</form>";
 	echo $table->close();
 }
@@ -119,11 +119,11 @@ function show_smiley_list() {
 	$table=new ZebraTable(array("bgcolor"=>"#eeeeee", "align"=>"center", "padding"=>"2"));
 	echo $table->open();
 	echo $table->openHeaderRow();
-	echo $table->cell("<b>Nr.</b>", array("align"=>"center"));
-	echo $table->cell("<b>Bild</b>", array("align"=>"center"));
-	echo $table->cell("<b>Name</b>", array("align"=>"center"));
-	echo $table->cell("<b>Kurz</b>", array("align"=>"center"));
-	echo $table->cell("<b>Löschen</b>", array("align"=>"center"));
+	echo $table->cell('<b>' . _('Nr.') . '</b>', array("align"=>"center"));
+	echo $table->cell('<b>' . _('Bild') . '</b>', array("align"=>"center"));
+	echo $table->cell('<b>' . _('Name') . '</b>', array("align"=>"center"));
+	echo $table->cell('<b>' . _('Kurz') . '</b>', array("align"=>"center"));
+	echo $table->cell('<b>' . _('Löschen') . '</b>', array("align"=>"center"));
 	echo $table->closeRow();
 	$count=0;
 	foreach ($i_smile as $smiley) {
@@ -158,18 +158,18 @@ function process_commands() {
 				if ($success) {
 					$count++;
 				} else {
-					parse_msg("error§Die Datei ".$ABSOLUTE_PATH_STUDIP.$SMILE_PATH."/".urldecode($matches[2])." konnte nicht umbenannt werden.");
+					parse_msg('error§' . sprintf( _('Die Datei %s konnte nicht umbenannt werden.'),  $ABSOLUTE_PATH_STUDIP.$SMILE_PATH.'/'.urldecode($matches[2]));
 				}
 			}
 		}
-	}	
+	}
 	if ($count>0) {
 		if ($count==1) {
 			parse_msg("msg§"._("Es wurde 1 Smiley umbenannt."));
 		} else {
 			parse_msg("msg§".sprintf(_("Es wurden %d Smileys umbenannt."), $count));
 		}
-	}	
+	}
 }
 
 //
@@ -192,9 +192,9 @@ if ($cmd=="upload") {
 	process_commands();
 } elseif ($cmd=="delete") {
 	if (unlink($ABSOLUTE_PATH_STUDIP.$SMILE_PATH.'/'.urldecode($img).".gif")) {
-		parse_msg("msg§Smiley erfolgreich gelöscht.");
+		parse_msg('msg§' . _('Smiley erfolgreich gelöscht.'));
 	} else {
-		parse_msg("error§Fehler: Smiley konnte nicht gelöscht werden.");
+		parse_msg('error§'. _('Fehler: Smiley konnte nicht gelöscht werden.'));
 	}
 }
 
