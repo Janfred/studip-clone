@@ -277,7 +277,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position heruasfinden
 								$db5->next_record();
 							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
-								parse_msg ("info§Sie wurden auf die Anmeldeliste der Veranstaltung <b>$SeminarName</b> gesetzt. Teilnehmer der Veranstaltung <b>$SeminarName</b> werden Sie, falls sie im Losverfahren am ".date("d.m.Y, G:i", $db2->f("admission_endtime"))." Uhr ausgelost werden. Sollten sie nicht ausgelost werden, werden sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
+								parse_msg ("info§Sie wurden auf die Anmeldeliste der Veranstaltung <b>$SeminarName</b> gesetzt. Teilnehmer der Veranstaltung <b>$SeminarName</b> werden Sie, falls Sie im Losverfahren am ".date("d.m.Y, G:i", $db2->f("admission_endtime"))." Uhr ausgelost werden. Sollten sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
 								if ($send_from_search)
 						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
