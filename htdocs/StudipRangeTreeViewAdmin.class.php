@@ -41,7 +41,13 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	
 	var $edit_item_id;
 	
+	var $move_item_id;
+	
 	var $search_result;
+
+	var $msg;
+	
+	var $marked_item;
 	
 	/**
 	* constructor
@@ -50,9 +56,14 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	* @access public
 	*/
 	function StudipRangeTreeViewAdmin(){
+		global $sess,$_marked_item;
 		$base_class = get_parent_class($this);
 		//parent::$base_class($item_id); //calling the baseclass constructor 
 		$this->$base_class(); //calling the baseclass constructor PHP < 4.1.0
+		if (is_object($sess)){
+			$sess->register("_marked_item");
+			$this->marked_item =& $_marked_item;
+		}
 		$this->initTreeStatus();
 		$this->parseCommand();
 	}
@@ -67,7 +78,8 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 				if ($key != 'root'){
 					$tmp = $this->tree->getAdminRange($key);
 					for ($i = 0; $i < count($i); ++$i){
-						$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
+						if ($tmp[$i])
+							$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
 					}
 				}
 			}
@@ -77,11 +89,13 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 				if ($key != 'root'){
 					$tmp = $this->tree->getAdminRange($key);
 					for ($i = 0; $i < count($i); ++$i){
-						$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
+						if ($tmp[$i])
+							$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
 					}
 					$tmp = $this->tree->getAdminRange($this->tree->tree_data[$key]['parent_id']);
 					for ($i = 0; $i < count($i); ++$i){
-						$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
+						if ($tmp[$i])
+							$studip_object_status[$tmp[$i]] = ($user_perm == "root") ? 1 : -1;
 					}
 				}
 			}
@@ -109,10 +123,15 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			$this->mode = $_REQUEST['mode'];
 		if ($_REQUEST['cmd']){
 			$exec_func = "execCommand" . $_REQUEST['cmd'];
-			if (method_exists($this,$exec_func))
-				if ($this->$exec_func())
+			if (method_exists($this,$exec_func)){
+				if ($this->$exec_func()){
 					$this->tree->init();
+					$this->initTreeStatus();
+				}
+			}
 		}
+		if ($this->mode == "MoveItem")
+			$this->move_item_id = $this->marked_item;
 	}
 	
 	function execCommandOrderItem(){
@@ -138,6 +157,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			$rs = $view->get_query("view:TREE_UPD_PRIO:$i,$items_to_order[$i]");
 		}
 		$this->mode = "";
+		$this->msg = "msg§" . (($direction == "up") ? _("Element wurde eine Position nach oben verschoben.") : _("Element wurde eine Position nach unten verschoben."));
 		return true;
 	}
 	
@@ -154,11 +174,13 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			}
 			$this->tree->tree_childs[$item_id] = $level_items;
 			$this->tree->tree_data[$new_item_id] = array('parent_id' => $item_id, 'name' => _("Neues Element"), 'priority' => (count($level_items)-1));
-			$this->mode = "NewItem";
 			$this->anchor = $new_item_id;
 			$this->edit_item_id = $new_item_id;
 			$this->open_ranges[$item_id] = true;
 			$this->open_items[$new_item_id] = true;
+			if ($this->mode != "NewItem")
+				$this->msg = "info§" . _("W&auml;hlen sie einen Namen für dieses Element, oder verlinken sie es mit einer Stud.IP Einrichtung");
+			$this->mode = "NewItem";
 		}
 		return false;
 	}
@@ -182,6 +204,9 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 					$this->search_result[$rs->f("Fakultaets_id")]['studip_object'] = "fak";
 				}
 			}
+		$this->msg = "info§" . sprintf(_("Ihre Suche ergab %s Treffer."),count($this->search_result));
+		} else {
+			$this->msg = "error§" . _("Sie haben keinen Suchbegriff eingegeben.");
 		}
 		if ($this->mode == "NewItem"){
 			$_REQUEST['item_id'] = $parent_id;
@@ -200,6 +225,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			$this->mode = "EditItem";
 			$this->anchor = $item_id;
 			$this->edit_item_id = $item_id;
+			$this->msg = "info§" . _("W&auml;hlen sie einen Namen für dieses Element, oder verlinken sie es mit einer Stud.IP Einrichtung");
 		}
 		return false;
 	}
@@ -226,22 +252,81 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 					$this->mode = "";
 					$this->anchor = $item_id;
 					$this->open_items[$item_id] = true;
+					$this->msg = "msg§" . _("Dieses Element wurde neu eingef&uuml;gt.");
 				}
 			}
 		}
 		if ($this->mode == "EditItem"){
-			if ($this->isParentAdmin($item_id) || $this->isItemAdmin($item_id)){
+			if ($this->isParentAdmin($item_id)){
 				$rs = $view->get_query("view:TREE_UPD_ITEM:$item_name,$studip_object,$studip_object_id,$item_id");
 				if ($rs->affected_rows()){
-					$this->mode = "";
-					$this->anchor = $item_id;
-					$this->open_items[$item_id] = true;
+					$this->msg = "msg§" . _("Element wurde ge&auml;ndert.");
+				} else {
+					$this->msg = "info§" . _("Keine Ver&auml;nderungen vorgenommen.");
 				}
+				$this->mode = "";
+				$this->anchor = $item_id;
+				$this->open_items[$item_id] = true;
+				
 			}
 		}
 		return true;
 	}
-				
+	
+	function execCommandAssertDeleteItem(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+		if ($this->isParentAdmin($item_id)){
+			$this->mode = "AssertDeleteItem";
+			$this->msg = "info§" ._("Sie beabsichtigen dieses Element inklusive aller Unterelemente zu l&ouml;schen. ")
+						. sprintf(_("Es werden insgesamt %s Elemente gel&ouml;scht !"),count($this->tree->getKidsKids($item_id))+1)
+						. "<br>" . _("Wollen sie diese Elemente wirklich l&ouml;schen ?") . "<br>"
+						. "<a href=\"" . $this->getSelf("cmd=DeleteItem&item_id=$item_id") . "\">"
+						. "<img " .makeButton("ja2","src") . tooltip(_("löschen"))
+						. " border=\"0\"></a>&nbsp;"
+						. "<a href=\"" . $this->getSelf("cmd=Cancel&item_id=$item_id") . "\">"
+						. "<img " .makeButton("nein","src") . tooltip(_("abbrechen"))
+						. " border=\"0\"></a>";
+		}
+		return false;
+	}
+	
+	function execCommandDeleteItem(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+		$deleted = 0;
+		$item_name = $this->tree->tree_data[$item_id]['name'];
+		if ($this->isParentAdmin($item_id) && $this->mode == "AssertDeleteItem"){
+			$this->anchor = $this->tree->tree_data[$item_id]['parent_id'];
+			$items_to_delete = $this->tree->getKidsKids($item_id);
+			$items_to_delete[] = $item_id;
+			$view = new DbView();
+			$rs = $view->get_query("view:TREE_DEL_ITEM:{" . join(",",$items_to_delete) . "}");
+			if ($deleted = $rs->affected_rows()){
+				$this->msg = "msg§" . sprintf(_("Das Element <b>%s</b> und alle Unterelemente (insgesamt %s) wurden gel&ouml;scht. "),htmlReady($item_name),$deleted);
+			} else {
+				$this->msg = "error§" . _("Fehler, es konnten keine Elemente gel&ouml;scht werden !");
+			}
+			$this->mode = "";
+			$this->open_items[$this->anchor] = true;
+		}
+		return ($deleted) ? true : false;
+	}
+	
+	function execCommandMoveItem(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+	
+	}
+	
+	function execCommandCancel(){
+		global $_REQUEST;
+		$item_id = $_REQUEST['item_id'];
+		$this->mode = "";
+		$this->anchor = $item_id;
+		return false;
+	}
+	
 	function isItemAdmin($item_id){
 		$admin_ranges = $this->tree->getAdminRange($item_id);
 		for ($i = 0; $i < count($admin_ranges); ++$i){
@@ -266,8 +351,13 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		
 		if ($item_id == $this->edit_item_id )
 			return $this->getEditItemContent();
-			
+		if ($item_id == $this->move_item_id){
+			$this->msg = "info§" . sprintf(_("Dieses Element wurde zum Verschieben markiert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus, um das Element zu verschieben.")
+						, "<img src=\"pictures/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">");
+			}
 		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+		if ($item_id == $this->anchor)
+			$content .= $this->getItemMessage();
 		$content .= "\n<tr><td align=\"center\">";
 		if ($this->isItemAdmin($item_id)){
 			$content .= "<a href=\"" . $this->getSelf("cmd=NewItem&item_id=$item_id") . "\">"
@@ -279,14 +369,14 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
 			. " border=\"0\"></a>&nbsp;";
 		
-			$content .= "<a href=\"" . $this->getSelf("cmd=DeleteItem&item_id=$item_id") . "\">"
+			$content .= "<a href=\"" . $this->getSelf("cmd=AssertDeleteItem&item_id=$item_id") . "\">"
 			. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
 			. " border=\"0\"></a>&nbsp;";
 			$content .= "<a href=\"" . $this->getSelf("cmd=MoveItem&item_id=$item_id") . "\">"
 			. "<img " .makeButton("verschieben","src") . tooltip(_("Dieses Element in eine andere Ebene verschieben"))
 			. " border=\"0\"></a>&nbsp;";
 		}
-		$content .= "<br>&nbsp;</td></tr></table>";
+		$content .= "</td></tr></table>";
 		$content .= "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
 		if ($item_id == "root"){
 			$content .= "\n<tr><td class=\"topic\" align=\"left\">" . htmlReady($this->tree->root_name) ." </td></tr>";
@@ -345,9 +435,10 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	}
 	
 	function getEditItemContent(){
-		$content = "\n<form action=\"" . $this->getSelf("cmd=InsertItem&item_id={$this->edit_item_id}") . "\" method=\"POST\">";
+		$content = "\n<form name=\"item_form\" action=\"" . $this->getSelf("cmd=InsertItem&item_id={$this->edit_item_id}") . "\" method=\"POST\">";
 		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
 		$content .= "\n<table width=\"90%\" border =\"0\" style=\"border-style: solid; border-color: #000000;  border-width: 1px;font-size: 10pt;\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+		$content .=  $this->getItemMessage(2);
 		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\" ><b>". _("Element editieren") . "</b></td></tr>";
 		$content .= "\n<tr><td class=\"steel1\" width=\"60%\">". _("Name des Elements:") . "&nbsp;"
 				. "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" value=\"" . $this->tree->tree_data[$this->edit_item_id]['name']
@@ -355,7 +446,8 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 				. makeButton("absenden","src") . tooltip("Einstellungen übernehmen") . "></td></tr>";
 		$content .= "\n<tr><td colspan=\"2\" class=\"steelgraudunkel\"><b>". _("Element mit Stud.IP Einrichtung verlinken") . "</b></td></tr>";
 		$content .= "\n<tr><td colspan=\"2\" class=\"steel1\">" . _("Stud.IP Einrichtung:") . "&nbsp;";
-		$content .= "\n<select name=\"edit_studip_object\">\n<option value=\"none\" ";
+		$content .= "\n<select name=\"edit_studip_object\" onChange=\"document.item_form.edit_name.value=document.item_form.edit_studip_object.options[document.item_form.edit_studip_object.selectedIndex].text;\">";
+		$content .= "\n<option value=\"none\" ";
 		$content .= ($this->tree->tree_data[$this->edit_item_id]['studip_object']) ? ">" : "selected >";
 		$content .= _("Kein Link") . "</option>";
 		if ($this->tree->tree_data[$this->edit_item_id]['studip_object']){
@@ -369,7 +461,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 			}
 		}
 		$content .= "</select></td></tr></form>";
-		$content .= "\n<form action=\"" . $this->getSelf("cmd=SearchStudIP&item_id={$this->edit_item_id}") . "\" method=\"POST\"><tr><td class=\"steel1\">" . _("Stud.IP Einrichtung suchen:") . "&nbsp;";
+		$content .= "\n<form name=\"link_form\" action=\"" . $this->getSelf("cmd=SearchStudIP&item_id={$this->edit_item_id}") . "\" method=\"POST\"><tr><td class=\"steel1\">" . _("Stud.IP Einrichtung suchen:") . "&nbsp;";
 		$content .= "\n<input type=\"HIDDEN\" name=\"parent_id\" value=\"{$this->tree->tree_data[$this->edit_item_id]['parent_id']}\">";
 		$content .= "\n<input type=\"TEXT\" name=\"edit_search\" size=\"30\"></td><td class=\"steel1\" align=\"left\"><input type=\"image\" "
 				. makeButton("suchen","src") . tooltip("Einrichtung suchen") . "></td></tr>";
@@ -378,13 +470,25 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 		return $content;
 	}
 	
+	function getItemMessage($colspan = 1){
+		if ($this->msg){
+			$msg = split("§",$this->msg);
+			$pics = array('error' => 'x.gif', 'info' => 'ausruf.gif', 'msg' => 'ok.gif');
+			$content = "\n<tr><td colspan=\"{$colspan}\"><table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\" style=\"font-size:10pt\">
+						<tr><td class=\"blank\" align=\"center\" width=\"25\"><img width=\"16\" height=\"16\" src=\"pictures/" . $pics[$msg[0]] . "\" ></td>
+						<td class=\"blank\" align=\"left\">" . $msg[1] . "</td></tr>
+						</table></td></tr><tr>";
+		}
+		return $content;
+	}
+		
 	function getSelf($param){
-		$url = $GLOBALS['PHP_SELF'];
+		$url = $GLOBALS['PHP_SELF'] . "?" . DbView::get_uniqid();
 		if ($this->mode)
-			$url .= "?mode=" . $this->mode;
+			$url .= "&mode=" . $this->mode;
 		if ($param)
-			$url .= ($this->mode) ? "&" : "?";
-		$url .= $param . "#anchor";
+			$url .= "&" . $param;
+		$url .= "#anchor";
 	return $url;
 	}
 }
