@@ -59,7 +59,7 @@ if ($ILIAS_CONNECT_ENABLE)
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="3">&nbsp;<b>Administration von Lernmodulen</b>
+		<td class="topic" colspan="3">&nbsp;<b><?=_("Administration von Lernmodulen")?></b>
 		</td>
 	</tr>
 	<tr>
