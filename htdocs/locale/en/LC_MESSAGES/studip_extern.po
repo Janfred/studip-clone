@@ -1,13 +1,11 @@
 # translation of studip_extern.po to
-# translation of studip_extern.po to
-# translation of studip_extern.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2004-02-15 14:22+0100\n"
+"POT-Creation-Date: 2004-02-15 14:50+0100\n"
 "PO-Revision-Date: 2004-02-15 14:01+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -3300,37 +3298,3 @@ msgstr "under group names"
 #: extern/elements/main/ExternElementMainSemlecturetree.class.php:90
 msgid "Umschlie&szlig;ende Tabelle"
 msgstr "Enclosed table"
-
-#~ msgid "Schrift Veranstaltungsname (HTML-Tag &lt;font&gt;)"
-#~ msgstr "Font of the course name (HTML - Tag &lt;font&gt;)"
-
-#~ msgid "Veranstaltungstypen der Kategorie &quot;%s&quot;"
-#~ msgstr "Course types of the category &quot;%s&quot;"
-
-#~ msgid ""
-#~ "Geben Sie eine Bezeichnung für den Veranstaltungstyp \"%s\" ein. Diese "
-#~ "wird an Stelle der ursprünglichen Bezeichnung ausgegeben."
-#~ msgstr ""
-#~ "Enter a description for the course type \"%s\". This will be displayed in "
-#~ "place of the original description."
-
-#, fuzzy
-#~ msgid "Startseite"
-#~ msgstr "Semester:"
-
-#~ msgid "Semesterumfang:"
-#~ msgstr "Range of semesters:"
-
-#~ msgid ""
-#~ "Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden "
-#~ "sollen."
-#~ msgstr "Enter from which semester courses should be shown."
-
-#~ msgid "nur aktuelles"
-#~ msgstr "only current"
-
-#~ msgid "vorheriges, aktuelles, n&auml;chstes"
-#~ msgstr "previous, current, next"
-
-#~ msgid "alle"
-#~ msgstr "all"

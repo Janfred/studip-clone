@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-15 14:22+0100\n"
+"POT-Creation-Date: 2004-02-15 14:50+0100\n"
 "PO-Revision-Date: 2004-02-15 13:53+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -8180,6 +8180,10 @@ msgstr "Repeated on %s every %s months."
 #: calendar/views/edit.inc.php:416 calendar/views/edit.inc.php:454
 msgid "Jeden"
 msgstr "Every"
+
+#: calendar/views/edit.inc.php:437
+msgid "alle"
+msgstr "All"
 
 #: calendar/views/edit.inc.php:441
 msgid "Monate"
@@ -16413,6 +16417,19 @@ msgstr "Add course"
 msgid "Mein Planer"
 msgstr "My planner"
 
+#: index.php:113 index.php:258 links_about.inc.php:69 links_sms.inc.php:33
+msgid "Terminkalender"
+msgstr "Appointment calendar"
+
+#: index.php:113 index.php:258 links_sms.inc.php:36
+msgid "Adressbuch"
+msgstr "Address book"
+
+#: index.php:113 index.php:258 links_about.inc.php:70 links_sms.inc.php:34
+#: links_sms.inc.php:59
+msgid "Stundenplan"
+msgstr "Time table"
+
 #: index.php:116 index.php:259
 msgid "individuelle Einstellungen"
 msgstr "Individual settings"
@@ -17159,6 +17176,12 @@ msgstr "Course time table"
 msgid "Administration der Einrichtung"
 msgstr "Institute administration"
 
+#: links_openobject.inc.php:160 links_openobject.inc.php:181
+#: links_openobject.inc.php:206 links_seminare.inc.php:43 links_sms.inc.php:60
+#: wiki.inc.php:867 help/kartei.inc.php:32 help/structure.inc.php:240
+msgid "Druckansicht"
+msgstr "Print view"
+
 #: links_openobject.inc.php:162
 msgid "Administration dieser Veranstaltung"
 msgstr "Administration of this course"
@@ -17313,6 +17336,14 @@ msgstr "Customise messaging"
 msgid "Wer ist online?"
 msgstr "Who is online? "
 
+#: links_sms.inc.php:52
+msgid "Monat"
+msgstr "Month"
+
+#: links_sms.inc.php:53
+msgid "Jahr"
+msgstr "Year"
+
 #: links_sms.inc.php:54
 msgid "Termin anlegen/bearbeiten"
 msgstr "Create / edit appointments "
@@ -17324,6 +17355,23 @@ msgstr "Course appointments"
 #: links_sms.inc.php:56
 msgid "Export/Sync"
 msgstr "Export/Sync"
+
+#: links_sms.inc.php:57 links_sms.inc.php:61 mein_stundenplan.php:385
+#: help/structure.inc.php:448
+msgid "Ansicht anpassen"
+msgstr "Customise lay-out"
+
+#: links_sms.inc.php:63
+msgid "Alphabetisch"
+msgstr "Alphabetical"
+
+#: links_sms.inc.php:64
+msgid "Gruppenansicht"
+msgstr "Group view"
+
+#: links_sms.inc.php:65
+msgid "Gruppenverwaltung"
+msgstr "Group administration"
 
 #: links_sms.inc.php:66
 msgid "VCF-Export"
@@ -26393,413 +26441,3 @@ msgid ""
 "eingetragen."
 msgstr ""
 "The allocation of rooms %s has been sent to the resources administration."
-
-#~ msgid "zuruecksetzen"
-#~ msgstr "Re-set"
-
-#~ msgid "Schrift Veranstaltungsname (HTML-Tag &lt;font&gt;)"
-#~ msgstr "Font of the course name (HTML - Tag &lt;font&gt;)"
-
-#~ msgid "Veranstaltungstypen der Kategorie &quot;%s&quot;"
-#~ msgstr "Course types of the category &quot;%s&quot;"
-
-#~ msgid ""
-#~ "Geben Sie eine Bezeichnung für den Veranstaltungstyp \"%s\" ein. Diese "
-#~ "wird an Stelle der ursprünglichen Bezeichnung ausgegeben."
-#~ msgstr ""
-#~ "Enter a description for the course type \"%s\". This will be displayed in "
-#~ "place of the original description."
-
-#, fuzzy
-#~ msgid "Startseite"
-#~ msgstr "Semester:"
-
-#~ msgid "Semesterumfang:"
-#~ msgstr "Range of semesters:"
-
-#~ msgid ""
-#~ "Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden "
-#~ "sollen."
-#~ msgstr "Enter from which semester courses should be shown."
-
-#~ msgid "nur aktuelles"
-#~ msgstr "only current"
-
-#~ msgid "vorheriges, aktuelles, n&auml;chstes"
-#~ msgstr "previous, current, next"
-
-#~ msgid "alle"
-#~ msgstr "all"
-
-#~ msgid "zur&uuml;ck zur &Uuml;bersicht"
-#~ msgstr "Back to overview"
-
-#~ msgid "Terminkalender"
-#~ msgstr "Appointment calendar"
-
-#~ msgid "Adressbuch"
-#~ msgstr "Address book "
-
-#~ msgid "Stundenplan"
-#~ msgstr "Time table"
-
-#~ msgid "Monat"
-#~ msgstr "Month"
-
-#~ msgid "Jahr"
-#~ msgstr "Year"
-
-#~ msgid "Ansicht anpassen"
-#~ msgstr "Customise lay-out"
-
-#~ msgid "Alphabetisch"
-#~ msgstr "Alphabetical"
-
-#~ msgid "Gruppenansicht"
-#~ msgstr "Group view"
-
-#~ msgid "Gruppenverwaltung"
-#~ msgstr "Group administration"
-
-#~ msgid "Druckansicht"
-#~ msgstr "Print view"
-
-#~ msgid "name"
-#~ msgstr "name"
-
-#~ msgid "Termin:"
-#~ msgstr "Appointment:"
-
-#~ msgid "<b>Alle &nbsp;</b>%s<b>&nbsp; Wochen</b>%s<b>am:&nbsp;</b>"
-#~ msgstr "<b>All&nbsp;</b>%s<b>&nbsp;Weeks</b>%s<b>on:&nbsp;</b>"
-
-#~ msgid "am rechts anzugebenden Datum"
-#~ msgstr "on the date stated on the right"
-
-#~ msgid ""
-#~ "Dieser Terminkalender verwaltet Ihre Termine. Sie k&ouml;nnen Termine "
-#~ "eintragen, &auml;ndern, gruppieren und sich &uuml;bersichtlich anzeigen "
-#~ "lassen."
-#~ msgstr ""
-#~ "This appointment calendar administers your appointments. You can enter "
-#~ "appointments as well as edit, group and display them."
-
-#~ msgid ""
-#~ "Mit dem Feld 'Gruppengr&ouml;&szlig;e' haben Sie die M&ouml;glichkeit, "
-#~ "die Sollst&auml;rke f&uuml;r eine Gruppe festzulegen."
-#~ msgstr ""
-#~ "With the field 'Group size' you can determine the authorised strength of "
-#~ "a group."
-
-#~ msgid ""
-#~ "Sie wurden aus der Veranstaltung **%s (%s)** gelöscht, da Sie in einer "
-#~ "anderen Veranstaltung dieser Gruppe von der Warteliste in die "
-#~ "Teilnehmerliste aufgestiegen sind."
-#~ msgstr ""
-#~ "You have been deleted from the course **%s**(%s)**, since you have been "
-#~ "promoted from the waiting list to the participant list for another course "
-#~ "within this group."
-
-#, fuzzy
-#~ msgid "Zur freien Kursseite (geändert)"
-#~ msgstr "To literature and links list (changed) "
-
-#, fuzzy
-#~ msgid "Zur freien Kursseite"
-#~ msgstr "To your preferences page"
-
-#, fuzzy
-#~ msgid "Ordner: Alle Nachrichten"
-#~ msgstr "New messages"
-
-#~ msgid "Literatur und Links ge&auml;ndert"
-#~ msgstr "Literature and links changed"
-
-#~ msgid "Literatur und Links"
-#~ msgstr "Literature and links"
-
-#~ msgid "Literaturliste"
-#~ msgstr "Literature lists"
-
-#~ msgid "&Auml;nderungen %s"
-#~ msgstr "changes %s "
-
-#~ msgid ""
-#~ "Sie k&ouml;nnen nun mit der Literatur- und Linkverwaltung und dem Termin-"
-#~ "Assistenten fortfahren oder an diesem Punkt abbrechen."
-#~ msgstr ""
-#~ "You can now only continue with the literature and link administration and "
-#~ "the appointment assistant, or finish at this point."
-
-#~ msgid ""
-#~ "Sie k&ouml;nnen nun mit der Literatur- und Linkverwaltung fortfahren oder "
-#~ "an diesem Punkt abbrechen."
-#~ msgstr ""
-#~ "You can now only continue with the literature and link administration, or "
-#~ "finish at this point."
-
-#~ msgid "Veranstaltungs-Assistent - Schritt 6: Literatur- und Linkliste"
-#~ msgstr "Course assistant - step 6: literature and links list"
-
-#~ msgid "Schritt 6: Eingeben der Literatur- und Linkliste"
-#~ msgstr "Step 6: setting up the literature and links list"
-
-#~ msgid "Literaturliste:"
-#~ msgstr "Literature lists:"
-
-#~ msgid "Linkliste:"
-#~ msgstr "Link lists:"
-
-#~ msgid ""
-#~ "In dieses Feld können Sie eine komplette Linkliste einfügen. Alle Links "
-#~ "werden später automatisch als Hyperlinks angezeigt."
-#~ msgstr ""
-#~ "In this field you can enter a complete link list. All links will later be "
-#~ "automatically displayed as hyperlinks."
-
-#~ msgid "Gruppengr&ouml;&szlig;e:"
-#~ msgstr "Group size:"
-
-#~ msgid "Literatur:"
-#~ msgstr "Literature:"
-
-#~ msgid "Links:"
-#~ msgstr "Links:"
-
-#~ msgid "Tragen Sie sich hier ein"
-#~ msgstr "Register yourself here"
-
-#~ msgid ""
-#~ "Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. "
-#~ "Die Kontingentierung wurde am %s aufgehoben. Weitere Pl&auml;tze k&ouml;"
-#~ "nnen noch &uuml;ber Wartelisten vergeben werden."
-#~ msgstr ""
-#~ "The choice of participant was conducted according to the order of "
-#~ "registration. The contingent groups ceased to be considered after the %s. "
-#~ "Further places can now be allocated according to the waiting list."
-
-#~ msgid "Anschrift:"
-#~ msgstr "Address:"
-
-#~ msgid "Literatur/Links"
-#~ msgstr "Literature / links"
-
-#~ msgid "Meine&nbsp;Einrichtungen"
-#~ msgstr "My&nbsp;institutes"
-
-#~ msgid "Einrichtungen&nbsp;verwalten"
-#~ msgstr "Administer&nbsp;institutes"
-
-#~ msgid ""
-#~ "Hier finden Sie n&uuml;tzliche Literatur und Links zu dieser Einrichtung."
-#~ msgstr "Here you will find useful literature and links for the institute."
-
-#~ msgid "Hier finden Sie die Literatur- und Linkliste der Veranstaltung."
-#~ msgstr "Here you can find the literature and link lists for the course."
-
-#~ msgid "Es sind %s weitere Einrichtungen vorhanden."
-#~ msgstr "There are %s other institutes available."
-
-#~ msgid "Einstellungen f&uuml;r das Stud.IP-Messaging anpassen"
-#~ msgstr "Customise the settings for the Stud.IP messaging. "
-
-#~ msgid ""
-#~ "Hier k&ouml;nnen Sie Ihre Einstellungen f&uuml;r das Stud.IP-Messaging "
-#~ "&auml;ndern."
-#~ msgstr "Here you can change the settings for the Stud.IP messaging."
-
-#~ msgid "Systeminterne Kurznachrichten"
-#~ msgstr "Internal system messages "
-
-#~ msgid "automatisches L&ouml;schen:"
-#~ msgstr "Delete automatically:"
-
-#~ msgid "Alle Nachrichten automatisch nach dem Logout l&ouml;schen"
-#~ msgstr "Automatically delete all messages after logging out"
-
-#~ msgid "Starten:"
-#~ msgstr "Start:"
-
-#~ msgid ""
-#~ "Anzahl der Minuten, nach denen ein(e) Nutzer(in) nicht mehr angezeigt wird"
-#~ msgstr "Number of minutes, after which a user will no longer be displayed"
-
-#~ msgid "Buddies verwalten:"
-#~ msgstr "Administer buddies: "
-
-#~ msgid "Zum Verwalten Ihrer Buddies besuchen Sie bitte das %sAdressbuch%s."
-#~ msgstr "To administer buddies, please take a look at the %saddress book%s."
-
-#~ msgid ""
-#~ "Hier k&ouml;nnen Sie die Ansicht von Stud.IP nach Ihren Vorstellungen "
-#~ "anpassen.<br>Sie k&ouml;nnen z.B. Ihre bevorzugte Sprache einstellen."
-#~ msgstr ""
-#~ "Here you can customise the lay-out of Stud.IP to suit your preferences."
-#~ "<br>For example you may select another language."
-
-#~ msgid "[l&ouml;schen]"
-#~ msgstr "[delete]"
-
-#~ msgid "(mehr)"
-#~ msgstr "(more)"
-
-#~ msgid ""
-#~ "Sie wurden mit dem Status <b> Leser </b> in die Veranstaltung %s "
-#~ "eingetragen."
-#~ msgstr "You have been accepted as <b>Reader</b> in the course %s."
-
-#~ msgid "Hier </a>kommen Sie zu der Veranstaltung"
-#~ msgstr "You can access the course here </a>"
-
-#~ msgid "Weiter zu der Veranstaltung"
-#~ msgstr "Continue to the course"
-
-#~ msgid "Weiter zur Veranstaltung"
-#~ msgstr "Continue to course"
-
-#~ msgid ""
-#~ "Falls Sie das Passwort jetzt noch nicht eingeben m&ouml;chten, k&ouml;"
-#~ "nnen Sie mit Leseberechtigung an der Veranstaltung teilnehmen."
-#~ msgstr ""
-#~ "If you do not want to enter your password yet, you can still take part in "
-#~ "the course with reader access."
-
-#~ msgid "Bitte klicken Sie dazu %s hier</a>!"
-#~ msgstr "For that purpose please click %s here</a>!"
-
-#~ msgid ""
-#~ "Um zu der Veranstaltung <b>%s</b> zu gelangen, klicken Sie bitte%s hier</"
-#~ "a>!"
-#~ msgstr "In order to receive the course <b>%s</b>, please click %s here</a>!"
-
-#~ msgid "Änderung durchführen"
-#~ msgstr "Apply changes"
-
-#~ msgid "gesendet an %s am %s %s"
-#~ msgstr "Sent to %s at %s %s."
-
-#~ msgid "automatische Systemnachricht, gesendet am %s %s"
-#~ msgstr "automatic system message, sent at %s %s "
-
-#~ msgid "gesendet von %s am %s %s"
-#~ msgstr "Sent from %s at %s %s"
-
-#~ msgid ""
-#~ "Alle systeminternen Nachrichten, die an Sie gesendet wurden werden hier "
-#~ "angezeigt.<br>"
-#~ msgstr ""
-#~ "You can see here all the internal system messages that you have received."
-
-#~ msgid ""
-#~ "Alle systeminternen Nachrichten, die Sie gesendet haben werden hier "
-#~ "angezeigt.<br>"
-#~ msgstr ""
-#~ "All the internal system messages that you have sent will be shown here."
-#~ "<br>"
-
-#~ msgid "Sie sehen alle Ihre Nachrichten."
-#~ msgstr "You can see all your messages"
-
-#~ msgid "Sie sehen nur neue Nachrichten."
-#~ msgstr "You can see only new messages."
-
-#~ msgid "Sie sehen nur Nachrichten der letzten 24 Stunden."
-#~ msgstr "You can see only messages from the last 24 hours."
-
-#~ msgid "Sie sehen alle Nachrichten der letzten 7 Tage."
-#~ msgstr "You can see all messages from the last 7 days."
-
-#~ msgid "Sie sehen alle Nachrichten der letzten 30 Tage."
-#~ msgstr "You can see all messages from the last 30 days."
-
-#~ msgid "Sie sehen nur Nachrichten, die &auml;lter als 30 Tage sind."
-#~ msgstr "You can see only those messages that are older than 30 days old."
-
-#~ msgid "Sie k&ouml;nnen die Anzeige der Nachrichten zeitlich eingrenzen."
-#~ msgstr "You can restrict the selection of messages:"
-
-#~ msgid "Anzeigezeitraum ausw&auml;hlen:"
-#~ msgstr "Select display time period:"
-
-#~ msgid "Anmeldedatum:"
-#~ msgstr "Subscription date:"
-
-#~ msgid "Systeminterne SMS"
-#~ msgstr "Internal system message "
-
-#~ msgid "Die Nachricht wurde an alle %s Buddies verschickt!"
-#~ msgstr "The message has been sent to all %s buddies!"
-
-#~ msgid ""
-#~ "Ihre Einladung zum Chatten an %s in den Chatraum %s wurde verschickt."
-#~ msgstr "Your invitation has been sent to %s to chat in the chat room %s."
-
-#~ msgid "Ihre Einladung zum Chatten an %s konnte nicht verschickt werden"
-#~ msgstr "Your invitation to chat could not be sent to %s."
-
-#~ msgid "Ihre Einladung zum Chatten wurde an %s Buddies verschickt!"
-#~ msgstr "Your invitation to chat has been sent to %s buddies."
-
-#~ msgid ""
-#~ "Ihre Einladung zum Chatten konnte nicht an Ihre Buddies verschickt werden!"
-#~ msgstr "Your invitation to chat could not be sent to your buddies!"
-
-#~ msgid "Schreiben Sie hier eine Nachricht an eine(n) anderen Benutzer(in):"
-#~ msgstr "Write a message to another user here: "
-
-#~ msgid "Nachricht schreiben an"
-#~ msgstr "Write message to"
-
-#~ msgid "alle Mitglieder der Gruppe: %s (%s Person(en))"
-#~ msgstr "all members of the group: %s (%s user(s))"
-
-#~ msgid "Diese Nachricht (auch) an alle meine Buddies versenden"
-#~ msgstr "Send this message to all my buddies (as well)."
-
-#~ msgid "Chateinladung verschicken"
-#~ msgstr "Send chat invitation "
-
-#~ msgid ""
-#~ "Schreiben Sie hier eine Chateinladung an eine(n) anderen Benutzer(in), "
-#~ "der Nachrichtentext ist optional:"
-#~ msgstr ""
-#~ "Write a chat invitation to another user here, the message text is "
-#~ "optional:"
-
-#~ msgid "Chateinladung verschicken an"
-#~ msgstr "Send chat invitation to"
-
-#~ msgid "Diese Einladung (auch) an alle meine Buddies verschicken"
-#~ msgstr "Send this invitation to all my buddies (as well)."
-
-#~ msgid ""
-#~ "Sie sehen hier alle systeminternen Nachrichten (SMS), die an Sie "
-#~ "verschickt wurden."
-#~ msgstr ""
-#~ "You can see here all the internal system messages (SMS) that you have "
-#~ "received."
-
-#~ msgid "Alle Nachrichten seit dem letzten Login erscheinen aufgeklappt."
-#~ msgstr "All messages received since your last login are displayed opened."
-
-#~ msgid "Nachrichten seit letztem Login nicht l&ouml;schen"
-#~ msgstr "Don't delete messages received since last login."
-
-#~ msgid "Einladung zum Chat"
-#~ msgstr "Invitation to chat"
-
-#~ msgid ""
-#~ "Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in "
-#~ "der Kopfzeile."
-#~ msgstr ""
-#~ "If you want to chat with him, enter the chat via the symbol on the header."
-
-#~ msgid "automatische Systemnachricht, gesendet am %s"
-#~ msgstr "automatic system message sent to %s."
-
-#~ msgid "gesendet von %s am %s"
-#~ msgstr "Sent from %s at %s."
-
-#~ msgid ""
-#~ "Im Augenblick liegen keine systeminternen Nachrichten f&uuml;r Sie vor."
-#~ msgstr "At present there are no internal system messages for you."

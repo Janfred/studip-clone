@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-02-15 14:22+0100\n"
+"POT-Creation-Date: 2004-02-15 14:50+0100\n"
 "PO-Revision-Date: 2004-02-15 13:48+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -975,59 +975,3 @@ msgstr ""
 #: calendar/lib/sync/CalendarSynchronizer.class.php:146
 msgid "Die zu synchronisierende Datei enth&auml;lt zu viele Termine."
 msgstr "The file to be synchronised contains too many appointments."
-
-#~ msgid "Terminkalender"
-#~ msgstr "Appointment calendar"
-
-#~ msgid "Adressbuch"
-#~ msgstr "Address book "
-
-#~ msgid "Stundenplan"
-#~ msgstr "Time table"
-
-#~ msgid "Monat"
-#~ msgstr "Month"
-
-#~ msgid "Jahr"
-#~ msgstr "Year"
-
-#~ msgid "Bearbeiten"
-#~ msgstr "Edit"
-
-#~ msgid "Ansicht anpassen"
-#~ msgstr "Customise lay-out"
-
-#~ msgid "Alphabetisch"
-#~ msgstr "Alphabetical"
-
-#~ msgid "Gruppenansicht"
-#~ msgstr "Group view"
-
-#~ msgid "Gruppenverwaltung"
-#~ msgstr "Group administration"
-
-#~ msgid "Druckansicht"
-#~ msgstr "Print view"
-
-#~ msgid "name"
-#~ msgstr "name"
-
-#~ msgid "Termin:"
-#~ msgstr "Appointment:"
-
-#~ msgid "<b>Alle &nbsp;</b>%s<b>&nbsp; Wochen</b>%s<b>am:&nbsp;</b>"
-#~ msgstr "<b>All&nbsp;</b>%s<b>&nbsp;Weeks</b>%s<b>on:&nbsp;</b>"
-
-#~ msgid "am rechts anzugebenden Datum"
-#~ msgstr "on the date stated on the right"
-
-#~ msgid "Keine Beschreibung"
-#~ msgstr "No description"
-
-#~ msgid ""
-#~ "Dieser Terminkalender verwaltet Ihre Termine. Sie k&ouml;nnen Termine "
-#~ "eintragen, &auml;ndern, gruppieren und sich &uuml;bersichtlich anzeigen "
-#~ "lassen."
-#~ msgstr ""
-#~ "This appointment calendar administers your appointments. You can enter "
-#~ "appointments as well as edit, group and display them."
