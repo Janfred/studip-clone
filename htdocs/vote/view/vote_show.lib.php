@@ -236,7 +236,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 		     ? _("Diesen Test bearbeiten.")
 		     : _("Dieses Voting bearbeiten.") ).
 	    " border=\"0\"></a>";
-
+      if (!$vote->isStopped())
       $html .= 
 	 "&nbsp;".
 	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
