@@ -36,8 +36,10 @@ function parse_header($header){
 	return $ret;
 }
 
-function parse_link($link) {
+function parse_link($link,$level=0) {
 	global $name, $the_file_name, $the_link, $locationheader, $parsed_link;
+	if ($level > 3)
+		return FALSE;
 	if (substr($link,0,6) == "ftp://") {
 		// Parsing an FTF-Adress	
 		$url_parts = @parse_url( $link );
@@ -70,42 +72,47 @@ function parse_link($link) {
 		return $parsed_link;
 				
 	} else {
-	
-	
-	$url_parts = @parse_url( $link );
-	if (!empty( $url_parts["path"])){
-		$documentpath = $url_parts["path"];
-	} else {
-		$documentpath = "/";
-	}
-	if ( !empty( $url_parts["query"] ) ) {
-		$documentpath .= "?" . $url_parts["query"];
-	}
-	$host = $url_parts["host"];
-	$port = $url_parts["port"];
-	if (empty( $port ) ) $port = "80";
-	$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
-	if (!$socket) {
-		//echo "$errstr ($errno)<br />\n";
-	} else {
-		fputs($socket, "HEAD ".$documentpath." HTTP/1.0\nHost: $host\n\n");
-   		socket_set_timeout($socket,2);
-   		while (!feof($socket)) {
-	       		$response .= fgets($socket,4096);
-	   	}
-	   	fclose($socket);
-	}
-	$parsed_link = parse_header($response);
-	//print_r ($parsed_link);
-	
-	// Weg über einen Locationheader:
-	
-	if (($parsed_link["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) && $parsed_link["Location"]) {
-		$the_file_name = basename($url_parts["path"]);
-		$the_link = $parsed_link["Location"];
-		parse_link($parsed_link["Location"]);
-	}
-	return $parsed_link;
+		$url_parts = @parse_url( $link );
+		if (!empty( $url_parts["path"])){
+			$documentpath = $url_parts["path"];
+		} else {
+			$documentpath = "/";
+		}
+		if ( !empty( $url_parts["query"] ) ) {
+			$documentpath .= "?" . $url_parts["query"];
+		}
+		$host = $url_parts["host"];
+		$port = $url_parts["port"];
+		if (empty( $port ) ) $port = "80";
+		
+		$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
+		if (!$socket) {
+			//echo "$errstr ($errno)<br />\n";
+		} else {
+			$urlString = "HEAD ".$documentpath." HTTP/1.0\nHost: $host\r\n";
+			if ($url_parts["user"] && $url_parts["pass"]) {
+				$pass = $url_parts["pass"];
+				$user = $url_parts["user"];
+				$urlString .= "Authorization: Basic ".base64_encode("$user:$pass")."\r\n";
+			}
+                       $urlString .= "\r\n";
+		       fputs($socket, $urlString);
+		       socket_set_timeout($socket,2);
+		       while (!feof($socket)) {
+			       $response .= fgets($socket,4096);
+			}
+			fclose($socket);
+		}
+		$parsed_link = parse_header($response);
+		//print_r ($parsed_link);
+		
+		// Weg über einen Locationheader:
+		if (($parsed_link["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) && $parsed_link["Location"]) {
+			$the_file_name = basename($url_parts["path"]);
+			$the_link = $parsed_link["Location"];
+			parse_link($parsed_link["Location"],$level);
+		}
+		return $parsed_link;
 	}
 }
 
