@@ -29,7 +29,7 @@ class SeminarEvent extends Event {
 
 	var $sem_id = ""; // Veranstaltungs-ID, wenn es sich um einen Veranstaltungstermin handelt (String)
 	var $sem_name = "";
-	var $sem_wright_perm = FALSE;
+	var $sem_write_perm = FALSE;
 	
 	function SeminarEvent () {
 		switch(func_num_args()){
@@ -128,7 +128,7 @@ class SeminarEvent extends Event {
 	* @access public
 	* @return Object a copy of this object
 	*/
-	function &clone () {
+	function clone () {
 		$clone =& new SeminarEvent($this->start, $this->end, $this->txt, $this->cat,
 				$this->loc, $this->id, $this->sem_id, $this->mkdate, $this->chdate);
 		$clone->desc = $this->des;
@@ -137,12 +137,12 @@ class SeminarEvent extends Event {
 	}
 	
 	
-	function setWrightPermission ($perm) {
-		$this->sem_wright_perm = $perm;
+	function setWritePermission ($perm) {
+		$this->sem_write_perm = $perm;
 	}
 	
-	function haveWrightPermission () {
-		return $this->sem_wright_perm;
+	function haveWritePermission () {
+		return $this->sem_write_perm;
 	}
 	
 } // class SeminarEvent
