@@ -29,6 +29,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 	
 $sess->register("sms_data");
 $msging=new messaging;
@@ -77,26 +78,27 @@ if ($cmd=="delete") {
 //Geschriebene Nachricht einfuegen
 if ($cmd=="insert") {
 	if ($send_all_buddies) {
-		if ($my_buddies)
-			foreach ($my_buddies as $a)
-				$buddy_count+=$msging->insert_sms($a["username"], $message);
+		$buddy_count+=$msging->circular_sms($message, "buddy");
 				
-	if (!$my_buddies[$rec_uname])
-		$count=$msging->insert_sms($rec_uname, $message);
-		
+		if (!CheckBuddy($rec_uname))
+			$count=$msging->insert_sms($rec_uname, $message);
+	} elseif($group_id) {
+		$group_count+=$msging->circular_sms($message, "group", $group_id);
 	} else				
 		$count=$msging->insert_sms($rec_uname, $message);
-		
-	if (($count > 0) || ($buddy_count >0)) {
+	
+	if (($count) || ($buddy_count) || ($group_count)) {
 		$msg="msg§";
 		if ($count > 0)	
 			$msg.="Ihre Nachricht an ".get_fullname_from_uname($rec_uname)." wurde verschickt! <br />";
 		if ($buddy_count > 0)	
 			$msg.="Die Nachricht wurde an alle $buddy_count Buddies verschickt!";
+		if ($group_count > 0)	
+			$msg.="Die Nachricht wurde an $group_count Gruppenmitglieder verschickt!";
 	}
 	if ($count < 0)
 		$msg="error§Ihre Nachricht konnte nicht gesendet werden, die Nachricht ist leer.";
-	elseif ((!$count) && (!$buddy_count))
+	elseif ((!$count) && (!$buddy_count) && (!$group_count))
 		$msg="error§Ihre Nachricht konnte nicht gesendet werden.";
 		
 	$sms_msg=rawurlencode ($msg);
@@ -169,13 +171,17 @@ if ($cmd=="write") {
 		}
 	
 	$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
-	$titel="</b>Nachricht schreiben an: <a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$fullname."</font></a><b>";				
+	$titel="</b>Nachricht schreiben an ";
+	if ($group_id)
+		$titel.="alle Mitglieder der Gruppe: ".htmlReady(GetStatusgruppeName($group_id))." (".CountMembersPerStatusgruppe($group_id)." Person(en))";
+	else
+		$titel.="<a href=\"about.php?username=$rec_uname\"><font size=-1 color=\"#333399\">".$fullname."</font></a><b>";				
 	$content="<textarea  name=\"message\" style=\"width: 90%\" cols=80 rows=4 wrap=\"virtual\">";
 	if ($quote)
 		$content.=quotes_encode($tmp_sms_content, $fullname);
 	$content.="</textarea><br />\n";
-	if ($my_buddies)
-		$content.="<font size=-1><input type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; Diese Nachricht an alle meine Buddies versenden</font><br />\n";
+	if ((GetNumberOfBuddies()) && (!$group_id))
+		$content.="<font size=-1><input type=\"CHECKBOX\" name=\"send_all_buddies\" />&nbsp; Diese Nachricht (auch) an alle meine Buddies versenden</font><br />\n";
 	$edit="<input type=\"IMAGE\" src=\"pictures/buttons/abschicken-button.gif\" border=0>";
 	$edit.="&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/abbrechen-button.gif\" border=0></a>";	
 	
@@ -184,7 +190,10 @@ if ($cmd=="write") {
 	echo"<input type=\"HIDDEN\" name=\"cmd\" value=\"insert\">\n";
 	echo"<input type=\"HIDDEN\" name=\"username\" value=\"$username\">\n";
 	echo"<input type=\"HIDDEN\" name=\"sms_source_page\" value=\"$sms_source_page\">\n";
-			
+	if ($group_id)
+		echo"<input type=\"HIDDEN\" name=\"group_id\" value=\"$group_id\">\n";
+	
+		
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 	printhead(0, 0, $link, TRUE,TRUE, $icon, $titel, $zusatz);
 	echo "</tr></table>	";
