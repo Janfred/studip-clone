@@ -228,7 +228,7 @@ else {
 	} // Ende HTTP-POST-VARS
 
 	// Jemand soll ans Institut...
-	if (isset($berufen) && $ins_id != "") {
+	if (isset($berufen_x) && $ins_id != "") {
     		if ($u_id == "0")
 			my_error("<b>Bitte eine Person ausw&auml;hlen!</b>");
 		else {		
@@ -280,7 +280,7 @@ if ($inst_id != "" && $inst_id !="0") {
 	$db->query("SELECT Name FROM Institute WHERE Institut_id ='$inst_id'");
 	$db->next_record();
 	$inst_name=$db->f("Name");
-	if ($search_user)
+	if ($search_user_x)
 		{
 		// Der Admin will neue Sklaven ins Institut berufen...
 			if (!$search_exp) //wenn leerer Suchaussruck, verwutzen (aus Datenschutzgruenden)
@@ -293,9 +293,9 @@ if ($inst_id != "" && $inst_id !="0") {
 			<tr>
 				<td class="blank" colspan=2>
 				<blockquote>
-					<table width="50%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">
+					<table width="50%" border="0" cellpadding="2" cellspacing="0">
 					<tr>
-						<td>
+						<td class="steel1">
 						<font size=-1><b>neue Person der Einrichtung zuordnen</b><br>
 						es wurden <? echo $db->num_rows() ?> Benutzer gefunden.<br>
 						<?
@@ -304,7 +304,7 @@ if ($inst_id != "" && $inst_id !="0") {
 						</td>
 					</tr>
 					<tr>
-						<td><SELECT Name="u_id" size="1">
+						<td class="steel1"><select name="u_id" size="1">
 						<?
 						//Alle User auswaehlen, auf die der Suchausdruck passt und die im Institut nicht schon was sind. Selected werden hierdurch 
 						printf ("<option value=\"0\">-- bitte ausw&auml;hlen --\n");
@@ -312,10 +312,10 @@ if ($inst_id != "" && $inst_id !="0") {
 							printf ("<option value=\"%s\">%s, %s (%s) - %s\n", $db->f("user_id"), $db->f("Nachname"), $db->f("Vorname"), $db->f("username"), $db->f("perms"));
 							?>
 							</select>&nbsp;
-						<input type="hidden" name="ins_id" value="<?echo $inst_id;?>">
-						<input type="SUBMIT" name="berufen" value="Person hinzuf&uuml;gen">
+						<input type="hidden" name="ins_id" value="<?echo $inst_id;?>"><br />
+						<input type="IMAGE" name="berufen" src="pictures/buttons/hinzufuegen-button.gif" border=0 value="berufen">
 					<? } ?>
-						<input type="SUBMIT" name="reset" value="Neue Suche"></td>
+						<input type="IMAGE" name="reset" src="pictures/buttons/neuesuche-button.gif" border=0 value="Neue Suche">
 						</td>
 					</tr>
 					</table>
@@ -332,22 +332,22 @@ if ($inst_id != "" && $inst_id !="0") {
 		// Der Admin will neue Sklaven ins Institut berufen... aber erst mal suchen
 		?>
 			<blockquote>Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung <b><? echo htmlReady($inst_name) ?></b> zuordnen, Daten ver&auml;ndern und Berechtigungen vergeben. <br> Um weitere Personen als Mitarbeiter hinzuzuf&uuml;gen, benutzen Sie die Suche. <br /><br /></blockquote>
-			<table width="100%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">
+			<table width="100%" border="0" cellpadding="2" cellspacing="0">
 			<form action="<? echo $PHP_SELF ?>" method="POST">
 			<tr>
 				<td class="blank" colspan=2>
 				<blockquote>
-					<table width="50%" border="0" bgcolor="#C0C0C0" bordercolor="#FFFFFF" cellpadding="2" cellspacing="0">
+					<table width="50%" border="0" cellpadding="2" cellspacing="0">
 					<tr>
-						<td>
+						<td class="steel1">
 						<font size=-1><b>neue Person der Einrichtung zuordnen</b><br>
 						bitte geben Sie Vornamen, Nachnamen oder den Usernamen ein:<br></font>
 						</td>
 					</tr>
 					<tr>
-						<td><input type="TEXT" size=20 maxlength=255 name="search_exp">
-						&nbsp;<input type="hidden" name="inst_id"   value="<?echo $inst_id;?>">
-						<input type="SUBMIT" name="search_user" value=" Suche starten ">
+						<td class="steel1"><input type="TEXT" size=20 maxlength=255 name="search_exp"><br />
+						<input type="IMAGE" name="search_user" src="pictures/buttons/suchestarten-button.gif" border=0 value="Suche starten ">
+						&nbsp;<input type="hidden" name="inst_id" value="<?echo $inst_id;?>">
 						</td>
 					</tr>
 					</table>
@@ -373,7 +373,7 @@ if ($inst_id != "" && $inst_id !="0") {
 		//Ausgabe der Tabellenueberschrift
 		print ("<tr><td class=\"blank\" colspan=2><blockquote>");
 		print ("<b>Bereits der Einrichtung zugeordnet:</b><br><br />");
-		print ("<table width=\"90%\" border=0 bgcolor=\"#eeeeee\" cellspacing=1 cellpadding=4 class=blank>");
+		print ("<table width=\"90%\" border=0 cellspacing=0 cellpadding=2>");
 		print ("<tr>");
 
 		if ($db->num_rows() > 0) {
@@ -391,19 +391,20 @@ if ($inst_id != "" && $inst_id !="0") {
 			//anfuegen der daten an tabelle in schleife...
 
 	  	while ($db->next_record()) {
+	  			$cssSw->switchClass();
 				ECHO "<tr valign=middle align=left>";
 				
 				  if ($perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
-					printf ("<td>%s</td><td><a href=\"%s?details=%s&inst=%s\">%s</a></td>", $db->f("Vorname"), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("Nachname"));	 
+					printf ("<td class=\"%s\">%s</td><td class=\"%s\"><a href=\"%s?details=%s&inst=%s\">%s</a></td>", $cssSw->getClass(), $db->f("Vorname"),  $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("Nachname"));	 
 				else
-					printf ("<td>&nbsp;%s</td><td>%s</td>", $db->f("Vorname"), $db->f("Nachname"));	 ?>
+					printf ("<td class=\"%s\">&nbsp;%s</td><td class=\"%s\">%s</td>", $cssSw->getClass(), $db->f("Vorname"), $cssSw->getClass(), $db->f("Nachname"));	 ?>
 	
-				<td>&nbsp;<?php echo $db->f("inst_perms"); ?></td>
-				<td>&nbsp;<?if ($db->f("Funktion") == 0) echo "keine Funktion"; else echo $INST_FUNKTION[$db->f("Funktion")]["name"];?>	</td>
-				<td>&nbsp;<?php echo htmlReady($db->f("raum")); ?></td>
-				<td>&nbsp;<?php echo htmlReady($db->f("sprechzeiten")); ?></td>
-				<td>&nbsp;<?php echo htmlReady($db->f("Telefon")); ?></td>
-				<td>&nbsp;<?php echo htmlReady($db->f("Fax")); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo $db->f("inst_perms"); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?if ($db->f("Funktion") == 0) echo "keine Funktion"; else echo $INST_FUNKTION[$db->f("Funktion")]["name"];?>	</td>
+				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("raum")); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("sprechzeiten")); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("Telefon")); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo htmlReady($db->f("Fax")); ?></td>
 				</tr>
 				<?php
 //	endif;
