@@ -251,32 +251,45 @@ function formatReady($what, $trim = TRUE){
 function latex($text) {
 	global $ABSOLUTE_PATH_STUDIP,$CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH;
-
+	
 	if ($LATEXRENDER_ENABLE) {
-	    require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
-    	$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
+		require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
+		$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
 		$latex->_convert_path = $CONVERT_PATH;
 		$latex->_identify_path = $IDENTIFY_PATH;
 		$latex->_tmp_dir = $TMP_PATH;
-    
+		
 		preg_match_all("#\[tex\](.*?)\[/tex\]#si",$text,$tex_matches);
-    
-    	for ($i=0; $i < count($tex_matches[0]); $i++) {
-        	$pos = strpos($text, $tex_matches[0][$i]);
-	        $latex_formula = $tex_matches[1][$i];
+		
+		for ($i=0; $i < count($tex_matches[0]); $i++) {
+			$pos = strpos($text, $tex_matches[0][$i]);
+			$latex_formula = decodeHTML($tex_matches[1][$i]);
+			
+			$url = $latex->getFormulaURL($latex_formula);
+			
+			if ($url != false) {
+				$text = substr_replace($text, "<img src='".$url."'>",$pos,strlen($tex_matches[0][$i]));
+			} else {
+				$text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
+			}
+		}	
+	}
+	return $text;
+}
 
-    	    $url = $latex->getFormulaURL($latex_formula);
-
-        	if ($url != false) {
-            	$text = substr_replace($text, "<img src='".$url."'>",$pos,strlen($tex_matches[0][$i]));
-	        } else {
-    	        $text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
-        	}
-	    }	
-    }
-   	return $text;
+/**
+* decodes html entities to normal characters
+*
+* @access	public
+* @param	string
+* @return	string
+*/
+function decodeHTML($string) {
+	$string = strtr($string, array_flip(get_html_translation_table(HTML_ENTITIES,ENT_QUOTES)));
+	$string = preg_replace("/&#([0-9]+);/me", "chr('\\1')", $string);
+	return $string;
 }
 
 // ermöglicht einfache Formatierungen in Benutzereingaben
