@@ -101,7 +101,8 @@ function get_free_admission ($seminar_id) {
 			$count=$count+round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
 
 	//Wiieviel Teilnehmer koennen noch eingetragen werden?
-	$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '".$db->f("Seminar_id")."' AND status= 'autor' ");
+	$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '".$db->f("Seminar_id")."' AND status= 'autor' AND admission_studiengang_id != ''");
+	echo $db3->num_rows();
 	if (($count - $db3->num_rows()) > 0)
 		$count = ($count - $db3->num_rows());
 	else
