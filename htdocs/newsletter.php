@@ -137,10 +137,10 @@ function SendMail($newsletter_id,$username,$Vorname,$Nachname,$Email)
 		$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
 		$env_from="wwwrun@".$smtp->host_name;
 		$abuse="abuse@".$smtp->host_name;
-		echo $abuse;
 		$to=$Email;
 		$secret= md5("$username:$magic");
 		$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP . "email_validation.php?username=$username&secret=" . $secret;
+		echo $url;
 		$mailbody="Dies ist ein Newsletter des Systems\n"
 		."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
 		."- $UNI_NAME_CLEAN -\n\n"
