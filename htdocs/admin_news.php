@@ -1,7 +1,7 @@
 <?php
 /*
-admin_news.php - Žndern der News von Stud.IP
-Copyright (C) 2001  Andr‚ Noack <andre.noack@gmx.net>
+admin_news.php - Ändern der News von Stud.IP
+Copyright (C) 2001  Andre Noack <andre.noack@gmx.net>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
