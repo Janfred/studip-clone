@@ -3,7 +3,7 @@
 * functions.php
 * 
 * The Stud.IP-Core functions. Look to the descriptions to get further details
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
 * @version		$Id$
@@ -492,7 +492,7 @@ function get_perm($range_id,$user_id="") {
 * @return		string	
 *
 */
-function get_fullname($user_id = "", $format = "full" ){
+function get_fullname($user_id = "", $format = "full" , $htmlready = true){
 	static $cache;
 	global $user,$_fullname_sql;
 	$author = _("unbekannt");
@@ -503,7 +503,7 @@ function get_fullname($user_id = "", $format = "full" ){
 		$db=new DB_Seminar;
 		$db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
 		if ($db->next_record()){
-			$author = htmlReady($db->f('fullname'));
+			$author = ($htmlready)? htmlReady($db->f('fullname')) : $db->f('fullname');
 		}
 		return ($cache[md5($user_id . $format)] = $author);
 	}
