@@ -478,7 +478,6 @@ class EvaluationObject extends StudipObject {
      $this->db->load ($this);
      if ($this->db->isError ())
        return $this->throwErrorFromClass ($this->db);
-     $this->check ();
    }
    
    /**
