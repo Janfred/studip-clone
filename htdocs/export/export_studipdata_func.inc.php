@@ -221,10 +221,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 					$data_object .= xml_tag($val, getRoom($db->f("Seminar_id")));
 				elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
 				{
-					$group_string .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
+					$data_object .= xml_open_tag($xml_groupnames_lecture["childgroup3"]);
 					foreach (get_sem_tree_path($db->f("Seminar_id")) as $sem_tree_id => $path_name)
 						$data_object .= xml_tag($val, $path_name);
-					$group_string .= xml_close_tag($xml_groupnames_lecture["childgroup3"]);
+					$data_object .= xml_close_tag($xml_groupnames_lecture["childgroup3"]);
 				}
 				elseif ($key == "metadata_dates") 
 				{
