@@ -611,7 +611,7 @@ function printposting ($forumposting) {
 				$edit = forum_get_buttons($forumposting);
 			}
 		}
-		if (ereg("\[quote",$description) AND ereg("\[/quote\]",$description) AND (!$forum["zitat"]) AND $forumposting["writestatus"] == "none")
+		if (ereg("\[quote",$description) AND ereg("\[/quote\]",$description) AND $forumposting["writestatus"] == "none")
 			$description = quotes_decode($description);
 		
   // Kontentzeile ausgeben
