@@ -152,7 +152,6 @@ class cssClassSwitcher {
 							return false;
 						}
 						var rowCellsCnt  = theCells.length;
-						theRow.className = theToClass;
 						for (var c = 0; c < rowCellsCnt; c++) {
 							if (theCells[c].className == theFromClass) {
 								theCells[c].className = theToClass;
