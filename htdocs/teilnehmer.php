@@ -250,14 +250,14 @@ if (isset($berufen)) {
 check_admission();
  
 
-$gruppe = array ("dozent" => "Dozenten",
-		  "tutor" => "Tutoren",
-		  "autor" => "Autoren",
-		  "user" => "Leser");
+$gruppe = array ("dozent" => "DozentInnen",
+		  "tutor" => "TutorInnen",
+		  "autor" => "AutorInnen",
+		  "user" => "LeserInnen");
 ?>
 
 <tr>
-        <td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - Teilnehmer</b></td>
+        <td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b></td>
 </tr>
 	<tr>
 		<td class="blank" width="100%" colspan=2>&nbsp;
@@ -308,13 +308,13 @@ if ($db->num_rows()) { //Only if Users were found...
 
 		if ($key == "tutor") {
 			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>&nbsp;</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Tutor entlassen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>TutorIn entlassen</b></font></td>";
 			if ($db3->f("admission_type"))
 				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
 		}
 		
 		if ($key == "autor") {
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>als Tutor eintragen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>als TutorIn eintragen</b></font></td>";
 			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Schreibrecht entziehen</b></font></td>";
 			if ($db3->f("admission_type"))
 				echo"<td class=\"steel\" width=\"10%\" align=center><font size=-1><b>Kontingent</b></font></td>";
@@ -322,7 +322,7 @@ if ($db->num_rows()) { //Only if Users were found...
 
 		if ($key == "user") {
 			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Schreibrecht erteilen</b></font></td>";
-			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Benutzer entfernen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>BenutzerIn entfernen</b></font></td>";
 			if ($db3->f("admission_type"))
 				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
 		}		
@@ -494,7 +494,7 @@ if ($rechte AND $SemUserStatus!="tutor") {
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>" method="POST">
 	<tr>
-		<td class="steel1" width="30%" align="left">&nbsp; <font size=-1><b>Mitarbeiter der Enrichtung</b></font></td>
+		<td class="steel1" width="30%" align="left">&nbsp; <font size=-1><b>MitarbeiterInnen der Einrichtung</b></font></td>
 		<td class="steel1" width="40%" align="center"><SELECT Name="u_id" size="1">
 		<?
 		$db->query("SELECT auth_user_md5.user_id, username, Vorname, Nachname, inst_perms FROM user_inst NATURAL LEFT JOIN auth_user_md5 WHERE Institut_id = '$SessSemName[5]' AND (inst_perms = 'tutor' OR inst_perms = 'dozent') ORDER BY Nachname");
@@ -503,7 +503,7 @@ if ($rechte AND $SemUserStatus!="tutor") {
 			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,40).")", $db->f("inst_perms"));
 		?>
 		</select></td>
-		<td class="steel1" width="30%" align=center><font size=-1>als Tutor</font><br />
+		<td class="steel1" width="30%" align=center><font size=-1>als TutorIn</font><br />
 		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als Tutor berufen "></td>
 	</tr></form></table>
 <?
