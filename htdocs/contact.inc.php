@@ -251,7 +251,7 @@ function ShowUserInfo ($contact_id)
 
 		$userinstinfo = GetInstInfo($user_id);
 		if (is_array($userinstinfo)) {
-			while(list($key,$value) = each($userinfo)) {
+			while(list($key,$value) = each($userinstinfo)) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
 		}
