@@ -429,7 +429,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 
 	$time_by_links = ""; // build links to narrow down the messages
-	$time_by_links .= "Sie können die Anzeige der Nachrichten zeitlich eingrenzen"."<br>";
+	$time_by_links .= _("Sie k&ouml;nnen die Anzeige der Nachrichten zeitlich eingrenzen.")."<br>";
 	$time_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?sms_time=new\"><img src=\"pictures/".show_icon($sms_data["time"], "new")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("neue Nachrichten")."</a><br>";
 	$time_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?sms_time=all\"><img src=\"pictures/".show_icon($sms_data["time"], "all")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("alle Nachrichten")."</a><br>";
 	$time_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?sms_time=24h\"><img src=\"pictures/".show_icon($sms_data["time"], "24h")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("letzte 24 Stunden")."</a><br>";
