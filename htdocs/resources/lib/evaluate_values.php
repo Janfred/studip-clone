@@ -998,8 +998,19 @@ switch ($skip_closed_requests) {
 	case "TRUE" : $resources_data["skip_closed_requests"] = TRUE; break;
 }
 
+//cancel an edit request session
+if ($cancel_edit_request_x) {
+	if (sizeof($resources_data["requests_open"]) < sizeof ($resources_data["requests_working_on"])) {
+		$msg->addMsg(40, array($PHP_SELF, $PHP_SELF));
+		//$resources_data["requests_working_on"] = FALSE;
+		$save_state_x = FALSE;
+	}
+	$resources_data["view"] = "requests_start";
+	$view = "requests_start";
+}
+
 //we start a new room-planning-session
-if ($start_single_mode_x) {
+if (($start_multiple_mode_x) || ($single_request)) {
 	unset($resources_data["requests_working_on"]);
 	unset($resources_data["requests_open"]);
 	
@@ -1023,32 +1034,41 @@ if ($start_single_mode_x) {
 		}
 	}
 	
-	//order requests
-	$in =  "('".join("','",array_keys($selected_requests))."')";
-	if ($resolve_requests_order = "complex")
-		$order = "seats DESC, complexity DESC";
-	if ($resolve_requests_order = "newest")
-		$order = "a.mkdate DESC";
-	if ($resolve_requests_order = "newest")
-		$order = "a.mkdate ASC";
-
-	$query = sprintf ("SELECT a.request_id, a. resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
-			FROM resources_requests a 
-			LEFT JOIN resources_requests_properties b USING (request_id)
-			LEFT JOIN resources_properties c ON (b.property_id = c.property_id AND c.system = 2)
-			LEFT JOIN resources_requests_properties d ON (c.property_id = d.property_id AND a.request_id = d.request_id)
-			WHERE a.request_id IN %s
-			GROUP BY a.request_id
-			ORDER BY %s", $in, $order);
+	if ($single_request) {
+		if ($selected_requests[$single_request]) {
+			$resources_data["requests_working_on"][] = array("request_id" => $single_request, "closed" => FALSE);
+			$resources_data["requests_open"][$single_request] = TRUE;
+		}
+	} else {
+		//order requests
+		$in =  "('".join("','",array_keys($selected_requests))."')";
+		if ($resolve_requests_order = "complex")
+			$order = "seats DESC, complexity DESC";
+		if ($resolve_requests_order = "newest")
+			$order = "a.mkdate DESC";
+		if ($resolve_requests_order = "newest")
+			$order = "a.mkdate ASC";
 	
-	$db->query($query);
+		$query = sprintf ("SELECT a.request_id, a. resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
+				FROM resources_requests a 
+				LEFT JOIN resources_requests_properties b USING (request_id)
+				LEFT JOIN resources_properties c ON (b.property_id = c.property_id AND c.system = 2)
+				LEFT JOIN resources_requests_properties d ON (c.property_id = d.property_id AND a.request_id = d.request_id)
+				WHERE a.request_id IN %s
+				GROUP BY a.request_id
+				ORDER BY %s", $in, $order);
+		
+		$db->query($query);
+		
+		while($db->next_record()) {
+			$resources_data["requests_working_on"][] = array("request_id" => $db->f("request_id"), "closed" => FALSE);
+			$resources_data["requests_open"][$db->f("request_id")] = TRUE;
+		} 
+	}
 	
-	while($db->next_record()) {
-		$resources_data["requests_working_on"][] = array("request_id" => $db->f("request_id"), "closed" => FALSE);
-		$resources_data["requests_open"][$db->f("request_id")] = TRUE;
-	} 
 	$resources_data["view"] = "edit_request";
 	$view = $resources_data["view"];
+	$new_session_started = TRUE;
 }
 
 if (is_array($selected_resource_id)) {
@@ -1097,162 +1117,174 @@ if ($save_state_x) {
 	
 	//get the selected resources, save this informations and create the right msgs
 	if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"])) {
-		//grouped multiple date mode
-		if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
-			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["resource_id"] = $val;
-				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["termin_ids"] as $key2 => $val2) {
-					$result = array_merge($result, $semResAssign->changeDateAssign($key2, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
-					$result_termin_id[] = $key2;
-				}
-				if ($semObj->getMetaDateType() == 0) {
-					$semObj->setMetaDateValue($key, "resource_id", $val);
-				}
-				
-			}
-			$close_request = TRUE;
-			$semObj->store();
-			
-		//normal metadate mode
-		} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
-			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-				$assignObjects[$key]->setResourceId($val);
-				$semResAssign->deleteAssignedRooms();
-				if (!$particular_free) {
-					$result = $semResAssign->changeMetaAssigns($assignObjects);
-				}
-			}
-
-		//single date mode
-		} elseif ($reqObj->getTerminId()) {
-			$result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
-		
-		//multiple dates mode
-		} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
-			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val){
-				$result = array_merge($result, $semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
-				$result_termin_id[] = $key;
-			}
+		//check all selected resources for perms
+		foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
+			$resPerms = new ResourceObjectPerms ($val);
+			if (!$resPerms->havePerm("tutor"))
+				$no_perm = TRUE;
+			$resPerms ='';
 		}
 		
-		//---------------------------------------------- second part, msgs and some other operations
-		
-		$succesful_assigned = 0;
-		//create msgs, single date mode
-		if ($reqObj->getTerminId()) {
-			$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-			$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
-			foreach ($result as $key=>$val) {
-				if (!$val["overlap_assigns"]) {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = $resObj->getId();			
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
-					$succesful_assigned++;
-				} else {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = FALSE;			
-					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+		if ($no_perm)
+			$add_msg(25);
+		else {
+			//grouped multiple date mode
+			if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
+				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["resource_id"] = $val;
+					foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["termin_ids"] as $key2 => $val2) {
+						$result = array_merge($result, $semResAssign->changeDateAssign($key2, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
+						$result_termin_id[] = $key2;
+					}
+					if ($semObj->getMetaDateType() == 0) {
+						$semObj->setMetaDateValue($key, "resource_id", $val);
+					}
+					
 				}
-			}
-	
-		//create msgs, grouped multi date mode
-		} elseif ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
-			$i=0;
-			foreach ($result as $key=>$val) {
-				$resObj = new ResourceObject($val["resource_id"]);
-				if (!$val["overlap_assigns"]) {
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
-				} else {
-					$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
-					$copyReqObj = $reqObj;
-					$copyReqObj->copy();
-					$copyReqObj->setTerminId($val["termin_id"]);
-					$copyReqObj->store();				
-				}
-				$i++;
-			}
-		
-		//create msgs, normal metadate mode, and update the matadata (we save the resource there too), if no overlaps detected and create msg's
-		} elseif (($semObj->getMetaDateType() == 0) && (!$particular_free) && (!isSchedule($semObj->getId(), FALSE))) {
-			$i=0;
-			$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-			foreach ($result as $key=>$val) {
-				$resObj = new ResourceObject($val["resource_id"]);
-				if (!$val["overlap_assigns"]) {
-					$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
-					$succesful_assigned++;
-				} else {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;				
-					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
-				}
-				$i++;
-			}
-
-		//create msgs, metadate mode, but create individual dates (a complete schedule) in case of trouble with the suggested room (it isn't free at all, but for most dates ok)
-		} elseif ($semObj->getMetaDateType() == 0) {
-			$i=0;
-			$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $val;
-				$semObj->setMetaDateValue($i, "resource_id", $val);
-				$i++;
-			}
-			$semObj->store();
-			
-			//use the assi to create all the dates (and do the checks again)
-			$assi_result = dateAssi ($semObj->getId(), "update", FALSE, FALSE, FALSE, FALSE, FALSE);
-
-			//reload the assignObject - now we are dealing with indivual dates instead of a regularly assign
-			$assignObjects = $semResAssign->getDateAssignObjects();
-			
-			foreach ($assi_result["resources_result"] as $key=>$val) {
-				$resObj = new ResourceObject($val["resource_id"]);
-				if (!$val["overlap_assigns"]) {
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
-					$succesful_assigned++;;
-				} else {
-					$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
-					$copyReqObj = $reqObj;
-					$copyReqObj->copy();
-					$copyReqObj->setTerminId($val["termin_id"]);
-					$copyReqObj->store();
-				}
-			}
-
-		//create msgs, multiple	date mode
-		} else {
-			$i=0;
-			$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-			foreach ($result as $key=>$val) {
-				$resObj = new ResourceObject($val["resource_id"]);
-				if (!$val["overlap_assigns"]) {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();							
-					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
-				} else {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;							
-					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
-				}
-				$i++;
-			}
-		}
-		
-		//update seminar-date (save the new resource_ids)
-		if ($succesful_assigned) {
-			if (($semObj->getMetaType == 0) && (!isSchedule($semObj->getId(), FALSE)))
+				$close_request = TRUE;
 				$semObj->store();
-		}
-		
-		//set reload flag for this request (the next time the user skips to the request, we reload all data)
-		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+				
+			//normal metadate mode
+			} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
+				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
+					$assignObjects[$key]->setResourceId($val);
+					$semResAssign->deleteAssignedRooms();
+					if (!$particular_free) {
+						$result = $semResAssign->changeMetaAssigns($assignObjects);
+					}
+				}
+	
+			//single date mode
+			} elseif ($reqObj->getTerminId()) {
+				$result = $semResAssign->changeDateAssign($reqObj->getTerminId(), $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
 			
+			//multiple dates mode
+			} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
+				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val){
+					$result = array_merge($result, $semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
+					$result_termin_id[] = $key;
+				}
+			}
+			
+			//---------------------------------------------- second part, msgs and some other operations
+			
+			$succesful_assigned = 0;
+			//create msgs, single date mode
+			if ($reqObj->getTerminId()) {
+				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
+				$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
+				foreach ($result as $key=>$val) {
+					if (!$val["overlap_assigns"]) {
+						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = $resObj->getId();			
+						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+						$succesful_assigned++;
+					} else {
+						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = FALSE;			
+						$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
+					}
+				}
 		
-		//create msg's
-		if ($good_msg)
-			$msg->addMsg(33, array($good_msg));
-		if ($bad_msg)
-			$msg->addMsg(34, array($bad_msg));
-		if ($req_added_msg)
-			$msg->addMsg(35, array($req_added_msg));
+			//create msgs, grouped multi date mode
+			} elseif ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
+				$i=0;
+				foreach ($result as $key=>$val) {
+					$resObj = new ResourceObject($val["resource_id"]);
+					if (!$val["overlap_assigns"]) {
+						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					} else {
+						$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+						$copyReqObj = $reqObj;
+						$copyReqObj->copy();
+						$copyReqObj->setTerminId($val["termin_id"]);
+						$copyReqObj->store();				
+					}
+					$i++;
+				}
+			
+			//create msgs, normal metadate mode, and update the matadata (we save the resource there too), if no overlaps detected and create msg's
+			} elseif (($semObj->getMetaDateType() == 0) && (!$particular_free) && (!isSchedule($semObj->getId(), FALSE))) {
+				$i=0;
+				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
+				foreach ($result as $key=>$val) {
+					$resObj = new ResourceObject($val["resource_id"]);
+					if (!$val["overlap_assigns"]) {
+						$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
+						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();
+						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+						$succesful_assigned++;
+					} else {
+						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;				
+						$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
+					}
+					$i++;
+				}
+	
+			//create msgs, metadate mode, but create individual dates (a complete schedule) in case of trouble with the suggested room (it isn't free at all, but for most dates ok)
+			} elseif ($semObj->getMetaDateType() == 0) {
+				$i=0;
+				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
+				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
+					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $val;
+					$semObj->setMetaDateValue($i, "resource_id", $val);
+					$i++;
+				}
+				$semObj->store();
+				
+				//use the assi to create all the dates (and do the checks again)
+				$assi_result = dateAssi ($semObj->getId(), "update", FALSE, FALSE, FALSE, FALSE, FALSE);
+	
+				//reload the assignObject - now we are dealing with indivual dates instead of a regularly assign
+				$assignObjects = $semResAssign->getDateAssignObjects();
+				
+				foreach ($assi_result["resources_result"] as $key=>$val) {
+					$resObj = new ResourceObject($val["resource_id"]);
+					if (!$val["overlap_assigns"]) {
+						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
+						$succesful_assigned++;;
+					} else {
+						$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
+						$copyReqObj = $reqObj;
+						$copyReqObj->copy();
+						$copyReqObj->setTerminId($val["termin_id"]);
+						$copyReqObj->store();
+					}
+				}
+	
+			//create msgs, multiple	date mode
+			} else {
+				$i=0;
+				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
+				foreach ($result as $key=>$val) {
+					$resObj = new ResourceObject($val["resource_id"]);
+					if (!$val["overlap_assigns"]) {
+						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();							
+						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					} else {
+						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;							
+						$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+					}
+					$i++;
+				}
+			}
+			
+			//update seminar-date (save the new resource_ids)
+			if ($succesful_assigned) {
+				if (($semObj->getMetaType == 0) && (!isSchedule($semObj->getId(), FALSE)))
+					$semObj->store();
+			}
+			
+			//set reload flag for this request (the next time the user skips to the request, we reload all data)
+			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
+				
+			
+			//create msg's
+			if ($good_msg)
+				$msg->addMsg(33, array($good_msg));
+			if ($bad_msg)
+				$msg->addMsg(34, array($bad_msg));
+			if ($req_added_msg)
+				$msg->addMsg(35, array($req_added_msg));
+		}
 	}
 	
 	//set request to closed, if we have a room for every assign_object
@@ -1309,7 +1341,7 @@ if (($dec_request_x) || ($auto_dec))
 	}
 
 //create the (overlap)data for all resources that should checked for a request
-if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_clip_ids) || ($save_state_x)) {
+if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_clip_ids) || ($save_state_x)) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
@@ -1331,7 +1363,9 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$reqObj->getResourceId()] = array("type"=>"requested");
 	
 		//add the matching ressources to selection
-		$machting_resources = $reqObj->searchRooms(FALSE, TRUE, 10);
+		if (getGlobalPerms($user->id) != "admin")
+			$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);		
+		$machting_resources = $reqObj->searchRooms(FALSE, TRUE, 10, TRUE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
 		foreach ($machting_resources as $key => $val) {
 			if (!$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key])
 				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$key] = array("type"=>"matching");
