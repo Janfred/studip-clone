@@ -35,7 +35,7 @@ page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 	"perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
-
+include ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 /* **END*of*initialise*Stud.IP-Session*********************************** */
 
 /* ************************************************************************** *
@@ -273,7 +273,7 @@ function getContactGroupData($exportID,$mode = "group"){
 			. "LEFT JOIN auth_user_md5 USING(user_id) "
 			. "LEFT JOIN user_info USING (user_id) "
 			. "WHERE statusgruppe_id = '$exportID'";
-			
+	
 	// all contacts from this user
 	} elseif ($mode == "group") { 
 		$query = "SELECT contact.user_id, "
@@ -321,14 +321,26 @@ function getContactGroupData($exportID,$mode = "group"){
 
 			// collecting the office data
 			$query = "SELECT a.*, "
-				. "b.Name as fak_name, b.Strasse as fak_strasse, b.Plz as fak_plz, "
+				. "b.Institut_id as inst_id, b.Name as fak_name, b.Strasse as fak_strasse, b.Plz as fak_plz, "
 				. "b.url as fak_url, b.telefon as fak_TEL, b.email as fak_mail, b.fax as fak_FAX "
 				. "FROM user_inst a "
 				. "LEFT JOIN Institute b USING (Institut_id) "
 				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user'";
 			$db2->query($query);
 			$j = 0;
+
 			while ($db2->next_record()){
+				$grouppositions = GetStatusgruppen($db2->f("inst_id"),$contacts[$i]["id"]);
+				if (is_array($grouppositions)){
+					$positions_tmp = array_values($grouppositions);
+					$positions = $positions_tmp[0];
+					for ($k=1;$k<sizeof($positions_tmp);$k++){
+						$positions .= ", ".$positions_tmp[$k];
+					}
+				}
+				else
+					$positions = NULL;
+
 				$contacts[$i]["fak"][$j] = array(
 					"fak_name" => $db2->f("fak_name"),
 					"consultation_hours" => $db2->f("sprechzeiten"),
@@ -340,8 +352,10 @@ function getContactGroupData($exportID,$mode = "group"){
 					"fak_url" => $db2->f("fak_url"),
 					"fak_TEL" => $db2->f("fak_TEL"),
 					"fak_mail" => $db2->f("fak_mail"),
-					"fak_FAX" => $db2->f("fak_FAX")
+					"fak_FAX" => $db2->f("fak_FAX"),
+					"fak_position" => $positions
 				);
+//				print "TEL: ".$contacts[$i]["fak"][$j]["TEL"]."<br>";
 				$j++;
 			}
 		$statusgruppe_id = $db->f("statusgruppe_id");	
@@ -371,20 +385,18 @@ function getContactGroupData($exportID,$mode = "group"){
  */
 function exportVCard($contacts){
 
-//	print "<pre>";
-//	print_r($contacts);
-//	print "</pre><br>";
 	if (!isset($_GET["contactid"]) && !isset($_GET["username"]))
 		$filename = $contacts["groupname"];
 	else
 		$filename = $contacts[0]["NICKNAME"];
 
-	header("Content-type: application/octet-stream"); //application/octet-stream MIME
+	header("Content-type: text/x-vCard"); //application/octet-stream MIME
 	header("Content-disposition: attachment; filename=".$filename.".vcf");
 
 	$br = "=0D=0A"; 
 	
 	for ($i=0;$i<=sizeof($contacts)-2;$i++){
+
 		$vcard .= "BEGIN:VCARD\r\n"
 			. "VERSION:2.1\r\n";
 
@@ -437,7 +449,6 @@ function exportVCard($contacts){
 		// if there is any workplace
 		if (sizeof($contacts[$i]["fak"]) > 0){
 			// the work adress
-			//$vcard .= "ADR;TYPE=work:;;";
 			$vcard .= "ADR;WORK:";
 			//name
 //			if ($contacts[$i]["fak"][0]["fak_name"]){
@@ -460,6 +471,13 @@ function exportVCard($contacts){
 //				$vcard .= $contacts[$i]["fak"][0]["consultation_hours"];
 			$vcard .= "\r\n";
 			
+			// the position
+			if ($contacts[$i]["fak"][0]["fak_position"]){
+				$vcard .= "TITLE:"
+					. $contacts[$i]["fak"][0]["fak_position"]
+					. "\r\n";
+			}
+						
 			// the work org
 			$vcard .= "ORG;WORK:";
 			if ($contacts[$i]["fak"][0]["fak_name"]){
@@ -500,10 +518,16 @@ function exportVCard($contacts){
 			$vcard .= "NOTE;"
 				. "ENCODING=QUOTED-PRINTABLE:";
 			$vcard .= _("Weitere Arbeitsplätze").": ".$br;
-			for ($j=1;$j<=sizeof($contacts[$i]["fak"]);$i++){
+			for ($j=1;$j<=sizeof($contacts[$i]["fak"]);$j++){
 				// the work adress
 				$vcard .= $contacts[$i]["fak"][$j]["fak_name"];
 				$vcard .= $br;
+				
+				if ($contacts[$i]["fak"][$j]["fak_position"]){
+					$vcard .= _("Position").": ";
+					$vcard .= $contacts[$i]["fak"][$j]["fak_position"];
+					$vcard .= $br;
+				}
 				if ($contacts[$i]["fak"][$j]["room"]){
 					$vcard .= _("Raum").": ";
 					$vcard .= $contacts[$i]["fak"][$j]["room"];
