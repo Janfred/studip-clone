@@ -187,12 +187,16 @@ function changeLockableRecursiv ($resource_id, $state) {
 * @return	string	the perms-string	
 *
 **/
-function getGlobalPerms ($user_id) {
+function getGlobalPerms($user_id) {
 	static $cache;
 	global $perm;
 	
 	if ($cache[$user_id])
 		return $cache[$user_id];
+	
+	if (!$user_id){
+		$user_id = $GLOBALS['user']->id;
+	}
 	
 	$db = new DB_Seminar;
 	
@@ -263,8 +267,8 @@ function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_
 	
 	//create good message
 	if ((is_array($rooms_id)) && (($mode == "good") || ($mode == "booth"))) {
+		$i=0;
 		foreach ($rooms_id as $key=>$val) {
-			$i=0;
 			if ($key) {	
 				$resObj =& ResourceObject::Factory($key);			
 				if ($i)
