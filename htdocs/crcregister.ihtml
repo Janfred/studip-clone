@@ -98,7 +98,6 @@ function checkdata(){
    document.login.response2.value = MD5(document.login.password2.value);
    document.login.password.value = "";
    document.login.password2.value = "";   
-   document.login.submit();
  }
  return checked;
 }

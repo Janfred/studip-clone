@@ -740,7 +740,6 @@ function checkdata(){
    document.pers.response.value = MD5(document.pers.password.value);
    document.pers.password.value = "*****";
    document.pers.check_pass.value = "*****";
-   document.pers.submit();
  }
  return checked;
 }
