@@ -156,7 +156,7 @@ class ShowSchedules {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="center"><br />
-					<? echo "<b>Anzeige vom ", date ("j.m.Y", $this->start_time), " bis ", date ("j.m.Y", $this->end_time)."</b><br />";?>
+					<? echo "<b>Anzeige vom ", date ("d.m.Y", $this->start_time), " bis ", date ("d.m.Y", $this->end_time)."</b><br />";?>
 					<br />
 				</td>
 			</tr>
@@ -197,7 +197,7 @@ class ShowSchedules {
 			$view = "edit_object_assign";
 		 
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
- 		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
+ 		$end_time = mktime (23, 59, 59, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
 
 	 	$schedule=new ScheduleWeek(FALSE, FALSE, FALSE, TRUE, $start_time) ;
 		
