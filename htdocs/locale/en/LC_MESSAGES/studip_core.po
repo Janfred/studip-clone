@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
 "POT-Creation-Date: 2003-02-17 18:16+0100\n"
-"PO-Revision-Date: 2003-02-19 01:54+0100\n"
+"PO-Revision-Date: 2003-02-20 13:16+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -113,9 +113,8 @@ msgid "Arbeitsschwerpunkte"
 msgstr ""
 
 #: about.php:283 links_openobject.inc.php:45
-#, fuzzy
 msgid "Veranstaltungen"
-msgstr "Type of course"
+msgstr ""
 
 #: admin_admission.php:208 admin_admission.php:212 admin_metadates.php:163
 msgid "mm"
@@ -4108,9 +4107,9 @@ msgid "%s Termine, %s neue"
 msgstr ""
 
 #: meine_einrichtungen.php:114 meine_seminare.php:111
-#, fuzzy, c-format
+#, c-format
 msgid "%s Termine"
-msgstr "appointments"
+msgstr " %s appointments"
 
 #: meine_einrichtungen.php:151 meine_seminare.php:183 meine_seminare.php:198
 msgid "Datenbankfehler!"
