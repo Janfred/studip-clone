@@ -671,20 +671,24 @@ function printposting ($forumposting) {
 			while(list($key,$value) = each($rate)) 
 				$addon .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$key: $value<br>";
 					
-			if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
-				$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
-				$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1<input type=radio name=rate value=1>";
-				$addon .= "<input type=radio name=rate value=2>";
-				$addon .= "<input type=radio name=rate value=3>";
-				$addon .= "<input type=radio name=rate value=4>";
-				$addon .= "<input type=radio name=rate value=5>5&nbsp;";
-				$addon .= "<br><br>";
-				$addon .= "<input type=hidden name=open value='".$forumposting["id"]."'><input type=hidden name=sidebar value='".$forumposting["id"]."'>";
-				$addon .= "<input type=hidden name=flatviewstartposting value='".$forum["flatviewstartposting"]."'>";
-				$addon .= "<input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>";
-				$addon .= "</form>";
+			if (get_username($user->id) == $forumposting["username"]) {
+				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie können sich nicht&nbsp;<br>&nbsp;&nbsp;selbst bewerten.";
 			} else {
-				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
+				if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
+					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF>";
+					$addon .= "<b>&nbsp;<font size=\"2\" color=\"555555\">1<input type=radio name=rate value=1>";
+					$addon .= "<input type=radio name=rate value=2>";
+					$addon .= "<input type=radio name=rate value=3>";
+					$addon .= "<input type=radio name=rate value=4>";
+					$addon .= "<input type=radio name=rate value=5>5&nbsp;";
+					$addon .= "<br><br>";
+					$addon .= "<input type=hidden name=open value='".$forumposting["id"]."'><input type=hidden name=sidebar value='".$forumposting["id"]."'>";
+					$addon .= "<input type=hidden name=flatviewstartposting value='".$forum["flatviewstartposting"]."'>";
+					$addon .= "<input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>";
+					$addon .= "</form>";
+				} else {
+					$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie haben diesen&nbsp;<br>&nbsp;&nbsp;Beitrag bewertet.";
+				}
 			}
 		} else 
 			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";		
