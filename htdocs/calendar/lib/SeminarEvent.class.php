@@ -44,7 +44,6 @@ class SeminarEvent extends Event {
 			$this->id = $id;
 			$this->sem_id = $sem_id;
 		}
-		$this->setProperty("RRULE", $this->getRepeat());
 	}
 	
 	
@@ -75,6 +74,8 @@ class SeminarEvent extends Event {
 	
 	// public
 	function getRepeat ($index = "") {
+		$ts = mktime(12, 0, 0, date('n', $this->getStart()), date('j', $this->getStart()),
+				date('Y', $this->getStart()), 0);
 		$rep = array('ts' => $this->date, 'linterval' => 0, 'sinterval' => 0, 'wdays' => '',
 				'month' => 0, 'day' => 0, 'rtype' => 'SINGLE', 'duration' => 1);
 		return $index ? $rep[$index] : $rep;
@@ -85,9 +86,13 @@ class SeminarEvent extends Event {
 		$this->sem_id = $id;
 	}
 	
-	function restore () {
-		global $user, $TERMIN_TYP;
+	function restore ($id = '') {
+		global $user;
 		
+		if ($id == "")
+			$id = $this->id;
+		else
+			$this->id = $id;
 		$db =& new DB_Seminar();
 		$query = "SELECT t.*, su.*, s.Seminar_id, s.Name "
 						.	"FROM termine t LEFT JOIN seminar_user su ON (t.range_id=su.Seminar_id) "
@@ -106,6 +111,7 @@ class SeminarEvent extends Event {
 			$this->setProperty('UID',           $this->getUid($this->id));
 			$this->setProperty('DTSTAMP',       $db->f('mkdate'));
 			$this->setProperty('LAST-MODIFIED', $db->f('chdate'));
+			$this->setProperty('RRULE',         $this->getRepeat());
 			$this->sem_id   = $db->f('Seminar_id');
 			$this->color    = $this->setcolor($db->f('gruppe'));
 			if ($db->f('status') == 'tutor' || $db->f('status') == 'dozent')
