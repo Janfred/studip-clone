@@ -139,8 +139,12 @@ foreach ($EXTERN_MODULE_TYPES as $type) {
 		$module_obj =& new ExternModule($range_id, $module_name, $config_id, $default);
 }
 
+$args = $module_obj->getArgs();
+for ($i = 0; $i < sizeof($args); $i++)
+	$arguments[$args[$i]] = $$args[$i];
+
 echo $sri_matches[1];
-$module_obj->printout($start, $end);
+$module_obj->printout($arguments);
 echo $sri_matches[3];
 
 ?>
