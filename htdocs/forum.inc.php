@@ -677,7 +677,7 @@ function printposting ($forumposting) {
 			$description = quotes_decode($description);
 
 		if ($sidebar==$forumposting["id"]) {
-			$addon = "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz:<br>&nbsp;&nbsp;Bewertung: ".$forumposting["rate"]."<br>";
+			$addon = "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz: $relevanz<br>&nbsp;&nbsp;Bewertung: ".$forumposting["rate"]."<br>";
 			$rate = object_print_rates_detail($forumposting["id"]);
 			while(list($key,$value) = each($rate)) 
 				$addon .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$key: $value<br>";
