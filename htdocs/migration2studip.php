@@ -93,8 +93,11 @@ include_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 if ($ILIAS_CONNECT_ENABLE)
 {
 
-	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_config.inc.php"); // Konfigurationsdatei
-	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_user_functions.inc.php"); // Funktionen f&uuml;r ILIAS-User
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_config.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
 
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
