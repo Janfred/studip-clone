@@ -72,7 +72,7 @@ function GetPresetGroups ($view, $veranstaltung_class)
 }
 
 function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="", $workgroup_mode=FALSE)
-{ global $HTTP_POST_VARS,$_range_type;
+{ global $HTTP_POST_VARS,$_range_type,$perm;
 		while (list($key, $val) = each ($HTTP_POST_VARS)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
@@ -88,7 +88,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 		if (isset($InstitutMembers) && $InstitutMembers != "---") {
 			$user_id = get_userid($InstitutMembers);
 			$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
-			if ($writedone ==TRUE) {
+			if ($writedone) {
 				if ($workgroup_mode == TRUE) {
 					$globalperms = get_global_perm($user_id);
 					if ($globalperms == "tutor" || $globalperms == "dozent") {
@@ -105,7 +105,7 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 			for ($i  = 0; $i < sizeof($Freesearch); $i++) {
 				$user_id = get_userid($Freesearch[$i]);
 				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
-				if ($writedone==TRUE) {
+				if ($writedone) {
 					if ($_range_type == "sem") {
 						if ($workgroup_mode == TRUE) {
 							$globalperms = get_global_perm($user_id);
@@ -119,10 +119,10 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 						}
 					} elseif ($_range_type == "inst" || $_range_type == "fak") {
 						$globalperms = get_global_perm($user_id);
-						if (get_perm($range_id, $user_id) =="fehler!") {
+						if ($perm->get_studip_perm($range_id, $user_id) == FALSE) {
 							$db2->query("INSERT INTO user_inst SET Institut_id = '$range_id', user_id = '$user_id', inst_perms = '$globalperms'");
 						}
-						if (get_perm($range_id, $user_id) =="user") {
+						if ($perm->get_studip_perm($range_id, $user_id) =="user") {
 							$db2->query("UPDATE user_inst SET inst_perms = '$globalperms' WHERE user_id = '$user_id' AND Institut_id = '$range_id'");
 						}
 					}
