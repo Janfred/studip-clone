@@ -1066,6 +1066,7 @@ class VoteDB extends StudipObject {
 	       array("type" => "sem",
 		     "name" => $this->db->f("Name"));
 	 }
+
 	 $query="SELECT Institut_id,Name, IF(Institut_id=fakultaets_id,'fak','inst') AS inst_type FROM Institute WHERE Name LIKE '%$search_str%'";
 	 $this->db->query($query);
 	 while($this->db->next_record()) {
@@ -1169,7 +1170,10 @@ class VoteDB extends StudipObject {
 	 //$this->search_result[$this->user_id]=array("type"=>"user","name"=>$this->full_username."(".$auth->auth["uname"].")");
       }
       /* --------------------------------------- */
-		
+
+      /*
+		[a] Was ger Kram hier soll weiß ich auch nicht
+
       if (is_array($this->search_result) && count($this->search_result)){
 	 $query="SELECT range_id,COUNT(range_id) AS anzahl FROM news_range WHERE range_id IN ('".implode("','",array_keys($this->search_result))."') GROUP BY range_id";
 	 $this->db->query($query);
@@ -1177,6 +1181,7 @@ class VoteDB extends StudipObject {
 	    $this->search_result[$this->db->f("range_id")]["anzahl"]=$this->db->f("anzahl");
 	 }
       }
+      */
 	
 	 
       return $this->search_result;
