@@ -63,7 +63,7 @@ function export_range($range_id)
 	$db->query('SELECT * FROM seminare WHERE Seminar_id = "' . $range_id . '"');
 	if (($db->next_record()) And ($db->f("Name") != ""))
 	{
-		$range_name = $db->f("titel");
+		$range_name = $db->f("Name");
 		output_data ( xml_header(), $o_mode);
 		export_inst( $db->f("Institut_id"), $db->f("Seminar_id") );
 	}
