@@ -1,7 +1,7 @@
 <?php
 /*
-admin_admission.php - Terminmetadatenverwaltung von Stud.IP
-Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>
+admin_admission.php - Zugangsberechtigungen fuer Veranstaltungen verwalten
+Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -83,6 +83,19 @@ $cssSw=new cssClassSwitcher;
 $sess->register("admin_admission_data");
 $messaging=new messaging;
 
+function get_snapshot() {
+	global $admin_admission_data;
+	return	serialize($admin_admission_data["admission_turnout"]).
+			serialize($admin_admission_data["admission_type"]).
+			serialize($admin_admission_data["admission_endtime"]).
+			serialize($admin_admission_data["admission_binding"]).
+			serialize($admin_admission_data["passwort"]).
+			serialize($admin_admission_data["read_level"]).
+			serialize($admin_admission_data["write_level"]).
+			serialize($admin_admission_data["studg"]).
+			serialize($admin_admission_data["all_ratio"]);
+}
+
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)) {
 	$db->query("SELECT admission_turnout, admission_type, admission_selection_take_place, admission_endtime, admission_binding, status, Passwort, Institut_id, Name, start_time, metadata_dates, Lesezugriff, Schreibzugriff FROM seminare WHERE Seminar_id = '$seminar_id'");
@@ -95,6 +108,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_selection_take_place"]=$db->f("admission_selection_take_place");	
 	$admin_admission_data["admission_endtime"]=$db->f("admission_endtime");
 	$admin_admission_data["admission_binding"]=$db->f("admission_binding");
+	settype($admin_admission_data["admission_binding"], integer);
 	$admin_admission_data["heimat_inst_id"]=$db->f("Institut_id"); 
 	$admin_admission_data["passwort"]=$db->f("Passwort");	
 	$admin_admission_data["name"]=$db->f("Name");	
@@ -111,6 +125,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		else
 			$admin_admission_data["studg"][$db->f("studiengang_id")]=array("name"=>$db->f("name"), "ratio"=>$db->f("quota"));
 	}
+	$admin_admission_data["original"]=get_snapshot();
 
 //nur wenn wir schon Daten haben kann was zurueckkommen
 } else {
@@ -132,7 +147,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_binding"]=$admission_binding;
 	if ($admin_admission_data["admission_binding"])
 		$admin_admission_data["admission_binding"]=TRUE;
-	
+	settype($admin_admission_data["admission_binding"], integer);
+		
+		
 	if (!$admin_admission_data["admission_type"]) { 
 		$admin_admission_data["read_level"]=$read_level;
 		$admin_admission_data["write_level"]=$write_level;
@@ -248,8 +265,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	
 		//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
 		if (($add_studg_x) || ($delete_studg) || ($uebernehmen_x)) {
-			if (($admin_admission_data["admission_type"]) && (!$admin_admission_data["admission_type_org"])) {
-				if ((!$admin_admission_data["admission_ratios_changed"]) && (!$add_ratio)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
+			if ($admin_admission_data["admission_type"]) {
+				if ((!$admin_admission_data["admission_ratios_changed"]) && (!$add_ratio) && (!$admin_admission_data["admission_type_org"])) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
 					if (is_array($admin_admission_data["studg"]))
 						foreach ($admin_admission_data["studg"] as $key=>$val)
 							$admin_admission_data["studg"][$key]["ratio"]=round(100 / (sizeof ($admin_admission_data["studg"]) + 1));
@@ -320,6 +337,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$admin_admission_data["sem_id"]."'");
 			}
 
+		//Save the current state as snapshot to compare with current data
+		$admin_admission_data["original"]=get_snapshot();
+
 		//Variante nachtraeglich Anmeldeverfahren starten, alle alten Teilnehmer muessen raus
 		if (($admin_admission_data["admission_type"] >$admin_admission_data["admission_type_org"]) && ($admin_admission_data["admission_type_org"]==0)) {	
 			$db->query("SELECT seminar_user.user_id, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id ='".$admin_admission_data["sem_id"]."' AND status IN ('autor', 'user') ");
@@ -373,6 +393,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			if ($admin_admission_data["all_ratio"]) {
 				$query = "INSERT INTO admission_seminar_studiengang VALUES('".$admin_admission_data["sem_id"]."', 'all', '".$admin_admission_data["all_ratio"]."' )";
 				$db->query($query);// Studiengang eintragen
+
+			//Save the current state as snapshot to compare with current data
+			$admin_admission_data["original"]=get_snapshot();
 			}
 		}
 	}
@@ -430,8 +453,11 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
-				<font size=-1>Diese Daten&nbsp; </font>
 				<input type="IMAGE" name="uebernehmen" src="./pictures/buttons/uebernehmen-button.gif" border=0 value="uebernehmen">
+				<? if ($admin_admission_data["original"] != get_snapshot()) {
+					?> <br /><font size=-1>Diese Daten sind noch nicht gespeichert.</font><br /> <?
+					}
+				?>
 			</td>
 		</tr>
 		<tr <? $cssSw->switchClass() ?> rowspan=2>
@@ -680,7 +706,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		?>
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
-				<font size=-1>Diese Daten&nbsp; </font>
 				<input type="IMAGE" name="uebernehmen" src="./pictures/buttons/uebernehmen-button.gif" border=0 value="uebernehmen">
 			</td>
 		</tr>
