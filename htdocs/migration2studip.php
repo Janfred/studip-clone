@@ -34,7 +34,7 @@ function ilias_auth_user()
 
 function check_ilias_auth()
 {
-	global $ilias_uname, $ilias_pw;
+	global $ilias_uname, $ilias_pw, $out;
 	$db = new DB_Ilias;
 	if ($ilias_uname == "")
 		return false;
@@ -46,8 +46,9 @@ function check_ilias_auth()
 		echo "<b>" . ("Authentifizierung f&uuml;r ILIAS war erfolgreich.") . "</b><br><br>";
 		return true;
 	}
-	echo "<b>" . _("Der Benutzername oder das Passwort f&uuml;r ILIAS ist nicht korrekt.") . "</b><br>";
-	return false;
+ 	if ($out == true)
+ 		echo "<b>" . _("Der Benutzername oder das Passwort f&uuml;r ILIAS ist nicht korrekt.") . "</b><br>";
+ 	return false;
 }
 
 function check_studip_auth()
@@ -95,6 +96,19 @@ if ($ILIAS_CONNECT_ENABLE)
 	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_config.inc.php"); // Konfigurationsdatei
 	include_once ("$ABSOLUTE_PATH_STUDIP/$RELATIVE_PATH_LEARNINGMODULES" ."/lernmodul_user_functions.inc.php"); // Funktionen f&uuml;r ILIAS-User
 
+	if (isset($back_x))
+		unset($mode);
+	if (($mode == "s2i") AND ((get_ilias_user($auth->auth["uname"]) == false) OR isset($ja_x)))
+	{
+		if (isset($ja2_x))
+			if (delete_ilias_user($username_prefix . $auth->auth["uname"]))
+				$deleted_msg = _("Alter Account wurde gel&ouml;scht.");/**/
+		$creation_result = create_ilias_user($auth->auth["uname"]);
+	}
+	if ( (check_ilias_auth()) AND ($mode == "connect") AND ((get_ilias_user($auth->auth["uname"]) == false) OR isset($ja_x)))
+		$connect_result = connect_users($auth->auth["uname"], $ilias_uname, $overwrite);
+	$out = true;
+	
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
@@ -117,8 +131,6 @@ if ($ILIAS_CONNECT_ENABLE)
 	<form method="POST" action="<? echo $PHP_SELF; ?>">
 	<table>
 <?
-	if (isset($back_x))
-		unset($mode);
 	if (!in_array($mode, array("i2s", "s2i", "connect")))
 	{
 		$infobox = array	(array ("kategorie"  => _("Information:"),
@@ -155,8 +167,12 @@ if ($ILIAS_CONNECT_ENABLE)
 		{	
 			case "i2s":
 				if (!check_ilias_auth()) 
+				{
 					ilias_auth_user();
+				}
 				echo "</td></tr>";
+//					if ($check_result != "")
+//						my_error($check_result);
 				if ($auth_mode == true)
 				{
 					if (create_studip_user($ilias_uname))
@@ -182,10 +198,7 @@ if ($ILIAS_CONNECT_ENABLE)
 					}
 					else
 					{	
-						if (isset($ja2_x))
-							if (delete_ilias_user(get_ilias_user($auth->auth["uname"])))
-								my_msg(_("Alter Account wurde gel&ouml;scht."));/**/
-						$creation_result = create_ilias_user($auth->auth["uname"]);
+						if (isset($deleted_msg)) my_msg( $deleted_msg);
 						if ($creation_result === true)
 							my_msg( _("Es wurde ein neuer ILIAS-Account f&uuml;r Sie angelegt."));
 						else
@@ -220,7 +233,7 @@ if ($ILIAS_CONNECT_ENABLE)
 						<input type="IMAGE" <? echo makeButton("nein", "src"); ?> name="back" value="<? echo _("Nein"); ?>"></center>
 						<?
 					}
-					elseif (connect_users($auth->auth["uname"], $ilias_uname, $overwrite))
+					elseif ($connect_result)
 						my_msg( _("Die Accounts wurden verbunden."));
 					else
 						my_error( _("Beim Verbinden der Accounts ist ein Fehler aufgetreten."));
