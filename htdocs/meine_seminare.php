@@ -86,6 +86,16 @@ function get_my_sem_values(&$my_sem) {
 			$my_sem[$db2->f("Seminar_id")]["wikiseiten"]=$db2->f("count");
 		}
 	}
+	
+	//Votes (nur laufende und sichtbar gestoppte)
+	$db2->query("SELECT b.Seminar_id,count(a.vote_id) as count, count(if((chdate > b.loginfilenow AND author_id !='".$user->id."'),a.vote_id,NULL)) AS neue
+				FROM loginfilenow_".$user->id." b  LEFT JOIN vote a ON (a.range_id = b.Seminar_id )
+				WHERE a.state IN('active','stopvis') GROUP BY b.Seminar_id");
+	while($db2->next_record()) {
+			$my_sem[$db2->f("Seminar_id")]["neuevotes"]=$db2->f("neue");
+			$my_sem[$db2->f("Seminar_id")]["votes"]=$db2->f("count");
+	}
+
 
 	
 	return;
@@ -142,6 +152,14 @@ function print_seminar_content($semid,$my_sem_values) {
 		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"20\" border=\"0\">";
+
+  //votes
+  if ($my_sem_values["neuevotes"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_sem_values["votes"], $my_sem_values["neuevotes"]))."></a>";
+  elseif ($my_sem_values["votes"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   echo "&nbsp;";  
 
@@ -268,7 +286,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	if ($sortby == "count")
 		$sortby = "count DESC";
 		
-	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding,modules FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding,modules FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
 	if (!$num_my_sem)
 		$meldung = "info§" . sprintf(_("Sie haben zur Zeit keine Veranstaltungen abonniert, an denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzuf&uuml;gen</b>%s um neue Veranstaltungen aufzunehmen."), "<a href=\"sem_portal.php\">", "</a>") . "§" . $meldung;
@@ -311,7 +329,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ob_start();
 		while ($db->next_record()) {
 			$my_sem[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
-				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules")));
+				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules"),$db->f("sem_status")));
 			
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 			if (($GLOBALS['CHAT_ENABLE']) && ($my_sem[$db->f("Seminar_id")]["modules"]["chat"])) {
@@ -679,7 +697,7 @@ elseif ($auth->auth["perm"]=="admin") {
 	
 		while ($db->next_record()){
 		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),
-			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules")));
+			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules"),$db->f("status")));
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 		}
 		$value_list=substr($value_list,0,-1);
