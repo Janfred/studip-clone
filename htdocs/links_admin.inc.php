@@ -258,7 +258,7 @@ $structure["zeiten"]=array (topKat=>"veranstaltungen", name=>"Zeiten", link=>"ad
 $structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>"Ablaufplan", link=>"admin_dates.php?list=TRUE", active=>FALSE);
 $structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_sem", active=>FALSE);
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>"Zugangsberechtigungen", link=>"admin_admission.php?list=TRUE", active=>FALSE);
-$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>"Statusgruppen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
+$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>"Gruppen / Funktionen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>"News", link=>"admin_news.php?view=news_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>"archivieren", link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
@@ -268,7 +268,7 @@ if ($perm->have_perm("dozent"))
 if ($perm->have_perm("admin")) {
 	$structure["grunddaten_inst"]=array (topKat=>"einrichtungen", name=>"Grunddaten", link=>"admin_institut.php?list=TRUE", active=>FALSE);
 	$structure["mitarbeiter"]=array (topKat=>"einrichtungen", name=>"Mitarbeiter", link=>"inst_admin.php?list=TRUE", active=>FALSE);
-	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>"Statusgruppen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
+	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>"Gruppen / Funktionen", link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
 }	
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"admin_news.php?view=news_inst", active=>FALSE);
@@ -784,7 +784,7 @@ while ($db->next_record()) {
 			break;
 			case "admin_statusgruppe.php": 
 			?>
-				<font size=-1>Statusgruppen<br /><a href="admin_statusgruppe.php?range_id=<? echo $seminar_id ?>&ebene=sem"><img src="pictures/buttons/bearbeiten-button.gif" border=0></a></font> 
+				<font size=-1>Funktionen / Gruppen<br /><a href="admin_statusgruppe.php?range_id=<? echo $seminar_id ?>&ebene=sem"><img src="pictures/buttons/bearbeiten-button.gif" border=0></a></font> 
 			<?
 			break;
 			case "admin_seminare1.php": 

@@ -91,17 +91,17 @@ else
 	
 
 if ($entry_level=="sem")
-	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
+	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Funktionen / Gruppen", link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
 //else
 //	$structure["statusgruppen"]=array (topKat=>"personal", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_inst", active=>FALSE);
 
 
 if ($rechte)
 	if ($entry_level=="sem")
-		$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>"Statusgruppen verwalten", link=>"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+		$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>"Funktionen / Gruppen verwalten", link=>"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 	else
 		if ($perm->have_perm("admin"))
-			$structure["Statusgruppen verwalten"]=array (topKat=>"personal", name=>"Statusgruppen verwalten", link=>"admin_statusgruppe.php?view=statusgruppe_inst&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+			$structure["Statusgruppen verwalten"]=array (topKat=>"personal", name=>"Funktionen / Gruppen verwalten", link=>"admin_statusgruppe.php?view=statusgruppe_inst&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
 
 if ($rechte)
