@@ -295,13 +295,8 @@ function move_item ($item_id, $new_parent) {
 	}
 	
 function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "", $filesize="") {
-	global $the_file_name;
 	$db=new DB_Seminar;
-	if (!$url) {
-		$db->query("SELECT filename FROM dokumente WHERE dokument_id = '$item_id'");	
-		if($db->next_record())
-			$the_file_name = $db->f("filename");
-	} else {
+	if ($url != ""){
 		$url_parts = parse_url($url);
 		$the_file_name = basename($url_parts['path']);	
 	}
@@ -311,7 +306,7 @@ function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "
 	elseif ($url != "")
 		$db->query("UPDATE dokumente SET name='$name', filesize='$filesize', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");
 	else
-		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");
+		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected' WHERE dokument_id ='$item_id'");
 	
 	if ($db->affected_rows())
 		return TRUE;
