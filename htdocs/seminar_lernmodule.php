@@ -142,8 +142,8 @@ if ($ILIAS_CONNECT_ENABLE)
 			)
 		);
 		$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
-										"text"  => _("Wenn Sie auf den Titel eines Lernmoduls klicken, &ouml;ffnet sich ein neues Fenster mit dem ILIAS-Lernmodul.")
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
+										"text"  => _("Wenn Sie auf den Titel eines Lernmoduls klicken, &ouml;ffnet sich ein neues Fenster mit dem ILIAS-Lernmodul. Mit den Navigationspfeilen k&ouml;nnen Sie durch das Lernmodul bl&auml;ttern.")
 									);
 
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
