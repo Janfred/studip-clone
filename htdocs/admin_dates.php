@@ -644,7 +644,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id\"></font>";
 				$content.= ("<option value=\"FALSE\">" . _("[eingeben oder aus Liste]") . "</option>");												
 				while ($resObject = $resList->next())
-					$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id == $resObject->getId()) ? "selected" : "", $resObject->getId(), htmlReady($resObject->getName()));
+					$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id == $resObject->getId()) ? "selected" : "", $resObject->getId(), my_substr(htmlReady($resObject->getName()), 0, 30));
 				$content.= "</select></font>";
 			}
 		}
@@ -769,20 +769,26 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				$content.="<font size=-1>" . _("Beschreibung:") . "<br></font><textarea style=\"width:98%\" cols=\"". round($max_col*0.45)."\" rows=4 name=\"description[]\"  wrap=\"virtual\">".$db->f("description")."</textarea>\n</div>";
 				$content.="</td>\n";
 				$content.="<td class=\"steel1\" width=\"20%\">\n";
-				$content.="<font size=-1>&nbsp;" . _("Raum:") . "</font>";
+				$content.="<font size=-1>&nbsp;" . _("Raum:");
 				if ($RESOURCES_ENABLE) {
 					$assigned_resource_id = getDateAssigenedRoom($db->f("termin_id"));
 					$resList -> reset();
 					if ($resList->numberOfRooms()) {
-						$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id[]\"></font>";
+						$content.= "<br />&nbsp;<select name=\"resource_id[]\">";
 						$content.= sprintf("<option %s value=\"FALSE\">" . _("[eingeben oder aus Liste]") . "</option>", (!$assigned_resource_id) ? "selected" : "");												
 						while ($resObject = $resList->next())
-							$content.= sprintf("<option %s value=\"%s\">%s</option>", ($assigned_resource_id) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
-						$content.= "</select></font>";
+							$content.= sprintf("<option %s value=\"%s\">%s</option>", ($assigned_resource_id) == $resObject->getId() ? "selected" :"", $resObject->getId(), my_substr(htmlReady($resObject->getName()), 0, 30));
+						$content.= "</select>";
 					}
 				}
 				$content.="<br />&nbsp;<input type=\"TEXT\"  name=\"raum[]\" maxlength=255 size=20 value=\"". htmlReady($db->f("raum"))."\"><br>\n";
-				$content.="&nbsp;<font size=-1>" . _("Art:") . "</font><br>&nbsp;<select name=\"art[]\">\n";
+
+				if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) {
+					$content.="&nbsp;<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$db->f("termin_id")."\">"._("Raumwunsch f&uuml;r diesen Termin bearbeiten")."</a><br>\n";
+				}
+
+				$content.="&nbsp;" . _("Art:") . "<br>&nbsp;<select name=\"art[]\">\n";
+				
 				for ($i=1; $i<=sizeof($TERMIN_TYP); $i++)
 					if ($db->f("date_typ") == $i)
 						$content.= "<option value=$i selected>".$TERMIN_TYP[$i]["name"]."</option>";
@@ -793,20 +799,20 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				//only, if the forum is active
 				if ($modules["forum"]) {
 					if ($db->f("topic_id")) 
-						$content.= "<font size=-1>&nbsp; " . _("Forenthema vorhanden") . "</font><br>";
+						$content.= "<font size=-1>&nbsp; " . _("Forenthema vorhanden") . "<br>";
 					else
-						$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_topic[]\"/>" . _("Thema im Forum anlegen") . "</font><br />\n";
+						$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_topic[]\"/>" . _("Thema im Forum anlegen") . "<br />\n";
 				}
 	
 				//only, if the documents-folder is active
 				if ($modules["documents"]) {
 					if ($folder)
-						$content.= "<font size=-1>&nbsp; " . _("Dateiordner vorhanden") . "</font>";
+						$content.= "&nbsp; " . _("Dateiordner vorhanden");
 					else
-						$content.="<font size=-1>&nbsp; <input type=\"CHECKBOX\" name=\"insert_folder[]\"/>" . _("Dateiordner anlegen") . "</font>\n";
+						$content.="&nbsp; <input type=\"CHECKBOX\" name=\"insert_folder[]\"/>" . _("Dateiordner anlegen") . "\n";
 				}
 					
-				$content.="</td></tr></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
+				$content.="</font></td></tr></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 				
