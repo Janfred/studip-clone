@@ -1167,8 +1167,10 @@ if ($save_state_x) {
 	}
 
 	//single date mode - just create one assign-object
-	if ($reqObj->getTerminId())
+	if ($reqObj->getTerminId()) {
+		$dateRequest = TRUE;
 		$assignObjects[] =& $semResAssign->getDateAssignObject($reqObj->getTerminId());
+	}
 	//multiple assign_objects (every date one assign-object or every metadate one assign-object)
 	elseif (is_array ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 		$i=0;
@@ -1225,7 +1227,7 @@ if ($save_state_x) {
 				$close_request = TRUE;
 				$semObj->store();
 			//normal metadate mode
-			} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
+			} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE) && (!$dateRequest))) {
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
 					$assignObjects[$key]->setResourceId($val);
 					$semResAssign->deleteAssignedRooms();
