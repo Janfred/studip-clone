@@ -379,6 +379,7 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 if ($kill_date)
 	$kill_termin = $kill_date;
 if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
+	$is_schedule = IsSchedule($admin_dates_data["range_id"], true, true); // we need to know if there is a schedule BEFORE something gets deleted
 	if (is_array($kill_date)) {
 		for ($i=0; $i < count($kill_date); $i++) {		
 			$do_delete = TRUE;
@@ -392,7 +393,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 						}
 						$do_delete = FALSE;
 						$just_informed = TRUE;
-					}
+					} 				
 				}
 			}
 			if ($do_delete) {
@@ -405,7 +406,9 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 	//after every change, we have to do this check (and we create the msgs...)
 	if ($RESOURCES_ENABLE) {
 		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign());
+		//only check locks if there is no longer a schedule after deletion of dates
+		$check_locks = ($is_schedule && !IsSchedule($admin_dates_data["range_id"], true, true)) ? false : true;
+		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign($check_locks));
 		
 		if ($updateAssign->turnus_cleared && $RESOURCES_ALLOW_ROOM_REQUESTS){
 			$request_id = getSeminarRoomRequest($admin_dates_data["range_id"]);
