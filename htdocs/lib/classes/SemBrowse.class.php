@@ -316,7 +316,7 @@ class SemBrowse {
 			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name 
 				, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
-				" . $_views['sem_number_sql'] . " AS sem_number FROM seminare 
+				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
 				LEFT JOIN auth_user_md5 USING (user_id) 
 				LEFT JOIN user_info USING (user_id) 
@@ -381,8 +381,15 @@ class SemBrowse {
 				echo "</b></font></td></tr>";
 				if (is_array($sem_ids['Seminar_id'])){
 					while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
+						$sem_name = key($sem_data[$seminar_id]["Name"]);
+						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
+						$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
+						if ($sem_number_start != $sem_number_end){
+							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . " - ";
+							$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->search_obj->sem_dates[$sem_number_end]['name']) . ")";
+						}
 						echo"<td class=\"steel1\" width=\"66%\"><font size=-1><a href=\"{$this->target_url}?{$this->target_id}={$seminar_id}&send_from_search=1&send_from_search_page="
-						. $PHP_SELF. "?keep_result_set=1\">", htmlReady(key($sem_data[$seminar_id]["Name"])), "</a><br>";
+						. $PHP_SELF. "?keep_result_set=1\">", htmlReady($sem_name), "</a><br>";
 						//create Turnus field
 						$temp_turnus_string=view_turnus($seminar_id, TRUE);
 						//Shorten, if string too long (add link for details.php)

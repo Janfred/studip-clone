@@ -512,9 +512,15 @@ class StudipSemTreeViewAdmin extends TreeView {
 					$sem_number = key($data['sem_number']);
 					$content .= "\n<tr><td class=\"steelkante\" colspan=\"3\" style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
 				}
+				$sem_name = key($data["Name"]);
+				$sem_number_end = key($data["sem_number_end"]);
+				if ($sem_number != $sem_number_end){
+					$sem_name .= " (" . $this->tree->sem_dates[$sem_number]['name'] . " - ";
+					$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->tree->sem_dates[$sem_number_end]['name']) . ")";
+				}
 				$content .= "<tr><td class=\"steel1\" width=\"1%\"><input type=\"checkbox\" name=\"marked_sem[]\" value=\"$seminar_id\" style=\"vertical-align:middle\">
 							</td><td class=\"steel1\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id 
-						."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady(key($data["Name"])) . "</a>
+						."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady($sem_name) . "</a>
 						 </td><td class=\"steel1\" align=\"right\" style=\"font-size:10pt;\">(";
 				for ($i = 0; $i < count($data["doz_name"]); ++$i){
 					$content .= "<a href=\"about.php?username=" . key($data["doz_uname"]) ."\">" . htmlReady(key($data["doz_name"])) . "</a>";

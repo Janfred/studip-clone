@@ -26,8 +26,9 @@ require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 foreach ($SEMESTER as $key => $value){
 	$sem_start_times[] = $value['beginn'];
 }
-
 $_views['sem_number_sql'] = "INTERVAL(start_time," . join(",",$sem_start_times) .")";
+$_views['sem_number_end_sql'] = "IF(duration_time=-1,-1,INTERVAL(start_time+duration_time," . join(",",$sem_start_times) ."))";
+
 $_views["TREE_KIDS"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT item_id FROM range_tree WHERE parent_id=? ORDER BY priority");
 $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",

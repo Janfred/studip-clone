@@ -175,7 +175,7 @@ $the_tree->showSemTree();
 	<select multiple size="20" name="sem_mark_list[]" style="font-size:8pt;width:100%">
 	<?
 	$cols = 50;
-	if (is_array($_marked_sem)){
+	if (is_array($_marked_sem) && count($_marked_sem)){
 		$view->params[0] = array_keys($_marked_sem);
 		$entries = new DbSnapshot($view->get_query("view:SEMINAR_GET_SEMDATA"));
 		$sem_data = $entries->getGroupedResult("seminar_id");
@@ -187,8 +187,14 @@ $the_tree->showSemTree();
 				echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . $the_tree->tree->sem_dates[$sem_number]['name'] . ":</option>";
 				echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . str_repeat("¯",floor($cols * .8)) . "</option>";
 			}
-			$line = htmlReady(my_substr(key($data["Name"]),0,$cols));
-			$tooltip = key($data["Name"]) . " (" . join(",",array_keys($data["doz_name"])) . ")";
+			$sem_name = key($data["Name"]);
+			$sem_number_end = key($data["sem_number_end"]);
+			if ($sem_number != $sem_number_end){
+				$sem_name .= " (" . $the_tree->tree->sem_dates[$sem_number]['name'] . " - ";
+				$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $the_tree->tree->sem_dates[$sem_number_end]['name']) . ")";
+			}
+			$line = htmlReady(my_substr($sem_name,0,$cols));
+			$tooltip = $sem_name . " (" . join(",",array_keys($data["doz_name"])) . ")";
 			echo "\n<option value=\"$seminar_id\" " . tooltip($tooltip,false) . ">$line</option>";
 		}
 	}
