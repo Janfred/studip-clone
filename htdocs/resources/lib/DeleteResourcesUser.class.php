@@ -80,6 +80,7 @@ class DeleteResourcesUser {
 	//private
 	function deleteOwnerResources() {
 		$query = sprintf("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $this->range_id);
+		$this->db->query($query);	
 		while ($this->db->next_record()) {
 			$killResource = new ResourceObject ($this->db->f("resource_id"));
 			$killResource->delete();

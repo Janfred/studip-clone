@@ -459,7 +459,7 @@ class AssignObject {
 	function delete() {
 		//update the owner in the case it is a Veranstaltung (delete resource_id from the metadata array)
 		if ($this->getOwnerType() == "sem") {
-			$query ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->assign_user_id);
+			$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s' ", $this->assign_user_id);
 			$this->db->query($query);
 			$this->db->next_record();
 			
@@ -467,12 +467,11 @@ class AssignObject {
 			
 			foreach ($metadata_termin["turnus_data"] as $key =>$val)
 				if ($val["resource_id"] == $this->resource_id) {
-					$metadata_termin["turnus_data"][$key]["resource_id"]='';
-					$metadata_termin["turnus_data"][$key]["room"]='';
+					$metadata_termin["turnus_data"][$key]["resource_id"]=FALSE;
 				}
 			
 			$serialized_metadata = serialize($metadata_termin);
-			$query ("UPDATE seminare SET metadata_dates ='%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $this->assign_user_id);
+			$query = sprintf ("UPDATE seminare SET metadata_dates ='%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $this->assign_user_id);
 			$this->db->query($query);
 		}
 		
