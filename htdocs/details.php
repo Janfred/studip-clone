@@ -174,7 +174,7 @@ else
 					?>
 					<tr>
 						<td width="1%" valign="top">
-							<? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=&send_from_search_page=$send_from_search_page\"><img src=\"./pictures/meinesem.gif\" border=0</a>"; ?>
+							<? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=&send_from_search_page=$send_from_search_page\"><img src=\"./pictures/meinesem.gif\" border=0></a>"; ?>
 						</td>
 						<td width="99%">
 							<font size=-1><? echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">",$abo_msg, "</a>"; ?></font>
@@ -184,14 +184,25 @@ else
 					if ($back_msg) {
 					?>
 					<tr>
-						<td width="1%" valign="top">
-							<? //echo "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=".$send_from_search."\"><img src=\"./pictures/meinesem.gif\" border=0</a>"; ?>
+						<td width="1%" valign="top">&nbsp; 
 						</td>
 						<td width="99%">
 							<font size=-1><? echo "<a href=\"$send_from_search_page\">",$back_msg, "</a>"; ?></font>
 						</td>					
 					</tr>
+					<? }
+					if ($db2->f("admission_binding")) {
+					?>
+					<tr>
+						<td width="1%" valign="top">
+							<img src="./pictures/ausruf_small.gif" border=0>
+						</td>
+						<td width="99%">
+							<font size=-1>Das Abonnement dieser Veranstaltung ist <u>bindend</u>!</font>
+						</td>					
+					</tr>
 					<? } ?>
+					
 					<tr>
 						<td width="100%" colspan=2>
 							<font size=-1><b><? print  "Berechtigungen" ?>:</b><br /></font> 
@@ -468,10 +479,16 @@ else
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 				<font size=-1><b>Anmeldeverfahren:</b></font><br />				
 				<?
-				if ($db2->f("admission_type") == 1)
-					printf ("<font size=-1>Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
-				else
-					printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.</font>");
+				if ($db2->f("admission_selection_take_place") == 1) {
+					if ($db2->f("admission_type") == 1)
+						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+					else
+						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wird am %s aufgehoben.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				} else
+					if ($db2->f("admission_type") == 1)
+						printf ("<font size=-1>Die Teilnehmerauswahl wurde dem Losverfahren am %s Uhr festgelegt. Weitere Teilnehmer k&ouml;nnen per Warteliste einen Platz bekommen.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+					else
+						printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurd am %s aufgehoben.Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
