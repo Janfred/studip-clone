@@ -63,7 +63,10 @@ while ($db->next_record())
            }
            else
                {
-               $new_msg[]=date("H:i",$db->f("mkdate"))." Sie haben eine Nachricht von <b>".get_fullname_from_uname($db->f("user_id_snd"))."</b> erhalten! <a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>[lesen]</a>";
+               if ($db->f("user_id_snd") == "____%system%____")
+	               $new_msg[]=date("H:i",$db->f("mkdate"))." Sie haben eine automatische <b>Systemnachricht</b> erhalten! <a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>[lesen]</a>";
+               else
+	               $new_msg[]=date("H:i",$db->f("mkdate"))." Sie haben eine Nachricht von <b>".get_fullname_from_uname($db->f("user_id_snd"))."</b> erhalten! <a href='$PHP_SELF?cmd=read&msg_nr=".$db->f("message_id")."'>[lesen]</a>";
                $refresh+=10;
                }
       }
@@ -170,8 +173,9 @@ if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 if ($cmd=="read" AND $msg_text)
 	{
 	echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>Nachricht von <b>".get_fullname_from_uname($msg_snd)."</b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
-     echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'><img src=\"pictures/buttons/antworten-button.gif\" border=0></a></td></tr>";
-     }
+	if ($db->f("user_id_snd") != "____%system%____")
+		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'><img src=\"pictures/buttons/antworten-button.gif\" border=0></a></td></tr>";
+	}
 
 if ($cmd=="write" AND $msg_rec)
 	{
