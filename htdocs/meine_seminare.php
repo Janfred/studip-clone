@@ -296,7 +296,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	// last visited-field
 		IF ($view=="ext") {
 			IF ($loginfilenow[$semid]==0) {
-				echo "<td class=".$cssSw->getClass()."  align=\"center\" nowrap><font size=-1>n.b.</font></td>";
+				echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>n.b.</font></td>";
 			}
 			ELSE {
 				 echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$semid]),"</font></td>";
