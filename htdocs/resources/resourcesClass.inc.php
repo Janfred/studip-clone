@@ -1161,11 +1161,15 @@ class ResourcesPerms {
 	}
 	
 	function getGlobalPerms () {
-		$this->db->query("SELECT user_id, perms FROM resources_user_resources WHERE user_id='$this->user_id' AND resource_id = '$this->master_string' ");
-		if ($this->db->next_record() && $this->db->f("perms")) 
-			return $this->db->f("perms");
-		else
-			return "autor";
+		global $perm;
+		if (!$perm->have_perm("root")) {
+			$this->db->query("SELECT user_id, perms FROM resources_user_resources WHERE user_id='$this->user_id' AND resource_id = '$this->master_string' ");
+			if ($this->db->next_record() && $this->db->f("perms")) 
+				return $this->db->f("perms");
+			else
+				return "autor";
+		} else
+			return "admin";
 	}
 }
 
