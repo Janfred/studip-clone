@@ -252,8 +252,8 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 								</tr>
 								<tr valign="top" align="center">
 									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" ".tooltip("Gruppe ändern")." border="0"></a></th>
-									<th width="10%"><b>Inhalt</b></th>
 									<th width="84%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
+									<th width="10%"><b>Inhalt</b></th>
 <?
 /*									<th width="10%"><b>besucht</b></th>
 									<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
@@ -284,18 +284,19 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ECHO $values["gruppe"];
 		ECHO "><a href='gruppe.php'><img src='pictures/blank.gif' ".tooltip("Gruppe ändern")." border=0 width=7 height=12></a></td>";
 		ECHO "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
-// Conent-field
-		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
-		print_seminar_content($semid, $values);
-		echo "</td>";
 // Name-field		
 		ECHO "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 		if ($lastVisit <= $values["chdate"])
 			print ("<font color=\"red\">");    // red color for new metadates
-		ECHO "&nbsp;".htmlReady($values["name"]);
+		ECHO htmlReady($values["name"]);
 		if ($lastVisit <= $values["chdate"])
 			print ("</font>");
 		print ("</a></td>");
+// Conent-field
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
+		print_seminar_content($semid, $values);
+		echo "</td>";
+
 
 // last visited-field
 /*
@@ -316,9 +317,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
 			echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
 		elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a></td>", $semid);
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\">&nbsp;<img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a></td>", $semid);
 		else
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td>", $semid);			
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\">&nbsp;<img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td>", $semid);			
 		 echo "</tr>\n";
 		}
 // 	echo "</table>";
