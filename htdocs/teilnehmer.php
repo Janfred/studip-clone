@@ -291,6 +291,20 @@ $gruppe = array ("dozent" => "DozentInnen",
 	<table width="99%" border="0"  cellpadding="2" cellspacing="0" align="center">
 
 <?
+//Index berechnen
+$db3->query ("SELECT count(dokument_id) AS count_doc FROM dokumente WHERE seminar_id = '$SessionSeminar'");
+if ($db3->next_record()) {
+	$aktivity_index_seminar = $db3->f("count_doc") * 10;
+}
+$db3->query ("SELECT count(topic_id) AS count_post FROM px_topics WHERE Seminar_id = '$SessionSeminar'");
+if ($db3->next_record()) {
+	$aktivity_index_seminar += $db3->f("count_post");
+}
+$db3->query ("SELECT count(user_id) AS count_pers FROM seminar_user WHERE Seminar_id = '$SessionSeminar'");
+if ($db3->next_record()) {
+	$aktivity_index_seminar /= $db3->f("count_pers");
+}
+
 //Veranstaltungsdaten holen
 $db3->query ("SELECT admission_type, admission_selection_take_place FROM seminare WHERE Seminar_id = '$SessionSeminar'");
 $db3->next_record();
@@ -305,10 +319,11 @@ $db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, c
 if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
 	echo "<tr height=28>";
+	echo "<td class=\"steel\" width=\"1%\" align=\"center\" valign=\"bottom\"><font size=\"-1\">&nbsp; </td>";
 	printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
 	printf ("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s>Postings</a></b></font></td>", $PHP_SELF);
 	echo "<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Dokumente</b></font></td>";
-	echo "<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Nachricht</b></font></td>";
+	echo "<td class=\"steel\" width=\"8%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Nachricht</b></font></td>";
 	//echo "<td class=\"steel\" width=\"10%\"><b>Literatur</b></td>";
 
 	if ($rechte) {
@@ -348,21 +363,19 @@ if ($db->num_rows()) { //Only if Users were found...
 	}
 	
 	echo "</tr>";
-
 	$c=1;
 	while ($db->next_record()) {
-	if ($c % 2)
+
+	if ($c % 2) {   // switcher fuer die Klassen 
 		$class="steel1";
-	else
+		$class2="colorline";
+	} else {
 		$class="steelgraulight"; 
+		$class2="colorline2";
+	}
 	$c++;
 
-	print("<tr><td class=\"$class\">");
-	print( "<font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">");
-	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
-	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
-	print( $db->f("doll"));
-	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
+//  Elemente holen
 
 	$Dokumente = 0;
 	$UID = $db->f("user_id");
@@ -370,6 +383,37 @@ if ($db->num_rows()) { //Only if Users were found...
 	while ($db2->next_record()) {
 		$Dokumente = $db2->f("doll");
 	}
+	$postings_user = $db->f("doll");
+
+// Aktivitaet berechnen
+
+	$red = "BB";
+	$green = "00";
+	$aktivity_index_user =  (($postings_user + (10 * $Dokumente)) / $aktivity_index_seminar) * 100;
+	if ($aktivity_index_user > 255) {
+		$green = "FF";
+		$red = "55";
+	} else {
+		if ($aktivity_index_user<16) {
+			$green = "0".dechex($aktivity_index_user);
+		} else {
+			$green = dechex($aktivity_index_user);
+		}
+		
+	}
+	if ($aktivity_index_user == 0) {
+		$red = "99";
+	}
+
+// Anzeige der eigentlichen Namenzeilen
+
+	printf("<tr><td nowrap bgcolor=\"#%s%s00\" class=\"%s\">", $red, $green,$class2);
+	printf("<img src=\"pictures/blank.gif\" %s width=\"10\" heigth=\"10\"></td><td class=\"%s\">", tooltip("Aktivitaet: ".round($aktivity_index_user)."%"), $class);
+	print( "<font size=\"-1\"><a href = about.php?username=" . $db->f("username") . ">");
+	print(htmlReady($db->f("Vorname")) ." ". htmlReady($db->f("Nachname")) ."</a>");
+	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
+	print( $db->f("doll"));
+	print("</font></td><td class=\"$class\" align=\"center\"><font size=\"-1\">");
 	print $Dokumente;
 	print("</font></td>");
 	
