@@ -26,32 +26,6 @@
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 
-//Compatibility for PHP Version < 4.1.0
-// 3/18/2002 - Tim Gallagher<timg@sunflowerroad.com>
-// if $_REQUEST isn't set, we will set it based on $HTTP_GET_VARS AND $HTTP_POST_VARS
-// however, we should still global these variables in the functions to keep backward
-// compatability from breaking.
-
-if ( (! isset($_REQUEST)) && (! isset($_GET)) ) {
-	// swap the foreach loops to change the order of variable registration
-	// in other words you can change GET then POST to POST then GET
-	// where the second set of variables overrides the first.
-
-	foreach ($HTTP_GET_VARS as $key => $value) {
-		$_GET[$key] = $value;
-		$_REQUEST[$key] =& $_GET[$key];
-	} // end foreach loop
-
-	foreach ($HTTP_POST_VARS as $key => $value) {
-		$_POST[$key] = $value;
-		$_REQUEST[$key] =& $_POST[$key];
-	} // end foreach loop
-} // end if
-
-//bugfix ?
-reset($HTTP_POST_VARS);
-reset($HTTP_GET_VARS);
-
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
@@ -60,7 +34,7 @@ if ($EXTERN_ENABLE) {
 	if ($EXTERN_SERVER_NAME && preg_match('#^(http://)?(.+?)(/)?$#', $EXTERN_SERVER_NAME, $matches))
 		$EXTERN_SERVER_NAME  = $matches[2] . '/';
 	else
-	$EXTERN_SERVER_NAME = getenv("HTTP_HOST") . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
+	$EXTERN_SERVER_NAME = $_SERVER["HTTP_HOST"] . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
 }
 
 //Besser hier globale Variablen definieren...
@@ -123,16 +97,25 @@ class studip_smtp_class extends smtp_class {
 	var $env_from = "";
 	var $abuse = "";
 	var $url = "";
+	var $additional_headers = array();
 	
 	function studip_smtp_class() {
-		$this->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? getenv("SERVER_NAME") : $GLOBALS['MAIL_LOCALHOST']; // name of the mail sending machine (the web server)
-		$this->host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? getenv("SERVER_NAME") : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
-		$this->from = "\"Stud.IP\" <wwwrun@".$this->localhost.">"; // From: Mailheader
-		$this->env_from = "wwwrun@".$this->localhost; // Envelope-From:
-		$this->abuse = "abuse@".$this->localhost; // Reply-To: Mailheader
-		$this->url = ((getenv("SERVER_PORT") == 443 || getenv("HTTPS") == "on") ? "https://" : "http://") 
-					. getenv("HTTP_HOST") . ((getenv("SERVER_PORT") != 443 && getenv("SERVER_PORT") != 80) ? ":" . getenv("SERVER_PORT") : "") 
+		$this->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST']; // name of the mail sending machine (the web server)
+		$this->host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
+		$this->charset = ($GLOBALS['MAIL_CHARSET'] == "") ? "ISO-8859-1" : $GLOBALS['MAIL_CHARSET']; //charset used in mail body
+		$this->env_from = ($GLOBALS['MAIL_ENV_FROM'] == "") ? "wwwrun@".$this->localhost : $GLOBALS['MAIL_ENV_FROM']; // Envelope-From:
+		$this->from = ($GLOBALS['MAIL_FROM'] == "") ? "\"Stud.IP\" <" . $this->env_from . ">" : $this->QuotedPrintableEncode('"' . $GLOBALS['MAIL_FROM'] . '"',1) . ' <' . $this->env_from . '>'; // From: Mailheader
+		$this->abuse = ($GLOBALS['MAIL_ABUSE'] == "") ? "abuse@" . $this->localhost : $GLOBALS['MAIL_ABUSE']; // Reply-To: Mailheader
+		$this->url = (($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") 
+					. $_SERVER["HTTP_HOST"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "") 
 					. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
+		$this->additional_headers = array("MIME-Version: 1.0",
+										"Content-Type: text/plain; charset=\"{$this->charset}\"",
+										"Content-Transfer-Encoding: 8bit");
+	}
+	function SendMessage($sender, $recipients, $headers, $body){
+		$headers = array_merge(array_values($headers),array_values($this->additional_headers));
+		return parent::SendMessage($sender, $recipients, $headers, $body);
 	}
 }
 
@@ -461,7 +444,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		}			   // E-Mail syntaktisch nicht korrekt oder fehlend
 		
 		$smtp=new studip_smtp_class;		     // Einstellungen fuer das Verschicken der Mails
-		$REMOTE_ADDR=getenv("REMOTE_ADDR");
+		$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
 		$Zeit=date("H:i:s, d.m.Y",time());
 		
 		if (!$validator->ValidateEmailHost($Email)) {     // Mailserver nicht erreichbar, ablehnen
