@@ -100,9 +100,6 @@ class ExternElementMainPersons extends ExternElementMain {
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE, $anker);
 		
-		if ($faulty_values = "")
-			$faulty_values = array();
-		
 		$headline = $edit_form->editHeadline(_("Name der Konfiguration"));
 		$table = $edit_form->editName("name");
 		
@@ -134,6 +131,12 @@ class ExternElementMainPersons extends ExternElementMain {
 		$nametitle_names = array(_("Vorname Nachname"), _("Nachname Vorname"),
 				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
 		$table = $edit_form->editOptionGeneric("nametitle", $title, $info, $nametitle_values, $nametitle_names);
+		
+		$title = _("HTML-Header/Footer:");
+		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
+		$wholesite_values = "1";
+		$wholesite_names = "";
+		$table .= $edit_form->editCheckboxGeneric("wholesite", $title, $info, $wholesite_values, $wholesite_names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
