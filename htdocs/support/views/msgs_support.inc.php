@@ -55,3 +55,6 @@ $this->msg[6] = array (
 $this->msg[7] = array (
 		"mode" => "error",
 		"msg"=> _("Bitte geben sie einen Bearbeiter f&uuml;r die Bearbeitungszeit an!"));	
+$this->msg[8] = array (
+		"mode" => "error",
+		"msg"=> _("Bitte w&auml;hlen Sie zun&auml;chst einen Vertrag aus, um die Anfragen einzusehen oder zu bearbeiten!"));

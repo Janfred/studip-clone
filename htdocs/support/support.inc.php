@@ -93,8 +93,8 @@ include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 					<table width="100%" cellspacing="0" cellpadding="0" border="0">
 						<?
 						if ($msg->checkMsgs()) {	
-							print "<tr><td class=\"blank\">&nbsp; </td></tr>";
 							$msg->displayAllMsg($view_mode = "line");
+							print "<tr><td class=\"blank\">&nbsp; </td></tr>";
 						}
 						if ($page_intro) {
 						?>
