@@ -45,8 +45,8 @@ define ("VOTE_BAR_LEFT",   VOTE_PATH_PICTURES."bar_l.gif");
 define ("VOTE_BAR_MIDDLE", "vote/view/vote_bar_image.php?percent=");
 define ("VOTE_BAR_RIGHT",  VOTE_PATH_PICTURES."bar_r.gif");
 
-define ("VOTE_ANSWER_CORRECT", VOTE_PATH_PICTURES."vote_answer_correct.gif");
-define ("VOTE_ANSWER_WRONG",   VOTE_PATH_PICTURES."vote_answer_wrong.gif");
+define ("VOTE_ANSWER_CORRECT", VOTE_PATH_PICTURES."haken_transparent.gif");
+define ("VOTE_ANSWER_WRONG",   VOTE_PATH_PICTURES."x_transparent.gif");
 
 define ("VOTE_COLOR_SUCCESS", "#008000");
 define ("VOTE_COLOR_ERROR",   "#E00000");
