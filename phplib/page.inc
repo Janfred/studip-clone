@@ -9,7 +9,7 @@
  *
  */ 
 
-function page_open($feature) {
+function page_open($feature, $order ="") {
   global $_PHPLIB;
 
   # enable sess and all dependent features.
@@ -25,6 +25,7 @@ function page_open($feature) {
       if (!isset($auth)) {
         $auth = new $feature["auth"];
       }
+      if ($order == "cancel") $auth->logout();
       $auth->start();
   
       
