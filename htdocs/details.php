@@ -80,7 +80,7 @@ if ($sem_id) {
 				$abo_msg="Tragen Sie sich hier ein";
 		} else {
 			if ($db->f("status") == "user") {
-				$abo_msg="Schrebrechte aktivieren";
+				$abo_msg="Schreibrechte aktivieren";
 			}
 		}
 	}
@@ -259,7 +259,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?
-				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>",($db2->f("Ort")) ? htmlReady($db2->f("Ort")) : "nicht angegeben");
+				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>", (getRoom ($sem_id)) ? htmlReady(getRoom ($sem_id)) : "nicht angegeben.");
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%"  align="top">

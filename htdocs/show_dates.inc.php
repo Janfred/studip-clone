@@ -131,8 +131,8 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 		while ($db->next_record()) {
 
 			$zusatz='';
-			if ($db->f("raum"))
-				$zusatz.= "Raum: ".htmlReady(mila($db->f("raum"),30))."&nbsp;";
+			if (getRoom($db->f("termin_id")))
+				$zusatz.= "Raum: ".htmlReady(getRoom($db->f("termin_id")))."&nbsp;";
 			
 			//Dokumente zaehlen
 			$num_docs='';

@@ -99,14 +99,14 @@ if ($SessSemName[1] =="") {
 	<tr><td class="blank" valign="top"><blockquote>
 	<?
 
-	if ($SessSemName[3]!="") {
+	if ($SessSemName[3]) {
 		echo "<br /><b>Untertitel: </b>"; echo htmlReady($SessSemName[3]); echo"<br>";
 	}
 
-	echo "<br><b>Zeit: </b>", (view_turnus($SessionSeminar, FALSE));
+	echo "<br><b>Zeit: </b>", view_turnus($SessionSeminar, FALSE);
 
-	if ($SessSemName[2]!="") {
-		echo "<br><b>Ort: </b>"; echo htmlReady($SessSemName[2]);
+	if (getRoom($SessSemName[1])) {
+		echo "<br><b>Ort: </b>".htmlReady(getRoom($SessSemName[1]));
 	}
 
 	$db=new DB_Seminar;
