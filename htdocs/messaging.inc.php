@@ -97,7 +97,10 @@ function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_messag
 	if (!$user_id) {
 		$user_id = $user->id;
 	}
-
+	
+	$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
+	$db4->next_record();
+		
 	if (!empty($message)) {
 		if ($user_id != "____%system%____") {
 			$snd_user_id = $user_id;
@@ -109,7 +112,7 @@ function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_messag
 				$message .= $this->sig_string.$my_messaging_settings["sms_sig"];
 			}
 		} else {
-			setTempLanguage($snd_user_id);
+			setTempLanguage($db4->f("user_id"));
 			$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 			restoreLanguage();
 		}
@@ -120,9 +123,21 @@ function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_messag
 			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
 		}
 		
-		$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
-		$db4->next_record();
 		$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
+		//Benachrichtigung in alle Chaträume schicken	 
+		$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
+		if ($GLOBALS['CHAT_ENABLE']) {	 
+			$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);	 
+			setTempLanguage($db4->f("user_id"));	 
+			$chatMsg = sprintf(_("Sie haben eine Nachricht von <b>%s</b> erhalten!"),htmlReady($snd_name));	 
+			restoreLanguage();	 
+			$chatMsg .= "<br></i>" . quotes_decode(formatReady(stripslashes($message)))."<i>";	 
+			foreach($chatServer->chatDetail as $chatid => $wert) {	 
+				if ($wert['users'][$db4->f("user_id")]) {	 
+					$chatServer->addMsg("system:".$db4->f("user_id"),$chatid,$chatMsg);	 
+				}	 
+			}	 
+		}
 		return 1;
 	} else {
 		return 0;
