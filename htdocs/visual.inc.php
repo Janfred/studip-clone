@@ -1,6 +1,7 @@
 <?
 
 require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."cssClassSwitcher.inc.php");
 
 
 /*****************************************************************************
@@ -91,113 +92,6 @@ function get_ampel_read ($mein_status, $admission_status, $read_level, $print="T
 		echo $ampel_status;
 	}
 	return $ampel_status;
-}
-
-/*****************************************************************************
-cssClassSwitcher, Klasse um cssClasses fuer Zebra auszuwaehlen
-/*****************************************************************************/
-class cssClassSwitcher {
-	var $class = array("steelgraulight", "steel1");                 //Klassen
-	var $headerClass = "steel";
-	var $classcnt = 0;                //Counter
-	var $hovercolor = array("#B7C2E2","#CED8F2");
-	var $nohovercolor = array("#E2E2E2","#F2F2F2");
-	var $JSenabled = FALSE;
-	var $hoverenabled = FALSE;
-	
-	function cssClassSwitcher($class = "",$headerClass = "",$hovercolor = "",$nohovercolor = ""){
-		if ($GLOBALS["auth"]->auth["jscript"]) $this->JSenabled = TRUE;
-		if (is_array($class)) $this->class = $class;
-		if ($headerClass) $this->headerClass = $headerClass;
-		if (is_array($hovercolor)) $this->hovercolor = $hovercolor;
-		if (is_array($nohovercolor)) $this->nohovercolor = $nohovercolor;
-	}
-	
-	function enableHover($hovercolor = "",$nohovercolor = ""){
-		if (is_array($hovercolor)) $this->hovercolor = $hovercolor;
-		if (is_array($nohovercolor)) $this->nohovercolor = $nohovercolor;	
-		if ($this->JSenabled)
-			$this->hoverenabled = TRUE;
-	}
-	
-	function disableHover(){
-		$this->hoverenabled = FALSE;
-	}
-	
-	function getHover(){
-		if($this->hoverenabled && $this->JSenabled){
-			$ret = $this->getFullClass();
-			$ret .= " onMouseOver='doHover(this,\"".$this->nohovercolor[$this->classcnt]."\",\"".$this->hovercolor[$this->classcnt]."\")'".
-				" onMouseOut='doHover(this,\"".$this->hovercolor[$this->classcnt]."\",\"".$this->nohovercolor[$this->classcnt]."\")' ";
-		}
-		return $ret;
-	}
-	
-	function getFullClass(){
-		$ret = ($this->hoverenabled) ?  " style=\"background-color:".$this->nohovercolor[$this->classcnt]."\" " : " class=\"" . $this->class[$this->classcnt] . "\" ";
-		return $ret;
-	}
-	
-	function getClass() {
-		return ($this->hoverenabled) ? "\"  style=\"background-color:".$this->nohovercolor[$this->classcnt]." " : $this->class[$this->classcnt];
-	}
-
-	function getHeaderClass() {
-		return $this->headerClass;
-	}
-
-	function resetClass() {
-		return $this->classcnt = 0;
-	}
-
-	function switchClass() {
-		$this->classcnt++;
-		if ($this->classcnt >= sizeof($this->class))
-			$this->classcnt = 0;
-	}
-	
-	function GetHoverJSFunction(){
-		static $is_called = FALSE;
-		$ret = "";
-		if($GLOBALS["auth"]->auth["jscript"] && !$is_called) {
-			$ret = "<script type=\"text/javascript\">
-					function hexToRgb(hexcolor){
-						var rgb = 'rgb(' + parseInt(hexcolor.substr(1,2),16) + ',' + parseInt(hexcolor.substr(3,2),16) + ','
-									+ parseInt(hexcolor.substr(5,2),16) +')';
-						return rgb;
-					}
-					function doHover(theRow, theFromColor, theToColor){
-						if (theFromColor == '' || theToColor == '') {
-							return false;
-						}
-						if (document.getElementsByTagName) {
-							var theCells = theRow.getElementsByTagName('td');
-						}
-						else if (theRow.cells) {
-							var theCells = theRow.cells;
-						} else {
-							return false;
-						}
-						hexToRgb(theToColor);
-						if (theRow.tagName.toLowerCase() != 'tr'){
-							if ((theRow.style.backgroundColor.toLowerCase() == theFromColor.toLowerCase()) || (theRow.style.backgroundColor == hexToRgb(theFromColor))) {
-								theRow.style.backgroundColor = theToColor;
-							}
-						} else {
-							var rowCellsCnt  = theCells.length;
-							for (var c = 0; c < rowCellsCnt; c++) {
-								if ((theCells[c].style.backgroundColor == theFromColor.toLowerCase()) || (theCells[c].style.backgroundColor == hexToRgb(theFromColor))) {
-									theCells[c].style.backgroundColor = theToColor;
-								}
-							}
-						}
-						return true;
-					}
-					</script>";
-		}
-		$is_called = TRUE;
-		return $ret;
-	}
 }
 
 function htmlReady($what, $trim = TRUE, $br = FALSE){
