@@ -74,8 +74,6 @@ else{
 	$new_direction = "DESC";
 }
 
-$accepted_functions = implode(",", $INST_FUNKTION_ORDER);
-
 if($SessSemName[1] == ""){
 	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br />"
 				. "<font size=\"-1\" color=\"black\">Dieser Teil des Systems kann nur "
