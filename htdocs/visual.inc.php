@@ -1,7 +1,8 @@
 <?
 
-require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."cssClassSwitcher.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP.'config.inc.php');
+require_once($ABSOLUTE_PATH_STUDIP.'cssClassSwitcher.inc.php');
+include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/idna_convert.class.php');
 
 /*****************************************************************************
 get_ampel_state is a helper function for get_ampel_write and get_ampel_read.
@@ -18,14 +19,14 @@ function get_ampel_state ($cur_ampel_state, $new_level, $new_text) {
 }
 
 /*****************************************************************************
-get_ampel_write, waehlt die geeignete Grafik in der Ampel Ansicht 
+get_ampel_write, waehlt die geeignete Grafik in der Ampel Ansicht
 (fuer Berechtigungen) aus. Benoetigt den Status in der Veranstaltung
 und auf der Anmeldeliste und den read_level der Veranstaltung
 /*****************************************************************************/
 
 function get_ampel_write ($mein_status, $admission_status, $write_level, $print="TRUE", $start = -1, $ende = -1, $temporaly = 0) {
 	global $perm;
-	
+
 	$ampel_state["access"] = 0;		// the current "lowest" access-level. If already yellow, it can't be green again, etc.
 	$ampel_state["text"] = "";			// the text for the reason, why the "ampel" has the current color
 	/*
@@ -212,7 +213,7 @@ function JSReady ($what = "", $target = "overlib") {
 		$what = format($what);
 		$what = str_replace("\r","",$what);
 		$what = smile($what);
-		$what = symbol($what);		
+		$what = symbol($what);
 		$what = str_replace("\n","<br /> ",$what);
 		if (ereg("\[quote",$what) AND ereg("\[/quote\]",$what))
 			$what = quotes_decode($what);
@@ -286,11 +287,11 @@ function quotes_decode ($description) {
 						}
 					else $curr_pos = 1;
 					}
-				else ++$curr_pos;        
+				else ++$curr_pos;
 				}
 			else ++$curr_pos;        
 			}
-		} 
+		}
 	return $description;
 }
 
@@ -342,7 +343,8 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 	}
 	$what = htmlReady($what, $trim, FALSE);
 	if ($wiki == TRUE)
-		return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), $show_comments), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		//return symbol(smile(FixLinks(wiki_format(format(latex($what, $extern)), $show_comments), FALSE, TRUE, TRUE, $extern), $extern), $extern);
+		return wiki_format(symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern), $show_comments);
 	else
 		return symbol(smile(FixLinks(format(latex($what, $extern)), FALSE, TRUE, TRUE, $extern), $extern), $extern);
 }
@@ -405,9 +407,9 @@ function wikiReady ($what, $trim = TRUE, $extern = FALSE, $show_comments="icon")
 */
 function wiki_format ($text, $show_comments) {
 	if ($show_comments=="icon" || $show_comments=="all") {
-		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#emU","format_wiki_comment('\\2','\\1',$show_comments)",$text);
+		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#emsU","format_wiki_comment('\\2','\\1',$show_comments)",$text);
 	} else {
-		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#mU","",$text);
+		$text=preg_replace("#\[comment(=.*)?\](.*)\[/comment\]#msU","",$text);
 	}
 	return $text;
 }
@@ -417,12 +419,12 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 	$metainfo=trim($metainfo,"=");
 	if ($show_comment=="all") {
 		$commenttmpl="<table style=\"border:thin solid;margin: 5px;\" bgcolor=\"#ffff88\"><tr><td><font size=-1><b>"._("Kommentar von")." %1\$s:</b>&nbsp;</font></td></tr><tr class=steelgrau><td class=steelgrau><font size=-1>%2\$s</font></td></tr></table>";
-		return sprintf($commenttmpl, $metainfo, $comment);
+		return sprintf($commenttmpl, $metainfo, stripslashes($comment));
 	} elseif ($show_comment=="icon") {
 		$comment = decodehtml($comment);
 		$comment = preg_replace("/<.*>/U","",$comment);
 		$metainfo = decodeHTML($metainfo);
-		return "<img src=\"pictures/icon-posting.gif\" ".tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE) . ">";
+		return '<a href="javascript:void(0);" '.tooltip(sprintf("%s %s:\n%s",_("Kommentar von"),$metainfo,$comment),TRUE,TRUE) . "><img src=\"pictures/icon-posting.gif\" border=0></a>";
 	} else {
 		echo "<p>Error: unknown show_comment value in format_wiki_comment: ".$show_comment."</p>";
 		die();
@@ -526,8 +528,6 @@ function format ($text) {
 					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
 					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
 					"'##(\S|\S.*?\S)##'s",                     // ML-diktengleich
-					//"'\+\+(((\+\+)*)(\S|\S.*?\S)\\2)\+\+'se",  // ML-groesser
-					//"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
 					"'((--)+|(\+\+)+)(\S|\S.*?\S)\\1'se",        // ML-kleiner / ML-groesser
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
@@ -554,17 +554,24 @@ function format ($text) {
 					"<b>\\1</b>",
 					"<u>\\1</u>",
 					"<tt>\\1</tt>",
-					//"'<big>'.format('\\1').'</big>'",
-					//"'<small>'.format('\\1').'</small>'",
 					"preg_call_format_text('\\1', format('\\4'))",
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
 					"'<blockquote>'.format('\\1').'</blockquote>'",
 					"\\1"
 					);
-		
-	$text = preg_replace($pattern, $replace, $text);
-	
+
+	$regtxt = "!((\[[^\]\[]+\])?(https?|ftp)://[^\s<]+)!is";
+	if (preg_match_all($regtxt, $text, $match)) {
+		$text = preg_replace($regtxt, 'ä', $text);
+		$text = preg_replace($pattern, $replace, $text);
+		$i = 0;
+		while (($pos = strpos($text, 'ä'))  !== false){
+			$text = substr($text,0, $pos) . $match[1][$i++] . substr($text, $pos +1);
+		}
+	} else {
+		$text = preg_replace($pattern, $replace, $text);
+	}
 	return $text;
 }
 
@@ -624,7 +631,7 @@ function preg_call_format_list ($content) {
 			$ret .= "<{$list_tags[$i]}>";
 			$stack[] = $list_tags[$i];
 		}
-			
+
 		if ($level_diff > 0) {
 			$ret .= "<li>{$items[$i]['content']}</li></" . array_pop($stack) . ">";
 			for ($j = $items[$i]["level"] - 1; $j > $items[$i + 1]["level"]; $j--)
@@ -710,8 +717,8 @@ function kill_format ($text) {
 					"'\\1'.substr(str_replace('<', ' ', '\\2'), 0, -1)",
 					"\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
 					"\\1", "\\1", "\n\\1\n", "", "\\1",'[nop] [/nop]', "\\2",
-					//"",
-					"");
+					 //"",
+					  "");
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $text, $matches)) {
 		$text = preg_replace($pattern, $replace, $text);
@@ -740,16 +747,16 @@ function kill_format ($text) {
 */
 function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $extern = FALSE) {
 	global $STUDIP_DOMAINS;
-	
+	$chars= '&;_a-z0-9-';
 	if (empty($data)) {
 		return $data;
 	}
 	if ($fix_nl)
 		$data = preg_replace("/\n?\r\n?/", "\n", $data); // newline fixen
-	
+
 	$img = $img ? 'TRUE' : 'FALSE';
 	$extern = $extern ? 'TRUE' : 'FALSE';
-	
+
 	// add protocol type and transform the domain names of links within Stud.IP
 	if (is_array($STUDIP_DOMAINS)) {
 		$domains = '';
@@ -767,19 +774,19 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 		$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	}
 	$fixed_text = preg_replace($pattern, $replace, $data);
-	
+
 	$pattern = array(
-					"'((\[(img)(\=([^\n\f\[\:]+))?(\:(\d{1,3}%?))?(\:(center|right))?(\:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?\://|ftp\://)([_a-z0-9-:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-:]+)*(/[^<\s]*[^\.\s<])*))'ie",
-					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
+					'#((\[(img)(\=([^\n\f\[:]+))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*(/[^<\s]*[^\.\s<])*))#ie',
+					'#(?<=\s|^)(\[([^\n\f\[]+)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
 					);
 	$replace = array(
 			"preg_call_link(array('\\1', '\\5', '\\7', '\\12', '\\13', '\\3', '\\9', '\\11'), 'LINK', $img, $extern)",
 			"preg_call_link(array('\\2', '\\3'), 'MAIL', $extern)");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
-	
+
 	if ($nl_to_br)
 		$fixed_text = str_replace("\n", "<br />", $fixed_text);
-	
+
 	return $fixed_text;
 }
 
@@ -795,18 +802,18 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 */
 function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 	global $auth;
-	
+	$chars= '&;_a-z0-9-';
 	if ($extern)
 		$link_pic = '';
 	else
-		$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
-	
+	$link_pic = "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/link_extern.gif\" border=\"0\" />";
+
 	if ($mod == 'LINK') {
 		if ($params[5] != 'img') {
 			if ($params[3] == '')
 				$params[3] = $params[4];
 			$params[4] = str_replace('&amp;', '&', $params[4]);
-			$tbr = "<a href=\"{$params[4]}\" target=\"_blank\">$link_pic{$params[3]}</a>";
+			$tbr = '<a href="'.idna_link($params[4])."\" target=\"_blank\">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) {
 			if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
@@ -828,11 +835,10 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 					}
 				}
-				$tbr = "<img src=\"{$params[4]}\"$width border=\"0\"$style alt=\"{$params[1]}\" title=\"{$params[1]}\">";
-				
-				if (preg_match("'(((https?\://|ftp\://)([_a-z0-9-\:]+@)?)[_a-z0-9-]+(\.[_a-z0-9-\:]+)+(/[^<\s]*[^\.\s<])*)'i",
-						$params[7])) {
-					$tbr = "<a href=\"{$params[7]}\" target=\"_blank\">$tbr</a>";
+				$tbr = '<img src="'.idna_link($params[4])."\"$width border=\"0\"$style alt=\"{$params[1]}\" title=\"{$params[1]}\">";
+
+				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)+(/[^<\s]*[^\.\s<])*)#i', $params[7])) {
+					$tbr = '<a href="'.idna_link($params[7]).'" target="_blank">'.$tbr.'</a>';
 				}
 				if ($params[6])
 					$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
@@ -840,27 +846,45 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 		}
 		else
 			return $params[0];
-			
+
 	}
 	elseif ($mod == 'MAIL') {
 		if ($params[0] != '')
-			$tbr = "<a href=\"mailto:{$params[1]}\">$link_pic{$params[0]}</a>";
+			$tbr = '<a href="mailto:'.idna_link($params[1]). "\">$link_pic{$params[0]}</a>";
 		else
-			$tbr = "<a href=\"mailto:{$params[1]}\">$link_pic{$params[1]}</a>";
+			$tbr = '<a href="mailto:'.idna_link($params[1])."\">$link_pic{$params[1]}</a>";
 	}
 
 	return $tbr;
 }
 
 /**
+* convert links with 'umlauten' to punycode
+*
+* @access	public
+* @param	string	link to convert
+* @return	string  link in punycode
+*/
+function idna_link($link){
+
+	if (preg_match('/&\w+;/i',$link)) { //umlaute?  (html-coded)
+		$IDN = new idna_convert();
+		$out = $IDN->encode(utf8_encode(decodeHTML($link))); // false by error
+		return ($out)? $out:$link;
+	}
+	return $link;
+}
+
+
+/**
 * create smileys
 *
 * This functions converts the smileys codes (":name:") notation an the shorts,
-* located in the config.inc into the assigned pictures. 
+* located in the config.inc into the assigned pictures.
 * On every smiley a link to show_smiley.php overview is given (only if $extern
 * is FALSE). A tooltip which shows the smiley code is given, too.
 *
-* @access	public        
+* @access	public
 * @param		string	the text to convert
 * @param		boolean	TRUE if function is called from external pages
 * @return		string	convertet text
@@ -1103,7 +1127,7 @@ Beispielaufbau f&uuml;r das Array:
 
 $infobox = array	(	
 array  ("kategorie"  => "Information:",
-		"eintrag" => array	(	
+		"eintrag" => array	(
 						array	 (	"icon" => "pictures/suchen.gif",
 								"text"  => "Um weitere Veranstaltungen bitte Blabla"
 								),
