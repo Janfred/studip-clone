@@ -997,6 +997,10 @@ function delete_range_of_dates ($range_id, $topics = FALSE) {
 function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE, $update_resources = TRUE, $presence_dates_only = TRUE, $check_locks = TRUE) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $user;
 	
+	//hmmm, workaround ?!
+	if ($mode != 'update')
+		$check_locks = false;
+		
 	if ($RESOURCES_ENABLE)	{
 	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		$insertAssign = new VeranstaltungResourcesAssign($sem_id);
@@ -1162,9 +1166,9 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 							//only if we get a resource_id, we update assigns...
 							if (($val["resource_id"]) && ($update_resources)){
 								if ($saved_dates[$affected_dates]) {
-									$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"], FALSE, FALSE, FALSE, FALSE));
+									$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[$affected_dates], $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
 								} else {
-									$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"], FALSE, FALSE, FALSE, FALSE));
+									$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
 								}
 							//...if no resource_id (but assign, if ressource was set but is no more), kill assign
 							} elseif ($saved_dates[$affected_dates]) {

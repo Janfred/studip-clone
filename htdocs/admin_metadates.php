@@ -425,10 +425,13 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		//update the dates in the assi.... (we update if user wants to or the changes to times/rooms/request-system causes killing all the date-assigns)
 		if (($term_metadata["update_dates"]) || (($term_metadata["update_dates"]) && ($update_dates_kill_resources))) {
 			$multisem = isDatesMultiSem($term_metadata["sem_id"]);
-			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"], TRUE, $update_resources);
+			$result = dateAssi($term_metadata["sem_id"], $mode="update", FALSE, FALSE, $multisem, $term_metadata["original_turnus"], FALSE, $update_resources);
 			$term_metadata["original_turnus"] = $metadata_termin["turnus_data"];
 			if ($result["changed"]) {
 				$errormsg.= sprintf ("msg§"._("%s Termine des Ablaufplans aktualisiert.")."§", $result["changed"]);
+			}
+			if ($result['resources_result']){
+				$updateResult = $result['resources_result'];
 			}
 		}
 		
