@@ -90,6 +90,22 @@ function RemoveBuddy($username)
 	}
 }
 
+function CheckBuddy($username)
+{ global $user;
+	$owner_id = $user->id;
+	$buddy = "";
+	$user_id = get_userid($username);
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db->query ("SELECT buddy FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
+	if ($db->next_record()) {
+		$buddy = TRUE;
+	} else {
+		$buddy = FALSE;
+	}
+	return $buddy;
+}
+
 function GetSizeofBook()
 { global $user;
 	$owner_id = $user->id;
