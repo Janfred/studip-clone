@@ -46,11 +46,30 @@ if ($dopen)
 if ($dclose)
 	$index_data["dopen"]='';
 	
+// database objects
+$db=new DB_Seminar;
+
 // evaluate language clicks
 if (isset($set_language)) {
 	$sess->register("forced_language");
 	$forced_language = $set_language;
 	$_language = $set_language;
+}
+
+// store and restore user-specific language preference
+if ($auth->is_authenticated() && $user->id != "nobody") {
+	// store last language click
+	if (isset($forced_language)) {
+		$db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='$user->id'");
+		$_language = $forced_language;
+		$sess->unregister("forced_language");
+	// restore user-setting
+	} else {
+		$db->query("SELECT preferred_language FROM user_info WHERE user_id='$user->id'");
+		if ($db->next_record()) {
+			$_language = $db->f("preferred_language");
+		}
+	}
 }
 
 
@@ -67,8 +86,6 @@ if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscr
 	$index_data["im_loaded"]=TRUE;
 }
 
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
 
 //Anzeigemodul fuer persoenliche Startseite (nur wenn man angemeldet und nicht global root oder admin ist!)
 IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("dozent"))
