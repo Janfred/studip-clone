@@ -53,7 +53,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");//ja,ja,ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/LockRules.class.php");//ja,ja,ja,ja,ja auch die...
 
 if ($RESOURCES_ENABLE) {
-	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	$resList = new ResourcesUserRoomsList($user_id);
 }
@@ -347,12 +348,12 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			}
 		}
 		
-		//If resource-management activ, update the assigned reources and do the overlap checks.... not so easy!
+		//If resource-management activ, update the assigned resources and do the overlap checks.... not so easy!
 		if ($RESOURCES_ENABLE) {
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
     			$updateResult = array_merge ($updateResult, $veranstAssign->updateAssign());
 
-			//are there overlaps, in the meanwhile since the regulat check? In this case the sem is regular, we have to touch the metadata
+			//are there overlaps, in the meanwhile since the regular check? In the case the sem is regular, we have to touch the metadata
 			if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
 				$overlaps_detected=FALSE;
 				foreach ($updateResult as $key=>$val)
@@ -429,9 +430,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
  if (($errormsg) && (($open_reg_x) || ($open_ureg_x) || ($enter_start_termin_x) || ($nenter_start_termin_x) || ($add_turnus_field_x) || ($delete_turnus_field)))
  	$errormsg='';	
  
- if ((!$metadata_saved) || (!$term_metadata["source_page"]))
- 	{
-?>
+ if ((!$metadata_saved) || (!$term_metadata["source_page"])) {
+	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
 		<td class="topic" colspan=2>&nbsp; <b>
@@ -592,12 +592,12 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								print "<br />&nbsp;"._("Raum:")."&nbsp; ";
 								if ($RESOURCES_ENABLE) {
 									$resList->reset();
-									if ($resList->numberOfEvents()) {
-										print "<font size=-1><select name=\"turnus_resource_id[]\" ";
+									if ($resList->numberOfRooms()) {
+										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
 										if ($lockdata[$lock_status]["metadata_dates"]) { echo "disabled";} 
 										print " ></font>";
 										printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
-										while ($resObject = $resList->nextEvent()) {
+										while ($resObject = $resList->next()) {
 											printf ("<option %s value=\"%s\">%s</option>", ($term_metadata["turnus_data"][$i]["resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 										}
 										print "</select></font>";
