@@ -139,14 +139,16 @@ class VeranstaltungResourcesAssign {
 					$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($corr_week * 7), date("Y", $sem_begin));
 					$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
 				
-					//check if we have to correct $start_time for a whole week (in special cases, sem_beginn is not a Monday but the assig is)
-					if (($sem_begin_uncorrected) && ($start_time < $sem_begin_uncorrected) && ($term_data["turnus"]))
+					//check if we have to correct the timestamps for a whole week (in special cases, sem_beginn is not a Monday but the assign is)
+					if (($sem_begin_uncorrected) && ($start_time < $sem_begin_uncorrected) && ($term_data["turnus"]))  {
 						$start_time = mktime (date("G", $start_time), date("i", $start_time), 0, date("n", $start_time), date("j", $start_time) +  7, date("Y", $start_time));
+						$end_time = mktime (date("G", $end_time), date("i", $end_time), 0, date("n", $end_time), date("j", $end_time) +  7, date("Y", $end_time));
+					}
 				
 					$day_of_week = date("w", $start_time);
 					if ($day_of_week == 0)
 						$day_of_week = 7;
-	
+							
 					$createAssign=new AssignObject(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
 												$start_time, $end_time, $sem_end,
 												-1, $interval, 0, 0, 0, 
