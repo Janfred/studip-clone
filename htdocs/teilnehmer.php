@@ -232,7 +232,7 @@ if ($cmd=="raus") {
 		}
 		restoreLanguage();
 
-		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1");
+		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")."&nbsp;"._("Abonnement aufgehoben"), TRUE);
 
 		// raus aus allen Statusgruppen
 		RemovePersonStatusgruppeComplete ($username, $id);
@@ -273,7 +273,7 @@ if ($cmd=="admission_raus") {
 		}
 		restoreLanguage();
 
-		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1");
+		$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")."&nbsp;"._("nicht zugelassen in Veranstaltung"), TRUE);
 
 		//Warteliste neu sortieren
 		renumber_admission($id);
@@ -318,7 +318,7 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 				}
 			}
 			restoreLanguage();
-			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1");
+			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")."&nbsp;"._("Eintragung in Veranstaltung"), TRUE);
 		}
 
 		//Warteliste neu sortieren
@@ -387,7 +387,7 @@ if (isset($add_tutor_x)) {
 						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
 					}
 					restoreLanguage();
-					$messaging->insert_message($message, get_username($u_id), "____%system%____", FALSE, FALSE, "1");
+					$messaging->insert_message($message, get_username($u_id), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")."&nbsp;"._("Eintragung in Veranstaltung"), TRUE);
 				}
 			}
 			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
