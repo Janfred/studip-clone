@@ -83,7 +83,7 @@ else
 	
 			$export_pagecontent = "<center><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr align=\"center\"><td>";
 			$export_pagecontent .= "<b>" . _("Ausgabe-Datei: ") . "</b>";
-			$export_pagecontent .= "</td><td>" . $link2 . $pdf_file . "</a>";
+			$export_pagecontent .= "</td><td>" . $link2 . $xslt_filename . ".pdf</a>";
 //			$export_pagecontent .= "</td><td>" . $result_file . "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
