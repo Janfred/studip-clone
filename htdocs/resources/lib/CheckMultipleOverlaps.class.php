@@ -89,7 +89,7 @@ class CheckMultipleOverlaps {
 	}
 	
 	function checkOverlap ($events, &$result, $index_mode = "assign_id") {
-		if ($this->resource_id) {
+		if ($this->resource_ids) {
 			foreach ($events as $obj) {
 				$clause = sprintf ("((begin <= %s AND end > %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());
 				$cases.= sprintf(" WHEN %s THEN '%s'", $clause, $obj->getId());
