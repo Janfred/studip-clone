@@ -124,8 +124,8 @@ setTimeout('again_and_again();',<? print($refresh*1000);?>);
 <?php
 
 $c=0;
+/*
 $owner_id = $user->id;
-
 if (is_array ($online)) { // wenn jemand online ist
 	foreach($online as $username=>$value) { //ale durchgehen die online sind
 		$user_id = get_userid($username);
@@ -146,6 +146,22 @@ if ((is_array($online)) && (is_array ($buddies))) {
 	}
  } else {
 	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Buddy ist online.") . "</font><br />&nbsp; ";
+}
+*/
+
+if (is_array($online)) {
+	foreach($online as $tmp_uname => $detail){
+		if ($detail['is_buddy']){
+			if (!$c){
+				echo "<tr><td class=\"blank\" colspan=2 align=\"left\"><font size=-1><b>" . _("Buddies:") . "</b></td></tr>";
+			}
+			echo "<tr><td class='blank' width='90%' align='left'><font size=-1><a " . tooltip(sprintf(_("letztes Lebenszeichen: %s"),date("i:s",$detail['last_action'])),false) . " href=\"javascript:coming_home('about.php?username=$tmp_uname');\">".htmlReady($detail['name'])."</a></font></td>\n";
+			echo "<td  class='blank' width='10%' align='middle'><font size=-1><a href='$PHP_SELF?cmd=write&msg_rec=$tmp_uname'><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\" width=\"24\" height=\"21\"></a></font></td></tr>";
+			$c++;
+		}
+	}
+} else {
+	echo "<tr><td class='blank' colspan='2' align='left'><font size=-1>" . _("Kein Buddy ist online.") . "</font>";
 }
 
 if (!$my_messaging_settings["show_only_buddys"]) {
