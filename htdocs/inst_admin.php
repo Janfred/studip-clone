@@ -215,7 +215,7 @@ else {
 						my_error("<b>Globale Administratoren k&ouml;nnen auch an Einrichtung nur den Status \"admin\" haben.</b>");
 					}
 					else { //na, dann muss es wohl sein (grummel)
-						$query = "UPDATE user_inst SET inst_perms='$perms' , Funktion='$inst_funktion' , raum='$raum' , Telefon='$Telefon' , Fax='$Fax' , sprechzeiten='$sprechzeiten' WHERE Institut_id = '$ins_id' AND user_id = '$u_id'";
+						$query = "UPDATE user_inst SET inst_perms='$perms', raum='$raum', Telefon='$Telefon', Fax='$Fax', sprechzeiten='$sprechzeiten' WHERE Institut_id = '$ins_id' AND user_id = '$u_id'";
 						$db2->query($query);
 						my_msg("<b>Status&auml;nderung f&uuml;r $Fullname durchgef&uuml;hrt.</b>");
 					}
@@ -244,7 +244,7 @@ else {
 				elseif ($db3->f("perms") == "admin") {
 					if ($perm->have_perm("root")) {
 					    // als admin aufnehmen
-					    $db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms, Funktion) values ('$u_id', '$ins_id', 'admin', '14')");
+					    $db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', 'admin')");
 					    my_msg("<b>$Fullname wurde als \"admin\" in die Einrichtung aufgenommen.</b>");
 					} else {
 					    my_error("<b>Sie haben keine Berechtigung einen admin zu berufen!</b>");
@@ -252,11 +252,11 @@ else {
 				} else {
 					//ok, aber nur hochstufen (hat sich selbst schonmal gemeldet als Student an dem Inst)
 					if ($db->f("inst_perms") == "user")
-						$db2->query("UPDATE user_inst SET inst_perms='autor', Funktion='0' WHERE user_id='$u_id' AND Institut_id = '$ins_id' ");
+						$db2->query("UPDATE user_inst SET inst_perms='autor' WHERE user_id='$u_id' AND Institut_id = '$ins_id' ");
 					// ok, als das aufnehmen was er global ist aufnehmen.
 					else
 						$globalperms = get_global_perm($u_id);				
-						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms, Funktion) values ('$u_id', '$ins_id', '$globalperms', '0')");
+						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', '$globalperms')");
 					if ($db2->affected_rows())
 						my_msg("<b>$Fullname wurde als \"$globalperms\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
 					else
