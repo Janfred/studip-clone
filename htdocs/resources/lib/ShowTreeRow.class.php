@@ -5,12 +5,15 @@ print a row in the common stud.ip printhead/content style
 /*****************************************************************************/
 class ShowTreeRow {
 
-	function ShowRow($icon, $link, $titel, $zusatz, $level='', $lines='', $weitere, $new=FALSE, $open="close", $content=_("Keine Beschreibung"), $edit='', $breite="99%") {
+	function ShowRow($icon, $link, $titel, $zusatz, $level='', $lines='', $weitere, $new=FALSE, $open="close", $content=FALSE, $edit='', $breite="99%") {
 		
 		?><table border=0 cellpadding=0 cellspacing=0 width="100%">
 			<tr>
 				<td class="blank" valign="top" heigth=21 nowrap><img src="pictures/forumleer.gif"><img src="pictures/forumleer.gif"><?
 	
+		if (!$content)
+			$content=_("Keine Beschreibung");
+		
 		//Struktur darstellen
 		$striche = "";
 		for ($i=0;$i<$level;$i++) {
