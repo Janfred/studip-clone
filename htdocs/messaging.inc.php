@@ -286,9 +286,9 @@ class messaging {
 
 				$title = $this->rfc_string($title . $snd_fullname);
 				// Generate "Header" of the message
-				$message = _("Von  :")." $snd_fullname\n".
-					_("An   :")." $rec_fullname\n".
-					_("Datum: ").date("d.m. Y, H:i",time())."\n\n".$message.
+				$message = _("Von: ")." $snd_fullname\n".
+					_("An: ")." $rec_fullname\n".
+					_("Datum: ").date("d.m.Y, H:i",time())."\n\n".$message.
 					"\n-- \n";
 
 				$message = kill_format($message);
