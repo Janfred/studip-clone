@@ -72,7 +72,7 @@ else
 	$pdf_file = md5(uniqid(rand())) .".pdf";
 	$str = "/usr/local/fop-0.20.5rc/fop.sh $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
 //	$out = system( ( $str ) );
-	$out = exec( ( $str ) );
+	$out = exec( ( ". /etc/profile.d/alljava.sh && " . $str ) );
 //echo $str . "<br>" . $out . "<br>";
 /*
 	unlink( $TMP_PATH . "/" . $xml_file_id);
