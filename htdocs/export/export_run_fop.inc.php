@@ -69,7 +69,9 @@ else
 	escapeshellcmd ( $result_file );
 	escapeshellcmd ( $TMP_PATH );
 	$pdf_file = md5(uniqid(rand())) .".pdf";
-	$str = "$JAVA_ENV_CALL && $FOP_SH_CALL $TMP_PATH/export/$result_file $TMP_PATH/export/$pdf_file ";
+	
+	$out = exec( $JAVA_ENV_CALL );
+	$str = "$FOP_SH_CALL $TMP_PATH/export/$result_file $TMP_PATH/export/$pdf_file ";
 //	$out = system( ( $str ) );
 //	$out = exec( $JAVA_ENV_CALL );
 	$out = exec( $str );
