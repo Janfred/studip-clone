@@ -155,12 +155,12 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 			}
 		}
 	}
-	
+	/*
 	if ($admin_rooms_data["resRequest"]->store()) {
 		$errormsg.="msg§"._("Die Raumanfragen und gew&uuml;nschte Raumeingenschaften wurden gespeichert");
 		$admin_rooms_data["original"] = get_snapshot();
 	}
-
+	*/
 	//Save changes
 	if (($uebernehmen_x) && (!$errormsg)) {
 		if ((!$admin_rooms_data["resRequest"]->getSettedPropertiesCount()) && (!$admin_rooms_data["resRequest"]->getResourceId()) && (!$perm->have_perm("admin"))) {
@@ -168,7 +168,7 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 		} else {
 			$admin_rooms_data["resRequest"]->setClosed(0);
 			if ($admin_rooms_data["resRequest"]->store()) {
-				$errormsg.="msg§"._("Die Raumanfragen und gew&uuml;nschte Raumeingenschaften wurden gespeichert");
+				$errormsg.="msg§"._("Die Raumanfragen und gew&uuml;nschte Raumeigenschaften wurden gespeichert");
 				$admin_rooms_data["original"] = get_snapshot();
 			}
 		}
