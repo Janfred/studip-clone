@@ -124,48 +124,45 @@ function checkdata(){
   		?>
 		<table>
 		<tr>
-			<? parse_msg ("error§<b>Cookies sind nicht aktiviert!</b>§info§Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den <a href=\"".$this->url()."\">Login</a>", "§", "blank", 1, TRUE);?>
+		<? parse_msg ("error§<b>" . _("Cookies sind nicht aktiviert!") . "</b>§info§" . sprintf(_("Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den %sLogin"), "<a href=\"".$this->url()."\">") . "</a>", "§", "blank", 1, TRUE);?>
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
 			
-			<b>&nbsp; Was sind Cookies?</b><br /><br />
+			<b>&nbsp; <?=_("Was sind Cookies?")?></b><br /><br />
 			<blockquote>
-			<font size =-1>Cookies werden normalerweise benutzt, damit der Browser den Benutzer der Seiten beim wiederholten Aufrufen dieser Seiten wiederekennen kann <br />
-			Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten des angemeldeten Benutzers auf jeder Seite neu verf&uuml;gbar zu machen.<br />
-			Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!<br></font></blockquote>
+			<font size =-1><?=_("Cookies werden normalerweise benutzt, damit der Browser den Benutzer der Seiten beim wiederholten Aufrufen dieser Seiten wiederekennen kann <br>Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten des angemeldeten Benutzers auf jeder Seite neu verf&uuml;gbar zu machen.<br>Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!")?>
+			<br></font></blockquote>
 			
-			<b>&nbsp; Sind Cookies gefahrlich?</b><br /><br />
+			<b>&nbsp; <?=_("Sind Cookies gefahrlich?")?></b><br /><br />
 			<blockquote>
-			<font size =-1>Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken stecken, die ein deutlich gr&ouml;sseres Sicherheitsririko darstellen (etwa AktiveX-Elemente)<br />
-			Au&szlig;sserdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie sie die entsprechenden Seiten benutzen.<br />
-			Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speichern des Browser befinden und danach automatisch verschwinden.<br>
-			Sie brauchen sich also keine Sorgen zu machen!<br /></font></blockquote>
+			<font size =-1><?=_("Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken integriert sind, die ein deutlich gr&ouml;sseres Sicherheitsririko darstellen (etwa AktiveX-Elemente).<br>Ausserdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie sie die entsprechenden Seiten benutzen.<br>Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speicher des Browser befinden und danach automatisch verschwinden.<br>Sie brauchen sich also keine Sorgen zu machen!")?>
+			<br></font></blockquote>
 
-			<b>&nbsp; Hinweise f&uuml;r Benutzer des Internet Explorers 6.0</b><br /><br />
+			<b>&nbsp; <?=_("Hinweise f&uuml;r Benutzer des Internet Explorers 6.0")?></b><br /><br />
 			<blockquote>
-			<font size =-1>Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf diese Seite gelangen, da der Browser Cookies vom Stud.IP System nicht akzeptiert<br />
-			Gehen Sie dann bitte so vor:
+			<font size =-1><?=_("Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf diese Seite gelangen, da der Browser Cookies vom Stud.IP System nicht akzeptiert<br>Gehen Sie dann bitte so vor:")?>
 			<ol type="1" start="1">
-				<li>&Ouml;ffnen Sie das Menu "Extras" in der Kopfzeile des Browsers
-				<li>Gehen Sie auf "Internetoptionen"
-				<li>W&auml;hlen Sie den Punkt "Datenschutz"
-				<li>Stellen Sie den Regler auf die Einstellung "Alle Cookies annehmen"
+				<li><?=_("&Ouml;ffnen Sie das Menu \"Extras\" in der Kopfzeile des Browsers")?>
+				<li><?=_("Gehen Sie auf \"Internetoptionen\"")?>
+				<li><?=_("W&auml;hlen Sie den Punkt \"Datenschutz\"")?>
+				<li><?=_("Stellen Sie den Regler auf die Einstellung \"Alle Cookies annehmen\"")?>
 			</ol>
 			</font></blockquote>
 			
-			<b>&nbsp; Hinweise f&uuml;r Benutzer des Netscape Navigator 4.x</b><br /><br />
+			<b>&nbsp; <?=_("Hinweise f&uuml;r Benutzer des Netscape Navigator 4.x")?></b><br /><br />
 			<blockquote>
-			<font size =-1>Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:<br />
+			<font size =-1><?=_("Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:")?>
+			<br />
 			<ol type="1" start="1">
-				<li>&Ouml;ffnen Sie das Menu "Bearbeiten" in der Kopfzeile des Browsers
-				<li>Gehen Sie auf "Einstellungen"
-				<li>Wählen sie jetzt auf der linken Seite der Einstellungsseite den Menüpunkt "Erweitert"
-				<li>Aktivieren sie jetzt auf der rechten Seite die Punkte:
+				<li><?=_("&Ouml;ffnen Sie das Menu \"Bearbeiten\" in der Kopfzeile des Browsers")?>
+				<li><?=_("Gehen Sie auf \"Einstellungen\"")?>
+				<li><?=_("Wählen sie jetzt auf der linken Seite der Einstellungsseite den Menüpunkt \"Erweitert\"")?>
+				<li><?=_("Aktivieren sie jetzt auf der rechten Seite die Punkte:")?>
 					<ul type="disc">
-					<li>"Benutze JavaScript"
-					<li>"Benutze Style Sheets"
-					<li>"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt"
+					<li><?=_("\"Benutze JavaScript\"")?>
+					<li><?=_("\"Benutze Style Sheets\"")?>
+					<li><?=_("\"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt\"")?>
 					</ul>
 			</ol>
 			</font></blockquote>
@@ -179,15 +176,15 @@ function checkdata(){
 
 ?>
 
-<b>&nbsp;Herzlich Willkommen!<br></b>
-&nbsp;Bitte f&uuml;llen Sie zur Anmeldung das Formular aus:<br>
+<b>&nbsp;<?=_("Herzlich Willkommen!")?><br></b>
+&nbsp;<?=_("Bitte f&uuml;llen Sie zur Anmeldung das Formular aus:")?><br><br>
 
 	<?
 	if ( isset($username) ): ?>
 	<!-- failed login code -->
 	<table>
 		<tr>
-			<? parse_msg ("error§Bei der Registrierung ist ein Fehler aufgetreten: <b>".$this->error_msg."</b>Bitte korrigieren Sie Ihre Eingaben und versuchen es erneut</b>", "§", "blank", 1, FALSE );?>
+			<? parse_msg ("error§" . _("Bei der Registrierung ist ein Fehler aufgetreten:") . " <b>".$this->error_msg."</b>" . _("Bitte korrigieren Sie Ihre Eingaben und versuchen Sie es erneut") . "</b>", "§", "blank", 1, FALSE );?>
 		</tr>
 	</table>
 
@@ -197,22 +194,22 @@ function checkdata(){
 <form name=login onsubmit="return checkdata()">
 <table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=4>
  <tr valign=top align=left>
-  <td colspan="2">Benutzername:</td>
+  <td colspan="2"><?=_("Benutzername:")?></td>
   <td><input type="text" name="username" onchange="checkusername()" value="<?php print (isset($username) ? $username : "" ) ?>" size=32 maxlength=63></td>
  </tr>
 
  <tr valign=top align=left>
-  <td colspan="2">Passwort:</td>
+  <td colspan="2"><?=_("Passwort:")?></td>
   <td><input type="password" name="password" onchange="checkpassword()" size=32 maxlength=31></td>
  </tr>
  
  <tr valign=top align=left>
-  <td colspan="2">Passwortbest&auml;tigung:</td>
+  <td colspan="2"><?=_("Passwortbest&auml;tigung:")?></td>
   <td><input type="password" name="password2" onchange="checkpassword2()" size=32 maxlength=31></td>
  </tr>
 
  <tr valign=top align=left>
-  <td>Titel:&nbsp;</td><td align="right"><select name="title_chooser_front" onChange="document.login.title_front.value=document.login.title_chooser_front.options[document.login.title_chooser_front.selectedIndex].text;">
+  <td><?=_("Titel:")?>&nbsp;</td><td align="right"><select name="title_chooser_front" onChange="document.login.title_front.value=document.login.title_chooser_front.options[document.login.title_chooser_front.selectedIndex].text;">
   <?
   for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
 	  echo "\n<option";
@@ -226,7 +223,7 @@ function checkdata(){
  </tr>
 
   <tr valign=top align=left>
-  <td>Titel nachgest.:&nbsp;</td><td align="right"><select name="title_chooser_rear" onChange="document.login.title_rear.value=document.login.title_chooser_rear.options[document.login.title_chooser_rear.selectedIndex].text;">
+  <td><?=_("Titel nachgest.:")?>&nbsp;</td><td align="right"><select name="title_chooser_rear" onChange="document.login.title_rear.value=document.login.title_chooser_rear.options[document.login.title_chooser_rear.selectedIndex].text;">
   <?
   for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
 	  echo "\n<option";
@@ -241,27 +238,27 @@ function checkdata(){
 
  
  <tr valign=top align=left>
-  <td colspan="2">Vorname:</td>
+  <td colspan="2"><?=_("Vorname:")?></td>
   <td><input type="text" name="Vorname" onchange="checkVorname()"  value="<?php print (isset($Vorname) ? $Vorname : "" ) ?>"size=32 maxlength=63></td>
  </tr>
 
  <tr valign=top align=left>
-  <td colspan="2">Nachname:</td>
+  <td colspan="2"><?=_("Nachname:")?></td>
   <td><input type="text" name="Nachname" onchange="checkNachname()"  value="<?php print (isset($Nachname) ? $Nachname : "" ) ?>"size=32 maxlength=63></td>
  </tr>
 
 <tr valign=top align=left>
-  <td colspan="2">Geschlecht:</td>
+  <td colspan="2"><?=_("Geschlecht:")?></td>
   <td><input type="RADIO" <? if (!$geschlecht) echo "checked" ?> name="geschlecht" value="0">m&auml;nnlich&nbsp; <input type="RADIO" name="geschlecht" <? if ($geschlecht) echo "checked" ?> value="1">weiblich</td>
  </tr>
 
  <tr valign=top align=left>
-  <td colspan="2">E-Mail:</td>
+  <td colspan="2"><?=_("E-Mail:")?></td>
   <td><input type="text" name="Email" onchange="checkEmail()"  value="<?php print (isset($Email) ? $Email : "" ) ?>"size=32 maxlength=63></td>
  </tr>
 
  <tr>
-  <td colspan="3" align=right><input type="submit" name="submitbtn" value=" Registrieren "></td>
+  <td colspan="3" align=right><input type="submit" name="submitbtn" value=" <?=_("Registrieren")?> "></td>
  </tr>
 </table>
 <br /><br />
