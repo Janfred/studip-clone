@@ -97,7 +97,7 @@ class AssignObject {
 
 	function getOwnerName($explain=FALSE, $id='') {
 		global $TERMIN_TYP;
-		
+
 		if (!$id)
 			$id=$this->owner_id;
 
@@ -824,7 +824,11 @@ class resourceObject {
 	function getOwnerType($id='') {
 		if (!$id)
 			$id=$this->owner_id;
-			
+
+		//Is it a entry for "everyone"?
+		if ($id == "all")
+			return "all";
+		
 		//Ist es eine Veranstaltung?
 		$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$id);
 		$this->db->query($query);
@@ -864,8 +868,17 @@ class resourceObject {
 			$id=$this->owner_id;
 
 		switch (resourceObject::getOwnerType($id)) {
+			case "all":
+				if (!$explain)
+					return "Jeder";
+				else
+					return "Jeder (alle Nutzer)";
+			break;
 			case "global":
-				return "Global";
+				if (!$explain)
+					return "Gloabal";
+				else
+					return "Gloabal (zentral Verwaltet)";
 			break;
 			case "user";
 				if (!$explain)

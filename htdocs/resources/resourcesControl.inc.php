@@ -644,7 +644,7 @@ Objecteigenschaften anzeigen, views: openobject_details
 if ($resources_data["view"]=="openobject_details") {
 
 	if ($resources_data["structure_open"]) {
-		$viewObject=new viewObject($resources_data["structure_open"]);
+		$viewObject = new viewObject($resources_data["structure_open"]);
 		$viewObject->view_properties();
 	} else {
 		echo "</td></tr>";

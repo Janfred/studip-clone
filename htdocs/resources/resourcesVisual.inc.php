@@ -754,7 +754,7 @@ class viewObject {
 	
 	function view_properties() {
 		global $PHP_SELF;
-			
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_properties=<? echo $this->resObject->getId() ?>">
@@ -766,7 +766,7 @@ class viewObject {
 				<font size=-1><? echo $this->resObject->getName()." (".$this->resObject->getCategory().")" ?>
 				</td>
 				<td class="<? echo $this->cssSw->getClass() ?>" width="60%" valign="top"><font size=-1><b>Besitzer:</b></font><br />
-				<font size=-1><a href="<? echo $this->resObject->getOwnerLink?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
+				<font size=-1><? echo $this->resObject->getName()?><? echo $this->resObject->getOwnerName(TRUE);  ?></font>
 				</td>
 			</tr>
 			<tr>
@@ -1120,7 +1120,7 @@ class editObject extends cssClasses {
 				<font size=-1><textarea name="change_description" rows=3 cols=60><? echo $this->resObject->getDescription() ?></textarea>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%" valign="top"><font size=-1>Besitzer:</font><br />
-				<font size=-1><a href="<? echo $this->resObject->getOwnerLink?>"><? $this->resObject->getOwnerName(TRUE) ?></a></font>
+				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
 				</td>
 			</tr>
 			<tr>
@@ -1216,17 +1216,24 @@ class editObject extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" colspan=2><font size=-1>Besitzer:</font><br />
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="60%"><font size=-1>Besitzer &auml;ndern:</font><font size=-1 color="red"></font><br />
-				<? create_search_form("search_owner", $search_string_search_owner) ?>
+				<td class="<? echo $this->getClass() ?>" width="60%">
+				<?
+				if (checkChangeOwnerOption ($this->resObject->getOwnerId())){
+					?>
+					<font size=-1>Besitzer &auml;ndern:</font><font size=-1 color="red"></font><br />
+					<? create_search_form("search_owner", $search_string_search_owner, FALSE,TRUE);
+				} else
+					print _("<img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> Sie k&ouml;nnen den Besitzer nicht &auml;ndern.</font>");
+				?>
 				</td>
 			</tr>
 			<tr>
 
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" colspan=2 valign="bottom"><font size=-1>Berechtigungen:</font><br />
+				<td class="<? echo $this->getClass() ?>" colspan=2 valign="top"><font size=-1>Berechtigungen:</font><br />
 				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1>Berechtigungen hinzuf&uuml;gen</font><br />
-				<?create_search_form("search_perm_user", $search_string_search_perm_user) ?>
+				<?create_search_form("search_perm_user", $search_string_search_perm_user, FALSE, FALSE, FALSE, TRUE) ?>
 				</td>
 			</tr>
 			<?
@@ -1258,7 +1265,7 @@ class editObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				<td class="<? echo $this->getClass() ?>" colspan=3>
-					<font size=-1>Es sind keine weiteren Berechtigungen eingetragen</font>
+					<font size=-1><img src="pictures/ausruf_small.gif" align="absmiddle" />&nbsp;<font size=-1><font size="-1"><?=_("Es sind keine weiteren Berechtigungen eingetragen")?></font>
 				</td>
 			</tr>
 			<? } ?>

@@ -114,29 +114,40 @@ function checkAvaiableResources($id) {
 
 
 /*****************************************************************************
-get_admin_user sucht mit angegebenem Ausruck in den Admins
-(wird von create_search_form verwendet)
+checkChangeOwnerOption checks, if I have the chance to change
+the owner of the given object
 /*****************************************************************************/
 
-function get_admin_user ($search_string='') {
-
-	$db=new DB_Seminar;
-
-	//In allen Admins suchen...
-	$db->query("SELECT user_id, Vorname, Nachname, username FROM auth_user_md5 WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR user_id = '$search_string' ORDER BY Nachname");
-	while ($db->next_record())
-			$my_objects[$db->f("user_id")]=array("name"=>$db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", "art"=>"Personen");
+function checkChangeOwnerOption ($resource_object_owner_id, $user_id='') {
+	global $user, $perm;
+	if (!$user_id)
+		$user_id = $user->id;
 	
-	return $my_objects;
+	//for root, it's quick!
+	if ($perm->have_perm("root"))
+		return TRUE;
+	
+	//load all my administrable objects
+	$my_objects=search_administrable_objects ($search_string='_');
+	
+	//ok, we as a user aren't interesting...
+	unset ($my_objects[$user_id]);
+	
+	if (sizeof ($my_objects)) {
+		if (($my_objects[$resource_object_owner_id]) || ($resource_object_owner_id == $user_id))
+			return TRUE;
+		else
+			return FALSE;
+	} else
+		return FALSE;
 }
 
 
 /*****************************************************************************
-get_my_objects gibt alle Objekte zurueck auf die der User 
-Zugriff hat (wird von create_search_form verwendet)
+search_administrable_objects searches in all the (for me!) adminstrable objects
 /*****************************************************************************/
 
-function get_objects ($search_string='', $user_id='') {
+function search_administrable_objects ($search_string='', $user_id='') {
 	global $user, $perm, $auth;
 
 	$db=new DB_Seminar;
@@ -229,26 +240,79 @@ function get_objects ($search_string='', $user_id='') {
 	return $my_objects;
 }
 
+/*****************************************************************************
+search_admin_user searches in all the admins
+/*****************************************************************************/
+
+function search_admin_user ($search_string='') {
+
+	$db=new DB_Seminar;
+
+	//In allen Admins suchen...
+	$db->query("SELECT user_id, Vorname, Nachname, username FROM auth_user_md5 WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR user_id = '$search_string' ORDER BY Nachname");
+	while ($db->next_record())
+			$my_objects[$db->f("user_id")]=array("name"=>$db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", "art"=>"Personen");
+	
+	return $my_objects;
+}
+
+
+/*****************************************************************************
+search_objects searches in all objects
+/*****************************************************************************/
+
+function search_objects ($search_string='', $user_id='') {
+	global $user, $perm, $auth;
+
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db3=new DB_Seminar;
+	
+	if (!$user_id)
+		$user_id=$user->id;
+		
+	//Alle Personen...
+	$db->query("SELECT user_id, Vorname, Nachname, username FROM auth_user_md5 WHERE username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR user_id = '$search_string' ORDER BY Nachname");
+	while ($db->next_record())
+		$my_objects[$db->f("user_id")]=array("name"=>$db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username").")", "art"=>"Personen");
+	//Alle Seminare...
+	$db->query("SELECT Seminar_id, Name FROM seminare WHERE Name LIKE '%$search_string%' OR Untertitel = '%$search_string%' OR Seminar_id = '$search_string' ORDER BY Name");
+	while ($db->next_record())
+		$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>"Veranstaltungen");
+	//Alle Institute...
+	$db->query("SELECT Institut_id, Name FROM Institute WHERE Name LIKE '%$search_string%' OR Institut_id = '$search_string' ORDER BY Name");
+	while ($db->next_record())
+		$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>"Institute");
+
+	return $my_objects;
+}
+
 
 /*****************************************************************************
 Searchform, zur Erzeugung der oft gebrauchten Personen-Auswahl
 u.a. Felder
 /*****************************************************************************/
 
-function create_search_form($name, $search_string='', $user_only=FALSE, $admins=FALSE) {
+function create_search_form($name, $search_string='', $user_only=FALSE, $administrable_objects_only=FALSE, $admins=FALSE, $allow_all=FALSE) {
 
 	if ($search_string) {
 		if ($user_only) //Nur in Personen suchen
 			if ($admins) //nur admins anzeigen
-				$my_objects=get_admin_user($search_string);
+				$my_objects=search_admin_user($search_string);
 			else //auch andere...
 				;
-		else //komplett in allen Objekten suchen, die ich verwalten darf
-				$my_objects=get_objects($search_string);
+		elseif ($administrable_objects_only)
+			$my_objects=search_administrable_objects($search_string);
+		else //komplett in allen Objekten suchen
+			$my_objects=search_objects($search_string);
 			
 		?>
 		<input type="HIDDEN" name="<? echo "search_string_".$name ?>" value="<? echo $search_string ?>" />
-		<select name="<? echo "submit_".$name ?>"><?
+		<select name="<? echo "submit_".$name ?>">
+		<?
+		if ($allow_all)
+			print "<option value=\"all\">Jeder</option>";
+
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
 				?>			
