@@ -739,14 +739,14 @@ if ($rechte) {
 		<td class="steel1" width="20%" align="center">
 		<input type="IMAGE" name="start_search" <?=makeButton("suchestarten", "src")?> border=0 value=" <?=_("Suche starten")?> "></td>
 	</tr></form></table>
-	
+	<?
 		if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1])))
 		{
 			include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 //			echo "<table width=\"99%\"><tr><td colspan=$colspan align=right class=\"steel1\"><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</td></tr></table>";
 			echo "<br><b>" . export_link($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</b>";
 		}
-		<?
+		
 	}
 	?>
 	<tr>
