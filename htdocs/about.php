@@ -238,7 +238,7 @@ if ($score->IsMyScore()) {
 	echo "&nbsp;<a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">" 
 		. _("Ihr Stud.IP-Score:") . " ".$score->ReturnMyScore()."<br>&nbsp;" 
 		. _("Ihr Rang:") . " ".$score->ReturnMyTitle()."</a></font><br />";
-} else {
+} elseif ($score->ReturnPublik()) {
 	$scoretmp = $score->GetScore(get_userid($username));
 	$title = $score->gettitel($scoretmp, $score->GetGender(get_userid($username)));
 	echo "&nbsp;<a href=\"score.php\"><font size=\"-1\">" 
