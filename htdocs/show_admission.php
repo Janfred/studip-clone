@@ -82,7 +82,7 @@ $db3=new DB_Seminar;
 				}
 				?>
 				</select>&nbsp;
-				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
+				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswÃ¤hlen"))?> type="image" border="0" style="vertical-align:middle;">
 				<br>&nbsp;
 			</div>
 		</td>
@@ -97,14 +97,14 @@ $db3=new DB_Seminar;
 			printf("<form action=\"%s\" method=\"post\">",$PHP_SELF);
 			printf("<table border=0 cellspacing=0 cellpadding=0 width=\"99%%\">");
 			if ($group == "group") {
-				my_info("Beachten Sie, dass einE TeilnehmerIn bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine Änderungen vor!");
-				my_info("Wollen Sie die ausgewählten Veranstaltungen gruppieren?");
+			  my_info("Beachten Sie, dass einE TeilnehmerIn bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine ÃƒÂ„nderungen vor!");
+			  my_info("Wollen Sie die ausgewÃƒâ‚¬hlten Veranstaltungen gruppieren?");
 			} else {
-				my_info("Beachten Sie, dass für bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine Änderungen vorgenommen werden.");
-				my_info("Wollen Sie die Gruppierung für die ausgewählte Gruppe auflösen?");
+			  my_info("Beachten Sie, dass fÃƒÅ’r bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine ÃƒÂ„nderungen vorgenommen werden.");
+			  my_info("Wollen Sie die Gruppierung fÃƒÅ’r die ausgewÃƒâ‚¬hlte Gruppe auflÃƒÂ¶sen?");
 			}
 			echo "<tr><td>\n";
-			printf("&nbsp;&nbsp;<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja2","src"),tooltip(_("Änderung durchführen")));
+			printf("&nbsp;&nbsp;<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja2","src"),tooltip(_("ÃƒÂ„nderung durchfÃƒÅ’hren")));
 			print("<input type=\"hidden\" name=\"real\" value=\"1\">\n");
 			printf("<input type=\"hidden\" name=\"group\" value=\"%s\">\n",$group);
 			printf("<input type=\"hidden\" name=\"institut_id\" value=\"%s\">\n",$institut_id);
@@ -114,7 +114,7 @@ $db3=new DB_Seminar;
 					printf("<input type=\"hidden\" name=\"gruppe[]\" value=\"%s\">\n",$element);
 				}
 			}
-			printf("<a href=\"show_admission.php?institut_id=%s\"><img %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\"></a>\n",$institut_id,makeButton("nein","src"),tooltip(_("Änderung NICHT durchfuehren")));
+			printf("<a href=\"show_admission.php?institut_id=%s\"><img %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\"></a>\n",$institut_id,makeButton("nein","src"),tooltip(_("Ã„nderung NICHT durchfuehren")));
 			print("</tr></td></table></form>");
 		} elseif ($ALLOW_GROUPING_SEMINARS) {
 			//execute order
@@ -134,10 +134,10 @@ $db3=new DB_Seminar;
 		}
 
 		if ((($institut_id == "all") || (!$institut_id)) && ($perm->have_perm("root")))
-			$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1 OR (admission_starttime <= ". time(). " AND admission_starttime > 0) ORDER BY admission_group DESC, start_time DESC, Name";	
-		else
-			$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1 OR (admission_starttime <= ".time()." AND admission_starttime > 1)) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
-		
+		$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1 OR (admission_starttime <= ". time(). " AND admission_starttime > 0) OR (admission_prelim = 1) ORDER BY admission_group DESC, start_time DESC, Name";  
+      else
++       $query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1 OR (admission_starttime <= ".time()." AND admission_starttime > 1) OR (admission_prelim = 1)) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
+
 		$db->query($query);
 		$tag = 0;
 		if ($db->nf()) {
@@ -151,14 +151,14 @@ $db3=new DB_Seminar;
 			echo "<th width=\"25%\">". _("Veranstaltung") ."</th>";
 			echo "<th width=\"8%\">". _("Teilnehmer") ."</th>";
 			echo "<th width=\"8%\">". _("Max. Teilnehmer") ."</th>";
-			echo "<th width=\"8%\">". _("Anmeldeliste") ."</th>";
+			echo "<th width=\"8%\">". _("Anmelde & Akzeptiertliste") ."</th>";
 			echo "<th width=\"8%\">". _("Warteliste") ."</th>";
 			echo "<th width=\"15%\">". _("Enddatum Kontingente") ."</th>";
 			echo "<th width=\"20%\">". _("Anmeldezeitraum") ."</th>";
 			echo "</tr>";
 		} elseif ($institut_id) {
 			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2>");
-			parse_msg ("info§Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen§", "§", "steel1",2, FALSE);
+			parse_msg ("infoÂ§Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten VeranstaltungenÂ§", "Â§", "steel1",2, FALSE);
 		}
 
 		if ($db->nf()) printf("<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
@@ -171,15 +171,15 @@ $db3=new DB_Seminar;
 			$quota = $db->f("admission_turnout");
 			$count2 = 0;
 			$count3 = 0;
-			$query2 = "SELECT status, count(*) AS count2 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='claiming' GROUP BY status";
+			$query2 = "SELECT status, count(*) AS count2 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND (status='claiming' OR status='accepted') GROUP BY status";
 			$db2->query($query2);
 			if ($db2->next_record()) {
 				$count2 = $db2->f("count2");
-			}
-			$query2 = "SELECT status, count(*) AS count2 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='awaiting' GROUP BY status";
+			} 
+			$query2 = "SELECT status, count(*) AS count3 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='awaiting' GROUP BY status";
 			$db2->query($query2);
 			if ($db2->next_record()) {
-				$count3 = $db2->f("count2");
+				$count3 = $db2->f("count3");
 			}
 			$datum = $db->f("admission_endtime");
 			/*if ($datum <1)
