@@ -123,7 +123,9 @@ if ($sem_portal["bereich"] != "all") {
 		}
 	}
 
-	$query = "SELECT count(*) AS count FROM seminare WHERE seminare.visible='1' AND seminare.status IN ('" . join("','", $_sem_status) . "')";
+	$query = "SELECT count(*) AS count FROM seminare WHERE "
+		. (!$GLOBALS['perm']->have_perm('root') ? "seminare.visible=1 AND" : "" ) 
+		. " seminare.status IN ('" . join("','", $_sem_status) . "')";
 	$db->query($query);
 	if ($db->next_record())
 		$anzahl_seminare_class = $db->f("count");
@@ -214,8 +216,9 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 	}
 	else 
 		$count = 5 * $mehr;
-	
-	$sql_where_query_seminare = "WHERE seminare.visible=1 "; // OK_VISIBLE
+	$sql_where_query_seminare = " WHERE 1 ";
+	if (!$GLOBALS['perm']->have_perm('root')) $sql_where_query_seminare .= " AND seminare.visible=1  "; 
+							
 	if ($sem_portal['bereich'] !="all")
 		$sql_where_query_seminare .= " AND seminare.status IN ('" . join("','", $_sem_status) . "')";
 	

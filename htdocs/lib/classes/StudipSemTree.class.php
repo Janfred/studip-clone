@@ -41,6 +41,8 @@ class StudipSemTree extends TreeAbstract {
 	var $sem_dates = array();
 	var $sem_number = null;
 	var $enable_lonely_sem = true;
+	var $visible_only = false;
+	
 	/**
 	* constructor
 	*
@@ -48,16 +50,19 @@ class StudipSemTree extends TreeAbstract {
 	* @access private
 	*/ 
 	function StudipSemTree($args) {
-		$semester=new SemesterData;
-		$all_semester = $semester->getAllSemesterData();
-		array_unshift($all_semester,0);
 		$this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
+		if (isset($args['visible_only'])){
+			$this->visible_only = $args['visible_only'];
+		}
 		if (isset($args['sem_number']) ){
 			$this->sem_number = $args['sem_number'];
 		}
 		parent::TreeAbstract(); //calling the baseclass constructor 
-		$this->sem_dates = $all_semester;
-		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
+		if (isset($args['build_index']) ){
+			$this->buildIndex();
+		}
+		
+		$this->sem_dates = SemesterData::GetSemesterArray();
 	}
 
 	/**
@@ -68,7 +73,8 @@ class StudipSemTree extends TreeAbstract {
 	*/
 	function init(){
 		parent::init();
-		$this->view->params[0] = (isset($this->sem_number)) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),b.seminar_id,NULL)"  : "b.seminar_id";
+		$this->view->params[0] = isset($this->sem_number) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),b.seminar_id,NULL)"  : "b.seminar_id";
+		$this->view->params[1] = $this->visible_only ? "visible=1" : "1";
 		$db = $this->view->get_query("view:SEM_TREE_GET_DATA");
 		$view = new DbView();
 		while ($db->next_record()){
@@ -86,11 +92,12 @@ class StudipSemTree extends TreeAbstract {
 	function getSemIds($item_id,$ids_from_kids = false){
 		if (!$this->tree_data[$item_id])
 			return false;
+		$this->view->params[0] = $this->visible_only ? "visible=1" : "1";
 		if ($ids_from_kids){
-			$this->view->params[0] = $this->getKidsKids($item_id);
+			$this->view->params[1] = $this->getKidsKids($item_id);
 		}
-		$this->view->params[0][] = $item_id;
-		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : "";
+		$this->view->params[1][] = $item_id;
+		$this->view->params[2] = (isset($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : "";
 		$ret = false;
 		$rs = $this->view->get_query("view:SEM_TREE_GET_SEMIDS");
 		while($rs->next_record()){
@@ -102,11 +109,12 @@ class StudipSemTree extends TreeAbstract {
 	function getSemData($item_id,$sem_data_from_kids = false){
 		if (!$this->tree_data[$item_id])
 			return false;
+		$this->view->params[0] = $this->visible_only ? "visible=1" : "1";
 		if ($sem_data_from_kids){
-			$this->view->params[0] = $this->getKidsKids($item_id);
+			$this->view->params[1] = $this->getKidsKids($item_id);
 		}
-		$this->view->params[0][] = $item_id;
-		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : "";
+		$this->view->params[1][] = $item_id;
+		$this->view->params[2] = (isset($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : "";
 		return new DbSnapshot($this->view->get_query("view:SEM_TREE_GET_SEMDATA"));
 	}
 	

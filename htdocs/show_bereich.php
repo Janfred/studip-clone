@@ -57,7 +57,7 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	$sem_browse_obj->sem_browse_data['level'] = $show_bereich_data['level'];
 	switch ($show_bereich_data['level']) {
 		case "sbb": 
-			$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+			$the_tree =& TreeAbstract::GetInstance("StudipSemTree", array('visible_only' => !$GLOBALS['perm']->have_perm('root')));
 			$bereich_typ = _("Studienbereich");
 			$head_text = "&nbsp; " . _("&Uuml;bersicht aller Veranstaltungen eines Studienbereichs");
 			$intro_text = sprintf(_("Alle Veranstaltungen, die dem Studienbereich: <br><b>%s</b><br> zugeordnet wurden."),
@@ -78,7 +78,9 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 			$db->next_record();
 			$head_text = "&nbsp;" . _("&Uuml;bersicht aller Veranstaltungen einer Einrichtung");
 			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"),$db->f("Name"));
-			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id) WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."' AND seminare.visible='1'");
+			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst 
+			LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id) 
+			WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."'" . (!$GLOBALS['perm']->have_perm('root') ? " AND seminare.visible='1'" : ""));
 
 			$sem_browse_obj->sem_browse_data['search_result'] = array();
 			while ($db->next_record()){

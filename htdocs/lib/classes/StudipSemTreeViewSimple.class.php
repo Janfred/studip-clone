@@ -45,13 +45,14 @@ class StudipSemTreeViewSimple {
 	*
 	* @access public
 	*/
-	function StudipSemTreeViewSimple($start_item_id = "root", $sem_number = false){
+	function StudipSemTreeViewSimple($start_item_id = "root", $sem_number = false, $visible_only = false){
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
 		$this->root_content = $GLOBALS['UNI_INFO'];
 		$args = null;
 		if ($sem_number !== false){
-			$args = array('sem_number' => $sem_number);
+			$args['sem_number'] = $sem_number;
 		}
+		$args['visible_only'] = $visible_only;
 		$this->tree =& TreeAbstract::GetInstance("StudipSemTree",$args);
 		$this->tree->enable_lonely_sem = false;
 		if (!$this->tree->tree_data[$this->start_item_id]){

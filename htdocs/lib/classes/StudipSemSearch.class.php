@@ -82,17 +82,14 @@ class StudipSemSearch {
 	var $search_scopes = array();
 	var $search_ranges = array();
 	
+	var $visible_only = false;
 	
-	
-	function StudipSemSearch($form_name = "search_sem", $auto_search = true){
-		$semester = new SemesterData;
-		$all_semester = $semester->getAllSemesterData();
-		array_unshift($all_semester,0);
+	function StudipSemSearch($form_name = "search_sem", $auto_search = true, $visible_only = false){
 		global $_REQUEST;
 		$this->view = new DbView();
 		$this->form_name = $form_name;
-		$this->sem_dates = $all_semester;
-		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
+		$this->sem_dates = SemesterData::GetSemesterArray();
+		$this->visible_only = $visible_only;
 		if(isset($_REQUEST[$form_name . "_do_search_x"]) || isset($_REQUEST[$form_name . "_send"])){
 			$this->search_button_clicked = true;
 			if ($auto_search){
@@ -306,9 +303,11 @@ class StudipSemSearch {
 			if(!is_object($this->sem_tree)){
 				$this->sem_tree =& TreeAbstract::GetInstance("StudipSemTree");
 			}
-			$this->view->params[0] = $this->sem_tree->getKidsKids($_REQUEST[$this->form_name . "_scope_choose"]);
-			$this->view->params[0][] = $_REQUEST[$this->form_name . "_scope_choose"];
-			$this->view->params[1] = $clause;
+			$this->view->params[0] = $this->visible_only ? "visible=1" : "1";
+
+			$this->view->params[1] = $this->sem_tree->getKidsKids($_REQUEST[$this->form_name . "_scope_choose"]);
+			$this->view->params[1][] = $_REQUEST[$this->form_name . "_scope_choose"];
+			$this->view->params[2] = $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_TREE_GET_SEMIDS"));
 			if ($snap->numRows){
 				$clause = " AND c.seminar_id IN('" . join("','",$snap->getRows("seminar_id")) ."')" . $clause;
@@ -322,8 +321,8 @@ class StudipSemSearch {
 			$range_object =& RangeTreeObject::GetInstance($_REQUEST[$this->form_name . "_range_choose"]);
 			$this->view->params[0] = $range_object->getAllObjectKids();
 			$this->view->params[0][] = $range_object->item_data['studip_object_id'];
-			$this->view->params[1] = $clause;
-			$this->view->params[2] = "";
+			$this->view->params[1] = $clause . ($this->visible_only ? " AND visible=1 " : "");
+			$this->view->params[2] = '';
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_INST_GET_SEM"));
 			if ($snap->numRows){
 				$clause = " AND c.seminar_id IN('" . join("','",$snap->getRows("Seminar_id")) ."')" . $clause;
@@ -335,10 +334,11 @@ class StudipSemSearch {
 		
 		
 		if (isset($_REQUEST[$this->form_name . "_lecturer"]) && strlen($_REQUEST[$this->form_name . "_lecturer"]) > 2){
-			$this->view->params[0] = "%".trim($_REQUEST[$this->form_name . "_lecturer"])."%";
+			$this->view->params[0] = $this->visible_only ? "visible=1" : "1";
 			$this->view->params[1] = "%".trim($_REQUEST[$this->form_name . "_lecturer"])."%";
 			$this->view->params[2] = "%".trim($_REQUEST[$this->form_name . "_lecturer"])."%";
-			$this->view->params[3] = $clause;
+			$this->view->params[3] = "%".trim($_REQUEST[$this->form_name . "_lecturer"])."%";
+			$this->view->params[4] = $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_SEARCH_LECTURER"));
 			$this->search_result = $snap;
 			$this->found_rows = $this->search_result->numRows;
@@ -352,7 +352,8 @@ class StudipSemSearch {
 		if ((isset($_REQUEST[$this->form_name . "_title"]) && strlen($_REQUEST[$this->form_name . "_title"]) > 2) ||
 			(isset($_REQUEST[$this->form_name . "_sub_title"]) && strlen($_REQUEST[$this->form_name . "_sub_title"]) > 2) ||
 			(isset($_REQUEST[$this->form_name . "_comment"]) && strlen($_REQUEST[$this->form_name . "_comment"]) > 2)){
-			$this->view->params[0] = ($_REQUEST[$this->form_name . "_title"]) ? " Name LIKE '%".trim($_REQUEST[$this->form_name . "_title"])."%' " : " ";
+			$this->view->params[0] = $this->visible_only ? " visible=1 AND" : "";
+			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_title"]) ? " Name LIKE '%".trim($_REQUEST[$this->form_name . "_title"])."%' " : " ";
 			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_title"] && $_REQUEST[$this->form_name . "_sub_title"]) ? $combination : " ";
 			$this->view->params[0] .= ($_REQUEST[$this->form_name . "_sub_title"]) ? " Untertitel LIKE '%".trim($_REQUEST[$this->form_name . "_sub_title"])."%' " : " ";
 			$this->view->params[0] .= (($_REQUEST[$this->form_name . "_title"] || $_REQUEST[$this->form_name . "_sub_title"]) && $_REQUEST[$this->form_name . "_comment"]) ? $combination : " ";
@@ -373,8 +374,9 @@ class StudipSemSearch {
 		}
 		
 		if (isset($_REQUEST[$this->form_name . "_scope"]) && strlen($_REQUEST[$this->form_name . "_scope"]) > 2){
-			$this->view->params[0] = "%".trim($_REQUEST[$this->form_name . "_scope"])."%";
-			$this->view->params[1] = $and_clause . $clause;
+			$this->view->params[0] = $this->visible_only ? "visible=1" : "1";
+			$this->view->params[1] = "%".trim($_REQUEST[$this->form_name . "_scope"])."%";
+			$this->view->params[2] = $and_clause . $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_TREE_SEARCH_SEM"));
 			if ($this->found_rows === false){
 				$this->search_result = $snap;

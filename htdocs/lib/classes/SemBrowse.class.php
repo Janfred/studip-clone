@@ -40,7 +40,7 @@ class SemBrowse {
 			$this->sem_browse_data[$this->persistent_fields[$i]] = $_REQUEST[$this->persistent_fields[$i]];
 			}
 		}
-		$this->search_obj = new StudipSemSearch("search_sem", false);
+		$this->search_obj = new StudipSemSearch("search_sem", false, !$GLOBALS['perm']->have_perm('root'));
 		$this->search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"), 'comment' => _("Kommentar"));
 		$this->search_obj->search_fields['type']['class'] = $this->sem_browse_data['show_class'];
 		
@@ -81,7 +81,7 @@ class SemBrowse {
 			if (!$this->sem_browse_data['start_item_id']){
 				$this->sem_browse_data['start_item_id'] = "root";
 			}
-			$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"], $this->sem_number);
+			$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"], $this->sem_number, !$GLOBALS['perm']->have_perm('root'));
 			$this->sem_browse_data['cmd'] = "qs";
 			if ($_REQUEST['cmd'] != "show_sem_range" && $level_change && !$this->search_obj->search_button_clicked ){
 				$this->get_sem_range($this->sem_browse_data["start_item_id"], false);
@@ -96,7 +96,7 @@ class SemBrowse {
 				$this->sem_browse_data['start_item_id'] = "root";
 			}
 			$sem_status = (is_array($this->sem_browse_data['sem_status'])) ? $this->sem_browse_data['sem_status'] : false;
-			$this->range_tree = new StudipSemRangeTreeViewSimple($sem_browse_data["start_item_id"],$this->sem_number,$sem_status);
+			$this->range_tree = new StudipSemRangeTreeViewSimple($sem_browse_data["start_item_id"],$this->sem_number,$sem_status, !$GLOBALS['perm']->have_perm('root'));
 			$this->sem_browse_data['cmd'] = "qs";
 			if ($_REQUEST['cmd'] != "show_sem_range_tree" && $level_change && !$this->search_obj->search_button_clicked ){
 				$this->get_sem_range_tree($this->sem_browse_data["start_item_id"], false);
@@ -151,7 +151,9 @@ class SemBrowse {
 	}
 	
 	function get_sem_class(){
-		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE seminare.visible=1 AND seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
+		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE "
+							. (!$GLOBALS['perm']->have_perm('root') ? "seminare.visible=1 AND" : "" ) 
+							. " seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
 		$snap = new DbSnapshot($db);
 		$sem_ids = $snap->getRows("Seminar_id");
 		if (is_array($sem_ids)){
@@ -178,7 +180,8 @@ class SemBrowse {
 		$inst_ids[] = $range_object->item_data['studip_object_id'];
 		$db_view = new DbView();
 		$db_view->params[0] = $inst_ids;
-		$db_view->params[1] = (is_array($this->sem_browse_data['sem_status'])) ? " AND c.status IN('" . join("','",$this->sem_browse_data['sem_status']) ."')" : "";
+		$db_view->params[1] = $GLOBALS['perm']->have_perm('root') ? '' : ' AND visible=1';
+		$db_view->params[1] .= (is_array($this->sem_browse_data['sem_status'])) ? " AND c.status IN('" . join("','",$this->sem_browse_data['sem_status']) ."')" : "";
 		$db_view->params[2] = (is_array($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : "";
 		$db_snap = new DbSnapshot($db_view->get_query("view:SEM_INST_GET_SEM"));
 		if ($db_snap->numRows){
@@ -332,7 +335,7 @@ class SemBrowse {
 				$the_tree->buildIndex();
 			}
 					
-			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name, seminare.metadata_dates 
+			$query = ("SELECT seminare.Seminar_id, seminare.status, IF(visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates 
 				, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
 				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 

@@ -50,9 +50,6 @@ class StudipRangeTree extends TreeAbstract {
 	* @access private
 	*/ 
 	function StudipRangeTree($args) {
-		$semester = new SemesterData;
-		$all_semester = $semester->getAllSemesterData();
-		array_unshift($all_semester,0);
 		$this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
 		$this->studip_objects['inst'] = array('pk' => 'Institut_id', 'table' => 'Institute');
 		$this->studip_objects['fak'] = array('pk' => 'Institut_id', 'table' => 'Institute');
@@ -62,9 +59,9 @@ class StudipRangeTree extends TreeAbstract {
 		if (isset($args['sem_status']) ){
 			$this->sem_status = $args['sem_status'];
 		}
+		$this->visible_only = $args['visible_only'];
 		parent::TreeAbstract(); //calling the baseclass constructor 
-		$this->sem_dates = $all_semester;
-		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
+		$this->sem_dates = SemesterData::GetSemesterArray();
 	}
 
 	/**
@@ -78,6 +75,7 @@ class StudipRangeTree extends TreeAbstract {
 		$this->tree_data['root']['studip_object_id'] = 'root';
 		$this->view->params[0] = (isset($this->sem_number)) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),d.Seminar_id,NULL)"  : "d.Seminar_id";
 		$this->view->params[1] = (isset($this->sem_status)) ? " AND d.status IN('" . join("','", $this->sem_status) . "')" : " ";
+		$this->view->params[1] .= $this->visible_only ? " AND visible=1 " : "";
 		$db = $this->view->get_query("view:TREE_GET_DATA_WITH_SEM");
 		while ($db->next_record()){
 			$item_name = $db->f("name");

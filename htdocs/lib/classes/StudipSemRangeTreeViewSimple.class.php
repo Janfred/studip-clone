@@ -45,7 +45,7 @@ class StudipSemRangeTreeViewSimple {
 	*
 	* @access public
 	*/
-	function StudipSemRangeTreeViewSimple($start_item_id = "root", $sem_number = false, $sem_status = false){
+	function StudipSemRangeTreeViewSimple($start_item_id = "root", $sem_number = false, $sem_status = false, $visible_only = false){
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
 		$this->root_content = $GLOBALS['UNI_INFO'];
 		$args = null;
@@ -55,6 +55,7 @@ class StudipSemRangeTreeViewSimple {
 		if ($sem_status !== false){
 			$args['sem_status'] =  $sem_status;
 		}
+		$args['visible_only'] = $visible_only;
 		$this->tree =& TreeAbstract::GetInstance("StudipRangeTree",$args);
 		if (!$this->tree->tree_data[$this->start_item_id]){
 			$this->start_item_id = "root";
