@@ -548,7 +548,7 @@ else{
 		echo "<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"exc_year\" value=\"JJJJ\">";
 		echo ($err["exc_time"] ? $error_sign : "");
 		echo '&nbsp;&nbsp;';
-		echo "<input type=\"image\" src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/add_right.gif\"";
+		echo "<input type=\"image\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/add_right.gif\"";
 		echo " name=\"add_exc\"" . tooltip(_("Ausnahme hinzufügen")) . ">";
 		echo "&nbsp; &nbsp;</font></td><td><font size=\"-1\">\n";
 		echo "<select name=\"exc_delete[]\" size=\"4\" multiple=\"multiple\" style=\"width:170px; vertical-align:middle;\">\n";
@@ -558,7 +558,7 @@ else{
 		}
 		echo "</select>\n</font></td></tr>\n";
 		echo "<tr><td>&nbsp;</td>\n<td><input style=\"vertical-align:middle;\" type=\"image\" ";
-		echo " src=\"$CANONICAL_RELATIVE_PATH_STUDIP/pictures/trash.gif\" name=\"del_exc\"";
+		echo " src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/trash.gif\" name=\"del_exc\"";
 		echo tooltip(_("ausgewählte Ausnahme löschen")) . ">\n";
 		echo '<font size="-1">' . _("ausgew&auml;hlte l&ouml;schen") . '</font>';
 		echo "</td></tr></table>\n</td>\n</tr>\n";
