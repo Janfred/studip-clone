@@ -72,7 +72,7 @@ if ( (! isset($_REQUEST)) && (! isset($_GET)) ) {
 } // end if
 
 //global variables
-$_integrity_plugins = array("User","Seminar","Institut","Fakultaet","Archiv","Studiengang","Fach","Bereich");
+$_integrity_plugins = array("User","Seminar","Institut","Fakultaet","Archiv","Studiengang","Fach","Bereich","Termin");
 $_csw = new cssClassSwitcher();
 
 ?>
@@ -93,7 +93,7 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
 		$result = $plugin_obj->doCheck($_REQUEST['checkid']);
 		$anzahl = $result->num_rows();
 		$msg = "info§Sie beabsichtigen $anzahl Datens&auml;tze der Tabelle <b>".$plugin_obj->getCheckDetailTable($_REQUEST['checkid'])."</b> zu l&ouml;schen.<br>"
-		."Dieser Schritt kann <u><span style=\"font-color:red\">nicht</span></u> r&uuml;ckg&auml;ngig gemacht werden! Sind sie sicher ? <br />\n"
+		."Dieser Schritt kann <u>nicht</u> r&uuml;ckg&auml;ngig gemacht werden! Sind sie sicher ? <br />\n"
 		."<br><a href=\"$PHP_SELF?plugin={$_REQUEST['plugin']}&cmd=delete&checkid={$_REQUEST['checkid']}\"><img src=\"pictures/buttons/ja2-button.gif\" border=0></a>&nbsp;"
 		."<a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0></a>\n";
 		?><table border="0" width="80%" cellpadding="2" cellspacing="0" class="steel1">
