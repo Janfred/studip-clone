@@ -493,11 +493,11 @@ if ($GLOBALS["RESOURCES_ENABLE"]) {
 			);
 }
 
-//show help for ILIAS-interface, if available
+//show help for export functions, if available
 if ($GLOBALS["EXPORT_ENABLE"]) {
 	$pages[] = array	(	"name" => _("Export von Daten"),
 				"text" => _("Exportieren von Daten aus Stud.IP in verschiedenen Formaten"),
-				"perm" =>	"user",
+				"perm" =>	"tutor",
 				"kategorien" => array	(	
 																array	(	"name" => _("Einführung"),
 																				"text" => _("Was ist das Export-Modul?"),
