@@ -1,4 +1,17 @@
 <?
+/**
+* Account-Migration from Stud.IP.
+* 
+* This file calls functions to create ILIAS-Useraccounts 
+* and to connect them with Stud.IP-Accounts.
+* 
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		elearning_modules
+* @module		account_migration
+* @package		ELearning
+*/
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // migration2studip.php

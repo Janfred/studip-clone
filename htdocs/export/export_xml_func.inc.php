@@ -7,7 +7,7 @@
 * @author		Arne Schroeder <schroeder@data.quest.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	export_modules
+* @modulegroup		export_modules
 * @module		export_xml_functions
 * @package		Export
 */

@@ -1,4 +1,15 @@
 <?
+/**
+* Config file for xml export
+* 
+*
+* @author		Arne Schroeder <schroeder@data.quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup		export_modules
+* @module		export_xml_vars
+* @package		Export
+*/
 
 // Variablen mit den XML-Bezeichnern
 // "TABELLENSPALTE" =>		"XML-BEZEICHNER"
