@@ -60,20 +60,29 @@ IF (($SessSemName[1] =="") && (!isset($sem_id)))
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
 	}
-//wenn externer Aufruf, nachfragen, ob das Seminar abonniert werden soll
+	
+//wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
+if (($SessSemName[1] <>"") && (!isset($sem_id)))
+	{
+	include "links1.php";
+
+	$sem_id=$SessSemName[1];
+	
+	}
+
+// nachfragen, ob das Seminar abonniert werden soll
 if (($sem_id) && (!$perm->have_perm("admin"))) {
 	if ($perm->have_perm("user")) { //Add lecture only if logged in	
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
+		$db->next_record();
 		if (!$db->num_rows()) {
 			$db->query("SELECT status FROM admission_seminar_user WHERE user_id ='$user->id' AND seminar_id = '$sem_id'");
 			if (!$db->num_rows())
 				$abo_msg="Tragen Sie sich hier ein";
+		} else {
+			if ($db->f("status") == "user") {
+				$abo_msg="Schrebrechte aktivieren";
 			}
-	 else {
-		    $db->next_record();
-		    if ($db->f("status") == "user") {
-			$abo_msg="Schrebrechte aktivieren";
-	    		}
 		}
 	}
 }
@@ -81,24 +90,15 @@ if (($sem_id) && (!$perm->have_perm("admin"))) {
 if ($send_from_search)
     	$back_msg.="Zur&uuml;ck zur letzten Auswahl";
 
-
-//wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
-elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
-	{
-	include "links1.php";
-
-	$sem_id=$SessSemName[1];
+//Namen holen
+$db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
+$db2->next_record();
 	
-	}
-	//Namen holen
-	$db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
-	$db2->next_record();
-	
-	//In dieser Datei nehmen wir die Art direkt, nicht aus Session, da die Datei auch ausserhalb von Seminaren aufgerufen wird
-	if ($SEM_TYPE[$db2->f("status")]["name"] == $SEM_TYPE_MISC_NAME) //Typ fuer Sonstiges
-		$art = "Veranstaltung"; 
-	else
-		$art = $SEM_TYPE[$db2->f("status")]["name"];
+//In dieser Datei nehmen wir die Art direkt, nicht aus Session, da die Datei auch ausserhalb von Seminaren aufgerufen wird
+if ($SEM_TYPE[$db2->f("status")]["name"] == $SEM_TYPE_MISC_NAME) //Typ fuer Sonstiges
+	$art = "Veranstaltung"; 
+else
+	$art = $SEM_TYPE[$db2->f("status")]["name"];
 
 	
 	?>
@@ -499,18 +499,27 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="24%" valign="top">
 				<?
+				if ($db2->f("admission_turnout"))
+					printf ("<font size=-1><b>%s Teilnehmerzahl:&nbsp;</b></font><font size=-1>%s </font>", ($db2->f("admission_type")) ? "max. " : "erw.", $db2->f("admission_turnout"));
+				else
+					print "&nbsp; ";
+				?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="24%" valign="top">
+				<?
 				$db3->query("SELECT count(*) as anzahl FROM px_topics WHERE Seminar_id = '$sem_id'");
 				$db3->next_record();
 				printf ("<font size=-1><b>Postings:&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anzahl")) ? $db3->f("anzahl") :"keine");
 				?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
+				<td class="<? echo $cssSw->getClass() ?>" width="48%" valign="top">
 				<?
 				$db3->query("SELECT count(*) as anzahl FROM dokumente WHERE Seminar_id = '$sem_id'");
 				$db3->next_record();
 				printf ("<font size=-1><b>Dokumente:&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anzahl")) ? $db3->f("anzahl") : "keine");
 				?>
 				</td>
+				
 			</tr>
 		</table>
 		<br />&nbsp; 
