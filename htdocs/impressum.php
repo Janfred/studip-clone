@@ -65,7 +65,7 @@ function write_toplist_person($rubrik,$query) {
 		echo "<tr><td class=links1>&nbsp; $rubrik</td></tr><tr><td class=steel1><ol type='1' start='1'>";
 		while ($db->next_record() ) {
 			echo"<font size=2><li><a href='about.php?username=".$db->f("username")."'>";
-			echo "".htmlReady(get_fullname($db->f("user_id")))."</a>";
+			echo "".htmlReady($db->f("full_name"))."</a>";
 			if ($rubrik== _("zuletzt angelegt") AND $db->f("count") >0) {
 				$count =  date("d.m.Y H:i:s",$db->f("count"));
 			} else
@@ -202,7 +202,7 @@ if ($view=="statistik") {?>
 			write_toplist(_("die meisten Materialien (Dokumente)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM dokumente a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			$week = time()-1209600;
 			write_toplist(_("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM px_topics a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) AND a.mkdate > $week GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
-			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, views as count FROM object_views LEFT JOIN auth_user_md5 ON(object_id=user_id) WHERE object_id=user_id ORDER BY count DESC LIMIT $count");
+			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, views as count, " . $_fullname_sql['full'] . " AS full_name FROM object_views INNER JOIN auth_user_md5 ON(object_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) ORDER BY count DESC LIMIT $count");
 			?>	
 			</table>
 		</blockquote>
@@ -284,7 +284,7 @@ if ($view=="statistik") {?>
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from literatur");
+			$db->query("SELECT count(*) from lit_list");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Literaturlisten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
