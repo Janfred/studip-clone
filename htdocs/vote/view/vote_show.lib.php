@@ -454,7 +454,7 @@ function createStoppedVoteHeader (&$vote, $evalDB = NULL) {
     $date           = $vote->getChangedate ();
     $authorName     = get_fullname ($vote->getAuthorID ());
     $authorUsername = get_username ($vote->getAuthorID ());
-    $title          = formatReady ($vote->getTitle ());
+    $title          = htmlReady ($vote->getTitle ());
     if (empty ($evalDB))
       $number       = $vote->voteDB->getNumberUserVoted ();
     else

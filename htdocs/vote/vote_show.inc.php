@@ -53,6 +53,12 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       return;
    }  
    
+   if ($perm->have_studip_perm ("tutor", $rangeID) ||
+       get_username($userID) == $rangeID)
+      $haveFullPerm = true;
+   else
+      $haveFullPerm = false;
+   
    $debug = "";
    /* ---------------------------------------------------------------------- */
 
@@ -79,13 +85,14 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
             _("Datenbankfehler beim Auslesen der EvaluationsIDs."));
    }
    
-   if ($userID == $rangeID2) {
+   
+   if ($haveFullPerm) {
      $stoppedEvals = $evalDB->getEvaluationIDs ($rangeID2, EVAL_STATE_STOPPED);
      if ($evalDB->isError ()) {
          echo createErrorReport ($evalDB, 
          _("Datenbankfehler beim Auslesen der EvaluationsIDs."));
      }
-  }
+   }
    
    if (empty ($activeVotes) && 
        empty ($stoppedVotes) &&
@@ -131,7 +138,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    foreach ($_GET as $key=>$item ) {
       $debug .= "$key: $item\n";
    }
-
+   
+   
   /* Show all active evals ------------------------------------------------ */
    foreach ($activeEvals as $evalID) {
       $eval = &new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
@@ -140,13 +148,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          echo createErrorReport ($vote, _("Fehler beim Einlesen der Evaluation"));
       }
       
-      $rangePerm = NO;
-      //while ($rangeID = $eval->getNextRangeID ()) {
-         if ($perm->have_studip_perm ("tutor", $rangeID))
-            $rangePerm = YES;
-      //}
-      $haveFullPerm = $rangePerm || ($userID == $eval->getAuthorID());
-
+      $haveFullPerm = $haveFullPerm || ($userID == $eval->getAuthorID());
 
       /* Get post and get-variables ---------------------------------------- */
       $formID = $_REQUEST["voteformID"];
@@ -322,7 +324,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
 
    /* Show all stopped Votes ----------------------------------------------- */
-   if (!empty ($stoppedVotes) || (!empty ($stoppedEvals)) && $haveFullPerm) {
+   if (!empty ($stoppedVotes) || (!empty ($stoppedEvals) && $haveFullPerm)) {
 
       $openStoppedVotes = $_GET["openStoppedVotes"];
       if (!isset($openStoppedVotes))
@@ -351,7 +353,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
             $tr = new HTML ("tr");
             $td = new HTML ("td");
             $td->addAttr ("align", "center");
-            $td->addContent (EvalShow::createOverviewButton ($rangeID2));
+            $td->addContent (EvalShow::createOverviewButton ($rangeID2, $evalID));
             $td->addContent (EvalShow::createContinueButton ($eval));
             $td->addContent (EvalShow::createDeleteButton ($eval));
             $td->addContent (EvalShow::createExportButton ($eval));
@@ -388,7 +390,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    
    /* Show text if no vote is available ------------------------------------ */
      if (empty ($activeVotes) AND empty ($stoppedVotes) AND
-       empty ($activeEvals) 
+       empty ($activeEvals) AND (empty ($stoppedEvals) && $haveFullPerm)
       ) {
       echo VOTE_MESSAGE_EMPTY;
    }
