@@ -95,9 +95,9 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 	{
 		$xml_export_text = _("Die Daten wurden erfolgreich exportiert.");
 		if ($object_counter == 1)
-			$export_msg = sprintf(_("%s Objekt wurde verarbeitet."), $object_counter);
+			$export_msg = sprintf(_("%s Objekt wurde verarbeitet.") . " ", $object_counter);
 		else
-			$export_msg = sprintf(_("%s Objekte wurden verarbeitet."), $object_counter);
+			$export_msg = sprintf(_("%s Objekte wurden verarbeitet.") . " ", $object_counter);
 
 		$export_info = _("Die Daten wurden in eine XML-Datei exportiert. <br>Wenn Sie die Datei in ein anderes Format konvertieren wollen, klicken Sie auf weiter.<br>Um die Datei herunterzuladen, klicken Sie auf den Dateinamen.");
 
