@@ -412,26 +412,23 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan=2>
+		<td class="blank" colspan="2">
 		&nbsp; 
  		</td>
  	</tr>
  	<tr>
-		<td class="blank">
+		<td class="blank" valign="top">
 			<table width="100%" border=0 cellpadding=0 cellspacing=0>
+				<?
+				if ($result) {
+					parse_msg($result);
+					print "<a href=\"anchor\"></a>";
+				}
+				?>
 				<tr>
 					<td valign="top">
-						<table width="100%" border=0 cellpadding=0 cellspacing=0>
-							<?
-							if ($result) {
-								parse_msg($result);
-								print "<a href=\"anchor\"></a>";
-							}
-							?>
-							<tr>
-								<td>
-									<blockquote>
-	<?
+						<blockquote>
+<?
 	//Anzeige, wenn wir aus dem Seminarassistenten kommen
 	$term_data=unserialize($db->f("metadata_dates"));
 	$term_data["start_time"]=$db->f("start_time");
@@ -442,6 +439,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		if (get_semester($admin_dates_data["range_id"])) {
 			echo "<br /><b>" . _("Semester:") . "</b> ", get_semester($admin_dates_data["range_id"]);
 		}
+		echo "</font>";
 	} else {
 		print("<font size=\"-1\">" . _("<b>Typ:</b> regelm&auml;&szlig;ige Veranstaltung"));
 		if (view_turnus($admin_dates_data["range_id"]))
@@ -501,11 +499,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		echo "</font>";
 		}
 	} ?>
-									</form>
-									</blockquote>
-									</td>
-								</tr>
-							</table>
+								</form>
+							</blockquote>
 						</td>
 					</tr>
 				</table>
@@ -513,16 +508,16 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			<?
 			if ($infobox) {
 			?>
-			<td class="blank" width="270" align="right" valign="top">
-				<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "./locale/$_language_path/LC_PICTURES/hands07.jpg" : "pictures/schedules.jpg"); ?>
-				<br />
+			<td class="blank" width="1%" valign="top">
+								<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "./locale/$_language_path/LC_PICTURES/hands07.jpg" : "pictures/schedules.jpg"); ?>
+				<img src="pictures/blank.gif" width="270" height="1"/>
 			</td>
 			<?
 			}
 			?>
 		</tr>
 		<tr>
-			<td class="blank" colspan=2>
+			<td class="blank" colspan="2">
 	<?
 	
 	 //Vorhandene Termine holen und anzeigen und nach Bedarf bearbeiten
@@ -571,7 +566,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		</td>
 		</tr>
 	</table>
-	<table border="0" cellpadding="0" cellspacing="2" width="99%" align="center">
+
 	<?	
 	
 	//Wenn insert gesetzt, neuen Anlegen...
