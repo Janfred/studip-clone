@@ -28,9 +28,9 @@ class AssignObject {
 	var $resource_id;			//resource_id des verknuepten Objects;
 	var $assign_user_id;		//id des verknuepten Benutzers der Ressource
 	var $user_free_name;		//freier Name fuer Belegung
-	var $begin_ts;				//Timestamp der Startzeit
-	var $end_ts;				//Timestamp der Endzeit
-	var $repeat_end_ts;		//Timestamp der Endzeit der Belegung (expire)
+	var $begin;				//Timestamp der Startzeit
+	var $end;					//Timestamp der Endzeit
+	var $repeat_end;			//Timestamp der Endzeit der Belegung (expire)
 	var $repeat_quantity;		//Anzahl der Wiederholungen
 	var $repeat_interval;		//Intervall der Wiederholungen
 	var $repeat_month_of_year ;	//Wiederholungen an bestimmten Monat des Jahres
@@ -41,9 +41,13 @@ class AssignObject {
 	var $repeat_week;			//najan
 
 	//Konstruktor
-	function AssignObject($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin_ts='', $end_ts='', 
-						$repeat_end_ts='', $repeat_quantity='', $repeat_interval='', $repeat_month_of_year='', $repeat_day_of_month='', 
+	function AssignObject($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin='', $end='', 
+						$repeat_end='', $repeat_quantity='', $repeat_interval='', $repeat_month_of_year='', $repeat_day_of_month='', 
 						$repeat_month='', $repeat_week_of_month='', $repeat_day_of_week='', $repeat_week='') {
+
+	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
+	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+
 		global $user;
 		
 		$this->user_id = $user->id;
@@ -57,9 +61,9 @@ class AssignObject {
 			$this->resource_id = func_get_arg(1);
 			$this->assign_user_id = func_get_arg(2);
 			$this->user_free_name = func_get_arg(3);
-			$this->begin_ts = func_get_arg(4);
-			$this->end_ts = func_get_arg(5);
-			$this->repeat_end_ts = func_get_arg(6);
+			$this->begin = func_get_arg(4);
+			$this->end = func_get_arg(5);
+			$this->repeat_end = func_get_arg(6);
 			$this->repeat_quantity = func_get_arg(7);
 			$this->repeat_interval = func_get_arg(8);
 			$this->repeat_month_of_year  = func_get_arg(9);
@@ -70,6 +74,7 @@ class AssignObject {
 			$this->repeat_week = func_get_arg(14);
 			if (!$this->id)
 				$this->id=$this->createId();
+			$this->isNewObject =TRUE;
 		} 	
 	}
 
@@ -164,24 +169,24 @@ class AssignObject {
 	}
 
 	function getBegin() {
-		if (!$this->begin_ts)
+		if (!$this->begin)
 			return time();
 		else
-			return $this->begin_ts;
+			return $this->begin;
 	}
 
 	function getEnd() {
-		if (!$this->end_ts)
+		if (!$this->end)
 			return time()+3600;
 		else
-			return $this->end_ts;
+			return $this->end;
 	}
 
 	function getRepeatEnd() {
-		if (!$this->repeat_end_ts)
+		if (!$this->repeat_end)
 			return time();
 		else
-			return $this->repeat_end_ts;
+			return $this->repeat_end;
 	}
 
 	function getRepeatQuantity() {
@@ -231,10 +236,21 @@ class AssignObject {
 		global $SEMESTER;
 
 		foreach ($SEMESTER as $a)	
-			if (($this->begin_ts >= $a["beginn"]) &&($this->begin_ts <= $a["ende"]))
-				if ($this->repeat_end_ts==$a["vorles_ende"])
+			if (($this->begin >= $a["beginn"]) &&($this->begin <= $a["ende"]))
+				if ($this->repeat_end==$a["vorles_ende"])
 					return true;
 		return false;
+	}
+	
+	function checkOverlap() {
+		list_restore_assign($this, $this->resource_id);
+		if ($this->isNewObject)
+			create_assigns($this, $this);
+		if($this->events)
+			usort($this->events,"cmp_assign_events");
+		
+		foreach ($this->events as $key=>$val) {
+		}
 	}
 
 	function setResourceId($value) {
@@ -248,17 +264,17 @@ class AssignObject {
 	}
 
 	function setBegin($value) {
-		$this->begin_ts=$value;
+		$this->begin=$value;
 		$this->chng_flag=TRUE;
 	}
 
 	function setEnd($value) {
-		$this->end_ts=$value;
+		$this->end=$value;
 		$this->chng_flag=TRUE;
 	}
 
 	function setRepeatEnd() {
-		$this->repeat_end_ts=$value;
+		$this->repeat_end=$value;
 		$this->chng_flag=TRUE;
 	}
 
@@ -304,9 +320,9 @@ class AssignObject {
 			$this->resource_id = $this->db->f("resource_id");
 			$this->assign_user_id = $this->db->f("assign_user_id");
 			$this->user_free_name = $this->db->f("user_free_name");
-			$this->begin_ts =$this->db->f("begin");
-			$this->end_ts = $this->db->f("end");
-			$this->repeat_end_ts = $this->db->f("repeat_end");
+			$this->begin =$this->db->f("begin");
+			$this->end = $this->db->f("end");
+			$this->repeat_end = $this->db->f("repeat_end");
 			$this->repeat_quantity = $this->db->f("repeat_quantity");
 			$this->repeat_interval = $this->db->f("repeat_interval");
 			$this->repeat_month_of_year  =$this->db->f("repeat_month_of_year");
@@ -325,25 +341,26 @@ class AssignObject {
 		if ((($this->chng_flag) || ($create)) && (($this->assign_user_id) || ($this->user_free_name))) {
 			$chdate = time();
 			$mkdate = time();
-			if($create)
+			if($create) {
+				$this->checkOverlap();
 				$query = sprintf("INSERT INTO resources_assign SET assign_id='%s', resource_id='%s', " 
 					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
 					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s', "
 					."mkdate='%s', chdate='%s' "
-							 , $this->id, $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin_ts
-							 , $this->end_ts, $this->repeat_end_ts, $this->repeat_quantity, $this->repeat_interval
+							 , $this->id, $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin
+							 , $this->end, $this->repeat_end, $this->repeat_quantity, $this->repeat_interval
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
 							 , $mkdate, $chdate);
-			else
+			}else
 				$query = sprintf("UPDATE resources_assign SET resource_id='%s', " 
 					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
 					."repeat_month='%s', repeat_week_of_month='%s', repeat_day_of_week='%s', repeat_week='%s', "
 					."chdate='%s' WHERE assign_id='%s'"
-							 , $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin_ts 
-							 , $this->end_ts, $this->repeat_end_ts, $this->repeat_quantity, $this->repeat_interval
+							 , $this->resource_id, $this->assign_user_id, $this->user_free_name, $this->begin 
+							 , $this->end, $this->repeat_end, $this->repeat_quantity, $this->repeat_interval
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
 							 , $chdate, $this->id);
@@ -373,18 +390,18 @@ class AssignEvent {
 	var $resource_id;			//resource_id from mother AssignObject
 	var $assign_user_id;		//user_id of mother AssignObject
 	var $user_free_name;		//free owner-name of mother AssignObject
-	var $begin_ts;				//begin timestamp
-	var $end_ts;				//end timestamp
+	var $begin;				//begin timestamp
+	var $end;					//end timestamp
 
 	//Konstruktor
-	function AssignEvent($assign_id, $begin_ts, $end_ts, $resource_id, $assign_user_id, $user_free_name='') {
+	function AssignEvent($assign_id, $begin, $end, $resource_id, $assign_user_id, $user_free_name='') {
 		global $user;
 		$this->user_id = $user->id;
 		$this->db=new DB_Seminar;
 
 		$this->id=$assign_id;
-		$this->begin_ts=$begin_ts;
-		$this->end_ts=$end_ts;
+		$this->begin=$begin_ts;
+		$this->end=$end;
 		$this->resource_id=$resource_id;
 		$this->assign_user_id=$assign_user_id;
 		$this->user_free_name=$user_free_name;
@@ -420,17 +437,17 @@ class AssignEvent {
 	}
 
 	function getBegin() {
-		if (!$this->begin_ts)
+		if (!$this->begin)
 			return time();
 		else
-			return $this->begin_ts;
+			return $this->begin;
 	}
 
 	function getEnd() {
-		if (!$this->end_ts)
+		if (!$this->end)
 			return time()+3600;
 		else
-			return $this->end_ts;
+			return $this->end;
 	}
 
 	function store($create='') {
@@ -449,7 +466,7 @@ AssignEventList, creates a event-list for an assignobject
 
 class AssignEventList{
 
-	var $start;	// starttime as unix-timestamp
+	var $begin;	// starttime as unix-timestamp
 	var $end;		// endtime as unix-timestamp
 	var $assign;	// ressources-assignements (Object[])
 	var $range_id;		// range_id (String)
@@ -457,20 +474,20 @@ class AssignEventList{
 	
 	// Konstruktor
 	// if activated without timestamps, we take the current semester
-	function AssignEventList($start = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
+	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
 	 	global $RELATIVE_PATH_RESOURCES, $SEMESTER, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
 	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	 	
 	 	
-		if (!$start)
-			$start = $SEMESTER[$SEM_ID]["beginn"];
+		if (!$begin)
+			$begin = $SEMESTER[$SEM_ID]["beginn"];
 		if (!$end )
 			$end = $SEMESTER[$SEM_ID]["ende"];
 		
 		
-		$this->start = $start;
+		$this->begin = $begin;
 		$this->end = $end;
 		$this->resource_id = $resource_id;
 		$this->range_id = $range_id;
@@ -507,7 +524,7 @@ class AssignEventList{
 	
 	// private
 	function restore(){
-		list_restore_assign($this);
+		list_restore_assign($this, $this->resource_id);
 	}
 	
 	// public
