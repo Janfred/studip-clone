@@ -145,7 +145,8 @@ if (is_array($n_buddies))
 	else { // nutzer hat prinzipiell buddies
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0>\n";
-		echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\"><b>Name</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>letztes Lebenszeichen</b></font></td></tr>"; 
+		if (($group_buddies) || ($non_group_buddies))
+			echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\"><b>Name</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>letztes Lebenszeichen</b></font></td></tr>"; 
 		if (sizeof($group_buddies)) {
 			reset ($group_buddies);
 			$lastgroup = "";
