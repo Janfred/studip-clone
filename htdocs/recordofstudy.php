@@ -355,7 +355,7 @@ function createInfoxboxArray($mode){
 			array ("kategorie"  => "Information:",
 				"eintrag" => array	(	
 						array	 (	"icon" => "pictures/ausruf_small.gif",
-								"text"  => _("Um eine Druckansicht ihrer Veranstlungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
+								"text"  => _("Um eine Druckansicht ihrer Veranstaltungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
 								),
 						)
 			),
@@ -365,14 +365,14 @@ function createInfoxboxArray($mode){
 		$infobox = array(	
 			array  ("kategorie"  => "Information:",
 					"eintrag" =>	array (
-							array (	"icon" => "pictures/icon-posting.gif",
-									"text"  => _("Bearbeiten Sie fehlende oder falsche Einträge.")
+							array (	"icon" => "pictures/ausruf_small.gif",
+									"text"  => _("Erstellen sie ihre Veranstaltungsübersicht und bearbeiten sie fehlende oder falsche Einträge.")
 									),
 									)
 			),
 			array  ("kategorie" => "Aktionen:",
 					"eintrag" => array(
-						array (	"icon" => "pictures/ausruf_small.gif",
+						array (	"icon" => "pictures/trash.gif",
 								"text"  => _("Löschen sie nicht benötigte Veranstallungen mit Hilfe der Markierungsboxen und/oder fügen sie  beliebig viele neue Veranstallungen hinzu.")
 								),
 						array (	"icon" => "pictures/icon-disc.gif",

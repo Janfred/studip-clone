@@ -114,17 +114,23 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 	
 	// displays some infos for the user
 	if ($notice){
-		$html .="	    <tr>\n"
-			  . "		 <td align=\"center\">\n"
-			  . "		  <img src=\"".$ABSOLUTE_PATH_STUDIP."pictures/ausruf.gif\" alt=\"ausruf\" style=\"vertical-align:middle;\">\n"
-			  . "		  </td>\n"
-			  . "		  <td colspan=\"3\">\n";
+		$html .="		<tr>\n"
+			  . "		 <td colspan=\"4\">\n"
+			  . "		   <table border=0 cellspacing=0 cellpadding=2>\n"
+			  . "			<tr>\n"
+			  . "			 <td align=\"center\" width=50 valign=\"middle\">"
+			  . "			  <img src=\"".$ABSOLUTE_PATH_STUDIP."pictures/ausruf.gif\" alt=\"ausruf\" style=\"vertical-align:middle;\">\n"
+			  . "			 </td>\n"
+			  . "			 <td align=\"left\" valign=\"middle\">\n";
 		if ($notice == "empty")
-			$html .="		  <font size=\"-1\" color=\"red\"><b>"._("Keine Vorlesungen zum Anzeigen vorhanden.")."</b><br>"._("Bitte fügen sie Vorlesungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre ihre Auswahl.")."\n";
+			$html .="		  <font size=\"-1\"><b>"._("Keine Veranstaltungen zum Anzeigen vorhanden.")."</b><br>"._("Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre ihre Auswahl.")."\n";
 		elseif ($notice == "above_limit")
-			$html .="		  <font size=\"-1\"><b>"._("Sie haben mehr als 10 Vorlesungen, Seminare oder Übungen für ihre Studienbuchseite vorbereitet.")."</b><font size=\"-2\" color=\"yello\"><br>"._("Es werden automatisch mehrere Studienbuchseiten erstellt.")."</font>\n";
-		$html .="		 <br><br></font>\n"
-			  . "		 </td>\n"
+			$html .="		  <font size=\"-1\"><b>"._("Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt.")."</b><font size=\"-1\" color=\"yello\"><br>"._("Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt.")."</font>\n";
+		$html .="			  </font>\n"
+			  . "			 </td>\n"
+			  . "			</tr>\n"
+			  . "		   </table>\n"
+			  . "		 <br></td>\n"
 			  . "		</tr>\n";
 	}
 
@@ -137,7 +143,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 
 	$html .="	    <tr>\n"
 		  . "		 <td colspan=\"4\"><font size=\"-1\"><b><br>\n"
-		  . _("Vorlesungen, Seminare und Übungen:")."\n"
+		  . _("Veranstaltungen:")."\n"
 		  . "		 </b></font></td>\n"
 		  . "		</tr>\n"
 		  . "		<tr>\n"		  
@@ -167,7 +173,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		  . "		 </td>\n"
 		  . "		</tr>\n"
 		  . "		<tr>\n"
-		  . "		 <td class=\"$displayclass\" colspan=\"3\"><font size=\"-2\" align=\"top\">\n"
+		  . "		 <td class=\"$displayclass\" colspan=\"3\"><font size=\"-1\" align=\"top\">\n"
 		  . "		  &nbsp;<b>"._("Genaue Bezeichnung:")."</b><br>&nbsp;<textarea name=\"description$i\" cols=\"60\" rows=\"2\">".$seminare[$i]["description"]."</textarea>\n"
 		  . "		 &nbsp;<br><br></td>\n"
 		  . "		</tr>\n";
@@ -190,7 +196,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 	
 	// only show delete-button if there are any seminars
 	if(!empty($seminare))
-		$html .= _("Markierte Vorlesungen löschen")."\n" . createButton("loeschen",_("Markierte Antworten löschen."),"delete_seminars");
+		$html .= _("Markierte Veranstaltung(en) löschen")."\n" . createButton("loeschen",_("Markierte Veranstaltung(en) löschen."),"delete_seminars");
 	$html .="	     </font></td></tr></table>\n"
 		  . "	    </tr>\n"
 		  . "	   </table>\n"
@@ -201,8 +207,8 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 	echo $html;
 	print_infobox($infobox,"pictures/folders.jpg");
 	$html = "	   <br>\n"
-		  . createButton("speichern",_("Erstellt sie mit diesem Button ein PDF, wenn sie die benötigten Daten eingegeben haben."),"create_pdf")
-		  . createButton("zurueck",_("Abbrechen und eine Veranstaltungsübersicht für ein anderes Semester erstellen."),"select_new_semester")
+		  . createButton("zurueck",_("Abbrechen und ein anderes Semester auswählen."),"select_new_semester")
+		  . createButton("weiter",_("Weiter zum Download ihrer Veranstaltungsübersicht."),"create_pdf")
 		  . "	  <br><br></td>\n"
 		  . "	 </tr>\n"
 		  . "	</table>\n"
@@ -263,14 +269,16 @@ function printPdfAssortment($infobox,$seminars){
 		  . "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
 	echo $html;
 	print_infobox($infobox,"pictures/folders.jpg");
-	$html = "	  <form action=\"$PHP_SELF\" method=post>"
-		  . "	  <center>\n"
-		  . "		<a href=\"recordofstudy.php\">\n"
-		  . "		 "._("Zurück zur Semesterauswahl")."\n"
-		  . "		</a>\n"
+//	$html = "	  <form action=\"$PHP_SELF\" method=post>"
+//		  . "	  <center>\n"
+//		  . "		<a href=\"recordofstudy.php\">\n"
+//		  . "		 "._("Zurück zur Semesterauswahl")."\n"
+//		  . "		</a>\n"
 // 		  . createButton("speichern",_("Erstellt sie mit diesem Button ein PDF, wenn sie die benötigten Daten eingegeben haben."),"create_pdf")
 //		  . createButton("zurueck",_("Abbrechen und eine Studienbuchseite für ein anderes Semester erstellen."),"select_new_semester")
-		  . "	  <br><br></center></form></td>\n"
+//		  . "	  <br><br></center></form></td>\n"
+
+	$html = "	  </td>\n"
 		  . "	 </tr>\n"
 		  . "	</table>\n"
 		  . "  <br></td>\n"
@@ -294,9 +302,10 @@ function printPdfAssortment($infobox,$seminars){
 function createInputBox($text, $value, $name, $class, $size, $additionaltext = NULL){
 	$html = "	 <tr>\n"
 		  . "	  <td class=\"".$class."\" colspan=\"4\" width=\"99%\"><font size=\"-1\">\n"
-		  . "	   <br>&nbsp;".$text."<input name=\"".$name."\" type=\"text\" size=\"".$size."\" maxlength=\"".$size."\" value=\"".$value."\">".$additionaltext."\n"
-		  . "	  <br>&nbsp;</font></td>\n"
+		  . "	   &nbsp;".$text."<br><input name=\"".$name."\" type=\"text\" size=\"".$size."\" maxlength=\"".$size."\" value=\"".$value."\">".$additionaltext."\n"
+		  . "	  </font></td>\n"
 		  . "	 </tr>\n";
+
 	return $html;
 }
 
