@@ -30,9 +30,9 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 		
-require_once("msg.inc.php"); //Ausgaberoutinen an den User
-require_once("config.inc.php"); //Grunddaten laden
-require_once("visual.inc.php"); //htmlReady
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Ausgaberoutinen an den User
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); //Grunddaten laden
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); //htmlReady
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 	
 $db=new DB_Seminar;
@@ -70,10 +70,7 @@ return;
 	<tr valign=top align=middle>
 		<td class="topic" colspan=2 align="left">&nbsp;<b>
 		<?
-		echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
-		if (strlen($tmp_name) > 60)
-			echo "... ";
-		echo " -  Mitarbeiter";
+		print getHeaderLine($inst_id)." -  Mitarbeiter";
 		?></b>
 		</td>
 	</tr>
@@ -87,7 +84,7 @@ return;
 //zeigen wir eine einzelne Person an?
 
 if (isset($details)) {
-	$db->query("SELECT auth_user_md5.*, user_inst.*, Institute.Name FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) LEFT JOIN Institute USING (Institut_id) WHERE username = '$details' AND user_inst.Institut_id = '$inst'");
+	$db->query("SELECT auth_user_md5.*, user_inst.*, Institute.Name FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) LEFT JOIN Institute USING (Institut_id) WHERE username = '$details' AND user_inst.Institut_id = '$inst_id'");
 	while ($db->next_record()) {
 		?>
 		<tr>
@@ -116,7 +113,7 @@ if (isset($details)) {
 			<?	
 			$user_id = $db->f("user_id")	;
 			
-			if ($gruppen = GetStatusgruppen($inst, $user_id)){
+			if ($gruppen = GetStatusgruppen($inst_id, $user_id)){
 					echo "<a href=\"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst\">";
 					echo htmlReady(join(", ", array_values($gruppen)));
 					echo "</a>";
@@ -395,7 +392,7 @@ if ($inst_id != "" && $inst_id !="0") {
 				ECHO "<tr valign=middle align=left>";
 				
 				  if ($perm->have_perm("root") || $db->f("inst_perms") != "admin" || $db->f("username") == $auth->auth["uname"])
-					printf ("<td class=\"%s\">%s</td><td class=\"%s\"><a href=\"%s?details=%s&inst=%s\">%s</a></td>", $cssSw->getClass(), $db->f("Vorname"),  $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("Nachname"));	 
+					printf ("<td class=\"%s\">%s</td><td class=\"%s\"><a href=\"%s?details=%s&inst_id=%s\">%s</a></td>", $cssSw->getClass(), $db->f("Vorname"),  $cssSw->getClass(), $PHP_SELF, $db->f("username"), $db->f("Institut_id"), $db->f("Nachname"));	 
 				else
 					printf ("<td class=\"%s\">&nbsp;%s</td><td class=\"%s\">%s</td>", $cssSw->getClass(), $db->f("Vorname"), $cssSw->getClass(), $db->f("Nachname"));	 ?>
 	
