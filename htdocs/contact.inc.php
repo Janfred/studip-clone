@@ -319,7 +319,7 @@ function ShowContact ($contact_id)
 				$link =	$hoverlink
 						."onMouseOver=\"return overlib('"
 						.JSReady($description,"contact").$txt
-						."', CAPTION, '&nbsp; &nbsp; &nbsp; "._("Weitere Informationen:").", NOCLOSE, CSSOFF)\" "
+						."', CAPTION, '&nbsp; &nbsp; &nbsp; "._("Weitere Informationen:")."', NOCLOSE, CSSOFF)\" "
 						." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 			} else {
 				$link = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
