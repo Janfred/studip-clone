@@ -182,13 +182,13 @@ else
 				echo "<td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
 					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
-				    		echo "<img src=\"pictures/chat2.gif\" alt=\"Dieser User befindet sich im Chat\" border=\"0\">";
+				    		echo "<img src=\"pictures/chat2.gif\" alt=\"Dieser User befindet sich im Chat\" border=\"0\"></td>";
 					else    
 				    		echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" alt=\"zum Chatten einladen\" border=\"0\"></a>";
-				$cssSw->switchClass();				    		
 				}
 				else echo "&nbsp;";
 				echo "</td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" alt=\"aus der Buddylist entfernen\" border=\"0\"></a></td></tr>";
+				$cssSw->switchClass();					
 				}
 			}
 		else
