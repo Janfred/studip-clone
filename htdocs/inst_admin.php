@@ -121,7 +121,7 @@ if (isset($details)) {
 			while ($db2->next_record()) {
 				 $tmptxt .= $db2->f("name").", ";
 			}
-			echo substr($tmptxt,0,-2);
+			echo htmlReady(substr($tmptxt,0,-2));
 			
 			?>	
 			&nbsp; 
@@ -410,7 +410,7 @@ if ($inst_id != "" && $inst_id !="0") {
 				while ($db2->next_record()) {
 					 $tmptxt .= $db2->f("name").", ";
 				}
-				echo substr($tmptxt,0,-2);
+				echo htmlReady(substr($tmptxt,0,-2));
 				
 				?>
 				
