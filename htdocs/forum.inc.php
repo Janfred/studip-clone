@@ -533,6 +533,8 @@ function printposting ($forumposting) {
  		if ($forumposting["openclose"] == "close") {
   			$link =	$PHP_SELF."?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&view=".$viewlink."#anker";
   		} else {
+  			if (get_username($user->id) != $forumposting["username"])  // eigene Postings werden beim view nicht gezählt
+  				$objectviews = object_add_view($forumposting["id"]); // Anzahl der Views erhöhen
   			if ($forum["view"] == "tree")
   				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker"; 
   			else
@@ -540,6 +542,10 @@ function printposting ($forumposting) {
 			if ($forumposting["neuauf"]==1 AND $forumposting["newold"]=="new")
 				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt	
   		}
+  		
+  		if (!$objectviews)
+  			$objectviews = object_return_views($forumposting["id"]);
+  		$forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
   		
   		if ($forumposting["foldercount"] && $forumposting["type"] == "folder" && $forumposting["openclose"] == "close")
   			$forumhead[] = "<b>".($forumposting["foldercount"]-1)."</b> / ";
