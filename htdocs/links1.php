@@ -19,7 +19,7 @@ if (!$entry_level) {
 }
 
 if (!$entry_level) {
-	$db->query("SELECT Fakultaets_id FROM fakultaeten WHERE Fakultaets_id = '$SessSemName[1]' ");
+	$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$SessSemName[1]' ");
 	if ($db->next_record())
 		$entry_level="fak";
 }

@@ -60,7 +60,7 @@ function get_object_type($id) {
 	}
 
 	if (!$entry_level) {
-		$db->query("SELECT Fakultaets_id FROM fakultaeten WHERE Fakultaets_id = '$id' ");
+		$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$id' ");
 		if ($db->next_record())
 			return "fak";
 	}
