@@ -65,7 +65,7 @@ if ($view)
 
 if ($choose_toplist)
 	$sem_portal["toplist"] = $choose_toplist;
-
+	
 //function to display toplists
 function getToplist($rubrik, $query, $type="count") {
 	global $PHP_SELF;
@@ -106,6 +106,7 @@ function getToplist($rubrik, $query, $type="count") {
 $view = $sem_portal["bereich"];
 if (!$view) 
 	$view="all";
+echo $sem_portal["bereich"] ;
 	
 if ($sem_portal["bereich"] != "all") {
 	$sem_browse_data["s_sem"] ="all";
@@ -120,7 +121,7 @@ if ($sem_portal["bereich"] != "all") {
 			}
 		}
 	}
-	
+echo lala, $sem_portal["bereich"] ;
 	$query = "SELECT count(*) AS count FROM seminare WHERE seminare.status IN ('" . join("','", $_sem_status) . "')";
 	$db->query($query);
 	if ($db->next_record())
