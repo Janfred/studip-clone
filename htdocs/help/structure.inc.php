@@ -349,6 +349,10 @@ array	(	"name" => _("Veranstaltungen verwalten"),
 																				"text" => _("Wie Sie die Zugangsberechtigungen für Veranstaltungen ändern können"),
 																				"page" => "x_admission.htm"
 																			),
+																array	(	"name" => _("Modulkonfiguration ändern"),
+																				"text" => _("Wie Sie Module für Veranstaltungen oder Einrichtungen aktivieren oder deaktivieren k&ouml;nnen"),
+																				"page" => "x_admin_modules.htm"
+																			),
 																array	(	"name" => _("Themen anlegen"),
 																				"text" => _("Wie Sie Debattenthemen für das Forum vorgeben können"),
 																				"page" => "x_themen.htm"

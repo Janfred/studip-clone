@@ -41,6 +41,11 @@ switch($referrer_page) {
 		    $help_page = "x_metadates.htm";
 		break;
 
+	case "admin_modules.php" :
+		if ($perm->have_perm("tutor"))
+		    $help_page = "x_admin_modules.htm";
+		break;
+
 	case "admin_admission.php" :
 		if ($perm->have_perm("tutor"))
 		    $help_page = "x_admission.htm";
