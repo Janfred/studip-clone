@@ -31,6 +31,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once($ABSOLUTE_PATH_STUDIP . 'visual.inc.php');
+require_once($ABSOLUTE_PATH_STUDIP . 'calendar_functions.inc.php');
 
 // Tabellenansicht der Termine eines Tages erzeugen
 function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,
@@ -578,8 +580,8 @@ function jumpTo ($month, $day, $year, $colsp = 1) {
 }
 
 function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
-	global $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
-	require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
+	global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
+	require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
 	global $imt, $atime;
 	
 	if ($imt)
@@ -587,7 +589,7 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	else
 		$xtime = $ptime;
 	
-	$js_include = " " . $js_include;		
+	//$js_include = " " . $js_include;		
 		
 	$amonth = new CalendarMonth($xtime);
 	$now = mktime(12, 0, 0, date("n", time()), date("j", time()), date("Y", time()), 0);
@@ -606,7 +608,7 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	$ret .= tooltip(_("ein Jahr zurück")) . "></a>";
 	$ret .= "<a href=\"$href$ptime&imt=" . ($amonth->getStart() - 1) . "\">";
 	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_previous_small.gif\"";
-	$ret .= tooltip(_("vorherige Woche")) . "></a>\n</td>\n";
+	$ret .= tooltip(_("einen Monat zurück")) . "></a>\n</td>\n";
 	
 	// month and year
 	$ret .= "<td class=\"precol1w\" colspan=\"";
@@ -621,7 +623,7 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	// navigation arrows right
 	$ret .= "<td class=\"steelgroup0\" align=\"center\" valign=\"top\"><a href=\"$href$ptime&imt=" . ($amonth->getEnd() + 1) . "\">";
 	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_small.gif\"";
-	$ret .= tooltip(_("nächste Woche")) . "></a>";
+	$ret .= tooltip(_("einen Monat vor")) . "></a>";
 	$ret .= "<a href=\"$href$ptime&imt=";
 	$ret .= (mktime(0, 0, 1, $amonth->mon, 1, $amonth->year + 1)) . "\">";
 	$ret .= "<img border=\"0\" src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}pictures/calendar_next_double_small.gif\"";
@@ -669,23 +671,35 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 		
 		if ($j % 7 == 0)
 			$ret .= "<tr>";
-			
-		if ($now == $i && abs($atime - $i) < 1000)
-			$ret .= "<td class=\"currenttoday\" ";
-		elseif ($now == $i)
+		
+		if (abs($now - $i) < 43199)
 			$ret .= "<td class=\"celltoday\" ";
-		elseif (abs($atime - $i) < 1000)
-			$ret .= "<td class=\"current\" ";
-		elseif (date('m', $i) != $amonth->mon) 
+		elseif (date('m', $i) != $amonth->mon)
 			$ret .= "<td class=\"lightmonth\"";
 		else
 			$ret .= "<td class=\"month\"";
 			
 		$ret .= "align=\"center\" width=\"$width\" height=\"$height\">";
 		
+		$js_inc = '';
+		if (is_array($js_include)) {
+			$js_inc = " onClick=\"{$js_include['function']}(";
+			if (sizeof($js_include['parameters']))
+				$js_inc .= implode(", ", $js_include['parameters']) . ", ";
+			$js_inc .= "'" . date('m', $i) . "', '$aday', '" . date('Y', $i) . "')\"";
+		}
+		
+		if (abs($atime - $i) < 43199)
+			$aday = "<span style=\"border-width: 2px; border-style: solid; "
+					. "border-color: #DD0000; padding: 2px;\">$aday</span>";
+		
 		if (($j + 1) % 7 == 0) {
-			$ret .= "<a class=\"{$style}sdaymin\" href=\"$href$i\"$js_include>$aday</a>";
+			$ret .= "<a class=\"{$style}sdaymin\" href=\"$href$i\"";
+			if ($hday['name'])
+				$ret .= ' ' . tooltip($hday['name']);
+			$ret .= "$js_inc>$aday</a>";
 			$ret .= "</td>";
+			
 			if ($mod != "NOKW") {
 				$ret .= "<td class=\"steel1\" align=\"center\" width=\"$width\" height=\"$height\">";
 				$ret .= "<a href=\"./calendar.php?cmd=showweek&atime=$i\">";
@@ -697,14 +711,16 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 			// unterschiedliche Darstellung je nach Art des Tages (Rang des Feiertages)
 			switch ($hday["col"]) {
 				case 1:
-				case 2:
-					$ret .= "<a class=\"{$style}hdaymin\" href=\"$href$i\"$js_include>$aday</a>";
+					$ret .= "<a class=\"{$style}daymin\" href=\"$href$i\" ";
+					$ret .= tooltip($hday['name']) . "$js_inc>$aday</a>";
 					break;
+				case 2:
 				case 3;
-					$ret .= "<a class=\"{$style}hdaymin\" href=\"$href$i\"$js_include>$aday</a>";
+					$ret .= "<a class=\"{$style}hdaymin\" href=\"$href$i\" ";
+					$ret .= tooltip($hday['name']) . "$js_inc>$aday</a>";
 					break;
 				default:
-					$ret .= "<a class=\"{$style}daymin\" href=\"$href$i\"$js_include>$aday</a>";
+					$ret .= "<a class=\"{$style}daymin\" href=\"$href$i\"$js_inc>$aday</a>";
 			}
 			$ret .= "</td>";	
 		}
@@ -806,5 +822,8 @@ function info_icons (&$event) {
 	
 	return $ret;
 }
-		
+
+function date_insert_popup () {}
+	
+
 ?>
