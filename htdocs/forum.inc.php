@@ -949,7 +949,8 @@ function printposting ($forumposting) {
   			$link =	$PHP_SELF."?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&view=".$viewlink;
   			if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
   				$link .= "&shrinkopen=".$forumposting["id"];
-  			$link .= "#anker";
+  			if ($forum["view"] != "mixed")
+  				$link .= "#anker";
   		} else {
   			if ($user->id != $forumposting["userid"])  // eigene Postings werden beim view nicht gezählt
   				$objectviews = object_add_view($forumposting["id"]); // Anzahl der Views erhöhen
