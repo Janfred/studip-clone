@@ -45,12 +45,20 @@ if ($limit)
 	$query=$query." LIMIT $limit";
 $db->query($query);
 
+if ($SessSemName[1] == $range_id){
+	$admin_link = ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=news_sem" :  "new_inst=TRUE&view=news_inst";
+} else if ($range_id == $auth->auth['uid']){
+	$admin_link = "range_id=self";
+} else if ($range_id == "studip"){
+	$admin_link = "range_id=studip";
+}
+
 if (!$db->num_rows()) {
 	if ($show_admin) {
 		echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
 		echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"./pictures/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
 		echo"\n<td align = \"right\" class=\"topic\">";
-		printf ("&nbsp;<a href=\"admin_news.php?%s&cmd=new_entry\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=news_sem" : (($SessSemName["class"]=="inst") ? "new_inst=TRUE&view=news_inst" : ($auth->auth["perm"] == "root" ? "range_id=studip" : "range_id=false")));
+		printf ("&nbsp;<a href=\"admin_news.php?%s&cmd=new_entry\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;", $admin_link);
 		echo"\n</td></tr>";
 		echo "\n<tr><td class=\"steel1\" colspan=\"3\"><blockquote><br /><font size=\"-1\">" . _("Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br />&nbsp; </font></blockquote>";
 		echo "\n</td></tr></table>";
@@ -67,7 +75,7 @@ if (!$db->num_rows()) {
 	if ($show_admin) {
 		$colspan++;
 		echo"\n<td align = \"right\" class=\"topic\">";
-		printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show&range_id=$range_id\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=news_sem" : "new_inst=TRUE&view=news_inst");
+		printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show\"><img src=\"./pictures/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", $admin_link);
 		echo"\n</td></tr>";
 	}
 	echo "\n<tr><td colspan=$colspan>";
