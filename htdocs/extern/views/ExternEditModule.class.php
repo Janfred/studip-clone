@@ -54,6 +54,7 @@ class ExternEditModule extends ExternEditHtml {
 			$no_sort = array();
 		
 		$this->css->resetClass();
+		$this->css->switchClass();
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
@@ -85,7 +86,7 @@ class ExternEditModule extends ExternEditHtml {
 			if (!in_array($order[$i], $no_sort)) {
 				$out .= "<td><select name=\"{$this->element_name}_sort[$order[$i]]\" ";
 				$out .= "size=\"1\">\n";
-				for ($j = 0; $j <= sizeof($order); $j++) {
+				for ($j = 0; $j <= (sizeof($order) - sizeof($no_sort)); $j++) {
 					if ($sort[$order[$i]] == $j)
 						$selected = " selected";
 					else
@@ -185,6 +186,7 @@ class ExternEditModule extends ExternEditHtml {
 			$groups[$groups_config[$i]] = $groups_aliases[$i];
 
 		$this->css->resetClass();
+		$this->css->switchClass();
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
 		$out .= "<td width=\"42%\"><font size=\"2\"><b>" . _("Gruppenname") . "</b></font></td>\n";
