@@ -463,23 +463,14 @@ function vorbesprechung ($seminar_id)
 	if ($db->next_record())
 		$return_string=date ("d.m.Y, G:i", $db->f("date"))." - ".date ("G:i", $db->f("end_time"));
 	if ($db->f("raum"))
-		$return_string.=", Ort: ".$db->f("raum");
+		$return_string .= ", " . sprintf(_("Ort: %s"), $db->f("raum"));
 	return $return_string;		
 	}
 
-/*
-Die Funktion next_date errechnet den naechsten Seminartermin. Dabei wird zuerst geprueft, ob es spezielle
-Termine in der Termintabelle gibt. Wenn nicht wird der naechste Seminartermin aus dem Turnusdaten ermittelt.
-*/
 
-function next_date ($seminar_id)
-	{
-	}
-	
 /*
 Die Funktion get_sem_name gibt den Namen eines Semester, in dem ein uebergebener Timestamp liegt, zurueck
 */
-
 
 function get_sem_name ($time) {
 	global $SEMESTER;
@@ -532,7 +523,7 @@ function get_semester($seminar_id, $start_sem_only=FALSE)
 		if ($db->f("duration_time")>0)
 			$return_string.=" - ".get_sem_name($db->f("start_time") + $db->f("duration_time"));
 		if ($db->f("duration_time")==-1)				
-			$return_string.=" bis unbegrenzt";
+			$return_string.= " " . _("bis unbegrenzt");
 		}
 	return $return_string;		
 	}
@@ -556,13 +547,13 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	$do=TRUE;
 	if (!checkdate($monat,$tag,$jahr)) {
 		$do=FALSE;
-		$result="error§Bitte geben Sie ein g&uuml;ltiges Datum ein!";
+		$result= "error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!");
 	}
 
 	if ($do)		
 		if ((!$stunde) && (!end_stunde)) {
 			$do=FALSE;	
-			$result.="error§Bitte geben Sie eine g&uuml;eltige Start- und Endzeit an!";
+			$result .= "error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!");
 		}
 	
 	$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
@@ -571,7 +562,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	if ($do)		
 		if ($start_time > $end_time) {
 			$do=FALSE;	
-			$result.="error§Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!";
+			$result .= "error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!");
 		}
 				
 	//Check auf Konsistenz mt Metadaten, Semestercheck
@@ -586,7 +577,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 			}
 			
 		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$add_result.="info§Sie haben einen oder mehrere Termine eingegeben, der ausserhalb des Semesters liegt, in dem die Veranstaltung stattfindet. Es wird empfohlen, diese Termine anzupassen.§";
+			$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, der ausserhalb des Semesters liegt, in dem die Veranstaltung stattfindet. Es wird empfohlen, diese Termine anzupassen.") . "§";
 		
 		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewsehlt ist
 		if (!$term_data["art"]) {
@@ -605,12 +596,12 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 				}
 			}
 			if (!$ok)
-				$add_result.="info§Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.§";
+				$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.") . "§";
 		}
 	}
 		
 	if ($result) 
-		$result.="<br> Der Termin <b>\"$titel\"</b> konnte nicht ge&auml;ndert werden.§";
+		$result .= "<br> " . sprintf(_("Der Termin <b>%s</b> konnte nicht ge&auml;ndert werden."), $titel) . "§";
 	
 	if ($do) {
 		$db=new DB_Seminar;
@@ -656,7 +647,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 			
 		//Aendern des Titels des zugehoerigen Ordners
 		$titel_f=$TERMIN_TYP[$art]["name"].": $titel";
-		$titel_f.=" am ".date("d.m.Y ", $start_time);
+		$titel_f .= " " . _("am") . " " . date("d.m.Y ", $start_time);
 		
 		$db->query("SELECT folder_id FROM folder WHERE range_id ='$termin_id'");
 		if ($db->num_rows() == 1) {
@@ -757,7 +748,7 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 			$db2->query("SELECT folder_id FROM folder WHERE range_id = '$termin_id'");
 			while ($db2->next_record()) {
 				move_item ($db2->f("folder_id"), $db->f("folder_id"));
-				$db3->query ("UPDATE folder SET name='Dateiordner zu gelöschtem Termin', description='Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins' WHERE folder_id='".$db2->f("folder_id")."'");
+				$db3->query ("UPDATE folder SET name='" . _("Dateiordner zu gelöschtem Termin") . "', description='" . _("Dieser Ordner enthält Dokumente und Termine eines gelöschten Termins") . "' WHERE folder_id='".$db2->f("folder_id")."'");
 				}
 			}
 		}
@@ -934,12 +925,12 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 						
 					//create topic
 					if (($topic) && (!$saved_dates[$affected_dates]))
-						$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." am ".date("d.m.Y", $start_time), $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $sem_id);
+						$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." " . _("am") . " ".date("d.m.Y", $start_time), $author, _("Hier kann zu diesem Termin diskutiert werden"), 0, 0, $sem_id);
 		
 					//create folder
 					if (($folder) && (!$saved_dates[$affected_dates])) {
-						$titel = sprintf ("%s am %s", $TERMIN_TYP[$date_typ]["name"], date("d.m.Y", $start_time));
-						$description="Ablage für Ordner und Dokumente zu diesem Termin";
+						$titel = sprintf (_("%s am %s"), $TERMIN_TYP[$date_typ]["name"], date("d.m.Y", $start_time));
+						$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
 						$db2->query("INSERT INTO folder SET folder_id='$folder_id', range_id='$date_id', description='$description', user_id='$user->id', name='$titel', mkdate='$aktuell', chdate='$aktuell'");
 					} else
 						$folder_id='';
@@ -948,7 +939,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 					if ($saved_dates[$affected_dates]) 
 						$query2 = "UPDATE termine SET autor_id='$user->id', date='$start_time', chdate='$aktuell', end_time='$end_time', raum='$room' WHERE termin_id = '".$saved_dates[$affected_dates]."' ";
 					else
-						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='Kein Titel', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='$room' ";
+						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='" . _("Kein Titel") . "', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='$room' ";
 					$db2->query($query2);
 					if ($db2->affected_rows()) {
 						//insert a entry for the linked resource, if resource management activ
@@ -968,10 +959,10 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 						$db->next_record();
 						
 						//change topic
-						$db2->query("UPDATE px_topics SET name='".$TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." am ".date("d.m.Y ", $start_time)."', author='$author', user_id='".$user->id."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
+						$db2->query("UPDATE px_topics SET name='".$TERMIN_TYP[$date_typ]["name"].": ".$db->f("content")." " . _("am") . " ".date("d.m.Y ", $start_time)."', author='$author', user_id='".$user->id."', chdate='$aktuell' WHERE topic_id='".$db->f("topic_id")." '");
 					
 						//change folder
-						$titel = sprintf ("%s: %s am %s", $TERMIN_TYP[$date_typ]["name"], $db->f("content"), date("d.m.Y", $start_time));
+						$titel = sprintf (_("%s: %s am %s"), $TERMIN_TYP[$date_typ]["name"], $db->f("content"), date("d.m.Y", $start_time));
 						$db2->query("UPDATE folder SET user_id='$user->id', name='$titel', chdate='$aktuell' WHERE range_id = '".$saved_dates[$affected_dates-1]."' ");
 					}
 				}
