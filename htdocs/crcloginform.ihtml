@@ -151,7 +151,7 @@ $_language_path = init_i18n($_language);
 		<tr>
 			<td align="center" class="steel1" colspan="2">
 				<input type="image"  name="submitbtn" <?=makeButton("login","src")?> align="absmiddle" border="0" alt="Login" title="Login" value=" Login ">
-				&nbsp;<a href="<?=$GLOBALS['PHP_SELF']?>?cancel_login=1"><img <?=makeButton("abbrechen","src")?> align="absmiddle" border="0"></a>
+				&nbsp;<a href="index.php?cancel_login=1"><img <?=makeButton("abbrechen","src")?> align="absmiddle" border="0"></a>
 			</td>
 		</tr>
 
