@@ -137,46 +137,39 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 //Anzeigemodul fuer nobody)
 ?>
 
-<table class="blank" width="600" border=0 cellpadding=0 cellspacing=0 align=center>
-<tr><td colspan=3 class="topic">&nbsp;<b><? echo $UNI_NAME;?></b></td></tr>
+<table class="blank" width="600" border="0" cellpadding="0" cellspacing="0" align="center">
+<tr><td colspan=3 class="topic" valign="middle">&nbsp;<b><? echo $UNI_NAME;?></b><img src="pictures/blank.gif" height="16" width="5" border="0"></td></tr>
 <tr> 
 	<td colspan=3 background="./pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
 	<table cellspacing="20">
 		<tr>
 			<?
-			echo "<td class=\"steel1\"><a href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font size=\"2\" color=#555555>&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"index.php?again=yes\"><img src=\"./pictures/start.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Login")."</b></font><br><font size=\"1\" color=#555555>&nbsp; "._("f&uuml;r registrierte NutzerInnen")."</font></a>&nbsp; </td>";
 			?>
 		</tr><tr>
 			<?
-			echo "<td class=\"steel1\"><a href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font size=\"2\" color=#555555>&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"register1.php\"><img src=\"./pictures/register.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Registrieren")."</b></font><br><font size=\"1\" color=#555555>&nbsp; ".("um NutzerIn zu werden")."</font></a>&nbsp; </td>";
 			?>
 		</tr>	<tr>
 			<?
-			echo "<td class=\"steel1\"><a href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font size=\"2\" color=#555555>&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"freie.php\"><img src=\"./pictures/free.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Freier Zugang")."</b></font><br><font size=\"1\" color=#555555>&nbsp; "._("ohne Registrierung")."</font></a>&nbsp; </td>";
 			?>
 		</tr>	<tr>
 			<?
-			echo "<td class=\"steel1\"><a href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font size=\"2\" color=#555555>&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
+			echo "<td class=\"steel1\"><a class=\"index\" href=\"help/index.php\"><img src=\"./pictures/help.gif\" align=left border=\"0\">&nbsp; <font size=\"4\"><b>"._("Hilfe")."</b></font><br><font size=\"1\" color=#555555>&nbsp; "._("zu Bedienung und Funktionsumfang")."&nbsp; &nbsp; </font></a>&nbsp; </td>";
 			?>
 		</tr>
 	</table>
 </td></tr>
-
-<tr><td class="blank" colspan="3" align="right">
 <?
-
-
 unset($temp_language_key); unset($temp_language);
-
 ?>
-&nbsp;&nbsp;</td></tr>
-
 <tr>
 <td class="blank" nowrap align=left valign=bottom>
-	&nbsp; 
+	<img src="pictures/blank.gif" height="85" width="5" border="0">
 </td>
-<td class="blank" align=center><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border=0 <?=tooltip(_("Zur Portalseite"))?>></a></td>
-<td class="blank" align=right nowrap valign=top>
+<td class="blank" valign="middle" align=center><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border=0 <?=tooltip(_("Zur Portalseite"))?>></a></td>
+<td class="blank" align=right nowrap valign="middle">
 <?
 
 
@@ -196,17 +189,20 @@ unset($temp_language_key); unset($temp_language);
 			$db->next_record();
 			$anzahl = $db->f(0);			
 			echo "<tr><td class=\"steel1\"><font size=\"2\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
-			echo "<tr><td class=\"blank\">&nbsp; </td><td align= right class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
+			echo "<tr><td class=\"blank\">";
+			// choose language
+			foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
+				printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
+			}
+			echo "</td><td align= right class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
 			echo "</table>";
 
 
-echo "<br>";
-// choose language
-foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
-	printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
-}
+
+
+
 ?>
-&nbsp; &nbsp; </td></tr></table>
+</table>
 <DIV align=center>
 <?php
 		
