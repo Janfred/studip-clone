@@ -2,11 +2,12 @@
 /**
  * create vote result bar image in percentage-dependent color
  *
- * @author     mcohrs
- * @version    $Id$
- * @copyright  2003 Stud.IP-Project
- * @access     public
- * @package    vote
+ * @author      mcohrs
+ * @version     $Id$
+ * @copyright   2003 Stud.IP-Project
+ * @access      public
+ * @package     vote
+ * @modulegroup vote_modules
  */
 
 $width  = 1;

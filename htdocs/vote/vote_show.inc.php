@@ -3,13 +3,14 @@
 /**
  * This file is used to insert a vote in Stud.IP.
  *
- * @author     Alexander Willner <mail@AlexanderWillner.de>,
- *             Michael Cohrs <michael@cohrs.de>
- * @version    $Id$
- * @copyright  2003 Stud.IP-Project (GNU General Public License)
- * @access     public
- * @module     vote_show
- * @package    vote
+ * @author      Alexander Willner <mail@AlexanderWillner.de>,
+ *              Michael Cohrs <michael@cohrs.de>
+ * @version     $Id$
+ * @copyright   2003 Stud.IP-Project (GNU General Public License)
+ * @access      public
+ * @module      vote_show
+ * @package     vote
+ * @modulegroup vote_modules
  */
 
 

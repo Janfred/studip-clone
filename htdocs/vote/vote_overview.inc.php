@@ -6,17 +6,19 @@
 
  *
 
- * @author     Christian Bauer <alfredhitchcock@gmx.net>
+ * @author      Christian Bauer <alfredhitchcock@gmx.net>
 
- * @version    $Id$
+ * @version     $Id$
 
- * @copyright  2003 Stud.IP-Project
+ * @copyright   2003 Stud.IP-Project
 
- * @access     public
+ * @access      public
 
- * @module     vote_overview
+ * @module      vote_overview
 
- * @package    vote
+ * @package     vote
+
+ * @modulegroup vote_modules
 
  */
 

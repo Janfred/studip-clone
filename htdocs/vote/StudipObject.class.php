@@ -51,10 +51,11 @@ define ("ERROR_CRITICAL", 1);
  *
  * Class to provide basic properties of an object in Stud.IP
  *
- * @author     Alexander Willner <mail@alexanderwillner.de>
- * @version    $Id$
- * @access     public
- * @package    vote
+ * @author      Alexander Willner <mail@alexanderwillner.de>
+ * @version     $Id$
+ * @access      public
+ * @package     vote
+ * @modulegroup vote_modules
  */
 class StudipObject {
 

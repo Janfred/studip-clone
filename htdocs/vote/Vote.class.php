@@ -8,11 +8,13 @@ require_once ($ABSOLUTE_PATH_STUDIP."vote/VoteDB.class.php");
 /**
  * This class is used to implement a vote in Stud.IP
  *
- * @author     Alexander Willner <mail@alexanderwillner.de>
- * @version    $Id$
- * @copyright  2003 Stud.IP-Project
- * @access     public
- * @package    vote
+ * @author      Alexander Willner <mail@alexanderwillner.de>
+ * @version     $Id$
+ * @copyright   2003 Stud.IP-Project
+ * @access      public
+ * @package     vote
+ * @modulegroup vote_modules
+ *
  */
 class Vote extends StudipObject {
 

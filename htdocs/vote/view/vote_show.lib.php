@@ -2,13 +2,14 @@
 /**
  * All needed HTML-code to visualize a vote or a test
  *
- * @author     Alexander Willner <mail@AlexanderWillner.de>,
- *             Michael Cohrs <michael@cohrs.de>
- * @version    $Id$
- * @copyright  2003 Stud.IP-Project (GNU General Public License)
- * @access     public
- * @module     vote_show_lib
- * @package    vote
+ * @author      Alexander Willner <mail@AlexanderWillner.de>,
+ *              Michael Cohrs <michael@cohrs.de>
+ * @version     $Id$
+ * @copyright   2003 Stud.IP-Project (GNU General Public License)
+ * @access      public
+ * @module      vote_show_lib
+ * @package     vote
+ * @modulegroup vote_modules
  */
 
 
@@ -64,20 +65,20 @@ function createFormHeader (&$vote) {
  */
 function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $html = "";
-   $isPreview = ($_GET["previewResults"] || $_POST["previewButton_x"]) &&
-       ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
-   $isAssociated = $vote->voteDB->isAssociated ($vote->getVoteID(), $userID);
-   $isStopped = $vote->isStopped();
-
-   $revealNames = $_GET["revealNames"] &&
-       $vote->getVoteID() == $_GET["voteopenID"] &&
-       ! $vote->isAnonymous();
-
-   $sortAnswers = $_GET["sortAnswers"] && 
-       $vote->getVoteID() == $_GET["voteopenID"];
 
    $haveFullPerm = $perm->have_studip_perm ("tutor", $vote->getRangeID()) ||
        $userID == $vote->getAuthorID ();
+
+   $isPreview = ($_GET["previewResults"] || $_POST["previewButton_x"]) &&
+       ($vote->getResultvisibility() == VOTE_RESULTS_ALWAYS || $haveFullPerm);
+
+   $isAssociated = $vote->voteDB->isAssociated ($vote->getVoteID(), $userID);
+   $isStopped = $vote->isStopped();
+
+   $revealNames = $_GET["revealNames"] && $vote->getVoteID() == $_GET["voteopenID"]
+       && ! $vote->isAnonymous();
+
+   $sortAnswers = $_GET["sortAnswers"] && $vote->getVoteID() == $_GET["voteopenID"];
 	
    $link  = $GLOBALS["PHP_SELF"];
    $link .= "?voteopenID=".$vote->getVoteID();

@@ -3,12 +3,13 @@
 /**
  * The page to create/edit votes ... vote_edit.inc.php
  *
- * @author     Michael Cohrs <michael@cohrs.de>
- * @version    $Id$
- * @copyright  2003 Stud.IP-Project
- * @access     public
- * @module     vote_edit
- * @package    vote
+ * @author      Michael Cohrs <michael@cohrs.de>
+ * @version     $Id$
+ * @copyright   2003 Stud.IP-Project
+ * @access      public
+ * @module      vote_edit
+ * @package     vote
+ * @modulegroup vote_modules
  *
  */
 
