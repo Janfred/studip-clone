@@ -2749,10 +2749,10 @@ if ($level==6)
 					?><br><br>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">						
 						<?
 						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
 							?>
+							<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">						
 							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="cmd_g">
 							<?
 						}
