@@ -319,7 +319,7 @@ function ShowContact ($contact_id)
 				$link =	$hoverlink
 						."onMouseOver=\"return overlib('"
 						.JSReady($description,"contact").$txt
-						."', CAPTION, '&nbsp; &nbsp; &nbsp; "._("Weitere Informationen:").', NOCLOSE, CSSOFF)\" "
+						."', CAPTION, '&nbsp; &nbsp; &nbsp; "._("Weitere Informationen:").", NOCLOSE, CSSOFF)\" "
 						." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 			} else {
 				$link = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
@@ -355,7 +355,7 @@ function ShowContact ($contact_id)
 function SearchResults ($search_exp)
 { global $SessSemName, $_fullname_sql,$_range_type;
 	$db=new DB_Seminar;
-	$query = "SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, username, perms ".
+	$query = "SELECT DISTINCT auth_user_md5.user_id, ".$_fullname_sql["full_rev"]." AS fullname, username, perms ".
 		"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) ".
 		"WHERE (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
 
@@ -376,7 +376,7 @@ function ShowEditContact ($contact_id)
 	global $PHP_SELF, $open, $filter, $edit_id;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	$db->query ("SELECT user_id FROM contact WHERE contact_id = '$contact_id'");	
+	$db->query ("SELECT user_id FROM contact WHERE contact_id = '".$contact_id."' ");
 	if ($db->next_record()) {
 
 		$lastrow =	"<tr><td class=\"steel2\">"
