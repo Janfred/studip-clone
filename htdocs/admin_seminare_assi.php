@@ -1092,6 +1092,7 @@ if (($form == 5) && ($jump_next_x))
 				//write the default module-config
 				$Modules = new Modules;
 				$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
+				$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
 
     				//update/insert the assigned roomes
     				if ($RESOURCES_ENABLE) {
@@ -1303,6 +1304,8 @@ if (($form == 6) && ($jump_next_x)) {
 if (($form == 7) && ($jump_next_x))
 	{
 	if ($sem_create_data["sem_scm_content"]) { 
+		//if content is created, we enable the module again (it was turned off above) 
+		$Modules->writeStatus("scm", $sem_create_data["sem_id"], TRUE);	
 		if ($sem_create_data["sem_scm_id"]) {
 			$db->query("UPDATE scm SET content='".$sem_create_data["sem_scm_content"]."', tab_name='".$sem_create_data["sem_scm_name"]."', chdate='".time()."' WHERE scm_id='".$sem_create_data["sem_scm_id"]."'");
 		} else {
