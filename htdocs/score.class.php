@@ -25,6 +25,7 @@ class Score {
 	var $title;	// Title that refers to the score
 	var $myscore;	// my own Score
 	var $mygender;
+	var $score_content_cache = null;
 
 	
 	// Konstruktor
@@ -104,43 +105,91 @@ function CheckScore ($user_id) {
 		return FALSE;
 }
 
+
+function doRefreshScoreContentCache(){
+	$db = new DB_Seminar("SELECT a.user_id,username FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0");
+	while ($db->next_record()){
+		$this->score_content_cache[$db->f('user_id')]['username'] = $db->f('username');
+	}
+	if (is_array( ($user_ids = array_keys($this->score_content_cache)) )){
+		$id_list = "('" . join("','", $user_ids) . "')";
+		$db->query("SELECT count(post_id) as guestcount,range_id FROM guestbook LEFT JOIN user_info ON(range_id=user_info.user_id) 
+					WHERE range_id IN $id_list AND guestbook='1' GROUP BY range_id");
+		while ($db->next_record()){
+			$this->score_content_cache[$db->f('range_id')]['guestcount'] = $db->f('guestcount');
+		}
+		$db->query("SELECT count(news_id) as newscount,range_id FROM news_range WHERE range_id IN $id_list GROUP BY range_id");
+		while ($db->next_record()){
+			$this->score_content_cache[$db->f('range_id')]['newscount'] = $db->f('newscount');
+		}
+		$db->query("SELECT count(event_id) eventcount,range_id FROM calendar_events WHERE range_id IN $id_list AND class = 'PUBLIC' GROUP BY range_id");
+		while ($db->next_record()){
+			$this->score_content_cache[$db->f('range_id')]['eventcount'] = $db->f('eventcount');
+		}
+		$db->query("SELECT count(list_element_id) AS litcount, range_id FROM lit_list LEFT JOIN lit_list_content USING ( list_id )
+					WHERE visibility = 1 AND range_id IN $id_list GROUP BY range_id");
+		while ($db->next_record()){
+			$this->score_content_cache[$db->f('range_id')]['litcount'] = $db->f('litcount');
+		}
+		if ($GLOBALS['VOTE_ENABLE']){
+			$db->query("SELECT count(vote_id) AS votecount,range_id FROM vote WHERE range_id IN $id_list GROUP BY range_id");
+			while ($db->next_record()){
+				$this->score_content_cache[$db->f('range_id')]['votecount'] = $db->f('votecount');
+			}
+		}
+	}
+	return true;
+}
+
 function GetScoreContent($user_id) {
-	$username = get_username($user_id);
-	$db=new DB_Seminar;
-	
-	$db->query("SELECT count(post_id) as guestcount FROM guestbook LEFT JOIN user_info ON(range_id=user_info.user_id) WHERE range_id = '$user_id' AND guestbook='1' GROUP BY range_id");
-	if ($db->next_record()) {
-		$gaeste = $db->f("guestcount");
+	if (!is_array($this->score_content_cache)){
+		$this->doRefreshScoreContentCache();
+	}
+	$username = $this->score_content_cache[$user_id]['username'];
+	if ( ($gaeste = $this->score_content_cache[$user_id]['guestcount']) ) {
 		if ($gaeste == 1) 
 			$tmp = _("Gästebuch aktiviert mit 1 Eintrag");
 		else 
 			$tmp = _("Gästebuch aktiviert mit $gaeste Einträgen");
 		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-posting.gif\" border=\"0\"".tooltip("$tmp")."></a>&nbsp;";
-	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
+	} else {
+		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
+	}
 	
-	$db->query("SELECT * FROM news_range WHERE range_id = '$user_id'");
-	if ($db->next_record()) {
-		$news = $db->num_rows();
+	if ( ($news = $this->score_content_cache[$user_id]['newscount']) ) {
 		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-news.gif\" border=\"0\"".tooltip(_("$news persönliche News"))."></a>&nbsp;";
-	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
-	
-	$db->query("SELECT * FROM vote WHERE range_id = '$user_id'");
-	if ($db->next_record()) {
-		$vote = $db->num_rows();
+	} else {
+		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
+	}
+	if ( ($vote = $this->score_content_cache[$user_id]['votecount']) ) {
 		if ($vote == 1)
 			$tmp = _("Umfrage");
-		else $tmp = _("Umfragen");
+		else
+			$tmp = _("Umfragen");
 		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-vote.gif\" border=\"0\"".tooltip("$vote $tmp")."></a>&nbsp;";
-	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
+	} else {
+		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
+	}
 	
-	$db->query("SELECT * FROM calendar_events WHERE range_id = '$user_id' AND class = 'PUBLIC'");
-	if ($db->next_record()) {
-		$termin = $db->num_rows();
+	if ( ($termin = $this->score_content_cache[$user_id]['eventcount']) ) {
 		if ($termin == 1)
 			$tmp = _("Termin");
-		else $tmp = _("Termine");
+		else 
+			$tmp = _("Termine");
 		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-uhr.gif\" border=\"0\"".tooltip("$termin $tmp")."></a>&nbsp;";
-	} else {$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";}
+	} else {
+		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
+	}
+	
+	if ( ($lit = $this->score_content_cache[$user_id]['litcount']) ) {
+		if ($lit == 1)
+			$tmp = _("Literaturangabe");
+		else 
+			$tmp = _("Literaturangaben");
+		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-lit.gif\" border=\"0\"".tooltip("$lit $tmp")."></a>&nbsp;";
+	} else {
+		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
+	}
 	return $content;
 }
 
@@ -229,19 +278,19 @@ function GetMyScore() {
 	$gaeste = $db->f("guestcount");
 	
 	if ($GLOBALS['VOTE_ENABLE']) {
-		$db->query("SELECT * FROM vote WHERE range_id = '$user_id'");
+		$db->query("SELECT count(*) FROM vote WHERE range_id = '$user_id'");
 		$db->next_record();
-		$vote = $db->num_rows()*2;
+		$vote = $db->f(0)*2;
 		
-		$db->query("SELECT * FROM vote_user WHERE user_id = '$user_id'");
+		$db->query("SELECT count(*) FROM vote_user WHERE user_id = '$user_id'");
 		$db->next_record();
-		$vote += $db->num_rows();
+		$vote += $db->f(0);
 	}
 	
 	if ($GLOBALS['WIKI_ENABLE']) {
-		$db->query("SELECT * FROM wiki WHERE user_id = '$user_id'");
+		$db->query("SELECT count(*) FROM wiki WHERE user_id = '$user_id'");
 		$db->next_record();
-		$wiki = $db->num_rows();	
+		$wiki = $db->f(0);	
 	}
 	
 	$visits = object_return_views($user_id);
