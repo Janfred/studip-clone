@@ -503,7 +503,7 @@ function get_fullname($user_id = "", $format = "full" ){
 		$db=new DB_Seminar;
 		$db->query ("SELECT " . $_fullname_sql[$format] . " AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE a.user_id = '$user_id'");
 		if ($db->next_record()){
-			$author = $db->f("fullname");
+			$author = htmlReady($db->f("fullname"));
 		}
 		return ($cache[md5($user_id . $format)] = $author);
 	}
