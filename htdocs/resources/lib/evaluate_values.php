@@ -1152,6 +1152,15 @@ if ($save_state_x) {
 	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
 	$semObj = new Seminar($reqObj->getSeminarId());
 	$semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
+	
+	//if not single date-mode, we have to load all termin_ids from other requests of this seminar, because these dates don't have to be touched (they have an own request!)
+	if (!$reqObj->getTerminId()) {
+		$query = sprintf ("SELECT rr.termin_id, closed, date, end_time FROM resources_requests rr LEFT JOIN termine USING (termin_id) WHERE seminar_id = '%s' AND rr.termin_id != '' ", $reqObj->getSeminarId());
+		$db->query($query);
+		while ($db->next_record()) {
+			$dates_with_request[$db->f("termin_id")] = array("closed"=>$db->f("closed"), "begin" => $db->f("date"), "end" => $db->f("end_time"));
+		}
+	}
 
 	//single date mode - just create one assign-object
 	if ($reqObj->getTerminId())
@@ -1193,13 +1202,16 @@ if ($save_state_x) {
 		if ($no_perm)
 			$msg->addMsg(25);
 		else {
-			//grouped multiple date mode
+			//grouped multiple dates mode
 			if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["resource_id"] = $val;
 					foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["termin_ids"] as $key2 => $val2) {
-						$result = array_merge($result, $semResAssign->changeDateAssign($key2, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
-						$result_termin_id[] = $key2;
+						if (!$dates_with_request[$key2]) {
+							$result = array_merge($result, $semResAssign->changeDateAssign($key2, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
+							$result_termin_id[] = $key2;
+						} else
+							$skipped_termin_ids[$key2]=TRUE;
 					}
 					if ($semObj->getMetaDateType() == 0) {
 						$semObj->setMetaDateValue($key, "resource_id", $val);
@@ -1208,7 +1220,6 @@ if ($save_state_x) {
 				}
 				$close_request = TRUE;
 				$semObj->store();
-				
 			//normal metadate mode
 			} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
@@ -1226,8 +1237,11 @@ if ($save_state_x) {
 			//multiple dates mode
 			} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val){
-					$result = array_merge($result, $semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
-					$result_termin_id[] = $key;
+					if (!$dates_with_request[$key]) {
+						$result = array_merge($result, $semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
+						$result_termin_id[] = $key;
+					} else
+						$skipped_termin_ids[$key]=TRUE;
 				}
 			}
 			
@@ -1332,6 +1346,16 @@ if ($save_state_x) {
 				}
 			}
 			
+			//create additional msgs for skipped dates (this ones have got an own request, so the generel request doesn't affect them)
+			$skipped_objects = 0;
+			if ($skipped_termin_ids) {
+				foreach ($skipped_termin_ids as $key=>$val) {
+					$skipped_msg="<br>"._("Belegungszeit:")."&nbsp;".date("d.m.Y, H:i", $dates_with_request[$key]["begin"]).(($dates_with_request[$key]["end"]) ? " - ".date("H:i", $dates_with_request[$key]["end"]) : "");
+					$skipped_msg.=sprintf("&nbsp;"._("Status:")."&nbsp;<font color=\"%s\">%s</font>", ($dates_with_request[$key]["closed"] == 0) ? "red" : "green", ($dates_with_request[$key]["closed"] == 0) ? _("noch nicht bearbeitet") : _("bereits bearbeitet"));
+					$skipped_objects++;
+				}
+			}
+			
 			//update seminar-date (save the new resource_ids)
 			if ($succesful_assigned) {
 				if (($semObj->getMetaType == 0) && (!isSchedule($semObj->getId(), FALSE)))
@@ -1349,6 +1373,9 @@ if ($save_state_x) {
 				$msg->addMsg(34, array($bad_msg));
 			if ($req_added_msg)
 				$msg->addMsg(35, array($req_added_msg));
+			if ($skipped_msg)
+				$msg->addMsg(42, array($skipped_msg));
+				
 		}
 	}
 	
@@ -1359,7 +1386,7 @@ if ($save_state_x) {
 			$assigned_resources++;
 	}
 	
-	if (($assigned_resources == sizeof($assignObjects)) || ($close_request)) {
+	if ((($assigned_resources + $skipped_objects) == sizeof($assignObjects)) || ($close_request)) {
 		$reqObj->setClosed(1);
 		$reqObj->store();
 		unset($resources_data["requests_open"][$reqObj->getId()]);
@@ -1629,29 +1656,26 @@ if ($snd_closed_request_sms) {
 					$message.= ", "._("ab:")." ".date("d.m.Y", $semObj->getFirstDate());
 				}
 			} else {
-				$query2 = sprintf("SELECT * FROM termine WHERE range_id = '%s' ORDER BY date, content", $reqObj->getSeminarId());
+				$query2 = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' ORDER BY date, content", $reqObj->getSeminarId());
 				$db2->query($query2);
 
 				if ($db2->nf()) {
 					while ($db2->next_record()) {
-						$message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "");
-						foreach ($request_data[$db->f("request_id")]["assign_objects"] as $key=>$val) {
-							if ($val["termin_id"] == $db2->f("termin_id")) {
-								$resObj =& ResourceObject::Factory($request_data[$db->f("request_id")]["assign_objects"][$key]["resource_id"]);
-								$message.= $resObj->getName()."\n";
-							}
+						if ($db2->f("resource_id")) {
+							$message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "")." ";
+							$resObj =& ResourceObject::Factory($db2->f("resource_id"));
+							$message.= $resObj->getName()."\n";
 						}
 					}
 				}
 			}
 		} else {
-			$query2 = sprintf("SELECT * FROM termine WHERE range_id = '%s' AND termin_id = '%s' ORDER BY date, content", $reqObj->getSeminarId(), $reqObj->getTerminId());
+			$query2 = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' AND termin_id = '%s' ORDER BY date, content", $reqObj->getSeminarId(), $reqObj->getTerminId());
 			$db2->query($query2);
 
-			$tmp_assign_ids = array_keys($request_data[$db->f("request_id")]["assign_objects"]);
 			if ($db2->nf()) {
 				while ($db2->next_record()) {
-					$resObj =& ResourceObject::Factory($request_data[$db->f("request_id")]["assign_objects"][$tmp_assign_ids[0]]["resource_id"]);
+					$resObj =& ResourceObject::Factory($db2->f("resource_id"));
 					$message.= date("d.m.Y, H:i", $db2->f("date")).(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "").": ".$resObj->getName()."\n";
 				}
 			}
