@@ -43,7 +43,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 <tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;Verwaltung der Studieng&auml;nge</b></td>
+	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung der Studieng&auml;nge")?></b></td>
 </tr>
 <tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
@@ -66,10 +66,10 @@ while ( is_array($HTTP_POST_VARS)
   
 
   // Neuer Studiengang
-  case "create":
+  case "create_x":
     // Do we have all necessary data?
     if (empty($Name)) {
-      my_error("<b>Bitte geben sie eine Bezeichnug f&uuml;r das Fach ein!</b>");
+      my_error("<b>" . _("Bitte geben sie eine Bezeichnug f&uuml;r das Fach ein!") . "</b>");
       break;
     }
     
@@ -77,7 +77,7 @@ while ( is_array($HTTP_POST_VARS)
     // NOTE: This should be a transaction, but it isn't...
     $db->query("SELECT * FROM studiengaenge WHERE name='$Name'");
     if ($db->nf()>0) {
-      my_error(" <b>Der Studiengang \"".htmlReady(stripslashes($Name))."\" existiert bereits!");
+      my_error("<b>" . sprintf(_("Der Studiengang \"%s\" existiert bereits!"), htmlReady(stripslashes($Name))) . "</b>");
       break;
     }
 
@@ -86,21 +86,21 @@ while ( is_array($HTTP_POST_VARS)
     $query = "INSERT INTO studiengaenge VALUES('$i_id','$Name','$Beschreibung', '".time()."', '".time()."') ";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      my_error("<b>Datenbankoperation gescheitert: $query </b>");
+      my_error("<b>" . _("Datenbankoperation gescheitert:") . " $query </b>");
       break;
     }
     ELSE {
          unset($i_view);  // gibt keine Detailansicht
-         my_msg("<b>Der Studiengang \"".htmlReady(stripslashes($Name))."\" wurde angelegt!");
+         my_msg("<b>" . sprintf(_("Der Studiengang \"%s\" wurde angelegt!"), htmlReady(stripslashes($Name))) . "</b>");
          break;
     }
 
   ## Change Studiengangname
-  case "i_edit":
+  case "i_edit_x":
 
     // Do we have all necessary data?
     if (empty($Name)) {
-      my_error("<b>Bitte geben Sie eine Bezeichnug f&uuml;r den Studiengang ein!</b>");
+      my_error("<b>" . _("Bitte geben Sie eine Bezeichnug f&uuml;r den Studiengang ein!") . "</b>");
       break;
     }
 		
@@ -109,13 +109,13 @@ while ( is_array($HTTP_POST_VARS)
     $db->query($query);
     if ($db->affected_rows() == 0) {
         unset($i_view);  // wurde nix verändert...
-        my_msg("<b>Keine Änderungen am Studiengang \"".htmlReady(stripslashes($Name))."\" durchgeführt.</b>");
+        my_msg("<b>" . sprintf(_("Keine Änderungen am Studiengang \"%s\" durchgeführt."), htmlReady(stripslashes($Name))) . "</b>");
         break;
 	}
     else
     	$db->query("UPDATE studiengaenge SET chdate='".time()."' ");
     
-    my_msg("<b>Die Daten des Studiengangs \"".htmlReady(stripslashes($Name))."\" wurden ver&auml;ndert.</b>");
+    my_msg("<b>" . sprintf(_("Die Daten des Studiengangs \"%s\" wurden ver&auml;ndert."), htmlReady(stripslashes($Name))) . "</b>");
     unset($i_view);  // gibt keine Detailansicht
   break;
 
@@ -124,11 +124,11 @@ while ( is_array($HTTP_POST_VARS)
   // diese Passage wäre zu diskutieren. Darf man Studiengänge löschen, denen sich Studis bereits zugeordnet haben?
   // Zur Vorsicht erst mal dringelassen.
 
-  case "i_kill":
+  case "i_kill_x":
     // sind dem Studengang noch veranstaltungen zugeordnet?
 	$db->query("SELECT * FROM admission_seminar_studiengang WHERE studiengang_id = '$i_id'");
     	if ($db->next_record()) {
-      		my_error("<b>Dieser Studiengang kann nicht gel&ouml;scht werden, da noch Veranstaltungen zugeordnet sind!</b>");
+      		my_error("<b>" . _("Dieser Studiengang kann nicht gel&ouml;scht werden, da noch Veranstaltungen zugeordnet sind!") . "</b>");
       		break;
     	}
     
@@ -137,78 +137,76 @@ while ( is_array($HTTP_POST_VARS)
     $query = "DELETE FROM studiengaenge WHERE studiengang_id='$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      my_error("<b>Datenbankoperation gescheitert: </b> $query</b>");
+      my_error("<b>" . _("Datenbankoperation gescheitert:") . " </b> $query</b>");
       break;
     }
     $query = "DELETE FROM user_studiengang WHERE studiengang_id='$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      my_msg("<b>keine Nutzer betroffen</b>");
+      my_msg("<b>" . _("keine Nutzer betroffen") . "</b>");
     }
     
     unset($i_view);  // gibt keine Detailansicht
-    my_msg("<b>Der Studiengang \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
+    my_msg("<b>" . sprintf(_("Der Studiengang \"%s\" wurde gel&ouml;scht!"), htmlReady(stripslashes($Name))) . "</b>");
     break;
 
     default:
     break;
- }
+	}
 }
 
 
 //Anzeige der Studiengangdaten; das tatseachliche Aenderungsmodul
 
-if ($i_view){
-    if ($i_view<>"new") {
-      $db->query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS number FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE studiengaenge.studiengang_id = '$i_view' GROUP BY studiengang_id");
-      $db->next_record();
-    }
-    $i_id= $db->f("studiengang_id");
+if ($i_view) {
+	if ($i_view <> "new") {
+		$db->query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS number FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE studiengaenge.studiengang_id = '$i_view' GROUP BY studiengang_id");
+		$db->next_record();
+	}
+	$i_id= $db->f("studiengang_id");
 
   ?>
-    <tr><td class="blank" colspan=2>
-    <table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=0 cellpadding=2>
+	<tr><td class="blank" colspan=2>
+	<table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
-	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">Studiengangname: </td><td class="<? echo $cssSw->getClass() ?>"><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
-	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">Beschreibung: </td><td class="<? echo $cssSw->getClass() ?>"><textarea cols=50 ROWS=4 name="Beschreibung" value="<?php $db->p("beschreibung") ?>"><?php echo htmlReady($db->f("beschreibung")) ?></textarea></td></tr>
+	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><?=_("Studiengangname:")?> </td><td class="<? echo $cssSw->getClass() ?>"><input type="text" name="Name" size=60 maxlength=254 value="<?php echo htmlReady($db->f("name")) ?>"></td></tr>
+	<tr><td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><?=_("Beschreibung:")?> </td><td class="<? echo $cssSw->getClass() ?>"><textarea cols=50 ROWS=4 name="Beschreibung" value="<?php $db->p("beschreibung") ?>"><?php echo htmlReady($db->f("beschreibung")) ?></textarea></td></tr>
 	<tr><td class="<? echo $cssSw->getClass() ?>"colspan=2 align="center">
 	
   <?
-	if ($i_view<>"new") {
+	if ($i_view <> "new") {
 		if ($db->f("number") < 1):
 			?>
-			<input type="submit" name="i_kill" value=" L&ouml;schen ">
+			<input type="IMAGE" name="i_kill" value=" <?=_("L&ouml;schen")?> " <?=makeButton("loeschen", "src")?>>
 			<?
 		endif;
 		?>
-		<input type="submit" name="i_edit" value=" Ver&auml;ndern ">
+		<input type="IMAGE" name="i_edit" value=" <?=_("Ver&auml;ndern")?> " <?=makeButton("uebernehmen", "src")?>>
 		<input type="hidden" name="i_id"   value="<?php $db->p("studiengang_id") ?>">
 		<?
-	}
-	else {
-	     echo "<input type=\"submit\" name=\"create\" value=\"Anlegen\">";
+	} else {
+		echo "<input type=\"IMAGE\" name=\"create\" value=\" " . _("Anlegen") . " \" " . makeButton("anlegen", "src") . ">";
 	}
 	?>
-	<input type="submit" name="cancel" value=" Abbrechen ">
+	<input type="IMAGE" name="cancel" value=" <?=_("Abbrechen")?> " <?=makeButton("abbrechen", "src")?>>
 	<input type="hidden" name="i_view" value="<? echo $i_view; ?>">
-  	</form></td></tr></table>
+	</form></td></tr></table>
 	<br><br>
-<?
-  	if ($i_view<>"new")
-		{
- 		$db->query("SELECT Name, seminare.seminar_id FROM admission_seminar_studiengang LEFT JOIN seminare USING (seminar_id) WHERE studiengang_id = '$i_id'");
+	<?
+	if ($i_view<>"new") {
+		$db->query("SELECT Name, seminare.seminar_id FROM admission_seminar_studiengang LEFT JOIN seminare USING (seminar_id) WHERE studiengang_id = '$i_id'");
  		?>
  		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
- <?
-        IF ($db->affected_rows() > 0) {?><tr><td width="100%" colspan=2><br>&nbsp;Diesem Studiengang sind folgende teilnahmebeschr&auml;nkte Veranstaltungen zugeordnet:<br><br></th></tr><?}
-        ELSE {?><tr><td width="100%" colspan=2><br>&nbsp;Diesem Bereich sind noch keine Veranstaltungen zugeordnet!<br><br></th></tr><?}
-?>
- 		<tr><th width="100%" align="center">Name</th><tr>
+		<?
+		if ($db->affected_rows() > 0) {?><tr><td width="100%" colspan=2><br>&nbsp;<?=_("Diesem Studiengang sind folgende teilnahmebeschr&auml;nkte Veranstaltungen zugeordnet:")?><br><br></th></tr><?}
+		else {?><tr><td width="100%" colspan=2><br>&nbsp;<?=_("Diesem Bereich sind noch keine Veranstaltungen zugeordnet!")?><br><br></th></tr><?}
+		?>
+ 		<tr><th width="100%" align="center"><?=_("Name")?></th><tr>
 		<?
  		while ($db->next_record()) {
  			printf ("<tr><td class=\"%s\"><a href=\"admin_admission.php?seminar_id=%s\">&nbsp; %s</a></td></tr>", $cssSw->getClass(), $db->f("seminar_id"), htmlReady($db->f("Name")));
-	            	$cssSw->switchClass();
-    		}
+			$cssSw->switchClass();
+    }
 	echo "</table><br><br>";
 	}
 }
@@ -217,30 +215,27 @@ if ($i_view){
 // information, if we come here after a submission...
 
 if (!$i_view) {
-?>
-  <tr><td class="blank" colspan=2><b><a href="<?echo $PHP_SELF?>?i_view=new">&nbsp;Neuen Studiengang anlegen</a><b><br><br></td></tr>
+	?>
+  <tr><td class="blank" colspan=2><b><a href="<?echo $PHP_SELF?>?i_view=new">&nbsp;<?=_("Neuen Studiengang anlegen")?></a><b><br><br></td></tr>
   <tr><td class="blank" colspan=2>
   <table align=center bg="#ffffff" width="80%" border=0 cellpadding=2 cellspacing=0>
   <tr valign=top align=middle>
-  <th width="80%">Name des Studiengangs</th>
-  <th width="20%">Veranstaltungen</th>
+  <th width="80%"><?=_("Name des Studiengangs")?></th>
+  <th width="20%"><?=_("Veranstaltungen")?></th>
   </tr>
-<?  
+	<?  
   
   // Traverse the result set
   $db->query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS count FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) GROUP BY studiengang_id ORDER BY name");
   while ($db->next_record()) {        //Aufbauen der &Uuml;bersichtstabelle
-?>     
-           <tr valign=middle align=left>
-           <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?echo $PHP_SELF?>?i_view=<?$db->p("studiengang_id")?>">&nbsp;<?php echo htmlReady($db->f("name")) ?></a></td>
-           <td class="<? echo $cssSw->getClass() ?>" align=center>&nbsp;<?php $db->p("count") ?></td>
-           </tr>
-           <?php
+		$cssSw->switchClass(); 
+		print("<tr valign=\"middle\" align=\"left\">");
+		printf("<td class=\"%s\"><a href=\"%s?i_view=%s\">&nbsp;%s</a></td>", $cssSw->getClass(), $PHP_SELF, $db->f("studiengang_id"), htmlReady($db->f("name")));
+		printf("<td class=\"%s\" align=\"center\">&nbsp;%s</td>", $cssSw->getClass(), $db->f("count"));
+		print("</tr>");
   }
-?>
-  </table><br><br>
-  </td></tr>
-  <?php
+  print("</table><br><br>\n");
+  print("</td></tr>\n");
 }
 
 echo"</table>";
