@@ -1,7 +1,7 @@
 <?php
 $config['title'] = "StudIP Messenger Sidebar";
 $config['panelName'] = "StudIP Messenger";
-$config['panelURL'] = "http://test.studip.de/sidebar_im.php";
+$config['panelURL'] = "http://test.studip.de/studip/sidebar_im.php";
 $config['panelConfigURL'] = "http://www.studip.de";
 $config['addPanelMsg'] = "StudIP Messenger als Sidebar hinzufügen";
 ?>
