@@ -53,6 +53,7 @@ class ExternEditGeneric extends ExternEdit {
 	*/
 	function editFaceGeneric ($attribute, $title, $info) {
 		$faces = array(
+			"" => _("keine Auswahl"),
 			"Arial,Helvetica,sans-serif" => _("serifenlose Schrift"),
 		  "Times,Times New Roman,serif" => _("Serifenschrift"),
 			"Courier,Courier New,monospace" => _("diktengleiche Schrift")

@@ -384,6 +384,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$value = $this->getValue($attribute);
 		
 		$align_types = array(
+			"" => _("keine Auswahl"),
 			"left" => _("linksbündig"),
 			"right" => _("rechtsbündig"),
 		  "center" => _("zentriert")
@@ -427,6 +428,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$value = $this->getValue($attribute);
 		
 		$valign_types = array(
+			"" => _("keine Auswahl"),
 			"top" => _("obenbündig"),
 			"bottom" => _("untenbündig"),
 		  "center" => _("zentriert")
@@ -467,8 +469,8 @@ class ExternEditHtml extends ExternEditGeneric {
 	function editSize ($attribute) {
 		$info = _("Geben Sie die relative Schriftgröße an.");
 		$title = _("Schriftgröße:");
-		$values = array("1", "2", "3", "4", "5", "6", "7");
-		$names = array("1", "2", "3", "4", "5", "6", "7");
+		$values = array("", "1", "2", "3", "4", "5", "6", "7");
+		$names = array(_("keine Auswahl"), "1", "2", "3", "4", "5", "6", "7");
 		
 		return $this->editOptionGeneric($attribute, $title, $info, $values, $names, 1, FALSE);
 	}

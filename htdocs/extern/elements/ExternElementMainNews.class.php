@@ -67,7 +67,7 @@ class ExternElementMainNews extends ExternElementMain {
 			"widthpp" => "",
 			"sort" => "|1|0",
 			"wholesite" => "",
-			"studiplink" => "1",
+			"studiplink" => "top",
 			"nameformat" => "no_title",
 			"dateformat" => "%d. %b. %Y",
 			"language" => "de_DE",
