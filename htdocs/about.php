@@ -39,6 +39,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/guestbook.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 	
@@ -299,6 +300,11 @@ if ($GLOBALS['CHAT_ENABLE']){
 		echo "<br>";
 }
 
+//test Ausgabe von Literaturlisten
+if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
+	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Literaturlisten") . " </b></td></tr>";
+	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
+}
 // Hier wird der Lebenslauf ausgegeben:
 if ($db->f("lebenslauf")!="") {
 	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Lebenslauf") . " </b></td></tr>";
