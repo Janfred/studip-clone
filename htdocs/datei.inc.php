@@ -42,8 +42,16 @@ function parse_link($link) {
 		// Parsing an FTF-Adress	
 		$url_parts = @parse_url( $link );
 		$documentpath = $url_parts["path"];
-		$ftp = ftp_connect($url_parts["host"]);
 		
+		if (strpos($url_parts["host"],"@")) {
+			$url_parts["pass"] .= "@".substr($url_parts["host"],0,strpos($url_parts["host"],"@"));
+			$url_parts["host"] = substr(strrchr($url_parts["host"],"@"),1);
+		}
+				
+		$ftp = ftp_connect($url_parts["host"]);
+		// echo $url_parts["pass"];
+		
+				
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) $url_parts["pass"] = "wwwrun@".$GLOBALS['MAIL_LOCALHOST'];
 		if (!ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
@@ -57,6 +65,8 @@ function parse_link($link) {
 			$parsed_link["HTTP/1.0 200 OK"] = "HTTP/1.0 200 OK";
 		else
 			$parsed_link = FALSE;
+		$url_parts["pass"] = preg_replace("!@!","%40",$url_parts["pass"]);	
+		$the_link = "ftp://".$url_parts["user"].":".$url_parts["pass"]."@".$url_parts["host"].$documentpath;
 		return $parsed_link;
 				
 	} else {
