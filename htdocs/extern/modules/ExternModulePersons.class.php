@@ -37,6 +37,7 @@
 
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/DataFields.class.php");
 
 class ExternModulePersons extends ExternModule {
 
@@ -60,6 +61,11 @@ class ExternModulePersons extends ExternModule {
 	}
 	
 	function setup () {
+		// extend $data_fields if generic datafields are set
+	//	$config_datafields = $this->config->getValue("Main", "genericdatafields");
+	//	$this->data_fields = array_merge($this->data_fields, $config_datafields);
+		
+		// setup module properties
 		$this->elements["LinkIntern"]->link_module_type = 2;
 		$this->elements["LinkIntern"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
 		$this->elements["Link"]->real_name = _("Email-Link");
