@@ -617,6 +617,7 @@ function ForumNoPostings () {
 *
 **/
 function forum_print_navi ($forum) {
+	global $PHP_SELF;
 	$i = 1;
 	$maxpages = ceil($forum["forumsum"] / $forum["postingsperside"]);
 	$ipage = ($forum["flatviewstartposting"] / $forum["postingsperside"])+1;
