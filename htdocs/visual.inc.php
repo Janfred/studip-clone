@@ -341,7 +341,7 @@ function quotes_encode($description,$author)
 ////////////////////////////////////////////////////////////////////////////////
 
 function formatReady($what, $trim = TRUE){
-	return smile(FixLinks(format(htmlReady($what, $trim, FALSE)), FALSE, TRUE));
+	return smile(FixLinks(format(htmlReady($what, $trim, FALSE)), FALSE));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -448,39 +448,38 @@ function kill_format($text){
 
 //////////////////////////////////////////////////////////////////////////
 
-function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = FALSE){
-	if(empty($data)){
+function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
+	if (empty($data)) {
 		return $data;
 	}
-	if($fix_nl === TRUE)
+	if ($fix_nl)
 		$data = preg_replace("/\n?\r\n?/", "\n", $data); // newline fixen
-	//$lines = explode("\n", $data);
 	
 	$pattern = array("/([ \t\]\n]|^)www\./i", "/([ \t\]\n]|^)ftp\./i");
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
-	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[_a-z0-9-~]*)*\.?[_a-z0-9-\?\&\=\;]*)'ie",
+	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[_a-z0-9-~]*)*\.?\S*)'ie",
 					"'(?<=\s)(\[([^\n\f\]]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie");
 	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 	
-	if($nl_to_br === TRUE)
+	if ($nl_to_br)
 		$fixed_text = str_replace("\n", "<br />", $fixed_text);
 	
 	return $fixed_text;
 }
 
 // Hilfsfunktion für FixLinks()
-function preg_call_link($name, $link, $mod){
-	if($mod == "LINK"){
-		if($name == "")
+function preg_call_link($name, $link, $mod) {
+	if ($mod == "LINK") {
+		if ($name == "")
 			$name = $link;
 		$link = str_replace("&amp;", "&", $link);
 		$tbr = "<a href=\"$link\" target=\"_blank\">$name</a>";
 	}
-	else{
-		if($name != "")
+	else {
+		if ($name != "")
 			$tbr = "<a href=\"mailto:$link\">$name</a>";
 		else
 			$tbr = "<a href=\"mailto:$link\">$link</a>";
