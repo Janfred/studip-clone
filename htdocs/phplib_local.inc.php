@@ -22,6 +22,11 @@
 // +---------------------------------------------------------------------------+
 //$Id$
 
+
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+
+
 //Compatibility for PHP Version < 4.1.0
 // 3/18/2002 - Tim Gallagher<timg@sunflowerroad.com>
 // if $_REQUEST isn't set, we will set it based on $HTTP_GET_VARS AND $HTTP_POST_VARS
@@ -388,7 +393,8 @@ class Seminar_Register_Auth extends Seminar_Auth {
 	function auth_doregister() {
 		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht, $Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN;
 		
-		require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+		global $_language, $_language_path;
+		$_language_path = init_i18n($_language);
 		
 		$this->auth["uname"]=$username;					// This provides access for "crcregister.ihtml"
 		
@@ -506,32 +512,13 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$to=$Email;
 		$secret= md5("$uid:$this->magic");
 		$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP . "email_validation.php?secret=" . $secret;
-		$mailbody="Dies ist eine Bestätigungsmail des Systems\n"
-		."\"Studienbegleitender Internetsupport Präsenzlehre\"\n"
-		."- $UNI_NAME_CLEAN -\n\n"
-		."Sie haben sich um $Zeit mit folgenden Angaben angemeldet:\n\n"
-		."Benutzername: $username\n"
-		."Vorname: $Vorname\n"
-		."Nachname: $Nachname\n"
-		."Email-Adresse: $Email\n\n"
-		."Diese Mail wurde Ihnen zugesandt um sicherzustellen,\n"
-		."daß die angegebene Email-Adresse tatsächlich Ihnen gehört.\n\n"
-		."Wenn diese Angaben korrekt sind, dann öffnen Sie bitte den Link\n\n"
-		."$url\n\n"
-		."in Ihrem Browser.\n"
-		."Möglicherweise unterstützt ihr Mail-Programm ein einfaches Anklicken des Links.\n"
-		."Ansonsten müssen sie Ihren Browser öffnen und den Link komplett in die Zeile\n"
-		."\"Location\" oder \"URL\" kopieren.\n\n"
-		."Sie müssen sich auf jeden Fall als Benutzer \"$username\" anmelden,\n"
-		."damit die Rückbestätigung funktioniert.\n\n"
-		."Falls Sie sich nicht als Benutzer \"$username\" angemeldet haben\n"
-		."oder überhaupt nicht wissen, wovon hier die Rede ist,\n"
-		."dann hat jemand Ihre Email-Adresse missbraucht!\n\n"
-		."Bitte wenden Sie sich in diesem Fall an $smtp->abuse,\n"
-		."damit der Eintrag aus der Datenbank gelöscht wird.\n";
+
+		// include language-specific subject and mailbody
+		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/register_mail.inc.php");
+
 		$smtp->SendMessage(
 		$smtp->env_from, array($to),
-		array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: Bestätigungsmail des Stud.IP-Systems"),
+		array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 		$mailbody);
 		
 		return $uid;
