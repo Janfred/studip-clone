@@ -149,22 +149,27 @@ class VeranstaltungResourcesAssign {
 	function changeDateAssign($termin_id, $resource_id='') {
 		$query = sprintf("SELECT date, content, end_time, assign_id FROM termine LEFT JOIN resources_assign ON (assign_user_id = termin_id) WHERE termin_id = '%s'", $termin_id);
 		$this->db->query($query);
-		while ($this->db->next_record()) {
-			$changeAssign=new AssignObject($this->db->f("assign_id"));
-			if ($resource_id)
-				$changeAssign->setResourceId($resource_id);
-			
-			$changeAssign->setBegin($this->db->f("date"));
-			$changeAssign->setEnd($this->db->f("end_time"));
-			$changeAssign->setRepeatEnd($this->db->f("end_date"));
-			$changeAssign->setRepeatQuantity(0);
-			$changeAssign->setRepeatInterval(0);
-			$changeAssign->setRepeatMonthOfYear(0);
-			$changeAssign->setRepeatDayOfMonth(0);
-			$changeAssign->setRepeatWeekOfMonth(0);
-			$changeAssign->setRepeatDayOfWeek(0);
-			//createAssign->checkIsFree ° should performed here			
-			$changeAssign->store();
+		if ($this->db->next_record()) {
+			if (!$this->db->f("assign_id"))
+				 $this->insertDateAssign($termin_id, $resource_id);
+			else {
+				$changeAssign=new AssignObject($this->db->f("assign_id"));
+	
+				if ($resource_id)
+					$changeAssign->setResourceId($resource_id);
+	
+				$changeAssign->setBegin($this->db->f("date"));
+				$changeAssign->setEnd($this->db->f("end_time"));
+				$changeAssign->setRepeatEnd($this->db->f("end_date"));
+				$changeAssign->setRepeatQuantity(0);
+				$changeAssign->setRepeatInterval(0);
+				$changeAssign->setRepeatMonthOfYear(0);
+				$changeAssign->setRepeatDayOfMonth(0);
+				$changeAssign->setRepeatWeekOfMonth(0);
+				$changeAssign->setRepeatDayOfWeek(0);
+				//createAssign->checkIsFree ° should performed here			
+				$changeAssign->store();
+			}
 		}
 	}
 	
