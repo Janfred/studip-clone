@@ -391,7 +391,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
-				printf ("<font size=-1><b>" . _("Sonstiges:") . "</b></font><br /><font size=-1>%s</font>",formatReady($db2->f("Sonstiges"), TRUE, TRUE)));
+				printf ("<font size=-1><b>" . _("Sonstiges:") . "</b></font><br /><font size=-1>%s</font>",formatReady($db2->f("Sonstiges")));
 				?>
 				</td>
 			</tr>
