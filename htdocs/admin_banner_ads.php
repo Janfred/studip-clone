@@ -66,16 +66,16 @@ function imaging($img, $img_size, $img_name) {
 		$ext = strtolower(substr($img_name,$dot+1,$l));
 	}
 	//passende Endung ?
-	if ($ext != "jpg" && $ext != "gif" ) {
-		$msg = "error§" . sprintf(_("Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die Dateiendungen .gif und .jpg erlaubt!"), $ext);
+	if ($ext != 'jpg' && $ext != 'gif' && $ext != 'png') {
+		$msg = "error§" . sprintf(_("Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die Dateiendungen .gif, .png und .jpg erlaubt!"), $ext);
 		return $msg;
 	}
 
 	//na dann kopieren wir mal...
-	$uploaddir = "./pictures/banner";
+	$uploaddir = './pictures/banner';
 	$md5hash = md5($img_name+time());
-	$newfile = $uploaddir . "/" . $md5hash . "." . $ext;
-	$banner_data["banner_path"] = $md5hash . "." . $ext;
+	$newfile = $uploaddir . '/' . $md5hash . '.' . $ext;
+	$banner_data["banner_path"] = $md5hash . '.' . $ext;
 	if(!@copy($img,$newfile)) {
 		$msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return $msg;
@@ -128,7 +128,9 @@ function show_banner_list($table) {
 }
 
 function check_data(&$banner_data) {
-	$msg="";
+	$msg = '';
+	$db = new DB_Seminar;
+
 	function valid_date($h,$m,$d,$mo,$y) {
 		if (($h==_("hh") && $m==_("mm") && $d==_("tt") && $mo==_("mm") && $y==_("jjjj"))|| ($h+$m+$d+$mo+$y == 0)) {
 			return 0; // 0= forever
@@ -160,10 +162,13 @@ function check_data(&$banner_data) {
 			 if (!eregi('^(https?)|(ftp)://', $banner_data['target'])) $msg .= "error§" . _('Das Verweisziel muss eine gültige URL sein (incl. http://).') . "§";
 			break;
 		case 'inst':
-			$msg .= 'error§' . _('Der Verweistyp "Einrichtung" wird in dieser Installation nicht unterstützt.') . '§';
+			$q = 'SELECT * FROM Institute WHERE Institut_id="' . $banner_data["target"] . '"';
+			$db->query($q);
+			if (!$db->next_record()) {
+				$msg .= "error§" . _('Die angegebene Einrichtung existiert nicht. Bitte geben Sie eine gültige Einrichtungs-ID ein.') .'§';
+			}
 			break;
 		case 'user':
-			$db = new DB_Seminar;
 			$q = 'SELECT * FROM auth_user_md5 WHERE username="' . $banner_data["target"] . '"';
 			$db->query($q);
 			if (!$db->next_record()) {
@@ -171,7 +176,6 @@ function check_data(&$banner_data) {
 			}
 			break;
 		case 'seminar':
-			$db = new DB_Seminar;
 			$q = "SELECT * FROM seminare WHERE Seminar_id='" . $banner_data["target"] . "'";
 			$db->query($q);
 			if (!$db->next_record()) {
