@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-10-01 18:51+0200\n"
+"POT-Creation-Date: 2003-10-01 19:30+0200\n"
 "PO-Revision-Date: 2003-10-01 11:56+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -137,15 +137,3 @@ msgstr "Official learning modules:"
 #: lernmodule/lernmodul_view_functions.inc.php:368
 msgid "Inoffizielle Lernmodule:"
 msgstr "Unofficial learning modules:"
-
-#~ msgid "Der Einrichtung sind folgende Lernmodule zugeordnet:"
-#~ msgstr "The institute is allocated the following learning modules:"
-
-#~ msgid "Der Veranstaltung sind folgende Lernmodule zugeordnet:"
-#~ msgstr "The course is allocated the following learning modules:"
-
-#~ msgid "Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft."
-#~ msgstr "No ILIAS learning modules are linked to this institute."
-
-#~ msgid "Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft."
-#~ msgstr "No ILIAS learning modules are linked to this course."

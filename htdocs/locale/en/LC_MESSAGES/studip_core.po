@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
-"POT-Creation-Date: 2003-10-01 18:51+0200\n"
+"POT-Creation-Date: 2003-10-01 19:30+0200\n"
 "PO-Revision-Date: 2003-10-01 18:42+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
