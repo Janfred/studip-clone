@@ -163,9 +163,9 @@ function GetScoreContent($user_id) {
 	}
 	if ( ($vote = $this->score_content_cache[$user_id]['votecount']) ) {
 		if ($vote == 1)
-			$tmp = _("Umfrage");
+			$tmp = _("Votes");
 		else
-			$tmp = _("Umfragen");
+			$tmp = _("Votes");
 		$content .= "<a href=\"about.php?username=$username\"><img src=\"pictures/icon-vote.gif\" border=\"0\"".tooltip("$vote $tmp")."></a>&nbsp;";
 	} else {
 		$content .= "<img src=\"pictures/blank.gif\" width=\"17\">";
