@@ -46,7 +46,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 
 class ExternModule {
 
-	var $type;
+	var $type = NULL;
 	var $name;
 	var $config;
 	var $registered_elements;
@@ -57,7 +57,7 @@ class ExternModule {
 	/**
 	*
 	*/
-	function ExternModule ($range_id, $module_name, $config_id = "", $set_config = "") {
+	function ExternModule ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 		$module_name = ucfirst($module_name);
 		
 		if ($module_name != "") {
@@ -78,7 +78,7 @@ class ExternModule {
 				break;
 			}
 		}
-		if ($this->type == "")
+		if ($this->type === NULL)
 			$this->printError();
 		
 		$this->name = $module_name;
@@ -96,16 +96,22 @@ class ExternModule {
 		// instantiate the registered elements
 		foreach ($this->registered_elements as $name => $registered_element) {
 			if (is_int($name) || !$name)
-				$this->elements[$registered_element] =& new ExternElement($this->config, $registered_element);
+				$this->elements[$registered_element] =& new ExternElement(&$this->config, $registered_element);
 			else {
-				$this->elements[$name] =& new ExternElement($this->config, $registered_element);
+				$this->elements[$name] =& new ExternElement(&$this->config, $registered_element);
 				$this->elements[$name]->name = $name;
 			}
 		}
-		
+				
 		if ($set_config != "" && $config_id == "") {
 			$config = $this->getDefaultConfig();
 			$this->config->setConfiguration($set_config, $config);
+		}
+		
+		// overwrite modules configuration with global configuration
+		if ($global_id) {
+			$this->config->setGlobalConfig(new ExternConfig($range_id, $module_name, $global_id),
+					$this->registered_elements);
 		}
 		
 		$this->setup();
