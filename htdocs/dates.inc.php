@@ -921,13 +921,13 @@ function delete_date ($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $se
 	$db3 = new DB_Seminar;	
 
 	## Eventuell rekursiv Postings loeschen
-	if ($topic_delete) {
+	/*if ($topic_delete) { //deprecated at the moment because of bad usabilty (delete date kill whole topic in forum without a notice, that's bad...)
 		$db->query("SELECT topic_id FROM termine WHERE termin_id ='$termin_id'");
 		$db->next_record();
 		if ($db->f('topic_id')){
 			delete_topic($db->f("topic_id"),$count);
 		}
-	}
+	}*/
 	
 	if (!$folder_move) {
 		## Dateiordner muessen weg!
