@@ -1,9 +1,9 @@
 <?
 $EXPORT_ENABLE = true;
 
-$XSLT_ENABLE = true;
+$XSLT_ENABLE = false;
 $skip_page_2 = false;
-$PATH_XSLT_PROCESS = "./htdocs/studip/tmp/";
+$PATH_XSLT_PROCESS = $TMP_PATH;
 
 $export_icon["xml"] = "xls-icon.gif";
 $export_icon["xslt"] = "xls-icon.gif";
