@@ -9,7 +9,7 @@
 		."Forename: $Vorname\n"
 		."Surname: $Nachname\n"
 		."E-mail address: $Email\n\n"
-		."This mail is being sent to you be sure,\n"
+		."This mail is being sent to you to be sure,\n"
 		."that the given E-mail address does actually belong to you.\n\n"
 		."If this information is correct, please open the link\n\n"
 		."$url\n\n"
