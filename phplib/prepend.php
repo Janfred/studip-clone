@@ -8,7 +8,7 @@
  * $Id$
  *
  */ 
-
+(!isset($_REQUEST['GLOBALS'])) OR die('Setting the $GLOBALS array is not tolerated!');
 $_PHPLIB = array();
 $_PHPLIB["libdir"] = ""; 
 
