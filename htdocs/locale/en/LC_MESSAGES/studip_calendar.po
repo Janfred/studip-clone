@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-03-21 13:06+0100\n"
-"PO-Revision-Date: 2003-03-17 16:10+0100\n"
+"PO-Revision-Date: 2003-03-21 16:42+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -64,9 +64,8 @@ msgid "Terminkalender"
 msgstr "Appointment calendar"
 
 #: calendar/calendar_links.inc.php:41 calendar/calendar_links.inc.php:47
-#, fuzzy
 msgid "Adressbuch"
-msgstr "Address book"
+msgstr "Address book "
 
 #: calendar/calendar_links.inc.php:54 calendar/calendar_links.inc.php:60
 #: calendar/calendar_links.inc.php:241 calendar/calendar_links.inc.php:246
@@ -130,13 +129,11 @@ msgstr "Customise settings for my appointment calendar"
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr ""
-"Here you can customise the lay out of your personal appointment calendar."
+msgstr "Here you can customise the lay out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:62
-#, fuzzy
 msgid "Startansicht anpassen:"
-msgstr "Customise lay out"
+msgstr "Customise start page:"
 
 #: calendar/calendar_settings.inc.php:69
 msgid "Wochenansicht"
@@ -155,9 +152,8 @@ msgid "Jahresansicht"
 msgstr "Year view"
 
 #: calendar/calendar_settings.inc.php:88
-#, fuzzy
 msgid "Zeitraum der Tages- und Wochenansicht:"
-msgstr "Time period of the day and week view:"
+msgstr "Time period of the day and week view: "
 
 #: calendar/calendar_settings.inc.php:113
 msgid "Uhr bis"
@@ -199,9 +195,8 @@ msgid "Zeitintervall der Wochenansicht:"
 msgstr "Time interval of the week view:"
 
 #: calendar/calendar_settings.inc.php:195
-#, fuzzy
 msgid "Wochenansicht anpassen:"
-msgstr "Customise lay out"
+msgstr "Customise week view:"
 
 #: calendar/calendar_settings.inc.php:202
 msgid "7 Tage-Woche"
@@ -213,7 +208,7 @@ msgstr "5 day week"
 
 #: calendar/calendar_settings.inc.php:231
 msgid "Extras:"
-msgstr ""
+msgstr "Extras:"
 
 #: calendar/calendar_settings.inc.php:238
 msgid "Bearbeiten-Link in Wochenansicht"
@@ -525,8 +520,7 @@ msgstr ""
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr ""
-"To edit this appointment, please switch to the %s Course administration</a> "
+msgstr "To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:498
 msgid "Aktion:"
@@ -557,7 +551,7 @@ msgid ""
 "lassen."
 msgstr ""
 "This appointment calendar administers your appointments. You can enter "
-"appointments as well as edit, group and concisely display them."
+"appointments as well as edit, group and display them."
 
 #: calendar/views/week.inc.php:53
 #, c-format
@@ -593,3 +587,4 @@ msgstr "1. appointment"
 
 #~ msgid "Komfortfunktionen"
 #~ msgstr "Extras"
+

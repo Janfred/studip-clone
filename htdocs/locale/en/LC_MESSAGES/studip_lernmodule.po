@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-03-21 13:06+0100\n"
-"PO-Revision-Date: 2003-03-17 16:20+0100\n"
+"PO-Revision-Date: 2003-03-21 15:03+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -68,18 +68,16 @@ msgid "Es sind keine Lernmodule vorhanden."
 msgstr "There are no learning modules available."
 
 #: lernmodule/lernmodul_view_functions.inc.php:121
-#, fuzzy
 msgid "Der Einrichtung sind folgende Lernmodule zugeordnet:"
-msgstr "The course is allocated the following learning modules:"
+msgstr "The institute is allocated the following learning modules:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:123
 msgid "Der Veranstaltung sind folgende Lernmodule zugeordnet:"
 msgstr "The course is allocated the following learning modules:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:170
-#, fuzzy
 msgid "Mit dieser Einrichtung sind keine ILIAS-Lernmodule verknüpft."
-msgstr "No ILIAS learning modules are linked to this course."
+msgstr "No ILIAS learning modules are linked to this institute."
 
 #: lernmodule/lernmodul_view_functions.inc.php:172
 msgid "Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft."
@@ -90,27 +88,24 @@ msgid "Folgende Lernmodule können eingebunden werden:"
 msgstr "The following learning modules can be connected:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:231
-#, fuzzy
 msgid "Alle verf&uuml;gbaren Lernmodule sind der Einrichtung zugeordnet."
-msgstr "All available learning modules are allocated to the course."
+msgstr "All available learning modules are allocated to the institute."
 
 #: lernmodule/lernmodul_view_functions.inc.php:233
 msgid "Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet."
 msgstr "All available learning modules are allocated to the course."
 
 #: lernmodule/lernmodul_view_functions.inc.php:253
-#, fuzzy
 msgid "Diese Einrichtung ist mit einem Lernmodul verbunden:"
-msgstr "This course is connected to a learning module:"
+msgstr "This institute is connected to a learning module:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:255
 msgid "Diese Veranstaltung ist mit einem Lernmodul verbunden:"
 msgstr "This course is connected to a learning module:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:261
-#, fuzzy
 msgid "Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:"
-msgstr "This course is connected to the following learning modules:"
+msgstr "This institute is connected to the following learning modules:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:263
 msgid "Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:"
@@ -130,3 +125,4 @@ msgstr "This course is connected to the following learning modules:"
 
 #~ msgid "Hinzufügen"
 #~ msgstr "Add"
+
