@@ -212,7 +212,7 @@ if ($form==3)
 					if ($sem_create_data["term_turnus_start_minute"][$i] < 10)
 						$tmp_idx.="0";
 					$tmp_idx.=$sem_create_data["term_turnus_start_minute"][$i];						
-					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>($sem_create_data["term_turnus_resource_id"][$i]) ? $sem_create_data["term_turnus_room"][$i] : "", "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
+					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>$sem_create_data["term_turnus_room"][$i], "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
 				}	
 			if (is_array($tmp_metadata_termin["turnus_data"])) {
 
@@ -2157,10 +2157,10 @@ if ($level==3) {
 												}
 												print "</select></font>";
 											}
+										}
 										?>
 										&nbsp; <font size=-1><input type="text" name="term_room[]" size="15" maxlength="255" value="<?= htmlReady($sem_create_data["term_room"][$i]) ?>"/></font>&nbsp; 
 										<?
-										}
 										print "<br />";
 										}
 										?>
