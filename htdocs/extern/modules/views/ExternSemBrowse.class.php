@@ -270,6 +270,7 @@ class ExternSemBrowse extends SemBrowse {
 				}
 				echo "</font></td></tr>";
 				if (is_array($sem_ids['Seminar_id'])) {
+					$zebra = 0;
 					while (list($seminar_id,) = each($sem_ids['Seminar_id'])) {
 						$sem_name = key($sem_data[$seminar_id]["Name"]);
 						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
@@ -279,7 +280,11 @@ class ExternSemBrowse extends SemBrowse {
 							$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->sem_dates[$sem_number_end]['name']) . ")";
 						}
 						echo "\n</td></tr>\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
-						echo "<td width=\"100%\"" . $this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
+						if ($zebra % 2 && $this->config->getValue("LecturesInnerTable", "td_bgcolor2_"))
+							echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td", TRUE)."\">\n";
+						else
+							echo "<td width=\"100%\"".$this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
+						$zebra++;
 						echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 						echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr1") . ">";
 						echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
@@ -310,7 +315,7 @@ class ExternSemBrowse extends SemBrowse {
 									uasort($doz_name, 'strnatcasecmp');
 									$i = 0;
 									foreach ($doz_name as $index => $value) {
-										echo "<a href=\"$lecturer_link&username={$doz_uname[$index]}\"";
+										echo "<a href=\"$lecturer_link&username={$doz_uname[$index]}&seminar_id=$seminar_id\"";
 										echo $this->config->getAttributes("LecturerLink", "a") . ">";
 										echo htmlReady($value) . "</a>";
 										if ($i != count($doz_name) - 1) {
