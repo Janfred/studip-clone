@@ -24,7 +24,7 @@ require_once("dates.inc.php");
 require_once("config.inc.php");
 
 function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=false, $show_admin=FALSE, $open) 
-{ Global $PHP_SELF, $SessSemName, $user, $TERMIN_TYP, $username;	
+{ Global $PHP_SELF, $loginfilelast, $SessSemName, $user, $TERMIN_TYP, $username;	
 	
 	// wenn man keinen Start und Endtag angibt, soll wohl alles angezeigt werden
 	// "0" bedeutet jeweils "open end"
