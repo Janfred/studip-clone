@@ -207,7 +207,7 @@ if ($kill) {
     }
     
     //Successful archived, if we are here
-    $msg .= "msg§Die Veranstaltung <b>".htmlReady(stripslashes($tmp_name))."</b> wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung§";
+    $msg .= "msg§Die Veranstaltung <b>".htmlReady(stripslashes($tmp_name))."</b> wurde erfolgreich archiviert und aus den aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung.§";
 
     //unset the checker, lecture is now killed!
     unset($archiv_assi_data["sem_check"][$s_id]);
@@ -412,8 +412,9 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 							$inc_possible=TRUE;
 					}
 					if ($inc_possible)
-						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?dec=TRUE"><img src="./pictures/buttons/vorherige-button.gif" border=0></a> <? } ?>
-					&nbsp;<a href="<? echo $PHP_SELF ?>?list=TRUE&new_session=TRUE"><img src="./pictures/buttons/abbrechen-button.gif" border=0></a>
+						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?dec=TRUE"><img src="./pictures/buttons/vorherige-button.gif" border=0></a> <? }
+					if (!$links_admin_data["sem_id"])
+						{ ?>&nbsp;<a href="<? echo $PHP_SELF ?>?list=TRUE&new_session=TRUE"><img src="./pictures/buttons/abbrechen-button.gif" border=0></a> <? } ?>
 					&nbsp;<a href="<? echo $PHP_SELF ?>?kill=TRUE"><img src="./pictures/buttons/archivieren-button.gif" border=0></a>
 					<?
 					//can we dec?
@@ -435,6 +436,8 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])>0)){
 	<?
 }
 elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==0)) {
+	if ($links_admin_data["sem_id"])
+		unset ($links_admin_data);
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -444,7 +447,10 @@ elseif (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"])==
 	<tr>
 		<td class="blank" colspan=2><b>&nbsp;
 		<?
-		parse_msg($msg."info§Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
+		if ($links_admin_data["sem_id"])
+			parse_msg($msg."info§Sie haben die ausgew&auml;hlte Veranstaltungen archiviert!");
+		else
+			parse_msg($msg."info§Sie haben alle ausgew&auml;hlten Veranstaltungen archiviert!");
 		?>
 		</td>
 	</tr>
