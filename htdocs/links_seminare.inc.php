@@ -27,7 +27,6 @@ $reiter=new reiter;
 //Topkats
 if (!$perm->have_perm("root")){
 	$structure["meine_veranstaltungen"]=array (topKat=>"", name=>_("Meine&nbsp;Veranstaltungen"), link=>"meine_seminare.php", active=>FALSE);
-	$structure["meine_einrichtungen"]=array (topKat=>"", name=>_("Meine&nbsp;Einrichtungen"), link=>"meine_einrichtungen.php", active=>FALSE);
 }
 if (!$perm->have_perm("admin")){
 	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen&nbsp;suchen / hinzuf&uuml;gen"), link=>"sem_portal.php", active=>FALSE);
@@ -51,12 +50,6 @@ foreach ($SEM_CLASS as $key=>$val)  {
 	$structure["class_".$key]=array (topKat=>"veranstaltungen_suche", name=>$val["name"], link=>"sem_portal.php?view=$key&reset_all=TRUE&cmd=qs", active=>FALSE);
 }
 //
-$structure["_meine_einrichtungen"]=array (topKat=>"meine_einrichtungen", name=>_("&Uuml;bersicht"), link=>"meine_einrichtungen.php", active=>FALSE);
-$structure["meine_einrichtungen_extendet"]=array (topKat=>"meine_einrichtungen", name=>_("erweiterte&nbsp;&Uuml;bersicht"), link=>"meine_einrichtungen.php?view=ext", active=>FALSE);
-
-if ($perm->have_perm("admin")) {
-	$structure["einrichtung_admin"]=array (topKat=>"meine_einrichtungen", name=>_("Einrichtungen&nbsp;verwalten"), link=>"admin_institut.php?list=TRUE", active=>FALSE);
-}
 
 //View festlegen
 switch ($i_page) {
@@ -69,12 +62,6 @@ switch ($i_page) {
 	case "my_archiv.php":
 		$reiter_view="my_archiv"; 
 	break;	
-	case "meine_einrichtungen.php" : 
-		if ($view=="ext") 
-			$reiter_view="meine_einrichtungen_extendet"; 
-		else
-			$reiter_view="meine_einrichtungen"; 
-	break;
 	case "sem_portal.php" : 
 		if ($view=="all")
 			$reiter_view="all";
