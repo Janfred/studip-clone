@@ -221,6 +221,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		} else {//User ist noch nicht eingetragen in seminar_user
 			if ($perm->have_perm("autor")) { //User ist global 'Autor'also normaler User
 				if (($SemSecLevelWrite==3) && ($SemSecLevelRead==3)) {//Teilnehmerbeschraenkte Veranstaltung, naehere Uberpruefungen erforderlich
+					if ($auth->auth["perm"]=="dozent") { //Dozenten duerfen sich nicht fuer Anmeldebeschraenkte Veranstaltungen anmelden
+						parse_msg ("info§Sie d&uuml;rfen sich mit dem Status Dozent nicht f&uuml;r die teilnahmebeschr&auml;nkte Veranstaltung <b>$SeminarName</b> anmelden.<br />Wenn Sie dennoch eingetragen werden m&ouml;chten, wenden Se sich bitte direkt an den Dozenten der Veranstaltung.");
+						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; zur&uuml;ck zur Startseite</a>";
+						if ($send_from_search)
+				    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
+						echo "<br	><br></td></tr></table>";
+						page_close();
+						die;
+						}
 					$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?					
 					if (!$db->num_rows()) { //Es sin gar keine vorhanden! Hinweis wie man das eintragen kann
 						parse_msg ("info§Die Veranstaltung <b>$SeminarName</b> ist teilnahmebeschr&auml;nkt. Um sich f&uuml;r teilnahmebeschr&auml;nkte Veranstaltungen eintragen zu k&ouml;nnen, m&uuml;ssen sie einmalig ihre Studienkombination angeben! <br> Bitte tragen sie ihre Studeng&auml;nge auf ihrer <a href=\"edit_about.php?view=Karriere#studiengaenge\">pers&ouml;nlichen Homepage</a> ein!");
@@ -272,9 +281,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr. <br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze angegeben.</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr. <br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 							else
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze angegeben.</font><br />&nbsp; ");
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ");
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 						    	if ($send_from_search)
 					    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -307,9 +316,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							</for	m>
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr. <br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze angegeben.</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr. <br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 							else
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze angegeben.</font><br />&nbsp; ");
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ");
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 						    	if ($send_from_search)
 					    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
