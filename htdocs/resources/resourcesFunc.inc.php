@@ -8,7 +8,7 @@
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	resources
+* @modulegroup		resources
 * @module		resourcesFunc.php
 * @package		resources
 */
@@ -81,32 +81,38 @@ function allowCreateRooms($user_id='') {
 * @return	array	the start- and end-timestamp
 *
 **/
-function getLockPeriod($timestamp='') {
+function getLockPeriod($timestamp1='', $timestamp2='') {
 	static $cache;
-
-	if ($cache[$timestamp % 60]) {
-		return $cache[$timestamp % 60];
+	
+	if ($cache[$timestamp1 / 60][$timestamp2 / 60]) {
+		return $cache[$timestamp1 / 60][$timestamp2 / 60];
 	}
 
 	$db = new DB_Seminar;
 	
-	if (!$timestamp)
-		$timestamp = time();
+	if (!$timestamp1)
+		$timestamp1 = time();
 	
 	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
-		$cache[$timestamp % 60] = FALSE;	
+		$cache[$timestamp1 / 60][$timestamp2 / 60] = FALSE;	
 		return FALSE;
 	} else {
-		$query = sprintf ("SELECT lock_begin, lock_end FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp, $timestamp);
+		if (($timestamp1) && ($timestamp2))
+			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp1, $timestamp1);
+		else
+			$query = sprintf ("SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE "
+					 ."((lock_begin <= %s AND lock_end > %s) OR (lock_begin >=%s AND lock_end <= %s) OR (lock_begin <= %s AND lock_end >= %s) OR (lock_begin < %s AND lock_end >= %s)) ", 
+					 $type, $timestamp1, $timestamp1, $timestamp1, $timestamp2, $timestamp1, $timestamp2, $timestamp2, $timestamp2);
 		$db->query($query);
 		$db->next_record();
 		if ($db->nf()) {
 			$arr[0] = $db->f("lock_begin");
 			$arr[1] = $db->f("lock_end");
-			$cache[$timestamp % 60] = $arr;			
+			$arr[2] = $db->f("lock_id");
+			$cache[timestamp1 / 60][$timestamp2 / 60] = $arr;			
 			return $arr;
 		} else {
-			$cache[$timestamp % 60] = FALSE;			
+			$cache[timestamp1 / 60][$timestamp2 / 60] = FALSE;			
 			return FALSE;
 		}
 	}
@@ -205,6 +211,85 @@ function getGlobalPerms ($user_id) {
 	return $res_perm;
 }
 
+/*
+* getGlobalPerms
+*
+* this Funktion creates an fully formatted output after changing/updating assigns
+*
+* @param	array	the result array, contains all informations about the last operation(s)
+* @param	string	the mode of returning: "good" (all booked resources), "bad" (all not booked resources) or "both"	
+* @return	string	the formatted message, ready for using it in msg.inc.php	
+*
+**/
+function getFormattedResult($result, $mode="bad", $bad_message_text = '', $good_message_text = '') {
+	//extract the overlaps (bad results) and locks
+	if (is_array($result)) {
+		$overlaps=FALSE;
+		foreach ($result as $key=>$val)
+			if ($val["overlap_assigns"] == TRUE) {
+				$overlaps[] = array("resource_id"=>$val["resource_id"], "overlap_assigns"=>$val["overlap_assigns"]);
+				foreach ($val["overlap_assigns"] as $val2) 
+					if ($val2["lock_id"])
+						$locks[$val2["lock_id"]] = array ("begin" => $val2["lock_begin"], "end" => $val2["lock_end"]);
+			}
+		if ($locks)
+			sort ($locks);
+	} else
+		return FALSE;
+	
+	//extract the succesfully booked roomes
+	foreach ($result as $key=>$val)
+		if (!is_array($val["overlap_assigns"]))
+			$rooms_id[$val["resource_id"]]=TRUE;
+	
+	//create bad message
+	if ((is_array($overlaps)) && (($mode == "bad") || ($mode == "booth"))) {
+		$i=0;
+		$bad_message = "error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+		//the overlaps (show only the earliest here, plus a message when more)
+		foreach ($overlaps as $val) {
+			$resObj =& ResourceObject::Factory($val["resource_id"]);
+			$bad_message.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
+			//show the first overlap
+			list(, $val2) = each($val["overlap_assigns"]);
+			$bad_message.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
+			if (sizeof($val["overlap_assigns"]) >1)
+				$bad_message.=", ... (".sprintf (_("und %s weitere &Uuml;berschneidungen"), (sizeof($val["overlap_assigns"])-1)).")";
+			$bad_message.= ", ".$resObj->getFormattedLink($val2["begin"], _("Raumplan anzeigen"));
+			$i++;
+		}
+		$bad_message.="</font>";
+		$bad_message.="§";
+	}
+	
+	
+	//create good message
+	if ((is_array($rooms_id)) && (($mode == "good") || ($mode == "booth"))) {
+		foreach ($rooms_id as $key=>$val) {
+			$i=0;
+			if ($key) {	
+				$resObj =& ResourceObject::Factory($key);			
+				if ($i)
+					$rooms_booked.=", ";
+				$rooms_booked.= $resObj->getFormattedLink();
+				$i++;
+			}
+		}
+		
+	if ($rooms_booked) 
+		if ($i == 1)
+			$good_message.= sprintf ("msg§"._("Die Belegung des Raumes %s wurde in die Ressourcenverwaltung &uuml;bernommen.")."§", $rooms_booked);
+		elseif ($i)
+			$good_message.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung &uuml;bernommen.")."§", $rooms_booked);
+	}
+
+	if ($mode == "bad")
+		return $bad_message;
+	if ($mode == "good")
+		return $good_message;
+	if ($mode == "booth")
+		return $bad_message.$good_message;
+}
 
 /*****************************************************************************
 a quick function to get the resource_id (only rooms!) for a assigned date
