@@ -407,14 +407,77 @@ function decodeHTML($string) {
 // ermöglicht einfache Formatierungen in Benutzereingaben
 
 function format ($text) {
-	$text = preg_replace("'\n?\r\n?'", "\n", $text);
+	/*$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	
 	$pattern = array("'(^|\n)\!([^!].*)$'m",     // Überschrift 4. Stufe
 					"'(^|\n)\!{2}([^!].*)$'m",           // Überschrift 3. Stufe
 					"'(^|\n)\!{3}([^!].*)$'m",           // Überschrift 2. Stufe
 					"'(^|\n)\!{4}([^!].*)$'m",           // Überschrift 1. Stufe
+					"'(^|\n)--+(?!=( |\w(\d?)(\n|$)'m"            // Trennlinie
+					);
+	$replace = array("<h4>\\2 </h4>",
+					"<h3> \\2 </h3>",
+					"<h2> \\2 </h2>",
+					"'<h1> \\2 </h1>",
+					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />"
+					);
+	$text = preg_replace($pattern, $replace, $text);
+	$text = preg_replace("'(\</h.\>)\n'", "\\1", $text);
+	
+	$pattern = array("'\[pre\](.+?)\[/pre\]'is",    // praeformatierter Text
+					"'(^|\s)%(?!%)(\S+%)+(?=(\s|$))'e",     // SL-kursiv
+					"'(^|\s)\*(?!\*)(\S+\*)+(?=(\s|$))'e",  // SL-fett
+					"'(^|\s)_(?!_)(\S+_)+(?=(\s|$))'e",     // SL-unterstrichen
+					"'(^|\s)#(?!#)(\S+#)+(?=(\s|$))'e",     // SL-diktengleich
+					"'(^|\s)\+(?!\+)(\S+\+)+(?=(\s|$))'e",  // SL-groesser
+			//		"'(^|\s)-(?!-)(\S+-)+(?=(\s|$))'e",     // SL-kleiner
+					"'(^|\s)&gt;(?!&gt;)(\S+&gt;)+(?=(\s|$))'ie",  // SL-hochgestellt
+					"'(^|\s)&lt;(?!&lt;)(\S+&lt;)+(?=(\s|$))'ie",  // SL-tiefgestellt
+					"'%%(\S|\S.*?\S)%%'s",               // ML-kursiv
+					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
+					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
+					"'##(\S|\S.*?\S)##'s",                     // ML-diktengleich
+					"'\+\+(((\+\+)*)(\S|\S.*?\S)\\2)\+\+'se",  // ML-groesser
+				//	"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
+					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
+					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
+					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
+					"'(\n|\A)(((-|=)+ .*\Z)*)'e"
+				//	"'(\n|\A)(((-|=)+ .*?(\n|\Z)))'se"
+					);
+	$replace = array("<pre>\\1</pre>",
+					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
+					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
+					"'\\1<u>'.substr(str_replace('_', ' ', '\\2'), 0, -1).'</u>'",
+					"'\\1<tt>'.substr(str_replace('#', ' ', '\\2'), 0, -1).'</tt>'",
+					"'\\1<big>'.substr(str_replace('+', ' ', '\\2'), 0, -1).'</big>'",
+				//	"'\\1<small>'.substr(str_replace('-', ' ', '\\2'), 0, -1).'</small>'",
+					"'\\1<sup>'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1).'</sup>'",
+					"'\\1<sub>'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1).'</sub>'",
+					"<i>\\1</i>",
+					"<b>\\1</b>",
+					"<u>\\1</u>",
+					"<tt>\\1</tt>",
+					"'<big>'.format('\\1').'</big>'",
+				//	"'<small>'.format('\\1').'</small>'",
+					"<sup>\\1</sup>",
+					"<sub>\\1</sub>",
+					"'<blockquote>'.format('\\1').'</blockquote>'",
+					"preg_call_format_list('\\2')"
+					);
+	$text = preg_replace($pattern, $replace, $text);
+	
+	return $text;*/
+	
+	
+	$text = preg_replace("'\n?\r\n?'", "\n", $text);
+	
+	$pattern = array("'(^|\n)\!([^!].*)$'m",     // Ueberschrift 4. Ordnung
+					"'(^|\n)\!{2}([^!].*)$'m",           // Ueberschrift 3. Ordnung
+					"'(^|\n)\!{3}([^!].*)$'m",           // Ueberschrift 2. Ordnung
+					"'(^|\n)\!{4}([^!].*)$'m",           // Ueberschrift 1. Ordnung
 					"'(^|\n)--+(\d?)(\n|$)'m",           // Trennlinie
-					"'(\n|\A)(((-|=)+.*(\n|\Z))+)'e"
+					"'(\n|\A)(((-|=)+ .*(\n|\Z))+)'e"     // Listen
 					);
 	$replace = array("<h4>\\2 </h4>",
 					"<h3> \\2 </h3>",
@@ -443,7 +506,7 @@ function format ($text) {
 					"'--(((--)*)(\S|\S.*?\S)\\2)--'se",        // ML-kleiner
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
-					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se"        // Absatz eingerueckt
+					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se"   // Absatz eingerueckt
 					);
 	$replace = array("<pre>\\1</pre>",
 					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
@@ -469,52 +532,57 @@ function format ($text) {
 	return $text;
 }
 
-// Hilfsfunktion für format()
+// Hilfsfunktion für format() zur generierung von Listen
 function preg_call_format_list ($content_str) {
+	$print_li = TRUE;
 	$current_level = 0;
-	$closed_level[0] = TRUE;
-	
 	$lines = explode("\n", $content_str);
-	foreach ($lines as $line) {
+	for ($i = 0; $i < sizeof($lines); $i++) {
+		$line = $lines[$i];
 		if (preg_match("'^((-|=)+)\s*(.*)$'", $line, $matches)) {
+			preg_match("'^((-|=)+).*$'", $lines[$i+1], $matches2);
+			$next_level = strlen($matches2[1]);
 			$level = strlen($matches[1]);
 			if ($matches[1]{0} == "-")
 				$tag = "ul";
 			else
 				$tag = "ol";
-		
+				
+			if ($i == 1)
+				$level_tag[1] = $tag;
+			
+			if ($level < $current_level) {
+				for (;$level < $current_level; $current_level--) {
+					$ret .= "</{$level_tag[$current_tag]}>";
+					if ($next_level <= $current_level)
+						$ret .= "</li>";
+				}
+			}
+			
 			if ($level > $current_level) {
-				while ($level > $current_level) {
+				for (;$level > $current_level; $current_level++) {
+					
+					$level_tag[$current_tag] = $tag;
 					$ret .= "<$tag><li>";
-					$closed_level[$current_level++] = FALSE;
 				}
-				$ret .= $matches[3];
-				$closed_level[$current_level] = FALSE;
+				$print_li = FALSE;
 			}
-			else if ($level == $current_level) {
-				if (!$closed_level[$current_level]) {
+			
+			if ($level == $current_level) {
+				if ($print_li)
+					$ret .= "<li>{$matches[3]}";
+				else {
+					$ret .= "{$matches[3]}";
+					$print_li = TRUE;
+				}
+			}
+			
+			if ($next_level <= $level)
 					$ret .= "</li>";
-					$closed_level[$current_level] = TRUE;
-				}
-				$ret .= "<li>{$matches[3]}</li>";
-			}
-			else if ($level < $current_level) {
-				while ($level < $current_level) {
-					$ret .= "</li></$tag>";
-					$closed_level[$current_level--] = TRUE;
-				}
-				$ret .= "<li>$matches[3]";
-				$closed_level[$current_level] = FALSE;
-			}
 		}
 	}
-	
-	foreach ($closed_level as $closed) {
-		if (!$closed)
-			$ret .= "</$tag>";
-	}
-	
-	return $ret;
+
+	return $ret . "</{$level_tag[1]}>";
 }
 
 
@@ -529,7 +597,10 @@ replace('/\|/','</td><td>','\\1').'</td></tr>'", $tbr);
 // muss dieser noch durch nl2br() laufen
 function kill_format ($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
-	$pattern = array("'(^|\s)%(?!%)(\S+%)+'e",     // SL-kursiv
+	$pattern = array(
+					"'(^|\n)\!{1,4}(.+)$'m",      // Ueberschriften
+					"'(\n|\A)(-|=)+ (.+)$'m",           // Aufzaehlungslisten
+					"'(^|\s)%(?!%)(\S+%)+'e",     // SL-kursiv
 					"'(^|\s)\*(?!\*)(\S+\*)+'e",  // SL-fett
 					"'(^|\s)_(?!_)(\S+_)+'e",     // SL-unterstrichen
 					"'(^|\s)#(?!#)(\S+#)+'e",     // SL-diktengleich
@@ -546,14 +617,16 @@ function kill_format ($text) {
 					"'>>(\S|\S.*?\S)>>'is",  // ML-hochgestellt
 					"'<<(\S|\S.*?\S)<<'is",  // ML-tiefgestellt
 					"'\n\n\t(((\n\n)\t)*(.+?))(\Z|\n\n(?!\t))'s",  // Absatz eingerueckt
-					"'(?<=\n|^)--+(\d?)(\n|$|(?=<))'m",                                                                          // Trennlinie
+					"'(?<=\n|^)--+(\d?)(\n|$|(?=<))'m", // Trennlinie
 					"'\n((-(.+?)(\n|\Z))+?)(\n|\Z)'s",  // Aufzaehlungsliste
 					"'\[pre\](.+?)\[/pre\]'is" ,        // praeformatierter Text
 					"'\[.+?\](((http://|https://|ftp://)?([^/\s]+)(.[^/\s]+){2,})|([-a-z0-9_]+(\.[_a-z0-9-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)+)))'i",
 					"'\[quote=.+?quote\]'is",
 					"':[^\s]+?:'s"
 					);
-	$replace = array("'\\1'.substr(str_replace('%', ' ', '\\2'), 0, -1)",
+	$replace = array(
+					"\\1\\2", "\\1\\3",
+					"'\\1'.substr(str_replace('%', ' ', '\\2'), 0, -1)",
 					"'\\1'.substr(str_replace('*', ' ', '\\2'), 0, -1)",
 					"'\\1'.substr(str_replace('_', ' ', '\\2'), 0, -1)",
 					"'\\1'.substr(str_replace('#', ' ', '\\2'), 0, -1)",
@@ -562,7 +635,7 @@ function kill_format ($text) {
 					"'\\1'.substr(str_replace('&gt;', ' ', '\\2'), 0, -1)",
 					"'\\1'.substr(str_replace('&lt;', ' ', '\\2'), 0, -1)",
 					"\\1", "\\1", "\\1", "\\1", "\\1", "\\1",
-					"\\1", "\\1", "\n\\1\n", "", "\n\\1\n", "\\1", "\\1", "", "");
+					"\\1", "\\1", "\n\\1\n", "", "\\1", "\\1", "", "");
 	
 	$text = preg_replace($pattern, $replace, $text);
 	return $text;
@@ -581,9 +654,13 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
-	$pattern = array("'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[^<\s]*[^\.\s<])*)'ie",
-					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie");
-	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
+	 $pattern = array(
+	 				
+					"'(\[IMG\])(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[^<\s]*[^\.\s<])*)'ie",
+					"'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[^<\s]*[^\.\s<])*)'ie",
+					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie"
+					);
+	$replace = array("preg_call_link('\\1', '\\2', 'IMG')", "preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 	
 	if ($nl_to_br)
@@ -599,6 +676,9 @@ function preg_call_link($name, $link, $mod) {
 			$name = $link;
 		$link = str_replace("&amp;", "&", $link);
 		$tbr = "<a href=\"$link\" target=\"_blank\">$name</a>";
+	}
+	elseif ($mod == "IMG") {
+		$tbr = "bla";
 	}
 	else {
 		if ($name != "")
