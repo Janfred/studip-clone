@@ -77,7 +77,7 @@ function createTempFolder ($folder_id,$tmp_full_path) {
 	$db->query("SELECT folder_id, name FROM folder WHERE range_id = '$folder_id' ORDER BY name");
 	while ($db->next_record()) {
 		$folders++;
-		$tmp_sub_full_path = $tmp_full_path."/[".$folders."] ".prepareFilename($db->f("name"));
+		$tmp_sub_full_path = $tmp_full_path."/[".$folders."] ".prepareFilename($db->f("name"), FALSE);
 		exec ("mkdir '$tmp_sub_full_path' ");
 		createTempFolder($db->f("folder_id"),$tmp_sub_full_path);
 	}
@@ -311,7 +311,7 @@ function form($refresh = FALSE) {
 	}
 
 //kill the forbidden characters, shorten filename to 31 Characters
-function prepareFilename($filename) {
+function prepareFilename($filename, $shorten == FALSE) {
 	$bad_characters = array (":", chr(92), "/", "\"", ">", "<", "*", "|", "?");
 	$replacements = array ("", "", "", "'", "", "", "", "", "", "");
 	
@@ -320,9 +320,10 @@ function prepareFilename($filename) {
 	if ($filename{0} == ".")
 		$filename = substr($filename, 1, strlen($filename));
 	
-	
-	$ext = getFileExtension ($filename);
-	$filename = substr(substr($filename, 0, strrpos($filename,$ext)-1), 0, (30 - strlen($ext))).".".$ext;
+	if ($shorten) {
+		$ext = getFileExtension ($filename);
+		$filename = substr(substr($filename, 0, strrpos($filename,$ext)-1), 0, (30 - strlen($ext))).".".$ext;
+	}
 	return ($filename);
 }
 

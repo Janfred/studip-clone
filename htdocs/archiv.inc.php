@@ -616,39 +616,29 @@ function in_archiv ($sem_id) {
 	exec ("mkdir $TMP_PATH/$archiv_file_id");
 	$tmp_full_path="$TMP_PATH/$archiv_file_id";
 	
-	//globale Seminardokumente unter richtigem Namen ins temporaere Verzeichnis kopieren
-	$doc_ids=doc_challenge ($seminar_id);
-	if (is_array($doc_ids))
-		foreach ($doc_ids as $a) {
-			$db->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id = '$a'");
-			if ($db->next_record()) {
-				$docs++;
-				exec ("cp '$UPLOAD_PATH/".$a."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
-				}
-			}
-
-	//Dokumente zu Terminen unter richtigem Namen ins temporaere Verzeichnis kopieren
-	$db->query ("SELECT termin_id FROM termine WHERE range_id='$seminar_id'");
+	$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s'", $seminar_id);
+	$db->query ($query);
+	$list = "('".$seminar_id."'";
 	while ($db->next_record()) {
-		$doc_ids=doc_challenge ($db->f("termin_id"));
-		if (is_array($doc_ids))
-			foreach ($doc_ids as $a) {
-				$db2->query("SELECT dokument_id, filename FROM dokumente WHERE dokument_id = '$a'");
-				if ($db2->next_record()) {
-					$docs++;
-					exec ("cp '$UPLOAD_PATH/".$a."' '$tmp_full_path/[".($docs)."] ".$db2->f("filename") ."'");
-					}
-				}
-			}
-
-	//Alles zippen
+		$arr .= ", '".$db->f("termin_id")."' ";
+	}
+	//copy documents in the temporary folder-system
+	$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN %s ORDER BY name", $arr);
+	$db->query ($query);
+	$folder = 0;
+	while ($db->next_record()) {
+		$folder++;
+		exec ("mkdir $tmp_full_path/[$folder] ".prepareFilename($db->f("name"), FALSE));
+		createTempFolder ($folder_id,$tmp_full_path."/[$folder] ".prepareFilename($db->f("name"), FALSE));
+	}
+	
+	//zip all the stuff
 	if ($docs) {
-	 	exec ($ZIP_PATH." -9 -j ".$ARCHIV_PATH."/".$archiv_file_id." ".$tmp_full_path."/*.* ");
+	 	exec ("cd $tmp_full_path && ".$ZIP_PATH." -9 -r ".$ARCHIV_PATH."/".$archiv_file_id." * ");
 	 	exec ("mv ".$ARCHIV_PATH."/".$archiv_file_id.".zip ".$ARCHIV_PATH."/".$archiv_file_id);
 	 	exec ("rm $tmp_full_path/*.*");
 	 	exec ("rmdir $TMP_PATH/$archiv_file_id");
-	 	}
-	else
+	} else
 		$archiv_file_id="";
 	
 	//Reinschreiben von diversem Klumpatsch in die Datenbank
