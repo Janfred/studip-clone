@@ -1,0 +1,282 @@
+<BODY>
+<TABLE class=blank cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD class=blank>&nbsp;</TD></TR>
+  <TR>
+    <TD class=blank>
+    <p>Hier finden Sie Hilfe zur Verwendung von TEX in Stud.IP.</p>
+    <p><a href="index.php?help_page=ix_forum6.htm"> Zur&uuml;ck zur &Uuml;bersichtsseite "Formatierungen"</a></p>
+    
+      <BLOCKQUOTE><BIG><BIG><U>Mathematische Formeln in
+        Studip</U></BIG></BIG><BR>Manch einem mag aufgefallen sein, dass unsere
+        Computertastatur keine Summenzeichen <IMG
+        src="../locale/de/LC_HELP/pictures/7231fa806691800f095133f6fb720d82.png">, Integrale
+        <IMG src="../locale/de/LC_HELP/pictures/05ac7a592ac15a18edc4cd1610e87ea8.png"> oder
+        &auml;hnliche Symbole hat. Weil wir das aber gerade im universit&auml;ren Betrieb
+        ab und an mal brauchen, hat Studip die Tex-Arithmetik (sprich
+        <I>Tech</I>) eingef&uuml;hrt, um mathematische Symbole und ganze Formeln
+        einf&uuml;gen zu k&ouml;nnen.
+        <BLOCKQUOTE>Man schreibt allgemein:<BR><TT>[tex] f(x) = e^{x+1}
+          [/tex]</TT><BR>und daraus wird beispielsweise<BR><IMG
+          src="../locale/de/LC_HELP/pictures/11491cb06e7ebb70a975c2a71533667d.png"></BLOCKQUOTE>Das
+        hei&szlig;t, die Klammern <TT>[tex] [/tex]</TT> bilden den Rahmen f&uuml;r die
+        Formel. Innerhalb der Tex-Klammer (bzw. des Tex-Tags) kann normaler
+        Tex-Code stehen, wie er auch von anderen Programmen und Webseiten
+        verwendet wird. Der Tex-Code ist ein gewisser Standard geworden, er soll
+        hier aber noch einmal kurz erkl&auml;rt werden:<BR><BR><BIG><U>Einf&uuml;hrung in
+        Tex</U></BIG><BR><BR>Prinzipiell kann man im Tex-Tag genau so schreiben
+        wie sonst auch. Alle Formeln, die aus +, -, *, / und den ganzen Zahlen
+        und Buchstaben bestehen, schreiben sich in Tex genau so, wie man es
+        sonst auch getan h&auml;tte. In Tex werden lediglich die anderen Symbole
+        durch bestimmte Zeichenfolgen dargestellt.<BR>Die Zeichenfolge \sum
+        f&uuml;hrt also zu einem Summenzeichen.
+        <BLOCKQUOTE>Beispiel:<BR><TT>[tex] \sum [/tex]</TT> wird zu <IMG
+          src="../locale/de/LC_HELP/pictures/7231fa806691800f095133f6fb720d82.png"></BLOCKQUOTE>Auf
+        &auml;hnliche Art und Weise entsteht durch \int das Integral <IMG
+        src="../locale/de/LC_HELP/pictures/05ac7a592ac15a18edc4cd1610e87ea8.png"> und so
+        weiter. Eine ausf&uuml;hrliche Liste wird weiter unten angegeben.<BR><BR>Aber
+        zuerst noch ein paar kleine Syntaxregeln zu Tex. Bei dem Summenzeichen
+        m&ouml;chte man sicher angeben, &uuml;ber welche Variable aufsummiert wird (und
+        wie h&auml;ufig) und beim Integral sollten die Integrationsgrenzen (oder
+        Mengen) angegeben werden. Das geht folgenderma&szlig;en:
+        <BLOCKQUOTE><TT>[tex] \sum_1^9 [/tex]</TT><BR>wird zu<BR><IMG
+          src="../locale/de/LC_HELP/pictures/8efd3ea53f51c6d6add785ffd983ee3d.png"></BLOCKQUOTE>Das
+        _ zeigt immer an, was unten stehen soll (so wie bei der &uuml;blichen
+        Studip-Syntax auch) und das ^ Zeichen tut das gleiche f&uuml;r hochgestellte
+        Zeichen. Und das ist g&uuml;ltig f&uuml;r Summenzeichen, Integral, aber - und
+        jetzt wird's cool - auch f&uuml;r normale Indizes von Variablen, bzw.
+        Potenzen.
+        <BLOCKQUOTE>Beispiel:<BR><TT>[tex] f(x) = x^7 [/tex]</TT> wird zu <IMG
+          src="../locale/de/LC_HELP/pictures/def3684f4c8345d42e99295e1f39e606.png"></BLOCKQUOTE>Eine
+        Schreibweise f&uuml;r alles sozusagen.<BR>Falls die Ausdr&uuml;cke, die oben oder
+        unten stehen sollten, komplizierter sein sollen als <U>ein Zeichen</U>
+        (und die Zahl 10 besteht schon aus zwei Zeichen!), muss man den ganzen
+        Ausdruck in geschweifte Klammern { und } schreiben, damit er auch als
+        gesammelter Ausdruck gewertet wird. Faktisch hat dieser mit { und }
+        geklammerte Ausdruck die Zeichenl&auml;nge 1 f&uuml;r Tex. Nun ein Beispiel zu
+        solchen "komplizierten" Ausdr&uuml;cken:
+        <BLOCKQUOTE>Beispiel: <BR><TT>[tex]\sum_1^100[/tex]</TT> w&uuml;rde zu <IMG
+          src="../locale/de/LC_HELP/pictures/479f7acdf62d40140a2d3d70e59a835f.png">
+          werden.<BR>Das ist nat&uuml;rlich nicht, was wir wollten, also m&uuml;ssen wir
+          schreiben<BR><TT>[tex]\sum_1^{100}[/tex]</TT> , was zu <IMG
+          src="../locale/de/LC_HELP/pictures/a345bafa786d3ff1249cb413f14512f8.png">
+          wird.<BR>Und jetzt noch mal ein richtiges
+          Beispiel:<BR><TT>[tex]\sum_{k = 1}^n 1/k [/tex]</TT> wird zu <IMG
+          src="../locale/de/LC_HELP/pictures/e2f9114803ccb4e2d61f86258a054884.png"></BLOCKQUOTE>Jetzt
+        noch die Br&uuml;che. In den meisten F&auml;llen wird ein Bruch mit dem Zeichen /
+        ganz gut dargestellt, wie bei 1/7 zum Beispiel. Aber gerade gro&szlig;e Br&uuml;che
+        werden dadurch sehr un&uuml;bersichtlich. In Tex kann man Br&uuml;che darstellen,
+        indem man den Bruchstrich durch \over schreibt. Alles, was davor steht,
+        wird als Z&auml;hler, das dahinter als Nenner des Bruches interpretiert:
+        <BLOCKQUOTE>Beispiel:<BR><TT>[tex] x + 3 \over y + 2 [/tex]</TT> wird
+          zu <IMG
+        src="../locale/de/LC_HELP/pictures/95fd2154d4e3bd306d4ef8e8a4cb9f6d.png"></BLOCKQUOTE>Ein
+        Problem tritt auf, wenn noch etwas anderes als der Bruch geschrieben
+        werden sollte. In diesem Fall schreibt man den Bruch in geschweifte
+        Klammern { und } und alles, was nicht in den geschweiften Klammern
+        steht, ist nicht Teil des Bruches.
+        <BLOCKQUOTE>Beispiel:<BR><U><B>falsch</B></U>: <TT>[tex] f(x) = x + 3
+          \over 5 [/tex]</TT> w&uuml;rde zu <IMG
+          src="../locale/de/LC_HELP/pictures/28ff8f41a01498837986e5444294e629.png">
+          werden<BR><U><B>richtig</B></U>: <TT>[tex] f(x) = x + {3 \over 5}
+          [/tex]</TT> wird zu <IMG
+          src="../locale/de/LC_HELP/pictures/6cabfdf19219424aff496918a2ef5e5f.png"></BLOCKQUOTE>Tex
+        kann auch Doppelbr&uuml;che darstellen. Dazu schreibt man einfach in einen
+        Bruch noch einen geklammerten Bruch hinein:
+        <BLOCKQUOTE>Beispiel:<BR><TT>[tex]f_n(x) = \left {3 + x \over 1 + {1
+          \over n} } [/tex]</TT> wird zu <IMG
+          src="../locale/de/LC_HELP/pictures/1a59a62e78e5c5e23cae03549b77fd77.png"></BLOCKQUOTE>Leider
+        gilt bei Tex wie auch im echten Leben, dass man Doppelbr&uuml;che vermeiden
+        sollte. Im echten Leben werden sie un&uuml;bersichtlich und bei Tex werden
+        die Zeichen allm&auml;hlich zu klein. Eine gewisse Gr&ouml;&szlig;e wird zumindest nie
+        unterschritten, so dass man unendlich weit klammern kann.
+        <BLOCKQUOTE>Beispiel:<BR><TT>[tex]f_n(x) = \left {3 + x \over 1 + {1
+          \over 1 + {1 \over 1 + {1 \over 1 + {1 \over n}}}} }
+          [/tex]</TT><BR>wird zu<BR><IMG
+          src="../locale/de/LC_HELP/pictures/55d21aea08ea9ad0af4db3f310afd9b4.png"></BLOCKQUOTE>Nun
+        ja, sch&ouml;n ist es dennoch nicht.<BR><BR>Eine ordentliche Formel bei Tex
+        ist recht kompliziert, das steht au&szlig;er Frage. Aber sagen wir mal so: es
+        ist schwerer Tex-Code zu lesen, als ihn zu schreiben. Im Grunde braucht
+        man n&auml;mlich nur das Prinzip von Tex verstanden zu haben und es l&auml;uft wie
+        von selbst.<BR><BR><BIG><U>Liste der
+        Tex-Funktionen</U></BIG><BR><BR><U>Rechenzeichen</U>
+        <BLOCKQUOTE><IMG
+          src="../locale/de/LC_HELP/pictures/b2dca7b5b4db670dfe39fbcf17fe35a7.png"> <TT>+ -
+          * /</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/acfc3c322fdbca87f7d47839df9c5a4e.png">
+          <TT>\cdot, \times oder \circ</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/fbfb2a9c4b58333b4a92cbe7388b5a68.png"> <TT>({1
+          \over 2}) oder (\frac{1}{2})</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/0d10e53c9cfdb6159f9a5d99bd62998c.png">
+          <TT>x^7</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/00b6d9998e989dd7567216dd18b271e7.png">
+          <TT>x-{i,j}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/55249e35938d61d63401abc88975c351.png">
+          <TT>\sum^n_{i=0} a_i</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/7952cb3c033f78e77ca0bda3981a4c8c.png">
+          <TT>\prod^n_{i=0} a_i</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/fbb9d92e91fd202c3622443e2b0696c7.png">
+          <TT>\sqrt x</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/fbf7a9b6281ac4e49a5a3a50d7bc5537.png">
+          <TT>\sqrt[n]{x}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/c2d98b9522d561d65df041d17643a861.png"> <TT>(
+          und )</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/f7750da9da0e52b5e49a5b933a6201d7.png">
+          <TT>\lbrack A \rbrack oder [A]</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/8f2939209115a6fa08cdf806c2ce49a5.png">
+          <TT>\lfloor A \rfloor und \lceil A \rceil</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/0e333b29dcc84847763b9dfbfdef071e.png">
+          <TT>lim_{n \to \infty}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/d2d0cbf6aca4de85705310532503cdd2.png"> <TT>=,
+          \approx, \cong und \equiv</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/c6ee8f873ac7b1c1611c89b340c502b8.png">
+          <TT>&lt;, &gt;, \le, \simeq oder \leq</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/cf2b0ee3c116a535b72991b81256f8e7.png">
+          <TT>\not=, \not\approx, \not\cong und \not\equiv</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/42f7b8a7045272a0ee6511520b84822a.png">
+          <TT>\not&lt;, \not&gt;, \not\le, \not\simeq oder \not\leq</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/10ae929c16d3662cd6c4498f2ff0ec52.png">
+          <TT>\oplus, \ominus, \otimes, \odot und \oslash</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/08f543c459ea09cc07cf2bd7b3ff85ee.png">
+          <TT>\pm</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/872e2144327b2fdfa280487852c777c3.png"> <TT>\vee
+          und \wedge</TT></BLOCKQUOTE><U>Spezialzeichen</U>
+        <BLOCKQUOTE><IMG
+          src="../locale/de/LC_HELP/pictures/85842c3e6ec1999f1b912bf1cea32cf2.png">
+          <TT>\infty, e, \pi</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/538905feb48061b0fd553efff700659b.png">
+          <TT>\mathbb{N}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/e410e9e5a75d68e4edbb13df544ed10b.png">
+          <TT>\mathbb{Z}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/c7f0e889603c55bb4078997d4dbb891f.png">
+          <TT>\mathbb{Q}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/d9a574988901a72078387e1439fdeb99.png">
+          <TT>\mathbb{R}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/bcc5fd1111e1f35e6592769d4eb1759d.png">
+          <TT>\mathbb{C}</TT><BR>&auml;hnlich sind <IMG
+          src="../locale/de/LC_HELP/pictures/54dd78acb680168fe85d0035c21b6fe4.png"><BR><IMG
+          src="../locale/de/LC_HELP/pictures/9ca70c02cfc08fa2c24302f63ac368e0.png">
+          <TT>\empty</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/ecb7224dc5859e37b14b6879e33648c8.png">
+          <TT>\alpha \beta \gamma \delta \epsilon \varepsilon \zeta \eta \theta
+          \vartheta \iota \kappa \lambda \mu \nu \xi \pi \varpi \rho \varrho
+          \sigma \varsigma \tau \upsilon \phi \varphi \chi \psi
+          \omega</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/c57f8259034b296919a77fa814fe38a2.png">
+          <TT>\Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi
+          \Omega</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/4d87baef3098958735aabfa46e5a4c29.png">
+          <TT>\exists</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/e52d80de16759fcabdacd874ce685f4f.png">
+          <TT>\forall</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/23a4537ce7d333e68d05d479ed97d65e.png">
+          <TT>\triangle</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/faca87121cef20dc2baf32ad447ba791.png"> <TT>\hat
+          a</TT></BLOCKQUOTE><U>Mengen</U>
+        <BLOCKQUOTE><IMG
+          src="../locale/de/LC_HELP/pictures/4cfe9dad39b456d4958accc6bafb8dfa.png">
+          <TT>\lbrace a,b \rbrace</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/6bc2e0c66d6d9ef8959c0de41fb043d4.png">
+          <TT>\left| A \right| oder \vert A \vert oder |A|</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/e52e9f862cebbed6ee581b49f818e92f.png"> <TT>\cap
+          und \cup</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/5b9ab142a7f6ff46e0ca74a3a0b58c18.png">
+          <TT>\subset und \subseteq</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/b21c81607f6b4b7a656f4df2f09cb6dc.png">
+          <TT>\supset und \supseteq</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/8e2aec627a8acb05d51f36707e7632bd.png">
+          <TT>\not\subset und \not\subseteq</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/0539d1bf4d2d15e7251f2b48a92835dc.png">
+          <TT>\not\supset und \not\supseteq</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/1a9317fb57760ef49981b8fbdc330168.png">
+          <TT>\neg</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/408bcd6a7acaa18884b8100887debe76.png"> <TT>\in
+          und \ni</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/693183583922df84a9eb183e4e07d55d.png">
+          <TT>\not\in und \not\ni</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/33f348838525cfae3b2c82f02cecae02.png">
+          <TT>\times</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/65e8cf7b307ee2c717f5921b94bcba5f.png">
+          <TT>\setminus</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/c9c09e513bb17096a1c648e559aa680a.png">
+          <TT>\triangleright und \triangleleft</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/faca87121cef20dc2baf32ad447ba791.png"> <TT>\hat
+          a</TT></BLOCKQUOTE><U>Vektoren und Matrizen</U>
+        <BLOCKQUOTE><IMG
+          src="../locale/de/LC_HELP/pictures/01d48ecc5e66d1b16b2fb2526dc764cc.png"> <TT>{n
+          \choose k}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/ace9dc7097babd40e5500e4e210e67f9.png"> <TT>\vec
+          a</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/ca71d13dfa4c378652e6280d2a5f0642.png">
+          <TT>\overrightarrow {ACB} oder \overleftarrow {BCA}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/1e223bc4dd50214540e89768496eb385.png"> <TT>\vec
+          a \bullet \vec b</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/8042d6b0a5182dc0f9d922fe2d02b278.png"> <TT>\vec
+          a \times \vec b</TT><BR><BR>Matrizen gibt es einige, die alle mit
+          \matrix anfangen. In geschweiften Klammern steht dann, um welche Art
+          von Matrix es sich handelt (sprich, welche Art von Klammern drumrum
+          geschrieben werden sollte). Dann werden von links nach rechts und von
+          oben nach unten alle Zellen einzeln beschrieben. Ein <I>&amp;</I>
+          zeigt an, dass man eine Zelle nach rechts r&uuml;ckt und ein <I>//</I>
+          zeigt an, eine Zeile nach unten zu rutschen.<BR><BR><IMG
+          src="../locale/de/LC_HELP/pictures/4fa7ffbcb323bdbe14ff9fab80fe141b.png">
+          <TT>\begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/288969732a6721627f6d8676802c6a4a.png"> <TT>\det
+          \begin{vmatrix} a-\lambda &amp; b \\ c &amp; d-\lambda
+          \end{vmatrix}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/1afbd52fb99d0588dd7d0b688f925d82.png">
+          <TT>\begin{bmatrix} 0 &amp; \cdots &amp; 1 \\ \vdots &amp; \ddots
+          &amp; \vdots \\ 2 &amp; \cdots &amp; 3\end{bmatrix}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/0d7089d418308f375abb5096c801a80f.png">
+          <TT>\begin{Bmatrix} x &amp; y \\ z &amp; v \end{Bmatrix}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/291a57152a17fff574182a19f44523f3.png">
+          <TT>\begin{Vmatrix} x &amp; y \\ z &amp; v \end{Vmatrix}</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/56834df1aa3312d51d412985ce0db84e.png">
+          <TT>\begin{matrix} x &amp; y \\ z &amp; v
+        \end{matrix}</TT></BLOCKQUOTE><U>Funktionen</U>
+        <BLOCKQUOTE><IMG
+          src="../locale/de/LC_HELP/pictures/74a183ab6c4ac8a7dc718c35c894e18f.png">
+          <TT>\mapsto und \rightarrow \to</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/7d48d856fc4142fd2003709e9cc11928.png">
+          <TT>\circ</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/51ca7a460ed9c4fadbd9a86b4b219d4d.png">
+          <TT>f(n)=\begin{cases} 1 &amp; \forall x &gt; 0 \\ 0, &amp; \forall x
+          \le 0 \end{cases}</TT></BLOCKQUOTE><U>Differentialrechnung</U>
+        <BLOCKQUOTE><IMG
+          src="../locale/de/LC_HELP/pictures/0f4d6de6f193d2944708aa53d90d7a2c.png"> <TT>\dot
+          a</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/793b46daf2460c89cf396ad1d404d009.png">
+          <TT>\ddot a\ und \dddot a</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/cf67075998305b988390a4907ae6cd0e.png">
+          <TT>\int_a^b</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/a6728bdc2f6bf2d46fdb6e9b26da4710.png">
+          <TT>\partial f</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/9bec7e443ad30f9b8ca2be2106f14891.png">
+          <TT>\nabla</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/9aa76054a6989599343ad8638730bfd9.png">
+          <TT>\oint_c</TT></BLOCKQUOTE><U>Pfeile</U>
+        <BLOCKQUOTE><IMG
+          src="../locale/de/LC_HELP/pictures/23b935293e1ca8b1128119c995653bff.png">
+          <TT>\downarrow, \uparrow, \leftarrow, \rightarrow</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/0bdcd1867f70bb8de635511468612224.png">
+          <TT>\Downarrow, \Uparrow, \Leftarrow, \Rightarrow</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/2f766611187a3b16cae89b9eaec67f6d.png">
+          <TT>\leftrightarrow, \updownarrow</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/5b3bf06274fcfc8d7a7ae212126f0eff.png">
+          <TT>\Leftrightarrow, \Updownarrow</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/b84108d6c39ae4761741226aff9058c0.png">
+          <TT>\hookleftarrow, \hookrightarrow</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/ffb7b56400a92a138258e91b3ef8bf87.png">
+          <TT>\mapsto</TT><BR><IMG
+          src="../locale/de/LC_HELP/pictures/6fde573f0541efee83e3035df1afe549.png">
+          <TT>\nearrow, \nwarrow, \searrow,
+        \swarrow</TT></BLOCKQUOTE><BIG><U>Links</U></BIG><BR><BR><A
+        href="index.php?help_page=ix_forum6.htm"><IMG src="../locale/de/LC_HELP/pictures/link_extern.gif"
+        border=0>Weitere Formatierungshilfen bei Studip</A><BR><A
+        href="http://de.wikipedia.org/wiki/Wikipedia:TeX" target=_blank><IMG src="../locale/de/LC_HELP/pictures/link_extern.gif"
+        border=0>Tex-Syntax bei
+        Wikipedia</A></BLOCKQUOTE></TD></TR>
+  <TR>
+    <TD class=blank>&nbsp;</TD></TR></TBODY></TABLE><BR>
+</BODY></HTML>
