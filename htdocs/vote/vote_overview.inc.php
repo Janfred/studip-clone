@@ -101,7 +101,7 @@ if ($showrangeID){
 	}
 }
 else{
-	printSafeguard("ausruf",_("Kein Bereich ausgewählt. Es werden"
+	printSafeguard("ausruf",_("Kein Bereich ausgewählt. Es werden "
 				. "Votings und Tests ihrer persönlichen Homepage angezeigt."));
 	$showrangeID = get_username ($userID);
 	}
