@@ -164,8 +164,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          
      /* User has already used the vote --------------------------------- */
          $hasVoted = $evalDB->hasVoted ($evalID, $userID);
-         $numberOfVotes = $evalDB->getNumberOfVotes ($evalID);         
-
+         $numberOfVotes = $evalDB->getNumberOfVotes ($evalID);
+         $evalNoPermissons = EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval);
          
          $table = new HTML ("table");
          $table->addAttr("style", "font-size:1.2em;");
@@ -202,14 +202,17 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          $table->addContent ($tr);
          $table->addContent (EvalShow::createEvalMetaInfo ($eval, $hasVoted));
          
-         if ( $haveFullPerm) {
+         if ( $haveFullPerm ) {
             $tr = new HTML ("tr");
             $td = new HTML ("td");
             $td->addAttr ("align", "center");
             $td->addContent (EvalShow::createOverviewButton ($rangeID2));
+
+            if ( $evalNoPermissons == 0 ) {
             $td->addContent (EvalShow::createStopButton ($eval));
             $td->addContent (EvalShow::createDeleteButton ($eval));
             $td->addContent (EvalShow::createExportButton ($eval));
+            }
             
             $tr->addContent ($td);
             $table->addContent ($tr);
