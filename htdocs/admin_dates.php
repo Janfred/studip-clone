@@ -549,7 +549,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 	if ((!$term_data["art"]) && (!$db2->f("anzahl")) && (!$admin_dates_data["manuel_edit"]) && (!$admin_dates_data["insert_id"]))
 		if (sizeof($term_data["turnus_data"])) { //Ablaufplanassistent nur wenn allgemeine Zeiten vorhanden moeglich
 		?>
-		<table border="0" cellpadding="0" cellspacing="2" width="100%" align="center">
+		<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
 		<tr>
 			<td class="steel1" width="5%">&nbsp; 
 			</td>
@@ -584,7 +584,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 		}
 	else {
 		?>
-		<table border="0" cellpadding="0" cellspacing="2" width="100%" align="center">
+		<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
 		<tr>
 			<td class="steel1" width="5%">&nbsp; 
 			</td>
@@ -621,7 +621,7 @@ if (($kill) && ($admin_dates_data["range_id"]))
 	 if ($db->num_rows() || $admin_dates_data["insert_id"])
 		{
 		?>
-		<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
+		<table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
 		<tr align="left" height="22">
 			<td width="82%" class="steelgraulight" align="center">
 			<?
