@@ -208,8 +208,8 @@ class EvalShow {
       }
       /* ---------------------------------------------------------------------- */
 
-#      if ($voted && $number > 1)
-#	  $html .= _(", Sie ebenfalls");
+      if ($voted && $number > 1)
+	  $html .= _(", Sie ebenfalls");
       
       $html .= ".\n";
       return $html;
