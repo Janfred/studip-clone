@@ -162,7 +162,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		}
 		foreach ($semester_data as $sem_num => $sem) {
 			$names[] = $sem["name"];
-			$values[] = $sem_num;
+			$values[] = $sem_num + 1;
 		}
 		$table .= $edit_form->editOptionGeneric("semstart", $title, $info, $values, $names);
 		
@@ -173,7 +173,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		$i = 1;
 		foreach ($semester_data as $sem_num => $sem) {
 			$names[] = $i++;
-			$values[] = $sem_num;
+			$values[] = $sem_num + 1;
 		}
 		$table .= $edit_form->editOptionGeneric("semrange", $title, $info, $values, $names);
 		
