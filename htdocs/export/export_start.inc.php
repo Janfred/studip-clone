@@ -84,6 +84,8 @@ $export_pagename = _("Datenexport - Startseite");
 			}
 		}
 	} /**/
+	if ($perm->have_perm("root"))
+		$export_pagecontent .= "<option style=\"font-weight:bold;\" value=\"root\">Alle Einrichtungen";
 	$export_pagecontent .= "</select><br><br><br>";
 	
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Art der auszugebenden Daten: ") .  "</font></b><br /><select name=\"ex_type\">";
