@@ -657,21 +657,24 @@ function forum_print_navi ($forum) {
 * @param	string root_id of the posting
 * @param	string tmpSessionSeminar
 * @param	string user_id of the author
+* @param	boolean writeextern 
 *
 * @return	string topic_id of the new posting
 *
 **/
-function CreateTopic ($name="[no name]", $author="[no author]", $description="", $parent_id="0", $root_id="0", $tmpSessionSeminar=0, $user_id=FALSE)
+function CreateTopic ($name="[no name]", $author="[no author]", $description="", $parent_id="0", $root_id="0", $tmpSessionSeminar=0, $user_id=FALSE, $writeextern=TRUE)
 
-{	global $SessionSeminar,$auth, $PHP_SELF, $writeextern;
+{	global $SessionSeminar,$auth, $PHP_SELF;
 	if (!$tmpSessionSeminar)
 		$tmpSessionSeminar=$SessionSeminar;
 	$db=new DB_Seminar;
 	$mkdate = time();
-	if ($writeextern != TRUE)
-		$chdate = $mkdate-1;
-	else
-		$chdate = $mkdate;
+	if ($writeextern == FALSE) {
+		$chdate = $mkdate-1;   	// der Beitrag wird für alle ausser dem Author "versteckt"
+	}
+	else {
+		$chdate = $mkdate;	// normales Anlegen
+	}
 	if (!$user_id) {
 		$db->query ("SELECT user_id , username FROM auth_user_md5 WHERE username = '".$auth->auth["uname"]."' ");
 		while ($db->next_record())
@@ -889,6 +892,11 @@ function forum_check_edit($forumposting) {
 	return $forumposting;
 }
 
+
+/**
+* prints the topicline
+*
+**/
 function forum_draw_topicline() {
 	global $user, $SessSemName;
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
@@ -1374,9 +1382,9 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		echo "<td class=\"steelgraudunkel\" width=\"33%\" align=\"center\"><font size=\"-1\">&nbsp;&nbsp;";
 		if ($user->id != "nobody") { // Nobody kriegt nur treeview
 			if ($forum["view"] == "tree")
-				echo "<a href=\"".$PHP_SELF."?view=mixed\"><img src=\"pictures/forumtree.gif\" border=\"0\" align=\"top\"></a>";
+				echo "<a href=\"".$PHP_SELF."?view=mixed&themeview=mixed\"><img src=\"pictures/forumtree.gif\" border=\"0\" align=\"top\"></a>";
 			else
-				echo "<a href=\"".$PHP_SELF."?view=tree\"><img src=\"pictures/forumflat.gif\" border=\"0\" align=\"top\"></a>";
+				echo "<a href=\"".$PHP_SELF."?view=tree&themeview=tree\"><img src=\"pictures/forumflat.gif\" border=\"0\" align=\"top\"></a>";
 		}
 		echo "</font><img src=\"pictures/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;</font></td></tr></table>\n";

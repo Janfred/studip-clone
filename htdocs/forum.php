@@ -83,6 +83,7 @@ function getMsTime(){
 // Anzeige und View-Logik
 //////////////////////////////////////////////////////////////////////////////////
 
+
 if ($forum["view"]=="mixed" && $open) {
 	$forum["flatfolder"] = $open;
 }
@@ -90,7 +91,10 @@ if ($forum["view"]=="mixed" && $open) {
 if (!$forum["themeview"])
 	$forum["themeview"]="tree";
 	
-if ($presetview) {
+if ($themeview)
+	$forum["themeview"]=$themeview;
+
+if ($presetview) {  
 	if ($presetview == "theme")
 		$forum["presetview"]=$forum["themeview"];
 	else
@@ -328,7 +332,7 @@ if ($answer_id) {
 			$name = "Re: ".$name; // Re: vor Überschriften bei Antworten
 		$author = get_fullname();
 		$postinginhalt = _("Dieser Beitrag wird gerade bearbeitet.");
-		$edit_id = CreateTopic (addslashes($name), $author, $postinginhalt, $answer_id, $db->f("root_id"));
+		$edit_id = CreateTopic (addslashes($name), $author, $postinginhalt, $answer_id, $db->f("root_id"),"","",FALSE);
 		$open = $edit_id;
 		$forum["lostposting"] = $edit_id;
 	}
@@ -353,7 +357,7 @@ if ($update) {
 if ($neuesthema==TRUE && ($rechte || $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"])) {			// es wird ein neues Thema angelegt
 		$name = _("Name des Themas");
 		$author = get_fullname();
-		$edit_id = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0");
+		$edit_id = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0","","",FALSE);
 		$open = $edit_id;
 		$forum["lostposting"] = $edit_id;
 }
