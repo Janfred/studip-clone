@@ -603,6 +603,7 @@ class AssignObject {
 			if ($this->db->affected_rows()) {
 				$query = sprintf("UPDATE resources_assign SET chdate='%s' WHERE assign_id='%s' ", $chdate, $this->id);
 				$this->db->query($query);
+				$this->syncronizeMetaDates();
 				return TRUE;
 			} else
 				return FALSE;
@@ -610,6 +611,30 @@ class AssignObject {
 		return FALSE;
 	}
 
+	function syncronizeMetaDates(){
+		$changed = false;
+		if ($this->getOwnerType() == "sem") {
+			$sem = new Seminar($this->getAssignUserId());
+			if (!$sem->is_new){
+				foreach($sem->getMetaDates() as $key => $value){
+					if (($value['day'] == $this->repeat_day_of_week)
+						&& ($value['start_hour'] == date('G', $this->begin))
+						&& ($value['start_minute'] == date('i', $this->begin))
+						&& ($value['end_hour'] == date('G', $this->end))
+						&& ($value['end_minute'] == date('i', $this->end))){
+						$sem->setMetaDateValue($key, 'resource_id', $this->resource_id);
+						$sem->setMetaDateValue($key, 'room_description', '');
+						$changed = true;
+						}
+				}
+				if ($changed){
+					$sem->store();
+				}
+			}
+		}
+		return $changed;
+	}
+	
 	function delete() {
 		/*
 		NOTE: this feature isn't used at the moment. I could be useful, if a functionality to delete assings from
