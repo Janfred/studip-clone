@@ -179,7 +179,7 @@ class ShowToolsRequests {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="center">
 					<?
-					print "<input type=\"IMAGE\" name=\"start_single_mode\" ".makeButton("starten", "src")." />";
+					print "<input type=\"IMAGE\" name=\"start_multiple_mode\" ".makeButton("starten", "src")." />";
 					?>
 			</td>
 			</tr>			
