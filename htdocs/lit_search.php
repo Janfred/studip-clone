@@ -182,15 +182,15 @@ if (($num_hits = $_the_search->getNumHits())){
 <?
 echo _("Anzeige: ");
 if ($_the_search->start_result > 1) {
-	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result - 5) . "\"><img src=\"pictures\move_left.gif\" hspace=\"3\" border=\"0\"></a>";
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result - 5) . "\"><img src=\"pictures/move_left.gif\" hspace=\"3\" border=\"0\"></a>";
 } else {
-	echo "<img src=\"pictures\forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
+	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 echo $_the_search->start_result . " - " . $end_result;
 if ($_the_search->start_result + 5 < $num_hits) {
-	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"pictures\move_right.gif\" hspace=\"3\" border=\"0\"></a>";
+	echo "<a href=\"$PHP_SELF?change_start_result=" . ($_the_search->start_result + 5) . "\"><img src=\"pictures/move_right.gif\" hspace=\"3\" border=\"0\"></a>";
 } else {
-	echo "<img src=\"pictures\forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
+	echo "<img src=\"pictures/forumleer.gif\" width=\"17\" height=\"18\" border=\"0\">";
 }
 ?>
 </td></tr>
@@ -198,26 +198,28 @@ if ($_the_search->start_result + 5 < $num_hits) {
 <?
 for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 	$element = $_the_search->getSearchResult($i);
-	echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>";
-	$addon = "<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id") . 
-			"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\"  border=\"0\" " . 
-			tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
-	printhead(0,0,false,"open",true,"<img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\">",htmlReady(my_substr($element->getShortName(),0,85)),$addon);
-	echo "\n</tr></table>";
-	$content = "";
-	$edit = "<a href=\"admin_lit_element.php?_catalog_id=" . $element->getValue("catalog_id") . "\">"
-			. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
-			. " border=\"0\"></a>&nbsp;";
-	echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
-	$content .= "<b>" . _("Titel:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_title"),true,true) . "<br>";
-	$content .= "<b>" . _("Autor; weitere Beteiligte:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("authors"),true,true) . "<br>";
-	$content .= "<b>" . _("Erschienen:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("published"),true,true) . "<br>";
-	$content .= "<b>" . _("Identifikation:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_identifier"),true,true) . "<br>";
-	$content .= "<b>" . _("Schlagw&ouml;rter:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_subject"),true,true) . "<br>";
-	
-	printcontent(0,0,$content,$edit);
-	echo "\n</table>";
+	if ($element){
+		echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>";
+		$addon = "<a href=\"". $PHP_SELF . "?cmd=add_to_clipboard&catalog_id=" . $element->getValue("catalog_id") . 
+				"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\"  border=\"0\" " . 
+				tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
+		printhead(0,0,false,"open",true,"<img src=\"pictures/cont_lit.gif\" border=\"0\" align=\"bottom\">",htmlReady(my_substr($element->getShortName(),0,85)),$addon);
+		echo "\n</tr></table>";
+		$content = "";
+		$edit = "<a href=\"admin_lit_element.php?_catalog_id=" . $element->getValue("catalog_id") . "\">"
+				. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
+				. " border=\"0\"></a>&nbsp;";
+		echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
+		$content .= "<b>" . _("Titel:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_title"),true,true) . "<br>";
+		$content .= "<b>" . _("Autor; weitere Beteiligte:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("authors"),true,true) . "<br>";
+		$content .= "<b>" . _("Erschienen:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("published"),true,true) . "<br>";
+		$content .= "<b>" . _("Identifikation:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_identifier"),true,true) . "<br>";
+		$content .= "<b>" . _("Schlagw&ouml;rter:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_subject"),true,true) . "<br>";
+		
+		printcontent(0,0,$content,$edit);
+		echo "\n</table>";
 	}
+}
 ?>
 </td></tr>
 </table>
