@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-  $perm->check("dozent");
+ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+ $perm->check("dozent");
 
 // Set this to something, just something different...
 $hash_secret = "nirhtak";
@@ -34,6 +34,8 @@ require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen 
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 
+
+echo $add_tut;
 // Get a database connection and Stuff
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -75,7 +77,7 @@ if (($sem_create_data["sem_entry"]) && (!$form))
 	}	
 
 //empfangene Variablen aus diversen Formularen auswerten
-if ($start_level) {
+if ($start_level) { //create defaults
 	$sem_create_data["sem_class"]=$class;
 
 	if ($SEM_CLASS[$class]["turnus_default"]) 
@@ -86,6 +88,9 @@ if ($start_level) {
 
 	if ($SEM_CLASS[$class]["default_write_level"]) 
 		$sem_create_data["sem_sec_schreib"] = $SEM_CLASS[$class]["default_write_level"];
+		
+	if ($auth->auth["perm"] == "dozent")
+		$sem_create_data["sem_doz"][$user->id]=TRUE;
 }
 
 if ($form==1)
@@ -113,16 +118,6 @@ if ($form==1)
 
 if ($form==2)
 	{
-	$i=0;
-	for ($i; $i<sizeof($sem_doz); $i++)
-		$tmp_create_data_doz[]=$sem_doz[$i];
-	unset ($sem_create_data["sem_doz"]);
-	$sem_create_data["sem_doz"]=$tmp_create_data_doz;
-	$i=0;
-	for ($i; $i<sizeof($sem_tut); $i++)
-		$tmp_create_data_tut[]=$sem_tut[$i];
-	unset ($sem_create_data["sem_tut"]);
-	$sem_create_data["sem_tut"]=$tmp_create_data_tut;
 	$i=0;
 	for ($i; $i<sizeof($sem_bereich); $i++)
 		$tmp_create_data_bereich[]=$sem_bereich[$i];
@@ -420,16 +415,37 @@ if ($cmd_b_x)
 		$level=2;
 	}
 
+//delete Tutoren/Dozenten
+if ($delete_doz) {
+	unset($sem_create_data["sem_doz"][get_userid($delete_doz)]);
+	$level=2;	
+}
+
+if ($delete_tut) {
+	unset($sem_create_data["sem_tut"][get_userid($delete_tut)]);
+	$level=2;	
+}
+
+if (($add_doz) && (!$reset_search_x)) {
+	$sem_create_data["sem_doz"][get_userid($add_doz)]=TRUE;
+	$level=2;	
+}
+
+if (($add_tut) && (!$reset_search_x)) {
+	$sem_create_data["sem_tut"][get_userid($add_tut)]=TRUE;
+	$level=2;	
+}
+
+if (($search_doz_x) || ($search_tut_x) || ($reset_search_x)) {
+	$level=2;
+}
 
 //wenn alles stimmt, Sprung auf Schritt 3
 if ($cmd_c_x)
 	{
-	if (is_array($sem_create_data["sem_doz"]))
-		foreach ($sem_create_data["sem_doz"] as $a)
-			$temp_sem_create_check_dozent[$a]=TRUE;
 	if (is_array($sem_create_data["sem_tut"]))
-		foreach ($sem_create_data["sem_tut"] as $a)
-			if ($temp_sem_create_check_dozent[$a])
+		foreach ($sem_create_data["sem_tut"] as $key=>$val)
+			if ($sem_create_data["sem_doz"][$key])
 				$badly_dozent_is_tutor=TRUE;
 	if ($badly_dozent_is_tutor) {
 		$level=2; //wir bleiben auf der zweiten Seite
@@ -443,14 +459,10 @@ if ($cmd_c_x)
 		}
 	elseif ((!$perm->have_perm("root")) && (!$perm->have_perm("admin")))
 		{
-		$self_in=false;
-		foreach ($sem_create_data["sem_doz"] as $tmp_array)
-			if ($tmp_array == $user_id)
-				$self_in=true;
-		if (!$self_in)
-			{
+		if (!$sem_create_data["sem_doz"][$user_id]) {
 			$level=2;
 			$errormsg=$errormsg."error§Sie m&uuml;ssen wenigstens sich selbst als DozentIn f&uuml;r diese Veranstaltung angeben! Der Eintrag wird automatisch gesetzt.§";
+			$sem_create_data["sem_doz"][$user_id]=TRUE;
 			}
 		}
 	if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"]) {
@@ -698,14 +710,14 @@ if ($cmd_e_x)
        			$check_pw = $hashpass2;
        			}
 
-		if ($sem_create_data["sem_pw"]=="")
+		if (($sem_create_data["sem_pw"]=="") || ($sem_create_data["sem_pw"] == md5("")))
 	          	{
         	  	$errormsg=$errormsg."error§Sie haben kein Passwort eingegeben! Bitte geben Sie ein Passwort ein!§";
           		$level=4;
 	          	}
         	  elseif (isset($check_pw) AND $sem_create_data["sem_pw"] != $check_pw)
      			{
-			$errormsg=$errormsg."error§Das eingegebene Passwort und das Wiederholungspasswort stimmen nicht &uuml;berein!§";
+			$errormsg=$errormsg."error§Das eingegebene Passwort und das Passwort zur Best&auml;tigung stimmen nicht &uuml;berein!§";
      			$sem_create_data["sem_pw"] = "";
      			$level=4;
 	          	}
@@ -1107,10 +1119,10 @@ if (!$sem_create_data["sem_class"]) {
 					<table cellpadding=0>
 					<?
 					foreach ($SEM_CLASS as $key=>$val) {
-						echo "<tr><td width=\"5%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"pictures/forumrot.gif\" border=0 /></a><td>";
-						echo "<td width=\"95%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\">".$val["name"]."</a><td></tr>";
-						echo "<tr><td width=\"5%\" class=\"blank\">&nbsp; <td>";
-						echo "<td width=\"95%\" class=\"blank\"><font size=-1>".$val["create_description"]."<td></tr>";
+						echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"pictures/forumrot.gif\" border=0 /></a><td>";
+						echo "<td width=\"97%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\">".$val["name"]."</a><td></tr>";
+						echo "<tr><td width=\"3%\" class=\"blank\">&nbsp; <td>";
+						echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$val["create_description"]."<td></tr>";
 					}
 					?>
 					</table>
@@ -1428,89 +1440,135 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 						<?
 						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
-							echo "DozentInnen der Veranstaltung:";
+							echo "DozentInnen:";
 						else
-							echo "Leiter der Veranstaltung:";
+							echo "Leiter:";
 						?>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							&nbsp; <select name="sem_doz[]" MULTIPLE SIZE=7>
+						<td class="<? echo $cssSw->getClass() ?>" width="40%">
 							<?
-								$clause='';
-								$clause=$clause."institut_id = '".$sem_create_data["sem_inst_id"]."' OR auth_user_md5.user_id = '".$user_id."'";
-								if ($sem_create_data["sem_bet_inst"])
-									foreach ($sem_create_data["sem_bet_inst"] as $tmp_array)
-										{
-										$clause=$clause." OR institut_id = '".$tmp_array."'";
-										}
-								$db->query("SELECT DISTINCT auth_user_md5.user_id, Nachname, username, auth_user_md5.Vorname, perms FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) WHERE user_inst.inst_perms = 'dozent' AND ($clause) ORDER BY Nachname");
-								while ($db->next_record()) {
-									$tempDozent_id = $db->f("user_id");
-									$selected=FALSE;
-									$i=0;
-									for ($i; $i<sizeof($sem_create_data["sem_doz"]); $i++)
-										if ($sem_create_data["sem_doz"][$i] == $tempDozent_id)
-											$selected=TRUE;
-										if (($db->f("user_id") == $user_id) && ($perm->have_perm ("dozent")))
-											$selected=TRUE;
-									if ($selected)
-										{
-										printf ("<option value=\"%s\" selected> %s, %s (%s) - %s</option>", $db->f("user_id"), $db->f("Nachname"), $db->f("Vorname"), $db->f("username"), $db->f("perms"));
-										}
-									else
-										{
-										printf ("<option value=\"%s\"> %s, %s (%s) - %s</option>", $db->f("user_id"), $db->f("Nachname"), $db->f("Vorname"), $db->f("username"), $db->f("perms"));
-										}
+							if (sizeof($sem_create_data["sem_doz"]) >0) {
+								foreach($sem_create_data["sem_doz"] as $key=>$val) {
+									printf ("&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <a href=\"$PHP_SELF?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a><br />", get_nachname($key), get_vorname($key), get_username($key), get_username($key));
 								}
+							} else {
+								printf ("<font size=\"-1\">&nbsp;  Keine %s gew&auml;hlt.</font><br >", $SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"] ? "LeiterIn" : "DozentIn");
+							}
 							?>
-							</select>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Die Namen der DozentInnen, die die Veranstaltung leiten. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.", TRUE, TRUE) ?>
+							&nbsp; <img  src="./pictures/info.gif" 
+								<? 
+								if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+									$tmp_assi_name= "DozentInnen, die die Veranstaltung leiten";
+								else
+									$tmp_assi_name= "Leiter der Veranstaltung";
+								echo tooltip("Die Namen der $tmp_assi_name. Nutzen Sie die Suchfunktion, um weitere Eintragungen vorzunehmen, oder die Mülltonne, um Eintragungen zu löschen.", TRUE, TRUE) ?>
 							>
 							<font color="red" size=+2>*</font>
+						</td>
+						<td <? echo $cssSw->getFullClass() ?> width="50%">
+							<?
+							if (($search_exp_doz) && ($search_doz_x)) {
+								if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
+									$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
+									if (is_array($sem_create_data["sem_bet_inst"]))
+										foreach($sem_create_data["sem_bet_inst"] as $val)
+											$clause.=",'$val'";
+									$clause.=")";
+								} else
+									$clause='';
+								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])									
+									$db->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms = 'dozent' $clause AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");
+								else
+									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5  WHERE perms = 'dozent' AND (username LIKE '%$search_exp_doz%' OR Vorname LIKE '%$search_exp_doz%' OR Nachname LIKE '%$search_exp_doz%') ORDER BY Nachname");								
+								if ($db->num_rows()) {
+									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
+									print "<select name=\"add_doz\">";
+									while ($db->next_record()) {
+										printf ("<option value=\"%s\">%s </option>", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname"), 0, 30));
+									}
+									print "</select></font>";
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/add_buddy.gif\" border=\"0\" name=\"add_doz\" />";
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/suchen.gif\" border=\"0\" name=\"reset_search\" />";									
+								}
+							}
+							if ((!$search_exp_doz) || (($search_exp_doz) && (!$db->num_rows()))) {
+								?>
+								<font size=-1>
+								<? printf ("%s %s", (($search_exp_doz) && (!$db->num_rows())) ? "Keinen Nutzer gefunden." : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "DozentIn hinzuf&uuml;gen" : "LeiterIn hinzuf&uuml;gen"  : "");?>
+								</font><br />
+								<input type="TEXT" size="30" maxlength="255" name="search_exp_doz" />&nbsp; 
+								<input type="IMAGE" src="./pictures/suchen.gif" border="0" name="search_doz" />
+								<?
+							}
+							?>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 						<?
 						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
-							echo "TutorInnen der Veranstaltung:";
+							echo "TutorInnen:";
 						else
-							echo "Mitglieder der Veranstaltung: <br />";
+							echo "Mitglieder: <br />";
 						?>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							&nbsp; <select name="sem_tut[]" MULTIPLE SIZE=7>
+						<td class="<? echo $cssSw->getClass() ?>" width="40%">
 							<?
-								$clause='';
-								$clause=$clause."institut_id = '".$sem_create_data["sem_inst_id"]."'";
-								if ($sem_create_data["sem_bet_inst"])
-									foreach ($sem_create_data["sem_bet_inst"] as $tmp_array)
-										{
-										$clause=$clause." OR institut_id = '".$tmp_array."'";
-										}
-								$db->query("SELECT DISTINCT auth_user_md5.user_id, Nachname, username, auth_user_md5.Vorname, perms FROM auth_user_md5 LEFT JOIN user_inst USING (user_id) WHERE (user_inst.inst_perms = 'tutor' OR user_inst.inst_perms = 'dozent') AND ($clause) ORDER BY Nachname");
-								while ($db->next_record())
-									{
-									$tempTutor_id = $db->f("user_id");
-									$selected=FALSE;
-									$i=0;
-									for ($i; $i<sizeof($sem_create_data["sem_tut"]); $i++)
-										if ($sem_create_data["sem_tut"][$i] == $tempTutor_id) $selected=TRUE;
-									if ($selected)
-										{
-										printf ("<option value=\"%s\" selected> %s, %s (%s) - %s</option>", $db->f("user_id"), $db->f("Nachname"), $db->f("Vorname"), $db->f("username"), $db->f("perms"));
-										}
-									else
-										{
-										printf ("<option value=\"%s\"> %s, %s (%s) - %s</option>", $db->f("user_id"), $db->f("Nachname"), $db->f("Vorname"), $db->f("username"), $db->f("perms"));
-										}
-									}
+							if (sizeof($sem_create_data["sem_tut"]) >0) {
+								foreach($sem_create_data["sem_tut"] as $key=>$val) {
+									printf ("&nbsp; <font size=\"-1\"><b>%s, %s (%s)&nbsp; &nbsp; <a href=\"$PHP_SELF?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a><br />", get_nachname($key), get_vorname($key), get_username($key), get_username($key));
+								}
+							} else {
+								printf ("<font size=\"-1\">&nbsp;  %s gew&auml;hlt.</font><br >", $SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"] ? "Kein Mitglied" : "Keine TutorIn");
+							}
 							?>
-							</select>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip("Die Tutoren der Veranstaltung. Diese haben eingeschränkte Zugriffsrechte. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten.", TRUE, TRUE) ?>
+							&nbsp; <img  src="./pictures/info.gif" 
+								<?
+								if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+									$tmp_assi_name= "TutorInnen, die in der Veranstaltung weitergehende Rechte erhalten";
+								else
+									$tmp_assi_name= "Mitglieder der Veranstaltung";
+								echo tooltip("Die Namen der $tmp_assi_name. Nutzen Sie die Suchfunktion, um weitere Eintragungen vorzunehmen, oder die Mülltonne, um Eintragungen zu löschen.", TRUE, TRUE) ?>
 							>
+							<font color="red" size=+2>*</font>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="40%">
+							<?
+							if (($search_exp_tut) && ($search_tut_x)) {
+								if ((!$perm->have_perm("root")) && ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])) {
+									$clause="AND Institut_id IN ('".$sem_create_data["sem_inst_id"]."'";
+									if (is_array($sem_create_data["sem_bet_inst"]))
+										foreach($sem_create_data["sem_bet_inst"] as $val)
+											$clause.=",'$val'";
+									$clause.=")";
+								} else
+									$clause='';
+								if ($SEM_CLASS[$sem_create_data["sem_class"]]["only_inst_user"])
+									$db->query ("SELECT username, Vorname, Nachname FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE inst_perms IN ('tutor', 'dozent') $clause AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");
+								else
+									$db->query ("SELECT username, Vorname, Nachname FROM auth_user_md5 WHERE perms IN ('tutor', 'dozent') AND (username LIKE '%$search_exp_tut%' OR Vorname LIKE '%$search_exp_tut%' OR Nachname LIKE '%$search_exp_tut%') ORDER BY Nachname");								
+								if ($db->num_rows()) {
+									printf ("<font size=-1><b>%s</b> Nutzer gefunden:<br />", $db->num_rows());
+									print "<select name=\"add_tut\">";
+									while ($db->next_record()) {
+										printf ("<option value=\"%s\">%s </option>", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname"), 0, 30));
+									}
+									print "</select></font>";
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/add_buddy.gif\" border=\"0\" name=\"add_tut\" />";
+									print "&nbsp; <input type=\"IMAGE\" src=\"./pictures/suchen.gif\" border=\"0\" name=\"reset_search\" />";									
+								}
+							}
+							if ((!$search_exp_tut) || (($search_exp_tut) && (!$db->num_rows()))) {
+								?>
+								<font size=-1>
+								<? printf ("%s %s", (($search_exp_tut) && (!$db->num_rows())) ? "Keinen Nutzer gefunden." : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? "TutorIn hinzuf&uuml;gen" : "Mitglied hinzuf&uuml;gen"  : "");?>
+								</font><br />
+								<input type="TEXT" size="30" maxlength="255" name="search_exp_tut" />&nbsp; 
+								<input type="IMAGE" src="./pictures/suchen.gif" border="0" name="search_tut" /><br />
+								<font size=-1>Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.</font>
+								<?
+							}
+							?>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
@@ -1525,7 +1583,8 @@ if ($level==2)
 										printf ("<option %s value=%s>%s</option>", $sem_create_data["sem_status"] == $i ? "selected" : "", $i, $SEM_TYPE[$i]["name"]);
 								}
 							?>
-							</select> in der Kategorie <b><? echo $SEM_CLASS[$sem_create_data["sem_class"]]["name"] ?></b>
+							</select> <br />
+							&nbsp; <font size="-1"> in der Kategorie <b><? echo $SEM_CLASS[$sem_create_data["sem_class"]]["name"] ?></b></font>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip("Über den Typ der Veranstaltung werden die Veranstaltungen innerhalb von Listen gruppiert.", TRUE, TRUE) ?>
 							>
@@ -1622,7 +1681,7 @@ if ($level==2)
 								<input type="radio" name="sem_sec_lese" value="1" <?php print $sem_create_data["sem_sec_lese"] == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;
 								<input type="radio" name="sem_sec_lese" value="2" <?php print $sem_create_data["sem_sec_lese"] == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;
 								<img  src="./pictures/info.gif" 
-									<? echo tooltip("Hier geben Sie an, ob der Lesezugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.", TRUE, TRUE) ?>
+									<? echo tooltip("Hier geben Sie an, ob der Lesezugriff auf die Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.", TRUE, TRUE) ?>
 								>								
 							<?
 							} else
@@ -1653,7 +1712,7 @@ if ($level==2)
 								<input type="radio" name="sem_sec_schreib" value="1" <?php print $sem_create_data["sem_sec_schreib"] == 1 ? "checked" : ""?>> in Stud.IP angemeldet &nbsp;
 								<input type="radio" name="sem_sec_schreib" value="2" <?php print $sem_create_data["sem_sec_schreib"] == 2 ? "checked" : ""?>> nur mit Passwort &nbsp;
 								<img  src="./pictures/info.gif" 
-									<? echo tooltip("Hier geben Sie an, ob der Schreibzugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.", TRUE, TRUE) ?>
+									<? echo tooltip("Hier geben Sie an, ob der Schreibzugriff auf die Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.", TRUE, TRUE) ?>
 							>
 							<?
 							} else
@@ -2022,10 +2081,10 @@ if ($level==4)
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>&nbsp;
 								<?
-									if ($sem_create_data["sem_pw"]!="")
-										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31 value=\"*******\">&nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31 value=\"*******\">";
-									else	
+									if (($sem_create_data["sem_pw"]=="") || ($sem_create_data["sem_pw"] == md5("")))
 										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31> &nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31>";
+									else	
+										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31 value=\"*******\">&nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31 value=\"*******\">";
 								?>
 								<img  src="./pictures/info.gif" 
 									<? echo tooltip("Bitte geben Sie hier ein Passwort für die Veranstaltung sowie dasselbe Passwort nochmal zur Bestätigung ein. Dieses wird von den Teilnehmer benötigt, um die Veranstaltung abonnieren zu können.", TRUE, TRUE) ?>
