@@ -90,6 +90,7 @@ class ExternSemBrowse extends SemBrowse {
 				} else {
 					$the_tree =& $this->sem_tree->tree;
 				}
+			$the_tree->buildIndex();
 			}
 			
 			if (!$this->config->getValue("Main", "allseminars")){
@@ -233,6 +234,13 @@ class ExternSemBrowse extends SemBrowse {
 					break;
 					
 					case 1:
+					$range_path_level = $this->config->getValue("Main", "rangepathlevel");
+					if ($the_tree->tree_data[$group_field]) {
+						echo htmlReady($the_tree->getShortPath($group_field,$range_path_level));
+					} else {
+						echo $this->config->getValue("Main", "textnogroups");
+					}
+					/*
 					$range_path_new = NULL;
 					if ($the_tree->tree_data[$group_field]) {
 						$range_path = explode(" ^ ", $the_tree->getShortPath($group_field, "^"));
@@ -245,7 +253,7 @@ class ExternSemBrowse extends SemBrowse {
 					}
 					else
 						echo $this->config->getValue("Main", "textnogroups");
-					
+					*/
 					break;
 					
 					case 2:

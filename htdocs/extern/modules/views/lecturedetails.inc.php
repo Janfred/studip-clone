@@ -88,6 +88,12 @@ if ($db->next_record()) {
 		$data["leistung"] = htmlReady($db->f("leistungsnachweis"));
 	
 	if ($visible[++$j]) {
+		$range_path_level = $this->config->getValue("Main", "rangepathlevel");
+		$pathes = get_sem_tree_path($seminar_id, $range_path_level);
+		if (is_array($pathes)) {
+			$data["range_path"] = htmlReady(implode("\n", array_values($pathes)));
+		}
+		/*
 		$pathes = get_sem_tree_path($seminar_id, "^");
 		if (is_array($pathes)) {
 			$range_path_level = $this->config->getValue("Main", "rangepathlevel");
@@ -104,6 +110,7 @@ if ($db->next_record()) {
 			}
 			$data["range_path"] = implode("<br>", $range_pathes);
 		}
+		*/
 	}
 	
 	if ($visible[$i++] && $db->f("Sonstiges"))
