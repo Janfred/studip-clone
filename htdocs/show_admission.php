@@ -46,7 +46,7 @@ $db3=new DB_Seminar;
 	<tr>
 		<td class="topic">&nbsp;<b>
 		<?
-		echo "Teilnehmerbeschr&auml;nkte Veranstaltungen";
+		echo _("Teilnehmerbeschr&auml;nkte Veranstaltungen");
 		?></b>
 		</td>
 	</tr>
@@ -97,14 +97,14 @@ $db3=new DB_Seminar;
 			printf("<form action=\"%s\" method=\"post\">",$PHP_SELF);
 			printf("<table border=0 cellspacing=0 cellpadding=0 width=\"99%%\">");
 			if ($group == "group") {
-			  my_info("Beachten Sie, dass einE TeilnehmerIn bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine Ãnderungen vor!");
-			  my_info("Wollen Sie die ausgewÃ€hlten Veranstaltungen gruppieren?");
+			  my_info(_("Beachten Sie, dass einE TeilnehmerIn bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine &Auml;nderungen vor!"));
+			  my_info(_("Wollen Sie die ausgew&auml;hlten Veranstaltungen gruppieren?"));
 			} else {
-			  my_info("Beachten Sie, dass fÃŒr bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine Ãnderungen vorgenommen werden.");
-			  my_info("Wollen Sie die Gruppierung fÃŒr die ausgewÃ€hlte Gruppe auflÃ¶sen?");
+			  my_info(_("Beachten Sie, dass f&uuml;r bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine &Auml;nderungen vorgenommen werden."));
+			  my_info(_("Wollen Sie die Gruppierung f&uuml;r die ausgew&auml;hlte Gruppe aufl&ouml;sen?"));
 			}
 			echo "<tr><td>\n";
-			printf("&nbsp;&nbsp;<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja2","src"),tooltip(_("Ãnderung durchfÃŒhren")));
+			printf("&nbsp;&nbsp;<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja2","src"),tooltip(_("&Auml;nderung durchf&uuml;hren")));
 			print("<input type=\"hidden\" name=\"real\" value=\"1\">\n");
 			printf("<input type=\"hidden\" name=\"group\" value=\"%s\">\n",$group);
 			printf("<input type=\"hidden\" name=\"institut_id\" value=\"%s\">\n",$institut_id);
@@ -158,7 +158,7 @@ $db3=new DB_Seminar;
 			echo "</tr>";
 		} elseif ($institut_id) {
 			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2>");
-			parse_msg ("info§Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen§", "§", "steel1",2, FALSE);
+			parse_msg ("info�"._("Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen")."�", "�", "steel1",2, FALSE);
 		}
 
 		if ($db->nf()) printf("<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
