@@ -69,7 +69,7 @@ function AddNewContact ($user_id)
 
 function ShowUserInfo ($user_id)
 { 	// Inserting an new contact
-	global $user, $open;
+	global $user, $open, $edit_id;
 	$output = "";
 	$db=new DB_Seminar;
 	$db->query ("SELECT Email, username FROM auth_user_md5 WHERE user_id = '$user_id'");	
@@ -85,7 +85,7 @@ function ShowUserInfo ($user_id)
 
 	// hier Zusatzinfos
 
-	if ($open == $user_id || $open == "all") {
+	if ($open == $user_id || $open == "all" || $edit_id) {
 		$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");	
 		if ($db->next_record()) {	
 			if ($db->f("Home")!="")
@@ -129,7 +129,7 @@ function ShowContact ($contact_id)
 		if ($open == $db->f("user_id") || $open == "all") {
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id\"><img src=\"pictures/nutzer.gif\" border=\"0\"></a>&nbsp; "
-						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\"></a>&nbsp; "
+						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\"></a>&nbsp; "
 						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id\"><img src=\"pictures/trash_att.gif\" border=\"0\"></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\"></a></td></tr>";
 		} else {
@@ -138,6 +138,35 @@ function ShowContact ($contact_id)
 		$output = "<table cellspacing=\"0\" width=\"350\" class=\"blank\">
 					<tr>
 						<td class=\"topic\" colspan=\"2\">"
+							.get_nachname($db->f("user_id")).", ".get_vorname($db->f("user_id"))."</td>"
+							."
+						</td>
+					</tr>"
+						.ShowUserInfo ($db->f("user_id"))
+						. $lastrow
+				."</table>";
+	} else {
+		$output = "Fehler!";
+	}
+	return $output;
+}
+
+function ShowEditContact ($contact_id)
+{	// Ausgabe eines zu editierenden Kontaktes
+	global $PHP_SELF, $open, $filter, $edit_id;
+	$db=new DB_Seminar;
+	$db->query ("SELECT user_id FROM contact WHERE contact_id = '$contact_id'");	
+	if ($db->next_record()) {
+
+		$lastrow =	"<tr><td class=\"steel1\"><form action=\"$PHP_SELF?cmd=newinfo\" method=\"POST\">"
+					."<input type=\"text\" name=\"owninfolabel[]\" value=\"Beschreibung\"></td>"
+					."<td class=\"steel1\"><input type=\"text\" name=\"owninfocontent[]\" value=\"Inhalt\">"
+					."<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n"
+					. "</td></tr>";
+		$lastrow .= "<tr><td valign=\"middle\" colspan=\"2\" class=\"steelgraulight\" align=\"center\"><br><input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/uebernehmen-button.gif\" border=\"0\" value=\" Personen suchen\" ".tooltip("Seite aktualisieren")."></form></td></tr>";
+		$output = "<table cellspacing=\"0\" width=\"700\" class=\"blank\">
+					<tr>
+						<td class=\"topicwrite\" colspan=\"2\">"
 							.get_nachname($db->f("user_id")).", ".get_vorname($db->f("user_id"))."</td>"
 							."
 						</td>
@@ -177,25 +206,40 @@ function DeleteContact ($contact_id)
 	return $output;
 }
 
+function PrintEditContact($edit_id)
+{	global $user;
+	$owner_id = $user->id;
+	$db=new DB_Seminar;
+	$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' AND contact_id = '$edit_id'");	
+	echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"700\" class=\"blank\">";
+	while ($db->next_record()) {
+			$contact_id = $db->f("contact_id");
+			echo ShowEditContact ($contact_id);
+			echo "<br>";
+	}
+	echo "</td></tr></table>";
+}
 
 function PrintAllContact($filter="")
 {	global $user, $open, $filter;
 	$i = 1;
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
-	$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");	
+	if ($filter!="") {
+		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' AND LEFT(nachname,1) = '$filter' ORDER BY nachname");	
+	} else {
+		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");		
+	}
 	$middle = round($db->num_rows()/2);
 	echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"350\" class=\"blank\">";
 	while ($db->next_record()) {
-		if ($filter=="" || strtolower(substr($db->f("nachname"),0,1))==$filter) {
-			$contact_id = $db->f("contact_id");
-			echo ShowContact ($contact_id);
-			echo "<br>";
-			if ($i==$middle) { //Spaltenumbruch
-				echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
-			}
+		$contact_id = $db->f("contact_id");
+		echo ShowContact ($contact_id);
+		echo "<br>";
+		if ($i==$middle) { //Spaltenumbruch
+			echo "</td><td valign=\"top\" width=\"350\" class=\"blank\">";
 		}
-		$i++;
+	$i++;
 	}
 	echo "</td></tr></table>";
 }
