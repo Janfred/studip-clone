@@ -99,37 +99,37 @@ if ($cmd=="delete")
 //ein weiterer persoenlicher Eintrag wurde uebermittelt
 if ($cmd=="insert") {
 	switch ($tag) {
-		case "Montag": {//nicht wundern, wir nehmen hier irgendwelche Tage, von denen wir wissen, was das fuer ein Wochentag war, um den Wochentag zu fixieren (dieser Programmteil entstand 03/2001... *G)
+		case 1: {//nicht wundern, wir nehmen hier irgendwelche Tage, von denen wir wissen, was das fuer ein Wochentag war, um den Wochentag zu fixieren (dieser Programmteil entstand 03/2001... *G)
 			$start_time = mktime($start_stunde,$start_minute,0,3,26,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,3,26,2001);
 			break;
 			}
-		case "Dienstag": {
+		case 2: {
 			$start_time = mktime($start_stunde,$start_minute,0,3,27,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,3,27,2001);
 			break;
 			}
-		case "Mittwoch": {
+		case 3: {
 			$start_time = mktime($start_stunde,$start_minute,0,3,28,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,3,28,2001);
 			break;
 			}
-		case "Donnerstag": {
+		case 4: {
 			$start_time = mktime($start_stunde,$start_minute,0,3,29,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,3,29,2001);
 			break;
 			}
-		case "Freitag": {
+		case 5: {
 			$start_time = mktime($start_stunde,$start_minute,0,3,30,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,3,30,2001);
 			break;
 			}
-		case "Samstag": {
+		case 6: {
 			$start_time = mktime($start_stunde,$start_minute,0,3,31,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,3,31,2001);
 			break;
 			}
-		case "Sonntag": {
+		case 7: {
 			$start_time = mktime($start_stunde,$start_minute,0,4,1,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,4,1,2001);
 			break;
@@ -374,9 +374,9 @@ if (!$print_view)
 if ($perm->have_perm("admin") && $view != "inst") {
 ?>
 <tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo "Mein Stundenplan"; else echo "Veranstaltungs-Timetable" ?></b>
+	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
 	</td>
-	<td nowrap class="topic" align="right">Ansicht anpassen&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="pictures/pfeillink.gif" border=0></a>
+	<td nowrap class="topic" align="right"><?=_("Ansicht anpassen")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="pictures/pfeillink.gif" border=0></a>
 	</td>
 </tr>
 <?
@@ -385,7 +385,7 @@ else
 	{
 ?>
 <tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan+1?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo "Mein Stundenplan"; else echo "Veranstaltungs-Timetable" ?></b>
+	<td class="topic" width = "99%"colspan=<? echo $glb_colspan+1?>><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
 	</td>
 </tr>
 <?
@@ -407,8 +407,8 @@ if (!$print_view) {
 				printf(_("Ihre pers&ouml;nlichen Termine finden sie im %sTerminkalender%s."), "<a href=\"calendar.php\">", "</a>");
 			echo "</font>";
 		} elseif ($view == "inst") { ?>
-		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung eines Semesters.<br />
-		<br /><font size=-1>Angezeigtes Semester:&nbsp; 
+		<?=_("In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung eines Semesters.")?><br />
+		<br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp; 
 			<select name="instview_sem">
 			<?
 				foreach ($SEMESTER as $key=>$val) {
@@ -416,15 +416,15 @@ if (!$print_view) {
 				}
 			?>
 			</select>&nbsp; 
-			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 value="&uuml;bernehmen" />&nbsp; 
+			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 value="<?=_("&uuml;bernehmen")?>" />&nbsp; 
 			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" />
 		<? } else { ?>
-		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen ihrer Einrichtung eines Semesters. <br /> Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen<br />
+		<?=_("In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen ihrer Einrichtung eines Semesters.")." <br /> "._("Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen.")?><br />
 		<br />
 			<? 
 		}
 		if ($view !="user")
-			printf ("<font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">Druckansicht dieser Seite</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
+			printf ("<font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
 		?>
 		<br>
 		</blockquote>
@@ -445,25 +445,25 @@ ob_start();
 	<td width="10%" align="center" class="rahmen_steelgraulight" >Zeit
 	</td>
 	<? if ($my_schedule_settings["glb_days"]["mo"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight" >Montag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight" ><?=_("Montag")?>
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["di"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Dienstag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Dienstag")?>
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["mi"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Mittwoch
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Mittwoch")?>
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["do"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Donnerstag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Donnerstag")?>
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["fr"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Freitag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Freitag")?>
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["sa"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Samstag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Samstag")?>
 	</td><?}
 	if ($my_schedule_settings["glb_days"]["so"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">Sonntag
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Sonntag")?>
 	</td><?}?>
 </tr>
 <?
@@ -482,7 +482,7 @@ for ($i; $i<$global_end_time+1; $i++)
 			{
 			echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>"; 
 			if ($i<10) echo "0";
-			echo $i, ".00 Uhr</td>";
+			echo $i, ".00 "._("Uhr")."</td>";
 			}
 		else echo "<tr>";
 		$l=1;
@@ -548,7 +548,7 @@ for ($i; $i<$global_end_time+1; $i++)
 						echo "</font>";
 						}
 					if ($my_sems[$cc["seminar_id"]]["dozenten"]) echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
-					if ($my_sems[$cc["seminar_id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Diesen Termin l&ouml;schen\">&nbsp;</a></div>";
+					if ($my_sems[$cc["seminar_id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" ".tooltip(_("Diesen Termin löschen")).">&nbsp;</a></div>";
 					}
 				echo "</td></tr></table></td>";
 				}
@@ -560,7 +560,7 @@ for ($i; $i<$global_end_time+1; $i++)
 	}
 
 	if ($print_view) {
-		echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; Erstellt am ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr></tr>";
+		printf  ("<tr><td colspan=%s><i><font size=-1>&nbsp; "._("Erstellt am %s um %s  Uhr.")."</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; %s v.%s&nbsp; &nbsp; </font></td></tr></tr>", $glb_colspan, date("d.m.y", time()), date("G:i", time()), date("Y", time()), $SOFTWARE_VERSION);
 		}
 	else {
 		}
@@ -582,18 +582,18 @@ if ((!$print_view) && (!$inst_id)) {
 </tr>
 <tr>
 	<td colspan=<? echo $glb_colspan+1?> class="steelgraulight">
-		<b>&nbsp;Eigene Veranstaltung eintragen:</b><br>
-		<font size=-1>&nbsp;(Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere eigene Ereignisse eintragen)</font><br>
+		<b>&nbsp;<?=_("Eigene Veranstaltung eintragen:")?></b><br>
+		<font size=-1>&nbsp;(<?=_("Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere eigene Ereignisse eintragen")?>)</font><br>
 		<form method="POST" action="<? echo $PHP_SELF ?>?cmd=insert">
-			&nbsp;Wochentag:
+			&nbsp;<?_("Wochentag:")?>
 			<select name="tag">
-				<option>Montag</option>
-				<option>Dienstag</option>
-				<option>Mittwoch</option>
-				<option>Donnerstag</option>
-				<option>Freitag</option>
-				<option>Samstag</option>
-				<option>Sonntag</option>				
+				<option value="1"><?=_("Montag")?></option>
+				<option value="2"><?=_("Dienstag")?></option>
+				<option value="3"><?=_("Mittwoch")?></option>
+				<option value="4"><?=_("Donnerstag")?></option>
+				<option value="5"><?=_("Freitag")?></option>
+				<option value="6"><?=_("Samstag")?></option>
+				<option value="7"><?=_("Sonntag")?></option>				
 			</select>
 			Beginn: 
 			<?	    
@@ -610,7 +610,7 @@ if ((!$print_view) && (!$inst_id)) {
 				if ($i==0) echo "<option selected value=".$i.">0".$i."</option>";
 					else echo "<option value=".$i.">".$i."</option>";
 				}
-				echo"</select> Uhr";
+				echo"</select> "._("Uhr");
 				?>
 			Ende:
 			<?	    
@@ -628,11 +628,11 @@ if ((!$print_view) && (!$inst_id)) {
 				elseif ($i==45) echo "<option selected value=".$i.">".$i."</option>";
 					else echo "<option value=".$i.">".$i."</option>";
 				}
-				echo"</select> Uhr";
+				echo"</select> "._("Uhr");
+				echo _("Beschreibung:");
 				?>
-				Beschreibung:
 				<input name="beschreibung" type="text" size=40 maxlength=255>
-				<input name="submit" type="submit" value="Eintragen">
+				<input name="send" type="IMAGE" <?=makeButton("eintragen", "src")?> value="<?=("Eintragen")?>">
 		</form>
 	</td>
 </tr>
@@ -653,4 +653,3 @@ if (!$print_view) {
 <? } ?>
 </body>
 </html>
-<!-- $Id$ -->
