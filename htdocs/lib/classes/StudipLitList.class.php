@@ -280,8 +280,9 @@ class StudipLitList extends TreeAbstract {
 	}
 	
 	function triggerListChdate($list_id){
+		$this->view->params[] = $GLOBALS['auth']->auth['uid'];
 		$this->view->params[] = $list_id;
-		$rs = $this->view->get_query("view:LIT_LIST_TRIGGER_CHDATE");
+		$rs = $this->view->get_query("view:LIT_LIST_TRIGGER_UPDATE");
 		return $rs->affected_rows();
 	}
 	
