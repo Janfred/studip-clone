@@ -121,7 +121,7 @@ function get_my_obj_values(&$my_obj) {
 				$my_obj[$db2->f("object_id")]["votes"] = $db2->f("count");
 		}
 		
-		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate IS NOT NULL AND (d.timespan IS  NULL AND d.stopdate IS NULL) OR d.stopdate > UNIX_TIMESTAMP() OR (d.startdate + d.timespan) > UNIX_TIMESTAMP())',
+		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON ( a.eval_id = d.eval_id AND d.startdate < UNIX_TIMESTAMP( ) AND (d.stopdate > UNIX_TIMESTAMP( ) OR d.startdate + d.timespan > UNIX_TIMESTAMP( ) OR (d.stopdate IS NULL AND d.timespan IS NULL)))',
 									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id' )",'eval',false,false,'d.eval_id'));
 		while($db2->next_record()) {
 				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
