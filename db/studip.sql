@@ -3,7 +3,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Erstellungszeit: 30. Juli 2003 um 09:51
+# Erstellungszeit: 30. Juli 2003 um 16:37
 # Server Version: 3.23.52
 # PHP-Version: 4.2.2
 # Datenbank: `studip`
@@ -841,9 +841,8 @@ CREATE TABLE wiki_locks (
   user_id varchar(32) NOT NULL default '',
   range_id varchar(32) NOT NULL default '',
   keyword varchar(255) NOT NULL default '',
-  version int(11) NOT NULL default '0',
   chdate int(11) NOT NULL default '0',
-  PRIMARY KEY  (range_id,user_id,keyword,version),
+  PRIMARY KEY  (range_id,user_id,keyword),
   KEY user_id (user_id),
   KEY chdate (chdate)
 ) TYPE=MyISAM;
