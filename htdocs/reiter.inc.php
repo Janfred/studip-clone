@@ -266,13 +266,12 @@ class reiter {
 		if ($bottomKats) {
 			$this->bottomkatStart();
 			for ($i=0; $i<=$bottomKats; $i++) {
-				if ($a["isolator"]) {
-					$this->bottomkatIsolator();
-					}
 				if ($a["topKat"]==$tmp_topKat) {
+					if ($a["isolator"])
+						$this->bottomkatIsolator();
 					$this->bottomkat($a["name"], $a["link"], $a["active"], $a["target"]);
 					}
-				$a=next($structure);				
+				$a=next($structure);
 				}
 			$this->bottomkatCloseRow();
 		}
