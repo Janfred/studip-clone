@@ -20,6 +20,11 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 require_once "config.inc.php";
+
+function my_comp($a, $b){
+	return strcasecmp($a[1], $b[1]);
+}
+
 $folder=dir($ABSOLUTE_PATH_STUDIP."/".$SMILE_PATH);
 $SMILE_SHORT_R=array_flip($SMILE_SHORT);
 $i_smile = array();
@@ -33,6 +38,7 @@ while ($entry=$folder->read()){
 	}
 }
 $folder->close();
+usort($i_smile, "my_comp");
 ?>
 <html>
 <head>
