@@ -1,6 +1,6 @@
 <?
 /**
-* ExternModuleLecturetree.class.php
+* ExternModuleSemlecturetree.class.php
 * 
 * 
 * 
@@ -9,13 +9,13 @@
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
-* @module		ExternModuleLecturetree
+* @module		ExternModuleSemlecturetree
 * @package	studip_extern
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternModuleLecturetree.class.php
+// ExternModuleSemlecturetree.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
