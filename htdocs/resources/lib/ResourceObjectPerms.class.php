@@ -74,7 +74,7 @@ class ResourceObjectPerms {
 			$this->changePerm("admin");
 		} else //check if resources admin
 			if (getGlobalPerms($this->user_id) == "admin")
-				$this->perm="admin";
+				$this->changePerm("admin");
 		
 		//check, if the resource is locked at the moment (only rooms!)
 		if (($this->perm != "admin") && ($resObject->isLocked())) {
@@ -151,8 +151,6 @@ class ResourceObjectPerms {
 							switch ($inheritance) {
 								case "1":
 									$this->changePerm($val["perms"]);
-									if ($this->perm == "dozent")
-										$this->changePerm("tutor");
 								break;
 								default:
 								case "2":
@@ -191,6 +189,8 @@ class ResourceObjectPerms {
 	
 	//private
 	function changePerm($new_perm) {
+		if ($new_perm == "dozent")
+			$new_perm = "tutor";
 		if ($this->perm_weight[$new_perm] > $this->perm_weight[$this->perm])
 			$this->perm = $new_perm;
 	}
