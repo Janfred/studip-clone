@@ -42,8 +42,6 @@ require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/score.class.php");
 require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 
-// -- wir sind jetzt definitiv in keinem Seminar, also... --
-closeObject();
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 	

@@ -658,24 +658,34 @@ class studip_news {
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
 
 echo "\n" . cssClassSwitcher::GetHoverJSFunction() . "\n";
 
 if(!$news_range_id) {
 	$sess->register("news_range_id");
 	$sess->register("news_range_name");
-	}
-
-//take a settet object as startview
-if ($SessSemName[1] && !$range_id && !$news_range_id) {
-	$news_range_id = $SessSemName[1];
-	$news_range_name = $SessSemName[0];
-} elseif ($range_id) {
-	$news_range_id = $range_id;	
 }
+
+if ($range_id == 'self') {
+	$range_id = $user->id;	
+}
+
+if ($range_id){
+	$news_range_id = $range_id;
+}
+
+if ($list || $view || ($news_range_id != $user->id) ){
+		include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
+		if ($SessSemName[1] && ($list || $view)) {
+			$news_range_id = $SessSemName[1];
+			$news_range_name = $SessSemName[0];
+		}
+} else {
+		include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php"); //Linkliste persönlicher Bereich
+}
+
 
 $news = new studip_news();
 
@@ -802,7 +812,7 @@ if (!$cmd OR $cmd=="show") {
 				reset($news->search_result);
 				while (list ($range,$details) = each ($news->search_result)) {
 					if ($details["type"]==$typen_key) {
-						echo "\n<div ".$css->getHover()."><a href=\"".$news->p_self("range_id=$range")."\">".htmlReady($details["name"]);
+						echo "\n<div ".$css->getHover()."><a href=\"".$news->p_self("range_id=$range&view_mode=$typen_key")."\">".htmlReady($details["name"]);
 						echo ($details["anzahl"]) ? " (".$details["anzahl"].")" : " (0)";
 						echo "</a></div>";
 					}
@@ -813,7 +823,7 @@ if (!$cmd OR $cmd=="show") {
 		}
 	}
 	echo "\n<tr><td class=\"blank\"><br /><blockquote>";
-	echo "<form action=\"".$news->p_self("cmd=new_entry")."\" method=\"POST\">";
+	echo "<form action=\"".$news->p_self("cmd=new_entry&range_id=$news_range_id&view_mode=$view_mode")."\" method=\"POST\">";
 	echo "<hr width=\"100%\"><br /><b>" . _("gew&auml;hlter Bereich:") . " </b>".htmlReady($news_range_name). "<br /><br />";
 	echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Eine neue News im gew&auml;hlten Bereich erstellen") . "</font>&nbsp;";
 	echo "<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"new_entry\" " .makeButton("erstellen","src") . tooltip(_("Eine neue News erstellen")) . " border=\"0\">";

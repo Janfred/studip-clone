@@ -204,9 +204,9 @@ if ($modules["scm"]) {
 //
 if ($modules["literature"]) {
 	if ($SessSemName["class"]=="sem")
-		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_sem", active=>FALSE);
+		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"literatur.php?view=literatur_sem", active=>FALSE);
 	else
-		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
+		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
 }
 
 if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte))
@@ -222,9 +222,9 @@ if ($rechte)
 
 if (($rechte) && ($modules["literature"]))
 	if ($SessSemName["class"]=="sem")
-		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur bearbeiten"), link=>"admin_lit_list.php?view=literatur_sem&new_sem=TRUE&_range_id=".$SessSemName[1], active=>FALSE);
 	else
-		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links bearbeiten"), link=>"admin_literatur.php?view=literatur_inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur bearbeiten"), link=>"admin_lit_list.php?view=literatur_inst&new_inst=TRUE&_range_id=".$SessSemName[1], active=>FALSE);
 
 if ($modules["wiki"]) {
 	$structure["_wiki"]=array (topKat=>"wiki", name=>_("WikiWikiWeb"), link=>"wiki.php", active=>FALSE);

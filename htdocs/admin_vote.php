@@ -30,11 +30,25 @@
  * @access	public
  * @package	vote
  */
+ob_start(); // start output buffering
 
 page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		  "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
-
+include_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
+include_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
+include_once($ABSOLUTE_PATH_STUDIP . "header.php");
+$the_range = isset($showrangeID) ? $showrangeID : $rangeID;
+	
+if ($the_range != $auth->auth['uname']){
+	$view_mode = get_object_type($the_range);
+	if ($view_mode == "fak"){
+		$view_mode = "inst";
+	}
+	include ($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");
+} else {
+	include ($ABSOLUTE_PATH_STUDIP . "links_about.inc.php");
+}
 if ($page == "edit")
 	include ($ABSOLUTE_PATH_STUDIP . "/vote/vote_edit.inc.php");
 else

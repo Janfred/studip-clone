@@ -55,8 +55,6 @@ function reset_all_data() {
 	$admin_admission_data='';
 	$archiv_assi_data='';
 	$term_metadata='';
-	$news_range_id='';
-	$news_range_name='';
 
 	$links_admin_data["select_old"]=TRUE;
 }
@@ -132,7 +130,7 @@ if ($i_view=="new")
 //here are all the pages/views listed, which require the search form for Einrichtungen
 if ($i_page == "admin_institut.php"
 		OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"] == "statusgruppe_inst")
-		OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"] == "literatur_inst")
+		OR ($i_page == "admin_lit_list.php" AND $links_admin_data["view"] == "literatur_inst")
 		OR ($i_page == "admin_scm.php" AND $links_admin_data["view"] == "scm_inst")
 		OR $i_page == "inst_admin.php"
 		OR ($i_page == "admin_news.php" AND $links_admin_data["view"] == "news_inst")
@@ -141,7 +139,7 @@ if ($i_page == "admin_institut.php"
 		OR ($i_page == "admin_vote.php" AND $links_admin_data["view"] == "vote_inst")
 		) {
 		
-	$view_mode="inst";
+	$links_admin_data["topkat"]="inst";
 }
 
 //here are all the pages/views listed, which require the search form for Veranstaltungen
@@ -150,7 +148,7 @@ if ($i_page == "admin_seminare1.php"
 		OR $i_page == "admin_metadates.php"
 		OR $i_page == "admin_admission.php"
 		OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem")
-		OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_sem")
+		OR ($i_page == "admin_lit_list.php" AND $links_admin_data["view"]=="literatur_sem")
 		OR ($i_page == "admin_scm.php" AND $links_admin_data["view"]=="scm_sem")
 		OR $i_page == "archiv_assi.php"
 		OR $i_page == "adminarea_start.php"
@@ -159,7 +157,7 @@ if ($i_page == "admin_seminare1.php"
 		OR ($i_page == "admin_vote.php" AND $links_admin_data["view"]=="vote_sem")
 		) {
 	
-	$view_mode="sem";
+	$links_admin_data["topkat"]="sem";
 }
 
 //remember the open topkat
@@ -167,8 +165,9 @@ if ($view_mode=="sem")
 	$links_admin_data["topkat"]="sem";
 elseif ($view_mode=="inst")
 	$links_admin_data["topkat"]="inst";
-else
+if (!$links_admin_data["topkat"])
 	$links_admin_data["topkat"]="global";
+$view_mode = $links_admin_data["topkat"];
 
 //Wenn nur ein Institut verwaltet werden kann, immer dieses waehlen (Auswahl unterdruecken)
 if ((!$SessSemName[1]) && ($list) && ($view_mode=="inst")) {
@@ -208,7 +207,7 @@ if ($perm->have_perm("tutor")) {
 		$structure["veranstaltungen"]=array (topKat=>"", name=>_("Veranstaltungen"), link=>"admin_seminare1.php", active=>FALSE);
 	else
 		$structure["veranstaltungen"]=array (topKat=>"", name=>_("Veranstaltungen"), link=>"adminarea_start.php?list=TRUE", active=>FALSE);	
-	$structure["einrichtungen"]=array (topKat=>"", name=>_("Einrichtungen"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
+	$structure["einrichtungen"]=array (topKat=>"", name=>_("Einrichtungen"), link=>"admin_lit_list.php?list=TRUE&view=literatur_inst", active=>FALSE);
 }
 
 if ($perm->have_perm("admin")) {
@@ -231,11 +230,11 @@ if (($modules["schedule"]) || (!$SessSemName[1]))
 if (($modules["scm"]) || (!$SessSemName[1]))
 	$structure["scm_sem"]=array (topKat=>"veranstaltungen", name=>_("Freie Kursseite"), link=>"admin_scm.php?view=scm_sem", active=>FALSE);
 if (($modules["literature"]) || (!$SessSemName[1]))
-	$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_sem", active=>FALSE);
+	$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur"), link=>"admin_lit_list.php?list=TRUE&view=literatur_sem", active=>FALSE);
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE);
 if (($modules["participants"]) || (!$SessSemName[1]))
 	$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
-$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?view=news_sem", active=>FALSE);
+$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_sem", active=>FALSE);
 if ($EXPORT_ENABLE)
 	$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
 $structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
@@ -251,8 +250,8 @@ if ($perm->have_perm("admin")) {
 }
 
 $structure["scm_inst"]=array (topKat=>"einrichtungen", name=>_("Freie Seite"), link => "admin_scm.php?view=scm_inst", active=>FALSE);
-$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
-$structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
+$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_lit_list.php?list=TRUE&view=literatur_inst", active=>FALSE);
+$structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_inst", active=>FALSE);
 
 if ($EXPORT_ENABLE)
 	$structure["vote_inst"]=array (topKat=>"einrichtungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_inst", active=>FALSE);
@@ -319,7 +318,7 @@ elseif ($SessSemName["class"] == "inst")
 	if ($perm->have_perm("admin")) //backlink for admin is admin_institut.php
 		$addText=" <a href=\"admin_institut.php?list=TRUE&quit=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 	else //backlink for <=dozent is admin_literatur, becauso he is not allowed to view admin_institut.php!
-		$addText=" <a href=\"admin_literatur.php?list=TRUE&quit=TRUE&view=literatur_inst\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
+		$addText=" <a href=\"admin_lit_list.php?list=TRUE&quit=TRUE&view=literatur_inst\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 
 //View festlegen
 switch ($i_page) {
@@ -342,7 +341,9 @@ switch ($i_page) {
 	case "admin_institut.php" : 
 		$reiter_view="grunddaten_inst"; 
 	break;
-	case "admin_literatur.php": 
+	case "admin_lit_list.php":
+	case "lit_search.php":
+	case "admin_lit_element.php":
 		if ($links_admin_data["topkat"] == "sem")
 			$reiter_view="literatur_sem"; 
 		else
@@ -848,8 +849,8 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 			case "admin_admission.php": 
 				printf("<font size=-1>" . _("Zugangsberechtigungen") . "<br /><a href=\"admin_admission.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));  
 				break;
-			case "admin_literatur.php": 
-				printf("<font size=-1>" . _("Literatur/Links") . "<br /><a href=\"admin_literatur.php?range_id=%s&ebene=sem\">%s</a></font>", $seminar_id, makeButton("bearbeiten")); 
+			case "admin_lit_list.php": 
+				printf("<font size=-1>" . _("Literatur/Links") . "<br /><a href=\"admin_lit_list.php?_range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten")); 
 				break;
 			case "admin_statusgruppe.php": 
 				printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"admin_statusgruppe.php?range_id=%s&ebene=sem\">%s</a></font>", $seminar_id, makeButton("bearbeiten")); 
@@ -859,6 +860,9 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 				break;
 			case "admin_modules.php": 
 				printf("<font size=-1>" . _("Module") . "<br /><a href=\"admin_modules.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+				break;
+			case "admin_news.php": 
+				printf("<font size=-1>" . _("News") . "<br /><a href=\"admin_news.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
 				break;
 			case "archiv_assi.php": 
 				if ($perm->have_perm("admin")) {
@@ -894,6 +898,9 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 	</tr>
 	</table>
 	<?
+	page_close();
+	die;
+} else {
 	page_close();
 	die;
 }

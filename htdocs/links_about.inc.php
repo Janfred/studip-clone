@@ -25,7 +25,9 @@ require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
 
 $reiter=new reiter;
 
-
+if (!$username){
+	$username = $auth->auth['uname'];
+}
 
 //Create Reitersystem
 
@@ -36,10 +38,11 @@ $structure["daten"]=array (topKat=>"", name=>_("Nutzerdaten"), link=>"edit_about
 $structure["karriere"]=array (topKat=>"", name=>_("universit&auml;re Daten"), link=>"edit_about.php?view=Karriere&username=$username", active=>FALSE);
 $structure["lebenslauf"]=array (topKat=>"", name=>_("weitere Daten"), link=>"edit_about.php?view=Lebenslauf&username=$username", active=>FALSE);
 $structure["sonstiges"]=array (topKat=>"", name=>_("eigene Kategorien"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
-if ($username==$auth->auth["uname"]) 
+$structure["tools"]=array (topKat=>"", name=>_("Tools"), link=>"admin_news.php?range_id=self&username=$username", active=>FALSE);
+if ($username==$auth->auth["uname"]) {
 // if (!$perm->have_perm("admin"))
 	$structure["mystudip"]=array (topKat=>"", name=>_("My Stud.IP"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
-
+}
 //Bottomkats
 $structure["_alle"]=array (topKat=>"alle", name=>_("Pers&ouml;nliche Homepage"), link=>"about.php?username=$username", active=>FALSE);
 $structure["_bild"]=array (topKat=>"bild", name=>_("Hochladen des pers&ouml;nlichen Bildes"), link=>"edit_about.php?view=Bild&username=$username", active=>FALSE);
@@ -55,6 +58,10 @@ if ($auth->auth['perm'] == "dozent") {
 	$structure["publikationen"]=array (topKat=>"lebenslauf", name=>_("Publikationen"), link=>"edit_about.php?view=Lebenslauf&username=$username#publikationen", active=>FALSE);
 }
 $structure["_sonstiges"]=array (topKat=>"sonstiges", name=>_("Eigene Kategorien bearbeiten"), link=>"edit_about.php?view=Sonstiges&username=$username", active=>FALSE);
+$structure["news"]=array (topKat=>"tools", name=>_("News"), link=>"admin_news.php?range_id=self&username=$username", active=>FALSE);
+$structure["lit"]=array (topKat=>"tools", name=>_("Literatur"), link=>"admin_lit_list.php?_range_id=self&username=$username", active=>FALSE);
+$structure["vote"]=array (topKat=>"tools", name=>_("Votings und Tests"), link=>"admin_vote.php?page=overview&showrangeID=$username&username=$username", active=>FALSE);
+
 $structure["allgemein"]=array (topKat=>"mystudip", name=>_("Allgemeines"), link=>"edit_about.php?view=allgemein&username=$username", active=>FALSE);
 $structure["forum"]=array (topKat=>"mystudip", name=>_("Forum"), link=>"edit_about.php?view=Forum&username=$username", active=>FALSE);
 if (!$perm->have_perm("admin")) {
@@ -113,6 +120,17 @@ switch ($i_page) {
 			case "Messaging":
 				$reiter_view="messaging"; 
 		}
+	break;
+	case "admin_news.php":
+		$reiter_view = "news";
+	break;
+	case "admin_lit_list.php":
+	case "admin_lit_element.php":
+	case "lit_search.php":
+		$reiter_view = "lit";
+	break;
+	case "admin_vote.php":
+		$reiter_view = "vote";
 	break;
 	default :
 		$reiter_view="alle";
