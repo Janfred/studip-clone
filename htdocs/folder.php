@@ -262,7 +262,7 @@ if ($close) {
 		}
 		
 	//when changing, uploading or show all (for download selector), create a form
-	if (($change) || ($folder_system_data["cmd"]=="all")) {
+	if ((($change) || ($folder_system_data["cmd"]=="all")) && (!$folder_system_data["upload"])) {
 		echo "<form method=\"post\" action=\"$PHP_SELF\">";
 		}
 	
@@ -275,7 +275,8 @@ if ($close) {
 		<? printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); ?>
 		</blockquote>
 		<?
-		print ("<div align=\"right\"><a href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");		
+		if (!$folder_system_data["upload"])
+			print ("<div align=\"right\"><a href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");		
 		}
 		
 	//Alle Termine der Veranstaltung holen

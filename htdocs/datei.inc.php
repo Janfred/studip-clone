@@ -924,7 +924,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						
 						//Zusatzangaben erstellen
 						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));
-						if ($all) {
+						if (($all) && (!$upload)){
 							$zusatz.=sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
 					}
