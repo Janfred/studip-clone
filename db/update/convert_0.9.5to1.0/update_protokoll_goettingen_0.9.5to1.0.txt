@@ -39,5 +39,25 @@ Datenbankupdate:
 Das Datenbankupdate erfolgt in der angegebenen Reihenfolge (in Klammern stehen die Verweise auf die jeweiligen Abschnitte des
 Migrationsscripts):
 
-* Entfernen von alten, nicht mehr benutzen Feldern, Ändern eines default-Eintrages und Ändern der Länge von
-  News-Titelzeilen (#1-#4)
+* neue Tabelle für den Stud.IP Wap-Zugang anlegen (#1)
+* Tabellenänderungen für neue Funktion im Messaging (#2)
+* Tabellenänderungen Änderungen am Voting-Modul (#3)
+* neue Tabellen und Änderungen für das Gästebuch (#4)
+* kleine Änderungen an den generischen Datenfeldern (#5)
+* neue Tabellen für die Banner Ads. Wenn diese Funktion genutzt werden soll, muß noch ein Verzeichnis 'pictures/banner' im
+  Stud.IP Wurzelverzeichnis angelegt werden. Auf dieses Verzeichnis benötigt der Webserver Schreibzugriff (#6)
+* Änderungen an den Tabellen für Statusgruppen (#7)
+* Anpassungen für neue Funktionen
+  Script: convert_statusgruppe_user.php (#8)
+* Tabellen für das Simple-Content-System anlegen (#9)
+* Inhalte aus der alten Literaturverwaltung in die Simple-Content-Management kopieren
+  Script: convert_literatur.php (#10)
+* Tabellen für neue Literaturverwaltung anlegen (#11)
+* neue Tabelle für alle privaten Termine des Terminkalenders (#12)
+* Termine aus alter Tabellen (termine) in neuen Tabelle (evetnts) kopieren
+  Script convert_termine_calendar_events (#13)
+* Veränderung für Druckansicht von Veranstaltungslisten (#14)
+* eine Konvertierung am Archiv vornehmen
+  Script: convert_archiv.php  (#15)
+* Konvertierungen an den Messages vornehmen
+  Script: convert_messaging.php
