@@ -69,7 +69,6 @@ function imaging($img, $img_size, $img_name) {
 	//na dann kopieren wir mal...
 	$uploaddir=$ABSOLUTE_PATH_STUDIP.$SMILE_PATH;
 	$newfile = $uploaddir . "/" . $img_name;
-	print "<p>copy: $img to $newfile</p>";
 	if(!@copy($img,$newfile)) {
 		$msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return $msg;
