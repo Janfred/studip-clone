@@ -112,71 +112,63 @@ if ($kill_object) {
 
 //Name und Beschreibung aendern
 if ($change_structure_object) {
-	//hier muss noch ein Rechtecheck passieren!
-	$changeObject=new resourceObject($change_structure_object);
-	$changeObject->setName($change_name);
-	$changeObject->setDescription($change_description);
-	if ($changeObject->store())
-	;
+	$ObjectPerms = new ResourcesObjectPerms($change_structure_object);
+	if ($ObjectPerms->getUserPerm () == "admin") {
+		$changeObject=new resourceObject($change_structure_object);
+		$changeObject->setName($change_name);
+		$changeObject->setDescription($change_description);
+		if ($changeObject->store())
+		;
+	} else {
+		$error->displayMsg(1);
+		die;
+	}
 	$resources_data["view"]="resources";
 	$resources_data["structure_open"]=$change_structure_object;
 }
 
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
-	//hier muss noch ein Rechtecheck passieren!
-	if ($change_object_schedules == "NEW")
-		$change_schedule_id=FALSE;
-	else
-		$change_schedule_id=$change_object_schedules;
+	//$ObjectPerms = new ResourcesObjectPerms($change_structure_object);
+	//if ($ObjectPerms->getUserPerm () == "user") {			---> hier brauchen wir irgendwie noch die Object id °
+		if ($change_object_schedules == "NEW")
+			$change_schedule_id=FALSE;
+		else
+			$change_schedule_id=$change_object_schedules;
 
-	if ($reset_search_user)
-		$search_string_search_user=FALSE;
+		if ($reset_search_user)
+			$search_string_search_user=FALSE;
 
-	if (($submit_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user))
-		$change_schedule_assign_user_id=$submit_search_user;
+		if (($submit_search_user) && ($submit_search_user !="FALSE") && (!$reset_search_user))
+			$change_schedule_assign_user_id=$submit_search_user;
 	
-	//create timestamps
-	if ($change_schedule_year) {
-		$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
-		$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
-	}
-	if ($change_schedule_repeat_end_year)
-		$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
+		//create timestamps
+		if ($change_schedule_year) {
+			$change_schedule_begin=mktime($change_schedule_start_hour, $change_schedule_start_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
+			$change_schedule_end=mktime($change_schedule_end_hour, $change_schedule_end_minute, 0, $change_schedule_month, $change_schedule_day, $change_schedule_year);
+		}
+		if ($change_schedule_repeat_end_year)
+			$change_schedule_repeat_end=mktime(23, 59, 59, $change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year);
 	
-	if ($change_schedule_repeat_sem_end)
-		foreach ($SEMESTER as $a)	
-			if (($change_schedule_begin >= $a["beginn"]) &&($change_schedule_begin <= $a["ende"]))
-				$change_schedule_repeat_end=$a["vorles_ende"];
-
-	//create repeatdata
+		if ($change_schedule_repeat_sem_end)
+			foreach ($SEMESTER as $a)	
+				if (($change_schedule_begin >= $a["beginn"]) &&($change_schedule_begin <= $a["ende"]))
+					$change_schedule_repeat_end=$a["vorles_ende"];
+		//create repeatdata
 	
-	//repeat = none
-	if ($change_schedule_repeat_none_x) {
-		$change_schedule_repeat_month_of_year='';
-		$change_schedule_repeat_day_of_month='';
-		$change_schedule_repeat_week_of_month='';
-		$change_schedule_repeat_day_of_week='';
-		$change_schedule_repeat_quantity='';
-		$change_schedule_repeat_interval='';	
-	}
-	
-	//repeat = year
-	if ($change_schedule_repeat_year_x) {
-		$change_schedule_repeat_month_of_year=date("n", $change_schedule_begin);
-		$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
-		$change_schedule_repeat_week_of_month='';
-		$change_schedule_repeat_day_of_week='';
-		if (!$change_schedule_repeat_quantity	)
-			$change_schedule_repeat_quantity=1;
-		if (!$change_schedule_repeat_interval)
-			$change_schedule_repeat_interval=1;
-	}
-
-	//repeat = month
-	if ($change_schedule_repeat_month_x)
-		if (!$change_schedule_repeat_week_of_month) {
+		//repeat = none
+		if ($change_schedule_repeat_none_x) {
 			$change_schedule_repeat_month_of_year='';
+			$change_schedule_repeat_day_of_month='';
+			$change_schedule_repeat_week_of_month='';
+			$change_schedule_repeat_day_of_week='';
+			$change_schedule_repeat_quantity='';
+			$change_schedule_repeat_interval='';	
+		}
+	
+		//repeat = year
+		if ($change_schedule_repeat_year_x) {
+			$change_schedule_repeat_month_of_year=date("n", $change_schedule_begin);
 			$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
 			$change_schedule_repeat_week_of_month='';
 			$change_schedule_repeat_day_of_week='';
@@ -186,216 +178,255 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_interval=1;
 		}
 
-	//repeat = week
-	if ($change_schedule_repeat_week_x) {
-		$change_schedule_repeat_month_of_year='';
-		$change_schedule_repeat_day_of_month='';
-		$change_schedule_repeat_week_of_month='';
-		$change_schedule_repeat_quantity='';
-		if (!$change_schedule_repeat_day_of_week)
-			$change_schedule_repeat_day_of_week=1;
-		if (!$change_schedule_repeat_quantity	)
-			$change_schedule_repeat_quantity=1;
-		if (!$change_schedule_repeat_interval)
-			$change_schedule_repeat_interval=1;
-	}
+		//repeat = month
+		if ($change_schedule_repeat_month_x)
+			if (!$change_schedule_repeat_week_of_month) {
+				$change_schedule_repeat_month_of_year='';
+				$change_schedule_repeat_day_of_month=date("j", $change_schedule_begin);
+				$change_schedule_repeat_week_of_month='';
+				$change_schedule_repeat_day_of_week='';
+				if (!$change_schedule_repeat_quantity	)
+					$change_schedule_repeat_quantity=1;
+				if (!$change_schedule_repeat_interval)
+					$change_schedule_repeat_interval=1;
+			}
 
-	//repeat = day
-	if ($change_schedule_repeat_day_x) {
-		$change_schedule_repeat_month_of_year='';
-		$change_schedule_repeat_day_of_month='';
-		$change_schedule_repeat_week_of_month='';
-		$change_schedule_repeat_quantity='';
-		$change_schedule_repeat_day_of_week='';
-		if (!$change_schedule_repeat_quantity	)
-			$change_schedule_repeat_quantity=1;
-		if (!$change_schedule_repeat_interval)
-			$change_schedule_repeat_interval=1;
-	}
+		//repeat = week
+		if ($change_schedule_repeat_week_x) {
+			$change_schedule_repeat_month_of_year='';
+			$change_schedule_repeat_day_of_month='';
+			$change_schedule_repeat_week_of_month='';
+			$change_schedule_repeat_quantity='';
+			if (!$change_schedule_repeat_day_of_week)
+				$change_schedule_repeat_day_of_week=1;
+			if (!$change_schedule_repeat_quantity	)
+				$change_schedule_repeat_quantity=1;
+			if (!$change_schedule_repeat_interval)
+				$change_schedule_repeat_interval=1;
+		}
+
+		//repeat = day
+		if ($change_schedule_repeat_day_x) {
+			$change_schedule_repeat_month_of_year='';
+			$change_schedule_repeat_day_of_month='';
+			$change_schedule_repeat_week_of_month='';
+			$change_schedule_repeat_quantity='';
+			$change_schedule_repeat_day_of_week='';
+			if (!$change_schedule_repeat_quantity	)
+				$change_schedule_repeat_quantity=1;
+			if (!$change_schedule_repeat_interval)
+				$change_schedule_repeat_interval=1;
+		}
 	
-	//repeat days, only if week
-	if ($change_schedule_repeat_day1_x)
-		$change_schedule_repeat_day_of_week=1;
-	if ($change_schedule_repeat_day2_x)
-		$change_schedule_repeat_day_of_week=2;
-	if ($change_schedule_repeat_day3_x)
-		$change_schedule_repeat_day_of_week=3;
-	if ($change_schedule_repeat_day4_x)
-		$change_schedule_repeat_day_of_week=4;
-	if ($change_schedule_repeat_day5_x)
-		$change_schedule_repeat_day_of_week=5;
-	if ($change_schedule_repeat_day6_x)
-		$change_schedule_repeat_day_of_week=6;
-	if ($change_schedule_repeat_day7_x)
-		$change_schedule_repeat_day_of_week=7;
+		//repeat days, only if week
+		if ($change_schedule_repeat_day1_x)
+			$change_schedule_repeat_day_of_week=1;
+		if ($change_schedule_repeat_day2_x)
+			$change_schedule_repeat_day_of_week=2;
+		if ($change_schedule_repeat_day3_x)
+			$change_schedule_repeat_day_of_week=3;
+		if ($change_schedule_repeat_day4_x)
+			$change_schedule_repeat_day_of_week=4;
+		if ($change_schedule_repeat_day5_x)
+			$change_schedule_repeat_day_of_week=5;
+		if ($change_schedule_repeat_day6_x)
+			$change_schedule_repeat_day_of_week=6;
+		if ($change_schedule_repeat_day7_x)
+			$change_schedule_repeat_day_of_week=7;
 			
-	//give data to the assignobject
-	$changeAssign=new AssignObject(
-		$change_schedule_id,
-		$change_schedule_resource_id,
-		$change_schedule_assign_user_id,
-		$change_schedule_user_free_name,
-		$change_schedule_begin,
-		$change_schedule_end,
-		$change_schedule_repeat_end,
-		$change_schedule_repeat_quantity,
-		$change_schedule_repeat_interval,
-		$change_schedule_repeat_month_of_year,
-		$change_schedule_repeat_day_of_month, 
-		$change_schedule_repeat_month,
-		$change_schedule_repeat_week_of_month,
-		$change_schedule_repeat_day_of_week,
-		$change_schedule_repeat_week);
+		//give data to the assignobject
+		$changeAssign=new AssignObject(
+			$change_schedule_id,
+			$change_schedule_resource_id,
+			$change_schedule_assign_user_id,
+			$change_schedule_user_free_name,
+			$change_schedule_begin,
+			$change_schedule_end,
+			$change_schedule_repeat_end,
+			$change_schedule_repeat_quantity,
+			$change_schedule_repeat_interval,
+			$change_schedule_repeat_month_of_year,
+			$change_schedule_repeat_day_of_month, 
+			$change_schedule_repeat_month,
+			$change_schedule_repeat_week_of_month,
+			$change_schedule_repeat_day_of_week,
+			$change_schedule_repeat_week);
 		
-	if ($change_object_schedules == "NEW")
-		$changeAssign->create();
-	else {
-		$changeAssign->chng_flag=TRUE;
-		$changeAssign->store();
-	}
+		if ($change_object_schedules == "NEW")
+			$changeAssign->create();
+		else {
+			$changeAssign->chng_flag=TRUE;
+			$changeAssign->store();
+		}
+	/*} else {
+		$error->displayMsg(1);
+		die;
+	}*/
+		
 	$assign_id=$changeAssign->getId();
 	$resources_data["view"]="edit_object_schedules";
 }
 
 //Objekteigenschaften aendern
 if ($change_object_properties) {
-	//hier muss noch ein Rechtecheck passieren!
-	$changeObject=new resourceObject($change_object_properties);
-	$changeObject->setName($change_name);
-	$changeObject->setDescription($change_description);
-	$changeObject->setCategoryId($change_category_id);
-	$changeObject->setParentBind($change_parent_bind);
+	$ObjectPerms = new ResourcesObjectPerms($change_object_properties);
+	if ($ObjectPerms->getUserPerm () == "admin") {
+		$changeObject=new resourceObject($change_object_properties);
+		$changeObject->setName($change_name);
+		$changeObject->setDescription($change_description);
+		$changeObject->setCategoryId($change_category_id);
+		$changeObject->setParentBind($change_parent_bind);
 	
-	//Properties loeschen
-	$changeObject->flushProperties();
+		//Properties loeschen
+		$changeObject->flushProperties();
 	
-	//Eigenschaften neu schreiben
-	if (is_array($change_property_val))
-		foreach ($change_property_val as $key=>$val) {
-			if ((substr($val, 0, 4) == "_id_") && (substr($change_property_val[$key+1], 0, 4) != "_id_"))
-				$changeObject->storeProperty(substr($val, 4, strlen($val)), $change_property_val[$key+1]);
-		}
+		//Eigenschaften neu schreiben
+		if (is_array($change_property_val))
+			foreach ($change_property_val as $key=>$val) {
+				if ((substr($val, 0, 4) == "_id_") && (substr($change_property_val[$key+1], 0, 4) != "_id_"))
+					$changeObject->storeProperty(substr($val, 4, strlen($val)), $change_property_val[$key+1]);
+			}
 	
-	//Object speichern
-	if ($changeObject->store())
-	;
+		//Object speichern
+		if ($changeObject->store())
+		;
+	} else {
+		$error->displayMsg(1);
+		die;
+	}
+	
 	$resources_data["view"]="edit_object_properties";
 }
 
 //Objektberechtigungen aendern
 if ($change_object_perms) {
-	//hier muss noch ein Rechtecheck passieren!
-	$changeObject=new resourceObject($change_object_perms);
+	$ObjectPerms = new ResourcesObjectPerms($change_object_perms);
+	if ($ObjectPerms->getUserPerm () == "admin") {
+		$changeObject=new resourceObject($change_object_perms);
 	
-	if (is_array($change_user_id))
-		foreach ($change_user_id as $key=>$val) {
-			$changeObject->storePerms($val, $change_user_perms[$key]);
-		}
+		if (is_array($change_user_id))
+			foreach ($change_user_id as $key=>$val) {
+				$changeObject->storePerms($val, $change_user_perms[$key]);
+			}
 
-	if ($delete_user_perms)
-		$changeObject->deletePerms($delete_user_perms);
+		if ($delete_user_perms)
+			$changeObject->deletePerms($delete_user_perms);
 	
-	if ($reset_search_owner)
-		$search_string_search_owner=FALSE;
+		if ($reset_search_owner)
+			$search_string_search_owner=FALSE;
 
-	if ($reset_search_perm_user)
-		$search_string_search_perm_user=FALSE;
+		if ($reset_search_perm_user)
+			$search_string_search_perm_user=FALSE;
 	
-	if (($submit_search_owner) && ($submit_search_owner !="FALSE") && (!$reset_search_owner)) 
- 		$changeObject->setOwnerId($submit_search_owner);
+		if (($submit_search_owner) && ($submit_search_owner !="FALSE") && (!$reset_search_owner)) 
+ 			$changeObject->setOwnerId($submit_search_owner);
 	
-	if (($submit_search_perm_user) && ($submit_search_perm_user !="FALSE") && (!$reset_search_perm_user))
-		$changeObject->storePerms($submit_search_perm_user);
+		if (($submit_search_perm_user) && ($submit_search_perm_user !="FALSE") && (!$reset_search_perm_user))
+			$changeObject->storePerms($submit_search_perm_user);
 	
-	//Object speichern
-	if ($changeObject->store())
-	;
+		//Object speichern
+		if ($changeObject->store())
+		;
+	} else {
+		$error->displayMsg(1);
+		die;
+	}
 	$resources_data["view"]="edit_object_perms";
 }
 
 //Typen bearbeiten
 if (($add_type) || ($delete_type) || ($add_type_property_id) || ($delete_type_property_id)) {
-	//hier muss noch ein Rechtecheck passieren!
+	//if ($ObjectPerms->getUserPerm () == "admin") { --> da muss der Ressourcen Root check hin °
+		if ($delete_type) {
+			$db->query("DELETE FROM resources_categories WHERE category_id ='$delete_type'");
+		}
 	
-	if ($delete_type) {
-		$db->query("DELETE FROM resources_categories WHERE category_id ='$delete_type'");
-	}
+		if (($add_type) && ($_add_type_x)) {
+			$id=md5(uniqid("Sommer2002"));	
+			$db->query("INSERT INTO resources_categories SET category_id='$id', name='$add_type', description='$insert_type_description' ");
+		}
 	
-	if (($add_type) && ($_add_type_x)) {
-		$id=md5(uniqid("Sommer2002"));	
-		$db->query("INSERT INTO resources_categories SET category_id='$id', name='$add_type', description='$insert_type_description' ");
-	}
+		if (($add_type_property_id) && ($add_type_category_id)) {	
+			$db->query("INSERT INTO resources_categories_properties SET category_id='$add_type_category_id', property_id='$add_type_property_id' ");
+		}
 	
-	if (($add_type_property_id) && ($add_type_category_id)) {	
-		$db->query("INSERT INTO resources_categories_properties SET category_id='$add_type_category_id', property_id='$add_type_property_id' ");
-	}
-	
-	if ($delete_type_property_id) {
-		$db->query("DELETE FROM resources_categories_properties WHERE category_id='$delete_type_category_id' AND property_id='$delete_type_property_id' ");
-	}
+		if ($delete_type_property_id) {
+			$db->query("DELETE FROM resources_categories_properties WHERE category_id='$delete_type_category_id' AND property_id='$delete_type_property_id' ");
+		}
+	/*} else {
+		$error->displayMsg(1);
+		die;
+	}*/
 }
 	
 //Eigenschaften bearbeiten
 if (($add_property) || ($delete_property) || ($send_property_type_id)) {
-	//hier muss noch ein Rechtecheck passieren!
-	
-	if ($delete_property) {
-		$db->query("DELETE FROM resources_properties WHERE property_id ='$delete_property' ");
-	}
-	
-	if ($add_property) {
-		if ($add_property_type=="bool")
-			$options="vorhanden";
-		if ($add_property_type=="select")
-			$options="Option 1;Option 2;Option 3";
-		$id=md5(uniqid("Regen2002"));
-		$db->query("INSERT INTO resources_properties SET options='$options', property_id='$id', name='$add_property', description='$insert_property_description', type='$add_property_type' ");
-	}
-	
-	if ($send_property_type_id) {
-		if ($send_property_type == "select") {
-			$tmp_options=explode (";",$send_property_select_opt);
-			$options='';
-			$i=0;
-			if (is_array($tmp_options))
-				foreach ($tmp_options as $a) {
-					if ($i)
-						$options.=";";
-					$options.=trim($a);						
-					$i++;
-				}
-		} elseif ($send_property_type == "bool") {
-			$options=$send_property_bool_desc;
+	//if ($ObjectPerms->getUserPerm () == "admin") { { --> da muss der Ressourcen Root check hin °
+		if ($delete_property) {
+			$db->query("DELETE FROM resources_properties WHERE property_id ='$delete_property' ");
 		}
-		else
-			$options='';
-			
-		if (!$options)
-			if ($send_property_type == "bool")
+	
+		if ($add_property) {
+			if ($add_property_type=="bool")
 				$options="vorhanden";
-			elseif ($send_property_type == "select")
-				$options="Option 1;Option 2;Option 3";	
+			if ($add_property_type=="select")
+				$options="Option 1;Option 2;Option 3";
+			$id=md5(uniqid("Regen2002"));
+			$db->query("INSERT INTO resources_properties SET options='$options', property_id='$id', name='$add_property', description='$insert_property_description', type='$add_property_type' ");
+		}
+	
+		if ($send_property_type_id) {
+			if ($send_property_type == "select") {
+				$tmp_options=explode (";",$send_property_select_opt);
+				$options='';
+				$i=0;
+				if (is_array($tmp_options))
+					foreach ($tmp_options as $a) {
+						if ($i)
+							$options.=";";
+						$options.=trim($a);						
+						$i++;
+					}
+			} elseif ($send_property_type == "bool") {
+				$options=$send_property_bool_desc;
+			}
+			else
+				$options='';
+			
+			if (!$options)
+				if ($send_property_type == "bool")
+					$options="vorhanden";
+				elseif ($send_property_type == "select")
+					$options="Option 1;Option 2;Option 3";	
 				
-		$db->query("UPDATE resources_properties SET options='$options', type='$send_property_type' WHERE property_id='$send_property_type_id' ");
-	} 
+			$db->query("UPDATE resources_properties SET options='$options', type='$send_property_type' WHERE property_id='$send_property_type_id' ");
+		}
+	/*} else {
+		$error->displayMsg(1);
+		die;
+	}*/
 }
 
 //Globale Perms bearbeiten
 if (($add_root_user) || ($delete_root_user_id)){
-	//hier muss noch ein Rechtecheck passieren!
-	if ($reset_search_root_user)
-		$search_string_search_root_user=FALSE;
+	//if ($ObjectPerms->getUserPerm () == "admin") { { --> da muss der Ressourcen Root check hin °
+		if ($reset_search_root_user)
+			$search_string_search_root_user=FALSE;
 
-	if (($submit_search_root_user) && ($submit_search_root_user !="FALSE") && (!$reset_search_root_user))
-		$db->query("INSERT resources_user_resources SET user_id='$submit_search_root_user', resource_id='all', perms='user' ");
+		if (($submit_search_root_user) && ($submit_search_root_user !="FALSE") && (!$reset_search_root_user))
+			$db->query("INSERT resources_user_resources SET user_id='$submit_search_root_user', resource_id='all', perms='user' ");
 
-	if ($delete_root_user_id)		
-		$db->query("DELETE FROM resources_user_resources WHERE user_id='$delete_root_user_id' AND resource_id='all' ");
+		if ($delete_root_user_id)		
+			$db->query("DELETE FROM resources_user_resources WHERE user_id='$delete_root_user_id' AND resource_id='all' ");
 	
-	if (is_array ($change_root_user_id))
-		foreach ($change_root_user_id as $key => $val) {
-			$db->query("UPDATE resources_user_resources SET perms='".$change_root_user_perms[$key]."' WHERE user_id='$val' ");
-		}
+		if (is_array ($change_root_user_id))
+			foreach ($change_root_user_id as $key => $val) {
+				$db->query("UPDATE resources_user_resources SET perms='".$change_root_user_perms[$key]."' WHERE user_id='$val' ");
+			}
+	/*} else {
+		$error->displayMsg(1);
+		die;
+	}*/
 }
 
 //evaluate the command from schedule navigator

@@ -1309,7 +1309,7 @@ class ResourcesBrowse {
 		global $PHP_SELF, $UNI_URL, $UNI_NAME;
 		$top=FALSE;
 		$k=0;
-		while ((!$top) && ($k < 100) && ($id)) {
+		while ((!$top) && ($id)) {
 			$k++;
 			$query = sprintf ("SELECT name, parent_id, resource_id FROM resources_objects WHERE resource_id = '%s' ", $id);
 			$this->db2->query($query);

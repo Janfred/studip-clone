@@ -631,7 +631,7 @@ class resourceObject {
 				return FALSE;
 			break;
 			case "user":
-				return  sprintf ("about?username=%s",$id);
+				return  sprintf ("about?username=%s",get_username($id));
 			break;
 			case "inst":
 				return  sprintf ("institut_main?auswahl=%s",$id);
@@ -833,57 +833,13 @@ class ResourcesObjectPerms extends ResourcesPerms {
 			$this->owner=FALSE;
 		}
 		
-		/*
-		//else check if the user is privilged by additional setted perms
-		if ($this->perm != "admin") {
-			$this->db->query("SELECTperms FROM resources_user_resources WHERE user_id='$this->user_id' AND resource_id = '$resource_object_id' ");
-			$this->perm = $this->db->f("perms");
-		}
-		
-		//else check if a Seminar the user is dozent or tutor is owner or has addiotional perms
-		if ($this->perm != "admin") {
-			if ($perm->have_perm("admin")) //check all the Seminare from all my Einrichtungen
-				$this->db->query("SELECT Seminar_id FROM user_inst LEFT JOIN seminar_inst USING (Seminar_id)  WHERE user_id='$this->user_id' AND inst_perms = 'admin' ");
-			else //check all my Seminare
-				$this->db->query("SELECT Seminar_id FROM seminar_user WHERE user_id='$this->user_id' AND status IN ('dozent', 'tutor') ");
-			
-			while (($this->db->next_record()) && (!$this->perm == "admin")) {
-				$this->db2->query("SELECT user_id FROM resources_objects WHERE user_id='".$this->db->f("Seminar_id")."' AND resource_id = '$resource_object_id' ");
-				if ($this->db2->next_record()) { //one of my Seminare is the owner
-					$this->perm="admin";
-				}
-				if ($this->perm != "admin") { //one of my Seminare has additional perms
-					$this->db2->query("SELECT perms FROM resources_user_resources WHERE user_id='".$this->db->f("Seminar_id")."' AND resource_id = '$resource_object_id' ");
-					$this->perm = $this->db2->f("perms");
-				}
-			}
-		}
-		
-
-		//else check if a Einrichtung the user is dozent, tutor or admin or has addiotional perms
-		if ($this->perm != "admin") {
-			//checkall my Einrichtungen
-			$this->db->query("SELECT Institut_id FROM user_inst WHERE user_id='$this->user_id' AND inst_perms IN ('admin', 'dozent', 'tutor') ");
-			
-			while (($this->db->next_record()) && (!$this->perm == "admin")) {
-				$this->db2->query("SELECT user_id FROM resources_objects WHERE user_id='".$this->db->f("Institut_id")."' AND resource_id = '$resource_object_id' ");
-				if ($this->db2->next_record()) { //one of my Seminare is the owner
-					$this->perm="admin";
-				}
-				if ($this->perm != "admin") { //one of my Seminare has additional perms
-					$this->db2->query("SELECT perms FROM resources_user_resources WHERE user_id='".$this->db->f("Institut_id")."' AND resource_id = '$resource_object_id' ");
-					$this->perm = $this->db2->f("perms");
-				}
-			}
-		}
-		*/
 		//else check all the other possibilities
 		if ($this->perm != "admin") {
 			$my_objects=get_my_administrable_objects();
 			
 			//add the user_id
-			$my_objects[$this->user_id]="user"; //evtl. ueberfluessig wegen oben....
-			
+			$my_objects[$this->user_id]="user"; //myself is administrable, too...
+			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			foreach ($my_objects as $key=>$val) {
 				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$resource_object_id' ");
 				if ($this->db->next_record())
@@ -892,10 +848,48 @@ class ResourcesObjectPerms extends ResourcesPerms {
 				if ($this->perm=="admin")
 					break;
 				
+				//also check the additional perms...
 				$this->db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$resource_object_id' ");
 				if ($this->db->next_record())
 					$this->perm=$this->db->f("perms");
 
+				if ($this->perm=="admin")
+					break;
+			}
+			
+			//if all the check don't work, we have to take a look to the superordinated objects
+			foreach ($my_objects as $key=>$val) {
+				$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $this->resource_id);
+				$this->db->query($query);	
+				$this->db->next_record();
+	
+				$superordinated_id=$this->db->f("parent_id");
+				$top=FALSE;
+				
+				while ((!$top) && ($k<10000) && ($superordinated_id)) {
+					$this->db2->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$superordinated_id' ");
+					if ($this->db2->next_record())
+						$this->perm="admin";
+					$k++;
+					if ($this->perm=="admin")
+						break;
+			
+					//also check the additional perms...
+					$this->db2->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$superordinated_id' ");
+					if ($this->db2->next_record())
+						$this->perm=$this->db2->f("perms");
+					if ($this->perm=="admin")
+						break;
+					
+					//select the next superordinated object
+					$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $superordinated_id);
+					$this->db->query($query);						
+					$this->db->next_record();
+		
+					$superordinated_id=$this->db->f("parent_id");
+					if ($this->db->f("parent_id") == "0")
+						$top = TRUE;
+				}
 				if ($this->perm=="admin")
 					break;
 			}
