@@ -148,7 +148,7 @@ if ($new_folder != "" && $new_folder_button_x) {
 		$msg = "error§".sprintf(_("Der gewählte Ordnername ist vom System belegt. Bitte wählen sie einen anderen."));	
 	} else { // ordnername ok und los
 		$my_messaging_settings["folder"][$sms_data["view"]][] = $new_folder;
-		$msg = "msg§".sprintf(_("Der Ordner %s wurde angelegt."), $new_folder);
+		$msg = "msg§".sprintf(_("Der Ordner %s wurde angelegt."), htmlready(stripslashes($new_folder)));
 	}
 }
 
@@ -406,60 +406,60 @@ if ($sms_data["time"] == "all") {
 		if (!empty($my_messaging_settings["folder"][$sms_data['view']])) {
 			// persoenliche ordner
 			for($x="0";$x<sizeof($my_messaging_settings["folder"][$sms_data['view']]);$x++) {
-			if (htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"][$sms_data["view"]], $x))) != "dummy") {
-				$count = count_messages_from_user($sms_data['view'], "AND folder='".$x."'");
-				$count_timefilter = count_x_messages_from_user($sms_data['view'], $x, $query_time_sort);
-				$open = folder_openclose($sms_show['folder'][$sms_data['view']], $x);
-				if ($sms_data['tmp']['move_to_folder'] && $open == "close") {
-					$picture = "move.gif";
-					$link = $PHP_SELF."?move_folder=".$x;
-				} else {
-					$picture = showfoldericon($x, $count);
-				}
-				if (!$sms_data['tmp']['move_to_folder']) {
-					$link = folder_makelink($x);
-					$link_add = "&cmd_show=openall";
-				}
-				$titel = "<a href=\"".$link."\" class=\"tree\" >".htmlready(stripslashes($my_messaging_settings["folder"][$sms_data['view']][$x]))."</a>";
-				$zusatz = show_nachrichtencount($count, $count_timefilter);
-				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
-				printhead(0, 0, $link, $open, FALSE, "<a href=\"".$link.$link_add."\"><img src=\"pictures/".$picture."\" border=0></a>", $titel, $zusatz);
-				echo "</tr></table>	";
-				if (!$move_to_folder) {
-					$content_content = _("Ordner:")."&nbsp;".$sms_show['folder'][$sms_data['view']]."<br>";
-					if ($open == "open") {
-						$content_content = "<div align=\"center\">"._("Ordneroptionen:")."
-							<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-								<input type=\"hidden\" name=\"delete_folder\" value=\"".$x."\">
-								<input type=\"image\" name=\"delete_folder_button\" border=\"0\" ".makeButton("loeschen", "src")." value=\"a\" align=\"absmiddle\">
-							</form>
-							<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-								<input type=\"hidden\" name=\"cmd\" value=\"admin_folder\">
-								<input type=\"hidden\" name=\"ren_folder\" value=\"".$x."\">
-								<input type=\"image\" name=\"x\" border=\"0\" ".makeButton("umbenennen", "src")." value=\"a\" align=\"absmiddle\">
-							</form>";
-						if (show_nachrichtencount($count, $count_timefilter) == "0") {
-							$content_content .= "
-								<br><img src=\"pictures/blank.gif\" height=\"5\"><br>"._("markierte Nachrichten:")."
-								<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-									<input type=\"hidden\" name=\"cmd\" value=\"select_all\">
-									<input type=\"image\" name=\"select\" border=\"0\" ".makeButton("alleauswaehlen", "src")." value=\"loeschen\" align=\"absmiddle\">
-									</form>
-									<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
-									<input type=\"image\" name=\"delete_selected_button\" border=\"0\" ".makeButton("loeschen", "src")." value=\"delete_selected\" align=\"absmiddle\">
-									<input type=\"image\" name=\"move_selected_button\" border=\"0\" ".makeButton("verschieben", "src")." value=\"move\" align=\"absmiddle\"><br>";
-						}
-						$content_content .= "</div>";
-						echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\">\n\t<tr>";
-						if ($count_timefilter != "0") {
-							echo "\n\t<td class=\"blank\" background=\"pictures/forumstrichgrau.gif\"><img src=\"pictures/blank.gif\" height=\"100%\" width=\"10px\"></td>\n";
-						}
-						printcontent("99%",0, $content_content, FALSE);
-						echo "</tr></table>	";		
+				if (htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"][$sms_data["view"]], $x))) != "dummy") {
+					$count = count_messages_from_user($sms_data['view'], "AND folder='".$x."'");
+					$count_timefilter = count_x_messages_from_user($sms_data['view'], $x, $query_time_sort);
+					$open = folder_openclose($sms_show['folder'][$sms_data['view']], $x);
+					if ($sms_data['tmp']['move_to_folder'] && $open == "close") {
+						$picture = "move.gif";
+						$link = $PHP_SELF."?move_folder=".$x;
+					} else {
+						$picture = showfoldericon($x, $count);
 					}
+					if (!$sms_data['tmp']['move_to_folder']) {
+						$link = folder_makelink($x);
+						$link_add = "&cmd_show=openall";
+					}
+					$titel = "<a href=\"".$link."\" class=\"tree\" >".htmlready(stripslashes($my_messaging_settings["folder"][$sms_data['view']][$x]))."</a>";
+					$zusatz = show_nachrichtencount($count, $count_timefilter);
+					echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
+					printhead(0, 0, $link, $open, FALSE, "<a href=\"".$link.$link_add."\"><img src=\"pictures/".$picture."\" border=0></a>", $titel, $zusatz);
+					echo "</tr></table>	";
+					if (!$move_to_folder) {
+						$content_content = _("Ordner:")."&nbsp;".$sms_show['folder'][$sms_data['view']]."<br>";
+						if ($open == "open") {
+							$content_content = "<div align=\"center\">"._("Ordneroptionen:")."
+								<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
+									<input type=\"hidden\" name=\"delete_folder\" value=\"".$x."\">
+									<input type=\"image\" name=\"delete_folder_button\" border=\"0\" ".makeButton("loeschen", "src")." value=\"a\" align=\"absmiddle\">
+								</form>
+								<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
+									<input type=\"hidden\" name=\"cmd\" value=\"admin_folder\">
+									<input type=\"hidden\" name=\"ren_folder\" value=\"".$x."\">
+									<input type=\"image\" name=\"x\" border=\"0\" ".makeButton("umbenennen", "src")." value=\"a\" align=\"absmiddle\">
+								</form>";
+							if ($count_timefilter != "0") {
+								$content_content .= "
+									<br><img src=\"pictures/blank.gif\" height=\"5\"><br>"._("markierte Nachrichten:")."
+									<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
+										<input type=\"hidden\" name=\"cmd\" value=\"select_all\">
+										<input type=\"image\" name=\"select\" border=\"0\" ".makeButton("alleauswaehlen", "src")." value=\"loeschen\" align=\"absmiddle\">
+										</form>
+										<form action=\"".$PHP_SELF."\" method=\"post\" style=\"display: inline\">
+										<input type=\"image\" name=\"delete_selected_button\" border=\"0\" ".makeButton("loeschen", "src")." value=\"delete_selected\" align=\"absmiddle\">
+										<input type=\"image\" name=\"move_selected_button\" border=\"0\" ".makeButton("verschieben", "src")." value=\"move\" align=\"absmiddle\"><br>";
+							}
+							$content_content .= "</div>";
+							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\">\n\t<tr>";
+							if ($count_timefilter != "0") {
+								echo "\n\t<td class=\"blank\" background=\"pictures/forumstrichgrau.gif\"><img src=\"pictures/blank.gif\" height=\"100%\" width=\"10px\"></td>\n";
+							}
+							printcontent("99%",0, $content_content, FALSE);
+							echo "</tr></table>	";		
+						}
+					}
+					if (folder_openclose($sms_show['folder'][$sms_data['view']], $x) == "open") print_messages();
 				}
-				if (folder_openclose($sms_show['folder'][$sms_data['view']], $x) == "open") print_messages();
-			}
 			}	
 		} 
 		print("</form>"); 
