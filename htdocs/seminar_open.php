@@ -129,9 +129,7 @@ if ($SessionStart==0) {
 	$sess->register("SessSemName");
 	$sess->register("messenger_started");
 	$sess->register("homepage_cache");
-	$sess->register("homepage_cache_own");
 	
-
 	// Language Settings
 	$sess->register("_language");
 	// try to get accepted languages from browser
@@ -157,6 +155,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$user->register("my_schedule_settings");
 		$user->register("my_personal_sems");
 		$user->register("my_studip_settings");
+		$user->register("homepage_cache_own");
 		
 		//garbage collect for user variables
 		// loginfilenow und loginfilelast
