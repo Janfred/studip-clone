@@ -676,15 +676,16 @@ if ($range_id){
 	$news_range_id = $range_id;
 }
 
+if ($SessSemName[1] && ($list || $view)) {
+	$news_range_id = $SessSemName[1];
+	$news_range_name = $SessSemName[0];
+}
+
 $news = new studip_news();
 
 
 if ($list || $view || (($news_range_id != $user->id) && ($news_range_id != 'studip')) ){
 		include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
-		if ($SessSemName[1] && ($list || $view)) {
-			$news_range_id = $SessSemName[1];
-			$news_range_name = $SessSemName[0];
-		}
 } else {
 		include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php"); //Linkliste persönlicher Bereich
 }
