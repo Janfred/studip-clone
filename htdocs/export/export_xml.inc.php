@@ -104,7 +104,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 	
 		$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"format\" value=\"" . $format . "\">";
-		$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
+		$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"choose\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . $ex_sem . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
