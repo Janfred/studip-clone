@@ -35,7 +35,7 @@ function check_messaging_default() {
 	if (!$my_messaging_settings['last_login'])
 		$my_messaging_settings['last_login'] = FALSE;	
 	if (!$my_messaging_settings['timefilter'])
-		$my_messaging_settings['timefilter'] = "all";	
+		$my_messaging_settings['timefilter'] = "30d";	
 	if (!$my_messaging_settings['opennew'])
 		$my_messaging_settings['opennew'] = 1;	
 	if (!$my_messaging_settings['logout_markreaded'])
@@ -56,6 +56,8 @@ function check_messaging_default() {
 		$my_messaging_settings['folder']['in'][0] = "dummy";
 	if (!$my_messaging_settings['folder']['out'])
 		$my_messaging_settings['folder']['out'][0] = "dummy";
+	if (!$my_messaging_settings['confirm_reading'])
+		$my_messaging_settings['confirm_reading'] = 3;
 }
 	
 // set default Values for schedule (timetable)	

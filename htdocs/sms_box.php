@@ -98,6 +98,28 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	die;
 } 
 
+if ($readingconfirmation) {
+	$query = "SELECT * FROM message WHERE message_id='".$readingconfirmation."'";
+	$db6->query($query);
+	$db6->next_record();
+	$date = date("d.m.y, H:i", $db6->f("mkdate"));
+	$orig_subject = $db6->f("subject");
+	
+	$user_id = $user->id;
+	$user_fullname = get_fullname($user_id);
+	
+	$query = "
+		UPDATE message_user SET 
+			confirmed_read = '1' 
+			WHERE message_id = '".$readingconfirmation."'
+				AND user_id = '".$user_id."'";
+	if($db->query($query)) {
+		$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);
+		$message = sprintf (_("Ihre Nachricht an %s mit dem Betreff: %s vom %s wurde gelesen."), "%%".$user_fullname."%%", "%%".$orig_subject."%%", "%%".$date."%%");
+		$msging->insert_message($message, $uname_snd, "____%system%____", FALSE, FALSE, 1, FALSE, $subject);	
+	}
+}
+
 // do we have any selected messages for move-to-different-folder-action but no click on possible folder so undo selection
 if ($sms_data['tmp']['move_to_folder'] && !$move_folder) {
 	unset($sms_data['tmp']['move_to_folder']);
@@ -298,7 +320,7 @@ if ($sms_data['tmp']['move_to_folder']) {
 	}
 }
 
-// set timefilter and concerning displayed-texts
+// set timefilter and depanding displayed-texts
 if ($sms_data["time"] == "all") {
 	$query_time = " ORDER BY message.mkdate DESC";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);		
@@ -503,12 +525,15 @@ if ($sms_data["time"] == "all") {
 	
 		// build infobox_content > viewfilter
 		$time_by_links = ""; 
-		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=new\"><img src=\"pictures/".show_icon($sms_data["time"], "new")."\" width=\"8\" border=\"0\">&nbsp;"._("neue Nachrichten")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
 		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=all\"><img src=\"pictures/".show_icon($sms_data["time"], "all")."\" width=\"8\" border=\"0\">&nbsp;"._("alle Nachrichten")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
 		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=24h\"><img src=\"pictures/".show_icon($sms_data["time"], "24h")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 24 Stunden")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
 		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=7d\"><img src=\"pictures/".show_icon($sms_data["time"], "7d")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 7 Tage")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
 		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=30d\"><img src=\"pictures/".show_icon($sms_data["time"], "30d")."\" width=\"8\" border=\"0\">&nbsp;"._("letzte 30 Tage")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>";
 		$time_by_links .= "<a href=\"".$PHP_SELF."?sms_time=older\"><img src=\"pictures/".show_icon($sms_data["time"], "older")."\" width=\"8\" border=\"0\">&nbsp;"._("&auml;lter als 30 Tage")."</a>";
+		
+		$view_by_links = ""; 
+		$view_by_links .= "<a href=\"".$PHP_SELF."?sms_time=new\"><img src=\"pictures/".show_icon($sms_data["time"], "new")."\" width=\"8\" border=\"0\">&nbsp;"._("neue Nachrichten")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\">";
+		
 		// did we came from a ...?
 		if ($SessSemName[0] && $SessSemName["class"] == "inst") {
 			$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"institut_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung")."</a>")));
@@ -526,8 +551,10 @@ if ($sms_data["time"] == "all") {
 		$infobox = array($tmp_array_1,
 			array("kategorie" => _("Information:"),"eintrag" => array(
 				array("icon" => "pictures/ausruf_small.gif", "text" => $show_message_count))),
-			array("kategorie" => _("Nachrichten filtern:"),"eintrag" => array(
+			array("kategorie" => _("nach Zeit filtern:"),"eintrag" => array(
 				array("icon" => "pictures/suchen.gif", "text" => $time_by_links))),
+			array("kategorie" => _("weitere Ansichten:"),"eintrag" => array(
+				array("icon" => "pictures/suchen.gif", "text" => $view_by_links))),
 			array("kategorie" => _("Optionen:"),"eintrag" => array(
 				array("icon" => "pictures/link_intern.gif", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br><a href=\"%s?cmd=mark_allsmsreaded\">"._("Alle als gelesen speichern")."</a><br><img src=\"./pictures/blank.gif\" border=\"0\" height=\"2\"><br>	<a href=\"%s?cmd=admin_folder&cmd_2=new\">"._("Neuen Ordner erstellen")."</a>", $PHP_SELF, $PHP_SELF, $PHP_SELF, $PHP_SELF))))		
 		);

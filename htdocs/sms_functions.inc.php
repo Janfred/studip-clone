@@ -264,13 +264,6 @@ function print_snd_message($psm) {
 		$zusatz .= "<a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$psm['message_id']."#".$psm['message_id']."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><img src=\"./pictures/blank.gif\" width=\"2\">".$trash."<input type=\"checkbox\" name=\"sel_sms[]\" value=\"".$psm['message_id']."\" ".CheckChecked($cmd, "select_all").">";
 	}
 	$zusatz .= "</font>";
-	
-	// tread content
-	if (strpos($psm['message'],$msging->sig_string)) {
-		$titel = mila(trim(kill_format(substr($psm['message'], 0, strpos($psm['message'],$msging->sig_string)))));
-	} else {
-		$titel = mila(trim(kill_format($psm['message'])));
-	}
 
 	if ($open == "open") {
 		$content = quotes_decode(formatReady($psm['message']));
@@ -309,14 +302,9 @@ function print_snd_message($psm) {
 		}
 	}
 
+	$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($psm['message_subject']))."</a></a>";
 	$message_hovericon['titel'] = $titel;
 
-	// mk titel
-	if (strlen($titel) >= "50") {
-		$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes(substr($titel, 0, 30)))." ...</a></a>";
-	} else {
-		$titel = "<a name=".$psm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($titel))."</a></a>";
-	}	
 	// (hover) icon 
 	$message_hovericon['openclose'] = $open;
 	$message_hovericon['content'] = $psm['message'];
@@ -347,7 +335,7 @@ function print_snd_message($psm) {
 
 // print_rec_message
 function print_rec_message($prm) {
-	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF, $msging, $cmd_show, $sms_show, $sms_data;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF, $msging, $cmd_show, $sms_show, $sms_data, $user;	
 	// build
 	if ($prm['readed'] != "1" && $my_messaging_settings["opennew"] == "1") { // open if unread
 		$open = "open";
@@ -364,7 +352,11 @@ function print_rec_message($prm) {
 	}
 	if ($prm['readed'] == "1") { // unread=new ... is message new? if new and opened=set readed
 		$red = FALSE;
-		$picture = "cont_nachricht.gif";
+		if ($prm['answered'] == 1) {
+			$picture = "cont_nachricht_pfeil.gif";	
+		} else {
+			$picture = "cont_nachricht.gif";
+		}
 	} else {
 		$red = TRUE;
 		$picture = "cont_nachricht_rot.gif";
@@ -395,24 +387,40 @@ function print_rec_message($prm) {
 	$zusatz .= "&nbsp;".$move_option."<a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$prm['message_id']."#".$prm['message_id']."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><img src=\"./pictures/blank.gif\" width=\"2\">".$trash."<input type=\"checkbox\" name=\"sel_sms[]\" value=\"".$prm['message_id']."\" ".CheckChecked($cmd, "select_all").">";
 	$zusatz .= "</font>";
 
-	// tread message_header and content
-	if (strpos($prm['message'],$msging->sig_string)) {
-		$titel = mila(trim(kill_format(substr($prm['message'], 0, strpos($prm['message'],$msging->sig_string)))));
-	} else {
-		$titel = mila(trim(kill_format($prm['message'])));
-	}
+	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($prm['message_subject']))."</a></a>";
 	$message_hovericon['titel'] = $titel;
-	if (strlen($titel) >= "50") {
-		$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes(substr($titel, 0, 30)))." ...</a></a>";
-	} else {
-		$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready(stripslashes($titel))."</a></a>";
-	}	
+	
 	$content = quotes_decode(formatReady($prm['message']));
+
+	
+	if ($my_messaging_settings["confirm_reading"] != 1 && $prm['message_reading_confirmation'] == 1) { // yeah i'm interested in readingconfirmations and the message has a readingrequested
+		if ($my_messaging_settings["confirm_reading"] == 3 && $prm['confirmed_read'] != 1) { // let me decided what to do
+			$content .= "<br>--<br>"._("Der Absender / Die Absenderin hat eine Lesebestätigung angefordert.");
+			$content .= "<br><a href=\"".$_PHPSELF."?readingconfirmation=".$prm['message_id']."&uname_snd=".$prm['uname_snd']."#".$prm['message_id']."\">"._("Klicken Sie hier um das Lesen der Nachricht zu bestätigen")."</a>";
+		} else if ($my_messaging_settings["confirm_reading"] == 2 && $prm['confirmed_read'] != 1) { // automatic confirm my reading and don't nag me
+			$dbX = new DB_Seminar;
+			$user_id = $user->id;
+			$user_fullname = get_fullname($user_id);	
+			$query = "
+				UPDATE message_user SET 
+					confirmed_read = '1' 
+					WHERE message_id = '".$prm['message_id']."'
+						AND user_id = '".$user_id."'";	
+			if($dbX->query($query)) {
+				$subject = sprintf (_("Lesebestätigung von %s"), $user_fullname);
+				$message = sprintf (_("Ihre Nachricht an %s mit dem Betreff: %s vom %s wurde gelesen."), "%%".$user_fullname."%%", "%%".$prm['message_subject']."%%", "%%".date("d.m.y, H:i", $prm['mkdate'])."%%");
+				$msging->insert_message($message, $prm['uname_snd'], "____%system%____", FALSE, FALSE, 1, FALSE, $subject);	
+			}				
+		}
+	} 
+	
+
+
 	// mk buttons
 	$edit = "";
 	if ($prm['user_id_snd'] != "____%system%____") {
-		$edit .= "<a href=\"sms_send.php?cmd=write&rec_uname=".$prm['uname_snd']."\">".makeButton("antworten", "img")."</a>";
-		$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$prm['message_id']."&rec_uname=".$prm['uname_snd']."\">".makeButton("zitieren", "img")."</a>";
+		$edit .= "<a href=\"sms_send.php?cmd=write&answer_to=".$prm['message_id']."\">".makeButton("antworten", "img")."</a>";
+		$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$prm['message_id']."&answer_to=".$prm['message_id']."\">".makeButton("zitieren", "img")."</a>";
 	}
 	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$prm['message_id']."\">".makeButton("loeschen", "img")."</a>";
 	if (have_msgfolder($sms_data['view']) == TRUE) {
@@ -463,6 +471,10 @@ function print_messages() {
 			$prm['folder'] = $my_messaging_settings['folder']['active']['in'];	
 			$prm['mkdate'] = $db->f("mkdate");
 			$prm['message_id'] = $db->f("message_id");
+			$prm['message_subject'] = $db->f("subject");
+			$prm['message_reading_confirmation'] = $db->f("reading_confirmation");
+			$prm['confirmed_read'] = $db->f("confirmed_read");
+			$prm['answered'] = $db->f("answered");
 			$prm['message'] = $db->f("message");
 			$prm['vorname'] = $db->f("Vorname");
 			$prm['nachname'] = $db->f("Nachname");
@@ -489,6 +501,7 @@ function print_messages() {
 			$psm['mkdate'] = $db->f("mkdate");
 			$psm['folder'] = $my_messaging_settings['folder']['active']['out'];	
 			$psm['message_id'] = $db->f("message_id");
+			$psm['message_subject'] = $db->f("subject");
 			$psm['message'] = $db->f("message");
 			$psm['dont_delete'] = $db->f("dont_delete");
 			$psm['rec_uid'] = $db->f("rec_uid");
@@ -530,6 +543,25 @@ function have_msgfolder($view) {
 	} else {
 		return TRUE;
 	}
+}
+
+// checkt ob alle adressbuchmitglieder in der empaengerliste stehen
+function CheckAllAdded($adresses_array, $rec_array) {
+
+	$x = sizeof($adresses_array);
+	if (!empty($rec_array)) {
+		foreach ($rec_array as $a) {
+			if (in_array($a, $adresses_array)) {
+				$x = ($x-1);
+			}
+		}
+	}
+	if ($x != "0") {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
+
 }
 
 ?>

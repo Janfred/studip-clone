@@ -69,7 +69,7 @@ if ($auth->auth["uid"]!="nobody"){
         $new_msg = $db->f("new_msg");
 
 	//load the data from new messages
-	$query =  "SELECT message.message_id,mkdate,autor_id,message 
+	$query =  "SELECT message.message_id, mkdate, autor_id, message, subject 
 		   FROM message_user LEFT JOIN message USING (message_id)
 		   WHERE deleted = '0' AND (readed = '0' OR message.message_id = '".$msg_id."' )AND snd_rec = 'rec' AND message_user.user_id ='".$user->id."' 
 		   ORDER BY mkdate";
@@ -88,7 +88,7 @@ if ($auth->auth["uid"]!="nobody"){
 			if ($db->f("autor_id") == "____%system%____"){
 				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 			} else {
-				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."&msg_subject=".$db->f("subject")."'>","</a>");
 			}
 		}
 		$refresh+=10;
@@ -190,7 +190,7 @@ if ($new_msg) {
 
 if ($cmd=="send_msg" AND $nu_msg AND $msg_rec) {
 	$nu_msg=trim($nu_msg);
-	if ($sms->insert_message ($nu_msg, $msg_rec))
+	if ($sms->insert_message ($nu_msg, $msg_rec, FALSE, FALSE, FALSE, FALSE, FALSE, "RE: ".$msg_subject))
 		echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
 			. sprintf(_("Ihre Nachricht an <b>%s</b> wurde verschickt!"),get_fullname_from_uname($msg_rec)) . "</font></td></tr>";
 	else 
@@ -208,20 +208,28 @@ if ($cmd=="read" AND $msg_text){
 		. sprintf(_("Nachricht von: <b>%s</b>"),htmlReady(get_fullname_from_uname($msg_snd))) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
 	if ($msg_autor_id != "____%system%____")
 		echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>"
-		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
+		. "<a href='$PHP_SELF?cmd=write&msg_rec=$msg_snd&msg_subject=".$msg_subject."'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
 		. "&nbsp;<a href='$PHP_SELF?cmd=cancel'><img " . makeButton("abbrechen","src") . tooltip(_("Vorgang abbrechen")) . " border=0></a></td></tr>";
 }
 
 if ($cmd=="write" AND $msg_rec){
-	echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-		. sprintf(_("Ihre Nachricht an <b>%s:</b>"),htmlReady(get_fullname_from_uname($msg_rec))) . "</font></td></tr>";
-	echo"\n<FORM  name='eingabe' action='$PHP_SELF?cmd=send_msg' method='POST'><INPUT TYPE='HIDDEN'  name='msg_rec' value='$msg_rec'>";
-	echo"\n<tr><td class='blank' colspan='2' valign='middle'><TEXTAREA  style=\"width: 100%\" name='nu_msg' rows='4' cols='44' wrap='virtual'></TEXTAREA></font><br>";
+
+	echo "\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>";
+	echo	sprintf(_("Ihre Nachricht an <b>%s:</b>"),htmlReady(get_fullname_from_uname($msg_rec))) . "</font>";
+	echo "</td></tr>";
+	echo "\n<FORM  name='eingabe' action='$PHP_SELF?cmd=send_msg' method='POST'>";
+	echo "<INPUT TYPE='HIDDEN'  name='msg_rec' value='$msg_rec'>";
+	echo "<INPUT TYPE='HIDDEN'  name='msg_subject' value='$msg_subject'>";
+	echo "\n<tr><td class='blank' colspan='2' valign='middle'>";
+	echo "<TEXTAREA  style=\"width: 100%\" name='nu_msg' rows='4' cols='44' wrap='virtual'></TEXTAREA></font><br>";
 	echo "<font size=-1><a target=\"_new\" href=\"show_smiley.php\">" . _("Smileys</a> k&ouml;nnen verwendet werden") . " </font>\n</td></tr>";
-	echo"\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>&nbsp;<INPUT TYPE='IMAGE' name='none' "
+	echo "\n<tr><td class='blank' colspan='2' valign='middle' align='right'><font size=-1>&nbsp;";
+	echo "<INPUT TYPE='IMAGE' name='none' "
 		. makeButton("absenden","src") . tooltip(_("Nachricht versenden")) . " border=0 value='senden'>&nbsp;<a href=\"$PHP_SELF?cmd=cancel\"><img "
 		. makeButton("abbrechen","src") . tooltip(_("Vorgang abbrechen")) . " border=0 /></a></FORM></font></td></tr>";
-	echo"\n<script language=\"JavaScript\">\n<!--\ndocument.eingabe.nu_msg.focus();\n//-->\n</script>";
+	
+	echo "\n<script language=\"JavaScript\">\n<!--\ndocument.eingabe.nu_msg.focus();\n//-->\n</script>";
+
 }
 	?>
 </table>

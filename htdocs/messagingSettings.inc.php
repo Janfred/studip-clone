@@ -68,13 +68,9 @@ if ($email_forward == "0") $email_forward = $GLOBALS["MESSAGING_FORWARD_DEFAULT"
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x) {
-	if (!$send_as_email) {
-		$db2->query("UPDATE user_info SET email_forward = '-1' WHERE user_id = '".$user->id."'");
-		$email_forward = "-1";
-	} else {
-		$db2->query("UPDATE user_info SET email_forward = '1'  WHERE user_id = '".$user->id."'");
-		$email_forward = "1";
-	}
+		$db2->query("UPDATE user_info SET email_forward = '".$send_as_email."' WHERE user_id = '".$user->id."'");
+		$email_forward = $send_as_email;
+
 	$my_messaging_settings["changed"] = TRUE;
 	$my_messaging_settings["show_only_buddys"] = $show_only_buddys;
 	$my_messaging_settings["delete_messages_after_logout"] = $delete_messages_after_logout;
@@ -91,6 +87,7 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x && $newmsgset_x)
 	$my_messaging_settings["logout_markreaded"] = $logout_markreaded;
 	$my_messaging_settings["addsignature"] = $addsignature;
 	$sms_data["sig"] = $addsignature;
+	$my_messaging_settings['confirm_reading'] = $confirm_reading;
 	$my_messaging_settings["changed"] = "TRUE";
 	if (!$save_snd) {
 		$my_messaging_settings["save_snd"] = "2";
@@ -211,15 +208,34 @@ function change_messaging_view() {
 				</tr>	
 
 				<? if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) { ?>
-        <tr  <? $cssSw->switchClass() ?>>
-          <td  align="right" class="blank" style="border-bottom:1px dotted black;">
-            <font size="-1"><?print _("Eine Kopie aller eingehenden Nachrichten an eigene E-Mail-Adresse schicken");?></font>
-          </td>
-          <td <?=$cssSw->getFullClass()?>>
-            <input type="checkbox" value="1" name="send_as_email"<?=($email_forward == "1") ? " checked": "";?>>
-          </td>
-        </tr>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Kopie empfangener Nachrichten an eigene E-Mail-Adresse schicken");?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<font size="-1">
+						<input type="radio" name="send_as_email" value="1"<?=($email_forward == "1") ? " checked": "";?>>&nbsp;<?=_("nie")?><br>
+						<input type="radio" name="send_as_email" value="2"<?=($email_forward == "2") ? " checked": "";?>>&nbsp;<?=_("immer")?><br>
+						<input type="radio" name="send_as_email" value="3"<?=($email_forward == "3") ? " checked": "";?>>&nbsp;<?=_("wenn vom Absender gewünscht")?>
+						</font>
+					</td>
+				</tr>
 				<? } ?>
+
+
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Umgang mit angeforderter Lesebestätigung");?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<font size="-1">
+						<input type="radio" name="confirm_reading" value="1"<?=($my_messaging_settings["confirm_reading"] == "1") ? " checked": "";?>>&nbsp;<?=_("ignorieren")?><br>
+						<input type="radio" name="confirm_reading" value="2"<?=($my_messaging_settings["confirm_reading"] == "2") ? " checked": "";?>>&nbsp;<?=_("immer automatisch bestätigen")?><br>
+						<input type="radio" name="confirm_reading" value="3"<?=($my_messaging_settings["confirm_reading"] == "3") ? " checked": "";?>>&nbsp;<?=_("je Nachricht selbst entscheiden")?>
+						</font>
+					</td>
+				</tr>
+
 
 				<tr <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
