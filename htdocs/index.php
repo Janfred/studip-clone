@@ -183,34 +183,29 @@ unset($temp_language_key); unset($temp_language);
 <td class="blank" align=right nowrap valign="middle">
 <?
 
-
-			//Statistics
-			$db=new DB_Seminar;
-			echo "<table cellspacing=\"0\" cellpadding=\"0\">";
-			$db->query("SELECT count(*) from seminare");
-			$db->next_record();
-			$anzahl = $db->f(0);
-			echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
-			$db->query("SELECT count(*) from auth_user_md5 WHERE perms <> 'user'");
-			$db->next_record();
-			$anzahl = $db->f(0);			
-			echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
-			$now = time()-600; 
-			$db->query("SELECT count(*) FROM active_sessions WHERE changed > '".date("YmdHis",$now)."' AND active_sessions.name = 'Seminar_User' AND sid != 'nobody'");
-			$db->next_record();
-			$anzahl = $db->f(0);			
-			echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
-			echo "<tr><td height=\"30\" class=\"blank\" valign=\"middle\">";
-			// choose language
-			foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
-				printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
-			}
-			echo "</td><td align= right valign=\"top\" class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
-			echo "</table>";
-
-
-
-
+//Statistics
+$db=new DB_Seminar;
+echo "<table cellspacing=\"0\" cellpadding=\"0\">";
+$db->query("SELECT count(*) from seminare");
+$db->next_record();
+$anzahl = $db->f(0);
+echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+$db->query("SELECT count(*) from auth_user_md5 WHERE perms <> 'user'");
+$db->next_record();
+$anzahl = $db->f(0);			
+echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+$now = time()-600; 
+$db->query("SELECT count(*) FROM active_sessions WHERE changed > '".date("YmdHis",$now)."' AND active_sessions.name = 'Seminar_User' AND sid != 'nobody'");
+$db->next_record();
+$anzahl = $db->f(0);			
+echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>"; 
+echo "<tr><td height=\"30\" class=\"blank\" valign=\"middle\">";
+// choose language
+foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
+	printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"pictures/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
+}
+echo "</td><td align= right valign=\"top\" class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
+echo "</table>";
 
 ?>
 </table>
@@ -252,8 +247,10 @@ unset($temp_language_key); unset($temp_language);
 	$end = $start + 60 * 60 * 24 * 7;
 	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
 
-        include ("show_vote.php");
-        show_votes ("studip", $auth->auth["uid"], $perm);
+        if ($GLOBALS['VOTE_ENABLE']) {
+        	include ("show_vote.php");
+	        show_votes ("studip", $auth->auth["uid"], $perm);
+	}
 
 } elseif ($auth->auth["perm"]=="admin") {
 

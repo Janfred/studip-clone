@@ -38,6 +38,11 @@ if ($GLOBALS['CHAT_ENABLE']){
 	}
 	
 }
+if ($GLOBALS['VOTE_ENABLE']) {
+	include_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+}
+
+
 // hier muessen Seiten-Initialisierungen passieren
 if (isset($auswahl) && $auswahl!="") {
 	//just opened Einrichtung... here follows the init
@@ -95,79 +100,78 @@ if ($nclose)
         
 ?>
 
-	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan=2><b>&nbsp; <? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?>
-	</b></td></tr>
-	<tr><td class="blank">
-	<br><blockquote><?
-	$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
-	$db->next_record();
+<table width="100%" border=0 cellpadding=0 cellspacing=0>
+<tr><td class="topic" colspan=2><b>&nbsp; <? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?>
+</b></td></tr>
+<tr><td class="blank">
+<br><blockquote><?
+$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
+$db->next_record();
 
-	if ($db->f("Strasse")) {
-		echo "<font size=\"-1\"><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br></font>";
-	}
-		
-	if ($db->f("Plz")) {
-		echo "<font size=\"-1\"><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br></font>";
-	}
-
-	if ($db->f("telefon")) {
-		echo "<font size=\"-1\"><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br></font>";
-	}
-
-	if ($db->f("fax")) {
-		echo "<font size=\"-1\"><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br></font>";
-	}
-
-	if ($db->f("url")) {
-		echo "<font size=\"-1\"><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br></font>";
-	}
-
-	if ($db->f("email")) {
-		echo "<font size=\"-1\"><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br></font>";
-	}
-
-	if ($db->f("fakultaet_name")) {
-		echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
-	}
+if ($db->f("Strasse")) {
+	echo "<font size=\"-1\"><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br></font>";
+}
 	
-	$localFields = $DataFields->getLocalFields();
-	
-	foreach ($localFields as $val) {
-		echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
-	}
-	
-		
-	?>
-	</blockquote>
-	</td>
-	<td class="blank" align="right" valign="top">
-		<img src="pictures/blank.gif" height="10" width="5" /><br />
-		<img src="pictures/einrichtungen.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" /><br />
-		<img src="pictures/blank.gif" height="10" width="5" />
-	</td>
-	</tr>
-	</table>
-	<br />
+if ($db->f("Plz")) {
+	echo "<font size=\"-1\"><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br></font>";
+}
 
+if ($db->f("telefon")) {
+	echo "<font size=\"-1\"><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br></font>";
+}
 
-	<?php
+if ($db->f("fax")) {
+	echo "<font size=\"-1\"><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br></font>";
+}
+
+if ($db->f("url")) {
+	echo "<font size=\"-1\"><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br></font>";
+}
+
+if ($db->f("email")) {
+	echo "<font size=\"-1\"><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br></font>";
+}
+
+if ($db->f("fakultaet_name")) {
+	echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
+}
+
+$localFields = $DataFields->getLocalFields();
+
+foreach ($localFields as $val) {
+	echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
+}
 
 	
+?>
+</blockquote>
+</td>
+<td class="blank" align="right" valign="top">
+	<img src="pictures/blank.gif" height="10" width="5" /><br />
+	<img src="pictures/einrichtungen.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" /><br />
+	<img src="pictures/blank.gif" height="10" width="5" />
+</td>
+</tr>
+</table>
+<br />
+<?php
 
-	// Anzeige von News
-	($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
-	if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
-		echo"<br>";
-	//show chat info
-	if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
-		if (chat_show_info($auswahl))
-			echo "<br>";
-	}
-/* Include and show votes and test ----------------------------------------- */
-require_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
-show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
-/* ------------------------------------------------------------------------- */
+// Anzeige von News
+($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
+if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
+	echo"<br>";
+	
+//show chat info
+if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
+	if (chat_show_info($auswahl))
+		echo "<br>";
+}
+
+// include and show votes and tests
+if ($GLOBALS['VOTE_ENABLE']) {
+	show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
+}
+
 ?>
 </body>
 </html>

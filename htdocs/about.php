@@ -45,6 +45,9 @@ if ($GLOBALS['CHAT_ENABLE']){
 	}
 	
 }
+if ($GLOBALS['VOTE_ENABLE']) {
+	include_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+}
 
 
 // Start  of Output
@@ -246,18 +249,11 @@ echo "</tr></table><br>\n";
 if (show_news($user_id, $show_admin, 0, $about_data["nopen"]))
 	echo "<br>";
 
-/* Include and show votes and test ----------------------------------------- */
-require_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
-show_votes ($username, $auth->auth["uid"], $perm, YES);
-/* ------------------------------------------------------------------------- */
-
 // alle persoenlichen Termine anzeigen, aber keine privaten
-
 $start_zeit=time();
 ($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
 if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
 	echo "<br>";
-
 
 // show chat info
 if ($GLOBALS['CHAT_ENABLE']){
@@ -265,8 +261,13 @@ if ($GLOBALS['CHAT_ENABLE']){
 		echo "<br>";
 }
 
-// Hier wird der Lebenslauf ausgegeben:
+// include and show votes and tests
+if ($GLOBALS['VOTE_ENABLE']) {
+	show_votes ($username, $auth->auth["uid"], $perm, YES);
+}
 
+
+// Hier wird der Lebenslauf ausgegeben:
 if ($db->f("lebenslauf")!="") {
 	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Lebenslauf") . " </b></td></tr>";
 	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("lebenslauf")));

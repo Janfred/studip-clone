@@ -33,6 +33,10 @@ if ($GLOBALS['CHAT_ENABLE']){
 		chat_kill_chat($_REQUEST['kill_chat']);
 	}
 }
+if ($GLOBALS['VOTE_ENABLE']) {
+	include_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+}
+
 
 if (isset($auswahl) && $auswahl!="") {
 		//just opened Veranstaltung... here follows the init
@@ -158,6 +162,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 ($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
 if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
 		echo"<br>";
+
 // Anzeige von Terminen
 $start_zeit=time();
 $end_zeit=$start_zeit+1210000;
@@ -165,17 +170,17 @@ $name = rawurlencode($SessSemName[0]);
 ($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
 if (show_dates($auswahl, $start_zeit, $end_zeit, 0, 0, $show_admin, $smain_data["dopen"]))
 		echo"<br>";
-//show chat info
-if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
+
+// show chat info
+if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])) {
 		if (chat_show_info($auswahl))
 				echo "<br>";
 }
 
-/* Include and show votes and test ----------------------------------------- */
-require_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
-show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
-/* ------------------------------------------------------------------------- */
-
+// include and show votes and tests
+if ($GLOBALS['VOTE_ENABLE']) {
+	show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
+}
 
 ?>
 </body>

@@ -78,22 +78,26 @@ function get_my_sem_values(&$my_sem) {
 	}
 	
 	//Wiki-Eintraege?
-	$db2->query("SELECT b.Seminar_id, COUNT(DISTINCT keyword) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.keyword,NULL)) AS neue 
+        if ($GLOBALS['WIKI_ENABLE']) {
+		$db2->query("SELECT b.Seminar_id, COUNT(DISTINCT keyword) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.keyword,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN wiki a ON (b.Seminar_id=range_id) GROUP BY b.Seminar_id");
-	while($db2->next_record()) {
-		if ($my_sem[$db2->f("Seminar_id")]["modules"]["wiki"]) {	
-			$my_sem[$db2->f("Seminar_id")]["neuewikiseiten"]=$db2->f("neue");
-			$my_sem[$db2->f("Seminar_id")]["wikiseiten"]=$db2->f("count");
+		while($db2->next_record()) {
+			if ($my_sem[$db2->f("Seminar_id")]["modules"]["wiki"]) {	
+				$my_sem[$db2->f("Seminar_id")]["neuewikiseiten"]=$db2->f("neue");
+				$my_sem[$db2->f("Seminar_id")]["wikiseiten"]=$db2->f("count");
+			}
 		}
 	}
 	
 	//Votes (nur laufende und sichtbar gestoppte)
-	$db2->query("SELECT b.Seminar_id,count(a.vote_id) as count, count(if((chdate > b.loginfilenow AND author_id !='".$user->id."'),a.vote_id,NULL)) AS neue
+        if ($GLOBALS['VOTE_ENABLE']) {
+        	$db2->query("SELECT b.Seminar_id,count(a.vote_id) as count, count(if((chdate > b.loginfilenow AND author_id !='".$user->id."'),a.vote_id,NULL)) AS neue
 				FROM loginfilenow_".$user->id." b  LEFT JOIN vote a ON (a.range_id = b.Seminar_id )
 				WHERE a.state IN('active','stopvis') GROUP BY b.Seminar_id");
-	while($db2->next_record()) {
-			$my_sem[$db2->f("Seminar_id")]["neuevotes"]=$db2->f("neue");
-			$my_sem[$db2->f("Seminar_id")]["votes"]=$db2->f("count");
+		while($db2->next_record()) {
+				$my_sem[$db2->f("Seminar_id")]["neuevotes"]=$db2->f("neue");
+				$my_sem[$db2->f("Seminar_id")]["votes"]=$db2->f("count");
+		}
 	}
 
 
@@ -146,20 +150,24 @@ function print_seminar_content($semid,$my_sem_values) {
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   // Wikiseiten
-  if ($my_sem_values["neuewikiseiten"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
-  elseif ($my_sem_values["wikiseiten"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
-  else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"20\" border=\"0\">";
+  if ($GLOBALS['WIKI_ENABLE']) {  
+	  if ($my_sem_values["neuewikiseiten"])
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='pictures/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_sem_values["wikiseiten"], $my_sem_values["neuewikiseiten"]))."></a>";
+	  elseif ($my_sem_values["wikiseiten"])
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=wiki.php\"><img src='pictures/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_sem_values["wikiseiten"]))."></a>";
+	  else
+			echo "&nbsp; <img src='pictures/icon-leer.gif' width=\"20\" height=\"20\" border=\"0\">";
+  }
 
   //votes
-  if ($my_sem_values["neuevotes"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_sem_values["votes"], $my_sem_values["neuevotes"]))."></a>";
-  elseif ($my_sem_values["votes"])
-		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
-  else
-		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  if ($GLOBALS['VOTE_ENABLE']) {
+  	if ($my_sem_values["neuevotes"])
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_sem_values["votes"], $my_sem_values["neuevotes"]))."></a>";
+	  elseif ($my_sem_values["votes"])
+			echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_sem_values["votes"]))."></a>";
+	  else
+			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  }
 
   echo "&nbsp;";  
 
