@@ -61,6 +61,18 @@ if ($_include_stylesheet != "")  // if empty, use no stylesheet
 	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_stylesheet);
 unset ($_include_stylesheet);
 unset ($_html_head_title);
+
+//start messenger, if set
+if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$messenger_started)) {
+	?>
+	<script language="Javascript">
+		{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
+	</script>
+	<?
+	}
+	$messenger_started = TRUE;
+}
+
 ?>
 	</head>
 	<body>
