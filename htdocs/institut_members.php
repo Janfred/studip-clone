@@ -580,8 +580,8 @@ function table_boddy ($db, $structure, $css_switcher) {
 		if ($structure["home"]) {
 			if ($db->f("Home")) {
 				$home = mila($db->f("Home"), 20);
-				printf("<td%salign=\"center\"><a href=\"%s\"><font size=\"-1\">%s</font></td>\n",
-					$css_switcher->getFullClass(), $db->f("Home"), $home);
+				printf("<td%salign=\"center\"><font size=\"-1\">%s</font></td>\n",
+					$css_switcher->getFullClass(), FixLinks($db->f("Home"), FALSE));
 			}
 			else
 				printf("<td%salign=\"center\"><font size=\"-1\">&nbsp;</font></td>\n",
