@@ -48,7 +48,7 @@ $Modules=new Modules;
 
 //load list of used modules
 $modules = $Modules->getLocalModules($SessSemName[1]);
-print_r ($modules);
+
 //Reitersytem erzeugen
 
 if ($ILIAS_CONNECT_ENABLE) {

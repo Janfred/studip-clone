@@ -125,8 +125,6 @@ class Modules {
 					$modules .= "0";
 			}
 		} else
-			return FALSE;
-		echo $modules;
 		return $modules;
 	}
 
