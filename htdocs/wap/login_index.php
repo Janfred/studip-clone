@@ -71,12 +71,14 @@
 		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
 		echo "    </go>\n";
 		echo "</anchor><br/>\n";
-
-		echo "<anchor>" . wap_txt_encode_to_wml(_("Termine")) . "\n";
-		echo "    <go method=\"post\" href=\"dates.php\">\n";
-		echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-		echo "    </go>\n";
-		echo "</anchor><br/>\n";
+		
+		if ($GLOBALS['CALENDAR_ENABLE']) {
+			echo "<anchor>" . wap_txt_encode_to_wml(_("Termine")) . "\n";
+			echo "    <go method=\"post\" href=\"dates.php\">\n";
+			echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+			echo "    </go>\n";
+			echo "</anchor><br/>\n";
+		}
 
 		echo "<anchor>" . wap_txt_encode_to_wml(_("News")) . "\n";
 		echo "    <go method=\"post\" href=\"news.php\">\n";
