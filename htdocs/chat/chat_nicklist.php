@@ -37,7 +37,12 @@ define("PHPDOC_DUMMY",true);
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-ob_start();
+
+/**
+* Close the actual window if PHPLib shows login screen
+* @const CLOSE_ON_LOGIN_SCREEN
+*/
+define("CLOSE_ON_LOGIN_SCREEN",true);
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 //chat eingeschaltet?
@@ -57,30 +62,14 @@ $chatServer->caching = true;
 <html>
 <head>
 	<title>Chat Nicklist</title>
-	<style type="text/css">
-	<!--
-	A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-	A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
-	TABLE.blank {	background-color: white;}
-	TD.blank {background-color: #FFFFFF;}
-	th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
-	p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
-	h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
-	table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
-	TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-	BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
-	-->
-</style>
-
+	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 </head>
-<body >
+<body>
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
 	?><table width="100%"><tr><?
-	my_error("Du bist nicht in diesem Chat angemeldet!",$class="blank",$colspan=1);
+	my_error("Du bist nicht in diesem Chat angemeldet!","chat",1,false);
 	?></tr></table></body></html><?
 	page_close();
 	die;
@@ -114,5 +103,5 @@ if (!$chatServer->isActiveUser($user->id,$chatid)) {
 </html>
 <?
 page_close();
-ob_end_flush();
+
 ?>
