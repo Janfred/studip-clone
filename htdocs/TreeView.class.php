@@ -43,7 +43,7 @@ class TreeView {
 	/**
 	* name of used tree class
 	* 
-	* @access	public
+	* @access	private
 	* @var	string $tree_class_name
 	*/
 	var $tree_class_name;
