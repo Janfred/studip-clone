@@ -442,7 +442,7 @@ ob_start();
 ?>
 <table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
 <tr>
-	<td width="10%" align="center" class="rahmen_steelgraulight" >Zeit
+	<td width="10%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit")?>
 	</td>
 	<? if ($my_schedule_settings["glb_days"]["mo"]) {?>
 	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight" ><?=_("Montag")?>
@@ -595,7 +595,7 @@ if ((!$print_view) && (!$inst_id)) {
 				<option value="6"><?=_("Samstag")?></option>
 				<option value="7"><?=_("Sonntag")?></option>				
 			</select>
-			Beginn: 
+			<?=_("Beginn:")?> 
 			<?	    
 			echo"<select name=\"start_stunde\">";
 			for ($i=$global_start_time; $i<=$global_end_time; $i++)
@@ -612,7 +612,7 @@ if ((!$print_view) && (!$inst_id)) {
 				}
 				echo"</select> "._("Uhr");
 				?>
-			Ende:
+			<?=_("Ende:")?>
 			<?	    
 			echo"<select name=\"ende_stunde\">";
 			for ($i=$global_start_time; $i<=$global_end_time; $i++)
