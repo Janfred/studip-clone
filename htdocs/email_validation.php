@@ -36,6 +36,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 ?>
 <br>
@@ -117,7 +118,10 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 								my_msg(sprintf(_("Ihnen wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt."), $db->f("Name")) . "\n");
 							}
 						} else {  // Benutzer ist noch nicht eingetragen
-							$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$user->id', 'autor', '0')");
+							$db2->query("SELECT start_time FROM seminare WHERE Seminar_id = '$a'");
+							$db2->next_record();							
+							$group=select_group ($db2->f("start_time"),$user->id);							
+							$db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$a', '$user->id', 'autor', '$group')");
 							my_msg(sprintf(_("Sie wurden automatisch in die Veranstaltung <b>%s</b> eingetragen."), $db->f("Name")) . "\n");
 						}
 					}
