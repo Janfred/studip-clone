@@ -907,11 +907,12 @@ function linkcheck ($URL) {
 
 
 function link_form ($range_id, $updating=FALSE) {
-	global $SessSemName, $the_link, $protect, $description, $name, $folder_system_data;
+	global $SessSemName, $the_link, $protect, $description, $name, $folder_system_data, $user;
 	if ($folder_system_data["update_link"])
 		$updating = TRUE;
 	if ($protect=="on") $protect = "checked";
 	$print = "";
+	$hiddenurl = FALSE;
 	if ($updating == TRUE) {
 		$db=new DB_Seminar;
 		$db->query("SELECT * FROM dokumente WHERE dokument_id='$range_id'");
@@ -921,6 +922,13 @@ function link_form ($range_id, $updating=FALSE) {
 			if ($protect==1) $protect = "checked";
 			$name = $db->f("name");
 			$description = $db->f("description");
+			if ($db->f("user_id") != $user->id) { // check if URL can be seen
+				$url_parts = @parse_url( $the_link );
+				if ($url_parts["user"] && $url_parts["user"]!="anonymous") {
+					$hiddenurl = TRUE;
+				}
+				
+			}
 		}
 	}
 	if ($folder_system_data["linkerror"]==TRUE) {
@@ -928,6 +936,9 @@ function link_form ($range_id, $updating=FALSE) {
 		$print.=_("&nbsp;FEHLER: unter der angegebenen Adresse wurde keine Datei gefunden.<br>&nbsp;Bitte kontrollieren Sie die Pfadangabe!");
 		$print.="</font><hr>";
 	}
+	// Check if URL can be seen
+	
+	
 
 	$print.="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 
@@ -936,7 +947,10 @@ function link_form ($range_id, $updating=FALSE) {
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie verlinken wollen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
-	$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=$the_link>&nbsp;</td></td>";
+	if ($hiddenurl)
+		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"password\"  style=\"width: 70%\" SIZE=\"30\" value=$the_link>&nbsp;</td></td>";
+	else
+		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=$the_link>&nbsp;</td></td>";
 	$print.= "\n</tr>";
 	if (!$refresh) {
 
