@@ -541,7 +541,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			),
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
-					array	 (	"icon" => "pictures/suchen.gif",
+					array	 (	"icon" => "pictures/suche2.gif",
 										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion%s"), "<a href=\"sem_portal.php\">", "</a>")
 					),
 					array	 (	"icon" => "pictures/admin.gif",
@@ -564,7 +564,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			),
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
-					array	 (	"icon" => "pictures/suchen.gif",
+					array	 (	"icon" => "pictures/suche2.gif",
 										"text"  => sprintf(_("Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die %sSuchfunktion%s"), "<a href=\"sem_portal.php\">", "</a>")
 					)
 				)

@@ -411,7 +411,7 @@ if ( !$perm->have_perm("root")) {
 			),
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
-					array	 (	"icon" => "pictures/suchen.gif",
+					array	 (	"icon" => "pictures/suche2.gif",
 										"text"  => sprintf(_("Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die %sSuchfunktion%s."), "<a href=\"institut_browse.php\">", "</a>")
 					),
 					array	 (	"icon" => "pictures/meinesem.gif",
@@ -433,7 +433,7 @@ if ( !$perm->have_perm("root")) {
 			),
 			array  ("kategorie" => _("Aktionen:"),
 				"eintrag" => array	(	
-					array	 (	"icon" => "pictures/suchen.gif",
+					array	 (	"icon" => "pictures/suche2.gif",
 										"text"  => sprintf(_("Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die %sSuchfunktion%s."), "<a href=\"institut_browse.php\">", "</a>")
 					)
 				)
