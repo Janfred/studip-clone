@@ -285,7 +285,7 @@ function ForumOpenClose ($forumposting) {
 function ForumNewPosting ($forumposting) {
 	global $loginfilelast,$SessSemName;
 	$datumtmp = $loginfilelast[$SessSemName[1]];
-	if ($datumtmp < $forumposting["mkdate"]) {
+	if ($datumtmp < $forumposting["chdate"]) {
 		$forumposting["newold"] = "new";  //Beitrag neu
 	} else {
 		$forumposting["newold"] = "old";  //Beitrag alt
@@ -1035,7 +1035,7 @@ function printposting ($forumposting) {
   			echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0 align=center><tr>";
   		if ($forum["anchor"] == $forumposting["id"])
   			echo "<a name='anker'></a>";
-		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$forumposting["mkdate"],"TRUE",$index,$forum["indikator"]);
+		printhead ("100%","0",$link,$forumposting["openclose"],$new,$forumposting["icon"],$name,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
 		echo "</tr></table>\n";	
