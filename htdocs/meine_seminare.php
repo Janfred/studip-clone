@@ -229,7 +229,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan="2">
+			<td class="topic" colspan="3>
 				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</>
 			</td>
 		</tr>
@@ -243,8 +243,8 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	 		<td class="blank">
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 					<tr valign="top" align="center">
-						<td colspan=>
-							<table border="0" cellpadding="0" cellspacing="0" width="96%" align="center" class="blank">
+						<td align="center">
+							<table border="0" cellpadding="2" cellspacing="0" width="98%" align="center" class="blank">
 								<tr>
 									<td class="blank" colspan="2">&nbsp;
 									
@@ -252,14 +252,14 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 								</tr>
 								<tr valign="top" align="center">
 									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" ".tooltip("Gruppe ändern")." border="0"></a></th>
-									<th width="84%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
+									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
 <?									if ($view=="ext") { ?>
 										<th width="10%"><b>besucht&nbsp;&nbsp;</b></th>
 										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
 										<th width="10%"><img src="pictures/nutzer.gif" alt="TeilnehmerInnen der Veranstaltung"></th>
 									<?	}?>
-									<th width="3%"><b>X</b></th>
+									<th width="3%"><b>X&nbsp; </b></th>
 								</tr>
 	<?
 	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
@@ -292,7 +292,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		if ($lastVisit <= $values["chdate"])
 			print ("</font>");
 		print ("</a></td>");
-// Conent-field
+// Content-field
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 		print_seminar_content($semid, $values);
 		echo "</td>";
@@ -323,12 +323,12 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
 			echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
 		elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a></td>", $semid);
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a>&nbsp; </td>", $semid);
 		else
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td>", $semid);			
+			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a>&nbsp; </td>", $semid);			
 		 echo "</tr>\n";
 		}
-// 	echo "</table>";
+ 	echo "</table></td></tr>";
 	 }?>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
@@ -342,21 +342,21 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	  IF ($db->num_rows()) {
 		?>
 	<tr>
-		<td class="blank" colspan=6>
+		<td class="blank">
 			<b><br>&nbsp; Anmelde- und Wartelisteneintr&auml;ge:</b><br />&nbsp; 
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan=6>
+		<td class="blank" align="center">
 		<?
-		ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"blank\">";
+		ECHO "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
 		ECHO "<tr>";
 			ECHO "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
-			ECHO "<th width=\"64%\"><b>Name</b></th>";
+			ECHO "<th width=\"65%\" align=\"left\"><b>Name</b></th>";
 			ECHO "<th width=\"10%\"><b>Datum</b></th>";
-			ECHO "<th width=\"10%\"><b>Position</b></th>";
+			ECHO "<th width=\"10%\" nowrap><b>Position/Chance</b></th>";
 			ECHO "<th width=\"10%\"><b>Art</b></th>";
-			ECHO "<th width=\"3%\">X</tr></th>";
+			ECHO "<th width=\"3%\">X&nbsp; </tr></th>";
 
 	WHILE ($db->next_record()) {
 		IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
@@ -379,14 +379,14 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	
 	$cssSw->disableHover();
 	$cssSw->switchClass();
-	printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
+	printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12></td>",$chance_color);
 	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
-	printf ("<td width=\"54%%\" class=\"%s\">",$cssSw->getClass());
+	printf ("<td width=\"55%%\" class=\"%s\">",$cssSw->getClass());
 	print "<a href=details.php?sem_id=".$db->f("seminar_id")."><font size=-1>".$db->f("Name")."</font></a></td>";
 	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
 	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
-	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldel." : "Wartel.");
-	printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a></td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
+	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Los" : "chronolg.");
+	printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a>&nbsp; </td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
 	}
 	print "</table></td>";
 ?>
@@ -403,7 +403,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
  // Ende Wartelisten
  
 
-
+//Info-field on the right side
 ?>
 		</table>
 			</td>
@@ -473,46 +473,6 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 
 <?
-
-
- 
- //Fusstext
- 
- /*
- 
- $db->query("SELECT count(*) as count  FROM seminare");
- $db->next_record();
-  ?>
-	<tr>
-		<td class="blank" colspan=2>
-			<table width="99%" border=0 cellpadding=0 cellspacing=0 align="center">
-				<tr>
-					<td align="right">
-						<font size=-1>Es sind noch <? echo ($db->f("count")-$num_my_sem) ?> weitere Veranstaltungen vorhanden.</font><br />&nbsp; 
-					</td>
-				</tr>
-				<tr>
-					<td>
-					Um weitere Veranstaltungen in ihre pers&ouml;nliche Auswahl aufzunehmen, <br />nutzen Sie bitte die <a href="sem_portal.php?view=Alle&reset_all=TRUE">Suchfunktion.</a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-					<? if ($perm->have_perm("dozent"))
-						echo "<br />Wenn sie selbst eine weitere Veranstaltungen anlegen m&ouml;chten, <br />nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a> zum Anlegen neuer Veranstaltungen.";
-					?>
-					</td>
-				</tr>
-				
-				<tr>
-					<td align="right">&nbsp;
-						
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	*/
 }
 
 
