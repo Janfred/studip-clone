@@ -1253,13 +1253,13 @@ if ($view=="Karriere") {
 					echo "<td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
 					if ($i != 1) {
 						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
-						echo "&direction=up&move_inst=$inst_id\">";
+						echo "&direction=up&move_inst=$inst_id&ticket=".get_ticket()."\">";
 						echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/move_up.gif\" ";
 						echo "border=\"0\"" . tooltip(_("nach oben")) . "></a>";
 					}
 					if ($i != sizeof($my_about->user_inst)) {
 						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
-						echo "&direction=down&move_inst=$inst_id\">";
+						echo "&direction=down&move_inst=$inst_id&ticket=".get_ticket()."\">";
 						echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}pictures/move_down.gif\" ";
 						echo "border=\"0\"" . tooltip(_("nach unten")) . "></a>";
 					}
