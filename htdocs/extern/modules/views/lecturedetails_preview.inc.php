@@ -174,13 +174,25 @@ else {
 	$content_div_end = "";
 }
 
-foreach ($order as $position) {
-	if ($visible[$position] && $data[$this->data_fields[$position]]) {
-		echo "<tr$headline_tr><td$headline_td>$headline_div";
-		echo "<font$headline_font>{$aliases[$position]}</font>$headline_div_end</td></tr>\n";
-		echo "<tr$content_tr><td$content_td>$content_div";
-		echo "<font$content_font>" . $data[$this->data_fields[$position]];
-		echo "</font>$content_div_end</td></tr>\n";
+if ($this->config->getValue("Main", "headlinerow")) {
+	foreach ($order as $position) {
+		if ($visible[$position] && $data[$this->data_fields[$position]]) {
+			echo "<tr$headline_tr><td$headline_td>$headline_div";
+			echo "<font$headline_font>{$aliases[$position]}</font>$headline_div_end</td></tr>\n";
+			echo "<tr$content_tr><td$content_td>$content_div";
+			echo "<font$content_font>" . $data[$this->data_fields[$position]];
+			echo "</font>$content_div_end</td></tr>\n";
+		}
+	}
+}
+else {
+	foreach ($order as $position) {
+		if ($visible[$position] && $data[$this->data_fields[$position]]) {
+			echo "<tr$content_tr><td$content_td>$content_div";
+			echo "<font$headline_font>{$aliases[$position]}</font>\n";
+			echo "<font$content_font>" . $data[$this->data_fields[$position]];
+			echo "</font>$content_div_end</td></tr>\n";
+		}
 	}
 }
 

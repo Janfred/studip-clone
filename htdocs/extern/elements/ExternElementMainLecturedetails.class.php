@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainLecturedetails extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "aliaspredisc", 
-			"aliasfirstmeeting", "rangepathlevel", "studipinfo",
+			"aliasfirstmeeting", "headlinerow", "rangepathlevel", "studipinfo",
 			"studiplink", "wholesite", "nameformat", "urlcss", "title", "language");
 	var $edit_function = "editMainSettings";
 	
@@ -61,12 +61,13 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			"name" => "",
 			"order" => "|0|1|2|3|4|5|6|7|8|9|10|11|12",
 			"visible" => "|1|1|1|1|1|1|1|1|1|1|1|1|1",
-			"aliases" => "|"._("Untertitel:")."|"._("DozentIn:")."|"._("Veranstaltungsart:")
-				."|"._("Veranstaltungstyp:")."|"._("Beschreibung:")."|"._("Ort:")."|"._("Zeiten:")
-				."|"._("TeilnehmerInnen:")."|"._("Voraussetzungen:")."|"._("Lernorganisation:")
-				."|"._("Leistungsnachweis:")."|"._("Bereichseinordnung:")."|"._("Sonstiges:"),
+			"aliases" => "|"._("Untertitel:")." |"._("DozentIn:")." |"._("Veranstaltungsart:")
+				." |"._("Veranstaltungstyp:")." |"._("Beschreibung:")." |"._("Ort:")." |"._("Zeiten:")
+				." |"._("TeilnehmerInnen:")." |"._("Voraussetzungen:")." |"._("Lernorganisation:")
+				." |"._("Leistungsnachweis:")." |"._("Bereichseinordnung:")." |"._("Sonstiges:"),
 			"aliaspredisc" => _("Vorbesprechung:") . " ",
 			"aliasfirstmeeting" => _("Erster Termin:") . " ",
+			"headlinerow" => "1",
 			"rangepathlevel" => "1",
 			"studipinfo" => "1",
 			"studiplink" => "top",
@@ -126,11 +127,17 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
+		$title = _("Absatz&uuml;berschrift in eigener Zeile:");
+		$info = _("Diese Option bewirkt, dass die Überschrift eines Absatzes in einer eigenen Zeile ausgegeben wird. Ist diese Option nicht ausgewählt, wird die Überschrift dem Text des Absatzes direkt vorangestellt.");
+		$values = "1";
+		$names = "";
+		$table = $edit_form->editCheckboxGeneric("headlinerow", $title, $info, $values, $names);
+		
 		$title = _("Bereichspfad ab Ebene:");
 		$info = _("Wählen Sie, ab welcher Ebene der Bereichspfad ausgegeben werden soll.");
 		$values = array("1", "2", "3", "4", "5");
 		$names = array("1", "2", "3", "4", "5");
-		$table = $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $names);
+		$table .= $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Info:");
 		$info = _("Diese Option zeigt weitere Informationen aus der Stud.IP-Datenbank an (Anzahl Teilnehmer, Posting, Dokumente usw.).");
@@ -180,6 +187,21 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == "studipinfo" || $attribute == "headlinerow") {
+			// This is especially for checkbox-values. If there is no checkbox
+			// checked, the variable is not declared and it is necessary to set the
+			// variable to 0.
+			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				return FALSE;
+			}
+			return !($value == "1" || $value == "0");
+		}
+		
+		return FALSE;
 	}
 	
 }
