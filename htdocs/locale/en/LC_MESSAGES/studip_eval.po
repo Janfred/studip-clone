@@ -2,14 +2,15 @@
 # translation of studip_eval.po to
 # translation of studip_eval.po to
 # translation of studip_eval.po to
+# translation of studip_eval.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
-"POT-Creation-Date: 2004-08-25 11:43+0200\n"
-"PO-Revision-Date: 2004-08-24 13:08+GMT\n"
+"POT-Creation-Date: 2004-09-23 21:40+0200\n"
+"PO-Revision-Date: 2004-09-23 21:31+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -66,13 +67,11 @@ msgstr ""
 "evaluation has been added to."
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:211
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sie haben in %s Bereichen, in denen diese Evaluation hängt, nicht "
 "aussreichene Rechte, um diese Eval zu bearbeiten."
 msgstr ""
-"You do not have the rights necessary to make changes in all areas this "
-"evaluation has been added to."
 
 #: modules/evaluation/evaluation_admin_edit.inc.php:234
 msgid "Zur Evaluations-Verwaltung"
@@ -1682,9 +1681,8 @@ msgid "Fehler beim Einlesen (Block)"
 msgstr "Error while reading (block)"
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1331
-#, fuzzy
 msgid "Einer Frage wurden noch keine Antwortenmöglichkeiten zugewiesen."
-msgstr "There is a question no reply has been associated to."
+msgstr ""
 
 #: modules/evaluation/classes/EvaluationTreeEditView.class.php:1333
 #, fuzzy

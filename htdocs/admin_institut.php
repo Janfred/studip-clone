@@ -170,7 +170,7 @@ while ( is_array($HTTP_POST_VARS)
 		}
 		
 		if ($db->f("is_fak") && !$perm->have_perm("root")){
-			$msg="error§<b>" . _("Sie haben nicht die Berechtigung Fakult&auml;ten zu l&oumlschen!") . "</b>";
+			$msg="error§<b>" . _("Sie haben nicht die Berechtigung Fakult&auml;ten zu l&ouml;schen!") . "</b>";
 			break;
 		}
 	

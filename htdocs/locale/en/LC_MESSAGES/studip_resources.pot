@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-08-25 11:43+0200\n"
+"POT-Creation-Date: 2004-09-23 21:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,44 +15,43 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resources/resourcesFunc.inc.php:470 resources/resourcesFunc.inc.php:479
-#: resources/resourcesFunc.inc.php:488 resources/resourcesFunc.inc.php:544
-#: resources/resourcesFunc.inc.php:589 resources/resourcesFunc.inc.php:599
-#: resources/resourcesFunc.inc.php:612 resources/resourcesFunc.inc.php:661
-#: resources/resourcesFunc.inc.php:712
+#: resources/resourcesFunc.inc.php:472 resources/resourcesFunc.inc.php:488
+#: resources/resourcesFunc.inc.php:497 resources/resourcesFunc.inc.php:559
+#: resources/resourcesFunc.inc.php:597 resources/resourcesFunc.inc.php:610
+#: resources/resourcesFunc.inc.php:659 resources/resourcesFunc.inc.php:710
 msgid "Veranstaltungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:528
+#: resources/resourcesFunc.inc.php:543
 #: resources/lib/ResourceObject.class.php:291
 msgid "Global"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:539 resources/resourcesFunc.inc.php:581
-#: resources/resourcesFunc.inc.php:605 resources/resourcesFunc.inc.php:621
-#: resources/resourcesFunc.inc.php:684 resources/resourcesFunc.inc.php:707
+#: resources/resourcesFunc.inc.php:554 resources/resourcesFunc.inc.php:589
+#: resources/resourcesFunc.inc.php:619 resources/resourcesFunc.inc.php:682
+#: resources/resourcesFunc.inc.php:705
 msgid "Personen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:549 resources/resourcesFunc.inc.php:555
-#: resources/resourcesFunc.inc.php:604 resources/resourcesFunc.inc.php:617
-#: resources/resourcesFunc.inc.php:667 resources/resourcesFunc.inc.php:717
+#: resources/resourcesFunc.inc.php:564 resources/resourcesFunc.inc.php:570
+#: resources/resourcesFunc.inc.php:576 resources/resourcesFunc.inc.php:615
+#: resources/resourcesFunc.inc.php:665 resources/resourcesFunc.inc.php:715
 msgid "Einrichtungen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:743
+#: resources/resourcesFunc.inc.php:741
 msgid "diesen Eintrag übernehmen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:747
+#: resources/resourcesFunc.inc.php:745
 msgid "jedeR"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:762
+#: resources/resourcesFunc.inc.php:760
 msgid "Suche zurücksetzen"
 msgstr ""
 
-#: resources/resourcesFunc.inc.php:767
+#: resources/resourcesFunc.inc.php:765
 msgid "Starten Sie hier Ihre Suche"
 msgstr ""
 
@@ -257,6 +256,10 @@ msgstr ""
 #: resources/lib/evaluate_values.php:1703
 #: resources/views/ShowToolsRequests.class.php:277
 msgid "ab:"
+msgstr ""
+
+#: resources/lib/evaluate_values.php:1733
+msgid "Raumanfrage bearbeitet"
 msgstr ""
 
 #: resources/lib/ResourceObject.class.php:285
@@ -1120,7 +1123,7 @@ msgid ""
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:105
-msgid "Die Startzeit darf nicht vor der Endzeit liegen!"
+msgid "Die Endzeit darf nicht vor der Startzeit liegen!"
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:108
@@ -1265,6 +1268,12 @@ msgstr ""
 
 #: resources/views/msgs_resources.inc.php:183
 msgid "Wollen Sie die Anfrage wirklich ablehnen?"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:188
+msgid ""
+"Die Belegungen konnte nicht gespeichert werden, da sie mit folgenden "
+"Sperrzeiten kollidiert:"
 msgstr ""
 
 #: resources/views/page_intros.inc.php:41
@@ -1544,8 +1553,8 @@ msgstr ""
 
 #: resources/views/page_intros.inc.php:198
 msgid ""
-"Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Veranstaltung "
-"zugeordneten Ressourcen einsehen."
+"Sie k&ouml;nnen hier die Details und den Belegungsplan der dieser "
+"Veranstaltung zugeordneten Ressourcen einsehen."
 msgstr ""
 
 #: resources/views/page_intros.inc.php:199

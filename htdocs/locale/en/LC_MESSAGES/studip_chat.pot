@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-08-25 11:43+0200\n"
+"POT-Creation-Date: 2004-09-23 21:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,187 +15,183 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: chat/chat_client.php:94
+#: chat/chat_client.php:89
 #, c-format
 msgid "Ihre %sSchriftfarbe</font> wurde ge&auml;ndert!"
 msgstr ""
 
-#: chat/chat_client.php:104
+#: chat/chat_client.php:99
 #, c-format
 msgid "%s verl&auml;sst den Chat und sagt: %s"
 msgstr ""
 
-#: chat/chat_client.php:105
+#: chat/chat_client.php:100
 msgid "Sie haben den Chat verlassen!"
 msgstr ""
 
-#: chat/chat_client.php:107
+#: chat/chat_client.php:102
 msgid ""
 "Ihre letzte Aufzeichnung wird noch einmal zum Download angeboten.<br>Nachdem "
 "sie dieses Fenster schließen wird diese Aufzeichnung gel&ouml;scht."
 msgstr ""
 
-#: chat/chat_client.php:112
+#: chat/chat_client.php:107
 msgid "Das Chatfenster wird in 3 Sekunden geschlossen!"
 msgstr ""
 
-#: chat/chat_client.php:128
+#: chat/chat_client.php:123
 msgid "Mögliche Chat-Kommandos:"
 msgstr ""
 
-#: chat/chat_client.php:140
+#: chat/chat_client.php:135
 #, c-format
 msgid "Ihre Botschaft an %s wurde verschickt."
 msgstr ""
 
-#: chat/chat_client.php:143
+#: chat/chat_client.php:138
 #, c-format
 msgid "Eine geheime Botschaft von %s"
 msgstr ""
 
-#: chat/chat_client.php:147
+#: chat/chat_client.php:142
 #, c-format
 msgid "<b>%s</b> ist in diesem Chat nicht bekannt."
 msgstr ""
 
-#: chat/chat_client.php:149 chat/chat_client.php:184 chat/chat_client.php:195
-#: chat/chat_client.php:215 chat/chat_client.php:307
+#: chat/chat_client.php:144 chat/chat_client.php:179 chat/chat_client.php:190
+#: chat/chat_client.php:210 chat/chat_client.php:302
 msgid "Fehler: Falsche Kommandosyntax!"
 msgstr ""
 
-#: chat/chat_client.php:177
+#: chat/chat_client.php:172
 #, c-format
 msgid "%s wurde von %s aus dem Chat geworfen!"
 msgstr ""
 
-#: chat/chat_client.php:181
+#: chat/chat_client.php:176
 msgid "Kein(e) Nutzer(in) zum entfernen gefunden."
 msgstr ""
 
-#: chat/chat_client.php:186
+#: chat/chat_client.php:181
 msgid "Sie d&uuml;rfen hier niemanden rauswerfen!"
 msgstr ""
 
-#: chat/chat_client.php:201
+#: chat/chat_client.php:196
 #, c-format
 msgid "Ihre Nachricht an <b>%s</b> wurde verschickt."
 msgstr ""
 
-#: chat/chat_client.php:203
+#: chat/chat_client.php:198
 msgid "Fehler: Ihre Nachricht konnte nicht verschickt werden!"
 msgstr ""
 
-#: chat/chat_client.php:205
+#: chat/chat_client.php:200
 msgid "Fehler: Es macht keinen Sinn, sich selbst Nachrichten zu schicken!"
 msgstr ""
 
-#: chat/chat_client.php:221
+#: chat/chat_client.php:216
 #, c-format
 msgid "Ihre Einladung an <b>%s</b> wurde verschickt."
 msgstr ""
 
-#: chat/chat_client.php:223
+#: chat/chat_client.php:218
 msgid "Fehler: Ihre Einladung konnte nicht verschickt werden!"
 msgstr ""
 
-#: chat/chat_client.php:226
+#: chat/chat_client.php:221
 msgid "Fehler: Es macht keinen Sinn, sich selbst in den Chat einzuladen!"
 msgstr ""
 
-#: chat/chat_client.php:229
+#: chat/chat_client.php:224
 msgid "Sie d&uuml;rfen f&uuml;r diesen Chat keine Einladungen verschicken!"
 msgstr ""
 
-#: chat/chat_client.php:238
+#: chat/chat_client.php:233
 #, c-format
 msgid "Dieser Chat wurde soeben von <b>%s</b> mit einem Passwort gesichert."
 msgstr ""
 
-#: chat/chat_client.php:242
+#: chat/chat_client.php:237
 #, c-format
 msgid ""
 "Der Passwortschutz f&uuml;r diesen Chat wurde soeben von <b>%s</b> "
 "aufgehoben."
 msgstr ""
 
-#: chat/chat_client.php:246
+#: chat/chat_client.php:241
 msgid "Dieser Chat ist nicht mit einem Passwort gesichert."
 msgstr ""
 
-#: chat/chat_client.php:249
+#: chat/chat_client.php:244
 msgid "Sie d&uuml;rfen hier kein Passwort setzen!"
 msgstr ""
 
-#: chat/chat_client.php:260
+#: chat/chat_client.php:255
 msgid "Sie d&uuml;rfen diesen Chat nicht absichern!"
 msgstr ""
 
-#: chat/chat_client.php:269
+#: chat/chat_client.php:264
 msgid "Sie d&uuml;rfen diesen Chat nicht entsichern!"
 msgstr ""
 
-#: chat/chat_client.php:279
+#: chat/chat_client.php:274
 #, c-format
 msgid "Sie lassen bereits seit %s eine Aufzeichnung laufen."
 msgstr ""
 
-#: chat/chat_client.php:281
+#: chat/chat_client.php:276
 #, c-format
 msgid "Es wurde soeben von <b>%s</b> eine Aufzeichnung gestartet."
 msgstr ""
 
-#: chat/chat_client.php:288
+#: chat/chat_client.php:283
 #, c-format
 msgid "Die Aufzeichnung von <b>%s</b> wurde beendet."
 msgstr ""
 
-#: chat/chat_client.php:289
+#: chat/chat_client.php:284
 msgid "Ihre Aufzeichnug wurde beendet und wird zu Ihrem Browser geschickt."
 msgstr ""
 
-#: chat/chat_client.php:297
+#: chat/chat_client.php:292
 msgid "Sie haben keine Aufzeichnung gestartet."
 msgstr ""
 
-#: chat/chat_client.php:301
+#: chat/chat_client.php:296
 msgid "Ihre Aufzeichnung wird zu Ihrem Browser geschickt."
 msgstr ""
 
-#: chat/chat_client.php:304
+#: chat/chat_client.php:299
 msgid "Sie haben keine gespeicherte Aufzeichnung."
 msgstr ""
 
-#: chat/chat_client.php:310
+#: chat/chat_client.php:305
 msgid "Sie d&uuml;rfen hier keine Aufzeichnung starten!"
 msgstr ""
 
-#: chat/chat_client.php:321
+#: chat/chat_client.php:316
 #, c-format
 msgid "Unbekanntes Kommando: <b>%s</b>"
 msgstr ""
 
-#: chat/chat_client.php:387
+#: chat/chat_client.php:382
 msgid "Sie mussten den Chat verlassen..."
 msgstr ""
 
-#: chat/chat_client.php:389
+#: chat/chat_client.php:384 chat/chat_client.php:395
 msgid "Hier</a> k&ouml;nnen Sie versuchen wieder einzusteigen.<br>"
 msgstr ""
 
-#: chat/chat_client.php:397
+#: chat/chat_client.php:392
 msgid "<b>IDLE TIMEOUT</b> - Sie wurden aus dem Chat entfernt!<br>"
 msgstr ""
 
-#: chat/chat_client.php:400
-msgid "Hier</a> k&oumlnnen Sie versuchen wieder einzusteigen.<br>"
-msgstr ""
-
-#: chat/chat_client.php:428 chat/chat_input.php:121 chat/chat_nicklist.php:77
+#: chat/chat_client.php:423 chat/chat_input.php:121 chat/chat_nicklist.php:77
 #: chat/chat_status.php:104
 msgid "<font size=\"-1\">Sie sind nicht in diesem Chat angemeldet!</font>"
 msgstr ""
 
-#: chat/chat_client.php:434
+#: chat/chat_client.php:429
 #, c-format
 msgid "Hallo %s,<br> willkommen im Raum: %s"
 msgstr ""

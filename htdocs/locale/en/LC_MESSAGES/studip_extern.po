@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_extern\n"
-"POT-Creation-Date: 2004-08-25 11:43+0200\n"
+"POT-Creation-Date: 2004-09-23 21:40+0200\n"
 "PO-Revision-Date: 2004-04-01 13:29+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
