@@ -989,7 +989,7 @@ if ($rechte) {
 		</td>
 	</tr>
 	<tr><td class=blank colspan=2>
-
+	<a name="freesearch"></a>
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>?cmd=add_user" method="POST">
 	<tr>
@@ -1013,9 +1013,8 @@ if ($rechte) {
 		</td>
 	</tr>
 	<tr><td class=blank colspan=2>
-
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
-	<form action="<? echo $PHP_SELF ?>" method="POST">
+	<form action="<?=$PHP_SELF?>#freesearch" method="POST">
 	<tr>
 		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b><?=_("Nutzer in die Veranstaltung eintragen")?></b></font>
 		<br /><font size=-1>&nbsp; <? printf(_("Bitte geben Sie den Vornamen, Nachnamen %s oder Usernamen zur Suche ein"), "<br />&nbsp;")?> </font></td>
