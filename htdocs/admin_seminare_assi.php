@@ -114,7 +114,6 @@ if ($start_level) { //create defaults
 			break;
 		}
 	}
-	print_r ($sem_create_data["modules_list"]);
 
 	if ($SEM_CLASS[$class]["turnus_default"]) 
 		$sem_create_data["term_art"] = $SEM_CLASS[$class]["turnus_default"];
