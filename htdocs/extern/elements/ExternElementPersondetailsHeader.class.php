@@ -41,7 +41,7 @@ class ExternElementPersondetailsHeader extends ExternElement {
 
 	var $attributes = array("table_width", "table_align", "table_border", "table_bgcolor",
 				"table_bordercolor", "table_cellpadding", "table_cellspacing", "table_class",
-				"table_style", "tr_height", "tr_class", "tr_style", "headlinetd_align",
+				"table_style", "tr_class", "tr_style", "headlinetd_height", "headlinetd_align",
 				"headlinetd_valign", "headlinetd_bgcolor", "headlinetd_class", "headlinetd_style",
 				"picturetd_width", "picturetd_align", "picturetd_valign", "picturetd_bgcolor",
 				"picturetd_class", "picturetd_style", "contacttd_width", "contacttd_align",
@@ -78,22 +78,21 @@ class ExternElementPersondetailsHeader extends ExternElement {
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE, $anker);
 		
-		$attributes = array("table_width", "table_align",
-				"table_border", "table_bgcolor", "table_bordercolor", "table_cellpadding",
-				"table_cellspacing", "table_class", "table_style");
-		$content_table .= $edit_form->getEditFormContent($attributes);
-		$content_table .= $edit_form->editBlankContent();
-		
-		$attributes = array("tr_height", "tr_class", "tr_style", "font_face", "font_size",
-				"font_color", "font_class", "font_style", "headlinetd_align",
+		$attributes = array("table_width", "table_align", "table_border", "table_bgcolor",
+				"table_bordercolor", "table_cellpadding", "table_cellspacing", "table_class",
+				"table_style", "tr_class", "tr_style", "font_face", "font_size",
+				"font_color", "font_class", "font_style", "headlinetd_height", "headlinetd_align",
 				"headlinetd_valign", "headlinetd_bgcolor", "headlinetd_class", "headlinetd_style",
 				"picturetd_width", "picturetd_align", "picturetd_valign", "picturetd_bgcolor",
 				"picturetd_class", "picturetd_style", "contacttd_width", "contacttd_align",
 				"contacttd_valign", "contacttd_bgcolor", "contacttd_class", "contacttd_style",);
-		$headlines = array("tr" => _("Tabellenzeile Name"), "font" => _("Schriftformatierung Name"),
-				"headlinetd" => _("Tabellenzelle Name"), "picturetd" => _("Tabellenzelle Bild"),
-				"contacttd" => _("Tabellenzelle Kontakt"));
-		$content_table .= $edit_form->getEditFormContent($attributes, $headlines);
+		$headlines = array("table" => _("Tabelle Seitenkopf/Bild (HTML-Tag &lt;table&gt;)"),
+				"tr" => _("Tabellenzeile Name (HTML-Tag &lt;tr&gt;)"),
+				"font" => _("Schriftformatierung Name (HTML-Tag &lt;font&gt;)"),
+				"headlinetd" => _("Tabellenzelle Name (HTML-Tag &lt;td&gt;)"),
+				"picturetd" => _("Tabellenzelle Bild (HTML-Tag &lt;td&gt;)"),
+				"contacttd" => _("Tabellenzelle Kontakt (HTML-Tag &lt;td&gt;)"));
+		$content_table = $edit_form->getEditFormContent($attributes, $headlines);
 		$content_table .= $edit_form->editBlankContent();
 		
 		$headline = $edit_form->editHeadline(_("Bild"));

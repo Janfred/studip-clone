@@ -39,7 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementTableHeadrow extends ExternElement {
 
-	var $attributes = array("tr_height", "tr_class", "tr_style", "th_align",
+	var $attributes = array("tr_class", "tr_style", "th_height", "th_align",
 			"th_valign", "th_bgcolor", "th_bgcolor2_", "th_zebrath_", "th_class", "th_style",
 			"font_face", "font_size", "font_color", "font_class", "font_style");
 

@@ -39,7 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementTableParagraphText extends ExternElement {
 
-	var $attributes = array("tr_height", "tr_class", "tr_style","td_align",
+	var $attributes = array("tr_class", "tr_style", "tr_height", "td_align",
 			"td_valign", "td_bgcolor", "td_class", "td_style", "font_face",
 			"font_size", "font_color", "font_class", "font_style", "margin");
 

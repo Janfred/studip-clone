@@ -39,9 +39,9 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementLecturesInnerTable extends ExternElement {
 
-	var $attributes = array("tr_height", "tr_class", "tr_style", "td_bgcolor",
-			"td_class", "td_style", "tr1_height", "td1_align", "td1_valign",
-			"font1_face", "font1_size", "font1_color", "font1_class", "font1_style", "tr2_height",
+	var $attributes = array("tr_class", "tr_style", "td_bgcolor", "td_bgcolor2_",
+			"td_class", "td_style", "td1_height", "td1_align", "td1_valign",
+			"font1_face", "font1_size", "font1_color", "font1_class", "font1_style", "td2_height",
 			"td2_align", "td2_valign", "td2width", "font2_face", "font2_size", "font2_color",
 			"font2_class", "font2_style", "td3_align");
 			
@@ -77,14 +77,15 @@ class ExternElementLecturesInnerTable extends ExternElement {
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE, $anker);
 		
-		$attributes = array("tr_height", "tr_class", "tr_style", "td_bgcolor", "td_class", "td_style");
+		$attributes = array("tr_class", "tr_style", "td_bgcolor", "td_bgcolor2_",
+				"td_class", "td_style");
 		$headline = array("tr" => $this->headlines[0], "td" => $this->headlines[1]);
 		$content_table = $edit_form->getEditFormContent($attributes, $headline);
 		$content_table .= $edit_form->editBlankContent();
 		
 		$headline = $edit_form->editHeadline($this->headlines[2]);
 		
-		$table = $edit_form->editHeight("tr1_height");
+		$table = $edit_form->editHeight("td1_height");
 		$table .= $edit_form->editAlign("td1_align");
 		$table .= $edit_form->editValign("td1_valign");
 		
@@ -98,7 +99,7 @@ class ExternElementLecturesInnerTable extends ExternElement {
 		
 		$headline = $edit_form->editHeadline($this->headlines[4]);
 		
-		$table = $edit_form->editHeight("tr2_height");
+		$table = $edit_form->editHeight("td2_height");
 		
 		$title = _("Spaltenbreite Zeiten:");
 		$info = _("Breite der Spalte \"Zeiten(Termine)\" in Prozent.");
