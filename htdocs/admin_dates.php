@@ -28,6 +28,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
 
+
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;	
@@ -758,7 +759,9 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 			$titel.="<input type=\"HIDDEN\" name=\"topic_id[]\" value=\"".$db->f("topic_id")."\">";
 			}
 		else {
-			$titel.= date ("d.m.Y, H:i", $db->f("date"));
+			setlocale("LC_TIME", "ge");		
+			$titel .= substr(strftime("%a",$db->f("date")),0,2);		
+			$titel.= date (". d.m.Y, H:i", $db->f("date"));
 			if ($db->f("date") <$db->f("end_time"))
 				$titel.= " - ".date ("H:i", $db->f("end_time"));
 			if ($db->f("content")) {
