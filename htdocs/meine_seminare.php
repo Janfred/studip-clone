@@ -148,6 +148,28 @@ $cssSw=new cssClassSwitcher;                                // Klasse für Zebra-
 <?
 $db=new DB_Seminar;
 
+//Sicherheitsabfrage fuer abonnierte Veranstaltungen
+if ($cmd=="suppose_to_kill") {
+	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
+	$db->next_record();
+	if ($db->f("admission_type")) {
+		$meldung="info§Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>".htmlReady($db->f("Name"))."</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich neu anmelden! <br />";
+		$meldung.="<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
+		$meldung.="<a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
+	} else {
+		$cmd="kill";
+	}
+}
+
+//Sicherheitsabfrage fuer Wartelisteneintraege
+if ($cmd=="suppose_to_kill_admission") {
+	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
+	$db->next_record();
+	$meldung="info§Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>".htmlReady($db->f("Name"))."</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich neu anmelden! <br />";
+	$meldung.="<a href=\"$PHP_SELF?cmd=kill_admission&auswahl=$auswahl\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
+	$meldung.="<a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
+}
+
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="kill") {
 	$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
@@ -274,7 +296,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 		echo "<td class=\"$class\"  align=\"center\" nowrap>". $values["status"]."&nbsp;</td>";
 		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) echo "<td class=\"$class\"  align=center>&nbsp;</td>";
-			else printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td>", $semid);
+			else printf("<td class=\"$class\"  align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td>", $semid);
 		 echo "</tr>\n";
 		}
 	echo "</table></td></tr>";
@@ -311,10 +333,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
                  $db2=new DB_Seminar;
                  $admission_studiengang_id = $db->f("studiengang_id");
                  $admission_seminar_id = $db->f("seminar_id");
-//                 $db2->query("SELECT quota FROM admission_seminar_studiengang WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
-//                 IF ($db2->next_record()) {
-                    $plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
-//                 }
+                 $plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
                  $db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
                  IF ($db2->next_record()) {
                     $wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
@@ -327,15 +346,17 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
             IF ($db->f("position") >= 30) $chance_color = 44; // das wird wohl nix mehr mit nachrücken
             ELSE $chance_color = dechex(255-($db->f("position")*6)); // da gibts vielleicht noch Hoffnung, also grün
         }
-		$cssSw->switchClass();
-	    printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
-	    printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
-	    printf ("<td width=\"64%%\" class=\"%s\">",$cssSw->getClass());
-		print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";
-		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.Y", $db->f("admission_endtime")) : "-");
-		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s %s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
-		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
-		printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(),$db->f("seminar_id"));
+	
+	$cssSw->switchClass();
+	
+	printf ("<tr><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='pictures/blank.gif' alt='Position oder Wahrscheinlichkeit' border=0 width=7 height=12>&nbsp;</td>",$chance_color);
+	printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
+	printf ("<td width=\"64%%\" class=\"%s\">",$cssSw->getClass());
+	print "<a href=details.php?sem_id=".$db->f("seminar_id").">".$db->f("Name")."</a></td>";
+	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.Y", $db->f("admission_endtime")) : "-");
+	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s %s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
+	printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
+	printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
 	}
 	print "</table>";
 }	
