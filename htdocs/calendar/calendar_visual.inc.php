@@ -233,7 +233,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		if ($precol) {
 			if (($i * $step) % 3600 == 0) {
 				$tab[$zeile] .= "<th$width_precol_1_txt$height_precol_1$rowspan_precol>";
-				$tab[$zeile] .= "<a class=\"precol1\" href=\"$PHP_SELF\"";
+				$tab[$zeile] .= "<a class=\"precol1\" href=\"$PHP_SELF";
 				$tab[$zeile] .= sprintf("?cmd=edit&atime=%s\">%s</a></th>"
 												, $day_obj->getStart() + $i * $step, $i / (3600 / $step));
 				$width_precol_1_txt = "";
@@ -328,7 +328,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					if ($rows > 1)
 						$tab[$zeile] .= ' rowspan="'.$rows.'"';
 					
-					$tab[$zeile] .= sprintf(" class=\"steel1\" style=\"border-style:solid; border-width:2px; border-color:%s;\">", $term[$zeile][$j]->getColor());
+					$tab[$zeile] .= sprintf(" class=\"steel1\" style=\"border-style:solid; border-width:2px; border-color:%s\">", $term[$zeile][$j]->getColor());
 					//$tab[$zeile] .= sprintf(" style=\"background-color:%s\">", $term[$zeile][$j]->getColor());
 					$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n";
 					//$tab[$zeile] .= "\n<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">\n";
