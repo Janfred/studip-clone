@@ -1062,7 +1062,7 @@ class EditObject extends cssClasses {
 						$this->db->query($query);
 						$this->db->next_record();
 					} elseif ($resAssign->getOwnerType() == "date") {
-						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN Seminare ON (termine.range_id = Seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
+						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN seminare ON (termine.range_id = Seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
 						$this->db->query($query);
 						$this->db->next_record();
 					}
