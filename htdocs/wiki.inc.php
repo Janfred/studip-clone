@@ -350,7 +350,7 @@ function getWikiLinks($str) {
 	$str = wikiReady($str,TRUE,FALSE,"none"); // ohne Kommentare
 	// [nop] und [code] Bereiche ausblenden ...
 	$str = preg_replace("'\<nowikilink\>.+\</nowikilink\>'isU", ' ', $str);
-	preg_match_all("/$wiki_keyword_regex/", $str, $out, PREG_PATTERN_ORDER);
+	preg_match_all("/$wiki_keyword_regex/", wikiDirectives($str), $out, PREG_PATTERN_ORDER);
 	return array_unique($out[2]);
 }
 
