@@ -161,12 +161,12 @@ class ShowList extends ShowTreeRow{
 					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 				} 
 				if ($resources_data["view_mode"] == "oobj"){
-					if (($perms == "autor") || ($perms == "admin")) 
+					if (($perms == "autor") || ($perms == "admin") || ($perms == "tutor")) 
 						if ($resObject->getCategoryId())
 							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
 					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("eigenschaften")."</a>";
 				} else {
-					if (($perms == "autor") || ($perms == "admin"))
+					if (($perms == "autor") || ($perms == "admin") || ($perms == "tutor"))
 						if ($resObject->getCategoryId())
 							$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>&nbsp;";
 					$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("eigenschaften")."</a>";

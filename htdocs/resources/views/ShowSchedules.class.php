@@ -182,7 +182,7 @@ class ShowSchedules {
 	}
 	
 	function showScheduleGraphical() {
-		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode, $resources_data;
+		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode, $resources_data, $ActualObjectPerms;
 	 	
 	 	$categories["na"] = 4;
 	 	$categories["sd"] = 4;
@@ -222,7 +222,8 @@ class ShowSchedules {
 		}
 
 	 	$schedule=new ScheduleWeek($start_hour, $end_hour, FALSE, TRUE, $start_time);
-	 	$schedule->add_link = "resources.php?view=edit_object_assign&add_ts=";
+	 	if ($ActualObjectPerms->havePerm("autor"))
+		 	$schedule->add_link = "resources.php?view=edit_object_assign&add_ts=";
 	 	
 		//fill the schedule
 		$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE, $resources_data["show_repeat_mode"]);
