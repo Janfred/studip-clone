@@ -45,6 +45,13 @@ class ExternEditModule extends ExternEditHtml {
 	}
 	
 	function editMainSettings ($field_names, $hide_fields = "", $hide = "") {
+		// these two values are always necessary, even there is an error in the users inputs, so
+		// there arent transfered via HTTP_POST_VARS
+		$this->form_values[$this->element_name . "_order"]
+				= $this->config->getValue($this->element_name, "order");
+		$this->form_values[$this->element_name . "_visible"]
+				= $this->config->getValue($this->element_name, "visible");
+		
 		$order = $this->getValue("order");
 		$aliases = $this->getValue("aliases");
 		$visible = $this->getValue("visible");
@@ -63,14 +70,9 @@ class ExternEditModule extends ExternEditHtml {
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
 		$out .= "<td><font size=\"2\"><b>" . _("Spaltenname") . "</b></font></td>\n";
-		$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font>";
-		$out .= $this->faulty_values[$this->element_name . "_aliases"][0] ? $this->error_sign : "";
-		$out .= "</td>\n";
-		if (!in_array("width", $hide)) {
-			$out .= "<td><font size=\"2\"><b>" . _("Breite") . "</b></font>";
-			$out .= $this->faulty_values[$this->element_name . "_width"][0] ? $this->error_sign : "";
-			$out .= "</td>\n";
-		}
+		$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font></td>\n";
+		if (!in_array("width", $hide))
+			$out .= "<td><font size=\"2\"><b>" . _("Breite") . "</b></font></td>\n";
 		if (!in_array("sort", $hide))
 			$out .= "<td><font size=\"2\"><b>" . _("Sortierung") . "</b></font></td>\n";
 		if (!in_array("visible", $hide))
@@ -88,7 +90,10 @@ class ExternEditModule extends ExternEditHtml {
 			if (!in_array($order[$i], $hide_fields["aliases"])) {
 				$out .= "<td><input type=\"text\" name=\"{$this->element_name}_aliases[$order[$i]]\"";
 				$out .= "\" size=\"12\" maxlength=\"50\" value=\"";
-				$out .= $aliases[$order[$i]] . "\"></td>\n";
+				$out .= $aliases[$order[$i]] . "\">";
+				if ($this->faulty_values[$this->element_name . "_aliases"][$order[$i]])
+					$out .= $this->error_sign;
+				$out .= "</td>\n";
 			}
 			else {
 				$out .= "<td>&nbsp;</td>\n";
@@ -100,7 +105,10 @@ class ExternEditModule extends ExternEditHtml {
 			if (!in_array("width", $hide)) {
 				$width = str_replace("%", "", $widths[$order[$i]]);
 				$out .= "<td><input type=\"text\" name=\"{$this->element_name}_width[$order[$i]]";
-				$out .= "\" size=\"3\" maxlength=\"3\" value=\"$width\">\n</td>\n";
+				$out .= "\" size=\"3\" maxlength=\"3\" value=\"$width\">";
+				if ($this->faulty_values[$this->element_name . "_width"][$order[$i]])
+					$out .= $this->error_sign;
+				$out .= "</td>\n";
 			}
 			
 			// sort
@@ -201,6 +209,11 @@ class ExternEditModule extends ExternEditHtml {
 		$info = _("Wählen sie die Statusgruppen aus, die ausgegeben werden sollen.");
 		$groups_config = $this->getValue("groups");
 		
+		// this value is always necessary, even there is an error in the users inputs, so
+		// it isn't transfered via HTTP_POST_VARS
+		$this->form_values[$this->element_name . "_groupsvisible"]
+				= $this->config->getValue($this->element_name, "groupsvisible");
+		
 		// initialize groups if this value isn't set in the config file
 		if (!$groups_config)
 			$groups_config = array_keys($groups_db);
@@ -218,14 +231,12 @@ class ExternEditModule extends ExternEditHtml {
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
 		$out .= "<td width=\"42%\"><font size=\"2\"><b>" . _("Gruppenname") . "</b></font></td>\n";
-		$out .= "<td width=\"48%\"><font size=\"2\"><b>" . _("alternativer Gruppenname") . "</b></font>";
-		$out .= $this->faulty_values[$this->element_name . "_groupsalias"] ? $this->error_sign : "";
-		$out .= "</td>\n";
+		$out .= "<td width=\"48%\"><font size=\"2\"><b>" . _("alternativer Gruppenname") . "</b></font></td>\n";
 		$out .= "<td width=\"1%\"><font size=\"2\"><b>" . _("Sichtbarkeit") . "</b></font></td>\n";
 		$out .= "<td width=\"9%\"><font size=\"2\">&nbsp;</font></td>\n";
 		$out .= "</tr>\n";
 		$this->css->switchClass();
-		
+		$i = 0;
 		foreach ($groups_db as $id => $name) {
 		
 			// name of group
@@ -237,7 +248,10 @@ class ExternEditModule extends ExternEditHtml {
 			// column headline
 			$out .= "<td nowrap=\"nowrap\"><input type=\"text\" name=\"{$this->element_name}_groupsalias[]\"";
 			$out .= "\" size=\"25\" maxlength=\"150\" value=\"";
-			$out .= $groups[$id] . "\"></td>\n";
+			$out .= $groups[$id] . "\">";
+			if ($this->faulty_values[$this->element_name . "_groupsalias"][$i])
+					$out .= $this->error_sign;
+			$out .= "</td>\n";
 			
 			// visible
 			if (in_array($id, $groups_visible)) {
@@ -254,6 +268,7 @@ class ExternEditModule extends ExternEditHtml {
 			}
 			$out .= "<td>&nbsp;</td></tr>\n";
 			$this->css->switchClass();
+			$i++;
 		}
 		foreach ($groups_db as $id => $name)
 			$out .= "<input type=\"hidden\" name=\"{$this->element_name}_groups[]\" value=\"$id\">\n";
