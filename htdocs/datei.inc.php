@@ -1,5 +1,7 @@
 <?php
 /*
+$Id$
+
 datei.inc.php - basale Routinen zur Dateiverwaltung, dienen zum Aufbau des Ordnersystems
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, Cornelis Kater <ckater@gwdg.de>
 
@@ -17,6 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
+include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/idna_convert.class.php');
 
 function parse_header($header){
 	if (!is_array($header)){
@@ -46,17 +50,20 @@ function parse_link($link, $level=0) {
 		// Parsing an FTF-Adress	
 		$url_parts = @parse_url( $link );
 		$documentpath = $url_parts["path"];
-		
+
 		if (strpos($url_parts["host"],"@")) {
 			$url_parts["pass"] .= "@".substr($url_parts["host"],0,strpos($url_parts["host"],"@"));
 			$url_parts["host"] = substr(strrchr($url_parts["host"],"@"),1);
 		}
-				
+
+		if (preg_match('/[^a-z0-9_.-]/i',$url_parts['host'])){ // exists umlauts ?
+			$IDN = new idna_convert();
+			$out = $IDN->encode(utf8_encode($url_parts['host'])); // false by error
+			$url_parts['host'] = ($out)? $out : $url_parts['host'];
+		}
+
 		$ftp = ftp_connect($url_parts["host"]);
-		
-		// echo $url_parts["pass"];
-		// $mailtmp = ($GLOBALS['MAIL_LOCALHOST'] == "") ? getenv("SERVER_NAME") : $GLOBALS['MAIL_LOCALHOST'];
-				
+
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) {
 			$mailclass = new studip_smtp_class;
@@ -67,14 +74,14 @@ function parse_link($link, $level=0) {
 		if (!@ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
       			ftp_quit($ftp);
       			return FALSE;
-   		} 
+   		}
    		$parsed_link["Content-Length"] = ftp_size($ftp, $documentpath);
    		ftp_quit($ftp);
 		if ($parsed_link["Content-Length"] != "-1")
 			$parsed_link["HTTP/1.0 200 OK"] = "HTTP/1.0 200 OK";
 		else
 			$parsed_link = FALSE;
-		$url_parts["pass"] = preg_replace("!@!","%40",$url_parts["pass"]);	
+		$url_parts["pass"] = preg_replace("!@!","%40",$url_parts["pass"]);
 		$the_link = "ftp://".$url_parts["user"].":".$url_parts["pass"]."@".$url_parts["host"].$documentpath;
 		return $parsed_link;
 				
@@ -89,9 +96,18 @@ function parse_link($link, $level=0) {
 			$documentpath .= "?" . $url_parts["query"];
 		}
 		$host = $url_parts["host"];
+
 		$port = $url_parts["port"];
 		if (empty( $port ) ) $port = "80";
-		
+
+		if (preg_match('/[^a-z0-9_.-]/i',$host)){ // exists umlauts ?
+			$IDN = new idna_convert();
+			$out = $IDN->encode(utf8_encode($host)); // false by error
+			$host = ($out)? $out : $host;
+			$pwtxt = ($url_parts['user'] && $url_parts['pass'])? $url_parts['user'].':'. $url_parts['pass'].'@':'';
+			echo $the_link = $url_parts['scheme'].'://'.$pwtxt.$host.':'.$port.$documentpath; // https noch berücksichtigen !
+		}
+
 		$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
 		if (!$socket) {
 			//echo "$errstr ($errno)<br />\n";
@@ -111,13 +127,12 @@ function parse_link($link, $level=0) {
 			fclose($socket);
 		}
 		$parsed_link = parse_header($response);
-		//print_r ($parsed_link);
-		
+
 		// Weg über einen Locationheader:
 		if (($parsed_link["HTTP/1.1 302 Found"] || $parsed_link["HTTP/1.0 302 Found"]) && $parsed_link["Location"]) {
 			$the_file_name = basename($url_parts["path"]);
 			$the_link = $parsed_link["Location"];
-			parse_link($parsed_link["Location"],$level);
+			parse_link($parsed_link["Location"],$level + 1);
 		}
 		return $parsed_link;
 	}
@@ -474,7 +489,7 @@ function validate_upload($the_file) {
 	else {
 		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$SemUserStatus];
 		}
-	
+
 	$error = FALSE;
 	if ($the_file == "none") { # haben wir eine Datei?
 		$emsg.= "error§" . _("Sie haben keine Datei zum Hochladen ausgew&auml;hlt!") . "§";
@@ -1410,7 +1425,7 @@ function getLinkPath($file_id) {
 		$url = $db->f("url");
 	else
 		$url = FALSE;
-	return $url;	
+	return $url;
 }
 
 /*
