@@ -117,16 +117,18 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 	
 	if ($sms_data_open == $message_id) {
 		$open = "open";
-		$link = $PHP_SELF."?mclose=TRUE";
+		#$link = $PHP_SELF."?mclose=TRUE";
+		$link = "sms_box.php?mclose=TRUE";
 	} else {
 		$open = "close";
-		$link = $PHP_SELF."?mopen=".$message_id;
+		#$link = $PHP_SELF."?mopen=".$message_id."#".$message_id;
+		$link = "sms_box.php?mopen=".$message_id."#".$message_id;
 	}
 	
 	if (strlen($titel) >= "50") {
-		$titel = "<a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a>";
+		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a></a>";
 	} else {
-		$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
+		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".$titel."</a></a>";
 	}
 
 	// ausgabe der ueberschrift		
@@ -158,13 +160,16 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 	// open if unread
 	if ($read != "1") {
 		$open = "open";
-		$link = $PHP_SELF."?mclose=TRUE";
+		$link = "sms_box.php?mclose=TRUE";
+		#$link = $PHP_SELF."?mclose=TRUE";
 	} else if ($sms_data_open == $message_id) {
 		$open = "open";
-		$link = $PHP_SELF."?mclose=TRUE";
+		$link = "sms_box.php?mclose=TRUE";
+		#$link = $PHP_SELF."?mclose=TRUE";
 	} else {
 		$open = "close";
-		$link = $PHP_SELF."?mopen=".$message_id;
+		$link = "sms_box.php?mopen=".$message_id;
+		#$link = $PHP_SELF."?mopen=".$message_id;
 	}
 
 	if ($read == "1") {
@@ -207,22 +212,12 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 		$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$message_id."&rec_uname=".$uname_snd."\">".makeButton("zitieren", "img")."</a>";
 	}
 	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a><br><br>";
-	
-	/*
-	if ($sms_data_open == $message_id) {
-		$link = $PHP_SELF."?mclose=TRUE";
-	} else {
-		$link = $PHP_SELF."?mopen=".$message_id;
-	}
-	*/
 
 	if (strlen($titel) >= "50") {
-		$titel = "<a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a>";
+		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a></a>";
 	} else {
-		$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
+		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".$titel."</a></a>";
 	}
-
-
 
 	// ausgabe der ueberschrift		
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
@@ -337,7 +332,6 @@ if ($sms_data["time"] == "new") {
 	} else {
 		$query_time = " AND message.mkdate > '".$CurrentLogin."' ORDER BY message.mkdate DESC";
 	}
-	#$no_message_text = _("Es liegen keine neuen systeminternen Nachrichten vor.");
 	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "24h") {
