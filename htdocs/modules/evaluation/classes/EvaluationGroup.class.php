@@ -165,8 +165,8 @@ class EvaluationGroup extends EvaluationObject {
    function setTemplateID ($templateID) {
       $newQuestionTexts = array ();
 
-      if ($templateID == $this->templateID)
-         return; // for performance reasons
+#      if ($templateID == $this->templateID)
+#         return; // for performance reasons
 
       $this->templateID = $templateID;
 
