@@ -107,13 +107,6 @@ function htmlReady($what, $trim = TRUE, $br = FALSE){
 function JSReady ($what = "", $target = "overlib") {        
 	switch ($target) {
 
-	case "popup" :
-		$what = addslashes(htmlentities($what,ENT_COMPAT));
-		$what = str_replace("\n","<br />",$what);
-		$what = str_replace("\r","",$what);
-		return $what;
-	break;
-
 	case "contact" :
 		$what = htmlentities($what,ENT_COMPAT);
 		$what = str_replace("\n","<br />",$what);
