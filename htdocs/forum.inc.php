@@ -365,13 +365,13 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="")
 	IF (!isset($anfang)) $anfang = $topic_id;
 
 	// Test um mal zu sehen ob eine umgekehrte Sortierung mit Aktualitaett nach oben die Usability erhoeht...
-
+/*
 	if ($level > 1) {
 		$sort = "ASC";
 	} else {
 		$sort = "DESC";
 	}
-
+*/
 	// testende
 
 	$query = "select topic_id, name, author "
