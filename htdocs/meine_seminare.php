@@ -398,8 +398,6 @@ ELSEIF ($perm->have_perm("root")){
 
 //Anzeigemodul fuer alle Seminare für root
 	?>
-	<body>
-	<br>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
 			<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&Uuml;bersicht &uuml;ber Veranstaltungen</></td>
