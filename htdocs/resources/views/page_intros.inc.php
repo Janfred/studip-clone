@@ -1,7 +1,7 @@
 <?
 
 $currentObject=new resourceObject($resources_data["structure_open"]);
-$currentObjectTitelAdd=$currentObject->getCategory();
+$currentObjectTitelAdd=$currentObject->getCategoryName();
 if ($currentObjectTitelAdd)
 	$currentObjectTitelAdd=": ";
 $currentObjectTitelAdd=$currentObject->getName()."&nbsp;<font size=-1>(".$currentObject->getOwnerName().")</font>";
@@ -56,22 +56,22 @@ switch ($resources_data["view"]) {
 	break;
 	case "openobject_details":
 		if ($resources_data["structure_open"])
-			$page_intro="Hier sehen Sie detaillierte Informationen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
+			$page_intro="Hier sehen Sie detaillierte Informationen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").";
 		$title=$SessSemName["header_line"]." - Ressourcendetails";
 	break;
 	case "openobject_schedule":
 		if ($resources_data["structure_open"])
-			$page_intro="Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().") ausgeben lassen.";
+			$page_intro="Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().") ausgeben lassen.";
 		$title=$SessSemName["header_line"]." - Ressourcenbelegung";
 	break;
 	case "openobject_assign":
 		if ($resources_data["structure_open"])
-			$page_intro="Bearbeiten von Belegungen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
+			$page_intro="Bearbeiten von Belegungen der Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").";
 		$title=$SessSemName["header_line"]." - Bearbeiten der Belegung";
 	break;
 	case "edit_object_perms":
 		if ($resources_data["structure_open"])
-			$page_intro="Vergeben von Rechten auf die Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
+			$page_intro="Vergeben von Rechten auf die Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").";
 		$title="Vergeben von Berechtigungen - Objekt: ".$currentObjectTitelAdd;
 	break;
 	//default
