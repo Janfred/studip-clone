@@ -31,5 +31,8 @@ $this->msg[8] = array (
 		"mode" => "msg",
 		"titel" => _("Berechtigungen ver&auml;ndert"),
 		"msg"=> _("Die Berechtigungseinstellungen der Ressource wurden ver&auml;ndert"));
-
+$this->msg[9] = array (
+		"mode" => "msg",
+		"titel" => _("Ressource verschoben"),
+		"msg"=> _("Die Ressource wurde verschoben"));
 ?>
