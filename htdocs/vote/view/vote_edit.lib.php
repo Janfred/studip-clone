@@ -199,7 +199,7 @@ function printTitleField ( $title = "" ) {
     
     $html = "<font size=-1><b>" . _("Titel:")	. "</b></font><br>"
 	. "<input type=text size=50 maxlength=100 name=\"title\" value=\"".htmlReady($title)."\" ".$js." tabindex=1>";
-    $html .= "&nbsp;<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\" "
+    $html .= "&nbsp;<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
 	. tooltip( _("Wenn Sie keinen Titel angeben, wird dieser automatisch aus der Fragestellung übernommen."),
 		   FALSE, TRUE )
 	. " border=0>";
@@ -234,7 +234,7 @@ function printQuestionField ( $question = "" ) {
     if( $pageMode != MODE_RESTRICTED ) {
 	$html .= "<textarea cols=50 rows=2 style=\"width:100%;\" name=\"question\" ".$js." tabindex=2>".htmlReady($question)."</textarea>";
     } else {
-       $html .= "<div class=steelgraulight style=\"width:100%; padding:2px;\">"
+       $html .= "<div class=steelgraulight style=\"padding:2px;\">"
 	  . "<font size=-1>".formatReady($question)."</font>"
 	  . "</div>";
     }
@@ -551,7 +551,7 @@ function printRuntimeSettings ( $startMode = "manual",
 
     $html .= "<tr><td colspan=2 style=\"padding-bottom:0;\">\n";
     $html .= "<font size=-1><b>" . _("Einstellungen zur Laufzeit:") . "</b></font>";
-    $html .= "&nbsp;<img src=\"".VOTE_PATH_PICTURES."info.gif\" "
+    $html .= "&nbsp;<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
 	. tooltip( ($type=="test"
 		    ? _("Legen Sie hier fest, von wann bis wann der Test in Stud.IP öffentlich sichtbar sein soll.")
 		    : _("Legen Sie hier fest, von wann bis wann das Voting in Stud.IP öffentlich sichtbar sein soll.")),
@@ -638,7 +638,7 @@ function printRuntimeSettings ( $startMode = "manual",
 
 	$startDate = ($startMode=="immediate") ? time() : $startDate;
 
-	$html .= "&nbsp;<input type=image name=\"updatetimespanbutton\" style=\"vertical-align:middle;\""
+	$html .= "&nbsp;<input type=image name=\"updatetimespanbutton\" align=middle border=\"0\" "
 	    . "src=pictures/pfeiltransparent.gif" . tooltip(_("Endzeitpunkt neu berechnen.")) . ">";
 	$html .= "<font size=-1>";
 	$html .= sprintf( _(" (<b>%s</b> um <b>%s</b> Uhr)"),
@@ -710,7 +710,7 @@ function printProperties ( $multipleChoice,
     // result visibility
     $html .= "<tr><td align=right class=blank style=\"border-bottom:1px dotted black;\">";
     if( $type == "test" ) {
-	$html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\""
+	$html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
 	    . tooltip(_("Bedenken Sie, dass die Einstellung 'immer', also eine Voransicht des Zwischenstands, bei einem Test nicht unbedingt sinnvoll ist."),
 		      FALSE, TRUE)
 	    . " border=0>&nbsp;";
@@ -775,7 +775,7 @@ function printProperties ( $multipleChoice,
     // -------------------------------------------
     // anonymity
     $html .= "<tr><td align=right class=blank style=\"border-bottom:1px dotted black;\">";
-    $html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\""
+    $html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
 	. tooltip(_("'Anonym' bedeutet, dass niemandem angezeigt und nirgends gespeichert wird, welche Antwort ein Teilnehmer wählt. \n\n'Personalisiert' bedeutet, dass für jeden sichtbar gemacht wird, wer wofür stimmt. Verwenden Sie diese Option daher am besten nur, wenn es wirklich nötig ist."), FALSE, TRUE)
 	. " border=0>&nbsp;";
 
@@ -803,7 +803,7 @@ function printProperties ( $multipleChoice,
     // changeable?
     if( ! ($anonymous && $pageMode == MODE_RESTRICTED ) ) {
 	$html .= "<tr><td align=right class=blank>";
-	$html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" style=\"vertical-align:middle;\""
+	$html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
 	    . tooltip(_("Diese Option ist nur erlaubt, wenn Sie die Auswertung auf 'personalisiert' schalten. ").
 		      ( ($type=="test")
 			? _("\n\nBeachten Sie außerdem, dass das Einschalten dieser Option in Kombination mit 'Richtigkeits-Anzeige: sofort' keinen Sinn macht.")
