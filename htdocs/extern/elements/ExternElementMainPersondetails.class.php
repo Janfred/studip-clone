@@ -65,7 +65,7 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 			"aliases" => "||"._("Lebenslauf")."|"._("Schwerpunkte")."|"._("Lehrveranstaltungen")."|"
 					._("Aktuell")."|"._("Termine")."|"._("Publikationen")."|",
 			"showcontact" => "1",
-			"showimage" => "1",
+			"showimage" => "right",
 			"wholesite" => "0",
 			"nameformat" => "no_title",
 			"dateformat" => "%d. %b. %Y",
