@@ -51,13 +51,33 @@ function check_schedule_default() {
 				"fr"=>"TRUE",
 				"sa"=>"",
 				"so"=>""
-				),
+			),
 			"default_setted"=>time()
-			);
-		}		
-	}
+		);
+	}		
+}
 
- if ($auth->is_authenticated() && $user->id != "nobody") {
+//Funktion zum generieren der default Werte des Kalenders	
+function check_calendar_default(){
+	global $calendar_user_control_data;
+	
+	if(!$calendar_user_control_data){
+		$calendar_user_control_data = array(
+			"view"           => "showweek",
+			"start"          => 9,
+			"end"            => 20,
+			"step_day"       => 900,
+			"step_week"      => 3600,
+			"type_week"      => "LONG",
+			"holidays"       => TRUE,
+			"sem_data"       => TRUE,
+			"link_edit"      => FALSE,
+			"bind_seminare"  => ""
+		);
+	}
+}
+
+if ($auth->is_authenticated() && $user->id != "nobody") {
 	if ($SessionStart > $CurrentLogin) {      // gerade eingeloggt
 		//Registrieren aller Uservariablen
 		$LastLogin=$CurrentLogin;
@@ -74,8 +94,12 @@ function check_schedule_default() {
 		//Default-Funktionen ausfuehren
 		check_messaging_default();
 		check_schedule_default();
+		if($CALENDAR_ENABLE){
+			$user->register("calendar_user_control_data");
+			check_calendar_default();
+		}
 	}
- }
+}
 
 if ($SessionStart==0) { 
 	$SessionStart=time(); 
