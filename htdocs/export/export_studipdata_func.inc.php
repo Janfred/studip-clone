@@ -99,8 +99,8 @@ function export_inst($inst_id, $ex_sem_id = "all")
 	while ( list($key, $val) = each($xml_names_inst))
 	{
 		if ($val == "") $val = $key;
-		if (($key == "type") AND ($INST_TYPE[$db->f($key)] != ""))
-			$data_object .= xml_tag($val, $INST_TYPE[$db->f($key)]);
+		if (($key == "type") AND ($INST_TYPE[$db->f($key)]["name"] != ""))
+			$data_object .= xml_tag($val, $INST_TYPE[$db->f($key)]["name"]);
 		elseif ($db->f($key) != "") 
 			$data_object .= xml_tag($val, $db->f($key));
 	}
