@@ -392,6 +392,14 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					</td>
 				</tr>
 				<tr>
+					<td>
+					<? if ($perm->have_perm("dozent"))
+						echo "Wenn sie selbst eine weitere Veranstaltungen anlegen m&ouml;chten, <br />nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a> zum Anlegen neuer Veranstaltungen.";
+					?>
+					</td>
+				</tr>
+				
+				<tr>
 					<td align="right">
 						&nbsp;
 					</td>
