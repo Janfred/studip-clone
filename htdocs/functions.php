@@ -59,6 +59,9 @@ function getHeaderLine ($id) {
 			$header_line = "Veranstaltung";
 		else
 			$header_line = $SEM_TYPE[$db->f("status")]["name"];
+
+		if (!$header_line)
+			$header_line = "Veranstaltung";
 		
 		$header_line.=": ". htmlReady(substr($db->f("Name"), 0, 60));
 		
@@ -72,6 +75,9 @@ function getHeaderLine ($id) {
 		$db->next_record();		
 
 		$header_line = $INST_TYPE[$db->f("type")]["name"];
+
+		if (!$header_line)
+			$header_line = "Einrichtung";
 		
 		$header_line.= ": ". htmlReady(substr($db->f("Name"), 0, 60));
 		
