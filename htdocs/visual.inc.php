@@ -595,12 +595,12 @@ function print_infobox ($picture, $content) {
 
 $print = "<table align=\"center\" width=\"250\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">
 			<tr>
-				<td class=\"blank\" width=\"100%\" align=\"right\" colspan=\"2\">
-					<img src=".$picture.">
+				<td class=\"blank\" width=\"100%\" align=\"right\">
+					<img src=\"".$picture."\">
 				</td>
 			</tr>
 			<tr>
-				<td class=\"angemeldet\" width=\"100%\" colspan=\"2\">
+				<td class=\"angemeldet\" width=\"100%\">
 					<table align=\"center\" width=\"99%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">";
 for ($i = 0; $i < count($content); $i++) { $print .= "
 						<tr>
@@ -614,7 +614,7 @@ for ($i = 0; $i < count($content); $i++) { $print .= "
 							<td class=\"blank\" width=\"1%\" valign=\"top\">
 								<img src=\"".$content[$i]["eintrag"][$j]["icon"]."\">
 							</td>
-							<td class=\"blank\" width=\"100%\">
+							<td class=\"blank\" width=\"99%\">
 								<font size=\"-1\">".$content[$i]["eintrag"][$j]["text"]."</font><br>
 							</td>
 						</tr>";

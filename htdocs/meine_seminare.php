@@ -435,10 +435,10 @@ $infobox = array	(
 	array  ("kategorie" => "Aktionen:",
 	       "eintrag" => array	(	
 						array	 (	"icon" => "pictures/suchen.gif",
-								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion"
+								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion</a>"
 								),
 						array	 (	"icon" => "pictures/admin.gif",
-								"text"  => "Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten"
+								"text"  => "Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a>"
 								)
 			)
 		)
@@ -459,7 +459,7 @@ ELSE {
 	array  ("kategorie" => "Aktionen:",
 	       "eintrag" => array	(	
 						array	 (	"icon" => "pictures/suchen.gif",
-								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion"
+								"text"  => "Um weitere Veranstaltungen in Ihre pers&ouml;nliche Auswahl aufzunehmen, nutzen Sie bitte die <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">Suchfunktion</a>"
 								)
 			)
 		)
