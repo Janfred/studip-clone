@@ -55,7 +55,7 @@ class ExternConfig {
 		if ($config_id != "") {
 			if ($configuration = get_configuration($range_id, $config_id)) {
 				$this->id = $config_id;
-				$this->module_type = $configuration["id"];
+				$this->module_type = $configuration["type"];
 				$this->module_name = $configuration["module_name"];
 				$this->config_name = $configuration["name"];
 				$this->range_id = $range_id;
@@ -183,15 +183,18 @@ class ExternConfig {
 			ksort($value, SORT_NUMERIC);
 			$value = "|" . implode("|", $value);
 		}
-			
-		$this->config[$element_name][$attribute] = htmlentities(stripslashes($value), ENT_QUOTES);
+		
+		$this->config[$element_name][$attribute] = $value;
 	}
 	
 	/**
 	*
 	*/
 	function getAttributes ($element_name, $tag, $second_set = FALSE) {
-		$attributes = FALSE;
+		if (!is_array($this->config[$element_name]))
+			return "";
+			
+		$attributes = "";
 		
 		reset($this->config);
 		if ($second_set) {
@@ -230,8 +233,6 @@ class ExternConfig {
 				. " $this->module_name in Stud.IP\n"
 				. "; (range_id: $this->range_id)\n"
 				. "; DO NOT EDIT !!!\n";
-		$changed = FALSE;
-		$store_own = FALSE;
 		
 		// store the own configuration if the function is called without parameters
 		if ($values != "") {
@@ -256,22 +257,21 @@ class ExternConfig {
 								if (is_array($values[$form_name])) {
 									ksort($values[$form_name], SORT_NUMERIC); 
 									$form_value = "|" . implode("|", $values[$form_name]);
-									$config_tmp[$attribute] =
-											htmlentities(stripslashes($form_value), ENT_QUOTES);
+									$config_tmp[$attribute] = stripslashes($form_value);
 								}
 								else {
-									$config_tmp[$attribute] =
-											htmlentities(stripslashes($values[$form_name]), ENT_QUOTES);
+									$config_tmp[$attribute] = stripslashes($values[$form_name]);
 								}
 							}
+							else
+								$config_tmp[$attribute] = $this->config[$element_name][$attribute];
 						}
-						$this->config[$element_name] = $config_tmp;
 					}
+					$this->config[$element_name] = $config_tmp;
 				}
 			}
 		}
 		
-		reset($this->config);
 		foreach ($this->config as $element => $attributes) {
 			$file_content .= "\n[" . $element . "]\n";
 			
@@ -351,11 +351,6 @@ class ExternConfig {
 		global $HTTP_POST_VARS;
 		$fault = array();
 		
-	/*	echo "<pre>";
-		print_r($HTTP_POST_VARS);
-		echo "</pre>";
-	*/	
-		
 		// Check for an alternative input field. All names of alternative input
 		// fields begin with an underscore. The alternative input field overwrites
 		// the input field having the same name but without the leading underscore.
@@ -364,7 +359,7 @@ class ExternConfig {
 			if ($form_name{0} == "_" && $value != "")
 				$HTTP_POST_VARS[substr($form_name, 1)] = $value;
 		}
-	
+		
 		foreach ($attributes as $attribute) {
 			$form_name = $element_name . "_" . $attribute;
 			
@@ -394,7 +389,7 @@ class ExternConfig {
 					case "color" :
 					case "bgcolor" :
 					case "bordercolor" :
-						$fault[$form_name] = (preg_match("/.*(<|>|\"|(script)|\?|(php)).*/i", $value[$i]));
+						$fault[$form_name] = (preg_match("/(<|>|\"|(script)|(php))/i", $value[$i]));
 						break;
 					case "height" :
 						$fault[$form_name] = (!preg_match("/^\d{0,3}$/", $value[$i])
@@ -437,7 +432,7 @@ class ExternConfig {
 					case "urlcss" :
 					case "nodatatext" :
 						$fault[$form_name] = ($value[$i] != ""
-								&& preg_match("/^.*(<|>|\"|script|\?|php).*$/i", $value[$i]));
+								&& preg_match("/(<|>|\"|script|php)/i", $value[$i]));
 						break;
 					case "iconpic" :
 					case "icontxt" :
@@ -448,7 +443,7 @@ class ExternConfig {
 					case "iconzip" :
 					case "icondefault" :
 						$fault[$form_name] = ($value[$i] != ""
-								&& (preg_match("/^.*(<|>|\"|script|\?|php).*$/i", $value[$i])
+								&& (preg_match("/(<|>|\"|script|php)/i", $value[$i])
 								|| !preg_match("/^.*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
 						break;
 					case "wholesite" :

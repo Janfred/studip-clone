@@ -132,8 +132,10 @@ class ExternModule {
 		$default_config = array();
 		
 		reset($this->elements);
-		foreach ($this->elements as $element)
-			$default_config[$element->getName()] = $element->getDefaultConfig();
+		foreach ($this->elements as $element) {
+			if ($element->isEditable())
+				$default_config[$element->getName()] = $element->getDefaultConfig();
+		}
 		
 		return $default_config;
 	}

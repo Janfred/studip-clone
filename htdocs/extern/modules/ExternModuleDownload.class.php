@@ -87,7 +87,7 @@ class ExternModuleDownload extends ExternModule {
 		}
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
-				. "/views/extern_download.inc.php");
+				. "/modules/views/download.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_footer();
@@ -110,7 +110,7 @@ class ExternModuleDownload extends ExternModule {
 		}
 		
 		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
-				. "/views/extern_download_preview.inc.php");
+				. "/modules/views/download_preview.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_footer();

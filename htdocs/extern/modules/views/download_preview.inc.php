@@ -1,6 +1,6 @@
 <?
 /**
-* extern_download_preview.inc.php
+* download_preview.inc.php
 * 
 * 
 * 
@@ -9,13 +9,13 @@
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
-* @module		extern_download_preview
+* @module		download_preview
 * @package	studip_extern
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// extern_download_preview.inc.php
+// download_preview.inc.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -87,7 +87,7 @@ $zebra = $this->config->getValue("TableHeadrow", "th_zebrath_");
 $i = 0;
 reset($rf_download);
 foreach($rf_download as $spalte){
-	if ($visible[$spalte] == "TRUE") {
+	if ($visible[$spalte]) {
 		
 		// "zebra-effect" in head-row
 		if ($zebra) {
@@ -102,9 +102,9 @@ foreach($rf_download as $spalte){
 		echo "<th$set width=\"" . $breite_download[$spalte] . "$percent\">";
 		
 		if($alias_download[$spalte] == "")
-			echo "<b>&nbsp;</b>\n";
+			echo "&nbsp;\n";
 		else 
-			echo "<font" . $this->config->getAttributes("TableHeadrow", "font") . "><b>" . $alias_download[$spalte] . "</b></font>\n";
+			echo "<font" . $this->config->getAttributes("TableHeadrow", "font") . ">" . $alias_download[$spalte] . "</font>\n";
 	
 		echo "</th>\n";
 		$i++;
@@ -179,7 +179,8 @@ foreach ($data as $db) {
 											 
 		"description" => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font")
-											, htmlReady($db["description"])),
+											, htmlReady(mila_extern($db["description"],
+												$this->config->getValue("Main", "lengthdesc")))),
 		
 		"date"        => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font")
@@ -190,8 +191,9 @@ foreach ($data as $db) {
 											$db["filesize"] > 1048576 ? round($db["filesize"] / 1048576, 1) . " MB"
 											: round($db["filesize"] / 1024, 1) . " kB"),
 												
-		"name"        => sprintf("<font%s>%s</font>"
-											, $this->config->getAttributes("TableRow", "font")
+		"name"        => sprintf("<font%s><a href=\"\"%s>%s</font>"
+											, $this->config->getAttributes("Link", "font")
+											, $this->config->getAttributes("Link", "a") 
 											, htmlReady($db["Vorname"]." ".$db["Nachname"]))
 	);
 
@@ -210,20 +212,22 @@ foreach ($data as $db) {
 	$j = 0;
 	reset($rf_download);
 	foreach($rf_download as $spalte){
+		if ($visible[$spalte]) {
 		
-		// "vertical zebra"
-		if ($zebra == "VERTICAL") {
-			if ($j % 2)
-				$set = $set_2;
+			// "vertical zebra"
+			if ($zebra == "VERTICAL") {
+				if ($j % 2)
+					$set = $set_2;
+				else
+					$set = $set_1;
+			}
 			else
 				$set = $set_1;
-		}
 	
-		if ($visible[$spalte] == "TRUE") {
-			if($daten[$this->data_fields[$spalte]] == "")
-				echo "<td$set>&nbsp;</td>\n";
-			else
+			if($daten[$this->data_fields[$spalte]])
 				echo "<td$set>" . $daten[$this->data_fields[$spalte]] . "</td>\n";
+			else
+				echo "<td$set>&nbsp;</td>\n";
 			$j++;
 		}
 	}
@@ -232,6 +236,6 @@ foreach ($data as $db) {
 	$i++;
 }
 
-echo "\n</table>";
+echo "\n</table><br>";
 
 ?>

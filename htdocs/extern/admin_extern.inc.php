@@ -35,9 +35,6 @@
 // +---------------------------------------------------------------------------+
 
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User", "ses" => "ses"));
-$perm->check("admin");
-
 include($ABSOLUTE_PATH_STUDIP. "seminar_open.php"); // initialise Stud.IP-Session
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php"); 		//wir brauchen die Seminar-Typen
 require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/extern_config.inc.php");
@@ -95,7 +92,7 @@ if ($com == "info") {
 }
 
 $main_element_command = FALSE;
-$main_element_commands = array("show", "hide", "move_left", "move_right");
+$main_element_commands = array("show", "hide", "move_left", "move_right", "show_group", "hide_group");
 reset($main_element_commands);
 foreach ($main_element_commands as $element_command) {
 	if ($HTTP_POST_VARS[$element_command]) {
@@ -187,7 +184,6 @@ else {
 
 	foreach ($EXTERN_MODULE_TYPES as $module_type) {
 		if ($configurations[$module_type["module"]]) {
-			$css_switcher_2->resetClass();
 			$css_switcher_2->switchClass();
 			echo "<table width=\"90%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
 			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\" width=\"100%\">";
@@ -248,15 +244,17 @@ else {
 				$css_switcher_2->switchClass();
 			}
 			
+			$css_switcher_2->resetClass();
 			echo "</table>\n";
 			echo "</td></tr>\n";
+			echo "<td" . $css_switcher_2->getFullClass() . ">&nbsp;</td></tr>";
 			echo "</table>\n";
 		}
 		
 	}
 	echo "</td></tr>\n";
 	echo "</table>\n";
-	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
+	echo "<tr><td" . $css_switcher->getFullClass() . " colspan=\"2\">&nbsp;</td></tr>\n";
 }
 
 echo "</td></tr></table>\n</td>\n";

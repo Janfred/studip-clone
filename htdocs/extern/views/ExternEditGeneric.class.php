@@ -66,7 +66,7 @@ class ExternEditGeneric extends ExternEdit {
 			$error_sign = "";
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}><font size=\"2\">";
+		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1} nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><select name=\"$form_name\" size=\"1\">\n";
 		foreach ($faces as $face_type => $face_name) {
@@ -114,7 +114,7 @@ class ExternEditGeneric extends ExternEdit {
 			$error_sign = "";
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1><font size=\"2\">";
+		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"$size\"";
 		$out .= " maxlength=\"$maxlength\" value=\"$value\" />&nbsp; \n";
@@ -154,7 +154,7 @@ class ExternEditGeneric extends ExternEdit {
 			$error_sign = "";
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1><font size=\"2\">";
+		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\">";
 		$out .= "<textarea name=\"$form_name\" cols=\"$cols\" rows=\"$rows\" wrap=\"virtual\">";
@@ -196,19 +196,19 @@ class ExternEditGeneric extends ExternEdit {
 			$error_sign = "";
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1><font size=\"2\">";
+		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\">";
 		$size = sizeof($check_values);
 			
 		for ($i = 0; $i < $size; $i++) {
-			$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"{$check_values}\"";
-			if ($value == $check_values)
+			$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"{$check_values[$i]}\"";
+			if ($value == $check_values[$i])
 				$out .= " checked";
 			if ($size == 1)
 				$out .= "> &nbsp;\n";
 			else
-				$out .= "><font size=\"2\">{$check_names}&nbsp; &nbsp;</font> &nbsp;\n";
+				$out .= "><font size=\"2\">{$check_names[$i]}&nbsp; &nbsp;</font>\n";
 		}
 		
 		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
@@ -247,7 +247,7 @@ class ExternEditGeneric extends ExternEdit {
 			$error_sign = "";
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1><font size=\"2\">";
+		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\">";
 		
@@ -255,7 +255,7 @@ class ExternEditGeneric extends ExternEdit {
 			$out .= "<input type=\"radio\" name=\"$form_name\" value=\"{$radio_values[$i]}\"";
 			if ($value == $radio_values[$i])
 				$out .= " checked";
-			$out .= " /><font size=\"2\">{$radio_names[$i]}&nbsp; &nbsp;</font> &nbsp;\n";
+			$out .= " /><font size=\"2\">{$radio_names[$i]}&nbsp; &nbsp;</font>\n";
 		}
 		
 		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
@@ -298,7 +298,7 @@ class ExternEditGeneric extends ExternEdit {
 			$error_sign = "";
 		
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1><font size=\"2\">";
+		$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\">";
 		if ($multiple)

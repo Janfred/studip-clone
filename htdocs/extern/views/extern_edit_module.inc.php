@@ -38,7 +38,6 @@
 require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_EXTERN/lib/ExternModule.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "msg.inc.php");
 
-$EXTERN_SESSION_OPEN_ELEMENTS = array();
 $sess->register("EXTERN_SESSION_OPEN_ELEMENTS");
 
 echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
@@ -81,6 +80,7 @@ else {
 if (!$module)
 	die("Unknown module type");
 
+// execute commands they modify attributes of the main element
 if ($main_element_command)
 	$module->mainCommand($main_element_command, $pos);
 
@@ -146,7 +146,8 @@ $info_preview .= "<a target=\"_blank\" href=\"{$GLOBALS["CANONICAL_RELATIVE_PATH
 $info_preview .= "?module=" . $module->getName() . "&range_id=" . $module->config->range_id;
 $info_preview .= "&preview=1&config_id=" . $module->config->getId() . "\">";
 $info_preview .= makeButton("vorschau") . "</a></div><br>";
-$info_preview .= _("Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet.");
+$info_preview .= _("Die Vorschau wird in einem neuen Fenster ge&ouml;ffnet.") . "<br>";
+$info_preview .= _("Es werden eventuell nicht alle Einstellungen in der Vorschau angezeigt.");
 /*echo "<br>";
  print_r($EXTERN_SESSION_OPEN_ELEMENTS);
  echo "<br>";
