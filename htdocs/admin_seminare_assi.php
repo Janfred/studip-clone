@@ -171,8 +171,6 @@ if ($form==1)
 if ($form==2)
 	{
 
-	$sem_create_data["sem_paytxt"]=$sem_paytxt;
-
 	if(isset($sem_bereich_chooser) && !$st_search->search_done){
 		$st_search->sem_tree_ranges = array();
 		$st_search->sem_tree_ids = array();
@@ -337,65 +335,28 @@ if ($form==3)
 	}
 
 	//Datum fuer Vobesprechung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
-	if (($vor_jahr>0) && ($vor_jahr<100))
-		 $vor_jahr=$vor_jahr+2000;
-
-	if ($vor_monat == _("mm")) $vor_monat=0;
-	if ($vor_tag == _("tt")) $vor_tag=0;
-	if ($vor_jahr == _("jjjj")) $vor_jahr=0;	
-	if ($vor_stunde == _("hh")) $vor_stunde=0;
-	if ($vor_minute == _("mm")) $vor_minute=0;
-	if ($vor_end_stunde == _("hh")) $vor_end_stunde=0;
-	if ($vor_end_minute == _("mm")) $vor_end_minute=0;
-	
-	if (($vor_monat) && ($vor_tag) && ($vor_jahr))
-		if (($vor_stunde== _("hh")) && ($vor_end_stunde== _("hh"))) {
-			$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der Vorbesprechung ein!")."§"; 
-			$check=FALSE;
-		} else
-			$check=TRUE;
-
-	settype($vor_stunde, "integer");
-	settype($vor_minute, "integer");
-	settype($vor_end_stunde, "integer");
-	settype($vor_end_minute, "integer");
-
-	if ((!checkdate($vor_monat, $vor_tag, $vor_jahr) && ($vor_monat) && ($vor_tag) && ($vor_jahr)) && ($check)) {
-		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!")."§";
-		$check=FALSE;
-	} else
-		$check=TRUE;
-
-	if ((($vor_stunde > 24) || ($vor_end_stunde > 24) || ($vor_minute > 59) || ($vor_end_minute > 60)) && ($check)) {
-		$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r die Vorbesprechung ein!")."§";
-		$check=FALSE;			
-	} else
-		$check=TRUE;
-
-	if ($check) {
-	 	$sem_create_data["sem_vor_termin"] = mktime($vor_stunde,$vor_minute,0,$vor_monat,$vor_tag,$vor_jahr);
-		$sem_create_data["sem_vor_end_termin"] = mktime($vor_end_stunde,$vor_end_minute,0,$vor_monat,$vor_tag,$vor_jahr);
-	} else {
-		$sem_create_data["sem_vor_termin"] = -1;
-		$sem_create_data["sem_vor_end_termin"] = -1;
+	if (!check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_stunde, $vor_minute, $sem_create_data, "sem_vor_termin") || !check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_end_stunde, $vor_end_minute, $sem_create_data, "sem_vor_end_termin")) {
+		$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der Vorbesprechung ein!")."§"; 
 	}
 }
 
-if ($form==4)
-	{
+if ($form==4) {
 	
 	// create a timestamp for begin and end of the seminar
-	$sem_create_data["sem_admission_start_date"] = mktime($adm_s_stunde,$adm_s_minute,59,$adm_s_monat,$adm_s_tag,$adm_s_jahr);
-	$sem_create_data["sem_admission_end_date"] = mktime($adm_e_stunde,$adm_e_minute,59,$adm_e_monat,$adm_e_tag,$adm_e_jahr);
+	if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_minute, $adm_s_stunde, $sem_create_data, "sem_admission_start_date")) {
+		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r den Start des Anmeldezeitraums ein!")."§";
+	}
+	if (!check_and_set_date($adm_e_tag, $adm_e_monat, $adm_e_jahr, $adm_e_minute, $adm_e_stunde, $sem_create_data, "sem_admission_start_date")) {
+		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Anmeldezeitraums ein!")."§";
+	}
 
-
-	if (($adm_e_stunde) && ($adm_e_minute) && ($admin_e_monat) && ($admin_e_tag) && ($admin_e_jahr)) { 
-		if ($sem_create_data["sem_admission_end_date"] != -1) {
-			if ($sem_create_data["sem_admission_end_date"] < time())
-			{
-				$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Teilnahmeverfahrens ein!")."§";
-				$check=FALSE;
-			}
+	if ($sem_create_data["sem_admission_end_date"] != -1) {
+		if ($sem_create_data["sem_admission_end_date"] < time())
+		{
+			$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Ende des Teilnahmeverfahrens ein!")."§";
+		}
+		if ($sem_create_data["sem_admission_end_date"] <= $sem_create_data["sem_admission_start_date"]) {
+			$errormsg=$errormsg."error§"._("Das Enddatum des Teilnahmeverfahrens muss nach dem Startdatum liegen!")."§";
 		}
 	}
 
@@ -431,56 +392,14 @@ if ($form==4)
 	}	
 	
 	//Datum fuer Ende der Anmeldung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
-	if (($adm_jahr>0) && ($adm_jahr<100))
-		 $adm_jahr=$adm_jahr+2000;
-	
-	if ($adm_monat == _("mm")) $adm_monat=0;
-	if ($adm_tag == _("tt")) $adm_tag=0;
-	if ($adm_jahr == _("jjjj")) $adm_jahr=0;	
-	if ($adm_stunde == _("hh")) $adm_stunde=0;
-	if ($adm_minute == _("mm")) $adm_minute=0;
-	
-
-	if (($adm_monat) && ($adm_tag) && ($adm_jahr))
-		if ($adm_stunde== _("hh")) {
-			if ($sem_create_data["sem_admission"] == 1)
+	if (!check_and_set_date($adm_tag, $adm_monat, $adm_jahr, $adm_stunde, $adm_minute, $sem_create_data, "sem_admission_date")) {
+			if ($sem_create_data["sem_admission"] == 1) {
 				$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Losdatum ein!")."§"; 
-			else
+			} else {
 				$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Enddatum der Kontingentierung ein!")."§"; 
-			$check=FALSE;
-		} else
-			$check=TRUE;
+			}
+	}
 
-	settype($adm_stunde, "integer");
-	settype($adm_minute, "integer");
-
-	if ((!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr)) && ($check)) {
-		if ($sem_create_data["sem_admission"] == 1)
-			$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Losdatum ein!")."§";
-		else
-			$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r das Enddatum der Kontingentierung ein!")."§";		
-		$check=FALSE;			
-	} else
-		$check=TRUE;
-
-	if ((($adm_stunde > 24) || ($adm_minute > 59)) && ($check)) {
-		if ($sem_create_data["sem_admission"] == 1)	
-			$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das Losdatum ein!")."§";
-		else
-			$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das Enddatum der Kontingentierung ein!")."§";		
-		$check=FALSE;			
-	} else
-		$check=TRUE;
-
-	if ($check)
-		{
- 		$sem_create_data["sem_admission_date"] = mktime($adm_stunde,$adm_minute,59,$adm_monat,$adm_tag,$adm_jahr);
-		}
-	else
-		{
-		$sem_create_data["sem_admission_date"] = -1;
-		}
-		
 	//Datum fuer ersten Termin umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
 	if (($jahr>0) && ($jahr<100))
 		 $jahr=$jahr+2000;
@@ -1892,20 +1811,6 @@ if ($level==2)
 							?>
 						</td>
 					</tr>
-					<? if ($sem_create_data["sem_payment"]=="1") { ?>
-					<tr<?$cssSw->switchClass()?>>
-						<td class ="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<? echo _("Hinweistext bei vorl&auml;ufigen Eintr&auml;gen:"); ?>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" colspan=3>
-							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für di Veranstaltung zugelassen zu werden. ".
-								"Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
-							>
-						</td>
-					</tr>
-					<? } ?>	
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?=_("Typ der Veranstaltung:"); ?>
@@ -2320,6 +2225,9 @@ if ($level==3) {
 //Level 4: Hier wird der Rest abgefragt
 if ($level==4)
 	{
+
+	$sem_create_data["sem_paytxt"]=$sem_paytxt;
+
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr >
@@ -2565,6 +2473,24 @@ if ($level==4)
 					</tr>
 					<?
 					}
+
+					if ($sem_create_data["sem_payment"]=="1") { ?>
+					<tr<?$cssSw->switchClass()?>>
+						<td class ="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							<? echo _("Hinweistext bei vorl&auml;ufigen Eintr&auml;gen:"); ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" colspan=3>
+							&nbsp;&nbsp;<textarea name="sem_paytxt" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_paytxt"])) ?></textarea>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("Dieser Hinweistext erläutert Ihren TeilnehmerInnen was sie tun müssen, um endgültig für di Veranstaltung zugelassen zu werden. ".
+								"Beschreiben Sie genau, wie Beiträge zu entrichten sind, Leistungen nachgewiesen werden müssen, etc."), TRUE, TRUE) ?>
+							>
+						</td>
+					</tr>
+
+					<?
+					}
+
 					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
 					?>
 					<tr <? $cssSw->switchClass() ?>>
