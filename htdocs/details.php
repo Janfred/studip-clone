@@ -323,7 +323,7 @@ if ($db2->f("admission_binding")) {
 
 // print the info_box
 
-print_infobox ($infobox,"pictures/seminare.jpg");
+print_infobox ($infobox,"pictures/details.jpg");
 			
 // ende Infobox
 
