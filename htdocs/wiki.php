@@ -38,6 +38,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 // -- Load Wiki Plugins -------------------
 // $WIKI_PLUGINS is defined in local.inc
 //
+$wiki_plugin_messages=array();
+
 if (is_array($WIKI_PLUGINS)) {
 	foreach ($WIKI_PLUGINS as $plugin) {
 		require_once($ABSOLUTE_PATH_STUDIP.$plugin);
@@ -74,6 +76,14 @@ $user_id=$auth->auth['uid'];
 wikiSeminarHeader();
 
 // ---------- Start of main WikiLogic
+
+if (is_array($wiki_plugin_messages)) { // print ay messages produced by plugins
+	foreach ($wiki_plugin_messages as $msg) {
+		begin_blank_table();
+		parse_msg($msg);
+		end_blank_table();
+	}
+}
 
 if ($view=="listall") {
 	//
