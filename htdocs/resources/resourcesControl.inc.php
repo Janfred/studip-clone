@@ -149,7 +149,7 @@ if ($change_object_schedules) {
 				$change_schedule_id=FALSE;
 			else
 				$change_schedule_id=$change_object_schedules;
-
+			
 			if ($reset_search_user)
 				$search_string_search_user=FALSE;
 
@@ -284,13 +284,14 @@ if ($change_object_schedules) {
 					$change_schedule_repeat_day_of_week,
 					$change_schedule_repeat_week);
 
-				if ($change_object_schedules == "NEW")
+				if ($change_object_schedules == "NEW") {
 					if ($changeAssign->create())
 						$assign_id=$changeAssign->getId();
-				else {
+				} else {
 					$changeAssign->chng_flag=TRUE;
-					if ($changeAssign->store())
+					if ($changeAssign->store()) {
 						$assign_id=$changeAssign->getId();
+						}
 				}
 			}
 		}

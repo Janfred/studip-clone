@@ -1410,14 +1410,13 @@ class ViewSchedules extends cssClasses {
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ScheduleWeek.class.php");
 	 	
-	 	$schedule=new ScheduleWeek;
-	 	
 	 	//match start_time & end_time for a whole week
 	 	$dow = date ("w", $this->start_time);
 	 	if (date ("w", $this->start_time) >1)
 	 		$offset = 1 - date ("w", $this->start_time);
 	 	if (date ("w", $this->start_time) <1)
 		 	$offset = -6;
+
 
 		 //select view to jump from the schedule
 		 if ($this->used_view == "openobject_schedule")
@@ -1427,6 +1426,8 @@ class ViewSchedules extends cssClasses {
 		 
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
  		$end_time = mktime (23, 59, 0, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
+
+	 	$schedule=new ScheduleWeek(FALSE, FALSE, FALSE, TRUE, $start_time) ;
 		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">

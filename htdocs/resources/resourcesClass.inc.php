@@ -44,7 +44,8 @@ class AssignObject {
 	function AssignObject($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin='', $end='', 
 						$repeat_end='', $repeat_quantity='', $repeat_interval='', $repeat_month_of_year='', $repeat_day_of_month='', 
 						$repeat_month='', $repeat_week_of_month='', $repeat_day_of_week='', $repeat_week='') {
-
+		global $RELATIVE_PATH_RESOURCES;
+		
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
 	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 
@@ -184,7 +185,7 @@ class AssignObject {
 
 	function getRepeatEnd() {
 		if (!$this->repeat_end)
-			return time();
+			return $this->end;
 		else
 			return $this->repeat_end;
 	}
@@ -243,14 +244,37 @@ class AssignObject {
 	}
 	
 	function checkOverlap() {
-		list_restore_assign($this, $this->resource_id);
+		//we check overlaps always for a whole day
+		$start = mktime (0,0,0, date("n", $this->begin), date("j", $this->begin), date("Y", $this->begin));
+		if ($this->repeat_end)
+			$end = mktime (23,59,59, date("n", $this->repeat_end), date("j", $this->repeat_end), date("Y", $this->repeat_end));
+		else
+			$end = mktime (23,59,59, date("n", $this->end), date("j", $this->end), date("Y", $this->end));
+			
+		list_restore_assign($this, $this->resource_id, $start, $end);
+		
 		if ($this->isNewObject)
 			create_assigns($this, $this);
-		if($this->events)
-			usort($this->events,"cmp_assign_events");
 		
-		foreach ($this->events as $key=>$val) {
+		if (is_array($this->events))
+			$keys=array_keys($this->events);
+
+		//ok, a very heavy algorhytmus do detect the overlaps...
+		for ($i1=0; $i1<count($this->events); $i1++) {
+			$val = $this->events[$keys[$i1]];
+			for ($i2=0; $i2<count($this->events); $i2++) {
+				$val2 = $this->events[$keys[$i2]];
+				if ($val2->getId() != $val->getId())
+					if ((($val->getEnd() >= $val2->getBegin()) &&($val->getEnd() <= $val2->getEnd()))
+					|| (($val->getBegin() >= $val2->getBegin()) &&($val->getBegin() <= $val2->getEnd()))
+					|| (($val2->getEnd() >= $val->getBegin()) &&($val2->getEnd() <= $val->getEnd()))
+					|| (($val2->getBegin() >= $val->getBegin()) &&($val2->getBegin() <= $val->getEnd()))) {
+						if (($val2->getAssignId()	 != $this->getId()) &&($val->getAssignId() == $this->getId()))
+							$overlaps[$val2->getAssignId()] =$val2->getAssignId();
+				}
+			}
 		}
+		return $overlaps;
 	}
 
 	function setResourceId($value) {
@@ -337,12 +361,11 @@ class AssignObject {
 	}
 
 	function store($create=''){
-		// Natuerlich nur Speichern, wenn sich was geaendert hat oder das Object neu angelegt wird und auch jemand die Ressource belegt
-		if ((($this->chng_flag) || ($create)) && (($this->assign_user_id) || ($this->user_free_name))) {
+		// Natuerlich nur Speichern, wenn sich was geaendert hat oder das Object neu angelegt wird
+		if (($this->chng_flag) || ($create)) {
 			$chdate = time();
 			$mkdate = time();
 			if($create) {
-				$this->checkOverlap();
 				$query = sprintf("INSERT INTO resources_assign SET assign_id='%s', resource_id='%s', " 
 					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
@@ -353,7 +376,7 @@ class AssignObject {
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
 							 , $mkdate, $chdate);
-			}else
+			} else {
 				$query = sprintf("UPDATE resources_assign SET resource_id='%s', " 
 					."assign_user_id='%s', user_free_name='%s', begin='%s', end='%s', repeat_end='%s', "
 					."repeat_quantity='%s', repeat_interval='%s', repeat_month_of_year='%s', repeat_day_of_month='%s',  "
@@ -364,7 +387,8 @@ class AssignObject {
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
 							 , $chdate, $this->id);
-
+			}
+			
 			if($this->db->query($query))
 				return TRUE;
 			return FALSE;
@@ -399,16 +423,21 @@ class AssignEvent {
 		$this->user_id = $user->id;
 		$this->db=new DB_Seminar;
 
-		$this->id=$assign_id;
-		$this->begin=$begin_ts;
+		$this->assign_id=$assign_id;
+		$this->begin=$begin;
 		$this->end=$end;
 		$this->resource_id=$resource_id;
 		$this->assign_user_id=$assign_user_id;
 		$this->user_free_name=$user_free_name;
+		$this->id = md5(uniqid("jasony"));
+	}
+
+	function getId() {
+		return $this->id;
 	}
 
 	function getAssignId() {
-		return $this->id;
+		return $this->assign_id;
 	}
 	
 	function getAssignUserId() {
@@ -498,8 +527,8 @@ class AssignEventList{
 	}
 	
 	// public
-	function getStart(){
-		return $this->start;
+	function getBegin(){
+		return $this->begin;
 	}
 	
 	// public
@@ -524,7 +553,7 @@ class AssignEventList{
 	
 	// private
 	function restore(){
-		list_restore_assign($this, $this->resource_id);
+		list_restore_assign($this, $this->resource_id,  $this->begin, $this->end);
 	}
 	
 	// public
