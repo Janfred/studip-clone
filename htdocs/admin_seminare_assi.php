@@ -2028,7 +2028,7 @@ if ($level==3) {
 											$resList->reset();
 											if ($resList->numberOfEvents()) {
 												print " &nbsp;<select name=\"term_turnus_resource_id[]\"></font>";
-												printf ("<option %s value=\"FALSE\">"._("[wie Eingabe")." -->]</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
+												printf ("<option %s value=\"FALSE\">["._("wie Eingabe")." -->]</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
 												while ($resObject = $resList->nextEvent()) {
 													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 												}
