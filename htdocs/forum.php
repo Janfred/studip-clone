@@ -301,7 +301,7 @@ if ($really_kill) {
 		$mutter = explode (";",$mutter);
 		$count = sizeof($mutter)-2;
 		$open = $db->f("root_id");
-		if ($rechte || (($db->f("user_id") == $user->id) && ($count == 0))) {  // noch mal checken ob alles o.k.
+		if ($rechte || (($db->f("user_id") == $user->id || $db->f("user_id") == "") && ($count == 0))) {  // noch mal checken ob alles o.k.
 			$count = 0;
 			delete_topic($really_kill, $count);
 			$db->next_record();
