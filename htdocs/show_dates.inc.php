@@ -156,14 +156,15 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		echo "\n<tr><td class=\"blank\" colspan=$colspan>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 
-		//open/close all
+		//open/close all (show header to switch)
 		print "\n<tr><td class=\"steelgraulight\" align=\"center\">";
-		if ($open == "all")
-			print "<a href=\"$PHP_SELF?dclose=1\"><img style=\"vertical-align:middle;\" src=\"pictures/close_all.gif\" ".tooltip(_("Alle schließen"))." border=\"0\"></a>";
-		else
-			print "<a href=\"$PHP_SELF?dopen=all\"><img style=\"vertical-align:middle;\" src=\"pictures/open_all.gif\" ".tooltip(_("Alle öffnen"))."border=\"0\"></a>";
+		if (!$show_as_window) {
+			if ($open == "all")
+				print "<a href=\"$PHP_SELF?dclose=1\"><img style=\"vertical-align:middle;\" src=\"pictures/close_all.gif\" ".tooltip(_("Alle schließen"))." border=\"0\"></a>";
+			else
+				print "<a href=\"$PHP_SELF?dopen=all\"><img style=\"vertical-align:middle;\" src=\"pictures/open_all.gif\" ".tooltip(_("Alle öffnen"))."border=\"0\"></a>";
 		print "\n</tr></td>\n<tr><td class=\"blank\">";
-
+		}
 
 		if ($username) 
 			$add_to_link = "&username=$username";
