@@ -258,7 +258,7 @@ else
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="35%" valign="top">
 				<?
-				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>",($db2->f("Ort")) ? $db2->f("Ort") : "nicht angegeben");
+				printf ("<font size=-1><b>Veranstaltungsort:</b></font><br /><font size=-1>%s</font>",($db2->f("Ort")) ? htmlReady($db2->f("Ort")) : "nicht angegeben");
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="35%"  align="top">
@@ -325,7 +325,7 @@ else
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 				<?
 				if ($db2->f("art"))
-					printf ("<font size=-1><b>Art/Form:</b></font><br /><font size=-1>%s</font>",$db2->f("art"));
+					printf ("<font size=-1><b>Art/Form:</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("art")));
 				else	
 					print "&nbsp; ";
 				?>
@@ -447,7 +447,7 @@ else
 				$db3->query("SELECT Name, url, Institut_id FROM Institute WHERE Institut_id = '".$db2->f("Institut_id")."' ");
 				$db3->next_record();
 				if ($db3->num_rows()) {
-				printf("<font size=-1><b>Heimat-Einrichtung:</b></font><br /><font size=-1><a href=\"institut_main.php?auswahl=%s\" target=\"_new\">%s</a></font>", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
+				printf("<font size=-1><b>Heimat-Einrichtung:</b></font><br /><font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font>", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
 				}
 				?>
 				</td>
@@ -463,7 +463,7 @@ else
 				while ($db3->next_record()) {
 					if ($db3->num_rows() >= 2)
 						print "<li>";
-					printf("<font size=-1><a href=\"institut_main.php?auswahl=%s\" target=\"_new\">%s</a></font><br />", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
+					printf("<font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font><br />", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
 					if ($db3->num_rows() > 2)
 						print "</li>";
 				}				
