@@ -203,7 +203,7 @@ if ($rechte) {
 								);
 }
 
-print_infobox ($infobox,"pictures/einrichtungen.jpg");
+print_infobox ($infobox,"pictures/groups.jpg");
 
 ?>		
 		</td>		
