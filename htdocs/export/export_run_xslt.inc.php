@@ -124,7 +124,7 @@ else
 		{
 			$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr><td>";
 			$export_pagecontent .= "&nbsp; <b>" . _("Ausgabe-Datei: ") . "</b>";
-			$export_pagecontent .= "</td><td>" . $link2 . $result_file . "</a>";
+			$export_pagecontent .= "</td><td>" . $link2 . $xslt_filename . "." . $format . "</a>";
 //			$export_pagecontent .= "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
