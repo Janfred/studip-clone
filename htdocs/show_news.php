@@ -98,6 +98,9 @@ if (!$db->num_rows()) {
 		$link .= "&username=".$db2->f("username");
 		$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".$db2->f("fullname")."</font></a><font size=-1>&nbsp;".date("d.m.Y",$db->f("date"))."</font>";			
 
+		if ($link)
+			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
+
 		$tempnew = ($db->f("date") >= $last_visited);
 		if ($open == $db->f("news_id"))
 			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $db->f("date"));
