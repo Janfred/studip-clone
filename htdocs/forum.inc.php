@@ -998,7 +998,7 @@ function printposting ($forumposting) {
     		
   	// Alter ausgeben
   		
-  		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed") && !$delete_id)
+  		if ($forumposting["type"] == "folder" && ($view=="tree" || $view=="mixed") && !$delete_id && $forumposting["openclose"] == "close")
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["folderlast"])."&nbsp;";
   		else
   			$forumhead[] = 	"&nbsp;".date("d.m.Y - H:i", $forumposting["chdate"])."&nbsp;";
