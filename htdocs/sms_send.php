@@ -212,10 +212,8 @@ function show_precform() {
 		}
 		$tmp .= "</select><br>";	
 		$tmp .= "<input type=\"image\" name=\"del_receiver_button\" src=\"./pictures/trash.gif\" ".tooltip(_("löscht alle ausgewählten EmpfängerInnen"))." border=\"0\">";
-		#$tmp .= " <font size=\"-1\"><a href=\"".$PHP_SELF."?del_receiver_button_x=1\">"._("ausgew&auml;hlte l&ouml;schen")."</a></font><br>";
 		$tmp .= " <font size=\"-1\">"._("ausgew&auml;hlte l&ouml;schen")."</font><br>";
 		$tmp .= "<input type=\"image\" name=\"del_allreceiver_button\" src=\"./pictures/trash.gif\" ".tooltip(_("Empf&auml;ngerliste leeren"))." border=\"0\">";
-		#$tmp .= " <font size=\"-1\"><a href=\"".$PHP_SELF."?del_allreceiver_button_x=1\">"._("Empf&auml;ngerliste leeren")."</a></font>";
 		$tmp .= " <font size=\"-1\">"._("Empf&auml;ngerliste leeren")."</font>";
 	}
 	return $tmp;
@@ -267,10 +265,8 @@ function show_addrform() {
 			$tmp .= $tmp_02;
 			$tmp .= "</select><br>";
 			$tmp .= "<input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/".$picture."\" border=\"0\" ".tooltip(_("fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu")).">";
-			#$tmp .= "&nbsp;<font size=\"-1\"><a href=\"".$PHP_SELF."?add_allreceiver_button_x=1\">"._("ausgew&auml;hlte hinzufügen")."</a>";
 			$tmp .= "&nbsp;<font size=\"-1\">"._("ausgew&auml;hlte hinzufügen")."";
 			$tmp .= "&nbsp;<br><input type=\"image\" name=\"add_allreceiver_button\" src=\"./pictures/".$picture."\" border=\"0\" ".tooltip(_("fügt alle Personen der EmpfängerInnenliste hinzu")).">";
-			#$tmp .= "&nbsp;<font size=\"-1\"><a href=\"".$PHP_SELF."?add_allreceiver_button_x=1\">"._("alle hinzuf&uuml;gen")."</a></font>";
 			$tmp .= "&nbsp;<font size=\"-1\">"._("alle hinzuf&uuml;gen")."</font>";
 		}
 	}
