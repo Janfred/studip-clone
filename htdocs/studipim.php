@@ -87,7 +87,7 @@ if ($auth->auth["uid"]!="nobody"){
 			if ($db->f("autor_id") == "____%system%____"){
 				$new_msgs[]=date("H:i",$db->f("mkdate")) . sprintf(_(" <b>Systemnachricht</b> %s[lesen]%s"),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 			} else {
-				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname_from_uname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
+				$new_msgs[]=date("H:i",$db->f("mkdate")). sprintf(_(" von <b>%s</b> %s[lesen]%s"),htmlReady(get_fullname($db->f("autor_id"))),"<a href='$PHP_SELF?cmd=read&msg_id=".$db->f("message_id")."'>","</a>");
 			}
 		}
 		$refresh+=10;
