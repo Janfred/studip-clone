@@ -44,7 +44,6 @@ if ((sizeof ($_REQUEST) == 1) && (!$view)) {
 
 //a dirty trick to prevent sometimes chaos ;-)
 if ((sizeof ($_REQUEST) == 2) && ($view == "view_schedule")) {
-	echo hallo;
 	$resources_data["view_mode"]=FALSE;
 }
 

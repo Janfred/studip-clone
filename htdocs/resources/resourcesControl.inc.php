@@ -47,6 +47,9 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");
 empfangene Werte auswerten und Befehle ausfuehren
 /*****************************************************************************/
 
+//handle values
+include ("$RELATIVE_PATH_RESOURCES/lib/evaluate_values.php");
+
 //load correct nav
 if ($resources_data["view_mode"] == "oobj")
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
@@ -54,9 +57,6 @@ elseif ($resources_data["view_mode"] == "no_nav")
 	;
 else
 	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
-
-//handle values
-include ("$RELATIVE_PATH_RESOURCES/lib/evaluate_values.php");
 
 //load content, text, pictures and stuff
 include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
