@@ -280,6 +280,8 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	global $attr_text_td;
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
+	// old hard coded $SEMESTER-array starts with index 1
+	array_unshift($all_semester, 0);
 	
 	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
@@ -330,14 +332,14 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	if ($last_sem < $current_sem)
 		$last_sem = $current_sem;
 	if (!isset($all_semester[$last_sem]))
-		$last_sem = sizeof($all_semester);
+		$last_sem = sizeof($all_semester) - 1;
 	
 	$out = "";
-	for (;$current_sem - 1 < $last_sem; $last_sem--) {			
-		$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
-		$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
+	for (;$current_sem <= $last_sem; $last_sem--) {			
 		if (!($this->config->getValue("PersondetailsLectures", "semstart") == "current"
 				&& $this->config->getValue("PersondetailsLectures", "semrange") == 1)) {
+			$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
+			$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 			$out .= $subheadline_div;
 			$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
 			$month = date("n", $all_semester[$last_sem]["beginn"]);

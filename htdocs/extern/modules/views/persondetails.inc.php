@@ -265,8 +265,10 @@ function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
 function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	global $attr_text_td, $end, $start; 
 	$db1 = new DB_Seminar();
-	$semester = new SemesterData;
+	$semester = new SemesterData();
 	$all_semester = $semester->getAllSemesterData();
+	// old hard coded $SEMESTER-array starts with index 1
+	array_unshift($all_semester, 0);
 	
 	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
@@ -317,10 +319,10 @@ function lehre (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	if ($last_sem < $current_sem)
 		$last_sem = $current_sem;
 	if (!isset($all_semester[$last_sem]))
-		$last_sem = sizeof($all_semester);
+		$last_sem = sizeof($all_semester) - 1;
 	
 	$out = "";
-	for (;$current_sem - 1 < $last_sem; $last_sem--) {
+	for (;$current_sem <= $last_sem; $last_sem--) {
 		$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
 	           ."WHERE user_id='".$db->f("user_id")."' AND "
 			       ."su.status LIKE 'dozent' AND ((start_time >= {$all_semester[$last_sem]['beginn']} "
