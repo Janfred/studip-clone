@@ -1,7 +1,7 @@
 <?php
 
 /*
-wiki.php - Einfaches WikiWikiWeb in Stud.IP
+wiki.php - (No longer so) Simple WikiWikiWeb in Stud.IP
 
 @module wiki
 @author Tobias Thelen <tthelen@uos.de>
@@ -118,7 +118,6 @@ if ($view=="listall") {
 	setWikiLock($db, $user->id, $SessSemName[1], $keyword);
 
 	//show form
-	wikiSinglePageHeader($wikiData, $keyword);
 	wikiEdit($keyword, $wikiData, $user->id);
 
 } else if ($view=='editnew') { // edit a new page
@@ -142,14 +141,13 @@ if ($view=="listall") {
 		$keyword='WikiWikiWeb'; // display Start page as default 
 	}
 	releaseLocks($keyword); // kill old locks 
-	$show_page=TRUE;
+	$special="";
 	
 	if ($submit) { 
 		//
 		// Page was edited and submitted
 		//
 		submitWikiPage($keyword, $version, $body, $user->id, $SessSemName[1]);
-		$show_page=TRUE;
 		$version=""; // $version="" means: get latest 
 
 	} else if ($cmd == "abortedit") { // Editieren abgebrochen
@@ -160,14 +158,12 @@ if ($view=="listall") {
 		if ($lastpage) { // if editing new page was aborted, display last page again
 			$keyword=$lastpage;
 		}
-		$showpage=true;
 
 	} else if ($cmd == "delete") {
 		// 
 		// Delete request sent -> confirmdialog and current page
 		//
-		$version=showDeleteDialog($keyword, $version);
-		$showpage=true;
+		$special="delete";
 
 	} else if ($cmd == "really_delete") {
 		// 
@@ -176,30 +172,25 @@ if ($view=="listall") {
 
 		$keyword=deleteWikiPage($keyword, $version, $SessSemName[1]);
 		$version=""; // show latest version
-		$show_page=true;    
 
 	} else if ($cmd == "delete_all") {
 		//
 		// Delete all request sent -> confirmdialog and current page
 		//
-		showDeleteAllDialog($keyword);
-		$showpage=true;
+		$special="delete_all";
+
 	} else if ($cmd == "really_delete_all") {
 		//
 		// Delete all was confirmed -> delete entire page
 		//
 		$keyword=deleteAllWikiPage($keyword, $SessSemName[1]);
 		$version=""; // show latest version
-		$show_page=true;    
 	}
   
-	if ($show_page) {
-		//
-		// Show Page
-		//
-		showWikiPage($keyword, $version);
-
-	} // end show page
+	//
+	// Show Page
+	//
+	showWikiPage($keyword, $version, $special);
 
 } // end default action
 
