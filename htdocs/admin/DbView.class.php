@@ -267,7 +267,7 @@ class DbView {
 					$query .= $this->params[$i];
 					break;
 					case 3:
-					$query .= "'".join("','",explode(",",$this->params[$i]))."'";
+					$query .= "'".join("','",$this->params[$i])."'";
 					break;
 				}
 			}
