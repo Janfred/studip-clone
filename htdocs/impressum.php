@@ -197,12 +197,12 @@ if ($view=="statistik") {?>
 			<?
 			//Toplists
 			$count = 10;
-			write_toplist(_("die meisten Teilnehmer"),"SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminare  LEFT JOIN seminar_user USING(seminar_id) WHERE seminare.visible=1 GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
+			write_toplist(_("die meisten Teilnehmer"),"SELECT seminar_user.seminar_id, seminare.name, count(seminar_user.seminar_id) as count FROM seminar_user INNER JOIN seminare USING(seminar_id) WHERE seminare.visible=1 GROUP BY seminar_user.seminar_id ORDER BY count DESC LIMIT $count");
 			write_toplist(_("zuletzt angelegt"),"SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare WHERE visible = 1 ORDER BY mkdate DESC LIMIT $count");
 			write_toplist(_("die meisten Materialien (Dokumente)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM seminare b  INNER JOIN dokumente a USING(seminar_id) WHERE b.visible=1 GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			$week = time()-1209600;
 			write_toplist(_("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)"),"SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM px_topics a INNER JOIN seminare b USING(seminar_id) WHERE b.visible=1 AND a.mkdate > $week GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
-			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, views as count, " . $_fullname_sql['full'] . " AS full_name FROM object_views LEFT JOIN auth_user_md5 ON(object_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) ORDER BY count DESC LIMIT $count");
+			write_toplist_person(_("die beliebtesten Homepages (Besucher)"),"SELECT auth_user_md5.user_id, username, views as count, " . $_fullname_sql['full'] . " AS full_name FROM object_views LEFT JOIN auth_user_md5 ON(object_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id IS NOT NULL  ORDER BY count DESC LIMIT $count");
 			?>	
 			</table>
 		</blockquote>
