@@ -149,7 +149,7 @@ if (isset($cmd) && ($cmd=="do_copy")) {
 	$sem_create_data["sem_class"] = $SEM_TYPE[$sem_create_data["sem_status"]]["class"];
 	$class = $SEM_TYPE[$sem_create_data["sem_status"]]["class"];
 	$sem_create_data["sem_desc"] = $db->f("Beschreibung");
-	$sem_create_data["sem_ort"] = $db->f("Ort"); 
+	$sem_create_data["sem_room"] = $db->f("Ort"); 
 	$sem_create_data["sem_sonst"] = $db->f("Sonstiges");
 	$sem_create_data["sem_pw"] = $db->f("Passwort");
 	$sem_create_data["sem_sec_lese"] = $db->f("Lesezugriff");
@@ -3446,7 +3446,7 @@ if ($level == 7)
 								printf ("<li>"._("<b>%s</b> TutorInnen f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_tut);
 							if ($count_bereich==1)
 								print "<li>"._("<b>1</b> Bereich f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
-							else
+							elseif ($count_bereich)
 								printf ("<li>"._("<b>%s</b> Bereiche f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_bereich);
 							//Show the result from the resources system
 							if ($RESOURCES_ENABLE) {
