@@ -166,7 +166,7 @@ switch (strtolower(getFileExtension ($file_name))) {
 	break;
 	case "zip": 
 	case "tgz": 
-	case "tar.gz": 	
+	case "gz": 	
 		$content_type="application/zip";
 		$content_disposition="inline";		
 	break;
