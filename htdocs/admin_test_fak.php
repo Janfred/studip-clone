@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 
-$_test_institut_id = "";
+$_test_institut_id = "7c7a4238e65b0662092d059b4514fa86";
 
 $_test_id_prefix = "t_";
 
@@ -33,7 +33,7 @@ $_test_user_default['Email'] = "hotte@testfreund.de";
 $_test_user_default['password'] = md5("hochgeheim");
 
 $_test_course_default['Name'] = "Testveranstaltung";
-$_test_course_default['status'] = 1;
+$_test_course_default['status'] = 8;
 $_test_course_default['Lesezugriff'] = 2;
 $_test_course_default['Schreibzugriff'] = 2;
 $_test_course_default['start_time'] = time();
@@ -205,6 +205,7 @@ if ($_REQUEST['cmd'] == 'course_form_send'){
 				$db->query("INSERT INTO folder SET folder_id='".md5(uniqid("tolle_test_ordner",1))."', range_id='" . $seminar_id . "',
 				name='Allgemeiner Dateiordner', description='Ablage für allgemeine Ordner und Dokumente der Veranstaltung',
 				mkdate='".time()."', chdate='".time()."'");
+				$db->query("INSERT INTO seminar_inst (seminar_id,institut_id) VALUES ('$seminar_id','$_test_institut_id')");
 			}
 			if ($db->affected_rows()){
 				++$num_added;
