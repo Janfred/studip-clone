@@ -44,9 +44,12 @@ require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipLitList.class.php");
 
 class AdminModules extends Modules {
 	var $db;
+	var $db2;
 	
 	function AdminModules() {
 		$this->db = new DB_Seminar;
+		$this->db2 = new DB_Seminar;
+		
 		//please add here the special messages for modules you need consistency checks (defined below in this class)
 		$this->registered_modules["forum"]["name"] = _("Forum");
 		$this->registered_modules["forum"]["msg_warning"] = _("Wollen Sie wirklich das Forum deaktivieren und damit alle Diskussionbeitr&auml;ge l&ouml;schen?");
@@ -56,8 +59,8 @@ class AdminModules extends Modules {
 
 
 		$this->registered_modules["documents"]["name"] = _("Dateiordner");
-		$this->registered_modules["documents"]["msg_warning"] = _("Wollen Sie wirklich den Dateiordner deaktivieren und damit alle hochgeladenen Dokumente l&ouml;schen?");
-		$this->registered_modules["documents"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Dateiordners werden <b>%s</b> Dateien ebenfalls gel&ouml;scht!");
+		$this->registered_modules["documents"]["msg_warning"] = _("Wollen Sie wirklich den Dateiordner deaktivieren und damit alle hochgeladenen Dokumente und alle Ordner l&ouml;schen?");
+		$this->registered_modules["documents"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Dateiordners werden <b>%s</b> Dateien und Ordner ebenfalls gel&ouml;scht!");
 		$this->registered_modules["documents"]["msg_activate"] = _("Der Dateiordner kann jederzeit aktiviert werden.");
 		$this->registered_modules["documents"]["msg_deactivate"] = _("Der Dateiordner kann jederzeit deaktiviert werden.");
 
@@ -149,12 +152,33 @@ class AdminModules extends Modules {
 	}	
 	
 	function getModuleDocumentsExistingItems($range_id) {
+		//documents
 		$query = sprintf ("SELECT COUNT(dokument_id) as items FROM dokumente WHERE seminar_id = '%s' ", $range_id);
 
 		$this->db->query($query);
 		$this->db->next_record();
 		
-		return $this->db->f("items");
+		$items = $this->db->f("items");
+		
+		//folder (seminar-folders)
+		$query = sprintf ("SELECT COUNT(folder_id) as items FROM folder WHERE range_id = '%s' ", $range_id);
+
+		$this->db->query($query);
+		$this->db->next_record();
+		$items += $this->db->f("items");
+
+		//folder (schedule-folders)
+		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s' ", $range_id);
+		$this->db->query($query);
+		
+		while ($this->db->next_record()) {
+			$query2 = sprintf ("SELECT COUNT(folder_id) as items FROM folder WHERE range_id = '%s' ", $this->db->f("termin_id"));
+			$this->db2->query($query2);
+			$this->db2->next_record();
+			$items += $this->db2->f("items");
+		}
+
+		return $items;
 	}
 
 	function moduleDocumentsDeactivate($range_id) {
@@ -179,7 +203,7 @@ class AdminModules extends Modules {
 		$db = new DB_Seminar;
 
 		//create a default folder
-		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$range_id."', user_id='".$user_id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
+		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$range_id."', user_id='".$user->id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
 	}	
 
 	function getModuleScheduleExistingItems($range_id) {
