@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+// $Id$
+
  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
  $perm->check("dozent");
 
@@ -1950,7 +1952,7 @@ if ($level == 2)
 							<?
 							if (sizeof($sem_create_data["sem_doz"]) >0) {
 								foreach($sem_create_data["sem_doz"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_fullname($key,"full_rev")), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev"), get_username($key));
 								}
 							} else {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
@@ -2018,7 +2020,7 @@ if ($level == 2)
 							<?
 							if (sizeof($sem_create_data["sem_tut"]) >0) {
 								foreach($sem_create_data["sem_tut"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), htmlReady(get_fullname($key,"full_rev")), get_username($key));
+									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"./pictures/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev"), get_username($key));
 								}
 							} else {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])

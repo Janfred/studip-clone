@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+// $Id$
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("tutor");
@@ -137,7 +139,7 @@ if ($delete_doz) {
 		else {
 			$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_doz)."' ");
 			if ($db2->affected_rows()) {
-				$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), htmlReady(get_fullname_from_uname($delete_doz))) . "§";
+				$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), get_fullname_from_uname($delete_doz)) . "§";
 				$user_deleted=TRUE;
 				RemovePersonStatusgruppeComplete ($delete_doz, $s_id);
 			}
@@ -150,7 +152,7 @@ if ($delete_tut) {
 	if ($perm->have_studip_perm("dozent",$s_id)) {
 		$db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_tut)."' ");
 		if ($db2->affected_rows()) {
-			$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), htmlReady(get_fullname_from_uname($delete_tut))) . "§";
+			$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), get_fullname_from_uname($delete_tut)) . "§";
 			$user_deleted=TRUE;
 			RemovePersonStatusgruppeComplete ($delete_tut, $s_id);
 		}
@@ -799,8 +801,3 @@ page_close();
 ?>
 </body>
 </html>
-<!-- $Id$ -->
-
-
-
-
