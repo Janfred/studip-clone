@@ -278,10 +278,16 @@ if ($view=="statistik") {?>
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Postings:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from dokumente");
+			$db->query("SELECT count(*) from dokumente WHERE url = ''");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
+			
+			$cssSw->switchClass();
+			$db->query("SELECT count(*) from dokumente WHERE url != ''");
+			$db->next_record();
+			$anzahl = $db->f(0);
+			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("verlinkte Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 
 			$cssSw->switchClass();
 			$db->query("SELECT count(*) from lit_list");
