@@ -109,5 +109,7 @@ td.month {background-color: #DDDDDD;}
 td.lightmonth{}
 
 /* Hover Styles */
-.hover1{background: none; background-color: #CED8F9;} 
-.hover2  {background: none; background-color:#B7C2E8;}
+.hover2{background-color: #CED8F2;} 
+.hover1{background-color:#B7C2E2;}
+.nohover2{background-color:#F2F2F2;}
+.nohover1{background-color:#E2E2E2;}

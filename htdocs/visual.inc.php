@@ -91,7 +91,7 @@ class cssClassSwitcher {
 	var $class = array("steelgraulight", "steel1"); 		//Klassen
 	var $headerClass="steel";
 	var $classcnt=0;		//Counter
-	var	$hoverclass = array("hover2","hover1");
+	var	$hoverclass = array("hover1","hover2");
 	var $JSenabled=FALSE;
 	var $hoverenabled=FALSE;
 	
@@ -100,6 +100,18 @@ class cssClassSwitcher {
 		if (is_array($class)) $this->class = $class;
 		if ($headerClass) $this->headerClass = $headerClass;
 		if (is_array($hoverclass)) $this->hoverclass = $hoverclass;
+	}
+	
+	function enableHover($newclass=""){
+		if (is_array($newclass)) $this->class = $newclass;
+		else $this->class = array("nohover1","nohover2");
+		$this->hoverenabled = TRUE;
+	}
+	
+	function disableHover($newclass=""){
+		if (is_array($newclass)) $this->class = $newclass;
+		else $this->class = array("steelgraulight","steel1");
+		$this->hoverenabled = FALSE;
 	}
 	
 	function getHover(){
