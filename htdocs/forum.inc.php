@@ -451,7 +451,7 @@ function DisplayKids ($topic_id=0, $level=0, $open=0, $lines="",$zitat="")
 					$r_description = editarea($write,$r_description,$nichtneu,$zitat);
 			  	else
 					$r_description = formatReady($r_description);
-				IF(ereg("\[quote",$r_description) AND ereg("\[/quote\]",$r_description) AND (!$write OR $r_topic_id==$davor))  $r_description = quotes_decode($r_description);
+				IF(ereg("\[quote",$r_description) AND ereg("\[/quote\]",$r_description) AND (!$write OR $r_topic_id==$davor))  $r_description = quotes_decode($r_description); //it contains a quoting
 				printcontent ("100%",$form,$r_description,$edit);
 				echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td></tr></table>\n";	
 				}
@@ -586,7 +586,7 @@ function DisplayTopic ($datum=0, $topic_id=0, $open=0, $level=0, $nokids=0,$zita
 						ELSE
 							$description = formatReady($description);
 						echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr>";
-					        IF(ereg("\[quote\]",$description) AND ereg("\[/quote\]",$description) AND (!$write OR $r_topic_id!=$open))  $description = quotes_decode($description);
+					        IF(ereg("\[quote",$description) AND ereg("\[/quote\]",$description) AND (!$write OR $r_topic_id!=$open))  $description = quotes_decode($description);  //it contains a quoting
 						printcontent ("99%",$form,$description,$edit);
 						echo "</tr></table>\n";
 						DisplayKids($topic_id, $level, $open,"",$zitat);
