@@ -31,8 +31,6 @@ function change_messaging_view() {
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;	
 	
-	if ((!$search_exp) && (!$add_user))
-		$new_search_x=TRUE;
 	
 	?>
 	<table width ="100%" cellspacing=0 cellpadding=0 border=0>
@@ -135,32 +133,12 @@ function change_messaging_view() {
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Buddy hinzuf&uuml;gen:</b></blockquote>
+					<blockquote><br><b><?echo _("Buddys verwalten:");?></b></blockquote>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 					<?
-					if ((!$new_search_x)){
-						$db->query("SELECT " . $_fullname_sql['full_rev'] ." AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
-						if ($db->affected_rows()) {
-							echo "<b><font size=-1>&nbsp; Es wurden ", $db->affected_rows(), " Benutzer gefunden </font><br /></b>";
-							echo "<font size=-1>&nbsp; Bitte w&auml;hlen Sie den Benutzer aus der Liste aus:</font>&nbsp;<font size=-1><select name=\"add_user\">";
-							while ($db->next_record()) {
-								echo "<option value=",$db->f("username"),">",$db->f("fullname"), ", (",$db->f("username"),") </option>";
-							}
-							echo "</select></font>";
-							echo "<br /><br />&nbsp; <font size=-1><input type=\"IMAGE\"  src=\"pictures/buttons/hinzufuegen-button.gif\" border=0  name=\"do_add_user\" value=\"Diesen Benutzer hinzuf&uuml;gen\" /></font>&nbsp;";
-							echo "<font size=-1>&nbsp;<input type=\"IMAGE\"  name=\"new_search\" src=\"pictures/buttons/neuesuche-button.gif\" border=0  value=\"Neue Suche\" /></font>";
-							echo "<input type=\"HIDDEN\" name=search_exp value=\"$search_exp\">";
-							echo "<a name=\"anker\"></a>";
-							}
-						}
-					if (((!$db->affected_rows())) || ($new_search_x)) {
-						if (($add_user) && (!$db->affected_rows)  && (!$new_search_x))
-							echo "<br /><b><font size=-1>&nbsp; Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!</font></b><br />";
-						echo "<font size=-1>&nbsp; Bitte Namen, Vornamen oder Usernamen eingeben:</font>&nbsp; ";
-						echo "<input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
-						echo "&nbsp;<input type=\"IMAGE\"  name=\"add_user\" src=\"pictures/buttons/suchestarten-button.gif\" border=0  value=\"Suche starten\" />";	
-						}
+					printf(_("Zum Verwalten Ihrer Buddies besuchen Sie bitte das %s Adressbuch."), "<a href=\"contact.php\">");
+					echo "</a>";
 					?>
 					</td>
 				</tr>
