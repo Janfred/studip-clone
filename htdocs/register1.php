@@ -15,19 +15,16 @@
 
 <?php
 	include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
-
-<!-- hier muessen Seiten-Initialisierungen passieren -->
-
-<?php 
 	include "header.php";   //hier wird der "Kopf" nachgeladen 
+	require_once "msg.inc.php";
 ?>
 <body>
 	
 <?php
 	if ($auth->is_authenticated() && $user->id != "nobody") {
-			print "<br><b>Sie sind schon als Benutzer am System angemeldet!</b><br>";
-			print "<br><a href=\"index.php\">Zur&uuml;ck</a> zur Startseite.<br>";
+		parse_window ("error§Sie sind schon als Benutzer am System angemeldet!", "§",
+					"Bereits angemeldet", 
+					"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es zur Startseite.<br />&nbsp;");
 	} else { 
 		$auth->logout();
 ?>
