@@ -224,8 +224,8 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$this->mode = "AssertDeleteItem";
 			$this->open_items[$item_id] = true;
 			$this->msg[$item_id] = "info§" ._("Sie beabsichtigen diesen Bereich inklusive aller Unterbereiche zu l&ouml;schen. ")
-						. sprintf(_("Es werden insgesamt %s Bereiche gel&ouml;scht !"),count($this->tree->getKidsKids($item_id))+1)
-						. "<br>" . _("Wollen sie diese Bereiche wirklich l&ouml;schen ?") . "<br>"
+						. sprintf(_("Es werden insgesamt %s Bereiche gel&ouml;scht!"),count($this->tree->getKidsKids($item_id))+1)
+						. "<br>" . _("Wollen sie diese Bereiche wirklich l&ouml;schen?") . "<br>"
 						. "<a href=\"" . $this->getSelf("cmd=DeleteItem&item_id=$item_id") . "\">"
 						. "<img " .makeButton("ja2","src") . tooltip(_("löschen"))
 						. " border=\"0\"></a>&nbsp;"
