@@ -565,35 +565,15 @@ function forum_get_index ($forumposting) {
 
 function ForumCheckShrink($id)  {
 
-
-/*	
-// Hilfsfunktion, das Alter des jüngsten Postings raussucht
-	global $forum, $agecount;
-	$ar[]=0;
-	$db=new DB_Seminar;
-	$db->query("SELECT topic_id, chdate FROM px_topics WHERE parent_id='$id'");
-	while ($db->next_record()) {
-		$tmpage = $db->f("chdate");
-		// echo $tmpage."<br>";
-		ForumCheckShrink($db->f("topic_id"));
-	}
-	if ($tmpage > $agecount)
-		$agecount = $tmpage;
-	// echo $tmpage."<br>";
-	return $agecount;
-}
-*/
-global $age;
+	global $age;
 
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE parent_id='$id'");
 	while ($db->next_record()) {
 		$next_topic=$db->f("topic_id");
-		// echo $db->f("chdate")."<br>";
 		$age .= ";".$db->f("chdate");
 		ForumCheckShrink($next_topic);
 	}
-	// echo "<i>".$age."</i><br>";
 	return $age;
 }
 
@@ -619,6 +599,8 @@ function printposting ($forumposting) {
 					
  // Kopfzeile zusammenbauen
   		
+  		// Link zusammenbauen
+  		
   		if ($forum["view"] == "mixed") {		// etwas umständlich: Weg von der Themenansicht zum Folderflatview
   			$viewlink = "flatfolder";
   			$forum["flatviewstartposting"] = 0;
@@ -627,9 +609,12 @@ function printposting ($forumposting) {
   	 	else
   	 		$viewlink = "";
  		if ($forumposting["openclose"] == "close") {
-  			$link =	$PHP_SELF."?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&view=".$viewlink."#anker";
+  			$link =	$PHP_SELF."?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&view=".$viewlink;
+  			if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
+  				$link .= "&shrinkopen=".$forumposting["id"];
+  			$link .= "#anker";
   		} else {
-  			if (get_username($user->id) != $forumposting["username"])  // eigene Postings werden beim view nicht gezählt
+  			if ($user->id != $forumposting["userid"])  // eigene Postings werden beim view nicht gezählt
   				$objectviews = object_add_view($forumposting["id"]); // Anzahl der Views erhöhen
   			if ($forum["view"] == "tree" && $forumposting["type"] == "posting")
   				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker"; 
@@ -961,7 +946,7 @@ if ($update)
 /////////////////////////////////////////////////////////////////////////
 
 function DisplayFolders ($open=0, $update="", $zitat="") {
-	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF;
+	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen;
 
 //Zeigt im Treeview die Themenordner an
 
@@ -1009,6 +994,11 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		if ($update && ForumFreshPosting($update)==TRUE)
 			$forum["openlist"] .= ForumGetParent($update);
 		$forum["openlist"] .= ";".$open.";".$root_id;
+		
+		if ($shrinkopen) {
+			$forum["shrinkopenlist"] = suche_kinder($shrinkopen);
+			$forum["shrinkopenlist"] .= ";".$shrinkopen;
+		}
 		
 		
 		// HTML
@@ -1124,12 +1114,19 @@ function DisplayKids ($forumposting, $level=0) {
 		echo "</td>";
 		
 		$age = "";
-		$age = ForumCheckShrink($forumposting["id"]);
-		// echo $age;
-		$age = explode(";",$age);
-		$count = sizeof($age)-1;
-		rsort($age);
-		// echo "<b>".$age[0]."</b><br>";
+		
+		//echo $forum["shrinkopenlist"];
+		
+		if (strstr($forum["shrinkopenlist"],$forumposting["id"])!=TRUE) {
+			$age = ForumCheckShrink($forumposting["id"]);
+			$age = explode(";",$age);
+			$count = sizeof($age)-1;
+			rsort($age);
+		} else {
+			$age[]=time();
+		}
+			
+		
 		if ($age[0] > time()-$forum["shrink"]) {
 			$forumposting["shrink"]=FALSE;
 			$forumposting = printposting($forumposting);
