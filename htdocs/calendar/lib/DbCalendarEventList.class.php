@@ -90,6 +90,44 @@ class AppList{
 		return FALSE;
 	}
 	
+	// public
+	function bindSeminarEvents(){
+		if(func_num_args() == 0)
+			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user s ON Seminar_id=range_id WHERE "
+			       . "user_id = '%s' AND date BETWEEN %s AND %s"
+						 , $this->user_id, $this->getStart(), $this->getEnd());
+		else if(func_num_args() == 1 && $seminar_ids = func_get_arg(0)){
+			if(is_array($seminar_ids))
+				$seminar_ids = implode("','", $seminar_ids);
+			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user s ON Seminar_id=range_id WHERE "
+			       . "user_id = '%s' AND Seminar_id IN ('%s') AND date_typ!=6"
+						 . " AND date_typ!=7 AND date BETWEEN %s AND %s"
+						 , $this->user_id, $seminar_ids, $this->getStart(), $this->getEnd());
+		}
+		else
+			return FALSE;
+			
+		$db = new DB_Seminar;	
+		$db->query($query);
+		$color = array("#000000","#FF0000","#FF9933","#FFCC66","#99FF99","#66CC66","#6699CC","#666699");
+		
+		if($db->num_rows() != 0){
+			while($db->next_record()){
+				$repeat = $db->f("date").",,,,,,SINGLE,#";
+				$expire = 2114377200; //01.01.2037 00:00:00 Uhr
+				$app = new CalendarEvent($db->f("date"), $db->f("end_time"), $db->f("content"), $repeat, $expire,
+				                  $db->f("date_typ"), $db->f("priority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+				$app->setSeminarId($db->f("Seminar_id"));
+				$app->setColor($color[$db->f("gruppe")]);
+				$app->setCategory($db->f("date_typ"));
+				$this->apps[] = $app;
+			}
+			$this->sort();
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	function sort(){
 		if($this->apps)
 			usort($this->apps,"cmp_list");
