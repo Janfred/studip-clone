@@ -61,24 +61,25 @@ class Modules {
 			return FALSE;
 	}
 
-	function getLocalModules($range_id, $range_type = '') {
+	function getLocalModules($range_id, $range_type = '', $modules = false) {
 		if (!$range_type)
 			$range_type = get_object_type($range_id);
 
-		$db = new DB_Seminar;
-		
-		if ($range_type == "sem") {
-			$query = sprintf ("SELECT modules FROM seminare WHERE Seminar_id ='%s'", $range_id);
-		} else {
-			$query = sprintf ("SELECT modules FROM Institute WHERE Institut_id ='%s'", $range_id);
+		if ($modules === false){
+			$db = new DB_Seminar;
+			if ($range_type == "sem") {
+				$query = sprintf ("SELECT modules FROM seminare WHERE Seminar_id ='%s'", $range_id);
+			} else {
+				$query = sprintf ("SELECT modules FROM Institute WHERE Institut_id ='%s'", $range_id);
+			}
+			$db->query($query);
+			$db->next_record();
+			$modules = $db->f("modules");
 		}
-		
-		$db->query($query);
-		$db->next_record();
-		
-		if (!$modules)
+		if (!$modules){
 			$modules = $this->getDefaultBinValue($range_id, $range_type);	
-	
+		}
+
 		foreach ($this->registered_modules as $key => $val) {
 			if ($this->isBit($modules,$val["id"]))
 				$modules_list[$key]= TRUE;
@@ -93,7 +94,7 @@ class Modules {
 		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
 
 		$db = new DB_Seminar;
-		
+		$bitmask = 0;
 		if (!$range_type)
 			$range_type = get_object_type($range_id);
 		
@@ -110,15 +111,12 @@ class Modules {
 			foreach ($this->registered_modules as $key=>$val) {
 				if (($SEM_CLASS[$SEM_TYPE[$db->f("type")]["class"]][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"]))) {
 					$this->setBit($bitmask, $val["id"]);
-				} else
-					$this->clearBit($bitmask, $val["id"]);
+				} 
 			}
 		} else {
 			foreach ($this->registered_modules as $key=>$val) {
-				if (($INST_MODULES[($INST_MODULES[$db->f("type")]) ? $type : "default"][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"])))
+				if (($INST_MODULES[($INST_MODULES[$db->f("type")]) ? $db->f("type") : "default"][$key]) && (($GLOBALS[$val["const"]]) || (!$val["const"])))
 					$this->setBit($bitmask, $val["id"]);
-				else
-					$this->clearBit($bitmask, $val["id"]);
 			}
 		}
 
