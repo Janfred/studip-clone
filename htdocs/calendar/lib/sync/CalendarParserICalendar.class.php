@@ -303,7 +303,7 @@ class CalendarParserICalendar extends CalendarParser {
 				return FALSE;
 			}
 		}
-		
+
 		return TRUE;
   }
 		
@@ -468,7 +468,8 @@ class CalendarParserICalendar extends CalendarParser {
 			foreach ($matches as $match) {
 				switch ($match[1]) {
 					case "FREQ" :
-						switch (trim($match[2])) {
+						$match[2] = trim($match[2]);
+						switch ($match[2]) {
 							case "DAILY" :
 							case "WEEKLY" :
 							case "MONTHLY" :
@@ -495,7 +496,6 @@ class CalendarParserICalendar extends CalendarParser {
 					case "BYHOUR" :
 					case "BYWEEKNO" :
 					case "BYYEARDAY" :
-						$trouble_flag = TRUE;
 						break;
 					
 					case "BYDAY" :
