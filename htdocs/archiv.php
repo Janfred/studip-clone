@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -31,12 +31,12 @@ elseif (($dump_id) || ($forum_dump_id))
 	$_include_stylesheet = "style_dump.css";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 
-require_once "msg.inc.php";
-require_once "config.inc.php";
-require_once "visual.inc.php";
-require_once "functions.php";
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 function archiv_check_perm($seminar_id){
 	static $archiv_perms;
@@ -83,8 +83,7 @@ if ($suche) {
 	$archiv_data["doz"]=$doz;
 	$archiv_data["pers"]=$pers;
 	$archiv_data["perform_search"]=TRUE;
-	}
-elseif ((!$open) && (!$delete_id) && (!$show_grants) && (!$hide_grants) && (!$delete_user) && (!$add_user) && (!$new_search) && (!$close) && (!$dump_id) && (!$sortby) && (!$back))
+} elseif ((!$open) && (!$delete_id) && (!$show_grants) && (!$hide_grants) && (!$delete_user) && (!$add_user) && (!$new_search) && (!$close) && (!$dump_id) && (!$sortby) && (!$back))
 	$archiv_data["perform_search"]=FALSE;
 
 //Anzeige der Zugriffsberechtigten Personen ein/ausschalten
@@ -112,15 +111,15 @@ $u_id = $user->id;
 if ($delete_id) {
    	$db->query("SELECT name FROM archiv WHERE seminar_id= '$delete_id'");
 	$db->next_record();
-	$msg="info§Wollen Sie die Veranstaltung <b>".htmlReady($db->f("name"))."</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiederuflich gel&ouml;scht! <br />";
-	$msg.="<a href=\"".$PHP_SELF."?delete_really=TRUE&delete_id=$delete_id\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
-	$msg.="<a href=\"".$PHP_SELF."?back=TRUE\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
+	$msg="info§" . sprintf(_("Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiederuflich gel&ouml;scht!"), htmlReady($db->f("name"))) . " <br />";
+	$msg.="<a href=\"".$PHP_SELF."?delete_really=TRUE&delete_id=$delete_id\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+	$msg.="<a href=\"".$PHP_SELF."?back=TRUE\">" . makeButton("nein", "img") . "</a>\n";
 	
 }
 
 //Loeschen aus dem Archiv
 if (($delete_id) && ($delete_really)){
-	if (archiv_check_perm($delete_id) == "admin"){
+	if (archiv_check_perm($delete_id) == "admin") {
 		$db2->query("SELECT name,archiv_file_id FROM archiv WHERE seminar_id='$delete_id'");
 		$db2->next_record();
 		$db->query("DELETE FROM archiv WHERE seminar_id = '$delete_id'");
@@ -139,7 +138,7 @@ if (($delete_id) && ($delete_really)){
 			$msg .= sprintf("msg§" . _("Es wurden %s Zugriffsberechtigungen entfernt.") . "§", $db->affected_rows());
 		}
 	} else {
-		$msg="error§Netter Versuch";
+		$msg="error§" . _("Netter Versuch");
 	}
 }
 
@@ -148,10 +147,10 @@ if ($delete_user) {
 	if (archiv_check_perm($d_sem_id) == "admin" || archiv_check_perm($d_sem_id) == "dozent") {
 		$db->query("DELETE FROM archiv_user WHERE seminar_id = '$d_sem_id' AND user_id='$delete_user'");
 		if ($db->affected_rows()){
-			$msg="msg§Zugriffsberechtigung entfernt§";
+			$msg="msg§" . _("Zugriffsberechtigung entfernt") . "§";
 		}
 	} else {
-		$msg="error§Netter Versuch";
+		$msg="error§" . _("Netter Versuch");
 	}
 }
 	
@@ -160,10 +159,10 @@ if ($do_add_user) {
 	if (archiv_check_perm($a_sem_id) == "admin" || archiv_check_perm($a_sem_id) == "dozent") {
 		$db->query("INSERT INTO archiv_user SET seminar_id = '$a_sem_id', user_id='$add_user', status='autor'");
 		if ($db->affected_rows()){
-			$msg="msg§Zugriffsberechtigung erteilt§";
+			$msg="msg§" . _("Zugriffsberechtigung erteilt") . "§";
 		}
 	} else {
-		$msg="error§Netter Versuch";
+		$msg="error§" . _("Netter Versuch");
 	}
 	$add_user=FALSE;
 }
@@ -171,40 +170,39 @@ if ($do_add_user) {
 
 // wollen wir den dump?
 
-if (!empty($dump_id)){
+if (!empty($dump_id)) {
 	if (archiv_check_perm($dump_id)){
 		$query = "SELECT dump FROM archiv WHERE archiv.seminar_id = '$dump_id'"; 
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
-				echo "<div align=center> <a href='$PHP_SELF?dump_id=".$dump_id."&druck=1' target=_self><b>Druckversion</b></a><br><br></div>";
+				echo "<div align=center> <a href='$PHP_SELF?dump_id=".$dump_id."&druck=1' target=_self><b>" . _("Druckversion") . "</b></a><br><br></div>";
 			}
 			echo $db->f('dump');
 		}
 	} else {
-		echo "netter Versuch, vieleicht beim n&auml;chsten Mal";
+		echo _("netter Versuch, vielleicht beim n&auml;chsten Mal");
 	}
 }
 
 // oder vielleicht den Forendump?
 
-ELSEIF (!empty($forum_dump_id)){
+elseif (!empty($forum_dump_id)) {
 	if (archiv_check_perm($forum_dump_id)){
 		$query = "SELECT forumdump FROM archiv WHERE archiv.seminar_id = '$forum_dump_id'"; 
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
-				echo "<div align=center> <a href='$PHP_SELF?forum_dump_id=".$forum_dump_id."&druck=1' target=_self><b>Druckversion</b></a><br><br></div>";
+				echo "<div align=center> <a href='$PHP_SELF?forum_dump_id=".$forum_dump_id."&druck=1' target=_self><b>" . _("Druckversion") . "</b></a><br><br></div>";
 			}
 			echo $db->f('forumdump');
 		}
 	} else {
-		echo "netter Versuch, vieleicht beim n&auml;chsten Mal";
+		echo _("netter Versuch, vielleicht beim n&auml;chsten Mal");
 	}
 }
 
-ELSE
-{	
+else {	
 
 // dann eben den Rest...
 
@@ -212,7 +210,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 border=0>
 	<tr>
-		<td class="topic" colspan=2><img valign="top" src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;Suche im Archiv</>
+		<td class="topic" colspan=2><img valign="top" src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche im Archiv")?></>
 		</td>
 	</tr>
 	<?
@@ -232,12 +230,12 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 					<table border=0 cellspacing=0 cellpadding=2>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-							<b><font size=-1>Bitte geben Sie hier Ihre Suchkriterien ein:</font></b><br /><font size=-1>Wenn Sie keinen Suchbegriff angeben, werden alle Veranstaltungen angezeigt.</font>
+							<b><font size=-1><?=_("Bitte geben Sie hier Ihre Suchkriterien ein:")?></font></b><br /><font size=-1><?=_("Wenn Sie keinen Suchbegriff angeben, werden alle Veranstaltungen angezeigt.")?></font>
 							</td>
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
-								<font size=-1>Name der Veranstaltung:</font>
+								<font size=-1><?=_("Name der Veranstaltung:")?></font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="name" value="<? echo $archiv_data["name"] ?>">
@@ -245,7 +243,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
-								<font size=-1>DozentIn der Veranstaltung:</font>
+								<font size=-1><?=_("DozentIn der Veranstaltung:")?></font>
 							</td>
 							<td  class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="doz" value="<? echo $archiv_data["doz"] ?>">
@@ -253,12 +251,12 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>"  width="10%">
-								<font size=-1>Semester </font>
+								<font size=-1><?=_("Semester")?> </font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>"  width="90%">
 								<font size=-1>
 								<select name="sem">
-								<option selected value=0>alle</option>
+								<option selected value=0><?=_("alle")?></option>
 								<?
 								$db->query("SELECT DISTINCT semester FROM archiv");
 								while ($db->next_record()) 
@@ -274,12 +272,12 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 						</tr>						
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
-								<font size=-1>Heimat-Einrichtung </font>
+								<font size=-1><?=_("Heimat-Einrichtung")?> </font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>"  width="90%">
 								<font size=-1>
 								<select name="inst">
-								<option selected value=0>alle</option>
+								<option selected value=0><?=_("alle")?></option>
 								<?
 								$db->query("SELECT DISTINCT heimat_inst_id, Institute.Name FROM archiv LEFT JOIN Institute ON (Institut_id=heimat_inst_id)  ORDER BY Name");
 								while ($db->next_record()) 
@@ -298,7 +296,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
-								<font size=-1>Beschreibung:</font>
+								<font size=-1><?=_("Beschreibung:")?></font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="desc" value="<? echo $archiv_data["desc"] ?>">
@@ -306,7 +304,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" width="10%">
-								<font size=-1>Suche &uuml;ber <b>alle</b> Felder:</font>
+								<font size=-1><?=_("Suche &uuml;ber <b>alle</b> Felder:")?></font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="text"  size=30 maxlength=255 name="all" value="<? echo $archiv_data["all"] ?>">
@@ -318,7 +316,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
 								<input  type="checkbox" name="pers" <? if ($archiv_data["pers"]) echo "checked" ?>>
-								<font size=-1>Nur Veranstaltungen anzeigen, an denen ich teilgenommen habe</font>
+								<font size=-1><?=_("Nur Veranstaltungen anzeigen, an denen ich teilgenommen habe")?></font>
 							</td>
 						</tr>
 					   	<tr <? $cssSw->switchClass() ?>>
@@ -327,7 +325,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 					   		</td>
 					   		<td class="<? echo $cssSw->getClass() ?>" width="90%">
 					   			<center>
-					   				<input type="IMAGE" border=0 src="pictures/buttons/suchestarten-button.gif" value="Suche starten">
+					   				<input type="IMAGE" border=0 <?=makeButton("suchestarten", "src")?> value="<?=_("Suche starten")?>">
 					   			</center
 					   		</td>
 						</tr>
@@ -345,7 +343,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 
 // wollen wir was Suchen?
 
-IF ($archiv_data["perform_search"]) {
+if ($archiv_data["perform_search"]) {
 	if (!$archiv_data["sortby"])
 		$archiv_data["sortby"]="Name";
 	if ($archiv_data["pers"])
@@ -362,8 +360,7 @@ IF ($archiv_data["perform_search"]) {
 		$query .= " OR institute LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR dozenten LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR fakultaet LIKE '%".$archiv_data["all"]."%'";
-		}
-	else {
+	} else {
 		if ($archiv_data["name"])
 			$query .= "name LIKE '%".$archiv_data["name"]."%'";
 		else
@@ -384,11 +381,11 @@ IF ($archiv_data["perform_search"]) {
 			$query .= " AND dozenten LIKE '%".$archiv_data["doz"]."%'";
 		else
 			$query .= " AND dozenten LIKE '%%'";		
-		}
+	}
 	$query .= " ORDER BY ".$archiv_data["sortby"];
 
 	$db->query($query);
-	IF (!$db->affected_rows() == 0) {
+	if (!$db->affected_rows() == 0) {
 		$hits = $db->affected_rows();
 		
 		?>
@@ -396,133 +393,140 @@ IF ($archiv_data["perform_search"]) {
 		<td class="blank" colspan=2>
 		<?
 		
-		echo "<blockquote><b><font size=-1>Es wurden $hits Veranstaltungen gefunden.</font></b></blockquote>";
+		echo "<blockquote><b><font size=-1>";
+		printf(_("Es wurden %s Veranstaltungen gefunden."), $hits);
+		echo "</font></b></blockquote>";
 
 	
+	 	echo "<br /><br /><TABLE class=\"blank\"  WIDTH=99% align=center cellspacing=0 border=0>\n";
+   	echo "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; </td>\n";
+		echo "<td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=Name\">" . _("Name") . "</a></b></td>\n";
+		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=dozenten\">" . _("DozentIn") . "</a></b></td>\n";
+		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=institute\">" . _("Institut") . "</a></b></td>\n";
+		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=semester\">" . _("Semester") . "</a></b></td>\n";
+		echo "<td  width=\"10%\" class=\"steel\" colspan=3 align=center valign=bottom><b>" . _("Aktion") . "</b></td></tr>\n";
 
-	
-   	ECHO "<br /><br /><TABLE class=\"blank\"  WIDTH=99% align=center cellspacing=0 border=0>";
-   	ECHO "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; </td><td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=Name\">Name</a></b></td><td  width=20% class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=dozenten\">Dozent</a></b></td><td  width=20% class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=institute\">Institut</a></b></td><td  width=20% class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=semester\">Semester</a></b></td><td  width=10% class=\"steel\" colspan=3 align=center valign=bottom><b>Aktion</b></td></tr>";
-
-	$c=0;
-       	WHILE ($db->next_record()) 
-	    	{
- 		$file_name="Dateisammlung ".substr($db->f("name"),0,200).".zip";
-	 	$view = 0;
-		if ($archiv_data["open"]) {
+		$c=0;
+    while ($db->next_record()) {
+ 			$file_name=_("Dateisammlung") . " ".substr($db->f("name"),0,200).".zip";
+	 		$view = 0;
+			if ($archiv_data["open"]) {
 	 	  	if ($archiv_data["open"] ==$db->f('seminar_id'))
  		  		$class="steelgraulight";
  		  	else
  		  		$class="steel1";
- 		  	}
- 	  	else {
+ 		  } else {
 	 	  	if ($c % 2)
   				$class="steelgraulight";
-			else
-				$class="steel1"; 
-			$c++;
+				else
+					$class="steel1"; 
+				$c++;
 			}
 
-      		ECHO "<tr><td class=\"$class\" WIDTH=\"1%\">&nbsp;";
+			echo "<tr><td class=\"$class\" WIDTH=\"1%\" nowrap>&nbsp;";
       		
       		// schon aufgeklappt?
-		IF ($archiv_data["open"]==$db->f('seminar_id'))  
-			ECHO"<a name='anker'></a><a href='$PHP_SELF?close=yes'>&nbsp;<img src='pictures/forumgraurunt.gif' alt='Zuklappen' border='0'></a></td><td class=\"$class\" width=\"29%\"><font size=-1><b>".htmlReady($db->f("name"))."</b></font></td>";
-      		ELSE 
-      			ECHO"<a href='$PHP_SELF?open=",$db->f('seminar_id'),"#anker'><img src='pictures/forumgrau.gif' alt='Aufklappen' border='0'></a></td><td class=\"$class\" width=\"29%\"><font size=-1>".htmlReady($db->f("name"))."</font></td>";
+			if ($archiv_data["open"]==$db->f('seminar_id')) { 
+				echo "<a name=\"anker\"></a><a href=\"$PHP_SELF?close=yes\"><img src=\"pictures/forumgraurunt.gif\" " . tooltip(_("Zuklappen")) . " border=\"0\" valign=\"top\"></a></td>";
+				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><b>".htmlReady($db->f("name"))."</b></font></td>";
+			} else { 
+	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"pictures/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
+				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\">".htmlReady($db->f("name"))."</font></td>";
+			}
+	    echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("dozenten")."</font></td>";
+	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("institute")."</font></td>";
+	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("semester")."</font></td>";
+			
+			if (archiv_check_perm($db->f("seminar_id")))
+				$view = 1;
+			if ($view == 1) {
+				echo "<td class=\"$class\" width=\"3%\">&nbsp;<a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><img src=\"pictures/i.gif\" " . tooltip(_("Komplettansicht")) . " border=\"0\"></a></td>";
+				echo "<td class=\"$class\" width=\"3%\">&nbsp;";
+				if (!$db->f('archiv_file_id')=='')
+					echo "<a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\"><img src=\"pictures/files.gif\" " . tooltip(_("Dateisammlung")) . " border=\"0\"></a>";
+				echo "</td><td class=\"$class\" width=\"3%\">&nbsp;";
+				if ($perm->have_perm("admin"))
+					echo "<a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\">&nbsp;<img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Diese Veranstaltung aus dem Archiv entfernen")) . "></a>";
+				echo "</td>";
+			} else
+				echo "<td class=\"$class\" width=\"9%\" colspan=\"3\">&nbsp;</td>";
+	      		
+			if ($archiv_data["open"] == $db->f('seminar_id')) {
+				echo "</tr><tr><td class=\"steelgraulight\" colspan=8><blockquote>";
+				if (!$db->f('untertitel')=='')
+					echo "<li><font size=\"-1\"><b>" . _("Untertitel:") . " </b>".htmlReady($db->f('untertitel'))."</font></li>";
+				if (!$db->f('beschreibung')=='')
+					echo "<li><font size=\"-1\"><b>" . _("Beschreibung:") . " </b>".htmlReady($db->f('beschreibung'))."</font></li>";
+				if (!$db->f('fakultaet')=='')
+					echo "<li><font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>".htmlReady($db->f('fakultaet'))."</font></li>";
+				if (!$db->f('studienbereiche')=='')
+					echo "<li><font size=-1><b>" . _("Bereich:") . " </b>".htmlReady($db->f('studienbereiche'))."</font></li>";
 
-    		ECHO "<td align=center class=\"$class\" WIDTH=25%>&nbsp;<font size=-1>".$db->f("dozenten")."</font></td>";
- 		ECHO "<td align=center class=\"$class\" WIDTH=25%>&nbsp;<font size=-1>".$db->f("institute")."</font></td>";
- 		ECHO "<td align=center class=\"$class\" WIDTH=11%>&nbsp;<font size=-1>".$db->f("semester")."</font></td>";
-		
-      		IF (archiv_check_perm($db->f("seminar_id")))
-      			$view = 1;
-      		IF ($view == 1)
-      			{
-	      		 ECHO "<td class=\"$class\" width=\"3%\">&nbsp;<a href='$PHP_SELF?dump_id=".$db->f('seminar_id')."' target=_blank><img src='pictures/i.gif' alt='Komplettansicht' border='0'></a></td><td class=\"$class\" width=\"3%\">&nbsp;";
-	      		 IF (!$db->f('archiv_file_id')=='') ECHO "<a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\"><img src='pictures/files.gif' alt='Dateisammlung' border='0'></a>";
-	      		 echo "</td><td class=\"$class\" width=\"3%\">&nbsp;";
-	      		 if ($perm->have_perm("admin"))
-	      		 	ECHO "<a href='$PHP_SELF?delete_id=".$db->f('seminar_id')."'>&nbsp;<img border=0 src=\"./pictures/trash.gif\" alt=\"Diese Veranstaltung aus dem Archiv entfernen\"></a>";
-	      		 echo "</td>";
-	      		 }	
-      		ELSE ECHO "<td class=\"$class\" width=\"3%\">&nbsp;</td><td class=\"$class\" width=\"3%\">&nbsp;</td><td class=\"$class\" width=\"3%\">&nbsp;</td>";
-      		
-      		IF ($archiv_data["open"]==$db->f('seminar_id'))
-      			{
-	      		ECHO "</tr><tr><td class=\"steelgraulight\" colspan=8><blockquote>";
-	      		IF (!$db->f('untertitel')=='') ECHO "<li><font size=-1><b>Untertitel: </b>".htmlReady($db->f('untertitel'))."</font></li>";
-	      		IF (!$db->f('beschreibung')=='') ECHO "<li><font size=-1><b>Beschreibung: </b>".htmlReady($db->f('beschreibung'))."</font></li>";
-   		 	IF (!$db->f('fakultaet')=='') ECHO "<li><font size=-1><b>Fakult&auml;t: </b>".htmlReady($db->f('fakultaet'))."</font></li>";
-    		 	IF (!$db->f('studienbereiche')=='') ECHO "<li><font size=-1><b>Bereich: </b>".htmlReady($db->f('studienbereiche'))."</font></li>";
+			// doppelt haelt besser: noch mal die Extras
 
-		// doppelt haelt besser: noch mal die Extras
-
-   		 	IF ($view == 1) 
-   		 		{
-   		 		ECHO "<br><br><li><a href='$PHP_SELF?dump_id=".$db->f('seminar_id')."' target=_blank><font size=-1>&Uuml;bersicht der Veranstaltungsinhalte</font></a></li>";
-   		 		IF (!$db->f('forumdump')=='') ECHO "<li><font size=-1><a href='$PHP_SELF?forum_dump_id=".$db->f('seminar_id')."' target=_blank>Beitr&auml;ge des Forums</a></font></li>";
-   		 		IF (!$db->f('archiv_file_id')=='') ECHO "<li><font size=-1><a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\">Download der Dateisammlung</a></font></li>";
-		      		if ($perm->have_perm("admin"))
-	      		 		ECHO "<li><a href='$PHP_SELF?delete_id=".$db->f('seminar_id')."'><font size=-1>Diese Veranstaltung unwiderruflich aus dem Archiv entfernen</font></a></li>";
-				if (archiv_check_perm($db->f("seminar_id")) == "admin") {
-					if (!$archiv_data["edit_grants"])
-						echo "<li><font size=-1><a href=\"$PHP_SELF?show_grants=yes#anker\">Zugriffsberechtigungen einblenden</a></font></li>";	      		 		
-					else
-						echo "<li><font size=-1><a href=\"$PHP_SELF?hide_grants=yes#anker\">Zugriffsberechtigungen ausblenden</a></font></li>";	      		 		
+				if ($view == 1) {
+					echo "<br><br><li><a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><font size=\"-1\">" . _("&Uuml;bersicht der Veranstaltungsinhalte") . "</font></a></li>";
+					if (!$db->f('forumdump')=='')
+						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?forum_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Beitr&auml;ge des Forums") . "</a></font></li>";
+					if (!$db->f('archiv_file_id')=='')
+						echo "<li><font size=\"-1\"><a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\">" . _("Download der Dateisammlung") . "</a></font></li>";
+					if ($perm->have_perm("admin"))
+						echo "<li><a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\"><font size=\"-1\">" . _("Diese Veranstaltung unwiderruflich aus dem Archiv entfernen") . "</font></a></li>";
+					if (archiv_check_perm($db->f("seminar_id")) == "admin") {
+						if (!$archiv_data["edit_grants"])
+							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?show_grants=yes#anker\">" . _("Zugriffsberechtigungen einblenden") . "</a></font></li>";	      		 		
+						else
+							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?hide_grants=yes#anker\">" . _("Zugriffsberechtigungen ausblenden") . "</a></font></li>";	      		 		
 					}
-   		 		}
-   		 	ELSE ECHO "<br><br><li><font size=-1>Die Veranstaltungsinhalte, Beitr&auml;ge im Forum und das Dateiarchiv sind nicht zug&auml;ngig, da Sie an dieser Veranstaltung nicht teilgenommen haben.</font></li>";
+				} else
+					echo "<br><br><li><font size=\"-1\">" . _("Die Veranstaltungsinhalte, Beitr&auml;ge im Forum und das Dateiarchiv sind nicht zug&auml;ngig, da Sie an dieser Veranstaltung nicht teilgenommen haben.") . "</font></li>";
 
-       		 	if ($archiv_data["edit_grants"]) {
-				echo "<br /><br /><hr><b><font size=-1>Folgende Benutzer haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):</font></b><br /><br />";
-				$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname , archiv_user.status, username, archiv_user.user_id FROM archiv_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$db->f("seminar_id")."' ORDER BY Nachname");
-				while ($db2->next_record()) {
-					echo "<font size=-1>".$db2->f("fullname"). " (Status: ". $db2->f("status"). ")</font>";
-					if ($db2->f("status") != "dozent")
-						echo "<a href='$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker'><font size=-1>&nbsp;Zugriffsberechtigung entfernen</font> <img border=0 src=\"./pictures/trash.gif\" alt=\"Diesem Benutzer die Zugriffsberechtigung entziehen\"></a>";
-					echo "<br />";	
+				if ($archiv_data["edit_grants"]) {
+					echo "<br /><br /><hr><b><font size=\"-1\">" . _("Folgende Benutzer haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):") . "</font></b><br /><br />";
+					$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname , archiv_user.status, username, archiv_user.user_id FROM archiv_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$db->f("seminar_id")."' ORDER BY Nachname");
+					while ($db2->next_record()) {
+						echo "<font size=\"-1\">".$db2->f("fullname"). " (" . _("Status:") . " ". $db2->f("status"). ")</font>";
+						if ($db2->f("status") != "dozent")
+							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Diesem Benutzer die Zugriffsberechtigung entziehen")) . "></a>";
+						echo "<br />";	
 					}		
-				if (($add_user) && (!$new_search)){
-					$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
-					if ($db2->affected_rows()) {
+					if (($add_user) && (!$new_search)) {
+						$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
+						if ($db2->affected_rows()) {
+							echo "<form action=\"$PHP_SELF#anker\">";
+							echo "<hr><b><font size=\"-1\">" . _("Benutzer Berechtigung erteilen:") . " </font></b><br /><br />";
+							echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Benutzer gefunden"), $db2->affected_rows()) . " </font></b><br />";
+							echo "<font size=\"-1\">" . _("Bitte w&auml;hlen Sie den Benutzer aus der Liste aus:") . "</font>&nbsp;<br /><font size=\"-1\"><select name=\"add_user\">";
+							while ($db2->next_record()) {
+								echo "<option value=\"".$db2->f("user_id")."\">".$db2->f("fullname"). " (".$db2->f("username").") </option>";
+							}
+							echo "</select></font>";
+							echo "<br /><font size=\"-1\"><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"" . _("Diesen Benutzer hinzuf&uuml;gen") . "\" /></font>";
+							echo "&nbsp;<font size=\"-1\"><input type=\"SUBMIT\"  name=\"new_search\" value=\"" . _("Neue Suche") . "\" /></font>";
+							echo "<input type=\"HIDDEN\"  name=\"a_sem_id\" value=\"",$db->f("seminar_id"), "\" />";
+							echo "</form>";
+						}
+					}
+					if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
 						echo "<form action=\"$PHP_SELF#anker\">";
-						echo "<hr><b><font size=-1>Benutzer Berechtigung erteilen: </font></b><br /><br />";
-						echo "<b><font size=-1>Es wurden ", $db2->affected_rows(), " Benutzer gefunden </font></b><br />";
-						echo "<font size=-1>Bitte w&auml;hlen Sie den Benutzer aus der Liste aus:</font>&nbsp;<br /><font size=-1><select name=\"add_user\">";
-						while ($db2->next_record()) {
-							echo "<option value=\"".$db2->f("user_id")."\">".$db2->f("fullname"). " (".$db2->f("username").") </option>";
-						}
-						echo "</select></font>";
-						echo "<br /><font size=-1><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"Diesen Benutzer hinzuf&uuml;gen\" /></font>";
-						echo "&nbsp;<font size=-1><input type=\"SUBMIT\"  name=\"new_search\" value=\"Neue Suche\" /></font>";
-						echo "<input type=\"HIDDEN\"  name=\"a_sem_id\" value=\"",$db->f("seminar_id"), "\" />";
-						echo "</form>";
-						}
+						echo "<hr><b><font size=\"-1\">" . _("Benutzer Berechtigung erteilen:") . " </font></b><br />";
+						if (($add_user) && (!$db2->affected_rows)  && (!$new_search))
+							echo "<br /><b><font size=\"-1\">" . _("Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br />";
+						echo "<font size=\"-1\">" . _("Bitte Namen, Vornamen oder Usernamen eingeben:") . "</font>&nbsp; ";
+						echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
+						echo "&nbsp;<font size=\"-1\"><br /><input type=\"SUBMIT\"  name=\"add_user\" value=\"" . _("Suche starten") . "\" /></font>";	
+						echo "</form>";						
 					}
-				if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
-					echo "<form action=\"$PHP_SELF#anker\">";
-					echo "<hr><b><font size=-1>Benutzer Berechtigung erteilen: </font></b><br />";
-					if (($add_user) && (!$db2->affected_rows)  && (!$new_search))
-						echo "<br /><b><font size=-1>Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!</font></b><br />";
-					echo "<font size=-1>Bitte Namen, Vornamen oder Usernamen eingeben:</font>&nbsp; ";
-					echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
-					echo "&nbsp;<font size=-1><br /><input type=\"SUBMIT\"  name=\"add_user\" value=\"Suche starten\" /></font>";	
-					echo "</form>";						
-					}
-       		 		}
-
-      		 	ECHO "</blockquote></td>";
-	      		}
-      		ECHO "</tr>";
-    		}
-    	ECHO "</table><br><br>";
-    	}
-   ELSE
- 	{
-	echo "<tr><td class=\"blank\" colspan=2><blockquote><font size=-1><b>Es wurde keine Veranstaltung gefunden.</b></font></blockquote>";
-  	}
-   }
+				}
+				echo "</blockquote></td>";
+			}
+			echo "</tr>";
+		}
+		echo "</table><br><br>";
+	} else {
+		echo "<tr><td class=\"blank\" colspan=2><blockquote><font size=\"-1\"><b>" . _("Es wurde keine Veranstaltung gefunden.") . "</b></font></blockquote>";
+  }
+}
 
 ?>
 </td></tr>
