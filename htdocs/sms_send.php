@@ -1,4 +1,15 @@
 <?
+
+/**
+* frontend for message-transmission
+* 
+* @author				Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <studip@nkwindisch.de>
+* @access				public
+* @modulegroup	Messaging
+* @module				sms_send.php
+* @package			Stud.IP Core
+*/
+
 /*
 sms_send.php - Verwaltung von systeminternen Kurznachrichten
 Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <info@nkwindisch.de>
@@ -31,6 +42,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/reiter.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/sms_functions.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php"; 
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
@@ -67,6 +79,24 @@ function CheckAllAdded($adresses_array, $rec_array) {
 
 # ACTION
 ###########################################################
+
+// where do we save the message?
+if($tmp_save_snd_folder) {
+	if($tmp_save_snd_folder == "dummy") {
+		unset($sms_data["tmp_save_snd_folder"]);
+	} else {
+		$sms_data["tmp_save_snd_folder"] = $tmp_save_snd_folder;
+	}
+}
+
+// do we like save the transmitted sms?
+if(!$sms_data["tmpsavesnd"]) {
+	$sms_data["tmpsavesnd"] = $my_messaging_settings["save_snd"];
+} else if($add_tmpsavesnd_button_x) {
+	$sms_data["tmpsavesnd"] = 1;
+} else if($rmv_tmpsavesnd_button_x) {
+	$sms_data["tmpsavesnd"] = 2;
+}
 
 // check if active chat avaiable
 if (($cmd == "write_chatinv") && (!is_array($admin_chats)))
@@ -118,9 +148,13 @@ if ($cmd_insert_x) {
 		die;
 	}
 	unset($sms_data["p_rec"]);
+	unset($sms_data["tmp_save_snd_folder"]);
+	if($my_messaging_settings["save_snd"] == "1") {
+		$sms_data["tmpsavesnd"]  = "1";
+	}
 }
 
-// falls antwort
+// do we answer someone and did we came fomr something which is not a sms-page
 if ($rec_uname) {
 	$sms_data["p_rec"] = array($rec_uname);
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
@@ -368,7 +402,31 @@ function show_sigform() {
 	}
 	$tmp = "<font size=\"-1\">".$tmp."</font>";
 	return $tmp;
+}
 
+function show_msgsaveoptionsform() {
+	global $sms_data, $my_messaging_settings;
+	if($sms_data["tmpsavesnd"] == 1) {
+		$tmp .= "<input type=\"image\" name=\"rmv_tmpsavesnd_button\" src=\"./pictures/icon-disc2.gif\" border=\"0\" ".tooltip(_("speichert die Nachricht nicht.")).">&nbsp;"._("Nachricht wird gespeichert.");
+		// do we have any personal folders? if, show them here
+		if (have_msgfolder("out") == TRUE) {
+			// walk throw personal folders
+			$tmp .= "<br><img src=\"pictures/blank.gif\" width=\"5\" height=\"5\" border=0>";
+			$tmp .= "<br>"._("in: ");
+			$tmp .= "<select name=\"tmp_save_snd_folder\" style=\"vertical-align:middle; font-size:11pt; width: 180px\">";
+			$tmp .=  "<option value=\"dummy\">"._("Postausgang")."</option>";
+			for($x="0";$x<sizeof($my_messaging_settings["folder"]["out"]);$x++) {
+				if (htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"]["out"], $x))) != "dummy") {	
+					$tmp .=  "<option value=\"".$x."\" ".CheckSelected($x, $sms_data["tmp_save_snd_folder"]).">".htmlready(stripslashes(return_val_from_key($my_messaging_settings["folder"]["out"], $x)))."</option>";
+				}
+			}
+			$tmp .= "</select>";
+		}
+	} else {
+		$tmp .= "<input type=\"image\" name=\"add_tmpsavesnd_button\" src=\"./pictures/icon-disc.gif\" border=\"0\" ".tooltip(_("speichert die Nachricht im Postausgang.")).">&nbsp;"._("Nachricht wird nicht gespeichert.");
+	}
+	$tmp = "<font size=\"-1\">".$tmp."</font>";
+	return $tmp;
 }
 
 function show_chatselector() {
@@ -411,6 +469,7 @@ $txt['002'] = _("m&ouml;gliche Empf&auml;ngerInnen");
 $txt['003'] = _("Signatur");
 $txt['004'] = _("Vorschau");
 $txt['005'] = (($cmd=="write_chatinv") ? _("Chateinladung") : _("Nachricht"));
+$txt['006'] = _("Nachricht speichern");
 
 if ($send_view) {
 	if ($send_view == "2") {
@@ -421,7 +480,6 @@ if ($send_view) {
 }
 
 ?>
-
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -461,15 +519,12 @@ if ($send_view) {
 					<table cellpadding="5" cellspacing="0" border="0" height="10" width="100%">
 						<tr>
 							<td valign="top" class="steelgraudunkel">
-								<?
-								echo "<font size=\"-1\" color=\"#FFFFFF\"><b>".$txt['001']."</b></font>"; ?>
+								<font size="-1" color="#FFFFFF"><b><?=$txt['001']?></b></font>
 							</td>
 						</tr>
 						<tr>
 							<td valign="top" class="steelgraulight">
-								<?
-								echo show_precform();							
-								?>
+								<?=show_precform()?>
 							</td>
 						</tr>
 						<tr>
@@ -479,9 +534,17 @@ if ($send_view) {
 						</tr>
 						<tr>
 							<td valign="top" class="steelgraulight">
-								<?
-								echo show_addrform();							
-								?>
+								<?=show_addrform()?>
+							</td>
+						</tr>
+						<tr>
+							<td valign="top" class="steelgraudunkel">
+								<font size="-1" color="#FFFFFF"><b><?=$txt['006']?></b></font>
+							</td>
+						</tr>
+						<tr>
+							<td valign="top" class="steelgraulight">
+								<?=show_msgsaveoptionsform()?>
 							</td>
 						</tr>
 					</table>
@@ -493,8 +556,7 @@ if ($send_view) {
 						<?=show_chatselector()?>
 						<tr>
 							<td valign="top" class="steelgraudunkel">
-								<?
-								echo "<font size=\"-1\" color=\"#FFFFFF\"><b>".$txt['005']."</b></font>"; ?>
+								<font size="-1" color="#FFFFFF"><b><?=$txt['005']?></b></font>
 							</td>
 						</tr>
 						<tr>
@@ -514,8 +576,7 @@ if ($send_view) {
 						</tr>						
 						<tr>
 							<td valign="top" class="steelgraudunkel">
-								<?
-								echo "<font size=\"-1\" color=\"#FFFFFF\"><b>".$txt['004']."</b></font>"; ?>
+								<font size="-1" color="#FFFFFF"><b><?=$txt['004']?></b></font>
 							</td>
 						</tr>
 						<tr>
@@ -581,10 +642,10 @@ if ($send_view) {
 				</td>
 				<td class="printcontent" width="20%" valign="top">
 					<?=show_previewform()?>
-					
 				</td>
 			</tr>
-		</table> <?
+		</table> 
+	<?
 	}
 
 	if (!$my_messaging_settings["send_view"]) {
@@ -600,7 +661,7 @@ if ($send_view) {
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 	$infobox = array(
 		array("kategorie" => _("Ansicht:"),"eintrag" => array(
-			array("icon" => "pictures/blank.gif", "text" => $switch_sendview)
+			array("icon" => "pictures/admin.gif", "text" => $switch_sendview)
 		)),
 		array("kategorie" => _("Empf&auml;nger hinzuf&uuml;gen:"),"eintrag" => array(
 			array("icon" => "pictures/nutzeronline.gif", "text" => sprintf(_("Nutzen Sie die Adressbuch-Liste oder freie Suche um Empf&auml;ngerInnen hinzuf&uuml;gen.")))
