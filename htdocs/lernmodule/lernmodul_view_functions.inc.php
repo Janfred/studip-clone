@@ -69,7 +69,8 @@ function show_admin_modules()
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "admin";
 			$printlink = $module_info["title"];
 			$printimage = "<img src=\"pictures/icon-lern.gif\">";
-			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$delete_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;<a href=\"$edit_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
+			$printcontent = $module_info["description"] . "<br><br><center><a href=\"$edit_link\" target=\"_blank\">" . makeButton("bearbeiten", "img") . "</a>&nbsp;".
+				"<a href=\"$delete_link\" target=\"_blank\">" . makeButton("loeschen", "img") . "</a></center>";
 			$mod_author = get_module_author($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			for ($i=0; $i<sizeof($mod_author); $i ++)
 				$mod_author[$i] = $mod_author[$i]["fullname"];
@@ -255,8 +256,9 @@ function show_seminar_modules_links($seminar_id)
 			{
 				$printlink = $out_str[$i]["link"];
 				$printimage = $out_str[$i]["image"];
-				$printcontent = $out_str[$i]["content"] . "<br>";
+				$printcontent = $out_str[$i]["content"] . $out_str[$i]["button"] . "<br>";
 				$printdesc = $out_str[$i]["desc"];
+				
 				?>
 				<table cellspacing="0" cellpadding="0" border="0" width="100%">
 					<tr>

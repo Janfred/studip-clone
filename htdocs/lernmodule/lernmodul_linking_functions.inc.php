@@ -7,6 +7,7 @@ function link_new_module()
 
 function link_seminar_modules($seminar_id)
 {
+	global $auth;
 	$mod_array = get_seminar_modules($seminar_id);
 	if ($mod_array != false)
 	{
@@ -41,6 +42,11 @@ function link_seminar_modules($seminar_id)
 			for ($i2=0; $i2<sizeof($mod_author); $i2 ++)
 			{
 				$mod_author[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["id"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
+				if ($auth->auth["uid"] == get_studip_user($mod_author[$i2]["id"]))
+				{
+					$link_str[$i]["button"] .= "<br><a href=\"" . link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]) . "\" target=\"_blank\">".
+					makeButton("bearbeiten", "img")."</a>";
+				}
 			}
 			$link_str[$i]["desc"] .= implode($mod_author, ", ");
 		}
