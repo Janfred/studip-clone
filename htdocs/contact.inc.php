@@ -90,13 +90,13 @@ function RemoveBuddy($username)
 	}
 }
 
-function CheckBuddy($username)
+function CheckBuddy($username, $owner_id=FALSE)
 { global $user;
-	$owner_id = $user->id;
+	if (!$owner_id)
+		$owner_id = $user->id;
 	$buddy = "";
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
 	$db->query ("SELECT buddy FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
 	if ($db->next_record()) {
 		$buddy = TRUE;
@@ -104,6 +104,14 @@ function CheckBuddy($username)
 		$buddy = FALSE;
 	}
 	return $buddy;
+}
+
+function GetNumberOfBuddies()
+{ global $user;
+	$db=new DB_Seminar;
+	$db->query ("SELECT buddy FROM contact WHERE owner_id = '$user->id'");	
+	return $db->nf();
+	
 }
 
 function GetSizeofBook()
@@ -300,7 +308,7 @@ function ShowContact ($contact_id)
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						.$buddy		
 						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"pictures/einst.gif\" border=\"0\" =".tooltip(_("Editieren"))."></a>&nbsp; "
-						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash_att.gif\" border=\"0\" =".tooltip(_("Kontakt löschen"))."></a></td></tr>"
+						."<a href=\"$PHP_SELF?cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"pictures/trash.gif\" border=\"0\" =".tooltip(_("Kontakt löschen"))."></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\" =".tooltip(_("Kontakte schliessen"))."></a></td></tr>";
 		} else {
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
