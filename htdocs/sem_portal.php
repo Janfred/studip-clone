@@ -60,7 +60,8 @@ if (isset($view)){
 	}
 	
 function write_toplist($rubrik,$query) {
-	$global $PHP_SELF;
+	global $PHP_SELF;
+	
 	$db=new DB_Seminar;
 	$db->query($query);
 	IF  ($db->affected_rows() > 0) {
