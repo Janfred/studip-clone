@@ -81,7 +81,7 @@ function get_global_perm($user_id="") {
 	 else
 	 	return ("Fehler");
 }
-// TABLES: perms
+// TABLES: auth_user_md5
 
 //////////////////////////////////////////////////////////////////////////
 
