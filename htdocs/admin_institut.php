@@ -41,6 +41,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitSearch.class.php");
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -96,7 +97,7 @@ while ( is_array($HTTP_POST_VARS)
 			}
 		}
 	
-	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type', '".time()."', '".time()."')";
+	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,lit_plugin_name,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','$lit_plugin_name', '".time()."', '".time()."')";
 	  $db->query($query);
 	  if ($db->affected_rows() == 0) {
 	  	$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
@@ -134,7 +135,7 @@ while ( is_array($HTTP_POST_VARS)
 		}
 
 		//update Institut information.
-		$query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type' ,chdate=".time()." where Institut_id = '$i_id'";
+		$query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type', lit_plugin_name='$lit_plugin_name' ,chdate=".time()." where Institut_id = '$i_id'";
 		$db->query($query);
 		if ($db->affected_rows() == 0) {
 			$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
@@ -351,9 +352,9 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	$i_id= $db->f("Institut_id");
 	?>
 <tr><td class="blank" colspan=2>
-<table border=0 align="center" width="50%" cellspacing=0 cellpadding=2>
+<table border=0 align="center" width="60%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Name:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Name" size=50 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Name:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="Name" size=50 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td></tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Fakult&auml;t:")?></td>
 		<td class="<? echo $cssSw->getClass() ?>" align=left>
 		<?php
@@ -363,7 +364,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 				printf(_("Es wurden bereits %s andere Einrichtungen zugeordnet."), $_num_inst) . "</b></font>";
 				echo "\n<input type=\"hidden\" name=\"Fakultaet\" value=\"$i_id\">";
 			} else {
-				echo "\n<select name=\"Fakultaet\">";
+				echo "\n<select name=\"Fakultaet\" style=\"width:98%\">";
 				if ($perm->have_perm("root")) {
 					printf ("<option %s value=\"%s\">" . _("Diese Einrichtung hat den Status einer Fakult&auml;t.") . "</option>", ($db->f("fakultaets_id") == $db->f("Institut_id")) ? "selected" : "", $db->f("Institut_id"));
 					$db2->query("SELECT Institut_id,Name FROM Institute WHERE Institut_id=fakultaets_id AND fakultaets_id !='". $db->f("institut_id") ."' ORDER BY Name");
@@ -381,7 +382,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 			
 		?>
 	</td>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Bezeichnung:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><select name="type">
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Bezeichnung:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><select style="width:98%" name="type">
 	<? 
 	$i=0;
 	foreach ($INST_TYPE as $a) {
@@ -392,16 +393,29 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 			echo "<option value=\"$i\">".$INST_TYPE[$i]["name"]."</option>";		
 	}
 	?></select></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Strasse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="strasse" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Strasse")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Ort:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="plz" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Plz")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Telefonnummer:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="telefon" size=32 maxlength=254 value="<?php echo htmlReady($db->f("telefon")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Faxnummer:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="fax" size=32 maxlength=254 value="<?php echo htmlReady($db->f("fax")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Emailadresse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
-	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Homepage:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Strasse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="strasse" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Strasse")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Ort:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="plz" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Plz")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Telefonnummer:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="telefon" size=32 maxlength=254 value="<?php echo htmlReady($db->f("telefon")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Faxnummer:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="fax" size=32 maxlength=254 value="<?php echo htmlReady($db->f("fax")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Emailadresse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Homepage:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
 	<?
+	//choose preferred lit plugin
+	if ($db->f("Institut_id") == $db->f("fakultaets_id")){
+		?><tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Bevorzugter Bibliothekskatalog:")?></td>
+		<td class="<? echo $cssSw->getClass() ?>" >
+		<select name="lit_plugin_name" style="width:98%">
+		<?
+		foreach (StudipLitSearch::GetAvailablePlugins() as $plugin_name){
+			echo '<option ' . ($db->f('lit_plugin_name') == $plugin_name ? 'selected' : '') .' >' . htmlReady($plugin_name) . '</option>';
+		}
+		?>
+		</select>
+		</td></tr>
+		<?
+	}
 	//add the free administrable datafields
-	$localFields = $DataFields->getLocalFields($SessSemName[1], ($SessSemName["class"]) ? $SessSemName["class"] : "inst");
-	
+	$localFields = $DataFields->getLocalFields($i_id, "inst");
 	foreach ($localFields as $val) {
 		?>
 		<tr>
@@ -410,7 +424,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 				<?
 				if ($perm->have_perm($val["edit_perms"])) {
 					?>
-					<input type="text" name="datafield_content[]" size=32 maxlength=255 value="<?php echo htmlReady($val["content"]) ?>">
+					<input type="text" name="datafield_content[]" style="width:98%" size=32 maxlength=255 value="<?php echo htmlReady($val["content"]) ?>">
 					<input type="HIDDEN" name="datafield_id[]" value="<?= $val["datafield_id"] ?>">
 					<?
 				} else {
