@@ -81,7 +81,9 @@ if ($ILIAS_CONNECT_ENABLE)
 	</td></tr>
 	<tr><td colspan="3">
 	<?
-	if (isset($search_key))
+	if (sizeof(trim($search_key)) < 2)
+		echo "<b>" . _("Der Suchbegriff ist zu kurz") . "</b><br><br>";
+	if (isset($search_key) AND (trim($search_key) != ""))
 	{
 		$erg_list = search_modules($search_key, $search_area);
 
