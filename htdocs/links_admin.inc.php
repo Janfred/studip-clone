@@ -246,6 +246,8 @@ if (($modules["participants"]) || (!$SessSemName[1]))
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_sem", active=>FALSE);
 if ($EXPORT_ENABLE)
 	$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
+if ($EXPORT_ENABLE)
+	$structure["evaluation_sem"]=array (topKat=>"veranstaltungen", name=>_("Evaluationen"), link=>"admin_evaluation.php?view=evaluation_sem", active=>FALSE);
 $structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
@@ -270,6 +272,9 @@ $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"
 
 if ($EXPORT_ENABLE)
 	$structure["vote_inst"]=array (topKat=>"einrichtungen", name=>_("Votes"), link=>"admin_vote.php?view=vote_inst", active=>FALSE);
+
+if ($EXPORT_ENABLE)
+	$structure["evaluation_inst"]=array (topKat=>"einrichtungen", name=>_("Evaluationen"), link=>"admin_evaluation.php?view=evaluation_inst", active=>FALSE);
 
 if ($perm->have_perm("admin"))
 	$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
