@@ -34,6 +34,10 @@ require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen 
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 
+if ($RESOURCES_ENABLE)
+	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+
+
 // Get a database connection and Stuff
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -146,8 +150,15 @@ if ($form==3)
 	$sem_create_data["term_start_woche"]=$term_start_woche;
 	$sem_create_data["term_turnus"]=$term_turnus;	
 	$sem_create_data["sem_start_time"]=$sem_start_time;
-	$sem_create_data["sem_vor_raum"]=$vor_raum;
 
+	//The room for the prelimary discussion
+	$sem_create_data["sem_vor_raum"]=$vor_raum; 
+	$sem_create_data["sem_vor_resource"]=$vor_resource; 
+	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource"] != "FALSE") {
+		$resObject=new ResourceObject($sem_create_data["sem_vor_resource"]);
+		$sem_create_data["sem_vor_raum"]=$resObject->getName();
+	}
+	
 	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
 		$sem_create_data["sem_duration_time"]=$sem_duration_time;
 	else
@@ -169,6 +180,13 @@ if ($form==3)
 			$sem_create_data["term_turnus_start_minute"][$i]=$term_turnus_start_minute[$i]; 
 			$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i]; 
 			$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i]; 
+			$sem_create_data["term_turnus_room"][$i]=$term_turnus_room[$i]; 
+			$sem_create_data["term_turnus_resource"][$i]=$term_turnus_resource[$i]; 
+			if ($RESOURCES_ENABLE && $sem_create_data["term_turnus_resource"][$i] != "FALSE") {
+				$resObject=new ResourceObject($sem_create_data["term_turnus_resource"][$i]);
+				$sem_create_data["term_turnus_room"][$i]=$resObject->getName();
+			}
+				
 
 			//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
 			settype($sem_create_data["term_turnus_start_stunde"][$i], "integer");
@@ -234,6 +252,12 @@ if ($form==3)
 			$sem_create_data["term_start_minute"][$i]=$term_start_minute[$i];
 			$sem_create_data["term_end_stunde"][$i]=$term_end_stunde[$i]; 
 			$sem_create_data["term_end_minute"][$i]=$term_end_minute[$i]; 
+			$sem_create_data["term_room"][$i]=$term_room[$i]; 
+			$sem_create_data["term_resource"][$i]=$term_resource[$i]; 
+			if ($RESOURCES_ENABLE && $sem_create_data["term_resource"][$i] != "FALSE") {
+				$resObject=new ResourceObject($sem_create_data["term_resource"][$i]);
+				$sem_create_data["term_room"][$i]=$resObject->getName();
+			}
 
 			//diese Umwandlung muss hier sein, da fuehrende 0 bei Minutenangaben sonst nur Verwirrung stiftet...
 			settype($sem_create_data["term_start_stunde"][$i], "integer");
@@ -1774,165 +1798,6 @@ if ($level==3)
 							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_b">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_d">
 						</td>
 					</tr>
-					<?
-						if ($sem_create_data["term_art"] ==0)
-							{
-							?>
-							<tr <? $cssSw->switchClass() ?>>
-								<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-									&nbsp; Daten &uuml;ber die Termine:
-								</td>
-								<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-									&nbsp; <b><font size=-1>Regelm&auml;&szlig;ige Veranstaltung</font></b><br><br>
-									&nbsp;  <font size=-1>Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte auf die erste Seite zur&uuml;ck.</font><br><br>
-									&nbsp; Turnus: &nbsp; 
-									<select name="term_turnus">
-									<?
-									if ($sem_create_data["term_turnus"]==0)
-										echo "<option selected value=0>w&ouml;chentlich</option>";
-									else
-										echo "<option value=0>w&ouml;chentlich</option>";
-									if ($sem_create_data["term_turnus"]==1)
-										echo "<option selected value=1>zweiw&ouml;chentlich</option>";
-									else
-										echo "<option value=1>zweiw&ouml;chentlich</option>";
-									?>
-									</select>&nbsp; erster Termin in der 
-									<select name="term_start_woche">
-									<?
-									if ($sem_create_data["term_start_woche"]==0)
-										echo "<option selected value=0>1. Semesterwoche</option>";
-									else
-										echo "<option value=0>1. Semesterwoche</option>";
-									if ($sem_create_data["term_start_woche"]==1)
-										echo "<option selected value=1>2. Semesterwoche</option>";
-									else
-										echo "<option value=1>2. Semesterwoche</option>";
-									if ($sem_create_data["term_start_woche"]==-1)
-										echo "<option selected value=-1>anderer Startzeitpunkt</option>";
-									else
-										echo "<option value=-1>anderer Startzeitpunkt</option>";
-										
-									?>
-									</select>
-									<br><br>&nbsp; Die Veranstaltung findet immer zu diesen Zeiten statt:<br><br>
-									<?
-									if (empty($sem_create_data["turnus_count"])) 
-										$sem_create_data["turnus_count"]=2;
-									for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
-										if ($i>0) echo "<br>";
-										?>&nbsp; <select name="term_turnus_date[<?echo $i?>]">
-										<?
-										if (($sem_create_data["term_turnus_date"][$i]==1) || (empty($sem_create_data["term_turnus_date"][$i])))
-											echo "<option selected value=1>Montag</option>";
-										else
-											echo "<option value=1>Montag</option>";
-										if ($sem_create_data["term_turnus_date"][$i]==2)
-											echo "<option selected value=2>Dienstag</option>";
-										else
-											echo "<option value=2>Dienstag</option>";
-										if ($sem_create_data["term_turnus_date"][$i]==3)
-											echo "<option selected value=3>Mittwoch</option>";
-										else
-											echo "<option value=3>Mittwoch</option>";
-										if ($sem_create_data["term_turnus_date"][$i]==4)
-											echo "<option selected value=4>Donnerstag</option>";
-										else
-											echo "<option value=4>Donnerstag</option>";
-										if ($sem_create_data["term_turnus_date"][$i]==5)
-											echo "<option selected value=5>Freitag</option>";
-										else
-											echo "<option value=5>Freitag</option>";
-										if ($sem_create_data["term_turnus_date"][$i]==6)
-											echo "<option selected value=6>Samstag</option>";
-										else
-											echo "<option value=6>Samstag</option>";
-										if ($sem_create_data["term_turnus_date"][$i]==7)
-											echo "<option selected value=7>Sonntag</option>";
-										else
-											echo "<option value=7>Sonntag</option>";
-										echo "</select>\n";
-										?>
-										<font size=-1>&nbsp; <input type="text" name="term_turnus_start_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_start_stunde"][$i]) echo $sem_create_data["term_turnus_start_stunde"][$i] ?>"> :
-										<input type="text" name="term_turnus_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_start_minute"][$i]) && ($sem_create_data["term_turnus_start_minute"][$i] >0)) { if ($sem_create_data["term_turnus_start_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_start_minute"][$i]; else echo $sem_create_data["term_turnus_start_minute"][$i];  } elseif ($sem_create_data["term_turnus_start_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr bis
-										&nbsp; <input type="text" name="term_turnus_end_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_end_stunde"][$i]) echo $sem_create_data["term_turnus_end_stunde"][$i] ?>"> :
-										<input type="text" name="term_turnus_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) { if ($sem_create_data["term_turnus_end_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_end_minute"][$i]; else echo $sem_create_data["term_turnus_end_minute"][$i];  } elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr</font>
-										<?
-										if ($sem_create_data["turnus_count"]>1) {
-											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
-											<?
-										}
-										?>
-										<br />&nbsp; <font size=-1>Raum:&nbsp; <input type="text" name="term_turnus_room[<?echo $i?>]" size="15" maxlength="255" value="<?= $sem_create_data["term_turnus_room"][$i] ?>"/></font>&nbsp; 
-										<?
-										if ($RESOURCES_ENABLE) {
-											require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
-											$resList = new ResourcesUserRoomsList($user_id);
-											if ($resList->numberOfEvents()) {
-												echo "&nbsp; <select name=\"term_turnus_resource[$i]\" onChange=\"document.form_3.term_turnus_room[$i].value=document.form_3.term_turnus_resource[$i].options[document.form_3.term_turnus_resource[$i].selectedIndex].text;\">";
-												while ($resObject = $resList->nextEvent()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_room"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
-												}
-												print "</select>";
-											}
-										}
-										print "<br />";
-									}
-										?>
-										<br />&nbsp; <input type="IMAGE" name="add_turnus_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
-										<img  src="./pictures/info.gif" 
-											<? echo tooltip("Wenn es sich um eine regelmäßige Veranstaltung handelt, so können Sie hier genau angeben, an welchen Tagen, zu welchen Zeiten und in welchem Raum die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern«.", TRUE, TRUE) ?>
-										>
-										<br>
-								</td>
-							</tr>
-						<?
-						}
-					else
-						{
-						?>
-							<tr <? $cssSw->switchClass() ?>>
-								<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-									&nbsp; Daten &uuml;ber die Termine:
-								</td>
-								<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-									&nbsp; <b><font size=-1>Veranstaltung an unregelm&auml;&szlig;igen Terminen</font></b><br><br>
-									&nbsp;  <font size=-1>Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte auf die erste Seite zur&uuml;ck.</font><br><br>
-									&nbsp; Die Veranstaltung findet an diesen Terminen statt:<br><br>
-									<?
-									if (empty($sem_create_data["term_count"])) 
-										$sem_create_data["term_count"]=2;
-									for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-										{
-										if ($i>0) echo "<br>";
-										?>
-										<font size=-1>&nbsp; Datum: <input type="text" name="term_tag[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_tag"][$i]) echo $sem_create_data["term_tag"][$i] ?>">.
-										<input type="text" name="term_monat[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_monat"][$i]) echo $sem_create_data["term_monat"][$i] ?>">.
-										<input type="text" name="term_jahr[<?echo $i?>]" size=4 maxlength=4 value="<? if ($sem_create_data["term_jahr"][$i]) echo $sem_create_data["term_jahr"][$i] ?>">
-										&nbsp;um <input type="text" name="term_start_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_start_stunde"][$i]) echo $sem_create_data["term_start_stunde"][$i] ?>"> :
-										<input type="text" name="term_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_start_minute"][$i]) && ($sem_create_data["term_start_minute"][$i] >0)) { if ($sem_create_data["term_start_minute"][$i] < 10) echo "0", $sem_create_data["term_start_minute"][$i]; else echo $sem_create_data["term_start_minute"][$i];  } elseif ($sem_create_data["term_start_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr bis
-										<input type="text" name="term_end_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_end_stunde"][$i]) echo $sem_create_data["term_end_stunde"][$i] ?>"> :
-										<input type="text" name="term_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_end_minute"][$i]) && ($sem_create_data["term_end_minute"][$i] >0)) { if ($sem_create_data["term_end_minute"][$i] < 10) echo "0", $sem_create_data["term_end_minute"][$i]; else echo $sem_create_data["term_end_minute"][$i];  } elseif ($sem_create_data["term_end_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr</font>
-										<? if ($sem_create_data["term_count"]>1) 
-											{
-											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
-											<?
-											}
-										}
-										?>
-										&nbsp; &nbsp; <input type="IMAGE" name="add_term_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
-										<img  src="./pictures/info.gif" 
-											<? echo tooltip("In diesem Feldern können Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann lassen Sie die Felder einfach frei.'", TRUE, TRUE) ?>
-										>
-										<font color="red" size=+2>*</font>
-										<br>
-								</td>
-							</tr>
-						<?
-						}
-						?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Semester:
@@ -1991,6 +1856,180 @@ if ($level==3)
 							>
 						</td>
 					</tr>
+					<?
+						if ($sem_create_data["term_art"] ==0)
+							{
+							?>
+							<tr <? $cssSw->switchClass() ?>>
+								<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+									&nbsp; Daten &uuml;ber die Termine:
+								</td>
+								<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+									&nbsp; <b><font size=-1>Regelm&auml;&szlig;ige Veranstaltung</font></b><br><br>
+									&nbsp;  <font size=-1>Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte auf die erste Seite zur&uuml;ck.</font><br><br>
+									&nbsp; Turnus: &nbsp; 
+									<select name="term_turnus">
+									<?
+									if ($sem_create_data["term_turnus"]==0)
+										echo "<option selected value=0>w&ouml;chentlich</option>";
+									else
+										echo "<option value=0>w&ouml;chentlich</option>";
+									if ($sem_create_data["term_turnus"]==1)
+										echo "<option selected value=1>zweiw&ouml;chentlich</option>";
+									else
+										echo "<option value=1>zweiw&ouml;chentlich</option>";
+									?>
+									</select>&nbsp; erster Termin in der 
+									<select name="term_start_woche">
+									<?
+									if ($sem_create_data["term_start_woche"]==0)
+										echo "<option selected value=0>1. Semesterwoche</option>";
+									else
+										echo "<option value=0>1. Semesterwoche</option>";
+									if ($sem_create_data["term_start_woche"]==1)
+										echo "<option selected value=1>2. Semesterwoche</option>";
+									else
+										echo "<option value=1>2. Semesterwoche</option>";
+									if ($sem_create_data["term_start_woche"]==-1)
+										echo "<option selected value=-1>anderer Startzeitpunkt</option>";
+									else
+										echo "<option value=-1>anderer Startzeitpunkt</option>";
+										
+									?>
+									</select>
+									<br><br>&nbsp; <font size=-1>Die Veranstaltung findet immer zu diesen Zeiten statt:</font><br><br>
+									<?
+									if (empty($sem_create_data["turnus_count"])) 
+										$sem_create_data["turnus_count"]=2;
+									for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
+										if ($i>0) echo "<br>";
+										?>&nbsp; <select name="term_turnus_date[<?echo $i?>]">
+										<?
+										if (($sem_create_data["term_turnus_date"][$i]==1) || (empty($sem_create_data["term_turnus_date"][$i])))
+											echo "<option selected value=1>Montag</option>";
+										else
+											echo "<option value=1>Montag</option>";
+										if ($sem_create_data["term_turnus_date"][$i]==2)
+											echo "<option selected value=2>Dienstag</option>";
+										else
+											echo "<option value=2>Dienstag</option>";
+										if ($sem_create_data["term_turnus_date"][$i]==3)
+											echo "<option selected value=3>Mittwoch</option>";
+										else
+											echo "<option value=3>Mittwoch</option>";
+										if ($sem_create_data["term_turnus_date"][$i]==4)
+											echo "<option selected value=4>Donnerstag</option>";
+										else
+											echo "<option value=4>Donnerstag</option>";
+										if ($sem_create_data["term_turnus_date"][$i]==5)
+											echo "<option selected value=5>Freitag</option>";
+										else
+											echo "<option value=5>Freitag</option>";
+										if ($sem_create_data["term_turnus_date"][$i]==6)
+											echo "<option selected value=6>Samstag</option>";
+										else
+											echo "<option value=6>Samstag</option>";
+										if ($sem_create_data["term_turnus_date"][$i]==7)
+											echo "<option selected value=7>Sonntag</option>";
+										else
+											echo "<option value=7>Sonntag</option>";
+										echo "</select>\n";
+										?>
+										<font size=-1>&nbsp; <input type="text" name="term_turnus_start_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_start_stunde"][$i]) echo $sem_create_data["term_turnus_start_stunde"][$i] ?>"> :
+										<input type="text" name="term_turnus_start_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_start_minute"][$i]) && ($sem_create_data["term_turnus_start_minute"][$i] >0)) { if ($sem_create_data["term_turnus_start_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_start_minute"][$i]; else echo $sem_create_data["term_turnus_start_minute"][$i];  } elseif ($sem_create_data["term_turnus_start_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr bis
+										&nbsp; <input type="text" name="term_turnus_end_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_end_stunde"][$i]) echo $sem_create_data["term_turnus_end_stunde"][$i] ?>"> :
+										<input type="text" name="term_turnus_end_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) { if ($sem_create_data["term_turnus_end_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_end_minute"][$i]; else echo $sem_create_data["term_turnus_end_minute"][$i];  } elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr</font>
+										<?
+										if ($sem_create_data["turnus_count"]>1) {
+											?>
+											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
+											<?
+										}
+										?>
+										<br />&nbsp; <font size=-1>Raum:&nbsp; <input type="text" name="term_turnus_room[]" size="15" maxlength="255" value="<?= $sem_create_data["term_turnus_room"][$i] ?>"/></font>&nbsp; 
+										<?
+										if ($RESOURCES_ENABLE) {
+											$resList = new ResourcesUserRoomsList($user_id);
+											if ($resList->numberOfEvents()) {
+												print "<font size=-1><select name=\"term_turnus_resource[]\"></font>";
+												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_turnus_resource"][$i]) ? "selected" : "");												
+												while ($resObject = $resList->nextEvent()) {
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+												}
+												print "</select></font>";
+											}
+										}
+										print "<br />";
+									}
+										?>
+										<br />&nbsp; <input type="IMAGE" name="add_turnus_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
+										<img  src="./pictures/info.gif" 
+											<? echo tooltip("Wenn es sich um eine regelmäßige Veranstaltung handelt, so können Sie hier genau angeben, an welchen Tagen, zu welchen Zeiten und in welchem Raum die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern«.", TRUE, TRUE) ?>
+										>
+										<br>
+								</td>
+							</tr>
+						<?
+						}
+					else
+						{
+						?>
+							<tr <? $cssSw->switchClass() ?>>
+								<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+									&nbsp; Daten &uuml;ber die Termine:
+								</td>
+								<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+									&nbsp; <b><font size=-1>Veranstaltung an unregelm&auml;&szlig;igen Terminen</font></b><br><br>
+									&nbsp;  <font size=-1>Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte auf die erste Seite zur&uuml;ck.</font><br><br>
+									&nbsp; <font size=-1>Die Veranstaltung findet an diesen Terminen statt:</font><br><br>
+									<?
+									if (empty($sem_create_data["term_count"])) 
+										$sem_create_data["term_count"]=2;
+									for ($i=0; $i<$sem_create_data["term_count"]; $i++)
+										{
+										if ($i>0) echo "<br>";
+										?>
+										<font size=-1>&nbsp; Datum: <input type="text" name="term_tag[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_tag"][$i]) echo $sem_create_data["term_tag"][$i] ?>">.
+										<input type="text" name="term_monat[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_monat"][$i]) echo $sem_create_data["term_monat"][$i] ?>">.
+										<input type="text" name="term_jahr[]" size=4 maxlength=4 value="<? if ($sem_create_data["term_jahr"][$i]) echo $sem_create_data["term_jahr"][$i] ?>">
+										&nbsp;um <input type="text" name="term_start_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_start_stunde"][$i]) echo $sem_create_data["term_start_stunde"][$i] ?>"> :
+										<input type="text" name="term_start_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_start_minute"][$i]) && ($sem_create_data["term_start_minute"][$i] >0)) { if ($sem_create_data["term_start_minute"][$i] < 10) echo "0", $sem_create_data["term_start_minute"][$i]; else echo $sem_create_data["term_start_minute"][$i];  } elseif ($sem_create_data["term_start_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr bis
+										<input type="text" name="term_end_stunde[]" size=2 maxlength=2 value="<? if ($sem_create_data["term_end_stunde"][$i]) echo $sem_create_data["term_end_stunde"][$i] ?>"> :
+										<input type="text" name="term_end_minute[]" size=2 maxlength=2 value="<? if (($sem_create_data["term_end_minute"][$i]) && ($sem_create_data["term_end_minute"][$i] >0)) { if ($sem_create_data["term_end_minute"][$i] < 10) echo "0", $sem_create_data["term_end_minute"][$i]; else echo $sem_create_data["term_end_minute"][$i];  } elseif ($sem_create_data["term_end_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr</font>
+										<?
+										if ($sem_create_data["term_count"]>1) 
+											{
+											?>
+											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="./pictures/trash.gif" <? echo tooltip("Dieses Feld aus der Auswahl löschen", TRUE) ?> ></a>
+											<?
+											}
+										?>
+										<br />&nbsp; <font size=-1>Raum:&nbsp; <input type="text" name="term_room[]" size="15" maxlength="255" value="<?= $sem_create_data["term_room"][$i] ?>"/></font>&nbsp; 
+										<?
+										if ($RESOURCES_ENABLE) {
+											$resList = new ResourcesUserRoomsList($user_id);
+											if ($resList->numberOfEvents()) {
+												print "<font size=-1><select name=\"term_resource[]\">";
+												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_resource"][$i]) ? "selected" : "");
+												while ($resObject = $resList->nextEvent()) {
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+												}
+												print "</select></font>";
+											}
+										}
+										print "<br />";
+										}
+										?>
+										&nbsp; <input type="IMAGE" name="add_term_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
+										<img  src="./pictures/info.gif" 
+											<? echo tooltip("In diesem Feldern können Sie alle Termine eingeben, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann lassen Sie die Felder einfach frei.'", TRUE, TRUE) ?>
+										>
+										<br>
+								</td>
+							</tr>
+						<?
+						}
+						?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Vorbesprechung:
@@ -2000,11 +2039,24 @@ if ($level==3)
 							<font size=-1><input type="text" name="vor_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("d",$sem_create_data["sem_vor_termin"]); else echo"tt" ?>">.
 							<input type="text" name="vor_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("m",$sem_create_data["sem_vor_termin"]); else echo"mm" ?>">.
 							<input type="text" name="vor_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("Y",$sem_create_data["sem_vor_termin"]); else echo"jjjj" ?>">&nbsp;
-							&nbsp;um <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); else echo"hh" ?>"> :
+							um <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); else echo"hh" ?>"> :
 							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); else echo"mm" ?>">&nbsp;Uhr bis
 							<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_end_termin"]); else echo"mm" ?>"> :
-							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); else echo"hh" ?>">&nbsp;Uhr
-							&nbsp;Raum: <input type="text" name="vor_raum" size=10 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>
+							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); else echo"hh" ?>">&nbsp;Uhr<br />
+							&nbsp; Raum: &nbsp;<input type="text" name="vor_raum" size=15 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>&nbsp; 
+							<?
+							if ($RESOURCES_ENABLE) {
+								$resList = new ResourcesUserRoomsList($user_id);
+								if ($resList->numberOfEvents()) {
+									print "<font size=-1><select name=\"vor_resource\">";
+									printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["sem_vor_resource"]) ? "selected" : "");
+									while ($resObject = $resList->nextEvent()) {
+										printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+									}
+									print "</select></font>";
+								}
+							}
+							?>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip("Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.", TRUE, TRUE) ?>
 							>
