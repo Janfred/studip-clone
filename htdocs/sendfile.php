@@ -305,7 +305,7 @@ if ($no_access) {
 	die;
 }
 
-/*
+
 
 if (substr($path_file,0,6) != "ftp://") {
 	//Datei per HTTP verschicken
@@ -369,7 +369,7 @@ if (substr($path_file,0,6) != "ftp://") {
 	ftp_quit($ftp);
 }
 
-*/
+/*
 
 //Datei verschicken
 if ($type != 5 && $type != 6){
@@ -398,6 +398,8 @@ if ($type != 5){
 } else {
 	echo $the_data;
 }
+
+*/
 
 //remove temporary file after zipping
 if ($zip) {
