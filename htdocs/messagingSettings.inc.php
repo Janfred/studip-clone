@@ -203,15 +203,15 @@ function change_messaging_view() {
 					</td>
 				</tr>	
 
-				<? if ($GLOBALS["ALLOW_SEND_AS_EMAIL"]) { ?>
-        <tr  <? $cssSw->switchClass() ?>>
-          <td  align="right" class="blank" style="border-bottom:1px dotted black;">
-            <font size="-1"><?print _("Eine Kopie aller eingehenden Nachrichten an eigene E-Mail-Adresse schicken");?></font>
-          </td>
-          <td <?=$cssSw->getFullClass()?>>
-            <input type="checkbox" value="1" name="send_as_email"<? if ($my_messaging_settings["send_as_email"] == "1") echo " checked"; ?>>
-          </td>
-        </tr>
+				<? if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) { ?>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
+						<font size="-1"><?print _("Eine Kopie aller eingehenden Nachrichten an eigene E-Mail-Adresse schicken");?></font>
+					</td>
+					<td <?=$cssSw->getFullClass()?>>
+						<input type="checkbox" value="1" name="send_as_email"<? if ($my_messaging_settings["send_as_email"] == "1") echo " checked"; ?>>
+					</td>
+				</tr>
 				<? } ?>
 
 				<tr <? $cssSw->switchClass() ?>>
