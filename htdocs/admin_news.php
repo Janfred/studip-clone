@@ -200,7 +200,7 @@ class studip_news {
 
 	function edit_news($news_id=0) {
 		global $perm;
-		$aktuell=mktime(strftime("%H",time()),strftime("%M",time()),strftime("%S",time()),strftime("%m",time()),strftime("%d",time()),strftime("%y",time()));
+		$aktuell=mktime(0,0,0,strftime("%m",time()),strftime("%d",time()),strftime("%y",time()));
 		if ($news_id AND $news_id!="new_entry")
 			$this->get_one_news($news_id);
 		else {
@@ -236,21 +236,25 @@ class studip_news {
 			$news_date = $aktuell;
 			$date_offset = 1;
 		}
-		
 		echo "\n<tr><td class=\"blank\" colspan=\"2\">" . _("Einstelldatum:") . " <select name=\"date\"><option value=\"".$news_date."\" selected>".strftime("%d.%m.%y", $news_date)."</option>";
 		for ($i = $date_offset; $i <= $date_offset+13; ++$i) {
-			$temp = $aktuell+$i*86400;
+			$temp = mktime(0,0,0,strftime("%m",$aktuell),strftime("%d",$aktuell) + $i,strftime("%y",$aktuell));
 			echo "\n<option value=\"".$temp."\">".strftime("%d.%m.%y",$temp)."</option>";
 		}
 		echo "</select>&nbsp;&nbsp;&nbsp;" . _("G&uuml;ltigkeitsdauer:") . " <select name=\"expire\">";
 		if ($this->news_query["news_id"] != "new_entry"){
-			$this->news_query["expire"] = ($this->news_query["date"] + $this->news_query["expire"]) - $aktuell;
+			if ($date_offset){
+				$this->news_query["expire"] = ($this->news_query['date'] + $this->news_query["expire"]) - $news_date;
+				if ($this->news_query['expire'] < mktime(23,59,59,strftime("%m",$news_date),strftime("%d",$news_date),strftime("%y",$news_date)) - $news_date){
+					$this->news_query['expire'] = mktime(23,59,59,strftime("%m",$news_date),strftime("%d",$news_date),strftime("%y",$news_date)) - $news_date;
+				}
+			}
 			echo "\n<option value=\"" . $this->news_query["expire"] . "\" selected>";
-			printf(_("bis zum %s"), strftime("%d.%m.%y",($this->news_query["expire"] + $aktuell)));
+			printf(_("bis zum %s"), strftime("%d.%m.%y",($this->news_query["expire"] + $news_date)));
 			echo "</option>";
 		}
 		for ($i = 2; $i <= 12; $i += 2) {
-			$temp = $i * 604800;
+			$temp = mktime(23,59,59,strftime("%m",$news_date),strftime("%d",$news_date) + ($i * 7),strftime("%y",$news_date)) - $news_date;
 			echo "\n<option value=\"" . $temp . "\" ";
 			if ($this->news_query["expire"] == $temp) 
 				echo"selected";
@@ -325,6 +329,10 @@ class studip_news {
 					OR $this->news_query["body"]!=stripslashes($body) 
 					OR $this->news_query["date"]!=$date 
 					OR $this->news_query["expire"]!=$expire) {
+						if ($this->news_query['date'] != $date && $this->news_query["expire"] == $expire){
+							$expire = ($this->news_query['date'] + $this->news_query["expire"]) - $date;
+						}
+						
 						if ($this->modus=="admin" AND $user_id!=$this->user_id) {
 							$admin="<admin_msg>";
 							$admin .= sprintf(_("Zuletzt aktualisiert von %s (%s) am %s"),$this->full_username,$auth->auth["uname"],date("d.m.y",time()));
