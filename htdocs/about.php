@@ -137,6 +137,8 @@ if ($perm->is_fak_admin()){
 	if ($db->next_record()) 
 	$admin_darf = TRUE;
 }
+if ($perm->have_perm("root"))
+	$admin_darf = TRUE;
 
 
 //Her mit den Daten...
