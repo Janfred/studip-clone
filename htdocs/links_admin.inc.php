@@ -1,4 +1,4 @@
-	<?
+<?
 /*
 links_admin.inc.php - Navigation fuer die Verwaltungsseiten von Stud.IP.
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de
@@ -595,23 +595,21 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 							<font size=-1>Dozent:</font><br /><select name="srch_doz">
 								<option value=0>alle</option>
 								<?
-								$query="SELECT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, Institut_id FROM user_inst  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms='dozent' AND institut_id IN (";
-								$i=0;
-								foreach ($my_inst as $a) {
-									if ($i)
-										$query.= ", ";
-									$query.="'".$a."'"; 
-									$i++;
-									}
-								$query.=") GROUP BY auth_user_md5.user_id ORDER BY Nachname ";
-								$db->query($query);
-								if ($db->num_rows() >1) 
-									while ($db->next_record()) {
-										if ($links_admin_data["srch_doz"] == $db->f("user_id"))
-											echo"<option selected value=".$db->f("user_id").">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
-										else
-											echo"<option value=".$db->f("user_id").">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
-										}										
+								if (is_array($my_inst)) {
+									$inst_id_query = "'";
+									$inst_id_query.= join ("', '",$my_inst);
+									$inst_id_query.= "'";
+											
+									$query="SELECT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, Institut_id FROM user_inst  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id) WHERE inst_perms='dozent' AND institut_id IN ($inst_id_query) GROUP BY auth_user_md5.user_id ORDER BY Nachname ";
+									$db->query($query);
+									if ($db->num_rows() >1) 
+										while ($db->next_record()) {
+											if ($links_admin_data["srch_doz"] == $db->f("user_id"))
+												echo"<option selected value=".$db->f("user_id").">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+											else
+												echo"<option value=".$db->f("user_id").">".htmlReady(my_substr($db->f("fullname"),0,35))."</option>";
+											}
+								}										
 								?>								
 							</select>
 							<?
@@ -633,7 +631,7 @@ if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($vi
 							</select>
 							<?
 								}
-							?>
+							?>&nbsp;
 							</td>
 							<td class="steel1">
 								<font size=-1>freie Suche:</font><br /><input type="TEXT" name="srch_exp" maxlength=255 size=20 value="<? echo $links_admin_data["srch_exp"] ?>" />

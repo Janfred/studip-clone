@@ -552,31 +552,37 @@ elseif ($auth->auth["perm"]=="admin") {
 			$_my_inst[$db->f("Institut_id")]["num_inst"] = $num_inst;
 		}
 	}
-	$_my_inst_arr = array_keys($_my_inst);
-	if(!$user->is_registered("_my_admin_inst_id")){
-		$_my_admin_inst_id = $_my_inst_arr[0];
-		$user->register("_my_admin_inst_id");
-	}
-	if($_REQUEST['institut_id']){
-		$_my_admin_inst_id = ($_my_inst[$_REQUEST['institut_id']]) ? $_REQUEST['institut_id'] : $_my_inst_arr[0];
-	}
 	
-	if (!isset($sortby)) $sortby="start_time DESC, Name ASC";
-	if ($sortby == "teilnehmer")
-	$sortby = "teilnehmer DESC";
-	$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM Institute LEFT JOIN seminare USING(Institut_id) LEFT JOIN seminar_user USING(Seminar_id) WHERE Institute.Institut_id='$_my_admin_inst_id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
-	$num_my_sem=$db->num_rows();
-	if (!$num_my_sem) 
-		$meldung = "msg§"
-				. sprintf(_("An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt."), htmlReady($_my_inst[$_my_admin_inst_id]['name']))
-				. "§"
-				. $meldung;
-	 ?>
-	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr>
-		<td class="topic" ><img src="pictures/meinesem.gif" border="0" align="texttop">
-		&nbsp;<b><?=_("Veranstaltungen an meinen Einrichtungen");?> - <?=htmlReady($_my_inst[$_my_admin_inst_id]['name'])?></b></td>
-	</tr>
+	if (!is_array($_my_inst))
+		$meldung="info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§".$meldung;
+	else {
+		$_my_inst_arr = array_keys($_my_inst);
+		if(!$user->is_registered("_my_admin_inst_id")){
+			$_my_admin_inst_id = $_my_inst_arr[0];
+			$user->register("_my_admin_inst_id");
+		}
+		if($_REQUEST['institut_id']){
+			$_my_admin_inst_id = ($_my_inst[$_REQUEST['institut_id']]) ? $_REQUEST['institut_id'] : $_my_inst_arr[0];
+		}
+		
+		if (!isset($sortby)) $sortby="start_time DESC, Name ASC";
+		if ($sortby == "teilnehmer")
+		$sortby = "teilnehmer DESC";
+		$db->query("SELECT Institute.Name AS Institut, seminare.*, COUNT(seminar_user.user_id) AS teilnehmer FROM Institute LEFT JOIN seminare USING(Institut_id) LEFT JOIN seminar_user USING(Seminar_id) WHERE Institute.Institut_id='$_my_admin_inst_id' AND seminare.Institut_id is not NULL GROUP BY seminare.Seminar_id ORDER BY $sortby");
+		$num_my_sem=$db->num_rows();
+		if (!$num_my_sem) 
+			$meldung = "msg§"
+					. sprintf(_("An der Einrichtung: <b>%s</b> sind zur Zeit keine Veranstaltungen angelegt."), htmlReady($_my_inst[$_my_admin_inst_id]['name']))
+					. "§"
+					. $meldung;
+	}
+	?>		 
+		<table width="100%" border=0 cellpadding=0 cellspacing=0>
+		<tr>
+			<td class="topic" ><img src="pictures/meinesem.gif" border="0" align="texttop">
+			&nbsp;<b><?=_("Veranstaltungen an meinen Einrichtungen"); print($_my_admin_inst_id) ? " - ".htmlReady($_my_inst[$_my_admin_inst_id]['name']) : ""?></b></td>
+		</tr>
+
 	<tr>
 		<td class="blank" width="100%" >&nbsp;
 			<?
@@ -584,107 +590,111 @@ elseif ($auth->auth["perm"]=="admin") {
 			?>
 		</td>
 	</tr>
-	<tr>
-		<form action="<?=$PHP_SELF?>" method="post">
-		<td class="blank" width="100%" >
-			<div style="font-weight:bold;font-size:10pt;margin-left:10px;">
-			<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?> 
-			</div>
-			<div style="margin-left:10px;">
-			<select name="institut_id" style="vertical-align:middle;">
-				<?
-				reset($_my_inst);
-				while (list($key,$value) = each($_my_inst)){
-					printf ("<option %s value=\"%s\" style=\"%s\">%s (%s)</option>\n",
-							($key == $_my_admin_inst_id) ? "selected" : "" , $key,($value["is_fak"] ? "font-weight:bold;" : ""),
-							htmlReady($value["name"]), $value["num_sem"]);
-					if ($value["is_fak"]){
-						$num_inst = $value["num_inst"];
-						for ($i = 0; $i < $num_inst; ++$i){
-							list($key,$value) = each($_my_inst);
-							printf("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s (%s)</option>\n",
-								($key == $_my_admin_inst_id) ? "selected" : "", $key,
+	<?
+	if (is_array($_my_inst)) {
+	?>	
+		<tr>
+			<form action="<?=$PHP_SELF?>" method="post">
+			<td class="blank" width="100%" >
+				<div style="font-weight:bold;font-size:10pt;margin-left:10px;">
+				<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?> 
+				</div>
+				<div style="margin-left:10px;">
+				<select name="institut_id" style="vertical-align:middle;">
+					<?
+					reset($_my_inst);
+					while (list($key,$value) = each($_my_inst)){
+						printf ("<option %s value=\"%s\" style=\"%s\">%s (%s)</option>\n",
+								($key == $_my_admin_inst_id) ? "selected" : "" , $key,($value["is_fak"] ? "font-weight:bold;" : ""),
 								htmlReady($value["name"]), $value["num_sem"]);
+						if ($value["is_fak"]){
+							$num_inst = $value["num_inst"];
+							for ($i = 0; $i < $num_inst; ++$i){
+								list($key,$value) = each($_my_inst);
+								printf("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s (%s)</option>\n",
+									($key == $_my_admin_inst_id) ? "selected" : "", $key,
+									htmlReady($value["name"]), $value["num_sem"]);
+							}
 						}
 					}
-				}
-				?>
-				</select>&nbsp;
-				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
-				<br>&nbsp;
-			</div>
-		</td>
-		</form>
-	</tr>
-		
-		
-	 <?
-	 if ($num_my_sem) {
-	 ?>
-	<tr>
-		<td class="blank" >
-			<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class=blank>
-				<tr valign"top" align="center">
-					<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name"><?=_("Name")?></a></th>
-					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status"><?=_("Status")?></a></th>
-					<th width="15%"><b><?=_("DozentIn")?></b></th>
-					<th width="10%"><b><?=_("Inhalt")?></b></th>
-					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=teilnehmer"><?=_("Teilnehmer")?></a></th>
-					<th width="5%"><b>&nbsp; </b></th>
-				</tr>
-	<?
-
-	while ($db->next_record()){
-	$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"));
-		$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
-	}
-	$value_list=substr($value_list,0,-1);
-	 $db->query("CREATE TEMPORARY TABLE IF NOT EXISTS  loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0 ) TYPE=HEAP");
-	 $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
-	$db->query($ins_query);
-	get_my_sem_values(&$my_sem);
-	$db->query("DROP TABLE loginfilenow_".$user->id);
-	$cssSw->enableHover();
-	foreach ($my_sem as $semid=>$values){
-		$cssSw->switchClass();
-		$class = $cssSw->getClass();
-		
-		$lastVisit = $loginfilenow[$semid];
-		
-		echo "<tr ".$cssSw->getHover()."><td class=\"$class\">&nbsp;&nbsp;</td>";
-		echo "<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">";
-		if ($lastVisit <= $values["chdate"])
-			print ("<font color=\"red\">");
-		echo htmlReady($values["name"]);
-		echo " (" . get_sem_name($values["start_time"]) .")";
-		if ($lastVisit <= $values["chdate"])
-			print ("</font>");
-		print ("</a></td>");
-
-		echo "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
-// Dozenten
-		$db2->query ("SELECT Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY Nachname ASC");
-		$temp = "";
-		while ($db2->next_record()) {
-			$temp .= "<a href=\"about.php?username=" . $db2->f("username") . "\">" . $db2->f("Nachname") . "</a>, ";
-		}
-		$temp = substr($temp, 0, -2);
-		print ("<td class=\"$class\" align=\"center\">&nbsp;$temp</td>");
-
-// Inhalt
-		echo "<td class=\"$class\" align=\"left\" nowrap>";
-		print_seminar_content($semid, $values);
-		echo "</td>";
-
-		echo "<td class=\"$class\" align=\"center\" nowrap>". $values["teilnehmer"]."&nbsp;</td>";
-		printf("<td class=\"$class\" align=center align=center><a href=\"seminar_main.php?auswahl=$semid&redirect_to=adminarea_start.php&new_sem=TRUE\"><img src=\"pictures/admin.gif\" ".tooltip(_("Veranstaltungsdaten bearbeiten"))." border=\"0\"></a></td>", $semid);
-		 echo "</tr>\n";
-		}
-	echo "		</table>
+					?>
+					</select>&nbsp;
+					<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
+					<br>&nbsp;
+				</div>
 			</td>
-		</tr>";
-
-	 }
+			</form>
+		</tr>
+			
+			
+		 <?
+		 if ($num_my_sem) {
+		 ?>
+		<tr>
+			<td class="blank" >
+				<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class=blank>
+					<tr valign"top" align="center">
+						<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name"><?=_("Name")?></a></th>
+						<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status"><?=_("Status")?></a></th>
+						<th width="15%"><b><?=_("DozentIn")?></b></th>
+						<th width="10%"><b><?=_("Inhalt")?></b></th>
+						<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=teilnehmer"><?=_("Teilnehmer")?></a></th>
+						<th width="5%"><b>&nbsp; </b></th>
+					</tr>
+		<?
+	
+		while ($db->next_record()){
+		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"));
+			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
+		}
+		$value_list=substr($value_list,0,-1);
+		 $db->query("CREATE TEMPORARY TABLE IF NOT EXISTS  loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0 ) TYPE=HEAP");
+		 $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
+		$db->query($ins_query);
+		get_my_sem_values(&$my_sem);
+		$db->query("DROP TABLE loginfilenow_".$user->id);
+		$cssSw->enableHover();
+		foreach ($my_sem as $semid=>$values){
+			$cssSw->switchClass();
+			$class = $cssSw->getClass();
+			
+			$lastVisit = $loginfilenow[$semid];
+			
+			echo "<tr ".$cssSw->getHover()."><td class=\"$class\">&nbsp;&nbsp;</td>";
+			echo "<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">";
+			if ($lastVisit <= $values["chdate"])
+				print ("<font color=\"red\">");
+			echo htmlReady($values["name"]);
+			echo " (" . get_sem_name($values["start_time"]) .")";
+			if ($lastVisit <= $values["chdate"])
+				print ("</font>");
+			print ("</a></td>");
+	
+			echo "<td class=\"$class\" align=\"center\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</td>";
+	// Dozenten
+			$db2->query ("SELECT Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY Nachname ASC");
+			$temp = "";
+			while ($db2->next_record()) {
+				$temp .= "<a href=\"about.php?username=" . $db2->f("username") . "\">" . $db2->f("Nachname") . "</a>, ";
+			}
+			$temp = substr($temp, 0, -2);
+			print ("<td class=\"$class\" align=\"center\">&nbsp;$temp</td>");
+	
+	// Inhalt
+			echo "<td class=\"$class\" align=\"left\" nowrap>";
+			print_seminar_content($semid, $values);
+			echo "</td>";
+	
+			echo "<td class=\"$class\" align=\"center\" nowrap>". $values["teilnehmer"]."&nbsp;</td>";
+			printf("<td class=\"$class\" align=center align=center><a href=\"seminar_main.php?auswahl=$semid&redirect_to=adminarea_start.php&new_sem=TRUE\"><img src=\"pictures/admin.gif\" ".tooltip(_("Veranstaltungsdaten bearbeiten"))." border=\"0\"></a></td>", $semid);
+			 echo "</tr>\n";
+			}
+		echo "		</table>
+				</td>
+			</tr>";
+	
+		 }
+	}
 
 ?>
 	<tr>
