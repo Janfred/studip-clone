@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2004-09-27 14:13+0200\n"
+"POT-Creation-Date: 2004-10-13 23:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -232,61 +232,61 @@ msgstr ""
 msgid "neu laden"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1262
-#: resources/lib/evaluate_values.php:1266
-#: resources/lib/evaluate_values.php:1276
+#: resources/lib/evaluate_values.php:1264
+#: resources/lib/evaluate_values.php:1268
 #: resources/lib/evaluate_values.php:1278
-#: resources/lib/evaluate_values.php:1296
-#: resources/lib/evaluate_values.php:1300
-#: resources/lib/evaluate_values.php:1325
-#: resources/lib/evaluate_values.php:1328
-#: resources/lib/evaluate_values.php:1344
-#: resources/lib/evaluate_values.php:1347
+#: resources/lib/evaluate_values.php:1280
+#: resources/lib/evaluate_values.php:1298
+#: resources/lib/evaluate_values.php:1302
+#: resources/lib/evaluate_values.php:1327
+#: resources/lib/evaluate_values.php:1330
+#: resources/lib/evaluate_values.php:1346
+#: resources/lib/evaluate_values.php:1349
 #, c-format
 msgid "%s, Belegungszeit: %s"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1357
+#: resources/lib/evaluate_values.php:1359
 msgid "Belegungszeit:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1358
+#: resources/lib/evaluate_values.php:1360
 msgid "Status:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1358
+#: resources/lib/evaluate_values.php:1360
 msgid "noch nicht bearbeitet"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1358
+#: resources/lib/evaluate_values.php:1360
 msgid "bereits bearbeitet"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1684
+#: resources/lib/evaluate_values.php:1686
 #, c-format
 msgid "Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet."
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1684
+#: resources/lib/evaluate_values.php:1686
 msgid "Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1701
+#: resources/lib/evaluate_values.php:1703
 msgid "wöchentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1703
+#: resources/lib/evaluate_values.php:1705
 #: resources/views/EditResourceData.class.php:269
 #: resources/views/ShowToolsRequests.class.php:276
 msgid "zweiw&ouml;chentlich"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1704
+#: resources/lib/evaluate_values.php:1706
 #: resources/views/ShowToolsRequests.class.php:277
 msgid "ab:"
 msgstr ""
 
-#: resources/lib/evaluate_values.php:1734
+#: resources/lib/evaluate_values.php:1736
 msgid "Raumanfrage bearbeitet"
 msgstr ""
 
