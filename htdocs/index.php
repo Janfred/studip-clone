@@ -102,7 +102,7 @@ ELSEIF (!$perm->have_perm("dozent")){ ?>
 
 <table class="blank" width="600" border=0 cellpadding=0 cellspacing=0 align=center>
 <tr><td colspan=3 class="topic">&nbsp;<b><? echo $UNI_NAME;?></b></td></tr>
-<tr><td class="blank" colspan=3><img src="pictures/startseite.jpg" alt="Stud.IP - G&ouml;ttingen" width="669" height="320" usemap="#Map" border="0">
+<tr><td class="blank" colspan=3><img src="pictures/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>" width="669" height="320" usemap="#Map" border="0">
 <map name="Map">
   <area shape="rect" coords="23,43,291,92" href="index.php?again=yes">
   <area shape="rect" coords="22,103,291,152" href="register1.php">
