@@ -206,6 +206,8 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			if ($val == "") $val = $key;
 			if ($key == "status") 
 				$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
+			elseif ($key == "ort") 
+				$data_object .= xml_tag($val, getRoom($db->f("Seminar_id")));
 			elseif ($key == "metadata_dates") 
 			{
 				$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
