@@ -399,14 +399,6 @@ hanged to "ChatFileServer". This enables the file-based processing of chat
 data, but has a huge impact on performace which makes it not a recommendable 
 for bigger installations.
 
-SRI-Schnistelle (External-module):
-For the module "Externe Seiten" can an additional Datenbankbenutzer,der only
-reading grip on the database created. This user must with
-Name and password among $DB_INSTITUT_USER and $DB_INSTITUT_PASSWORD entered
-become. When no additional data base user is supposed to be created, asks here
-simply entering the data base user that sets aside also in $DB_STUDIP_USER
-is.
-
 Ilias-Connect-module: 
 To use the module "Ilias Connect", which allows to attach Ilias learning 
 modules to Stud.IP courses, an Ilias installation version 2.3.3 or better 
