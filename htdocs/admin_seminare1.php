@@ -172,7 +172,6 @@ if (!checkpassword2())
 	
 	require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
 	require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-	require_once("archiv.inc.php");
 	require_once("functions.php");
 	require_once("visual.inc.php");
 	
@@ -414,112 +413,6 @@ if (($s_command=="edit") && ($s_send)){
 	}
 }
 
-## Delete the Seminar
-if (($s_command == "kill") && ($s_send)) {
-		$run = TRUE;
-		$list= TRUE; //Listenmodus fuer linksadmin vorwaehlen
-    ## Do we have permission to do so?
-
-   //Admin sollte man schon sein
-   if (!$perm->have_perm("admin")) {
-    	$msg .= "error§Sie haben keine Berechtigung Veranstaltungen zu archivieren.§";
-    	$run = FALSE;
-    	}
-
-   //Trotzdem nochmal nachsehen   	
-    if (!$perm->have_perm("root")) {
-	$db2->query("select inst_perms from seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user_id'");
-		if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
-		      $msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu archivieren.§";
-		      $run = FALSE;
-		}
-	}
-	
-	//Soll die Veranstaltung in weiteren (kommenden Semestern auftauchen?
-	$db2->query ("SELECT start_time, duration_time FROM seminare WHERE Seminar_id = '$s_id'");
-	$db2->next_record();
-	if ($db2->f("duration_time") == -1) {
-		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung eine dauerhafte Veranstaltung ist. <br>Wenn Sie sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
-		      $run = FALSE;
-		}
-	elseif (time() < ($db2->f("start_time") + $db2->f("duration_time"))) {
-		      $msg .= "error§Das Archivieren der Veranstaltung ist nicht m&ouml;glich, da diese Veranstaltung &uuml;ber mehrere Semester l&auml;uft und noch nicht abgeschlossen ist. <br>Wenn sie Sie wirklich archivieren wollen, dann &auml;ndern Sie bitte die Semesterzurordnung &uuml;ber den Menupunkt <a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>.§";
-		      $run = FALSE;
-		}
-
-	if ($run) {
-    ## Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
-    in_archiv($s_id);
-
-    ## Delete that Seminar.
-		## Alle Benutzer aus dem Seminar rauswerfen.
-    $query = "DELETE from seminar_user where Seminar_id='$s_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_user\" gel&ouml;scht.§";
-    }
-		## Alle beteiligten Institute rauswerfen
-	  $query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_inst\" gel&ouml;scht.§";
-    }
-		## Alle Eintraege in der seminar_bereich rauswerfen
-	  $query = "DELETE FROM seminar_bereich where Seminar_id='$s_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"seminar_bereich\" gel&ouml;scht.§";
-    }
-		## Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
-    if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
-      $msg .= "info§$db_ar Termine gel&ouml;scht.§";
-    }
-		## Alle weiteren Postings zu diesem Seminar loeschen.
-    $query = "DELETE from px_topics where Seminar_id='$s_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "info§$db_ar weitere Eintr&auml;ge aus der Tabelle \"px_topics\" gel&ouml;scht.§";
-    }
-		## Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
-    if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
-      $msg .= "info§$db_ar Dokumente und Ordner aus dem \"allgemeinen Dateiordner\" gel&ouml;scht.§";
-    }
-		## Literatur zu diesem Seminar löschen
-	  $query = "DELETE FROM literatur where range_id='$s_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "info§Literatur und Links gel&ouml;scht.§";
-    }
-		## Alle News-Verweise auf dieses Seminar löschen
-	  $query = "DELETE FROM news_range where range_id='$s_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
-      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news_range\" gel&ouml;scht.§";
-    }
-		## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
-	  $query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
-    $db->query($query);
-		While ($db->next_record()) {			  // Diese News hängen an nix mehr...
-			$tempNews_id = $db->f("news_id");
-		   $query = "DELETE FROM news where news_id = '$tempNews_id'";
-	    $db2->query($query);
-		}
-    if (($db_ar = $db->num_rows()) > 0) {
-      $msg .= "info§$db_ar Eintr&auml;ge aus der Tabelle \"news\" gel&ouml;scht.§";
-    }
-		## und das Seminar loeschen.
-    $query = "DELETE FROM seminare where Seminar_id= '$s_id'";
-    $db->query($query);
-    if ($db->affected_rows() == 0) {
-      $msg .= "error§<b>Fehler:</b> $query §";
-      break;
-    }
-
-    $msg .= "msg§Veranstaltung \"".htmlReady(stripslashes($Name))."\" gel&ouml;scht.§";
-	}
-}
-
-
 ## Details-Formular
 include ("links_admin.inc.php");
 
@@ -549,8 +442,6 @@ if ($s_command) {
 		echo " - ";
 		if ($s_command=="edit")
 			echo "Bearbeiten der Veranstaltungsdaten</b></td>";
-		elseif($s_command=="kill")
-			echo "Archivieren der Veranstaltung</b></td>";
 		?>
 	</tr>
 	<tr><td class="blank" colspan=2><br>
@@ -560,13 +451,6 @@ if ($s_command) {
 		parse_msg($msg);
 		echo "</td></tr><tr><td class=\"blank\" colspan=2>";
 	}
-	elseif  ($s_command=="kill") {
-		$msg.="info§<font size=-1>Achtung: Sie sind im Begriff die Veranstaltung <b>".$db->f("Name")."</b> zu archivieren! Damit verschieben Sie die Veranstaltung mit allen zugeh&ouml;rigen Daten in das Archiv.<br /> </font><font size=-1 color=\"#FF0000\">Die Veranstaltung kann danach nur im Archiv eingesehen werden. Dieser Schritt l&auml;sst sich nicht r&uuml;ckg&auml;ngig machen!</font><br /><font size=-1>Wenn Sie sich sicher sind, dass diese Veranstaltung nicht mehr aktiv ist, best&auml;tigen Sie das Archivieren unten am Ende der Seite.</font>§";
-		parse_msg($msg);
-		echo "</td></tr><tr><td class=\"blank\" colspan=2>";
-	}
-	
-	
 	
 	?>
 	<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=1 width=98%>
@@ -987,10 +871,6 @@ if ($s_command) {
 							($my_perms == "dozent" || $my_perms == "tutor"))):
 						?>
 						<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" src="pictures/buttons/uebernehmen-button.gif" border=0 name="s_edit" value=" Ver&auml;ndern ">
-						<?php
-					elseif ($s_id != "" && $s_command=="kill" && $perm->have_perm("admin")):
-						?>
-						<input type="image" src="pictures/buttons/archivieren-button.gif" name="s_kill2" value=" L&ouml;schen ">
 						<?php
 					else:
 						?>
