@@ -41,7 +41,6 @@ $db->query($query);
 
 //If User id is found, track him!
 if ($db->next_record()) {
-	echo $QUERY_STRING;
 	$query = sprintf ("INSERT INTO tracking_data SET entry_id = '%s', user_id = '%s', page = '%s', params = '%s', timestamp = '%s', open_object = '%s', user_ip = '%s', user_agent = '%s' ", md5(uniqid(rand())), $user->id, $i_page, $QUERY_STRING, time(), $SessSemName[1], $REMOTE_ADDR, $HTTP_USER_AGENT);
 	$db->query($query);
 }
