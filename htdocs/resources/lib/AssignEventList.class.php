@@ -41,15 +41,16 @@ AssignEventList, creates a event-list for an assignobject
 
 class AssignEventList{
 
-	var $begin;	// starttime as unix-timestamp
+	var $begin;		// starttime as unix-timestamp
 	var $end;		// endtime as unix-timestamp
-	var $assign;	// ressources-assignements (Object[])
+	var $assign;		// ressources-assignements (Object[])
 	var $range_id;		// range_id (String)
-	var $user_id;    // userId from PhpLib (String)
+	var $user_id;    	// userId from PhpLib (String)
+	var $filter;		// filter mode (single, repeated, all)
 	
 	// Konstruktor
 	// if activated without timestamps, we take the current semester
-	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE){
+	function AssignEventList($begin = 0, $end = 0, $resource_id='', $range_id='', $user_id='', $sort = TRUE, $filter = FALSE){
 	 	global $RELATIVE_PATH_RESOURCES, $SEM_ID, $user;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
@@ -66,6 +67,7 @@ class AssignEventList{
 		
 		$this->begin = $begin;
 		$this->end = $end;
+		$this->filter = $filter;
 		$this->resource_id = $resource_id;
 		$this->range_id = $range_id;
 		$this->user_id = $user_id;
@@ -100,8 +102,8 @@ class AssignEventList{
 	}
 	
 	// private
-	function restore(){
-		list_restore_assign($this, $this->resource_id,  $this->begin, $this->end);
+	function restore() {
+		list_restore_assign($this, $this->resource_id,  $this->begin, $this->end, FALSE, FALSE, $this->filter);
 	}
 	
 	// public
@@ -115,9 +117,10 @@ class AssignEventList{
 	
 	// public
 	function nextEvent(){
-		if (is_array($this->events))
-			if(list(,$ret) = each($this->events));
+		if (is_array($this->events)) {
+			if (list(,$ret) = each($this->events))
 				return $ret;
+		}
 		return FALSE;
 	}
 	

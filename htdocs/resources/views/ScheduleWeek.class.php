@@ -36,26 +36,29 @@
 
 class ScheduleWeek {
 	var $events;				//the events that will be shown
-	var $cell_allocations;		//internal Array
+	var $cell_allocations;			//internal Array
 	var $start_hour;			//First hour to display from
-	var $end_hour;			//Last hout to display to
-	var $show_days;			//Arrays of the days that should be shown
+	var $end_hour;				//Last hout to display to
+	var $show_days;				//Arrays of the days that should be shown
 	var $show_dates;			//If setted, the dates of each day will be shown
 	var $start_date;			//the timestamp of the first day (monday) of the viewed week 
-	
+	var $categories = array(		//the categories configuration (color's and bg-image)
+		"0"=>array("bg-picture"=>"/studip/calendar/pictures/category5_small.jpg", "border-color"=>"#505064"),
+		"1"=>array("bg-picture"=>"/studip/calendar/pictures/category3_small.jpg", "border-color"=>"#5C2D64"),
+		"2"=>array("bg-picture"=>"/studip/calendar/pictures/category9_small.jpg", "border-color"=>"#957C29"),
+		"3"=>array("bg-picture"=>"/studip/calendar/pictures/category11_small.jpg", "border-color"=>"#66954F"),
+		"4"=>array("bg-picture"=>"/studip/calendar/pictures/category13_small.jpg", "border-color"=>"#951408"),
+		);
 	
 	//Kontruktor
 	function ScheduleWeek ($start_hour = '', $end_hour = '', $show_days = '', $show_dates = '', $start_date = '') {
+		$this->start_hour=$start_hour;
+		$this->end_hour=$end_hour;
 		
-		if (!$start_hour)
-			$this->start_hour=8; //set 8:00 as default start
-		else
-			$this->start_hour=$start_hour;
-
-		if (!$end_hour)
-			$this->end_hour=20; //set 20:00 as default start
-		else
-			$this->end_hour=$start_hour;
+		if ((!$this->start_hour) && (!$this->end_hour)) {
+			$this->start_hour = 8;
+			$this->end_hour = 20;
+		}
 			
 		if (!$show_days) {
 			$this->show_days[1]=TRUE;
@@ -74,11 +77,12 @@ class ScheduleWeek {
 			$this->start_date=$start_date;
 		if ((!$show_dates) && ($start_date))
 			$this->show_dates=TRUE;	
+		//the base_date have to be 0:00
+		$this->base_date = mktime(0, 0, 0, date("n", $this->start_date), date("j",$this->start_date),  date("Y",$this->start_date));		
 	}
 
 
-	function addEvent ($name, $start_time, $end_time, $link='', $add_info='') {
-
+	function addEvent ($name, $start_time, $end_time, $link='', $add_info='', $category=0) {
 		if (date ("G", $end_time) >= $this->start_hour) {
 			$week_day=date("w", $start_time);
 			
@@ -89,7 +93,7 @@ class ScheduleWeek {
 				$rows = ((( $this->end_hour - date("G", $start_time))+1) *4);
 				$rows = $rows - (int)(date("i", $start_time) / 15);
 			} else 
-				$rows = ((date("G", $end_time) - date("G", $start_time)) * 4) + (int)((date("i", $end_time)-1) / 15);
+				$rows = ceil(((date("G", $end_time) - date("G", $start_time)) * 4) + ((date("i", $end_time) - date("i", $start_time)) / 15));
 				
 			if (date ("G", $start_time) < $this->start_hour) {
 				$rows = $rows - (($this->start_hour - date ("G", $start_time)) *4);
@@ -111,30 +115,40 @@ class ScheduleWeek {
 							"start_time" => $start_time,
 							"end_time" => $end_time,
 							"link" => $link,
-							"add_info" => $add_info
+							"add_info" => $add_info,
+							"category" => $category
 							);
 		}
 	}
 	
 	//private
 	function createCellAllocation() {
-		
-		if (is_array($this->events)) 
+		if (is_array($this->events)) {
 			foreach ($this->events as $ms) {
 				$m=1;
 				$idx_tmp=$ms["sort_index"];
-				if ($ms["rows"]>0)
+				if ($ms["rows"]>0) {
 					for ($m; $m<=$ms["rows"]; $m++) {
-						if ($m==1)  $start_cell=TRUE; else $start_cell=FALSE;
-							 $this->cell_allocations[$idx_tmp][$ms["id"]] = $start_cell;
-					if (($idx_tmp % 100) -date("w",$ms["start_time"]) == 30)
+						if ($m==1)
+							$start_cell=TRUE; 
+						else 
+							$start_cell=FALSE;
+					$this->cell_allocations[$idx_tmp][$ms["id"]] = $start_cell;
+					
+					//compense php sunday = 0 bullshit
+					$day = date("w",$ms["start_time"]);
+					if ($day == 0)
+						$day = 7;
+	
+					if ((($idx_tmp % 100) - $day) == 30)
 						$idx_tmp=$idx_tmp+70;
 					else
 						$idx_tmp=$idx_tmp+10;	
 					}
-				else
+				} else
 					$this->cell_allocations[$idx_tmp][$ms["id"]] = TRUE;
-			}	
+			}
+		}
 	}
 	
 	//private
@@ -260,28 +274,34 @@ class ScheduleWeek {
 					if ($this->cell_allocations[$idx])
 						while ($cs = each ($this->cell_allocations [$idx]))
 							$cell_content[]=array("id"=>$cs[0], "start_cell"=>$cs[1]);
-					if ((!$this->cell_allocations[$idx]) || ($cell_content[0]["start_cell"]))	echo "<td ";
+					if ((!$this->cell_allocations[$idx]) || ($cell_content[0]["start_cell"]))	
+						echo "<td ";
 					$u=0;
 					if (($this->cell_allocations[$idx]) && ($cell_content[0]["start_cell"])) {
 						$r=0;
 						foreach ($cell_content as $cc) {
 							if ($r==0) {
-								echo "class=\"rahmen_white\" valign=\"top\" rowspan=",$this->events[$cell_content[0]["id"]]["rows"],">";
-								echo "<table width=\"100%\" cellspacing=0 cellpadding=2 border=0><tr><td class=\"topic\">";
+								printf ("style=\"vertical-align:top; font-size:10px; color:#FFFFFF; background-image:url(%s); border-style:solid; border-width:1px; border-color:%s;\" valign=\"top\" rowspan=\"%s\" >",
+									$this->categories[$this->events[$cell_content[0]["id"]]["category"]]["bg-picture"], $this->categories[$this->events[$cell_content[0]["id"]]["category"]]["border-color"], $this->events[$cell_content[0]["id"]]["rows"]);
+								echo "<table width=\"100%\" cellspacing=0 cellpadding=0 border=0><tr>";
 							} else
-								echo "</td></tr><tr><td class=\"topic\">";
+								echo "</td></tr><tr>";
+							printf ("<td style=\"vertical-align:top; font-size:10px; height:15px; color:#FFFFFF; background-image:url(%s); border-style:solid; border-width:1px; border-color:%s;\" >", 
+								$this->categories[$this->events[$cell_content[0]["id"]]["category"]]["bg-picture"], $this->categories[$this->events[$cell_content[0]["id"]]["category"]]["border-color"]);
 							if (($print_view) && ($r!=0))
 								echo "<hr width=\"100%\">";
 							$r++;
-							echo "<font size=-1 ";
+							printf ("<div style=\"font-size:10px; height:15px; background-color:%s; ",
+								$this->categories[$this->events[$cell_content[0]["id"]]["category"]]["border-color"]);
 							if (!$print_view)
-								echo "color=\"FFFFFF\"";
-							echo ">", date ("H:i",  $this->events[$cc["id"]]["start_time"]);
+								echo "color:#FFFFFF;";
+							echo " \">".date ("H:i",  $this->events[$cc["id"]]["start_time"]);
 							if  ($this->events[$cc["id"]]["start_time"] <> $this->events[$cc["id"]]["end_time"]) 
 								echo " - ",  date ("H:i",  $this->events[$cc["id"]]["end_time"]);
 							//if ($this->events[$cc["id"]]["ort"]) echo ",  ", $this->events[$cc["id"]]["ort"];
-							echo "</font></td></tr><tr><td class=\"blank\">";
-								echo  "<a href=\"".$this->events[$cc["id"]]["link"]."\"><font size=-1>";
+							echo "</div>";
+							echo "</td></tr><tr><td>";
+								echo  "<a style=\"color: #FFFFFF;font-size:10px;\" href=\"".$this->events[$cc["id"]]["link"]."\"><font size=-1>";
 								echo htmlReady(substr($this->events[$cc["id"]]["name"], 0,50));
 								if (strlen($this->events[$cc["id"]]["name"])>50)
 									echo "..."; 
@@ -290,18 +310,26 @@ class ScheduleWeek {
 							//if ($this->events[$cc["id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$this->events[$cc["id"]]["id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Dieses Feld aus der Auswahl l&ouml;schen\">&nbsp;</a></div>";
 						}
 						echo "</td></tr></table></td>";
-						}
-					if (!$this->cell_allocations[$idx])  echo "class=\"steel1\"></td>"; 
 					}
-					echo "</tr>\n";
+					if (!$this->cell_allocations[$idx]) {
+						if (($k == 3) && ($this->add_link)) {
+							$add_link_timestamp = $this->base_date + (($l-1) * 24 * 60 * 60) + ($i * 60 * 60);
+							echo sprintf ("class=\"steel1\" align=\"right\" valign=\"bottom\"><a href=\"%s%s\"><img src=\"pictures/calplus.gif\" %s border=\"0\"/></a></td>", 
+									$this->add_link, $add_link_timestamp, tooltip(sprintf(_("Eine neue Belegung von %s bis %s Uhr anlegen"), date ("H:i", $add_link_timestamp), date ("H:i", $add_link_timestamp + (60 * 60)))));
+						} else
+							echo "class=\"steel1\" align=\"right\"></td>"; 
+					}
 				}
+				echo "</tr>\n";
 			}
+		}
 
-			if ($print_view) {
-				echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; "._("Erstellt am")." ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr></tr>";
-			} else {
-			}
-			?>
+		if ($print_view) {
+			echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; "._("Erstellt am")." ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr></tr>";
+		} else {;
+			//print view bottom
+		}
+		?>
 			</td>
 		</tr>
 	</table>

@@ -300,6 +300,10 @@ if ($change_structure_object) {
 	$resources_data["actual_object"]=$change_structure_object;
 }
 
+/*****************************************************************************
+edit/add assigns
+/*****************************************************************************/
+
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
 	require_once ("$RELATIVE_PATH_CALENDAR/calendar_func.inc.php"); //needed for extended checkdate
@@ -770,6 +774,10 @@ if (($add_root_user) || ($delete_root_user_id)){
 	}
 }
 
+/*****************************************************************************
+change settings
+/*****************************************************************************/
+
 //change settings
 if ($change_global_settings) {
 	if ($globalPerm == "admin") { //check for resources root or global root
@@ -861,8 +869,9 @@ if (($kill_lock)) {
 	}
 }
 
-
-//evaluate the command from schedule navigator
+/*****************************************************************************
+evaluate the commands from schedule navigator
+/*****************************************************************************/
 if ($view == "view_schedule" || $view == "openobject_schedule") {
 	if ($next_week)
 		$resources_data["schedule_week_offset"]++;
@@ -912,7 +921,20 @@ if ($view == "view_schedule" || $view == "openobject_schedule") {
 	}
 }
 
-//handle commands from the search 'n' browse modul
+if (($show_repeat_mode) && ($send_schedule_repeat_mode_x)) {
+	$resources_data["show_repeat_mode"] = $show_repeat_mode;
+}
+
+if ($time_range) {
+	if ($time_range == "FALSE")
+		$resources_data["schedule_time_range"] = '';
+	else
+		$resources_data["schedule_time_range"] = $time_range;
+}
+	
+/*****************************************************************************
+handle commands from the search 'n' browse module
+/*****************************************************************************/
 if ($view == "search") {
 	if ($open_level)
 		 $resources_data["browse_open_level"]=$open_level;

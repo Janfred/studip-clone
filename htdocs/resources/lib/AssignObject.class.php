@@ -119,7 +119,7 @@ class AssignObject {
 
 		if (!$id)
 			$id=$this->assign_user_id;
-
+			
 		switch (ResourceObject::getOwnerType($id)) {
 			case "user";
 				if (!$explain)
@@ -173,25 +173,25 @@ class AssignObject {
 	
 	function getOwnerType() {
 		//Ist es eine Veranstaltung?
-		$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$id);
+		$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$this->getAssignUserId());
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "sem";
 
 		//Ist es ein Nutzer?
-		$query = sprintf("SELECT user_id FROM auth_user_md5 WHERE user_id='%s' ",$id);
+		$query = sprintf("SELECT user_id FROM auth_user_md5 WHERE user_id='%s' ",$this->getAssignUserId());
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "user";
 		
 		//Ist es ein Termin?
-		$query = sprintf("SELECT termin_id FROM termine WHERE termin_id='%s' ",$id);
+		$query = sprintf("SELECT termin_id FROM termine WHERE termin_id='%s' ",$this->getAssignUserId());
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "date";
 
 		//Ist es ein Institut?
-		$query = sprintf("SELECT Institut_id FROM Institute WHERE Institut_id='%s' ",$id);
+		$query = sprintf("SELECT Institut_id FROM Institute WHERE Institut_id='%s' ",$this->getAssignUserId());
 		$this->db->query($query);
 		if ($this->db->next_record())
 			return "inst";

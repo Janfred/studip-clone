@@ -33,16 +33,20 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP']."datei.inc.php");
+require_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/AssignObject.class.php");
+
 /*****************************************************************************
 AssignEvent, the assigned events 
 /*****************************************************************************/
 class AssignEvent {
 	var $db;					//Database
 	var $id;					//Id from mother AssignObject
-	var $resource_id;			//resource_id from mother AssignObject
-	var $assign_user_id;		//user_id of mother AssignObject
-	var $user_free_name;		//free owner-name of mother AssignObject
-	var $begin;				//begin timestamp
+	var $resource_id;				//resource_id from mother AssignObject
+	var $assign_user_id;				//user_id of mother AssignObject
+	var $user_free_name;				//free owner-name of mother AssignObject
+	var $repeat_mode;				//the repeat mode of mother AssignObject
+	var $begin;					//begin timestamp
 	var $end;					//end timestamp
 
 	//Konstruktor
@@ -59,6 +63,20 @@ class AssignEvent {
 		$this->user_free_name=$user_free_name;
 		$this->id = md5(uniqid("jasony"));
 	}
+
+	function setRepeatMode ($value) {
+		$this->repeat_mode = ($value);
+	}
+	
+	function getRepeatMode ($check_corresponding_metadata = FALSE) {
+		if (($this->repeat_mode == "na") && ($check_corresponding_metadata)) {
+			$assObj = new AssignObject($this->getAssignId());
+			if (($assObj->getOwnerType() == "date") && (isMetadateCorrespondingDate($this->getAssignUserId())))
+				return "meta";
+		}
+		return $this->repeat_mode;
+	}
+
 
 	function getId() {
 		return $this->id;

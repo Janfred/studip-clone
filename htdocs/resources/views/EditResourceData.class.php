@@ -109,7 +109,7 @@ class EditResourceData {
 
 	function showScheduleForms($assign_id='') {
 		global $PHP_SELF, $perm, $resources_data, $new_assign_object, $search_user, $search_string_search_user,
-			$CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode;
+			$CANONICAl_RELATIVE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $cssSw, $view_mode, $add_ts;
 
 		$killButton = TRUE;
 		
@@ -117,7 +117,12 @@ class EditResourceData {
 			$resAssign = unserialize($new_assign_object);
 		else
 			$resAssign=new AssignObject($assign_id);
-
+		
+		if (($add_ts) && ($resAssign->isNew())) {
+			$resAssign->setBegin($add_ts);
+			$resAssign->setEnd($add_ts + (60 * 60));
+		}
+		
 		//it is not allowed to edit or kill assigns for rooms here
 		if (($resAssign->getOwnerType() == "sem") || ($resAssign->getOwnerType() == "date")) {
 			$resObject=new ResourceObject ($resAssign->getResourceId());
@@ -173,7 +178,7 @@ class EditResourceData {
 				}
 				if  (!$resAssign->getId()) 
 					print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
-				else
+				elseif (!$lockedAssign)
 					print "<br />&nbsp;";
 				if ($lockedAssign) {
 					if ($resAssign->getOwnerType() == "sem") {
@@ -186,22 +191,22 @@ class EditResourceData {
 						$this->db->next_record();
 					}
 					if ($resAssign->getOwnerType() == "sem") {
-						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Termin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
 								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
 								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							print "<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte die Zeiten der Veranstaltung");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie die %sZeiten%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_metadates.php?seminar_id=".$this->db->f("Seminar_id")."\">", "</a>");
 						print "</font>";
 					} elseif ($resAssign->getOwnerType() == "date") {
-						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+						print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Diese Belegung ist ein Einzeltermin der Veranstaltung %s, die in diesem Raum stattfindet."), 
 							($perm->have_studip_perm("user", $this->db->f("Seminar_id"))) ? 
 								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>" : 
 								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							print "<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den entsprechenden Termin in der Veranstaltung");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin im %sAblaufplan%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_dates.php?range_id=".$this->db->f("Seminar_id")."\">", "</a>");
 						print "</font>";
 					} elseif (!$lockedAssign) {
 						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
@@ -239,7 +244,11 @@ class EditResourceData {
 						else
 							echo "<b>"._("w&ouml;chentlich")."</b>";
 					else
-						echo "<b>"._("keine Wiederholung (Einzeltermin)")."</b>";
+						if ($resAssign->getOwnerType() == "date") {
+							if (isMetadateCorrespondingDate($resAssign->getAssignUserId()))
+								echo "<b>"._("Einzeltermin zu regelm&auml;&szlig;igen Veranstaltungszeiten")."</b>";
+						} else
+							echo "<b>"._("keine Wiederholung (Einzeltermin)")."</b>";
 				} else {
 				?>				
 					<input type="IMAGE" name="change_schedule_repeat_none" <?=makeButton("keine".(($resAssign->getRepeatMode()=="na") ? "2" :""), "src") ?> border=0 />&nbsp;&nbsp;

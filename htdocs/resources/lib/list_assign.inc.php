@@ -37,7 +37,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignEvent.class.php");
 
 
-function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $range_id=''){
+function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $range_id='', $filter = FALSE){
 	$db = new DB_Seminar();
 
 	$year = date("Y", $begin);
@@ -61,11 +61,11 @@ function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $r
 	//handle the assigns und create all the repeated stuff
 	while($db->next_record()) {
 		$assign_object = new AssignObject($db->f("assign_id"));
-		create_assigns($assign_object, $this, $begin, $end);
+		create_assigns($assign_object, $this, $begin, $end, $filter);
 	}
 }
 
-function create_assigns($assign_object, &$this, $begin='', $end='') {
+function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FALSE) {
 	$year_offset=0;
 	$week_offset=0;
 	$month_offset=0;
@@ -81,9 +81,12 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 		
 	if ($assign_object->getRepeatMode() == "na") {
 		// date without repeatation, we have to create only one event (object = event)
-		$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
+		$assEvt = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
+		$assEvt->setRepeatMode($assign_object->getRepeatMode());
+		if (!isFiltered($filter, $assEvt->getRepeatMode(TRUE)))
+			$this->events[] = $assEvt;
 	} elseif ($assign_object->getRepeatMode() == "sd") {
 		// several days mode, we create multiple assigns
 		
@@ -93,10 +96,14 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 					date("j",$assign_object -> getBegin()),
 					date("Y",$assign_object -> getBegin()));
 
-		if (($temp_ts_end <= $end) && ($assign_object->getBegin() >= $begin))
-			$this->events[] = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $temp_ts_end,
+		if (($temp_ts_end <= $end) && ($assign_object->getBegin() >= $begin)) {
+			$assEvt = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
+			$assEvt->setRepeatMode($assign_object->getRepeatMode());
+			if (!isFiltered($filter, $assEvt->getRepeatMode()))
+				$this->events[] = $assEvt;
+		}
 		//in between days
 		for ($d=date("j",$assign_object -> getBegin())+1; $d<=date("j",$assign_object -> getRepeatEnd())-1; $d++) {
 			$temp_ts=mktime(0, 0, 0,
@@ -109,10 +116,14 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 					$d,
 					date("Y",$assign_object -> getBegin()));
 
-			if (($temp_ts_end <= $end) && ($temp_ts >= $begin))
-				$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+			if (($temp_ts_end <= $end) && ($temp_ts >= $begin)) {
+				$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
+				$assEvt->setRepeatMode($assign_object->getRepeatMode());
+				if (!isFiltered($filter, $assEvt->getRepeatMode()))
+					$this->events[] = $assEvt;								
+			}
 		}
 				
 		//last_day
@@ -128,10 +139,14 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 					date("j",$assign_object -> getRepeatEnd()),
 					date("Y",$assign_object -> getRepeatEnd()));
 
-		if (($temp_ts_end <= $end) && ($temp_ts >= $begin))
-			$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+		if (($temp_ts_end <= $end) && ($temp_ts >= $begin)) {
+			$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
+			$assEvt->setRepeatMode($assign_object->getRepeatMode());
+			if (!isFiltered($filter, $assEvt->getRepeatMode()))
+				$this->events[] = $assEvt;								
+		}
 		
 	} elseif ((($assign_object -> getRepeatEnd() >= $begin) && ($assign_object -> getBegin() <= $end)) ||
 			(($begin == -1) &&($end == -1) && ($assign_object->getRepeatQuantity() >0)))
@@ -166,11 +181,14 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 										$assign_object->getUserFreeName());
 		elseif ($temp_ts >= $begin) {
 			 if (($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && (($quantity <= $assign_object->getRepeatQuantity()) || ($assign_object->getRepeatQuantity() == -1)))  {
-			 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+			 	$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 										$assign_object->getUserFreeName());
-				}
+				$assEvt->setRepeatMode($assign_object->getRepeatMode());
+				if (!isFiltered($filter, $assEvt->getRepeatMode()))
+					$this->events[] = $assEvt;										
 			}
+		}
 		
 		//security break
 		if ($quantity > 150)
@@ -178,6 +196,20 @@ function create_assigns($assign_object, &$this, $begin='', $end='') {
 			
 		} while((($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && ($quantity < $assign_object->getRepeatQuantity() || $assign_object->getRepeatQuantity() == -1)) || 
 				(($begin == -1) &&($end == -1) &&($assign_object->getRepeatQuantity()) >0) && ($quantity < $assign_object->getRepeatQuantity()));
+}
+
+function isFiltered($filter, $mode) {
+	$filters = array(	// filter rules (a filter consists of one or more repeat_modes)
+		"all"=>array("na", "sd", "meta", "d", "m", "y", "w"),
+		"single"=>array("na", "sd"),
+		"repeated"=>array("meta", "d", "m", "y", "w"));
+	if ($filter) {
+		if (in_array($mode, $filters[$filter]))
+			return FALSE;
+		else
+			return TRUE;
+	} else
+		return FALSE;
 }
 
 ?>

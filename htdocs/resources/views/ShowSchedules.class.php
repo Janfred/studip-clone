@@ -52,7 +52,8 @@ class ShowSchedules {
 	var $length_factor;		//the used length factor for calculations, only used for viewing
 	var $length_unit;		//the used length unit for calculations, only used for viewing
 	var $week_offset;		//offset for the week view
-	var $used_view;		//the used view, submitted to the sub classes
+	var $used_view;			//the used view, submitted to the sub classes
+	
 		
 	//Konstruktor
 	function ShowSchedules ($resource_id='', $user_id='', $range_id='') {
@@ -136,7 +137,6 @@ class ShowSchedules {
 					&nbsp; <input type="IMAGE" name="start_graphical" <?=makeButton("ausgeben", "src") ?> border=0 vallue="<?=_("ausgeben")?>" /><br />&nbsp; 
 				</td>
 			</tr>
-			</form>
 		</table>
 	<?
 	}
@@ -176,12 +176,23 @@ class ShowSchedules {
 				</td>
 			</tr>
 		</table>
+		</form>
 		<br /><br />
 	<?
 	}
 	
 	function showScheduleGraphical() {
-		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode;
+		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode, $resources_data;
+	 	
+	 	$categories["na"] = 4;
+	 	$categories["sd"] = 4;
+	 	$categories["y"] = 0;
+	 	$categories["m"] = 0;
+	 	$categories["w"] = 0;
+	 	$categories["d"] = 0;
+	 	
+	 	//an assign for a date corresponding to a (seminar-)metadate
+	 	$categories["meta"] = 1;
 	 	
 	 	//match start_time & end_time for a whole week
 	 	$dow = date ("w", $this->start_time);
@@ -198,9 +209,28 @@ class ShowSchedules {
 		 
  		$start_time = mktime (0, 0, 0, date("n",$this->start_time), date("j", $this->start_time)+$offset+($this->week_offset*7), date("Y", $this->start_time));
  		$end_time = mktime (23, 59, 59, date("n",$start_time), date("j", $start_time)+6, date("Y", $start_time));
+ 		
+ 		if ($resources_data["schedule_time_range"] == -1) {
+ 			$start_hour = 0;
+ 			$end_hour = 12;
+ 		} elseif ($resources_data["schedule_time_range"] == 1) {
+ 			$start_hour = 12;
+ 			$end_hour = 23;
+ 		} else {
+ 		 	$start_hour = 8;
+ 			$end_hour = 22;
+		}
 
-	 	$schedule=new ScheduleWeek(FALSE, FALSE, FALSE, TRUE, $start_time) ;
-		
+	 	$schedule=new ScheduleWeek($start_hour, $end_hour, FALSE, TRUE, $start_time);
+	 	$schedule->add_link = "resources.php?view=edit_object_assign&add_ts=";
+	 	
+		//fill the schedule
+		$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE, $resources_data["show_repeat_mode"]);
+		while ($event=$assign_events->nextEvent()) {
+			$repeat_mode = $event->getRepeatMode(TRUE);
+			$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 
+						"$PHP_SELF?quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$repeat_mode]);
+		}
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
@@ -219,23 +249,51 @@ class ShowSchedules {
 				</td>
 			</tr>
 			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
+					<?
+					if ((!$resources_data["schedule_time_range"]) || ($resources_data["schedule_time_range"] == 1))
+						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"pictures/calendar_up.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : -1, tooltip (_("Frühere Belegungen anzeigen")));
+					?>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3">
+				<td class="<? echo $cssSw->getClass() ?>" width="76%" colspan="2">
 					<?						
-					$assign_events=new AssignEventList ($start_time, $end_time, $this->resource_id, '', '', TRUE);
-					echo "<br /><font size=-1>"._("Anzahl der Belegungen in diesem Zeitraum:")." ", $assign_events->numberOfEvents()."</font>";
-					echo "<br />&nbsp; ";
-					while ($event=$assign_events->nextEvent()) {
-						$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 
-											"$PHP_SELF?quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId());
-					}
-					$schedule->showSchedule("html");
-					echo "<br />&nbsp; ";
+					echo "&nbsp;<font size=-1>"._("Anzahl der Belegungen in diesem Zeitraum:")." ", $assign_events->numberOfEvents()."</font><br />&nbsp;";
+					?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap>
+					<?
+					print "<select style=\"font-size:10px;\" name=\"show_repeat_mode\">";
+					printf ("<option style=\"font-size:10px;\" %s value=\"all\">"._("alle Belegungen")."</option>", ($resources_data["show_repeat_mode"] == "all") ? "selected" : "");
+					printf ("<option %s style=\"font-size:10px;\" value=\"single\">"._("nur Einzeltermine")."</option>", ($resources_data["show_repeat_mode"] == "single") ? "selected" : "");
+					printf ("<option %s style=\"font-size:10px;\" value=\"repeated\">"._("nur Wiederholungstermine")."</option>", ($resources_data["show_repeat_mode"] == "repeated") ? "selected" : "");
+					print "</select>";
+					print "&nbsp;<input type=\"IMAGE\" name=\"send_schedule_repeat_mode\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Ansicht umschalten"))." />";
 					?>
 				</td>
 			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="3">
+					<?					
+					$schedule->showSchedule("html");
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="center" valign="bottom">&nbsp;
+					<?
+					if ((!$resources_data["schedule_time_range"]) || ($resources_data["schedule_time_range"] == -1))
+						printf ("<a href=\"%s?quick_view=%s&quick_view_mode=%s&time_range=%s\"><img src=\"pictures/calendar_down.gif\" %sborder=\"0\" /></a>", $PHP_SELF, $this->used_view, $view_mode, ($resources_data["schedule_time_range"]) ? "FALSE" : 1, tooltip (_("Spätere Belegungen anzeigen")));
+					?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="20%" nowrap colspan="3">
+				&nbsp;
+				</td>
+			</tr>
+			
 		</table>
+		</form>
 	<?
 	}
 }
