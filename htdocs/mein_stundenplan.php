@@ -531,10 +531,7 @@ for ($i; $i<$global_end_time+1; $i++)
 		}
 	else {
 		}
-	?>
-	</td>
-</tr>
-<?
+
 echo "</table></td></tr>";
 ?>
 <tr>
@@ -620,7 +617,7 @@ ob_end_flush(); //end outputbuffering
 page_close();
 if (!$print_view) {
 ?>
-</td></tr></table>
+</table>
 <? } ?>
 </body>
 </html>
