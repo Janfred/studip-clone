@@ -42,13 +42,13 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="blank">
-			<br><br><center><font style="font-weight: bold">Convert-Script</font> die user_info anzupassen...</center><br><hr noshade size="9">
+			<br><br><center><font style="font-weight: bold">Convert-Script</font> die user_info anzupassen ... hierbei wird bei allen nutzer die email-weiterleitungsoption auf den systemdefault gesetzt (diese wird in der local.inc angepasst)</center><br><hr noshade size="9">
 			<?
 			$db=new DB_Seminar;
 			$count = "0";
-			$db->query("SELECT * FROM user_info WHERE  email_forward = '0'");
+			$db->query("SELECT * FROM user_info");
 			while ($db->next_record()) {
-				$db2->query("UPDATE user_info SET email_forward = '1' WHERE  user_id = '".$db->f("user_id")."'");
+				$db2->query("UPDATE user_info SET email_forward = '".$MESSAGING_FORWARD_DEFAULT."' WHERE  user_id = '".$db->f("user_id")."'");
 				$count = $count+1; // zaehle
 			}
 			echo $count." Eintr&auml;ge bearbeitet.";
