@@ -46,7 +46,7 @@ $db=new DB_Seminar;
 <?
 	$i = 0;
 	$j = 0;
-	$db->query ("SELECT * FROM user_inst WHERE Funktion != '' AND Funktion != 'Student' AND Funktion != '0'");
+	$db->query ("SELECT * FROM user_inst WHERE Funktion != '' AND Funktion != 'Student' AND Funktion != '0' AND Funktion != '1'");
 	while ($db->next_record()) {
 		$name = $INST_FUNKTION[$db->f("Funktion")][name];
 		$statusgruppe_id = CheckStatusgruppe($db->f("Institut_id"),$name);
