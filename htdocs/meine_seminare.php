@@ -244,7 +244,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
                                         <tr valign="top" align="center">
                                                 <td align="center">
-                                                        <table border="0" cellpadding="2" cellspacing="0" width="98%" align="center" class="blank">
+                                                        <table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
                                                                 <tr>
                                                                         <td class="blank" colspan="2">&nbsp;
                                                                         
@@ -264,10 +264,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
         <?
         ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
         ob_start();
-         while ($db->next_record())
-                {
-          $my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"), binding=>$db->f("admission_binding"));
-          $value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
+         while ($db->next_record())   {
+          	$my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"), binding=>$db->f("admission_binding"));
+	        $value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
          }
          $value_list=substr($value_list,0,-1);
          $db->query("CREATE  TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
