@@ -31,6 +31,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+echo "test";
+
 if(ini_get('zlib.output_compression'))
       ini_set('zlib.output_compression', 'Off');
 
