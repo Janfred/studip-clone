@@ -85,13 +85,6 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	//nobody darf sogar durch (wird spaeter schon abgefangen)
 	if ($perm->have_perm("user")) {
 
-	//Rueckgabe aus Studiengangsauswahl bearbeiten
-	if (is_array($sem_verify_suggest_arr))
-		foreach($sem_verify_suggest_arr as $key=>$val) {
-			if ($val=="on")
-				$sem_verify_suggest_studg=$sem_verify_suggest_arr[$key-1];
-		}
-
 		//Sonderfall, Passwort fuer Schreiben nicht eingegeben, Lesen aber erlaubt
 		if ($SemIDtemp<>"") {
 			$db->query("SELECT Lesezugriff, Name FROM seminare WHERE Seminar_id LIKE '$SemIDtemp'");
@@ -306,7 +299,6 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
 							       <?
 								while ($db->next_record()) {
-									printf ("<input type=\"HIDDEN\" name=\"sem_verify_suggest_arr[]\" value=\"%s\">", $db->f("studiengang_id"));
 									$db3->query("SELECT studiengang_id FROM user_studiengang WHERE studiengang_id = '".$db->f("studiengang_id")."' AND user_id = '$user->id' "); // Darf ich diesen auswaehlen?
 									$db3->next_record();
 									if ($db3->f("studiengang_id") == "all")
@@ -314,7 +306,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 									else
 										$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
 									if (($db3->num_rows()) || ($db->f("studiengang_id") == "all"))
-										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_arr[]\">&nbsp; <font size=-1><b>Kontingent f&uuml;r %s (%s Pl&auml;tze)</b></font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
+										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_studg\" value=\"%s\">&nbsp; <font size=-1><b>Kontingent f&uuml;r %s (%s Pl&auml;tze)</b></font><br />", $db->f("studiengang_id"), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
 									else
 										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
 									}
