@@ -1045,10 +1045,10 @@ function printposting ($forumposting) {
   				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker"; 
   			else
   				$link = $PHP_SELF."?&flatviewstartposting=".$forum["flatviewstartposting"]."#anker"; 
-			if ($forumposting["neuauf"]==1 AND $forumposting["newold"]=="new")
+			if ($forum["neuauf"]==1 AND $forumposting["newold"]=="new")
 				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt	
   		}
-  		
+  				  		
   	// Views hochzählen
   	
   		if ($forumposting["openclose"] == "open" && $user->id != $forumposting["userid"])  // eigene Postings werden beim view nicht gezählt
