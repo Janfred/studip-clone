@@ -20,8 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //////////////////////////////////////////////////////////////////////////
 
-function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt, $root_name, $description, $username, $mehr, $show,$write=0,$modify_dt)
-{global $PHP_SELF,$loginfilelast,$SessSemName,$forum,$view,$davor,$check_author,$check_cont,$check_name,$suchbegriff,$mehr,$tmp,$open,$show,$anfang,$auth,$user;
+function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt, $root_name, $description, $username, $mehr, $show,$write=0,$modify_dt) {
+	global $PHP_SELF,$loginfilelast,$SessSemName,$forum,$view,$davor,$check_author,$check_cont,$check_name,$suchbegriff,$mehr,$tmp,$open,$show,$anfang,$auth,$user;
+
 	$meineseite = $PHP_SELF;
 	$datumtmp = $loginfilelast[$SessSemName[1]];
 	IF ($datumtmp < $modify_dt) $neuer_beitrag = TRUE;  //ist der Beitrag neu?
@@ -103,8 +104,8 @@ function topic_liste_suche($eintrag, $root_id, $open, $name, $author, $create_dt
 //////////////////////////////////////////////////////////////////////////
 
 
-function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$check_cont)
-{ global $SessionSeminar,$SessSemName, $PHP_SELF;
+function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$check_cont) {
+	global $SessionSeminar,$SessSemName, $PHP_SELF;
 
 
 	if(!$mehr) 
@@ -128,19 +129,19 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 	if(!isset($suchbegriff)):
 	?>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;Bitte geben Sie hier Ihren Suchbegriff ein:</b></td>
+	<td class="topic" colspan=2><b>&nbsp;<?=_("Bitte geben Sie hier Ihren Suchbegriff ein:")?></b></td>
 </tr>
 <tr>
 <td class="blank" width=100%">
 <blockquote>
-<BR>
-<P>
+<br>
+<p>
  <center> 
    <table cellpadding=2 cellspacing=0 border=0>
 	<form  name="search" method="post"  action="<?echo $PHP_SELF?>" >
 		<tr>
 			<td class="steel1">
-				<b>Suchbegriff:</b>
+				<b><?=_("Suchbegriff:")?></b>
 			</td>
 			<td class="steel1">
 				<input  type="TEXT" name="suchbegriff">
@@ -148,7 +149,7 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 		</tr>
 	   	<tr>
 	   		<td class="steelgraulight">
-	   			<b>Suchen in den Feldern:</b>
+	   			<b><?=_("Suchen in den Feldern:")?></b>
 	   		</td>
 	   		<td class="steelgraulight">&nbsp;
 	   			 
@@ -159,7 +160,7 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 				 
 			</td>
 			<td class="steel1">
-				<input name="check_author" type="CHECKBOX" value="on" checked> Autor
+				<input name="check_author" type="CHECKBOX" value="on" checked> <?=_("Autor")?>
 			</td>
 		</tr>
 	     	<tr>
@@ -167,7 +168,7 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 	     			 
 	     		</td>
 	     		<td class="steelgraulight">
-	     			<input type="CHECKBOX" name="check_name" value="on" checked> Thema 
+	     			<input type="CHECKBOX" name="check_name" value="on" checked> <?=_("&Uuml;berschrift")?> 
 	     		</td>
 	     	</tr>
 	     	<tr>
@@ -175,12 +176,12 @@ function suchen ($eintrag=0, $mehr=5, $suchbegriff,$check_author,$check_name,$ch
 		     		 
 		     	</td>
 		     	<td class="steel1">
-		     		<input type="CHECKBOX" name="check_cont" value="on" checked> Inhalt
+		     		<input type="CHECKBOX" name="check_cont" value="on" checked> <?=_("Inhalt")?>
 		     	</td>
 		</tr> 
 		<tr>
 			<td class="steelgraulight" colspan=2 align="center">
-				<input  type="IMAGE"  src="pictures/buttons/suchestarten-button.gif" border=0 value=" Suche starten ">
+				<input type="IMAGE" <?=makeButton("suchestarten", "src")?> border=0 value=" <?=_("Suche starten")?> ">
 			</td>
 		</tr>
 	</form>
@@ -196,7 +197,7 @@ else:
 ?>
  
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;Ergebnis der Suche nach "<? echo $suchbegriff ?>"</></td>
+	<td class="topic" colspan=2><b>&nbsp;<?=_("Ergebnis der Suche nach")?> "<? echo $suchbegriff ?>"</></td>
 </tr>
 <tr><td class="blank" colspan=2 width=100%">&nbsp;</td></tr>
 <tr><td class="blank" colspan=2 width=100%" align="center">
@@ -213,21 +214,24 @@ if(isset($SessSemName[0]) && $SessSemName[0] != "")
 $i = 1;
 $anzahl = $db->num_rows();
 if ($anzahl)
-	echo "<b>Ihre Suche ergab $anzahl Treffer</b><p>";
+	echo "<b>" . sprintf(_("Ihre Suche ergab %s Treffer"), $anzahl) . "</b><p>";
 else
-	echo "<b>Ihre Suche ergab leider keine Treffer</b><p>";
+	echo "<b>" . _("Ihre Suche ergab leider keine Treffer") . "</b><p>";
 if ($anzahl > 0):
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 class="blank">
 	<tr><td colspan=2 class="blank"><br>
 	<table border=0 width="90%" cellspacing="0" cellpadding="0" align="center"><tr>
 	<th width="100%">
-	<?echo "<a href=\"suchen.php?view=".$view."&mehr=".$mehr."&suchbegriff=$suchbegriff&check_author=$check_author&check_cont=$check_cont&check_name=$check_name"
-		."&show=1\"><img src='pictures/forumleer.gif' border=0 height='25' align=middle><img src='pictures/forumgraurunt.gif' border=0 alt='Alle aufklappen' align=middle><img src='pictures/forumleer.gif' border=0></a></th>";?>
+	<?
+	echo "<a href=\"suchen.php?view=".$view."&mehr=".$mehr."&suchbegriff=$suchbegriff&check_author=$check_author&check_cont=$check_cont&check_name=$check_name";
+	echo "&show=1\"><img src=\"pictures/forumleer.gif\" border=0 height=\"25\" align=\"middle\"><img src=\"pictures/forumgraurunt.gif\" border=0" . tooltip(_("Alle aufklappen")) . " align=\"middle\"><img src=\"pictures/forumleer.gif\" border=0></a></th>";
+	?>
 
 	</th></tr></table>
 <?
-if($anzahl<$mehr) $mehr=$anzahl;
+if($anzahl<$mehr)
+	$mehr=$anzahl;
 $suchbegriff=rawurlencode($suchbegriff);
 
 while($i<=$mehr) {
@@ -237,30 +241,21 @@ while($i<=$mehr) {
 	$db2->next_record();
 	$tmp = $db->f("topic_id");
 	topic_liste_suche($db->f("topic_id"),$db->f("thema_id"),$open,$db->f("titel"),$db->f("author"),$db->f("mkdate"),$db->f("thema"),$db->f("description"),$db2->f("username"),$mehr,$show,$write,$db->f("chdate"));
-/*	
-	$datum = sprintf("%s.%s.%s - %s:%s",substr($db->f("create_dt"),6,2), substr($db->f("create_dt"),4,2), substr($db->f("create_dt"),0,4), substr($db->f("create_dt"),8,2), substr($db->f("create_dt"),10,2));
- 	if ($eintrag != $db->f("topic_id")) {
-		printf("<tr><td><a href=\"display_topic.php?topic_id=%s\">%s</a></td><td>%s</td><td>%s</td><td><a href=\"display_topic.php?topic_id=%s\">%s</a></td><td><a href=\"suchen.php?eintrag=%s&mehr=$mehr&suchbegriff=%s&check_author=$check_author&check_cont=$check_cont&check_name=$check_name\">%s</a></td></tr>\n",
-		$db->f("topic_id"), $db->f("titel"), $db->f("author"), $datum, $db->f("thema_id"), $db->f("thema"), $db->f("topic_id"), $suchbegriff, substr(ereg_replace("<[[:print:]]*>","",$db->f("description")),0,30));
-		}
-	ELSE {
-		printf("<tr><td><a href=\"display_topic.php?topic_id=%s\">%s</a></td><td>%s</td><td>%s</td><td><a href=\"display_topic.php?topic_id=%s\">%s</a></td><td>%s</td></tr>\n",
-		$db->f("topic_id"), $db->f("titel"), $db->f("author"), $datum, $db->f("thema_id"), $db->f("thema"), $db->f("description"));
-		}
-*/
 	$i++; 
 }
 $eintrag = 0;
 echo "</td></tr></table>";
 
-echo "<table width='90%' border=0 cellpadding=0 cellspacing=0 align='center'><tr><td class='blank'><img src='pictures/forumleer.gif' border=0 height='4'></td></tr><tr><td class=\"steelgraudunkel\" align=\"center\">";
-if($mehr>5) printf ("<a href=\"suchen.php?mehr=%s&suchbegriff=%s&check_author=%s&check_cont=%s&check_name=%s\"><img src='pictures/forumleer.gif' border=0 height='25' align=middle><img src='pictures/forumgraurauf.gif' alt='zeig mir die Neuesten' border=0 align=middle><img src='pictures/forumleer.gif' border=0 height='25' align=middle></a>",
-5,$suchbegriff,$check_author,$check_cont,$check_name);
-if($mehr<=5)printf ("<a href=\"suchen.php?mehr=%s&suchbegriff=%s&check_author=%s&check_cont=%s&check_name=%s\"><img src='pictures/forumleer.gif' border=0 height='25' align=middle><img src='pictures/forumgraurunt.gif' alt='zeig mit alle Trefer' border=0 align=middle><img src='pictures/forumleer.gif' border=0 height='25' align=middle></a>",
-$anzahl,$suchbegriff,$check_author,$check_cont,$check_name);
+echo "<table width=\"90%\" border=0 cellpadding=0 cellspacing=0 align=\"center\"><tr><td class=\"blank\"><img src=\"pictures/forumleer.gif\" border=0 height=\"4\"></td></tr><tr><td class=\"steelgraudunkel\" align=\"center\">";
+if($mehr>5)
+	printf ("<a href=\"suchen.php?mehr=%s&suchbegriff=%s&check_author=%s&check_cont=%s&check_name=%s\"><img src=\"pictures/forumleer.gif\" border=0 height=\"25\" align=middle><img src=\"pictures/forumgraurauf.gif\" " . tooltip(_("zeig mir die Neuesten")) . " border=0 align=\"middle\"><img src=\"pictures/forumleer.gif\" border=0 height=\"25\" align=\"middle\"></a>",
+		5,$suchbegriff,$check_author,$check_cont,$check_name);
+if($mehr<=5)
+	printf ("<a href=\"suchen.php?mehr=%s&suchbegriff=%s&check_author=%s&check_cont=%s&check_name=%s\"><img src=\"pictures/forumleer.gif\" border=0 height=\"25\" align=middle><img src=\"pictures/forumgraurunt.gif\" " . tooltip(_("zeig mit alle Treffer")) . " border=0 align=\"middle\"><img src=\"pictures/forumleer.gif\" border=0 height=\"25\" align=\"middle\"></a>",
+		$anzahl,$suchbegriff,$check_author,$check_cont,$check_name);
 echo "</td></tr><tr><td class=\"blank\">&nbsp;<br><br></td></tr></table>";
 
-echo "<a href='suchen.php'>Neue Suche</a>";
+echo "<a href=\"suchen.php\">" . _("Neue Suche") . "</a>";
 
 
 endif;  // nur eine Ergebnistabelle anzeigen, wenn es auch ein Ergebnis gibt
@@ -268,7 +263,6 @@ endif;  // nur eine Ergebnistabelle anzeigen, wenn es auch ein Ergebnis gibt
 
 endif;  // Ende des Ergebniszeiges
 
-//echo "<br>&nbsp;</td></tr>";
 }
 
 ?>
