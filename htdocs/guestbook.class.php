@@ -1,6 +1,6 @@
 <?
 /*
-object.inc.php - Verwaltung des Objecttrackings
+guestbook.class.php - Guestbook for personal homepages
 Copyright (C) 2003 Ralf Stockmann <rstockm@gwdg.de>
 
 This program is free software; you can redistribute it and/or

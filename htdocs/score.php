@@ -11,6 +11,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/score.class.php");
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
@@ -19,36 +20,30 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 <tr>
 <td class="blank" align = left valign="top" width="60%"><br /><blockquote>
 <?
-echo _("Auf dieser Seite k&ouml;nnen Sie abrufen, wie weit Sie im Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto h&ouml;her klettern Sie!");
+echo _("Auf dieser Seite können Sie abrufen, wie weit Sie im Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto höher klettern Sie!");
 
-$score = getscore();
-$user_id=$user->id; //damit keiner schummelt...
+$cssSw=new cssClassSwitcher;
+$score = new Score($user->id);
 
 // schreiben des Wertes
-$db=new DB_Seminar;
-$cssSw=new cssClassSwitcher;
 
 IF ($cmd=="write") {
-	$query = "UPDATE user_info "
-		." SET score = $score"
-		." WHERE user_id = '$user_id'";
-		$db->query($query);
-	}
+	$score->PublishScore();
+}
 	
 IF ($cmd=="kill") {
-	$db=new DB_Seminar;
-	$query = "UPDATE user_info "
-		." SET score = 0"
-		." WHERE user_id = '$user_id'";
-		$db->query($query);
-	}
+	$score->KillScore();
+}
 
 // Angabe der eigenen Werte (immer)
-$db->query("SELECT score, geschlecht AS gender FROM user_info WHERE user_id = '$user_id'");
-$db->next_record();
-echo "<br><br><b>" . _("Ihr Score:") . "&nbsp; ".$score."</b>";
-echo "<br><b>" . _("Ihr Titel") . "</b> ;-)&nbsp; <b>".gettitel($score, $db->f("gender"))."</b>";
-echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert hier ver&ouml;ffentlichen") . "</a>";
+
+echo "<br><br><b>" . _("Ihr Score:") . "&nbsp; ".$score->ReturnMyScore()."</b>";
+echo "<br><b>" . _("Ihr Titel") . "</b> ;-)&nbsp; <b>".$score->ReturnMyTitle()."</b>";
+if ($score->ReturnPublik())
+	echo "<br><br><a href=\"score.php?cmd=kill\">" . _("Ihren Wert von der Liste löschen") . "</a>";
+else
+	echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert auf der Liste veröffentlichen") . "</a>";
+	
 ?>
 
 </blockquote></td>
@@ -71,12 +66,13 @@ if ($db->num_rows()) {
 	while ($db->next_record()) {
 		$kill = "";
 		$cssSw->switchClass();
-		if ($db->f("user_id")==$user_id) {
-			$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[l&ouml;schen]") . "</a>";
+		if ($db->f("user_id")==$user->id) {
+			$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[löschen]") . "</a>";
 		}
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
 		."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$db->f("fullname")."</a></td>"
-		."<td class=\"".$cssSw->getClass()."\" width=\"30%\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\">".gettitel($db->f("score"), $db->f("geschlecht"))
+		."<td class=\"".$cssSw->getClass()."\" width=\"10%\">".$score->GetScoreContent($db->f("user_id"))."</td>"
+		."<td class=\"".$cssSw->getClass()."\" width=\"20%\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\">".$score->GetTitel($db->f("score"), $db->f("geschlecht"))
 		.$kill
 		."</td></tr>\n";
 		$rang++;
