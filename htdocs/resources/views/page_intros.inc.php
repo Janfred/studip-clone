@@ -12,11 +12,11 @@ switch ($resources_data["view"]) {
 	case "resources":
 	case "_resources":
 		$page_intro="Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die Sie Zugriff haben, navigieren und Ressourcen verwalten.";
-		$title="Suche nach Ressourcen";
+		$title="&Uuml;bersicht der Ressourcen";
 	break;
 	case "search":
 		$page_intro="Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen suchen oder sich durch die Ebenen navigieren.";
-		$title="&Uuml;bersicht der Ressourcen";
+		$title="Suche nach Ressourcen";
 	break;
 	
 	//Reiter "Listen"
