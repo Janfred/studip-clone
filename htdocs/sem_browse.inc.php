@@ -95,7 +95,7 @@ if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_da
 	if (($sem_browse_data["cmd"]=="qs") || ($sem_browse_data["cmd"]=="") || (!isset($sem_browse_data["cmd"]))) {
 		echo "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo "<form action=\"$PHP_SELF?send=yes&sset=qs\" method=\"post\">\n";
-		echo "<tr><td class=\"steel1\" align=\"center\" colspan=2>Schnellsuche:&nbsp;<select name=s_range size=1>";
+		echo "<tr><td class=\"steel1\" align=\"center\"  colspan=2>Schnellsuche:&nbsp;<select name=s_range size=1>";
 		if ($sem_browse_data["s_range"] == "alles")
 			echo "<option selected>alles</option>";
 		else
@@ -114,7 +114,7 @@ if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_da
 		else
 			echo "<option>Kommentar</option>";
 		echo "</select>&nbsp;<input name=qs_string type=textarea size=20 maxlength=255 value=\"".htmlReady($sem_browse_data["qs_string"])."\">\n";
-		echo "<input type=\"IMAGE\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\">&nbsp;<a href=\"$PHP_SELF?reset_all=true\"><img src=\"pictures/buttons/neuesuche-button.gif\" border=0></a>\n";
+		echo "<input type=\"IMAGE\" src=\"pictures/buttons/suchestarten-button.gif\"  border=0 value=\"Suche starten\">&nbsp;<a href=\"$PHP_SELF?reset_all=true\"><img src=\"pictures/buttons/neuesuche-button.gif\" border=0></a>\n";
 		echo "<a href=\"$PHP_SELF?cmd=xts";
 		if (isset($sem_browse_data["sset"])) echo "&sset=", $sem_browse_data["sset"];
 		echo "\"><img src=\"pictures/buttons/erweitertesuche-button.gif\" border=0></a></td></tr>";
@@ -180,22 +180,18 @@ if ((!$sem_browse_data["extern"]) && ($sem_browse_data["sset"] || $sem_browse_da
 
 			//bauen des Bereichspulldownfeld
 			$fachtmp="0";
-			$db->query("SELECT bereiche.bereich_id, bereiche.name, bereich_fach.fach_id FROM bereiche LEFT JOIN bereich_fach USING(bereich_id) ORDER BY bereich_fach.fach_id");
+			$db->query("SELECT a.bereich_id, a.name, b.fach_id, c.name AS fachname FROM bereiche a LEFT JOIN bereich_fach b USING(bereich_id) LEFT JOIN faecher c USING (fach_id) ORDER BY c.fach_id,a.name");
 			while ($db->next_record()) 
 				{
 				if ($fachtmp != $db->f("fach_id"))
 					{
 					// Hier werden die Faecherueberschriften ausgegeben 
-				   $fachtmp = $db->f("fach_id");
-				   $db2->query("SELECT name from faecher WHERE fach_id = '$fachtmp'"); 
-				   while ($db2->next_record()) 
-						{
-						echo "<option value = nix>------------------------------------------------------------</option>";
-						echo "<option value = nix>".htmlReady(my_substr($db2->f("name"), 0,30))."</option>";
-						echo "<option value = nix>------------------------------------------------------------</option>";
-						}
+					$fachtmp = $db->f("fach_id");
+					echo "<option value = nix>------------------------------------------------------------</option>";
+					echo "<option value = nix>".htmlReady(my_substr($db->f("fachname"), 0,30))."</option>";
+					echo "<option value = nix>------------------------------------------------------------</option>";
 					}
-					$bereichtmp =  $db->f("bereich_id");
+				$bereichtmp =  $db->f("bereich_id");
 				if($sem_browse_data["s_bereich"]==$db->f("bereich_id"))
 				echo "<option selected VALUE=\"".$db->f("bereich_id")."\">&nbsp;".htmlReady(my_substr($db->f("name"), 0, 30))."</option>";
 			else
