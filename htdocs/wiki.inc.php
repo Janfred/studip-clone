@@ -711,7 +711,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 		parse_msg("info§" . "<p>&nbsp;</p>". sprintf(_("Die Seite wird eventuell von %s bearbeitet."), $locks) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."), "§", "printcontent");
 	}
 
-	$cont .= "<p><form method=\"post\" action=\"?keyword=$keyword&cmd=edit\">";
+	$cont .= "<p><form method=\"post\" action=\"".$PHP_SELF."?keyword=$keyword&cmd=edit\">";
 	$cont .= "<textarea name=\"body\" cols=\"80\" rows=\"15\">$body</textarea>\n";
 	$cont .= "<input type=\"hidden\" name=\"wiki\" value=\"$keyword\">";
 	$cont .= "<input type=\"hidden\" name=\"version\" value=\"$version\">";
