@@ -108,7 +108,7 @@ $RELATIVE_PATH_LEARNINGMODULES = "lernmodule";						//Stud.IP module: Ilias lern
 $RELATIVE_PATH_SUPPORT = "./support";							//Stud.IP module: SupportDB (not part of the main distribution)
 $PATH_EXPORT = "export";								//Stud.IP module: export
 
-$FAVICON = "http://www.studip.de/favicon.ico";
+$FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored. 
 
 
 /*mail settings
