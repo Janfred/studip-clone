@@ -641,11 +641,13 @@ if ($cmd_d_x)
 						$errormsg.=date("d.m, h:i",$val2["begin"])." - ".date("h:i",$val2["end"]);
 						if (sizeof($val) >1)
 							$errormsg.=", ... ("._("und weitere").")";
-						$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">"._("Raumplan anzeigen")."</a> ",$key);
+						$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
 						$i++;
 					}
 					$errormsg.="</font>§";
 				}
+				unset($checkResult);
+				unset($overlaps_detected);
 			}
 		}
 	else {
@@ -674,6 +676,7 @@ if ($cmd_d_x)
 						$errormsg=$errormsg."error§Die jeweilige Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!§";
 						$just_informed5=TRUE;				
 					}
+				//check overlaps
 				if ((!$errormsg) && ($RESOURCES_ENABLE)) {
 					$tmp_chk_date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
 					$tmp_chk_end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
@@ -707,6 +710,8 @@ if ($cmd_d_x)
 				}
 				$errormsg.="</font>§";
 			}
+			unset($checkResult);
+			unset($overlaps_detected);
 	} 
 	if ($sem_create_data["sem_vor_termin"] == -1);
 	else {
@@ -735,6 +740,8 @@ if ($cmd_d_x)
 				}
 				$errormsg.="</font>§";
 			}
+			unset($checkResult);
+			unset($overlaps_detected);
 		}
 	}
 	if (!$errormsg)
