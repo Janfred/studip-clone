@@ -977,7 +977,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 		//Rekursiv mit Unterordnern weitermachen	
 		if (!$all)
-			display_folder_system ($db->f("folder_id"), $level+1, $open, $lines, $change, $move, $upload, $all);
+			display_folder_system ($db->f("folder_id"), $level+1, $open, $lines, $change, $move, $upload, $all, $refresh);
 		}
 	}
 }
