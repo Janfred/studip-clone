@@ -166,13 +166,13 @@ switch ($view) {
 					array  ("kategorie"  => _("Information:"), 
 							"eintrag" => array (
 								array ("icon" => "pictures/ausruf_small.gif", 	
-									"text"  => ($resources_data["skip_closed_requests"]) ? _("Bearbeitete Anfragen werden </u>ausgeblendet</u>.") : _("Bearbeitete Anfragen werden nicht ausgeblendet.")))),
+									"text"  => ($resources_data["skip_closed_requests"]) ? _("Bereits bearbeitete Anfragen werden <u>nicht</u> angezeigt.") : _("Bereits bearbeitete Anfragen werden weiterhin angezeigt.")))),
 					array  ("kategorie" => _("Aktionen:"), 
 							"eintrag" => array (
 								array	("icon" =>  (!$resources_data["skip_closed_requests"]) ? "pictures/off_small.gif" : "pictures/on_small.gif",
-									"text"  => ($resources_data["skip_closed_requests"]) ? sprintf(_("Bearbeitete Anfragen mit %sanzeigen%s."), "<a href=\"$PHPSELF?skip_closed_requests=TRUE\">", "</a>") :  sprintf(_("Bearbeitete Anfragen %snicht anzeigen%s"), "<a href=\"$PHP_SELF?skip_closed_requests=FALSE\">", "</a>")),
+									"text"  => ($resources_data["skip_closed_requests"]) ? sprintf(_("Bearbeitete Anfragen %sanzeigen%s."), "<a href=\"$PHPSELF?skip_closed_requests=FALSE\">", "</a>") :  sprintf(_("Bearbeitete Anfragen %snicht anzeigen%s"), "<a href=\"$PHP_SELF?skip_closed_requests=TRUE\">", "</a>")),
 								array	("icon" =>  "pictures/nachricht1.gif",
-									"text"  => sprintf(_("Nachrichten zu zugewiesenen Anfragen %sversenden%s."), "<a href=\"$PHPSELF?snd_closed_rewuest_sms=TRUE\">", "</a>")))));
+									"text"  => sprintf(_("Nachrichten zu zugewiesenen Anfragen %sversenden%s."), "<a href=\"$PHPSELF?snd_closed_request_sms=TRUE\">", "</a>")))));
 		$infopic = "pictures/rooms.jpg";
 		$clipboard = TRUE;
 	break;

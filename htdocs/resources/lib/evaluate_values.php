@@ -941,6 +941,11 @@ if ($view == "search") {
 the room-planning module
 /*****************************************************************************/
 
+switch ($skip_closed_requests) {
+	case "FALSE" : $resources_data["skip_closed_requests"] = FALSE; break;
+	case "TRUE" : $resources_data["skip_closed_requests"] = TRUE; break;
+}
+
 //we start a new room-planning-session
 if ($start_single_mode_x) {
 	unset($resources_data["requests_working_on"]);
@@ -1036,7 +1041,7 @@ if ($save_state_x) {
 			$result = $semResAssign->changeMetaAssigns($assignObjects);
 			
 		//update the matadata (we save the resource there too), if no overlaps detected and create msg's
-		$sem_changed = FALSE;
+		$succesful_assigned = 0;
 		if ($semObj->getMetaDateType() == 0) {
 			$i=0;
 			foreach ($result as $key=>$val) {
@@ -1044,17 +1049,18 @@ if ($save_state_x) {
 				if (!$val["overlap_assigns"]) {
 					$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
 					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
-					$sem_changed = TRUE;
+					$succesful_assigned++;
 				} else
 					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
 				$i++;
 			}
+		print_r ($semObj->metadata["turnus_data"]);
 		//create msgs (single date request)
 		} elseif ($reqObj->getTerminId()) {
 			$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
 			if (!$val["overlap_assigns"]) {
 				$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
-				$sem_changed = TRUE;
+				$succesful_assigned++;
 			} else
 				$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[0]->getFormattedShortInfo());
 		//create msgs (multiple	dates, a irregular seminar)
@@ -1064,21 +1070,28 @@ if ($save_state_x) {
 				$resObj = new ResourceObject($val["resource_id"]);
 				if (!$val["overlap_assigns"]) {
 					$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
-					$sem_changed = TRUE;
+					$succesful_assigned++;;
 				} else
 					$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 				$i++;
 			}
 		}
 		
-		if ($sem_changed) {
+		echo lala, $succesful_assigned, sizeof($assignObjects);
+		
+		if ($succesful_assigned) {
 			//update seminar-date (save the new resource_ids)
 			if ($semObj->getMetaType == 0)
 				$semObj->store();
 		
-			//set request to closed 
-			$reqObj->setClosed(TRUE);
-			//$reqObj->store();
+			//set request to closed, if we have a room for every assign_object
+			if ($succesful_assigned == sizeof($assignObjects)) {
+				$reqObj->setClosed(TRUE);
+				echo timetoclose;
+				$resources_data["requests_open"][$reqObj->getId()] = TRUE;
+				print_r ($reqObj);
+				$reqObj->store();
+			}
 		}
 	
 		//create msg's
@@ -1094,9 +1107,10 @@ if ($save_state_x) {
 if ($inc_request_x)
 	if ($resources_data["requests_working_pos"] < sizeof($resources_data["requests_open"])-1) {
 		$i = 1;
-		while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) && ($resources_data["requests_working_pos"] + $i < sizeof($resources_data["requests_open"])-1))
-		$i++;
-		if ((sizeof($resources_data["requests_open"]) > 1) && ($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]])) {
+		if ($resources_data["skip_closed_requests"])
+			while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]]) && ($resources_data["requests_working_pos"] + $i < sizeof($resources_data["requests_open"])-1))
+				$i++;
+		if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $i]["request_id"]])) || (!$resources_data["skip_closed_requests"])){
 			$resources_data["requests_working_pos"] = $resources_data["requests_working_pos"] + $i;
 		}
 	} 
@@ -1105,22 +1119,26 @@ if ($inc_request_x)
 if ($dec_request_x)
 	if ($resources_data["requests_working_pos"] > 0) {
 		$d = -1;
-		while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) && ($resources_data["requests_working_pos"] + $d > 0))
-		$d--;
-		if ((sizeof($resources_data["requests_open"]) > 1) && ($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]])) {
+		if ($resources_data["skip_closed_requests"])
+			while ((!$resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]]) && ($resources_data["requests_working_pos"] + $d > 0))
+				$d--;
+		if ((sizeof($resources_data["requests_open"]) > 1) && (($resources_data["requests_open"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"] + $d]["request_id"]])) || (!$resources_data["skip_closed_requests"])) {
 			$resources_data["requests_working_pos"] = $resources_data["requests_working_pos"] + $d;
 		}
 	}
 
 //create the (overlap)data for all resources that should we cheked for a request
-if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_clip_ids)) {
+if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_clip_ids) || ($save_state_x)) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
+	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
 	
-	
-	if ((!is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"])) || ($marked_clip_ids)){
+	if ((!is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"])) || ($marked_clip_ids) || ($save_state_x)) {
+		$semester = new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
+		
 		$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
 		$semObj = new Seminar($reqObj->getSeminarId());
 		$multiOverlaps = new CheckMultipleOverlaps;
@@ -1155,10 +1173,11 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]=array();
 		if (is_array($assignObjects)) {
 			//set the time range to check;
-			if (($semObj->getMetaDateType() == 1) || ($reqObj->getTerminId()))
+			if (($semObj->getMetaDateType() == 1) || ($reqObj->getTerminId())) {
 				$multiOverlaps->setAutoTimeRange($assignObjects);
-			else
-				$multiOverlaps->setTimeRange($semObj->getSemesterStartTime(), $SEMESTER[get_sem_num($semObj->getSemesterStartTime())]["ende"]); //!!!!!
+			} else {;
+				$multiOverlaps->setTimeRange($semObj->getSemesterStartTime(), $all_semester[get_sem_num($semObj->getSemesterStartTime())]["ende"]); //!!!!!
+			}
 			
 			//add the considered resources to the check-set
 			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"] as $key => $val) {
@@ -1169,7 +1188,7 @@ if (($inc_request_x) || ($dec_request_x) || ($start_single_mode_x) || ($marked_c
 			$result = array();
 			foreach ($assignObjects as $obj) {
 				$multiOverlaps->checkOverlap($obj, &$result);
-				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$obj->getId()] = array("termin_id" => ($semObj->getMetaDateType() == 1) ?  $obj->getAssignUserId() : FALSE);
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$obj->getId()] = array("termin_id" => ($semObj->getMetaDateType() == 1) ?  $obj->getAssignUserId() : FALSE, "resource_id" => $obj->getResourceId());
 			}
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"] = $result;
 		}

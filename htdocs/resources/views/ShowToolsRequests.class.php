@@ -171,50 +171,11 @@ class ShowToolsRequests {
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>"><font size=-1><b><?=_("Starten")?></b><br />
+				<td class="<? echo $cssSw->getClass() ?>" align="center">
 					<?
-					print _("Sie k&ouml;nnen das Aufl&ouml;sen der Anfragen in verschiedenen Modi starten:");
+					print "<input type=\"IMAGE\" name=\"start_single_mode\" ".makeButton("starten", "src")." />";
 					?>
-					<br /><br /></font>
-					<table border="0" cellpadding="2" cellspacing="0">
-						<tr>
-							<td width="48%" valign="top">
-								<font size="-1">
-								<?
-								print _("Anfragen einzeln durchgehen");
-								print "<br /><br /><input type=\"CHECKBOX\" name=\"resolve_requests_skip_matching\" />&nbsp;"._("passende Anfragen <u>ohne</u> Best&auml;tigung direkt Speichern.");
-								?>
-								</font>
-							</td>
-							<td width="4%">
-							&nbsp;
-							</td>
-							<td width="48%" valign="top">
-								<font size="-1">
-								<?
-								print _("Anfragen geblockt bearbeiten:");
-								print "<br /><br />"._("Anzahl der Anfragen, die in jedem Durchgang bearbeitet werden:")."&nbsp;<input type=\"TEXT\" name=\"resolve_requests_limit\" value=\"50\" size=\"5\" maxlength=\"10\" />";
-								?>
-								</font>
-							</td>
-						</tr>
-						<tr>
-							<td width="48%" align="center">
-								<?
-								print "<input type=\"IMAGE\" name=\"start_single_mode\" ".makeButton("starten", "src")." />";
-								?>
-							</td>
-							<td width="4%">
-							&nbsp;
-							</td>
-							<td width="48%"  align="center">
-								<?
-								print "<input type=\"IMAGE\" name=\"start_single_mode\" ".makeButton("starten", "src")." />";
-								?>
-							</td>
-						</tr>						
-					</table>
-				</td>
+			</td>
 			</tr>			
 			<?
 			}
@@ -260,8 +221,16 @@ class ShowToolsRequests {
 					if (!$reqObj->getTerminId()) {
 						if ($semObj->getMetaDateType() == 0) {
 							if ($metadates = $semObj->getFormattedTurnusDates()) {
-								foreach ($metadates as $key=>$val)
+								$i=0;
+								$tmp_assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
+								foreach ($metadates as $key=>$val) {
 									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $key+1, $val);
+									$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
+									if ($link = $resObj->getFormattedLink(TRUE, TRUE, TRUE))
+										print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
+									$i++;
+								}
+
 								if ($semObj->getCycle() == 1)
 									print _("w&ouml;chentlich");
 								elseif ($semObj->getCycle() == 2)
@@ -275,6 +244,13 @@ class ShowToolsRequests {
 								$i=1;
 								while ($this->db->next_record()) {
 									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
+									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key=>$val) {
+										if ($val["termin_id"] == $this->db->f("termin_id")) {
+											$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$key]["resource_id"]);
+											if ($link == $resObj->getFormattedLink(TRUE, TRUE, TRUE))
+												print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
+										}
+									}
 									$i++;
 								}
 							} else
@@ -282,10 +258,14 @@ class ShowToolsRequests {
 						}
 					} else {
 						$this->selectDates($reqObj->getSeminarId(), $reqObj->getTerminId());
+						$tmp_assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 						if ($this->db->nf()) {
 							$i=1;
 							while ($this->db->next_record()) {
 								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
+								$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i-1]]["resource_id"]);
+								if ($link == $resObj->getFormattedLink(TRUE, TRUE, TRUE))
+									print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 								$i++;
 							}
 						} else
@@ -333,8 +313,12 @@ class ShowToolsRequests {
 								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key => $val) {
 									print "<td width=\"1%\" nowrap><font size=\"-1\">";
 									if ($request_resource_id) {
-										print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id][$key]);
-										printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+										if ($request_resource_id == $val["resource_id"]) {
+											echo "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+										} else {
+											print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id][$key]);
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+										}
 									} else
 										print "&nbsp;";
 									print "</font></td>";
@@ -377,8 +361,12 @@ class ShowToolsRequests {
 							if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
 									print "<td width=\"1%\" nowrap><font size=\"-1\">";
-									print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]);
-									printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+									if ($key == $val2["resource_id"]) {
+										print "<img src=\"pictures/haken_transparent.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+									} else {
+										print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]);
+										printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+									}
 									print "</font></td>";
 									$i++;
 								}
@@ -418,8 +406,12 @@ class ShowToolsRequests {
 							if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key2 => $val2) {
 									print "<td width=\"1%\" nowrap><font size=\"-1\">";
-									print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]);
-									printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+									if ($key == $val2["resource_id"]) {
+										print "<img src=\"pictures/haken.gif\" ".tooltip(_("Dieser Raum ist augenblicklich gebucht"), TRUE, TRUE)." />";
+									} else {
+										print $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]);
+										printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", ($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "", ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2]) ? "disabled" : "");
+									}
 									print "</font></td>";
 									$i++;
 								}
