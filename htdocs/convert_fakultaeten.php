@@ -12,7 +12,7 @@ $view2 = new DbView();
 echo "<h1>convert_fakultaeten.php</h1>";
 
 $rs = $view->get_query("INSERT INTO Institute (Institut_id,fakultaets_id,Name,mkdate,chdate,type)
-						SELECT Fakultaets_id,Fakultaets_id,Name,mkdate,chdate,7 FROM fakultaeten");
+						SELECT Fakultaets_id,Fakultaets_id,Name,mkdate,chdate,7 FROM Fakultaeten");
 
 $rs = $view->get_query("SELECT Name,fakultaets_id FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
 while ($rs->next_record()){
