@@ -1390,5 +1390,3 @@ class VoteDB extends StudipObject {
 
 }
 ?>
-
-

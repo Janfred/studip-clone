@@ -153,6 +153,10 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
 			    _("Votings und Tests. Umfragen und mehr..."));
 
+   /* create an anchor ---------------------------------------------------- */
+   
+   echo "<a name=\"vote\"></a>";
+   
    /* ---------------------------------------------------------------------- */
 
 
