@@ -142,7 +142,7 @@ if ($SessSemName["class"]=="inst") {
 }
 //
 
-if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)) && ($modules["participants"])){
+if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte) && ($modules["participants"])){
 	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 }
 if ($modules["forum"]) {
@@ -177,7 +177,7 @@ if ($modules["literature"]) {
 		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
 }
 
-if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)))
+if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte))
 	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>_("Funktionen / Gruppen"), link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
 
 
