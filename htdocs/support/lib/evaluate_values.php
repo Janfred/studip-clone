@@ -43,7 +43,7 @@ empfangene Werte auswerten und Befehle ausfuehren
 /*****************************************************************************/
 
 //is the user a supporter?
-if (($SemUserStatus == "dozent") || ($SemUserStatus == "dozent") || ($SemUserStatus == "dozent"))
+if ($perm->have_studip_perm ("dozent", $SessSemName[1]))
 	$supporter = TRUE;
 
 
@@ -319,4 +319,16 @@ if (($supportdb_data["view"] == "requests") && (!$supportdb_data["actual_con"]))
 	$supportdb_data["view"] = "overview";
 }
 
+//search expression?
+if (($search_exp) || ($show_all))
+	$supportdb_data["req_search_exp"] = $search_exp;
+
+//reset s search?
+if ($reset_search_x) {
+	unset ($supportdb_data["req_search_exp"]);
+}	unset ($supportdb_data["req_show_all"]);
+	
+//show all requests?
+if ($show_all)
+	$supportdb_data["req_show_all"] = TRUE;
 ?>
