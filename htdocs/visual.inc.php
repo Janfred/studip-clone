@@ -336,7 +336,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE) {
 		$what = explode('ö', $what);
 		$i = 0;
 		foreach ($what as $w)	
-			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
+			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', htmlReady($matches[1][$i++]));
 			
 		return $all;
 	}
@@ -353,6 +353,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE) {
 * @access       public        
 * @param        string $what		what to format
 * @param        string $trim		should the output trimmed?
+* @param        boolean $extern TRUE if called from external pages ('externe Seiten')
 * @return       string
 */
 function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
@@ -363,7 +364,7 @@ function wikiReady ($what, $trim = TRUE, $extern = FALSE) {
 		$what = explode('ö', $what);
 		$i = 0;
 		foreach ($what as $w)
-			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', $matches[1][$i++]);
+			$all .= $w . preg_replace("/\n?\r\n?/", '<br />', htmlReady($matches[1][$i++]));
 	
 		return $all;
 	}
@@ -667,6 +668,7 @@ function kill_format ($text) {
 * @param	string	text to convert
 * @param	string	TRUE if all forms of newlines have to be converted in single \n
 * @param	boolean	TRUE if newlines have to be converted into <br>
+* @param	boolean TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
 function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE) {
@@ -700,9 +702,9 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $extern = FALSE
 * callback function used by FixLinks()
 *
 * @access	private
-* @param	string	link-text
-* @param	string	url
-* @param	string "LINK" if it is a normal url, "MAIL" if it is an email-address
+* @param	array $params	parameters extracted by the regular expression
+* @param	string	$mod type of lin ('LINK' or 'MAIL')
+* @param	boolean $extern TRUE if called from external pages ('externe Seiten')
 * @return	string
 */
 function preg_call_link ($params, $mod, $extern = FALSE) {
