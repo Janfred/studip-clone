@@ -1,0 +1,189 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2003-03-05 17:27+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: chat/chat_client.php:87
+#, c-format
+msgid "Ihre %sSchriftfarbe</font> wurde ge&auml;ndert!"
+msgstr ""
+
+#: chat/chat_client.php:95
+#, c-format
+msgid "%s verl&auml;sst den Chat und sagt: %s"
+msgstr ""
+
+#: chat/chat_client.php:96
+msgid "Sie haben den Chat verlassen!"
+msgstr ""
+
+#: chat/chat_client.php:97
+msgid "Das Chatfenster wird in 3 s geschlossen!"
+msgstr ""
+
+#: chat/chat_client.php:112
+msgid "Mögliche Chat Kommandos:"
+msgstr ""
+
+#: chat/chat_client.php:124
+#, c-format
+msgid "Ihre Botschaft an %s wurde &uuml;bermittelt."
+msgstr ""
+
+#: chat/chat_client.php:125
+#, c-format
+msgid "Eine geheime Botschaft von %s"
+msgstr ""
+
+#: chat/chat_client.php:129
+#, c-format
+msgid "<b>%s</b> ist in diesem Chat nicht bekannt."
+msgstr ""
+
+#: chat/chat_client.php:131 chat/chat_client.php:159 chat/chat_client.php:170
+msgid "Fehler, falsche Kommandosyntax!"
+msgstr ""
+
+#: chat/chat_client.php:152
+#, c-format
+msgid "%s wurde von %s aus dem Chat geworfen!"
+msgstr ""
+
+#: chat/chat_client.php:156
+msgid "Kein Nutzer gefunden, der entfernt werden k&ouml;nnte."
+msgstr ""
+
+#: chat/chat_client.php:161
+msgid "Sie d&uuml;rfen hier niemanden rauswerfen!"
+msgstr ""
+
+#: chat/chat_client.php:174
+#, c-format
+msgid "Ihre SMS an <b>%s</b> wurde &uuml;bermittelt."
+msgstr ""
+
+#: chat/chat_client.php:176
+msgid "Fehler, deine SMS konnte nicht &uuml;bermittelt werden!"
+msgstr ""
+
+#: chat/chat_client.php:186
+#, c-format
+msgid "Unbekanntes Kommando: <b>%s</b>"
+msgstr ""
+
+#: chat/chat_client.php:243
+msgid "Sie mussten den Chat verlassen..."
+msgstr ""
+
+#: chat/chat_client.php:245
+msgid "Hier</a> k&ouml;nnen sie versuchen wieder einzusteigen.<br>"
+msgstr ""
+
+#: chat/chat_client.php:253
+msgid "<b>IDLE TIMOUT</b> - sie wurden aus dem Chat entfernt!<br>"
+msgstr ""
+
+#: chat/chat_client.php:256
+msgid "Hier</a> k&oumlnnen sie versuchen wieder einzusteigen.<br>"
+msgstr ""
+
+#: chat/chat_client.php:283 chat/chat_input.php:99 chat/chat_nicklist.php:76
+msgid "Sie sind nicht in diesem Chat angemeldet!"
+msgstr ""
+
+#: chat/chat_client.php:289
+#, c-format
+msgid "Hallo %s,<br> willkommen im Raum: %s"
+msgstr ""
+
+#: chat/chat_config.php:101
+msgid " [msg] - Sie verlassen den Chat mit der Botschaft [msg]"
+msgstr ""
+
+#: chat/chat_config.php:102
+msgid " [colorcode] - Ihre Schriftfarbe wird auf [colorcode] gesetzt"
+msgstr ""
+
+#: chat/chat_config.php:103
+msgid " [msg] - Ihr Name wird zusammen mit [msg] vom Chatbot ausgegeben"
+msgstr ""
+
+#: chat/chat_config.php:104
+msgid ""
+" [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"
+msgstr ""
+
+#: chat/chat_config.php:105
+msgid " - Zeigt diesen Hilfetext"
+msgstr ""
+
+#: chat/chat_config.php:106
+msgid ""
+" [username] - Wirft [username] aus dem Chat wenn sie Chatadmin sind, mit /"
+"kick all werfen sie alle anderen Nutzer aus dem Chat"
+msgstr ""
+
+#: chat/chat_config.php:107
+msgid " [username][msg] - Verschickt eine Studip SMS [msg] an [username]"
+msgstr ""
+
+#: chat/chat_config.php:108
+msgid ""
+" [password] - Setzt das Paßwort für den Chat, wenn [password] leer ist wird "
+"ein eventuell vorhandenes Paßwort gelöscht"
+msgstr ""
+
+#: chat/chat_input.php:130
+msgid "Chat Kommandos einblenden"
+msgstr ""
+
+#: chat/chat_input.php:133
+msgid "Alle verfügbaren Smileys anzeigen"
+msgstr ""
+
+#: chat/chat_input.php:166
+msgid "Nachricht senden"
+msgstr ""
+
+#: chat/chat_input.php:169
+msgid "Chat verlassen"
+msgstr ""
+
+#: chat/chat_nicklist.php:97
+msgid "Homepage dieses Nutzers aufrufen"
+msgstr ""
+
+#: chat/chat_nicklist.php:102
+msgid "diesen Nutzer aus dem Chat werfen"
+msgstr ""
+
+#: chat/chat_nicklist.php:106
+msgid "diesem Nutzer eine private Botschaft senden"
+msgstr ""
+
+#: chat/ChatServer.class.php:126
+#, c-format
+msgid "%s hat den Chat betreten!"
+msgstr ""
+
+#: chat/ChatServer.class.php:151
+#, c-format
+msgid "%s hat den Chat verlassen!"
+msgstr ""
+
+#: chat/ChatServer.class.php:214
+#, c-format
+msgid "%s hat sich aus StudIP ausgeloggt!"
+msgstr ""
