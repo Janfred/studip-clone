@@ -748,7 +748,7 @@ class ResourcesUserRoomsList {
 
 
 /*****************************************************************************
-resourceObjeckt, zentrale Klasse der Ressourcen Objecte
+resourceObject, zentrale Klasse der Ressourcen Objekte
 /*****************************************************************************/
 class ResourceObject {
 	var $id;					//resource_id des Objects;
@@ -1007,6 +1007,16 @@ class ResourceObject {
 			return TRUE;
 		else
 			return FALSE;
+	}
+
+	function isDeletable() {
+		$db = new DB_Seminar;
+		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s'", $this->id);
+		$this->db->query($query);
+		if ($this->db->affected_rows())
+			return FALSE;
+		else 
+			return TRUE;
 	}
 	
 	function flushProperties() {
