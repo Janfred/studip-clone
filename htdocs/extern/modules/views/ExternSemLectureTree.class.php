@@ -86,7 +86,7 @@ class ExternSemLectureTree extends StudipSemTreeViewSimple {
 		echo "<table" . $this->config->getAttributes("TreeLevelContent", "table");
 		echo ">\n<tr><td" . $this->config->getAttributes("TreeLevelContent", "td") . ">";
 		echo "<font" . $this->config->getAttributes("TreeLevelContent", "font") . ">";
-		echo formatReady($this->tree->tree_data[$item_id]['info'], TRUE, TRUE, TRUE) ."</font></td></tr>\n</table>";
+		echo formatReady($this->tree->tree_data[$item_id]['info'], TRUE, TRUE) ."</font></td></tr>\n</table>";
 	}
 
 	function getSemPath () {

@@ -119,7 +119,7 @@ else {
 				
 		$data["content"]["topic"] = $this->elements["ContentNews"]->toString(array("content" =>
 									array("topic" => htmlReady($db->f("topic")),
-									"body" => formatReady($content, TRUE, TRUE, TRUE))));
+									"body" => formatReady($content, TRUE, TRUE))));
 		
 		$this->elements["TableRow"]->printout($data);
 	}
