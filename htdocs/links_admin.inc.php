@@ -401,7 +401,7 @@ if ((!$SessSemName[1]) && ($list) && ($search_mode == "inst")) {
 					
 					printf ("<option value=\"NULL\">-- bitte Einrichtung ausw&auml;hlen --</option>\n");
 					while ($db->next_record())
-						printf ("<option %s value=\"%s\">%s </option></font>\n", $db->f("Institut_id") == $inst_id ? "selected" : "", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 50)));
+						printf ("<option %s value=\"%s\">%s </option>\n", $db->f("Institut_id") == $inst_id ? "selected" : "", $db->f("Institut_id"), htmlReady(substr($db->f("Name"), 0, 50)));
 					?>
 				</select></font>&nbsp; 
 				<input type="IMAGE" src="./pictures/buttons/auswaehlen-button.gif" border=0 value="bearbeiten">
