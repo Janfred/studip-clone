@@ -591,7 +591,7 @@ while ($db->next_record()) {
 			break;
 			case "admin_dates.php": 
 			?>
-			<font size=-1>Ablaufplan<br /><a href="admin_dates.php?range_id=<? echo $seminar_id ?>&ebene=sem"><img src="pictures/buttons/bearbeiten-button.gif" border=0></a></font> 
+			<font size=-1>Ablaufplan<br /><a href="admin_dates.php?range_id=<? echo $seminar_id ?>"><img src="pictures/buttons/bearbeiten-button.gif" border=0></a></font> 
 			<?
 			break;
 			case "admin_metadates.php": 
