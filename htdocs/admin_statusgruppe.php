@@ -73,13 +73,23 @@ function MakeUniqueID ()
 	RETURN $tmp_id;
 }
 
-function PrintAllStatusgruppen ()
-{
+function GetPresetGroups ()
+{ 	global $INST_STATUS_GROUPS, $SEM_STATUS_GROUPS, $view, $tmp_class;
         echo "<select name=\"move_old_statusgruppe\">";
-	$db=new DB_Seminar;
-	$db->query ("SELECT DISTINCT name FROM statusgruppen ORDER BY name ASC");
-	while ($db->next_record()) {
-		printf ("<option>%s</option>",$db->f("name"));
+	if ($view == "statusgruppe_inst") {
+		for ($i=0; $i<sizeof($INST_STATUS_GROUPS["default"]); $i++) {
+			printf ("<option>%s</option>",$INST_STATUS_GROUPS["default"][$i]);
+		}
+	}
+	if ($view == "statusgruppe_sem") {
+		if (isset($tmp_class) AND isset($SEM_STATUS_GROUPS[$tmp_class])) {   // wir sind in einer Veranstaltung die Presets hat
+			$key = $tmp_class;
+		} else {
+			$key = "default";
+		}
+		for ($i=0; $i<sizeof($SEM_STATUS_GROUPS[$key]); $i++) {
+			printf ("<option>%s</option>",$SEM_STATUS_GROUPS[$key][$i]);
+		}
 	}
 	echo "</select>";
 }
@@ -183,7 +193,7 @@ function PrintAktualMembers ($range_id)
 		echo "<font size=\"-1\">&nbsp; TeilnehmerInnen der Veranstaltung</font><br>";
 		$query = "SELECT seminar_user.user_id, username, Nachname, Vorname, perms FROM auth_user_md5 LEFT JOIN seminar_user USING(user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	} else {
-		echo "<font size=\"-1\">&nbsp; MitarbeiterInnen des Instituts</font><br>";
+		echo "<font size=\"-1\">&nbsp; MitarbeiterInnen der Einrichtung</font><br>";
 		$query = "SELECT user_inst.user_id, username, Nachname, Vorname, inst_perms AS perms FROM auth_user_md5 LEFT JOIN user_inst USING(user_id)  WHERE Institut_id = '$range_id' AND inst_perms != 'user' ORDER BY Nachname ASC";
 	}
 	echo "&nbsp; <select size=\"10\" name=\"AktualMembers[]\" multiple>";
@@ -366,12 +376,15 @@ function PrintInstitutMembers ()
 		$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$range_id'");
 			if ($db->next_record()) {
 				$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-		}
-	} else
-		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) 	
+			}
+	} else {
+		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) {
 			$tmp_typ = "Veranstaltung"; 
-		else
+		} else {
 			$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
+			$tmp_class = $SEM_TYPE[$db->f("status")]["class"];
+		}
+	}
 
 	$tmp_name=$db->f("Name");
 
@@ -396,7 +409,7 @@ function PrintInstitutMembers ()
 	 	<?
 	 	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">&nbsp; ";
       	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\"><font size=\"2\">Vorlagen:</font>&nbsp; ";
-		PrintAllStatusgruppen (); 
+		GetPresetGroups (); 
 		printf ("&nbsp; <input type=\"IMAGE\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp;  ", tooltip("in Namesnsfeld uebernehmen"));
 	        ?>
 	        </form>
