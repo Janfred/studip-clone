@@ -67,6 +67,11 @@ $searchRange 								= htmlready($HTTP_POST_VARS['searchRange']);
 
 /* **END*of*initialize*post/get*variables*********************************** */
 
+// creates an array with all the labels
+$label = createLabel();
+
+// Displays the title
+printSiteTitle();
 
 /* ************************************************************************** *
 /*																			  *
@@ -158,13 +163,6 @@ else{
 /* displays the site														  *
 /*																			  *
 /* ************************************************************************* */
-
-// creates an array with all the labels
-$label = createLabel();
-// get the userid
-
-// Displays the title
-printSiteTitle();
 
 // If a votes attribute(s) is to be modified, the action will be execute here.
 if ($voteaction)	callSafeguard($voteaction, $voteID, $showrangeID, $searchRange);
