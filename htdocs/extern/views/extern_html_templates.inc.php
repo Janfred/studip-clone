@@ -114,16 +114,13 @@ function tablefooter () {
 *
 *
 */
-function html_header ($title = "", $css_file = "", $body_css = "") {
+function html_header ($title = "", $css_file = "", $attr_body = "") {
 	$out = "<html>\n<head>\n<title>";
 	$out .= $title;
 	$out .= "</title>\n";
 	if ($css_file)
 		$out .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"$css_file\">\n";
-	$out .= "</head>\n<body ";
-	if ($body_css)
-		$out .= $body_css;
-	$out .= ">\n";
+	$out .= "</head>\n<body$attr_body>\n";
 	
 	return $out;
 }
