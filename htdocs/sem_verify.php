@@ -21,16 +21,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-?>
-<html>
-<head>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-	<title>Stud.IP</title>
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-<script language="javascript" src="md5.js"></script>
-<script language="javascript">
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+?>
+<script type="text/javascript" language="javascript" src="md5.js"></script>
+<script type="text/javascript" language="javascript">
   <!--
   function verifySeminar() {
       document.details.hashpass.value = MD5(document.details.pass.value);
@@ -39,18 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   // -->
 </script>
 
-</head>
-<body>
-
-
 <?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-?>
-
-<!-- hier muessen Seiten-Initialisierungen passieren -->
-
-<?php
-	include "header.php";   //hier wird der "Kopf" nachgeladen
 	require_once "msg.inc.php";
 	require_once "functions.php";
 	require_once "admission.inc.php";
@@ -171,12 +162,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 						?>
 						</td></tr>
 						<tr><td class="blank" colspan=2>
-						<form action="<? echo $sess->pself_url(); ?>" method="POST" >
+						<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST">
 						&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
-						       <input type="HIDDEN" name="id" value="<? echo $id;?>">
+						<input type="HIDDEN" name="id" value="<? echo $id;?>">
 						<input type="HIDDEN" name="hashpass" value="">
-						<input onSubmit="verifySeminar();return true;" type="SUBMIT" value="abschicken">
+						<input type="submit" onClick="verifySeminar();return true;" value="abschicken">
 						</form>
+						</td></tr>
 						<?
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 					    	if ($send_from_search)
@@ -271,7 +263,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							?>
 							</td></tr>
 							<tr><td class="blank" colspan=2>
-							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
+							<form action="<? echo $sess->pself_url(); ?>" method="POST">
 						       <?
 							while ($db->next_record()) {
 								if ($db->f("studiengang_id") == "all")
@@ -428,12 +420,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					?>
 					</td></tr>					
 					<tr><td class="blank" colspan=2>
-					<form action="<? echo $sess->pself_url(); ?>" method="POST" >
+					<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST" >
 					&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
 					<input type="HIDDEN" name="id" value="<? echo $id;?>">
 					<input type="HIDDEN" name="hashpass" value="">
-					<input onSubmit="verifySeminar();return true;" type="SUBMIT" value="abschicken">
+					<input onClick="verifySeminar();return true;" type="SUBMIT" value="abschicken">
 					</form>
+					</td></tr>					
 					<?
 					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 				    	if ($send_from_search)
@@ -452,12 +445,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					?>
 					</td></tr>					
 					<tr><td class="blank" colspan=2>
-					<form action="<? echo $sess->pself_url(); ?>" method="POST" >
+					<form name="details" action="<? echo $sess->pself_url(); ?>" method="POST" >
 					&nbsp; &nbsp; <input type="PASSWORD" name="pass" size="12">
 					<input type="HIDDEN" name="id" value="<? echo $id;?>">
 					<input type="HIDDEN" name="hashpass" value="">
-					<input onSubmit="verifySeminar();return true;" type="SUBMIT" value="abschicken">
+					<input onClick="verifySeminar(); return true;" type="SUBMIT" value="abschicken">
 					</form>
+					</td></tr>					
 					<?
 					echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 				    	if ($send_from_search)
