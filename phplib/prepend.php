@@ -17,7 +17,7 @@ if (!is_array($_PHPLIB)) {
 }
 
 require($_PHPLIB["libdir"] . "db_mysql.inc");  /* Change this to match your database. */
-require($_PHPLIB["libdir"] . "ct_sql.inc");    /* Change this to match your data storage container */
+require($_PHPLIB["libdir"] . "ct_sql_patched.inc");    /* Change this to match your data storage container */
 require($_PHPLIB["libdir"] . "session.inc");   /* Required for everything below.      */
 require($_PHPLIB["libdir"] . "auth.inc");      /* Disable this, if you are not using authentication. */
 require($_PHPLIB["libdir"] . "perm.inc");      /* Disable this, if you are not using permission checks. */
