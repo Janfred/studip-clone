@@ -75,6 +75,7 @@ class EvalTemplateGUI {
      $input->attr( "border", "0" );
      $input->attr( "style", "vertical-align:middle;" );
 #     $input->stri( makeButton( "erstellen", "src" ) );
+     $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
      $input->attr ("src", EVAL_PIC_ADD);
 
      $td->addContent($input);
@@ -107,6 +108,7 @@ class EvalTemplateGUI {
     $input->attr( "border", "0" );
     $input->attr( "style", "vertical-align:middle;" );
 #    $input->stri( makeButton( "bearbeiten", "src" ) );
+    $input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
     $input->attr ("src", EVAL_PIC_EDIT);
 
     $td->addContent($input);
@@ -137,6 +139,7 @@ class EvalTemplateGUI {
      $input->attr( "border", "0" );
      $input->attr( "style", "vertical-align:middle;" );
 #     $input->stri( makeButton( "erstellen", "src" ) );
+     $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
      $input->attr ("src", EVAL_PIC_ADD);
 
      $td->addContent($input);
@@ -168,6 +171,7 @@ class EvalTemplateGUI {
     $input->attr( "border", "0" );
     $input->attr( "style", "vertical-align:middle;" );
 #    $input->stri( makeButton( "bearbeiten", "src" ) );
+    $input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
     $input->attr ("src", EVAL_PIC_EDIT);
 
     $td->addContent($input);
@@ -198,6 +202,7 @@ class EvalTemplateGUI {
      $input->attr( "border", "0" );
      $input->attr( "style", "vertical-align:middle;" );
 #     $input->stri( makeButton( "erstellen", "src" ) );
+     $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
      $input->attr ("src", EVAL_PIC_ADD);
 
      $td->addContent($input);
@@ -230,6 +235,7 @@ class EvalTemplateGUI {
     $input->attr( "border", "0" );
     $input->attr( "style", "vertical-align:middle;" );
 #    $input->stri( makeButton( "bearbeiten", "src" ) );
+    $input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
     $input->attr ("src", EVAL_PIC_EDIT);
 
     $td->addContent($input);
@@ -260,6 +266,7 @@ class EvalTemplateGUI {
     $input->attr( "border", "0" );
     $input->attr( "style", "vertical-align:middle;" );
 #    $input->stri( makeButton( "erstellen", "src" ) );
+    $input->stri( tooltip( _("Neue Vorlage erstellen." ), TRUE ) );
     $input->attr ("src", EVAL_PIC_ADD);
     $td->addContent($input);
     $tr->addContent($td);
@@ -291,6 +298,7 @@ class EvalTemplateGUI {
         $input->attr( "border", "0" );
         $input->attr( "style", "vertical-align:middle;" );
 #        $input->stri( makeButton( "bearbeiten", "src" ) );
+	$input->stri( tooltip( _("Ausgewählte Vorlage bearbeiten." ), TRUE ) );
         $input->attr ("src", EVAL_PIC_EDIT);
         $td->addContent($input);
         $tr->addContent($td);
