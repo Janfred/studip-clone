@@ -305,8 +305,8 @@ class ShowToolsRequests {
 									}
 							}
 							?>
-							<td width="29%">
-								&nbsp;
+							<td width="29%" align="right">
+								<!--<font style="font-size:10px;color:blue;"><?//=_("Kapazit&auml;t")?></font>-->
 							</td>
 						</tr>
 						<tr>
@@ -359,8 +359,19 @@ class ShowToolsRequests {
 								}
 							}
 							?>
-							<td width="29%">
-								&nbsp;
+							<td width="29%" align="right">
+								<?
+								$seats = $resObj->getSeats();
+								$requested_seats = $reqObj->getSeats();
+								if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
+									$percent_diff = (100 / $requested_seats) * $seats;
+									if ($percent_diff > 0)
+										$percent_diff = "+".$percent_diff;
+									if ($percent_diff < 0)
+										$percent_diff = "-".$percent_diff;
+									print "<font style=\"font-size:10px;\">".round($percent_diff)."%</font>";
+								}
+								?>
 							</td>
 						</tr>
 						<tr>
@@ -423,8 +434,19 @@ class ShowToolsRequests {
 								}
 							}
 							?>
-							<td width="29%">
-								&nbsp;
+							<td width="29%" align="right">
+								<?
+								$seats = $resObj->getSeats();
+								$requested_seats = $reqObj->getSeats();
+								if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
+									$percent_diff = (100 / $requested_seats) * $seats;
+									if ($percent_diff > 0)
+										$percent_diff = "+".$percent_diff;
+									if ($percent_diff < 0)
+										$percent_diff = "-".$percent_diff;
+									print "<font style=\"font-size:10px;\">$percent_diff%</font>";
+								}
+								?>
 							</td>
 						</font></td>
 						</tr>
@@ -487,7 +509,18 @@ class ShowToolsRequests {
 							}
 							?>
 							<td width="29%">
-								&nbsp;
+								<?
+								$seats = $resObj->getSeats();
+								$requested_seats = $reqObj->getSeats();
+								if ((is_numeric($seats)) && (is_numeric($requested_seats))) {
+									$percent_diff = (100 / $requested_seats) * $seats;
+									if ($percent_diff > 0)
+										$percent_diff = "+".$percent_diff;
+									if ($percent_diff < 0)
+										$percent_diff = "-".$percent_diff;
+									print "<font style=\"font-size:10px;\">$percent_diff%</font>";
+								}
+								?>
 							</td>
 						</font></td>
 						</tr>

@@ -1250,19 +1250,21 @@ function isMetadateCorrespondingDate ($termin_id) {
 	$semObj = new Seminar($db->f("range_id"));
 
 	//than we check, if the date matches a metadate
-	foreach ($semObj->getMetaDates() as $key=>$val) {
-		//compense php sunday = 0 bullshit
-		if ($val["day"] == 7)
-			$t_day = 0;
-		else
-			$t_day = $val["day"];
-		
-		if ((date("w", $db->f("date")) == $t_day) &&
-			(date("G", $db->f("date")) == $val["start_hour"]) &&
-			(date("i", $db->f("date")) == $val["start_minute"]) &&
-			(date("G", $db->f("end_time")) == $val["end_hour"]) &&
-			(date("i", $db->f("end_time")) == $val["end_minute"]))
-			$result = TRUE;
+	if (is_array($semObj->getMetaDates())) {
+		foreach ($semObj->getMetaDates() as $key=>$val) {
+			//compense php sunday = 0 bullshit
+			if ($val["day"] == 7)
+				$t_day = 0;
+			else
+				$t_day = $val["day"];
+			
+			if ((date("w", $db->f("date")) == $t_day) &&
+				(date("G", $db->f("date")) == $val["start_hour"]) &&
+				(date("i", $db->f("date")) == $val["start_minute"]) &&
+				(date("G", $db->f("end_time")) == $val["end_hour"]) &&
+				(date("i", $db->f("end_time")) == $val["end_minute"]))
+				$result = TRUE;
+		}
 	}
 	return $result;
 }
