@@ -38,6 +38,9 @@ if ($SessSemName["class"]=="inst") {
 			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
 		elseif ($perm->have_perm("dozent"))
 			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
+		else $nolink = true;
+		if (($nolink != true) AND (get_ilias_user($auth->auth["uname"]) == false))
+			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"migration2studip.php", active=>FALSE);
 	}
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
@@ -124,10 +127,15 @@ if ($RESOURCES_ENABLE) {
 }
 
 if ($ILIAS_CONNECT_ENABLE) {
-	if (get_seminar_modules($SessSemName[1]) != false)
-		$structure["lernmodule_use"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=use&seminar_id=" . $SessSemName[1], active=>FALSE);
-	if  ($perm->have_perm("dozent"))
-		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lenmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
+	if (get_ilias_user($auth->auth["uname"]) != false)
+	{
+		if (get_seminar_modules($SessSemName[1]) != false)
+			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+		if  ($perm->have_perm("dozent"))
+			$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lenmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
+	}
+	if  ($perm->have_perm("user"))
+		$structure["lernmodule_user"]=array (topKat=>"lernmodule", name=>_("Mein ILIAS-Account"), link=>"migration2studip.php", active=>FALSE);
 }
 
 
@@ -232,6 +240,9 @@ switch ($i_page) {
 	break;	
 	case "literatur.php": 
 		$reiter_view="literatur";
+	break;
+	case "migration2studip.php": 
+		$reiter_view="lernmodule_user";
 	break;
 	case "seminar_lernmodule.php": 
 		switch ($view) {
