@@ -368,7 +368,7 @@ function createOpeningOrClosingArrow () {
  * @returns  String   The HTML-text
  */
 function createVoteHeadline (&$vote, $open, $openID) {
-   $title          = htmlReady ($vote->getTitle ());
+   $title          = htmlReady (my_substr ($vote->getTitle (), 0, 35));
    $date           = $vote->getChangedate ();
    $authorName     = $vote->voteDB->getAuthorRealname ($vote->getAuthorID ());
    $authorUsername = $vote->voteDB->getAuthorUsername ($vote->getAuthorID ());
@@ -620,7 +620,7 @@ function createVoteResult ($vote, $preview = NO) {
    if ($sortAnswers) $vote->sortVoteanswers (); 
   
    $max         = $vote->getMaxAnswer ();
-   $totalNumber = $vote->getNumberAnswers ();
+   $totalNumber = $vote->getNumberPersons ();
    $answers     = $vote->getAnswers ();
    $html        = "";
    /* ---------------------------------------------------------------------- */
@@ -764,6 +764,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
        $html .= ($isAssociated || $vote->isStopped())
 	   ? _("Sie konnten mehrere Antworten ausw&auml;hlen.")
 	   : _("Sie k&ouml;nnen mehrere Antworten ausw&auml;hlen.");
+       $html .= _(" Die Summe kann daher über 100% liegen.");
        $html .= " \n";
    }
    /* ---------------------------------------------------------------------- */
