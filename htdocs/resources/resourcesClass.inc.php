@@ -453,9 +453,10 @@ class resourceObject {
 			$this->parent_id = func_get_arg(5);
 			$this->category_id = func_get_arg(6);
 			$this->owner_id = func_get_arg(7);
-			$this->id=$this->createId();
+			if (!$this->id)
+				$this->id=$this->createId();
 			if (!$this->root_id)
-			$this->root_id = $this->id;
+				$this->root_id = $this->id;
 			$this->changeFlg=FALSE;
 		}
 	}

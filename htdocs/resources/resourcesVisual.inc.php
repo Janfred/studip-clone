@@ -19,88 +19,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-/*****************************************************************************
-printThread generische Darstellung einer Zeile des Threads
-/*****************************************************************************/
-class printThread {
-
-	function printRow($icon, $link, $titel, $zusatz, $level='', $lines='', $weitere, $new=FALSE, $open="close", $content='Keine Beschreibung', $edit='', $breite="99%") {
-		
-		?><table border=0 cellpadding=0 cellspacing=0 width="100%">
-			<tr>
-				<td class="blank" valign="top" heigth=21 nowrap><img src="pictures/forumleer.gif"><img src="pictures/forumleer.gif"><?
-	
-		//Struktur darstellen
-		$striche = "";
-		for ($i=0;$i<$level;$i++) {
-			if ($i==($level-1)) {
-				if ($this->lines[$i+1]>1) 
-					$striche.= "<img src=\"pictures/forumstrich3.gif\" border=0>"; 		//Kreuzung
-				else
-					$striche.= "<img src=\"pictures/forumstrich2.gif\" border=0>"; 		//abknickend
-				$this->lines[$i+1] -= 1;
-			} else {
-				if ($this->lines[$i+1]==0) 
-					$striche .= "<img src=\"pictures/forumleer.gif\" border=0>";			//Leerzelle
-				else
-					$striche .= "<img src=\"pictures/forumstrich.gif\" border=0>";		//Strich
-			}
-		}
-	
-		echo $striche;
-					?></td>
-					<?
-	
-		//Kofzeile ausgeben
-		 printhead ($breite, 0, $link, $open, $new, $icon, $titel, $zusatz);
-			?><td class="blank" width="*">&nbsp;</td>
-			</tr>
-		</table>
-		<?	 
-		 
-		 //weiter zur Contentzeile
-		 if ($open=="open") {
-		?><table width="100%" cellpadding=0 cellspacing=0 border=0>
-			<tr>
-				<?
-			 	//wiederum Striche fuer Struktur
-				?><td class="blank" nowrap background="pictures/forumleer.gif"><img src="pictures/forumleer.gif"><img src="pictures/forumleer.gif"></td>
-				<?
-				$striche='';
-				if ($level)
-					for ($i=1;$i<=$level;$i++) {
-						if ($this->lines[$i]==0) {
-							$striche.= "<td class=\"blank\" nowrap background=\"pictures/forumleer.gif\"><img src=\"pictures/forumleer.gif\"></td>";
-							}
-						else {
-							$striche.= "<td class=\"blank\" nowrap background=\"pictures/forumstrich.gif\"><img src=\"pictures/forumleer2.gif\"></td>";
-							}
-					}
-
-				if ($weitere)
-					$striche.= "<td class=\"blank\" nowrap background=\"pictures/forumstrichgrau.gif\"><img src=\"pictures/forumleer.gif\"></td>";
-				else 
-					$striche.= "<td class=\"blank\" nowrap background=\"pictures/steel1.jpg\"><img src=\"pictures/forumleer.gif\"></td>";
-
-				echo $striche;
-		
-				//Contenzeile ausgeben
-				printcontent ($breite, FALSE, $content, $edit);
-				?><td class="blank" width="*">
-					&nbsp;
-				</td>
-			</tr>	
-		</table>
-		<?
-		}
-	}
-}
 
 /*****************************************************************************
 getList, stellt Liste mit Hilfe von printThread dar
 /*****************************************************************************/
+require_once ($RELATIVE_PATH_RESOURCES."/lib/CreateTreeRow.class.php");
 
-class getList extends printThread {
+class getList extends CreateTreeRow{
 	var $db;
 	var $db2;
 	var $recurse_levels;			//How much Levels should the List recurse
@@ -110,6 +35,10 @@ class getList extends printThread {
 	function getList() {
 		$this->recurse_levels=-1;
 		$this->supress_hierachy_levels=FALSE;
+	
+		$this->db = new DB_Seminar;
+		$this->db2 = new DB_Seminar;
+		
 	}
 
 	function setRecurseLevels($levels) {
@@ -127,6 +56,7 @@ class getList extends printThread {
 			$this->supress_hierachy_levels=TRUE;
 	}
 	
+	//private
 	function createListObject ($resource_id, $admin_buttons=FALSE) {
 		global $resources_data, $edit_structure_object;
 	
@@ -178,7 +108,7 @@ class getList extends printThread {
 		}
 
 		//Daten an Ausgabemodul senden (aus resourcesVisual)
-		$this->printRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
+		$this->createRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
 	}
 	
 	function createList ($start_id='', $level=0, $result_count=0) {
@@ -255,7 +185,7 @@ class getList extends printThread {
 			}
 			
 			if ($search_array["search_exp"]) 
-				$query.= sprintf(" AND name LIKE '%%%s%%' ", $search_array["search_exp"]);
+				$query.= sprintf(" AND (name LIKE '%%%s%%' OR description LIKE '%%%s%%') ", $search_array["search_exp"], $search_array["search_exp"]);
 		}
 		
 		$db->query($query);
@@ -275,12 +205,14 @@ class getList extends printThread {
 /*****************************************************************************
 getThread, stellt Struktur mit Hilfe von printThread dar
 /*****************************************************************************/
-class getThread extends printThread {
+require_once ($RELATIVE_PATH_RESOURCES."/lib/CreateTreeRow.class.php");
+
+class getThread extends CreateTreeRow {
 	var $lines;		//Uebersichtsarray der Struktur;
 
 	function getThread() {
-		$this->db=new DB_Seminar;
-		$this->db2=new DB_Seminar;
+		$this->db = new DB_Seminar;
+		$this->db2 = new DB_Seminar;
 	}
 
 	function createThread ($root_id, $level=0, $lines='') {
@@ -346,7 +278,7 @@ class getThread extends printThread {
 			
 
 			//Daten an Ausgabemodul senden (aus resourcesVisual)
-			$this->printRow($icon, $link, $titel, $zusatz, $level, $lines, $weitere, $new, $open, $content, $edit);
+			$this->createRow($icon, $link, $titel, $zusatz, $level, $lines, $weitere, $new, $open, $content, $edit);
 			
 			//in weitere Ebene abtauchen
 			while ($db2->next_record()) {
@@ -919,10 +851,12 @@ class editObject extends cssClasses {
 		$this->used_view = $value;
 	}
 	
+	//private
 	function selectCategories() {
 		$this->db->query("SELECT * FROM resources_categories");
 	}
 
+	//private
 	function selectProperties() {
 		$this->db->query ("SELECT resources_properties.name, resources_properties.description, resources_properties.type, resources_properties.options, resources_properties.system, resources_properties.property_id  FROM resources_properties LEFT JOIN resources_categories_properties USING (property_id) LEFT JOIN resources_objects USING (category_id) WHERE resources_objects.resource_id = '".$this->resObject->getId()."' ");
 		if (!$this->db->affected_rows())
@@ -931,6 +865,7 @@ class editObject extends cssClasses {
 			return TRUE;
 	}
 
+	//private
 	function selectPerms() {
 		$this->db->query ("SELECT *  FROM resources_user_resources WHERE resource_id = '".$this->resObject->getId()."' ");
 		if (!$this->db->affected_rows())
@@ -1572,6 +1507,7 @@ class ResourcesBrowse {
 		$this->searchArray=$array;
 	}
 	
+	//private
 	function searchForm() {
 		?>
 		<tr>
@@ -1591,6 +1527,7 @@ class ResourcesBrowse {
 		<?
 	}
 	
+	//private
 	function getHistory($id) {
 		global $PHP_SELF, $UNI_URL, $UNI_NAME;
 		$top=FALSE;
@@ -1617,6 +1554,7 @@ class ResourcesBrowse {
 		return $result;
 	}
 	
+	//private
 	function showProperties() {
 		global $PHP_SELF;
 
@@ -1692,6 +1630,7 @@ class ResourcesBrowse {
 		<?	
 	}
 	
+	//private
 	function browseLevels() {
 		global $PHP_SELF;
 		
@@ -1769,6 +1708,7 @@ class ResourcesBrowse {
 		<? 
 	}
 	
+	//private
 	function showList() {
 		$result_count=$this->list->createList($this->open_object);
 		if (!$result_count) {
@@ -1781,7 +1721,8 @@ class ResourcesBrowse {
 			<?
 		}
 	}
-
+	
+	//private
 	function showSearchList() {
 		$result_count=$this->list->createSearchList($this->searchArray);
 		if (!$result_count) {
@@ -1794,7 +1735,8 @@ class ResourcesBrowse {
 			<?
 		}
 	}
-
+	
+	//private
 	function createSearch() {
 		?>
 			<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
