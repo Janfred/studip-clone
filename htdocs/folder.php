@@ -50,17 +50,9 @@ if ($cmd=="all") {
 
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-IF ($SessSemName[1] =="")
-	{
-	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
-				"Keine Objekt gew&auml;hlt", 
-				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
-	die;
-	}
-ELSE
-	{
-	include "links_openobject.inc.php";
-	}
+checkObject();
+
+include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -76,15 +68,15 @@ if ((!$rechte) && strpos($open, "_")) {
 if (($rechte) || ($owner)) {
 	//wurde Code fuer Anlegen von Ordnern ubermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
 	if (strpos($open, "_n_")) {
-		$change=create_folder('Neuer Ordner', '', substr($open, (strpos($open, "_n_"))-32, (strpos($open, "_n_"))));
+		$change=create_folder(_('Neuer Ordner'), '', substr($open, (strpos($open, "_n_"))-32, (strpos($open, "_n_"))));
 		$open=$change;
 		}
 
 	//wurde Code fuer Anlegen von Ordnern der obersten Ebene ubermittelt (=id+"_a_"), wird entsprechende Funktion aufgerufen
 	if (strpos($open, "_a_")) {
 		if (substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))) == $SessionSeminar) {
-			$titel="Allgemeiner Dateiordner";
-			$description="Ablage für allgemeine Ordner und Dokumente der ".$SessSemName["art_generic"];
+			$titel=_("Allgemeiner Dateiordner");
+			$description= sprintf(_("Ablage für allgemeine Ordner und Dokumente der %s"), $SessSemName["art_generic"]);
 			}
 		
 		$db->query("SELECT date, date_typ, content FROM termine WHERE termin_id='".substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_")))."'");
@@ -93,8 +85,8 @@ if (($rechte) || ($owner)) {
 			$titel=$TERMIN_TYP[$db->f("date_typ")]["name"].": ".substr($db->f("content"), 0, 35);
 			if (strlen($db->f("content")) >=35)
 				$titel.="...";
-			$titel.=" am ".date("d.m.Y ", $db->f("date"));
-			$description="Ablage für Ordner und Dokumente zu diesem Termin";
+			$titel.=" " . _("am") . " ".date("d.m.Y ", $db->f("date"));
+			$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
 			}
 			
 		$change=create_folder($titel, $description, substr($open, (strpos($open, "_a_"))-32, (strpos($open, "_a_"))));
@@ -109,16 +101,16 @@ if (($rechte) || ($owner)) {
 	if (strpos($open, "_fd_")) {
 		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."'");
 		$db->next_record();
-		$msg="info§Wollen sie die Datei <b>".htmlentities(stripslashes($db->f("filename")))."</b> von <a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a> wirklich l&ouml;schen?<br>";
-		$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\"><img src=\"pictures/buttons/ja2-button.gif\" border=0></a>&nbsp;&nbsp; <a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0></a>§";
+		$msg="info§" . sprintf("Wollen sie die Datei <b>%s</b> von %s wirklich l&ouml;schen?", htmlentities(stripslashes($db->f("filename"))), "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>") . "<br>";
+		$msg.="<b><a href=\"$PHP_SELF?open=".substr($open, (strpos($open, "_fd_"))-32, (strpos($open, "_fd_")))."_rm_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
 		}
 
 	//Loeschen von Datein im wirklich-ernst Mode
 	if (strpos($open, "_rm_")) {
 		if (delete_document(substr($open, (strpos($open, "_rm_"))-32, (strpos($open, "_rm_")))))
-			$msg.="msg§Die Datei wurde gel&ouml;scht§";
+			$msg.="msg§" . _("Die Datei wurde gel&ouml;scht") . "§";
 		else
-			$msg.="error§Die Datei konnte nicht gel&ouml;scht werden§";
+			$msg.="error§" . _("Die Datei konnte nicht gel&ouml;scht werden") . "§";
 		} 
 
 	//wurde Code fuer Aendern des Namens und der Beschreibung von Ordnern oder Dokumenten ubermittelt (=id+"_c_"), wird entsprechende Funktion aufgerufen
@@ -184,12 +176,13 @@ if ($close) {
 
 // Hauptteil
 
- if (!isset($range_id)) $range_id = $SessionSeminar ;
+ if (!isset($range_id))
+ 	$range_id = $SessionSeminar ;
 
 ?>
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr><td class="topic" colspan="2"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"] . " - Dateien"; ?></b></td></tr>
+<tr><td class="topic" colspan="2"><b>&nbsp;<img src="pictures/icon-disc.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"] . " - " . _("Dateien"); ?></b></td></tr>
 
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
@@ -206,11 +199,11 @@ if ($close) {
 	if (($rechte) && ($folder_system_data["cmd"]=="tree")) {
 		$db2->query("SELECT name FROM folder WHERE range_id='$range_id'");
 		if (!$db2->affected_rows())
-			$select="<option value=\"".$range_id."_a_\">Allgemeiner Dateiordner</option>";
+			$select="<option value=\"".$range_id."_a_\">" . _("Allgemeiner Dateiordner") . "</option>";
 		
 		$db2->query("SELECT termine.date, folder.name, termin_id, date_typ FROM termine LEFT JOIN folder ON (termin_id = folder.range_id) WHERE termine.range_id='$range_id' ORDER BY name, termine.date");
 		while (($db2->next_record()) && (!$db2->f("name"))) {
-			$select.="<option value=\"".$db2->f("termin_id")."_a_\">Dateiordner zum Termin am ".date("d.m.Y ", $db2->f("date"))."[".$TERMIN_TYP[$db2->f("date_typ")]["name"]."]</option>";
+			$select.="<option value=\"".$db2->f("termin_id")."_a_\">" . sprintf(_("Dateiordner zum Termin am %s [%s]"), date("d.m.Y", $db2->f("date")), $TERMIN_TYP[$db2->f("date_typ")]["name"]) . "</option>";
 			}
 
 		if ($select) {
@@ -218,8 +211,8 @@ if ($close) {
 			<blockquote>
 			<p valign="middle">
 			<form action="<? echo $PHP_SELF?>" method="POST">
-				<input type="image" name="anlegen" value="Neuer Ordner" align="absmiddle" src="pictures/buttons/neuerordner-button.gif" border=0 />&nbsp;
-				<select name="open">
+				<input type="image" name="anlegen" value="<?=_("Neuer Ordner")?>" align="absmiddle" <?=makeButton("neuerordner", "src")?> border=0 />&nbsp;
+				<select name="open" style="vertical-align:middle">
 					<? echo $select ?>				
 				</select>
 			</form>
@@ -232,7 +225,7 @@ if ($close) {
 	if ($folder_system_data["cmd"]=="all") {
 		?>
 		<blockquote>
-		<? printf ("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen.", $SessSemName["art_generic"]); ?>
+		<? printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); ?>
 		</blockquote>
 		<?
 		}

@@ -122,7 +122,7 @@ function form() {
 	
 	$c=1;
 	
-	$print="\n<br /><br />Sie haben diesen Ordner zum Upload ausgew&auml;hlt:<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	$print.="\n";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
 	
@@ -130,7 +130,7 @@ function form() {
 	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
 		if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
 			$i=1;
-			$print.= "Unzul&auml;ssige Dateitypen:</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
+			$print.= _("Unzul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
 			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
 				if ($i !=1)
 					$print.= ", ";				
@@ -140,7 +140,7 @@ function form() {
 			}
 		else {
 			$i=1;
-			$print.= "Zul&auml;ssige Dateitypen:</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
+			$print.= _("Zul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
 			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
 				if ($i !=1)
 					$print.= ", ";				
@@ -152,7 +152,7 @@ function form() {
 	else {
 		if ($UPLOAD_TYPES["default"]["type"] == "allow") {
 			$i=1;
-			$print.= "Unzul&auml;ssige Dateitypen:</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
+			$print.= _("Unzul&auml;ssige Dateitypen:") . "</b><font></td><td class=\"steel1\" width=\"80%\"><font size=-1>";
 			foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
 				if ($i !=1)
 					$print.= ", ";				
@@ -162,7 +162,7 @@ function form() {
 			}
 		else {
 			$i=1;
-			$print.= "Zul&auml;ssige Dateitypen:</b></td><font><td class=\"steel1\" width=\"80%\"><font size=-1>";
+			$print.= _("Zul&auml;ssige Dateitypen:") . "</b></td><font><td class=\"steel1\" width=\"80%\"><font size=-1>";
 			foreach ($UPLOAD_TYPES["default"]["file_types"] as $ft) {
 				if ($i !=1)
 					$print.= ", ";				
@@ -172,20 +172,20 @@ function form() {
 			}
 		}
 	$print.="</font></td></tr>";
-	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>Maximale Gr&ouml;&szlig;e:</b></font></td><td class=\"steel1\" width=\"80%\"><font size=-1><b>".($max_filesize / 1048576)." </b>Megabyte</font></td></tr>";
+	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>" . _("Maximale Gr&ouml;&szlig;e:") . "</b></font></td><td class=\"steel1\" width=\"80%\"><font size=-1><b>".($max_filesize / 1048576)." </b>" . _("Megabyte") . "</font></td></tr>";
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . $PHP_SELF . "\" method=\"post\">";
-	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen. </font></td></tr>";
+	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
-	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;Dateipfad:&nbsp;</font><br />";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
-	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>2. Geben Sie eine kurze Bescheibung der Datei ein.</font></td></tr>";
-	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;Beschreibung:&nbsp;</font><br>";
+	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Bescheibung der Datei ein.") . "</font></td></tr>";
+	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 	$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
-	$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen</font></td></tr>";
+	$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";
-	$print.= "\n<input type=\"image\" src=\"pictures/buttons/absenden-button.gif\" border=0 value=\"Senden\" onClick=\"return upload_start();\" name=\"create\">";
-	$print.="&nbsp;<a href=\"$PHP_SELF?abbrechen=true\"><img src=\"./pictures/buttons/abbrechen-button.gif\" border=0></a></td></tr>";	
+	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\">";
+	$print.="&nbsp;<a href=\"$PHP_SELF?abbrechen=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";	
 	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"upload\">";	
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";	
 	$print.= "\n</form></table><br /></center>";
@@ -226,7 +226,7 @@ function validate_upload($the_file) {
 	
 	$error = FALSE;
 	if ($the_file == "none") { # haben wir eine Datei?
-		$emsg.= "error§Sie haben keine Datei zum Hochladen ausgew&auml;hlt!§";
+		$emsg.= "error§" . _("Sie haben keine Datei zum Hochladen ausgew&auml;hlt!") . "§";
 	} else { # pruefen, ob der Typ stimmt
 
 		//Die Dateierweiterung von dem Original erfragen
@@ -249,12 +249,14 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp$exts nicht hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp %s nicht hochladen!"), trim($exts)) . "§";
 					else
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die Dateitypen$exts nicht hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die Dateitypen %s nicht hochladen!"), trim($exts)) . "§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
+							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
+						else
+							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>" . _("Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!") . "§";
 					}
 				}
 			else {
@@ -270,14 +272,14 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp$exts hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp %s hochladen!"), trim($exts)) . "§";
 					else
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen$exts hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen %s hochladen!"), trim($exts)) . "§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
+							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
 						else
-							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!§";
+							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>" . _("Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!") . "§";
 					}
 				}
 			}
@@ -295,14 +297,14 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp$exts nicht hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp %s nicht hochladen!"), trim($exts)) . "§";
 					else
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen  die Dateitypen$exts nicht hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die Dateitypen %s nicht hochladen!"), trim($exts)) . "§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
+							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
 						else
-							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!§";
+							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>" . _("Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!") . "§";
 					}
 				}					      				
 			else {
@@ -318,21 +320,21 @@ function validate_upload($the_file) {
 					}
 				if (!$t) {
 					if ($i==2)
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp$exts hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den Dateityp %s hochladen!"), trim($exts)) . "§";
 					else
-						$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen$exts hochladen!§";
+						$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die Dateitypen %s hochladen!"), trim($exts)) . "§";
 					if ($doc)
 						if (!$auth->auth["jscript"])
-							$emsg.= "info§<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">Hier</a> bekommen Sie Hilfe zum Upload von Word-Dokumenten.§";
+							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
 						else
-							$emsg.= "info§<script language=\"Javascript\">{fenster=window.open(\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\",\"help\",\"scrollbars=yes,width=620,height=400\");} </script>Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;ffneten Hilfefenster!§";
+							$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"help/index.php?referrer_page=datei.inc.php&doc=TRUE\">", "</a>") . "§";
 					}
 				}
 			}
 		
 		//pruefen ob die Groesse stimmt.
 		if ($the_file_size > $max_filesize) {
-			$emsg.= "error§Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse zum Upload (".($max_filesize /1048576)." Megabyte) wurde &uuml;berschritten!";
+			$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse zum Upload (%s Megabyte) wurde &uuml;berschritten!"), $max_filesize / 1048576);
 		}
 	}
 	if ($emsg) {
@@ -360,10 +362,10 @@ function upload($the_file) {
 
 		//Kopieren und Fehlermeldung
 		if (!@copy($the_file,$newfile)) {
-			$msg.= "error§Datei&uuml;bertragung gescheitert!";
+			$msg.= "error§" . _("Datei&uuml;bertragung gescheitert!");
 			return FALSE;
 		} else {
-			$msg="msg§Die Datei wurde erfolgreich auf den Server &uuml;bertragen!";
+			$msg="msg§" . _("Die Datei wurde erfolgreich auf den Server &uuml;bertragen!");
 			return TRUE;
 		}
 	}
@@ -414,7 +416,7 @@ function JS_for_upload() {
 	file_name=document.upload_form.the_file.value
 	if (!file_name)
 	     {
-	     alert("Bitte wählen Sie eine Datei aus !");
+	     alert("<?=_("Bitte wählen Sie eine Datei aus!")?>");
 	     document.upload_form.the_file.focus();
 	     return false;
 	     }
@@ -480,7 +482,7 @@ function JS_for_upload() {
 		}
 	?>)
 	     {
-	     alert("Dieser Dateityp ist nicht zugelassen!");
+	     alert("<?=_("Dieser Dateityp ist nicht zugelassen!")?>");
 	     document.upload_form.the_file.focus();
 	     <? if ($deny_doc) { ?>
 		if (ext == "doc")
@@ -502,7 +504,7 @@ function JS_for_upload() {
 	msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 	msg_window.document.write("<html><head><title>Datei Upload</title></head>");
 	msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='pictures/alienupload.gif' width='165' height='125'></p>");
-	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;wird hochgeladen.<br>&nbsp;Bitte haben sie etwas Geduld!<br /></font></p></body></html>");
+	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;<?=_("wird hochgeladen.")?><br>&nbsp;<?=_("Bitte haben sie etwas Geduld!")?><br /></font></p></body></html>");
 
 	upload=true;
 
@@ -601,7 +603,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$icon="<img src=\"pictures/cont_folder2.gif\">";				
 			
 			if ($move)
-				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0 alt=\"Objekt in diesen Ordner verschieben\" /></a>".$icon;
+				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0 " . tooltip(_("Objekt in diesen Ordner verschieben")) . "/></a>".$icon;
 			
 			//Link erstellen
 			$link=$PHP_SELF."?close=".$db->f("folder_id")."#anker";
@@ -617,9 +619,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
 
 				if ($dok_letzter > 1)
-					$titel= $tmp_titel."&nbsp;&nbsp;($dok_letzter Dokumente)";
+					$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $dok_letzter);
 				elseif ($dok_letzter)
-					$titel= $tmp_titel." </b>&nbsp;&nbsp;($dok_letzter Dokument)";
+					$titel= $tmp_titel." </b>&nbsp;&nbsp;" . _("(1 Dokument)");
 				else
 					$titel= $tmp_titel;		
 				}
@@ -662,18 +664,18 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			//Contentbereich erstellen
 			if ($change == $db->f("folder_id")) { //Aenderungsmodus, zweiter Teil
 				$content.="<textarea name=\"change_description\" rows=3 cols=40>".htmlReady($db->f("description"))."</textarea><br /><br />";
-				$content.="<input type=\"image\" src=\"./pictures/buttons/uebernehmen-button.gif\" border=0 value=\"&Auml;nderungen speichern\" />";
-				$content.="&nbsp;<input type=\"image\" src=\"./pictures/buttons/abbrechen-button.gif\" border=0 value=\"Abbrechen\" />";
+				$content.="<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"&Auml;nderungen speichern\">&nbsp;";
+				$content.="<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" value=\"Abbrechen\">";
 				$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
 				$content.="<input type=\"hidden\" name=\"type\" value=1 />";
 				}
 			elseif ($db->f("description"))
 				$content= htmlReady($db->f("description"));
 			else
-				$content= "Keine Beschreibung vorhanden";
+				$content= _("Keine Beschreibung vorhanden");
 			
 			if ($move == $db->f("folder_id")) 
-				$content.="<br />Dieser Ordner wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol <img src=\"pictures/move.gif\" border=0 alt=\"Klicken Sie dieses Symbol, um diesen Ordner in einen anderen Ordner einzuf&uuml;gen\">, um ihn in den gew&uuml;nschten Ordner zu verschieben.";
+				$content.="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen")) . ">");
 			
 			if ($upload == $db->f("folder_id")) {
 				$content.=upload_item ($upload,FALSE,FALSE);
@@ -685,15 +687,15 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			//Editbereich erstellen
 			if (($change != $db->f("folder_id")) && ($upload != $db->f("folder_id"))) {
 				if (($rechte) || ($SemUserStatus == "autor")) {
-					$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_#anker\"><img src=\"./pictures/buttons/dateihochladen-button.gif\" border=0></a>";
+					$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_#anker\">" . makeButton("dateihochladen", "img") . "</a>";
 					if ($rechte) {
-						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\"><img src=\"./pictures/buttons/neuerordner-button.gif\" border=0></a>"; 
+						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>"; 
 						if (($letzter == 0) && ($dok_letzter==0)) {
-							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\"><img src=\"./pictures/buttons/loeschen-button.gif\"  border=0></a>";
+							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
 							}
-						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\"><img src=\"./pictures/buttons/verschieben-button.gif\"  border=0></a>";	
+						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";	
 						if (!$level==0)
-							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\"><img src=\"./pictures/buttons/bearbeiten-button.gif\"  border=0></a>";
+							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
 						}
 					}
 				}
@@ -795,8 +797,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 								
 					if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
 						$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
-						$content.= "<input type=\"image\" src=\"./pictures/buttons/uebernehmen-button.gif\" border=0 value=\"&Auml;nderungen speichern\" />";
-						$content.= "&nbsp;<input type=\"image\" src=\"./pictures/buttons/abbrechen-button.gif\" border=0 value=\"Abbrechen\" />";						
+						$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\"&Auml;nderungen speichern\" />";
+						$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 value=\"Abbrechen\" />";						
 						$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
 						$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
 						}
@@ -804,12 +806,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						if ($db3->f("description"))
 							$content= htmlReady($db3->f("description"));
 						else
-							$content= "Keine Beschreibung vorhanden";
-						$content.=  "<br />Dateigr&ouml;&szlig;e: ".round ($db3->f("filesize") / 1024)." kB";	
+							$content= _("Keine Beschreibung vorhanden");
+						$content.=  "<br />" . sprintf(_("Dateigr&ouml;&szlig;e: %s kB"), round ($db3->f("filesize") / 1024));	
 						}
 			
 					if ($move == $db3->f("dokument_id"))
-						$content.="<br />Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol <img src=\"pictures/move.gif\" border=0 alt=\"Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzuf&uuml;gen\">, um sie in den gew&uuml;nschten Ordner zu verschieben.";
+						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um diese Datei in einen anderen Ordner einzuf&uuml;gen."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 										
 					$content.= "\n";	
 										
@@ -817,13 +819,13 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$edit='';
 					if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id"))) {
 						if (($rechte) || ($db3->f("user_id")==$user->id)) {
-							$edit= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\"><img src=\"./pictures/buttons/loeschen-button.gif\" border=0></a>";
-							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \"><img src=\"./pictures/buttons/verschieben-button.gif\" border=0></a>";	
-							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \"><img src=\"./pictures/buttons/bearbeiten-button.gif\" border=0></a>";
+							$edit= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
+							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
+							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
 							}
-						$edit.= "&nbsp;<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src=\"./pictures/buttons/herunterladen-button.gif\" border=0></a>";
+						$edit.= "&nbsp;<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
 						if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz"))
-							$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src=\"./pictures/buttons/alsziparchiv-button.gif\" border=0></a>";						
+							$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";						
 						}
 	
 					
@@ -851,7 +853,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			
 			if ($move)
-				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0 alt=\"Objekt in diesen Ordner verschieben\" /></a>".$icon;
+				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"pictures/move.gif\" border=0 " . tooltip(_("Objekt in diesen Ordner verschieben")) . " /></a>".$icon;
 			
 			//Link erstellen
 			$link=$PHP_SELF."?open=".$db->f("folder_id")."#anker";
@@ -864,9 +866,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
 			
 			if ($dok_letzter > 1)
-				$titel= $tmp_titel."&nbsp;&nbsp;($dok_letzter Dokumente)";
+				$titel= $tmp_titel."&nbsp;&nbsp;" . sprintf(_("(%s Dokumente)"), $dok_letzter);
 			elseif ($dok_letzter)
-				$titel= $tmp_titel." &nbsp;&nbsp;($dok_letzter Dokument)";
+				$titel= $tmp_titel." &nbsp;&nbsp;" . _("(1 Dokument)");
 			else
 				$titel= $tmp_titel;
 
@@ -945,16 +947,16 @@ function delete_folder ($folder_id) {
 	$db->query("DELETE FROM folder WHERE folder_id='$folder_id'");
 	if ($db->affected_rows()) {
 		if ($deleted)
-			$msg.="info§Der Dateiordner und $deleted Dokumente wurden gel&ouml;scht§";
+			$msg.="info§" . sprintf(_("Der Dateiordner und %s Dokumente wurden gel&ouml;scht"), $deleted) . "§";
 		else
-			$msg.="info§Der Dateiordner wurde gel&ouml;scht§";
+			$msg.="info§" . _("Der Dateiordner wurde gel&ouml;scht") . "§";
 		return TRUE;
 		}
 	else {
 		if ($deleted)
-			$msg.="error§Probleme beim L&ouml;schen des Ordners. $deleted Dokumente wurden gel&ouml;scht§";
+			$msg.="error§" . sprintf(_("Probleme beim L&ouml;schen des Ordners. %s Dokumente wurden gel&ouml;scht"), $deleted) . "§";
 		else
-			$msg.="error§Probleme beim L&ouml;schen des Ordners§";
+			$msg.="error§" . _("Probleme beim L&ouml;schen des Ordners") . "§";
 		return FALSE;
 		}
 	}
@@ -985,36 +987,5 @@ function recursiv_folder_delete ($parent_id) {
 	return $doc_count;
 	}
 
-
-
-/*
-Die function delete_range_of_documents löscht alle Dateien eines Items.
-Der Parameter ist die range_id der zu löschenden Dateien.
-Es koennen also mit einem Aufruf alle Dateien eines Seminares
-(nur die direkten im allgemeinen Ordner), eines Institutes oder
-eines Termines aus der Datenbank und von der Platte entfernt werden.
--- update: Seit Einfuehrung des Folder-Systems nur noch noetig zum
-Loeschen aller Dateien eines Folders.
-Der Rückgabewert der Funktion ist die Anzahl der gelöschten Dateien.
-Ausgabe wird keine produziert.
-Es erfolgt keine Überprüfung der Berechtigung innerhalb der Funktion,
-dies muss das aufrufende Script sicherstellen.
-*/
-
-function delete_range_of_documents ($range_id) {
-
-	$db = new DB_Seminar;
-	$count = 0;
-
-	## Dokumente finden...
-	$query = "SELECT dokument_id, filename FROM dokumente WHERE range_id='$range_id'";
-	$db->query($query);
-	while ($db->next_record()) {       // ...und nacheinander...
-		if (delete_document($db->f("dokument_id"),$db->f("filename")))  // ...loeschen
-			$count ++;
-	}
-
-	return $count;
-}
 
 ?>
