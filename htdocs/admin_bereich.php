@@ -35,9 +35,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-	include "links_admin.inc.php";  //Linkleiste fuer admins
-	require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-	require_once ("visual.inc.php");
+	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
+	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
+	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 	$cssSw=new cssClassSwitcher;
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
@@ -152,8 +152,9 @@ while ( is_array($HTTP_POST_VARS)
       my_error("<b>Datenbankoperation gescheitert: </b> $query</b>");
       break;
     }
-    
-		unset($i_view);  // wenn wir den Bereich gelöscht haben, wollen wir nicht in die Detail-Ansicht dieses Bereiches...
+    $db->query("DELETE FROM bereich_fach WHERE bereich_id='$i_id'");
+	
+	unset($i_view);  // wenn wir den Bereich gelöscht haben, wollen wir nicht in die Detail-Ansicht dieses Bereiches...
     my_msg("<b>Der Bereich \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
   break;
   
@@ -211,7 +212,7 @@ if ($i_view)
   	
   	if ($i_view<>"new")
 		{
- 		$db->query("SELECT * FROM seminare LEFT  JOIN seminar_bereich USING (seminar_id) WHERE bereich_id = '$i_id'");
+ 		$db->query("SELECT a.seminar_id,Name FROM seminar_bereich a LEFT  JOIN  seminare USING (seminar_id) WHERE a.bereich_id = '$i_id'");
  		?>
  		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
  <?
@@ -220,19 +221,18 @@ if ($i_view)
 ?>
  		<tr><th width="80%" align="center">Name</th><th width="20%" align="center">Aktion</th><tr>
 		<?
+		$assigned = array();
  		while ($db->next_record())
  			{
  			echo"<tr><td class=\"".$cssSw->getClass()."\">", htmlReady($db->f("Name")), "</td><td align=center class=\"".$cssSw->getClass()."\"><form method=\"POST\" name=\"kill_s\" action=", $PHP_SELF, "><input type=\"submit\" name=\"kill_sem\" value=\" Zuordnung aufheben\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"><input type=\"hidden\" name=\"seminar_id\" value=\"", $db->f("seminar_id"),"\"></td></form></tr>";
             $cssSw->switchClass();
-    			}
+			$assigned[] = $db->f("seminar_id");
+    		}
  		echo"<tr><td class=\"".$cssSw->getClass()."\"><form method=\"POST\" name=\"add_s\" action=", $PHP_SELF, "><select name=\"seminar_id\" size=1>";
- 		$db2->query("SELECT Name, Seminar_id FROM seminare ORDER BY Name");
+ 		$db2->query("SELECT Name, Seminar_id FROM seminare WHERE Seminar_id NOT IN('".join("','",$assigned)."') ORDER BY Name");
  		while ($db2->next_record())
  			{
- 			$stmp = $db2->f("Seminar_id");
- 			$db->query("SELECT * FROM seminar_bereich WHERE bereich_id = '$i_view' AND seminar_id = '$stmp'");
-	 		IF (!$db->next_record())
-	 			echo "<option value=".$db2->f("Seminar_id").">", substr($db2->f("Name"),0,80);
+ 				echo "<option value=".$db2->f("Seminar_id").">", substr($db2->f("Name"),0,80);
  			}
  		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=center><input type=\"submit\" name=\"add_sem\" value=\" Zuordnen\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"></td></form></tr>";
  		echo "</table><br><br>";

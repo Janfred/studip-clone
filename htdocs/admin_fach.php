@@ -36,9 +36,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-	include "links_admin.inc.php";  //Linkleiste fuer admins
-	require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-	require_once ("visual.inc.php");
+	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
+	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
+	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 	$cssSw=new cssClassSwitcher;
 ?>
@@ -155,7 +155,8 @@ while ( is_array($HTTP_POST_VARS)
       my_error("<b>Datenbankoperation gescheitert: </b> $query</b>");
       break;
     }
-    
+    $db->query("DELETE FROM fach_inst WHERE fach_id='$i_id'");
+	
 		unset($i_view);  // wenn wir das Fach gelöscht haben, wollen wir nicht in die Detail-Ansicht dieses Faches...
     my_msg("<b>Das Fach \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
   break;
@@ -213,7 +214,7 @@ if ($i_view)
   	
   	if ($i_view<>"new")
 		{
- 		$db->query("SELECT * FROM bereiche LEFT JOIN bereich_fach USING (bereich_id) WHERE fach_id = '$i_id'");
+ 		$db->query("SELECT a.bereich_id,name FROM bereich_fach a LEFT JOIN bereiche USING (bereich_id) WHERE a.fach_id = '$i_id'");
  		?>
  		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
 
@@ -223,17 +224,16 @@ if ($i_view)
 ?>
         <tr><th width="80%" align="center">Name</th><th width="20%" align="center">Aktion</th><tr>
 		<?
+		$assigned = array();
  		while ($db->next_record()){
            echo"<tr><td class=\"".$cssSw->getClass()."\">", htmlReady($db->f("name")), "</td><td class=\"".$cssSw->getClass()."\" align=\"center\"><form method=\"POST\" name=\"kill_b\" action=", $PHP_SELF, "><input type=\"submit\" name=\"kill_bereich\" value=\" Zuordnung aufheben\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"><input type=\"hidden\" name=\"bereich_id\" value=\"", $db->f("bereich_id"),"\"></td></form></tr>";
            $cssSw->switchClass();
+		   $assigned[] = $db->f("bereich_id");
         }
  		echo"<tr><td class=\"".$cssSw->getClass()."\"><form method=\"POST\" name=\"add_b\" action=", $PHP_SELF, "><select name=\"bereich_id\" size=1>";
- 		$db2->query("SELECT * FROM bereiche ORDER BY name");
+ 		$db2->query("SELECT bereich_id,name FROM bereiche WHERE bereich_id NOT IN('".join("','",$assigned)."') ORDER BY name");
  		while ($db2->next_record())
  			{
- 			$btmp = $db2->f("bereich_id");
- 			$db->query("SELECT * FROM bereich_fach WHERE fach_id = '$i_view' AND bereich_id = '$btmp'");
-	 		IF (!$db->next_record())
  			echo "<option value=".$db2->f("bereich_id").">", substr($db2->f("name"),0,80);
  			}
  		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=\"center\"><input type=\"submit\" name=\"add_bereich\" value=\" Zuordnen\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"></td></form></tr>";
