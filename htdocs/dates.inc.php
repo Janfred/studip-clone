@@ -36,7 +36,7 @@ function getRoom ($range_id, $link=TRUE) {
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
 	
 	if ($RESOURCES_ENABLE)	
-	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
@@ -540,8 +540,8 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 	global $user,$auth, $SEMESTER, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
 
 	if ($RESOURCES_ENABLE) {
-		require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+		include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+		include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	}
 	
 	$do=TRUE;
@@ -722,7 +722,7 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES;
 	
 	if ($RESOURCES_ENABLE) {
-		require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+		include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	}
 	
 	$db = new DB_Seminar;
@@ -803,7 +803,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $SEMESTER, $HOLIDAY, $TERMIN_TYP, $user;
 	
 	if ($RESOURCES_ENABLE)	{
-	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
 	}
 	 	

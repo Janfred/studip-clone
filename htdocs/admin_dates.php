@@ -64,9 +64,9 @@ $sess->register("term_data");
 $sess->register("admin_dates_data");
 
 if ($RESOURCES_ENABLE) {
-	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
-	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	$resList = new ResourcesUserRoomsList($user_id);
 }
 

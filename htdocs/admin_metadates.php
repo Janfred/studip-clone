@@ -52,8 +52,8 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");//ja,ja,ja,ja auch die...
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");//ja,ja,ja,ja,ja auch die...
 
 if ($RESOURCES_ENABLE) {
-	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	$resList = new ResourcesUserRoomsList($user_id);
 }
 
