@@ -163,13 +163,13 @@ class studip_news {
 		}
 		echo "\n<tr><td width=\"100%\" class=\"blank\"><blockquote>";
 		echo "\n<form action=\"".$this->p_self("cmd=kill")."\" method=\"POST\">";
-		echo "<table class=\"blank\" align=\"left\" width=\"".round(0.89*$this->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+		echo "<table class=\"blank\" align=\"left\" width=\"".round(0.88*$this->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
 		echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\" style=\"vertical-align:middle;\"><font size=-1 >" . _("Vorhandene News im gew&auml;hlten Bereich:") . "<br>";
 		echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\" style=\"vertical-align:middle;\"><font size=-1 >" . _("markierte News l&ouml;schen");
 		echo "\n<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"kill\" " . makeButton("loeschen","src") . tooltip(_("Markierte News löschen")) . " border=\"0\" >&nbsp;&nbsp;</td></tr>";
 		echo "\n<tr><th width=\"15%\">" . _("&Uuml;berschrift") . "</th><th width=\"20%\">" . _("Inhalt") . "</th><th width=\"20%\">"
 			. _("Autor") . "</th><th width=\"10%\">" . _("Einstelldatum") . "</th><th width=\"10%\">" . _("Ablaufdatum") . "</th><th width=\"15%\">"
-			. _("Bearbeiten") . "</th><th width=\"10%\">" . _("L&ouml;schen") . "</th>";
+			. _("Bearbeiten") . "</th><th width=\"10%\">" . _("L&ouml;schen") . "</th></tr>";
 		while (list ($news_id,$details) = each ($this->news_query)) {
 			$cssSw->switchClass();
 			echo "\n<tr ".$cssSw->getHover()."><td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><font size=\"-1\"><b>".htmlReady($details["topic"])."</b></font></td>";
@@ -188,7 +188,7 @@ class studip_news {
 			echo "</td></tr>";
 		}
 		echo "\n<tr><td class=\"blank\" colspan=8>&nbsp; </td></tr>";
-		echo "\n</form></table><br><br></blockquote></td></tr>";
+		echo "\n</table></form><br><br></blockquote></td></tr>";
 		return TRUE;
 	}
 
@@ -739,24 +739,25 @@ if (!$cmd OR $cmd=="show") {
 			echo "&nbsp; <font size=-1>" . _("Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!") . "</font><br /><br />";
 			echo "&nbsp; <INPUT TYPE=\"TEXT\" style=\"vertical-align:middle;\" name=\"search\" size=\"20\">&nbsp;&nbsp;";
 			echo "<input type=\"IMAGE\" style=\"vertical-align:middle;\" name=\"submit\" " . makeButton("suchestarten","src") . tooltip( _("Suche starten")) ." border=\"0\">";
-			echo "</td></tr></table>\n";
+			echo "</td></tr></form></table>\n";
 			echo "</blockquote>";
-			echo "</form>";
-		}
-		else $news->search_range("blah");
+			echo "</td></tr>";
+		} else
+			$news->search_range("blah");
 		echo "\n<tr><td class=\"blank\"><blockquote>";
 		if ($perm->have_perm("admin"))
-		echo "<hr width=\"100%\">";
+		echo "<hr>";
 		echo "<br /><b>" . _("verf&uuml;gbare Bereiche");
 		echo "</b></blockquote></td></tr>\n ";
 		$typen = array("user"=>_("Benutzer"),"sem"=>_("Veranstaltung"),"inst"=>_("Einrichtung"),"fak"=>_("Fakult&auml;t"));
-		$my_cols=4;
+		$my_cols=3;
 		if ($perm->have_perm("tutor")){
 			echo "\n<tr><td class=\"blank\"><blockquote>";
 			echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b> bearbeiten") . "</font>&nbsp;";
 			echo "<a href=\"".$news->p_self("range_id=$user->id")."\">&nbsp; <img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Persönliche News bearbeiten")) ." border=\"0\"></a>";
 		}
 		if ($perm->have_perm("root")) {
+			$my_cols=4;
 			echo "<font size=\"-1\" style=\"vertical-align:middle;\">&nbsp; " . _("<i>oder</i> <b>Systemweite News</b> bearbeiten") . "</font>&nbsp;";
 			echo "<a href=\"".$news->p_self("range_id=studip")."\">&nbsp;<img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Systemweite News bearbeiten")) ." border=\"0\"></a>";
 		}
@@ -768,7 +769,7 @@ if (!$cmd OR $cmd=="show") {
 		
 		if ($news->search_result) {
 			echo "\n<tr><td width=\"100%\" class=\"blank\"><blockquote>";
-			echo "<table width=\"".round(0.89*$news->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+			echo "<table width=\"".round(0.88*$news->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
 			$css = new CssClassSwitcher(array("steel1","steel1"));
 			$css->hoverenabled = TRUE;
 			$css->switchClass();
