@@ -360,8 +360,8 @@ $css_switcher->switchClass();
 				</blockquote>
 				<p>Veranstaltungstermine k&ouml;nnen nicht im pers&ouml;nlichen Terminkalender bearbeitet werden.</p>
 <?
-		$perm = get_perm($atermin->getSeminarId());
-		if($perm == "tutor" || $perm == "dozent")
+		$permission = get_perm($atermin->getSeminarId());
+		if($permission == "tutor" || $permission == "dozent")
 			echo 'Um diesen Termin zu bearbeiten, wechseln Sie bitte in die <a href="./admin_dates.php?range_id='.$atermin->getSeminarId().'&ebene=sem">Terminverwaltung</a>.';
 		echo "</td></tr>\n";
  	}
