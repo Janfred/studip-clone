@@ -148,7 +148,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 						<td width="99%">
 						<?
 						if ($mein_status)
-							$tmp_text="Sie sind als Teilnehmer der Veranstaltung eingetrage";
+							$tmp_text="Sie sind als Teilnehmer der Veranstaltung eingetragen";
 						elseif (!$perm->have_perm("admin"))
 							$tmp_text="Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.";
 						else

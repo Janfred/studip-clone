@@ -168,11 +168,11 @@ if ($cmd=="kill_admission") {
 	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
 	else {
 	  //Warteliste neu sortieren
-	  update_admission($auswahl, "sort_position");
+	  update_admission($auswahl);
 	  
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
-	  $meldung="msg§Das Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
+	  $meldung="msg§Der Eintrag in der Anmelde- bzw. Wartelistet der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen sie sich erneut bewerben.";
 	}
 }
 
