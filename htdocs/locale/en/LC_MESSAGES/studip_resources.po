@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-21 13:06+0100\n"
+"POT-Creation-Date: 2003-03-21 18:44+0100\n"
 "PO-Revision-Date: 2003-03-21 17:34+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -566,7 +566,8 @@ msgid "Nächste Woche anzeigen"
 msgstr "Show next week"
 
 #: resources/resourcesVisual.inc.php:1830
-msgid "folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
+msgid ""
+"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
 msgstr ""
 "The resource should possess the following properties (empty means that it "
 "doesn't matter):"
@@ -773,7 +774,8 @@ msgstr "The resource has been moved"
 msgid ""
 "Bitte geben Sie eineN NutzerIn f&uuml;r die Belegung an, um diese Belegung "
 "zu speichern!"
-msgstr "In order to save this allocation, please enter a user for the allocation!"
+msgstr ""
+"In order to save this allocation, please enter a user for the allocation!"
 
 #: resources/views/msgs_resources.inc.php:78
 msgid ""
@@ -785,7 +787,8 @@ msgstr ""
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
-msgstr "There are no resources or levels in existence to which you have access."
+msgstr ""
+"There are no resources or levels in existence to which you have access."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid ""
@@ -806,7 +809,8 @@ msgid ""
 msgstr "No resources exist which you may allocate in respect to this course."
 
 #: resources/views/msgs_resources.inc.php:87
-msgid "Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
+msgid ""
+"Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
 msgstr "You have not selected a level. Therefore no list can be created."
 
 #: resources/views/msgs_resources.inc.php:87
@@ -834,7 +838,8 @@ msgstr "You have not selected an object to display."
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der "
 "Belegung an!"
-msgstr "Please enter valid values for the date, begin and end of the allocation!"
+msgstr ""
+"Please enter valid values for the date, begin and end of the allocation!"
 
 #: resources/views/msgs_resources.inc.php:99
 msgid ""
@@ -869,7 +874,8 @@ msgid ""
 msgstr "The weekly repetition may occur a maximum of 50 times!"
 
 #: resources/views/msgs_resources.inc.php:117
-msgid "Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
+msgid ""
+"Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
 msgstr "The daily repetition may occur a maximum of 100 times!"
 
 #: resources/views/msgs_resources.inc.php:121
@@ -1048,20 +1054,24 @@ msgid ""
 "Als Mitarbeiter der Einrichtung haben Sie die M&ouml;glichkeit, diese "
 "Ressourcen frei zu belegen oder den Belegungsplan einzusehen."
 msgstr ""
-"As a member of staff of the institute, you may allocate these resources or see the "
-"allocation plan."
+"As a member of staff of the institute, you may allocate these resources or "
+"see the allocation plan."
 
 #: resources/views/page_intros.inc.php:136
 msgid ""
 "Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Veranstaltung "
 "zugeordneten Ressourcen einsehen."
-msgstr "Here you can see the details and allocation plan of the resources allocated to this course."
+msgstr ""
+"Here you can see the details and allocation plan of the resources allocated "
+"to this course."
 
 #: resources/views/page_intros.inc.php:137
 msgid ""
 "Sie k&ouml;nnen hier den Details und Belegungsplan der dieser Einrichtung "
 "zugeordneten Ressourcen einsehen."
-msgstr "Here you can see the details and allocation plan of the resources allocated to this institute."
+msgstr ""
+"Here you can see the details and allocation plan of the resources allocated "
+"to this institute."
 
 #: resources/views/page_intros.inc.php:143
 #, c-format
@@ -1099,8 +1109,10 @@ msgid "Eine neue Belegung %serstellen%s"
 msgstr "%sCreate%s a new allocation"
 
 #: resources/views/page_intros.inc.php:163
-#, c-format
-msgid "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s"
+#, fuzzy, c-format
+msgid ""
+"Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s ausgeben "
+"lassen"
 msgstr "This page shows you the allocation times of the resource %s"
 
 #: resources/views/page_intros.inc.php:164
@@ -1129,4 +1141,3 @@ msgid ""
 msgstr ""
 "You are in the resource administration for Stud.IP. You can administer "
 "rooms, buildings, equipment and other resources here."
-

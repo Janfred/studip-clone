@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-21 13:06+0100\n"
+"POT-Creation-Date: 2003-03-21 18:44+0100\n"
 "PO-Revision-Date: 2003-03-21 16:42+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
@@ -129,7 +129,8 @@ msgstr "Customise settings for my appointment calendar"
 msgid ""
 "Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders "
 "anpassen."
-msgstr "Here you can customise the lay out of your personal appointment calendar."
+msgstr ""
+"Here you can customise the lay out of your personal appointment calendar."
 
 #: calendar/calendar_settings.inc.php:62
 msgid "Startansicht anpassen:"
@@ -520,7 +521,8 @@ msgstr ""
 msgid ""
 "Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %"
 "sTerminverwaltung</a>."
-msgstr "To edit this appointment, please switch to the %s Course administration</a> "
+msgstr ""
+"To edit this appointment, please switch to the %s Course administration</a> "
 
 #: calendar/views/edit.inc.php:498
 msgid "Aktion:"
@@ -587,4 +589,3 @@ msgstr "1. appointment"
 
 #~ msgid "Komfortfunktionen"
 #~ msgstr "Extras"
-
