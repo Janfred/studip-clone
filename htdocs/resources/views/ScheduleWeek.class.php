@@ -90,7 +90,7 @@ class ScheduleWeek {
 				$week_day = 7;
 				
 			if (date ("G", $end_time) > $this->end_hour) {
-				$rows = ((( $this->end_hour - date("G", $start_time))+1) *4);
+				$rows = ((($this->end_hour - date("G", $start_time))+1) *4);
 				$rows = $rows - (int)(date("i", $start_time) / 15);
 			} else 
 				$rows = ceil(((date("G", $end_time) - date("G", $start_time)) * 4) + ((date("i", $end_time) - date("i", $start_time)) / 15));
@@ -104,8 +104,7 @@ class ScheduleWeek {
 				$idx_corr_h = 0;
 				$idx_corr_m = 0;
 			}
-				
-			$sort_index = 	date ("G", $start_time)+$idx_corr_h.(int)((date("i", $start_time)+$idx_corr_m) / 15).$week_day;			
+			$sort_index = date ("G", $start_time)+$idx_corr_h.(int)((date("i", $start_time)+$idx_corr_m) / 15).$week_day;			
 			$id = md5(uniqid("rss",1));
 			$this->events[$id]=array (
 							"sort_index" => $sort_index,
@@ -161,6 +160,8 @@ class ScheduleWeek {
 				$l=0;
 				for ($l; $l<4; $l++) {
 					$idx=($n*100)+($l*10)+$i;
+					if ($idx < 10) $idx="0".$idx;
+					if ($idx < 100) $idx="0".$idx;
 					if ($this->cell_allocations[$idx]) 
 						if (sizeof($this->cell_allocations[$idx])>0) {
 							$rows=0;
@@ -269,6 +270,9 @@ class ScheduleWeek {
 					if (($l==7) && (!$this->show_days[7])) $l=8;
 		
 					$idx=($i*100)+($k*10)+$l;
+					if ($idx < 10) $idx="0".$idx;
+					if ($idx < 100) $idx="0".$idx;
+
 					unset($cell_content);
 					$m=0;
 					if ($this->cell_allocations[$idx])
