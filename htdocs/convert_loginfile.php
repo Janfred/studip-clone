@@ -98,6 +98,7 @@ class FakeUser{
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
+$db3=new DB_Seminar;
 $test = new FakeUser();
 $c = 0;
 $db->query("select * from active_sessions WHERE name = 'Seminar_User' AND sid != 'nobody'");
@@ -109,6 +110,7 @@ while ($db->next_record()) {
 	$now =& $test->getVariable("loginfilenow");
 	echo ++$i . " : " . $db->f("sid") . " ";
 	$c=0;
+	$e=0;
 	if (is_array($now))
 		foreach ($now as $key=>$val) {
 			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='".get_object_type($key)."', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
@@ -118,11 +120,46 @@ while ($db->next_record()) {
 			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='scm', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
 			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='schedule', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
 			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='literature', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+			$e=$e+7;
+			//News
+			$query3 = ("SELECT news_id FROM news_range WHERE range_id = '".$key."' ");
+			$db3->query($query3);
+			while ($db3->next_record()) {
+				$db2->query("SELECT visitdate FROM object_user_visits WHERE object_id = '".$db3->f("news_id")."' ");
+				$db2->next_record();
+				if ($val > $db2->f("visitdate"))
+					$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("news_id")."', user_id ='".$db->f("sid")."', type='news', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$e++;
+			}
+			//Votes
+			$query3 = ("SELECT vote_id FROM vote WHERE range_id = '".$key."' ");
+			$db3->query($query3);
+			while ($db3->next_record()) {
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("vote_id")."', user_id ='".$db->f("sid")."', type='vote', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$e++;
+			}
+			//Evals
+			$query3 = ("SELECT eval_id FROM eval_range WHERE range_id = '".$key."' ");
+			$db3->query($query3);
+			while ($db3->next_record()) {
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("eval_id")."', user_id ='".$db->f("sid")."', type='eval', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$e++;
+			}
 			$c++;
 		}
-	echo "<br/>".$c ."&nbsp;Veranstaltungen/Einrichtungen konvertiert";
+	//kill the old session-variable
+	$test->killVariable("loginfilenow");
+	$test->killVariable("loginfilelast");
+	$test->freezeIt();
+	$db2->query("UPDATE active_sessions set changed='$changed' WHERE name='Seminar_user' AND sid='".$db->f("sid")."'");
+
+	echo "<br/>".$c ."&nbsp;Veranstaltungen/Einrichtungen konvertiert, $e Eintr&auml;ge erzeugt...";
 	echo "<hr>";
+	$cc = $cc + $c;
+	$ee = $ee + $e;
 }
+$db2->query("OPTIMIZE TABLE `active_sessions` ");
+echo "<br/>".$cc ."&nbsp;Veranstaltungen/Einrichtungen konvertiert, $ee Eintr&auml;ge erzeugt... WOW!";
 echo "<br />uff, geschafft!";
 
 page_close();
