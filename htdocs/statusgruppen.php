@@ -226,10 +226,10 @@ if ($delete_id)
 									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")
 								);
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/move.gif" ,
-									"text"  => _("In Gruppen mit diesem Symbol können Sie Sich selbst eintragen. Klicken Sie auf das jeweilige Symbol um sich einzutragen.")
+									"text"  => _("In Gruppen mit diesem Symbol können Sie sich selbst eintragen. Klicken Sie auf das jeweilige Symbol um sich einzutragen.")
 								);	
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/trash.gif" ,
-									"text"  => _("Aus diesen Gruppen können Sie Sich selbst austragen.")
+									"text"  => _("Aus diesen Gruppen können Sie sich selbst austragen.")
 								);						
 	if ($rechte) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
