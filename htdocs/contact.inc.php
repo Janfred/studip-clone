@@ -253,32 +253,30 @@ function ShowUserInfo ($contact_id)
 
 	// hier Zusatzinfos
 
-	if ($open == $contact_id || $open == "all" || $edit_id) {
+	if (($open == $contact_id || $open == "all") && !$edit_id) {
 
 		$userinfo = GetUserInfo($user_id);
 		if (is_array($userinfo)) {
 			while(list($key,$value) = each($userinfo)) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
+			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"./pictures/border.jpg\"></td></tr>";
 		}
 
 		$userinstinfo = GetInstInfo($user_id);
 		for ($i=0; $i <sizeof($userinstinfo); $i++) {
-			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><hr></td></tr>";
 			while(list($key,$value) = each($userinstinfo[$i])) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".$key.":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".$value."</font></td></tr>";
 			}
+			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"./pictures/border.jpg\"></td></tr>";
 		}
-		if (is_array($userinstinfo)) {
-			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><hr></td></tr>";
-		}	
-
 
 		$extra = GetExtraUserinfo ($contact_id);
 		if (is_array($extra)) {
 			while(list($key,$value) = each($extra)) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">".htmlReady($key).":</font></td><td class=\"steel1\" width=\"250\"><font size=\"2\">".formatReady($value)."</font></td></tr>";
 			}
+			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"./pictures/border.jpg\"></td></tr>";
 		}
 		
 		if(file_exists("./user/".$user_id.".jpg")) {
@@ -286,9 +284,12 @@ function ShowUserInfo ($contact_id)
 		}
 		$owner_id = $user->id;
 		$db->query ("SELECT DISTINCT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE user_id = '$user_id' AND range_id= '$owner_id'");	
-		while ($db->next_record()) {		
-			$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">"._("Gruppe").":</font></td><td class=\"steel1\" width=\"250\"><a href=\"$PHP_SELF?view=gruppen&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".htmlready($db->f("name"))."</font></a></td></tr>";		
-		}		
+		if ($db->num_rows()) {
+			while ($db->next_record()) {		
+				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">"._("Gruppe").":</font></td><td class=\"steel1\" width=\"250\"><a href=\"$PHP_SELF?view=gruppen&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".htmlready($db->f("name"))."</font></a></td></tr>";		
+			}
+		$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"./pictures/border.jpg\"></td></tr>";
+		}
 	}
 	return $output;	
 } 
@@ -300,10 +301,11 @@ function ShowContact ($contact_id)
 	$db->query ("SELECT contact_id, user_id, buddy FROM contact WHERE contact_id = '$contact_id'");	
 	if ($db->next_record()) {
 		if ($open == $contact_id || $open == "all") {
+			$rnd = rand(0,10000);
 			if ($db->f("buddy")=="1") {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\" =".tooltip(_("Als Buddie entfernen"))."></a>&nbsp; ";
+				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzeronline.gif\" border=\"0\" =".tooltip(_("Als Buddie entfernen"))."></a>&nbsp; ";
 			} else {
-				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\" =".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
+				$buddy = "<a href=\"$PHP_SELF?cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"pictures/nutzer.gif\" border=\"0\" =".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
 			}
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
 						.$buddy		
@@ -387,14 +389,15 @@ function SearchResults ($search_exp)
 
 	$db->query($query); // results all users which are not in the seminar
 	if (!$db->num_rows()) {
-		echo "&nbsp; "._("keine Treffer")."&nbsp; ";
+		$msg = false;
 	} else {
-		echo "&nbsp; <select name=\"Freesearch\">";
+		$msg = "&nbsp; <select name=\"Freesearch\">";
 		while ($db->next_record()) {
-			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
+			$msg .= sprintf ("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
 		}
-		echo "</select>";
+		$msg .=  "</select>";
 	}
+	return $msg;
 }
 
 function ShowEditContact ($contact_id)
@@ -405,13 +408,13 @@ function ShowEditContact ($contact_id)
 	$db->query ("SELECT user_id FROM contact WHERE contact_id = '".$contact_id."' ");
 	if ($db->next_record()) {
 
-		$lastrow =	"<tr><td class=\"steel2\">"
+		$lastrow =	"<tr><td class=\"steelkante\">&nbsp; "
 					."<input type=\"text\" name=\"owninfolabel[]\" value=\"Neue Rubrik\"></td>"
-					."<td colspan=\"2\" class=\"steel2\"><textarea style=\"width: 55%\" cols=\"20\" rows\"3\" wrap=virtual name=\"owninfocontent[]\" value=\"Inhalt\">Inhalt</textarea>"
+					."<td colspan=\"2\" class=\"steelkante\"><br><textarea style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual name=\"owninfocontent[]\" value=\"Inhalt\">Inhalt</textarea>"
 					."\n"
 					. "</td></tr>";
 		$lastrow .= "<tr><td valign=\"middle\" colspan=\"3\" class=\"steelgraulight\" align=\"center\"><br><a href=\"$PHP_SELF?open=$contact_id#anker\"><img src= \"./pictures/buttons/zurueck-button.gif\" border=\"0\" ".tooltip("zur&uuml;ck zur &Uuml;bersicht")."></a>&nbsp; <input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/uebernehmen-button.gif\" border=\"0\" value=\" Personen suchen\" ".tooltip("Seite aktualisieren")."></form></td></tr>";
-		$output = "<table cellspacing=\"0\" width=\"700\" class=\"blank\">
+		$output = "<table cellspacing=\"0\" cellpadding=\"3\" width=\"700\" class=\"blank\">
 					<tr>
 						<td class=\"topicwrite\" colspan=\"3\">"
 							.get_fullname($db->f("user_id"), $format = "full_rev" )."</td>"
@@ -423,13 +426,17 @@ function ShowEditContact ($contact_id)
 						
 		$db2->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
 		$i = 0;
+		$output .= "<tr><td class=\"steel1\" colspan=\"3\">&nbsp; </td></tr>";
 		while ($db2->next_record()) 	{
 			if ($i ==0) {
-				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP><input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\"><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\"></a></td></tr>";
+				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\"><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" =".tooltip(_("Diesen Eintrag löschen"))."></a></td></tr>";
 			} else {
-				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP><input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td NOWRAP class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\" nowrap><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\"></a>&nbsp; <a href=\"$PHP_SELF?edit_id=$contact_id&move=".$db2->f("userinfo_id")."\"><img src=\"pictures/move_up.gif\" border=\"0\"></a></td></tr>";			
+				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td NOWRAP class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\" nowrap><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" =".tooltip(_("Diesen Eintrag löschen"))."></a>&nbsp; <a href=\"$PHP_SELF?edit_id=$contact_id&move=".$db2->f("userinfo_id")."\"><img src=\"pictures/move_up.gif\" border=\"0\" =".tooltip(_("Diesen Eintrag nach oben schieben"))."></a></td></tr>";			
 			}
 			$i++;
+		}
+		if ($i == 0) { // noch nichts angelegt
+			$output .= "<tr><td class=\"steel1\" colspan=\"3\">&nbsp;<font size=\"2\">"._("Sie können hier eigene Rubriken für diesen Kontakt anlegen:")."</font></td></tr>";
 		}
 		$output .= "<tr><td class=\"steel1\" colspan=\"3\">&nbsp; </td></tr>".$lastrow
 				."</table>";
@@ -545,11 +552,13 @@ function PrintAllContact($filter="")
 	if ($auth->auth["xres"] > 800) {
 		$maxcolls = 2;
 		$maxwidth = 900;
-		$middle = round($db->num_rows()/3);
+		$middle[0] = ceil($db->num_rows()/3);
+		$middle[1] = round($db->num_rows()/3);
+		$middle[2] = floor($db->num_rows()/3);
 	} else {
 		$maxcolls = 1;
 		$maxwidth = 700;
-		$middle = round($db->num_rows()/2);
+		$middle = ceil($db->num_rows()/2);
 	}
 
 	if ($db->num_rows() == 0) {
@@ -561,7 +570,7 @@ function PrintAllContact($filter="")
 			$contact_id = $db->f("contact_id");
 			echo ShowContact ($contact_id);
 			echo "<br>";
-			if ($i==$middle && $spalten!=$maxcolls) { //Spaltenumbruch
+			if ($i==$middle[$spalten] && $spalten!=$maxcolls) { //Spaltenumbruch
 				echo "</td><td valign=\"top\" width=\"280\" class=\"blank\">";
 				$i = 0;
 				$spalten++;

@@ -131,16 +131,21 @@ if ($existingowninfolabel) {
 
 	<form action="<? echo $PHP_SELF ?>?cmd=search#anker" method="POST"><?
 
-if ($open != "all") {
+if ($open != "all" && $size_of_book>0) {
 	echo "&nbsp; <a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen")."</font></a></td>";
-} else {
+} elseif ($size_of_book>0) {
 	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"pictures/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen")."</font></a></td>";
 }
 
 echo "<td class=\"blank\" align=\"right\">";
 
 if ($search_exp) {
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\"" . _("In Addressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Addressbuch eintragen")));
+	if (SearchResults($search_exp)) {
+		printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\"" . _("In Addressbuch eintragen") . "\" %s>&nbsp;  ", tooltip(_("In Addressbuch eintragen")));
+		echo SearchResults($search_exp);
+	} else {
+		echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
+	}
 	SearchResults($search_exp);
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>&nbsp;  ", tooltip(_("neue Suche")));
 } else {
@@ -231,8 +236,26 @@ if ($edit_id) {
 	PrintAllContact($filter);
 }
 
-echo "<br><br></td></tr></table>";
 
+
+		
+		
+if (!$edit_id) {
+
+	if ($size_of_book>0)
+		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/nachrichtsmall.gif\">&nbsp; "._("Nachricht an Kontakt");
+	if ($open && $size_of_book>0)
+		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/forumgraurauf.gif\">&nbsp; "._("Kontakt zuklappen");
+	if ((!$open) && $size_of_book>0)
+		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/forumgraurunt.gif\">&nbsp; "._("Kontakt aufklappen");
+	if ($open && $size_of_book>0) {
+		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/nutzer.gif\">&nbsp; "._("Buddystatus");
+		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/einst.gif\">&nbsp; "._("Eigene Rubriken");
+		$hints .= "&nbsp; |&nbsp; <img src= \"./pictures/trash.gif\">&nbsp; "._("Kontakt löschen");
+	}
+	echo 	"<br><font size=\"2\" color=\"#555555\">"._("Bedienung:").$hints;
+}
+echo "<br>&nbsp; </td></tr></table>";
 page_close()
 
  ?>
