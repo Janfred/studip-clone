@@ -13,9 +13,9 @@ function get_module_info($co_inst, $co_id)
 	{
 		$module_info["title"] = $ilias_db -> f("title");
 		$module_info["description"] = $ilias_db -> f("description");
-		$ilias_db -> query("SELECT DISTINCT id FROM page WHERE lerneinheit='co_id' AND le_inst='co_inst' AND pg_typ = 'le'");
+		$ilias_db -> query("SELECT id FROM page WHERE lerneinheit='$co_id' AND le_inst='$co_inst' AND pg_typ = 'le'");
 		$module_info["pages"] = $ilias_db -> num_rows();
-		$ilias_db -> query("SELECT DISTINCT id FROM page WHERE lerneinheit='co_id' AND le_inst='co_inst' AND pg_typ = 'mc'");
+		$ilias_db -> query("SELECT id FROM page WHERE lerneinheit='$co_id' AND le_inst='$co_inst' AND pg_typ = 'mc'");
 		$module_info["questions"] = $ilias_db -> num_rows();
 		
 		return $module_info;
