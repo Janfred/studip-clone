@@ -45,6 +45,17 @@ $db->query($query);
 if (!$db->num_rows())
 	$error_message = $this->config->getValue("Main", "nodatatext");
 
+$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}institut_main.php?auswahl=" . $this->config->range_id;
+$studip_link .= "&redirect_to=admin_news.php&cmd=new_entry&view=inst&new_inst=TRUE&range_id=";
+$studip_link .= $this->config->range_id;
+if ($this->config->getValue("Main", "studiplink") == "top") {
+	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "top",
+	"height" => "40", "link" => $studip_link);
+	$this->elements["StudipLink"]->printout($args);
+	echo "<br>";
+}
+
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 echo "<tr" . $this->config->getAttributes("TableHeadRow", "tr") . ">\n";
 
@@ -58,31 +69,6 @@ $visible = $this->config->getValue("Main", "visible");
 $set_1 = $this->config->getAttributes("TableHeadrow", "th");
 $set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
 $zebra = $this->config->getValue("TableHeadrow", "th_zebrath_");
-
-if ($this->config->getValue("Main", "studiplink")) {
-	$colspan = array_count_values($visible);
-	echo "<th$set_1 colspan=\"{$colspan['1']}\">";
-	echo "<div" . $this->config->getAttributes("StudipLink", "div") . ">";
-	echo "<font" . $this->config->getAttributes("StudipLink", "font") . ">";
-	$lnk = "http://{$GLOBALS['EXTERN_SERVER_NAME']}institut_main.php?auswahl=" . $this->config->range_id;
-	$lnk .= "&redirect_to=admin_news.php&cmd=new_entry&view=inst&new_inst=TRUE&range_id=";
-	$lnk .= $this->config->range_id;
-	printf("<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
-			$this->config->getAttributes("StudipLink", "a"),
-			$this->config->getValue("StudipLink", "linktext"));
-	if ($this->config->getValue("StudipLink", "image")) {
-		if ($image_url = $this->config->getValue("StudipLink", "imageurl"))
-			$img = "<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
-		else {
-			$img = "<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
-			$img .= "pictures/login.gif\" align=\"absmiddle\">";
-		}
-		printf("&nbsp;<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
-			$this->config->getAttributes("StudipLink", "a"), $img);
-	}
-	echo "</font></div></th></tr>\n";
-	echo "<tr" . $this->config->getAttributes("TableHeadRow", "tr") . ">\n";
-}
 
 $i = 0;
 foreach($rf_news as $spalte){
@@ -186,6 +172,14 @@ else {
 	}
 	
 	echo "\n</table>";
+}
+
+if ($this->config->getValue("Main", "studiplink") == "bottom") {
+	echo "<br>";
+	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "bottom",
+	"height" => "40", "link" => $studip_link);
+	$this->elements["StudipLink"]->printout($args);
 }
 
 ?>

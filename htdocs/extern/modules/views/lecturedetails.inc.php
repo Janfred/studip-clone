@@ -103,30 +103,19 @@ if ($db->next_record()) {
 	if ($visible[$i++] && $db->f("Sonstiges"))
 		$data["misc"] = htmlReady($db->f("Sonstiges"));
 	
+	$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}seminar_main.php?&auswahl=";
+	$studip_link .= $seminar_id . "&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE";
+	if ($this->config->getValue("Main", "studiplink") == "top") {
+		$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+				"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "top",
+		"height" => "40", "link" => $studip_link);
+		$this->elements["StudipLink"]->printout($args);
+		echo "<br>";
+	}
+		
 	echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">";
 	echo "<tr" . $this->config->getAttributes("SemName", "tr") . ">";
 	echo "<td" . $this->config->getAttributes("SemName", "td") . ">";
-	
-	if ($this->config->getValue("Main", "studiplink")) {
-		echo "<div" . $this->config->getAttributes("StudipLink", "div") . ">";
-		echo "<font" . $this->config->getAttributes("StudipLink", "font") . ">";
-		$lnk = "http://{$GLOBALS['EXTERN_SERVER_NAME']}seminar_main.php?&auswahl=" . $seminar_id;;
-		$lnk .= "&redirect_to=admin_seminare1.php&login=true&new_sem=TRUE";
-		printf("<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
-				$this->config->getAttributes("StudipLink", "a"),
-				$this->config->getValue("StudipLink", "linktext"));
-		if ($this->config->getValue("StudipLink", "image")) {
-			if ($image_url = $this->config->getValue("StudipLink", "imageurl"))
-				$img = "<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
-			else {
-				$img = "<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
-				$img .= "pictures/login.gif\" align=\"absmiddle\">";
-			}
-			printf("&nbsp;<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
-				$this->config->getAttributes("StudipLink", "a"), $img);
-		}
-		echo "</font></div>";
-	}
 	
 	if ($margin = $this->config->getValue("SemName", "margin"))
 		echo "<div style=\"margin-left:{$margin}px;\">";
@@ -234,6 +223,14 @@ if ($db->next_record()) {
 	}
 	
 	echo "</table>\n";
+	
+	if ($this->config->getValue("Main", "studiplink") == "bottom") {
+		echo "<br>";
+		$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+				"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "bottom",
+		"height" => "40", "link" => $studip_link);
+		$this->elements["StudipLink"]->printout($args);
+	}
 }
 ?>
 

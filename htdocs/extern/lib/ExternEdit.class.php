@@ -234,9 +234,15 @@ class ExternEdit {
 		return $out;
 	}
 	
-	function editContent ($content, $submit) {
+	function editContent ($content, $submit, $class = "") {
+		if (!$class) {
+			$this->css->resetClass();
+			$this->css->switchClass();
+			$class = $this->css->getClass();
+		}
+		
 		$out = "\n<!-- BEGIN Content -->\n";
-		$out .= "<tr><td class=\"blank\" width=\"100%\" align=\"left\">\n";
+		$out .= "<tr><td class=\"$class\" width=\"100%\" align=\"left\">\n";
 		$out .= "<form action=\"{$GLOBALS['PHP_SELF']}?com=store#anker\" method=\"post\">\n";
 		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 		$out .= "<tr>" . printcontent("100%", FALSE, $content, "", FALSE) . "</tr>";

@@ -123,9 +123,10 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		$table .= $edit_form->editCheckboxGeneric("studipinfo", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Link:");
-		$info = _("Anwählen, wenn ein Link angezeigt werden soll, der direkt zum Stud.IP-Administrationsbereich verweisen soll.");
-		$value = "1";
-		$table .= $edit_form->editCheckboxGeneric("studiplink", $title, $info, $value, "");
+		$info = _("Ausgabe eines Links, der direkt zum Stud.IP-Administrationsbereich verweist.");
+		$value = array("top", "bottom", "0");
+		$names = array(_("oberhalb"), _("unterhalb der Tabelle"), _("ausblenden"));
+		$table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $value, $names);
 		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");

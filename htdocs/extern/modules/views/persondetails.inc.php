@@ -69,10 +69,12 @@ $attr_subheadline_td = preg_replace('/width\="[^"]+"/i',
 $aliases_content = $this->config->getValue("Main", "aliases");
 $visible_content = $this->config->getValue("Main", "visible");
 
+$studip_link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}edit_about.php";
+$studip_link .= "?login=yes&view=Daten&usr_name=$username";
 if ($this->config->getValue("Main", "studiplink") == "top") {
 	$args = array("width" => $this->config->getValue("TableParagraph", "table_width"),
 			"align" => $this->config->getValue("TableParagraph", "table_align"), "valign" => "top",
-	"height" => "40");
+	"height" => "40", "link" => $studip_link);
 	$this->elements["StudipLink"]->printout($args);
 	echo "<br>";
 }
@@ -110,7 +112,7 @@ foreach ($order as $position) {
 if ($this->config->getValue("Main", "studiplink") == "bottom") {
 	$args = array("width" => $this->config->getValue("TableParagraph", "table_width"),
 			"align" => $this->config->getValue("TableParagraph", "table_align"), "valign" => "bottom",
-			"height" => "40");
+			"height" => "40", "link" => $studip_link);
 	$this->elements["StudipLink"]->printout($args);
 }
 

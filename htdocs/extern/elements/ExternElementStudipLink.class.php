@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementStudipLink extends ExternElement {
 
 	var $attributes = array("linktext", "imageurl", "image", "a_class", "a_style", "font_face",
-			"font_size", "font_color", "font_class", "font_style", "div_align");
+			"font_size", "font_color", "font_class", "font_style", "align");
 
 	/**
 	* Constructor
@@ -64,7 +64,8 @@ class ExternElementStudipLink extends ExternElement {
 		$config = array(
 			"linktext" => _("Daten &auml;ndern"),
 			"imageurl" => "",
-			"image" => "1"
+			"image" => "1",
+			"align" => "left"
 		);
 		
 		return $config;
@@ -88,9 +89,12 @@ class ExternElementStudipLink extends ExternElement {
 		$content_table .= $edit_form->editBlankContent();
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
+		
+		$content = $edit_form->editAlign("align");
+		
 		$title = _("Linktext:");
 		$info = _("Geben Sie den Text für den Link ein.");
-		$content = $edit_form->editTextfieldGeneric("linktext", $title, $info, 40, 150);
+		$content .= $edit_form->editTextfieldGeneric("linktext", $title, $info, 40, 150);
 		
 		$title = _("Bild anzeigen:");
 		$info = _("Anwählen, wenn ein Bild als Link angezeigt werden soll.");
@@ -110,6 +114,30 @@ class ExternElementStudipLink extends ExternElement {
 		$out .= $edit_form->editBlank();
 		
 		return  $element_headline . $out;
+	}
+	
+	function toString ($args) {
+		$out = "<table width=\"{$args['width']}\" align=\"{$args['align']}\" ";
+		$out .= "valign=\"{$args['valign']}\" cellpadding=\"0\" cellspacing=\"0\">\n";
+		$out .= "<tr height=\"{$args['height']}\">";
+		$out .= "<td width=\"100%\" align=\"" . $this->config->getValue($this->name, "align") . "\">\n";
+		$out .= "<font" . $this->config->getAttributes($this->name, "font") . ">";
+		$out .= sprintf("<a href=\"\"%s>%s</a>",
+				$this->config->getAttributes($this->name, "a"),
+				$this->config->getValue($this->name, "linktext"));
+		if ($this->config->getValue($this->name, "image")) {
+			if ($image_url = $this->config->getValue($this->name, "imageurl"))
+				$img = "&nbsp;<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
+			else {
+				$img = "&nbsp;<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
+				$img .= "pictures/login.gif\" align=\"absmiddle\">";
+			}
+			$out .= sprintf("<a href=\"%s\"%s>%s</a>", $args['link'],
+					$this->config->getAttributes($this->name, "a"), $img);
+		}
+		$out .= "</font>\n</td></tr></table>\n";
+		
+		return $out;
 	}
 	
 }

@@ -47,6 +47,14 @@ for ($n = 0; $n < 3; $n++) {
 	}
 }
 
+if ($this->config->getValue("Main", "studiplink") == "top") {
+	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "top",
+	"height" => "40", "link" => "");
+	$this->elements["StudipLink"]->printout($args);
+	echo "<br>";
+}
+
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 echo "<tr" . $this->config->getAttributes("TableHeadRow", "tr") . ">\n";
 
@@ -175,5 +183,12 @@ foreach ($content_data as $dat) {
 
 echo "\n</table>";
 
+if ($this->config->getValue("Main", "studiplink") == "bottom") {
+	echo "<br>";
+	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "bottom",
+	"height" => "40", "link" => "");
+	$this->elements["StudipLink"]->printout($args);
+}
 
 ?>

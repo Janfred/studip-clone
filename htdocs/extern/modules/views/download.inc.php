@@ -175,7 +175,7 @@ else {
 		}
 		
 		if ($icon)
-			$picture_file = $CANONICAL_RELATIVE_PATH_STUDIP ."pictures/$icon";
+			$picture_file = $GLOBALS["EXTERN_SERVER_NAME"] ."pictures/$icon";
 	
 		$download_link = $CANONICAL_RELATIV_PATH_STUDIP;
 		$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",

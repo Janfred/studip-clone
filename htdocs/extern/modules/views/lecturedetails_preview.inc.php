@@ -121,6 +121,14 @@ if ($visible[++$j]) {
 if ($visible[$i++])
 	$data["misc"] = $data_sem["misc"];
 
+if ($this->config->getValue("Main", "studiplink") == "top") {
+	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "top",
+	"height" => "40", "link" => "");
+	$this->elements["StudipLink"]->printout($args);
+	echo "<br>";
+}
+
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">";
 echo "<tr" . $this->config->getAttributes("SemName", "tr") . ">";
 echo "<td" . $this->config->getAttributes("SemName", "td") . ">";
@@ -203,5 +211,13 @@ if ($this->config->getValue("Main", "studipinfo")) {
 }
 
 echo "</table>\n";
+
+if ($this->config->getValue("Main", "studiplink") == "bottom") {
+	echo "<br>";
+	$args = array("width" => $this->config->getValue("TableHeader", "table_width"),
+			"align" => $this->config->getValue("TableHeader", "table_align"), "valign" => "bottom",
+	"height" => "40", "link" => "");
+	$this->elements["StudipLink"]->printout($args);
+}
 ?>
 
