@@ -44,13 +44,13 @@ function parse_link($link) {
 		$documentpath = $url_parts["path"];
 		$ftp = ftp_connect($url_parts["host"]);
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
-		if (!$url_parts["pass"]) $url_parts["pass"] = "wwwrun@".$GLOBALS['MAIL_LOCALHOST'];
+		if (!$url_parts["pass"]) $url_parts["pass"] = "rstockm%40gwdg.de;
 		if (!ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
       			ftp_quit($ftp);
       			// die("Error: can't login");
       			return FALSE;
    		}
-		$parsed_link["Content-Length"] = ftp_size($ftp, $documentpath);
+   		$parsed_link["Content-Length"] = ftp_size($ftp, $documentpath);
 		ftp_quit($ftp);
 		if ($parsed_link["Content-Length"] != "-1")
 			$parsed_link["HTTP/1.0 200 OK"] = "HTTP/1.0 200 OK";
