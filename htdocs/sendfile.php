@@ -88,7 +88,7 @@ $file_name=str_replace("?", "", rawurldecode($file_name));
 
 if ($force_download) {
 	$content_type="application/octet-stream";
-	$content_disposition="inline";
+	$content_disposition="attachment";
 } else {
 	switch (strtolower(getFileExtension ($file_name))) {
 		case "txt": 
@@ -118,6 +118,10 @@ if ($force_download) {
 		case "bmp": 
 			$content_type="image/x-ms-bmp";
 			$content_disposition="inline";		
+		break;
+		case "png": 
+			$content_type="image/png";
+			$content_disposition="inline";	
 		break;
 		case "wav": 
 			$content_type="audio/x-wav";
