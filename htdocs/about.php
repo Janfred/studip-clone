@@ -202,7 +202,9 @@ IF ($db3->num_rows()) {
 
 // Anzeige der Institute an denen gearbeitet wird
 
-$db3->query("SELECT a.*,b.Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");
+$query = "SELECT a.*,b.Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) ";
+$query .= "WHERE user_id = '$user_id' AND inst_perms != 'user' ORDER BY priority ASC";
+$db3->query($query);
 IF ($db3->num_rows()) {
 	echo "<br><b>&nbsp;" . _("Wo ich arbeite:") . "&nbsp;&nbsp;</b><br>";
 }
