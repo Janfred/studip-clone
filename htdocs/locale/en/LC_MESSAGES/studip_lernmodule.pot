@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2003-10-06 13:02+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lernmodule/lernmodul_db_functions.inc.php:98
+msgid "Stud.IP-User wurde nicht gefunden."
+msgstr ""
+
+#: lernmodule/lernmodul_db_functions.inc.php:103
+msgid "Sie sind nicht als User im angebundenen ILIAS-System eingetragen."
+msgstr ""
+
+#: lernmodule/lernmodul_linking_functions.inc.php:16
+#, c-format
+msgid " (%s Seiten)"
+msgstr ""
+
+#: lernmodule/lernmodul_linking_functions.inc.php:18
+msgid " (1 Seite)"
+msgstr ""
+
+#: lernmodule/lernmodul_linking_functions.inc.php:21
+#, c-format
+msgid "Diese Lerneinheit enth&auml;lt %s Seiten. "
+msgstr ""
+
+#: lernmodule/lernmodul_linking_functions.inc.php:23
+msgid "Diese Lerneinheit enth&auml;lt eine Seite. "
+msgstr ""
+
+#: lernmodule/lernmodul_linking_functions.inc.php:25
+msgid "Es gibt eine Testfrage zu der Lerneinheit."
+msgstr ""
+
+#: lernmodule/lernmodul_linking_functions.inc.php:27
+#, c-format
+msgid "Es gibt %s Testfragen zu der Lerneinheit."
+msgstr ""
+
+#: lernmodule/lernmodul_user_functions.inc.php:103
+#, c-format
+msgid "Der ILIAS-User '%s' existiert bereits!<br>"
+msgstr ""
+
+#: lernmodule/lernmodul_user_functions.inc.php:157
+msgid "Datenbankoperation konnte nicht ausgeführt werden!"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:8
+msgid "Es wurden keine Lernmodule zu diesem Suchbegriff gefunden."
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:14
+msgid "Es wurde ein Lernmodul gefunden:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:16
+#, c-format
+msgid "%s Lernmodule wurden gefunden:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:64
+#: lernmodule/lernmodul_view_functions.inc.php:123
+msgid "Sie haben Zugriff auf folgende Lernmodule:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:113
+msgid "Sie haben bisher keine ILIAS-Lernmodule angelegt."
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:173
+#: lernmodule/lernmodul_view_functions.inc.php:332
+msgid "Es sind keine Lernmodule vorhanden."
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:187
+msgid "Offizielle Lernmodule dieser Einrichtung:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:189
+msgid "Offizielle Lernmodule dieser Veranstaltung:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:194
+msgid "Inoffizielle Lernmodule zu dieser Einrichtung:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:196
+msgid "Inoffizielle Lernmodule zu dieser Veranstaltung:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:273
+msgid "Folgende Lernmodule können eingebunden werden:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:326
+msgid "Alle verf&uuml;gbaren Lernmodule sind der Einrichtung zugeordnet."
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:328
+msgid "Alle verf&uuml;gbaren Lernmodule sind der Veranstaltung zugeordnet."
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:348
+msgid "Diese Einrichtung ist mit einem Lernmodul verbunden:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:350
+msgid "Diese Veranstaltung ist mit einem Lernmodul verbunden:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:356
+msgid "Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:358
+msgid "Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:366
+msgid "Offizielle Lernmodule:"
+msgstr ""
+
+#: lernmodule/lernmodul_view_functions.inc.php:368
+msgid "Inoffizielle Lernmodule:"
+msgstr ""
