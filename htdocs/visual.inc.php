@@ -627,8 +627,9 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 /**
 * create the img tag for graphic buttons
 *
-* This function creates the html text for a button. Supposed to decides, which button (folder)
-* is used for international buttons, later...
+* This function creates the html text for a button.
+* Decides, which button (folder)
+* is used for international buttons.
 *
 * @access	public        
 * @param		string	the (german) button name
@@ -637,17 +638,7 @@ function tooltip($text,$with_alt = TRUE,$with_popup = FALSE){
 */
 function makeButton ($name, $mode="img") {
 	global $_language_path;
-	switch ($_language_path) {
-		case "de":
-			$path="./pictures/buttons";
-		break;
-		case "en":
-			$path="./pictures/buttons/en/";
-		break;
-		default:
-			$path="./pictures/buttons";
-		break;
-	}
+	$path = "./locale/$_language_path/LC_BUTTONS";
 	if ($mode == "img")
 		$tag = sprintf ("<img src=\"%s/%s-button.gif\" border=\"0\" />", $path, $name);
 	else
