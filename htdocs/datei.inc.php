@@ -1081,9 +1081,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			//Editbereich erstellen
 			if (($change != $db->f("folder_id")) && ($upload != $db->f("folder_id")) && ($filelink != $db->f("folder_id"))) {
 				if (($rechte) || ($SemUserStatus == "autor")) {
-					$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_#anker\">" . makeButton("dateihochladen", "img") . "</a>";
+					$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_&rand=".rand()."#anker\">" . makeButton("dateihochladen", "img") . "</a>";
 					if ($rechte)
-						$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_l_#anker\">" . makeButton("link", "img") . "</a>";
+						$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_l_&rand=".rand()."#anker\">" . makeButton("link", "img") . "</a>";
 					if ($documents_count)
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
 					if ($rechte) {
