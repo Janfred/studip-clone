@@ -49,12 +49,14 @@ class DeleteResources {
 		$this->resource_id = $resource_id;
 		$this->recurse = $recurse;
 	}
-
+	
+	//private
 	function deleteAssigns($id) {
 		$query = sprintf("DELETE FROM resources_assign WHERE resource_id = '%s' ", $id);
 		$this->db->query($query);			
 	}
 
+	//private
 	function deletePerms($id) {
 		$query = sprintf("DELETE FROM resources_user_resources WHERE resource_id = '%s' ", $id);
 		$this->db->query($query);			

@@ -2,7 +2,7 @@
 /**
 * ResourcesAssign.class.php
 * 
-* updates the to object (range_id)  the linked resources
+* updates the to the object (range_id)  linked resources
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>
@@ -53,17 +53,20 @@ class ResourcesAssign extends DeleteResources {
 		//execute constructor from DeleteResources
 		$this->DeleteResources($recurse);
 	}
-
+	
+	//private
 	function deleteForeignAssigns() {
 		$query = sprintf("DELETE FROM resources_assign WHERE assign_user_id = '%s' ", $this->range_id);
 		$this->db->query($query);			
 	}
 
+	//private
 	function deleteForeignPerms() {
 		$query = sprintf("DELETE FROM resources_user_resources WHERE user_id = '%s' ", $this->range_id);
 		$this->db->query($query);			
 	}
 
+	//private
 	function deleteOwnerResources() {
 		$query = sprintf("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $this->range_id);
 		while ($this->db->next_record()) {

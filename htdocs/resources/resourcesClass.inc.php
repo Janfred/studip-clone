@@ -101,7 +101,7 @@ class AssignObject {
 		if (!$id)
 			$id=$this->owner_id;
 
-		switch (resourceObject::getOwnerType($id)) {
+		switch (ResourceObject::getOwnerType($id)) {
 			case "user";
 				if (!$explain)
 					return get_fullname($id);
@@ -701,7 +701,7 @@ class ResourcesUserRoomsList {
 /*****************************************************************************
 resourceObjeckt, zentrale Klasse der Ressourcen Objecte
 /*****************************************************************************/
-class resourceObject {
+class ResourceObject {
 	var $id;					//resource_id des Objects;
 	var $db;					//Datenbankanbindung;
 	var $name;				//Name des Objects
@@ -713,7 +713,7 @@ class resourceObject {
 
 	
 	//Konstruktor
-	function resourceObject($name='', $description='', $inventar_num='', $parent_bind='', $root_id='', $parent_id='', $category_id='', $owner_id='', $resource_id='') {
+	function ResourceObject($name='', $description='', $inventar_num='', $parent_bind='', $root_id='', $parent_id='', $category_id='', $owner_id='', $resource_id='') {
 		global $user;
 		
 		$this->user_id = $user->id;
@@ -876,7 +876,7 @@ class resourceObject {
 		if (!$id)
 			$id=$this->owner_id;
 
-		switch (resourceObject::getOwnerType($id)) {
+		switch (ResourceObject::getOwnerType($id)) {
 			case "all":
 				if (!$explain)
 					return "Jeder";

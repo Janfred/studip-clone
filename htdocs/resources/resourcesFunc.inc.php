@@ -307,7 +307,7 @@ Searchform, zur Erzeugung der oft gebrauchten Personen-Auswahl
 u.a. Felder
 /*****************************************************************************/
 
-function create_search_form($name, $search_string='', $user_only=FALSE, $administrable_objects_only=FALSE, $admins=FALSE, $allow_all=FALSE) {
+function showSearchForm($name, $search_string='', $user_only=FALSE, $administrable_objects_only=FALSE, $admins=FALSE, $allow_all=FALSE) {
 
 	if ($search_string) {
 		if ($user_only) //Nur in Personen suchen

@@ -73,11 +73,11 @@ if ($open_list) {
 //Neue Hierachieebene oder Unterebene anlegen
 if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {
 	if ($resources_data["view"]=="create_hierarchie") {
-		$newHiearchie=new resourceObject("Neue Hierachie", "Dieses Objekt kennzeichnet eine Hierachie und kann jederzeit in eine Ressource umgewandelt werden"
+		$newHiearchie=new ResourceObject("Neue Hierachie", "Dieses Objekt kennzeichnet eine Hierachie und kann jederzeit in eine Ressource umgewandelt werden"
 						, '', '', '', "0", '', $user->id);
 	} elseif ($create_hierachie_level) {
-		$parent_Object=new resourceObject($create_hierachie_level);
-		$newHiearchie=new resourceObject("Neue Hierachieebene", "Dieses Objekt kennzeichnet eine neue Hierachieebene und kann jederzeit in eine Ressource umgewandelt werden"
+		$parent_Object=new ResourceObject($create_hierachie_level);
+		$newHiearchie=new ResourceObject("Neue Hierachieebene", "Dieses Objekt kennzeichnet eine neue Hierachieebene und kann jederzeit in eine Ressource umgewandelt werden"
 						, '', '', $parent_Object->getRootId(), $create_hierachie_level, '', $user->id);
 	}
 	$newHiearchie->create();
@@ -87,8 +87,8 @@ if ($resources_data["view"]=="create_hierarchie" || $create_hierachie_level) {
 
 //Neues Objekt anlegen
 if ($create_object) {
-	$parent_Object=new resourceObject($create_object);
-	$new_Object=new resourceObject("Neues Objekt", "Dieses Objekt wurde neu erstellt. Es wurden noch keine Eigenschaften zugewiesen."
+	$parent_Object=new ResourceObject($create_object);
+	$new_Object=new ResourceObject("Neues Objekt", "Dieses Objekt wurde neu erstellt. Es wurden noch keine Eigenschaften zugewiesen."
 					, FALSE, FALSE, $parent_Object->getRootId(), $create_object, "0", $user->id);
 	$new_Object->create();
 	$resources_data["view"]="edit_object_properties";
@@ -105,7 +105,7 @@ if ($edit_object) {
 if ($kill_object) {
 	$ObjectPerms = new ResourcesObjectPerms($kill_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$killObject=new resourceObject($kill_object);
+		$killObject=new ResourceObject($kill_object);
 		if ($killObject->delete())
 		 	$msg -> addMsg(7);
 		$resources_data["view"]="resources";
@@ -119,7 +119,7 @@ if ($kill_object) {
 if ($change_structure_object) {
 	$ObjectPerms = new ResourcesObjectPerms($change_structure_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$changeObject=new resourceObject($change_structure_object);
+		$changeObject=new ResourceObject($change_structure_object);
 		$changeObject->setName($change_name);
 		$changeObject->setDescription($change_description);
 		if ($changeObject->store())
@@ -314,7 +314,7 @@ if ($change_object_schedules) {
 if ($change_object_properties) {
 	$ObjectPerms = new ResourcesObjectPerms($change_object_properties);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$changeObject=new resourceObject($change_object_properties);
+		$changeObject=new ResourceObject($change_object_properties);
 		$changeObject->setName($change_name);
 		$changeObject->setDescription($change_description);
 		$changeObject->setCategoryId($change_category_id);
@@ -347,7 +347,7 @@ if ($change_object_properties) {
 if ($change_object_perms) {
 	$ObjectPerms = new ResourcesObjectPerms($change_object_perms);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$changeObject=new resourceObject($change_object_perms);
+		$changeObject=new ResourceObject($change_object_perms);
 	
 		if (is_array($change_user_id))
 			foreach ($change_user_id as $key=>$val) {
@@ -609,12 +609,12 @@ if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources
 	$range_id = $user->id;
 
 	$resUser=new ResourcesRootThreads($range_id);
-	$thread=new getThread();
+	$thread=new ShowThread();
 	
 	$roots=$resUser->getRoots();
 	if (is_array($roots)) {
 		foreach ($roots as $a) {
-			$thread->createThread($a);
+			$thread->showThreadLevel($a);
 		}
 		echo "<br />&nbsp;";			
 	} else {
@@ -633,7 +633,7 @@ Listview, die Listendarstellung, views: lists, _lists, openobject_main
 /*****************************************************************************/
 if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $resources_data["view"]=="openobject_main") {
 
-	$list=new getList();
+	$list=new ShowList();
 	$list->setRecurseLevels(-1);
 	if ($resources_data["view"] != "openobject_main")
 		$list->setAdminButtons(TRUE);
@@ -643,12 +643,12 @@ if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists" || $re
 	}
 	
 	if ($resources_data["view"]=="openobject_main") {
-		if (!$list->createRangeList($SessSemName[1])) {
+		if (!$list->showRangeList($SessSemName[1])) {
 			echo "</td></tr>";
 			parse_msg ("info§Es existieren keine Ressourcen, die Sie in dieser Veranstaltung belegen k&ouml;nnen.");
 		}
 	} else {
-		if (!$list->createList($resources_data["list_open"])) {
+		if (!$list->showList($resources_data["list_open"])) {
 			echo "</td></tr>";
 			parse_msg ("info§Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Startpunkt in der Hierachie aus.");
 		}
@@ -666,7 +666,7 @@ if ($resources_data["view"]=="edit_object_properties" || $resources_data["view"]
 
 	if ($resources_data["structure_open"]) {
 		$editObject=new editObject($resources_data["structure_open"]);
-		$editObject->create_propertie_forms();
+		$editObject->showPropertiesForms();
 	} else {
 		echo "</td></tr>";
 		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
@@ -694,7 +694,7 @@ Objectberechtigungen bearbeiten, views: edit_object_perms
 if ($resources_data["view"]=="edit_object_perms") {
 	if ($resources_data["structure_open"]) {
 		$editObject=new editObject($resources_data["structure_open"]);
-		$editObject->create_perm_forms();
+		$editObject->showPermsForms();
 	} else {
 		echo "</td></tr>";
 		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
@@ -710,7 +710,7 @@ if ($resources_data["view"]=="edit_object_assign" || $resources_data["view"]=="o
 		$editObject->setUsedView($resources_data["view"]);
 		if ($edit_assign_object)
 			$assign_id=$edit_assign_object;
-		$editObject->create_schedule_forms($assign_id);
+		$editObject->showScheduleForms($assign_id);
 	} else {
 		echo "</td></tr>";
 		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
@@ -723,7 +723,7 @@ Typen verwalten, views: edit_types
 if (($resources_data["view"]=="edit_types") || ($resources_data["view"]=="settings")) {
 	
 	$editSettings=new editSettings;
-	$editSettings->create_types_forms();
+	$editSettings->showTypesForms();
 }
 
 /*****************************************************************************
@@ -732,7 +732,7 @@ Eigenschaften verwalten, views: edit_properties
 if ($resources_data["view"]=="edit_properties") {
 	
 	$editSettings=new editSettings;
-	$editSettings->create_properties_forms();
+	$editSettings->showPropertiesForms();
 }
 
 /*****************************************************************************
@@ -741,7 +741,7 @@ Berechtigungen verwalten, views: edit_perms
 if ($resources_data["view"]=="edit_perms") {
 	
 	$editSettings=new editSettings;
-	$editSettings->create_perms_forms();
+	$editSettings->showPermsForms();
 }
 
 /*****************************************************************************
@@ -762,9 +762,9 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 	
 		if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
 			if ($resources_data["schedule_mode"] == "list") //view List
-				$ViewSchedules->create_schedule_list($schedule_start_time, $schedule_end_time);
+				$ViewSchedules->showScheduleList($schedule_start_time, $schedule_end_time);
 			else
-				$ViewSchedules->create_schedule_graphical($schedule_start_time, $schedule_end_time);
+				$ViewSchedules->showScheduleGraphical($schedule_start_time, $schedule_end_time);
 	} else {
 		echo "</td></tr>";
 		parse_msg ("info§Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt. <br />Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus.");
@@ -777,7 +777,7 @@ persoenliche Einstellungen verwalten, views: edit_personal_settings
 if ($resources_data["view"]=="edit_personal_settings") {
 	
 	$editSettings=new editPersonalSettings;
-	$editSettings->create_personal_settings_forms();
+	$editSettings->showPesonalSettingsForms();
 }
 
 /*****************************************************************************
@@ -791,7 +791,7 @@ if ($resources_data["view"]=="search") {
 	$search->setSearchArray($resources_data["search_array"]);
 	if ($resources_data["browse_open_level"])
 		$search->setOpenLevel($resources_data["browse_open_level"]);
-	$search->createSearch();
+	$search->showSearch();
 }
 
 

@@ -1,6 +1,6 @@
 <?
 
-$currentObject=new resourceObject($resources_data["structure_open"]);
+$currentObject=new ResourceObject($resources_data["structure_open"]);
 $currentObjectTitelAdd=$currentObject->getCategoryName();
 if ($currentObjectTitelAdd)
 	$currentObjectTitelAdd=": ";

@@ -21,18 +21,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 /*****************************************************************************
-getList, stellt Liste mit Hilfe von printThread dar
+ShowList, stellt Liste mit Hilfe von printThread dar
 /*****************************************************************************/
-require_once ($RELATIVE_PATH_RESOURCES."/lib/CreateTreeRow.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ShowTreeRow.class.php");
 
-class getList extends CreateTreeRow{
+class ShowList extends ShowTreeRow{
 	var $db;
 	var $db2;
 	var $recurse_levels;			//How much Levels should the List recurse
 	var $supress_hierachy_levels;	//show only resources with a category or show also the hierarhy-levels (that are resources too)
 	var $admin_buttons;			//show admin buttons or not
 
-	function getList() {
+	function ShowList() {
 		$this->recurse_levels=-1;
 		$this->supress_hierachy_levels=FALSE;
 	
@@ -57,11 +57,11 @@ class getList extends CreateTreeRow{
 	}
 	
 	//private
-	function createListObject ($resource_id, $admin_buttons=FALSE) {
+	function showListObject ($resource_id, $admin_buttons=FALSE) {
 		global $resources_data, $edit_structure_object;
 	
 		//Object erstellen
-		$resObject=new resourceObject($resource_id);
+		$resObject=new ResourceObject($resource_id);
 
 		//Daten vorbereiten
 		$icon="<img src=\"pictures/cont_folder2.gif\" />";
@@ -108,10 +108,10 @@ class getList extends CreateTreeRow{
 		}
 
 		//Daten an Ausgabemodul senden (aus resourcesVisual)
-		$this->createRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
+		$this->showRow($icon, $link, $titel, $zusatz, 0, 0, 0, $new, $open, $content, $edit);
 	}
 	
-	function createList ($start_id='', $level=0, $result_count=0) {
+	function showList ($start_id='', $level=0, $result_count=0) {
 
 		$db=new DB_Seminar;	
 		$db2=new DB_Seminar;
@@ -125,7 +125,7 @@ class getList extends CreateTreeRow{
 			return FALSE;
 			
 		while ($db->next_record()) {
-			$this->createListObject($db->f("resource_id"), $this->admin_buttons);
+			$this->showListObject($db->f("resource_id"), $this->admin_buttons);
 							
 			//in weitere Ebene abtauchen
 			if (($recurse_levels == -1) || ($recurse_levels < $levels + 1)) {
@@ -133,14 +133,14 @@ class getList extends CreateTreeRow{
 				$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ");
 				
 				while ($db2->next_record())
-					$this->createList($db2->f("resource_id"), $level+1, $result_count);
+					$this->showList($db2->f("resource_id"), $level+1, $result_count);
 			}
 			$result_count++;
 		}
 	return $result_count;
 	}
 	
-	function createRangeList($range_id) {
+	function showRangeList($range_id) {
 		$db=new DB_Seminar;	
 		
 		//create the query for all objects owned by the range
@@ -148,7 +148,7 @@ class getList extends CreateTreeRow{
 		$db->query($query);
 		
 		while ($db->next_record()) {
-			$this->createListObject($db->f("resource_id"));
+			$this->showListObject($db->f("resource_id"));
 			$result_count++;
 		}
 
@@ -157,14 +157,14 @@ class getList extends CreateTreeRow{
 		$db->query($query);
 		
 		while ($db->next_record()) {
-			$this->createListObject($db->f("resource_id"));
+			$this->showListObject($db->f("resource_id"));
 			$result_count++;
 		}
 		
 	return $result_count;		
 	}
 	
-	function createSearchList($search_array) {
+	function showSearchList($search_array) {
 
 		$db=new DB_Seminar;	
 		
@@ -195,7 +195,7 @@ class getList extends CreateTreeRow{
 			return FALSE;
 
 		while ($db->next_record()) {
-			$this->createListObject($db->f("resource_id"));
+			$this->showListObject($db->f("resource_id"));
 			$result_count++;
 		}
 	return $result_count;
@@ -203,19 +203,19 @@ class getList extends CreateTreeRow{
 }
 
 /*****************************************************************************
-getThread, stellt Struktur mit Hilfe von printThread dar
+ShowThread, stellt Struktur mit Hilfe von printThread dar
 /*****************************************************************************/
-require_once ($RELATIVE_PATH_RESOURCES."/lib/CreateTreeRow.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ShowTreeRow.class.php");
 
-class getThread extends CreateTreeRow {
+class ShowThread extends ShowTreeRow {
 	var $lines;		//Uebersichtsarray der Struktur;
 
-	function getThread() {
+	function ShowThread() {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
 	}
 
-	function createThread ($root_id, $level=0, $lines='') {
+	function showThreadLevel ($root_id, $level=0, $lines='') {
 		global $resources_data, $edit_structure_object;
 		
 		$db=new DB_Seminar;		
@@ -232,7 +232,7 @@ class getThread extends CreateTreeRow {
 			$this->lines[$level+1] = $weitere;
 	
 			//Object erstellen
-			$resObject=new resourceObject($db->f("resource_id"));
+			$resObject=new ResourceObject($db->f("resource_id"));
 
 			//Daten vorbereiten
 			$icon="<img src=\"pictures/cont_folder2.gif\" />";
@@ -278,11 +278,11 @@ class getThread extends CreateTreeRow {
 			
 
 			//Daten an Ausgabemodul senden (aus resourcesVisual)
-			$this->createRow($icon, $link, $titel, $zusatz, $level, $lines, $weitere, $new, $open, $content, $edit);
+			$this->showRow($icon, $link, $titel, $zusatz, $level, $lines, $weitere, $new, $open, $content, $edit);
 			
 			//in weitere Ebene abtauchen
 			while ($db2->next_record()) {
-				$this->createThread($db2->f("resource_id"), $level+1, $lines);
+				$this->showThreadLevel($db2->f("resource_id"), $level+1, $lines);
 			}
 		}
 	}
@@ -372,10 +372,10 @@ class editSettings extends cssClasses {
 			return TRUE;
 	}
 
-	function create_perms_forms() {
+	function showPermsForms() {
 		global $PHP_SELF, $search_string_search_root_user, $search_root_user;
 		
-		$resObject=new resourceObject();
+		$resObject=new ResourceObject();
 			
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -413,7 +413,7 @@ class editSettings extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="30%" valign="top"><font size=-1>Nutzer hinzuf&uuml;gen</font><br />
-				<?create_search_form("search_root_user", $search_string_search_root_user, TRUE, TRUE) ?>
+				<? showSearchForm("search_root_user", $search_string_search_root_user, TRUE, TRUE) ?>
 				</td>
 			</tr>
 			<?
@@ -458,7 +458,7 @@ class editSettings extends cssClasses {
 		<?
 	}
 
-	function create_types_forms() {
+	function showTypesForms() {
 		global $PHP_SELF;
 			
 		?>
@@ -595,7 +595,7 @@ class editSettings extends cssClasses {
 		<?
 	}
 	
-	function create_properties_forms() {
+	function showPropertiesForms() {
 		global $PHP_SELF;
 			
 		?>
@@ -721,7 +721,7 @@ class editSettings extends cssClasses {
 		<?
 	}	
 	
-	function create_pesonal_settings_forms() {
+	function showPesonalSettingsForms() {
 		global $PHP_SELF;
 		
 		?>
@@ -740,7 +740,7 @@ class viewObject {
 	function viewObject($resource_id) {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
-		$this->resObject = new resourceObject($resource_id);
+		$this->resObject = new ResourceObject($resource_id);
 		$this->cssSw = new cssClassSwitcher;
 	}
 
@@ -836,15 +836,15 @@ class viewObject {
 editObject, Darstellung der unterschiedlichen Forms zur 
 Bearbeitung eines Objects
 /*****************************************************************************/
-class editObject extends cssClasses {
+class EditObject extends cssClasses {
 	var $resObject;		//Das Oject an dem gearbeitet wird
 	var $used_view;		//the used view
 	
 	//Konstruktor
-	function editObject($resource_id) {
+	function EditObject($resource_id) {
 		$this->db=new DB_Seminar;
 		$this->db2=new DB_Seminar;
-		$this->resObject=new resourceObject($resource_id);
+		$this->resObject=new ResourceObject($resource_id);
 	}
 	
 	function setUsedView ($value) {
@@ -874,7 +874,7 @@ class editObject extends cssClasses {
 			return TRUE;
 	}
 
-	function create_schedule_forms($assign_id='') {
+	function showScheduleForms($assign_id='') {
 		global $PHP_SELF, $resources_data, $search_user, $search_string_search_user;
 
 		$resAssign=new AssignObject($assign_id);
@@ -963,7 +963,7 @@ class editObject extends cssClasses {
 					else
 						echo "<b>-- kein Stud.IP Nutzer eingetragen -- &nbsp;</b><br /><br /></font>"
 					?><font size=-1>einen <? if ($user_name) echo "anderen" ?> User (Nutzer, Veranstaltung oder Einrichtung) eintragen: <br /></font><font size=-1>
-					<?create_search_form("search_user", $search_string_search_user, FALSE, TRUE) ?> <br/>
+					<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE) ?> <br/>
 					freie Eingabe zur Belegung:<br /></font>
 					<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
 					<br /><font size=-1><b>Beachten Sie:</b> Wenn sie einen Nutzer des System eintragen, wird dieser Account mit der Belegung verkn&uuml;pft, dh. z.B. der Nutzer oder berechtigte Personen 
@@ -1058,7 +1058,7 @@ class editObject extends cssClasses {
 	}	
 
 
-	function create_propertie_forms() {
+	function showPropertiesForms() {
 		global $PHP_SELF;
 			
 		?>
@@ -1189,7 +1189,7 @@ class editObject extends cssClasses {
 		<?
 	}	
 
-	function create_perm_forms() {
+	function showPermsForms() {
 		global $PHP_SELF, $search_owner, $search_perm_user, $search_string_search_perm_user, $search_string_search_owner;
 		
 		$ObjectPerms = new ResourcesObjectPerms($this->resObject->getId());
@@ -1214,7 +1214,7 @@ class editObject extends cssClasses {
 				if ($owner_perms){
 					?>
 					<font size=-1>Besitzer &auml;ndern:</font><font size=-1 color="red"></font><br />
-					<? create_search_form("search_owner", $search_string_search_owner, FALSE,TRUE);
+					<? showSearchForm("search_owner", $search_string_search_owner, FALSE,TRUE);
 				} else
 					print "<img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den Besitzer nicht &auml;ndern.")."</font>";
 				?>
@@ -1226,7 +1226,7 @@ class editObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" colspan=2 valign="top"><font size=-1>Berechtigungen:</font><br />
 				<td class="<? echo $this->getClass() ?>" width="60%" valign="top"><font size=-1>Berechtigung hinzuf&uuml;gen</font><br />
-				<?create_search_form("search_perm_user", $search_string_search_perm_user, FALSE, FALSE, FALSE, TRUE) ?>
+				<? showSearchForm("search_perm_user", $search_string_search_perm_user, FALSE, FALSE, FALSE, TRUE) ?>
 				</td>
 			</tr>
 			<?
@@ -1378,7 +1378,7 @@ class ViewSchedules extends cssClasses {
 	<?
 	}
 
-	function create_schedule_list() {
+	function showScheduleList() {
 		global $PHP_SELF;
 
 		 //select view to jump from the schedule
@@ -1418,7 +1418,7 @@ class ViewSchedules extends cssClasses {
 	<?
 	}
 
-	function create_schedule_graphical() {
+	function showScheduleGraphical() {
 		global $RELATIVE_PATH_RESOURCES, $PHP_SELF;
 	 	
 	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ScheduleWeek.class.php");
@@ -1470,7 +1470,7 @@ class ViewSchedules extends cssClasses {
 						$schedule->addEvent($event->getName(), $event->getBegin(), $event->getEnd(), 
 											"$PHP_SELF?view=$view&edit_assign_object=".$event->getAssignId());
 					}
-					$schedule->createSchedule("html");
+					$schedule->showSchedule("html");
 					echo "<br />&nbsp; ";
 					?>
 				</td>
@@ -1497,7 +1497,7 @@ class ResourcesBrowse {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
 		$this->cssSw = new cssClassSwitcher;
-		$this->list = new getList;
+		$this->list = new ShowList;
 		
 		$this->list->setRecurseLevels(0);
 		$this->list->setViewHiearchyLevels(FALSE);
@@ -1724,7 +1724,7 @@ class ResourcesBrowse {
 	
 	//private
 	function showList() {
-		$result_count=$this->list->createList($this->open_object);
+		$result_count=$this->list->showList($this->open_object);
 		if (!$result_count) {
 			?>
 		<tr>
@@ -1738,7 +1738,7 @@ class ResourcesBrowse {
 	
 	//private
 	function showSearchList() {
-		$result_count=$this->list->createSearchList($this->searchArray);
+		$result_count=$this->list->showSearchList($this->searchArray);
 		if (!$result_count) {
 			?>
 		<tr>
@@ -1751,7 +1751,7 @@ class ResourcesBrowse {
 	}
 	
 	//private
-	function createSearch() {
+	function showSearch() {
 		?>
 			<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 				<form method="POST" action="<?echo $PHP_SELF ?>?view=search">

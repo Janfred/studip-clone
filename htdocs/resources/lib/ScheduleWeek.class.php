@@ -308,7 +308,7 @@ class ScheduleWeek {
 	<?
 	}
 	
-	function createSchedule($mode="html") {
+	function showSchedule($mode="html") {
 		$this->createCellAllocation();
 		$this->handleOverlaps();
 		switch ($mode) {
