@@ -247,15 +247,16 @@ else {
 					    my_error("<b>Sie haben keine Berechtigung einen admin zu berufen!</b>");
 					}
 				} else {
-					//ok, aber nur hochstufen (hat sich selbst schonmal gemeldet als Student an dem Inst)
-					if ($db->f("inst_perms") == "user")
-						$db2->query("UPDATE user_inst SET inst_perms='autor' WHERE user_id='$u_id' AND Institut_id = '$ins_id' ");
-					// ok, als das aufnehmen was er global ist aufnehmen.
-					else
-						$globalperms = get_global_perm($u_id);				
-						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', '$globalperms')");
+					$insert_perms = get_global_perm($u_id);				
+					//ok, aber nur hochstufen auf Maximal-Status (hat sich selbst schonmal gemeldet als Student an dem Inst)
+					if ($db->f("inst_perms") == "user") {
+						$db2->query("UPDATE user_inst SET inst_perms='$insert_perms' WHERE user_id='$u_id' AND Institut_id = '$ins_id' ");
+					// ok, neu aufnehmen als das was er global ist
+					} else {
+						$db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', '$insert_perms')");
+					}
 					if ($db2->affected_rows())
-						my_msg("<b>$Fullname wurde als \"$globalperms\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
+						my_msg("<b>$Fullname wurde als \"$insert_perms\" in die Einrichtung aufgenommen. Bitte verwenden Sie die untere Tabelle, um Rechte etc. zu &auml;ndern!</b>");
 					else
 						parse_msg ("error§<b>$Fullname konnte nicht in die Einrichtung aufgenommen werden!§");
 				}
