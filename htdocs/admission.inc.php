@@ -108,7 +108,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE Seminar_id = '$seminar_id' AND admission_selection_take_place = '1' ");
 	if ($db->next_record()) {
 		//anzahl der freien Plaetze holen
-		$count=get_free_admission($db->f("Seminar_id"));
+		$count=get_free_admission($seminar_id);
 		
 		//Studis auswaehlen, die jetzt aufsteigen koennen
 		$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count");
@@ -126,7 +126,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 		}
 
 		//Warteposition der restlichen User neu eintragen
-		renumber_admission($db->f("Seminar_id"). $send_message);
+		renumber_admission($seminar_id. $send_message);
 	}
 }
 
@@ -186,7 +186,7 @@ function check_admission ($send_message=TRUE) {
 		$db2->query("UPDATE seminare SET admission_selection_take_place ='1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
 
 		//evtl. verbliebene Plaetze auffuellen
-		update_admission($db->f("Seminar_id"). $send_message);
+		update_admission($seminar_id, $send_message);
 
 		//User benachrichten (nur bei Losverfahren, da Wartelist erst waehrend des Losens generiert wurde.
 		if (($send_message) && ($db->f("admission_type") == '1')) {
