@@ -37,7 +37,7 @@ switch ($resources_data["view"]) {
 					array  ("kategorie" => "Aktionen:", 
 							"eintrag" => array (
 								array	("icon" =>  (!$resources_data["list_recurse"]) ? "pictures/on_small.gif" : "pictures/off_small.gif",
-									"text"  => ($resources_data["list_recurse"]) ? "Untergeordnete Ebenen <br /><a href=\"$PHPSELF?nrecurse_list=TRUE\"><u>nicht</u> ausgeben.</a>" : "Untergeordnete Ebenen <br /><a href=\"$PHP_SELF?recurse_list=TRUE\">mit ausgeben</a>"))));
+									"text"  => ($resources_data["list_recurse"]) ? "Ressourcen in untergeordneten Ebenen <br /><a href=\"$PHPSELF?nrecurse_list=TRUE\"><u>nicht</u> ausgeben.</a>" : "Ressourcen in untergeordneten Ebenen <br /><a href=\"$PHP_SELF?recurse_list=TRUE\">mit ausgeben</a>"))));
 		$infopic = "pictures/rooms.jpg";
 	break;
 

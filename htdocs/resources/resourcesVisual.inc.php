@@ -1045,7 +1045,7 @@ class EditObject extends cssClasses {
 					<input name="change_schedule_repeat_end_day" value="<? echo date("d",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_repeat_end_month" value="<? echo date("m",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_repeat_end_year" value="<? echo date("Y",$resAssign->getRepeatEnd()); ?>" size=4 maxlength="4" />
-					<input type="CHECKBOX" <? printf ("%s", ($resAssign->isRepeatEndSemEnd()) ? "checked" : "") ?> name="change_schedule_repeat_sem_end" /> Ende des Semesters
+					<input type="CHECKBOX" <? printf ("%s", ($resAssign->isRepeatEndSemEnd()) ? "checked" : "") ?> name="change_schedule_repeat_sem_end" /> Ende der Vorlesungszeit
 				<?
 				}
 				?>
@@ -1224,6 +1224,8 @@ class EditObject extends cssClasses {
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
 				</td>
 			</tr>
+			<?
+			/*
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
@@ -1233,6 +1235,8 @@ class EditObject extends cssClasses {
 				Objekt &uuml;bernimmt Belegung von &uuml;bergeordnetem Objekt</font>
 				</td>
 			</tr>
+			*/
+			?>
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
@@ -1264,13 +1268,13 @@ class EditObject extends cssClasses {
 					printf ("<input type=\"HIDDEN\" name=\"change_property_val[]\" value=\"%s\" />", "_id_".$this->db->f("property_id"));
 					switch ($this->db->f("type")) {
 						case "bool":
-							printf ("<input type=\"CHECKBOX\" name=\"change_property_val[]\" %s /><font size=-1>&nbsp;%s</font>", ($this->db2->f("state")) ? "checked":"", $this->db->f("options"));
+							printf ("<input type=\"CHECKBOX\" name=\"change_property_val[]\" %s /><font size=-1>&nbsp;%s</font>", ($this->db2->f("state")) ? "checked":"", htmlReady($this->db->f("options")));
 						break;
 						case "num":
-							printf ("<input type=\"TEXT\" name=\"change_property_val[]\" value=\"%s\" size=30 maxlength=255 />", $this->db2->f("state"));
+							printf ("<input type=\"TEXT\" name=\"change_property_val[]\" value=\"%s\" size=30 maxlength=255 />", htmlReady($this->db2->f("state")));
 						break;
 						case "text";
-							printf ("<textarea name=\"change_property_val[]\" cols=30 rows=2 >%s</textarea>", $this->db2->f("state"));
+							printf ("<textarea name=\"change_property_val[]\" cols=30 rows=2 >%s</textarea>", htmlReady($this->db2->f("state")));
 						break;
 						case "select";
 							$options=explode (";",$this->db->f("options"));
@@ -1354,7 +1358,7 @@ class EditObject extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				<td class="<? echo $this->getClass() ?>" width="20%">
 					<input type="HIDDEN" name="change_user_id[]" value="<? echo $this->db->f("user_id")?>" />
-					<font size=-1><a href="<? echo $this->resObject->getOwnerLink($this->db->f("user_id"))?>"><? echo $this->resObject->getOwnerName(TRUE, $this->db->f("user_id")) ?></a></font>
+					<font size=-1><a href="<? echo $this->resObject->getOwnerLink($this->db->f("user_id"))?>"><? echo htmlReady($this->resObject->getOwnerName(TRUE, $this->db->f("user_id"))) ?></a></font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="*">
 					<font size=-1>&nbsp; 
@@ -1370,9 +1374,9 @@ class EditObject extends cssClasses {
 						printf ("<input type=\"RADIO\" disabled name=\"FALSE\" %s /><font color=\"#888888\">admin</font>", ($this->db->f("perms") == "admin") ? "checked" : "");
 
 					if (($owner_perms) || (($admin_perms) && ($this->db->f("perms") == "autor")))
-						printf ("&nbsp; <a href=\"%s?change_object_perms=%s&delete_user_perms=%s\"><img src=\"pictures/trash.gif\" ".tooltip(_("Berechtigung l&ouml;schen"))." border=0></a>", $PHP_SELF, $this->resObject->getId(), $this->db->f("user_id"));
+						printf ("&nbsp; <a href=\"%s?change_object_perms=%s&delete_user_perms=%s\"><img src=\"pictures/trash.gif\" ".tooltip(_("Berechtigung löschen"))." border=0></a>", $PHP_SELF, $this->resObject->getId(), $this->db->f("user_id"));
 					else
-						print "&nbsp; <img src=\"pictures/lighttrash.gif\" ".tooltip(_("Sie d&uuml;rfen diese Berechtigung leider nichtl&ouml;schen"))." border=0>";
+						print "&nbsp; <img src=\"pictures/lighttrash.gif\" ".tooltip(_("Sie d&uuml;rfen diese Berechtigung leider nicht löschen"))." border=0>";
 					?>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="60%" valign="top">&nbsp; 
