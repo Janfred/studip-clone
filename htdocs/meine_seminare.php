@@ -288,7 +288,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 <?
 // Anzeige der Wartelisten
 
-      $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) WHERE user_id = '$user->id'");
+      $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id'");
       IF ($db->num_rows()) {
       	?>
        	<tr>
@@ -305,16 +305,16 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
    		    ECHO "<th width=\"10%\"><b>Position</b></th>";
    		    ECHO "<th width=\"10%\"><b>Art</b></th>";
        	    ECHO "<th width=\"3%\">X</tr></th>";
-      }
+
 	WHILE ($db->next_record()) {
         IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
                  $db2=new DB_Seminar;
                  $admission_studiengang_id = $db->f("studiengang_id");
                  $admission_seminar_id = $db->f("seminar_id");
-                 $db2->query("SELECT quota FROM admission_seminar_studiengang WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
-                 IF ($db2->next_record()) {
-                    $plaetze = round ($db->f("admission_turnout") * ($db2->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
-                 }
+//                 $db2->query("SELECT quota FROM admission_seminar_studiengang WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
+//                 IF ($db2->next_record()) {
+                    $plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
+//                 }
                  $db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
                  IF ($db2->next_record()) {
                     $wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
@@ -335,9 +335,10 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.Y", $db->f("admission_endtime")) : "-");
 		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s %s</td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
 		printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">%s</td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? "Anmeldeliste" : "Warteliste");
-		printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr></table>", $cssSw->getClass(),$db->f("seminar_id"));
+		printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=kill_admission\"><img src=\"pictures/trash.gif\" alt=\"aus der Veranstaltung abmelden\" border=\"0\"></a></td></tr>", $cssSw->getClass(),$db->f("seminar_id"));
 	}
-
+	print "</table>";
+}	
 
  // Ende Wartelisten
 
