@@ -163,7 +163,7 @@ if ($SessSemName["class"]=="inst") {
 
 	$db->query("SELECT admission_binding FROM seminare WHERE seminar_id = '$SessSemName[1]'");
 	$db->next_record();
-	if (!$db->f("admission_binding") && !$perm->have_studip_perm("tutor",$SessSemName[1]))
+	if (!$db->f("admission_binding") && !$perm->have_studip_perm("tutor",$SessSemName[1]) && $user->id != "nobody")
 		$structure["delete_abo"]=array (topKat=>"seminar_main", name=>_("Austragen aus der Veranstaltung"), link=>"meine_seminare.php?auswahl=$SessSemName[1]&cmd=suppose_to_kill", isolator=>TRUE);
 }
 //
@@ -373,7 +373,14 @@ switch ($i_page) {
 		$reiter_view="timetable"; 
 	break;	
 	case "scm.php":
-		$reiter_view="scm";
+		switch ($i_view) {
+			case FALSE:
+				$reiter_view="scm";
+			break;
+			case "edit":
+				$reiter_view="scm_admin";
+			break;
+		}
 	break;
 	case "literatur.php": 
 		$reiter_view="literatur";
