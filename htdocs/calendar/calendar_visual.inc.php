@@ -731,11 +731,10 @@ function js_hover ($aterm) {
 	if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // Hovern
 		$jscript_text = array();
 		
-		if (get_class($aterm) == "seminarevent")
-			$jscript_title = JSReady($aterm->getSemName());
-		else
-			$jscript_title = JSReady($aterm->getTitle());
+		$jscript_title = JSReady($aterm->getTitle());
 		
+		if (get_class($aterm) == 'seminarevent')
+			$jscript_text[] = '<b>' . _("Veranstaltung:") . ' </b> ' . $aterm->getSemName();
 		if ($aterm->getDescription())
 			$jscript_text[] = '<b>' . _("Beschreibung:") . ' </b> ' . $aterm->getDescription();
 		if ($categories = $aterm->toStringCategories())
