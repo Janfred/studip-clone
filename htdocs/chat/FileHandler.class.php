@@ -82,7 +82,7 @@ class FileHandler {
 	*/
 	function store(&$what,$key) {
 		$file_name = $this->file_path . "/" . $this->file_name . $key;
-		$contents = base64_encode(serialize($what));
+		$contents = serialize($what);
 		$handle = fopen ($file_name, "wb");
 		if (flock($handle, LOCK_EX)){
 			fwrite ($handle, $contents,strlen($contents));
@@ -117,7 +117,7 @@ class FileHandler {
 				$this->halt("Fehler beim Lesen von $key");
 			}
 			if ($contents){
-				$what = unserialize(base64_decode($contents));
+				$what = unserialize($contents);
 			}
 		}
 		return true;
