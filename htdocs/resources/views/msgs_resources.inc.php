@@ -153,7 +153,7 @@ $this->msg[34] = array (
 		"msg"=> _("Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden: <font size=\"-1\" color=\"black\">%s</font>"));
 $this->msg[35] = array (
 		"mode" => "error",
-		"msg"=> _("Die folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden.")."<br />"._("Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r jede Belegungszeit erstellt.  <font size=\"-1\" color=\"black\">%s</font>"));
+		"msg"=> _("Die folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden:")."<br />"._("Eine neue Anfrage, die einzeln bearbeitet werden mu&szlig;, wurde f&uuml;r jede Belegungszeit erstellt.  <font size=\"-1\" color=\"black\">%s</font>"));
 $this->msg[36] = array (
 		"mode" => "info",
 		"msg"=> _("Sie haben alle Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")
@@ -175,4 +175,7 @@ $this->msg[40] = array (
 $this->msg[41] = array (
 		"mode" => "info",
 		"msg"=> _("Mit den von ihnen ausgewählten Einstellungen sind keine Anfragen, die Sie auflösen könnten, vorhanden."));
+$this->msg[42] = array (
+		"mode" => "info",
+		"msg"=> _("Folgenden Einzelterminen wurde kein Raum zugewiesen, da gesonderte Anfragen zu diesem Termine vorliegen, die einzeln bearbeitet werden m&uuml;ssen:")."<font size=\"-1\" color=\"black\">%s</font>");
 ?>
