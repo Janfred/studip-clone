@@ -290,7 +290,7 @@ if ($msg)	{
 				$titel=mila(kill_format($db->f("message")));
 			
 			$content=quotes_decode(formatReady($db->f("message")));
-			if (!$db->f("user_id_snd") == "____%system%____") {
+			if ($db->f("user_id_snd") != "____%system%____") {
 				$edit="<a href=\"$PHP_SELF?cmd=write&rec_uname=".$db->f("user_id_snd")."\"><img src=\"pictures/buttons/antworten-button.gif\" border=0></a>";
 				$edit.="&nbsp;<a href=\"$PHP_SELF?cmd=write&quote=".$db->f("message_id")."&rec_uname=".$db->f("user_id_snd")."\"><img src=\"pictures/buttons/zitieren-button.gif\" border=0></a>";
 			}
