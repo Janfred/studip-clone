@@ -642,7 +642,7 @@ else {
 		// max number of events reached
 		$info_box['count'] = _("Sie k&ouml;nnen keine weiteren Termine mehr speichern!")
 				. '<br><br>'
-				. sprintf(_("L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische L&ouml;schmethode in ihren %sKalenderoptionen%s."),
+				. sprintf(_("L&ouml;schen Sie &auml;ltere Termine, oder w&auml;hlen Sie eine automatische L&ouml;schfunktion in ihren %sKalenderoptionen%s."),
 				"<a href=\"$PHP_SELF?cmd=changeview&atime=$atime\">",
 				"</a>");
 	}
@@ -656,7 +656,7 @@ else {
 				"</a>");
 	}
 	else {
-		$info_box['count'] = sprintf(_("Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;hlen Sie dazu eine L&ouml;funktion in Ihren %sKalenderoptionen%s."),
+		$info_box['count'] = sprintf(_("Sie k&ouml;nnen abgelaufene Termine automatisch l&ouml;schen lassen. W&auml;hlen Sie dazu eine L&ouml;schfunktion in Ihren %sKalenderoptionen%s."),
 				"<a href=\"$PHP_SELF?cmd=changeview&atime=$atime\">",
 				"</a>");
 	}
