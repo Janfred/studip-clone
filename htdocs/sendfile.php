@@ -179,9 +179,16 @@ if ($force_download) {
 			$content_type="application/ms-powerpoint";
 			$content_disposition="inline";		
 		break;
-		case "zip": 
 		case "tgz": 
 		case "gz": 	
+			$content_type="application/x-gzip";
+			$content_disposition="inline";
+		break;
+		case "bz2": 
+			$content_type="application/x-bzip2";
+			$content_disposition="inline";		
+		break;
+		case "zip": 
 			$content_type="application/zip";
 			$content_disposition="inline";		
 		break;
