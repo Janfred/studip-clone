@@ -273,6 +273,13 @@ function PrintInstitutMembers ($range_id)
 // Ende Funktionen
 
 
+		while (list($key, $val) = each ($HTTP_POST_VARS)) {
+//			$statusgruppe_id = substr($key, 0, -2);
+			echo $key."<br>";
+		}
+		reset($HTTP_POST_VARS);
+
+
 // Abfrage der Formulare und Aktionen
 
 	// neue Statusgruppe hinzufuegen
@@ -371,12 +378,7 @@ function PrintInstitutMembers ($range_id)
     <td align="right" width="50%" class="blank">
     
 <?
-		while (list($key, $val) = each ($HTTP_POST_VARS)) {
-//			$statusgruppe_id = substr($key, 0, -2);
-//			echo $key."<br>";
-		}
-		if (is_array($HTTP_POST_VARS))
-			echo "hallo";
+
 
 	if ($cmd!="edit_statusgruppe") { // normale Anzeige
 ?>
