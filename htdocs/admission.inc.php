@@ -48,7 +48,6 @@ function get_free_admission ($seminar_id) {
 		$count = ($count - $db3->num_rows());
 	else
 		$count = 0;
-	echo checkpoint2, $count;
 	
 	return $count;
 }
