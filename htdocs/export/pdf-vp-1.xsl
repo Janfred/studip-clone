@@ -39,11 +39,10 @@ MitarbeiterInnen
 					</xsl:for-each>
 				</fo:flow>
 			</fo:page-sequence>
-
+			
 			<xsl:for-each select="studip/institut">
 				<fo:page-sequence master-reference="contents">
-					<fo:static-content flow-name="xsl-region-before">
-					</fo:static-content>
+					<fo:static-content flow-name="xsl-region-before"></fo:static-content>
 					<fo:static-content flow-name="xsl-region-after">
 						<fo:block font-family="Helvetica" font-size="10pt" text-align="center">
 		Seite <fo:page-number/>
@@ -56,50 +55,49 @@ MitarbeiterInnen
 									<xsl:value-of select="name"/>
 								</fo:inline>
 							</fo:block>
-<xsl:if test="fakultaet">
-							<fo:block>
-								<fo:inline font-weight="bold">Fakult&#228;t: </fo:inline>
-								<xsl:value-of select="fakultaet"/>
-							</fo:block>
-</xsl:if>
-<xsl:if test="homepage">
-							<fo:block>
-								<fo:inline font-weight="bold">Homepage: </fo:inline>
-								<xsl:value-of select="homepage"/>
-							</fo:block>
-</xsl:if>
-<xsl:if test="strasse">
-							<fo:block>
-								<fo:inline font-weight="bold">Strasse: </fo:inline>
-								<xsl:value-of select="strasse"/>
-							</fo:block>
-</xsl:if>
-<xsl:if test="plz">
-							<fo:block>
-								<fo:inline font-weight="bold">Postleitzahl: </fo:inline>
-								<xsl:value-of select="plz"/>
-							</fo:block>
-</xsl:if>
-<xsl:if test="telefon">
-							<fo:block>
-								<fo:inline font-weight="bold">Telefon: </fo:inline>
-								<xsl:value-of select="telefon"/>
-							</fo:block>
-</xsl:if>
-<xsl:if test="fax">
-							<fo:block>
-								<fo:inline font-weight="bold">Fax: </fo:inline>
-								<xsl:value-of select="fax"/>
-							</fo:block>
-</xsl:if>
-<xsl:if test="email">
-							<fo:block>
-								<fo:inline font-weight="bold">E-mail: </fo:inline>
-								<xsl:value-of select="email"/>
-							</fo:block>
-</xsl:if>
-							<fo:block space-after="12pt">
-							</fo:block>
+							<xsl:if test="fakultaet">
+								<fo:block>
+									<fo:inline font-weight="bold">Fakult&#228;t: </fo:inline>
+									<xsl:value-of select="fakultaet"/>
+								</fo:block>
+							</xsl:if>
+							<xsl:if test="homepage">
+								<fo:block>
+									<fo:inline font-weight="bold">Homepage: </fo:inline>
+									<xsl:value-of select="homepage"/>
+								</fo:block>
+							</xsl:if>
+							<xsl:if test="strasse">
+								<fo:block>
+									<fo:inline font-weight="bold">Strasse: </fo:inline>
+									<xsl:value-of select="strasse"/>
+								</fo:block>
+							</xsl:if>
+							<xsl:if test="plz">
+								<fo:block>
+									<fo:inline font-weight="bold">Postleitzahl: </fo:inline>
+									<xsl:value-of select="plz"/>
+								</fo:block>
+							</xsl:if>
+							<xsl:if test="telefon">
+								<fo:block>
+									<fo:inline font-weight="bold">Telefon: </fo:inline>
+									<xsl:value-of select="telefon"/>
+								</fo:block>
+							</xsl:if>
+							<xsl:if test="fax">
+								<fo:block>
+									<fo:inline font-weight="bold">Fax: </fo:inline>
+									<xsl:value-of select="fax"/>
+								</fo:block>
+							</xsl:if>
+							<xsl:if test="email">
+								<fo:block>
+									<fo:inline font-weight="bold">E-mail: </fo:inline>
+									<xsl:value-of select="email"/>
+								</fo:block>
+							</xsl:if>
+							<fo:block space-after="12pt"></fo:block>
 							<xsl:if test="seminare">
 								<fo:block text-align="center" font-size="14pt" space-after="10pt">     
 	Veranstaltungen
@@ -120,8 +118,7 @@ MitarbeiterInnen
 																<xsl:value-of select="@key"/>
 															</fo:inline>
 															<fo:block>
-																<xsl:text> 
- </xsl:text>
+																<xsl:text></xsl:text>
 															</fo:block>
 														</fo:block>
 														<xsl:call-template name="showseminar"/>
@@ -144,57 +141,57 @@ MitarbeiterInnen
 								<fo:block text-align="center" font-size="14pt" space-after="10pt">     
 	MitarbeiterInnen
 </fo:block>
-<fo:block>
-<fo:table border-style="solid" border-color="black" table-layout="fixed">
-	<fo:table-column column-number="1" column-width="5cm" border-after-style="solid" border-after-color="black"/>
-	<fo:table-column column-number="2" column-width="3cm" border-after-style="solid" border-after-color="black"/>
-	<fo:table-column column-number="3" column-width="2.5cm" border-after-style="solid" border-after-color="black"/>
-	<fo:table-column column-number="4" column-width="4cm" border-after-style="solid" border-after-color="black"/>
-	<fo:table-column column-number="5" column-width="4cm" border-after-style="solid" border-after-color="black"/>
-	<fo:table-header>
-		<fo:table-row>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>Name</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>Telefon</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>Raum</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>Sprechzeiten</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>E-Mail</fo:block>
-			</fo:table-cell>
-		</fo:table-row>
-	</fo:table-header>
-	<fo:table-body>
-						<xsl:choose>
-									<xsl:when test="personen/gruppe">
-										<xsl:for-each select="personen/gruppe">
-		<fo:table-row>
-			<fo:table-cell>
-				<fo:block>
-<fo:inline font-weight="bold">
-<xsl:value-of select="@key"/>
-</fo:inline>
-				</fo:block>
-			</fo:table-cell>
-		</fo:table-row>
-											<xsl:call-template name="showperson"/>
-										</xsl:for-each>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:for-each select="personen">
-											<xsl:call-template name="showperson"/>
-										</xsl:for-each>
-									</xsl:otherwise>
-								</xsl:choose>
-	</fo:table-body>
-</fo:table>
-</fo:block>
+								<fo:block>
+									<fo:table border-style="solid" border-color="black" table-layout="fixed">
+										<fo:table-column column-number="1" column-width="5cm" border-after-style="solid" border-after-color="black"/>
+										<fo:table-column column-number="2" column-width="3cm" border-after-style="solid" border-after-color="black"/>
+										<fo:table-column column-number="3" column-width="2.5cm" border-after-style="solid" border-after-color="black"/>
+										<fo:table-column column-number="4" column-width="4cm" border-after-style="solid" border-after-color="black"/>
+										<fo:table-column column-number="5" column-width="4cm" border-after-style="solid" border-after-color="black"/>
+										<fo:table-header>
+											<fo:table-row>
+												<fo:table-cell border-style="solid" border-color="black">
+													<fo:block>Name</fo:block>
+												</fo:table-cell>
+												<fo:table-cell border-style="solid" border-color="black">
+													<fo:block>Telefon</fo:block>
+												</fo:table-cell>
+												<fo:table-cell border-style="solid" border-color="black">
+													<fo:block>Raum</fo:block>
+												</fo:table-cell>
+												<fo:table-cell border-style="solid" border-color="black">
+													<fo:block>Sprechzeiten</fo:block>
+												</fo:table-cell>
+												<fo:table-cell border-style="solid" border-color="black">
+													<fo:block>E-Mail</fo:block>
+												</fo:table-cell>
+											</fo:table-row>
+										</fo:table-header>
+										<fo:table-body>
+											<xsl:choose>
+												<xsl:when test="personen/gruppe">
+													<xsl:for-each select="personen/gruppe">
+														<fo:table-row>
+															<fo:table-cell>
+																<fo:block>
+																	<fo:inline font-weight="bold">
+																		<xsl:value-of select="@key"/>
+																	</fo:inline>
+																</fo:block>
+															</fo:table-cell>
+														</fo:table-row>
+														<xsl:call-template name="showperson"/>
+													</xsl:for-each>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:for-each select="personen">
+														<xsl:call-template name="showperson"/>
+													</xsl:for-each>
+												</xsl:otherwise>
+											</xsl:choose>
+										</fo:table-body>
+									</fo:table>
+								</fo:block>
 							</xsl:if>
 						</fo:block>
 					</fo:flow>
@@ -202,54 +199,54 @@ MitarbeiterInnen
 			</xsl:for-each>
 		</fo:root>
 	</xsl:template>
-
+	
 	<xsl:template name="showperson">
 		<xsl:for-each select="person">
-		<fo:table-row>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
-	<xsl:if test="titel">
-				<xsl:value-of select="titel"/>
-				<xsl:text> </xsl:text>
-			</xsl:if>
-			<xsl:value-of select="vorname"/>
-			<xsl:text> </xsl:text>
-			<xsl:value-of select="nachname"/>
-			<xsl:if test="titel2">
-				<xsl:text>, </xsl:text>
-				<xsl:value-of select="titel2"/>
-			</xsl:if>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
-					<xsl:if test="telefon">
-					<xsl:value-of select="telefon"/>
-					</xsl:if>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
-					<xsl:if test="raum">
-					<xsl:value-of select="raum"/>
-					</xsl:if>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
-					<xsl:if test="sprechzeiten">
-					<xsl:value-of select="sprechzeiten"/>
-					</xsl:if>
-				</fo:block>
-			</fo:table-cell>
-			<fo:table-cell border-style="solid" border-color="black">
-				<fo:block>
-					<xsl:if test="email">
-						<xsl:value-of select="email"/>
-					</xsl:if>
-				</fo:block>
-			</fo:table-cell>
-		</fo:table-row>
+			<fo:table-row>
+				<fo:table-cell border-style="solid" border-color="black">
+					<fo:block>
+						<xsl:if test="titel">
+							<xsl:value-of select="titel"/>
+							<xsl:text></xsl:text>
+						</xsl:if>
+						<xsl:value-of select="vorname"/>
+						<xsl:text></xsl:text>
+						<xsl:value-of select="nachname"/>
+						<xsl:if test="titel2">
+							<xsl:text>, </xsl:text>
+							<xsl:value-of select="titel2"/>
+						</xsl:if>
+					</fo:block>
+				</fo:table-cell>
+				<fo:table-cell border-style="solid" border-color="black">
+					<fo:block>
+						<xsl:if test="telefon">
+							<xsl:value-of select="telefon"/>
+						</xsl:if>
+					</fo:block>
+				</fo:table-cell>
+				<fo:table-cell border-style="solid" border-color="black">
+					<fo:block>
+						<xsl:if test="raum">
+							<xsl:value-of select="raum"/>
+						</xsl:if>
+					</fo:block>
+				</fo:table-cell>
+				<fo:table-cell border-style="solid" border-color="black">
+					<fo:block>
+						<xsl:if test="sprechzeiten">
+							<xsl:value-of select="sprechzeiten"/>
+						</xsl:if>
+					</fo:block>
+				</fo:table-cell>
+				<fo:table-cell border-style="solid" border-color="black">
+					<fo:block>
+						<xsl:if test="email">
+							<xsl:value-of select="email"/>
+						</xsl:if>
+					</fo:block>
+				</fo:table-cell>
+			</fo:table-row>
 		</xsl:for-each>
 	</xsl:template>
 	<xsl:template name="showseminar">
@@ -291,8 +288,7 @@ MitarbeiterInnen
 					<xsl:value-of select="termine/vorbesprechung"/>
 				</fo:block>
 			</xsl:if>
-			<xsl:text>
-</xsl:text>
+			<xsl:text></xsl:text>
 			<xsl:if test="status">
 				<fo:block>
 					<fo:inline font-weight="bold">Status: </fo:inline>
@@ -359,8 +355,7 @@ MitarbeiterInnen
 					<xsl:value-of select="bereich"/>
 				</fo:block>
 			</xsl:if>
-			<fo:block space-after="12pt"> 
-</fo:block>
+			<fo:block space-after="12pt"></fo:block>
 		</xsl:for-each>
 	</xsl:template>
 </xsl:stylesheet>

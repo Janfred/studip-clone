@@ -37,6 +37,7 @@ class StudipSemRangeTreeViewSimple {
 
 	
 	var $tree;
+	var $show_entries;
 	
 	/**
 	* constructor
@@ -54,24 +55,35 @@ class StudipSemRangeTreeViewSimple {
 			$args['sem_status'] =  $sem_status;
 		}
 		$this->tree =& TreeAbstract::GetInstance("StudipRangeTree",$args);
+		if (!$this->tree->tree_data[$this->start_item_id]){
+			$this->start_item_id = "root";
+		}
 	}
 	
 	function showSemRangeTree(){
 		echo "\n<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		echo "\n<tr><td class=\"steelgraulight\" align=\"left\" valign=\"top\" style=\"font-size:10pt;\">"
 			. "<div style=\"font-size:10pt;margin-left:10px\"><b>" . _("Einrichtungen:"). "</b><br>". $this->getSemPath();
-		echo "</div></td></tr>";
-		echo "\n<tr><td class=\"steel1\"  align=\"left\" valign=\"center\">";
-		$this->showContent($this->start_item_id);
-		echo "\n</td></tr><tr><td class=\"steelgraulight\"  align=\"center\" valign=\"center\">";
+		echo "</div></td>";
+		echo "<td nowrap class=\"steelgraulight\" align=\"right\" valign=\"bottom\" style=\"font-size:10pt;\">";
+		if ($this->start_item_id != "root"){
+			echo "\n<a href=\"" .$this->getSelf("start_item_id={$this->tree->tree_data[$this->start_item_id]['parent_id']}", false) . "\">
+			<img src=\"pictures/move_left.gif\" border=\"0\" align=\"bottom\" hspace=\"3\">" . _("eine Ebene zur&uuml;ck") . "</a>";
+		} else {
+			echo "&nbsp;";
+		}
+		echo "</td></tr>";
+		echo "\n</tr><tr><td class=\"steel1\" colspan=\"2\" align=\"center\" valign=\"center\">";
 		$this->showKids($this->start_item_id);
+		echo "\n</td><tr><td class=\"steelgraulight\" colspan=\"2\" align=\"left\" valign=\"center\">";
+		$this->showContent($this->start_item_id);
 		echo "\n</td></tr></table>";
 	}
 	
 	function showKids($item_id){
 		$num_kids = $this->tree->getNumKids($item_id);
 		$kids = $this->tree->getKids($item_id);
-		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\"><tr>\n<td class=\"steelgraulight\" width=\"50%\" align=\"left\" valign=\"top\">";
+		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\"><tr>\n<td class=\"steel1\" width=\"50%\" align=\"left\" valign=\"top\">";
 		for ($i = 0; $i < $num_kids; ++$i){
 			$num_entries = $this->tree->getNumEntries($kids[$i],true);
 			echo "<b><a " . tooltip(sprintf(_("%s Einträge in allen Unterebenen vorhanden"), $num_entries)) . " href=\"" .$this->getSelf("start_item_id={$kids[$i]}", false) . "\">";
@@ -79,7 +91,7 @@ class StudipSemRangeTreeViewSimple {
 			echo "&nbsp;($num_entries)</span>";
 			echo "</a></b>";
 			if ($i == ceil($num_kids / 2)-1){
-				echo "</td>\n<td class=\"steelgraulight\" align=\"left\" valign=\"top\">";
+				echo "</td>\n<td class=\"steel1\" align=\"left\" valign=\"top\">";
 			} else {
 				echo "<br>";
 			}
@@ -89,50 +101,62 @@ class StudipSemRangeTreeViewSimple {
 			echo _("Auf dieser Ebene existieren keine weiteren Unterebenen.");
 			echo "</b></p>";
 		}
-		if ($item_id != "root"){
-			echo "\n<div align=\"right\" style=\"font-size:10pt;\"><a href=\"" .$this->getSelf("start_item_id={$this->tree->tree_data[$item_id]['parent_id']}", false) . "\">
-			<img src=\"pictures/move_left.gif\" border=\"0\" align=\"bottom\" hspace=\"3\">" . _("eine Ebene zur&uuml;ck") . "</a></div>";
-		}
 		echo "\n</td></tr></table>";
 	}
 	
-	function showContent($item_id){
-		echo "\n<div style=\"margin-left:10px\">";
+	function getTooltip($item_id){
 		if ($item_id == "root"){
-			echo "\n<p style=\"font-size:10pt\"><b><u>" . htmlReady($this->tree->root_name) ." </u></b></p>";
-			echo "\n<p style=\"font-size:10pt\">" . formatReady($this->root_content) ." </p>";
+			$ret = ($this->root_content) ? $this->root_content : _("Keine weitere Info vorhanden");
 		} else {
 			$range_object =& RangeTreeObject::GetInstance($item_id);
-			$name = ($range_object->item_data['type']) ? $range_object->item_data['type'] . ": " : "";
-			$name .= $range_object->item_data['name'];
-			echo "\n<p style=\"font-size:10pt\"><b><u>" . htmlReady($name) ." </u></b></p>";
 			if (is_array($range_object->item_data_mapping)){
-				echo "\n<p style=\"font-size:10pt\">";
 				foreach ($range_object->item_data_mapping as $key => $value){
 					if ($range_object->item_data[$key]){
-						echo "<b>" . htmlReady($value) . ":</b>&nbsp;";
-						echo fixLinks(htmlReady($range_object->item_data[$key])) . "&nbsp; ";
+						$info .= $value . ": ";
+						$info .= $range_object->item_data[$key].  " ";
 					}
 				}
 			}
-			echo "\n<p style=\"font-size:10pt;\">";
+			$ret = ($info) ? $info :  _("Keine weitere Info vorhanden");
+		}
+		return $ret;
+	}
+	
+	function showContent($item_id){
+		echo "\n<div align=\"center\" style=\"margin-left:10px;margin-top:10px;font-size:10pt\">";
+		if ($item_id != "root"){
+			if ($this->tree->hasKids($item_id) && ($num_entries = $this->tree->getNumEntries($this->start_item_id,true))){
+				if ($this->show_entries != "sublevels"){
+					echo "<a " . tooltip(_("alle Einträge in allen Unterebenen anzeigen")) ." href=\"" . $this->getSelf("cmd=show_sem_range_tree&item_id={$this->start_item_id}_withkids") ."\">";
+					echo "<img src=\"pictures/forumrot.gif\" border=\0\">&nbsp;";
+				} else {
+					echo "<img src=\"pictures/forumrotrunt.gif\" border=\0\">&nbsp;";
+				}
+				printf(_("<b>%s</b> Eintr&auml;ge in allen Unterebenen vorhanden"), $num_entries);
+				if ($this->show_entries != "sublevels"){
+					echo "</a>";
+				}
+				echo "&nbsp;&nbsp;|&nbsp;&nbsp;";
+			}
 			if ($num_entries = $this->tree->getNumEntries($item_id)){
-				echo "<a " . tooltip(_("alle Einträge auf dieser Ebene anzeigen")) ." href=\"" . $this->getSelf("cmd=show_sem_range_tree&item_id=$item_id") ."\">";
+				if ($this->show_entries != "level"){
+					echo "<a " . tooltip(_("alle Einträge auf dieser Ebene anzeigen")) ." href=\"" . $this->getSelf("cmd=show_sem_range_tree&item_id=$item_id") ."\">";
+					echo "<img src=\"pictures/forumrot.gif\" border=\0\">&nbsp;";
+				} else {
+					echo "<img src=\"pictures/forumrotrunt.gif\" border=\0\">&nbsp;";
+				}
 				printf(_("<b>%s</b> Eintr&auml;ge auf dieser Ebene.&nbsp;"),$num_entries);
-				echo "</a>";
+				if ($this->show_entries != "level"){
+					echo "</a>";
+				}
 			} else {
 				echo _("Keine Eintr&auml;ge auf dieser Ebene vorhanden!");
 			}
-			if ($this->tree->hasKids($item_id) && ($num_entries = $this->tree->getNumEntries($this->start_item_id,true))){
-				echo "<br><br>";
-				echo "<a " . tooltip(_("alle Einträge in allen Unterebenen anzeigen")) ." href=\"" . $this->getSelf("cmd=show_sem_range_tree&item_id={$this->start_item_id}_withkids") ."\">";
-				printf(_("<b>%s</b> Eintr&auml;ge in allen Unterebenen vorhanden"), $num_entries);
-				echo "</a>";
-		}
 			echo "</p>";
 		}
 		echo "\n</div>";
 	}
+	
 	function getSemPath(){
 		
 		if ($parents = $this->tree->getParents($this->start_item_id)){
@@ -147,9 +171,10 @@ class StudipSemRangeTreeViewSimple {
 			$ret .= "&nbsp;&gt;&nbsp;<a href=\"" . $this->getSelf("start_item_id={$this->start_item_id}",false) . "\">" . htmlReady($this->tree->tree_data[$this->start_item_id]["name"]) . "</a>";
 		
 		}
+		$ret .= "&nbsp;<a href=\"#\" " . tooltip(kill_format($this->getTooltip($this->start_item_id)),false,true) . "><img src=\"pictures/info.gif\" border=\"0\" align=\"absmiddle\"></a>";
 		return $ret;
 	}
-			
+
 	
 	
 	function getSelf($param = "", $with_start_item = true){

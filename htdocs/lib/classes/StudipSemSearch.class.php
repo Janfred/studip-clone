@@ -74,8 +74,8 @@ class StudipSemSearch {
 								'sem' => array('type' => 'select', 'default_value' => 'all'),
 								'category' => array('type' => 'select', 'default_value' => 'all', size => 50),
 								'combination' => array('type' => 'select', 'default_value' => 'AND'),
-								'scope_choose' => array('type' => 'select', 'default_value' => 'root', size => 50),
-								'range_choose' => array('type' => 'select', 'default_value' => 'root', size => 50),
+								'scope_choose' => array('type' => 'select', 'default_value' => 'root', size => 45),
+								'range_choose' => array('type' => 'select', 'default_value' => 'root', size => 45),
 								'qs_choose' => array('type' => 'select', 'default_value' => 'all', 'content' => array()));
 	
 	var $search_scopes = array();
@@ -262,7 +262,7 @@ class StudipSemSearch {
 		
 		if (isset($_REQUEST[$this->form_name . "_quick_search"]) && isset($_REQUEST[$this->form_name . "_qs_choose"])){
 			if (strlen($_REQUEST[$this->form_name . "_quick_search"]) < 2){
-				return;
+				return false;
 			}
 			if ($_REQUEST[$this->form_name . "_qs_choose"] == 'all'){
 				foreach ($this->search_fields['qs_choose']['content'] as $key => $value){
@@ -275,6 +275,7 @@ class StudipSemSearch {
 			if (is_array($this->override_sem)){
 				$clause = " HAVING sem_number IN(" . join(",",$this->override_sem) . ") ";
 			}
+		
 		}
 		
 		if (isset($_REQUEST[$this->form_name . "_sem"]) && $_REQUEST[$this->form_name . "_sem"] != 'all'){
@@ -306,6 +307,8 @@ class StudipSemSearch {
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_TREE_GET_SEMIDS"));
 			if ($snap->numRows){
 				$clause = " AND c.seminar_id IN('" . join("','",$snap->getRows("seminar_id")) ."')" . $clause;
+			} else {
+				return true;
 			}
 			unset($snap);
 		}
@@ -319,6 +322,8 @@ class StudipSemSearch {
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_INST_GET_SEM"));
 			if ($snap->numRows){
 				$clause = " AND c.seminar_id IN('" . join("','",$snap->getRows("Seminar_id")) ."')" . $clause;
+			} else {
+				return true;
 			}
 			unset($snap);
 		}

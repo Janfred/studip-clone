@@ -43,7 +43,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";   //hier wird der "Kopf" nachgeladen
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; 		//wir brauchen die Seminar-Typen
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 		//wir brauchen die Seminar-Typen
-
+require_once "$ABSOLUTE_PATH_STUDIP/SemBrowse.class.php";
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
@@ -56,18 +56,17 @@ echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 //Einstellungen fuer Reitersystem
 $sess->register("sem_portal");
 
-//got a fresh session?
-if ((sizeof ($_REQUEST) == 1) && (!$view)) {
-	$sem_portal='';
-	$reset_all=TRUE;
-}
 
 //Standard herstellen
-if (!$sem_portal["bereich"])
-	$sem_portal["bereich"] = "all";
+
 
 if ($view)
 	$sem_portal["bereich"] = $view;
+
+if (!$sem_portal["bereich"])
+	$sem_portal["bereich"] = "all";
+
+$view = $sem_portal['bereich'];
 
 if ($choose_toplist)
 	$sem_portal["toplist"] = $choose_toplist;
@@ -109,17 +108,12 @@ function getToplist($rubrik, $query, $type="count") {
 <body>
 <?	
 
-$view = $sem_portal["bereich"];
-if (!$view) 
-	$view="all";
+$sem_browse_data['show_class'] = $sem_portal["bereich"];
 	
 if ($sem_portal["bereich"] != "all") {
-	$sem_browse_data["s_sem"] ="all";
-	if (!$show_class)
-		$show_class = $view;
 
 	foreach ($SEM_CLASS as $key => $value){
-		if ($key == $show_class){
+		if ($key == $sem_portal["bereich"]){
 			foreach($SEM_TYPE as $type_key => $type_value){
 				if($type_value['class'] == $key)
 				$_sem_status[] = $type_key;
@@ -134,8 +128,13 @@ if ($sem_portal["bereich"] != "all") {
 }
 
 	
-if (!$perm->have_perm("root"))
-	include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
+include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
+
+$init_data = array("level" => "f","cmd"=>"qs","show_class"=>$sem_portal['bereich'],"group_by"=>0,"default_sem"=>"all","sem_status"=>$_sem_status);
+if ($reset_all) $sem_browse_data = null;
+$sem_browse_obj = new SemBrowse($init_data);
+$sem_browse_obj->target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
+$sem_browse_obj->target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -150,49 +149,53 @@ if (!$perm->have_perm("root"))
 </tr>
 <tr>	
 	<td class="blank" valign="top">
-	<table cellpadding="5" border="0"><tr><td>
+	<table cellpadding="5" border="0" width="100%"><tr><td>
 		<?
 		if ($sem_portal["bereich"] == "all")
-			print _("Sie k&ouml;nnen hier nach allen Veranstaltungen suchen, sich Informationen anzeigen lassen und Veranstaltungen abonnieren.<br /><br />");
+			print _("Sie k&ouml;nnen hier nach allen Veranstaltungen suchen, sich Informationen anzeigen lassen und Veranstaltungen abonnieren.<br>");
 		
 		elseif ($anzahl_seminare_class > 0)
-			print $SEM_CLASS[$sem_portal["bereich"]]["description"]."<br /><br />" ;
+			print $SEM_CLASS[$sem_portal["bereich"]]["description"]."<br>" ;
 
 		 elseif ($sem_portal["bereich"] != "all") 
 			print "<br>"._("In dieser Kategorie sind keine Veranstaltungen angelegt.<br>Bitte w&auml;hlen Sie einen andere Kategorie!");
 
-		print "<font size=\"-1\">"._("Um eine Veranstaltung zu abonnieren, klicken Sie auf den Namen der Veranstaltung.")."</font><br />";
-
-		if (($anzahl_seminare_class <= 20) && ($sem_portal["bereich"] != "all")) {
-			print "<a href=\"$PHP_SELF?cmd=show_class\"><font size=\"-1\">";
-			print _("Alle Veranstaltungen in dieser Kategorie anzeigen");
-			print "</font></a><br />";
+		echo "</td></tr><tr><td class=\"blank\" align=\"right\">";
+		if ($sem_browse_data['cmd'] == "xts"){
+			echo "<a href=\"$PHP_SELF?cmd=qs&level=f\"><img " . makeButton("schnellsuche", "src") . tooltip(_("Zur Schnellsuche zurückgehen")) ." border=0></a>";
+		} else {
+			echo "<a href=\"$PHP_SELF?cmd=xts&level=f\"><img " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
 		}
-		?>
-	<br />
-	</tr></td></table>
+		echo "&nbsp;</td></tr>\n";
+		
+?>
+	
+	</table>
 <?
 
-//include the search engine
+$sem_browse_obj->do_output();
 
-if ($view=="all") {
-	$show_class=FALSE;
-} else
-	 $show_class=$view;
+print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
 
-if ($SEM_CLASS[$view]["show_browse"] == FALSE AND $view!="all") {
-	$hide_bereich=TRUE;
-} else
-	 $hide_bereich=FALSE;
-
-$target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
-$target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
-
-include "sem_browse.inc.php"; 		//der zentrale Seminarbrowser wird hier eingef&uuml;gt.
-
-if (!count($_marked_sem)) {
-	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
-
+if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
+	$goup_by_links = "";
+	for ($i = 0; $i < count($sem_browse_obj->group_by_fields); ++$i){
+		if($sem_browse_data['group_by'] != $i){
+			$group_by_links .= "<a href=\"$PHP_SELF?group_by=$i&keep_result_set=1\"><img src=\"pictures/blank.gif\" width=\"10\" height=\"20\" border=\"0\">";
+		} else {
+			$group_by_links .= "<img src=\"pictures/forumrot.gif\" border=\"0\" align=\"bottom\">";
+		}
+		$group_by_links .= "&nbsp;" . $sem_browse_obj->group_by_fields[$i]['name'];
+		if($sem_browse_data['group_by'] != $i){
+			$group_by_links .= "</a>";
+		}
+		$group_by_links .= "<br>";
+	}
+	$infobox[] = 	array(	"kategorie" => _("Suchergebnis gruppieren:"),
+							"eintrag" => array(array(	"icon" => "pictures/blank.gif",
+														"text" => $group_by_links))
+					);
+} else {
 	//create TOP-lists
 	if (!$mehr) {
 		$count=5; // wieviel zeigen wir von den Listen?
@@ -201,7 +204,7 @@ if (!count($_marked_sem)) {
 	else 
 		$count = 5 * $mehr;
 	
-	if ($view !="all")
+	if ($sem_portal['bereich'] !="all")
 		$sql_where_query_seminare = "WHERE seminare.status IN ('" . join("','", $_sem_status) . "')";
 	
 	
@@ -231,35 +234,35 @@ if (!count($_marked_sem)) {
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=2\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("die meisten Materialien")."</a><br />";
 	if ($sem_portal["toplist"] != 3)
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=3\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("aktivste Veranstaltungen")."</a><br />";
-	
-	$infobox = array (
-		 ($view !="all") ? 
-		 	array  ("kategorie"  => _("Information:"),
-				"eintrag" => array	(	
-					array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => sprintf (_("Gew&auml;hlte Kategorie: <b>%s</b>")."<br />"._("%s Veranstaltungen vorhanden"), $SEM_CLASS[$sem_portal["bereich"]]["name"], $anzahl_seminare_class)
-					)
-				)
-			) : FALSE,
-	
+
+	$infobox[] = ($view !="all") ? 
+		 		array  ("kategorie"  => _("Information:"),
+						"eintrag" => array	(	
+									array (	"icon" => "pictures/ausruf_small.gif",
+											"text"  => sprintf (_("Gew&auml;hlte Kategorie: <b>%s</b>")."<br />"._("%s Veranstaltungen vorhanden"), $SEM_CLASS[$sem_portal["bereich"]]["name"], $anzahl_seminare_class)
+											)
+										)
+						) : FALSE;
+						$infobox[] =
 		array  ("kategorie" => _("Topliste:"),
 			"eintrag" => array	(	
 				array	 (	"icon" => "pictures/blank.gif",
 									"text"  =>	$toplist
 				)
 			)
-		),
+		);
+		$infobox[] = 
 		array  ("kategorie" => _("weitere Toplisten:"),
 			"eintrag" => array	(	
 				array	 (	"icon" => "pictures/blank.gif",
 									"text"  =>	$toplist_links
 				)
 			)
-		)
-	);
-	print_infobox ($infobox,"pictures/browse.jpg");
-} else
-	print "</td><td class=\"blank\" width=\"1\" align=\"right\" valign=\"top\">";
+		);
+}
+	
+print_infobox ($infobox,"pictures/browse.jpg");
+
 ?>
 
 	</td>
