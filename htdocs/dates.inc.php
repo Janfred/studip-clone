@@ -49,7 +49,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 	}
 	switch ($range_typ) {
 		case ("sem"):
-			$query = sprintf ("SELECT metadata_dates, ort FROM seminare WHERE Seminar_id = '%s'", $range_id);
+			$query = sprintf ("SELECT metadata_dates, Ort FROM seminare WHERE Seminar_id = '%s'", $range_id);
 			$db->query($query);
 			if ($db->next_record()) {
 				//get the metatdata array
@@ -87,8 +87,8 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 					}
 					if ($ret)
 						return $ret;
-					elseif ($db->f("ort"))
-						return htmlReady($db->f("ort"));
+					elseif ($db->f("Ort"))
+						return htmlReady($db->f("Ort"));
 					else
 						return _("nicht angegeben");
 				} else {
@@ -106,12 +106,12 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 					$typ_clause .= ")";	
 					
 					$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE date_typ IN $typ_clause AND range_id='%s' AND date >= $start_time ORDER BY date", $range_id);
-					$db->query($query);
+					$db2->query($query);
 					$i=0;
-					while ($db->next_record()) {
+					while ($db2->next_record()) {
 						$tmp_room='';
 						if ($RESOURCES_ENABLE) {
-							$assigned_room = getDateAssigenedRoom($db->f("termin_id"));
+							$assigned_room = getDateAssigenedRoom($db2->f("termin_id"));
 							if ($assigned_room) {
 								$resObj =& ResourceObject::Factory($assigned_room);
 								if ($link)
@@ -120,20 +120,20 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 									$tmp_room .= htmlReady($resObj->getName());
 							}
 						}
-						if (($tmp_room) || ($db->f("raum"))) {
+						if (($tmp_room) || ($db2->f("raum"))) {
 							if ($i)
 								$ret .= ", ";
 							$i++;
 						}
 						if ($tmp_room)
-							$ret .= date ("d.m", $db->f("date")).": ".$tmp_room;
-						elseif ($db->f("raum"))
-							$ret .= date ("d.m", $db->f("date")).": ".htmlReady($db->f("raum"));
+							$ret .= date ("d.m", $db2->f("date")).": ".$tmp_room;
+						elseif ($db2->f("raum"))
+							$ret .= date ("d.m", $db2->f("date")).": ".htmlReady($db2->f("raum"));
 					}
 					if ($ret)
 						return $ret;
-					elseif ($db->f("ort"))
-						return htmlReady($db->f("ort"));
+					elseif ($db->f("Ort"))
+						return htmlReady($db->f("Ort"));
 					else
 						return _("nicht angegeben");
 				}
