@@ -245,9 +245,8 @@ if ($perm->have_perm("admin")) {
 	$structure["mitarbeiter"]=array (topKat=>"einrichtungen", name=>_("Mitarbeiter"), link=>"inst_admin.php?list=TRUE", active=>FALSE);
 	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
 }
-if (($modules["literature"]) || (!$SessSemName[1]))
-	$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 
+$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
 
 if ($EXPORT_ENABLE)
