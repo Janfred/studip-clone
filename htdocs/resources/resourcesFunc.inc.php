@@ -364,13 +364,13 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 			$old_art=$val["art"];
 		}
 		?></select>
-			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "send_".$name ?>" <?=makeButton("uebernehmen", "src") ?> value="<?=_("&uuml;bernehmen")?>"  /></font>
-			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "reset_".$name ?>" <?=makeButton("neuesuche", "src") ?> border=0 value="<?=_("neue Suche")?>" /></font>
+			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "send_".$name ?>" src="./pictures/move_up.gif" <?=tooltip (_("diesen Eintrag übernehmen")) ?> border="0" value="<?=_("&uuml;bernehmen")?>"  /></font>
+			<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "reset_".$name ?>" src="./pictures/rewind.gif" <?=tooltip (_("Suche zurücksetzen")) ?> border="0" value="<?=_("neue Suche")?>" /></font>
 		<?
 	} else {
 		?>
 		<font size=-1><input type="TEXT" tyle="{vertikal-align: middle;}" name="<? echo "search_string_".$name ?>" size=30 maxlength=255 /></font>
-		<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "do_".$name ?>" <?=makeButton("suchestarten", "src") ?> border=0 value="<?=_("suchen")?>" /></font>
+		<font size=-1><input type="IMAGE" align="absmiddle" name="<? echo "do_".$name ?>" src="./pictures/suchen.gif" <?=tooltip (_("Starten Sie hier eine ihre Suche")) ?> border=0 value="<?=_("suchen")?>" /></font>
 		<?
 	}
 }
