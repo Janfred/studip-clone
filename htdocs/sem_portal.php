@@ -106,7 +106,6 @@ function getToplist($rubrik, $query, $type="count") {
 $view = $sem_portal["bereich"];
 if (!$view) 
 	$view="all";
-echo $sem_portal["bereich"] ;
 	
 if ($sem_portal["bereich"] != "all") {
 	$sem_browse_data["s_sem"] ="all";
