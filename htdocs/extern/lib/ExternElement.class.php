@@ -33,7 +33,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
 
 class ExternElement {
 
@@ -191,13 +191,14 @@ class ExternElement {
 	* 
 	*/
 	function executeCommand ($command, $value = "") {
+		global $HTTP_POST_VARS;
 		switch ($command) {
 			case "show" :
 				$visible = $this->config->getValue($this->name, "visible");
 				if ($value >= 0 || $value < sizeof($visible)) {
 					$visible[$value] = "1";
 					$this->config->setValue($this->name, "visible", $visible);
-					$GLOBALS["HTTP_POST_VARS"]["{$this->name}_visible"] = $visible;
+					$HTTP_POST_VARS["{$this->name}_visible"] = $visible;
 				}
 				break;
 				
@@ -207,7 +208,7 @@ class ExternElement {
 				if ($value >= 0 || $value < sizeof($visible)) {
 					$visible[$value] = "0";
 					$this->config->setValue($this->name, "visible", $visible);
-					$GLOBALS["HTTP_POST_VARS"]["{$this->name}_visible"] = $visible;
+					$HTTP_POST_VARS["{$this->name}_visible"] = $visible;
 				}
 				break;
 				
@@ -226,7 +227,7 @@ class ExternElement {
 						$order[$value] = $b;
 					}
 					$this->config->setValue($this->name, "order", $order);
-					$GLOBALS["HTTP_POST_VARS"]["{$this->name}_order"] = $order;
+					$HTTP_POST_VARS["{$this->name}_order"] = $order;
 				}
 				break;
 				
@@ -245,50 +246,42 @@ class ExternElement {
 						$order[$value] = $b;
 					}
 					$this->config->setValue($this->name, "order", $order);
-					$GLOBALS["HTTP_POST_VARS"]["{$this->name}_order"] = $order;
+					$HTTP_POST_VARS["{$this->name}_order"] = $order;
 				}
 				break;
 			
 			case "show_group" :
 				$visible = $this->config->getValue($this->name, "groupsvisible");
-				$groups = $this->config->getValue($this->name, "groups");
-				// initialize groupsvisible if it isn't set in the config file
-				// all groups are visible (1)
-				if (!$visible && !$groups) {
-					if($groups = get_all_statusgruppen($this->config->range_id))
-						$groups = array_keys($groups);
-					else
-						break;
-					global $HTTP_POST_VARS;
-					$visible = $HTTP_POST_VARS["{$this->name}_groups"];
+				if ($groups = get_all_statusgruppen($this->config->range_id)) {
+					$groups = array_keys($groups);
+					$visible = array_intersect($groups, $visible);
 				}
-				if (!$groups) {
-					if($groups = get_all_statusgruppen($this->config->range_id))
-						$groups = array_keys($groups);
-					else
-						break;
-				}
+				else
+					break;
 				
 				if (in_array($value, $groups)) {
 					$visible[] = $value;
 					$visible = array_unique($visible);
 					$this->config->setValue($this->name, "groupsvisible", $visible);
-					$GLOBALS["HTTP_POST_VARS"]["{$this->name}_groupsvisible"] = $visible;
+					$HTTP_POST_VARS["{$this->name}_groupsvisible"] = $visible;
 				}
-				
 				break;
 			
 			case "hide_group" :
 				$visible = $this->config->getValue($this->name, "groupsvisible");
+				if ($groups = get_all_statusgruppen($this->config->range_id)) {
+					$groups = array_keys($groups);
+					$visible = array_intersect($groups, $visible);
+				}
+				else
+					break;
 				// initialize groupsvisible if it isn't set in the config file
 				// all groups are visible (1)
-				if (!$visible) {
-					global $HTTP_POST_VARS;
-					$visible = $HTTP_POST_VARS["{$this->name}_groups"];
-				}
+				if (!$visible) 
+					$visible = array_keys(get_all_statusgruppen($this->config->range_id));
 				$visible = array_diff($visible, array($value));
 				$this->config->setValue($this->name, "groupsvisible", $visible);
-				$GLOBALS["HTTP_POST_VARS"]["{$this->name}_groupsvisible"] = $visible;
+				$HTTP_POST_VARS["{$this->name}_groupsvisible"] = $visible;
 				break;
 			
 			default :

@@ -270,8 +270,6 @@ class ExternEditModule extends ExternEditHtml {
 			$this->css->switchClass();
 			$i++;
 		}
-		foreach ($groups_db as $id => $name)
-			$out .= "<input type=\"hidden\" name=\"{$this->element_name}_groups[]\" value=\"$id\">\n";
 			
 		$out .= "</table>\n</td></tr>\n";
 		

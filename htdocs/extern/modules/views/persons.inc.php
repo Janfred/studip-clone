@@ -40,13 +40,23 @@ global $_fullname_sql;
 
 $range_id = $this->config->range_id;
 
-$all_groups = $this->config->getValue("Main", "groups");
-
-if (!$group_ids = $this->config->getValue("Main", "groupsvisible")) {
+//$all_groups = $this->config->getValue("Main", "groups");
+if (!$all_groups = get_all_statusgruppen($range_id))
 	die($GLOBALS["EXTERN_ERROR_MESSAGE"]);
-}
-	
-$visible_groups = get_statusgruppen_by_id($range_id, $group_ids);
+else
+	$all_groups = array_keys($all_groups);
+
+if (!$group_ids = $this->config->getValue("Main", "groupsvisible"))
+	die($GLOBALS["EXTERN_ERROR_MESSAGE"]);
+else
+	$group_ids = array_intersect($all_groups, $group_ids);
+
+if (!is_array($group_ids))
+	die($GLOBALS["EXTERN_ERROR_MESSAGE"]);
+
+if (!$visible_groups = get_statusgruppen_by_id($range_id, $group_ids))
+	die($GLOBALS["EXTERN_ERROR_MESSAGE"]);
+
 $aliases_groups = $this->config->getValue("Main", "groupsalias");
 $order = $this->config->getValue("Main", "order");
 $sort = $this->config->getValue("Main", "sort");
@@ -61,7 +71,7 @@ if ($query_order) {
 	$query_order = " ORDER BY " . implode(",", $query_order);
 }
 
-$db = new DB_Institut();
+$db = new DB_Seminar();
 $grouping = $this->config->getValue("Main", "grouping");
 if(!$grouping){
 	$groups_ids = implode("','", $this->config->getValue("Main", "groupsvisible"));
@@ -217,7 +227,7 @@ foreach ($visible_groups as $group_id => $group) {
 					}
 			
 					echo "<td$set_td>";
-					if ($db->f($this->data_fields[$column]))
+					if ($db->f($this->data_fields[$column]) || $this->data_fields[$column] == "Nachname")
    					echo $data[$this->data_fields[$column]];
 					else
 						echo "&nbsp";

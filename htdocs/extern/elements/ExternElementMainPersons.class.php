@@ -40,7 +40,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainPersons extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
-			"width_pp", "sort", "groups", "groupsalias", "groupsvisible", "grouping", "wholesite",
+			"width_pp", "sort", "groupsalias", "groupsvisible", "grouping", "wholesite",
 			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass");
 	var $edit_function = "editMainSettings";
 	
@@ -70,7 +70,6 @@ class ExternElementMainPersons extends ExternElementMain {
 			"width" => "|30%|15%|15%|20%|20%",
 			"widthpp" => "",
 			"sort" => "|1|0|0|0|0",
-			"groups" => $groups,
 			"groupsalias" => "",
 			"groupsvisible" => $groups,
 			"grouping" => "1",
