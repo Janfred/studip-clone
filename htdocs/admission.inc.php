@@ -128,6 +128,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 	$db3=new DB_Seminar;
 	$db4=new DB_Seminar;
 	$db5=new DB_Seminar;
+	$db6=new DB_Seminar;
 	$messaging=new messaging;
 	
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
