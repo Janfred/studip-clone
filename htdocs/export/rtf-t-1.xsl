@@ -38,9 +38,13 @@
 						</xsl:choose>
 					</xsl:if>
 					<xsl:text>\par</xsl:text>
-					<xsl:for-each select="studiengaenge/studiengang">
-						<xsl:text>\par\b\fs24</xsl:text><xsl:value-of select="name"/><xsl:text>: \b0 </xsl:text><xsl:value-of select="anzahl"/>
-					</xsl:for-each>
+					<xsl:if test="studiengaenge/studiengang">
+						<xsl:text>\fs28\b Studiengänge:\b0</xsl:text>
+						<xsl:for-each select="studiengaenge/studiengang">
+							<xsl:text>\par\fs24</xsl:text><xsl:value-of select="name"/><xsl:text>: </xsl:text><xsl:value-of select="anzahl"/>
+						</xsl:for-each>
+						<xsl:text>\par</xsl:text>
+					</xsl:if>				
 				</xsl:for-each>
 \par\qr\fs16 Generiert von Stud.IP Version <xsl:value-of select="@version"/>
 			</xsl:for-each>
