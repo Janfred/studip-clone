@@ -105,11 +105,11 @@ if ($quick_view_mode)
 else
 	$quick_view_mode = $resources_data["view_mode"];
 
-//reset edit the assign
-if ((sizeof ($_REQUEST) == 2) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
+//reset edit the assign (was soll dieser kranke Blödsinn ??? in $_REQUEST steht GET/POST/COOKIE/SESSION ! Wie soll man sich da auf die Anzahl verlassen können ? )
+if ((sizeof ($_REQUEST) == 3) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
 	$new_assign_object=FALSE;
 }
-if ((sizeof ($_REQUEST) == 3) && ($edit_assign_object) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
+if ((sizeof ($_REQUEST) == 4) && ($edit_assign_object) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
 	$new_assign_object=FALSE;
 }
 if ($cancel_edit_assign) {
@@ -321,8 +321,10 @@ if ($change_object_schedules) {
 	if (($ObjectPerms->getUserPerm() != "admin") && ($change_object_schedules != "NEW") && (!$new_assign_object)) {
 		//load the assign-object perms of a saved object
 		$SavedStateAssignObject = new AssignObject($change_object_schedules);
-		if ($SavedStateAssignObject->getAssignUserId())
+		if ($SavedStateAssignObject->getAssignUserId()){
+			unset($ObjectPerms);
 			$ObjectPerms = new AssignObjectPerms($change_object_schedules);
+		}
 	}
 	
 	if (($ObjectPerms->havePerm("admin")) && ($change_meta_to_single_assigns_x)) {
@@ -1028,7 +1030,7 @@ if (($start_multiple_mode_x) || ($single_request)) {
 	
 	//filter the requests
 	foreach($requests as $key => $val) {
-		if (!$val["closed"]) {
+		if (!$val["closed"] && !($resolve_requests_no_time && !$val['have_times'])) {
 			if ($resolve_requests_mode == "sem") {
 				if ($val["my_sem"])
 					$selected_requests[$key] = TRUE;
@@ -1049,11 +1051,11 @@ if (($start_multiple_mode_x) || ($single_request)) {
 	} else {
 		//order requests
 		$in =  "('".join("','",array_keys($selected_requests))."')";
-		if ($resolve_requests_order = "complex")
+		if ($resolve_requests_order == "complex")
 			$order = "seats DESC, complexity DESC";
-		if ($resolve_requests_order = "newest")
+		if ($resolve_requests_order == "newest")
 			$order = "a.mkdate DESC";
-		if ($resolve_requests_order = "oldest")
+		if ($resolve_requests_order == "oldest")
 			$order = "a.mkdate ASC";
 	
 		$query = sprintf ("SELECT a.request_id, a.resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
@@ -1072,10 +1074,14 @@ if (($start_multiple_mode_x) || ($single_request)) {
 			$resources_data["requests_open"][$db->f("request_id")] = TRUE;
 		} 
 	}
-	
-	$resources_data["view"] = "edit_request";
-	$view = $resources_data["view"];
-	$new_session_started = TRUE;
+	if (is_array($resources_data['requests_open']) && count($resources_data['requests_open'])){
+		$resources_data["view"] = "edit_request";
+		$view = $resources_data["view"];
+		$new_session_started = TRUE;
+	} else {
+		$resources_data["view"] = $view = "requests_start";
+		$msg->addMsg(41);
+	}
 }
 
 if (is_array($selected_resource_id)) {
