@@ -215,9 +215,9 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 }
 
 function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALSE, $show_admin=FALSE, $open){
-	global $PHP_SELF, $SessSemName, $user, $TERMIN_TYP, $PERS_TERMIN_KAT, $username;
+	global $PHP_SELF, $RELATIVE_PATH_CALENDAR, $SessSemName, $user, $TERMIN_TYP, $PERS_TERMIN_KAT, $username;
 	
-	require_once("kalenderClass.inc.php");
+	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 	
 	setlocale ("LC_TIME","de_DE");
 	
@@ -227,7 +227,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		
 	if($show_admin && $range_id == $user->id){
 		$show_private = TRUE;
-		$admin_link = "<a href=\"./kalender.php?cmd=edit\">";
+		$admin_link = "<a href=\"./calendar.php?cmd=edit\">";
 	}
 
 	$list = new AppList($range_id, $show_private, $date_start, $date_end, TRUE);
@@ -272,8 +272,8 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 					$titel .= " - ".date("H:i", $termin->getEnd());
 			}
 			
-			if($termin->getTitel()){
-				$tmp_titel = htmlReady(mila($termin->getTitel())); //Beschneiden des Titels			
+			if($termin->getTitle()){
+				$tmp_titel = htmlReady(mila($termin->getTitle())); //Beschneiden des Titels			
 				$titel .= ", ".$tmp_titel;
 			}
 			
@@ -303,10 +303,10 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 					$content .= "Keine Beschreibung vorhanden<br /><br />";
 				
 				if(sizeof($PERS_TERMIN_KAT) > 1)
-					$content .= "<b>Art des Termins:</b> ".$PERS_TERMIN_KAT[$termin->getKategorie()]["name"]."<br /><br />";
+					$content .= "<b>Art des Termins:</b> ".$PERS_TERMIN_KAT[$termin->getCategory()]["name"]."<br /><br />";
 				
 				if($show_admin)
-					$content .= '<div align="center"><a href="./kalender.php?cmd=edit&termin_id='.$termin->getId()
+					$content .= '<div align="center"><a href="./calendar.php?cmd=edit&termin_id='.$termin->getId()
 										. '"><img src="./pictures/buttons/terminaendern-button.gif" border="0" alt="Termin &auml;ndern">'
 										. '</a></div>';
 
