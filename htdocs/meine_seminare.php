@@ -202,13 +202,9 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<tr>
 		<td class="topic" colspan="2"><img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</></td>
 	</tr>
-	<tr>
-		<td class="blank" width="100%" colspan="2">&nbsp;
-			<?
-			if ($meldung) parse_msg($meldung);
-			?>
-		</td>
-	</tr>
+	<?
+	if ($meldung) parse_msg($meldung);
+	?>
      <?
      if ($num_my_sem){
      ?>
