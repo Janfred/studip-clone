@@ -23,7 +23,7 @@ $auth->login_if($auth->auth["uid"] == "nobody");
  $perm->check("autor");
 
 require_once "messaging.inc.php";
-
+ 
 
 // Klassendefinition
 class studip_news extends messaging
