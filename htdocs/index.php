@@ -200,7 +200,13 @@ if (!$perm->have_perm("autor")) {  // Warning for Users
 		</tr><tr><td class="shadowhor" width="280"><img src="pictures/blank.gif" width="10" height="3" border="0"></td>
 		<td class="shadowcor" width="3"><img src="pictures/blank.gif" width="3" border="0"></td>
 		</tr></table><br>
-	</td>
+<?		if(isset($UNI_LOGIN_ADD) && ($UNI_LOGIN_ADD != '')) {
+			echo '</td></tr>';
+			echo '<tr><td align=justify colspan="3" bgcolor="#FFFFFF"><blockquote><font size="-1">&nbsp;<br>';
+			echo $UNI_LOGIN_ADD;
+			echo '</font></blockquote>';
+		}
+?>	</td>
 </tr>
 <?
 unset($temp_language_key); unset($temp_language);
