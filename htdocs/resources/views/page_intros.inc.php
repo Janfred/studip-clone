@@ -91,8 +91,16 @@ switch ($resources_data["view"]) {
 	//Reiter "Objekt"
 	case "objects":
 	case "edit_object_assign":
-		$page_intro=_("Hier k&ouml;nnen Sie Ressourcen-Belegungen bearbeiten und neue anlegen.");
-		$title=_("Belegungen bearbeiten").$currentObjectTitelAdd;
+		$page_intro=_("Sie sehen hier die Einzelheiten der Belegung. Falls Sie &uuml;ber entsprechende Rechte verf&uuml;gen, k&ouml;nnen Sie sie bearbeiten oder eine neue Belegung erstellen.");
+		$title=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
+		if ($resources_data["view_mode"] == "no_nav") {
+			$infobox = array(
+						array  ("kategorie" => "Aktionen:", 
+								"eintrag" => array (
+									array	("icon" => "pictures/forumrot.gif",
+										"text"  => "<a href=\"$PHP_SELF?view=view_schedule&view_mode=no_nav\">"._("zur&uuml;ck zum Belegungsplan")."</a>"))));
+			$infopic = "pictures/schedule.jpg";
+		}
 	break;
 	case "edit_object_properties":
 		$page_intro=_("Hier k&ouml;nnen Sie Ressourcen-Eigenschaften bearbeiten.");
@@ -165,8 +173,8 @@ switch ($resources_data["view"]) {
 	break;
 	case "openobject_assign":
 		if ($resources_data["actual_object"])
-			$page_intro=sprintf(_("Bearbeiten von Belegungen der Ressource %s"), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").");
-		$title=$SessSemName["header_line"]." - ".("Bearbeiten der Belegung");
+			$page_intro=sprintf(_("Anzeigen der der Belegung der Ressource %s. Sie k&ouml;nnen die Belegung auch bearbeiten, falls Sie entsprechende Rechte besitzen, oder eine neue Belegung erstellen."), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").");
+		$title=$SessSemName["header_line"]." - ".("Belegung anzeigen/bearbeiten");
 	break;
 	case "edit_object_perms":
 		if ($resources_data["actual_object"])
