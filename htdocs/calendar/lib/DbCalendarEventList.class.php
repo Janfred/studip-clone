@@ -92,27 +92,25 @@ class AppList{
 	}
 	
 	// public
-	function bindSeminarEvents(){
-		if(func_num_args() == 0)
+	function bindSeminarEvents($sem_ids = ""){
+		if ($sem_ids == "")
 			$query = "SELECT termine.*, seminar_user.*, seminare.Name FROM seminar_user "
 						 . "LEFT JOIN seminare USING(Seminar_id) LEFT JOIN termine ON "
 						 . "seminare.Seminar_id=range_id WHERE user_id = '" . $this->user_id
 						 . "' AND ((date BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . ") OR (end_time BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . "))";
-		else if(func_num_args() == 1 && $seminar_ids = func_get_arg(0)){
-			if(is_array($seminar_ids))
-				$seminar_ids = implode("','", $seminar_ids);
-			$query = "SELECT termine.*, seminar_user.*, seminare.Name FROM seminar_user "
-						 . "LEFT JOIN seminare USING(Seminar_id) LEFT JOIN termine ON "
-						 . "seminare.Seminar_id=range_id WHERE user_id = '" . $this->user_id
-						 . "' AND Seminar_id IN ('$seminar_ids') AND "
+		else {
+			if (is_array($sem_ids))
+				$sem_ids = implode("','", $sem_ids);
+			$query = "SELECT t.*, su.*, s.Name FROM seminar_user su "
+						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
+						 . "s.Seminar_id=range_id WHERE user_id = '" . $this->user_id
+						 . "' AND range_id IN ('$sem_ids') AND "
 						 . "((date BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . ") OR (end_time BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . "))";
 		}
-		else
-			return FALSE;
 			
 		$db = new DB_Seminar;	
 		$db->query($query);
