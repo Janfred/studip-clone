@@ -23,6 +23,108 @@ require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 
 
+/*
+Die Funktion veranstaltung_beginn errechnet den ersten Seminartermin aus dem Turnus Daten.
+Zurueckgegeben wird ein String oder Timestamp. je nach return_mode (TRUE = Timestamp)
+Evtl. Ergaenzungen werden im Stringmodus mit ausgegeben.
+Die Funktion kann mit einer Seminar_id aufgerufen werden, dann werden saemtliche gespeicherten Daten 
+beruecksichtigt. Im 'ad hoc' Modus koennen der Funktion auch die eizelnen Variabeln des Metadaten-Arrays
+uebergeben werden. Dann werden konkrete Termine nur mit berruecksichtigt, sofern sie schon angelegt wurden.
+*/
+
+function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='', $start_woche='', $start_termin='', $turnus_data='', $return_mode='')
+	{
+	global $SEMESTER;
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;	
+	
+	if ((func_num_args()==1) || (func_num_args()==2)){
+		$seminar_id=func_get_arg(0);
+		if (func_num_args()==2)
+			$return_mode=func_get_arg(1);
+		$db->query("SELECT metadata_dates, start_time, duration_time FROM seminare WHERE seminar_id='$seminar_id'");
+		$db->next_record();
+		$term_data=unserialize($db->f("metadata_dates"));
+		$term_data["start_time"]=$db->f("start_time");
+	} else {
+		$term_data["art"]=func_get_arg(0);
+		$term_data["start_time"]=func_get_arg(1);
+		$term_data["start_woche"]=func_get_arg(2);
+		$term_data["start_termin"]=func_get_arg(3);
+		$term_data["turnus_data"]=func_get_arg(4);
+		if (func_num_args()==6)
+			$return_mode=func_get_arg(1);
+	}
+
+	//Regelmaessige Termine. also Turnus aus Metadaten
+	if ($term_data["art"]==0)
+		{
+		if (($term_data["start_woche"] ==0) || ($term_data["start_woche"] ==1)) // Startzeitpunkt 1. oder 2. Semesterwoche
+			if (sizeof($term_data["turnus_data"])) {
+				foreach ($SEMESTER as $sem)
+					if (($term_data["start_time"] >= $sem["beginn"]) AND ($term_data["start_time"] <= $sem["ende"]))
+						$vorles_beginn=$sem["vorles_beginn"];
+				$start_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);
+				$end_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["end_stunde"]*60*60)+($term_data["turnus_data"][0]["end_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);;
+				$return_string=date ("d.m.Y, G:i", $start_termin);
+				$return_int=$start_termin;
+				if ($start_termin != $end_termin) 
+					$return_string.=" - ".date ("G:i", $end_termin);
+				}
+			else {
+				if ($term_data["start_woche"]==0) {
+					$return_string="1. Semesterwoche";
+					$return_int=$vorles_beginn;
+				} else {
+					$return_string="2. Semesterwoche";
+					$return_int=$vorles_beginn+604800;
+				}
+			}
+		else //anderer Startzeitpunkt gewaehlt
+			{
+			if ($term_data["start_termin"]<1) {
+				$return_string.="nicht bekannt";
+				$return_int=-1;
+			}	
+			else {
+				$return_string.=date ("d.m.Y", $term_data["start_termin"]);
+				$return_int=$term_data["start_termin"];
+			}
+			if ($term_data["turnus_data"][0]["start_stunde"]) {
+				$return_string.=", ". $term_data["turnus_data"][0]["start_stunde"]. ":"; 
+				if (($term_data["turnus_data"][0]["start_minute"] > 0)  &&  ($term_data["turnus_data"][0]["start_minute"] < 10))
+					$return_string.="0". $term_data["turnus_data"][0]["start_minute"];
+				elseif ($term_data["turnus_data"][0]["start_minute"] > 10)
+					$return_string.=$term_data["turnus_data"][0]["start_minute"];
+				if (!$term_data["turnus_data"][0]["start_minute"])
+					$return_string.="00";
+				if (($term_data["turnus_data"][0]["end_stunde"] != $term_data["turnus_data"][0]["start_stunde"]) && ($term_data["turnus_data"][0]["end_minute"] !=$term_data["turnus_data"][0]["start_minute"])) {
+					$return_string.= " - ". $term_data["turnus_data"][0]["end_stunde"]. ":";
+					if (($term_data["turnus_data"][0]["end_minute"] > 0)  &&  ($term_data["turnus_data"][0]["end_minute"] < 10))
+						$return_string.="0".$term_data["turnus_data"][0]["end_minute"];
+					elseif ($term_data["turnus_data"][0]["end_minute"] > 10)
+						$return_string.=$term_data["turnus_data"][0]["end_minute"];
+					if (!$term_data["turnus_data"][0]["end_minute"])
+						$return_string.="00";
+					}
+				}
+			}
+		}
+	//Unregelmaessige Termine, also konkrete Termine aus Termintabelle
+	else
+		{
+		$db2->query("SELECT date, end_time FROM termine WHERE date_typ='1' AND range_id='$seminar_id' ORDER BY date");
+		$db2->next_record();
+		if ($db->affected_rows())
+			$return_string=date ("d.m.Y, G:i", $db2->f("date"))." - ".date ("G:i",  $db2->f("end_time"));
+			$return_int=$db2->f("date");
+		}
+
+	if ($return_mode)
+		return $return_int;	
+	else
+		return $return_string;	
+	}
 
 /*
 Die Funktion view_turnus zeigt in einer kompakten Ansicht den Turnus eines Seminars an.
@@ -190,74 +292,6 @@ function view_turnus ($seminar_id, $short = FALSE)
 				$return_string.=" (zweiwöchentlich)";
 		}
 	return $return_string;
-	}
-
-
-/*
-Die Funktion veranstaltung_beginn errechnet den ersten Seminartermin aus dem Turnus Daten.
-Zurueckgegeben wird ein Timestamp.
-*/
-
-function veranstaltung_beginn ($seminar_id)
-	{
-	global $SEMESTER;
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;	
-	
-	$db->query("SELECT metadata_dates, start_time, duration_time FROM seminare WHERE seminar_id='$seminar_id'");
-	$db->next_record();
-	$term_data=unserialize($db->f("metadata_dates"));
-
-	if ($term_data["art"]==0)
-		{
-		if (($term_data["start_woche"] ==0) || ($term_data["start_woche"] ==1))
-			if (sizeof($term_data["turnus_data"])) {
-				foreach ($SEMESTER as $sem)
-					if (($db->f("start_time") >= $sem["beginn"]) AND ($db->f("start_time") <= $sem["ende"]))
-						$vorles_beginn=$sem["vorles_beginn"];
-				$start_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);
-				$end_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["end_stunde"]*60*60)+($term_data["turnus_data"][0]["end_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);;
-				$return_string=date ("d.m.Y, G:i", $start_termin);
-				if ($start_termin != $end_termin) 
-					$return_string.=" - ".date ("G:i", $end_termin);
-				}
-			else {
-				if ($term_data["start_woche"]==0)
-					$return_string="1. Semesterwoche";
-				else
-					$return_string="2. Semesterwoche";
-				}
-		else
-			{
-			$return_string.=date ("d.m.Y", $term_data["start_termin"]);
-			if ($term_data["turnus_data"][0]["start_stunde"]) {
-				$return_string.=", ". $term_data["turnus_data"][0]["start_stunde"]. ":"; 
-				if (($term_data["turnus_data"][0]["start_minute"] > 0)  &&  ($term_data["turnus_data"][0]["start_minute"] < 10))
-					$return_string.="0". $term_data["turnus_data"][0]["start_minute"];
-				elseif ($term_data["turnus_data"][0]["start_minute"] > 10)
-					$return_string.=$term_data["turnus_data"][0]["start_minute"];
-				if (!$term_data["turnus_data"][0]["start_minute"])
-					$return_string.="00";
-				if (($term_data["turnus_data"][0]["end_stunde"] != $term_data["turnus_data"][0]["start_stunde"]) && ($term_data["turnus_data"][0]["end_minute"] !=$term_data["turnus_data"][0]["start_minute"])) {
-					$return_string.= " - ". $term_data["turnus_data"][0]["end_stunde"]. ":";
-					if (($term_data["turnus_data"][0]["end_minute"] > 0)  &&  ($term_data["turnus_data"][0]["end_minute"] < 10))
-						$return_string.="0".$term_data["turnus_data"][0]["end_minute"];
-					elseif ($term_data["turnus_data"][0]["end_minute"] > 10)
-						$return_string.=$term_data["turnus_data"][0]["end_minute"];
-					if (!$term_data["turnus_data"][0]["end_minute"])
-						$return_string.="00";
-					}
-				}
-			}
-		}
-	else
-		{
-		$db2->query("SELECT date, end_time FROM termine WHERE date_typ='1' AND range_id='$seminar_id' ORDER BY date");
-		$db2->next_record();
-		if ($db->affected_rows())
-			$return_string=date ("d.m.Y, G:i", $db2->f("date"))." - ".date ("G:i",  $db2->f("end_time"));
-		}
-	return $return_string;	
 	}
 
 /*
@@ -510,16 +544,26 @@ function next_date ($seminar_id)
 Die Funktion get_sem_name gibt den Namen eines Semester, in dem ein uebergebener Timestamp liegt, zurueck
 */
 
-function get_sem_name ($time)
-	{
-	global $SEMESTER;
-	for ($i; $i <= sizeof($SEMESTER); $i++)
-		{
-		if (($time >= $SEMESTER[$i]["beginn"]) AND ($time <= $SEMESTER[$i]["ende"]))
-			return $SEMESTER[$i]["name"];
-		}
-	}
 
+function get_sem_name ($time) {
+	global $SEMESTER;
+	foreach ($SEMESTER as $key=>$val)
+		if (($time >= $val["beginn"]) AND ($time <= $val["ende"]))
+			return $val["name"];
+
+}
+
+/*
+Die Funktion get_sem_num gibt die Nummer eines Semester, in dem ein uebergebener Timestamp liegt, zurueck
+*/
+
+function get_sem_num ($time) {
+	global $SEMESTER;
+	foreach ($SEMESTER as $key=>$val)
+		if (($time >= $val["beginn"]) AND ($time <= $val["ende"]))
+			return $key;
+
+}
 
 /*
 Die Funktion get_semester gibt den oder die Semester einer speziellen Veranstaltung aus.
