@@ -229,7 +229,7 @@ elseif (($voteaction == "search") && (($rangemode == "root") || ($rangemode == "
  * @param voteaction	string comprised the action
  */
 function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search = NULL, $referer = NULL){
-
+	global $perm;
 	$voteDB = &new voteDB;
 	$votechanged = NULL;
 	$safeguard = "";
@@ -247,6 +247,14 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 	$votename = htmlReady($vote->getTitle($voteID));
 	//$vote->finalize ();
 
+	if($rangeID = $vote->getRangeID())
+	
+	if (!($perm->have_studip_perm("tutor",$vote->getRangeID())) &&
+		(get_username($userID) != $vote->getRangeID())){
+		$safeguard .= printSafeguard("ausruf", sprintf(_("Das Voting \"%s\" ist einem Bereich zugeordnet für den Sie keine Veränderungsrechte besitzen. Die Aktion wurde nicht ausgeführt."),$votename));
+		$voteaction = "nothing";
+	}
+	
 	switch ($voteaction){
 		case "change_visibility":
 			if ($vote->getResultvisibility() != VOTE_RESULTS_NEVER){
@@ -384,6 +392,8 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 			$type
 			? $safeguard .= printSafeguard("ok", sprintf(_("Das Voting \"%s\" wurde mit den Ver&auml;nderungen gespeichert."),$votename))
 			: $safeguard .= printSafeguard("ok", sprintf(_("Der Test \"%s\" wurde mit den Ver&auml;nderungen gespeichert."),$votename));
+			break;
+		case "nothing":
 			break;
 		default:
 			$safeguard .= printSafeguard("ausruf",_("Fehler! Es wurde versucht, eine nicht vorhandene Aktion auszuführen."));
