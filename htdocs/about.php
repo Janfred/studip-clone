@@ -233,25 +233,29 @@ if ($msg)
 // Hier wird der Lebenslauf ausgegeben:
 
 	if ($db->f("lebenslauf")!="") {
-    printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Lebenslauf </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("lebenslauf")));
+    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Lebenslauf </b></td></tr>");
+		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("lebenslauf")));
 	}
 
 // Ausgabe Hobbys
 
 	if ($db->f("hobby")!="") {
-		printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Hobbies </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("hobby")));
+    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Hobbies </b></td></tr>");
+		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("hobby")));
 	}
 
 //Ausgabe von Publikationen
 
 	if ($db->f("publi")!="") {
-		printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Publikationen </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("publi")));
+    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Publikationen </b></td></tr>");
+		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("publi")));
 	}
 
 // Ausgabe von Arbeitsschwerpunkten
 
 	if ($db->f("schwerp")!="") {
-		printf ("<table class='blank' width='100%%' border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Arbeitsschwerpunkte </b></td></tr><tr><td class='steel1'><br><blockquote>%s</blockquote></td></tr></table><br>\n",formatReady($db->f("schwerp")));
+    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Arbeitsschwerpunkte </b></td></tr>");
+		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("schwerp")));
 	}
 
 // Ausgabe der eigenen Kategorien
@@ -260,24 +264,27 @@ if ($msg)
 	while ($db2->next_record())  {
 		$head=$db2->f("name");
 		$body=$db2->f("content");
-		if ($db2->f("hidden")!='1')  // oeffentliche Rubrik
-			echo "<table class='blank' width=100% border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;".htmlReady($head)." </b></td></tr><tr><td class='steel1'><br><blockquote>", formatReady($body),"</blockquote></td></tr></table><br>\n";
-		elseif ($db->f("user_id")==$user->id)   // nur ich darf sehen
-			echo "<table class='blank' width=100% border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;".htmlReady($head)." </b></td></tr><tr><td class='steel1'><br><blockquote>", formatReady($body),"</blockquote></td></tr></table><br>\n";
+		if ($db2->f("hidden")!='1') { // oeffentliche Rubrik
+    	printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;%s </b></td></tr>", htmlReady($head));
+			printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($body));
+		} elseif ($db->f("user_id")==$user->id) {  // nur ich darf sehen
+    	printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;%s </b></td></tr>", htmlReady($head));
+			printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($body));
+		}
 	}
 // Anzeige der Seminare
 
 	$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' ORDER BY start_time");
 	if ($db2->num_rows()) {
-		echo "<table class='blank' width=100% border='0' cellpadding='0' cellspacing='0'><tr><td class=\"topic\"><b>&nbsp;Veranstaltungen</b></td></tr><tr><td class='steel1'><blockquote>";
+		echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Veranstaltungen</b></td></tr><tr><td class=\"steel1\"><blockquote>";
 		while ($db2->next_record()) {
 			if (($sem_name) <> (get_sem_name ($db2->f("start_time")))) {
 				$sem_name=get_sem_name ($db2->f("start_time"));
 				echo"<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
 			}
-			echo"<b><a href=\"details.php?sem_id=", $db2->f("Seminar_id"), "\">", htmlReady($db2->f("Name")), "</b></a><br>";
+			echo"<b><a href=\"details.php?sem_id=", $db2->f("Seminar_id"), "\">", htmlReady($db2->f("Name")), "</a></b><br>";
 		}
-		echo "</blockquote></td></tr></table><br>\n";
+		echo "</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n";
 	}
 
   // Save data back to database.
