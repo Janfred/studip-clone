@@ -84,7 +84,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			 {
 			 $db->query("UPDATE literatur SET user_id='$user->id', literatur='$literatur', links='$links' WHERE literatur_id='$lit_id'");
 			 if ($db->affected_rows()) {
-			 	$result="msg§Listen ge&auml;ndert";
+			 	$result="msg§Literatur und Links ge&auml;ndert";
 			 	$db->query("UPDATE literatur SET chdate='".time()."' WHERE literatur_id='$lit_id'");
 			 	}
 			 }
@@ -92,18 +92,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		 }
 
 	$db->query ("SELECT Name, status FROM seminare WHERE Seminar_id = '$range_id'");
-	$db->next_record();
+	if (!$db->next_record()) {
+		$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$range_id'");
+			if ($db->next_record()) {
+				$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+		}
+	} else
+		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) 	
+			$tmp_typ = "Veranstaltung"; 
+		else
+			$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
 
 	$tmp_name=$db->f("Name");
-	if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) 	
-		$tmp_typ = "Veranstaltung"; 
-	else
-		$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
-
-	if ($SessSemName["class"]=="inst") {
-		$tmp_typ=$SessSemName["art"];
-		$tmp_name=$SessSemName[0];
-	}
 
 	 ?>
        	<table cellspacing="0" cellpadding="0" border="0" width="100%">

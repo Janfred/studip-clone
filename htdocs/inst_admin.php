@@ -41,6 +41,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once("config.inc.php"); //Grunddaten laden
 	require_once("visual.inc.php"); //htmlReady
 	
+	$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$inst_id'");
+	if ($db->next_record())
+		$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+	$tmp_name=$db->f("Name");
 
 function perm_select($name,$global_perm,$default)
 {
@@ -65,7 +69,13 @@ return;
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 	<tr valign=top align=middle>
-		<td class="topic" colspan=2 align="left"><b>&nbsp;Verwaltung der Mitarbeiterdaten von Einrichtungen</b>
+		<td class="topic" colspan=2 align="left">&nbsp;<b>
+		<?
+		echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
+		if (strlen($tmp_name) > 60)
+			echo "... ";
+		echo " -  Mitarbeiter";
+		?></b>
 		</td>
 	</tr>
 	<tr>

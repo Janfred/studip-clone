@@ -293,8 +293,8 @@ if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="inst") OR $i_pa
 	IF ($i_page == "admin_institut.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_institut.php?view=inst&list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_institut.php?view=inst&list=TRUE">Grunddaten&nbsp; &nbsp; </a> <?}
 
-	IF ($i_page == "inst_admin.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiterlisten&nbsp; &nbsp; </a> <?}
-	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiterlisten&nbsp; &nbsp; </a> <?}
+	IF ($i_page == "inst_admin.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
+	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="inst_admin.php?list=TRUE">Mitarbeiter&nbsp; &nbsp; </a> <?}
 
 	IF ($i_page == "admin_literatur.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_literatur.php?view=inst&list=TRUE">Literatur/Links&nbsp; &nbsp; </a> <?}
 	ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_literatur.php?view=inst&list=TRUE">Literatur/Links&nbsp; &nbsp; </a> <?}

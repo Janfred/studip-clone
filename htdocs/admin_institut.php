@@ -62,11 +62,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once("config.inc.php");
 	require_once("forum.inc.php");
 	require_once("datei.inc.php");
+	
+	$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$i_view'");
+	if ($db->next_record())
+		$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+	$tmp_name=$db->f("Name");
+	
+	
 ?>
 
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 <tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;Verwaltung von Einrichtungen</b></td>
+	<td class="topic"colspan=2 align="left"><b>&nbsp;<b>
+	<?
+	echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
+		if (strlen($tmp_name) > 60)
+			echo "... ";
+		echo " -  Grunddaten";
+	?></b></td>
 </tr>
 <tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
@@ -147,7 +160,7 @@ while ( is_array($HTTP_POST_VARS)
   break;
 
   ## Change Institut name
-  case "i_edit":
+  case "i_edit_x":
 
     ## Do we have all necessary data?
     if (empty($Name)) {
@@ -271,7 +284,7 @@ if ($i_view)
 			<?
 		endif;
 		?>
-		<input type="submit" name="i_edit" value=" Ver&auml;ndern ">
+		<input type="IMAGE" name="i_edit" src="./pictures/buttons/uebernehmen-button.gif" border=0 value=" Ver&auml;ndern ">
 		<input type="hidden" name="i_id"   value="<?php $db->p("Institut_id") ?>">
 		<?
 		}
@@ -280,7 +293,6 @@ if ($i_view)
 		echo "<input type=\"submit\" name=\"create\" value=\"Anlegen\">";
 		}
 	?>
-	<input type="submit" name="cancel" value=" Abbrechen ">
 	<input type="hidden" name="i_view" value="<? echo $i_view; ?>">
 	</form></td></tr></table>
 	<br><br>
