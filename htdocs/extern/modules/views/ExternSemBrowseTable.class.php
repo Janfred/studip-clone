@@ -200,8 +200,8 @@ class ExternSemBrowseTable extends SemBrowse {
 			}			
 			
 			// generic datafields
-			if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields"))
-				$datafields_obj =& new DataFields();
+	//		if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields"))
+		//		$datafields_obj =& new DataFields();
 			
 			$info = "&nbsp;" . count($sem_data);
 			$info .= $this->module->config->getValue("Main", "textlectures");
@@ -210,13 +210,27 @@ class ExternSemBrowseTable extends SemBrowse {
 			$info .= $group_by_name[$this->sem_browse_data['group_by']];
 			$out = $this->module->elements["InfoCountSem"]->toString(array("content" => $info));
 			
-			$out .= $this->module->elements["TableHeadrow"]->toString();
-			
+			$first_loop = TRUE;
+			$repeat_headrow = $this->module->config->getValue("Main", "repeatheadrow");
 			foreach ($group_by_data as $group_field => $sem_ids) {
 				
-				$out .= $this->module->elements["Grouping"]->toString(array("content" =>
-						$this->getGroupContent($the_tree, $group_field)));
+				$group_content = $this->getGroupContent($the_tree, $group_field);
 				
+				if ($repeat_headrow == "beneath") {
+					$out .= $this->module->elements["Grouping"]->toString(array("content" => $group_content));
+					$out .= $this->module->elements["TableHeadrow"]->toString();
+				}
+	
+				if($first_loop && $repeat_headrow != "beneath")
+					$out .= $this->module->elements["TableHeadrow"]->toString();
+	
+				if ($repeat_headrow != "beneath") {
+					if ($repeat_headrow && !$first_loop)
+						$out .= $this->module->elements["TableHeadrow"]->toString();
+					$out .= $this->module->elements["Grouping"]->toString(array("content" => $group_content));
+				}
+				$first_loop = FALSE;
+								
 				if (is_array($sem_ids['Seminar_id'])) {
 					$zebra = 0;
 					while (list($seminar_id,) = each($sem_ids['Seminar_id'])) {

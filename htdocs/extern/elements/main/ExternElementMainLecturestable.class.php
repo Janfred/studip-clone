@@ -40,8 +40,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMainLecturestable extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width", "widthpp",
-			"grouping", "semrange", "allseminars", "rangepathlevel",
-			"addinfo", "time", "lecturer", "semclasses", "textlectures", "textgrouping",
+			"grouping", "semrange", "allseminars", "rangepathlevel", "addinfo", "time",
+			"lecturer", "repeatheadrow", "semclasses", "textlectures", "textgrouping",
 			"textnogroups", "aliasesgrouping", "wholesite", "nameformat", "language", "urlcss",
 			"title");
 	var $edit_function = "editMainSettings";
@@ -75,6 +75,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			"addinfo" => "1",
 			"time" => "1",
 			"lecturer" => "1",
+			"repeatheadrow" => "",
 			"semclasses" => "|1",
 			"textlectures" => " " . _("Veranstaltungen"),
 			"textgrouping" => _("Gruppierung:") . " ",
@@ -167,6 +168,12 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		$values = "1";
 		$names = "";
 		$table .= $edit_form->editCheckboxGeneric("lecturer", $title, $info, $values, $names);
+		
+		$title = _("Spalten&uuml;berschriften<br>wiederholen:");
+		$info = _("Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile.");
+		$values = array("above", "beneath", "");
+		$names = array(_("&uuml;ber"), _("unter Gruppierungszeile"), _("keine"));
+		$table .= $edit_form->editRadioGeneric("repeatheadrow", $title, $info, $values, $names);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
