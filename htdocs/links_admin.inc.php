@@ -765,7 +765,7 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 		}
 
 		//Extension to the query, if we want to show lectures which are archiveable
-		if (($i_page== "archiv_assi.php") && ($links_admin_data["select_old"])) {
+		if (($i_page== "archiv_assi.php") && ($links_admin_data["select_old"]) && ($SEM_BEGINN_NEXT)) {
 			$query.="AND ((seminare.start_time + seminare.duration_time < ".$SEM_BEGINN_NEXT.") AND seminare.duration_time != '-1') ";
 			$conditions++;
 		}
