@@ -193,7 +193,7 @@ if ($cmd=="admission_raus") {
 }
 
 //aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen
-if ($cmd=="admission_rein") {
+if (($cmd=="admission_rein") || ($cmd=="add_autor")) {
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
 		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
@@ -206,15 +206,21 @@ if ($cmd=="admission_rein") {
 		
 		$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$userchange', status= 'autor', gruppe='$group' ");
 		if ($db->affected_rows())
-			$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
-
-		$message="Sie wurden vom einem Dozenten oder Administrator aus der Warteliste in die Veranstaltung **$SessSemName[0]** aufgenommen und sind damit zugelassen.";
-		$messaging->insert_sms ($username, $message, "____%system%____");
+			$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+		
+		//Only if user was on the waiting list
+		if ($db2->affected_rows()) {
+			$message="Sie wurden vom einem Dozenten oder Administrator aus der Warteliste in die Veranstaltung **$SessSemName[0]** aufgenommen und sind damit zugelassen.";
+			$messaging->insert_sms ($username, $message, "____%system%____");
+		}
 
 		//Warteliste neu sortieren
 		 renumber_admission($id);
 		
-		$msg = "msg§Der Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste in die Veranstaltung hochgestuft.§";
+		if ($cmd=="add_autor")
+			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde in die Veranstaltung eingetargen.§";
+		else
+			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste in die Veranstaltung hochgestuft.§";
 	}
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
@@ -528,20 +534,83 @@ if ($rechte AND $SemUserStatus!="tutor") {
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>" method="POST">
 	<tr>
-		<td class="steel1" width="30%" align="left">&nbsp; <font size=-1><b>MitarbeiterInnen der Einrichtung(en)</b></font></td>
-		<td class="steel1" width="40%" align="center"><SELECT Name="u_id" size="1">
+		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b>MitarbeiterInnen der Einrichtung(en)</b></font></td>
+		<td class="steel1" width="40%" align="left"><select name="u_id" size="1">
 		<?
 		printf ("<option value=\"0\">- -  bitte ausw&auml;hlen - -\n");
 		while ($db->next_record())
-			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,40).")", $db->f("inst_perms"));
+			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("inst_perms"));
 		?>
 		</select></td>
-		<td class="steel1" width="30%" align=center><font size=-1>als TutorIn</font><br />
-		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als Tutor berufen "></td>
+		<td class="steel1" width="20%" align="center"><font size=-1>als TutorIn</font><br />
+		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als TutorIn berufen "></td>
 	</tr></form></table>
 <?
 
 } // Ende der Berufung
+
+//inser autors via free search form
+if ($rechte AND $SemUserStatus!="tutor") {
+	if ($search_exp) {
+		$query = "SELECT DISTINCT a.user_id, username, Vorname, Nachname, perms FROM seminar_user a ".
+			"LEFT JOIN auth_user_md5  b USING(user_id) ".		
+			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
+			"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(c.seminar_id) AND ".
+			"(username LIKE '%$search_exp%' OR Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%') ".
+			"ORDER BY Nachname";
+		$db->query($query); // results all users which are not in the seminar
+		?>
+
+	<tr>
+		<td class=blank colspan=2>&nbsp; 
+		</td>
+	</tr>
+	<tr><td class=blank colspan=2>
+
+	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
+	<form action="<? echo $PHP_SELF ?>?cmd=add_autor" method="POST">
+	<tr>
+		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b>Gefundene Nutzer</b></font></td>
+		<td class="steel1" width="40%" align="left"><select name="username" size="1">
+		<?
+		printf ("<option value=\"0\">- -  bitte ausw&auml;hlen - -\n");
+		while ($db->next_record())
+			printf ("<option value=\"%s\">%s - %s\n", $db->f("username"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,35).")", $db->f("perms"));
+		?>
+		</select></td>
+		<td class="steel1" width="20%" align="center"><font size=-1>als AutorIn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </font><br />
+		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als AutorIn berufen ">&nbsp; 
+		<a href="<? echo $PHP_SELF ?>"><img src="./pictures/buttons/neuesuche-button.gif" border=0 /></a></td>
+	</tr></form></table>
+		<?
+	} else { //create a searchform
+		?>
+	<tr>
+		<td class=blank colspan=2>&nbsp; 
+		</td>
+	</tr>
+	<tr><td class=blank colspan=2>
+
+	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
+	<form action="<? echo $PHP_SELF ?>" method="POST">
+	<tr>
+		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b>Nutzer in die Veranstaltung eintragen</b></font>
+		<br /><font size=-1>&nbsp; Bitte geben Sie den Vornamen, Nachnamen <br />&nbsp; oder Usernamen zur Suche ein </font></td>
+		<td class="steel1" width="40%" align="left">
+		<input type="TEXT" name="search_exp" size="40" maxlength="255" />
+		<td class="steel1" width="20%" align="center">
+		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/suchestarten-button.gif" border=0 value=" Suche starten "></td>
+	</tr></form></table>
+		<?
+	}
+	?>
+	<tr>
+		<td class=blank colspan=2>&nbsp; 
+		</td>
+	</tr>
+	<?
+
+} // end insert autor
 
 echo "</td></tr></table>";
 
