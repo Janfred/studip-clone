@@ -405,15 +405,8 @@ class StudipSemTreeViewAdmin extends TreeView {
 	* @return	string
 	*/
 	function getItemHeadPics($item_id){
-		$head = "";
-		$head .= "<a href=\"";
-		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
-											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= "<img src=\"pictures/";
-		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
-		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"2\">";
-		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures/forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
-		$head .= "</a>";
+		$head = $this->getItemHeadFrontPic($item_id);
+		$head .= "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
 		if ($this->tree->hasKids($item_id)){
 			$head .= "<img border=\"0\"  src=\"pictures/";
 			$head .= ($this->open_ranges[$item_id]) ? "cont_folder3.gif" : "cont_folder.gif";
@@ -425,7 +418,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$head .= ($this->open_items[$item_id]) ? "cont_folder4.gif" : "cont_folder2.gif";
 			$head .= "\" " . tooltip(_("Dieses Element hat keine Unterelemente")) . "border=\"0\">";
 		}
-	return $head;
+	return $head . "</td>";
 	}
 	
 	function getItemContent($item_id){
