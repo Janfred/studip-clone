@@ -108,9 +108,8 @@ ob_start();
 	if (is_array ($online)) { // wenn jemand online ist
 		foreach($online as $username=>$value) { //alle durchgehen die online sind
 			$user_id = $value["userid"];
-			$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
-			if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
-				$db2->query ("SELECT statusgruppen.position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY statusgruppen.position ASC");	
+			if ($value['is_buddy']) { // er ist auf jeden Fall als Buddy eingetragen
+				$db2->query ("SELECT statusgruppen.position, name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id' ORDER BY statusgruppen.position ASC LIMIT 1");	
 				if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
 					$group_buddies[]=array($db2->f("position"), $db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
 				} else {	// buddy, aber keine Gruppe
@@ -144,9 +143,8 @@ if (is_array($n_buddies))
 	echo "<tr>";
 
 	//Buddiespalte
-	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND buddy = '1'");	
-
-	if (!$db->next_record()) { // Nutzer hat gar keine buddies
+	
+	if (!GetNumberOfBuddies()) { // Nutzer hat gar keine buddies
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
 		echo "\n<td class=\"steel1\" width=\"50%\" align=\"center\" colspan=5><font size=-1>";
