@@ -33,7 +33,7 @@ function get_my_inst_values(&$my_inst) {
 	$db2 = new DB_seminar();
 	
 	// Postings
-	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(if((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
+	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(if((chdate > b.loginfilenow AND chdate >= mkdate AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
 				FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		if ($my_inst[$db2->f("Seminar_id")]["modules"]["forum"]) {
@@ -103,7 +103,7 @@ function print_institut_content($instid,$my_inst_values) {
   if ($my_inst_values["neuepostings"])
 		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"),$my_inst_values["postings"], $my_inst_values["neuepostings"]))."></a>";
   elseif ($my_inst_values["postings"])
-		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=tree\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_sem_values["postings"]))."></a>";  
+		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=reset&sort=age\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_sem_values["postings"]))."></a>";  
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
