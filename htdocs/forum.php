@@ -275,7 +275,7 @@ if ($delete_id) {
 			$forumposting["buttons"] = "no";
 			forum_draw_topicline();
 			if ($forumposting["id"] == $forumposting["rootid"])
-				$tmp_label = _("den untenstehenden Ordner");
+				$tmp_label = _("das untenstehende Thema");
 			else
 				$tmp_label = _("das untenstehende Posting");
 			echo "\n\n<table class=\"blank\" cellspacing=0 cellpadding=5 border=0 width=\"100%\"><colgroup span=1></colgroup>\n";

@@ -458,7 +458,7 @@ function ForumIcon ($forumposting) {
 	if ($forum["jshover"]==1 AND $auth->auth["jscript"] AND $forumposting["description"]!="" && $forumposting["openclose"]=="close") {      
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder") { // wir kommen aus der Themenansicht
 			$hoverlink = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\" ";
-			$txt = "<i>" . _("Hier klicken um alle Postings im Ordner zu &ouml;ffnen") . "</i>";
+			$txt = "<i>" . _("Hier klicken um alle Postings im Thema zu öffnen") . "</i>";
 		} else {
 			$hoverlink = "<a href=\"javascript:void(0);\" ";
 			$txt = "";
@@ -472,14 +472,14 @@ function ForumIcon ($forumposting) {
 			." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 	} else {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
-			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&folderopen=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Ordner öffnen")) . "></a>";
+			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&folderopen=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Thema öffnen")) . "></a>";
 		else
 			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";	
 	}
 	
 	if ($cmd=="move" && $rechte && $topic_id != $forumposting["id"] )  // ein Beitrag wird verschoben, gelbe Pfeile davor
 		$forumposting["icon"] =	 "<a href=\"".$PHP_SELF."?target=Thema&move_id=".$topic_id."&parent_id=".$forumposting["id"]."\">"
-					."<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Postings in diesen Ordner verschieben")) . "></a>"
+					."<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Postings in dieses Thema verschieben")) . "></a>"
 					.$forumposting["icon"];
 	return $forumposting;
 }
@@ -588,12 +588,12 @@ function DebugForum ($debugvar) {
 function ForumEmpty () {
 	global $rechte, $SessSemName;
 	if ($rechte)
-		$text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie k&ouml;nnen oben unter <b>neues Thema</b> einen Ordner anlegen.");
+		$text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie können oben unter <b>neues Thema</b> einen Themenordner anlegen.");
 	else {
 		if ($SessSemName["class"]!="inst")
-			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Ordner anlegen zu lassen.");
+			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Themenordner anlegen zu lassen.");
 		else
-			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Ordner anlegen zu lassen.");
+			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Themenordner anlegen zu lassen.");
 	}
 	$empty = parse_msg("info§$text");
 	return $empty;
