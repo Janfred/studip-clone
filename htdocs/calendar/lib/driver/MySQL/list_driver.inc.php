@@ -41,13 +41,13 @@ function list_restore(&$this){
 			case "DAILY" :
 				if ($rep["ts"] < $start) {
 					// brauche den ersten Tag nach $start an dem dieser Termin wiederholt wird
-					$adate = $this->ts + (($rep["linterval"]-(ceil(($start - $rep["ts"])
-							 / 86400) % $rep["linterval"])) * 86400);
+					$adate = $this->ts + (($rep["linterval"] - (($start - $rep["ts"])
+							 / 86400) % $rep["linterval"] - 1) * 86400);
 				}
 				else
-					$adate = $rep["ts"];
+					$adate = $rep['ts'];
 				
-				while ($adate <= $expire && $adate <= $end && $adate >= $start) {
+				while ($adate <= $expire && $adate <= $end) {
 					new_event($this, $db, $adate);
 					$adate += 86400 * $rep["linterval"];
 				}
