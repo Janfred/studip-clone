@@ -203,7 +203,7 @@ $the_tree->showSemTree();
 		}
 	}
 	?>
-	<option value="del">Aus Merkliste l&ouml;schen</option>
+	<option value="del"><?=_("Aus Merkliste l&ouml;schen")?></option>
 	</select>
 	<div align="right">
 	<input border="0" type="image" <?=makeButton("ok","src") . tooltip(_("Gewählte Aktion starten"))?> >
