@@ -142,7 +142,7 @@ if (!$chat_entry_check){
 	var chatuniqid = '<?=$chatServer->chatDetail[$chatid]["id"]?>';
 	function doSubmit() {
 		if (document.chatlogin.chat_password.value){
-			document.chatlogin.chat_password.value = md5(chatuniqid + ":" + document.chatlogin.chat_password.value);
+			document.chatlogin.chat_password.value = MD5(chatuniqid + ":" + document.chatlogin.chat_password.value);
 			document.chatlogin.submit();
 		}
 		return false;
