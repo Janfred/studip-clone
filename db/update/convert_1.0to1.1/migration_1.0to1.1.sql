@@ -267,3 +267,9 @@ ADD `protected` TINYINT( 4 ) NOT NULL ;
 
 ALTER TABLE `Institute` ADD `lit_plugin_name` VARCHAR( 255 ) ;
 DROP TABLE IF EXISTS `literatur` ;
+
+# #11
+# changes for email-forwarding
+#
+
+ALTER TABLE `user_info` ADD `email_forward` TINYINT DEFAULT '0' NOT NULL ; 

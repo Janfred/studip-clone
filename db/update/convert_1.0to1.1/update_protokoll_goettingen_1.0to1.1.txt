@@ -66,6 +66,8 @@ Migrationsscripts):
 * Default-Einträge für Evaluationsmodul anlegen (#8)
 * Änderungen an der Dateiverwaltung (#9)
 * Änderungen an der Literaturverwaltung für Einrichtungsfunktionen (#10)
+* Änderungen für eMailweiterleitung (#11)
+
 
 Sonstige Änderungen:
 
