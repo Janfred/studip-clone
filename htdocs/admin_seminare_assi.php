@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Set this to something, just something different...
 $hash_secret = "nirhtak";
- 
 
 include "seminar_open.php"; 	//hier werden die sessions initialisiert
 require_once "msg.inc.php"; 		//Funktionen fuerr Nachrichtenmeldungen
@@ -32,14 +31,15 @@ require_once "config_tools_semester.inc.php";  //Bereitstellung weiterer Daten
 require_once "functions.php";	//noch mehr Stuff
 require_once "forum.inc.php";		//damit wir Themen anlegen koennen
 require_once "visual.inc.php";		//Aufbereitungsfunktionen
+require_once "dates.inc.php";		//Terminfunktionen
 
 // Get a database connection and Stuff
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
+$cssSw = new cssClassSwitcher;
 $user_id = $auth->auth["uid"];
-
 $errormsg='';
 
 //Registrieren der Sessionvariablen
@@ -56,7 +56,9 @@ if (((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60) || ($new_sess
 	$sem_create_data["sem_start_termin"]=-1;
 	$sem_create_data["sem_vor_termin"]=-1;
 	$sem_create_data["sem_vor_end_termin"]=-1;
-	
+	$sem_create_data["sem_admission_date"]=-1;
+	$sem_create_data["sem_admission_ratios_changed"]=FALSE;
+		
 	$sem_create_data["timestamp"]=time();
 	}
 else 
@@ -78,11 +80,18 @@ if ($form==1)
 	$sem_create_data["sem_untert"]=$sem_untert;
 	$sem_create_data["sem_nummer"]=$sem_nummer;
 	$sem_create_data["sem_ects"]=$sem_ects;	
-	$sem_create_data["sem_art"]=$sem_art;
 	$sem_create_data["sem_ort"]=$sem_ort;
 	$sem_create_data["sem_desc"]=$sem_desc;
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;	
+	$sem_create_data["sem_turnout"]=$sem_turnout;	
+	//Anmeldeverfahren festlegen
+	$sem_create_data["sem_admission"]='';
+	if ($sem_admission_chrono)
+		$sem_create_data["sem_admission"]="2";
+	if ($sem_admission_los)
+		$sem_create_data["sem_admission"]="1";
+	
 	if ($sem_bet_inst)
 		{
 		foreach ($sem_bet_inst as $tmp_array)
@@ -114,9 +123,12 @@ if ($form==2)
 		$tmp_create_data_bereich[]=$sem_bereich[$i];
 	unset ($sem_create_data["sem_bereich"]);
 	$sem_create_data["sem_bereich"]=$tmp_create_data_bereich;
-	$sem_create_data["sem_sec_lese"]=$sem_sec_lese;
-	$sem_create_data["sem_sec_schreib"]=$sem_sec_schreib;
-	$sem_create_data["sem_status"]=$sem_status;	
+	if (!$sem_create_data["sem_admission"]) {
+		$sem_create_data["sem_sec_lese"]=$sem_sec_lese;
+		$sem_create_data["sem_sec_schreib"]=$sem_sec_schreib;
+	}
+	$sem_create_data["sem_status"]=$sem_status;
+	$sem_create_data["sem_art"]=$sem_art;
 	}
 
 if ($form==3)
@@ -125,7 +137,6 @@ if ($form==3)
 	$sem_create_data["term_turnus"]=$term_turnus;	
 	$sem_create_data["sem_start_time"]=$sem_start_time;
 	$sem_create_data["sem_vor_raum"]=$vor_raum;
-	$sem_create_data["block_na"]=$block_na;
 
 	if (($sem_duration_time == 0) || ($sem_duration_time == -1))
 		$sem_create_data["sem_duration_time"]=$sem_duration_time;
@@ -142,19 +153,54 @@ if ($form==3)
 		$sem_create_data["term_turnus_end_minute"]='';
 	
 		//Alle eingegebenen Turnus-Daten in Sessionvariable uebernehmen
-		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
-				{
-				$sem_create_data["term_turnus_date"][$i]=$term_turnus_date[$i]; 
-				$sem_create_data["term_turnus_start_stunde"][$i]=$term_turnus_start_stunde[$i];
-				$sem_create_data["term_turnus_start_minute"][$i]=$term_turnus_start_minute[$i]; 
-				$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i]; 
-				$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i]; 
-				//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
-				settype($term_metadata["turnus_data"][$i]["start_stunde"], "integer");
-				settype($term_metadata["turnus_data"][$i]["start_minute"], "integer");  
-				settype($term_metadata["turnus_data"][$i]["end_stunde"], "integer");		
-				settype($term_metadata["turnus_data"][$i]["end_minute"], "integer");
+		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
+			$sem_create_data["term_turnus_date"][$i]=$term_turnus_date[$i]; 
+			$sem_create_data["term_turnus_start_stunde"][$i]=$term_turnus_start_stunde[$i];
+			$sem_create_data["term_turnus_start_minute"][$i]=$term_turnus_start_minute[$i]; 
+			$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i]; 
+			$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i]; 
+
+			//diese Umwandlung muessen hier passieren, damit Werte mit fuehrender Null nicht als String abgelegt werden und so spaeter Verwirrung stiften
+			settype($sem_create_data["term_turnus_start_stunde"][$i], "integer");
+			settype($sem_create_data["term_turnus_start_minute"][$i], "integer");
+			settype($sem_create_data["term_turnus_end_stunde"][$i], "integer");
+			settype($sem_create_data["term_turnus_end_minute"][$i], "integer");
+		}
+		
+		//Turnus-Metadaten-Array erzeugen
+		$sem_create_data["metadata_termin"]='';
+		$sem_create_data["metadata_termin"]["art"]=$sem_create_data["term_art"];
+		$sem_create_data["metadata_termin"]["start_termin"]=$sem_create_data["sem_start_termin"];
+		$sem_create_data["metadata_termin"]["start_woche"]=$sem_create_data["term_start_woche"];
+		$sem_create_data["metadata_termin"]["turnus"]=$sem_create_data["term_turnus"];
+		
+		//indizierte (=sortierbares Temporaeres Array erzeugen)
+		if ($sem_create_data["term_art"] == 0)
+			{
+			for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
+				if (($sem_create_data["term_turnus_start_stunde"][$i])  && ($sem_create_data["term_turnus_end_stunde"][$i])) {
+					//Index erzeugen
+					$tmp_idx=$sem_create_data["term_turnus_date"][$i];
+					if ($sem_create_data["term_turnus_start_stunde"][$i] < 10)
+						$tmp_idx.="0";
+					$tmp_idx.=$sem_create_data["term_turnus_start_stunde"][$i];
+					if ($sem_create_data["term_turnus_start_minute"][$i] < 10)
+						$tmp_idx.="0";
+					$tmp_idx.=$sem_create_data["term_turnus_start_minute"][$i];						
+						
+					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i]);
+				}	
+			if (is_array($tmp_metadata_termin["turnus_data"])) {
+
+				//sortieren
+				sort ($tmp_metadata_termin["turnus_data"]);
+			
+				foreach ($tmp_metadata_termin["turnus_data"] as $tmp_array)
+					{
+					$sem_create_data["metadata_termin"]["turnus_data"][]=$tmp_array;
+					}
 				}
+			}
 		}
 	else
 		{
@@ -166,22 +212,34 @@ if ($form==3)
 		$sem_create_data["term_start_minute"]='';
 		$sem_create_data["term_end_stunde"]='';
 		$sem_create_data["term_end_minute"]='';
+		$sem_create_data["term_first_date"]='';
+		
 	
-		//Alle eingegebenen Turnus-Daten in Sessionvariable uebernehmen
-		for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-				{
-				$sem_create_data["term_tag"][$i]=$term_tag[$i];
-				$sem_create_data["term_monat"][$i]=$term_monat[$i];
-				$sem_create_data["term_jahr"][$i]=$term_jahr[$i];
-				$sem_create_data["term_start_stunde"][$i]=$term_start_stunde[$i];
-				$sem_create_data["term_start_minute"][$i]=$term_start_minute[$i];
-				settype($sem_create_data["term_start_minute"][$i], "integer");//diese Umwandlung muss hier sein, da fuehrende 0 bei Minutenangaben sonst nur Verwirrung stiftet...
-				$sem_create_data["term_end_stunde"][$i]=$term_end_stunde[$i]; 
-				$sem_create_data["term_end_minute"][$i]=$term_end_minute[$i]; 
-				settype($sem_create_data["term_end_minute"][$i], "integer");				
-				}
+		//Alle eingegebenen Termin-Daten in Sessionvariable uebernehmen
+		for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
+			$sem_create_data["term_tag"][$i]=$term_tag[$i];
+			$sem_create_data["term_monat"][$i]=$term_monat[$i];
+			$sem_create_data["term_jahr"][$i]=$term_jahr[$i];
+			$sem_create_data["term_start_stunde"][$i]=$term_start_stunde[$i];
+			$sem_create_data["term_start_minute"][$i]=$term_start_minute[$i];
+			$sem_create_data["term_end_stunde"][$i]=$term_end_stunde[$i]; 
+			$sem_create_data["term_end_minute"][$i]=$term_end_minute[$i]; 
+
+			//diese Umwandlung muss hier sein, da fuehrende 0 bei Minutenangaben sonst nur Verwirrung stiftet...
+			settype($sem_create_data["term_start_stunde"][$i], "integer");
+			settype($sem_create_data["term_start_minute"][$i], "integer");
+			settype($sem_create_data["term_end_stunde"][$i], "integer");
+			settype($sem_create_data["term_end_minute"][$i], "integer");
+		
+			//erster Termin wird gepeichert, wird fuer spaetere Checks benoetigt
+			if ((($sem_create_data["term_first_date"] == 0) 
+				|| ($sem_create_data["term_first_date"] >mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]))) 
+				&& (mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]) > 0)) {
+				$sem_create_data["term_first_date"]=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+			}
 		}
-	
+	}
+
 	//Datum fuer Vobesprechung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
 	if (($vor_jahr>0) && ($vor_jahr<100))
 		 $vor_jahr=$vor_jahr+2000;
@@ -189,9 +247,9 @@ if ($form==3)
 	if ($vor_monat == "mm") $vor_monat=0;
 	if ($vor_tag == "tt") $vor_tag=0;
 	if ($vor_jahr == "jjjj") $vor_jahr=0;	
-	if ($vor_stunde == "ss") $vor_stunde=0;
+	if ($vor_stunde == "hh") $vor_stunde=0;
 	if ($vor_minute == "mm") $vor_minute=0;
-	if ($vor_end_stunde == "ss") $vor_end_stunde=0;
+	if ($vor_end_stunde == "hh") $vor_end_stunde=0;
 	if ($vor_end_minute == "mm") $vor_end_minute=0;
 
 	if (!checkdate($vor_monat, $vor_tag, $vor_jahr) && ($vor_monat) && ($vor_tag) && ($vor_jahr))
@@ -209,7 +267,7 @@ if ($form==3)
 			}
 		else
 			$check=TRUE;
-
+	
 	if ($check)
 		{
 	 	$sem_create_data["sem_vor_termin"] = mktime($vor_stunde,$vor_minute,0,$vor_monat,$vor_tag,$vor_jahr);
@@ -229,7 +287,61 @@ if ($form==4)
 	$sem_create_data["sem_orga"]=$sem_orga;
 	$sem_create_data["sem_leistnw"]=$sem_leistnw;
 	$sem_create_data["sem_sonst"]=$sem_sonst;
+	
+	//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
+	if ($sem_all_ratio_old != $sem_all_ratio) {
+		$sem_create_data["sem_admission_ratios_changed"]=TRUE;
+		$sem_create_data["sem_all_ratio"]=$sem_all_ratio;
+	}
+	
+	//Studienbereiche entgegennehmen
+	if (is_array($sem_studg_id)) {
+		foreach ($sem_studg_id as $key=>$val)
+			if ($sem_studg_ratio_old[$key] != $sem_studg_ratio[$key])
+				$sem_create_data["sem_admission_ratios_changed"]=TRUE;
+		if ($sem_create_data["sem_admission_ratios_changed"]) {
+			$sem_create_data["sem_studg"]='';
+			foreach ($sem_studg_id as $key=>$val)
+				$sem_create_data["sem_studg"][$val]=array("name"=>$sem_studg_name[$key], "ratio"=>$sem_studg_ratio[$key]);
+		}
+	}	
+	
+	//Datum fuer Ende der Anmeldung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
+	if (($adm_jahr>0) && ($adm_jahr<100))
+		 $adm_jahr=$adm_jahr+2000;
+	
+	if ($adm_monat == "mm") $adm_monat=0;
+	if ($adm_tag == "tt") $adm_tag=0;
+	if ($adm_jahr == "jjjj") $adm_jahr=0;	
+	if ($adm_stunde == "hh") $adm_stunde=0;
+	if ($adm_minute == "mm") $adm_minute=0;
 
+	if (!checkdate($adm_monat, $adm_tag, $adm_jahr) && ($adm_monat) && ($adm_tag) && ($adm_jahr))
+		{
+		$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Anmeldefrist ein!§";
+		$check=FALSE;			
+		}
+	else
+		$check=TRUE;
+	if (($adm_monat) && ($adm_tag) && ($adm_jahr))
+		if (!$adm_stunde)
+			{
+			$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r das Ende der Anmeldefrist ein!§"; 
+			$check=FALSE;
+			}
+		else
+			$check=TRUE;
+
+	if ($check)
+		{
+	 	$sem_create_data["sem_admission_date"] = mktime($adm_stunde,$adm_minute,59,$adm_monat,$adm_tag,$adm_jahr);
+		}
+	else
+		{
+		$sem_create_data["sem_admission_date"] = -1;
+		}
+	}
+		
 	//Datum fuer ersten Termin umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
 	if (($jahr>0) && ($jahr<100))
 		 $jahr=$jahr+2000;
@@ -250,7 +362,6 @@ if ($form==4)
 	 	$sem_create_data["sem_start_termin"] = mktime($stunde,$minute,0,$monat,$tag,$jahr);
 	else
 		$sem_create_data["sem_start_termin"] = -1;
-	}
 
 if ($form==7)
 	{
@@ -259,7 +370,7 @@ if ($form==7)
 	}
 
 //Check auf korrekte Eingabe und Sprung in naechste Level, hier auf Schritt 2
-if ($cmd_b)
+if ($cmd_b_x)
 	{
 	if (strlen($sem_create_data["sem_name"]) <3)
 		{
@@ -271,13 +382,20 @@ if ($cmd_b)
 		$level=1;
 		$errormsg=$errormsg."error§Da Ihr Account keinem Institut zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den zust&auml;ndigen Instituts-Administrator oder einen der <a href=\"impressum.php\">Entwickler</a>!§";
 		}
+	if (($sem_create_data["sem_turnout"] < 5) && ($sem_create_data["sem_admission"]))
+ 		{
+		$level=1;
+		$errormsg=$errormsg."error§Wenn Sie sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen sie wenigsten 5 Teilnehmer zulassen.§";
+		$sem_create_data["sem_turnout"] =5;
+		}
+	
 	if (!$errormsg)
 		$level=2;
 	}
 
 
 //wenn alles stimmt, Sprung auf Schritt 3
-if ($cmd_c)
+if ($cmd_c_x)
 	{
 	if (is_array($sem_create_data["sem_doz"]))
 		foreach ($sem_create_data["sem_doz"] as $a)
@@ -338,13 +456,13 @@ if ($cmd_c)
 		$level=2;
 	}
 
-//Felder fuer Standardtermine oder Blocktermine hinzufuegen/l&ouml;schen
-if ($add_turnus_field)
+//Felder fuer Standardtermine oder Blocktermine, Studiengaenge hinzufuegen/loeschen
+if ($add_turnus_field_x)
 	{
 	$sem_create_data["turnus_count"]++;
 	$level=3;
 	}
-if ($add_term_field)
+if ($add_term_field_x)
 	{
 	$sem_create_data["term_count"]++;
 	$level=3;
@@ -395,17 +513,16 @@ if ($delete_term_field)
 	}
 
 
-
 //Termin-Metaddaten-Check, wenn alles stimmt, Sprung auf Schritt 4
-if ($cmd_d)
+if ($cmd_d_x)
 	{
 	if (($sem_create_data["sem_duration_time"]<0) && ($sem_create_data["sem_duration_time"] != -1))
 		{ 
 		$level=3;
 		$errormsg=$errormsg."error§Das Endsemester darf nicht vor dem Startsemester liegen, bitte &auml;ndern Sie die entsprechenden Einstellungen!§";
 		}
-	
-	if (($sem_create_data["term_art"]==0) && (!$sem_create_data["block_na"]))
+
+	if ($sem_create_data["term_art"]==0)
 		{
 		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
 			if ((($sem_create_data["term_turnus_start_stunde"][$i]) || ($sem_create_data["term_turnus_end_stunde"][$i])))
@@ -436,13 +553,8 @@ if ($cmd_d)
 						$errormsg=$errormsg."error§Sie haben nicht alle Felder der regul&auml;ren Termine ausgef&uuml;llt, bitte korrigieren sie dies!§";
 						$just_informed4=TRUE;
 						}
-		if ($empty_fields == $sem_create_data["turnus_count"])
-			{
-			$errormsg=$errormsg."error§Bitte geben Sie wenigstens einen regul&auml;ren Termin f&uuml;r die Veranstaltung an! Wenn Sie keine regul&auml;ren Termine speichern wollen, aktivieren Sie bitte das Kontrollk&auml;stchen \"keine Zeiten speichern\". Die Veranstaltung wird dann gesondert ausgewiesen (Zeiten nach spezieller Ank&uuml;ndigung).§";
-			}
 		}
-	elseif (!$sem_create_data["block_na"])
-		{
+	else {
 		for ($i=0; $i<$sem_create_data["term_count"]; $i++)
 			if ((($sem_create_data["term_start_stunde"][$i]) || ($sem_create_data["term_end_stunde"][$i])) && (($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_jahr"][$i])))
 				{
@@ -478,12 +590,8 @@ if ($cmd_d)
 						$errormsg=$errormsg."error§Sie haben nicht alle Felder bei der Termineingabe ausgef&uuml;llt, bitte korrigieren sie dies!§";
 						$just_informed4=TRUE;
 						}
-		if ($empty_fields == $sem_create_data["term_count"])
-			{
-			$errormsg=$errormsg."error§Bitte geben Sie wenigstens einen Termin f&uuml;r die Veranstaltung an! Wenn Sie keine Termine speichern wollen, aktivieren Sie bitte das Kontrollk&auml;stchen \"keine Termine speichern\". Die Veranstaltung wird dann gesondert ausgewiesen (Termine nach spezieller Ank&uuml;ndigung).§";
-			}
-		}
-	
+
+	} 
 	if ($sem_create_data["sem_vor_termin"] == -1);
 	else
 		if ((($vor_stunde) && (!$vor_end_stunde)) || ((!$vor_stunde) && ($vor_end_stunde)))
@@ -495,8 +603,47 @@ if ($cmd_d)
 		$level=3;
 	}
 
+//Neuen Studiengang zur Begrenzung aufnehmen
+if ($add_studg_x) {
+	if ($sem_add_studg) {
+		$db->query("SELECT name FROM studiengaenge WHERE studiengang_id='".$sem_add_studg."' ");
+		$db->next_record();
+		$sem_create_data["sem_studg"][$sem_add_studg]=array("name"=>$db->f("name"), "ratio"=>$sem_add_ratio);
+	}
+	$level=4;
+}
+
+//Studiengang zur Begrenzung loeschen
+if ($sem_delete_studg) {
+	unset($sem_create_data["sem_studg"][$sem_delete_studg]);
+	$level=4;
+	}
+
+//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
+if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
+	if ($sem_create_data["sem_admission"]) {
+		if (!$sem_create_data["sem_admission_ratios_changed"]) {//User hat nichts veraendert, wir koennen automatisch rechnen
+			if (is_array($sem_create_data["sem_studg"]))
+				foreach ($sem_create_data["sem_studg"] as $key=>$val)
+					$sem_create_data["sem_studg"][$key]["ratio"]=round(100 / (sizeof ($sem_create_data["sem_studg"]) + 1));
+			$sem_create_data["sem_all_ratio"]=100 - (sizeof ($sem_create_data["sem_studg"])) * round(100 / (sizeof ($sem_create_data["sem_studg"]) + 1));
+		} else {
+			$cnt=0;
+			if (is_array($sem_create_data["sem_studg"]))
+				foreach ($sem_create_data["sem_studg"] as $val)
+					$cnt+=$val["ratio"];
+			if (($cnt + $sem_create_data["sem_all_ratio"]) < 100)
+				$sem_create_data["sem_all_ratio"]=100 - $cnt;
+			if (($cnt + $sem_create_data["sem_all_ratio"]) > 100)
+				$errormsg.=sprintf ("error§Das Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
+				$level=4;
+		}
+	}
+}
+
+
 //wenn alles stimmt, Sprung auf Schritt 5 (Anlegen)
-if ($cmd_e)
+if ($cmd_e_x)
 	{
 	if (($sem_create_data["sem_sec_lese"] ==2) ||  ($sem_create_data["sem_sec_schreib"] ==2))
 		{
@@ -520,34 +667,53 @@ if ($cmd_e)
 
 		if ($sem_create_data["sem_pw"]=="")
 	          	{
-        	  	$errormsg=$errormsg."error§Sie haben kein Passwort eingegeben! Bitte korrigieren Sie dies!§";
+        	  	$errormsg=$errormsg."error§Sie haben kein Passwort eingegeben! Bitte geben Sie ein Passwort ein!§";
           		$level=4;
 	          	}
         	  elseif (isset($check_pw) AND $sem_create_data["sem_pw"] != $check_pw)
      			{
-			$errormsg=$errormsg."error§Das eingegebene Passwort und das Wiederholungspasswort stimmen nicht &uuml;berein! Bitte korrigieren Sie dies!§";
+			$errormsg=$errormsg."error§Das eingegebene Passwort und das Wiederholungspasswort stimmen nicht &uuml;berein!§";
      			$sem_create_data["sem_pw"] = "";
      			$level=4;
 	          	}
 	}
+	
+	//Ende der Anmeldung checken
+	if ($sem_create_data["sem_admission"]) {
+		if ($sem_create_data["sem_admission_date"] == -1) 
+			$errormsg.="error§Bitte geben Sie einen Termin f&uuml;r das Ende der Anmeldefrist an!§";	
+		elseif ($sem_create_data["term_art"]==0) {
+			$tmp_first_date=veranstaltung_beginn ($sem_create_data["term_art"], $sem_create_data["sem_start_time"], $sem_create_data["term_start_woche"], $sem_create_data["sem_start_termin"], $sem_create_data["metadata_termin"]["turnus_data"], "int");
+			if ($sem_create_data["sem_admission_date"] > $tmp_first_date) {
+				if ($tmp_first_date > 0)
+					$errormsg.= sprintf ("error§Das Ende der Anmeldefrist liegt nach dem ersten Veranstaltungstermin am %s. Bitte &auml;ndern sie den Termin der Anmeldefrist!§", date ("d.m.Y", $tmp_first_date));
+				$level=4;
+			}
+		} elseif ($sem_create_data["sem_admission_date"] > $sem_create_data["term_first_date"]) {
+				$errormsg.=sprintf ("error§Das Ende der Anmeldefrist liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte &auml;ndern sie den Termin der Anmeldefrist!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
+				$level=4;
+		}
+	}
+
+	//Erster Termin wenn angegeben werden soll muss er auch da sein
 	if (($sem_create_data["sem_start_termin"] == -1) && ($sem_create_data["term_start_woche"] ==-1))
 		$errormsg=$errormsg."error§Bitte geben Sie einen ersten Termin an!§";	
 	else
 		if ((($stunde) && (!$end_stunde)) || ((!$stunde) && ($end_stunde)))
 			$errormsg=$errormsg."error§Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit des ersten Termins aus!§";	
-          
+
 	if (!$errormsg)
 		$level=5;
 	else
 		$level=4;
 	}
-
+	
 //OK, nun wird es ernst, wir legen das Seminar an.
-if ($cmd_f)
+if ($cmd_f_x)
 	{
 	$run = TRUE;
 
-	//Rechte &uuml;berpr&uuml;fen
+	//Rechte ueberpruefen
 	if (!$perm->have_perm("dozent"))
 		{
 		$errormsg .= "error§Sie haben keine Berechtigung Veranstaltungen anzulegen Um eine Veranstaltung anlegen zu k&ouml;nnen, ben&ouml;tigen Sie mindestens den globalen Status \"Dozent\". Bitte kontaktieren Sie den f&uuml;r Sie zust&auml;ndigen Administrator.§";
@@ -605,62 +771,43 @@ if ($cmd_f)
 		{
 		//Seminar_id erzeugen und Seminar eintrag
 		$sem_create_data["sem_id"]=md5(uniqid($hash_secret));
+    		
+		//Termin-Metadaten-Array zusammenmatschen zum besseren speichern in der Datenbank
+		$serialized_metadata=serialize($sem_create_data["metadata_termin"]);
 
 		if ($Schreibzugriff < $Lesezugriff) // hier wusste ein Dozent nicht, was er tat
 			$Schreibzugriff = $Lesezugriff;
 		
-		//Termin-Metadaten-Array erzeugen
-		$metadata_termin["art"]=$sem_create_data["term_art"];
-		$metadata_termin["start_termin"]=$sem_create_data["sem_start_termin"];
-		$metadata_termin["start_woche"]=$sem_create_data["term_start_woche"];
-		$metadata_termin["turnus"]=$sem_create_data["term_turnus"];
-		
-		//indizierte (=sortierbares Tempor&auml;res Array erzeugen)
-		if ($sem_create_data["term_art"] == 0)
-			{
-			for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
-				if (($sem_create_data["term_turnus_start_stunde"][$i])  && ($sem_create_data["term_turnus_end_stunde"][$i]))
-					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$sem_create_data["term_turnus_date"][$i].$sem_create_data["term_turnus_start_stunde"][$i].$sem_create_data["term_turnus_start_minute"][$i], "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i]);
-					
-			if (is_array($tmp_metadata_termin["turnus_data"])) {
-
-				//sortieren
-				sort ($tmp_metadata_termin["turnus_data"]);
-			
-				foreach ($tmp_metadata_termin["turnus_data"] as $tmp_array)
-					{
-					$metadata_termin["turnus_data"][]=$tmp_array;
-					}
-				}
-			}
-		
-		//Termin-Metadaten-Array zusammenmatschen zum besseren speichern in der Datenbank
-		$serialized_metadata=serialize ($metadata_termin);		
-				
+						
 		$query = "insert into seminare values('".
-				$sem_create_data["sem_id"]."', '".
-				$sem_create_data["sem_nummer"]."', '".
-				$sem_create_data["sem_inst_id"]."', '".
-				$sem_create_data["sem_name"]."', '".
-				$sem_create_data["sem_untert"]."', '".
-				$sem_create_data["sem_status"]."', '".
-				$sem_create_data["sem_desc"]."', '".
-				$sem_create_data["sem_ort"]."', '".
-				$sem_create_data["sem_sonst"]."', '".
-				$sem_create_data["sem_pw"]."', '".
-				$sem_create_data["sem_sec_lese"]."', '".
-				$sem_create_data["sem_sec_schreib"]."', '".
-				$sem_create_data["sem_start_time"]."', '".
-				$sem_create_data["sem_duration_time"]."', '".
-				$sem_create_data["sem_art"]."', '".
-				$sem_create_data["sem_teiln"]."', '".
-				$sem_create_data["sem_voraus"]."', '".
-				$sem_create_data["sem_orga"]."', '".
-				$sem_create_data["sem_leistnw"]."', '".
-				$serialized_metadata."', '".
-				time()."', '".
-				time()."', '".
-				$sem_create_data["sem_ects"]."') ";
+				$sem_create_data["sem_id"]."', '".				//Feld Seminar_id 
+				$sem_create_data["sem_nummer"]."', '".		//Feld VeranstaltungsNummer
+				$sem_create_data["sem_inst_id"]."', '".			//Feld Institut_id 
+				$sem_create_data["sem_name"]."', '".			//Feld Name 
+				$sem_create_data["sem_untert"]."', '".			//Feld Untertitel 
+				$sem_create_data["sem_status"]."', '".			//Feld status 
+				$sem_create_data["sem_desc"]."', '".			//Feld Beschreibung 
+				$sem_create_data["sem_ort"]."', '".			//Feld Ort 
+				$sem_create_data["sem_sonst"]."', '".			//Feld Sonstiges
+				$sem_create_data["sem_pw"]."', '".			//Feld Passwort 
+				$sem_create_data["sem_sec_lese"]."', '".		//Feld Lesezugriff 
+				$sem_create_data["sem_sec_schreib"]."', '".		//Feld Schreibzugriff
+				$sem_create_data["sem_start_time"]."', '".		//Feld start_time 
+				$sem_create_data["sem_duration_time"]."', '".	//Feld duration_time 
+				$sem_create_data["sem_art"]."', '".			//Feld art 
+				$sem_create_data["sem_teiln"]."', '".			//Feld teilnehmer 
+				$sem_create_data["sem_voraus"]."', '".			//Feld vorrausetzungen 
+				$sem_create_data["sem_orga"]."', '".			//Feld lernorga 
+				$sem_create_data["sem_leistnw"]."', '".			//Feld leistungsnachweis 
+				$serialized_metadata."', '".					//Feld metadata_dates 
+				time()."', '".								//Feld mkdate 
+				time()."', '".								//Feld chdate 
+				$sem_create_data["sem_ects"]."', '".			//Feld ects
+				$sem_create_data["sem_admission_date"]."', '".	//Feld admission_endtime 
+				$sem_create_data["sem_turnout"]."', '".			//Feld admission_turnout 
+				"', '".										//Feld admission_binding
+				$sem_create_data["sem_admission"]."', '".		//Feld admission_type 
+				"' )";										//Feld admission_selection_take_place
 
 		//und jetzt wirklich eintragen
 		if (!$sem_create_data["sem_entry"])
@@ -698,7 +845,7 @@ if ($cmd_f)
 					$self_included=TRUE;
 				$query = "insert into seminar_user  values('".
 					$sem_create_data["sem_id"]."', '".
-					$tmp_array."', 'dozent', '$group')";
+					$tmp_array."', 'dozent', '$group', '')";
 				$db3->query($query);// Dozenten eintragen
 				if ($db3->affected_rows() >=1)
 					$count_doz++;
@@ -711,7 +858,7 @@ if ($cmd_f)
 
 			$query = "insert into seminar_user  values('".
 				$sem_create_data["sem_id"]."', '".
-				$user_id."', 'dozent', '$group')";
+				$user_id."', 'dozent', '$group', '')";
 			$db3->query($query);
 			if ($db3->affected_rows() >=1)
 				$count_doz++;
@@ -733,7 +880,7 @@ if ($cmd_f)
 					{
 					$query = "insert into seminar_user  values('".
 						$sem_create_data["sem_id"]."', '".
-						$tmp_array."', 'tutor', '$group')";
+						$tmp_array."', 'tutor', '$group', '')";
 					$db3->query($query);			     // Tutor eintragen
 						if ($db3->affected_rows() >= 1)
 							$count_tut++;
@@ -741,8 +888,7 @@ if ($cmd_f)
 				}
 			}
 
-		///Eintrag der Studienbereiche
-
+		//Eintrag der Studienbereiche
 		if (is_array($sem_create_data["sem_bereich"]))
 			{
 			$count_bereich=0;
@@ -757,7 +903,22 @@ if ($cmd_f)
 					}
 				}
 			}
+			
+		//Eintrag der zugelassen Studienbereiche
+		if ($sem_create_data["sem_admission"]) {
+			if (is_array($sem_create_data["sem_studg"]))
+				foreach($sem_create_data["sem_studg"] as $key=>$val)
+					if ($val["ratio"]) {
+						$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
+						$db3->query($query);// Studiengang eintragen
+					}
+			if ($sem_create_data["sem_all_ratio"]) {
+				$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', 'all', '".$sem_create_data["sem_all_ratio"]."' )";
+				$db3->query($query);// Studiengang eintragen
+			}
+		}
 
+		//Eintrag der beteiligten Institute
 		if (is_array($sem_create_data["sem_bet_inst"])>0)
 			{
 			$count_bet_inst=0;
@@ -770,7 +931,7 @@ if ($cmd_f)
 				}
 			}
 
-		// Heimat-Institut ebenfalls eintragen, wenn noch nicht da
+		//Heimat-Institut ebenfalls eintragen, wenn noch nicht da
 		$query = "INSERT IGNORE INTO seminar_inst values('".$sem_create_data["sem_id"]."', '".$sem_create_data["sem_inst_id"]."')";
 		$db3->query($query);
 
@@ -809,13 +970,13 @@ if ($cmd_f)
 	}
 
 //Nur der Form halber... es geht weiter zur Literaturliste
-if ($cmd_g)
+if ($cmd_g_x)
    	{
 	$level=7;
    	}
 
 //Eintragen der Literatur und Links
-if ($cmd_h)
+if ($cmd_h_x)
 	{
 	if ($sem_create_data["lit_entry"])
 		$db->query("UPDATE literatur SET literatur='".$sem_create_data["sem_literat"]."', links='".$sem_create_data["sem_links"]."', chdate='".time()."' WHERE literatur_id='".$sem_create_data["sem_lit_id"]."'");
@@ -891,14 +1052,14 @@ if ((!$level) || ($level==1))
 			</td>
 		</tr>
 		<tr>
-			<td class="blank">
+			<td class="blank" valign="top">
 				<blockquote>
 				Willkommen beim Veranstaltungs-Assistenten. Der Veranstaltungs-Assistent wird Sie nun Schritt f&uuml;r Schritt durch die notwendigen Schritte zum Anlegen einer neuen Veranstaltung in Stud.IP leiten.<br><br>
-				<b>Schritt 1: Grunddaten der Veranstaltung angeben</b><br>
+				<b>Schritt 1: Grunddaten der Veranstaltung angeben</b><br><br />
 				<font size=-1>Alle mit einem Sternchen&nbsp;</font><font color="red" size=+1><b>*</b></font><font size=-1>&nbsp;markierten Felder sind zwingend notwendig, um eine Veranstaltung anlegen zu k&ouml;nnen.</font><br><br>
 				</blockqoute>
 			</td>
-			<td class="blank" align="right">
+			<td class="blank" align="right" valign="top">
 				<img src="pictures/hands01.jpg" border="0">
 			</td>
 		</tr>
@@ -906,12 +1067,20 @@ if ((!$level) || ($level==1))
 			<td class="blank" colspan=2>
 			<form method="POST" action="<? echo $PHP_SELF ?>">
 			<input type="HIDDEN" name="form" value=1>
-				<table width ="100%" cellspacing=1 cellpadding=1>
-					<tr>
-						<td width="10%" align="right">
+				<table cellspacing=0 cellpadding=2 border=0 width="99%" align="center">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_b">
+						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Name der Veranstaltung:
 						</td>
-						<td width="90%"  colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <input type="text" name="sem_name" size=58 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_name"])) ?>">
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Bitte geben Sie hier einen aussagekräftigen aber möglichst knappen Titel für die Veranstaltung ein. Dieser Eintrag erscheint innerhalb des Systems durchgehend zur Identifikation der Veranstaltung.');" 
@@ -919,22 +1088,22 @@ if ((!$level) || ($level==1))
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Untertitel:
 						</td>
-						<td width="90%"  colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <input type="text" name="sem_untert" size=58 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_untert"]))?>">
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Der Untertitel ermöglicht eine genauere Beschreibung der Veranstaltung.');" 
 									alt="Der Untertitel erm&ouml;glicht eine genauere Beschreibung der Veranstaltung.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Kategorie:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; 
 							<?
 								$i=0;
@@ -953,63 +1122,100 @@ if ((!$level) || ($level==1))
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
-							Art der Veranstaltung:
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Raum:
 						</td>
-						<td width="30%" colspan=1>
-							&nbsp; <input type="text" name="sem_art" size=30 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_art"])) ?>">
+						<td class="<? echo $cssSw->getClass() ?>" width="30%" colspan=1>
+							&nbsp; <input type="text" name="sem_ort" size=20 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_ort"]))  ?>">
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Hier können Sie eine frei wählbare Bezeichnug für die Art der Veranstaltung wählen.');" 
-									alt="Hier k&ouml;nnen Sie eine frei w&auml;hlbare Bezeichnug f&uuml;r die Art der Veranstaltung w&auml;hlen.">
+									onClick="alert('Der Raum, in dem die Veranstaltung stattfindet.');" 
+									alt="Der Raum in dem die Veranstaltung stattfindet.">
 						</td>
-						<td width="10%" align="right">
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Veranstaltungsnummer:
 						</td>
-						<td width="60%">
+						<td class="<? echo $cssSw->getClass() ?>" width="60%">
 							&nbsp; <input type="int" name="sem_nummer" size=6 maxlength=6 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Die von der Universität vergebene Veranstaltungsnummer');" 
 									alt="Die von der Universit&auml;t vergebene Veranstaltungsnummer">							
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
-							Raum:
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Turnus:
 						</td>
-						<td width="30%" colspan=1>
-							&nbsp; <input type="text" name="sem_ort" size=20 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_ort"]))  ?>">
+						<td class="<? echo $cssSw->getClass() ?>" width="30%" colspan=1>
+							&nbsp; <select  name="term_art">
+							<?
+							if ($sem_create_data["term_art"] == 0) 
+								echo "<option selected value=0>regelm&auml;&szlig;ig</option>";
+							else
+								echo "<option value=0>regelm&auml;&szlig;ig</option>>";
+							if ($sem_create_data["term_art"] == 1) 
+								echo "<option selected value=1>unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
+							else
+								echo "<option value=1>unregelm&auml;&szlig;ig oder Blockveranstaltung</option>";
+											
+							?>
+							</select>
 							<img  src="./pictures/info.gif" 
-									onClick="alert('Der Raum, in dem die Veranstaltung stattfindet.');" 
-									alt="Der Raum in dem die Veranstaltung stattfindet.">
+									onClick="alert('Bitte wählen Sie hier aus, ob die Veranstaltung regelmässig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)');" 
+									alt="Bitte w&auml;hlen Sie hier aus, ob die Veranstaltung regelm&auml;ssig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)">
+							<font color="red" size=+2>*</font>									
 						</td>
-						<td width="10%" align="right">
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							ECTS-Punkte:
 						</td>
-						<td width="60%">
+						<td class="<? echo $cssSw->getClass() ?>" width="60%">
 							&nbsp; <input type="int" name="sem_ects" size=6 maxlength=32 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_ects"])) ?>">
 							<img  src="./pictures/info.gif" 
 									onClick="alert('ECTS-Kreditpunkte, die in dieser Veranstaltung vergeben werden.');" 
 									alt="ECTS-Kreditpunkte, die in dieser Veranstaltung vergeben werden.">
 						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Anmeldung:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" nowrap width="30%" colspan=1>
+ 							&nbsp; <input type="CHECKBOX" name="sem_admission_chron" <? if ($sem_create_data["sem_admission"]=="2") echo checked?>>
+ 							Teilnehmerzahl beschr&auml;nken <i>oder</i><br />
+ 							&nbsp; <input type="CHECKBOX" name="sem_admission_los" <? if ($sem_create_data["sem_admission"]=="1") echo checked?>>
+ 							Teilnehmerbeschr&auml;nkung per Losverfahren
+							<img  src="./pictures/info.gif" 
+									onClick="alert('Sie können die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie können später Angaben über zugelassene Teilnehmer machen.');" 
+									alt="Sie k&ouml;nnen die Teilnhmezahl in der Reihenfolgen der Anmeldung chronologisch vornehmen oder das Losverfahren benutzen. Sie k&ouml;nnen sp&auml;ter Angaben &uuml;ber zugelassene Teilnehmer machen.">
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							erwartete Teilnehmeranzahl:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="60%">
+							&nbsp; <input type="int" name="sem_turnout" size=6 maxlength=5 value="<? echo $sem_create_data["sem_turnout"] ?>">
+							<img  src="./pictures/info.gif" 
+									onClick="alert('Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  » Anmeldebeschränkung benutzen«.');" 
+									alt="Hier geben Sie die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldungsverfahren starten, wenn sie  »Anmeldebeschr&auml;nkung benutzen">
+						</td>
 						
 					</tr>
-					<tr>
-						<td width="10%" align="right">
-							Beschreibung:
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Beschreibung/ Kommentar:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <textarea name="sem_desc" cols=58 rows=6><? echo htmlReady(stripslashes($sem_create_data["sem_desc"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Hier geben Sie bitte den eigentlichen Kommentartext der Veranstaltung ein.');" 
 									alt="Hier geben Sie bitte den eigentlichen Kommentartext der Veranstaltung ein.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Heimatinstitut:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp;
 							<?
 								if (!$perm->have_perm("admin")) //Alles unter Admin bekommt Institut, in denen er Dozent ist
@@ -1036,11 +1242,11 @@ if ((!$level) || ($level==1))
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							beteiligte Institute:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <select  name="sem_bet_inst[]" MULTIPLE SIZE=7>
 							<?
 								$db->query("SELECT * FROM Institute  WHERE Name NOT LIKE '%- - -%' ORDER BY Name");
@@ -1063,37 +1269,12 @@ if ((!$level) || ($level==1))
 									alt="Bitte markieren Sie hier alle Institute, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie k&ouml;nnen sp&auml;ter nur DozentInnen aus den Instituten ausw&auml;hlen, die entweder als Heimt- oder beteiligtes Institut markiert worden sind. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
-							Turnus:
-						</td>
-						<td width="90%" colspan=3>
-							&nbsp; <select  name="term_art">
-							<?
-							if ($sem_create_data["term_art"] == 0) 
-								echo "<option selected value=0>regelm&auml;&szlig;ige Veranstaltung</option>";
-							else
-								echo "<option value=0>regelm&auml;&szlig;ige Veranstaltung</option>>";
-							if ($sem_create_data["term_art"] == 1) 
-								echo "<option selected value=1>unregelm&auml;&szlig;ige Veranstaltung</option>";
-							else
-								echo "<option value=1>unregelm&auml;&szlig;ige Veranstaltung</option>";
-											
-							?>
-							</select>
-							<img  src="./pictures/info.gif" 
-									onClick="alert('Bitte wählen Sie hier aus, ob die Veranstaltung regelmässig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)');" 
-									alt="Bitte w&auml;hlen Sie hier aus, ob die Veranstaltung regelm&auml;ssig stattfindet, oder ob die Sitzungen nur an bestimmten Terminen stattfinden (etwa bei einem Blockseminar)">
-							<font color="red" size=+2>*</font>									
-						</td>
-					</tr>
-					
-					<tr>
-						<td width="10%">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
 						</td>
-						<td width="90%" align="center" colspan=3>
-							&nbsp; <input type="SUBMIT" value="Weiter >>" name="cmd_b">
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_b">
 						</td>
 					</tr>
 				</table>
@@ -1109,7 +1290,7 @@ if ($level==2)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
+		<tr >
 			<td class="topic" colspan=2><b>
 			<?
 				if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"])
@@ -1127,18 +1308,18 @@ if ($level==2)
 			</td>
 		</tr>
 		<tr>
-			<td class="blank">
+			<td class="blank" valign="top">
 				<blockquote>
 				<?
 				if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"])
-					echo "<b>Schritt 2: Personendaten, Studienbereiche und weitere Angaben der Veranstaltung</b><br>";
+					echo "<b>Schritt 2: Personendaten, Studienbereiche und weitere Angaben der Veranstaltung</b><br><br>";
 				else
-					echo "<b>Schritt 2: Personendaten und weitere Angaben der Veranstaltung </b><br>";
+					echo "<b>Schritt 2: Personendaten und weitere Angaben der Veranstaltung </b><br><br>";
 				?>
 				<font size=-1>Alle mit einem Sternchen&nbsp;</font><font color="red" size=+1><b>*</b></font><font size=-1>&nbsp;markierten Felder sind zwingend notwendig, um eine Veranstaltung anlegen zu k&ouml;nnen.</font><br><br>
 				</blockqoute>
 			</td>
-			<td class="blank" align="right">
+			<td class="blank" align="right" valign="top">
 				<img src="pictures/hands02.jpg" border="0">
 			</td>
 		</tr>
@@ -1146,12 +1327,20 @@ if ($level==2)
 			<td class="blank" colspan=2>
 			<form method="POST" action="<? echo $PHP_SELF ?>">
 			<input type="HIDDEN" name="form" value=2>
-				<table width ="100%" cellspacing=1 cellpadding=1>
-					<tr>
-						<td width="10%" align="right">
+				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_a">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_c">
+						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							DozentInnen der Veranstaltung:
 						</td>
-						<td width="90%"  colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <select name="sem_doz[]" MULTIPLE SIZE=7>
 							<?
 								$clause='';
@@ -1188,11 +1377,11 @@ if ($level==2)
 							<font color="red" size=+2>*</font>
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							TutorInnen der Veranstaltung:
 						</td>
-						<td width="90%"  colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <select name="sem_tut[]" MULTIPLE SIZE=7>
 							<?
 								$clause='';
@@ -1226,11 +1415,11 @@ if ($level==2)
 									alt="Die Tutoren der Veranstaltung. Diese haben eingeschr&auml;nkte Zugriffsrechte. Sie k&ouml;nnen mehrere Eintr&auml;ge markieren, indem sie die STRG bzw. APPLE Taste gedr&uuml;ckt halten.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Typ der Veranstaltung:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <select name="sem_status">
 							<?
 								for ($i=1; $i <= sizeof($SEM_TYPE); $i++) {
@@ -1244,19 +1433,32 @@ if ($level==2)
 									alt="&Uuml;ber den Typ der Veranstaltung werden die Veranstaltungen innerhalb von Listen gruppiert.">							
 							<font color="red" size=+2>*</font>
 						</td>
-					</tr>					
+					</tr>	
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Art der Veranstaltung:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+							&nbsp; <input type="text" name="sem_art" size=30 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_art"])) ?>">
+							<font size=-1>(eigene Beschreibung)</font>
+							<img  src="./pictures/info.gif" 
+									onClick="alert('Hier können Sie eine frei wählbare Bezeichnug für die Art der Veranstaltung wählen.');" 
+									alt="Hier k&ouml;nnen Sie eine frei w&auml;hlbare Bezeichnug f&uuml;r die Art der Veranstaltung w&auml;hlen.">
+						</td>
+					</tr>
+									
 					<?
 					if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"])
 					{
 					?>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Studienbereiche:<br>
 							<font color="red" size=-1>
 								(Studien<i>f&auml;cher</i> sind rot bzw. innerhalb der Linien dargestellt und k&ouml;nnen nicht ausgew&auml;hlt werden!)
 							</font>
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <select MULTIPLE name="sem_bereich[]" SIZE=10>
 							<?
 								$fachtmp="0";
@@ -1278,9 +1480,11 @@ if ($level==2)
 										$db4->query("SELECT name from faecher WHERE fach_id = '$fachtmp'");
 										while ($db4->next_record())
 											{
+											//echo "</optgroup>"; ## Optgroups funktionieren nur ab Browser v. 6 Koennen auf Wunsch statt der naechsten drei Zeilen verwendet werden
 											echo "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
 											echo "<option style=\"color:red;\" value = \"nix\">".my_substr($db4->f("name"),0,60)."</option>";
 											echo "<option style=\"color:red;\" value = \"nix\">------------------------------------------------------------</option>";
+											//echo "<optgroup style=\"color:red;\" label=\"".my_substr($db4->f("name"),0,60)."\">";
 											}
 										}
 										// Anzeige ob Selected oder nicht
@@ -1306,12 +1510,13 @@ if ($level==2)
 					<?
 					}
 					?>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Lesezugriff:
 						</td>
-						<td width="90%" colspan=3>
-							<?
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+							<?					
+							if (!$sem_create_data["sem_admission"]) {
 								if (!isset($sem_create_data["sem_sec_lese"])) $sem_create_data["sem_sec_lese"] = "1";	//Vorgabe: nur angemeldet
 							?>
 								<input type="radio" name="sem_sec_lese" value="0" <?php print $sem_create_data["sem_sec_lese"] == 0 ? "checked" : ""?>> freier Zugriff &nbsp;
@@ -1320,14 +1525,19 @@ if ($level==2)
 								<img  src="./pictures/info.gif" 
 									onClick="alert('Hier geben Sie an, ob der Lesezugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.');" 
 									alt="Hier geben Sie an, ob der Lesezugriff auf das Veranstaltung frei (jeder), normal beschr&auml;nkt (nur angemdeldet) oder nur mit einem speziellen Passwort m&ouml;glich ist.">
+							<?
+							} else
+								print "&nbsp; <font size=-1>Leseberechtigung nach erfolgreichem Anmeldeprozess</font>"
+							?>
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Schreibzugriff:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<?
+							if (!$sem_create_data["sem_admission"]) {
 								if (!isset($sem_create_data["sem_sec_schreib"])) $sem_create_data["sem_sec_schreib"] = "1";	//Vorgabe: nur angemeldet
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["write_access_nobody"]) {
 									?>
@@ -1345,14 +1555,18 @@ if ($level==2)
 								<img  src="./pictures/info.gif" 
 									onClick="alert('Hier geben Sie an, ob der Schreibzugriff auf das Veranstaltung frei (jeder), normal beschränkt (nur angemdeldet) oder nur mit einem speziellen Passwort möglich ist.');" 
 									alt="Hier geben Sie an, ob der Schreibzugriff auf das Veranstaltung frei (jeder), normal beschr&auml;nkt (nur angemdeldet) oder nur mit einem speziellen Passwort m&ouml;glich ist.">
+							<?
+							} else
+								print "&nbsp; <font size=-1>Schreibberechtigung nach erfolgreichem Anmeldeprozess</font>"
+							?>
 						</td>
 					</tr>
-					<tr>
-						<td width="10%">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
 						</td>
-						<td width="90%" align="center" colspan=3>
-							&nbsp; <input type="SUBMIT" value="<< Zur&uuml;ck" name="cmd_a">&nbsp;<input type="SUBMIT" name="cmd_c" value="Weiter >>">
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_a">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_c">
 						</td>
 					</tr>
 				</table>
@@ -1380,25 +1594,25 @@ if ($level==3)
 			</td>
 		</tr>
 		<tr>
-			<td class="blank">
+			<td class="blank" valign="top">
 				<blockquote>
 				<b>Schritt 3: Daten &uuml;ber die Termine</b><br><br>
 				<? if ($sem_create_data["term_art"] ==0) 
 					{?>
-					Bitte geben Sie hier ein, an welchen Tagen das Seminar stattfindet. Wenn Sie nur einen Wochentag wissen, brauchen Sie nur diesen angeben.<br>Sie haben sp&auml;ter die M&ouml;glichkeit, weitere Einzelheiten zu diesen Terminen anzugeben.<br>
+					Bitte geben Sie hier ein, an welchen Tagen das Seminar stattfindet. Wenn Sie nur einen Wochentag wissen, brauchen Sie nur diesen angeben.<br>Sie haben sp&auml;ter die M&ouml;glichkeit, weitere Einzelheiten zu diesen Terminen anzugeben.<br><br>
 					<?
 					}
 				else
 					{
 					?>
-					Bitte geben Sie hier die eizelnen Termine, an denen die Veranstaltung stattfinden, an. <br> Sie haben sp&auml;ter die M&ouml;glichkeit, weitere Einzelheiten zu diesen Terminen anzugeben.<br>
+					Bitte geben Sie hier die eizelnen Termine, an denen die Veranstaltung stattfinden, an. <br> Sie haben sp&auml;ter die M&ouml;glichkeit, weitere Einzelheiten zu diesen Terminen anzugeben.<br><br>
 					<?
 					}
 				?>
 				<font size=-1>Alle mit einem Sternchen&nbsp;</font><font color="red" size=+1><b>*</b></font><font size=-1>&nbsp;markierten Felder sind zwingend notwendig, um eine Veranstaltung anlegen zu k&ouml;nnen.</font><br><br>
 				</blockqoute>
 			</td>
-			<td class="blank" align="right">
+			<td class="blank" align="right" valign="top">
 				<img src="pictures/hands03.jpg" border="0">
 			</td>
 		</tr>
@@ -1406,17 +1620,25 @@ if ($level==3)
 			<td class="blank" colspan=2>
 			<form method="POST" name="form_3" action="<? echo $PHP_SELF ?>">
 			<input type="HIDDEN" name="form" value=3>
-				<table width ="100%" cellspacing=1 cellpadding=1>
+				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_b">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_d">
+						</td>
+					</tr>
 					<?
 						if ($sem_create_data["term_art"] ==0)
 							{
 							?>
-							<tr>
-								<td width="10%" align="right">
+							<tr <? $cssSw->switchClass() ?>>
+								<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 									&nbsp; Daten &uuml;ber die Termine:
 								</td>
-								<td width="90%" colspan=3>
-									&nbsp; <b>Regelm&auml;&szlig;ige Veranstaltung</b><br><br>
+								<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+									&nbsp; <b><font size=-1>Regelm&auml;&szlig;ige Veranstaltung</font></b><br><br>
 									&nbsp;  <font size=-1>Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte auf die erste Seite zur&uuml;ck.</font><br><br>
 									&nbsp; Turnus: &nbsp; 
 									<select name="term_turnus">
@@ -1487,10 +1709,10 @@ if ($level==3)
 											echo "<option value=7>Sonntag</option>";
 										echo "</select>\n";
 										?>
-										&nbsp; <input type="text" name="term_turnus_start_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_start_stunde"][$i]) echo $sem_create_data["term_turnus_start_stunde"][$i] ?>"> :
-										<input type="text" name="term_turnus_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_start_minute"][$i]) && ($sem_create_data["term_turnus_start_minute"][$i] >0)) { if ($sem_create_data["term_turnus_start_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_start_minute"][$i]; else echo $sem_create_data["term_turnus_start_minute"][$i];  } elseif ($sem_create_data["term_turnus_start_stunde"][$i]) echo "00"; ?>">Uhr bis
+										<font size=-1>&nbsp; <input type="text" name="term_turnus_start_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_start_stunde"][$i]) echo $sem_create_data["term_turnus_start_stunde"][$i] ?>"> :
+										<input type="text" name="term_turnus_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_start_minute"][$i]) && ($sem_create_data["term_turnus_start_minute"][$i] >0)) { if ($sem_create_data["term_turnus_start_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_start_minute"][$i]; else echo $sem_create_data["term_turnus_start_minute"][$i];  } elseif ($sem_create_data["term_turnus_start_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr bis
 										&nbsp; <input type="text" name="term_turnus_end_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_turnus_end_stunde"][$i]) echo $sem_create_data["term_turnus_end_stunde"][$i] ?>"> :
-										<input type="text" name="term_turnus_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) { if ($sem_create_data["term_turnus_end_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_end_minute"][$i]; else echo $sem_create_data["term_turnus_end_minute"][$i];  } elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo "00"; ?>">Uhr
+										<input type="text" name="term_turnus_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_turnus_end_minute"][$i]) && ($sem_create_data["term_turnus_end_minute"][$i] >0)) { if ($sem_create_data["term_turnus_end_minute"][$i] < 10) echo "0", $sem_create_data["term_turnus_end_minute"][$i]; else echo $sem_create_data["term_turnus_end_minute"][$i];  } elseif ($sem_create_data["term_turnus_end_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr</font>
 										<? if ($sem_create_data["turnus_count"]>1) 
 											{
 											?>
@@ -1499,13 +1721,12 @@ if ($level==3)
 											}
 										}
 										?>
-										&nbsp; &nbsp; <input type="submit" name="add_turnus_field" value="Feld hinzuf&uuml;gen"><br />
-										&nbsp; <font size=-1>keine Zeiten speichern:<input type="checkbox" name="block_na" <? if ($sem_create_data["block_na"]) echo "checked" ?>/>(Zeiten nach besonderer Ank&uuml;ndigung)</font>
+										&nbsp; &nbsp; <input type="IMAGE" name="add_turnus_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
 										<img  src="./pictures/info.gif" 
 											onClick="alert('Wenn es sich um eine zyklische Veranstaltung handelt, so können Sie hier genau angeben, an welchen Tagen und zu welchen Zeiten die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern«.');" 
 											alt="Wenn es sich um eine zyklische Veranstaltung handelt, so k&ouml;nnen Sie hier genau angeben, an welchen Tagen und zu welchen Zeiten die Veranstaltung stattfindet. Wenn Sie noch keine Zeiten wissen, dann klicken Sie auf »keine Zeiten speichern".">
 										<font color="red" size=+2>*</font>											
-										<br><br>
+										<br>
 								</td>
 							</tr>
 						<?
@@ -1513,12 +1734,12 @@ if ($level==3)
 					else
 						{
 						?>
-							<tr>
-								<td width="10%" align="right">
+							<tr <? $cssSw->switchClass() ?>>
+								<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 									&nbsp; Daten &uuml;ber die Termine:
 								</td>
-								<td width="90%" colspan=3>
-									&nbsp; <b>Veranstaltung an unregelm&auml;&szlig;igen Terminen</b><br><br>
+								<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+									&nbsp; <b><font size=-1>Veranstaltung an unregelm&auml;&szlig;igen Terminen</font></b><br><br>
 									&nbsp;  <font size=-1>Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte auf die erste Seite zur&uuml;ck.</font><br><br>
 									&nbsp; Die Veranstaltung findet an diesen Terminen statt:<br><br>
 									<?
@@ -1528,13 +1749,13 @@ if ($level==3)
 										{
 										if ($i>0) echo "<br>";
 										?>
-										&nbsp; Datum: <input type="text" name="term_tag[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_tag"][$i]) echo $sem_create_data["term_tag"][$i] ?>">.
+										<font size=-1>&nbsp; Datum: <input type="text" name="term_tag[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_tag"][$i]) echo $sem_create_data["term_tag"][$i] ?>">.
 										<input type="text" name="term_monat[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_monat"][$i]) echo $sem_create_data["term_monat"][$i] ?>">.
 										<input type="text" name="term_jahr[<?echo $i?>]" size=4 maxlength=4 value="<? if ($sem_create_data["term_jahr"][$i]) echo $sem_create_data["term_jahr"][$i] ?>">
-										&nbsp; um <input type="text" name="term_start_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_start_stunde"][$i]) echo $sem_create_data["term_start_stunde"][$i] ?>"> :
-										<input type="text" name="term_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_start_minute"][$i]) && ($sem_create_data["term_start_minute"][$i] >0)) { if ($sem_create_data["term_start_minute"][$i] < 10) echo "0", $sem_create_data["term_start_minute"][$i]; else echo $sem_create_data["term_start_minute"][$i];  } elseif ($sem_create_data["term_start_stunde"][$i]) echo "00"; ?>">Uhr bis
+										&nbsp;um <input type="text" name="term_start_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_start_stunde"][$i]) echo $sem_create_data["term_start_stunde"][$i] ?>"> :
+										<input type="text" name="term_start_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_start_minute"][$i]) && ($sem_create_data["term_start_minute"][$i] >0)) { if ($sem_create_data["term_start_minute"][$i] < 10) echo "0", $sem_create_data["term_start_minute"][$i]; else echo $sem_create_data["term_start_minute"][$i];  } elseif ($sem_create_data["term_start_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr bis
 										<input type="text" name="term_end_stunde[<?echo $i?>]" size=2 maxlength=2 value="<? if ($sem_create_data["term_end_stunde"][$i]) echo $sem_create_data["term_end_stunde"][$i] ?>"> :
-										<input type="text" name="term_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_end_minute"][$i]) && ($sem_create_data["term_end_minute"][$i] >0)) { if ($sem_create_data["term_end_minute"][$i] < 10) echo "0", $sem_create_data["term_end_minute"][$i]; else echo $sem_create_data["term_end_minute"][$i];  } elseif ($sem_create_data["term_end_stunde"][$i]) echo "00"; ?>">Uhr
+										<input type="text" name="term_end_minute[<?echo $i?>]" size=2 maxlength=2 value="<? if (($sem_create_data["term_end_minute"][$i]) && ($sem_create_data["term_end_minute"][$i] >0)) { if ($sem_create_data["term_end_minute"][$i] < 10) echo "0", $sem_create_data["term_end_minute"][$i]; else echo $sem_create_data["term_end_minute"][$i];  } elseif ($sem_create_data["term_end_stunde"][$i]) echo "00"; ?>">&nbsp;Uhr</font>
 										<? if ($sem_create_data["term_count"]>1) 
 											{
 											?>
@@ -1543,23 +1764,22 @@ if ($level==3)
 											}
 										}
 										?>
-										&nbsp; &nbsp; <input type="submit" name="add_term_field" value="Feld hinzuf&uuml;gen"><br />
-										&nbsp; <font size=-1>keine Termine speichern: <input type="checkbox" name="block_na" <? if ($sem_create_data["block_na"]) echo "checked" ?>/> (Termine nach besonderer Ank&uuml;ndigung)</font>
+										&nbsp; &nbsp; <input type="IMAGE" name="add_term_field" src="./pictures/buttons/feldhinzufuegen-button.gif" border=0 value="Feld hinzuf&uuml;gen">&nbsp; 
 										<img  src="./pictures/info.gif" 
 											onClick="alert('In diesem Feldern können Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann klicken Sie auf »keine Termine speichern.');" 
 											alt="In diesem Feldern k&ouml;nnen Sie aller Termine ein, an denen die Veranstaltung stattfindet. Wenn Sie noch keine Termine wissen, dann klicken Sie auf »keine Termine speichern.">
 										<font color="red" size=+2>*</font>
-										<br><br>
+										<br>
 								</td>
 							</tr>
 						<?
 						}
 						?>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Semester:
 						</td>
-						<td width="20%">
+						<td class="<? echo $cssSw->getClass() ?>" width="20%">
 							&nbsp;
 							<?
 							echo "<select name=\"sem_start_time\">";
@@ -1578,29 +1798,29 @@ if ($level==3)
 								alt="Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet werden solll.">
 							<font color="red" size=+2>*</font>
 						</td>
-						<td width="10%" align="right">
-							Endsemester:
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Dauer:
 						</td>
-						<td width="60%">
+						<td class="<? echo $cssSw->getClass() ?>" width="60%">
 							&nbsp; <select name="sem_duration_time">
 							<?
 								if ($sem_create_data["sem_duration_time"] == 0)
-									echo "<option value=0 selected>--</option>";
+									echo "<option value=0 selected>1 Semester</option>";
 								else
-									echo "<option value=0>--</option>";
+									echo "<option value=0>1 Semester</option>";
 								$i=1;
 								for ($i; $i<=sizeof($SEMESTER); $i++)
 									if ((!$SEMESTER[$i]["past"]) && ($SEMESTER[$i]["name"] != $SEM_NAME) && (($SEMESTER[$i]["vorles_ende"] > time())))
 										{
 										if (($sem_create_data["sem_start_time"] + $sem_create_data["sem_duration_time"]) == $SEMESTER[$i]["beginn"])
 											{
-											if ((!$sem_create_data["sem_duration_time"] == 0) && (!$sem_create_data["sem_duration_time"] == 0))
-												echo "<option value=",$SEMESTER[$i]["beginn"], " selected>", $SEMESTER[$i]["name"], "</option>";
+											if (!$sem_create_data["sem_duration_time"] == 0)
+												echo "<option value=",$SEMESTER[$i]["beginn"], " selected>bis ", $SEMESTER[$i]["name"], "</option>";
 											else
-												echo "<option value=",$SEMESTER[$i]["beginn"], ">", $SEMESTER[$i]["name"], "</option>";
+												echo "<option value=",$SEMESTER[$i]["beginn"], ">bis ", $SEMESTER[$i]["name"], "</option>";
 											}
 										else
-											echo "<option value=",$SEMESTER[$i]["beginn"], ">", $SEMESTER[$i]["name"], "</option>";
+											echo "<option value=",$SEMESTER[$i]["beginn"], ">bis ", $SEMESTER[$i]["name"], "</option>";
 										}
 								if ($sem_create_data["sem_duration_time"] == -1)
 									echo "<option value=-1 selected>unbegrenzt</option>";
@@ -1613,32 +1833,31 @@ if ($level==3)
 								alt="Falls die Veranstaltung mehrere Semester l&auml;uft, k&ouml;nnen Sie hier das Endsemester w&auml;hlen. Dauerveranstaltung k&ouml;nnen &uuml;ber die entsprechende Einstellung markiert werden.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Vorbesprechung:
 						</td>
-						<td width="90%" colspan=3>
-							<br>
-							&nbsp; <font size=-1>Wenn es eine Vorbesprechung gibt, tragen Sie diese bitte hier ein:</font><br><br>&nbsp; Datum:
-							<input type="text" name="vor_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("d",$sem_create_data["sem_vor_termin"]); else echo"tt" ?>">.
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+							<font size=-1>&nbsp; <font size=-1>Wenn es eine Vorbesprechung gibt, tragen Sie diese bitte hier ein:</font><br><br>&nbsp; Datum:</font>
+							<font size=-1><input type="text" name="vor_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("d",$sem_create_data["sem_vor_termin"]); else echo"tt" ?>">.
 							<input type="text" name="vor_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("m",$sem_create_data["sem_vor_termin"]); else echo"mm" ?>">.
-							<input type="text" name="vor_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("Y",$sem_create_data["sem_vor_termin"]); else echo"jjjj" ?>">&nbsp; 
-							&nbsp; um <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); else echo"ss" ?>"> :
-							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); else echo"mm" ?>">Uhr bis
+							<input type="text" name="vor_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("Y",$sem_create_data["sem_vor_termin"]); else echo"jjjj" ?>">&nbsp;
+							&nbsp;um <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); else echo"hh" ?>"> :
+							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); else echo"mm" ?>">&nbsp;Uhr bis
 							<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_end_termin"]); else echo"mm" ?>"> :
-							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); else echo"ss" ?>">Uhr
-							&nbsp; Raum: <input type="text" name="vor_raum" size=10 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>">
+							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); else echo"hh" ?>">&nbsp;Uhr
+							&nbsp;Raum: <input type="text" name="vor_raum" size=10 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Dieses Feld müssen Sie nur ausfüllen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.');" 
 									alt="Dieses Feld m&uuml;ssen Sie nur ausf&uuml;llen, wenn es eine verbindliche Vorbesprechung zu der Veranstaltung gibt.">							
 						</td>
 					</tr>
-					<tr>
-						<td width="10%">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
 						</td>
-						<td width="90%" align="center" colspan=3>
-							&nbsp; <input type="SUBMIT" value="<< Zur&uuml;ck" name="cmd_b">&nbsp;<input type="SUBMIT" name="cmd_d" value="Weiter >>">
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_b">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_d">
 						</td>
 					</tr>
 				</table>
@@ -1655,25 +1874,25 @@ if ($level==4)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
+		<tr >
 			<td class="topic" colspan=2><b>&nbsp;Veranstaltungs-Assistent - Schritt 4: Sonstige Daten</b>
 			</td>
 		</tr>
 		<tr>
-			<td class="blank" colspan=2>&nbsp;
+			<td class="blank" colspan=2 >&nbsp;
 				<?
 				if ($errormsg) parse_msg($errormsg);
 				?>
 			</td>
 		</tr>
 		<tr>
-			<td class="blank">
+			<td class="blank" valign="top">
 				<blockquote>
-				<b>Schritt 4: Sonstige Daten zu der Veranstaltung</b><br>
+				<b>Schritt 4: Sonstige Daten zu der Veranstaltung</b><br><br>
 				<font size=-1>Alle mit einem Sternchen&nbsp;</font><font color="red" size=+1><b>*</b></font><font size=-1>&nbsp;markierten Felder sind zwingend notwendig, um eine Veranstaltung anlegen zu k&ouml;nnen.</font><br><br>
 				</blockqoute>
 			</td>
-			<td class="blank" align="right">
+			<td class="blank" align="right" valign="top">
 				<img src="pictures/hands04.jpg" border="0">
 			</td>
 		</tr>
@@ -1684,56 +1903,169 @@ if ($level==4)
                		>
 			<input type="HIDDEN" name="form" value=4>
                		<input type="HIDDEN" name="hashpass" value="">
-				<table width ="100%" cellspacing=1 cellpadding=1>
-					<tr>
-						<td width="10%" align="right">
-							Teilnehmer:
+				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
+							&nbsp;
 						</td>
-						<td width="90%"  colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_c">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_e">
+						</td>
+					</tr>
+					<?
+					if ($sem_create_data["sem_admission"]) {
+					?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Anmeldeverfahren:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
+							<font size=-1>&nbsp;Sie haben vorher das Stud.IP Anmeldeverfahren aktiviert. <br />
+							&nbsp;Bitte geben Sie hier an, welche Studieng&auml;nge mit welchen Kontingenten zugelassen sind und wann das Enddatum der Anmeldung ist:<br /><br />
+								<table border=0 cellpadding=2 cellspacing=0>
+									<tr>
+										<td class="<? echo $cssSw->getClass() ?>" valign="bottom" width="25%">
+										<font size=-1>&nbsp;
+										<?
+										printf ("%s", ($sem_create_data["sem_studg"]) ? "Alle anderen Studieng&auml;nge" : "Alle Studieng&auml;nge");
+										?>
+										</font>
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" valign="bottom"  nowrap width="5%">
+										<?
+										printf ("<input type=\"HIDDEN\" name=\"sem_all_ratio_old\" value=\"%s\" />", ($sem_create_data["sem_studg"]) ? $sem_create_data["sem_all_ratio"] : "100");
+										printf ("<input type=\"TEXT\" name=\"sem_all_ratio\" size=5 maxlength=5 value=\"%s\" /> <font size=-1> %%</font>", ($sem_create_data["sem_studg"]) ? $sem_create_data["sem_all_ratio"] : "100");
+										?>
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="25%">
+											<font size=-1>Enddatum:</font>
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
+											<font size=-1>&nbsp; <input type="text" name="adm_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("d",$sem_create_data["sem_admission_date"]); else echo"tt" ?>">.
+											<input type="text" name="adm_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("m",$sem_create_data["sem_admission_date"]); else echo"mm" ?>">.
+											<input type="text" name="adm_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("Y",$sem_create_data["sem_admission_date"]); else echo"jjjj" ?>">um&nbsp;</font><br />
+											<font size=-1>&nbsp; <input type="text" name="adm_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("H",$sem_create_data["sem_admission_date"]); else echo"23" ?>">:
+											<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("i",$sem_create_data["sem_admission_date"]); else echo"59" ?>">&nbsp;Uhr</font>
+										</td>
+									</tr>
+									<?
+									if ($sem_create_data["sem_studg"]) {
+										foreach ($sem_create_data["sem_studg"] as $key=>$val) {
+									?>
+									<tr>
+										<td class="<? echo $cssSw->getClass() ?>" width="25%">
+										<font size=-1>&nbsp;
+										<?
+										echo (htmlReady(my_substr($val["name"], 0, 40)));
+										?>
+										</font>
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" nowrap width="5%">
+										<input type="HIDDEN" name="sem_studg_id[]" value="<? echo $key ?>" />
+										<input type="HIDDEN" name="sem_studg_name[]" value="<? echo $val["name"] ?>" />
+										<?
+										printf ("<input type=\"HIDDEN\" name=\"sem_studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
+										printf ("<input type=\"TEXT\" name=\"sem_studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %%</font>", $val["ratio"]);
+										printf ("&nbsp; <a href=\"%s?sem_delete_studg=%s\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Den Studiengang %s aus der Liste l&ouml;schen\" />", $PHP_SELF, $key, $val["name"]);
+										?>
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" width="70%" colspan=2>&nbsp; 
+										</td>
+									</tr>
+									<?
+										}
+									}
+									$db->query("SELECT * FROM studiengaenge");
+									if ($db->num_rows() != sizeof($sem_create_data["sem_studg"])) {
+									?>
+									<tr>
+										<td class="<? echo $cssSw->getClass() ?>" width="25%">
+										<font size=-1>&nbsp;
+										<select name="sem_add_studg">
+										<option value="">-- bitte ausw&auml;hlen --</option>
+									<?
+									while ($db->next_record()) {
+										if (is_array($sem_create_data["sem_studg"])) {
+											if (!$sem_create_data["sem_studg"][$db->f("studiengang_id")])
+												printf ("<option value=%s>%s</option>", $db->f("studiengang_id"), htmlReady(my_substr($db->f("name"), 0, 40)));
+											}
+										else
+											printf ("<option value=%s>%s</option>", $db->f("studiengang_id"), htmlReady(my_substr($db->f("name"), 0, 40)));					
+									}
+									?>
+										</select>
+										</font>
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" nowrap width="5%">
+										<input type="TEXT" name="sem_add_ratio" size=5 maxlength=5 /><font size=-1> %</font>
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" width="25%">
+											<input type="IMAGE" src="./pictures/buttons/hinzufuegen-button.gif" name="add_studg" border=0 />&nbsp;
+											<img  src="./pictures/info.gif" 
+												onClick="alert('Bitte geben Sie hier ein, für welche Studiengänge die Veranstaltung mit welchen Kontingenten beschränkt sein soll und bis wann eine Anmeldung über das Stud.IP Anmeldeverfahren möglich ist.');" 
+												alt="'Bitte geben Sie hier ein, für welche Studieng&auml;nge die Veranstaltung mit welchen Kontingenten beschr&auml;nkt sein soll und bis wann eine Anmeldung &uuml;ber das Stud.IP Anmeldeverfahren m&ouml;glich ist.">
+										</td>
+										<td class="<? echo $cssSw->getClass() ?>" width="40%">&nbsp; 
+										</td>
+									</tr>
+									<?
+									} 
+									?>
+								</table>
+						</td>
+					</tr>
+					<?
+					}
+					?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							Teilnehmer- beschreibung:
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_teiln" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_teiln"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Bitte geben Sie hier ein, für welchen Teilnehmerkreis die Veranstaltung geeignet ist.');" 
 									alt="Bitte geben Sie hier ein, f&uuml;r welchen Teilnehmerkreis die Veranstaltung geeignet ist.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Voraussetzungen:
 						</td>
-						<td width="90%"  colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_voraus" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_voraus"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Bitte geben Sie hier ein, welche Vorausetzungen für die Veranstaltung nötig sind.');" 
 									alt="Bitte geben Sie hier ein, welche Vorausetzungen für die Veranstaltung n&ouml;tig sind.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Lernorganisation:
 						</td>
-						<td width="90%"  colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
 							&nbsp; <textarea name="sem_orga" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_orga"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Bitte geben Sie hier ein, mit welcher Lernorganisation die Veranstaltung durchgeführt wird.');" 
 									alt="Bitte geben Sie hier ein, mit welcher Lernorganisation die Veranstaltung durchgef&uuml;hrt wird.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Leistungsnachweis:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <textarea name="sem_leistnw" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_leistnw"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen.');" 
 									alt="Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden m&uuml;ssen.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Sonstiges:
 						</td>
-						<td width="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <textarea name="sem_sonst" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_sonst"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('Hier ist Platz für alle sonstigen Informationen der Veranstaltung.');" 
@@ -1744,11 +2076,11 @@ if ($level==4)
 					if (($sem_create_data["sem_sec_lese"] ==2) || ($sem_create_data["sem_sec_schreib"] ==2))
 						{
 						?>
-						<tr>
-							<td width="10%" align="right">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 								Passwort f&uuml;r Freischaltung:
 							</td>
-							<td width="90%" colspan=3>&nbsp;
+							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>&nbsp;
 								<?
 									if ($sem_create_data["sem_pw"]!="")
 										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31 value=\"*******\">&nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31 value=\"*******\">";
@@ -1765,15 +2097,15 @@ if ($level==4)
 					if (($sem_create_data["term_start_woche"]==-1) && ($sem_create_data["term_art"] == 0))
 						{
 						?>
-						<tr>
-							<td width="10%" align="right">
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 								erster Termin:
 							</td>
-							<td width="90%" colspan=3>
-								&nbsp; <font size=-1>Sie haben angegeben, an einem anderen Zeitpunkt mit der Veranstaltung zu beginnen. Bitte geben Sie hier den ersten Termin ein.</font><br><br>&nbsp; Datum: 
-								<input type="text" name="tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("d",$sem_create_data["sem_start_termin"]); else echo"tt" ?>">.
+							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+								<font size=-1>&nbsp; <font size=-1>Sie haben angegeben, an einem anderen Zeitpunkt mit der Veranstaltung zu beginnen. Bitte geben Sie hier den ersten Termin ein.</font><br><br>&nbsp; Datum: </font>
+								<font size=-1><input type="text" name="tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("d",$sem_create_data["sem_start_termin"]); else echo"tt" ?>">.
 								<input type="text" name="monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("m",$sem_create_data["sem_start_termin"]); else echo"mm" ?>">.
-								<input type="text" name="jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("Y",$sem_create_data["sem_start_termin"]); else echo"jjjj" ?>">&nbsp; 
+								<input type="text" name="jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_start_termin"]<>-1) echo date("Y",$sem_create_data["sem_start_termin"]); else echo"jjjj" ?>">&nbsp; </font>
 								<img  src="./pictures/info.gif" 
 										onClick="alert('Bitte geben Sie hier ein, wann der erste Termin der Veranstaltung stattfindet.');" 
 										alt="Bitte geben Sie hier nach M&ouml;glichkeit ein, wann der erste Termin der Veranstaltung stattfindet.">
@@ -1782,12 +2114,12 @@ if ($level==4)
 						<?
 						}
 					?>
-					<tr>
-						<td width="10%">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
 						</td>
-						<td width="90%" align="center" colspan=3>
-							&nbsp; <input type="SUBMIT" value="<< Zur&uuml;ck" name="cmd_c">&nbsp;<input  type="SUBMIT" name="cmd_e" value="Weiter >>">
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							&nbsp; <input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_c">&nbsp;<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_e">
 						</td>
 					</tr>
 				</table>
@@ -1815,17 +2147,17 @@ if ($level==5)
 			</td>
 		</tr>
 		<tr>
-			<td class="blank">
+			<td class="blank" valign="top">
 				<blockquote>
 				<b>Schritt 5: Bereit zum Anlegen der Veranstaltung</b><br><br>
 				Sie haben nun alle n&ouml;tigen Daten zum Anlegen der Veranstaltung eingegeben. Wenn Sie auf "Fertig stellen" klicken, wird die Veranstaltung in das System &uuml;bernommen. Wenn Sie sich sich nicht sicher sind, ob alle Daten korrekt sind, &uuml;berpr&uuml;fen Sie noch einmal die Eingaben auf den vorhergehenden Seiten.<br><br>
 				<form method="POST" action="<? echo $PHP_SELF ?>">
 					<input type="HIDDEN" name="form" value=5>
-					<input type="SUBMIT" value="<< Zur&uuml;ck" name="cmd_d">&nbsp;<input type="SUBMIT" name="cmd_f" value="Fertig stellen >>">
+					<input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_d">&nbsp;<input type="IMAGE" src="./pictures/buttons/fertigstellen-button.gif" border=0 value="Weiter >>" name="cmd_f">
 				</form>
 				</blockqoute>
 			</td>
-			<td class="blank" align="right">
+			<td class="blank" align="right" valign="top">
 				<img src="pictures/hands05.jpg" border="0">
 			</td>
 		</tr>
@@ -1856,10 +2188,10 @@ if ($level==6)
 				<td class="blank">
 					<blockquote>
 					<b>Die Veranstaltung konnte nicht angelegt werden.</b><br><br>
-					Bitte korrigieren Sie die Daten
+					Bitte korrigieren Sie die Daten.
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="SUBMIT" value="<< Daten korrigieren" name="cmd_a">
+						<input type="IMAGE" src="./pictures/buttons/zurueck-button.gif" border=0 value="Weiter >>" name="cmd_a">
 					</form>
 					</blockqoute>
 				</td>
@@ -1876,7 +2208,7 @@ if ($level==6)
 					Sie haben die Veranstaltung bereits angelegt und k&ouml;nnen nun mit der Literatur- und Linkverwaltung und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen.<br><br><br>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="SUBMIT" name="cmd_f" value="weitere Daten >>">
+						<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_f">
 					</form>
 					</blockqoute>
 				</td>
@@ -1889,18 +2221,18 @@ if ($level==6)
 		else
 			{ ?>
 			<tr>
-				<td class="blank">
+				<td class="blank" valign="top">
 					<blockquote>
 					<b>Die Daten der Veranstaltung wurden in das System &uuml;bernommen</b><br><br>
-					Die Veranstaltung ist damit eingerichtet. Wenn Sie auf "weitere Daten" klicken, k&ouml;nnen Sie weitere optionale Daten f&uuml;r die Veranstaltung eintragen. Sie haben die M&ouml;glichkeit, Literatur- und Linklisten einzugeben und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen.<br><br>
+					Die Veranstaltung ist damit eingerichtet. Wenn Sie nun auf "weiter >>" klicken, k&ouml;nnen Sie weitere optionale Daten f&uuml;r die Veranstaltung eintragen. Sie haben die M&ouml;glichkeit, Literatur- und Linklisten einzugeben und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen.<br><br>
 					<font size=-1>Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und die n&auml;chsten Schritte sp&auml;ter nachzuholen.</font><br><br>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
-						<input type="SUBMIT" name="cmd_g" value="weitere Daten >>">
+						<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_g">
 					</form>
 					</blockqoute>
 				</td>
-				<td class="blank" align="right">
+				<td class="blank" align="right" valign="top">
 					<img src="pictures/hands05.jpg" border="0">
 				</td>
 			</tr>
@@ -1911,7 +2243,7 @@ if ($level==6)
 					<table width ="60%" cellspacing=1 cellpadding=1>
 						<tr>
 							<td width="10%" class="blank">&nbsp; </td>
-							<td width="90%" class="angemeldet">
+							<td width="90%" class="steel1">
 							<?
 							echo "<br><br><ul><li>Veranstaltung \"<b>".htmlReady(stripslashes($sem_create_data["sem_name"]))."</b>\"erfolgreich angelgt.<br><br>";
 							if ($count_bet_inst==1)
@@ -1964,13 +2296,13 @@ if ($level==7)
 			</td>
 		</tr>
 		<tr>
-			<td class="blank">
+			<td class="blank" valign="top">
 				<blockquote>
 				<b>Schritt 6: Eingeben der Literatur- und Linkliste</b><br><br>
 				Sie k&ouml;nnen nun Literatur und Links f&uuml;r die eben angelegte Veranstaltung "<? echo $sem_create_data["sem_name"] ?>" eingeben. Wenn Sie auf "Fertig stellen" klicken, bekommen Sie noch die M&ouml;glichkeit, mit dem Termin-Assisten den Ablaufplan f&uuml;r die Veranstaltung anzulegen.<br><br>
 				</blockqoute>
 			</td>
-			<td class="blank" align="right">
+			<td class="blank" align="right" valign="top">
 				<img src="pictures/hands06.jpg" border="0">
 			</td>
 		</tr>
@@ -1978,35 +2310,43 @@ if ($level==7)
 			<td class="blank" colspan=2>
 			<form method="POST" name="form_4" action="<? echo $PHP_SELF ?>">
 			<input type="HIDDEN" name="form" value=7>
-				<table width ="100%" cellspacing=1 cellpadding=1>
-					<tr>
-						<td width="10%" align="right">
+				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
+					<tr<? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_h">
+						</td>
+					</tr>
+						<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Literaturliste:
 						</td>
-						<td width="90%"  colspan=3>
-							&nbsp; <textarea name="sem_literat" cols=58 rows=15><? echo $sem_create_data["sem_literat"] ?></textarea>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
+							&nbsp; <textarea name="sem_literat" cols=58 rows=10><? echo $sem_create_data["sem_literat"] ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('In diesen Feld können Sie eine komplette Literaturliste einfügen.');" 
 									alt="In diesen Feld k&ouml;nnen Sie eine komplette Literaturliste einfügen.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%" align="right">
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							Linkliste:
 						</td>
-						<td width="90%"  colspan=3>
-							&nbsp; <textarea name="sem_links" cols=58 rows=15><? echo $sem_create_data["sem_links"] ?></textarea>
+						<td class="<? echo $cssSw->getClass() ?>" class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
+							&nbsp; <textarea name="sem_links" cols=58 rows=10><? echo $sem_create_data["sem_links"] ?></textarea>
 							<img  src="./pictures/info.gif" 
 									onClick="alert('In diesen Feld können Sie eine komplette Linkliste einfügen. Alle Links werden später automatisch als Hyperlinks angezeigt.');" 
 									alt="In diesen Feld k&ouml;nnen Sie eine komplette Linkliste einfügen. Alle Links werden sp&auml;ter automatisch als Hyperlinks angezeigt.">
 						</td>
 					</tr>
-					<tr>
-						<td width="10%">
+					<tr<? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
 						</td>
-						<td width="90%" align="center" colspan=3>
-							&nbsp; <input type="SUBMIT" value="Fertig stellen & zum Termin-Assistenten" name="cmd_h">
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" align="center" colspan=3>
+							<input type="IMAGE" src="./pictures/buttons/weiter-button.gif" border=0 value="Weiter >>" name="cmd_h">
 						</td>
 					</tr>
 				</table>
