@@ -33,13 +33,13 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
-		
+
 require_once("config.inc.php"); //Grunddaten laden
 require_once("visual.inc.php"); //htmlReady
-	
+
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
-$db3=new DB_Seminar;	
+$db3=new DB_Seminar;
 
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
@@ -55,14 +55,14 @@ $db3=new DB_Seminar;
 		<td class="blank" width="100%" >
 			<br />
 			<div style="font-weight:bold;font-size:10pt;margin-left:10px;">
-			<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?> 
+			<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?>
 			</div>
 			<div style="margin-left:10px;">
 			<select name="institut_id" style="vertical-align:middle;">
 				<?
 				if ($perm->have_perm("root"))
 					printf ("<option %s value=\"%s\"> %s</option>", (($institut_id == "all") || (!$institut_id)) ? "selected" :"", "all", "alle");
-				
+
 				if ($perm->have_perm("root"))
 					$db3->query("SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
 				elseif ($perm->have_perm("admin"))
@@ -72,7 +72,7 @@ $db3=new DB_Seminar;
 					printf ("<option %s style=\"%s\" value=\"%s\"> %s</option>", $db3->f("Institut_id") == $institut_id ? "selected" : "",
 						($db3->f("is_fak")) ? "font-weight:bold;" : "", $db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
 					if ($db3->f("is_fak") && $db3->f("inst_perms") == "admin"){
-						$db2->query("SELECT a.Institut_id, a.Name FROM Institute a 
+						$db2->query("SELECT a.Institut_id, a.Name FROM Institute a
 									 WHERE fakultaets_id='" . $db3->f("Institut_id") . "' AND a.Institut_id!='" .$db3->f("Institut_id") . "' ORDER BY Name");
 						while($db2->next_record()){
 							printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("Institut_id") == $institut_id ? "selected" : "",
@@ -87,7 +87,7 @@ $db3=new DB_Seminar;
 			</div>
 		</td>
 		</form>
-	</tr>	
+	</tr>
 	<tr>
 		<td class="blank">
 <?
@@ -97,23 +97,19 @@ $db3=new DB_Seminar;
 			printf("<form action=\"%s\" method=\"post\">",$PHP_SELF);
 			printf("<table border=0 cellspacing=0 cellpadding=0 width=\"99%%\">");
 			if ($group == "group") {
-				my_info("Beachten Sie, dass ein Teilnehmer bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine Änderungen vor!");
+				my_info("Beachten Sie, dass einE TeilnehmerIn bereits f&uuml;r mehrere der zu gruppierenden Veranstaltungen eingetragen sein kann. Das System nimmt daran keine Änderungen vor!");
 				my_info("Wollen Sie die ausgewählten Veranstaltungen gruppieren?");
-			} else { 
-				my_info("Beachten Sie, dass für bereits eingetragene / auf der Warteliste stehende Teilnehmer keine Änderungen vorgenommen werden.");
+			} else {
+				my_info("Beachten Sie, dass für bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine Änderungen vorgenommen werden.");
 				my_info("Wollen Sie die Gruppierung für die ausgewählte Gruppe auflösen?");
 			}
 			echo "<tr><td>\n";
-			//if ($group == "group")
-			//	echo _("Gruppieren?");
-			//else
-			//	echo _("Gruppierung aufheben?");
-			printf("&nbsp;&nbsp;<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja2","src"),tooltip(_("Änderung durchfuehren")));
+			printf("&nbsp;&nbsp;<input %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\">\n",makeButton("ja2","src"),tooltip(_("Änderung durchführen")));
 			print("<input type=\"hidden\" name=\"real\" value=\"1\">\n");
 			printf("<input type=\"hidden\" name=\"group\" value=\"%s\">\n",$group);
 			printf("<input type=\"hidden\" name=\"institut_id\" value=\"%s\">\n",$institut_id);
 			printf("<input type=\"hidden\" name=\"seminarid\" value=\"%s\">\n",$seminarid);
-			if (($group == "group") && ($_REQUEST['gruppe'])) {			
+			if (($group == "group") && ($_REQUEST['gruppe'])) {
 				foreach ($_REQUEST['gruppe'] as $element) {
 					printf("<input type=\"hidden\" name=\"gruppe[]\" value=\"%s\">\n",$element);
 				}
@@ -138,17 +134,18 @@ $db3=new DB_Seminar;
 		}
 
 		if ((($institut_id == "all") || (!$institut_id)) && ($perm->have_perm("root")))
-			$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1  ORDER BY admission_group, Name";
+			$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1 OR admission_starttime <= ". time(). " ORDER BY admission_group DESC, start_time DESC, Name";
 		else
-			$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group, Name";
+			$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1 OR (admission_starttime <= ".time()." AND admission_starttime > 1)) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
 		$db->query($query);
 		$tag = 0;
 		if ($db->nf()) {
-			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2 align=\"center\">");
-			print ("<tr>");	
+			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2>");
+			print ("<tr>");
+			echo "<td width=\"3%\"></td>";
 			if ($ALLOW_GROUPING_SEMINARS) {
 				echo "<th width=\"5%\">". _("Gruppieren") ."</th>";
-				echo "<th width=\"1%\"></th>";	
+				echo "<th width=\"1%\"></th>";
 			}
 			echo "<th width=\"25%\">". _("Veranstaltung") ."</th>";
 			echo "<th width=\"8%\">". _("Teilnehmer") ."</th>";
@@ -176,17 +173,17 @@ $db3=new DB_Seminar;
 			$query2 = "SELECT status, count(*) AS count2 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='claiming' GROUP BY status";
 			$db2->query($query2);
 			if ($db2->next_record()) {
-				$count2 = $db2->f("count2"); 				
+				$count2 = $db2->f("count2");
 			}
 			$query2 = "SELECT status, count(*) AS count2 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='awaiting' GROUP BY status";
 			$db2->query($query2);
 			if ($db2->next_record()) {
-				$count3 = $db2->f("count2"); 				
+				$count3 = $db2->f("count2");
 			}
 			$datum = $db->f("admission_endtime");
 			/*if ($datum <1)
 				$datum = 1;*/
-			echo "<tr>";
+			echo "<tr><td></td>";
 			if ($ALLOW_GROUPING_SEMINARS) {
 				printf("<td class=\"%s\" align=\"center\">",$cssSw->getClass());
 				if (!$db->f("admission_group")) { //wenn keiner Gruppe zugeordnet, dann cechkbox ausgeben
@@ -238,19 +235,19 @@ $db3=new DB_Seminar;
 
 		if ($db->nf() && $ALLOW_GROUPING_SEMINARS) {
 			print("<table width=\"90%\" border=0 cellspacing=0 cellpadding=2>\n");
-			print ("<tr><td>\n");
+			print ("<tr><td></td><td>\n");
 			echo "<input ".makeButton("gruppieren","src")." ".tooltip(_("Markierte Veranstaltungen gruppieren"))." type=\"image\" border=\"0\" style=\"vertical-align:left;\" align=\"left\">";
 			//TODO: Button gruppieren statt auswählen
 			print("</td></tr>\n");
 			print("<input type=\"hidden\" name=\"group\" value=\"group\">\n");
 			printf("<input type=\"hidden\" name=\"institut_id\" value=\"%s\">\n",$institut_id);
 			print("</form>\n");
-		}		
+		}
 
 		print("</table>");
-	
+
 ?>
-<br>&nbsp; 
+<br>&nbsp;
 </td>
 </tr>
 </table>
@@ -260,5 +257,3 @@ page_close();
 </body>
 </html>
 <!-- $Id$ -->
-
-
