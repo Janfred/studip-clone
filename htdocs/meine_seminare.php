@@ -71,33 +71,46 @@ function get_my_sem_values(&$my_sem) {
 
 function print_seminar_content($semid,$my_sem_values) {
   // Postings
-  IF ($my_sem_values["neuepostings"])  ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip($my_sem_values["postings"]." Postings, ".$my_sem_values["neuepostings"]." Neue")."></a>";
-  ELSEIF ($my_sem_values["postings"]) ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip($my_sem_values["postings"]." Postings")."></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  if ($my_sem_values["neuepostings"])
+		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"), $my_sem_values["postings"], $my_sem_values["neuepostings"]))."></a>";
+  elseif ($my_sem_values["postings"])
+		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_sem_values["postings"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
-  IF ($my_sem_values["neuedokumente"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 ".tooltip($my_sem_values["dokumente"]." Dokumente, ".$my_sem_values["neuedokumente"]." neue")."></a>";
-  ELSEIF ($my_sem_values["dokumente"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 ".tooltip($my_sem_values["dokumente"]." Dokumente")."></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  if ($my_sem_values["neuedokumente"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='pictures/icon-disc2.gif' border=0 ".tooltip(sprintf(_("%s Dokumente, %s neue"), $my_sem_values["dokumente"], $my_sem_values["neuedokumente"]))."></a>";
+  elseif ($my_sem_values["dokumente"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='pictures/icon-disc.gif' border=0 ".tooltip(sprintf(_("%s Dokumente"), $my_sem_values["dokumente"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //News
-  IF ($my_sem_values["neuenews"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip($my_sem_values["news"]." News, ".$my_sem_values["neuenews"]." neue")."></a>";
-  ELSEIF ($my_sem_values["news"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 ".tooltip($my_sem_values["news"]." News")."></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  if ($my_sem_values["neuenews"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news2.gif' border=0 ".tooltip(sprintf(_("%s News, %s neue"), $my_sem_values["news"], $my_sem_values["neuenews"]))."></a>";
+  elseif ($my_sem_values["news"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid\"><img src='pictures/icon-news.gif' border=0 ".tooltip(sprintf(_("%s News"), $my_sem_values["news"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   //Literatur
-  IF ($my_sem_values["literatur"]) {
-	ECHO "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
-	if ($my_sem_values["neueliteratur"])
-	  ECHO "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip("Zur Literatur und Linkliste (geändert)")."></a>";
+  if ($my_sem_values["literatur"]) {
+		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=literatur.php\">";
+		if ($my_sem_values["neueliteratur"])
+	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste (geändert)"))."></a>";
 		else
-		  ECHO "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip("Zur Literatur und Linkliste")."></a>";
+		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur Literatur und Linkliste"))."></a>";
   }
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   // Termine
-  IF ($my_sem_values["neuetermine"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip($my_sem_values["termine"]." Termine, ".$my_sem_values["neuetermine"]." neue")."></a>";
-  ELSEIF ($my_sem_values["termine"]) ECHO "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip($my_sem_values["termine"]." Termine")."></a>";
-  ELSE ECHO "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
+  if ($my_sem_values["neuetermine"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_sem_values["termine"], $my_sem_values["neuetermine"]))."></a>";
+  elseif ($my_sem_values["termine"])
+		echo "&nbsp; <a href=\"seminar_main.php?auswahl=$semid&redirect_to=dates.php\"><img src='pictures/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_sem_values["termine"]))."></a>";
+  else
+		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
 
   echo "&nbsp;";
 
@@ -133,7 +146,7 @@ if (!$perm->have_perm("root"))
 if ($cmd == "no_kill") {
 	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	$meldung = "info§Die Veranstaltung <b>" . htmlReady($db->f("Name")) . "</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden.<br />";
+	$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
 }
 
 //Sicherheitsabfrage fuer abonnierte Veranstaltungen
@@ -141,9 +154,9 @@ if ($cmd == "suppose_to_kill") {
 	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
 	if ($db->f("admission_type")) {
-		$meldung="info§Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>".htmlReady($db->f("Name"))."</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich neu anmelden! <br />";
-		$meldung.="<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
-		$meldung.="<a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
+		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
+		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	} else {
 		$cmd="kill";
 	}
@@ -153,9 +166,9 @@ if ($cmd == "suppose_to_kill") {
 if ($cmd=="suppose_to_kill_admission") {
 	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	$meldung="info§Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>".htmlReady($db->f("Name"))."</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich neu anmelden! <br />";
-	$meldung.="<a href=\"$PHP_SELF?cmd=kill_admission&auswahl=$auswahl\"><img src=\"pictures/buttons/ja2-button.gif\" border=0 /></a>&nbsp; \n";
-	$meldung.="<a href=\"$PHP_SELF\"><img src=\"pictures/buttons/nein-button.gif\" border=0 /></a>\n";
+	$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+	$meldung.="<a href=\"$PHP_SELF?cmd=kill_admission&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
+	$meldung.="<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 }
 
 //bei Bedarf aus seminar_user austragen
@@ -163,17 +176,18 @@ if ($cmd=="kill") {
 	$db->query("SELECT Name, admission_binding, a.status FROM seminar_user a LEFT JOIN seminare USING(Seminar_id) WHERE a.Seminar_id = '$auswahl' AND a.user_id='$user->id' AND a.status IN('user','autor')");
 	$db->next_record();
 	if ($db->f("admission_binding")) {
-		$meldung = "info§Die Veranstaltung <b>" . htmlReady($db->f("Name")) . "</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden.<br />";
-	} elseif ($db->f("status")){
+		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
+	} elseif ($db->f("status")) {
 		$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
-		if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
+		if ($db->affected_rows() == 0)
+			$meldung="error§" . _("Datenbankfehler!");
 		else {
 		  //Pruefen, ob es Nachruecker gibt
 		  update_admission($auswahl);
 	  
 	  	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 		  $db->next_record();
-		  $meldung="msg§Das Abonnement der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert.";
+		  $meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als Teilnehmer dieser Veranstaltung im System registriert."), $db->f("Name"));
 		}
 	}
 }
@@ -181,14 +195,14 @@ if ($cmd=="kill") {
 //bei Bedarf aus admission_seminar_user austragen
 if ($cmd=="kill_admission") {
 	$db->query("DELETE FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='$auswahl'");
-	if ($db->affected_rows() == 0)  $meldung="error§Datenbankfehler!";
+	if ($db->affected_rows() == 0)  $meldung="error§" . _("Datenbankfehler!");
 	else {
 	  //Warteliste neu sortieren
 	  renumber_admission($auswahl);
 	  
 	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	  $db->next_record();
-	  $meldung="msg§Der Eintrag in der Anmelde- bzw. Wartelistet der Veranstaltung <b>".$db->f("Name")."</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen sie sich erneut bewerben.";
+	  $meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Wartelistet der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen sie sich erneut bewerben."), $db->f("Name"));
 	}
 }
 
@@ -201,28 +215,31 @@ if ($cmd=="kill_admission") {
 
 
 //Anzeigemodul fuer eigene Seminare (nur wenn man angemeldet und nicht root oder admin ist!)
-IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")){
+if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")) {
 
-	 //Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
-	 check_admission();
+	//Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
+	check_admission();
 	 
-	 if (!isset($sortby)) $sortby="gruppe, Name";
-	 if ($sortby == "count")
-	 $sortby = "count DESC";
+	if (!isset($sortby))
+		$sortby="gruppe, Name";
+	if ($sortby == "count")
+		$sortby = "count DESC";
+		
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
-	 if (!$num_my_sem) $meldung="info§Sie haben zur Zeit keine Veranstaltungen abonniert, in denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie <a href=\"sem_portal.php?view=Alle&reset_all=TRUE\"><b>Veranstaltung suchen / hinzuf&uuml;gen</b></a> um neue Veranstaltungen aufzunehmen.§".$meldung;
+	if (!$num_my_sem)
+		$meldung = "info§" . sprintf(_("Sie haben zur Zeit keine Veranstaltungen abonniert, an denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzuf&uuml;gen</b>%s um neue Veranstaltungen aufzunehmen."), "<a href=\"sem_portal.php?view=Alle&reset_all=TRUE\">", "</a>") . "§" . $meldung;
 
 	 ?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<td class="topic" colspan="2">
-				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b>Meine Veranstaltungen</b>
+				<img src="pictures/meinesem.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Meine Veranstaltungen")) ?></b>
 			</td>
 		</tr>
 	<?
 
-	if ($num_my_sem){
+	if ($num_my_sem) {
 	?>
 		<tr valign="top">
 			<td class="blank" colspan="2">&nbsp;
@@ -235,88 +252,86 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 							parse_msg($meldung, "§", "blank",3);
 							}?>
 							<tr align="center" valign="top">
-									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" <? echo tooltip("Gruppe ändern") ?> border="0"></a></th>
-									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name&view=<? echo $view ?>">Name</a></th>
-									<th width="10%"><b>Inhalt</b></th>
+									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" <? echo tooltip(_("Gruppe ändern")) ?> border="0"></a></th>
+									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name&view=<? echo $view ?>"><? echo(_("Name")) ?></a></th>
+									<th width="10%"><b><? echo(_("Inhalt")) ?></b></th>
 									<? 
 									if ($view=="ext") { ?>
-										<th width="10%"><b>&nbsp;besucht&nbsp;</b></th>
-										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status&view=<? echo $view ?>">&nbsp;Status&nbsp;</a></th>
-										<th width="10%"><img src="pictures/nutzer.gif" alt="TeilnehmerInnen der Veranstaltung"></th>
+										<th width="10%"><b>&nbsp;<? echo(_("besucht")) ?>&nbsp;</b></th>
+										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status&view=<? echo $view ?>">&nbsp;<? echo(_("Status")) ?>&nbsp;</a></th>
+										<th width="10%"><img src="pictures/nutzer.gif" <? echo tooltip(_("TeilnehmerInnen der Veranstaltung")) ?>></th>
 									<?	}?>
 									<th width="3%"><b>X&nbsp; </b></th>
 							</tr>
-	<?
-	ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
-	ob_start();
-	 while ($db->next_record())   {
-	  	$my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"), binding=>$db->f("admission_binding"));
-		$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
-	 }
-	 $value_list=substr($value_list,0,-1);
-	 $db->query("CREATE TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
-	 $ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
-	 $db->query($ins_query);
-	 get_my_sem_values($my_sem);
-	 $db->query("DROP TABLE loginfilenow_".$user->id);
+		<?
+		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
+		ob_start();
+		while ($db->next_record()) {
+			$my_sem[$db->f("Seminar_id")]=array(name=>$db->f("Name"),status=>$db->f("status"),gruppe=>$db->f("gruppe"),chdate=>$db->f("chdate"), binding=>$db->f("admission_binding"));
+			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
+		}
+		$value_list=substr($value_list,0,-1);
+		$db->query("CREATE TEMPORARY TABLE IF NOT EXISTS loginfilenow_".$user->id." ( Seminar_id varchar(32) NOT NULL PRIMARY KEY, loginfilenow int(11) NOT NULL DEFAULT 0, INDEX(loginfilenow) ) TYPE=HEAP");
+		$ins_query="REPLACE INTO loginfilenow_".$user->id." (Seminar_id,loginfilenow) VALUES ".$value_list;
+		$db->query($ins_query);
+		get_my_sem_values($my_sem);
+		$db->query("DROP TABLE loginfilenow_".$user->id);
 
-  foreach ($my_sem as $semid=>$values){
+	  foreach ($my_sem as $semid=>$values) {
 
-		$cssSw->switchClass();
-		$lastVisit = $loginfilenow[$semid];
-		ECHO "<tr ".$cssSw->getHover()."><td class=gruppe";
-		ECHO $values["gruppe"];
-		ECHO "><a href='gruppe.php'><img src='pictures/blank.gif' ".tooltip("Gruppe ändern")." border=0 width=7 height=12></a></td>";
-		ECHO "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
+			$cssSw->switchClass();
+			$lastVisit = $loginfilenow[$semid];
+			echo "<tr ".$cssSw->getHover()."><td class=gruppe";
+			echo $values["gruppe"];
+			echo "><a href='gruppe.php'><img src='pictures/blank.gif' ".tooltip(_("Gruppe ändern"))." border=0 width=7 height=12></a></td>";
+			echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 // Name-field		
-		ECHO "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
-		if ($lastVisit <= $values["chdate"])
-			print ("<font color=\"red\">");    // red color for new metadates
-		ECHO "<font size=-1>".htmlReady($values["name"])."</font>";
-		if ($lastVisit <= $values["chdate"])
-			print ("</font>");
-		print ("</a></td>");
+			echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
+			if ($lastVisit <= $values["chdate"])
+				print ("<font color=\"red\">");    // red color for new metadates
+			echo "<font size=-1>".htmlReady($values["name"])."</font>";
+			if ($lastVisit <= $values["chdate"])
+				print ("</font>");
+			print ("</a></td>");
 // Content-field
-		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
-		print_seminar_content($semid, $values);
-		echo "</td>";
+			echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
+			print_seminar_content($semid, $values);
+			echo "</td>";
 
 
 // Extendet views:
 
-	// last visited-field
-		IF ($view=="ext") {
-			IF ($loginfilenow[$semid]==0) {
-				echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>n.b.</font></td>";
+			// last visited-field
+			if ($view=="ext") {
+				if ($loginfilenow[$semid]==0) {
+					echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>" . _("n.b.") . "</font></td>";
+				} else {
+					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$semid]),"</font></td>";
+				}
+			// Status-field
+				echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
+			// Teilnehmer
+				$db2=new DB_Seminar;
+				$db2->query ("SELECT count(*) as teilnehmer FROM seminar_user WHERE Seminar_id ='$semid'");
+				 while($db2->next_record()) 
+					 echo "<td class=\"".$cssSw->getClass()."\"  nowrap align=\"right\"><font size=-1>". $db2->f("teilnehmer")."&nbsp;</font></td>";
 			}
-			ELSE {
-				 echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $loginfilenow[$semid]),"</font></td>";
-			}
-	// Status-field
-			echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
-	// Teilnehmer
-			$db2=new DB_Seminar;
-			$db2->query ("SELECT count(*) as teilnehmer FROM seminar_user WHERE Seminar_id ='$semid'");
-			 while($db2->next_record()) 
-				 echo "<td class=\"".$cssSw->getClass()."\"  nowrap align=\"right\"><font size=-1>". $db2->f("teilnehmer")."&nbsp;</font></td>";
-		}
 
 
 // delete Entry from List:
 
-		if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
-			echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
-		elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip("Das Abonnement ist bindend. Bitte wenden sie sich an den Dozenten der Veranstaltung, um sich austragen zu lassen.")." border=\"0\"></a>&nbsp; </td>", $semid);
-		else
-			printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip("aus der Veranstaltung abmelden")." border=\"0\"></a>&nbsp; </td>", $semid);			
-		 echo "</tr>\n";
+			if (($values["status"]=="dozent") || ($values["status"]=="tutor")) 
+				echo "<td class=\"".$cssSw->getClass()."\"  align=center>&nbsp;</td>";
+			elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
+				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"pictures/lighttrash.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
+			else
+				printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp; </td>", $semid);			
+			echo "</tr>\n";
 		}
-	 echo "</table><br><br>";
-	 } 
+		echo "</table><br><br>";
 
 
-else {  // es sind keine Veranstaltungen abboniert
+	} else {  // es sind keine Veranstaltungen abboniert
 	 
 	 ?>
 	 <tr>
@@ -336,13 +351,11 @@ else {  // es sind keine Veranstaltungen abboniert
 
 // Anzeige der Wartelisten
 
-	  $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
-	  IF ($db->num_rows()) {
-		?>
+  $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
+  if ($db->num_rows()) {
 
-			<b><div align="left">&nbsp; Anmelde- und Wartelisteneintr&auml;ge:</div>&nbsp; 
+		echo "<b><div align=\"left\">&nbsp;" . "Anmelde- und Wartelisteneintr&auml;ge:" . "</div>&nbsp;"; 
 
-		<?
 		ECHO "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
 		ECHO "<tr>";
 			ECHO "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
