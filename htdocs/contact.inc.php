@@ -299,10 +299,12 @@ function ShowContact ($contact_id)
 				$name = "huhu";
 				$txt = "<hr>Klicken zum Bearbeiten";
 				$bild = "pictures/forumgraurunt.gif";
+				if ($description == "")
+					$description = "<br>Keine eingegeben<br>";
 				$link =	$hoverlink
 						."onMouseOver=\"return overlib('"
 						.JSReady($description,"contact").$txt
-						."', NOCLOSE, CSSOFF)\" "
+						."', CAPTION, '&nbsp; &nbsp; &nbsp; Weitere Informationen:', NOCLOSE, CSSOFF)\" "
 						." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 			} else {
 				$link = "<a href=\"$PHP_SELF?filter=$filter&open=".$contact_id."#anker\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\"></a>";
