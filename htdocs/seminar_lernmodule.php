@@ -126,6 +126,19 @@ if ($ILIAS_CONNECT_ENABLE)
 	{
 		include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
 
+		if ($seminar_id != $print_open["id"])
+		{	
+			$sess->unregister("print_open");
+			unset($print_open);
+		}/**/
+		$print_open["id"] = $seminar_id;
+		if (isset($do_open))
+			$print_open[$do_open] = true;
+		elseif (isset($do_close))
+			$print_open[$do_close] = false;
+		$sess->register("print_open");
+
+
 		$le_modules = get_seminar_modules($seminar_id);
 		if ($le_modules != false)
 			$le_anzahl = sizeof($le_modules);

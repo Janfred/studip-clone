@@ -24,6 +24,7 @@ function link_seminar_modules($seminar_id)
 			$link_str[$i]["link"] .= $mod_info["title"];
 			$link_str[$i]["link"] .= "</a>";
 			$link_str[$i]["content"] .= $mod_info["description"];
+			$link_str[$i]["key"] .= $mod_array[$i]["id"] . "@" . $mod_array[$i]["inst"];
 			$mod_author = get_module_author($mod_array[$i]["inst"], $mod_array[$i]["id"]);
 			for ($i2=0; $i2<sizeof($mod_author); $i2 ++)
 			{

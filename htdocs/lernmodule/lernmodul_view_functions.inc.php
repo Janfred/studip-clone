@@ -136,7 +136,7 @@ function show_all_modules_admin()
 
 function show_seminar_modules_links($seminar_id)
 {
-	global $cssSw;
+	global $cssSw, $PHP_SELF, $print_open;
 	$out_str = link_seminar_modules($seminar_id);
  	if ($out_str == false)
  	{
@@ -159,10 +159,15 @@ function show_seminar_modules_links($seminar_id)
 				<table cellspacing="0" cellpadding="0" border="0" width="100%">
 					<tr>
 						<?
-						printhead ("99%", FALSE, "", "close", true, $printimage, $printlink, $printdesc);
+						if ($print_open[$out_str[$i]["key"]] == true)
+							printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+						else
+							printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $out_str[$i]["key"] . "&view=show&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
 						?>
 					</tr>
 				</table>
+				<? if ($print_open[$out_str[$i]["key"]] == true) 
+				{ ?>
 				<table cellspacing="0" cellpadding="0" border="0" width="100%">
 					<tr>
 						<?
@@ -170,7 +175,7 @@ function show_seminar_modules_links($seminar_id)
 						?>
 					</tr>
 				</table>
-				<?
+				<? }
 			}
 	}
 }
