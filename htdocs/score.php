@@ -19,7 +19,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 	<td class="topic" colspan=2><img src="pictures/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Stud.IP-Score")?></td>
 </tr>
 <tr>
-<td class="blank" align = left valign="top" width="60%"><br /><blockquote>
+<td class="blank" align = left valign="top" width="60%"><blockquote><br><font size="-1">
 <?
 echo _("Auf dieser Seite können Sie abrufen, wie weit Sie im Stud.IP-Score aufgestiegen sind. Je aktiver Sie sich im System verhalten, desto höher klettern Sie!");
 
@@ -46,15 +46,13 @@ else
 	echo "<br><br><a href=\"score.php?cmd=write\">" . _("Diesen Wert auf der Liste veröffentlichen") . "</a>";
 	
 ?>
-
-</blockquote></td>
-<td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
-</tr>
-</table>
-<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class=blank>
-<br><blockquote>
+<br><br><b>
 <?=_("Hier sehen Sie den Score der NutzerInnen, die Ihre Werte ver&ouml;ffentlicht haben:")?>
-</blockquote>&nbsp; </td></tr>
+<br><br></blockquote></td>
+		<td class="blank" align = right valign = "top"><img src="pictures/board2.jpg" border="0"></td>
+	</tr>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="blank">
 <?
 
