@@ -26,12 +26,14 @@ require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php";
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $db4=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
+$Modules=new Modules;
 
 $sess->register("links_admin_data");
 $sess->register("sem_create_data");
@@ -116,6 +118,8 @@ if ($srch_send) {
 	$links_admin_data["srch_on"]=TRUE;
 	$list=TRUE;
 }
+if ($SessSemName[1])
+	$modules = $Modules->getLocalModules($SessSemName[1]);
 
 //if the user selected the information field at Einrichtung-selection....
 if ($admin_inst_id == "NULL")
@@ -216,10 +220,13 @@ elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_d
 //Bottomkats
 $structure["grunddaten_sem"]=array (topKat=>"veranstaltungen", name=>_("Grunddaten"), link=>"admin_seminare1.php?list=TRUE", active=>FALSE);
 $structure["zeiten"]=array (topKat=>"veranstaltungen", name=>_("Zeiten"), link=>"admin_metadates.php?list=TRUE", active=>FALSE);
-$structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>_("Ablaufplan"), link=>"admin_dates.php?list=TRUE", active=>FALSE);
-$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_sem", active=>FALSE);
+if (($modules["schedule"]) || (!$SessSemName[1]))
+	$structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>_("Ablaufplan"), link=>"admin_dates.php?list=TRUE", active=>FALSE);
+if (($modules["literature"]) || (!$SessSemName[1]))
+	$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_sem", active=>FALSE);
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE);
-$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
+if (($modules["participants"]) || (!$SessSemName[1]))
+	$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?view=news_sem", active=>FALSE);
 $structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
@@ -231,8 +238,9 @@ if ($perm->have_perm("admin")) {
 	$structure["grunddaten_inst"]=array (topKat=>"einrichtungen", name=>_("Grunddaten"), link=>"admin_institut.php?list=TRUE", active=>FALSE);
 	$structure["mitarbeiter"]=array (topKat=>"einrichtungen", name=>_("Mitarbeiter"), link=>"inst_admin.php?list=TRUE", active=>FALSE);
 	$structure["statusgruppe_inst"]=array (topKat=>"einrichtungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", active=>FALSE);
-}	
-$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
+}
+if (($modules["literature"]) || (!$SessSemName[1]))
+	$structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
 if ($perm->have_perm("admin"))
 	$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
