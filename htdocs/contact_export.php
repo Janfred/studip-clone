@@ -325,8 +325,20 @@ function getContactGroupData($exportID,$mode = "group"){
 				. "b.url as fak_url, b.telefon as fak_TEL, b.email as fak_mail, b.fax as fak_FAX "
 				. "FROM user_inst a "
 				. "LEFT JOIN Institute b USING (Institut_id) "
-				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user'";
+				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user' "
+				. "AND externdefault = 1";
 			$db2->query($query);
+			// if externdefault isn't set
+			if ($db2->num_rows() == 0) {
+				$query = "SELECT a.*, "
+				. "b.Institut_id as inst_id, b.Name as fak_name, b.Strasse as fak_strasse, b.Plz as fak_plz, "
+				. "b.url as fak_url, b.telefon as fak_TEL, b.email as fak_mail, b.fax as fak_FAX "
+				. "FROM user_inst a "
+				. "LEFT JOIN Institute b USING (Institut_id) "
+				. "WHERE user_id = '".$contacts[$i]["id"]."' AND inst_perms != 'user' "
+				. "ORDER BY priority ASC";
+				$db2->query($query);
+			}
 			$j = 0;
 
 			while ($db2->next_record()){

@@ -210,11 +210,14 @@ function GetUserInfo($user_id)
 	return $userinfo;
 }
 
-function GetinstInfo($user_id)
+function GetinstInfo ($user_id)
 {
 	$db=new DB_Seminar;
 	$i = 0;
-	$db->query ("SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");	
+	$query = "SELECT sprechzeiten, raum, user_inst.telefon, user_inst.fax, Name, ";
+	$query .= "Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) ";
+	$query .= "WHERE user_id = '$user_id' AND inst_perms != 'user' ORDER BY priority ASC";
+	$db->query($query);	
 	while ($db->next_record()) {	
 		$userinfo[$i][_("Einrichtung")] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
 		if ($gruppen = GetStatusgruppen($db->f("Institut_id"), $user_id))
