@@ -49,7 +49,6 @@ $sort = $this->config->getValue("Main", "sort");
 sort($sort, SORT_NUMERIC);
 
 $query_order = "";
-reset($sort);
 foreach ($sort as $position) {
 	if ($position > 0)
 		$query_order .= " " . $this->data_fields[$position - 1] . ",";
@@ -91,10 +90,12 @@ $set_td_1 = $this->config->getAttributes("TableRow", "td");
 $set_td_2 = $this->config->getAttributes("TableRow", "td", TRUE);
 $zebra_td = $this->config->getValue("TableRow", "td_zebratd_");
 
+$link_persondetails = $this->getModuleLink("Persondetails",
+		$this->config->getValue("Main", "config"), $this->config->getValue("Main", "srilink"));
+
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 
 $first_loop = TRUE;
-reset($visible_groups);
 foreach ($visible_groups as $group_id => $group) {
 	if($grouping){
 		$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
@@ -162,7 +163,8 @@ foreach ($visible_groups as $group_id => $group) {
 		while($db->next_record()){
 		
 			$data = array(
-			"fullname"         => sprintf("<a href=\"\"%s><font%s>%s</font></a>",
+			"fullname"     => sprintf("<a href=\"%s&username=%s\"%s><font%s>%s</font></a>",
+												$link_persondetails, $db->f("username"),
 												$this->config->getAttributes("Link", "a"),
 												$this->config->getAttributes("Link", "font"),
 												htmlReady($db->f("fullname"), TRUE)),
@@ -200,7 +202,6 @@ foreach ($visible_groups as $group_id => $group) {
 			
 			
 			$j = 0;
-			reset($order);
 			foreach ($order as $column) {
 				if ($visible[$column]) {
 				
