@@ -30,6 +30,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+
 	/**
 	* Gets the ID of a user
 	*
@@ -128,6 +130,9 @@
 		include_once("wap_buttons.inc.php");
 		include_once("wap_hlp.inc.php");
 
+		$db = new DB_Seminar;
+		
+		/*
 		$encoded_pass = md5($user_pass);
 
 		$q_string  = "SELECT user_id ";
@@ -135,14 +140,12 @@
 		$q_string .= "WHERE username = \"$user_name\" ";
 		$q_string .= "AND password = \"$encoded_pass\"";
 
-		$db = new DB_Seminar;
 		$db-> query ("$q_string");
-
-		if ($db-> next_record())
-		{
+		*/
+		$check_auth = StudipAuthAbstract::CheckAuthentication($user_name,$user_pass,false);
+		if ($check_auth['uid']){
+			$user_id = $check_auth['uid'];
 			$new_session_id = md5(uniqid("WapSession", TRUE));
-			$user_id        = $db-> f("user_id");
-
 			$q_string  = "INSERT INTO wap_sessions ";
 			$q_string .= "(user_id, session_id, creation_time) ";
 			$q_string .= "VALUES (\"$user_id\", \"$new_session_id\", NOW())";
