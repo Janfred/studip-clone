@@ -301,7 +301,7 @@ if ($view=="ansprechpartner") {?>
 		<td class="blank" valign="top">
 		<blockquote><b>
 <?
-	echo _("F&uuml;r diese Stud.IP-Installation sind folgende Administratoren zust&auml;ndig:") . "</b><br><br />";
+	printf ("<font size=\"-1\">"._("F&uuml;r diese Stud.IP-Installation (%s) sind folgende Administratoren zust&auml;ndig:") . "</font></b><br><br />", $UNI_NAME);
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -314,8 +314,9 @@ if ($view=="ansprechpartner") {?>
 		}
 	
 ?>
-		<br>
+		<br><font size="-1">
 		<?=_("<b>allgemeine Anfragen</b> wie Passwort-Anforderungen u.a. richten Sie bitte an:")?><br>
+		</font>
 		<font size="-1"><a href="mailto:<?=$UNI_CONTACT?>"><?=$UNI_CONTACT?>	</a></font ><br /><br />
 		</td>
 		<td class="blank" align="center" valign="middle">
@@ -328,7 +329,7 @@ if ($view=="ansprechpartner") {?>
 		</td>
 	<tr>
 		<td class="steel1" colspan=2>
-		<blockquote><br><b><?=_("Folgende Einrichtungen sind beteiligt:")?></b><br><font size=-1><?=_("(Genannt werden die jeweiligen Administratoren der Einrichtungen f&uuml;r entsprechende Anfragen)")?></font>
+		<blockquote><br><b><font size="-1"><?=_("Folgende Einrichtungen sind beteiligt:")?></font></b><br><font size=-1><?=_("(Genannt werden die jeweiligen Administratoren der Einrichtungen f&uuml;r entsprechende Anfragen)")?></font>
 		</td>
 	</table><table width="100%" border=0 cellpadding=0 cellspacing=0>
 	</tr>

@@ -84,7 +84,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				<tr>
 
 
-<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),_("Informationen zu dieser Installation"),40,"_top");
+<?				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),40,"_top");
 ?>
 				</td></tr></table></td>
 			<td class="toolbar" align="right">											
@@ -220,7 +220,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr align="center">
 <? //create (javascript) info tooltip/window
-				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),_("Informationen zu dieser Installation"),112, "_top");
+				echo MakeToolbar("pictures/logo2.gif","impressum.php",_("Impressum"),$UNI_NAME_CLEAN." - "._("Informationen über das System"),112, "_top");
 ?>
 	</tr>
 	</table>
