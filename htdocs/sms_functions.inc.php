@@ -230,7 +230,7 @@ function print_snd_message($psm) {
 					if ($i > "0") {
 						$content .= ",&nbsp;";
 					}
-					$content .= "<a href=\"about.php?username=".$db7->f("username")."\"><font size=-1 color=\"#333399\">".$db7->f("fullname")."</font></a>";
+					$content .= "<a href=\"about.php?username=".$db7->f("username")."\"><font size=-1 color=\"#333399\">".htmlReady($db7->f("fullname"))."</font></a>";
 					++$i;
 				} else {
 					$msg_sndnote = _("und an Sie selbst");

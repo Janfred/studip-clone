@@ -81,7 +81,7 @@ function dump_sem($sem_id) {
 	else
 		$dump.= "<tr><td width=\"15%\"><b>" . _("DozentIn:") . " </b></td><td>";
 	while ($db->next_record()) 
-		$dump.= $db->f("fullname") ."<br>  ";
+		$dump.= htmlReady($db->f("fullname")) ."<br>  ";
 	$dump.="</td></tr>\n";
 		
 	//und wer ist Tutor?
@@ -92,7 +92,7 @@ function dump_sem($sem_id) {
 	elseif ($db->affected_rows() == 1)
 		$dump.="<tr><td width=\"15%\"><b>" . _("TutorIn:") . " </b></td><td>";
 	while ($db->next_record()) 
-		$dump.= $db->f("fullname")."<br>";
+		$dump.= htmlReady($db->f("fullname")) ."<br>";
 	if ($db->affected_rows())
 		$dump.="</td></tr>\n";
 		

@@ -393,7 +393,7 @@ if ($view=="ansprechpartner") {?>
 	if ($db->affected_rows() ==0) { echo _("keine. Na sowas. Das kann ja eigentlich gar nicht sein..."); }
 	while ($db->next_record())
 		{
-		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>, E-Mail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font ><br>";
+		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>, E-Mail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font ><br>";
 		}
 	
 ?>
@@ -440,7 +440,7 @@ if ($view=="ansprechpartner") {?>
 			echo "<br><br><b><font size=\"-1\"><a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>:</font></b><br>";
 			}
 		$last_inst=$inst_id;
-		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".$db->f("fullname")."</a>, E-Mail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font><br>";
+		echo "<font size=\"-1\"><a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>, E-Mail: <a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a></font><br>";
 		$count=$count-1;
 		}
 

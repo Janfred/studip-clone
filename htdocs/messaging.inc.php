@@ -448,7 +448,7 @@ class messaging {
 					message_id = '$m_id', 
 					autor_id = '".$user_id."', 
 					mkdate = '".time()."', 
-					subject = '".sprintf(_("Chateinladung von %s"), $db->f("fullname"))."', 
+					subject = '".sprintf(_("Chateinladung von %s"), mysql_escape_string($db->f("fullname")))."', 
 					message = '".mysql_escape_string($message)."', 
 					chat_id = '$chat_uniqid'";
 			$db3->query ($query);

@@ -1081,7 +1081,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
 		
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate)."";			
+			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".htmlReady($db->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate)."";			
 
 			
 			if (object_get_visit($SessSemName[1], "documents") < $chdate) 
@@ -1240,7 +1240,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 						
 						//Zusatzangaben erstellen
-						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
+						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".htmlReady($db3->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
 						if (($all) && (!$upload) && ($db3->f("url")=="")) {
 							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
@@ -1406,7 +1406,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
 
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate);
+			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".htmlReady($db->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate);
 			
 			
 			if (object_get_visit($SessSemName[1], "documents") < $chdate) 

@@ -467,7 +467,7 @@ if ($archiv_data["perform_search"]) {
 					echo "<br /><br /><hr><b><font size=\"-1\">" . _("Folgende Personen haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):") . "</font></b><br /><br />";
 					$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname , archiv_user.status, username, archiv_user.user_id FROM archiv_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$db->f("seminar_id")."' ORDER BY Nachname");
 					while ($db2->next_record()) {
-						echo "<font size=\"-1\">".$db2->f("fullname"). " (" . _("Status:") . " ". $db2->f("status"). ")</font>";
+						echo "<font size=\"-1\">".htmlReady($db2->f("fullname")). " (" . _("Status:") . " ". $db2->f("status"). ")</font>";
 						if ($db2->f("status") != "dozent")
 							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"./pictures/trash.gif\" " . tooltip(_("Dieser Person die Zugriffsberechtigung entziehen")) . "></a>";
 						echo "<br />";	
@@ -480,7 +480,7 @@ if ($archiv_data["perform_search"]) {
 							echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Personen gefunden"), $db2->affected_rows()) . " </font></b><br />";
 							echo "<font size=\"-1\">" . _("Bitte w&auml;hlen Sie die Person aus der Liste aus:") . "</font>&nbsp;<br /><font size=\"-1\"><select name=\"add_user\">";
 							while ($db2->next_record()) {
-								echo "<option value=\"".$db2->f("user_id")."\">".$db2->f("fullname"). " (".$db2->f("username").") </option>";
+								echo "<option value=\"".$db2->f("user_id")."\">".htmlReady($db2->f("fullname")). " (".$db2->f("username").") </option>";
 							}
 							echo "</select></font>";
 							echo "<br /><font size=\"-1\"><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"" . _("Diese Person hinzuf&uuml;gen") . "\" /></font>";
