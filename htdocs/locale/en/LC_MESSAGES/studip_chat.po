@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-09-30 21:32+0200\n"
-"PO-Revision-Date: 2003-04-04 09:46+0200\n"
+"PO-Revision-Date: 2003-10-01 11:20+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -79,18 +79,17 @@ msgid "Sie d&uuml;rfen hier niemanden rauswerfen!"
 msgstr "You are not allowed to throw anyone out of here!"
 
 #: chat/chat_client.php:195
-#, fuzzy, c-format
+#, c-format
 msgid "Ihre Nachricht an <b>%s</b> wurde verschickt."
-msgstr "Your SMS has been sent to <b>%s</b>."
+msgstr "Your message has been sent to <b>%s</b>."
 
 #: chat/chat_client.php:197
-#, fuzzy
 msgid "Fehler: Ihre Nachricht konnte nicht verschickt werden!"
-msgstr "Error: Your SMS could not be sent!"
+msgstr "Error: Your message could not be sent!"
 
 #: chat/chat_client.php:199
 msgid "Fehler: Es macht keinen Sinn, sich selbst Nachrichten zu schicken!"
-msgstr ""
+msgstr "Error: It doesn't make sense to send yourself messages!"
 
 #: chat/chat_client.php:215
 #, c-format
@@ -103,7 +102,7 @@ msgstr "Error: Your invitation could not be sent! "
 
 #: chat/chat_client.php:220
 msgid "Fehler: Es macht keinen Sinn, sich selbst in den Chat einzuladen!"
-msgstr ""
+msgstr "Error: It doesn't make any sense to invite yourself to the chat!"
 
 #: chat/chat_client.php:223
 msgid "Sie d&uuml;rfen f&uuml;r diesen Chat keine Einladungen verschicken!"
@@ -119,8 +118,7 @@ msgstr "This chat has just been secured with a password by <b>%s</b>."
 msgid ""
 "Der Passwortschutz f&uuml;r diesen Chat wurde soeben von <b>%s</b> "
 "aufgehoben."
-msgstr ""
-"The password security for this chat has just been removed by <b>%s</b>. "
+msgstr "The password security for this chat has just been removed by <b>%s</b>. "
 
 #: chat/chat_client.php:240
 msgid "Dieser Chat ist nicht mit einem Passwort gesichert."
@@ -214,14 +212,11 @@ msgstr " [colorcode] - Your font colour is set at  [colorcode] "
 
 #: chat/chat_config.php:103
 msgid " [msg] - Ihr Name wird zusammen mit [msg] vom Chatbot ausgegeben"
-msgstr ""
-" [msg] - Your name will be printed together with [msg] from the Chatbot"
+msgstr " [msg] - Your name will be printed together with [msg] from the Chatbot"
 
 #: chat/chat_config.php:104
-msgid ""
-" [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"
-msgstr ""
-"[username][msg] - The message [msg] will be sent secretly to [username] "
+msgid " [username][msg] - Die Botschaft [msg] wird geheim an [username] übermittelt"
+msgstr "[username][msg] - The message [msg] will be sent secretly to [username] "
 
 #: chat/chat_config.php:105
 msgid " - Zeigt diesen Hilfetext"
@@ -236,8 +231,7 @@ msgstr ""
 "with / kick all throw all other users out of the chat"
 
 #: chat/chat_config.php:107
-msgid ""
-" [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
+msgid " [username][msg] - Verschickt eine systeminterne SMS [msg] an [username]"
 msgstr "[username] [msg] - Send an internal system SMS [msg] to [username]"
 
 #: chat/chat_config.php:108
@@ -276,8 +270,7 @@ msgstr ""
 msgid ""
 " [start | stop | send] - Startet, beendet oder versendet eine Aufzeichnung, "
 "wenn sie Chat-Admin sind"
-msgstr ""
-" [start | stop | send] - start, end or send a recording if you are chat-admin"
+msgstr " [start | stop | send] - start, end or send a recording if you are chat-admin"
 
 #: chat/chat_dummy.php:61
 msgid "Chat: "
@@ -353,8 +346,7 @@ msgid "Diesen Chatraum %sleeren%s"
 msgstr "%sEmpty%s this chat room"
 
 #: chat/chat_func_inc.php:183
-msgid ""
-"Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;ltige Einladung."
+msgid "Um diesen Chatraum zu betreten, brauchen sie eine g&uuml;ltige Einladung."
 msgstr "You need a valid invitation in order to enter this chat room."
 
 #: chat/chat_func_inc.php:187
@@ -400,7 +392,7 @@ msgstr "No valid invitation was found for this chat!"
 
 #: chat/chat_login.php:78
 msgid "Passwort erforderlich"
-msgstr "Password nesessary"
+msgstr "Password necessary"
 
 #: chat/chat_login.php:79
 msgid ""
@@ -501,3 +493,4 @@ msgstr "Show chat commands"
 #: chat/chat_status.php:165
 msgid "Alle verfügbaren Smileys anzeigen"
 msgstr "Show all available smileys"
+

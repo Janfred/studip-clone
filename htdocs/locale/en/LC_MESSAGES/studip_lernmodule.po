@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-09-30 21:32+0200\n"
-"PO-Revision-Date: 2003-03-24 17:28+0100\n"
+"PO-Revision-Date: 2003-10-01 11:56+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -60,19 +60,17 @@ msgid "Datenbankoperation konnte nicht ausgeführt werden!"
 msgstr "Data base operation could not be executed!"
 
 #: lernmodule/lernmodul_view_functions.inc.php:8
-#, fuzzy
 msgid "Es wurden keine Lernmodule zu diesem Suchbegriff gefunden."
-msgstr "There are no learning modules available."
+msgstr "No learning modules were found for this search term."
 
 #: lernmodule/lernmodul_view_functions.inc.php:14
-#, fuzzy
 msgid "Es wurde ein Lernmodul gefunden:"
-msgstr "There are no learning modules available."
+msgstr "One learning module was found:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:16
-#, fuzzy, c-format
+#, c-format
 msgid "%s Lernmodule wurden gefunden:"
-msgstr "The following learning modules can be connected:"
+msgstr "%s learning modules were found:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:64
 #: lernmodule/lernmodul_view_functions.inc.php:123
@@ -80,9 +78,8 @@ msgid "Sie haben Zugriff auf folgende Lernmodule:"
 msgstr "You have access to the following learning modules:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:113
-#, fuzzy
 msgid "Sie haben bisher keine ILIAS-Lernmodule angelegt."
-msgstr "You do not have access to the current ILIAS learning modules."
+msgstr "You have not yet created any ILIAS learning modules."
 
 #: lernmodule/lernmodul_view_functions.inc.php:173
 #: lernmodule/lernmodul_view_functions.inc.php:332
@@ -91,19 +88,19 @@ msgstr "There are no learning modules available."
 
 #: lernmodule/lernmodul_view_functions.inc.php:187
 msgid "Offizielle Lernmodule dieser Einrichtung:"
-msgstr ""
+msgstr "Official learning modules for this institute:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:189
 msgid "Offizielle Lernmodule dieser Veranstaltung:"
-msgstr ""
+msgstr "Official learning modules for this course:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:194
 msgid "Inoffizielle Lernmodule zu dieser Einrichtung:"
-msgstr ""
+msgstr "Unofficial learning modules for this institute:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:196
 msgid "Inoffizielle Lernmodule zu dieser Veranstaltung:"
-msgstr ""
+msgstr "Unofficial learning modules for this course:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:273
 msgid "Folgende Lernmodule können eingebunden werden:"
@@ -135,11 +132,11 @@ msgstr "This course is connected to the following learning modules:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:366
 msgid "Offizielle Lernmodule:"
-msgstr ""
+msgstr "Official learning modules:"
 
 #: lernmodule/lernmodul_view_functions.inc.php:368
 msgid "Inoffizielle Lernmodule:"
-msgstr ""
+msgstr "Unofficial learning modules:"
 
 #~ msgid "Der Einrichtung sind folgende Lernmodule zugeordnet:"
 #~ msgstr "The institute is allocated the following learning modules:"
@@ -152,3 +149,4 @@ msgstr ""
 
 #~ msgid "Mit dieser Veranstaltung sind keine ILIAS-Lernmodule verknüpft."
 #~ msgstr "No ILIAS learning modules are linked to this course."
+

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-09-30 21:32+0200\n"
-"PO-Revision-Date: 2003-03-24 17:56+0100\n"
+"PO-Revision-Date: 2003-10-01 11:34+0200\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -103,8 +103,7 @@ msgstr "Selection of export module"
 msgid ""
 "W&auml;hlen Sie bitte eine der folgenden XSLT-Dateien und klicken Sie auf "
 "'weiter'"
-msgstr ""
-"Please select one of the following XSLT- files and click on 'continue' "
+msgstr "Please select one of the following XSLT- files and click on 'continue' "
 
 #: export/export_choose_xslt.inc.php:169
 msgid "Ausgabemodul"
@@ -203,8 +202,7 @@ msgid "Fehlende Parameter!"
 msgstr "Defective parameter!"
 
 #: export/export_run_fop.inc.php:52 export/export_xml.inc.php:53
-msgid ""
-"Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
+msgid "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr "The parameters, with which this page has been loaded are defective."
 
 #: export/export_run_fop.inc.php:61
@@ -356,16 +354,16 @@ msgstr "All semesters"
 
 #: export/export_start.inc.php:123
 msgid "Welche Arten von Veranstaltungen sollen exportiert werden? "
-msgstr ""
+msgstr "What form of course should be exported?"
 
 #: export/export_start.inc.php:147
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in "
 "den folgenden Formaten ausgeben: %s."
 msgstr ""
-"This is the Stud.IP export module. The data can be exported in the formats %"
-"s and XML with this module."
+"This is the Stud.IP export module. You can export data in the following formats "
+"using this module:%s."
 
 #: export/export_start.inc.php:155
 msgid ""
@@ -386,11 +384,11 @@ msgstr "The chosen export module is not supported."
 
 #: export/export_studipdata_func.inc.php:332
 msgid "keiner Funktion oder Gruppe zugeordnet"
-msgstr ""
+msgstr "Not allocated to a function or group"
 
 #: export/export_studipdata_func.inc.php:341
 msgid "Alle Studieng&auml;nge"
-msgstr ""
+msgstr "All programs of study"
 
 #: export/export_studipdata_func.inc.php:343
 msgid "DozentInnen"
@@ -420,7 +418,7 @@ msgstr "Members"
 
 #: export/export_xml_func.inc.php:10
 msgid "Alle Einrichtungen"
-msgstr ""
+msgstr "All institutes"
 
 #: export/export_xml.inc.php:27
 msgid "Datenexport"
@@ -434,8 +432,7 @@ msgstr "No data was found!"
 msgid ""
 "Es wurden keine Daten gefunden! Die &uuml;bergebene ID ist mit keinen "
 "Veranstaltungs- / Personendaten verbunden."
-msgstr ""
-"No data was found! The given ID is not connected to any course or user data."
+msgstr "No data was found! The given ID is not connected to any course or user data."
 
 #: export/export_xml.inc.php:109
 msgid "Die Daten wurden erfolgreich exportiert."
@@ -487,10 +484,9 @@ msgstr ""
 
 #: export/export_xslt_vars.inc.php:17
 msgid "Unformatiert mit Veranstaltungsnummern"
-msgstr ""
+msgstr "Unformatted with course numbers"
 
 #: export/export_xslt_vars.inc.php:18
-#, fuzzy
 msgid ""
 "Modul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die "
 "Daten werden nicht formatiert. Es werden auch die Veranstaltungsnummern "
@@ -498,7 +494,8 @@ msgid ""
 "werden."
 msgstr ""
 "Module for the output of user or course data in text format. The data will "
-"not be formatted. The output file can be edited in a word processor program."
+"not be formatted. The course numbers will also be exported. "
+"The output file can be edited in a word processor program."
 
 #: export/export_xslt_vars.inc.php:26
 msgid ""
@@ -541,18 +538,16 @@ msgstr ""
 
 #: export/export_xslt_vars.inc.php:49
 msgid "Standardmodul mit Veranstaltungsnummern"
-msgstr ""
+msgstr "Standard module with course numbers"
 
 #: export/export_xslt_vars.inc.php:50
-#, fuzzy
 msgid ""
 "Standardmodul zur Ausgabe von Veranstaltungsdaten als HTML-Seite. Es werden "
 "auch die Veranstaltungsnummern ausgegeben. Die Ausgabe-Datei kann in einem "
 "Web-Browser angezeigt werden."
 msgstr ""
-"Standard module for the output of user or course data as HTML page. User "
-"data will be displayed as tables. The output data can be displayed in a web "
-"browser."
+"Standard module for the output of course data as HTML page. The course numbers will also be exported. "
+"The output data can be displayed in a web browser."
 
 #: export/export_xslt_vars.inc.php:56 export/export_xslt_vars.inc.php:91
 msgid "TeilnehmerInnenliste"
@@ -608,10 +603,9 @@ msgstr ""
 
 #: export/export_xslt_vars.inc.php:85 export/export_xslt_vars.inc.php:116
 msgid "Vorlesungskommentar mit Veranstaltungsnummern"
-msgstr ""
+msgstr "Course commentary with course numbers"
 
 #: export/export_xslt_vars.inc.php:92
-#, fuzzy
 msgid ""
 "Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten "
 "der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle "
@@ -619,25 +613,24 @@ msgid ""
 "ausgegeben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet "
 "werden."
 msgstr ""
-"Module for the output of user data as HTML page. The basic data of a course "
-"participants will be written in a table. The output data can be displayed in "
-"a web browser."
+"Module for the output of user data as RTF file. The basic data of course "
+"participants of a single course will be written in a table. The contingent and program "
+"of study will also be exported. The output data can be edited in a word processing program."
 
 #: export/export_xslt_vars.inc.php:96
 msgid "Liste der Guppen und Funktionen"
-msgstr ""
+msgstr "List of groups and functions"
 
 #: export/export_xslt_vars.inc.php:97
-#, fuzzy
 msgid ""
 "Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten "
 "der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle "
 "geschrieben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet "
 "werden."
 msgstr ""
-"Module for the output of user data as HTML page. The basic data of a course "
-"participants will be written in a table. The output data can be displayed in "
-"a web browser."
+"Module for the output of user data as a RTF file. The basic data of course "
+"participants of a single course will be written in a table. The output data can be edited "
+"in a word processing program."
 
 #: export/export_xslt_vars.inc.php:104
 msgid ""
@@ -662,7 +655,6 @@ msgstr ""
 "data can be read with the Acrobat PDF Reader."
 
 #: export/export_xslt_vars.inc.php:117
-#, fuzzy
 msgid ""
 "Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe "
 "PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit "
@@ -670,10 +662,10 @@ msgid ""
 "generiert. Es werden auch die Veranstaltungsnummern ausgegeben. Die Datei "
 "kann mit dem Acrobat PDF-Reader gelesen werden."
 msgstr ""
-"Module for the output of user or course data as course commentary in Adobe "
+"Module for the output of course data as course commentary in Adobe "
 "PDF format. The pages include a header and a footer with the page numbers. A "
-"title page and table of contents will be automatically generated. The output "
-"data can be read with the Acrobat PDF Reader."
+"title page and table of contents will be automatically generated. The course number will "
+"also be exported. The output data can be read with the Acrobat PDF Reader."
 
 #: export/export_xslt_vars.inc.php:122
 msgid "MitarbeiterInnenlisten"
@@ -713,7 +705,7 @@ msgstr ""
 
 #: export/oscar.php:57
 msgid "Fehler beim &Ouml;ffnen des Export-Temp-Verzeichnisses!"
-msgstr ""
+msgstr "Error while opening the temporary export directory!"
 
 #~ msgid "Das Verzeichnis existiert nicht!"
 #~ msgstr "The index does not exist!"
@@ -733,3 +725,4 @@ msgstr ""
 #~ msgstr ""
 #~ "If you want to convert the data to another format then click on "
 #~ "'continue'."
+
