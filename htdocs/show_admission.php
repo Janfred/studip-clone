@@ -87,7 +87,7 @@ $db3=new DB_Seminar;
 				if ($datum <1)
 					$datum = 1;
 				ECHO "<tr>";
-				printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\">%s</a></td><td class=\"%s\">%s</td><td class=\"%s\">%s</td><td class=\"%s\">%s</td><td class=\"%s\">%s</td><td class=\"%s\">%s</td>", $cssSw->getClass(), $db->f("seminar_id"), $db->f("Name"), $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, $cssSw->getClass(), date("d.m.Y, G:i", $datum));	 
+				printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\">%s</a></td><td class=\"%s\">%s</td><td class=\"%s\">%s</td><td class=\"%s\">%s</td><td class=\"%s\">%s</td><td class=\"%s\">%s</td>", $cssSw->getClass(), $db->f("seminar_id"), $db->f("Name"), $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, $datum < time() ? "steelgroup4" : "steelgroup1", date("d.m.Y, G:i", $datum));	 
 				print ("</tr>");
 			}
 		
