@@ -265,7 +265,7 @@ if ($change_object_schedules) {
 					$change_schedule_repeat_day_of_week=6;
 				if ($change_schedule_repeat_day7_x)
 					$change_schedule_repeat_day_of_week=7;
-		
+
 				//give data to the assignobject
 				$changeAssign=new AssignObject(
 					$change_schedule_id,
@@ -283,15 +283,15 @@ if ($change_object_schedules) {
 					$change_schedule_repeat_week_of_month,
 					$change_schedule_repeat_day_of_week,
 					$change_schedule_repeat_week);
-			
+
 				if ($change_object_schedules == "NEW")
-					$changeAssign->create();
+					if ($changeAssign->create())
+						$assign_id=$changeAssign->getId();
 				else {
 					$changeAssign->chng_flag=TRUE;
-					$changeAssign->store();
+					if ($changeAssign->store())
+						$assign_id=$changeAssign->getId();
 				}
-		
-				$assign_id=$changeAssign->getId();
 			}
 		}
 	} else {

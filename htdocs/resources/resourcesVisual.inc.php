@@ -885,7 +885,7 @@ class editObject extends cssClasses {
 			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", ($assign_id) ? $resAssign->getResourceId() : $resources_data["structure_open"]); ?>" />			
 			<input type="HIDDEN" name="change_schedule_repeat_month_of_year" value="<? echo $resAssign->getRepeatMonthOfYear() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_month" value="<? echo $resAssign->getRepeatDayOfMonth() ?>" />
-			<input type="HIDDEN" name="change_schedule_repeat_month" value="<? echo $resAssign->repeatMonth() ?>" />
+			<input type="HIDDEN" name="change_schedule_repeat_month" value="<? echo $resAssign->getRepeatMonth() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_week_of_month" value="<? echo $resAssign->getRepeatWeekOfMonth() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_week" value="<? echo $resAssign->getRepeatDayOfWeek() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_week" value="<? echo $resAssign->getRepeatWeek() ?>" />
