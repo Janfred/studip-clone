@@ -36,6 +36,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 
 if ($RESOURCES_ENABLE)
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 
 
 // Get a database connection and Stuff
@@ -153,9 +154,9 @@ if ($form==3)
 
 	//The room for the prelimary discussion
 	$sem_create_data["sem_vor_raum"]=$vor_raum; 
-	$sem_create_data["sem_vor_resource"]=$vor_resource; 
-	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource"] != "FALSE") {
-		$resObject=new ResourceObject($sem_create_data["sem_vor_resource"]);
+	$sem_create_data["sem_vor_resource_id"]=$vor_resource_id; 
+	if ($RESOURCES_ENABLE && $sem_create_data["sem_vor_resource_id"] != "FALSE") {
+		$resObject=new ResourceObject($sem_create_data["sem_vor_resource_id"]);
 		$sem_create_data["sem_vor_raum"]=$resObject->getName();
 	}
 	
@@ -181,9 +182,9 @@ if ($form==3)
 			$sem_create_data["term_turnus_end_stunde"][$i]=$term_turnus_end_stunde[$i]; 
 			$sem_create_data["term_turnus_end_minute"][$i]=$term_turnus_end_minute[$i]; 
 			$sem_create_data["term_turnus_room"][$i]=$term_turnus_room[$i]; 
-			$sem_create_data["term_turnus_resource"][$i]=$term_turnus_resource[$i]; 
-			if ($RESOURCES_ENABLE && $sem_create_data["term_turnus_resource"][$i] != "FALSE") {
-				$resObject=new ResourceObject($sem_create_data["term_turnus_resource"][$i]);
+			$sem_create_data["term_turnus_resource_id"][$i]=$term_turnus_resource_id[$i]; 
+			if ($RESOURCES_ENABLE && $sem_create_data["term_turnus_resource_id"][$i] != "FALSE") {
+				$resObject=new ResourceObject($sem_create_data["term_turnus_resource_id"][$i]);
 				$sem_create_data["term_turnus_room"][$i]=$resObject->getName();
 			}
 				
@@ -215,8 +216,8 @@ if ($form==3)
 					if ($sem_create_data["term_turnus_start_minute"][$i] < 10)
 						$tmp_idx.="0";
 					$tmp_idx.=$sem_create_data["term_turnus_start_minute"][$i];						
-						
-					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i]);
+
+					$tmp_metadata_termin["turnus_data"][]=array("idx"=>$tmp_idx, "day" => $sem_create_data["term_turnus_date"][$i], "start_stunde" => $sem_create_data["term_turnus_start_stunde"][$i], "start_minute" => $sem_create_data["term_turnus_start_minute"][$i], "end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i], "end_minute" => $sem_create_data["term_turnus_end_minute"][$i], "room"=>$sem_create_data["term_turnus_room"][$i], "resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],);
 				}	
 			if (is_array($tmp_metadata_termin["turnus_data"])) {
 
@@ -253,9 +254,9 @@ if ($form==3)
 			$sem_create_data["term_end_stunde"][$i]=$term_end_stunde[$i]; 
 			$sem_create_data["term_end_minute"][$i]=$term_end_minute[$i]; 
 			$sem_create_data["term_room"][$i]=$term_room[$i]; 
-			$sem_create_data["term_resource"][$i]=$term_resource[$i]; 
-			if ($RESOURCES_ENABLE && $sem_create_data["term_resource"][$i] != "FALSE") {
-				$resObject=new ResourceObject($sem_create_data["term_resource"][$i]);
+			$sem_create_data["term_resource_id"][$i]=$term_resource_id[$i]; 
+			if ($RESOURCES_ENABLE && $sem_create_data["term_resource_id"][$i] != "FALSE") {
+				$resObject=new ResourceObject($sem_create_data["term_resource_id"][$i]);
 				$sem_create_data["term_room"][$i]=$resObject->getName();
 			}
 
@@ -911,30 +912,31 @@ if ($cmd_f_x)
 				"0' )";									//Feld showscore
 
 		//und jetzt wirklich eintragen
-		if (!$sem_create_data["sem_entry"])
-			{
+		if (!$sem_create_data["sem_entry"]) {
 			$db->query($query);
-			if ($db->affected_rows() == 0)
-				{
+			if ($db->affected_rows() == 0) {
 				$errormsg .= "error§<b>Fehler:</b> $query §";
 				$successful_entry=0;
 				$sem_create_data["sem_entry"]=FALSE;
 				die;
+    			} else {
+    				//update/insert the assigned roomes
+    				if ($RESOURCES_ENABLE) {
+    					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+    					$updateAssign->updateAssign();
     				}
-	    		else
-    				{
+    				die;
+    				//completing the internal settings....
     				$successful_entry=1;
 				$sem_create_data["sem_entry"]=TRUE;
 				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 				$links_admin_data["referred_from"]="assi";
 				$links_admin_data["assi"]=FALSE; //protected Assi-mode off
 				}
-			}
-		else
-			{
+		} else {
 			$errormsg .= "error§<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!§";
     			$successful_entry=2;			
-			}
+		}
 
 		if (is_array($sem_create_data["sem_doz"]))  // alle ausgewählten Dozenten durchlaufen
 			{
@@ -1047,26 +1049,33 @@ if ($cmd_f_x)
 		$db3->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$sem_create_data["sem_id"]."', user_id='".$user_id."', name='Allgemeiner Dateiordner', description='Ablage für allgemeine Ordner und Dokumente der Veranstaltung', mkdate='".time()."', chdate='".time()."'");
 		
 		//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
-		if ($sem_create_data["sem_vor_termin"] <>-1)
-			{
+		if ($sem_create_data["sem_vor_termin"] <>-1) {
 			$termin_id=md5(uniqid($hash_secret));
 			$mkdate=time();		
 			$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', topic_id=0, end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
+			//update/insert the assigned roomes
+			if ($RESOURCES_ENABLE && $db->affected_rows()) {
+				$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+				$updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]);
 			}
+		}
 		
 		//Wenn der Veranstaltungs-Termintyp Blockseminar ist, dann tragen wir diese Termine auch schon mal ein
-		if ($sem_create_data["term_art"] ==1)
-			{
+		if ($sem_create_data["term_art"] ==1) {
 			for ($i=0; $i<$sem_create_data["term_count"]; $i++)
-				if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i]))
-					{
+				if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i]) && ($sem_create_data["term_end_stunde"][$i])) {
 					$termin_id=md5(uniqid($hash_secret));
 					$mkdate=time();
 					$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
 					$end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-					$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum=''");
+					$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='".($i+1).". Seminartermin (ohne Titel)', date='$date', mkdate='$mkdate', chdate='$mkdate', date_typ='1', topic_id=0, end_time='$end_time', raum='".$sem_create_data["term_room"][$i]."' ");
+					if ($RESOURCES_ENABLE && $db->affected_rows()) {
+						$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
+						$updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]);
 					}
-			}
+				}
+		}
+
 		}
 
 	$level=6;
@@ -1124,7 +1133,7 @@ include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  		//Linkleiste fuer admins
 	// -->
 	</script>
 <?
-//Befre we start, let's decide the category (class) of the Veranstaltung
+//Before we start, let's decide the category (class) of the Veranstaltung
 if (!$sem_create_data["sem_class"]) {
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -1867,7 +1876,7 @@ if ($level==3)
 								<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 									&nbsp; <b><font size=-1>Regelm&auml;&szlig;ige Veranstaltung</font></b><br><br>
 									&nbsp;  <font size=-1>Wenn Sie den Typ der Veranstaltung &auml;ndern m&ouml;chten, gehen Sie bitte auf die erste Seite zur&uuml;ck.</font><br><br>
-									&nbsp; Turnus: &nbsp; 
+									&nbsp;  <font size=-1>Turnus: </font>&nbsp; 
 									<select name="term_turnus">
 									<?
 									if ($sem_create_data["term_turnus"]==0)
@@ -1879,7 +1888,7 @@ if ($level==3)
 									else
 										echo "<option value=1>zweiw&ouml;chentlich</option>";
 									?>
-									</select>&nbsp; erster Termin in der 
+									</select>&nbsp;  <font size=-1>erster Termin in der</font> 
 									<select name="term_start_woche">
 									<?
 									if ($sem_create_data["term_start_woche"]==0)
@@ -1900,7 +1909,7 @@ if ($level==3)
 									<br><br>&nbsp; <font size=-1>Die Veranstaltung findet immer zu diesen Zeiten statt:</font><br><br>
 									<?
 									if (empty($sem_create_data["turnus_count"])) 
-										$sem_create_data["turnus_count"]=2;
+										$sem_create_data["turnus_count"]=1;
 									for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
 										if ($i>0) echo "<br>";
 										?>&nbsp; <select name="term_turnus_date[<?echo $i?>]">
@@ -1951,10 +1960,10 @@ if ($level==3)
 										if ($RESOURCES_ENABLE) {
 											$resList = new ResourcesUserRoomsList($user_id);
 											if ($resList->numberOfEvents()) {
-												print "<font size=-1><select name=\"term_turnus_resource[]\"></font>";
-												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_turnus_resource"][$i]) ? "selected" : "");												
+												print "<font size=-1><select name=\"term_turnus_resource_id[]\"></font>";
+												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_turnus_resource_id"][$i]) ? "selected" : "");												
 												while ($resObject = $resList->nextEvent()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_turnus_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
 												}
 												print "</select></font>";
 											}
@@ -1984,7 +1993,7 @@ if ($level==3)
 									&nbsp; <font size=-1>Die Veranstaltung findet an diesen Terminen statt:</font><br><br>
 									<?
 									if (empty($sem_create_data["term_count"])) 
-										$sem_create_data["term_count"]=2;
+										$sem_create_data["term_count"]=1;
 									for ($i=0; $i<$sem_create_data["term_count"]; $i++)
 										{
 										if ($i>0) echo "<br>";
@@ -2009,10 +2018,10 @@ if ($level==3)
 										if ($RESOURCES_ENABLE) {
 											$resList = new ResourcesUserRoomsList($user_id);
 											if ($resList->numberOfEvents()) {
-												print "<font size=-1><select name=\"term_resource[]\">";
-												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_resource"][$i]) ? "selected" : "");
+												print "<font size=-1><select name=\"term_resource_id[]\">";
+												printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["term_resource_id"][$i]) ? "selected" : "");
 												while ($resObject = $resList->nextEvent()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
 												}
 												print "</select></font>";
 											}
@@ -2036,22 +2045,22 @@ if ($level==3)
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<font size=-1>&nbsp; <font size=-1>Wenn es eine Vorbesprechung gibt, tragen Sie diese bitte hier ein:</font><br><br>&nbsp; Datum:</font>
-							<font size=-1><input type="text" name="vor_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("d",$sem_create_data["sem_vor_termin"]); else echo"tt" ?>">.
-							<input type="text" name="vor_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("m",$sem_create_data["sem_vor_termin"]); else echo"mm" ?>">.
-							<input type="text" name="vor_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("Y",$sem_create_data["sem_vor_termin"]); else echo"jjjj" ?>">&nbsp;
-							um <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); else echo"hh" ?>"> :
-							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); else echo"mm" ?>">&nbsp;Uhr bis
-							<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_end_termin"]); else echo"mm" ?>"> :
-							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); else echo"hh" ?>">&nbsp;Uhr<br />
+							<font size=-1><input type="text" name="vor_tag" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("d",$sem_create_data["sem_vor_termin"]); ?>">.
+							<input type="text" name="vor_monat" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("m",$sem_create_data["sem_vor_termin"]); ?>">.
+							<input type="text" name="vor_jahr" size=4 maxlength=4 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("Y",$sem_create_data["sem_vor_termin"]); ?>">&nbsp;
+							um <input type="text" name="vor_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_termin"]); ?>"> :
+							<input type="text" name="vor_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_termin"]); ?>">&nbsp;Uhr bis
+							<input type="text" name="vor_end_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("H",$sem_create_data["sem_vor_end_termin"]); ?>"> :
+							<input type="text" name="vor_end_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_vor_end_termin"]<>-1) echo date("i",$sem_create_data["sem_vor_end_termin"]); ?>">&nbsp;Uhr<br />
 							&nbsp; Raum: &nbsp;<input type="text" name="vor_raum" size=15 maxlength=255 value="<? if ($sem_create_data["sem_vor_raum"]) echo  htmlReady(stripslashes($sem_create_data["sem_vor_raum"])); ?>"></font>&nbsp; 
 							<?
 							if ($RESOURCES_ENABLE) {
 								$resList = new ResourcesUserRoomsList($user_id);
 								if ($resList->numberOfEvents()) {
-									print "<font size=-1><select name=\"vor_resource\">";
-									printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["sem_vor_resource"]) ? "selected" : "");
+									print "<font size=-1><select name=\"vor_resource_id\">";
+									printf ("<option %s value=\"FALSE\">--</option>", (!$sem_create_data["sem_vor_resource_id"]) ? "selected" : "");
 									while ($resObject = $resList->nextEvent()) {
-										printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
+										printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), $resObject->getName());
 									}
 									print "</select></font>";
 								}
