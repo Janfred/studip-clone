@@ -1,4 +1,5 @@
 <?php
+//$id$
 /*basic settings for Stud.IP
 ----------------------------------------------------------------
 you find here the basic system settings. You shouldn't have to touch much of them...
@@ -125,6 +126,10 @@ leave blank if localhost is also the mailserver*/
 
 $MAIL_LOCALHOST = "";		// name of the mail sending machine (the web server) defaults to SERVER_NAME
 $MAIL_HOST_NAME = "";		// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+$MAIL_CHARSET = "";			//character set of mail body, defaults to ISO-8859-1
+$MAIL_ENV_FROM = "";		//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
+$MAIL_FROM = "";			//name of sender, defaults to "Stud.IP"
+$MAIL_ABUSE = "";			//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
 
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
 $MESSAGING_FORWARD_DEFAULT = FALSE;	// the default setting: if TRUE, every message will be forwarded else the user has to switch it on (both only if above option is active)
@@ -295,7 +300,7 @@ $LATEX_FORMATS = array(
 if (substr($ABSOLUTE_PATH_STUDIP,-1) != "/"){
 	$ABSOLUTE_PATH_STUDIP .= "/";
 }
-$CANONICAL_RELATIVE_PATH_STUDIP = substr($ABSOLUTE_PATH_STUDIP,strlen(getenv("DOCUMENT_ROOT")));
+$CANONICAL_RELATIVE_PATH_STUDIP = substr($ABSOLUTE_PATH_STUDIP,strlen($_SERVER["DOCUMENT_ROOT"]));
 if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
 	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
 }
