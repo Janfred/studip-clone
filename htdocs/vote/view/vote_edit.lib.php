@@ -3,7 +3,7 @@
 /**
  * The page to create/edit votes (HTML generation) ... vote_edit.lib.php
  *
- * @author      Michael Cohrs <michael@cohrs.de>
+ * @author      Michael Cohrs <michael A7 cohrs D07 de>
  * @version     $Id$
  * @copyright   2003 Stud.IP-Project
  * @access      public

@@ -4,7 +4,7 @@
  * This file is used to insert a vote in Stud.IP.
  *
  * @author      Alexander Willner <mail@AlexanderWillner.de>,
- *              Michael Cohrs <michael@cohrs.de>
+ *              Michael Cohrs <michael A7 cohrs D07 de>
  * @version     $Id$
  * @copyright   2003 Stud.IP-Project (GNU General Public License)
  * @access      public
@@ -138,7 +138,9 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    foreach ($_GET as $key=>$item ) {
       $debug .= "$key: $item\n";
    }
-   
+
+   /* Javascript function for show-link */
+   echo EvalCommon::createEvalShowJS( NO, NO );
    
   /* Show all active evals ------------------------------------------------ */
    foreach ($activeEvals as $evalID) {
