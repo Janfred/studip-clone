@@ -191,10 +191,9 @@ function scm_edit_content($range_id) {
 	scm_change_header($content_table, $titel, $result["user_id"], $result["chdate"]);
 	
 	$content="<textarea name=\"content\" style=\"width: 90%\" cols=$max_col rows=10 wrap=virtual >".htmlReady($result["content"])."</textarea>\n";
-	if (!$result);
+	if (!$result)
 		$content.="<input type=\"HIDDEN\" name=\"new_entry\" value=\"1\"><b>\n";
 	$content.= "<input type=\"HIDDEN\" name=\"scm_id\" value=\"$scm_id\">";
-//	$content.= "<input type=\"HIDDEN\" name=\"new_entry\" value=\"$new_entry\">";
 	$content.= "<input type=\"HIDDEN\" name=\"i_view\" value=\"change\">";
 	
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
