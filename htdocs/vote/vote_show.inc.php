@@ -203,11 +203,12 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          $table->addContent (EvalShow::createEvalMetaInfo ($eval, $hasVoted));
          
          if ( $haveFullPerm ) {
+            if (!($range = get_username($rangeID2)))
+               $range = $rangeID2;
             $tr = new HTML ("tr");
             $td = new HTML ("td");
             $td->addAttr ("align", "center");
-            $td->addContent (EvalShow::createOverviewButton 
-                                 (get_username($rangeID2)));
+            $td->addContent (EvalShow::createOverviewButton ($range));
 
             if ( $evalNoPermissons == 0 ) {
             $td->addContent (EvalShow::createStopButton ($eval));
