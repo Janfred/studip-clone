@@ -211,7 +211,7 @@ if (($contact["view"])=="gruppen") {
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
-	echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
+	echo "<td nowrap ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
 		."<a href=\"$PHP_SELF?filter=all\"><font size=\"2\">" . _("Alle Gruppen") . "</font></a>"
 		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"pictures/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a>&nbsp; </td>";
 	if (!$filter) {
@@ -230,7 +230,7 @@ if (($contact["view"])=="gruppen") {
 			$color = "";
 			$maillink ="";
 		}
-		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
+		echo "<td nowrap ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
 		."<a href=\"$PHP_SELF?view=$view&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>$maillink"
 		."&nbsp; </td>";
 		if ($filter==$db->f("statusgruppe_id")) {
