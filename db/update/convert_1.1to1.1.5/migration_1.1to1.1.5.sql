@@ -4,7 +4,7 @@
 
 PLEASE NOTE: Since there exists no migration-tool, please use this script MANUEL to convert your old database to
 a newer version.
-Dont't paste this script directly into your SQL-client, because you have to excute the convert scripts and/or delete-queries 
+Don`t paste this script directly into your SQL-client, because you have to excute the convert scripts and/or delete-queries 
 in the specified order! 
 
 # For detailed informations, please take a look at the update protocol from our installation in Goettingen!
@@ -82,7 +82,7 @@ CREATE TABLE `smiley` (
   PRIMARY KEY  (`smiley_id`),
   UNIQUE KEY `name` (`smiley_name`),
   KEY `short` (`short_name`)
-) TYPE=MyISAM;[
+) TYPE=MyISAM;
 
 ALTER TABLE user_info
   ADD smiley_favorite VARCHAR(255) NOT NULL ,
@@ -102,3 +102,23 @@ ADD `visible` TINYINT UNSIGNED DEFAULT '1' NOT NULL ;
 #
 
 ALTER TABLE `voteanswers_user` ADD INDEX ( `user_id` );
+
+#11
+#
+#
+ALTER TABLE `object_views` ADD INDEX ( `views` ) ;
+
+#12
+#
+#
+ALTER TABLE `seminar_user` DROP INDEX `Seminar_id` ;
+ALTER TABLE `seminar_user` ADD INDEX ( `status` , `Seminar_id` ) ;
+
+#13
+#
+#
+ALTER TABLE `active_sessions` DROP PRIMARY KEY ;
+ALTER TABLE `active_sessions` DROP INDEX `changed`;
+
+ALTER TABLE `active_sessions` ADD PRIMARY KEY ( `sid` , `name` );
+ALTER TABLE `active_sessions` ADD INDEX ( `name` , `changed`);
