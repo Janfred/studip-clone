@@ -127,7 +127,7 @@ if ($cmd_cal == 'chng_cal_settings') {
 
 // delete all expired events and count events
 $db_control = new CalendarDriver();
-if ($cmd == 'add') {
+if ($cmd == 'add' && $calendar_user_control_data['delete'] > 0) {
 	$expire_delete = mktime(date('G', time()), date('i', time()), 0,
 			date('n', time()) - $calendar_user_control_data['delete'],
 			date('j', time()), date('Y', time()));
@@ -372,6 +372,8 @@ if ($cmd == 'add') {
 		if ($calendar_sess_control_data['source']) {
 			$destination = $calendar_sess_control_data['source'];
 			$calendar_sess_control_data['source'] = '';
+			unset($calendar_sess_forms_data);
+			$sess->unregister('calendar_sess_forms_data');
 			page_close();
 			header("Location: $destination");
 			exit;
