@@ -36,7 +36,7 @@ $_language_path = init_i18n($_language);
 	<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
 		<tr>
 <?
-		echo MakeToolbar("pictures/logo2.gif","#",_(" "),_(" "),40,"_top");
+		echo MakeToolbar("pictures/logo2.gif","#"," "," ",40,"_top");
 ?>
 		</tr>
 	</table>
