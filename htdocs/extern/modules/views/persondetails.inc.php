@@ -89,12 +89,10 @@ if ($this->config->getValue("Main", "studiplink") == "top") {
 }
 
 // generic data fields
-/*
 if ($generic_datafields = $this->config->getValue("Main", "genericdatafields")) {
 	$datafields_obj =& new DataFields($db->f("user_id"));
 	$datafields = $datafields_obj->getLocalFields($db->f("user_id"));
 }
-*/
 
 $order = $this->config->getValue("Main", "order");
 foreach ($order as $position) {
@@ -130,6 +128,19 @@ foreach ($order as $position) {
 			// generic data fields
 			default :
 				// include generic datafields
+				if ($datafields[$data_field]["content"]) {
+					echo "<tr><td width=\"100%\">\n";
+					echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
+					echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
+					echo "><td" . $this->config->getAttributes("TableParagraphHeadline", "td");
+					echo "><font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">\n";
+					echo $aliases_content[$position] . "</font></td></tr>\n";
+					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
+					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
+					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
+					echo FixLinks(format(htmlReady($datafields[$data_field]["content"])));
+					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
+				}
 		}
 	}
 }
@@ -195,7 +206,7 @@ function termine (&$this, $db, $alias_content, $text_div, $text_div_end) {
 			$subheadline_div_end = "";
 		}
 	
-		$event_list = new AppList($db->f("user_id"));
+		$event_list = new DbCalendarEventList($db->f("user_id"));
 		if ($event_list->existEvent()) {
 			echo "<tr><td width=\"100%\">\n";
 			echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
