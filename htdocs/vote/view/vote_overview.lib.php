@@ -657,7 +657,7 @@ function makeNewVoteSelectForm($range2, $action){
 			// select current range
 			if($showrangeID == $range[$counter][0])
 				$html .= " selected";
-			$html .=	   ">".$range[$counter][1]."</option>\n";
+			$html .=	   ">".my_substr ($range[$counter][1], 0, 40)."</option>\n";
 			$counter++;
 		}
 		$html .="	   </select>\n";
@@ -702,7 +702,7 @@ function makeDisplaySelectForm($action){
 		if($showrangeID == $range[$counter][0]){
 			$html .= " selected";
 		}
-		$html .=	   ">".$range[$counter][1]."</option>\n";
+		$html .=	   ">".my_substr ($range[$counter][1],0, 40)."</option>\n";
 
 		$counter++;
 	}
