@@ -184,7 +184,6 @@ function PrintNonMembers ($range_id)
 			)
 		)
 	);
-
 	$link = "<a href=\"mailto:".groupmail($SessSemName[1])."?subject=".rawurlencode($SessSemName[0])."\">";
 	$infobox[1]["kategorie"] = "Aktionen:";
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
