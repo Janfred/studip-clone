@@ -350,7 +350,7 @@ function dump_sem($sem_id)
 
 // Teilnehmer
 
-	if (!in_array($sem_id, $AUTO_INSERT_SEM)) {
+	if (is_array($AUTO_INSERT_SEM) && !in_array($sem_id, $AUTO_INSERT_SEM)) {
 
 		$gruppe = array ("dozent" => _("DozentInnen"),
 		  "tutor" => _("TutorInnen"),
