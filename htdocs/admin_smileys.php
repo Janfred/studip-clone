@@ -21,10 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("root");
 
-// keep data copies for search etc.
-$sess->register("save_banner_data");
-$sess->register("banner_data");
-
 if (!$SMILEYADMIN_ENABLE) {
 	print '<p>' . _('Smiley-Modul abgeschaltet.'). '</p>';
 	print "</body></html>";
