@@ -57,7 +57,7 @@ function get_my_sem_values(&$my_sem) {
 	 $my_sem[$db2->f("range_id")]["neuenews"]=$db2->f("count");
 	 }
 // Literatur?
-	 $db2->query ("SELECT range_id,chdate,user_id FROM literatur WHERE range_id IN ".$my_semids);
+	 $db2->query ("SELECT range_id,chdate,user_id FROM literatur WHERE range_id IN ".$my_semids." AND literatur !='' AND links != '' ");
 	while($db2->next_record()) {
 	  if ($db2->f("chdate")>$loginfilenow[$db2->f("range_id")] AND $db2->f("user_id")!=$user->id){
 		$my_sem[$db2->f("range_id")]["neueliteratur"]=TRUE;
@@ -626,4 +626,3 @@ ELSEIF ($perm->have_perm("root")){
 ob_end_flush(); //Outputbuffering beenden
 page_close();
   ?>
-<!-- $Id$ -->
