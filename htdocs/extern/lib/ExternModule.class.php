@@ -262,8 +262,9 @@ class ExternModule {
 	/**
 	*
 	*/
-	function store ($element_name = "", $values = "") {
-		$this->config->store(&$this, $element_name, $values);
+	function store ($element_name = '', $values = '') {
+		$this->config->restore(&$this, $element_name, $values);
+		$this->config->store();
 	}
 	
 	/**

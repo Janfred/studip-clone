@@ -229,14 +229,15 @@ class ExternConfig {
 	}
 	
 	/**
+	* Restores a configuration with all registered elements and their attributes.
+	* The restored configuration contains only the attributes of the current
+	* registered elements.
 	*
+	* @access		public
+	* @param		object	 $module		The module whose configuration will be restored
+	* @param		string[] $values		These values overwrites the values in current configuration
 	*/
-	function store ($module = "", $element_name = "", $values = "") {
-		$file_content = "; Configuration file for the extern module"
-				. " $this->module_name in Stud.IP\n"
-				. "; (range_id: $this->range_id)\n"
-				. "; DO NOT EDIT !!!\n";
-		
+	function restore ($module, $element_name = '', $values = '') {
 		// store the own configuration if the function is called without parameters
 		if ($values != "" && $module) {
 			if ($element_name)
@@ -270,6 +271,16 @@ class ExternConfig {
 				$this->config[$element_name] = $config_tmp;
 			}
 		}
+	}
+	
+	/**
+	*
+	*/
+	function store () {
+		$file_content = "; Configuration file for the extern module"
+				. " $this->module_name in Stud.IP\n"
+				. "; (range_id: $this->range_id)\n"
+				. "; DO NOT EDIT !!!\n";
 		
 		foreach ($this->config as $element => $attributes) {
 			$file_content .= "\n[" . $element . "]\n";
