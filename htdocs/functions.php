@@ -37,6 +37,7 @@
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTree.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 /**
 * This function creates the header line for studip-objects
