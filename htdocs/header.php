@@ -259,6 +259,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			
 			$picture = "pictures/einst.gif";
 			$hp_txt = _("Zu Ihrer Einstellungsseite");
+			$hp_link = "about.php";
 			
 			$db->query("SELECT COUNT(post_id) AS count
 				FROM guestbook 
@@ -270,13 +271,15 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				if ($db->f("count") == 1) {
 					$hp_txt .= sprintf(_(", Sie haben %s neuen Eintrag im Gästebuch."), $db->f("count"));
 					$picture = "pictures/einst2.gif";
+					$hp_link .= "?guestbook=open#guest";
 				}
 				if ($db->f("count") > 1) {
 					$hp_txt .= sprintf(_(", Sie haben %s neue Einträge im Gästebuch."), $db->f("count"));
 					$picture = "pictures/einst2.gif";
+					$hp_link .= "?guestbook=open#guest";
 				}
 			}
-			echo MakeToolbar($picture,"about.php",_("Homepage"),$hp_txt,40, "_top","right");
+			echo MakeToolbar($picture,$hp_link,_("Homepage"),$hp_txt,40, "_top","right");
 
 			echo MakeToolbar("pictures/suchen.gif","auswahl_suche.php",_("Suche"),_("Im System suchen"),40, "_top");
 		}
