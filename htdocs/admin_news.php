@@ -229,7 +229,7 @@ else
 	{
 	$this->news_query = array("news_id"=>"new_entry", "topic" => "", "body" => "", "date" => $aktuell, "user_id" =>$this->user_id, "author" =>$this->full_username, "expire" => "604800");
 	if ($perm->have_perm("admin")){
-	   $this->search_range($this->range_name);
+	   $this->search_range(mysql_escape_string($this->range_name));
 	   }
    }
 
@@ -701,7 +701,7 @@ $news = new studip_news();
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr><td class="topic"><b>&nbsp;
-Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=$news_range_name?></b>)</font></td></tr>
+Newsverwaltung</b> <font size="-1">(gew&auml;hlter Bereich: <b><?=htmlReady($news_range_name)?></b>)</font></td></tr>
 <?
 
  if ($perm->have_perm("admin"))
