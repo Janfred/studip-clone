@@ -37,7 +37,7 @@
 
 function object_set_visit_module($type){
 	global $SessSemName;
-	if (object_get_visit($SessSemName[1], $type) <= object_get_visit($SessSemName[1], $SessSemName['class'])){
+	if (object_get_visit($SessSemName[1], $type, false) <= object_get_visit($SessSemName[1], $SessSemName['class'], false)){
 		object_set_visit($SessSemName[1], $type);
 	}
 }
