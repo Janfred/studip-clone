@@ -109,8 +109,8 @@ function PrintAktualStatusgruppen () {
 
 		
 		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
-			printf ("<a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("E-Mail an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
-			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s \"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id); 
+			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&emailrequest=1&subject=%s\"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
+			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&subject=%s\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0])); 
 		} else {
 			echo "&nbsp;";
 		}
@@ -263,9 +263,12 @@ if ($delete_id)
 		$adr_all=groupmail($SessSemName[1], "all");
 		$adr_prelim=groupmail($SessSemName[1], "prelim");
 		$adr_waiting=groupmail($SessSemName[1], "waiting");
-		$link_mail_all = $adr_all ? "<a href=\"mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
-		$link_mail_prelim = $adr_prelim ?  "<a href=\"mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
-		$link_mail_waiting = $adr_waiting ? "<a href=\"mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		$link_mail_all = $adr_all ? "<a href=\"sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=all\">" : NULL;
+		$link_mail_prelim = $adr_prelim ? "<a href=\"sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=prelim\">" : NULL;
+		$link_mail_waiting = $adr_waiting ? "<a href=\"sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=waiting\">" : NULL;
+		#$link_mail_all = $adr_all ? "<a href=\"mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		#$link_mail_prelim = $adr_prelim ?  "<a href=\"mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		#$link_mail_waiting = $adr_waiting ? "<a href=\"mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
 								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">", "</a>")
 								);

@@ -225,6 +225,16 @@ if($rec_uname) {
 
 // if send message at group (adressbook or groups in courses)
 if ($group_id) {
+	
+	// be sure to send it as email
+	if($emailrequest == 1) {
+		$sms_data['tmpemailsnd'] = 1;
+	}
+
+	// predefine subject
+	if($subject) {
+		$messagesubject = $subject;	
+	}
 
 	$query = sprintf("SELECT statusgruppe_user.user_id, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING (user_id) WHERE statusgruppe_id = '%s' ", $group_id);
 	$db->query($query);
@@ -239,7 +249,40 @@ if ($group_id) {
 		$sms_msg = "error§"._("Die gewählte Adressbuchgruppe enthält keine Mitglieder.");
 		unset($sms_data["p_rec"]);
 	}
+	
+	// append signature
+	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 
+}
+
+// if send message at course
+if ($course_id) {
+
+	// be sure to send it as email
+	if($emailrequest == 1) {
+		$sms_data['tmpemailsnd'] = 1;
+	}
+	
+	// predefine subject
+	if($subject) {
+		$messagesubject = $subject;	
+	}
+	$db = new DB_Seminar;
+	if ($filter=="all") {
+		$db->query ("SELECT username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '".$course_id."'");
+	} else if ($filter=="prelim") {
+		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND status='accepted'");
+	} else if ($filter=="waiting") {
+		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND (status='awaiting' OR status='claiming')");
+	}
+	while ($db->next_record()) {
+		$add_course_members[] = $db->f("username");
+	}
+
+	$sms_data["p_rec"] = "";
+	$sms_data["p_rec"] = array_add_value($add_course_members, $sms_data["p_rec"]);
+	
+	// append signature
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 
 }
