@@ -177,6 +177,28 @@ class Seminar_Session extends Session {
 				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
 			}
 			
+			$result = array();
+			//unsichtbare forenbeiträge die älter als 2 Stunden sind löschen
+			$db->query("SELECT a.topic_id, count( b.topic_id ) AS kinder FROM px_topics a
+						LEFT JOIN px_topics b ON ( a.topic_id = b.parent_id )
+						WHERE a.chdate < UNIX_TIMESTAMP(DATE_ADD(NOW(),INTERVAL -2 HOUR))  AND a.chdate = a.mkdate - 1
+						GROUP BY a.topic_id");
+			while ($db->next_record()){
+				if ($db->f("kinder") != 0){
+					$result['with_kids'][] = $db->f("topic_id");
+				} else {
+					$result['no_kids'][] = $db->f("topic_id");
+				}
+			}
+			//Beiträge ohne Antworten löschen
+			if (is_array($result['no_kids'])){
+				$db->query("DELETE FROM px_topics WHERE topic_id IN('" . join("','",$result['no_kids']) . "')");
+			}
+			//Beiträge mit Antworten sichtbar machen
+			if (is_array($result['with_kids'])){
+				$db->query("UPDATE px_topics SET chdate=mkdate WHERE topic_id IN('" . join("','",$result['with_kids']) . "')");
+			}
+			unset($result);
 		}
 		
 		//weiter mit gc() in der Super Klasse
