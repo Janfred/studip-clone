@@ -143,7 +143,7 @@ class AssignObject {
 		return $this->repeat_day_of_month;
 	}
 
-	function repeatMonth() {
+	function getRepeatMonth() {
 		return $this->repeat_month;
 	}
 	function getRepeatWeekOfMonth() {
@@ -178,6 +178,61 @@ class AssignObject {
 				if ($this->repeat_end_ts==$a["vorles_ende"])
 					return true;
 		return false;
+	}
+
+	function setResourceId($value) {
+		$this->resource_id=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setUserFreeName($value) {
+		$this->user_free_name=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setBegin($value) {
+		$this->begin_ts=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setEnd($value) {
+		$this->end_ts=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setRepeatEnd() {
+		$this->repeat_end_ts=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setRepeatQuantity($value) {
+		$this->repeat_quantity=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setRepeatInterval($value) {
+		$this->repeat_interval=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setRepeatMonthOfYear($value) {
+		$this->repeat_month_of_year=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setRepeatDayOfMonth($value) {
+		$this->repeat_day_of_month=$value;
+		$this->chng_flag=TRUE;
+	}
+
+	function setRepeatWeekOfMonth($value) {
+		$this->repeat_week_of_month=$value;
+		$this->chng_flag=TRUE;
+	}
+	
+	function setRepeatDayOfWeek($value) {
+		$this->repeat_day_of_week=$value;
+		$this->chng_flag=TRUE;
 	}
 
 	function restore($id='') {
@@ -235,6 +290,7 @@ class AssignObject {
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_month
 							 , $this->repeat_week_of_month, $this->repeat_day_of_week, $this->repeat_week
 							 , $chdate, $this->id);
+
 			if($this->db->query($query))
 				return TRUE;
 			return FALSE;
@@ -847,7 +903,7 @@ class resourceObject {
 	}
 
 	function store($create=''){
-		// Natrlich nur Speichern, wenn sich was ge„ndert hat oder das Object neu angelegt wird
+		// Natuerlich nur Speichern, wenn sich was gaendert hat oder das Object neu angelegt wird
 		if(($this->chng_flag) || ($create)) {
 			$chdate = time();
 			$mkdate = time();
