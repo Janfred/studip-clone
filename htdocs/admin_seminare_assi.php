@@ -1067,7 +1067,7 @@ if ($cmd_h_x)
 	if ($db->affected_rows()) {
 		$sem_create_data["lit_entry"]=TRUE;
 		header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
-		break;
+		die;
 		}
 	else
 		{
