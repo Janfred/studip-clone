@@ -228,6 +228,27 @@ function getResourceObjectCategory($id){
 		return FALSE;
 }
 
+function getDateRoomRequest($termin_id) {
+	$db=new DB_Seminar;
+	$query = sprintf("SELECT request_id FROM resources_requests WHERE termin_id = '%s' ",$termin_id);
+	$db->query($query);
+	if ($db->next_record())
+		return $db->f("request_id");
+	else
+		return FALSE;
+}
+	
+function getSeminarRoomRequest($seminar_id) {
+	$db=new DB_Seminar;
+	$query = sprintf("SELECT request_id FROM resources_requests WHERE seminar_id = '%s' ",$seminar_id);
+	$db->query($query);
+	if ($db->next_record())
+		return $db->f("request_id");
+	else
+		return FALSE;
+}
+
+
 function getMyRoomRequests($user_id = '') {
 	global $user, $perm, $RELATIVE_PATH_RESOURCES;
 
