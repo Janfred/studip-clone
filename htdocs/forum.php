@@ -99,6 +99,8 @@ if ($presetview) {
 
 if (!$forum["presetview"])
 	$forum ["presetview"] = $forum["themeview"];
+if (!$forum["sortthemes"])
+	$forum["sortthemes"] = "asc";
 
 if ($view) {
 	if ($view=="reset")
