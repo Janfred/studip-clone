@@ -41,7 +41,10 @@ if ($SessSemName[1] != "")
 }
 else
 {
-	checkObject();
+	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
+				"Keine Objekt gew&auml;hlt", 
+				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
+	die;
 }
 if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id == "")))
 {
@@ -53,9 +56,9 @@ if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id ==
 if ($ILIAS_CONNECT_ENABLE)
 {
 
+	$db = New DB_Seminar;
 	if (($perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{		
-		$db = New DB_Seminar;
 		if ($do_op == "clear")
 		{
 			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
@@ -236,6 +239,21 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 							)
 			)
 		);
+		$db->query("SELECT preferred_language FROM user_info WHERE user_id='" . $auth->auth["uid"] . "'");
+		if ($db->next_record()) 
+			$preferred_language = $db->f("preferred_language");
+		if ($preferred_language != "")
+		{
+			$language = explode("_", $preferred_language);
+			$language = $language[0];
+		}
+		else
+			$language = "de";
+		$link1 = "<a href=\"".$ABSOLUTE_PATH_ILIAS . "/help/$language/editor/index.html\">";
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
+		$infobox[0]["eintrag"][] = array (	"icon" => "pictures/hilfe.gif",
+									"text"  => $link1 . _("Hilfe zum Anlegen und Bearbeiten von ILIAS-Lernmodulen.") . "</a>"
+		);
 		$infobox[1]["kategorie"] = _("Aktionen:");
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/forumgrau.gif" ,
 										"text"  => _("Wenn Sie auf den Titel eines Lernmoduls klicken, &ouml;ffnet sich ein neues Fenster mit dem ILIAS-Lernmodul. Mit den Navigationspfeilen k&ouml;nnen Sie durch das Lernmodul bl&auml;ttern.")
@@ -243,7 +261,7 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 
 		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
-										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss anschlie&szlig;end der Veranstaltung zugewiesen werden."), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
 									);
 
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
