@@ -42,14 +42,14 @@
 */
 define("PHPDOC_DUMMY",true);
 
-$EXTERN_SERVER_NAME = "localhost/studip";
+$EXTERN_SERVER_NAME = "test.studip.de";
 
 $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
 
 $EXTERN_MODULE_TYPES[1] = array("module" => "Download", "name" => _("Download"), "level" => 1,
 													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."));
 
-$EXTERN_MODULE_TYPES[2] = array("module" => "Persons", "name" => _("Personal"), "level" => 1,
+$EXTERN_MODULE_TYPES[2] = array("module" => "Persons", "name" => _("Mitarbeiter"), "level" => 1,
 													"description" => _("Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
 
 $EXTERN_MODULE_TYPES[3] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
@@ -63,10 +63,13 @@ $EXTERN_MODULE_TYPES[5] = array("module" => "News", "name" => _("News"), "level"
 
 $EXTERN_MODULE_TYPES[6] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
 													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."));
-/*
-$EXTERN_MODULE_TYPES[7] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,
-													"description" => _("Das Modul &quot;Veranstaltungsdetails&uot; gibt alle allgemeinen Daten einer Veranstaltung aus."));
 
+$EXTERN_MODULE_TYPES[7] = array("module" => "Lectures", "name" => _("Veranstaltungs&uuml;bersicht"), "level" => 1,
+													"description" => _("Das Modul &quot;Veranstaltungs&uuml;bersicht&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
+
+$EXTERN_MODULE_TYPES[8] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,
+													"description" => _("Das Modul &quot;Veranstaltungsdetails&uot; gibt alle allgemeinen Daten einer Veranstaltung aus."));
+/*
 $EXTERN_MODULE_TYPES[8] = array("module" => "Tree", "name" => _("Bereichsbaum"), "level" => 1,
 													"description" => _("Das Modul &quot;Bereichsbaum&quot; gibt die Struktur einer Einrichtung aus, wenn diese im Bereichsbaum eingefügt wurde. Die Ausgabe erfolgt jeweils vor der Datenausgabe eines anderen Moduls."));
 */
@@ -88,4 +91,6 @@ $EXTERN_LOG_FILE = "";
 if (substr($EXTERN_SERVER_NAME, -1) != "/")
 	$EXTERN_SERVER_NAME .= "/";
 
+if (substr($EXTERN_CONFIG_FILE_PATH, -1) != "/")
+	$EXTERN_CONFIG_FILE_PATH .= "/";
 ?>
