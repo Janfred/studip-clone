@@ -77,6 +77,17 @@ $xml_names_person = array(
 	"name"			=>		"statusgruppe",
 	"privadr"			=>		"adresse",
 	"privatnr"			=>		"privatnummer",
-	"admission_studiengang_id"	=>		"studiengang"
+	"admission_studiengang_id"	=>		"kontingent"
 );
+
+$xml_groupnames_studiengaenge = array(
+	"group"			=>		"studiengaenge",
+	"object"			=>		"studiengang"
+);
+
+$xml_names_studiengaenge = array( 
+	"name"		=>		"studiengang",
+	"count"		=>		"anzahl"
+);
+
 ?>
