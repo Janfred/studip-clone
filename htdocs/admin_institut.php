@@ -314,65 +314,6 @@ if ($i_view)
   	}
 }
 
-
-### Output Institut administration forms, including all updated
-### information, if we come here after a submission...
-
-if (!$i_view)
-{
-  
-  // darf ich neue Institute anlegen? (nur Root)
-  
-  IF ($perm->have_perm("root"))
-  {?>
-  <tr><td class="blank" colspan=2><b><a href="<?echo $PHP_SELF?>?i_view=new">&nbsp;Neue Einrichtung anlegen</a><b><br><br></td></tr>	
-   <?}?>
-
-	<tr><td class="blank" colspan=2>
-  <table align=center bg="#ffffff" width="90%" border=0 cellpadding=2 cellspacing=2>
-  <tr valign=top align=middle>
-  <th width="40%"><a href="<?echo $PHP_SELF?>?sortby=Name">Name der Einrichtung</a></th>
-  <th width="20%"><a href="<?echo $PHP_SELF?>?sortby=fakultaets_id">Fakult&auml;t</a></th>
-  <th width="20%"><a href="<?echo $PHP_SELF?>?sortby=url">Homepage</a></th>
-  <th width="10%"><a href="<?echo $PHP_SELF?>?sortby=number">Veranstaltungen</a></th>
-  </tr>
-<?  
-  ## nachsehen, ob wir ein Sortierkriterium haben, sonst nach Name
-  if (!isset($sortby) || $sortby=="") $sortby = "Name";
-  ## Traverse the result set
-  IF ($perm->have_perm("root"))
-	$db->query("SELECT Institute.*, count(Seminar_id) AS number FROM Institute LEFT OUTER JOIN seminare USING (Institut_id) GROUP BY Institut_id ORDER BY $sortby");
-  ELSE
-   	{
-   	$us_id = $user->id;
-   	$db->query("SELECT Institute.*, count(Seminar_id) AS number FROM Institute LEFT JOIN user_inst USING(Institut_id) LEFT OUTER JOIN seminare USING (Institut_id) WHERE user_inst.user_id = '$us_id' AND user_inst.inst_perms = 'admin' GROUP BY Institut_id ORDER BY $sortby");
-   	}
-  while ($db->next_record()):
-
-//Aufbauen der Uebersichtstabelle
-
-?>
- <!-- existing Institut -->
- <tr valign=middle align=left>
-  <td><a href="<?echo $PHP_SELF?>?i_view=<?$db->p("Institut_id")?>">&nbsp;<?php echo htmlReady($db->f("Name")) ?></a></td>
- <td align=left>&nbsp;
- <?php
-	$inst_id=$db->f("fakultaets_id");
-	$db2->query("SELECT Name FROM Fakultaeten WHERE Fakultaets_id='$inst_id'");
-	$db2->next_record();
-	echo htmlReady($db2->f("Name"));
- ?>
-</td>
-<td align="left"><?php echo FixLinks(htmlReady($db->f("url"))) ?></td>
-<td align=center>&nbsp;<?php $db->p("number") ?></td>
-</tr>
- <?php
-  endwhile;
-?>
-</table><br><br>
-</td></tr>
-<?php
-}
 echo"</table>";
 page_close();
 ?>
