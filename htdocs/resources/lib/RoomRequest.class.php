@@ -385,7 +385,7 @@ class RoomRequest {
 				$properties[] = $key;
 			}
 			$in="('".join("','",$properties)."')";
-			$query = sprintf("DELETE FROM resources_requests_properties WHERE property_id IN %s'", $in);
+			$query = sprintf("DELETE FROM resources_requests_properties WHERE property_id IN %s", $in);
 			$this->db->query($query);
 		}
 		
