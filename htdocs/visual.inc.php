@@ -438,7 +438,7 @@ function format ($text) {
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
-					"'\n(<h[1-4r])'"                        // removes newline delimiters
+					"'\n?(</?h[1-4r]>)\n?'"                        // removes newline delimiters
 					);
 	$replace = array(
 					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
