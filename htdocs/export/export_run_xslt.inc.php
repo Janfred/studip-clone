@@ -53,6 +53,7 @@ global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_fo
 
 
 $export_pagename = _("Download der Ausgabedatei");
+$xslt_process = false;
 
 if (!CheckParamRUN()) 
 {
@@ -89,6 +90,7 @@ else
 		$export_error .= sprintf(_("Bei der Konvertierung ist ein Fehler aufgetreten. %sDer XSLT-Prozessor meldet den Fehler Nr. %s: %s %s"), "<br>", xslt_errno($xh), xslt_error($xh), "<br>");
 		$xslt_info = _("Bei der Konvertierung ist ein Fehler aufgetreten.");
 		$xslt_process = false;
+		$export_error_num++;
 	}
 	
 	xslt_free($xh);
@@ -103,6 +105,20 @@ else
 	else
 	{
 	
+
+		$export_weiter_button .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"page\" value=\"4\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"choose\" value=\"" . $choose . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"format\" value=\"" . $format . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
+		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . $ex_sem . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
+		$export_weiter_button .= "<center><input type=\"IMAGE\"" . makeButton("zurueck", "src") . " name=\"back\" value=\"back\"><br>";
+		$export_weiter_button .= "</center></form>";
+
 		if ($xslt_process)
 		{
 			$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr><td>";
@@ -111,8 +127,9 @@ else
 //			$export_pagecontent .= "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
-			$export_pagecontent .= "</td></tr></table></center><br><br>";
+			$export_pagecontent .= "</td></tr></table></center><br>";
 		}	
+
 
 		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
 		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>";

@@ -81,13 +81,13 @@ else
 		{
 			$link2 = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file  . "&file_name=" . $xslt_filename . ".pdf\">";
 	
-			$export_pagecontent = "<center><table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr align=\"center\"><td>";
+			$export_pagecontent = "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"30%\"><tr align=\"center\"><td>";
 			$export_pagecontent .= "<b>" . _("Ausgabe-Datei: ") . "</b>";
 			$export_pagecontent .= "</td><td>" . $link2 . $xslt_filename . ".pdf</a>";
 //			$export_pagecontent .= "</td><td>" . $result_file . "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
-			$export_pagecontent .= "</td></tr></table></center><br><br>";
+			$export_pagecontent .= "</td></tr></table><br>";
 		}	
 
 		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
