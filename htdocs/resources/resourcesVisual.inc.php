@@ -119,9 +119,8 @@ class ShowList extends ShowTreeRow{
 				$perms = $ActualObjectPerms->getUserPerm();
 			else {
 				$ThisObjectPerms = new ResourcesObjectPerms($resObject->getId());
-				$perms = $ActualObjectPerms->getUserPerm();
+				$perms = $ThisObjectPerms->getUserPerm();
 			}
-		
 			if ($edit_structure_object==$resObject->id) {
 				$content= "<br /><textarea name=\"change_description\" rows=3 cols=40>".htmlReady($resObject->getDescription())."</textarea><br />";
 				$content.= "<input type=\"image\" name=\"send\" align=\"absmiddle\" ".makeButton("uebernehmen", "src")." border=0 value=\""._("&Auml;nderungen speichern")."\" />";
@@ -136,15 +135,18 @@ class ShowList extends ShowTreeRow{
 					$edit= "<a href=\"$PHP_SELF?kill_object=$resObject->id\">".makeButton("loeschen")."</a>";
 				} 
 				$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt")."</a>";
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details")."</a>";
+				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
+			} 
+			if ($SessSemName[1]) {
+				if (($perms == "autor") || ($perms == "admin")) 
+					if ($resObject->getCategoryId())
+						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
+				$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("eigenschaften")."</a>";
 			} else {
-				if ($SessSemName[1]) {
-					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>";
-					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_details\">".makeButton("details")."</a>";
-				} else {
-					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>";
-					$edit.= "&nbsp;<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("details")."</a>";
-				}
+				if (($perms == "autor") || ($perms == "admin"))
+					if ($resObject->getCategoryId())
+						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>&nbsp;";
+				$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("eigenschaften")."</a>";
 			}
 		}
 
@@ -332,7 +334,7 @@ class ShowThread extends ShowTreeRow {
 					$perms = $ActualObjectPerms->getUserPerm();
 				else {
 					$ThisObjectPerms = new ResourcesObjectPerms($resObject->getId());
-					$perms = $ActualObjectPerms->getUserPerm();
+					$perms = $ThisObjectPerms->getUserPerm();
 				}
 				
 				if ($edit_structure_object==$resObject->id) {
@@ -356,12 +358,19 @@ class ShowThread extends ShowTreeRow {
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?cancel_move=TRUE\">".makeButton("abbrechen", "img")."</a>";			
 				elseif ($perms == "admin")
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?pre_move_object=$resObject->id\">".makeButton("verschieben", "img")."</a>";
+
+				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 							
 				if ($perms == "admin") {
-					$edit.= "&nbsp;<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt", "img")."</a>";
+					$edit.= "<a href=\"$PHP_SELF?create_object=$resObject->id\">".makeButton("neuesobjekt", "img")."</a>";
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?create_hierachie_level=$resObject->id\">".makeButton("neueebene", "img")."</a>";
+					$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 				}
-				$edit.= "&nbsp;<a href=\"$PHP_SELF?edit_object=$resObject->id\">".makeButton("details", "img")."</a>";
+				if (($perms == "autor") || ($perms == "admin")) {
+					if ($resObject->getCategoryId())
+						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_schedule\">".makeButton("belegung")."</a>&nbsp;";
+				$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=view_details\">".makeButton("eigenschaften")."</a>";
+				}
 			}	
 
 			//Daten an Ausgabemodul senden (aus resourcesVisual)
@@ -1654,7 +1663,7 @@ class ViewSchedules extends cssClasses {
 					echo "<br /><font size=-1>"._("Anzahl der Belegungen in diesem Zeitraum:")." ", $assign_events->numberOfEvents()."</font>";
 					echo "<br /><br />";
 					while ($event=$assign_events->nextEvent()) {
-						echo "<a href=\"$PHP_SELF?view=".$view."&edit_assign_object=".$event->getAssignId()."\">".makeButton("details")."</a>";
+						echo "<a href=\"$PHP_SELF?view=".$view."&edit_assign_object=".$event->getAssignId()."\">".makeButton("eigenschaften")."</a>";
 						printf ("&nbsp; <font size=-1>"._("Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>")."</font><br />", date("d.m.Y H:i", $event->getBegin()), date("d.m.Y H:i", $event->getEnd()), $event->getName());
 					}
 					?>
