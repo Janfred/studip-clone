@@ -71,7 +71,7 @@ class Request extends ShowTreeRow {
 		<tr>
 			<td class="steel1" align="center">
 				<font size=-1>freie Suche:&nbsp;
-				<input name="search_exp"  type="TEXT" style="{font-size:8 pt; vertikal-align: middle;}" size=30 maxlength=255 value="<? echo $search_exp; ?>" />
+				<input name="search_exp"  type="TEXT" style="{font-size:8pt; vertikal-align: middle;}" size=30 maxlength=255 value="<? echo $search_exp; ?>" />
 				<input type="IMAGE" align="absmiddle"  <? echo makeButton ("suchestarten", "src") ?> name="start_search" border=0 value="<?=_("Suche starten")?>">
 			</td>
 		</tr>
@@ -101,10 +101,11 @@ class Request extends ShowTreeRow {
 		
 		if ($edit_req_object == $reqObject->id) {
 			echo "<a name=\"a\"></a>";
-			$titel .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"40\" maxlength=\"255\" name=\"req_name\" value=\"".htmlReady($reqObject->getName())."\" />";
-		} else {
+			$titel .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"40\" maxlength=\"255\" name=\"req_name\" value=\"".htmlReady($reqObject->getName())."\" />";
+		} elseif ($reqObject->getName()) {
 			$titel = htmlReady($reqObject->getName());
-		}
+		} else
+			$titel = _("kein Titel");
 
 		//create a link on the titel, too
 		if (($link) && ($edit_req_object != $reqObject->id))
@@ -114,9 +115,9 @@ class Request extends ShowTreeRow {
 		if (($edit_req_object == $reqObject->id) && ($supporter)) {
 			$this->db->query("SELECT " . $_fullname_sql['no_title_rev'] . ", auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status IN ('tutor','autor')  AND Seminar_id='".$SessSemName[1]."' ORDER BY Nachname");
 			if ($this->db->nf()) {
-				$zusatz =  _("von:")." <select name=\"req_user_id\" style=\"{font-size:8 pt;};\">\n";
+				$zusatz =  _("von:")." <select name=\"req_user_id\" style=\"{font-size:8pt;};\">\n";
 				while ($this->db->next_record()) {
-					$zusatz .= sprintf ("<option %s style=\"{font-size:8 pt;}\" value=\"%s\">%s</option>\n", $this->db->f("user_id") == $reqObject->getUserId() ? "selected" : "", $this->db->f("user_id"), htmlReady(my_substr($this->db->f(0),0,30)));
+					$zusatz .= sprintf ("<option %s style=\"{font-size:8pt;}\" value=\"%s\">%s</option>\n", $this->db->f("user_id") == $reqObject->getUserId() ? "selected" : "", $this->db->f("user_id"), htmlReady(my_substr($this->db->f(0),0,30)));
 				}
 				$zusatz .= "</select>\n";
 			} else
@@ -131,7 +132,7 @@ class Request extends ShowTreeRow {
 			$content = "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
 			$content .= sprintf ("<tr><td width=\"10%%\"><b><font size=\"-1\">"._("Medium:")."</font></b></td><td width=\"10%%\" align=\"left\"><font size=\"-1\">");
 			if (($edit_req_object == $reqObject->id) && ($supporter)) {
-				$content .= "<select style=\"{font-size:8 pt;}\" name=\"req_channel\">";
+				$content .= "<select style=\"{font-size:8pt;}\" name=\"req_channel\">";
 				$content .= sprintf ("<option %s value=\"FALSE\">"._("unbekannt")."</option>", (!$reqObject->getChannel()) ? "selected" : "");
 				$content .= sprintf ("<option %s value=\"1\">"._("eMail")."</option>", ($reqObject->getChannel() == 1) ? "selected" : "");
 				$content .= sprintf ("<option %s value=\"2\">"._("Telefon")."</option>", ($reqObject->getChannel() == 2) ? "selected" : "");
@@ -159,11 +160,11 @@ class Request extends ShowTreeRow {
 			$content .= "</font></td><td width=\"10%\">&nbsp;</td>";
 			$content .= sprintf("<td width=\"10%%\"><b><font size=\"-1\">"._("Datum:")."</font></b></td><td width=\"40%%\" align=\"left\"><font size=\"-1\">");
 			if (($edit_req_object == $reqObject->id) && ($supporter)) {
-				$content .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_day\" value=\"".date("d", $reqObject->getDate())."\" />.";
-				$content .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_month\" value=\"".date("m", $reqObject->getDate())."\" />.";
-				$content .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"4\" maxlength=\"4\" name=\"req_year\" value=\"".date("Y", $reqObject->getDate())."\" />";
-				$content .= "&nbsp;um&nbsp;<input style=\"{font-size:8 pt;}\" type=\"text\"size=2 maxlength=\"2\" name=\"req_hour\" value=\"".date("H", $reqObject->getDate())."\" />:";
-				$content .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_min\" value=\"".date("i", $reqObject->getDate())."\" />"._("Uhr");
+				$content .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_day\" value=\"".date("d", $reqObject->getDate())."\" />.";
+				$content .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_month\" value=\"".date("m", $reqObject->getDate())."\" />.";
+				$content .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"4\" maxlength=\"4\" name=\"req_year\" value=\"".date("Y", $reqObject->getDate())."\" />";
+				$content .= "&nbsp;um&nbsp;<input style=\"{font-size:8pt;}\" type=\"text\"size=2 maxlength=\"2\" name=\"req_hour\" value=\"".date("H", $reqObject->getDate())."\" />:";
+				$content .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"req_min\" value=\"".date("i", $reqObject->getDate())."\" />"._("Uhr");
 				$content .= sprintf ("<input type=\"HIDDEN\" name=\"sent_req_id\" value=\"%s\" />", $reqObject->id);
 			} else
 				$content .= date("d.m.Y H:i", $reqObject->getDate());
@@ -179,8 +180,8 @@ class Request extends ShowTreeRow {
 				$query = sprintf("SELECT px_topics.name, px_topics.topic_id, date FROM px_topics LEFT OUTER JOIN support_request USING (topic_id) WHERE (support_request.topic_id IS NULL AND seminar_id = '%s' AND parent_id ='0') OR px_topics.topic_id = '%s'", $SessSemName[1], $reqObject->getTopicId());
 				$this->db->query($query);
 				
-				$content .= "<select style=\"{font-size:8 pt;}\" name=\"req_topic_id\">";
-				$content .= sprintf ("<option %s value=\"FALSE\">--"._("kein Forumsthema")."--</option>", (!$reqObject->getTopicId()) ? "selected" : "");
+				$content .= "<select style=\"{font-size:8pt;}\" name=\"req_topic_id\">";
+				$content .= sprintf ("<option %s value=\"FALSE\">--"._("kein Forenthema")."--</option>", (!$reqObject->getTopicId()) ? "selected" : "");
 				
 				while ($this->db->next_record()) {
 					$content .= sprintf ("<option %s value=\"%s\">%s</option>", ($this->db->f("topic_id") == $reqObject->getTopicId()) ? "selected" : "", $this->db->f("topic_id"), $this->db->f("name"));
@@ -195,6 +196,7 @@ class Request extends ShowTreeRow {
 			
 				$content .= sprintf ("<a href=\"forum.php?topic_id=%s&all=TRUE&open=%s\">%s</a>", $reqObject->getTopicId(), $reqObject->getTopicId(), htmlReady($this->db->f("name")));
 			}
+							
 			$content .= "</font></td></tr>\n";
 
 			$content .= "</table>";
@@ -217,42 +219,42 @@ class Request extends ShowTreeRow {
 					$content .= "<tr>";
 					if ($supportdb_data["evt_edits"][$this->db->f("event_id")]) {
 						//we need the user_id's from all the supporter (=dozenten)
-						$this->db2->query("SELECT " . $_fullname_sql['no_title_rev'] . ", auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE (status IN ('dozent') AND Seminar_id='".$SessSemName[1]."') OR auth_user_md5.user_id = '".$user->id."' ORDER BY Nachname");
+						$this->db2->query("SELECT " . $_fullname_sql['no_title_rev'] . ", auth_user_md5.user_id FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE (status IN ('dozent') AND Seminar_id='".$SessSemName[1]."') ORDER BY Nachname");
 						
 						//edit evemt start time
 						$content .= "<td width=\"20%%\"><font size=\"-1\">";
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_begin_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("d", $this->db->f("begin")));
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_begin_month[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("m", $this->db->f("begin")));
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_begin_year[]\" size=\"4\" maxlength=\"4\" value=\"%s\" />&nbsp;", date("Y", $this->db->f("begin")));
-						$content .= sprintf ("<br /><input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_begin_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", date("H", $this->db->f("begin")));
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_begin_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", date("i", $this->db->f("begin")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_begin_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("d", $this->db->f("begin")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_begin_month[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("m", $this->db->f("begin")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_begin_year[]\" size=\"4\" maxlength=\"4\" value=\"%s\" />&nbsp;", date("Y", $this->db->f("begin")));
+						$content .= sprintf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_begin_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", date("H", $this->db->f("begin")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_begin_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", date("i", $this->db->f("begin")));
 						$content .= "</font></td>";
 						
 						//edit event end time
 						$content .= "<td width=\"20%%\"><font size=\"-1\">";
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_end_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("d", $this->db->f("end")));
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_end_month[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("m", $this->db->f("end")));
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_end_year[]\" size=\"4\" maxlength=\"4\" value=\"%s\" />&nbsp;", date("Y", $this->db->f("end")));
-						$content .= sprintf ("<br /><input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_end_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", date("H", $this->db->f("end")));
-						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8 pt;}\" name=\"evt_end_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", date("i", $this->db->f("end")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_end_day[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("d", $this->db->f("end")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_end_month[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />.", date("m", $this->db->f("end")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_end_year[]\" size=\"4\" maxlength=\"4\" value=\"%s\" />&nbsp;", date("Y", $this->db->f("end")));
+						$content .= sprintf ("<br /><input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_end_hour[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />:", date("H", $this->db->f("end")));
+						$content .= sprintf ("<input type=\"TEXT\" style=\"{font-size:8pt;}\" name=\"evt_end_min[]\" size=\"2\" maxlength=\"2\" value=\"%s\" />", date("i", $this->db->f("end")));
 						$content .= "</font></td>";
 
 						$content .= sprintf ("<td width=\"20%%\" valign=\"top\"><font size=\"-1\">%s</font></td>", ($this->db->f("used_points")) ? $this->db->f("used_points") : _("werden automatisch berechnet"));
 						
 						//edit event supporter
 						$content .= "<td width=\"30%%\" valign=\"top\"><font size=\"-1\">";
-						$content .= "<select style=\"{font-size:8 pt;}\" name=\"evt_user_id[]\">";
+						$content .= "<select style=\"{font-size:8pt;}\" name=\"evt_user_id[]\">";
 						$content .= sprintf ("<option %s value=\"FALSE\">"._("unbekannt")."</option>", (!$reqObject->getUserId()) ? "selected" : "");			
 						while ($this->db2->next_record()) {
-							$content .= sprintf ("<option %s style=\"{font-size:8 pt;}\" value=\"%s\">%s</option>\n", $this->db2->f("user_id") == $this->db->f("user_id") ? "selected" : "", $this->db2->f("user_id"), htmlReady(my_substr($this->db2->f(0),0,30)));						
+							$content .= sprintf ("<option %s style=\"{font-size:8pt;}\" value=\"%s\">%s</option>\n", $this->db2->f("user_id") == $this->db->f("user_id") ? "selected" : "", $this->db2->f("user_id"), htmlReady(my_substr($this->db2->f(0),0,30)));						
 						}
 						$content .= "</select>\n";
 						$content .= "<br /><input type=\"HIDDEN\" name=\"evt_id[]\" value=\"".$this->db->f("event_id")."\" />";
 						$content .= "</td>";
 						
 						$content .= "<td width=\"10%%\" align=\"right\" valign=\"top\"><font size=\"-1\">";
-						$content .= "<input type=\"IMAGE\" name=\"evt_sent\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip("Diesen Eintrag speichern")." />";
-						$content .= "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_evt=".$this->db->f("event_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip("Diesen Eintrag löschen")."/></a>";						
+						$content .= "<input type=\"IMAGE\" name=\"evt_sent\" src=\"pictures/haken_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag speichern"))." />";
+						$content .= "&nbsp;&nbsp;<a href=\"$PHP_SELF?kill_evt=".$this->db->f("event_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a>";						
 						$content .= "</td></tr>";
 						
 					} else {
@@ -260,7 +262,7 @@ class Request extends ShowTreeRow {
 						$content .= sprintf ("<td width=\"20%%\"><font size=\"-1\">%s</font></td>", date("d.m.Y H:i", $this->db->f("end")));
 						$content .= sprintf ("<td width=\"20%%\"><font size=\"-1\">%s</font></td>", $this->db->f("used_points"));
 						$content .= sprintf ("<td width=\"30%%\"><font size=\"-1\"><a href=\"about.php?username=%s\">%s</a></font></td>", get_username($this->db->f("user_id")), htmlReady(get_fullname($this->db->f("user_id"))));
-						$content .= sprintf ("<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_evt=".$this->db->f("event_id")."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" ".tooltip("Diesen Eintrag bearbeiten")."/>&nbsp;&nbsp;</a><a href=\"$PHP_SELF?kill_evt=".$this->db->f("event_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip("Diesen Eintrag löschen")."/></a></td>");
+						$content .= sprintf ("<td width=\"10%%\" align=\"right\" valign=\"top\"><a href=\"$PHP_SELF?edit_evt=".$this->db->f("event_id")."\"><img src=\"pictures/edit_transparent.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag bearbeiten"))."/>&nbsp;&nbsp;</a><a href=\"$PHP_SELF?kill_evt=".$this->db->f("event_id")."\"><img src=\"pictures/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."/></a></td>");
 					}
 					$content .= "</tr>\n";
 				}
@@ -269,18 +271,18 @@ class Request extends ShowTreeRow {
 				$content .= "<font size=\"-1\">"._("Diese Anfrage wurde noch nicht bearbeitet")."</font><br />";
 			}
 			if ($supporter)
-				$content .= "<a href=\"$PHP_SELF?create_evt=$reqObject->id\"><img src=\"pictures/add_right.gif\" border=\"0\" ".tooltip ("Bearbeitungszeit hinzufügen")."/></a>";
+				$content .= "<a href=\"$PHP_SELF?create_evt=$reqObject->id\"><img src=\"pictures/add_right.gif\" border=\"0\" ".tooltip (_("Bearbeitungszeit hinzufügen"))."/></a>";
 		}
 		if ($supporter) {
 			if ($edit_req_object == $reqObject->id) {
-				$edit = "<br />&nbsp;<input type=\"IMAGE\" ".makeButton("uebernehmen", "src")." />";
+				$edit = "<br />&nbsp;<input align=\"absmiddle\" type=\"IMAGE\" ".makeButton("uebernehmen", "src")." ".tooltip(_("Daten der Anfrage übernehmen"))." />";
 				$edit .= "&nbsp;<a href=\"$PHP_SELF?cancel_edit_req=$reqObject->id\">".makeButton("abbrechen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			}
 			if ($reqObject->isDeleteable()) {
 				$edit .= "<a href=\"$PHP_SELF?kill_req=$reqObject->id\">".makeButton("loeschen")."</a>";
 			}
 			if ($edit_req_object != $reqObject->id)
-				$edit .= "&nbsp;<a href=\"$PHP_SELF?edit_req=$reqObject->id\">".makeButton("bearbeiten")."</a>";				
+				$edit .= "&nbsp;<a href=\"$PHP_SELF?edit_req=$reqObject->id\"><img ".makeButton("bearbeiten", "src")." ".tooltip(_("Die Anfrage bearbeiten"))." border=\"0\"/></a>";				
 		} 
 		
 		//Daten an Ausgabemodul senden

@@ -84,12 +84,12 @@ class Overview extends ShowTreeRow {
 		if (($edit_con_object == $conObject->id) && ($supporter)){
 			echo "<a name=\"a\"></a>";
 			$titel = _("Laufzeit: ");
-			$titel .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"con_begin_day\" value=\"".date("d", $conObject->getContractBegin())."\" />.";
-			$titel .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"con_begin_month\" value=\"".date("m", $conObject->getContractBegin())."\" />.";
-			$titel .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"4\" maxlength=\"4\" name=\"con_begin_year\" value=\"".date("Y", $conObject->getContractBegin())."\" />";
-			$titel .= "&nbsp;bis&nbsp;<input style=\"{font-size:8 pt;}\" type=\"text\"size=2 maxlength=\"2\" name=\"con_end_day\" value=\"".date("d", $conObject->getContractEnd())."\" />.";
-			$titel .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"con_end_month\" value=\"".date("m", $conObject->getContractEnd())."\" />.";
-			$titel .= "<input style=\"{font-size:8 pt;}\" type=\"text\"size=\"4\" maxlength=\"4\" name=\"con_end_year\" value=\"".date("Y", $conObject->getContractEnd())."\" />";
+			$titel .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"con_begin_day\" value=\"".date("d", $conObject->getContractBegin())."\" />.";
+			$titel .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"con_begin_month\" value=\"".date("m", $conObject->getContractBegin())."\" />.";
+			$titel .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"4\" maxlength=\"4\" name=\"con_begin_year\" value=\"".date("Y", $conObject->getContractBegin())."\" />";
+			$titel .= "&nbsp;bis&nbsp;<input style=\"{font-size:8pt;}\" type=\"text\"size=2 maxlength=\"2\" name=\"con_end_day\" value=\"".date("d", $conObject->getContractEnd())."\" />.";
+			$titel .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"2\" maxlength=\"2\" name=\"con_end_month\" value=\"".date("m", $conObject->getContractEnd())."\" />.";
+			$titel .= "<input style=\"{font-size:8pt;}\" type=\"text\"size=\"4\" maxlength=\"4\" name=\"con_end_year\" value=\"".date("Y", $conObject->getContractEnd())."\" />";
 		} else {
 			$titel = sprintf(_("Supportvertrag vom %s bis %s"), date("d.m.Y", $conObject->getContractBegin()), date("d.m.Y", $conObject->getContractEnd()));
 		}
@@ -111,7 +111,7 @@ class Overview extends ShowTreeRow {
 			$this->db->query($query);
 
 			while ($this->db->next_record()) {
-				$zusatz .= sprintf ("<option %s style=\"%s\" value=\"%s\"> %s</option>\n", $this->db->f("Institut_id") == $conObject->getInstitutId() ? "selected" : "",
+				$zusatz .= sprintf ("<option style=\"{font-size:8pt;}\" %s style=\"%s\" value=\"%s\"> %s</option>\n", $this->db->f("Institut_id") == $conObject->getInstitutId() ? "selected" : "",
 					($this->db->f("is_fak")) ? "font-weight:bold;" : "", $this->db->f("Institut_id"), htmlReady(my_substr($this->db->f("Name"),0,50)));
 				if ($this->db->f("is_fak") && $this->db->f("inst_perms") == "admin") {
 					$this->db2->query("SELECT a.Institut_id, a.Name FROM Institute a WHERE fakultaets_id='" . $this->db->f("Institut_id") . "' AND a.Institut_id!='" .$this->db->f("Institut_id") . "' ORDER BY Name");
@@ -135,8 +135,8 @@ class Overview extends ShowTreeRow {
 		$new=TRUE;
 		if ($open == "open") {
 			$content = "<table border=\"0\" cellspacing=\"2\" cellpadding=\"0\" width=\"100%\">\n";
-			$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Punkte in diesem Vertrag:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td>\n",  
-				(($edit_con_object == $conObject->id) && ($supporter)) ? "<input type=\"TEXT\" name=\"con_given_points\" size=\"4\" maxlength=\"4\" value=\"".$conObject->getGivenPoints()."\" />" : $conObject->getGivenPoints());
+			$content .= sprintf ("<tr><td width=\"20%%\"><b><font size=\"-1\">"._("Punkte in diesem Vertrag:")."</font></b></td><td width=\"10%%\" align=\"center\" valign=\"top\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td>\n",  
+				(($edit_con_object == $conObject->id) && ($supporter)) ? "<input style=\"{font-size:8pt;}\" type=\"TEXT\" name=\"con_given_points\" size=\"4\" maxlength=\"4\" value=\"".$conObject->getGivenPoints()."\" />" : $conObject->getGivenPoints());
 			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Anfragen:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getRequests());
 			$content .= sprintf ("<tr><td><b><font size=\"-1\">"._("verbrauchte Punkte:")."</font></b></td><td align=\"center\"><font size=\"-1\">%s</font></td><td>&nbsp;</td>\n",  $conObject->getUsedPoints());
 			$content .= sprintf ("<td width=\"20%%\"><b><font size=\"-1\">"._("Bearbeitungen:")."</font></b></td><td width=\"10%%\" align=\"center\"><font size=\"-1\">%s</font></td><td width=\"20%%\">&nbsp;</td></tr>\n",  $conObject->getEvents());
@@ -147,7 +147,7 @@ class Overview extends ShowTreeRow {
 		}
 		if ($supporter) {
 			if ($edit_con_object == $conObject->id) {
-				$edit = "<br />&nbsp;<input type=\"IMAGE\" ".makeButton("uebernehmen", "src")." />";
+				$edit = "<br />&nbsp;<input align=\"absmiddle\" type=\"IMAGE\" ".makeButton("uebernehmen", "src")." />";
 				$edit .= "&nbsp;<a href=\"$PHP_SELF?cancel_edit_con=$conObject->id\">".makeButton("abbrechen")."</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			}
 			if ($conObject->isDeleteable()) {
