@@ -205,9 +205,6 @@ while ($db->next_record())
 	if (($db->f("start_time") <=$tmp_sem_beginn) &&(($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time"))) || ($db->f("duration_time") == -1)))
 		$use_this=TRUE;
 	
-	
-	$term_data=unserialize($db->f("metadata_dates"));
-
 	if (($use_this) && (!$term_data["art"]) && (is_array($term_data["turnus_data"])))
 		{
 		//Zusammenbasteln Dozentenfeld
@@ -270,8 +267,6 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 	
 	$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"]).(int)(date("i", $mps["start_time"]) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>"", "row_span"=>$tmp_row_span, "dozenten"=>"", "personal_sem"=>TRUE);
 	}
-
-echo serialize ($my_sems);
 
 //Array der Zellenbelegungen erzeugen
 if (is_array($my_sems)) 
@@ -379,7 +374,7 @@ if (!$print_view) {
 		Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die Druckfunktion ihres Browsers.<br /><br />
 		<font size=-1>Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die <a href = "sem_portal.php?view=Alle">Veranstaltungssuche</a>. <br>
 		Ihre pers&ouml;nlichen Termine finden sie auf der <a href="kalender.php">Termin&uuml;bersicht</a>.</font>
-		<?} else { ?>
+		<?} elseif ($view == "inst") { ?>
 		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung eines Semesters.<br />
 		<br /><font size=-1>Angezeigtes Semester:&nbsp; 
 			<select name="instview_sem">
@@ -391,7 +386,11 @@ if (!$print_view) {
 			</select>&nbsp; 
 			<input type="IMAGE" value="change_instview_sem" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&uuml;bernehmen" />
 			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" />
-		<? } 
+		<? } else { ?>
+		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen ihrer Einrichtung eines Semesters. <br /> Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen<br />
+		<br /><font size=-1>Angezeigtes Semester:&nbsp; 
+			<? 
+		}
 		if ($view !="user")
 			printf ("&nbsp; <font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">Druckansicht dieser Seite</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=".$inst_id : "");
 		?>
