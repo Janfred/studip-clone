@@ -95,7 +95,7 @@ function PrintAktualStatusgruppen ()
 			printf ("     <tr>");
 			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("fullname")));
 			printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
-			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Mail an alle GruppenmitgliederInnen verschicken\" border=\"0\"></a>", $db2->f("username")); 
+			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Mail an alle Gruppenmitglieder verschicken\" border=\"0\"></a>", $db2->f("username")); 
 			printf ("	   </td>");
 			echo "	</tr>";
 			$k++;
