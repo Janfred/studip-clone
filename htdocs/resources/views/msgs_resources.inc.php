@@ -91,4 +91,17 @@ $this->msg[15] = array (
 $this->msg[16] = array (
 		"mode" => "info",
 		"msg"=> _("Sie haben keine Objekt zum Anzeigen ausgew&auml;hlt.")." <br />"._("Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus."));
+$this->msg[17] = array (
+		"mode" => "error",
+		"msg"=> _("Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der Belegung an!"));
+$this->msg[18] = array (
+		"mode" => "error",
+		"msg"=> _("Bitte geben Sie einen g&uuml;ltigen Wert f&uuml;r das Ende der Wiederholung an!"));
+$this->msg[19] = array (
+		"mode" => "error",
+		"msg"=> _("Das Ende der Wiederholung darf nicht vor dem ersten Termin der Wiederholung liegen!"));
+$this->msg[20] = array (
+		"mode" => "error",
+		"msg"=> _("Die Startzeit darf nicht vor der Endzeit liegen!"));
+		
 ?>
