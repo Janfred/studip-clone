@@ -563,7 +563,7 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 					$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
 			}
 			//Alle meine Institute...
-			$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms IN ('tutor', 'dozent')  AND user_inst.user_id='$user_id'  ORDER BY Name");
+			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms IN ('tutor', 'dozent')  AND user_inst.user_id='$user_id'  ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => $db->f("inst_perms"));
 			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>_("Personen"),  "perms" => "admin");
