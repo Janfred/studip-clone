@@ -362,7 +362,7 @@ class messaging {
 	}
 
 	function check_newmsgfoldername($foldername) {
-		if ($new_folder[0] == "new" || $new_folder[0] == "all" || $new_folder[0] == "free") {
+		if ($foldername == "new" || $foldername == "all" || $foldername == "free" || $foldername == "dummy") {
 			return FALSE;
 		} else {
 			return TRUE;	
