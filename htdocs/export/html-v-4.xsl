@@ -255,7 +255,7 @@
 		<xsl:if test="teilnehmer">
 			<tr>
 				<td bgcolor="#EEEEEE">
-					<b>Teilnehmer: </b>
+					<b>Teilnahme: </b>
 				</td>
 				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="teilnehmer"/>
@@ -265,7 +265,7 @@
 		<xsl:if test="teilnehmerzahl">
 			<tr>
 				<td bgcolor="#EEEEEE">
-					<b><xsl:value-of select="teilnehmerzahl@key"/> Teilnehmer: </b>
+					<b><xsl:value-of select="teilnehmerzahl@key"/> TeilnehmerInnenzahl: </b>
 				</td>
 				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="teilnehmerzahl"/>

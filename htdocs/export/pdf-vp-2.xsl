@@ -432,8 +432,14 @@ MitarbeiterInnenliste
 			</xsl:if>
 			<xsl:if test="teilnehmer">
 				<fo:block>
-					<fo:inline font-weight="bold">Teilnehmer: </fo:inline>
+					<fo:inline font-weight="bold">Teilnahme: </fo:inline>
 					<xsl:value-of select="teilnehmer"/>
+				</fo:block>
+			</xsl:if>
+			<xsl:if test="teilnehmerzahl">
+				<fo:block>
+					<fo:inline font-weight="bold"><xsl:value-of select="teilnehmerzahl@key"/> TeilnehmerInnenzahl: </fo:inline>
+					<xsl:value-of select="teilnehmerzahl"/>
 				</fo:block>
 			</xsl:if>
 			<xsl:if test="voraussetzung">

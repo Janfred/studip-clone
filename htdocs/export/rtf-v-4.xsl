@@ -179,7 +179,11 @@
 			</xsl:if>
 			<xsl:if test="teilnehmer">
 				<xsl:text>
-\par\b Teilnehmer: \b0 </xsl:text><xsl:value-of select="teilnehmer"/>
+\par\b Teilnahme: \b0 </xsl:text><xsl:value-of select="teilnehmer"/>
+			</xsl:if>
+			<xsl:if test="teilnehmerzahl">
+				<xsl:text>
+\par\b </xsl:text><xsl:value-of select="teilnehmerzahl@key"/><xsl:text> TeilnehmerInnenzahl: \b0 </xsl:text><xsl:value-of select="teilnehmerzahl"/>
 			</xsl:if>
 			<xsl:if test="voraussetzung">
 				<xsl:text>
