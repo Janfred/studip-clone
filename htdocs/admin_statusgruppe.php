@@ -181,7 +181,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 			if ($k > 1)
 				printf("<a href=\"$PHP_SELF?cmd=move_up&username=%s&statusgruppe_id=%s\"><img src=\"pictures/move_up.gif\" border=\"0\" %s></a>", $db2->f("username"), $statusgruppe_id, tooltip(_("Person nach oben bewegen")));
 			else echo "&nbsp;&nbsp;&nbsp;";
-			printf ("&nbsp;</td><td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip(_("Person aus der Gruppe entfernen")));
+			printf ("&nbsp;</td><td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip(_("Person aus der Gruppe entfernen")));
 			echo "\n\t</tr>";
 			$k++;
 		}
