@@ -191,7 +191,7 @@ function gettitel($score, $gender=0) {
 *
 */
 function GetMyScore() {
-	global $user,$auth;
+	global $user,$auth, $GLOBALS;
 
 	$user_id=$user->id; //damit keiner schummelt...
 
@@ -221,11 +221,35 @@ function GetMyScore() {
 	$db->query("SELECT count(*) as news FROM news WHERE user_id = '$user_id' ");
 	$db->next_record();
 	$news=$db->f("news");
+	
+	$db->query("SELECT count(post_id) as guestcount FROM guestbook WHERE range_id = '$user_id' ");
+	$db->next_record();
+	$gaeste = $db->f("guestcount");
+	
+	if ($GLOBALS['VOTE_ENABLE']) {
+		$db->query("SELECT * FROM vote WHERE range_id = '$user_id'");
+		$db->next_record();
+		$vote = $db->num_rows()*2;
+		
+		$db->query("SELECT * FROM vote_user WHERE user_id = '$user_id'");
+		$db->next_record();
+		$vote += $db->num_rows();
+	}
+	
+	if ($GLOBALS['WIKI_ENABLE']) {
+		$db->query("SELECT * FROM wiki WHERE user_id = '$user_id'");
+		$db->next_record();
+		$wiki = $db->num_rows();	
+	}
+	
+	$visits = object_return_views($user_id);
+		
+		
 
 
 ///////////////////////// Die HOCHGEHEIME Formel:
 
-	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (5*$institut) + (5*($archiv+$seminare));
+	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (5*($archiv+$seminare)) + (5*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
 	if(file_exists("./user/".$user_id.".jpg"))
 		$score *=10;
 
