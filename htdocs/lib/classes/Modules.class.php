@@ -229,13 +229,14 @@ class Modules {
 		
 		$this->db->query($query);
 		$this->db->next_record();
+		
 		if (get_object_type($range_id) == "sem") {
 			if (($SEM_CLASS[$SEM_TYPE[$this->db->f("type")]["class"]][$modul]) && ($this->checkGlobal($modul)))
 				return TRUE;
 			else
 				return FALSE;
 		} else {
-			if (($INST_MODULES[($INST_MODULES[$this->db->f("type")]) ? $db->f("type") : "default"][$module]) && ($this->checkGlobal($modul)))
+			if (($INST_MODULES[($INST_MODULES[$this->db->f("type")]) ? $db->f("type") : "default"][$modul]) && ($this->checkGlobal($modul)))
 				return TRUE;
 			else
 				return FALSE;
