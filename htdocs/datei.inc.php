@@ -156,7 +156,7 @@ function createTempFolder ($folder_id, $tmp_full_path, $perm_check = TRUE) {
 	$db->query($query);
 	while ($db->next_record()) {
 		if ($db->f("url")!="") {  // just a linked file
-			$linkinfo .= "\n\r".$db->f("filename");
+			$linkinfo .= "\r\n".$db->f("filename");
 		} else {
 			$docs++;
 			exec ("cp '$UPLOAD_PATH/".$db->f("dokument_id")."' '$tmp_full_path/[".($docs)."] ".$db->f("filename") ."'");
