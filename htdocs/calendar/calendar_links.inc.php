@@ -54,59 +54,59 @@ if($i_page == "calendar.php"){
 	echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";
 		
 	if($cmd == "showday" || $cmd == "add" || $cmd == "del"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showday<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Tag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showday<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Tag&nbsp; &nbsp; &nbsp; </b></b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showday<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Tag&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showday<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Tag&nbsp; &nbsp; &nbsp; </b></font></a><?
 	}
 	
 	if(($i_page == "calendar.php" && $cmd == "") || $cmd == "showweek"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showweek<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Woche&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showweek<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Woche &nbsp; &nbsp;</b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showweek<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Woche&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showweek<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Woche &nbsp; &nbsp;</b></font></a><?
 	}
 
 	if ($cmd == "showmonth"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showmonth<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Monat&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showmonth<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Monat &nbsp; &nbsp;</b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showmonth<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Monat&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showmonth<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Monat &nbsp; &nbsp;</b></font></a><?
 	}
 
 	if ($cmd == "showyear"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showyear<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Jahr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=showyear<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Jahr &nbsp; &nbsp; </b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showyear<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Jahr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=showyear<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Jahr &nbsp; &nbsp; </b></font></a><?
 	}
 	
 	if ($cmd == "edit"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=edit<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Bearbeiten&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=edit<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Bearbeiten &nbsp;</b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=edit<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Bearbeiten&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=edit<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Bearbeiten &nbsp;</b></font></a><?
 	}
 	
 	if ($cmd == "bind"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Einbinden&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Einbinden &nbsp;</b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Einbinden&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=bind<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Einbinden &nbsp;</b></font></a><?
 	}
 	
 /*	if ($cmd == "import"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=import<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Importieren&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=import<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Importieren&nbsp;&nbsp;</b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=import<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Importieren&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=import<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Importieren&nbsp;&nbsp;</b></font></a><?
 	} */
 	
 	if ($cmd == "changeview"){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=changeview<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Ansicht anpassen&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="calendar.php?cmd=changeview<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Ansicht anpassen &nbsp;</b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=changeview<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2">Ansicht anpassen&nbsp;&nbsp;</font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="calendar.php?cmd=changeview<? if($atime) echo "&atime=$atime" ?>"><font color="#000000" size="2"><b>Ansicht anpassen &nbsp;</b></font></a><?
 	}
 	
 	echo"<br />";
@@ -117,19 +117,19 @@ elseif ($i_page == "mein_stundenplan.php"){
 	echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";	
 
 	if(!$change_view){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="mein_stundenplan.php"><font color="#000000" size="2">Stundenplan&nbsp; &nbsp; </font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="mein_stundenplan.php"><font color="#000000" size="2"><b>Stundenplan&nbsp; &nbsp; </b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="mein_stundenplan.php"><font color="#000000" size="2">Stundenplan&nbsp; &nbsp; </font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="mein_stundenplan.php"><font color="#000000" size="2"><b>Stundenplan&nbsp; &nbsp; </b></font></a><?
 	}
 
-	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  target="_new" href="mein_stundenplan.php?print_view=TRUE"><font color="#000000" size="2">Druckansicht&nbsp; &nbsp; </font></a><?
+	?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  target="_new" href="mein_stundenplan.php?print_view=TRUE"><font color="#000000" size="2"><b>Druckansicht&nbsp; &nbsp; </b></font></a><?
 
 	if($change_view){
-		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="mein_stundenplan.php?change_view=TRUE"><font color="#000000" size="2">Ansicht anpassen&nbsp; &nbsp; </font></a><?
+		?><img src="pictures/forumrot.gif" border="0"><a class="links1"  href="mein_stundenplan.php?change_view=TRUE"><font color="#000000" size="2"><b>Ansicht anpassen&nbsp; &nbsp; </b></font></a><?
 	}
 	else{
-		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="mein_stundenplan.php?change_view=TRUE">Ansicht anpassen&nbsp; &nbsp; </font></a><?
+		?><img src="pictures/forumgrau.gif" border="0"><a class="links1"  href="mein_stundenplan.php?change_view=TRUE"><font color="#000000" size="2"><b>Ansicht anpassen&nbsp; &nbsp; </b></font></a><?
 	}
 
 	echo"<br />";
