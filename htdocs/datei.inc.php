@@ -712,7 +712,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	$lines[$level] = $check_folder[1];
 
 	if ($check_folder[1]){
-	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.mkdate");
+	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.name, a.mkdate");
 	while ($db->next_record()) {	
 		if (!$all) {?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><td class="blank" valign="top" heigth=21 nowrap><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><?}
 
@@ -866,10 +866,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			
 			$s=0;
 			if ($all) {
-					$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY a.mkdate DESC");
+					$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IFNULL(a.name, a.filename) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY t_name, a.mkdate DESC");
 					$documents_count = $db3->num_rows();
 			} else {
-				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY a.mkdate DESC");
+				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IFNULL(a.name, a.filename) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY t_name, a.mkdate DESC");
 			}
 			//Hier wird der Ordnerinhalt (Dokumente) gelistet
 			if ($documents_count){
@@ -907,10 +907,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					if ($change == $db3->f("dokument_id"))
 					$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
 					else {
-						if ($db3->f("name"))
-						$tmp_titel=mila($db3->f("name"));
-						else
-						$tmp_titel=mila($db3->f("filename"));					
+						$tmp_titel=mila($db3->f("t_name"));
 						
 						//create a link onto the titel, too
 						if ($link)
