@@ -239,9 +239,7 @@ if ($perm->have_perm("tutor")) {
 	$structure["einrichtungen"]=array (topKat=>"", name=>"Einrichtungen", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 }
 
-if (/*($CHAT_ENABLE) || */ ($RESOURCES_ENABLE)) {
-	$structure["modules"]=array (topKat=>"", name=>"Tools", link=>"export.php", active=>FALSE);
-}
+$structure["modules"]=array (topKat=>"", name=>"Tools", link=>"export.php", active=>FALSE);
 
 if ($perm->have_perm("admin")) {
 	$structure["einrichtungen"]=array (topKat=>"", name=>"Einrichtungen", link=>"admin_institut.php?list=TRUE", active=>FALSE);
@@ -277,7 +275,8 @@ if ($perm->is_fak_admin())
 	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
 $structure["export"]=array (topKat=>"modules", name=>"Export", link=>"export.php", active=>FALSE);
-$structure["resources"]=array (topKat=>"modules", name=>"Ressourcenverwaltung", link=>"resources.php", active=>FALSE);
+if ($RESOURCES_ENABLE)
+	$structure["resources"]=array (topKat=>"modules", name=>"Ressourcenverwaltung", link=>"resources.php", active=>FALSE);
 //
 if ($perm->have_perm("admin")) {		
 	$structure["new_user"]=array (topKat=>"global", name=>"Benutzer", link=>"new_user_md5.php", active=>FALSE);
