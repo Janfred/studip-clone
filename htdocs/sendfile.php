@@ -188,7 +188,6 @@ if ($disposition)
 //determine the type of the object we want to download a file from (only in type=0 mode!)
 $db->query("SELECT seminar_id AS object_id, filesize FROM dokumente WHERE dokument_id = '".$file_id."' ");
 $db->next_record();
-$filesize=$db->f("filesize");
 
 $skip_check=FALSE;
 if (!$type) {
@@ -269,6 +268,8 @@ if ($no_access) {
 }
 
 //Datei verschicken
+$filesize = filesize($path_file);
+
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-cache, must-revalidate");
