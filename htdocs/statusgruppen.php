@@ -65,7 +65,7 @@ function groupmail($range_id) {
 
 
 function PrintAktualStatusgruppen () {
-	global $_fullname_sql,$SessSemName, $PHP_SELF, $rechte;
+	global $_fullname_sql,$SessSemName, $PHP_SELF, $rechte, $user;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -79,7 +79,7 @@ function PrintAktualStatusgruppen () {
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
 		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s</b></font></td>",htmlReady($db->f("name")));
 		printf ("<td width=\"10%%\"class=\"topic\" align=\"right\" nowrap>");
-		if ($rechte) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
+		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("<a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("E-Mail an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s \"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id); 
 		} else {

@@ -189,6 +189,16 @@ function CheckStatusgruppe ($range_id, $name) {
 	return $exists;
 }
 
+function CheckUserStatusgruppe ($group_id, $object_id) {
+		$db=new DB_Seminar;
+		$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$group_id' AND user_id = '$object_id'");
+		if ($db->next_record()) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+
 /**
 * get all statusgruppen for one user and one range
 *
