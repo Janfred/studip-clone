@@ -165,7 +165,7 @@ if ($chatInput) {
 </table>
 </div>
 </form>
-<script>
+<script  type="text/javascript">
 document.inputform.chatInput.focus();
 </script>
 </body>
