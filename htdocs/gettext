@@ -32,7 +32,7 @@ do {
 	msgmerge locale/$language/LC_MESSAGES/studip_lernmodule.po.old locale/$language/LC_MESSAGES/studip_lernmodule.pot --output-file=locale/$language/LC_MESSAGES/studip_lernmodule.po
 
 	mv locale/$language/LC_MESSAGES/studip_extern.po locale/$language/LC_MESSAGES/studip_extern.po.old
-	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_extern.pot  extern/*.* extern/views/*.* extern/modules/*.* extern/modules/views/*.* extern/lib/*.* extern/elements/*.*
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_extern.pot  extern/*.* extern/views/*.* extern/modules/*.* extern/modules/views/*.* extern/lib/*.* extern/elements/*.* extern/elements/main/*.*
 	msgmerge locale/$language/LC_MESSAGES/studip_extern.po.old locale/$language/LC_MESSAGES/studip_extern.pot --output-file=locale/$language/LC_MESSAGES/studip_extern.po
 
 	mv locale/$language/LC_MESSAGES/studip_support.po locale/$language/LC_MESSAGES/studip_support.po.old
