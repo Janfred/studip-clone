@@ -116,8 +116,9 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	$term_metadata["original_turnus"]=$term_metadata["turnus_data"];
 	$term_metadata["original_art"]=$term_metadata["art"];
 	$term_metadata["original_resource_id"] = array();
-	foreach ($term_metadata["original_turnus"] as $val)
-		$term_metadata["original_resource_id"][] = $val["resource_id"];
+	if (is_array($term_metadata["original_turnus"]))
+		foreach ($term_metadata["original_turnus"] as $val)
+			$term_metadata["original_resource_id"][] = $val["resource_id"];
 	$term_metadata["update_dates"]=TRUE;
 	}
 else {
@@ -521,8 +522,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	$term_metadata["original_turnus"] = $term_metadata["turnus_data"];
 	$term_metadata["original_art"] = $term_metadata["art"];
 	$term_metadata["original_resource_id"] = array();
-	foreach ($term_metadata["original_turnus"] as $val)
-		$term_metadata["original_resource_id"][] = $val["resource_id"];
+	if (is_array($term_metadata["original_turnus"]))
+		foreach ($term_metadata["original_turnus"] as $val)
+			$term_metadata["original_resource_id"][] = $val["resource_id"];
 	
 	$metadata_saved=TRUE;
 	
