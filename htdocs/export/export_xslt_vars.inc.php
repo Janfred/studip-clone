@@ -58,6 +58,15 @@ $xslt_files["html-liste"]["html"] = true;
 $xslt_files["html-liste"]["person"] = true;
 $xslt_files["html-liste"]["veranstaltung"] = true;
 
+$xslt_files["html-teiln"]["name"] = _("TeilnehmerInnenliste");
+$xslt_files["html-teiln"]["desc"] = _("Modul zur Ausgabe von Personendaten als HTML-Seite. 
+	Es werden die Grunddaten der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle geschrieben. 
+	Die Ausgabe-Datei kann in einem Web-Browser angezeigt werden.");
+$xslt_files["html-teiln"]["file"] = "html-t-1.xsl";
+$xslt_files["html-teiln"]["htm"] = true;
+$xslt_files["html-teiln"]["html"] = true;
+$xslt_files["html-teiln"]["person"] = true;
+
 
 
 $xslt_files["rtf-standard"]["name"] = _("Standardmodul");
