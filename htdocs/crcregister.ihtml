@@ -130,24 +130,24 @@ function checkdata(){
   		?>
 		<table>
 		<tr>
-		<? parse_msg ("error§<b>" . _("Cookies sind nicht aktiviert!") . "</b>§info§" . sprintf(_("Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie Ihre Einstellungen und und wiederholen Sie den %sLogin"), "<a href=\"".$this->url()."\">") . "</a>", "§", "blank", 1, TRUE);?>
+		<? parse_msg ("error§<b>" . _("Cookies sind nicht aktiviert!") . "</b>§info§" . sprintf(_("Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies erlauben! Bitte &auml;ndern Sie die Einstellungen Ihres Browsers und wiederholen Sie den %sLogin%s"), "<a href=\"".$this->url()."\">", "</a>"), "§", "blank", 1, TRUE);?>
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
 			
 			<b>&nbsp; <?=_("Was sind Cookies?")?></b><br /><br />
 			<blockquote>
-			<font size =-1><?=_("Cookies werden normalerweise benutzt, damit der Browser den Benutzer der Seiten beim wiederholten Aufrufen dieser Seiten wiederekennen kann <br>Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten des angemeldeten Benutzers auf jeder Seite neu verf&uuml;gbar zu machen.<br>Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!")?>
+			<font size =-1><?=_("Cookies werden normalerweise benutzt, damit der Browser BenutzerInnen der Seiten beim wiederholten Aufrufen dieser Seiten wiedererkennen kann <br>Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten der Nutzenden auf jeder Seite neu verf&uuml;gbar zu machen.<br>Ohne Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!")?>
 			<br></font></blockquote>
 			
-			<b>&nbsp; <?=_("Sind Cookies gefahrlich?")?></b><br /><br />
+			<b>&nbsp; <?=_("Sind Cookies gef&auml;hrlich?")?></b><br /><br />
 			<blockquote>
-			<font size =-1><?=_("Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken integriert sind, die ein deutlich gr&ouml;sseres Sicherheitsririko darstellen (etwa AktiveX-Elemente).<br>Ausserdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie sie die entsprechenden Seiten benutzen.<br>Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speicher des Browser befinden und danach automatisch verschwinden.<br>Sie brauchen sich also keine Sorgen zu machen!")?>
+			<font size =-1><?=_("Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass in den meisten Browsern Techniken integriert sind, die ein deutlich gr&ouml;&szlig;eres Sicherheitsrisiko darstellen (etwa AktiveX-Elemente).<br>Au&szlig;erdem gibt es zwei verschiedene Arten von Cookies: Jene, die auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und solche, die nur solange aktiv sind, wie Sie die entsprechenden Seiten benutzen.<br>Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speicher des Browser befinden und danach automatisch verschwinden.<br>Sie brauchen sich also keine Sorgen zu machen!")?>
 			<br></font></blockquote>
 
 			<b>&nbsp; <?=_("Hinweise f&uuml;r Benutzer des Internet Explorers 6.0")?></b><br /><br />
 			<blockquote>
-			<font size =-1><?=_("Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf diese Seite gelangen, da der Browser Cookies vom Stud.IP System nicht akzeptiert<br>Gehen Sie dann bitte so vor:")?>
+			<font size =-1><?=_("Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf diese Seite gelangen, da der Browser Cookies vom Stud.IP-System nicht akzeptiert<br>Gehen Sie dann bitte so vor:")?>
 			<ol type="1" start="1">
 				<li><?=_("&Ouml;ffnen Sie das Menu \"Extras\" in der Kopfzeile des Browsers")?>
 				<li><?=_("Gehen Sie auf \"Internetoptionen\"")?>
@@ -156,15 +156,15 @@ function checkdata(){
 			</ol>
 			</font></blockquote>
 			
-			<b>&nbsp; <?=_("Hinweise f&uuml;r Benutzer des Netscape Navigator 4.x")?></b><br /><br />
+			<b>&nbsp; <?=_("Hinweise f&uuml;r BenutzerInnen des Netscape Navigator 4.x")?></b><br /><br />
 			<blockquote>
 			<font size =-1><?=_("Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen von Cookies auf folgende Weise einschalten:")?>
 			<br />
 			<ol type="1" start="1">
 				<li><?=_("&Ouml;ffnen Sie das Menu \"Bearbeiten\" in der Kopfzeile des Browsers")?>
 				<li><?=_("Gehen Sie auf \"Einstellungen\"")?>
-				<li><?=_("Wählen sie jetzt auf der linken Seite der Einstellungsseite den Menüpunkt \"Erweitert\"")?>
-				<li><?=_("Aktivieren sie jetzt auf der rechten Seite die Punkte:")?>
+				<li><?=_("W&auml;hlen Sie jetzt auf der linken Seite der Einstellungsseite den Menüpunkt \"Erweitert\"")?>
+				<li><?=_("Aktivieren Sie jetzt auf der rechten Seite die Punkte:")?>
 					<ul type="disc">
 					<li><?=_("\"Benutze JavaScript\"")?>
 					<li><?=_("\"Benutze Style Sheets\"")?>
