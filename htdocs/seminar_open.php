@@ -87,7 +87,6 @@ function start_messenger() {
 	{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
 	</script>
 	<?
-	// $messenger_started = TRUE;
 }
 
 //redirect the user whre he want to go today....
