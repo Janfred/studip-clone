@@ -392,6 +392,8 @@ if ($db->num_rows()) { //Only if Users were found...
 		$offset = $aktivity_index_user / 4;
 		if ($offset < 0) {
 			$offset = 0;
+		} elseif ($offset > 200) {
+			$offset = 200;
 		}
 		$red = dechex(200-$offset) ;
 		$green = dechex(200);
