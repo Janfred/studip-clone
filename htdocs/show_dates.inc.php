@@ -315,9 +315,11 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		while ($termin = $list->nextEvent()) {
 			$icon = "&nbsp;<img src=\"./pictures/termin-icon.gif\" border=\"0\" " . tooltip(_("Termin")) . ">";
 			
-			$zusatz = "";
-			if ($termin->getLocation())
-				$zusatz .= "<font size=\"-1\">Raum: ".htmlReady($termin->getLocation())."&nbsp;</font>";
+			$zusatz = '';
+			if ($termin->getLocation()) {
+				$zusatz .= '<font size="-1">' . _("Raum:") . ' ';
+				$zusatz .= htmlReady($termin->getLocation()) . '&nbsp;</font>';
+			}
 				
 			$titel = "";
 			$titel = substr(strftime("%a", $termin->getStart()),0,2);
@@ -336,13 +338,12 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				$tmp_titel = htmlReady(mila($termin->getTitle())); //Beschneiden des Titels			
 				$titel .= ", ".$tmp_titel;
 			}
-
+			
 			if ($termin->getChangeDate() > $LastLogin)
 				$new=TRUE;
 			else
 				$new=FALSE;
 
-			
 			// Zur Identifikation von auf- bzw. zugeklappten Terminen muss zusaetzlich
 			// die Startzeit ueberprueft werden, da die Wiederholung eines Termins die
 			// gleiche ID besitzt.
@@ -375,8 +376,17 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				else
 					$content .= _("Keine Beschreibung vorhanden") . "<br /><br />";
 				
-				if (sizeof($PERS_TERMIN_KAT) > 1)
-					$content .= sprintf("<b>%s</b> %s<br /><br />", _("Art des Termins:"), $termin->getCategoryName());
+				if (sizeof($PERS_TERMIN_KAT) > 1) {
+					$content .= sprintf("<b>%s</b> %s", _("Kategorie:"),
+							htmlReady($termin->toStringCategories()));
+				}
+				
+				$content .= '<br><b>' . _("Priorit&auml;t:") . ' </b>'
+						. htmlReady($termin->toStringPriority());
+				$content .= '&nbsp; &nbsp; &nbsp; &nbsp; ';
+				$content .= '<b>' . _("Sichtbarkeit:") . ' </b>'
+						. htmlReady($termin->toStringAccessibility());
+				$content .= '<br>' . htmlReady($termin->toStringRecurrence());
 				
 				if ($show_admin)
 					$content .= sprintf("<div align=\"center\"><a href=\"./calendar.php?cmd=edit&termin_id=%s&atime=%s&source_page=%s\">"
@@ -439,11 +449,11 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 
 		while ($termin = $list->nextEvent()) {
 			$icon = '&nbsp;<img src="./pictures/termin-icon.gif" border="0" alt="Termin">';
-			$have_write_permission = (($termin->getType() == 1 && $termin->haveWritePermission())
-					|| ($termin->getType() != 1));
+			$have_write_permission = ((get_class($termin) == 'seminarevent' && $termin->haveWritePermission())
+					|| (get_class($termin) != 'seminarevent'));
 					
 			$zusatz = "";
-			if($termin->getType() == 1)
+			if(get_class($termin) == 'seminarevent')
 				$zusatz .= "<a href=\"seminar_main.php?auswahl=" . $termin->getSeminarId()
 								. "\"><font size=\"-1\">".htmlReady(mila($termin->getSemName(), 22))
 								. "&nbsp;</font></a>";
@@ -466,7 +476,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			else
 				$titel .= " - ".date("H:i", $termin->getEnd());
 			
-			if ($termin->getType() == 1)
+			if (get_class($termin) == 'seminarevent')
 				//Beschneiden des Titels
 				$titel .= ", " . htmlReady(mila($termin->getTitle(), $length - 10));
 			else
@@ -475,7 +485,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			
 			//Dokumente zaehlen
 			$num_docs = 0;
-			if ($show_docs && $termin->getType() == 1) {
+			if ($show_docs && get_class($termin) == 'seminarevent') {
 				$num_docs = doc_count($termin->getId());
 				
 				if ($num_docs) {
@@ -532,18 +542,34 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 					$content .= sprintf("%s<br /><br />", formatReady($termin->getDescription(), TRUE, TRUE));
 				else
 					$content .= _("Keine Beschreibung vorhanden") . "<br /><br />";
-					
-				$have_category = (sizeof($TERMIN_TYP) > 1 && $termin->getType() == 1)
-						|| (sizeof($PERS_TERMIN_KAT) > 1 && $termin->getType() != 1);
 				
-				if ($have_category)
-					$content .= "<b>" . _("Kategorie:") . "</b> " . htmlReady($termin->getCategoryName());
+				$have_category = FALSE;
+				if (sizeof($PERS_TERMIN_KAT) > 1 && get_class($termin) != 'seminarevent') {
+					$content .= "<b>" . _("Kategorie:") . "</b> " . htmlReady($termin->toStringCategories());
+					$have_category = TRUE;
+				}
+				elseif (sizeof($TERMIN_TYP) > 1 && get_class($termin) == 'seminarevent') {
+					$content .= "<b>" . _("Art des Termins:") . "</b> " . htmlReady($termin->toStringCategories());
+					$have_category = TRUE;
+				}
 				
 				if ($termin->getLocation()) {
 					if ($have_category)
 						$content .= "&nbsp; &nbsp; &nbsp; &nbsp; ";
-					$content .= "<b>" . _("Raum:") . " </b>"
-										. htmlReady(mila($termin->getLocation(), 25));
+					if (get_class($termin) == 'seminartermin')
+						$content .= "<b>" . _("Raum:") . " </b>";
+					else
+						$content .= "<b>" . _("Ort:") . " </b>";
+					$content .= htmlReady(mila($termin->getLocation(), 25));
+				}
+				
+				if (get_class($termin) != 'seminarevent') {
+					$content .= '<br><b>' . _("Priorit&auml;t:") . ' </b>'
+							. htmlReady($termin->toStringPriority());
+					$content .= '&nbsp; &nbsp; &nbsp; &nbsp; ';
+					$content .= '<b>' . _("Sichtbarkeit:") . ' </b>'
+							. htmlReady($termin->toStringAccessibility());
+					$content .= '<br>' . htmlReady($termin->toStringRecurrence());
 				}
 								
 				$edit = FALSE;
