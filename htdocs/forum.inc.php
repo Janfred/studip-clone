@@ -214,7 +214,7 @@ function ForumGetParent($id) {  //Holt die ID des Parent-Postings (wird für Schr
 
 function ForumFreshPosting($id) {  //Sieht nach ob das Posting frisch angelegt ist (mkdate ist gleich chdate)
 	$db=new DB_Seminar;
-	$db->query("SELECT chdate, mkdate FROM px_topics WHERE topic_id='$id' AND chdate = mkdate");
+	$db->query("SELECT chdate, mkdate FROM px_topics WHERE topic_id='$id' AND chdate < mkdate");
 	IF ($db->num_rows()) {
 		$fresh = TRUE;
 	} else {
@@ -235,7 +235,7 @@ function ForumFolderOrPosting ($forumposting) {
 function ForumGetWriteStatus($forumposting) {
 	global $forum;
 	if ($forumposting["id"] == $forum["update"]) {  			// das Posting ist im Schreibmodus
-		if ($forumposting["chdate"] == $forumposting["mkdate"]) { 	// das Posting ist frisch angelegt und noch nicht geschrieben
+		if ($forumposting["chdate"] < $forumposting["mkdate"]) { 	// das Posting ist frisch angelegt und noch nicht geschrieben
 			$forumposting["writestatus"] = "new";		
 		} else { 					// das Posting wird editiert
 			$forumposting["writestatus"] = "update";	
@@ -423,9 +423,9 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 	$db=new DB_Seminar;
 	$mkdate = time();
 	if ($writeextern != TRUE)
-		$chdate = $mkdate;
+		$chdate = $mkdate-1;
 	else
-		$chdate = $mkdate+1;
+		$chdate = $mkdate;
 	if (!$user_id) {
 		$db->query ("SELECT user_id , username FROM auth_user_md5 WHERE username = '".$auth->auth["uname"]."' ");
 		while ($db->next_record())
