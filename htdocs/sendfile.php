@@ -52,6 +52,10 @@ switch ($type) {
 	case 2:
 		$path_file=$TMP_PATH."/".$file_id;
 	break;
+	//We want to download an XSL-Script
+	case 3:
+		$path_file=$ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/".$file_id;
+	break;
 	//We want to download from the regular upload-folder
 	default:
 		$path_file=$UPLOAD_PATH."/".$file_id;
@@ -188,7 +192,7 @@ if (!$type) {
 }
 
 //permcheck
-if (($type != 2) && (!$skip_check)) { //if type 2 we donload from the tmp directory and skip permchecks
+if (($type != 2) && ($type != 3) && (!$skip_check)) { //if type 2 or type 3 we download from the tmp directory and skip permchecks
 	if (!$perm->have_perm ("user")) {
 		if (!$type) {
 			$db->query("SELECT Lesezugriff FROM seminare LEFT JOIN dokumente USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
