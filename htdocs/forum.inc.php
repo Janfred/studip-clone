@@ -274,7 +274,7 @@ function ForumGetRights ($forumposting) {
 }
 
 function ForumIcon ($forumposting) {
-	global $cmd, $rechte, $topic_id, $PHP_SELF, $forum;
+	global $cmd, $rechte, $topic_id, $PHP_SELF, $forum, $auth;
 	if ($forumposting["type"]=="folder") {
 		if (leer($forumposting["id"])==FALSE)
 			$bild = "pictures/cont_folder.gif";
@@ -284,11 +284,27 @@ function ForumIcon ($forumposting) {
 		$bild = "pictures/cont_blatt.gif";
 	}
 	
-	
-	if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
-		$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Ordner öffnen")) . "></a>";
-	else
-		$forumposting["icon"] =	"<img src=\"".$bild."\">";	
+	if ($forum["jshover"]==1 AND $auth->auth["jscript"] AND $forumposting["description"]!="" && $forumposting["openclose"]=="close") {      
+		if ($forum["view"]=="tree" && $forumposting["type"]=="folder") { // wir kommen aus der Themenansicht
+			$hoverlink = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\" ";
+			$txt = "<i>" . _("Hier klicken um alle Postings im Ordner zu &ouml;ffnen") . "</i>";
+		} else {
+			$hoverlink = "<a href=\"javascript:void(0);\" ";
+			$txt = "";
+		}
+		$forumposting["icon"] =	$hoverlink
+			."onMouseOver=\"return overlib('"
+			.JSReady($forumposting["description"],"forum").$txt
+			."', CAPTION, '&nbsp;"
+			.JSReady($forumposting["name"])
+			."', NOCLOSE, CSSOFF)\" "
+			." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
+	} else {
+		if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
+			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Ordner öffnen")) . "></a>";
+		else
+			$forumposting["icon"] =	"<img src=\"".$bild."\">";	
+	}
 	
 	if ($cmd=="move" && $rechte)  // ein Beitrag wird verschoben, gelbe Pfeile davor
 		$forumposting["icon"] =	 "<a href=\"".$PHP_SELF."?target=Thema&move_id=".$topic_id."&parent_id=".$forumposting["id"]."\">"
