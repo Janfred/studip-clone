@@ -194,7 +194,6 @@ class CalendarEvent extends Event {
 								+ ($last_wday - 1) * 86400;
 						$r_rule['expire'] = mktime(23, 59, 59, date('n', $r_rule['expire']),
 								date('j', $r_rule['expire']), date('Y', $r_rule['expire']));
-					echo "<br>" . date("d.m.Y", $r_rule['expire']);
 					}
 					$rrule = array($ts, $r_rule['linterval'], 0, $r_rule['wdays'], 0, 0, 'WEEKLY', $duration);
 				}
