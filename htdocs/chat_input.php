@@ -1,24 +1,36 @@
 <?
-/*
-This file is part of StudIP -
-chat_input.php
-Erzeugt das Eingabefenster,fügt geschriebene Nachrichten ein
-Copyright (c) 2002 André Noack <andre.noack@gmx.net>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* Input Window for the Chat
+* 
+* This script prints a HTML input form and handles color changing and quitting the chat with some JavaScript
+*
+* @author		André Noack <andre.noack@gmx.net>
+* @version		$Id$
+* @access		public
+* @modulegroup		chat_modules
+* @module		chat_input
+* @package		Chat
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// chat_nicklist.php
+// Shows the nicklist
+// Copyright (c) 2002 André Noack <andre.noack@gmx.net>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
@@ -33,7 +45,8 @@ require "ChatShmServer.class.php";
 //Studip includes
 require "msg.inc.php";
 
-$chatServer=new ChatShmServer;
+$chatServer = &new ChatShmServer;
+$chatServer->caching = true;
 
 ?>
 <html>
@@ -41,11 +54,17 @@ $chatServer=new ChatShmServer;
        <title>ChatInput</title>
 <link rel="stylesheet" href="style.css" type="text/css">
 <script type="text/javascript">
-    function doQuit(){
+/**
+* JavaScript 
+*/
+   function doQuit(){
 	    document.inputform.chatInput.value="/quit bye";
 	    document.inputform.submit();
     }
-    
+
+/**
+* JavaScript 
+*/
     function doColorChange(){
     	for(i=0;i<document.inputform.chatColor.length;++i)
      		if(document.inputform.chatColor.options[i].selected == true){
@@ -56,6 +75,9 @@ $chatServer=new ChatShmServer;
 	}
 </script>
 <script type="text/javascript">
+/**
+* JavaScript 
+*/
     function printhelp(){
 	    document.inputform.chatInput.value="/help";
 	    document.inputform.submit();

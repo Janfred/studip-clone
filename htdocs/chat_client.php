@@ -1,24 +1,37 @@
 <?
-/*
-This file is part of StudIP -
-chat_client.php
-Das Ausgabefenster des Chats. Hier werden alle Chat Events bearbeitet
-Copyright (c) 2002 André Noack <andre.noack@gmx.net>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* chat client
+* 
+* prints messages, handles all communication
+* 
+*
+* @author		André Noack <andre.noack@gmx.net>
+* @version		$Id$
+* @access		public
+* @modulegroup		chat_modules
+* @module		chat_client
+* @package		Chat
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// chat_nicklist.php
+// Shows the nicklist
+// Copyright (c) 2002 André Noack <andre.noack@gmx.net>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
@@ -238,7 +251,7 @@ function outputLoop($chatid){
 
 //main()
 
-$chatServer=new ChatShmServer;
+$chatServer = &new ChatShmServer;
 $userQuit=false;
 
 ?>
