@@ -10,8 +10,11 @@
 * @param int    Version number. If empty, latest version is returned.
 *
 **/
-function getWikiPage($keyword, $version) {
-	global $db, $SessSemName;
+function getWikiPage($keyword, $version, $db=NULL) {
+	global $SessSemName;
+	if (!$db) {
+		$db=new DB_Seminar();
+	}
 	$q = "SELECT * FROM wiki WHERE ";
 	$q .= "keyword = '$keyword' AND range_id='$SessSemName[1]' ";
 	if (!$version) {
@@ -19,12 +22,14 @@ function getWikiPage($keyword, $version) {
 	} else {
 		$q .= "AND version='$version'";
 	}
+	$q .= " LIMIT 1"; // only one version needed
+
 	$db->query($q);
 	$exists=$db->next_record();
 	if (!$exists) {
-		if ($keyword=="StartSeite") {
+		if ($keyword=="WikiWikiWeb") {
 			$body=_("Dieses Wiki ist noch leer. Bearbeiten Sie es!\nNeue Seiten oder Links werden einfach durch Eingeben von WikiNamen angelegt.");
-			$wikidata=array("body"=>$body, "user_id"=>"nobody",  "version"=>-1);
+			$wikidata=array("body"=>$body, "user_id"=>"nobody",  "version"=>0);
 		} else {
 			return NULL;
 		}
@@ -35,16 +40,62 @@ function getWikiPage($keyword, $version) {
 }
 
 /**
+* Write a new/edited wiki page to database
+* 
+* @param	string	keyword	WikiPage name
+* @param	string	version	WikiPage version
+* @param	string	body	WikiPage text
+* @param	string	user_id	Internal user id of editor
+* @param	string	range_id	Internal id of seminar/einrichtung
+*
+**/
+function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
+
+	releasePageLocks($keyword); // kill lock that was set when starting to edit
+	$db=new DB_Seminar;
+	// write changes to db, show new page
+	$latestVersion=getWikiPage($keyword,"");
+	if ($latestVersion) {
+		$date=time();
+		$lastchange = $date - $latestVersion[chdate];
+	}
+	if ($latestVersion && ($latestVersion['body'] == $body)) {
+		begin_blank_table();
+		parse_msg("info§" . _("Keine Änderung vorgenommen."));
+		end_blank_table();
+	} else if ($latestVersion && ($version!="") && ($lastchange < 30*60) && ($user_id == $latestVersion[user_id])) {
+		// if same author changes again within 30 minutes,
+		// no new verison is created 
+		$result=$db->query("UPDATE wiki SET body='$body', chdate='$date' WHERE keyword='$keyword' AND range_id='$range_id' AND version='$version'");
+		begin_blank_table();
+		parse_msg("info§" . _("Update ok, keine neue Version, da erneute Änderung innerhalb 30 Minuten."));
+		end_blank_table();
+	} else {
+		if ($version=="") {
+			$version=0;
+		} else {
+			$version=$latestVersion['version']+1;
+		}
+		$date=time();
+		$result=$db->query("INSERT INTO wiki (range_id, user_id, keyword, body, chdate, version) VALUES ('$range_id', '$user_id', '$keyword','$body','$date','$version')");
+		begin_blank_table();
+		parse_msg("info§" . _("Update ok, neue Version angelegt."));
+		end_blank_table(); 
+	}
+
+	refreshBacklinks($keyword, $body);
+}
+
+/**
 * Retrieve latest version for a given keyword
 *
 * @param	string	keyword	WikiPage name
 *
 **/
-function latestVersion($keyword) {
-	global $SessSemName;
+function getLatestVersion($keyword, $range_id) {
 	$db=new DB_Seminar;
 	$q = "SELECT * FROM wiki WHERE ";
-	$q .= "keyword='$keyword' AND range_id='$SessSemName[1]' ";
+	$q .= "keyword='$keyword' AND range_id='$range_id' ";
 	$q .= "ORDER BY version DESC";
 	$db->query($q);
 	$db->next_record();
@@ -52,38 +103,30 @@ function latestVersion($keyword) {
 }
 
 /**
-* Create HTML code with version navigation
+* Return array containing version numbes and chdates
 *
-* Generate a link-list of recent versions of WikiPage $keyword,
-* add links to diff-script between version links.
-*
-* @param string	Wiki keyword for currently selected seminar
+* @param string		keyword	Wiki keyword for currently selected seminar
+* @param string		limit	Number of links to be retrieved (default:10)
+* @param string		getfirst Should first (=most recent) version e retrieved, too?
 *
 **/ 
-function getWikiPageVersions($keyword) {
+function getWikiPageVersions($keyword, $limit=10, $getfirst=0) {
 	global $SessSemName;
 	$db = new DB_Seminar;
-	$db->query("SELECT version FROM wiki WHERE keyword = '$keyword' AND range_id='$SessSemName[1]' ORDER BY version DESC");
+	$db->query("SELECT version,chdate FROM wiki WHERE keyword = '$keyword' AND range_id='$SessSemName[1]' ORDER BY version DESC LIMIT $limit");
 	if ($db->affected_rows() == 0) {
 		return "";
 	}
-	$db->next_record();
-	$latest=$db->f("version");
-	$difflink="";
-	$last=$latest;
-	$count=0; 
-
-	$str = "Versionen: <a href=\"wiki.php?keyword=$keyword&view=diff\">"._("Diffs")."</a>&nbsp;&nbsp;&nbsp; ";
-	$str .= "<a href=\"wiki.php?keyword=$keyword\">"._("Aktuell")."</a> ";
-	while ($db->next_record()) {
-		if ($count++ >= 10) { // list at most 10 versions
-			break;
-		}
-		$v = $db->f("version");
-		$str .= " | <a href=\"wiki.php?keyword=$keyword&version=$v\">$v</a>";
-		$last=$v;
+	$versions=array();
+	if (!$getfirst) {
+		// skip first
+		$db->next_record();
 	}
-	return $str;
+	while ($db->next_record()) {
+		$versions[]=array("version"=>$db->f("version"),
+				"chdate"=>$db->f("chdate"));
+	}
+	return $versions;
 }
 
 
@@ -154,6 +197,20 @@ function getLock($keyword) {
 }
 
 /**
+* Set lock for current user and current page
+*
+* @param	DB_Seminar	db	DB_Seminar instance
+* @param	string		user_id	Internal user id
+* @param	string		range_if	Internal seminar id
+* @param	string		keyword	WikiPage name
+*
+**/
+function setWikiLock($db, $user_id, $range_id, $keyword) {
+	$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, chdate) VALUES ('$user_id', '$range_id', '$keyword', '".time()."')");
+}
+
+
+/**
 * Release all locks for wiki page that are older than 30 minutes.
 *
 * @param	string	WikiPage keyword
@@ -175,7 +232,7 @@ function releaseLocks($keyword) {
 /**
 * Release locks for current wiki page and current user
 *
-* @param	string	WikiPage keyword
+* @param	string	keyword	WikiPage name
 *
 **/
 function releasePageLocks($keyword) {
@@ -185,27 +242,96 @@ function releasePageLocks($keyword) {
 }
 
 
+// wiki regex pattern
+// IMPORTANT: Wiki Keyword has to be in 2nd paranthesed pattern!!
+// change routines below if this changes
+//
+$wiki_keyword_regex="(^|\s|\A|\>)([A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]+)";
+
 /**
 * Replace WikiWords with appropriate links in given string
 *
-* @param	string str	
+* @param	string 	str	
+* @param 	string	page
 *
 **/
 function wikiLinks($str, $page) { 
+	global $wiki_keyword_regex;
 	// regex adapted from RoboWiki
 	// added > as possible start of WikiWord
 	// because htmlFormat converts newlines to <br>
-	return preg_replace("/(^|\s|\A|\>)([A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]+)/e", "'\\1'.isKeyword('\\2', $page)", $str); 
+	return preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', $page)", $str); 
+}
+
+/**
+* Return list of WikiWord in given page body ($str)
+*
+* @param	string 	str	
+*
+**/
+function getWikiLinks($str) {
+	global $wiki_keyword_regex;
+	preg_match_all("/$wiki_keyword_regex/", $str, $out, PREG_PATTERN_ORDER);
+	return $out[2];
+}
+
+
+/**
+* Return list of WikiPages containing links to given page
+*
+* @param	string 	str	
+*
+**/
+function getBacklinks($keyword) {
+	global $SessSemName;
+	$db=new DB_seminar();
+	$q="SELECT DISTINCT from_keyword FROM wiki_links WHERE range_id='$SessSemName[1]' AND to_keyword='$keyword'";
+	$db->query($q);
+	$backlinks=array();
+	while ($db->next_record()) {
+		$backlinks[]=$db->f("from_keyword");
+	}
+
+	return $backlinks;
+} 
+
+/**
+* Refresh wiki_links table for backlinks from given page to
+* other pages
+*
+* @param	string 	keyword	WikiPage-name for $str content 
+* @param	string	str	Page content containing links
+*
+**/
+function refreshBacklinks($keyword, $str) {
+	global $SessSemName;
+	// insert links from page to db
+	// logic: all links are added, also links to nonexistant pages
+	// (these will change when submitting other pages)
+	$db_wiki_list=new DB_seminar();
+	// first delete all links
+	$q="DELETE FROM wiki_links WHERE range_id='$SessSemName[1]' AND from_keyword='$keyword'";
+	$db_wiki_list->query($q);
+	// then reinsert those (still) existing
+	$wikiLinkList=getWikiLinks($str);
+	if (!empty($wikiLinkList)) {
+		foreach ($wikiLinkList as $key => $value) {
+			$q="INSERT INTO wiki_links (range_id, from_keyword, to_keyword) VALUES ('$SessSemName[1]', '$keyword', '$value')";
+			$db_wiki_list->query($q);
+		}
+	}
+	$db_wiki_list->free();
 }
 
 /**
 * Generate Meta-Information on Wiki-Page to display in top line
 *
 * @param	db-query result		all information about a wikiPage
+* @return 	string	Displayable HTML
 *
 **/
 function getZusatz($wikiData) {
-	if (!$wikiData || $wikiData["version"] < 0) {
+	if (!$wikiData || $wikiData["version"] <= 0) {
 		return "";
 	}
 	$s = "<font size=-1>";
@@ -215,13 +341,103 @@ function getZusatz($wikiData) {
 }
 
 /**
+* Display yes/no dialog to confirm WikiPage version deletion.
+*
+* @param	string	WikiPage name
+* @param	string	WikiPage version (if empty: take latest)
+*
+* @return	string	Version number to delete
+*
+**/
+function showDeleteDialog($keyword, $version) {
+	global $perm, $SessSemName;
+	if (!$perm->have_perm("dozent")) {
+		begin_blank_table();
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
+	$islatest=0; // will another version become latest version?
+	$willvanish=0; // will the page be deleted entirely?
+	if ($version=="latest") {
+		$lv=getLatestVersion($keyword, $SessSemName[1]);
+		$version=$lv["version"];
+		if ($version==1) {
+			$willvanish=1;
+		}
+		$islatest=1;
+	}
+	begin_blank_table();
+	$msg="info§" . sprintf(_("Wollen Sie die untenstehende Version %s der Seite %s wirklich l&ouml;schen?"), "<b>".$version."</b>", "<b>".$keyword."</b>") . "<br>\n";
+	if ($islatest && !$willvanish) {
+		$msg .= _("Diese Version ist derzeit aktuell. Nach dem L&ouml;schen wird die n&auml;chst&auml;ltere Version aktuell.") . "<br>";
+	} elseif ($islatest && $willvanish) {
+		$msg .= _("Diese Version ist die derzeit einzige. Nach dem L&ouml;schen ist die Seite komplet gelöscht.") . "<br>";
+	} else {
+		$msg .= _("Diese Version ist nicht aktuell. Das L&ouml;schen wirkt sich daher nicht auf die aktuelle Version aus.") . "<br>";
+	}    
+	$msg.="<a href=\"".$PHP_SELF."?cmd=really_delete&keyword=$keyword&version=$version&dellatest=$islatest\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+	$lnk = "?keyword=$keyword"; // what to do when delete is aborted
+	if (!$islatest) $lnk .= "&version=$version"; 
+	$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
+	parse_msg($msg, '§', 'blank', '1', FALSE);
+	end_blank_table();
+	return $version;
+}
+
+/**
+* Delete WikiPage version and adjust backlinks.
+*
+* @param	string	WikiPage name
+* @param	string	WikiPage version
+* @param	string  ID of seminar/einrichtung
+*
+* @return	string	WikiPage name to display next
+*
+**/
+function deleteWikiPage($keyword, $version, $range_id) {
+	global $perm, $SessSemName;
+	if (!$perm->have_perm("dozent")) {
+		begin_blank_table();
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
+	$q="DELETE FROM wiki WHERE keyword='$keyword' AND version='$version' AND range_id='$range_id'";
+	$db=new DB_Seminar;
+	$db->query($q);
+	if (!keywordExists($keyword)) { // all versions have gone
+		$addmsg = sprintf(_("<br>Damit ist die Seite mit allen Versionen gel&ouml;scht."));
+		$newkeyword = "WikiWikiWeb";
+	} else {
+		$newkeyword = $keyword;
+		$addmsg = "";
+	}
+	begin_blank_table();
+	parse_msg("info§" . sprintf(_("Version %s der Seite <b>%s</b> gel&ouml;scht."), $version, $keyword) . $addmsg);
+	end_blank_table();
+	if ($dellatest) {
+		$lv=getLatestVersion($keyword, $SessSemName[1]);
+		if ($lv) {
+			$body="";
+		} else {
+			$body=$lv["body"];
+		}
+		refreshBacklinks($keyword, $body);
+	}
+	return $newkeyword;
+}
+
+/**
 * List all topics in this seminar's wiki
 *
 * @param  mode  string  Either "all" or "new", affects default sorting and page title.
 * @param  sortby  string  Different sortings of entries.
 **/
 function listPages($mode, $sortby=NULL) {
-	global $SessSemName, $user_id, $loginfilelast, $begin_blank_table, $end_blank_table;
+	global $SessSemName, $user_id, $loginfilelast;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -240,89 +456,102 @@ function listPages($mode, $sortby=NULL) {
 	}  
 
 	$titlesortlink = "title";
+	$versionsortlink = "version";
 	$changesortlink = "lastchange";
 
-	if ($sortby == 'title') { 
-		// sort by keyword, prepare link for descending sorting
-		$sort = " ORDER BY keyword";
-		$titlesortlink = "titledesc";
-	} else if ($sortby == 'titledesc') { 
-		// sort descending by keyword, prep link for asc. sort
-		$sort = " ORDER BY keyword DESC";
-		$titlesortlink = "title";
-	} else if ($sortby == 'lastchange') {
-		// sort by change date, default: newest first
-		$sort = " ORDER BY lastchange DESC"; 
-		$changesortlink = "lastchangedesc";
-	} else if ($sortby == 'lastchangedesc') {
-		// sort by change date, oldest first
-		$sort = " ORDER BY lastchange"; 
-		$changesortlink = "lastchange";
-	} 
+	switch ($sortby) {
+		case 'title':
+			// sort by keyword, prepare link for descending sorting
+			$sort = " ORDER BY keyword";
+			$titlesortlink = "titledesc";
+			break;
+		case 'titledesc':
+			// sort descending by keyword, prep link for asc. sort
+			$sort = " ORDER BY keyword DESC";
+			break;
+		case 'version':
+			$sort = " ORDER BY lastversion DESC";
+			$versionsortlink = "versiondesc";
+			break;
+		case 'versiondesc':
+			$sort = " ORDER BY lastversion";
+			break;
+		case 'lastchange':
+			// sort by change date, default: newest first
+			$sort = " ORDER BY lastchange DESC"; 
+			$changesortlink = "lastchangedesc";
+			break;
+		case 'lastchangedesc':
+			// sort by change date, oldest first
+			$sort = " ORDER BY lastchange"; 
+			break;
+	}
 
 	if ($mode=="all") {
-		$q="SELECT keyword, MAX(chdate) AS lastchange FROM wiki WHERE range_id='$SessSemName[1]' GROUP BY keyword " . $sort;
+		$q="SELECT keyword, MAX(chdate) AS lastchange, MAX(version) AS lastversion FROM wiki WHERE range_id='$SessSemName[1]' GROUP BY keyword " . $sort;
 	} else if ($mode=="new") {
-		$datumtmp = $loginfilelast[$SessSemName[1]];
-		$q="SELECT keyword, MAX(chdate) AS lastchange FROM wiki WHERE range_id='$SessSemName[1]' AND chdate > '$datumtmp' GROUP BY keyword " . $sort;
+		$lastlogindate = $loginfilelast[$SessSemName[1]];
+		$q="SELECT keyword, MAX(chdate) AS lastchange, MAX(version) AS lastversion FROM wiki WHERE range_id='$SessSemName[1]' AND chdate > '$lastlogindate' GROUP BY keyword " . $sort;
 	}
 	$result=$db->query($q);
 
 	// quit if no pages found
 	if ($db->affected_rows() == 0) {
-		echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
+		begin_blank_table();
 		parse_msg ("info\xa7" . $nopages);
 		echo "</table></td></tr></table></body></html>";
 		die;
 	}
 
 	// show pages
-	echo $begin_blank_table;
+	begin_blank_table();
 	echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
 	echo "<tr><td class=\"blank\" colspan=\"2\">";
 	echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
 	echo "<tr height=28>";
-	$s = "<td class=\"steel\" width=\"%d%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\">%s</td>";
-	printf($s, 3, "&nbsp;");
-	printf($s, 49, "<font size=-1><b><a href=\"$selfurl&sortby=$titlesortlink\">"._("Titel")."</a></b></font>");
-	printf($s, 24, "<font size=-1><b><a href=\"$selfurl&sortby=$changesortlink\">"._("Letzte Änderung")."</a></b></font>");
-	printf($s, 24, "<font size=-1><b>"._("von")."</b></font>");
+	$s = "<td class=\"steel\" width=\"%d%%\" align=\"%s\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\">%s</td>";
+	printf($s, 3, "left", "&nbsp;");
+	printf($s, 39,"left",  "<font size=-1><b><a href=\"$selfurl&sortby=$titlesortlink\">"._("Titel")."</a></b></font>");
+	printf($s, 10,"center",  "<font size=-1><b><a href=\"$selfurl&sortby=$versionsortlink\">"._("Änderungen")."</a></b></font>");
+	printf($s, 15,"left",  "<font size=-1><b><a href=\"$selfurl&sortby=$changesortlink\">"._("Letzte Änderung")."</a></b></font>");
+	printf($s, 25,"left",  "<font size=-1><b>"._("von")."</b></font>");
 	echo "</tr>";
 
 	$c=1;
 	while ($db->next_record()) {
 
-		if ($c++ % 2) {   // switcher fuer die Klassen
-			$class="steel1";
-			$class2="colorline";
-		} else {
-			$class="steelgraulight";
-			$class2="colorline2";
-		}
+		$class = ($c++ % 2) ? "steel1" : "steelgraulight";
 
 		$keyword=$db->f("keyword");
 		$lastchange=$db->f("lastchange");
-		$db2->query("SELECT user_id FROM wiki WHERE range_id='$SessSemName[1]' AND keyword='$keyword' AND chdate='$lastchange'");
+		$db2->query("SELECT user_id, version FROM wiki WHERE range_id='$SessSemName[1]' AND keyword='$keyword' AND chdate='$lastchange'");
 		$db2->next_record();
 		$userid=$db2->f("user_id");
 	    
-		print("<tr><td class=\"$class\">&nbsp;</td>");
-		printf("<td class=\"%s\"><font size=\"-1\"><a href = wiki.php?keyword=" . $keyword . ">", $class);
+		$tdheadleft="<td class=\"$class\" align=\"left\"><font size=\"-1\">";
+		$tdheadcenter="<td class=\"$class\" align=\"center\"><font size=\"-1\">";
+		$tdtail="</font></td>";
+		print("<tr>".$tdheadleft."&nbsp;"."$tdtail");
+		printf($tdheadleft."<a href = wiki.php?keyword=" . $keyword . ">");
 		print(htmlReady($keyword) ."</a>");
-		print("</font></td>");
-		print("<td class=\"$class\" align=\"left\"><font size=\"-1 \">");
-
-		print(date("d.m.Y, H:i", $lastchange));
-		print("</font></td>");
-		print("<td class=\"$class\" align=\"left\"><font size=\"-1\">");
-		print(get_fullname($userid));
-		print("</font></td></tr>\n");
+		print($tdtail);
+		print($tdheadcenter.$db2->f("version").$tdtail);
+		print($tdheadleft.date("d.m.Y, H:i", $lastchange));
+		if ($mode=="new" && $db2->f("version")>1) {
+			print("&nbsp;(<a href=\"wiki.php?view=diff&keyword=$keyword&versionssince=$lastlogindate\">Diff</a>)");
+		}
+		print($tdtail);
+		print($tdheadleft.get_fullname($userid).$tdtail."</tr>");
 	}
 	echo "</table><p>&nbsp;</p>";
-	echo $end_blank_table;
+	end_blank_table();
 }
 
 
+/**
+* Print a wiki header (css class: topic) including seminar name.
+*
+**/
 function wikiSeminarHeader() {
 	global $SessSemName;
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
@@ -337,17 +566,29 @@ function wikiSeminarHeader() {
 	echo "</table>";
 }
 
+/**
+* Print a wiki page header including printhead-bar with page name and 
+* last change info. 
+*
+**/
 function wikiSinglePageHeader($wikiData, $keyword) {
-	global $begin_blank_table, $end_blank_table;
 	$zusatz=getZusatz($wikiData);
 
-	echo $begin_blank_table;
+	begin_blank_table();
 	printhead(0, 0, FALSE, "icon-wiki", FALSE, "", "<b>$keyword</b>", $zusatz);
-	echo $end_blank_table; 
+	end_blank_table(); 
 }
 
-function wikiEdit($keyword, $wikiData, $backpage=NULL) {
-	global $begin_blank_table, $end_blank_table, $user_id;
+/**
+* Display edit form for wiki page.
+* 
+* @param	string	keyword	WikiPage name
+* @param	array	wikiData	Array from DB with WikiPage data	
+* @param	string	user_id		Internal user id
+* @param	string	backpage	Page to display if editing is aborted
+*
+**/
+function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 
 	if (!$wikiData) {
 		$body = "";
@@ -361,16 +602,16 @@ function wikiEdit($keyword, $wikiData, $backpage=NULL) {
 	releaseLocks($keyword); // kill old locks 
 	$locks=getLock($keyword);
 	if ($locks && $lock["user_id"]!=$user_id) { 
-		echo $begin_blank_table;
+		begin_blank_table();
 		echo "<tr><td class=blank>&nbsp;</td></tr>";
 		parse_msg("info§" . _("Die Seite wird eventuell bearbeitet von ") . $locks . ".<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."));
-		echo $end_blank_table;
+		end_blank_table();
 	}
 
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
 	echo "<tr><td>";
 	$cont = "<font size=-2><p>" . _("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern.") . " ";
-	$cont .= _("Beachten Sie dabei die <a href=\"help/index.php?help_page=ix_forum6.htm\">Formatierungsm&ouml;glichkeiten</a>.") . "<br>";
+	$cont .= _("Beachten Sie dabei die "). "<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"_new\">" . _("Formatierungsm&ouml;glichkeiten") . "</a>.<br>";
 	$cont .= _("Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten.") . "</p></font>";
     
 	$cont .= "<p><form method=\"post\" action=\"?keyword=$keyword&cmd=edit\">";
@@ -386,6 +627,305 @@ function wikiEdit($keyword, $wikiData, $backpage=NULL) {
 	echo "</td></tr></table>";
 }
 
+/**
+* Display wiki page for print.
+* 
+* @param	string	keyword	WikiPage name
+* @param	string	version	WikiPage version
+*
+**/
+function printWikiPage($keyword, $version) {
+	global $SessSemName;
+	$wikiData=getWikiPage($keyword,$version);
+	echo "<html><head><title>$keyword</title></head>";
+	echo "<body>";
+	echo "<p><em>$SessSemName[header_line]</em></p>";
+	echo "<h1>$keyword</h1>";
+	echo "<p><em>Version ".$wikiData['version'];
+	echo ", letzte Änderung ".date("d.m.Y, h:i", $wikiData['chdate']);
+	echo " von ".get_fullname($wikiData['user_id']).".</em></p>";
+	echo "<hr>";
+	echo wikiReady($wikiData['body']);
+	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
+	echo date("d.m.Y, h:i", time());
+	echo " </font></p>";
+	echo "</body></html>";
+}
+
+/**
+* Show export dialog
+*
+**/
+function exportWiki() {
+	showPageFrameStart();
+	begin_blank_table();
+	parse_msg("info§Alle Wiki-Seiten werden als große HTML-Datei zusammengfügt und in einem neuen Fenster angezeigt. Von dort aus können Sie die Datei abspeichern.");
+	$infobox = array ();
+	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Die Wiki-Seiten werden als eine zusammenhängende HTML-Datei ohne Links exportiert."))));
+	print "</tr><tr align=center><td>";
+	print "<a href=\"wiki.php?view=wikiprintall\" target=\"_new\"><img ".makebutton("weiter","src"). " border=0></a></td></tr>";
+	end_blank_table();
+	echo "</td>"; // end of content area
+	showPageFrameEnd($infobox);
+}
+
+/**
+* HTML-dump all wiki pages.
+* Implements an iterative breadth-first traversal of WikiPage-tree. 
+* 
+* @param	string	ID of veranstaltung/einrichtung
+* @param	string	Short title (header) of veranstaltung/einrichtung
+*
+**/
+function printAllWikiPages($range_id, $header) {
+	$visited=array(); // holds names of already visited pages
+	$tovisit=array(); // holds names of pages yetto visit/expand
+	$tovisit[]="WikiWikiWeb"; // start with top level page
+	echo "<html><head><title>$header</title></head>";
+	echo "<body>";
+	echo "<p><em>$header</em></p>";
+	while (! empty($tovisit)) { // while there are still pages left to visit
+		$pagename=array_shift($tovisit);
+		$pagedata=getLatestVersion($pagename, $range_id);
+		if ($pagedata) { // consider only pages with content
+			array_push($visited, $pagename);
+			$linklist=getWikiLinks($pagedata["body"]);
+			foreach ($linklist as $l) {
+				// add pages not visited yet to queue
+				if (! in_array($l, $visited)) {
+					$tovisit[] = $l; // breadth-first
+				}
+			}
+			echo "<hr><h1>$pagename</h1>";
+			echo "<p><em>Version ".$pagedata['version'];
+			echo ", letzte Änderung ".date("d.m.Y, h:i", $pagedata['chdate']);
+			echo " von ".get_fullname($pagedata['user_id']).".</em></p>";
+			// output is html without WikiLinks
+			echo wikiReady($pagedata['body']);
+		}
+	}
+	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
+	echo date("d.m.Y, h:i", time());
+	echo " </font></p>";
+	echo "</body></html>";
+}
+
+/**
+* Display start of page "frame", i.e. open correct table structure.
+*
+**/
+function showPageFrameStart() {
+	print "<table width=\"100%\" class=\"blank\" cellpadding=0 cellspacing=0>";
+	print "<tr class=\"blank\"><td class=\"blank\" nowrap width=\"1%\">&nbsp;</td><td class=\"blank\" valign=\"top\">";
+}
+
+/**
+* Display the right and bottom part of a page "frame".
+*
+* Renders an infobox and closes the table. 
+*
+* @param	array	ready to pass to print_infoxbox()
+*
+**/
+function showPageFrameEnd($infobox) {
+	// start of infobox area
+	echo "<td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
+	print_infobox ($infobox,"pictures/details.jpg");
+	echo "</td></tr><tr><td colspan=3 class=\"blank\">&nbsp;</td></tr>";
+	echo "</table>"; // end infoframe (content+box)
+	echo "</td></tr></table>"; // end page box
+}
+
+/**
+* Returns an infobox string holding information and action links for
+* current page.
+* If newest version is displayed, infobox includes backlinks.
+*
+* @param	string	WikiPage name
+* @param	bool	Is version displayed latest version?
+*
+**/
+function getShowPageInfobox($keyword, $latest_version) {
+
+	$versions=getWikiPageVersions($keyword);
+	$versiontext="<a href=\"wiki.php?keyword=".$keyword."\">Aktuelle Version</a><br>";
+	if ($version) {
+		foreach ($versions as $v) {
+			$versiontext .= "<a href=\"wiki.php?keyword=$keyword&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
+		}
+	}
+	if (!$versiontext) {
+		$versiontext=_("Keine alten Versionen.");
+	}
+
+	$viewtext="<a href=\"wiki.php?keyword=".$keyword."&view=show\">Standard</a><br>";
+	$viewtext .= "<a href=\"wiki.php?keyword=".$keyword."&view=wikiprint&version=$version\" target=\"_new\">Druckansicht</a><br>";
+	$viewtext .= "<a href=\"wiki.php?keyword=".$keyword."&cmd=showdiff&view=diff\">Änderungen am Text verfolgen</a>";
+	$views=array(array("icon" => "pictures/blank.gif", "text" => $viewtext));
+
+	$backlinktext="";
+	$first=1;
+	$backlinks=getBacklinks($keyword);
+	foreach($backlinks as $b) {
+		if (!$first) {
+			$backlinktext .= "<br>";
+		} else {
+			$first=0;
+		}
+		$backlinktext .= "<a href=\"wiki.php?keyword=$b\">$b</a>";
+	}
+	if (empty($backlinktext)) {
+		$backlinktext = _("Keine Verweise vorhanden.");
+	}
+	$backlinktext= array(array("icon" => "pictures/icon-leer.gif", "text" =>
+ $backlinktext));
+	$infobox = array ();
+	if (!$latest_version) {
+		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array("icon"=>"pictures/ausruf_small.gif", "text"=>_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die <a href=\"wiki.php?keyword=$keyword\">aktuelle Version</a>."))));
+	}
+	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
+	if ($latest_version) { 
+		// no backlinks for old versions!
+		$infobox[] = array("kategorie" => _("Seiten, die auf diese Seite verweisen:"), "eintrag" => $backlinktext);
+	}
+	$infobox[] = array("kategorie" => _("Alte Versionen dieser Seite:"),
+			"eintrag" => array(array("icon"=>"pictures/blank.gif","text"=>$versiontext)));
+	return $infobox;
+}
+
+/**
+* Display wiki page.
+* 
+* @param	string	keyword	WikiPage name
+* @param	string	version	WikiPage version
+*
+**/
+function showWikiPage($keyword, $version) {
+	global $perm;
+	$wikiData = getWikiPage($keyword, $version);
+	if (!$version) {
+		$latest_version=1;
+	}
+
+	showPageFrameStart();
+	// show page logic
+	//
+	wikiSinglePageHeader($wikiData, $keyword);
+
+	if ($perm->have_perm("autor")) { 
+		if (!$latest_version) {
+			if ($perm->have_perm("dozent")) {
+				$edit="<a href=\"?keyword=$keyword&cmd=delete&version=$version\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
+			} else {
+				$edit="Ältere Version, nicht bearbeitbar!";
+			}
+		} else {
+			$edit="";
+			if ($perm->have_perm("autor")) {
+				$edit.="<a href=\"?keyword=$keyword&view=edit\"><img ".makeButton("bearbeiten","src")." border=\"0\"></a>";
+			}
+			if ($perm->have_perm("dozent")) {
+				$edit.="&nbsp;<a href=\"?keyword=$keyword&cmd=delete&version=latest\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
+			}
+		}
+		$edit .= "<br>&nbsp;";
+	} else {
+		$edit="";
+	}
+
+	begin_blank_table();
+	echo "<tr class=\"printcontent\">";
+	echo "<td class=\"printcontent\" width=\"22\">&nbsp;&nbsp;</td>";
+	echo "<td class=\"printcontent\" align=\"center\">&nbsp;<br>\n";
+	echo $edit;
+	end_blank_table(); 
+
+	begin_blank_table();
+	echo "<tr>\n";
+	$cont = wikiLinks(wikiReady($wikiData["body"]), $keyword);
+	$num_body_lines=substr_count($wikiData['body'], "\n");
+	if ($num_body_lines<15) {
+		$cont .= "<p>";
+		$cont .= str_repeat("&nbsp<br>", 15-$num_body_lines);
+	}
+	printcontent(0,0, $cont, $edit);
+	end_blank_table(); 
+
+	echo "</td>"; // end content area
+	//
+	// end showpage logic
+
+	$infobox=getShowPageInfobox($keyword, $latest_version);
+	showPageFrameEnd($infobox);
+}
+
+/**
+* Helper function that prints header for a "blank" table
+*
+**/
+function begin_blank_table() {
+	echo "<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
+}
+
+/**
+* Helper function that prints footer for a "blank" table
+*
+**/
+function end_blank_table() {
+	echo "</tr></table>";
+}
+
+/**
+* Display Page diffs, restrictable to recent versions
+*
+* @param	string	WikiPage name
+* @param	string	Only show versions never than this timestamp
+*
+**/
+function showDiffs($keyword, $versions_since) {
+	global $SessSemName;
+	$db = new DB_Seminar;
+	$q = "SELECT * FROM wiki WHERE ";
+	$q .= "keyword = '$keyword' AND range_id='$SessSemName[1]' ";
+	$q .= "ORDER BY version DESC";
+	$result = $db->query($q);
+	if ($db->affected_rows() == 0) {
+		begin_blank_table();
+		parse_msg ("info\xa7" . _("Es gibt keine zu vergleichenden Versionen."));
+		end_blank_table();
+		echo "</td></tr></table></body></html>";
+		die;
+	}
+
+	showPageFrameStart();
+	wikiSinglePageHeader($wikiData, $keyword);
+
+	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
+	$db->next_record();
+	$last = $db->f("body");
+	$lastversion = $db->f("version");
+	$zusatz=getZusatz($db->Record);
+	while ($db->next_record()) {
+		echo "<tr>";
+		$current = $db->f("body");
+		$currentversion = $db->f("version");
+		$diffarray = "<b><font size=-1>Änderungen zu </font> $zusatz</b><p>";
+		$diffarray .= "<table cellpadding=0 cellspacing=0 border=0 width=\"100%\">\n";
+		$diffarray .= do_diff($current, $last);
+		$diffarray .= "</table>\n";
+		printcontent(0,0, $diffarray, "");
+		echo "</tr>";
+		$last = $current;
+		$lastversion = $currentversion;
+		$zusatz=getZusatz($db->Record);
+		if ($versions_since && $db->f("chdate") < $versions_since) {
+			break;
+		}
+	}
+	echo "</table>     ";
+	showPageFrameEnd($keyword, 1);
+}
+   
 /////////////////////////////////////////////////
 // DIFF funcitons adapted from:
 // PukiWiki - Yet another WikiWikiWeb clone.

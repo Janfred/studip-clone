@@ -31,259 +31,154 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+require_once("$ABSOLUTE_PATH_STUDIP/wiki.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+
+
+if ($view=="wikiprint") {
+	printWikiPage($keyword, $version);
+	page_close();
+	die();
+} elseif ($view=="wikiprintall") {
+	printAllWikiPages($SessSemName[1], $SessSemName[header_line]);
+	page_close();
+	die();
+}
+
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 checkObject(); // do we have an open object?
 checkObjectModule("wiki"); //are we allowed to use this module here?
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
-require_once("$ABSOLUTE_PATH_STUDIP/wiki.inc.php");
 
 echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>\n";
 
-$db=new DB_Seminar;
-
 $user_id=$auth->auth['uid'];
-
-$begin_blank_table="<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
-$end_blank_table="</tr></table>";
 
 wikiSeminarHeader();
 
 // ---------- Start of main WikiLogic
 
 if ($view=="listall") {
+	//
+	// list all pages, default sorting = alphabetically
+	//
 	listPages("all", $sortby);
-} else if ($view=="listnew") {
-	listPages("new", $sortby);
-} else if ($view=="diff") {
-	$db = new DB_Seminar;
-	$q = "SELECT * FROM wiki WHERE ";
-	$q .= "keyword = '$keyword' AND range_id='$SessSemName[1]' ";
-	$q .= "ORDER BY version DESC";
-	$result = $db->query($q);
-	if ($db->affected_rows() == 0) {
-		echo $begin_blank_table;
-		parse_msg ("info\xa7" . _("Es gibt keine zu vergleichenden Versionen."));
-		echo $end_blank_table;
-		echo "</td></tr></table></body></html>";
-		die;
-	}
-	wikiSinglePageHeader($wikiData, $keyword);
 
-	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
-	$db->next_record();
-	$last = $db->f("body");
-	$lastversion = $db->f("version");
-	$zusatz=getZusatz($db->Record);
-	while ($db->next_record()) {
-		echo "<tr>";
-		$current = $db->f("body");
-		$currentversion = $db->f("version");
-		$diffarray = "<b><font size=-1>Änderungen zu </font> $zusatz</b><p>";
-		$diffarray .= "<table cellpadding=0 cellspacing=0 border=0 width=\"100%\">\n";
-		$diffarray .= do_diff($current, $last);
-		$diffarray .= "</table>\n";
-		printcontent(0,0, $diffarray, "");
-		echo "</tr>";
-		$last = $current;
-		$lastversion = $currentversion;
-		$zusatz=getZusatz($db->Record);
-	}
-	echo "</table>     ";
-	echo "</td></tr></table>";
-	echo "<p><font size=-2>".getWikiPageVersions($keyword)."</font></p>";
-   
+} else if ($view=="listnew") {
+	//
+	// list new pages, default sorting = newest first
+	//
+	listPages("new", $sortby);
+
+} else if ($view=="diff") {
+	//
+	// show one large diff-file containing all changes
+	//
+	showDiffs($keyword, $versionssince);
+
+} else if ($view=="diffselect") {
+	// 
+	// show only last changes in a diff
+	//
+	showDiffs($keyword, $diffmode);
+
+} else if ($view=="export") {
+	// 
+	// show export dialog
+	//
+	exportWiki();
+
 } else if ($view=="edit") {
+	//
+	// show page for editing
+	//
 	if (!$perm->have_perm("autor")) {
-		echo $begin_blank_table;
+		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
-		echo $end_blank_table;
+		end_blank_table();
 		echo "</td></tr></table></body></html>";
 		die;
 	}
-	//show form
-	$wikiData=getWikiPage($keyword,$version);
+	$wikiData=getWikiPage($keyword,0); // always get newest page
 
 	// set lock
-	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '".time()."')");
+	setWikiLock($db, $user->id, $SessSemName[1], $keyword);
 
+	//show form
 	wikiSinglePageHeader($wikiData, $keyword);
-	wikiEdit($keyword, $wikiData);
+	wikiEdit($keyword, $wikiData, $user->id);
 
 } else if ($view=='editnew') { // edit a new page
 
 	if (!$perm->have_perm("autor")) {
-		echo $begin_blank_table;
+		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
-		echo $end_blank_table;
+		end_blank_table();
 		echo "</td></tr></table></body></html>";
 		die;
 	}
 	// set lock
-	$result=$db->query("REPLACE INTO wiki_locks (user_id, range_id, keyword, chdate) VALUES ('$user->id', '$SessSemName[1]', '$keyword', '".time()."')");
+	setWikiLock($db, $user->id, $SessSemName[1], $keyword);
 	wikiSinglePageHeader($wikiData, $keyword);
-	wikiEdit($keyword, NULL, $lastpage);
+	wikiEdit($keyword, NULL, $user->id, $lastpage);
 
 } else { 
 	// Default action: Display WikiPage (+ logic for submission)
 	//
-	if (empty($keyword)) { $keyword='StartSeite'; } // display Start page as default FIX: I18n?
+	if (empty($keyword)) { 
+		$keyword='WikiWikiWeb'; // display Start page as default 
+	}
 	releaseLocks($keyword); // kill old locks 
 	$show_page=TRUE;
 	
 	if ($submit) { 
-		// write changes to db, show new page
-		$latestVersion=getWikiPage($keyword,"");
-		if ($latestVersion) {
-			$date=time();
-			$lastchange = $date - $latestVersion[chdate];
-		}
-		if ($latestVersion && ($latestVersion['body'] == $body)) {
-			echo $begin_blank_table;
-			parse_msg("info§" . _("Keine Änderung vorgenommen."));
-			echo $end_blank_table;
-		} else if ($latestVersion && ($version!="") && ($lastchange < 30*60) && ($user->id == $latestVersion[user_id])) {
-			// if same author changes again within 30 minutes,
-			// no new verison is created 
-			$result=$db->query("UPDATE wiki SET body='$body', chdate='$date' WHERE keyword='$keyword' AND range_id='$SessSemName[1]' AND version='$version'");
-			echo $begin_blank_table;
-			parse_msg("info§" . _("Update ok, keine neue Version, da erneute Änderung innerhalb 30 Minuten."));
-			echo $end_blank_table;
-		} else {
-			if ($version=="") {
-				$version=0;
-			} else {
-				$version=$latestVersion['version']+1;
-			}
-			$date=time();
-			$result=$db->query("INSERT INTO wiki (range_id, user_id, keyword, body, chdate, version) VALUES ('$SessSemName[1]', '$user->id', '$keyword','$body','$date','$version')");
-			echo $begin_blank_table;
-			parse_msg("info§" . _("Update ok, neue Version angelegt."));
-			echo $end_blank_table; 
-		}
+		//
+		// Page was edited and submitted
+		//
+		submitWikiPage($keyword, $version, $body, $user->id, $SessSemName[1]);
 		$show_page=TRUE;
-		$version=""; // $version="" means: get latest and display edit button
+		$version=""; // $version="" means: get latest 
 
-	// -----------------------------------
-	// Editing page was aborted
-	//
 	} else if ($cmd=="abortedit") { // Editieren abgebrochen
-		releasePageLocks($keyword); // kill lock that was set when starting to edit
+		// 
+		// Editing page was aborted
+		//
+		releasePageLocks($keyword); // kill lock (set when starting to edit)
 		if ($lastpage) { // if editing new page was aborted, display last page again
 			$keyword=$lastpage;
 		}
 		$showpage=true;
 
-	// -----------------------------------
-	// Delete request sent -> display confirmation dialog and current page
-	//
 	} else if ($cmd=="delete") {
-		if (!$perm->have_perm("dozent")) {
-			echo $begin_blank_table;
-			parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
-			echo $end_blank_table;
-			echo "</td></tr></table></body></html>";
-			die;
-		}
-		if ($version=="latest") {
-			$lv=latestVersion($keyword);
-			$version=$lv["version"];
-			$islatest=true;
-		}
-		echo $begin_blank_table;
-		$msg="info§" . sprintf(_("Wollen Sie die untenstehende Version %s der Seite %s wirklich l&ouml;schen?"), "<b>".$version."</b>", "<b>".$keyword."</b>") . "<br>\n";
-		if ($islatest) {
-			$msg .= _("Diese Version ist derzeit aktuell. Nach dem L&ouml;schen wird die n&auml;chst&auml;ltere Version aktuell.") . "<br>";
-		} else {
-			$msg .= _("Diese Version ist nicht aktuell. Das L&ouml;schen wirkt sich daher nicht auf die aktuelle Version aus.") . "<br>";
-		}    
-		$msg.="<a href=\"".$PHP_SELF."?cmd=really_delete&keyword=$keyword&version=$version\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
-		$lnk = "?keyword=$keyword"; // what to do when delete is aborted
-		if (!$islatest) $lnk .= "&version=$version"; 
-		$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
-		parse_msg($msg, '§', 'blank', '1', FALSE);
-		echo $end_blank_table;
+		// 
+		// Delete request sent -> confirmdialog and current page
+		//
+		$version=showDeleteDialog($keyword, $version);
+		$showpage=true;
 
-	// -------------------------------
-	// Delete was confirmed -> really delete
-	//
 	} else if ($cmd=="really_delete") {
+		// 
+		// Delete was confirmed -> really delete
+		//
 
-		if (!$perm->have_perm("dozent")) {
-			echo $begin_blank_table;
-			parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
-			echo $end_blank_table;
-			echo "</td></tr></table></body></html>";
-			die;
-		}
-		$q="DELETE FROM wiki WHERE keyword='$keyword' AND version='$version' AND range_id='$SessSemName[1]'";
-		$db->query($q);
-		if (!keywordExists($keyword)) { // all versions have gone
-			$addmsg = sprintf(_("<br>Damit ist die Seite mit allen Versionen gel&ouml;scht."));
-			$newkeyword = "StartSeite";
-		} else {
-			$newkeyword = $keyword;
-			$addmsg = "";
-		}
-		echo $begin_blank_table;
-		parse_msg("info§" . sprintf(_("Version %s der Seite <b>%s</b> gel&ouml;scht."), $version, $keyword) . $addmsg);
-		echo $end_blank_table;
+		$keyword=deleteWikiPage($keyword, $version, $SessSemName[1]);
 		$version=""; // show latest version
-		$keyword=$newkeyword;
 		$show_page=true;    
+
 	} // end really delete
   
-	/****************************************************************
-	 Show Page
-	 ****************************************************************/
 	if ($show_page) {
-		$wikiData = getWikiPage($keyword, $version);
-		wikiSinglePageHeader($wikiData, $keyword);
-
-		if ($perm->have_perm("autor")) { 
-			if ($version!="") {
-				if ($perm->have_perm("dozent")) {
-					$edit="<a href=\"?keyword=$keyword&cmd=delete&version=$version\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
-				} else {
-					$edit="Ältere Version, nicht bearbeitbar!";
-				}
-			} else {
-				$edit="";
-				if ($perm->have_perm("autor")) {
-					$edit.="<a href=\"?keyword=$keyword&view=edit\"><img ".makeButton("bearbeiten","src")." border=\"0\"></a>";
-				}
-				if ($perm->have_perm("dozent")) {
-					$edit.="&nbsp;<a href=\"?keyword=$keyword&cmd=delete&version=latest\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
-				}
-			}
-			$edit .= "<br>&nbsp;";
-		} else {
-			$edit="";
-		}
-
-		echo $begin_blank_table;
-		echo "<tr class=\"printcontent\">";
-		echo "<td class=\"printcontent\" width=\"22\">&nbsp;&nbsp;</td>";
-		echo "<td class=\"printcontent\" align=\"center\">&nbsp;<br>\n";
-		echo $edit;
-		echo $end_blank_table; 
-
-		echo $begin_blank_table;
-		echo "<tr>\n";
-		$cont = wikiLinks(wikiReady($wikiData["body"]), $keyword);
-		printcontent(0,0, $cont, $edit);
-		echo $end_blank_table; 
-
-		echo "</td></tr></table>";
-		echo "<p>&nbsp;<font size=-2>".getWikiPageVersions($keyword)."</font></p>";
+		//
+		// Show Page
+		//
+		showWikiPage($keyword, $version);
 
 	} // end show page
 
