@@ -415,6 +415,14 @@ if ($filesize != FALSE)
 	header("Content-length: $filesize");
 header("Content-disposition: $content_disposition; filename=\"".rawurldecode($file_name)."\"");
 if ($type != 5){
+		
+	if (!preg_match("!^ftp://(.*?):!i",$path_file)) {
+		$username = "anonymous";
+		$pass = "wwwrun@".$GLOBALS['MAIL_LOCALHOST'];
+		$pass = preg_replace("!@!","%40",$pass);
+		$path_file = preg_replace("!^ftp://(.*?)!i","ftp://$username:$pass@$1",$path_file);
+	}
+		
 	readfile($path_file);
 	TrackAccess ($file_id);
 } else {
