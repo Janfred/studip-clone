@@ -111,7 +111,6 @@ function getToplist($rubrik, $query, $type="count") {
 <body>
 <?	
 
-$sem_browse_data['show_class'] = $sem_portal["bereich"];
 	
 if ($sem_portal["bereich"] != "all") {
 
@@ -136,6 +135,8 @@ include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Nav
 $init_data = array("level" => "f","cmd"=>"qs","show_class"=>$sem_portal['bereich'],"group_by"=>0,"default_sem"=>"all","sem_status"=>$_sem_status);
 if ($reset_all) $sem_browse_data = null;
 $sem_browse_obj = new SemBrowse($init_data);
+$sem_browse_data['show_class'] = $sem_portal["bereich"];
+
 if (!$perm->have_perm("root")){
 	$sem_browse_obj->target_url="details.php";	
 	$sem_browse_obj->target_id="sem_id"; 

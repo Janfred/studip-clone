@@ -29,7 +29,7 @@ class SemBrowse {
 										array('name' => _("Typ"), 'group_field' => 'status'),
 										array('name' => _("Einrichtung"), 'group_field' => 'Institut', 'unique_field' => 'Institut_id'));
 
-		if (!$sess->is_registered("sem_browse_data") || is_null($sem_browse_data)){
+		if (!$sess->is_registered("sem_browse_data") || !$sem_browse_data){
 			$sess->register("sem_browse_data");
 			$sem_browse_data = $sem_browse_data_init;
 		}
