@@ -345,14 +345,14 @@ class ExternElement {
 			
 					case "height" :
 						$fault[$form_name][$i] = (!preg_match("/^\d{0,3}$/", $value[$i])
-								|| $value[$i]> 100 || $value[$i]< 0);
+								|| $value[$i]> 2000 || $value[$i]< 0);
 						break;
 					case "cellpadding" :
 					case "cellspacing" :
 					case "border" :
 					case "sort" :
 						$fault[$form_name][$i] = (!preg_match("/^\d{0,2}$/", $value[$i])
-								|| $value[$i]> 30 || $value[$i]< 0);
+								|| $value[$i]> 100 || $value[$i]< 0);
 						break;
 					case "width" :
 						$fault[$form_name][$i] = (!preg_match("/^\d{0,4}$/", $value[$i])
