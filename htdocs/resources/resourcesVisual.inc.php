@@ -1370,7 +1370,7 @@ class EditObject extends cssClasses {
 				<?
 				if ($owner_perms){
 					?>
-					<font size=-1>Besitzer &auml;ndern:</font><font size=-1 color="red"></font><br />
+					<font size=-1><?=_("Besitzer &auml;ndern:") ?></font><font size=-1 color="red"></font><br />
 					<? showSearchForm("search_owner", $search_string_search_owner, FALSE,TRUE);
 				} else
 					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den Besitzer nicht &auml;ndern.")."</font>";
