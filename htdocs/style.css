@@ -1,24 +1,19 @@
 /* TD {	background-color: #EEEEEE;}*/
 
-A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+A:visited {	color:#3333BB; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+A:link {	color:#3333BB; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;} 
+A:hover {	color: #FF3333; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
 A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
 
 TABLE.links1 {	background-color: #FFFFFF;}
 
-A:link.links1 {	color: white; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
-A:visited.links1 {color: white; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
-A:hover.links1 {color: #FF7733;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;}
+A:link.links1 {	color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
+A:visited.links1 {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
+A:hover.links1 {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
 
-TABLE.links2 {	background-color: transparent;}
-
-A:link.links2 { text-decoration: none; color: #000000;font-weight: bold; font-size: 10pt}
-A:visited.links2 {text-decoration: none; color: #000000; font-weight: bold; font-size: 10pt}
-A:hover.links2 { text-decoration: none; color: #FF7733; font-weight: bold; font-size: 10pt}
-
-A:link.links1b { color: White; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
-A:visited.links1b { color: #FF0000;	text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
+A:link.links1b { color: #000000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
+A:visited.links1b { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
+A:hover.links1b {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
 
 TD.links1b {background-image: url('pictures/steel1.jpg');}
 TD.links1 {background-image: url('pictures/fill2.gif');}
@@ -109,4 +104,3 @@ td.weekday {background-image: url('pictures/steel1.jpg');	font-family: Arial, He
 td.current {border-width: 2px; border-style: solid; border-color: #DD0000;}
 td.month {background-image: url('pictures/steelgroup0.gif');}
 td.lightmonth{background-image: url('pictures/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
-

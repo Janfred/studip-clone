@@ -21,11 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 class reiter {
 	var $classActive = "links1b";					//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
-	var $classInactive="links1";						//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
-	var $fontColor="#000000";					//Die Schriftfarbe im Reitersystem
-	var $fontSize="2";							//Die Schriftgroesse im Reitersystem
+	var $classInactive="links1";					//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
 	var $infoPic="pictures/info.gif";				//Bild das als Info Click/Alt-Text verwendet wird
-	var $toActiveTopkatPic="pictures/reiter1.jpg";		//Trenner fuer Reiter
+	var $toActiveTopkatPic="pictures/reiter1.jpg";	//Trenner fuer Reiter
 	var $toInactiveTopkatPic="pictures/reiter2.jpg";	//Trenner auf Inactive fuer Reiter
 	var $closerTopkatPic="pictures/reiter4.jpg";		//Closer fuer Reiter
 	var $activeBottomkatPic="pictures/forumrot.gif";			//Aktiver Pfeil
@@ -56,17 +54,17 @@ class reiter {
 	
 	function topkat($text,$link,$active=FALSE, $target="", $close=FALSE) {
 		if (($active) && (!$close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\"><font color=\"%s\" size=%s><b>&nbsp; &nbsp; %s&nbsp; &nbsp; </b></font></a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classActive, $this->classActive, $target, $link, $this->fontColor, $this->fontSize, $text, $this->toInactiveTopkatPic);
+			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
+				$this->classActive, $this->classActive, $target, $link, $text, $this->toInactiveTopkatPic);
 		if ((!$active) && (!$close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\"><font color=\"%s\" size=%s><b>&nbsp; &nbsp; %s&nbsp; &nbsp; </b></font></a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classInactive, $this->classInactive, $target, $link, $this->fontColor, $this->fontSize, $text, $this->toActiveTopkatPic);
+			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
+				$this->classInactive, $this->classInactive, $target, $link, $text, $this->toActiveTopkatPic);
 		if (($active) && ($close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\"><font color=\"%s\" size=%s><b>&nbsp; &nbsp; %s&nbsp; &nbsp; </b></font></a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classActive, $this->classActive, $target, $link, $this->fontColor, $this->fontSize, $text, $this->closerTopkatPic);
+			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
+				$this->classActive, $this->classActive, $target, $link, $text, $this->closerTopkatPic);
 		if ((!$active) && ($close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\"><font color=\"%s\" size=%s><b>&nbsp; &nbsp; %s&nbsp; &nbsp; </b></font></a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classInactive, $this->classInactive, $target, $link, $this->fontColor, $this->fontSize, $text, $this->closerTopkatPic);
+			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
+				$this->classInactive, $this->classInactive, $target, $link, $text, $this->closerTopkatPic);
 		return;
 	}
 
@@ -82,11 +80,11 @@ class reiter {
 
 	function bottomkat($text,$link,$active=FALSE, $target="") {
 		if ($active)
-			printf("<img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\"><font color=\"%s\" size=%s><b>%s&nbsp; &nbsp; </b></font></a>\n",
-				$this->activeBottomkatPic, $this->classActive, $target, $link, $this->fontColor, $this->fontSize, $text);
+			printf("<img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s&nbsp; &nbsp; </a>\n",
+				$this->activeBottomkatPic, $this->classActive, $target, $link, $text);
 		else
-			printf("<img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\"><font color=\"%s\" size=%s><b>%s&nbsp; &nbsp; </b></font></a>\n",
-				$this->inactiveBottomkatPic, $this->classActive, $target, $link, $this->fontColor, $this->fontSize, $text);
+			printf("<img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s&nbsp; &nbsp; </a>\n",
+				$this->inactiveBottomkatPic, $this->classActive, $target, $link, $text);
 	}
 
 	function bottomkatCloseRow() {
