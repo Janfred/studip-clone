@@ -77,7 +77,7 @@ function scm_seminar_footer($table) {
 
 function scm_change_header($table, $user_id, $chdate) {
 	$zusatz = "<font size=-1>";
-	$zusatz .= sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username($username)."\"><font size=-1 color=\"#333399\">".get_fullname ($user_id)."</font></a><font size=-1>", date("d.m.Y, H:i",$chdate)."<font size=-1>&nbsp;"."</font>");
+	$zusatz .= sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username($user_id)."\"><font size=-1 color=\"#333399\">".get_fullname ($user_id)."</font></a><font size=-1>", date("d.m.Y, H:i",$chdate)."<font size=-1>&nbsp;"."</font>");
 	$icon="&nbsp;<img src=\"pictures/cont_lit.gif\">";
 
 	echo $table->openRow();
@@ -242,11 +242,11 @@ function scm_change_content($scm_id, $range_id, $user_id, $tab_name, $content, $
 		
 	$db=new DB_Seminar();
 	if ($new_entry) {
-		$db->query("INSERT INTO scm VALUES ('$scm_id','$range_id','$user->id','$tab_name','$content', '".time()."', '".time()."')");
+		$db->query("INSERT INTO scm VALUES ('$scm_id','$range_id','$user_id','$tab_name','$content', '".time()."', '".time()."')");
 		if ($db->affected_rows())
 			$result="msg§" . _("Inhalt ge&auml;ndert");
 	} else {
-		$db->query("UPDATE scm SET user_id='$user->id', tab_name='$tab_name', content='$content' WHERE scm_id='$scm_id'");
+		$db->query("UPDATE scm SET user_id='$user_id', tab_name='$tab_name', content='$content' WHERE scm_id='$scm_id'");
 		if ($db->affected_rows()) {
 			$result="msg§" . _("Inhalt ge&auml;ndert");
 		 	$db->query("UPDATE scm SET chdate='".time()."' WHERE scm_id='$scm_id'");
