@@ -249,7 +249,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 		
 		
-		echo MakeToolbar("pictures/info.gif","#",$auth->auth["uname"],$infotext,88, "","left","TRUE");
+		echo MakeToolbar("pictures/info_header.gif","#",$auth->auth["uname"],$infotext,88, "","left","TRUE");
 
 ?>
 <?		
