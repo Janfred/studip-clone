@@ -39,7 +39,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainLectures extends ExternElementMain {
 
-	var $attributes = array("name", "addinfo", "time", "lecturer", "textlectures", "textgrouping",
+	var $attributes = array("name", "grouping", "semrange", "addinfo", "time", "lecturer",
+			"semclasses", "textlectures", "textgrouping",
 			"textnogroups", "aliasesgrouping", "wholesite", "nameformat", "urlcss", "title");
 	var $edit_function = "editMainSettings";
 	
@@ -59,9 +60,12 @@ class ExternElementMainLectures extends ExternElementMain {
 		
 		$config = array(
 			"name" => "",
+			"grouping" => "3",
+			"semrange" => "three",
 			"addinfo" => "1",
 			"time" => "1",
 			"lecturer" => "1",
+			"semclasses" => "|1",
 			"textlectures" => _("Veranstaltungen"),
 			"textgrouping" => _("Gruppierung:"),
 			"textnogroups" => _("keine Studienbereiche eingetragen"),
@@ -99,23 +103,52 @@ class ExternElementMainLectures extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Allgemeine Angaben Seitenaufbau"));
 		
-		$title = _("Anzahl Veranstaltungen/Gruppierung:");
+		$title = _("Gruppierung:");
+		$info = _("Wählen Sie, wie die Veranstaltungen gruppiert werden sollen.");
+		$values = array("0", "1", "2", "3", "4");
+		$names = array(_("Semester"), _("Bereich"), _("DozentIn"),
+				_("Typ"), _("Einrichtung"));
+		$table = $edit_form->editOptionGeneric("grouping", $title, $info, $values, $names);
+		
+		$title = _("Semesterumfang:");
+		$info = _("Geben Sie an, aus welchen Semestern Lehrveranstaltungen angezeigt werden sollen.");
+		$names = array(_("nur aktuelles"), _("vorheriges, aktuelles, n&auml;chstes"), _("alle"));
+		$values = array("current", "three", "all");
+		$table .= $edit_form->editRadioGeneric("semrange", $title, $info, $values, $names);
+		
+		$title = _("Anzahl Veranstaltungen/Gruppierung anzeigen:");
 		$info = _("Wählen Sie diese Option, wenn die Anzahl der Veranstaltungen und die gewählte Gruppierungsart angezeigt werden sollen.");
 		$values = "1";
 		$names = "";
-		$table = $edit_form->editCheckboxGeneric("addinfo", $title, $info, $values, $names);
+		$table .= $edit_form->editCheckboxGeneric("addinfo", $title, $info, $values, $names);
 		
 		$title = _("Termine/Zeiten anzeigen:");
 		$info = _("Wählen Sie diese Option, wenn Termine und Zeiten der Veranstaltung unter dem Veranstaltungsnamen angezeigt werden sollen.");
 		$values = "1";
 		$names = "";
-		$table = $edit_form->editCheckboxGeneric("time", $title, $info, $values, $names);
+		$table .= $edit_form->editCheckboxGeneric("time", $title, $info, $values, $names);
 		
 		$title = _("Dozenten anzeigen:");
 		$info = _("Wählen Sie diese Option, wenn die Namen der Dozenten der Veranstaltung angezeigt werden sollen.");
 		$values = "1";
 		$names = "";
 		$table .= $edit_form->editCheckboxGeneric("lecturer", $title, $info, $values, $names);
+		
+		$content_table .= $edit_form->editContentTable($headline, $table);
+		$content_table .= $edit_form->editBlankContent();
+		
+		$headline = $edit_form->editHeadline(_("Ausgabe bestimmter Veranstaltungsklassen"));
+		
+		$table = "";
+		unset($names);
+		unset($values);
+		$info = _("Wählen Sie die anzuzeigenden Veranstaltungsklassen aus.");
+		
+		foreach ($GLOBALS["SEM_CLASS"] as $key => $class) {
+			$values[] = $key;
+			$names[] = $class["name"];
+		}
+		$table = $edit_form->editCheckboxGeneric("semclasses", $names, $info, $values, "");
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
