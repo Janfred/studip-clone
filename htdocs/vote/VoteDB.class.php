@@ -609,9 +609,10 @@ class VoteDB extends StudipObject {
 	 " vote ".
 	 "SET".
 	 " state     = '".$state."',".
-	 " chdate    = '".time()."' ".
+	 " chdate    = '".time()."', ".
 #	 " startdate = ".$startdate.",".
-#	 " stopdate  = '".$stopdate."' ".
+	 " stopdate  = '".$stopdate."', ".
+	 " timespan  = NULL ".
 	 " WHERE".
 	 " vote_id = '".$voteID."'";
       $this->db->query ($sql);
