@@ -128,9 +128,11 @@ this are some settings to activate some special features, special
 behaviour of some features and other advanced options. Change on your 
 own risk :) */
 
-$ALLOW_GROUPING_SEMINARS = FALSE;			// if true, administrators can group seminars - students
+$ALLOW_GROUPING_SEMINARS = TRUE;			// if true, administrators can group seminars - students
 							// will only be able to register for one of the grouped seminars
 
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 			// if true, students aren't allowed to set or change 
+							// their studycourse (studiengang)
 
 
 /*language settings
@@ -144,8 +146,8 @@ $_language_domain = "studip";  // the name of the language file. Should not be c
 
 
 /*authentication plugins
-----------------------------------------------------------------*/
-/*the following plugins are available:
+----------------------------------------------------------------
+the following plugins are available:
 Standard 		authentication using the local Stud.IP database
 StandardExtern  	authentication using an alternative Stud.IP database, e.g. another installation
 Ldap  			authentication using an LDAP server, this plugin uses anonymous bind against LDAP to retrieve the user dn,
@@ -212,8 +214,14 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 
 												
 */
-//should it be possible for an user to register himself (you MUST enable Standard authentication-plugin to use this!)
-$ENABLE_SELF_REGISTRATION = true;
+
+//some additional authification-settings
+//NOTE: you MUST enable Standard authentication-plugin or this settings takes no effect!
+
+$ALLOW_CHANGE_USERNAME = TRUE;				// if true, users are not allowed to change their username
+$ALLOW_CHANGE_EMAIL = TRUE;				// if true, users are not allowed to change their email-address
+$ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself 
+
 
 /*path generation 
 -----------------------------------------------------------------
