@@ -18,16 +18,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-
-	$perm->check("tutor");
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("tutor");
 	
-	$sess->register("term_metadata");
-
-	if ($abbrechen_x)
-		header ("Location: ".$term_metadata["source_page"]."?ebene=sem&range_id=".$term_metadata["sem_id"]);
+if ($abbrechen_x)
+	header ("Location: ".$term_metadata["source_page"]."?ebene=sem&range_id=".$term_metadata["sem_id"]);
 	
-	?>
+?>
 <html>
 <head>
 	<title>Stud.IP</title>
@@ -289,16 +286,21 @@ if (($uebernehmen_x) && (!$errormsg))
 		?>
 		</td>
 	</tr>
-<?
-	if (isset($errormsg)) 
-		parse_msg($errormsg);
-?>
+	<?
+	if (isset($errormsg)) {
+	?>
+	<tr> 
+		<td class="blank" colspan=2><br />
+		<?parse_msg($errormsg);?>
+		</td>
+	</tr>
+	<? } ?>
  	<tr>
 		<td class="blank" valign="top">
 			<br />
 			<blockquote>
 			<b>Zeiten der Veranstaltung bearbeiten</b><br /><br />
-			Sie k&ouml;nnen hier die allgemeinen Zeiten der Veranstaltung "<? echo htmlReady($term_metadata["sem_name"]) ?>" bearbeiten. Diese Zeiten werden im System mit der Veranstaltung angezeigt. <br />
+			Sie k&ouml;nnen hier die allgemeinen Zeiten bearbeiten. <br />
 			Spezifische Termine zur Anzeige im Ablaufplan legen Sie unter dem Menupunkt <a href="admin_dates.php?ebene=sem&range_id=<? echo $term_metadata["sem_id"] ?>">Ablaufpl&auml;ne</a> fest.
 			</blockqoute>
 		</td>
