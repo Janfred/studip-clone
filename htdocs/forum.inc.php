@@ -105,7 +105,7 @@ function editarea($forumposting) {
 	else
 		$zusatz = "<a href=\"".$PHP_SELF."?open=".$forumposting["rootid"]."#anker\">" . makeButton("abbrechen", "img") . "</a>";
 	
-	$zusatz .= "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\">Smileys</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\">Formatierungshilfen</a>";
+	$zusatz .= "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
 	if ($forumposting["writestatus"] == "new") { // es ist ein neuer Beitrag, der Autor sieht dann:
 		$description = _("Ihr Beitrag");
 	} else {
