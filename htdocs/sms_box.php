@@ -150,10 +150,10 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 // print_rec_message
 
 function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullname, $sms_data_open, $read) {
-	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF, $msging, $cmd_show;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF, $msging, $cmd_show, $sms_show;	
 	$uname_snd = get_username($user_id_snd);
 	// open if unread
-	if ($read != "1" && $my_messaging_settings["opennew"] == "1") {
+	if ($read != "1" && ($my_messaging_settings["opennew"] == "1" || $sms_show['sort'] != "no")) {
 		$open = "open";
 		$link = $PHP_SELF."?mclose=TRUE";
 	} else if ($sms_data_open == $message_id) {
@@ -429,7 +429,13 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
 				echo "<tr><td width=\"1px\" class=\"blank\"></td><td width=\"99%\" height=\"4\" class=\"blank\"></td><td width=\"1px\" class=\"blank\"></td></tr>";
-				echo "<tr><td width=\"1px\" class=\"blank\"></td><td width=\"99%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;".get_fullname($tmp_rec_snd[$x])."</b></font></td><td width=\"1px\" class=\"blank\"></td></tr>";
+				echo "<tr><td width=\"1px\" class=\"blank\"></td><td width=\"99%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;";
+				if ($tmp_rec_snd[$x] == "____%system%____") {
+					echo "Stud.IP - Systemnachricht";
+				} else {
+					echo 	get_fullname($tmp_rec_snd[$x]);
+				}
+				echo "</b></font></td><td width=\"1px\" class=\"blank\"></td></tr>";
 				echo "</table>	";	
 
 				$query = "
