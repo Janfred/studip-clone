@@ -48,7 +48,7 @@ if (!empty($calendar_sess_control_data["view_prv"]))
 else
 	echo "<form action=\"$PHP_SELF?cmd=showweek\" method=\"post\">";
 echo "\n<tr>\n";
-echo "<th width=\"1%\" nowrap colspan=\"2\" align=\"center\">";
+echo "<th width=\"2%\" nowrap colspan=\"2\" align=\"center\">";
 echo "&nbsp;<a href=\"gruppe.php\">";
 $tooltip = tooltip(_("Gruppe ändern"));
 echo "<img src=\"pictures/gruppe.gif\"{$tooltip}border=\"0\">";
@@ -69,7 +69,7 @@ $css_switcher->switchClass();
 
 while($db->next_record()){
 	$style = $css_switcher->getFullClass();
-	echo "<tr" . $css_switcher->getHover() . "><td class=\"gruppe" . $db->f("gruppe") . "\">";
+	echo "<tr" . $css_switcher->getHover() . "><td width=\"1%\" class=\"gruppe" . $db->f("gruppe") . "\">";
 	echo "<img src=\"pictures/blank.gif\" alt=\"Gruppe\" border=\"0\" width=\"7\" height=\"12\"></td>\n";
 	echo "<td$style>&nbsp; </td>";
 	echo "<td$style><font size=\"-1\">";
