@@ -19,7 +19,7 @@ $db =& new DB_Seminar();
 
 $query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
 						. $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname,"
-						. "uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Lehre, uin.Home "
+						. "uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home "
 						. "FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) "
 	          . "LEFT JOIN auth_user_md5 aum USING(user_id) "
 	          . "LEFT JOIN user_info uin USING (user_id) WHERE";
