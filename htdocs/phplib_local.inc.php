@@ -567,22 +567,49 @@ class Seminar_Perm extends Perm {
 		include($ABSOLUTE_PATH_STUDIP . "perminvalid.ihtml");
 	}
 	
-	function get_studip_perm($range_id, $user_id = false) {
+	function get_perm($user_id = false){
 		global $auth;
-		if (!$range_id){
-			return false;
-		}
-		$db=new DB_Seminar;
-		$status = false;
-		if (!$user_id){
-			$user_id = $auth->auth["uid"];
-			$user_perm = $auth->auth["perm"];
+		if (!$user_id || $user_id == $auth->auth['uid']){
+			return $auth->auth['perm'];
+		} else if ($this->studip_perms['studip'][$user_id]){
+			return $this->studip_perms['studip'][$user_id];
 		} else {
-			$db->query("SELECT perms FROM auth_user_md5 WHERE user_id = '$user_id'");
+			$db = new DB_Seminar("SELECT perms FROM auth_user_md5 WHERE user_id = '$user_id'");
 			if (!$db->next_record()){
 				return false;
 			} else {
-				$user_perm = $db->f(0);
+				return $this->studip_perms['studip'][$user_id] = $db->f(0);
+			}
+		}
+	}
+	
+	function have_perm($perm, $user_id = false) {
+		
+		$pageperm = split(",", $perm);
+		$userperm = split(",", $this->get_perm($user_id));
+		
+		list($ok0, $pagebits) = $this->permsum($pageperm);
+		list($ok1, $userbits) = $this->permsum($userperm);
+		
+		$has_all = (($userbits & $pagebits) == $pagebits);
+		if (!($has_all && $ok0 && $ok1) ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	function get_studip_perm($range_id, $user_id = false) {
+		global $auth;
+		$db = new DB_Seminar;
+		$status = false;
+		if (!$user_id || $user_id == $auth->auth['uid']){
+			$user_id = $auth->auth["uid"];
+			$user_perm = $auth->auth["perm"];
+		} else {
+			$user_perm = $this->get_perm($user_id);
+			if (!$user_perm){
+				return false;
 			}
 		}
 		if ($user_perm == "root") {
@@ -628,13 +655,10 @@ class Seminar_Perm extends Perm {
 		return $status;
 	}
 	
-	function have_studip_perm($perm,$range_id) {
+	function have_studip_perm($perm, $range_id, $user_id = false) {
 		
-		if (!$perm || !$range_id){
-			return false;
-		}
 		$pageperm = split(",", $perm);
-		$userperm = split(",", $this->get_studip_perm($range_id));
+		$userperm = split(",", $this->get_studip_perm($range_id, $user_id));
 		
 		list ($ok0, $pagebits) = $this->permsum($pageperm);
 		list ($ok1, $userbits) = $this->permsum($userperm);
@@ -648,12 +672,17 @@ class Seminar_Perm extends Perm {
 		}
 	}
 	
-	function is_fak_admin($user_id = ""){
+	function is_fak_admin($user_id = false){
 		global $auth;
-		$user_id = $auth->auth["uid"];
-		$user_perm = $auth->auth["perm"];
+		if (!$user_id || $user_id == $auth->auth['uid']){
+			$user_id = $auth->auth['uid'];
+		}
+		$user_perm = $this->get_perm($user_id);
 		if ($user_perm == "root") {
 			return true;
+		}
+		if ($user_perm != "admin"){
+			return false;
 		}
 		if (isset($this->fak_admins[$user_id])){
 			return $this->fak_admins[$user_id];
