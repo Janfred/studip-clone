@@ -24,14 +24,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Set this to something, just something different...
 $hash_secret = "nirhtak";
 
-include "seminar_open.php"; 	//hier werden die sessions initialisiert
-require_once "msg.inc.php"; 		//Funktionen fuer Nachrichtenmeldungen
-require_once "config.inc.php"; 		//wir brauchen die Seminar-Typen
-require_once "config_tools_semester.inc.php";  //Bereitstellung weiterer Daten
-require_once "functions.php";	//noch mehr Stuff
-require_once "forum.inc.php";		//damit wir Themen anlegen koennen
-require_once "visual.inc.php";		//Aufbereitungsfunktionen
-require_once "dates.inc.php";		//Terminfunktionen
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; 	//hier werden die sessions initialisiert
+
+require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php"; 		//Funktionen fuer Nachrichtenmeldungen
+require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; 		//wir brauchen die Seminar-Typen
+require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";  //Bereitstellung weiterer Daten
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";	//noch mehr Stuff
+require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen koennen
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
+require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 
 // Get a database connection and Stuff
 $db = new DB_Seminar;
@@ -1047,8 +1048,8 @@ $sem_create_data["level"]=$level;
 
 //Includes...
 
-include "header.php";   		//hier wird der "Kopf" nachgeladen
-include "links_admin.inc.php";  		//Linkleiste fuer admins
+include "$ABSOLUTE_PATH_STUDIP/header.php";   		//hier wird der "Kopf" nachgeladen
+include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  		//Linkleiste fuer admins
 
 //Level 1: Hier werden die Grunddaten abgefragt.
 if ((!$level) || ($level==1))
