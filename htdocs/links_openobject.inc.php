@@ -201,10 +201,13 @@ if ($modules["scm"]) {
 }
 //
 if ($modules["literature"]) {
-	if ($SessSemName["class"]=="sem")
+	if ($SessSemName["class"]=="sem"){
 		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"literatur.php?view=literatur_sem", active=>FALSE);
-	else
+		$structure["_literatur_print"]=array (topKat=>"literatur", name=>_("Druckansicht"), link=>"lit_print_view.php?_range_id=" . $SessSemName[1], target=>"_blank", active=>FALSE);
+	}else{
 		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
+		$structure["_literatur_print"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"lit_print_view.php?_range_id=" . $SessSemName[1], target=>"_blank", active=>FALSE);
+	}
 }
 
 if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte))
