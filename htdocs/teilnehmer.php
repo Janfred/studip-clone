@@ -298,20 +298,25 @@ $gruppe = array ("dozent" => "DozentInnen",
 		<td class="topic" ><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b>
 		</td>
 		<td align="right" class="topic"> <?
-		if ($rechte) {
+		
 			$db3->query ("SELECT showscore  FROM seminare WHERE Seminar_id = '$SessionSeminar'");
 			while ($db3->next_record()) {
 				if ($db3->f("showscore") == 1) {
-					printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"pictures/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige eingeschaltet. Klicken zum Ausschalten."));
+					if ($rechte) {
+						printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"pictures/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige eingeschaltet. Klicken zum Ausschalten."));
+					} else {
+						echo "&nbsp; ";
+					}
 					$showscore = TRUE;
 				} else {
-					printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"pictures/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige ausgeschaltet. Klicken zum Einschalten."));
+					if ($rechte) {
+						printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"pictures/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip("Aktivitaetsanzeige ausgeschaltet. Klicken zum Einschalten."));
+					} else {
+						echo "&nbsp; ";
+					}
 					$showscore = FALSE;
 				}
 			}
-		} else {
-			echo "&nbsp; ";
-		}
 		?>
 		</td>
 </tr>
