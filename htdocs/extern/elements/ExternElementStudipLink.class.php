@@ -122,7 +122,7 @@ class ExternElementStudipLink extends ExternElement {
 		$out .= "<td height=\"{$args['height']}\" width=\"100%\" align=\""
 				. $this->config->getValue($this->name, "align") . "\">\n";
 		$font = "<font" . $this->config->getAttributes($this->name, "font") . ">";
-		$out .= sprintf("<a href=\"%s\"%s>%s%s</font></a>", $args['link'],
+		$out .= sprintf("<a href=\"%s\"%s target=\"_blank\">%s%s</font></a>", $args['link'],
 				$this->config->getAttributes($this->name, "a"), $font,
 				$this->config->getValue($this->name, "linktext"));
 		if ($this->config->getValue($this->name, "image")) {
@@ -132,7 +132,7 @@ class ExternElementStudipLink extends ExternElement {
 				$img = "<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
 				$img .= "pictures/login.gif\" align=\"absmiddle\">";
 			}
-			$out .= sprintf("&nbsp;<a href=\"%s\"%s>%s</a>", $args['link'],
+			$out .= sprintf("&nbsp;<a href=\"%s\"%s target=\"_blank\">%s</a>", $args['link'],
 					$this->config->getAttributes($this->name, "a"), $img);
 		}
 		$out .= "\n</td></tr></table>\n";
