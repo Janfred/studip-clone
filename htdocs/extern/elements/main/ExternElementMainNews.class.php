@@ -198,7 +198,7 @@ class ExternElementMainNews extends ExternElementMain {
 				return FALSE;
 			}
 				
-			return !($value == "1" || $value == "0");
+			return !($value == "1" || $value == "");
 		}
 		
 		return FALSE;
