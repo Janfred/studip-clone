@@ -53,16 +53,16 @@ include($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");  //Linkleiste fuer admins
 
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
-	<tr><td class="topic" align="left">&nbsp; <b><?=$UNI_NAME . " - " . _("Bereiche verwalten")?></b></td></tr>
-	<tr><td  align="center">
+	<tr><td class="topic" align="left">&nbsp; <b><?=$UNI_NAME . " - " . _("Einrichtungshierarchie bearbeiten")?></b></td></tr>
+	<tr><td  align="center" class="blank"><br />
 	<table class="blank" cellspacing="0" cellpadding="0" border="0" width="99%">
 	<tr>
-	<td align="center">
+	<td align="center" class="blank">
 <?
 $the_tree = new StudipRangeTreeViewAdmin();
 $_open_ranges['root'] = true;
 $the_tree->showTree();
 page_close();
 ?>
-</td></tr></table></td></tr></table></body></html>
+</td></tr></table><br /></td></tr></table></body></html>
 <!--$Id$-->
