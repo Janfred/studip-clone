@@ -140,6 +140,8 @@ define ("EVAL_PIC_TREE_QUESTIONGROUP_FILLED", PATH_PICTURES."eval_qgroup_filled.
 define ("EVAL_PIC_EXPORT_FILE", PATH_PICTURES."xls-icon.gif");
 define ("EVAL_PIC_YES", PATH_PICTURES."symbol01.gif");
 define ("EVAL_PIC_NO",  PATH_PICTURES."symbol02.gif");
+define ("EVAL_PIC_SHARED",  PATH_PICTURES."on_small_transparent.gif");
+define ("EVAL_PIC_NOTSHARED",  PATH_PICTURES."off_small_blank_transparent.gif");
 /* -------------------------------------------------- end: picture constants */
 
 /* CSS constants ----------------------------------------------------------- */

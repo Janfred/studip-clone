@@ -260,7 +260,7 @@ class EvalOverview {
      $shareButton->addAttr ("style", "vertical-align:middle;");
      $shareButton->addAttr ("type", "image");
      $shareButton->addAttr ("name", "share_template_button");
-     $shareButton->addAttr ("src", PATH_PICTURES.( $isShared ? "vote-icon-visible" : "vote-icon-invisible" ). ".gif");
+     $shareButton->addAttr ("src", $isShared ? EVAL_PIC_SHARED : EVAL_PIC_NOTSHARED );
      $shareButton->addAttr ("border", "0");
      $shareButton->addAttr ("alt", $isShared ? _("als öffentliche Evaluationsvorlage Freigeben") : _("Freigabe entziehen"));
      $shareButton->addAttr ("title", $isShared ? _("Die Freigabe für diese Evaluationsvorlage entziehen") : _("Diese Evaluationsvorlage öffentlich freigeben"));
