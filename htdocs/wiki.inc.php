@@ -272,7 +272,7 @@ function wikiLinks($str, $page) {
 function getWikiLinks($str) {
 	global $wiki_keyword_regex;
 	preg_match_all("/$wiki_keyword_regex/", $str, $out, PREG_PATTERN_ORDER);
-	return $out[2];
+	return array_unique($out[2]);
 }
 
 
@@ -685,30 +685,33 @@ function printAllWikiPages($range_id, $header) {
 	echo "<body>";
 	echo "<p><em>$header</em></p>";
 	while (! empty($tovisit)) { // while there are still pages left to visit
-		$pagename=array_shift($tovisit);
-		$pagedata=getLatestVersion($pagename, $range_id);
-		if ($pagedata) { // consider only pages with content
-			array_push($visited, $pagename);
-			$linklist=getWikiLinks($pagedata["body"]);
-			foreach ($linklist as $l) {
-				// add pages not visited yet to queue
-				if (! in_array($l, $visited)) {
-					$tovisit[] = $l; // breadth-first
+		$pagename=array_shift($tÖöovisit);
+		if (!in_array($pagename,$visited)){
+			$pagedata=getLatestVersion($pagename, $range_id);
+			if ($pagedata) { // consider only pages with content
+				array_push($visited, $pagename);
+				$linklist=getWikiLinks($pagedata["body"]);
+				foreach ($linklist as $l) {
+					// add pages not visited yet to queue
+						if (! in_array($l, $visited)) {
+						$tovisit[] = $l; // breadth-first
+					}
 				}
+				echo "<hr><h1>$pagename</h1>";
+				echo "<p><em>Version ".$pagedata['version'];
+				echo ", letzte Änderung ".date("d.m.Y, h:i", $pagedata['chdate']);
+				echo " von ".get_fullname($pagedata['user_id']).".</em></p>";
+				// output is html without WikiLinks
+				echo wikiReady($pagedata['body']);
 			}
-			echo "<hr><h1>$pagename</h1>";
-			echo "<p><em>Version ".$pagedata['version'];
-			echo ", letzte Änderung ".date("d.m.Y, h:i", $pagedata['chdate']);
-			echo " von ".get_fullname($pagedata['user_id']).".</em></p>";
-			// output is html without WikiLinks
-			echo wikiReady($pagedata['body']);
-		}
+		} 
 	}
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
 	echo date("d.m.Y, h:i", time());
 	echo " </font></p>";
 	echo "</body></html>";
 }
+
 
 /**
 * Display start of page "frame", i.e. open correct table structure.
