@@ -158,7 +158,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 				$global_obj['vote']['gesamt'] = $db->f('count');
 			}
 		$db->query("SELECT  COUNT(a.eval_id) as count,
-					COUNT(IF((chdate > IFNULL(b.visitdate,0) AND d.author_id !='{$user->id}' AND (d.stopdate IS NULL OR d.stopdate > UNIX_TIMESTAMP() OR (d.startdate + d.timespan) > UNIX_TIMESTAMP())), a.eval_id, NULL)) AS neue 
+					COUNT(IF((chdate > IFNULL(b.visitdate,0) AND d.author_id !='{$user->id}' AND ((d.stopdate IS NOT NULL AND d.stopdate > UNIX_TIMESTAMP()) OR (d.stopdate IS NULL AND (d.startdate + d.timespan) > UNIX_TIMESTAMP()))) AS neue 
 					FROM eval_range a INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate IS NOT NULL)
 					LEFT JOIN object_user_visits b ON (b.object_id = d.eval_id AND b.user_id = '{$user->id}' AND b.type='eval') 
 					WHERE a.range_id='studip' GROUP BY a.range_id");
