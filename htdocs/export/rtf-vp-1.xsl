@@ -121,10 +121,14 @@
 \brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx7566\clvertalt\clbrdrt\brdrs\brdrw10 \clbrdrl\brdrs\brdrw10 \clbrdrb\brdrs\brdrw10 \clbrdrr\brdrs\brdrw10 \cltxlrtb \cellx9475\pard\plain \nowidctlpar\intbl\adjustright \lang1031\cgrid 
 {\fs24 </xsl:text>
 			<xsl:if test="titel">
-				<xsl:value-of select="titel"/>
+				<xsl:value-of select="titel"/><xsl:text> </xsl:text>
 			</xsl:if>
 				<xsl:value-of select="vorname"/>
+				<xsl:text> </xsl:text>
 				<xsl:value-of select="nachname"/>
+			<xsl:if test="titel2">
+				<xsl:text> </xsl:text><xsl:value-of select="titel2"/>
+			</xsl:if>
 <xsl:text>\cell </xsl:text>
 			<xsl:if test="telefon">
 				<xsl:value-of select="telefon"/>

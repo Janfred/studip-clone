@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 	<xsl:output method="html"/>
 	<xsl:template match="/">
@@ -156,9 +156,15 @@
 			<td>
 				<xsl:if test="titel">
 					<xsl:value-of select="titel"/>
+					<xsl:text> </xsl:text>
 				</xsl:if>
 				<xsl:value-of select="vorname"/>
+				<xsl:text> </xsl:text>
 				<xsl:value-of select="nachname"/>
+				<xsl:if test="titel2">
+					<xsl:text> </xsl:text>
+					<xsl:value-of select="titel2"/>
+				</xsl:if>
 				<br/>
 			</td>
 			<td>

@@ -70,8 +70,14 @@ Institut: <xsl:value-of select="name"/>
 <xsl:template name="showperson">
 	<xsl:for-each select="person">
 	- <xsl:if test="titel">
-					<xsl:value-of select="titel"/> 
-				</xsl:if> <xsl:value-of select="vorname"/> <xsl:value-of select="nachname"/>
+				<xsl:value-of select="titel"/><xsl:text> </xsl:text> 
+				</xsl:if>
+				<xsl:value-of select="vorname"/>
+				<xsl:text> </xsl:text>
+				<xsl:value-of select="nachname"/>
+				<xsl:if test="titel2">
+					<xsl:text> </xsl:text><xsl:value-of select="titel2"/> 
+				</xsl:if>
 				<xsl:if test="telefon">
 		Telefon: <xsl:value-of select="telefon"/>
 				</xsl:if>

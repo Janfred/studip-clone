@@ -156,9 +156,15 @@
 			<td>
 				<xsl:if test="titel">
 					<xsl:value-of select="titel"/>
+					<xsl:text> </xsl:text>
 				</xsl:if>
 				<xsl:value-of select="vorname"/>
+				<xsl:text> </xsl:text>
 				<xsl:value-of select="nachname"/>
+				<xsl:if test="titel2">
+					<xsl:text> </xsl:text>
+					<xsl:value-of select="titel2"/>
+				</xsl:if>
 				<br/>
 			</td>
 			<td>
