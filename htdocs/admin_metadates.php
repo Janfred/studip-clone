@@ -227,34 +227,6 @@ if ($term_metadata["art"]==0)
 					$errormsg=$errormsg."error§"._("Sie haben nicht alle Felder f&uuml;r regul&auml;ren Termine ausgef&uuml;llt. bitte korrigieren sie dies!")."§";
 					$just_informed4=TRUE;
 					}
-	/*		//check overlaps...
-			if ($RESOURCES_ENABLE) {
-				$resAssign = new VeranstaltungResourcesAssign();
-				$checkResult = $resAssign->changeMetaAssigns($term_metadata, $term_metadata["sem_start_time"], $term_metadata["sem_duration_time"],TRUE);
-				if (is_array($checkResult)) {
-					$overlaps_detected=FALSE;
-					foreach ($checkResult as $key=>$val)
-						if ($val["overlap_assigns"] == TRUE)
-							$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
-					}
-				if ($overlaps_detected) {
-					$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
-					$i=0;
-					foreach ($overlaps_detected as $key=>$val) {
-						$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
-						//show the first overlap
-						list(, $val2) = each($val);
-						$errormsg.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
-						if (sizeof($val) >1)
-							$errormsg.=", ... ("._("und weitere").")";
-						$errormsg.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
-						$i++;
-					}
-					$errormsg.="</font>§";
-				}
-				unset($checkResult);
-				unset($overlaps_detected);
-			}*/
 	}
 
 if (($term_metadata["start_termin"] == -1) && ($term_metadata["start_woche"] ==-1))
@@ -317,7 +289,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$overlaps_detected=FALSE;
 				foreach ($updateResult as $key=>$val)
 					if ($val["overlap_assigns"] == TRUE) {
-						$overlaps_detected[$val["resource_id"].$val["metadate_id"]] = $val["overlap_assigns"];
+						$overlaps_detected[$val["resource_id"]] = $val["overlap_assigns"];
 						list($key2, $val2) = each($val["overlap_assigns"]);
 						$begin = $val2["begin"];
 						$end = $val2["end"];
@@ -342,7 +314,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			}
 			//create bad msg
 			if ($overlaps_detected) {
-				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen und wurden <u>nicht</u> gebucht. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 				$i=0;
 				foreach ($overlaps_detected as $key=>$val) {
 					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
@@ -362,14 +334,14 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				if (!is_array($val["overlap_assigns"])) {
 					if ($i)
 						$rooms_booked.=", ";
-					$rooms_booked.="<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">".htmlReady(getResourceObjectName($val["resource_id"]))."</a>";
+					$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $val["resource_id"], htmlReady(getResourceObjectName($val["resource_id"])));
 					$i++;
 				}
 			}
 			if ($i == 1)
-				$errormsg.= sprintf ("msg§"._("Der Raum %s wurde gebucht.")."§", $rooms_booked);
+				$errormsg.= sprintf ("msg§"._("Der Raum %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
 			elseif ($i)
-				$errormsg.= sprintf ("msg§"._("Die R&auml;ume %s wurden gebucht.")."§", $rooms_booked);
+				$errormsg.= sprintf ("msg§"._("Die R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
   		}
 	}
 	

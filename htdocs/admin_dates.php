@@ -67,6 +67,7 @@ if ($RESOURCES_ENABLE) {
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	$resList = new ResourcesUserRoomsList($user_id);
 }
 
 // Start of Output
@@ -208,11 +209,9 @@ if ($make_dates_x) {
 				$f_id=md5(uniqid($hash_secret)); 	//folder_id erzeiugen
 				$aktuell=time();
 				
-				//if we have a resource_id, we flush the room name
-				if (!$term_data["turnus_data"][$i]["resource_id"])
-					$raum=$term_data["turnus_data"][$i]["raum"];
-				else
-					$raum='';
+				//if we have a resource_id, we take the room name from resource_id
+				if (($term_data["turnus_data"][$i]["resource_id"]) && ($RESOURCES_ENABLE))
+					$raum=getResourceObjectName($term_data["turnus_data"][$i]["resource_id"]);
 				
 				if ($pfad)  //Forumseintrag erzeugen
 					$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." am ".date("d.m.Y", $insert_termin_start[$i]), $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $admin_dates_data["range_id"]);
@@ -230,6 +229,7 @@ if ($make_dates_x) {
 					//insert a entry for the linked resource, if resource management activ
 					if ($RESOURCES_ENABLE) {
 						$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+						$insertAssign->dont_check = TRUE;
 						$insertAssign->insertDateAssign($t_id, $term_data["turnus_data"][$i]["resource_id"]);
 					}
 					$made_dates++;
@@ -257,7 +257,7 @@ if ($make_dates_x) {
 
 	//make an update, this will kill old metadate entries in the resources
 	if ($RESOURCES_ENABLE)
-		$insertAssign->updateAssign();
+		$resources_result=$insertAssign->updateAssign();
 
 	$result="msg§Der Ablaufplan wurde erstellt. Es wurden ".$made_dates." Termine erstellt.§";
 	}
@@ -342,9 +342,9 @@ if ($new)
 		if ($description==$default_description)
 			$description='';
 			
-		//if we have a resource_id, we flush the room name
-		if ($resource_id)
-			$raum='';
+		//if we have a resource_id, we take the room name from resource_id
+		if (($resource_id) && ($RESOURCES_ENABLE))
+			$raum=getResourceObjectName($resource_id);
 
 		if ($topic)  //Forumseintrag erzeugen
 			$topic_id=CreateTopic($TERMIN_TYP[$art]["name"].": ".$tmp_titel." am ".date("d.m.Y ", $start_time), $author, "Hier kann zu diesem Termin diskutiert werden", 0, 0, $admin_dates_data["range_id"]);
@@ -365,7 +365,7 @@ if ($new)
 			//insert a entry for the linked resource, if resource management activ
 			if ($RESOURCES_ENABLE) {
 				$insertAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-				$insertAssign->insertDateAssign($t_id, $resource_id);
+				$resources_result = $insertAssign->insertDateAssign($t_id, $resource_id);
 				$insertAssign->updateAssign($t_id, $resource_id);
 			}
 		
@@ -375,20 +375,20 @@ if ($new)
 		}
 	}
 
-if (($edit_x) && (!$admin_dates_data["termin_id"]))
-	{
-	if (is_array($termin_id))
-		{
-		for ($i=0; $i < sizeof($termin_id); $i++)
-	 		{
+if (($edit_x) && (!$admin_dates_data["termin_id"])) {
+	if (is_array($termin_id)) {
+		for ($i=0; $i < sizeof($termin_id); $i++) {
 		 	$t_id=$termin_id[$i];
 			$f_id=md5(uniqid($hash_secret));
+			
 			if ($resource_id[$i] == "FALSE")
 				$resource_id[$i] = FALSE;
 				
 			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$i], $titel[$i],$description[$i], $topic_id[$i],$raum[$i], $resource_id[$i], $admin_dates_data["range_id"]);
 		 	$result.=$tmp_result["msg"];
-		 	
+
+		 	$resources_result = array_merge ($resources_result, $tmp_result["resources_result"]);
+
 			$aktuell=time();
 
 			$tmp = $auth->auth["uname"];
@@ -425,18 +425,29 @@ if (($edit_x) && (!$admin_dates_data["termin_id"]))
 		 	}
 		 $result.=$add_result;
 		}
+
+		//after every change, we have to do this check (and we create the msgs...)
+		if ($RESOURCES_ENABLE) {
+			$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+			$updateAssign->updateAssign();
+		}
 	}
 
-if (($kill_x) && ($admin_dates_data["range_id"]))
-	{
-	if (is_array($kill_termin))
-		{
-		for ($i=0; $i < count($kill_termin); $i++)
-			{
+if (($kill_x) && ($admin_dates_data["range_id"])) {
+	if (is_array($kill_termin)) {
+		for ($i=0; $i < count($kill_termin); $i++) {
 			$teile = explode("&",$kill_termin[$i]);
-	 		$del_count+=delete_date($teile[0], $teile[1], TRUE, $admin_dates_data["range_id"]);
-			}
+	 		$del_count=$del_count+delete_date($teile[0], $teile[1], TRUE, $admin_dates_data["range_id"]);
 		}
+		$del_count=count($kill_termin);
+	}
+
+	//after every change, we have to do this check (and we create the msgs...)
+	if ($RESOURCES_ENABLE) {
+		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
+		$updateAssign->updateAssign();
+	}
+	
 	if ($del_count)
 		if ($del_count ==1)
 			$result="msg§$del_count Termin wurde gel&ouml;scht!";
@@ -445,6 +456,49 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 	$beschreibung='';
 	}
 
+	//If resource-management activ, update the assigned reources and do the overlap checks.... not so easy!
+	if (($RESOURCES_ENABLE) && ($resources_result)) {
+		$overlaps_detected=FALSE;
+		foreach ($resources_result as $key=>$val)
+			if ($val["overlap_assigns"] == TRUE)
+				$overlaps_detected[$val["resource_id"]] = $val["overlap_assigns"];
+
+		//create bad msg
+		if ($overlaps_detected) {
+			$result.="error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
+			$i=0;
+			foreach ($overlaps_detected as $key=>$val) {
+				$result.="<br /><font size=\"-1\" color=\"black\">".htmlReady(getResourceObjectName($key)).": ";
+				//show the first overlap
+				list(, $val2) = each($val);
+				$result.=date("d.m, H:i",$val2["begin"])." - ".date("H:i",$val2["end"]);
+				if (sizeof($val) >1)
+					$result.=", ... ("._("und weitere").")";
+				$result.=sprintf (", <a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav&start_time=%s\">"._("Raumplan anzeigen")."</a> ",$key, $val2["begin"]);
+				$i++;
+			}
+			$result.="</font>§";
+		}
+		//create good msg
+		$i=0;
+		foreach ($resources_result as $key=>$val)
+			if (!is_array($val["overlap_assigns"]))
+				$rooms_id[$val["resource_id"]]=TRUE;
+			
+		if (is_array($rooms_id))
+			foreach ($rooms_id as $key=>$val) {
+				if ($i)
+					$rooms_booked.=", ";
+				$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
+				$i++;
+			}
+		
+		if ($i == 1)
+			$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+		elseif ($i)
+			$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+	  }
+	
 
 //Ab hier Ausgaben....
 
@@ -685,10 +739,10 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 		$content.="<td class=\"steel1\" width=\"20%\">\n";
 		$content.="<font size=-1>&nbsp;Raum:</font>";
 		if ($RESOURCES_ENABLE) {
-			$resList = new ResourcesUserRoomsList($user_id);
+			$resList -> reset();
 			if ($resList->numberOfEvents()) {
 				$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id\"></font>";
-				$content.= ("<option value=\"FALSE\">--</option>");												
+				$content.= ("<option value=\"FALSE\">[eingeben oder aus Liste]</option>");												
 				while ($resObject = $resList->nextEvent())
 					$content.= sprintf("<option value=\"%s\">%s</option>", $resObject->getId(), htmlReady($resObject->getName()));
 				$content.= "</select></font>";
@@ -814,10 +868,10 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 				$content.="<font size=-1>&nbsp;Raum:</font>";
 				if ($RESOURCES_ENABLE) {
 					$assigned_resource_id = getDateAssigenedRoom($db->f("termin_id"));
-					$resList = new ResourcesUserRoomsList($user_id);
-					if ($resList->numberOfEvents()) {
+						$resList -> reset();
+						if ($resList->numberOfEvents()) {
 						$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id[]\"></font>";
-						$content.= sprintf("<option %s value=\"FALSE\">--</option>", (!$assigned_resource_id) ? "selected" : "");												
+						$content.= sprintf("<option %s value=\"FALSE\">[eingeben oder aus Liste]</option>", (!$assigned_resource_id) ? "selected" : "");												
 						while ($resObject = $resList->nextEvent())
 							$content.= sprintf("<option %s value=\"%s\">%s</option>", ($assigned_resource_id) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
 						$content.= "</select></font>";

@@ -767,6 +767,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	}
 	
 	$do=TRUE;
@@ -839,14 +840,13 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		$titel=$titel;
 		$description=$description; 
 
-		//if we have a resource_id, we flush the room name
+		//if we have a resource_id, we take the room name from resource_id
 		if ($resource_id)
-			$raum='';
+			$raum=getResourceObjectName($resource_id);
 		
 		$db->query("UPDATE  termine SET autor_id='$user->id', content='$titel', date= '$start_time', end_time='$end_time', date_typ='$art', raum='$raum', description='$description'  WHERE termin_id='$termin_id'");
 		if ($db->affected_rows()) {
 			$db->query ("UPDATE termine SET chdate='".time()."' WHERE termin_id='$termin_id'"); //Nur wenn Daten geaendert wurden, schreiben wir auch ein chdate
-			$succes=$termin_id;
 		}
 			
 		//Workaround fuer Forenbug. Dies ist keine Loesung, sondern Schadensvermeidung!!
@@ -887,16 +887,15 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 		if ($RESOURCES_ENABLE) {
 			$updateAssign = new VeranstaltungResourcesAssign($range_id);
 			if ($resource_id)
-				$updateAssign->changeDateAssign($termin_id, $resource_id);
+				$resources_result=$updateAssign->changeDateAssign($termin_id, $resource_id);
 			else
-				$updateAssign->killDateAssign($termin_id);			
-			$updateAssign->updateAssign();
+				$updateAssign->killDateAssign($termin_id);
 		}
 	}
 
 	$result_a["msg"]=$result;
-	$result_a["succes"]=$succes;
 	$result_a["add_msg"]=$add_result;
+	$result_a["resources_result"]=$resources_result;
 
 	return ($result_a);
 }
@@ -986,12 +985,7 @@ function delete_date ($termin_id, $topic_id = FALSE, $folder_move=FALSE, $sem_id
 	if ($db->affected_rows() && $RESOURCES_ENABLE) {
 		$insertAssign = new VeranstaltungResourcesAssign($sem_id);
 		$insertAssign->killDateAssign($termin_id);
-		$insertAssign->updateAssign();
 	}
-		
-	$count = $db->affected_rows();
-
-	return $count;
 }
 
 /*
