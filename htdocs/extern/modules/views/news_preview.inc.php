@@ -131,9 +131,9 @@ foreach ($content_data as $dat) {
 		$content.="\n--%%{$admin_msg}%%--";
 		
 	$data = array(
-			"date" => sprintf("%s<br><a href=\"\"%s><font%s>(%s)</font></a>",
-													strftime($dateform, $dat["date"]),
-													$attr_a, $attr_font, $dat["fullname"]),
+			"date" => sprintf("<font%s>%s<br><a href=\"\"%s>(%s)</a></font>",
+													$attr_font, strftime($dateform, $dat["date"]),
+													$attr_a, $dat["fullname"]),
 			"topic" => sprintf("<div%s><font%s>%s</font></div><div%s><font%s>%s</font></div>",
 													$attr_div_topic, $attr_font_topic,
 													$dat["topic"], $attr_div_body,

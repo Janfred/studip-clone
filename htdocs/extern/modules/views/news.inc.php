@@ -120,8 +120,8 @@ if ($error_message) {
 }
 else {
 	$dateform = $this->config->getValue("Main", "dateformat");
-	$attr_a = $this->config->getAttributes("Link", "a");
-	$attr_font = $this->config->getAttributes("Link", "font");
+	$attr_a = $this->config->getAttributes("LinkInternSimple", "a");
+	$attr_font = $this->config->getAttributes("TableRow", "font");
 	$attr_div_topic = $this->config->getAttributes("ContentNews", "divtopic");
 	$attr_div_body = $this->config->getAttributes("ContentNews", "divbody");
 	$attr_font_topic = $this->config->getAttributes("ContentNews", "fonttopic");
@@ -140,9 +140,9 @@ else {
 			$content.="\n--%%{$admin_msg}%%--";
 			
 		$data = array(
-				"date" => sprintf("%s<br><a href=\"%s&username=%s\"%s><font%s>(%s)</font></a>",
-														strftime($dateform, $db->f("date")), $link_persondetails,
-														$db->f("username"),$attr_a, $attr_font, htmlReady($db->f("name"))),
+				"date" => sprintf("<font%s>%s<br><a href=\"%s&username=%s\"%s>(%s)</a></font>",
+														$attr_font, strftime($dateform, $db->f("date")), $link_persondetails,
+														$db->f("username"),$attr_a, htmlReady($db->f("name"))),
 				"topic" => sprintf("<div%s><font%s>%s</font></div><div%s><font%s>%s</font></div>",
 														$attr_div_topic, $attr_font_topic,
 														$db->f("topic"), $attr_div_body,
