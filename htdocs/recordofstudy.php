@@ -216,7 +216,8 @@ elseif($mode == "pdf_assortment"){
 }
 elseif($mode == "create_pdf"){
 	global $record_of_study_templates;
-	$pdf_file = "http://" . getenv('SERVER_NAME') . $CANONICAL_RELATIVE_PATH_STUDIP . $PATH_EXPORT . "/".$record_of_study_templates[$template]["template"];
+	$pdf_file["full_path"] = "http://" . getenv('SERVER_NAME') . $CANONICAL_RELATIVE_PATH_STUDIP . $PATH_EXPORT . "/".$record_of_study_templates[$template]["template"];
+	$pdf_file["filename"] = $record_of_study_templates[$template]["template"];
 	$fdfAR = createFdfAR($seminars);
 };
 
@@ -304,7 +305,6 @@ function createFdfAR($seminars){
  *
  */
 function printPDF ($pdf_file, $pdf_data) {
-
 	$fdf = "%FDF-1.2\n%‚„œ”\n";
 	$fdf .= "1 0 obj \n<< /FDF ";
 	$fdf .= "<< /Fields [\n"; 
@@ -312,14 +312,15 @@ function printPDF ($pdf_file, $pdf_data) {
 	foreach ($pdf_data as $key => $val)
 		$fdf .= "<< /V ($val)/T ($key) >> \n";
 
-	$fdf .= "]\n/F ($pdf_file) >>";
+	$fdf .= "]\n/F (".$pdf_file["full_path"].") >>";
 	$fdf .= ">>\nendobj\ntrailer\n<<\n";
 	$fdf .= "/Root 1 0 R \n\n>>\n";
 	$fdf .= "%%EOF";
-
-	// Now we display the FDF data which causes Acrobat to start  
-	header ("Content-Type: application/vnd.fdf");
-	print $fdf;
+	
+	// Now we display the FDF data which causes Acrobat to start
+	header("Content-Type: application/vnd.fdf");
+	header("Content-disposition: inline; filename=\"".$pdf_file["filename"]."\"");
+	echo $fdf;
 }
 
 /**
@@ -441,4 +442,5 @@ function sortSemestersArray($array,$sort = 0,$order = "ASC",$left = 0,$right = -
 	}
 	return $array; 
 }
+
 ?>
