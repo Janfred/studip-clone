@@ -158,14 +158,18 @@ class DbCalendarDay extends CalendarDay{
 	// public
 	function bindSeminarEvents($sem_id = ""){
 		if($sem_id == "")
-			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user s ON Seminar_id=range_id WHERE "
+			$query = sprintf("SELECT t.*, su.*, s.Name "
+						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
+						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 			       . "user_id = '%s' AND date_typ!=-1 AND date_typ!=-2 AND date BETWEEN %s AND %s"
 						 , $this->user_id, $this->getStart(), $this->getEnd());
 		else if($sem_id != ""){
 			if(is_array($sem_id))
 				$sem_id = implode("','", $sem_id);
-			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user s ON Seminar_id=range_id WHERE "
-			       . "user_id = '%s' AND Seminar_id IN ('%s') AND date_typ!=-1"
+			$query = sprintf("SELECT t.*, su.*, s.Name "
+						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
+						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
+			       . "user_id = '%s' AND su.Seminar_id IN ('%s') AND date_typ!=-1"
 						 . " AND date_typ!=-2 AND date BETWEEN %s AND %s"
 						 , $this->user_id, $sem_id, $this->getStart(), $this->getEnd());
 		}
@@ -177,11 +181,11 @@ class DbCalendarDay extends CalendarDay{
 		
 		if($db->num_rows() != 0){
 			while($db->next_record()){
-			//	$repeat = $db->f("date").",,,,,,SINGLE,#";
-			//	$expire = 2114377200; //01.01.2037 00:00:00 Uhr
-				$this->app[] =& new SeminarEvent($db->f("date"), $db->f("end_time"), $db->f("content"),
+				$app =& new SeminarEvent($db->f("date"), $db->f("end_time"), $db->f("content"),
 				              $db->f("date_typ"), $db->f("raum"), $db->f("termin_id"), $db->f("range_id"),
 											$db->f("mkdate"), $db->f("chdate"));
+				$app->setSemName($db->f("Name"));
+				$this->app[] = $app;
 			}
 			$this->sort();
 			return TRUE;

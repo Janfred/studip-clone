@@ -73,16 +73,26 @@ if($cmd_cal == "chng_cal_settings"){
 		"sem_data"         => $cal_sem_data,
 		"link_edit"        => $cal_link_edit,
 		"bind_seminare"    => $calendar_user_control_data["bind_seminare"],
-		"ts_bind_seminare" => $calendar_user_control_data["ts_bind_seminare"]
+		"ts_bind_seminare" => $calendar_user_control_data["ts_bind_seminare"],
+		"number_of_events" => $calendar_user_control_data["number_of_events"],
+		"delete"           => $cal_delete
 	);
 }
 
-$db_bind_check = new DB_Seminar;
-$db_bind_check->query("SELECT Seminar_id, mkdate FROM seminar_user WHERE user_id='$user->id' ORDER BY mkdate DESC");
-while ($db_bind_check->next_record()
-		&& ($db_bind_check->f("mkdate") > $calendar_user_control_data["ts_bind_seminare"]
-		|| $db_bind_check->f("mkdate") == 0)) {
-	$calendar_user_control_data["bind_seminare"][$db_bind_check->f("Seminar_id")] = "TRUE";
+$db_check =& new DB_Seminar;
+
+if(!isset($calendar_user_control_data["number_of_events"])){
+	$db_check->query("SELECT COUNT(*) cnt FROM termine WHERE autor_id='$user->id' AND autor_id=range_id GROUP BY autor_id");
+	$db_check->next_record();
+	$calendar_user_control_data["number_of_events"] = $db_check->f("cnt");
+	$calendar_user_control_data["delete"] = 6;
+}
+
+$db_check->query("SELECT Seminar_id, mkdate FROM seminar_user WHERE user_id='$user->id' ORDER BY mkdate DESC");
+while ($db_check->next_record()
+		&& ($db_check->f("mkdate") > $calendar_user_control_data["ts_bind_seminare"]
+		|| $db_check->f("mkdate") == 0)) {
+	$calendar_user_control_data["bind_seminare"][$db_check->f("Seminar_id")] = "TRUE";
 }
 $calendar_user_control_data["ts_bind_seminare"] = time();
 
@@ -171,7 +181,7 @@ switch($cmd){
 	case "del":
 		require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
 		$title = "Mein pers&ouml;nlicher Terminkalender - Tagesansicht";
-		$atermin = new DbCalendarEvent($termin_id);
+		$atermin =& new DbCalendarEvent($termin_id);
 		$atermin->delete();
 		
 		if($calendar_sess_control_data["source"]){
@@ -199,21 +209,40 @@ switch($cmd){
 		$calendar_sess_control_data["view_prv"] = $cmd;
 		break;
 	case "bind":
-		$title = "Mein pers&ouml;nlicher Terminkalender - Seminartermine einbinden";
+		$title = "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden";
 		break;
 /*		case "import":
 		$title = "Mein pers&ouml;nlicher Terminkalender - Termine importieren";
 		break; */
 	case "edit":
 		if($termin_id && !$mod){
-			require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
-			$atermin = new DbCalendarEvent($termin_id);
-			$repeat = $atermin->getRepeat();
+			// in the near future there will be a factory method to get the
+			// right type of event ;-)
+			if($sem_id){
+				$db_check_event =& new DBSeminar();
+				$db_check_event->query("SELECT termin_id FROM termine WHERE termin_id='$termin_id' "
+						. "AND range_id='$sem_id'");
+				if($db_check_event->next_record()){
+					require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
+					$atermin =& new SeminarEvent($termin_id);
+				}
+				else{
+				// there is something wrong... its better to go back to the last view
+					header("Location: " . $PHP_SELF	. "?cmd="
+							. $calendar_sess_control_data["view_prv"] . "&atime=$atime");
+					exit;
+				}
+			}
+			else{	
+				require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+				$atermin =& new DbCalendarEvent($termin_id);
+				$repeat = $atermin->getRepeat();
 		//	$translate = array("SINGLE"=>"keine", "DAYLY"=>"taeglich", "WEEKLY"=>"woechentlich",
 			//	                 "MONTHLY"=>"monatlich", "YEARLY"=>"jaehrlich");
-			$mod = $repeat["type"];
+				$mod = $repeat["type"];
 		//	if(empty($HTTP_POST_VARS))
 			//	$calendar_sess_control_data["mod"] = $mod;
+			}
 		}
 		if($termin_id)
 			$title = "Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten";
@@ -302,7 +331,7 @@ if($cmd == "add"){
 	// wenn alle Daten OK, dann Termin anlegen		
 	if(empty($err)){
 		include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
-		$atermin = new DbCalendarEvent($start,$end,$txt,$exp,$cat,$priority,$loc);		
+		$atermin =& new DbCalendarEvent($start,$end,$txt,"SINGLE",$exp,$cat,$priority,$loc);		
 		$atermin->setDescription($content);
 		if($via == "public")
 			$atermin->setType(-1);
@@ -392,7 +421,7 @@ if($cmd == "showday"){
 	}
 	
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
-	$aday = new DbCalendarDay($atime);
+	$aday =& new DbCalendarDay($atime);
 	$aday->bindSeminarEvents($bind_seminare);
 	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"], TRUE, TRUE, FALSE, 70, 20, 3, 1);
 	
@@ -423,9 +452,9 @@ if($cmd == "showweek"){
 		$st = $w_end - 2;
 		$et = 23;
 	}
-	
+
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
-	$aweek = new DbCalendarWeek($atime, $calendar_user_control_data["type_week"]);
+	$aweek =& new DbCalendarWeek($atime, $calendar_user_control_data["type_week"]);
 	$aweek->bindSeminarEvents($bind_seminare);
 	$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data["step_week"]
 												, FALSE, $calendar_user_control_data["link_edit"]);
@@ -454,7 +483,7 @@ if($cmd == "showmonth"){
 
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarMonth.class.php");
 	
-	$amonth = new DbCalendarMonth($atime);
+	$amonth =& new DbCalendarMonth($atime);
 	$calendar_sess_forms_data["bind_seminare"] = "";
 	$amonth->bindSeminarEvents($bind_seminare);
 	$amonth->sort();
@@ -480,14 +509,14 @@ if($cmd == "showyear"){
 
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
 	
-	$ayear = new DbCalendarYear($atime);
+	$ayear =& new DbCalendarYear($atime);
 	$ayear->bindSeminarEvents($bind_seminare);
 	
 	include($RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
 
 }
 
-// editing an event *********************************************************
+// edit an event *********************************************************
 
 // ist $termin_id an das Skript uebergeben worden, dann bearbeite diesen Termin
 // ist $atime an das Skript uebergeben worden, dann erzeuge neuen Termin (s.o.)
@@ -510,7 +539,7 @@ if($cmd == "edit"){
 		$via = "private";
 		$edit_mode_out = sprintf("<b>Termin erstellen f&uuml;r %s</b></td></tr>\n", ldate($atime));
 	}
-	// call from different views for editing an event
+	// call from different views to edit an event
 	else if($atermin && !$mod_prv){
 		$start_h = date("G", $atermin->getStart());
 		$start_m = date("i", $atermin->getStart());
@@ -615,7 +644,7 @@ if($cmd == "edit"){
 if($cmd == "bind"){
 
 	// alle vom user abonnierten Seminare
-	$db = new DB_Seminar;
+	$db =& new DB_Seminar;
 	if(!isset($sortby))
 		$sortby = "seminar_user.gruppe, seminare.Name";
 	//	if($sortby == "count")
@@ -623,7 +652,7 @@ if($cmd == "bind"){
 	if(!isset($order))
 		$order = "ASC";
 	$query = "SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, count(termin_id) as count "
-				 . "FROM seminare LEFT JOIN seminar_user USING (Seminar_id) LEFT JOIN termine ON range_id=seminare.Seminar_id WHERE seminar_user.user_id = '"
+				 . "FROM seminar_user LEFT JOIN seminare USING (Seminar_id) LEFT JOIN termine ON range_id=seminare.Seminar_id WHERE seminar_user.user_id = '"
 				 . $user->id."' GROUP BY Seminar_id ORDER BY $sortby $order";
 	$db->query($query);
 	if($order == "ASC")

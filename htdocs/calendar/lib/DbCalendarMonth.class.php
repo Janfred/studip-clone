@@ -27,6 +27,7 @@ require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarEvent.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
 require_once($RELATIVE_PATH_CALENDAR . "/lib/driver/$CALENDAR_DRIVER/month_driver.inc.php");
 
 class DbCalendarMonth extends DbCalendarYear{
@@ -107,17 +108,20 @@ class DbCalendarMonth extends DbCalendarYear{
 		$end = $this->getEnd() + 518400;
 		$start = $this->getStart() - 518400;
 		$db = new DB_Seminar;
-		$color = array("#000000","#FF0000","#FF9933","#FFCC66","#99FF99","#66CC66","#6699CC","#666699");
 		
 		if(func_num_args() == 0)
-			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
+			$query = sprintf("SELECT t.*, su.*, s.Name "
+						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
+						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
 			       . "user_id = '%s' AND date BETWEEN %s AND %s"
 						 , $this->user_id, $start, $end);
 		else if(func_num_args() == 1 && $seminar_ids = func_get_arg(0)){
 			if(is_array($seminar_ids))
 				$seminar_ids = implode("','", $seminar_ids);
-			$query = sprintf("SELECT * FROM termine LEFT JOIN seminar_user ON Seminar_id=range_id WHERE "
-			       . "user_id = '%s' AND Seminar_id IN ('%s') AND date BETWEEN %s AND %s"
+			$query = sprintf("SELECT t.*, su.*, s.Name "
+						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
+						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
+			       . "user_id = '%s' AND su.Seminar_id IN ('%s') AND date BETWEEN %s AND %s"
 						 , $this->user_id, $seminar_ids, $start, $end);
 		}
 		else
@@ -127,15 +131,14 @@ class DbCalendarMonth extends DbCalendarYear{
 		
 		while($db->next_record()){
 			$adate = mktime(12,0,0,date("n",$db->f("date")),date("j",$db->f("date")),$this->year,0);
-			$repeat = $db->f("date").",,,,,,SINGLE,#";
-			$expire = 2114377200; //01.01.2037 00:00:00 Uhr
+		//	$repeat = $db->f("date").",,,,,,SINGLE,#";
+		//	$expire = 2114377200; //01.01.2037 00:00:00 Uhr
 			$this->apdays["$adate"]++;
-			$app = new CalendarEvent($db->f("date"), $db->f("end_time"),
-			                          $db->f("content"), $repeat, $expire, $db->f("date_typ"),
-															  $db->f("priority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
-			$app->setSeminarId($db->f("Seminar_id"));
-			$app->setColor($color[$db->f("gruppe")]);
-			$app->setCategory($db->f("date_typ"));
+			$app =& new SeminarEvent($db->f("date"), $db->f("end_time"), $db->f("content"),
+				              $db->f("date_typ"), $db->f("raum"), $db->f("termin_id"), $db->f("range_id"),
+											$db->f("mkdate"), $db->f("chdate"));
+			$app->setDescription($db->f("description"));
+			$app->setSemName($db->f("Name"));
 			$this->apps["$adate"][] = $app;
 		}
 	}
