@@ -293,11 +293,11 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 		IF ($loginfilenow[$semid]==0)
 			{
-			echo "<td class=$class  align=\"center\">nicht besucht</td>";
+			echo "<td class=$class  align=\"center\" nowrap>nicht besucht</td>";
 			}
 		ELSE
 			 {
-			 echo "<td class=\"$class\" align=\"center\">", date("d.m.Y", $loginfilenow[$semid]),"</td>";
+			 echo "<td class=\"$class\" align=\"center\" nowrap>", date("d.m.Y", $loginfilenow[$semid]),"</td>";
 			}
 
 // Inhalt
