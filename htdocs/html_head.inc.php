@@ -61,6 +61,10 @@ if ($_include_stylesheet != "")  // if empty, use no stylesheet
 	printf("\t\t<link rel=\"stylesheet\" href=\"%s\" type=\"text/css\">\n", $_include_stylesheet);
 unset ($_include_stylesheet);
 unset ($_html_head_title);
+?>
+	</head>
+	<body>
+?>
 
 //start messenger, if set
 if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$messenger_started)) {
@@ -72,6 +76,3 @@ if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscr
 	$messenger_started = TRUE;
 }
 
-?>
-	</head>
-	<body>
