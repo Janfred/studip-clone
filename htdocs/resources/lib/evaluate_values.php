@@ -1585,9 +1585,11 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 
 //inform the owner of the requests
 if ($snd_closed_request_sms) {
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/messaging.inc.php");
+	require_once ($GLOBALS["RELATIVE_PATH_RESOURCES"]."/lib/RoomRequest.class.php");
+	require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/Seminar.class.php");
+	require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/messaging.inc.php");
+	require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/language.inc.php");
+	
 	
 	$messaging = new messaging;
 	
@@ -1656,7 +1658,9 @@ if ($snd_closed_request_sms) {
 		}
 		
 		//send the message into stud.ip message system
+		setTempLanguage($reqObj->getUserId());
 		$messaging->insert_message($message, get_username($reqObj->getUserId()), $user->id);
+		restoreLanguage();
 		
 		//set more closed ;-)
 		$reqObj->setClosed(2);
