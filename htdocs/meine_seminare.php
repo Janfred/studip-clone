@@ -105,7 +105,7 @@ function get_my_obj_values(&$my_obj) {
 		$sql = 
 			"SELECT".
 			" b.Seminar_id,".
-			" (COUNT(d.eval_id) + COUNT(DISTINCT vote_id)) AS count,".
+			" (COUNT(DISTINCT d.eval_id) + COUNT(DISTINCT vote_id)) AS count,".
 			" (COUNT(if ((".
 			"             a.chdate > b.loginfilenow".
 			"             AND".
