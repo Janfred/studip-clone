@@ -699,10 +699,10 @@ if ($cmd_e_x)
 				$errormsg.=sprintf ("error§Das $end_date_name liegt nach dem eingetragenen Veranstaltungsbeginn am %s. Bitte &auml;ndern sie das $end_date_name!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
 				$level=4;
 		} 
-		if ($sem_create_data["sem_admission_date"] < time()) {
+		if (($sem_create_data["sem_admission_date"] < time()) && ($sem_create_data["sem_admission_date"] != -1)) {
 				$errormsg.=sprintf ("error§Das $end_date_name liegt in der Vergangenheit. Bitte &auml;ndern sie das $end_date_name!§");	
 				$level=4;
-		} elseif ($sem_create_data["sem_admission_date"] < (time() + (24 * 60 *60))) {
+		} elseif (($sem_create_data["sem_admission_date"] < (time() + (24 * 60 *60))) && ($sem_create_data["sem_admission_date"] != -1)) {
 				$errormsg.=sprintf ("error§Das $end_date_name liegt zu nah am aktuellen Datum. Bitte &auml;ndern sie das $end_date_name!§");	
 				$level=4;
 		}
