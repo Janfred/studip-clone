@@ -40,7 +40,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 //set handling for script execution
 ignore_user_abort(TRUE);
-set_time_limit(0);
+if( !ini_get('safe_mode')) set_time_limit(0);
 
 /**
 * This function inserts an user into the seminar_user and does consitency checks with admission_seminar_user

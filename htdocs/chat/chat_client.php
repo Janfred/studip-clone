@@ -306,7 +306,7 @@ function chatCommand_log($msgStr){
 	}
 }
 
-	 
+
 //Simpler Kommandoparser
 function chatCommand($msg){
 	global $user,$chatServer,$chatCmd,$chatid;
@@ -327,7 +327,7 @@ function outputLoop($chatid){
 	$lastPingTime = 0;
 	$lastMsgTime = $chatServer->getMsTime();
 	--$lastMsgTime[1];
-	set_time_limit(0);       //wir sind nicht zu stoppen...
+	if( !ini_get('safe_mode')) set_time_limit(0);       //wir sind nicht zu stoppen...
 	ignore_user_abort(1);    //es sei denn wir werden brutal ausgebremst :)
 
 	while(!connection_aborted()){
