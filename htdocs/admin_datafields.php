@@ -149,7 +149,7 @@ if ($kill_datafield) {
 				</td>
 				<td class="steel" width="10%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Priorit&auml;t")?></b>
+					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
 				<td class="steel" width="20%" align="center" valign="bottom">
@@ -320,7 +320,7 @@ if ($kill_datafield) {
 				</td>
 				<td class="steel" width="10%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Priorit&auml;t")?></b>
+					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
 				<td class="steel" width="20%" align="center" valign="bottom">
@@ -493,7 +493,7 @@ if ($kill_datafield) {
 				</td>
 				<td class="steel" width="10%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Priorit&auml;t")?></b>
+					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
 				<td class="steel" width="20%" align="center" valign="bottom">
