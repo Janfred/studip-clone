@@ -336,7 +336,7 @@ function wikiLinks($str, $page) {
 		foreach ($str as $w) $all .= $w .  $matches[1][$i++];
 		return $all;
 	}
-	return preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', $page)", $str);
+	return wikiDirectives(preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', $page)", $str));
 }
 
 /**
@@ -1067,7 +1067,7 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
 
 	begin_blank_table();
 	echo "<tr>\n";
-	$cont = wikiDirectives(wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword));
+	$cont = wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword);
 	$num_body_lines=substr_count($wikiData['body'], "\n");
 	if ($num_body_lines<15) {
 		$cont .= "<p>";
