@@ -93,7 +93,7 @@ include_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 
 if ($ILIAS_CONNECT_ENABLE)
 {
-
+	$GLOBALS['ALWAYS_SELECT_DB'] = true;
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
