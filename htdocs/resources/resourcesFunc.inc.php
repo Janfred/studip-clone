@@ -37,7 +37,7 @@
 /*
 * allowCreateRooms
 *
-* gets the status, if an user is allowed to create new room(objects)
+* gets the status, if an user is allowed to create new rooms(objects)
 *
 * @param	string	the user_id, if not set, the actual user's id is used
 * @return	boolean	
@@ -49,7 +49,7 @@ function allowCreateRooms($user_id='') {
 	if (!$user_id)
 		$user_id = $user->id;
 	
-	switch (get_config("RESOURCES_ALLOW_CREATE_ROOMS")) {
+	switch ($GLOBALS["RESOURCES_ALLOW_CREATE_ROOMS"]) {
 		case 1:
 			if ($perm->have_perm("tutor"))
 				return TRUE;
@@ -63,7 +63,7 @@ function allowCreateRooms($user_id='') {
 				return FALSE;
 		break;
 		case 3:
-			if (getGlobalPerms($user_id) == ("admin"))
+			if (getGlobalPerms($user_id) == "admin")
 				return TRUE;
 			else
 				return FALSE;
