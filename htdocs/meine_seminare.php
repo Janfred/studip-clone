@@ -550,12 +550,11 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 		echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
 		echo "<tr>";
-		echo "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
-		echo "<th width=\"65%\" align=\"left\"><b>" . _("Anmelde- und Wartelisteneintr&auml;ge:") . "</b></th>";
+		echo "<th width=\"67%\" align=\"left\" colspan=3>&nbsp;" . _("Anmelde- und Wartelisteneintr&auml;ge") . "</th>";
 		echo "<th width=\"10%\"><b>" . _("Datum") . "</b></th>";
 		echo "<th width=\"10%\" nowrap><b>" . _("Position/Chance") . "</b></th>";
 		echo "<th width=\"10%\"><b>" . _("Art") . "</b></th>";
-		echo "<th width=\"3%\">X&nbsp; </tr></th>";
+		echo "<th width=\"3%\">&nbsp; </tr></th>";
 			
 		$cssSw->resetClass();
 	
