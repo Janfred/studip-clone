@@ -51,8 +51,12 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 		$db->query("SELECT admission_prelim_txt FROM seminare WHERE Seminar_id = '$sem_id'");
 		$db->next_record();
 		echo "<tr><td class=\"blank\">&nbsp;&nbsp;</td><td class=\"blank\">";
-		printf (_("Um endg&uuml;ltig in die Veranstaltung <b>%s</b> aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen. Lesen Sie bitte den folgenden Hinweistext:"),$sem_name);
-		echo "<br/><br/><table width=90%><tr><td>\n";
+		printf (_("Um endg&uuml;ltig in die Veranstaltung <b>%s</b> aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen."),$sem_name);
+		if ($db->f("admission_prelim_txt"))
+			print " "._("Lesen Sie bitte folgenden Hinweistext:")."<br />";
+		else
+			print " "._("Bitte erkundigen Sie sich bei dem Dozeten oder der Dozentin der Veranstaltung nach weiteren Teilnahmevoraussetzungen.");
+		echo "<br/><table width=90%><tr><td>\n";
 		echo $db->f("admission_prelim_txt");
 		echo "</td></tr></table><br/>\n";
 		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung <b>%s</b> eingetragen zu werden."), $sem_name);
