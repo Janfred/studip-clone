@@ -108,8 +108,4 @@ td.current {border-width: 2px; border-style: solid; border-color: #DD0000;}
 td.month {background-color: #DDDDDD;}
 td.lightmonth{}
 
-/* Hover Styles */
-.hover2{background-color: #CED8F2;} 
-.hover1{background-color:#B7C2E2;}
-.nohover2{background-color:#F2F2F2;}
-.nohover1{background-color:#E2E2E2;}
+
