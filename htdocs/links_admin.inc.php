@@ -180,10 +180,10 @@ if ($perm->have_perm("tutor")) {
 }
 
 if ($perm->have_perm("admin")) {
-	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_e") OR ($i_page == "admin_institut.php" AND $links_admin_data["view"]=="einrichtung_e") OR ($i_page == "new_user_md5.php" AND $links_admin_data["view"]=="user_e") OR $i_page == "inst_admin.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="inst_admin.php"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><?
+	if (($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_e") OR ($i_page == "admin_institut.php" AND $links_admin_data["view"]=="einrichtung_e") OR ($i_page == "new_user_md5.php" AND $links_admin_data["view"]=="user_e") OR $i_page == "inst_admin.php") {?>  <td class="links1b" align=right nowrap><a  class="links1b" href="admin_inst.php"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><?
 		if ($perm->have_perm("root")) {?><img src="pictures/reiter2.jpg" align=absmiddle></td><? }
 		ELSE {?><img src="pictures/reiter4.jpg" align=absmiddle></td><?}}
-	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="inst_admin.php"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
+	ELSE {?>  <td class="links1" align=right nowrap><a  class="links1" href="admin_inst.php"><font color="#000000" size=2><b>&nbsp; &nbsp; Einrichtungen&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align=absmiddle></td><?}
 }
 
 if ($perm->have_perm("root")) {
