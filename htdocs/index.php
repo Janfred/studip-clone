@@ -115,7 +115,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	include("show_dates.inc.php");
 	$start = time();
 	$end = $start + 60 * 60 * 24 * 7;
-	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
+	if ($GLOBALS['CALENDAR_ENABLE']) {
+		show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
+	}
+	else {
+		show_dates($start, $end, $index_data["dopen"]);
+	}
 
         if ($GLOBALS['VOTE_ENABLE']) {
         	include ("show_vote.php");
@@ -252,11 +257,16 @@ echo "</table>";
 	include("show_dates.inc.php");
 	$start = time();
 	$end = $start + 60 * 60 * 24 * 7;
-	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
+	if ($GLOBALS["CALENDAR_ENABLE"]) {
+		show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
+	}
+	else {
+		show_dates($start, $end, $index_data["dopen"]);
+	}
 
-        if ($GLOBALS['VOTE_ENABLE']) {
-        	include ("show_vote.php");
-	        show_votes ("studip", $auth->auth["uid"], $perm);
+	if ($GLOBALS['VOTE_ENABLE']) {
+		include ("show_vote.php");
+		show_votes ("studip", $auth->auth["uid"], $perm);
 	}
 
 } elseif ($auth->auth["perm"]=="admin") {

@@ -266,12 +266,14 @@ if (show_news($user_id, $show_admin, 0, $about_data["nopen"]))
 
 
 // alle persoenlichen Termine anzeigen, aber keine privaten
-$temp_user_perm = get_global_perm($user_id);
-if ($temp_user_perm != "root" && $temp_user_perm != "admin") {
-	$start_zeit=time();
-	($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
-	if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
-		echo "<br>";
+if ($GLOBALS['CALENDAR_ENABLE']) {
+	$temp_user_perm = get_global_perm($user_id);
+	if ($temp_user_perm != "root" && $temp_user_perm != "admin") {
+		$start_zeit = time();
+		($perm->have_perm("autor") AND $auth->auth["uid"] == $user_id) ? $show_admin = TRUE : $show_admin = FALSE;
+		if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
+			echo "<br>";
+	}
 }
 
 // include and show votes and tests
