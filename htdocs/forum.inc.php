@@ -169,20 +169,23 @@ function MakeUniqueID ()
 **/
 function move_topic($topic_id, $sem_id, $root, &$verschoben)  //rekursives Verschieben von topics, in anderes Seminar
 {
-	$db=new DB_Seminar;
-	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-	if ($db->num_rows()) {
-		while ($db->next_record()) {
-			$next_topic=$db->f("topic_id");
-			move_topic($next_topic,$sem_id,$root,$verschoben);
+	global $rechte;
+	if ($rechte) {
+		$db=new DB_Seminar;
+		$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
+		if ($db->num_rows()) {
+			while ($db->next_record()) {
+				$next_topic=$db->f("topic_id");
+				move_topic($next_topic,$sem_id,$root,$verschoben);
+				}
 			}
-		}
-	if ($root == $topic_id)
-		$db->query("UPDATE px_topics SET parent_id=0, root_id='$topic_id', Seminar_id='$sem_id' WHERE topic_id='$topic_id'");
- 	else
- 		$db->query("UPDATE px_topics SET root_id='$root', Seminar_id='$sem_id' WHERE topic_id='$topic_id'");
- 	$verschoben++;
- 	return $verschoben;
+		if ($root == $topic_id)
+			$db->query("UPDATE px_topics SET parent_id=0, root_id='$topic_id', Seminar_id='$sem_id' WHERE topic_id='$topic_id'");
+ 		else
+ 			$db->query("UPDATE px_topics SET root_id='$root', Seminar_id='$sem_id' WHERE topic_id='$topic_id'");
+ 		$verschoben++;
+ 		return $verschoben;
+ 	}
 }
 
 /**
@@ -197,21 +200,23 @@ function move_topic($topic_id, $sem_id, $root, &$verschoben)  //rekursives Versc
 *
 **/
 function move_topic2($topic_id, $root, &$verschoben,$thema)  //rekursives Verschieben von topics, diesmal in ein Thema
-{
-	$db=new DB_Seminar;
-	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-	if ($db->num_rows()) {
-		while ($db->next_record()) {
-			$next_topic=$db->f("topic_id");
-			move_topic2($next_topic,$root,$verschoben,$thema);
+{	global $rechte;
+	if ($rechte) {
+		$db=new DB_Seminar;
+		$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
+		if ($db->num_rows()) {
+			while ($db->next_record()) {
+				$next_topic=$db->f("topic_id");
+				move_topic2($next_topic,$root,$verschoben,$thema);
+				}
 			}
-		}
-	if ($root == $topic_id)
-		$db->query("UPDATE px_topics SET parent_id='$thema', root_id='$thema' WHERE topic_id='$topic_id'");
- 	else
+		if ($root == $topic_id)
+			$db->query("UPDATE px_topics SET parent_id='$thema', root_id='$thema' WHERE topic_id='$topic_id'");
+ 		else
  		$db->query("UPDATE px_topics SET root_id='$thema' WHERE topic_id='$topic_id'");
- 	$verschoben++;
- 	return $verschoben;
+ 		$verschoben++;
+ 		return $verschoben;
+ 	}
 }
 
 /**
@@ -675,7 +680,7 @@ function forum_print_navi ($forum) {
 **/
 function CreateTopic ($name="[no name]", $author="[no author]", $description="", $parent_id="0", $root_id="0", $tmpSessionSeminar=0, $user_id=FALSE, $writeextern=TRUE)
 
-{	global $SessionSeminar,$auth, $PHP_SELF;
+{	global $SessionSeminar,$auth, $PHP_SELF, $user;
 	if (!$tmpSessionSeminar)
 		$tmpSessionSeminar=$SessionSeminar;
 	$db=new DB_Seminar;
@@ -706,6 +711,16 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 	
 	$query = "INSERT INTO px_topics (topic_id,name,description, parent_id, root_id , author, author_host, Seminar_id, user_id, mkdate, chdate) values ('$topic_id', '$name', '$description', '$parent_id', '$root_id', '$author', '".getenv("REMOTE_ADDR")."', '$tmpSessionSeminar', '$user_id', '$mkdate', '$chdate') ";
 	$db=new DB_Seminar;
+	
+	if ($user->id == "nobody") { 	// darf Nobody hier schreiben?
+		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id='$SessionSeminar' AND Schreibzugriff=0");
+		if (!$db->num_rows()) {
+			echo parse_msg("error§" . _("Ihnen fehlen die Rechte in dieser Veranstaltung zu Schreiben."));
+			die;
+		}
+			
+		}
+	
 	$db->query ($query);
 	if  ($db->affected_rows() == 0) {
 		print "<p>"._("Fehler beim Anlegen eines Postings.")."</p>\n";
