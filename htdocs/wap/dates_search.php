@@ -78,7 +78,7 @@
 		$event_list = new DbCalendarEventList($session_user_id, $start_time, $end_time, TRUE);
 		$event_list->bindSeminarEvents($bind_seminare);
 
-		$num_events = $event_list-> numberOfEvents();
+		$num_events = $event_list->numberOfEvents();
 		$num_pages  = ceil($num_events / DATES_PER_PAGE);
 
         if ($dates_search_pc)
@@ -102,16 +102,16 @@
 			if ($progress_limit > $num_events)
 				$progress_limit = $num_events;
 
-			while ($event_list-> existEvent() && ($event = $event_list-> nextEvent())
+			while ($event_list->existEvent() && ($event = $event_list->nextEvent())
 			                                  && ($progress_counter < $progress_limit))
 			{
 				$progress_counter ++;
-				$event_id     = $event-> getId();
-				$event_title  = $event-> getTitle();
-				if (method_exists($event, "getSemName"))
-					$event_sem_name = $event-> getSemName();
+				$event_id     = $event->getId();
+				$event_title  = $event->getTitle();
+				if (get_class($event) == 'seminarevent')
+					$sem_event = 1;
 				else
-					$event_sem_name = FALSE;
+					$sem_event = 0;
 
 				$short_title = wap_txt_shorten_text($event_title, WAP_TXT_LINK_LENGTH);
 				echo "<p align=\"left\">\n";
@@ -120,7 +120,7 @@
 				echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
 				echo "        <postfield name=\"date_id\" value=\"$event_id\"/>\n";
 				echo "        <postfield name=\"num_days\" value=\"$num_days\"/>\n";
-				echo "        <postfield name=\"event_sem_name\" value=\"$event_sem_name\"/>\n";
+				echo "        <postfield name=\"sem_event\" value=\"$sem_event\"/>\n";
 				echo "        <postfield name=\"dates_search_pc\" value=\"$page_counter\"/>\n";
 				echo "    </go>\n";
 				echo "</anchor>\n";

@@ -58,7 +58,7 @@
         $q_string .= "AS komplett_name, Email ";
         $q_string .= "FROM auth_user_md5 ";
         $q_string .= "LEFT JOIN user_info USING (user_id) ";
-        $q_string .= "WHERE auth_user_md5.user_id=\"$user_id\"";
+        $q_string .= "WHERE auth_user_md5.username=\"$user_name\"";
         $db-> query("$q_string");
         $db-> next_record();
 
@@ -66,8 +66,8 @@
         $e_mail        = $db-> f("Email");
 
         $q_string  = "SELECT privatnr, privadr ";
-        $q_string .= "FROM user_info ";
-        $q_string .= "WHERE user_id = \"$user_id\"";
+        $q_string .= "FROM auth_user_md5 LEFT JOIN user_info ";
+        $q_string .= "USING (user_id) WHERE username = \"$user_name\"";
         $db-> query("$q_string");
         $db-> next_record();
 
@@ -80,9 +80,10 @@
         echo "</p>\n";
 
         $q_string  = "SELECT Institute.Name, Institute.Institut_id ";
-        $q_string .= "FROM user_inst, Institute ";
-        $q_string .= "WHERE user_inst.user_id = '$user_id'";
-        $q_string .= "AND user_inst.Institut_id = Institute.Institut_id ";
+        $q_string .= "FROM auth_user_md5 LEFT JOIN user_inst ";
+		  $q_string .= "USING (user_id) LEFT JOIN Institute USING (Institut_id) ";
+        $q_string .= "WHERE username = '$user_name' ";
+      //  $q_string .= "AND user_inst.Institut_id = Institute.Institut_id ";
         $q_string .= "AND user_inst.inst_perms != 'user' ";
         $q_string .= "ORDER BY Institute.Name";
         $db-> query("$q_string");
@@ -95,7 +96,7 @@
             echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
             echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
             echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
-            echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
+            echo "        <postfield name=\"user_name\" value=\"$user_name\"/>\n";
             echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
             echo "    </go>\n";
             echo "</anchor>\n";
@@ -114,7 +115,7 @@
             echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
             echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
             echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
-            echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
+            echo "        <postfield name=\"user_name\" value=\"$user_name\"/>\n";
             echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
             echo "        <postfield name=\"inst_id\" value=\"$inst_id\"/>\n";
             echo "    </go>\n";

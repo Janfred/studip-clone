@@ -42,91 +42,98 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-    /**
-    * Maximum of characters used for event description
-    * @const MAX_DESCR_LENGTH
-    */
-    define("MAX_DESCR_LENGTH", 250);
+/**
+* Maximum of characters used for event description
+* @const MAX_DESCR_LENGTH
+*/
+define("MAX_DESCR_LENGTH", 250);
 
-	include_once("wap_adm.inc.php");
-	include_once("wap_txt.inc.php");
-	include_once("wap_buttons.inc.php");
-	require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]
-	            . $GLOBALS["RELATIVE_PATH_CALENDAR"]
-		        . "/calendar_func.inc.php");
+include_once("Dummy.class.php");
+include_once("wap_adm.inc.php");
+include_once("wap_txt.inc.php");
+include_once("wap_buttons.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+		. $GLOBALS["RELATIVE_PATH_CALENDAR"]
+		. "/calendar_func.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+		. $GLOBALS["RELATIVE_PATH_CALENDAR"]
+		. "/lib/DbCalendarEvent.class.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+		. $GLOBALS["RELATIVE_PATH_CALENDAR"]
+		. "/lib/SeminarEvent.class.php");
+	
+$session_user_id = wap_adm_start_card($session_id);
+if ($session_user_id)
+{
+	$user     = new Dummy();
+	$user->id = $session_user_id;
+	
+	if ($sem_event)
+		$event = new SeminarEvent($date_id);
+	else
+		$event = new DbCalendarEvent($date_id);
 
-	$session_user_id = wap_adm_start_card($session_id);
-    if ($session_user_id)
-    {
-        $db = new DB_Seminar();
-        $q_string  = "SELECT content, description, date, end_time ";
-        $q_string .= "FROM termine ";
-        $q_string .= "WHERE termin_id = \"$date_id\"";
-        $db-> query("$q_string");
-        $db-> next_record();
+	$event_start = $event->getStart();
+	$event_end   = $event->getEnd();
+	$event_title = $event->getTitle();
+	$event_descr = $event->getDescription();
 
-        $event_start = $db-> f("date");
-        $event_end   = $db-> f("end_time");
-        $event_title = $db-> f("content");
-        $event_descr = $db-> f("description");
+	$week_day_start = wday($event_start, "SHORT");
+	$week_day_end   = wday($event_end, "SHORT");
+	$date_start     = date("d.m.", $event_start);
+	$date_end       = date("d.m.", $event_end);
+	$time_start     = date("H:i", $event_start);
+	$time_end       = date("H:i", $event_end);
 
-        $week_day_start = wday($event_start, "SHORT");
-        $week_day_end   = wday($event_end, "SHORT");
-        $date_start     = date("d.m.", $event_start);
-        $date_end       = date("d.m.", $event_end);
-        $time_start     = date("H:i", $event_start);
-        $time_end       = date("H:i", $event_end);
+	echo "<p align=\"center\">\n";
 
-        echo "<p align=\"center\">\n";
+	if ($sem_event)
+	{
+		$short_event_sem_name = wap_txt_shorten_text($event->getSemName(), WAP_TXT_LINE_LENGTH);
+		echo "<b>";
+		echo wap_txt_encode_to_wml($short_event_sem_name);
+		echo "</b><br/>\n";
+	}
 
-        if ($event_sem_name)
-        {
-            $short_event_sem_name = wap_txt_shorten_text($event_sem_name, WAP_TXT_LINE_LENGTH);
-            echo "<b>";
-            echo wap_txt_encode_to_wml($short_event_sem_name);
-            echo "</b><br/>\n";
-        }
+	echo "<b>" . wap_txt_encode_to_wml($event_title) . "</b><br/>\n";
+	echo "$week_day_start, $date_start, $time_start<br/>\n";
+	echo "</p>\n";
 
-        $short_event_title = wap_txt_shorten_text($event_title, WAP_TXT_LINE_LENGTH);
-        echo "<b>" . wap_txt_encode_to_wml($short_event_title) . "</b><br/>\n";
-        echo "$week_day_start, $date_start, $time_start<br/>\n";
-        echo "</p>\n";
+	echo "<p align=\"left\">\n";
+	$short_event_descr = wap_txt_shorten_text($event_descr, MAX_DESCR_LENGTH, "cut_end");
+	echo wap_txt_encode_to_wml($short_event_descr) . "\n";
+	echo "</p>\n";
 
-        echo "<p align=\"left\">\n";
-        $short_event_descr = wap_txt_shorten_text($event_descr, MAX_DESCR_LENGTH, "cut_end");
-        echo wap_txt_encode_to_wml($short_event_descr) . "\n";
-        echo "</p>\n";
+	echo "<p align=\"center\">";
+	echo wap_txt_encode_to_wml(_("bis"));
+	if ($date_start != $date_end)
+		echo " $week_day_end, $date_end,";
+	echo " $time_end";
+	echo "</p>\n";
 
-        echo "<p align=\"center\">";
-        echo wap_txt_encode_to_wml(_("bis"));
-        if ($date_start != $date_end)
-            echo " $week_day_end, $date_end,";
-        echo " $time_end";
-        echo "</p>\n";
+	echo "<p align=\"right\">\n";
+	echo "<anchor>" . wap_buttons_back() . "\n";
+	if ($event_id)
+	{
+		echo "	 <go method=\"post\" href=\"event_dates.php\">\n";
+		echo "		  <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "		  <postfield name=\"event_id\" value=\"$event_id\"/>\n";
+		echo "		  <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
+		echo "		  <postfield name=\"event_dates_pc\" value=\"$event_dates_pc\"/>\n";
+		echo "	 </go>\n";
+	}
+	else
+	{
+		echo "	 <go method=\"post\" href=\"dates_search.php\">\n";
+		echo "		  <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+		echo "		  <postfield name=\"num_days\" value=\"$num_days\"/>\n";
+		echo "		  <postfield name=\"dates_search_pc\" value=\"$dates_search_pc\"/>\n";
+		echo "	 </go>\n";
+	}
+	echo "</anchor><br/>\n";
 
-        echo "<p align=\"right\">\n";
-        echo "<anchor>" . wap_buttons_back() . "\n";
-        if ($event_id)
-        {
-            echo "    <go method=\"post\" href=\"event_dates.php\">\n";
-            echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-            echo "        <postfield name=\"event_id\" value=\"$event_id\"/>\n";
-            echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
-            echo "        <postfield name=\"event_dates_pc\" value=\"$event_dates_pc\"/>\n";
-            echo "    </go>\n";
-        }
-        else
-        {
-            echo "    <go method=\"post\" href=\"dates_search.php\">\n";
-            echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-            echo "        <postfield name=\"num_days\" value=\"$num_days\"/>\n";
-            echo "        <postfield name=\"dates_search_pc\" value=\"$dates_search_pc\"/>\n";
-            echo "    </go>\n";
-        }
-        echo "</anchor><br/>\n";
-
-        wap_buttons_menu_link($session_id);
-        echo "</p>\n";
-    }
-	wap_adm_end_card();
+	wap_buttons_menu_link($session_id);
+	echo "</p>\n";
+}
+wap_adm_end_card();
 ?>

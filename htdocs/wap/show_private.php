@@ -55,8 +55,8 @@
 
         $db = new DB_Seminar;
         $q_string  = "SELECT privatnr, privadr ";
-        $q_string .= "FROM user_info ";
-        $q_string .= "WHERE user_id = \"$user_id\"";
+        $q_string .= "FROM auth_user_md5 LEFT JOIN user_info ";
+        $q_string .= "USING (user_id) WHERE username = \"$user_name\"";
         $db-> query("$q_string");
         $db-> next_record();
 
@@ -82,7 +82,7 @@
         echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
         echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
         echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
-        echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
+        echo "        <postfield name=\"user_name\" value=\"$user_name\"/>\n";
         echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
         echo "    </go>\n";
         echo "</anchor><br/>\n";
