@@ -218,10 +218,13 @@ class ShowToolsRequests {
 	}
 	
 	function showRequest($request_id) {
-		global $PHP_SELF, $cssSw, $resources_data;
+		global $PHP_SELF, $cssSw, $resources_data, $perm;
 		$reqObj = new RoomRequest($request_id);
 		$semObj = new Seminar($reqObj->getSeminarId());
-
+		$sem_link = $perm->have_studip_perm('tutor', $semObj->getId()) ? 
+			"seminar_main.php?auswahl=" . $semObj->getId() : 
+			"details.php?sem_id=" . $semObj->getId() . "&send_from_search=1&send_from_search_page=" 
+			. rawurlencode($PHP_SELF . "?working_on_request=$request_id");
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?working_on_request=<?=$request_id?>">
@@ -230,7 +233,7 @@ class ShowToolsRequests {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="2" width="96%" valign="top">
-					<a href="seminar_main.php?auswahl=<?=$semObj->getId()?>">
+					<a href="<?=$sem_link?>">
 						<b><?=htmlReady($semObj->getName())?></b>
 					</a>
 					<font size="-1">
