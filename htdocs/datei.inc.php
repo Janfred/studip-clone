@@ -765,7 +765,7 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE)
 }
 
 function linkcheck ($URL) {
-	$fp = @fopen($URL, "r");
+	$fp = @fopen(FixLinks($URL), "r");
 	if (!$fp) {
 		return FALSE;
 	} else {
