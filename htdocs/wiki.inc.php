@@ -385,7 +385,7 @@ function getZusatz($wikiData) {
 **/
 function showDeleteDialog($keyword, $version) {
 	global $perm, $SessSemName, $PHP_SELF;
-	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
+	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -435,7 +435,7 @@ function showDeleteDialog($keyword, $version) {
 **/
 function showDeleteAllDialog($keyword) {
 	global $perm, $SessSemName, $PHP_SELF;
-	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
+	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -478,7 +478,7 @@ function showDeleteAllDialog($keyword) {
 **/
 function deleteWikiPage($keyword, $version, $range_id) {
 	global $perm, $SessSemName;
-	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
+	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -527,7 +527,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 **/
 function deleteAllWikiPage($keyword, $range_id) {
 	global $perm, $SessSemName;
-	if (!$perm->have_studip_perm("dozent", $SessSemName[1])) {
+	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
@@ -989,7 +989,7 @@ function showWikiPage($keyword, $version, $special="") {
 			if ($perm->have_studip_perm("autor", $SessSemName[1])) {
 				$edit.="<a href=\"".$PHP_SELF."?keyword=$keyword&view=edit\"><img ".makeButton("bearbeiten","src")." border=\"0\"></a>";
 			}
-			if ($perm->have_studip_perm("dozent", $SessSemName[1])) {
+			if ($perm->have_studip_perm("tutor", $SessSemName[1])) {
 				$edit.="&nbsp;<a href=\"".$PHP_SELF."?keyword=$keyword&cmd=delete&version=latest\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
 			}
 		}
