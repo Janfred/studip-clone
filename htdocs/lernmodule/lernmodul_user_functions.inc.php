@@ -11,12 +11,6 @@ function get_password_md5()
 		return false;
 }
 
-function get_ilias_logindata()
-{
-	global $auth, $username_prefix;
-	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5();
-}
-
 function get_ilias_user_id($benutzername)
 {
 	global $username_prefix;
@@ -27,6 +21,12 @@ function get_ilias_user_id($benutzername)
 		return $ilias_db->f("id");
 	else
 		return false;
+}
+
+function get_ilias_logindata()
+{
+	global $auth, $username_prefix;
+	return "&acct_name=" . $username_prefix . $auth->auth["uname"] . "&acct_pass=" . get_password_md5() . "&acct_id=".get_ilias_user_id($auth->auth["uname"])."&u_id=".get_ilias_user_id($auth->auth["uname"]);
 }
 
 function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachname, $title_front, $institution, $telefon, $email, $status, $preferred_language)

@@ -9,15 +9,20 @@ function link_seminar_modules($seminar_id)
 {
 	$mod_array = get_seminar_modules($seminar_id);
 	if ($mod_array != false)
+	{
 		for ($i=0; $i<sizeof($mod_array); $i ++)
 		{
 			$mod_info = get_module_info($mod_array[$i]["inst"], $mod_array[$i]["id"]);
-			echo "<a href=\"";
-			echo link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
-			echo "\">";
-			echo "<b>" . $mod_info["title"] . "</b> - " . $mod_info["description"] . "<br>";
-			echo "</a>";
+			$link_str .= "<a href=\"";
+			$link_str .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
+			$link_str .= "\" target=\"_blank\">";
+			$link_str .= "<b>" . $mod_info["title"] . "</b> - " . $mod_info["description"] . "<br>";
+			$link_str .= "</a>";
 		}
+		return $link_str;
+	}
+	else
+		return false;
 }
 
 function link_use_module($co_inst, $co_id)

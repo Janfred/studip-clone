@@ -132,6 +132,23 @@ function show_all_modules_admin()
 
 function show_seminar_modules_links($seminar_id)
 {
-	link_seminar_modules($seminar_id);
+	global $cssSw;
+	$out_str = link_seminar_modules($seminar_id);
+ 	if ($out_str == false)
+ 	{
+ 		return false;
+ 	}
+ 	else
+ 	{
+	 	?>
+		<tr>
+			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
+			</td>
+			<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top"><?
+			printf ("<font size=-1><b>" . _("Diese Veranstaltung ist mit folgenden Lernmodulen verbunden:") . "</b></font><br />". $out_str);
+			?></td>
+		</tr>
+		<?
+	}
 }
 ?>
