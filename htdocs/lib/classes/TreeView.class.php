@@ -298,7 +298,7 @@ class TreeView {
 		$head .= "<img src=\"pictures/";
 		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
 		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"2\">";
-		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures\forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
+		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures/forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
 		$head .= "</a>";
 		if ($this->tree->hasKids($item_id)){
 			$head .= "<a href=\"";
