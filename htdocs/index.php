@@ -91,7 +91,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 //Anzeigemodul fuer nobody)
 ELSEIF (!$perm->have_perm("dozent")){ ?>
 
-<table width="600" border=0 cellpadding=0 cellspacing=0 align=center>
+<table class="blank" width="600" border=0 cellpadding=0 cellspacing=0 align=center>
 <tr><td colspan=3 class="topic">&nbsp;<b><? echo $UNI_NAME;?></b></td></tr>
 <tr><td class="blank" colspan=3><img src="pictures/startseite.jpg" alt="Stud.IP - G&ouml;ttingen" width="669" height="320" usemap="#Map" border="0">
 <map name="Map">
@@ -106,8 +106,8 @@ ELSEIF (!$perm->have_perm("dozent")){ ?>
 	&nbsp; <a href="index.php?again=yes"><font size=2 color="#6699CC">Login</font></a>&nbsp; 
 	<a href="register1.php"><font size=2 color="#6699CC">Registrieren</font></a>&nbsp; 
 </td>
-<td class="Blank" align=center><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border=0 alt="Zur Portalseite"></a></td>
-<td class="Blank" align=right nowrap valign=bottom>
+<td class="blank" align=center><a href="http://www.studip.de"><img src="pictures/logoklein.gif" border=0 alt="Zur Portalseite"></a></td>
+<td class="blank" align=right nowrap valign=bottom>
 	<a href="freie.php"><font size=2 color="#6699CC">Freier Zugang</font></a>&nbsp; 
 	<a href="help/index.php" target="_new"><font size=2 color="#6699CC">Hilfe</font></a>&nbsp;
 </td></tr>
