@@ -74,8 +74,7 @@ function change_schedule_view() {
 	global $my_schedule_settings, $PHP_SELF, $SEMESTER, $SEM_NAME, $SEM_NAME_NEXT, $VORLES_ENDE, $perm, $user;
 		
 	$db=new DB_Seminar;
-	
-
+	$cssSw=new cssClassSwitcher;		
 
 	?>
 	<table width ="100%" cellspacing=0 cellpadding=0 border=0>
@@ -94,12 +93,12 @@ function change_schedule_view() {
 	<tr>
 		<td class="blank" colspan=2>
 			<form method="POST" action="<? echo $PHP_SELF ?>?schedule_cmd=change_view_insert">
-			<table width ="100%" cellspacing=1 cellpadding=1 border=0>
-				<tr>
-					<td width="20%">
+			<table width ="99%" align="center" cellspacing=0 cellpadding=2 border=0>
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Zeitraum:</b></blockquote>
 					</td>
-					<td width="80%">&nbsp; Stundenplanansicht von&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; Stundenplanansicht von&nbsp; 
 					<?	    
 			   		echo"<select name=\"beginn_zeit\">";
 	   					for ($i=0; $i<=23; $i++)
@@ -146,11 +145,11 @@ function change_schedule_view() {
 					&nbsp;Uhr.
 					</td>
 				</tr>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Angezeigte Wochentage:</b></blockquote>
 					</td>
-					<td width="80%">
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 						&nbsp; <input type="CHECKBOX" name="mo" value="true" <?if ($my_schedule_settings ["glb_days"]["mo"]) echo "checked"?>>&nbsp; Montag <br>
 						&nbsp; <input type="CHECKBOX" name="di" value="true" <?if ($my_schedule_settings ["glb_days"]["di"]) echo "checked"?>>&nbsp; Dienstag <br>
 						&nbsp; <input type="CHECKBOX" name="mi" value="true" <?if ($my_schedule_settings ["glb_days"]["mi"]) echo "checked"?>>&nbsp; Mittwoch <br>
@@ -160,11 +159,11 @@ function change_schedule_view() {
 						&nbsp; <input type="CHECKBOX" name="so" value="true" <?if ($my_schedule_settings ["glb_days"]["so"]) echo "checked"?>>&nbsp; Sonntag <br>
 					</td>
 				</tr>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Angezeigtes Semester:</b></blockquote>
 					</td>
-					<td width="80%">
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 						<?
 						echo "&nbsp; <select name=\"sem\">";
 						if (!$my_schedule_settings ["glb_sem"]) {
@@ -199,11 +198,11 @@ function change_schedule_view() {
 						$db->query("SELECT Institute.Institut_id, Name FROM Institute LEFT JOIN user_inst USING(Institut_id) WHERE user_id = '".$user->id."' AND inst_perms = 'admin' ORDER BY Name");						
 					if ($db->num_rows()>1) {
 					?>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Angezeigtes Institut:</b></blockquote>
 					</td>
-					<td width="80%">
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 					<?
 					echo "&nbsp; <select name=\"institut_id\">";
 					while ($db->next_record()) {
@@ -220,10 +219,10 @@ function change_schedule_view() {
 						}
 					}
 					?>
-				<tr>
-					<td width="20%">&nbsp;
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
-					<td width="80%"><br>&nbsp; <input type="SUBMIT" value="&Auml;nderungen &uuml;bernehmen"><br>&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; <input type="SUBMIT" value="&Auml;nderungen &uuml;bernehmen"><br>&nbsp; 
 					<input type="HIDDEN" name="view" value="Stundenplan">
 					</td>
 				</tr>

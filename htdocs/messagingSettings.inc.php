@@ -37,6 +37,7 @@ function change_messaging_view() {
 	global $my_messaging_settings, $my_buddies, $PHP_SELF, $perm, $user, $search_exp, $add_user, $do_add_user, $new_search;
 		
 	$db=new DB_Seminar;
+	$cssSw=new cssClassSwitcher;	
 	
 	if ((!$search_exp) && (!$add_user))
 		$new_search=TRUE;
@@ -58,61 +59,60 @@ function change_messaging_view() {
 	<tr>
 		<td class="blank" colspan=2>
 			<form method="POST" action="<? echo $PHP_SELF ?>?messaging_cmd=change_view_insert#anker">
-			<table width ="100%" cellspacing=1 cellpadding=1 border=0>
-				<tr>
-					<td colspan=2>
+			<table width ="99%" align="center" cellspacing=0 cellpadding=2 border=0>
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
 					&nbsp; &nbsp; <b>Systeminterne Kurznachrichten (SMS)</b>
 					</td>
 				</tr>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>automatisches L&ouml;schen:</b></blockquote>
 					</td>
-					<td width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["delete_messages_after_logout"]) echo " checked"; ?>
 					 name="delete_messages_after_logout">
 					&nbsp; Gelesene Nachrichten automatisch nach dem Logout l&ouml;schen
 					</td>
 				</tr>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Signatur:</b></blockquote>
 					</td>
-					<td width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
 					<textarea name="sms_sig" rows=3 cols=40><? echo htmlready($my_messaging_settings["sms_sig"]); ?></textarea>
 					</td>
 				</tr>
-				
-				<tr>
-					<td colspan=2>
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
 					&nbsp; &nbsp; <b>Stud.IP Messenger</b>
 					</td>
 				</tr>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Starten:</b></blockquote>
 					</td>
-					<td width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["start_messenger_at_startup"]) echo " checked"; ?>
 					 name="start_messenger_at_startup">
 					&nbsp; Stud.IP-Messenger automatisch nach dem Login starten
 					</td>
 				</tr>
-				<tr>
-					<td colspan=2>
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
 					&nbsp; &nbsp; <b>Buddiess</b><a name="buddy_anker"></a>
 					</td>
 				</tr>
 				<?
 				if (is_array($my_buddies)) {
 				?>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Anzeige:</b></blockquote>
 					</td>
-					<td width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["show_only_buddys"]) echo " checked"; ?>
 					 name="show_only_buddys">
@@ -122,11 +122,11 @@ function change_messaging_view() {
 				<?
 				}
 				?>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Dauer bis inaktiv:</b></blockquote>
 					</td>
-					<td width="80%">&nbsp; Benutzer nach&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; Benutzer nach&nbsp; 
 					<select name="active_time">
 					<? 
 					for ($i=0; $i<=15; $i=$i+5) {
@@ -141,11 +141,11 @@ function change_messaging_view() {
 					&nbsp; Minuten nicht mehr anzeigen
 					</td>
 				</tr>
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Buddy hinzuf&uuml;gen:</b></blockquote>
 					</td>
-					<td width="80%">
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 					<?
 					if ((!$new_search)){
 						$db->query("SELECT Vorname, Nachname, username, user_id FROM auth_user_md5 WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
@@ -175,17 +175,17 @@ function change_messaging_view() {
 				<?
 				if (is_array($my_buddies)) {
 				?>				
-				<tr>
-					<td width="20%">
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">
 					<blockquote><br><b>Buddies:</b></blockquote>
 					</td>
-					<td width="80%">
+					<td class="<? echo $cssSw->getClass() ?>" width="80%">
 				<?
 						echo "<table cellspacing=0 cellpadding=0 width=\"100%\" border=0 height=\"100%\" bgcolor=\"white\" border=0>\n";
-						echo "<tr><td class=\"steel1\" width=\"70%\">&nbsp; </td>";
+						echo "<tr><td class=\"".$cssSw->getClass() ."\" width=\"70%\">&nbsp; </td>";
 						for ($k=0; $k<8; $k++)
 							echo "<td class=\"gruppe".$k."\" width=\"1%\">&nbsp;</td>\n";
-						echo "<td class=\"steel1\" width=\"10%\" align=\"center\">&nbsp; </td>";
+						echo "<td class=\"".$cssSw->getClass() ."\" width=\"10%\" align=\"center\">&nbsp; </td>";
 						echo "</tr>";
 						$i=0;
 						foreach ($my_buddies as $a) {
@@ -193,9 +193,9 @@ function change_messaging_view() {
 							$db->next_record();
 
 							if ($i % 2)
-								$class="steel1";
-							else
 								$class="steelgraulight"; 
+							else
+								$class="steel1";
 							
 							echo "<tr><td class=\"$class\" width=\"70%\">";
 							echo "<a href=\"about.php?username=",$db->f("username"),"\">",$db->f("Vorname")," ",$db->f("Nachname"), "</a></td>\n";
@@ -216,10 +216,10 @@ function change_messaging_view() {
 				<?
 					}
 				?>
-				<tr>
-					<td width="20%">&nbsp;
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
-					<td width="80%"><br>&nbsp; <font size=-1><input type="SUBMIT" value="&Auml;nderungen &uuml;bernehmen"></font><br>&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; <font size=-1><input type="SUBMIT" value="&Auml;nderungen &uuml;bernehmen"></font><br>&nbsp; 
 					<input type="HIDDEN" name="view" value="Messaging">
 					</td>
 				</tr>
