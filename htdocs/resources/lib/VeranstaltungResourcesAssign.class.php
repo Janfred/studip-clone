@@ -72,7 +72,7 @@ class VeranstaltungResourcesAssign {
 		while ($this->db->next_record()) {
 			if ($TERMIN_TYP[$this->db->f("date_typ")]["sitzung"])
 				$course_session=TRUE;
-			$this->changeDateAssign($this->db->f("termin_id"));
+			$result = array_merge($result, $this->changeDateAssign($this->db->f("termin_id")));
 		}
 		
 		//kill all assigned roomes (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
@@ -80,7 +80,8 @@ class VeranstaltungResourcesAssign {
 		
 		//if no course session date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
 		if (!$course_session)
-			$this->changeMetaAssigns();
+			$result = array_merge($result, $this->changeMetaAssigns());
+		return $result;
 	}
 	
 	function changeMetaAssigns($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='', $check_only=FALSE) {
@@ -146,17 +147,17 @@ class VeranstaltungResourcesAssign {
 					//check if there are overlaps (resource isn't free!)
 					$overlaps = $createAssign->checkOverlap();
 					if ($overlaps)
-						$created_ids[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$val["resource_id"]);
+						$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$val["resource_id"]);
 					$i++;
 
 					if ((!$check_only) && (!$overlaps)) {
 						$createAssign->create();
-						$created_ids[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$val["resource_id"]);
+						$result[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$val["resource_id"]);
 					}
 					
 				}
 			}
-		return $created_ids;
+		return $result;
 	}
 	
 	function changeDateAssign($termin_id, $resource_id='', $begin='', $end='', $check_only=FALSE) {
@@ -193,14 +194,14 @@ class VeranstaltungResourcesAssign {
 			//check if there are overlaps (resource isn't free!)
 			$overlaps = $changeAssign->checkOverlap();
 			if ($overlaps)
-				$changed_id[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+				$result[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
 			
 			if ((!$check_only) && (!$overlaps)) {
 				$changeAssign->store();
-				$changed_id[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
+				$result[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
 			}
 		}
-		return $changed_id;
+		return $result;
 	}
 	
 	function insertDateAssign($termin_id, $resource_id, $begin='', $end='', $check_only=FALSE) {
@@ -224,15 +225,15 @@ class VeranstaltungResourcesAssign {
 				//check if there are overlaps (resource isn't free!)
 				$overlaps = $createAssign->checkOverlap();
 				if ($overlaps)
-					$created_id[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
+					$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id);
 	
 				if ((!$check_only) && (!$overlaps)) {
 					$createAssign->create();
-					$created_id[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
+					$result[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id);
 				}
 			}
 		}
-		return $created_id;
+		return $result;
 	}
 
 	function killDateAssign($termin_id) {
@@ -240,7 +241,6 @@ class VeranstaltungResourcesAssign {
 		$this->db->query($query);
 		while ($this->db->next_record()) {
 			$killAssign=new AssignObject($this->db->f("assign_id"));
-			//createAssign->checkIsFree ° should performed here
 			$killAssign->delete();
 		}
 	}
