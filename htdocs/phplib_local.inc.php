@@ -156,8 +156,8 @@ class Seminar_Session extends Session {
 	
 	//erweiterter Garbage Collector
 	function gc(){
-		srand(time());
-		if ((rand()%100) < $this->gc_probability){
+		mt_srand((double)microtime()*1000000);
+		if ((mt_rand()%100) < $this->gc_probability){
 			//Alte News, oder News ohne range_id löschen
 			$db=new DB_Seminar("SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() ");
 			while($db->next_record()) {
@@ -176,9 +176,11 @@ class Seminar_Session extends Session {
 				$db->query("DELETE FROM news WHERE news_id IN $kill_news");
 				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
 			}
-			/*
-			$result = array();
+			unset($result);
+		}
+		if ((mt_rand()%1000) < $this->gc_probability){
 			//unsichtbare forenbeiträge die älter als 2 Stunden sind löschen
+			$db = new DB_Seminar();
 			$db->query("SELECT a.topic_id, count( b.topic_id ) AS kinder FROM px_topics a
 						LEFT JOIN px_topics b ON ( a.topic_id = b.parent_id )
 						WHERE a.chdate < UNIX_TIMESTAMP(DATE_ADD(NOW(),INTERVAL -2 HOUR))  AND a.chdate = a.mkdate - 1
@@ -199,9 +201,7 @@ class Seminar_Session extends Session {
 				$db->query("UPDATE px_topics SET chdate=mkdate WHERE topic_id IN('" . join("','",$result['with_kids']) . "')");
 			}
 			unset($result);
-			*/
 		}
-		
 		//weiter mit gc() in der Super Klasse
 		Session::gc();
 	}
