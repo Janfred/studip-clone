@@ -1681,10 +1681,10 @@ function execCommandAddQuestions(){
 			
 	if ($addquestions == "1")
 		$this->msg[$this->itemID] = "msg§"
-			. _("Es wurden eine neue Fragen hinzufgefügt.");
+			. _("Es wurde eine neue Frage hinzugefügt.");
 	else
 		$this->msg[$this->itemID] = "msg§"
-			. sprintf(_("Es wurden %s neue Fragen hinzufgefügt."),$addquestions);
+			. sprintf(_("Es wurden %s neue Fragen hinzugefügt."),$addquestions);
 			
 	$this->execCommandUpdateItem( NO );
 	
@@ -1906,7 +1906,7 @@ function execCommandMoveGroup(){
 	
 	if (!$this->moveItemID){
 		$this->msg[$this->itemID] = "msg§"
-			. _("Fehler beim Verschieben eines Blocks. Es wurde kein Block zum verschieben ausgwählt.");
+			. _("Fehler beim Verschieben eines Blocks. Es wurde kein Block zum verschieben ausgewählt.");
 		return false;
 	}
 	
@@ -1914,7 +1914,7 @@ function execCommandMoveGroup(){
 	
 	if (!$mode){
 		$this->msg[$this->itemID] = "msg§"
-			. _("Fehler beim Verschieben eines Block. Der Zielblock besitzt keinen Typ.");
+			. _("Fehler beim Verschieben eines Blocks. Der Zielblock besitzt keinen Typ.");
 		return false;
 	}
 	
@@ -1922,7 +1922,7 @@ function execCommandMoveGroup(){
 	
 	if (!$move_mode){
 		$this->msg[$this->itemID] = "msg§"
-			. _("Fehler beim Verschieben eines Block. Der Zielblock besitzt keinen Typ.");
+			. _("Fehler beim Verschieben eines Blocks. Der Zielblock besitzt keinen Typ.");
 		return false;
 	}
 	
@@ -1937,7 +1937,7 @@ function execCommandMoveGroup(){
 			if ($children = $this->tree->eval->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
 					$this->msg[$this->itemID] = "msg§"
-						. _("Fehler beim Verschieben eines Block. Der ausgewählte Block und der Zielblock besitzten verschiedene Typ.");
+						. _("Fehler beim Verschieben eines Blocks. Der ausgewählte Block und der Zielblock besitzen verschiedene Typen.");
 					return false;
 				}
 			}
@@ -1977,7 +1977,7 @@ function execCommandMoveGroup(){
 					_("Fehler beim Verschieben einer Gruppe"));
 			
 			$this->msg[$this->itemID] = "msg§"
-				. sprintf(_("Der Block <b>%s</b> wurde in die Haupebene verschoben."),
+				. sprintf(_("Der Block <b>%s</b> wurde in die Hauptebene verschoben."),
 					$move_group_title);
 			break;
 			
@@ -1987,7 +1987,7 @@ function execCommandMoveGroup(){
 			if ($children = $group->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
 					$this->msg[$this->itemID] = "msg§"
-						. _("Fehler beim Verschieben eines Block. Der ausgewählte Block und der Zielblock besitzten verschiedene Typ.");
+						. _("Fehler beim Verschieben eines Blocks. Der ausgewählte Block und der Zielblock besitzen verschiedene Typen.");
 					return false;
 				}
 			}
@@ -2042,7 +2042,7 @@ function execCommandMoveGroup(){
 			if ($children = $group->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) != $move_mode){
 					$this->msg[$this->itemID] = "msg§"
-						. _("Fehler beim Verschieben eines Block. Der ausgewählte Block und der Zielblock besitzten verschiedene Typ.");
+						. _("Fehler beim Verschieben eines Blocks. Der ausgewählte Block und der Zielblock besitzen verschiedene Typen.");
 					return false;
 				}
 			}
@@ -2051,12 +2051,12 @@ function execCommandMoveGroup(){
 			if ($oldparentID == ROOT_BLOCK){
 			
 				$this->msg[$this->itemID] = "msg§"
-						. _("Fehler beim Verschieben eines Block. Ein Fragenblock kann nicht auf die oberste Ebene verschoben werden.");
+						. _("Fehler beim Verschieben eines Blocks. Ein Fragenblock kann nicht auf die oberste Ebene verschoben werden.");
 					return false;
 			} elseif ($oldparentID == $this->evalID){
 
 				$this->msg[$this->itemID] = "msg§"
-						. _("Fehler beim Verschieben eines Block. Ein Fragenblock kann nicht auf die oberste Ebene verschoben werden.");
+						. _("Fehler beim Verschieben eines Blocks. Ein Fragenblock kann nicht auf die oberste Ebene verschoben werden.");
 					return false;
 			} else {
 			
@@ -2158,7 +2158,7 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 			_("Einen neuen Gruppierungsblock erstellen."),
 			"cmd[AddGroup]");
 	$infotext .= "\n"
-		. _("- einen neuen Gruppierungsblock innherhalb dieses Blockes erstellen, in welchem sie weitere Gruppierungs- oder Fragenblöcke anlegen können.");
+		. _("- einen neuen Gruppierungsblock innerhalb dieses Blockes erstellen, in welchem sie weitere Gruppierungs- oder Fragenblöcke anlegen können.");
    }
 
 	// the new question-group-button
@@ -2170,7 +2170,7 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 			_("Einen neuen Fragenblock mit der ausgewählten Antwortenvorlage erstellen."),
 			"cmd[AddQGroup]");
 	$infotext .= "\n"
-		. _("- einen neuen Fragenblock innherhalb dieses Blockes erstellen. Geben sie dazu bitte einen Antwortenvorlage an, welche für alle Fragen des neuen Fragenblockes verwendet wird.");
+		. _("- einen neuen Fragenblock innherhalb dieses Blockes erstellen. Geben sie dazu bitte eine Antwortenvorlage an, welche für alle Fragen des neuen Fragenblockes verwendet wird.");
    }
 
 	// the move-button
@@ -2424,7 +2424,7 @@ function createTitleInput($mode = ROOT_BLOCK){
 			
 		case QUESTION_BLOCK:
 			$title_label = _("Titel des Fragenblocks");
-			$title_info	 = _("Die Angabe des Titles ist bei einem Fragenblock optional.");
+			$title_info	 = _("Die Angabe des Titels ist bei einem Fragenblock optional.");
 			$group 		 =  new EvaluationGroup($this->itemID);
 			$title 		 = htmlentities ($group->getTitle());
 			$text_label	 = _("Zusätzlicher Text");
@@ -2666,7 +2666,7 @@ function createQuestionFeatures(){
 				$templateTitle));
 	$text = _("Das Zuweisen einer Antwortenvorlage ändert alle Antworten der Fragen dieses Fragenblocks.");
 	if ($templateTitle == NO_TEMPLATE_GROUP)
-		$text .= " "._("Da dieser Fragenblock keine Antwortenvorlage benutzt, würde ein Zuweisen einer Antwortvorlage zum Verlust aller eingegebenen Antworten führen.");
+		$text .= " "._("Da dieser Fragenblock keine Antwortenvorlage benutzt, würde ein Zuweisen einer Antwortenvorlage zum Verlust aller eingegebenen Antworten führen.");
 	
 	$td->addHTMLContent ($this->createImage(EVAL_PIC_HELP,
 		$text));
@@ -2679,7 +2679,7 @@ function createQuestionFeatures(){
 	$td->addHTMLContent ($this->createTemplateSelection($templateID));
 	$td->addContent (" ");
 	$td->addHTMLContent ($this->createButton("zuweisen",
-		_("Eine andere Antwortvorlage für diesen Fragenblock auswählen"),
+		_("Eine andere Antwortenvorlage für diesen Fragenblock auswählen"),
 		"cmd[ChangeTemplate]"));
 		
 	$tr->addContent ($td);
