@@ -52,6 +52,7 @@ function getWikiPage($keyword, $version, $db=NULL) {
 function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 
 	releasePageLocks($keyword); // kill lock that was set when starting to edit
+	$message="";
 	$db=new DB_Seminar;
 	// write changes to db, show new page
 	$latestVersion=getWikiPage($keyword,"");
@@ -60,16 +61,13 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 		$lastchange = $date - $latestVersion[chdate];
 	}
 	if ($latestVersion && ($latestVersion['body'] == $body)) {
-		begin_blank_table();
-		parse_msg("info§" . _("Keine Änderung vorgenommen."));
-		end_blank_table();
+		$message="info§" . _("Keine Änderung vorgenommen.");
 	} else if ($latestVersion && ($version!="") && ($lastchange < 30*60) && ($user_id == $latestVersion[user_id])) {
 		// if same author changes again within 30 minutes,
 		// no new verison is created 
 		$result=$db->query("UPDATE wiki SET body='$body', chdate='$date' WHERE keyword='$keyword' AND range_id='$range_id' AND version='$version'");
 		begin_blank_table();
-		parse_msg("info§" . _("Update ok, keine neue Version, da erneute Änderung innerhalb 30 Minuten."));
-		end_blank_table();
+		$message="info§" . _("Update ok, keine neue Version, da erneute Änderung innerhalb 30 Minuten.");
 	} else {
 		if ($version=="") {
 			$version=0;
@@ -78,12 +76,11 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 		}
 		$date=time();
 		$result=$db->query("INSERT INTO wiki (range_id, user_id, keyword, body, chdate, version) VALUES ('$range_id', '$user_id', '$keyword','$body','$date','$version')");
-		begin_blank_table();
-		parse_msg("info§" . _("Update ok, neue Version angelegt."));
-		end_blank_table(); 
+		$message="info§" . _("Update ok, neue Version angelegt.");
 	}
 
 	refreshBacklinks($keyword, $body);
+	return $message;
 }
 
 /**
@@ -656,9 +653,6 @@ function wikiSeminarHeader() {
 	echo "<tr>";
 	echo "<td class=\"topic\" width=\"100%\">";
 	echo "<b>&nbsp;<img src=\"pictures/icon-wiki.gif\" align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " .  _("Wiki") . "</b></td>";
-	//echo "<td class=\"topic\" width=\"5%\" align=\"right\">";
-	//echo "<a href =\"wiki.php?cmd=anpassen\">";
-	//echo "<img src=\"pictures/pfeillink.gif\" border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a></td></tr>\n";
 	echo "</tr>";
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp; </td></tr>\n";
 	echo "</table>";
@@ -933,7 +927,7 @@ function getDiffPageInfobox($keyword) {
 * 
 * @param	string	WikiPage name
 * @param	string	WikiPage version
-* @param	string	ID of special dialog to be printed (delete, delete_all)
+* @param	string	ID of special dialog to be printed (delete, delete_all) or message string for parse_msg to display
 *
 **/
 function showWikiPage($keyword, $version, $special="") {
@@ -947,6 +941,10 @@ function showWikiPage($keyword, $version, $special="") {
 		$version=showDeleteDialog($keyword, $version);
 	} else if ($special == "delete_all") {
 		showDeleteAllDialog($keyword);
+	} else if ($special) {
+		begin_blank_table();
+		parse_msg($special);
+		end_blank_table();
 	}
 
 	$wikiData = getWikiPage($keyword, $version);
@@ -960,7 +958,7 @@ function showWikiPage($keyword, $version, $special="") {
 
 	if ($perm->have_perm("autor")) { 
 		if (!$latest_version) {
-			$edit="Ältere Version, nicht bearbeitbar!";
+			$edit="<img src=\"pictures/ausruf_small2.gif\"> Ältere Version, nicht bearbeitbar!";
 		} else {
 			$edit="";
 			if ($perm->have_perm("autor")) {
@@ -1033,7 +1031,7 @@ function showDiffs($keyword, $versions_since) {
 	$result = $db->query($q);
 	if ($db->affected_rows() == 0) {
 		begin_blank_table();
-		parse_msg ("info\xa7" . _("Es gibt keine zu vergleichenden Versionen."));
+		parse_msg ("info§" . _("Es gibt keine zu vergleichenden Versionen."));
 		end_blank_table();
 		echo "</td></tr></table></body></html>";
 		die;
