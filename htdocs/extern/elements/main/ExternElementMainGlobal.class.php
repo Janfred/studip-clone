@@ -42,8 +42,9 @@ require_once($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
 
 class ExternElementMainGlobal extends ExternElementMain {
 
-	var $attributes = array("name", "semstart", "semrange", "semswitch",
-			"nameformat", "language", "wholesite", "urlcss", 'copyright', 'author');
+	var $attributes = array('name', 'semstart', 'semrange', 'semswitch',
+			'nameformat', 'language', 'wholesite', 'urlcss', 'copyright', 'author',
+			'defaultadr');
 	
 	/**
 	* Constructor
@@ -70,7 +71,8 @@ class ExternElementMainGlobal extends ExternElementMain {
 			"urlcss" => "",
 			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
 					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
-			"author" => ''
+			"author" => '',
+			"defaultadr" => '0'
 		);
 				
 		return $config;
@@ -161,6 +163,10 @@ class ExternElementMainGlobal extends ExternElementMain {
 		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
+		$title = _("Standard-Adresse:");
+		$info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
+		$table .= $edit_form->editCheckboxGeneric('defaultadr', $title, $info, '1', '0');
+		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");
 		$values = "1";
@@ -200,11 +206,26 @@ class ExternElementMainGlobal extends ExternElementMain {
 				$fault["Main_nameformat"][0] = FALSE;
 			}
 			
+			
+			
 			return $fault;
 		}
 		
 		return FALSE;
 	}	
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == 'defaultadr') {
+			if (!isset($GLOBALS['HTTP_POST_VARS']["Main_$attribute"])) {
+				$GLOBALS['HTTP_POST_VARS']["Main_$attribute"] = 0;
+				return FALSE;
+			}
+				
+			return !($value == '1' || $value == '');
+		}
+		
+		return FALSE;
+	}
 	
 }
 
