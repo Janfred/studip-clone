@@ -212,6 +212,7 @@ if ($view=="listall") {
 	} elseif ($wiki_comments=="icon") {  // show comments as icons
 		$show_wiki_comments="icon";
 	}
+	print "<p>show_wiki_comments=".$show_wiki_comments."</p>";
 	showWikiPage($keyword, $version, $special, $show_wiki_comments);
 
 } // end default action
