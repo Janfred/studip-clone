@@ -1,7 +1,7 @@
 <?php
 /*
-show_admission.php - Instituts-Mitarbeiter-Verwaltung von Stud.IP
-Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>
+show_admission.php - Uebersicht ueber laufende Anmeldeverfahren in Stud.IP
+Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ $db3=new DB_Seminar;
 	<tr>
 		<td class="topic">&nbsp;<b>
 		<?
-		echo "Teilnehmerbeschr&auml;nkte Veranstaltungen";
+		echo _("Teilnehmerbeschr&auml;nkte Veranstaltungen");
 		?></b>
 		</td>
 	</tr>
@@ -57,7 +57,7 @@ $db3=new DB_Seminar;
 			<select name="institut_id" style="vertical-align:middle;">
 				<?
 				if ($perm->have_perm("root"))
-					printf ("<option %s value=\"%s\"> %s</option>", (($institut_id == "all") || (!$institut_id)) ? "selected" :"", "all", "alle");
+					printf ("<option %s value=\"%s\"> %s</option>", (($institut_id == "all") || (!$institut_id)) ? "selected" :"", "all", _("alle"));
 				
 				if ($perm->have_perm("root"))
 					$db3->query("SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
@@ -67,10 +67,10 @@ $db3=new DB_Seminar;
 				while ($db3->next_record()) {
 					printf ("<option %s style=\"%s\" value=\"%s\"> %s</option>", $db3->f("Institut_id") == $institut_id ? "selected" : "",
 						($db3->f("is_fak")) ? "font-weight:bold;" : "", $db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
-					if ($db3->f("is_fak") && $db3->f("inst_perms") == "admin"){
+					if ($db3->f("is_fak") && $db3->f("inst_perms") == "admin") {
 						$db2->query("SELECT a.Institut_id, a.Name FROM Institute a 
 									 WHERE fakultaets_id='" . $db3->f("Institut_id") . "' AND a.Institut_id!='" .$db3->f("Institut_id") . "' ORDER BY Name");
-						while($db2->next_record()){
+						while($db2->next_record()) {
 							printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("Institut_id") == $institut_id ? "selected" : "",
 								$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
 						}
@@ -88,28 +88,28 @@ $db3=new DB_Seminar;
 		<td class="blank"align="center">
 <?
 		if ((($institut_id == "all") || (!$institut_id)) && ($perm->have_perm("root")))
-		  	$query = "SELECT Name, Seminar_id, admission_turnout, admission_endtime FROM seminare WHERE admission_type > 0 ORDER BY Name";
+			$query = "SELECT Name, Seminar_id, admission_turnout, admission_endtime FROM seminare WHERE admission_type > 0 ORDER BY Name";
 		 else
 			$query = "SELECT Name, seminare.Seminar_id, admission_turnout, admission_endtime FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE admission_type > 0 AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY Name";		  
 		$db->query($query);
 		if ($db->nf()) {
 			print ("<table width=\"90%\" border=0 cellspacing=0 cellpadding=2>");
 			print ("<tr>");		
-			echo "<th width=\"40%\">Veranstaltung</th>";
-			echo "<th width=\"10%\">Teilnehmer</th>";
-			echo "<th width=\"10%\">Quota</th>";
-			echo "<th width=\"10%\">Anmeldeliste</th>";
-			echo "<th width=\"10%\">Warteliste</th>";
-			echo "<th width=\"20%\">Datum</th>";
+			echo "<th width=\"40%\">" . _("Veranstaltung") . "</th>";
+			echo "<th width=\"10%\">" . _("Teilnehmer") . "</th>";
+			echo "<th width=\"10%\">" . _("Quota") . "</th>";
+			echo "<th width=\"10%\">" . _("Anmeldeliste") . "</th>";
+			echo "<th width=\"10%\">" . _("Warteliste") . "</th>";
+			echo "<th width=\"20%\">" . _("Datum") . "</th>";
 			echo "</tr>";
 		} elseif ($institut_id) {
 			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2>");
-			parse_msg ("info§Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen§", "§", "steel1",2, FALSE);
+			parse_msg ("info§" . _("Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen.") . "§", "§", "steel1",2, FALSE);
 		}
 		
 	  	while ($db->next_record()) {
 				$seminar_id = $db->f("Seminar_id");
-	  			$query2 = "SELECT * FROM seminar_user WHERE seminar_id='$seminar_id'";
+				$query2 = "SELECT * FROM seminar_user WHERE seminar_id='$seminar_id'";
 				$db2->query($query2);
 				$teilnehmer = $db2->num_rows();
 	  			$cssSw->switchClass();
@@ -129,8 +129,8 @@ $db3=new DB_Seminar;
 				$datum = $db->f("admission_endtime");
 				if ($datum <1)
 					$datum = 1;
-				ECHO "<tr>";
-				printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\"><font size=\"-1\">%s%s</font></a></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td>", 
+				echo "<tr>";
+				printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\"><font size=\"-1\">%s%s</font></a></td><td class=\"%s\" align=\"middle\"><font size=\"-1\">%s</font></td><td class=\"%s\" align=\"middle\"><font size=\"-1\">%s</font></td><td class=\"%s\" align=\"middle\"><font size=\"-1\">%s</font></td><td class=\"%s\" align=\"middle\"><font size=\"-1\">%s</font></td><td class=\"%s\" align=\"middle\"><font size=\"-1\">%s</font></td>", 
 					$cssSw->getClass(), $db->f("Seminar_id"), htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "", $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, $datum < time() ? "steelgroup4" : "steelgroup1", date("d.m.Y, G:i", $datum));	 
 				print ("</tr>");
 			}
