@@ -66,12 +66,19 @@ function list_restore_assign(&$this, $resource_id, $begin, $end, $user_id='', $r
 }
 
 function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FALSE) {
+	static $all_holidays;
 	$year_offset=0;
 	$week_offset=0;
 	$month_offset=0;
 	$day_offset=0;
 	$quantity=0;
 	$temp_ts=0;
+	
+	// fetch all Holidays
+	if (!$all_holidays) {
+		$holiday = new HolidayData;
+		$all_holidays = $holiday->getAllHolidays(); 
+	}
 
 	//if no begin/end-date submitted, we create all the assigns from the given assign-object
 	if (!$begin)
@@ -89,6 +96,7 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 	$ao_r_end = $assign_object->getRepeatEnd();
 	$ao_r_q = $assign_object->getRepeatQuantity();
 	$ao_r_i = $assign_object->getRepeatInterval();
+	$ao_owner_type = $assign_object->getOwnerType();
 	if ($ao_repeat_mode == "na") {
 		// date without repeatation, we have to create only one event (object = event)
 		$assEvt = new AssignEvent($assign_object->getId(), $ao_begin, $ao_end,
@@ -184,22 +192,33 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 		//inc the count
 		$quantity++;
 		
-		//check if we want to show the event and if it is not outdated
-		if (($begin == -1) && ($end == -1) && ($ao_r_q  >0))
-			 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
-										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
-										$assign_object->getUserFreeName());
-		elseif ($temp_ts >= $begin) {
-			 if (($temp_ts <=$end) && ($temp_ts <= $ao_r_end) && (($quantity <= $ao_r_q ) || ($ao_r_q  == -1)))  {
-			 	$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
-										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
-										$assign_object->getUserFreeName());
-				$assEvt->setRepeatMode($ao_repeat_mode);
-				if (!isFiltered($filter, $assEvt->getRepeatMode()))
-					$this->events[] = $assEvt;										
+		//check for holidays (we do this only for repeated assign (means only here) and only for assigns by seminars!))
+		if ($ao_owner_type == "sem") {
+			$holiday_skipping = FALSE;
+			foreach ($all_holidays as $val) {
+				if (($val["beginn"] <= $temp_ts) && ($temp_ts <=$val["ende"]))
+					$holiday_skipping = TRUE;
 			}
 		}
 		
+		if (!$holiday_skipping) {
+			//check if we want to show the event and if it is not outdated
+			if (($begin == -1) && ($end == -1) && ($ao_r_q  >0))
+				 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+											$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
+											$assign_object->getUserFreeName());
+			elseif ($temp_ts >= $begin) {
+				 if (($temp_ts <=$end) && ($temp_ts <= $ao_r_end) && (($quantity <= $ao_r_q ) || ($ao_r_q  == -1)))  {
+				 	$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
+											$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
+											$assign_object->getUserFreeName());
+					$assEvt->setRepeatMode($ao_repeat_mode);
+					if (!isFiltered($filter, $assEvt->getRepeatMode()))
+						$this->events[] = $assEvt;										
+				}
+			}
+		}
+			
 		//security break
 		if ($quantity > 150)
 			break;
