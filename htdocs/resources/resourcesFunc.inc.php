@@ -282,6 +282,46 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 	return $my_objects;
 }
 
+/*
+* search_my_objects
+*
+* this Funktion searches all my objects (only them with autor perms).
+* the function works as an addition to the search administrable objects
+* function above
+*
+* @param	string	a search string, that could be used
+* @param	string	the user_id
+* @param	boolean	should seminars searched`?
+* @return 	array
+*
+**/
+function search_my_objects ($search_string='', $user_id='', $sem=TRUE) {
+	global $user, $perm, $auth, $_fullname_sql;
+
+	$db = new DB_Seminar;
+	
+	if (!$user_id)
+		$user_id = $user->id;
+		
+	if (!$search_string)
+		$search_string = "_";
+
+	//Alle meine Seminare
+	if ($sem) {
+		$db->query("SELECT seminare.Seminar_id, Name FROM seminar_user LEFT JOIN seminare USING (seminar_id) WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string') AND seminar_user.status = 'autor'  AND seminar_user.user_id='$user_id' ORDER BY Name");
+		while ($db->next_record())
+			$my_objects[$db->f("Seminar_id")]=array("name"=>$db->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "autor");
+	}
+	
+	//Alle meine Institute...
+	$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms = 'autor' AND user_inst.user_id='$user_id' ORDER BY Name");
+	while ($db->next_record())
+		$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "autor");
+
+	return $my_objects;
+}
+
+
 /*****************************************************************************
 search_admin_user searches in all the admins
 /*****************************************************************************/

@@ -101,7 +101,7 @@ else {
 				
 				"topic" => $this->elements["ContentNews"]->toString(array("content" =>
 									array("topic" => htmlReady($db->f("topic")),
-									"body" => FixLinks(format(htmlReady($content))))))
+									"body" => formatReady($content, TRUE, TRUE, TRUE))))
 		);
 		
 		$this->elements["TableRow"]->printout($data);
