@@ -131,7 +131,7 @@ if ($msg)
 // hier wird das Bild ausgegeben
 
 	if(!file_exists("./user/".$user_id.".jpg")) {
-		echo "&nbsp;<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip("kein persönliches Bild vorhanden").">";
+		echo "&nbsp;<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip(_("kein persönliches Bild vorhanden")).">";
 	} else {
 		?>&nbsp;<img src="./user/<?echo $user_id; ?>.jpg" border=1 <?=tooltip($db->f("fullname"));?>></td><?
 	}
@@ -140,20 +140,20 @@ if ($msg)
 	?>
     <td class="steel1"  width="99%" valign ="top" rowspan=2><br><blockquote>
     <? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br><br>";?>
-    <? echo "<b>&nbsp;e-mail: </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
-		IF ($db->f("privatnr")!="") echo "<b>&nbsp;Telefon (privat): </b>". htmlReady($db->f("privatnr"))."<br>";
-		IF ($db->f("privadr")!="") echo "<b>&nbsp;Adresse (privat): </b>". htmlReady($db->f("privadr"))."<br>";
+    <? echo "<b>&nbsp;" . _("e-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
+		IF ($db->f("privatnr")!="") echo "<b>&nbsp;" . _("Telefon (privat):") . " </b>". htmlReady($db->f("privatnr"))."<br>";
+		IF ($db->f("privadr")!="") echo "<b>&nbsp;" . _("Adresse (privat):") . " </b>". htmlReady($db->f("privadr"))."<br>";
 		IF ($db->f("Home")!="") {
 			$home=$db->f("Home");
 			$home=FixLinks($home);
-			echo "<b>&nbsp;Homepage: </b>".$home."<br>";
+			echo "<b>&nbsp;" . _("Homepage:") . " </b>".$home."<br>";
 		}
 
 // Anzeige der Institute an denen (hoffentlich) studiert wird:
 
     $db3->query("SELECT Institute.* FROM user_inst LEFT JOIN Institute  USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms = 'user'");
     IF ($db3->num_rows()) {
-			echo "<br><b>&nbsp;Wo ich studiere:&nbsp;&nbsp;</b><br>";
+			echo "<br><b>&nbsp;" . _("Wo ich studiere:") . "&nbsp;&nbsp;</b><br>";
       while ($db3->next_record()) {
       	echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$db3->f("Institut_id")."\">".htmlReady($db3->f("Name"))."</a><br>";
     	}
@@ -163,7 +163,7 @@ if ($msg)
 
 		$db3->query("SELECT a.*,b.Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms != 'user'");
 		IF ($db3->num_rows()) {
-			echo "<br><b>&nbsp;Wo ich arbeite:&nbsp;&nbsp;</b><br>";
+			echo "<br><b>&nbsp;" . _("Wo ich arbeite:") . "&nbsp;&nbsp;</b><br>";
 		}
 
    //schleife weil evtl. mehrere sprechzeiten und institut nicht gesetzt...
@@ -177,13 +177,13 @@ if ($msg)
 			}
 			echo "<font size=-1>";
 			IF ($db3->f("raum")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Raum: </b>", htmlReady($db3->f("raum"));
+				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Raum:") . " </b>", htmlReady($db3->f("raum"));
 			IF ($db3->f("sprechzeiten")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Sprechzeit: </b>", htmlReady($db3->f("sprechzeiten"));
+				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Sprechzeit:") . " </b>", htmlReady($db3->f("sprechzeiten"));
 			IF ($db3->f("Telefon")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Telefon: </b>", htmlReady($db3->f("Telefon"));
+				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Telefon:") . " </b>", htmlReady($db3->f("Telefon"));
 			IF ($db3->f("Fax")!="")
-				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Fax: </b>", htmlReady($db3->f("Fax"));
+				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax:") . " </b>", htmlReady($db3->f("Fax"));
 
 			echo "</font><br>";
 		}
@@ -196,23 +196,23 @@ if ($msg)
 
 	if ($username==$auth->auth["uname"]) {
 		if ($auth->auth["jscript"])
-			echo "<br>&nbsp; <a href='javascript:open_im();'>Stud.IP Messenger starten</a>";
+			echo "<br>&nbsp; <a href='javascript:open_im();'>" . _("Stud.IP Messenger starten") . "</a>";
 		} else {
-	        	echo "<br>&nbsp; Nachricht an User: <a href=\"sms.php?sms_source_page=about.php&username=$username&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=0 align=texttop></a>";
+	        	echo "<br>&nbsp; " . _("Nachricht an User:") . " <a href=\"sms.php?sms_source_page=about.php&username=$username&cmd=write&rec_uname=", $db->f("username"),"\"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Nachricht an User verschicken")) . " border=0 align=texttop></a>";
 			if (!$my_buddies[$username])
-				echo "<br />&nbsp; <a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">Zu Buddies hinzuf&uuml;gen</a>";
+				echo "<br />&nbsp; <a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("Zu Buddies hinzuf&uuml;gen") . "</a>";
 		}
     	
 
 /// Die Anzeige der Stud.Ip-Score
 
 		IF ($username==$auth->auth["uname"])
-			echo "<br /><br />&nbsp; <a href='score.php' alt='Zur Highscoreliste'>Ihre Stud.IP-Score: ".getscore()."<br>&nbsp; Ihr Rang: ".gettitel(getscore())."</a>";
+			echo "<br /><br />&nbsp; <a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . ">" . _("Ihre Stud.IP-Score:") . " ".getscore()."<br>&nbsp; " . _("Ihr Rang:") . " ".gettitel(getscore())."</a>";
 		else {
 			$db2->query("SELECT score FROM user_info WHERE score > 0  AND user_id = '$user_id'");
 			if ($db2->num_rows()) {
 				while ($db2->next_record())
-					echo "<br /><br />&nbsp; <a href='score.php'>Stud.IP-Score: ".$db->f("score")."<br>&nbsp; Rang: ".gettitel($db->f("score"))."</a>";
+					echo "<br /><br />&nbsp; <a href='score.php'>" . _("Stud.IP-Score:") . " ".$db->f("score")."<br>&nbsp; " . _("Rang:") . " ".gettitel($db->f("score"))."</a>";
 			}
 		}
 
@@ -237,28 +237,28 @@ if ($msg)
 // Hier wird der Lebenslauf ausgegeben:
 
 	if ($db->f("lebenslauf")!="") {
-    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Lebenslauf </b></td></tr>");
+		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Lebenslauf") . " </b></td></tr>";
 		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("lebenslauf")));
 	}
 
 // Ausgabe Hobbys
 
 	if ($db->f("hobby")!="") {
-    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Hobbies </b></td></tr>");
+		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Hobbies") . " </b></td></tr>");
 		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("hobby")));
 	}
 
 //Ausgabe von Publikationen
 
 	if ($db->f("publi")!="") {
-    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Publikationen </b></td></tr>");
+		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Publikationen") . " </b></td></tr>";
 		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("publi")));
 	}
 
 // Ausgabe von Arbeitsschwerpunkten
 
 	if ($db->f("schwerp")!="") {
-    printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Arbeitsschwerpunkte </b></td></tr>");
+		echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Arbeitsschwerpunkte") . " </b></td></tr>";
 		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("schwerp")));
 	}
 
@@ -280,7 +280,7 @@ if ($msg)
 
 	$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING(Seminar_id) WHERE seminar_user.user_id = '$user_id' AND seminar_user.status = 'dozent' ORDER BY start_time DESC");
 	if ($db2->num_rows()) {
-		echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;Veranstaltungen</b></td></tr><tr><td class=\"steel1\"><blockquote>";
+		echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Veranstaltungen") . "</b></td></tr><tr><td class=\"steel1\"><blockquote>";
 		while ($db2->next_record()) {
 			if (($sem_name) <> (get_sem_name ($db2->f("start_time")))) {
 				$sem_name=get_sem_name ($db2->f("start_time"));
