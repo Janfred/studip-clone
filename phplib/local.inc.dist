@@ -107,6 +107,9 @@ $STUDIP_AUTH_CONFIG_LDAP = array(	"host" => "localhost",
 
 												
 */
+//should it be possible for an user to register himself (you MUST enable Standard authentication-plugin to use this!)
+$ENABLE_SELF_REGISTRATION = true;
+
 
 /*Stud.IP modules
 ----------------------------------------------------------------
