@@ -111,7 +111,8 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 					while ($db->next_record()) {
 						$tmp_room='';
 						if ($RESOURCES_ENABLE) {
-							if ($assigned_room = getDateAssigenedRoom($db->f("termin_id"))) {
+							$assigned_room = getDateAssigenedRoom($db->f("termin_id"));
+							if ($assigned_room) {
 								$resObj = new ResourceObject($assigned_room);
 								if ($link)
 									$tmp_room .= $resObj->getFormattedLink();
@@ -145,7 +146,8 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 			$db->next_record();
 
 			if ($RESOURCES_ENABLE) {
-				if ($assigned_room = getDateAssigenedRoom($range_id)) {
+				$assigned_room = getDateAssigenedRoom($range_id);
+				if ($assigned_room) {
 					$resObj = new ResourceObject($assigned_room);
 					if ($link)
 						$tmp_room .= $resObj->getFormattedLink($db->f("date"));
