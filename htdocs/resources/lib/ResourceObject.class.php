@@ -370,13 +370,13 @@ class ResourceObject {
 				return $PHP_SELF;
 			break;
 			case "user":
-				return  sprintf ("about?username=%s",get_username($id));
+				return  sprintf ("about.php?username=%s",get_username($id));
 			break;
 			case "inst":
-				return  sprintf ("institut_main?auswahl=%s",$id);
+				return  sprintf ("institut_main.php?auswahl=%s",$id);
 			break;
 			case "sem":
-				return  sprintf ("seminar_main?auswahl=%s",$id);
+				return  sprintf ("seminar_main.php?auswahl=%s",$id);
 			break;
 		}
 	}
