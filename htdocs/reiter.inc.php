@@ -31,6 +31,7 @@ class reiter {
 	var $activeBottomkatPic="pictures/forumrot.gif";			//Aktiver Pfeil
 	var $inactiveBottomkatPic="pictures/forumgrau.gif";		//Inaktiver Pfeil
 	var $bottomPic="pictures/reiter3.jpg";			//Unterer Abschluss
+	var $noAktiveBottomkat=FALSE;				//Wenn trotz bestimmtem View kein Unterktagorie markiert sein soll (wird durch "(view)" erreicht) 
 	
 	
 	function topkatStart() {
@@ -78,7 +79,7 @@ class reiter {
 	}
 
 	function bottomkat($text,$link,$active=FALSE, $target="") {
-		if ($active)
+		if (($active) && (!$this->noAktiveBottomkat))
 			printf("<img src=\"%s\" border=\"0\"><a class=\"%s\" target=\"%s\" href=\"%s\">%s&nbsp; &nbsp; </a>\n",
 				$this->activeBottomkatPic, $this->classActive, $target, $link, $text);
 		else
@@ -144,7 +145,16 @@ class reiter {
 		$this->bottomkatCloseRow();
 	}
 	
+	function setNoAktiveBottomkat($view) {
+		if ((substr ($view, 0, 1) == "(") && (substr ($view,strlen($view)-1, strlen($view)) == ")")) {
+			$this->noAktiveBottomkat=TRUE;
+			$view=substr($view, 1, strlen($view)-2);
+		}
+		return $view;
+	}
+	
 	function create($structure, $view, $tooltip='', $addText='') {
+		$view=$this->setNoAktiveBottomkat($view);
 		$structure=$this->activateStructure ($structure, $view);
 		$this->printStructure($structure, $tooltip, $addText);
 	}
