@@ -52,7 +52,7 @@ $sess->register("resources_data");
 $globalPerm = getGlobalPerms($this->user_id);
 $msg = new Msg;
 $db=new DB_Seminar;
-
+$db2=new DB_Seminar;
 
 /*****************************************************************************
 Kopf der Ausgabe
