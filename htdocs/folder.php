@@ -71,7 +71,7 @@ if ((!$rechte) && strpos($open, "_")) {
 
 if (($rechte) || ($owner)) {
 	//wurde Code fuer Anlegen von Ordnern ubermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
-	if (strpos($open, "_n_")) {
+	if ((strpos($open, "_n_")) && (!$cancel_x)) {
 		$change=create_folder(_('Neuer Ordner'), '', substr($open, (strpos($open, "_n_"))-32, (strpos($open, "_n_"))));
 		$open=$change;
 		}
