@@ -212,12 +212,12 @@ class RoomRequest {
 	function searchRooms($search_exp, $properties = FALSE, $limit = 0, $only_rooms = TRUE, $permitted_resources = FALSE) {
 		//create permitted resource clause
 		if (is_array($permitted_resources)) {
-			$permitted_resources_clause="AND resource_id IN ('".join("','",$permitted_resources)."')";
+			$permitted_resources_clause="AND a.resource_id IN ('".join("','",$permitted_resources)."')";
 		}
 
 		//create the query
 		if ($search_exp && !$properties)
-			$query = sprintf ("SELECT b.resource_id, b.name FROM resources_categories a LEFT JOIN resources_objects b USING (category_id) WHERE 1 %s AND b.name LIKE '%%%s%%' %s ORDER BY b.name", ($only_rooms) ? "AND is_room = '1'" : "", $search_exp, $permitted_resources_clause);
+			$query = sprintf ("SELECT a.resource_id, a.name FROM resources_objects a %s WHERE a.name LIKE '%%%s%%' %s ORDER BY a.name", ($only_rooms) ? "INNER JOIN resources_categories b ON (a.category_id=b.category_id AND is_room = 1)" : "", $search_exp, $permitted_resources_clause);
 
 		//create the very complex query for room search AND room propterties search...	
 		if ($properties) {
