@@ -52,7 +52,7 @@ function return_val_from_key($array, $key) {
 	return $array[$key];
 }
 
-function MessageIcon ($message_hovericon) {
+function MessageIcon($message_hovericon) {
 	global $my_messaging_settings, $PHP_SELF, $auth, $forum;
 	if ($auth->auth["jscript"] AND $message_hovericon["content"]!="" && $message_hovericon["openclose"]=="close" &&  $forum["jshover"] == "1") {
 		$hovericon = "<a href=\"javascript:void(0);\" "
@@ -79,37 +79,18 @@ function count_x_messages_from_user($snd_rec, $folder, $where="") {
 	} else {
 		$tmp_snd_rec = $snd_rec;
 	}
-	if (!$uer_id) {
-		$user_id = $user->id;
-	}
-	$x = "0";
+	$user_id = $user->id;
 	if ($folder == "all") {
 		$folder_query = "";
 	} else {
-		$folder_query = " AND message_user.folder = '".$folder."'";
+		$folder_query = " AND message_user.folder = " . $folder;
 	}
-	/*
-	$query = "SELECT message_user.message_id, message.mkdate
-		FROM message_user 
-			LEFT JOIN message using(message_id)
-		WHERE message_user.snd_rec = '".$tmp_snd_rec."'
-			AND message_user.user_id = '".$user_id."' 
-			AND message_user.deleted = '0'
-			".$folder_query."
-			".$where;
-	$db->query($query);
-	while ($db->next_record()) {
-		$x = $x+1;
-	}
-	return $x;
-	*/
-	
 	$query = "SELECT COUNT(*)
 		FROM message_user 
 			LEFT JOIN message using(message_id)
 		WHERE message_user.snd_rec = '".$tmp_snd_rec."'
 			AND message_user.user_id = '".$user_id."' 
-			AND message_user.deleted = '0'
+			AND message_user.deleted = 0
 			".$folder_query . $where;
 	$db->query($query);
 	$db->next_record();
@@ -127,28 +108,12 @@ function count_messages_from_user($snd_rec, $where="") {
 	} else {
 		$tmp_snd_rec = $snd_rec;
 	}
-	if (!$uer_id) {
-		$user_id = $user->id;
-	}
-	$x = "0";
-	/*
-	$query = "SELECT DISTINCT message_id
-		FROM message_user 
-		WHERE snd_rec = '".$tmp_snd_rec."'
-			AND user_id = '".$user_id."' 
-			AND deleted = '0'
-			".$where;
-	$db->query($query);
-	while ($db->next_record()) {
-		$x = $x+1;
-	}
-	return $x;
-	*/
+	$user_id = $user->id;
 	$query = "SELECT COUNT(*)
 		FROM message_user 
 		WHERE snd_rec = '".$tmp_snd_rec."'
 			AND user_id = '".$user_id."' 
-			AND deleted = '0'
+			AND deleted = 0
 			".$where;
 	$db->query($query);
 	$db->next_record();
@@ -217,14 +182,6 @@ function print_snd_message($psm) {
 
 	// make message_header
 	$x = $psm['num_rec']; // how many receivers are there?
-	/*
-	$x = "0"; // how many receivers are there?
-	$query = "SELECT COUNT(message_id) as tmp_count_msg FROM message_user WHERE message_id = '".$psm['message_id']."' AND snd_rec = 'rec'";
-	$db7->query($query);
-	while ($db7->next_record()) {
-		$x = $db7->f("tmp_count_msg");
-	}
-	*/
 	if ($psm['dont_delete'] == "1") { // disable the checkbox if message is locked
 		$tmp_cmd = "open_selected";
 		$tmp_picture = "closelock2";
@@ -239,16 +196,6 @@ function print_snd_message($psm) {
 
 	$zusatz = "<font size=-1>";
 	if ($x == 1) { // if only one receiver
-		/*
-		$query = "SELECT auth_user_md5.user_id, auth_user_md5.vorname, auth_user_md5.nachname, auth_user_md5.username FROM message_user LEFT JOIN auth_user_md5 USING(user_id) WHERE message_user.message_id = '".$psm['message_id']."' AND message_user.snd_rec = 'rec'";
-		$db7->query($query);
-		while ($db7->next_record()) {
-			$tmp['rec_userid'] = $db7->f("user_id");
-			$tmp['username'] = $db7->f("username");
-			$tmp['vorname'] = $db7->f("vorname");
-			$tmp['nachname'] = $db7->f("nachname");
-		}
-		*/
 		$zusatz .= sprintf(_("an %s, %s"), "</font><a href=\"about.php?username=".$psm['rec_uname']."\"><font size=-1 color=\"#333399\">".$psm['rec_vorname']."&nbsp;".$psm['rec_nachname']."</font></a><font size=-1>", date("d.m.y, H:i",$psm['mkdate']));
 		$zusatz .= "&nbsp;";
 		if (have_msgfolder($sms_data['view']) == TRUE) {
@@ -469,7 +416,10 @@ function print_messages() {
 	$n = 0;
 	$user_id = $user->id;
 	if ($sms_data['view'] == "in") { // postbox in
-		$query = "SELECT message.*, message_user.*, auth_user_md5.* FROM message_user LEFT JOIN message USING (message_id) LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id) LEFT JOIN user_info USING(user_id) WHERE message_user.user_id = '".$user_id."' AND message_user.snd_rec = 'rec' AND message_user.deleted = '0' ".$query_movetofolder." ".$query_showfolder." ".$query_time;
+		$query = "SELECT message.*, message_user.*, auth_user_md5.* FROM message_user
+				LEFT JOIN message USING (message_id) LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id)
+				WHERE message_user.user_id = '".$user_id."' AND message_user.snd_rec = 'rec'
+				AND message_user.deleted = 0 ".$query_movetofolder." ".$query_showfolder." ".$query_time;
 		$db->query($query);		
 		while ($db->next_record()) {
 			$count = ($count-1);
@@ -500,7 +450,7 @@ function print_messages() {
 					LEFT JOIN message USING (message_id)
 					LEFT JOIN message_user as mu ON(message.message_id = mu.message_id AND mu.snd_rec = 'rec')
 					LEFT JOIN auth_user_md5 USING (user_id)  WHERE message_user.user_id = '".$user_id."' 
-					AND message_user.snd_rec = 'snd' AND message_user.deleted = '0' "
+					AND message_user.snd_rec = 'snd' AND message_user.deleted = 0 "
 					.$query_movetofolder." ".$query_showfolder. $query_time_sort . " GROUP BY (message_user.message_id) ORDER BY message.mkdate DESC");
 		while ($db->next_record()) {
 			$count = ($count-1);

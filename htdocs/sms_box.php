@@ -325,28 +325,28 @@ if ($sms_data["time"] == "all") {
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);		
 } else if ($sms_data["time"] == "new") {
 	if ($sms_data["view"] == "in") {
-		$query_time = " AND message.mkdate > '".$LastLogin."' ORDER BY message.mkdate DESC";
-		$query_time_sort = " AND message.mkdate > '".$LastLogin."'";
+		$query_time = " AND message.mkdate > ".$LastLogin." ORDER BY message.mkdate DESC";
+		$query_time_sort = " AND message.mkdate > ".$LastLogin;
 	} else {
-		$query_time = " AND message.mkdate > '".$CurrentLogin."' ORDER BY message.mkdate DESC";
-		$query_time_sort = " AND message.mkdate > '".$CurrentLogin."'";
+		$query_time = " AND message.mkdate > ".$CurrentLogin." ORDER BY message.mkdate DESC";
+		$query_time_sort = " AND message.mkdate > ".$CurrentLogin;
 	}
 	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "24h") {
-	$query_time = " AND message.mkdate > '".(date("U")-86400)."' ORDER BY message.mkdate DESC";
-	$query_time_sort = " AND message.mkdate > '".(date("U")-86400)."'";
+	$query_time = " AND message.mkdate > ".(date("U")-86400)." ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate > ".(date("U")-86400);
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s aus den letzten 24 Stunden %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "7d") {
-	$query_time = " AND message.mkdate > '".(date("U")-(7*86400))."' ORDER BY message.mkdate DESC";
-	$query_time_sort = " AND message.mkdate > '".(date("U")-(7*86400))."'";
+	$query_time = " AND message.mkdate > ".(date("U")-(7*86400))." ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate > ".(date("U")-(7*86400));
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s aus den letzten 7 Tagen %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "30d") {
-	$query_time = " AND message.mkdate > '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
-	$query_time_sort = " AND message.mkdate > '".(date("U")-(30*86400))."'";
+	$query_time = " AND message.mkdate > ".(date("U")-(30*86400))." ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate > ".(date("U")-(30*86400));
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s aus den letzten 30 Tagen %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "older") {
-	$query_time = " AND message.mkdate < '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
-	$query_time_sort = " AND message.mkdate < '".(date("U")-(30*86400))."'";
+	$query_time = " AND message.mkdate < ".(date("U")-(30*86400))." ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate < ".(date("U")-(30*86400));
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor, die &auml;lter als 30 Tage sind."), $infotext_folder, $no_message_text_box);
 }
 
