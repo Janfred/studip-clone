@@ -49,10 +49,10 @@ $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";
 $EXTERN_MODULE_TYPES[1] = array("module" => "Download", "name" => _("Download"), "level" => 1,
 													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."));
 
-/*$EXTERN_MODULE_TYPES[2] = array("module" => "Persons", "name" => _("Personal"), "level" => 1,
+$EXTERN_MODULE_TYPES[2] = array("module" => "Persons", "name" => _("Personal"), "level" => 1,
 													"description" => _("Das Modul &quot;Personal&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[3] = array("module" => "Lectures", "name" => _("Veranstaltungen"), "level" => 1,
+/*$EXTERN_MODULE_TYPES[3] = array("module" => "Lectures", "name" => _("Veranstaltungen"), "level" => 1,
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 
 $EXTERN_MODULE_TYPES[4] = array("module" => "News", "name" => _("News"), "level" => 1,
