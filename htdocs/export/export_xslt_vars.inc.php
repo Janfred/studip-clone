@@ -102,7 +102,7 @@ $xslt_files["pdf-liste"]["name"] = _("Vorlesungsverzeichnis");
 $xslt_files["pdf-liste"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungsverzeichnis im Adobe PDF-Format. Die Grunddaten der Veranstaltungen (DozentInnen, Titel, Status, erster Termin und Raum) werden in einer Tabelle angezeigt. Es wird automatisch ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem Acrobat Reader gelesen werden.");
 $xslt_files["pdf-liste"]["file"] = "pdf-v-3.xsl";
 $xslt_files["pdf-liste"]["fo"] = true;
-$xslt_files["pdf-liste"]["veranstaltung"] = true;
+//$xslt_files["pdf-liste"]["veranstaltung"] = true;
 /*
 $xslt_files["pdf-kommentar2"]["name"] = _("Vorlesungskommentar, Layout 2");
 $xslt_files["pdf-kommentar2"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. 
