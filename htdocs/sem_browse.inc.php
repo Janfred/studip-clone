@@ -662,7 +662,7 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 			$db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'");
 			if ($db2->next_record() ){
 				$mein_status = $db2->f("status");
-			}	else {
+			} else {
 				unset ($mein_status);
 			}
 			
@@ -686,6 +686,11 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 						else
 							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 					break;
+					case 3:
+						if ($perm->have_perm("autor"))
+							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp; ";
+						else
+							echo"<td class=\"$class\" align=center><img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp; ";
 				}
 			}
 
@@ -708,11 +713,16 @@ if (($sem_browse_data["level"]=="s") || ($sem_browse_data["level"]=="sbb"))
 						else
 							echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
 					break;
+					case 3:
+						if ($perm->have_perm("autor"))
+							echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\"></td>";
+						else
+							echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\"></td>";
 				}
 			}
 			echo "<td class=\"$class\" align=\"center\"><font size=-1>";
-			// Meinen Status ausgeben
-			if ($mein_status){
+			//Meinen Status ausgeben
+			if ($mein_status) {
 				echo $mein_status;
 			} else {
 				echo "&nbsp;";
