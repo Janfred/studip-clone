@@ -101,8 +101,9 @@ foreach ($order as $position) {
 						$data["fullname"] = _("Dr. Peter Meyer");
 						break;
 				}
+				$data['instfunction'] = _("HochschullehrerIn");
 				$data["Name"] = _("Mustereinrichtung");
-				$data["Strasse"] = _("Musterstra&szlig;e");
+				$data["Strasse"] = _("Musterstra&szlig;e 23");
 				$data["Plz"] = _("12345 Musterstadt");
 				$data["raum"] = "A 123";
 				$data["Telefon"] = "213 - 237 192";
@@ -406,12 +407,14 @@ function head (&$this, $data, $a) {
 	
 	echo "<tr><td width=\"100%\">\n";
 	echo "<table" . $this->config->getAttributes("PersondetailsHeader", "table") . ">\n";
-	echo "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
-	echo "<td$colspan width=\"100%\"";
-	echo $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
-	echo "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
-	echo $data["fullname"];
-	echo "</font></td></tr>\n";
+	if (!$this->config->getValue('PersondetailsHeader', 'hidename')) {
+		echo "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
+		echo "<td$colspan width=\"100%\"";
+		echo $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
+		echo "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
+		echo $data["fullname"];
+		echo "</font></td></tr>\n";
+	}
 	
 	if ($this->config->getValue("Main", "showimage")
 			|| $this->config->getValue("Main", "showcontact")) {
@@ -441,12 +444,21 @@ function head (&$this, $data, $a) {
 		}
 		
 		echo "</tr>\n";
+		if ($this->config->getValue('Main', 'showcontact')
+				&& $this->config->getValue('Contact', 'separatelinks')) {
+			echo "<tr><td";
+			if ($this->config->getValue('Main', 'showimage'))
+				echo ' colspan="2"';
+			echo $this->config->getAttributes('PersondetailsHeader', 'contacttd') . ">\n";
+			echo kontakt($this, $data, TRUE);
+			echo "</td></tr>\n";
+		}
 	}
 	
 	echo "</table>\n</td></tr>\n";
 }
 
-function kontakt (&$this, $data) {
+function kontakt (&$this, $data, $separate = FALSE) {
 	$attr_table = $this->config->getAttributes("Contact", "table");
 	$attr_tr = $this->config->getAttributes("Contact", "table");
 	$attr_td = $this->config->getAttributes("Contact", "td");
@@ -454,28 +466,35 @@ function kontakt (&$this, $data) {
 	$attr_fontcontent = $this->config->getAttributes("Contact", "fontcontent");
 	
 	$out = "<table$attr_table>\n";
-	$out .= "<tr$attr_tr>";
-	$out .= "<td colspan=\"2\"$attr_td>";
-	$out .= "<font$attr_fonttitle>";
-	if ($headline = $this->config->getValue("Contact", "headline"))
-		$out .= "$headline<br><br></font>\n";
-	else
-		$out .= "<br></font>\n";
-	
-	$out .= "<font$attr_fontcontent>";
-	$out .= $data["fullname"] . "<br>\n";
-	
-	$out .= "<br>";
-	$out .= "<a href=\"\">";
-	$out .= $data["Name"] . "</a>";
-	if ($this->config->getValue("Contact", "adradd"))
-		$out .= "<br>" . $this->config->getValue("Contact", "adradd");
-	
-	$out .= "<br><br>" . $data["Strasse"];
-	$out .= "<br>" . $data["Plz"];
-	
-  $out .= "<br><br></font></td></tr>\n";
-	
+	if (!$separate) {
+		$out .= "<tr$attr_tr>";
+		$out .= "<td colspan=\"2\"$attr_td>";
+		$out .= "<font$attr_fonttitle>";
+		if ($headline = $this->config->getValue("Contact", "headline"))
+			$out .= "$headline</font>\n";
+		else
+			$out .= "</font>\n";
+		$out .= "<font$attr_fontcontent>";
+		
+		if (!$this->config->getValue("Contact", "hidepersname"))
+			$out .= "<br><br>" . $data["fullname"] . "\n";
+		if ($this->config->getValue('Contact', 'showinstgroup'))
+			$out .= "<br>{$data['instfunction']}\n";
+		
+		if ($this->config->getValue("Contact", "hideinstname") != '1') {
+			if ($this->config->getValue("Contact", "hideinstname") == 'link')
+				$out .= "<br><br><a href=\"\">" . $data["Name"] . "</a><br>";
+			else
+				$out .= "<br><br>" . $data["Name"] . "<br>";
+		}
+		if ($this->config->getValue("Contact", "adradd"))
+			$out .= "<br>" . $this->config->getValue("Contact", "adradd");
+		
+		$out .= "<br><br>" . $data["Strasse"];
+		$out .= "<br>" . $data["Plz"];
+		
+	  $out .= "<br><br></font></td></tr>\n";
+	}
 	$order = $this->config->getValue("Contact", "order");
 	$visible = $this->config->getValue("Contact", "visible");
 	$alias_contact = $this->config->getValue("Contact", "aliases");
@@ -483,66 +502,41 @@ function kontakt (&$this, $data) {
 		if (!$visible[$position])
 			continue;
 		$data_field = $this->data_fields["contact"][$position];
-	  if($data_field == "raum"){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-	    $out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-   	  $out .= $data["raum"] . "</font></td></tr>\n";
-    }
-
-	  if($data_field == "Telefon"){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-   	  $out .= $data["Telefon"] . "</font></td></tr>\n";
-	  }
-    
-   	if($data_field == "Fax"){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= $data["Fax"] . "</font></td></tr>\n";
-	  }
-           	
-	  if($data_field == "Email"){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= "<a href=\"mailto:$mail\">{$data['Email']}</a></font></td></tr>\n";
+		switch ($data_field) {
+			case 'Email' :
+				if ($separate || !$this->config->getValue('Contact', 'separatelinks')) {
+					$out .= "<tr$attr_tr>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fonttitle>";
+					$out .= $alias_contact[$position] . "</font></td>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fontcontent>";
+					$out .= "<a href=\"mailto:{$data['Email']}\">{$data['Email']}</a>";
+				}
+				break;
+			case 'Home' :
+				if ($separate || !$this->config->getValue('Contact', 'separatelinks')) {
+					$out .= "<tr$attr_tr>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fonttitle>";
+					$out .= $alias_contact[$position] . "</font></td>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fontcontent>{$data['Home']}";
+				}
+				break;
+			default:
+				if (!$separate) {
+					$out .= "<tr$attr_tr>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fonttitle>";
+					$out .= $alias_contact[$position] . "</font></td>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fontcontent>{$data[$data_field]}";
+				}
 		}
-        	
-		if($data_field == "Home"){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= $data["home"] . "</font></td></tr>\n";
-		}
-			
-		if($data_field == "sprechzeiten"){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= $data["sprechzeiten"] . "</font></td></tr>\n";
-		}
+		$out .= "</font></td></tr>\n";
 	}
+	
 	$out .= "</table>\n";
 	
 	return $out;

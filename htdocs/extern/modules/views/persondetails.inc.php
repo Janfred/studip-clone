@@ -3,6 +3,7 @@
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/SemesterData.class.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
+require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "statusgruppe.inc.php");
 require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
 		. "/lib/extern_functions.inc.php");
 if ($GLOBALS["CALENDAR_ENABLE"]) {
@@ -34,7 +35,7 @@ $db_inst->query("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui US
 	          ."WHERE i.Institut_id = '$instituts_id' AND aum.username = '$username'");
 
 // Mitarbeiter/in am Heimatinstitut des Seminars
-if(!$db_inst->num_rows() && $sem_id){
+if (!$db_inst->num_rows() && $sem_id) {
 	$db_inst->query("SELECT s.Institut_id FROM seminare s LEFT JOIN user_inst ui USING(Institut_id) "
 	               ."LEFT JOIN auth_user_md5 aum USING(user_id) WHERE s.Seminar_id = '$sem_id' "
 								 ."AND aum.username = '$username' AND ui.inst_perms = 'dozent'");
@@ -43,7 +44,7 @@ if(!$db_inst->num_rows() && $sem_id){
 }
 
 // an beteiligtem Institut Dozent(in)
-if(!$db_inst->num_rows() && $sem_id){
+if (!$db_inst->num_rows() && $sem_id) {
 	$db_inst->query("SELECT si.institut_id FROM seminare s LEFT JOIN seminar_inst si ON(s.Seminar_id = si.seminar_id) "
 	               ."LEFT JOIN user_inst ui ON(si.institut_id = ui.Institut_id) LEFT JOIN auth_user_md5 aum "
 								 ."USING(user_id) WHERE s.Seminar_id = '$sem_id' AND si.institut_id != '$instituts_id' "
@@ -53,17 +54,22 @@ if(!$db_inst->num_rows() && $sem_id){
 }
 
 // ist zwar global Dozent, aber an keinem Institut eingetragen
-if(!$db_inst->num_rows() && $sem_id){
+if (!$db_inst->num_rows() && $sem_id) {
 	$query = "SELECT aum.*, ";
 	$query .= $_fullname_sql[$nameformat] . " AS fullname ";
 	$query .= "FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) ";
 	$query .= "WHERE username = '$username' AND perms = 'dozent'";
 	$db->query($query);
 }
+elseif ($this->config->getValue('Contact', 'defaultadr')) {
+	$db->query($query_user_data . " aum.username = '$username' AND ui.externdefault = 1");
+	if (!$db->num_rows())
+		$db->query($query_user_data . " aum.username = '$username' AND i.Institut_id = '$instituts_id'");
+}
 else
 	$db->query($query_user_data . " aum.username = '$username' AND i.Institut_id = '$instituts_id'");
 
-if(!$db->next_record())
+if (!$db->next_record())
 	die;
 
 $aliases_content = $this->config->getValue("Main", "aliases");
@@ -243,10 +249,12 @@ function termine (&$this, $db, $alias_content, $text_div, $text_div_end) {
 
 function kategorien (&$this, $db, $alias_content, $text_div, $text_div_end) {
 	$db_kategorien = new DB_Seminar();
-	$query = "SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON (range_id=user_id) "
+	$query = "SELECT * FROM auth_user_md5 aum LEFT JOIN kategorien k ON (k.range_id=user_id) "
 	       ."WHERE username='" . $db->f("username") . "' AND hidden=0";
+	
 	$db_kategorien->query($query);
 	while ($db_kategorien->next_record()) {
+		
 		echo "<tr><td width=\"100%\">\n";
 		echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
 		echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr") . ">";
@@ -440,12 +448,16 @@ function head (&$this, $db, $a) {
 	
 	echo "<tr><td width=\"100%\">\n";
 	echo "<table" . $this->config->getAttributes("PersondetailsHeader", "table") . ">\n";
-	echo "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
-	echo "<td$colspan width=\"100%\"";
-	echo $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
-	echo "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
-	echo htmlReady($db->f("fullname"), TRUE);
-	echo "</font></td></tr>\n";
+	
+	// display name as headline
+	if (!$this->config->getValue('PersondetailsHeader', 'hidename')) {
+		echo "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
+		echo "<td$colspan width=\"100%\"";
+		echo $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
+		echo "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
+		echo htmlReady($db->f("fullname"), TRUE);
+		echo "</font></td></tr>\n";
+	}
 	
 	if ($this->config->getValue("Main", "showimage")
 			|| $this->config->getValue("Main", "showcontact")) {
@@ -475,12 +487,21 @@ function head (&$this, $db, $a) {
 		}
 		
 		echo "</tr>\n";
+		if ($this->config->getValue('Main', 'showcontact')
+				&& $this->config->getValue('Contact', 'separatelinks')) {
+			echo "<tr><td";
+			if ($this->config->getValue('Main', 'showimage'))
+				echo ' colspan="2"';
+			echo $this->config->getAttributes('PersondetailsHeader', 'contacttd') . ">\n";
+			echo kontakt($this, $db, TRUE);
+			echo "</td></tr>\n";
+		}
 	}
 	
 	echo  "</table>\n</td></tr>\n";
 }
 
-function kontakt ($this, $db) {
+function kontakt ($this, $db, $separate = FALSE) {
 	$attr_table = $this->config->getAttributes("Contact", "table");
 	$attr_tr = $this->config->getAttributes("Contact", "table");
 	$attr_td = $this->config->getAttributes("Contact", "td");
@@ -488,107 +509,97 @@ function kontakt ($this, $db) {
 	$attr_fontcontent = $this->config->getAttributes("Contact", "fontcontent");
 	
 	$out = "<table$attr_table>\n";
-	$out .= "<tr$attr_tr>";
-	$out .= "<td colspan=\"2\"$attr_td>";
-	$out .= "<font$attr_fonttitle>";
-	if ($headline = $this->config->getValue("Contact", "headline"))
-		$out .= "$headline<br><br></font>\n";
-	else
-		$out .= "<br></font>\n";
-	
-	$out .= "<font$attr_fontcontent>";
-	$out .= htmlReady($db->f("fullname"), TRUE) . "<br>\n";
-	
-	if ($db->f("Name")) {
+	if (!$separate) {
+		$out .= "<tr$attr_tr>";
+		$out .= "<td colspan=\"2\"$attr_td>";
+		$out .= "<font$attr_fonttitle>";
+		if ($headline = $this->config->getValue("Contact", "headline"))
+			$out .= "$headline</font>\n";
+		else
+			$out .= "</font>\n";
+		
+		$out .= "<font$attr_fontcontent>";
+		
+		if (!$this->config->getValue("Contact", "hidepersname"))
+			$out .= "<br><br>" . htmlReady($db->f("fullname"), TRUE) . "\n";
+		if ($this->config->getValue('Contact', 'showinstgroup')) {
+			if ($gruppen = GetStatusgruppen($this->config->range_id, $db->f('user_id')))
+				$out .= "<br>" . htmlReady(join(", ", array_values($gruppen)));
+		}
+		// display name of institution (as link)
+		if ($db->f("Name")) {
+			$br_out = "";
+			if ($this->config->getValue("Contact", "hideinstname") != '1') {
+				if ($this->config->getValue("Contact", "hideinstname") == 'link' && $db->f('url')) {
+					$url = htmlReady(trim($db->f("url")));
+					if (!stristr($url, "http://"))
+						$url = "http://$url";
+					$out .= "<br><br><a href=\"$url\" target=\"_blank\">";
+					$out .= htmlReady($db->f("Name"), TRUE) . "</a><br>";
+				}
+				else
+					$out .= "<br><br>" . htmlReady($db->f("Name"), TRUE) . "<br>";
+			}
+			if ($this->config->getValue("Contact", "adradd"))
+				$out .= "<br>" . $this->config->getValue("Contact", "adradd");
+		}
+		
 		$out .= "<br>";
-		$url = trim($db->f("url"));
-		if (!stristr($url, "http://"))
-			$url = "http://$url";
-		$out .= "<a href=\"$url\" target=\"_blank\">";
-		$out .= htmlReady($db->f("Name"), TRUE) . "</a>";
-		if ($this->config->getValue("Contact", "adradd"))
-			$out .= "<br>" . $this->config->getValue("Contact", "adradd");
+		if ($db->f("Strasse")) {
+			$out .= "<br>" . htmlReady($db->f("Strasse"), TRUE);
+			if($db->f("Plz"))
+	  		$out .= "<br>" . htmlReady($db->f("Plz"), TRUE);
+		}
+	  $out .= "<br><br></font></td></tr>\n";
 	}
-	
-	if ($db->f("Strasse")) {
-		$out .= "<br><br>" . htmlReady($db->f("Strasse"), TRUE);
-		if($db->f("Plz"))
-  		$out .= "<br>" . htmlReady($db->f("Plz"), TRUE);
-	}
-  $out .= "<br><br></font></td></tr>\n";
-	
 	$order = $this->config->getValue("Contact", "order");
 	$visible = $this->config->getValue("Contact", "visible");
 	$alias_contact = $this->config->getValue("Contact", "aliases");
 	foreach ($order as $position) {
-		if (!$visible[$position])
-			continue;
 		$data_field = $this->data_fields["contact"][$position];
-	  if($data_field == "raum" && $db->f("raum")){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-	    $out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-   	  $out .= htmlReady($db->f("raum"), TRUE) . "</font></td></tr>\n";
-    }
-
-	  if($data_field == "Telefon" && $db->f("Telefon")){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-   	  $out .= htmlReady($db->f("Telefon"), TRUE) . "</font></td></tr>\n";
-	  }
-    
-   	if($data_field == "Fax" && $db->f("Fax")){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= htmlReady($db->f("Fax"), TRUE) . "</font></td></tr>\n";
-	  }
-           	
-	  if($data_field == "Email" && $db->f("Email")){
-			$mail = trim($db->f("Email"));
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= "<a href=\"mailto:$mail\">$mail</a></font></td></tr>\n";
+		if (!$visible[$position] || !$db->f($data_field))
+			continue;
+		switch ($data_field) {
+			case 'Email' :
+				if ($separate || !$this->config->getValue('Contact', 'separatelinks')) {
+					$out .= "<tr$attr_tr>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fonttitle>";
+					$out .= $alias_contact[$position] . "</font></td>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fontcontent>";
+					$mail = trim(htmlReady($db->f("Email")));
+					$out .= "<a href=\"mailto:$mail\">$mail</a>";
+				}
+				break;
+			case 'Home' :
+				if ($separate || !$this->config->getValue('Contact', 'separatelinks')) {
+					$out .= "<tr$attr_tr>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fonttitle>";
+					$out .= $alias_contact[$position] . "</font></td>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fontcontent>";
+					$out .= trim(FixLinks(htmlReady($db->f("Home")), TRUE, TRUE, FALSE, TRUE));
+				}
+				break;
+			default:
+				if (!$separate) {
+					$out .= "<tr$attr_tr>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fonttitle>";
+					$out .= $alias_contact[$position] . "</font></td>";
+					$out .= "<td$attr_td>";
+					$out .= "<font$attr_fontcontent>";
+					$out .= htmlReady($db->f($data_field), TRUE);
+				}
 		}
-        	
-		if($data_field == "Home" && $db->f("Home")){
-			$home = trim(FixLinks(htmlReady($db->f("Home")), TRUE, TRUE, FALSE, TRUE));
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= "$home</font></td></tr>\n";
-		}
-			
-		if($data_field == "sprechzeiten" && $db->f("sprechzeiten")){
-			$out .= "<tr$attr_tr>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fonttitle>";
-			$out .= $alias_contact[$position] . "</font></td>";
-			$out .= "<td$attr_td>";
-			$out .= "<font$attr_fontcontent>";
-			$out .= htmlReady($db->f("sprechzeiten")) . "</font></td></tr>\n";
-		}
+		if ($db->f($data_field))
+			$out .= "</font></td></tr>\n";
 	}
 	$out .= "</table>\n";
 	
 	return $out;
-}				
+}
 
 ?>
