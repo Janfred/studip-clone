@@ -31,4 +31,7 @@ $GLOBALS["_views"]["AUTH_USER_UID"] = array("pk"=>"item_id","temp_table_type"=>"
 $GLOBALS["_views"]["GENERIC_UPDATE"] = array("query" => "UPDATE § SET §=? WHERE user_id=?");
 $GLOBALS["_views"]["AUTH_USER_INSERT"] = array("query" => "INSERT INTO auth_user_md5 (user_id, username, perms, password, Vorname, Nachname, Email,auth_plugin) VALUES (?,?,?,?,?,?,?,?)");
 $GLOBALS["_views"]["USER_INFO_INSERT"] = array("query" => "INSERT INTO user_info (user_id, mkdate, chdate, preferred_language) VALUES (?,?,?,?)");
+
+$GLOBALS["_views"]["SEM_USER_INSERT"] = array("query" => "INSERT INTO seminar_user (Seminar_id, user_id, status, gruppe, mkdate) VALUES (?, ?, ?, §, UNIX_TIMESTAMP())");
+					
 ?>
