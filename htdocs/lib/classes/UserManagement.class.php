@@ -1,4 +1,4 @@
-<?
+<?php
 /**
 * UserManagement.class.php
 * 
@@ -342,7 +342,7 @@ class UserManagement {
 	* @return	bool Change successful?
 	*/
 	function changeUser($newuser) {
-		global $perm, $auth;
+		global $perm, $auth, $ABSOLUTE_PATH_STUDIP;
 	
 		// Do we have permission to do so?
 		if (!$perm->have_perm("admin")) {
@@ -504,7 +504,7 @@ class UserManagement {
 	* @return	bool Password change successful?
 	*/
 	function setPassword() {
-		global $perm, $auth;
+		global $perm, $auth, $ABSOLUTE_PATH_STUDIP;
 	
 		// Do we have permission to do so?
 		if (!$perm->have_perm("admin")) {
@@ -572,7 +572,7 @@ class UserManagement {
 	* @return	bool Removal successful?
 	*/
 	function deleteUser() {
-		global $perm, $auth;
+		global $perm, $auth, $ABSOLUTE_PATH_STUDIP;
 
 		// Do we have permission to do so?
 		if (!$perm->have_perm("admin")) {
@@ -803,3 +803,4 @@ class UserManagement {
 	}
 
 }
+?>
