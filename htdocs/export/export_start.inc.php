@@ -22,6 +22,7 @@
 // +---------------------------------------------------------------------------+
 
 
+require_once ("$ABSOLUTE_PATH_STUDIPconfig.inc.php");   // Stud.IP - Konfigurationsdatei
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xslt_vars.inc.php");   // XSLT-Variablen
 require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");   // Checken des aktuellen Semesters
