@@ -40,7 +40,7 @@ if ($auth->auth["uid"]!="nobody"){
 	$sms= new messaging;
 	
 	if ($msg_rec)
-		$msg_rec = get_userid($msg_rec)
+		$msg_rec = get_userid($msg_rec);
 	
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
 	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
