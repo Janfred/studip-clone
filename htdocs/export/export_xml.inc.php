@@ -58,10 +58,25 @@ if (!CheckParamXML())
 }
 
 
+$count = 0;
+if (isset($ex_sem_class))
+	foreach ($SEM_CLASS as $key=>$val) 
+	{
+		if ($ex_sem_class[$count] == "1")
+			$ex_class_array[$key] = true;
+		$count ++;
+	}
+
 if ($o_mode != "direct")
 {
+	if (!($handle=opendir( $TMP_PATH."/export" )))
+	{
+		exec("md $TMP_PATH/export");
+	}
+	else
+		closedir($handle); 
 	$xml_file_id = md5(uniqid(rand())) . ".xml";
-	$xml_file = fopen($TMP_PATH."/" . $xml_file_id, "w");
+	$xml_file = fopen($TMP_PATH."/export/" . $xml_file_id, "w");
 }
 
 
@@ -108,6 +123,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 		$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"choose\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . $ex_sem . "\">";
+		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
 	

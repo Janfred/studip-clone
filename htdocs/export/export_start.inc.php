@@ -35,7 +35,7 @@ $export_pagename = _("Datenexport - Startseite");
 
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
 
-	$export_pagecontent .="<b><font size=\"-1\">". _("Bitte w&auml;hlen Sie eine Einrichtung: ") .  "</font></b><br /><select name=\"range_id\">";
+	$export_pagecontent .="<br><b><font size=\"-1\">". _("Bitte w&auml;hlen Sie eine Einrichtung: ") .  "</font></b><br /><select name=\"range_id\">";
 	
 /*	if ($auth->auth['perm'] == "root")
 	{
@@ -86,7 +86,7 @@ $export_pagename = _("Datenexport - Startseite");
 	} /**/
 	if ($perm->have_perm("root"))
 		$export_pagecontent .= "<option style=\"font-weight:bold;\" value=\"root\">Alle Einrichtungen";
-	$export_pagecontent .= "</select><br><br><br>";
+	$export_pagecontent .= "</select><br><br>";
 	
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Art der auszugebenden Daten: ") .  "</font></b><br /><select name=\"ex_type\">";
 
@@ -105,7 +105,7 @@ $export_pagename = _("Datenexport - Startseite");
 		$export_pagecontent .= " selected";
 	$export_pagecontent .= " value=\"forschung\">" . _("Forschungsberichte") .  "</option>";/**/
 
-	$export_pagecontent .= "</select><br><br><br>";
+	$export_pagecontent .= "</select><br><br><br><br>";
 	
 	$export_pagecontent .="<b><font size=\"-1\">". _("Aus welchem Semester sollen die Daten exportiert werden (f&uuml;r Veranstaltungsexport): ") .  "</font></b><br /><select name=\"ex_sem\">";
 	$export_pagecontent .= "<option value=\"all\">" . _("Alle Semester") . "</option>";
@@ -118,7 +118,18 @@ $export_pagename = _("Datenexport - Startseite");
 			$export_pagecontent .= " selected";
 		$export_pagecontent .= " value=\"" . $key . "\">" . $val["name"] . "</option>";
 	}
-	$export_pagecontent .= "</select><br><br><br>";
+	$export_pagecontent .= "</select><br><br>";
+
+	$export_pagecontent .="<b><font size=\"-1\">". _("Welche Arten von Veranstaltungen sollen exportiert werden? ") .  "</font></b><br />";
+	$count = 0;
+	foreach ($SEM_CLASS as $key=>$val) 
+	{
+		$export_pagecontent .= "<input type=\"checkbox\" name=\"ex_class_$count\" value=\"TRUE\"";
+		if ($ex_sem_class[$count] == "1") 
+			$export_pagecontent .= " checked";
+		$export_pagecontent .= ">&nbsp;" . $val["name"] . "&nbsp;&nbsp;";
+		$count ++;
+	}
 
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"choose\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
@@ -130,7 +141,7 @@ $export_pagename = _("Datenexport - Startseite");
 		array ("kategorie"  => _("Information:"),
 			"eintrag" => array	(	
 							array (	"icon" => "pictures/ausruf_small.gif",
-									"text"  => sprintf(_("Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in den Formaten %s und XML ausgeben."), implode($output_formats, ", "))
+									"text"  => sprintf(_("Dies ist das Stud.IP-Exportmodul. Mit diesem Modul k&ouml;nnen Sie Daten in den folgenden Formaten ausgeben: %s."), implode($output_formats, ", "))
 								 )
 							)
 			)

@@ -44,10 +44,13 @@ define("PHPDOC_DUMMY",true);
 
 //require_once ("./export_xslt_vars.inc.php"); // 
 
-$dirstr = "" . $TMP_PATH;
-//$dirstr = "/apache/htdocs/studip/" . $TMP_PATH;
+$dirstr = "" . $TMP_PATH . "/export";
+
 if (!($handle=opendir( $dirstr )))
+{
 	echo _("Das Verzeichnis existiert nicht!");
+	exec("md $dirstr");
+}
 elseif ($perm->have_perm("admin"))  
 {
 //	echo _("Verzeichnis:") . "$handle<br>";

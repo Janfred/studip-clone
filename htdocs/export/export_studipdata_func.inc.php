@@ -186,8 +186,8 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
 	while ($db->next_record()) 
-		if ($SEM_TYPE[$db->f("status")]["class"] == 1)
-		// Nur Lehre exportieren
+		if ((!isset($ex_class_array)) OR ($ex_class_array[$SEM_TYPE[$db->f("status")]["class"]] == true))
+		// Nur gew&auml;hlte Veranstaltungsklassen exportieren
 		{
 			$group_string = "";
 			if (($do_group) AND ($group != $db->f($group_tab_zelle)))
