@@ -1,5 +1,7 @@
 <?
 /*
+$Id$
+
 archiv.inc.php - Funktionen zur Archivierung in Stud.IP
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>, Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
@@ -627,7 +629,7 @@ function in_archiv ($sem_id) {
 	$db->query ($query);
 	if ((file_exists($ZIP_PATH) || ini_get('safe_mode')) && $db->affected_rows()) {
 		$archiv_file_id = md5(uniqid($hash_secret,1));
-		$docs = 0;	
+		$docs = 0;
 		
 		//temporaeres Verzeichnis anlegen
 		$tmp_full_path = "$TMP_PATH/$archiv_file_id";
