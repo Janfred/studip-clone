@@ -21,7 +21,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //////////////////////////////////////////////////////////////////////////
 
-
+/**
+* Builds the edit-Area for created postings or postings being re-editet
+*
+* @param	array	forumposting contains several data of the actual posting
+* 
+* @return	string	description contains the complete html-data of the edit-area
+*
+**/
 function editarea($forumposting) {
 	global $forum, $view, $user, $PHP_SELF;
 	
@@ -64,8 +71,12 @@ function editarea($forumposting) {
 	return $description;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
+/**
+* Builds a unique topic_id in table px_topics
+*
+* @return	string	tmp_id is a unique id
+*
+**/
 function MakeUniqueID ()
 {	// baut eine ID die es noch nicht gibt
 
@@ -74,72 +85,102 @@ function MakeUniqueID ()
 	$tmp_id=md5(uniqid($hash_secret));
 
 	$db->query ("SELECT topic_id FROM px_topics WHERE topic_id = '$tmp_id'");	
-	IF ($db->next_record()) 	
+	if ($db->next_record()) 	
 		$tmp_id = MakeUniqueID(); //ID gibt es schon, also noch mal
-	RETURN $tmp_id;
+	return $tmp_id;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
+/**
+* Moves postings into a different lecture
+*
+* @param	string topic_id posting to be moved (inc. childs)
+* @param	string sem_id id of the target 
+* @param	string root 
+* @param	string verschoben count of moved postings
+*
+* @return	string	verschoben count of moved postings
+*
+**/
 function move_topic($topic_id, $sem_id, $root, &$verschoben)  //rekursives Verschieben von topics, in anderes Seminar
 {
 	$db=new DB_Seminar;
 	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-	IF ($db->num_rows()) {
+	if ($db->num_rows()) {
 		while ($db->next_record()) {
 			$next_topic=$db->f("topic_id");
 			move_topic($next_topic,$sem_id,$root,$verschoben);
 			}
 		}
-	IF ($root == $topic_id)
+	if ($root == $topic_id)
 		$db->query("UPDATE px_topics SET parent_id=0, root_id='$topic_id', Seminar_id='$sem_id' WHERE topic_id='$topic_id'");
- 	ELSE
+ 	else
  		$db->query("UPDATE px_topics SET root_id='$root', Seminar_id='$sem_id' WHERE topic_id='$topic_id'");
  	$verschoben++;
  	return $verschoben;
 }
 
-////////////////////////////////////////////////////////////////////////////
-
+/**
+* Moves postings into a different folder
+*
+* @param	string topic_id posting to be moved (inc. childs)
+* @param	string root 
+* @param	string verschoben count of moved postings
+* @param	string thema id of the target 
+*
+* @return	string	verschoben count of moved postings
+*
+**/
 function move_topic2($topic_id, $root, &$verschoben,$thema)  //rekursives Verschieben von topics, diesmal in ein Thema
 {
 	$db=new DB_Seminar;
 	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-	IF ($db->num_rows()) {
+	if ($db->num_rows()) {
 		while ($db->next_record()) {
 			$next_topic=$db->f("topic_id");
 			move_topic2($next_topic,$root,$verschoben,$thema);
 			}
 		}
-	IF ($root == $topic_id)
+	if ($root == $topic_id)
 		$db->query("UPDATE px_topics SET parent_id='$thema', root_id='$thema' WHERE topic_id='$topic_id'");
- 	ELSE
+ 	else
  		$db->query("UPDATE px_topics SET root_id='$thema' WHERE topic_id='$topic_id'");
  	$verschoben++;
  	return $verschoben;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
-function lonely($topic_id)  //Sucht alle aufgeklappten Beitraege raus
+/**
+* Checks whether there can be ditet or not (seeks childs an rights)
+*
+* @param	string topic_id posting to be checked
+*
+* @return	bool	lonely
+*
+**/
+function lonely($topic_id)  //Sucht nach Kindern und den Rechten (für editieren)
 {	global $user,$auth,$rechte;
 	$lonely=TRUE;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db2->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-		IF (!$db2->num_rows()) {
+		if (!$db2->num_rows()) {
 			$db->query("SELECT user_id FROM px_topics WHERE topic_id='$topic_id'");
-			IF ($db->num_rows())
+			if ($db->num_rows())
 				while ($db->next_record())
-					IF ($db->f("user_id")==$user->id OR $rechte) 
+					if ($db->f("user_id")==$user->id OR $rechte) 
 						$lonely=FALSE;
 			}
 				
  	return $lonely;
 }
 
-/////////////////////////////////////////////////////////////////////////
-
+/**
+* builds a string of opened postings, separated by ;
+*
+* @param	string the original posting
+*
+* @return	string	open the string of opened postings
+*
+**/
 function suche_kinder($topic_id)  //Sucht alle aufgeklappten Beitraege raus
 {	global $open,$view;
 	$db=new DB_Seminar;
@@ -154,9 +195,14 @@ function suche_kinder($topic_id)  //Sucht alle aufgeklappten Beitraege raus
  	return $open;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
-
+/**
+* Ckeck whether a posting is opened or not
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	array	forumposting whith additional openclose flag
+*
+**/
 function ForumOpenClose ($forumposting) {
 	global $forum, $openall, $open;
 	if (strstr($forum["openlist"],$forumposting["id"])!=TRUE
@@ -171,6 +217,14 @@ function ForumOpenClose ($forumposting) {
 	return $forumposting;
 }
 
+/**
+* Ckeck whether a posting is new or old
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	array	forumposting whith additional newold flag
+*
+**/
 function ForumNewPosting ($forumposting) {
 	global $loginfilelast,$SessSemName;
 	$datumtmp = $loginfilelast[$SessSemName[1]];
@@ -182,6 +236,14 @@ function ForumNewPosting ($forumposting) {
 	return $forumposting;	
 }
 
+/**
+* Ckeck whether a posting has childs or not
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	array	forumposting whith additional lonely flag
+*
+**/
 function forum_lonely($forumposting) {  //Sieht nach ob das Posting kinderlos ist
 	
 	$topic_id = $forumposting["id"];
@@ -194,6 +256,14 @@ function forum_lonely($forumposting) {  //Sieht nach ob das Posting kinderlos is
  	return $forumposting;
 }
 
+/**
+* Gets the id of the root-posting (theme)
+*
+* @param	string id of the child-posting
+*
+* @return	string	root_id the id of the root-posting
+*
+**/
 function ForumGetRoot($id) {  //Holt die ID des Root-Postings
 	
 	$db=new DB_Seminar;
@@ -203,6 +273,14 @@ function ForumGetRoot($id) {  //Holt die ID des Root-Postings
  	return $root_id;
 }
 
+/**
+* Gets the id of the parent-posting
+*
+* @param	string id of the child-posting
+*
+* @return	string	parent_id the id of the root-posting
+*
+**/
 function ForumGetParent($id) {  //Holt die ID des Parent-Postings (wird für Schreibanzeige gebraucht)
 	
 	$db=new DB_Seminar;
@@ -212,6 +290,14 @@ function ForumGetParent($id) {  //Holt die ID des Parent-Postings (wird für Schr
  	return $parent_id;
 }
 
+/**
+* check whether a posting is fresh or not
+*
+* @param	string id of the posting
+*
+* @return	bool	fresh indikates freshness
+*
+**/
 function ForumFreshPosting($id) {  //Sieht nach ob das Posting frisch angelegt ist (mkdate ist gleich chdate)
 	$db=new DB_Seminar;
 	$db->query("SELECT chdate, mkdate FROM px_topics WHERE topic_id='$id' AND chdate < mkdate");
@@ -223,6 +309,14 @@ function ForumFreshPosting($id) {  //Sieht nach ob das Posting frisch angelegt i
  	return $fresh;
 }
 
+/**
+* Check whether a posting is a folder (theme) or not
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	array forumposting with additional type flag
+*
+**/
 function ForumFolderOrPosting ($forumposting) {
 	if ($forumposting["id"]==$forumposting["rootid"]) {
 		$forumposting["type"] = "folder";  //Beitrag ist ein folder
@@ -232,6 +326,14 @@ function ForumFolderOrPosting ($forumposting) {
 	return $forumposting;	
 }
 
+/**
+* Check of the write-state of a posting
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	array forumposting with additional writestatus flag
+*
+**/
 function ForumGetWriteStatus($forumposting) {
 	global $forum;
 	if ($forumposting["id"] == $forum["update"]) {  			// das Posting ist im Schreibmodus
@@ -246,6 +348,14 @@ function ForumGetWriteStatus($forumposting) {
 	return $forumposting;	
 }
 
+/**
+* Check whether user has rights on posting or not
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	array forumposting with additional perms flag
+*
+**/
 function ForumGetRights ($forumposting) {
 	global $user,$auth,$rechte;
 	if ($forumposting["userid"]==$user->id || $rechte)
@@ -255,6 +365,14 @@ function ForumGetRights ($forumposting) {
 	return $forumposting;
 }
 
+/**
+* builds the icon for the printhead of a posting
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	array forumposting with additional icon flag
+*
+**/
 function ForumIcon ($forumposting) {
 	global $cmd, $rechte, $topic_id, $PHP_SELF, $forum, $auth;
 	if ($forumposting["type"]=="folder") {
@@ -299,6 +417,14 @@ function ForumIcon ($forumposting) {
 	return $forumposting;
 }
 
+/**
+* quote engine for a quoted posting
+*
+* @param	string zitat_id id of the posting to be quoted
+*
+* @return	string zitat is the quoted string
+*
+**/
 function quote($zitat_id)  {
 // Hilfsfunktion, die sich den zu quotenden Text holt, encodiert und zurueckgibt.
 	$db=new DB_Seminar;
@@ -308,18 +434,34 @@ function quote($zitat_id)  {
 			$author = $db->f("author");
 			}
 	$zitat = quotes_encode($description,$author);
-	RETURN $zitat;
+	return $zitat;
 }
 
+/**
+* Gets the title of a posting
+*
+* @param	string	id of the posting
+*
+* @return	$name the name of the posting
+*
+**/
 function ForumGetName($id)  {
 // Hilfsfunktion, die sich den Titel eines Beitrags holt
 	$db=new DB_Seminar;
 	$db->query("SELECT name FROM px_topics WHERE topic_id='$id'");
 		if ($db->next_record())
 			$name = $db->f("name");
-	RETURN $name;
+	return $name;
 }
 
+/**
+* builds the button-line for an opened posting
+*
+* @param	array forumposting contains several data of the actual posting
+*
+* @return	string edit contains the HTML of the button-line
+*
+**/
 function forum_get_buttons ($forumposting) {
 	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar, $view;	
 
@@ -350,6 +492,14 @@ function forum_get_buttons ($forumposting) {
 	return $edit;
 }
 
+/**
+* Debug Code for var-output
+*
+* @param	array debugvar ($forum or $forumposting)
+*
+* @return	string debug the debug-output of the array
+*
+**/
 function DebugForum ($debugvar) {
 	global $HTTP_POST_VARS;
 	while(list($key,$value) = each($debugvar)) 
@@ -360,6 +510,12 @@ function DebugForum ($debugvar) {
 	return $debug;
 }
 
+/**
+* builds the output of an empty board
+*
+* @return	string empty contains the HTML of the empty board
+*
+**/
 function ForumEmpty () {
 	global $rechte, $SessSemName;
 	IF ($rechte)
@@ -376,6 +532,12 @@ function ForumEmpty () {
 	return $empty;
 } 
 
+/**
+* builds the output of an empty site (empty search for example)
+*
+* @return	string empty contains the HTML of the empty site
+*
+**/
 function ForumNoPostings () {
 	global $forum, $PHP_SELF;
 	if ($forum["view"] != "search")
@@ -388,6 +550,14 @@ function ForumNoPostings () {
 
 // Berechnung und Ausgabe der Blätternavigation
 
+/**
+* builds the navigation element in page-view
+*
+* @param	array	forum contains several data of the actual board-site
+*
+* @return	string 	navi contains the HTML of the navigation
+*
+**/
 function forum_print_navi ($forum) {
 	$i = 1;
 	$maxpages = ceil($forum["forumsum"] / $forum["postingsperside"]);
@@ -420,6 +590,20 @@ function forum_print_navi ($forum) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+* creates a new posting in the DB
+*
+* @param	string name of the posting
+* @param	string author of the posting (plaintext)
+* @param	string description the content of the posting
+* @param	string parent_id of the posting
+* @param	string root_id of the posting
+* @param	string tmpSessionSeminar
+* @param	string user_id of the author
+*
+* @return	string topic_id of the new posting
+*
+**/
 function CreateTopic ($name="[no name]", $author="[no author]", $description="", $parent_id="0", $root_id="0", $tmpSessionSeminar=0, $user_id=FALSE)
 
 {	global $SessionSeminar,$auth, $PHP_SELF, $writeextern;
@@ -437,20 +621,26 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 			$user_id = $db->f("user_id");
 	}
 	$topic_id = MakeUniqueID();
-	IF ($root_id == "0")	{
+	if ($root_id == "0")	{
 		$root_id = $topic_id;
 		}
 	$query = "INSERT INTO px_topics (topic_id,name,description, parent_id, root_id , author, author_host, Seminar_id, user_id, mkdate, chdate) values ('$topic_id', '$name', '$description', '$parent_id', '$root_id', '$author', '".getenv("REMOTE_ADDR")."', '$tmpSessionSeminar', '$user_id', '$mkdate', '$chdate') ";
 	$db=new DB_Seminar;
 	$db->query ($query);
-	IF  ($db->affected_rows() == 0) {
+	if  ($db->affected_rows() == 0) {
 		print "<p>"._("Fehler beim Anlegen eines Postings.")."</p>\n";
 		}
 	return $topic_id;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/**
+* Updates an existing posting
+*
+* @param	string	name of the posting
+* @param	string	topic_id of the posting
+* @param	string	description of the posting
+*
+**/
 function UpdateTopic ($name="[no name]", $topic_id, $description)
 {	global $user, $nobodysname;
 	$db=new DB_Seminar;
@@ -465,6 +655,14 @@ function UpdateTopic ($name="[no name]", $topic_id, $description)
 		}
 }
 
+/**
+* builds right side of the printhead
+*
+* @param	array	forumhead contains several GUI-Elements of the posting
+*
+* @return	string 	zusatz the HTML-Output of the right printhead region
+*
+**/
 function ForumParseZusatz($forumhead) {
 	
 	while(list($key,$value) = each($forumhead)) 
@@ -472,6 +670,14 @@ function ForumParseZusatz($forumhead) {
 	return $zusatz;
 }
 
+/**
+* engine to create the amazing HTML-Lines of child-postings
+*
+* @param	array	forumposting contains several data of the actual posting
+*
+* @return	string 	striche the HTML-Output for the lines
+*
+**/
 function ForumStriche($forumposting) {
 	$striche = "<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'></td>";
 	for ($i=0;$i<$forumposting["level"];$i++) {
@@ -487,6 +693,14 @@ function ForumStriche($forumposting) {
 	return $striche;
 }
 
+/**
+* Builds the toolbar for indikators an sort-options
+*
+* @param	string	id
+*
+* @return	string 	print the HTML-Output of the toolbar
+*
+**/
 function forum_print_toolbar ($id="") {
 		global $user, $PHP_SELF, $forum, $open, $flatviewstartposting, $indexvars;
 		$print = "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">";
@@ -549,6 +763,14 @@ function forum_print_toolbar ($id="") {
 		return $print;
 }
 
+/**
+* Builds the Indikator for printhead
+*
+* @param	array	forumposting contains several data of the actual posting
+*
+* @return	string 	tmp HTML-Output of the Indikator
+*
+**/
 function forum_get_index ($forumposting) {
 	global $forum, $indexvars;
  	if ($forum["sort"] == "viewcount" || $forum["sort"] == "rating" || $forum["sort"] == "score") {
@@ -565,10 +787,17 @@ function forum_get_index ($forumposting) {
 	return $tmp;
 }
 
+
+/**
+* Builds a list of posting not to be shrinked
+*
+* @param	string 	id of the first non-shrink posting
+*
+* @return	string 	age is the list of postings not to be shrinked, separated by ;
+*
+**/
 function ForumCheckShrink($id)  {
-
 	global $age;
-
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM px_topics WHERE parent_id='$id'");
 	while ($db->next_record()) {
@@ -579,11 +808,18 @@ function ForumCheckShrink($id)  {
 	return $age;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+* Checks the state of a posting an prints it with printhead and printcontent
+*
+* @param	array	forumposting contains several data of the current posting
+*
+* @return	array forumposting with added flags
+*
+**/
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars, $open;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars, $open, $openorig;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -682,7 +918,7 @@ function printposting ($forumposting) {
 			$favicon = "pictures/forum_fav2.gif";
 			$favtxt = _("zu den Favoriten hinzufügen");
 		}
-		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$open&flatviewstartposting=".$forum["flatviewstartposting"]."\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
+		$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
 		
 	// Antwort-Pfeil
 		
@@ -802,6 +1038,18 @@ function printposting ($forumposting) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+* Builds the Flatview of a Board (for last Postings, New Postings, Search, Flatview)
+*
+* @param	string	open id of the opened posting
+* @param	string	mehr ?
+* @param	string	show ?
+* @param	string	update the id of the posting to be updated
+* @param	string	name ?
+* @param	string	description ?
+* @param	string	zitat id of the posting to be quoted
+*
+**/
 function flatview ($open=0, $mehr=1, $show=0, $update="", $name="", $description="",$zitat="")
 
 {	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$view,$rechte,$forum,$user,$flatviewstartposting,$PHP_SELF;
@@ -860,6 +1108,8 @@ if ($db->num_rows() > 0) {  // Forum ist nicht leer
 	die;
 }
 
+// we proudly present: the longest SQl in Stud.IP :) regards to Suchi+Noack for inspirations
+
 $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.name AS root_name"
 	.", x.description, x.Seminar_id, y.topic_id AS root_id, username, x.user_id"
 	.", IFNULL(views,0) as viewcount, nachname, IFNULL(ROUND(AVG(rate),1),99) as rating"
@@ -868,9 +1118,9 @@ $query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.na
 	."FROM px_topics x LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id) "
 	."LEFT OUTER JOIN object_user ON(object_user.object_id=x.topic_id AND object_user.user_id='$user->id' AND flag='fav') , px_topics y "
 	."WHERE x.root_id = y.topic_id AND x.seminar_id = '$SessionSeminar' AND (x.chdate>=x.mkdate OR x.user_id='$user->id')".$addon." "
-	."GROUP by x.topic_id ORDER BY ".$forum["sort"]." ".$order;
+	."GROUP by x.topic_id ORDER BY ".$forum["sort"]." ".$order
+	." LIMIT $flatviewstartposting,$postingsperside";
 
-$query .= " LIMIT $flatviewstartposting,$postingsperside";
 $db->query($query);
 
 
@@ -956,6 +1206,15 @@ if ($update)
 
 /////////////////////////////////////////////////////////////////////////
 
+
+/**
+* Builds the themeview of the board (shows all folders)
+*
+* @param	string	open id of the opened posting
+* @param	string	update the id of the posting to be updated
+* @param	string	zitat id of the posting to be quoted
+*
+**/
 function DisplayFolders ($open=0, $update="", $zitat="") {
 	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen;
 
@@ -976,7 +1235,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	else
 		$order = "t.mkdate ".$forum["sortthemes"];
 	
-	WHILE (list($key,$val)=each($fields)) {
+	while (list($key,$val)=each($fields)) {
 		$query .= $comma."t.".$val;
 		$comma = ", ";
 	}
@@ -1066,6 +1325,14 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 
 /////////////////////////////////
 
+
+/**
+* Amazing engine to build the treeview incl. shrinking
+*
+* @param	array	forumpostng contains several data of the curren posting
+* @param	string	level contains the current level of the treeview
+*
+**/
 function DisplayKids ($forumposting, $level=0) {
 	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user, $age;
 
@@ -1087,7 +1354,7 @@ function DisplayKids ($forumposting, $level=0) {
 	$db=new DB_Seminar;
 	$db->query($query);
 	$forumposting["lines"][$level] = $db->num_rows();
-	WHILE ($db->next_record()) {
+	while ($db->next_record()) {
 		
 		$forumposting["id"] = $db->f("topic_id");
 		$forumposting["name"] = $db->f("name");
@@ -1154,6 +1421,12 @@ function DisplayKids ($forumposting, $level=0) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+* Builds the search-fields 
+*
+* @return	string searchfield contains the complete HTML of the search-page
+*
+**/
 function forum_search_field () {
 	global $PHP_SELF;
 $searchfield = "
@@ -1216,7 +1489,13 @@ return $searchfield;
 }
 
 /////////////////////
-	
+
+/**
+* Builds the HTML for the move-navigation
+*
+* @param	string	topic_id the id of the original posting to be moved
+*
+**/	
 function forum_move_navi ($topic_id) {
 	global $perm, $user, $forum, $view, $PHP_SELF;
 	

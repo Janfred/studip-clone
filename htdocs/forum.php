@@ -1,7 +1,7 @@
 <?
 /*
 forum.php - Anzeige und Verwaltung des Forensystems
-Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>
+Copyright (C) 2003 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -68,6 +68,10 @@ function pruefe_name(){
 
 	checkObject();
 
+//////////////////////////////////////////////////////////////////////////////////
+// Debug Funktion zur Zeitmessung
+//////////////////////////////////////////////////////////////////////////////////
+
 function getMsTime(){
 	$microtime = explode(' ', microtime());
 	return (double)($microtime[1].substr($microtime[0],1)); 
@@ -75,33 +79,13 @@ function getMsTime(){
 
 $stoppuhr=getMsTime();
 
+//////////////////////////////////////////////////////////////////////////////////
+// Anzeige und View-Logik
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($forum["view"]=="mixed" && $open) {
 	$forum["flatfolder"] = $open;
 }
-
-
-/*
-if ($view) {
-	if ($view=="reset") {
-				
-		if ($forum["view"]=="tree" || $forum["view"]=="mixed")
-			$view = $forum["view"];
-		elseif ($forum["view"]=="flatfolder") {
-			$view = "mixed";
-			$forum["view"]="mixed";
-		} else {
-			$view = "tree";
-			$forum["view"]="tree";
-		}
-		
-		
-	
-	} else
-		$forum["view"] = $view;
-}
-*/
-
 
 if (!$forum["themeview"])
 	$forum["themeview"]="tree";
@@ -129,11 +113,15 @@ if (!$forum["view"]) {
 
 $view = $forum["view"];
 
-	include "links_openobject.inc.php";
+///////////////////////////////////////////////////////////////////////////////////
+// Reiterleiste einbinden
+//////////////////////////////////////////////////////////////////////////////////
 
+include "links_openobject.inc.php";
 
+//////////////////////////////////////////////////////////////////////////////////
 // Behandlung der Suche
-
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($suchbegriff!="") {
 	if($check_author) 
@@ -151,10 +139,12 @@ if ($suchbegriff!="") {
 	$forum["search"] = $search_exp;	
 }
 
-if ($reset=="1")
+if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen
 	$forum["search"] = "";	
 
+//////////////////////////////////////////////////////////////////////////////////
 // verschiedene GUI-Konstanten werden gesetzt
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($indikator)
 	$forum["indikator"] = $indikator;
@@ -181,9 +171,11 @@ $indexvars["rating"]["color"]="#CC7700";
 $indexvars["score"]["name"]=_("Relevanz");
 $indexvars["score"]["color"]=_("#0000FF");
 
+$openorig = $open;  // wird gebraucht für den open-Link wenn im Treeview $open überschrieben wird
 
-
+//////////////////////////////////////////////////////////////////////////////////
 // Sind wir da wo wir hinwollen?
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($topic_id AND !$update) {
 	$db=new DB_Seminar;
@@ -207,7 +199,9 @@ if ($topic_id AND !$update) {
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////
 // loeschen von nicht zuende getippten Postings
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($forum["lostposting"]!="" AND !isset($update)) {
 	$writemode = $forum["lostposting"];
@@ -221,7 +215,10 @@ if ($forum["lostposting"]!="" AND !isset($update)) {
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////
 // Rekursives Löschen von Postings, Warnung
+//////////////////////////////////////////////////////////////////////////////////
+
 if ($delete_id) {
 	$db=new DB_Seminar;
 	$mutter = suche_kinder($delete_id);
@@ -266,6 +263,9 @@ if ($delete_id) {
 	$forumposting["buttons"] = "yes";
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+// Verschieben von Postings
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden 
 	$verschoben = 0;
@@ -285,8 +285,9 @@ if ($target =="Thema"){ //Es soll in ein anderes Thema verschoben werden
 	$message = "move";
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////
 // Rekursives Löschen von Postings, jetzt definitiv!
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($really_kill) {
 	$db=new DB_Seminar;
@@ -309,7 +310,9 @@ if ($really_kill) {
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////
 // neuer Beitrag als Antwort wird eingeleitet
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($answer_id) {
 	$db=new DB_Seminar;
@@ -326,11 +329,9 @@ if ($answer_id) {
 	}
 }
 
-if ($zitat==TRUE)
-	$zitat = $answer_id;
-	
-if ($edit_id) 
-	$open = $edit_id;
+//////////////////////////////////////////////////////////////////////////////////
+// Update eines Beitrags
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($update) {
 	$author = get_fullname();
@@ -347,6 +348,10 @@ if ($update) {
 	$forum["lostposting"] = "";
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+// Neues Thema wird angelegt
+//////////////////////////////////////////////////////////////////////////////////
+
 if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 		$name = _("Name des Themas");
 		$author = get_fullname();
@@ -355,15 +360,33 @@ if ($neuesthema==TRUE && $rechte) {			// es wird ein neues Thema angelegt
 		$forum["lostposting"] = $edit_id;
 }
 
-if ($rate && $open) {
+//////////////////////////////////////////////////////////////////////////////////
+// weitere Konstanten setzen
+//////////////////////////////////////////////////////////////////////////////////
+
+if ($zitat==TRUE)
+	$zitat = $answer_id;
+	
+if ($edit_id) 
+	$open = $edit_id;
+
+if ($rate && $open) // Objekt bewerten
 	$txt = object_add_rate ($open, $rate);
-}
 
-// Anker setzen
+if ($fav)   // zu den Favoriten hinzufügen/entfernen
+	$fav = object_switch_fav($fav);
 
-	$forum["anchor"] = $open;
+if ($flatallopen=="TRUE")
+	$forum["flatallopen"] = "TRUE";
 
-//Titel-Zeile
+if ($flatallopen=="FALSE")
+	$forum["flatallopen"] = "FALSE";
+
+$forum["anchor"] = $open; // Anker setzen
+
+//////////////////////////////////////////////////////////////////////////////////
+//Daten aus der Einstellungsseite verarbeiten
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($forumsend) {
 	if ($forumsend=="bla"){
@@ -380,6 +403,10 @@ if ($forumsend) {
 	} else
 		include("forumsettings.inc.php");
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//Anzeige des Kopfes mit Meldungen und Toolbar
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($forumsend!="anpassen") {
 
@@ -399,26 +426,22 @@ if ($forumsend!="anpassen") {
 	echo "\n</table>\n";
 }
 
-
-
-if ($fav) {  // zu den Favoriten hinzufügen/entfernen
-	$fav = object_switch_fav($fav);
-}
-
-// Verzweigung zu den drei Anzeigemodi 
-
-if ($flatallopen=="TRUE")
-	$forum["flatallopen"] = "TRUE";
-if ($flatallopen=="FALSE")
-	$forum["flatallopen"] = "FALSE";
-
-if (!$reset)
+if (!$reset)   // wenn Suche aufgerufen wird keine toolbar
 	echo forum_print_toolbar($edit_id);
+
+//////////////////////////////////////////////////////////////////////////////////
+// Verzweigung zu den Anzeigemodi 
+//////////////////////////////////////////////////////////////////////////////////
 
 if ($forum["view"]=="flat" || $forum["view"]=="neue" || $forum["view"]=="flatfolder" || $forum["view"]=="search")
  	flatview ($open, $mehr, $show, $edit_id, $name, $description, $zitat);
 else
 	DisplayFolders ($open, $edit_id, $zitat);
+
+//////////////////////////////////////////////////////////////////////////////////
+// Rest
+//////////////////////////////////////////////////////////////////////////////////
+
 
 echo "Zeit:".(getMsTime()-$stoppuhr);
 
