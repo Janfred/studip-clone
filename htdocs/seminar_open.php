@@ -94,7 +94,7 @@ function check_calendar_default(){
 			"type_week"        => "LONG",
 			"holidays"         => TRUE,
 			"sem_data"         => TRUE,
-			"link_edit"        => FALSE,
+			"link_edit"        => TRUE,
 			"bind_seminare"    => "",
 			"ts_bind_seminare" => 0,
 			"delete"           => 0
