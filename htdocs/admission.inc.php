@@ -218,7 +218,6 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
  * Grouped seminars MUST HAVE chronologically admission-procedure activated!
  */
 function check_group($user_id, $username, $grouped_sems, $cur_name, $cur_id) {
-
 	global $send_message;
 
 	$db = new DB_Seminar;
@@ -281,30 +280,30 @@ function group_update_admission($seminar_id, $send_message = TRUE) {
 			while ($db3->next_record()) {
 				//First we check to parse the grouped seminars
 				check_group($db3->f("user_id"),$db3->f("username"),$grouped_seminars,$db->f("Name"),$db->f("Seminar_id"));
-      }	
-		} else {
-	    //Alle zugelassenen Studiengaenge einzeln bearbeiten
-  	  $db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '".$db->f("Seminar_id")."' ");
-	    while ($db2->next_record()) {
-	      //Wenn Kontingent "alle" bearbeitet wird, wird die Teilnehmerzahl aus den anderen Kontingenten gebildet
-  	    if ($db2->f("studiengang_id") == "all")
-	        $tmp_admission_quota=get_all_quota($db->f("Seminar_id"));
-	      else
-	        $tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
-	      //belegte Plaetze zaehlen
-	      $db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id")."' ");
-	      $db5->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id = '".$db->f("Seminar_id")."' AND status = 'accepted' AND studiengang_id = '".$db2->f("studiengang_id")."'");
-	      $free_quota=$tmp_admission_quota - $db3->num_rows() - $db5->num_rows();
-				if ($free_quota < 0) $free_quota = 0;
-	      //Studis auswaehlen, die jetzt aufsteigen koennen
-	      $db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY position LIMIT $free_quota");
-	      while ($db4->next_record()) {
-    			check_group($db4->f("user_id"),$db4->f("username"),$grouped_seminars,$db->f("Name"),$db->f("Seminar_id"));
-      	}
-    	}
+			}	
+	} else {
+		//Alle zugelassenen Studiengaenge einzeln bearbeiten
+		$db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '".$db->f("Seminar_id")."' ");
+		while ($db2->next_record()) {
+			//Wenn Kontingent "alle" bearbeitet wird, wird die Teilnehmerzahl aus den anderen Kontingenten gebildet
+			if ($db2->f("studiengang_id") == "all") {
+				$tmp_admission_quota=get_all_quota($db->f("Seminar_id"));
+			} else {
+				$tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
+			}
+			//belegte Plaetze zaehlen
+			$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id")."' ");
+			$db5->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id = '".$db->f("Seminar_id")."' AND status = 'accepted' AND studiengang_id = '".$db2->f("studiengang_id")."'");
+			$free_quota=$tmp_admission_quota - $db3->num_rows() - $db5->num_rows();
+			if ($free_quota < 0) $free_quota = 0;
+				//Studis auswaehlen, die jetzt aufsteigen koennen
+				$db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY position LIMIT $free_quota");
+				while ($db4->next_record()) {
+					check_group($db4->f("user_id"),$db4->f("username"),$grouped_seminars,$db->f("Name"),$db->f("Seminar_id"));
+				}
+			}
 		}
 	}
-
 }
 
 /*
