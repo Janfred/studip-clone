@@ -50,7 +50,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	function StudipLitSearchPluginZ3950Abstract(){
 		parent::StudipLitSearchPluginAbstract();
 		$this->z_hits =& $this->search_result['z_hits'];
-		/* UNIMARC mapping
+		// UNIMARC mapping
 		$this->mapping['UNIMARC'] = array('001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
 								'010' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a'),
 								'101' => array('field' => 'dc_language', 'callback' => 'simpleMap', 'cb_args' => '$a'),
@@ -71,7 +71,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 								'712' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a, $b','dc_contributor','$a, $b;')),
 								'856' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'URL: $u '),
 								);
-		*/
+		
 		//MARC mapping
 		$this->mapping['MARC'] = array(	'001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
 										'008' => array(	array('field' => 'dc_language', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>35,'length'=>3)),
