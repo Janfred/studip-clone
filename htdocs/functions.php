@@ -767,7 +767,8 @@ function write_config ($key='', $val='', $arr='') {
 /**
  * get_config
  *
- * gets an entry from the studip configuration table
+ * gets an entry from the studip configuration table - deprecated, because all values from table
+ * are set as globals now
  *
  * @param	string	the key for the config entry
  * @param	boolean	if set, the default value will we returned
