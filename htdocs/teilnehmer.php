@@ -744,7 +744,7 @@ if ($rechte) {
 		{
 			include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
 //			echo "<table width=\"99%\"><tr><td colspan=$colspan align=right class=\"steel1\"><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</td></tr></table>";
-			echo "<br><b>" . export_link($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</b>";
+			echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</font></b>";
 		}
 		
 	}
