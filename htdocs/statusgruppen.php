@@ -88,7 +88,7 @@ function PrintAktualStatusgruppen () {
 		printf ("</td>");
 		echo 	"</tr>";
 
-		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] ." AS fullname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
+		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] ." AS fullname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id' ORDER BY position ASC");
 		$k = 1;
 		while ($db2->next_record()) {
 			if ($k % 2) {

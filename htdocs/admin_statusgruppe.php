@@ -158,7 +158,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/trash_att.gif\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip(_("Gruppe mit Personenzuordnung entfernen")));
 		echo 	"\n\t</tr>";
 
-		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
+		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username, position FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id' ORDER BY position ASC");
 		$k = 1;
 		while ($db2->next_record()) {
 			if ($k > $size) {
@@ -172,7 +172,12 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 				$class="steelgraulight"; 
 			}
 			printf ("\n\t<tr>\n\t\t<td><font color=\"%s\">$k</font></td>", $farbe);
-			printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\">%s</font></td>",$class, htmlReady($db2->f("fullname")));
+			printf ("<td class=\"%s\" ><font size=\"2\">%s</font></td>",$class, htmlReady($db2->f("fullname")));
+			printf ("<td class=\"$class\" nowrap align=\"center\">");
+			if ($k < $db2->num_rows())
+				printf("<a href=\"$PHP_SELF?cmd=move_down&username=%s&statusgruppe_id=%s\"><img src=\"pictures/move_down.gif\" border=\"0\" %s></a>", $db2->f("username"), $statusgruppe_id, tooltip(_("Person nach unten bewegen")));
+			if ($k > 1)
+				printf("<a href=\"$PHP_SELF?cmd=move_up&username=%s&statusgruppe_id=%s\"><img src=\"pictures/move_up.gif\" border=\"0\" %s></a>", $db2->f("username"), $statusgruppe_id, tooltip(_("Person nach oben bewegen")));
 			printf ("<td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"pictures/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip(_("Person aus der Gruppe entfernen")));
 			echo "\n\t</tr>";
 			$k++;
@@ -328,6 +333,16 @@ function PrintInstitutMembers ($range_id)
 
 	if ($cmd=="swap") {
 		SwapStatusgruppe ($statusgruppe_id);	
+	}
+	
+	// Reihenfolge innerhalb Gruppe ändern
+	
+	if ($cmd=="move_up") {
+	 	MovePersonPosition ($username, $statusgruppe_id, "up");	
+	}
+	
+	if ($cmd=="move_down") {
+	 	MovePersonPosition ($username, $statusgruppe_id, "down");	
 	}
 
 

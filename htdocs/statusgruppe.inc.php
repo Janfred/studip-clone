@@ -89,11 +89,11 @@ function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit
 }
 
 function InsertPersonStatusgruppe ($user_id, $statusgruppe_id) {
-
+	$position = CountMembersPerStatusgruppe($statusgruppe_id)+1;
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 	if (!$db->next_record()) {			
-		$db->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id'");
+		$db->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id', position = '$position'");
 		$writedone = TRUE;
 	} else {
 		$writedone = FALSE;
@@ -105,7 +105,20 @@ function RemovePersonStatusgruppe ($username, $statusgruppe_id) {
 
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
+	$db->query("SELECT position FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
+	if ($db->next_record())
+		$position = $db->f("position");
 	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
+	
+	// Neusortierung
+	echo $position;
+	$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND position > '$position'");
+	while ($db->next_record()) {
+		$new_position = $db->f("position")-1;
+		$alt_user_id = $db->f("user_id");
+		$db2=new DB_Seminar;
+		$db2->query("UPDATE statusgruppe_user SET position =  '$new_position' WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$alt_user_id'");
+	}
 }
 
 function RemovePersonFromAllStatusgruppen ($username) {
@@ -147,6 +160,21 @@ function DeleteStatusgruppe ($statusgruppe_id) {
 		$statusgruppe_id = $db->f("statusgruppe_id");
 		$db2=new DB_Seminar;
 		$db2->query("UPDATE statusgruppen SET position =  '$new_position' WHERE statusgruppe_id = '$statusgruppe_id'");
+	}
+}
+
+function MovePersonPosition ($username, $statusgruppe_id, $direction) {
+	$user_id = get_userid($username);
+	$db=new DB_Seminar;
+	$db->query("SELECT position FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
+	if ($db->next_record()) {
+		if ($direction == "up")
+			$position = $db->f("position")-1;
+		if ($direction == "down")
+			$position = $db->f("position")+1;
+		$position_alt = $db->f("position");
+		$db->query("UPDATE statusgruppe_user SET position =  '$position_alt' WHERE statusgruppe_id = '$statusgruppe_id' AND position = '$position'");
+		$db->query("UPDATE statusgruppe_user SET position =  '$position' WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 	}
 }
 
