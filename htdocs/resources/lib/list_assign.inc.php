@@ -78,6 +78,11 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 		$begin = $assign_object->getBegin();
 	if (!$end)
 		$end = $assign_object->getRepeatEnd();
+		
+	//take a whole day!
+	$begin = mktime(0,0,0,date("m", $begin), date("d", $begin), date("Y", $begin));
+	$end = mktime(23,59,59,date("m", $end), date("d", $end), date("Y", $end));
+	
 	$ao_repeat_mode = $assign_object->getRepeatMode();
 	$ao_begin = $assign_object->getBegin();
 	$ao_end = $assign_object->getEnd();
@@ -218,3 +223,4 @@ function isFiltered($filter, $mode) {
 }
 
 ?>
+
