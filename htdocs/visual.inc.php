@@ -341,7 +341,7 @@ function format ($text) {
 	$replace = array("<h4>\\2 </h4>",
 					"<h3> \\2 </h3>",
 					"<h2> \\2 </h2>",
-					"'<h1> \\2 </h1>",
+					"<h1> \\2 </h1>",
 					"<hr noshade=\"noshade\" width=\"98%\" size=\"\\1\" align=\"center\" />",
 					"preg_call_format_list('\\2')"
 					);
