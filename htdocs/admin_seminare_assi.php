@@ -1,4 +1,4 @@
-=3<?
+<?
 /*
 admin_seminare_assi.php - Seminar-Assisten von Stud.IP.
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
