@@ -202,7 +202,7 @@ class EditResourceData {
 				if ($killButton) {
 					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
 				}
-				if  (!$resAssign->getId()) 
+				if  ($resAssign->isNew()) 
 					print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
 				elseif (!$lockedAssign)
 					print "<br />&nbsp;";
