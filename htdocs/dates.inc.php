@@ -738,7 +738,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 								$create_update_request = TRUE;
 							} else {
 								$do = FALSE;
-								$add_result .= "info§" . sprintf(_("Sie wollen die Zeiten eines oder mehrere Termine &auml;ndern, f&uuml;r den bereits ein Raum durch den Raumadministrator zugewiesen wurde. Wenn Sie die Zeiten dieser Termine &auml;ndern, verlieren Sie diese Buchung und es mu&szlig; eine neue Anfrage an den Raumadministrator gestellt werden. <br /> Wollen Sie diese Termin dennoch &auml;ndern und daf&uuml;r jeweils neue Anfragen erstellen?"));
+								$add_result .= "info§" . sprintf(_("Sie wollen die Zeiten eines oder mehrerer Termine &auml;ndern, f&uuml;r die bereits ein Raum durch den Raumadministrator zugewiesen wurde. Wenn Sie die Zeiten dieser Termine &auml;ndern, verlieren Sie diese Buchung und es mu&szlig; eine neue Anfrage an den Raumadministrator gestellt werden. <br /> Wollen Sie diese Termin dennoch &auml;ndern und daf&uuml;r jeweils neue Anfragen erstellen?"));
 								$add_result .= "<br /><a href=\"$PHP_SELF?save_changes_with_request=1\">".makeButton("ja2")."</a>&nbsp;<a href=\"$PHP_SELF?reset_edit=1\">".makeButton("nein")."</a>§";
 							}
 						}
