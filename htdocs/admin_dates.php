@@ -637,7 +637,7 @@ if (($kill_x) && ($admin_dates_data["range_id"])) {
 			if ($infobox) {
 			?>
 				<td class="blank" width="270" align="right" valign="top">
-				<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "pictures/hands07.jpg" : "pictures/schedules.jpg"); ?>
+				<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "./locale/$_language_path/LC_PICTURES/hands07.jpg" : "pictures/schedules.jpg"); ?>
 				<br />
 			</td>
 			<?
