@@ -224,7 +224,7 @@ function printQuestionField ( $question = "" ) {
     $html = "<font size=-1><b>" . _("Frage:")	. "</b></font><br>";
 
     if( $pageMode != MODE_RESTRICTED )
-	$html .= "<textarea cols=80 rows=2 name=\"question\" ".$js." tabindex=2>".$question."</textarea>";
+	$html .= "<textarea cols=50 rows=2 style=\"width:100%;\" name=\"question\" ".$js." tabindex=2>".$question."</textarea>";
     else 
 	$html .= "<div class=steelgraulight style=\"width:100%; padding:2px;\">"
 	    . "<font size=-1>".formatReady($question)."</font>"

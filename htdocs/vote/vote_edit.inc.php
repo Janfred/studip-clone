@@ -66,13 +66,20 @@ if ($voteID) {
 if (!($perm->have_studip_perm ("tutor", $rangeID) OR
       get_username($userID) == $rangeID)
     ) {
-   echo "BLA".$rangeID."<br>";
-   echo "Home: ".(get_username($userID) == $rangeID)."<br>";
-   echo "Recht: ".$perm->have_studip_perm ("tutor", $rangeID)."<br>";
+    parse_window( "error§" .
+		  _("Zugriff verweigert.").
+		  "<br /><font size=-1 color=black>".
+		  ($vote->instanceof() == INSTANCEOF_TEST
+		   ? sprintf(_("Sie haben keine Berechtigung den Test '%s' zu editieren."), $vote->getTitle())
+		   : sprintf(_("Sie haben keine Berechtigung das Voting '%s' zu editieren."), $vote->getTitle())).
+		  "</font>",
+		  "§", _("Zugriff auf Editierseite verweigert"), 
+		  "<br />&nbsp;"
+		  );
 
-   echo createReportMessage (_("Sie haben keine Berechtigung in ".
-			       "diesem Bereich"), VOTE_ICON_ERROR, 
-			     VOTE_COLOR_ERROR);
+#   echo createReportMessage (_("Sie haben keine Berechtigung in ".
+#			       "diesem Bereich"), VOTE_ICON_ERROR, 
+#			     VOTE_COLOR_ERROR);
    page_close ();
    exit;
 }
@@ -384,10 +391,9 @@ printFormEnd();
  */
 
 function makeNewAnswer( ) {
-    static $ch = 'A';
 
     return array( 'answer_id' => md5(uniqid(rand())),
-		  'text'      => $ch++,
+		  'text'      => "",
 		  'counter'   => 0,
 		  'correct'   => NO
 		  );
