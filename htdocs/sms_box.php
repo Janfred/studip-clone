@@ -61,7 +61,7 @@ function set_read($message_id) {
 // print_snd_message
 
 function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_data_view) {
-	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $db7, $PHP_SELF;	
 	//Kopfzeile erstellen
 	$icon = "&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
 	if ($cmd == "select_all") {
@@ -117,12 +117,10 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 	
 	if ($sms_data_open == $message_id) {
 		$open = "open";
-		#$link = $PHP_SELF."?mclose=TRUE";
-		$link = "sms_box.php?mclose=TRUE";
+		$link = $PHP_SELF."?mclose=TRUE";
 	} else {
 		$open = "close";
-		#$link = $PHP_SELF."?mopen=".$message_id."#".$message_id;
-		$link = "sms_box.php?mopen=".$message_id."#".$message_id;
+		$link = $PHP_SELF."?mopen=".$message_id."#".$message_id;
 	}
 	
 	if (strlen($titel) >= "50") {
@@ -147,7 +145,7 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 // print_rec_message
 
 function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullname, $sms_data_open, $read) {
-	global $n, $LastLogin, $my_messaging_settings, $cmd;	
+	global $n, $LastLogin, $my_messaging_settings, $cmd, $PHP_SELF;	
 
 	$uname_snd = get_username($user_id_snd);
 
@@ -160,16 +158,13 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 	// open if unread
 	if ($read != "1") {
 		$open = "open";
-		$link = "sms_box.php?mclose=TRUE";
-		#$link = $PHP_SELF."?mclose=TRUE";
+		$link = $PHP_SELF."?mclose=TRUE";
 	} else if ($sms_data_open == $message_id) {
 		$open = "open";
-		$link = "sms_box.php?mclose=TRUE";
-		#$link = $PHP_SELF."?mclose=TRUE";
+		$link = $PHP_SELF."?mclose=TRUE";
 	} else {
 		$open = "close";
-		$link = "sms_box.php?mopen=".$message_id;
-		#$link = $PHP_SELF."?mopen=".$message_id;
+		$link = $PHP_SELF."?mopen=".$message_id;
 	}
 
 	if ($read == "1") {
