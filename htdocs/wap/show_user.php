@@ -91,6 +91,7 @@ $db->query("$q_string");
 if ($back_to == "show_sms") {
 	$postfields_back_to = "		<postfield name=\"sms_id\" value=\"$sms_id\"/>\n";
 	$postfields_back_to .= "		<postfield name=\"no_search_link\" value=\"1\"/>\n";
+	$postfields_back_to .= "		<postfield name=\"back_to\" value=\"show_sms\"/>\n";
 }
 else
 	$postfields_back_to = "		<postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";

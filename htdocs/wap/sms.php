@@ -84,7 +84,7 @@ if ($session_user_id)
 
 	if ($num_sms > 0)
 	{
-		$q_string  = "SELECT message_user.message_id, auth_user_md5.username ";
+		$q_string  = "SELECT message_user.message_id, auth_user_md5.* ";
 		$q_string .= "FROM message_user LEFT JOIN message USING (message_id) ";
 		$q_string .= "LEFT JOIN auth_user_md5 ON (message.autor_id = auth_user_md5.user_id) ";
 		$q_string .= "WHERE message_user.user_id = \"$session_user_id\" ";
@@ -111,7 +111,7 @@ if ($session_user_id)
 		while ($db-> next_record() && $progress_counter < $progress_limit)
 		{
 			$progress_counter ++;
-			$entry_sender = $db->f("username");
+			$entry_sender = $db->f("Nachname");
 			$entry_id	 = $db->f("message_id");
 
 			$short_sender = wap_txt_shorten_text($entry_sender, WAP_TXT_LINK_LENGTH - 3);
