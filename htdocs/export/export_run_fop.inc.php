@@ -69,7 +69,6 @@ else
 	// Process the document
 	escapeshellcmd ( $result_file );
 	escapeshellcmd ( $TMP_PATH );
-//	$str = "java -cp \\php3\\fop\\build\\fop.jar;\\php3\\fop\\lib\\batik.jar;\\php3\\fop\\lib\\xalan-2.3.1.jar;\\php3\\fop\\lib\\xercesImpl-2.0.1.jar;\\php3\\fop\\lib\\xml-apis.jar;\\php3\\fop\\lib\\avalon-framework-cvs-20020315.jar;\\php3\\fop\\lib\\logkit-1.0.jar;\\php3\\fop\\lib\\jimi-1.0.jar org.apache.fop.apps.Fopjava -cp \\php3\\fop\\build\\fop.jar;\\php3\\fop\\lib\\batik.jar;\\php3\\fop\\lib\\xalan-2.3.1.jar;\\php3\\fop\\lib\\xercesImpl-2.0.1.jar;\\php3\\fop\\lib\\xml-apis.jar;\\php3\\fop\\lib\\avalon-framework-cvs-20020315.jar;\\php3\\fop\\lib\\logkit-1.0.jar;\\php3\\fop\\lib\\jimi-1.0.jar org.apache.fop.apps.Fop tmp\\$result_file tmp\\studip.pdf";
 	$pdf_file = md5(uniqid(rand())) .".pdf";
 	$str = "/usr/local/fop-0.20.5rc/fop.sh $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
 //	$out = system( ( $str ) );
@@ -79,6 +78,7 @@ else
 	unlink( $TMP_PATH . "/" . $xml_file_id);
 	unlink( $TMP_PATH . "/" . $result_file);
 */	
+		if (file_exists($TMP_PATH."/".$pdf_file))
 		{
 			$link2 = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file  . "&file_name=" . $xslt_filename . ".pdf\">";
 	
@@ -89,23 +89,28 @@ else
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
 			$export_pagecontent .= "</td></tr></table><br>";
+	
+			$result_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\"><img src=\"./pictures/" . $export_icon["pdf"] . "\" border=0></a>";
+			$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\">" . $xslt_filename . ".pdf" . "</a>";
+			$result_printdesc = _("PDF-Datei");
+			$result_printcontent = _("Dies ist die fertige PDF-Datei.") . "<br>";	
 		}	
-
+		else
+		{	
+			$export_error = "<b>" . _("Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten.") . "</b><br>";
+			$export_error_num ++;
+		}
+	
 		$xml_printimage = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\"><img src=\"./pictures/" . $export_icon["xml"] . "\" border=0></a>";
 		$xml_printlink = "<a href=\"sendfile.php?type=2&file_id=$xml_file_id&file_name=$xml_filename\">" . $xml_filename . "</a>";
 		$xml_printdesc = _("XML-Daten");
-		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können mit einem XSLT-Script verarbeitet werden.") . "<br>";	
+		$xml_printcontent = _("In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags k&ouml;nnen mit einem XSLT-Script verarbeitet werden.") . "<br>";	
 	
 		$xslt_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\"><img src=\"./pictures/" . $export_icon[$format] . "\" border=0></a>";
 		$xslt_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $result_file . "&file_name=" . $xslt_filename . "." . $format . "\">" . $xslt_filename . "." . $format . "</a>";
 		$xslt_printdesc = _("Formatting-Objects-Datei");
 		$xslt_printcontent = _("In dieser Datei sind die Formatting Objects zur Erzeugung der PDF-Datei gespeichert.") . "<br>";	
 	
-		$result_printimage = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\"><img src=\"./pictures/" . $export_icon["pdf"] . "\" border=0></a>";
-		$result_printlink = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file . "&file_name=" . $xslt_filename . ".pdf" . "\">" . $xslt_filename . ".pdf" . "</a>";
-		$result_printdesc = _("PDF-Datei");
-		$result_printcontent = _("Dies ist die fertige PDF-Datei.") . "<br>";	
-
 
 		$infobox = array	(			
 		array ("kategorie"  => "Information:",
