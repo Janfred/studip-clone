@@ -112,6 +112,12 @@ while ($db->next_record()) {
 	if (is_array($now))
 		foreach ($now as $key=>$val) {
 			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='".get_object_type($key)."', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='forum', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='documents', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='wiki', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='scm', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='schedule', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='literature', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
 			$c++;
 		}
 	echo "<br/>".$c ."&nbsp;Veranstaltungen/Einrichtungen konvertiert";
