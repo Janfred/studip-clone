@@ -76,5 +76,19 @@ $this->msg[10] = array (
 $this->msg[11] = array (
 		"mode" => "error",
 		"msg"=> _("Die Belegung konnte nicht gespeichert werden, da sie sich mit einer anderen Belegung &uuml;berschneidet!"));
-		
+$this->msg[12] = array (
+		"mode" => "info",
+		"msg"=> _("Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben.")."<br />"._("Um Ressourcen anzulegen, erzeugen sie zun&auml;chst eine neue Ebene, indem sie &raquo;Neue Hierarchie erzeugen&laquo; anw&auml;hlen.")." <br />"._("Anschliessend k&ouml;nnen auf dieser Ebene Ressourcen anlegen"));
+$this->msg[13] = array (
+		"mode" => "info",
+		"msg"=> _("Es existieren keine Ressourcen, die Sie in im Rahmen dieser Veranstaltung belegen d&uuml;rfen."));
+$this->msg[14] = array (
+		"mode" => "info",
+		"msg"=> _("Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden.")." <br />"._("Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter &raquo;&Uuml;bersicht&laquo; einen Ebene bzw. Ressource in der Hierachie aus."));
+$this->msg[15] = array (
+		"mode" => "info",
+		"msg"=> _("Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt.")." <br />"._("Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus."));
+$this->msg[16] = array (
+		"mode" => "info",
+		"msg"=> _("Sie haben keine Objekt zum Anzeigen ausgew&auml;hlt.")." <br />"._("Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus."));
 ?>
