@@ -161,15 +161,18 @@ include ($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");	//hier wird das Reiter- u
 //get ID
 if ($SessSemName[1])
 	$range_id=$SessSemName[1]; 
+
+if (!$admin_modules_data["conflicts"])
+	$admin_modules_data["conflicts"] = array();
 	
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents) && (!count($admin_modules_data["conflicts"]))) {
+if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents) && ((!count($admin_modules_data["conflicts"]) && (is_array($admin_modules_data["conflicts"]))))) {
 	$admin_modules_data["modules_list"] = $amodules->getLocalModules($range_id);
 	$admin_modules_data["orig_bin"] = $amodules->getBin($range_id);
 	$admin_modules_data["changed_bin"] = $amodules->getBin($range_id);
 	$admin_modules_data["range_id"] = $range_id;
 } else {
-	//Sicherheitscheck ob &uuml;berhaupt was zum Bearbeiten gewaehlt ist.
+	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
 	if (!$admin_modules_data["range_id"]) {
 		echo "</tr></td></table>";
 		die;
