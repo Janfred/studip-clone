@@ -1,7 +1,7 @@
 <?php
 /*
 SemesterScript.php - Insertscript von Stud.IP 
-by Mark Sievers
+by Mark Sievers <kursmanager@uos.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,19 +19,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check("root");
 // Semester and Holiday Insert Script. To insert the data from the global Variables SEMESTER
 // and HOLIDAY, simply call this script. 
 // Be careful when inserting the data, because the script should only be used, when the db-tables
 // semester_data, semester_holiday are empty
 
 if (semester_insert_into_semester_from_array($SEMESTER)) {
-	echo "Einf&uuml;gen der Semester hat funktioniert<br><br>";
+	echo "Folgende Semester wurden eingef&uuml;gt<br><br>";
+	echo "<table border=1><tr>";
+	echo "<th></th><th>Name</th><th>Beginn</th><th>Ende</th>";
+	echo "</tr>";
+	for ($i=1;$i<count($SEMESTER);$i++) {
+		echo "<tr><td><b>".$i."</b></td><td>".$SEMESTER[$i]["name"]."</td><td>".date("d-m-Y",$SEMESTER[$i]["beginn"])."</td><td>".date("d-m-Y",$SEMESTER[$i]["ende"])."</td></tr>";
+	}
+	echo "</table>";
 }
 if (holiday_insert_into_semester_from_array($HOLIDAY)) {
-	echo "Einf&uuml;gen der Ferien hat funktioniert<br><br>";
+	echo "Folgende Ferien wurden eingef&uuml;gt:<br><br>";
+	echo "<table border=1><tr>";
+	echo "<th></th><th>Name</th><th>Beginn</th><th>Ende</th>";
+	echo "</tr>";
+	for ($i=1;$i<count($HOLIDAY);$i++) {
+		echo "<tr><td><b>".$i."</b></td><td>".$HOLIDAY[$i]["name"]."</td><td>".date("d-m-Y",$HOLIDAY[$i]["beginn"])."</td><td>".date("d-m-Y",$HOLIDAY[$i]["ende"])."</td></tr>";
+	}
+	echo "</table>";
 }
 
 
