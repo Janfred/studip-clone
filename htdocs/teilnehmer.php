@@ -24,9 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <html>
 <head>
 <?IF (!isset($SessSemName[0]) || $SessSemName[0] == "") {
-    echo "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=index.php\">";
-    echo "</head></html>";
-    die;
+	echo "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=index.php\">";
+	echo "</head></html>";
+	die;
 }
 ?>
 
@@ -50,6 +50,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	$messaging=new messaging;
 	$cssSw=new cssClassSwitcher;
 
+//Hilfsfunktion, erzeugt eine lsite mit allen ids der einrichtungen
+function get_inst_list(){
+	global $SessSemName;
+	$db = new DB_Seminar("SELECT Institut_id FROM seminar_inst WHERE seminar_id='$SessSemName[1]'"); //beteiligte Einrichtungen
+	$value_list = "";
+	$result[] = $SessSemName[5]; //Heimatinstitut
+	if ($db->num_rows()){
+		while($db->next_record()) {
+			$result[] = $db->Record[0];
+		}
+	}
+	$value_list = "'".join("','",$result)."'";
+	return $value_list;
+}
+
+	
 if ($sms_msg)
 	$msg=rawurldecode($sms_msg);
 
@@ -211,7 +227,12 @@ if (isset($add_tutor_x)) {
 	if ($rechte AND $SemUserStatus!="tutor") {
 				// nur wenn wer ausgewaehlt wurde
 		if ($u_id != "0") {
-			$db->query("SELECT Vorname, Nachname FROM user_inst NATURAL LEFT JOIN auth_user_md5 WHERE Institut_id = '$SessSemName[5]' AND user_inst.user_id = '$u_id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent')");
+			$value_list = get_inst_list();
+			$query = "SELECT b.user_id, username, Vorname, Nachname, inst_perms FROM user_inst a ".
+			"LEFT JOIN auth_user_md5  b USING(user_id) ".
+			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
+			"WHERE a.Institut_id IN($value_list) AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
+			$db->query($query);
 				// wer versucht denn da wen nicht zugelassenen zu berufen?
 			if ($db->next_record()) {
 				// so, Berufung ist zulaessig
@@ -264,7 +285,7 @@ $gruppe = array ("dozent" => "DozentInnen",
 ?>
 
 <tr>
-        <td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b></td>
+		<td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - TeilnehmerInnen</b></td>
 </tr>
 	<tr>
 		<td class="blank" width="100%" colspan=2>&nbsp;
@@ -306,7 +327,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		else
 			$width=20;
 						
- 		if ($key == "dozent") {
+		if ($key == "dozent") {
 			echo"<td class=\"steel\" width=\"$width%\" align=center><b>&nbsp;</b></td>";
 			echo"<td class=\"steel\" width=\"$width%\" align=center><b>&nbsp;</b></td>";
 			if ($db3->f("admission_type"))
@@ -339,8 +360,8 @@ if ($db->num_rows()) { //Only if Users were found...
 
 	$c=1;
 	while ($db->next_record()) {
-  	if ($c % 2)
-  		$class="steel1";
+	if ($c % 2)
+		$class="steel1";
 	else
 		$class="steelgraulight"; 
 	$c++;
@@ -379,7 +400,7 @@ if ($db->num_rows()) { //Only if Users were found...
 		elseif ($key == "autor") {
 			// zum Tutor befördern
 			if ($SemUserStatus!="tutor") {
-				$db2->query ("SELECT inst_perms, user_id, Institut_id FROM user_inst WHERE user_id = '$UID' AND Institut_id = '$SessSemName[5]' AND inst_perms!='user' AND inst_perms!='autor'");		
+				$db2->query ("SELECT inst_perms, user_id, Institut_id FROM user_inst WHERE user_id = '$UID' AND Institut_id IN(".get_inst_list().") AND inst_perms!='user' AND inst_perms!='autor'");		
 				if ($db2->next_record()) {
 					echo "<td class=\"$class\" align=center>";
 					echo "<a href=\"$PHP_SELF?cmd=pleasure&username=$username\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>";
@@ -442,7 +463,7 @@ if ($rechte) {
 	if ($db->num_rows()) { //Only if Users were found...
 
 		// die eigentliche Teil-Tabelle
-	 	echo "<tr><td class=\"blank\" colspan=2>";
+		echo "<tr><td class=\"blank\" colspan=2>";
 		echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
 		echo "<tr height=28>";
 		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>%s</b></font></td>", ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30",  ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1) ? "Warteliste" : "Anmeldeliste");
@@ -464,8 +485,8 @@ if ($rechte) {
 				$db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
 				IF ($db2->next_record())
 					$wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
-	        	         IF ($plaetze >= $wartende) 
-        		         	$admission_chance = 100;   // ich komm auf jeden Fall rein
+						 IF ($plaetze >= $wartende) 
+							$admission_chance = 100;   // ich komm auf jeden Fall rein
 				ELSE 
 					$admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
 			}
@@ -488,10 +509,14 @@ if ($rechte) {
 
 
 
-// Der Dozent braucht mehr Unterstuetzung, also Tutor aus dem Institut berufen...
+// Der Dozent braucht mehr Unterstuetzung, also Tutor aus der(n) Einrichtung(en) berufen...
 if ($rechte AND $SemUserStatus!="tutor") {
-	$query="SELECT auth_user_md5.user_id, username, Vorname, Nachname, inst_perms FROM user_inst LEFT JOIN auth_user_md5  USING(user_id) LEFT JOIN seminar_user ON (seminar_user.user_id=user_inst.user_id AND seminar_id='$SessSemName[1]')  WHERE Institut_id = '$SessSemName[5]' AND inst_perms IN ('tutor','dozent') AND ISNULL(seminar_id) ORDER BY Nachname";
-	$db->query($query);
+	$value_list = get_inst_list();
+			$query = "SELECT b.user_id, username, Vorname, Nachname, inst_perms FROM user_inst a ".
+			"LEFT JOIN auth_user_md5  b USING(user_id) ".
+			"LEFT JOIN seminar_user c ON (c.user_id=a.user_id AND c.seminar_id='$SessSemName[1]')  ".
+			"WHERE a.Institut_id IN($value_list) AND a.inst_perms IN ('tutor','dozent') AND ISNULL(c.seminar_id) ORDER BY Nachname";
+	$db->query($query); // ergibt alle berufbaren Personen
 	?>
 
 	<tr>
@@ -503,7 +528,7 @@ if ($rechte AND $SemUserStatus!="tutor") {
 	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>" method="POST">
 	<tr>
-		<td class="steel1" width="30%" align="left">&nbsp; <font size=-1><b>MitarbeiterInnen der Einrichtung</b></font></td>
+		<td class="steel1" width="30%" align="left">&nbsp; <font size=-1><b>MitarbeiterInnen der Einrichtung(en)</b></font></td>
 		<td class="steel1" width="40%" align="center"><SELECT Name="u_id" size="1">
 		<?
 		printf ("<option value=\"0\">- -  bitte ausw&auml;hlen - -\n");
