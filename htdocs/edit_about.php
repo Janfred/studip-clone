@@ -448,7 +448,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 		if (!StudipAuthAbstract::CheckField("auth_user_md5.Email", $this->auth_user['auth_plugin']) && $this->auth_user["Email"] != $email) {  //email wurde geändert!
 			if ($ALLOW_CHANGE_EMAIL) {
 				$smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
-				$REMOTE_ADDR=getenv("REMOTE_ADDR");
+				$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
 				$Zeit=date("H:i:s, d.m.Y",time());
 				
 				if (!$validator->ValidateEmailAddress($email)) {
@@ -460,9 +460,9 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 					$this->msg=$this->msg . "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
 					return false;
 				} else {       // Server ereichbar
-					if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse@localhost!
-						$from="wwwrun@".$smtp->localhost;
-						$to="abuse@".$smtp->localhost;
+					if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
+						$from = $smtp->env_from;
+						$to = $smtp->abuse;
 						$smtp->SendMessage(
 						$from, array($to),
 						array("From: $from", "To: $to", "Subject: edit_about"),

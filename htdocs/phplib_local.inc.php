@@ -417,6 +417,8 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		
 		global $_language, $_language_path;
 		
+		$this->error_msg = "";
+		
 		// check for direct link to register2.php 
 		if (!isset($_language) || $_language == "") {
 			$_language = get_accepted_languages();
@@ -474,9 +476,9 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			$this->error_msg=$this->error_msg. _("Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken und empfangen können!") . "<br>";
 			return false;
 		} else {					  // Server ereichbar
-			if (!$validator->ValidateEmailBox($Email)) {    // aber user unbekannt. Mail an abuse@puk!
-				$from="wwwrun@".$smtp->localhost;
-				$to="abuse@".$smtp->localhost;
+			if (!$validator->ValidateEmailBox($Email)) {    // aber user unbekannt. Mail an abuse!
+				$from = $smtp->env_from;
+				$to = $smtp->abuse;
 				$smtp->SendMessage(
 				$from, array($to),
 				array("From: $from", "To: $to", "Subject: Register"),
