@@ -5,7 +5,7 @@
 		<xsl:for-each select="studip">
 			<xsl:text>{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
 \viewkind4\uc1\pard\par\qc\fs56 </xsl:text><xsl:value-of select="@range"/>
-<xsl:text>\par\fs36 der </xsl:text><xsl:value-of select="@uni"/>
+<xsl:text>\par\fs36 </xsl:text><xsl:value-of select="@uni"/>
 <xsl:text>\par\pard\fs44 
 \par 
 \par 
