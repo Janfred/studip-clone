@@ -1632,52 +1632,52 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["termin_ids"] = $val;
 					}
 				}
-
-				$events = array();
-				foreach ($assignObjects as $assObj) {
-					foreach ($assObj->getEvents() as $evtObj) {
-						$events[$evtObj->getId()] = $evtObj;
-						if (($evtObj->getBegin() < $first_event) || (!$first_event))
-							$first_event = $evtObj->getBegin();
+				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $group_id=>$group_val) {
+					$termin_groups = array();
+					$events = array();
+					$tmp_result = array();
+					$result_termin = array();
+					foreach ($group_val["termin_ids"] as $key2=>$val2) {
+						$termin_groups[$key2] = true; 
 					}
-				}
-				$multiOverlaps->checkOverlap($events, &$result, "assign_user_id");
-
-				//build a temporary array for termin_id=>group_number
-				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key=>$val) {
-					foreach ($val["termin_ids"] as $key2=>$val2) {
-						$termin_groups[$key2] = $key; 
-					}
-					
-				}
-				
-				//build the overlap-result based on termin_ids...
-				foreach ($result as $key=>$val) {
-					foreach ($val as $key2=>$val2) {
-						if (sizeof($val2))
-							$tmp_result_termin[$termin_groups[$key2]][$key][$key2] = TRUE;
-					}
-				}
-							
-				//count for every group	
-				$result_termin = array();
-				if (is_array($tmp_result_termin)) {
-					foreach ($tmp_result_termin as $key=>$val) {
-						foreach ($val as $key2=>$val2) {
-							$result_termin[$key][$key2] = sizeof($val2);
+					foreach ($assignObjects as $assObj) {
+						if ($termin_groups[$assObj->getAssignUserId()]){
+							foreach ($assObj->getEvents() as $evtObj) {
+								$events[$evtObj->getId()] = $evtObj;
+								if (($evtObj->getBegin() < $first_event) || (!$first_event))
+									$first_event = $evtObj->getBegin();
+							}
 						}
 					}
+					$multiOverlaps->checkOverlap($events, &$tmp_result, "assign_user_id");
+
+				//count for every group	
+				foreach ($tmp_result as $key=>$val) {
+					foreach ($val as $key2=>$val2) {
+							if (sizeof($val2)){
+								$result[$key][$key2] = $val2;
+								$tmp_overlap_event_count = 0;
+								foreach ($val2 as $val3) {
+									foreach ($events as $one_event){
+										if ( 	($val3['begin'] > $one_event->begin && $val3['begin'] < $one_event->end)
+											||	($val3['begin'] <= $one_event->begin && $val3['end'] > $one_event->begin)
+											||	($val3['begin'] == $one_event->begin && $val3['end'] == $one_event->end)){
+										++$tmp_overlap_event_count;
+										}
+									}
+								}
+							$result_termin[$key] += $tmp_overlap_event_count;
+							}
+						}
 				}
-					
 				
-				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key=>$val) {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["events_count"] = sizeof($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["termin_ids"]);
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["overlap_events_count"] = $result_termin[$key];
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["resource_id"] = $semObj->getMetaDateValue($key, "resource_id");
-				}
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$group_id]["events_count"] = sizeof($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$group_id]["termin_ids"]);
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$group_id]["overlap_events_count"] = $result_termin;
+				$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$group_id]["resource_id"] = $semObj->getMetaDateValue($group_id, "resource_id");
 			}
-			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"] = $result;
-			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"] = $first_event;
+		}
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"] = $result;
+		$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"] = $first_event;
 		}
 	}
 }
