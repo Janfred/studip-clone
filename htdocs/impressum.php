@@ -42,8 +42,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	require_once "config.inc.php";
 	require_once("visual.inc.php");
 
-function write_toplist($rubrik,$query)
-{
+function write_toplist($rubrik,$query) {
+	global $PHP_SELF;
+	
 	$db=new DB_Seminar;
 	$db->query($query);
 	$tmp_link="$PHP_SELF?view=statistik";
