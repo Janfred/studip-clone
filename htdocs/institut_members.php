@@ -33,26 +33,7 @@ require($ABSOLUTE_PATH_STUDIP."header.php");   //hier wird der "Kopf" nachgelade
 
 $db_institut_members = new DB_Seminar();
 
-// hier muessen Seiten-Initialisierungen passieren
-if(isset($auswahl) && $auswahl != ""){
-	// dieses Institut wurde gerade eben betreten
-	$SessionSeminar = $auswahl;
-	$db_institut_members->query("SELECT Name, Institut_id, type FROM Institute WHERE Institut_id='$auswahl'");
-	while($db->next_record()){
-		$SessSemName[0] = $db_institut_members->f("Name");
-		$SessSemName[1] = $db_institut_members->f("Institut_id");
-		$SessSemName["art_generic"] = "Einrichtung";
-		$SessSemName["art"] = $INST_TYPE[$db_institut_members->f("type")]["name"];
-		if(!$SessSemName["art"])
-			$SessSemName["art"] = $SessSemName["art_generic"];
-		$SessSemName["class"] = "inst";
-		$nr = $db_institut_members->f("Institut_id");
-		$loginfilelast["$nr"] = $loginfilenow["$nr"];
-		$loginfilenow["$nr"] = time();
-	}
-}
-else 
-	$auswahl = $SessSemName[1];
+$auswahl = $SessSemName[1];
 
 // initialize session variable and store data given by URL
 if(!isset($institut_members_data))
