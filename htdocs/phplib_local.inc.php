@@ -52,7 +52,7 @@ if ( (! isset($_REQUEST)) && (! isset($_GET)) ) {
 reset($HTTP_POST_VARS);
 reset($HTTP_GET_VARS);
 
-if (strstr( PHP_OS,"WIN") && $CHAT_ENABLE == true) 						//Attention: file based chat for windows installations (slow)
+if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
 // path generation for SRI-interface (external pages)
@@ -71,7 +71,7 @@ $_fullname_sql['no_title_rev'] = "CONCAT(Nachname ,', ', Vorname)";
 $_fullname_sql['no_title_short'] = "CONCAT(Nachname,', ',UCASE(LEFT(TRIM(Vorname),1)),'.')";
 
 //software version - please leave it as it as!
-$SOFTWARE_VERSION="1.1.0 beta cvs";
+$SOFTWARE_VERSION="1.2.0 alpha cvs";
 
 /*classes for database access
 ----------------------------------------------------------------
@@ -130,7 +130,9 @@ class studip_smtp_class extends smtp_class {
 		$this->from = "\"Stud.IP\" <wwwrun@".$this->localhost.">"; // From: Mailheader
 		$this->env_from = "wwwrun@".$this->localhost; // Envelope-From:
 		$this->abuse = "abuse@".$this->localhost; // Reply-To: Mailheader
-		$this->url = "http://" . getenv("HTTP_HOST") . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
+		$this->url = ((getenv("SERVER_PORT") == 443 || getenv("HTTPS") == "on") ? "https://" : "http://") 
+					. getenv("HTTP_HOST") . ((getenv("SERVER_PORT") != 443 && getenv("SERVER_PORT") != 80) ? ":" . getenv("SERVER_PORT") : "") 
+					. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
 	}
 }
 
