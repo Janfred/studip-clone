@@ -165,6 +165,66 @@ class ExternEditHtml extends ExternEditGeneric {
 	}
 	
 	/**
+	* Prints out a form for entering the link color in the body tag
+	*
+	* @param string name The name of the text field.
+	* @param string value The value for the text pre-emption.
+	*/
+	
+	function editText ($attribute) {
+		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
+		$info .= _("Diese Farbe wird seitenweit als Schriftfarbe benutzt.");
+		$title = _("Schriftfarbe:");
+		
+		return $this->editColorGeneric($attribute, $title, $info);
+	}
+	
+	/**
+	* Prints out a form for entering the link color in the body tag
+	*
+	* @param string name The name of the text field.
+	* @param string value The value for the text pre-emption.
+	*/
+	
+	function editLink ($attribute) {
+		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
+		$info .= _("Diese Farbe wird seitenweit für Verweise zu noch nicht besuchten Zielen benutzt.");
+		$title = _("Linkfarbe (nicht besucht):");
+		
+		return $this->editColorGeneric($attribute, $title, $info);
+	}
+	
+	/**
+	* Prints out a form for entering the link color in the body tag
+	*
+	* @param string name The name of the text field.
+	* @param string value The value for the text pre-emption.
+	*/
+	
+	function editVlink ($attribute) {
+		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
+		$info .= _("Diese Farbe wird seitenweit für Verweise zu bereits besuchten Zielen benutzt.");
+		$title = _("Linkfarbe (besucht):");
+		
+		return $this->editColorGeneric($attribute, $title, $info);
+	}
+	
+	/**
+	* Prints out a form for entering the link color in the body tag
+	*
+	* @param string name The name of the text field.
+	* @param string value The value for the text pre-emption.
+	*/
+	
+	function editAlink ($attribute) {
+		$info = _("Geben Sie einen HTML-Farbnamen oder eine Farbe im Hex-Format (#RRGGBB) in das Textfeld ein, oder wählen Sie eine Farbe aus der Auswahlliste. ");
+		$info .= _("Diese Farbe wird seitenweit für aktivierte Verweise benutzt.");
+		$title = _("Linkfarbe (aktiviert):");
+		
+		return $this->editColorGeneric($attribute, $title, $info);
+	}
+	
+	/**
 	* Prints out a text field and a selection list for entering the color of
 	* a table border.
 	*
@@ -240,10 +300,14 @@ class ExternEditHtml extends ExternEditGeneric {
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . "><td{$this->width_1}>";
 		$out .= "<font size=\"2\">$title</font></td>\n";
-		$out .= "<td{$this->width_2} nowrap=\"nowrap\"><input type=\"text\" name=\"$form_name\" size=\"20\"";
+		$out .= "<td{$this->width_2} nowrap=\"nowrap\">\n";
+		$out .= "<input type=\"text\" name=\"$form_name\" size=\"20\"";
 		$out .= " maxlength=\"20\" value=\"$value\" />&nbsp; &nbsp;\n";
 		
-		$out .= "<select name=\"_{$form_name}\" size=\"1\">\n";
+		$out .= "<select name=\"_{$form_name}\" ";
+		$out .= "onChange=\"document.edit_form.{$form_name}.value=document.edit_form._{$form_name}.";
+		$out .= "options[document.edit_form._{$form_name}.selectedIndex].value;\" ";
+		$out .= ">\n";
 		foreach ($colors as $color_name => $color_value) {
 			if ($value == $color_value)
 				$out .= "<option selected=\"selected\" ";
@@ -253,6 +317,7 @@ class ExternEditHtml extends ExternEditGeneric {
 			$out .= $color_name . "</option>";
 		}
 		$out .= "</select>\n";
+		
 		$out .= "<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"] . "pictures/info.gif\"";
 		$out .= tooltip($info, TRUE, TRUE) . ">$error_sign</td></tr>\n</table>\n</td></tr>\n";
 		$this->css->switchClass();
