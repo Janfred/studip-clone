@@ -4,11 +4,14 @@
 #  extract all Stud.IP message strings and merge with old translations
 #
 
-# first handle files separate
-mv locale/en/LC_MESSAGES/studip_core.po locale/en/LC_MESSAGES/studip_core.po.old
-xgettext -C -n --keyword=_ -o locale/en/LC_MESSAGES/studip_core.po.new  *.php
-msgmerge locale/en/LC_MESSAGES/studip_core.po.old locale/en/LC_MESSAGES/studip_core.po.new --output-file=locale/en/LC_MESSAGES/studip_core.po
+for language in en;
+do {
+	# first handle files separate
+	mv locale/$language/LC_MESSAGES/studip_core.po locale/$language/LC_MESSAGES/studip_core.po.old
+	xgettext -C -n --keyword=_ -o locale/$language/LC_MESSAGES/studip_core.pot  *.php
+	msgmerge locale/$language/LC_MESSAGES/studip_core.po.old locale/$language/LC_MESSAGES/studip_core.pot --output-file=locale/$language/LC_MESSAGES/studip_core.po
 
-
-# then merge into one file
-msgcat locale/en/LC_MESSAGES/studip_core.po locale/en/LC_MESSAGES/studip.po --output-file=locale/en/LC_MESSAGES/studip.po --use-first
+	# then merge into one file
+	msgcat locale/$language/LC_MESSAGES/studip_core.po locale/$language/LC_MESSAGES/studip.po --output-file=locale/$language/LC_MESSAGES/studip.po --use-first
+} ;
+done
