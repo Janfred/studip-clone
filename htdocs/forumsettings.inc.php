@@ -127,10 +127,13 @@ echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 			<font size=-1>
 			&nbsp;<select name="shrink">
 			<?
+			echo "<option value=0";
+			if ($forum["shrink"]==0) echo " selected";
+			echo ">"._("ausgeschaltet");
 			for ($i=1;$i<20;$i+=1) {
 				echo "<option value=\"$i\"";
-				if ($i == $forum["postingsperside"]) echo " selected";
-				echo ">$i Wochen";
+				if ($i*604800 == $forum["shrink"]) echo " selected";
+				echo ">$i "._("Wochen");
 			}
 			?>
 			</select>
