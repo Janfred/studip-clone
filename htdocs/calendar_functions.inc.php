@@ -158,11 +158,11 @@ function holiday ($tmstamp, $mod = "") {
 			$name = "Erntedank";
 			$col = 1;
 		}
-		else if ($doy > 319 && $doy < 327) {
+		else if ($doy > 316 && $doy < 324) {
 			$name = "Volkstrauertag";
 			$col = 2;
 		}
-		else if ($doy > 326 && $doy < 334) {
+		else if ($doy > 323 && $doy < 331) {
 			$name = "Totensonntag";
 			$col = 1;
 		}
