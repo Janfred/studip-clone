@@ -169,7 +169,7 @@ else {
 
 	if ( is_array($HTTP_POST_VARS) && list($key, $val) = each($HTTP_POST_VARS)) {
     		if ($perms!="") { //hoffentlich auch was Sinnvolles?
-			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE user_id = '$u_id'");
+			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$u_id'");
 			while ($db->next_record()) {
 				$scherge=$db->f("perms");
 				$Fullname = $db->f("fullname");
