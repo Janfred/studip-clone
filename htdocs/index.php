@@ -119,7 +119,7 @@ ELSEIF (!$perm->have_perm("dozent")){ ?>
 <td class="blank" align=right nowrap valign=bottom>
 	<a href="freie.php"><font size=2 color="#6699CC">Freier Zugang</font></a>&nbsp; 
 	<a href="help/index.php" target="_new"><font size=2 color="#6699CC">Hilfe</font></a>&nbsp;
-</td></tr>
+</td></tr></table>
 <DIV align=center>
 <?php
 		
