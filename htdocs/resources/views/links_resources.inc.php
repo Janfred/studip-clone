@@ -28,7 +28,8 @@ $reiter=new reiter;
 $structure["resources"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"resources.php?view=resources#a", active=>FALSE);
 $structure["lists"]=array (topKat=>"", name=>"Listen", link=>"resources.php?view=lists#a", active=>FALSE);
 $structure["objects"]=array (topKat=>"", name=>"Ressourcen", link=>"resources.php?view=objects", active=>FALSE);
-//$structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=settings", active=>FALSE);
+if (($my_perms->getGlobalPerms() == "admin") || ($perm->have_perm("root")))
+	$structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php?view=settings", active=>FALSE);
 
 //Reiter "Uebersicht"
 $structure["_resources"]=array (topKat=>"resources", name=>"Struktur", link=>"resources.php?view=_resources#a", active=>FALSE);
