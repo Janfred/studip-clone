@@ -111,6 +111,10 @@ class reiter {
 				$this->inactiveBottomkatPic, $this->class2nd, $target, $link, $text);
 	}
 
+	function bottomkatIsolator () {
+		print "<span style=\"white-space:nowrap;\"><img valign=\"bottom\" src=\"pictures/isolator.gif\" border=\"0\">&nbsp;&nbsp;&nbsp;</span>\n";
+	}
+
 	function bottomkatCloseRow() {
 		printf ("</td></tr><tr><td colspan=\"2\" background=\"%s\">&nbsp;</td></tr></table>\n", $this->bottomPic);
 		return;
@@ -262,6 +266,9 @@ class reiter {
 		if ($bottomKats) {
 			$this->bottomkatStart();
 			for ($i=0; $i<=$bottomKats; $i++) {
+				if ($a["isolator"]) {
+					$this->bottomkatIsolator();
+					}
 				if ($a["topKat"]==$tmp_topKat) {
 					$this->bottomkat($a["name"], $a["link"], $a["active"], $a["target"]);
 					}
