@@ -1,5 +1,7 @@
 <?
 
+// $Id$
+
 require_once($ABSOLUTE_PATH_STUDIP.'config.inc.php');
 require_once($ABSOLUTE_PATH_STUDIP.'cssClassSwitcher.inc.php');
 include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/idna_convert.class.php');
@@ -863,14 +865,15 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE) {
 *
 * @access	public
 * @param	string	link to convert
+* @param	boolean	 for mailadr = true and for other link = false
 * @return	string  link in punycode
 */
 function idna_link($link, $mail = false){
-	if (0 && !$GLOBALS['CONVERT_IDNA_URL']) return decodeHTML($link);
+	if (!$GLOBALS['CONVERT_IDNA_URL']) return decodeHTML($link);
 	if (preg_match('/&\w+;/i',$link)) { //umlaute?  (html-coded)
 		$IDN = new idna_convert();
 		$out = false;
-		if ($mail){ // bei mailadressen nur hinter dem @ auswerten ...
+		if ($mail){
 			if (preg_match('#^([^@]*)@(.*)$#i',$link, $matches)) {
 				$out = $IDN->encode(utf8_encode(decodeHTML($matches[2]))); // false by error
 				$out = ($out)? $matches[1].'@'.$out : link;
