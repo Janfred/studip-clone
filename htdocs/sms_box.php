@@ -131,8 +131,8 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 		$open = "close";
 		$link = $PHP_SELF."?mopen=".$message_id;
 	}
-
-	$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady(substr($titel, 0, 30))."</a>";
+	
+	$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady(preg_replace("/\n(.*)/", "", wordwrap($titel, 30)))."</a>";
 
 	// ausgabe der ueberschrift		
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
@@ -188,8 +188,8 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 		$zusatz .= "</font>";			
 	}
 	
-	if (strpos($message,$msging->sig_string)) {
-		$titel = mila(kill_format(substr($message, 0, strpos($message,$msging->sig_string))));
+	if (strpos($message, $msging->sig_string)) {
+		$titel = mila(kill_format(substr($message, 0, strpos($message, $msging->sig_string))));
 	} else {
 		$titel = mila(kill_format($message));
 	}
@@ -209,7 +209,7 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 		$link = $PHP_SELF."?mopen=".$message_id;
 	}
 	
-	$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady(substr($titel, 0, 30))."</a>";
+	$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady(preg_replace("/\n(.*)/", "", wordwrap($titel, 30)))."</a>";
 
 	// ausgabe der ueberschrift		
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
