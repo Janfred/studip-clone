@@ -149,7 +149,7 @@ function day_restore (&$this) {
 					}
 					else {
 						$adate = $this->ts - ($this->dow - 1) * 86400;
-						if ($adate + 1 > $rep["ts"] - ($this->dow - 1) * 86400) {
+						if ($adate + 1 > $rep["ts"] - ($this->dow) * 86400) {
 							for ($i = 0;$i < strlen($rep["wdays"]);$i++) {
 								$pos = (($adate - $rep["ts"]) / 86400 - $rep["wdays"][$i] + $this->dow) % ($rep["linterval"] * 7);
 								if ($pos == 0) {
@@ -161,7 +161,6 @@ function day_restore (&$this) {
 										createEvent($this, $db, 3);
 									else
 										createEvent($this, $db, 2);
-							//		break 2;
 								}
 							}
 						}
