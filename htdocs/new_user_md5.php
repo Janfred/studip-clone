@@ -154,7 +154,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="<wwwrun@".$smtp->host_name.">";
+			$env_from="wwwrun@".$smtp->host_name;
 			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -267,7 +267,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="<wwwrun@".$smtp->host_name.">";
+			$env_from="wwwrun@".$smtp->host_name;
 			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -383,7 +383,7 @@ while ( is_array($HTTP_POST_VARS)
 
 			## Mail abschicken...
 			$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-			$env_from="<wwwrun@".$smtp->host_name.">";
+			$env_from="wwwrun@".$smtp->host_name;
 			$abuse="abuse@".$smtp->host_name;
 			$to=$Email;
 			$url = "http://" . $smtp->host_name . $CANONICAL_RELATIVE_PATH_STUDIP;
@@ -567,7 +567,7 @@ while ( is_array($HTTP_POST_VARS)
 					## Mail abschicken...
 					$permlist = addslashes(implode($perms,","));
 					$from="\"Stud.IP\" <wwwrun@".$smtp->host_name.">";
-					$env_from="<wwwrun@".$smtp->host_name.">";
+					$env_from="wwwrun@".$smtp->host_name;
 					$abuse="abuse@".$smtp->host_name;
 					$to=$Email;
 					$mailbody="Dies ist eine Informationsmail des Systems\n"
