@@ -108,3 +108,6 @@ td.weekend {background-color: #DDDDDD;}
 td.current {border-width: 2px; border-style: solid; border-color: #DD0000;}
 td.month {background-color: #DDDDDD;}
 td.lightmonth{}
+
+/* Hover Styles */
+.hover1{background-color: #B9C8D7;}	
