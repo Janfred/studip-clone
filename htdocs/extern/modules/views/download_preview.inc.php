@@ -83,12 +83,12 @@ if ($this->config->getValue("TableHeader", "width_pp") == "PERCENT")
 	$percent = "%";
 $alias_download = $this->config->getValue("Main", "aliases");
 $visible = $this->config->getValue("Main", "visible");
+setlocale(LC_TIME, $this->config->getValue("Main", "datelanguage"));
 
 $set_1 = $this->config->getAttributes("TableHeadrow", "th");
 $set_2 = $this->config->getAttributes("TableHeadrow", "th", TRUE);
 $zebra = $this->config->getValue("TableHeadrow", "th_zebrath_");
 $i = 0;
-reset($rf_download);
 foreach($rf_download as $spalte){
 	if ($visible[$spalte]) {
 		
@@ -120,7 +120,6 @@ $set_2 = $this->config->getAttributes("TableRow", "td", TRUE);
 $zebra = $this->config->getValue("TableRow", "td_zebratd_");
 
 $i = 0;
-reset($data);
 foreach ($data as $db) {
 	
 	preg_match("/^.+\.([a-z1-9_-]+)$/i", $db["filename"], $file_suffix);
@@ -187,7 +186,7 @@ foreach ($data as $db) {
 		
 		"mkdate"      => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font")
-											, date("d.m.Y", $db["mkdate"])),
+											, strftime($this->config->getValue("Main", "dateformat"), $db["mkdate"])),
 		
 		"filesize"    => sprintf("<font%s>%s</font>"
 											, $this->config->getAttributes("TableRow", "font"),
@@ -213,7 +212,6 @@ foreach ($data as $db) {
 	echo "<tr" . $this->config->getAttributes("TableRow", "tr") . ">\n";
 	
 	$j = 0;
-	reset($rf_download);
 	foreach($rf_download as $spalte){
 		if ($visible[$spalte]) {
 		
