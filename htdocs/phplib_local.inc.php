@@ -149,7 +149,8 @@ class Seminar_Session extends Session {
 	//erweiterter Garbage Collector
 	function gc(){
 		mt_srand((double)microtime()*1000000);
-		if ((mt_rand()%100) < $this->gc_probability){
+		$zufall = mt_rand();
+		if (($zufall % 100) < $this->gc_probability){
 			//Alte News, oder News ohne range_id löschen
 			$db=new DB_Seminar("SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() ");
 			while($db->next_record()) {
@@ -169,8 +170,9 @@ class Seminar_Session extends Session {
 				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
 			}
 			unset($result);
+			
 		}
-		if ((mt_rand()%1000) < $this->gc_probability){
+		if (($zufall % 1000) < $this->gc_probability){
 			//unsichtbare forenbeiträge die älter als 2 Stunden sind löschen
 			$db = new DB_Seminar();
 			$db->query("SELECT a.topic_id, count( b.topic_id ) AS kinder FROM px_topics a
@@ -192,6 +194,23 @@ class Seminar_Session extends Session {
 			if (is_array($result['with_kids'])){
 				$db->query("UPDATE px_topics SET chdate=mkdate WHERE topic_id IN('" . join("','",$result['with_kids']) . "')");
 			}
+			unset($result);
+			
+			//messages aufräumen
+			$db->query("SELECT message_id, count( message_id ) AS gesamt, count(IF (deleted =0, NULL , 1) ) AS geloescht
+						FROM message_user GROUP BY message_id HAVING gesamt = geloescht");
+			$result = array();
+			$i = 0;
+			while($db->next_record()) {
+				$result[floor($i / 100)][] = $db->Record[0];
+				++$i;
+			}
+			for ($i = 0; $i < count($result); ++$i){
+				$ids =  join("','", $result[$i]);
+				$db->query("DELETE FROM message_user WHERE message_id IN('$ids')");
+				$db->query("DELETE FROM message WHERE message_id IN('$ids')");
+			}
+			
 			unset($result);
 		}
 		//weiter mit gc() in der Super Klasse
