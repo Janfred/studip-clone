@@ -24,80 +24,62 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
+require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
 // -- here you have to put initialisations for the current page
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-
 checkObject(); // do we have an open object?
 checkObjectModule("literature");
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-	
-
 ?>
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr>
-	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Literatur und Links")?></b></td>
-</tr>
-	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? _("Hier finden Sie n&uuml;tzliche Literatur und Links zu dieser Einrichtung.") : _("Hier finden Sie die Literatur- und Linkliste der Veranstaltung."));?></td>
-	<td class="blank" align = right><img src="pictures/literatur.jpg" border="0"></td>
-</tr>
-<tr>
-	<td class="blank" colspan=2>
-
+<body>
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+	<tr>
+		<td class="topic" colspan="2"><b>&nbsp;<?=getHeaderLine($SessSemName[1])?></b></td>
+	</tr>
+	<tr>
+	<td class="blank" width="99%" align="left" valign="top">
+	<table width="100%" border="0" cellpadding="20" cellspacing="0">
+		<tr><td align="left" class="steel1">
 <?
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
-
-$db->query("SELECT * FROM literatur WHERE range_id='$SessSemName[1]'");
-echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
-
-if ($db->num_rows()) {
-	$db->next_record();
-	$literatur=$db->f("literatur");
-	$links=$db->f("links");
-	
-	$zusatz="<font size=-1>" . sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($db->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname ($db->f("user_id"))."</font></a><font size=-1>", date("d.m.Y, H:i",$db->f("chdate"))."<font size=-1>&nbsp;"."</font>");				
-	$icon="&nbsp;<img src=\"pictures/cont_lit.gif\">";
-	
-	//Literatur
-	if ($literatur) {
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printhead(0, 0, false, "open", FALSE, $icon, _("Literatur"), $zusatz);
-		echo "</tr></table>	";
-	
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printcontent(0,0, formatReady($literatur), FALSE);	
-		echo "</tr></table>	";		
-		}
-
-	//Links
-	if ($links) {
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printhead(0, 0, false, "open", FALSE, $icon, _("Links"), $zusatz);
-		echo "</tr></table>	";
-	
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printcontent(0,0, formatReady($links), FALSE);	
-		echo "</tr></table>	";		
-		}
-	}
-	if ((!$literatur) && (!$links)) {
-		parse_msg("info§<font size=-1><b>" . sprintf(_("In dieser %s wurden keine Literatur oder Links erfasst"), $SessSemName["art_generic"]) . "</b></font>", "§", "steel1", 
-		2, FALSE);
-		}
-	echo "</td></tr></table></td></tr></table>";
+if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1])) ){
+	echo $list;
+} else {
+	echo _("Es wurde noch keine Literatur erfasst");
+}
 ?>
-</td></tr></table>
+		</td></tr>
+	</table>
+</td>
+<td class="blank" align="center" valign="top">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td class="blank" width="270" align="right" valign="top">
+<?
+$infobox[0] = array ("kategorie" => _("Information:"),
+					"eintrag" =>	array(	
+									array("icon" => "pictures/blank.gif","text"  =>	_("Hier sehen sie Literaturlisten.")),
+									)
+					);
+$infobox[1] = array ("kategorie" => _("Aktionen:"));
+$infobox[1]["eintrag"][] = array("icon" => "pictures/blank.gif","text"  =>  _("Sie k&ouml;nnen jede dieser Listen in ihren pers&ouml;nlichen Literaturbereich kopieren, um erweiterte Informationen über die Eintr&auml;ge zu erhalten.") );
+
+print_infobox ($infobox,"pictures/browse.jpg");
+?>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="blank" colspan="2">&nbsp;</td></tr>
+</table>
 </body>
-</html>
-<?php
-  // Save data back to database.
-  page_close()
- ?>
+<?
+// Save data back to database.
+page_close()
+?>
 <!-- $Id$ -->
