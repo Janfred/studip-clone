@@ -240,44 +240,40 @@ if ($form==3)
 	}
 
 	//Datum fuer Vobesprechung umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
-	if (($vor_jahr>0) && ($vor_jahr<100))
-		 $vor_jahr=$vor_jahr+2000;
+	if ($sem_create_data["sem_admission"]==1) {
+		if (($vor_jahr>0) && ($vor_jahr<100))
+			 $vor_jahr=$vor_jahr+2000;
 	
-	if ($vor_monat == "mm") $vor_monat=0;
-	if ($vor_tag == "tt") $vor_tag=0;
-	if ($vor_jahr == "jjjj") $vor_jahr=0;	
-	if ($vor_stunde == "hh") $vor_stunde=0;
-	if ($vor_minute == "mm") $vor_minute=0;
-	if ($vor_end_stunde == "hh") $vor_end_stunde=0;
-	if ($vor_end_minute == "mm") $vor_end_minute=0;
+		if ($vor_monat == "mm") $vor_monat=0;
+		if ($vor_tag == "tt") $vor_tag=0;
+		if ($vor_jahr == "jjjj") $vor_jahr=0;	
+		if ($vor_stunde == "hh") $vor_stunde=0;
+		if ($vor_minute == "mm") $vor_minute=0;
+		if ($vor_end_stunde == "hh") $vor_end_stunde=0;
+		if ($vor_end_minute == "mm") $vor_end_minute=0;
 
-	if (!checkdate($vor_monat, $vor_tag, $vor_jahr) && ($vor_monat) && ($vor_tag) && ($vor_jahr))
-		{
-		$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!§";
-		$check=FALSE;			
-		}
-	else
-		$check=TRUE;
-	if (($vor_monat) && ($vor_tag) && ($vor_jahr))
-		if ((!$vor_stunde) && (!$vor_end_stunde))
-			{
-			$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r Start- und Endzeit ein!§"; 
-			$check=FALSE;
-			}
-		else
+		if (!checkdate($vor_monat, $vor_tag, $vor_jahr) && ($vor_monat) && ($vor_tag) && ($vor_jahr)) {
+			$errormsg=$errormsg."error§Bitte geben Sie ein g&uuml;ltiges Datum f&uuml;r die Vorbesprechung ein!§";
+			$check=FALSE;			
+		} else
 			$check=TRUE;
+		
+		if (($vor_monat) && ($vor_tag) && ($vor_jahr))
+			if ((!$vor_stunde) && (!$vor_end_stunde)) {
+				$errormsg=$errormsg."error§Bitte geben Sie g&uuml;ltige Werte f&uuml;r Start- und Endzeit ein!§"; 
+				$check=FALSE;
+			} else
+				$check=TRUE;
 	
-	if ($check)
-		{
-	 	$sem_create_data["sem_vor_termin"] = mktime($vor_stunde,$vor_minute,0,$vor_monat,$vor_tag,$vor_jahr);
-    		$sem_create_data["sem_vor_end_termin"] = mktime($vor_end_stunde,$vor_end_minute,0,$vor_monat,$vor_tag,$vor_jahr);
-		}
-	else
-		{
-		$sem_create_data["sem_vor_termin"] = -1;
-		$sem_create_data["sem_vor_end_termin"] = -1;
+		if ($check) {
+		 	$sem_create_data["sem_vor_termin"] = mktime($vor_stunde,$vor_minute,0,$vor_monat,$vor_tag,$vor_jahr);
+    			$sem_create_data["sem_vor_end_termin"] = mktime($vor_end_stunde,$vor_end_minute,0,$vor_monat,$vor_tag,$vor_jahr);
+		} else {
+			$sem_create_data["sem_vor_termin"] = -1;
+			$sem_create_data["sem_vor_end_termin"] = -1;
 		}
 	}
+}
 
 if ($form==4)
 	{
@@ -621,7 +617,7 @@ if ($sem_delete_studg) {
 //Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
 if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 	if ($sem_create_data["sem_admission"]) {
-		if (!$sem_create_data["sem_admission_ratios_changed"]) {//User hat nichts veraendert, wir koennen automatisch rechnen
+		if ((!$sem_create_data["sem_admission_ratios_changed"]) && (!$sem_add_ratio)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
 			if (is_array($sem_create_data["sem_studg"]))
 				foreach ($sem_create_data["sem_studg"] as $key=>$val)
 					$sem_create_data["sem_studg"][$key]["ratio"]=round(100 / (sizeof ($sem_create_data["sem_studg"]) + 1));
@@ -634,8 +630,12 @@ if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 			if (($cnt + $sem_create_data["sem_all_ratio"]) < 100)
 				$sem_create_data["sem_all_ratio"]=100 - $cnt;
 			if (($cnt + $sem_create_data["sem_all_ratio"]) > 100)
-				$errormsg.=sprintf ("error§Das Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
-				$level=4;
+				if ($cnt < 100)
+					$sem_create_data["sem_all_ratio"]=(100 - $cnt);
+				else {
+					$errormsg.=sprintf ("error§Das Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!§", date ("d.m.Y", $sem_create_data["term_first_date"]));	
+					$level=4;
+				}
 		}
 	}
 }
@@ -1938,6 +1938,9 @@ if ($level==4)
 										printf ("<input type=\"TEXT\" name=\"sem_all_ratio\" size=5 maxlength=5 value=\"%s\" /> <font size=-1> %%</font>", ($sem_create_data["sem_studg"]) ? $sem_create_data["sem_all_ratio"] : "100");
 										?>
 										</td>
+										<?
+										if ($sem_create_data["sem_admission"] == 1) {
+										?>
 										<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="25%">
 											<font size=-1>Enddatum:</font>
 										</td>
@@ -1948,6 +1951,15 @@ if ($level==4)
 											<font size=-1>&nbsp; <input type="text" name="adm_stunde" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("H",$sem_create_data["sem_admission_date"]); else echo"23" ?>">:
 											<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($sem_create_data["sem_admission_date"]<>-1) echo date("i",$sem_create_data["sem_admission_date"]); else echo"59" ?>">&nbsp;Uhr</font>
 										</td>
+										<?
+										} else {
+										?>
+										<td class="<? echo $cssSw->getClass() ?>" valign="top" coslspan=2" width="70%">
+											&nbsp; 
+										</td>
+										<?
+										}
+										?>
 									</tr>
 									<?
 									if ($sem_create_data["sem_studg"]) {
