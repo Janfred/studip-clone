@@ -950,6 +950,7 @@ if ($view == "view_schedule" || $view == "openobject_schedule") {
 		$resources_data["schedule_start_time"] = $start_time;
 		$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60) + 59;		
 		$resources_data["schedule_mode"] = "graphical";
+		$resources_data["schedule_week_offset"] = 0;
 	}
 	elseif ($navigate) {
 		$resources_data["schedule_length_factor"] = $schedule_length_factor;
