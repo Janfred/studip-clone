@@ -44,7 +44,7 @@ function link_seminar_modules($seminar_id)
 			{
 				if (($auth->auth["uname"] == get_studip_user($mod_author[$i2]["id"])) OR ($perm->have_studip_perm("admin",$seminar_id)))
 				{
-					$link_str[$i]["button"] .= "<br><center><a href=\"" . link_edit_module($mod_array[$i]["inst"], $mod_array[$i]["id"]) . "\" target=\"_blank\">".
+					$link_str[$i]["button"] = "<br><center><a href=\"" . link_edit_module($mod_array[$i]["inst"], $mod_array[$i]["id"]) . "\" target=\"_blank\">".
 					makeButton("bearbeiten", "img")."</center></a>";
 				}
 				if (get_studip_user($mod_author[$i2]["id"]) == false)
