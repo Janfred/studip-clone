@@ -760,7 +760,7 @@ class Vote extends StudipObject {
     * @throws  error
     */
    function executeRemove () {
-      if ($this->isError ()) return;
+      //if ($this->isError ()) return;
 
       $this->voteDB->removeVote ($this->voteID);
       if ($this->voteDB->isError ())
