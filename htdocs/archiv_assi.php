@@ -84,6 +84,10 @@ include ("links_admin.inc.php");
 
 //Handlings....
 
+//Kill current list and stuff
+if ($new_session)
+	$archiv_assi_data='';
+
 //A list was sent
 if (is_array($archiv_sem)) {
 	unset($archiv_assi_data["sems"]);
@@ -164,6 +168,10 @@ if ($kill) {
     if (($db_ar = $db->affected_rows()) > 0) {
       $msg .= "<li>$db_ar Veranstaltungsteilnehmer, Dozenten oder Tutoren archiviert.</li>";
     }
+		## Alle Benutzer aus Wartelisten rauswerfen
+    $query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
+    $db->query($query);
+
 		## Alle beteiligten Institute rauswerfen
 	  $query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
     $db->query($query);
