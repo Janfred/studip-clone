@@ -306,7 +306,7 @@ if ($view=="statistik") {?>
 			}
 			if ($RESOURCES_ENABLE) {
 				$cssSw->switchClass();
-				$db->query("SELECT COUNT(*) from ressources_objects");
+				$db->query("SELECT COUNT(*) from resources_objects");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Ressourcen-Objekte:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
