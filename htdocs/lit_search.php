@@ -215,7 +215,15 @@ for ($i = $_the_search->start_result; $i <= $end_result; ++$i){
 		$content .= "<b>" . _("Erschienen:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("published"),true,true) . "<br>";
 		$content .= "<b>" . _("Identifikation:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_identifier"),true,true) . "<br>";
 		$content .= "<b>" . _("Schlagw&ouml;rter:") ."</b>&nbsp;&nbsp;" . htmlReady($element->getValue("dc_subject"),true,true) . "<br>";
-		
+		if ($element->getValue("lit_plugin") != "Studip"){
+			$content .= "<b>" . _("Externer Link:") ."</b>&nbsp;&nbsp;";
+			if (($link = $element->getValue("external_link"))){
+				$content.= formatReady(" [" . $element->getValue("lit_plugin"). "]" . $link);
+			} else {
+				$content .= _("(Kein externer Link vorhanden.)");
+			}
+			$content .= "<br>";
+		}
 		printcontent(0,0,$content,$edit);
 		echo "\n</table>";
 	}
