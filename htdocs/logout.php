@@ -71,7 +71,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 	// -- here you have to put initialisations for the current page
-	require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+	include("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 
 	// Start of Output
