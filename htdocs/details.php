@@ -35,6 +35,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); // wir brauchen htmlReady
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php"); 
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 ?>
 <body>
@@ -59,6 +60,8 @@ if (($SessSemName[1] <>"") && (!isset($sem_id))) {
 	$sem_id=$SessSemName[1];
 	
 }
+
+$DataFields = new DataFields($sem_id);
 
 // nachfragen, ob das Seminar abonniert werden soll
 if ($sem_id) {
@@ -384,6 +387,25 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 			</tr>
 			<? }
+			//add the free adminstrable datafields
+			$localFields = $DataFields->getLocalFields();
+	
+			foreach ($localFields as $val) {
+				if ($val["content"]) {
+
+			?>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp; 
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
+				<?
+				printf ("<font size=-1><b>" . htmlReady($val["name"]) . ":</b></font><br /><font size=-1>%s</font>", htmlReady($val["content"], TRUE, TRUE));
+				?>
+				</td>
+			</tr>
+			<?
+				}
+			}
 			if ($db2->f("Sonstiges") !="") {
 			?>
 			<tr>

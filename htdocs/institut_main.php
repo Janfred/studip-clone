@@ -29,6 +29,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/datei.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"; 
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -83,6 +84,7 @@ include "links_openobject.inc.php";
 include "show_news.php";
   	
 $sess->register("institut_main_data");
+$DataFields = new DataFields($SessSemName[1]);
   	
 //Auf und Zuklappen News
 if ($nopen)
@@ -102,39 +104,50 @@ if ($nclose)
 	$db->next_record();
 
 	if ($db->f("Strasse")) {
-		echo "<b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br>";
+		echo "<font size=\"-1\"><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br></font>";
 	}
 		
 	if ($db->f("Plz")) {
-		echo "<b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br>";
+		echo "<font size=\"-1\"><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br></font>";
 	}
 
 	if ($db->f("telefon")) {
-		echo "<b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br>";
+		echo "<font size=\"-1\"><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br></font>";
 	}
 
 	if ($db->f("fax")) {
-		echo "<b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br>";
+		echo "<font size=\"-1\"><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br></font>";
 	}
 
 	if ($db->f("url")) {
-		echo "<b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br>";
+		echo "<font size=\"-1\"><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br></font>";
 	}
 
 	if ($db->f("email")) {
-		echo "<b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br>";
+		echo "<font size=\"-1\"><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br></font>";
 	}
 
 	if ($db->f("fakultaet_name")) {
-		echo "<b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br>";
+		echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
 	}
+	
+	$localFields = $DataFields->getLocalFields();
+	
+	foreach ($localFields as $val) {
+		echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>"; echo htmlReady($val["content"]); echo"<br>";
+	}
+	
 		
 	?>
-	</blockquote><br><br>
+	</blockquote>
 	</td>
-
-	<td class="blank" align = right><img src="pictures/board2.jpg" border="0"></td>
-	</tr></table><br>
+	<td class="blank" align="right" valign="top">
+		<img src="pictures/blank.gif" height="10" width="5" /><br />
+		<img src="pictures/einrichtungen.jpg" border="0"><img src="pictures/blank.gif" height="10" width="10" />
+	</td>
+	</tr>
+	</table>
+	<br />
 
 
 	<?php

@@ -35,6 +35,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");		//Aufbereitungsfunktione
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");		//Terminfunktionen
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
@@ -55,13 +56,16 @@ $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
 $st_search = new StudipSemTreeSearch("dummy","sem_bereich",false);
+$DataFields = new DataFields();
+
 if (is_array($sem_create_data["sem_bereich"])){
 		for ($i = 0; $i < count($sem_create_data["sem_bereich"]); $i++){
 			$st_search->selected[$sem_create_data["sem_bereich"][$i]] = true;
 			$st_search->sem_tree_ranges[$st_search->tree->tree_data[$sem_create_data["sem_bereich"][$i]]['parent_id']][] = $sem_create_data["sem_bereich"][$i];
 			$st_search->sem_tree_ids[] = $sem_create_data["sem_bereich"][$i];
 		}
-	}
+}
+	
 $st_search->institut_id = $sem_create_data["sem_inst_id"];
 $st_search->doSearch();
 $user_id = $auth->auth["uid"];
@@ -377,6 +381,15 @@ if ($form==4)
 	$sem_create_data["sem_orga"]=$sem_orga;
 	$sem_create_data["sem_leistnw"]=$sem_leistnw;
 	$sem_create_data["sem_sonst"]=$sem_sonst;
+	
+	$sem_create_data["sem_datafields"]='';
+	
+	if (is_array($sem_datafield_id)) {
+		foreach ($sem_datafield_id as $key=>$val) {
+			$sem_create_data["sem_datafields"][$val] = $sem_datafield_content[$key];
+			}
+		}
+
 	
 	//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
 	if ($sem_all_ratio_old != $sem_all_ratio) {
@@ -1231,6 +1244,11 @@ if ($cmd_f_x)
 						$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
 					}
 				}
+		}
+		
+		//Store the additional datafields
+		foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
+			$DataFields->storeContent($val, $key, $sem_create_data["sem_id"]);
 		}
 
 		}
@@ -2495,13 +2513,46 @@ if ($level==4)
 					</tr>
 					<?
 					}
+					//add the free adminstrable datafields
+					$localFields = $DataFields->getLocalFields('', "sem", $sem_create_data["sem_class"]);
+					
+					foreach ($localFields as $key=>$val) {
+					?>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							<?=htmlReady($val["name"]) ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+							<?
+							if ($perm->have_perm($val["edit_perms"])) {
+							?>
+							&nbsp; <textarea name="sem_datafield_content[]" cols=58 rows=4><? echo htmlReady(stripslashes($sem_create_data["sem_datafields"][$val["datafield_id"]])) ?></textarea>
+							<input type="HIDDEN" name="sem_datafield_id[]" value="<?= $val["datafield_id"] ?>">
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("Bitte geben Sie in dieses Feld die entsprechenden Daten ein."), TRUE, TRUE) ?>
+							>
+							<?
+							} else {
+							?>
+							&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("Diese Felder werden zentral durch die zust&auml;ndigen Administratoren erfasst."), TRUE, TRUE) ?>
+							>
+							<?
+							}
+							?>
+						</td>
+					</tr>
+					<?
+					}
 					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?=_("Sonstiges:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							&nbsp; <textarea name="sem_sonst" cols=58 rows=<? 	if ($SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) echo "10"; else echo "4" ?>><? echo  htmlReady(stripslashes($sem_create_data["sem_sonst"])) ?></textarea>
+							&nbsp; <textarea name="sem_sonst" cols=58 rows=<? if ($SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) echo "10"; else echo "4" ?>><? echo  htmlReady(stripslashes($sem_create_data["sem_sonst"])) ?></textarea>
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Hier ist Platz für alle sonstigen Informationen zur Veranstaltung."), TRUE, TRUE) ?>
 							>

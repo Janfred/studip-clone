@@ -39,6 +39,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"; 
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -54,6 +55,7 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
 $Modules = new Modules;
+$DataFields = new DataFields();
 
 // Check if there was a submission
 while ( is_array($HTTP_POST_VARS) 
@@ -63,11 +65,11 @@ while ( is_array($HTTP_POST_VARS)
  	
 	// Create a new Institut
 	case "create_x":
-	  if (!$perm->is_fak_admin()) {
-		  $msg = "error§<b>" . _("Sie haben nicht die Berechtigung, um neue Einrichtungen zu erstellen!") . "</b>";
-		  break;
-	  }
-	  // Do we have all necessary data?
+	if (!$perm->is_fak_admin()) {
+		$msg = "error§<b>" . _("Sie haben nicht die Berechtigung, um neue Einrichtungen zu erstellen!") . "</b>";
+		break;
+	}
+	// Do we have all necessary data?
 		if (empty($Name)) {
 			$msg="error§<b>" . _("Bitte geben sie eine Bezeichnung f&uuml;r die Einrichtung ein!") . "</b>";
 			$i_view="new";
@@ -116,7 +118,7 @@ while ( is_array($HTTP_POST_VARS)
 		openInst($i_id);
 	  break;
 
-	// Change Institut name
+	//change institut's data
 	case "i_edit_x":
 
 		if (!$perm->have_studip_perm("admin",$i_id)){
@@ -124,26 +126,32 @@ while ( is_array($HTTP_POST_VARS)
 			break;
 		}
 	  
-		// Do we have all necessary data?
+		//do we have all necessary data?
 		if (empty($Name)) {
 			$msg="error§<b>" . _("Bitte geben Sie eine Bezeichnung f&uuml;r die Einrichtung ein!") . "</b>";
 			break;
 		}
 
-		// Update Institut information.
+		//update Institut information.
 		$query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type' ,chdate=".time()." where Institut_id = '$i_id'";
 		$db->query($query);
 		if ($db->affected_rows() == 0) {
 			$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
 			break;
 		}
-    
+		
+		//Update the additional data-fields
+		if (is_array($datafield_id)) {
+			foreach ($datafield_id as $key=>$val) {
+				$DataFields->storeContent($datafield_content[$key], $val, $SessSemName[1]);
+			}
+		}
     
 		$msg="msg§<b>" . sprintf(_("Die Daten der Einrichtung \"%s\" wurden ver&auml;ndert."), htmlReady(stripslashes($Name))) . "</b>";
 		break;
 
 	// Delete the Institut
-  case "i_kill_x":
+  	case "i_kill_x":
 
 		// Institut in use?
 		$db->query("SELECT * FROM seminare WHERE Institut_id = '$i_id'");
@@ -186,15 +194,15 @@ while ( is_array($HTTP_POST_VARS)
 		}
 	
 		// delete news-links
-	  $query = "DELETE FROM news_range where range_id='$i_id'";
-    $db->query($query);
+		$query = "DELETE FROM news_range where range_id='$i_id'";
+		$db->query($query);
 		// check News, if there are now entries without range...
-	  $query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
-    $db->query($query);
+		$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
+		$db->query($query);
 		while ($db->next_record()) {			  // this News are unconnected...
 			$tempNews_id = $db->f("news_id");
-		  $query = "DELETE FROM news where news_id = '$tempNews_id'";
-	    $db2->query($query);
+			$query = "DELETE FROM news where news_id = '$tempNews_id'";
+			$db2->query($query);
 		}
 	
 		//updating range_tree
@@ -229,7 +237,8 @@ while ( is_array($HTTP_POST_VARS)
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
 			$msg.="msg§" . sprintf(_("%s Postings aus dem Forum der Einrichtung gel&ouml;scht."), $db_ar) . "§";
-    }
+    		}
+    		
 		$db_ar = recursiv_folder_delete($i_id);
 		if ($db_ar > 0)
 			$msg.="msg§" . sprintf(_("%s Dokumente gel&ouml;scht."), $db_ar) . "§";
@@ -250,7 +259,7 @@ while ( is_array($HTTP_POST_VARS)
 		break;
 	
 	default:
-		break;
+	break;
 	}
 }
 
@@ -367,8 +376,28 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Faxnummer:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="fax" size=32 maxlength=254 value="<?php echo htmlReady($db->f("fax")) ?>"></td></tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Emailadresse:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Homepage:")?> </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
+	<?
+	//add the free adminstrable datafields
+	$localFields = $DataFields->getLocalFields($SessSemName[1], ($SessSemName["class"]) ? $SessSemName["class"] : "inst");
 	
-	
+	foreach ($localFields as $val) {
+		?>
+		<tr>
+			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass(); ?>" ><?=htmlReady($val["name"])?>: </td>
+			<td class="<? echo $cssSw->getClass() ?>" >
+				<?
+				if ($perm->have_perm($val["edit_perms"])) {
+					?>
+					<input type="text" name="datafield_content[]" size=32 maxlength=255 value="<?php echo htmlReady($val["content"]) ?>">
+					<input type="HIDDEN" name="datafield_id[]" value="<?= $val["datafield_id"] ?>">
+					<?
+				} else {
+					print $val["content"];
+				}
+	}
+	?>
+		</td>
+	</tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 	
 	<? 
