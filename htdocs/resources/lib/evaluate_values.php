@@ -211,7 +211,7 @@ if ($cancel_edit) {
 
 //move an object
 if ($target_object) {
-	$ObjectPerms = new ResourcesObjectPerms($kill_object);
+	$ObjectPerms = new ResourcesObjectPerms($target_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		if ($target_object != $resources_data["move_object"]) {
 			//we want to move an object, so we have first to check if we want to move a object in a subordinated object
