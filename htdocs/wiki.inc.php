@@ -749,7 +749,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 
 	$versions=getWikiPageVersions($keyword);
 	$versiontext="<a href=\"wiki.php?keyword=".$keyword."\">Aktuelle Version</a><br>";
-	if ($version) {
+	if ($versions) {
 		foreach ($versions as $v) {
 			$versiontext .= "<a href=\"wiki.php?keyword=$keyword&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
 		}
