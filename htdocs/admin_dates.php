@@ -556,7 +556,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		}
 		if ($show_all) {
 			?>
-			<input type="IMAGE" name="edit" border=0 <?=makeButton("termineaendern", "src")?> value="verändern">&nbsp; &nbsp; 
+			<input type="IMAGE" name="edit" border=0 <?=makeButton("allesuebernehmen", "src")?> value="verändern">&nbsp; &nbsp; 
 			<?
 		}
 			?>
@@ -635,7 +635,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$content.="<input type=\"CHECKBOX\" name=\"folder\"/><font size=-1>" . _("Dateiordner anlegen") . "</font>\n";
 				
 		$content.="</tr></td></table></td></tr>\n<tr><td class=\"steel1\" align=\"center\" colspan=2>";
-		$content.="<input type=\"IMAGE\" name=\"send\" border=0 " . makeButton("terminspeichern", "src") . " align=\"absmiddle\" value=\"speichern\">&nbsp;";
+		$content.="<input type=\"IMAGE\" name=\"send\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"speichern\">&nbsp;";
 		$content.="<a href=\"$PHP_SELF?cancel=TRUE\">" . makeButton("abbrechen", "img") . "</a><br /><br />";
 	 	$content.= "<a name=\"anchor\"></a>";
 		
@@ -672,6 +672,12 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			$zusatz="<input type=\"CHECKBOX\" ".(($mark_all_x) ? "checked" : "")." name=\"kill_termin[]\" value=\"". $db->f("termin_id")."&". $db->f("topic_id")."\"><img src=\"pictures/trash.gif\" border=0 />";
 		else
 			$zusatz='';
+
+		//Link erstellen
+		if (($show_id  == $db->f("termin_id")) || ($show_all))
+			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=";			
+		else
+			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=".$db->f("termin_id")."#anchor";
 		
 		//Titel erstellen
 		$titel='';
@@ -694,16 +700,11 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				$tmp_titel=htmlReady(mila($db->f("content"))); //Beschneiden des Titels			
 				$titel.=", ".$tmp_titel;
 			}
+			$titel = "<a class=\"tree\" href=\"".$link."\">".$titel."</a>";
 		}
 		if (($show_id  == $db->f("termin_id")) && (!$result))
 		 	$titel.= "<a name=\"anchor\"></a>";
 		
-		//Link erstellen
-		if (($show_id  == $db->f("termin_id")) || ($show_all))
-			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=";			
-		else
-			$link=$PHP_SELF."?range_id=".$admin_dates_data["range_id"]."&show_id=".$db->f("termin_id")."#anchor";
-			
 		//Icon erstellen
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 		
@@ -773,7 +774,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\"><tr>";
 				
 				if (!$show_all)
-					$content.="<input type=\"IMAGE\" name=\"edit\" border=0 " . makeButton("terminaendern", "src") . " align=\"absmiddle\" value=\"verändern\"><br /><br />";
+					$content.="<input type=\"IMAGE\" name=\"edit\" border=0 " . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\"verändern\"><br /><br />";
 				printcontent(0,1, $content, '');
 			}
 		
@@ -799,7 +800,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				<?
 			} else {
 				?>
-				<input type="IMAGE" name="edit" border=0 <?=makeButton("termineaendern", "src")?> value="verändern">&nbsp; &nbsp; 
+				<input type="IMAGE" name="edit" border=0 <?=makeButton("allesuebernehmen", "src")?> value="verändern">&nbsp; &nbsp; 
 				<?
 			}
 			?>
