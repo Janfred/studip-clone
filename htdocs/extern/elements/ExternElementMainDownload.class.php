@@ -41,7 +41,7 @@ class ExternElementMainDownload extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width", "width_pp", "sort",
 			"wholesite", "lengthdesc", "nameformat", "urlcss", "title", "nodatatext", "dateformat",
-			"datelanguage", "srilink", "config", "iconpic", "icontxt", "iconpdf", "iconppt", "iconxls",
+			"timelocale", "iconpic", "icontxt", "iconpdf", "iconppt", "iconxls",
 			"iconrtf", "iconzip", "icondefault");
 	var $edit_function = "editMainSettings";
 	
@@ -62,7 +62,7 @@ class ExternElementMainDownload extends ExternElementMain {
 			"name" => "",
 			"order" => "|0|1|2|3|4|5",
 			"visible" => "|TRUE|TRUE|TRUE|TRUE|TRUE|TRUE",
-			"aliases" => "||"._("Name"."|"._("Beschreibung")."|"._("Upload am")."|"
+			"aliases" => "||"._("Name")."|"._("Beschreibung")."|"._("Upload am")."|"
 					._("Gr&ouml;&szlig;e")."|"._("Upload durch"),
 			"width" => "|1%|20%|25%|15%|15%|24%",
 			"sort" => "|0|0|0|1|0|0",
@@ -73,7 +73,7 @@ class ExternElementMainDownload extends ExternElementMain {
 			"title" => "",
 			"nodatatext" => _("Keine Dateien vorhanden"),
 			"dateformat" => "%d. %b. %Y",
-			"datelanguage" => "de_DE",
+			"timelocale" => "de_DE",
 			"config" => "",
 			"srilink" => "",
 			"iconpic" => "",
@@ -134,9 +134,9 @@ class ExternElementMainDownload extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Vorname Nachname"), _("Nachname Vorname"),
-				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
+		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Datumsformat:");
@@ -150,7 +150,7 @@ class ExternElementMainDownload extends ExternElementMain {
 		$info = ("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$values = array("de_DE", "en_US");
 		$names = array(_("Deutsch"), _("Englisch (US)"));
-		$table .= $edit_form->editOptionGeneric("datelanguage", $title, $info, $values, $names);
+		$table .= $edit_form->editOptionGeneric("timelocale", $title, $info, $values, $names);
 		
 		$title = _("Stylesheet-Datei:");
 		$info = _("Geben Sie hier die URL Ihrer Stylesheet-Datei an.");
@@ -163,26 +163,6 @@ class ExternElementMainDownload extends ExternElementMain {
 		$title = _("Keine Dateien:");
 		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfügbar sind.");
 		$table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
-		
-		$title = _("Konfiguration Mitarbeiterdetails:");
-		$info = ("Der Link auf die Seite zur Anzeige der Mitarbeiterdaten wird die gewählte Konfiguration aufrufen. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das Mitarbeitermodul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
-		if ($configs = get_all_configurations($this->config->range_id, 6)) {
-			$values = array_keys($configs["Persondetails"]);
-			unset($names);
-			foreach ($configs["Persondetails"] as $config)
-				$names[] = $config["name"];
-		}
-		else {
-			$values = array();
-			$names = array();
-		}
-		array_unshift($values, "");
-		array_unshift($names, _("Standardkonfiguration"));
-		$table .= $edit_form->editOptionGeneric("config", $title, $info, $values, $names);
-		
-		$title = _("SRI-Link:");
-		$info = _("Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Ausgabemodul für die Mitarbeiterdaten eingebunden wird. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nicht nutzen.");
-		$table .= $edit_form->editTextfieldGeneric("srilink", $title, $info, 50, 250);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();

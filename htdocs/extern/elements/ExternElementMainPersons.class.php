@@ -41,8 +41,7 @@ class ExternElementMainPersons extends ExternElementMain {
 
 	var $attributes = array("name", "order", "visible", "aliases", "width",
 			"width_pp", "sort", "groups", "groupsalias", "groupsvisible", "grouping", "wholesite",
-			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext",
-			"config", "srilink");
+			"nameformat", "repeatheadrow", "urlcss", "title", "bodystyle", "bodyclass", "nodatatext");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -141,9 +140,9 @@ class ExternElementMainPersons extends ExternElementMain {
 		
 		$title = _("Namensformat:");
 		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
-		$values = array("no_title", "no_title_rev", "full", "full_rev");
-		$names = array(_("Vorname Nachname"), _("Nachname Vorname"),
-				_("Titel Vorname Nachname"), _("Nachname Vorname Titel"));
+		$values = array("no_title_short", "no_title", "no_title_rev", "full", "full_rev");
+		$names = array(_("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
+				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Spalten&uuml;berschriften<br>Wiederholen:");
@@ -169,26 +168,6 @@ class ExternElementMainPersons extends ExternElementMain {
 		$title = _("Keine Dateien:");
 		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine Dateien zum Download verfügbar sind.");
 		$table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
-		
-		$title = _("Konfiguration Mitarbeiterdetails:");
-		$info = ("Der Link auf die Seite zur Anzeige der Mitarbeiterdaten wird die gewählte Konfiguration aufrufen. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das Mitarbeitermodul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
-		if ($configs = get_all_configurations($this->config->range_id, 6)) {
-			$values = array_keys($configs["Persondetails"]);
-			unset($names);
-			foreach ($configs["Persondetails"] as $config)
-				$names[] = $config["name"];
-		}
-		else {
-			$values = array();
-			$names = array();
-		}
-		array_unshift($values, "");
-		array_unshift($names, _("Standardkonfiguration"));
-		$table .= $edit_form->editOptionGeneric("config", $title, $info, $values, $names);
-		
-		$title = _("SRI-Link:");
-		$info = _("Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Ausgabemodul für die Mitarbeiterdaten eingebunden wird. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nicht nutzen.");
-		$table .= $edit_form->editTextfieldGeneric("srilink", $title, $info, 50, 250);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
