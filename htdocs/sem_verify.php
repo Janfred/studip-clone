@@ -57,7 +57,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr><td class="topic" colspan=2>&nbsp;<b>Veranstaltungsfreischaltung</b></td></tr>
-	<tr><td class="blank" colspan=2>&nbsp<br></td></tr>
+	<tr><td class="blank" colspan=2>&nbsp;<br></td></tr>
 <?
 	// admins und roots haben hier nix verloren
 	if ($perm->have_perm("admin")) {
@@ -279,11 +279,11 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 								print "<br />";
 							}
 						       ?>
-							</for	m><br />
+							</form><br />
 							&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt",  date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							else
 								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
@@ -313,7 +313,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 									else
 										$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
 									if (($db3->num_rows()) || ($db->f("studiengang_id") == "all"))
-										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_arr[]\">&nbsp; <font size=-1><b>Kontingent f&uuml;r %s (%s Pl&auml;tze)</font></b><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
+										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_arr[]\">&nbsp; <font size=-1><b>Kontingent f&uuml;r %s (%s Pl&auml;tze)</b></font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
 									else
 										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">Kontingent f&uuml;r %s (%s Pl&auml;tze)</font><br />", ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"), $tmp_sem_verify_quota);
 									}
@@ -322,7 +322,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 							</for	m>
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", date("d.m.Y, G:i", $db2->f("admission_endtime")), ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							else
 								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
