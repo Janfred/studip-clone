@@ -99,6 +99,12 @@ if ($ILIAS_CONNECT_ENABLE)
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
+	if (isset($do_open))
+		$print_open_admin[$do_open] = true;
+	elseif (isset($do_close))
+		$print_open_admin[$do_close] = false;
+	$sess->register("print_open_admin");
+
 	if (isset($back_x))
 		unset($mode);
 	$this_ilias_id = get_connected_user_id($auth->auth["uid"]);
@@ -143,7 +149,15 @@ if ($ILIAS_CONNECT_ENABLE)
 	<form method="POST" action="<? echo $PHP_SELF; ?>">
 	<table>
 <?
-	if (!in_array($mode, array("i2s", "s2i", "connect")))
+	if (isset($delete))
+	{	
+		my_info(sprintf(_("Wenn Sie fortfahren, wird das Lernmodul mit dem Titel %s unwiderruflich gel&ouml;scht. Soll dieses Lernmodul wirklich gel&ouml;scht werden?"), "<b>" . $del_title . "</b>"));
+		?><tr><td><br><center>
+		<a href="<? echo link_delete_module($del_inst, $del_id); ?>" target="_blank"><? echo makeButton("ja", "img"); ?>&nbsp;
+		<a href="<? echo $PHP_SELF; ?>"><? echo makeButton("nein", "img"); ?></center>
+		<?
+	}
+	elseif (!in_array($mode, array("i2s", "s2i", "connect")))
 	{
 		$infobox = array	(array ("kategorie"  => _("Information:"),
 				"eintrag" => array	(array (	"icon" => "pictures/ausruf_small.gif",
@@ -151,13 +165,23 @@ if ($ILIAS_CONNECT_ENABLE)
 		$infobox[1]["kategorie"] = _("Aktionen:");
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
 										"text"  => _("W&auml;hlen Sie eine Option.") );
+		if (($this_ilias_id != false) AND ($perm->have_perm("autor")))
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen%s. Das Modul muss anschlie&szlig;end noch zugewiesen werden."), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+									);
 
 		if ($this_ilias_id != false)
 			my_info( _("Ihrem Stud.IP-Account ist bereits ein ILIAS-Account zugeordnet. Diese Zuordnung k&ouml;nnen Sie nachtr&auml;glich noch &auml;ndern, dabei gehen allerdings die bereits in ILIAS gespeicherten Daten verloren.") );
 		else
 			my_info( _("<b>Ihr Stud.IP-Account ist bisher mit keinem ILIAS-Account verkn&uuml;pft</b>. Auf dieser Seite k&ouml;nnen Sie eine Zuordnung der Accounts herstellen. Die Zuordnung k&ouml;nnen Sie nachtr&auml;glich noch &auml;ndern, dabei gehen allerdings die bereits in ILIAS gespeicherten Daten verloren.") );
 		
-		echo "<tr><td><br><b>" . _("Sie k&ouml;nnen einen neuen Account anlegen oder einen bestehenden einbinden:") . "</b><br><br>";
+		echo "<tr><td>";
+		if ($this_ilias_id != false)
+		{
+			show_user_modules($auth->auth["uname"]);
+			echo "<br>";
+		}
+		echo "<br><b>" . _("Sie k&ouml;nnen einen neuen Account anlegen oder einen bestehenden einbinden:") . "</b><br><br>";
 //		echo "<input type=\"RADIO\" name=\"mode\" value=\"i2s\">&nbsp;";
 //		echo _("Neuen Stud.IP-Account anlegen und einem bestehenden ILIAS-NutzerInnen-Account zuordnen") . "<br><br>";
 		echo "<input type=\"RADIO\" name=\"mode\" value=\"s2i\" checked>&nbsp;";
