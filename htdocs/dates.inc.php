@@ -23,7 +23,7 @@ require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von
 require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
 require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php";  //Daten 
-require_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/calendar_func.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR."/calendar_func.inc.php");
 
 /**
 * This function creates the assigned room name for range_id
@@ -166,8 +166,8 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;	
 	$semester = new SemesterData;
+	$holiday = new HolidayData;
 	$all_semester = $semester->getAllSemesterData();
-	
 	
 	if ((func_num_args()==1) || (func_num_args()==2)){
 		$seminar_id=func_get_arg(0);
@@ -187,14 +187,15 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 			$return_mode=func_get_arg(1);
 	}
 	//Regelmaessige Termine. also Turnus aus Metadaten
-	if ($term_data["art"]==0)
-		{
+	if ($term_data["art"]==0) {
 		if (($term_data["start_woche"] ==0) || ($term_data["start_woche"] ==1)) // Startzeitpunkt 1. oder 2. Semesterwoche
 			if (sizeof($term_data["turnus_data"])) {
+				//first, determine the correct the start for $vorles_bginn
 				foreach ($all_semester as $sem)
 					if (($term_data["start_time"] >= $sem["beginn"]) AND ($term_data["start_time"] <= $sem["ende"]))
-						$vorles_beginn=$sem["vorles_beginn"];
-				
+
+				$vorles_beginn=$sem["vorles_beginn"];
+					
 				//correct the vorles_beginn to match monday, if necessary
 				$dow = date("w", $vorles_beginn);
 
@@ -211,28 +212,54 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 					$vorles_beginn_uncorrected = $vorles_beginn;
 					$vorles_beginn = mktime(date("G",$vorles_beginn), date("i",$vorles_beginn), 0, date("n",$vorles_beginn), date("j",$vorles_beginn)+$corr,  date("Y",$vorles_beginn));
 				}
-
-				$start_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["start_stunde"]*60*60)+($term_data["turnus_data"][0]["start_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);
-				$end_termin=$vorles_beginn+(($term_data["turnus_data"][0]["day"]-1)*24*60*60)+($term_data["turnus_data"][0]["end_stunde"]*60*60)+($term_data["turnus_data"][0]["end_minute"]*60) + ($term_data["start_woche"] * 7 * 24 * 60 *60);;
-
-				//correct the start_termin if the start_termin is ealier than $start_termin_uncorrected
-				$corr = 0;
-				if ($vorles_beginn_uncorrected)
-					if ($start_termin < $vorles_beginn_uncorrected) {
-						if ($term_data["turnus"])
-							$corr = $corr + 7;
-					}
-
-				if ($corr) {
-					$start_termin = mktime(date("G",$start_termin), date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin)+$corr,  date("Y",$start_termin));
-					$end_termin = mktime(date("G",$end_termin), date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin)+$corr,  date("Y",$end_termin));
-				}
 				
-				//and, correct the start_termin, if de dayligt saving time plays a trick with us
-				if (date("G", $start_termin) != $term_data["turnus_data"][0]["start_stunde"])
-					$start_termin = mktime($term_data["turnus_data"][0]["start_stunde"], date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin),  date("Y",$start_termin));
-				if (date("G", $end_termin) != $term_data["turnus_data"][0]["end_stunde"])
-					$end_termin = mktime($term_data["turnus_data"][0]["end_stunde"], date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin),  date("Y",$end_termin));
+				//now create possible start dates and do checks for holidays or calculatable off-days			
+				do {
+					$cycle=0;
+					foreach ($term_data["turnus_data"] as $turnus_arr) {
+						$date_ok = TRUE;
+
+						$start_termin=$vorles_beginn+(($turnus_arr["day"]-1)*24*60*60)+($turnus_arr["start_stunde"]*60*60)+($turnus_arr["start_minute"]*60) + (($term_data["start_woche"] + $cycle) * 7 * 24 * 60 *60);
+						$end_termin=$vorles_beginn+(($turnus_arr["day"]-1)*24*60*60)+($turnus_arr["end_stunde"]*60*60)+($turnus_arr["end_minute"]*60) + (($term_data["start_woche"] + $cycle) * 7 * 24 * 60 *60);
+		
+						//correct the start_termin if the start_termin is ealier than $vorles_beginn_uncorrected
+						$corr = 0;
+						if ($vorles_beginn_uncorrected)
+							if ($start_termin < $vorles_beginn_uncorrected) {
+								if ($term_data["turnus"])
+									$corr = $corr + 7;
+							}
+		
+						if ($corr) {
+							$start_termin = mktime(date("G",$start_termin), date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin)+$corr,  date("Y",$start_termin));
+							$end_termin = mktime(date("G",$end_termin), date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin)+$corr,  date("Y",$end_termin));
+						}
+						
+						//and, correct the start_termin, if de dayligt saving time plays a trick with us
+						if (date("G", $start_termin) != $term_data["turnus_data"][0]["start_stunde"])
+							$start_termin = mktime($term_data["turnus_data"][0]["start_stunde"], date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin),  date("Y",$start_termin));
+						if (date("G", $end_termin) != $term_data["turnus_data"][0]["end_stunde"])
+							$end_termin = mktime($term_data["turnus_data"][0]["end_stunde"], date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin),  date("Y",$end_termin));
+						
+						//check for holidays. You should use it only for special holidays
+						$all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
+						// get all holidays from db
+						foreach ($all_holiday as $val)
+							if (($val["beginn"] <= $start_termin) && ($start_termin <=$val["ende"]))
+								$date_ok = FALSE;	
+						
+						//check for calculatable holidays
+						$holy_type = holiday($start_termin);
+						if ($holy_type["col"] == 3) {
+							$date_ok = FALSE;
+						}
+						
+						//cancel running the foreach-loop, if one of my matadates (not the last) already is fine
+						if ($date_ok)
+							break;
+					}
+					$cycle ++;
+				} while (!$date_ok);
 				
 				$return_string=date ("d.m.Y, G:i", $start_termin);
 				$return_int=$start_termin;
@@ -245,15 +272,16 @@ function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='',
 			}
 		//anderer Startzeitpunkt gewaehlt
 		else {
-			//kein gueltiger Termin bekannt
+			//no $start_termin given
 			if ($term_data["start_termin"]<1) {
 				$return_string.= _("nicht angegeben");
 				$return_int=-1;
-			//gueltiger Termin bekannt
+			//$start_termin given, this is the first date
 			} else {
 				$return_string.=date ("d.m.Y", $term_data["start_termin"]);
 				$return_int=$term_data["start_termin"];
 			}
+			//just an algorhytmus to fit the given start_termin (only a date without hour an minute!) to given meta_dates, if they are on the same day
 			if (is_array($term_data["turnus_data"]))
 				foreach ($term_data["turnus_data"] as $val) {
 					$dow = $val["day"];
@@ -973,6 +1001,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 				//create new dates
 				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
 				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
+
 				$all_holiday = $holiday->getAllHolidays(); // fetch all Holidays
 				// get all holidays from db
 				foreach ($all_holiday as $val2)
@@ -982,7 +1011,7 @@ function dateAssi ($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full =
 				//check for calculatable holidays
 				if ($do) {
 					$holy_type = holiday($start_time);
-					if ($holy_type == 3)
+					if ($holy_type["col"] == 3)
 						$do = FALSE;
 				}
 				
