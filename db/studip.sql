@@ -3,7 +3,7 @@
 # http://www.phpmyadmin.net/ (download page)
 #
 # Host: localhost
-# Erstellungszeit: 04. September 2003 um 11:58
+# Erstellungszeit: 08. September 2003 um 23:40
 # Server Version: 3.23.52
 # PHP-Version: 4.2.2
 # Datenbank: `studip`
@@ -70,7 +70,7 @@ CREATE TABLE admission_seminar_user (
   status varchar(16) NOT NULL default '',
   mkdate int(20) NOT NULL default '0',
   position int(5) default NULL,
-  admission_description tinytext,
+  comment tinytext,
   PRIMARY KEY  (user_id,seminar_id,studiengang_id)
 ) TYPE=MyISAM;
 # --------------------------------------------------------
@@ -204,6 +204,7 @@ CREATE TABLE dokumente (
   range_id varchar(32) NOT NULL default '',
   user_id varchar(32) NOT NULL default '',
   seminar_id varchar(32) NOT NULL default '0',
+  name varchar(255) default NULL,
   description text NOT NULL,
   filename varchar(255) NOT NULL default '',
   mkdate int(20) NOT NULL default '0',
@@ -617,7 +618,7 @@ CREATE TABLE seminar_user (
   gruppe tinyint(4) NOT NULL default '0',
   admission_studiengang_id varchar(32) NOT NULL default '',
   mkdate int(20) NOT NULL default '0',
-  admission_description tinytext,
+  comment tinytext,
   PRIMARY KEY  (Seminar_id,user_id),
   KEY user_id (user_id),
   KEY Seminar_id (Seminar_id)
