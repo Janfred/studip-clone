@@ -19,27 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// User-Variablen initialisieren
-//if(!isset($calendar_user_control_data)){
-//	$user->register("calendar_user_control_data");
-//}
-
 require_once("visual.inc.php");
-
-/*// store default-values
-if(empty($calendar_user_control_data["view"])){
-	$calendar_user_control_data = array(
-		"view"           => "showweek",
-		"start"          => 9,
-		"end"            => 20,
-		"step_day"       => 900,
-		"step_week"      => 3600,
-		"type_week"      => "LONG",
-		"holidays"       => TRUE,
-		"sem_data"       => TRUE,
-		"link_edit"      => FALSE
-	);
-}*/
 
 // store user-settings
 if($cmd_cal == "chng_cal_settings"){
@@ -192,6 +172,19 @@ $css_switcher = new cssClassSwitcher();
 						<input type="checkbox" name="cal_link_edit" value="TRUE"<? if($calendar_user_control_data["link_edit"]) echo " checked"; ?>>&nbsp;Bearbeiten-Link in Wochenansicht
 					</td>
 				</tr>
+<? /*
+				<tr><? $css_switcher->switchClass(); ?>
+					<td class="<? echo $css_switcher->getClass(); ?>">
+						<blockquote><p><b>Löschen von Terminen</b></p></blockquote>
+					</td>
+					<td class="<? echo $css_switcher->getClass(); ?>">
+						<input type="checkbox" name="cal_delete" value="12"<? if($calendar_user_control_data["delete"]) echo " checked"; ?>>&nbsp;12 Monate nach Ablauf<br>
+						<input type="checkbox" name="cal_delete" value="6"<? if($calendar_user_control_data["delete"]) echo " checked"; ?>>&nbsp;6 Monate nach Ablauf<br>
+						<input type="checkbox" name="cal_delete" value="3"<? if($calendar_user_control_data["delete"]) echo " checked"; ?>>&nbsp;3 Monate nach Ablauf<br>
+						<input type="checkbox" name="cal_delete" value="0"<? if($calendar_user_control_data["delete"]) echo " checked"; ?>>&nbsp;nie
+					</td>
+				</tr>
+*/ ?>
 				<tr><? $css_switcher->switchClass(); ?>
 					<td class="<? echo $css_switcher->getClass(); ?>">&nbsp;
 					</td>
