@@ -151,6 +151,39 @@ if ($cmd=="raus") {
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
+//aus der Anmelde- oder Warteliste entfernen
+if ($cmd=="admission_raus") {
+	//erst mal sehen, ob er hier wirklich Dozent ist...
+	if ($rechte) {
+		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
+		$db->next_record();
+		$userchange=$db->f("user_id");
+		$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+		
+		$msg = "msg§Der Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste entfernt.§";
+		$msg.= "info§Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.<br>\n"
+				."Dann k&ouml;nnen sich weitere Benutzer nur noch mit Kenntnis des Veranstaltungs-Passworts als Autor anmelden.§";
+	}
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
+}
+
+//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen
+if ($cmd=="admission_rein") {
+	//erst mal sehen, ob er hier wirklich Dozent ist...
+	if ($rechte) {
+		$db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
+		$db->next_record();
+		$userchange=$db->f("user_id");
+		$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$userchange', status= 'autor' ");
+		if ($db->affected_rows())
+			$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+		
+		$msg = "msg§Der Leser ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste in die Veranstaltung hochgestuft.§";
+	}
+	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
+}
+
+
 // so bin auch ich berufen?
 
 if (isset($berufen)) {
@@ -214,12 +247,16 @@ $gruppe = array ("dozent" => "Dozenten",
 	<table width="99%" border="0"  cellpadding="2" cellspacing="0" align="center">
 
 <?
+//Veranstaltungsdaten holen
+$db3->query ("SELECT admission_type, admission_selection_take_place FROM seminare WHERE Seminar_id = '$SessionSeminar'");
+$db3->next_record();
+
 while (list ($key, $val) = each ($gruppe)) {
 
 if (!isset($sortby) || $sortby=="") 
 	$sortby = "doll DESC";
 
-$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id)  WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
+$db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, count(topic_id) AS doll,  studiengaenge.name, admission_studiengang_id AS studiengang_id FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN studiengaenge ON (seminar_user.admission_studiengang_id = studiengaenge.studiengang_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
 if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
@@ -231,25 +268,38 @@ if ($db->num_rows()) { //Only if Users were found...
 	//echo "<td class=\"steel\" width=\"10%\"><b>Literatur</b></td>";
 
 	if ($rechte) {
+
+		if ($db3->f("admission_type"))
+			$width=15;
+		else
+			$width=20;
 						
  		if ($key == "dozent") {
-			echo"<td class=\"steel\" width=\"20%\" align=center><b>&nbsp;</b></td>";
-			echo"<td class=\"steel\" width=\"20%\" align=center><b>&nbsp;</b></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><b>&nbsp;</b></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><b>&nbsp;</b></td>";
+			if ($db3->f("admission_type"))
+				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
 		}
 
 		if ($key == "tutor") {
-			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>&nbsp;</b></font></td>";
-			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>Tutor entlassen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>&nbsp;</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Tutor entlassen</b></font></td>";
+			if ($db3->f("admission_type"))
+				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
 		}
 		
 		if ($key == "autor") {
-			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>zum Tutor bef&ouml;rdern</b></font></td>";
-			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>Schreibrecht entziehen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>als Tutor eintragen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Schreibrecht entziehen</b></font></td>";
+			if ($db3->f("admission_type"))
+				echo"<td class=\"steel\" width=\"10%\" align=center><font size=-1><b>Kontingent</b></font></td>";
 		}
 
 		if ($key == "user") {
-			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>Schreibrecht erteilen</b></font></td>";
-			echo"<td class=\"steel\" width=\"20%\" align=center><font size=-1><b>Benutzer entfernen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Schreibrecht erteilen</b></font></td>";
+			echo"<td class=\"steel\" width=\"$width%\" align=center><font size=-1><b>Benutzer entfernen</b></font></td>";
+			if ($db3->f("admission_type"))
+				echo"<td class=\"steel\" width=\"10%\" align=center><b>&nbsp;</b></td>";
 		}		
 	}
 	
@@ -324,17 +374,29 @@ if ($db->num_rows()) { //Only if Users were found...
 			echo "<td class=\"$class\" >&nbsp;</td>";
 			echo "<td class=\"$class\">&nbsp;</td>";
 		}
-	
-	} // Ende der Befoerderungsspalten
+		
+		if ($db3->f("admission_type")) {
+			if ($key== "autor" || $key== "user")
+				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
+			else
+				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
+		}
+			
+	} // Ende der Dozenten/Tutorenspalten
 
 
 	print("</tr>\n");
 } // eine Zeile zuende
 
-if ($rechte)
-	echo "<tr><td class=blank colspan=\"6\">&nbsp;</td></tr>";
-else
-	echo "<tr><td class=blank colspan=\"4\">&nbsp;</td></tr>";
+if ($rechte) {
+	if ($db3->f("admission_type"))
+		$colspan=7;
+	else
+		$colspan=6;
+} else
+	$colspan=4;
+
+	echo "<tr><td class=blank colspan=\"$colspan\">&nbsp;</td></tr>";
 
 } // eine Gruppe zuende
 }
@@ -347,19 +409,19 @@ if ($rechte) {
 	$db->query ("SELECT admission_seminar_user.user_id, Vorname, Nachname, username, studiengaenge.name, position, admission_seminar_user.studiengang_id, status FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN studiengaenge ON (admission_seminar_user.studiengang_id=studiengaenge.studiengang_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' ORDER BY position, name");
 	if ($db->num_rows()) { //Only if Users were found...
 
-		$db2->query ("SELECT admission_type FROM seminare WHERE Seminar_id = '$SessionSeminar'");
-		$db2->next_record();
 		// die eigentliche Teil-Tabelle
 	 	echo "<tr><td class=\"blank\" colspan=2>";
 		echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
 		echo "<tr height=28>";
-		printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>%s</b></font></td>", ($db2->f("admission_type") == 1) ? "Anmeldeliste" : "Warteliste");
-		if ($db2->f("admission_type") == 2)
+		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=1 height=20><font size=-1><b>%s</b></font></td>", ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30",  ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1) ? "Warteliste" : "Anmeldeliste");
+		if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
 			printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Position</b></font></td>");
-		printf ("<td class=\"steel\" width=\"%s\" align=\"center\"><font size=-1><b>Kontingent</b></font></td>", ($db2->f("admission_type") == 1) ? "20%" : "10%");
+		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\">&nbsp; </td>");
 		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Nachricht</b></font></td>");
-		printf ("<td class=\"steel\" width=\"20%%\" align=\"center\"><font size=-1><b>in Veranstaltung eintragen</b></font></td>");
-		printf ("<td class=\"steel\" width=\"20%%\" align=\"center\"><font size=-1><b>Aus Liste entfernen</b></font></td></tr>");
+		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=-1><b>eintragen</b></font></td>");
+		printf ("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=-1><b>entfernen</b></font></td>");
+		printf ("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=-1><b>Kontingent</b></font></td></tr>");
+		
 
 		WHILE ($db->next_record()) {
 			IF ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
@@ -377,13 +439,14 @@ if ($rechte) {
 			}
 		
 			$cssSw->switchClass(); 
-			printf ("<tr><td width=\"30%%\" class=\"%s\" align=left><font size=-1><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td>", $cssSw->getClass(), $db->f("username"), $db->f("Vorname"), $db->f("Nachname"));
-			if ($db2->f("admission_type") == 2)
+			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=left><font size=-1><a href=\"about.php?username=%s\">%s&nbsp;%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("Vorname"), $db->f("Nachname"));
+			if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), $db->f("position"));
-			printf ("<td width=\"%s\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", ($db2->f("admission_type") == 1) ? "20%" : "10%", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username")); 
-			printf ("<td width=\"20%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"20%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></td></tr>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s\"><img border=\"0\" src=\"pictures/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s\"><img border=\"0\" src=\"pictures/down.gif\" width=\"21\" height=\"16\"></a></tr>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td></tr>", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db->f("name"));
 		}
 		print "</table>";
 	}
@@ -397,9 +460,13 @@ if ($rechte) {
 if ($rechte AND $SemUserStatus!="tutor") {
 ?>
 
+	<tr>
+		<td class=blank colspan=2>&nbsp; 
+		</td>
+	</tr>
 	<tr><td class=blank colspan=2>
 
-	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0>
+	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<? echo $PHP_SELF ?>" method="POST">
 	<tr>
 		<td class="steel1" width="30%" align="left">&nbsp; <font size=-1><b>Mitarbeiter der Enrichtung</b></font></td>
@@ -411,7 +478,8 @@ if ($rechte AND $SemUserStatus!="tutor") {
 			printf ("<option value=\"%s\">%s - %s\n", $db->f("user_id"), my_substr($db->f("Nachname").", ".$db->f("Vorname")." (".$db->f("username"),0,40).")", $db->f("inst_perms"));
 		?>
 		</select></td>
-		<td width="30%" align=center><input type="SUBMIT" name="berufen" value=" Als Tutor berufen "></td>
+		<td class="steel1" width="30%" align=center><font size=-1>als Tutor</font><br />
+		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als Tutor berufen "></td>
 	</tr></form></table>
 <?
 
