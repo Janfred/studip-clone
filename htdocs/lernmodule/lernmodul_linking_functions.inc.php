@@ -20,13 +20,13 @@ function link_seminar_modules($seminar_id)
 			$link_str[$i]["image"] .= "</a>";
 			$link_str[$i]["link"] .= "<a href=\"";
 			$link_str[$i]["link"] .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
-			$link_str[$i]["link"] .= "\" target=\"_blank\">";
+			$link_str[$i]["link"] .= "\" target=\"_blank\"><font color=\"black\">";
 			$link_str[$i]["link"] .= $mod_info["title"];
 			$link_str[$i]["link"] .= " (" . $mod_info["pages"] . " Seite";
 			if ($mod_info["pages"] != 1) 
 				$link_str[$i]["link"] .= "n";
 			$link_str[$i]["link"] .= ")";
-			$link_str[$i]["link"] .= "</a>";
+			$link_str[$i]["link"] .= "</font></a>";
 			$link_str[$i]["content"] .= $mod_info["description"] . "<br>";
 			$link_str[$i]["content"] .= "Diese Lerneinheit enth&auml;lt " . $mod_info["pages"] . " Seite";
 			if ($mod_info["pages"] != 1) 
