@@ -35,6 +35,7 @@ activate or deactivate some basic system-functions here*/
 $LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
 $WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
 $SCM_ENABLE = TRUE;									//enable Simple-Content functionality
+$SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
 
 
 /*Stud.IP modules
