@@ -2,7 +2,7 @@
 
 function show_user_modules($benutzername)
 {
-	global $cssSw;
+	global $print_open_admin;
 	$module_count = 0;
 	$mod_array = get_user_modules($benutzername);
 	if ($mod_array != false)
@@ -26,14 +26,14 @@ function show_user_modules($benutzername)
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
 					<?
-					if ($print_open[$ph_key] == true)
-						printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+					if ($print_open_admin[$ph_key] == true)
+						printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "", "open", true, $printimage, $printlink, $printdesc);
 					else
-						printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
+						printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "", "close", true, $printimage, $printlink, $printdesc);
 					?>
 				</tr>
 			</table>
-			<? if ($print_open[$ph_key] == true) 
+			<? if ($print_open_admin[$ph_key] == true) 
 			{ ?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
@@ -52,7 +52,7 @@ function show_user_modules($benutzername)
 
 function show_admin_modules()
 {
-	global $cssSw;
+	global $print_open_admin;
 	$module_count = 0;
 	$mod_array = get_all_modules();
 	if ($mod_array != false)
@@ -76,14 +76,14 @@ function show_admin_modules()
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>
 					<?
-					if ($print_open[$ph_key] == true)
-						printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "open", true, $printimage, $printlink, $printdesc);
+					if ($print_open_admin[$ph_key] == true)
+						printhead ("99%", FALSE, $PHP_SELF . "?do_close=" . $ph_key . "", "open", true, $printimage, $printlink, $printdesc);
 					else
-						printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "&view=edit&seminar_id=$seminar_id", "close", true, $printimage, $printlink, $printdesc);
+						printhead ("99%", FALSE, $PHP_SELF . "?do_open=" . $ph_key . "", "close", true, $printimage, $printlink, $printdesc);
 					?>
 				</tr>
 			</table>
-			<? if ($print_open[$ph_key] == true) 
+			<? if ($print_open_admin[$ph_key] == true) 
 			{ ?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 				<tr>

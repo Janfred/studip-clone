@@ -51,6 +51,12 @@ if ($ILIAS_CONNECT_ENABLE)
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
 	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
 
+	if (isset($do_open))
+		$print_open_admin[$do_open] = true;
+	elseif (isset($do_close))
+		$print_open_admin[$do_close] = false;
+	$sess->register("print_open_admin");
+
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
 		<td class="topic" colspan="3">&nbsp;<b>Administration von Lernmodulen</b>
