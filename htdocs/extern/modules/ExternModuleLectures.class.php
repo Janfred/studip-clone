@@ -88,11 +88,7 @@ class ExternModuleLectures extends ExternModule {
 		init_i18n($this->config->getValue("Main", "language"));
 		
 		$start_item_id = get_start_item_id($this->config->range_id);
-		$group_by = $this->config->getValue("Main", "grouping");
-		$sem_browse_data = array("start_item_id" => $start_item_id, "level" => "ev",
-		"cmd" => "qs", "show_class" => "all", "group_by" => $group_by, "default_sem" => "all",
-		"search_result" => Array(), "show_entries" => "level", "sem_status" => "", "sset" => "");
-		$browser =& new ExternSemBrowse($this->config, $sem_browse_data);
+		$browser =& new ExternSemBrowse($this->config, $start_item_id);
 		$browser->print_result();
 		
 		if ($this->config->getValue("Main", "wholesite"))
