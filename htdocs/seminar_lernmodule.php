@@ -35,7 +35,7 @@ require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
 
-if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($op_seminar_id == "")))
+if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id == "")))
 {
 	parse_window ("error§" . _("Die Seite wurde mit fehlerhaften Parametern aufgerufen. Bitte wenden Sie sich an den/die AdministratorIn."), "§",
 				_("Fehlerhafte Parameter"));
@@ -70,25 +70,23 @@ if ($ILIAS_CONNECT_ENABLE)
 		$db = New DB_Seminar;
      		if ($do_op == "clear")
      		{
-     			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$op_seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
+     			$db->query("DELETE FROM seminar_lernmodul WHERE seminar_id = '$seminar_id' AND co_id = '$op_co_id' AND co_inst = '$op_co_inst' LIMIT 1");
      			echo "<table><tr>";
      			my_msg("Die Zuordnung wurde aufgehoben.");
 	     		echo "</tr></table>";
 	     	}
 	     	elseif ($do_op == "connect")
 	     	{
-	     		$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst) VALUES ('$op_seminar_id', '$op_co_id', '$op_co_inst')");
+	     		$db->query("INSERT INTO seminar_lernmodul (seminar_id, co_id, co_inst) VALUES ('$seminar_id', '$op_co_id', '$op_co_inst')");
 	     		echo "<table><tr>";
 	     		my_msg("Die Zuordnung wurde gespeichert.");
 	     		echo "</tr></table>";
      		}
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
-     		show_seminar_modules("958125dbf62513c841bdebf7aef3e1ed");
+     		show_seminar_modules($seminar_id);
 		
-		echo "<b>" . _("Folgende Lernmodule können eingebunden werden:") . "</b><br><br>";
-
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
-		show_all_modules("958125dbf62513c841bdebf7aef3e1ed");
+		show_all_modules($seminar_id);
 
 		?>
 		</table>
