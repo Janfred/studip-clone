@@ -30,6 +30,7 @@ function editarea($forumposting) {
 	else
 		$zusatz = "<a href=\"".$PHP_SELF."?open=".$forumposting["rootid"]."#anker\">" . makeButton("abbrechen", "img") . "</a>";
 	
+	$zusatz .= "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\">Smileys</a>&nbsp;&nbsp;"."<a href=\"help/index.php?help_page=ix_forum6.htm\" target=\"new\">Formatierungshilfen</a>";
 	if ($forumposting["writestatus"] == "new") { // es ist ein neuer Beitrag, der Autor sieht dann:
 		$description = _("Ihr Beitrag");
 	} else {
@@ -57,7 +58,7 @@ function editarea($forumposting) {
 				.htmlReady($zitat)
 				."</textarea>";
 		}
-	$description .= "<br><br><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
+	$description .= "<br><br><img src=\"pictures/blank.gif\" width=\"160\" height=\"1\"><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
 		.$zusatz
 		."</div>";	
 	return $description;
@@ -482,7 +483,7 @@ function ForumStriche($forumposting) {
 }
 
 function forum_print_toolbar ($id="") {
-		global $user, $PHP_SELF, $forum;
+		global $user, $PHP_SELF, $forum, $open, $flatviewstartposting;
 		$print = "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">";
 		if ($id) {  // Schreibmodus, also form einbauen
 			if  ($user->id == "nobody") $print .= "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
