@@ -40,7 +40,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 /**
 * This function calculate the remaining places for the "alle"-allocation 
 *
-* The function calculate the ramining places for the "alle"-allocation. It considers
+* The function calculate the remaining places for the "alle"-allocation. It considers
 * the places in the other allocations to avoid rounding errors
 * 
 * @param		string	seminar_id	the seminar_id of the seminar to calculate
@@ -94,7 +94,10 @@ function get_free_admission ($seminar_id) {
 	$db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' ");
 	$count=0;
 	while ($db2->next_record())
-		$count=$count+ round($db->f("admission_turnout") * ($db2->f("quota") / 100));
+		if ($db2->f("studiengang_id") == "all")
+			$count=$count+get_all_quota($db->f("Seminar_id"));
+		else
+			$count=$count+round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
 
 	//Wiieviel Teilnehmer koennen noch eingetragen werden?
 	$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '".$db->f("Seminar_id")."' AND status= 'autor' ");
@@ -136,7 +139,7 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 			$db3->query("UPDATE admission_seminar_user SET position = '$position' WHERE user_id = '".$db2->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 			//User benachrichten				
 			if (($db3->affected_rows()) && ($send_message)) {
-				//Username auslesen
+				//Usernamen auslesen
 				$db4->query("SELECT username FROM auth_user_md5 WHERE user_id = '".$db2->f("user_id")."' ");
 				$db4->next_record();
 				$message="Sie sind in der Warteliste der Veranstaltung **".$db->f("Name")."** hochgestuft worde. Sie stehen zur Zeit auf Position $position.";
@@ -295,7 +298,7 @@ function check_admission ($send_message=TRUE) {
 		//evtl. verbliebene Plaetze auffuellen
 		update_admission($db->f("Seminar_id"), $send_message);
 
-		//User benachrichten (nur bei Losverfahren, da Wartelist erst waehrend des Losens generiert wurde.
+		//User benachrichten (nur bei Losverfahren, da Warteliste erst waehrend des Losens generiert wurde.
 		if (($send_message) && ($db->f("admission_type") == '1')) {
 			$db2->query("SELECT admission_seminar_user.user_id, username, position FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' ORDER BY position ");
 			while ($db2->next_record()) {
