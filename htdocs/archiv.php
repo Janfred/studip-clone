@@ -230,7 +230,7 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 					<table border=0 cellspacing=0 cellpadding=2>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-							<b><font size=-1><?=_("Bitte geben Sie hier Ihre Suchkriterien ein:")?></font></b><br /><font size=-1><?=_("Wenn Sie keinen Suchbegriff angeben, werden alle Veranstaltungen angezeigt.")?></font>
+							<b><font size=-1><?=_("Bitte geben Sie hier Ihre Suchkriterien ein:")?></font></b><br />
 							</td>
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
@@ -344,6 +344,16 @@ include "header.php";   //hier wird der "Kopf" nachgeladen
 // wollen wir was Suchen?
 
 if ($archiv_data["perform_search"]) {
+	//searchstring to short?
+	if ((((strlen($archiv_data["all"]) < 4) && ($archiv_data["all"]))
+		|| ((strlen($archiv_data["name"]) < 4) && ($archiv_data["name"]))
+		|| ((strlen($archiv_data["desc"]) < 4) && ($archiv_data["desc"]))
+		|| ((strlen($archiv_data["doz"]) < 4) && ($archiv_data["doz"])))
+		&& (!$archiv_data["pers"]))
+		$string_too_short = TRUE;
+	if ((!$archiv_data["all"]) && (!$archiv_data["name"]) && (!$archiv_data["desc"]) && (!$archiv_data["doz"]) && (!$archiv_data["pers"]))
+		$string_too_short = TRUE;
+		
 	if (!$archiv_data["sortby"])
 		$archiv_data["sortby"]="Name";
 	if ($archiv_data["pers"])
@@ -351,44 +361,45 @@ if ($archiv_data["perform_search"]) {
 	else
 		$query ="SELECT seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv WHERE ";
 	if ($archiv_data["all"]) {
-		$query .= "name LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR untertitel LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR beschreibung LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR start_time LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR semester LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR studienbereiche LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR institute LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR dozenten LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR fakultaet LIKE '%".$archiv_data["all"]."%'";
+		$query .= "name LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR untertitel LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR beschreibung LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR start_time LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR semester LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR studienbereiche LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR institute LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR dozenten LIKE '%".trim($archiv_data["all"])."%'";
+		$query .= " OR fakultaet LIKE '%".trim($archiv_data["all"])."%'";
 	} else {
 		if ($archiv_data["name"])
-			$query .= "name LIKE '%".$archiv_data["name"]."%'";
+			$query .= "name LIKE '%".trim($archiv_data["name"])."%'";
 		else
 			$query .= "name LIKE '%%'";
 		if ($archiv_data["desc"])
-			$query .= " AND beschreibung LIKE '%".$archiv_data["desc"]."%'";
+			$query .= " AND beschreibung LIKE '%".trim($archiv_data["desc"])."%'";
 		else
 			$query .= " AND beschreibung LIKE '%%'";		
 		if ($archiv_data["sem"])
-			$query .= " AND semester LIKE '%".$archiv_data["sem"]."%'";
+			$query .= " AND semester LIKE '%".trim($archiv_data["sem"])."%'";
 		else
 			$query .= " AND semester LIKE '%%'";
 		if ($archiv_data["inst"])
-			$query .= " AND heimat_inst_id LIKE '%".$archiv_data["inst"]."%'";
+			$query .= " AND heimat_inst_id LIKE '%".trim($archiv_data["inst"])."%'";
 		else
 			$query .= " AND heimat_inst_id LIKE '%%'";
 		if ($archiv_data["doz"])
-			$query .= " AND dozenten LIKE '%".$archiv_data["doz"]."%'";
+			$query .= " AND dozenten LIKE '%".trim($archiv_data["doz"])."%'";
 		else
 			$query .= " AND dozenten LIKE '%%'";		
 	}
 	$query .= " ORDER BY ".$archiv_data["sortby"];
+	
+	$db->query($query);	
 
-	$db->query($query);
-	if (!$db->affected_rows() == 0) {
+	if ((!$db->affected_rows() == 0) && (!$string_too_short)) {
 		$hits = $db->affected_rows();
 		
-		?>
+	?>
 	<tr>
 		<td class="blank" colspan=2>
 		<?
@@ -428,10 +439,10 @@ if ($archiv_data["perform_search"]) {
       		// schon aufgeklappt?
 			if ($archiv_data["open"]==$db->f('seminar_id')) { 
 				echo "<a name=\"anker\"></a><a href=\"$PHP_SELF?close=yes\"><img src=\"pictures/forumgraurunt.gif\" " . tooltip(_("Zuklappen")) . " border=\"0\" valign=\"top\"></a></td>";
-				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><b>".htmlReady($db->f("name"))."</b></font></td>";
+				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><b><a href=\"$PHP_SELF?close=yes\">".htmlReady($db->f("name"))."</a></b></font></td>";
 			} else { 
 	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"pictures/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
-				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\">".htmlReady($db->f("name"))."</font></td>";
+				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\">".htmlReady($db->f("name"))."</a></font></td>";
 			}
 	    echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("dozenten")."</font></td>";
 	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".$db->f("institute")."</font></td>";
@@ -491,7 +502,7 @@ if ($archiv_data["perform_search"]) {
 						echo "<br />";	
 					}		
 					if (($add_user) && (!$new_search)) {
-						$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%' ORDER BY Nachname");
+						$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%".trim($search_exp)."%' ORDER BY Nachname");
 						if ($db2->affected_rows()) {
 							echo "<form action=\"$PHP_SELF#anker\">";
 							echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br /><br />";
@@ -524,7 +535,7 @@ if ($archiv_data["perform_search"]) {
 		}
 		echo "</table><br><br>";
 	} else {
-		echo "<tr><td class=\"blank\" colspan=2><blockquote><font size=\"-1\"><b>" . _("Es wurde keine Veranstaltung gefunden.") . "</b></font></blockquote>";
+		echo "<tr><td class=\"blank\" colspan=2><blockquote><font size=\"-1\"><b>" . (($string_too_short) ? _("Der Suchbegriff ist zu kurz.") : _("Es wurde keine Veranstaltung gefunden.")) . "</b></font></blockquote>";
   }
 }
 
