@@ -583,7 +583,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 					else {
 						// Personal appointment
 						$edit = sprintf("<a href=\"./calendar.php?cmd=edit&termin_id=%s"
-									. "&atime%s&source_page=%s\">"
+									. "&atime=%s&source_page=%s\">"
 									. makeButton("terminaendern", "img") . "</a>"
 									, $termin->getId(), $termin->getStart(), rawurlencode($PHP_SELF));
 					}
