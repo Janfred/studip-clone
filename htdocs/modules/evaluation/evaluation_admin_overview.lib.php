@@ -961,7 +961,7 @@ class EvalOverview {
 
             /* Create link ------------------------------------------------- */
             $link = new HTML ("a");
-            $link->addAttr ("href", "sendfile.php?type=2&file_id=".$exportManager->getTempFilename ()."&file_name='".$exportManager->getFilename ()."'");
+            $link->addAttr ("href", "sendfile.php?type=2&file_id=".$exportManager->getTempFilename ()."&file_name=".$exportManager->getFilename ());
             $img = new HTMLempty ("img");
             $img->addAttr("border","0");
             $img->addAttr("src", EVAL_PIC_EXPORT_FILE);
