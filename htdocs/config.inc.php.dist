@@ -261,7 +261,7 @@ $PERS_TERMIN_KAT[15]=array("name"=>_("Vorlesung"), "color"=>"#627C95");
 // weitere Kategorien können hier angefügt werden
 
 // number of personal events each user can store in his calendar
-$CALENDAR_MAX_EVENTS = 500;
+$CALENDAR_MAX_EVENTS = 1000;
 
 //preset for titles, insert your own titles in the array
 $TITLE_FRONT_TEMPLATE = array("","Prof.","Prof. Dr.","Dr.","PD Dr.","Dr. des.","Dr. med.","Dr. rer. nat.","Dr. forest.",
