@@ -54,8 +54,7 @@ function url_ftp($url) {
 function parse_link($link) {
 	global $name;
 	if (substr($link,0,6) == "ftp://") {
-		// echo url_ftp($link);
-		
+		// Parsing an FTF-Adress		
 		$url_parts = @parse_url( $link );
 		$documentpath = $url_parts["path"];
 		$ftp = ftp_connect($url_parts["host"]);
@@ -91,7 +90,7 @@ function parse_link($link) {
 	if (empty( $port ) ) $port = "80";
 	$socket = @fsockopen( $host, $port, $errno, $errstr, 10 );
 	if (!$socket) {
-		echo "$errstr ($errno)<br />\n";
+		// echo "$errstr ($errno)<br />\n";
 	} else {
    		fputs($socket, "HEAD ".$documentpath." HTTP/1.0\nHost: $host\nCookie: Seminar_Session=".$sess->id."\n\n");
    		socket_set_timeout($socket,2);
@@ -839,10 +838,13 @@ function link_item ($range_id, $create = FALSE, $echo = FALSE, $refresh = FALSE)
 			if (insert_link_db($range_id, $link_data["Content-Length"], $refresh))
 				if ($refresh)
 					delete_link($refresh, TRUE);
+			$tmp = TRUE;
 		} else {
-			echo "Link nicht aktiv!";	
+			$tmp = FALSE;	
+			
 		}
-		return;
+		return $tmp;
+		
 	} else {
 		if ($echo) {
 			echo link_form($refresh);
@@ -867,29 +869,36 @@ function linkcheck ($URL) {
 
 
 function link_form ($range_id) {
-	global $SessSemName;
+	global $SessSemName, $the_link, $protect, $description, $name, $folder_system_data;
+	if ($protect=="on") $protect = "checked";
+	$print = "";
+	if ($folder_system_data["linkerror"]==TRUE) {
+		$print.="<hr><img src=\"pictures/x.gif\" align=\"left\"><font color=\"red\">";
+		$print.=_("&nbsp;FEHLER: unter der angegebenen Adresse wurde keine Datei gefunden.<br>&nbsp;Bitte kontrollieren Sie die Pfadangabe!");
+		$print.="</font><hr>";
+	}
 
-	$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	$print.="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 
 	$print.="</font></td></tr>";
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"link_form\" action=\"" . $PHP_SELF . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie verlinken wollen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
-	$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
+	$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=$the_link>&nbsp;</td></td>";
 	$print.= "\n</tr>";
 	if (!$refresh) {
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. aktivieren Sie eine Anzeige, dass es sich um eine urheberrechtlich geschützte Datei handelt.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Geschützt:") . "&nbsp;</font>";
-		$print.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"protect\"></td></tr>";
+		$print.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"protect\" $protect></td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
-		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
+		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" value=$name></td></tr>";
 						
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
-		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
+		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL>$description</TEXTAREA>&nbsp;</td></tr>";
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("4. Klicken Sie auf <b>'absenden'</b>, um die Datei zu verlinken") . "</font></td></tr>";
 	} else
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";

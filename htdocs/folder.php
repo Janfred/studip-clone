@@ -201,13 +201,16 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		
 	//wurde eine Datei verlinkt?
 	if (($cmd=="link") && (!$cancel_x) && ($folder_system_data["link"])) {
-		link_item ($folder_system_data["link"], TRUE, FALSE, $folder_system_data["refresh"]);
-		$open = $dokument_id;
-		$close = $folder_system_data["refresh"];
-		$folder_system_data["link"]='';
-		$folder_system_data["refresh"]='';		
-		unset($cmd);
+		if (link_item ($folder_system_data["link"], TRUE, FALSE, $folder_system_data["refresh"])) {
+			$open = $dokument_id;
+			$close = $folder_system_data["refresh"];
+			$folder_system_data["link"]='';
+			$folder_system_data["refresh"]='';		
+			unset($cmd);
+		} else {
+			$folder_system_data["linkerror"]=TRUE;	
 		}
+	}
 		
 	if ($cancel_x)  {
 		$folder_system_data["upload"]='';
