@@ -54,7 +54,6 @@ function scm_tab_name() {
 	global $SessSemName;
 	static $tab_name="";
 	if (!$tab_name) {
-		$db=new DB_Seminar();
 		$db->query("SELECT tab_name FROM scm WHERE range_id='$SessSemName[1]'");
 		$db->next_record();
 		$tab_name=$db->f("tab_name");
@@ -160,6 +159,11 @@ if ($SessSemName["class"]=="inst") {
 	$structure["druckansicht_s"]=array (topKat=>"seminar_main", name=>_("Druckansicht"), link=>"print_seminar.php", target=>"_new", active=>FALSE);
 	if ($rechte)
 		$structure["administration_v"]=array (topKat=>"seminar_main", name=>_("Administration dieser Veranstaltung"), link=>"admin_seminare1.php?new_sem=TRUE", active=>FALSE);
+
+	$db->query("SELECT admission_binding FROM seminare WHERE seminar_id = '$SessSemName[1]'");
+	$db->next_record();
+	if (!$db->f("admission_binding") && !$perm->have_studip_perm("tutor",$SessSemName[1]))
+		$structure["delete_abo"]=array (topKat=>"seminar_main", name=>_("Austragen aus der Veranstaltung"), link=>"meine_seminare.php?auswahl=$SessSemName[1]&cmd=suppose_to_kill", isolator=>TRUE);
 }
 //
 
