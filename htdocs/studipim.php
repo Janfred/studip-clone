@@ -39,13 +39,8 @@ if ($auth->auth["uid"]!="nobody"){
 	$sess->register("messenger_data");
 	$sms= new messaging;
 	
-	//Initial time, all msg's from this time will later be counted as new
-	if (!$messenger_data["messenger_start"])
-		if ($my_messaging_settings["last_visit"] < time())
-			$messenger_data["messenger_start"] = $my_messaging_settings["last_visit"];
-		else
-			$messenger_data["messenger_start"] = time();
-
+	if ($msg_rec)
+		$msg_rec = get_userid($msg_rec)
 	
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
 	$query = "SELECT " . $_fullname_sql['full'] . " AS full_name,($now-UNIX_TIMESTAMP(changed)) AS lastaction,a.username,a.user_id,contact_id 
