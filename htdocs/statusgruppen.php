@@ -41,7 +41,13 @@ $cssSw=new cssClassSwitcher;
 
 // Hilfsfunktionen
 
-function groupmail($range_id) {
+// groupmail:
+// create mailto:-Link fpr 
+// - groups (filter-argument ignored)
+// - seminars (filter=empty or =all: Mail to all accepted participants)
+//            (filter=prelim: Mail to all preliminarily accepted partic.)
+//            (filter=waiting: Mail to all waiting or claiming partic.)
+function groupmail($range_id, $filter="") {
 	$type = get_object_type($range_id);
 	if ($type == "group") {
 		$db=new DB_Seminar;
@@ -54,7 +60,16 @@ function groupmail($range_id) {
 	}
 	if ($type == "sem") {
 		$db=new DB_Seminar;
-		$db->query ("SELECT Email FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$range_id'");
+		if ($filter=="" || $filter=="all") {
+			$db->query ("SELECT Email FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$range_id'");
+		} else if ($filter=="prelim") {
+			$db->query ("SELECT Email FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '$range_id' AND status='accepted'");
+
+		} else if ($filter=="waiting") {
+			$db->query ("SELECT Email FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '$range_id' AND (status='awaiting' OR status='claiming')");
+		} else {
+			echo "<p>ERROR: unknown filter: $filter</p>";
+		}
 		while ($db->next_record()) {
 			$mailpersons .= ",".$db->f("Email");
 		}
@@ -234,7 +249,6 @@ if ($delete_id)
 			)
 		)
 	);
-	$link = "<a href=\"mailto:".groupmail($SessSemName[1])."?subject=".rawurlencode($SessSemName[0])."\">";
 	$infobox[1]["kategorie"] = _("Aktionen:");
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
 									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")
@@ -246,17 +260,35 @@ if ($delete_id)
 									"text"  => _("Aus diesen Gruppen können Sie sich selbst austragen.")
 								);						
 	if ($rechte) {
+		$adr_all=groupmail($SessSemName[1], "all");
+		$adr_prelim=groupmail($SessSemName[1], "prelim");
+		$adr_waiting=groupmail($SessSemName[1], "waiting");
+		$link_mail_all = $adr_all ? "<a href=\"mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		$link_mail_prelim = $adr_prelim ?  "<a href=\"mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		$link_mail_waiting = $adr_waiting ? "<a href=\"mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
 								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">", "</a>")
 								);
-	if ($anzahltext > 0) {
-		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/mailnachricht.gif" ,
+		if ($anzahltext > 0) {
+			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/mailnachricht.gif" ,
 									"text"  => _("Mit dem erweiterten Briefsymbol können Sie eine E-Mail an alle Gruppenmitglieder verschicken.")
 								);
-	}
-		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
-									"text"  => sprintf(_("Um eine E-Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie %shier%s."), $link, "</a>")
+		}
+		if ($link_mail_all) {
+			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+									"text"  => sprintf(_("Um eine E-Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie %shier%s."), $link_mail_all, "</a>")
 								);
+		}
+		if ($link_mail_waiting) {
+			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+									"text"  => sprintf(_("Um eine E-Mail an alle TeilnehmerInnen auf der Warteliste zu versenden, klicken Sie %shier%s."), $link_mail_waiting, "</a>")
+								);
+		}
+		if ($link_mail_prelim) {
+			$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
+									"text"  => sprintf(_("Um eine E-Mail an alle vorläufig akzeptierten TeilnehmerInnen zu versenden, klicken Sie %shier%s."), $link_mail_prelim, "</a>")
+								);
+		}
 	}
 
 	print_infobox ($infobox,"pictures/groups.jpg");
