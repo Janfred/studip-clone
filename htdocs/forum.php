@@ -212,27 +212,101 @@ IF ($cmd == "move" && $topic_id !="" && $rechte) {
 		$query = "SELECT Seminar_id, Name FROM seminare ORDER BY Name";
 	$db=new DB_Seminar;
 	$db->query($query);
-?>		<table class=blank width="100%" cellpadding=0 cellspacing=0 border=0><tr><td class=blank>
-		<form action="forum.php" method="POST">
-		&nbsp;<b>Als Thema in anderes Forum verschieben (zusammen mit <?echo $count;?> Antworten):</b><br><br>&nbsp; 
-  		<SELECT Name="sem_id" size="1">
-<?		WHILE ($db->next_record()){
-			$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
-			printf ("<option %s value=\"%s\">%s\n", $db->f("Seminar_id") == $SessSemName[1] ? "selected" : "", $db->f("Seminar_id"), $sem_name);
-			}
-?>		</select>
-		<input type="HIDDEN" name="target" value="Seminar">
-		<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
-		<input type="HIDDEN" name="view" value="<?echo $view;?>">
-  		<input type=image name="SUBMIT" value="Verschieben" src="pictures/buttons/verschieben-button.gif" border=0>
-  		<a href="forum.php?view=<?echo $view;?>"><img src="pictures/buttons/abbrechen-button.gif" border=0></a>
-  		</form></td></tr></table>
+
+	if ($perm->have_perm("tutor") OR $perm->have_perm("dozent") OR $perm->have_perm("admin")) {
+		$query2 = "SELECT institute.Institut_id, Name FROM user_inst LEFT JOIN institute USING(Institut_id) WHERE user_id = '$user->id' AND (inst_perms = 'tutor' OR inst_perms = 'dozent' OR inst_perms = 'admin') ORDER BY Name";	
+		$db2=new DB_Seminar;
+		$db2->query($query2);
+	}
+	if ($perm->have_perm("root")) {
+		$query2 = "SELECT Institut_id, Name FROM institute ORDER BY Name";
+		$db2=new DB_Seminar;
+		$db2->query($query2);
+	}
+
+
+?>		<table class="steel1" width="100%" cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<td class="steel2" colspan="2">
+					<form action="forum.php" method="POST">
+					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1">Als Thema verschieben (zusammen mit <?echo $count;?> Antworten):</font></b>
+				</td>
+			</tr>
+			<tr>
+				<td class="steel1" colspan="2">
+					&nbsp; 
+				</td>
+			</tr>
+			<tr>
+				<form action="forum.php" method="POST">
+				<td class="steel1" align="right" nowrap width="20%">
+					<font size="-1">in anderes Forum:</font>&nbsp; &nbsp; 
+				</td>
+				<td class="steel1" width="80%">					
+					<SELECT Name="sem_id" size="1">
+			<?		while ($db->next_record()) {
+						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
+						printf ("<option %s value=\"%s\">%s\n", $db->f("Seminar_id") == $SessSemName[1] ? "selected" : "", $db->f("Seminar_id"), $sem_name);
+					}
+			?>		</select>&nbsp; <input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip("dahin verschieben")?>>
+				</td>
+				<input type="HIDDEN" name="target" value="Seminar">
+				<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
+				<input type="HIDDEN" name="view" value="<?echo $view;?>">
+		  		</form>
+			</tr>
+			<?
+		if ($db2->num_rows()) {   // Es kann auch in Institute verschoben werden
+		?>
+			<tr>
+				<form action="forum.php" method="POST">
+				<td class="steel1" align="right" nowrap width="20%">
+			  		<font size="-1">in anderes Institut:</font>&nbsp; &nbsp; 
+			  	</td>
+				<td class="steel1" width="80%">					
+			  		<SELECT Name="inst_id" size="1">
+			<?		while ($db2->next_record()) {
+						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
+						printf ("<option value=\"%s\">%s\n", $db2->f("Institut_id"), $inst_name);
+					}
+			?>		</select>&nbsp; <input type=image name="SUBMIT" value="Verschieben" src="pictures/move.gif" border=0 <?=tooltip("dahin verschieben")?>>
+				</td>
+				<input type="HIDDEN" name="target" value="Institut">
+				<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
+				<input type="HIDDEN" name="view" value="<?echo $view;?>">
+		  		</form>
+			</tr>
+		<?
+		}
+		?>
+			<tr valign="middle">
+				<td class="steel1" align="right" nowrap width="20%">
+					&nbsp; 
+				</td>
+				<td class="steel1" width="80%">					
+					<br>
+
+			  		<a href="forum.php?view=<?echo $view;?>"><img src="pictures/buttons/abbrechen-button.gif" border=0></a>
+
+		  		</td>
+  			</tr>
+  		</table>
 <?		
 	}
+	
+
 	
 IF ($target =="Seminar"){ //Es soll in ein anderes Seminar verschoben werden 
 	$verschoben = 0;
 	move_topic($topic_id,$sem_id,$topic_id,$verschoben);
+	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
+	parse_msg("msg§$verschoben Posting(s) verschoben.");
+	echo "</table>";
+	}
+	
+IF ($target =="Institut"){ //Es soll in ein Institut verschoben werden 
+	$verschoben = 0;
+	move_topic($topic_id,$inst_id,$topic_id,$verschoben);
 	echo "<table class=blank width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
 	parse_msg("msg§$verschoben Posting(s) verschoben.");
 	echo "</table>";
