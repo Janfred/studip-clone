@@ -5,7 +5,7 @@ function link_new_module()
 	return $ABSOLUTE_PATH_ILIAS . "studip2ilias.php?rdmode=new" . get_ilias_logindata();
 }
 
-function get_module_linkdata($this_array)
+function get_module_linkdata($this_array, $perm_area = 0)
 {
 	global $auth, $perm;
 
@@ -28,18 +28,18 @@ function get_module_linkdata($this_array)
 	$data_str["content"] .= "<br>";
 	$data_str["key"] .= $this_array["id"] . "@" . $this_array["inst"];
 	
-	$data_str["button"] = "<br><center><a href=\"" . link_use_module($mod_array["inst"], $mod_array["id"]) . "\" class=\"tree\" target=\"_blank\">"
+	$data_str["button"] = "<br><center><a href=\"" . link_use_module($this_array["inst"], $this_array["id"]) . "\" class=\"tree\" target=\"_blank\">"
 		. makeButton("starten", "img")."</a>&nbsp";
 
 	$mod_author = get_module_author($this_array["inst"], $this_array["id"]);
 	$mod_desc = "";
 	for ($i=0; $i<sizeof($mod_author); $i ++)
 	{
-		if (($auth->auth["uname"] == get_studip_user($mod_author[$i]["id"])) OR ($perm->have_studip_perm("admin",$seminar_id)))
+		if (($auth->auth["uname"] == get_studip_user($mod_author[$i]["id"])) OR ($perm->have_studip_perm("admin",$perm_area)))
 		{
-			$data_str["button"] .= "<a href=\"" . link_edit_module($mod_array[$i]["inst"], $mod_array[$i]["id"]) . "\" target=\"_blank\">"
+			$data_str["button"] .= "<a href=\"" . link_edit_module($this_array["inst"], $this_array["id"]) . "\" target=\"_blank\">"
 			. makeButton("bearbeiten", "img")."</a>&nbsp";
-			$delete_link = $PHP_SELF . "?delete=now&del_inst=".$mod_array[$i]["inst"]."&del_id=".$mod_array[$i]["id"]."&del_title=".$mod_info["title"];
+			$delete_link = $PHP_SELF . "?delete=now&del_inst=".$this_array["inst"]."&del_id=".$this_array["id"]."&del_title=".$mod_info["title"];
 			$data_str["button"] .= "<a href=\"" . $delete_link . "\">"
 			. makeButton("loeschen", "img")."</a>";
 		}
@@ -61,7 +61,7 @@ function link_seminar_modules($seminar_id)
 	{
 		for ($i=0; $i<sizeof($mod_array); $i ++)
 		{
-			$link_str[$i] = get_module_linkdata($mod_array[$i]);
+			$link_str[$i] = get_module_linkdata($mod_array[$i], $seminar_id);
 		}
 		return $link_str;
 	}
