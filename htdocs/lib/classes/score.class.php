@@ -280,6 +280,10 @@ function GetMyScore() {
 	$db->query("SELECT count(contact_id) as contactcount FROM contact WHERE user_id = '$user_id' ");
 	$db->next_record();
 	$contact = $db->f("contactcount");
+	
+	$db->query("SELECT count(kategorie_id) as katcount FROM kategorien WHERE range_id = '$user_id' ");
+	$db->next_record();
+	$katcount = $db->f("katcount");
 
 	$db->query("SELECT mkdate FROM user_info WHERE user_id = '$user_id' ");
 	$db->next_record();
@@ -316,7 +320,7 @@ function GetMyScore() {
 
 ///////////////////////// Die HOCHGEHEIME Formel:
 
-	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (10*$archiv*$age) + (10*$contact) + (5*$seminare) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
+	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (10*$archiv*$age) + (10*$contact) + (20*$katcount) + (5*$seminare) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
 	$score = round($score/$age);
 	if(file_exists("./user/".$user_id.".jpg"))
 		$score *=10;
