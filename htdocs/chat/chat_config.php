@@ -81,7 +81,7 @@ define("CHAT_ADMIN_IDLE_TIMEOUT",7200);       //in Sekunden
 * A higher number means lower CPU usage on the server, but slower response times for the clients
 * @const CHAT_SLEEP_TIME
 */
-define("CHAT_SLEEP_TIME",300000);       //in usleep(micro s)
+define("CHAT_SLEEP_TIME",500000);       //in usleep(micro s)
 /**
 * Time seconds to 'ping' the clients
 *
