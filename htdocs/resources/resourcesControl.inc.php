@@ -46,6 +46,10 @@ empfangene Werte auswerten und Befehle ausfuehren
 if ($view)
 	 $resources_data["view"]=$view;
 
+//If we start the admin mode, kill open objects
+if ($resources_data["view"] == "ressources")
+	close_object();
+
 //Beitrag aufklappen
 if ($structure_open)
 	$resources_data["structure_open"]=$structure_open;
@@ -510,7 +514,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");
 if ($SessSemName[1])
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 else
-	include ("$RELATIVE_PATH_RESOURCES/views/links_ressources.inc.php");
+	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
 
 include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
 
@@ -535,8 +539,6 @@ include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
 Treeview, die Strukturdarstellung, views: resources, _resources, make_hierarchie
 /*****************************************************************************/
 if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources"){
-
-	closeObject();
 
 	if ($edit_structure_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
