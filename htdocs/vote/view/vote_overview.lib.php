@@ -693,7 +693,7 @@ function makeDisplaySelectForm($action){
 	}
 	$html .="	   </select>\n";
 	
-	$html .="	   <input type=image name=new style=\"vertical-align:middle;\" "
+	$html .="	   <input type=image name=new style=\"vertical-align:middle;\" border=\"0\" "
 		  . 	    makeButton($label["selections_selectrange_button"],"src") . " title=\"".$label["selections_selectrange_tooltip"]."\" alt=\"".$label["selections_selectrange_tooltip"]."\">\n"
 		  . "	   <br></font></form>\n"
 		  . "	  </td>\n";
@@ -713,7 +713,7 @@ function makeSearchForm(){
 		  . "	     ".$label["search_text"]."\n"
 		  . "	     <input type=\"text\" name=\"searchRange\"  value=\"$searchRange\" size=\"30\" style=\"vertical-align:middle;\">"
 		  . "	     <input type=\"hidden\" name=\"voteaction\" value=\"search\">"
-		  . "	     <input type=\"image\" style=\"vertical-align:middle;\""
+		  . "	     <input type=\"image\" style=\"vertical-align:middle;\" border=\"0\" "
 		  .			makeButton($label["search_button"],"src") . " title=\"".$label["search_tooltip"]."\" alt=\"".$label["search_tooltip"]."\">\n"
 		  . "	  <br>&nbsp;</font></form>\n"
 		  . "	  </td>\n";

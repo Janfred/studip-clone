@@ -98,11 +98,8 @@ function createBoxHeader ($title, $width, $extraTitle = "",
 
    if ($adminURL) {
       $html .= 
-	  "<a href=\"".$adminURL."\">\n".
-	  "<img src=\"".$adminImgURL."\" border=\"0\" ".
-	  " alt=\"".$adminTitle."\" ".
-	  " title=\"".$adminTitle."\">".
-	  "</a>&nbsp;";
+	  "<a href=\"".$adminURL."\"><img src=\"".$adminImgURL."\" border=\"0\" ".
+	  " alt=\"".$adminTitle."\" title=\"".$adminTitle."\"></a>&nbsp;";
    }
 
    $html .= 
