@@ -160,10 +160,8 @@ if (!$perm->have_perm("root")){
 	<td class="blank" valign="top">
 	<table cellpadding="5" border="0" width="100%"><tr><td colspan="2">
 		<?
-		if ($sem_portal["bereich"] == "all")
-			print _("Sie k&ouml;nnen hier nach allen Veranstaltungen suchen, sich Informationen anzeigen lassen und Veranstaltungen abonnieren.<br>");
-		
-		elseif ($anzahl_seminare_class > 0)
+		// 
+		if ($anzahl_seminare_class > 0)
 			print $SEM_CLASS[$sem_portal["bereich"]]["description"]."<br>" ;
 
 		 elseif ($sem_portal["bereich"] != "all") 
@@ -248,6 +246,20 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=2\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("die meisten Materialien")."</a><br />";
 	if ($sem_portal["toplist"] != 3)
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=3\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("aktivste Veranstaltungen")."</a><br />";
+
+
+
+// if ($sem_portal["bereich"] == "all")
+	$infotxt = _("Sie können hier nach allen Veranstaltungen suchen, sich Informationen anzeigen lassen und Veranstaltungen abonnieren.");
+		
+	$infobox[] =
+		array  ("kategorie" => _("Aktionen:"),
+			"eintrag" => array	(	
+				array	 (	"icon" => "pictures/suchen.gif",
+									"text"  =>	$infotxt
+				)
+			)
+		);
 
 	$infobox[] = ($view !="all") ? 
 		 		array  ("kategorie"  => _("Information:"),
