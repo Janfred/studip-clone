@@ -326,6 +326,7 @@ class EvaluationObjectDB extends DatabaseObject {
    * @return  array   All evaluations in this range and this state
    */
   function getEvaluationIDs ($rangeID = "", $state = "") {
+    $db = DatabaseObject::getDBObject ();
     global $user;
 
     $result = array ();
@@ -338,7 +339,7 @@ class EvaluationObjectDB extends DatabaseObject {
    $state != EVAL_STATE_ACTIVE &&
    $state != EVAL_STATE_STOPPED)
       return $this->throwError (2, _("Übergebener Status ist ungültig."));
-	  
+  
     if ( get_userid($rangeID) != NULL && $rangeID != NULL)
       $rangeID = get_userid($rangeID);
 
@@ -360,17 +361,17 @@ class EvaluationObjectDB extends DatabaseObject {
       // Krampf!!! Jetzt klappt's....seufz
       $sql =
          "SELECT".
-         " eval.eval_id ".
+         " b.eval_id ".
          "FROM".
-         " eval ".
+         " eval b ".
          "LEFT JOIN".
          " eval_range ".
          "ON".
-         " eval.eval_id = eval_range.eval_id ".
+         " b.eval_id = eval_range.eval_id ".
          "WHERE".
          " eval_range.eval_id IS NULL".
          " AND".
-         " eval.author_id = '".$user->id."'";
+         " b.author_id = '".$user->id."'";
     }
 
     if ($state == EVAL_STATE_NEW)
@@ -398,17 +399,17 @@ class EvaluationObjectDB extends DatabaseObject {
 
     $sql .= " ORDER BY mkdate DESC";
 
-    if ($this->db->Debug)
+    if ($db->Debug)
        $sql .= " #eval->getEvaluationIDs ()";
-    $this->db->query ($sql);
+    $db->query ($sql);
 
     if ($this->db->Errno)
       return $this->throwError (1, _("Fehler beim Suchen. Fehlermeldung: ").$this->db->Error);
     /* -------------------------------------------------------- end: asking */
 
     /* Fill up the array with IDs ----------------------------------------- */
-    while ($this->db->next_record ()) {
-      array_push ($result, $this->db->f ("eval_id"));
+    while ($db->next_record ()) {
+      array_push ($result, $db->f ("eval_id"));
     }
     /* ------------------------------------------------------- end: filling */
 
