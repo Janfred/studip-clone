@@ -122,6 +122,16 @@ $WIKI_ENABLE = FALSE;									//Stud.IP module: Wiki-Web
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
+/*system settings
+----------------------------------------------------------------
+this are some settings to activate some special features, special
+behaviour of some features and other advanced options. Change on your 
+own risk :) */
+
+$ALLOW_GROUPING_SEMINARS = FALSE;			// if true, administrators can group seminars - students
+							// will only be able to register for one of the grouped seminars
+
+
 
 /*language settings
 ----------------------------------------------------------------*/
