@@ -165,17 +165,17 @@ foreach ($visible_groups as $group_id => $group) {
 			"fullname"         => sprintf("<a href=\"\"%s><font%s>%s</font></a>",
 												$this->config->getAttributes("Link", "a"),
 												$this->config->getAttributes("Link", "font"),
-												htmlReady($db->f("name"), TRUE)),
+												htmlReady($db->f("fullname"), TRUE)),
 												
 			"Telefon"      => sprintf("<font%s>%s</font>",
 												$this->config->getAttributes("TableRow", "font"),
 												htmlReady($db->f("Telefon"), TRUE)),
 			
-			"Sprechzeiten" => sprintf("<font%s>%s</font>",
+			"sprechzeiten" => sprintf("<font%s>%s</font>",
 												$this->config->getAttributes("TableRow", "font"),
 												htmlReady($db->f("sprechzeiten"), TRUE)),
 			
-			"Raum"         => sprintf("<font%s>%s</font>",
+			"raum"         => sprintf("<font%s>%s</font>",
 												$this->config->getAttributes("TableRow", "font"),
 												htmlReady($db->f("raum"), TRUE)),
 			
