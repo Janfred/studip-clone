@@ -425,9 +425,9 @@ if ($forumsend!="anpassen") {
 	echo "\n</table>\n";
 }
 
-if (!$reset && $user->id != "nobody")   // wenn Suche aufgerufen wird keine toolbar
+if (!$reset && $user->id != "nobody" && $cmd!="move")   // wenn Suche aufgerufen wird keine toolbar
 	echo forum_print_toolbar($edit_id);
-elseif ($user->id == "nobody") {
+elseif ($user->id == "nobody" || $cmd=="move") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"blank\"><br></td></tr>";
 	if ($edit_id)
 		echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";

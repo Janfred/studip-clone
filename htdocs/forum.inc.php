@@ -1608,7 +1608,9 @@ function forum_move_navi ($topic_id) {
 	}
 
 ?>	
-			<tr><td class="blank" colspan="2"><table border="0" cellpadding="0" cellspacing="0"><tr>
+			<tr><td class="blank" colspan="2"><br>
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
 				<td class="steel2" colspan="2">
 					&nbsp; <img src="pictures/move.gif" border="0">&nbsp;<b><font size="-1"><?=sprintf(_("Als Thema verschieben (zusammen mit %s Antworten):"), $count)?></font></b>
 				</td>
