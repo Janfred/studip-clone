@@ -42,7 +42,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-cont.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Content")?></b></td>
+	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/blank.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"]; ?> - <?=_("Content")?></b></td>
 </tr>
 <tr>
 	<td class="blank" colspan=2>
