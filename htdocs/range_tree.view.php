@@ -36,6 +36,8 @@ $_views["TREE_INST_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
 							"query"=>"SELECT Institut_id FROM user_inst WHERE Institut_id IN(&) AND user_id=? AND inst_perms='admin'");
 $_views["TREE_FAK_STATUS"] = array("pk"=>"","temp_table_type"=>"HEAP",
 							"query"=>"SELECT a.Fakultaets_id,Institut_id FROM fakultaet_user a LEFT JOIN Institute USING(Fakultaets_id) WHERE a.Fakultaets_id IN(&) AND user_id=? AND status='admin'");
+$_views["TREE_ITEMS_OBJECT"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT item_id FROM range_tree WHERE studip_object_id LIKE ?");
 
 $_views["TREE_UPD_PRIO"] = array("query" => "UPDATE range_tree SET priority=! WHERE item_id=?");
 $_views["TREE_INS_ITEM"] = array("query" => "INSERT INTO range_tree (item_id,parent_id,name,priority,studip_object,studip_object_id) VALUES (?,?,?,!,?,?)");
