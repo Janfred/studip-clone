@@ -322,8 +322,8 @@ if ($i_page == "admin_fakultaet.php" OR $i_page == "admin_fach.php" OR $i_page =
 		IF ($i_page == "admin_bereich.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_bereich.php">Bereiche&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_bereich.php">Bereiche&nbsp; &nbsp; </a> <?}
 
-  		IF ($i_page == "admin_studiengang.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_studiengang.php">Studiengänge&nbsp; &nbsp; </a> <?}
-		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_studiengang.php">Studiengaenge&nbsp; &nbsp; </a> <?}
+  		IF ($i_page == "admin_studiengang.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
+		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="admin_studiengang.php">Studieng&auml;nge&nbsp; &nbsp; </a> <?}
 
 		IF ($i_page == "view_sessions.php"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
 		ELSE{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2" href="view_sessions.php">Sessions&nbsp; &nbsp; </a> <?}
