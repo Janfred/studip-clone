@@ -551,8 +551,10 @@ for ($i; $i<$global_end_time+1; $i++)
 							echo "...";
 						echo "</font>";
 						}
-					if ($my_sems[$cc["seminar_id"]]["dozenten"]) echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
-					if ($my_sems[$cc["seminar_id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" ".tooltip(_("Diesen Termin löschen")).">&nbsp;</a></div>";
+					if ($my_sems[$cc["seminar_id"]]["dozenten"]) 
+						echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
+					if (($my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view))
+						echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" ".tooltip(_("Diesen Termin löschen")).">&nbsp;</a></div>";
 					}
 				echo "</td></tr></table></td>";
 				}
