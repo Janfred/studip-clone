@@ -42,7 +42,7 @@ define("PHPDOC_DUMMY",true);
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
-require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_func.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP . "calendar_functions.inc.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
 require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
@@ -193,13 +193,14 @@ if ($cmd == 'add' || $cmd == 'edit') {
 	else
 		$calendar_sess_control_data['mod'] = '';
 	// checkbox-values
-	if (!$back_recur_x && !$set_recur_x)
+	if (!$set_recur_x)
 		$calendar_sess_forms_data['wholeday'] = $HTTP_POST_VARS['wholeday'];
 }
-else {
+elseif ($cmd != 'export') {
 	unset($calendar_sess_forms_data);
 	$sess->unregister('calendar_sess_forms_data');
 }
+	
 
 if ($source_page && ($cmd == 'edit' || $cmd == 'add' || $cmd == 'delete')) {
 	$calendar_sess_control_data['source'] = rawurldecode($source_page);
@@ -265,7 +266,7 @@ switch ($cmd) {
 	
 	case 'export':
 		$title = _("Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren und synchronisieren");
-		$calendar_sess_control_data['view_prv'] = $cmd;
+	//	$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 		
 	case 'bind':
@@ -527,7 +528,7 @@ if ($cmd == 'edit') {
 		$mod = 'SINGLE';
 	
 	// transfer form->form
-	if ($mod_prv && $set_recur_x) {
+	if ($set_recur_x || $back_recur_x) {
 		$txt = htmlentities(stripslashes($txt), ENT_QUOTES);
 		$content = htmlentities(stripslashes($content), ENT_QUOTES);
 		$loc = htmlentities(stripslashes($loc), ENT_QUOTES);
@@ -586,10 +587,6 @@ function check_form_values (&$post_vars) {
 		if ($start > $end)
 			$err['end_time'] = TRUE;
 	}
-	if (!isset($post_vars['wholeday']))
-		$post_vars['wholeday'] = FALSE;
-	else
-		$post_vars['wholeday'] = TRUE;
 	
 	if (!preg_match('/^.*\S+.*$/', $post_vars['txt']))
 		$err['titel'] = TRUE;
@@ -677,23 +674,6 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 	$atermin->properties['LOCATION']        = $post_vars['loc'];
 	$atermin->properties['DESCRIPTION']     = $post_vars['content'];
 	
-	// exceptions
-	$atermin->setExceptions($post_vars['exceptions']);
-	// add exception
-	if ($post_vars['add_exc_x']) {
-		$exception = array(mktime(12, 0, 0, $post_vars['exc_month'],
-				$post_vars['exc_day'], $post_vars['exc_year'], 0));
-		$atermin->setExceptions(array_merge($atermin->getExceptions(), $exception));
-		unset($post_vars['add_exc_x']);
-	}
-	// delete exceptions
-	if ($post_vars['del_exc_x']) {
-		$atermin->setExceptions(array_diff($atermin->getExceptions(), $post_vars['exc_delete']));
-		unset($post_vars['del_exc_x']);
-		unset($post_vars['exc_delete']);
-	}
-	$post_vars['exceptions'] = $atermin->getExceptions();
-	
 	switch ($post_vars['via']) {
 		case 'PUBLIC':
 			$atermin->setType('PUBLIC');
@@ -766,6 +746,24 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 		default:
 			$atermin->setRepeat(array('rtype' => 'SINGLE', 'expire' => $expire));
 	}
+	
+	// exceptions
+	$atermin->setExceptions($post_vars['exceptions']);
+	// add exception
+	if ($post_vars['add_exc_x'] && check_date($post_vars['exc_month'], $post_vars['exc_day'],
+			$post_vars['exc_year'])) {
+		$exception = array(mktime(12, 0, 0, $post_vars['exc_month'],
+				$post_vars['exc_day'], $post_vars['exc_year'], 0));
+		$atermin->setExceptions(array_merge($atermin->getExceptions(), $exception));
+		unset($post_vars['add_exc_x']);
+	}
+	// delete exceptions
+	if ($post_vars['del_exc_x'] && is_array($post_vars['exc_delete'])) {
+		$atermin->setExceptions(array_diff($atermin->getExceptions(), $post_vars['exc_delete']));
+		unset($post_vars['del_exc_x']);
+		unset($post_vars['exc_delete']);
+	}
+	$post_vars['exceptions'] = $atermin->getExceptions();
 	
 }
 
