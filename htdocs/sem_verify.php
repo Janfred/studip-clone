@@ -4,7 +4,7 @@ sem_verify.php - Script zum Anmelden zu einem Seminar mit Ueberpruefung aller Re
 Copyright (C) 2002 	André Noack <anoack@mcis.de>, 
 				Cornelis Kater <ckater@gwdg.de>, 
 				Stefan Suchi <suchi@gmx.de>, 
-				data-quest <info@data-quest.de>
+				Suchi & Berg GmbH<info@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -284,9 +284,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							&nbsp; &nbsp; <input type="IMAGE" src="./pictures/buttons/ok-button.gif" border=0 value="abschicken">
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr. <br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 							else
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ");
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 						    	if ($send_from_search)
 					    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
@@ -319,9 +319,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 							</for	m>
 							<?
 							if ($db2->f("admission_type") == 1)
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr. <br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s nach dem Losverfahren am %s Uhr. %s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ", ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 							else
-								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ");
+								printf ("<br /><br /><font size=-1>&nbsp; &nbsp; Die Teilnehmerauswahl %s in der Reihenfolge der Anmeldung.%s<br /><font size=-1>&nbsp; &nbsp; In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.</font><br />&nbsp; ",  ($db2->f("admission_selection_take_place")) ? "erfolgte" : "erfolgt", ($db2->f("admission_selection_take_place")) ? "Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergben werden" : "");
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp; &nbsp; zur&uuml;ck zur Startseite</a>";
 						    	if ($send_from_search)
 					    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">zur&uuml;ck zur letzten Auswahl</a>";
