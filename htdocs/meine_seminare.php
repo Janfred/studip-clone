@@ -499,12 +499,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
   $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
   if ($db->num_rows()) {
 
-		echo "<b><div align=\"left\">&nbsp;" . _("Anmelde- und Wartelisteneintr&auml;ge:") . "</div>&nbsp;"; 
+		// echo "<b><div align=\"left\">&nbsp;" . _("Anmelde- und Wartelisteneintr&auml;ge:") . "</div>&nbsp;"; 
 
 		echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"98%\" align=\"center\" class=\"blank\">";
 		echo "<tr>";
 		echo "<th width=\"2%\" nowrap colspan=2>&nbsp</th>";
-		echo "<th width=\"65%\" align=\"left\"><b>" . _("Name") . "</b></th>";
+		echo "<th width=\"65%\" align=\"left\"><b>" . _("Anmelde- und Wartelisteneintr&auml;ge:") . "</b></th>";
 		echo "<th width=\"10%\"><b>" . _("Datum") . "</b></th>";
 		echo "<th width=\"10%\" nowrap><b>" . _("Position/Chance") . "</b></th>";
 		echo "<th width=\"10%\"><b>" . _("Art") . "</b></th>";
