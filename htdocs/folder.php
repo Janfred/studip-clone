@@ -40,7 +40,7 @@ if ($folderzip) {
 	$db->query($query);
 	$db->next_record();
 	$zip_name = prepareFilename(_("Dateiordner ").$db->f("name").".zip");
-	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name.zip");
+	header("Location: sendfile.php/?type=4&file_id=$zip_file_id&file_name=$zip_name");
 	page_close();
 	die;
 }
