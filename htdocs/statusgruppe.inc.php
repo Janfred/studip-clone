@@ -72,6 +72,7 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
 		$position = "1";
 	}
 	$db->query("INSERT INTO statusgruppen SET statusgruppe_id = '$statusgruppe_id', name = '$new_statusgruppe_name', range_id= '$range_id', position='$position', size = '$new_statusgruppe_size', mkdate = '$mkdate', chdate = '$chdate'");
+	return $statusgruppe_id;	
 } 
 
 function GetAllSelected ($range_id)
@@ -171,4 +172,15 @@ function SwapStatusgruppe ($statusgruppe_id)
 	}
 }
 
+function CheckStatusgruppe ($range_id, $name)
+{
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM statusgruppen WHERE range_id = '$range_id' AND name = '$name'");
+	if ($db->next_record()) {
+		$exists = $db->f("statusgruppe_id");
+	} else {
+		$exists = FALSE;
+	}
+	return $exists;
+}
 ?>
