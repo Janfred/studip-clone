@@ -105,7 +105,7 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 	$content = quotes_decode(formatReady($message));
 	
 	if ($x >= "2") {
-		$content .= "<br><br>"._("gesendet an:")."<br>";
+		$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
 		$query = "SELECT message_user.* 
 		FROM message_user 
 			LEFT JOIN auth_user_md5 USING(user_id) 
@@ -113,7 +113,7 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 			AND message_user.snd_rec = 'rec'";
 		$db7->query($query);
 		while ($db7->next_record()) {
-			$content .= "<a href=\"about.php?username=".get_username($db7->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname($db7->f("user_id"))."</font></a> / ";
+			$content .= "<a href=\"about.php?username=".get_username($db7->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname($db7->f("user_id"))."</font></a>,&nbsp;";
 		}
 	}
 
@@ -323,8 +323,7 @@ if ($sms_data["time"] == "all") {
 	$info_text_003 = _("Sie sehen alle Ihre Nachrichten.");
 	$query_time = " ORDER BY message.mkdate DESC";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten %s vor."), $no_message_text_box);
-}
-if ($sms_data["time"] == "new") {
+} else if ($sms_data["time"] == "new") {
 	$info_text_003 = _("Sie sehen nur neue Nachrichten.");
 	if ($sms_data["view"] == "in") {
 		$query_time = " AND message.mkdate > '".$LastLogin."' ORDER BY message.mkdate DESC";
@@ -333,26 +332,22 @@ if ($sms_data["time"] == "new") {
 		$query_time = " AND message.mkdate > '".$CurrentLogin."' ORDER BY message.mkdate DESC";
 	}
 	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten %s vor."), $no_message_text_box);
-}
-if ($sms_data["time"] == "24h") {
+} else if ($sms_data["time"] == "24h") {
 	$info_text_003 = _("Sie sehen nur Nachrichten der letzten 24 Stunden.");
 	$query_time = " AND message.mkdate > '".(date("U")-86400)."' ORDER BY message.mkdate DESC";
 	$query_time_sort = " AND message.mkdate > '".(date("U")-86400)."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 24 Stunden %s vor."), $no_message_text_box);
-}
-if ($sms_data["time"] == "7d") {
+} else if ($sms_data["time"] == "7d") {
 	$info_text_003 = _("Sie sehen alle Nachrichten der letzten 7 Tage.");
 	$query_time = " AND message.mkdate > '".(date("U")-(7*86400))."' ORDER BY message.mkdate DESC";
 	$query_time_sort = " AND message.mkdate > '".(date("U")-(7*86400))."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 7 Tagen %s vor."), $no_message_text_box);
-}
-if ($sms_data["time"] == "30d") {
+} else if ($sms_data["time"] == "30d") {
 	$info_text_003 = _("Sie sehen alle Nachrichten der letzten 30 Tage.");
 	$query_time = " AND message.mkdate > '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
 	$query_time_sort = " AND message.mkdate > '".(date("U")-(30*86400))."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 30 Tagen %s vor."), $no_message_text_box);
-}
-if ($sms_data["time"] == "older") {
+} else if ($sms_data["time"] == "older") {
 	$info_text_003 = _("Sie sehen nur Nachrichten, die &auml;lter als 30 Tage sind.");
 	$query_time = " AND message.mkdate < '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
 	$query_time_sort = " AND message.mkdate < '".(date("U")-(30*86400))."'";
@@ -518,7 +513,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	if ($sms_data['view'] == "in") {
 		$sort_by_links = ""; // build infobox_content > viewsort
 		$sort_by_links .= _("Sie können die Nachrichten nach Absender sortieren.")."<br>";
-		$sort_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?cmd_sort=no\"><img src=\"pictures/".show_icon($sms_show['sort'], "no")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("Keine Sortierung")."</a><br>";
+		$sort_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?cmd_sort=no\"><img src=\"pictures/".show_icon($sms_show['sort'], "no")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("nur Anzeigefilter")."</a><br>";
 		$sort_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?cmd_sort=snd_rec\"><img src=\"pictures/".show_icon($sms_show['sort'], "snd_rec")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("nach Absender sortieren")."</a>";	
 	} else {
 		$sort_by_links = _("Keine Sortierung im Postausgang möglich.");

@@ -154,7 +154,7 @@ if ($rec_uname) {
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 }
 
-//
+// if send message at adressbook-group
 if ($group_id) {
 	$query = sprintf("SELECT statusgruppe_user.user_id, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING (user_id) WHERE statusgruppe_id = '%s' ", $group_id);
 	$db->query($query);
@@ -166,7 +166,7 @@ if ($group_id) {
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 }
 
-// 
+// attach signature
 if (!isset($sms_data["sig"])) {
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 } else if ($add_sig_button_x) {
@@ -217,10 +217,10 @@ if ($del_receiver_button_x && !empty($del_receiver)) {
 # OUTPUT
 ###########################################################
 
+// includes
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-
-include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php"); // include reitersystem
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	change_messaging_view();
@@ -228,6 +228,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	page_close();
 	die;
 } ?>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
 	<td class="topic" colspan="2"><img src="pictures/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Systeminterne Nachricht schreiben")?></b></td>
