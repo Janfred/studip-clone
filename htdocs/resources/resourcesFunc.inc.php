@@ -384,7 +384,7 @@ function getMyRoomRequests($user_id = '') {
 	if ((getGlobalPerms($user_id) == "admin") || ($perm->have_perm("root"))) {
 		$query = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
 						(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
-							rr.termin_id, COUNT(t.termin_id) as anzahl_termine
+							rr.termin_id, COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
 							FROM resources_requests rr 
 							LEFT JOIN seminare s USING(seminar_id) 
 							LEFT JOIN termine t ON(s.Seminar_id = t.range_id) GROUP BY request_id");
@@ -413,7 +413,7 @@ function getMyRoomRequests($user_id = '') {
 			$in_resource_id =  "('".join("','",array_keys($my_res))."')";
 			$query_res = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
 								(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
-								rr.termin_id, COUNT(t.termin_id) as anzahl_termine
+								rr.termin_id, COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
 								FROM resources_requests rr 
 								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.resource_id IN %s GROUP BY request_id", $in_resource_id);
@@ -428,7 +428,7 @@ function getMyRoomRequests($user_id = '') {
 			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
 			$query_sem = sprintf("SELECT request_id, closed, LOCATE('s:11:\"turnus_data\";',metadata_dates) AS metatime,
 								(LOCATE('s:3:\"art\";s:1:\"1\";',metadata_dates) OR LOCATE('s:3:\"art\";i:1;',metadata_dates)) AS irregular,
-								rr.termin_id, COUNT(t.termin_id) as anzahl_termine
+								rr.termin_id, COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
 								FROM resources_requests rr 
 								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.seminar_id IN %s GROUP BY request_id", $in_seminar_id);
