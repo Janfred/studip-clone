@@ -183,7 +183,9 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 					
 			$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 			
-			
+			if ($link)
+				$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
+
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 			
 			if ($open == $db->f("termin_id"))
@@ -313,6 +315,9 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				$link = $PHP_SELF."?dclose=true".$add_to_link;
 			
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
+
+			if ($link)
+				$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
 			
 			if ($open == $app_ident)
 				printhead(0, 0, $link, "open", $new, $icon, $titel, $zusatz, $termin->getChangeDate()); //Ebenso muss hier als letzer Parameter eine Methode getMkdate o.ae. angefuegt werden
@@ -320,7 +325,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 				printhead(0, 0, $link, "close", $new, $icon, $titel, $zusatz, $termin->getChangeDate()); //hier auch.....
 
 			echo "</tr></table>	";
-					
+			
 			if($open == $app_ident) {
 				$content = '';			
 				if($termin->getDescription())
@@ -467,6 +472,9 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				$link = $PHP_SELF."?dopen=".$app_ident;
 			else
 				$link = $PHP_SELF."?dclose=true";
+			
+			if ($link)
+				$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
 			
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 			
