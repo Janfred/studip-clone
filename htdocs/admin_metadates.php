@@ -115,6 +115,10 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	$term_metadata["original"]=get_snapshot();
 	$term_metadata["original_turnus"]=$term_metadata["turnus_data"];
 	$term_metadata["original_art"]=$term_metadata["art"];
+	$term_metadata["original_start_time"]=$db->f("start_time");
+	$term_metadata["original_duration_time"]=$db->f("start_time");
+	$term_metadata["original_start_woche"]=$term_metadata["start_woche"];
+	$term_metadata["original_start_termin"]=$term_metadata["start_termin"];
 	$term_metadata["original_resource_id"] = array();
 	if (is_array($term_metadata["original_turnus"]))
 		foreach ($term_metadata["original_turnus"] as $val)
@@ -333,11 +337,10 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			}
 		}	
 
-		//sortieren
+		//check for changes to the old (saved) metadates (for each metadate)
 		if (is_array($tmp_metadata_termin["turnus_data"])) {
 			$art_changed = FALSE;
 			$metadates_changed = FALSE;
-			//check for changes to the old (saved) metadates (for each metadate)
 			foreach ($tmp_metadata_termin["turnus_data"] as $key => $val) {
 				if (($tmp_metadata_termin["turnus_data"][$key]["start_stunde"] != $term_metadata["original_turnus"][$key]["start_stunde"])
 					|| ($tmp_metadata_termin["turnus_data"][$key]["start_minute"] != $term_metadata["original_turnus"][$key]["start_minute"])
@@ -349,8 +352,17 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				}
 			}
 		}
+
+		//check for changes by deleted entries, changes to semesterdata an start termin
+		if (($RESOURCES_ENABLE) && 
+			((sizeof($tmp_metadata_termin["turnus_data"]) !=  sizeof($term_metadata["original_turnus"])) ||
+			($term_metadata["original_start_woche"] != $term_metadata["start_woche"]) ||
+			($term_metadata["original_start_time"] != $term_metadata["sem_start_time"]) ||
+			($term_metadata["original_duration_time"] != $term_metadata["sem_duration_time"]) ||
+			($term_metadata["original_start_termin"] != $term_metadata["start_termin"])))
+			$update_resources = TRUE;
 	}
-	
+
 	//check for the rights, the user has on the selected resource-objects
 	if (($RESOURCES_ENABLE) && ($metadates_changed) || ($art_changed)) {
 		$foreign_resource = FALSE;
@@ -521,6 +533,10 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	$term_metadata["original"] = get_snapshot();
 	$term_metadata["original_turnus"] = $term_metadata["turnus_data"];
 	$term_metadata["original_art"] = $term_metadata["art"];
+	$term_metadata["original_start_time"]=$term_metadata["sem_start_time"];
+	$term_metadata["original_duration_time"]=$term_metadata["sem_duration_time"];
+	$term_metadata["original_start_woche"]=$term_metadata["start_woche"];
+	$term_metadata["original_start_termin"]=$term_metadata["start_termin"];
 	$term_metadata["original_resource_id"] = array();
 	if (is_array($term_metadata["original_turnus"]))
 		foreach ($term_metadata["original_turnus"] as $val)
