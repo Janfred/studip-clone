@@ -1,0 +1,178 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2003-02-12 01:20+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: resources/resourcesClass.inc.php:1507 resources/resourcesClass.inc.php:1515
+msgid "zur&uuml;ck"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:248
+msgid "Objekt in diese Ebene verschieben"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:794 resources/views/page_intros.inc.php:4
+#: resources/views/page_intros.inc.php:86
+msgid "Hierachieebene"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:947
+msgid "Sie erstellen eine neue Belegung"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:960
+msgid ""
+"Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in "
+"diesem Raum staffindet."
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:960
+#, c-format
+msgid ""
+"Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %"
+"s bearbeiten!"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:962
+msgid ""
+"Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum "
+"stattfindet."
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:962
+#, c-format
+msgid ""
+" Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %"
+"s bearbeiten!"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:964
+msgid "Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:993
+msgid "zweiw&ouml;chentlich"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:995
+msgid "w&ouml;chentlich"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:997
+msgid "keine Wiederholung (Einzeltermin)"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1333
+msgid "Sie k&ouml;nnen den Besitzer nicht &auml;ndern."
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1371
+msgid "Berechtigung löschen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1373
+msgid "Sie d&uuml;rfen diese Berechtigung leider nicht löschen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1388
+msgid "Es sind keine weiteren Berechtigungen eingetragen"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:4
+msgid "Fehlende Berechtigung"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:5
+msgid "Sie haben leider keine Berechtigung, das Objekt zu bearbeiten"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:8
+msgid "Nutzer hat keine Berechtigung"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:9
+msgid ""
+"Sie versuchen, einen Nutzer einzutragen, der nicht selbst in der Lage ist, "
+"die Belegung zu bearbeiten oder zu l&ouml;schen. Sie k&ouml;nnen diesen "
+"Nutzer leider nicht eintragen"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:12
+msgid "Belegung eingetragen"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:13
+msgid "Die Belegung wurde eingetragen"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:16
+msgid "Belegung ver&auml;ndert"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:17
+msgid "Die Belegung wurde ver&auml;ndert"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:20
+msgid "Belegung gel&ouml;scht"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:21
+msgid "Die Belegung wurde gel&ouml;scht"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:24
+msgid "Eigenschaften ver&auml;ndert"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:25
+msgid "Die Eigenschaften der Ressource wurden ver&auml;ndert"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:28
+msgid "Ressource gel&ouml;scht"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:29
+msgid "Die Ressource wurde gel&ouml;scht"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:32
+msgid "Berechtigungen ver&auml;ndert"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:33
+msgid "Die Berechtigungseinstellungen der Ressource wurden ver&auml;ndert"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:36
+msgid "Ressource verschoben"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:37
+msgid "Die Ressource wurde verschoben"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:40
+msgid ""
+"Bitte geben Sie einen Nutzer f&uuml;r die Belegung an, um diese Belegung zu "
+"speichern!"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:43
+msgid ""
+"Die Belegung konnte nicht gespeichert werden, da sie sich mit einer anderen "
+"Belegung &uuml;berschneidet!"
+msgstr ""
