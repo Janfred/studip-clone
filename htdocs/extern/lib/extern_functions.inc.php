@@ -96,7 +96,7 @@ function get_statusgruppen_by_name ($range_id, $names, $hidden = FALSE) {
 *
 * @access	public
 * @param	string	$range_id
-* @param	string	$names comma separated list of statusgruppe_id for 
+* @param	string	$ids comma separated list of statusgruppe_id for 
 * statusgruppe valid for the given range (syntax: 'id1','id2',...)
 * @param	boolean	$hidden TRUE if you don't want to get the specified groups,
 * but all others in the given range. Default FALSE.
