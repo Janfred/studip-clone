@@ -18,9 +18,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once "config.inc.php";
-require_once "dates.inc.php";
-require_once "datei.inc.php";
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 
 // Liefert den dump des Seminars
@@ -30,7 +32,6 @@ function dump_sem($sem_id)
 {
 	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS,$_fullname_sql,$AUTO_INSERT_SEM;
 	
-	require_once("visual.inc.php");
 
 	$dump = "";
 	$db2=new DB_Seminar;
@@ -154,27 +155,19 @@ function dump_sem($sem_id)
 		$dump.= "</td></tr>\n";
 		}	
 	
-// Faecher...
-
-	$db3->query("SELECT DISTINCT faecher.name FROM faecher LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) WHERE seminar_id = '$sem_id'");
-	IF ($db3->affected_rows() > 0)
-		{
-		$dump.= "<tr><td width=\"15%\"><b>F&auml;cher:&nbsp;</b></td><td>";
-		WHILE ($db3->next_record())
-			$dump.= htmlReady($db3->f("name"))."<br>";
+	//Studienbereiche 
+	if ($SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
+		$sem_path = get_sem_tree_path($sem_id);
+		$dump .= "<tr><td width=\"15%\"><b>Studienbereich(e):&nbsp;</b></td><td>";
+		if (is_array($sem_path)){
+			foreach ($sem_path as $sem_tree_id => $path_name) {
+				$dump.= htmlReady($path_name)."<br>";
+			}
+		}
 		$dump.= "</td></tr>\n";
-		}	
+	}
 
-// Anzeige der Bereiche  
-		
-	$db3->query("SELECT bereiche.* FROM bereiche LEFT JOIN seminar_bereich USING(bereich_id) WHERE seminar_id = '$sem_id'");
-	IF ($db3->affected_rows() > 0)
-		{
-		$dump.= "<tr><td width=\"15%\"><b>Studienbereiche:&nbsp;</b></td><td>";
-		WHILE ($db3->next_record())
-			$dump.= htmlReady($db3->f("name"))."<br>";
-		$dump.= "</td></tr>\n";
-		}	
+			
 		
 	$iid=$db2->f("Institut_id");
 	$db3->query("SELECT Name, url FROM Institute WHERE Institut_id = '$iid'");
@@ -508,7 +501,7 @@ RETURN $forum_dumb;
 //Funktion zum archivieren eines Seminars, sollte in der Regel vor dem Loeschen ausgfuehrt werden.
 function in_archiv ($sem_id)
 {
-	global $SEMESTER, $ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $_fullname_sql;
+	global $SEMESTER, $SEM_CLASS,$SEM_TYPE,$ABSOLUTE_PATH_STUDIP, $UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $_fullname_sql;
 	
 	$hash_secret="frauen";
 
@@ -536,21 +529,13 @@ function in_archiv ($sem_id)
 		if (($start_time >= $SEMESTER[$i]["beginn"]) && ($start_time <= $SEMESTER[$i]["ende"])) $semester_tmp=$SEMESTER[$i]["name"];
 		}
 	
-	$db2->query("SELECT faecher.name FROM faecher LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) WHERE seminar_id = '$seminar_id'");
-	$db2->next_record();
-	$fach=$db2->f("name");
-	while ($db2->next_record())
-		{
-		$fach=$fach.", ".$db2->f("name");
-		}	
-
-	$db2->query("SELECT bereiche.name FROM bereiche LEFT JOIN seminar_bereich USING (bereich_id) WHERE seminar_id = '$seminar_id'");
-	$db2->next_record();
-	$bereich=$db2->f("name");
-	while ($db2->next_record())
-		{
-		$bereich=$bereich.", ".$db2->f("name");
+	//Studienbereiche 
+	if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) {
+		$sem_path = get_sem_tree_path($seminar_id);
+		if (is_array($sem_path)){
+			$studienbereiche = join(", ",array_values($sem_path));
 		}
+	}
 	
 	// das Heimatinstitut als erstes
 	$db2->query("SELECT Name FROM Institute WHERE Institut_id = '$heimat_inst_id'");
@@ -590,7 +575,7 @@ function in_archiv ($sem_id)
 	$untertitel = addslashes($untertitel);
 	$beschreibung = addslashes($beschreibung);
 	$institute = addslashes($institute);
-	$bereich = addslashes($bereich);		
+	$studienbereiche = addslashes($studienbereiche);		
 	$dozenten = addslashes($dozenten);		
 	$fakultaet = addslashes($fakultaet);	
 
@@ -659,7 +644,11 @@ function in_archiv ($sem_id)
 		$archiv_file_id="";
 	
 	//Reinschreiben von diversem Klumpatsch in die Datenbank
-	$db->query("INSERT INTO archiv VALUES ('$seminar_id', '$name', '$untertitel', '$beschreibung', '$start_time', '$semester_tmp', '$fach', '$bereich', '$heimat_inst_id', '$fakultaet_id', '$institute', '$dozenten', '$fakultaet', '$dump', '$archiv_file_id', '".time()."','$forumdump')");
+	$db->query("INSERT INTO archiv (seminar_id,name,untertitel,beschreibung,start_time,semester,heimat_inst_id,
+				fakultaet_id,institute,dozenten,fakultaet,dump,archiv_file_id,mkdate,forumdump,studienbereiche) VALUES 
+				('$seminar_id', '$name', '$untertitel', '$beschreibung', '$start_time', '$semester_tmp', '$heimat_inst_id', 
+				'$fakultaet_id', '$institute', '$dozenten', '$fakultaet', '$dump', '$archiv_file_id', '".time()."','$forumdump',
+				'$studienbereiche')");
 }
 
 

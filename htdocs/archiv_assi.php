@@ -102,13 +102,10 @@ if ($archive_kill) {
     	$run = FALSE;
     	}
 
-   //Trotzdem nochmal nachsehen
-    if (!$perm->have_perm("root")) {
-	$db2->query("SELECT inst_perms FROM seminare LEFT JOIN user_inst USING(Institut_id) where Seminar_id = '$s_id' AND user_id = '$user->id'");
-		if (!$db2->next_record() || $db2->f("inst_perms") != "admin") {
-		      $msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu archivieren.§";
-		      $run = FALSE;
-		}
+//Trotzdem nochmal nachsehen
+	if (!$perm->have_studip_perm("admin",$s_id)) {
+		$msg .= "error§Sie haben keine Berechtigung diese Veranstaltung zu archivieren.§";
+		$run = FALSE;
 	}
 	
 	//Soll die Veranstaltung in weiteren (kommenden Semestern auftauchen?
@@ -128,7 +125,7 @@ if ($archive_kill) {
 
 	if ($run) {
     ## Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
-    in_archiv($s_id);
+    	in_archiv($s_id);
     
     ## Delete that Seminar.
 		## Alle Benutzer aus dem Seminar rauswerfen.
@@ -154,10 +151,9 @@ if ($archive_kill) {
 	$liste .= "<li>Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht.</li>";
     }
     
-    ## Alle Eintraege in der seminar_bereich rauswerfen
-    $query = "DELETE FROM seminar_bereich where Seminar_id='$s_id'";
-    $db->query($query);
-    if (($db_ar = $db->affected_rows()) > 0) {
+    ## Alle Eintraege aus dem Vorlesungsverzeichnis rauswerfen
+    $db_ar = StudipSemTree::DeleteSemEntries(null,$s_id);
+	if ($db_ar > 0) {
       $liste .= "<li>$db_ar Zuordnungen zu Bereichen archiviert.</li>";
     }
 		## Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.

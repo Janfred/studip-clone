@@ -38,6 +38,35 @@ require_once "config.inc.php";
 require_once "visual.inc.php";
 require_once "functions.php";
 
+function archiv_check_perm($seminar_id){
+	static $archiv_perms;
+	global $perm,$auth;
+	$u_id = $auth->auth['uid'];
+	$db = new DB_Seminar();
+	if ($perm->have_perm("root")){  // root darf sowieso ueberall dran
+		return "admin";
+	}
+	if (!is_array($archiv_perms)){
+		$db->query("SELECT seminar_id,status FROM archiv_user WHERE user_id = '$u_id'");
+		while ($db->next_record()) {
+			$archiv_perms[$db->f("seminar_id")] = $db->f("status");
+		}
+		if ($perm->have_perm("admin")){
+			$db->query("SELECT archiv.seminar_id FROM archiv LEFT  JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
+			while ($db->next_record()) {
+				$archiv_perms[$db->f("seminar_id")] = "admin";
+			}
+		}
+		if ($perm->is_fak_admin()){
+			$db->query("SELECT archiv.seminar_id FROM archiv LEFT JOIN user_inst ON (archiv.fakultaet_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
+			while($db->next_record()){
+				$archiv_perms[$db->f("seminar_id")] = "admin";
+			}
+		}
+	}
+	return $archiv_perms[$seminar_id]; 
+}
+
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
@@ -91,121 +120,87 @@ if ($delete_id) {
 
 //Loeschen aus dem Archiv
 if (($delete_id) && ($delete_really)){
-	if ($perm->have_perm("admin") && !$perm->have_perm("root")) // root darf sowieso ueberall dran
-		{
-	   	$db2->query("SELECT archiv.seminar_id, archiv_file_id FROM archiv LEFT OUTER JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin' AND archiv.seminar_id= '$delete_id'");
-		if ($db2->affected_rows() >0) {
-		$db->query("DELETE FROM archiv WHERE seminar_id = '$delete_id'");
-			if ($db->affected_rows())
-				$msg="msg§Die Veranstaltung wurde aus dem Archiv gel&ouml;scht§";
-			$db2->next_record();
-			if ($db2->f("archiv_file_id")) {
-				if (unlink ($ARCHIV_PATH."/".$db2->f("archiv_file_id")))
-					$msg.="msg§Das Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht.§";
-				else
-					$msg.="error§Das Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht werden.§";
-				}
-			}
-		else
-			$msg="error§Netter Versuch";
-		}
-	elseif ($perm->have_perm("root")) {
-	   	$db2->query("SELECT archiv_file_id FROM archiv WHERE seminar_id='$delete_id'");
-		$db->query("DELETE FROM archiv WHERE seminar_id = '$delete_id'");
-		if ($db->affected_rows())
-			$msg="msg§Die Veranstaltung wurde aus dem Archiv gel&ouml;scht§";
+	if (archiv_check_perm($delete_id) == "admin"){
+		$db2->query("SELECT name,archiv_file_id FROM archiv WHERE seminar_id='$delete_id'");
 		$db2->next_record();
+		$db->query("DELETE FROM archiv WHERE seminar_id = '$delete_id'");
+		if ($db->affected_rows()){
+			$msg = sprintf("msg§" . _("Die Veranstaltung %s wurde aus dem Archiv gel&ouml;scht") . "§", htmlReady($db2->f("name")));
+		}
 		if ($db2->f("archiv_file_id")) {
-			if (unlink ($ARCHIV_PATH."/".$db2->f("archiv_file_id")))
-				$msg.="msg§Das Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht.§";
-			else
-				$msg.="error§Das Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht werden.§";
+			if (unlink ($ARCHIV_PATH."/".$db2->f("archiv_file_id"))){
+				$msg .= "msg§" . _("Das Zip-Archiv der Veranstaltung wurde aus dem Archiv gel&ouml;scht.") ."§";
+			} else {
+				$msg.="error§" . _("Das Zip-Archiv der Veranstaltung konnte nicht aus dem Archiv gel&ouml;scht werden.") ."§";
 			}
 		}
+		$db->query("DELETE FROM archiv_user WHERE seminar_id='$delete_id'");
+		if ($db->affected_rows()){
+			$msg .= sprintf("msg§" . _("Es wurden %s Zugriffsberechtigungen entfernt.") . "§", $db->affected_rows());
+		}
+	} else {
+		$msg="error§Netter Versuch";
 	}
+}
 
 //Loeschen von Archiv-Usern
 if ($delete_user) {
-	if ($perm->have_perm("root")) //root darf alles
-		$do=TRUE;
-	else { //vielleicht sein eigenes Seminar??
-	   	$db2->query("SELECT seminar_id FROM archiv_user WHERE user_id = '$u_id' AND status = 'dozent' AND seminar_id= '$d_sem_id'");
-		if ($db2->affected_rows()) 
-			$do=TRUE;
-		else { //dann aber vielleicht der Admin??
-		   	$db2->query("SELECT archiv.seminar_id FROM archiv LEFT OUTER JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin' AND archiv.seminar_id= '$d_sem_id'");
-			if ($db2->affected_rows()) 
-			$do=TRUE;
-			}
-		}
-		
-		if ($do) {
+	if (archiv_check_perm($d_sem_id) == "admin" || archiv_check_perm($d_sem_id) == "dozent") {
 		$db->query("DELETE FROM archiv_user WHERE seminar_id = '$d_sem_id' AND user_id='$delete_user'");
-		if ($db->affected_rows())
+		if ($db->affected_rows()){
 			$msg="msg§Zugriffsberechtigung entfernt§";
 		}
-		else
-			$msg="error§Netter Versuch";
+	} else {
+		$msg="error§Netter Versuch";
 	}
+}
 	
 //Eintragen von Archiv_Usern
 if ($do_add_user) {
-	if ($perm->have_perm("root")) //root darf alles
-		$do=TRUE;
-	else { //vielleicht sein eigenes Seminar??
-	   	$db2->query("SELECT seminar_id FROM archiv_user WHERE user_id = '$u_id' AND status = 'dozent' AND seminar_id= '$a_sem_id'");
-		if ($db2->affected_rows()) 
-			$do=TRUE;
-		else { //dann aber vielleicht der Admin??
-		   	$db2->query("SELECT archiv.seminar_id FROM archiv LEFT OUTER JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin' AND archiv.seminar_id= '$a_sem_id'");
-			if ($db2->affected_rows()) 
-			$do=TRUE;
-			}
-		}
-		
-		if ($do) {
-		$db->query("INSERT INTO archiv_user SET seminar_id = '$a_sem_id', user_id='$add_user', status=\"autor\"");
-		if ($db->affected_rows())
+	if (archiv_check_perm($a_sem_id) == "admin" || archiv_check_perm($a_sem_id) == "dozent") {
+		$db->query("INSERT INTO archiv_user SET seminar_id = '$a_sem_id', user_id='$add_user', status='autor'");
+		if ($db->affected_rows()){
 			$msg="msg§Zugriffsberechtigung erteilt§";
 		}
-		else
-			$msg="error§Netter Versuch";
-	$add_user=FALSE;
+	} else {
+		$msg="error§Netter Versuch";
 	}
+	$add_user=FALSE;
+}
 
 
 // wollen wir den dump?
 
-IF (!empty($dump_id))
-{
-
-       	IF ($perm->have_perm("root")) $query = "SELECT dump FROM archiv WHERE archiv.seminar_id = '$dump_id'"; 
-	ELSEIF ($perm->have_perm("admin")) $query = "SELECT dump FROM archiv LEFT JOIN user_inst ON(heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin' AND archiv.seminar_id = '$dump_id'";
-        ELSE $query = "SELECT dump FROM archiv LEFT JOIN archiv_user USING(seminar_id) WHERE archiv.seminar_id = '$dump_id' AND user_id = '$u_id'";
-	$db->query ($query);
-       	IF ($db->next_record()) 
-       		{
-       		IF (!isset($druck)) ECHO "<div align=center> <a href='$PHP_SELF?dump_id=".$dump_id."&druck=1' target=_self><b>Druckversion</b></a><br><br>";
-       		ECHO $db->f('dump');
-       		}
-	ELSE ECHO "netter Versuch, vieleicht beim n&auml;chsten Mal";
+if (!empty($dump_id)){
+	if (archiv_check_perm($dump_id)){
+		$query = "SELECT dump FROM archiv WHERE archiv.seminar_id = '$dump_id'"; 
+		$db->query ($query);
+		if ($db->next_record()) {
+			if (!isset($druck)) {
+				echo "<div align=center> <a href='$PHP_SELF?dump_id=".$dump_id."&druck=1' target=_self><b>Druckversion</b></a><br><br></div>";
+			}
+			echo $db->f('dump');
+		}
+	} else {
+		echo "netter Versuch, vieleicht beim n&auml;chsten Mal";
+	}
 }
 
 // oder vielleicht den Forendump?
 
-ELSEIF (!empty($forum_dump_id))
-{
-
-       	IF ($perm->have_perm("root")) $query = "SELECT forumdump FROM archiv WHERE archiv.seminar_id = '$forum_dump_id'"; 
-	ELSEIF ($perm->have_perm("admin")) $query = "SELECT forumdump FROM archiv LEFT JOIN user_inst ON(heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin' AND archiv.seminar_id = '$forum_dump_id'";
-        ELSE $query = "SELECT forumdump FROM archiv LEFT JOIN archiv_user USING(seminar_id) WHERE archiv.seminar_id = '$forum_dump_id' AND user_id = '$u_id'";
-	$db->query ($query);
-       	IF ($db->next_record()) 
-       		{
-       		IF (!isset($druck)) ECHO "<div align=center> <a href='$PHP_SELF?forum_dump_id=".$forum_dump_id."&druck=1' target=_self><b>Druckversion</b></a><br><br>";
-       		ECHO $db->f('forumdump');
-       		}
-	ELSE ECHO "netter Versuch, vieleicht beim n&auml;chsten Mal";
+ELSEIF (!empty($forum_dump_id)){
+	if (archiv_check_perm($forum_dump_id)){
+		$query = "SELECT forumdump FROM archiv WHERE archiv.seminar_id = '$forum_dump_id'"; 
+		$db->query ($query);
+		if ($db->next_record()) {
+			if (!isset($druck)) {
+				echo "<div align=center> <a href='$PHP_SELF?forum_dump_id=".$forum_dump_id."&druck=1' target=_self><b>Druckversion</b></a><br><br></div>";
+			}
+			echo $db->f('forumdump');
+		}
+	} else {
+		echo "netter Versuch, vieleicht beim n&auml;chsten Mal";
+	}
 }
 
 ELSE
@@ -354,17 +349,16 @@ IF ($archiv_data["perform_search"]) {
 	if (!$archiv_data["sortby"])
 		$archiv_data["sortby"]="Name";
 	if ($archiv_data["pers"])
-		$query ="SELECT archiv.seminar_id, name, untertitel,  beschreibung, start_time, semester, fach, bereich, heimat_inst_id, fakultaet_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE user_id = '".$user->id."' AND ";
+		$query ="SELECT archiv.seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, fakultaet_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE user_id = '".$user->id."' AND ";
 	else
-		$query ="SELECT seminar_id, name, untertitel,  beschreibung, start_time, semester, fach, bereich, heimat_inst_id, fakultaet_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv WHERE ";
+		$query ="SELECT seminar_id, name, untertitel,  beschreibung, start_time, semester, studienbereiche, heimat_inst_id, fakultaet_id, institute, dozenten, fakultaet, archiv_file_id, forumdump FROM archiv WHERE ";
 	if ($archiv_data["all"]) {
 		$query .= "name LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR untertitel LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR beschreibung LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR start_time LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR semester LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR fach LIKE '%".$archiv_data["all"]."%'";
-		$query .= " OR bereich LIKE '%".$archiv_data["all"]."%'";
+		$query .= " OR studienbereiche LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR institute LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR dozenten LIKE '%".$archiv_data["all"]."%'";
 		$query .= " OR fakultaet LIKE '%".$archiv_data["all"]."%'";
@@ -405,26 +399,7 @@ IF ($archiv_data["perform_search"]) {
 		echo "<blockquote><b><font size=-1>Es wurden $hits Veranstaltungen gefunden.</font></b></blockquote>";
 
 	
-	//alle Seminare, in denen ich Admin bin...
-	$treffer=''	;
-	IF ($perm->have_perm("admin") && !$perm->have_perm("root")) // root darf sowieso ueberall dran
-		{
-	   	$db2->query("SELECT archiv.seminar_id FROM archiv LEFT OUTER JOIN user_inst ON (heimat_inst_id = institut_id) WHERE user_inst.user_id = '$u_id' AND user_inst.inst_perms = 'admin'");
-		WHILE ($db2->next_record()) 
-			{
-			$treffer[$db2->f("seminar_id")]=array("seminar_id"=>$db2->f("seminar_id"), "status" =>"admin");
-			}
-		}
 
-	//und alle anderen  
-	ELSE
-	{
-   	$db2->query("SELECT seminar_id FROM archiv_user WHERE user_id = '$u_id'");
-	WHILE ($db2->next_record()) 
-		{
-		$treffer[$db2->f("seminar_id")]=array("seminar_id"=>$db2->f("seminar_id"), "status" =>$db2->f("status"));
-		}
-	}
 	
    	ECHO "<br /><br /><TABLE class=\"blank\"  WIDTH=99% align=center cellspacing=0 border=0>";
    	ECHO "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"pictures/blank.gif\" width=1 height=20>&nbsp; </td><td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=Name\">Name</a></b></td><td  width=20% class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=dozenten\">Dozent</a></b></td><td  width=20% class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=institute\">Institut</a></b></td><td  width=20% class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=semester\">Semester</a></b></td><td  width=10% class=\"steel\" colspan=3 align=center valign=bottom><b>Aktion</b></td></tr>";
@@ -460,8 +435,7 @@ IF ($archiv_data["perform_search"]) {
  		ECHO "<td align=center class=\"$class\" WIDTH=25%>&nbsp;<font size=-1>".$db->f("institute")."</font></td>";
  		ECHO "<td align=center class=\"$class\" WIDTH=11%>&nbsp;<font size=-1>".$db->f("semester")."</font></td>";
 		
-      		IF ($perm->have_perm("root")) $view = 1;
-      		ELSEIF ($treffer[$db->f("seminar_id")])
+      		IF (archiv_check_perm($db->f("seminar_id")))
       			$view = 1;
       		IF ($view == 1)
       			{
@@ -480,8 +454,7 @@ IF ($archiv_data["perform_search"]) {
 	      		IF (!$db->f('untertitel')=='') ECHO "<li><font size=-1><b>Untertitel: </b>".htmlReady($db->f('untertitel'))."</font></li>";
 	      		IF (!$db->f('beschreibung')=='') ECHO "<li><font size=-1><b>Beschreibung: </b>".htmlReady($db->f('beschreibung'))."</font></li>";
    		 	IF (!$db->f('fakultaet')=='') ECHO "<li><font size=-1><b>Fakult&auml;t: </b>".htmlReady($db->f('fakultaet'))."</font></li>";
-    		      	IF (!$db->f('fach')=='') ECHO "<li><font size=-1><b>Fach: </b>".htmlReady($db->f('fach'))."</font></li>";
-    		 	IF (!$db->f('bereich')=='') ECHO "<li><font size=-1><b>Bereich: </b>".htmlReady($db->f('bereich'))."</font></li>";
+    		 	IF (!$db->f('studienbereiche')=='') ECHO "<li><font size=-1><b>Bereich: </b>".htmlReady($db->f('studienbereiche'))."</font></li>";
 
 		// doppelt haelt besser: noch mal die Extras
 
@@ -492,7 +465,7 @@ IF ($archiv_data["perform_search"]) {
    		 		IF (!$db->f('archiv_file_id')=='') ECHO "<li><font size=-1><a href=\"sendfile.php?type=1&file_id=".$db->f('archiv_file_id')."&file_name=".rawurlencode($file_name)."\">Download der Dateisammlung</a></font></li>";
 		      		if ($perm->have_perm("admin"))
 	      		 		ECHO "<li><a href='$PHP_SELF?delete_id=".$db->f('seminar_id')."'><font size=-1>Diese Veranstaltung unwiderruflich aus dem Archiv entfernen</font></a></li>";
-				if ($treffer[$db2->f("seminar_id")]["status"] != "autor") {
+				if (archiv_check_perm($db->f("seminar_id")) == "admin") {
 					if (!$archiv_data["edit_grants"])
 						echo "<li><font size=-1><a href=\"$PHP_SELF?show_grants=yes#anker\">Zugriffsberechtigungen einblenden</a></font></li>";	      		 		
 					else
@@ -530,7 +503,7 @@ IF ($archiv_data["perform_search"]) {
 				if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
 					echo "<form action=\"$PHP_SELF#anker\">";
 					echo "<hr><b><font size=-1>Benutzer Berechtigung erteilen: </font></b><br />";
-					if (($add_user) && (!$db2->affected_rows)  && (!§new_search))
+					if (($add_user) && (!$db2->affected_rows)  && (!$new_search))
 						echo "<br /><b><font size=-1>Es wurde kein Benutzer zu dem eingegebenem Suchbegriff gefunden!</font></b><br />";
 					echo "<font size=-1>Bitte Namen, Vornamen oder Usernamen eingeben:</font>&nbsp; ";
 					echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
