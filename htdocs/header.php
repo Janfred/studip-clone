@@ -129,18 +129,18 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 <?
-				echo MakeToolbar("pictures/home.gif","index.php","Start",_("Zurück zur Startseite"),40,"_top");
-				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php","Veranstaltungen",_("Meine Veranstaltungen & Einrichtungen"),40, "_top","left");
+				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zurück zur Startseite"),40,"_top");
+				echo MakeToolbar("pictures/meinesem.gif","meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),40, "_top","left");
 
 
 				if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
-					echo MakeToolbar("pictures/meinetermine.gif","./calendar.php","Planer",_("Meine Termine und Kontakte"),40, "_top");
+					echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Meine Termine und Kontakte"),40, "_top");
 				}
 //Nachrichten anzeigen
 
 	if ((($altm) && (!$neum)) || ((($altm+$neum) >0) && ($i_page == "sms.php"))) {
 		$icon = "pictures/nachricht1.gif";
-		$text = "Post";
+		$text = _("Post");
 		if ($altm > 1) {
 			$tip = sprintf(_("Sie haben %s alte Nachrichten!"), $altm);
 		} else {
@@ -166,18 +166,18 @@ if ($auth->auth["uid"] == "nobody") { ?>
           //Version für neuen Chat (vorläufig)
   	if ($CHAT_ENABLE) {
     	if (($chatm) && ($i_page != "sms.php") && (!$chatServer->isActiveUser($user->id,"studip"))) {
-				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();","Chat",_("Sie wurden zum Chatten eingeladen!"),40,"_top");
+				echo MakeToolbar("pictures/chateinladung.gif","javascript:open_chat();",_("Chat"),_("Sie wurden zum Chatten eingeladen!"),40,"_top");
 			} else {
       	$chatter=$chatServer->getActiveUsers("studip");
    			if ($chatter == 1)
    		  	if ($chatServer->isActiveUser($user->id,"studip"))	
-						echo MakeToolbar("pictures/chat3.gif","javascript:open_chat();","Chat",_("Sie sind alleine im Chat"),40,"_top");
+						echo MakeToolbar("pictures/chat3.gif","javascript:open_chat();",_("Chat"),_("Sie sind alleine im Chat"),40,"_top");
 					else
-						echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();","Chat",_("Es ist eine Person im Chat"),40,"_top");
+						echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();",_("Chat"),_("Es ist eine Person im Chat"),40,"_top");
 				elseif ($chatter > 1)
-					echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();","Chat",sprintf(_("Es sind %s Personen im Chat"), $chatter),40,"_top");
+					echo MakeToolbar("pictures/chat2.gif","javascript:open_chat();",_("Chat"),sprintf(_("Es sind %s Personen im Chat"), $chatter),40,"_top");
       	else
-					echo MakeToolbar("pictures/chat1.gif","javascript:open_chat();","Chat",_("Es ist niemand im Chat"),40,"_top");
+					echo MakeToolbar("pictures/chat1.gif","javascript:open_chat();",_("Chat"),_("Es ist niemand im Chat"),40,"_top");
 			}
 		} else {
 //			echo MakeToolbar("pictures/blank.gif","","","",40,"_top");
@@ -185,12 +185,12 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 		// Ist sonst noch wer da?
 		if (!count($online))
-			echo MakeToolbar("pictures/nutzer.gif","online.php","Online",_("Nur Sie sind online"),40, "_top");
+			echo MakeToolbar("pictures/nutzer.gif","online.php",_("Online"),_("Nur Sie sind online"),40, "_top");
 		else {
 			if (count($online)==1) {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php","Online",_("Außer Ihnen ist eine Person online"),40, "_top");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),_("Außer Ihnen ist eine Person online"),40, "_top");
 			} else {
-				echo MakeToolbar("pictures/nutzeronline.gif","online.php","Online",sprintf(_("Es sind außer Ihnen %s Personen online"), count($online)),40, "_top");
+				echo MakeToolbar("pictures/nutzeronline.gif","online.php",_("Online"),sprintf(_("Es sind außer Ihnen %s Personen online"), count($online)),40, "_top");
 			}
 		}
 
@@ -224,7 +224,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			echo MakeToolbar("pictures/admin.gif","adminarea_start.php?list=TRUE",_("Admin"),_("Zu Ihrer Administrationsseite"),40, "_top");
 		}
 
-		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query","Hilfestellung",_("Hilfe zu dieser Seite"),40, "_new","right");
+		echo MakeToolbar("pictures/hilfe.gif","./help/index.php$help_query",_("Hilfestellung"),_("Hilfe zu dieser Seite"),40, "_new","right");
 		echo MakeToolbar("pictures/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, "_top");
 
 ?>
