@@ -271,7 +271,8 @@ function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $data
 
 function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachname,$email,$telefon,$anschrift,$home,$hobby,$geschlecht,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$view) {
 	global $UNI_NAME_CLEAN, $_language_path, $auth; 
-	
+	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL;
+  
 	//erstmal die "unwichtigen" Daten
 	if ($home == $this->default_url)
 	$home='';
@@ -358,81 +359,88 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 			}   // Nachname nicht korrekt oder fehlend
 			$this->db->query("UPDATE auth_user_md5 SET Nachname='$nachname' WHERE user_id='".$this->auth_user["user_id"]."'");
 			$this->msg=$this->msg . "msg§" . _("Ihr Nachname wurde ge&auml;ndert!") . "§";
+
 		}
 		
+
 		if (!StudipAuthAbstract::CheckField("auth_user_md5.username", $this->auth_user['auth_plugin']) && $this->auth_user["username"] != $new_username) {
-			if (!$validator->ValidateUsername($new_username)) {
-				$this->msg=$this->msg . "error§" . _("Der gewählte Username ist nicht lang genug!") . "§";
-				return false;
-			}
-			$check_uname = StudipAuthAbstract::CheckUsername($new_username);
-			if ($check_uname['found']) {
-				$this->msg .= "error§" . _("Der Username wird bereits von einem anderen User verwendet. Bitte wählen sie einen anderen Usernamen!") . "§";
-				return false;
-			} else {
-				$this->msg .= "info§" . $check_uname['error'] ."§";
-			}
-			$this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
-			$this->msg=$this->msg . "msg§" . _("Ihr Username wurde ge&auml;ndert!") . "§";
-			//Hotfix, sms auf neuen usernamen umbiegen
-			$this->db->query("UPDATE globalmessages SET user_id_rec='$new_username' WHERE user_id_rec='".$this->auth_user["username"]."'");
-			$this->db->query("UPDATE globalmessages SET user_id_snd='$new_username' WHERE user_id_snd='".$this->auth_user["username"]."'");
-			$this->logout_user = TRUE;
-		}
-		
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.Email", $this->auth_user['auth_plugin']) && $this->auth_user["Email"] != $email) {  //email wurde geändert!
-			$smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
-			$REMOTE_ADDR=getenv("REMOTE_ADDR");
-			$Zeit=date("H:i:s, d.m.Y",time());
-			
-			if (!$validator->ValidateEmailAddress($email)) {
-				$this->msg=$this->msg . "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
-				return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
-			}
-			
-			if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
-				$this->msg=$this->msg . "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
-				return false;
-			} else {       // Server ereichbar
-				if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse@localhost!
-					$from="wwwrun@".$smtp->localhost;
-					$to="abuse@".$smtp->localhost;
-					$smtp->SendMessage(
-					$from, array($to),
-					array("From: $from", "To: $to", "Subject: edit_about"),
-					"Emailbox unbekannt\n\nUser: ".$this->auth_user["username"]."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-					$this->msg=$this->msg . "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "§";
+			if ($ALLOW_CHANGE_USERNAME) {			
+				if (!$validator->ValidateUsername($new_username)) {
+					$this->msg=$this->msg . "error§" . _("Der gewählte Username ist nicht lang genug!") . "§";
 					return false;
 				}
-			}
-			
-			$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
-			if ($this->db->next_record()) {
-				$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
-				return false;
-			}
-			if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
-				//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
-				$newpass=$this->generate_password(6);
-				$hashpass=md5($newpass);
-				// Mail abschicken...
-				$to=$email;
-				$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
-				
-				// include language-specific subject and mailbody
-				include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
-				
-				$smtp->SendMessage(
-				$smtp->env_from, array($to),
-				array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-				$mailbody);
-				
-				$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
-				$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§info§" . _("ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;ndert. Es wurde an die neue E-Mail-Adresse geschickt!") . "§";
+				$check_uname = StudipAuthAbstract::CheckUsername($new_username);
+				if ($check_uname['found']) {
+					$this->msg .= "error§" . _("Der Username wird bereits von einem anderen User verwendet. Bitte wählen sie einen anderen Usernamen!") . "§";
+					return false;
+				} else {
+					$this->msg .= "info§" . $check_uname['error'] ."§";
+				}
+				$this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
+				$this->msg=$this->msg . "msg§" . _("Ihr Username wurde ge&auml;ndert!") . "§";
+				//Hotfix, sms auf neuen usernamen umbiegen
+				$this->db->query("UPDATE globalmessages SET user_id_rec='$new_username' WHERE user_id_rec='".$this->auth_user["username"]."'");
+				$this->db->query("UPDATE globalmessages SET user_id_snd='$new_username' WHERE user_id_snd='".$this->auth_user["username"]."'");
 				$this->logout_user = TRUE;
-			} else {
-				$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");
-				$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
+			}
+		}
+
+
+		if (!StudipAuthAbstract::CheckField("auth_user_md5.Email", $this->auth_user['auth_plugin']) && $this->auth_user["Email"] != $email) {  //email wurde geändert!
+			if ($ALLOW_CHANGE_EMAIL) {			
+				$smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
+				$REMOTE_ADDR=getenv("REMOTE_ADDR");
+				$Zeit=date("H:i:s, d.m.Y",time());
+				
+				if (!$validator->ValidateEmailAddress($email)) {
+					$this->msg=$this->msg . "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
+					return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
+				}
+				
+				if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
+					$this->msg=$this->msg . "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
+					return false;
+				} else {       // Server ereichbar
+					if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse@localhost!
+						$from="wwwrun@".$smtp->localhost;
+						$to="abuse@".$smtp->localhost;
+						$smtp->SendMessage(
+						$from, array($to),
+						array("From: $from", "To: $to", "Subject: edit_about"),
+						"Emailbox unbekannt\n\nUser: ".$this->auth_user["username"]."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+						$this->msg=$this->msg . "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "§";
+						return false;
+					}
+				}
+				
+				$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
+				if ($this->db->next_record()) {
+					$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), $this->db->f("Vorname"), $this->db->f("Nachname")) . "§";
+					return false;
+				}
+				if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
+					//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
+					$newpass=$this->generate_password(6);
+					$hashpass=md5($newpass);
+					// Mail abschicken...
+					$to=$email;
+					$url = "http://" . $smtp->localhost . $CANONICAL_RELATIVE_PATH_STUDIP;
+					
+					// include language-specific subject and mailbody
+					include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
+					
+					$smtp->SendMessage(
+					$smtp->env_from, array($to),
+					array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
+					$mailbody);
+					
+					$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
+					$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§info§" . _("ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;ndert. Es wurde an die neue E-Mail-Adresse geschickt!") . "§";
+					$this->logout_user = TRUE;
+				} else {
+					$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");
+					$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
+				}
 			}
 		}
 	}
@@ -621,13 +629,13 @@ if ($cmd=="copy")
 	}
 
 //Veränderungen an Studiengängen
-if ($cmd=="studiengang_edit")
+if ($cmd=="studiengang_edit" && $ALLOW_SELFASSIGN_STUDYCOURSE)
  {
 	$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
 	}
 
 //Veränderungen an Instituten für Studies
-if ($cmd=="inst_edit")
+if ($cmd=="inst_edit" && $ALLOW_SELFASSIGN_STUDYCOURSE)
  {
 	$my_about->inst_edit($inst_delete,$new_inst);
 	}
@@ -897,58 +905,59 @@ if ($view=="Daten") {
 	$cssSw->switchClass();
 	//persönliche Daten...
 	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
-	echo "<br><font size=-1>" . sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), "</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>") . "</font><br>";
+	echo "<br><font size=-1>" . sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), "</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>") . "</font><br><br>";
 	if ($my_about->auth_user['auth_plugin']){
-		echo "<font size=\"-1\">" . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
+      		echo "<font size=\"-1\">" . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
 	}
 	echo "<br><br></td></tr>\n<tr><td class=blank><table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>";
 	//Keine JavaScript überprüfung bei adminzugriff
 	if ($my_about->check=="user" && $auth->auth["jscript"] && !$my_about->auth_user['auth_plugin']) {
-		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
+	echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
 	} else {
 		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
 	}
-
+	 
 	if ($my_about->check=="user") {
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.username", $my_about->auth_user['auth_plugin'])) {
-			echo "&nbsp; ".$my_about->auth_user["username"];
-		} else {
-			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
-		}
-		echo "</td></tr>\n";
-		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </td>";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
-			echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" width=\"80%\" align=\"left\">&nbsp; *****";
-		} else {
-			echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
-		}
-		echo "</td></tr>\n";
-		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $my_about->auth_user['auth_plugin'])) {
-			echo "&nbsp; " . $my_about->auth_user["Vorname"];
-		} else {
-			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
-		}
-		echo "</td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; " . _("Nachname:") . "</font><br />";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $my_about->auth_user['auth_plugin'])) {
-			echo "&nbsp; " . $my_about->auth_user["Nachname"];
-		} else {
-			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
-		}
-		echo "</td></tr>\n";
-		
-		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">";
-		if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $my_about->auth_user['auth_plugin'])) {
-			echo "&nbsp; " . $my_about->auth_user["Email"];
-		} else {
-			echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
-		}
-		echo "</td></tr>\n";
-		
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp;";
+		if ((!$ALLOW_CHANGE_USERNAME) || (StudipAuthAbstract::CheckField("auth_user_md5.username", $my_about->auth_user['auth_plugin']))) {
+			echo "&nbsp;<font size=\"-1\">".$my_about->auth_user["username"]."</font>";
+	} else {
+		echo "&nbsp;<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
+	}		
+	echo "</td></tr>\n";
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </td>";
+	if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
+	echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" width=\"80%\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
+	} else {
+		echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
+	}
+	echo "</td></tr>\n";
+
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
+	if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $my_about->auth_user['auth_plugin'])) {
+        	echo "&nbsp; <font size=\"-1\">" . $my_about->auth_user["Vorname"]."</font>";
+	} else {
+        	echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
+	}
+	echo "</td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; " . _("Nachname:") . "</font><br />";
+	if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $my_about->auth_user['auth_plugin'])) {
+		echo "&nbsp; <font size=\"-1\">" . $my_about->auth_user["Nachname"]."</font>";
+	} else {
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
+	}
+                            
+	echo "</td></tr>\n";
+      
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp;";
+	if ((!$ALLOW_CHANGE_EMAIL) || (StudipAuthAbstract::CheckField("auth_user_md5.Email", $my_about->auth_user['auth_plugin']))) {
+		echo "&nbsp; <font size=\"-1\">".$my_about->auth_user["Email"]."</font>";
+	} else {
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
+	}
+	echo "</td></tr>\n";
 	} else {
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
@@ -1059,9 +1068,14 @@ if ($view=="Karriere") {
 			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.");
 		elseif ($perm->have_perm("dozent"))
 			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");	
-		else
-			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");	
-	
+		elseif ($ALLOW_SELFASSIGN_STUDYCOURSE)
+			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
+		else {
+			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\">";
+			$message = "info§" . sprintf(formatReady(_("Sie haben keine Berechtigung diese Daten selbst zu ändern!")));
+			parse_msg($message, "§", "blank",3);
+		}
+		
 		echo "<br />&nbsp; </td></tr>";
 
 		//Verändern von Raum, Sprechzeiten etc
@@ -1100,7 +1114,7 @@ if ($view=="Karriere") {
 	}
 
 	//Studiengänge die ich belegt habe
-	if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") { // nur für Autoren und Tutoren
+	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") && $ALLOW_SELFASSIGN_STUDYCOURSE) { // nur für Autoren und Tutoren
 		$cssSw->resetClass();
 		$cssSw->switchClass();
 		echo "<tr><td class=\"blank\">";
@@ -1136,11 +1150,12 @@ if ($view=="Karriere") {
 		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
 		echo "</form>";
 	}
-	echo "</td></tr></table>";
+	if ($ALLOW_SELFASSIGN_STUDYCOURSE)
+		echo "</td></tr></table>";
 
 
 	//Institute, an denen studiert wird
-	if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") {
+	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") && $ALLOW_SELFASSIGN_STUDYCOURSE) {
 		$cssSw->resetClass();
 		$cssSw->switchClass();
 		echo "<tr><td class=\"blank\">";
@@ -1176,7 +1191,8 @@ if ($view=="Karriere") {
 		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
 		echo "</form>";
 	}
-	echo "</td></tr></table>";
+	if ($ALLOW_SELFASSIGN_STUDYCOURSE)
+		echo "</td></tr></table>";
 }   
 
 if ($view=="Lebenslauf") {
