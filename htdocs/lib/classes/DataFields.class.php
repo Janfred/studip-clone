@@ -137,4 +137,20 @@ class DataFields {
 			return FALSE;
 
 	}
+	
+	function killAllEntries ($range_id = '') {
+		if (!$range_id)
+			$range_id = $this->range_id;
+		
+		if ($range_id) {
+			$query = sprintf ("DELETE FROM datafields_entries WHERE range_id = '%s'", $range_id);
+		
+		$this->db->query($query);
+		
+		if ($this->db->affected_rows())
+			return TRUE;
+		else
+			return FALSE;
+		}
+	}
 }
