@@ -82,7 +82,7 @@ class DbView {
 	* @access	public
 	* @var		boolean	$debug
 	*/
-	var $debug = true;
+	var $debug = false;
 	
 	/**
 	* Constructor
@@ -235,7 +235,7 @@ class DbView {
 					break;
 				}
 			}
-			$ptemp = split("[\{\}]",$param);
+			$ptemp = split("[{}]",$param);
 			$param = array();
 			if(count($ptemp) > 1){
 				for ($i=0;$i < count($ptemp);++$i){
