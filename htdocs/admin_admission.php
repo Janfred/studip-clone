@@ -89,6 +89,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");	//Settings....
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");	//basale Funktionen
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");	//Darstellungsfunktionen
 require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Nachrichtenfunktionen
+require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//load functions from admission system
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -111,18 +112,18 @@ $messaging = new messaging;
 function get_snapshot() {
 	global $admin_admission_data;
 	return	serialize($admin_admission_data["admission_turnout"]).
-			serialize($admin_admission_data["admission_type"]).
-			serialize($admin_admission_data["admission_endtime"]).
-			serialize($admin_admission_data["admission_binding"]).
-			serialize($admin_admission_data["passwort"]).
-			serialize($admin_admission_data["read_level"]).
-			serialize($admin_admission_data["write_level"]).
-			serialize($admin_admission_data["studg"]).
-			serialize($admin_admission_data["all_ratio"]).
-			serialize($admin_admission_data["admission_prelim"]).
-			serialize($admin_admission_data["admission_prelim_txt"]).
-			serialize($admin_admission_data["sem_admission_start_date"]).
-			serialize($admin_admission_data["sem_admission_end_date"]);
+		serialize($admin_admission_data["admission_type"]).
+		serialize($admin_admission_data["admission_endtime"]).
+		serialize($admin_admission_data["admission_binding"]).
+		serialize($admin_admission_data["passwort"]).
+		serialize($admin_admission_data["read_level"]).
+		serialize($admin_admission_data["write_level"]).
+		serialize($admin_admission_data["studg"]).
+		serialize($admin_admission_data["all_ratio"]).
+		serialize($admin_admission_data["admission_prelim"]).
+		serialize($admin_admission_data["admission_prelim_txt"]).
+		serialize($admin_admission_data["sem_admission_start_date"]).
+		serialize($admin_admission_data["sem_admission_end_date"]);
 }
 
 //get ID
@@ -136,6 +137,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data='';	
 	$admin_admission_data["metadata_dates"]=unserialize($db->f("metadata_dates"));
 	$admin_admission_data["admission_turnout"]=$db->f("admission_turnout");
+	$admin_admission_data["admission_turnout_org"]=$db->f("admission_turnout");	
 	$admin_admission_data["admission_type"]=$db->f("admission_type");
 	$admin_admission_data["admission_type_org"]=$db->f("admission_type");	
 	$admin_admission_data["admission_selection_take_place"]=$db->f("admission_selection_take_place");	
@@ -158,9 +160,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id'");
 	while ($db->next_record()) {
 		if ($db->f("studiengang_id") == "all")
-			$admin_admission_data["all_ratio"]	=$db->f("quota");
+			$admin_admission_data["all_ratio"] = $db->f("quota");
 		else
-			$admin_admission_data["studg"][$db->f("studiengang_id")]=array("name"=>$db->f("name"), "ratio"=>$db->f("quota"));
+			$admin_admission_data["studg"][$db->f("studiengang_id")] = array("name"=>$db->f("name"), "ratio"=>$db->f("quota"));
 	}
 	$admin_admission_data["original"]=get_snapshot();
 
@@ -290,11 +292,21 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	//Checks bei Anmeldeverfahren
 	} elseif ((!$adm_chrono_x) && (!$adm_los_x))  {
 		//max. Teilnehmerzahl checken
-		if ($uebernehmen_x)
-			if (($admin_admission_data["admission_turnout"] < 1) && ($admin_admission_data["admission_type"])) {
+		if (($uebernehmen_x) && ($admin_admission_data["admission_type"])) {
+			if ($admin_admission_data["admission_turnout"] < 1) {
 				$errormsg=$errormsg."error§"._("Wenn Sie die Teilnahmebeschr&auml;nkung benutzen wollen, m&uuml;ssen Sie wenigstens einen Teilnehmer zulassen.")."§";
 				$admin_admission_data["admission_turnout"] =1;
 			}
+			
+			//we have to perform some checks more, if we change the turnout-parameter from an already saved admission
+			if ($admin_admission_data["admission_type_org"]) {
+				if ($admin_admission_data["admission_turnout"] < $admin_admission_data["admission_turnout_org"])
+					$infomsg.= "info§" . _("Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Wenn Sie die Anzahl der Teilnehmenden verringern, m&uuml;ssen Sie evtl. NutzerInnen, die bereits einen Platz in der Veranstaltung erhalten haben, manuell entfernen!") . "§";
+			
+				if ($admin_admission_data["admission_turnout"] > $admin_admission_data["admission_turnout_org"])
+					$do_update_admission=TRUE;
+			}
+		}
 	
 		//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
 		if (($add_studg_x) || ($delete_studg) || ($uebernehmen_x)) {
@@ -417,6 +429,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				Lesezugriff = '".$admin_admission_data["read_level"]."', 
 				Schreibzugriff  = '".$admin_admission_data["write_level"]."' 
 				WHERE seminar_id = '".$admin_admission_data["sem_id"]."' ");
+
+		//check, if we need to update the admission data after saving new settings
+		if ($do_update_admission)
+    			update_admission($admin_admission_data["sem_id"]);				
 				
 		if ($db->affected_rows()) {
 			$errormsg.="msg§"._("Die Berechtigungseinstellungen f&uuml;r die Veranstaltung wurden aktualisiert")."§";
@@ -424,8 +440,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			}
 
 		//Save the current state as snapshot to compare with current data
-		$admin_admission_data["original"]=get_snapshot();
-
+		$admin_admission_data["original"] = get_snapshot();
+		$admin_admission_data["admission_turnout_org"] = $admin_admission_data["admission_turnout"];
+		$admin_admission_data["admission_type_org"] = $admin_admission_data["admission_type"];		
+		
 		//Variante nachtraeglich Anmeldeverfahren starten, alle alten Teilnehmer muessen raus
 		if (($admin_admission_data["admission_type"] >$admin_admission_data["admission_type_org"]) && ($admin_admission_data["admission_type_org"]==0)) {	
 			$db->query("SELECT seminar_user.user_id, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE Seminar_id ='".$admin_admission_data["sem_id"]."' AND status IN ('autor', 'user') ");
