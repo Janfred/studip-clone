@@ -13,8 +13,8 @@ class email_validation_class
 	var $name_regular_expression="^([a-zA-ZÄÖÜ][^0-9\\/\\\\\'\\`\\´\(\)]+)\$";
 	var $telefon_regular_expression="^([0-9 \(\)\\/+_-]*)\$";
 	var $email_regular_expression="^([-!#\$%&'*+./0-9=?A-Z^_`a-z{|}~])+@([-!#\$%&'*+/0-9=?A-Z^_`a-z{|}~]+\\.)+[a-zA-Z]{2,6}\$";
-	var $timeout=0;
-	var $data_timeout=0;
+	var $timeout=10;
+	var $data_timeout=10;
 	var $localhost="";
 	var $localuser="";
 	var $debug=0;
