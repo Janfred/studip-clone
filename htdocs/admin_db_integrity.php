@@ -107,22 +107,18 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)){
 		<?
 		$db = $plugin_obj->getCheckDetailResult($_REQUEST['checkid']);
 		?><table border=1 class="steelgraulight" style="font-size:smaller" align="center"><tr><?
-		$db->next_record();
-		$i=1;
-		foreach ($db->Record as $key=>$value) {
-			if (!($i%2)) echo "<th>".$key."</th>";
-			$i++;
+		$meta = $db->metadata();
+		for($i = 0;$i < count($meta);++$i){ 
+			echo "<th>" . $meta[$i]['name'] . "</th>";
 		}
 		echo "</tr>";
-		do {
+		while ($db->next_record()){
 			echo"<tr>";
-			$i=1;
-			foreach ($db->Record as $key=>$value) {
-				if (!($i%2)) echo "<td>".htmlReady(substr($value,0,50))."&nbsp;</td>";
-				$i++;
-			}
+			for($i = 0;$i < count($meta);++$i){ 
+				echo "<td>&nbsp;".htmlReady(substr($db->f($i),0,50))."</td>";
+				}
 			echo"</tr>";
-		} while ($db->next_record());
+		}
 		?></table></td></tr>
 		<tr><td class="blank" colspan="2">&nbsp; </td></tr>
 		</table><?
