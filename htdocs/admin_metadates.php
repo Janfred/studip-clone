@@ -346,7 +346,7 @@ if (($uebernehmen_x) && (!$errormsg))
 					}
 				?>
 				<? if ($term_metadata["original"] != get_snapshot()) {
-					?> <br /><font size=-1><? print _("Diese Daten sind noch nicht gespeichert.") ?></font><br /> <?
+					?> <br /><img src="pictures/ausruf_small.gif" align="absmiddle" />&nbsp;<font size=-1><? print _("Diese Daten sind noch nicht gespeichert.") ?></font><br /> <?
 					}
 				?>
 			</td>

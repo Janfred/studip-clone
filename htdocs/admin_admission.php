@@ -494,7 +494,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">
 				<? if ($admin_admission_data["original"] != get_snapshot()) {
-					?> <br /><font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br /> <?
+					?> <br /><img src="pictures/ausruf_small.gif" align="absmiddle" />&nbsp;<font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br /> <?
 					}
 				?>
 			</td>
