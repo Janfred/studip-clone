@@ -74,8 +74,8 @@ else
 
 	// Process the document
 	$result_file = md5(uniqid(rand())) . "." . $format;
-	$result = "" . $TMP_PATH . "/" . $result_file;
-	$xml_process_file = "" . $TMP_PATH . "/" . $xml_file_id;
+	$result = "" . $TMP_PATH . "/export/" . $result_file;
+	$xml_process_file = "" . $TMP_PATH . "/export/" . $xml_file_id;
 	$xslt_process_file = "" . $ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
 	if (xslt_process($xh, $xml_process_file , $xslt_process_file, $result) AND ($o_mode != "passthrough")) 
 	{
@@ -98,9 +98,9 @@ else
 
 	if ($o_mode == "passthrough")
 	{
-		readfile( $TMP_PATH . "/" . $result_file);
-		unlink( $TMP_PATH . "/" . $xml_file_id);
-		unlink( $TMP_PATH . "/" . $result_file);
+		readfile( $TMP_PATH . "/export/" . $result_file);
+		unlink( $TMP_PATH . "/export/" . $xml_file_id);
+		unlink( $TMP_PATH . "/export/" . $result_file);
 	}
 	else
 	{

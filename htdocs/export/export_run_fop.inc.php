@@ -69,16 +69,16 @@ else
 	escapeshellcmd ( $result_file );
 	escapeshellcmd ( $TMP_PATH );
 	$pdf_file = md5(uniqid(rand())) .".pdf";
-	$str = "$JAVA_ENV_CALL && $FOP_SH_CALL $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
+	$str = "$JAVA_ENV_CALL && $FOP_SH_CALL $TMP_PATH/export/$result_file $TMP_PATH/export/$pdf_file ";
 //	$out = system( ( $str ) );
 //	$out = exec( $JAVA_ENV_CALL );
 	$out = exec( $str );
 //echo $str . "<br>" . $out . "<br>";
 /*
-	unlink( $TMP_PATH . "/" . $xml_file_id);
-	unlink( $TMP_PATH . "/" . $result_file);
+	unlink( $TMP_PATH . "/export/" . $xml_file_id);
+	unlink( $TMP_PATH . "/export/" . $result_file);
 */	
-		if (file_exists($TMP_PATH."/".$pdf_file))
+		if (file_exists($TMP_PATH."/export/".$pdf_file))
 		{
 			$link2 = "<a href=\"sendfile.php?type=2&file_id=" . $pdf_file  . "&file_name=" . $xslt_filename . ".pdf\">";
 	
