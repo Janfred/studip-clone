@@ -227,16 +227,18 @@ else
    }
 
 if ($this->news_query["user_id"]==$this->user_id) $this->modus="";
+echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
 echo "\n<form action=\"".$this->p_self("cmd=news_submit")."\" method=\"POST\">";
 echo "\n<input type=\"HIDDEN\" name=\"news_id\" value=\"".$this->news_query["news_id"]."\">";
 echo "\n<input type=\"HIDDEN\" name=\"user_id\" value=\"".$this->news_query["user_id"]."\">";
 echo "\n<input type=\"HIDDEN\" name=\"author\" value=\"".$this->news_query["author"]."\">";
+echo "\n</td></tr>";
 echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
 echo "\n<table width=\"99%\" cellspacing=\"0\" cellpadding=\"6\" border=\"0\">";
-echo "\n<tr><td class=\"steel1\" class=\"blank\" width=\"70%\"><b>Autor:</b>&nbsp;".$this->news_query["author"]."<br><br><b>Überschrift</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\"  name=\"topic\" value=\"".htmlReady($this->news_query["topic"])."\"><br>";
+echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>Autor:</b>&nbsp;".$this->news_query["author"]."<br><br><b>Überschrift</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\"  name=\"topic\" value=\"".htmlReady($this->news_query["topic"])."\"><br>";
 list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
 echo "\n<br><b>Inhalt</b><br><textarea name=\"body\" style=\"width: 100%\" cols=\"".floor($this->max_col*.8*.8)."\" rows=\"10\"   wrap=\"virtual\">".htmlReady($body)."</textarea><br></td>";
-echo "\n<td class=\"steelgraulight\"  class=\"blank\" width=\"30%\">Geben sie hier die Überschrift und den Inhalt ihrer News ein.<br><br>Im unteren Bereich können sie auswählen, in welchen Bereichen ihre News angezeigt wird.";
+echo "\n<td class=\"steelgraulight\" width=\"30%\">Geben sie hier die Überschrift und den Inhalt ihrer News ein.<br><br>Im unteren Bereich können sie auswählen, in welchen Bereichen ihre News angezeigt wird.";
 echo "\n<br><br>Drücken sie danach hier, um die Änderungen zu übernehmen.<br><br><center><INPUT TYPE=\"IMAGE\"  name=\"news_submit\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"&Uuml;bernehmen\"></center></td></tr>";
 echo "\n<tr><td class=\"blank\" colspan=\"2\">Einstelldatum: <select name=\"date\"><option value=\"".$aktuell."\" selected>".strftime("%d.%m.%y", $aktuell)."</option>";
 for ($i=1; $i<=14; $i++)
@@ -296,7 +298,7 @@ if ($perm->have_perm("admin"))
       echo "\n<form action=\"".$this->p_self("cmd=edit")."\" method=\"POST\"><input type=\"HIDDEN\" name=\"edit_news\" value=\"".$this->news_query["news_id"]."\">";
       echo "\n<tr><td class=\"blank\"><b>Einen weiteren Bereich hinzufügen:<br /><br /></td></tr>";
       echo "\n<tr><td class=\"steel1\"><font size=-1>Hier k&ouml;nnen Sie weitere Bereiche, auf die sie Zugriff haben, der Auswahl hinzuf&uuml;gen</font><br /><br />";
-      echo "<input type=\"TEXT\"  name=\"search\" size=\"20\">&nbsp; <input type=\"IMAGE\" name=\"submit\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\"></td></tr></form>";
+      echo "<input type=\"TEXT\"  name=\"search\" size=\"20\">&nbsp; <input type=\"IMAGE\" name=\"submit\" src=\"pictures/buttons/suchestarten-button.gif\" border=0 value=\"Suche starten\"></td></tr></form></table><br />";
      }
 echo "</table>";
 }
