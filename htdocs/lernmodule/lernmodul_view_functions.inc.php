@@ -12,7 +12,7 @@ function show_user_modules($benutzername)
 		{
 			$edit_link = link_edit_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 //			$delete_link = link_delete_module($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
-			$delete_link = $PHP_SELF . "?delete=now&del_inst=".$mod_array[$module_count]["inst"]."&del_id=".$mod_array[$module_count]["id"];
+			$delete_link = $PHP_SELF . "?delete=now&del_inst=".$mod_array[$module_count]["inst"]."&del_id=".$mod_array[$module_count]["id"]."&del_title=".$module_info["title"];
 
 			$module_info = get_module_info($mod_array[$module_count]["inst"], $mod_array[$module_count]["id"]);
 			$ph_key = $mod_array[$module_count]["id"] . "@" . $mod_array[$module_count]["inst"] . "@" . "user";
