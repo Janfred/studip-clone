@@ -220,7 +220,7 @@ class studip_news {
 		echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
 		echo "\n<table width=\"99%\" cellspacing=\"0\" cellpadding=\"6\" border=\"0\">";
 		echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>" . _("Autor:") . "</b>&nbsp;".htmlReady($this->news_query["author"])."<br><br><b>" . _("&Uuml;berschrift") 
-			. "</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\"  name=\"topic\" value=\""
+			. "</b><br><input type=\"TEXT\" style=\"width: 50%\" size=\"".floor($this->max_col*.5*.8)."\" maxlength=\"255\" name=\"topic\" value=\""
 			.htmlReady($this->news_query["topic"])."\"><br>";
 		list ($body,$admin_msg)=explode("<admin_msg>",$this->news_query["body"]);
 		echo "\n<br><b>" . _("Inhalt") . "</b><br><textarea name=\"body\" style=\"width: 100%\" cols=\"".floor($this->max_col*.8*.8)."\" rows=\"10\"	  wrap=\"virtual\">"
