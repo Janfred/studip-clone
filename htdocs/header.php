@@ -135,7 +135,38 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			$altm = $db->f("alt_m");
 			$neux = $db->f("neu_x");
 		}
-
+		
+		//globale Objekte zählen
+		$db->query("SELECT  COUNT((IF(date < UNIX_TIMESTAMP(),range_id,NULL))) as count,
+		COUNT(IF((date > IFNULL(b.visitdate,0) AND nw.user_id !='{$user->id}'),
+		(IF(date < UNIX_TIMESTAMP(),range_id,NULL)), NULL)) AS neue 
+		FROM   news_range a  LEFT JOIN news nw USING(news_id)
+		LEFT JOIN object_user_visits b ON (b.object_id = nw.news_id AND b.user_id = '{$user->id}' AND b.type ='news')
+		WHERE a.range_id='studip' GROUP BY a.range_id");
+		if ($db->next_record()){
+			$global_obj['news']['neue'] = $db->f('neue');
+			$global_obj['news']['gesamt'] = $db->f('count');
+		}
+		if ($GLOBALS['VOTE_ENABLE']) {
+			$db->query("SELECT  COUNT(vote_id) as count, 
+						COUNT(IF((chdate > IFNULL(b.visitdate,0) AND a.author_id !='{$user->id}' AND a.state != 'stopvis'), vote_id, NULL)) AS neue 
+						FROM  vote a LEFT JOIN object_user_visits b ON (b.object_id = vote_id AND b.user_id = '{$user->id}' AND b.type='vote') 
+						WHERE a.range_id='studip'  AND a.state IN('active','stopvis')
+						GROUP BY a.range_id");
+			if ($db->next_record()){
+				$global_obj['vote']['neue'] = $db->f('neue');
+				$global_obj['vote']['gesamt'] = $db->f('count');
+			}
+		$db->query("SELECT  COUNT(a.eval_id) as count,
+					COUNT(IF((chdate > IFNULL(b.visitdate,0) AND d.author_id !='{$user->id}'), a.eval_id, NULL)) AS neue 
+					FROM eval_range a INNER JOIN eval d ON (a.eval_id = d.eval_id AND d.startdate IS NOT NULL AND (d.stopdate > UNIX_TIMESTAMP() OR d.stopdate IS NULL) )
+					LEFT JOIN object_user_visits b ON (b.object_id = d.eval_id AND b.user_id = '{$user->id}' AND b.type='eval') 
+					WHERE a.range_id='studip' GROUP BY a.range_id");
+			if ($db->next_record()){
+				$global_obj['eval']['neue'] = $db->f('neue');
+				$global_obj['eval']['gesamt'] = $db->f('count');
+			}
+		}
 		?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr>
@@ -143,10 +174,11 @@ if ($auth->auth["uid"] == "nobody") { ?>
 			<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 <?
-				echo MakeToolbar("pictures/home.gif","index.php",_("Start"),_("Zur Startseite"),40,"_top");
-				echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left");
-
-
+	$home_icon = ($global_obj['eval']['neue'] || $global_obj['vote']['neue'] || $global_obj['news']['neue'] ? "pictures/home_red.gif" : "pictures/home.gif");
+	$home_info .= ($global_obj['news']['neue'] ? " - " . sprintf(_(" %s neue News"), $global_obj['news']['neue']) : "");
+	$home_info .= (($global_obj['vote']['neue'] + $global_obj['eval']['neue']) ? " - " . sprintf(_(" %s neue Umfrage(n)"), ($global_obj['vote']['neue'] + $global_obj['eval']['neue'])) : "");
+	echo MakeToolbar($home_icon  ,"index.php",_("Start"),_("Zur Startseite") . $home_info,40,"_top");
+	echo MakeToolbar("pictures/meinesem.gif",($perm->have_perm("root")) ? "sem_portal.php" : "meine_seminare.php",_("Veranstaltungen"),_("Meine Veranstaltungen & Einrichtungen"),90, "_top","left");
 
 //Nachrichten anzeigen
 	$text = _("Post");
