@@ -92,7 +92,7 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 function getLatestVersion($keyword, $range_id) {
 	$db=new DB_Seminar;
 	$q = "SELECT * FROM wiki WHERE ";
-	$q .= "keyword='$keyword' AND range_id='$range_id' ";
+	$q .= "keyword='".decodeHTML($keyword)."' AND range_id='$range_id' ";
 	$q .= "ORDER BY version DESC LIMIT 1";
 	$db->query($q);
 	$db->next_record();
@@ -338,7 +338,7 @@ function refreshBacklinks($keyword, $str) {
 	$wikiLinkList=getWikiLinks($str);
 	if (!empty($wikiLinkList)) {
 		foreach ($wikiLinkList as $key => $value) {
-			$q="INSERT INTO wiki_links (range_id, from_keyword, to_keyword) VALUES ('$SessSemName[1]', '$keyword', '$value')";
+			$q="INSERT INTO wiki_links (range_id, from_keyword, to_keyword) VALUES ('$SessSemName[1]', '$keyword', '".decodeHTML($value)."')";
 			$db_wiki_list->query($q);
 		}
 	}
