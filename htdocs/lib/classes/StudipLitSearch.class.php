@@ -159,7 +159,7 @@ class StudipLitSearch {
 		return $search_values;
 	}
 	
-	function getPreferredPlugin(){
+	function GetPreferredPlugin(){
 		$dbv = new DbView();
 		$dbv->params[0] = $GLOBALS['user']->id;
 		$rs = $dbv->get_query("view:LIT_GET_FAK_LIT_PLUGIN");
