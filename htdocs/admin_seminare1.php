@@ -34,9 +34,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 ?>
 
- <script language="javascript" src="./md5.js"></script>
-
-
  <SCRIPT language="JavaScript">
 <!--
 
