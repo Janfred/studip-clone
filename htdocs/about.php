@@ -291,8 +291,8 @@ if ($msg)
 		echo "</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n";
 	}
 
-  // Save data back to database.
-  page_close()
- ?>
+// Save data back to database.
+page_close()
+?>
 </body>
 </html>
