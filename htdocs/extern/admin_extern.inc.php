@@ -65,9 +65,13 @@ foreach ($EXTERN_MODULE_TYPES as $key => $type) {
 }
 echo "</b></td></tr>";
 echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
-echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\">\n";
+if ($com != "info")
+	echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\">\n";
+else
+	echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\" colspan=\"2\">\n";
 echo "<table width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
+
 
 if ($com == "delete_sec") {
 	$config = get_configuration($range_id, $config_id);
