@@ -77,8 +77,22 @@ function PrintAktualStatusgruppen () {
 		$size = $db->f("size");
 		$groupmails = groupmail($statusgruppe_id);
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font></td>",CheckAssignRights($statusgruppe_id,$user->id)?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"pictures/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"", htmlReady($db->f("name")));
-		printf ("<td width=\"10%%\"class=\"topic\" align=\"right\" nowrap>");
+		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",CheckAssignRights($statusgruppe_id,$user->id)?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"pictures/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"", htmlReady($db->f("name")));
+
+		$limit = GetStatusgruppeLimit($statusgruppe_id);
+		if ($limit) {
+			$voll = CountMembersPerStatusgruppe ($statusgruppe_id);
+			if ($voll >= $limit)
+				$limitcolor = "#FF5555";
+			else
+				$limitcolor = "55FF55";
+			echo "<font size = \"2\" color=$limitcolor>&nbsp;&nbsp;-&nbsp;&nbsp;";
+			printf ("%s von %s Plätzen belegt",$voll, $limit);
+			echo "&nbsp;</font>";
+		}
+		printf ("</td><td width=\"10%%\"class=\"topic\" valign=\"middle\" align=\"right\" nowrap>");
+
+		
 		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("<a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" " . tooltip(_("E-Mail an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s \"><img src=\"pictures/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id); 

@@ -79,9 +79,19 @@ function CheckSelfAssign ($statusgruppe_id) {
 	return $tmp;		
 }
 
+function ReturnSelfAssign ($statusgruppe_id) {
+	
+	
+	
+}
+
 function CheckAssignRights($statusgruppe_id, $user_id) {
 	global $perm;
-	if (CheckSelfAssign($statusgruppe_id) && !CheckUserStatusgruppe($statusgruppe_id, $user_id) && !$perm->have_perm("admin") && $perm->have_perm("autor")) 
+	if (CheckSelfAssign($statusgruppe_id) 
+	&& !CheckUserStatusgruppe($statusgruppe_id, $user_id) 
+	&& !$perm->have_perm("admin") 
+	&& $perm->have_perm("autor") 
+	&& ((GetStatusgruppeLimit($statusgruppe_id)==FALSE) || (GetStatusgruppeLimit($statusgruppe_id) > CountMembersPerStatusgruppe($statusgruppe_id))))
 		$assign = TRUE;
 	else
 		$assign = FALSE;
@@ -337,6 +347,16 @@ function GetStatusgruppeName ($group_id) {
 	
 	if ($db->next_record())
 		return $db->f("name");
+	else
+		return FALSE;
+}
+
+function GetStatusgruppeLimit ($group_id) {
+	$db = new DB_Seminar();
+	$db->query("SELECT size FROM statusgruppen WHERE statusgruppe_id='$group_id' ");
+	
+	if ($db->next_record())
+		return $db->f("size");
 	else
 		return FALSE;
 }
