@@ -67,7 +67,7 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 	$messaging=new messaging;
 
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
-	$db->query("SELECT Seminar_id, Name FROM seminare WHERE Seminar_id = '$seminar_id' AND ((admission_type = '1'  AND admission_selection_take_place = '1') OR (admission_type = '2'))");
+	echo "SELECT Seminar_id, Name FROM seminare WHERE Seminar_id = '$seminar_id' AND ((admission_type = '1'  AND admission_selection_take_place = '1') OR (admission_type = '2'))";
 	if ($db->next_record()) {
 		echo jaa;
 		//Liste einlesen
