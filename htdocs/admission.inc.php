@@ -36,6 +36,7 @@
 
 require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 
 //set handling for script execution
 ignore_user_abort(TRUE);
@@ -146,7 +147,9 @@ function renumber_admission ($seminar_id, $send_message=TRUE) {
 				//Usernamen auslesen
 				$db4->query("SELECT username FROM auth_user_md5 WHERE user_id = '".$db2->f("user_id")."' ");
 				$db4->next_record();
-				$message="Sie sind in der Warteliste der Veranstaltung **".$db->f("Name")."** hochgestuft worden. Sie stehen zur Zeit auf Position $position.";
+				setTempLanguage($db2->f("user_id"));
+				$message = sprintf(_("Sie sind in der Warteliste der Veranstaltung **%s** hochgestuft worden. Sie stehen zur Zeit auf Position %s."), $db->f("Name"), $position);
+				restoreLanguage();
 				$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
 			}
 			$position++;
@@ -192,7 +195,9 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 				$db5->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db3->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 				//User benachrichten
 				if (($db5->affected_rows()) && ($send_message)) {
-					$message="Sie sind als Teilnehmer der Veranstaltung **".$db->f("Name")."** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen.";
+					setTempLanguage($db3->f("user_id"));
+					$message = sprintf (_("Sie sind als Teilnehmer der Veranstaltung **%s** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen."), $db->f("Name"));
+					restoreLanguage();
 					$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
 				}
 			}
@@ -223,7 +228,9 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 					$db6->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db4->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 					//User benachrichten
 					if (($db6->affected_rows()) && ($send_message)) {
-						$message="Sie sind als Teilnehmer der Veranstaltung **".$db->f("Name")."** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen.";
+						setTempLanguage($db4->f("user_id"));
+						$message = sprintf (_("Sie sind als Teilnehmer der Veranstaltung **%s** eingetragen worden, da für Sie ein Platz frei geworden ist. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen."), $db->f("Name"));
+						restoreLanguage();
 						$messaging->insert_sms ($db4->f("username"), $message, "____%system%____");
 					}
 				}
@@ -285,7 +292,9 @@ function check_admission ($send_message=TRUE) {
 						$db5->query("DELETE FROM admission_seminar_user WHERE user_id ='".$db3->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
 						//User benachrichten
 						if (($db5->affected_rows()) && ($send_message)) {
-							$message="Sie wurden als Teilnehmer der Veranstaltung **".$db->f("Name")."** ausgelost. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen.";
+							setTempLanguage($db3->f("user_id"));
+							$message = sprintf (_("Sie wurden als Teilnehmer der Veranstaltung **%s** ausgelost. Ab sofort finden Sie die Veranstaltung in der Übersicht ihrer Veranstaltungen. Damit sind sie auch als Teilnehmer der Präsenzveranstaltung zugelassen."), $db->f("Name"));
+							restoreLanguage();							
 							$messaging->insert_sms ($db3->f("username"), $message, "____%system%____");
 						}
 					}
@@ -312,7 +321,9 @@ function check_admission ($send_message=TRUE) {
 		if (($send_message) && ($db->f("admission_type") == '1')) {
 			$db2->query("SELECT admission_seminar_user.user_id, username, position FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' ORDER BY position ");
 			while ($db2->next_record()) {
-				$message="Sie wurden leider im Losverfahren der Veranstaltung **".$db->f("Name")."** __nicht__ ausgelost. Sie wurden jedoch auf Position ".$db2->f("position")." auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen, sobald ein Platz für Sie frei wird.";
+				setTempLanguage($db2->f("user_id"));						
+				$message = sprintf(_("Sie wurden leider im Losverfahren der Veranstaltung **%s** __nicht__ ausgelost. Sie wurden jedoch auf Position %s auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen, sobald ein Platz für Sie frei wird."), $db->f("Name"), $db2->f("position"));
+				restoreLanguage();	
 				$messaging->insert_sms ($db2->f("username"), $message, "____%system%____");
 			}
 		}
