@@ -1,23 +1,26 @@
 <?php
-/*
-about_edit.php - Ändern der persönlichen Userseiten von Stud.IP
-Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>, Niklas Nohlen <nnohlen@gwdg.de>,
-Miro Freitag <mfreita@goe.net>, André Noack <andre.noack@gmx.net>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// edit_about.php
+// administration of personal home page
+// 
+// Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>,
+// Niklas Nohlen <nnohlen@gwdg.de>, Miro Freitag <mfreita@goe.net>, André Noack <andre.noack@gmx.net>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
@@ -51,6 +54,8 @@ var $check="";    //Hilfsvariable für den Rechtecheck
 var $special_user=FALSE;  // Hilfsvariable für bes. Institutsfunktionen
 var $msg = ""; //enthält evtl Fehlermeldungen
 var $max_file_size = 100; //max Größe der Bilddatei in KB
+var $img_max_h = 250; // max picture height
+var $img_max_w = 200; // max picture width
 var $uploaddir = "./user"; //Uploadverzeichnis für Bilder
 var $logout_user = FALSE; //Hilfsvariable, zeigt an, ob der User ausgeloggt werden muß
 var $priv_msg="";  //Änderungsnachricht bei Adminzugriff
@@ -132,7 +137,7 @@ function get_user_details() {       // füllt die arrays  mit Daten
 }
 
 function imaging($img,$img_size,$img_name) {
-	global $DJPEG_PATH, $CJPEG_PATH, $PNMSCALE_PATH, $GIFTOPNM_PATH, $TMP_PATH;
+	global $TMP_PATH, $CONVERT_PATH;
 
 	if ($img_size > ($this->max_file_size*1024)) { //Bilddatei ist zu groß
 		$this->msg = "error§" . sprintf(_("Die hochgeladene Bilddatei ist %s KB groß.<br>Die maximale Dateigröße beträgt %s KB!"), round($img_size/1024), $this->max_file_size);
@@ -162,21 +167,52 @@ function imaging($img,$img_size,$img_name) {
 		$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return;
 	} else {
-		$imgsize = GetImageSize($img);
+		list($width, $height, $img_type, ) = getimagesize($img);
 		// Check picture size
-		if (($imgsize[0] > 200) || ($imgsize[1] > 250)) {
-			//Temporaere Datei
-			$tmpimg = "$TMP_PATH/tmp.pnm";
-			//Konvertierung nach PNM
-			if ($ext == "jpg") {
-				system($DJPEG_PATH ." $newfile >$tmpimg");
+		$hscale = $height / $this->img_max_h;
+		$wscale = $width / $this->img_max_w;
+		if (($hscale > 1) || ($wscale > 1)) {
+			$scale = ($hscale > $wscale)? $hscale : $wscale;
+			$newwidth = floor($width / $scale);
+			$newheight= floor($height / $scale);
+			$ret_val = false;
+			if (file_exists($CONVERT_PATH)){
+				system($CONVERT_PATH . ' -resize ' . $newwidth . 'x' . $newheight . '! ' . $newfile .' ' . $newfile, $ret_val);
+			} else if (extension_loaded('gd') && function_exists('imagecopyresampled')){
+				// leeres Bild erzeugen
+				$img_res = ImageCreateTrueColor($newwidth, $newheight);
+				switch ($img_type) {  //original Bild einlesen
+				case 1: //GIF
+					$img_org = ImageCreateFromGIF($img);
+					break;
+				case 2: //JPG
+					$img_org = ImageCreateFromJPEG($img);
+					break;
+				case 3: //PNG
+					$img_org = ImageCreateFromPNG($img);
+					break;
+				default:
+					$img_org = FALSE;
+				} // end switch
+				if (!$img_org) {
+					$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
+					return;
+				}
+				// resampeln und als jpg speichern
+				$ret_val = ImageCopyResampled ( $img_res, $img_org, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+				$ret_val = ImageJPEG ( $img_res, $newfile , 70);
+				$ret_val = $ret_val ? false : true;
+				ImageDestroy ( $img_res);
+				ImageDestroy ( $img_org);
+			} else {
+				$ret_val = true; //Fehler!!!
 			}
-			else if ($ext == "gif") {
-				system($GIFTOPNM_PATH ." $newfile >$tmpimg");
+			if ($ret_val){
+				@unlink($newfile);
+				$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
+				return;
 			}
-			system($PNMSCALE_PATH ." -xysize 200 250 $tmpimg | ". $CJPEG_PATH ." -smoo 10 -qual 60 >$newfile");
-		}
-
+		} 
 		$this->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).");
 		setTempLanguage($this->auth_user["user_id"]);
 		$this->priv_msg = _("Ein neues Bild wurde hochgeladen.\n");
