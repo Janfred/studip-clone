@@ -153,12 +153,11 @@ IF ($view=="statistik") {?>
 			<?
 			//Toplists
 			$count = 10;
-			write_toplist("die meisten Teilnehmer","SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
-			write_toplist("zuletzt angelegt","SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ".$sql_where_query_seminare." ORDER BY mkdate DESC LIMIT $count");
-			write_toplist("die meisten Materialien (Dokumente)","SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM dokumente LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminar_id  ORDER BY count DESC LIMIT $count");
+			write_toplist("die meisten Teilnehmer","SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
+			write_toplist("zuletzt angelegt","SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ORDER BY mkdate DESC LIMIT $count");
+			write_toplist("die meisten Materialien (Dokumente)","SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM dokumente a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			$week = time()-1209600;
-			IF ($view!="Alle") $tmp = ereg_replace("WHERE","AND",$sql_where_query_seminare);
-				write_toplist("die aktivsten Seminare (Postings der letzten zwei Wochen)","SELECT seminare.seminar_id, seminare.name, count(*) as count FROM px_topics LEFT JOIN seminare USING(seminar_id) WHERE px_topics.mkdate > $week ".$tmp." GROUP BY seminar_id  ORDER BY count DESC LIMIT $count");
+			write_toplist("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)","SELECT a.seminar_id, b.name, count(a.seminar_id) as count FROM px_topics a LEFT JOIN seminare b USING(seminar_id) WHERE NOT ISNULL(b.seminar_id) AND a.mkdate > $week GROUP BY a.seminar_id  ORDER BY count DESC LIMIT $count");
 			?>	
 			</table>
 		</blockquote>
@@ -171,77 +170,90 @@ IF ($view=="statistik") {?>
 			$db=new DB_Seminar;
 			$cssSw=new cssClassSwitcher;
 	
-			$db->query("SELECT * from seminare");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from seminare");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">Aktive Veranstaltungen:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 
 			$cssSw->switchClass();
-			$db->query("SELECT * from archiv");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from archiv");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" nowrap>Archivierte Veranstaltungen:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
 			$cssSw->switchClass();	
-			$db->query("SELECT * FROM Institute");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) FROM Institute");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">beteiligte Einrichtungen:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 
 			$cssSw->switchClass();
-			$db->query("SELECT * FROM Fakultaeten");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) FROM Fakultaeten");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">beteiligte Fakult&auml;ten:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT * from auth_user_md5 WHERE perms='admin'");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='admin'");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Administratoren:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
 			$cssSw->switchClass();	
-			$db->query("SELECT * from auth_user_md5 WHERE perms='dozent'");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='dozent'");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Dozenten:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
 			$cssSw->switchClass();
-			$db->query("SELECT * from auth_user_md5 WHERE perms='tutor'");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='tutor'");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Tutoren:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
 			$cssSw->switchClass();
-			$db->query("SELECT * from auth_user_md5 WHERE perms='autor'");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='autor'");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">registrierte Studierende:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 
 	
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 	
 			$cssSw->switchClass();
-			$db->query("SELECT * from px_topics");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from px_topics");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >Postings:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
 			$cssSw->switchClass();
-			$db->query("SELECT * from dokumente");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from dokumente");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">Dateien:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 
 			$cssSw->switchClass();
-			$db->query("SELECT * from literatur");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from literatur");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >Literaturlisten:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
 			$cssSw->switchClass();
-			$db->query("SELECT * from termine");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from termine");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">Termine:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>"; 	
 	
 			$cssSw->switchClass();
-			$db->query("SELECT * from news");
-			$anzahl = $db->num_rows();
+			$db->query("SELECT count(*) from news");
+			$db->next_record();
+			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">News:</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr></blockquote></table></td></tr>"; 	
 	}
 	
@@ -376,3 +388,4 @@ echo "<br><br>Das System wird ständig weiterentwickelt und an die Wünsche unsere
 page_close();
  ?>
 <!-- $Id$ -->
+

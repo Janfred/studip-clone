@@ -202,10 +202,10 @@ IF ($sem_browse_data["level"]!="s" AND $sem_browse_data["level"]!="sbb" AND !$le
 
 	write_toplist("die meisten Teilnehmer","SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM seminar_user LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminare.seminar_id ORDER BY count DESC LIMIT $count");
 	write_toplist("zuletzt angelegt","SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ".$sql_where_query_seminare." ORDER BY mkdate DESC LIMIT $count");
-	write_toplist("die meisten Materialien (Dokumente)","SELECT seminare.seminar_id, seminare.name, count(seminare.seminar_id) as count FROM dokumente LEFT JOIN seminare USING(seminar_id) ".$sql_where_query_seminare." GROUP BY seminar_id  ORDER BY count DESC LIMIT $count");
-	$week = time()-1209600;
-	IF ($view!="Alle") $tmp = ereg_replace("WHERE","AND",$sql_where_query_seminare);
-	write_toplist("die aktivsten Seminare (Postings der letzten zwei Wochen)","SELECT seminare.seminar_id, seminare.name, count(*) as count FROM px_topics LEFT JOIN seminare USING(seminar_id) WHERE px_topics.mkdate > $week ".$tmp." GROUP BY seminar_id  ORDER BY count DESC LIMIT $count");
+	$tmp_where = ($view != "Alle") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) " : " WHERE NOT ISNULL(seminare.seminar_id) ";
+	write_toplist("die meisten Materialien (Dokumente)","SELECT dokumente.seminar_id, seminare.name, count(dokumente.seminar_id) as count FROM dokumente LEFT JOIN seminare USING(seminar_id) ".$tmp_where." GROUP BY dokumente.seminar_id  ORDER BY count DESC LIMIT $count");
+	$tmp_where = ($view != "Alle") ? $sql_where_query_seminare." AND NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600) : " WHERE NOT ISNULL(seminare.seminar_id) AND px_topics.mkdate > ".(time()-1209600);
+	write_toplist("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)","SELECT px_topics.seminar_id, seminare.name, count(px_topics.seminar_id) as count FROM px_topics LEFT JOIN seminare USING(seminar_id) ".$tmp_where." GROUP BY px_topics.seminar_id  ORDER BY count DESC LIMIT $count");
 	}
 	echo "<tr><td class=\"steelgraudunkel\" align=\"center\" ><a href=\"$PHP_SELF?view=".$view."&mehr=", $mehr+1, "#anker\"><font size=2 color='#333399'><img src='pictures/forumgraurunt.gif' alt='zeig mir mehr' border=0 align=middle></font></a><img src='pictures/forumleer.gif' height='23' border=0 valign='top' align='middle'>";
 	IF ($mehr > 1) echo "<a href=\"$PHP_SELF?view=".$view."&mehr=", $mehr-1, "#anker\"><font size=2 color='#333399'><img src='pictures/forumgraurauf.gif' alt ='zeig mir weniger' border=0 align=middle></font></a>";
@@ -221,3 +221,4 @@ IF ($sem_browse_data["level"]!="s" AND $sem_browse_data["level"]!="sbb" AND !$le
  ?>
 </body>
 </html>
+
