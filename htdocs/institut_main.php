@@ -21,7 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include "seminar_open.php"; //hier werden die sessions initialisiert
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
 require_once "dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
 require_once "datei.inc.php";
 require_once "config.inc.php";
@@ -45,8 +47,7 @@ require_once "visual.inc.php";
 			$loginfilelast["$nr"] = $loginfilenow["$nr"];
 			$loginfilenow["$nr"] = time();
 		}
-	}
-	else {
+	} else {
 		$auswahl=$SessSemName[1];
 	}
 
@@ -60,8 +61,7 @@ require_once "visual.inc.php";
 				// aha, wir haben die erste interessante Angabe gefunden
 				$new_query = $parts[1];
 				$take_it ++;
-			}
-			else if ($take_it) {
+			} elseif ($take_it) {
 				// alle weiteren Parameter mit einsammeln
 				if ($take_it == 1) { // hier kommt der erste
 					$new_query .= '?';
@@ -79,28 +79,11 @@ require_once "visual.inc.php";
 		die;
 	}
 
-?>
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-<html>
-<head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<body bgcolor="#ffffff">
-
-
-<?php
-
-	include "header.php";   //hier wird der "Kopf" nachgeladen
-
-?>
-<body>
-<?
-IF ($SessSemName[1] =="")
+if ($SessSemName[1] =="")
 	{
 	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Kein Objekt gew&auml;hlt", 

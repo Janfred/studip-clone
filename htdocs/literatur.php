@@ -19,55 +19,32 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-          page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-          $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-?>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-        <link rel="stylesheet" href="style.css" type="text/css">
- </head>
-<body bgcolor="#ffffff">
+// -- here you have to put initialisations for the current page
 
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-<?php
-        include "seminar_open.php"; //hier werden die sessions initialisiert
-
-// hier muessen Seiten-Initialisierungen passieren
-
-
-        include "header.php";   //hier wird der "Kopf" nachgeladen
-
-?>
-<body>
-
-<?
-IF ($SessSemName[1] =="")
-	{
+if ($SessSemName[1] =="") {
 	parse_window ("error§Sie haben kein Objekt gew&auml;hlt. <br /><font size=-1 color=black>Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt gew&auml;hlt haben.<br /><br /> Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen. </font>", "§",
 				"Kein Objekt gew&auml;hlt", 
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
-	}
-ELSE
-        {
-        include "links1.php";
-        require_once "functions.php";
-        require_once "visual.inc.php";
-        
-
-
+} else {
+	include ("$ABSOLUTE_PATH_STUDIP/links1.php");
+	require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+	require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+	
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-        <td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo htmlReady($SessSemName["art"]) .": ". htmlReady($SessSemName[0]); ?> - Literatur und Links</b></td>
+	<td class="topic" colspan=2><b>&nbsp;<img src="pictures/icon-lit.gif" align=absmiddle>&nbsp; <? echo htmlReady($SessSemName["art"]) .": ". htmlReady($SessSemName[0]); ?> - Literatur und Links</b></td>
 </tr>
 	<td class="blank" width="100%"><blockquote><? printf ("%s", ($SessSemName["class"]=="inst") ? "Hier finden Sie n&uuml;tzliche Linteratur und Links zu der Einrichtung." : "Hier finden Sie die Literatur- und Linkliste der Veranstaltung.");?></td>
 	<td class="blank" align = right><img src="pictures/literatur.jpg" border="0"></td>
