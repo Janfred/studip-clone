@@ -855,7 +855,7 @@ if ($send_view) {
 
 	
 	$switch_sendview = sprintf(_("Wählen Sie hier zwischen Experten- und Standard-Ansicht."))."<br><img src=\"pictures/link_intern.gif\" width=\"15\" height=\"15\" border=0 alt=\"\">&nbsp;<a href=\"".$PHP_SELF."?send_view=".$tmp_link_01."\">".$tmp_link_02."</a>";
-	if($my_messaging_settings["send_view"] == 1) {
+	if($my_messaging_settings["send_view"] == FALSE) {
 		$switch_sendview .= "<br>"._("In der Experten-Ansicht sind weitere Optionen wie z. B. Emailweiterleitung und Lesebestätigung wählbar.");
 	}
 
