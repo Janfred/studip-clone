@@ -348,7 +348,7 @@ class VoteDB extends StudipObject {
 	 $this->throwError (1, _("Es wurden keine Votes mit der angegebenen ID gefunden."),
 			    __LINE__, __FILE__);  
       } else {
-	 $this->db->next_record(); # Das brauchst du um einen Eintrag zu lesen!
+	 $this->db->next_record();
 	 $votearray=array('vote_id'       => $this->db->f("vote_id"),
 			  'author_id'     => $this->db->f("author_id"),
 			  'range_id'      => $this->db->f("range_id"),
@@ -370,6 +370,10 @@ class VoteDB extends StudipObject {
 			  'answerArray'   => array (),
 			  'isAssociated'  => $this->hasanyoneparticipated 
 			  ($voteID));
+
+	// convert userID to username
+	if ($name = get_username($votearray['range_id']))
+	   $votearray['range_id'] = $name;
 	                                   
 #Entsprechende Antworten aus der DB laden und in einem abgefahrenen 
 #3d Array speichern!
