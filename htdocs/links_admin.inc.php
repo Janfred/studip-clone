@@ -292,9 +292,9 @@ if ($perm->have_perm("admin")) {
 }	
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>"Literatur", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"admin_news.php?view=news_inst", active=>FALSE);
+
 if ($EXTERN_ENABLE && $perm->have_perm("admin"))
-	$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => "externe Seiten",
-										"link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
+	$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => "externe Seiten", "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
 if ($perm->is_fak_admin())
 	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue&nbsp;Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
@@ -307,12 +307,11 @@ if ($RESOURCES_ENABLE)
 //
 if ($perm->have_perm("admin")) {		
 	$structure["new_user"]=array (topKat=>"global", name=>"Benutzer", link=>"new_user_md5.php", active=>FALSE);
-	$structure["range_tree"]=array (topKat=>"global", name=>"Bereichsbaum", link=>"admin_range_tree.php", active=>FALSE);
+	$structure["range_tree"]=array (topKat=>"global", name=>"Einrichtungshierarchie", link=>"admin_range_tree.php", active=>FALSE);
 }
 if ($perm->have_perm("root")) {
+	$structure["sem_tree"]=array (topKat=>"global", name=>"Veranstaltungshierarchie", link=>"admin_sem_tree.php", active=>FALSE);
 	$structure["studiengang"]=array (topKat=>"global", name=>"Studieng&auml;nge", link=>"admin_studiengang.php", active=>FALSE);
-	$structure["fach"]=array (topKat=>"global", name=>"Studienf&auml;cher", link=>"admin_fach.php", active=>FALSE);
-	$structure["bereich"]=array (topKat=>"global", name=>"Bereiche", link=>"admin_bereich.php", active=>FALSE);
 	$structure["sessions"]=array (topKat=>"global", name=>"Sessions", link=>"view_sessions.php", active=>FALSE);
 	$structure["integrity"]=array (topKat=>"global", name=>"DB Integrit&auml;t", link=>"admin_db_integrity.php", active=>FALSE);
 }
@@ -421,6 +420,9 @@ switch ($i_page) {
 	break;
 	case "admin_range_tree.php": 
 		$reiter_view="range_tree"; 
+	break;
+	case "admin_sem_tree.php": 
+		$reiter_view="sem_tree"; 
 	break;
 	case "admin_extern.php":
 		$reiter_view = "extern_inst";
