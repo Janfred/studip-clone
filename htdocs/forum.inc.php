@@ -41,7 +41,7 @@
 **/
 function forum_kill_edit ($description) {
 	if (ereg("<admin_msg",$description)) { // wurde schon mal editiert
-		$postmp = strrpos($description,"<admin_msg");
+		$postmp = strpos($description,"<admin_msg");
 		$description = substr_replace($description,"",$postmp);
 	}
 	return $description;
