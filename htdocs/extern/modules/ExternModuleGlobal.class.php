@@ -71,8 +71,8 @@ class ExternModuleGlobal extends ExternModule {
 		$this->elements["TableGrouprowGlobal"]->real_name = _("Gruppenzeile");
 		$this->elements["TableRowGlobal"]->real_name = _("Datenzeile");
 		$this->elements["TableHeadrowTextGlobal"]->real_name = _("Text in Tabellenkopf");
-		$this->elements["Headline1TextGlobal"]->real_name = _("&Uuml;berschriften");
-		$this->elements["Headline2TextGlobal"]->real_name = _("&Uuml;berschriften");
+		$this->elements["Headline1TextGlobal"]->real_name = _("&Uuml;berschriften erster Ordnung");
+		$this->elements["Headline2TextGlobal"]->real_name = _("&Uuml;berschriften zweiter Ordnung");
 		$this->elements["TextGlobal"]->real_name = _("Schrift");
 		$this->elements["LinksGlobal"]->real_name = _("Links");
 		
