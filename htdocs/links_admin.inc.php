@@ -89,7 +89,7 @@ if (($archive_kill) && ($SessSemName[1] == $archiv_assi_data["sems"][$archiv_ass
 }
 
 //a new session in the adminarea...
-if (($i_page== "adminarea_start.php") && ($list)) {
+if ((($i_page == "adminarea_start.php") && ($list)) || ($quit)) {
 	reset_all_data();
 	closeObject();
 } elseif ($i_page== "adminarea_start.php")
@@ -221,7 +221,7 @@ $structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE);
 $structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?view=news_sem", active=>FALSE);
-$structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?view=modules_sem", active=>FALSE);
+$structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
 if ($perm->have_perm("dozent")) 
@@ -234,7 +234,7 @@ if ($perm->have_perm("admin")) {
 }	
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
-$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?view=modules_inst", active=>FALSE);
+$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_inst", active=>FALSE);
 
 if ($EXTERN_ENABLE && $perm->have_perm("admin"))
 	$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
@@ -288,7 +288,10 @@ else
 if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Veranstaltung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 elseif ($SessSemName["class"] == "inst")
-	$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
+	if ($perm->have_perm("admin")) //backlink for admin is admin_institut.php
+		$addText=" <a href=\"admin_institut.php?list=TRUE&quit=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
+	else //backlink for <=dozent is admin_literatur, becauso he is not allowed to view admin_institut.php!
+		$addText=" <a href=\"admin_literatur.php?list=TRUE&quit=TRUE&view=literatur_inst\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"pictures/admin.gif\" border=0></a>";
 
 //View festlegen
 switch ($i_page) {
@@ -808,6 +811,9 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 			case "admin_seminare1.php": 
 				printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare1.php?s_id=%s&s_command=edit\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
 				break;
+			case "admin_modules.php": 
+				printf("<font size=-1>" . _("Module") . "<br /><a href=\"admin_modules.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+				break;
 			case "archiv_assi.php": 
 				if ($perm->have_perm("admin")) {
 				?>
@@ -838,6 +844,7 @@ if ($links_admin_data["srch_on"] || $auth->auth["perm"] =="tutor" || $auth->auth
 	</form>
 	<?
 	page_close();
+	die;
 }
 ?>
 </td>
