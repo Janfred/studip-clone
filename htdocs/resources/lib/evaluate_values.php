@@ -541,7 +541,9 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 		$resources_data["schedule_week_offset"]++;
 	if ($previous_week)
 		$resources_data["schedule_week_offset"]--;
-	if ($navigate) {
+	if ($start_time)
+		$resources_data["schedule_start_time"] = $start_time;
+	elseif ($navigate) {
 		$resources_data["schedule_length_factor"] = $schedule_length_factor;
 		$resources_data["schedule_length_unit"] = $schedule_length_unit;
 		$resources_data["schedule_week_offset"] = 0;
