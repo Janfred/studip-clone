@@ -83,6 +83,11 @@ if ((sizeof ($_REQUEST) == 2) && ($view == "view_schedule")) {
 	$resources_data["view_mode"]=FALSE;
 }
 
+//reset edit the assign
+if ((sizeof ($_REQUEST) == 2) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
+	$new_assign_object=FALSE;
+}
+
 //get views/view_modes
 if ($view)
 	 $resources_data["view"]=$view;
@@ -398,15 +403,41 @@ if ($change_object_schedules) {
 				$change_schedule_repeat_week);
 
 			//check repeat_end
-			if ($changeAssign->getRepeatMode() != "na") {
+			if (($changeAssign->getRepeatMode() != "na") && ($change_schedule_repeat_end_month) && ($change_schedule_repeat_end_day) && ($change_schedule_repeat_end_year)){
 				if (!check_date($change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year)) {
 					$illegal_dates=TRUE;
 					$msg -> addMsg(18);
 				}
+				//repeat end schould not be bevor the begin
 				if (!$illegal_dates) {
 					if ($change_schedule_end > $change_schedule_repeat_end) {
 						$illegal_dates=TRUE;
 						$msg -> addMsg(19);
+					}
+				}
+				//limit recurrences
+				if (!$illegal_dates) {
+					switch ($changeAssign->getRepeatMode()) {
+						case "y" : if ((date("Y",$change_schedule_repeat_end) - date("Y", $change_schedule_begin)) > 10) {
+									$illegal_dates=TRUE;
+									$msg -> addMsg(21);
+								}
+						break;
+						case "m" : if (($change_schedule_repeat_end - $change_schedule_begin) > (60 * 60 * 24 *7 * 52)) {
+									$illegal_dates=TRUE;
+									$msg -> addMsg(22);
+								}
+						break;
+						case "w" : if ((($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24 *7)) > 50) {
+									$illegal_dates=TRUE;
+									$msg -> addMsg(23);
+								}
+						break;
+						case "d" : if ((($change_schedule_repeat_end - $change_schedule_begin) / (60 * 60 * 24)) > 30) {
+									$illegal_dates=TRUE;
+									$msg -> addMsg(24);
+								}
+						break;
 					}
 				}
 			}
