@@ -176,7 +176,7 @@ class StudipSemTreeView extends TreeView {
 		foreach($sem_data as $seminar_id => $data){
 			if (key($data['sem_number']) != $sem_number){
 				$sem_number = key($data['sem_number']);
-				$content .= "\n<tr><td class=\"steelgroup$sem_number\" colspan=\"2\">" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
+				$content .= "\n<tr><td class=\"steelkante\" colspan=\"2\">" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
 			}
 			$content .= "<tr><td class=\"blank\"><a href=\"details.php?sem_id=". $seminar_id 
 			."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">" . htmlReady(key($data["Name"])) . "</a>

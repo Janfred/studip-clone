@@ -509,7 +509,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		foreach($sem_data as $seminar_id => $data){
 				if (key($data['sem_number']) != $sem_number){
 					$sem_number = key($data['sem_number']);
-					$content .= "\n<tr><td class=\"steelgroup1\" colspan=\"3\ style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
+					$content .= "\n<tr><td class=\"steelkante\" colspan=\"3\ style=\"font-size:10pt;\" >" . $this->tree->sem_dates[$sem_number]['name'] . "</td></tr>";
 				}
 				$content .= "<tr><td class=\"blank\" width=\"1%\"><input type=\"checkbox\" name=\"marked_sem[]\" value=\"$seminar_id\" style=\"vertical-align:middle\">
 							</td><td class=\"blank\" style=\"font-size:10pt;\"><a href=\"details.php?sem_id=". $seminar_id 

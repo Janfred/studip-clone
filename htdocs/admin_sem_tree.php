@@ -172,8 +172,9 @@ $the_tree->showSemTree();
 	<b><?=_("Merkliste:")?></b>
 	</p>
 	<form action="<?=$the_tree->getSelf("cmd=MarkList")?>" method="post">
-	<select multiple size="20" name="sem_mark_list[]" style="font-size:8pt;width:100%;">
+	<select multiple size="20" name="sem_mark_list[]" style="font-size:8pt;">
 	<?
+	$cols = 50;
 	if (is_array($_marked_sem)){
 		$view->params[0] = array_keys($_marked_sem);
 		$entries = new DbSnapshot($view->get_query("view:SEMINAR_GET_SEMDATA"));
@@ -182,9 +183,11 @@ $the_tree->showSemTree();
 		foreach($sem_data as $seminar_id => $data){
 			if (key($data['sem_number']) != $sem_number){
 				$sem_number = key($data['sem_number']);
+				echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">&nbsp;</option>";
 				echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . $the_tree->tree->sem_dates[$sem_number]['name'] . ":</option>";
+				echo "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . str_repeat("¯",floor($cols * .8)) . "</option>";
 			}
-			$line = htmlReady(my_substr(key($data["Name"]),0,50));
+			$line = htmlReady(my_substr(key($data["Name"]),0,$cols));
 			$tooltip = key($data["Name"]) . " (" . join(",",array_keys($data["doz_name"])) . ")";
 			echo "\n<option value=\"$seminar_id\" " . tooltip($tooltip,false) . ">$line</option>";
 		}
@@ -196,7 +199,7 @@ $the_tree->showSemTree();
 		echo "\n<option  value=\"insert_all\">" . _("In alle ge&ouml;ffneten Bereiche eintragen") . "</option>";
 		foreach ($_open_items as $item_id => $value){
 			echo "\n<option value=\"insert_{$item_id}\">" 
-				. sprintf(_("In \"%s\" eintragen"),htmlReady(my_substr($the_tree->tree->tree_data[$item_id]['name'],0,30))) . "</option>";
+				. sprintf(_("In \"%s\" eintragen"),htmlReady(my_substr($the_tree->tree->tree_data[$item_id]['name'],0,floor($cols * .8)))) . "</option>";
 		}
 	}
 	?>
