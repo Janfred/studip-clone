@@ -37,7 +37,7 @@
 
 function object_set_visit_module($type){
 	global $SessSemName;
-	if (object_get_visit($SessSemName[1], $type, false) <= object_get_visit($SessSemName[1], $SessSemName['class'], false)){
+	if (object_get_visit($SessSemName[1], $type, false, false) <= object_get_visit($SessSemName[1], $SessSemName['class'], false, false)){
 		object_set_visit($SessSemName[1], $type);
 	}
 }
@@ -56,14 +56,18 @@ function object_set_visit($object_id, $type, $user_id = '') {
 	if (!$user_id)
 		$user_id = $user->id;
 	
-	$last_visit = object_get_visit($object_id, $type, FALSE, $user_id);
+	$last_visit = object_get_visit($object_id, $type, FALSE, false , $user_id);
+	
+	if ($last_visit === false){
+		$last_visit = 0;
+	}
 	
 	$db=new DB_Seminar;
 	$query = sprintf ("REPLACE INTO object_user_visits SET object_id = '%s', user_id ='%s', type='%s', visitdate='%s', last_visitdate = '%s'",
 						$object_id, $user_id, $type, $now, $last_visit);
 	$db->query($query);
 	
-	return TRUE;
+	return object_get_visit($object_id, $type, FALSE, false, $user_id, true);
 }
 
 /**
@@ -77,14 +81,19 @@ function object_set_visit($object_id, $type, $user_id = '') {
 * @return	int	the timestamp of the last visit or FALSE
 *
 */
-function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '', $user_id = '') {
+function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '', $user_id = '', $refresh_cache = false) {
 	global $user;
 	static $cache;
 	
-	if (!$user_id)
+	if (!$user_id){
 		$user_id = $user->id;
-	if (!$open_object_id)
+	}
+	if (!$open_object_id && $open_object_id !== false){
 		$open_object_id = $object_id;
+	}
+	if ($refresh_cache){
+		$cache[$object_id][$type][$user_id] = null;
+	}
 	
 	if ($cache[$object_id][$type][$user_id]) {
 		if ($mode == "last")
@@ -106,11 +115,10 @@ function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '
 			return $db->f("visitdate");
 	//no visitdate for the object or modul - we have to gather the information from the studip-object (seminar or institute)
 	} elseif ($open_object_id) {
-		$query = sprintf ("SELECT visitdate FROM object_user_visits WHERE object_id = '%s' AND user_id = '%s' AND (type = 'sem' OR type = 'inst')",
+		$query = sprintf ("SELECT visitdate, last_visitdate FROM object_user_visits WHERE object_id = '%s' AND user_id = '%s' AND (type = 'sem' OR type = 'inst')",
 				$open_object_id, $user_id);
 		$db->query($query);
 		if ($db->next_record()) {
-			$cache[$object_id][$type][$user_id] = array("last_visitdate" => $db->f("last_visitdate"), "visitdate" =>$db->f("visitdate"));
 			if ($mode == "last")
 				return $db->f("last_visitdate");
 			else
