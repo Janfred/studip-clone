@@ -102,17 +102,17 @@ ob_start();
 
 	if (is_array ($online)) { // wenn jemand online ist
 		foreach($online as $username=>$value) { //alle durchgehen die online sind
-			$user_id = get_userid($username);
+			$user_id = $value["userid"];
 			$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
 			if ($db->next_record()) { // er ist auf jeden Fall als Buddy eingetragen
 				$db2->query ("SELECT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id'");	
 				if ($db2->next_record()) { // er ist auch einer Gruppe zugeordnet
-					$group_buddies[]=array($db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"));
+					$group_buddies[]=array($db2->f("name"), $online[$username]["name"],$online[$username]["last_action"],$username,$db2->f("statusgruppe_id"),$user_id);
 				} else {	// buddy, aber keine Gruppe
-					$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
+					$non_group_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
 				}
 			} else { // online, aber kein buddy
-				$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username);
+				$n_buddies[]=array($online[$username]["name"],$online[$username]["last_action"],$username,$user_id);
 			}
 		}
 	}
@@ -164,7 +164,7 @@ if (is_array($n_buddies))
 			$lastgroup = "";
 			$groupcount = 0;
 			while (list($index)=each($group_buddies)) {
-				list($gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id)=$group_buddies[$index];
+				list($gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id,$tmp_user_id)=$group_buddies[$index];
 				if ($gruppe != $lastgroup) {// Ueberschrift fuer andere Gruppe
 					printf("\n<tr><td colspan=\"6\" align=\"middle\" class=\"steelkante\"><a href=\"contact.php?view=gruppen&filter=%s\"><font size=\"2\" color=\"#555555\">%s</font></a></td></tr>",$statusgruppe_id, htmlready($gruppe));
 					$groupcount++;
@@ -175,10 +175,14 @@ if (is_array($n_buddies))
 				printf("\n<tr><td  width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"steel1\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"steel1\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $groupcount, $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"steel1\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
-					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip")) {
-						echo "<img src=\"pictures/chat2.gif\"".tooltip(_("Dieser User befindet sich im Chat"))." border=\"0\"></td>";
-					} else {
+					if ($tmp_num_chats = $chatServer->chatUser[$tmp_user_id]) {
+						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
+							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
+							." border=\"0\"></a></td>";
+					} elseif ($chatServer->chatUser[$auth->auth['uid']]) {
 						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+					} else {
+						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
 					}
 				} else {
 					echo "&nbsp;";
@@ -192,16 +196,22 @@ if (is_array($n_buddies))
 			echo "\n<tr><td colspan=6 class=\"steelkante\" align=\"center\"><font size=-1 color=\"#555555\"><a href=\"contact.php?view=gruppen&filter=all\"><font size=-1 color=\"#555555\">"._("Buddies ohne Gruppenzuordnung").":</font></a></font></td></tr>";
 			reset ($non_group_buddies);
 			while (list($index)=each($non_group_buddies)) {
-				list($fullname,$zeit,$tmp_online_uname)=$non_group_buddies[$index];
+				list($fullname,$zeit,$tmp_online_uname,$tmp_user_id)=$non_group_buddies[$index];
 				printf("\n<tr><td  width=\"1%%\" class=\"steel1\">&nbsp; </td><td class=\"steel1\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"steel1\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"steel1\" width=\"5%\" align=center>";
 				if ($CHAT_ENABLE) {
-					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
-						echo "<img src=\"pictures/chat2.gif\"".tooltip(_("Dieser User befindet sich im Chat"))." border=\"0\"></td>";
-					else    
+					if ($tmp_num_chats = $chatServer->chatUser[$tmp_user_id]) {
+						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
+							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
+							." border=\"0\"></a></td>";
+					} elseif ($chatServer->chatUser[$auth->auth['uid']]) {
 						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+					} else {
+						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
+					}
+				} else {
+					echo "&nbsp;";
 				}
-				else echo "&nbsp;";
 				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"pictures/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
 			}
 		}
@@ -221,16 +231,22 @@ ob_start();
 			echo "\n<td class=\"steelgraudunkel\"  colspan=2><font size=-1 color=\"white\"><b>&nbsp;" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\" colspan=3 ><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>\n";
 			reset($n_buddies);
 			while (list($index)=each($n_buddies)) {
-				list($fullname,$zeit,$tmp_online_uname)=$n_buddies[$index];
+				list($fullname,$zeit,$tmp_online_uname,$tmp_user_id)=$n_buddies[$index];
 				printf("\n<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"pictures/add_buddy.gif\" ".tooltip(_("zu den Buddies hinzufügen"))." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"67%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
 				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"6%\"align=center>";
-				if ($CHAT_ENABLE){
-					if ($chatServer->isActiveUser($chatServer->getIdFromNick("studip",$tmp_online_uname),"studip"))
-							echo "<img src=\"pictures/chat2.gif\" ".tooltip(_("Dieser User befindet sich im Chat"))." border=\"0\">";
-					else    
-							echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+				if ($CHAT_ENABLE) {
+					if ($tmp_num_chats = $chatServer->chatUser[$tmp_user_id]) {
+						echo "<a href=\"chat_online.php?search_user={$tmp_user_id}\"><img src=\"pictures/chat2.gif\""
+							.tooltip(($tmp_num_chats == 1) ? _("Dieser User befindet sich in einem Chatraum.") : sprintf(_("Dieser User befindet sich in %s Chaträumen"),$tmp_num_chats)) 
+							." border=\"0\"></a></td>";
+					} elseif ($chatServer->chatUser[$auth->auth['uid']]) {
+						echo "<a href=\"sms.php?sms_source_page=online.php&cmd=chatinsert&rec_uname=$tmp_online_uname\"><img src=\"pictures/chat1.gif\" ".tooltip(_("zum Chatten einladen"))." border=\"0\"></a>";
+					} else {
+						echo "<img src=\"pictures/chat1.gif\" border=\"0\">";
 					}
-				else echo "&nbsp;";
+				} else {
+					echo "&nbsp;";
+				}
 				echo "\n</td><td class=\"".$cssSw->getClass()."\" align=center width=\"6%\"><a href=\"sms.php?sms_source_page=online.php&cmd=write&rec_uname=$tmp_online_uname\"><img src=\"pictures/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td></tr>";
 				$cssSw->switchClass();					
 			}
