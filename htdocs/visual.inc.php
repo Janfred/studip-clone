@@ -93,7 +93,16 @@ class cssClassSwitcher {
 		2=>"steel1"); 		//Klassen
 	var $headerClass="steel";
 	var $classcnt=1;		//Counter
-
+	var	$hoverclass;
+	
+	function getHoverJS(){
+		$ret="";
+		if($this->hoverclass){
+			$ret=" onMouseOver='this.className=\"".$this->hoverclass."\"'".
+				" onMouseOut='this.className=\"".$this->class[$this->classcnt]."\"' ";
+		}
+		return $ret;
+	}
 	function getClass() {
 		return $this->class[$this->classcnt];
 	}
