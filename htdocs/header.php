@@ -47,7 +47,8 @@ function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target,$align="center")
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
 	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"2\" width=\"50\"><br>"
 			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".tooltip($tooltip)."><br>"
-			  ."$text</a>";
+			  ."$text</a><br>"
+			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"10\" width=\"50\">";
 	$toolbar .= "</td>\n";
 	return $toolbar;
 }
@@ -237,7 +238,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 <?
 
 	}
-	echo"<body><br>\n";
+	echo"<body>\n";
 	ob_end_flush();
 
 	include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft
