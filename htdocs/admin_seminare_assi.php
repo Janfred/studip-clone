@@ -879,7 +879,7 @@ if (($form == 3) && ($jump_next_x))
 					($sem_create_data["term_turnus_start_minute"][$i] == $vor_start_minute) &&
 					($sem_create_data["term_turnus_end_minute"][$i] == $vor_end_minute) &&
 					($sem_create_data["term_turnus_date"][$i] == $tmp_vor_day))
-					$errormsg=$errormsg."error§"._("Der Termin f&uuml;r die Vorbesprechung findet zu den gleichen Zeiten wie die Veranstaltung statt. Bitte legen Sie in diesem Fall einen Ablaufplan in einem sp&auml;teren Schritt an und &auml;nder einen Termin in den Typ \"Vorbesprechung\"")."§";
+					$errormsg=$errormsg."error§"._("Der Termin f&uuml;r die Vorbesprechung findet zu den gleichen Zeiten wie die Veranstaltung statt. Bitte legen Sie in diesem Fall einen Ablaufplan in einem sp&auml;teren Schritt an und &auml;ndern einen Termin in den Typ \"Vorbesprechung\"")."§";
 			}
 		}
 	}
@@ -2623,10 +2623,10 @@ if ($level == 4) {
 																printf ("<input type=\"TEXT\" name=\"request_property_val[%s]\" value=\"%s\" size=30 maxlength=255 />", $db2->f("property_id"), htmlReady($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id"))));
 															}
 														break;
-														case "text";
+														case "text":
 															printf ("<textarea name=\"request_property_val[%s]\" cols=30 rows=2 >%s</textarea>", $db2->f("property_id"), htmlReady($sem_create_data["resRequest"]->getPropertyState($db2->f("property_id"))));
 														break;
-														case "select";
+														case "select":
 															$options=explode (";",$db2->f("options"));
 															printf ("<select name=\"request_property_val[%s]\">", $db2->f("property_id"));
 															print	"<option value=\"\">--</option>";
