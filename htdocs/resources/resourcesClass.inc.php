@@ -1557,7 +1557,7 @@ class ResourcesRootThreads {
 			}
 			
 			//...and all objects where I have add perms...
-			$query = sprintf ("SELECT resources_objects.resource_id, parent_id, root_id, level FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id IN %s ORDER BY level DESC", $clause);
+			$query = sprintf ("SELECT resources_objects.resource_id, parent_id, root_id, level FROM resources_user_resources LEFT JOIN resources_objects USING (resource_id) WHERE user_id IN %s OR user_id = 'all' ORDER BY level DESC", $clause);
 			$db->query($query);
 			while ($db->next_record()) {
 				$my_resources[$db->f("resource_id")]=array("root_id" =>$db->f("root_id"), "parent_id" =>$db->f("parent_id"), "level" =>$db->f("level"));
