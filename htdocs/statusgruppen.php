@@ -19,21 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
   page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-	$auth->login_if($auth->auth["uid"] == "nobody");
-  $perm->check("dozent");
 
-## Set this to something, just something different...
-  $hash_secret = "dslkjjhetbjs";
-  
 	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
-require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
 
 // Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -42,10 +33,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachr
 
 	$cssSw=new cssClassSwitcher;
 
-
 // Hilfsfunktionen
-
-
 
 function PrintAktualStatusgruppen ()
 {	global $SessSemName, $PHP_SELF;
@@ -104,24 +92,27 @@ function PrintAktualStatusgruppen ()
 
 // Beginn Darstellungsteil
 
+ ?>
 
-	 ?>
-       	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="blank">&nbsp; </td></tr>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-	
-	<td class="topic"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - Statusgruppen</b></td>
-	
-	</tr><tr><td class="blank">&nbsp; </td></tr>
-
-  <tr>
-     <td width="100%" NOWRAP class="blank">
-	<?
-	PrintAktualStatusgruppen ();
-	?>
-	<br>&nbsp; 
-    </td>
-  </tr>
+		<td class="blank">&nbsp; 
+		</td>
+	</tr>
+	<tr>
+		<td class="topic"><b>&nbsp;<? echo $SessSemName["art"],": ",htmlReady($SessSemName[0]); ?> - Statusgruppen</b>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank">&nbsp; 
+		</td>
+	</tr>
+	<tr>
+     		<td width="100%" NOWRAP class="blank">
+			<?PrintAktualStatusgruppen (); ?>
+			<br>&nbsp; 
+		</td>
+	</tr>
 </table>
 <p>&nbsp;</p>
 <?
