@@ -37,10 +37,12 @@ require_once ($ABSOLUTE_PATH_STUDIP . "functions.php"); // <- für getHeaderLine
  *
  * This class is used to ...
  *
- * @author     John Patrick Wowra jpwowra@math.uni-goettingen.de
- * @version    $Id$
- * @access     public
- * @package    vote
+ * @author      John Patrick Wowra jpwowra@math.uni-goettingen.de
+ * @version     $Id$
+ * @access      public
+ * @package     vote
+ * @modulegroup vote_modules
+ *
  */
 class VoteDB extends StudipObject {
 
@@ -398,7 +400,6 @@ class VoteDB extends StudipObject {
    }
 
 
-
    /**
     * Checks wheather a vote with a specified ID already exists
     * @access  public
@@ -633,7 +634,7 @@ class VoteDB extends StudipObject {
 	 " vote ".
 	 "SET".
 	 " state     = '".$state."',".
-	 " chdate    = '".time()."', ".
+#	 " chdate    = '".time()."', ".
 #	 " startdate = ".$startdate.",".
 	 " stopdate  = '".$stopdate."', ".
 	 " timespan  = NULL ".
@@ -688,10 +689,8 @@ class VoteDB extends StudipObject {
      if ($stopdate == NULL) $stopdate = "NULL";
      
      $sql= "UPDATE vote SET state = '".VOTE_STATE_NEW."', ".
-       "startdate= NULL , stopdate= NULL , ".
-       "chdate=".time()."  WHERE vote_id=\"".$voteID."\"";
+       "startdate=NULL, stopdate=NULL WHERE vote_id=\"".$voteID."\"";
      
-
      $this->db->query($sql);
      if (!$this->db->affected_rows())
 	 $this->throwError (1, _("Vote konnte nicht neu gestartet werden"), 
