@@ -138,8 +138,10 @@ class StudipLitList extends TreeAbstract {
 			} else {
 				$this->cat_element->getElementData($this->tree_data[$item_id]['catalog_id']);
 			}
-			$cat_element->fields['note']['value'] = $this->tree_data[$item_id]['note'];
-			$content = preg_replace('/({[a-z0-9_]+})/e', "(\$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2))) ? \$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2)) : '...'", $format);
+			$this->cat_element->fields['note']['value'] = $this->tree_data[$item_id]['note'];
+			$content = preg_replace('/({[a-z0-9_]+})/e', "(\$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2))) ? \$this->cat_element->getValue(substr('\\1',1,strlen('\\1')-2)) : '???'", $format);
+			$content = preg_replace('/\|.[^|]*\?\?\?.*?\|/' , "", $content);
+			$content = str_replace('|','', $content);
 			return $content;
 		} else {
 			return false;
@@ -268,10 +270,10 @@ class StudipLitList extends TreeAbstract {
 	
 	function deleteList($list_id){
 		$deleted = 0;
-		$this->view->params[] = $list_id;
+		$this->view->params[] = array($list_id);
 		$rs = $this->view->get_query("view:LIT_DEL_LIST");
 		$deleted += $rs->affected_rows();
-		$this->view->params[] = $list_id;
+		$this->view->params[] = array($list_id);
 		$rs = $this->view->get_query("view:LIT_DEL_LIST_CONTENT_ALL");
 		$deleted += $rs->affected_rows();
 		return $deleted;
@@ -281,6 +283,33 @@ class StudipLitList extends TreeAbstract {
 		$this->view->params[] = $list_id;
 		$rs = $this->view->get_query("view:LIT_LIST_TRIGGER_CHDATE");
 		return $rs->affected_rows();
+	}
+	
+	function DeleteListsByRange($range_id){
+		$deleted = null;
+		$view = new DbView();
+		$view->params[] = $range_id;
+		$rs = $view->get_query("view:LIT_GET_LIST_BY_RANGE");
+		while ($rs->next_record()){
+			$list_ids[] =  $rs->f("list_id");
+		}
+		if (is_array($list_ids)){
+			$view->params[] = $list_ids;
+			$rs = $view->get_query("view:LIT_DEL_LIST");
+			$deleted['list'] = $rs->affected_rows();
+			$view->params[] = $list_ids;
+			$rs = $view->get_query("view:LIT_DEL_LIST_CONTENT_ALL");
+			$deleted['list_content'] = $rs->affected_rows();
+		}
+		return $deleted;
+	}
+	
+	function GetListCountByRange($range_id){
+		$dbv = new DbView();
+		$dbv->params[0] = $range_id;
+		$rs = $dbv->get_query("view:LIT_GET_LIST_COUNT_BY_RANGE");
+		$rs->next_record();
+		return array("visible_list" => $rs->f("visible_list"),"invisible_list" => $rs->f("invisible_list"));;
 	}
 	
 	function GetListsByRange($range_id){
