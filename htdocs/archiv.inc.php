@@ -378,8 +378,7 @@ function dump_sem($sem_id)
 			$dump.= "</td></tr>\n";
 			$dump.="<th width=\"30%%\">Name</th>";
 			$dump.="<th width=\"10%%\">Postings</th>";
-			$dump.="<th width=10%><b>Dokumente</b></th>";
-			$dump.="<th width=10%><b>Literatur</b></th></tr>\n";
+			$dump.="<th width=10%><b>Dokumente</b></th></tr>\n";
 			
 			while ($db->next_record()) {
 				$dump.="<tr><td>";
@@ -400,19 +399,6 @@ function dump_sem($sem_id)
 					$Dokumente += $db2->f("doll");
 				}
 				$dump.= $Dokumente;
-				$dump.="</td><td align=center>";
-
-				$Literatur = 0;
-				//$db2->query ("SELECT count(literatur_id) AS doll FROM termine LEFT JOIN literatur ON termine.termin_id = literatur.range_id WHERE termine.range_id = '$sem_id' AND literatur.user_id = '$UID' GROUP by termine.range_id");
-				//while ($db2->next_record()) {
-				//	$Literatur += $db2->f("doll");
-				//}
-				//$db2->query ("SELECT count(literatur_id) AS doll FROM literatur WHERE literatur.range_id = '$sem_id' AND literatur.user_id = '$UID' GROUP by literatur.range_id");
-				//while ($db2->next_record()) {
-				//	$Literatur += $db2->f("doll");
-				//}
-				$dump.= $Literatur;
-				$username=$db->f("username");
 				$dump.="</td>";
 				$dump.="</tr>\n";
 	
