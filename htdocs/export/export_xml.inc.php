@@ -103,6 +103,7 @@ if (($o_mode == "file") OR ($o_mode == "choose"))
 //		$export_weiter_button = "<br><br><center><a href=\"" . $PHP_SELF . "?xml_file_id=" . $xml_file_id . "&ex_type=" . $ex_type . "&o_mode=choose\">" . makeButton("weiter") . "</a></center>";
 	
 		$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
+		$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"3\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"format\" value=\"" . $format . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"choose\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
