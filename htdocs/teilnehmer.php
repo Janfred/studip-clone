@@ -336,7 +336,7 @@ else
 ?>
 
 <tr>
-		<td class="topic" ><b>&nbsp;<? echo $SessSemName["header_line"] . ": " . htmlReady($SessSemName[0]) . " - " . _("TeilnehmerInnen"); ?></b>
+		<td class="topic" ><b>&nbsp;<? echo $SessSemName["header_line"] . " - " . _("TeilnehmerInnen"); ?></b>
 		</td>
 		<td align="right" class="topic"> <?
 		
