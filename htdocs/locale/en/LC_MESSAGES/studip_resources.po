@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-02-12 01:20+0100\n"
+"POT-Creation-Date: 2003-02-17 18:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,164 +15,981 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: resources/resourcesClass.inc.php:1507 resources/resourcesClass.inc.php:1515
+#: resources/resourcesClass.inc.php:124 resources/resourcesClass.inc.php:940
+#: resources/resourcesVisual.inc.php:469
+msgid "Nutzer"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:133 resources/resourcesClass.inc.php:949
+msgid "Einrichtung"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:142 resources/resourcesClass.inc.php:958
+msgid "Fakult&auml;t"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:151 resources/resourcesClass.inc.php:967
+msgid "Veranstaltung"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:926
+msgid "Jeder"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:928
+msgid "Jeder (alle Nutzer)"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:932
+msgid "Global"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:934
+msgid "Global (zentral verwaltet)"
+msgstr ""
+
+#: resources/resourcesClass.inc.php:1522 resources/resourcesClass.inc.php:1530
 msgid "zur&uuml;ck"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:248
+#: resources/resourcesFunc.inc.php:199 resources/resourcesFunc.inc.php:223
+#: resources/resourcesFunc.inc.php:257 resources/resourcesFunc.inc.php:270
+#: resources/resourcesFunc.inc.php:273 resources/resourcesFunc.inc.php:290
+#: resources/resourcesFunc.inc.php:313
+msgid "Personen"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:204 resources/resourcesFunc.inc.php:229
+#: resources/resourcesFunc.inc.php:251 resources/resourcesFunc.inc.php:264
+#: resources/resourcesFunc.inc.php:318
+msgid "Veranstaltungen"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:209 resources/resourcesFunc.inc.php:215
+#: resources/resourcesFunc.inc.php:256 resources/resourcesFunc.inc.php:269
+#: resources/resourcesFunc.inc.php:323
+msgid "Einrichtungen"
+msgstr ""
+
+#: resources/resourcesFunc.inc.php:352
+msgid "jeder"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:106 resources/resourcesVisual.inc.php:108
+#: resources/resourcesVisual.inc.php:811
+#: resources/resourcesVisual.inc.php:1237
+#: resources/resourcesVisual.inc.php:1343
+msgid "Besitzer:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:112 resources/resourcesVisual.inc.php:289
+msgid "&Auml;nderungen speichern"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:113 resources/resourcesVisual.inc.php:290
+msgid "Abbrechen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:263
 msgid "Objekt in diese Ebene verschieben"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:794 resources/views/page_intros.inc.php:4
-#: resources/views/page_intros.inc.php:86
+#: resources/resourcesVisual.inc.php:297
+#, c-format
+msgid ""
+"Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das "
+"Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschten Ebene zu verschieben."
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:297
+msgid ""
+"Klicken Sie dieses Symbol, um dieses Objekt in eine andere Ebene zu "
+"verschieben"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:418
+msgid "Name"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:421
+msgid "Berechtigungen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:424 resources/resourcesVisual.inc.php:510
+#: resources/resourcesVisual.inc.php:657
+msgid "X"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:430
+msgid "Suchen/hinzuf&uuml;gen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:437
+msgid ""
+"Diese Nutzer sind als Ressourcen-Root eingetragen, sie haben damit Zugriff "
+"auf alle globalen Ressourcen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:445
+msgid "Nutzer hinzuf&uuml;gen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:504
+msgid "Typ"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:507
+msgid "zugeordnete Eigenschaften"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:518
+msgid "neuer Typ:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:539
+#, c-format
+msgid "wird von <b>%s</b> Objekten verwendet"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:540 resources/resourcesVisual.inc.php:691
+msgid "systemobjekt"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:566
+msgid "Zustand Ja/Nein"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:569
+msgid "mehrzeiliges Textfeld"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:572 resources/resourcesVisual.inc.php:701
+msgid "einzeiliges Textfeld"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:575
+msgid "definiertes Auswahlfeld"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:583
+msgid "Eigenschaft löschen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:651
+msgid "Eigenschaft"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:654
+msgid "Art der Eigenschaft"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:670 resources/resourcesVisual.inc.php:700
+msgid "Zustand"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:671
+msgid "einzeiligesTextfeld"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:672
+msgid "mehrzeiligesTextfeld"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:673 resources/resourcesVisual.inc.php:703
+msgid "Auswahlfeld"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:697
+msgid "Art:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:702
+msgid "mehrzeilges Textfeld"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:708
+msgid "Bezeichnung:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:709
+msgid "vorhanden"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:712
+msgid "Optionen:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:748
+msgid "diese Eigenschaft"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:808
+#: resources/resourcesVisual.inc.php:1201
+msgid "Name:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:809
+#: resources/views/page_intros.inc.php:39
+#: resources/views/page_intros.inc.php:121
 msgid "Hierachieebene"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:947
+#: resources/resourcesVisual.inc.php:818
+#: resources/resourcesVisual.inc.php:1233
+msgid "Beschreibung:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:828
+msgid "Eigenschaften:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:962
 msgid "Sie erstellen eine neue Belegung"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:960
+#: resources/resourcesVisual.inc.php:975
 msgid ""
 "Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in "
 "diesem Raum staffindet."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:960
+#: resources/resourcesVisual.inc.php:975
 #, c-format
 msgid ""
 "Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %"
 "s bearbeiten!"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:962
+#: resources/resourcesVisual.inc.php:977
 msgid ""
 "Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum "
 "stattfindet."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:962
+#: resources/resourcesVisual.inc.php:977
 #, c-format
 msgid ""
 " Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %"
 "s bearbeiten!"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:964
+#: resources/resourcesVisual.inc.php:979
 msgid "Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:993
+#: resources/resourcesVisual.inc.php:987
+msgid "Datum/erster Termin:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1002
+msgid "Art der Wiederholung:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1008
 msgid "zweiw&ouml;chentlich"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:995
+#: resources/resourcesVisual.inc.php:1010
 msgid "w&ouml;chentlich"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:997
+#: resources/resourcesVisual.inc.php:1012
 msgid "keine Wiederholung (Einzeltermin)"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1333
+#: resources/resourcesVisual.inc.php:1029
+msgid "Beginn/Ende:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1037
+#: resources/resourcesVisual.inc.php:1039
+#: resources/lib/ScheduleWeek.class.php:243
+msgid "Uhr"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1047
+msgid "Wiederholung bis sp&auml;testens:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1058
+msgid "Ende der Vorlesungszeit"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1072
+msgid "eingetragen f&uuml;r die Belegung:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1079
+msgid "kein Stud.IP Nutzer eingetragen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1083
+msgid "einen anderen User (Nutzer oder Einrichtung) eintragen:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1085
+msgid "einen User (Nutzer oder Einrichtung) eintragen:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1088
+msgid "freie Eingabe zur Belegung:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1090
+msgid ""
+"<b>Beachten Sie:</b> Wenn sie einen Nutzer oder eine Einrichtung eintragen, "
+"kann dieser Nutzer oder berechtigte Personen die Belegung selbstst&auml;ndig "
+"aufheben. Sie k&ouml;nnen die die Belegung aber auch frei eingeben."
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1099
+msgid "Wiederholungsturnus:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1105
+msgid "jeden Tag"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1106
+msgid "jeden zweiten Tag"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1107
+msgid "jeden dritten Tag"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1108
+msgid "jeden vierten Tag"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1109
+msgid "jeden f&uuml;nften Tag"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1110
+msgid "jeden sechsten Tag"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1114
+msgid "jede Woche"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1115
+msgid "jede zweite Woche"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1116
+msgid "jede dritte Woche"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1120
+msgid "jeden Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1121
+msgid "jeden zweiten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1122
+msgid "jeden dritten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1123
+msgid "jeden vierten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1124
+msgid "jeden f&uuml;nften Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1125
+msgid "jeden sechsten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1126
+msgid "jeden siebten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1127
+msgid "jeden achten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1128
+msgid "jeden neunten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1129
+msgid "jeden zehnten Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1130
+msgid "jeden elften Monat"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1134
+msgid "jedes Jahr"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1135
+msgid "jedes zweite Jahr"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1136
+msgid "jedes dritte Jahr"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1137
+msgid "jedes vierte Jahr"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1138
+msgid "jedes f&uuml;nfte Jahr"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1151
+msgid "begrenzte Anzahl der Wiederholungen:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1153
+msgid "Mal wiederholen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1204
+msgid "Typ des Objekts:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1213
+msgid "nicht zugeordnet"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1257
+msgid "Eigenschaften"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1310
+msgid ""
+"Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu "
+"k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1353
 msgid "Sie k&ouml;nnen den Besitzer nicht &auml;ndern."
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1371
+#: resources/resourcesVisual.inc.php:1361
+msgid "Berechtigungen:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1362
+msgid "Berechtigung hinzuf&uuml;gen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1391
 msgid "Berechtigung löschen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1373
+#: resources/resourcesVisual.inc.php:1393
 msgid "Sie d&uuml;rfen diese Berechtigung leider nicht löschen"
 msgstr ""
 
-#: resources/resourcesVisual.inc.php:1388
+#: resources/resourcesVisual.inc.php:1408
 msgid "Es sind keine weiteren Berechtigungen eingetragen"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:4
+#: resources/resourcesVisual.inc.php:1490
+msgid "Zeitraum:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1506
+msgid "Tag(e)"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1507
+msgid "Woche(n)"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1508
+msgid "Monat(e)"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1509
+msgid "Jahre(e)"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1550
+#: resources/resourcesVisual.inc.php:1609
+msgid "Anzahl der Belegungen in diesem Zeitraum:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1554
+#, c-format
+msgid "Belegung ist von <b>%s</b> bis <b>%s</b>, belegt von <b>%s</b>"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1593
+msgid "Vorherige Woche anzeigen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1596
+msgid "Woche"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1600
+msgid "Nächste Woche anzeigen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1677
+#: resources/resourcesVisual.inc.php:1679
+msgid "durchsuchen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1720
+msgid ""
+"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1823
+msgid "Unterebenen vorhanden"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1832
+msgid "Auf dieser Ebene existieren keine weiteren Unterebenen"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1853
+msgid "eine Ebene zur&uuml;ck"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1861
+msgid "Eintr&auml;ge auf dieser Ebene:"
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1874
+msgid "Es existieren keine Eintr&auml;ge auf dieser Ebene."
+msgstr ""
+
+#: resources/resourcesVisual.inc.php:1888
+msgid "Es wurden keine Eintr&auml;ge zu ihren Suchkriterien gefunden."
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:200
+msgid "Zeit"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:203
+msgid "Montag"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:207
+msgid "Dienstag"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:211
+msgid "Mittwoch"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:215
+msgid "Donnerstag"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:219
+msgid "Freitag"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:223
+msgid "Samstag"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:227
+msgid "Sonntag"
+msgstr ""
+
+#: resources/lib/ScheduleWeek.class.php:301
+msgid "Erstellt am"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:44
+msgid "&Uuml;bersicht"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:46
+msgid "Liste"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:48
+msgid "Ressource"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:50
+msgid "Anpassen"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:53
+msgid "Struktur"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:54
+msgid "Suchen"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:55
+msgid "Neue&nbsp;Hierarchieebene&nbsp;erzeugen"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:59
+msgid "Listenausgabe"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:68
+msgid "Eigenschaften&nbsp;bearbeiten"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:69
+msgid "Rechte&nbsp;bearbeiten"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:71
+msgid "Details"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:74
+msgid "Belegungsplan"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:75
+msgid "Belegung&nbsp;bearbeiten"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:82
+msgid "Typen&nbsp;verwalten"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:83
+msgid "Eigenschaften&nbsp;verwalten"
+msgstr ""
+
+#: resources/views/links_resources.inc.php:86
+msgid "globale&nbsp;Rechte&nbsp;verwalten"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:39
 msgid "Fehlende Berechtigung"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:5
+#: resources/views/msgs_resources.inc.php:40
 msgid "Sie haben leider keine Berechtigung, das Objekt zu bearbeiten"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:8
+#: resources/views/msgs_resources.inc.php:43
 msgid "Nutzer hat keine Berechtigung"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:9
+#: resources/views/msgs_resources.inc.php:44
 msgid ""
 "Sie versuchen, einen Nutzer einzutragen, der nicht selbst in der Lage ist, "
 "die Belegung zu bearbeiten oder zu l&ouml;schen. Sie k&ouml;nnen diesen "
 "Nutzer leider nicht eintragen"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:12
+#: resources/views/msgs_resources.inc.php:47
 msgid "Belegung eingetragen"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:13
+#: resources/views/msgs_resources.inc.php:48
 msgid "Die Belegung wurde eingetragen"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:16
+#: resources/views/msgs_resources.inc.php:51
 msgid "Belegung ver&auml;ndert"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:17
+#: resources/views/msgs_resources.inc.php:52
 msgid "Die Belegung wurde ver&auml;ndert"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:20
+#: resources/views/msgs_resources.inc.php:55
 msgid "Belegung gel&ouml;scht"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:21
+#: resources/views/msgs_resources.inc.php:56
 msgid "Die Belegung wurde gel&ouml;scht"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:24
+#: resources/views/msgs_resources.inc.php:59
 msgid "Eigenschaften ver&auml;ndert"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:25
+#: resources/views/msgs_resources.inc.php:60
 msgid "Die Eigenschaften der Ressource wurden ver&auml;ndert"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:28
+#: resources/views/msgs_resources.inc.php:63
 msgid "Ressource gel&ouml;scht"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:29
+#: resources/views/msgs_resources.inc.php:64
 msgid "Die Ressource wurde gel&ouml;scht"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:32
+#: resources/views/msgs_resources.inc.php:67
 msgid "Berechtigungen ver&auml;ndert"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:33
+#: resources/views/msgs_resources.inc.php:68
 msgid "Die Berechtigungseinstellungen der Ressource wurden ver&auml;ndert"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:36
+#: resources/views/msgs_resources.inc.php:71
 msgid "Ressource verschoben"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:37
+#: resources/views/msgs_resources.inc.php:72
 msgid "Die Ressource wurde verschoben"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:40
+#: resources/views/msgs_resources.inc.php:75
 msgid ""
 "Bitte geben Sie einen Nutzer f&uuml;r die Belegung an, um diese Belegung zu "
 "speichern!"
 msgstr ""
 
-#: resources/views/msgs_resources.inc.php:43
+#: resources/views/msgs_resources.inc.php:78
 msgid ""
 "Die Belegung konnte nicht gespeichert werden, da sie sich mit einer anderen "
 "Belegung &uuml;berschneidet!"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:81
+msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:81
+msgid ""
+"Um Ressourcen anzulegen, erzeugen sie zun&auml;chst eine neue Ebene, indem "
+"sie &raquo;Neue Hierarchie erzeugen&laquo; anw&auml;hlen."
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:81
+msgid "Anschliessend k&ouml;nnen auf dieser Ebene Ressourcen anlegen"
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:84
+msgid ""
+"Es existieren keine Ressourcen, die Sie in im Rahmen dieser Veranstaltung "
+"belegen d&uuml;rfen."
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:87
+msgid ""
+"Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:87
+msgid ""
+"Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter &raquo;&Uuml;"
+"bersicht&laquo; einen Ebene bzw. Ressource in der Hierachie aus."
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:90
+msgid "Sie haben keine Objekt zum Bearbeiten ausgew&auml;hlt."
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:90
+#: resources/views/msgs_resources.inc.php:93
+msgid "Bitte w&auml;hlen Sie zun&auml;chst ein Objekt aus."
+msgstr ""
+
+#: resources/views/msgs_resources.inc.php:93
+msgid "Sie haben keine Objekt zum Anzeigen ausgew&auml;hlt."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:49
+msgid ""
+"Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die "
+"Sie Zugriff haben, navigieren und Ressourcen verwalten."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:50
+#: resources/views/page_intros.inc.php:151
+msgid "&Uuml;bersicht der Ressourcen"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:53
+msgid ""
+"Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, "
+"&uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen suchen oder "
+"sich durch die Ebenen navigieren."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:54
+msgid "Suche nach Ressourcen"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:63
+#, c-format
+msgid "Sie sehen alle Eintr&auml;ge in der Ebene <b>%s</b>"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:64
+msgid "Bearbeiten und Ausgeben von Listen"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:66
+msgid "Ebene"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:68
+msgid "Information:"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:71
+msgid "Untergeordnete Ebenen werden ausgegeben."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:71
+msgid "Untergeordnete Ebenen werden <u>nicht</u> ausgegeben."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:75
+#, c-format
+msgid "Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:75
+#, c-format
+msgid "Ressourcen in untergeordneten Ebenen %smit ausgeben%s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:82
+msgid "Hier k&ouml;nnen Sie Ressourcen-Belegungen bearbeiten und neue anlegen."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:83
+msgid "Belegungen bearbeiten"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:86
+msgid "Hier k&ouml;nnen Sie Ressourcen-Eigenschaften bearbeiten."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:87
+#: resources/views/page_intros.inc.php:91
+msgid "Eigenschaften bearbeiten"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:90
+msgid ""
+"Hier k&ouml;nnen Sie Berechtigungen f&uuml;r den Zugriff auf die Ressource "
+"vergeben oder den Besitzer &auml;ndern."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:90
+msgid ""
+"<b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls f&uuml;r "
+"die Ressourcen, die der gew&auml;hlten Ressource untergeordnetet sind!"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:94
+msgid ""
+"Hier k&ouml;nnen Sie sich die Belegunszeiten der Ressource anzeigen lassen "
+"und auf unterschiedliche Art und Weise darstellen lassen."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:95
+msgid "Belegungszeiten ausgeben"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:101
+msgid ""
+"Verwalten Sie auf dieser Seite die Ressourcen-Typen, wie etwa R&auml;ume, "
+"Ger&auml;te oder Geb&auml;ude. Sie k&ouml;nnen jedem Typ beliebig viele "
+"Eigenschaften zuordnen."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:102
+msgid "Typen bearbeiten"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:105
+msgid ""
+"Verwalten Sie auf dieser Seite die eizelnen Eigenschaften. Diese "
+"Eigenschaften k&ouml;nnen Sie beliebigen Ressourcen-Typen zuweisen."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:106
+msgid "Eigenschaften verwalten bearbeiten"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:109
+msgid ""
+"Verwalten Sie hier alle Administratoren, die administrative Rechte oder "
+"Belegungsrechte &uuml;ber &uuml;ber alle Ressourcen besitzen."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:110
+msgid "Ressourcen-Administratoren bearbeiten"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:115
+#, c-format
+msgid "Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."
+msgstr ""
+
+#: resources/views/page_intros.inc.php:116
+msgid "Ressourcen&uuml;bersicht"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:121
+#, c-format
+msgid "Hier sehen Sie detaillierte Informationen der Ressource %s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:123
+msgid "Ressourcendetails"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:125
+msgid "Anzeige der Ressourceneigenschaften"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:127
+msgid "Aktionen:"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:130
+msgid "zur&uuml;ck zur Suche"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:130
+msgid "zur&uuml;ck zur &Uuml;bersicht"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:135
+#, c-format
+msgid "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:136
+msgid "Ressourcenbelegung"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:140
+#, c-format
+msgid "Bearbeiten von Belegungen der Ressource %s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:145
+#, c-format
+msgid "Vergeben von Rechten auf die Ressource %s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:146
+#, c-format
+msgid "Vergeben von Berechtigungen - Objekt%s"
+msgstr ""
+
+#: resources/views/page_intros.inc.php:150
+msgid ""
+"Sie befinden sich in der Ressurcenverwaltung von Stud.IP. Sie k&ouml;nnen "
+"hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."
 msgstr ""
