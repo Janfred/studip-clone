@@ -37,7 +37,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 <SCRIPT LANGUAGE="JavaScript" SRC="overlib.js"></SCRIPT>
 
 <?
-include "$ABSOLUTE_PATH_STUDIP/links1.php";
+include "$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php";
 
 require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";

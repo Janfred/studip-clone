@@ -36,7 +36,7 @@ if ($SessSemName[1] =="") {
 				"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;");
 	die;
 } else {
-	include ("$ABSOLUTE_PATH_STUDIP/links1.php");
+	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 	require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 	

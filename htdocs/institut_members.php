@@ -89,7 +89,7 @@ if($SessSemName[1] == ""){
 	die;
 }
 
-require($ABSOLUTE_PATH_STUDIP."links1.php");
+require($ABSOLUTE_PATH_STUDIP."links_openobject.inc.php");
 
 // group by function as preset
 switch ($institut_members_data["show"]) {

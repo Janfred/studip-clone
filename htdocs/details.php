@@ -55,7 +55,7 @@ if (($SessSemName[1] =="") && (!isset($sem_id))) {
 	
 //wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
 if (($SessSemName[1] <>"") && (!isset($sem_id))) {
-	include "links1.php";
+	include "links_openobject.inc.php";
 
 	$sem_id=$SessSemName[1];
 	

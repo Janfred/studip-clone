@@ -3,31 +3,15 @@
 if (isset($SessSemName) && $SessSemName[0] != "") {
 require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."reiter.inc.php");
+require_once ($ABSOLUTE_PATH_STUDIP."functions.inc.php");
 
 $db=new DB_Seminar;
 $reiter=new reiter;
 		
-//Welche Art liegt hier vor?
-$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id = '$SessSemName[1]' ");
-if ($db->next_record())
-	$entry_level="sem";
-
-if (!$entry_level) {
-	$db->query("SELECT Institut_id FROM Institute WHERE Institut_id = '$SessSemName[1]' ");
-	if ($db->next_record())
-		$entry_level="inst";
-}
-
-if (!$entry_level) {
-	$db->query("SELECT Fakultaets_id FROM Fakultaeten WHERE Fakultaets_id = '$SessSemName[1]' ");
-	if ($db->next_record())
-		$entry_level="fak";
-}
-
 //Reitersytem erzeugen
 
 //Topkats
-if ($entry_level=="inst") {
+if ($SessSemName["class"]=="inst") {
 	$structure["institut_main"]=array (topKat=>"", name=>"&Uuml;bersicht", link=>"institut_main.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>"Forum", link=>"forum.php", active=>FALSE);
 	$structure["personal"]=array (topKat=>"", name=>"Personal", link=>"institut_members.php", active=>FALSE);
@@ -43,7 +27,7 @@ if ($entry_level=="inst") {
 }
 
 //Bottomkats
-if ($entry_level=="inst") {
+if ($SessSemName["class"]=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>"Info", link=>"institut_main.php", active=>FALSE);
 	$structure["institut_members"]=array (topKat=>"personal", name=>"MitarbeiterInnen", link=>"institut_members.php", active=>FALSE);
 	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>"Veranstaltungen", link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
@@ -73,7 +57,7 @@ $structure["forum_export"]=array (topKat=>"forum", name=>"Druckansicht", link=>"
 if ($rechte)
 	$structure["neues_thema"]=array (topKat=>"forum", name=>"neues Thema", link=>"forum.php?neuesthema=TRUE#anker", active=>FALSE);
 //
-if ($entry_level=="sem") {
+if ($SessSemName["class"]=="sem") {
 	$structure["_dates"]=array (topKat=>"dates", name=>"alle Termine", link=>"dates.php", active=>FALSE);
 	$structure["sitzung"]=array (topKat=>"dates", name=>"Sitzungstermine", link=>"dates.php?show_not=sem", active=>FALSE);
 	$structure["andere_t"]=array (topKat=>"dates", name=>"andere Termine", link=>"dates.php?show_not=other", active=>FALSE);
@@ -84,20 +68,20 @@ if ($entry_level=="sem") {
 $structure["_folder"]=array (topKat=>"folder", name=>"Ordneransicht", link=>"folder.php?cmd=tree", active=>FALSE);
 $structure["alle_dateien"]=array (topKat=>"folder", name=>"Alle Dateien", link=>"folder.php?cmd=all", active=>FALSE);
 //
-if ($entry_level=="sem")
+if ($SessSemName["class"]=="sem")
 	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=literatur_sem", active=>FALSE);
 else
 	$structure["_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links", link=>"literatur.php?view=literatur_inst", active=>FALSE);
 	
 
-if ($entry_level=="sem")
+if ($SessSemName["class"]=="sem")
 	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>"Funktionen / Gruppen", link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
 //else
 //	$structure["statusgruppen"]=array (topKat=>"personal", name=>"Statusgruppen", link=>"statusgruppen.php?view=statusgruppe_inst", active=>FALSE);
 
 
 if ($rechte)
-	if ($entry_level=="sem")
+	if (3$SessSemName["class"]=="sem")
 		$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>"Funktionen / Gruppen verwalten", link=>"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 	else
 		if ($perm->have_perm("admin"))
@@ -105,13 +89,13 @@ if ($rechte)
 
 
 if ($rechte)
-	if ($entry_level=="sem")
+	if ($SessSemName["class"]=="sem")
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=literatur_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 	else
 		$structure["admin_literatur"]=array (topKat=>"literatur", name=>"Literatur und Links bearbeiten", link=>"admin_literatur.php?view=literatur_inst&new_inst=TRUE&range_id=".$SessSemName[1], active=>FALSE);
 
 //Infofenstereintraege erzeugen
-if ($entry_level=="inst") {
+if ($SessSemName["class"]=="inst") {
 	$tooltip="Sie befinden sich in der Einrichtung: ".$SessSemName[0].", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Einrichtung: ".$SemUserStatus;
 } else {
 	$tooltip="Sie befinden sich in der Veranstaltung: ".$SessSemName[0].", letzter Besuch: ".date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]).", Ihr Status in dieser Veranstaltung: ".$SemUserStatus;
@@ -213,7 +197,7 @@ switch ($i_page) {
 		$reiter_view="literatur";
 	break;
 	default :
-		if ($entry_level=="inst")
+		if ($SessSemName["class"]=="inst")
 			$reiter_view="institut_main";
 		else
 			$reiter_view="seminar_main";

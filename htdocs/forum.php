@@ -64,7 +64,7 @@ function pruefe_name(){
 		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
 	}
 
-	include "links1.php";
+	include "links_openobject.inc.php";
 	require_once "functions.php";
 	require_once "visual.inc.php";
 	require_once "forum.inc.php";

@@ -32,7 +32,7 @@ echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
-	include ("$ABSOLUTE_PATH_STUDIP/links1.php");
+	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 }
 		
 	$sess->register ("show_bereich_data");

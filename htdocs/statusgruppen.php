@@ -31,7 +31,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 // Start of Output
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	include ("$ABSOLUTE_PATH_STUDIP/links1.php");
+	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
 	$cssSw=new cssClassSwitcher;
 

@@ -60,7 +60,7 @@ IF ($SessSemName[1] =="")
 	}
 ELSE
 	{
-	include "links1.php";
+	include "links_openobject.inc.php";
 	}
 
 $db=new DB_Seminar;

@@ -33,7 +33,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for
 // Start  of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head	
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
-include ("$ABSOLUTE_PATH_STUDIP/links1.php");
+include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
