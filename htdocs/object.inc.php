@@ -141,7 +141,7 @@ function object_kill_visits($user_id, $object_ids = false){
 			if (!is_array($object_ids)){
 				$object_ids = array($object_ids);
 			}
-			$sql = "AND object_id IN('" . join("','", $object_ids) . "')";
+			$sql .= "AND object_id IN('" . join("','", $object_ids) . "')";
 		}
 		$db = new DB_Seminar("DELETE FROM object_user_visits WHERE " . $sql);
 		return $db->affected_rows();
