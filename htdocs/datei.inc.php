@@ -77,7 +77,7 @@ function createTempFolder ($folder_id,$tmp_full_path) {
 	$db->query("SELECT folder_id, name FROM folder WHERE range_id = '$folder_id' ORDER BY name");
 	while ($db->next_record()) {
 		$folders++;
-		$tmp_sub_full_path = $tmp_full_path."/[".$folders."] ".$db->f("name");
+		$tmp_sub_full_path = $tmp_full_path."/[".$folders."] ".prepareFilename($db->f("name"));
 		exec ("mkdir '$tmp_sub_full_path' ");
 		createTempFolder($db->f("folder_id"),$tmp_sub_full_path);
 	}
