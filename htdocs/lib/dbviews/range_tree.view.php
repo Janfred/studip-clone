@@ -23,11 +23,9 @@
 // $Id$
 require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
-$semester = new SemesterData;
-$all_semester = $semester->getAllSemesterData();
 
-foreach ($all_semester as $key => $value){
-	$sem_start_times[] = $value['beginn'];
+foreach (SemesterData::GetSemesterArray() as $key => $value){
+	if ($value['beginn']) $sem_start_times[] = $value['beginn'];
 }
 $_views['sem_number_sql'] = "INTERVAL(start_time," . join(",",$sem_start_times) .")";
 $_views['sem_number_end_sql'] = "IF(duration_time=-1,-1,INTERVAL(start_time+duration_time," . join(",",$sem_start_times) ."))";
@@ -40,7 +38,7 @@ $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 $_views["TREE_GET_DATA_WITH_SEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT a.*, b.Name AS studip_object_name, b.fakultaets_id,count(§) AS entries FROM range_tree a 
 									LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) LEFT JOIN seminar_inst c USING(Institut_id)
-									 LEFT JOIN seminare d ON(c.seminar_id=d.Seminar_id AND d.visible=1 §) GROUP BY a.item_id ORDER BY priority");
+									 LEFT JOIN seminare d ON(c.seminar_id=d.Seminar_id  §) GROUP BY a.item_id ORDER BY priority");
 
 $_views["TREE_OBJECT_NAME"] = array("pk"=>"","temp_table_type"=>"HEAP",
 							"query"=>"SELECT Name FROM § WHERE § LIKE ? ");
