@@ -45,6 +45,7 @@ if ($entry_level=="inst") {
 	$structure["_institut_main"]=array (topKat=>"institut_main", name=>"Info", link=>"institut_main.php", active=>FALSE);
 	$structure["institut_mitarbeiter"]=array (topKat=>"institut_main", name=>"MitarbeiterInnen", link=>"institut_mitarbeiter.php", active=>FALSE);
 	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>"Veranstaltungen", link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
+	$structure["timetable"]=array (topKat=>"institut_main", name=>"Veranstaltungs-Timetable", link=>"mein_stundenplan.php?inst_id=$SessSemName[1]", active=>FALSE);
 	$structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
 	if ($rechte)
 		$structure["administration_e"]=array (topKat=>"institut_main", name=>"Administration der Einrichtung", link=>"admin_institut.php?new_inst=TRUE&view=inst", active=>FALSE);
@@ -176,6 +177,9 @@ switch ($i_page) {
 	break;
 	case "suchen.php": 
 		$reiter_view="suchen"; 
+	break;	
+	case "mein_stundenplan.php": 
+		$reiter_view="timetable"; 
 	break;	
 	case "literatur.php": 
 		$reiter_view="literatur";
