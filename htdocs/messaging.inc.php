@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatShmServer.class.php"; //wird für Nachrichten im chat benötigt
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 
 class messaging {
 	var $db;							//Datenbankanbindung
@@ -180,6 +181,11 @@ function add_buddy ($username, $group) {
 
 	if (!$my_buddies[$username]) {
 		$my_buddies[$username]=array("username"=>$username, "group"=>$group);
+
+		////
+		// Buddies auch ins Addressbuch (wenn Buddies umgestellt sind bleibt nur das stehen)		
+		////
+		AddNewContact (get_userid($username));
 		return TRUE;
 		}
 	else
