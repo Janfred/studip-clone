@@ -135,7 +135,7 @@ class Seminar_Session extends Session {
 	//var $fallback_mode  = "get";
 	var $lifetime       = 0;		 // 0 = do session cookies, else minutes
 	var $that_class     = "Seminar_CT_Sql"; // name of data storage container
-	var $gc_probability = 5;
+	var $gc_probability = 2;
 	var $allowcache = "no";
 	
 	
@@ -216,9 +216,10 @@ class Seminar_Session extends Session {
 			}
 			
 			unset($result);
+			
+			//weiter mit gc() in der Super Klasse
+			Session::gc();
 		}
-		//weiter mit gc() in der Super Klasse
-		Session::gc();
 	}
 }
 
