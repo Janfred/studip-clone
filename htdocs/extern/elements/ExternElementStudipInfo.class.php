@@ -113,6 +113,14 @@ class ExternElementStudipInfo extends ExternElement {
 		return  $element_headline . $out;
 	}
 	
+	function toString ($args) {
+		if ($attributes_font = $this->config->getAttributes($this->name, "font"))
+			return "\n" . $this->config->getTag($this->name, "font") . $args["content"]
+				. "</font>";
+				
+		return $args["content"];
+	}
+	
 }
 
 ?>

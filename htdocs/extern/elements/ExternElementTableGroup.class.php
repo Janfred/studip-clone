@@ -56,7 +56,30 @@ class ExternElementTableGroup extends ExternElement {
 		$this->real_name = _("Gruppen&uuml;berschriften");
 		$this->description = _("Gruppen&uuml;berschriften sind Tabellenzeilen, die eine neue Gruppe einleiten.");
 	}
-
+	
+	function toString ($args) {
+		if (!$args["main_module"])
+			$args["main_module"] = "Main";
+		if (isset($args["colspan"]))
+			$visible["1"] = $args["colspan"];
+		else
+			$visible = array_count_values($this->config->getValue($args["main_module"], "visible"));
+		
+		if ($tag = $this->config->getTag($this->name, "font", FALSE, TRUE))
+			$content = $tag . $args["content"] . "</font>";
+		else
+			$content = $args["content"];
+		$out = "<tr" . $this->config->getAttributes($this->name, "tr") . ">";
+		if ($visible["1"] > 1)
+			$out .= "<td colspan=\"{$visible['1']}\" ";
+		else
+			$out .= "<td";
+		$out .= $this->config->getAttributes($this->name, "td") . ">";
+		$out .= "$content</td></tr>\n";
+		
+		return $out;
+	}
+	
 }
 
 ?>

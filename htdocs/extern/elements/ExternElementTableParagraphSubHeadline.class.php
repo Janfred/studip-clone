@@ -90,6 +90,24 @@ class ExternElementTableParagraphSubHeadline extends ExternElement {
 		return  $element_headline . $out;
 	}
 	
+	function toString ($args) {
+		$out = $args["content"];
+		if ($attributes_font = $this->config->getAttributes($this->name, "font"))
+			$out = "<font$attributes_font>$out</font>";
+		if ($margin = $this->config->getValue($this->name, "margin")) {
+			$div = "<div style=\"margin-left:$margin;\">";
+			$div_end = "</div>";
+		}
+		else {
+			$div = "";
+			$div_end = "";
+		}
+		$out = $this->config->getTag($this->name, "td") . $div . $out . $div_end . "</td>\n";
+		$out = "\n" . $this->config->getTag($this->name, "tr") . "\n$out\n</tr>";
+		
+		return $out;
+	}
+	
 }
 
 ?>

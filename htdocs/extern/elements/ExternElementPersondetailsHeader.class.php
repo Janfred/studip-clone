@@ -127,6 +127,95 @@ class ExternElementPersondetailsHeader extends ExternElement {
 		return $element_headline . $out;
 	}
 	
+	function toString ($args) {
+		if (!$args["main_module"])
+			$args["main_module"] = "Main";
+		
+		$pic_max_width = $this->config->getValue($this->name, "img_width");
+		$pic_max_height = $this->config->getValue($this->name, "img_height");
+	
+		// fit size of image
+		if ($pic_max_width && $pic_max_height) {
+			$pic_size = @getimagesize($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "user/"
+					. $db->f("user_id") . ".jpg");
+		
+			if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
+				$fak_width = $pic_size[0] / $pic_max_width;
+				$fak_height = $pic_size[1] / $pic_max_height;
+				if ($fak_width > $fak_height) {
+					$pic_width = (int) ($pic_size[0] / $fak_width);
+					$pic_height = (int) ($pic_size[1] / $fak_width);
+				}
+				else {
+					$pic_height = (int) ($pic_size[1] / $fak_height);
+					$pic_width = (int) ($pic_size[0] / $fak_height);
+				}
+			}
+			else {
+				$pic_width = $pic_size[0];
+				$pic_height = $pic_size[1];
+			}
+			$pic_max_width = $pic_width;
+			$pic_max_height = $pic_height;
+		}
+	/*	else {
+			$pic_max_width = "";
+			$pic_max_height = "";
+		}*/
+	
+		$this->config->config[$this->name]["img_width"] = $pic_max_width;
+		$this->config->config[$this->name]["img_height"] = $pic_max_height;
+		
+		if ($this->config->getValue($args["main_module"], "showcontact")
+			&& $this->config->getValue($args["main_module"], "showimage"))
+			$colspan = " colspan=\"2\"";
+		else
+			$colspan = "";
+		
+		$out = "\n<tr><td width=\"100%\">\n";
+		$out .= $this->config->getTag($this->name, "table") . "\n";
+		$out .= $this->config->getTag($this->name, "tr");
+		$out .= "<td$colspan width=\"100%\"";
+		$out .= $this->config->getAttributes($this->name, "headlinetd") . ">";
+		$out .= $this->config->getTag($this->name, "font");
+		$out .= $args["content"]["name"];
+		$out .= "</font></td></tr>\n";
+		
+		if ($this->config->getValue($args["main_module"], "showimage")
+				|| $this->config->getValue($args["main_module"], "showcontact")) {
+			$out .= "<tr>";
+			if ($this->config->getValue($args["main_module"], "showcontact")
+					&& ($this->config->getValue($args["main_module"], "showimage") == "right"
+					|| !$this->config->getValue($args["main_module"], "showimage"))) {
+					$out .= $this->config->getTag($this->name, "contacttd");
+					$args["content"]["contact"] . "</td>\n";
+			}
+			
+			if ($this->config->getValue($args["main_module"], "showimage")) {
+				$out .= $this->config->getTag($this->name, "picturetd");
+				if (file_exists($args["content"]["picture_url"])) {
+					$out .= "<img src=\"{$args['content']['picture_url']}\" ";
+					$out .= "alt=\"Picture " . htmlReady(trim($db->f("fullname"))) . "\"";
+					$out .= $this->config->getAttributes($this->name, "img") . "></td>";
+				}
+				else
+					$out .= "&nbsp;</td>";
+			}
+			
+			if ($this->config->getValue($args["main_module"], "showcontact")
+					&& $this->config->getValue($args["main_module"], "showimage") == "left") {
+				$out .= $this->config->getTag("PersondetailsHeader", "contacttd");
+				$out .= $args["content"]["contact"] . "</td>\n";
+			}
+			
+			$out .= "</tr>\n";
+		}
+		
+		$out .= "</table>\n</td></tr>\n";
+		
+		return $out;
+	}
+	
 }
 
 ?>

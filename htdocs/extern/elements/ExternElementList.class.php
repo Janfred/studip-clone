@@ -91,6 +91,25 @@ class ExternElementList extends ExternElement {
 		if ($attribute == "margin")
 			return !preg_match("|^\d{0,3}$|", $value);
 	}
+	
+	function toString ($args) {
+		if ($args["level"] == "list") {
+			if ($this->config->getValue($this->name, "margin")) {
+				$out = "\n<div style=\"margin-left:" . $this->config->getValue($this->name, "margin");
+				$out .= "\">" . $this->config->getTag($this->name, "ul") . $args["content"];
+				$out .= "</ul></div>";
+			}
+			else
+				$out = "\n" . $this->config->getTag($this->name, "ul") . $args["content"] . "</ul>";
+		}
+		else if ($args["level"] == "item")
+			$out = "\n" . $this->config->getTag($this->name, "li") . $args["content"] . "</li>";
+		else
+			$out = "";
+		
+		return $out;
+	}
+	
 }
 
 ?>

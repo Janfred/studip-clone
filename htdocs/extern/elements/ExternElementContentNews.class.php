@@ -91,6 +91,28 @@ class ExternElementContentNews extends ExternElement {
 		return $out;
 	}
 	
+	function toString ($args) {
+		$font_topic = $this->config->getAttributes($this->name, "fonttopic");
+		$font_body = $this->config->getAttributes($this->name, "fontbody");
+		
+		if ($font_topic)
+			$out = "<font$font_topic>{$args['content']['topic']}</font>";
+		else
+			$out = $args['content']['topic'];
+		$out = "<div" . $this->config->getAttributes($this->name, "divtopic") . ">$out</div>\n";
+		
+		if ($args["content"]["body"]) {
+			$out .= "<div" . $this->config->getAttributes($this->name, "divbody");
+			if ($font_body)
+				$out .= "><font$font_body>{$args['content']['body']}</font>";
+			else
+				$out .= ">{$args['content']['body']}";
+			$out .= "</div>\n";
+		}
+		
+		return $out;
+	}
+	
 }
 
 ?>

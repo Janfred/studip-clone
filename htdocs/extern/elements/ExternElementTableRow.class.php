@@ -57,7 +57,51 @@ class ExternElementTableRow extends ExternElement {
 		$this->real_name = _("Datenzeile");
 		$this->description = _("Angaben zur Formatierung einer Datenzeile.");
 	}
+	
+	function toString ($args) {
+		static $i;
+		static $j;
+		
+		if ($args["color"] === 0 || $args["color"] === 1)
+			$i = $args["color"];
+		if (!$args["main_module"])
+			$args["main_module"] = "Main";
+		$order = $this->config->getValue($args["main_module"], "order");
+		$visible = $this->config->getValue($args["main_module"], "visible");
+		$attributes[0] = $this->config->getAttributes($this->name, "td", FALSE);
+		$attributes[1] = $this->config->getAttributes($this->name, "td", TRUE);
+		$font = $this->config->getTag($this->name, "font", FALSE, TRUE);
+		$zebra = $this->config->getValue($this->name, "td_zebratd_");
+		
+		// "horizontal zebra"
+		if ($zebra == "HORIZONTAL")
+			$set_td = $attributes[$i++ % 2];
+		else
+			$set_td = $attributes[0];
 
+		$out = "<tr" . $this->config->getAttributes($this->name, "tr") . ">";
+		
+		foreach ($order as $column) {
+			if ($visible[$column]) {
+				// "vertical zebra"
+				if ($zebra == "VERTICAL")
+					$set_td = $attributes[$j++ % 2];
+				
+				if (!$args["content"][$args["data_fields"][$column]])
+					$args["content"][$args["data_fields"][$column]] = "&nbsp;";
+				$out .= "<td$set_td>";
+				if ($font)
+					$out .= $font . $args["content"][$args["data_fields"][$column]] . "</font>";
+				else
+					$out .= $args["content"][$args["data_fields"][$column]];
+				$out .= "</td>\n";
+			}
+		}
+		$out .= "</tr>\n";
+		
+		return $out;
+	}
+	
 }
 
 ?>

@@ -137,6 +137,62 @@ class ExternElementLecturesInnerTable extends ExternElement {
 		return $out;
 	}
 	
+	function toString ($args) {
+		static $zebra = 0;
+		
+		$show_time = $this->config->getValue("Main", "time");
+		$show_lecturer = $this->config->getValue("Main", "lecturer");
+		if ($show_time && $show_lecturer) {
+		  if (!$td2width = $this->config->getValue($this->name, "td2width"))
+		    $td2width = 50;
+		  $colspan = " colspan=\"2\"";
+		  $td_time = $this->config->getAttributes($this->name, "td2");
+		  $td_time .= " width=\"$td2width%\"";
+		  $td_lecturer = " align=\"" . $this->config->getValue($this->name, "td3_align");
+		  $td_lecturer .= "\" valign=\"" . $this->config->getValue($this->name, "td2_valign");
+		  $td_lecturer .= "\" width=\"" . (100 - $td2width) . "%\"";
+		}
+		else {
+		  $colspan = "";
+		  $td_time = $this->config->getAttributes($this->name, "td2") . " width=\"100%\"";
+		  $td_lecturer = " align=\"" . $this->config->getValue($this->name, "td3_align");
+		  $td_lecturer .= "\" valign=\"" . $this->config->getValue($this->name, "td2_valign");
+		  $td_lecturer .= " width=\"100%\"";
+		}
+		
+		$out = "<tr" . $this->config->getAttributes($this->name, "tr").">";
+		if ($zebra % 2 && $this->config->getValue($this->name, "td_bgcolor2_"))
+			$out .= "<td width=\"100%\"".$this->config->getAttributes($this->name, "td", TRUE)."\">\n";
+		else
+			$out .= "<td width=\"100%\"".$this->config->getAttributes($this->name, "td", FALSE)."\">\n";
+		$zebra++;
+		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+		$out .= "<tr" . $this->config->getAttributes($this->name, "tr1") . ">";
+		$out .= "<td$colspan" . $this->config->getAttributes($this->name, "td1") . ">";
+		$out .= "<font" . $this->config->getAttributes($this->name, "font1") . ">";
+		
+		$out .= "{$args['content']['sem_name']}</font></td></tr>\n";
+		
+		if ($show_time || $show_lecturer) {
+			$out .= "\n<tr" . $this->config->getAttributes($this->name, "tr2") . ">";
+			if ($show_time) {
+				$out .= "<td$td_time>";
+				$out .= "<font" . $this->config->getAttributes($this->name, "font2") . ">";
+				$out .= "{$args['content']['turnus']}</font></td>\n";
+			}
+			if ($show_lecturer) {
+				$out .= "<td$td_lecturer>";
+				$out .= "<font" . $this->config->getAttributes($this->name, "font2") . ">";
+				
+				$out .= "{$args['content']['lecturers']}</font></td>";
+			}
+			$out .= "</tr>";
+		}
+		$out .= "</table></td></tr>\n";
+		
+		return $out;
+	}
+	
 }
 
 ?>

@@ -56,7 +56,14 @@ class ExternElementTableHeader extends ExternElement {
 		$this->real_name = _("Tabellenkopf");
 		$this->description = _("Angaben zur Gestaltung der Tabelle.");
 	}
-
+	
+	function toString ($args) {
+		$out = "\n" . $this->config->getTag($this->name, "table") . "\n";
+		$out .= $args["content"] . "</table>\n";
+		
+		return $out;
+	}
+	
 }
 
 ?>

@@ -118,6 +118,47 @@ class ExternElementLinkIntern extends ExternElement {
 		if ($attribute = "srilink")
 			return preg_match("|^https?://.*$|i", $value);
 	}
+	
+	function toString ($args) {
+		if (!$args["main_module"])
+			$args["main_module"] = "Main";
+		$sri_link = $this->config->getValue($this->name, "srilink");
+		if ($this->config->config[$args["main_module"]]["incdata"])
+			$link = $sri_link;
+		else {
+			if ($sri_link) {
+				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php";
+				if ($args["link_args"])
+					$link .= "?" . $args["link_args"] . "&";
+				else
+					$link .= "?";
+				$link .= "page_url=" . $sri_link;
+			}
+			else {
+				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module={$args['module']}";
+				if ($config)
+					$link .= "&config_id=" . $this->config->getId();
+				$link .= "&range_id={$this->config->range_id}";
+				if ($args["link_args"])
+					$link .= "&" . $args["link_args"];
+			}
+		}
+		
+		// to set the color of the font in the style-attribute of the a-tag
+		if ($color = $this->config->getValue($this->name, "font_color_")) {
+			$this->config->setValue($this->name, "a_style", "color:$color;"
+					. $this->config->getValue($this->name, "a_style_"));
+		}
+		
+		if ($tag = $this->config->getTag($this->name, "font", FALSE, TRUE))
+			$out = $tag . $args["content"] . "</font>";
+		else
+			$out = $args["content"];
+		$out = "<a href=\"$link\"" . $this->config->getAttributes($this->name, "a") . ">" . $out . "</a>";
+		
+		return $out;
+	}
+	
 }
 
 ?>

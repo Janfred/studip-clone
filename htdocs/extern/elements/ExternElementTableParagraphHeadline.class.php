@@ -56,7 +56,19 @@ class ExternElementTableParagraphHeadline extends ExternElement {
 		$this->real_name = _("Absatz&uuml;berschrift");
 		$this->description = _("Angaben zur Formatierung einer Absatz&uuml;berschrift.");
 	}
-
+	
+	function toString ($args) {
+		$out = "\n" . $this->config->getTag($this->name, "tr") . "\n";
+		$out .= $this->config->getTag($this->name, "td");
+		if ($attributes_font = $this->config->getAttributes($this->name, "font"))
+			$out .= "<font$attributes_font>{$args['content']}</font>";
+		else
+			$out .= $args["content"];
+		$out .= "</td>\n</tr>";
+		
+		return $out;
+	}
+	
 }
 
 ?>

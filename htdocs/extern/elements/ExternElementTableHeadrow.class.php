@@ -56,7 +56,47 @@ class ExternElementTableHeadrow extends ExternElement {
 		$this->real_name = _("Kopfzeile");
 		$this->description = _("Angaben, die die Kopfzeile einer Tabelle betreffen.");
 	}
-
+	
+	function toString ($args = NULL) {
+		if (!$args["main_module"])
+			$args["main_module"] = "Main";
+		$out = "<tr" . $this->config->getAttributes($this->name, "tr") . ">\n";
+		$i = 0;
+		$zebra = $this->config->getValue($this->name, "th_zebrath_");
+		$visible = $this->config->getValue($args["main_module"], "visible");
+		$order = $this->config->getValue($args["main_module"], "order");
+		$alias = $this->config->getValue($args["main_module"], "aliases");
+		$width = $this->config->getValue($args["main_module"], "width");
+		$attributes[0] = $this->config->getAttributes($this->name, "th", TRUE);
+		$attributes[1] = $this->config->getAttributes($this->name, "th", FALSE);
+		$font = $this->config->getTag($this->name, "font", FALSE, TRUE);
+		
+		foreach ($order as $column) {
+		
+			// "zebra-effect" in head-row
+			if ($zebra)
+				$set = $attributes[++$i % 2];
+			else
+				$set = $attributes[1];
+		
+			if ($visible[$column]) {
+  			$out .= "<th$set width=\"" . $width[$column] . "\">";
+				if ($font)
+					$out .= $font;
+				if ($alias[$column])
+					$out .= $alias[$column];
+				else
+					$out .= "&nbsp;";
+				if ($font)
+					$out .= "</font>";
+				$out .= "</th>\n";
+			}
+		}
+		$out .= "</tr>\n";
+		
+		return $out;
+	}
+	
 }
 
 ?>
