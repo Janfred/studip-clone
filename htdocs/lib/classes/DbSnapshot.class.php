@@ -216,6 +216,7 @@ class DbSnapshot {
 			$sortresult[] = $this->result[$key];
 		}
 		$this->result = $sortresult;
+		$this->resetPos();
 		return true;
 	}
 	

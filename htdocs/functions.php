@@ -446,7 +446,6 @@ function get_perm($range_id,$user_id="") {
  global $perm;
  $status = $perm->get_studip_perm($range_id,$user_id);
  if (!($status)) $status= _("Fehler!");
-
  return $status;
 }
 
