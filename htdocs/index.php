@@ -21,6 +21,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
+// database object
+$db=new DB_Seminar;
+
+// evaluate language clicks
+// has to be done before seminar_open to get switching back to german (no init of i18n at all))
+if (isset($set_language)) {
+	$sess->register("forced_language");
+	$forced_language = $set_language;
+	$_language = $set_language;
+}
+
+// store and restore user-specific language preference
+if ($auth->is_authenticated() && $user->id != "nobody") {
+	// store last language click
+	if (isset($forced_language)) {
+		$db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='$user->id'");
+		$_language = $forced_language;
+		$sess->unregister("forced_language");
+	// restore user-setting
+	} else {
+		$db->query("SELECT preferred_language FROM user_info WHERE user_id='$user->id'");
+		if ($db->next_record()) {
+			$_language = $db->f("preferred_language");
+		}
+	}
+}
+
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
@@ -46,33 +73,6 @@ if ($dopen)
 if ($dclose)
 	$index_data["dopen"]='';
 	
-// database objects
-$db=new DB_Seminar;
-
-// evaluate language clicks
-if (isset($set_language)) {
-	$sess->register("forced_language");
-	$forced_language = $set_language;
-	$_language = $set_language;
-}
-
-// store and restore user-specific language preference
-if ($auth->is_authenticated() && $user->id != "nobody") {
-	// store last language click
-	if (isset($forced_language)) {
-		$db->query("UPDATE user_info SET preferred_language = '$forced_language' WHERE user_id='$user->id'");
-		$_language = $forced_language;
-		$sess->unregister("forced_language");
-	// restore user-setting
-	} else {
-		$db->query("SELECT preferred_language FROM user_info WHERE user_id='$user->id'");
-		if ($db->next_record()) {
-			$_language = $db->f("preferred_language");
-		}
-	}
-}
-
-
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");

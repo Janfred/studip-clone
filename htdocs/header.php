@@ -1,22 +1,38 @@
 <?php
-/*
-header.php - Kopfzeile von Stud.IP
-Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* header
+* 
+* head line of Stud.IP
+* 
+*
+* @author		Stefan Suchi <suchi@data-quest.de>
+* @version		$Id$
+* @access		public
+* @modulegroup	visual
+* @module		header.php
+* @package		studip_core
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// header.php
+// head line of Stud.IP
+// Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@data-quest.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 ob_start();
 //Daten fuer Onlinefunktion einbinden
 if (!$perm->have_perm("user"))
@@ -34,7 +50,7 @@ if ($CHAT_ENABLE) {
 	echo "\t\t<script type=\"text/javascript\">\n";
 	echo "\t\tfunction open_chat() {\n";
 	if ($chatServer->isActiveUser($user->id,"studip"))
-		echo "alert('Sie sind bereits im Chat angemeldet!');\n";
+		printf ("alert('%s');\n", _("Sie sind bereits im Chat angemeldet!"));
 	else
 		echo "\t\t\tfenster=window.open(\"$RELATIVE_PATH_CHAT/chat_login.php?chatid=studip\",\"chat_studip_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
 	echo "\t\t}\n";
@@ -55,14 +71,14 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		<table class="header" border="0" width="100%" background="pictures/fill1.gif" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 			<tr>
 				<td class="header" width="33%" valign="bottom" align="left" background="pictures/fill1.gif">
-					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip("zurück zur Startseite")?>></a>
-					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip("Hilfe")?> width="24" height="21"></a>
-					&nbsp;<a href="freie.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip("Freie Veranstaltungen")?> width="24" height="21"></a></td>
+					&nbsp;<a href="index.php" target="_top"><img border="0" src="pictures/home.gif" <?=tooltip(_("zurück zur Startseite"))?>></a>
+					&nbsp;<a href="./help/index.php<?echo $help_query?>" target="_new"><img border="0" src="pictures/hilfe.gif" <?=tooltip(_("Hilfe"))?> width="24" height="21"></a>
+					&nbsp;<a href="freie.php"><img border="0" src="pictures/meinesem.gif" <?=tooltip(_("Freie Veranstaltungen"))?> width="24" height="21"></a></td>
 				<td class="angemeldet" width="20%" nowrap bgcolor="#C0C0C0" align="center" valign="middle" background="pictures/kaverl1b.jpg">
-					<font color="#000080">Sie sind nicht angemeldet</font></td>
+					<font color="#000080"><? echo _("Sie sind nicht angemeldet") ?></font></td>
 				<td class="header" width="33%" nowrap valign="bottom" align="right" background="pictures/fill1.gif">
-					&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" <?=tooltip("Impressum")?>></a>
-					&nbsp;&nbsp;<a href="index.php?again=yes"><img border="0" src="pictures/login.gif" <?=tooltip("Am System anmelden")?>></a>&nbsp;</td>
+					&nbsp;&nbsp;<a href="impressum.php"><img border="0" src="pictures/logo2.gif" <?=tooltip(_("Impressum"))?>></a>
+					&nbsp;&nbsp;<a href="index.php?again=yes"><img border="0" src="pictures/login.gif" <?=tooltip(_("Am System anmelden"))?>></a>&nbsp;</td>
 			</tr>
 		</table>
 

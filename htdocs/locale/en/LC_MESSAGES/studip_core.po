@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-09 20:18+0100\n"
-"PO-Revision-Date: 2003-01-09 19:42+GMT\n"
+"Project-Id-Version: STUD.IP 0.9.0\n"
+"POT-Creation-Date: 2003-01-10 20:59+0100\n"
+"PO-Revision-Date: 2003-01-10 19:33+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -335,167 +335,6 @@ msgid ""
 "den Menupunkt %s Zeiten %s"
 msgstr ""
 
-#: admin_fakultaet.php:82
-msgid "Bitte geben Sie hier einen Namen ein!"
-msgstr ""
-
-#: admin_fakultaet.php:86
-#, c-format
-msgid "Die Fakult&auml;t <b>%s</b> wurde angelegt!"
-msgstr ""
-
-#: admin_fakultaet.php:93
-#, c-format
-msgid "<b>%s</b> wurde zur Gruppe der Administratoren hinzugefgt!"
-msgstr ""
-
-#: admin_fakultaet.php:104
-#, c-format
-msgid "<b>%s</b> in <b>%s</b> gendert!"
-msgstr ""
-
-#: admin_fakultaet.php:114
-#, c-format
-msgid "<b>%s</b> wurde aus der Gruppe der Administratoren entfernt!"
-msgstr ""
-
-#: admin_fakultaet.php:126
-#, c-format
-msgid "Die Fakultt <b>%s</b> wurde gelscht"
-msgstr ""
-
-#: admin_fakultaet.php:131
-#, c-format
-msgid "<b>%s</b> Administrator(en) wurden gelscht"
-msgstr ""
-
-#: admin_fakultaet.php:148
-#, c-format
-msgid "<b>%s</b> Bereichsbaumelemente wurden gelscht"
-msgstr ""
-
-#: admin_fakultaet.php:153
-#, c-format
-msgid "<b>%s</b> zugehrige Datenfelder wurden gelscht"
-msgstr ""
-
-#: admin_fakultaet.php:158
-msgid " (Element wurde in Stud.IP gelscht)"
-msgstr ""
-
-#: admin_fakultaet.php:163
-#, c-format
-msgid "<b>%s</b> Bereichsbaumelemente wurden angepasst"
-msgstr ""
-
-#: admin_fakultaet.php:196
-msgid "Name der Fakult&auml;t:"
-msgstr ""
-
-#: admin_fakultaet.php:199
-msgid "Neuen Namen bernehmen"
-msgstr ""
-
-#: admin_fakultaet.php:200 StudipRangeTreeViewAdmin.class.php:633
-msgid "Aktion abbrechen"
-msgstr ""
-
-#: admin_fakultaet.php:211
-msgid "Fakult&auml;t l&ouml;schen"
-msgstr ""
-
-#: admin_fakultaet.php:212
-msgid "Zugeh&ouml;rige Eintr&auml;ge im Bereichsbaum l&ouml;schen"
-msgstr ""
-
-#: admin_fakultaet.php:216
-msgid "Fakultt lschen"
-msgstr ""
-
-#: admin_fakultaet.php:225
-msgid "Administratoren:"
-msgstr ""
-
-#: admin_fakultaet.php:231
-msgid "Zuordnung entfernen"
-msgstr ""
-
-#: admin_fakultaet.php:243
-msgid "Administrator hinzufgen:"
-msgstr ""
-
-#: admin_fakultaet.php:249
-msgid "Als Administrator hinzufgen"
-msgstr ""
-
-#: admin_fakultaet.php:254
-msgid "Neue Suche starten"
-msgstr ""
-
-#: admin_fakultaet.php:255
-msgid " Nutzer gefunden"
-msgstr ""
-
-#: admin_fakultaet.php:263
-msgid "Administrator suchen"
-msgstr ""
-
-#: admin_fakultaet.php:265
-msgid "Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein."
-msgstr ""
-
-#: admin_fakultaet.php:266
-msgid "Ihre Suche ergab keine Treffer"
-msgstr ""
-
-#: admin_fakultaet.php:283
-msgid ""
-"Auf dieser Seite k&ouml;nnen Sie die Fakult&auml;ten, die im System "
-"verwendet werden, verwalten. Sie m&uuml;ssen mindestens eine Fakult&auml;t "
-"angelegt haben, um Einrichtungen anlegen zu k&ouml;nnen.<br>"
-msgstr ""
-
-#: admin_fakultaet.php:288
-msgid "Neue Fakult&auml;t anlegen:"
-msgstr ""
-
-#: admin_fakultaet.php:290
-msgid "Neue Fakultt anlegen"
-msgstr ""
-
-#: admin_fakultaet.php:294
-msgid "Vorhandene Fakult&auml;ten:"
-msgstr ""
-
-#: admin_fakultaet.php:302 admin_fakultaet.php:309
-msgid "Sortierreihenfolge ndern"
-msgstr ""
-
-#: admin_fakultaet.php:303 freie.php:166
-msgid "Name"
-msgstr "Name"
-
-#: admin_fakultaet.php:306
-msgid "Admininstratoren"
-msgstr ""
-
-#: admin_fakultaet.php:310
-#, fuzzy
-msgid "Einrichtungen"
-msgstr "Institution"
-
-#: admin_fakultaet.php:324
-msgid "Hier klicken um Daten der Fakultt zu ndern"
-msgstr ""
-
-#: admin_fakultaet.php:333
-msgid "kein Eintrag"
-msgstr ""
-
-#: admin_fakultaet.php:339
-msgid "Keine Fakult&auml;ten vorhanden"
-msgstr ""
-
 #: admin_metadates.php:164
 msgid "Bitte geben Sie ein g&uuml;ltiges Datum ein!"
 msgstr ""
@@ -683,120 +522,8 @@ msgstr ""
 msgid "unbegrenzt"
 msgstr ""
 
-#: admin_range_tree.php:56
+#: admin_range_tree.php:57
 msgid " - Bereiche verwalten"
-msgstr ""
-
-#: config.inc.php:346
-msgid "Prof."
-msgstr ""
-
-#: config.inc.php:346
-msgid "Prof. Dr."
-msgstr ""
-
-#: config.inc.php:346
-msgid "Dr."
-msgstr ""
-
-#: config.inc.php:346
-msgid "PD Dr."
-msgstr ""
-
-#: config.inc.php:346
-msgid "Dr. des."
-msgstr ""
-
-#: config.inc.php:346
-msgid "Dr. med."
-msgstr ""
-
-#: config.inc.php:346
-msgid "Dr. rer. nat."
-msgstr ""
-
-#: config.inc.php:346
-msgid "Dr. forest."
-msgstr ""
-
-#: config.inc.php:347
-msgid "Dr. sc. agr."
-msgstr ""
-
-#: config.inc.php:347 config.inc.php:350
-msgid "Dipl.-Biol."
-msgstr ""
-
-#: config.inc.php:347 config.inc.php:350
-msgid "Dipl.-Chem."
-msgstr ""
-
-#: config.inc.php:347 config.inc.php:350
-msgid "Dipl.-Ing."
-msgstr ""
-
-#: config.inc.php:347 config.inc.php:350
-msgid "Dipl.-Sozw."
-msgstr ""
-
-#: config.inc.php:347 config.inc.php:350
-msgid "Dipl.-Geogr."
-msgstr ""
-
-#: config.inc.php:348 config.inc.php:351
-msgid "Dipl.-Geol."
-msgstr ""
-
-#: config.inc.php:348 config.inc.php:351
-msgid "Dipl.-Geophys."
-msgstr ""
-
-#: config.inc.php:348 config.inc.php:351
-msgid "Dipl.-Ing. agr."
-msgstr ""
-
-#: config.inc.php:348 config.inc.php:351
-msgid "Dipl.-Kfm."
-msgstr ""
-
-#: config.inc.php:348 config.inc.php:351
-msgid "Dipl.-Math."
-msgstr ""
-
-#: config.inc.php:348 config.inc.php:351
-msgid "Dipl.-Phys."
-msgstr ""
-
-#: config.inc.php:349 config.inc.php:352
-msgid "Dipl.-Psych."
-msgstr ""
-
-#: config.inc.php:349 config.inc.php:352
-msgid "M. Sc"
-msgstr ""
-
-#: config.inc.php:349 config.inc.php:352
-msgid "B. Sc"
-msgstr ""
-
-#: config.inc.php:350
-msgid "M.A."
-msgstr ""
-
-#: config.inc.php:350
-msgid "B.A."
-msgstr ""
-
-#: config.inc.php:350
-msgid "M.S."
-msgstr ""
-
-#: config.inc.php:350
-msgid "MBA"
-msgstr ""
-
-#: config.inc.php:350
-msgid "Ph.D."
 msgstr ""
 
 #: dates.inc.php:57
@@ -909,6 +636,10 @@ msgid ""
 "Inhalten vorhanden ist."
 msgstr "In the right column you can see the content of every course."
 
+#: freie.php:166
+msgid "Name"
+msgstr "Name"
+
 #: freie.php:167
 msgid "Veranstaltungstyp"
 msgstr "Type of course"
@@ -921,32 +652,60 @@ msgstr "Institution"
 msgid "Inhalt"
 msgstr "Content"
 
-#: institut_browse.php:66
+#: header.php:53
+msgid "Sie sind bereits im Chat angemeldet!"
+msgstr "You have already entered the chat!"
+
+#: header.php:74
+msgid "zurck zur Startseite"
+msgstr "back to start page"
+
+#: header.php:75
+msgid "Hilfe"
+msgstr "Help"
+
+#: header.php:76
+msgid "Freie Veranstaltungen"
+msgstr "public courses"
+
+#: header.php:78
+msgid "Sie sind nicht angemeldet"
+msgstr "You are not logged in"
+
+#: header.php:80
+msgid "Impressum"
+msgstr "imprint"
+
+#: header.php:81
+msgid "Am System anmelden"
+msgstr "Login"
+
+#: institut_browse.php:64
 #, fuzzy
 msgid "Gefundene Einrichtungen:"
 msgstr "Institution"
 
-#: institut_browse.php:68
+#: institut_browse.php:66
 msgid ""
 "Es konnte keine den Suchkriterien entsprechende Einrichtung gefunden werden."
 msgstr ""
 
-#: institut_browse.php:75
+#: institut_browse.php:73
 #, fuzzy
 msgid "Suche nach Einrichtungen"
 msgstr "Institution"
 
-#: institut_browse.php:94
+#: institut_browse.php:92
 msgid ""
 "Sie k&ouml;nnen sich durch den Einrichtungsbaum klicken, oder das "
 "Suchformular benutzen"
 msgstr ""
 
-#: institut_browse.php:98
+#: institut_browse.php:96
 msgid "Bitte geben Sie hier Ihre Suchkriterien ein:"
 msgstr ""
 
-#: institut_browse.php:105
+#: institut_browse.php:103
 msgid "Suche starten"
 msgstr ""
 
@@ -1417,70 +1176,74 @@ msgstr ""
 msgid "Mitarbeiter: "
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:571
+#: StudipRangeTreeViewAdmin.class.php:570
 msgid "Grunddaten in Stud.IP bearbeiten"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:586
-#: StudipRangeTreeViewAdmin.class.php:697 StudipRangeTreeView.class.php:346
+#: StudipRangeTreeViewAdmin.class.php:585
+#: StudipRangeTreeViewAdmin.class.php:696 StudipRangeTreeView.class.php:346
 msgid "Keine weiteren Daten vorhanden!"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:601
+#: StudipRangeTreeViewAdmin.class.php:600
 msgid "An dieser Stelle einfgen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:609
+#: StudipRangeTreeViewAdmin.class.php:608
 msgid "Element nach oben"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:614
+#: StudipRangeTreeViewAdmin.class.php:613
 msgid "Element nach unten"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:626
+#: StudipRangeTreeViewAdmin.class.php:625
 msgid "Element editieren"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:627
+#: StudipRangeTreeViewAdmin.class.php:626
 msgid "Name des Elements:"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:635
+#: StudipRangeTreeViewAdmin.class.php:632
+msgid "Aktion abbrechen"
+msgstr ""
+
+#: StudipRangeTreeViewAdmin.class.php:634
 msgid "Element mit Stud.IP Einrichtung verlinken"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:636
+#: StudipRangeTreeViewAdmin.class.php:635
 #, fuzzy
 msgid "Stud.IP Einrichtung:"
 msgstr "Institution"
 
-#: StudipRangeTreeViewAdmin.class.php:640
+#: StudipRangeTreeViewAdmin.class.php:639
 msgid "Kein Link"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:652
+#: StudipRangeTreeViewAdmin.class.php:651
 msgid "Stud.IP Einrichtung suchen:"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:662
-#: StudipRangeTreeViewAdmin.class.php:664
+#: StudipRangeTreeViewAdmin.class.php:661
+#: StudipRangeTreeViewAdmin.class.php:663
 msgid "Neues Datenfeld anlegen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:677
+#: StudipRangeTreeViewAdmin.class.php:676
 msgid "Datenfeld nach oben"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:682
+#: StudipRangeTreeViewAdmin.class.php:681
 msgid "Datenfeld nach unten"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:688
+#: StudipRangeTreeViewAdmin.class.php:687
 msgid "nderungen bernehmen"
 msgstr ""
 
-#: StudipRangeTreeViewAdmin.class.php:691
+#: StudipRangeTreeViewAdmin.class.php:690
 msgid "Datenfeld lschen"
 msgstr ""
 
@@ -1511,3 +1274,7 @@ msgstr ""
 #: StudipRangeTreeView.class.php:330
 msgid "in Stud.IP"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Einrichtungen"
+#~ msgstr "Institution"
