@@ -514,14 +514,18 @@ print_infobox ($infobox,"pictures/details.jpg");
 	}
 	if ($db2->f("admission_prelim") == 1) {
 		echo "<font size=-1>";
-		print(_("Die Auswahl der Teilnehmenden wird vom Dozenten getroffen."));
+		print(_("Die Auswahl der Teilnehmenden wird nach der Eintragung manuell vorgenommen."));
 		echo "<br/>";
 		$db3->query("SELECT * FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='$sem_id'");
 		if ($db3->next_record()) {
 			echo "<table width=\"100%\">";
 			printf ("<tr><td width=\"%s\">&nbsp;</td><td><font size=-1>%s</font><br/></tr></td></table>", "2%", $db2->f("admission_prelim_txt"));
 		} else {
-			print(_("Wenn Sie an der Veranstaltung teilnehmen wollen, klicken Sie auf  \"Tragen Sie sich hier ein\". Sie erhalten dann nähere Hinweise und können sich immer noch gegen eine Teilnahme entscheiden."));
+			if (!$perm->have_perm("admin")) {
+				print("<p>"._("Wenn Sie an der Veranstaltung teilnehmen wollen, klicken Sie auf  \"Tragen Sie sich hier ein\". Sie erhalten dann nähere Hinweise und können sich immer noch gegen eine Teilnahme entscheiden.")."</p>");
+			} else {
+				print("<p>"._("NutzerInnen, die sich für diese Veranstaltung eintragen möchten, erhalten nähere Hinweise und können sich dann noch gegen eine Teilnahme entscheiden.")."</p>");
+			}
 		}
 		echo "</font>";
 	}
