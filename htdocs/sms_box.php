@@ -102,8 +102,8 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 		$titel = mila(kill_format($message));
 	}
 	
-
 	$content = quotes_decode(formatReady($message));
+	
 	if ($x >= "2") {
 		$content .= "<br><br>"._("gesendet an:")."<br>";
 		$query = "SELECT message_user.* 
@@ -116,6 +116,7 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 			$content .= "<a href=\"about.php?username=".get_username($db7->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname($db7->f("user_id"))."</font></a> / ";
 		}
 	}
+
 	$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a><br><br>";
 	
 	if ($sms_data_open == $message_id) {
@@ -254,6 +255,12 @@ $db = new DB_Seminar;
 $db6 = new DB_Seminar;
 $db7 = new DB_Seminar;
 
+if ($cmd_sort) {
+	$sms_show['sort'] = $cmd_sort;
+} else if (empty($sms_show['sort'])) {
+	$sms_show['sort'] = "no";
+}
+
 if (empty($my_messaging_settings["timefilter"])) {
 	$my_messaging_settings["timefilter"] ="all";
 }
@@ -281,19 +288,16 @@ if ($cmd == "delete_selected") {
 if ($mclose) {
 	$sms_data["open"] = '';
 }
-
 if ($mopen) {
 	$sms_data["open"] = $mopen;
 }
-
 if ($sms_inout) {
 	$sms_data["view"] = $sms_inout;
 } else if ($sms_data["view"] == "") {
 	$sms_data["view"] = "in";
 }
-
 if (empty($my_messaging_settings["openall"])) {
-	$my_messaging_settings["openall"] = "0";
+	$my_messaging_settings["openall"] = "2";
 }
 
 if ($sms_time) {
@@ -324,6 +328,7 @@ if ($sms_data["time"] == "new") {
 	$info_text_003 = _("Sie sehen nur neue Nachrichten.");
 	if ($sms_data["view"] == "in") {
 		$query_time = " AND message.mkdate > '".$LastLogin."' ORDER BY message.mkdate DESC";
+		$query_time_sort = " AND message.mkdate > '".$LastLogin."'";
 	} else {
 		$query_time = " AND message.mkdate > '".$CurrentLogin."' ORDER BY message.mkdate DESC";
 	}
@@ -332,21 +337,25 @@ if ($sms_data["time"] == "new") {
 if ($sms_data["time"] == "24h") {
 	$info_text_003 = _("Sie sehen nur Nachrichten der letzten 24 Stunden.");
 	$query_time = " AND message.mkdate > '".(date("U")-86400)."' ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate > '".(date("U")-86400)."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 24 Stunden %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "7d") {
 	$info_text_003 = _("Sie sehen alle Nachrichten der letzten 7 Tage.");
 	$query_time = " AND message.mkdate > '".(date("U")-(7*86400))."' ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate > '".(date("U")-(7*86400))."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 7 Tagen %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "30d") {
 	$info_text_003 = _("Sie sehen alle Nachrichten der letzten 30 Tage.");
 	$query_time = " AND message.mkdate > '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate > '".(date("U")-(30*86400))."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten aus den letzten 30 Tagen %s vor."), $no_message_text_box);
 }
 if ($sms_data["time"] == "older") {
 	$info_text_003 = _("Sie sehen nur Nachrichten, die &auml;lter als 30 Tage sind.");
 	$query_time = " AND message.mkdate < '".(date("U")-(30*86400))."' ORDER BY message.mkdate DESC";
+	$query_time_sort = " AND message.mkdate < '".(date("U")-(30*86400))."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten %s vor, die &auml;lter als 30 Tage sind."), $no_message_text_box);
 }
 
@@ -394,40 +403,93 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	$n=0;
 	$query = "";
 	if ($sms_data['view'] == "in") {
+
 		$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("empfangene systeminterne Nachrichten anzeigen")."</b>";
 		$info_text_002 = _("Alle systeminternen Nachrichten, die an Sie gesendet wurden werden hier angezeigt.<br>");
-		$query .= "
-		SELECT message.*, message_user.*, ".$_fullname_sql['full']." AS fullname 
-		FROM message_user 
-			LEFT JOIN message USING (message_id) 
-			LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id) 
-			LEFT JOIN user_info USING(user_id) 
-		WHERE message_user.user_id = '".$user->id."' 
-			AND message_user.snd_rec = 'rec' 
-			AND message_user.deleted = '0' ".$query_time;		
-		$db->query($query);		
-		while ($db->next_record()) {
-			print_rec_message($db->f("autor_id"), $db->f("mkdate"), $db->f("message_id"), $db->f("message"), get_fullname($db->f("autor_id")), $sms_data["open"], $db->f("readed"));	
-		}	
+
+		if ($sms_show['sort'] == "snd_rec") {
+			
+			$query = "
+				SELECT message.*, message_user.*, auth_user_md5.* 
+				FROM message_user 
+					LEFT JOIN message USING (message_id) 
+					LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id) 
+				WHERE message_user.user_id = '".$user->id."' 
+					AND message_user.snd_rec = 'rec' 
+					AND message_user.deleted = '0' 
+					".$query_time_sort."
+				GROUP BY message.autor_id 
+				ORDER BY auth_user_md5.Nachname ASC";
+			$db->query($query);		
+			while ($db->next_record()) {
+				$tmp_rec_snd[] = $db->f("autor_id");	
+			}
+
+			for ($x=0; $x < sizeof($tmp_rec_snd); $x++) {
+
+				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">";
+				echo "<tr><td width=\"1px\" class=\"blank\"></td><td width=\"99%\" height=\"4\" class=\"blank\"></td><td width=\"1px\" class=\"blank\"></td></tr>";
+				echo "<tr><td width=\"1px\" class=\"blank\"></td><td width=\"99%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;".get_fullname($tmp_rec_snd[$x])."</b></font></td><td width=\"1px\" class=\"blank\"></td></tr>";
+				echo "</table>	";	
+
+				$query = "
+				SELECT message.*, message_user.* 
+				FROM message_user 
+					LEFT JOIN message USING (message_id) 
+					LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id) 
+				WHERE message_user.user_id = '".$user->id."' 
+					AND message_user.snd_rec = 'rec' 
+					AND message.autor_id = '".$tmp_rec_snd[$x]."' 
+					AND message_user.deleted = '0' 
+				".$query_time;		
+				$db->query($query);		
+				while ($db->next_record()) {
+					$tmp_x = "1";	
+					print_rec_message($db->f("autor_id"), $db->f("mkdate"), $db->f("message_id"), $db->f("message"), get_fullname($db->f("autor_id")), $sms_data["open"], $db->f("readed"));	
+				}
+
+			}
+
+		} else {
+
+			$query .= "
+			SELECT message.*, message_user.*, ".$_fullname_sql['full']." AS fullname 
+			FROM message_user 
+				LEFT JOIN message USING (message_id) 
+				LEFT JOIN auth_user_md5 ON (autor_id=auth_user_md5.user_id) 
+				LEFT JOIN user_info USING(user_id) 
+			WHERE message_user.user_id = '".$user->id."' 
+				AND message_user.snd_rec = 'rec' 
+				AND message_user.deleted = '0' ".$query_time;		
+			$db->query($query);		
+			while ($db->next_record()) {
+				print_rec_message($db->f("autor_id"), $db->f("mkdate"), $db->f("message_id"), $db->f("message"), get_fullname($db->f("autor_id")), $sms_data["open"], $db->f("readed"));	
+			}
+
+		}
+
 	} else if ($sms_data['view'] == "out") {
+
 		$info_text_001 = "<img src=\"pictures/nachricht1.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;"._("gesendete systeminterne Nachrichten anzeigen")."</b>";
 		$info_text_002 = _("Alle systeminternen Nachrichten, die Sie gesendet haben werden hier angezeigt.<br>");
+
 		$query .= "
-		SELECT message.*, message_user.* 
-		FROM message_user 
-			LEFT JOIN message USING (message_id) 
-		WHERE message_user.user_id = '".$user->id."' 
-			AND message_user.snd_rec = 'snd' 
-			AND message_user.deleted = '0' ".$query_time;
+			SELECT message.*, message_user.* 
+			FROM message_user 
+				LEFT JOIN message USING (message_id) 
+			WHERE message_user.user_id = '".$user->id."' 
+				AND message_user.snd_rec = 'snd' 
+				AND message_user.deleted = '0' ".$query_time;
 		$db->query($query);
 		while ($db->next_record()) {
 			print_snd_message($db->f("mkdate"), $db->f("message_id"), $db->f("message"), $sms_data["open"], $sms_data["view"]);		
 		}	
+
 	}
 	echo "</form>"; // close form "delete selected messages"
 
-	// wenn keine nachrichten zum anzeigen
-	if (!$n) {
+	
+	if (!$n) { // wenn keine nachrichten zum anzeigen
 		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\">";
 		$srch_result = "info§<font size=-1><b>".$no_message_text."</b></font>";
 		parse_msg ($srch_result, "§", "steel1", 2, FALSE);
@@ -435,8 +497,10 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	}
 
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";
-
-	$time_by_links = ""; // build links to narrow down the messages
+	
+	// start infobox //
+	
+	$time_by_links = ""; // build infobox_content > viewfilter
 	$time_by_links .= _("Sie k&ouml;nnen die Anzeige der Nachrichten zeitlich eingrenzen.")."<br>";
 	$time_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?sms_time=new\"><img src=\"pictures/".show_icon($sms_data["time"], "new")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("neue Nachrichten")."</a><br>";
 	$time_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?sms_time=all\"><img src=\"pictures/".show_icon($sms_data["time"], "all")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("alle Nachrichten")."</a><br>";
@@ -445,25 +509,41 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	$time_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?sms_time=30d\"><img src=\"pictures/".show_icon($sms_data["time"], "30d")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("letzte 30 Tage")."</a><br>";
 	$time_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?sms_time=older\"><img src=\"pictures/".show_icon($sms_data["time"], "older")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("&auml;lter als 30 Tage")."</a>";
 
+	if ($sms_data['view'] == "in") {
+		$sort_by_links = ""; // build infobox_content > viewsort
+		$sort_by_links .= _("Sie können die Nachrichten nach Absender sortieren.")."<br>";
+		$sort_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?cmd_sort=no\"><img src=\"pictures/".show_icon($sms_show['sort'], "no")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("Keine Sortierung")."</a><br>";
+		$sort_by_links .= "&nbsp;<a href=\"".$PHP_SELF."?cmd_sort=snd_rec\"><img src=\"pictures/".show_icon($sms_show['sort'], "snd_rec")."\" width=\"10\" height=\"20\" border=\"0\">&nbsp;"._("nach Absender sortieren")."</a>";	
+	} else {
+		$sort_by_links = _("Keine Sortierung im Postausgang möglich.");
+	}
+
+
 	if ($SessSemName[0] && $SessSemName["class"] == "inst") {
-		$x = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"institut_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung")."</a>")));
+		$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"institut_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung")."</a>")));
 	} else if ($SessSemName[0]) {
-		$x = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"seminar_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung")."</a>")));
+		$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"seminar_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung")."</a>")));
 	}
 
 	$infobox = array(
-		$x,
+		$tmp_array_1,
 		array("kategorie" => _("Information:"),"eintrag" => array(
 			array("icon" => "pictures/ausruf_small.gif", "text" => sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), count_rec_messages_from_user($user->id), count_snd_messages_from_user($user->id)))
 		)),
-		array("kategorie" => _("Anzeigezeitraum ausw&auml;hlen:"),"eintrag" => array(
+		array("kategorie" => _("Anzeigesortierung:"),"eintrag" => array(
+			array("icon" => "pictures/suchen.gif", "text" => $sort_by_links)
+		)),
+		array("kategorie" => _("Anzeigefilter:"),"eintrag" => array(
 			array("icon" => "pictures/suchen.gif", "text" => $time_by_links)
 		)),
 		array("kategorie" => _("Weitere M&ouml;glichkeiten:"),"eintrag" => array(
 			array("icon" => "pictures/blank", "text" => sprintf("<a href=\"%s?cmd_show=openall\">"._("Alle Nachrichten aufklappen.")."</a>", $PHP_SELF))
 		))
 	);
+
 	print_infobox($infobox,"pictures/sms3.jpg");
+	
+	// end infobox //
 
 ?></td>
 </tr>
