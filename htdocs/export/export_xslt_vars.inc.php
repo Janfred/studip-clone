@@ -14,6 +14,12 @@ $xslt_files["txt-noformat"]["txt"] = true;
 $xslt_files["txt-noformat"]["person"] = true;
 $xslt_files["txt-noformat"]["veranstaltung"] = true;
 
+$xslt_files["txt-standard"]["name"] = _("Standardmodul mit Veranstaltungsnummern");
+$xslt_files["txt-standard"]["desc"] = _("Standardmodul zur Ausgabe von Personen- oder Veranstaltungsdaten im Textformat. Die Daten werden nur mit Tabulatoren und Bindestrichen formatiert. Es werden auch die Veranstaltungsnummern ausgegeben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
+$xslt_files["txt-standard"]["file"] = "txt-v-3.xsl";
+$xslt_files["txt-standard"]["txt"] = true;
+$xslt_files["txt-standard"]["veranstaltung"] = true;
+
 
 
 $xslt_files["html-standard"]["name"] = _("Standardmodul");
@@ -39,6 +45,13 @@ $xslt_files["html-liste"]["htm"] = true;
 $xslt_files["html-liste"]["html"] = true;
 $xslt_files["html-liste"]["person"] = true;
 $xslt_files["html-liste"]["veranstaltung"] = true;
+
+$xslt_files["html-standard"]["name"] = _("Standardmodul mit Veranstaltungsnummern");
+$xslt_files["html-standard"]["desc"] = _("Standardmodul zur Ausgabe von Veranstaltungsdaten als HTML-Seite. Es werden auch die Veranstaltungsnummern ausgegeben. Die Ausgabe-Datei kann in einem Web-Browser angezeigt werden.");
+$xslt_files["html-standard"]["file"] = "html-v-4.xsl";
+$xslt_files["html-standard"]["htm"] = true;
+$xslt_files["html-standard"]["html"] = true;
+$xslt_files["html-standard"]["veranstaltung"] = true;
 
 $xslt_files["html-teiln"]["name"] = _("TeilnehmerInnenliste");
 $xslt_files["html-teiln"]["desc"] = _("Modul zur Ausgabe von Personendaten als HTML-Seite. Es werden die Grunddaten der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle geschrieben. Die Ausgabe-Datei kann in einem Web-Browser angezeigt werden.");
@@ -69,6 +82,18 @@ $xslt_files["rtf-kommentar"]["file"] = "rtf-vp-3.xsl";
 $xslt_files["rtf-kommentar"]["rtf"] = true;
 $xslt_files["rtf-kommentar"]["veranstaltung"] = true;
 
+$xslt_files["rtf-kommentar"]["name"] = _("Vorlesungskommentar");
+$xslt_files["rtf-kommentar"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Rich-Text-Format. Der Kommentar enth&auml;lt die Veranstaltungs-Details-Daten. Es wird automatisch ein Deckblatt generiert. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
+$xslt_files["rtf-kommentar"]["file"] = "rtf-v-4.xsl";
+$xslt_files["rtf-kommentar"]["rtf"] = true;
+$xslt_files["rtf-kommentar"]["veranstaltung"] = true;
+
+$xslt_files["rtf-teiln"]["name"] = _("TeilnehmerInnenliste");
+$xslt_files["rtf-teiln"]["desc"] = _("Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle geschrieben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
+$xslt_files["rtf-teiln"]["file"] = "rtf-t-1.xsl";
+$xslt_files["rtf-teiln"]["htm"] = true;
+$xslt_files["rtf-teiln"]["html"] = true;
+
 
 
 $xslt_files["pdf-standard"]["name"] = _("Standardmodul");
@@ -81,6 +106,12 @@ $xslt_files["pdf-standard"]["veranstaltung"] = true;
 $xslt_files["pdf-kommentar"]["name"] = _("Vorlesungskommentar");
 $xslt_files["pdf-kommentar"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit der Seitenzahl. Deckblatt und Inhaltsverzeichnis werden automatisch generiert. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden.");
 $xslt_files["pdf-kommentar"]["file"] = "pdf-vp-2.xsl";
+$xslt_files["pdf-kommentar"]["fo"] = true;
+$xslt_files["pdf-kommentar"]["veranstaltung"] = true;
+
+$xslt_files["pdf-kommentar"]["name"] = _("Vorlesungskommentar mit Veranstaltungsnummern");
+$xslt_files["pdf-kommentar"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. Die Seiten enthalten eine Kopfzeile und eine Fu&szlig;zeile mit der Seitenzahl. Deckblatt und Inhaltsverzeichnis werden automatisch generiert. Es werden auch die Veranstaltungsnummern ausgegeben. Die Datei kann mit dem Acrobat PDF-Reader gelesen werden.");
+$xslt_files["pdf-kommentar"]["file"] = "pdf-v-4.xsl";
 $xslt_files["pdf-kommentar"]["fo"] = true;
 $xslt_files["pdf-kommentar"]["veranstaltung"] = true;
 
