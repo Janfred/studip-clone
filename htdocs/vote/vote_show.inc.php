@@ -156,7 +156,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
       /* Show headlines ---------------------------------------------------- */
       echo createBoxLineHeader ();
-      echo createVoteHeadline ( $eval, $open, $openID, $evalDB );
+      echo createVoteHeadline ( $eval, $open, $openID, $evalDB, $isHomepage);
 
       if ( $open ) {
          echo createBoxContentHeader ();
@@ -174,7 +174,11 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          $tr = new HTML ("tr");
          $td = new HTML ("td");
          
-         if (strlen (formatReady($eval->getTitle ())) > VOTE_SHOW_MAXTITLELENGTH){
+         $maxTitleLength = ($isHomepage)
+            ? VOTE_SHOW_MAXTITLELENGTH
+            : VOTE_SHOW_MAXTITLELENGTH - 10;
+
+         if (strlen (formatReady($eval->getTitle ())) > $maxTitleLength){
             $b = new HTML ("b");
             $b->addHTMLContent(formatReady($eval->getTitle ()));
             
@@ -255,7 +259,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
       /* Show headlines ---------------------------------------------------- */
       echo createBoxLineHeader ();
-      echo createVoteHeadline ( $vote, $open, $openID );
+      echo createVoteHeadline ( $vote, $open, $openID, NULL, $isHomepage );
 
       if ( $open ) {
 	 echo createBoxContentHeader ();

@@ -158,7 +158,7 @@ define ("VOTE_IMAGETYPE_LINE", 2);
  * @const  VOTE_SHOW_MAXTITLELENGTH
  */
 
-define ("VOTE_SHOW_MAXTITLELENGTH", 65);
+define ("VOTE_SHOW_MAXTITLELENGTH", 80);
 
 # ===================================================== end: public constants #
 

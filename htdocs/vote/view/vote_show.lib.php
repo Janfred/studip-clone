@@ -368,8 +368,13 @@ function createOpeningOrClosingArrow () {
  *                            the headline only
  * @returns  String   The HTML-text
  */
-function createVoteHeadline (&$vote, $open, $openID, $evalDB = "") {
-   $title          = htmlReady (my_substr ($vote->getTitle (), 0, VOTE_SHOW_MAXTITLELENGTH));
+function createVoteHeadline (&$vote, $open, $openID, $evalDB = "", $isHomepage = NO) {
+
+   $maxTitleLength = ($isHomepage)
+      ? VOTE_SHOW_MAXTITLELENGTH
+      : VOTE_SHOW_MAXTITLELENGTH - 10;
+
+   $title          = htmlReady (my_substr ($vote->getTitle (), 0, $maxTitleLength));
    $date           = $vote->getChangedate ();
    $authorName     = get_fullname ($vote->getAuthorID ());
    $authorUsername = get_username ($vote->getAuthorID ());
