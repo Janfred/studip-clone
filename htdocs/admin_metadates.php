@@ -36,9 +36,6 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("tutor");
 	
-if ($abbrechen_x)
-	header ("Location: ".$term_metadata["source_page"]."?ebene=sem&range_id=".$term_metadata["sem_id"]);
-
 $_language_domain = "studip_core";
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
@@ -92,7 +89,6 @@ if (($seminar_id) && (!$uebernehmen_x) && (!$add_turnus_field_x) &&(!$delete_tur
 	$db->query("SELECT metadata_dates, art, Name, start_time, duration_time, status FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$term_metadata=unserialize($db->f("metadata_dates"));
-	$term_metadata["source_page"]=$source_page;
 	$term_metadata["sem_status"]=$db->f("status");
 	$term_metadata["sem_name"]=$db->f("Name");	
 	$term_metadata["sem_start_time"]=$db->f("start_time");	
@@ -591,10 +587,6 @@ if (($uebernehmen_x) && (!$errormsg))
 	<tr <? $cssSw->switchClass() ?>>
 		<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>		
 			<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src") ?> border=0 value="uebernehmen">
-			<? if ($term_metadata["source_page"]) {
-				?> &nbsp; <input type="IMAGE" name="abbrechen" <?=makeButton("abbrechen", "src") ?> border=0 value="abbrechen"> <?
-				}
-			?>
 		</td>
 	</tr>
 	<tr>
@@ -605,48 +597,6 @@ if (($uebernehmen_x) && (!$errormsg))
 	</form>
 <?
 	}
-elseif ($term_metadata["source_page"])
-	{
-	if ($auth->auth["jscript"])
-		{
-		$result=rawurlencode ($errormsg);
-		?>
-		<script language="JavaScript">
-			 location.href = "<? echo $term_metadata["source_page"]."?ebene=sem&range_id=".$term_metadata["sem_id"]."&result=".$result ?>"
-		</script>
-		<?
-		}
-	else		
-		{
-		?>	
-		<table width="100%" border=0 cellpadding=0 cellspacing=0>
-			<tr>
-				<td class="blank" colspan=2>&nbsp;
-				</td>
-			</tr>
-			<tr>	
-				<td class="topic" colspan=2>&nbsp; <b>Bearbeiten der allgemeinen Termindaten der Veranstaltung "<? echo $term_metadata["sem_name"] ?>"</b>
-				</td>
-			</tr>
-			<tr>
-				<td class="blank"colspan=2>&nbsp; <br>
-
-		<?
-			if (isset($errormsg)) 
-				{
-				parse_msg($errormsg);
-				}
-		?>
-				</td>
-			</tr>
-			<tr>
-				<td class="blank" colspan=2>
-				&nbsp; zur&uuml;ck zur <a href="admin_dates.php?ebene=sem&range_id=<? echo $term_metadata["sem_id"] ?>">Verwaltung des Ablaufplans</a><br><br>
-				</td>
-			</tr>
-		<?
-		}
-	}		
 	page_close();
 ?>
 	</table>
