@@ -246,6 +246,11 @@ echo "</tr></table><br>\n";
 if (show_news($user_id, $show_admin, 0, $about_data["nopen"]))
 	echo "<br>";
 
+/* Include and show votes and test ----------------------------------------- */
+require_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+show_votes ($username, $auth->auth["uid"], $perm, YES);
+/* ------------------------------------------------------------------------- */
+
 // alle persoenlichen Termine anzeigen, aber keine privaten
 
 $start_zeit=time();

@@ -171,6 +171,12 @@ if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
 				echo "<br>";
 }
 
+/* Include and show votes and test ----------------------------------------- */
+require_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
+/* ------------------------------------------------------------------------- */
+
+
 ?>
 </body>
 </html>

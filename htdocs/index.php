@@ -110,6 +110,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	$end = $start + 60 * 60 * 24 * 7;
 	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
 
+/* Include and show votes and test ----------------------------------------- */
+        require_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+        show_votes ("studip", $auth->auth["uid"], $perm);
+        echo "hallo";
+/* ------------------------------------------------------------------------- */
+
 
 } elseif (!$perm->have_perm("dozent")) {
 
@@ -247,7 +253,8 @@ unset($temp_language_key); unset($temp_language);
 	$end = $start + 60 * 60 * 24 * 7;
 	show_all_dates($start, $end, TRUE, FALSE, $index_data["dopen"]);
 
-
+        include ("show_vote.php");
+        show_votes ("studip", $auth->auth["uid"], $perm);
 
 } elseif ($auth->auth["perm"]=="admin") {
 
@@ -279,7 +286,8 @@ unset($temp_language_key); unset($temp_language);
 	if (show_news("studip", FALSE, 0, $index_data["nopen"], "70%", $LastLogin))
 		echo "<br />";
 
-
+        include ("show_vote.php");
+        show_votes ("studip", $auth->auth["uid"], $perm);
 
 } elseif ($perm->have_perm("root")) {
 
@@ -309,6 +317,9 @@ unset($temp_language_key); unset($temp_language);
 	include ('show_news.php');
 	if (show_news("studip", TRUE, 0, $index_data["nopen"], "70%", $LastLogin))
 		echo "<br />";
+		
+	include ("show_vote.php");
+        show_votes ("studip", $auth->auth["uid"], $perm);
 }
 
 ?>

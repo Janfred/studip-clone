@@ -519,6 +519,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				}
 		}
 		echo "\n</td></tr>\n</table>";
+		echo "\n</td></tr>\n</table><br>";
 		return TRUE;
 	}
 	
