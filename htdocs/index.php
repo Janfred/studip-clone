@@ -83,6 +83,14 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	include ('show_news.php');
 	if (show_news("studip", FALSE, 0, $index_data["nopen"], "70%", $LastLogin))
 		echo "<br />";
+
+	include("show_dates.inc.php");
+	$start = time();
+	$end = $start + 60 * 60 * 24 * 7;
+	echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
+	echo "\n<tr><td>\n";
+	show_all_dates($start, $end, FALSE, TRUE, $index_data["dopen"]);
+	echo "\n</tr></td>\n</table>";
 }
 
 //Anzeigemodul fuer nobody)
@@ -141,6 +149,14 @@ ELSEIF ($auth->auth["perm"]=="dozent"){
 	include ('show_news.php');
 	if (show_news("studip", FALSE, 0, $index_data["nopen"], "70%", $LastLogin))
 		echo "<br />";
+	
+	include("show_dates.inc.php");
+	$start = time();
+	$end = $start + 60 * 60 * 24 * 7;
+	echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
+	echo "\n<tr><td>\n";
+	show_all_dates($start, $end, FALSE, TRUE, $index_data["dopen"]);
+	echo "\n</tr></td>\n</table>";
 }
 
 
