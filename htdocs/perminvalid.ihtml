@@ -3,6 +3,12 @@ if (CLOSE_ON_LOGIN_SCREEN === true) {
 	echo "<script type=\"text/javascript\">self.close();</script>";
 	die;
 	}
+
+// first of all init I18N because seminar_open is not called here...
+require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+global $_language;
+$_language_path = init_i18n($_language);
+
 //wir befinden uns in einer Funktion ! Alles verfügbar machen,was später gebraucht wird !!!
 global $auth,$perm,$user,$ABSOLUTE_PATH_STUDIP,$RELATIVE_PATH_CHAT,$CHAT_ENABLE,$my_messaging_settings,$SessionStart,$LastLogin;
 include $ABSOLUTE_PATH_STUDIP."html_head.inc.php";
@@ -14,14 +20,14 @@ require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
 
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
 <tr valign=top align=middle>
-	<td class="topic" align="left"><b>&nbsp;Zugriff verweigert</b></td>
+	<td class="topic" align="left"><b>&nbsp;<?=_("Zugriff verweigert")?></b></td>
 </tr>
 <tr><td class="blank">&nbsp;</td></tr>
 
 	<?
-		parse_msg ("error§Zugriff verweigert <br /><font size=-1 color=black>Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als $AUTH_LIFETIME Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Zugrff auf Teile des System, für die Sie keine Berechtigung haben, sein. In diesem Fall gelangen Sie üben den untenstehenden Link zurück auf die Startseite.", "§", "blank", 1)
+		parse_msg ("error§" . _("Zugriff verweigert") . " <br /><font size=-1 color=black>" . sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "<br /> <br /> " . _("Eine andere Ursache kann der Zugrff auf Teile des System, für die Sie keine Berechtigung haben, sein. In diesem Fall gelangen Sie üben den untenstehenden Link zurück auf die Startseite."), "§", "blank", 1)
 	?>
-	<tr><td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung beziehungsweise Startseite.<br />&nbsp;
+	<tr><td class="blank"><font size=-1><a href="index.php"><b>&nbsp;<? printf(_("Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "</b></a>")?><br />&nbsp;
 
 </td></tr>
 </table>
