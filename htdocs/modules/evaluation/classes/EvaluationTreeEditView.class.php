@@ -1303,7 +1303,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 		$group->save();
 		if ($group->isError)
 			return EvalCommon::showErrorReport ($this->tree->eval,
-				_("Fehler beim Einlesen (Gruppe)"));
+				_("Fehler beim Einlesen (Block)"));
 		$this->msg[$this->itemID] = "msg§"
 			. _("Veränderungen wurden gespeichert.");
 		break;
@@ -1328,14 +1328,14 @@ function execCommandUpdateItem ( $no_delete = false ){
 			}
 			if ($no_answers == 1){
 				if ($this->msg[$this->itemID])
-					$this->msg[$this->itemID] .= "<br>"._("Einer Frage wurden noch keine Antworten zugewiesen.");
+					$this->msg[$this->itemID] .= "<br>"._("Einer Frage wurden noch keine Antwortenmöglichkeiten zugewiesen.");
 				else
-					$this->msg[$this->itemID] .= "info§"._("Einer Frage  wurden noch keine Antworten zugewiesen.");
+					$this->msg[$this->itemID] .= "info§"._("Einer Frage  wurden noch keine Antwortenmöglichkeiten zugewiesen.");
 			} elseif ($no_answers > 1){
 				if ($this->msg[$this->itemID])
-					$this->msg[$this->itemID] .= "<br>".sprintf(_("%s Fragen wurden noch keine Antworten zugewiesen."),$no_answers);
+					$this->msg[$this->itemID] .= "<br>".sprintf(_("%s Fragen wurden noch keine Antwortenmöglichkeiten zugewiesen."),$no_answers);
 				else
-					$this->msg[$this->itemID] .= "info§".sprintf(_("%s Fragen wurden noch keine Antworten zugewiesen."),$no_answers);			
+					$this->msg[$this->itemID] .= "info§".sprintf(_("%s Fragen wurden noch keine Antwortenmöglichkeiten zugewiesen."),$no_answers);			
 			}
 		
 		}
@@ -1452,7 +1452,7 @@ function execCommandDeleteItem(){
 	
 	if ($group->isError)
 		return EvalCommon::showErrorReport ($group,
-			_("Fehler beim Löschen einer Gruppe."));
+			_("Fehler beim Löschen eines Block."));
 
 	if ($group->getChildType() == "EvaluationQuestion"){
 		if ($number_of_kids){
@@ -1496,7 +1496,7 @@ function execCommandAddGroup(){
 		$this->tree->eval->save();
 		if ($this->tree->eval->isError)
 			return EvalCommon::showErrorReport ($this->tree->eval,
-				_("Fehler beim Anlegen einer neuen Gruppe."));
+				_("Fehler beim Anlegen eines neuen Blocks."));
 		$this->msg[$this->itemID] = "msg§"
 			. _("Ein neuer Gruppierungsblock wurde angelegt.");
 	}// group
@@ -1506,7 +1506,7 @@ function execCommandAddGroup(){
 		$parentgroup->save();
 		if ($parentgroup->isError)
 			return EvalCommon::showErrorReport ($parentgroup,
-				_("Fehler beim Anlegen einer neuen Untergruppe."));
+				_("Fehler beim Anlegen eines neuen Blocks."));
 		$this->msg[$this->itemID] = "msg§"
 			. _("Ein neuer Gruppierungsblock wurde angelegt.");
 	}
@@ -1557,7 +1557,7 @@ function execCommandAddQGroup(){
 		$this->tree->eval->save();
 		if ($this->tree->eval->isError)
 			return EvalCommon::showErrorReport ($this->tree->eval,
-				_("Fehler beim Anlegen einer neuen Gruppe."));
+				_("Fehler beim Anlegen eines neuen Blocks."));
 		$this->msg[$item_id] = "msg§"
 			. _("Ein neuer Fragenblock wurde angelegt.");
 	}// group
@@ -1567,7 +1567,7 @@ function execCommandAddQGroup(){
 		$parentgroup->save();
 		if ($parentgroup->isError)
 			return EvalCommon::showErrorReport ($parentgroup,
-				_("Fehler beim Anlegen einer neuen Untergruppe."));
+				_("Fehler beim Anlegen eines neuen Blocks."));
 		if ($_REQUEST["templateID"] != "")
 			$this->msg[$this->itemID] = "msg§"
 				. sprintf(_("Ein neuer Fragenblock mit der Antwortenvorlage <b>%s</b> wurde angelegt."),
@@ -1789,7 +1789,7 @@ function execCommandQuestionAnswersCreated(){
 	$title = htmlready ($question->getTitle());
 	
 	$this->msg[$this->itemID] = "msg§"
-		. sprintf(_("Der Frage <b>%s</b> wurden Antworten zugewiesen."),$title);
+		. sprintf(_("Der Frage <b>%s</b> wurden Antwortenmöglichkeiten zugewiesen."),$title);
 		
 	$this->changed = true;
 	
@@ -1966,7 +1966,7 @@ function execCommandMoveGroup(){
 				$this->tree->eval->save ();
 				if ($this->tree->eval->isError)
 					return EvalCommon::showErrorReport ($newgroup,
-						_("Fehler beim Verschieben einer Gruppe"));
+						_("Fehler beim Verschieben eines Blocks."));
 			} else {
 
 				$oldparentgroup = &new EvaluationGroup ($oldparentID, NULL, EVAL_LOAD_FIRST_CHILDREN);
@@ -1977,16 +1977,16 @@ function execCommandMoveGroup(){
 			
 			if ($this->tree->eval->isError)
 				return EvalCommon::showErrorReport ($group,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($move_group->isError)
 				return EvalCommon::showErrorReport ($move_group,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($newgroup->isError)
 				return EvalCommon::showErrorReport ($newgroup,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($grouptodelete->isError)
 				return EvalCommon::showErrorReport ($newgroup,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			
 			$this->msg[$this->itemID] = "msg§"
 				. sprintf(_("Der Block <b>%s</b> wurde in die Hauptebene verschoben."),
@@ -2016,7 +2016,7 @@ function execCommandMoveGroup(){
 				$this->tree->eval->save ();
 				if ($this->tree->eval->isError)
 					return EvalCommon::showErrorReport ($newgroup,
-						_("Fehler beim Verschieben einer Gruppe"));
+						_("Fehler beim Verschieben eines Blocks."));
 			} else {
 
 				$oldparentgroup = &new EvaluationGroup ($oldparentID, NULL, EVAL_LOAD_FIRST_CHILDREN);
@@ -2025,21 +2025,21 @@ function execCommandMoveGroup(){
 				$oldparentgroup->save ();
 				if ($oldparentgroup->isError)
 					return EvalCommon::showErrorReport ($newgroup,
-						_("Fehler beim Verschieben einer Gruppe"));
+						_("Fehler beim Verschieben eines Blocks."));
 			}
 			
 			if ($group->isError)
 				return EvalCommon::showErrorReport ($group,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($move_group->isError)
 				return EvalCommon::showErrorReport ($move_group,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($newgroup->isError)
 				return EvalCommon::showErrorReport ($newgroup,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($grouptodelete->isError)
 				return EvalCommon::showErrorReport ($newgroup,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 
 					
 			$this->msg[$this->itemID] = "msg§"
@@ -2087,19 +2087,19 @@ function execCommandMoveGroup(){
 			
 			if ($group->isError)
 				return EvalCommon::showErrorReport ($group,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($move_group->isError)
 				return EvalCommon::showErrorReport ($move_group,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($newgroup->isError)
 				return EvalCommon::showErrorReport ($newgroup,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($grouptodelete->isError)
 				return EvalCommon::showErrorReport ($newgroup,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			if ($oldparent->isError)
 				return EvalCommon::showErrorReport ($oldparent,
-					_("Fehler beim Verschieben einer Gruppe"));
+					_("Fehler beim Verschieben eines Blocks."));
 			
 			$this->msg[$this->itemID] = "msg§"
 				. sprintf(_("Der Block <b>%s</b> wurde in diesen Fragenblock verschoben."),
@@ -2342,7 +2342,7 @@ function createFormNew($show = ARRANGMENT_BLOCK){
 	$qgroup_selection = _("Fragenblock mit")
 		. "&nbsp;"
 		. $this->createTemplateSelection()
-		. $this->createButton("erstellen",_("Neue Fragengruppe"),
+		. $this->createButton("erstellen",_("Einen neuen Fragenblock erstellen"),
 				"cmd[AddQGroup]");
 				
 	$seperator = "&nbsp;|&nbsp;";
@@ -2674,9 +2674,9 @@ function createQuestionFeatures(){
 	
 	$td = new HTML ("td");
     $td->addAttr ("style","border-bottom:0px dotted black;");
-    $td->addHTMLContent (sprintf(_("Dieser Fragenblock benutzt die Antwortenvorlage <b>%s</b>."),
+    $td->addHTMLContent (sprintf(_("Diesem Fragenblock ist die Antwortvorlage <b>%s</b> zugewiesen."),
 				$templateTitle));
-	$text = _("Das Zuweisen einer Antwortenvorlage ändert alle Antworten der Fragen dieses Fragenblocks.");
+	$text = _("Das Zuweisen einer Antwortenvorlage ändert alle Antwortenmöglichkeiten der Fragen dieses Fragenblocks.");
 	if ($templateTitle == NO_TEMPLATE_GROUP)
 		$text .= " "._("Da dieser Fragenblock keine Antwortenvorlage benutzt, würde ein Zuweisen einer Antwortenvorlage zum Verlust aller eingegebenen Antworten führen.");
 	
@@ -2926,13 +2926,13 @@ function createQuestionForm(){
 	 // hat noch keine antworten
 	 if ($question->getChildren() == NULL){
 	 	$image = EVAL_PIC_CREATE_ANSWERS;
-		$text = _("Dieser Frage wurden noch keine Antworten zugewiesen. Drücken sie auf den Doppelfpeil, um dies jetzt zu tun.");
-		$tooltip = tooltip (_("Dieser Frage Antwortmöglichkeiten zuweisen."));
+		$text = _("Dieser Frage wurden noch keine Antwortenmöglichkeiten zugewiesen. Drücken sie auf den Doppelfpeil, um dies jetzt zu tun.");
+		$tooltip = tooltip (_("Dieser Frage Antwortenmöglichkeiten zuweisen."));
 	} else {
 	 	$image = EVAL_PIC_EDIT_ANSWERS;
-		$text = _("Dieser Frage wurden bereits folgende Antworten zugewiesen:")
+		$text = _("Dieser Frage wurden bereits folgende Antwortenmöglichkeiten zugewiesen:")
 			. " ";
-		$tooltip = tooltip (_("Die zugewiesenen Antwortmöglichkeiten bearbeiten."));
+		$tooltip = tooltip (_("Die zugewiesenen Antwortenmöglichkeiten bearbeiten."));
 		$text .= "\n";
 		while ($answer = $question->getNextChild()){
 			$text .= "\"".$answer->getText()."\"\n ";
