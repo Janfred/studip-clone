@@ -849,7 +849,9 @@ if (($sem_browse_data["level"]=="i") && (!$hide_bereich))
 if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 	{
 	
-	$db->query("SELECT bereiche.name, bereiche.bereich_id, count(seminare.Seminar_id) AS number_seminare FROM Institute  LEFT JOIN seminare USING (Institut_id) LEFT JOIN seminar_bereich USING (Seminar_id) LEFT JOIN bereich_fach USING (bereich_id) LEFT JOIN bereiche USING (bereich_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["oid"]."' AND bereich_fach.fach_id = '".$sem_browse_data["id"]."' $class_query GROUP BY bereiche.bereich_id ORDER BY number_seminare DESC");
+	$db->query("SELECT bereiche.name, bereiche.bereich_id, count(seminare.Seminar_id) AS number_seminare FROM bereich_fach 
+				LEFT JOIN bereiche USING (bereich_id) LEFT JOIN seminar_bereich USING (bereich_id)LEFT JOIN seminare USING (Seminar_id)
+				WHERE bereich_fach.fach_id = '".$sem_browse_data["id"]."' $class_query GROUP BY bereiche.bereich_id HAVING number_seminare > 0 ORDER BY number_seminare DESC");
 	
 	$i=0;
 	//echo "<tr><td class=\"blank\">&nbsp;<br></tr></td>";
@@ -880,7 +882,8 @@ if (($sem_browse_data["level"]=="b")  && (!$hide_bereich))
 if (($sem_browse_data["level"]=="sb") && (!$hide_bereich))
 	{
 	
-	$db->query("SELECT faecher.name, faecher.fach_id, count(seminare.Seminar_id) AS number_seminare FROM Institute LEFT JOIN seminare USING (Institut_id)  LEFT JOIN seminar_bereich USING (Seminar_id) LEFT JOIN bereich_fach USING (bereich_id) LEFT JOIN faecher USING (fach_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["id"]."' $class_query GROUP BY faecher.fach_id  ORDER BY number_seminare DESC");
+	$db->query("SELECT faecher.name, faecher.fach_id, count(seminare.Seminar_id) AS number_seminare FROM Institute  LEFT JOIN fach_inst USING (Institut_id) LEFT JOIN faecher USING (fach_id) LEFT JOIN bereich_fach USING (fach_id) LEFT JOIN seminar_bereich USING (bereich_id) 
+				LEFT JOIN seminare USING (Seminar_id) WHERE Institute.Fakultaets_id = '".$sem_browse_data["id"]."' $class_query GROUP BY faecher.fach_id HAVING number_seminare > 0 ORDER BY number_seminare DESC");
 	
 	$i=0;
 	//echo "<tr><td class=\"blank\">&nbsp;<br></tr></td>";
