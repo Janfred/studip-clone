@@ -234,6 +234,16 @@ function CountMembersStatusgruppen ($range_id) {
 	return $db->f("count");
 }
 
+function CountMembersPerStatusgruppe ($group_id) {
+	$db = new DB_Seminar();
+	$db->query("SELECT COUNT(user_id) AS count FROM statusgruppen
+							LEFT JOIN statusgruppe_user USING(statusgruppe_id)
+							WHERE statusgruppen.statusgruppe_id = '$group_id'");
+	$db->next_record();
+	return $db->f("count");
+}
+
+
 /**
 * Returns all statusgruppen for the given range.
 *
@@ -255,4 +265,14 @@ function GetAllStatusgruppen ($range_id) {
 	return (is_array($ret)) ? $ret : FALSE;
 }
 
+
+function GetStatusgruppeName ($group_id) {
+	$db = new DB_Seminar();
+	$db->query("SELECT name FROM statusgruppen WHERE statusgruppe_id='$group_id' ");
+	
+	if ($db->next_record())
+		return $db->f("name");
+	else
+		return FALSE;
+}
 ?>

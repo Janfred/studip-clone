@@ -74,10 +74,11 @@ function PrintAktualStatusgruppen ()
 		$groupmails = groupmail($statusgruppe_id);
 		echo "<table width=\"99%\" cellpadding=\"1\" cellspacing=\"0\" align=\"center\" border=\"0\">
 			        <tr> ";
-		printf ("	        <td width=\"95%%\" class=\"topic\"><font size=\"-1\"><b>%s</b></font></td>",htmlReady($db->f("name")));
-		printf ("	   	<td width=\"5%%\"class=\"topic\" align=\"center\">");
-		if ($rechte) {  // nicht alle duerfen Gruppenmails verschicken
-			printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"Nachricht an User verschicken\" border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
+		printf ("	        <td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>%s</b></font></td>",htmlReady($db->f("name")));
+		printf ("	   	<td width=\"10%%\"class=\"topic\" align=\"center\" nowrap>");
+		if (!$rechte) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
+			printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"eMail an alle Gruppenmitglieder verschicken\" border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
+			printf ("		   &nbsp;<a href=\"sms.php?sms_source_page=statusgruppen.php&cmd=write&group_id=%s \"><img src=\"pictures/nachricht1.gif\" alt=\"Systemnachricht an alle Gruppenmitglieder verschicken\" border=\"0\"></a>", $statusgruppe_id); 
 		} else {
 			echo "&nbsp;";
 		}
@@ -94,7 +95,7 @@ function PrintAktualStatusgruppen ()
 			}
 			printf ("     <tr>");
 			printf ("       <td width=\"95%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>%s</a></font></td>",$class, $db2->f("username"), htmlReady($db2->f("fullname")));
-			printf ("	   <td width=\"5%%\"class=\"$class\" align=\"center\">");
+			printf ("	   <td width=\"5%%\"class=\"$class\" align=\"right\">");
 			printf ("		<a href=\"sms.php?sms_source_page=teilnehmer.php&cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Mail an alle Gruppenmitglieder verschicken\" border=\"0\"></a>", $db2->f("username")); 
 			printf ("	   </td>");
 			echo "	</tr>";
@@ -160,6 +161,13 @@ function PrintNonMembers ($range_id)
 		<td class="blank" colspan="2">&nbsp; 
 		</td>
 	</tr>
+	<tr>
+		<td class="blank">
+		<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<?
+	if ($sms_msg)
+		parse_msg (rawurldecode($sms_msg));
+	?>	
 	<tr valign="top">
      		<td width="90%" NOWRAP class="blank">
 			<? PrintAktualStatusgruppen (); ?>
@@ -177,9 +185,12 @@ function PrintNonMembers ($range_id)
 			}
 			?>
 		</td>
-		<td width="270" NOWRAP class="blank" align="center" valign="top">
-		
-<?
+	</tr>
+	</table>
+	</td>
+	<td width="270" NOWRAP class="blank" align="center" valign="top">
+	
+	<?
 	$infobox = array	(			
 	array  ("kategorie"  => "Information:",
 		"eintrag" => array	(	
@@ -194,7 +205,7 @@ function PrintNonMembers ($range_id)
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/nachricht1.gif" ,
 									"text"  => "Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie das normale Briefsymbol."
 								);
-if ($rechte) {
+	if ($rechte) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
 								"text"  => "Um Gruppen anzulegen und Personen zuzuordnen nutzen Sie <a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">Funktionen / Gruppen verwalten</a>."
 								);
@@ -206,12 +217,12 @@ if ($rechte) {
 		$infobox[1]["eintrag"][] = array (	"icon" => "./pictures/ausruf_small.gif" ,
 									"text"  => "Um eine Mail an alle TeilnehmerInnen der Veranstaltung zu versenden, klicken Sie $link hier</a>."
 								);
-}
+	}
 
-print_infobox ($infobox,"pictures/groups.jpg");
+	print_infobox ($infobox,"pictures/groups.jpg");
 
-?>		
-		</td>		
+	?>
+	</td>		
 	</tr>
 	<tr>
 		<td class="blank" colspan="2">&nbsp; 
