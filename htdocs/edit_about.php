@@ -195,7 +195,7 @@ function studiengang_edit($studiengang_delete,$new_studiengang)
   if ( ($studiengang_delete || $new_studiengang) && !$this->msg)
   {
   $this->msg = "msg§Die Zuordnung zu Studiengängen wurde ge&auml;ndert.";
-  $this->priv_msg= "Die Zuordnung zu Studiengängen wurde ge&auml;ndert!";
+  $this->priv_msg= "Die Zuordnung zu Studiengängen wurde geändert!";
   }
 
   return;
@@ -223,7 +223,7 @@ function inst_edit($inst_delete,$new_inst)
   if ( ($inst_delete || $new_inst) && !$this->msg)
   {
   $this->msg = "msg§Die Zuordnung zu Einrichtungen wurde ge&auml;ndert.";
-  $this->priv_msg= "Die Zuordnung zu Einrichtungen wurde ge&auml;ndert!";
+  $this->priv_msg= "Die Zuordnung zu Einrichtungen wurde geändert!";
   }
 
   return;
@@ -238,7 +238,7 @@ function special_edit($raum,$sprech,$tel,$fax,$name)
 	$this->db->query("UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', Telefon='$tel[$inst_id]', Fax='$fax[$inst_id]' WHERE Institut_id='$inst_id' AND user_id='".$this->auth_user["user_id"]."'");
 	if ($this->db->affected_rows())
 		 {
-		 $this->msg = $this->msg."msg§Ihre Daten an der Einrichtung $name[$inst_id] wurden geändert§";
+		 $this->msg = $this->msg."msg§Ihre Daten an der Einrichtung $name[$inst_id] wurden ge&auml;ndert§";
 		 $this->priv_msg = $this->priv_msg."Ihre Daten an der Einrichtung $name[$inst_id] wurden geändert.";
 		 }
 	}
@@ -309,7 +309,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 	 else $newpass=$response;
 
 	$this->db->query("UPDATE auth_user_md5 SET password='$newpass' WHERE user_id='".$this->auth_user["user_id"]."'");
-	$this->msg=$this->msg."msg§Ihr Passwort wurde geändert!§";
+	$this->msg=$this->msg."msg§Ihr Passwort wurde ge&auml;ndert!§";
 	}
 
 	if ($vorname!=$this->auth_user["Vorname"] || $nachname!=$this->auth_user["Nachname"])  //Namen verändert ?
@@ -325,7 +325,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
    return false;      ## Nachname nicht korrekt oder fehlend
 	}
   $this->db->query("UPDATE auth_user_md5 SET Vorname='$vorname', Nachname='$nachname' WHERE user_id='".$this->auth_user["user_id"]."'");
-  $this->msg=$this->msg."msg§Ihr Name wurde geändert!§";
+  $this->msg=$this->msg."msg§Ihr Name wurde ge&auml;ndert!§";
   }
 
   if ($this->auth_user["username"] != $new_username)
@@ -342,7 +342,7 @@ function edit_pers($password,$check_pass,$response,$new_username,$vorname,$nachn
 		return false;
 	 }
 	$this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
-	$this->msg=$this->msg."msg§Ihr Username wurde geändert!§";
+	$this->msg=$this->msg."msg§Ihr Username wurde ge&auml;ndert!§";
 	//Hotfix, sms auf neuen usernamen umbiegen
 	$this->db->query("UPDATE globalmessages SET user_id_rec='$new_username' WHERE user_id_rec='".$this->auth_user["username"]."'");
 	$this->db->query("UPDATE globalmessages SET user_id_snd='$new_username' WHERE user_id_snd='".$this->auth_user["username"]."'");
@@ -583,7 +583,7 @@ if ($logout)  // wir wurden gerade ausgeloggt...
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	?>
   <table cellspacing="0" cellpadding="0" border="0" width="100%">
-  <tr><td class="topic" colspan=2><b>&nbsp;Daten geändert!</b></th></tr>
+  <tr><td class="topic" colspan=2><b>&nbsp;Daten ge&auml;ndert!</b></th></tr>
   <?
 
   $my_about->parse_msg($my_about->msg);
