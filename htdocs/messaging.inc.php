@@ -19,12 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
+require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
 
 class messaging {
 	var $db;							//Datenbankanbindung
-	var $sig_string;					//String, der Signaturen vom eigentlichen Text abgrenut
+	var $sig_string;					//String, der Signaturen vom eigentlichen Text abgrenzt
 
 
 //Konstruktor
@@ -75,9 +76,6 @@ function delete_sms ($message_id) {
 function insert_sms ($rec_uname, $message, $user_id='') {
 	global $_fullname_sql,$user, $my_messaging_settings, $CHAT_ENABLE;
 
-	if (!$this->sig_string)
-		$this->sig_string="\n \n -- \n";
-
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
@@ -101,14 +99,19 @@ function insert_sms ($rec_uname, $message, $user_id='') {
 			if ($user_id != "____%system%____")  {
 				if ($my_messaging_settings["sms_sig"])
 					$message.=$this->sig_string.$my_messaging_settings["sms_sig"];
-			} else
-				$message.=$this->sig_string."Diese Nachricht wurde automatisch vom System generiert. Sie können darauf nicht antworten.";
+			} else {
+				setTempLanguage($db2->f("user_id"));
+				$message.=$this->sig_string. _("Diese Nachricht wurde automatisch vom System generiert. Sie können darauf nicht antworten.");
+				restoreLanguage();
+			}
 			$db3->query("INSERT INTO globalmessages SET message_id='$m_id', user_id_rec='$rec_uname', user_id_snd='$snd_uname', mkdate='".time()."', message='$message' ");
 		
 			//Benachrichtigung in alle Chaträume schicken
 			if ($CHAT_ENABLE) {
 				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-				$chatMsg = "Du hast eine SMS von <b>".$db->f("fullname")." (".$db->f("username").")</b> erhalten!<br></i>";
+				setTempLanguage($db2->f("user_id"));
+				$chatMsg = sprintf(_("Du hast eine SMS von <b>%s</b> erhalten!"), $db->f("fullname")." (".$db->f("username").")") . "<br></i>";
+				restoreLanguage();
 				$chatMsg .= formatReady(stripslashes($message))."<i>";
 				foreach($chatServer->chatDetail as $chatid => $wert)
 					if ($wert['users'][$db2->f("user_id")])
@@ -171,7 +174,9 @@ function insert_chatinv ($rec_uname, $user_id='') {
 	//Benachrichtigung in alle Chaträume schicken, noch nicht so sinnvoll :)
 	if ($CHAT_ENABLE) {
 		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-		$chatMsg="Du wurdest von <b>".$db->f("fullname")." (".$db->f("username").")</b> in den Chat eingeladen !";
+		setTempLanguage($db2->f("user_id"));
+		$chatMsg= sprintf(_("Du wurdest von <b>%s</b> in den Chat eingeladen!"), $db->f("fullname")." (".$db->f("username").")");
+		restoreLanguage();
 		foreach($chatServer->chatDetail as $chatid => $wert)
 			if ($wert['users'][$db2->f("user_id")])
 				$chatServer->addMsg("system:".$db2->f("user_id"),$chatid,$chatMsg);

@@ -1,7 +1,6 @@
 <?
-//Variable registrieren
-//$user->register("my_messaging_settings");
 
+require_once ($ABSOLUTE_PATH_STUDIP."/language.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
@@ -36,13 +35,13 @@ function change_messaging_view() {
 	?>
 	<table width ="100%" cellspacing=0 cellpadding=0 border=0>
 	<tr>
-		<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;Einstellungen f&uuml;r das Stud.IP Messaging anpassen</b>
+		<td class="topic" colspan=2><img src="pictures/meinesem.gif" border="0" align="texttop"><b>&nbsp;<?=_("Einstellungen f&uuml;r das Stud.IP Messaging anpassen")?></b>
 		</td>
 	</tr>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
 			<blockquote>
-				Hier k&ouml;nnen Sie sie Einstellungen f&uuml;r das Stud.IP-Messaging &auml;ndern. <br />
+				<?=_("Hier k&ouml;nnen Sie Ihre Einstellungen f&uuml;r das Stud.IP-Messaging &auml;ndern.")?> <br />
 			<br>
 			</blockquote>
 		</td>
@@ -53,71 +52,75 @@ function change_messaging_view() {
 			<table width ="99%" align="center" cellspacing=0 cellpadding=2 border=0>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-					&nbsp; &nbsp; <b>Systeminterne Kurznachrichten (SMS)</b>
+					&nbsp; &nbsp; <b><?=_("Systeminterne Kurznachrichten (SMS)")?></b>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>automatisches L&ouml;schen:</b></blockquote>
+					<td class="<? echo $cssSw->getClass() ?>" width="30%">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<?=_("automatisches L&ouml;schen:")?>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>" width="70%">&nbsp; 
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["delete_messages_after_logout"]) echo " checked"; ?>
 					 name="delete_messages_after_logout">
-					&nbsp; Gelesene Nachrichten automatisch nach dem Logout l&ouml;schen
+					&nbsp;<font size=-1> <?=_("Gelesene Nachrichten automatisch nach dem Logout l&ouml;schen")?></font>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Signatur:</b></blockquote>
-					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<?=_("Signatur:")?>
+					<td class="<? echo $cssSw->getClass() ?>">&nbsp; 
 					<textarea name="sms_sig" rows=3 cols=40><? echo htmlready($my_messaging_settings["sms_sig"]); ?></textarea>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-					&nbsp; &nbsp; <b>Stud.IP Messenger</b>
+					&nbsp; &nbsp; <b><?=_("Stud.IP Messenger")?></b>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Starten:</b></blockquote>
+					<td class="<? echo $cssSw->getClass() ?>">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<?=_("Starten:")?>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>">&nbsp; 
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["start_messenger_at_startup"]) echo " checked"; ?>
 					 name="start_messenger_at_startup">
-					&nbsp; Stud.IP-Messenger automatisch nach dem Login starten
+					&nbsp; <font size=-1><?=_("Stud.IP-Messenger automatisch nach dem Login starten")?></font>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-					&nbsp; &nbsp; <b>Buddies / Wer ist online</b><a name="buddy_anker"></a>
+					&nbsp; &nbsp; <b><?=_("Buddies / Wer ist online")?></b><a name="buddy_anker"></a>
 					</td>
 				</tr>
 				<?
 				if (GetNumberOfBuddies()) {
 				?>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Anzeige:</b></blockquote>
+					<td class="<? echo $cssSw->getClass() ?>">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<?=_("Anzeige:")?>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>">&nbsp; 
 					<input type="CHECKBOX" 
 					<? if ($my_messaging_settings["show_only_buddys"]) echo " checked"; ?>
 					 name="show_only_buddys">
-					&nbsp; Nur Buddys in der &Uuml;bersicht der aktiven Benutzer anzeigen
+					&nbsp; <font size=-1><?=_("Nur Buddys in der &Uuml;bersicht der aktiven Benutzer anzeigen")?></font>
 					</td>
 				</tr>
 				<?
 				}
 				?>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b>Dauer bis inaktiv:</b></blockquote>
+					<td class="<? echo $cssSw->getClass() ?>">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<?=_("Dauer bis inaktiv:")?>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">&nbsp; Benutzer nach&nbsp; 
+					<td class="<? echo $cssSw->getClass() ?>">&nbsp;&nbsp; 
 					<select name="active_time">
 					<? 
 					for ($i=0; $i<=15; $i=$i+5) {
@@ -129,30 +132,30 @@ function change_messaging_view() {
 							}
 					?>
 					</select>
-					&nbsp; Minuten nicht mehr anzeigen
+					&nbsp; <font size=-1><?=_("Anzahl der Minuten, nach denen ein Nutzer nicht mehr angezeigt wird")?></font>
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>" width="20%">
-					<blockquote><br><b><?echo _("Buddys verwalten:");?></b></blockquote>
+					<td class="<? echo $cssSw->getClass() ?>">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<?echo _("Buddys verwalten:");?>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="80%">
+					<td class="<? echo $cssSw->getClass() ?>"><font size=-1>&nbsp;&nbsp;
 					<?
-					printf(_("Zum Verwalten Ihrer Buddies besuchen Sie bitte das %s Adressbuch."), "<a href=\"contact.php\">");
-					echo "</a>";
+					printf(_("Zum Verwalten Ihrer Buddies besuchen Sie bitte das %sAdressbuch%s."), "<a href=\"contact.php\">", "</a>");
 					?>
-					</td>
+					</font></td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; 
-					<font size=-1><input type="IMAGE" src="pictures/buttons/uebernehmen-button.gif" border=0 value="&Auml;nderungen &uuml;bernehmen"></font>&nbsp; 
+					<font size=-1><input type="IMAGE" <?=makeButton("uebernehmen", "src")?> border=0 align="absmiddle" value="<?=_("&Auml;nderungen &uuml;bernehmen")?>"></font>&nbsp; 
 					<?
 					if ($i_page == "online.php")
-						echo "<a href=\"online.php\"><img src=\"pictures/buttons/zurueck2-button.gif\" border=0></a>";
+						echo "<a href=\"online.php\">" . makeButton("zurueck2", "img") . "</a>";
 					if ($i_page == "sms.php")
-						echo "<a href=\"sms.php\"><img src=\"pictures/buttons/zurueck2-button.gif\" border=0></a>";
+						echo "<a href=\"sms.php\">" . makeButton("zurueck2", "img") . "</a>";
 					?>
 					<input type="HIDDEN" name="view" value="Messaging">
 					</td>

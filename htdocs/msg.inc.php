@@ -107,8 +107,12 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
 }
 
 //Kombinierte Nachrichten zerlegen und in eigenem Fenster anzeigen
-function parse_window ($long_msg,$separator="§", $titel="Fehler", $add_msg="<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es zur&uuml;ck zur Startseite.<br />&nbsp;") {
+function parse_window ($long_msg,$separator="§", $titel, $add_msg) {
 
+if ($titel == "")
+	$titel= _("Fehler");
+if ($add_msg == "")
+	$add_msg= sprintf(_("%sHier%s geht es zur&uuml;ck zur Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;";
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=70%>
 <tr valign=top align=middle>
