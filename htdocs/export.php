@@ -57,15 +57,6 @@ require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT" . "/export_config.inc.php");
 
 if ($EXPORT_ENABLE)
 {
-	if (isset($range_id) AND isset($o_mode) AND isset($ex_type) AND !isset($page))
-	{
-	?> <script LANGUAGE="JavaScript">
-	msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
-	msg_window.document.write("<html><head><title>Daten-Export</title></head>");
-	msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='pictures/alienupload.gif' width='165' height='125'></p>");
-	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;Die Daten werden exportiert.<br>&nbsp;Bitte haben sie etwas Geduld!<br /></font></p></body></html>");
-	</script><?
-	}
 
 	if (!isset($range_id) AND !isset($xml_file_id) AND !isset($o_mode) AND !isset($ex_type))
 	{
@@ -92,6 +83,12 @@ if ($EXPORT_ENABLE)
 	if ( (isset($choose)) AND (isset($format)) AND ($XSLT_ENABLE) AND ($export_error_num==0) AND
 		( ($o_mode == "processor") OR ($o_mode == "passthrough") OR ($page == 3) ) )
 	{
+		?> <script LANGUAGE="JavaScript">
+		msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
+		msg_window.document.write("<html><head><title>Daten-Export</title></head>");
+		msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='pictures/alienupload.gif' width='165' height='125'></p>");
+		msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;Die Daten werden exportiert.<br>&nbsp;Bitte haben sie etwas Geduld!<br /></font></p></body></html>");
+		</script><?
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_process_done = true;
