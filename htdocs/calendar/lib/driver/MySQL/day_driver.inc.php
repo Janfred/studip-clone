@@ -448,58 +448,30 @@ function day_restore (&$this) {
 					}
 			}
 		}
-		
-	/*	if($is_in_day==TRUE){		
-			switch($time_range){
-				case 0: // Einzeltermin
-					$start = mktime(date("G",$db->f("date")),date("i",$db->f("date")),0,$this->mon,$this->dom,$this->year);
-					$end = mktime(date("G",$db->f("end_time")),date("i",$db->f("end_time")),0,$this->mon,$this->dom,$this->year);
-					break;
-				case 1: // Start
-					$start = mktime(date("G",$db->f("date")),date("i",$db->f("date")),0,$this->mon,$this->dom,$this->year);
-					$end = $this->getEnd();
-					break;
-				case 2: // Mitte
-					$start = $this->getStart();
-					$end = $this->getEnd();
-					break;
-				case 3: // Ende
-					$start = $this->getStart();
-					$end = mktime(date("G",$db->f("end_time")),date("i",$db->f("end_time")),0,$this->mon,$this->dom,$this->year);
-			}
-			$termin = new CalendarEvent($start, $end, $db->f("content"), $db->f("repeat"), $db->f("expire"),
-			                     $db->f("color"), $db->f("priority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
-			if($time_range == 2)
-				$termin->setDayEvent(TRUE);
-			$termin->chng_flag = FALSE;
-			$this->app[] = $termin;
-		}*/
 	}
 }
 	
 	function createEvent (&$this, &$db, $time_range) {
 		switch ($time_range) {
 			case 0: // Einzeltermin
-				$start = mktime(date("G", $db->f("start")), date("i",$db->f("start")), 0,
-						$this->mon, $this->dom, $this->year);
-				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0,
-						$this->mon, $this->dom, $this->year);
+				$start = mktime(date('G', $db->f('start')), date('i', $db->f('start')),
+						date('s', $db->f('start')), $this->mon, $this->dom, $this->year);
+				$end = mktime(date('G', $db->f('end')), date('i', $db->f('end')),
+						date('s', $db->f('end')), $this->mon, $this->dom, $this->year);
 				break;
 			case 1: // Start
-				$start = mktime(date("G", $db->f("start")), date("i", $db->f("start")), 0,
-						$this->mon, $this->dom, $this->year);
+				$start = mktime(date('G', $db->f('start')), date('i', $db->f('start')),
+						date('s', $db->f('start')), $this->mon, $this->dom, $this->year);
 				$end = $start + $db->f('end') - $db->f('start');
-				//$end = $this->getEnd();
 				break;
 			case 2: // Mitte
-				$start = $this->getStart();
-				$end = $this->getEnd();
+				$start = $this->getStart() - $this->getStart() + $db->f('start');
+				$end = $start + $db->f('end') - $db->f('start');
 				break;
 			case 3: // Ende
-			//	$start = $this->getStart();
-				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0,
-						$this->mon, $this->dom, $this->year);
-				$start = $end - ($db->f('end') - $db->f('start'));
+				$end = mktime(date('G', $db->f('end')), date('i', $db->f('end')),
+						date('s', $db->f('end')), $this->mon, $this->dom, $this->year);
+				$start = $end - $db->f('end') + $db->f('start');
 		}
 		$termin =& new CalendarEvent(array(
 				'DTSTART'         => $start,
@@ -525,8 +497,6 @@ function day_restore (&$this) {
 						'count'       => $db->f('count'),
 						'expire'      => $db->f('expire'))),
 				$db->f('event_id'), $db->f('mkdate'), $db->f('chdate'));
-		if ($time_range == 2)
-			$termin->setDayEvent(TRUE);
 		$this->events[] = $termin;
 	}
 	
