@@ -71,187 +71,189 @@ if (is_array($archiv_sem)) {
 					$archiv_assi_data["sems"][] = array("id" => substr($val, 4, strlen($val)), "succesful_archived" => FALSE);
 					$archiv_assi_data["sem_check"][substr($val, 4, strlen($val))] = TRUE;
 				} 
+	} 
+} 
+// inc if we have lectures left in the upper
+if ($inc)
+	if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) {
+		$i = 1;
+		while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $i]["id"]]) && ($archiv_assi_data["pos"] + $i < sizeof($archiv_assi_data["sems"])-1))
+		$i++;
+		if ((sizeof($archiv_assi_data["sem_check"]) > 1) && ($archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $i]["id"]]))
+			$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $i;
+	} 
+
+// dec if we have lectures left in the lower
+if ($dec)
+	if ($archiv_assi_data["pos"] > 0) {
+		$d = -1;
+		while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $d]["id"]]) && ($archiv_assi_data["pos"] + $d > 0))
+		$d--;
+		if ((sizeof($archiv_assi_data["sem_check"]) > 1) && ($archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $d]["id"]]))
+			$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $d;
+	} 
+	
+// Delete (and archive) the lecture
+if ($archive_kill) {
+	$run = TRUE;
+	$s_id = $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]; 
+	// # Do we have permission to do so?
+	// Admin sollte man schon sein
+	if (!$perm->have_perm("admin")) {
+		$msg .= "error§" . _("Sie haben keine Berechtigung zum archivieren von Veranstaltungen.") . "§";
+		$run = FALSE;
+	} 
+	// Trotzdem nochmal nachsehen
+	if (!$perm->have_studip_perm("admin", $s_id)) {
+		$msg .= "error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu archivieren.") . "§";
+		$run = FALSE;
+	} 
+
+	if ($run) {
+		// Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
+		in_archiv($s_id); 
+		
+		// Delete that Seminar.
+		
+		// Alle Benutzer aus dem Seminar rauswerfen.
+		$query = "DELETE from seminar_user where Seminar_id='$s_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$liste .= "<li>" . sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentenInnen oder TutorenInnen archiviert."), $db_ar) . "</li>";
+		} 
+		
+		// Alle Benutzer aus Wartelisten rauswerfen
+		$query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
+		$db->query($query); 
+		
+		// Alle Eintraege aus Zuordnungen zu Studiengaenge rauswerfen
+		$query = "DELETE from admission_seminar_studiengang where seminar_id='$s_id'";
+		$db->query($query); 
+		
+		// Alle beteiligten Institute rauswerfen
+		$query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$liste .= "<li>" . sprintf(_("%s Zuordnungen zu Einrichtungen archiviert."), $db_ar) . "</li>";
+		} 
+		
+		// user aus den Statusgruppen rauswerfen
+		$count = DeleteAllStatusgruppen($s_id);
+		if ($count > 0) {
+			$liste .= "<li>" . _("Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht.") . "</li>";
+		} 
+		
+		// Alle Eintraege aus dem Vorlesungsverzeichnis rauswerfen
+		$db_ar = StudipSemTree::DeleteSemEntries(null, $s_id);
+		if ($db_ar > 0) {
+			$liste .= "<li>" . sprintf(_("%s Zuordnungen zu Bereichen archiviert."), $db_ar) . "</li>";
+		} 
+		
+		// Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
+		if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
+			$liste .= "<li>" . sprintf(_("%s Veranstaltungstermine archiviert."), $db_ar) . "</li>";
+		} 
+		
+		// Alle weiteren Postings zu diesem Seminar loeschen.
+		$query = "DELETE from px_topics where Seminar_id='$s_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$liste .= "<li>" . sprintf(_("%s Postings archiviert."), $db_ar) . "</li>";
+		} 
+		
+		// Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
+		if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
+			$liste .= "<li>" . sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar) . "</li>";
+		} 
+		
+		// Freie Seite zu diesem Seminar löschen
+		$query = "DELETE FROM scm where range_id='$s_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$liste .= "<li>" . _("Freie Seite der Veranstaltung archiviert.") . "</li>";
+		} 
+		
+		// delete literatur 
+		$del_lit = StudipLitList::DeleteListsByRange($s_id);
+		if ($del_lit) {
+			$liste .= "<li>" . sprintf(_("%s Literaturlisten archiviert."),$del_lit['list'])  . "</li>";
+		}
+		
+		// Alle News-Verweise auf dieses Seminar löschen
+		$query = "DELETE FROM news_range where range_id='$s_id'";
+		$db->query($query); 
+		
+		// Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
+		$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
+		$db->query($query);
+		while ($db->next_record()) { // Diese News hängen an nix mehr...
+			$tempNews_id = $db->f("news_id");
+			$query = "DELETE FROM news where news_id = '$tempNews_id'";
+			$db2->query($query);
+		} 
+		if (($db_ar = $db->num_rows()) > 0) {
+			$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
+		} 
+
+		if ($liste)
+			$msg .= "info§<font size=-1>$liste</font>§"; 
+		
+		//kill the datafields
+		$DataFields = new DataFields($s_id);
+		$DataFields->killAllEntries();
+		
+		//kill all wiki-pages
+		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $s_id);
+		$db->query($query);
+
+		$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $s_id);
+		$db->query($query);
+
+		$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $s_id);
+		$db->query($query);
+		
+		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
+		if ($RESOURCES_ENABLE) {
+			$killAssign = new DeleteResourcesUser($s_id);
+			$killAssign->delete();
+		} 
+								
+		// und das Seminar loeschen.
+		$query = "DELETE FROM seminare where Seminar_id= '$s_id'";
+		$db->query($query);
+		if ($db->affected_rows() == 0) {
+			$msg .= "error§<b>" . _("Fehler beim L&ouml;schen der Veranstaltung") . "§";
+			die;
+		} 
+		// Successful archived, if we are here
+		$msg .= "msg§" . sprintf(_("Die Veranstaltung %s wurde erfolgreich archiviert und aus der Liste der aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung."), "<b>" . htmlReady(stripslashes($tmp_name)) . "</b>") . "§"; 
+		
+		// unset the checker, lecture is now killed!
+		unset($archiv_assi_data["sem_check"][$s_id]);
+		
+		// if there are lectures left....
+		if (is_array($archiv_assi_data["sem_check"])) {
+			if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) { // ...inc the counter if possible..
+				$i = 1;
+				while ((! $archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $i]["id"]]) && ($archiv_assi_data["pos"] + $i < sizeof($archiv_assi_data["sems"])-1))
+				$i++;
+				$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $i;
+			} else { // ...else dec the counter to find a unarchived lecture
+				if ($archiv_assi_data["pos"] > 0)
+					$d = -1;
+				while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $d]["id"]]) && ($archiv_assi_data["pos"] + $d > 0))
+				$d--;
+				$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $d;
 			} 
 		} 
-		// inc if we have lectures left in the upper
-		if ($inc)
-			if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) {
-				$i = 1;
-				while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $i]["id"]]) && ($archiv_assi_data["pos"] + $i < sizeof($archiv_assi_data["sems"])-1))
-				$i++;
-				if ((sizeof($archiv_assi_data["sem_check"]) > 1) && ($archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $i]["id"]]))
-					$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $i;
-			} 
-			// inc if we have lectures left in the lower
-			if ($dec)
-				if ($archiv_assi_data["pos"] > 0) {
-					$d = -1;
-					while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $d]["id"]]) && ($archiv_assi_data["pos"] + $d > 0))
-					$d--;
-					if ((sizeof($archiv_assi_data["sem_check"]) > 1) && ($archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $d]["id"]]))
-						$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $d;
-				} 
-				// Delete (and archive) the lecture
-				if ($archive_kill) {
-					$run = TRUE;
-					$s_id = $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]; 
-					// # Do we have permission to do so?
-					// Admin sollte man schon sein
-					if (!$perm->have_perm("admin")) {
-						$msg .= "error§" . _("Sie haben keine Berechtigung zum archivieren von Veranstaltungen.") . "§";
-						$run = FALSE;
-					} 
-					// Trotzdem nochmal nachsehen
-					if (!$perm->have_studip_perm("admin", $s_id)) {
-						$msg .= "error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu archivieren.") . "§";
-						$run = FALSE;
-					} 
+	} 
+} 
 
-					if ($run) {
-						// Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
-						in_archiv($s_id); 
-						
-						// Delete that Seminar.
-						
-						// Alle Benutzer aus dem Seminar rauswerfen.
-						$query = "DELETE from seminar_user where Seminar_id='$s_id'";
-						$db->query($query);
-						if (($db_ar = $db->affected_rows()) > 0) {
-							$liste .= "<li>" . sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentenInnen oder TutorenInnen archiviert."), $db_ar) . "</li>";
-						} 
-						
-						// Alle Benutzer aus Wartelisten rauswerfen
-						$query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
-						$db->query($query); 
-						
-						// Alle Eintraege aus Zuordnungen zu Studiengaenge rauswerfen
-						$query = "DELETE from admission_seminar_studiengang where seminar_id='$s_id'";
-						$db->query($query); 
-						
-						// Alle beteiligten Institute rauswerfen
-						$query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
-						$db->query($query);
-						if (($db_ar = $db->affected_rows()) > 0) {
-							$liste .= "<li>" . sprintf(_("%s Zuordnungen zu Einrichtungen archiviert."), $db_ar) . "</li>";
-						} 
-						
-						// user aus den Statusgruppen rauswerfen
-						$count = DeleteAllStatusgruppen($s_id);
-						if ($count > 0) {
-							$liste .= "<li>" . _("Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht.") . "</li>";
-						} 
-						
-						// Alle Eintraege aus dem Vorlesungsverzeichnis rauswerfen
-						$db_ar = StudipSemTree::DeleteSemEntries(null, $s_id);
-						if ($db_ar > 0) {
-							$liste .= "<li>" . sprintf(_("%s Zuordnungen zu Bereichen archiviert."), $db_ar) . "</li>";
-						} 
-						
-						// Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
-						if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
-							$liste .= "<li>" . sprintf(_("%s Veranstaltungstermine archiviert."), $db_ar) . "</li>";
-						} 
-						
-						// Alle weiteren Postings zu diesem Seminar loeschen.
-						$query = "DELETE from px_topics where Seminar_id='$s_id'";
-						$db->query($query);
-						if (($db_ar = $db->affected_rows()) > 0) {
-							$liste .= "<li>" . sprintf(_("%s Postings archiviert."), $db_ar) . "</li>";
-						} 
-						
-						// Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
-						if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
-							$liste .= "<li>" . sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar) . "</li>";
-						} 
-						
-						// Freie Seite zu diesem Seminar löschen
-						$query = "DELETE FROM scm where range_id='$s_id'";
-						$db->query($query);
-						if (($db_ar = $db->affected_rows()) > 0) {
-							$liste .= "<li>" . _("Freie Seite der Veranstaltung archiviert.") . "</li>";
-						} 
-						
-						// delete literatur 
-						$del_lit = StudipLitList::DeleteListsByRange($s_id);
-						if ($del_lit) {
-							$liste .= "<li>" . sprintf(_("%s Literaturlisten archiviert."),$del_lit['list'])  . "</li>";
-						}
-						
-						// Alle News-Verweise auf dieses Seminar löschen
-						$query = "DELETE FROM news_range where range_id='$s_id'";
-						$db->query($query); 
-						
-						// Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
-						$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
-						$db->query($query);
-						while ($db->next_record()) { // Diese News hängen an nix mehr...
-							$tempNews_id = $db->f("news_id");
-							$query = "DELETE FROM news where news_id = '$tempNews_id'";
-							$db2->query($query);
-						} 
-						if (($db_ar = $db->num_rows()) > 0) {
-							$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
-						} 
-
-						if ($liste)
-							$msg .= "info§<font size=-1>$liste</font>§"; 
-						
-						//kill the datafields
-						$DataFields = new DataFields($s_id);
-						$DataFields->killAllEntries();
-						
-						//kill all wiki-pages
-						$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $s_id);
-						$db->query($query);
-				
-						$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $s_id);
-						$db->query($query);
-				
-						$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $s_id);
-						$db->query($query);
-						
-						// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
-						if ($RESOURCES_ENABLE) {
-							$killAssign = new DeleteResourcesUser($s_id);
-							$killAssign->delete();
-						} 
-												
-						// und das Seminar loeschen.
-						$query = "DELETE FROM seminare where Seminar_id= '$s_id'";
-						$db->query($query);
-						if ($db->affected_rows() == 0) {
-							$msg .= "error§<b>" . _("Fehler beim L&ouml;schen der Veranstaltung") . "§";
-							die;
-						} 
-						// Successful archived, if we are here
-						$msg .= "msg§" . sprintf(_("Die Veranstaltung %s wurde erfolgreich archiviert und aus der Liste der aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung."), "<b>" . htmlReady(stripslashes($tmp_name)) . "</b>") . "§"; 
-						
-						// unset the checker, lecture is now killed!
-						unset($archiv_assi_data["sem_check"][$s_id]);
-						
-						// if there are lectures left....
-						if (is_array($archiv_assi_data["sem_check"])) {
-							if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) { // ...inc the counter if possible..
-								$i = 1;
-								while ((! $archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $i]["id"]]) && ($archiv_assi_data["pos"] + $i < sizeof($archiv_assi_data["sems"])-1))
-								$i++;
-								$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $i;
-							} else { // ...else dec the counter to find a unarchived lecture
-								if ($archiv_assi_data["pos"] > 0)
-									$d = -1;
-								while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $d]["id"]]) && ($archiv_assi_data["pos"] + $d > 0))
-								$d--;
-								$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $d;
-							} 
-						} 
-					} 
-				} 
-
-	// Outputs...
-	if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0)) {
-		$db->query("SELECT * FROM seminare WHERE Seminar_id = '" . $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"] . "' ");
-		$db->next_record();
-		$msg .= "info§<font color=\"red\">" . _("Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!") . "§"; 
+// Outputs...
+if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0)) {
+	$db->query("SELECT * FROM seminare WHERE Seminar_id = '" . $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"] . "' ");
+	$db->next_record();
+	$msg .= "info§<font color=\"red\">" . _("Sie sind im Begriff, die untenstehende  Veranstaltung zu archivieren. Dieser Schritt kann nicht r&uuml;ckg&auml;ngig gemacht werden!") . "§"; 
 	// check is Veranstaltung running
 	if ($db->f("duration_time") == -1) {
 		$msg .= "info§" . _("Das Archivieren k&ouml;nnte unter Umst&auml;nden nicht sinnvoll sein, da es sich um eine dauerhafte Veranstaltung handelt.") . "§";
@@ -465,7 +467,7 @@ if (is_array($archiv_sem)) {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="96%" valign="top" align="center">
 				<? 
-				// can we inc?
+				// can we dec?
 				if ($archiv_assi_data["pos"] > 0) {
 					$d = -1;
 					while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $d]["id"]]) && ($archiv_assi_data["pos"] + $d > 0))
@@ -480,7 +482,7 @@ if (is_array($archiv_sem)) {
 					print("&nbsp;<a href=\"$PHP_SELF?list=TRUE&new_session=TRUE\">" . makeButton("abbrechen", "img") . "</a>");
 				} 
 				print("&nbsp;<a href=\"$PHP_SELF?archive_kill=TRUE\">" . makeButton("archivieren", "img") . "</a>"); 
-				// can we dec?
+				// can we inc?
 				if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) {
 					$i = 1;
 					while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"] + $i]["id"]]) && ($archiv_assi_data["pos"] + $i < sizeof($archiv_assi_data["sems"])-1))
