@@ -255,7 +255,7 @@ while ($db->next_record())
 					$tmp_row_span = ((($global_end_time - $data["start_stunde"])+1) *4);
 					$tmp_row_span = $tmp_row_span - (int)($data["start_minute"] / 15);
 				} else 
-					$tmp_row_span = (($data["end_stunde"] - $data["start_stunde"]) * 4) + (int)(($data["end_minute"] - (($data['start_minute'] > 0) ? 60 - $data['start_minute']: 0) -1) / 15);
+					$tmp_row_span = ceil((($data["end_stunde"] - $data["start_stunde"]) * 4) + (($data["end_minute"] - $data['start_minute'] ) / 15));
 
 				//Check, ob die Startzeit ueber den Sichtbaren Bereich hinauslaeuft, wenn ja wird row_span und der index entsprechend frisiert
 				if ($data["start_stunde"] < $global_start_time) {
@@ -501,13 +501,13 @@ for ($i; $i<$global_end_time+1; $i++)
 		for ($l; $l<8; $l++)
 			{
 			//ausgeblendete Tage skippen
-			if (($l==1) && (!$my_schedule_settings["glb_days"]["mo"] )) $l=2;
-			if (($l==2) && (!$my_schedule_settings["glb_days"]["di"] )) $l=3;
-			if (($l==3) && (!$my_schedule_settings["glb_days"]["mi"] )) $l=4;
-			if (($l==4) && (!$my_schedule_settings["glb_days"]["do"] )) $l=5;
-			if (($l==5) && (!$my_schedule_settings["glb_days"]["fr"] )) $l=6;
-			if (($l==6) && (!$my_schedule_settings["glb_days"]["sa"] )) $l=7;
-			if (($l==7) && (!$my_schedule_settings["glb_days"]["so"] )) $l=8;
+			if (($l==1) && (!$my_schedule_settings["glb_days"]["mo"] )) continue;
+			if (($l==2) && (!$my_schedule_settings["glb_days"]["di"] )) continue;
+			if (($l==3) && (!$my_schedule_settings["glb_days"]["mi"] )) continue;
+			if (($l==4) && (!$my_schedule_settings["glb_days"]["do"] )) continue;
+			if (($l==5) && (!$my_schedule_settings["glb_days"]["fr"] )) continue;
+			if (($l==6) && (!$my_schedule_settings["glb_days"]["sa"] )) continue;
+			if (($l==7) && (!$my_schedule_settings["glb_days"]["so"] )) continue;
 			//if ($l <>8)
 			{
 			$idx=($i*100)+($k*10)+$l;
@@ -572,7 +572,7 @@ for ($i; $i<$global_end_time+1; $i++)
 					}
 				echo "</td></tr></table></td>";
 				}
-			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>"; 
+			if (!$cell_sem[$idx])  echo "class=\"steel1\">&nbsp;</td>"; 
 			}
 			}
 			echo "</tr>\n";
