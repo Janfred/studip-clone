@@ -41,7 +41,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternModulePersons extends ExternModule {
 
 	var $field_names = array();
-	var $data_fields = array("fullname", "Telefon", "Raum", "Email", "Sprechzeiten");
+	var $data_fields = array("fullname", "Telefon", "raum", "Email", "sprechzeiten");
 	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableGroup",
 																	 "TableRow", "Link", "TableFooter");
 
