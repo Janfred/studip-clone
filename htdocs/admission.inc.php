@@ -126,7 +126,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 		}
 
 		//Warteposition der restlichen User neu eintragen
-		renumber_admission($seminar_id. $send_message);
+		renumber_admission($seminar_id, $send_message);
 	}
 }
 
