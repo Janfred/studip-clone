@@ -72,7 +72,7 @@ function print_chat_info($chatids){
 		echo "\n</tr></table>";
 		if ($chat_online_id[$chat_id]){
 			echo "\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
-			echo chat_get_content($chat_id,$chatter,$chatinv,$chatServer->chatDetail['password'],$is_active,$chatServer->getUsers($chat_id));
+			echo chat_get_content($chat_id,$chatter,$chatinv,$chatServer->chatDetail[$chat_id]['password'],$is_active,$chatServer->getUsers($chat_id));
 			echo "\n</table>";
 		}
 	}

@@ -145,7 +145,7 @@ function chat_show_info($chatid){
 			echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
 			echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
 			echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
-			echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail['password'],$is_active,$chatServer->getUsers($chatid));
+			echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
 			echo "\n</table>";
 			return true;
 		} else {
