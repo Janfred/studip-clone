@@ -53,7 +53,7 @@ if (($SessSemName[1] =="") && (!isset($sem_id))) {
 				. _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.") . "<br /><br /> "
 				. sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . "</font>", "§",
 				_("Kein Objekt gew&auml;hlt"),
-				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+				sprintf(_("%sHier%s geht es wieder zur Anmeldungs- bzw. Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
 	die;
 }
 	
@@ -152,14 +152,14 @@ else
 							
 							if (($mein_status) || ($admission_status)) {
 								if ($mein_status) {
-									$tmp_text=_("Sie sind als Teilnehmer der Veranstaltung eingetragen");
+									$tmp_text=_("Sie sind als TeilnehmerIn der Veranstaltung eingetragen");
 								} elseif ($admission_status) {
 									$tmp_text=sprintf (_("Sie sind in die %s der Veranstaltung eingetragen"), ($admission_status=="claiming")  ? _("Anmeldeliste") : _("Warteliste"));
 								} 
 							} elseif (!$perm->have_perm("admin")) {
-								$tmp_text=_("Sie sind nicht als Teilnehmer der Veranstaltung eingetragen.");
+								$tmp_text=_("Sie sind nicht als TeilnehmerIn der Veranstaltung eingetragen.");
 							} else {
-								$tmp_text=_("Sie sind Administrator und k&ouml;nnen die Veranstaltung nicht abonnieren.");
+								$tmp_text=_("Sie sind AdministratorIn und k&ouml;nnen deshalb die Veranstaltung nicht abonnieren.");
 							}
 							if ((!$mein_status) && (!$admission_status)) {
 								$tmp_text = "<font color = red>".$tmp_text."<font>";
@@ -348,7 +348,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
-				printf ("<font size=-1><b>" . _("Teilnehmer:") . "</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("teilnehmer"), TRUE, TRUE));
+				printf ("<font size=-1><b>" . _("Teilnehmende:") . "</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("teilnehmer"), TRUE, TRUE));
 				?>
 				</td>
 			</tr>
@@ -360,7 +360,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
-				printf ("<font size=-1><b>" . _("Vorausetzungen:") . "</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("vorrausetzungen"), TRUE, TRUE));
+				printf ("<font size=-1><b>" . _("Voraussetzungen:") . "</b></font><br /><font size=-1>%s</font>",htmlReady($db2->f("vorrausetzungen"), TRUE, TRUE));
 				?>
 				</td>
 			</tr>
@@ -482,14 +482,14 @@ print_infobox ($infobox,"pictures/details.jpg");
 				<?
 				if ($db2->f("admission_selection_take_place") == 1) {
 					if ($db2->f("admission_type") == 1)
-						printf ("<font size=-1>" . _("Die Teilnehmerauswahl wurde nach dem Losverfahren am %s Uhr festgelegt. Weitere Teilnehmer k&ouml;nnen per Warteliste einen Platz bekommen.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+						printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden wurde nach dem Losverfahren am %s Uhr festgelegt. Weitere Interessierte k&ouml;nnen per Warteliste einen Platz bekommen.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 					else
-						printf ("<font size=-1>" . _("Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurde am %s aufgehoben.Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+						printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wurde am %s aufgehoben. Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 				} else {
 					if ($db2->f("admission_type") == 1)
-						printf ("<font size=-1>" . _("Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+						printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt nach dem Losverfahren am %s Uhr.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 					else
-						printf ("<font size=-1>" . _("Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wird am %s aufgehoben.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+						printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung. Die Kontingentierung wird am %s aufgehoben.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 				}
 				?>
 				</td>
@@ -517,7 +517,7 @@ print_infobox ($infobox,"pictures/details.jpg");
 				//Statistikfunktionen
 				$db3->query("SELECT count(*) as anzahl FROM seminar_user WHERE Seminar_id = '$sem_id'");
 				$db3->next_record();
-				printf ("<font size=-1><b>" . _("Angemeldete Teilnehmer:") . "&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anzahl")) ? $db3->f("anzahl") : _("keine"));
+				printf ("<font size=-1><b>" . _("Anzahl der Teilnehmenden:") . "&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anzahl")) ? $db3->f("anzahl") : _("keine"));
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="24%" valign="top">

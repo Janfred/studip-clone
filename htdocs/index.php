@@ -112,7 +112,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Meine Veranstaltungen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="sem_portal.php"><?=_("Veranstaltung hinzuf&uuml;gen")?></a></td></tr>
 		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Terminkalender")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php"><?=_("pers&ouml;nlicher Stundenplan")?></a></td></tr>
 		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("pers&ouml;nliche Homepage")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=allgemein"><?=_("individuelle Einstellungen")?></a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungssuche")?></a></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Hilfe")?></a></td></tr>
 		</table>
 	</td>
@@ -242,7 +242,7 @@ unset($temp_language_key); unset($temp_language);
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="admin_seminare_assi.php?new_session=TRUE"><?=_("neue Veranstaltung anlegen")?></a></font></td></tr>
 		<tr><td class="blank"><a href="calendar.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Terminkalender")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="mein_stundenplan.php"><?=_("pers&ouml;nlicher Stundenplan")?></a></font></td></tr>
 		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("pers&ouml;nliche Homepage")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="edit_about.php?view=allgemein"><?=_("individuelle Einstellungen")?></a></font></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></font></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<font size="-1"><a href="sem_portal.php"><?=_("Veranstaltungssuche")?></a></font></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Hilfe")?></a></td></tr>
 		</table>
 	</td>
@@ -271,7 +271,7 @@ unset($temp_language_key); unset($temp_language);
 ?>
 <div align="center">
 <table width="70%" border=0 cellpadding=0 cellspacing=0 >
-<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;<?=_("Startseite f&uuml;r Administratoren bei Stud.IP")?></b></td></tr>
+<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b>&nbsp;<?=_("Startseite f&uuml;r AdministratorInnen bei Stud.IP")?></b></td></tr>
 <tr>
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="top">
@@ -279,7 +279,7 @@ unset($temp_language_key); unset($temp_language);
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Veranstaltungen an meinen Einrichtungen")?></a></td></tr>
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a></td></tr>
 		<tr><td class="blank"><a href="admin_institut.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Einrichtungen")?></a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></font></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<a href="sem_portal.php"><?=_("Veranstaltungssuche")?></a></font></td></tr>
 		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("globale Benutzerverwaltung")?></a></td></tr>
 		</table>
 	</td>
@@ -303,16 +303,16 @@ unset($temp_language_key); unset($temp_language);
 ?>
 <div align="center">
 <table width="70%" border=0 cellpadding=0 cellspacing=0>
-<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b><b>&nbsp;<?=_("Startseite f&uuml;r root bei Stud.IP")?></b></b></td></tr>
+<tr><td class="topic" colspan=3><img src="pictures/home.gif" border="0" align="texttop"><b><b>&nbsp;<?=_("Startseite f&uuml;r Root bei Stud.IP")?></b></b></td></tr>
 <tr>
 	<td width="5%" class="blank" valign="middle">&nbsp;</td>
 	<td width="90%" class="blank" valign="top">
 		<table cellpadding=4>
-		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Veranstaltungs-&Uuml;bersicht")?></a></td></tr>
+		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Veranstaltungs&uuml;bersicht")?></a></td></tr>
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Veranstaltungen")?></a></td></tr>
 		<tr><td class="blank"><a href="admin_institut.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung von Einrichtungen")?></a></td></tr>
 		<tr><td class="blank"><a href="new_user_md5.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Verwaltung globaler Einstellungen")?></a></td></tr>
-		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<a href="sem_portal.php"><?=_("Veranstaltungsuche")?></a></font></td></tr>
+		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;<?=_("Suchen")?></a><br />&nbsp; &nbsp; <font size="-1"><a href="browse.php"><?=_("Personensuche")?></a>&nbsp;/&nbsp;<a href="sem_portal.php"><?=_("Veranstaltungssuche")?></a></font></td></tr>
 		</table>
 	</td>
 	<td class="blank" align="right" valign="top" background="pictures/indexbild.jpg"><img src="pictures/blank.gif" width="235"></td>

@@ -89,7 +89,7 @@ $the_tree->showTree();
 	<?
 $infobox = array(array("kategorie"  => "Information:",
 						"eintrag" => array(array("icon" => "pictures/ausruf_small.gif",
-												"text"  => _("Sie k&ouml;nnen sich durch den Einrichtungsbaum klicken, oder das Suchformular benutzen"))
+												"text"  => _("Sie k&ouml;nnen sich durch den Einrichtungsbaum klicken oder das Suchformular benutzen"))
 										)
 						)
 				);
