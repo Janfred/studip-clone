@@ -351,7 +351,7 @@ function PrintInstitutMembers ()
 	PrintAllStatusgruppen (); 
 	?>
     	<input type="IMAGE" name="move_old_statusgruppe" src="./pictures/move.gif" border=0 value="Statusgruppe uebernehmen">&nbsp;  
-        </form></td>
+        </form><br></td>
     <td align="right" width="50%" NOWRAP>
 	<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="POST">
         Name: 
@@ -360,11 +360,14 @@ function PrintInstitutMembers ()
         <input name="new_statusgruppe_size" type="text" value="" size="3">
         &nbsp; &nbsp; &nbsp; Einf&uuml;gen 
     	<input type="IMAGE" name="add_new_statusgruppe" src="./pictures/move_down.gif" border=0 value=" neue Statusgruppe ">&nbsp;  
-      </form></td>
+      </form><br></td>
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0">
  <form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
+	<?
+  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
+  	?>
   <tr>
     <td class="steelgraudunkel" valign="top" width="50%">
     	<br>
@@ -393,9 +396,6 @@ function PrintInstitutMembers ()
 	<br>&nbsp; 
     </td>
   </tr>
-	<?
-  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
-  	?>
  </form>
 </table>
 <p>&nbsp;</p>
