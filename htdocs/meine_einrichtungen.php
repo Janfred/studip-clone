@@ -269,7 +269,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 				<table "center" width="100%" border=0 cellpadding=0 cellspacing=0>
 					<tr>
 						<td class="blank" width="100%" align="right" colspan=2>
-							<img src="pictures/seminare.jpg">
+							<img src="pictures/einrichtungen.jpg">
 						</td>
 					</tr>
 					<tr>
