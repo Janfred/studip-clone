@@ -58,10 +58,10 @@ $css_switcher = new cssClassSwitcher();
 			<form method="post" action="<? echo $PHP_SELF ?>?cmd_cal=chng_cal_settings">
 			<table width ="100%" cellspacing="0" cellpadding="2" border="0">
 				<tr>
-					<td class="<? echo $css_switcher->getClass(); ?>" width="10%">
+					<td class="<? echo $css_switcher->getClass(); ?>" width="1%" nowrap=\"nowrap\">
 						<blockquote><p><b><? echo _("Startansicht einstellen:"); ?></b></p></blockquote>
 					</td>
-					<td class="<? echo $css_switcher->getClass(); ?>" width="90%">
+					<td class="<? echo $css_switcher->getClass(); ?>" width="99%">
 						<select name="cal_view" size="1">
 							<option value="showweek"<?
 								if($calendar_user_control_data["view"] == "showweek")
@@ -83,7 +83,7 @@ $css_switcher = new cssClassSwitcher();
 					</td>
 				</tr>
 				<tr><? $css_switcher->switchClass(); ?>
-				<td class="<? echo $css_switcher->getClass(); ?>">
+				<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 					<blockquote>
 						<p><b><? echo _("Zeitraum der Tages- und Wochensansicht:"); ?></b></p>
 					</blockquote>
@@ -136,7 +136,7 @@ $css_switcher = new cssClassSwitcher();
 					</td>
 				</tr>
 				<tr><? $css_switcher->switchClass(); ?>
-					<td class="<? echo $css_switcher->getClass(); ?>">
+					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
 							<p><b><? echo _("Zeitintervall der Tagesansicht:"); ?></b></p>
 						</blockquote>
@@ -167,7 +167,7 @@ $css_switcher = new cssClassSwitcher();
 					</td>
 				</tr>
 				<tr><? $css_switcher->switchClass(); ?>
-					<td class="<? echo $css_switcher->getClass(); ?>">
+					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
 							<p><b><? echo _("Zeitintervall der Wochenansicht:"); ?></b></p>
 						</blockquote>
@@ -190,7 +190,7 @@ $css_switcher = new cssClassSwitcher();
 					</td>
 				</tr>
 				<tr><? $css_switcher->switchClass(); ?>
-					<td class="<? echo $css_switcher->getClass(); ?>">
+					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
 							<p><b><? echo _("Wochenansicht definieren:"); ?></b></p>
 						</blockquote>
@@ -207,7 +207,7 @@ $css_switcher = new cssClassSwitcher();
 					</td>
 				</tr>
 				<tr><? $css_switcher->switchClass(); ?>
-					<td class="<? echo $css_switcher->getClass(); ?>">
+					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
 							<p><b><? echo _("Feiertage/Semesterdaten:"); ?></b></p>
 						</blockquote>
@@ -224,7 +224,7 @@ $css_switcher = new cssClassSwitcher();
 					</td>
 				</tr>
 				<tr><? $css_switcher->switchClass(); ?>
-					<td class="<? echo $css_switcher->getClass(); ?>">
+					<td class="<? echo $css_switcher->getClass(); ?>" nowrap=\"nowrap\">
 						<blockquote>
 							<p><b><? echo _("Komfortfunktionen"); ?></b></p>
 						</blockquote>
