@@ -404,6 +404,10 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 	$range_id = trim($range_id); 		// laestige white spaces loswerden
 	$description = trim($description);  	// laestige white spaces loswerden
 	$name = trim($name);  			// laestige white spaces loswerden
+	
+	if (!$name)
+		$name = $the_file_name;
+	
 	$db=new DB_Seminar;
 
 	if (!$refresh)
@@ -849,7 +853,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							$content= htmlReady($db3->f("description"), TRUE, TRUE);
 						else
 							$content= _("Keine Beschreibung vorhanden");
-						$content.=  "<br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
+						$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
 						$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
 						}
 			
