@@ -105,7 +105,7 @@ function get_my_obj_values(&$my_obj) {
 		$sql = 
 			"SELECT".
 			" b.Seminar_id,".
-			" (COUNT(d.eval_id) + COUNT(vote_id)) AS count,".
+			" (COUNT(d.eval_id) + COUNT(DISTINCT vote_id)) AS count,".
 			" (COUNT(if ((".
 			"             a.chdate > b.loginfilenow".
 			"             AND".
@@ -143,6 +143,10 @@ function get_my_obj_values(&$my_obj) {
 			"  a.state ".
 			"  IN".
 			"  ('active','stopvis')) ".
+			"WHERE".
+			" d.startdate IS NOT NULL ".
+			" AND".
+			" (d.stopdate > ".time()." OR d.stopdate IS NULL) ".
 			"GROUP BY".
 			" b.Seminar_id";
 		$db2->query ($sql);
