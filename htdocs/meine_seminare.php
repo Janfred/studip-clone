@@ -144,7 +144,7 @@ function print_seminar_content($semid,$my_sem_values) {
   if ($my_sem_values["scmcontent"]) {
 		echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=scm.php\">";
 		if ($my_sem_values["neuscmcontent"])
-	  	echo "&nbsp; <img src=\"pictures/icon-lit2.gif\" border=0 ".tooltip(_("Zur freien Kursseite (geändert)"))."></a>";
+	  	echo "&nbsp; <img src=\"pictures/icon-cont.gif\" border=0 ".tooltip(_("Zur freien Kursseite (geändert)"))."></a>";
 		else
 		  echo "&nbsp; <img src=\"pictures/icon-lit.gif\" border=0 ".tooltip(_("Zur freien Kursseite"))."></a>";
   }
