@@ -119,7 +119,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" valign="top" colspan=2 valign="top" width="96%">
+				<td class="<? echo $cssSw->getClass() ?>" valign="top" colspan=2 valign="top" width="70%">
 				<?
 				//Titel und Untertitel der Veranstaltung
 				printf ("<b>%s</b><br /> ",htmlReady($db2->f("Name")));
@@ -202,52 +202,12 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 						</td>
 						<td width="99%">
 						<?
-
-				// Ampel-Schaltung
-				printf ("<font size=-1>Lesen:&nbsp;</font><font size=-1>%s </font>",$db3->f("anzahl"));
-				if ($mein_status) { // wenn ich im Seminar schon drin bin, darf ich auf jeden Fall lesen
-					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
-				} else {
-					switch($db2->f("Lesezugriff")){
-						case 0 :
-							echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
-					break;
-						case 1 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
-						else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
-						break;
-						case 2 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
-							else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten!)</font>";
-						break;
-					}
-				}
-				printf ("<font size=-1><br />Schreiben:&nbsp;</font><font size=-1>%s </font>",$db3->f("anzahl"));
-					if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
-					echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
-				} else {
-					switch($db2->f("Schreibzugriff")){
-						case 0 :
-							echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
-						break;
-						case 1 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gruen.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1></font>";
-							else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
-						break;
-						case 2 :
-							if ($perm->have_perm("autor"))
-								echo"<img border=\"0\" src=\"pictures/ampel_gelb.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(mit Passwort)</font>";
-							else
-								echo"<img border=\"0\" src=\"pictures/ampel_rot.gif\" width=\"11\" height=\"16\">&nbsp;<font size=-1>(Registrierungsmail beachten)</font>";
-						break;
-					}
-				}
+						// Ampel-Schaltung
+						printf ("<font size=-1>Lesen:&nbsp;</font>");
+						get_ampel_read($mein_status, $admission_status, $db2->f("Lesezugriff"));
+					
+						printf ("<font size=-1><br />Schreiben:&nbsp;</font>");
+						get_ampel_write($mein_status, $admission_status, $db2->f("Schreibzugriff"));
 						?>
 						</td>
 					</tr>
@@ -499,6 +459,33 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				?>
 				</td>
 			</tr>
+			<?
+			if ($db2->f("admission_type")) {
+			?>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
+				<font size=-1><b>Anmeldeverfahren:</b></font><br />				
+				<?
+				if ($db2->f("admission_type") == 1)
+					printf ("<font size=-1>Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				else
+					printf ("<font size=-1>Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.</font>");
+				?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
+					<font size=-1><b>Kontingente:</b></font><br />
+					<?
+					$db3->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$sem_id' "); //Alle  moeglichen Studiengaenge anziegen
+					while ($db3->next_record()) {
+						printf ("<font size=-1>Kontingent f&uuml;r %s (%s Pl&auml;tze)</font>",  ($db3->f("studiengang_id") == "all") ? "alle Studieng&auml;nge" : $db3->f("name"), round ($db2->f("admission_turnout") * ($db3->f("quota") / 100)));
+						print "<br />";
+					}
+				       ?>
+				</td>				
+			</tr>
+			<? } ?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
