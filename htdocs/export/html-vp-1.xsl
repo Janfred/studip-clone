@@ -400,7 +400,7 @@
 				</td>
 				<td bgcolor="#EEEEEE">
 					<xsl:for-each select="bereiche/bereich">
-						<xsl:value-of select="."/><br>
+						<xsl:value-of select="."/><br/>
 					</xsl:for-each>
 				</td>
 			</tr>
