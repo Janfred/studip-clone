@@ -268,7 +268,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 				</tr>
 				<tr>
 					<td>
-					<? if (!$perm->have_perm("dozent")
+					<? if (!$perm->have_perm("dozent"))
 						echo "Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufzunehmen m&ouml;chten, <br />k&ouml;nnen sie sich hier <a href=\"edit_about.php?view=Karriere#einrichtungen\">zuordnen.</a><br /><br />";
 					?>
 					Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen<br /> nutzen Sie die <a href="institut_browse.php">Suchfunktion.</a><br />
