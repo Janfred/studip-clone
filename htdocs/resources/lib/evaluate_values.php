@@ -175,7 +175,6 @@ if ($nrecurse_list)
 //Create ClipBoard-Class, if needed
 if (($view == "search") || ($view == "edit_request")) {
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/ClipBoard.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/ClipBoard.class.php");
 
 	$clipObj = & ClipBoard::GetInstance("search");
 	$clipFormObj =& $clipObj->getFormObject();
@@ -1135,7 +1134,7 @@ if ($save_state_x) {
 		}
 		
 		if ($no_perm)
-			$msg->add_msg(25);
+			$msg->addMsg(25);
 		else {
 			//grouped multiple date mode
 			if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
@@ -1374,6 +1373,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
 	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
 	

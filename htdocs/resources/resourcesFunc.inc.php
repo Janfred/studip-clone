@@ -502,7 +502,9 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 	if (getGlobalPerms($user_id) == "admin") 
 		$my_objects["global"]=array("name"=>_("Global"), "perms" => "admin");
 		
-	$user_global_perm=get_global_perm($this->user_id);
+	$username = get_username($user_id);
+	
+	$user_global_perm=get_global_perm($user_id);
 	switch ($user_global_perm) {
 		case "root": 
 			//Alle Personen...
@@ -524,13 +526,14 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 			//Alle meine Institute (Suche)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms = 'admin' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record()) {
-				$my_objects_inst[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin");
+				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "admin");
 			}
-			//Alle meine Institute (unabhaengig von Suche fuer Rechte)...
+			/*//Alle meine Institute (unabhaengig von Suche fuer Rechte)...
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE inst_perms = 'admin' AND user_inst.user_id='$user_id' ");
 			while ($db->next_record()) {
 				//...alle Mitarbeiter meiner Institute, in denen ich Admin bin....
-				$db2->query ("SELECT auth_user_md5.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string') AND Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ORDER BY Nachname");
+				$db2->query ("SELECT auth_user_md5.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username 
+							FROM user_inst a  LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string') AND Institut_id = '".$db->f("Institut_id")."' AND inst_perms IN ('autor', 'tutor', 'dozent') ORDER BY Nachname");
 				while ($db2->next_record()) {
 					$my_objects_user[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
 				}
@@ -541,19 +544,26 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 						$my_objects_sem[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
 					}
 				}
+			}*/
+			$db2->query("SELECT auth_user_md5.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username 
+						FROM user_inst a INNER JOIN user_inst b ON(a.Institut_id=b.Institut_id AND b.inst_perms IN ('autor', 'tutor', 'dozent'))
+						LEFT JOIN auth_user_md5 USING (user_id) 
+						LEFT JOIN user_info USING (user_id) 
+						WHERE (username LIKE '%$search_string%' OR Vorname LIKE '%$search_string%' OR Nachname LIKE '%$search_string%' OR auth_user_md5.user_id = '$search_string')
+						AND  a.inst_perms='admin' AND a.user_id='$user_id' GROUP BY auth_user_md5.user_id ORDER BY Nachname");
+			while ($db2->next_record()) {
+				$my_objects[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
 			}
-			if (is_array ($my_objects_user))
-				foreach ($my_objects_user as $key=>$val) {
-					$my_objects[$key]=$val;
+			if ($sem) {
+				$db2->query("SELECT seminar_inst.seminar_id, Name FROM user_inst a INNER JOIN seminar_inst USING(Institut_id)
+							LEFT JOIN seminare USING (seminar_id) 
+							WHERE (Name LIKE '%$search_string%' OR Untertitel LIKE '%$search_string%' OR seminare.Seminar_id = '$search_string')
+							AND  a.inst_perms='admin' AND a.user_id='$user_id' GROUP BY seminar_inst.seminar_id ORDER BY Name");
+				while ($db2->next_record()) {
+					$my_objects[$db2->f("Seminar_id")]=array("name"=>$db2->f("Name"), "art"=>_("Veranstaltungen"), "perms" => "admin");
+				}
 			}
-			if (is_array ($my_objects_sem))
-				foreach ($my_objects_sem as $key=>$val) {
-					$my_objects[$key]=$val;
-			}
-			if (is_array ($my_objects_inst))
-				foreach ($my_objects_inst as $key=>$val) {
-					$my_objects[$key]=$val;
-			}
+			
 		break;
 		case "dozent": 
 			//Alle meine Seminare
@@ -566,7 +576,7 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 			$db->query("SELECT Institute.Institut_id, Name, inst_perms FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms IN ('tutor', 'dozent')  AND user_inst.user_id='$user_id'  ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => $db->f("inst_perms"));
-			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>_("Personen"),  "perms" => "admin");
+			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".$username.")", "art"=>_("Personen"),  "perms" => "admin");
 		break;
 		case "tutor": 
 			//Alle meine Seminare
@@ -579,10 +589,10 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 			$db->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (institut_id)  WHERE (Name LIKE '%$search_string%' OR Institute.Institut_id = '$search_string') AND inst_perms='tutor' AND user_inst.user_id='$user_id' ORDER BY Name");
 			while ($db->next_record())
 				$my_objects[$db->f("Institut_id")]=array("name"=>$db->f("Name"), "art"=>_("Einrichtungen"), "perms" => "tutor");
-			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>_("Personen"),  "perms" => "admin");
+			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".$username.")", "art"=>_("Personen"),  "perms" => "admin");
 		break;
 		case "autor": 
-			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".get_username($user_id).")", "art"=>_("Personen"),  "perms" => "admin");
+			$my_objects[$user_id]=array("name"=>"aktueller Account"." (".$username.")", "art"=>_("Personen"),  "perms" => "admin");
 		break;
 	}
 	return $my_objects;
@@ -611,6 +621,10 @@ function search_my_objects ($search_string='', $user_id='', $sem=TRUE) {
 		
 	if (!$search_string)
 		$search_string = "_";
+	
+	if ($perm->have_perm('admin')){
+		return array();
+	}
 
 	//Alle meine Seminare
 	if ($sem) {
