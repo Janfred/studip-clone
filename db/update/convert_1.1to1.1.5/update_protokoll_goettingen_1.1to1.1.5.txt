@@ -40,37 +40,26 @@ gesetzt werden. Dabei muss jedoch sehr genau darauf geachtet werden, dass keine 
 auftreten.
 Es empfielt sich, den Abgleich der neuen Distributionsversionen und der eigenen Datei mit einem Differ vorzunehmen.
 
-Anpassung der Konfigurationstabelle:
-
-Bereits in der Version 1.1 wurde eine Konfigurationstabelle (Tabelle config) eingeführt. Zur Version 1.1.5 wurden einige Werte aus der 
-local.inc und der config.inc.php in diese Tabelle verschoben. Sie können in Ihrer Installation diese Werte in den Konfigurationsdateien
-belassen oder die Einträge in der Konfigurationstabelle entsprechend anpassen. Bitte beachten Sie dafür den Datenbankdump studio-config, 
-in dem alle Werte, die in der Konfigurationstabelle geführt werde, entsprechend gesetzt werden. 
-
 Datenbankupdate:
 
 Das Datenbankupdate erfolgt in der angegebenen Reihenfolge (in Klammern stehen die Verweise auf die jeweiligen Abschnitte des
-Migrationsscripts). Zum Updaten müssen Datenbank und Werbserver wieder gestartet werden. 
+Migrationsscripts). 
+ACHTUNG: Zum Ausführen der SQL-Befehle und Updatescripte müssen Datenbank und Werbserver wieder gestartet werden. 
 
-*  (#1)
-*  (#2)
-*  (#3)
-  ACHTUNG: Dieser Schritt kann bei einer großen Installation eine Zeit dauern (1 Minute...)
-*  (#4)
-  ACHTUNG: Dieser Schritt kann bei einer großen Installation eine Zeit dauern (1 Minute...)
-* Änderungen an den Tabellen der Ressourcenverwaltung vornehmen (#5)
-  ACHTUNG: Wenn die neue Funktionalität für eine zentrale Raumverwaltung/Raumwünsche genutzt werden soll,
-  müssen weitere Konfigurationsoptionen in der Ressourcenverwaltung unter "Anpassen" vorngenommen werden.
-  Die default-Einträge sollten allerdings zunächst gesetzt werden:
-* Default-Einträge für Ressourcenverwaltung setzen (#6)
-* neue Tabellen für Evaluationsmodul anlegen (#7)
-* Default-Einträge für Evaluationsmodul anlegen (#8)
-* Änderungen an der Dateiverwaltung (#9)
-* Änderungen an der Literaturverwaltung für Einrichtungsfunktionen (#10)
-* Änderungen für eMailweiterleitung (#11)
-
-
-Sonstige Änderungen:
-
-- Für die neue Smiley-Verwaltung muss der Webserver Schreibrechte auf der Verzeichnis <studip-root>/pictiures/smileys erhalten,
-  so dass Smileys im System hochgeladen werden können.
+* neue Tabellen für die object_user_visits (Anzeige von neuen Inhalten) in der Datenbank anlegen (#1)
+* Konvertierungen für die object_user_visits aus alten Daten vornehmen 
+  Script: convert_loginfile.php als root ausführen (#2)
+  ACHTUNG: Dieser Schritt kann bei einer großen Installation einige Zeit dauern, da eine große Anzahl an Einträgen erzeugt
+  werden (mehrere Minuten)
+* Änderungen am Messaging vornehmen (#3)
+  ACHTUNG: Dieser Schritt kann bei einer großen Installation eine Zeit dauern (etwa 1 Minute)
+* Indexe am Messaging verändern (#4)
+  ACHTUNG: Dieser Schritt kann bei einer großen Installation eine Zeit dauern (etwa 1 Minute)
+* Konvertierungen für Betreffzeilen im Messaging vornehmen
+  Script: convert_sms_subject.php als root ausführen (#5)
+* Konvertierungen für Einstellungen der Weiterleitung im Messaging vornehmen
+  Script: convert_sms_user_info.php als root ausführen (#6)
+* Änderungen am Wiki (#7)
+* Änderungen an der Smileyverwaltung (#8)
+* Änderungen an der Tabelle user_indo (#9)
+* Änderungen an Indexes der Votes zur Steigerung der Performance (#10)

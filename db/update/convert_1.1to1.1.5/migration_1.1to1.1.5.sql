@@ -9,8 +9,7 @@ in the specified order!
 
 # For detailed informations, please take a look at the update protocol from our installation in Goettingen!
 # (Should be located in the same folder)
-#
-#
+
 # #1
 # create new table for visits
 #
@@ -49,10 +48,14 @@ ALTER TABLE `message_user` ADD INDEX ( `user_id` , `snd_rec` , `deleted` , `fold
 ALTER TABLE `message_user` ADD INDEX ( `user_id` , `snd_rec` , `deleted` , `folder` ) ;
 
 # #5
-# >>>please use the script convert_<NILS_SCRIPT!FEHLT>
+# >>>please use the script convert_sms_subject.php at this point
 #
 
 # #6
+# >>>please use the script convert_sms_user_info.php at this point
+#
+
+# #7
 # changes to the wiki
 #
 
@@ -61,33 +64,30 @@ ALTER TABLE `wiki_links` CHANGE `to_keyword` `to_keyword` CHAR( 128 ) BINARY NOT
 ALTER TABLE `wiki_links` CHANGE `from_keyword` `from_keyword` CHAR( 128 ) BINARY NOT NULL ;
 ALTER TABLE `wiki_locks` CHANGE `keyword` `keyword` VARCHAR( 128 ) BINARY NOT NULL ;
 
-# #7
+# #8
 # create new table and changes for new smiley-management
 #
 
-CREATE TABLE smiley (
-  smiley_id bigint(20) NOT NULL auto_increment,
-  smiley_name varchar(50) NOT NULL default '',
-  smiley_width int(11) NOT NULL default '0',
-  smiley_height int(11) NOT NULL default '0',
-  short_name varchar(50) NOT NULL default '',
-  smiley_counter bigint(20) NOT NULL default '0',
-  short_counter bigint(20) NOT NULL default '0',
-  fav_counter bigint(20) NOT NULL default '0',
-  timestamp timestamp(14) NOT NULL,
-  PRIMARY KEY  (smiley_id),
-  UNIQUE KEY name (smiley_name),
-  KEY short (short_name)
-) TYPE=MyISAM;
+CREATE TABLE `smiley` (
+  `smiley_id` bigint(20) NOT NULL auto_increment,
+  `smiley_name` varchar(50) NOT NULL default '',
+  `smiley_width` int(11) NOT NULL default '0',
+  `smiley_height` int(11) NOT NULL default '0',
+  `short_name` varchar(50) NOT NULL default '',
+  `smiley_counter` bigint(20) NOT NULL default '0',
+  `short_counter` bigint(20) NOT NULL default '0',
+  `fav_counter` bigint(20) NOT NULL default '0',
+  `mkdate` int(10) unsigned default NULL,
+  `chdate` int(10) unsigned default NULL,
+  PRIMARY KEY  (`smiley_id`),
+  UNIQUE KEY `name` (`smiley_name`),
+  KEY `short` (`short_name`)
+) TYPE=MyISAM;[
 
 ALTER TABLE user_info
   ADD smiley_favorite VARCHAR(255) NOT NULL ,
   ADD smiley_favorite_publish TINYINT(1) DEFAULT '0' NOT NULL ;
-
-# #8
-# initialize new smiley-management <SCRIPT?admin_smileys.php?cmd=updatetable>
-#
-
+  
 # #9
 # changes to the table user_inst
 #
