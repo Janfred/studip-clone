@@ -3,7 +3,10 @@
 	<xsl:output method="text" encoding="iso-8859-1"/>
 	<xsl:template match="/">
 	<xsl:for-each select="studip/institut">
-Einrichtung: <xsl:value-of select="name"/>
+<xsl:choose>
+	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
+	<xsl:otherwise>Einrichtung</xsl:otherwise>
+</xsl:choose>: <xsl:value-of select="name"/>
 <xsl:if test="fakultaet">
 Fakultät: <xsl:value-of select="fakultaet"/>
 </xsl:if>

@@ -17,6 +17,7 @@ $xml_groupnames_inst = array(
 );
 
 $xml_names_inst = array( 
+	"type"			=>		"type",
 	"Name"			=>		"name",
 	"Strasse"			=>		"strasse",
 	"Plz"			=>		"plz",

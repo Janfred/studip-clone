@@ -7,8 +7,10 @@
 
 		<xsl:for-each select="studip/institut">
 			<xsl:text>
-\fs36 Einrichtung: </xsl:text>
-			<xsl:value-of select="name"/>
+\fs36 </xsl:text><xsl:choose>
+	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
+	<xsl:otherwise>Einrichtung</xsl:otherwise>
+</xsl:choose>: <xsl:value-of select="name"/>
 <xsl:if test="fakultaet">
 			<xsl:text>
 \par\par\fs24\b Fakult\'e4t: \b0 </xsl:text>

@@ -5,7 +5,10 @@
 	<html>
 		<body>
 			<xsl:for-each select="studip/institut">
-				<h1>Einrichtung: <xsl:value-of select="name"/>
+				<h1><xsl:choose>
+	<xsl:when test="type"><xsl:value-of select="type"/></xsl:when>
+	<xsl:otherwise>Einrichtung</xsl:otherwise>
+</xsl:choose>: <xsl:value-of select="name"/>
 				</h1>
 <xsl:if test="fakultaet">
 				<b>Fakultät: </b>
