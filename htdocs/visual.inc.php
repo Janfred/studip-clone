@@ -584,7 +584,7 @@ for ($i = 0; $i < count($content); $i++) { $print .= "
 						</tr>";
 	for ($j = 0; $j < count($content[$i]["eintrag"]); $j++) { $print .= "
 						<tr>
-							<td class=\"blank\" width=\"1%\" valign=\"top\">
+							<td class=\"blank\" width=\"1%\" align=\"center\" valign=\"top\">
 								<img src=\"".$CANONICAL_RELATIVE_PATH_STUDIP.$content[$i]["eintrag"][$j]["icon"]."\">
 							</td>
 							<td class=\"blank\" width=\"99%\">
