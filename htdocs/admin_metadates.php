@@ -602,7 +602,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 							<?
 							if (isSchedule($term_metadata["sem_id"])) {
 							?>
-							<font size="-1">&nbsp;(<input type="CHECKBOX" name = "update_dates" <?=($term_metadata["update_dates"]) ? "checked" : "" ?> />&nbsp;<?=_("Ablaufplantermine aktualisieren"); ?>)</font><br>
+							<font size="-1">&nbsp;(<input type="CHECKBOX" name="update_dates" value="1" <?=($term_metadata["update_dates"] ? "checked" : "");?> />&nbsp;<?=_("Ablaufplantermine aktualisieren"); ?>)</font><br>
 							<?
 							}
 							?>
