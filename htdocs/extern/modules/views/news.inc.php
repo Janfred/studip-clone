@@ -87,9 +87,11 @@ else {
 	$not_author_link = $this->config->getValue("Main", "notauthorlink");
 	
 	while($db->next_record()){
-		list ($content,$admin_msg) = explode("<admin_msg>",$db->f("body"));
-		if ($admin_msg) 
-			$content.="\n--%%{$admin_msg}%%--";
+		list ($content, $admin_msg) = explode("<admin_msg>", $db->f("body"));
+		if ($admin_msg) {
+			$admin_msg = preg_replace('# \(.*?\)#', '', $admin_msg);
+			$content .= "\n--%%{$admin_msg}%%--";
+		}
 		
 		// !!! LinkInternSimple is not the type of this element,
 		// the type of this element is LinkIntern !!!
