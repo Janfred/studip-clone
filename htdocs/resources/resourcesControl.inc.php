@@ -127,7 +127,7 @@ if ($resources_data["view"]=="resources" || $resources_data["view"]=="_resources
 		echo "<br />&nbsp;";			
 	} else {
 		echo "</td></tr>";
-		parse_msg ("info§Es sind keine Objekte beziehungsweise Ebene angelegt, auf die Sie Zugriff haben. <br />Sie k&ouml;nnen eine neue Ebene erzeugen, wenn sie \"Neue Hierarchie erzeugen\" anw&auml;hlen.");
+		parse_msg ("info§Es sind es existieren Eintr&auml;ge, auf die Sie Zugriff haben. <br />Um Ressourcen anzulegen, erzeugen sie zun&auml;chst eine neue Ebene, indem sie \"Neue Hierarchie erzeugen\" anw&auml;hlen. <br />Anschliessend k&ouml;nnen sie in dieser Ebene Ressourcen anlegen.");
 	}
 
 	if ($edit_structure_object) {

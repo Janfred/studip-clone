@@ -882,9 +882,19 @@ class EditObject extends cssClasses {
 	}
 
 	function showScheduleForms($assign_id='') {
-		global $PHP_SELF, $resources_data, $search_user, $search_string_search_user;
+		global $PHP_SELF, $resources_data, $new_assign_object, $search_user, $search_string_search_user;
 
-		$resAssign=new AssignObject($assign_id);
+		if ($new_assign_object)
+			$resAssign = unserialize($new_assign_object);
+		else
+			$resAssign=new AssignObject($assign_id);
+
+		if (($resAssign->getOwnerType() == "sem") || ($resAssign->getOwnerType() == "date")) {
+			$resObject=new ResourceObject ($resAssign->getResourceId());
+			if ($resObject->getCategoryName() == "Raum")
+				$lockedAssign=TRUE;
+		}
+
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
@@ -899,8 +909,13 @@ class EditObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="Zuweisen">
-				<? 
+				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; 				
+				<?
+				if (!$lockedAssign) {
+				?>
+					<input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
+				<?
+				}
 				if  ($resAssign->getId()) {
 					$ObjectPerms = new AssignObjectPerms($resAssign->getId());
 					if ($ObjectPerms->getUserPerm () == "admin") {
@@ -909,26 +924,61 @@ class EditObject extends cssClasses {
 					}
 				} else
 					 print "<br /><img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
+				if ($lockedAssign) {
+					if ($resAssign->getOwnerType() == "sem")
+						$query = sprintf("SELECT Name, Seminar_id FROM seminare WHERE Seminar_id='%s' ",$resAssign->getAssignUserId());
+					else
+						$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN Seminare ON (termine.range_id = Seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());									
+					$this->db->query($query);
+					$this->db->next_record();
+					print "<br /><img src=\"pictures/ausruf_small.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+					if ($resAssign->getOwnerType() == "sem")
+						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in diesem Raum staffindet.")."<br />"._("Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".$this->db->f("Name")."</a>");
+					else
+						printf (_("Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum stattfindet.")."<br />"._(" Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".$this->db->f("Name")."</a>");					
+				}
 				?>
 				</td>
 			</tr>
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Datum:</font><br />
+				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Datum/erster Termin:</font><br />
 				<font size=-1>
+				<?
+				if ($lockedAssign) {
+					echo "<b>".date("d.m.Y",$resAssign->getBegin())."</b>";
+				} else {
+				?>
 					<input name="change_schedule_day" value="<? echo date("d",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_month" value="<? echo date("m",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_year" value="<? echo date("Y",$resAssign->getBegin()); ?>" size=4 maxlength="4" />
+				<?
+				}
+				?>
 				</font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%"><font size=-1>Art der Wiederholung:</font><br />
 				<font size=-1>
+				<?
+				if ($lockedAssign) {
+					if ($resAssign->getRepeatMode()=="w")
+						if ($resAssign->getRepeatInterval() == 2)
+							echo "<b>"._("zweiw&ouml;chentlich")."</b>";
+						else
+							echo "<b>"._("w&ouml;chentlich")."</b>";
+					else
+						echo "<b>"._("keine Wiederholung (Einzeltermin)")."</b>";
+				} else {
+				?>				
 					<input type="IMAGE" name="change_schedule_repeat_none" src="./pictures/buttons/keine<? printf (($resAssign->getRepeatMode()=="na") ? "2" :"") ?>-button.gif" border=0 />
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_day" src="./pictures/buttons/taeglich<? printf (($resAssign->getRepeatMode()=="d") ? "2" :"") ?>-button.gif" border=0 />
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_week" src="./pictures/buttons/woechentlich<? printf (($resAssign->getRepeatMode()=="w") ? "2" :"") ?>-button.gif" border=0 /><br />
 					<input type="IMAGE" name="change_schedule_repeat_month" src="./pictures/buttons/monatlich<? printf (($resAssign->getRepeatMode()=="m") ? "2" :"") ?>-button.gif" border=0 />
 					&nbsp;<input type="IMAGE" name="change_schedule_repeat_year" src="./pictures/buttons/jaehrlich<? printf (($resAssign->getRepeatMode()=="y") ? "2" :"") ?>-button.gif" border=0 />
+				<?
+				}
+				?>
 				</font>
 				</td>
 			</tr>
@@ -937,20 +987,36 @@ class EditObject extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" valign="top"><font size=-1>Beginn/Ende:</font><br />
 				<font size=-1>
+				<?
+				if ($lockedAssign) {
+					echo "<b>".date("G:i",$resAssign->getBegin())." - ".date("G:i",$resAssign->getEnd())." </b>";
+				} else {
+				?>
 					<input name="change_schedule_start_hour" value="<? echo date("G",$resAssign->getBegin()); ?>" size=2 maxlength="2" />
 					:<input name="change_schedule_start_minute" value="<? echo date("i",$resAssign->getBegin()); ?>" size=2 maxlength="2" />Uhr
 					&nbsp; &nbsp; <input name="change_schedule_end_hour"  value="<? echo date("G",$resAssign->getEnd()); ?>" size=2 maxlength="2" />
 					:<input name="change_schedule_end_minute" value="<? echo date("i",$resAssign->getEnd()); ?>" size=2 maxlength="2" />Uhr
+				<?
+				}
+				?>
 				</font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="40%" valign="top">
 				<? if ($resAssign->getRepeatMode() != "na") { ?>
 				<font size=-1>Wiederholung bis sp&auml;testens:</font><br />				
 				<font size=-1>
+				<?
+				if ($lockedAssign) {
+					echo "<b>".date("d.m.Y",$resAssign->getRepeatEnd())."</b>";
+				} else {
+				?>
 					<input name="change_schedule_repeat_end_day" value="<? echo date("d",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_repeat_end_month" value="<? echo date("m",$resAssign->getRepeatEnd()); ?>" size=2 maxlength="2" />
 					.<input name="change_schedule_repeat_end_year" value="<? echo date("Y",$resAssign->getRepeatEnd()); ?>" size=4 maxlength="4" />
 					<input type="CHECKBOX" <? printf ("%s", ($resAssign->isRepeatEndSemEnd()) ? "checked" : "") ?> name="change_schedule_repeat_sem_end" /> Ende des Semesters
+				<?
+				}
+				?>
 				</font>
 				<? 
 				} else { 
@@ -966,20 +1032,24 @@ class EditObject extends cssClasses {
 					<? 
 					$user_name=$resAssign->getUsername(FALSE);
 					if ($user_name)
-						echo "<b>$user_name&nbsp;</b><br /><br /></font>";
+						echo "<b>$user_name&nbsp;</b></font>";
 					else
-						echo "<b>-- kein Stud.IP Nutzer eingetragen -- &nbsp;</b><br /><br /></font>"
-					?><font size=-1>einen <? if ($user_name) echo "anderen" ?> User (Nutzer, Veranstaltung oder Einrichtung) eintragen: <br /></font><font size=-1>
-					<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE) ?> <br/>
-					freie Eingabe zur Belegung:<br /></font>
-					<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
-					<br /><font size=-1><b>Beachten Sie:</b> Wenn sie einen Nutzer des System eintragen, wird dieser Account mit der Belegung verkn&uuml;pft, dh. z.B. der Nutzer oder berechtigte Personen 
-					k&ouml;nnen die Belegung selbstst&auml;ndig aufheben. Wenn es den Nutzer nicht gibt, k&ouml;nnen sie die Art der Belegung frei eingeben</font>
-					<input type ="HIDDEN" name="change_schedule_assign_user_id" value="<? echo $resAssign->getAssignUserId(); ?>" />
+						echo "<b>-- kein Stud.IP Nutzer eingetragen -- &nbsp;</b></font>";
+					if (!$lockedAssign) {
+						?><br /><br /><font size=-1>einen <? if ($user_name) echo "anderen" ?> User (Nutzer, Veranstaltung oder Einrichtung) eintragen: <br /></font><font size=-1>
+						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE) ?> <br/>
+						freie Eingabe zur Belegung:<br /></font>
+						<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
+						<br /><font size=-1><b>Beachten Sie:</b> Wenn sie einen Nutzer des System eintragen, wird dieser Account mit der Belegung verkn&uuml;pft, dh. z.B. der Nutzer oder berechtigte Personen 
+						k&ouml;nnen die Belegung selbstst&auml;ndig aufheben. Wenn es den Nutzer nicht gibt, k&ouml;nnen sie die Art der Belegung frei eingeben</font>
+						<input type ="HIDDEN" name="change_schedule_assign_user_id" value="<? echo $resAssign->getAssignUserId(); ?>" />
+					<?
+					}
+					?>
 				</font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" valign="top">
-				<? if ($resAssign->getRepeatMode() != "na") { ?>
+				<? if (($resAssign->getRepeatMode() != "na") && ($resAssign->getOwnerType() != "sem") && ($resAssign->getOwnerType() != "date")) {?>
 				<font size=-1>Wiederholungsturnus:</font><br />				
 				<font size=-1>
 					<select name="change_schedule_repeat_interval"> value="<? echo $resAssign->getRepeatInterval(); ?>" size=2 maxlength="2" />
@@ -1050,8 +1120,13 @@ class EditObject extends cssClasses {
 			<tr>
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; <input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="Zuweisen">
+				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; 
 				<?
+				if (!$lockedAssign) {
+				?>
+					<input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
+				<?
+				}
 				if ($killButton) {
 					?><input type="IMAGE" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
 				}

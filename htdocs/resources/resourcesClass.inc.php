@@ -99,7 +99,7 @@ class AssignObject {
 		global $TERMIN_TYP;
 
 		if (!$id)
-			$id=$this->owner_id;
+			$id=$this->assign_user_id;
 
 		switch (ResourceObject::getOwnerType($id)) {
 			case "user";
@@ -159,6 +159,10 @@ class AssignObject {
 			return $this->getUserFreeName();
 		else 
 			return FALSE;
+	}
+	
+	function getOwnerType() {
+		return ResourceObject::getOwnerType($this->assign_user_id);
 	}
 
 	function getResourceId() {
@@ -366,8 +370,8 @@ class AssignObject {
 	}
 
 	function store($create=''){
-		// Natuerlich nur Speichern, wenn sich was geaendert hat oder das Object neu angelegt wird
-		if (($this->chng_flag) || ($create)) {
+		// save only, if changes were made or the object is new and a assign_user_id or a user_free_name is given
+		if ((($this->chng_flag) || ($create)) && (($this->assign_user_id) || ($this->user_free_name))) {
 			$chdate = time();
 			$mkdate = time();
 			if($create) {
@@ -645,21 +649,29 @@ class ResourcesUserRoomsList {
 				$resource_object = new ResourceObject ($db->f("resource_id"));
 				$this->resources[$db->f("resource_id")] = $resource_object;
 			}
-		//if tutor, dozent or admin, load all the rooms of all the Einrichtungen he is member of
+		//if tutor, dozent or admin, load all the rooms of all his administrable objects
 		} elseif  ($perm->have_perm ("tutor")) {
-			$query = sprintf ("SELECT Institut_id FROM user_inst  WHERE inst_perms IN ('tutor', 'dozent', 'admin') AND user_id = '%s' ", $this->user_id);
+			$my_objects=search_administrable_objects();
+			$my_objects[$this->user_id]=TRUE;
+			$i=0;
+			$clause="(";
+			//load my objects
+			foreach ($my_objects as $key=>$val) {
+				if ($i)
+					$clause.=", ";
+				$clause.="'$key'";
+				$i++;
+			}
+			$clause.=")";
+			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id IN %s ",$clause);
 			$db->query($query);
 			while ($db->next_record()) {
-				$query2 = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $db->f("Institut_id"));
-				$db2->query($query2);
-				while ($db2->next_record()) {
-					$this->walkThread($db2->f("resource_id"));
-				}
-				$query2 = sprintf ("SELECT resource_id FROM resources_user_resources WHERE user_id = '%s' ", $db->f("Institut_id"));
-				$db2->query($query2);
-				while ($db2->next_record()) {
-					$this->walkThread($db2->f("resource_id"));
-				}
+				$this->walkThread($db->f("resource_id"));
+			}
+			$query = sprintf ("SELECT resource_id FROM resources_user_resources WHERE user_id IN %s OR user_id = 'all' ", $clause);
+			$db->query($query);
+			while ($db->next_record()) {
+				$this->walkThread($db->f("resource_id"));
 			}
 		}
 		
@@ -1233,7 +1245,6 @@ class ResourcesObjectPerms extends ResourcesPerms {
 		//else check all the other possibilities
 		if ($this->perm != "admin") {
 			$my_objects=search_administrable_objects();
-			//echo serialize ($my_objects);
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			foreach ($my_objects as $key=>$val) {
 				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$this->resource_id' ");
@@ -1404,7 +1415,7 @@ class ResourcesRootThreads {
 				$roots[$db->f("root_id")][]=$db->f("resource_id");
 			}
 
-			foreach ($my_resources as $key => $val) {
+			if (is_array($my_resources)) foreach ($my_resources as $key => $val) {
 				if (!$this->checked[$key]) {
 					if (sizeof($roots[$val["root_id"]]) == 1)
 						$this->my_roots[$key] = $key;
