@@ -57,6 +57,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Seminar.class.php");	//Seminar-c
 
 
 if ($RESOURCES_ENABLE) {
+	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 }
@@ -176,6 +177,9 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 //initiate the seminar-class
 $semObj = new Seminar($admin_rooms_data["sem_id"]);
 
+//load my request, se can see if user id the appropriciate admin too
+$my_requests = getMyRoomRequests();
+
 	//Output & Forms
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
@@ -201,7 +205,13 @@ $semObj = new Seminar($admin_rooms_data["sem_id"]);
 			<blockquote>
 			<b><?=_("Raumanfragen und gew&uuml;nschte Raumeigenschaften") ?></b><br /><br />
 			<?=_("Sie k&ouml;nnen hier Angaben &uuml;ber einen gew&uuml;nschten Raum und gew&uuml;nschte Raumeigenschaften machen.")?> <br />
-			<?=_("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird dann ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen.")?><br />
+			<? 
+			if ($my_requests[$admin_rooms_data["resRequest"]->getId()])
+				printf (_("Sie k&ouml;nnen diese Anfrage auch selbst %saufl&ouml;sen%s."), "<a href=\"resources.php?view=edit_request&single_request=".$admin_rooms_data["resRequest"]->getId()."\">&nbsp;<img src=\"pictures\link_intern.gif\" border=\"0\" />&nbsp;", "</a>");
+			else
+				print _("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird dann ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen.");
+			?>
+			<br />
 			</blockqoute>
 		</td>
 		<td class="blank" align="right">
