@@ -73,6 +73,8 @@ h2.topic, h3.topic { font-family: Arial, Helvetica, sans-serif; color: #FFFFFF; 
 td.printhead {background-image: url('pictures/steelblau.jpg');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
 td.printhead2 {background-image: url('pictures/steelblau2.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
 td.printhead3 {background-image: url('pictures/steelblau3.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
+td.colorline {background-image: url('pictures/colorline.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
+td.colorline2 {background-image: url('pictures/colorline2.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
 A:link.printhead {color:#333399;  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
 A:visited.printhead {color:#333399;  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
 a.printhead {color:#333399;  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
