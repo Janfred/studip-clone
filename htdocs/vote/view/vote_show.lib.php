@@ -745,7 +745,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
    // a: habe $number als Überprüfung hinzugefügt, da sonst bei abgelaufenen 
    // Votes die Anzeige nicht funktioniert...muss überarbeitet werden!
    if ($isAssociated && $number) 
-       $html .= formatReady(_(", Sie auch"));
+       $html .= formatReady(_(", Sie haben ebenfalls abgestimmt"));
    /* ---------------------------------------------------------------------- */
 
    $html .= ".";
