@@ -316,9 +316,13 @@ function dump_sem($sem_id) {
 		$doc_ids=doc_challenge($sem_id);
 		if (count($doc_ids))
 			foreach ($doc_ids as $a) {
-				$db->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
+				$db->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
 				$db->next_record();
-				$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
+				if ($db->f("url")!="")
+					$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.<br>");
+				else
+					$linktxt = "";	
+				$dbresult[$i]=array("mkdate"=>$db->f("mkdate"), "dokument_id"=>$db->f("dokument_id"), "description"=>$linktxt.$db->f("description"), "filename"=>$db->f("filename"), "filesize"=>$db->f("filesize"),"user_id"=> $db->f("user_id"), "username"=>$db->f("username"), "nachname"=>$db->f("Nachname"));
 				$i++;
 			}
 			
@@ -328,9 +332,13 @@ function dump_sem($sem_id) {
 			$doc_ids=doc_challenge($db->f("termin_id"));
 			if (count($doc_ids))
 				foreach ($doc_ids as $a) {
-					$db2->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
+					$db2->query ("SELECT dokument_id, dokumente.description, filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE dokument_id = '$a'");
 					$db2->next_record();
-					$dbresult[$i]=array("mkdate"=>$db2->f("mkdate"), "dokument_id"=>$db2->f("dokument_id"), "description"=>$db2->f("description"), "filename"=>$db2->f("filename"), "filesize"=>$db2->f("filesize"),"user_id"=> $db2->f("user_id"), "username"=>$db2->f("username"), "nachname"=>$db2->f("Nachname"));	
+					if ($db2->f("url")!="")
+						$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.<br>");
+					else
+						$linktxt = "";	
+					$dbresult[$i]=array("mkdate"=>$db2->f("mkdate"), "dokument_id"=>$db2->f("dokument_id"), "description"=>$linktxt.$db2->f("description"), "filename"=>$db2->f("filename"), "filesize"=>$db2->f("filesize"),"user_id"=> $db2->f("user_id"), "username"=>$db2->f("username"), "nachname"=>$db2->f("Nachname"));	
 					$i++;
 				}
 		}
@@ -615,7 +623,7 @@ function in_archiv ($sem_id) {
 	
 	//OK, letzter Schritt: ZIPpen der Dateien des Seminars und Verschieben in eigenes Verzeichnis
 
-	$query = sprintf ("SELECT dokument_id FROM dokumente WHERE seminar_id = '%s'", $seminar_id);
+	$query = sprintf ("SELECT dokument_id FROM dokumente WHERE seminar_id = '%s' AND url = ''", $seminar_id);
 	$db->query ($query);
 	if ($db->affected_rows()) {
 		$archiv_file_id=md5(uniqid($hash_secret));
