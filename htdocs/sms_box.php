@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 function MessageIcon ($message_hovericon) {
 	global $my_messaging_settings, $PHP_SELF, $auth;
-	#if ($my_messaging_settings["hover"]==1 AND $auth->auth["jscript"] AND $message["content"]!="" && $message["openclose"]=="close") {
 	if ($auth->auth["jscript"] AND $message_hovericon["content"]!="" && $message_hovericon["openclose"]=="close" && $my_messaging_settings["hover"] == "1") {
 		$hovericon = "<a href=\"".$message_hovericon['link']."\" "
 			."onMouseOver=\"return overlib('"
@@ -193,27 +192,25 @@ function print_snd_message($mkdate, $message_id, $message, $sms_data_open, $sms_
 	}
 	$zusatz .= "</font>";
 	
-	if ($open == "open" || $my_messaging_settings["hover"] == "1") {
-		// tread content
-		if (strpos($message,$msging->sig_string)) {
-			$titel = mila(kill_format(substr($message, 0, strpos($message,$msging->sig_string))));
-		} else {
-			$titel = mila(kill_format($message));
-		}
-		$content = quotes_decode(formatReady($message));
-		if ($x >= "2") { // if more than one receiver add appendix
-			$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
-			$query = "SELECT message_user.* FROM message_user LEFT JOIN auth_user_md5 USING(user_id) WHERE message_user.message_id = '".$message_id."' AND message_user.snd_rec = 'rec'";
-			$db7->query($query);
-			while ($db7->next_record()) {
-				$content .= "<a href=\"about.php?username=".get_username($db7->f("user_id"))."\"><font size=-1 color=\"#333399\">".get_fullname($db7->f("user_id"))."</font></a>,&nbsp;";
-			}
-		}
-
-		// buttons
-		$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\" ".tooltip(_("Diese Nachricht löschen.")).">".makeButton("loeschen", "img")."</a>&nbsp;";
-		$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
+	// tread content
+	if (strpos($message,$msging->sig_string)) {
+		$titel = mila(kill_format(substr($message, 0, strpos($message,$msging->sig_string))));
+	} else {
+		$titel = mila(kill_format($message));
 	}
+	$content = quotes_decode(formatReady($message));
+	if ($x >= "2") { // if more than one receiver add appendix
+		$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
+		$query = "SELECT message_user.*, auth_user_md5.username FROM message_user LEFT JOIN auth_user_md5 USING(user_id) WHERE message_user.message_id = '".$message_id."' AND message_user.snd_rec = 'rec'";
+		$db7->query($query);
+		while ($db7->next_record()) {
+			$content .= "<a href=\"about.php?username=".$db7->f("username")."\"><font size=-1 color=\"#333399\">".get_fullname($db7->f("user_id"))."</font></a>,&nbsp;";
+		}
+	}
+
+	// buttons
+	$edit = "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\" ".tooltip(_("Diese Nachricht löschen.")).">".makeButton("loeschen", "img")."</a>&nbsp;";
+	$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
 
 	// mk titel
 	if (strlen($titel) >= "50") {
@@ -299,31 +296,30 @@ function print_rec_message($user_id_snd, $mkdate, $message_id, $message, $fullna
 		$zusatz .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\"><img src=\"./pictures/cont_folder_sms.gif\" border=0 ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben."))."></a><a href=\"".$PHP_SELF."?cmd=".$tmp_cmd."&sel_lock=".$message_id."\"><img src=\"./pictures/".$tmp_picture.".gif\" border=0 ".$tmp_tooltip."></a><input type=\"checkbox\" name=\"sel_delsms[]\" ".$disable." value=\"".$message_id."\" ".CheckChecked($cmd, "select_all").">";
 		$zusatz .= "</font>";			
 	}
-	if ($open == "open" || $my_messaging_settings["hover"] == "1") {
-		// tread message_header and content
-		if (strpos($message,$msging->sig_string)) {
-			$titel = mila(kill_format(substr($message, 0, strpos($message,$msging->sig_string))));
-		} else {
-			$titel = mila(kill_format($message));
-		}
-		if (strlen($titel) >= "50") {
-			$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a></a>";
-		} else {
-			$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".$titel."</a></a>";
-		}	
-		$content = quotes_decode(formatReady($message));
-		// mk buttons
-		$edit = "";
-		if ($user_id_snd != "____%system%____") {
-			$edit .= "<a href=\"sms_send.php?cmd=write&rec_uname=".$uname_snd."\">".makeButton("antworten", "img")."</a>";
-			$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$message_id."&rec_uname=".$uname_snd."\">".makeButton("zitieren", "img")."</a>";
-		}
-		$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a>";
-		$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
+	// tread message_header and content
+	if (strpos($message,$msging->sig_string)) {
+		$titel = mila(kill_format(substr($message, 0, strpos($message,$msging->sig_string))));
+	} else {
+		$titel = mila(kill_format($message));
 	}
+	if (strlen($titel) >= "50") {
+		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".substr($titel, 0, 30)." ...</a></a>";
+	} else {
+		$titel = "<a name=".$message_id."><a href=\"$link\" class=\"tree\" >".$titel."</a></a>";
+	}	
+	$content = quotes_decode(formatReady($message));
+	// mk buttons
+	$edit = "";
+	if ($user_id_snd != "____%system%____") {
+		$edit .= "<a href=\"sms_send.php?cmd=write&rec_uname=".$uname_snd."\">".makeButton("antworten", "img")."</a>";
+		$edit .= "&nbsp;<a href=\"sms_send.php?cmd=write&quote=".$message_id."&rec_uname=".$uname_snd."\">".makeButton("zitieren", "img")."</a>";
+	}
+	$edit.= "&nbsp;<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_delsms[1]=".$message_id."\">".makeButton("loeschen", "img")."</a>";
+	$edit .= "&nbsp;<a href=\"".$PHP_SELF."?move_to_folder=".$message_id."\" ".tooltip(_("Diese Nachricht in einen frei wählbaren Ordner verschieben.")).">".makeButton("verschieben", "img")."</a><br><br>";
+	
 	// (hover) icon 
 	$message_hovericon['openclose'] = $open;
-	$message_hovericon['content'] = $message;
+	$message_hovericon['content'] = $content;
 	$message_hovericon['id'] = $message_id;
 	$message_hovericon['titel'] = $titel;
 	$message_hovericon['link'] = $link;
@@ -524,11 +520,14 @@ if ($sms_inout) {
 	$sms_data["view"] = "in";
 }
 
-if ($show_folder) { // set choosen folder
+if ($show_folder || empty($sms_show['folder'][$sms_data['view']])) { // set choosen folder
 	if ($show_folder == "close") {
 		$sms_show['folder'][$sms_data['view']] = "close";
 	} else {
 		$sms_show['folder'][$sms_data['view']] = $show_folder;
+	}
+	if (empty($sms_show['folder'][$sms_data['view']])) {
+		$sms_show['folder'][$sms_data['view']] = "close";
 	}
 }
 
