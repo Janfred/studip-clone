@@ -121,7 +121,7 @@ class AppList{
 				              $db->f("date_typ"), $db->f("raum"), $db->f("termin_id"), $db->f("range_id"),
 											$db->f("mkdate"), $db->f("chdate"));
 				$app->setDescription($db->f("description"));
-				$app->setWrightPermission($db->f("status") == "tutor" || $db->f("status") == "dozent");
+				$app->setWritePermission($db->f("status") == "tutor" || $db->f("status") == "dozent");
 				$app->setSemName($db->f("Name"));
 				$this->apps[] = $app;
 			}
@@ -136,6 +136,6 @@ class AppList{
 			usort($this->apps,"cmp_list");
 	}
 	
-} // class AppList 
+} // class DbCalendarEventList 
 
 ?>

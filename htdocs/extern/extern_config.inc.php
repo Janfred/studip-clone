@@ -64,7 +64,7 @@ $EXTERN_MODULE_TYPES[5] = array("module" => "Lecturedetails", "name" => _("Veran
 $EXTERN_MODULE_TYPES[6] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
 													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."));
 
-$EXTERN_MODULE_TYPES[7] = array("module" => "Structure", "name" => _("Bereichsbaum"), "level" => 1,
+$EXTERN_MODULE_TYPES[7] = array("module" => "Tree", "name" => _("Bereichsbaum"), "level" => 1,
 													"description" => _("Das Modul &quot;Bereichsbaum&quot; gibt die Struktur einer Einrichtung aus, wenn diese im Bereichsbaum eingefügt wurde. Die Ausgabe erfolgt jeweils vor der Datenausgabe eines anderen Moduls."));
 */
 // Don't allow more than 10 configuration files for each module!
