@@ -603,8 +603,7 @@ ELSEIF ($perm->have_perm("root")){
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-				<blockquote>Um eine neue Veranstaltung anzulegen, benutzen Sie bitte den&nbsp; <a href="admin_seminare_assi.php?new_session=TRUE">Veranstaltungs-Assistenten</a><br>
-				</blockquote>
+				&nbsp; 
 			</td>
 		</tr>
 	</table>
