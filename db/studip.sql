@@ -25,6 +25,7 @@ CREATE TABLE Institute (
   email varchar(255) NOT NULL default '',
   fax varchar(32) NOT NULL default '',
   type int(10) NOT NULL default '0',
+  modules bigint(20) default NULL,
   mkdate int(20) NOT NULL default '0',
   chdate int(20) NOT NULL default '0',
   PRIMARY KEY  (Institut_id)
@@ -570,6 +571,7 @@ CREATE TABLE seminare (
   admission_type int(3) NOT NULL default '0',
   admission_selection_take_place tinyint(4) default NULL,
   showscore tinyint(3) default '0',
+  modules bigint(20) default NULL,
   PRIMARY KEY  (Seminar_id),
   KEY Institut_id (Institut_id)
 ) TYPE=MyISAM PACK_KEYS=1;
@@ -667,11 +669,8 @@ CREATE TABLE user_info (
   user_id varchar(32) NOT NULL default '',
   hobby varchar(255) NOT NULL default '',
   lebenslauf text,
-  raum varchar(32) default NULL,
-  sprechzeiten varchar(200) default NULL,
   publi text NOT NULL,
   schwerp text NOT NULL,
-  Lehre text NOT NULL,
   Home varchar(200) NOT NULL default '',
   privatnr varchar(32) NOT NULL default '',
   privadr varchar(64) NOT NULL default '',
@@ -679,7 +678,6 @@ CREATE TABLE user_info (
   geschlecht tinyint(4) NOT NULL default '0',
   mkdate int(20) NOT NULL default '0',
   chdate int(20) NOT NULL default '0',
-  hide_studiengang tinyint(4) default NULL,
   preferred_language varchar(6) default NULL,
   title_front varchar(64) NOT NULL default '',
   title_rear varchar(64) NOT NULL default '',
