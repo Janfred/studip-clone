@@ -158,7 +158,7 @@ $this->msg[36] = array (
 		"mode" => "info",
 		"msg"=> _("Sie haben alle Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")
 			."<br /><a href=\"%s?snd_closed_request_sms=1&edit_all=1\">".makeButton("ja2")."</a>"
-			."&nbsp;<a href=\"%s&edit_all=1\">".makeButton("nein")."</a>");
+			."&nbsp;<a href=\"%s?edit_all=1\">".makeButton("nein")."</a>");
 $this->msg[37] = array (
 		"mode" => "msg",
 		"msg"=> _("Die regelm&auml;&szlig;ige Belegung wurde in Einzeltermine umgewandelt und ein Ablaufplan angelegt."));
