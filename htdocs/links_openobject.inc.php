@@ -105,7 +105,7 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])) {
 
 //topkats for SupportDB, if module is activated
 if (($SUPPORT_ENABLE) && ($modules["support"])) {
-	$structure["support"]=array (topKat=>"", name=>_("SupportDB"), link=>"support.php?view=overview", active=>FALSE);
+	$structure["support"]=array (topKat=>"", name=>_("SupportDB"), link=>"support.php", active=>FALSE);
 }
 
 
