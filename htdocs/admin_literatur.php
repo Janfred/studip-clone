@@ -129,8 +129,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	  if (!$db->num_rows())
 		{
 		$new_entry=TRUE;
-		$literatur="Keine Einträge";
-		$links="Keine Einträge";
 		$hash_secret = "blafasel25";
 		$lit_id=md5(uniqid($hash_secret));
 		$autor=get_fullname();
