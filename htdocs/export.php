@@ -87,7 +87,7 @@ if ($EXPORT_ENABLE)
 			$xslt_process_done = true;
 	}
 	
-	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo") AND ($FOP_ENABLE))
+	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_fop.inc.php");
 
 	if (($export_error_num < 1) AND (!$start_done) AND (!$xml_output_done) AND (!$xslt_choose_done) AND (!$xslt_process_done))
