@@ -694,10 +694,6 @@ if ($send_view) {
 	if ($answer_to && !$quote) {
 		$db->query ("SELECT subject, message FROM message WHERE message_id = '$answer_to' ");
 		$db->next_record();
-		echo "|".strlen($db->f("subject"))."|";
-		echo "<br>";
-		echo "|".substr($db->f("subject"), 0, 3)."|";
-		
 		if(substr($db->f("subject"), 0, 3) != "RE:") {
 			$messagesubject = "RE: ".$db->f("subject");
 		} else {
