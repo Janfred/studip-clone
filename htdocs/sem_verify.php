@@ -207,68 +207,36 @@ $db6=new DB_Seminar;
 			echo"<tr>";
 
 		if (!$seminar && !$warteliste && $platz) {
+			$meldung = sprintf(_("Sie bekommen einen Platz in der Veranstaltung %s."), "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b>");
+			$meldung = _("<p>Falls dies nicht ihre präferierte Veranstaltung dieser Gruppe ist, tragen Sie sich bitte ebenfalls für ihre präferierte Veranstaltung ein.</p>");
+			$meldung = _("<p>Wenn Sie dort über die Warteliste nachrücken, wird ihre Eintragung in dieser Veranstaltung automatisch gelöscht.</p>");
 			if ($as_info) {
-				$meldung1 = "info§" . sprintf(
-				(formatReady(_("Sie bekommen einen Platz in der Veranstaltung"))).
-				"<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b>.");
-				$meldung2 = "info§" . sprintf(
-				formatReady(_("Falls dies nicht ihre präferierte Veranstaltung dieser Gruppe ist, tragen Sie sich bitte ebenfalls für ihre präferierte Veranstaltung ein.")));
-				$meldung3 = "info§" . sprintf(
-				formatReady(_("Wenn Sie dort über die Warteliste nachrücken, wird ihre Eintragung in dieser Veranstaltung automatisch gelöscht.")));
-				parse_msg($meldung1, "§", "blank",3);
-				parse_msg($meldung2, "§", "blank",3);
-				parse_msg($meldung3, "§", "blank",3);
+				parse_msg("info§".$meldung, "§", "blank",3);
 			} else {
-				print (formatReady(_("Sie bekommen einen Platz in der Veranstaltung")));
-				echo "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b>.<br/><br/>";
-				print (formatReady(_("Falls dies nicht ihre präferierte Veranstaltung dieser Gruppe ist, tragen Sie sich bitte ebenfalls für ihre präferierte Veranstaltung ein.")));
-				echo "<br/><br/>";
-				print (formatReady(_("Wenn Sie dort über die Warteliste nachrücken, wird ihre Eintragung in dieser Veranstaltung automatisch gelöscht.")));
+				print $meldung;
 			}
 		}
 
 		if (!$seminar && !$warteliste && !$platz) {
+			$meldung= "<font color=\"#FF0000\">".  sprintf(_("Sie bekommen im Moment keinen Platz in der Veranstaltung %s."), "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>");
+			$meldung .= _("Sie wurden jedoch auf die Warteliste gesetzt.")."</font>";
+			$meldung .= _("<p>Um sicher zu gehen, dass Sie einen Platz in einer Veranstaltung dieser Gruppe bekommen, sollten Sie sich zusätzlich in einer weiteren Veranstaltung fest eintragen.</p>");
+			$meldung = _("<p>Sobald Sie in dieser Veranstaltung von der Warteliste aufrücken, wird ihre dortige Eintragung automatisch gelöscht.");
 			if ($as_info) {
-				$meldung1 = "info§" . sprintf(
-				"<font color=\"#FF0000\">".
-				(formatReady(_("Sie bekommen im Moment keinen Platz in der Veranstaltung"))).
-				"<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>".
-				(formatReady(_("wurden jedoch auf die Warteliste gesetzt.")))."</font>");
-				$meldung2 = "info§" . sprintf(
-				(formatReady(_("Um sicher zu gehen, dass Sie einen Platz in einer Veranstaltung dieser Gruppe bekommen, sollten Sie sich zusätzlich in einer weiteren Veranstaltung fest eintragen."))));
-				$meldung3 = "info§" . sprintf(
-				(formatReady(_("Sobald Sie in dieser Veranstaltung von der Warteliste aufrücken, wird ihre dortige Eintragung automatisch gelöscht."))));
-				parse_msg($meldung1, "§", "blank",3);
-				parse_msg($meldung2, "§", "blank",3);
-				parse_msg($meldung3, "§", "blank",3);
+				parse_msg("info&".$meldung, "§", "blank",3);
 			} else {
-				echo "<font color=\"#FF0000\">";
-				print (formatReady(_("Sie bekommen im Moment keinen Platz in der Veranstaltung")));
-				echo "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>";
-				print (formatReady(_("wurden jedoch auf die Warteliste gesetzt.")));
-				echo "<br/><br/></font>";
-				print (formatReady(_("Um sicher zu gehen, dass Sie einen Platz in einer Veranstaltung dieser Gruppe bekommen, sollten Sie sich zusätzlich in einer weiteren Veranstaltung fest eintragen.")));
-				echo "<br/><br/>";
-				print (formatReady(_("Sobald Sie in dieser Veranstaltung von der Warteliste aufrücken, wird ihre dortige Eintragung automatisch gelöscht.")));
+				print $meldung;
 			}
 		}
 
 		if ($seminar && !$warteliste && $platz) {
+			$meldung = sprintf(_("In dieser Veranstaltung sind noch Plätze frei. Sie haben jedoch bereits einen Platz in der Veranstaltung %s."), "<br>&nbsp;<b>$seminar_name (".htmlReady(view_turnus($seminar_id)).")</b><br/>");
+			$meldung .= sprintf(_("Um sich für die Veranstaltung %s fest anzumelden, löschen Sie bitte erst Ihre dortige Eintragung."), "<br>&nbsp;<b>$current_name (".htmlReady(view_turnus($sem_id)). ")</b><br>");
 			if ($as_info) {
-				$meldung1 = "info§" . sprintf(
-				(formatReady(_("In dieser Veranstaltung sind noch Plätze frei. Sie haben jedoch bereits in der Veranstaltung"))).
-				"<br>&nbsp;<b>$seminar_name (".htmlReady(view_turnus($seminar_id)).")</b><br/>".
-				(formatReady(_("einen Platz. Um sich für die Veranstaltung"))).
-				"</br>&nbsp;<b>$current_name (".htmlReady(view_turnus($sem_id)). ")</b><br/>".
-				(formatReady(_("fest anzumelden löschen Sie bitte erst Ihre dortige Eintragung."))));
-				parse_msg($meldung1, "§", "blank",3);
+				parse_msg("info§$meldung", "§", "blank",3);
 				echo "</td></tr></table>";
 			} else {
-				print (formatReady(_("In dieser Veranstaltung sind noch Plätze frei. Sie haben jedoch bereits in der Veranstaltung")));
-				echo "<br>&nbsp;<b>$seminar_name (".htmlReady(view_turnus($seminar_id)).")</b><br/>";
-				print (formatReady(_("einen Platz. Um sich für die Veranstaltung")));
-				echo "</br>&nbsp;<b>$current_name (".htmlReady(view_turnus($sem_id)). ")</b><br/>";
-				print (formatReady(_("fest anzumelden löschen Sie bitte erst Ihre dortige Eintragung.")));
+				print $meldung;
 				echo "<br/><br/></td></tr></table>";
 			}
 
@@ -277,79 +245,37 @@ $db6=new DB_Seminar;
 		}
 
 		if ($seminar && !$warteliste && !$platz) {
+			$meldung = "<font color=\"#FF0000\">";
+			$meldung .= sprintf(_("Sie sind bereits in der Veranstaltung %s in dieser Gruppe eingetragen."), "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
+			$meldung .= "<p>" . sprintf(_("Sie wurden für die Veranstaltung %s auf die Warteliste gesetzt."), "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>") . "</p></font>";
+			$meldung .= _("Sobald Sie hier nachrücken, wird ihre andere Anmeldung automatisch gelöscht.");
 			if ($as_info) {
-				$meldung1 = "info§" . sprintf(
-				"<font color=\"#FF0000\">".
-				(_("Sie sind bereits in der Veranstaltung")).
-				"<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>".
-				(formatReady(_("dieser Gruppe eingetragen.")))."</font>");
-				$meldung2 = "info§" . sprintf(
-				(formatReady(_("Sie wurden für die Veranstaltung"))).
-				"<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>".
-				(formatReady(_("auf die Warteliste gesetzt."))));
-				$meldung3 = "info§" . sprintf(
-				(formatReady(_("Sobald Sie hier nachrücken, wird ihre andere Anmeldung automatisch gelöscht."))));
-				parse_msg($meldung1, "§", "blank",3);
-				parse_msg($meldung2, "§", "blank",3);
-				parse_msg($meldung3, "§", "blank",3);
+				parse_msg("info§".$meldung, "§", "blank",3);
 			} else {
-				echo "<font color=\"#FF0000\">";
-				print(_("Sie sind bereits in der Veranstaltung"));
-				echo "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>";
-				print (formatReady(_("dieser Gruppe eingetragen.")));
-				echo "</font><br/><br/>";
-				print(formatReady(_("Sie wurden für die Veranstaltung")));
-				echo "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>";
-				print (formatReady(_("auf die Warteliste gesetzt.")));
-				echo "<br/><br/>";
-				print (formatReady(_("Sobald Sie hier nachrücken, wird ihre andere Anmeldung automatisch gelöscht.")));
-				echo "</font>";
+				print $meldung;
 			}
 		}
 
 		if (!$seminar && $warteliste && $platz) {
+			$meldung = sprintf(_("Sie stehen bereits für die Veranstaltung %s auf der Warteliste. Ihre Anmeldung für die Veranstaltung %s wird automatisch gelöscht, wenn Sie dort über die Warteliste aufrücken."), "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>", "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>");
+			$meldung .= "<p>". sprintf(_("Wenn Sie sich hier fest eintragen möchten, löschen Sie bitte erst ihren Eintrag in der Warteliste für die Veranstaltung %s."), "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>") . "</p>";
 			if ($as_info) {
-				$meldung1 = "info§" . sprintf(
-				(formatReady(_("Sie stehen bereits für die Veranstaltung"))).
-				"<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>".
-	 			( formatReady(_("auf der Warteliste. Ihre Anmeldung für die Veranstaltung"))).
-				"<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>".
-				(formatReady(_("wird automatisch gelöscht, wenn Sie dort über die Warteliste aufrücken."))));
-				$meldung2 = "info§" . sprintf(
-				(formatReady(_("Wenn Sie sich hier fest eintragen möchten, löschen Sie bitte erst ihren Eintrag in der Warteliste für"))).
-				"<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>");
-				parse_msg($meldung1, "§", "blank",3);
-				parse_msg($meldung2, "§", "blank",3);
+				parse_msg("info§".$meldung, "§", "blank",3);
 			} else {
-				printf(formatReady(_("Sie stehen bereits für die Veranstaltung")));
-				echo "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>";
-	 			print( formatReady(_("auf der Warteliste. Ihre Anmeldung für die Veranstaltung")));
-				echo "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>";
-				print (formatReady(_("wird automatisch gelöscht, wenn Sie dort über die Warteliste aufrücken.")));
-				echo "<br/><br/>";
-				print(formatReady(_("Wenn Sie sich hier fest eintragen möchten, löschen Sie bitte erst ihren Eintrag in der Warteliste für")));
-				echo "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>";
+				print $meldung;
+				echo "<br/><br/></td></tr></table>";
 			}
 
 		}
 
 		if (!$seminar && $warteliste && !$platz) {
+			$meldung = sprintf(_("Sie stehen bereits für die Veranstaltung %s auf der Warteliste. Wenn Sie sich in die Warteliste der Veranstaltung %s eintragen möchten, löschen Sie bitte erst Ihre andere Eintragung."), "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>", "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>");
 			if ($as_info) {
-				$meldung = "info§" . sprintf(
-				(formatReady(_("Sie stehen bereits für die Veranstaltung"))).
-				"<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>".
-				(formatReady(_("auf der Warteliste. Wenn Sie sich für die Warteliste der Veranstaltung"))).
-				"<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>".
-				(formatReady(_("eintragen möchten, löschen Sie bitte erst ihre andere Eintragung."))));
-				parse_msg($meldung, "§", "blank",3);
+				parse_msg("info§".$meldung, "§", "blank",3);
 				echo "</td></tr></table>";
 
 			} else {
-				print (formatReady(_("Sie stehen bereits für die Veranstaltung")));
-				echo "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>";
-				print (formatReady(_("auf der Warteliste. Wenn Sie sich für die Warteliste der Veranstaltung")));
-				echo "<br/>&nbsp;<b>$current_name (". htmlReady(view_turnus($sem_id)) .")</b><br/>";
-				print(formatReady(_("eintragen möchten, löschen Sie bitte erst ihre andere Eintragung."))); 
+				print $meldung;
 				echo "<br/><br/></td></tr></table>";
 			}
 
@@ -358,30 +284,13 @@ $db6=new DB_Seminar;
 		}
 		
 		if ($seminar && $warteliste && $platz) {
+			$meldung = sprintf(_("Sie stehen bereits für die Veranstaltung %s auf der Warteliste und sind in die Veranstaltung %s eingetragen."), "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>", "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
+			$meldung .= "<p>" . sprintf(_("Sie können sich hier erst eintragen, wenn sie ihr Abonnement der Veranstaltung %s löschen."), "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
 			if ($as_info) {
-				$meldung1 = "info§" . sprintf(
-				(formatReady(_("Sie stehen bereits für die Veranstaltung"))).
-				"<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>".
-				(formatReady(_("auf der Warteliste und sind in die Veranstaltung"))).
-				"<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>".
-				(formatReady(_("eingetragen."))));
-				$meldung2 = "info§" . sprintf(
-				(formatReady(_("Sie können sich hier erst eintragen, wenn sie ihr Abonnement der Veranstaltung"))).
-				"<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>".
-				(formatReady(_("löschen."))));
-				parse_msg($meldung1, "§", "blank",3);
-				parse_msg($meldung2, "§", "blank",3);
+				parse_msg("info§" . $meldung, "§", "blank",3);
 				echo "</td></tr></table>";
 			} else {
-				print(formatReady(_("Sie stehen bereits für die Veranstaltung")));
-				echo "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>";
-				print(formatReady(_("auf der Warteliste und sind in die Veranstaltung")));
-				echo "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>";
-				print(formatReady(_("eingetragen.")));
-				echo "<br/><br/>";
-				printf(formatReady(_("Sie können sich hier erst eintragen, wenn sie ihr Abonnement der Veranstaltung")));
-				echo "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>";
-				print(formatReady(_("löschen.")));
+				print $meldung;
 				echo "<br/><br/></td></tr></table>";
 			}
 
@@ -390,30 +299,13 @@ $db6=new DB_Seminar;
 		}
 		
 		if ($seminar && $warteliste && !$platz) {
+			$meldung = sprintf(_("Sie stehen bereits für die Veranstaltung %s auf der Warteliste und sind in die Veranstaltung %s eingetragen."), "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>", "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
+			$meldung .= "<p>". sprintf(_("Sie können sich hier erst eintragen, wenn sie sich von der Warteliste der Veranstaltung $s löschen."), "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
 			if ($as_info) {
-				$meldung1 = "info§" . sprintf(
-				(formatReady(_("Sie stehen bereits für die Veranstaltung"))).
-				"<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>".
-				(formatReady(_("auf der Warteliste und sind in die Veranstaltung"))).
-				"<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>".
-				(formatReady(_("eingetragen."))));
-				$meldung2 = "info§" . sprintf(
-				(formatReady(_("Sie können sich hier erst eintragen, wenn sie sich von der Warteliste der Veranstaltung"))).
-				"<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>".
-				(formatReady(_("löschen."))));
-				parse_msg($meldung1, "§", "blank",3);
-				parse_msg($meldung2, "§", "blank",3);
+				parse_msg("info§" . $meldung, "§", "blank",3);
 				echo "</td></tr></table>";
 			} else {
-				print(formatReady(_("Sie stehen bereits für die Veranstaltung")));
-				echo "<br/>&nbsp;<b>$warteliste_name (". htmlReady(view_turnus($warte_id)) .")</b><br/>";
-				print(formatReady(_("auf der Warteliste und sind in die Veranstalung")));
-				echo "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>";
-				print(formatReady(_("eingetragen.")));
-				echo "<br/><br/>";
-				print(formatReady(_("Sie können sich hier erst eintragen, wenn sie sich von der Warteliste der Veranstaltung")));
-				echo "<br/>&nbsp;<b>$seminar_name (". htmlReady(view_turnus($seminar_id)) .")</b><br/>";
-				print(formatReady(_("löschen.")));
+				print $meldung;
 				echo "<br/><br/></td></tr></table>";
 			}
 			page_close();
