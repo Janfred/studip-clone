@@ -246,23 +246,12 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		$db->next_record();
 		$userchange=$db->f("user_id");
 		$fullname = $db->f("fullname");
-		$db2->query("SELECT start_time FROM seminare WHERE Seminar_id = '$id'");
-		$db2->next_record();
-		$group=select_group ($db2->f("start_time"),$db->f("user_id"));
-		$studiengang_id = "";	//part for temporarily accepted
-		if ($accepted) {	//as well
-			$db4->query("SELECT studiengang_id, comment FROM admission_seminar_user WHERE user_id = '$userchange' AND seminar_id = '$id'");
-			$db4->next_record();
-			$studiengang_id = $db4->f("studiengang_id");
-		}
+
 		$status = (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))) ? "tutor" : "autor";
-		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s' ", $id, $userchange, $status, $studiengang_id, $db4->f("comment"), $group);
-		$db2->query($query2);
-		if ($db2->affected_rows())
-			$db3->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
+		$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
 
 		//Only if user was on the waiting list
-		if ($db3->affected_rows()) {
+		if ($admission_user) {
 			setTempLanguage($userchange);
 			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 				if (!$accepted) {
@@ -332,19 +321,13 @@ if (isset($add_tutor_x)) {
 							// Nicht das sich noch ein Dozent auf die Art und Weise selber degradiert!
 					}
 				} else {  // ok, einfach aufnehmen.
-					$db3->query("SELECT start_time FROM seminare WHERE Seminar_id = '$id' ");
-					$db->next_record();
-					$group=select_group ($db3->f("start_time"), $u_id);
-					$db2->query("INSERT into seminar_user SET Seminar_id='$id', user_id='$u_id', status='tutor', gruppe='$group'");
+					insert_seminar_user($id, $u_id, "tutor", FALSE);
+
 					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 						$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id));
 					} else {
 						$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id));
 					}
-					//kill from waiting user
-					$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
-					//reordner waiting list
-					renumber_admission($id);
 
 					setTempLanguage($userchange);
 					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
@@ -700,8 +683,8 @@ while (list ($key, $val) = each ($gruppe)) {
 
 		if (($cmd == "moreinfos") && ($user_id == $db->f("user_id")) && $rechte) {
 			printf ("<tr><td class=\"%s\" colspan=9><form action=\"%s%s\" method=\"POST\">", $class, $PHPSELF, "#info");
-			printf("<table border=\"0\"><tr><td width=\"%s\"><font size=\"-1\">"._("Bemerkungen:")."&nbsp;</font></td><td><textarea name=\"userinfo\" rows=3 cols=30>%s</textarea></td>", "10%", $db->f("comment"));
-			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>"._("Anmeldedatum:")." %s</font></td>",$class, "50%", ($db->f("mkdate")) ? date("d.m.Y",$db->f("mkdate")) : _("unbekannt"));
+			printf("<table border=\"0\"><tr><td valign=\"top\" width=\"%s\"><font size=\"-1\">"._("Bemerkungen:")."&nbsp;</font></td><td><textarea name=\"userinfo\" rows=3 cols=30>%s</textarea></td>", "10%", $db->f("comment"));
+			printf ("<td>&nbsp;</td><td class=\"%s\" align=\"left\" valign=\"top\" width=\"%s\"><font size=-1>"._("TeilnehmerIn der Veranstaltung seit:<br />")." %s</font></td>",$class, "50%", ($db->f("mkdate")) ? date("d.m.Y",$db->f("mkdate")) : _("unbekannt"));
 			echo "<td class=\"$class\" align=\"center\" width=\"20%\"><font size=\"-1\">"._("&Auml;nderungen")."</font><br /><input type=\"image\" ".makeButton("uebernehmen", "src").">";
 			echo "<input type=\"hidden\" name=\"user_id\" value=\"".$db->f("user_id")."\">";
 			echo "<input type=\"hidden\" name=\"cmd\" value=\"change_userinfo\">";
