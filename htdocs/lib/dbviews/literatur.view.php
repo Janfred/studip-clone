@@ -42,14 +42,9 @@ $GLOBALS['_views']["LIT_GET_LIST_CONTENT"] = array("query" => "SELECT a.*," . $G
 													LEFT JOIN lit_catalog USING(catalog_id) LEFT JOIN auth_user_md5 USING(user_id) 
 													LEFT JOIN user_info USING(user_id) 
 													WHERE list_id IN(&) ORDER BY list_id,priority");
-$GLOBALS['_views']["LIT_GET_FREELIST_USER"] = array("query" => "SELECT publi AS content, chdate, auth_user_md5.user_id," . $_fullname_sql['no_title_short'] . " AS fullname, username  FROM auth_user_md5 LEFT JOIN user_info  USING(user_id) WHERE auth_user_md5.user_id=?");
-$GLOBALS['_views']["LIT_GET_FREELIST_RANGE"] = array("query" => "SELECT literatur AS content, literatur.chdate, literatur.user_id," . $_fullname_sql['no_title_short'] . " AS fullname,username FROM literatur LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info  USING(user_id) WHERE range_id=?");
-
-$GLOBALS['_views']["LIT_UPD_FREELIST_USER"] = array("query" => "UPDATE user_info SET publi=?, chdate=UNIX_TIMESTAMP() WHERE user_id=?");
-$GLOBALS['_views']["LIT_UPD_FREELIST_RANGE"] = array("query" => "UPDATE literatur SET literatur=?, user_id=?, chdate=UNIX_TIMESTAMP() WHERE range_id=?");
 $GLOBALS['_views']["LIT_UPD_LIST_CONTENT"] = array("query" => "UPDATE lit_list_content SET list_id=?, catalog_id=?, user_id=?,note=?,priority=?, chdate=UNIX_TIMESTAMP() WHERE list_element_id=?");
 $GLOBALS['_views']["LIT_INS_LIST_CONTENT"] = array("query" => "INSERT INTO lit_list_content (list_id,catalog_id,user_id,note,priority,chdate,mkdate,list_element_id) VALUES (?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
-$GLOBALS['_views']["LIT_UPD_LIST"] = array("query" => "UPDATE lit_list SET range_id=?, name=?, user_id=?,format=?,priority=?, chdate=UNIX_TIMESTAMP() WHERE list_id=?");
+$GLOBALS['_views']["LIT_UPD_LIST"] = array("query" => "UPDATE lit_list SET range_id=?, name=?, user_id=?,format=?,priority=?,visibility=§, chdate=UNIX_TIMESTAMP() WHERE list_id=?");
 $GLOBALS['_views']["LIT_INS_LIST"] = array("query" => "INSERT INTO lit_list (range_id,name,user_id,format,priority,chdate,mkdate,list_id) VALUES (?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
 $GLOBALS['_views']["LIT_DEL_LIST"] = array("query" => "DELETE FROM lit_list WHERE list_id=?");
 $GLOBALS['_views']["LIT_DEL_LIST_CONTENT_ALL"] = array("query" => "DELETE FROM lit_list_content WHERE list_id=?");
@@ -59,5 +54,7 @@ $GLOBALS['_views']["LIT_INS_HELPER"] = array("pk" => "list_element_id", "query" 
 														user_id,mkdate,chdate,note,priority FROM lit_list_content  WHERE list_id=?");
 $GLOBALS['_views']["LIT_INS_LIST_CONTENT_COPY"] = array("query" => array("INSERT INTO lit_list_content (list_element_id,list_id,catalog_id,user_id,mkdate,chdate,note,priority)
 														SELECT * FROM {1}","view:LIT_INS_HELPER"));
+$GLOBALS['_views']["LIT_LIST_TOGGLE_VISIBILITY"] = array("query" => "UPDATE lit_list SET visibility=IF(visibility=0,1,0) WHERE list_id=?");
+$GLOBALS['_views']["LIT_LIST_TRIGGER_CHDATE"] = array("query" => "UPDATE lit_list SET chdate=UNIX_TIMESTAMP() WHERE list_id=?");
 
 ?>
