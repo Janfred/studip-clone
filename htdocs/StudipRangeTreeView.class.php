@@ -73,6 +73,7 @@ class StudipRangeTreeView {
 	*/
 	var $start_item_id;
 	
+	var $root_content;
 	/**
 	* constructor
 	*
@@ -81,6 +82,7 @@ class StudipRangeTreeView {
 	*/
 	function StudipRangeTreeView(){
 		global $sess,$_open_ranges,$_open_items;
+		$this->root_content = "Eine gaaaaaanz tolle Uni.";
 		$this->tree =& StudipRangeTree::GetInstance();
 		if (is_object($sess)){
 			$sess->register("_open_ranges");
@@ -135,6 +137,19 @@ class StudipRangeTreeView {
 		}
 		if ($_REQUEST['item_id'])
 			$this->anchor = $_REQUEST['item_id'];
+	}
+	
+	function openItem($item_id){
+		$this->open_items[$item_id] = true;
+		$this->openRange($this->tree->tree_data[$item_id]['parent_id']);
+	}
+	
+	function openRange($item_id){
+		$this->open_ranges[$item_id] = true;
+		$parents = $this->tree->getParents($item_id);
+		for ($i = 0; $i < count($parents); ++$i){
+			$this->open_ranges[$parents[$i]] = true;
+		}
 	}
 	
 	/**
@@ -268,9 +283,10 @@ class StudipRangeTreeView {
 	}
 	
 	function getItemContent($item_id){
-		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:small\">";
+		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
 		if ($item_id == "root"){
 			$content .= "\n<tr><td class=\"topic\" align=\"left\">" . htmlReady($this->tree->root_name) ." </td></tr>";
+			$content .= "\n<tr><td class=\"blank\" align=\"left\">" . $this->root_content ." </td></tr>";
 			$content .= "\n</table>";
 			return $content;
 		}
@@ -284,7 +300,10 @@ class StudipRangeTreeView {
 				$content .= "<b>" . htmlReady($value) . ":</b>&nbsp;";
 				$content .= fixLinks(htmlReady($range_object->item_data[$key])) . "&nbsp; ";
 			}
-			$content .= "</td></tr>";
+			$content .= "</td></tr><tr><td class=\"blank\" align=\"left\"><a href=\"institut_main.php?auswahl="
+						. $range_object->item_data['studip_object_id'] ."\"". tooltip(_("Seite dieser Einrichtung in Stud.IP aufrufen"))
+						. ">" . $range_object->item_data['name'] . "</a>&nbsp;" ._("in Stud.IP") ."</td></tr>";
+			
 		} elseif (!$range_object->item_data['studip_object']){
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">" .
 						_("Dieses Element ist keine Stud.IP Einrichtung, es hat daher keine Grunddaten.") . "</td></tr>";
@@ -296,7 +315,7 @@ class StudipRangeTreeView {
 		if ($kategorien->numRows){
 			while($kategorien->nextRow()){
 				$content .= "\n<tr><td class=\"topic\">" . htmlReady($kategorien->getField("name")) . "</td></tr>";
-				$content .= "\n<tr><td class=\"blank\">" . htmlReady($kategorien->getField("content")) . "</td></tr>";
+				$content .= "\n<tr><td class=\"blank\">" . formatReady($kategorien->getField("content")) . "</td></tr>";
 			}
 		} else {
 			$content .= "\n<tr><td class=\"blank\">" . _("Keine weiteren Daten vorhanden!") . "</td></tr>";

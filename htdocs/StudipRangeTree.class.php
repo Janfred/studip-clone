@@ -275,6 +275,8 @@ class StudipRangeTree {
 	* @return	string	
 	*/
 	function getItemPath($item_id){
+		if (!$this->tree_data[$item_id])
+			return false;
 		$path = $this->tree_data[$item_id]['name'];
 		while($item_id != "root"){
 			$item_id = $this->tree_data[$item_id]['parent_id'];
@@ -283,6 +285,18 @@ class StudipRangeTree {
 		return $path;
 	}
 	
+	function getParents($item_id){
+		if (!$this->tree_data[$item_id])
+			return false;
+		if ($item_id == "root")
+			return false;
+		$ret = array();
+		while($item_id != "root"){
+			$item_id = $this->tree_data[$item_id]['parent_id'];
+			$ret[] = $item_id;
+		}
+		return $ret;
+	}
 }
 
 //$test = new StudipRangeTree();
