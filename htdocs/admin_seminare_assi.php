@@ -895,7 +895,7 @@ if ($cmd_f_x)
 				$errormsg .= "error§<b>Fehler:</b> $query §";
 				$successful_entry=0;
 				$sem_create_data["sem_entry"]=FALSE;
-				break;
+				die;
     				}
 	    		else
     				{
