@@ -885,4 +885,25 @@ function get_seminars_user($user_id) {
 	return $seminars;
 }
 
+/**
+* converts a string to a float, depending on the locale
+* 
+* @param		string	
+* @return		float
+*
+*/
+
+function StringToFloat($str){
+	$str = substr((string)$str,0,13);
+	$locale = localeconv();
+	$from = ($locale["thousands_sep"] ? $locale["thousands_sep"] : ',');
+	$to = ($locale["decimal_point"] ? $locale["decimal_point"] : '.');
+	if(strstr($str, $from)){
+		$conv_str = str_replace($from, $to, $str);
+		$my_float = (float)$conv_str;
+		if ($conv_str === (string)$my_float) return $my_float;
+	} 
+	return (float)$str;
+}
+
 ?>
