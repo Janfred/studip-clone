@@ -21,17 +21,20 @@ switch ($resources_data["view"]) {
 	case "_lists":
 	case "export_lists":
 	case "search_list":
-		$page_intro="Hier k&ouml;nnen Sie Listen verwalten. Angezeigt wird jeweils die Liste einer ausgew&auml;hlten Ebene oder alle Ressourcen, auf die sie Zugriff haben.";
+		if ($resources_data["list_open"])
+			$page_intro="Sie sehen alle Eintr&auml;ge in der Ebene <b>".getResourceObjectName($resources_data["list_open"])."</b>.";
 		$title="Bearbeiten und Ausgeben von Listen";
+		if ($resources_data["list_open"])
+			$title.=" - Ebene: ".getResourceObjectName($resources_data["list_open"]);
 		$infobox = array(
 					array  ("kategorie"  => "Information:", 
 							"eintrag" => array (
 								array ("icon" => "pictures/ausruf_small.gif", 	
-									"text"  => "Hier k&ouml;nnen Sie Zeugs irgendwie in Listen anschauen!"))),
+									"text"  => ($resources_data["list_recurse"]) ? "Untergeordnete Ebenen werden ausgegeben." : "Untergeordnete Ebenen werden <u>nicht</u> ausgegeben."))),
 					array  ("kategorie" => "Aktionen:", 
 							"eintrag" => array (
-								array	("icon" => "pictures/admin.gif",
-									"text"  => "Um Veranstaltungen anzulegen, nutzen Sie bitte den <a href=\"admin_seminare_assi.php?new_session=TRUE\">Veranstaltungs-Assistenten</a>"))));
+								array	("icon" =>  (!$resources_data["list_recurse"]) ? "pictures/on_small.gif" : "pictures/off_small.gif",
+									"text"  => ($resources_data["list_recurse"]) ? "Untergeordnete Ebenen <br /><a href=\"$PHP_SELF?nrecurse_list=TRUE\"><u>nicht</u> ausgeben.</a>" : "Untergeordnete Ebenen <br /><a href=\"$PHP_SELF?recurse_list=TRUE\">mit ausgeben</a>"))));
 	break;
 
 	//Reiter "Objekt"
