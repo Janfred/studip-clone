@@ -108,7 +108,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 	</b></td></tr>
 	<?
 	if ($send_from_search)
-	    	$msg.="info§Um zur letzten Auswahl zue&uuml;ckzukehren, klicken Sie bitte <a href=\"$send_from_search_page\">hier</a>";
+	    	$msg.="info§Um zur letzten Auswahl zur&uuml;ckzukehren, klicken Sie bitte <a href=\"$send_from_search_page\">hier</a>";
 
 	if ($msg)
 		{
