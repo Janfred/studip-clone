@@ -139,6 +139,10 @@ class Seminar_Session extends Session {
 	var $allowcache = "no";
 	
 	
+	function Seminar_Session(){
+		$this->cookie_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
+	}
+	
 	//modifizierte function put_headers(),ermöglicht den Verzicht auf Headers seitens der PHPLib
 	function put_headers(){
 		if ($GLOBALS["dont_put_headers"]) return;
