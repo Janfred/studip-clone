@@ -397,11 +397,16 @@ if (!$print_view) {
 	<td class="blank" colspan=<? echo $glb_colspan+1?>>&nbsp;
 		<form action="<? echo $PHP_SELF ?>" method="POST">
 		<blockquote>
-		<?  if ($view=="user")  { ?>
-		Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die Druckfunktion ihres Browsers.<br /><br />
-		<font size=-1>Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die <a href = "sem_portal.php?view=Alle">Veranstaltungssuche</a>. <br>
-		Ihre pers&ouml;nlichen Termine finden sie auf der <a href="kalender.php">Termin&uuml;bersicht</a>.</font>
-		<?} elseif ($view == "inst") { ?>
+		<?
+		if ($view=="user")  { 
+			echo _("Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen sie bitte die Druckfunktion ihres Browsers.") . "<br /><br />";
+			echo "<font size=-1>";
+			printf(_("Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."), "<a href = \"sem_portal.php\">", "</a>");
+			echo "<br>";
+			if ($CALENDAR_ENABLE)
+				printf(_("Ihre pers&ouml;nlichen Termine finden sie im %sTerminkalender%s."), "<a href=\"calendar.php\">", "</a>");
+			echo "</font>";
+		} elseif ($view == "inst") { ?>
 		In der Veranstaltungs-Timetable sehen Sie alle Veranstaltungen der Einrichtung eines Semesters.<br />
 		<br /><font size=-1>Angezeigtes Semester:&nbsp; 
 			<select name="instview_sem">
