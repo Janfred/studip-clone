@@ -163,7 +163,7 @@ class messaging {
 
 	function user_wants_email($userid) {
 
-		$db = new DB_Seminar("SELECT email_forward FROM user_info WHERE user_id = ".$userid."");
+		$db = new DB_Seminar("SELECT email_forward FROM user_info WHERE user_id = '".$userid."'");
 		#$db = new DB_Seminar("SELECT email_forward FROM user_info a, auth_user_md5 b WHERE a.user_id = b.user_id AND (b.username = '$userid' OR b.user_id = '$userid')");
 		$db->next_record();
 		switch ($db->f("email_forward")) {
