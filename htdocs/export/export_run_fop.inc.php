@@ -71,8 +71,9 @@ else
 	$pdf_file = md5(uniqid(rand())) .".pdf";
 	$str = "$FOP_SH_CALL $TMP_PATH/$result_file $TMP_PATH/$pdf_file ";
 //	$out = system( ( $str ) );
-	$out = exec( ( $JAVA_ENV_CALL . " && " . $str ) );
-//echo $str . "<br>" . $out . "<br>";
+	$out = exec( $JAVA_ENV_CALL );
+	$out = exec( $str );
+echo $str . "<br>" . $out . "<br>";
 /*
 	unlink( $TMP_PATH . "/" . $xml_file_id);
 	unlink( $TMP_PATH . "/" . $result_file);
@@ -103,7 +104,7 @@ else
 			unset($export_info);
 			unset($export_msg);
 			$export_pagecontent = "";
-			$export_error = "<b>" . sprintf(_("Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. <br>Fehlermeldung: %s <br>Datei: %s"), $out, $pdf_file) . "</b><br><".$JAVA_ENV_CALL.$FOP_SH_CALL.">";
+			$export_error = "<b>" . sprintf(_("Bei der Erzeugung der PDF-Datei ist ein Fehler aufgetreten. <br>Fehlermeldung: %s <br>Datei: %s"), $out, $pdf_file) . "</b><br>";
 			$export_error_num ++;
 		}
 	
