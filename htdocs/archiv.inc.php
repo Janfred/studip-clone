@@ -28,7 +28,7 @@ require_once "datei.inc.php";
 
 function dump_sem($sem_id)  
 {
-	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS,$_fullname_sql;
+	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS,$_fullname_sql,$AUTO_INSERT_SEM;
 	
 	require_once("visual.inc.php");
 
@@ -196,7 +196,7 @@ function dump_sem($sem_id)
 		$dump.="</td></tr>\n";
 
 	//Teilnehmeranzahl
-	$dump.= "<tr><td width=\"15%\"><b>max. Teilnehmeranzahl:&nbsp;</b></td><td>".$db2->f("admission_turnout")."</td></tr>\n";
+	$dump.= "<tr><td width=\"15%\"><b>max. Teilnehmeranzahl:&nbsp;</b></td><td>".$db2->f("admission_turnout")."&nbsp;</td></tr>\n";
 
 	//Statistikfunktionen
 
@@ -356,56 +356,54 @@ function dump_sem($sem_id)
 
 // Teilnehmer
 
-	$gruppe = array ("dozent" => "Dozenten",
+	if (!in_array($sem_id, $AUTO_INSERT_SEM)) {
+
+		$gruppe = array ("dozent" => "Dozenten",
 		  "tutor" => "Tutoren",
 		  "autor" => "Autoren",
 		  "user" => "Leser");
-	$dump.="<br>";	  
-	while (list ($key, $val) = each ($gruppe)) {	  
+		$dump.="<br>";	  
+		while (list ($key, $val) = each ($gruppe)) {	  
 
 // die eigentliche Teil-Tabelle
 
-		$sortby = "doll DESC";
-		$db=new DB_Seminar;
-		$db2=new DB_Seminar;
-		$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
+			$sortby = "doll DESC";
+			$db=new DB_Seminar;
+			$db2=new DB_Seminar;
+			$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id) LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
-		IF (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
-	  	$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
-			$dump .= " <tr><td align=left colspan=4 class=\"topic\">";
-			$dump .= "<H2 class=\"topic\">&nbsp;".$val."</H2>";
-			$dump.= "</td></tr>\n";
-			$dump.="<th width=\"30%%\">Name</th>";
-			$dump.="<th width=\"10%%\">Postings</th>";
-			$dump.="<th width=10%><b>Dokumente</b></th></tr>\n";
+			if (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
+	  		$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+				$dump .= " <tr><td align=left colspan=4 class=\"topic\">";
+				$dump .= "<H2 class=\"topic\">&nbsp;".$val."</H2>";
+				$dump.= "</td></tr>\n";
+				$dump.="<th width=\"30%%\">Name</th>";
+				$dump.="<th width=\"10%%\">Postings</th>";
+				$dump.="<th width=10%><b>Dokumente</b></th></tr>\n";
 			
-			while ($db->next_record()) {
-				$dump.="<tr><td>";
-				$dump.= $db->f("fullname");
-				$dump.="</td><td align=center>";
-				$dump.= $db->f("doll");
-				$dump.="</td><td align=center>";
+				while ($db->next_record()) {
+					$dump.="<tr><td>";
+					$dump.= $db->f("fullname");
+					$dump.="</td><td align=center>";
+					$dump.= $db->f("doll");
+					$dump.="</td><td align=center>";
 
-				$Dokumente = 0;
-				$UID = $db->f("user_id");
-				//???!!!
-				//$db2->query ("SELECT count(dokument_id) AS doll FROM termine LEFT JOIN dokumente ON termine.termin_id = dokumente.range_id WHERE termine.range_id = '$sem_id' AND dokumente.user_id = '$UID' GROUP by termine.range_id");
-				//while ($db2->next_record()) {
-				//	$Dokumente += $db2->f("doll");
-				//}
-				$db2->query ("SELECT count(dokument_id) AS doll FROM dokumente WHERE dokumente.Seminar_id = '$sem_id' AND dokumente.user_id = '$UID'");
-				while ($db2->next_record()) {
-					$Dokumente += $db2->f("doll");
-				}
-				$dump.= $Dokumente;
-				$dump.="</td>";
-				$dump.="</tr>\n";
+					$Dokumente = 0;
+					$UID = $db->f("user_id");
+					$db2->query ("SELECT count(dokument_id) AS doll FROM dokumente WHERE dokumente.Seminar_id = '$sem_id' AND dokumente.user_id = '$UID'");
+					while ($db2->next_record()) {
+						$Dokumente += $db2->f("doll");
+					}
+					$dump.= $Dokumente;
+					$dump.="</td>";
+					$dump.="</tr>\n";
 	
-			} // eine Zeile zuende
+				} // eine Zeile zuende
 
-			$dump.= "</table>\n";
-		}
-	} // eine Gruppe zuende
+				$dump.= "</table>\n";
+			}
+		} // eine Gruppe zuende
+	}
 
  	return $dump;
 	

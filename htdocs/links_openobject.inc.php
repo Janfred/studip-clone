@@ -25,7 +25,9 @@ if ($SessSemName["class"]=="inst") {
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"seminar_main.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
-	$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
+	if (!in_array($SessSemName[1], $AUTO_INSERT_SEM)) {
+		$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
+	}
 	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
 	$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
 	$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
@@ -58,7 +60,9 @@ if ($SessSemName["class"]=="inst") {
 }
 //
 
-$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
+if (!in_array($SessSemName[1], $AUTO_INSERT_SEM)) {
+	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
+}
 $structure["_forum"]=array (topKat=>"forum", name=>_("Themen"), link=>"forum.php", active=>FALSE);
 $structure["neue"]=array (topKat=>"forum", name=>_("neue Beitr&auml;ge"), link=>"forum.php?view=neue", active=>FALSE);
 $structure["letzte"]=array (topKat=>"forum", name=>_("letzte 5 Beitr&auml;ge"), link=>"forum.php?view=letzte&mehr=1", active=>FALSE);
@@ -84,7 +88,7 @@ else
 	$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur und Links"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
 	
 
-if ($SessSemName["class"]=="sem")
+if ($SessSemName["class"]=="sem" && !in_array($SessSemName[1], $AUTO_INSERT_SEM))
 	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>_("Funktionen / Gruppen"), link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
 
 
