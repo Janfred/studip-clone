@@ -359,7 +359,7 @@ class RoomRequest {
 	function copy() {
 		$this->id = $this->createId();
 		$this->isNewObject = TRUE;
-		$this->chang_flag = TRUE;
+		$this->chng_flag = TRUE;
 	}
 
 	function store(){
