@@ -33,7 +33,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-
 if ($resources_data["actual_object"]) {
 	$currentObject=new ResourceObject($resources_data["actual_object"]);
 	$currentObjectTitelAdd=": ".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene"));
@@ -93,13 +92,12 @@ switch ($resources_data["view"]) {
 	case "edit_object_assign":
 		$page_intro=_("Sie sehen hier die Einzelheiten der Belegung. Falls Sie &uuml;ber entsprechende Rechte verf&uuml;gen, k&ouml;nnen Sie sie bearbeiten oder eine neue Belegung erstellen.");
 		$title=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
-		if ($resources_data["view_mode"] == "no_nav") {
+		if (($resources_data["view_mode"] == "no_nav") || ($resources_data["view_mode"] == "search")) {
 			$infobox = array(
 						array  ("kategorie" => _("Aktionen:"), 
 								"eintrag" => array (
 									array	("icon" => "pictures/forumrot.gif",
-										"text"  => "<a href=\"$PHP_SELF?view=view_schedule&view_mode=no_nav\">"._("zur&uuml;ck zum Belegungsplan")."</a>"))));
-			$infopic = "pictures/schedule.jpg";
+										"text"  => "<a href=\"$PHP_SELF?view=view_schedule\">"._("zur&uuml;ck zum Belegungsplan")."</a>"))));
 		}
 	break;
 	case "edit_object_properties":
@@ -111,8 +109,30 @@ switch ($resources_data["view"]) {
 		$title=_("Eigenschaften bearbeiten").$currentObjectTitelAdd;
 	break;
 	case "view_schedule":
-		$page_intro=_("Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen lassen und auf unterschiedliche Art darstellen lassen.");
+		$page_intro=_("Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen  und auf unterschiedliche Art darstellen lassen.");
 		$title=_("Belegungszeiten ausgeben").$currentObjectTitelAdd;
+		
+		$infobox[0]["kategorie"] = _("Aktionen:");
+		$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+								"text"  => sprintf (_("%sEigenschaften%s anzeigen"), "<a href=\"$PHP_SELF?view=view_details\">", "</a>"));
+		if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
+
+		if ($resources_data["view_mode"] == "search")
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+									"text"  =>"<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>");
+
+		if (!($resources_data["view_mode"] == "search")) {
+			if ($SessSemName["class"] == "sem")
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+										"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
+			if ($SessSemName["class"] == "inst")
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+										"text"  => "<a href=\"institut_main.php\">"._("zur&uuml;ck zur Einrichtung")."</a>");
+		}
+									
+		//$infopic = "pictures/schedule.jpg";		
 	break;
 	
 	//Reiter "Anpassen"	
@@ -153,20 +173,32 @@ switch ($resources_data["view"]) {
 			$title=$SessSemName["header_line"]." - "._("Ressourcendetails");
 		else
 			$title=_("Anzeige der Ressourceneigenschaften");
-		$infobox = array(
-					array  ("kategorie" => _("Aktionen:"), 
-							"eintrag" => array (
-								array	("icon" => "pictures/forumrot.gif",
-									"text"  => (($resources_data["view_mode"] == "no_nav") || ($resources_data["search_array"])) ? "<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>" : "<a href=\"$PHP_SELF?view=".(($SessSemName[1]) ? "openobject_main" : "resources")."\">"._("zur&uuml;ck zur &Uuml;bersicht")."</a>"))));
-		if (is_object($currentObject)) {
-			if ($currentObject->getCategoryId())
+		
+		if (($resources_data["view_mode"] == "no_nav") || ($resources_data["view_mode"] == "search")) {
+			$infobox[0]["kategorie"] = _("Aktionen:");
+	
+			if (is_object($currentObject)) {
+				if ($currentObject->getCategoryId())
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+											"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_schedule\">" : "<a href=\"$PHP_SELF?view=view_schedule".(($resources_data["view_mode"] == "no_nav") ? "&view_mode=no_nav" : "")."\">", "</a>"));
+				if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+											"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
+			}
+			if (!($resources_data["view_mode"] == "search")) {
+				if ($SessSemName["class"] == "sem")
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+											"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
+				if ($SessSemName["class"] == "inst")
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+											"text"  => "<a href=\"institut_main.php\">"._("zur&uuml;ck zur Einrichtung")."</a>");
+			}
+		
+			if ($resources_data["view_mode"] == "search")
 				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
-										"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($SessSemName[1]) ? "<a href=\"$PHP_SELF?view=openobject_schedule\">" : "<a href=\"$PHP_SELF?view=view_schedule".(($resources_data["view_mode"] == "no_nav") ? "&view_mode=no_nav" : "")."\">", "</a>"));
-			if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
-				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
-										"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($SessSemName[1]) ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
-		}
+										"text"  =>"<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>");
 		$infopic = "pictures/schedule.jpg";
+		}
 	break;
 	case "openobject_schedule":
 		if ($resources_data["actual_object"])

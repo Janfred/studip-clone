@@ -137,7 +137,7 @@ class ShowList extends ShowTreeRow{
 				} 
 				$edit.= "&nbsp;&nbsp;&nbsp;&nbsp;";
 			} 
-			if (($SessSemName[1]) && ($resources_data["view_mode"] != "no_nav")){
+			if ($resources_data["view_mode"] == "oobj"){
 				if (($perms == "autor") || ($perms == "admin")) 
 					if ($resObject->getCategoryId())
 						$edit.= "<a href=\"$PHP_SELF?show_object=$resObject->id&view=openobject_schedule\">".makeButton("belegung")."</a>&nbsp;";
@@ -1723,17 +1723,18 @@ class ViewSchedules extends cssClasses {
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 			<tr>
-				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp;
+				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">
+					<img src="pictures\blank.gif" height="35" border="0"/>					
 				</td>
 				<td class="<? echo $this->getClass() ?>"  width="10%" align="left">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&previous_week=TRUE"><img src="pictures/forumrotlinks.gif" <? echo tooltip (_("Vorherige Woche anzeigen")) ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&previous_week=TRUE"><img src="pictures/calendar_previous.gif" <? echo tooltip (_("Vorherige Woche anzeigen")) ?>border="0" /></a>
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="76%" align="center"><br />
+				<td class="<? echo $this->getClass() ?>" width="76%" align="center">
 					<? echo "<b>Anzeige der Woche vom ", date ("j.m.Y", $start_time), " bis ", date ("j.m.Y", $end_time)."</b> (".strftime("%V", $start_time).". "._("Woche").")";?>
-					<br /><br />
+					<br />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="10%" align="center">&nbsp;
-					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&next_week=TRUE"><img src="pictures/forumrot.gif" <? echo tooltip (_("Nächste Woche anzeigen")) ?>border="0" /></a>
+					<a href="<? echo $PHP_SELF ?>?view=<?=$this->used_view?>&next_week=TRUE"><img  valign="middle"  src="pictures/calendar_next.gif" <? echo tooltip (_("Nächste Woche anzeigen")) ?>border="0" /></a>
 				</td>
 			</tr>
 			<tr>

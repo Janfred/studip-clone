@@ -80,9 +80,9 @@ if ((sizeof ($_REQUEST) == 1) && (!$view)) {
 }
 
 //a dirty trick to prevent sometimes chaos ;-)
-if ((sizeof ($_REQUEST) == 2) && ($view == "view_schedule")) {
+/*if ((sizeof ($_REQUEST) == 2) && ($view == "view_schedule")) {
 	$resources_data["view_mode"]=FALSE;
-}
+}*/
 
 //reset edit the assign
 if ((sizeof ($_REQUEST) == 2) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
@@ -106,7 +106,7 @@ if (($view=="openobject_main") || ($view=="_lists") || ($view=="lists") || ($vie
 
 //get views/view_modes
 if ($view)
-	 $resources_data["view"]=$view;
+	$resources_data["view"]=$view;
 if ($view_mode)	
 	$resources_data["view_mode"]=$view_mode;
 if (strpos($view, "openobject") !== FALSE)

@@ -71,7 +71,7 @@ include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
 //load correct nav
 if ($resources_data["view_mode"] == "oobj")
 	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-elseif ($resources_data["view_mode"] == "no_nav")
+elseif (($resources_data["view_mode"] == "no_nav") || ($resources_data["view_mode"] == "search"))
 	;
 else
 	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
@@ -234,6 +234,33 @@ if ($resources_data["view"]=="edit_object_perms") {
 Objectbelegung bearbeiten, views: edit_object_assign, openobject_assign
 /*****************************************************************************/
 if ($resources_data["view"]=="edit_object_assign" || $resources_data["view"]=="openobject_assign") {
+	if ($resources_data["view"]=="edit_object_assign") {
+		$suppress_infobox = TRUE;
+		?>						</td>
+							</tr>
+						</table>
+					</td>
+				<?
+				if ($infobox) {
+					?>
+					<td class="blank" width="270" align="right" valign="top">
+						<? print_infobox ($infobox, $infopic);?>
+					</td>
+					<?
+				}
+			?>				
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign ="top">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td valign ="top">
+			<?
+		}
+
 	if ($resources_data["actual_object"]) {
 		$editObject=new editObject($resources_data["actual_object"]);
 		$editObject->setUsedView($resources_data["view"]);
@@ -288,7 +315,30 @@ if ($resources_data["view"]=="view_schedule" || $resources_data["view"]=="openob
 		$ViewSchedules->setUsedView($resources_data["view"]);	
 		
 		$ViewSchedules->navigator();
-	
+		$suppress_infobox = TRUE;
+		?>						</td>
+							</tr>
+						</table>
+					</td>
+				<?
+				if ($infobox) {
+					?>
+					<td class="blank" width="270" align="right" valign="top">
+						<? print_infobox ($infobox, $infopic);?>
+					</td>
+					<?
+				}
+			?>				
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign ="top">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td valign ="top">
+			<?
 		if (($resources_data["schedule_start_time"]) && ($resources_data["schedule_end_time"]))
 			if ($resources_data["schedule_mode"] == "list") //view List
 				$ViewSchedules->showScheduleList($schedule_start_time, $schedule_end_time);
@@ -328,7 +378,9 @@ if ($resources_data["view"]=="search") {
 /*****************************************************************************
 Seite abschliessen und Infofenster aufbauen
 /*****************************************************************************/
-		?>						</td>
+if (!$suppress_infobox) {
+?>
+								</td>
 							</tr>
 						</table>
 					</td>
@@ -345,7 +397,9 @@ Seite abschliessen und Infofenster aufbauen
 			</table>
 		</td>
 	</tr>
-	<tr>
+<?
+}	
+?>	<tr>
 		<td class="blank">&nbsp; 
 		</td>
 	</tr>
