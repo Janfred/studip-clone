@@ -173,5 +173,7 @@ $this->msg[40] = array (
 		"msg"=> _("Sie haben bereits Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Wollen Sie jetzt Nachrichten zu allen aufgel&ouml;sten Anfragen versenden?")
 			."<br /><a href=\"%s?snd_closed_request_sms=1\">".makeButton("ja2")."</a>"
 			."&nbsp;<a href=\"%s\">".makeButton("nein")."</a>");
-
+$this->msg[41] = array (
+		"mode" => "msg",
+		"msg"=> _("Mit den von ihnen ausgewählten Einstellungen sind keine Anfragen, die Sie auflösen könnten, vorhanden."));
 ?>
