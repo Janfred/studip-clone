@@ -33,6 +33,7 @@ require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Funktionen zum Anzeigen 
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); // wir brauchen htmlReady
 require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php"); // wir brauchen htmlReady
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 
 ?>
 <body>
@@ -101,7 +102,7 @@ else
 	
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]." - Details"; ?>
+	<tr><td class="topic" colspan=2><b>&nbsp;<? echo getHeaderLine($sem_id)." - Details"; ?>
 	</b></td></tr>
 	<?
 
