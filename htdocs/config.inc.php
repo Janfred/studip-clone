@@ -268,6 +268,7 @@ $INST_TYPE[4]=array("name"=>"Abteilung", "en"=>"Unit");
 $INST_TYPE[5]=array("name"=>"Fachbereich", "en"=>"Fachbereich");
 $INST_TYPE[6]=array("name"=>"Seminar", "en"=>"Seminar");
 $INST_TYPE[7]=array("name"=>"Fakultät");
+$INST_TYPE_FAKULTAET_DEFAULT = 7;
 //weitere Typen koennen hier angefuegt werden
 
 
