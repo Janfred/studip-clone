@@ -40,7 +40,7 @@ function export_link($range_id, $ex_type = "", $filename = "", $format = "", $ch
 	$filename = $xslt_filename;
 	$export_string .= "";
 	if ($choose != "")
-		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&format=$format&choose=$choose&o_mode=processor&filter=$filter\">";
+		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&format=$format&choose=$choose&o_mode=processor&filter=$filter&jump=1\">";
 	elseif ($ex_type != "")
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&o_mode=choose&filter=$filter\">";
 	else
@@ -55,7 +55,7 @@ function export_button($range_id, $ex_type = "", $filename = "", $format = "", $
 	global $ABSOLUTE_PATH_STUDIP, $PATH_EXPORT, $xslt_filename;
 	$filename = $xslt_filename;
 	if ($choose != "")
-		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&format=$format&choose=$choose&o_mode=processor&filter=$filter\">";
+		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&format=$format&choose=$choose&o_mode=processor&filter=$filter&jump=1\">";
 	elseif ($ex_type != "")
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=$filename&o_mode=choose&filter=$filter\">";
 	else
