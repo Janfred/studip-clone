@@ -120,6 +120,29 @@ PRIMARY KEY (`event_id`)
 
 ALTER TABLE `resources_assign` CHANGE `assign_user_id` `assign_user_id` VARCHAR( 32 ) DEFAULT NULL;
 
+ALTER TABLE `resources_assign` ADD INDEX ( `resource_id` );
+ALTER TABLE `resources_assign` ADD INDEX ( `assign_user_id` ) ;
+OPTIMIZE TABLE `resources_assign` ;
+
+ALTER TABLE `resources_categories` ADD INDEX ( `is_room` ) ;
+OPTIMIZE TABLE `resources_categories` ;
+
+ALTER TABLE `resources_objects` DROP INDEX `categorie_id` ;
+ALTER TABLE `resources_objects` DROP INDEX `root_id` ;
+ALTER TABLE `resources_objects` ADD INDEX ( `root_id` ) ;
+ALTER TABLE `resources_objects` ADD INDEX ( `parent_id` ) ;
+ALTER TABLE `resources_objects` ADD INDEX ( `category_id` ) ;
+ALTER TABLE `resources_objects` ADD INDEX ( `owner_id` ) ;
+OPTIMIZE TABLE `resources_objects` ;
+
+ALTER TABLE `resources_requests` DROP INDEX `seminar_id` ;
+ALTER TABLE `resources_requests` ADD INDEX ( `seminar_id` ) ;
+ALTER TABLE `resources_requests` ADD INDEX ( `user_id` ) ;
+ALTER TABLE `resources_requests` ADD INDEX ( `resource_id` ) ;
+ALTER TABLE `resources_requests` ADD INDEX ( `category_id` ) ;
+ALTER TABLE `resources_requests` ADD INDEX ( `closed` ) ;
+OPTIMIZE TABLE `resources_requests` ;
+
 UPDATE `resources_categories` SET `is_room`='1' WHERE `name` = 'Raum';
 
 # #6

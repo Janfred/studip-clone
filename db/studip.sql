@@ -2,7 +2,7 @@
 # Server Version: 4.0.15
 # PHP-Version: 4.3.3
 # Datenbank: `studip`
-# 
+# $Id$
 
 # --------------------------------------------------------
 
@@ -805,7 +805,9 @@ CREATE TABLE `resources_assign` (
   `repeat_day_of_week` int(2) default NULL,
   `mkdate` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
-  PRIMARY KEY  (`assign_id`)
+  PRIMARY KEY  (`assign_id`),
+  KEY `resource_id` (`resource_id`),
+  KEY `assign_user_id` (`assign_user_id`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -822,7 +824,8 @@ CREATE TABLE `resources_categories` (
   `system` tinyint(4) NOT NULL default '0',
   `is_room` tinyint(4) NOT NULL default '0',
   `iconnr` int(3) default '1',
-  PRIMARY KEY  (`category_id`)
+  PRIMARY KEY  (`category_id`),
+  KEY `is_room` (`is_room`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -868,7 +871,7 @@ CREATE TABLE `resources_objects` (
   `category_id` varchar(32) NOT NULL default '',
   `owner_id` varchar(32) NOT NULL default '',
   `institut_id` varchar(32) NOT NULL default '',
-  `level` int(4) default NULL,
+  `level` varchar(4) default NULL,
   `name` varchar(255) NOT NULL default '',
   `description` text NOT NULL,
   `lockable` tinyint(4) default NULL,
@@ -876,9 +879,11 @@ CREATE TABLE `resources_objects` (
   `mkdate` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`resource_id`),
-  KEY `categorie_id` (`category_id`,`owner_id`),
-  KEY `root_id` (`root_id`,`parent_id`),
-  KEY `institut_id` (`institut_id`)
+  KEY `institut_id` (`institut_id`),
+  KEY `root_id` (`root_id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `category_id` (`category_id`),
+  KEY `owner_id` (`owner_id`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -892,7 +897,8 @@ CREATE TABLE `resources_objects_properties` (
   `resource_id` varchar(32) NOT NULL default '',
   `property_id` varchar(32) NOT NULL default '',
   `state` text NOT NULL,
-  PRIMARY KEY  (`resource_id`,`property_id`)
+  PRIMARY KEY  (`resource_id`,`property_id`),
+  KEY `property_id` (`property_id`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -931,8 +937,12 @@ CREATE TABLE `resources_requests` (
   `mkdate` int(20) unsigned default NULL,
   `chdate` int(20) unsigned default NULL,
   PRIMARY KEY  (`request_id`),
-  KEY `seminar_id` (`seminar_id`,`user_id`,`resource_id`),
-  KEY `termin_id` (`termin_id`)
+  KEY `termin_id` (`termin_id`),
+  KEY `seminar_id` (`seminar_id`),
+  KEY `user_id` (`user_id`),
+  KEY `resource_id` (`resource_id`),
+  KEY `category_id` (`category_id`),
+  KEY `closed` (`closed`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
