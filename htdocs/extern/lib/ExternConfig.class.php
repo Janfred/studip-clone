@@ -235,40 +235,38 @@ class ExternConfig {
 				. "; DO NOT EDIT !!!\n";
 		
 		// store the own configuration if the function is called without parameters
-		if ($values != "") {
-			if ($module) {
-				if ($element_name)
-					$module_elements[$element_name] = $module->elements[$element_name];
-				else
-					$module_elements = $module->elements;
+		if ($values != "" && $module) {
+			if ($element_name)
+				$module_elements[$element_name] = $module->elements[$element_name];
+			else
+				$module_elements = $module->elements;
+		
+			reset($module_elements);
+			foreach ($module_elements as $element_name => $element_obj) {
 			
-				reset($module_elements);
-				foreach ($module_elements as $element_name => $element_obj) {
+				if ($element_obj->isEditable()) {
+			
+					$attributes = $element_obj->getAttributes();
 				
-					if ($element_obj->isEditable()) {
-				
-						$attributes = $element_obj->getAttributes();
+					reset($attributes);
+					foreach ($attributes as $attribute) {
+						$form_name = $element_name . "_" . $attribute;
 					
-						reset($attributes);
-						foreach ($attributes as $attribute) {
-							$form_name = $element_name . "_" . $attribute;
-						
-							if (isset($values[$form_name])) {
-								if (is_array($values[$form_name])) {
-									ksort($values[$form_name], SORT_NUMERIC); 
-									$form_value = "|" . implode("|", $values[$form_name]);
-									$config_tmp[$attribute] = stripslashes($form_value);
-								}
-								else {
-									$config_tmp[$attribute] = stripslashes($values[$form_name]);
-								}
+						if (isset($values[$form_name])) {
+							if (is_array($values[$form_name])) {
+								ksort($values[$form_name], SORT_NUMERIC); 
+								$form_value = "|" . implode("|", $values[$form_name]);
+								$config_tmp[$attribute] = stripslashes($form_value);
 							}
-							else
-								$config_tmp[$attribute] = $this->config[$element_name][$attribute];
+							else {
+								$config_tmp[$attribute] = stripslashes($values[$form_name]);
+							}
 						}
+						else
+							$config_tmp[$attribute] = $this->config[$element_name][$attribute];
 					}
-					$this->config[$element_name] = $config_tmp;
 				}
+				$this->config[$element_name] = $config_tmp;
 			}
 		}
 		
@@ -350,7 +348,9 @@ class ExternConfig {
 	function checkFormValues ($element_name, $attributes) {
 		global $HTTP_POST_VARS;
 		$fault = array();
-		
+	/*	echo "<pre>";
+		print_r($HTTP_POST_VARS);
+		echo "</pre>";*/
 		foreach ($attributes as $attribute) {
 			$form_name = $element_name . "_" . $attribute;
 			
@@ -448,6 +448,9 @@ class ExternConfig {
 								|| !preg_match("/^[^.\/\\\].*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
 						break;
 					case "wholesite" :
+					case "addinfo" :
+					case "time" :
+					case "lecturer" :
 						// This is especially for checkbox-values. If there is no checkbox
 						// checked, the variable is not declared and it is necessary to set the
 						// variable to 0.
