@@ -43,7 +43,7 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";   //hier wird der "Kopf" nachgeladen
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; 		//wir brauchen die Seminar-Typen
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 		//wir brauchen die Seminar-Typen
-require_once "$ABSOLUTE_PATH_STUDIP/SemBrowse.class.php";
+require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemBrowse.class.php";
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
