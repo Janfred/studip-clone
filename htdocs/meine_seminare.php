@@ -100,18 +100,57 @@ function get_my_obj_values(&$my_obj) {
 		}
 	}
 	
-	//Votes (nur laufende und sichtbar gestoppte)
-        if ($GLOBALS['VOTE_ENABLE']) {
-        	$db2->query("SELECT b.Seminar_id,count(a.vote_id) as count, count(if((chdate > b.loginfilenow AND author_id !='".$user->id."'),a.vote_id,NULL)) AS neue
-				FROM loginfilenow_".$user->id." b  LEFT JOIN vote a ON (a.range_id = b.Seminar_id )
-				WHERE a.state IN('active','stopvis') GROUP BY b.Seminar_id");
+	//Umfragen
+	if ($GLOBALS['VOTE_ENABLE']) {
+		$sql = 
+			"SELECT".
+			" b.Seminar_id,".
+			" (COUNT(d.eval_id) + COUNT(vote_id)) AS count,".
+			" (COUNT(if ((".
+			"             a.chdate > b.loginfilenow".
+			"             AND".
+			"             a.author_id !='".$user->id."'".
+			"            ),".
+			"            a.vote_id,".
+			"            NULL".
+			"           )".
+			"        ) + ".
+			"  COUNT(if ((".
+			"             d.chdate > b.loginfilenow".
+			"             AND".
+			"             d.author_id != '".$user->id."'".
+			"            ),".
+			"            d.eval_id,".
+			"            NULL".
+			"           )".
+			"        )".
+			" ) AS neue ".
+			"FROM".
+			" loginfilenow_".$user->id." b ".
+			"LEFT JOIN".
+			" eval_range c ".
+			"ON".
+			" (c.range_id = b.Seminar_id ) ".
+			"LEFT JOIN".
+			" eval d ".
+			"ON".
+			" (d.eval_id = c.eval_id)".
+			"LEFT JOIN".
+			" vote a ".
+			"ON".
+			" (a.range_id = b.Seminar_id".   
+			"  AND".
+			"  a.state ".
+			"  IN".
+			"  ('active','stopvis')) ".
+			"GROUP BY".
+			" b.Seminar_id";
+		$db2->query ($sql);
 		while($db2->next_record()) {
 				$my_obj[$db2->f("Seminar_id")]["neuevotes"]=$db2->f("neue");
 				$my_obj[$db2->f("Seminar_id")]["votes"]=$db2->f("count");
 		}
 	}
-
-
 	
 	return;
 }
@@ -184,9 +223,9 @@ function print_seminar_content($semid,$my_obj_values, $type="seminar") {
   //votes
   if ($GLOBALS['VOTE_ENABLE']) {
   	if ($my_obj_values["neuevotes"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Votes, %s neue"), $my_obj_values["votes"], $my_obj_values["neuevotes"]))."></a>";
+			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Umfrage(n), %s neue"), $my_obj_values["votes"], $my_obj_values["neuevotes"]))."></a>";
 	  elseif ($my_obj_values["votes"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Votes"), $my_obj_values["votes"]))."></a>";
+			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='pictures/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Umfrage(n)"), $my_obj_values["votes"]))."></a>";
 	  else
 			echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   }
