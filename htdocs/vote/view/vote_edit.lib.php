@@ -162,15 +162,15 @@ function printFormStart ( $voteID, $rangeID, $referer ) {
     $html = createBoxHeader (_("Voting-Verwaltung: "), "100%", $task_string,
 			     VOTE_PATH_PICTURES.$type."-icon.gif","","","","",
 			     "blank" );
-    if( $vote->isError() )
-	$html .= createErrorReport( $vote );
-
     $html .= "<form action=\"".$GLOBALS['PHP_SELF']."?page=edit&type=".$type."\" name=\"voteform\" method=post>"
 	. "<input type=hidden name=\"voteID\" value=\"".$voteID."\">"
 	. "<input type=hidden name=\"rangeID\" value=\"".$rangeID."\">"
 	. "<input type=hidden name=\"referer\" value=\"".$referer."\">"
 	. "<table width=\"100%\" cellpadding=5 cellspacing=3 border=0>\n"
 	. "<tr><td class=steel1 width=\"80%\" valign=top>\n";
+
+    if( $vote->isError() )
+	$html .= createErrorReport( $vote );
 
     echo $html;
 #    echo $debug;
