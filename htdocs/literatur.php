@@ -68,7 +68,7 @@ if ($db->num_rows()) {
 	//Literatur
 	if ($literatur) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printhead(0, 0, $link, "open", FALSE, $icon, _("Literatur"), $zusatz);
+		printhead(0, 0, false, "open", FALSE, $icon, _("Literatur"), $zusatz);
 		echo "</tr></table>	";
 	
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
@@ -79,7 +79,7 @@ if ($db->num_rows()) {
 	//Links
 	if ($links) {
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
-		printhead(0, 0, $link, "open", FALSE, $icon, _("Links"), $zusatz);
+		printhead(0, 0, false, "open", FALSE, $icon, _("Links"), $zusatz);
 		echo "</tr></table>	";
 	
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
