@@ -158,7 +158,7 @@ function process_commands() {
 				if ($success) {
 					$count++;
 				} else {
-					parse_msg('error§' . sprintf( _('Die Datei %s konnte nicht umbenannt werden.'),  $ABSOLUTE_PATH_STUDIP.$SMILE_PATH.'/'.urldecode($matches[2]));
+					parse_msg('error§' . sprintf( _('Die Datei %s konnte nicht umbenannt werden.'),  $ABSOLUTE_PATH_STUDIP.$SMILE_PATH.'/'.urldecode($matches[2])));
 				}
 			}
 		}
