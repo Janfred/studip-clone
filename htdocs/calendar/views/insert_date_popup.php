@@ -214,7 +214,7 @@ if ($mcount > 3) {
 		while ($kalender && ($i < $mcount)) {
 			if (($i % $mcounth == 0) && $i > 0) echo '</tr><tr valign=top>', "\n";
 			echo '<td class="blank">';
-			echo includeMonth(mktime(0,0,0,$atimex['mon'] + $i++,$atimex['mday'],$atimex['year']), 'javascript:void(0);//', 'NONAV', $js);
+			echo includeMonth(mktime(12,0,0,$atimex['mon'] + $i++,10,$atimex['year']), 'javascript:void(0);//', 'NONAV', $js);
 			echo '</td>';
 		}
 		if (!$kalender) echo '<td class="blank" colspan="',$mcounth,'">&nbsp;</td>';
@@ -253,15 +253,15 @@ if ($mcount > 3) {
 		echo '<tr>';
 		$zeiten_buttons = '<a href="javascript:insert_time();">'. makeButton('uebernehmen', 'img') . '</a> &nbsp; <a href="javascript:window.close();">' . makeButton('abbrechen', 'img').'</a>';
 		if ($kalender) {
-			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _("Monate zurück")),' border="0"></a>';
-			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_small.gif"', tooltip($mcounth .' ' . _("Monate zurück")),' border="0"></a></td>', "\n";
+			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _("Monate zurück")),' border="0"></a>';
+			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_previous_small.gif"', tooltip($mcounth .' ' . _("Monate zurück")),' border="0"></a></td>', "\n";
 			if ($mcounth - 2 > 0) {
 				echo '<td class="blank" colspan="' , ($mcounth - 2) , '" align=center>';
 				if ($zeiten) echo $zeiten_buttons;
 				echo '&nbsp;</td>';
 			}
-			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcounth,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_small.gif"', tooltip($mcounth . ' ' . _("Monate vor")),' border="0"></a>&nbsp;', "\n";
-			echo '<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcount,$atimex['mday'],$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_double_small.gif"', tooltip($mcount .' ' . _("Monate vor")),' border="0"></a>&nbsp;</td>';
+			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_small.gif"', tooltip($mcounth . ' ' . _("Monate vor")),' border="0"></a>&nbsp;', "\n";
+			echo '<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="',$CANONICAL_RELATIVE_PATH_STUDIP,'pictures/calendar_next_double_small.gif"', tooltip($mcount .' ' . _("Monate vor")),' border="0"></a>&nbsp;</td>';
 		} elseif ($zeiten) {
 			echo '<td class="blank" colspan="',$mcounth,'" align="center">', $zeiten_buttons, "</td>\n";
 		}
