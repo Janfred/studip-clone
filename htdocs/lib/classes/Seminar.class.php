@@ -216,7 +216,7 @@ class Seminar {
 			$this->metadata["start_termin"] = $this->start_date;
 			$this->metadata["start_woche"] = $this->start_week;
 			$this->metadata["turnus"] = $this->cycle-1;
-			if ($this->metadate_type == 0) {
+			if ($this->metadate_type == 0 && is_array($this->meta_times)) {
 				$this->metadata["turnus_data"]='';
 				foreach ($this->meta_times as $val) {
 					$this->metadata["turnus_data"][] = array(
