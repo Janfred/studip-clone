@@ -262,6 +262,16 @@
 				</td>
 			</tr>
 		</xsl:if>
+		<xsl:if test="teilnehmerzahl">
+			<tr>
+				<td bgcolor="#EEEEEE">
+					<b><xsl:value-of select="teilnehmerzahl@key"/> Teilnehmer: </b>
+				</td>
+				<td bgcolor="#EEEEEE">
+					<xsl:value-of select="teilnehmerzahl"/>
+				</td>
+			</tr>
+		</xsl:if>
 		<xsl:if test="voraussetzung">
 			<tr>
 				<td bgcolor="#EEEEEE">
