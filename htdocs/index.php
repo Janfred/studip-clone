@@ -73,16 +73,6 @@ if ($dclose)
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
-if (($my_messaging_settings["start_messenger_at_startup"]) && ($auth->auth["jscript"]) && (!$index_data["im_loaded"])) {
-	?>
-	<script language="Javascript">
-	{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
-	</script>
-	<?
-	$index_data["im_loaded"]=TRUE;
-}
-
-
 //Anzeigemodul fuer studentische Startseite (nur wenn man angemeldet und nicht global dozent oder hoeher ist!)
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("dozent")) {
 ?>
