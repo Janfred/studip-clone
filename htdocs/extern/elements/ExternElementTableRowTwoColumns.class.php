@@ -41,7 +41,7 @@ class ExternElementTableRowTwoColumns extends ExternElement {
 
 	var $attributes = array("tr_height", "tr_class", "tr_style", "td1_align",
 			"td1_valign", "td1_bgcolor", "td1_class", "td1_style", "font1_face",
-			"font1_size", "td1_width", "font1_color", "font1_class", "font1_style",
+			"font1_size", "td1width", "font1_color", "font1_class", "font1_style",
 			"td2_align", "td2_valign", "td2_bgcolor", "td2_class", "td2_style",
 			"font2_face", "font2_size", "font2_color", "font2_class", "font2_style");
 			
@@ -86,7 +86,7 @@ class ExternElementTableRowTwoColumns extends ExternElement {
 		
 		$title = _("Spaltenbreite:");
 		$info = _("Breite der Spalte in Prozent.");
-		$table = $edit_form->editTextfieldGeneric("td1_width", $title, $info, 2, 2);
+		$table = $edit_form->editTextfieldGeneric("td1width", $title, $info, 2, 2);
 		
 		$table .= $edit_form->editAlign("td1_align");
 		$table .= $edit_form->editValign("td1_valign");

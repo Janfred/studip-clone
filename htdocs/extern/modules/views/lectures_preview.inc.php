@@ -50,15 +50,28 @@ $data_sem[1]["lecturer"] = $data_sem[0]["lecturer"];
 
 $show_time = $this->config->getValue("Main", "time");
 $show_lecturer = $this->config->getValue("Main", "lecturer");
-if ($show_time && $show_lecturer)
+if ($show_time && $show_lecturer) {
+	if (!$td2width = $this->config->getValue("LecturesInnerTable", "td2width"))
+		$td2width = 50;
 	$colspan = " colspan=\"2\"";
-else
+	$td_time = $this->config->getAttributes("LecturesInnerTable", "td2");
+	$td_time .= " width=\"$td2width%\"";
+	$td_lecturer = " align=\"" . $this->config->getValue("LecturesInnerTable", "td3_align");
+	$td_lecturer .= "\" valign=\"" . $this->config->getValue("LecturesInnerTable", "td2_valign");
+	$td_lecturer .= "\" width=\"" . (100 - $td2width) . "%\"";
+}
+else {
 	$colspan = "";
+	$td_time = $this->config->getAttributes("LecturesInnerTable", "td2") . " width=\"100%\"";
+	$td_lecturer = " align=\"" . $this->config->getValue("LecturesInnerTable", "td3_align");
+	$td_lecturer .= "\" valign=\"" . $this->config->getValue("LecturesInnerTable", "td2_valign");
+	$td_lecturer .= " width=\"100%\"";
+}
 
-echo "\n<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
+echo "\n<table" . $this->config->getAttributes("TableHeader", "table") . ">";
 if ($this->config->getValue("Main", "addinfo")) {
 	echo "\n<tr" . $this->config->getAttributes("InfoCountSem", "tr") . ">";
-	echo "<td$colspan" . $this->config->getAttributes("InfoCountSem", "td") . ">";
+	echo "<td" . $this->config->getAttributes("InfoCountSem", "td") . ">";
 	echo "<font" . $this->config->getAttributes("InfoCountSem", "font") . ">&nbsp;";
 	echo "2 ";
 	echo $this->config->getValue("Main", "textlectures");
@@ -70,7 +83,7 @@ if ($this->config->getValue("Main", "addinfo")) {
 
 foreach ($data_sem as $dat) {
 	echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
-	echo "<td$colspan" . $this->config->getAttributes("Grouping", "td") . ">";
+	echo "<td" . $this->config->getAttributes("Grouping", "td") . ">";
 	echo "<font" . $this->config->getAttributes("Grouping", "font") . ">";
 	
 	$aliases_sem_type = $this->config->getValue("ReplaceTextSemType",
@@ -82,30 +95,34 @@ foreach ($data_sem as $dat) {
 				." (". $SEM_CLASS[$SEM_TYPE[$dat['group']]["class"]]["name"].")");
 	}
 	
-	echo "</font></td></tr>";
-	echo "<tr" . $this->config->getAttributes("SemName", "tr") . ">";
-	echo "<td$colspan" . $this->config->getAttributes("SemName", "td") . ">";
-	echo "<font" . $this->config->getAttributes("SemName", "font") . ">";
+	echo "\n</td></tr>\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
+	echo "<td width=\"100%\"" . $this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
+	echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+	echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr1") . ">";
+	echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
+	echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font1") . ">";
 	echo "<a href=\"\"";
 	echo $this->config->getAttributes("SemLink", "a") . ">";
-	echo $dat["name"] . "</a></font></td></tr>\n";
+	echo $dat["name"] . "</a></font></td></tr>";
 	
 	if ($show_time || $show_lecturer) {
-		echo "<tr" . $this->config->getAttributes("TimeLecturer", "tr") . ">";
+		echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr2") . ">";
 		if ($show_time) {
-			echo "<td" . $this->config->getAttributes("TimeLecturer", "td1") . ">";
-			echo "<font" . $this->config->getAttributes("TimeLecturer", "font1") . ">";
-			echo $dat["time"] . "</font></td>\n";
+			echo "<td$td_time>";
+			echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">";
+			echo $dat["time"] . "</font>\n";
 		}
 		if ($show_lecturer) {
-			echo "<td" . $this->config->getAttributes("TimeLecturer", "td2") . ">";
-			echo "<font" . $this->config->getAttributes("TimeLecturer", "font2") . ">(";
+			echo "<td$td_lecturer>";
+			echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">(";
 			echo "<a href=\"\"";
 			echo $this->config->getAttributes("LecturerLink", "a") . ">";
 			echo $dat["lecturer"] . "</a>";
-			echo ") </font></td></tr>";
+			echo ") </font></td>";
 		}
+		echo "</tr>\n";
 	}
+	echo "</table></td></tr>\n";
 }
 echo "</table>";
 ?>

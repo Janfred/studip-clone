@@ -14,6 +14,7 @@ $attr_subheadline_td = preg_replace('/width\="[^"]+"/i',
 $aliases_content = $this->config->getValue("Main", "aliases");
 $visible_content = $this->config->getValue("Main", "visible");
 
+$first_loop = TRUE;
 $order = $this->config->getValue("Main", "order");
 foreach ($order as $position) {
 	
@@ -99,27 +100,41 @@ foreach ($order as $position) {
 				break;
 		}
 				
-				
+		if ($first_loop && $this->config->getValue("Main", "studiplink") == "top") {
+			$args = array("width" => $this->config->getValue("TableParagraph", "table_width"),
+					"align" => $this->config->getValue("TableParagraph", "table_align"), "valign" => "top",
+			"height" => "40");
+			$this->elements["StudipLink"]->printout($args);
+			echo "<br>";
+			$first_loop = FALSE;
+		}
+		
 		if (($data_field == "lebenslauf" || $data_field == "schwerp"
 				|| $data_field == "publi")) {
-			echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
+			echo "\n<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
 			echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
 			echo "><td" . $this->config->getAttributes("TableParagraphHeadline", "td");
 			echo "><font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">\n";
 			echo $aliases_content[$position] . "</font></td></tr>\n";
 			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-			if ($this->config->getValue("TableParagraphText", "margin"))
-				echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+			if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+				echo "<div style=\"margin-left:$margin;\">";
 			else
 				echo "<div>";
 			echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
 			echo $data["content"];
-			echo "</font></div></td></tr>\n</table><br>\n";
+			echo "</font></div></td></tr>\n</table><br>";
 		}
 		else
 			$data_field($this, $data, $aliases_content[$position]);
 	}
+}
+if ($this->config->getValue("Main", "studiplink") == "bottom") {
+	$args = array("width" => $this->config->getValue("TableParagraph", "table_width"),
+			"align" => $this->config->getValue("TableParagraph", "table_align"), "valign" => "bottom",
+			"height" => "40");
+	$this->elements["StudipLink"]->printout($args);
 }
 
 function news (&$this, $data, $alias_content) {	
@@ -131,8 +146,8 @@ function news (&$this, $data, $alias_content) {
 	foreach ($data as $dat) {
 		echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 		echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
-		if ($this->config->getValue("TableParagraphSubHeadline", "margin"))
-			echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
+		if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin"))
+			echo "<div style=\"margin-left:$margin;\">";
 		else
 			echo "<div>";
 		echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
@@ -141,8 +156,8 @@ function news (&$this, $data, $alias_content) {
 		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 		list ($content, $admin_msg) = explode("<admin_msg>", $dat["body"]);
 		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-		if ($this->config->getValue("TableParagraphText", "margin"))
-			echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+		if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+			echo "<div style=\"margin-left:$margin;\">";
 		else
 			echo "<div>";
 		echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
@@ -163,8 +178,8 @@ function termine (&$this, $data, $alias_content) {
 		foreach ($data as $dat) {
 			echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 			echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
-			if ($this->config->getValue("TableParagraphSubHeadline", "margin"))
-				echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
+			if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin"))
+				echo "<div style=\"margin-left:$margin;\">";
 			else
 				echo "<div>";
 			echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
@@ -177,8 +192,8 @@ function termine (&$this, $data, $alias_content) {
 			echo "</font></div></td></tr>\n";
 			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-			if ($this->config->getValue("TableParagraphText", "margin"))
-				echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+			if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+				echo "<div style=\"margin-left:$margin;\">";
 			else
 				echo "<div>";
 			echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
@@ -198,8 +213,8 @@ function kategorien (&$this, $data, $alias_content) {
 	echo "</font></td></tr>\n";
 	echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 	echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-	if ($this->config->getValue("TableParagraphText", "margin"))
-		echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+	if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+		echo "<div style=\"margin-left:$margin;\">";
 	else
 		echo "<div>";
 	echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
@@ -248,8 +263,8 @@ function lehre (&$this, $data, $alias_content) {
 				
 			$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 			$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
-			if ($this->config->getValue("TableParagraphSubHeadline", "margin"))
-				$out .= "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
+			if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin"))
+				$out .= "<div style=\"margin-left:$margin;\">";
 			else
 				$out .= "<div>";
 			$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
@@ -267,8 +282,8 @@ function lehre (&$this, $data, $alias_content) {
 			$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 			
 			if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-				if ($this->config->getValue("List", "margin"))
-					$out .= "<div style=\"margin-left:" . $this->config->getValue("List", "margin") . ";\">";
+				if ($margin = $this->config->getValue("List", "margin"))
+					$out .= "<div style=\"margin-left:$margin;\">";
 				else
 					$out .= "<div>";
 				$out .= "<ul" . $this->config->getAttributes("List", "ul") . ">\n";
@@ -283,8 +298,8 @@ function lehre (&$this, $data, $alias_content) {
 				$out .= "</ul>";
 			}
 			else {
-				if ($this->config->getValue("TableParagraphText", "margin"))
-					$out .= "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+				if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+					$out .= "<div style=\"margin-left:$margin;\">";
 				else
 					$out .= "<div>";
 				$j = 0;
@@ -309,8 +324,8 @@ function lehre (&$this, $data, $alias_content) {
 		$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 		
 		if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-			if ($this->config->getValue("List", "margin"))
-				$out .= "<div style=\"margin-left:" . $this->config->getValue("List", "margin") . ";\">";
+			if ($margin = $this->config->getValue("List", "margin"))
+				$out .= "<div style=\"margin-left:$margin;\">";
 			else
 				$out .= "<div>";
 			$out .= "<ul" . $this->config->getAttributes("List", "ul") . ">";
@@ -325,8 +340,8 @@ function lehre (&$this, $data, $alias_content) {
 			$out .= "</ul>";
 		}
 		else {
-			if ($this->config->getValue("TableParagraphText", "margin"))
-				$out .= "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+			if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+				$out .= "<div style=\"margin-left:$margin;\">";
 			else
 				$out .= "<div>";
 			$j = 0;
@@ -353,29 +368,12 @@ function lehre (&$this, $data, $alias_content) {
 	}
 }
 
-function head (&$this, $data) {
+function head (&$this, $data, $a) {
 	$out = "";
 	$out .= "<table" . $this->config->getAttributes("PersondetailsHeader", "table") . ">\n";
 	$out .= "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
 	$out .= "<td colspan=\"2\" width=\"100%\"";
 	$out .= $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
-  if ($this->config->getValue("Main", "studiplink")) {
-		$out .= "<div" . $this->config->getAttributes("StudipLink", "div") . ">";
-		$out .= "<font" . $this->config->getAttributes("StudipLink", "font") . ">";
-		$out .= sprintf("<a href=\"\"%s>%s</a>",
-				$this->config->getAttributes("StudipLink", "a"),
-				$this->config->getValue("StudipLink", "linktext"));
-		if ($this->config->getValue("StudipLink", "image")) {
-			if ($image_url = $this->config->getValue("StudipLink", "imageurl"))
-				$img = "&nbsp;<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
-			else {
-				$img = "&nbsp;<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
-				$img .= "pictures/login.gif\" align=\"absmiddle\">";
-			}
-			$out .= sprintf("<a href=\"\"%s>%s</a>", $this->config->getAttributes("StudipLink", "a"), $img);
-		}
-		$out .= "</font></div>";
-	}
 	$out .= "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
 	$out .= $data["fullname"];
 	$out .= "</font></td></tr>\n";

@@ -62,7 +62,7 @@ class ExternModuleDownload extends ExternModule {
 	}
 	
 	function setup () {
-		$this->elements["LinkIntern"]->link_module_type = 6;
+		$this->elements["LinkIntern"]->link_module_type = 2;
 		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Mitarbeiterdetails");
 		$this->elements["Link"]->real_name = _("Link zum Dateidownload");
 	}

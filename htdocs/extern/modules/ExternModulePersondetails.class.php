@@ -81,7 +81,7 @@ class ExternModulePersondetails extends ExternModule {
 	}
 	
 	function setup () {
-		$this->elements["LinkIntern"]->link_module_type = 7;
+		$this->elements["LinkIntern"]->link_module_type = 4;
 		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Veranstaltungsdetails");
 	}
 	

@@ -46,6 +46,7 @@ class ExternModuleLecturedetails extends ExternModule {
 	var $data_fields = array("subtitle", "lecturer", "art", "status", "description", "location",
 			"time", "teilnehmer", "requirements", "lernorga", "leistung", "range_path", "misc");
 	var $registered_elements = array(
+			"ReplaceTextSemType",
 			"Body",
 			"TableHeader",
 			"SemName" => "TableParagraphText",
@@ -80,7 +81,7 @@ class ExternModuleLecturedetails extends ExternModule {
 		$this->elements["SemName"]->real_name = _("Name der Veranstaltung");
 		$this->elements["Headline"]->real_name = _("&Uuml;berschriften");
 		$this->elements["Content"]->real_name = _("Abs&auml;tze");
-		$this->elements["LinkInternSimple"]->link_module_type = 6;
+		$this->elements["LinkInternSimple"]->link_module_type = 2;
 		$this->elements["LinkInternSimple"]->real_name = _("Link zum Modul Mitarbeiterdetails");
 	}
 	

@@ -112,20 +112,15 @@ class ExternElement {
 	/**
 	* 
 	*/
-	function toString ($data = "") {
-		$template_function = $this->name;
-		
-		if ($data == "")
-			return $template_function(&$this);
-			
-		return $template_function(&$this, $data);
+	function toString ($args = NULL) {
+		return "";
 	}
 
 	/**
 	* 
 	*/
-	function printout () {
-		echo $this->toString();
+	function printout ($args = NULL) {
+		echo $this->toString($args);
 	}
 
 	/**
@@ -337,30 +332,30 @@ class ExternElement {
 			
 				// Don't accept strings longer than 200 characters!
 				if (strlen($value[$i]) > 200) {
-					$fault[$form_name] = TRUE;
-					break;
+					$fault[$form_name][$i] = TRUE;
+					continue;
 				}
 				
-				if (preg_match("/(<|>|\")/i", $value[$i])) {
-					$fault[$form_name] = TRUE;
-					break;
+				if (preg_match("/(<|>|\"|\|)/i", $value[$i])) {
+					$fault[$form_name][$i] = TRUE;
+					continue;
 				}
 					
 				switch ($html_attribute) {
 			
 					case "height" :
-						$fault[$form_name] = (!preg_match("/^\d{0,3}$/", $value[$i])
+						$fault[$form_name][$i] = (!preg_match("/^\d{0,3}$/", $value[$i])
 								|| $value[$i]> 100 || $value[$i]< 0);
 						break;
 					case "cellpadding" :
 					case "cellspacing" :
 					case "border" :
 					case "sort" :
-						$fault[$form_name] = (!preg_match("/^\d{0,2}$/", $value[$i])
+						$fault[$form_name][$i] = (!preg_match("/^\d{0,2}$/", $value[$i])
 								|| $value[$i]> 30 || $value[$i]< 0);
 						break;
 					case "width" :
-						$fault[$form_name] = (!preg_match("/^\d{0,4}$/", $value[$i])
+						$fault[$form_name][$i] = (!preg_match("/^\d{0,4}$/", $value[$i])
 								|| $value[$i]> 2000 || $value[$i]< 0);
 						if ($HTTP_POST_VARS["{$form_name}pp"] == "%") {
 							if (is_array($HTTP_POST_VARS[$form_name]))
@@ -370,20 +365,20 @@ class ExternElement {
 						}
 						break;
 					case "valign" :
-						$fault[$form_name] = !preg_match("/^(top|bottom|center)$/", $value[$i]);
+						$fault[$form_name][$i] = !preg_match("/^(top|bottom|center)$/", $value[$i]);
 						break;
 					case "align" :
-						$fault[$form_name] = !preg_match("/^(left|right|center)$/", $value[$i]);
+						$fault[$form_name][$i] = !preg_match("/^(left|right|center)$/", $value[$i]);
 						break;
 					case "size" :
-						$fault[$form_name] = !preg_match("/^(-|\+)*(1|2|3|4|5|6|7)$/", $value[$i]);
+						$fault[$form_name][$i] = !preg_match("/^(-|\+)*(1|2|3|4|5|6|7)$/", $value[$i]);
 						break;
 					case "face" :
-						$fault[$form_name] = !preg_match("/^(Verdana,Arial,Helvetica,sans-serif|"
+						$fault[$form_name][$i] = !preg_match("/^(Verdana,Arial,Helvetica,sans-serif|"
 								. "Times,Times New Roman,serif|Courier,Courier New,monospace)$/", $value[$i]);
 						break;
 					case "background" :
-						$fault[$form_name] = ($value[$i] != ""
+						$fault[$form_name][$i] = ($value[$i] != ""
 								&& (preg_match("/(<|>|\"|<script|<php)/i", $value[$i])
 								|| !preg_match("/^[^.\/\\\].*\.(png|jpg|jpeg|gif)$/i", $value[$i])));
 						break;
@@ -398,32 +393,30 @@ class ExternElement {
 							$HTTP_POST_VARS[$form_name] = 0;
 							break;
 						}
-						$fault[$form_name] = !($value[$i] == "1" || $value[$i] == "0" || !isset($value[$i]));
+						$fault[$form_name][$i] = !($value[$i] == "1" || $value[$i] == "0" || !isset($value[$i]));
 						break;
 					case "name" :
 						$HTTP_POST_VARS[$form_name] = trim($HTTP_POST_VARS[$form_name]);
-						$fault[$form_name] = (preg_match("/^.*(<script|<php).*$/i", $value[$i])
+						$fault[$form_name][$i] = (preg_match("/^.*(<script|<php).*$/i", $value[$i])
 								|| !preg_match("/^[0-9a-z\._\- ]+$/i", $value[$i]));
 						break;
 					case "widthpp" :
-						$fault[$form_name] = !($value[$i] == "" || $value[$i] == "%");
+						$fault[$form_name][$i] = !($value[$i] == "" || $value[$i] == "%");
 						break;
 					case "nameformat" :
-						$fault[$form_name] = !($value[$i] == "no_title_short" || $value[$i] == "no_title"
+						$fault[$form_name][$i] = !($value[$i] == "no_title_short" || $value[$i] == "no_title"
 								|| $value[$i] == "no_title_rev" || $value[$i] == "full"
 								|| $value[$i] == "full_rev");
 						break;
 					case "dateformat" :
-						$fault[$form_name] = !($value[$i] == "%d. %b. %Y" || $value[$i] == "%d.%m.%Y"
+						$fault[$form_name][$i] = !($value[$i] == "%d. %b. %Y" || $value[$i] == "%d.%m.%Y"
 								|| $value[$i] == "%d.%m.%y" || $value[$i] == "%d. %B %Y" || $value[$i] == "%m/%d/%y");
 						break;
 					default :
-						$fault[$form_name] = $this->checkValue($html_attribute, $value[$i]);
+						$fault[$form_name][$i] = $this->checkValue($html_attribute, $value[$i]);
 						
 				}
 					
-				if ($fault[$form_name])
-					break;
 			}
 			
 		}

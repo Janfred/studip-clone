@@ -56,7 +56,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -87,7 +87,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -232,7 +232,7 @@ class ExternEditHtml extends ExternEditGeneric {
 							"tomato" => "#FF6347", "turquoise" => "#40E0D0", "violet" => "#EE82EE",
 							"wheat" => "#F5DEB3", "whitesmoke" => "#F5F5F5", "yellowgreen" => "#9ACD32");
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -272,7 +272,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -303,7 +303,7 @@ class ExternEditHtml extends ExternEditGeneric {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -340,7 +340,7 @@ class ExternEditHtml extends ExternEditGeneric {
 			$value = substr($value, 0, -1);
 		}
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -388,7 +388,7 @@ class ExternEditHtml extends ExternEditGeneric {
 			"right" => _("rechtsbündig"),
 		  "center" => _("zentriert")
 		);
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -431,7 +431,7 @@ class ExternEditHtml extends ExternEditGeneric {
 			"bottom" => _("untenbündig"),
 		  "center" => _("zentriert")
 		);
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";

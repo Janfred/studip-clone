@@ -175,7 +175,7 @@ class ExternSemBrowse extends SemBrowse {
 			}
 			$types = implode("','", $types);
 			
-			$query = ("SELECT seminare.Seminar_id, seminare.status, seminare.Name 
+			$query = "SELECT seminare.Seminar_id, seminare.status, seminare.Name 
 				, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, "
 				. $_fullname_sql[$this->config->getValue("Main", "nameformat")]
@@ -185,11 +185,13 @@ class ExternSemBrowse extends SemBrowse {
 				LEFT JOIN auth_user_md5 USING (user_id) 
 				LEFT JOIN user_info USING (user_id) 
 				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
-				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
-				LEFT JOIN Institute USING (Institut_id) 
-				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')
-				AND ((start_time >= $start AND start_time <= $end) OR (start_time <= $end AND duration_time = -1))
-				AND seminare.status IN ('$types')	ORDER BY seminare.Name ");
+				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id)
+				LEFT JOIN Institute USING (Institut_id)
+				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "') ";
+			if (!$this->config->getValue("Main", "allseminars"))
+				$query .= "AND seminare.Institut_id='{$this->config->range_id}' ";
+			$query .= "AND ((start_time >= $start AND start_time <= $end) OR (start_time <= $end AND duration_time = -1))
+				AND seminare.status IN ('$types')	ORDER BY seminare.Name ";
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
 			$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
@@ -205,16 +207,29 @@ class ExternSemBrowse extends SemBrowse {
 			
 			$show_time = $this->config->getValue("Main", "time");
 			$show_lecturer = $this->config->getValue("Main", "lecturer");
-			if ($show_time && $show_lecturer)
+			if ($show_time && $show_lecturer) {
+				if (!$td2width = $this->config->getValue("LecturesInnerTable", "td2width"))
+					$td2width = 50;
 				$colspan = " colspan=\"2\"";
-			else
+				$td_time = $this->config->getAttributes("LecturesInnerTable", "td2");
+				$td_time .= " width=\"$td2width%\"";
+				$td_lecturer = " align=\"" . $this->config->getValue("LecturesInnerTable", "td3_align");
+				$td_lecturer .= "\" valign=\"" . $this->config->getValue("LecturesInnerTable", "td2_valign");
+				$td_lecturer .= "\" width=\"" . (100 - $td2width) . "%\"";
+			}
+			else {
 				$colspan = "";
+				$td_time = $this->config->getAttributes("LecturesInnerTable", "td2") . " width=\"100%\"";
+				$td_lecturer = " align=\"" . $this->config->getValue("LecturesInnerTable", "td3_align");
+				$td_lecturer .= "\" valign=\"" . $this->config->getValue("LecturesInnerTable", "td2_valign");
+				$td_lecturer .= " width=\"100%\"";
+			}
 			
 			$sem_data = $snap->getGroupedResult("Seminar_id");
 			echo "\n<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 			if ($this->config->getValue("Main", "addinfo")) {
 				echo "\n<tr" . $this->config->getAttributes("InfoCountSem", "tr") . ">";
-				echo "<td$colspan" . $this->config->getAttributes("InfoCountSem", "td") . ">";
+				echo "<td" . $this->config->getAttributes("InfoCountSem", "td") . ">";
 				echo "<font" . $this->config->getAttributes("InfoCountSem", "font") . ">&nbsp;";
 				echo count($sem_data) ." ";
 				echo $this->config->getValue("Main", "textlectures");
@@ -230,7 +245,7 @@ class ExternSemBrowse extends SemBrowse {
 			
 			foreach ($group_by_data as $group_field => $sem_ids) {
 				echo "\n<tr" . $this->config->getAttributes("Grouping", "tr") . ">";
-				echo "<td$colspan" . $this->config->getAttributes("Grouping", "td") . ">";
+				echo "<td" . $this->config->getAttributes("Grouping", "td") . ">";
 				echo "<font" . $this->config->getAttributes("Grouping", "font") . ">";
 				switch ($this->sem_browse_data["group_by"]){
 					case 0:
@@ -238,8 +253,16 @@ class ExternSemBrowse extends SemBrowse {
 					break;
 					
 					case 1:
-					if ($the_tree->getShortPath($group_field))
-						echo htmlReady($the_tree->getShortPath($group_field));
+					$range_path_new = NULL;
+					if ($the_tree->getShortPath($group_field)) {
+						$range_path = explode(" > ", $the_tree->getShortPath($group_field));
+						$range_path_level = $this->config->getValue("Main", "rangepathlevel");
+						if ($range_path_level > sizeof($range_path))
+							$range_path_level = sizeof($range_path);
+						for ($i = $range_path_level - 1; $i < sizeof($range_path); $i++)
+							$range_path_new[] = $range_path[$i];
+						echo implode(" > ", $range_path_new);
+					}
 					else
 						echo $this->config->getValue("Main", "textnogroups");
 					
@@ -266,53 +289,59 @@ class ExternSemBrowse extends SemBrowse {
 					
 				}
 				echo "</font></td></tr>";
-				if (is_array($sem_ids['Seminar_id'])){
-					while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
-						echo "<tr" . $this->config->getAttributes("SemName", "tr") . ">";
-						echo "<td$colspan" . $this->config->getAttributes("SemName", "td") . ">";
-						echo "<font" . $this->config->getAttributes("SemName", "font") . ">";
+				if (is_array($sem_ids['Seminar_id'])) {
+					while (list($seminar_id,) = each($sem_ids['Seminar_id'])) {
+						echo "\n</td></tr>\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr").">";
+						echo "<td width=\"100%\"" . $this->config->getAttributes("LecturesInnerTable", "td")."\">\n";
+						echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+						echo "<tr" . $this->config->getAttributes("LecturesInnerTable", "tr1") . ">";
+						echo "<td$colspan" . $this->config->getAttributes("LecturesInnerTable", "td1") . ">";
+						echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font1") . ">";
 						echo "<a href=\"$sem_link&seminar_id=$seminar_id\"";
 						echo $this->config->getAttributes("SemLink", "a") . ">";
 						echo htmlReady(key($sem_data[$seminar_id]["Name"])) . "</a></font></td></tr>\n";
 						//create Turnus field
-						$temp_turnus_string=view_turnus($seminar_id, TRUE);
+						$temp_turnus_string = view_turnus($seminar_id, TRUE);
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) >70) {
 							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
 							$temp_turnus_string .= "...";
 						}
 						if ($show_time || $show_lecturer) {
-							echo "<tr" . $this->config->getAttributes("TimeLecturer", "tr") . ">";
+							echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr2") . ">";
 							if ($show_time) {
-								echo "<td" . $this->config->getAttributes("TimeLecturer", "td1") . ">";
-								echo "<font" . $this->config->getAttributes("TimeLecturer", "font1") . ">";
+								echo "<td$td_time>";
+								echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">";
 								echo $temp_turnus_string . "</font></td>\n";
 							}
 							if ($show_lecturer) {
-								echo "<td" . $this->config->getAttributes("TimeLecturer", "td2") . ">";
-								echo "<font" . $this->config->getAttributes("TimeLecturer", "font2") . ">(";
+								echo "<td$td_lecturer>";
+								echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">(";
 								$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 								$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 								if (is_array($doz_name)){
 									asort($doz_name, SORT_STRING);
 									$i = 0;
-									foreach ($doz_name as $index => $value){
+									foreach ($doz_name as $index => $value) {
 										echo "<a href=\"$lecturer_link&username={$doz_uname[$index]}\"";
 										echo $this->config->getAttributes("LecturerLink", "a") . ">";
 										echo htmlReady($value) . "</a>";
-										if($i != count($doz_name)-1){
+										if ($i != count($doz_name) - 1) {
 											echo ", ";
 										}
-										if ($i == 3){
+										if ($i == 3) {
 											echo "...";
 											break;
 										}
 										++$i;
 									}
-									echo ") </font></td></tr>";
+									echo ") ";
 								}
+								echo "</font></td>";
 							}
+							echo "</tr>";
 						}
+						echo "</table></td></tr>\n";
 					}
 				}
 			}

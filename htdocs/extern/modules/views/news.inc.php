@@ -12,12 +12,24 @@ $db->query($query);
 if(!$db->next_record())
 	$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
 
+$sort = $this->config->getValue("Main", "sort");
+
+$query_order = "";
+foreach ($sort as $key => $position) {
+	if ($position > 0)
+		$query_order[$position] = $this->data_fields[$key];
+}
+if ($query_order) {
+	ksort($query_order, SORT_NUMERIC);
+	$query_order = " ORDER BY " . implode(",", $query_order);
+}
+
 $nameformat = $this->config->getValue("Main", "nameformat");
 
 if ($nametitel == "last") {
 	$query = "SELECT n.*, aum.Nachname AS name, aum.username FROM news_range nr LEFT JOIN ";
 	$query .= "news n USING(news_id) LEFT JOIN auth_user_md5 aum USING(user_id) ";
-	$query .= "WHERE range_id='{$this->config->range_id}'";
+	$query .= "WHERE range_id='{$this->config->range_id}'$query_order";
 }
 else {
 	global $_fullname_sql;
@@ -25,20 +37,8 @@ else {
 	$query .= "aum.username FROM news_range nr LEFT JOIN ";
 	$query .= "news n USING(news_id) LEFT JOIN auth_user_md5 aum USING(user_id) ";
 	$query .= "LEFT JOIN user_info USING(user_id) ";
-	$query .= "WHERE range_id='{$this->config->range_id}'";
+	$query .= "WHERE range_id='{$this->config->range_id}'$query_order";
 }
-
-$sort = $this->config->getValue("Main", "sort");
-sort($sort, SORT_NUMERIC);
-
-$query_order = "";
-foreach ($sort as $position) {
-	if ($position > 0)
-		$query_order .= " " . $this->data_fields[$position] . ",";
-}
-
-if ($query_order)
-	$query .= " ORDER BY" . substr($query_order, 0, -1);
 
 $db->query($query);
 

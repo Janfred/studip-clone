@@ -39,9 +39,10 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainLectures extends ExternElementMain {
 
-	var $attributes = array("name", "grouping", "semrange", "addinfo", "time", "lecturer",
-			"semclasses", "textlectures", "textgrouping", "textnogroups", "aliasesgrouping",
-			"wholesite", "nameformat", "language", "urlcss", "title");
+	var $attributes = array("name", "grouping", "semrange", "allseminars", "rangepathlevel",
+			"addinfo", "time", "lecturer", "semclasses", "textlectures", "textgrouping",
+			"textnogroups", "aliasesgrouping", "wholesite", "nameformat", "language", "urlcss",
+			"title");
 	var $edit_function = "editMainSettings";
 	
 	/**
@@ -62,6 +63,8 @@ class ExternElementMainLectures extends ExternElementMain {
 			"name" => "",
 			"grouping" => "3",
 			"semrange" => "three",
+			"allseminars" => "",
+			"rangepathlevel" => "1",
 			"addinfo" => "1",
 			"time" => "1",
 			"lecturer" => "1",
@@ -116,6 +119,18 @@ class ExternElementMainLectures extends ExternElementMain {
 		$names = array(_("nur aktuelles"), _("vorheriges, aktuelles, n&auml;chstes"), _("alle"));
 		$values = array("current", "three", "all");
 		$table .= $edit_form->editRadioGeneric("semrange", $title, $info, $values, $names);
+		
+		$title = _("Veranstaltungen beteiligter Institute anzeigen:");
+		$info = _("Wählen Sie diese Option, um Veranstaltungen anzuzeigen, bei denen diese Einrichtung als beteiligtes Institut eingetragen ist.");
+		$values = "1";
+		$names = "";
+		$table .= $edit_form->editCheckboxGeneric("allseminars", $title, $info, $values, $names);
+		
+		$title = _("Bereichspfad ab Ebene:");
+		$info = _("Wählen Sie, wie die Veranstaltungen gruppiert werden sollen.");
+		$values = array("1", "2", "3", "4");
+		$names = array("1", "2", "3", "4");
+		$table .= $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $names);
 		
 		$title = _("Anzahl Veranstaltungen/Gruppierung anzeigen:");
 		$info = _("Wählen Sie diese Option, wenn die Anzahl der Veranstaltungen und die gewählte Gruppierungsart angezeigt werden sollen.");
@@ -184,7 +199,7 @@ class ExternElementMainLectures extends ExternElementMain {
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
-		$title = _("Sprache");
+		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$values = array("de_DE", "en_GB");
 		$names = array(_("Deutsch"), _("Englisch"));
@@ -213,6 +228,22 @@ class ExternElementMainLectures extends ExternElementMain {
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == "allseminars") {
+			// This is especially for checkbox-values. If there is no checkbox
+			// checked, the variable is not declared and it is necessary to set the
+			// variable to 0.
+			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
+			echo "<br>hallo";
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				return FALSE;
+			}
+			return !($value == "1" || $value == "0");
+		}
+		
+		return FALSE;
 	}
 	
 }

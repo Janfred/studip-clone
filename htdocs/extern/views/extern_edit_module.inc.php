@@ -100,16 +100,20 @@ if ($com == "new" || $com == "edit" || $com == "open" || $com == "close") {
 if ($com == "store") {
 
 	$faulty_values = $module->checkFormValues($edit);
-
-	if ($faulty_values) {
-		$message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"),
-				"<font color=\"#ff0000\" size=\"+1\"><b>*</b></font>");
-		my_info($message);
-		echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
-		$module->printoutEdit($edit_open, $HTTP_POST_VARS,
-				$faulty_values, $edit);
+	$fault = FALSE;
+	foreach ($faulty_values as $faulty) {
+		if (in_array(TRUE, $faulty)) {
+			$message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Werte!"),
+					"<font color=\"#ff0000\" size=\"+1\"><b>*</b></font>");
+			my_info($message);
+			echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
+			$module->printoutEdit($edit_open, $HTTP_POST_VARS,
+					$faulty_values, $edit);
+			$fault = TRUE;
+			break;
+		}
 	}
-	else {
+	if (!$fault) {
 		// This is the right place to trigger some functions by special 
 		// POST_VARS-values. At the moment there is only one: If the name of the
 		// configuration was changed, setup the extern_config table.

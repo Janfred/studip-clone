@@ -124,7 +124,7 @@ class ExternElementMainNews extends ExternElementMain {
 				_("25. November 2003"), "11/25/03");
 		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $nametitle_values, $nametitle_names);
 		
-		$title = _("Sprache");
+		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$values = array("de_DE", "en_GB");
 		$names = array(_("Deutsch"), _("Englisch"));

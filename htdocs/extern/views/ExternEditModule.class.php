@@ -64,11 +64,11 @@ class ExternEditModule extends ExternEditHtml {
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
 		$out .= "<td><font size=\"2\"><b>" . _("Spaltenname") . "</b></font></td>\n";
 		$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font>";
-		$out .= $this->faulty_values[$this->element_name . "_aliases"] ? $this->error_sign : "";
+		$out .= $this->faulty_values[$this->element_name . "_aliases"][0] ? $this->error_sign : "";
 		$out .= "</td>\n";
 		if (!in_array("width", $hide)) {
 			$out .= "<td><font size=\"2\"><b>" . _("Breite") . "</b></font>";
-			$out .= $this->faulty_values[$this->element_name . "_width"] ? $this->error_sign : "";
+			$out .= $this->faulty_values[$this->element_name . "_width"][0] ? $this->error_sign : "";
 			$out .= "</td>\n";
 		}
 		if (!in_array("sort", $hide))
@@ -108,21 +108,22 @@ class ExternEditModule extends ExternEditHtml {
 				if (!in_array($order[$i], $hide_fields["sort"])) {
 					$out .= "<td><select name=\"{$this->element_name}_sort[$order[$i]]\" ";
 					$out .= "size=\"1\">\n";
-					for ($j = 0; $j <= (sizeof($order) - sizeof($no_sort)); $j++) {
+					$out .= "<option value=\"0\"" . ($sort[$order[$i]] == 1 ? " selected" : "")
+							. ">" . _("keine") . "</option>";
+					for ($j = 1; $j <= (sizeof($order) - sizeof($hide_fields["sort"])); $j++) {
 						if ($sort[$order[$i]] == $j)
 							$selected = " selected";
 						else
 							$selected = "";
-					
-						if ($j == 0)
-							$out .= "<option value=\"0\"$selected>keine</option>";
-						else
-							$out .= "<option value=\"$j\"$selected>$j</option>";
+						$out .= "<option value=\"$j\"$selected>$j</option>";
 					}
 					$out .= "\n</select>\n</td>\n";
 				}
-				else
+				else {
 					$out .= "<td>&nbsp;</td>\n";
+					$out .= "<input type=\"hidden\" name=\"{$this->element_name}_sort[$order[$i]]\" ";
+					$out .= "value=\"0\">\n";
+				}
 			}
 			
 			if (!in_array("visible", $hide)) {

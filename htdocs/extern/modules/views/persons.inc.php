@@ -50,16 +50,15 @@ $visible_groups = get_statusgruppen_by_id($range_id, $group_ids);
 $aliases_groups = $this->config->getValue("Main", "groupsalias");
 $order = $this->config->getValue("Main", "order");
 $sort = $this->config->getValue("Main", "sort");
-//$sort = sort($sort, SORT_NUMERIC);
 
 $query_order = "";
 foreach ($sort as $key => $position) {
 	if ($position > 0)
-		$query_order[$position] = " " . $this->data_fields[$key] . ",";
+		$query_order[$position] = $this->data_fields[$key];
 }
-if (is_array($query_order)) {
+if ($query_order) {
 	ksort($query_order, SORT_NUMERIC);
-	$query_order = implode("", $query_order);
+	$query_order = " ORDER BY " . implode(",", $query_order);
 }
 
 $db = new DB_Institut();
@@ -71,10 +70,8 @@ if(!$grouping){
 	$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname, aum.Nachname ";
 	$query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
 	$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-	$query .= "WHERE statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id'";
+	$query .= "WHERE statusgruppe_id IN ('$groups_ids') AND Institut_id = '$range_id'$query_order";
 	
-	if ($query_order)
-		$query .= " ORDER BY" . substr($query_order, 0, -1);
 	$db->query($query);
 	$visible_groups = array("");
 }
@@ -109,9 +106,8 @@ foreach ($visible_groups as $group_id => $group) {
 		$query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname, aum.Nachname ";
 		$query .= "FROM statusgruppe_user LEFT JOIN auth_user_md5 aum USING(user_id) ";
 		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-		$query .= "WHERE statusgruppe_id='$group_id' AND Institut_id = '$range_id'";
-		if ($query_order)
-			$query .= " ORDER BY" . substr($query_order, 0, -1);
+		$query .= "WHERE statusgruppe_id='$group_id' AND Institut_id = '$range_id'$query_order";
+		
 		$db->query($query);
 		
 		$position = array_search($group_id, $all_groups);

@@ -50,8 +50,7 @@ class ExternModuleLectures extends ExternModule {
 			"TableHeader",
 			"InfoCountSem" => "TableGroup",
 			"Grouping" => "TableGroup",
-			"SemName" => "TableGroup",
-			"TimeLecturer" => "TableRowTwoColumns",
+			"LecturesInnerTable",
 			"SemLink" => "LinkInternSimple",
 			"LecturerLink" => "LinkInternSimple");
 	var $args = array();
@@ -62,15 +61,10 @@ class ExternModuleLectures extends ExternModule {
 	function ExternModuleLectures () {}
 	
 	function setup () {
-		$this->elements["TimeLecturer"]->real_name = _("Zeile Zeiten(Termine)/Dozenten");
-		$this->elements["SemName"]->real_name = _("Zeile Veranstaltungsname");
 		$this->elements["InfoCountSem"]->real_name = _("Anzahl Veranstaltungen/Gruppierung");
-		$this->elements["TimeLecturer"]->headlines = array(_("Angaben zum HTML-Tag &lt;tr&gt;"),
-				_("Spalte mit Terminen/Zeiten &lt;td&gt;"),	_("Spalte mit Terminen/Zeiten &lt;font&gt;"),
-				_("Spalte mit Dozentennamen &lt;td&gt;"), _("Spalte mit Dozentennamen &lt;font&gt;"));
-		$this->elements["SemLink"]->link_module_type = 6;
+		$this->elements["SemLink"]->link_module_type = 4;
 		$this->elements["SemLink"]->real_name = _("Link zum Modul Veranstaltungsdetails");
-		$this->elements["LecturerLink"]->link_module_type = 7;
+		$this->elements["LecturerLink"]->link_module_type = 2;
 		$this->elements["LecturerLink"]->real_name = _("Link zum Modul Mitarbeiterdetails");
 	}
 	

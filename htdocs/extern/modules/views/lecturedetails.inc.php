@@ -41,8 +41,25 @@ if ($db->next_record()) {
 	if ($visible[++$j] && $db->f("art"))
 		$data["art"] = htmlReady($db->f("art"));
 	
-	if ($visible[++$j])
-		$data["status"] = htmlReady($GLOBALS["SEM_TYPE"][$db->f("status")]["name"]);
+	if ($visible[++$j]) {
+		// reorganize the $SEM_TYPE-array
+		foreach ($GLOBALS["SEM_CLASS"] as $key_class => $class) {
+			$i = 0;
+			foreach ($GLOBALS["SEM_TYPE"] as $key_type => $type) {
+				if ($type["class"] == $key_class) {
+					$i++;
+					$sem_types_position[$key_type] = $i;
+				}
+			}
+		}
+		
+		$aliases_sem_type = $this->config->getValue("ReplaceTextSemType",
+				"class_" . $GLOBALS["SEM_TYPE"][$db->f("status")]['class']);
+		if ($aliases_sem_type[$sem_types_position[$db->f("status")] - 1])
+			$data["status"] =  $aliases_sem_type[$sem_types_position[$db->f("status")] - 1];
+		else
+			$data["status"] = htmlReady($GLOBALS["SEM_TYPE"][$db->f("status")]["name"]);
+	}
 	
 	if ($visible[++$j] && $db->f("Beschreibung"))
 		$data["description"] = htmlReady($db->f("Beschreibung"));

@@ -140,7 +140,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table .= $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
-		$title = _("Sprache");
+		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$values = array("de_DE", "en_GB");
 		$names = array(_("Deutsch"), _("Englisch"));

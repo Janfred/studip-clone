@@ -199,7 +199,7 @@ class ExternConfig {
 		reset($this->config);
 		if ($second_set) {
 			foreach ($this->config[$element_name] as $tag_attribute_name => $value) {
-				if ($value) {
+				if ($value != "") {
 					$tag_attribute = explode("_", $tag_attribute_name);
 					if ($tag_attribute[0] == $tag && !isset($tag_attribute[2])) {
 						if ($this->config[$element_name]["{$tag_attribute_name}2_"] == "")
@@ -214,7 +214,7 @@ class ExternConfig {
 		}
 		else {
 			foreach ($this->config[$element_name] as $tag_attribute_name => $value) {
-				if ($value) {
+				if ($value != "") {
 					$tag_attribute = explode("_", $tag_attribute_name);
 					if ($tag_attribute[0] == $tag && !isset($tag_attribute[2]))
 						$attributes .= " {$tag_attribute[1]}=\"$value\"";

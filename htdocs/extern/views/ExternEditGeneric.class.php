@@ -60,7 +60,7 @@ class ExternEditGeneric extends ExternEdit {
 		$form_name = $this->element_name . "_" . $attribute;
 		$value = $this->getValue($attribute);
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -132,7 +132,7 @@ class ExternEditGeneric extends ExternEdit {
 			return $out;
 		}
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -172,7 +172,7 @@ class ExternEditGeneric extends ExternEdit {
 			$width_2 = $this->width_2;
 		}
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -214,11 +214,6 @@ class ExternEditGeneric extends ExternEdit {
 			$width_2 = $this->width_2;
 		}
 		
-		if ($this->faulty_values[$form_name])
-			$error_sign = $this->error_sign;
-		else
-			$error_sign = "";
-		
 		$size = sizeof($check_values);
 		$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 		
@@ -226,6 +221,11 @@ class ExternEditGeneric extends ExternEdit {
 			$form_name .= "[]";
 			if (is_array($title)) {
 				for ($i = 0; $i < $size; $i++) {
+					if ($this->faulty_values[$form_name][$i])
+						$error_sign = $this->error_sign;
+					else
+						$error_sign = "";
+					
 					$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 					$out .= "$title[$i]</font></td>\n";
 					$out .= "<td$width_2 nowrap=\"nowrap\">";
@@ -242,6 +242,11 @@ class ExternEditGeneric extends ExternEdit {
 				}
 			}
 			else {
+				if ($this->faulty_values[$form_name][0])
+					$error_sign = $this->error_sign;
+				else
+					$error_sign = "";
+				
 				$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 				$out .= "$title</font></td>\n";
 				$out .= "<td$width_2 nowrap=\"nowrap\">";
@@ -259,6 +264,11 @@ class ExternEditGeneric extends ExternEdit {
 			}
 		}
 		else {
+			if ($this->faulty_values[$form_name][0])
+				$error_sign = $this->error_sign;
+			else
+				$error_sign = "";
+			
 			$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 			$out .= "$title</font></td>\n";
 			$out .= "<td$width_2 nowrap=\"nowrap\">";
@@ -301,7 +311,7 @@ class ExternEditGeneric extends ExternEdit {
 			$width_2 = $this->width_2;
 		}
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";
@@ -352,7 +362,7 @@ class ExternEditGeneric extends ExternEdit {
 			$width_2 = $this->width_2;
 		}
 		
-		if ($this->faulty_values[$form_name])
+		if ($this->faulty_values[$form_name][0])
 			$error_sign = $this->error_sign;
 		else
 			$error_sign = "";

@@ -67,7 +67,7 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 			"nameformat" => "no_title",
 			"dateformat" => "%d. %b. %Y",
 			"language" => "de_DE",
-			"studiplink" => "1",
+			"studiplink" => "top",
 			"urlcss" => "",
 			"title" => _("Mitarbeiter"),
 		);
@@ -121,16 +121,17 @@ class ExternElementMainPersonDetails extends ExternElementMain {
 				_("25. November 2003"), _("11/25/03"));
 		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
 		
-		$title = _("Sprache");
+		$title = _("Sprache:");
 		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
 		$values = array("de_DE", "en_GB");
 		$names = array(_("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Link:");
-		$info = _("Anwählen, wenn ein Link angezeigt werden soll, der direkt zum Stud.IP-Administrationsbereich verweisen soll.");
-		$value = "1";
-		$table .= $edit_form->editCheckboxGeneric("studiplink", $title, $info, $value, "");
+		$info = _("Ausgabe eines Links, der direkt zum Stud.IP-Administrationsbereich verweist.");
+		$value = array("top", "bottom", "0");
+		$names = array(_("oberhalb"), _("unterhalb der Tabelle"), _("ausblenden"));
+		$table .= $edit_form->editRadioGeneric("studiplink", $title, $info, $value, $names);
 		
 		$title = _("HTML-Header/Footer:");
 		$info = _("Anwählen, wenn die Seite als komplette HTML-Seite ausgegeben werden soll, z.B. bei direkter Verlinkung oder in einem Frameset.");

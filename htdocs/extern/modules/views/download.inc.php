@@ -46,27 +46,26 @@ $db->query($query);
 if(!$db->next_record())
 	$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
 
+$sort = $this->config->getValue("Main", "sort");
+
+$query_order = "";
+foreach ($sort as $key => $position) {
+	if ($position > 0)
+		$query_order[$position] = $this->data_fields[$key];
+}
+if ($query_order) {
+	ksort($query_order, SORT_NUMERIC);
+	$query_order = " ORDER BY " . implode(",", $query_order);
+}
+
 // Daten holen
 global $_fullname_sql;
 $query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
 $query .= $_fullname_sql[$this->config->getValue("Main", "nameformat")];
 $query .= "AS fullname, username FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 $query .= "LEFT JOIN auth_user_md5 USING (user_id) WHERE ";
-$query .= "Seminar_id='{$this->config->range_id}'";
-
-$sort = $this->config->getValue("Main", "sort");
-sort($sort, SORT_NUMERIC);
-
-$query_order = "";
-reset($sort);
-foreach ($sort as $position) {
-	if ($position > 0)
-		$query_order .= " " . $this->data_fields[$position] . ",";
-}
-
-if ($query_order)
-	$query .= " ORDER BY" . substr($query_order, 0, -1);
-		
+$query .= "Seminar_id='{$this->config->range_id}'$query_order";
+echo "<br>$query<br>";
 $db->query($query);
 
 if (!$db->num_rows())

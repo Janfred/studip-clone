@@ -47,9 +47,6 @@ for ($n = 0; $n < 3; $n++) {
 	}
 }
 
-$sort = $this->config->getValue("Main", "sort");
-sort($sort, SORT_NUMERIC);
-
 echo "<table" . $this->config->getAttributes("TableHeader", "table") . ">\n";
 echo "<tr" . $this->config->getAttributes("TableHeadRow", "tr") . ">\n";
 

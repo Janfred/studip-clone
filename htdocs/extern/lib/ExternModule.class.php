@@ -302,7 +302,7 @@ class ExternModule {
 			else {
 				$link = "http://{$GLOBALS['EXTERN_SERVER_NAME']}extern.php?module=$module";
 				if ($config)
-					$link .= "&config_name=$config";
+					$link .= "&config_id=$config";
 				$link .= "&range_id={$this->config->range_id}";
 			}
 		}

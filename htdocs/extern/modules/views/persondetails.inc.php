@@ -15,7 +15,6 @@ $username = $args["username"];
 
 $db_inst =& new DB_Institut();
 $db =& new DB_Institut();
-$db_kategorien =& new DB_Institut();
 
 $query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
 						. $_fullname_sql[$this->config->getValue("Main", "nameformat")] . " AS fullname,"
@@ -59,12 +58,8 @@ if(!$db_inst->num_rows() && $sem_id){
 else
 	$db->query($query_user_data . " aum.username = '$username' AND i.Institut_id = '$instituts_id'");
 
-if(!$db->num_rows())
+if(!$db->next_record())
 	die;
-
-if($db->next_record())
-	$db_kategorien->query("SELECT * FROM auth_user_md5 LEFT JOIN kategorien ON (range_id=user_id) "
-	                     ."WHERE username='$username' AND hidden=0");
 		
 $attr_subheadline_td = preg_replace('/width\="[^"]+"/i',
 		$this->config->getAttributes("TableParagraphSubHeadline", "td"),
@@ -74,7 +69,13 @@ $attr_subheadline_td = preg_replace('/width\="[^"]+"/i',
 $aliases_content = $this->config->getValue("Main", "aliases");
 $visible_content = $this->config->getValue("Main", "visible");
 
-echo head($this, $db);
+if ($this->config->getValue("Main", "studiplink") == "top") {
+	$args = array("width" => $this->config->getValue("TableParagraph", "table_width"),
+			"align" => $this->config->getValue("TableParagraph", "table_align"), "valign" => "top",
+	"height" => "40");
+	$this->elements["StudipLink"]->printout($args);
+	echo "<br>";
+}
 
 $order = $this->config->getValue("Main", "order");
 foreach ($order as $position) {
@@ -92,7 +93,10 @@ foreach ($order as $position) {
 				echo $aliases_content[$position] . "</font></td></tr>\n";
 				echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 				echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-				echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+				if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+					echo "<div style=\"margin-left:$margin;\">";
+				else
+					echo "<div>";
 				echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
 				echo FixLinks(format(htmlReady($db->f($data_field))));
 				echo "</font></div></td></tr>\n</table><br>\n";
@@ -101,6 +105,13 @@ foreach ($order as $position) {
 		else
 			$data_field($this, $db, $aliases_content[$position]);
 	}
+}
+
+if ($this->config->getValue("Main", "studiplink") == "bottom") {
+	$args = array("width" => $this->config->getValue("TableParagraph", "table_width"),
+			"align" => $this->config->getValue("TableParagraph", "table_align"), "valign" => "bottom",
+			"height" => "40");
+	$this->elements["StudipLink"]->printout($args);
 }
 
 function news (&$this, $db, $alias_content) {	
@@ -119,14 +130,20 @@ function news (&$this, $db, $alias_content) {
 		while ($db_news->next_record()) {
 			echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 			echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
-			echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
+			if ($margin =  $this->config->getValue("TableParagraphSubHeadline", "margin"))
+				echo "<div style=\"margin-left:$margin;\">";
+			else
+				echo "<div>";
 			echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
 			echo format(htmlReady($db_news->f("topic")));
 			echo "</font></div></td></tr>\n";
 			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 			list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
 			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-			echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+			if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+				echo "<div style=\"margin-left:$margin;\">";
+			else
+				echo "<div>";
 			echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
 			echo FixLinks(format(htmlReady($content)));
 			echo "</font></div></td></tr>\n";
@@ -148,7 +165,10 @@ function termine (&$this, $db, $alias_content) {
 			while ($event = $event_list->nextEvent()) {
 				echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 				echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
-				echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
+				if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin"))
+					echo "<div style=\"margin-left:$margin;\">";
+				else
+					echo "<div>";
 				echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
 				echo strftime($this->config->getValue("Main", "dateformat") . " %H.%m", $event->getStart());
 				if (date("dmY", $event->getStart()) == date("dmY", $event->getEnd()))
@@ -160,7 +180,10 @@ function termine (&$this, $db, $alias_content) {
 				if ($event->getDescription()) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-					echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+					if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+						echo "<div style=\"margin-left:$margin;\">";
+					else
+						echo "<div>";
 					echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
 					echo FixLinks(format(htmlReady($event->getDescription())));
 					echo "</font></div></td></tr>\n";
@@ -185,7 +208,10 @@ function kategorien (&$this, $db, $alias_content) {
 		echo "</font></td></tr>\n";
 		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-		echo "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+		if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+			echo "<div style=\"margin-left:$margin;\">";
+		else
+			echo "<div>";
 		echo "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
 		echo FixLinks(format(htmlReady($db_kategorien->f("content"))));
 		echo "</font></div></td></tr>\n</table><br>\n";
@@ -246,7 +272,10 @@ function lehre (&$this, $db, $alias_content) {
 			if ($db1->num_rows()) {
 				$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 				$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
-				$out .= "<div style=\"margin-left:" . $this->config->getValue("TableParagraphSubHeadline", "margin") . ";\">";
+				if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin"))
+					$out .= "<div style=\"margin-left:$margin;\">";
+				else
+					$out .= "<div>";
 				$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
 				$month = date("n", $start);
 				if($month > 9) {
@@ -262,7 +291,10 @@ function lehre (&$this, $db, $alias_content) {
 				$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 
 				if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-					$out .= "<div style=\"margin-left:" . $this->config->getValue("List", "margin") . ";\">";
+					if ($margin = $this->config->getValue("List", "margin"))
+						$out .= "<div style=\"margin-left:$margin;\">";
+					else
+						$out .= "<div>";
 					$out .= "<ul" . $this->config->getAttributes("List", "ul") . ">\n";
 					while ($db1->next_record()) {
 						$lnk = $lnk_sdet . $db1->f("Seminar_id");
@@ -278,7 +310,10 @@ function lehre (&$this, $db, $alias_content) {
 					$out .= "</ul>";
 				}
 				else {
-					$out .= "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+					if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+						$out .= "<div style=\"margin-left:$margin;\">";
+					else
+						$out .= "<div>";
 					$j = 0;
 					while ($db1->next_record()) {
 						if ($j) $out .= "<br><br>";
@@ -312,7 +347,10 @@ function lehre (&$this, $db, $alias_content) {
 			$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 			
 			if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-				$out .= "<div style=\"margin-left:" . $this->config->getValue("List", "margin") . ";\">";
+				if ($margin = $this->config->getValue("List", "margin"))
+					$out .= "<div style=\"margin-left:$margin;\">";
+				else
+					$out .= "<div>";
 				$out .= "<ul" . $this->config->getAttributes("List", "ul") . ">";
 				while ($db1->next_record()) {
 					$lnk = $lnk_sdet . $db1->f("Seminar_id");
@@ -328,7 +366,10 @@ function lehre (&$this, $db, $alias_content) {
 				$out .= "</ul>";
 			}
 			else {
-				$out .= "<div style=\"margin-left:" . $this->config->getValue("TableParagraphText", "margin") . ";\">";
+				if ($margin = $this->config->getValue("TableParagraphText", "margin"))
+					$out .= "<div style=\"margin-left:$margin;\">";
+				else
+					$out .= "<div>";
 				$j = 0;
 				while ($db1->next_record()) {
 					if ($j) $out .= "<br><br>";
@@ -356,32 +397,12 @@ function lehre (&$this, $db, $alias_content) {
 	}
 }
 
-function head (&$this, $db) {
+function head (&$this, $db, $a) {
 	$out = "";
 	$out .= "<table" . $this->config->getAttributes("PersondetailsHeader", "table") . ">\n";
 	$out .= "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
 	$out .= "<td colspan=\"2\" width=\"100%\"";
 	$out .= $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
-  if ($this->config->getValue("Main", "studiplink")) {
-		$out .= "<div" . $this->config->getAttributes("StudipLink", "div") . ">";
-		$out .= "<font" . $this->config->getAttributes("StudipLink", "font") . ">";
-		$lnk = "http://{$GLOBALS['EXTERN_SERVER_NAME']}edit_about.php?login=yes&view=Daten";
-		$lnk .= "&usr_name=" . $db->f("username");
-		$out .= sprintf("<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
-				$this->config->getAttributes("StudipLink", "a"),
-				$this->config->getValue("StudipLink", "linktext"));
-		if ($this->config->getValue("StudipLink", "image")) {
-			if ($image_url = $this->config->getValue("StudipLink", "imageurl"))
-				$img = "&nbsp;<img border=\"0\" align=\"absmiddle\" src=\"$image_url\">";
-			else {
-				$img = "&nbsp;<img border=\"0\" src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}";
-				$img .= "pictures/login.gif\" align=\"absmiddle\">";
-			}
-			$out .= sprintf("<a href=\"%s\"%s target=\"_blank\">%s</a>", $lnk,
-				$this->config->getAttributes("StudipLink", "a"), $img);
-		}
-		$out .= "</font></div>";
-	}
 	$out .= "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
 	$out .= htmlReady($db->f("fullname"), TRUE);
 	$out .= "</font></td></tr>\n";
@@ -400,7 +421,7 @@ function head (&$this, $db) {
 		
 	$out .=  "</td></tr>\n</table><br>\n";
 	
-	return $out;
+	echo $out;
 }
 
 function kontakt ($this, $db) {
