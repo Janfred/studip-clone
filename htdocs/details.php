@@ -120,7 +120,7 @@ elseif (($SessSemName[1] <>"") && (!isset($sem_id)))
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" colspan=2 valign="top" width="96%">
 				<?
 				//Titel und Untertitel der Veranstaltung
-				printf ("<b>%s</b><br />&nbsp; ",htmlReady($db2->f("Name")));
+				printf ("<b>%s</b><br /> ",htmlReady($db2->f("Name")));
 				printf ("<font size=-1>%s</font>",htmlReady($db2->f("Untertitel")));
 				?>
 				</td>
