@@ -295,7 +295,9 @@ if ($GLOBALS['VOTE_ENABLE']) {
 
 // show Guestbook
 
-$guest = new Guestbook($user_id,$admin_darf);
+if (!$guestpage)
+	$guestpage = 0;
+$guest = new Guestbook($user_id,$admin_darf,$guestpage);
 
 if ($guestbook)
 	$guest->actionsGuestbook($guestbook,$post,$deletepost);

@@ -27,10 +27,12 @@ class Guestbook {
 	var $msg_guest; // Output Message
 	var $anchor;	// html anchor
 	var $openclose; // open/close status
+	var $perpage;	// count of entrys per guestbook-site
+	var $guestpage;	// page of guestbook currently displayed
 
 	// Konstruktor
 	
-	function Guestbook ($user_id,$rights) {
+	function Guestbook ($user_id,$rights, $guestpage) {
 		$this->user_id = $user_id;
 		$this->username = get_username($user_id);
 		$this->checkGuestbook();
@@ -40,6 +42,8 @@ class Guestbook {
 		$this->msg_guest = "";
 		$this->anchor = FALSE;
 		$this->openclose = "close";
+		$this->perpage = 10;
+		$this->guestpage = $guestpage;
 	}
 	
 	function checkGuestbook () {
@@ -87,7 +91,7 @@ class Guestbook {
 		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr valign=\"baseline\"><td class=\"topic\"><img src=\"./pictures/guestbook.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
 		echo _("Gästebuch").$active;
-		print("</b></td></tr>");
+				print("</b></td></tr>");
 				
 		echo "\n<tr><td class=\"blank\" colspan=$colspan>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
@@ -101,6 +105,8 @@ class Guestbook {
 		//
 		$titel = "<a href=\"$link\" class=\"tree\" >".$this->number."&nbsp;"._(" Einträge")."</a>";
 		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
+		if ($this->active == TRUE)
+			$zusatz .= $this->guest_navi();
 		printhead ("100%","0",$link,$this->openclose,$new,"<img src=\"pictures/icon-guest.gif\">",$titel,$zusatz,$forumposting["chdate"],"TRUE",$index,$forum["indikator"]);	
 			
 		echo "</tr></table>";
@@ -111,32 +117,87 @@ class Guestbook {
 				if ($perm->have_perm("autor"))
 					$content .= $this->formGuestbook();
 			}
+			
+			printcontent ("100%",$formposting,$content,$buttons,TRUE,"");
+			echo "</td></tr></table>";
+			echo "<table width=\"100%\" border=0 cellpadding=3 cellspacing=0 align=center><tr><td class=\"steel2\">";
 			if ($this->rights == TRUE)
 				$buttons = $this->buttonsGuestbook();
 			else
 				$buttons = "";
-			printcontent ("100%",$formposting,$content,$buttons,TRUE,"");
-			echo "</td></tr></table>";
+			echo "$buttons</td><td class= \"steel2\" align=\"right\">$zusatz&nbsp;</td></tr></table>";
+			
 		}
 		echo "</td></tr></table></td></tr></table>";
 	}
 	
+	
+// Berechnung und Ausgabe der Blätternavigation
+
+/**
+* builds the navigation element in page-view
+*
+* @param	array	forum contains several data of the actual board-site
+*
+* @return	string 	navi contains the HTML of the navigation
+*
+**/
+
+function guest_navi () {
+	global $PHP_SELF;
+	$i = 1;
+	$maxpages = ceil($this->number / $this->perpage);
+	$ipage = ($this->guestpage / $this->perpage)+1;
+	if ($ipage != 1)
+		$navi .= "<a href=\"$SELF_PHP?guestpage=".($ipage-2)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1>" . _("zurück") . "</a> | </font>";
+	else
+		$navi .= "<font size=\"-1\">Seite: </font>";
+	while ($i <= $maxpages) {
+		if ($i == 1 || $i+2 == $ipage || $i+1 == $ipage || $i == $ipage || $i-1 == $ipage || $i-2 == $ipage || $i == $maxpages) {
+			if ($space == 1) {
+				$navi .= "<font size=-1>... | </font>";
+				$space = 0;
+			}
+			if ($i != $ipage)
+				$navi .= "<a href=\"$SELF_PHP?guestpage=".($i-1)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1>".$i."</a></font>";
+			else
+				$navi .= "<font size=\"-1\"><b>".$i."</b></font>";
+			if ($maxpages != 1)
+				$navi .= "<font size=\"-1\"> | </font>";
+		} else {
+			$space = 1;
+		}
+		$i++;	
+	}
+	if ($ipage != $maxpages)
+		$navi .= "<a href=\"$SELF_PHP?guestpage=".($ipage)*$this->perpage."&guestbook=open&username=$this->username#guest\"><font size=-1> " . _("weiter") . "</a></font>";
+	return $navi;
+}
+	
+	
+	
+	
 	function showPostsGuestbook () {
 		global $PHP_SELF;
+		$i = 0;
 		$db=new DB_Seminar;
 		$output = "<table class=\"blank\" width=\"98%%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">";
-		$db->query("SELECT * FROM guestbook WHERE range_id = '$this->user_id' ORDER BY mkdate DESC");
+		$db->query("SELECT * FROM guestbook WHERE range_id = '$this->user_id' ORDER BY mkdate DESC LIMIT $this->guestpage, $this->perpage");
 		while ($db->next_record()) {  
-			$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\"><a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">".get_fullname($db->f("user_id"))."</a>&nbsp;"._("hat am")."&nbsp;".date("d.m.Y - H:i", $db->f("mkdate"))."&nbsp;"._("geschrieben:")."</font></b></td></tr>"
+			$position = $this->number - ($this->guestpage+$i);
+			$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\">#$position - <a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">";
+			$output .= sprintf(_("%s hat am %s geschrieben:"), get_fullname($db->f("user_id"))."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
+			$output .= "</font></b></td></tr>"
 				. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".quotes_decode(formatready($db->f("content")))."</font><p align=\"right\">";
 			if ($this->rights == TRUE)
-				$addon = "<a href=\"".$PHP_SELF."?guestbook=delete&deletepost=".$db->f("post_id")."&username=$this->username#guest\">" . makeButton("loeschen", "img") . "</a>";
+				$addon = "<a href=\"".$PHP_SELF."?guestbook=delete&guestpage=$this->guestpage&deletepost=".$db->f("post_id")."&username=$this->username#guest\">" . makeButton("loeschen", "img") . "</a>";
 			else
 				$addon = "&nbsp;";
 			
 			$output .= $addon
 				."</p></td></tr>"
 				. "<tr><td class=\"steel1\">&nbsp;</td></tr>";
+			$i++;
 		}
 		$output .= "</table>";
 		return $output;	
