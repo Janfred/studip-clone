@@ -238,7 +238,7 @@ if ($cmd=="admission_raus") {
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
 }
 
-//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen
+//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
 if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
@@ -256,7 +256,8 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 				$studiengang = "admission_studiengang_id = '".$db4->f("studiengang_id")."',";
 			}
 		}
-		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s' ", $id, $userchange, (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && ($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) ? "tutor" : "autor", $studiengang, $db4->f("comment"), $group);
+		$status = (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))) ? "tutor" : "autor";
+		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s' ", $id, $userchange, $status, $studiengang, $db4->f("comment"), $group);
 		$db2->query($query2);
 		if ($db2->affected_rows())
 			$db3->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
@@ -278,21 +279,19 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 				}
 			}
 			restoreLanguage();
-			#$messaging->insert_message ($message, date("U"), $username, md5(uniqid("321losgehtes")));
 			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1");
-			#$messaging->insert_sms ($username, $message, "____%system%____");
 		}
 
 		//Warteliste neu sortieren
 		renumber_admission($id);
 
 		if ($cmd=="add_user")
-			$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung eingetragen."), $fullname) . "§";
+			$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), $fullname, $status) . "§";
 		else
 			if (!$accepted) {
-				$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste in die Veranstaltung eingetragen."), $fullname) . "§";
+				$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste mit dem Status <b>%s</b> in die Veranstaltung eingetragen."), $fullname, $status) . "§";
 			} else {
-				$msg = "msg§" . sprintf(_("NutzerIn %s wurde endgültig akzeptiert."), $fullname) . "§";
+				$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), $fullname, $status) . "§";
 			}
 	}
 	else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -355,8 +354,6 @@ if (isset($add_tutor_x)) {
 						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
 					}
 					restoreLanguage();
-					#$messaging->insert_sms (get_username($u_id), $message, "____%system%____");
-					#$messaging->insert_message ($message, date("U"), $username, md5(uniqid("321losgehtes")));
 					$messaging->insert_message($message, get_username($u_id), "____%system%____", FALSE, FALSE, "1");
 				}
 			}
