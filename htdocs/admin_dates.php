@@ -70,7 +70,7 @@ if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
-	$resList = new ResourcesUserRoomsList($user_id);
+	$resList = new ResourcesUserRoomsList($user->id, TRUE, FALSE, TRUE);
 }
 
 //Content of the Infobox
@@ -730,8 +730,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			if ($resList->numberOfRooms()) {
 				$content.= "<br /><font size=-1>&nbsp;<select name=\"resource_id\"></font>";
 				$content.= ("<option value=\"FALSE\">[" . _("ausw&auml;hlen oder wie Eingabe") . "]</option>");												
-				while ($resObject = $resList->next())
-					$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id && $new_date_resource_id == $resObject->getId()) ? "selected" : "", $resObject->getId(), my_substr(htmlReady($resObject->getName()), 0, 30));
+				while ($res = $resList->next())
+					$content.= sprintf("<option %s value=\"%s\">%s</option>", ($new_date_resource_id && $new_date_resource_id == $res["resource_id"]) ? "selected" : "", $res["resource_id"], my_substr(htmlReady($res["name"]), 0, 30));
 				$content.= "</select></font>";
 			}
 		}
@@ -923,8 +923,8 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 					if ($resList->numberOfRooms()) {
 						$content.= "<br />&nbsp;<select name=\"resource_id[]\">";
 						$content.= sprintf("<option %s value=\"FALSE\">[" . (($resource_id) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")) . "]</option>", (!$resource_id) ? "selected" : "");												
-						while ($resObject = $resList->next())
-							$content.= sprintf("<option value=\"%s\">%s</option>", $resObject->getId(), my_substr(htmlReady($resObject->getName()), 0, 30));
+						while ($res = $resList->next())
+							$content.= sprintf("<option value=\"%s\">%s</option>", $res["resource_id"], my_substr(htmlReady($res["name"]), 0, 30));
 						$content.= "</select>";
 					}
 				}

@@ -2189,8 +2189,6 @@ if ($level == 2)
 
 //Level 3: Metadaten ueber Terminstruktur
 if ($level == 3) {
-	if ($RESOURCES_ENABLE)
-		$resList = new ResourcesUserRoomsList($user_id);
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
 	?>
@@ -2422,7 +2420,7 @@ if ($level == 3) {
 //Level 4: Raumdaten
 if ($level == 4) {
 	if ($RESOURCES_ENABLE)
-		$resList = new ResourcesUserRoomsList($user_id);
+		$resList = new ResourcesUserRoomsList($user_id->id, TRUE, FALSE, TRUE);
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
@@ -2711,9 +2709,8 @@ if ($level == 4) {
 											if ($resList->numberOfRooms()) {
 												print " &nbsp;<select name=\"term_turnus_resource_id[]\">";
 												printf ("<option %s value=\"FALSE\">["._("bitte ausw&auml;hlen")."]</option>", (!$val["resource_id"]) ? "selected" : "");												
-												while ($resObject = $resList->next()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($val["resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
-												}
+												while ($res = $resList->next()) {
+													printf ("<option %s value=\"%s\">%s</option>", ($val["resource_id"] == $res["resource_id"]) ? "selected" :"", $res["resource_id"], htmlReady($res["name"]));												}
 												print "</select><br />";
 											}
 											print "</font></td></tr>\n";
@@ -2729,8 +2726,8 @@ if ($level == 4) {
 											if ($resList->numberOfRooms()) {
 												printf (" &nbsp;<select name=\"term_resource_id[%s]\">", $i);
 												printf ("<option %s value=\"FALSE\">["._("bitte ausw&auml;hlen")."]</option>", (!$sem_create_data["term_resource_id"][$i]) ? "selected" : "");												
-												while ($resObject = $resList->next()) {
-													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+												while ($res = $resList->next()) {
+													printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["term_resource_id"][$i] == $res["resource_id"]) ? "selected" :"", $res["resource_id"], htmlReady($res["name"]));
 												}
 												print "</select><br />";
 											}
@@ -2746,8 +2743,8 @@ if ($level == 4) {
 									if ($resList->numberOfRooms()) {
 										print " &nbsp;<select name=\"vor_resource_id\">";
 										printf ("<option %s value=\"FALSE\">["._("bitte ausw&auml;hlen")."]</option>", (!$sem_create_data["sem_vor_resource_id"]) ? "selected" : "");												
-										while ($resObject = $resList->next()) {
-											printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"]) == $resObject->getId() ? "selected" :"", $resObject->getId(), htmlReady($resObject->getName()));
+										while ($res = $resList->next()) {
+											printf ("<option %s value=\"%s\">%s</option>", ($sem_create_data["sem_vor_resource_id"] == $res["resource_id"]) ? "selected" :"", $res["resource_id"], htmlReady($res["name"]));
 										}
 										print "</select><br />";
 									}
@@ -2785,7 +2782,7 @@ if ($level == 4) {
 												case 6: print _("Sanstag"); break;
 												case 7: print _("Sonntag"); break;
 											}
-											printf (" "._("von %02d%02d Uhr bis %02d:%02d Uhr"), $val["start_stunde"], $val["start_minute"],  $val["end_stunde"], $val["end_minute"]);
+											printf (" "._("von %02d:%02d Uhr bis %02d:%02d Uhr"), $val["start_stunde"], $val["start_minute"],  $val["end_stunde"], $val["end_minute"]);
 											print "</font></td><td width=\"50%\"><font size=\"-1\">";
 											printf ("&nbsp;<input type=\"text\" name=\"term_turnus_room[]\" size=\"30\" maxlength=\"255\" value=\"%s\" /><br />", htmlReady($val["room"]));
 											print "</font></td></tr>\n";

@@ -58,7 +58,7 @@ if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-	$resList = new ResourcesUserRoomsList($user_id);
+	$resList = new ResourcesUserRoomsList($user->id, TRUE, FALSE, TRUE);
 }
 
 $db=new DB_Seminar;
@@ -635,8 +635,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 										print "<font size=-1><select name=\"turnus_resource_id[]\"></font>";
 										print " ></font>";
 										printf ("<option %s value=\"FALSE\">[".(($term_metadata["original_turnus"][$i]["resource_id"]) ? _("gebuchter Raum oder ausw&auml;hlen") : _("ausw&auml;hlen oder wie Eingabe")." -->")."]</option>", (!$term_metadata["turnus_data"][$i]["resource_id"]) ? "selected" : "");												
-										while ($resObject = $resList->next()) {
-											printf ("<option value=\"%s\">%s</option>", $resObject->getId(), htmlReady($resObject->getName()));
+										while ($res = $resList->next()) {
+											printf ("<option value=\"%s\">%s</option>", $res["resource_id"], htmlReady($res["name"]));
 										}
 										print "</select></font>";
 									} 
