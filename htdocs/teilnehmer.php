@@ -242,7 +242,6 @@ if ($cmd=="admission_raus") {
 if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 	//erst mal sehen, ob er hier wirklich Dozent ist...
 	if ($rechte) {
-		echo ac, $accepted;
 		$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 		$db->next_record();
 		$userchange=$db->f("user_id");
@@ -250,13 +249,14 @@ if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
 		$db2->query("SELECT start_time FROM seminare WHERE Seminar_id = '$id'");
 		$db2->next_record();
 		$group=select_group ($db2->f("start_time"),$db->f("user_id"));
-		$studiengang = "";	//part for temporarily accepted
+		$studiengang_id = "";	//part for temporarily accepted
 		if ($accepted) {	//as well
 			$db4->query("SELECT studiengang_id, comment FROM admission_seminar_user WHERE user_id = '$userchange' AND seminar_id = '$id'");
 			$db4->next_record();
+			$studiengang_id = $db4->f("studiengang_id");
 		}
 		$status = (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))) ? "tutor" : "autor";
-		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s' ", $id, $userchange, $status, $db4->f("studiengang_id"), $db4->f("comment"), $group);
+		$query2 = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s' ", $id, $userchange, $status, $studiengang_id, $db4->f("comment"), $group);
 		$db2->query($query2);
 		if ($db2->affected_rows())
 			$db3->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
