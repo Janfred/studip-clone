@@ -79,7 +79,7 @@ function GetAllSelected ($range_id)
 {	
 	$zugeordnet[] = "";
   	$db3=new DB_Seminar;
-	$db3->query ("SELECT DISTINCT user_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id'");
+	$db3->query ("SELECT DISTINCT user_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$range_id'");
 	while ($db3->next_record()) {
 		if (!in_array($db3->f("user_id"), $zugeordnet)) {
 			$zugeordnet[] = $db3->f("user_id");

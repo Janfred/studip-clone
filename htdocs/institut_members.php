@@ -399,16 +399,16 @@ if ($institut_members_data["show"] == "funktion") {
 				$query = sprintf("SELECT aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
 								ui.sprechzeiten, ui.Telefon, ui.inst_perms, aum.Email, aum.user_id,
 								aum.username, info.Home, statusgruppe_id
-								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN
-								user_info info USING(user_id) LEFT JOIN statusgruppe_user USING(user_id)
+								FROM statusgruppe_user LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN
+								user_info info USING(user_id) LEFT JOIN user_inst ui USING(user_id)
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND statusgruppe_id = '%s' ORDER BY %s %s", $auswahl, $statusgruppe_id,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
 			else
 				$query = sprintf("SELECT Nachname, Vorname, raum, sprechzeiten, Telefon, inst_perms,
 								Email, auth_user_md5.user_id, username, statusgruppe_id
-								FROM user_inst LEFT JOIN	auth_user_md5 USING(user_id)
-								LEFT JOIN statusgruppe_user USING(user_id)
+								FROM statusgruppe_user  LEFT JOIN	auth_user_md5 USING(user_id)
+								LEFT JOIN user_inst USING(user_id)
 								WHERE Institut_id = '%s' AND statusgruppe_id = '%s'
 								AND inst_perms != 'user' ORDER BY %s %s", $auswahl, $statusgruppe_id,
 								$institut_members_data["sortby"], $institut_members_data["direction"]);
