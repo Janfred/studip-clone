@@ -142,7 +142,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 
                         
                         setlocale("LC_TIME", "ge");
-                        $titel = strftime("%a",$db->f("date"));
+                        $titel = substr(strftime("%a",$db->f("date")),0,2);
                         $titel .= date (" d.m.Y, H:i", $db->f("date"));
                         if ($db->f("date") <$db->f("end_time"))
                                 $titel.= " - ".date ("H:i", $db->f("end_time"));
