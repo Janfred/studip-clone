@@ -41,13 +41,13 @@ define( "QUESTION_HELPTEXT",
 	_("Geben Sie hier Ihre Frage ein") );
 /* -------------------------------------------------------- */
 
-include_once ($ABSOLUTE_PATH_STUDIP . "seminar_open.php"); // initialise Stud.IP-Session
+include_once ($ABSOLUTE_PATH_STUDIP . "seminar_open.php"); // initialize Stud.IP-Session
 
 ob_start(); // start output buffering
 
 require_once ($ABSOLUTE_PATH_STUDIP . "html_head.inc.php"); // Output of html head
 require_once ($ABSOLUTE_PATH_STUDIP . "header.php");   // Output of Stud.IP head
-require_once ($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  //Linkleiste fuer admins
+require_once ($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  // link bar for admins
 
 include_once ($ABSOLUTE_PATH_STUDIP . "vote/Vote.class.php");
 include_once ($ABSOLUTE_PATH_STUDIP . "vote/TestVote.class.php");
@@ -60,9 +60,7 @@ global $auth, $perm;
 if (isset($_REQUEST["voteID"])) {
    $vote = new Vote ($voteID);
    $rangeID = $vote->getRangeID ();
-   // convert userID to username
-   if ($id = get_username($rangeID))
-	$rangeID = $id;
+   if( !$rangeID ) $rangeID = $_REQUEST["rangeID"];
 }
 
 if ( ! ( $perm->have_studip_perm( "tutor", $rangeID ) || $auth->auth["uname"] == $rangeID ) ) {
