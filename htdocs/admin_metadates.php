@@ -178,7 +178,7 @@ if ($turnus_refresh)
 			$term_metadata["turnus_data"][$i]["resource_id"] = $temp_turnus_data[$i]["resource_id"];
 		
 		if ($RESOURCES_ENABLE && $term_metadata["turnus_data"][$i]["resource_id"]) {
-			$resObject=new ResourceObject($term_metadata["turnus_data"][$i]["resource_id"]);
+			$resObject =& ResourceObject::Factory($term_metadata["turnus_data"][$i]["resource_id"]);
 			$term_metadata["turnus_data"][$i]["room"]=$resObject->getName();
 		}
 		
@@ -334,7 +334,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		$update_resources = TRUE;
 		if (($RESOURCES_ENABLE) && ($metadates_changed)) {
 			foreach ($metadates_changed as $key=>$val) {
-				$resObjPrm = new ResourceObjectPerms($metadata_termin["turnus_data"][$key]["resource_id"]);
+				$resObjPrm =& ResourceObjectPerms::Factory($metadata_termin["turnus_data"][$key]["resource_id"]);
 				if (!$resObjPrm->havePerm("autor"))
 					$foreign_resources = TRUE;
 			}
@@ -414,7 +414,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 				$errormsg=$errormsg."error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 				$i=0;
 				foreach ($overlaps_detected as $val) {
-					$resObj = new ResourceObject($val["resource_id"]);
+					$resObj =& ResourceObject::Factory($val["resource_id"]);
 					$errormsg.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
 					//show the first overlap
 					list(, $val2) = each($val["overlap_assigns"]);
@@ -435,7 +435,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			if (is_array($rooms_id))
 				foreach ($rooms_id as $key=>$val) {
 					if ($key) {
-						$resObj = new ResourceObject($key);
+						$resObj =& ResourceObject::Factory($key);
 						if ($i)
 							$rooms_booked.=", ";
 						$rooms_booked.=$resObj->getFormattedLink();
@@ -648,7 +648,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								if ($RESOURCES_ENABLE) {
 									print "<br />&nbsp;"._("gebuchter Raum:")."&nbsp; ";
 									if ($term_metadata["turnus_data"][$i]["resource_id"]) {
-										$resObj = new ResourceObject ($term_metadata["original_turnus"][$i]["resource_id"]);
+										$resObj =& ResourceObject::Factory($term_metadata["original_turnus"][$i]["resource_id"]);
 										print "<font size=-1>".$resObj->getFormattedLink(TRUE, TRUE, TRUE)."</font>";
 									} else
 										print "<font size=-1>"._("kein gebuchter Raum")."</font>";

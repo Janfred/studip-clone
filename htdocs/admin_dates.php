@@ -224,7 +224,7 @@ if ($new) {
 					$result .= "info§" . sprintf(_("Sie wollen einen Sondertermin (%s) zu den regelm&auml;&szlig;igen Veranstaltungszeiten anlegen. Bitte verwenden zun&auml;chst den Ablaufplanassistenten und &auml;ndern dann die Terminart f&uuml;r den gew&uuml;nschten Termin in %s "), $TERMIN_TYP[$art]["name"], $TERMIN_TYP[$art]["name"]) . "§";
 
 		} elseif ($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) {
-			$resObjPrm = new ResourceObjectPerms($resource_id);
+			$resObjPrm =& ResourceObjectPerms::Factory($resource_id);
 			if (!$resObjPrm->havePerm("autor"))
 				$result .= "info§" . sprintf(_("Sie haben einen neuen Termin angelegt. Um f&uuml;r diesen Termin einen Raum zu buchen, m&uuml;ssen Sie f&uuml;r diesen Termin eine %sRaumanfrage%s an den zust&auml;ndigen Raumadministrator stellen."), "<a href=\"admin_room_requests.php?seminar_id=".$admin_dates_data["range_id"]."&termin_id=".$termin_id."\">", "</a>") . "§";
 		}
@@ -391,7 +391,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 			$do_delete = TRUE;
 			if (($RESOURCES_ALLOW_ROOM_REQUESTS) && (!$delete_confirm)){
 				if ($assigned_room = getDateAssigenedRoom($teile[0])) {
-					$resObjPrm = new ResourceObjectPerms($assigned_room);
+					$resObjPrm =& ResourceObjectPerms::Factory($assigned_room);
 					if (!$resObjPrm->havePerm("autor")) {
 						$result .= "info§" . sprintf(_("Sie wollen einen Termin l&ouml;schen, dem ein Raum zugewiesen ist. Beim L&ouml;schen verlieren Sie diese Raumbuchung. Wollen Sie den Termin wirklich l&ouml;schen?"));
 						$result .= "<br /><a href=\"$PHP_SELF?delete_confirm=1\">".makeButton("ja2")."</a>&nbsp;<a href=\"$PHP_SELF?reset_edit=1\">".makeButton("nein")."</a>§";
@@ -433,7 +433,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		$result.="error§"._("Folgende gew&uuml;nschte Raumbelegungen &uuml;berschneiden sich mit bereits vorhandenen Belegungen. Bitte &auml;ndern Sie die R&auml;ume oder Zeiten!");
 		$i=0;
 		foreach ($overlaps_detected as $val) {
-			$resObj = new ResourceObject($val["resource_id"]);
+			$resObj =& ResourceObject::Factory($val["resource_id"]);
 			$result.="<br /><font size=\"-1\" color=\"black\">".htmlReady($resObj->getName()).": ";
 			//show the first overlap
 			list(, $val2) = each($val["overlap_assigns"]);
@@ -454,7 +454,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 	if (is_array($rooms_id))
 		foreach ($rooms_id as $key=>$val) {
 			if ($key) {	
-				$resObj = new ResourceObject($key);			
+				$resObj =& ResourceObject::Factory($key);			
 				if ($i)
 					$rooms_booked.=", ";
 				$rooms_booked.= $resObj->getFormattedLink();
@@ -936,7 +936,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 				if ($RESOURCES_ENABLE) {
 					$content.= "<br />&nbsp;<b>"._("gebuchter Raum:")."</b><br /> ";
 					if ($resource_id) {
-						$resObj = new ResourceObject ($resource_id);
+						$resObj =& ResourceObject::Factory($resource_id);
 						$content.="&nbsp;".$resObj->getFormattedLink(TRUE, TRUE, TRUE)."\n";
 					} else
 						$content.="&nbsp;"._("kein gebuchter Raum")."\n";

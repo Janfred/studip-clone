@@ -265,7 +265,7 @@ if ($perm->have_perm("admin"))
 		</tr>		
 		<?
 		if ($request_resource_id = $admin_rooms_data["resRequest"]->getResourceId()) {
-			$resObject = new ResourceObject($request_resource_id);
+			$resObject =& ResourceObject::Factory($request_resource_id);
 		?>
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">

@@ -70,7 +70,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 								case "7": $ret .=_("So.: "); break;
 							}
 						if (($RESOURCES_ENABLE) && ($data["resource_id"])) {
-							$resObj = new ResourceObject($data["resource_id"]);
+							$resObj =& ResourceObject::Factory($data["resource_id"]);
 							if ($resObj->getName())
 								if ($link)
 									$ret .= $resObj->getFormattedLink();
@@ -113,7 +113,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 						if ($RESOURCES_ENABLE) {
 							$assigned_room = getDateAssigenedRoom($db->f("termin_id"));
 							if ($assigned_room) {
-								$resObj = new ResourceObject($assigned_room);
+								$resObj =& ResourceObject::Factory($assigned_room);
 								if ($link)
 									$tmp_room .= $resObj->getFormattedLink();
 								else
@@ -148,7 +148,7 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 			if ($RESOURCES_ENABLE) {
 				$assigned_room = getDateAssigenedRoom($range_id);
 				if ($assigned_room) {
-					$resObj = new ResourceObject($assigned_room);
+					$resObj =& ResourceObject::Factory($assigned_room);
 					if ($link)
 						$tmp_room .= $resObj->getFormattedLink($db->f("date"));
 					else
@@ -724,7 +724,7 @@ function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, 
 				$check_resource_id = getDateAssigenedRoom($termin_id);
 			}
 			if ($check_resource_id) {	
-				$resObjPrm = new ResourceObjectPerms($check_resource_id);
+				$resObjPrm =& ResourceObjectPerms::Factory($check_resource_id);
 				if (!$resObjPrm->havePerm("autor")) {
 					//load the saved state to check for changes to date and time
 					$query = sprintf("SELECT date, end_time FROM termine WHERE termin_id = '%s' ", $termin_id);
