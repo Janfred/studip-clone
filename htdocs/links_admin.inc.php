@@ -253,6 +253,7 @@ if ($perm->have_perm("dozent")) {
 }
 if ($perm->have_perm("admin")) {
 	$structure["visibility"]=array (topKat=>"veranstaltungen", name=>_("Sichtbarkeit"), link=>"admin_visibility.php?list=TRUE&new_session=TRUE", active=>FALSE, newline=>TRUE);
+	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);	
 } 
 
 //
