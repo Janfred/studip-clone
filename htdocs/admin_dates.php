@@ -638,11 +638,11 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			<?
 			if (!$show_all) {
 				?>
-				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_all=TRUE"; ?>"><img src="pictures/forumgraurunt.gif" <?=tooltip(_("Alle Termine aufklappen"))?> border=0></a>
+				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_all=TRUE"; ?>"><img src="pictures/open_all.gif" <?=tooltip(_("Alle Termine aufklappen"))?> border=0></a>
 				<?
 			} else {
 				?>
-				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_nall=TRUE"; ?>"><img src="pictures/forumgraurauf.gif" <?=tooltip(_("Alle Termine zuklappen"))?> border=0></a>
+				<a href="<? echo $PHP_SELF, "?range_id=".$admin_dates_data["range_id"]."&show_nall=TRUE"; ?>"><img src="pictures/close_all.gif" <?=tooltip(_("Alle Termine zuklappen"))?> border=0></a>
 				<?
 			}
 				?>
