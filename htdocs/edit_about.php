@@ -1009,7 +1009,6 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    {
    $cssSw->resetClass();
    $cssSw->switchClass();
-   echo "<a name=\"studiengaenge\"></a>";   
    echo "<tr><td class=\"blank\">";
    echo "<b>&nbsp; Ich bin in folgenden Studiengängen immatrikuliert:</b>";
    echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
@@ -1038,6 +1037,7 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
    echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
    echo "</form>";
+   echo "<a name=\"studiengaenge\"></a>";
    }
  echo "</td></tr></table>";
 
@@ -1048,7 +1048,6 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    {
    $cssSw->resetClass();
    $cssSw->switchClass();
-   echo "<a name=\"einrichtungen\"></a>";
    echo "<tr><td class=\"blank\">";
    echo "<br><b>&nbsp; Ich studiere an folgenden Einrichtungen:</b>";
    echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
@@ -1079,13 +1078,13 @@ if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tu
    echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
    echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
    echo "</form>";
+   echo "<a name=\"einrichtungen\"></a>";   
    }
  echo "</td></tr></table>";
 }   
 
 IF ($view=="Lebenslauf"){
   $cssSw->switchClass();
-  echo "<a name=\"lebenslauf\"></a>";   
   if ($my_about->auth_user["perms"] == "dozent")
 	 echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.";
   else
@@ -1095,15 +1094,16 @@ IF ($view=="Lebenslauf"){
   echo "<tr><form action=\"$PHP_SELF?cmd=edit_leben&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
   echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Lebenslauf:</b><br>";
   echo "<textarea  name=\"lebenslauf\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["lebenslauf"])."</textarea></td></tr>\n";
+    echo "<a name=\"lebenslauf\"></a>";  
   if ($my_about->auth_user["perms"] == "dozent"){
        $cssSw->switchClass();
-        echo "<a name=\"schwerpunkte\"></a>";   
 	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Schwerpunkte:</b><br>";
 	echo "<textarea  name=\"schwerp\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["schwerp"])."</textarea></td></tr>\n";
+        echo "<a name=\"schwerpunkte\"></a>";   
         $cssSw->switchClass();
-        echo "<a name=\"publikationen\"></a>";   
 	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><br><blockquote>Publikationen:</b><br>";
 	echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea></td></tr>\n";
+        echo "<a name=\"publikationen\"></a>";   
 	}
   echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"><br><br></blockquote></td></tr>\n</table>\n</td>";
 }
