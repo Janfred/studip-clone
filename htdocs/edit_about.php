@@ -148,7 +148,7 @@ function imaging($img,$img_size,$img_name)
 
   //na dann kopieren wir mal...
   $newfile = $this->uploaddir . "/".$this->auth_user["user_id"].".jpg";
-  if(!copy($img,$newfile))
+  if(!@copy($img,$newfile))
    {
    $this->msg = "error§Fehler beim kopieren der Datei!!!";
    return;
