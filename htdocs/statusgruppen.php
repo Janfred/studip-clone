@@ -71,7 +71,7 @@ function groupmail($range_id, $filter="") {
 			echo "<p>ERROR: unknown filter: $filter</p>";
 		}
 		while ($db->next_record()) {
-			$mailpersons .= ",".$db->f("Email");
+			$mailpersons .= ";".$db->f("Email");
 		}
 		$mailpersons = substr($mailpersons,1);
 		return $mailpersons;
