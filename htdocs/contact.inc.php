@@ -77,6 +77,46 @@ function ChangeBuddy($contact_id)
 	}
 }
 
+function RemoveBuddy($username)
+{ global $user;
+	$owner_id = $user->id;
+	$user_id = get_userid($username);
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");	
+	if ($db->next_record()) {
+		$contact_id = $db->f("contact_id")	;
+		$db2->query("UPDATE contact SET buddy='0' WHERE contact_id = '$contact_id'");
+	}
+}
+
+function GetSizeofBook()
+{ global $user;
+	$owner_id = $user->id;
+	$db=new DB_Seminar;
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id'");	
+	if ($db->next_record()) {
+		$size = $db->num_rows();
+	} else {
+		$size="keine";
+	}
+	return $size;
+}
+
+function AddBuddy($username)
+{ global $user;
+
+	$owner_id = $user->id;
+	$user_id = get_userid($username);
+	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");	
+	if ($db->next_record()) {
+		$contact_id = $db->f("contact_id")	;
+		$db2->query("UPDATE contact SET buddy='1' WHERE contact_id = '$contact_id'");
+	}
+}
+
 function AddNewContact ($user_id)
 { 	// Inserting an new contact
 	global $user;

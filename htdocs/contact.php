@@ -66,30 +66,7 @@ if ($contact["view"]=="alpha" && strlen($filter) > 3)
 if ($contact["view"]=="gruppen" && strlen($filter) < 4)
 	$filter="";
 
-?>
-<table width = "100%" cellspacing="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch</b>
-	</td>
-</tr><tr><td class="blank" align="left" valign="absmiddle">
 
-	<form action="<? echo $PHP_SELF ?>?cmd=search" method="POST"><?
-echo "&nbsp; <a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">Alle aufklappen</font></a></td>";
-echo "<td class=\"blank\" align=\"right\">";
-
-if ($search_exp) {
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\" In Addressbuch eintragen\" %s>&nbsp;  ", tooltip("In Addressbuch eintragen"));
-	SearchResults($search_exp);
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
-} else {
-	echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
-	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
-} 
-echo "</form>";
-
-?>
-
-</td></tr></table>
-<?
 
 // Aktionen //////////////////////////////////////
 
@@ -136,7 +113,30 @@ if ($existingowninfolabel) {
 
 
 
+?>
+<table width = "100%" cellspacing="0" cellpadding="0"><tr>
+	<td class="topic" colspan="2" width = "100%"><img src="pictures/nutzer.gif" border="0" align="texttop"><b>&nbsp; Mein Addressbuch <font size="2">(<?echo GetSizeofBook();?> Eintr&auml;ge)</size></b>
+	</td>
+</tr><tr><td class="blank" align="left" valign="absmiddle">
 
+	<form action="<? echo $PHP_SELF ?>?cmd=search" method="POST"><?
+echo "&nbsp; <a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">Alle aufklappen</font></a></td>";
+echo "<td class=\"blank\" align=\"right\">";
+
+if ($search_exp) {
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/buttons/eintragen-button.gif\" border=\"0\" value=\" In Addressbuch eintragen\" %s>&nbsp;  ", tooltip("In Addressbuch eintragen"));
+	SearchResults($search_exp);
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/rewind.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("neue Suche"));
+} else {
+	echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
+	printf ("<input type=\"IMAGE\" name=\"search\" src= \"./pictures/suchen.gif\" border=\"0\" value=\" Personen suchen\" %s>&nbsp;  ", tooltip("Person suchen"));
+} 
+echo "</form>";
+
+?>
+
+</td></tr></table>
+<?
 
 
 echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"1\"><tr><td align=\"middle\" class=\"steelgraulight\">";
