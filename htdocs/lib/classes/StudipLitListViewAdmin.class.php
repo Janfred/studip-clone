@@ -46,6 +46,7 @@ class StudipLitListViewAdmin extends TreeView{
 	
 	var $clip_board;
 	
+	
 	/**
 	* constructor
 	*
@@ -53,6 +54,7 @@ class StudipLitListViewAdmin extends TreeView{
 	* @access public
 	*/
 	function StudipLitListViewAdmin($range_id){
+		$this->use_aging = true;
 		parent::TreeView("StudipLitList", $range_id); //calling the baseclass constructor 
 		$this->clip_board =& StudipLitClipBoard::GetInstance();
 	}
@@ -303,7 +305,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$content .= "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"0\" align=\"center\" style=\"font-size:10pt\">";
 		$content .= $this->getItemMessage($item_id);
 		if (!$edit_content){
-			if ($item_id == "root"){
+			if ($item_id == "root" && $this->tree->range_type != 'user'){
 				$content .= "\n<form name=\"userlist_form\" action=\"" . $this->getSelf("cmd=CopyUserList") . "\" method=\"POST\">";
 				$user_lists = $this->tree->GetListsByRange($GLOBALS['auth']->auth['uid']);
 				$content .= "\n<tr><td class=\"steel1\" align=\"left\"><b>" . _("Pers&ouml;nliche Literaturlisten:")
@@ -315,12 +317,13 @@ class StudipLitListViewAdmin extends TreeView{
 				}
 				$content .= "\n</select>&nbsp;&nbsp;<input type=\"image\" " . makeButton("kopieerstellen","src") 
 				. tooltip(_("Eine Kopie der ausgewählten Liste erstellen")) . " style=\"vertical-align:middle;\" border=\"0\"></td></tr></form>";
-			} else if ($this->tree->isElement($item_id)) {
+			}
+			if ($this->tree->isElement($item_id)) {
 				//$content .= "\n<tr><td class=\"steelkante\" align=\"left\" style=\"font-size:10pt\">" . _("Anmerkung:") ." </td></tr>";
 				//$content .= "\n<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt\">" . formatReady($this->tree->tree_data[$item_id]['note']) ." &nbsp;</td></tr>";
 				$content .= "\n<tr><td class=\"steelgraulight\" align=\"left\" style=\"font-size:10pt;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;\">" . _("Vorschau:") ."<br>";
-				$content .= "\n<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\">" . formatReady($this->tree->getFormattedEntry($item_id)) ." </td></tr>";
-			} else {
+				$content .= "\n<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\">" . formatReady($this->tree->getFormattedEntry($item_id), false, true) ." </td></tr>";
+			} elseif ($item_id != 'root') {
 				$content .= "\n<tr><td class=\"steelgraulight\" align=\"left\" style=\"font-size:10pt;border-top: 1px solid black;border-left: 1px solid black;border-right: 1px solid black;\">" . _("Formatierung:") ." </td></tr>";
 				$content .= "\n<tr><td class=\"steel1\" align=\"left\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\">" . htmlReady($this->tree->tree_data[$item_id]['format'],false,true) ." &nbsp;</td></tr>";
 				$content .= "\n<tr><td class=\"steelgraulight\" align=\"left\" style=\"font-size:10pt;border-left: 1px solid black;border-right: 1px solid black;\">" . _("Sichtbarkeit:") . "</td></tr>";
@@ -410,16 +413,10 @@ class StudipLitListViewAdmin extends TreeView{
 		}
 		return $head;
 	}
+	
 	function getItemHeadPics($item_id){
-		$head = "";
-		$head .= "<a href=\"";
-		$head .= ($this->open_items[$item_id])? $this->getSelf("close_item={$item_id}") . "\"" . tooltip(_("Dieses Element schließen"),true) . ">"
-											: $this->getSelf("open_item={$item_id}") . "\"" . tooltip(_("Dieses Element öffnen"),true) . ">";
-		$head .= "<img src=\"pictures/";
-		$head .= ($this->open_items[$item_id]) ? "forumrotrunt.gif" : "forumgrau.gif";
-		$head .= "\" border=\"0\" align=\"baseline\" hspace=\"2\">";
-		$head .= (!$this->open_items[$item_id]) ? "<img  src=\"pictures/forumleer.gif\" width=\"5\" border=\"0\">" : ""; 
-		$head .= "</a>";
+		$head = $this->getItemHeadFrontPic($item_id);
+		$head .= "\n<td  class=\"printhead\" nowrap  align=\"left\" valign=\"bottom\">";
 		if (!$this->tree->isElement($item_id)){
 			if ($this->tree->hasKids($item_id)){
 				$head .= "<a href=\"";
@@ -443,7 +440,7 @@ class StudipLitListViewAdmin extends TreeView{
 			$head .= "<img src=\"pictures/cont_lit.gif";
 			$head .= "\" border=\"0\">";
 		}
-	return $head;
+	return $head . "</td>";
 	}
 	
 	function getEditItemContent(){
@@ -488,7 +485,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$content = "";
 		if ($this->msg[$item_id]){
 			$msg = split("§",$this->msg[$item_id]);
-			$pics = array('error' => 'x.gif', 'info' => 'ausruf_small2.gif', 'msg' => 'ok.gif');
+			$pics = array('error' => 'x_small2.gif', 'info' => 'ausruf_small2.gif', 'msg' => 'ok_small2.gif');
 			$content = "\n<tr><td colspan=\"{$colspan}\"><table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\" style=\"font-size:10pt\">
 						<tr><td align=\"center\" width=\"25\"><img width=\"22\" height=\"20\" src=\"pictures/" . $pics[$msg[0]] . "\" ></td>
 						<td align=\"left\">" . $msg[1] . "</td></tr>
