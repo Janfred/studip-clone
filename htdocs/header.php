@@ -33,6 +33,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+
+if ($SHOW_TERMS_ON_FIRST_LOGIN){
+	require_once ("$ABSOLUTE_PATH_STUDIP/terms.inc.php");
+	check_terms($user->id, $_language_path);	
+} 
+
+
 ob_start();
 //Daten fuer Onlinefunktion einbinden
 if (!$perm->have_perm("user"))
@@ -163,7 +170,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		
 		
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
-			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php",_("Planer"),_("Termine und Kontakte"),40, "_top");
+			echo MakeToolbar("pictures/meinetermine.gif","./calendar.php?caluserid=self",_("Planer"),_("Termine und Kontakte"),40, "_top");
 		}		
 
 		if ($GLOBALS['CHAT_ENABLE']) {
@@ -276,3 +283,4 @@ ob_end_flush();
 include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft
 ?>
 <!-- $Id$ -->
+
