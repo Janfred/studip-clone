@@ -31,25 +31,14 @@
  * @package	vote
  */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
-		"perm" => "Seminar_Perm", "user" => "Seminar_User"));
-//$perm->check("admin");
+page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
+		  "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+$perm->check ("autor");
 
 if ($page == "edit")
-	include($ABSOLUTE_PATH_STUDIP . "/vote/vote_edit.inc.php");
+	include ($ABSOLUTE_PATH_STUDIP . "/vote/vote_edit.inc.php");
 else
-	include($ABSOLUTE_PATH_STUDIP . "/vote/vote_overview.inc.php");
+	include ($ABSOLUTE_PATH_STUDIP . "/vote/vote_overview.inc.php");
 
-//else {
-// Start of Output
-//include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-//include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-//require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
-//parse_window ("error" . _("Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an den Systemadministrator."), "",
-//	 		  _("Modul \"externe Seiten\" nicht eingebunden"));
-
-
-page_close();
-
+page_close ();
 ?>
-
