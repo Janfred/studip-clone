@@ -235,33 +235,34 @@ elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_d
 
 //Bottomkats
 $structure["grunddaten_sem"]=array (topKat=>"veranstaltungen", name=>_("Grunddaten"), link=>"admin_seminare1.php?list=TRUE", active=>FALSE);
-if (((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))) && ($RESOURCES_ENABLE))
-	$structure["room_requests"]=array (topKat=>"veranstaltungen", name=>_("Raumw&uuml;nsche"), link=>"admin_room_requests.php?list=TRUE", active=>FALSE);
-$structure["zeiten"]=array (topKat=>"veranstaltungen", name=>_("Zeiten"), link=>"admin_metadates.php?list=TRUE", active=>FALSE);
+$structure["zeiten"]=array (topKat=>"veranstaltungen", name=>_("Zeiten"), link=>"admin_metadates.php?list=TRUE", active=>FALSE, isolator=>TRUE);
 if (($modules["schedule"]) || (!$SessSemName[1]))
 	$structure["ablaufplan"]=array (topKat=>"veranstaltungen", name=>_("Ablaufplan"), link=>"admin_dates.php?list=TRUE", active=>FALSE);
+if (($RESOURCES_ALLOW_ROOM_REQUESTS) && ($RESOURCES_ENABLE))
+	$structure["room_requests"]=array (topKat=>"veranstaltungen", name=>_("Raumw&uuml;nsche"), link=>"admin_room_requests.php?list=TRUE", active=>FALSE);
+$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_sem", active=>FALSE, isolator=>TRUE);
 if (($modules["literature"]) || (!$SessSemName[1]))
 	$structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur"), link=>"admin_lit_list.php?list=TRUE&view=literatur_sem", active=>FALSE);
-$structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE);
-if (($modules["participants"]) || (!$SessSemName[1]))
-	$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
-$structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?list=TRUE&view=news_sem", active=>FALSE);
 if ($EXPORT_ENABLE)
 	$structure["vote_sem"]=array (topKat=>"veranstaltungen", name=>_("Votings und Tests"), link=>"admin_vote.php?view=vote_sem", active=>FALSE);
 if ($EXPORT_ENABLE)
 	$structure["eval_sem"]=array (topKat=>"veranstaltungen", name=>_("Evaluationen"), link=>"admin_evaluation.php?view=eval_sem", active=>FALSE);
+
+$structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE, isolator=>TRUE);
+if (($modules["participants"]) || (!$SessSemName[1]))
+	$structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?list=TRUE&view=modules_sem", active=>FALSE);
-if ($perm->have_perm("admin")) 
-	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
-if ($perm->have_perm("admin")) 
+if ($perm->have_perm("dozent")) {
+	$structure["copysem"]=array (topKat=>"veranstaltungen", name=>_("Veranstaltung&nbsp;kopieren"), link=>"copy_assi.php?list=TRUE&new_session=TRUE", active=>FALSE, isolator=>TRUE);
+	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE);
+}
+if ($perm->have_perm("admin")) {
+	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE, newline=>TRUE);
 	$structure["visibility"]=array (topKat=>"veranstaltungen", name=>_("Sichtbarkeit"), link=>"admin_visibility.php?list=TRUE&new_session=TRUE", active=>FALSE);
-if ($perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
-	$structure["lock"]=array (topKat=>"veranstaltungen", name=>_("Sperren"), link=>"admin_lock.php?list=TRUE&new_session=TRUE", active=>FALSE);
+	if ($SEMINAR_LOCK_ENABLE)
+		$structure["lock"]=array (topKat=>"veranstaltungen", name=>_("Sperren"), link=>"admin_lock.php?list=TRUE&new_session=TRUE", active=>FALSE);
 } 
-if ($perm->have_perm("dozent")) 
-	$structure["copysem"]=array (topKat=>"veranstaltungen", name=>_("Veranstaltung kopieren"), link=>"copy_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
-if ($perm->have_perm("dozent")) 
-	$structure["new_sem"]=array (topKat=>"veranstaltungen", name=>_("neue&nbsp;Veranstaltung"), link=>"admin_seminare_assi.php?new_session=TRUE", active=>FALSE, newline=>FALSE);
+
 //
 if ($perm->have_perm("admin")) {
 	$structure["grunddaten_inst"]=array (topKat=>"einrichtungen", name=>_("Grunddaten"), link=>"admin_institut.php?list=TRUE", active=>FALSE);
