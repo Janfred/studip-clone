@@ -279,10 +279,11 @@ class StudipAuthAbstract {
 	*/
 	function authenticateUser($username, $password, $jscript = false){
 		if ($this->isAuthenticated($username, $password, $jscript)){
-			$uid = $this->getStudipUserid($username);
-			$this->doDataMapping($uid);
-			if ($this->is_new_user){
-				$this->doNewUserInit($uid);
+			if ($uid = $this->getStudipUserid($username)){
+				$this->doDataMapping($uid);
+				if ($this->is_new_user){
+					$this->doNewUserInit($uid);
+				}
 			}
 			return $uid;
 		} else {
