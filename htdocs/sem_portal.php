@@ -70,6 +70,9 @@ $view = $sem_portal['bereich'];
 
 if ($choose_toplist)
 	$sem_portal["toplist"] = $choose_toplist;
+
+if (!$sem_portal["toplist"])
+	$sem_portal["toplist"] = 4;
 	
 //function to display toplists
 function getToplist($rubrik, $query, $type="count") {
@@ -214,7 +217,8 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 	
 	
 	switch ($sem_portal["toplist"]) {
-		case FALSE:
+		case 4:
+		default:
 			$toplist =	getToplist(_("neueste Veranstaltungen"),"SELECT seminare.seminar_id, seminare.name, mkdate as count FROM seminare ".$sql_where_query_seminare." ORDER BY mkdate DESC LIMIT $count", "date");
 		break;
 		case 1:
@@ -231,8 +235,8 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 	}
 	
 	//toplist link switcher
-	if ($sem_portal["toplist"])
-		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=0\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("neueste Veranstaltungen")."</a><br />";
+	if ($sem_portal["toplist"] != 4)
+		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=4\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("neueste Veranstaltungen")."</a><br />";
 	if ($sem_portal["toplist"] != 1)
 		$toplist_links .= "<a href=\"$PHP_SELF?choose_toplist=1\"><img src=\"pictures/forumrot.gif\" border=\"0\">&nbsp;"._("Teilnehmeranzahl")."</a><br />";
 	if ($sem_portal["toplist"] != 2)
