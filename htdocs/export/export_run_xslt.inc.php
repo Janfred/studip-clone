@@ -117,8 +117,8 @@ else
 		$export_weiter_button .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
-		if ($jump == 1)
-			$export_weiter_button .= "<center><a href=\"./seminar_main.php?auswahl=$range_id\">" . makeButton("zurueck", "img") . "</a><br>";
+		if (isset($jump))
+			$export_weiter_button .= "<center><a href=\"./$jump?auswahl=$range_id\">" . makeButton("zurueck", "img") . "</a><br>";
 		else
 			$export_weiter_button .= "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " name=\"back\" value=\"". _("Zur&uuml;ck")."\"><br>";
 		$export_weiter_button .= "</center></form>";
