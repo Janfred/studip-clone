@@ -50,9 +50,8 @@ class DeleteResourcesUser {
 		global $RELATIVE_PATH_RESOURCES;
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
-		$this->object_type = get_object_type($this->range_id);
-		
 		$this->range_id = $range_id;
+		$this->object_type = get_object_type($this->range_id);
 	}
 	
 	//private
