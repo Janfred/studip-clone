@@ -1099,7 +1099,7 @@ class EditObject extends cssClasses {
 					<?
 					} else {
 						print "<b>".htmlReady($this->resObject->getCategoryName())."</b>";
-						printf ("<input type=\"HIDDEN\" name=\"change_category_id\" value=\"%s\" />", $this->db->f("category_id"));
+						printf ("<input type=\"HIDDEN\" name=\"change_category_id\" value=\"%s\" />", $this->resObject->getCategoryId());
 					}
 					?>
 				</td>

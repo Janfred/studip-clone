@@ -1457,7 +1457,7 @@ class ResourcesMsg {
 			if ($view_mode == "window")
 				parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"resources.php\">"._("zur&uuml;ck")."</a>");
 			else
-				parse_msg($collected_msg);
+				parse_msg($collected_msg, "§", "blank", 1, FALSE);
 		}
 	}
 	
@@ -1465,7 +1465,7 @@ class ResourcesMsg {
 		if ($view_mode == "window")
 			parse_window($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", $this->msg[$msg_code]["titel"], "<a href=\"resources.php\">"._("zur&uuml;ck")."</a>");
 		else
-			parse_msg($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"]);
+			parse_msg($this->msg[$msg_code]["mode"]."§".$this->msg[$msg_code]["msg"], "§", "blank", 1, FALSE);
 	}
 }
 	

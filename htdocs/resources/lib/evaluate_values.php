@@ -152,8 +152,8 @@ if ($change_object_schedules) {
 			if (($send_search_user_x) && ($submit_search_user !="FALSE") && (!$reset_search_user_x)) {
 				//Check if this user is able to reach the resource (and this assign), to provide, that the owner of the resources foists assigns to others
 				$ForeignObjectPerms = new ResourcesObjectPerms($change_schedule_resource_id, $submit_search_user);
-				
-				if (($ForeignObjectPerms->getUserPerms == "user") || ($ForeignObjectPerms-> getUserPerms == "admin"))
+				//echo 
+				if (($ForeignObjectPerms->getUserPerm() == "user") || ($ForeignObjectPerms-> getUserPerm() == "admin"))
 					$change_schedule_assign_user_id=$submit_search_user;
 				else
 					$msg -> addMsg(2);
