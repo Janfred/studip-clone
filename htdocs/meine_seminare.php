@@ -396,7 +396,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				</tr>
 				<tr>
 					<td>
-					Wenn Sie weitere Veranstaltungen in ihre pers&ouml;nliche Auswahl aufzunehmen, <br />nutzen Sie bitte die <a href="sem_portal.php?view=Alle&reset_all=TRUE">Suchfunktion.</a>
+					Um weitere Veranstaltungen in ihre pers&ouml;nliche Auswahl aufzunehmen, <br />nutzen Sie bitte die <a href="sem_portal.php?view=Alle&reset_all=TRUE">Suchfunktion.</a>
 					</td>
 				</tr>
 				<tr>
