@@ -122,9 +122,8 @@ class ExternElementMainPersons extends ExternElementMain {
 		if ($table) {
 			$title = _("Gruppierung:");
 			$info = _("Personen nach Gruppen/Funktionen gruppieren.");
-			$values = array("1", "0");
-			$names = array("an", "aus");
-			$table .= $edit_form->editRadioGeneric("grouping", $title, $info, $values, $names);
+			$values = "1";
+			$table .= $edit_form->editCheckboxGeneric("grouping", $title, $info, $values, "");
 		}
 		else {
 			$text = _("An dieser Einrichtung wurden noch keine Gruppen/Funktionen angelegt, oder es wurden diesen noch keine Personen zugeordnet.");
@@ -179,6 +178,22 @@ class ExternElementMainPersons extends ExternElementMain {
 		
 		return $element_headline . $out;
 	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == "grouping") {
+			// This is especially for checkbox-values. If there is no checkbox
+			// checked, the variable is not declared and it is necessary to set the
+			// variable to 0.
+			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
+				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				return FALSE;
+			}
+			return !($value == "1" || $value == "0");
+		}
+		
+		return FALSE;
+	}
+	
 	
 }
 
