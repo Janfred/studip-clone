@@ -79,17 +79,18 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 		//Alle zugelassenen Studiengaenge auswaehlen um die genaue Platzzahl zu ermitteln
 		$db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' ");
 		$count=0;
-		while ($db2->next_record()) {
-			//Wiieviel Teilnehmer koennen eingetragen werden?
-			$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '".$db->f("Seminar_id")."' AND admission_studiengang_id = '".$db2->f("studiengang_id")."' AND status= 'autor' ");
-			if ((round($db->f("admission_turnout") * ($db2->f("quota") / 100)) - $db3->num_rows()) > 0)
-				$count=$count+ (round($db->f("admission_turnout") * ($db2->f("quota") / 100)) - $db3->num_rows());
-		}
+		while ($db2->next_record())
+			$count=$count+ round($db->f("admission_turnout") * ($db2->f("quota") / 100));
+
+		//Wiieviel Teilnehmer koennen noch eingetragen werden?
+		$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '".$db->f("Seminar_id")."' AND status= 'autor' ");
+			if ($count - $db3->num_rows() > 0)
+				$count = $count - $db3->num_rows();
+			else
+				$count = 0;
 
 		//Studis auswaehlen, die jetzt aufsteigen koennen
-		$query = "SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count";
-		echo $query;
-		$db3->query($query); 
+		$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count");
 		while ($db3->next_record()) {
 			$group = select_group ($db->f("start_time"), $db3->f("user_id"));			
 			$db4->query("INSERT INTO seminar_user SET user_id = '".$db3->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db3->f("studiengang_id")."', mkdate = '".time()."' ");
