@@ -968,11 +968,12 @@ class EditObject extends cssClasses {
 				<?
 				if (!$lockedAssign) {
 				?>
-					<input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
+					<input type="IMAGE" align="absmiddle"  <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="&Uuml;bernehmen">
+					&nbsp;<a href="<?=$PHP_SELF."?view=".$this->used_view ?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				}
 				if ($killButton) {
-					?><input type="IMAGE" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
+					?>&nbsp;<input type="IMAGE"align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="l&ouml;schen"><?
 				}
 				if  (!$resAssign->getId()) 
 					 print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>"._("Sie erstellen eine neue Belegung")."</font>";
@@ -1186,10 +1187,11 @@ class EditObject extends cssClasses {
 				<td class="<? $this->switchClass(); echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" colspan=2 align="center"><br />&nbsp; 
-					<input type="IMAGE" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("&Uuml;bernehmen")?>">
+					<input type="IMAGE" align="absmiddle" <?=makeButton("uebernehmen", "src") ?> border=0 name="submit" value="<?=_("&Uuml;bernehmen")?>">
+					&nbsp;<a href="<?=$PHP_SELF."?view=".$this->used_view ?>"><?=makeButton("abbrechen", "img") ?></a>
 				<?
 				if ($killButton) {
-					?><input type="IMAGE" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
+					?>&nbsp;<input type="IMAGE" align="absmiddle" <?=makeButton("loeschen", "src") ?> border=0 name="kill_assign" value="<?=_("l&ouml;schen")?>"><?
 				}
 				?>
 				<br />&nbsp; 
