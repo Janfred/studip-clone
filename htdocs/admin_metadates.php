@@ -330,19 +330,23 @@ if (($uebernehmen_x) && (!$errormsg)) {
 			}
 			//create good msg
 			$i=0;
-			foreach ($updateResult as $key=>$val) {
-				if (!is_array($val["overlap_assigns"])) {
+			foreach ($updateResult as $key=>$val)
+				if (!is_array($val["overlap_assigns"]))
+					$rooms_id[$val["resource_id"]]=TRUE;
+			
+			if (is_array($rooms_id))
+				foreach ($rooms_id as $key=>$val) {
 					if ($i)
-						$rooms_booked.=", ";
-					$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $val["resource_id"], htmlReady(getResourceObjectName($val["resource_id"])));
+					$rooms_booked.=", ";
+					$rooms_booked.=sprintf ("<a target=\"new\" href=\"resources.php?actual_object=%s&view=view_schedule&view_mode=no_nav\">%s</a>", $key, htmlReady(getResourceObjectName($key)));
 					$i++;
 				}
-			}
+				
 			if ($i == 1)
-				$errormsg.= sprintf ("msg§"._("Der Raum %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+				$result.= sprintf ("msg§"._("Die Belegung des Raums %s wurde in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
 			elseif ($i)
-				$errormsg.= sprintf ("msg§"._("Die R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
-  		}
+				$result.= sprintf ("msg§"._("Die Belegung der R&auml;ume %s wurden in die Ressourcenverwaltung eingetragen.")."§", $rooms_booked);
+ 		}
 	}
 	
 	//Save the current state as snapshot to compare with current data
