@@ -81,7 +81,7 @@ if ($db->next_record()) {
 	}
 	
 	if ($visible[++$i] && $db->f("VeranstaltungsNummer"))
-		$data["number"] = htmlReady($db->f("VeranstaltungsNummer");
+		$data["number"] = htmlReady($db->f("VeranstaltungsNummer"));
 	
 	if ($visible[++$j] && $db->f("teilnehmer"))
 		$data["teilnehmer"] = htmlReady($db->f("teilnehmer"));
