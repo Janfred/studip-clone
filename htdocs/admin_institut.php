@@ -38,6 +38,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -52,6 +53,7 @@ if ($EXTERN_ENABLE) {
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
+$Modules = new Modules;
 
 // Check if there was a submission
 while ( is_array($HTTP_POST_VARS) 
@@ -91,13 +93,16 @@ while ( is_array($HTTP_POST_VARS)
 			}
 		}
 	
-	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','".time()."', '".time()."')";
+	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type', '".time()."', '".time()."')";
 	  $db->query($query);
 	  if ($db->affected_rows() == 0) {
 	  	$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
 			break;
 		}
 
+		// Set the default list of modules
+		$Modules->writeDefaultStatus($i_id);
+		
 		// Create default folder and discussion
 		CreateTopic(_('Allgemeine Diskussionen'), " ", _('Hier ist Raum für allgemeine Diskussionen'), 0, 0, $i_id, 0);
 		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$i_id."', name='" . _("Allgemeiner Dateiordner") . "', description='" . _("Ablage für allgemeine Ordner und Dokumente der Einrichtung") . "', mkdate='".time()."', chdate='".time()."'");
