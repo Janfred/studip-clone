@@ -295,6 +295,8 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
        	<tr>
 	<td class="blank" colspan=2><b>Anmelde- und Wartelisteneintr&auml;ge:</b><br />&nbsp; </td>
 	</tr>
+	<tr>
+	<td class="blank" colspan=2>
       	<?
         ECHO "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\" class=\"blank\">";
         ECHO "<tr>";
