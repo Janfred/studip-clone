@@ -27,7 +27,7 @@ require_once($ABSOLUTE_PATH_STUDIP . "/range_tree.view.php");
 /**
 * class to handle the "range tree"
 *
-* This class an interface to the structure of the "range tree"
+* This class provides an interface to the structure of the "range tree"
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
@@ -151,6 +151,7 @@ class StudipRangeTree {
 	*
 	* @access	public
 	* @param	string	$item_id
+	* @param	array	$kidskids	only used in recursion
 	* @return	array
 	*/
 	function getKidsKids($item_id, $kidskids = null){

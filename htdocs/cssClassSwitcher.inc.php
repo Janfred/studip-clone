@@ -22,20 +22,10 @@ define(PHPDOC_DUMMY,false);
 * cssClassSwitcher.inc.php
 *
 * class for handling zebra-tables
-* class for handling zebra-tables
-* class for handling zebra-tables
-*
-<<<<<<< cssClassSwitcher.inc.php
-* @access	public
-* @author	André Noack <noack@data-quest.de>
-* @version	$Id$
-* @package	studip_core
-=======
 * @author		Andre Noack <noack@data-quest.de>
 * @version		$Id$
 * @access		public
 * @package		studip_core
->>>>>>> 1.5
 */
 class cssClassSwitcher {
 	
