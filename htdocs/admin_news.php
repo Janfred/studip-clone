@@ -691,7 +691,7 @@ else
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <tr><td class="topic"><b>&nbsp;
-News eingeben / ver„ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?></b> )</font></td></tr>
+News eingeben / ver&auml;ndern</b> <font size="-1">( Bereich: <b><?=$news_range_name?></b> )</font></td></tr>
 <?
 
  if ($perm->have_perm("admin"))
