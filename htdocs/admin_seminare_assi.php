@@ -57,6 +57,7 @@ $db4 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
 $st_search = new StudipSemTreeSearch("dummy","sem_bereich",false);
 $DataFields = new DataFields();
+$Modules = new Modules;
 
 if (is_array($sem_create_data["sem_bereich"])){
 		for ($i = 0; $i < count($sem_create_data["sem_bereich"]); $i++){
@@ -111,7 +112,6 @@ if (($sem_create_data["sem_entry"]) && (!$form))
 
 //empfangene Variablen aus diversen Formularen auswerten
 if ($start_level) { //create defaults
-	$Modules = new Modules;
 	$sem_create_data["sem_class"]=$class;
 	foreach ($SEM_TYPE as $key => $val) {
 		if ($val["class"] == $class) {
@@ -425,10 +425,13 @@ if ($form==4) {
 
 if ($form==7)
 	{
-	$sem_create_data["sem_scm"]=$sem_scm;
-	$sem_create_data["sem_scm_alt_title"]=$sem_scm_alt_title;
-	$sem_create_data["sem_scm_predef_title"]=$sem_scm_predef_title;
-	}
+	$sem_create_data["sem_scm_content"]=$sem_scm_content;
+	if (!$sem_scm_name) {
+		$sem_create_data["sem_scm_name"]=$SCM_PRESET[$sem_scm_preset]["name"];
+		$sem_create_data["sem_scm_preset"]=$sem_scm_preset;
+	} else
+		$sem_create_data["sem_scm_name"]=$sem_scm_name;
+}
 
 //jump-logic
 if ($jump_back_x)
@@ -446,6 +449,7 @@ if ((!$jump_back_x) && (!$jump_next) && (!$add_doz) && (!$add_tut) && (!$delete_
 	&& (!$delete_turnus_field_x) && (!$send_doz_x) && (!$reset_search_x) && (!$add_term_field_x) && (!$delete_term_field_x)
 	&& (!$add_studg_x) && (!$delete_studg_x) && (!$search_doz) && (!$search_tut))
 	$jump_next_x=TRUE;
+	
 
 //Check auf korrekte Eingabe und Sprung in naechste Level, hier auf Schritt 2
 if (($form == 1) && ($jump_next_x))
@@ -1217,45 +1221,48 @@ if (($form == 5) && ($jump_next_x))
 	$level=6;
 	}
 
+
 //Nur der Form halber... es geht weiter zur SCM-Seite
-if (($form == 6) && ($jump_next_x))
-   	{
-	if (!$sem_create_data["modules_list"]["scm"]) {
+if (($form == 6) && ($jump_next_x)) {
+	if (!$sem_create_data["modules_list"]["scm"] && !$sem_create_data["modules_list"]["schedule"]) {
 		header ("Location: admin_seminare1.php");
+		die;
+	} elseif (!$sem_create_data["modules_list"]["scm"]) {
+		header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
 		die;
 	}
 	$level=7;
-   	}
+}
 
-//Eintragen des Simple Content Modules
+//Eintragen der Simple-Content Daten
 if (($form == 7) && ($jump_next_x))
 	{
-	if ($sem_create_data["sem_scm_alt_title"]) {
-		$scm_title=$sem_create_data["sem_scm_alt_title"];
-	} else {
-		$scm_title=$sem_create_data["sem_scm_predef_title"];
-	}
-	if ($sem_create_data["scm_entry"]) {
-		$db->query("UPDATE scm SET content='".$sem_create_data["sem_scm"]."', tab_name='".$scm_title."', chdate='".time()."' WHERE scm_id='".$sem_create_data["sem_scm_id"]."'");
-	} else {
-		$sem_create_data["sem_scm_id"]=md5(uniqid($hash_secret));
-		$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', tab_name='".$scm_title."', content='".$sem_create_data["sem_scm"]."', mkdate='".time()."', chdate='".time()."' ");
-	}
-	if ($db->affected_rows()) {
-		$sem_create_data["scm_entry"]=TRUE;
-		if ($sem_create_data["modules_list"]["schedule"])
-			header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+	if ($sem_create_data["sem_scm_content"]) { 
+		if ($sem_create_data["sem_scm_id"]) {
+			$db->query("UPDATE scm SET content='".$sem_create_data["sem_scm_content"]."', tab_name='".$sem_create_data["sem_scm_name"]."', chdate='".time()."' WHERE scm_id='".$sem_create_data["sem_scm_id"]."'");
+		} else {
+			$sem_create_data["sem_scm_id"]=md5(uniqid($hash_secret));
+			$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
+		}
+		if ($db->affected_rows()) {
+			if ($sem_create_data["modules_list"]["schedule"])
+				header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+			else
+				header ("Location: admin_seminare1.php");
+			page_close();
+			die;
+			}
 		else
-			header ("Location: admin_seminare1.php");
-		die;
+			{
+			$errormsg .= "error§"._("Fehler! Der Eintrag konnte nicht erfolgreich vorgenommen werden!")."";
+			$level=7;
+			}
 		}
-	else
-		{
-		$errormsg .= "error§"._("Fehler! Der Eintrag konnte nicht erfolgreich vorgenommen werden!")."";
-		$level=7;
-		}
+	} else {
+		//if no content is created yet, we disable the module
+		$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE);
 	}
-
+	
 //Gibt den aktuellen View an, brauchen wir in der Hilfe
 $sem_create_data["level"]=$level;
 
@@ -2723,11 +2730,11 @@ if ($level==6)
 					print _("Sie haben die Veranstaltung bereits angelegt.");
 					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
 						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))
-							print " "._("Sie k&ouml;nnen nun mit der freien Kursseite und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen."); 
+							print " "._("Sie k&ouml;nnen nun mit der Informationsseite und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen."); 
 						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["scm"]))	
 							print " "._("Sie k&ouml;nnen nun mit dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen.");
 						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))	
-							print " "._("Sie k&ouml;nnen nun mit der freien Kursseite fortfahren oder an diesem Punkt abbrechen."); 						
+							print " "._("Sie k&ouml;nnen nun mit der Informationsseite fortfahren oder an diesem Punkt abbrechen."); 						
 						print "<br><br><font size=-1>"._("Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und diese Schritte sp&auml;ter nachzuholen.")."</font>";
 					}
 					?>
@@ -2762,11 +2769,11 @@ if ($level==6)
 					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
 						print " "._("Wenn Sie nun auf &raquo;weiter >>&laquo; klicken, k&ouml;nnen Sie weitere -optionale- Daten f&uuml;r die Veranstaltung eintragen.");
 						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))
-							print " "._("Sie haben die M&ouml;glichkeit, Informationen für die freie Kursseite einzugeben und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen."); 
+							print " "._("Sie haben die M&ouml;glichkeit, eine Informationsseite anzulegen und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen."); 
 						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["scm"]))	
 							print " "._("Sie haben die M&ouml;glichkeit, mit Hilfe des Termin-Assisten einen Ablaufplan zu erstellen.");
 						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))	
-							print " "._("Sie haben die M&ouml;glichkeit, Informationen für die freie Kursseite einzugeben."); 						
+							print " "._("Sie haben die M&ouml;glichkeit,  eine Informationsseite anzulegen."); 						
 						print "<br><br><font size=-1>"._("Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und die n&auml;chsten Schritte sp&auml;ter nachzuholen.")."</font>";
 					}
 					?><br><br>
@@ -2872,13 +2879,14 @@ if ($level==6)
 	<?
 	}
 
-//Level 7: Erstellen der Literatur- und Linkliste
+//Level 7: Erstellen des Simple-Content-Bereichs
 if ($level==7)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 6: Freie Kursseite"); ?></b>
+			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 6: Freie Informatiosseite"); ?></b>
+
 			</td>
 		</tr>
 		<tr>
@@ -2891,10 +2899,11 @@ if ($level==7)
 		<tr>
 			<td class="blank" valign="top">
 				<blockquote>
-				<b><?=_("Schritt 6: Eingeben der freien Kursseite"); ?></b><br><br>
-				<? printf (_("Sie k&ouml;nnen nun zus&auml;tzliche Informationen f&uuml;r die eben angelegte Veranstaltung <b>%s</b> eingeben."), $sem_create_data["sem_name"]);
+				<b><?=_("Schritt 6: Erstellen einer Informationsseite"); ?></b><br><br>
+				<? printf (_("Sie k&ouml;nnen nun eine frei gestaltbare Infomationsseite f&uuml;r die eben angelegte Veranstaltung <b>%s</b> eingeben."), $sem_create_data["sem_name"]);
+				print "<br />"._("Sie k&ouml;nnen die Bezeichnug dieser Seite frei bestimmten. Nutzen sie Sie etwa, um ungeordnete Literaturlisten oder weitere Informationen anzugeben.");
 				if ($sem_create_data["modules_list"]["schedule"])
-					print " "._("Wenn Sie auf &raquo;weiter&laquo; klicken, haben Sie die M&ouml;glichkeit, mit dem Termin-Assistenten einen Ablaufplan f&uuml;r die Veranstaltung anzulegen.")
+					print "<br /> "._("Wenn Sie auf &raquo;weiter&laquo; klicken, haben Sie die M&ouml;glichkeit, mit dem Termin-Assistenten einen Ablaufplan f&uuml;r die Veranstaltung anzulegen.")
 				?>
 				<br><br>
 				</blockqoute>
@@ -2932,25 +2941,34 @@ if ($level==7)
 							<?=_("Titel:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-						&nbsp; <select name="sem_scm_predef_title">
-							<option><?=_("Literatur"); ?></option>
-							<option><?=_("Info"); ?></option>
-						</select>
-						&nbsp; oder freie Eingabe: <input type="text" size=25 name="sem_scm_alt_title">
-						<img  src="./pictures/info.gif" 
-							<? echo tooltip(_("Sie können entweder einen vordefinierten Titel für die freie Kursseite auswählen oder einen eigenen Titel frei wählen."), TRUE, TRUE) ?>
-						>
+							&nbsp;
+							<select name="sem_scm_preset">
+								<? foreach ($SCM_PRESET as $key=>$val) 
+									printf ("<option value=\"%s\" %s>%s</option>\n", $key, ($sem_create_data["sem_scm_preset"] == $key) ? "selected": "", $val["name"]);
+								?>
+							</select>&nbsp; <?=_("oder geben Sie einen beliebigen Titel ein:") ?>
+							<input type="TEXT" name="sem_scm_name" value="<?=$sem_create_data["sem_scm_name"]?>" maxlength="20" size="20" />
+							<img  src="./pictures/info.gif" 
+								<? echo tooltip(_("Sie können entweder einen vordefinierten Titel für die freie Kursseite auswählen oder einen eigenen Titel frei wählen. Diese Titel erscheint im Reitersystem der Veranstaltung als Bezeichnug des der freien Informationsseite"), TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Inhalt:"); ?>
+							<?=_("Inhalt der Seite:"); ?>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							&nbsp; <textarea name="sem_scm" cols=58 rows=10><? echo $sem_create_data["sem_scm"] ?></textarea>
+						<td class="<? echo $cssSw->getClass() ?>" width="50%"  colspan=2>
+							&nbsp; <textarea name="sem_scm_content" cols=58 rows=10><? echo $sem_create_data["sem_scm_content"] ?></textarea>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("In dieses Feld können Sie zusätzliche Informationen zu Ihrer Veranstaltung einfügen."), TRUE, TRUE) ?>
+								<? echo tooltip(_("In dieses Feld können Sie beliebigen Text zur Anzeige auf der Informationsseite eingeben."), TRUE, TRUE) ?>
 							>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="top">
+							<?
+							print "<br><font size=\"-1\">"._("Sie k&ouml;nnen auf dieser Seite s&auml;mtliche Stud.IP Formatierungen verwenden. Sie k&ouml;nnen Links normal einegeben, diesen werden automatisch sp&auml;ter als Hyperlinks dargestellt.");
+							print "<br /><br /><a target=\"new\" href=\"help/index.php?help_page=ix_forum6.htm\">"._("Hilfe zur Formatierung von Texten")."</a>";
+							print "<br /><br />"._("Um eine geordnete Literaturliste zu erstellen, benutzen Sie bitte die Literaturverwaltung.")."</a></font>";
+							?>
 						</td>
 					</tr>
 					<tr<? $cssSw->switchClass() ?>>
