@@ -109,9 +109,9 @@ class ShowList extends ShowTreeRow{
 			$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
 		
 		if ($resObject->getOwnerLink())
-			$zusatz=sprintf (_("Besitzer:")." <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
+			$zusatz=sprintf (_("verantwortlich:")." <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
 		else			
-			$zusatz=sprintf (_("Besitzer:")." %s", $resObject->getOwnerName());
+			$zusatz=sprintf (_("verantwortlich:")." %s", $resObject->getOwnerName());
 		$new=TRUE;
 		if ($open=="open") {
 			//load the perms
@@ -303,9 +303,9 @@ class ShowThread extends ShowTreeRow {
 				$titel = "<a href=\"$link\" class=\"tree\" >$titel</a>";
 			
 			if ($resObject->getOwnerLink())
-				$zusatz=sprintf ("Besitzer: <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
+				$zusatz=sprintf ("verantwortlich: <a href=\"%s\"><font color=\"#333399\">%s</font></a>", $resObject->getOwnerLink(), $resObject->getOwnerName());
 			else			
-				$zusatz=sprintf ("Besitzer: %s", $resObject->getOwnerName());
+				$zusatz=sprintf ("verantwortlich: %s", $resObject->getOwnerName());
 			$new=TRUE;
 			if ($open=="open") {
 				//load the perms
@@ -326,7 +326,7 @@ class ShowThread extends ShowTreeRow {
 					$content=htmlReady($resObject->getDescription());
 				}
 				if ($resources_data["move_object"] == $resObject->id) 
-					$content.= sprintf ("<br />"._("Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschten Ebene zu verschieben."), "<img src=\"pictures/move.gif\" border=0 alt=\""._("Klicken Sie dieses Symbol, um dieses Objekt in eine andere Ebene zu verschieben")."\">");
+					$content.= sprintf ("<br />"._("Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."), "<img src=\"pictures/move.gif\" border=0 alt=\""._("Klicken Sie suf dieses Symbol, um dieses Objekt in eine andere Ebene zu verschieben")."\">");
 	
 				if ($weitere)
 					$edit.= "&nbsp;<a href=\"$PHP_SELF?open_list=$resObject->id\">".makeButton("listeoeffnen", "img")."</a>";
@@ -473,7 +473,7 @@ class editSettings extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="42%">
-					<font size=-1><?=_("Diese Nutzer sind als Ressourcen-Root eingetragen, sie haben damit Zugriff auf alle globalen Ressourcen")?></font>
+					<font size=-1><?=_("Diese NutzerInnen sind als Ressourcen-Roots eingetragen, sie haben damit Zugriff auf alle globalen Ressourcen")?></font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="10%">&nbsp; 
 				</td>
@@ -481,7 +481,7 @@ class editSettings extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="30%" valign="top"><font size=-1><?=_("Nutzer hinzuf&uuml;gen")?></font><br />
+				<td class="<? echo $this->getClass() ?>" width="30%" valign="top"><font size=-1><?=_("NutzerInnen hinzuf&uuml;gen")?></font><br />
 				<? showSearchForm("search_root_user", $search_string_search_root_user, TRUE, FALSE, TRUE) ?>
 				</td>
 			</tr>
@@ -505,7 +505,7 @@ class editSettings extends cssClasses {
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="10%" valign="middle" align="right">
 					<font size=-1>
-						<?=_("Nutzer")?>&nbsp; 
+						<?=_("NutzerIn")?>&nbsp; 
 						<a href="<? echo $PHP_SELF ?>?delete_root_user_id=<? echo $this->db->f("user_id") ?>">
 						<?=makeButton("loeschen", "img") ?> 
 					</font>
@@ -576,7 +576,7 @@ class editSettings extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="25%" valign="top">
 					<font size=-1><input type="TEXT" name="change_category_name[<?=$this->db->f("category_id")?>]" value="<? echo $this->db->f("name") ?>" size="20" maxlength="255" /></font><br />
 					<font size=-1><? printf(_("wird von <b>%s</b> Objekten verwendet")."</font><br />", $depRes); ?>
-					<font size=-1><? ($this->db->f("system")) ? print( _("systemobjekt")."<br />") :print("") ?></font>
+					<font size=-1><? ($this->db->f("system")) ? print( _("(systemobjekt)")."<br />") :print("") ?></font>
 					
 					<?
 					foreach ($avaiableIcons as $key => $val) {
@@ -627,7 +627,7 @@ class editSettings extends cssClasses {
 									<?
 								} else {
 									?>
-									<img src="pictures/lighttrash.gif" border="0" <?=tooltip(_("Löschen der Eigenschaft nicht möglich, systemobjekt!"))?> 
+									<img src="pictures/lighttrash.gif" border="0" <?=tooltip(_("Löschen der Eigenschaft nicht möglich, Systemobjekt!"))?> 
 									<?
 								}
 								?>
@@ -737,7 +737,7 @@ class editSettings extends cssClasses {
 				<td class="<? echo $this->getClass() ?>" width="25%" valign="top">
 					<font size=-1><input type="TEXT" name="change_property_name[<?=$this->db2->f("property_id")?>]" value="<? echo htmlReady($this->db2->f("name")) ?>" size="20" maxlength="255" /></font><br />
 					<font size=-1>wird von <b><? echo  $depTyp ?></b> Typen verwendet</font><br />
-					<font size=-1><? ($this->db2->f("system")) ? print( _("systemobjekt")) :print("") ?></font><br />
+					<font size=-1><? ($this->db2->f("system")) ? print( _("(systemobjekt)")) :print("") ?></font><br />
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="65%" valign="top">
 					<table border=0 celpadding=2 cellspacing=0 width="100%" align="center">
@@ -748,7 +748,7 @@ class editSettings extends cssClasses {
 							<select name="send_property_type[<?=$this->db2->f("property_id")?>]">
 								<font size=-1><option <? ($this->db2->f("type") == "bool") ? print "selected" : print "" ?> value="bool"><?=_("Zustand")?></option></font>
 								<font size=-1><option <? ($this->db2->f("type") == "num") ? print "selected" : print "" ?> value="num"><?=_("einzeiliges Textfeld")?></option></font>
-								<font size=-1><option <? ($this->db2->f("type") == "text") ? print "selected" : print "" ?> value="text"><?=_("mehrzeilges Textfeld")?></option></font>
+								<font size=-1><option <? ($this->db2->f("type") == "text") ? print "selected" : print "" ?> value="text"><?=_("mehrzeiliges Textfeld")?></option></font>
 								<font size=-1><option <? ($this->db2->f("type") == "select") ? print "selected" : print "" ?> value="select"><?=_("Auswahlfeld")?></option></font>
 							</select>
 							<br />
@@ -857,7 +857,7 @@ class viewObject {
 				<td class="<? echo $this->cssSw->getClass() ?>"><font size=-1><b><?=_("Name:")?></b></font><br />
 				<font size=-1><? echo $this->resObject->getName()." (".(($this->resObject->getCategoryName()) ? $this->resObject->getCategoryName() : _("Hierachieebene")).")" ?>
 				</td>
-				<td class="<? echo $this->cssSw->getClass() ?>" width="60%" valign="top"><font size=-1><b><?=_("Besitzer:")?></b></font><br />
+				<td class="<? echo $this->cssSw->getClass() ?>" width="60%" valign="top"><font size=-1><b><?=_("verantwortlich:")?></b></font><br />
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE);  ?></a></font>
 				</td>
 			</tr>
@@ -1022,9 +1022,9 @@ class EditObject extends cssClasses {
 					}
 					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 					if ($resAssign->getOwnerType() == "sem")
-						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in diesem Raum staffindet.")."<br />"._("Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
+						printf (_("Diese Belegung ist ein regelm&auml;&szlig;iger Veranstaltungstermin, der in diesem Raum stattfindet.")."<br />"._("Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
 					elseif ($resAssign->getOwnerType() == "date")
-						printf (_("Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum stattfindet.")."<br />"._(" Die Zeiten dieser Belegung k&ouml;nnen sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
+						printf (_("Diese Belegung ist ein Einzeltermin einer Veranstaltung, der in diesem Raum stattfindet.")."<br />"._(" Die Zeiten dieser Belegung k&ouml;nnen Sie nur innerhalb der Veranstaltung %s bearbeiten!")."</font>", "<a href=\"seminar_main?auswahl=".$this->db->f("Seminar_id")."\">".htmlReady($this->db->f("Name"))."</a>");
 					else
 						printf (_("Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."));
 				}
@@ -1126,18 +1126,18 @@ class EditObject extends cssClasses {
 					if ($user_name)
 						echo "<b>$user_name&nbsp;</b></font>";
 					else
-						echo "<b>-- "._("kein Stud.IP Nutzer eingetragen")." -- &nbsp;</b></font>";
+						echo "<b>-- "._("keinE Stud.IP NutzerIn eingetragen")." -- &nbsp;</b></font>";
 					if (!$lockedAssign) {
 						?><br /><br /><font size=-1><? 
 						 if ($user_name) 
-						 	print _("einen anderen User (Nutzer oder Einrichtung) eintragen:");
+						 	print _("einen anderen User (NutzerIn oder Einrichtung) eintragen:");
 						 else
-							print _("einen User (Nutzer oder Einrichtung) eintragen:");						 
+							print _("einen User (NutzerIn oder Einrichtung) eintragen:");						 
 						?><br /></font><font size=-1>
 						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE) ?> <br/>
 						<?=_("freie Eingabe zur Belegung:")?><br /></font>
 						<input name="change_schedule_user_free_name" value="<? echo $resAssign->getUserFreeName(); ?>" size=40 maxlength="255" />
-						<br /><font size=-1><?=_("<b>Beachten Sie:</b> Wenn sie einen Nutzer oder eine Einrichtung eintragen, kann dieser Nutzer oder berechtigte Personen die Belegung selbstst&auml;ndig aufheben. Sie k&ouml;nnen die die Belegung aber auch frei eingeben.")?></font>
+						<br /><font size=-1><?=_("<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung selbstst&auml;ndig aufheben. Sie k&ouml;nnen die Belegung aber auch frei eingeben.")?></font>
 						<input type ="HIDDEN" name="change_schedule_assign_user_id" value="<? echo $resAssign->getAssignUserId(); ?>" />
 					<?
 					}
@@ -1252,7 +1252,7 @@ class EditObject extends cssClasses {
 				<td class="<? echo $this->getClass() ?>"><font size=-1><?=_("Name:")?></font><br />
 				<font size=-1><input name="change_name" value="<? echo htmlReady($this->resObject->getName()) ?>" size=60 maxlength="255" />
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="40%"><font size=-1><?=_("Typ des Objekts:")?></font><br />
+				<td class="<? echo $this->getClass() ?>" width="40%"><font size=-1><?=_("Typ des Objektes:")?></font><br />
 				<font size=-1>
 					<?
 					if (!checkAssigns($this->resObject->getId())) {
@@ -1285,7 +1285,7 @@ class EditObject extends cssClasses {
 			
 				<font size=-1><textarea name="change_description" rows=3 cols=60><? echo htmlReady($this->resObject->getDescription()) ?></textarea>
 				</td>
-				<td class="<? echo $this->getClass() ?>" width="40%" valign="top"><font size=-1><?=_("Besitzer:")?></font><br />
+				<td class="<? echo $this->getClass() ?>" width="40%" valign="top"><font size=-1><?=_("verantwortlich:")?></font><br />
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
 				</td>
 			</tr>
@@ -1396,17 +1396,17 @@ class EditObject extends cssClasses {
 			<tr>
 				<td class="<? echo $this->getClass() ?>" width="4%">&nbsp; 
 				</td>
-				<td class="<? echo $this->getClass() ?>" colspan=2><font size=-1><?=_("Besitzer:")?></font><br />
+				<td class="<? echo $this->getClass() ?>" colspan=2><font size=-1><?=_("verantwortlich:")?></font><br />
 				<font size=-1><a href="<? echo $this->resObject->getOwnerLink()?>"><? echo $this->resObject->getOwnerName(TRUE) ?></a></font>
 				</td>
 				<td class="<? echo $this->getClass() ?>" width="60%">
 				<?
 				if ($owner_perms){
 					?>
-					<font size=-1><?=_("Besitzer &auml;ndern:") ?></font><font size=-1 color="red"></font><br />
+					<font size=-1><?=_("verantworlicheN NutzerIn &auml;ndern:") ?></font><font size=-1 color="red"></font><br />
 					<? showSearchForm("search_owner", $search_string_search_owner, FALSE,TRUE);
 				} else
-					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den Besitzer nicht &auml;ndern.")."</font>";
+					print "<img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1><font size=\"-1\"> "._("Sie k&ouml;nnen den/die verantwortlicheN NutzerIn nicht &auml;ndern.")."</font>";
 				?>
 				</td>
 			</tr>
@@ -1941,7 +1941,7 @@ class ResourcesBrowse {
 			?>
 		<tr>
 			<td <? echo $this->cssSw->getFullClass() ?>>
-				<font size=-1><b><?=_("Es wurden keine Eintr&auml;ge zu ihren Suchkriterien gefunden.")?></b></font>
+				<font size=-1><b><?=_("Es wurden keine Eintr&auml;ge zu Ihren Suchkriterien gefunden.")?></b></font>
 			</td>
 		</tr>		
 			<?

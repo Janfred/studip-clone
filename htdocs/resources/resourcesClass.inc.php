@@ -121,7 +121,7 @@ class AssignObject {
 				if (!$explain)
 					return get_fullname($id);
 				else
-					return get_fullname($id)." ("._("Nutzer").")";
+					return get_fullname($id)." ("._("NutzerIn").")";
 			break;
 			case "inst":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);
@@ -930,9 +930,9 @@ class ResourceObject {
 		switch (ResourceObject::getOwnerType($id)) {
 			case "all":
 				if (!$explain)
-					return _("Jeder");
+					return _("jederR");
 				else
-					return _("Jeder (alle Nutzer)");
+					return _("jedeR (alle Nutzenden)");
 			break;
 			case "global":
 				if (!$explain)
@@ -944,7 +944,7 @@ class ResourceObject {
 				if (!$explain)
 					return get_fullname($id);
 				else
-					return get_fullname($id)." ("._("Nutzer").")";
+					return get_fullname($id)." ("._("NutzerIn").")";
 			break;
 			case "inst":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);

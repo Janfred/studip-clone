@@ -50,7 +50,7 @@ switch ($resources_data["view"]) {
 		$title=_("&Uuml;bersicht der Ressourcen");
 	break;
 	case "search":
-		$page_intro=_("Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen suchen oder sich durch die Ebenen navigieren.");
+		$page_intro=_("Sie k&ouml;nnen hier nach Ressourcen suchen. Sie haben die M&ouml;glichkeit, &uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen zu suchen oder sich durch die Ebenen zu navigieren.");
 		$title=_("Suche nach Ressourcen");
 	break;
 	
@@ -61,7 +61,7 @@ switch ($resources_data["view"]) {
 	case "search_list":
 		if ($resources_data["list_open"])
 			$page_intro= sprintf(_("Sie sehen alle Eintr&auml;ge in der Ebene <b>%s</b>"), getResourceObjectName($resources_data["list_open"]));
-		$title=_("Bearbeiten und Ausgeben von Listen");
+		$title=_("Bearbeiten und ausgeben von Listen");
 		if ($resources_data["list_open"])
 			$title.=" - "._("Ebene").": ".getResourceObjectName($resources_data["list_open"]);
 		$infobox = array(
@@ -72,7 +72,7 @@ switch ($resources_data["view"]) {
 					array  ("kategorie" => "Aktionen:", 
 							"eintrag" => array (
 								array	("icon" =>  (!$resources_data["list_recurse"]) ? "pictures/on_small.gif" : "pictures/off_small.gif",
-									"text"  => ($resources_data["list_recurse"]) ? sprintf(_("Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."), "<a href=\"$PHPSELF?nrecurse_list=TRUE\">", "</a>") :  sprintf(_("Ressourcen in untergeordneten Ebenen %smit ausgeben%s"), "<a href=\"$PHP_SELF?recurse_list=TRUE\">", "</a>")))));
+									"text"  => ($resources_data["list_recurse"]) ? sprintf(_("Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."), "<a href=\"$PHPSELF?nrecurse_list=TRUE\">", "</a>") :  sprintf(_("Ressourcen in untergeordneten Ebenen %s(mit) ausgeben%s"), "<a href=\"$PHP_SELF?recurse_list=TRUE\">", "</a>")))));
 		$infopic = "pictures/rooms.jpg";
 	break;
 
@@ -87,11 +87,11 @@ switch ($resources_data["view"]) {
 		$title=_("Eigenschaften bearbeiten").$currentObjectTitelAdd;
 	break;
 	case "edit_object_perms":
-		$page_intro=_("Hier k&ouml;nnen Sie Berechtigungen f&uuml;r den Zugriff auf die Ressource vergeben oder den Besitzer &auml;ndern.")." <br /><font size=\"-1\">"._("<b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls f&uuml;r die Ressourcen, die der gew&auml;hlten Ressource untergeordnetet sind!")."</font>";
+		$page_intro=_("Hier k&ouml;nnen Sie Berechtigungen f&uuml;r den Zugriff auf die Ressource vergeben.")." <br /><font size=\"-1\">"._("<b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls f&uuml;r die Ressourcen, die der gew&auml;hlten Ressource untergeordnet sind!")."</font>";
 		$title=_("Eigenschaften bearbeiten").$currentObjectTitelAdd;
 	break;
 	case "view_schedule":
-		$page_intro=_("Hier k&ouml;nnen Sie sich die Belegunszeiten der Ressource anzeigen lassen und auf unterschiedliche Art und Weise darstellen lassen.");
+		$page_intro=_("Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen lassen und auf unterschiedliche Art darstellen lassen.");
 		$title=_("Belegungszeiten ausgeben").$currentObjectTitelAdd;
 	break;
 	
@@ -102,12 +102,12 @@ switch ($resources_data["view"]) {
 		$title=_("Typen bearbeiten");
 	break;
 	case "edit_properties":
-		$page_intro=_("Verwalten Sie auf dieser Seite die eizelnen Eigenschaften. Diese Eigenschaften k&ouml;nnen Sie beliebigen Ressourcen-Typen zuweisen.");
-		$title=_("Eigenschaften verwalten bearbeiten");
+		$page_intro=_("Verwalten Sie auf dieser Seite die einzelnen Eigenschaften. Diese Eigenschaften k&ouml;nnen Sie beliebigen Ressourcen-Typen zuweisen.");
+		$title=_("Eigenschaften bearbeiten");
 	break;
 	case "edit_perms":
-		$page_intro=_("Verwalten Sie hier alle Administratoren, die administrative Rechte oder Belegungsrechte &uuml;ber &uuml;ber alle Ressourcen besitzen.");
-		$title=_("Ressourcen-Administratoren bearbeiten");
+		$page_intro=_("Verwalten Sie hier AdministratorInnen des Systems, die volle Rechte &uuml;ber alle Ressourcen erhalten.");
+		$title=_("Ressourcen-AdministratorInnen bearbeiten");
 	break;
 	
 	//all the intros in an open object (Veranstaltung, Einrichtung)
@@ -153,7 +153,7 @@ switch ($resources_data["view"]) {
 	break;
 	//default
 	default:
-		$page_intro=_("Sie befinden sich in der Ressurcenverwaltung von Stud.IP. Sie k&ouml;nnen hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten.");
+		$page_intro=_("Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten.");
 		$title=_("&Uuml;bersicht der Ressourcen");
 	break;
 	}

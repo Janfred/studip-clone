@@ -349,7 +349,7 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 		<select name="<? echo "submit_".$name ?>">
 		<?
 		if ($allow_all)
-			print "<option value=\"all\">"._("jeder")."</option>";
+			print "<option value=\"all\">"._("jedeR")."</option>";
 
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
