@@ -123,7 +123,7 @@ function PrintAktualStatusgruppen ()
 			        <tr> 
 				          <td width=\"5%\">";
 		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"./pictures/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip("Markierte Personen dieser Gruppe zuordnen"));
-		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&gruppe_name=%s&gruppe_anzahl=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$cmd =="edit_statusgruppe"&&$edit_id == $statusgruppe_id?"topicwrite":"topic",$db->f("name"),$statusgruppe_id, $db->f("name"), $db->f("size"), $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
+		printf ("	          <td width=\"95%%\" class=\"%s\">&nbsp; %s </td><td class=\"topic\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&gruppe_name=%s&gruppe_anzahl=%s&range_id=%s&view=%s\"><img src=\"./pictures/einst.gif\" border=\"0\" %s></a></td>",$cmd =="edit_statusgruppe"&&$edit_id == $statusgruppe_id?"topicwrite":"topic",htmlReady($db->f("name")),$statusgruppe_id, $db->f("name"), $db->f("size"), $range_id, $view, tooltip("Gruppennahme oder Anzahl anpassen"));
 		printf ( "	          <td width=\"4%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"pictures/lighttrash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip("Gruppe mit Personenzuordnung entfernen"));
 		echo 	"</tr>";
 
@@ -428,7 +428,7 @@ function PrintInstitutMembers ()
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
 	  	?>
 	        <font size="2">Name: </font>
-	        <input type="text" name="new_statusgruppe_name" value="<? echo $statusgruppe_name;?>">
+	        <input type="text" name="new_statusgruppe_name" value="<? echo htmlready($statusgruppe_name);?>">
 	        &nbsp; &nbsp; &nbsp; <font size="2">Anzahl:</font> 
 	        <input name="new_statusgruppe_size" type="text" value="" size="3">
 	        &nbsp; &nbsp; &nbsp; <b>Einf&uuml;gen</b>&nbsp; 
