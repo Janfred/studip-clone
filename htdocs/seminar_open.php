@@ -63,16 +63,17 @@ function check_calendar_default(){
 	
 	if(!$calendar_user_control_data){
 		$calendar_user_control_data = array(
-			"view"           => "showweek",
-			"start"          => 9,
-			"end"            => 20,
-			"step_day"       => 900,
-			"step_week"      => 3600,
-			"type_week"      => "LONG",
-			"holidays"       => TRUE,
-			"sem_data"       => TRUE,
-			"link_edit"      => FALSE,
-			"bind_seminare"  => ""
+			"view"             => "showweek",
+			"start"            => 9,
+			"end"              => 20,
+			"step_day"         => 900,
+			"step_week"        => 3600,
+			"type_week"        => "LONG",
+			"holidays"         => TRUE,
+			"sem_data"         => TRUE,
+			"link_edit"        => FALSE,
+			"bind_seminare"    => "",
+			"ts_bind_seminare" => 0
 		);
 	}
 }
