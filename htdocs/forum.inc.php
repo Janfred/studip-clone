@@ -584,9 +584,7 @@ function ForumEmpty () {
 		else
 			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Ordner anlegen zu lassen.");
 	}
-	$empty = "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>";
-	$empty .= parse_msg("info§$text");
-	$empty .= "</table>";	
+	$empty = parse_msg("info§$text");
 	return $empty;
 } 
 
@@ -825,7 +823,7 @@ function forum_print_toolbar ($id="") {
 			$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
 		}
 		
-		$print .= "</td></tr></table>";	
+		$print .= "</td></tr></table>\n";	
 		return $print;
 }
 
@@ -1337,7 +1335,9 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	$db=new DB_Seminar;
 	$db->query($query);
 	if ($db->num_rows()==0) {  // Das Forum ist leer
+		echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		echo ForumEmpty();
+		echo "</table>";
 		die;
 	} else {
 		
