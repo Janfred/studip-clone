@@ -1,4 +1,4 @@
-26.09.2004 v.1.1.5
+26.09.2004 v 1.1.5
 - Neue Messaging-Funktionen: Betreff für systeminterne Nachrichten, 
   erzwungene/ optionale eMail-Weiterleitung, differenzierte Lesebestätigung, 
   Bild des Absenders in Nachrichtenansicht und verbesserte Anwort-Funktionalität
@@ -14,7 +14,10 @@
 - Termineingabehilfe/Minikalender für die Eingabe von Terminen an vielen Stellen im
   System, konfigurierbare Standardzeiten zum Auswählen für regelmäßige Termine
 - Verbesserte Bedienung der Ablaufplansicht und Ablaufplanverwaltung
+- automatische Umsetzung von internen Links, falls mehrere Servername verwendet 
+  werden
 - Intern verbesserte Benutzerverwaltung
+- Zahlreiche Performance-Verbesserungen (Datenbankabfragen und -struktur)
 - weitere Detailverbesserungen und Bugfixes
 
 08.04.2004 v 1.1
@@ -140,7 +143,7 @@
 - Geschwindigkeitsoptimierungen
 - weitere Detailverbesserungen und Bugfixes
 
-10.03.2002 v.0.7.5 release candidate 2
+10.03.2002 v 0.7.5 release candidate 2
 - bessere Performance der Veranstaltungsübersicht
 - Druckansicht für ein komplettes Forum einer Veranstaltung
 - beim Archivieren wird ein Forumdump mit archiviert
@@ -161,7 +164,7 @@
 - mehr Smileys :)
 - weitere Detailverbesserungen und Bugfixes
 
-13.01.2002 v.0.7.0 release candidate 1
+13.01.2002 v 0.7.0 release candidate 1
 - Komplett neu geschriebener Terminkalender: Tages-, Monats-, Wochen- und Jahresansicht, flexible Wiederholungstermine, 
   farbliche Kennungen für Termine, freie Einbindung vom Veranstaltungsterminen, PIM-Optik, zahlreiche Optionen über
   MyStudip-Bereich frei konfigurierbar
@@ -195,7 +198,7 @@
 - Handling von Sonderzeichen systemweit optimiert
 - weitere Detailverbesserungen und Bugfixes
 
-01.10.2001 v.0.6.0 beta 4
+01.10.2001 v 0.6.0 beta 4
 - erste komplett überarbeitete und in vielen Details neu durchdachte und strukturierte Version
 - v.2.0 des Forensystems (NT Version): Komplett graphischer Treeview, JavaScript Effekte zur schnellen
   Verarbeitung der Informationen
@@ -223,13 +226,13 @@
 28.08.2001
 - Start der Portalseite auf www.studip.de
 
-07.06.2001 v.0.5.0 beta 3 
+07.06.2001 v 0.5.0 beta 3 
 - Release bei Sourceforge
 - weitere Fixes
 - Graphische Ausgabe des Stundenplans
 - SMS nicht mehr auf 255 Zeichen begrenzt
 
-01.05,2001 v.0.4.0 beta 2
+01.05,2001 v 0.4.0 beta 2
 - Archiv eingefügt
 - neuer Seminar-Browser (Suchfunktion für Veranstaltungen)
 - automatisches Archivieren der Veranstaltungen
@@ -240,7 +243,7 @@
 - v.2.0 des Newssystems 
 - Facelifting beim Design: neue Buttons, konsequenter Fensterlook
 
-19.03.2001 v.0.3.0 beta 1
+19.03.2001 v 0.3.0 beta 1
 - erster Release bei Sourceforge
 - unzählige Buxfixes
 - viele Detail-Verbesserungen, die sich im laufenden Betrieb ergeben haben
@@ -250,7 +253,7 @@
 15.12.2000
 - Stud.IP wird bei Sourceforge registriert
 
-16.10.2000 v.0.2.0 alpha 
+16.10.2000 v 0.2.0 alpha 
 - In letzter Sekunde wird pünktlich zum Start des WS 2000/01 die erste Version im öffentlichen Einsatz fertig gestellt
 - Neue Funktionen: Dateiordner, Chat, SMS-System, Anzeige von Personen, die Online sind,
   Terminplaner, Personensuche und persönliche Homepage
@@ -272,7 +275,7 @@ Sommer 2000
   Präsenzlehre
 - Domain www.studip.de wird registriert
 
-11.01.2000 v0.1.0
+11.01.2000 v 0.1.0
 - Die erste Version im Lehreinsatz: Die Veranstaltung "Kurzfilmpraxis" von Ralf Stockmann nutzt 
   das personalisierte Forum zur Entwicklung von Drehbüchern
 
