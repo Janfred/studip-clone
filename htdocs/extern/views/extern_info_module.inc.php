@@ -56,6 +56,9 @@ echo "</b>&nbsp " . $info["make_date"];
 echo "&nbsp; &nbsp; &nbsp; <b>";
 echo _("Letzte &Auml;nderung:");
 echo "</b>&nbsp " . $info["change_date"];
+echo "<br><br>\n<b>";
+echo _("Beschreibung:");
+echo "</b>&nbsp " . $EXTERN_MODULE_TYPES[$info["module_type"]]["description"];
 echo "<br></font></blockquote>\n</td></tr>\n";
 echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
 
@@ -66,8 +69,8 @@ if ($info["level"] == 1) {
 	echo "<blockquote><font size=\"2\"><br>\n";
 	echo _("Der folgende Link verweist auf die von Stud.IP generierte HTML-Seite.");
 	echo "<blockquote>\n";
-	echo "<br>" . $info["link_br"] . "</blockquote>\n";
-	echo _("Die Adresse dieses Links k&ouml;nnen Sie in Ihre Website kopieren.");
+	echo $info["link_br"] . "</blockquote>\n";
+	echo _("Diese Adresse k&ouml;nnen Sie in einen Link auf Ihrer Website integrieren, um auf die Ausgabe des Moduls zu verweisen.");
 	echo "<br></font></blockquote>\n</td></tr>\n";
 	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
 }
