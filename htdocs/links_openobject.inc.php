@@ -30,7 +30,7 @@ if ($SessSemName["class"]=="inst") {
 } else {
 	$structure["seminar_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"seminar_main.php", active=>FALSE);
 	$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
-	if (!in_array($SessSemName[1], $AUTO_INSERT_SEM)) {
+	if (!in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) {
 		$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
 	}
 	$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
