@@ -39,6 +39,10 @@ array	(	"name" => "Allgemeines",
 																array	(	"name" => "Nutzungsbedingungen",
 																				"text" => "Die rechtlichen Grundlagen",
 																				"page" => "nutzung.html"
+																			),
+																array	(	"name" => "Was ist neu?",
+																				"text" => "neue Funktionen in dieser Version",
+																				"page" => "whatsnew.htm"
 																			)
 															)
 			),
