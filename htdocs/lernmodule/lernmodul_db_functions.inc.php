@@ -19,10 +19,15 @@ function get_module_info($co_inst, $co_id)
 		return false;
 }
 
-function get_user_modules($firstname, $surname, $ilias_user_id)
+function get_user_modules($benutzername)
 {
 	$mod_array = false;
 	$module_count = 0;
+	$db = New DB_Seminar;
+	$db->query("SELECT * FROM auth_user_md5  WHERE username ='$benutzername'");
+	$firstname = $db->f("Vorname");
+	$surname = $db->f("Nachname");
+	$ilias_user_id = get_ilias_user_id($benutzername);
 	$ilias_db = New DB_Ilias;
 	$ilias_db -> query("SELECT DISTINCT meta.id, meta.inst, meta.title, meta.description ".
 			" FROM lerneinheit LEFT JOIN meta USING(id, inst) LEFT JOIN meta_author USING(id, inst, typ) LEFT JOIN meta_contrib USING(id, inst, typ)".
@@ -40,7 +45,10 @@ function get_user_modules($firstname, $surname, $ilias_user_id)
 		$mod_array[$module_count]["description"] = $ilias_db -> f("description");
 		$module_count ++;
 	}
-	return $mod_array;
+	if ($module_count<1)
+		return false;
+	else
+		return $mod_array;
 }
 
 function get_seminar_modules($seminar_id)
@@ -55,7 +63,10 @@ function get_seminar_modules($seminar_id)
 		$mod_array[$module_count]["id"] = $db -> f("co_id");
 		$module_count ++;
 	}
-	return $mod_array;
+	if ($module_count<1)
+		return false;
+	else
+		return $mod_array;
 }
 
 function get_all_modules()
@@ -78,7 +89,10 @@ function get_all_modules()
 		$mod_array[$module_count]["description"] = $ilias_db -> f("description");
 		$module_count ++;
 	}
-	return $mod_array;
+	if ($module_count<1)
+		return false;
+	else
+		return $mod_array;
 }
 	
 ?>
