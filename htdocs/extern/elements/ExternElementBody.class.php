@@ -38,7 +38,8 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementBody extends ExternElement {
 
-	var $attributes = array("body_bgcolor", "body_background", "body_class", "body_style");
+	var $attributes = array("body_bgcolor", "body_text", "body_link", "body_vlink",
+			"body_alink", "body_background", "body_class", "body_style");
 
 	/**
 	* Constructor
@@ -52,6 +53,13 @@ class ExternElementBody extends ExternElement {
 		$this->name = "Body";
 		$this->real_name = _("Seitenkörper");
 		$this->description = _("Eigenschaften des Seitenkörpers (HTML-Tag &gt;body&lt;).");
+	}
+	
+	function toString ($args) {
+		$out = "\n" . $this->config->getTag($this->name, "body");
+		$out .= $args["content"] . "</body>\n";
+		
+		return $out;
 	}
 	
 }
