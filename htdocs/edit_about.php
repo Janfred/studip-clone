@@ -794,7 +794,7 @@ if (!$cmd)
 include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");  
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
-IF ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Messaging"){
+if ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Messaging") {
 	echo "<table class=\"blank\" cellspacing=0 cellpadding=0 border=0 width=\"100%\">";
 		
 	if ($username!=$auth->auth["uname"]) 
@@ -803,323 +803,327 @@ IF ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Me
 		echo "<tr><td class=\"topic\" colspan=2><img src='pictures/einst.gif' border=0 align=texttop><b>&nbsp;";
 	switch ($view) {
 		case ("Bild") :
-			echo "Hochladen des pers&ouml;nlichen Bildes";
+			echo _("Hochladen des pers&ouml;nlichen Bildes");
 		break;
 		case ("Daten") :
-			echo "Benutzerdaten bearbeiten";
+			echo _("Benutzerdaten bearbeiten");
 		break;
 		case ("Karriere") :
 			if ($perm->have_perm ("tutor"))
-				echo "Studienkarriere und Einrichtungen bearbeiten";
+				echo _("Studienkarriere und Einrichtungen bearbeiten");
 			else
-				echo "Studienkarriere bearbeiten";
+				echo _("Studienkarriere bearbeiten");
 		break;
 		case ("Lebenslauf") :
 			if ($perm->have_perm ("dozent"))
-				echo "Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten";
+				echo _("Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten");
 			else
-				echo "Lebenslauf bearbeiten";
+				echo _("Lebenslauf bearbeiten");
 		break;
 		case ("Sonstiges") :
-			echo "Eigene Kategorien bearbeiten";
+			echo _("Eigene Kategorien bearbeiten");
 		break;
 		case ("Login") :
-			echo "Autologin einrichten";
+			echo _("Autologin einrichten");
 		break;
-		}
-	if ($username!=$auth->auth["uname"]) 
-		echo "&nbsp; &nbsp; <font size=-1>Daten von: ".$my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]." ($username), Status:  ".$my_about->auth_user["perms"]."</font>";
+	}
+	
+	if ($username!=$auth->auth["uname"]) { 
+		echo "&nbsp; &nbsp; <font size=-1>";
+		printf(_("Daten von: %s %s (%s), Status: %s"), $my_about->auth_user["Vorname"], $my_about->auth_user["Nachname"], $username, $my_about->auth_user["perms"]);
+		echo "</font>";
+	}
 
 	echo "</b></td></tr>\n";
 	echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n</table>\n<table class=\"blank\" cellspacing=0 cellpadding=2 border=0 width=\"100%\">";
-	}
+}
 
-	// evtl Fehlermeldung ausgeben
-	if ($my_about->msg)
-	 {
-	 $my_about->parse_msg($my_about->msg);
-	 }
+// evtl Fehlermeldung ausgeben
+if ($my_about->msg) {
+	$my_about->parse_msg($my_about->msg);
+}
 
-IF ($view=="Bild"){
-	 // hier wird das Bild ausgegeben
+if ($view=="Bild") {
+	// hier wird das Bild ausgegeben
 	$cssSw->switchClass();
-	echo "<tr><td colspan=2 class=\"blank\"><blockquote><br />Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre Homepage hochladen.<br><br><br></td></tr>";
+	echo "<tr><td colspan=2 class=\"blank\"><blockquote><br />" . _("Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre Homepage hochladen.") . "<br><br><br></td></tr>";
 	echo"<tr><td width=\"30%\" class=\"".$cssSw->getClass()."\" align=\"center\">";
-	echo "<font size=-1><b>Aktuell angezeigtes Bild:<br /><br /></b></font>";
+	echo "<font size=-1><b>" . _("Aktuell angezeigtes Bild:") . "<br /><br /></b></font>";
 	
-	if(!file_exists("./user/".$my_about->auth_user["user_id"].".jpg"))
-		echo "<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\" alt=\"kein pers&ouml;nliches Bild vorhanden\" ><br />&nbsp; ";
-	else
-			echo "<img border=\"1\" src=\"./user/".$my_about->auth_user["user_id"].".jpg\" alt=\"". $my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."\"><br />&nbsp; ";
+	if (!file_exists("./user/".$my_about->auth_user["user_id"].".jpg")) {
+		echo "<img src=\"./user/nobody.jpg\" width=\"200\" height=\"250\" alt=\"" . _("kein pers&ouml;nliches Bild vorhanden") . "\" ><br />&nbsp; ";
+	} else {
+		echo "<img border=\"1\" src=\"./user/".$my_about->auth_user["user_id"].".jpg\" alt=\"". $my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."\"><br />&nbsp; ";
+	}
 			
-		echo "</td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote>";
-		echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username&view=Bild\" method=\"POST\">";
-		echo "<br />Upload eines Bildes:<br><br>1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.<br><br>";
-		echo "&nbsp;&nbsp;<input name=\"imgfile\" type=\"file\" style=\"width: 80%\" cols=".round($max_col*0.7*0.8)."><br><br>";
-		echo "2. Klicken sie auf <b>Bild senden</b>, um das Bild hochzuladen.<br><br>";
-		echo "&nbsp;&nbsp;<input type=\"submit\" value=\"Bild senden\"><br><br>";
-		echo "<b>ACHTUNG!</b><br>Die Bilddatei darf max. ".$my_about->max_file_size." KB groß sein, es sind nur Dateien mit den Endungen <b>.jpg</b> oder <b>.gif</b> erlaubt!";
-		echo "</blockquote></td></tr>";
-		}
+	echo "</td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote>";
+	echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?cmd=copy&username=$username&view=Bild\" method=\"POST\">";
+	echo "<br />" . _("Upload eines Bildes:") . "<br><br>" . _("1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.") . "<br><br>";
+	echo "&nbsp;&nbsp;<input name=\"imgfile\" type=\"file\" style=\"width: 80%\" cols=".round($max_col*0.7*0.8)."><br><br>";
+	echo _("2. Klicken sie auf <b>Bild senden</b>, um das Bild hochzuladen.") . "<br><br>";
+	echo "&nbsp;&nbsp;<input type=\"submit\" value=\"Bild senden\"><br><br>";
+	printf ("<b>ACHTUNG!</b><br>Die Bilddatei darf max. %s KB groß sein, es sind nur Dateien mit den Endungen <b>.jpg</b> oder <b>.gif</b> erlaubt!", $my_about->max_file_size);
+	echo "</blockquote></td></tr>";
+}
 
-IF ($view=="Daten"){
- $cssSw->switchClass();
- //persönliche Daten...
-	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können sie Ihre Benutzerdaten verändern.";
-	echo "<br><font size=-1>Alle mit einem Sternchen&nbsp;</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>&nbsp;markierten Felder m&uuml;ssen ausgef&uuml;llt werden.</font><br><br>";
+if ($view=="Daten") {
+	$cssSw->switchClass();
+	//persönliche Daten...
+	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können sie Ihre Benutzerdaten verändern.");
+	echo "<br><font size=-1>" . sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), "</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>") . "</font><br><br>";
 	echo "<br></td></tr>\n<tr><td class=blank><table align=\"center\" width=99% class=blank border=0 cellpadding=2 cellspacing=0>";
 	//Keine JavaScript überprüfung bei adminzugriff
-	if ($my_about->check=="user" AND $auth->auth["jscript"])
-	 echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
-	else
-	 echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
+	if ($my_about->check=="user" AND $auth->auth["jscript"]) {
+		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\" onsubmit=\"return checkdata()\">";
+	} else {
+		echo "<tr><form action=\"$PHP_SELF?cmd=edit_pers&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
+	}
 	 
-//   echo "<td width=\"30%\"></td><td>";
-
-	if ($my_about->check=="user"){
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Username: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Paßwort: </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; neues Passwort:</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; Passwort-Wiederholung:</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Name: </td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><font size=-1>&nbsp; Vorname:</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; Nachname:</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+	if ($my_about->check=="user") {
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Paßwort:") . " </td><td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"60%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"vorname\" value=\"".$my_about->auth_user["Vorname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td><td class=\"".$cssSw->getClass()."\" nowrap width=\"60%\" align=\"left\"><font size=-1>&nbsp; " . _("Nachname:") . "</font><br />&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"nachname\" value=\"".$my_about->auth_user["Nachname"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
 	  $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Email: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
-	 }
-	else {
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Username: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">Adminzugriff hier nicht möglich!</font></b></td></tr>\n";
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Paßwort: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; *****</td></tr>\n";
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Name: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."</td></tr>\n";
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Email: </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
-	 }
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Titel: </td>
-	 		<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Email:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font></td></tr>\n";
+	} else {
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Username:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Paßwort:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; *****</td></tr>\n";
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Name:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"]."</td></tr>\n";
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Email:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"30%\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
+	}
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Titel:") . " </td>
+			<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
 	echo "\n<select name=\"title_front_chooser\" onChange=\"document.pers.title_front.value=document.pers.title_front_chooser.options[document.pers.title_front_chooser.selectedIndex].text;\">";
-	for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i){
+	for($i = 0; $i < count($TITLE_FRONT_TEMPLATE); ++$i) {
 		echo "\n<option";
-		if($TITLE_FRONT_TEMPLATE[$i] == $my_about->user_info['title_front'])
-		echo " selected ";
+		if ($TITLE_FRONT_TEMPLATE[$i] == $my_about->user_info['title_front']) {
+			echo " selected ";
+		}
 		echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
 	}	
 	echo "</select></td><td class=\"".$cssSw->getClass()."\" width=\"60%\" align=\"left\">&nbsp;&nbsp;";
 	echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_front\" value=\"".$my_about->user_info['title_front']."\"></td></tr>\n";
 	$cssSw->switchClass();
- echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\" nowrap><blockquote><b>Titel nachgest.: </td>
-		<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\" nowrap><blockquote><b>" . _("Titel nachgest.:") . " </td>
+			<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">&nbsp;";
 	echo "\n<select name=\"title_rear_chooser\" onChange=\"document.pers.title_rear.value=document.pers.title_rear_chooser.options[document.pers.title_rear_chooser.selectedIndex].text;\">";
-	for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i){
+	for($i = 0; $i < count($TITLE_REAR_TEMPLATE); ++$i) {
 		echo "\n<option";
-		if($TITLE_REAR_TEMPLATE[$i] == $my_about->user_info['title_rear'])
-		echo " selected ";
+		if($TITLE_REAR_TEMPLATE[$i] == $my_about->user_info['title_rear']) {
+			echo " selected ";
+		}
 		echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
 	}	
 	echo "</select></td><td class=\"".$cssSw->getClass()."\" width=\"60%\" align=\"left\">&nbsp;&nbsp;";
 	echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_rear\" value=\"".$my_about->user_info['title_rear']."\"></td></tr>\n";
 	
-	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Geschlecht: </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>&nbsp; m&auml;nnlich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=0 ";
-	if (!$my_about->user_info["geschlecht"]) 
-	echo "checked";
-	echo " />&nbsp; weiblich&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=1 ";
-	if ($my_about->user_info["geschlecht"]) 
-	echo "checked";
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Geschlecht:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap width=\"80%\" align=\"left\"><font size=-1>&nbsp; " . _("m&auml;nnlich") . "&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=0 ";
+	if (!$my_about->user_info["geschlecht"]) {
+		echo "checked";
+	}
+	echo " />&nbsp; " . _("weiblich") . "&nbsp; <input type=\"RADIO\" name=\"geschlecht\" value=1 ";
+	if ($my_about->user_info["geschlecht"]) {
+		echo "checked";
+	}
 	echo " /></font></td></tr>";
 
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Optionale Angaben") . "</b></td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"100%\" colspan=3 align=\"center\"><b>Optionale Angaben</b></td></tr>\n";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Telefon:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"telefon\" value=\"".htmlReady($my_about->user_info["privatnr"])."\"></td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Telefon: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"telefon\" value=\"".htmlReady($my_about->user_info["privatnr"])."\"></td></tr>\n";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Anschrift:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\"></td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Anschrift: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\"></td></tr>\n";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\"></td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Homepage: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" size=\"".round($max_col*0.5)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\"></td></tr>\n";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>" . _("Hobbies:") . " </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <textarea  name=\"hobby\"  style=\"width: 50%\" cols=".round($max_col*0.5)." rows=4 maxlength=250 wrap=virtual >".htmlReady($my_about->user_info["hobby"])."</textarea></td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\"><blockquote><b>Hobbies: </td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"80%\" align=\"left\">&nbsp; <textarea  name=\"hobby\"  style=\"width: 50%\" cols=".round($max_col*0.5)." rows=4 maxlength=250 wrap=virtual >".htmlReady($my_about->user_info["hobby"])."</textarea></td></tr>\n";
-	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" colspan=2>&nbsp; <input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></td></tr>\n</table>\n</td>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" colspan=2>&nbsp; <input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=\"" . _("Änderungen übernehmen") . "\"></td></tr>\n</table>\n</td>";
 }
 
 	
 
-IF ($view=="Karriere"){
+if ($view=="Karriere") {
 	
-IF ($perm->have_perm("root") AND $username==$auth->auth["uname"])   echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br><br>Als Root haben Sie bereits genug Karriere gemacht ;-)<br><br>";
-ELSE { 
-	if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent")))
-		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.";
-	elseif ($perm->have_perm("dozent"))
-		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.";	
-	else
-		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.";	
+	if ($perm->have_perm("root") AND $username==$auth->auth["uname"]) {
+		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br><br>" . _("Als Root haben Sie bereits genug Karriere gemacht ;-)") . "<br><br>";
+	} else { 
+		if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent")))
+			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.");
+		elseif ($perm->have_perm("dozent"))
+			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");	
+		else
+			echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");	
 	
-	echo "<br />&nbsp; </td></tr>";
+		echo "<br />&nbsp; </td></tr>";
 
-	//Verändern von Raum, Sprechzeiten etc
-	if ($my_about->special_user)
-	 {
-	 reset ($my_about->user_inst);
-	 echo "<a name=\"inst_data\"></a>";   
-	 echo "<tr><td class=\"blank\">";
-	 echo "<b>&nbsp; Ich arbeite an folgenden Einrichtungen:</b>";
-	 echo "<table cellspacing=0 cellpadding=2 border=0 align=\"center\" width=\"99%\" border=\"0\">";
-	 echo "<form action=\"$PHP_SELF?cmd=special_edit&username=$username&view=$view\" method=\"POST\">";
-	 while (list ($inst_id,$details) = each ($my_about->user_inst))
-	{
-	$cssSw->resetClass();
-	$cssSw->switchClass();    
-	if ($details["inst_perms"]!= "user")
-	 {
-	 echo "<tr><td class=\"blank\">&nbsp; </td></tr>";
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <b>".htmlReady($details["Name"])."</b>";
-	//statusgruppen
-	if ($gruppen = GetStatusgruppen($inst_id, $my_about->auth_user["user_id"])){
-		echo ",&nbsp;Funktion(en): " . htmlReady(join(", ", array_values($gruppen)));
+		//Verändern von Raum, Sprechzeiten etc
+		if ($my_about->special_user) {
+	 		reset ($my_about->user_inst);
+	 		echo "<a name=\"inst_data\"></a>";   
+	 		echo "<tr><td class=\"blank\">";
+	 		echo "<b>&nbsp; " . _("Ich arbeite an folgenden Einrichtungen:") . "</b>";
+	 		echo "<table cellspacing=0 cellpadding=2 border=0 align=\"center\" width=\"99%\" border=\"0\">";
+	 		echo "<form action=\"$PHP_SELF?cmd=special_edit&username=$username&view=$view\" method=\"POST\">";
+
+	 		while (list ($inst_id,$details) = each ($my_about->user_inst)) {
+				$cssSw->resetClass();
+				$cssSw->switchClass();    
+				if ($details["inst_perms"]!= "user") {
+	 				echo "<tr><td class=\"blank\">&nbsp; </td></tr>";
+	 				echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <b>".htmlReady($details["Name"])."</b>";
+					//statusgruppen
+					if ($gruppen = GetStatusgruppen($inst_id, $my_about->auth_user["user_id"])) {
+						echo ",&nbsp;Funktion(en): " . htmlReady(join(", ", array_values($gruppen)));
+					}
+					echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"".htmlReady($details["Name"])."\"></td></tr>";
+	 				$cssSw->switchClass();
+	 				echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Raum:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"raum[$inst_id]\" value=\"".htmlReady($details["raum"])."\"></td></tr>";
+	 				$cssSw->switchClass();
+	 				echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Sprechzeit:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"sprech[$inst_id]\" value=\"".htmlReady($details["sprechzeiten"])."\"></td></tr>";
+	 				$cssSw->switchClass();
+	 				echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Telefon:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"tel[$inst_id]\" value=\"".htmlReady($details["Telefon"])."\"></td></tr>";
+	 				$cssSw->switchClass();
+	 				echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">" . _("Fax:") . " </td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"fax[$inst_id]\" value=\"".htmlReady($details["Fax"])."\"></td></tr>";
+				}
+			}
+	 		$cssSw->switchClass();
+	 		echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\">&nbsp; <input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></td></table><br />&nbsp; </form></td></tr>";
+		}
 	}
-	echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"".htmlReady($details["Name"])."\"></td></tr>";
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Raum:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"raum[$inst_id]\" value=\"".htmlReady($details["raum"])."\"></td></tr>";
-	 $cssSw->switchClass();
-	 echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Sprechzeit:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"sprech[$inst_id]\" value=\"".htmlReady($details["sprechzeiten"])."\"></td></tr>";
-	 $cssSw->switchClass();
-	 echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Telefon:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"tel[$inst_id]\" value=\"".htmlReady($details["Telefon"])."\"></td></tr>";
-	 $cssSw->switchClass();
-	 echo "<td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"left\">Fax:</td><td class=\"".$cssSw->getClass()."\" width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" size=\"".round($max_col*0.25*0.6)."\"   name=\"fax[$inst_id]\" value=\"".htmlReady($details["Fax"])."\"></td></tr>";
-	
-	 }
+
+	//Studiengänge die ich belegt habe
+	if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") { // nur für Autoren und Tutoren
+		$cssSw->resetClass();
+		$cssSw->switchClass();
+		echo "<tr><td class=\"blank\">";
+		echo "<b>&nbsp; " . _("Ich bin in folgenden Studiengängen immatrikuliert:") . "</b>";
+		echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
+		echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view#studiengaenge\" method=\"POST\">";
+		echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
+		reset ($my_about->user_studiengang);
+		$flag=FALSE;
+
+		$i=0;
+		while (list ($studiengang_id,$details) = each ($my_about->user_studiengang)) {
+			if (!$i) {
+				echo "<tr><td class=\"steelgraudunkel\" width=\"80%\">" . _("Studiengang") . "</td><td class=\"steelgraudunkel\" width=\"30%\">" . _("austragen") . "</ts></tr>";
+			}
+			$cssSw->switchClass();
+			echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\"><input type=\"CHECKBOX\" name=\"studiengang_delete[]\" value=\"$studiengang_id\"></td><tr>";
+			$i++;
+			$flag=TRUE;
+		}
+
+		if (!$flag) {
+			echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\"><br /><font size=-1><b>" . _("Sie haben sich noch keinem Studiengang zugeordnet.") . "</b><br /><br />" . _("Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!") . "</font></td><tr>";
+		}
+		$cssSw->resetClass();
+		$cssSw->switchClass();
+		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />" . _("Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden Liste aus:") . "<br>";
+		echo "<br><div align=\"center\">";
+		echo "<a name=\"studiengaenge\"></a>";   
+		$my_about->select_studiengang();
+		echo "</div><br></b>" . _("Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
+		echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br /> ";
+		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
+		echo "</form>";
 	}
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\">&nbsp; <input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></td></table><br />&nbsp; </form></td></tr>";
-	 }
-}
-
- //Studiengänge die ich belegt habe
-if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")  // nur für Autoren und Tutoren
-	 {
-	 $cssSw->resetClass();
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"blank\">";
-	 echo "<b>&nbsp; Ich bin in folgenden Studiengängen immatrikuliert:</b>";
-	 echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
-	 echo "<form action=\"$PHP_SELF?cmd=studiengang_edit&username=$username&view=$view#studiengaenge\" method=\"POST\">";
-	 echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
-	 reset ($my_about->user_studiengang);
-	 $flag=FALSE;
-
-	 $i=0;
-	 while (list ($studiengang_id,$details) = each ($my_about->user_studiengang)){
-		 if (!$i)
-			echo "<tr><td class=\"steelgraudunkel\" width=\"80%\">Studiengang</td><td class=\"steelgraudunkel\" width=\"30%\">austragen</ts></tr>";
-		 $cssSw->switchClass();
-		 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\"><input type=\"CHECKBOX\" name=\"studiengang_delete[]\" value=\"$studiengang_id\"></td><tr>";
-		 $i++;
-		 $flag=TRUE;
-	 }
-
-	 if (!$flag) echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\"><br /><font size=-1><b>Sie haben sich noch keinem Studiengang zugeordnet.</b><br /><br />Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!</font></td><tr>";
-	 $cssSw->resetClass();
-	 $cssSw->switchClass();
-	 echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden Liste aus:<br>";
-	 echo "<br><div align=\"center\">";
-	 echo "<a name=\"studiengaenge\"></a>";   
-	 $my_about->select_studiengang();
-	 echo "</div><br></b>Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.<br>";
-	 echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
-	 echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
-	 echo "</form>";
-	 }
- echo "</td></tr></table>";
+	echo "</td></tr></table>";
 
 
-
-//Institute, an denen studiert wird
-	if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")
-	 {
-	 $cssSw->resetClass();
-	 $cssSw->switchClass();
-	 echo "<tr><td class=\"blank\">";
-	 echo "<br><b>&nbsp; Ich studiere an folgenden Einrichtungen:</b>";
-	 echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
-	 echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view#einrichtungen\" method=\"POST\">";
-	 echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
-	 reset ($my_about->user_inst);
-	 $flag=FALSE;
-	 $i=0;
-	 while (list ($inst_id,$details) = each ($my_about->user_inst))
-	{
-	if ($details["inst_perms"] == "user")
-	 {
-	 if (!$i)
-		echo "<tr><td class=\"steelgraudunkel\" width=\"80%\">Einrichtung</td><td class=\"steelgraudunkel\" width=\"30%\">austragen</ts></tr>";
-	$cssSw->switchClass();    
-	 echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["Name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\"><input type=\"CHECKBOX\" name=\"inst_delete[]\" value=\"$inst_id\"></td><tr>";
-	 $i++;
-	 $flag=TRUE;
-	 }
+	//Institute, an denen studiert wird
+	if ($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor") {
+		$cssSw->resetClass();
+		$cssSw->switchClass();
+		echo "<tr><td class=\"blank\">";
+		echo "<br><b>&nbsp; " . _("Ich studiere an folgenden Einrichtungen:") . "</b>";
+		echo "<table width= \"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>\n";
+		echo "<form action=\"$PHP_SELF?cmd=inst_edit&username=$username&view=$view#einrichtungen\" method=\"POST\">";
+		echo "<tr><td width=\"30%\" valign=\"top\"><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\">";
+		reset ($my_about->user_inst);
+		$flag=FALSE;
+		$i=0;
+		while (list ($inst_id,$details) = each ($my_about->user_inst)) {
+			if ($details["inst_perms"] == "user") {
+	 			if (!$i) {
+					echo "<tr><td class=\"steelgraudunkel\" width=\"80%\">" . _("Einrichtung") . "</td><td class=\"steelgraudunkel\" width=\"30%\">" . _("austragen") . "</ts></tr>";
+				}
+				$cssSw->switchClass();    
+				echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"80%\">".htmlReady($details["Name"])."</td><td class=\"".$cssSw->getClass()."\" width=\"20%\" align=\"center\"><input type=\"CHECKBOX\" name=\"inst_delete[]\" value=\"$inst_id\"></td><tr>";
+	 			$i++;
+	 			$flag=TRUE;
+	 		}
+		}
+		if (!$flag) {
+			echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\"><br /><font size=-1><b>" . _("Sie haben sich noch keinen Einrichtungen zugeordnet.") . "</b><br /><br />" . _("Wenn Sie auf ihrer Homepage die Einrichtungen, an denen Sie studieren, auflisten wollen, k&ouml;nnen Sie diese Einrichtungen hier entragen.") . "</font></td><tr>";
+		}
+		$cssSw->resetClass();
+		$cssSw->switchClass();    
+		echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />" . _("Um sich als Student einer Einrichtung zuzuordnen, wählen sie die entsprechende Einrichtung aus der folgenden Liste aus:") . "<br>";
+		echo "<br><div align=\"center\">";
+		echo "<a name=\"einrichtungen\"></a>";   
+		$my_about->select_inst();
+		echo "</div><br></b>" . _("Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie die entsprechenden Felder in der linken Tabelle.") . "<br>";
+		echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br /> ";
+		echo "<input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"></blockquote></td></tr>";
+		echo "</form>";
 	}
-	 if (!$flag) echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\"><br /><font size=-1><b>Sie haben sich noch keinen Einrichtungen zugeordnet.</b><br /><br />Wenn Sie auf ihrer Homepage die Einrichtungen, an denen Sie studieren, auflisten wollen, k&ouml;nnen Sie diese Einrichtungen hier entragen.</font></td><tr>";
-	 $cssSw->resetClass();
-	 $cssSw->switchClass();    
-	 echo "</table></td><td class=\"".$cssSw->getClass()."\" width=\"70%\" align=\"left\" valign=\"top\"><blockquote><br />Um sich als Student einer Einrichtung zuzuordnen, wählen sie die entsprechende Einrichtung aus der folgenden Liste aus:<br>";
-	 echo "<br><div align=\"center\">";
-	 echo "<a name=\"einrichtungen\"></a>";   
-	 $my_about->select_inst();
-	 echo "</div><br></b>Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie die entsprechenden Felder in der linken Tabelle.<br>";
-	 echo "Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.<br /><br /> ";
-	 echo "<input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"></blockquote></td></tr>";
-	 echo "</form>";
-	 }
- echo "</td></tr></table>";
+	echo "</td></tr></table>";
 }   
 
-IF ($view=="Lebenslauf"){
+if ($view=="Lebenslauf") {
 	$cssSw->switchClass();
-	if ($my_about->auth_user["perms"] == "dozent")
-	 echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.";
-	else
-	 echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>Hier können sie Ihren Lebenslauf bearbeiten.";
-	  
+	if ($my_about->auth_user["perms"] == "dozent") {
+		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.");
+	} else {
+		echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>" . _("Hier können sie Ihren Lebenslauf bearbeiten.");
+	}  
 	echo "<br>&nbsp; </td></tr>\n<tr><td class=blank><table align=\"center\" width=\"99%\" align=\"center\" border=0 cellpadding=2 cellspacing=0>";
 	echo "<tr><form action=\"$PHP_SELF?cmd=edit_leben&username=$username&view=$view\" method=\"POST\" name=\"pers\">";
-	echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Lebenslauf:</b><br>";
+	echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>" . _("Lebenslauf:") . "</b><br>";
 	echo "<textarea  name=\"lebenslauf\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["lebenslauf"])."</textarea><a name=\"lebenslauf\"></a></td></tr>\n";
-	if ($my_about->auth_user["perms"] == "dozent"){
-	   $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Schwerpunkte:</b><br>";
-	echo "<textarea  name=\"schwerp\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["schwerp"])."</textarea><a name=\"schwerpunkte\"></a></td></tr>\n";
+	if ($my_about->auth_user["perms"] == "dozent") {
 		$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>Publikationen:</b><br>";
-	echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>" . _("Schwerpunkte:") . "</b><br>";
+		echo "<textarea  name=\"schwerp\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["schwerp"])."</textarea><a name=\"schwerpunkte\"></a></td></tr>\n";
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>" . _("Publikationen:") . "</b><br>";
+		echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
 	}
-	echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" src=\"pictures/buttons/uebernehmen-button.gif\" border=0 value=\"Änderungen übernehmen\"><br></blockquote></td></tr>\n</table>\n</td>";
+	echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</td>";
 }
 
-IF ($view=="Sonstiges"){
-	IF ($freie=="create_freie") create_freie();
-	IF ($freie=="delete_freie") delete_freie($freie_id);
-	IF ($freie=="update_freie") update_freie();
+if ($view=="Sonstiges") {
+	if ($freie=="create_freie") create_freie();
+	if ($freie=="delete_freie") delete_freie($freie_id);
+	if ($freie=="update_freie") update_freie();
 	if ($freie=="order_freie") order_freie($cat_id,$direction,$username);
 	print_freie($username);
-	}
+}
 
 // Ab hier die Views der MyStudip-Sektion
-IF ($view=="Login"){
-	if ($my_about->check=="user" && !$perm->have_perm("admin")){
+if ($view=="Login") {
+	if ($my_about->check=="user" && !$perm->have_perm("admin")) {
 		echo "<tr><td colspan=2 class=blank><blockquote>";
-		echo "<br><br>Um die automatische Anmeldung zu nutzen müssen sie ihre persönliche Login Datei auf ihren Rechner kopieren. Mit dem folgenden Link öffnet sich ein Fenster, indem sie ihr Paßwort eingeben müssen.";
-		echo "Dann wird die Datei erstellt und zu ihrem Rechner geschickt.<br><br>";
-		echo "<b><center><a href=\"javascript:oeffne();\">Autologin Datei erzeugen</a></b></center>";
-		echo "<br><br><b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große Sicherheitslücke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich damit unter ihrem Namen in Stud.IP einloggen!";
+		echo "<br><br>" . _("Um die automatische Anmeldung zu nutzen müssen sie ihre persönliche Login Datei auf ihren Rechner kopieren. Mit dem folgenden Link öffnet sich ein Fenster, indem sie ihr Paßwort eingeben müssen.") . " ";
+		echo _("Dann wird die Datei erstellt und zu ihrem Rechner geschickt.") . "<br><br>";
+		echo "<b><center><a href=\"javascript:oeffne();\">" . _("Autologin Datei erzeugen") . "</a></b></center>";
+		echo "<br><br>" . _("<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große Sicherheitslücke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich damit unter ihrem Namen in Stud.IP einloggen!");
 		echo "</blockquote></td></tr>";
-		}
-	ELSE {
-		echo "<blockquote><br><br>Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - tragen Sie Verantwortung!";
+	} else {
+		echo "<blockquote><br><br>" . _("Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - tragen Sie Verantwortung!");
 		echo "</blockquote></td></tr>";
-		}
-	}	
+	}
+}	
 
 if($view == "Forum"){
 	require_once("forumsettings.inc.php");
