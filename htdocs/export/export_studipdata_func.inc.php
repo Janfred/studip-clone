@@ -54,6 +54,7 @@ function export_range($range_id)
 	{
 		$range_name = $db->f("Name");
 		output_data ( xml_header(), $o_mode);
+		$output_startet = true;
 		export_inst( $range_id );
 		
 	}
@@ -72,7 +73,8 @@ function export_range($range_id)
 	if (($db->next_record()) And ($db->f("Name") != ""))
 	{
 		$range_name = $db->f("Name");
-		output_data ( xml_header(), $o_mode);
+		if (!$output_startet) 
+			output_data ( xml_header(), $o_mode);
 		export_inst( $db->f("Institut_id"), $db->f("Seminar_id") );
 	}
 
