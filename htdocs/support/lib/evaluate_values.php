@@ -173,7 +173,7 @@ if (($supporter) && ($sent_con_id)) {
 	} else
 		$con_end = mktime(23,59,59,$con_end_month, $con_end_day, $con_end_year);
 		
-	if ((!$illegal_begin) && (!$illegal_end) && ($con_begin <= $con_end)) {
+	if ((!$illegal_begin) && (!$illegal_end) && ($con_begin < $con_end)) {
 		$changedCon->setContractBegin($con_begin);
 		$changedCon->setContractEnd($con_end);
 	} elseif ((!$illegal_begin) && ($con_begin < $changedCon->getContractEnd()))
@@ -293,7 +293,7 @@ if (($supporter) && ($evt_sent_x)) {
 		} else
 			$evt_end = mktime($evt_end_hour[$key],$evt_end_min[$key],0,$evt_end_month[$key], $evt_end_day[$key], $evt_end_year[$key]);
 		
-		if ((!$illegal_begin) && (!$illegal_end) && ($evt_begin < $evt_end)) {
+		if ((!$illegal_begin) && (!$illegal_end) && ($evt_begin <= $evt_end)) {
 			$changedEvt->setBegin($evt_begin);
 			$changedEvt->setEnd($evt_end);
 		} elseif ((!$illegal_begin) && ($evt_begin < $changedEvt->getEnd()))
