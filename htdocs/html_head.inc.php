@@ -48,20 +48,18 @@ define("PHPDOC_DUMMY",true);
 <html>
 	<head>
 <?
-if ($AUTH_LIFETIME) {
-?>
-		<meta http-equiv="REFRESH" CONTENT="<?=$AUTH_LIFETIME*60;?>; URL=logout.php">
-<?
+if ($AUTH_LIFETIME && (basename($_SERVER['SCRIPT_NAME']) != 'logout.php')) {
+	echo "\t\t",'<meta http-equiv="REFRESH" CONTENT="',$AUTH_LIFETIME*60,'; URL=logout.php">', "\n";
 }
 ?>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 <?php
 if (isset($FAVICON))
-		printf("<link rel=\"SHORTCUT ICON\" href=\"%s\">", $FAVICON);
+		printf("\t\t<link rel=\"SHORTCUT ICON\" href=\"%s\">\n", $FAVICON);
 if (!isset($_html_head_title))  // if not set, use default title
 	$_html_head_title = ($HTML_HEAD_TITLE) ? $HTML_HEAD_TITLE : "Stud.IP";
-printf("\t\t<title>%s</title>",$_html_head_title);
+printf("\t\t<title>%s</title>\n",$_html_head_title);
 if (!isset($_include_stylesheet))  // if not set, use default stylesheet
 	$_include_stylesheet ="style.css";
 if ($_include_stylesheet != "")  // if empty, use no stylesheet
