@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: STUD.IP 0.9.0\n"
-"POT-Creation-Date: 2003-01-14 09:00+0100\n"
+"POT-Creation-Date: 2003-01-17 15:07+0100\n"
 "PO-Revision-Date: 2003-01-13 20:55+GMT\n"
 "Last-Translator: \n"
 "Language-Team:  <de@li.org>\n"
@@ -13,6 +13,107 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
+
+#: about.php:134
+msgid "kein persönliches Bild vorhanden"
+msgstr ""
+
+#: about.php:143
+msgid "e-mail:"
+msgstr ""
+
+#: about.php:144
+msgid "Telefon (privat):"
+msgstr ""
+
+#: about.php:145
+msgid "Adresse (privat):"
+msgstr ""
+
+#: about.php:149 edit_about.php:951
+msgid "Homepage:"
+msgstr ""
+
+#: about.php:156
+msgid "Wo ich studiere:"
+msgstr ""
+
+#: about.php:166
+msgid "Wo ich arbeite:"
+msgstr ""
+
+#: about.php:180 edit_about.php:995 show_dates.inc.php:483
+msgid "Raum:"
+msgstr ""
+
+#: about.php:182 edit_about.php:997
+msgid "Sprechzeit:"
+msgstr ""
+
+#: about.php:184 edit_about.php:947 edit_about.php:999
+msgid "Telefon:"
+msgstr ""
+
+#: about.php:186 edit_about.php:1001
+msgid "Fax:"
+msgstr ""
+
+#: about.php:199
+msgid "Stud.IP Messenger starten"
+msgstr ""
+
+#: about.php:201
+msgid "Nachricht an User:"
+msgstr ""
+
+#: about.php:201
+msgid "Nachricht an User verschicken"
+msgstr ""
+
+#: about.php:203
+msgid "Zu Buddies hinzuf&uuml;gen"
+msgstr ""
+
+#: about.php:210
+msgid "Zur Highscoreliste"
+msgstr ""
+
+#: about.php:210
+msgid "Ihre Stud.IP-Score:"
+msgstr ""
+
+#: about.php:210
+msgid "Ihr Rang:"
+msgstr ""
+
+#: about.php:215
+msgid "Stud.IP-Score:"
+msgstr ""
+
+#: about.php:215
+msgid "Rang:"
+msgstr ""
+
+#: about.php:240
+msgid "Lebenslauf"
+msgstr ""
+
+#: about.php:247
+msgid "Hobbies"
+msgstr ""
+
+#: about.php:254
+msgid "Publikationen"
+msgstr ""
+
+#: about.php:261
+msgid "Arbeitsschwerpunkte"
+msgstr ""
+
+#: about.php:283
+#, fuzzy
+msgid "Veranstaltungen"
+msgstr "Type of course"
 
 #: admin_admission.php:208 admin_admission.php:212 admin_metadates.php:158
 msgid "mm"
@@ -223,7 +324,7 @@ msgid ""
 "gew&auml;hlt haben."
 msgstr ""
 
-#: admin_admission.php:585 admin_admission.php:587
+#: admin_admission.php:585 admin_admission.php:587 edit_about.php:891
 msgid "Passwort-Wiederholung:"
 msgstr ""
 
@@ -554,7 +655,7 @@ msgstr ""
 msgid "So.: "
 msgstr ""
 
-#: dates.inc.php:72 mein_stundenplan.php:232
+#: dates.inc.php:72 mein_stundenplan.php:231
 msgid "n. A."
 msgstr ""
 
@@ -562,23 +663,507 @@ msgstr ""
 msgid "nicht angegeben"
 msgstr ""
 
-#: export.php:66
+#: edit_about.php:130
+#, c-format
+msgid ""
+"Die hochgeladene Bilddatei ist %s KB groß!<br>Die maximale Dateigröße "
+"beträgt %s KB!"
+msgstr ""
+
+#: edit_about.php:135
+msgid "Sie haben keine Datei zum hochladen ausgewählt!"
+msgstr ""
+
+#: edit_about.php:147
+#, c-format
+msgid ""
+"Der Dateityp der Bilddatei ist falsch (%s)!<br>Es sind nur die "
+"Dateiendungen .gif und .jpg erlaubt!"
+msgstr ""
+
+#: edit_about.php:154
+msgid "Fehler beim kopieren der Datei!"
+msgstr ""
+
+#: edit_about.php:172
+msgid ""
+"Die Bilddatei wurde erfolgreich hochgeladen! Eventuell sehen Sie das neue "
+"Bild erst nach einem Reload dieser Seite."
+msgstr ""
+
+#: edit_about.php:174
+msgid "Eine neue Bilddatei wurde hochgeladen.\n"
+msgstr ""
+
+#: edit_about.php:186
+#, c-format
+msgid "Fehler beim L&ouml;schen in user_studiengang bei ID=%s"
+msgstr ""
+
+#: edit_about.php:193
+#, c-format
+msgid "Fehler beim Einf&uuml;gen in user_studiengang bei ID=%s"
+msgstr ""
+
+#: edit_about.php:197
+msgid "Die Zuordnung zu Studiengängen wurde ge&auml;ndert."
+msgstr ""
+
+#: edit_about.php:199
+msgid "Die Zuordnung zu Studiengängen wurde geändert!\n"
+msgstr ""
+
+#: edit_about.php:213
+#, c-format
+msgid "Fehler beim L&ouml;schen in user_inst bei ID=%s"
+msgstr ""
+
+#: edit_about.php:220
+#, c-format
+msgid "Fehler beim Einf&uuml;gen in user_inst bei ID=%s"
+msgstr ""
+
+#: edit_about.php:224
+msgid "Die Zuordnung zu Einrichtungen wurde ge&auml;ndert."
+msgstr ""
+
+#: edit_about.php:226
+msgid "Die Zuordnung zu Einrichtungen wurde geändert!\n"
+msgstr ""
+
+#: edit_about.php:238
+#, c-format
+msgid "Ihre Daten an der Einrichtung %s wurden ge&auml;ndert"
+msgstr ""
+
+#: edit_about.php:240
+#, c-format
+msgid "Ihre Daten an der Einrichtung %s wurden geändert.\n"
+msgstr ""
+
+#: edit_about.php:254
+msgid "msg§Daten an Lebenslauf u.a. ge&auml;ndert"
+msgstr ""
+
+#: edit_about.php:256
+msgid "Daten Daten an Lebenslauf u.a. wurden geändert.\n"
+msgstr ""
+
+#: edit_about.php:276
+msgid "Ihre pers&ouml;nlichen Daten wurden ge&auml;ndert."
+msgstr ""
+
+#: edit_about.php:278
+msgid "Ihre persönlichen Daten wurden geändert.\n"
+msgstr ""
+
+#: edit_about.php:297
+msgid "Das Paßwort ist zu kurz!"
+msgstr ""
+
+#: edit_about.php:301
+msgid ""
+"Die Wiederholung des Paßwortes ist falsch! Bitte geben sie das exakte "
+"Paßwort ein!"
+msgstr ""
+
+#: edit_about.php:309
+msgid "Ihr Passwort wurde ge&auml;ndert!"
+msgstr ""
+
+#: edit_about.php:314
+msgid "Der Vorname fehlt, oder ist unsinnig!"
+msgstr ""
+
+#: edit_about.php:318
+msgid "Der Nachname fehlt, oder ist unsinnig!"
+msgstr ""
+
+#: edit_about.php:322
+msgid "Ihr Name wurde ge&auml;ndert!"
+msgstr ""
+
+#: edit_about.php:327
+msgid "Der gewählte Username ist zu kurz!"
+msgstr ""
+
+#: edit_about.php:332
+#, c-format
+msgid ""
+"Der Username wird bereits von einem anderen User (%s %s) verwendet. Bitte "
+"wählen sie einen Anderen!"
+msgstr ""
+
+#: edit_about.php:336
+msgid "Ihr Username wurde ge&auml;ndert!"
+msgstr ""
+
+#: edit_about.php:349
+msgid "Die E-Mail Addresse fehlt, oder ist falsch geschrieben!"
+msgstr ""
+
+#: edit_about.php:354
+msgid ""
+"Der Mailserver ist nicht erreichbar. Bitte überprüfen Sie, ob Sie E-Mails "
+"mit der angegebenen Addresse verschicken können!"
+msgstr ""
+
+#: edit_about.php:364
+msgid ""
+"Die angegebene E-Mail Addresse ist nicht erreichbar. Bitte überprüfen Sie "
+"Ihre Angaben!"
+msgstr ""
+
+#: edit_about.php:371
+#, c-format
+msgid ""
+"Die angegebene E-Mail Addresse wird bereits von einem anderen User (%s %s) "
+"verwendet. Sie müssen eine andere E-Mail Addresse angeben!"
+msgstr ""
+
+#: edit_about.php:406
+msgid "Ihre Email Addresse wurde geändert!"
+msgstr ""
+
+#: edit_about.php:406
+msgid ""
+"ACHTUNG!<br>Aus Sicherheitsgründen wurde auch ihr Paßwort geändert, es wurde "
+"an die neu angegebene Email Addresse geschickt!"
+msgstr ""
+
+#: edit_about.php:561
+msgid "Um eine korrekte Authentifizierung mit ihren neuen Daten"
+msgstr ""
+
+#: edit_about.php:566
+msgid "Login"
+msgstr ""
+
+#: edit_about.php:585
+msgid "Zugriff auf Userdaten verweigert"
+msgstr ""
+
+#: edit_about.php:586
+msgid ""
+"<a href=\"index.php\"><b>&nbsp;Hier</b></a> geht es wieder zur Anmeldung "
+"beziehungsweise Startseite.<br />&nbsp;"
+msgstr ""
+
+#: edit_about.php:661
+msgid ""
+"Ihre persönliche Seite wurde von einem Administrator verändert.\n"
+" Folgende Veränderungen wurden vorgenommen:\n"
+" \n"
+msgstr ""
+
+#: edit_about.php:812
+msgid "Hochladen des pers&ouml;nlichen Bildes"
+msgstr ""
+
+#: edit_about.php:815
+msgid "Benutzerdaten bearbeiten"
+msgstr ""
+
+#: edit_about.php:819
+msgid "Studienkarriere und Einrichtungen bearbeiten"
+msgstr ""
+
+#: edit_about.php:821
+msgid "Studienkarriere bearbeiten"
+msgstr ""
+
+#: edit_about.php:825
+msgid "Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten"
+msgstr ""
+
+#: edit_about.php:827
+msgid "Lebenslauf bearbeiten"
+msgstr ""
+
+#: edit_about.php:830
+msgid "Eigene Kategorien bearbeiten"
+msgstr ""
+
+#: edit_about.php:833
+msgid "Autologin einrichten"
+msgstr ""
+
+#: edit_about.php:839
+#, c-format
+msgid "Daten von: %s %s (%s), Status: %s"
+msgstr ""
+
+#: edit_about.php:855
+msgid ""
+"Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre "
+"Homepage hochladen."
+msgstr ""
+
+#: edit_about.php:857
+msgid "Aktuell angezeigtes Bild:"
+msgstr ""
+
+#: edit_about.php:860
+msgid "kein pers&ouml;nliches Bild vorhanden"
+msgstr ""
+
+#: edit_about.php:867
+msgid "Upload eines Bildes:"
+msgstr ""
+
+#: edit_about.php:867
+msgid ""
+"1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus."
+msgstr ""
+
+#: edit_about.php:869
+msgid "2. Klicken sie auf <b>Bild senden</b>, um das Bild hochzuladen."
+msgstr ""
+
+#: edit_about.php:878
+msgid "Hier können sie Ihre Benutzerdaten verändern."
+msgstr ""
+
+#: edit_about.php:879
+#, c-format
+msgid ""
+"Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt "
+"werden."
+msgstr ""
+
+#: edit_about.php:889 edit_about.php:898
+msgid "Username:"
+msgstr ""
+
+#: edit_about.php:891 edit_about.php:900
+msgid "Paßwort:"
+msgstr ""
+
+#: edit_about.php:891
+msgid "neues Passwort:"
+msgstr ""
+
+#: edit_about.php:893 edit_about.php:902
+#, fuzzy
+msgid "Name:"
+msgstr "Name"
+
+#: edit_about.php:893
+msgid "Vorname:"
+msgstr ""
+
+#: edit_about.php:893
+#, fuzzy
+msgid "Nachname:"
+msgstr "Name"
+
+#: edit_about.php:895 edit_about.php:904
+msgid "Email:"
+msgstr ""
+
+#: edit_about.php:898
+msgid "Adminzugriff hier nicht möglich!"
+msgstr ""
+
+#: edit_about.php:907
+msgid "Titel:"
+msgstr ""
+
+#: edit_about.php:920
+msgid "Titel nachgest.:"
+msgstr ""
+
+#: edit_about.php:934
+msgid "Geschlecht:"
+msgstr ""
+
+#: edit_about.php:934
+msgid "m&auml;nnlich"
+msgstr ""
+
+#: edit_about.php:938
+msgid "weiblich"
+msgstr ""
+
+#: edit_about.php:945
+msgid "Optionale Angaben"
+msgstr ""
+
+#: edit_about.php:949
+msgid "Anschrift:"
+msgstr ""
+
+#: edit_about.php:953
+msgid "Hobbies:"
+msgstr ""
+
+#: edit_about.php:955 edit_about.php:1005 edit_about.php:1043
+#: edit_about.php:1083 edit_about.php:1108
+#: StudipRangeTreeViewAdmin.class.php:687
+msgid "Änderungen übernehmen"
+msgstr ""
+
+#: edit_about.php:963
+msgid "Als Root haben Sie bereits genug Karriere gemacht ;-)"
+msgstr ""
+
+#: edit_about.php:966
+msgid ""
+"Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an "
+"Einrichtungen, an denen Sie arbeiten, machen."
+msgstr ""
+
+#: edit_about.php:968
+msgid ""
+"Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie "
+"arbeiten, machen."
+msgstr ""
+
+#: edit_about.php:970
+msgid "Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen."
+msgstr ""
+
+#: edit_about.php:979
+#, fuzzy
+msgid "Ich arbeite an folgenden Einrichtungen:"
+msgstr "Institution"
+
+#: edit_about.php:1014
+msgid "Ich bin in folgenden Studiengängen immatrikuliert:"
+msgstr ""
+
+#: edit_about.php:1024
+msgid "Studiengang"
+msgstr ""
+
+#: edit_about.php:1024 edit_about.php:1064
+msgid "austragen"
+msgstr ""
+
+#: edit_about.php:1033
+msgid "Sie haben sich noch keinem Studiengang zugeordnet."
+msgstr ""
+
+#: edit_about.php:1033
+msgid "Tragen Sie bitte hier die Angaben aus Ihrem Studierendenausweis ein!"
+msgstr ""
+
+#: edit_about.php:1037
+msgid ""
+"Wählen Sie die Studiengänge auf Ihrem Studierendenausweis aus der folgenden "
+"Liste aus:"
+msgstr ""
+
+#: edit_about.php:1041
+msgid ""
+"Wenn Sie einen Studiengang wieder ausgetragen möchten, markieren Sie die "
+"entsprechenden Felder in der linken Tabelle."
+msgstr ""
+
+#: edit_about.php:1042 edit_about.php:1082
+msgid ""
+"Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen "
+"durchgeführt."
+msgstr ""
+
+#: edit_about.php:1054
+#, fuzzy
+msgid "Ich studiere an folgenden Einrichtungen:"
+msgstr "Type of course"
+
+#: edit_about.php:1064 freie.php:168
+msgid "Einrichtung"
+msgstr "Institution"
+
+#: edit_about.php:1073
+msgid "Sie haben sich noch keinen Einrichtungen zugeordnet."
+msgstr ""
+
+#: edit_about.php:1073
+msgid ""
+"Wenn Sie auf ihrer Homepage die Einrichtungen, an denen Sie studieren, "
+"auflisten wollen, k&ouml;nnen Sie diese Einrichtungen hier entragen."
+msgstr ""
+
+#: edit_about.php:1077
+msgid ""
+"Um sich als Student einer Einrichtung zuzuordnen, wählen sie die "
+"entsprechende Einrichtung aus der folgenden Liste aus:"
+msgstr ""
+
+#: edit_about.php:1081
+msgid ""
+"Wenn sie aus Einrichtungen wieder ausgetragen werden möchten, markieren sie "
+"die entsprechenden Felder in der linken Tabelle."
+msgstr ""
+
+#: edit_about.php:1092
+msgid ""
+"Hier können sie Ihren Lebenslauf, Publikationen und Arbeitschwerpunkte "
+"bearbeiten."
+msgstr ""
+
+#: edit_about.php:1094
+msgid "Hier können sie Ihren Lebenslauf bearbeiten."
+msgstr ""
+
+#: edit_about.php:1098
+msgid "Lebenslauf:"
+msgstr ""
+
+#: edit_about.php:1102
+msgid "Schwerpunkte:"
+msgstr ""
+
+#: edit_about.php:1105
+msgid "Publikationen:"
+msgstr ""
+
+#: edit_about.php:1148
+msgid ""
+"Um die automatische Anmeldung zu nutzen müssen sie ihre persönliche Login "
+"Datei auf ihren Rechner kopieren. Mit dem folgenden Link öffnet sich ein "
+"Fenster, indem sie ihr Paßwort eingeben müssen."
+msgstr ""
+
+#: edit_about.php:1149
+msgid "Dann wird die Datei erstellt und zu ihrem Rechner geschickt."
+msgstr ""
+
+#: edit_about.php:1150
+msgid "Autologin Datei erzeugen"
+msgstr ""
+
+#: edit_about.php:1151
+msgid ""
+"<b>ACHTUNG!</b> Die automatische Anmeldung stellt eine große "
+"Sicherheitslücke dar. Jeder, der Zugriff auf ihren Rechner hat, kann sich "
+"damit unter ihrem Namen in Stud.IP einloggen!"
+msgstr ""
+
+#: edit_about.php:1154
+msgid ""
+"Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - tragen Sie "
+"Verantwortung!"
+msgstr ""
+
+#: export.php:91
 msgid "Fehlerhafter Seitenaufruf"
 msgstr ""
 
-#: export.php:71
+#: export.php:96
 msgid ""
 "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr ""
 
-#: export.php:85
+#: export.php:110
 msgid ""
 "Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert "
 "werden k&ouml;nnen, muss das Exportmodul in den Systemeinstellungen "
 "freigeschaltet werden. Wenden Sie sich bitte an den Administrator."
 msgstr ""
 
-#: export.php:86
+#: export.php:111
 msgid "Exportmodul nicht eingebunden"
 msgstr ""
 
@@ -643,10 +1228,6 @@ msgstr "Name"
 #: freie.php:167
 msgid "Veranstaltungstyp"
 msgstr "Type of course"
-
-#: freie.php:168
-msgid "Einrichtung"
-msgstr "Institution"
 
 #: freie.php:169
 msgid "Inhalt"
@@ -740,6 +1321,25 @@ msgstr ""
 #, fuzzy
 msgid "Einrichtung auswählen"
 msgstr "Institution"
+
+#: mystudip.inc.php:41
+msgid "Allgemeine Stud.IP-Einstellungen anpassen"
+msgstr ""
+
+#: mystudip.inc.php:44
+msgid ""
+"Hier k&ouml;nnen Sie die Ansicht von Stud.IP nach Ihren Vorstellungen "
+"anpassen.<br>Sie k&ouml;nnen z.B. Ihre individuell bevorzugte Sprache "
+"einstellen."
+msgstr ""
+
+#: mystudip.inc.php:52
+msgid "Sprache:"
+msgstr ""
+
+#: mystudip.inc.php:65
+msgid "&Auml;nderungen &uuml;bernehmen"
+msgstr ""
 
 #: sem_verify.php:72
 #, fuzzy
@@ -1031,12 +1631,8 @@ msgid ""
 "teilnehmen zu d&uuml;rfen!"
 msgstr ""
 
-#: show_dates.inc.php:482
+#: show_dates.inc.php:478
 msgid "Kategorie:"
-msgstr ""
-
-#: show_dates.inc.php:487
-msgid "Raum:"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:167
@@ -1257,10 +1853,6 @@ msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:681
 msgid "Datenfeld nach unten"
-msgstr ""
-
-#: StudipRangeTreeViewAdmin.class.php:687
-msgid "Änderungen übernehmen"
 msgstr ""
 
 #: StudipRangeTreeViewAdmin.class.php:690
