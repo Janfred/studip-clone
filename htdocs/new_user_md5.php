@@ -42,94 +42,95 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
-
 // Check if there was a submission
-while ( is_array($HTTP_POST_VARS) 
-		 && list($key, $val) = each($HTTP_POST_VARS)) {
-	switch ($key) {
-
-	// Create a new user
-	case "create_x":
-
-		$UserManagement = new UserManagement;
-		
-		if (!$title_front)
-			$title_front = $title_front_chooser;
-		if (!$title_rear)
-			$title_rear = $title_rear_chooser;
-
-		$newuser = array(	'auth_user_md5.username' => stripslashes(trim($username)),
-											'auth_user_md5.Vorname' => stripslashes(trim($Vorname)),
-											'auth_user_md5.Nachname' => stripslashes(trim($Nachname)),
-											'auth_user_md5.Email' => stripslashes(trim($Email)),
-											'auth_user_md5.perms' => implode($perms,","),
-											'user_info.title_front' => stripslashes(trim($title_front)),
-											'user_info.title_rear' => stripslashes(trim($title_rear)),
-											'user_info.geschlecht' => stripslashes(trim($geschlecht)),
-										);
-		
-		$UserManagement->createNewUser($newuser);
-		
-		break;
-
-
-	// Change user parameters
-	case "u_edit_x":
-
-		$UserManagement = new UserManagement($u_id);
-
-		$newuser = array();
-		if (isset($username))
-			$newuser['auth_user_md5.username'] = stripslashes(trim($username));
-		if (isset($Vorname))
-			$newuser['auth_user_md5.Vorname'] = stripslashes(trim($Vorname));
-		if (isset($Nachname))
-			$newuser['auth_user_md5.Nachname'] = stripslashes(trim($Nachname));
-		if (isset($Email))
-			$newuser['auth_user_md5.Email'] = stripslashes(trim($Email));
-		if (isset($perms))
-			$newuser['auth_user_md5.perms'] = implode($perms,",");
-		if (isset($title_front) || isset($title_front_chooser)) {
+if (check_ticket($ticket)){
+	while ( is_array($HTTP_POST_VARS) 
+			 && list($key, $val) = each($HTTP_POST_VARS)) {
+		switch ($key) {
+	
+		// Create a new user
+		case "create_x":
+	
+			$UserManagement = new UserManagement;
+			
 			if (!$title_front)
 				$title_front = $title_front_chooser;
-			$newuser['user_info.title_front'] = stripslashes(trim($title_front));
-		}
-		if (isset($title_rear) || isset($title_rear_chooser)) {
 			if (!$title_rear)
 				$title_rear = $title_rear_chooser;
-			$newuser['user_info.title_rear'] = stripslashes(trim($title_rear));
-		}
-		if (isset($geschlecht))
-			$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
+	
+			$newuser = array(	'auth_user_md5.username' => stripslashes(trim($username)),
+												'auth_user_md5.Vorname' => stripslashes(trim($Vorname)),
+												'auth_user_md5.Nachname' => stripslashes(trim($Nachname)),
+												'auth_user_md5.Email' => stripslashes(trim($Email)),
+												'auth_user_md5.perms' => implode($perms,","),
+												'user_info.title_front' => stripslashes(trim($title_front)),
+												'user_info.title_rear' => stripslashes(trim($title_rear)),
+												'user_info.geschlecht' => stripslashes(trim($geschlecht)),
+											);
 			
-		$UserManagement->changeUser($newuser);
+			$UserManagement->createNewUser($newuser);
+			
+			break;
+	
+	
+		// Change user parameters
+		case "u_edit_x":
+	
+			$UserManagement = new UserManagement($u_id);
+	
+			$newuser = array();
+			if (isset($username))
+				$newuser['auth_user_md5.username'] = stripslashes(trim($username));
+			if (isset($Vorname))
+				$newuser['auth_user_md5.Vorname'] = stripslashes(trim($Vorname));
+			if (isset($Nachname))
+				$newuser['auth_user_md5.Nachname'] = stripslashes(trim($Nachname));
+			if (isset($Email))
+				$newuser['auth_user_md5.Email'] = stripslashes(trim($Email));
+			if (isset($perms))
+				$newuser['auth_user_md5.perms'] = implode($perms,",");
+			if (isset($title_front) || isset($title_front_chooser)) {
+				if (!$title_front)
+					$title_front = $title_front_chooser;
+				$newuser['user_info.title_front'] = stripslashes(trim($title_front));
+			}
+			if (isset($title_rear) || isset($title_rear_chooser)) {
+				if (!$title_rear)
+					$title_rear = $title_rear_chooser;
+				$newuser['user_info.title_rear'] = stripslashes(trim($title_rear));
+			}
+			if (isset($geschlecht))
+				$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
+				
+			$UserManagement->changeUser($newuser);
+			
+			break;
+	
+	
+		// Change user password
+		case "u_pass_x":
 		
-		break;
-
-
-	// Change user password
-	case "u_pass_x":
+			$UserManagement = new UserManagement($u_id);
 	
-		$UserManagement = new UserManagement($u_id);
-
-		$UserManagement->setPassword();
-
-		break;
-
-
-	// Delete the user
-	case "u_kill_x":
+			$UserManagement->setPassword();
 	
-		$UserManagement = new UserManagement($u_id);
-
-		$UserManagement->deleteUser();
-
-		break;
-
+			break;
 	
-	default:
-		break;
- 	}
+	
+		// Delete the user
+		case "u_kill_x":
+		
+			$UserManagement = new UserManagement($u_id);
+	
+			$UserManagement->deleteUser();
+	
+			break;
+	
+		
+		default:
+			break;
+		}
+	}
 }
 
 // einzelnen Benutzer anzeigen
@@ -389,6 +390,7 @@ if (isset($_GET['details'])) {
 				?>
 				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
 				&nbsp;</td></tr>
+			<input type="hidden" name="ticket" value="<?=get_ticket();?>">
 			</form>
 			
 			<tr><td colspan=3 class="blank">&nbsp;</td></tr>
