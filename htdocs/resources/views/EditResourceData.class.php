@@ -117,11 +117,16 @@ class EditResourceData {
 		$resReq = new RoomRequest();
 
 		$killButton = TRUE;
-			
+
 		if ($new_assign_object)
 			$resAssign = unserialize($new_assign_object);
 		else
 			$resAssign=new AssignObject($assign_id);
+		
+		//workaround anoack: new AssignObjects need a resource_id !
+		if ($resAssign->isNew()){
+			$resAssign->setResourceId($resources_data['actual_object']);
+		}
 		
 		if (($add_ts) && ($resAssign->isNew())) {
 			$resAssign->setBegin($add_ts);
@@ -140,24 +145,36 @@ class EditResourceData {
 		}
 
 		//load the object perms
-		$ObjectPerms =& ResourceObjectPerms::Factory($resAssign->getResourceId());
-		$ResourceObjectPerms = $ObjectPerms;
+		$ResourceObjectPerms =& ResourceObjectPerms::Factory($resAssign->getResourceId());
 		
 		//in some case, we load the perms from the assign object, if it has an owner
-		if (($ObjectPerms->getUserPerm() != "admin") && (!$resAssign->isNew()) && (!$new_assign_object)) {
+		if (($ResourceObjectPerms->getUserPerm() != "admin") && (!$resAssign->isNew()) && (!$new_assign_object)) {
 			//load the assign-object perms of a saved object
 			$SavedStateAssignObject = new AssignObject($resAssign->getId());
-			if ($SavedStateAssignObject->getAssignUserId())
+			if ($SavedStateAssignObject->getAssignUserId()){
+				unset($ObjectPerms);
 				$ObjectPerms = new AssignObjectPerms($resAssign->getId());
+			}
 		}
-
-		if ((!$ObjectPerms->havePerm("tutor")) && (!$resAssign->isNew()) && (!$new_assign_object)) {
+		if (!isset($ObjectPerms)){
+			$ObjectPerms =& $ResourceObjectPerms;
+		}
+		
+		if ((!$ObjectPerms->havePerm("tutor"))){ // && (!$resAssign->isNew()) && (!$new_assign_object)) {
 			$killButton = FALSE;
 			$lockedAssign = TRUE;
 		}
-
+	
 		if ($resAssign->isNew())
 			$killButton = FALSE;
+			
+		if ($resAssign->isNew() && $lockedAssign){
+			echo "<div align=\"center\"><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
+			echo (_("Sie haben nicht die Berechtigung, für diese Resource eine Belegung zu erstellen."));
+			echo "</div>";
+			return;
+		}
+		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
@@ -217,7 +234,7 @@ class EditResourceData {
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
 							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin im %sAblaufplan%s der Veranstaltung"), "<img src=\"pictures/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_dates.php?range_id=".$this->db->f("Seminar_id")."\">", "</a>");
 						print "</font>";
-					} elseif (!$lockedAssign) {
+					} else {
 						print "<br /><img src=\"pictures/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
 						printf (_("Sie haben nicht die Berechtigung, diese Belegung zu bearbeiten."));
 					}
