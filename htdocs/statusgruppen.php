@@ -76,7 +76,7 @@ function PrintAktualStatusgruppen ()
 			        <tr> ";
 		printf ("	        <td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>%s</b></font></td>",htmlReady($db->f("name")));
 		printf ("	   	<td width=\"10%%\"class=\"topic\" align=\"center\" nowrap>");
-		if (!$rechte) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
+		if ($rechte) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("		   <a href=\"mailto:%s?subject=%s \"><img src=\"pictures/mailnachricht.gif\" alt=\"eMail an alle Gruppenmitglieder verschicken\" border=\"0\"></a>", $groupmails,rawurlencode($SessSemName[0])); 
 			printf ("		   &nbsp;<a href=\"sms.php?sms_source_page=statusgruppen.php&cmd=write&group_id=%s \"><img src=\"pictures/nachricht1.gif\" alt=\"Systemnachricht an alle Gruppenmitglieder verschicken\" border=\"0\"></a>", $statusgruppe_id); 
 		} else {
