@@ -33,6 +33,7 @@ require_once("lib/classes/Table.class.php");
 
 checkObject(); // do we have an open object?
 checkObjectModule("scm");
+object_set_visit($SessSemName[1], "scm");
 
 $msg=""; // Message to display 
 

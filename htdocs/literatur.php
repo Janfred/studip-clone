@@ -33,6 +33,8 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 checkObject(); // do we have an open object?
 checkObjectModule("literature");
+object_set_visit($SessSemName[1], "literature");
+
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 ?>
@@ -46,7 +48,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 	<table width="100%" border="0" cellpadding="20" cellspacing="0">
 		<tr><td align="left" class="steel1">
 <?
-if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1], $loginfilelast[$SessSemName[1]])) ){
+if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1], object_get_visit($SessSemName[1], "literature"))) ){
 	echo $list;
 } else {
 	echo _("Es wurde noch keine Literatur erfasst");

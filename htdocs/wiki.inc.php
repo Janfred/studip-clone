@@ -553,7 +553,7 @@ function deleteAllWikiPage($keyword, $range_id) {
 * @param  sortby  string  Different sortings of entries.
 **/
 function listPages($mode, $sortby=NULL) {
-	global $SessSemName, $user_id, $loginfilelast, $PHP_SELF;
+	global $SessSemName, $user_id, $PHP_SELF;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -606,7 +606,7 @@ function listPages($mode, $sortby=NULL) {
 	if ($mode=="all") {
 		$q="SELECT keyword, MAX(chdate) AS lastchange, MAX(version) AS lastversion FROM wiki WHERE range_id='$SessSemName[1]' GROUP BY keyword " . $sort;
 	} else if ($mode=="new") {
-		$lastlogindate = $loginfilelast[$SessSemName[1]];
+		$lastlogindate = object_get_visit($SessSemName[1], "wiki");
 		$q="SELECT keyword, MAX(chdate) AS lastchange, MAX(version) AS lastversion FROM wiki WHERE range_id='$SessSemName[1]' AND chdate > '$lastlogindate' GROUP BY keyword " . $sort;
 	}
 	$result=$db->query($q);

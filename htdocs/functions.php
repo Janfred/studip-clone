@@ -37,9 +37,10 @@
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipRangeTree.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
 
 /**
 * This function creates the header line for studip-objects
@@ -139,6 +140,8 @@ function openSem ($sem_id) {
 
 		$loginfilelast["$nr"] = $loginfilenow["$nr"];
 		$loginfilenow["$nr"] = time();
+		
+		object_set_visit($sem_id, "sem");
 	}
 }
 
@@ -187,6 +190,8 @@ function openInst ($inst_id) {
 		$nr = $db->f("Institut_id");
 		$loginfilelast["$nr"] = $loginfilenow["$nr"];
 		$loginfilenow["$nr"] = time();
+	
+		object_set_visit($inst_id, "inst");
 	}
 }
 

@@ -27,7 +27,7 @@ if ($GLOBALS["CALENDAR_ENABLE"])
 	
 function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 0,
 		$show_docs = TRUE, $show_admin = FALSE, $full_width = TRUE) { 
-	global $PHP_SELF, $loginfilelast, $SessSemName, $user, $TERMIN_TYP, $username;	
+	global $PHP_SELF, $SessSemName, $user, $TERMIN_TYP, $username;	
 	
 	// wenn man keinen Start und Endtag angibt, soll wohl alles angezeigt werden
 	// "0" bedeutet jeweils "open end"
@@ -186,7 +186,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 				$titel .= ", " . $tmp_titel;
 				}
 			
-			if ($db->f("chdate") > $loginfilelast[$SessSemName[1]])
+			if ($db->f("chdate") > object_get_visit($SessSemName[1], "sem"))
 				$new = TRUE;
 			else
 				$new = FALSE;

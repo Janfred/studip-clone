@@ -856,7 +856,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 		//Icon erstellen
 		$icon="&nbsp;<img src=\"./pictures/termin-icon.gif\" border=0>";
 
-		if ($db->f("chdate") > $loginfilelast[$SessSemName[1]])
+		if ($db->f("chdate") > object_get_visit($SessSemName[1], "schedule"):
 			$neuer_termin=TRUE;
 		else
 			$neuer_termin=FALSE;

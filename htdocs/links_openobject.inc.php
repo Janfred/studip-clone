@@ -269,9 +269,9 @@ if (($SUPPORT_ENABLE) && ($modules["support"])){
 
 //Infofenstereintraege erzeugen
 if ($SessSemName["class"]=="inst") {
-	$tooltip = sprintf(_("Sie befinden sich in der Einrichtung: %s, letzter Besuch: %s, Ihr Status in dieser Einrichtung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]), $SemUserStatus);
+	$tooltip = sprintf(_("Sie befinden sich in der Einrichtung: %s, letzter Besuch: %s, Ihr Status in dieser Einrichtung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", object_get_visit($SessSemName[1], $SessSemName["class"])), $SemUserStatus);
 } else {
-	$tooltip = sprintf(_("Sie befinden sich in der Veranstaltung: %s, letzter Besuch: %s, Ihr Status in dieser Veranstaltung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", $loginfilelast[$SessSemName[1]]), $SemUserStatus);
+	$tooltip = sprintf(_("Sie befinden sich in der Veranstaltung: %s, letzter Besuch: %s, Ihr Status in dieser Veranstaltung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", object_get_visit($SessSemName[1], $SessSemName["class"])), $SemUserStatus);
 }
 
 //View festlegen

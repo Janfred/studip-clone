@@ -52,22 +52,24 @@ function pruefe_name(){
 
 }
 
-	if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-		echo "<script language=\"JavaScript\">";
-		echo "var ol_textfont = \"Arial\"";
-		echo "</script>";
-		echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
-	}
+if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+	echo "<script language=\"JavaScript\">";
+	echo "var ol_textfont = \"Arial\"";
+	echo "</script>";
+	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+}
 
-	require_once "functions.php";
-	require_once "visual.inc.php";
-	require_once "forum.inc.php";
-	require_once "object.inc.php";
-	require_once "msg.inc.php";
-	require_once "dates.inc.php"; 
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); 
 
-	checkObject();
+checkObject();
+checkObjectModule("forum");
+object_set_visit($SessSemName[1], "forum");
 
 //////////////////////////////////////////////////////////////////////////////////
 // Debug Funktion zur Zeitmessung

@@ -969,7 +969,7 @@ function link_form ($range_id, $updating=FALSE) {
 
 //create the folder-system
 function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all, $refresh=FALSE, $filelink="") {
-	global $_fullname_sql,$SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $rechte, $anfang, $PHP_SELF, 
+	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang, $PHP_SELF, 
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all;
 
 	if (!$anfang)
@@ -1062,7 +1062,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate)."";			
 
 			
-			if ($loginfilelast[$SessSemName[1]] < $chdate) 
+			if (object_get_visit($SessSemName[1], "documents") < $chdate) 
 				$neuer_ordner = TRUE;
 			else
 				$neuer_ordner = FALSE;
@@ -1231,7 +1231,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					}
 					
 					//Neue Datei herausfinden
-					if ($loginfilelast[$SessSemName[1]] < $chdate)
+					if (object_get_visit($SessSemName[1], "documents") < $chdate)
 						$neue_datei = TRUE;
 					else
 						$neue_datei = FALSE;
@@ -1385,7 +1385,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".$db->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate);
 			
 			
-			if ($loginfilelast[$SessSemName[1]] < $chdate) 
+			if (object_get_visit($SessSemName[1], "documents") < $chdate) 
 				$neuer_ordner = TRUE;
 			else
 				$neuer_ordner = FALSE;

@@ -293,8 +293,8 @@ function ForumOpenClose ($forumposting) {
 *
 **/
 function ForumNewPosting ($forumposting) {
-	global $loginfilelast,$SessSemName;
-	$datumtmp = $loginfilelast[$SessSemName[1]];
+	global $SessSemName;
+	$datumtmp = object_get_visit($SessSemName[1], "forum");
 	if ($datumtmp < $forumposting["chdate"]) {
 		$forumposting["newold"] = "new";  //Beitrag neu
 	} else {
@@ -985,7 +985,7 @@ function print_rating($rate, $id, $username) {
 *
 **/
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $loginfilelast, $sidebar, $indexvars, $open, $openorig, $delete_id;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $sidebar, $indexvars, $open, $openorig, $delete_id;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -1121,7 +1121,7 @@ function printposting ($forumposting) {
   			$new = TRUE;
   		  		
   		if (($forum["view"]=="tree" || $forum["view"]=="mixed") && $forumposting["type"] == "folder") {
-  			if ($loginfilelast[$SessSemName[1]] < $forumposting["folderlast"])
+  			if (object_get_visit($SessSemName[1], "forum") < $forumposting["folderlast"])
 			 	$new = TRUE;		
 			$forumposting["mkdate"] = $forumposting["folderlast"];
   		}
@@ -1245,7 +1245,7 @@ function printposting ($forumposting) {
 **/
 function flatview ($open=0, $mehr=1, $show=0, $update="", $name="", $description="",$zitat="")
 
-{	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$view,$rechte,$forum,$user,$flatviewstartposting,$PHP_SELF;
+{	global $SessionSeminar,$SessSemName,$view,$rechte,$forum,$user,$flatviewstartposting,$PHP_SELF;
 
 /////////////////////////////// Konstanten setzen bzw. zuweisen die für die ganze Seite gelten
 
@@ -1285,7 +1285,7 @@ if ($forum["view"]=="search") {
 		die;
 	}
 } elseif ($forum["view"]=="neue") {
-	$datumtmp = $loginfilelast[$SessSemName[1]];
+	$datumtmp = object_get_visit($SessSemName[1], "forum");
 	$addon = " AND x.chdate > '$datumtmp'";
 }
 
@@ -1413,7 +1413,7 @@ if ($update)
 *
 **/
 function DisplayFolders ($open=0, $update="", $zitat="") {
-	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen, $SEM_CLASS, $SEM_TYPE;
+	global $SessionSeminar,$SessSemName,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen, $SEM_CLASS, $SEM_TYPE;
 
 //Zeigt im Treeview die Themenordner an
 
@@ -1537,7 +1537,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 *
 **/
 function DisplayKids ($forumposting, $level=0) {
-	global $SessionSeminar,$SessSemName,$loginfilelast,$loginfilenow, $anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user, $age, $openall;
+	global $SessionSeminar,$SessSemName,$anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user, $age, $openall;
 
 // stellt im Treeview alle Postings dar, die NICHT Thema sind
 

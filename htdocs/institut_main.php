@@ -165,7 +165,7 @@ if ($nclose)
 
 // Anzeige von News
 ($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
-if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", $loginfilelast[$SessSemName[1]]))
+if (show_news($auswahl,$show_admin, 0, $institut_main_data["nopen"], "100%", object_get_visit($SessSemName[1], "inst")))
 	echo"<br>";
 	
 //show chat info
