@@ -62,6 +62,7 @@ function pruefe_name(){
 	require_once "functions.php";
 	require_once "visual.inc.php";
 	require_once "forum.inc.php";
+	require_once "object.inc.php";
 	require_once "msg.inc.php";
 	require_once "dates.inc.php"; 
 
