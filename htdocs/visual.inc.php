@@ -113,6 +113,13 @@ function JSReady ($what = "", $target = "overlib") {
 		$what = str_replace("\r","",$what);
 		return $what;
 	break;
+
+	case "contact" :
+		$what = htmlentities($what,ENT_COMPAT);
+		$what = str_replace("\n","<br />",$what);
+		$what = str_replace("\r","",$what);
+		return $what;
+	break;
 	
 	case "alert" :
 		$what = addslashes(htmlentities($what,ENT_COMPAT));
