@@ -1,10 +1,10 @@
 <?
 $output_formats = array(
-	"htm"		=>		"Hypertext (HTML)", 
+	"html"		=>		"Hypertext (HTML)", 
 	"rtf"			=>		"Rich Text Format (RTF)", 
 	"txt"			=>		"Text (TXT)", 
-	"fo"			=>		"Adobe Postscript (PDF)" /*,
-	"xml"		=>		"Extensible Markup Language (XML)"*/ 
+	"fo"			=>		"Adobe Postscript (PDF)" ,
+	"xml"		=>		"Extensible Markup Language (XML)"
 );
 
 
