@@ -84,7 +84,7 @@ class ShowList extends ShowTreeRow{
 			$user, $clipObj, $view_mode, $view;
 		
 		//Object erstellen
-		$resObject=new ResourceObject($resource_id);
+		$resObject =& ResourceObject::Factory($resource_id);
 		
 		if (!$resObject->getId())
 			return FALSE;
@@ -146,7 +146,7 @@ class ShowList extends ShowTreeRow{
 				if (($ActualObjectPerms) && ($ActualObjectPerms->getId() == $resObject->getId()))
 					$perms = $ActualObjectPerms->getUserPerm();
 				else {
-					$ThisObjectPerms = new ResourceObjectPerms($resObject->getId());
+					$ThisObjectPerms =& ResourceObjectPerms::Factory($resObject->getId());
 					$perms = $ThisObjectPerms->getUserPerm();
 				}
 				if ($edit_structure_object==$resObject->id) {

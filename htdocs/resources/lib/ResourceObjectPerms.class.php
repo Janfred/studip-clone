@@ -41,6 +41,22 @@ Verfuegung
 /*****************************************************************************/
 
 class ResourceObjectPerms {
+	
+	function &Factory($resource_id, $user_id = false){
+		
+		static $object_pool;
+		
+		if (!$user_id){
+			$user_id = $GLOBALS['auth']->auth['uid'];
+		}
+		if (is_object($object_pool[$user_id][$resource_id])){
+			return $object_pool[$user_id][$resource_id];
+		} else {
+			$object_pool[$user_id][$resource_id] =& new ResourceObjectPerms($resource_id, $user_id);
+			return $object_pool[$user_id][$resource_id];
+		}
+	}
+	
 	var $user_id;
 	var $db;
 	var $db2;
@@ -65,7 +81,7 @@ class ResourceObjectPerms {
 			return;
 		}
 		
-		$resObject= new ResourceObject($this->resource_id);
+		$resObject =& ResourceObject::Factory($this->resource_id);
 		$is_room = $resObject->isRoom();
 		
 		if ($is_room)
@@ -99,65 +115,27 @@ class ResourceObjectPerms {
 		
 		//else check all the other possibilities
 		if ($this->perm != "admin") {
-			$my_administrable_objects=search_administrable_objects();	//the administrative ones....
+			$my_administrable_objects = search_administrable_objects();	//the administrative ones....
 			$my_objects=search_my_objects();				//...and the other, where the user is autor.
-			$my_objects["all"]=TRUE;
+			$my_objects["all"] = TRUE;
 			$my_objects = array_merge($my_administrable_objects, $my_objects);
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			
-			foreach ($my_objects as $key=>$val) {
-				$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$this->resource_id' ");
-				if ($this->db->next_record())
-					if ($val["perms"] == "admin")
-						$this->changePerm("admin");
-					else {
-						switch ($inheritance) {
-							case "1":
-								$this->changePerm($val["perms"]);
-								if ($this->perm == "dozent")
-									$this->changePerm("tutor");
-							break;
-							default:
-							case "2":
-								$this->changePerm("autor");
-							break;
-						}
-					}
-				
-				if ($this->perm == "admin")
-					break;
-					
-				//also check the additional perms...
-				$this->db->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$this->resource_id' ");
-				while ($this->db->next_record())
-					$this->changePerm($this->db->f("perms"));
-				if ($this->perm == "admin")
-					break;
+			if (is_array($my_objects) && count($my_objects)){
+				$objects_sql = " ('" . join("','", array_keys($my_objects)) . "') ";
 
-			}
-		}
-
-		//if all the checks don't work, we have to take a look to the superordinated objects
-		if ($this->perm != "admin") {
-			
-			$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $this->resource_id);
-			$this->db->query($query);	
-			$this->db->next_record();
-			$superordinated_id=$this->db->f("parent_id");
-			
-			foreach ($my_objects as $key=>$val) {
-				
+				$superordinated_id = $this->resource_id;
 				$top=FALSE;
 
 				while ((!$top) && ($k<10000) && ($superordinated_id)) {
-					$this->db2->query("SELECT owner_id, resource_id FROM resources_objects WHERE owner_id='$key' AND resource_id = '$superordinated_id' ");
-					if ($this->db2->next_record()) {
-						if ($val["perms"] == "admin")
+					$this->db2->query("SELECT owner_id, resource_id FROM resources_objects WHERE owner_id IN $objects_sql AND resource_id = '$superordinated_id' ");
+					while ($this->db2->next_record()) {
+						if ($my_objects[$this->db2->f('owner_id')]["perms"] == "admin"){
 							$this->changePerm("admin");
-						else {
+						} else {
 							switch ($inheritance) {
 								case "1":
-									$this->changePerm($val["perms"]);
+									$this->changePerm($my_objects[$this->db2->f('owner_id')]["perms"]);
 								break;
 								default:
 								case "2":
@@ -165,31 +143,30 @@ class ResourceObjectPerms {
 								break;
 							}
 						}
+						if ($this->perm == "admin")
+						break;
 					}
-					$k++;
+					++$k;
 					if ($this->perm == "admin")
 						break;
-
 					//also check the additional perms...
-					$this->db2->query("SELECT perms FROM resources_user_resources  WHERE user_id='$key' AND resource_id = '$superordinated_id' ");
-					while ($this->db2->next_record())
+					$this->db2->query("SELECT user_id,perms FROM resources_user_resources  WHERE user_id IN $objects_sql AND resource_id = '$superordinated_id' ");
+					while ($this->db2->next_record()){
 						$this->changePerm($this->db2->f("perms"));
+						if ($this->perm == "admin")
+							break;
+					}
 					if ($this->perm == "admin")
 						break;
-
 					//select the next superordinated object
 					$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $superordinated_id);
 					$this->db->query($query);						
 					$this->db->next_record();
-		
-					$superordinated_id=$this->db->f("parent_id");
+					$superordinated_id = $this->db->f("parent_id");
 					if ($this->db->f("parent_id") == "0")
 						$top = TRUE;
 				}
 
-				if ($this->perm == "admin")
-					break;
-				
 			}
 		}
 	}

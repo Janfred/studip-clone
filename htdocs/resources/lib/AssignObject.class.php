@@ -278,7 +278,7 @@ class AssignObject {
 	}
 	
 	function checkOverlap() {
-		$resObject = new ResourceObject($this->resource_id);
+		$resObject =& ResourceObject::Factory($this->resource_id);
 		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...
 			//we check overlaps always for a whole day
 			$start = mktime (0,0,0, date("n", $this->begin), date("j", $this->begin), date("Y", $this->begin));

@@ -56,7 +56,7 @@ if ($perm->have_perm("admin")) {
 		$top_kat_tools = TRUE;
 	}
 
-	$structure["settings"]=array (topKat=>"", name=>_("Anpassen"), link=>"resources.php?view=edit_types", active=>FALSE);
+	//$structure["settings"]=array (topKat=>"", name=>_("Anpassen"), link=>"resources.php?view=edit_types", active=>FALSE);
 }
 
 //Reiter "Uebersicht"

@@ -199,11 +199,11 @@ if (($view == "search") || ($view == "edit_request")) {
 //Neue Hierachieebene oder Unterebene anlegen
 if ($view == "create_hierarchie" || $create_hierachie_level) {
 	if ($view == "create_hierarchie") {
-		$newHiearchie=new ResourceObject("Neue Hierachie", "Dieses Objekt kennzeichnet eine Hierachie und kann jederzeit in eine Ressource umgewandelt werden"
+		$newHiearchie =& ResourceObject::Factory("Neue Hierachie", "Dieses Objekt kennzeichnet eine Hierachie und kann jederzeit in eine Ressource umgewandelt werden"
 						, '', '', '', '', $user->id);
 	} elseif ($create_hierachie_level) {
-		$parent_Object=new ResourceObject($create_hierachie_level);
-		$newHiearchie=new ResourceObject("Neue Hierachieebene", "Dieses Objekt kennzeichnet eine neue Hierachieebene und kann jederzeit in eine Ressource umgewandelt werden"
+		$parent_Object =& ResourceObject::Factory($create_hierachie_level);
+		$newHiearchie =& ResourceObject::Factory("Neue Hierachieebene", "Dieses Objekt kennzeichnet eine neue Hierachieebene und kann jederzeit in eine Ressource umgewandelt werden"
 						, '', $parent_Object->getRootId(), $create_hierachie_level, '', $user->id);
 	}
 	$newHiearchie->create();
@@ -216,8 +216,8 @@ if ($view == "create_hierarchie" || $create_hierachie_level) {
 
 //Neues Objekt anlegen
 if ($create_object) {
-	$parent_Object=new ResourceObject($create_object);
-	$new_Object=new ResourceObject("Neues Objekt", "Dieses Objekt wurde neu erstellt. Es wurden noch keine Eigenschaften zugewiesen."
+	$parent_Object =& ResourceObject::Factory($create_object);
+	$new_Object=& ResourceObject::Factory("Neues Objekt", "Dieses Objekt wurde neu erstellt. Es wurden noch keine Eigenschaften zugewiesen."
 					, FALSE, $parent_Object->getRootId(), $create_object, "0", $user->id);
 	$new_Object->create();
 	$resources_data["view"]="edit_object_properties";
@@ -228,9 +228,9 @@ if ($create_object) {
 
 //Object loeschen
 if ($kill_object) {
-	$ObjectPerms = new ResourceObjectPerms($kill_object);
+	$ObjectPerms =& ResourceObjectPerms::Factory($kill_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$killObject=new ResourceObject($kill_object);
+		$killObject =& ResourceObject::Factory($kill_object);
 		if ($killObject->delete())
 		 	$msg -> addMsg(7);
 		$resources_data["view"]="resources";
@@ -242,9 +242,9 @@ if ($kill_object) {
 
 //cancel a just created object
 if ($cancel_edit) {
-	$ObjectPerms = new ResourceObjectPerms($cancel_edit);
+	$ObjectPerms =& ResourceObjectPerms::Factory($cancel_edit);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$cancel_edit = new ResourceObject($cancel_edit);
+		$cancel_edit =& ResourceObject::Factory($cancel_edit);
 		$cancel_edit->delete();
 		$resources_data["view"]="resources";
 		$view = $resources_data["view"];
@@ -256,7 +256,7 @@ if ($cancel_edit) {
 
 //move an object
 if ($target_object) {
-	$ObjectPerms = new ResourceObjectPerms($target_object);
+	$ObjectPerms =& ResourceObjectPerms::Factory($target_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
 		if ($target_object != $resources_data["move_object"]) {
 			//we want to move an object, so we have first to check if we want to move a object in a subordinated object
@@ -287,9 +287,9 @@ if ($target_object) {
 
 //Name und Beschreibung aendern
 if ($change_structure_object) {
-	$ObjectPerms = new ResourceObjectPerms($change_structure_object);
+	$ObjectPerms =& ResourceObjectPerms::Factory($change_structure_object);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$changeObject=new ResourceObject($change_structure_object);
+		$changeObject =& ResourceObject::Factory($change_structure_object);
 		$changeObject->setName($change_name);
 		$changeObject->setDescription($change_description);
 		if ($changeObject->store())
@@ -314,9 +314,8 @@ if ($change_object_schedules) {
 	
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
-
 	//load the object perms
-	$ObjectPerms = new ResourceObjectPerms($change_schedule_resource_id);
+	$ObjectPerms =& ResourceObjectPerms::Factory($change_schedule_resource_id);
 	
 	//in some case, we load the perms from the assign object, if it has an owner
 	if (($ObjectPerms->getUserPerm() != "admin") && ($change_object_schedules != "NEW") && (!$new_assign_object)) {
@@ -339,7 +338,7 @@ if ($change_object_schedules) {
 	}
 
 	if (($ObjectPerms->havePerm("admin")) && ($send_change_resource_x)) {
-		$ChangeObjectPerms = new ResourceObjectPerms($select_change_resource);
+		$ChangeObjectPerms =& ResourceObjectPerms::Factory($select_change_resource);
 		if ($ChangeObjectPerms->havePerm("tutor")) {
 			$changeAssign=new AssignObject($change_object_schedules);
 			$changeAssign->setResourceId($select_change_resource);
@@ -372,7 +371,7 @@ if ($change_object_schedules) {
 
 			if (($send_search_user_x) && ($submit_search_user !="FALSE") && (!$reset_search_user_x)) {
 				//Check if this user is able to reach the resource (and this assign), to provide, that the owner of the resources foists assigns to others
-				$ForeignObjectPerms = new ResourceObjectPerms($change_schedule_resource_id, $submit_search_user); 
+				$ForeignObjectPerms =& ResourceObjectPerms::Factory($change_schedule_resource_id, $submit_search_user); 
 				if ($ForeignObjectPerms->havePerm("autor"))
 					$change_schedule_assign_user_id=$submit_search_user;
 				else
@@ -606,9 +605,9 @@ if ($change_object_schedules) {
 
 //Objekteigenschaften aendern
 if ($change_object_properties) {
-	$ObjectPerms = new ResourceObjectPerms($change_object_properties);
+	$ObjectPerms =& ResourceObjectPerms::Factory($change_object_properties);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$changeObject=new ResourceObject($change_object_properties);
+		$changeObject =& ResourceObject::Factory($change_object_properties);
 		$changeObject->setName($change_name);
 		$changeObject->setDescription($change_description);
 		$changeObject->setCategoryId($change_category_id);
@@ -644,9 +643,9 @@ if ($change_object_properties) {
 
 //Objektberechtigungen aendern
 if ($change_object_perms) {
-	$ObjectPerms = new ResourceObjectPerms($change_object_perms);
+	$ObjectPerms =& ResourceObjectPerms::Factory($change_object_perms);
 	if ($ObjectPerms->getUserPerm () == "admin") {
-		$changeObject=new ResourceObject($change_object_perms);
+		$changeObject =& ResourceObject::Factory($change_object_perms);
 	
 		if (is_array($change_user_id))
 			foreach ($change_user_id as $key=>$val) {
@@ -1127,7 +1126,7 @@ if ($save_state_x) {
 	if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"])) {
 		//check all selected resources for perms
 		foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-			$resPerms = new ResourceObjectPerms ($val);
+			$resPerms =& ResourceObjectPerms::Factory($val);
 			if (!$resPerms->havePerm("tutor"))
 				$no_perm = TRUE;
 			$resPerms ='';
@@ -1180,7 +1179,7 @@ if ($save_state_x) {
 			//create msgs, single date mode
 			if ($reqObj->getTerminId()) {
 				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-				$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
+				$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][0]);
 				foreach ($result as $key=>$val) {
 					if (!$val["overlap_assigns"]) {
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[0]]["resource_id"] = $resObj->getId();			
@@ -1196,7 +1195,7 @@ if ($save_state_x) {
 			} elseif ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
 				$i=0;
 				foreach ($result as $key=>$val) {
-					$resObj = new ResourceObject($val["resource_id"]);
+					$resObj =& ResourceObject::Factory($val["resource_id"]);
 					if (!$val["overlap_assigns"]) {
 						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 					} else {
@@ -1214,7 +1213,7 @@ if ($save_state_x) {
 				$i=0;
 				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 				foreach ($result as $key=>$val) {
-					$resObj = new ResourceObject($val["resource_id"]);
+					$resObj =& ResourceObject::Factory($val["resource_id"]);
 					if (!$val["overlap_assigns"]) {
 						$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();
@@ -1245,7 +1244,7 @@ if ($save_state_x) {
 				$assignObjects = $semResAssign->getDateAssignObjects();
 				
 				foreach ($assi_result["resources_result"] as $key=>$val) {
-					$resObj = new ResourceObject($val["resource_id"]);
+					$resObj =& ResourceObject::Factory($val["resource_id"]);
 					if (!$val["overlap_assigns"]) {
 						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
 						$succesful_assigned++;;
@@ -1263,7 +1262,7 @@ if ($save_state_x) {
 				$i=0;
 				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 				foreach ($result as $key=>$val) {
-					$resObj = new ResourceObject($val["resource_id"]);
+					$resObj =& ResourceObject::Factory($val["resource_id"]);
 					if (!$val["overlap_assigns"]) {
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();							
 						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
@@ -1557,9 +1556,9 @@ if ($snd_closed_request_sms) {
 					$tmp_assign_ids = array_keys($request_data[$db->f("request_id")]["assign_objects"]);
 					foreach ($metadates as $key=>$val) {
 						if ($request_data[$db->f("request_id")]["grouping"])
-							$resObj = new ResourceObject($request_data[$db->f("request_id")]["groups"][$i]["resource_id"]);
+							$resObj =& ResourceObject::Factory($request_data[$db->f("request_id")]["groups"][$i]["resource_id"]);
 						else
-							$resObj = new ResourceObject($request_data[$db->f("request_id")]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
+							$resObj =& ResourceObject::Factory($request_data[$db->f("request_id")]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
 						$message.= $val.": ".$resObj->getName()."\n";
 						$i++;
 					}
@@ -1579,7 +1578,7 @@ if ($snd_closed_request_sms) {
 						$message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "");
 						foreach ($request_data[$db->f("request_id")]["assign_objects"] as $key=>$val) {
 							if ($val["termin_id"] == $db2->f("termin_id")) {
-								$resObj = new ResourceObject($request_data[$db->f("request_id")]["assign_objects"][$key]["resource_id"]);
+								$resObj =& ResourceObject::Factory($request_data[$db->f("request_id")]["assign_objects"][$key]["resource_id"]);
 								$message.= $resObj->getName()."\n";
 							}
 						}
@@ -1593,7 +1592,7 @@ if ($snd_closed_request_sms) {
 			$tmp_assign_ids = array_keys($request_data[$db->f("request_id")]["assign_objects"]);
 			if ($db2->nf()) {
 				while ($db2->next_record()) {
-					$resObj = new ResourceObject($request_data[$db->f("request_id")]["assign_objects"][$tmp_assign_ids[0]]["resource_id"]);
+					$resObj =& ResourceObject::Factory($request_data[$db->f("request_id")]["assign_objects"][$tmp_assign_ids[0]]["resource_id"]);
 					$message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "").": ".$resObj->getName()."\n";
 				}
 			}
@@ -1615,7 +1614,7 @@ some other stuff ;-)
 
 //display perminvalid window
 if ((in_array("1", $msg->codes)) || (in_array("25", $msg->codes))) {
-	$forbiddenObject = new ResourceObject($resources_data["actual_object"]);
+	$forbiddenObject =& ResourceObject::Factory($resources_data["actual_object"]);
 	if ($forbiddenObject->isLocked()) {
 		$lock_ts = getLockPeriod();
 		$msg->addMsg(31, array(date("d.m.Y, G:i", $lock_ts[0]), date("d.m.Y, G:i", $lock_ts[1])));
@@ -1630,18 +1629,19 @@ if ($show_object)
 
 if ($show_msg) {
 	if ($msg_resource_id)
-		$msgResourceObj = new ResourceObject ($msg_resource_id);
+		$msgResourceObj =& ResourceObject::Factory($msg_resource_id);
 	$msg->addMsg($show_msg, ($msg_resource_id) ? array(htmlReady($msgResourceObj->getName())) : FALSE);
 }
 
 //if ObjectPerms for actual user and actual object are not loaded, load them!
+	
 if ($ObjectPerms) {
 	if (($ObjectPerms->getId() == $resources_data["actual_object"]) && ($ObjectPerms->getUserId()  == $user->id))
 		$ActualObjectPerms = $ObjectPerms;	
 	 else
-		$ActualObjectPerms = new ResourceObjectPerms($resources_data["actual_object"]);
+		$ActualObjectPerms =& ResourceObjectPerms::Factory($resources_data["actual_object"]);
 } else
-	$ActualObjectPerms = new ResourceObjectPerms($resources_data["actual_object"]);
+	$ActualObjectPerms =& ResourceObjectPerms::Factory($resources_data["actual_object"]);
 	
 //edit or view object
 if ($edit_object) {

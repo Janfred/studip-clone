@@ -57,7 +57,7 @@ class EditResourceData {
 	function EditResourceData ($resource_id) {
 		$this->db=new DB_Seminar;
 		$this->db2=new DB_Seminar;
-		$this->resObject=new ResourceObject($resource_id);
+		$this->resObject =& ResourceObject::Factory($resource_id);
 	}
 	
 	function setUsedView ($value) {
@@ -132,7 +132,7 @@ class EditResourceData {
 		
 		//it is not allowed to edit or kill assigns for rooms here
 		if (($owner_type == "sem") || ($owner_type == "date")) {
-			$resObject=new ResourceObject ($resAssign->getResourceId());
+			$resObject =& ResourceObject::Factory($resAssign->getResourceId());
 			if ($resObject->isRoom()) {
 				$lockedAssign=TRUE;
 				$killButton = FALSE;
@@ -140,7 +140,7 @@ class EditResourceData {
 		}
 
 		//load the object perms
-		$ObjectPerms = new ResourceObjectPerms($resAssign->getResourceId());
+		$ObjectPerms =& ResourceObjectPerms::Factory($resAssign->getResourceId());
 		$ResourceObjectPerms = $ObjectPerms;
 		
 		//in some case, we load the perms from the assign object, if it has an owner
@@ -158,13 +158,12 @@ class EditResourceData {
 
 		if ($resAssign->isNew())
 			$killButton = FALSE;
-		
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_object_schedules=<? printf ("%s", ($resAssign->getId()) ?  $resAssign->getId() : "NEW"); ?>">
 			<input type="HIDDEN" name="quick_view" value="<?=$this->used_view ?>" />
 			<input type="HIDDEN" name="quick_view_mode" value="<?=$view_mode ?>" />
-			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", ($assign_id) ? $resAssign->getResourceId() : $resources_data["actual_object"]); ?>" />			
+			<input type="HIDDEN" name="change_schedule_resource_id" value="<? printf ("%s", (!$resAssign->isNew()) ? $resAssign->getResourceId() : $resources_data["actual_object"]); ?>" />			
 			<input type="HIDDEN" name="change_schedule_repeat_month_of_year" value="<? echo $resAssign->getRepeatMonthOfYear() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_day_of_month" value="<? echo $resAssign->getRepeatDayOfMonth() ?>" />
 			<input type="HIDDEN" name="change_schedule_repeat_week_of_month" value="<? echo $resAssign->getRepeatWeekOfMonth() ?>" />
@@ -525,7 +524,7 @@ class EditResourceData {
 	function showPropertiesForms() {
 		global $PHP_SELF, $cssSw;
 		
-		$ObjectPerms = new ResourceObjectPerms($this->resObject->getId());
+		$ObjectPerms =& ResourceObjectPerms::Factory($this->resObject->getId());
 			
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
@@ -721,7 +720,7 @@ class EditResourceData {
 		global $PHP_SELF, $search_owner, $search_perm_user, $search_string_search_perm_user, $search_string_search_owner,
 			$cssSw;
 		
-		$ObjectPerms = new ResourceObjectPerms($this->resObject->getId());
+		$ObjectPerms =& ResourceObjectPerms::Factory($this->resObject->getId());
 		
 		$owner_perms = checkObjektAdministrablePerms ($this->resObject->getOwnerId());
 

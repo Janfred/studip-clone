@@ -81,7 +81,7 @@ class CheckMultipleOverlaps {
 		$this->resource_ids[] = $resource_id;
 		$query = sprintf ("DELETE FROM resources_temporary_events WHERE resource_id = '%s'", $resource_id);
 		$this->db->query($query);
-		$resObject = new ResourceObject($resource_id);
+		$resObject =& ResourceObject::Factory($resource_id);
 		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...		
 			$assEvt = new AssignEventList($this->begin, $this->end, $resource_id, FALSE, FALSE, FALSE);
 			$now = time();
@@ -98,7 +98,7 @@ class CheckMultipleOverlaps {
 	function checkOverlap ($events, &$result, $index_mode = "assign_id") {
 		if ($this->resource_ids) {
 			foreach ($events as $obj) {
-				$clause = sprintf ("((begin <= %s AND end > %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());
+				$clause = sprintf ("((begin <= %s AND end > %s) OR (begin >=%s AND end <= %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(),$obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());
 				$cases.= sprintf(" WHEN %s THEN '%s'", $clause, $obj->getId());
 				$clauses[] = $clause;
 			}

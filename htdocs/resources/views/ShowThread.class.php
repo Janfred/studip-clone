@@ -68,7 +68,7 @@ class ShowThread extends ShowTreeRow {
 			$this->lines[$level+1] = $weitere;
 	
 			//Object erstellen
-			$resObject=new ResourceObject($db->f("resource_id"));
+			$resObject =& ResourceObject::Factory($db->f("resource_id"));
 
 			//Daten vorbereiten
 			if (!$resObject->getCategoryIconnr())
@@ -112,7 +112,7 @@ class ShowThread extends ShowTreeRow {
 				if (($ActualObjectPerms) && ($ActualObjectPerms->getId() == $resObject->getId()))
 					$perms = $ActualObjectPerms->getUserPerm();
 				else {
-					$ThisObjectPerms = new ResourceObjectPerms($resObject->getId());
+					$ThisObjectPerms =& ResourceObjectPerms::Factory($resObject->getId());
 					$perms = $ThisObjectPerms->getUserPerm();
 				}
 				

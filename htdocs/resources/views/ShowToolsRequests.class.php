@@ -232,9 +232,9 @@ class ShowToolsRequests {
 								foreach ($metadates as $key=>$val) {
 									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $key+1, $val);
 									if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"])
-										$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$i]["resource_id"]);
+										$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$i]["resource_id"]);
 									else
-										$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
+										$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
 									if ($link = $resObj->getFormattedLink($semObj->getFirstDate()))
 										print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 									$i++;
@@ -255,7 +255,7 @@ class ShowToolsRequests {
 									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key=>$val) {
 										if ($val["termin_id"] == $this->db->f("termin_id")) {
-											$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$key]["resource_id"]);
+											$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$key]["resource_id"]);
 											if ($link = $resObj->getFormattedLink($this->db->f("date")))
 												print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 										}
@@ -272,7 +272,7 @@ class ShowToolsRequests {
 							$i=1;
 							while ($this->db->next_record()) {
 								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
-								$resObj = new ResourceObject($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i-1]]["resource_id"]);
+								$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i-1]]["resource_id"]);
 								if ($link = $resObj->getFormattedLink($this->db->f("date")))
 									print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 								$i++;
@@ -314,7 +314,7 @@ class ShowToolsRequests {
 							<font size="-1">
 							<?
 							if ($request_resource_id = $reqObj->getResourceId()) {
-								$resObj = new ResourceObject($request_resource_id);
+								$resObj =& ResourceObject::Factory($request_resource_id);
 								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							} else
@@ -396,7 +396,7 @@ class ShowToolsRequests {
 						<tr>
 							<td width="70%"><font size="-1">
 								<?
-								$resObj = new ResourceObject($key);
+								$resObj =& ResourceObject::Factory($key);
 								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
@@ -471,7 +471,7 @@ class ShowToolsRequests {
 						<tr>
 							<td width="70%"><font size="-1">
 								<?
-								$resObj = new ResourceObject($key);
+								$resObj =& ResourceObject::Factory($key);
 								print "<img src=\"./pictures/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>

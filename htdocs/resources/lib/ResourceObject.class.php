@@ -40,6 +40,23 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 ResourceObject, zentrale Klasse der Ressourcen Objekte
 /*****************************************************************************/
 class ResourceObject {
+	
+	function &Factory(){
+		static $ressource_object_pool;
+		$argn = func_num_args();
+		if ($argn < 2){
+			if ( ($id = func_get_arg(0)) ){
+				if (is_object($ressource_object_pool[$id])){
+					return $ressource_object_pool[$id];
+				} else {
+					$ressource_object_pool[$id] =& new ResourceObject($id);
+					return $ressource_object_pool[$id];
+				}
+			}
+		}
+		return new ResourceObject(func_get_args());
+	}
+	
 	var $id;				//resource_id des Objects;
 	var $db;				//Datenbankanbindung;
 	var $name;				//Name des Objects
@@ -54,6 +71,7 @@ class ResourceObject {
 	var $my_state = null;
 	
 	//Konstruktor
+	/*
 	function ResourceObject($name='', $description='', $parent_bind='', $root_id='', $parent_id='', $category_id='', $owner_id='', $id = '') {
 		global $user;
 		
@@ -81,7 +99,36 @@ class ResourceObject {
 
 		}
 	}
+	*/
+	
+	function ResourceObject($argv) {
+		global $user;
+		
+		$this->user_id = $user->id;
+		$this->db = new DB_Seminar;
+		
+		if($argv && !is_array($argv)) {
+			$id = $argv;
+			$this->restore($id);
+		} else {
+			$this->name = $argv[0];
+			$this->description = $argv[1];
+			$this->parent_bind = $argv[2];
+			$this->root_id = $argv[3];
+			$this->parent_id = $argv[4];
+			$this->category_id = $argv[5];
+			$this->owner_id = $argv[6];
+			if (!$this->id)
+				$this->id=$this->createId();
+			if (!$this->root_id) {
+				$this->root_id = $this->id;
+				$this->parent_id = "0";
+			}
+			$this->changeFlg=FALSE;
 
+		}
+	}
+	
 	function createId() {
 		return md5(uniqid("DuschDas",1));
 	}

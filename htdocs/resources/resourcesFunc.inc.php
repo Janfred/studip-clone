@@ -487,8 +487,9 @@ function search_administrable_seminars ($search_string='', $user_id='') {
 *
 **/
 function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE) {
+	static $my_object_cache;
 	global $user, $perm, $auth, $_fullname_sql;
-
+	
 	$db = new DB_Seminar;
 	$db2 = new DB_Seminar;
 	$db3 = new DB_Seminar;
@@ -496,15 +497,22 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 	if (!$user_id)
 		$user_id = $user->id;
 		
-	if (!$search_string)
+	if (!$search_string){
 		$search_string = "_";
-
+		$caching = true;
+	}
+	
+	if ($caching && isset($my_object_cache[$user_id][$sem])){
+		return $my_object_cache[$user_id][$sem];
+	}
+	
 	if (getGlobalPerms($user_id) == "admin") 
 		$my_objects["global"]=array("name"=>_("Global"), "perms" => "admin");
 		
 	$username = get_username($user_id);
 	
 	$user_global_perm=get_global_perm($user_id);
+	
 	switch ($user_global_perm) {
 		case "root": 
 			//Alle Personen...
@@ -593,6 +601,10 @@ function search_administrable_objects ($search_string='', $user_id='', $sem=TRUE
 		case "autor": 
 	}
 	$my_objects[$user_id]=array("name"=>"aktueller Account"." (".$username.")", "art"=>_("Personen"),  "perms" => "admin");
+	
+	if ($caching){
+		$my_object_cache[$user_id][$sem] =& $my_objects;
+	}
 	return $my_objects;
 }
 

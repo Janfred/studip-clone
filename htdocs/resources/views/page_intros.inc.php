@@ -37,7 +37,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 
 
 if ($resources_data["actual_object"]) {
-	$currentObject=new ResourceObject($resources_data["actual_object"]);
+	$currentObject =& ResourceObject::Factory($resources_data["actual_object"]);
 	$currentObjectTitelAdd=": ".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene"));
 	if ($currentObjectTitelAdd)
 		$currentObjectTitelAdd=": ";
