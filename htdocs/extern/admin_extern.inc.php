@@ -75,11 +75,9 @@ if ($com == "delete_sec") {
 	$message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich l&ouml;schen?"),
 							$config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
 	$message .= "<br><br><a href=\"$PHP_SELF?com=delete&config_id=$config_id\">";
-	$message .= "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-	$message .= "pictures/buttons/ja2-button.gif\" border=\"0\"></a>&nbsp; &nbsp;";
+	$message .= makeButton("ja2") . "</a>&nbsp; &nbsp;";
 	$message .= "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">";
-	$message .= "<img src=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-	$message .= "pictures/buttons/nein-button.gif\" border=\"0\"></a>";
+	$message .= makeButton("nein") . "</a>";
 	my_info($message, "blank", 1);
 	print_footer();
 	exit;
@@ -143,14 +141,19 @@ echo "<tr><td class=\"blank\">\n";
 $configurations = get_all_configurations($range_id);
 
 $choose_module_form = "";
-foreach ($EXTERN_MODULE_TYPES as $module_types) {
-	if (sizeof($configurations[$module_types["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
-		$choose_module_form .= "<option value=\"{$module_types['module']}\">"
-				. $module_types['name'] . "</option>\n";
+for ($i = 1; $i < sizeof($EXTERN_MODULE_TYPES); $i++) {
+	if (sizeof($configurations[$EXTERN_MODULE_TYPES[$i]["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
+		$choose_module_form .= "<option value=\"{$EXTERN_MODULE_TYPES[$i]['module']}\">"
+				. $EXTERN_MODULE_TYPES[$i]['name'] . "</option>\n";
 	}
-	if ($configurations[$module_types["module"]])
+	if ($configurations[$EXTERN_MODULE_TYPES[$i]["module"]])
 		$have_config = TRUE;
 }
+
+echo "<blockquote><font size=\"2\">";
+echo _("Neue globale Konfiguration anlegen.");
+echo "&nbsp; <a href=\"$PHP_SELF?com=new&mod=Global\">" . makeButton("neuanlegen") . "</a>\n";
+echo "</blockquote>";
 
 if ($choose_module_form != "") {
 	echo "<form method=\"post\" action=\"$PHP_SELF?com=new\">\n";
