@@ -3228,16 +3228,23 @@ function createTemplateSelection ( $selected = NULL ){
 			EVAL_LOAD_FIRST_CHILDREN);
 		$question->load();
 		$questiontyp = $question->getType();
+
+		$questiontext = $question->getText();
+
+		if( $question->getParentID() == 0) 
+			$questiontext .= " [R]";
+
+		
 	   switch( $questiontyp ) {
 
 		 case EVALQUESTION_TYPE_POL:
 		  array_push($arrayOfPolTemplates, array($question->getObjectID(),
-		  	($question->getText())));
+		  	($questiontext)));
 		  break;
 
 		 case EVALQUESTION_TYPE_LIKERT:
 		  array_push($arrayOfSkalaTemplates, array($question->getObjectID(),
-		  	($question->getText())));   
+		  	($questiontext)));   
 		  break; 
 
 		 case EVALQUESTION_TYPE_MC:
@@ -3245,11 +3252,11 @@ function createTemplateSelection ( $selected = NULL ){
 		  if ( $answer && $answer->isFreetext() )
 			array_push($arrayOfFreetextTemplates, array(
 				$question->getObjectID(),
-				($question->getText())));
+				($questiontext)));
 		  else
 			 array_push($arrayOfNormalTemplates, array(
 				$question->getObjectID(),
-				($question->getText())));
+				($questiontext)));
 		  break;
 		}
 	}
