@@ -172,8 +172,9 @@ class StudipLitListViewAdmin extends TreeView{
 	function execCommandToggleVisibility(){
 		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
+		$user_id = $GLOBALS['auth']->auth['uid'];
 		$visibility = ($this->tree->tree_data[$item_id]['visibility']) ? 0 : 1;
-		if ($this->tree->updateList(array('list_id' => $item_id, 'visibility' => $visibility))){
+		if ($this->tree->updateList(array('list_id' => $item_id, 'visibility' => $visibility, 'user_id' => $user_id))){
 			$this->msg[$item_id] = "msg§" . _("Die Sichtbarkeit der Liste wurde ge&auml;ndert.");
 		} else {
 			$this->msg[$item_id] = "error§" . _("Die Sichtbarkeit konnte nicht ge&auml;ndert werden.");
