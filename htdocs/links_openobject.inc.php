@@ -206,7 +206,7 @@ if ($modules["literature"]) {
 		$structure["_literatur_print"]=array (topKat=>"literatur", name=>_("Druckansicht"), link=>"lit_print_view.php?_range_id=" . $SessSemName[1], target=>"_blank", active=>FALSE);
 	}else{
 		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
-		$structure["_literatur_print"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"lit_print_view.php?_range_id=" . $SessSemName[1], target=>"_blank", active=>FALSE);
+		$structure["_literatur_print"]=array (topKat=>"literatur", name=>_("Druckansicht"), link=>"lit_print_view.php?_range_id=" . $SessSemName[1], target=>"_blank", active=>FALSE);
 	}
 }
 
