@@ -117,7 +117,7 @@ leave blank if localhost is also the mailserver*/
 $MAIL_LOCALHOST = "";		// name of the mail sending machine (the web server) defaults to SERVER_NAME
 $MAIL_HOST_NAME = "";		// which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
 
-$ALLOW_SEND_AS_EMAIL = FALSE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
+$MESSAGING_FORWARD_AS_EMAIL = TRUE;	// enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
 
 
 /*advanced system settings
