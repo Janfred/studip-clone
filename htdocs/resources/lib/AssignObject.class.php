@@ -60,10 +60,12 @@ class AssignObject {
 	
 	function &Factory(){
 		static $assign_object_pool;
+		
 		$argn = func_num_args();
+		
 		if ($argn == 1){
 			if ( ($id = func_get_arg(0)) ){
-				if (is_object($assign_object_pool[$id])){
+				if (is_object($assign_object_pool[$id]) && $assign_object_pool[$id]->getId() == $id){
 					return $assign_object_pool[$id];
 				} else {
 					$assign_object_pool[$id] =& new AssignObject($id);
