@@ -188,7 +188,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 	&& ! (($vote->getResultVisibility() == VOTE_RESULTS_AFTER_END
 	       || $vote->getResultVisibility() == VOTE_RESULTS_NEVER)
 	      && $vote->isActive() && !$haveFullPerm)
-	&& $haveFullPerm
+	&& ($haveFullPerm || $vote->getNamesVisibility())
 	&& (! $changeAnswer || $isPreview)
 	)
        {

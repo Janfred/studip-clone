@@ -74,10 +74,14 @@ function printJSfunctions ( ) {
 	    . "  if (document.voteform.anonymous[1].checked) {\n"
 	    . "    document.voteform.changeable[0].disabled = false;\n"
 	    . "    document.voteform.changeable[1].disabled = false;\n"
+	    . "    document.voteform.namesVisibility[0].disabled = false;\n"
+	    . "    document.voteform.namesVisibility[1].disabled = false;\n"
 	    . "  }\n"
 	    . "  else {\n"
 	    . "    document.voteform.changeable[0].disabled = true;\n"
 	    . "    document.voteform.changeable[1].disabled = true;\n"
+	    . "    document.voteform.namesVisibility[0].disabled = true;\n"
+	    . "    document.voteform.namesVisibility[1].disabled = true;\n"
 	    . "  }\n"
 	    . "}\n"
 	    
@@ -669,6 +673,7 @@ function printProperties ( $multipleChoice,
 			   $resultVisibility,
 			   $co_visibility,
 			   $anonymous,
+			   $namesVisibility,
 			   $changeable ) {
     global $type, $pageMode;
 
@@ -800,11 +805,33 @@ function printProperties ( $multipleChoice,
     $html .= "</font></td></tr>";
 
     // -------------------------------------------
+    // names visibility
+    $html .= "<tr><td align=right class=blank style=\"border-bottom:1px dotted black;\">";
+    $html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
+	. tooltip(_("Diese Option ist nur möglich, wenn Sie die Auswertung auf 'personalisiert' schalten, und wenn die Ergebnissichtbarkeit nicht auf 'nie' steht. "),
+		  FALSE, TRUE)
+	. " border=0>&nbsp;";
+    
+    $html .= "<font size=-1>";
+    $html .= _("Die Namen der Teilnehmer werden &ouml;ffentlich sichtbar gemacht:") . "</font>&nbsp;&nbsp;";
+    $html .= ($type == "test")
+	? "</td><td align=left class=steel1>"
+	: "</td><td align=left class=steelgraulight>";
+    $html .= "<font size=-1>";
+    
+    $line1 = "<input type=radio value=\"".YES."\" name=namesVisibility ".( $namesVisibility ? "checked" : "" )."> ";
+    $line2 = "<input type=radio value=\"".NO."\" name=namesVisibility ".( !$namesVisibility ? "checked" : "" )."> ";
+
+    $html .= $line1 . _("ja"). "<br>";
+    $html .= $line2 . _("nein");
+    $html .= "</font></td></tr>";
+
+    // -------------------------------------------
     // changeable?
     if( ! ($anonymous && $pageMode == MODE_RESTRICTED ) ) {
 	$html .= "<tr><td align=right class=blank>";
 	$html .= "<img src=\"".VOTE_PATH_PICTURES."info.gif\" align=middle "
-	    . tooltip(_("Diese Option ist nur erlaubt, wenn Sie die Auswertung auf 'personalisiert' schalten. ").
+	    . tooltip(_("Diese Option ist nur möglich, wenn Sie die Auswertung auf 'personalisiert' schalten. ").
 		      ( ($type=="test")
 			? _("\n\nBeachten Sie außerdem, dass das Einschalten dieser Option in Kombination mit 'Richtigkeits-Anzeige: sofort' keinen Sinn macht.")
 			: "" ),
@@ -816,8 +843,8 @@ function printProperties ( $multipleChoice,
 	$html .= "</font>&nbsp;&nbsp;";
 
 	$html .= ($type == "test")
-	    ? "</td><td align=left class=steel1>"
-	    : "</td><td align=left class=steelgraulight>";
+	    ? "</td><td align=left class=steelgraulight>"
+	    : "</td><td align=left class=steel1>";
 	$html .= "<font size=-1>";
 	
 	$line1 = "<input type=radio value=\"".NO."\" name=changeable ".

@@ -155,6 +155,7 @@ $multipleChoice    = $_POST['multipleChoice'];
 $resultVisibility  = $_POST['resultVisibility'];
 $co_visibility     = $_POST['co_visibility'];
 $anonymous         = $_POST['anonymous'];
+$namesVisibility   = $_POST['namesVisibility'];
 $changeable        = $_POST['changeable'];
 
 if( !isset( $answers ) ) {
@@ -183,6 +184,7 @@ if( !isset( $timeSpan ) )          $timeSpan = $vote->getTimeSpan();
 if( !isset( $multipleChoice ) )    $multipleChoice = $vote->isMultipleChoice();
 if( !isset( $resultVisibility ) )  $resultVisibility = $vote->getResultVisibility();
 if( !isset( $anonymous ) )         $anonymous = $vote->isAnonymous();
+if( !isset( $namesVisibility ) )   $namesVisibility = $vote->getNamesVisibility();
 if( !isset( $changeable ) )        $changeable = $vote->isChangeable();
 if( $type == "test" ) {
     if( !isset( $co_visibility ) ) $co_visibility = $vote->getCo_Visibility();
@@ -312,6 +314,7 @@ if( isset( $saveButton_x ) ) {
     }
     /* -------------------------------------------------------- */
     $vote->setResultVisibility( $resultVisibility );
+    $vote->setNamesVisibility( $namesVisibility );
     if( isset($changeable) ) $vote->setChangeable( $changeable );
     /* -------------------------------------------------------- */
     // now all values are set...
@@ -386,7 +389,7 @@ printRightRegion();
 
 printRuntimeSettings( $startMode, $stopMode, $startDate, $stopDate, $timeSpan );
 
-printProperties( $multipleChoice, $resultVisibility, $co_visibility, $anonymous, $changeable );
+printProperties( $multipleChoice, $resultVisibility, $co_visibility, $anonymous, $namesVisibility, $changeable );
 
 printFormEnd();
 
