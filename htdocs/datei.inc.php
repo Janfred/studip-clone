@@ -283,14 +283,15 @@ function move_item ($item_id, $new_parent) {
 		return TRUE;
 	}
 	
-function edit_item ($item_id, $type, $name, $description) {
+function edit_item ($item_id, $type, $name, $description, $protected=0) {
 
 	$db=new DB_Seminar;
-	
+	if ($protected == "on") $protected=1;
+	echo $protected;
 	if ($type)
-		$db->query("UPDATE folder SET name='$name', description='$description'  WHERE folder_id ='$item_id'");
+		$db->query("UPDATE folder SET name='$name', description='$description' WHERE folder_id ='$item_id'");
 	else
-		$db->query("UPDATE dokumente SET name='$name', description='$description'  WHERE dokument_id ='$item_id'");	
+		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected'  WHERE dokument_id ='$item_id'");	
 	
 	if ($db->affected_rows())
 		return TRUE;
@@ -1219,6 +1220,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						echo "<a name='anker'></a>";
 						
 						if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
+							if ($db3->f("protected")==1)
+								$protect = "checked";
+							$content.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"change_protected\" $protect>&nbsp;"._("geschützter Inhalt")."</br>";
 							$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
 							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
 							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";

@@ -161,7 +161,7 @@ if (($rechte) || ($owner)) {
 
 	//wurde Code fuer Speichern von Aenderungen uebermittelt (=id+"_sc_"), wird entsprechende Funktion aufgerufen
 	if ((strpos($open, "_sc_")) && (!$cancel_x)) {
-		edit_item (substr($open, (strpos($open, "_sc_"))-32, (strpos($open, "_sc_"))), $type, $change_name, $change_description);
+		edit_item (substr($open, (strpos($open, "_sc_"))-32, (strpos($open, "_sc_"))), $type, $change_name, $change_description, $change_protected);
 		}
 
 	//wurde Code fuer Verschieben-Vorwaehlen uebermittelt (=id+"_m_"), wird entsprechende Funktion aufgerufen
