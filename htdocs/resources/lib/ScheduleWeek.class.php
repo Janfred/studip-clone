@@ -65,12 +65,12 @@ class ScheduleWeek {
 		$week_day=date("w", $start_time);
 		if ($week_day == 0)
 			$week_day = 7;
-		$sort_index = 	date ("G", $start_time).(date("i", $start_time) / 15).$week_day;
+		$sort_index = 	date ("G", $start_time).(int)(date("i", $start_time) / 15).$week_day;
 		if (date ("G", $end_time) >= $this->end_hour) {
 			$rows = ((( $this->end_hour - date("G", $start_time))+1) *4)-1;
-			$rows = $rows - (date("i", $start_time) / 15);
+			$rows = $rows - (int)(date("i", $start_time) / 15);
 		} else 
-			$rows = ((date("G", $end_time) - date("G", $start_time)) * 4) + (date("i", $end_time) / 15);
+			$rows = ((date("G", $end_time) - date("G", $start_time)) * 4) + (int)(date("i", $end_time) / 15);
 		$id = md5(uniqid("rss"));
 		$this->events[$id]=array (
 						"sort_index" => $sort_index,
@@ -128,7 +128,7 @@ class ScheduleWeek {
 								for ($s; $s<=$rows; $s++) {
 									$l++;
 									if ($l>=4) {
-										$l=0;
+										$l=0; 
 										$n++;
 									}
 									$idx=($n*100)+($l*10)+$i;

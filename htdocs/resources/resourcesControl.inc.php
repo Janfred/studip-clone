@@ -424,7 +424,33 @@ if ($navigate_to) {
 		$schedule_end_time = $schedule_start_time + (7 * 24 * 60 * 60);
 }
 
+//handle commands from the search 'n' browse modul
+if ($resources_data["view"]=="search") {
+	if ($open_level)
+		 $resources_data["browse_open_level"]=$open_level;
+
+	if ($mode == "properties")
+		$resources_data["search_mode"]="properties";
 	
+	if ($mode == "browse")
+		$resources_data["search_mode"]="browse";
+	
+	if ($start_search_x) {
+		unset($resources_data["search_array"]);
+		$resources_data["search_array"]["search_exp"]=$search_exp;
+		if (is_array($search_property_val))
+			foreach ($search_property_val as $key=>$val) {
+				if ((substr($val, 0, 4) == "_id_") && (substr($search_property_val[$key+1], 0, 4) != "_id_") && ($search_property_val[$key+1]))
+					$resources_data["search_array"]["properties"][substr($val, 4, strlen($val))]=$search_property_val[$key+1];
+		}
+	}
+	
+	if ($reset) {
+		unset($resources_data["browse_open_level"]);
+		unset($resources_data["search_array"]);
+	}
+}
+ 
 /*****************************************************************************
 Kopf der Seite
 /*****************************************************************************/
@@ -447,8 +473,8 @@ $structure["settings"]=array (topKat=>"", name=>"Anpassen", link=>"resources.php
 
 //Reiter "Uebersicht"
 $structure["_resources"]=array (topKat=>"resources", name=>"Struktur", link=>"resources.php?view=_resources", active=>FALSE);
+$structure["search"]=array (topKat=>"resources", name=>"Suchen", link=>"resources.php?view=search&new_search=TRUE", active=>FALSE);
 $structure["create_hierarchie"]=array (topKat=>"resources", name=>"Neue Hierarchieebene erzeugen", link=>"resources.php?view=create_hierarchie#a", active=>FALSE);
-$structure["search_hierarchie"]=array (topKat=>"resources", name=>"Hierarchieebene suchen", link=>"resources.php?view=search_hierarchie", active=>FALSE);
 
 //Reiter "Listen"
 $structure["_lists"]=array (topKat=>"lists", name=>"Listenausgabe", link=>"resources.php?view=_lists", active=>FALSE);
@@ -487,7 +513,7 @@ switch ($resources_data["view"]) {
 	case "resources":
 	case "_resources":
 	case "create_hierachie":
-	case "search_hierachie":
+	case "search":
 		$page_intro="Auf dieser Seite k&ouml;nnen Sie Ressourcen, auf die Sie Zugriff haben, Ebenen zuordnen. ";
 		$title="&Uuml;bersicht der Ressourcen";
 	break;
@@ -591,11 +617,12 @@ Listview, die Listendarstellung, views: resources, _resources, make_hierarchie
 if ($resources_data["view"]=="lists" || $resources_data["view"]=="_lists") {
 
 	$list=new getList();
+	$list->setRecurseLevels(-1);
 	
 	if ($edit_structure_object) {
 		echo"<form method=\"POST\" action=\"$PHP_SELF\">";
 	}
-
+	
 	if (!$list->createList($resources_data["list_open"])) {
 		echo "</td></tr>";
 		parse_msg ("infoºSie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden. <br />Benutzen Sie die Suchfunktion oder w&auml;hlen Sie unter \"&Uuml;bersicht\" einen Startpunkt in der Hierachie aus.");
@@ -692,13 +719,29 @@ if ($resources_data["view"]=="view_schedule") {
 }
 
 /*****************************************************************************
-persoenliche Einstellungen verwelten, views: edit_personal_settings
+persoenliche Einstellungen verwalten, views: edit_personal_settings
 /*****************************************************************************/
 if ($resources_data["view"]=="edit_personal_settings") {
 	
 	$editSettings=new editPersonalSettings;
 	$editSettings->create_personal_settings_forms();
 }
+
+/*****************************************************************************
+Search 'n' browse
+/*****************************************************************************/
+if ($resources_data["view"]=="search") {
+	
+	$search=new ResourcesBrowse;
+	$search->setStartLevel('');
+	$search->setMode($resources_data["search_mode"]);
+	$search->setSearchArray($resources_data["search_array"]);
+	if ($resources_data["browse_open_level"])
+		$search->setOpenLevel($resources_data["browse_open_level"]);
+	$search->createSearch();
+}
+
+
 
 /*****************************************************************************
 Seite abschliessen

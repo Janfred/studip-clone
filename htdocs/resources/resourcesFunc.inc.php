@@ -21,6 +21,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 /*****************************************************************************
+a quick function to get a name from a resources object
+/*****************************************************************************/
+
+function getResourceObjectName($id){
+	$db=new DB_Seminar;
+	$query = sprintf ("SELECT name FROM resources_objects WHERE resource_id = '%s'", $id);
+	$db->query($query);
+	if ($db->next_record())
+		return $db->f("name");
+	else
+		return FALSE;
+}
+
+/*****************************************************************************
+a quick function to get a category from a resources object
+/*****************************************************************************/
+
+function getResourceObjectCategory($id){
+	$db=new DB_Seminar;
+	$query = sprintf ("SELECT category_id FROM resources_objects WHERE resource_id = '%s'", $id);
+	$db->query($query);
+	if ($db->next_record())
+		return $db->f("category_id");
+	else
+		return FALSE;
+}
+
+
+
+/*****************************************************************************
 sort function to sort the AssignEvents
 /*****************************************************************************/
 
@@ -166,7 +196,7 @@ function create_search_form($name, $search_string='', $user_only=FALSE, $admins=
 			else //auch andere...
 				;
 		else //komplett in allen Objekten suchen, die ich verwalten darf
-				$my_objects=get_my_objects($search_string);
+				$my_objects=get_objects($search_string);
 				
 		?>
 		<input type="HIDDEN" name="<? echo "search_string_".$name ?>" value="<? echo $search_string ?>" />
