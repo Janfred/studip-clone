@@ -706,4 +706,74 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 	}
 	return $check;
 }
+
+// folgende Funktion ist nur notwendig, wenn die zu kopierende Veranstaltung nicht vom Dozenten selbst,
+// sondern vom Admin oder vom root kopiert wird (sonst wird das Dozentenfeld leer gelassen, was ja keiner will...)
+function get_seminar_dozent($seminar_id) {
+	$db = new DB_Seminar;
+	$sql = "SELECT user_id FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='dozent'";
+	if (!$db->query($sql)) {
+		echo "Fehler bei DB-Abfrage in get_seminar_user!";
+		return 0;
+	}
+	if (!$db->num_rows()) {
+		echo "Fehler in get_seminar_dozent: Kein Dozent gefunden";
+		return 0;
+	}
+	while ($db->next_record()) {
+		$dozent[$db->f("user_id")] = TRUE;
+	}
+	return $dozent;
+}
+
+function get_seminar_sem_tree_entries($seminar_id) {
+	// get sem_tree_entries for copy 
+	$db = new DB_Seminar;
+	$sql = "SELECT sem_tree_id FROM seminar_sem_tree WHERE seminar_id='".$seminar_id."'";
+	if (!$db->query($sql)) {
+		return 0;
+	}
+	$i=0;
+	while ($db->next_record()) {
+		$sem_tree[$i] = $db->f("sem_tree_id");
+		$i++;
+	}
+	$i=0;
+	// check whether entries exist in sem_tree
+	// we do not need to copy non-existent entries
+	for ($j=0;$j<count($sem_tree);$j++) {
+		$sql = "SELECT * FROM sem_tree WHERE sem_tree_id='".$sem_tree[$j]."'";
+		if (!$db->query($sql)) {
+			echo "FEHLER beim Holen der sem_tree";
+		}
+		if ($db->num_rows()) {
+			$sem_tree_final[$i] = $sem_tree[$j];
+			$i++;
+		}
+	}
+	return $sem_tree_final;
+}
+
+
+function get_seminars_user($user_id) {
+	$db = new DB_Seminar;
+	$sql = 	"SELECT seminare.name, seminare.Seminar_id, seminare.mkdate, seminare.VeranstaltungsNummer as va_nummer ".
+			"FROM seminare ".
+			"LEFT JOIN seminar_user ON seminare.Seminar_id=seminar_user.Seminar_id ".
+			"WHERE user_id = '".$user_id."'";
+	$db->query($sql);
+	
+	$seminars = array();
+	$i = 0;
+	
+	while ($db->next_record()) {
+		$i++;
+		$seminars[$i]["name"] = $db->f("name");
+		$seminars[$i]["id"] = $db->f("Seminar_id");
+		$seminars[$i]["mkdate"] = $db->f("mkdate");
+		$seminars[$i]["va_nummer"] = $db->f("va_nummer");
+	}	
+	return $seminars;
+}
+
 ?>
