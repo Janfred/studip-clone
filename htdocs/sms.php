@@ -214,8 +214,7 @@ if ($cmd=="write") {
 	echo"<input type=\"HIDDEN\" name=\"sms_source_page\" value=\"$sms_source_page\">\n";
 	if ($group_id)
 		echo"<input type=\"HIDDEN\" name=\"group_id\" value=\"$group_id\">\n";
-	
-		
+
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 	printhead(0, 0, $link, TRUE,TRUE, $icon, $titel, $zusatz);
 	echo "</tr></table>	";
@@ -349,12 +348,15 @@ if ($msg)	{
 							$neu=TRUE;
 							$icon="&nbsp;<img src=\"pictures/cont_nachricht.gif\">";
 							$zusatz= sprintf("<font size=-1>" . "gesendet von </font><a href=\"about.php?username=".$db->f("user_id_snd")."\"><font size=-1 color=\"#333399\">".$db->f("fullname")."</font></a><font size=-1> am ".date("d.m.Y, H:i",$db->f("mkdate"))."<font size=-1>&nbsp;"."</font>");				
-							$titel="Einladung zum Chat";
+							$titel=_("Einladung zum Chat");
 							$content=$db->f("fullname")." hat Sie am ".date("d.m.Y",$db->f("mkdate"))." um ".date("H:i",$db->f("mkdate"))." Uhr in den Chat eingeladen.\n";
-							$content.="Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in der Kopfzeile.";
+							$content.=_("Wenn Sie mit ihm Chatten wollen, betreten Sie den Chat über das Symbol in der Kopfzeile.");
+							
+							if ($link)
+								$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
 
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
-							printhead(0, 0, $link, $open, $neu, $icon, htmlReady($titel), $zusatz);
+							printhead(0, 0, $link, $open, $neu, $icon, $titel, $zusatz);
 							echo "</tr></table>	";
 			
 							echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
@@ -420,9 +422,12 @@ if ($msg)	{
 					$link=$PHP_SELF."?mopen=".$db->f("message_id");
 					}
 				}
+				
+			if ($link)
+				$titel = "<a href=\"$link\" class=\"tree\" >".htmlReady($titel)."</a>";
 		
 			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
-			printhead(0, 0, $link, $open, $red, $icon, htmlReady($titel), $zusatz);
+			printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz);
 			echo "</tr></table>	";
 			
 			if (($open=="open") || ($sms_data["open"]==$db->f("message_id"))) {
