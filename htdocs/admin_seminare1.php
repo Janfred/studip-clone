@@ -440,16 +440,16 @@ if ($s_command) {
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Name der Veranstaltung</b> &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="Name" onchange="checkname()" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Name der Veranstaltung</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="Name" onchange="checkname()" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Untertitel der Veranstaltung &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="Untertitel" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Untertitel")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Untertitel der Veranstaltung</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="Untertitel" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Untertitel")) ?>"></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Typ der Veranstaltung</b> &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2><Select name="Status">
+				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Typ der Veranstaltung</b></td>
+				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <select name="Status">
 				<?
 				if (!$perm->have_perm("admin")) {
 					$i=0;
@@ -472,35 +472,35 @@ if ($s_command) {
 				?>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Art der Veranstaltung &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="art" size=30 maxlength=254 value="<?php echo htmlReady($db->f("art")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Art der Veranstaltung</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="art" size=30 maxlength=254 value="<?php echo htmlReady($db->f("art")) ?>"></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Veranstaltungs-Nummer &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="int" name="VeranstaltungsNummer" size=6 maxlength=6 value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Veranstaltungs-Nummer</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="int" name="VeranstaltungsNummer" size=6 maxlength=6 value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>ECTS-Punkte &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="int" name="ects" size=6 maxlength=32 value="<?php echo htmlReady($db->f("ects")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>ECTS-Punkte</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="int" name="ects" size=6 maxlength=32 value="<?php echo htmlReady($db->f("ects")) ?>"></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%smax. Teilnehmeranzahl%s &nbsp;", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
-				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2><input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%smax. Teilnehmeranzahl%s", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
+				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>"></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right>Raum &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><input type="text" name="Ort" size=20 maxlength=254 value="<?php echo htmlReady($db->f("Ort")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="Ort" size=20 maxlength=254 value="<?php echo htmlReady($db->f("Ort")) ?>"></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right>Beschreibung &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="Beschreibung" cols=58 rows=6><?php echo htmlReady($db->f("Beschreibung")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Beschreibung" cols=58 rows=6><?php echo htmlReady($db->f("Beschreibung")) ?></textarea></td>
 			</tr>			
 			<tr>
 				<?
 					if ($my_perms != "tutor") {
-						echo "<td class=\"".$cssSw->getClass()."\" align=right><b>Heimat-Einrichtung</b> &nbsp;</td>";
-						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>";
-						echo "<select name=\"Institut\">";
+						echo "<td class=\"".$cssSw->getClass()."\" align=right><b>Heimat-Einrichtung</b></td>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
+						echo "&nbsp; <select name=\"Institut\">";
 						if (!$perm->have_perm("admin"))
 							$db3->query("SELECT * FROM Institute LEFT JOIN user_inst USING (institut_id) WHERE (user_id = '$user_id' AND (inst_perms = 'dozent' OR inst_perms = 'tutor')) GROUP BY Institute.institut_id ORDER BY Name");
 						else if (!$perm->have_perm("root"))
@@ -512,8 +512,8 @@ if ($s_command) {
 							}
 						}
 					else {
-						echo "<td class=\"".$cssSw->getClass()."\" align=right>Heimat-Einrichtung &nbsp;</td>";
-						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=right>Heimat-Einrichtung</td>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
 						echo "<b>".htmlReady($db->f("Institut"))."</b>";
 						}
 					echo "</select>";
@@ -521,8 +521,8 @@ if ($s_command) {
 				</td>
 			</tr>				
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>beteiligte Einrichtungen &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select  name="b_institute[]" MULTIPLE SIZE=8>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>beteiligte Einrichtungen</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <select  name="b_institute[]" MULTIPLE SIZE=8>
 					<?php
 					$db3->query("SELECT * FROM Institute ORDER BY Name");
 					while ($db3->next_record()) {
@@ -561,9 +561,9 @@ if ($s_command) {
 			//Fuer Tutoren eine Sonderregelung, da sie nicht alle Daten aendern duerfen
 			if ($my_perms == "tutor") {
 				?>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>DozentInnen &nbsp;
+				<td class="<? echo $cssSw->getClass() ?>" align=right>DozentInnen
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
 				<?
 				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'dozent' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
@@ -580,9 +580,9 @@ if ($s_command) {
 				?>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>TutorInnen &nbsp;
+				<td class="<? echo $cssSw->getClass() ?>" align=right>TutorInnen
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
 				<?
 				$db3->query("SELECT Vorname,Nachname FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status = 'tutor' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
@@ -600,37 +600,17 @@ if ($s_command) {
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><font color="#FF0000">Die Personendaten k&ouml;nnen Sie mit Ihrem Status (Tutor) nicht bearbeiten!</font></td>
-			<tr <?$cssSw->switchClass() ?>>   
-				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
-					<?
-					if ($s_id != "" && $s_command=="edit" &&
-							($perm->have_perm("admin") ||
-							($my_perms == "dozent" || $my_perms == "tutor"))):
-						?>
-						<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" src="pictures/buttons/uebernehmen-button.gif" border=0 name="s_edit" value=" Ver&auml;ndern ">
-						<?php
-					else:
-						?>
-						&nbsp;
-						<?php
-					endif;
-					?>
-				<input type="hidden" name="s_command" value="<? echo $s_command ?>">
-				<input type="hidden" name="s_send" value="TRUE">
-				</td>
-			</tr>
-			<tr <?$cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <font color="#FF0000">Die Personendaten k&ouml;nnen Sie mit Ihrem Status (Tutor) nicht bearbeiten!</font></td>
 				<?
 				}
 			else
 				{
 				if ($perm->have_perm("admin"))
-					echo "<td class=\"".$cssSw->getClass()."\" align=right><b>DozentInnen &nbsp;</b></td>";
+					echo "<td class=\"".$cssSw->getClass()."\" align=right><b>DozentInnen</b></td>";
 				else
-					echo "<td class=\"".$cssSw->getClass()."\" align=right>DozentInnen &nbsp;</td>";
+					echo "<td class=\"".$cssSw->getClass()."\" align=right>DozentInnen</td>";
 ?>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select name="Dozenten[]" MULTIPLE SIZE=10>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <select name="Dozenten[]" MULTIPLE SIZE=10>
 					<?php
 					unset($tempDozent_id);
 					$db4->query("SELECT seminar_user.user_id,status FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '$s_id' AND Status IN('dozent','tutor')");
@@ -649,8 +629,8 @@ if ($s_command) {
 				</select></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>TutorInnen &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select name="Tutoren[]" MULTIPLE SIZE=10>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>TutorInnen</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <select name="Tutoren[]" MULTIPLE SIZE=10>
 					<?php
 					$db3->query("SELECT * FROM auth_user_md5 WHERE perms = 'tutor' OR perms = 'dozent' ORDER BY Nachname");
 					while ($db3->next_record()) {
@@ -671,8 +651,8 @@ if ($s_command) {
 			if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) {
 			?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Studienbereich(e)</b> &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><select MULTIPLE name="bereich[]" onchange="checkbereich()" SIZE=12>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><b>Studienbereich(e)</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <select MULTIPLE name="bereich[]" onchange="checkbereich()" SIZE=12>
 					<?php
 					$fachtmp="0";
 					//Anzeige der eigenen Faecher
@@ -760,31 +740,31 @@ if ($s_command) {
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Zeit &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo htmlReady(view_turnus ($s_id)) ?></b>&nbsp; </td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Zeit</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo htmlReady(view_turnus ($s_id)) ?></b>&nbsp; </td>
 			</td>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Semester &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo get_semester ($s_id) ?></b>&nbsp; </td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Semester</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo get_semester ($s_id) ?></b>&nbsp; </td>
 			</td>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Erster Termin &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo veranstaltung_beginn ($s_id) ?></b>&nbsp; </td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Erster Termin</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo veranstaltung_beginn ($s_id) ?></b>&nbsp; </td>
 			</td>
 			</tr>
 			<?
 			if (vorbesprechung ($s_id)) {
 			?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Vorbesprechung &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><b><? echo vorbesprechung ($s_id) ?></b>&nbsp; </td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Vorbesprechung</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <b><? echo vorbesprechung ($s_id) ?></b>&nbsp; </td>
 			</td>
 			<?
 			}
 			?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>">&nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><font color="#FF0000">Bitte nutzen Sie den Menupunkt <? echo "<a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>" ?>, um diese Angaben zu ver&auml;ndern!</font></td>
+				<td class="<? echo $cssSw->getClass() ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <font color="#FF0000">Bitte nutzen Sie den Menupunkt <? echo "<a href=\"admin_metadates.php?seminar_id=$s_id\"><b>Zeiten</b></a>" ?>, um diese Angaben zu ver&auml;ndern!</font></td>
 			<tr <?$cssSw->switchClass() ?>>   
 				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
 					<?
@@ -805,25 +785,25 @@ if ($s_command) {
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Teilnehmer &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="teilnehmer" cols=58 rows=2><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Teilnehmer</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=2><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
 			</tr>
 
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Voraussetzungen &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="vorrausetzungen" cols=58 rows=2><?php echo htmlReady($db->f("vorrausetzungen")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Voraussetzungen</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="vorrausetzungen" cols=58 rows=2><?php echo htmlReady($db->f("vorrausetzungen")) ?></textarea></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Lernorganisation &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="lernorga" cols=58 rows=2><?php echo htmlReady($db->f("lernorga")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Lernorganisation</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="lernorga" cols=58 rows=2><?php echo htmlReady($db->f("lernorga")) ?></textarea></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Leistungsnachweis &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="leistungsnachweis" cols=58 rows=2><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Leistungsnachweis</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="leistungsnachweis" cols=58 rows=2><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea></td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>Sonstiges &nbsp;</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2><textarea name="Sonstiges" cols=58 rows=4><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right>Sonstiges</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=4><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
 			</tr>
 			<?
 			$mkstring=date ("d.m.Y, G:i", $db->f("mkdate"));
