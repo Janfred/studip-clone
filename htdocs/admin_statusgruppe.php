@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
 
+	require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 	require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
@@ -289,7 +290,7 @@ function PrintInstitutMembers ($range_id)
 	if (!$db->next_record()) {
 		$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$range_id'");
 			if ($db->next_record()) {
-				$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+				$tmp_typ = ($db->f('type')) ? $GLOBALS['INST_TYPE'][$db->f('type')]['name'] : $GLOBALS['INST_TYPE'][1]['name'];
 			}
 	} else {
 		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) {
@@ -301,7 +302,6 @@ function PrintInstitutMembers ($range_id)
 	}
 	$workgroup_mode = $SEM_CLASS[$veranstaltung_class][workgroup_mode];  // are we in a workgroup?
 	$tmp_name=$db->f("Name");
-
 // Abfrage der Formulare und Aktionen
 
 	// neue Statusgruppe hinzufuegen
