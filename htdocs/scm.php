@@ -34,8 +34,23 @@ require_once("lib/classes/Table.class.php");
 checkObject(); // do we have an open object?
 checkObjectModule("scm");
 
-include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-	
+$msg=""; // Message to display 
+
+
+switch ($i_view) {
+	case "edit":
+		include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+		scm_edit_content($SessSemName[1]);
+		break;
+	case "change":
+		scm_change_content($scm_id, $SessSemName[1], $scm_name, $scm_preset, $content, $new_entry);
+		$msg="msg§"._("Die Änderungen wurden übernommen.");
+	default:
+		include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+		scm_show_content($SessSemName[1], $msg);
+		break;
+}
+
 
 function scm_max_cols() 
 {
@@ -225,19 +240,6 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content, $new_e
 		 	$db->query("UPDATE scm SET chdate='".time()."' WHERE range_id='$range_id'");
 		}
 	}
-}
-
-$msg=""; // Message to display 
-switch ($i_view) {
-	case "edit":
-		scm_edit_content($SessSemName[1]);
-		break;
-	case "change":
-		scm_change_content($scm_id, $SessSemName[1], $scm_name, $scm_preset, $content, $new_entry);
-		$msg="msg§"._("Die Änderungen wurden übernommen.");
-	default:
-		scm_show_content($SessSemName[1], $msg);
-		break;
 }
 
 echo "</td></tr></table>";
