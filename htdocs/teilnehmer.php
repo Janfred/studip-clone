@@ -461,6 +461,8 @@ while (list ($key, $val) = each ($gruppe)) {
 		} else {
 			$sortby = "Nachname";
 		}
+	} elseif ($sortby=="doll") {
+		$sortby = "doll DESC";
 	}
 
 	$counter=1;
@@ -485,7 +487,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		echo "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
 	print "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
 	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
-	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s>%s</a></b></font></td>", $PHP_SELF, _("Postings"));
+	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s?sortby=doll>%s</a></b></font></td>", $PHP_SELF, _("Postings"));
 	printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Dokumente"));
 	printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
 
