@@ -9,18 +9,18 @@ function event_get_description($id){
 	return FALSE;
 }
 
-function event_save($this){
+function event_save(&$this){
 	// Natuerlich nur Speichern, wenn sich was geaendert hat
 	// und es sich um einen persoenlichen Termin handelt
 	if($this->chng_flag && ($this->type == -1 || $this->type == -2)){
 		$db = new DB_Seminar;
 		$chdate = time();
-		if($this->mkd == -1)
+		if($this->mkdate == -1)
 			$mkdate = $chdate;
 		else
-			$mkdate = $this->mkd;
-			
-		if(is_int($this->desc))
+			$mkdate = $this->mkdate;
+
+		if($this->desc == null)
 			$query = sprintf("REPLACE termine (termin_id,range_id,autor_id,content,"
 			       . "date,end_time,mkdate,chdate,date_typ,expire,repeat,color,priority,raum) VALUES"
 			       . " ('%s','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,'%s')"
@@ -34,8 +34,10 @@ function event_save($this){
 						 , $this->id, $this->user_id, $this->user_id, $this->txt, $this->desc, $this->start
 						 , $this->end, $mkdate, $chdate, $this->type, $this->exp, $this->rep, $this->cat
 						 , $this->prio, $this->loc);
-		if($db->query($query))
+		if($db->query($query)){
+			$this->chng_flag = FALSE;
 			return TRUE;
+		}
 		return FALSE;
 	}
 	return FALSE;
@@ -87,11 +89,14 @@ function event_restore($id, &$this){
 				$this->col = $PERS_TERMIN_KAT[$this->type][color];
 		}
 		
+		if($db->f("range_id") != $db->f("autor_id"))
+			$this->type = 1;
+		
 		$this->desc = $db->f("description");
 		$this->prio = $db->f("priority");
 		$this->loc = $db->f("raum");
 		$this->setSeminarId($db->f("Seminar_id"));
-		$this->mkd = $db->f("mkdate");
+		$this->mkdate = $db->f("mkdate");
 		$this->chng_flag = FALSE;
 		
 		return TRUE;

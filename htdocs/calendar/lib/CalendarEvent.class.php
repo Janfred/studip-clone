@@ -23,44 +23,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //****************************************************************************
 
 require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/Event.class.php");
 
-class CalendarEvent{
+class CalendarEvent extends Event {
 
-	var $id;    	    // termin_id (String)
-	var $txt;         // Terminkurzbeschreibung (String)
-	var $start;       // Anfangszeit des Termins als Unix-Timestamp (int)
-	var $end;         // Endzeit des des Termins als Unix-Timestamp (int)
 	var $rep;         // Wiederholungsanweisung des Termins (String).
-	var $exp;         // Wann verliert Termin Gueltigkeit? Unix-Timestamp (int)
+	var $exp = 2114377200;         // Wann verliert Termin Gueltigkeit? Unix-Timestamp (int)
 	var $col = "";    // Farbe (STRING)
-	var $cat = 1;     // Kategorie (int)
 	var $dev = FALSE; // TRUE wenn Tagestermin (boolean)
 	var $ts;          // der "genormte" Timestamp
 	var $prio;        // Prioritaet (int)
-	var $loc;         // Ort (String)
-	var $desc = -1;   // Terminbeschreibung (String)
-	var $chng_flag;   // Termin geaendert ? (boolean)
 	var $user_id;     // User-ID aus PphLib (String)
-	var $type = -2;   // Termintyp (int) siehe config.inc.php (privater Termin als Standard)
-	var $sem_id = ""; // Seminar-ID, wenn es sich um einen Seminartermin handelt (String)
-	var $mkd = -1;    // Erstellungsdatum (int) wird ueberschrieben, falls Termin aus DB geholt wird
+	var $type = -2;   // Termintyp (int) -2 privat, -1 öffentlich,
+	                  // 1 Veranstaltungstermin (privater Termin als Standard)
+	var $sem_id = ""; // Veranstaltungs-ID, wenn es sich um einen Veranstaltungstermin handelt (String)
+	var $chdate;
+	var $mkdate;
 	
 	// Konstruktor
-	function CalendarEvent($start = "", $end = "", $title = "", $expire = "", $category = "",
-												 $priority = 1, $location = "", $id = "", $type = -2){
+	function CalendarEvent ($start = "", $end = "", $title = "", $repeat = "", $expire = "", $category = "",
+												 $priority = 1, $location = "", $id = "", $type = -2) {
 		global $user, $PERS_TERMIN_KAT, $TERMIN_TYP;
 		$this->user_id = $user->id;
 		if(func_num_args() == 10){
-			$this->id = func_get_arg(8);
-			$this->start = func_get_arg(0);
-			$this->end = func_get_arg(1);
-			$this->txt = func_get_arg(2);
-			$this->rep = func_get_arg(3);
-			$this->exp = func_get_arg(4);
-			$this->cat = func_get_arg(5);
-			$this->prio = func_get_arg(6);
-			$this->loc = func_get_arg(7);
-			$this->type = func_get_arg(9);
+			$this->id = $id;
+			$this->start = $start;
+			$this->end = $end;
+			$this->txt = $title;
+			$this->rep = $repeat;
+			$this->exp = $expire;
+			$this->cat = $category;
+			$this->prio = $priority;
+			$this->loc = $location;
+			$this->type = $type;
 			$this->chng_flag = FALSE;
 		}
 		else if(func_num_args() != 1){
@@ -91,106 +86,83 @@ class CalendarEvent{
 		// fuer Veranstaltungstermine muss eine Farbe explizit mit setColor() gesetzt werden
 		if($this->type == -1 || $this->type == -2)
 			$this->col = $PERS_TERMIN_KAT[$this->cat]["color"];
-	}
-		
-	// public
-	function getTitle(){
-		return $this->txt;
+			
+		$this->mkdate = time();
+		$this->chndate = $this->mkdate;
 	}
 	
 	// public
-	function getStart(){
-		return $this->start;
-	}
-	
-	// public
-	function getEnd(){
-		return $this->end;
-	}
-	
-	// public
-	function getExpire(){
+	function getExpire () {
 		return $this->exp;
 	}
 	
-	function isDayEvent(){
+	/**
+	* Returns the name of the category.
+	*
+	* @access public
+	* @return String the name of the category
+	*/
+	function getCategoryName () {
+		global $PERS_TERMIN_KAT;
+			return _($PERS_TERMIN_KAT[$this->cat]["name"]);
+	}
+	
+	function isDayEvent () {
 		return $this->dev;
 	}
 	
-	function setDayEvent($is_dev){
+	function setDayEvent ($is_dev) {
 		$this->dev = $is_dev;
 	}
 	
 	// public
-	function getTs(){
+	function getTs () {
 		$repeat_data = explode(",", $this->rep);
 		return $repeat_data[0];
 	}
 	
 	// public
-	function getDuration(){
-		if(date("I", $this->start) > date("I", $this->end))
-			return($this->end - $this->start - 3600);
-		if(date("I", $this->start) < date("I", $this->end))
-			return($this->end - $this->start + 3600);
-		return($this->end - $this->start);
-	}
-	
-	// public
-	function getRepeat($index = ""){
+	function getRepeat ($index = "") {
 		if($this->rep != ""){
 			list($rep["ts"], $rep["lintervall"], $rep["sintervall"], $rep["wdays"],
 			     $rep["month"], $rep["day"], $rep["type"], $rep["duration"]) = explode(",", $this->rep);
 			if($rep["duration"] == "#")
 				$rep["duration"] = 1;
-			return $index?$rep[$index]:$rep;
+			return $index ? $rep[$index] : $rep;
 		}
 		return FALSE;
 	}
 	
 	// public
-	function getColor(){
+	function getColor () {
 		if($this->col == "")
 			return FALSE;
 		return $this->col;
 	}
 	
 	// public
-	function getCategory(){
-		return $this->cat;
-	}
-	
-	// public
-	function getLocation(){
-		if($this->loc == "")
-			return FALSE;
-		return $this->loc;
-	}
-	
-	// public
-	function getType(){
+	function getType () {
 		return $this->type;
 	}
 	
 	// public
-	function getSeminarId(){
-		if($this->sem_id != "")
+	function getSeminarId () {
+		if($this->type == 1)
 			return $this->sem_id;
 		return FALSE;
 	}
 	
 	// public
-	function setSeminarId($id){
-		global $TERMIN_TYP;
-		// Seminar-Typ muss vorher gesetzt werden
-		if($TERMIN_TYP[$this->type])
+	function setSeminarId ($id) {
+		if($this->type == 1){
 			$this->sem_id = $id;
-		else
-			$this->sem_id = "";
+			return TRUE;
+		}
+		return FALSE;
 	}
 	
 	// public
-	function setType($type){
+	function setType ($type) {
 		// nur fuer private Termine
 		if($type == -2 || $type == -1){
 			$this->type = $type;
@@ -199,78 +171,26 @@ class CalendarEvent{
 	}
 	
 	// public
-	function setLocation($location){
-		$this->loc = $location;
-		$this->chng_flag = TRUE;
-	}
-	
-	// public
-	function getDescription(){
-		if(is_int($this->desc))
-			return FALSE;
-		return $this->desc;
-	}
-	
-	// public
-	function setDescription($description){
-		$this->desc = $description;
-		$this->chng_flag = TRUE;
-	}
-	
-	// public
-	function getPriority(){
+	function getPriority () {
 		return $this->prio;
 	}
 	
-	function setPriority($priority){
+	function setPriority ($priority) {
 		if($priority < 6 && $priority > 0){
 			$this->prio = $priority;
 			$this->chng_flag = TRUE;
 		}
 	}
 	
-	// public
-	function setId($id){
-		$this->id = $id;
-		$this->chng_flag = TRUE;
-	}
-	
-	// public
-	function getId(){
-		return $this->id;
-	}
-	
-	// public
-	function setTitle($title = ""){
-		if($title)
-			$this->txt = $title;
-		else
-			$this->txt = "Kein Titel";
-		$this->chng_flag = TRUE;
-	}
-	
-	// public
-	function setStart($start){
-		if($start <= $this->end){
-			$this->start = $start;
-			$this->chng_flag = TRUE;
-			return TRUE;
-		}
-		return FALSE;
-	}
-	
-	// public
-	function setEnd($end){
-		if($end >= $this->start){
-			$this->end = $end;
-			$this->chng_flag = TRUE;
-			return TRUE;
-		}
-		return FALSE;
-	}
-	
-	// public
-	function setRepeat(){
+	/**
+	* Sets the repetition of this event
+	*
+	* This is a very flexible function ;-) For every kind of repetition there is
+	* a different number of parameters.<br>The possible repetitions are:<br><br>
+	* SINGLE, DAYLY, WEEKLY, MONTHLY, YEARLY<br><br>
+	*
+	*/
+	function setRepeat () {
 		$num = func_num_args();
 		$type = func_get_arg(0);
 		$duration = (int) ((mktime(12,0,0,date("n",$this->end),date("j",$this->end),date("Y",$this->end),0)
@@ -415,8 +335,15 @@ class CalendarEvent{
 		$this->chng_flag = TRUE;
 	}
 	
-	// public
-	function setExpire($exp = ""){
+	/**
+	* Sets the date of expiry
+	*
+	* Without parameter the date of expiry is 01/01/2037 00:00:00
+	*
+	* @access public
+	* @param int $exp a valid unix timestamp
+	*/
+	function setExpire ($exp = "") {
 		if($exp == ""){
 			$this->exp = 2114377200; //01.01.2037 00:00:00 Uhr
 			$this->chng_flag = TRUE;
@@ -431,33 +358,63 @@ class CalendarEvent{
 	}
 		
 	// public
-	function setColor($col){
+	function setColor ($col) {
 		$this->col = $col;
 		$this->chng_flag = TRUE;
 	}
 	
-	// public
-	function setCategory($category){
-		$this->cat = $category;
-		$this->chng_flag = TRUE;
-	}
-	
-	// public
-	function serialisiere(){
-		return serialize($this);
-	}
-	
-	// public
-	function clone(){
+	/**
+	* Creates and returns a copy of this object.
+	*
+	* @access public
+	*/
+	function clone () {
 		$cloned = new CalendarEvent($this->start, $this->end, $this->txt, $this->rep,
 		                     $this->exp, $this->cat, $this->prio, $this->loc, $this->id, $this->type);
 		if(!is_int($this->descr))
 			$cloned->setDescription($this->desc);
-		// Das Erstellungsdatum wird hier erstmal ganz bewusst nicht uebernommen
-		//if($this->mkd != -1)
-			//$cloned->mkd = $this->mkd;
 		$cloned->setColor($this->col);
 		return $cloned;
 	}
+	
+	/**
+	* Sets the unix timestamp of the last change
+	*
+	* Access to this method is useful only from the container classes
+	* DbCalendarEventList, DbCalendarDay, DbCalendarMonth. Normally every
+	* modification of this object sets this value automatically.
+	* Nevertheless it is a public function.
+	*
+	* @access public
+	* @param int $timestamp a valid unix timestamp
+	*/
+	function setChangeDate ($timestamp = "") {
+		if($timestamp == "")
+			$this->chdate = time();
+		else
+			$this->chdate = $timestamp;
+		if($this->mkdate > $this->chdate)
+			$this->chdate = $this->mkdate;
+	}
+	
+	/**
+	* Sets the unix timestamp of the creation date
+	*
+	* Access to this method is useful only from the container classes
+	* DbCalendarEventList, DbCalendarDay, DbCalendarMonth. Normally the
+	* constructor sets this timestamp.
+	*
+	* @access public
+	* @param int $timestamp a valid unix timestamp
+	*/
+	function setMakeDate ($timestamp = "") {
+		if($timestamp == "")
+			$this->mkdate = time();
+		else
+			$this->mkdate = $timestamp;
+		if($this->mkdate > $this->chdate)
+			$this->chdate = $this->mkdate;
+	}
+	
 	
 } // class Termin

@@ -7,7 +7,7 @@ function month_restore(&$this){
 	$start = $this->getStart() - 518400;
 	$start_ts = $this->month->ts - 518400;
 	$end_ts = $start_ts + date("t",$this->month->ts) * 86400 + 518400;
-	$query = sprintf("SELECT termin_id,content,date,end_time,date_typ,expire,repeat,color,priority,raum"
+	$query = sprintf("SELECT termin_id,content,description,date,end_time,date_typ,expire,repeat,color,priority,raum"
 	       . " FROM termine WHERE range_id='%s' AND autor_id='%s' AND (date BETWEEN %s AND %s OR "
 				 . "(date <= %s AND expire > %s AND (repeat NOT LIKE '%%SINGLE%%' OR repeat REGEXP '^.*,[^#]+$')))"
 				 . " ORDER BY date ASC"
@@ -33,10 +33,12 @@ function month_restore(&$this){
 				$adate = $rep["ts"];
 				while($duration-- && $adate <= $end){
 					if($adate > $start){
+						$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$event->setDescription($db->f("description"));
 						$this->apdays["$adate"]++;
-						$this->apps["$adate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$this->apps["$adate"][] = $event;
 					}
 					$adate += 86400;
 				}
@@ -53,10 +55,12 @@ function month_restore(&$this){
 						$duration_first = ($xdate - $start_ts) / 86400 + 1;
 						$md_date = $start_ts;
 						while($duration_first-- && $md_date <= $end && $md_date <= $expire){
+							$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$event->setDescription($db->f("description"));
 							$this->apdays["$md_date"]++;
-							$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                             $db->f("repeat"),$expire,$db->f("color"),
-																			 $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$this->apps["$md_date"][] = $event;
 							$md_date += 86400;
 						}
 					}
@@ -67,10 +71,12 @@ function month_restore(&$this){
 				while($duration--){
 					$md_date = $adate;
 					while($md_date <= $db->f("expire") && $md_date <= $end){
+						$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$event->setDescription($db->f("description"));
 						$this->apdays["$md_date"]++;
-						$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                             $db->f("repeat"),$expire,$db->f("color"),
-																			 $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$this->apps["$md_date"][] = $event;
 						$md_date += 86400 * $rep["lintervall"];
 					}
 					$adate += 86400;
@@ -85,10 +91,12 @@ function month_restore(&$this){
 						$md_date = $adate;
 						$count = $duration;
 						while($count-- && $md_date <= $end && $md_date <= $expire){
+							$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$event->setDescription($db->f("description"));
 							$this->apdays["$md_date"]++;
-							$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                            $db->f("repeat"),$expire,$db->f("color"),
-																		  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$this->apps["$md_date"][] = $event;
 							$md_date += 86400;
 						}
 					}
@@ -101,10 +109,12 @@ function month_restore(&$this){
 							while($count--){
 								if($wdate > $end || $wdate > $expire)
 									break 2;
+								$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+								$event->setDescription($db->f("description"));
 								$this->apdays["$wdate"]++;
-								$this->apps["$wdate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+								$this->apps["$wdate"][] = $event;
 								$wdate += 86400;
 							}
 						}
@@ -128,10 +138,12 @@ function month_restore(&$this){
 						while($count--){
 							if($wdate > $end || $wdate > $db->f("expire"))
 								break 3;
+							$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$event->setDescription($db->f("description"));
 							$this->apdays["$wdate"]++;
-							$this->apps["$wdate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$this->apps["$wdate"][] = $event;
 							$wdate += 86400;
 						}
 					}
@@ -146,10 +158,12 @@ function month_restore(&$this){
 					$adate = mktime(12,0,0,date("n",$db->f("date")),date("j",$db->f("date")),date("Y",$db->f("date")),0);
 					$count = $duration;
 					while($count-- && $adate <= $end && $adate <= $db->f("expire")){
+						$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$event->setDescription($db->f("description"));
 						$this->apdays["$adate"]++;
-						$this->apps["$adate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$this->apps["$adate"][] = $event;
 						$adate += 86400;
 					}
 				}
@@ -212,10 +226,12 @@ function month_restore(&$this){
 					$xdate++;
 					$md_date = $start_ts;
 					while($md_date < $xdate && $md_date <= $db->f("expire")){
+						$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$event->setDescription($db->f("description"));
 						$this->apdays["$md_date"]++;
-						$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+						$this->apps["$md_date"][] = $event;
 						$md_date += 86400;
 					}
 				}
@@ -226,11 +242,14 @@ function month_restore(&$this){
 					while($count--){
 						// verhindert die Anzeige an Tagen, die auﬂerhalb des Monats liegen (am 29. bis 31.)
 						if($rep["wdays"] == ""?date("j", $adate) == $rep["day"]:TRUE
-							&& $md_date <= $db->f("expire") && $md_date <= $end)
+							&& $md_date <= $db->f("expire") && $md_date <= $end){
+								$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+								$event->setDescription($db->f("description"));
 								$this->apdays["$md_date"]++;
-								$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+								$this->apps["$md_date"][] = $event;
+						}
 						$md_date += 86400;
 					}
 					$amonth += $rep["lintervall"];
@@ -265,10 +284,12 @@ function month_restore(&$this){
 							$event_end = $end;
 						$count = $duration;
 						while($wdate < $event_end && $wdate < $expire + 1){
+							$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$event->setDescription($db->f("description"));
 							$this->apdays["$wdate"]++;
-							$this->apps["$wdate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$this->apps["$wdate"][] = $event;
 							$wdate += 86400;
 						}
 					}
@@ -322,20 +343,24 @@ function month_restore(&$this){
 					$duration_first -= date("z", $this->month->ts);
 					if($xdate + $duration * 86400 > $start){
 						while($duration_first-- > 0 && $md_date <= $end && $md_date <= $expire){
+							$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$event->setDescription($db->f("description"));
 							$this->apdays["$md_date"]++;
-							$this->apps["$md_date"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                             $db->f("repeat"),$expire,$db->f("color"),
-																			 $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+							$this->apps["$md_date"][] = $event;
 							$md_date += 86400;
 						}
 					}
 				}
 				
 				while($duration-- && $adate <= $expire && $adate <= $end){
+					$event = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
+														$db->f("repeat"),$expire,$db->f("color"),
+														$db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+					$event->setDescription($db->f("description"));
 					$this->apdays["$adate"]++;
-					$this->apps["$adate"][] = new CalendarEvent($db->f("date"),$db->f("end_time"),$db->f("content"),
-					                              $db->f("repeat"),$expire,$db->f("color"),
-																			  $db->f("prority"), $db->f("raum"), $db->f("termin_id"), $db->f("date_typ"));
+					$this->apps["$adate"][] = $event;
 					$adate += 86400;
 				}
 				break;
