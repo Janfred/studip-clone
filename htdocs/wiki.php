@@ -131,7 +131,6 @@ if ($view=="listall") {
 	}
 	// set lock
 	setWikiLock($db, $user->id, $SessSemName[1], $keyword);
-	wikiSinglePageHeader($wikiData, $keyword);
 	wikiEdit($keyword, NULL, $user->id, $lastpage);
 
 } else { 
@@ -147,7 +146,7 @@ if ($view=="listall") {
 		//
 		// Page was edited and submitted
 		//
-		submitWikiPage($keyword, $version, $body, $user->id, $SessSemName[1]);
+		$special=submitWikiPage($keyword, $version, $body, $user->id, $SessSemName[1]);
 		$version=""; // $version="" means: get latest 
 
 	} else if ($cmd == "abortedit") { // Editieren abgebrochen
