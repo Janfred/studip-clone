@@ -115,8 +115,13 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 		}
 		
 		//if we start with a termin_id, we want to create a request for a single date, so save it!
-		if ($termin_id)
+		if ($termin_id) {
 			$admin_rooms_data["resRequest"]->setTerminId($termin_id);
+			$db->query("SELECT date, end_time FROM termine WHERE termin_id = '$termin_id' ");
+			$db->next_record();
+			$admin_rooms_data["date_begin"] = $db->f("date");
+			$admin_rooms_data["date_end"] = $db->f("end_time");
+		}
 		
 	}
 	$admin_rooms_data["sem_id"] = $seminar_id;	
@@ -209,7 +214,7 @@ if ($perm->have_perm("admin"))
 			<?=_("Sie k&ouml;nnen hier Angaben &uuml;ber einen gew&uuml;nschten Raum und gew&uuml;nschte Raumeigenschaften machen.")?> <br />
 			<? 
 			if ($my_requests[$admin_rooms_data["resRequest"]->getId()])
-				printf (_("Sie k&ouml;nnen diese Anfrage auch selbst %saufl&ouml;sen%s."), "<a href=\"resources.php?view=edit_request&single_request=".$admin_rooms_data["resRequest"]->getId()."\">&nbsp;<img src=\"pictures\link_intern.gif\" border=\"0\" />&nbsp;", "</a>");
+				printf (_("Sie k&ouml;nnen diese Anfrage auch selbst %saufl&ouml;sen%s."), "<a href=\"resources.php?view=edit_request&single_request=".$admin_rooms_data["resRequest"]->getId()."\">&nbsp;<img src=\"pictures/link_intern.gif\" border=\"0\" />&nbsp;", "</a>");
 			else
 				print _("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen.");			?>
 			<br />
@@ -248,17 +253,27 @@ if ($perm->have_perm("admin"))
 			<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
 				&nbsp;
 			</td>
-			<td class="<? echo $cssSw->getClass() ?>" width="47%">
+			<td class="<? echo $cssSw->getClass() ?>" width="47%" valign="top">
 				<font size="-1"><b><?=("Art des Wunsches:")?></b><br /><br />
 				<?
-				print (($admin_rooms_data["resRequest"]->getTerminId()) ? _("Einzeltermin ihrer Veranstaltung") : (($semObj->getMetaDateType() == 1) ?_("alle Ablaufplan-Termine der Veranstaltung (unregelm&auml;&szlig;ige Veranstaltung)") :_("alle Veranstaltungszeiten (regelm&auml;&szlig;ige Veranstaltung)")))."<br />";
-				
+				if ($admin_rooms_data["resRequest"]->getTerminId()) {
+					print _("Einzeltermin der Veranstaltung");
+					print "<br />"._("am:")."&nbsp;".date("d.m.Y, H:i", $admin_rooms_data["date_begin"]).(($admin_rooms_data["date_end"]) ? " - ".date("H:i", $admin_rooms_data["date_end"]) : "");
+				} elseif ($semObj->getMetaDateType() == 1) {
+					print _("alle Ablaufplan-Termine der Veranstaltung (unregelm&auml;&szlig;ige Belegung)");
+				} else {
+					print _("alle Veranstaltungszeiten (regelm&auml;&szlig;ige Belegung)");
+					print "<br />"._("am:")."&nbsp;".$semObj->getFormattedTurnus();
+				}
 				?>
 			</td>
-			<td class="<? echo $cssSw->getClass() ?>" width="49%">
+			<td class="<? echo $cssSw->getClass() ?>" width="49%" valign="top">
 				<font size="-1"><b><?=("Bearbeitungsstatus:")?></b><br /><br />
 				<?
-				print ((!$admin_rooms_data["resRequest"]->getClosed()) ? _("Die Anfrage wurde noch nicht bearbeitet") : (($admin_rooms_data["resRequest"]->getClosed() == 3) ?_("Die Anfrage wurde bearbeitet und abgelehnt") :_("Die Anfrage wurde bearbeitet")))."<br />";
+				if ($admin_rooms_data["resRequest"]->isNew())
+					print _("Diese Anfrage ist noch nicht gespeichert");
+				else
+					print ((!$admin_rooms_data["resRequest"]->getClosed()) ? _("Die Anfrage wurde noch nicht bearbeitet") : (($admin_rooms_data["resRequest"]->getClosed() == 3) ?_("Die Anfrage wurde bearbeitet und abgelehnt") :_("Die Anfrage wurde bearbeitet")))."<br />";
 				
 				?>
 			</td>
