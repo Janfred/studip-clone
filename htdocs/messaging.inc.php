@@ -117,20 +117,28 @@ class messaging {
 		$db4->next_record();
 			
 		if (!empty($message)) {
-			if ($user_id != "____%system%____") {
-				$snd_user_id = $user_id;
-			} else {
-				$snd_user_id = "____%system%____";			
-			}
+
 			if ($user_id != "____%system%____")  {
+
+				$snd_user_id = $user_id;
+				if ($my_messaging_settings["save_snd"] != "1") {
+					$set_deleted = "1";
+				}
+
 				if ($sms_data["sig"] == "1") {
 					$message .= $this->sig_string.$signature;
 				}
+
 			} else {
+
+				$snd_user_id = "____%system%____";		
+
 				setTempLanguage($db4->f("user_id"));
 				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
 				restoreLanguage();
+
 			}
+
 			$db3->query("INSERT IGNORE message SET message_id='".$tmp_message_id."', mkdate='".$time."', message='".$message."', autor_id='".$snd_user_id."'");
 			if (!$set_deleted) {
 				$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$snd_user_id."', snd_rec='snd' ");
@@ -141,6 +149,7 @@ class messaging {
 			$db4->query("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."'");
 			$db4->next_record();
 			$db3->query("INSERT IGNORE message_user SET message_id='".$tmp_message_id."', user_id='".$db4->f("user_id")."', snd_rec='rec' ");
+
 			//Benachrichtigung in alle Chaträume schicken	 
 			$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
 			if ($GLOBALS['CHAT_ENABLE']) {	 
@@ -155,10 +164,15 @@ class messaging {
 					}	 
 				}	 
 			}
+
 			return 1;
+
 		} else {
+
 			return 0;
+
 		}
+
 	}
 
 
