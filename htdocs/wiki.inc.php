@@ -1,4 +1,5 @@
 <?
+// $Id$
 
 /**
 * Retrieve a WikiPage version from current seminar's WikiWikiWeb.
@@ -47,7 +48,7 @@ function getWikiPage($keyword, $version, $db=NULL) {
 **/
 function completeWikiComments($body) {
 	global $auth;
-	return preg_replace("/\[comment\]/","\[comment=".get_fullname($auth->auth[uid])."\]",$body);
+	return preg_replace("/\[comment\]/","\[comment=".addslashes(get_fullname($auth->auth[uid],'full',false))."\]",$body);
 }
 
 /**
@@ -186,7 +187,7 @@ function keywordExists($str) {
 
 
 /**
-* Check if keyword already exists or links to new page. 
+* Check if keyword already exists or links to new page.
 * Returns HTML-Link-Representation.
 * 
 * @param	string	WikiPage keyword
@@ -384,8 +385,8 @@ function getZusatz($wikiData) {
 		return "";
 	}
 	$s = "<font size=-1>";
-	$s .=  _("Version ") . $wikiData[version];
-	$s .= sprintf(_(", ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username ($wikiData[user_id])."\"><font size=-1 color=\"#333399\">".get_fullname ($wikiData[user_id])."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData[chdate])."<font size=-1>&nbsp;"."</font>");
+	$s .=  _("Version ") . $wikiData['version'];
+	$s .= sprintf(_(", ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=". get_username($wikiData['user_id']) ."\"><font size=-1 color=\"#333399\">". get_fullname($wikiData['user_id'],'full', true) ."</font></a><font size=-1>", date("d.m.Y, H:i",$wikiData['chdate'])."<font size=-1>&nbsp;"."</font>");
 	return $s;
 }
 
