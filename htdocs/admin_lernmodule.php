@@ -66,7 +66,7 @@ if ($ILIAS_CONNECT_ENABLE)
 	//neuen ILIAS-User anlegen, wenn noch nicht vorhanden.
 	create_ilias_user($auth->auth["uname"]);
 
-		echo "<a href=\"" . link_new_module() ."\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
+		echo "<a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br><br>";
 
 		if ($perm->have_perm("admin"))  
 			show_all_modules_admin();
