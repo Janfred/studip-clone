@@ -58,28 +58,28 @@
 								<br/>
 							</td>
 						</tr>
-						<tr bgcolor="#0000BB">
-							<td width="20%">
+						<tr>
+							<td width="20%" bgcolor="#006699">
 								<b>
 									<font color="#FFFFFF">DozentIn</font>
 									</b>
 								</td>
-								<td width="35%">
+								<td width="35%" bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Veranstaltung</font>
 									</b>
 								</td>
-								<td width="20%">
+								<td width="20%" bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Status</font>
 									</b>
 								</td>
-								<td width="15%">
+								<td width="15%" bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Termin</font>
 									</b>
 								</td>
-								<td width="10%">
+								<td width="10%" bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Raum</font>
 									</b>
@@ -142,28 +142,28 @@
 								<br/>
 							</td>
 						</tr>
-						<tr bgcolor="#0000BB">
-							<td>
+						<tr>
+							<td bgcolor="#006699">
 								<b>
 									<font color="#FFFFFF">Name</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Telefon</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Raum</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Sprechzeiten</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">E-Mail</font>
 									</b>
@@ -202,7 +202,7 @@
 <xsl:template name="showperson">
 	<xsl:for-each select="person">
 		<tr>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="titel">
 					<xsl:value-of select="titel"/>
 					<xsl:text> </xsl:text>
@@ -216,25 +216,25 @@
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="telefon">
 					<xsl:value-of select="telefon"/>
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="raum">
 					<xsl:value-of select="raum"/>
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="sprechzeiten">
 					<xsl:value-of select="sprechzeiten"/>
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="email">
 					<xsl:value-of select="email"/>
 				</xsl:if>
@@ -248,7 +248,7 @@
 <xsl:template name="showseminar">
 	<xsl:for-each select="seminar">
 		<tr border="0" align="left">
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:for-each select="dozenten/dozent">
 					<xsl:if test="position() &gt; 1">
 						<xsl:text>, </xsl:text>
@@ -256,18 +256,18 @@
 					<xsl:value-of select="."/>
 				</xsl:for-each>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<b>
 					<xsl:value-of select="titel"/>
 				</b>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:value-of select="status"/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:value-of select="termine/termin"/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:value-of select="raum"/>
 			</td>
 		</tr>

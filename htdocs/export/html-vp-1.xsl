@@ -57,7 +57,7 @@
 							<xsl:when test="seminare/gruppe">
 								<xsl:for-each select="seminare/gruppe">
 									<tr bgcolor="#0000BB">
-										<td colspan="2">
+										<td colspan="2" bgcolor="#006699">
 											<h2>
 												<font color="#FFFFFF">
 													<b>
@@ -71,7 +71,7 @@
 										<xsl:when test="untergruppe">
 											<xsl:for-each select="untergruppe">
 												<tr bgcolor="#6600BB">
-													<td colspan="2">
+													<td colspan="2" bgcolor="#006699">
 														<h2>
 															<font color="#FFFFFF">
 																<b>
@@ -110,28 +110,28 @@
 								<br/>
 							</td>
 						</tr>
-						<tr bgcolor="#0000BB">
-							<td>
+						<tr>
+							<td bgcolor="#006699">
 								<b>
 									<font color="#FFFFFF">Name</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Telefon</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Raum</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">Sprechzeiten</font>
 									</b>
 								</td>
-								<td>
+								<td bgcolor="#006699">
 									<b>
 										<font color="#FFFFFF">E-Mail</font>
 									</b>
@@ -140,8 +140,8 @@
 						<xsl:choose>
 							<xsl:when test="personen/gruppe">
 								<xsl:for-each select="personen/gruppe">
-									<tr bgcolor="#8800BB">
-										<td colspan="5">
+									<tr>
+										<td colspan="5" bgcolor="#006699">
 											<font color="#FFFFFF">
 												<b>
 													<xsl:value-of select="@key"/>
@@ -170,7 +170,7 @@
 <xsl:template name="showperson">
 	<xsl:for-each select="person">
 		<tr>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="titel">
 					<xsl:value-of select="titel"/>
 					<xsl:text> </xsl:text>
@@ -184,25 +184,25 @@
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="telefon">
 					<xsl:value-of select="telefon"/>
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="raum">
 					<xsl:value-of select="raum"/>
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="sprechzeiten">
 					<xsl:value-of select="sprechzeiten"/>
 				</xsl:if>
 				<br/>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:if test="email">
 					<xsl:value-of select="email"/>
 				</xsl:if>
@@ -215,8 +215,8 @@
 
 <xsl:template name="showseminar">
 	<xsl:for-each select="seminar">
-		<tr bgcolor="#8800BB" border="0" align="left">
-			<td>
+		<tr border="0" align="left">
+			<td bgcolor="#006699">
 				<font color="#FFFFFF">
 					<b>
 						<xsl:for-each select="dozenten/dozent">
@@ -228,7 +228,7 @@
 					</b>
 				</font>
 			</td>
-			<td>
+			<td bgcolor="#006699">
 				<font color="#FFFFFF">
 					<b>
 						<xsl:value-of select="titel"/>
@@ -238,19 +238,19 @@
 		</tr>
 		<xsl:if test="untertitel">
 		<tr>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<b>Untertitel: </b>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:value-of select="untertitel"/>
 			</td>
 		</tr>
 		</xsl:if>
 		<tr>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<b>DozentIn: </b>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:for-each select="dozenten/dozent">
 					<xsl:if test="position() &gt; 1">
 						<xsl:text>, </xsl:text>
@@ -260,137 +260,137 @@
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<b>Termin: </b>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:value-of select="termine/termin"/>
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<b>Erster Termin: </b>
 			</td>
-			<td>
+			<td bgcolor="#EEEEEE">
 				<xsl:value-of select="termine/erstertermin"/>
 			</td>
 		</tr>
 		<xsl:if test="termine/vorbesprechung">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Vorbesprechung: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="termine/vorbesprechung"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="status">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Status: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="status"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="beschreibung">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Beschreibung: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="beschreibung"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="raum">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Raum: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="raum"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="sonstiges">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Sonstiges: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="sonstiges"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="art">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Art der Veranstaltung: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="art"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="teilnehmer">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Teilnehmer: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="teilnehmer"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="voraussetzung">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Voraussetzungen: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="voraussetzung"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="lernorga">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Lernorganisation: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="lernorga"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="schein">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Leistungsnachweis: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="schein"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="ects">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>ECTS: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="ects"/>
 				</td>
 			</tr>
 		</xsl:if>
 		<xsl:if test="bereich">
 			<tr>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<b>Bereich: </b>
 				</td>
-				<td>
+				<td bgcolor="#EEEEEE">
 					<xsl:value-of select="bereich"/>
 				</td>
 			</tr>
