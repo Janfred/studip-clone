@@ -181,7 +181,9 @@ function insert_chatinv ($rec_uname, $chat_id, $msg = "", $user_id = false) {
 		$db->next_record();
 		
 		$db2->query ("SELECT user_id FROM auth_user_md5 WHERE username = '".$rec_uname."' ");
-		$db2->next_record();
+		if (!$db2->next_record()){
+			return false;	//no user found
+		}
 		setTempLanguage($db2->f("user_id"));
 		$message = sprintf(_("Sie wurden von %s in den Chatraum %s eingeladen!"),$db->f("fullname")." (".$db->f("username").")",$chatServer->chatDetail[$chat_id]['name']) 
 			. "\n - - - \n" . stripslashes($msg);
