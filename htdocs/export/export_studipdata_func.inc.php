@@ -374,20 +374,22 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 							$data_object .= xml_tag($val, $db->f($key));
 					}
 				// freie Datenfelder ausgeben
+					$d_fields = false;
 					$DataFields = new DataFields($db->f("user_id"));
 					$localFields = $DataFields->getLocalFields();
-					if (sizeof($localFields) > 0)
-					{
-						$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
-						foreach ($localFields as $val) 
-							if ($val["content"]) 
-							{
-								$data_object .= xml_open_tag($xml_groupnames_person["childobject1"] , $val["name"]);
-								$data_object .= $val["content"];
-								$data_object .= xml_close_tag($xml_groupnames_person["childobject1"]);
-							}
+					foreach ($localFields as $val) 
+						if ($val["content"]) 
+						{
+							if (!$d_fields)
+								$data_object .= xml_open_tag( $xml_groupnames_person["childgroup1"] );
+							$data_object .= xml_open_tag($xml_groupnames_person["childobject1"] , $val["name"]);
+							$data_object .= $val["content"];
+							$data_object .= xml_close_tag($xml_groupnames_person["childobject1"]);
+							$d_fields = true;
+						}
+					if ($d_fields)
 						$data_object .= xml_close_tag( $xml_groupnames_person["childgroup1"] );
-					}
+
 					$data_object .= xml_close_tag( $xml_groupnames_person["object"] );
 					reset($xml_names_person);
 					$person_out[$db->f("user_id")] = true;
