@@ -42,6 +42,15 @@ class StudipLitClipBoard {
 	var $form_name = "lit_clipboard_form";
 	var $msg;
 	
+	
+	function &GetInstance(){
+		static $instance;
+		if (!is_object($instance)){
+			$instance =& new StudipLitClipBoard();
+		}
+		return $instance;
+	}
+	
 	function StudipLitClipBoard(){
 		$this->dbv = new DbView();
 		if (!$GLOBALS['sess']->is_registered("_lit_clipboard_elements")){
@@ -90,6 +99,10 @@ class StudipLitClipBoard {
 	
 	function getNumElements(){
 		return count($this->elements);
+	}
+	
+	function isInClipboard($catalog_id){
+		return isset($this->elements[$catalog_id]);
 	}
 	
 	function getElements(){

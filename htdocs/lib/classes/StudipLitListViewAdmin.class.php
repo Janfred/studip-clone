@@ -23,6 +23,7 @@
 
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitClipBoard.class.php");
 
 /**
 * 
@@ -53,6 +54,7 @@ class StudipLitListViewAdmin extends TreeView{
 	*/
 	function StudipLitListViewAdmin($range_id){
 		parent::TreeView("StudipLitList", $range_id); //calling the baseclass constructor 
+		$this->clip_board =& StudipLitClipBoard::GetInstance();
 	}
 
 	function parseCommand(){
@@ -87,12 +89,14 @@ class StudipLitListViewAdmin extends TreeView{
 				$this->clip_board->insertElement($this->tree->tree_data[$item_id]['catalog_id']);
 				$this->msg[$item_id] = $this->clip_board->msg;
 			} else {
-				$kids = $this->tree->getKids($item_id);
-				for ($i = 0; $i < $this->tree->getNumKids($item_id); ++$i){
-					$cat_ids[] = $this->tree->tree_data[$kids[$i]]['catalog_id'];
+				if ($this->tree->getNumKids($item_id)){
+					$kids = $this->tree->getKids($item_id);
+					for ($i = 0; $i < $this->tree->getNumKids($item_id); ++$i){
+						$cat_ids[] = $this->tree->tree_data[$kids[$i]]['catalog_id'];
+					}
+					$this->clip_board->insertElement($cat_ids);
+					$this->msg[$item_id] = $this->clip_board->msg;
 				}
-				$this->clip_board->insertElement($cat_ids);
-				$this->msg[$item_id] = $this->clip_board->msg;
 			}
 		}
 		return false;
@@ -274,37 +278,8 @@ class StudipLitListViewAdmin extends TreeView{
 		if ($item_id == $this->edit_item_id){
 			$edit_content = $this->getEditItemContent();
 		}
-		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
-		$content .= $this->getItemMessage($item_id);
-		$content .= "\n<tr><td align=\"center\">";
-		if ($item_id == "root"){
-			$content .= "<a href=\"" . $this->getSelf("cmd=NewItem&item_id=$item_id") . "\">"
-			. "<img " .makeButton("neuerordner","src") . tooltip(_("Eine neue Literaturliste anlegen."))
-			. " border=\"0\"></a>&nbsp;";
-		}
-		if ($this->mode != "NewItem"){
-			$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
-			. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
-			. " border=\"0\"></a>&nbsp;";
-			if ($item_id != "root"){
-				if ($this->tree->isElement($item_id)){
-					$cmd = "DeleteItem";
-					$content .= "<a href=\"admin_lit_element.php?_catalog_id={$this->tree->tree_data[$item_id]['catalog_id']}\">"
-					. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
-					. " border=\"0\"></a>&nbsp;";
-				} else {
-					$cmd = "AssertDeleteItem";
-					$content .= "<a href=\"" . $this->getSelf("cmd=CopyList&item_id=$item_id") . "\">"
-					. "<img " .makeButton("kopieerstellen","src") . tooltip(_("Eine Kopie dieser Liste erstellen"))
-					. " border=\"0\"></a>&nbsp;";
-				}
-				$content .= "<a href=\"" . $this->getSelf("cmd=$cmd&item_id=$item_id") . "\">"
-				. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
-				. " border=\"0\"></a>&nbsp;";
-			}
-		}
-		$content .= "</td></tr></table>";
 		$content .= "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+		$content .= $this->getItemMessage($item_id);
 		if (!$edit_content){
 			if ($item_id == "root"){
 				$content .= "\n<tr><td class=\"steelkante\" align=\"left\">" . htmlReady(_("Allgemeine Literaturliste: ") . $this->tree->root_name) ." </td></tr>";
@@ -324,6 +299,37 @@ class StudipLitListViewAdmin extends TreeView{
 		$content .= "\n<tr><td class=\"steel1\" align=\"right\">" . _("Letzte &Auml;nderung:") . strftime(" %d.%m.%Y ", $this->tree->tree_data[$item_id]['chdate']) 
 						. "(<a href=\"about.php?username=" . $this->tree->tree_data[$item_id]['username'] . "\">" . htmlReady($this->tree->tree_data[$item_id]['fullname']) . "</a>) </td></tr>";
 		$content .= "</table>";
+		if (!$edit_content){
+			$content .= "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
+			$content .= "\n<tr><td align=\"center\">";
+			if ($item_id == "root"){
+				$content .= "<a href=\"" . $this->getSelf("cmd=NewItem&item_id=$item_id") . "\">"
+				. "<img " .makeButton("neuerordner","src") . tooltip(_("Eine neue Literaturliste anlegen."))
+				. " border=\"0\"></a>&nbsp;";
+			}
+			if ($this->mode != "NewItem"){
+				$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
+				. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
+				. " border=\"0\"></a>&nbsp;";
+				if ($item_id != "root"){
+					if ($this->tree->isElement($item_id)){
+						$cmd = "DeleteItem";
+						$content .= "<a href=\"admin_lit_element.php?_catalog_id={$this->tree->tree_data[$item_id]['catalog_id']}\">"
+						. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
+						. " border=\"0\"></a>&nbsp;";
+					} else {
+						$cmd = "AssertDeleteItem";
+						$content .= "<a href=\"" . $this->getSelf("cmd=CopyList&item_id=$item_id") . "\">"
+						. "<img " .makeButton("kopieerstellen","src") . tooltip(_("Eine Kopie dieser Liste erstellen"))
+						. " border=\"0\"></a>&nbsp;";
+					}
+					$content .= "<a href=\"" . $this->getSelf("cmd=$cmd&item_id=$item_id") . "\">"
+					. "<img " .makeButton("loeschen","src") . tooltip(_("Dieses Element löschen"))
+					. " border=\"0\"></a>&nbsp;";
+				}
+			}
+			$content .= "</td></tr></table>";
+		}
 		return $content;
 	}
 	
@@ -343,9 +349,12 @@ class StudipLitListViewAdmin extends TreeView{
 				tooltip(_("Element nach unten verschieben")) . "></a>";
 			}
 			if ($this->tree->isElement($item_id)){
-				$head .= "<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") . 
-				"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " . 
-				tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
+				$head .= ($this->clip_board->isInClipboard($this->tree->tree_data[$item_id]["catalog_id"])) 
+						? "<img src=\"pictures/forum_fav.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " . 
+						tooltip(_("Dieser Eintrag ist bereits in ihrer Merkliste")) . ">" 
+						:"<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") . 
+						"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " . 
+						tooltip(_("Eintrag in Merkliste aufnehmen")) . "></a>";
 			} else {
 				$head .= "<a href=\"". $this->getSelf("cmd=InClipboard&item_id=$item_id") . 
 				"\"><img src=\"pictures/forum_fav2.gif\" hspace=\"4\" width=\"12\" height=\"11\" border=\"0\" " . 

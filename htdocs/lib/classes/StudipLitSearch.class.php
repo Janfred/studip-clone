@@ -88,7 +88,7 @@ class StudipLitSearch {
 			$this->outer_form->form_values['search_term_count']--;
 		}
 		$plugin_number = false;
-		if ($this->outer_form->isClicked("reset") || ($this->outer_form->isClicked("change") && $this->outer_form->isChanged("search_plugin"))){
+		if ($this->outer_form->isClicked("reset") ||  $this->outer_form->isChanged("search_plugin")){
 			$plugin_number = $this->outer_form->getFormFieldValue("search_plugin");
 			$this->outer_form->doFormReset();
 			$this->outer_form->form_values["search_plugin"] = $plugin_number;
