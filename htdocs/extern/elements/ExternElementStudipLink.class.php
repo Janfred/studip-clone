@@ -117,13 +117,13 @@ class ExternElementStudipLink extends ExternElement {
 	}
 	
 	function toString ($args) {
-		$out = "<table width=\"{$args['width']}\" align=\"{$args['align']}\" ";
-		$out .= "valign=\"{$args['valign']}\" cellpadding=\"0\" cellspacing=\"0\">\n";
-		$out .= "<tr height=\"{$args['height']}\">";
-		$out .= "<td width=\"100%\" align=\"" . $this->config->getValue($this->name, "align") . "\">\n";
-		$out .= "<font" . $this->config->getAttributes($this->name, "font") . ">";
-		$out .= sprintf("<a href=\"%s\"%s>%s</a>", $args['link'],
-				$this->config->getAttributes($this->name, "a"),
+		$out = "<table width=\"{$args['width']}\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n";
+		$out .= "<tr>";
+		$out .= "<td height=\"{$args['height']}\" width=\"100%\" align=\""
+				. $this->config->getValue($this->name, "align") . "\">\n";
+		$font = "<font" . $this->config->getAttributes($this->name, "font") . ">";
+		$out .= sprintf("<a href=\"%s\"%s>%s%s</font></a>", $args['link'],
+				$this->config->getAttributes($this->name, "a"), $font,
 				$this->config->getValue($this->name, "linktext"));
 		if ($this->config->getValue($this->name, "image")) {
 			if ($image_url = $this->config->getValue($this->name, "imageurl"))
@@ -135,7 +135,7 @@ class ExternElementStudipLink extends ExternElement {
 			$out .= sprintf("<a href=\"%s\"%s>%s</a>", $args['link'],
 					$this->config->getAttributes($this->name, "a"), $img);
 		}
-		$out .= "</font>\n</td></tr></table>\n";
+		$out .= "\n</td></tr></table>\n";
 		
 		return $out;
 	}
