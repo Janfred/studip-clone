@@ -117,6 +117,7 @@ if ($ILIAS_CONNECT_ENABLE)
 				$deleted_msg = _("Alter Account wurde gel&ouml;scht.");/**/
 		}
 		$creation_result = create_ilias_user($auth->auth["uid"]);
+		$created = true;
 	}
 	if ( (check_ilias_auth()) AND ($mode == "connect") AND (($this_ilias_id == false) OR isset($ja_x)))
 		$connect_result = connect_users($auth->auth["uid"], get_ilias_user_id($ilias_uname));
@@ -195,7 +196,7 @@ if ($ILIAS_CONNECT_ENABLE)
 				echo "</td></tr>";
 				if ($auth_mode == true)
 				{
-					if ((get_connected_user_id($auth->auth["uid"]) != false) AND !isset($ja_x))
+					if ((get_connected_user_id($auth->auth["uid"]) != false) AND !isset($ja_x) AND !$created)
 					{	
 						my_info( _("Ihrem Stud.IP-Account wurde bereits ein ILIAS-Account zugeordnet. Wenn Sie fortfahren, wird diese Zuordnung &uuml;berschrieben und ein neuer Account angelegt. Soll die alte Zuordnung gel&ouml;scht werden?"));
 						?>
