@@ -41,12 +41,12 @@ $db->query($query);
 
 //If User id is found, track him with all the data...
 if ($db->next_record()) {
-	$query = sprintf ("INSERT INTO tracking_data SET entry_id = '%s', user_id = '%s', page = '%s', params = '%s', timestamp = '%s', open_object = '%s', user_ip = '%s', user_agent = '%s' ", md5(uniqid(rand())), $user->id, $i_page, $QUERY_STRING, time(), $SessSemName[1], $REMOTE_ADDR, $HTTP_USER_AGENT);
+	$query = sprintf ("INSERT INTO tracking_data SET entry_id = '%s', user_id = '%s', page = '%s', params = '%s', timestamp = '%s', open_object = '%s', user_ip = '%s', user_agent = '%s' ", md5(uniqid(rand())), $user->id, $i_page, $QUERY_STRING, time(), $SessSemName[1], $REMOTE_ADDR, $HTTP_USER_AGENT, $referrer_page);
 	$db->query($query);
 //track him anonymously
 } else {
 	$hashed_user_id = md5($user->id);
-	$query = sprintf ("INSERT INTO tracking_data SET entry_id = '%s', user_id = '%s', page = '%s', timestamp = '%s'", md5(uniqid(rand())), $hashed_user_id, $i_page, time());
+	$query = sprintf ("INSERT INTO tracking_data SET entry_id = '%s', user_id = '%s', page = '%s', timestamp = '%s'", md5(uniqid(rand())), $hashed_user_id, $i_page, time(), $referrer_page);
 	$db->query($query);
 }
 */
