@@ -35,7 +35,7 @@ $structure["timetable"]=array ("topKat"=>"", "name"=>_("Stundenplan"), "link"=>"
 $structure["contact"]=array ("topKat"=>"", "name"=>_("Adressbuch"), "link"=>"contact.php", "active"=>FALSE);
 $structure["post"]=array ("topKat"=>"", "name"=>_("Nachrichten"), "link"=>"sms_box.php", "active"=>FALSE);
 $structure["chat"]=array ("topKat"=>"", "name"=>_("Chat"), "link"=>"chat_online.php", "active"=>FALSE);
-$structure["online"]=array ("topKat"=>"", "name"=>_("Wer ist online?"), "link"=>"online.php", "active"=>FALSE);
+$structure["online"]=array ("topKat"=>"", "name"=>_("Online"), "link"=>"online.php", "active"=>FALSE);
 
 //Bottomkats
 
@@ -43,6 +43,8 @@ $structure["in"] = array ("topKat"=>"post", "name"=>_("empfangene"), "link"=>"sm
 $structure["out"] = array ("topKat"=>"post", "name"=>_("gesendete"), "link"=>"sms_box.php?sms_inout=out", "active"=>FALSE);
 $structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreiben"), "link"=>"sms_send.php", "active"=>FALSE);
 $structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), "link"=>"".$PHP_SELF."?change_view=TRUE", "active"=>FALSE);
+$structure["online2"] = array ("topKat"=>"online", "name"=>_("Wer ist online?"), "link"=>"online.php", "active"=>FALSE);
+$structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), "link"=>"".$PHP_SELF."?change_view=TRUE", "active"=>FALSE);
 $structure["calendar_day"] = array ("topKat"=>"calender", "name"=>_("Tag"), "link"=>"calendar.php?cmd=showday&atime=$atime", "active"=>FALSE);
 $structure["calendar_week"] = array ("topKat"=>"calender", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
 $structure["calendar_month"] = array ("topKat"=>"calender", "name"=>_("Monat"), "link"=>"calendar.php?cmd=showmonth&atime=$atime", "active"=>FALSE);
@@ -61,21 +63,25 @@ $structure["contact_statusgruppen"] = array ("topKat"=>"contact", "name"=>_("Gru
 //View festlegen
 switch ($i_page) {
 	case "sms_box.php" : 
-		if ($change_view == TRUE) {
+		if ($change_view == TRUE || $messaging_cmd == "change_view_insert") {
 			$reiter_view = "adjust";
 		} else {
 			$reiter_view = $sms_data["view"]; 
 		}
 	break;
 	case "sms_send.php" : 
-		if ($change_view == TRUE) {
+		if ($change_view == TRUE || $messaging_cmd == "change_view_insert") {
 			$reiter_view = "adjust";
 		} else {
 			$reiter_view = "write"; 
 		}
 	break;
 	case "online.php" : 
-		$reiter_view = "online"; 
+		if ($change_view == TRUE || $messaging_cmd == "change_view_insert") {
+			$reiter_view = "adjust_online";
+		} else	{
+			$reiter_view = "online";
+		}
 	break;
 	case "chat_online.php" : 
 		$reiter_view = "chat"; 
