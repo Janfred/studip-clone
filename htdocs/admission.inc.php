@@ -295,6 +295,7 @@ function group_update_admission($seminar_id, $send_message = TRUE) {
 	      $db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id")."' ");
 	      $db5->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id = '".$db->f("Seminar_id")."' AND status = 'accepted' AND studiengang_id = '".$db2->f("studiengang_id")."'");
 	      $free_quota=$tmp_admission_quota - $db3->num_rows() - $db5->num_rows();
+				if ($free_quota < 0) $free_quota = 0;
 	      //Studis auswaehlen, die jetzt aufsteigen koennen
 	      $db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY position LIMIT $free_quota");
 	      while ($db4->next_record()) {
