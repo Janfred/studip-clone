@@ -526,7 +526,7 @@ reset($votes);
 function makeTableHeaderCell($text = "&nbsp;", $width = "5%", $align = "center", $colspan = "1"){
    if ($text == "blindgif") $text = "<img width=\"$width\" align=\"middle\" height=\"1\" src=\"pictures/blank.gif\" alt=\"\">";
    $html = "	 <td class=\"steel\" style=\"vertical-align:bottom;\" colspan=\"$colspan\" align=\"$align\" width=\"$width\" height=\"26\">\n"
-      . "	  <font size=-1 style=\"vertical-align:bottom;\"><b>$text</b></font>\n"
+      . "	  <font size=-1><b>$text</b></font>\n"
       . "	 </td>\n";
    return $html;
 }
