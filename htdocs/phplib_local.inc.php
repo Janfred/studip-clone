@@ -107,7 +107,7 @@ class DB_Ilias extends DB_Sql {
 /*get params from the CONFIG table
 ----------------------------------------------------------------*/
 $db = new DB_Seminar;
-$query = ("SELECT * FROM CONFIG");
+$query = ("SELECT * FROM config");
 $db->query($query);
 while ($db->next_record()) {
 	$variable_key = $db->f("key");

@@ -727,13 +727,13 @@ function write_config ($key='', $val='', $arr='') {
 	}
 	if (is_array($arr)) {
 		foreach ($arr as $key=>$val) {
-			$query = sprintf ("SELECT * FROM CONFIG WHERE `key` = '%s' ", $key);
+			$query = sprintf ("SELECT * FROM config WHERE `key` = '%s' ", $key);
 			$db->query($query);
 		
 			if ($db->nf()) {
-				$query = sprintf ("UPDATE CONFIG SET `key` = '%s', value = '%s', chdate = '%s' WHERE `key` = '%s' ", $key, $val, time(), $key);
+				$query = sprintf ("UPDATE config SET `key` = '%s', value = '%s', chdate = '%s' WHERE `key` = '%s' ", $key, $val, time(), $key);
 			} else {
-				$query = sprintf ("INSERT INTO CONFIG SET config_id = '%s', `key` = '%s', value = '%s', chdate = '%s'", md5(uniqid("configID")), $key, $val, time());
+				$query = sprintf ("INSERT INTO config SET config_id = '%s', `key` = '%s', value = '%s', chdate = '%s'", md5(uniqid("configID")), $key, $val, time());
 			}
 			$db->query($query);
 		}
@@ -756,7 +756,7 @@ function write_config ($key='', $val='', $arr='') {
 function get_config ($key, $default = FALSE) {
 	$db = new DB_Seminar;
 	
-	$query = sprintf ("SELECT value, default_value FROM CONFIG WHERE `key` = '%s' ", $key);
+	$query = sprintf ("SELECT value, default_value FROM config WHERE `key` = '%s' ", $key);
 	$db->query($query);
 	if ($db->next_record()) {
 		if ($default)
