@@ -133,7 +133,13 @@ class CT_Sql {
   }
 
   function ac_newid($str, $name) {
-    return $str;
+		$query = "SELECT DISTINCTROW sid FROM " . $this->database_table . " WHERE sid = '$str' AND name = '$name'";
+		$this->db->query($query);
+		if ($this->db->affected_rows() == 0) {
+    	return $str;
+		} else {
+			return FALSE;
+		}
   }
 
   function ac_halt($s) {

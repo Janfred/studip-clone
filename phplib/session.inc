@@ -108,7 +108,9 @@ class Session {
  
     if ( "" == $id ) {
       $newid=true;
-      $id = $this->that->ac_newid(md5(uniqid($this->magic)), $this->name);
+      while (!$id = $this->that->ac_newid(md5(uniqid($this->magic, TRUE)), $this->name)) {
+				; // loop until we have an unused session id 
+			}
     }
  
     switch ($this->mode) {
