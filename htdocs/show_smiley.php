@@ -19,7 +19,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 // $Id$
-require_once "config.inc.php";
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+$_language_path = init_i18n($_language);
 
 function my_comp($a, $b){
 	return strcasecmp($a[1], $b[1]);
@@ -42,15 +44,15 @@ usort($i_smile, "my_comp");
 ?>
 <html>
 <head>
-<title>Alle Smileys (<?=count($i_smile)?>)</title>
+<title><?=_("Alle Smilies")?> (<?=count($i_smile)?>)</title>
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-<div align="center"><b>Aktuelle Smiley Anzahl: <?=count($i_smile)?></b></div>
+<div align="center"><b><?=_("Aktuelle Smiley Anzahl: ") . count($i_smile)?></b></div>
 <table align="center"><tr><td valign="top" align="center"><table><tr>
-<th>Bild</th><th>Schreibweise</th><th>Kürzel</th>
-</tr>
 <?
+echo "<th>" . _("Bild") . "</th><th>" . _("Schreibweise") . "</th><th>" . _("Kürzel") . "</th>";
+echo "</tr>";
 ob_start();
 for($i=0;$i < count($i_smile);++$i){
 		echo "\n<tr><td class=\"blank\" align=\"center\"><img src=\"$SMILE_PATH/".$i_smile[$i][0]."\"></td>";
@@ -62,9 +64,9 @@ for($i=0;$i < count($i_smile);++$i){
 			?>
 			</table></td><td valign="top">
 			<table align="center"><tr>
-			<th>Bild</th><th>Schreibweise</th><th>Kürzel</th>
-			</tr>
 			<?
+			echo "<th>" . _("Bild") . "</th><th>" . _("Schreibweise") . "</th><th>" . _("Kürzel") . "</th>";
+			echo "</tr>";
 			ob_end_flush();
 			ob_start();
 		}
