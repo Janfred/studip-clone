@@ -173,6 +173,7 @@ else {
 	echo "<font size=\"2\"><b>&nbsp;";
 	echo _("Angelegte Konfigurationen");
 	echo "</b></font>\n</td></tr>\n";
+	$css_switcher->switchClass();
 	echo "<tr><td" . $css_switcher->getFullClass() . ">&nbsp;</td></tr>\n";
 	echo "<tr><td" . $css_switcher->getFullClass() . " valign=\"top\">\n";
 	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
