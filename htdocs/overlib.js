@@ -257,6 +257,9 @@ overlib=no_overlib;
 nd=no_overlib;
 ver3fix=true;
 }
+if(navigator.appName=='Opera'||navigator.appName=='Konqueror'){
+ie5=true;
+}
 function no_overlib(){
 return ver3fix;
 }
