@@ -425,8 +425,9 @@ if ($form==4) {
 
 if ($form==7)
 	{
-	$sem_create_data["sem_literat"]=$sem_literat;
-	$sem_create_data["sem_links"]=$sem_links;
+	$sem_create_data["sem_scm"]=$sem_scm;
+	$sem_create_data["sem_scm_alt_title"]=$sem_scm_alt_title;
+	$sem_create_data["sem_scm_predef_title"]=$sem_scm_predef_title;
 	}
 
 //jump-logic
@@ -1216,27 +1217,32 @@ if (($form == 5) && ($jump_next_x))
 	$level=6;
 	}
 
-//Nur der Form halber... es geht weiter zur Literaturliste
+//Nur der Form halber... es geht weiter zur SCM-Seite
 if (($form == 6) && ($jump_next_x))
    	{
-	if (!$sem_create_data["modules_list"]["literature"]) {
+	if (!$sem_create_data["modules_list"]["scm"]) {
 		header ("Location: admin_seminare1.php");
 		die;
 	}
 	$level=7;
    	}
 
-//Eintragen der Literatur und Links
+//Eintragen des Simple Content Modules
 if (($form == 7) && ($jump_next_x))
 	{
-	if ($sem_create_data["lit_entry"]) {
-		$db->query("UPDATE literatur SET literatur='".$sem_create_data["sem_literat"]."', links='".$sem_create_data["sem_links"]."', chdate='".time()."' WHERE literatur_id='".$sem_create_data["sem_lit_id"]."'");
+	if ($sem_create_data["sem_scm_alt_title"]) {
+		$scm_title=$sem_create_data["sem_scm_alt_title"];
 	} else {
-		$sem_create_data["sem_lit_id"]=md5(uniqid($hash_secret));
-		$db->query("INSERT INTO literatur SET literatur_id='".$sem_create_data["sem_lit_id"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', literatur='".$sem_create_data["sem_literat"]."', links='".$sem_create_data["sem_links"]."', mkdate='".time()."', chdate='".time()."' ");
+		$scm_title=$sem_create_data["sem_scm_predef_title"];
+	}
+	if ($sem_create_data["scm_entry"]) {
+		$db->query("UPDATE scm SET content='".$sem_create_data["sem_scm"]."', tab_name='".$scm_title."', chdate='".time()."' WHERE scm_id='".$sem_create_data["sem_scm_id"]."'");
+	} else {
+		$sem_create_data["sem_scm_id"]=md5(uniqid($hash_secret));
+		$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', tab_name='".$scm_title."', content='".$sem_create_data["sem_scm"]."', mkdate='".time()."', chdate='".time()."' ");
 	}
 	if ($db->affected_rows()) {
-		$sem_create_data["lit_entry"]=TRUE;
+		$sem_create_data["scm_entry"]=TRUE;
 		if ($sem_create_data["modules_list"]["schedule"])
 			header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
 		else
@@ -2715,13 +2721,13 @@ if ($level==6)
 					<blockquote>
 					<?
 					print _("Sie haben die Veranstaltung bereits angelegt.");
-					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
-						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))
-							print " "._("Sie k&ouml;nnen nun mit der Literatur- und Linkverwaltung und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen."); 
-						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["literature"]))	
+					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
+						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))
+							print " "._("Sie k&ouml;nnen nun mit der freien Kursseite und dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen."); 
+						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["scm"]))	
 							print " "._("Sie k&ouml;nnen nun mit dem Termin-Assistenten fortfahren oder an diesem Punkt abbrechen.");
-						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))	
-							print " "._("Sie k&ouml;nnen nun mit der Literatur- und Linkverwaltung fortfahren oder an diesem Punkt abbrechen."); 						
+						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))	
+							print " "._("Sie k&ouml;nnen nun mit der freien Kursseite fortfahren oder an diesem Punkt abbrechen."); 						
 						print "<br><br><font size=-1>"._("Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und diese Schritte sp&auml;ter nachzuholen.")."</font>";
 					}
 					?>
@@ -2730,7 +2736,7 @@ if ($level==6)
 						<input type="HIDDEN" name="form" value=6>
 						<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">
 						<?
-						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
+						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
 							?>
 							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 							<?
@@ -2753,21 +2759,21 @@ if ($level==6)
 					<b><?=_("Die Daten der Veranstaltung wurden in das System &uuml;bernommen"); ?></b><br><br>
 					<?
 					print _("Die Veranstaltung ist jetzt eingerichtet.");
-					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
+					if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
 						print " "._("Wenn Sie nun auf &raquo;weiter >>&laquo; klicken, k&ouml;nnen Sie weitere -optionale- Daten f&uuml;r die Veranstaltung eintragen.");
-						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))
-							print " "._("Sie haben die M&ouml;glichkeit, Literatur- und Linklisten einzugeben und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen."); 
-						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["literature"]))	
+						if (($sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))
+							print " "._("Sie haben die M&ouml;glichkeit, Informationen für die freie Kursseite einzugeben und k&ouml;nnen mit Hilfe des Termin-Assisten einen Ablaufplan erstellen."); 
+						if (($sem_create_data["modules_list"]["schedule"]) && (!$sem_create_data["modules_list"]["scm"]))	
 							print " "._("Sie haben die M&ouml;glichkeit, mit Hilfe des Termin-Assisten einen Ablaufplan zu erstellen.");
-						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["literature"]))	
-							print " "._("Sie haben die M&ouml;glichkeit, Literatur- und Linklisten einzugeben."); 						
+						if ((!$sem_create_data["modules_list"]["schedule"]) && ($sem_create_data["modules_list"]["scm"]))	
+							print " "._("Sie haben die M&ouml;glichkeit, Informationen für die freie Kursseite einzugeben."); 						
 						print "<br><br><font size=-1>"._("Sie haben jederzeit die M&ouml;glichkeit, die bereits erfassten Daten zu &auml;ndern und die n&auml;chsten Schritte sp&auml;ter nachzuholen.")."</font>";
 					}
 					?><br><br>
 					<form method="POST" action="<? echo $PHP_SELF ?>">
 						<input type="HIDDEN" name="form" value=6>
 						<?
-						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["literature"])) {
+						if (($sem_create_data["modules_list"]["schedule"]) || ($sem_create_data["modules_list"]["scm"])) {
 							?>
 							<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">						
 							&nbsp;<input type="IMAGE" <?=makeButton("weiter", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
@@ -2872,7 +2878,7 @@ if ($level==7)
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 6: Literatur- und Linkliste"); ?></b>
+			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 6: Freie Kursseite"); ?></b>
 			</td>
 		</tr>
 		<tr>
@@ -2885,8 +2891,8 @@ if ($level==7)
 		<tr>
 			<td class="blank" valign="top">
 				<blockquote>
-				<b><?=_("Schritt 6: Eingeben der Literatur- und Linkliste"); ?></b><br><br>
-				<? printf (_("Sie k&ouml;nnen nun Literatur und Links f&uuml;r die eben angelegte Veranstaltung <b>%s</b> eingeben."), $sem_create_data["sem_name"]);
+				<b><?=_("Schritt 6: Eingeben der freien Kursseite"); ?></b><br><br>
+				<? printf (_("Sie k&ouml;nnen nun zus&auml;tzliche Informationen f&uuml;r die eben angelegte Veranstaltung <b>%s</b> eingeben."), $sem_create_data["sem_name"]);
 				if ($sem_create_data["modules_list"]["schedule"])
 					print " "._("Wenn Sie auf &raquo;weiter&laquo; klicken, haben Sie die M&ouml;glichkeit, mit dem Termin-Assistenten einen Ablaufplan f&uuml;r die Veranstaltung anzulegen.")
 				?>
@@ -2923,23 +2929,27 @@ if ($level==7)
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Literaturliste:"); ?>
+							<?=_("Titel:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							&nbsp; <textarea name="sem_literat" cols=58 rows=10><? echo $sem_create_data["sem_literat"] ?></textarea>
-							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("In dieses Feld können Sie eine komplette Literaturliste einfügen."), TRUE, TRUE) ?>
-							>
+						&nbsp; <select name="sem_scm_predef_title">
+							<option><?=_("Literatur"); ?></option>
+							<option><?=_("Info"); ?></option>
+						</select>
+						&nbsp; oder freie Eingabe: <input type="text" size=25 name="sem_scm_alt_title">
+						<img  src="./pictures/info.gif" 
+							<? echo tooltip(_("Sie können entweder einen vordefinierten Titel für die freie Kursseite auswählen oder einen eigenen Titel frei wählen."), TRUE, TRUE) ?>
+						>
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Linkliste:"); ?>
+							<?=_("Inhalt:"); ?>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
-							&nbsp; <textarea name="sem_links" cols=58 rows=10><? echo $sem_create_data["sem_links"] ?></textarea>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%"  colspan=3>
+							&nbsp; <textarea name="sem_scm" cols=58 rows=10><? echo $sem_create_data["sem_scm"] ?></textarea>
 							<img  src="./pictures/info.gif" 
-								<? echo tooltip(_("In dieses Feld können Sie eine komplette Linkliste einfügen. Alle Links werden später automatisch als Hyperlinks angezeigt."), TRUE, TRUE) ?>
+								<? echo tooltip(_("In dieses Feld können Sie zusätzliche Informationen zu Ihrer Veranstaltung einfügen."), TRUE, TRUE) ?>
 							>
 						</td>
 					</tr>
