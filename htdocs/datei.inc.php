@@ -1205,7 +1205,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						//Zusatzangaben erstellen
 						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
 						if (($all) && (!$upload) && ($db3->f("url")=="")) {
-							$zusatz.=sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
+							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
 					}
 					
@@ -1226,6 +1226,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$zusatz .= "&nbsp;<img src=\"pictures/ausruf_small3.gif\" ".tooltip(_("Diese Datei ist urheberrechtlich geschützt!")).">";
 					if ($db3->f("url")!="") 
 						$zusatz .= "&nbsp;<img src=\"pictures/link_extern.gif\" ".tooltip(_("Diese Datei wird von einem externen Server geladen!")).">";
+					
+					$zusatz .= $box;
 					
 					//Dokumenttitelzeile ausgeben
 					if (strstr($open,$db3->f("dokument_id"))) 
