@@ -104,17 +104,19 @@ $CHAT_SERVER_NAME = "ChatShmServer";
 $EXPORT_ENABLE = TRUE;									//Stud.IP module: export
 $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
-$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					/*path to fop*/
-$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					/*used to set environment for JRE*/
+$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					//path to fop
+$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					//used to set environment for JRE
 
 $ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias connect
 $ABSOLUTE_PATH_ILIAS = "http://<your.server.name>/ilias/";
 
 $EXTERN_ENABLE = TRUE;									//Stud.IP module: SRI-System
 $EXTERN_SERVER_NAME = "http://<your.server.name>/";
-$EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				/*path to store configs (wwwrun needs write-perm there)		
+$EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				//path to store configs (wwwrun needs write-perm there)		
 
 $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
+
+$WIKI_ENABLE = FALSE;									//Stud.IP module: Wiki-Web
 
 
 /*language settings
