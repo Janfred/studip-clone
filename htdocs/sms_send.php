@@ -425,7 +425,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	echo "</td>\n";
 	// 
 	echo "<td class=\"printcontent\" width=\"20%\" valign=\"top\">\n";
-	echo _("Vorschau der Nachricht:")."<br><br>";
+	echo "<input type=\"image\" name=\"refresh_message\" src=\"./pictures/rewind.gif\" border=\"0\" ".tooltip(_("fügt der aktuellen Nachricht eine Signatur an.")).">&nbsp;"._("Vorschau erneuern.")."<br><br>";
 
 	echo quotes_decode(formatReady($message));
 	if ($sms_data["sig"] == "1") {
