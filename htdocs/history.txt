@@ -1,6 +1,10 @@
 31.03.2003 v 0.9
+- neues Exporttool, unterstützt Ausgaben in XML, RTF und PDF
+- neue Einrichtungssuche, verwendet den Bereichsbaum
+- neuer Bereichsbaum zur Darstellung der Uni-Hierachie
+- bei regelmäßigen Veranstaltungen können nun ein Raum für jeden Termin angegeben werden
 - Ablaufplanverwaltung überarbeitet
-- neue Titelverwaltung für Nutzernamen
+- neue Titelverwaltung für Nutzernamen mit vor- und nachgestellten Titeln
 - weitere Detailverbesserungen und Bugfixes
 
 13.10.2002 v 0.8.15 ;-)
