@@ -79,6 +79,27 @@ function getMsTime(){
 
 // $stoppuhr=getMsTime();
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//Daten aus der Einstellungsseite verarbeiten
+//////////////////////////////////////////////////////////////////////////////////
+
+if ($forumsend) {
+	if ($forumsend=="bla"){
+		$forum["neuauf"] = $neuauf;
+		$forum["postingsperside"] = $postingsperside;
+		$forum["flatallopen"] = $flatallopen;
+		$forum["rateallopen"] = $rateallopen;
+		$forum["showimages"] = $showimages;
+		$forum["sortthemes"] = $sortthemes;
+		$forum["themeview"] = $themeview;
+		$forum["shrink"] = $shrink*604800; // Anzahl der Sekunden pro Woche
+		$forum["changed"] = "TRUE";
+		$txt = _("Anpassungen durchgeführt.");
+	} else
+		include("forumsettings.inc.php");
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 // Anzeige und View-Logik
 //////////////////////////////////////////////////////////////////////////////////
@@ -91,8 +112,11 @@ if ($forum["view"]=="mixed" && $open) {
 if (!$forum["themeview"])
 	$forum["themeview"]="tree";
 	
-if ($themeview)
+if ($themeview) { // Umschaltung tree/flat über die Kopfleiste
 	$forum["themeview"]=$themeview;
+	if ($forum["presetview"]=="tree" || $forum["presetview"]=="mixed")
+		$forum["presetview"] = $themeview;
+}
 
 if ($presetview) {  
 	if ($presetview == "theme")
@@ -386,25 +410,7 @@ if ($flatallopen=="FALSE")
 
 $forum["anchor"] = $open; // Anker setzen
 
-//////////////////////////////////////////////////////////////////////////////////
-//Daten aus der Einstellungsseite verarbeiten
-//////////////////////////////////////////////////////////////////////////////////
 
-if ($forumsend) {
-	if ($forumsend=="bla"){
-		$forum["neuauf"] = $neuauf;
-		$forum["postingsperside"] = $postingsperside;
-		$forum["flatallopen"] = $flatallopen;
-		$forum["rateallopen"] = $rateallopen;
-		$forum["showimages"] = $showimages;
-		$forum["sortthemes"] = $sortthemes;
-		$forum["themeview"] = $themeview;
-		$forum["shrink"] = $shrink*604800; // Anzahl der Sekunden pro Woche
-		$forum["changed"] = "TRUE";
-		$txt = _("Anpassungen durchgeführt.");
-	} else
-		include("forumsettings.inc.php");
-}
 
 //////////////////////////////////////////////////////////////////////////////////
 //Anzeige des Kopfes mit Meldungen und Toolbar
