@@ -314,7 +314,7 @@ if ($kill_datafield) {
 					<b><?=_("ben&ouml;tigter Status")?></b>
 					</font>
 				</td>
-				<td class="steel" width="10%" align="center" valign="bottom"
+				<td class="steel" width="10%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Priorit&auml;t")?></b>
 					</font>
