@@ -155,24 +155,11 @@ echo "</form>";
 <?
 
 
-echo "<table align=\"center\" class=\"blank\" width=\"100%\" cellpadding=\"1\"><tr><td align=\"middle\" class=\"steelgraulight\">";
-
-/*
-
-
-
-
-*/
-
-// echo "<a href=\"$PHP_SELF?open=all&filter=$filter\"><img src=\"pictures/meinesem.gif\" border=\"0\" valign=\"bottom\">&nbsp; <font size=\"2\">in Addressbuch aufnehmen</font></a><hr>";
-
-// Buchstabenleiste
-
-// echo $filter;
+echo "<table align=\"center\" class=\"blank\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td align=\"middle\" class=\"steelgraulight\">";
 
 
 if (($contact["view"])=="alpha") {
-	echo "<table align=\"center\" width=\"70%\"><tr>";
+	echo "<table class=\"blank\" align=\"center\" width=\"70%\"><tr>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
