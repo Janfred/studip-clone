@@ -70,7 +70,7 @@ class Modules {
 	
 	function getDefaultBinValue($range_id) {
 		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
-	
+
 		$db = new DB_Seminar;
 		
 		if (get_object_type($range_id) == "sem") {
@@ -97,6 +97,7 @@ class Modules {
 					$this->clearBit($bitmask, $val["id"]);
 			}
 		}
+
 		return $bitmask;
 	}
 	
@@ -104,9 +105,9 @@ class Modules {
 		$db = new DB_Seminar;
 		
 		if (get_object_type($range_id) == "sem") {
-			$query = sprintf ("SELECT status AS type, modules FROM seminare WHERE Seminar_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
+			$query = sprintf ("SELECT status AS type, modules FROM seminare WHERE Seminar_id ='%s'", $range_id);
 		} else {
-			$query = sprintf ("SELECT type, modules FROM Institute WHERE Institut_id ='%s' AND (modules IS NULL OR modules > 0)", $range_id);
+			$query = sprintf ("SELECT type, modules FROM Institute WHERE Institut_id ='%s' ", $range_id);
 		}
 
 		$db->query($query);
@@ -116,7 +117,7 @@ class Modules {
 			if ($db->f("modules"))
 				$bitmask = $db->f("modules");
 			else
-				$bitmask = $this->getDefaultBinValue($db->f("type"), $range_id);
+				$bitmask = $this->getDefaultBinValue($range_id);
 		}
 
 		return $bitmask;
@@ -190,7 +191,7 @@ class Modules {
 			$this->clearBit($bitmask, $this->registered_modules[$modul]["id"]);
 			
 		if (get_object_type($range_id) == "sem") {
-			if (($SEM_CLASS[$SEM_TYPE[$db->f("type")]["class"]][$modul]) && ($this->checkGlobal($modul))) {
+			if ($this->checkGlobal($modul)) {
 				$query = sprintf ("UPDATE seminare SET modules = '%s' WHERE Seminar_id ='%s'", $bitmask, $range_id);
 				$db->query($query);
 				if ($db->affected_rows())
@@ -200,7 +201,7 @@ class Modules {
 			} else 
 				return FALSE;
 		} else {
-			if (($INST_MODULES[($INST_MODULES[$db->f("type")]) ? $db->f("type") : "default"][$module]) && ($this->checkGlobal($modul))) {
+			if ($this->checkGlobal($modul)) {
 				$query = sprintf ("UPDATE Institute SET modules = '%s' WHERE Institut_id ='%s'", $bitmask, $range_id);
 				$db->query($query);
 				if ($db->affected_rows())
@@ -242,12 +243,12 @@ class Modules {
 		$this->db->next_record();
 		
 		if (get_object_type($range_id) == "sem") {
-			if (($SEM_CLASS[$SEM_TYPE[$this->db->f("type")]["class"]][$modul]) && ($this->checkGlobal($modul)))
+			if ($this->checkGlobal($modul))
 				return TRUE;
 			else
 				return FALSE;
 		} else {
-			if (($INST_MODULES[($INST_MODULES[$this->db->f("type")]) ? $db->f("type") : "default"][$modul]) && ($this->checkGlobal($modul)))
+			if ($this->checkGlobal($modul))
 				return TRUE;
 			else
 				return FALSE;
