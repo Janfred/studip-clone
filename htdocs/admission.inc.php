@@ -116,14 +116,14 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 							$messaging->insert_sms ($db3->f("username"), $message, $user_id="____%system%____");
 						}
 				}
-				//Warteposition der restlichen User neu eintragen
-				$db4->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position ");
-				$position=1;
-				while ($db4->next_record()) {
-					$db4->query("UPDATE admission_seminar_user SET position = '$position'  ");
-					$position++;
-				}
 			}
+		}
+		//Warteposition der restlichen User neu eintragen
+		$db4->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position ");
+		$position=1;
+		while ($db4->next_record()) {
+			$db4->query("UPDATE admission_seminar_user SET position = '$position'  ");
+			$position++;
 		}
 	}
 }
