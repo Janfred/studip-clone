@@ -637,6 +637,7 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	} elseif ($indikator == "score") {
 		if ($index == "0") {
 			$timecolor = "#BBBBBB";
+			echo "hallo";
 		} else {
 			if ($index >= 68)
 				$tmp = 68;
