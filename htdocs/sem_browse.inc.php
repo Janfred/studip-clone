@@ -937,10 +937,10 @@ if (($sem_browse_data["level"]=="sbi")  && (!$hide_bereich))
 //Uebersicht ueber alle Fakultaeten mit einigen Instituten
 if ((($sem_browse_data["level"]=="f") || (!isset($sem_browse_data["level"])))  && (!$hide_bereich))
 	{
-	$db->query("SELECT a.Name, a.Institut_id AS Fakultaets_id, count(d.Seminar_id) AS number_seminare FROM Institute a 
+	$db->query("SELECT a.Name, a.Institut_id AS Fakultaets_id, count(seminare.Seminar_id) AS number_seminare FROM Institute a 
 				LEFT JOIN Institute b ON (b.fakultaets_id=a.Institut_id) 
 				LEFT JOIN seminar_inst c USING (Institut_id) 
-				LEFT JOIN seminare d USING (Seminar_id) 
+				LEFT JOIN seminare  USING (Seminar_id) 
 				WHERE a.Name NOT LIKE '%- - -%' AND a.Institut_id=b.fakultaets_id $class_query GROUP BY a.Institut_id ORDER BY number_seminare DESC");
 	$db2->query("SELECT Institute.Name, Institute.Institut_id, Institute.fakultaets_id, count(seminare.Seminar_id) AS number_seminare 
 				FROM Institute LEFT JOIN seminar_inst USING(Institut_id) 
@@ -1010,3 +1010,4 @@ if ((($sem_browse_data["level"]=="f") || (!isset($sem_browse_data["level"])))  &
 			
 echo "</table></form>";
 ?>
+
