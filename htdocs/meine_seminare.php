@@ -123,7 +123,7 @@ IF ($my_sem_values["literatur"]) {
   <title>Stud.IP</title>
 	<link rel="stylesheet" href="style.css" type="text/css">
  </head>
-<body bgcolor="#ffffff">
+<body>
 
 
 <?
@@ -242,7 +242,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
      if ($num_my_sem){
      ?>
      <tr><td class="blank" colspan=2>
-	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
+	<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class="blank">
 	<tr valign="top" align="center">
 		<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" alt="Gruppe &auml;ndern" border="0"></a></th>
 		<th width="64%" align="center"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
@@ -425,7 +425,7 @@ ELSEIF ($auth->auth["perm"]=="admin"){
      if ($num_my_sem) {
      ?>
 	<tr><td class="blank" colspan=2>
-	<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class=blank>
+	<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class=blank>
 	<tr valign"top" align="center">
 		<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
 		<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">Status</a></th>
