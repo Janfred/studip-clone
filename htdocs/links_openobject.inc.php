@@ -147,9 +147,11 @@ if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)
 }
 if ($modules["forum"]) {
 	$structure["_forum"]=array (topKat=>"forum", name=>_("Baumansicht"), link=>"forum.php?view=tree", active=>FALSE);
-	$structure["mixed"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=mixed", active=>FALSE);
-	$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue", active=>FALSE);
-	$structure["flat"]=array (topKat=>"forum", name=>_("alle Beiträge"), link=>"forum.php?view=flat", active=>FALSE);
+	if ($user->id != "nobody") {
+		$structure["mixed"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=mixed", active=>FALSE);
+		$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue", active=>FALSE);
+		$structure["flat"]=array (topKat=>"forum", name=>_("alle Beiträge"), link=>"forum.php?view=flat", active=>FALSE);
+	}
 	$structure["suchen"]=array (topKat=>"forum", name=>_("Suchen"), link=>"suchen.php", active=>FALSE);
 	$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
