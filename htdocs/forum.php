@@ -18,18 +18,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-?>
 
-<html>
-
-<head>
-<?IF (!isset($SessSemName[0]) || $SessSemName[0] == "") {
-    echo "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=index.php\">";
-    echo "</head></html>";
+	if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
+		header("Location: index.php");
     die;
-}
+	}
 
-IF  ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+
+	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
 ?>
 <SCRIPT language="JavaScript">
 <!--
@@ -52,26 +55,15 @@ function pruefe_name(){
 </SCRIPT>
 <?
 }
-?>
 
-<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<? // <body bgcolor="#333366" background="pictures/bathtile.jpg">	
-
-IF ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-	echo "<script language=\"JavaScript\">";
-	echo "var ol_textfont = \"Arial\"";
-	echo "</script>";
-	ECHO "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	ECHO "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+	if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+		echo "<script language=\"JavaScript\">";
+		echo "var ol_textfont = \"Arial\"";
+		echo "</script>";
+		echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
 	}
 
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-
-// -- hier muessen Seiten-Initialisierungen passieren
-
-	include "header.php";   //hier wird der "Kopf" nachgeladen
 	include "links1.php";
 	require_once "functions.php";
 	require_once "visual.inc.php";
@@ -93,9 +85,6 @@ $write_id (welcher wird geschrieben)
 */
 ////////////////////////////////////////////////////////////////////
 
-
-//laden der persoenlichen Eintraege/Einstellungen aus dem Sessionmanagement
-$user->register("writemode");
 
 // Sind wir da wo wir hinwollen?
 

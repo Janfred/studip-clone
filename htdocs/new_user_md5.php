@@ -40,21 +40,7 @@ function generate_password($length) {
 	return $pass;
 }
 
-?>
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
- </head>
-
-<body>
-
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 	require_once("msg.inc.php"); // Funktionen fuer Nachrichtenmeldungen
 	require_once('dates.inc.php'); //Wir brauchen die Funktionen zum Loeschen von Terminen...
 	require_once("config.inc.php"); // Wir brauchen den Namen der Uni
@@ -65,6 +51,8 @@ function generate_password($length) {
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
+// Start of Output
+	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include "header.php";	 //hier wird der "Kopf" nachgeladen 
 ?>
 <body>

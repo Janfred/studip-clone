@@ -39,7 +39,7 @@ if ($nopen)
 if ($nclose)
 	$index_data["nopen"]='';
 
-// Start  of Output
+// Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");
 

@@ -37,14 +37,14 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 $perm->check("tutor");
 
-?>
-<html>
-<head>
-	<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-	<META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
-	<body bgcolor=white>
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
+// -- here you have to put initialisations for the current page
+
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+?>
 	<script language="javascript" src="md5.js"></script>
 
 	<script language="javascript">
@@ -78,12 +78,9 @@ $perm->check("tutor");
 	}
 	// -->
 	</script>
-</head>
 
 <?
 
-include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; 	//hier werden die sessions initialisiert
-include "$ABSOLUTE_PATH_STUDIP/header.php";   		//hier wird der "Kopf" nachgeladen
 include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");	//Ausgaben

@@ -87,6 +87,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$user->register("CurrentLogin");
 		$user->register("LastLogin");
 		$user->register("forum");
+		$user->register("writemode");  // Forum-Postings
 		$user->register("my_messaging_settings");
 		$user->register("my_schedule_settings");
 		$user->register("my_personal_sems");
