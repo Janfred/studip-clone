@@ -552,7 +552,7 @@ if ($change_object_perms) {
 
 //Typen bearbeiten
 if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_categories)) {
-	//if ($ObjectPerms->getUserPerm () == "admin") { --> da muss der Ressourcen Root check hin °
+	if ($my_perms->getGlobalPerms () == "admin") { //check for resources root or global root
 		if ($delete_type) {
 			$db->query("DELETE FROM resources_categories WHERE category_id ='$delete_type'");
 		}
@@ -576,15 +576,15 @@ if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_cate
 				$db->query("INSERT INTO resources_categories_properties SET category_id='$key', property_id='$add_type_property_id[$key]' ");
 			}
 		}
-	/*} else {
-		$msg->displayMsg(1);
+	} else {
+		$msg->displayMsg(25);
 		die;
-	}*/
+	}
 }
 
 //Eigenschaften bearbeiten
 if (($add_property) || ($delete_property) || ($change_properties)) {
-	//if ($ObjectPerms->getUserPerm () == "admin") { { --> da muss der Ressourcen Root check hin °
+	if ($my_perms->getGlobalPerms () == "admin") { //check for resources root or global root
 		if ($delete_property) {
 			$db->query("DELETE FROM resources_properties WHERE property_id ='$delete_property' ");
 		}
@@ -616,23 +616,17 @@ if (($add_property) || ($delete_property) || ($change_properties)) {
 			else
 				$options='';
 			
-			if (!$options)
-				if ($send_property_type[$key] == "bool")
-					$options="vorhanden";
-				elseif ($send_property_type[$key] == "select")
-					$options="Option 1;Option 2;Option 3";	
-				
 			$db->query("UPDATE resources_properties SET name='$change_property_name[$key]', options='$options', type='$send_property_type[$key]' WHERE property_id='$key' ");
 		}
-	/*} else {
-		$msg->displayMsg(1);
+	} else {
+		$msg->displayMsg(25);
 		die;
-	}*/
+	}
 }
 
 //Globale Perms bearbeiten
 if (($add_root_user) || ($delete_root_user_id)){
-	//if ($ObjectPerms->getUserPerm () == "admin") { { --> da muss der Ressourcen Root check hin °
+	if ($my_perms->getGlobalPerms () == "admin") { //check for resources root or global root
 		if ($reset_search_root_user_x)
 			$search_string_search_root_user=FALSE;
 
@@ -646,10 +640,10 @@ if (($add_root_user) || ($delete_root_user_id)){
 			foreach ($change_root_user_id as $key => $val) {
 				$db->query("UPDATE resources_user_resources SET perms='".$change_root_user_perms[$key]."' WHERE user_id='$val' ");
 			}
-	/*} else {
-		$msg->displayMsg(1);
+	} else {
+		$msg->displayMsg(25);
 		die;
-	}*/
+	}
 }
 
 //evaluate the command from schedule navigator
