@@ -855,13 +855,13 @@ if (!$cmd)
 	ELSE {?>  <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Sonstiges&username=<?echo $username?>"><font color="#000000" size=2><b>&nbsp; &nbsp; Sonstiges&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?}
 
 	IF ($auth->auth["perm"]!="admin" AND $auth->auth["perm"]!="root") {
-		IF ($view=="Login" || $view=="Forum" || $view=="Terminkalender" || $view=="Stundenplan" || $view=="Messaging"){?>  <td class=links1b align=right nowrap><a  class="links1b" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
+		IF ($view=="Login" || $view=="Forum" || $view=="calendar" || $view=="Stundenplan" || $view=="Messaging"){?>  <td class=links1b align=right nowrap><a  class="links1b" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter4.jpg" align=absmiddle></td><?}
 		ELSE {?>  <td class="links1" align="right" nowrap><a  class="links1" href="edit_about.php?view=Login"><font color="#000000" size=2><b>&nbsp; &nbsp; MyStud.IP&nbsp; &nbsp; </b></font></a><img src="pictures/reiter1.jpg" align="absmiddle"></td><?}
 		}
 echo "</tr>\n</table>\n<table class=blank cellspacing=0 cellpadding=0 border=0 width=100%>";
 
 //My StudIP-Bereich Kategorien bei bedarf einbinden
-IF ($view=="Login" || $view=="Forum" || $view=="Terminkalender" || $view=="Stundenplan" || $view=="Messaging"){
+IF ($view=="Login" || $view=="Forum" || $view=="calendar" || $view=="Stundenplan" || $view=="Messaging"){
 
 	echo "</table><table cellspacing=0 cellpadding=4 border=0 width=\"100%\"><tr><td class=\"steel1\">&nbsp; &nbsp; ";
 		
@@ -871,8 +871,8 @@ IF ($view=="Login" || $view=="Forum" || $view=="Terminkalender" || $view=="Stund
 	if ($view == "Forum"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Forum">Forum&nbsp; &nbsp; </a> <?}
 	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Forum">Forum&nbsp; &nbsp; </a> <?}
 
-	if ($view == "Terminkalender"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Terminkalender">Terminkalender&nbsp; &nbsp; </a> <?}
-	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Terminkalender">Terminkalender&nbsp; &nbsp; </a> <?}
+	if ($view == "calendar"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=calendar">Terminkalender&nbsp; &nbsp; </a> <?}
+	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=calendar">Terminkalender&nbsp; &nbsp; </a> <?}
 
 	if ($view == "Stundenplan"){ ?><img src="pictures/forumrot.gif" border="0"><a class="links2"  href="edit_about.php?view=Stundenplan">Stundenplan&nbsp; &nbsp; </a> <?}
 	else{ ?><img src="pictures/forumgrau.gif" border="0"><a class="links2"  href="edit_about.php?view=Stundenplan">Stundenplan&nbsp; &nbsp; </a> <?}
@@ -885,7 +885,7 @@ IF ($view=="Login" || $view=="Forum" || $view=="Terminkalender" || $view=="Stund
 	}
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
-IF ($view!="Forum" AND $view!="Terminkalender" AND $view!="Stundenplan" AND $view!="Messaging"){
+IF ($view!="Forum" AND $view!="calendar" AND $view!="Stundenplan" AND $view!="Messaging"){
 	if ($view!="Login") {
 		echo "<tr><td class=\"steel1\">&nbsp; &nbsp; ";
 		echo"</td></tr>\n<tr><td class=\"reiterunten\">&nbsp; </td></tr>\n</table>\n";
@@ -1197,8 +1197,8 @@ if ($view == "Stundenplan") {
 	change_schedule_view();
 	}
 	
-if($view == "Terminkalender"){
-	require_once("kalenderSettings.inc.php");
+if($view == "calendar"){
+	require_once("$RELATIVE_PATH_CALENDAR/calendar_settings.inc.php");
 	}
 
 if ($view == "Messaging") {

@@ -215,7 +215,7 @@ function show_dates ($range_id, $date_start, $date_end, $show_not=0, $show_docs=
 }
 
 function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALSE, $show_admin=FALSE, $open){
-	global $PHP_SELF, $RELATIVE_PATH_CALENDAR, $SessSemName, $user, $TERMIN_TYP, $PERS_TERMIN_KAT, $username;
+	global $PHP_SELF, $RELATIVE_PATH_CALENDAR, $SessSemName, $user, $TERMIN_TYP, $PERS_TERMIN_KAT, $username, $CALENDAR_DRIVER;
 	
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 	
@@ -298,17 +298,17 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 			if($open == $app_ident) {
 				$content = '';			
 				if($termin->getDescription())
-					$content .= htmlReady($termin->getDescription())."<br /><br />";
+					$content .= sprintf("%s<br /><br />", htmlReady($termin->getDescription()));
 				else
 					$content .= "Keine Beschreibung vorhanden<br /><br />";
 				
 				if(sizeof($PERS_TERMIN_KAT) > 1)
-					$content .= "<b>Art des Termins:</b> ".$PERS_TERMIN_KAT[$termin->getCategory()]["name"]."<br /><br />";
+					$content .= sprintf("<b>Art des Termins:</b> %s<br /><br />", $PERS_TERMIN_KAT[$termin->getCategory()]["name"]);
 				
 				if($show_admin)
-					$content .= '<div align="center"><a href="./calendar.php?cmd=edit&termin_id='.$termin->getId()
-										. '"><img src="./pictures/buttons/terminaendern-button.gif" border="0" alt="Termin &auml;ndern">'
-										. '</a></div>';
+					$content .= sprintf("<div align=\"center\"><a href=\"./calendar.php?cmd=edit&termin_id=%s&atime=%s\">"
+										. "<img src=\"./pictures/buttons/terminaendern-button.gif\" border=\"0\" alt=\"Termin &auml;ndern\">"
+										. "</a></div>", $termin->getId(), $termin->getStart());
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				printcontent(0,0, $content, $edit);
