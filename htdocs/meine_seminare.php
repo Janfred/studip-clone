@@ -30,7 +30,7 @@ function get_my_sem_values(&$my_sem) {
 
 	// Postings
 	$db2->query("SELECT b.Seminar_id,count(topic_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.topic_id,NULL)) AS neue 
-				FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
+	FROM loginfilenow_".$user->id." b  LEFT JOIN px_topics a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		if ($my_sem[$db2->f("Seminar_id")]["modules"]["forum"]) {
 			$my_sem[$db2->f("Seminar_id")]["neuepostings"]=$db2->f("neue");
@@ -40,7 +40,7 @@ function get_my_sem_values(&$my_sem) {
 	
 	//dokumente
 	$db2->query("SELECT b.Seminar_id,count(dokument_id) as count, count(IF((chdate > b.loginfilenow AND user_id !='".$user->id."'),a.dokument_id,NULL)) AS neue 
-				FROM loginfilenow_".$user->id." b  LEFT JOIN dokumente a USING (Seminar_id) GROUP BY b.Seminar_id");
+	FROM loginfilenow_".$user->id." b  LEFT JOIN dokumente a USING (Seminar_id) GROUP BY b.Seminar_id");
 	while($db2->next_record()) {
 		if ($my_sem[$db2->f("Seminar_id")]["modules"]["documents"]) {
 			$my_sem[$db2->f("Seminar_id")]["neuedokumente"]=$db2->f("neue");
@@ -243,7 +243,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	if ($sortby == "count")
 		$sortby = "count DESC";
 		
-	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, seminare.chdate, admission_binding,modules FROM seminar_user LEFT JOIN seminare  USING (Seminar_id) WHERE seminar_user.user_id = '$user->id' GROUP BY Seminar_id ORDER BY $sortby");
 	$num_my_sem=$db->num_rows();
 	if (!$num_my_sem)
 		$meldung = "info§" . sprintf(_("Sie haben zur Zeit keine Veranstaltungen abonniert, an denen Sie teilnehmen k&ouml;nnen. Bitte nutzen Sie %s<b>Veranstaltung suchen / hinzuf&uuml;gen</b>%s um neue Veranstaltungen aufzunehmen."), "<a href=\"sem_portal.php\">", "</a>") . "§" . $meldung;
@@ -286,7 +286,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		ob_start();
 		while ($db->next_record()) {
 			$my_sem[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"gruppe" => $db->f("gruppe"),
-				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"), "sem"));
+				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules")));
 			
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 			if (($GLOBALS['CHAT_ENABLE']) && ($my_sem[$db->f("Seminar_id")]["modules"]["chat"])) {
@@ -654,7 +654,7 @@ elseif ($auth->auth["perm"]=="admin") {
 	
 		while ($db->next_record()){
 		$my_sem[$db->f("Seminar_id")]=array(institut=>$db->f("Institut"),teilnehmer=>$db->f("teilnehmer"),name=>$db->f("Name"),status=>$db->f("status"),chdate=>$db->f("chdate"),
-			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id"), "sem"));
+			start_time=>$db->f("start_time"), binding=>$db->f("admission_binding"), modules=>$Modules->getLocalModules($db->f("Seminar_id"), "sem",$db->f("modules")));
 			$value_list.="('".$db->f("Seminar_id")."',0".$loginfilenow[$db->f("Seminar_id")]."),";
 		}
 		$value_list=substr($value_list,0,-1);
