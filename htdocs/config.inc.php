@@ -312,7 +312,7 @@ $INST_FUNKTION[22]=array("name"=>"ausserdem am Institut tätig", "en"=>"assoziate
 $INST_FUNKTION[23]=array("name"=>"DozentIn institutsübergreifender Veranstaltungen", "en"=>"Lecturer of interinstitutional courses");
 //weitere Funktionen koennen hier angefuegt werden
 
-$INST_FUNKTION_ORDER = array(21,13,11,12,10,9,6,3,20,7,23,8,2,15,14,23,19,17,5,18,4,22,16);
+$INST_FUNKTION_ORDER = array(21,13,11,12,10,9,6,3,20,7,23,8,2,15,14,19,17,5,18,4,22,16);
 
 //Festlegen der Veranstaltungs Termin Typen
 $TERMIN_TYP[1]=array("name"=>"Sitzung", "sitzung"=>1); 		//dieser Termin Typ wird immer als Seminarsitzung verwendet und im Ablaufplan entsprechend markiert. Der Titel kann veraendert werden, Eintraege aus dem Seminar Assistenten und Terminverwaltung fuer Seminar-Sitzungsterrmine bekommen jedoch immer diesen Typ
@@ -332,7 +332,7 @@ $PERS_TERMIN_KAT[3]=array("name"=>"Vorbesprechung", "color"=>"#DC143C");
 $PERS_TERMIN_KAT[4]=array("name"=>"Klausur", "color"=>"#FF0000");
 $PERS_TERMIN_KAT[5]=array("name"=>"Exkursion", "color"=>"#FFA500");
 $PERS_TERMIN_KAT[6]=array("name"=>"Sondersitzung", "color"=>"#FFA500");
-$PERS_TERMIN_KAT[7]=array("name"=>"Püfung", "color"=>"#FF0000");
+$PERS_TERMIN_KAT[7]=array("name"=>"Prüfung", "color"=>"#FF0000");
 $PERS_TERMIN_KAT[8]=array("name"=>"Telefonat", "color"=>"#6B8E23");
 $PERS_TERMIN_KAT[9]=array("name"=>"Besprechung", "color"=>"#32CD23");
 $PERS_TERMIN_KAT[10]=array("name"=>"Verabredung", "color"=>"#228B22");
