@@ -78,49 +78,54 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 		$begin = $assign_object->getBegin();
 	if (!$end)
 		$end = $assign_object->getRepeatEnd();
-		
-	if ($assign_object->getRepeatMode() == "na") {
+	$ao_repeat_mode = $assign_object->getRepeatMode();
+	$ao_begin = $assign_object->getBegin();
+	$ao_end = $assign_object->getEnd();
+	$ao_r_end = $assign_object->getRepeatEnd();
+	$ao_r_q = $assign_object->getRepeatQuantity();
+	$ao_r_i = $assign_object->getRepeatInterval();
+	if ($ao_repeat_mode == "na") {
 		// date without repeatation, we have to create only one event (object = event)
-		$assEvt = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $assign_object->getEnd(),
+		$assEvt = new AssignEvent($assign_object->getId(), $ao_begin, $ao_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
-		$assEvt->setRepeatMode($assign_object->getRepeatMode());
+		$assEvt->setRepeatMode($ao_repeat_mode);
 		if (!isFiltered($filter, $assEvt->getRepeatMode(TRUE)))
 			$this->events[] = $assEvt;
-	} elseif ($assign_object->getRepeatMode() == "sd") {
+	} elseif ($ao_repeat_mode == "sd") {
 		// several days mode, we create multiple assigns
 		
 		//first day
 		$temp_ts_end=mktime(23, 59, 59,
-					date("n",$assign_object -> getBegin()), 
-					date("j",$assign_object -> getBegin()),
-					date("Y",$assign_object -> getBegin()));
+					date("n",$ao_begin), 
+					date("j",$ao_begin),
+					date("Y",$ao_begin));
 
-		if (($temp_ts_end <= $end) && ($assign_object->getBegin() >= $begin)) {
-			$assEvt = new AssignEvent($assign_object->getId(), $assign_object->getBegin(), $temp_ts_end,
+		if (($temp_ts_end <= $end) && ($ao_begin >= $begin)) {
+			$assEvt = new AssignEvent($assign_object->getId(), $ao_begin, $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
-			$assEvt->setRepeatMode($assign_object->getRepeatMode());
+			$assEvt->setRepeatMode($ao_repeat_mode);
 			if (!isFiltered($filter, $assEvt->getRepeatMode()))
 				$this->events[] = $assEvt;
 		}
 		//in between days
-		for ($d=date("j",$assign_object -> getBegin())+1; $d<=date("j",$assign_object -> getRepeatEnd())-1; $d++) {
+		for ($d=date("j",$ao_begin)+1; $d<=date("j",$ao_r_end)-1; $d++) {
 			$temp_ts=mktime(0, 0, 0,
-					date("n",$assign_object -> getBegin()), 
+					date("n",$ao_begin), 
 					$d,
-					date("Y",$assign_object -> getBegin()));
+					date("Y",$ao_begin));
 
 			$temp_ts_end=mktime(23, 59, 59,
-					date("n",$assign_object -> getBegin()), 
+					date("n",$ao_begin), 
 					$d,
-					date("Y",$assign_object -> getBegin()));
+					date("Y",$ao_begin));
 
 			if (($temp_ts_end <= $end) && ($temp_ts >= $begin)) {
 				$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
-				$assEvt->setRepeatMode($assign_object->getRepeatMode());
+				$assEvt->setRepeatMode($ao_repeat_mode);
 				if (!isFiltered($filter, $assEvt->getRepeatMode()))
 					$this->events[] = $assEvt;								
 			}
@@ -128,63 +133,63 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 				
 		//last_day
 		$temp_ts=mktime(0, 0, 0,
-					date("n",$assign_object -> getRepeatEnd()), 
-					date("j",$assign_object -> getRepeatEnd()),
-					date("Y",$assign_object -> getRepeatEnd()));
+					date("n",$ao_r_end), 
+					date("j",$ao_r_end),
+					date("Y",$ao_r_end));
 
-		$temp_ts_end=mktime(date("G",$assign_object -> getEnd()), 
-					date("i",$assign_object -> getEnd()), 
+		$temp_ts_end=mktime(date("G",$ao_end), 
+					date("i",$ao_end), 
 					0, 
-					date("n",$assign_object -> getRepeatEnd()), 
-					date("j",$assign_object -> getRepeatEnd()),
-					date("Y",$assign_object -> getRepeatEnd()));
+					date("n",$ao_r_end), 
+					date("j",$ao_r_end),
+					date("Y",$ao_r_end));
 
 		if (($temp_ts_end <= $end) && ($temp_ts >= $begin)) {
 			$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 								$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 								$assign_object->getUserFreeName());
-			$assEvt->setRepeatMode($assign_object->getRepeatMode());
+			$assEvt->setRepeatMode($ao_repeat_mode);
 			if (!isFiltered($filter, $assEvt->getRepeatMode()))
 				$this->events[] = $assEvt;								
 		}
 		
-	} elseif ((($assign_object -> getRepeatEnd() >= $begin) && ($assign_object -> getBegin() <= $end)) ||
-			(($begin == -1) &&($end == -1) && ($assign_object->getRepeatQuantity() >0)))
+	} elseif ((($ao_r_end >= $begin) && ($ao_begin <= $end)) ||
+			(($begin == -1) &&($end == -1) && ($ao_r_q  >0)))
 		do { 
 
 		//create a temp_ts to try every possible repeatation
-		$temp_ts=mktime(date("G",$assign_object -> getBegin()), 
-					date("i",$assign_object -> getBegin()), 
+		$temp_ts=mktime(date("G",$ao_begin), 
+					date("i",$ao_begin), 
 					0, 
-					date("n",$assign_object -> getBegin())+($month_offset * $assign_object ->getRepeatInterval()), 
-					date("j",$assign_object -> getBegin())+($week_offset * $assign_object ->getRepeatInterval() * 7) + ($day_offset * $assign_object ->getRepeatInterval()), 
-					date("Y",$assign_object -> getBegin())+($year_offset * $assign_object ->getRepeatInterval()));
-		$temp_ts_end=mktime(date("G",$assign_object -> getEnd()), 
-					date("i",$assign_object -> getEnd()), 
+					date("n",$ao_begin)+($month_offset * $ao_r_i), 
+					date("j",$ao_begin)+($week_offset * $ao_r_i * 7) + ($day_offset * $ao_r_i), 
+					date("Y",$ao_begin)+($year_offset * $ao_r_i));
+		$temp_ts_end=mktime(date("G",$ao_end), 
+					date("i",$ao_end), 
 					0, 
-					date("n",$assign_object -> getBegin()) + ($month_offset * $assign_object ->getRepeatInterval()), 
-					date("j",$assign_object -> getEnd())+($week_offset * $assign_object ->getRepeatInterval() * 7)  + ($day_offset * $assign_object ->getRepeatInterval()),  
-					date("Y",$assign_object -> getEnd())+($year_offset * $assign_object ->getRepeatInterval()));
+					date("n",$ao_begin) + ($month_offset * $ao_r_i), 
+					date("j",$ao_end)+($week_offset * $ao_r_i * 7)  + ($day_offset * $ao_r_i),  
+					date("Y",$ao_end)+($year_offset * $ao_r_i));
 		//change the offsets
-		if ($assign_object->getRepeatMode() == "y") $year_offset++;
-		if ($assign_object->getRepeatMode() == "w") $week_offset++;
-		if ($assign_object->getRepeatMode() == "m") $month_offset++;
-		if ($assign_object->getRepeatMode() == "d") $day_offset++;
+		if ($ao_repeat_mode == "y") $year_offset++;
+		if ($ao_repeat_mode == "w") $week_offset++;
+		if ($ao_repeat_mode == "m") $month_offset++;
+		if ($ao_repeat_mode == "d") $day_offset++;
 
 		//inc the count
 		$quantity++;
 		
 		//check if we want to show the event and if it is not outdated
-		if (($begin == -1) && ($end == -1) && ($assign_object->getRepeatQuantity() >0))
+		if (($begin == -1) && ($end == -1) && ($ao_r_q  >0))
 			 	$this->events[] = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 										$assign_object->getUserFreeName());
 		elseif ($temp_ts >= $begin) {
-			 if (($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && (($quantity <= $assign_object->getRepeatQuantity()) || ($assign_object->getRepeatQuantity() == -1)))  {
+			 if (($temp_ts <=$end) && ($temp_ts <= $ao_r_end) && (($quantity <= $ao_r_q ) || ($ao_r_q  == -1)))  {
 			 	$assEvt = new AssignEvent($assign_object->getId(), $temp_ts, $temp_ts_end,
 										$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 										$assign_object->getUserFreeName());
-				$assEvt->setRepeatMode($assign_object->getRepeatMode());
+				$assEvt->setRepeatMode($ao_repeat_mode);
 				if (!isFiltered($filter, $assEvt->getRepeatMode()))
 					$this->events[] = $assEvt;										
 			}
@@ -194,8 +199,8 @@ function create_assigns($assign_object, &$this, $begin='', $end='', $filter = FA
 		if ($quantity > 150)
 			break;
 			
-		} while((($temp_ts <=$end) && ($temp_ts <= $assign_object -> getRepeatEnd()) && ($quantity < $assign_object->getRepeatQuantity() || $assign_object->getRepeatQuantity() == -1)) || 
-				(($begin == -1) &&($end == -1) &&($assign_object->getRepeatQuantity()) >0) && ($quantity < $assign_object->getRepeatQuantity()));
+		} while((($temp_ts <=$end) && ($temp_ts <= $ao_r_end) && ($quantity < $ao_r_q  || $ao_r_q  == -1)) || 
+				(($begin == -1) &&($end == -1) &&($ao_r_q ) >0) && ($quantity < $ao_r_q ));
 }
 
 function isFiltered($filter, $mode) {

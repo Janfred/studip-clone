@@ -84,10 +84,13 @@ class CheckMultipleOverlaps {
 		$resObject = new ResourceObject($resource_id);
 		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...		
 			$assEvt = new AssignEventList($this->begin, $this->end, $resource_id, FALSE, FALSE, FALSE);
+			$now = time();
+			if ($assEvt->existEvent()){
 			while ($event = $assEvt->nextEvent()) {
-				$query = sprintf ("INSERT INTO resources_temporary_events SET event_id = '%s', resource_id = '%s', assign_id = '%s', begin = '%s', end = '%s', mkdate = '%s'",
-							md5(uniqid("tempo")), $resource_id, $event->getAssignId(), $event->getBegin(), $event->getEnd(), time());
-				$this->db->query($query);
+				$sql[] = "('" . md5(uniqid("tempo")) ."','$resource_id', '".$event->getAssignId()."', ".$event->getBegin().", ".$event->getEnd().", $now)";
+			}
+			$query = "INSERT INTO resources_temporary_events (event_id ,resource_id, assign_id,begin,end,mkdate) VALUES " . join(",",$sql);
+			$this->db->query($query);
 			}
 		}
 	}

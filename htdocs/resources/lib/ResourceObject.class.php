@@ -49,6 +49,10 @@ class ResourceObject {
 	var $category_name;			//name of the assigned catgory
 	var $category_iconnr;			//iconnumber of the assigned catgory
 	var $category_id;			//Die Kategorie des Objects
+	var $is_room = null;
+	var	$is_parent = null;
+	var $my_state = null;
+	var $my_owner_type = null;
 	
 	//Konstruktor
 	function ResourceObject($name='', $description='', $parent_bind='', $root_id='', $parent_id='', $category_id='', $owner_id='', $id = '') {
@@ -200,37 +204,40 @@ class ResourceObject {
 		if (!$id)
 			$id=$this->owner_id;
 
-		//Is it a global?
-		if ($id == "global")
-			return "global";
-
-		//Is it a entry for "everyone"?
-		if ($id == "all")
-			return "all";
-		
-		//Ist es eine Veranstaltung?
-		$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$id);
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "sem";
-
-		//Ist es ein Nutzer?
-		$query = sprintf("SELECT user_id FROM auth_user_md5 WHERE user_id='%s' ",$id);
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "user";
-		
-		//Ist es ein Termin?
-		$query = sprintf("SELECT termin_id FROM termine WHERE termin_id='%s' ",$id);
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "date";
-
-		//Ist es ein Institut?
-		$query = sprintf("SELECT Institut_id FROM Institute WHERE Institut_id='%s' ",$id);
-		$this->db->query($query);
-		if ($this->db->next_record())
-			return "inst";
+		if (is_null($this->my_owner_type)){
+			//Is it a global?
+			if ($id == "global")
+				$this->my_owner_type = "global";
+	
+			//Is it a entry for "everyone"?
+			if ($id == "all")
+				$this->my_owner_type = "all";
+			
+			//Ist es eine Veranstaltung?
+			$query = sprintf("SELECT Seminar_id FROM seminare WHERE Seminar_id='%s' ",$id);
+			$this->db->query($query);
+			if ($this->db->next_record())
+				$this->my_owner_type = "sem";
+	
+			//Ist es ein Nutzer?
+			$query = sprintf("SELECT user_id FROM auth_user_md5 WHERE user_id='%s' ",$id);
+			$this->db->query($query);
+			if ($this->db->next_record())
+				$this->my_owner_type = "user";
+			
+			//Ist es ein Termin?
+			$query = sprintf("SELECT termin_id FROM termine WHERE termin_id='%s' ",$id);
+			$this->db->query($query);
+			if ($this->db->next_record())
+				$this->my_owner_type = "date";
+	
+			//Ist es ein Institut?
+			$query = sprintf("SELECT Institut_id FROM Institute WHERE Institut_id='%s' ",$id);
+			$this->db->query($query);
+			if ($this->db->next_record())
+				$this->my_owner_type = "inst";
+		}
+		return $this->my_owner_type;
 	}
 	
 	function getOrgaName ($explain=FALSE, $id='') {
@@ -370,13 +377,14 @@ class ResourceObject {
 	
 
 	function getSeats() {
-		$query = sprintf("SELECT a.state FROM resources_objects_properties a LEFT JOIN resources_properties b USING (property_id) LEFT JOIN resources_categories_properties c USING (property_id) WHERE resource_id = '%s' AND c.category_id = '%s' AND b.system = 2 ORDER BY b.name", $this->id, $this->category_id);
-		$this->db->query($query);
-		
-		if ($this->db->next_record()) {
-			return $this->db->f("state");
-		} else
-			return FALSE;
+		if (is_null($this->my_state)){
+			$query = sprintf("SELECT a.state FROM resources_objects_properties a LEFT JOIN resources_properties b USING (property_id) LEFT JOIN resources_categories_properties c USING (property_id) WHERE resource_id = '%s' AND c.category_id = '%s' AND b.system = 2 ORDER BY b.name", $this->id, $this->category_id);
+			$this->db->query($query);
+			if ($this->db->next_record()) {
+				$this->my_state = $this->db->f("state");
+			}
+		}
+		return is_null($this->my_state) ? false : $this->my_state;
 	}
 
 	function isUnchanged() {
@@ -394,24 +402,28 @@ class ResourceObject {
 	}
 
 	function isParent() {
-		$db = new DB_Seminar;
-		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s'", $this->id);
-		$this->db->query($query);
-		if ($this->db->affected_rows())
-			return TRUE;
-		else 
-			return FALSE;
+		if (is_null($this->is_parent)){
+			$db = new DB_Seminar;
+			$query = sprintf ("SELECT resource_id FROM resources_objects WHERE parent_id = '%s'", $this->id);
+			$this->db->query($query);
+			if ($this->db->next_record()){
+				$this->is_parent = true;
+			}
+		}
+		return (!is_null($this->is_parent));
 	}
 	
 	function isRoom() {
-		$db = new DB_Seminar;
-		$query = sprintf ("SELECT is_room FROM resources_objects LEFT JOIN resources_categories USING (category_id) WHERE resource_id = '%s'", $this->id);
-		$this->db->query($query);
-		$this->db->next_record();
-		if ($this->db->f("is_room"))
-			return TRUE;
-		else 
-			return FALSE;
+		if (is_null($this->is_room)){
+			$db = new DB_Seminar;
+			$query = sprintf ("SELECT is_room FROM resources_objects LEFT JOIN resources_categories USING (category_id) WHERE resource_id = '%s'", $this->id);
+			$this->db->query($query);
+			$this->db->next_record();
+			if ($this->db->f("is_room")){
+				$this->is_room = true;
+			}
+		}
+		return (!is_null($this->is_parent));
 	}
 	
 	function isLocked() {

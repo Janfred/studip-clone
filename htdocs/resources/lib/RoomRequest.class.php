@@ -1,4 +1,4 @@
-	<?/**
+<?/**
 * RoomRequest.class.php
 * 
 * class for room requests and room-property requests

@@ -316,27 +316,27 @@ class AssignObject {
 			//..so we have a "virtual" set of assign-events in the given resource. Now we can check...
 			if (is_array($this->events))
 				$keys=array_keys($this->events);
-			
-	
+			$my_id = $this->getId();
 			//ok, a very heavy algorythmus to detect the overlaps...
 			$count_this_events = count($this->events);
 			for ($i1=0; $i1<$count_this_events; $i1++) {
-				$val = $this->events[$keys[$i1]];
+				$val_id = $this->events[$keys[$i1]]->getId();
+				$val_begin = $this->events[$keys[$i1]]->getBegin();
+				$val_end = $this->events[$keys[$i1]]->getEnd();
+				$val_assign_id = $this->events[$keys[$i1]]->getAssignId();
 				for ($i2=0; $i2<$count_this_events; $i2++) {
-					$val2 = $this->events[$keys[$i2]];
-					if ($val2->getId() != $val->getId()) {
-						$val_begin = $val->getBegin();
-						$val_end = $val->getEnd();
-						$val2_begin = $val2->getBegin();
-						$val2_end = $val2->getEnd();
-						
+					$val2_id = $this->events[$keys[$i2]]->getId();
+					if ($val2_id != $val_id) {
+						$val2_begin = $this->events[$keys[$i2]]->getBegin();
+						$val2_end = $this->events[$keys[$i2]]->getEnd();
+						$val2_assign_id = $this->events[$keys[$i2]]->getAssignId();
 						if ((($val_end > $val2_begin) && ($val_end < $val2_end))
 						|| (($val_begin > $val2_begin) && ($val_begin < $val2_end))
 						|| (($val2_end > $val_begin) && ($val2_end < $val_end))
 						|| (($val2_begin > $val_begin) && ($val2_begin < $val_end))
 						|| (($val_begin == $val2_begin) && ($val_end == $val2_end))) {
-							if (($val2->getAssignId() != $this->getId()) && ($val->getAssignId() == $this->getId())) {
-								$overlaps[$val2->getAssignId()] = array("begin" =>$val_begin, "end"=>$val_end);
+							if (($val2_assign_id  != $my_id) && ($val_assign_id  == $my_id )) {
+								$overlaps[$val2_assign_id] = array("begin" =>$val_begin, "end"=>$val_end);
 							}
 						}
 					}
