@@ -871,7 +871,9 @@ muss(!) eine Variable sein, diese wird für jedes gelöschte Posting um eins erhöh
 
 function delete_topic($topic_id, &$deleted)  //rekursives löschen von topics VORSICHT!
 {
-
+	if (!$topic_id){ // if topic_id is 0, ALL postings would be deleted !
+		return;
+	}
 	$db=new DB_Seminar;
 	$db->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
 	if ($db->num_rows()) {
@@ -921,7 +923,8 @@ function delete_date ($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $se
 	## Eventuell rekursiv Postings loeschen
 	if ($topic_delete) {
 		$db->query("SELECT topic_id FROM termine WHERE termin_id ='$termin_id'");
-		if ($db->next_record()) {
+		$db->next_record();
+		if ($db->f('topic_id')){
 			delete_topic($db->f("topic_id"),$count);
 		}
 	}
