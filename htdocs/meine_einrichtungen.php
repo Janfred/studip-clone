@@ -189,6 +189,10 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 		<td valign="top" class="blank">
 				<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 					<tr align="center">
+						<td class="blank" colspan="3">&nbsp;
+						</td>
+					</tr>
+					<tr align="center">
 						<td valign="top" align="center">
 							<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" class="blank">
 								<? if ($meldung) {
@@ -196,10 +200,6 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 									parse_msg($meldung);
 								}
 								?>
-								<tr>
-									<td class="blank" colspan="3">&nbsp;
-									</td>
-								</tr>
 								<tr valign="top" align="center">
 									<th width="1%">&nbsp; </th>
 									<th width="86%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
@@ -265,11 +265,15 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 	 } else {
 	 ?>
 	 <tr>
+	 	<td class="blank" colspan=\"2\">&nbsp; 
+	 	</td>
+	 </tr>
+	 <tr>
 		 <td valign="top" class="blank">
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 				<?
 				if ($meldung)	{
-					echo "<tr><td>&nbsp; </td></tr>";
+		//			echo "<tr><td>&nbsp; </td></tr>";
 					parse_msg($meldung);
 				}
 	}
@@ -278,63 +282,68 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("roo
 ?>
 	</table>
 		</td>
-			<td class="blank">
-				&nbsp;&nbsp;
-			</td>
-			<td class="blank" width="240" valign="top">
-				<table align="center" width="100%" border=0 cellpadding=0 cellspacing=0>
-					<tr>
-						<td class="blank" width="100%" align="right" colspan=2>
-							<img src="pictures/einrichtungen.jpg">
-						</td>
-					</tr>
-					<tr>
-						<td class="angemeldet" width="100%" colspan=2>
-							<table align="center" width="99%" border=0 cellpadding=4 cellspacing=0>
-								<tr>
-									<td class="blank" width="100%" colspan=2>
-										<font size=-1><b><? print "Information" ?>:</b></font>
-										<br>
-									</td>
-								</tr>
-								<tr>
-									<td width="1%" valign="top">
-										<img src="./pictures/ausruf_small.gif">
-									</td>
-									<td class="blank" width="100%">
-									 	<?  $db->query("SELECT count(*) as count  FROM Institute");
-										 $db->next_record();?>
-										<font size=-1>Es sind <? echo ($db->f("count")-$num_my_sem) ?> weitere Einrichtungen vorhanden.</font><br>
-									</td>
-								</tr>
-								<tr>
-									<td class="blank" width="100%" colspan=2>
-										<font size=-1><b><? print "Aktionen" ?>:</b></font>
-										<br>
-									</td>
-								</tr>
-								<tr>
-									<td width="1%" valign="top">
-										<img src="./pictures/suchen.gif">
-									</td>
-									<td class="blank" width="100%">
-										<font size=-1>Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die <a href="institut_browse.php">Suchfunktion.</a><br /></font>
-									</td>
-								</tr>
-							<?  if (!$perm->have_perm("dozent")) {  ?>
-								<tr>
-									<td width="1%" valign="top">
-										<img src="./pictures/einst.gif">
-									</td>
-									<td class="blank" width="100%">
-										<? echo "<font size=-1>Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufzunehmen m&ouml;chten, k&ouml;nnen sie sich hier <a href=\"edit_about.php?view=Karriere#einrichtungen\">zuordnen.</a></font>"; ?>
-									</td>
-								</tr>  
-							 <? }  ?>
-							</table>
-						</td>
-					</tr>
-				</table>
+			<td class="blank" width="270" valign="top">
+
+
+<?
+
+
+	$db->query("SELECT count(*) as count  FROM Institute");
+	$db->next_record();
+	$anzahltext = "Es sind ".($db->f("count")-$num_my_sem)." weitere Einrichtungen vorhanden.";
+	
+IF (!$perm->have_perm("dozent")) {
+	$infobox = array	(			
+	array  ("kategorie"  => "Information:",
+		"eintrag" => array	(	
+						array (	"icon" => "pictures/ausruf_small.gif",
+								"text"  => $anzahltext
+								)
+		)
+	),
+	array  ("kategorie" => "Aktionen:",
+	       "eintrag" => array	(	
+						array	 (	"icon" => "pictures/suchen.gif",
+								"text"  => "Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die <a href=\"institut_browse.php\">Suchfunktion.</a>"
+								),
+						array	 (	"icon" => "pictures/meinesem.gif",
+								"text"  => "Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufzunehmen m&ouml;chten, k&ouml;nnen sie sich hier <a href=\"edit_about.php?view=Karriere#einrichtungen\">zuordnen.</a>"
+								)
+			)
+		)
+	);
+}
+
+ELSE {
+	$db->query("SELECT count(*) as count  FROM Institute");
+	$db->next_record();
+	$anzahltext = "Es sind ".($db->f("count")-$num_my_sem)." weitere Einrichtungen vorhanden.";
+
+
+	$infobox = array	(			
+	array  ("kategorie"  => "Information:",
+		"eintrag" => array	(	
+						array (	"icon" => "pictures/ausruf_small.gif",
+								"text"  => $anzahltext
+								)
+		)
+	),
+	array  ("kategorie" => "Aktionen:",
+	       "eintrag" => array	(	
+						array	 (	"icon" => "pictures/suchen.gif",
+								"text"  => "Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die <a href=\"institut_browse.php\">Suchfunktion.</a>"
+								)
+			)
+		)
+	);
+ }
+
+
+// print the info_box
+
+print_infobox ("pictures/einrichtungen.jpg",$infobox);
+
+?>				
 				<br />
 			</td>
 		</tr>
