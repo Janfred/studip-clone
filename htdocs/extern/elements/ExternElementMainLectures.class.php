@@ -127,9 +127,9 @@ class ExternElementMainLectures extends ExternElementMain {
 		$table .= $edit_form->editCheckboxGeneric("allseminars", $title, $info, $values, $names);
 		
 		$title = _("Bereichspfad ab Ebene:");
-		$info = _("Wählen Sie, wie die Veranstaltungen gruppiert werden sollen.");
-		$values = array("1", "2", "3", "4");
-		$names = array("1", "2", "3", "4");
+		$info = _("Wählen Sie, ab welcher Ebene der Bereichspfad ausgegeben werden soll.");
+		$values = array("1", "2", "3", "4", "5");
+		$names = array("1", "2", "3", "4", "5");
 		$table .= $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $names);
 		
 		$title = _("Anzahl Veranstaltungen/Gruppierung anzeigen:");

@@ -39,7 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainLecturedetails extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases", "range", "studipinfo",
+	var $attributes = array("name", "order", "visible", "aliases", "rangepathlevel", "studipinfo",
 			"studiplink", "wholesite", "nameformat", "urlcss", "title", "language");
 	var $edit_function = "editMainSettings";
 	
@@ -64,9 +64,9 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 				."|"._("Veranstaltungstyp:")."|"._("Beschreibung:")."|"._("Ort:")."|"._("Zeiten:")
 				."|"._("Teilnehmer:")."|"._("Voraussetzungen:")."|"._("Lernorganisation:")
 				."|"._("Leistungsnachweis:")."|"._("Bereichseinordnung:")."|"._("Sonstiges:"),
-			"range" => "long",
+			"rangepathlevel" => "1",
 			"studipinfo" => "1",
-			"studiplink" => "1",
+			"studiplink" => "top",
 			"wholesite" => "",
 			"nameformat" => "no_title",
 			"urlcss" => "",
@@ -110,11 +110,11 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
-		$title = _("Bereichseinordnung:");
-		$info = _("Wählen Sie, ob die Bereichseinordnung mit übergeordneten Bereichen angezeigt werden soll. Die Option \"kurz\" gibt nur den untersten Bereich aus.");
-		$values = array("long", "short");
-		$names = array(_("vollst&auml;ndig"), _("kurz"));
-		$table = $edit_form->editRadioGeneric("range", $title, $info, $values, $names);
+		$title = _("Bereichspfad ab Ebene:");
+		$info = _("Wählen Sie, ab welcher Ebene der Bereichspfad ausgegeben werden soll.");
+		$values = array("1", "2", "3", "4", "5");
+		$names = array("1", "2", "3", "4", "5");
+		$table = $edit_form->editOptionGeneric("rangepathlevel", $title, $info, $values, $names);
 		
 		$title = _("Stud.IP-Info:");
 		$info = _("Diese Option zeigt weitere Informationen aus der Stud.IP-Datenbank an (Anzahl Teilnehmer, Posting, Dokumente usw.).");
