@@ -76,6 +76,7 @@ if ((sizeof ($_REQUEST) == 1) && (!$view)) {
 	$resources_data='';
 	$resources_data["view"]="resources";
 	$resources_data["view_mode"]=FALSE;
+	closeObject();
 }
 
 //a dirty trick to prevent sometimes chaos ;-)
@@ -87,6 +88,17 @@ if ((sizeof ($_REQUEST) == 2) && ($view == "view_schedule")) {
 if ((sizeof ($_REQUEST) == 2) && (($view == "edit_object_assign") || ($view == "openobject_assign"))) {
 	$new_assign_object=FALSE;
 }
+
+//send the user to index, if he want to use studip-object based modul but has no object set!
+if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="openobject_assign") || ($view=="openobject_schedule"))
+	if (!$SessSemName[1]) {
+		checkObject();
+		die;	
+	}
+	
+//we take a serach as long with us, as no other overview modul is used
+if (($view=="openobject_main") || ($view=="_lists") || ($view=="lists") || ($view=="resources") || ($view=="_resources"))
+	$resources_data["search_array"]='';
 
 //get views/view_modes
 if ($view)
@@ -174,7 +186,7 @@ if ($kill_object) {
 		 	$msg -> addMsg(7);
 		$resources_data["view"]="resources";
 	} else {
-		$msg->displayMsg(1);
+		$msg->displayMsg(1, "window");
 		die;
 	}
 }
@@ -187,7 +199,7 @@ if ($cancel_edit) {
 		$cancel_edit->delete();
 		$resources_data["view"]="resources";
 	} else {
-		$msg->displayMsg(1);
+		$msg->displayMsg(1, "window");
 		die;
 	}
 }
@@ -220,7 +232,7 @@ if ($target_object) {
 		}
 		unset($resources_data["move_object"]);
 	} else {
-		$msg->displayMsg(1);
+		$msg->displayMsg(1, "window");
 		die;
 	}	
 }
@@ -235,7 +247,7 @@ if ($change_structure_object) {
 		if ($changeObject->store())
 			$msg -> addMsg(6);
 	} else {
-		$msg->displayMsg(1);
+		$msg->displayMsg(1, "window");
 		die;
 	}
 	$resources_data["view"]="resources";
@@ -446,7 +458,7 @@ if ($change_object_schedules) {
 					}
 				}
 			}
-			
+
 			if ($illegal_dates) {
 				$new_assign_object=serialize($changeAssign);
 			} elseif (($change_object_schedules == "NEW") || ($new_assign_object)) {
@@ -459,7 +471,8 @@ if ($change_object_schedules) {
 						$new_assign_object='';
 					} else {
 						if ((!$do_search_user_x) && (!$reset_search_user_x))
-							$msg->addMsg(10);					
+							if ((!$change_schedule_assign_user_id) && ($change_schedule_user_free_name))
+								$msg->addMsg(10);					
 						$new_assign_object=serialize($changeAssign);
 					}
 				} else
@@ -471,14 +484,16 @@ if ($change_object_schedules) {
 					$changeAssign->chng_flag=TRUE;
 					if ($changeAssign->store()) {
 						$msg->addMsg(4);
+						$new_assign_object='';						
 						}
 					$assign_id=$changeAssign->getId();
 				} else
 					$msg->addMsg(11);
+					
 			}
 		}
 	} else {
-		$msg->displayMsg(1);
+		$msg->displayMsg(1, "window");
 		die;
 	}
 }
@@ -509,7 +524,7 @@ if ($change_object_properties) {
 		if (($changeObject->store()) || ($props_changed))
 		 	$msg -> addMsg(6);
 	} else {
-		$msg->displayMsg(1);
+		$msg->displayMsg(1, "window");
 		die;
 	}
 	
@@ -549,7 +564,7 @@ if ($change_object_perms) {
 		if (($changeObject->store()) || ($perms_changed))
 			$msg->addMsg(8);
 	} else {
-		$msg->displayMsg(1);
+		$msg->displayMsg(1, "window");
 		die;
 	}
 	$resources_data["view"]="edit_object_perms";
@@ -582,7 +597,7 @@ if (($add_type) || ($delete_type) || ($delete_type_property_id) || ($change_cate
 			}
 		}
 	} else {
-		$msg->displayMsg(25);
+		$msg->displayMsg(25, "window");
 		die;
 	}
 }
@@ -624,7 +639,7 @@ if (($add_property) || ($delete_property) || ($change_properties)) {
 			$db->query("UPDATE resources_properties SET name='$change_property_name[$key]', options='$options', type='$send_property_type[$key]' WHERE property_id='$key' ");
 		}
 	} else {
-		$msg->displayMsg(25);
+		$msg->displayMsg(25, "window");
 		die;
 	}
 }
@@ -646,7 +661,7 @@ if (($add_root_user) || ($delete_root_user_id)){
 				$db->query("UPDATE resources_user_resources SET perms='".$change_root_user_perms[$key]."' WHERE user_id='$val' ");
 			}
 	} else {
-		$msg->displayMsg(25);
+		$msg->displayMsg(25, "window");
 		die;
 	}
 }
@@ -712,7 +727,7 @@ if ($resources_data["view"]=="search") {
 	if ($mode == "browse")
 		$resources_data["search_mode"]="browse";
 	
-	if ($start_search_x) {
+	if ((isset($start_search_x)) || ($search_send)) {
 		unset($resources_data["search_array"]);
 		$resources_data["search_array"]["search_exp"]=$search_exp;
 		if (is_array($search_property_val))
