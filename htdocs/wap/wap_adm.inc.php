@@ -193,7 +193,7 @@
 		echo "    <meta http-equiv=\"Cache-Control\" content=\"no-store\" forua=\"true\"/>\n";
 		echo "</head>\n";
 		echo "<card newcontext=\"true\">\n\n";
-
+		
 		if (!$session_id)
 		{
 			$_language      = wap_hlp_get_language(FALSE);

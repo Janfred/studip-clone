@@ -57,11 +57,11 @@
         echo "<p align=\"left\">\n";
         $t = _("Nachname:");
         echo wap_txt_encode_to_wml($t) . "<br/>\n";
-        echo "<input type=\"text\" name=\"last_name\" emptyok=\"false\"/><br/>\n";
+        echo "<input type=\"text\" name=\"last_name\" emptyok=\"true\"/><br/>\n";
 
         $t = _("Vorname:");
         echo wap_txt_encode_to_wml($t) . "<br/>\n";
-        echo "<input type=\"text\" name=\"first_name\" emptyok=\"false\"/><br/>\n";
+        echo "<input type=\"text\" name=\"first_name\" emptyok=\"true\"/><br/>\n";
         echo "</p>\n";
 
         echo "<p align=\"right\">\n";

@@ -1,25 +1,25 @@
 <?php
 /**
-* Outputs a list of events subscribed by the user
+* Outputs a list of institutes the user has subscribed to
 *
 * Parameters received via stdin<br/>
 * <code>
 *	$session_id
-*	$events_pc	(page counter)
+*	$institutes_pc	(page counter)
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.12	10.09.2003	21:23:36
+* @version		0.1		11.09.2003	19:14:30
 * @access		public
 * @modulegroup	wap_modules
-* @module		events.php
+* @module		institutes.php
 * @package		WAP
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// events.php
-// List of events subscribed by the user
+// institutes.php
+// List of the users institutes
 // Copyright (c) 2003 Florian Hansen <f1701h@gmx.net>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -37,10 +37,10 @@
 // +---------------------------------------------------------------------------+
 
 	/**
-	* Maximum of events displayed per page
-	* @const EVENTS_PER_PAGE
+	* Maximum of institutes displayed per page
+	* @const INSTS_PER_PAGE
 	*/
-	define ("EVENTS_PER_PAGE", 5);
+	define ("INSTS_PER_PAGE", 5);
 
 	include_once("wap_adm.inc.php");
 	include_once("wap_txt.inc.php");
@@ -51,13 +51,13 @@
     if ($session_user_id)
     {
         echo "<p align=\"center\">";
-        echo "<b>" . _("Veranstaltungen") . "</b>";
+        echo "<b>" . _("Einrichtungen") . "</b>";
         echo "</p>\n";
 
-        if ($events_pc)
+        if ($institutes_pc)
         {
-            $page_counter     = $events_pc;
-            $progress_counter = $page_counter * EVENTS_PER_PAGE;
+            $page_counter     = $institutes_pc;
+            $progress_counter = $page_counter * INSTS_PER_PAGE;
         }
         else
         {
@@ -70,76 +70,70 @@
         $current_time = time();
         wap_hlp_get_global_user_var($session_user_id, "CurrentLogin");
 
-        $q_string  = "SELECT COUNT(Seminar_id) AS num_events ";
-        $q_string .= "FROM seminar_user ";
+        $q_string  = "SELECT COUNT(Institut_id) AS num_insts ";
+        $q_string .= "FROM user_inst ";
         $q_string .= "WHERE user_id = \"$session_user_id\"";
 
         $db-> query("$q_string");
         $db-> next_record();
-        $num_events = $db-> f("num_events");
-        $num_pages  = ceil($num_events / EVENTS_PER_PAGE);
+        $num_insts = $db-> f("num_insts");
+        $num_pages = ceil($num_insts / INSTS_PER_PAGE);
 
-        if ($num_events > 0)
+        if ($num_insts > 0)
         {
-            $q_string  = "SELECT seminare.Seminar_id, seminare.Name ";
-            $q_string .= "FROM seminar_user LEFT JOIN seminare USING (Seminar_id) ";
-            $q_string .= "WHERE seminar_user.user_id = \"$session_user_id\" ";
-			$q_string .= "ORDER BY seminar_user.gruppe, seminare.Name";
+		    $q_string  = "SELECT Institute.Institut_id, Institute.Name ";
+		    $q_string .= "FROM user_inst LEFT JOIN Institute USING (Institut_id) ";
+		    $q_string .= "WHERE user_inst.user_id = \"$session_user_id\" ";
+		    $q_string .= "ORDER BY Institute.Name";
             $db-> query("$q_string");
 
-            $event_new_array = array();
-            $event_old_array = array();
+            $inst_new_array = array();
+            $inst_old_array = array();
             $new_sign        = "*";
             while ($db-> next_record())
             {
 				$entry_array = array();
                 $entry_name  = $db-> f("Name");
-                $entry_id    = $db-> f("Seminar_id");
+                $entry_id    = $db-> f("Institut_id");
 
-				$q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
+		        $q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
     		    $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-        		$q_string .= "WHERE news_range.range_id=\"$entry_id\" ";
-	        	$q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
-    	    	$q_string .= "AND date > $CurrentLogin";
+		        $q_string .= "WHERE news_range.range_id=\"$entry_id\" ";
+    		    $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
+        		$q_string .= "AND date > $CurrentLogin";
     	    	$db_entry-> query("$q_string");
     	    	$db_entry-> next_record();
     	    	$num_news = $db_entry-> f("num_news");
 
-		        $q_string  = "SELECT COUNT(termin_id) AS num_dates FROM termine ";
-		        $q_string .= "WHERE range_id = \"$entry_id\" ";
-		        $q_string .= "AND chdate > $CurrentLogin";
-    	    	$db_entry-> query("$q_string");
-    	    	$db_entry-> next_record();
-    	    	$num_dates = $db_entry-> f("num_dates");
-
-    	    	if ($num_news || $num_dates)
+    	    	if ($num_news)
     	    	{
     	    		$entry_array[$entry_id] = $new_sign . $entry_name;
-    	    		array_push($event_new_array, $entry_array);
+    	    		array_push($inst_new_array, $entry_array);
     	    	}
     	    	else
     	    	{
                 	$entry_array[$entry_id] = $entry_name;
-    	    		array_push($event_old_array, $entry_array);
+    	    		array_push($inst_old_array, $entry_array);
     	    	}
     	    }
 
-    	    $event_array    = array_merge($event_new_array, $event_old_array);
-    	    $progress_limit = $progress_counter + EVENTS_PER_PAGE;
-    	    if ($progress_limit > $num_events)
-    	    	$progress_limit = $num_events;
+    	    $inst_array     = array_merge($inst_new_array, $inst_old_array);
+    	    $progress_limit = $progress_counter + INSTS_PER_PAGE;
+    	    if ($progress_limit > $num_insts)
+    	    	$progress_limit = $num_insts;
 
             while ($progress_counter < $progress_limit)
             {
-                $entry_id   = key($event_array[$progress_counter]);
-                $entry_name = $event_array[$progress_counter][$entry_id];
+                $entry_id   = key($inst_array[$progress_counter]);
+                $entry_name = $inst_array[$progress_counter][$entry_id];
                 $short_name = wap_txt_shorten_text($entry_name, WAP_TXT_LINK_LENGTH);
                 echo "<p align=\"left\">\n";
                 echo "<anchor>" . wap_txt_encode_to_wml($short_name) . "\n";
-                echo "    <go method=\"post\" href=\"show_event.php\">\n";
+                echo "    <go method=\"post\" href=\"show_institute.php\">\n";
                 echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-                echo "        <postfield name=\"event_id\" value=\"$entry_id\"/>\n";
-                echo "        <postfield name=\"events_pc\" value=\"$page_counter\"/>\n";
+                echo "        <postfield name=\"inst_id\" value=\"$entry_id\"/>\n";
+                echo "        <postfield name=\"institutes_pc\" value=\"$page_counter\"/>\n";
+	            echo "        <postfield name=\"institutes_flag\" value=\"1\"/>\n";
                 echo "    </go>\n";
                 echo "</anchor>\n";
                 echo "</p>\n";
@@ -148,13 +142,13 @@
                 if ($progress_counter == $progress_limit)
                 {
                     echo "<p align=\"right\">\n";
-                    if ($progress_counter < $num_events)
+                    if ($progress_counter < $num_insts)
                     {
                         $page_counter_v = $page_counter + 1;
                         echo "<anchor>" . wap_buttons_forward_page($page_counter_v, $num_pages) . "\n";
-                        echo "    <go method=\"post\" href=\"events.php\">\n";
+                        echo "    <go method=\"post\" href=\"institutes.php\">\n";
                         echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-                        echo "        <postfield name=\"events_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "        <postfield name=\"institutes_pc\" value=\"$page_counter_v\"/>\n";
                         echo "    </go>\n";
                         echo "</anchor><br/>\n";
                     }
@@ -162,9 +156,9 @@
                     {
                         $page_counter_v = $page_counter - 1;
                         echo "<anchor>" . wap_buttons_back_page($page_counter_v, $num_pages) . "\n";
-                        echo "    <go method=\"post\" href=\"events.php\">\n";
+                        echo "    <go method=\"post\" href=\"institutes.php\">\n";
                         echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-                        echo "        <postfield name=\"events_pc\" value=\"$page_counter_v\"/>\n";
+                        echo "        <postfield name=\"institutes_pc\" value=\"$page_counter_v\"/>\n";
                         echo "    </go>\n";
                         echo "</anchor><br/>\n";
                     }
@@ -175,7 +169,7 @@
         else
         {
             echo "<p align=\"left\">";
-            $t = _("Keine Veranstaltungen abonniert.");
+            $t = _("Sie haben sich an keinen Einrichtungen eingetragen.");
             echo "? " . wap_txt_encode_to_wml($t) . " &#191;";
             echo "</p>\n";
         }

@@ -56,7 +56,7 @@
 	wap_adm_start_card();
 
 			echo "<p align=\"center\">";
-			echo "<b>StudIP WAP</b>";
+			echo "<b>Stud.IP WAP</b>";
 			echo "</p>\n";
 
 			echo "<p align=\"center\">\n";

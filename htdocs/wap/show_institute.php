@@ -9,11 +9,13 @@
 *	$last_name
 *	$user_id
 *	$inst_id
+*	$institutes_flag
 *	$directory_search_pc    (page counter)
+*	$institutes_pc			(page counter)
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.12	10.09.2003	21:24:59
+* @version		0.12	12.09.2003	14:11:51
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_institute.php
@@ -50,13 +52,19 @@
 
 	include_once("wap_adm.inc.php");
 	include_once("wap_txt.inc.php");
+	include_once("wap_hlp.inc.php");
 	include_once("wap_buttons.inc.php");
 	require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 
-	wap_adm_start_card();
+	$session_user_id = wap_adm_start_card($session_id);
 
         $db = new DB_Seminar;
-        $q_string  = "SELECT Strasse, Plz ";
+        $current_time = time();
+
+        if ($institutes_flag)
+        	$q_string = "SELECT Strasse, Plz, url, telefon, email, fax ";
+        else
+        	$q_string = "SELECT Strasse, Plz ";
         $q_string .= "FROM Institute ";
         $q_string .= "WHERE Institut_id = \"$inst_id\"";
         $db-> query("$q_string");
@@ -64,18 +72,52 @@
 
         $inst_street = $db-> f("Strasse");
         $inst_post   = $db-> f("Plz");
+        if ($institutes_flag)
+        {
+			wap_hlp_get_global_user_var($session_user_id, "CurrentLogin");
 
-        $q_string  = "SELECT raum, Telefon, Fax, sprechzeiten ";
-        $q_string .= "FROM user_inst ";
-        $q_string .= "WHERE user_id = \"$user_id\"";
-        $db-> query("$q_string");
-        $db-> next_record();
+	        $inst_url   = $db-> f("url");
+    	    $inst_phone = $db-> f("telefon");
+    	    $inst_email = $db-> f("email");
+    	    $inst_fax   = $db-> f("fax");
 
-        $user_room      = $db-> f("raum");
-        $user_phone     = $db-> f("Telefon");
-        $user_fax       = $db-> f("Fax");
-        $user_cons_time = $db-> f("sprechzeiten");
-        $user_groups    = GetStatusgruppen ($inst_id, $user_id);
+	        $q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
+   		    $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
+	        $q_string .= "WHERE news_range.range_id=\"$inst_id\" ";
+   		    $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
+       		$q_string .= "AND date > $CurrentLogin";
+   	    	$db-> query("$q_string");
+   	    	$db-> next_record();
+   	    	$num_news = $db-> f("num_news");
+    	}
+		else
+        {
+        	$q_string  = "SELECT raum, Telefon, Fax, sprechzeiten ";
+	        $q_string .= "FROM user_inst ";
+	        $q_string .= "WHERE user_id = \"$user_id\"";
+	        $db-> query("$q_string");
+	        $db-> next_record();
+
+	        $user_room      = $db-> f("raum");
+	        $user_phone     = $db-> f("Telefon");
+    	    $user_fax       = $db-> f("Fax");
+        	$user_cons_time = $db-> f("sprechzeiten");
+	        $user_groups    = GetStatusgruppen ($inst_id, $user_id);
+	    }
+
+        if ($num_news)
+        {
+        	echo "<p align=\"center\">\n";
+            echo "<anchor>" . wap_txt_encode_to_wml(_("News")) . "\n";
+            echo "    <go method=\"post\" href=\"inst_news.php\">\n";
+            echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+            echo "        <postfield name=\"inst_id\" value=\"$inst_id\"/>\n";
+            echo "        <postfield name=\"institutes_pc\" value=\"$institutes_pc\"/>\n";
+            echo "        <postfield name=\"institutes_flag\" value=\"$institutes_flag\"/>\n";
+            echo "    </go>\n";
+            echo "</anchor><br/>\n";
+            echo "</p>\n";
+        }
 
         echo "<p align=\"left\">\n";
         if ($user_groups)
@@ -92,6 +134,24 @@
             echo wap_txt_encode_to_wml(_("Fax:")) . "&#32;";
             echo wap_txt_encode_to_wml($user_fax) . "<br/>\n";
         }
+
+        if ($inst_phone)
+		{
+            echo wap_txt_encode_to_wml(_("Tel:")) . "&#32;";
+            echo wap_txt_encode_to_wml($inst_phone) . "<br/>\n";
+        }
+
+        if ($inst_fax)
+		{
+            echo wap_txt_encode_to_wml(_("Fax:")) . "&#32;";
+            echo wap_txt_encode_to_wml($inst_fax) . "<br/>\n";
+        }
+
+        if ($inst_email)
+            echo wap_txt_encode_to_wml($inst_email) . "<br/>\n";
+
+        if ($inst_url)
+            echo wap_txt_encode_to_wml($inst_url) . "<br/>\n";
 
         if ($inst_street)
         	echo wap_txt_encode_to_wml($inst_street) . "<br/>\n";
@@ -114,19 +174,29 @@
 
         echo "<p align=\"right\">\n";
         echo "<anchor>" . wap_buttons_back() . "\n";
-        echo "    <go method=\"post\" href=\"show_user.php\">\n";
-        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-        echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
-        echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
-        echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
-        echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
-        echo "    </go>\n";
-        echo "</anchor><br/>\n";
+		if ($institutes_flag)
+		{
+	        echo "    <go method=\"post\" href=\"institutes.php\">\n";
+	        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+    	    echo "        <postfield name=\"institutes_pc\" value=\"$institutes_pc\"/>\n";
+	        echo "    </go>\n";
+	    }
+	    else
+	    {
+	        echo "    <go method=\"post\" href=\"show_user.php\">\n";
+    	    echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+        	echo "        <postfield name=\"first_name\" value=\"$first_name\"/>\n";
+	        echo "        <postfield name=\"last_name\" value=\"$last_name\"/>\n";
+    	    echo "        <postfield name=\"user_id\" value=\"$user_id\"/>\n";
+        	echo "        <postfield name=\"directory_search_pc\" value=\"$directory_search_pc\"/>\n";
+	        echo "    </go>\n";
+    	    echo "</anchor><br/>\n";
 
-        echo "<anchor>" . wap_buttons_new_search() . "\n";
-        echo "    <go method=\"post\" href=\"directory.php\">\n";
-        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
-        echo "    </go>\n";
+	        echo "<anchor>" . wap_buttons_new_search() . "\n";
+    	    echo "    <go method=\"post\" href=\"directory.php\">\n";
+	        echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+    	    echo "    </go>\n";
+	    }
         echo "</anchor><br/>\n";
 
         wap_buttons_menu_link ($session_id);

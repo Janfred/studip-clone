@@ -7,14 +7,18 @@
 *	$session_id
 *	$news_id
 *	$event_id
-*	$news_pc		(page counter)
-*	$events_pc		(page counter)
-*	$event_news_pc	(page counter)
-*	$show_news_pc	(page counter)
+*	$inst_id
+*	$institutes_flag
+*	$news_pc			(page counter)
+*	$events_pc			(page counter)
+*	$event_news_pc		(page counter)
+*	$institutes_pc		(page counter)
+*	$inst_news_pc		(page counter)
+*	$show_news_pc		(page counter)
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	10.09.2003	21:25:15
+* @version		0.12	11.09.2003	19:14:11
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_news.php
@@ -110,6 +114,13 @@
         		    echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
 		            echo "        <postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>\n";
                 }
+                elseif ($institutes_flag)
+                {
+	                echo "        <postfield name=\"inst_id\" value=\"$inst_id\"/>\n";
+    	            echo "        <postfield name=\"institutes_pc\" value=\"$institutes_pc\"/>\n";
+        	        echo "        <postfield name=\"inst_news_pc\" value=\"$inst_news_pc\"/>\n";
+            	    echo "        <postfield name=\"institutes_flag\" value=\"$institutes_flag\"/>\n";
+                }
                 else
                 {
 		            echo "        <postfield name=\"news_pc\" value=\"$news_pc\"/>\n";
@@ -131,6 +142,13 @@
         		    echo "        <postfield name=\"events_pc\" value=\"$events_pc\"/>\n";
 		            echo "        <postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>\n";
                 }
+                elseif ($institutes_flag)
+                {
+	                echo "        <postfield name=\"inst_id\" value=\"$inst_id\"/>\n";
+    	            echo "        <postfield name=\"institutes_pc\" value=\"$institutes_pc\"/>\n";
+        	        echo "        <postfield name=\"inst_news_pc\" value=\"$inst_news_pc\"/>\n";
+            	    echo "        <postfield name=\"institutes_flag\" value=\"$institutes_flag\"/>\n";
+                }
                 else
                 {
 		            echo "        <postfield name=\"news_pc\" value=\"$news_pc\"/>\n";
@@ -149,6 +167,16 @@
             echo "        <postfield name=\"event_news_pc\" value=\"$event_news_pc\"/>\n";
             echo "</go>\n";
         }
+        elseif ($institutes_flag)
+        {
+            echo "<go method=\"post\" href=\"inst_news.php\">\n";
+            echo "        <postfield name=\"session_id\" value=\"$session_id\"/>\n";
+			echo "        <postfield name=\"inst_id\" value=\"$inst_id\"/>\n";
+			echo "        <postfield name=\"institutes_pc\" value=\"$institutes_pc\"/>\n";
+			echo "        <postfield name=\"inst_news_pc\" value=\"$inst_news_pc\"/>\n";
+			echo "        <postfield name=\"institutes_flag\" value=\"$institutes_flag\"/>\n";
+            echo "</go>\n";
+		}
         else
         {
             echo "    <go method=\"post\" href=\"news.php\">\n";

@@ -10,7 +10,7 @@
 * </code>
 *
 * @author		Florian Hansen <f1701h@gmx.net>
-* @version		0.11	10.09.2003	21:24:46
+* @version		0.11	12.09.2003	00:10:31
 * @access		public
 * @modulegroup	wap_modules
 * @module		show_event.php
@@ -90,7 +90,7 @@
         echo view_turnus($event_id, TRUE) . "<br/>\n";
         echo "</p>\n";
 
-        echo "<p align=\"left\">\n";
+        echo "<p align=\"center\">\n";
         if ($num_news == 0 && $num_dates == 0)
         {
             echo "? ";
