@@ -25,12 +25,12 @@ $perm->check("admin");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once("$ABSOLUTE_PATH_STUDIP/archiv.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
+require_once($ABSOLUTE_PATH_STUDIP."dates.inc.php"); // Funktionen zum Loeschen von Terminen
+require_once($ABSOLUTE_PATH_STUDIP."datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once($ABSOLUTE_PATH_STUDIP."archiv.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."functions.php");
+require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
+require_once($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -199,21 +199,21 @@ if ($archive_kill) {
     //unset the checker, lecture is now killed!
     unset($archiv_assi_data["sem_check"][$s_id]);
     
-    //if there are lectures left....
+    		//if there are lectures left....
 		if (is_array($archiv_assi_data["sem_check"])) {
 			if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) { //...inc the counter if possible..
-				$i=1;
-				while ((! $archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"]+$i]["id"]]) && ($archiv_assi_data["pos"]+$i <sizeof($archiv_assi_data["sems"])-1))
-					$i++;
-				$archiv_assi_data["pos"]=$archiv_assi_data["pos"]+$i;
-		
+					$i=1;
+					while ((! $archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"]+$i]["id"]]) && ($archiv_assi_data["pos"]+$i <sizeof($archiv_assi_data["sems"])-1))
+						$i++;
+					$archiv_assi_data["pos"]=$archiv_assi_data["pos"]+$i;
+			
 			} else { //...else dec the counter to find a unarchived lecture
 				if ($archiv_assi_data["pos"] > 0) 
 					$d=-1;
 				while ((!$archiv_assi_data["sem_check"][$archiv_assi_data["sems"][$archiv_assi_data["pos"]+$d]["id"]]) && ($archiv_assi_data["pos"]+$d > 0))
 					$d--;
 				$archiv_assi_data["pos"]=$archiv_assi_data["pos"]+$d;
-  		}
+		  	}
 		}
 	}
 }
