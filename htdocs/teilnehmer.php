@@ -18,34 +18,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-?>
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-<html>
-<head>
-<?IF (!isset($SessSemName[0]) || $SessSemName[0] == "") {
-	echo "<META HTTP-EQUIV=\"refresh\" CONTENT=\"0; URL=index.php\">";
-	echo "</head></html>";
-	die;
-}
-?>
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
 
-<title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
-</head>
-<body bgcolor=white>
-
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
-
-	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-	require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
-	require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
+require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
 	
-	include "header.php";   //hier wird der "Kopf" nachgeladen
-	include "links1.php";
+// Start  of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head	
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
+include ("$ABSOLUTE_PATH_STUDIP/links1.php");
 	
 	$messaging=new messaging;
 	$cssSw=new cssClassSwitcher;
@@ -218,10 +204,10 @@ if (($cmd=="admission_rein") || ($cmd=="add_autor")) {
 		 renumber_admission($id);
 		
 		if ($cmd=="add_autor")
-			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde in die Veranstaltung eingetargen.§";
+			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde in die Veranstaltung eingetragen.§";
 		else
 			$msg = "msg§Der Nutzer ".$db->f("Vorname")." ". $db->f("Nachname")." wurde aus der Anmelde bzw. Warteliste in die Veranstaltung hochgestuft.§";
-	}
+	} 
 	else $msg ="error§Netter Versuch! vielleicht beim n&auml;chsten Mal!§";
 }
 
@@ -511,10 +497,6 @@ if ($rechte) {
 	}
 }
 
-
-
-
-
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus der(n) Einrichtung(en) berufen...
 if ($rechte AND $SemUserStatus!="tutor") {
 	$value_list = get_inst_list();
@@ -549,8 +531,8 @@ if ($rechte AND $SemUserStatus!="tutor") {
 
 } // Ende der Berufung
 
-//inser autors via free search form
-if ($rechte AND $SemUserStatus!="tutor") {
+//insert autors via free search form
+if ($rechte) {
 	if ($search_exp) {
 		$query = "SELECT DISTINCT a.user_id, username, Vorname, Nachname, perms FROM seminar_user a ".
 			"LEFT JOIN auth_user_md5  b USING(user_id) ".		
@@ -579,7 +561,7 @@ if ($rechte AND $SemUserStatus!="tutor") {
 		?>
 		</select></td>
 		<td class="steel1" width="20%" align="center"><font size=-1>als AutorIn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </font><br />
-		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als AutorIn berufen ">&nbsp; 
+		<input type="IMAGE" name="add_autor" src="./pictures/buttons/eintragen-button.gif" border=0 value=" Als AutorIn berufen ">&nbsp; 
 		<a href="<? echo $PHP_SELF ?>"><img src="./pictures/buttons/neuesuche-button.gif" border=0 /></a></td>
 	</tr></form></table>
 		<?
@@ -599,7 +581,7 @@ if ($rechte AND $SemUserStatus!="tutor") {
 		<td class="steel1" width="40%" align="left">
 		<input type="TEXT" name="search_exp" size="40" maxlength="255" />
 		<td class="steel1" width="20%" align="center">
-		<input type="IMAGE" name="add_tutor" src="./pictures/buttons/suchestarten-button.gif" border=0 value=" Suche starten "></td>
+		<input type="IMAGE" name="start_search" src="./pictures/buttons/suchestarten-button.gif" border=0 value=" Suche starten "></td>
 	</tr></form></table>
 		<?
 	}
