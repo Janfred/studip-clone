@@ -137,7 +137,6 @@ function change_general_view() {
 							<?	    
 							printf ("<option %s value=\"\">"._("keine")."</option>", (!$my_studip_settings["startpage_redirect"]) ? "selected" : "");
 							printf ("<option %s value=\"1\">"._("Meine Veranstaltungen")."</option>", ($my_studip_settings["startpage_redirect"] ==  1) ? "selected" : "");
-							printf ("<option %s value=\"2\">"._("Meine Einrichtungen")."</option>", ($my_studip_settings["startpage_redirect"] == 2) ? "selected" : "");
 							printf ("<option %s value=\"3\">"._("Mein Stundenplan")."</option>", ($my_studip_settings["startpage_redirect"] == 3) ? "selected" : "");
 							printf ("<option %s value=\"4\">"._("Mein Adressbuch")."</option>", ($my_studip_settings["startpage_redirect"] == 4) ? "selected" : "");
 							printf ("<option %s value=\"5\">"._("Mein Planer")."</option>", ($my_studip_settings["startpage_redirect"] == 5) ? "selected" : "");
