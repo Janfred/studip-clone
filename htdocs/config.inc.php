@@ -1,10 +1,39 @@
-<?php
+<?
+/**
+* config.inc.php
+* 
+* Configuration file for studip. In this file you can change the options of many
+* Stud.IP Settings. Please note: to setup the system, set the basic settings in the
+* local.inc of the phpLib package first.
+* 
+* @access		public
+* @package		studip_core
+* @modulegroup	studip_core
+* @module		config.inc.php
+*/
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// functions.php
+// Stud.IP Kernfunktionen
+// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, 
+// Ralf Stockmann <rstockm@gwdg.de>, André Noack André Noack <andre.noack@gmx.net>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 
-// Einstellungen der Systemwerte fuer Stud.IP
-//----------------------------------------------------------------
-//grundlegende Einstellungen finden sich in der local.inc im Verzeichnis
-//der PHP-LIB, bitte dort ebenfalls Anpassungen vornehmen.
 
 //Generische Systemeinstellungen
 $AUTH_LIFETIME=30;						//Zeit bis zu einem automatischem Logout in Minuten (wird zur Zeit nur zu Anzeigezwecken verwendet...)
@@ -42,6 +71,35 @@ $SEMESTER[5]=array("name"=>"WS 2002/03", "beginn"=>mktime(0,0,0,10,1,2002), "end
 $SEMESTER[6]=array("name"=>"SS 2003", "beginn"=>mktime(0,0,0,4,1,2003), "ende"=>mktime(23,59,59,9,30,2003), "vorles_beginn"=>mktime(0,0,0,4,21,2003), "vorles_ende"=>mktime(23,59,59,7,18,2003), "past"=>FALSE); 			# Daten ueber das SS 2003
 $SEMESTER[7]=array("name"=>"WS 2003/04", "beginn"=>mktime(0,0,0,10,1,2003), "ende"=>mktime(23,59,59,3,31,2004), "vorles_beginn"=>mktime(0,0,0,10,13,2003), "vorles_ende"=>mktime(23,59,59,2,14,2004), "past"=>FALSE); 		# Daten ueber das WS 2003/04
 //weitere Semester koennen hier angefuegt werden
+
+
+//Festlegen der zulaessigen Typen fuer Veranstaltungen
+$SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezechnung (=Veranstaltung ersetzt)
+$SEM_TYPE[1]=array("name"=>"Vorlesung", "en"=>"Lecture", "class"=>1);
+$SEM_TYPE[2]=array("name"=>"Grundstudium", "en"=>"Basic classes", "class"=>1);
+$SEM_TYPE[3]=array("name"=>"Hauptstudium", "en"=>"Advanced classes", "class"=>1);
+$SEM_TYPE[4]=array("name"=>"Seminar", "en"=>"Seminar", "class"=>1);
+$SEM_TYPE[5]=array("name"=>"Praxisveranstaltung", "en"=>"Practical course", "class"=>1);
+$SEM_TYPE[6]=array("name"=>"Colloquium", "en"=>"Colloqia", "class"=>1);
+$SEM_TYPE[7]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>1);
+$SEM_TYPE[8]=array("name"=>"Arbeitsgruppe", "en"=>"Workgroup", "class"=>5);
+$SEM_TYPE[9]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>1); 
+$SEM_TYPE[10]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>2); 
+$SEM_TYPE[11]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>2); 
+$SEM_TYPE[12]=array("name"=>"Gremiumsveranstaltung", "en"=>"Board meeting", "class"=>3); 
+$SEM_TYPE[13]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>3); 
+$SEM_TYPE[14]=array("name"=>"Kulturforum", "en"=>"Cultural forum", "class"=>4); 
+$SEM_TYPE[15]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>4); 
+$SEM_TYPE[16]=array("name"=>"Praktikum", "en"=>"Practical course", "class"=>1); 
+$SEM_TYPE[17]=array("name"=>"Lehrveranstaltung nach PVO-Lehr I", "en"=>"", "class"=>1); 
+$SEM_TYPE[18]=array("name"=>"Anleitung zu selbständigen wissenschaftlichen Arbeiten", "en"=>"", "class"=>1); 
+$SEM_TYPE[19]=array("name"=>"Sprachkurs", "en"=>"Language Course", "class"=>1);
+$SEM_TYPE[20]=array("name"=>"Fachdidaktik", "en"=>"Didactics", "class"=>1);
+$SEM_TYPE[21]=array("name"=>"Übung", "en"=>"Exercise Course", "class"=>1);
+$SEM_TYPE[22]=array("name"=>"Proseminar", "en"=>"Proseminar", "class"=>1);
+$SEM_TYPE[23]=array("name"=>"Oberseminar", "en"=>"Oberseminar", "class"=>1);
+$SEM_TYPE[24]=array("name"=>"Arbeitsgemeinschaft", "en"=>"Workgroup", "class"=>1);
+//weitere Typen koennen hier angefuegt werden
 
 
 //Festlegen der zulaessigen Klassen fuer Veranstaltungen. Jeder sem_type referenziert auf eine dieser Klassen
@@ -111,33 +169,97 @@ $SEM_CLASS[5]=array("name"=>"Arbeitsgruppen",
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
-//Festlegen der zulaessigen Typen fuer Veranstaltungen
-$SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezechnung (=Veranstaltung ersetzt)
-$SEM_TYPE[1]=array("name"=>"Vorlesung", "en"=>"Lecture", "class"=>1);
-$SEM_TYPE[2]=array("name"=>"Grundstudium", "en"=>"Basic classes", "class"=>1);
-$SEM_TYPE[3]=array("name"=>"Hauptstudium", "en"=>"Advanced classes", "class"=>1);
-$SEM_TYPE[4]=array("name"=>"Seminar", "en"=>"Seminar", "class"=>1);
-$SEM_TYPE[5]=array("name"=>"Praxisveranstaltung", "en"=>"Practical course", "class"=>1);
-$SEM_TYPE[6]=array("name"=>"Colloquium", "en"=>"Colloqia", "class"=>1);
-$SEM_TYPE[7]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>1);
-$SEM_TYPE[8]=array("name"=>"Arbeitsgruppe", "en"=>"Work group", "class"=>5);
-$SEM_TYPE[9]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>1); 
-$SEM_TYPE[10]=array("name"=>"Forschungsgruppe", "en"=>"Research group", "class"=>2); 
-$SEM_TYPE[11]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>2); 
-$SEM_TYPE[12]=array("name"=>"Gremiumsveranstaltung", "en"=>"Board meeting", "class"=>3); 
-$SEM_TYPE[13]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>3); 
-$SEM_TYPE[14]=array("name"=>"Kulturforum", "en"=>"Cultural forum", "class"=>4); 
-$SEM_TYPE[15]=array("name"=>"sonstige", "en"=>"Miscellaneous", "class"=>4); 
-$SEM_TYPE[16]=array("name"=>"Praktikum", "en"=>"Practical course", "class"=>1); 
-$SEM_TYPE[17]=array("name"=>"Lehrveranstaltung nach PVO-Lehr I", "en"=>"", "class"=>1); 
-$SEM_TYPE[18]=array("name"=>"Anleitung zu selbständigen wissenschaftlichen Arbeiten", "en"=>"", "class"=>1); 
-$SEM_TYPE[19]=array("name"=>"Sprachkurs", "en"=>"Language Course", "class"=>1);
-$SEM_TYPE[20]=array("name"=>"Fachdidaktik", "en"=>"Didactics", "class"=>1);
-$SEM_TYPE[21]=array("name"=>"Übung", "en"=>"Exercise Course", "class"=>1);
-$SEM_TYPE[22]=array("name"=>"Proseminar", "en"=>"Proseminar", "class"=>1);
-$SEM_TYPE[23]=array("name"=>"Oberseminar", "en"=>"Oberseminar", "class"=>1);
-$SEM_TYPE[24]=array("name"=>"Arbeitsgemeinschaft", "en"=>"Workgroup", "class"=>1);
-//weitere Typen koennen hier angefuegt werden
+//Festlegen der erlaubten oder verbotenen Dateitypen
+$UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
+						array(	"type"=>"deny", 									//Type bezeichnet den grundsetzlichen Typ der Deklaration: deny verbietet alles ausser den angegebenen file_types, allow erlaubt alle ausser den angegebenen file_types
+								"file_types" => array ("rtf", "xls", "ppt", "zip", "pdf", "txt"),	//verbotene bzw. erlaubte Dateitypen
+								"file_sizes" => array (	"root" => 7 * 1048576,			//Erlaubte Groesse je nach Rechtestufe
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,
+													"tutor" => 7 * 1048576,
+													"autor" => 1.38 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"7" =>													//Kommentar: Leider wird der Sem_type noch immer alphanumerisch gespeichert, daher 
+						array(	"type"=>"allow", 									//Bezeichnung ueber Namen und nicht ueber die jeweilige Nummer.... muss mal angepasst werden!
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,
+													"tutor" => 7 * 1048576,													
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"8" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"9" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"10" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"11" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"12" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							),
+						"13" =>									
+						array(	"type"=>"allow",
+								"file_types" => array ("exe"),
+								"file_sizes" => array (	"root" => 7 * 1048576,			
+													"admin" => 7 * 1048576,
+													"dozent" => 7 * 1048576,													
+													"tutor" => 7 * 1048576,
+													"autor" => 7 * 1048576,
+													"nobody" => 1.38 * 1048576													
+												)
+							)
+					);
+//weitere Definitionen fuer spezielle Veranstaltungstypen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
 //Festlegen von zulaessigen Bezeichnungen fuer Einrichtungen (=Institute)
@@ -150,7 +272,49 @@ $INST_TYPE[6]=array("name"=>"Seminar", "en"=>"Seminar");
 //weitere Typen koennen hier angefuegt werden
 
 
-//Festlegen von zulaessigen Funktion fuer Institutsmitarbeiter
+//define the presets of statusgroups for Veranstaltungen (refers to the key of the $SEM_CLASS array)
+$SEM_STATUS_GROUPS["default"] = array (	array ("name"=>"DozentInnen", "en"=>""),				//the default. Don't delete this entry!
+										array ("name"=>"TutorInnen", "en"=>""),
+										array ("name"=>"AutorInnen", "en"=>""),
+										array ("name"=>"LeserInnen", "en"=>""),
+										array ("name"=>"sonstige", "en"=>"")
+									);
+$SEM_STATUS_GROUPS["3"] = array (	array ("name"=>"Organisatoren", "en"=>""),				//Class Organisation
+										array ("name"=>"Mitglieder", "en"=>""),
+										array ("name"=>"Ausschu&szlig;mitglieder", "en"=>""),
+										array ("name"=>"sonstige", "en"=>""),
+									);
+$SEM_STATUS_GROUPS["4"] = array (	array ("name"=>"Moderatoren des Forums", "en"=>""),		//Class Community
+										array ("name"=>"Mitglieder", "en"=>""),
+										array ("name"=>"sonstige", "en"=>""),
+									);
+$SEM_STATUS_GROUPS["5"] = array (	array ("name"=>"ArbeitsgruppenleiterIn", "en"=>""),			//Class Arbeitsgruppen
+										array ("name"=>"Arbeitsgruppenmitglieder", "en"=>""),
+										array ("name"=>"sonstige", "en"=>""),
+									);
+//you can add more specifig presets for the different classes 
+
+
+//define the presets of statusgroups for Einrichtungen (refers to the key of the $INST_TYPE array)
+$INST_STATUS_GROUPS["default"] = array (	array ("name"=>"DirektorIn", "en"=>"Principal"),			//the default. Don't delete this entry!
+										array ("name"=>"HochschullehrerIn", "en"=>"Lecturer"),
+										array ("name"=>"Lehrbeauftragte", "en"=>"Lecturers from other institutes"),
+										array ("name"=>"Zweitmitglied", "en"=>"Teaching assistant"),
+										array ("name"=>"wiss. Hilfskraft", "en"=>"Teaching assistants"),
+										array ("name"=>"wiss. Mitarbeiter", "en"=>"Scientific assistants"),
+										array ("name"=>"stud. Hilfskraft", "en"=>"Student assistants"),
+										array ("name"=>"StudentIn", "en"=>"Students"),										
+										array ("name"=>"StudentIn", "en"=>"Students"),										
+										array ("name"=>"StudentIn", "en"=>"Students"),										
+										array ("name"=>"techn. MitarbeiterIn", "en"=>"Technical assistant"),										
+										array ("name"=>"Sekretariat / Verwaltung", "en"=>"Secretariate"),
+										array ("name"=>"stud. VertreterIn", "en"=>"Collegiate representatives"),
+										array ("name"=>"StudentIn", "en"=>"Students"),										
+									);
+//you can add more specifig presets for the different types 
+
+
+//Festlegen von zulaessigen Funktion fuer Institutsmitarbeiter !!!!wird im Prinzip ersetzt durch die Statusgruppen und kann daher eigentlich weg!!!!
 $INST_FUNKTION[1]=array("name"=>"StudentIn", "en"=>"Student");
 $INST_FUNKTION[2]=array("name"=>"stud. VertreterIn", "en"=>"Collegiate representative");
 $INST_FUNKTION[3]=array("name"=>"Sekretariat / Verwaltung", "en"=>"Secretariate");
@@ -205,44 +369,6 @@ $PERS_TERMIN_KAT[12]=array("name"=>"Familie", "color"=>"#191970");
 $PERS_TERMIN_KAT[13]=array("name"=>"Urlaub", "color"=>"#DB7093");
 $PERS_TERMIN_KAT[14]=array("name"=>"Reise", "color"=>"#C71585");
 // weitere Kategorien können hier angefügt werden
-
-
-//Festlegen der erlaubten oder verbotenen Dateitypen
-$UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
-						array(	"type"=>"deny", 									//Type bezeichnet den grundsetzlichen Typ der Deklaration: deny verbietet alles ausser den angegebenen file_types, allow erlaubt alle ausser den angegebenen file_types
-								"file_types" => array ("rtf", "xls", "ppt", "zip", "pdf", "txt"),	//verbotene bzw. erlaubte Dateitypen
-								"file_sizes" => array (	"root" => 7 * 1048576,			//Erlaubte Groesse je nach Rechtestufe
-													"admin" => 7 * 1048576,
-													"dozent" => 7 * 1048576,
-													"tutor" => 7 * 1048576,
-													"autor" => 1.38 * 1048576,
-													"nobody" => 1.38 * 1048576													
-												)
-							),
-						"7" =>													//Kommentar: Leider wird der Sem_type noch immer alphanumerisch gespeichert, daher 
-						array(	"type"=>"allow", 									//Bezeichnung ueber Namen und nicht ueber die jeweilige Nummer.... muss mal angepasst werden!
-								"file_types" => array ("exe"),
-								"file_sizes" => array (	"root" => 7 * 1048576,			
-													"admin" => 7 * 1048576,
-													"dozent" => 7 * 1048576,
-													"tutor" => 7 * 1048576,													
-													"autor" => 7 * 1048576,
-													"nobody" => 1.38 * 1048576													
-												)
-							),
-						"8" =>									
-						array(	"type"=>"allow",
-								"file_types" => array ("exe"),
-								"file_sizes" => array (	"root" => 7 * 1048576,			
-													"admin" => 7 * 1048576,
-													"dozent" => 7 * 1048576,													
-													"tutor" => 7 * 1048576,
-													"autor" => 7 * 1048576,
-													"nobody" => 1.38 * 1048576													
-												)
-							)
-					);
-//weitere Definitionen fuer spezielle Veranstaltungstypen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
 //Abkürzungen für Smileys
