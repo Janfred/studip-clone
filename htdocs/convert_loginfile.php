@@ -113,39 +113,44 @@ while ($db->next_record()) {
 	$e=0;
 	if (is_array($now))
 		foreach ($now as $key=>$val) {
-			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='".get_object_type($key)."', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='forum', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='documents', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='wiki', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='scm', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='schedule', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='literature', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-			$e=$e+7;
-			//News
-			$query3 = ("SELECT news_id FROM news_range WHERE range_id = '".$key."' ");
-			$db3->query($query3);
-			while ($db3->next_record()) {
-				$db2->query("SELECT visitdate FROM object_user_visits WHERE object_id = '".$db3->f("news_id")."' ");
-				$db2->next_record();
-				if ($val > $db2->f("visitdate"))
-					$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("news_id")."', user_id ='".$db->f("sid")."', type='news', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-				$e++;
+			$type = get_object_type($key);
+			if ($type == "fak")
+				$type = "inst";
+			if ($type) {
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='".get_object_type($key)."', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='forum', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='documents', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='wiki', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='scm', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='schedule', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='literature', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+				$e=$e+7;
+				//News
+				$query3 = ("SELECT news_id FROM news_range WHERE range_id = '".$key."' ");
+				$db3->query($query3);
+				while ($db3->next_record()) {
+					$db2->query("SELECT visitdate FROM object_user_visits WHERE object_id = '".$db3->f("news_id")."' ");
+					$db2->next_record();
+					if ($val > $db2->f("visitdate"))
+						$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("news_id")."', user_id ='".$db->f("sid")."', type='news', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+					$e++;
+				}
+				//Votes
+				$query3 = ("SELECT vote_id FROM vote WHERE range_id = '".$key."' ");
+				$db3->query($query3);
+				while ($db3->next_record()) {
+					$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("vote_id")."', user_id ='".$db->f("sid")."', type='vote', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+					$e++;
+				}
+				//Evals
+				$query3 = ("SELECT eval_id FROM eval_range WHERE range_id = '".$key."' ");
+				$db3->query($query3);
+				while ($db3->next_record()) {
+					$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("eval_id")."', user_id ='".$db->f("sid")."', type='eval', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
+					$e++;
+				}
+				$c++;
 			}
-			//Votes
-			$query3 = ("SELECT vote_id FROM vote WHERE range_id = '".$key."' ");
-			$db3->query($query3);
-			while ($db3->next_record()) {
-				$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("vote_id")."', user_id ='".$db->f("sid")."', type='vote', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-				$e++;
-			}
-			//Evals
-			$query3 = ("SELECT eval_id FROM eval_range WHERE range_id = '".$key."' ");
-			$db3->query($query3);
-			while ($db3->next_record()) {
-				$db2->query("REPLACE INTO object_user_visits SET object_id = '".$db3->f("eval_id")."', user_id ='".$db->f("sid")."', type='eval', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
-				$e++;
-			}
-			$c++;
 		}
 	//kill the old session-variable
 	$test->killVariable("loginfilenow");
