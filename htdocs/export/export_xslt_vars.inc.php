@@ -95,7 +95,7 @@ $xslt_files["rtf-teiln"]["rtf"] = true;
 
 $xslt_files["rtf-gruppen"]["name"] = _("Liste der Guppen und Funktionen");
 $xslt_files["rtf-gruppen"]["desc"] = _("Modul zur Ausgabe von Personendaten als RTF-Datei. Es werden die Grunddaten der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle geschrieben. Die Ausgabe-Datei kann in einer Textverarbeitung bearbeitet werden.");
-$xslt_files["rtf-gruppen"]["file"] = "rtf-t-1.xsl";
+$xslt_files["rtf-gruppen"]["file"] = "rtf-t-2.xsl";
 $xslt_files["rtf-gruppen"]["rtf"] = true;
 
 
