@@ -80,27 +80,25 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 
 	?>
 	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">
-		<tr><td colspan="2" class="topic" valign="absmiddle"><img src="pictures/logout.gif" border="0"><b>&nbsp;Stud.IP - Logout</b></td></tr>
+		<tr><td colspan="2" class="topic" valign="middle"><img src="pictures/logout.gif" border="0" style="vertical-align:middle"><b>&nbsp;Stud.IP - Logout</b></td></tr>
 		<tr>
-			<td width="100%" class="blank" valign="middle">
+			<td width="99%"  class="blank" valign="middle">
 				<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0">
 	<?
 					parse_msg ("info§Sie sind nun aus dem System abgemeldet", "§", "blank", 1)
 	?>
 					<tr>
-					<td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Startseite.<br />
+					<td class="blank"><font size=-1><a href="index.php"><b>&nbsp;Hier</b></a> geht es wieder zur Startseite.
+					</font></td></tr>
 					
 				<? if ($UNI_LOGOUT_ADD) {
-					echo "<tr><td class=\"blank\"><font size=-1>&nbsp;$UNI_LOGOUT_ADD</font></td></tr><tr></tr>";
+					echo "<tr><td class=\"blank\"><font size=-1>&nbsp;$UNI_LOGOUT_ADD</font></td></tr>";
 					}
 				?>
-					</font>
-					</td>
-					</tr>
 				</table>
 			</td>
-			<td valign="top">
-			<img src="pictures/maus.jpg" border="0">
+			<td  >
+			<img src="pictures/maus.jpg" style="vertical-align:top" border="0">
 			</td>
 		</tr>
 	</table>
