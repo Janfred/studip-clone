@@ -30,6 +30,8 @@ TD.topic {border:0px solid #000000; background:#B5B5B5 url('pictures/fill1.gif')
 TD.topicwrite {border:0px solid #000000; background:#B5B5B5 url('pictures/fill1write.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
 TD.header {background: url('pictures/fill1.gif');}
 TD.angemeldet {border-style: solid; border-color: #000000;  border-width: 1px;}
+TD.rahmen_steel {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('pictures/steel1.jpg');}
+TD.rahmen_steelgraulight {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('pictures/steelgraulight.jpg');}
 TD.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-size:8;}
 TD.nix {background-color: transparent;}
 TD.aufklapp {background-color : #FFFAEE;}
