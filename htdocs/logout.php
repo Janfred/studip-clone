@@ -44,7 +44,8 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 		$db2->query("DELETE FROM globalmessages WHERE user_id_rec = '".$db->f("username")."' AND mkdate <'".$my_messaging_settings["last_visit"]."' ");
 	}
  
-	$logout_user=$user->id;            
+	$logout_user=$user->id;
+	$logout_language = $_language;
 	//Logout aus dem Sessionmanagement
 	$auth->logout();
 	$sess->delete();
@@ -61,7 +62,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	$query = "UPDATE active_sessions SET changed = '$sqldate' WHERE sid = '$logout_user'";
 	$db->query($query); 
 	
-	header("Location:$PHP_SELF?logout"); //Seite neu aufrufen um eine nobody Session zu erzeugen
+	header("Location:$PHP_SELF?_language=$logout_language"); //Seite neu aufrufen um eine nobody Session zu erzeugen
 
 } else {        //wir sind nobody, also wahrscheinlich gerade ausgeloggt
 
