@@ -31,6 +31,7 @@ for ($i; $i <= sizeof($SEMESTER); $i++)
 		$SEM_BEGINN=$SEMESTER[$i]["beginn"];
 		$SEM_ENDE=$SEMESTER[$i]["ende"];
 		$SEM_NAME=$SEMESTER[$i]["name"];
+		$SEM_ID=$i;
 		if ($i<sizeof ($SEMESTER))
 			{
 			$VORLES_BEGINN_NEXT=$SEMESTER[$i+1]["vorles_beginn"];
@@ -38,6 +39,7 @@ for ($i; $i <= sizeof($SEMESTER); $i++)
 			$SEM_BEGINN_NEXT=$SEMESTER[$i+1]["beginn"];
 			$SEM_ENDE_NEXT=$SEMESTER[$i+1]["ende"];
 			$SEM_NAME_NEXT=$SEMESTER[$i+1]["name"];			
+			$SEM_ID_NEXT=$i+1;
 			}
 		}
 	}
