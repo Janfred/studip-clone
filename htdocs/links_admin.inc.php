@@ -635,7 +635,10 @@ while ($db->next_record()) {
 		</td>
 	</tr>
 	</table>
-	</form>				
+	</form>
+</td>
+</tr>
+</table>					
 	<?
 	page_close();
 	die;
