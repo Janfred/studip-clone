@@ -127,8 +127,8 @@ $infobox[0] = array ("kategorie" => _("Literaturlisten erstellen / bearbeiten"),
 $infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Listen blabla") );
 
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
-$infobox[1]["eintrag"][] = array("icon" => "pictures/forumrot.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
-$infobox[1]["eintrag"][] = array("icon" => "pictures/forumrot.gif","text"  => "<a href=\"admin_lit_element.php?_range_id=new_entry\">" . _("Neue Literatur anlegen") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"admin_lit_element.php?_range_id=new_entry\">" . _("Neue Literatur anlegen") . "</a>" );
 
 print_infobox ($infobox,"pictures/browse.jpg");
 

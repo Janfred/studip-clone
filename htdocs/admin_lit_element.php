@@ -189,8 +189,8 @@ if (!$_the_element->isChangeable()){
 	$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Sie haben diesen Eintrag nicht selbst vorgenommen, und dürfen ihn daher nicht verändern!") );
 }						
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
-$infobox[1]["eintrag"][] = array("icon" => "pictures/forumrot.gif","text"  => "<a href=\"admin_lit_list.php\">" . _("Literaturlisten bearbeiten") . "</a>" );
-$infobox[1]["eintrag"][] = array("icon" => "pictures/forumrot.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"admin_lit_list.php\">" . _("Literaturlisten bearbeiten") . "</a>" );
+$infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
 
 print_infobox ($infobox,"pictures/browse.jpg");
 

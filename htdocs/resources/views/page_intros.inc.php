@@ -96,7 +96,7 @@ switch ($resources_data["view"]) {
 			$infobox = array(
 						array  ("kategorie" => _("Aktionen:"), 
 								"eintrag" => array (
-									array	("icon" => "pictures/forumrot.gif",
+									array	("icon" => "pictures/link_intern.gif",
 										"text"  => "<a href=\"$PHP_SELF?view=view_schedule\">"._("zur&uuml;ck zum Belegungsplan")."</a>"))));
 		}
 	break;
@@ -113,22 +113,22 @@ switch ($resources_data["view"]) {
 		$title=_("Belegungszeiten ausgeben").$currentObjectTitelAdd;
 		
 		$infobox[0]["kategorie"] = _("Aktionen:");
-		$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+		$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 								"text"  => sprintf (_("%sEigenschaften%s anzeigen"), "<a href=\"$PHP_SELF?view=view_details\">", "</a>"));
 		if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
-			$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
 
 		if ($resources_data["view_mode"] == "search")
-			$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 									"text"  =>"<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>");
 
 		if (!($resources_data["view_mode"] == "search")) {
 			if ($SessSemName["class"] == "sem")
-				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 										"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
 			if ($SessSemName["class"] == "inst")
-				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 										"text"  => "<a href=\"institut_main.php\">"._("zur&uuml;ck zur Einrichtung")."</a>");
 		}
 									
@@ -179,23 +179,23 @@ switch ($resources_data["view"]) {
 	
 			if (is_object($currentObject)) {
 				if ($currentObject->getCategoryId())
-					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 											"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_schedule\">" : "<a href=\"$PHP_SELF?view=view_schedule".(($resources_data["view_mode"] == "no_nav") ? "&view_mode=no_nav" : "")."\">", "</a>"));
 				if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
-					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 											"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($resources_data["view_mode"] == "oobj") ? "<a href=\"$PHP_SELF?view=openobject_assign\">" : "<a href=\"$PHP_SELF?view=edit_object_assign\">", "</a>"));
 			}
 			if (!($resources_data["view_mode"] == "search")) {
 				if ($SessSemName["class"] == "sem")
-					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 											"text"  => "<a href=\"seminar_main.php\">"._("zur&uuml;ck zur Veranstaltung")."</a>");
 				if ($SessSemName["class"] == "inst")
-					$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 											"text"  => "<a href=\"institut_main.php\">"._("zur&uuml;ck zur Einrichtung")."</a>");
 			}
 		
 			if ($resources_data["view_mode"] == "search")
-				$infobox[0]["eintrag"][] = array ("icon" => "pictures/forumrot.gif",
+				$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
 										"text"  =>"<a href=\"$PHP_SELF?view=search\">"._("zur&uuml;ck zur Suche")."</a>");
 		$infopic = "pictures/schedule.jpg";
 		}
