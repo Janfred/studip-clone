@@ -206,6 +206,11 @@ array	(	"name" => "In der Veranstaltung: grundlegende Funktionen",
 																				"text" => "Personen in der Veranstaltung",
 																				"page" => "vi_teilnehmer.htm"
 																			),
+																array	(	"name" => "Funktionen / Gruppen",
+																				"text" => "Nutzer in Gruppen organisieren",
+																				"page" => "vi_statusgruppen_show.htm"
+																			),
+
 																array	(	"name" => "Ablaufplan",
 																				"text" => "Termine finden",
 																				"page" => "vi_ablauf.htm"

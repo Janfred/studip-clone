@@ -292,6 +292,10 @@ switch($referrer_page) {
 	case "datei_upload.php" :
 		$help_page = "vii_upload.htm";
 		break;
+
+	case "statusgruppen.php" :
+		$help_page = "vi_statusgruppen_show.htm";
+		break;
 	
 	default :
 		;
