@@ -31,7 +31,7 @@ include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-if ($SessSemName[1]) {
+if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	include ("$ABSOLUTE_PATH_STUDIP/links1.php");
 }
 		

@@ -148,14 +148,9 @@ IF ($SEM_CLASS[$view]["show_browse"]==FALSE AND $view!="Alle") {
 	}
 ELSE $hide_bereich=FALSE;
 
-	if ($perm->have_perm("admin")) {
-		$target_url="seminar_main.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
-		$target_id="auswahl"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
-		}
-	else {
-		$target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
-		$target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
-		}
+	$target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
+	$target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
+
 	include "sem_browse.inc.php"; 		//der zentrale Seminarbrowser wird hier eingef&uuml;gt.
 	
 	$sql_where_query_seminare="";
@@ -221,4 +216,3 @@ IF ($sem_browse_data["level"]!="s" AND $sem_browse_data["level"]!="sbb" AND !$le
  ?>
 </body>
 </html>
-
