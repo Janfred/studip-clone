@@ -65,7 +65,7 @@ $xslt_files["html-teiln"]["desc"] = _("Modul zur Ausgabe von Personendaten als H
 $xslt_files["html-teiln"]["file"] = "html-t-1.xsl";
 $xslt_files["html-teiln"]["htm"] = true;
 $xslt_files["html-teiln"]["html"] = true;
-$xslt_files["html-teiln"]["person"] = true;
+//$xslt_files["html-teiln"]["person"] = true;
 
 
 
