@@ -127,7 +127,7 @@ function get_user_details() {       // f¸llt die arrays  mit Daten
 }
 
 function imaging($img,$img_size,$img_name) {
-	global $DJPEG_PATH, $CJPEG_PATH, $PNMSCALE_PATH, $GIFTOPNM_PATH;
+	global $DJPEG_PATH, $CJPEG_PATH, $PNMSCALE_PATH, $GIFTOPNM_PATH, $TMP_PATH;
 
 	if ($img_size > ($this->max_file_size*1024)) { //Bilddatei ist zu groﬂ
 		$this->msg = "errorß" . sprintf(_("Die hochgeladene Bilddatei ist %s KB groﬂ.<br>Die maximale Dateigrˆﬂe betr‰gt %s KB!"), round($img_size/1024), $this->max_file_size);
@@ -161,7 +161,7 @@ function imaging($img,$img_size,$img_name) {
 		// Check picture size
 		if (($imgsize[0] > 200) || ($imgsize[1] > 250)) {
 			//Temporaere Datei
-			$tmpimg = "/tmp/tmp.pnm";
+			$tmpimg = "$TMP_PATH/tmp.pnm";
 			//Konvertierung nach PNM
 			if ($ext == "jpg") {
 				system($DJPEG_PATH ." $newfile >$tmpimg");

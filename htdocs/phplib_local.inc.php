@@ -250,26 +250,26 @@ class Seminar_Auth extends Auth {
 	}
 	
 	function auth_preauth() {
-		global $auto_user,$auto_response,$auto_id,$resolution;
+		global $auto_user,$auto_response,$auto_id,$resolution,$TMP_PATH;
 		
 		if (!$auto_user OR !$auto_response OR !$auto_id){
 			return false;
 		}
 		$aktuell = time();
-		$folder = dir("/tmp");
+		$folder = dir($TMP_PATH);
 		while ($entry = $folder->read()){
 			if (!strncmp($entry,"auto_key",8)){
-				if ($aktuell-filemtime("/tmp/$entry") > 30){
-					unlink("/tmp/$entry");
+				if ($aktuell-filemtime("$TMP_PATH/$entry") > 30){
+					unlink("$TMP_PATH/$entry");
 				}
 			}
 		}
 		$folder->close;
-		if (file_exists("/tmp/auto_key_$auto_id")){
-			$fp = @fopen("/tmp/auto_key_$auto_id","r");
+		if (file_exists("$TMP_PATH/auto_key_$auto_id")){
+			$fp = @fopen("$TMP_PATH/auto_key_$auto_id","r");
 			$auto_challenge = fgets($fp,100);
 			fclose($fp);
-			unlink("/tmp/auto_key_$auto_id");
+			unlink("$TMP_PATH/auto_key_$auto_id");
 		} else {
 			$this->error_msg= _("Fehler beim Auto-Login!") . "<br>";
 			return false;
