@@ -1,3 +1,27 @@
+29.12.2003 v 1.0
+- neue WAP-Schnittstelle
+- neue Literaturverwaltung zur direkten Literaturrecherche und -verwaltung aus Stud.IP heraus
+- neue Funktionen zur Verwaltung systeminterner Nachrichten: Ordner, Weiterleiten an anderen Account,
+  Löschschutz, Fallweises Bearbeiten von Signaturen, Vorschau und ein Experten-Modus zum Versenden von 
+  Nachrichten
+- neue Simple-Content-Funktion zum Verwalten von beliebigem Content innerhalb von Veranstaltungen und
+  Einrichtungen
+- neuer vCard-Export für Personendaten
+- neue Funktion zum Erstellen von vorformatierten Veranstaltungslisten als PDF
+- neue Synchronisationsschnittstelle für Termine
+- neue Gästebuchfunktion für persönliche Homepages
+- Viewcounter für perönliche Homepages und News
+- kompletter Download als Zip-Archiv mit Ordnerstruktur für alle Dateien oder einzelne Ordner einer 
+  Veranstaltung und Archivierung von Dateien als Zip-Archiv mit der kompletten Ordnerstruktur 
+  der Veranstaltung
+- neue Formatierung: Einbindung von externen Bildern in Textbeiträge
+- neue Formatierung: Umgehen aller Formatierungen
+- neue Funktion zum Einbinden von grafischen Bannern auf der Startseite
+- überarbeitetes Design im Terminkalender
+- Veranstaltungen und Einrichtungen werden nun zusammen unter "Meine Veranstaltungen" geführt
+- leichte Überarbeitung einiger Icons
+- weitere Detailverbesserungen und Bugfixes
+
 30.09.2003 v 0.9.5
 - neues Modul für Votings und Tests
 - neues Wiki-Web-Modul zum kollaborativen Erstellen von verlinkten Dokumenten

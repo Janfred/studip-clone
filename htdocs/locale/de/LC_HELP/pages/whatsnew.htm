@@ -1,3 +1,6 @@
+<?
+$url = new studip_smtp_class;
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -8,6 +11,44 @@
 </font></h1>
 <p>Sie bekommen hier einen &Uuml;berblick, welche Funktionen in den
 jeweiligen Stud.IP Versionen neu hinzugekommen sind.<br>
+</p>
+<h1><font size="+1">Version 1.0</font></h1>
+<p>29.12.03 </p>
+<ul>
+  <li><b>WAP-Schnittstelle</b>: Das Abrufen von Stud.IP-Daten direkt 	 
+    vom Handy wird dank WAP-Schnittstelle möglich. Folgende Funktionen stehen
+    bereit: Suchen nach Nutzern (ohne Anmeldung), aktuelle Termine, Systemnews,
+    Veranstaltungsnews und -termine, Einrichtungsnews und -termine und empfangene 
+    systeminterne Nachrichten.<br />
+    Sie finden die WAP-Seiten unter 
+    <a href="<?=$url->url?>wap/"><?=$url->url?>wap/</a></li>
+   <li><b>neue Literaturverwaltung</b>: Stud.IP bietet nun die direkte Abfrage von 
+    Bibliotheksbeständen und das Erstellen von Literaturlisten aus den in den Katalogen
+    gefundenen Eintr&auml;gen. Auf diese Weise k&ouml;nnen Publikationslisten – personenbezogen, 
+    auf Veranstaltungs oder auf Einrichtungsebene – erstellt werden. Zudem steht damit ein 
+    leistungsf&auml;higes Tool bereit, um die pers&ouml;nliche Literaturverwaltung und -recherche
+    direkt aus Stud.IP heraus zu erledigen.</li>
+   <li><b>Simple-Content-Modul (freie Informationsseite)</b>: Es k&ouml;nnen f&uuml;r Veranstaltungen
+    und Einrichtungen beliebige Inhalte in einer frei benennbaren Informationsseite erfasst werden.</li>
+   <li><b>neue Funktionen zur Verwaltung von systeminternen Nachrichten</b>: Es stehen neue 
+    Funktionen, wie das Anlegen von Ordnern, Verschieben von Nachrichten, L&ouml;schschutz,
+    Weiterleitung an anderen Account, Fallweises Bearbeiten von Signaturen, Vorschau und vieles mehr zur 
+    Verf&uuml;gung</li>
+   <li><b>vCard-Export</b>: Nutzerdaten lassen sich einzeln oder gesammelt aus dem Adre&szlig;buch
+    und von pers&ouml;nlichen Nutzerhomepages als vCard exportieren und k&ouml;nnen so in andere 
+    Anwendungen importiert werden.</li>
+   <li><b>G&auml;stebuch-Funktion</b>: Auf pers&ouml;nlichen Homepages kann ein G&auml;stebuch f&uuml;r
+    jede Homepage durch den Besitzer aktiviert werden.</li>
+   <li><b>Banner auf der Startseite</b>: Es k&ouml;nnen verschiedene grafische Banner verwaltet 
+    und auf der Startseite eingebunden werden.</li>
+   <li><b>Einbindungen von Grafiken</b>: An vielen Stellen k&ouml;nnen mit einer eigenen Formatierung
+    externe Bilder eingebunden werden.</li>
+   <li><b>Ausgabe von Veranstaltungslisten</b>: Es lassen sich vorformatierte Ausgaben - etwa 
+    f&uuml;r Einlagebl&auml;tter im Studienbuch - ausgehend von abonnierten und in der Vergangenheit
+    belegten Veranstaltungen exportieren.</li>
+</ul>
+<br />
+<p>
 </p>
 <h1><font size="+1">Version 0.9.5</font></h1>
 <p>30.09.03 </p>
@@ -55,7 +96,8 @@ jeweiligen Stud.IP Versionen neu hinzugekommen sind.<br>
     wie LDAP- oder Radius-Server als Nutzerdatenbanken verwendet werden.</li>
 </ul>
 <br />
-<p><h1><font size="+1"><b>Version 0.9</b></font></h1><br>
+<p>
+<h1><font size="+1"><b>Version 0.9</b></font></h1><br>
 </p>
 <p>23.03.03<br>
 </p>
