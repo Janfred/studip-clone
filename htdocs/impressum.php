@@ -65,9 +65,9 @@ $structure["programm"]=array (topKat=>"", name=>"&Uuml;ber Stud.IP", link=>"impr
 //Bottomkats
 $structure["main"]=array (topKat=>"kontakt", name=>"Entwickler", link=>"impressum.php?view=main", active=>FALSE);
 $structure["ansprechpartner"]=array (topKat=>"kontakt", name=>"Ansprechpartner", link=>"impressum.php?view=ansprechpartner", active=>FALSE);
+$structure["technik"]=array (topKat=>"programm", name=>"Technik", link=>"impressum.php?view=technik", active=>FALSE);
 $structure["statistik"]=array (topKat=>"programm", name=>"Statistik", link=>"impressum.php?view=statistik", active=>FALSE);
 $structure["history"]=array (topKat=>"programm", name=>"History", link=>"impressum.php?view=history", active=>FALSE);
-$structure["technik"]=array (topKat=>"programm", name=>"Technik", link=>"impressum.php?view=technik", active=>FALSE);
 
 if (!$view)
 	$view="main";
