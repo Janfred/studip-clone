@@ -90,7 +90,7 @@ function print_institut_content($instid,$my_inst_values) {
   if ($my_inst_values["neuepostings"])
 		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=neue\">&nbsp; <img src='pictures/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"),$my_inst_values["postings"], $my_inst_values["neuepostings"]))."></a>";
   elseif ($my_inst_values["postings"])
-		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_inst_values["postings"]))."></a>";
+		echo "<a href=\"institut_main.php?auswahl=$instid&redirect_to=forum.php&view=tree\">&nbsp; <img src='pictures/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_sem_values["postings"]))."></a>";  
   else
 		echo "&nbsp; <img src='pictures/icon-leer.gif' border=0>";
   //Dokumente
