@@ -361,11 +361,11 @@ $db->query ("SELECT seminar_user.user_id, Vorname, Nachname, username, status, c
 if ($db->num_rows()) { //Only if Users were found...
 	// die eigentliche Teil-Tabelle
 	echo "<tr height=28>";
-	if ($showscore==TRUE)  echo "<td class=\"steel\" width=\"2%\">&nbsp; </td>";
+	if ($showscore==TRUE)  echo "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
 	printf ("<td class=\"steel\" width=\"30%%\" align=\"left\"><img src=\"pictures/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b><a href=%s?sortby=Nachname>%s</a></b></font></td>", $PHP_SELF, $val);
 	printf ("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b><a href=%s>Postings</a></b></font></td>", $PHP_SELF);
 	echo "<td class=\"steel\" width=\"10%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Dokumente</b></font></td>";
-	echo "<td class=\"steel\" width=\"8%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Nachricht</b></font></td>";
+	echo "<td class=\"steel\" width=\"9%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>Nachricht</b></font></td>";
 	//echo "<td class=\"steel\" width=\"10%\"><b>Literatur</b></td>";
 
 	if ($rechte) {
