@@ -51,8 +51,8 @@ else {
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
-	parse_window ("error§Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an den Systemadministrator.", "§",
-				"Modul \"externe Seiten\" nicht eingebunden");
+	parse_window ("error§" . _("Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an den Systemadministrator."), "§",
+				_("Modul \"externe Seiten\" nicht eingebunden"));
 }
 page_close();
 ?>
