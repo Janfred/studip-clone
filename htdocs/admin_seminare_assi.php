@@ -36,8 +36,9 @@ require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
 require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
 
 if ($RESOURCES_ENABLE) {
-	require_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
-	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/resourcesClass.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	$resAssign = new VeranstaltungResourcesAssign();
 }
 
@@ -75,7 +76,7 @@ if (((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60) || ($new_sess
 	{
 	$sem_create_data='';
 	$links_admin_data='';
-	$sem_create_data["sem_start_termin"]=-1;
+	//$sem_create_data["sem_start_termin"]=-1;
 	$sem_create_data["sem_vor_termin"]=-1;
 	$sem_create_data["sem_vor_end_termin"]=-1;
 	$sem_create_data["sem_admission_date"]=-1;
@@ -90,7 +91,7 @@ else
 if (($sem_create_data["sem_entry"]) && (!$form)) 
 	{
 	$sem_create_data='';
-	$sem_create_data["sem_start_termin"]=-1;
+	//$sem_create_data["sem_start_termin"]=-1;
 	$sem_create_data["sem_vor_termin"]=-1;
 	$sem_create_data["sem_vor_end_termin"]=-1;	
 	}	
@@ -430,7 +431,6 @@ if ($form==4)
 		{
 		$sem_create_data["sem_admission_date"] = -1;
 		}
-	}
 		
 	//Datum fuer ersten Termin umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
 	if (($jahr>0) && ($jahr<100))
@@ -440,18 +440,16 @@ if ($form==4)
 	if ($tag == _("tt")) $tag=0;
 	if ($jahr == _("jjjj")) $jahr=0;	
 
-	if (!checkdate($monat, $tag, $jahr) && ($monat) && ($tag) && ($jahr))
+	if ((!checkdate($monat, $tag, $jahr)) && ($monat) && ($tag) && ($jahr))
 		{
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum ein!")."§";
-		$check=FALSE;			
-		}
-	else
-		$check=TRUE;
-
-	if ($check)
-	 	$sem_create_data["sem_start_termin"] = mktime($stunde,$minute,0,$monat,$tag,$jahr);
-	else
 		$sem_create_data["sem_start_termin"] = -1;
+		}
+	else {
+	 	$sem_create_data["sem_start_termin"] = mktime($stunde,$minute,0,$monat,$tag,$jahr);
+	 }
+	}	 
+
 
 if ($form==7)
 	{
