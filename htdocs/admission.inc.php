@@ -41,7 +41,7 @@ function check_admission ($send_message=TRUE) {
 	$messaging=new messaging;
 	
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
-	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE admission_endtime > '".time()."' AND admission_selection_take_place = '0' AND admission_type = '1' ");
+	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE admission_endtime <= '".time()."' AND admission_selection_take_place = '0' AND admission_type = '1' ");
 	while ($db->next_record()) {
 		//Veranstaltung locken
 		$db2->query("UPDATE seminare SET admission_selection_take_place ='-1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
@@ -64,7 +64,7 @@ function check_admission ($send_message=TRUE) {
 					}
 			}
 			//Alle anderen Teilnehmer in der Warteliste losen
-			$db3->query("SELECT user_id, username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' ORDER BY RAND() ");
+			$db3->query("SELECT admission_seminar_user.user_id, username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' ORDER BY RAND() ");
 			//Warteposition ablegen
 			$position=1;
 			while ($db3->next_record()) {
@@ -104,7 +104,7 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 			$db3->next_record();
 			if ($db3->f("count") < round($db->f("admission_turnout") * ($db2->f("quota") / 100))) {
 				//Studis asuwaehlen, die jetzt aufsteigen koennen
-				$db4->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id =  '".$db->f("Seminar_id")."'  AND studiengang_id = ".$db2->f("studiengang_id")."' ORDER BY position LIMIT ".($db3->f("count") - round($db->f("admission_turnout") * ($db2->f("quota") / 100))));
+				$db4->query("SELECT admission_seminar_user.user_id, username LEFT JOIN auth_user_md5 USING (user_id) FROM admission_seminar_user WHERE seminar_id =  '".$db->f("Seminar_id")."'  AND studiengang_id = ".$db2->f("studiengang_id")."' ORDER BY position LIMIT ".($db3->f("count") - round($db->f("admission_turnout") * ($db2->f("quota") / 100))));
 				while ($db4->next_record()) {
 					$group = select_group ($db->f("start_time"), $db4->f("user_id"));			
 					$db5->query("INSERT INTO seminar_user SET user_id = '".$db4->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', group = '$group', admission_studiengang_id = '".$db2->f("studiengang_id")."', mkdate = '".time()."' ");
