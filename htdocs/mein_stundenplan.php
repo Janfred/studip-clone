@@ -19,7 +19,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-          page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+
+ob_start(); //Outputbuffering for max performance
 
 ?>
 
@@ -41,18 +43,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 <?php
-require_once "seminar_open.php";
-require_once "config.inc.php"; //Daten laden
-require_once "config_tools_semester.inc.php"; 
-require_once "ms_stundenplan.inc.php";
-require_once "visual.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/seminar_open.php";
+require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; //Daten laden
+require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php"; 
+require_once "$ABSOLUTE_PATH_STUDIP/ms_stundenplan.inc.php";
+require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 
 //eingebundene Daten auf Konsitenz testen (Semesterwechsel? nicht mehr Admin im gespeicherten Institut?)
 check_schedule_settings();
 
 if (!$print_view) {
-	include "header.php";   //hier wird der "Kopf" nachgeladen
-	if (!$perm->have_perm("admin"))
+	include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
+	if ($inst_id) //Links if we show in the instiute-object-view
+		include "$ABSOLUTE_PATH_STUDIP/links1.php";
+	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
 		include "$RELATIVE_PATH_CALENDAR/calendar_links.inc.php";
 	}
 
@@ -150,8 +154,7 @@ if ($cmd=="insert") {
 if ($inst_id) {
 	$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' ");
 	$view="inst";
-}
-else {
+} else {
 	$user_id=$user->id;
 	if ($perm->have_perm("admin")) {
 		$db->query("SELECT seminare.Seminar_id, Name, Ort, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
@@ -227,7 +230,7 @@ while ($db->next_record())
 		$i=0;
 		foreach 	($term_data["turnus_data"] as $data)
 			{
-			//Pacth fuer Problem mit alten Versionwn <=0.7 (Typ war falsch gesetzt), wird nur fuer rueckwaerts-Kompatibilitaet benoetigt
+			//Patch fuer Problem mit alten Versionwn <=0.7 (Typ war falsch gesetzt), wird nur fuer rueckwaerts-Kompatibilitaet benoetigt
 			settype ($data["start_stunde"], "integer");
 			settype ($data["end_stunde"], "integer");
 			settype ($data["start_minute"], "integer");
@@ -256,7 +259,7 @@ while ($db->next_record())
 
 	
 //Daten aus der Sessionvariable hinzufuegen
-if (is_array($my_personal_sems))
+if ((is_array($my_personal_sems)) && (!$inst_id))
 	foreach ($my_personal_sems as $mps)
 	{
 	//auch hier nochmal der Check
@@ -389,8 +392,13 @@ if (!$print_view) {
 </tr>	
 <tr>
 <td class="steel1" colspan=<? echo $glb_colspan+1?>>
-<? } ?>
-<table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=2 border=0>
+<? } 
+
+ob_end_flush(); //Clear buffer for ouput the headers
+ob_start();
+
+?>
+<table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
 <tr>
 	<td width="10%" align="center" class="rahmen_steelgraulight" >Zeit
 	</td>
@@ -454,23 +462,27 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 			if ($cell_sem[$idx])
 				while ($cs = each ($cell_sem [$idx]))
 					$cell_content[]=array("seminar_id"=>$cs[0], "start_cell"=>$cs[1]);
-			if ((!$cell_sem[$idx]) || ($cell_content[0]["start_cell"])) echo "<td ";
+			if ((!$cell_sem[$idx]) || ($cell_content[0]["start_cell"]))	echo "<td ";
 			$u=0;
 			if (($cell_sem[$idx]) && ($cell_content[0]["start_cell"]))
 				{
 				$r=0;
 				foreach ($cell_content as $cc)
 					{
-					if ($r==0)
-						echo "class=\"rahmen_steelgraulight\" valign=\"top\" rowspan=",$my_sems[$cell_content[0]["seminar_id"]]["row_span"],">";
-					else
-						echo "<hr \"95%\">";
+					if ($r==0) {
+						echo "class=\"rahmen_white\" valign=\"top\" rowspan=",$my_sems[$cell_content[0]["seminar_id"]]["row_span"],">";
+						echo "<table width=\"100%\" cellspacing=0 cellpadding=2 border=0><tr><td class=\"topic\">";
+					} else
+						echo "</td></tr><tr><td class=\"topic\">";
 					$r++;
-					echo "<font size=-1>", date ("H:i",  $my_sems[$cc["seminar_id"]]["start_time"]);
+					echo "<font size=-1 ";
+					if (!$print_view)
+						echo "color=\"FFFFFF\"";
+					echo ">", date ("H:i",  $my_sems[$cc["seminar_id"]]["start_time"]);
 					if  ($my_sems[$cc["seminar_id"]]["start_time"] <> $my_sems[$cc["seminar_id"]]["end_time"]) 
 						echo " - ",  date ("H:i",  $my_sems[$cc["seminar_id"]]["end_time"]);
 					if ($my_sems[$cc["seminar_id"]]["ort"]) echo ",  ", $my_sems[$cc["seminar_id"]]["ort"];
-					echo "</font><br>";
+					echo "</font></td></tr><tr><td class=\"blank\">";
 					if (!$my_sems[$cc["seminar_id"]]["personal_sem"]) 
 						{
 						echo  "<a href=\"seminar_main.php?auswahl=", substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
@@ -490,7 +502,7 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 					if ($my_sems[$cc["seminar_id"]]["dozenten"]) echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
 					if ($my_sems[$cc["seminar_id"]]["personal_sem"]) echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"./pictures/trash.gif\" alt=\"Dieses Feld aus der Auswahl l&ouml;schen\">&nbsp;</a></div>";
 					}
-				echo "</td>";
+				echo "</td></tr></table>";
 				}
 			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>"; 
 			}
@@ -500,7 +512,7 @@ for ($i; $i<$my_schedule_settings["glb_end_time"]+1; $i++)
 	}
 
 	if ($print_view) {
-		echo "<tr><td colspan=$glb_colspan><i><font size=-1>Erstellt am ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td>";
+		echo "<tr><td colspan=$glb_colspan><i><font size=-1>&nbsp; Erstellt am ",date("d.m.y", time())," um ", date("G:i", time())," Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"pictures/logo2b.gif\"><br />&copy; ", date("Y", time())," v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td>";
 		}
 	else {
 		}
@@ -580,7 +592,7 @@ if (!$print_view) {
 
 <?
 }
-
+ob_end_flush(); //end outputbuffering 
 
 // Save data back to database.
 page_close();
