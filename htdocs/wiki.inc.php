@@ -1102,7 +1102,6 @@ function showComboDiff($keyword, $db=NULL) {
 	$diffarray1 = toDiffLineArray($wd1['body'], $wd1['user_id']);
 	$current_version = $version1 + 1;
 	$differ = new line_diff();
-	$fp=fopen("/tmp/combo.log","w");
 	while ($current_version <= $version2) {
 		$wd2 = getWikiPage($keyword, $current_version, $db);
 		if ($wd2) {
@@ -1112,13 +1111,11 @@ function showComboDiff($keyword, $db=NULL) {
 			foreach ($newarray as $i) {
 				if ($i->status["diff"] != "-") {
 					$diffarray1[]=$i;
-					fwrite($fp,"#".$current_version."#".get_fullname($i->who)."#".$i->text."\n");
 				}
 			}
 		}
 		$current_version++;
 	}
-	fclose($fp);
 	$content="<table>";
 	$count=0;
 	$authors=array();
