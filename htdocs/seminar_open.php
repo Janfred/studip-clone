@@ -42,8 +42,6 @@ function check_messaging_default() {
 		$my_messaging_settings['logout_markreaded'] = FALSE;	
 	if (!$my_messaging_settings['openall'])
 		$my_messaging_settings['openall'] = FALSE;	
-	if (!$my_messaging_settings['save_snd'])
-		$my_messaging_settings['save_snd'] = 1;		
 	if (!$my_messaging_settings['addsignature'])
 		$my_messaging_settings['addsignature'] = FALSE;	
 	if (!$my_messaging_settings['save_snd'])
@@ -51,10 +49,11 @@ function check_messaging_default() {
 	if (!$my_messaging_settings['sms_sig'])
 		$my_messaging_settings['sms_sig'] = FALSE;	
 	if (!$my_messaging_settings['send_view'])
-		$my_messaging_settings['send_view'] = 2;		
+		$my_messaging_settings['send_view'] = FALSE;	
+	if (!$my_messaging_settings['last_box_visit'])
+		$my_messaging_settings['last_box_visit'] = 1;	
 
 	}
-	
 	
 // set default Values for schedule (timetable)	
 function check_schedule_default() {

@@ -43,6 +43,8 @@ $msging=new messaging;
 
 $db=new DB_Seminar;
 
+check_messaging_default();
+
 # FUNCTIONS
 ###########################################################
 
@@ -65,13 +67,6 @@ function CheckAllAdded($adresses_array, $rec_array) {
 
 # ACTION
 ###########################################################
-
-if (empty($my_messaging_settings["addsignature"])) {
-	$my_messaging_settings["addsignature"] = "0";
-}
-if (empty($my_messaging_settings["save_snd"])) {
-	$my_messaging_settings["save_snd"] = "1";
-}
 
 // check if active chat avaiable
 if (($cmd == "write_chatinv") && (!is_array($admin_chats)))
@@ -228,6 +223,11 @@ function show_precform() {
 
 function show_addrform() {
 	global $PHP_SELF, $sms_data, $user, $recuname, $db, $_fullname_sql, $adresses_array, $search_exp, $my_messaging_settings;
+	if ($my_messaging_settings["send_view"] == "1") {
+		$picture = "move_up.gif";
+	} else {
+		$picture = "move_left.gif";
+	}
 	// list of adresses
 	$query_for_adresses = "SELECT contact.user_id, username, ".$_fullname_sql['full_rev']." AS fullname FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE owner_id = '".$user->id."' ORDER BY Nachname ASC";
 	$db->query($query_for_adresses);
@@ -266,10 +266,10 @@ function show_addrform() {
 			$tmp .= "<select size=\"".$tmp_01."\" name=\"add_receiver[]\" multiple style=\"width: 250\">";
 			$tmp .= $tmp_02;
 			$tmp .= "</select><br>";
-			$tmp .= "<input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/move_left.gif\" border=\"0\" ".tooltip(_("fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu")).">";
+			$tmp .= "<input type=\"image\" name=\"add_receiver_button\" src=\"./pictures/".$picture."\" border=\"0\" ".tooltip(_("fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu")).">";
 			#$tmp .= "&nbsp;<font size=\"-1\"><a href=\"".$PHP_SELF."?add_allreceiver_button_x=1\">"._("ausgew&auml;hlte hinzufügen")."</a>";
 			$tmp .= "&nbsp;<font size=\"-1\">"._("ausgew&auml;hlte hinzufügen")."";
-			$tmp .= "&nbsp;<br><input type=\"image\" name=\"add_allreceiver_button\" src=\"./pictures/move_left.gif\" border=\"0\" ".tooltip(_("fügt alle Personen der EmpfängerInnenliste hinzu")).">";
+			$tmp .= "&nbsp;<br><input type=\"image\" name=\"add_allreceiver_button\" src=\"./pictures/".$picture."\" border=\"0\" ".tooltip(_("fügt alle Personen der EmpfängerInnenliste hinzu")).">";
 			#$tmp .= "&nbsp;<font size=\"-1\"><a href=\"".$PHP_SELF."?add_allreceiver_button_x=1\">"._("alle hinzuf&uuml;gen")."</a></font>";
 			$tmp .= "&nbsp;<font size=\"-1\">"._("alle hinzuf&uuml;gen")."</font>";
 		}
@@ -285,7 +285,7 @@ function show_addrform() {
 			$tmp .= "&nbsp;<input type=\"image\" name=\"reset_freesearch\" src=\"./pictures/rewind.gif\" border=\"0\" value=\""._("Suche zur&uuml;cksetzen")."\" ".tooltip(_("setzt die Suche zurück")).">";
 			$tmp .= "&nbsp;<font size=\"-1\">"._("keine Treffer")."</font>";
 		} else {
-			$tmp .= "<input type=\"image\" name=\"add_freesearch\" ".tooltip(_("zu Empfängerliste hinzufügen"))." value=\""._("zu Empf&auml;ngerliste hinzuf&uuml;gen")."\" src=\"./pictures/move_left.gif\" border=\"0\">&nbsp;";
+			$tmp .= "<input type=\"image\" name=\"add_freesearch\" ".tooltip(_("zu Empfängerliste hinzufügen"))." value=\""._("zu Empf&auml;ngerliste hinzuf&uuml;gen")."\" src=\"./pictures/".$picture."\" border=\"0\">&nbsp;";
 			$tmp .= "<select size=\"1\" width=\"80\" name=\"freesearch[]\">";
 			while ($db->next_record()) {
 				if (empty($sms_data["p_rec"])) {
@@ -396,6 +396,7 @@ function show_chatselector() {
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
 include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php"); // include reitersystem
+check_messaging_default();
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	change_messaging_view();
@@ -411,10 +412,15 @@ $txt['004'] = _("Vorschau");
 $txt['005'] = (($cmd=="write_chatinv") ? _("Chateinladung") : _("Nachricht"));
 
 if ($send_view) {
-	$my_messaging_settings["send_view"] = $send_view;
+	if ($send_view == "2") {
+		unset($my_messaging_settings["send_view"]);
+	} else if ($send_view == "1") {
+		$my_messaging_settings["send_view"] = $send_view;
+	}
 }
 
 ?>
+
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
@@ -522,7 +528,7 @@ if ($send_view) {
 			</tr>
 		</table> <? 
 
-	} else if ($my_messaging_settings["send_view"] == "2"){ ?>
+	} else { ?>
 
 		<table cellpadding="5" cellspacing="0" border="0" height="10" width="99%">
 			<tr>
@@ -574,19 +580,20 @@ if ($send_view) {
 				</td>
 				<td class="printcontent" width="20%" valign="top">
 					<?=show_previewform()?>
+					
 				</td>
 			</tr>
 		</table> <?
 	}
-	
-	if ($my_messaging_settings["send_view"] == "1") {
-		$tmp_link_01 = "2";
-		$tmp_link_02 = _("normale Ansicht");
-	} else if ($my_messaging_settings["send_view"] == "2") {
+
+	if (!$my_messaging_settings["send_view"]) {
 		$tmp_link_01 = "1";
-		$tmp_link_02 = _("alternative Ansicht");
+		$tmp_link_02 = _("Experten-Ansicht");
+	} else if ($my_messaging_settings["send_view"] == "1") {
+		$tmp_link_01 = "2";
+		$tmp_link_02 = _("Standard-Ansicht");
 	}
-	$switch_sendview = sprintf(_("Wählen Sie hier zwischen den 2 verfügbaren Ansichten dieser Seite."))."<br><a href=\"".$PHP_SELF."?send_view=".$tmp_link_01."\">".$tmp_link_02."</a>";
+	$switch_sendview = sprintf(_("Wählen Sie hier zwischen Experten- und Standard-Ansicht."))."<br><a href=\"".$PHP_SELF."?send_view=".$tmp_link_01."\">".$tmp_link_02."</a>";
 	
 	echo"</form>\n";
 	print "</td><td class=\"blank\" width=\"270\" align=\"right\" valign=\"top\">";

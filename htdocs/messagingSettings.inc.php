@@ -24,7 +24,7 @@ require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/messaging.inc.php");
 require_once ($ABSOLUTE_PATH_STUDIP."/contact.inc.php");
-
+check_messaging_default();
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 
@@ -60,11 +60,20 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x) {
 	$my_messaging_settings["sms_sig"] = $sms_sig;
 	$my_messaging_settings["timefilter"] = $timefilter;
 	$my_messaging_settings["openall"] = $openall;
-	$my_messaging_settings["opennew"] = $opennew;
+	if (!$opennew) {
+		$my_messaging_settings["opennew"] = "2";
+	} else {
+		$my_messaging_settings["opennew"] = $opennew;
+	}
 	$my_messaging_settings["logout_markreaded"] = $logout_markreaded;
 	$my_messaging_settings["addsignature"] = $addsignature;
+	$sms_data["sig"] = $addsignature;
 	$my_messaging_settings["changed"] = "TRUE";
-	$my_messaging_settings["save_snd"] = $save_snd;
+	if (!$save_snd) {
+		$my_messaging_settings["save_snd"] = "2";
+	} else {
+		$my_messaging_settings["save_snd"] = $save_snd;
+	}
 	$sms_data["time"] = $my_messaging_settings["timefilter"];
 	if ($smsforward['rec']) {
 		if ($smsforward_copy && !$smsforward['copy'])  {
@@ -77,7 +86,7 @@ if ($messaging_cmd=="change_view_insert" && !$set_msg_default_x) {
 		}
 	}
 } else if ($messaging_cmd=="change_view_insert" && $set_msg_default_x) {
-	$reset_txt = "<font size=\"-1\">"._("Durch das Zurücksetzen werden die persönliche Messaging-Einstellungen auf die Startwerte zurückgesetzt und die persönlichen Nachrichten-Ordner gelöscht. Nachrichten werden nicht entfernt.")."</font>";
+	$reset_txt = "<font size=\"-1\">"._("Durch das Zurücksetzen werden die persönliche Messaging-Einstellungen auf die Startwerte zurückgesetzt <b>und</b> die persönlichen Nachrichten-Ordner gelöscht. <b>Nachrichten werden nicht entfernt.</b>")."</font><br>";
 }
 
 if ($messaging_cmd == "reset_msg_settings") {

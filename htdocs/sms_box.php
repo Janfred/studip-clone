@@ -47,6 +47,33 @@ $db = new DB_Seminar;
 $db6 = new DB_Seminar;
 $db7 = new DB_Seminar;
 
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+if ($neux) {
+	$sms_data["view"] = "in";
+	$show_folder = "all";
+}
+// view festlegen
+if ($sms_inout && !$neux) {
+	$sms_data["view"] = $sms_inout;
+} else if ($sms_data["view"] == "") {
+	$sms_data["view"] = "in";
+} 
+include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+check_messaging_default();
+if ($auth->auth["jscript"]) { // JS an und erwuenscht?
+	echo "<script language=\"JavaScript\">var ol_textfont = \"Arial\"</script>";
+	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
+}
+
+if (($change_view) || ($delete_user) || ($view=="Messaging")) {
+	change_messaging_view();
+	echo "</td></tr></table>";
+	page_close();
+	die;
+} 
+
 // sortierung festlegen
 if ($cmd_sort) { 
 	$sms_show['sort'] = $cmd_sort;
@@ -81,13 +108,6 @@ if ($mclose) {
 	$sms_data["open"] = $mopen;
 }
 
-// view festlegen
-if ($sms_inout) {
-	$sms_data["view"] = $sms_inout;
-} else if ($sms_data["view"] == "") {
-	$sms_data["view"] = "in";
-}
-
 if ($cmd == "mark_allsmsreaded") {
 	$msging->set_read_all_messages();
 	$msg = "msg§".sprintf(_("Es wurden alle ungelesenen Nachrichten als gelesen gespeichert."), $l);
@@ -95,22 +115,31 @@ if ($cmd == "mark_allsmsreaded") {
 
 $count_newsms = count_messages_from_user($sms_data['view'], "AND deleted='0' AND readed='0'");
 
-// folder festlegen
-if (!$sms_show['folder'][$sms_data['view']]) {
-	$sms_show['folder'][$sms_data['view']] = $my_messaging_settings["folder"]['active'][$sms_data['view']];
-}
 if ($show_folder == "close") {
 	$sms_show['folder'][$sms_data['view']] = "close";
 } else if ($show_folder != "") {
 	$sms_show['folder'][$sms_data['view']] = $show_folder;
 	$my_messaging_settings["folder"]['active'][$sms_data['view']] = $sms_show['folder'][$sms_data['view']];
 }
-if (empty($my_messaging_settings["folder"][$sms_data["view"]])) {
-	$sms_show['folder'][$sms_data['view']] = "all";
-	$my_messaging_settings["folder"]['active'][$sms_data['view']] = $sms_show['folder'][$sms_data['view']];
+
+if (empty($sms_show['folder'][$sms_data['view']])) {
+	$sms_show['folder'][$sms_data['view']] = $my_messaging_settings["folder"]['active'][$sms_data['view']];
 }
 
-
+// folder festlegen
+if ($sms_show['folder'][$sms_data['view']]) { 
+	if ($sms_show['folder'][$sms_data['view']] != "all") {
+		$query_showfolder = "AND message_user.folder='".$sms_show['folder'][$sms_data['view']]."'";
+		$infotext_folder = "&nbsp;("._("Ordner").":&nbsp;".$sms_show['folder'][$sms_data['view']].")";
+	} else {
+		$query_showfolder = "AND message_user.folder=''";
+		$infotext_folder = "&nbsp;("._("Ordner: Alle Nachrichten").")";
+	}
+} else {
+	$infotext_folder = "&nbsp;("._("Ordner: Alle Nachrichten").")";
+	$sms_show['folder'][$sms_data['view']] = "all";
+	$query_showfolder = "AND message_user.folder=''";
+}
 
 // neuen folder anlegen
 if ($new_folder[0] != "" && $new_folder_button_x) {
@@ -167,21 +196,6 @@ if ($sms_time) {
 	$my_messaging_settings["timefilter"] = "all";
 } else if ($sms_data["time"] == "" && !empty($my_messaging_settings["timefilter"])) {
 	$sms_data["time"] = $my_messaging_settings["timefilter"];
-}
-
-// folder festlegen
-if ($sms_show['folder'][$sms_data['view']]) { 
-	if ($sms_show['folder'][$sms_data['view']] != "all") {
-		$query_showfolder = "AND message_user.folder='".$sms_show['folder'][$sms_data['view']]."'";
-		$infotext_folder = "&nbsp;("._("Ordner").":&nbsp;".$sms_show['folder'][$sms_data['view']].")";
-	} else {
-		$query_showfolder = "AND message_user.folder=''";
-		$infotext_folder = "&nbsp;("._("Ordner: Alle Nachrichten").")";
-	}
-} else {
-	$infotext_folder = "&nbsp;("._("Ordner: Alle Nachrichten").")";
-	$sms_show['folder'][$sms_data['view']] = "all";
-	$query_showfolder = "AND message_user.folder=''";
 }
 
 // texte definieren
@@ -300,24 +314,6 @@ if ($sms_data["time"] == "all") {
 	$query_time_sort = " AND message.mkdate < '".(date("U")-(30*86400))."'";
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor, die &auml;lter als 30 Tage sind."), $infotext_folder, $no_message_text_box);
 }
-
-// Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
-
-if ($auth->auth["jscript"]) { // JS an und erwuenscht?
-	echo "<script language=\"JavaScript\">var ol_textfont = \"Arial\"</script>";
-	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"overlib.js\"></SCRIPT>";
-}
-
-if (($change_view) || ($delete_user) || ($view=="Messaging")) {
-	change_messaging_view();
-	echo "</td></tr></table>";
-	page_close();
-	die;
-} 
 
 ?>
 
@@ -466,7 +462,8 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 				if (folder_openclose($sms_show['folder'][$sms_data['view']], $my_messaging_settings["folder"][$sms_data['view']][$x]) == "open") print_messages();
 			}	
 		} 
-		print("</form>"); ?>
+		print("</form>"); 
+		?>
 	</td>
 	<td class="blank" width="270" align="right" valign="top"> <?
 	
@@ -485,9 +482,13 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 			$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array("icon" => "pictures/ausruf_small.gif", "text" => "<a href=\"seminar_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung")."</a>")));
 		}
 
+		$show_message_count = sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), ($altm+$neum), count_messages_from_user("snd"));
+		if ($neum) {
+			$show_message_count .= "<br>".sprintf(_("%s Nachrichten sind ungelesen."), ($neum));
+		}
 		$infobox = array($tmp_array_1,
 			array("kategorie" => _("Information:"),"eintrag" => array(
-				array("icon" => "pictures/ausruf_small.gif", "text" => sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), count_messages_from_user("rec"), count_messages_from_user("snd"))))),
+				array("icon" => "pictures/ausruf_small.gif", "text" => $show_message_count))),
 			array("kategorie" => _("Nachrichten filtern:"),"eintrag" => array(
 				array("icon" => "pictures/suchen.gif", "text" => $time_by_links))),
 			array("kategorie" => _("Optionen:"),"eintrag" => array(
@@ -500,6 +501,10 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	<td class="blank" colspan="2">&nbsp;</td>
 </tr>
 </table><?
+
+if ($my_messaging_settings["last_box_visit"] < time()) {
+	$my_messaging_settings["last_box_visit"] = time();
+}
 
 // Save data back to database.
 page_close() ?>

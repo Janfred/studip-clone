@@ -125,15 +125,16 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$db->query("
 					SELECT COUNT(m.chat_id) AS chat_m, 
 					COUNT(IF(m_u.readed = '0', m_u.message_id, NULL)) AS neu_m, 
-					COUNT(IF(m_u.readed = '1', m_u.message_id, NULL)) AS alt_m 
-					FROM message_user AS m_u LEFT JOIN message AS m USING (message_id ) WHERE m_u.user_id='".$user->id."' AND deleted = '0' AND m_u.snd_rec = 'rec'
+					COUNT(IF(m_u.readed = '1', m_u.message_id, NULL)) AS alt_m,
+					COUNT(IF((m.mkdate > ".$my_messaging_settings["last_box_visit"]." AND m_u.readed = '0'), m_u.message_id, NULL)) AS neu_x
+					FROM message_user AS m_u LEFT JOIN message AS m USING (message_id) WHERE m_u.user_id='".$user->id."' AND deleted = '0' AND m_u.snd_rec = 'rec'
 					");
 		if ($db->next_record()) {
 			$chatm = $db->f("chat_m");
 			$neum = $db->f("neu_m"); // das ist eine neue Nachricht.
 			$altm = $db->f("alt_m");
+			$neux = $db->f("neu_x");
 		}
-
 
 		?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -151,23 +152,29 @@ if ($auth->auth["uid"] == "nobody") { ?>
 	$text = _("Post");
 	$link = "sms_box.php";
 	if ($neum) {
-		$icon = "pictures/nachricht2.gif";		
-		if ($neum > 1) {
-			$tip = sprintf(_("Sie haben %s neue Nachrichten!"), $neum);
-		} else {
-			$tip = _("Sie haben eine neue Nachricht!");
-		}
-		$link .= "?sms_inout=in";
+		$icon = "pictures/nachricht2.gif";
 	} else if (!$neum) {
 		$icon = "pictures/nachricht1.gif";
-		if ($altm > "1") {
-			$tip = sprintf(_("Sie haben %s alte empfangene Nachrichten."), $altm);
-		} else if ($altm == "1") {
-			$tip = _("Sie haben eine alte empfangene Nachricht.");
-		} else {
-			$tip = _("Sie haben keine alten empfangenen Nachrichten.");
-		}
 	}
+	$link .= "?sms_inout=in";
+	if ($neux >= "1") {
+		$tip = sprintf(_("Sie haben %s neue ungelesene Nachrichten!"), $neum);
+	} else if ($neux == "1") {
+		$tip = _("Sie haben eine neue ungelesene Nachricht!");
+	}
+	if ($neum > "1" && !$neux) {
+		$tip = sprintf(_("Sie haben %s ungelesene Nachrichten!"), $neum);
+	} else if ($neum == "1" && !$neux) {
+		$tip = _("Sie haben eine ungelesene Nachricht!");
+	}
+	if ($altm > "1" && !$neum) {
+		$tip = sprintf(_("Sie haben %s alte empfangene Nachrichten."), $altm);
+	} else if ($altm == "1" && !$neum) {
+		$tip = _("Sie haben eine alte empfangene Nachricht.");
+	} else if (!$neum) {
+		$tip = _("Sie haben keine alten empfangenen Nachrichten.");
+	}
+
 	echo MakeToolbar($icon,$link,$text,$tip,40, "_top");
 
 		if (!($perm->have_perm("admin") || $perm->have_perm("root"))) {
