@@ -49,7 +49,32 @@ define("CHAT_FILE_NAME", "chat_data");
 * path used for data storage (used only with ChatFileServer)
 * @const CHAT_FILE_NAME
 */
-define("CHAT_FILE_PATH", $TMP_PATH);
+define("CHAT_FILE_PATH", $GLOBALS['TMP_PATH']);
+/**
+* database host (used only with ChatMysqlServer)
+* @const CHAT_DB_HOST
+*/
+define("CHAT_DB_HOST", $GLOBALS['DB_STUDIP_HOST']);
+/**
+* database user (used only with ChatMysqlServer)
+* @const CHAT_DB_USER
+*/
+define("CHAT_DB_USER", $GLOBALS['DB_STUDIP_USER']);
+/**
+* database password (used only with ChatMysqlServer)
+* @const CHAT_DB_PASS
+*/
+define("CHAT_DB_PASS", $GLOBALS['DB_STUDIP_PASSWORD']);
+/**
+* database name (used only with ChatMysqlServer)
+* @const CHAT_DB_NAME
+*/
+define("CHAT_DB_NAME", $GLOBALS['DB_STUDIP_DATABASE']);
+/**
+* database tablename (used only with ChatMysqlServer)
+* @const CHAT_DB_TABLE_NAME
+*/
+define("CHAT_DB_TABLE_NAME", "chat_data");
 /**
 * Used for shm access, do not alter
 * @const CHAT_USER_KEY
@@ -69,7 +94,7 @@ define("CHAT_MAX_MSG",50);
 * Time in seconds before chat user gets kicked
 * @const CHAT_IDLE_TIMEOUT
 */
-define("CHAT_IDLE_TIMEOUT",600);       //in Sekunden
+define("CHAT_IDLE_TIMEOUT",1200);       //in Sekunden
 /**
 * Time in seconds before chat admin gets kicked
 * @const CHAT_ADMIN_IDLE_TIMEOUT
