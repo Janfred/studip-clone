@@ -45,46 +45,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <body>
 
 
-<?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
+<?
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
 
-// hier muessen Seiten-Initialisierungen passieren
-
-	include "header.php";   //hier wird der "Kopf" nachgeladen 
-?>
-<body>
-
-<?php
-	include "links_admin.inc.php";  //Linkleiste fuer admins
-
-	require_once ("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
-	require_once("visual.inc.php");
-	require_once("config.inc.php");
-	require_once("forum.inc.php");
-	require_once("datei.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
 	
-	$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$i_view'");
-	if ($db->next_record())
-		$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
-	$tmp_name=$db->f("Name");
-	
-	
-?>
-
-<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;<b>
-	<?
-	echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
-		if (strlen($tmp_name) > 60)
-			echo "... ";
-		echo " -  Grunddaten";
-	?></b></td>
-</tr>
-<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-
-
-<?php
 
 ###
 ### Submit Handler
@@ -93,36 +62,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ## Get a database connection
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
+$cssSw = new cssClassSwitcher;
 
 ## Check if there was a submission
-
-
 while ( is_array($HTTP_POST_VARS) 
      && list($key, $val) = each($HTTP_POST_VARS)) {
   switch ($key) {
   
   ## Zugeordneten Fachbereich rauswerfen
-  case "kill_fach":
+  case "kill_fach_x":
   	{
 	$db->query("DELETE FROM fach_inst WHERE fach_id = '$fach_id' AND institut_id ='$i_view'");
-	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Die Zuordnung wurde aufgehoben");
+	if ($db->affected_rows()==0)  $msg="error§Datenbankoperation gescheitert."; else $msg="msg§Die Zuordnung wurde aufgehoben";
 	break;
   	}
   	
   ## Fachbereich zuordnen
-  case "add_fach":
+  case "add_fach_x":
   	{
 	$db->query("INSERT INTO fach_inst VALUES ('$fach_id', '$i_view')");
-	if ($db->affected_rows()==0)  parse_msg("error§Datenbankoperation gescheitert."); else parse_msg("msg§Das Fach wurde der Einrichtung zugeordnet");
+	if ($db->affected_rows()==0)  $msg="error§Datenbankoperation gescheitert."; else $msg="msg§Das Fach wurde der Einrichtung zugeordnet";
 	break;
   	}
   
   
   ## Create a new Institut
-  case "create":
+  case "create_x":
     ## Do we have all necessary data?
     if (empty($Name)) {
-      my_error("<b>Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!</b>");
+      $msg="error§<b>Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!</b>";
       break;
     }
     
@@ -130,33 +98,36 @@ while ( is_array($HTTP_POST_VARS)
     ## NOTE: This should be a transaction, but it isn't...
     $db->query("select * from Institute where Name='$Name'");
     if ($db->nf()>0) {
-      my_error(" <b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" existiert bereits!");
+      $msg="error§<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" existiert bereits!";
       break;
     }
 
     ## Create an id
     $i_id=md5(uniqid($hash_secret));
-		## Namen der Fakultaet durch Fakultaets_id erstzen
-		$db2->query("SELECT * FROM Fakultaeten WHERE Name = '$Fakultaet'");
+	## Namen der Fakultaet durch Fakultaets_id erstzen
+	$db2->query("SELECT * FROM Fakultaeten WHERE Name = '$Fakultaet'");
   	if ($db2->next_record()) {
-			$Fakultaet = $db2->f("Fakultaets_id");
-		}
-		## insert the Institut...
-		if ($home == "")
-			$home = "http://www.studip.de";
+		$Fakultaet = $db2->f("Fakultaets_id");
+	}
+	## insert the Institut...
+	if ($home == "")
+		$home = "http://www.studip.de";
     $query = "insert into Institute values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','".time()."', '".time()."')";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      my_error("<b>Datenbankoperation gescheitert: $query </b>");
+      $msg="error§<b>Datenbankoperation gescheitert: $query </b>";
       break;
     }
        ## Create default folder and discussion
     CreateTopic('Allgemeine Diskussionen', " ", 'Hier ist Raum für allgemeine Diskussionen', 0, 0, $i_id, 0);
     $db->query("INSERT INTO folder SET folder_id='".md5(uniqid(rand()))."', range_id='".$i_id."',name='Allgemeiner Dateiordner', description='Ablage für allgemeine Ordner und Dokumente der Einrichtung', mkdate='".time()."', chdate='".time()."'");
  
-    my_msg("<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde angelegt.</b>");
+    $msg="msg§<b>Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde angelegt.</b>";
    
    $i_view = $i_id;
+
+   //This will select the new institute later for navisgation (=>links_admin.inc.php)
+   $admin_inst_id =$i_id; 
   break;
 
   ## Change Institut name
@@ -164,33 +135,35 @@ while ( is_array($HTTP_POST_VARS)
 
     ## Do we have all necessary data?
     if (empty($Name)) {
-      my_error("<b>Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!</b>");
+      $msg="error§<b>Bitte geben sie eine Bezeichnug f&uuml;r die Einrichtung ein!</b>";
       break;
     }
-		## Namen der Fakultaet durch Fakultaets_id erstzen
-		$db2->query("SELECT * FROM Fakultaeten WHERE Name = '$Fakultaet'");
+
+	## Namen der Fakultaet durch Fakultaets_id erstzen
+	$db2->query("SELECT * FROM Fakultaeten WHERE Name = '$Fakultaet'");
   	if ($db2->next_record()) {
-			$Fakultaet = $db2->f("Fakultaets_id");
-		}
+		$Fakultaet = $db2->f("Fakultaets_id");
+	}
     ## Update Institut information.
     $query = "UPDATE Institute SET Name='$Name', fakultaets_id='$Fakultaet', Strasse='$strasse', Plz='$plz', url='$home', telefon='$telefon', fax='$fax', email='$email', type='$type' where Institut_id = '$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      	my_error("<b>Datenbankoperation gescheitert: $query</b>");
+      	$msg="error§<b>Datenbankoperation gescheitert: $query</b>";
       	break;
      	}
     else 
     	$db->query("UPDATE Institute SET chdate='".time()."'");     
     
-    my_msg("<b>Die Daten der Einrichtung \"".htmlReady(stripslashes($Name))."\" wurden ver&auml;ndert.</b>");
+    $msg="msg§<b>Die Daten der Einrichtung \"".htmlReady(stripslashes($Name))."\" wurden ver&auml;ndert.</b>";
   break;
 
   ## Delete the Institut
-  case "i_kill":
+  case "i_kill_x":
+
     ## Institut in use?
-		$db->query("SELECT * FROM seminare WHERE Institut_id = '$i_id'");
+	$db->query("SELECT * FROM seminare WHERE Institut_id = '$i_id'");
     if ($db->next_record()) {
-      my_error("<b>Diese Einrichtung kann nicht gel&ouml;scht werden, da noch Veranstaltungen an dieser Einrichtung existieren!</b>");
+      $msg="error§<b>Diese Einrichtung kann nicht gel&ouml;scht werden, da noch Veranstaltungen an dieser Einrichtung existieren!</b>";
       break;
     }
     
@@ -198,7 +171,7 @@ while ( is_array($HTTP_POST_VARS)
     $query = "delete from Institute where Institut_id='$i_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
-      my_error("<b>Datenbankoperation gescheitert: </b> $query</b>");
+      $msg="error§<b>Datenbankoperation gescheitert: </b> $query</b>";
       break;
     }
     
@@ -206,25 +179,67 @@ while ( is_array($HTTP_POST_VARS)
     $query = "DELETE from px_topics where Seminar_id='$i_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
-      my_msg("$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.");
+      $msg="msg$db_ar Postings aus dem Forum der Einrichtung gel&ouml;scht.";
     }
     $db_ar = recursiv_folder_delete($i_id);
     if ($db_ar > 0)
-     my_msg("$db_ar Dokumente gel&ouml;scht.");
+     $msg="msg§$db_ar Dokumente gel&ouml;scht.";
 
 
-    my_msg("Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!");
+    $msg="msg§Die Einrichtung \"".htmlReady(stripslashes($Name))."\" wurde gel&ouml;scht!";
   	unset($i_view);
-		break;
-  
+	//We deleted that intitute, so we have to unset the selection an switch to list
+	unset ($links_admin_data["inst_id"]);
+	$list=TRUE;
+	break;
+	
   default:
   break;
  }
 }
 
+//Output starts here
+
+include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen 
+include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";  //Linkleiste fuer admins
 
 
-//Anzeige der Institutsdaten; das tatseachliche Aenderungsmodul
+$db->query ("SELECT Name, type FROM Institute WHERE Institut_id = '$i_view'");
+if ($db->next_record())
+	$tmp_typ = $INST_TYPE[$db->f("type")]["name"];
+$tmp_name=$db->f("Name");
+
+?>
+<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
+<tr valign=top align=middle>
+	<td class="topic"colspan=2 align="left"><b>&nbsp;<b>
+	<?
+	if ($i_view !="new") {
+		echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
+			if (strlen($tmp_name) > 60)
+				echo "... ";
+			echo " -  Grunddaten";
+	} else
+		echo "Anlegen einer neuen Einrichtung";
+	?></b></td>
+</tr>
+<?
+if (isset($msg)) {
+?>
+<tr> 
+	<td class="blank" colspan=2><br />
+		<?parse_msg($errormsg);?>
+	</td>
+</tr>
+<? } ?>
+<tr>
+	<td class="blank" colspan=2>
+		&nbsp;
+	</td>
+</tr>
+
+<?
+
 if ($i_view)
 	{
 	$db->query("SELECT * FROM user_inst WHERE Institut_id ='$i_view' AND user_id = '$user->id' AND inst_perms = 'admin'");
@@ -242,11 +257,11 @@ if ($i_view)
 	$i_id= $db->f("Institut_id");
   ?>
   <tr><td class="blank" colspan=2>
-  <table border=0 bgcolor="#eeeeee" align="center" width="50%" cellspacing=2 cellpadding=2>
+  <table border=0 align="center" width="50%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
-	<tr><td>Name: </td><td><input type="text" name="Name" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td></tr>
-	<tr><td>Fakult&auml;t</td>
-		<td align=left><select name="Fakultaet">
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Name: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="Name" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Fakult&auml;t</td>
+		<td class="<? echo $cssSw->getClass() ?>" align=left><select name="Fakultaet">
 		<?php
 		$db2->query("SELECT * FROM Fakultaeten ORDER BY Name");
 		while ($db2->next_record()) {
@@ -254,7 +269,7 @@ if ($i_view)
 		}
 		?>
 	</select></td>
-	<tr><td>Bezeichnung: </td><td><select name="type">
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Bezeichnung: </td><td class="<? echo $cssSw->getClass() ?>" ><select name="type">
 	<? 
 	$i=0;
 	foreach ($INST_TYPE as $a) {
@@ -265,22 +280,22 @@ if ($i_view)
 			echo "<option value=$i>".$INST_TYPE[$i]["name"]."</option>";		
 		}
 	?></select></td></tr>
-	<tr><td>Strasse: </td><td><input type="text" name="strasse" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Strasse")) ?>"></td></tr>
-	<tr><td>Ort: </td><td><input type="text" name="plz" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Plz")) ?>"></td></tr>
-	<tr><td>Telefonnummer: </td><td><input type="text" name="telefon" size=32 maxlength=254 value="<?php echo htmlReady($db->f("telefon")) ?>"></td></tr>
-	<tr><td>Faxnummer: </td><td><input type="text" name="fax" size=32 maxlength=254 value="<?php echo htmlReady($db->f("fax")) ?>"></td></tr>
-	<tr><td>eMailadresse: </td><td><input type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
-	<tr><td>Homepage: </td><td><input type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Strasse: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="strasse" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Strasse")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Ort: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="plz" size=32 maxlength=254 value="<?php echo htmlReady($db->f("Plz")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Telefonnummer: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="telefon" size=32 maxlength=254 value="<?php echo htmlReady($db->f("telefon")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Faxnummer: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="fax" size=32 maxlength=254 value="<?php echo htmlReady($db->f("fax")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Emailadresse: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="email" size=32 maxlength=254 value="<?php echo htmlReady($db->f("email")) ?>"></td></tr>
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" >Homepage: </td><td class="<? echo $cssSw->getClass() ?>" ><input type="text" name="home" size=32 maxlength=254 value="<?php echo htmlReady($db->f("url")) ?>"></td></tr>
 	
 	
-	<tr><td colspan=2 align="center">
+	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 	
 	<? 
 	if ($i_view<>"new")
 		{
 		if ($db->f("number") < 1):
 			?>
-			<input type="submit" name="i_kill" value=" L&ouml;schen ">
+			<input type="IMAGE" name="i_kill" src="./pictures/buttons/loeschen-button.gif" border=0 value=" L&ouml;schen ">
 			<?
 		endif;
 		?>
@@ -290,28 +305,31 @@ if ($i_view)
 		}
 	else
 		{
-		echo "<input type=\"submit\" name=\"create\" value=\"Anlegen\">";
+		echo "<input type=\"IMAGE\" name=\"create\" src=\"./pictures/buttons/anlegen-button.gif\" border=0 value=\"Anlegen\">";
 		}
 	?>
-	<input type="hidden" name="i_view" value="<? echo $i_view; ?>">
-	</form></td></tr></table>
-	<br><br>
+	<input type="hidden" name="i_view" value="<? printf ("%s", ($i_view=="new") ? "create" : $i_view);  ?>">
+	</td></tr></table>
+	</form>
+	<br>
  
   	<?
   	
   	if ($i_view<>"new")
 		{
  		$db->query("SELECT * FROM faecher LEFT  JOIN fach_inst USING (fach_id) WHERE institut_id = '$i_id'");
+		$cssSw->resetClass();
  		?>
- 		<table border=0 align="center" width="80%" cellspacing=2 cellpadding=2>
+ 		<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
  		<tr><td width="100%" colspan=2><br>&nbsp;Dieser Einrichtung sind folgende Fachbereiche zugeordnet:<br><br></th></tr>
  		<tr><th width="80%" align="center">Name</th><th width="20%" align="center">Aktion</th><tr>
 		<?
- 		while ($db->next_record())
- 			{
- 			echo"<tr><td>", htmlReady($db->f("name")), "</td><td align=\"center\"><form method=\"POST\" name=\"kill_f\" action=", $PHP_SELF, "><input type=\"submit\" name=\"kill_fach\" value=\" Zuordnung aufheben\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"><input type=\"hidden\" name=\"fach_id\" value=\"", $db->f("fach_id"),"\"></td></form></tr>";
- 			}
- 		echo"<tr><td><form method=\"POST\" name=\"add_f\" action=", $PHP_SELF, "><select name=\"fach_id\" size=1>";
+ 		while ($db->next_record()) {
+ 			$cssSw->switchClass();
+ 			echo"<tr><td class=\"".$cssSw->getClass()."\">", htmlReady($db->f("name")), "</td><td class=\"".$cssSw->getClass()."\" align=\"center\"><form method=\"POST\" name=\"kill_f\" action=", $PHP_SELF, "><input type=\"IMAGE\" name=\"kill_fach\" src=\"./pictures/buttons/entfernen-button.gif\" border=0 value=\" Zuordnung aufheben\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"><input type=\"hidden\" name=\"fach_id\" value=\"", $db->f("fach_id"),"\"></td></form></tr>";
+ 		}
+ 		$cssSw->switchClass();
+ 		echo"<tr><td class=\"".$cssSw->getClass()."\"><form method=\"POST\" name=\"add_f\" action=", $PHP_SELF, "><select name=\"fach_id\" size=1>";
  		$db2->query("SELECT * FROM faecher ORDER BY name");
  		while ($db2->next_record())
  			{
@@ -320,7 +338,7 @@ if ($i_view)
 	 		IF (!$db->next_record())
 	 			echo "<option value=".$db2->f("fach_id").">", htmlReady(substr($db2->f("name"),0,80));
  			}
- 		echo "</select></td><td align=\"center\"><input type=\"submit\" name=\"add_fach\" value=\" Zuordnen\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"></td></form></tr>";
+ 		echo "</select></td><td class=\"".$cssSw->getClass()."\" align=\"center\"><input type=\"IMAGE\" src=\"./pictures/buttons/zuordnen-button.gif\" border=0 name=\"add_fach\" value=\" Zuordnen\"><input type=\"hidden\" name=\"i_view\" value=\"", $i_id, "\"></td></form></tr>";
  		echo "</table><br><br>";
   		}
   	}
