@@ -325,8 +325,8 @@ $export_icon["txt"] = "txt-icon.gif";
 // PDF-Vorlagen für den Veranstaltungsexport (Index von 1 bis X)
 // title = Beschreibung der Vorlage
 // template = PDF-Vorlage in '/export'
-$record_of_study_templates[1] = array("title" => "Allgmeine Druckvorlage", "template" =>"general_template.pdf");
-$record_of_study_templates[2] = array("title" => "Studienbuch", "template" => "record_of_study_template.pdf");
+$record_of_study_templates[1] = array("title" => "Allgemeine Druckvorlage", "template" =>"general_template.pdf");
+$record_of_study_templates[2] = array("title" => "Studienbuch", "template" => "recordofstudy_template.pdf");
 // EXPORT -->>
 
 
