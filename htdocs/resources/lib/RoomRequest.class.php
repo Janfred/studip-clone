@@ -324,6 +324,12 @@ class RoomRequest {
 		
 		return $changed;
 	}
+	
+	function copy() {
+		$this->id = $this->createId();
+		$this->isNewObject = TRUE;
+		$this->chang_flag = TRUE;
+	}
 
 	function store(){
 		// save only, if changes were made or the object is new and we have a resource_id or properties
