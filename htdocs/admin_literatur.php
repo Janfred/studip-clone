@@ -50,14 +50,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	 if ($range_id && !$perm->have_perm("root"))
 	     {
 	     //Sicherheitscheck
-	      $range_perm=get_perm($range_id);
-	     if ($SessSemName["class"]=="sem" && ($range_perm!="admin" && $range_perm!="dozent" && $range_perm!="tutor")) 
+	     $range_perm=get_perm($range_id);
+	     if (($ebene=="sem") && ($range_perm!="admin" && $range_perm!="dozent" && $range_perm!="tutor")) 
 		die;
-	     elseif ($SessSemName["class"]=="inst" && ($range_perm!="admin")) 
+	     if (($ebene=="inst") && ($range_perm!="admin")) 
 	     	die;
-	     elseif ($SessSemName["class"]=="fak" && ($range_perm!="admin")) 
+	     if (($ebene=="fak") && ($range_perm!="admin")) 
 	     	die;
-	     elseif ((!$SessSemName["class"]) && $range_id!=$user->id)  
+	     if ((!$ebene) && $range_id!=$user->id)  
 	     	die;
 	     }
 
@@ -66,7 +66,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		echo "</tr></td></table>";
 		die;
 	}
-	  	
+
  	//maximale spaltenzahl berechnen
 	if ($auth->auth["jscript"]) $max_col = round($auth->auth["xres"] / 12 );
 		else $max_col =  64 ; //default für 640x480
