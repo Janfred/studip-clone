@@ -69,8 +69,8 @@ if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],$db->f("fullnam
 	   h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
 	   table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
 	   TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-	   BODY {font-family: Arial, Helvetica, sans-serif}
-	   -->
+	   BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
+-->
 	   </style>
 	 </head>
 	 <body>
@@ -97,11 +97,28 @@ $sms=new messaging();
 $sms->delete_chatinv($auth->auth["uname"]);
 
 ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
 <html>
 <head>
-	   <title>Chat(<?=$auth->auth["uname"]?>) -
-	   <?=$chatServer->chatDetail[$chatid]["name"]?></title>
-	   <script type="text/javascript">
+	<title>Chat(<?=$auth->auth["uname"]?>) -
+	<?=$chatServer->chatDetail[$chatid]["name"]?></title>
+	<style type="text/css">
+	   <!--
+	   A:visited {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	   A:link {	color:#3333BB;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	   A:hover {	color: #FF3333;	text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+	   A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
+	   TABLE.blank {	background-color: white;}
+	   TD.blank {background-color: #FFFFFF;}
+	   th   {border:0px solid #000000; background:#B5B5B5 url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
+	   p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
+	   h1, h2, h3 {font-family: Arial, Helvetica, sans-serif;	color: #990000;	font-weight: bold; }
+	   table.header { background-image: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif');}
+	   TD.topic {border:0px solid #000000; background: url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+	   BODY {background-color:#EEEEEE;background-image:url('<?=$CANONICAL_RELATIVE_PATH_STUDIP?>pictures/steel1.jpg');font-family: Arial, Helvetica, sans-serif}
+	   -->
+</style>
+<script type="text/javascript">
 	/**
 	* JavaScript 
 	*/
@@ -115,17 +132,14 @@ $sms->delete_chatinv($auth->auth["uname"]);
 
 	}
 	 </script>
-<frameset rows="83%,*" border=0>
-  <frameset cols="75%,25%" border=0>
-	<frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1 frameborder=0>
-	<frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1 frameborder=0>
-  </frameset>
-<frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 frameborder=0>
-</frameset>
 </head>
-<body>
-
-</body>
+<frameset rows="83%,*" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
+  <frameset cols="*,25%" FRAMEBORDER=NO FRAMESPACING=0 FRAMEPADDING=0 border=0>
+	<frame name="frm_chat" src="chat_client.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=1>
+	<frame name="frm_nicklist" src="chat_nicklist.php?chatid=<?=$chatid?>"  marginwidth=1 marginheight=1>
+	</frameset>
+<frame name="frm_input" src="chat_input.php?chatid=<?=$chatid?>" marginwidth=1 marginheight=2 >
+</frameset>
 </html>
 <?
 page_close();

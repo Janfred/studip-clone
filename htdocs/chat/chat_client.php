@@ -74,7 +74,7 @@ function chatSystemMsg(&$msg,&$output){
 	 global $user,$chatServer;
 	 $id=substr(strrchr ($msg[0],":"),1);
 	 if (!$id) {
-		  printJs("parent.frames['frm_nicklist'].location.href=parent.frames['frm_nicklist'].location.href;");
+		  printJs("if (parent.frames['frm_nicklist'].location.href) parent.frames['frm_nicklist'].location.href = parent.frames['frm_nicklist'].location.href;");
 		  $output=strftime("%T",floor($msg[2]))."<i> [chatbot] $msg[1]</i><br>";
 	 }
 	 elseif ($user->id==$id){
@@ -86,9 +86,9 @@ function chatSystemMsg(&$msg,&$output){
 function chatCommand_color($msgStr,&$output){
 	 global $user,$chatServer,$chatid;
 	 if (!$msgStr OR $msgStr=="\n" OR $msgStr=="\r") return;
-	 $chatServer->chatUser[$user->id][$chatid]["color"]=$msgStr;
+	 $chatServer->chatUser[$user->id][$chatid]["color"]=formatReady($msgStr);
 	 $chatServer->shmCt->store(&$chatServer->chatUser,CHAT_USER_KEY);
-	 $chatServer->addMsg("system:$user->id",$chatid,"Deine <font color=\"$msgStr\">Schriftfarbe</font> wurde geändert!");
+	 $chatServer->addMsg("system:$user->id",$chatid,"Deine <font color=\"".formatReady($msgStr)."\">Schriftfarbe</font> wurde geändert!");
 	 return;
 }
 
@@ -107,7 +107,7 @@ function chatCommand_quit($msgStr,&$output){
 
 function chatCommand_me($msgStr,&$output){
 	 global $user,$chatServer,$chatid;
-	 $chatServer->addMsg("system",$chatid,"<b>".fullNick($user->id)." ".$msgStr."</b>");
+	 $chatServer->addMsg("system",$chatid,"<b>".fullNick($user->id)." ".formatReady($msgStr)."</b>");
 
 }
 
