@@ -32,6 +32,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php"); 
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
@@ -59,6 +60,7 @@ function about($username,$msg) {  // Konstruktor, prüft die Rechte
 
 	$this->db = new DB_Seminar;
 	$this->get_auth_user($username);
+	$this->DataFields = new DataFields($this->auth_user["user_id"]);	
 	$this->msg = rawurldecode($msg); //Meldungen restaurieren
 
 	if ($auth->auth["uname"] == $username AND $perm->have_perm("autor")) $this->check="user"; // der user selbst natürlich auch
@@ -246,11 +248,18 @@ function special_edit($raum,$sprech,$tel,$fax,$name) {
 	return;
 }
 
-function edit_leben($lebenslauf,$schwerp,$publi,$view) {
+function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id) {
+	//Update the additional data-fields
+	if (is_array($datafield_id)) {
+		foreach ($datafield_id as $key=>$val) {
+			$resultDataFields = $this->DataFields->storeContent($datafield_content[$key], $val);
+		}
+	}
+
 	//check ob die blobs verändert wurden...
 	$this->db->query("SELECT  lebenslauf, schwerp, publi FROM user_info WHERE user_id='".$this->auth_user["user_id"]."'");
 	$this->db->next_record();
-	if ($lebenslauf!=$this->db->f("lebenslauf") || $schwerp!=$this->db->f("schwerp") || $publi!=$this->db->f("publi")) {
+	if ($lebenslauf!=$this->db->f("lebenslauf") || $schwerp!=$this->db->f("schwerp") || $publi!=$this->db->f("publi") || $resultDataFields) {
 		$this->db->query("UPDATE user_info SET lebenslauf='$lebenslauf', schwerp='$schwerp', publi='$publi', chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
 		$this->msg = $this->msg . "msg§" . _("Daten im Lebenslauf u.a. wurden ge&auml;ndert") . "§";
 		setTempLanguage($this->auth_user["user_id"]);
@@ -528,6 +537,7 @@ if (!$username) $username = $auth->auth["uname"];
 
 $my_about = new about($username,$msg);
 $cssSw = new cssClassSwitcher;
+$DataFields = new DataFields($my_about->auth_user["user_id"]);
 
 if ($logout)  // wir wurden gerade ausgeloggt...
 	{
@@ -607,7 +617,7 @@ if ($cmd=="edit_pers")
 	}
 
 if ($cmd=="edit_leben")  {
-	$my_about->edit_leben($lebenslauf,$schwerp,$publi,$view);
+	$my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id);
 	$my_about->get_auth_user($username);
 	}
 
@@ -1083,7 +1093,24 @@ if ($view=="Lebenslauf") {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>" . _("Publikationen:") . "</b><br>";
 		echo "<textarea  name=\"publi\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($my_about->user_info["publi"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
 	}
-	echo "<tr><td class=\"steel1\" colspan=2><blockquote><br><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=\"0\" value=\"" . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</td>";
+	
+	//add the free adminstrable datafields
+	$localFields = $DataFields->getLocalFields();
+
+	foreach ($localFields as $val) {
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>" . htmlReady($val["name"]). ":</b><br>";
+		if ($perm->have_perm($val["edit_perms"])) {
+			echo "<textarea  name=\"datafield_content[]\" style=\" width: 80%\" cols=".round($max_col/1.3)." rows=7 wrap=virtual>".htmlReady($val["content"])."</textarea><a name=\"publikationen\"></a></td></tr>\n";
+			echo "<input type=\"HIDDEN\" name=\"datafield_id[]\" value=\"".$val["datafield_id"]."\">";
+		} else {
+			echo formatReady($val["content"]);
+			echo "<br /><br /><hr><font size=\"-1\">"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</font>";
+		}
+ 	}		
+
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=2><blockquote><br><input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=\"0\" value=\"" . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</td>";
 }
 
 if ($view=="Sonstiges") {
