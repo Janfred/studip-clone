@@ -89,11 +89,21 @@ function doc_challenge ($parent_id){
 function move_item ($item_id, $new_parent) {
 
 	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
 	
 	if ($item_id != $new_parent) {
 		$db->query ("UPDATE dokumente SET range_id='$new_parent' WHERE dokument_id = '$item_id'");
-		if (!$db->affected_rows());
-			$db->query ("UPDATE folder SET range_id='$new_parent' WHERE folder_id = '$item_id'");
+		if (!$db->affected_rows()) {
+			//we want to move a folder, so we have first to check if we want to move a folder in a subordinated folder
+			$db2->query ("SELECT range_id FROM folder WHERE folder_id = '$new_parent'");
+			while ($db2->next_record()) {
+				if ($db2->f("range_id") == $item_id)
+					$target_is_child=TRUE;
+				$db2->query ("SELECT range_id FROM folder WHERE folder_id = '".$db2->f("range_id")."' ");
+			}
+			if (!$target_is_child)
+				$db->query ("UPDATE folder SET range_id='$new_parent' WHERE folder_id = '$item_id'");
+		}
 	}	
 		
 	if ($db->affected_rows());		
