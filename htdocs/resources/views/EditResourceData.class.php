@@ -488,7 +488,7 @@ class EditResourceData {
 						if (getGlobalPerms($user->id) != "admin")
 							$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
 							
-						$result = $resReq->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE, 10, FALSE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
+						$result = $resReq->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE, 0, 10, FALSE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
 						if ($result) {
 							printf ("<br /><font size=-1><b>%s</b> ".((!$search_properties_x) ? _("Ressourcen gefunden:") : _("passende R&auml;ume gefunden"))."<br />", sizeof($result));
 							print "<select name=\"select_change_resource\">";
