@@ -46,7 +46,7 @@ if ($SessSemName["class"]=="inst") {
 if ($ILIAS_CONNECT_ENABLE) {
 	if (get_seminar_modules($SessSemName[1]) != false)
 		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
-	elseif  ($perm->have_studip_perm("dozent",$SessSemName[1]))
+	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
 		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
 /*		else $nolink = true;
 		if (($nolink != true) AND (get_connected_user_id($auth->auth["uid"]) == false))
@@ -138,7 +138,7 @@ if ($ILIAS_CONNECT_ENABLE) {
 		else		
 			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
 	}
-	if  ($perm->have_studip_perm("dozent",$SessSemName[1]))
+	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
 		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
 }
 

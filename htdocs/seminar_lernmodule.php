@@ -169,7 +169,7 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 									);
 	}
 // Lernmodule hinzufuegen / entfernen
-	elseif (($perm->have_studip_perm("dozent",$seminar_id)) AND ($view=="edit"))
+	elseif (($perm->have_studip_perm("tutor",$seminar_id)) AND ($view=="edit"))
 	{
 		if ($SessSemName["class"]=="inst") 
 			$msg = _("Auf dieser Seite können Sie einer Einrichtung Lernmodule zuordnen."); 
@@ -244,10 +244,15 @@ include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul
 										"text"  => _("Wenn Sie auf den Titel eines Lernmoduls klicken, &ouml;ffnet sich ein neues Fenster mit dem ILIAS-Lernmodul. Mit den Navigationspfeilen k&ouml;nnen Sie durch das Lernmodul bl&auml;ttern.")
 									);
 
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("tutor",$seminar_id)))
+			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-lern.gif" ,
+										"text"  => sprintf(_("Hier k&ouml;nnen Sie ein %s neues Lernmodul anlegen %s"), "<a href=\"" . link_new_module() ."\" target=\"_blank\">", "</a>")
+									);
+
 		$cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 		show_seminar_modules_links($seminar_id);
 
-		if (get_connected_user_id($auth->auth["uid"]) != false)
+		if ((get_connected_user_id($auth->auth["uid"]) != false) AND ($perm->have_studip_perm("autor",$seminar_id)))
 			echo "<br><br><a href=\"" . link_new_module() ."\" target=\"_blank\">". _("Neues Lernmodul anlegen") ."</a><br>";
 	}
 	?>
