@@ -347,7 +347,7 @@ if ($db3->next_record()) {
 	$aktivity_index_seminar += $db3->f("count_post");
 }
 $db3->query ("SELECT count(user_id) AS count_pers FROM seminar_user WHERE Seminar_id = '$SessionSeminar'");
-if ($db3->next_record()) {
+if ($db3->next_record() && $db3->f("count_pers")) {
 	$aktivity_index_seminar /= $db3->f("count_pers");
 }
 
