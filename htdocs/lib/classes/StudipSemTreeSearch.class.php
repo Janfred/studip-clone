@@ -122,6 +122,31 @@ class StudipSemTreeSearch {
 		}
 	}
 	
+	function prepRangePath($path, $cols) {
+		$parts=explode(">",$path);
+		$paths=array();
+		$currpath="";
+		foreach ($parts as $part) {
+			if (strlen($part)>$cols) {	
+				$p=my_substr($part, 0, $cols);
+			} else {
+				$p = $part;
+			}
+			if (strlen($currpath)+strlen($p)+3 > $cols) {
+				$paths[]=htmlReady($currpath);
+				$currpath="   >> " . $p;
+			} else {
+				if (count($paths)==0 && strlen($currpath)==0) {
+					$currpath.=$p;
+				} else {
+					$currpath.=" > ".$p;
+				}
+			}
+		}
+		$paths[]=htmlReady($currpath);
+		return $paths;
+	}
+
 	function getChooserField($attributes = array(), $cols = 70){
 		if ($this->institut_id){
 			$this->getExpectedRanges();
@@ -133,7 +158,11 @@ class StudipSemTreeSearch {
 		$ret .= ">";
 		foreach ($this->sem_tree_ranges as $range_id => $sem_tree_id){
 			$ret .= "\n<option value=\"0\">&nbsp;</option>";
-			$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . htmlReady(my_substr($this->getPath($range_id),0,$cols)) ."</option>";
+			$paths=$this->prepRangePath($this->getPath($range_id), $cols);
+			foreach ($paths as $p) {
+				$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . $p ."</option>";
+			}
+			//$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . htmlReady(my_substr($this->getPath($range_id),0,$cols)) ."</option>";
 			$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . str_repeat("¯",$cols) . "</option>";
 			for ($i = 0; $i < count($sem_tree_id); ++$i){
 				$ret .= "\n<option value=\"{$sem_tree_id[$i]}\" " 

@@ -37,6 +37,9 @@
 
 // this script is included in extern.inc.php
 
+$semester = new SemesterData;
+$all_semester = $semester->getAllSemesterData();
+
 if ($sri_file = @file($page_url))
 	$sri_page = implode("", $sri_file);
 else {
@@ -140,23 +143,23 @@ elseif (!$global_id) {
 // sem == +1: show data from next semester
 // other values: show data from current semester
 $now = time();
-foreach ($SEMESTER as $key => $sem_record) {
+foreach ($all_semester as $key => $sem_record) {
 	if ($now >= $sem_record["beginn"] && $now <= $sem_record["ende"]) {
 		$current = $key;
 		break;
 	}
 }
 if ($sem_offset == "-1") {
-	$start = $SEMESTER[$current - 1]["beginn"];
-	$end = $SEMESTER[$current - 1]["ende"];
+	$start = $all_semester[$current - 1]["beginn"];
+	$end = $all_semester[$current - 1]["ende"];
 }
 elseif ($sem_offset == "+1") {
-	$start = $SEMESTER[$current + 1]["beginn"];
-	$end = $SEMESTER[$current + 1]["ende"];
+	$start = $all_semester[$current + 1]["beginn"];
+	$end = $all_semester[$current + 1]["ende"];
 }
 else {
-	$start = $SEMESTER[$current]["beginn"];
-	$end = $SEMESTER[$current]["ende"];
+	$start = $all_semester[$current]["beginn"];
+	$end = $all_semester[$current]["ende"];
 }
 
 // all parameters ok, instantiate module and print data

@@ -104,6 +104,7 @@ class DataFields {
 	}
 	
 	function getLocalFields($range_id = '', $object_class='', $object_type='') {
+		global $SEM_TYPE;
 		$local_datafields = array();
 		
 		if (!$range_id)
@@ -133,6 +134,8 @@ class DataFields {
 				$object_type = $this->db->f("type");
 			}
 
+			$object_type = $SEM_TYPE[$object_type]["class"];
+			
 			switch ($object_class) {
 				case "sem": 
 				case "inst":
@@ -146,6 +149,7 @@ class DataFields {
 					$clause = "((object_class & ".$this->perms_mask[$this->db->f("perms")].") OR object_class IS NULL)";
 				break;
 			}
+
 
 			if ($object_type == "fak")
 				$object_type = "inst";
@@ -161,7 +165,7 @@ class DataFields {
 				$local_datafields[$this->db->f("datafield_id")] = $this->db->Record;
 			}
 			*/
-			$query2 = sprintf ("SELECT a.datafield_id, name, content, edit_perms, view_perms FROM datafields a LEFT JOIN datafields_entries b ON (a.datafield_id=b.datafield_id AND range_id = '%s') WHERE  object_type ='%s' AND (%s) ORDER BY object_class, priority", $range_id, $object_class, $clause);
+			$query2 = sprintf ("SELECT a.datafield_id, name, content, edit_perms, view_perms FROM datafields a LEFT JOIN datafields_entries b ON (a.datafield_id=b.datafield_id AND range_id = '%s') WHERE object_type ='%s' AND (%s) ORDER BY object_class, priority", $range_id, $object_class, $clause);
 
 			$this->db2->query($query2);
 

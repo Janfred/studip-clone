@@ -19,6 +19,7 @@
  */
 require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
 
 /**
  * collect the current seminars and concerning semesters from the archiv	
@@ -28,14 +29,16 @@ require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
  *
  */
 function getSemesters(){
-	global $SEMESTER,$user;
+	global $user;
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 	// creating the list of avaible semester
-	for ($i=1;$i<=sizeof($SEMESTER); $i++){
-//		$position = sizeof($SEMESTER)+1-$i;
-		$semestersAR[$i]["beginn"] = $SEMESTER[$i]["beginn"];
+	for ($i=1;$i<=sizeof($all_semester); $i++){
+//		$position = sizeof($all_semester)+1-$i;
+		$semestersAR[$i]["beginn"] = $all_semester[$i]["beginn"];
 		$semestersAR[$i]["id"] = $i;
-		$semestersAR[$i]["idname"] = $SEMESTER[$i]["name"];
-		$semestersAR[$i]["name"] = convertSemester($SEMESTER[$i]["name"]);
+		$semestersAR[$i]["idname"] = $all_semester[$i]["name"];
+		$semestersAR[$i]["name"] = convertSemester($all_semester[$i]["name"]);
 	}
 
 	// adding the semester from avaible archiv-items
@@ -48,8 +51,8 @@ function getSemesters(){
 
 	while ($db->next_record()) {
 		$found = 0;
-		for ($j=1; $j<=sizeof($SEMESTER); $j++){
-			if (in_array($db->f("semester"), $SEMESTER[$j],1))
+		for ($j=1; $j<=sizeof($all_semester); $j++){
+			if (in_array($db->f("semester"), $all_semester[$j],1))
 				$found++;
 		}
 		if ($found == 0){
@@ -168,9 +171,11 @@ function getStudentname(){
  *
  */
 function getSeminare($semesterid,$onlyseminars){
-	global $user,$SEMESTER,$semestersAR,$SEM_CLASS,$SEM_TYPE,$_fullname_sql;
+	global $user,$semestersAR,$SEM_CLASS,$SEM_TYPE,$_fullname_sql;
 	
 	$db = &new DB_Seminar ();
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 	$i = 0;
 	// if its not an archiv-only-semester, get the current ones
 	if(!$semestersAR[$semesterid]["onlyarchiv"]){
@@ -179,7 +184,7 @@ function getSeminare($semesterid,$onlyseminars){
 		$status = "autor";
 		
 		// some stolen code from a.noack :)
-		foreach ($SEMESTER as $key => $value){
+		foreach ($all_semester as $key => $value){
 			$sem_start_times[] = $value['beginn'];
 		}
 		foreach ($SEM_CLASS as $key => $value){

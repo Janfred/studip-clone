@@ -25,9 +25,11 @@
 require_once ($ABSOLUTE_PATH_STUDIP . "config.inc.php");   // Stud.IP - Konfigurationsdatei
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_xslt_vars.inc.php");   // XSLT-Variablen
 require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");   // Checken des aktuellen Semesters
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");   // Checken des aktuellen Semesters
 	
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
+	$semester = new SemesterData;
 
 $export_pagename = _("Datenexport - Startseite");
 
@@ -109,8 +111,9 @@ $export_pagename = _("Datenexport - Startseite");
 	
 	$export_pagecontent .="<b><font size=\"-1\">". _("Aus welchem Semester sollen die Daten exportiert werden (f&uuml;r Veranstaltungsexport): ") .  "</font></b><br /><select name=\"ex_sem\">";
 	$export_pagecontent .= "<option value=\"all\">" . _("Alle Semester") . "</option>";
-	reset($SEMESTER);
-	while (list($key, $val) = each($SEMESTER))
+	$all_semester = $semester->getAllSemesterData();
+	reset($all_semester);
+	while (list($key, $val) = each($all_semester))
 	{
 		$export_pagecontent .= "<option";
 		if (($ex_sem == $key) OR

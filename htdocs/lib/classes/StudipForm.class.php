@@ -94,8 +94,8 @@ class StudipForm {
 											. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_month"])) . "-" 
 											. trim(stripslashes($_REQUEST[$this->form_name . "_" . $name . "_day"]));
 				}
-				if ( (isset($this->form_values[$name]) && $this->form_values[$name] != $new_form_values[$name])
-				|| (!isset($this->form_values[$name]) && $new_form_values[$name] != $this->form_fields[$name]['default_value']) ){
+				if ( (isset($this->form_values[$name]) && $this->form_values[$name] != $new_form_values[$name]) 
+					|| (!isset($this->form_values[$name]) && $new_form_values[$name] != $this->form_fields[$name]['default_value']) ){ 
 					$this->value_changed[$name] = true;
 				}
 			}

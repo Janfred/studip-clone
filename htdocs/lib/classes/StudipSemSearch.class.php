@@ -22,6 +22,7 @@
 
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipSemTree.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipRangeTree.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
 require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
 
@@ -84,10 +85,13 @@ class StudipSemSearch {
 	
 	
 	function StudipSemSearch($form_name = "search_sem", $auto_search = true){
+		$semester = new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
+		array_unshift($all_semester,0);
 		global $_REQUEST;
 		$this->view = new DbView();
 		$this->form_name = $form_name;
-		$this->sem_dates = $GLOBALS['SEMESTER'];
+		$this->sem_dates = $all_semester;
 		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
 		if(isset($_REQUEST[$form_name . "_do_search_x"]) || isset($_REQUEST[$form_name . "_send"])){
 			$this->search_button_clicked = true;

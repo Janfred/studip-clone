@@ -21,6 +21,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+
 function string_to_unicode ($xml_string) 
 {
 	for ($x=0; $x<strlen($xml_string); $x++) 
@@ -180,10 +182,13 @@ function export_inst($inst_id, $ex_sem_id = "all")
 
 function export_sem($inst_id, $ex_sem_id = "all")
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $SEMESTER, $ex_sem, $ex_class_array;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $ex_sem, $ex_class_array;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
+
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
 
 	switch ($filter)
 	{
@@ -205,8 +210,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			$group_tab_zelle = "status";
 			$do_group = true;
 	}
-	if (isset($SEMESTER[ $ex_sem]["beginn"] ) )
-		$addquery = " AND seminare.start_time <=".$SEMESTER[$ex_sem]["beginn"]." AND (".$SEMESTER[$ex_sem]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+
+	if (isset($all_semester[ $ex_sem]["beginn"] ) )
+		$addquery = " AND seminare.start_time <=".$all_semester[$ex_sem]["beginn"]." AND (".$all_semester[$ex_sem]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+
 	if ($ex_sem_id != "all")
 		$addquery .= " AND seminare.Seminar_id = '" . $ex_sem_id . "' ";
 	$db->query('SELECT * FROM seminar_inst

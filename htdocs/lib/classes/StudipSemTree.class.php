@@ -23,6 +23,7 @@
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DbSnapshot.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/dbviews/sem_tree.view.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeAbstract.class.php");
+require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
 require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 
 /**
@@ -47,12 +48,15 @@ class StudipSemTree extends TreeAbstract {
 	* @access private
 	*/ 
 	function StudipSemTree($args) {
+		$semester=new SemesterData;
+		$all_semester = $semester->getAllSemesterData();
+		array_unshift($all_semester,0);
 		$this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
 		if (isset($args['sem_number']) ){
 			$this->sem_number = $args['sem_number'];
 		}
 		parent::TreeAbstract(); //calling the baseclass constructor 
-		$this->sem_dates = $GLOBALS['SEMESTER'];
+		$this->sem_dates = $all_semester;
 		$this->sem_dates[0] = array("name" => sprintf(_("vor dem %s"),$this->sem_dates[1]['name']));
 	}
 

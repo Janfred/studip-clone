@@ -60,6 +60,8 @@ class Table {
 		$this->row_class="";
 		$this->row_style="";
 		$this->row_id="";
+		$this->row_mouse_over="";
+		$this->row_mouse_out="";
 
 		// default properties for cells
 		$this->cell_bgcolor="";
@@ -274,13 +276,17 @@ class Table {
 		$align = $styles["align"] ? $styles["align"] : $this->row_align;
 		$valign = $styles["valign"] ? $styles["valign"] : $this->row_valign;
 		$class = $styles["class"] ? $styles["class"] : $this->row_class;
-		$style = $styles["style"] ? $styles["style"] : $this->cell_style;
-		$id = $styles["id"] ? $styles["id"] : $this->cell_id;
+		$style = $styles["style"] ? $styles["style"] : $this->row_style;
+		$mouseover = $styles["onMouseOver"] ? $styles["onMouseOver"] : $this->row_mouseover;
+		$mouseout = $styles["onMouseOut"] ? $styles["onMouseOut"] : $this->row_mouseout;
+		$id = $styles["id"] ? $styles["id"] : $this->row_id;
 		if ($bgcolor) { $code .= "bgcolor=\"" . $bgcolor . "\" "; }
 		if ($align) { $code .= "align=\"" . $align . "\" "; }
 		if ($valign) { $code .= "valign=\"" . $valign . "\" "; }
 		if ($class) { $code .= "class=\"" . $class . "\" "; }
 		if ($style) { $code .= "style=\"" . $style . "\" "; }
+		if ($mouseover) { $code .= "onMouseOver=" . $mouseover . " "; }
+		if ($mouseout) { $code .= "onMouseOut=" . $mouseout . " "; }
 		if ($id) { $code .= "id=\"" . $id . "\" "; }
 		$code .= ">";
 		$this->rowopen=TRUE;
@@ -436,5 +442,95 @@ class Table {
 		$code .= $this->closeRow();
 		return $code;
 	}
+
+	function blankRow($styles="")
+	{
+		return $this->row(array("&nbsp;"),$styles);
+	}
+}
+/**
+* Table Class for entire area filled by single scipts
+*
+* The container table usually contains:
+* - a 100%-width blank table
+* - An header (class topic) with name of seminar, name of admin area etc.
+* - The content area
+* - a blank footer row
+*
+* For an example see ContentTable class
+*
+* @access public
+* @author Tobias Thelen <tthelen@uni-osnabrueck.de>
+* @version $Id$
+*
+**/
+class ContainerTable extends Table {
+	function ContainerTable($styles="") 
+	{
+		Table::Table($styles);
+		if (! $styles["width"]) {
+			$this->table_width="100%";
+		}
+		if (! $styles["class"]) {
+			$this->table_class="blank";
+		}
+		$this->row_class="blank";
+		$this->cell_class="blank";
+	}
+
+	function headerRow($header, $styles=array()) {
+		if (!$styles["class"]) {
+			$styles["class"]="topic";
+		}
+		if (!$styles["colspan"]) {
+			$styles["colspan"]="2";
+		}
+		$code="";
+		$code.=$this->openRow();
+		$code.=$this->openCell($styles);
+		$code.=$header;
+		$code.=$this->closeRow();
+		$code.=$this->blankRow();
+		return $code;
+	}
 }
 
+/**
+* Table Class for content areas of Stud.IP pages
+*
+* The content area usually contains:
+* - a 99%-width centred table with 2 columns
+* - the content
+* Content areas are normally part of a container table.
+* 
+* Example:
+*
+* $container=new ContainerTable();
+* echo $container->headerRow("Name of the game...");
+* echo $container->openCell();
+* $content=new ContentTable();
+* echo $content->open();
+* ...the content...
+* echo $content->close();
+* echo $container->blankRow();
+* echo $container->close();
+*
+* @access public
+* @author Tobias Thelen <tthelen@uni-osnabrueck.de>
+* @version $Id$
+*
+**/
+class ContentTable extends Table {
+	function ContentTable($styles="") 
+	{
+		Table::Table($styles);
+		if (! $styles["width"]) {
+			$this->table_width="99%";
+		}
+		if (! $styles["align"]) {
+			$this->table_align="center";
+		}
+	}
+}
+
+?>
