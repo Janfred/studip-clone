@@ -263,7 +263,7 @@ function format($text){
 					"'--(((--)*)(\S|\S.*?\S)\\2)--'se",       // ML-kleiner
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",  // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",        // ML-tiefgestellt
-					"'\n\n\t(((\n\n)\t)*(.+?))(\Z|\n\n(?!\t))'se",        // Absatz eingerueckt
+					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",        // Absatz eingerueckt
 					"'(\n|\A)((-([^\-]|[^\-].+?)(\n|\Z))+?)(\n|\Z)'se",            // Aufzaehlungsliste
 					"'\[pre\](.+?)\[/pre\]'is"           // praeformatierter Text 
 					);
@@ -355,8 +355,8 @@ function FixLinks($data = "", $fix_nl = TRUE, $nl_to_br = TRUE) {
 	$replace = array("\\1http://www.", "\\1ftp://ftp.");
 	$fixed_text = preg_replace($pattern, $replace, $data);
 	
-	$pattern = array("'(\[([^\n\f\]]+)\])?(((http://)|(https://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[^<\s]*)*(\.[^<\s]+)?)\b'ie",
-					"'(?<=\s)(\[([^\n\f\]]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie");
+	$pattern = array("'(\[([^\n\f\[]+)\])?(((https?://)|(ftp://([_a-z0-9-:]+@)?))[_a-z0-9-]+(\.[_a-z0-9-]+)+(/[^<\s]*[^\.\s])*)'ie",
+					"'(?<=\s|^)(\[([^\n\f\[]+)\])?([-a-z0-9_]+(\.[_a-z0-9-]+)*@([_a-z0-9-]+(\.[_a-z0-9-]+)+))'ie");
 	$replace = array("preg_call_link('\\2', '\\3', 'LINK')", "preg_call_link('\\2', '\\3', 'MAIL')");
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 	
