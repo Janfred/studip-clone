@@ -19,8 +19,8 @@
 *
 * @access	public        
 * @param		string	keyword
-* @param		string	where to search
-* @return		string	returns array of string or false
+* @param		integer	where to search
+* @return		array		returns array of string or false
 */
 function search_modules($key, $area = 4)
 {
@@ -64,9 +64,9 @@ function search_modules($key, $area = 4)
 * This function returns information about the learning module specified by the given IDs
 *
 * @access	public        
-* @param		string	ILIAS-Inst-ID
-* @param		string	ILIAS-learning-module-ID
-* @return		string	returns array of string or false
+* @param		integer	ILIAS-Inst-ID
+* @param		integer	ILIAS-learning-module-ID
+* @return		array		returns array of string or false
 */
 function get_module_info($co_inst, $co_id)
 {
@@ -99,9 +99,9 @@ function get_module_info($co_inst, $co_id)
 * This function returns an array of the authors of the learning module specified by the given IDs
 *
 * @access	public        
-* @param		string	ILIAS-Inst-ID
-* @param		string	ILIAS-learning-module-ID
-* @return		string	returns array of string or false
+* @param		integer	ILIAS-Inst-ID
+* @param		integer	ILIAS-learning-module-ID
+* @return		array		returns array of string or false
 */
 function get_module_author($co_inst, $co_id)
 {
@@ -131,7 +131,7 @@ function get_module_author($co_inst, $co_id)
 *
 * @access	public        
 * @param		string	Stud.IP-User-ID
-* @return		string	returns array of string or false
+* @return		array		returns array of string or false
 */
 function get_user_modules($studip_id)
 {
@@ -187,7 +187,7 @@ function get_user_modules($studip_id)
 *
 * @access	public        
 * @param		string	Stud.IP-Seminar-ID
-* @return		string	returns array of string or false
+* @return		array		returns array of string or false
 */
 function get_seminar_modules($seminar_id)
 {
@@ -214,8 +214,8 @@ function get_seminar_modules($seminar_id)
 * This function returns an array of all learning modules
 *
 * @access	public        
-* @param		string	array of learning-modules that will not be shown
-* @return		string	returns array of string or false
+* @param		array		$hide mod	optional array of learning-modules that will not be shown
+* @return		array 	returns array of string or false
 */
 function get_all_modules($hide_mod = false)
 {
