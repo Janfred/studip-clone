@@ -94,11 +94,16 @@ function getWikiPageVersions($keyword) {
 *
 **/
 function keywordExists($str) {
+	static $keywords;
 	global $SessSemName;
-	$db = new DB_Seminar;
-	$db->query("SELECT keyword FROM wiki WHERE keyword='$str' AND range_id='$SessSemName[1]' LIMIT 1");
-	$result=$db->next_record();
-	return $result;
+	if (is_null($keywords)){
+		$db = new DB_Seminar;
+		$db->query("SELECT DISTINCT keyword FROM wiki WHERE  range_id='$SessSemName[1]' ");
+		while($db->next_record()){
+			$keywords[$db->f(0)] = true;
+		}
+	}
+	return $keywords[$str];
 }
 
 
@@ -110,7 +115,7 @@ function keywordExists($str) {
 *
 **/
 function isKeyword($str, $page){
-	if (keywordExists($str)==NULL) {
+	if (keywordExists($str) == NULL) {
 		return ' <a href="wiki.php?keyword='.$str.'&view=editnew&lastpage='.$page.'">'.$str.'(?)</a>';
 	} else {
 		return ' <a href="wiki.php?keyword='.$str.'">'.$str.'</a>';
