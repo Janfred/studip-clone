@@ -245,7 +245,7 @@ if ($close) {
 		}
 		
 	//Alle Termine der Veranstaltung holen
-	$db->query("SELECT termin_id FROM termine WHERE range_id='$range_id' ORDER BY date");
+	$db->query("SELECT termin_id FROM termine INNER JOIN folder ON(termin_id=folder.range_id) WHERE termine.range_id='$range_id' ORDER BY date");
 	
 	//Bei Veraenderung Form beginnen
 	if ($change) {

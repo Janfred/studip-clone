@@ -17,7 +17,36 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-	
+
+function getFolderChildren($folder_id){
+	static $folder_children;
+	static $folder_num_children;
+	if (!isset($folder_num_children[$folder_id])){
+		$db = new DB_Seminar();
+		$db->query ("SELECT folder_id FROM folder WHERE range_id='$folder_id'");
+		while ($db->next_record()) {
+			$folder_children[$folder_id][] = $db->Record[0];
+		}
+		$folder_num_children[$folder_id] = $db->num_rows();
+	}
+	return array($folder_children[$folder_id],$folder_num_children[$folder_id]);
+}
+
+function getFolderId($parent_id, $in_recursion = false){
+	static $kidskids;
+		if (!$kidskids || !$in_recursion){
+			$kidskids = array();
+		}
+		$kids = getFolderChildren($parent_id);
+		if ($kids[1]){
+			$kidskids = array_merge($kidskids,$kids[0]);
+			for ($i = 0; $i < $kids[1]; ++$i){
+				getFolderId($kids[0][$i],true);
+			}
+		}
+		return (!$in_recursion) ? $kidskids : null;
+	}
+/*
 function getFolderId(&$folders,$parent_id){
 	if(!$folders) $folders[]=$parent_id;
 	$db = new DB_Seminar;
@@ -28,37 +57,34 @@ function getFolderId(&$folders,$parent_id){
 		}
 	return;
 }
-	
+*/
+
 function doc_count ($parent_id) {
 	$db=new DB_Seminar;
-	getFolderId($arr,$parent_id);
-	if (count($arr)==1) 
-		$in="('$arr[0]')";
-        else
-        	$in="('".join("','",$arr)."')";
+	$arr = getFolderId($parent_id);
+	$arr[] = $parent_id;
+	$in="('".join("','",$arr)."')";
 	$db->query ("SELECT count(*) as count FROM dokumente WHERE range_id IN $in");
 	$db->next_record();
 	return $db->Record[0];
 }
 
+
 function doc_newest ($parent_id) {
 	$db=new DB_Seminar;
-	getFolderId($arr,$parent_id);
-	if (count($arr)==1) 
-		$in="('$arr[0]')";
-        else 
-        	$in="('".join("','",$arr)."')";
-	$db->query ("SELECT mkdate FROM dokumente WHERE range_id IN $in ORDER BY mkdate DESC LIMIT 1");
+	$arr = getFolderId($parent_id);
+	$arr[] = $parent_id;
+	$in="('".join("','",$arr)."')";
+	$db->query ("SELECT max(mkdate) FROM dokumente WHERE range_id IN $in ");
 	$db->next_record();
-		
 	return $db->Record[0];
 }
 
 function doc_challenge ($parent_id){
 	$db=new DB_Seminar;
-	getFolderId($arr,$parent_id);
-	if (count($arr)==1) $in="('$arr[0]')";
-        else $in="('".join("','",$arr)."')";
+	$arr = getFolderId($parent_id);
+	$arr[] = $parent_id;
+	$in="('".join("','",$arr)."')";
 	$db->query ("SELECT dokument_id FROM dokumente WHERE range_id IN $in");
 	while($db->next_record()) $result[] = $db->Record[0];
 	return $result;
@@ -590,10 +616,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;	
 	
+	$check_folder = getFolderChildren($folder_id);
+	
+	$lines[$level] = $check_folder[1];
+
+	if ($check_folder[1]){
 	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.mkdate");
-
-	$lines[$level] = $db->affected_rows();
-
 	while ($db->next_record()) {	
 		if (!$all) {?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><td class="blank" valign="top" heigth=21 nowrap><img src='pictures/forumleer.gif'><img src='pictures/forumleer.gif'><?}
 
@@ -620,24 +648,21 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 		
 		if (!$all) {
-			$db2->query("SELECT * FROM folder WHERE range_id = '".$db->f("folder_id")."' ORDER BY mkdate");		
-			$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY a.mkdate DESC");
-			}
-		else
-			$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY a.mkdate DESC");
-			
-		$letzter=$db2->num_rows(); 		// wenn $letzter = 0 ist gibt es keinen untergeordneten Ordner mehr
-		$dok_letzter=$db3->num_rows(); // wenn $dok_letzter = 0 ist gibt es keine Dokumente in dem Ordner
-		$documents_count = doc_count($db->f("folder_id"));
-		$newest_document = doc_newest($db->f("folder_id"));
-
+			$das_letzte = getFolderChildren($db->f("folder_id"));
+			$letzter = $das_letzte[1]; 		// wenn $letzter = 0 ist gibt es keinen untergeordneten Ordner mehr
+			$documents_count = doc_count($db->f("folder_id"));
+			$newest_document = doc_newest($db->f("folder_id"));
+			$dok_letzter = $documents_count; // wenn $dok_letzter = 0 ist gibt es keine Dokumente in dem Ordner
+		}
 		//Ordner aufgeklappt
 		if ((strstr($open,$db->f("folder_id"))) || ($all)) { 
 			$content='';
 			
 			//Icon auswaehlen
-			if ($documents_count) //Dokumente und Dateien vorhanden
+			if ($documents_count){ //Dokumente und Dateien vorhanden
 				$icon="<img src=\"pictures/cont_folder.gif\">";	
+			
+			}
 			else
 				$icon="<img src=\"pictures/cont_folder2.gif\">";				
 			
@@ -747,153 +772,160 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if (!$all) printcontent ("99%", TRUE, $content, $edit);
 			
 			$s=0;
-			
+			if ($all) {
+					$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$folder_id."' ORDER BY a.mkdate DESC");
+					$documents_count = $db3->num_rows();
+			} else {
+				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.* FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY a.mkdate DESC");
+			}
 			//Hier wird der Ordnerinhalt (Dokumente) gelistet
-			while ($db3->next_record()) { 			
-				
-				$s++;
-				if (($dok_letzter == $s) && (!$letzter))
+			if ($documents_count){
+				while ($db3->next_record()) { 			
+					
+					$s++;
+					if (($dok_letzter == $s) && (!$letzter))
 					$striche3="<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumstrich2.gif'></td>"; //Knick
-				else
+					else
 					$striche3="<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumstrich3.gif'></td>"; //Verzweigung
-				
-				//Icon auswaehlen
-				if ((getFileExtension(strtolower($db3->f("filename"))) == "rtf") || (getFileExtension(strtolower($db3->f("filename"))) == "doc"))
+					
+					//Icon auswaehlen
+					if ((getFileExtension(strtolower($db3->f("filename"))) == "rtf") || (getFileExtension(strtolower($db3->f("filename"))) == "doc"))
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/rtf-icon.gif' border=0></a>";
-				elseif (getFileExtension(strtolower($db3->f("filename"))) == "xls")
+					elseif (getFileExtension(strtolower($db3->f("filename"))) == "xls")
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/xls-icon.gif' border=0></a>";
-				elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "gz"))
+					elseif ((getFileExtension(strtolower($db3->f("filename"))) == "zip") || (getFileExtension(strtolower($db3->f("filename"))) == "tgz") || (getFileExtension(strtolower($db3->f("filename"))) == "gz"))
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/zip-icon.gif' border=0></a>";
-				elseif (getFileExtension(strtolower($db3->f("filename"))) == "ppt")
+					elseif (getFileExtension(strtolower($db3->f("filename"))) == "ppt")
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/ppt-icon.gif' border=0></a>";
-				elseif (getFileExtension(strtolower($db3->f("filename"))) == "pdf")
+					elseif (getFileExtension(strtolower($db3->f("filename"))) == "pdf")
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pdf-icon.gif' border=0></a>";
-				elseif ((getFileExtension(strtolower($db3->f("filename"))) == "gif") || (getFileExtension(strtolower($db3->f("filename"))) == "jpg") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpe") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpeg") || (getFileExtension(strtolower($db3->f("filename"))) == "png") || (getFileExtension(strtolower($db3->f("filename"))) == "bmp"))
+					elseif ((getFileExtension(strtolower($db3->f("filename"))) == "gif") || (getFileExtension(strtolower($db3->f("filename"))) == "jpg") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpe") ||  (getFileExtension(strtolower($db3->f("filename"))) == "jpeg") || (getFileExtension(strtolower($db3->f("filename"))) == "png") || (getFileExtension(strtolower($db3->f("filename"))) == "bmp"))
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/pic-icon.gif' border=0></a>";
-				else
+					else
 					$icon="<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\"><img src='pictures/txt-icon.gif' border=0></a>";
-
-				//Link erstellen
-				if (strstr($open,$db3->f("dokument_id"))) 
+					
+					//Link erstellen
+					if (strstr($open,$db3->f("dokument_id"))) 
 					$link=$PHP_SELF."?close=".$db3->f("dokument_id")."#anker";
-				else
+					else
 					$link=$PHP_SELF."?open=".$db3->f("dokument_id")."#anker";
-				
-				//Titelbereich erstellen
-				if ($change == $db3->f("dokument_id"))
+					
+					//Titelbereich erstellen
+					if ($change == $db3->f("dokument_id"))
 					$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
-				else {
-					if ($db3->f("name"))
+					else {
+						if ($db3->f("name"))
 						$tmp_titel=mila($db3->f("name"));
-					else
+						else
 						$tmp_titel=mila($db3->f("filename"));					
-				
-					//create a link onto the titel, too
-					if ($link)
+						
+						//create a link onto the titel, too
+						if ($link)
 						$tmp_titel = "<a href=\"$link\" class=\"tree\" >$tmp_titel</a>";
-	
-					//add the size
-					if (($db3->f("filesize") /1024 / 1024) >= 1)
+						
+						//add the size
+						if (($db3->f("filesize") /1024 / 1024) >= 1)
 						$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024 / 1024)." MB";
-					else
+						else
 						$titel= $tmp_titel."&nbsp;&nbsp;(".round ($db3->f("filesize") / 1024)." kB";
 						
-					//add number of downloads
-					$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
-					
-					//Zusatzangaben erstellen
-					$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
-				}
-	
-				?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?
-				
-				if (!$all) echo $striche.$striche3;
-				else {
-					?><td class="blank" width="*">&nbsp;</td><?
-					}
-			
-				//Neue Datei herausfinden
-				if ($loginfilelast[$SessSemName[1]] < $db3->f("mkdate")) 
-					$neue_datei = TRUE;
-				else
-					$neue_datei = FALSE;
-				
-				//Dokumenttitelzeile ausgeben
-				if (strstr($open,$db3->f("dokument_id"))) 
-					printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
-				else
-					printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
-				
-				//Dokumentansicht aufgeklappt 
-				if (strstr($open,$db3->f("dokument_id"))) {  
-					$content='';
-
-					if (($dok_letzter == $s) && (!$letzter))
-						$striche4="<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumleer2.gif'></td>";
-					else
-						$striche4="<td class=\"blank\" nowrap background='pictures/forumstrich.gif'><img src='pictures/forumleer2.gif'></td>";					
+						//add number of downloads
+						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 						
-					//Ankerlogik
-					if (($change) || ($move) || ($upload)) {
-						if (($change == $db3->f("dokument_id")) ||  ($move == $db3->f("dokument_id")) ||  ($upload == $db3->f("dokument_id")))
-							echo "<a name='anker'></a>";
-						}
-					elseif ($db3->f("dokument_id") == substr($open, strlen($open) -32, strlen ($open)))
-						echo "<a name='anker'></a>";
-								
-					if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
-						$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
-						$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-						$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
-						$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
-						$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
-						}
-					else {
-						if ($db3->f("description"))
-							$content= htmlReady($db3->f("description"), TRUE, TRUE);
-						else
-							$content= _("Keine Beschreibung vorhanden");
-						$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
-						$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
-						}
-			
-					if ($move == $db3->f("dokument_id"))
-						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
-										
-					$content.= "\n";
-					
-					if ($upload == $db3->f("dokument_id")) {
-						$content.=upload_item ($upload,FALSE,FALSE,$refresh);
+						//Zusatzangaben erstellen
+						$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".$db3->f("fullname")."</font></a>&nbsp;".date("d.m.Y - H:i",$db3->f("mkdate"));			
 					}
-										
-					//Editbereich ertstellen
-					$edit='';
-					if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id"))) {
-						$edit= "&nbsp;<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
-						if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz"))
-							$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
-
-						if (($rechte) || ($db3->f("user_id")==$user->id)) {
-							$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
-							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
-							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
-							$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
-							}
-					}
-	
 					
-					//Dokument-Content ausgeben
-					?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?				
-					if (!$all) echo $striche.$striche4;
+					?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?
+					
+					if (!$all) echo $striche.$striche3;
 					else {
 						?><td class="blank" width="*">&nbsp;</td><?
+					}
+					
+					//Neue Datei herausfinden
+					if ($loginfilelast[$SessSemName[1]] < $db3->f("mkdate")) 
+					$neue_datei = TRUE;
+					else
+					$neue_datei = FALSE;
+					
+					//Dokumenttitelzeile ausgeben
+					if (strstr($open,$db3->f("dokument_id"))) 
+					printhead ("90%", 0, $link, "open", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
+					else
+					printhead ("90%", 0, $link, "close", $neue_datei, $icon, $titel, $zusatz, $db3->f("mkdate"));
+					
+					//Dokumentansicht aufgeklappt 
+					if (strstr($open,$db3->f("dokument_id"))) {  
+						$content='';
+						
+						if (($dok_letzter == $s) && (!$letzter))
+						$striche4="<td class=\"blank\" nowrap background='pictures/forumleer.gif'><img src='pictures/forumleer2.gif'></td>";
+						else
+						$striche4="<td class=\"blank\" nowrap background='pictures/forumstrich.gif'><img src='pictures/forumleer2.gif'></td>";					
+						
+						//Ankerlogik
+						if (($change) || ($move) || ($upload)) {
+							if (($change == $db3->f("dokument_id")) ||  ($move == $db3->f("dokument_id")) ||  ($upload == $db3->f("dokument_id")))
+							echo "<a name='anker'></a>";
 						}
-					printcontent ("100%",TRUE, $content, $edit);
+						elseif ($db3->f("dokument_id") == substr($open, strlen($open) -32, strlen ($open)))
+						echo "<a name='anker'></a>";
+						
+						if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
+							$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
+							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
+							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
+							$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
+						}
+						else {
+							if ($db3->f("description"))
+							$content= htmlReady($db3->f("description"), TRUE, TRUE);
+							else
+							$content= _("Keine Beschreibung vorhanden");
+							$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
+							$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
+						}
+						
+						if ($move == $db3->f("dokument_id"))
+						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"pictures/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+						
+						$content.= "\n";
+						
+						if ($upload == $db3->f("dokument_id")) {
+							$content.=upload_item ($upload,FALSE,FALSE,$refresh);
+						}
+						
+						//Editbereich ertstellen
+						$edit='';
+						if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id"))) {
+							$edit= "&nbsp;<a href=\"sendfile.php?type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("herunterladen", "img") . "</a>";
+							if ((getFileExtension(strtolower($db3->f("filename"))) != "zip") && (getFileExtension(strtolower($db3->f("filename"))) != "tgz") && (getFileExtension(strtolower($db3->f("filename"))) != "gz"))
+							$edit.= "&nbsp;<a href=\"sendfile.php?zip=TRUE&type=0&file_id=".$db3->f("dokument_id") ."&file_name=".rawurlencode($db3->f("filename"))."\">" . makeButton("alsziparchiv", "img") . "</a>";
+							
+							if (($rechte) || ($db3->f("user_id")==$user->id)) {
+								$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
+								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
+								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";	
+								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
+							}
+						}
+						
+						
+						//Dokument-Content ausgeben
+						?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?				
+						if (!$all) echo $striche.$striche4;
+						else {
+							?><td class="blank" width="*">&nbsp;</td><?
+						}
+						printcontent ("100%",TRUE, $content, $edit);
 					}
 				}
+			}
 			
 			if (!$all) echo "<td class=\"blank\">&nbsp;</td></tr></td></table>";
-			}			
+		}			
 		
 		//Ordner nicht aufgeklappt 
 		else {
@@ -948,6 +980,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			display_folder_system ($db->f("folder_id"), $level+1, $open, $lines, $change, $move, $upload, $all);
 		}
 	}
+}
 
 /*
 Die function delete_document löscht ein hochgeladenes Dokument.
