@@ -66,6 +66,9 @@ if($answer_to) {
 	$db->query ($query);
 }
 
+// write a chat-invitation, so predefine the messagesubject
+if (isset($chat_id) && !isset($messagesubject)) $messagesubject = _("Chateinladung");
+
 // where do we save the message?
 if($tmp_save_snd_folder) {
 
@@ -88,12 +91,12 @@ if(!$sms_data["tmpsavesnd"]) {
 }
 
 // email-forwarding?
-if ($rmv_tmpemailsnd_button_x) { $sms_data['tmpemailsnd'] = ""; }
-if ($add_tmpemailsnd_button_x) { $sms_data['tmpemailsnd'] = 1; }
+if ($rmv_tmpemailsnd_button_x) $sms_data['tmpemailsnd'] = "";
+if ($add_tmpemailsnd_button_x) $sms_data['tmpemailsnd'] = 1;
 
 //reading-confirmation?
-if ($rmv_tmpreadsnd_button_x) { $sms_data["tmpreadsnd"] = ""; }
-if ($add_tmpreadsnd_button_x) { $sms_data["tmpreadsnd"] = 1; }
+if ($rmv_tmpreadsnd_button_x) $sms_data["tmpreadsnd"] = "";
+if ($add_tmpreadsnd_button_x) $sms_data["tmpreadsnd"] = 1;
 
 
 // check if active chat avaiable
@@ -103,17 +106,16 @@ if (($cmd == "write_chatinv") && (!is_array($admin_chats))) $cmd='';
 if ($cmd_insert_x) {
 
 	if (!empty($sms_data["p_rec"])) {
-		#$count = "";
 		$time = date("U");
 		$tmp_message_id = md5(uniqid("321losgehtes"));
 		if ($chat_id) {
-			$count = $msging->insert_message($message, $sms_data["p_rec"], $chat_id);
+			$count = $msging->insert_message($message, $sms_data["p_rec"], $chat_id, $time, $tmp_message_id, FALSE, $signature, $messagesubject);
 		} else {
 			$count = $msging->insert_message($message, $sms_data["p_rec"], FALSE, $time, $tmp_message_id, FALSE, $signature, $messagesubject);
 		}
 	}
 
-/*
+	/*
 	if (!empty($sms_data["p_rec"])) {
 		$count = "";
 		$time = date("U");
@@ -126,19 +128,13 @@ if ($cmd_insert_x) {
 			}
 		}
 	}
-*/
-
-
+	*/
 
 	if ($count) {
 
 		$msg = "msg§";
-		if ($count == "1")	 {
-			$msg .= sprintf(_("Ihre Nachricht an %s wurde verschickt!"), get_fullname_from_uname($sms_data["p_rec"][0]))."<br />";
-		}
-		if ($count >= "2") {
-			$msg .= sprintf(_("Ihre Nachricht wurde an %s Empf&auml;nger verschickt!"), $count)."<br />";
-		}
+		if ($count == "1") $msg .= sprintf(_("Ihre Nachricht an %s wurde verschickt!"), get_fullname_from_uname($sms_data["p_rec"][0]))."<br />";
+		if ($count >= "2") $msg .= sprintf(_("Ihre Nachricht wurde an %s Empf&auml;nger verschickt!"), $count)."<br />";
 		unset($signature);
 		unset($message);
 		$sms_data["sig"] = $my_messaging_settings["addsignature"];
@@ -178,16 +174,13 @@ if ($cmd_insert_x) {
 
 // do we answer someone and did we came from somewhere != sms-page
 if ($answer_to) {
-
 	$query = "SELECT auth_user_md5.username as rec_uname, message.autor_id FROM message LEFT JOIN auth_user_md5 ON(message.autor_id = auth_user_md5.user_id) WHERE message.message_id = '".$answer_to."'";
 	$db->query ($query);
 	while ($db->next_record()) {
 		if($quote) $quote_username = $db->f("rec_uname");
 		$sms_data["p_rec"] = array($db->f("rec_uname"));
 	}
-
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
-
 }
 
 
@@ -443,7 +436,7 @@ function show_addrform() {
 function show_msgform() {
 
 	global $PHP_SELF, $sms_data, $user, $quote, $tmp_sms_content, $quote_username, $message, $messagesubject;
-	
+
 	$tmp = "&nbsp;<font size=\"-1\"><b>"._("Betreff:")."</b></font>";
 	$tmp .= "<div align=\"center\"><input type=\"text\" name=\"messagesubject\" value=\"".trim(htmlready(stripslashes($messagesubject)))."\"style=\"width: 99%\"></div>";
 
