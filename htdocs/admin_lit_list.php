@@ -81,7 +81,7 @@ $_the_clip_form =& $_the_clipboard->getFormObject();
 if ( ($lists = $_the_tree->getListIds()) ){
 	for ($i = 0; $i < count($lists); ++$i){
 		$_the_clip_form->form_fields['clip_cmd']['options'][] 
-		= array('name' => my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50),
+		= array('name' => htmlReady(my_substr(sprintf(_("In \"%s\" eintragen"), $_the_tree->tree_data[$lists[$i]]['name']),0,50)),
 		'value' => 'ins_' . $lists[$i]);
 	}
 }
