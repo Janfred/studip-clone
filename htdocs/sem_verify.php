@@ -51,7 +51,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		$db->query("SELECT admission_prelim_txt FROM seminare WHERE Seminar_id = '$sem_id'");
 		$db->next_record();
 		echo "<tr><td class=\"blank\">&nbsp;&nbsp;</td><td class=\"blank\">";
-		printf (_("Um endg&uuml;ltig in die Veranstaltung <b>%s</b> aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen."),$sem_name);
+		printf (_("Um endg&uuml;ltig in die Veranstaltung <b>%s</b> aufgenommen zu werden, m&uuml;ssen Sie noch weitere Voraussetzungen erf&uuml;llen."),htmlReady($sem_name));
 		if ($db->f("admission_prelim_txt")) {
 			print " "._("Lesen Sie bitte folgenden Hinweistext:")."<br />";
 			echo "<br/><table width=90%><tr><td>\n";
@@ -60,7 +60,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		} else {
 			print " "._("Bitte erkundigen Sie sich bei dem Dozenten oder der Dozentin der Veranstaltung nach weiteren Teilnahmevoraussetzungen.");
 		}
-		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung <b>%s</b> eingetragen zu werden."), $sem_name);
+		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung <b>%s</b> eingetragen zu werden."), htmlReady($sem_name));
 		echo "<br/><br/>\n";
 
 		printf("<form action=\"%s\" method=\"post\">\n",$url);
@@ -77,7 +77,7 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 
 	} else {
 		$db->query("INSERT INTO admission_seminar_user SET user_id = '$user_id', seminar_id = '$sem_id', studiengang_id = '$studiengang_id', status = 'accepted', mkdate = '".time()."', position = NULL");
-		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung <b>%s</b> eingetragen. Damit haben Sie einen Platz sicher. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."),$sem_name));
+		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung <b>%s</b> eingetragen. Damit haben Sie einen Platz sicher. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."),htmlReady($sem_name)));
 		echo "<tr><td class=\"blank\" colspan=2>";
 	}
 }
@@ -101,7 +101,7 @@ function seminar_preliminary($seminar_id,$user_id=NULL) {
 			$db2->query("SELECT user_id FROM admission_seminar_user WHERE user_id='$user_id' AND seminar_id='$seminar_id'");
 			if ($db2->next_record()) {
 				echo "<tr><td class=\"blank\" colspan=2>";
-				parse_msg (sprintf("msg§"._("Sie sind für die Veranstaltung **%s** bereits vorläufig eingetragen!"),$db->f("Name")));
+				parse_msg (sprintf("msg§"._("Sie sind für die Veranstaltung **%s** bereits vorläufig eingetragen!"),htmlReady($db->f("Name"))));
 				echo "</td></tr>";
 				page_close();
 				die;
@@ -371,10 +371,10 @@ $db6=new DB_Seminar;
 			if ($db->f("Lesezugriff") <= 1 && $perm->have_perm("autor")) {
 				if (!seminar_preliminary($id,$user->id)) {  // we have to change behaviour, depending on preliminary
 					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'user', gruppe = '$group', mkdate = '".time()."'");
-					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Leser</b> in die Veranstaltung <b>%s</b> eingetragen."), $db->f("Name")));
+					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Leser</b> in die Veranstaltung <b>%s</b> eingetragen."), htmlReady($db->f("Name"))));
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
 				} else {
-					parse_msg (sprintf("msg§"._("Die Veranstaltung **%s** ist teilnahmebeschränkt. Sie können sich nicht als Leser eintragen lassen."),$db->f("Name")));
+					parse_msg (sprintf("msg§"._("Die Veranstaltung **%s** ist teilnahmebeschränkt. Sie können sich nicht als Leser eintragen lassen."),htmlReady($db->f("Name"))));
 				}
 				if ($send_from_search)
 			    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -395,7 +395,7 @@ $db6=new DB_Seminar;
 			$SemSecLevelRead=$db->f("Lesezugriff");
 			$SemSecLevelWrite=$db->f("Schreibzugriff");
 			$SemSecPass=$db->f("Passwort");
-			htmlReady($SeminarName=$db->f("Name"));
+			$SeminarName=htmlReady($db->f("Name"));
 		}
 		$db->query("SELECT status FROM seminar_user WHERE Seminar_id LIKE '$id' AND user_id LIKE '$user->id'");
 		$db->next_record();
