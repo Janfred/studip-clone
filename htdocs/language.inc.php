@@ -112,6 +112,35 @@ function makeButton ($name, $mode = "img") {
 
 
 /**
+* retrieves path to preferred language of user from database
+*
+* Can be used for sending language specific mails to other users.
+*
+* @access	public        
+* @param		string	the user_id of the recipient (function will try to get preferred language from database)
+* @return		string	the path to the language files, given in "en"-style
+*/
+function getUserLanguagePath($uid) {
+	global $INSTALLED_LANGUAGES, $DEFAULT_LANGUAGE;
+	// try to get preferred language from user
+	$db=new DB_Seminar;
+	$db->query("SELECT preferred_language FROM user_info WHERE user_id='$uid'");
+	if ($db->next_record()) {
+		if ($db->f("preferred_language") != NULL && $db->f("preferred_language") != "") {
+			// we found a stored setting for preferred language
+			$temp_language = $db->f("preferred_language");
+		} else {
+			// no preferred language, use system default
+			$temp_language = $DEFAULT_LANGUAGE;
+		}
+	} else {
+		// no preferred language, use system default
+		$temp_language = $DEFAULT_LANGUAGE;
+	}
+	return $INSTALLED_LANGUAGES[$temp_language]["path"];
+}
+
+/**
 * switch i18n to different language
 *
 * This function switches i18n system to a different language.
