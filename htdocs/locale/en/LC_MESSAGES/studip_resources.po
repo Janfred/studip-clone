@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-03-17 12:39+0100\n"
-"PO-Revision-Date: 2003-03-17 12:33+0100\n"
+"PO-Revision-Date: 2003-03-17 15:00+0100\n"
 "Last-Translator: Rosemary Wilson <rawilson80@yahoo.co.uk>\n"
 "Language-Team: english\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgstr "Institutes"
 
 #: resources/resourcesFunc.inc.php:352
 msgid "jedeR"
-msgstr ""
+msgstr "Everyone"
 
 #: resources/resourcesFunc.inc.php:367
 msgid "diesen Eintrag übernehmen"
@@ -108,14 +108,14 @@ msgid ""
 "Dieses Objekt wurde zum Verschieben markiert. Bitte w&auml;hlen sie das "
 "Einf&uuml;gen-Symbol %s, um es in die gew&uuml;nschte Ebene zu verschieben."
 msgstr ""
-"This object has been selected to move.  Please select the insertion symbol %"
-"s in order to move to the desired level."
+"This object has been selected to move. Please select the insertion "
+"symbol %s in order to move to the desired level."
 
 #: resources/resourcesVisual.inc.php:350
 msgid ""
 "Klicken Sie auf dieses Symbol, um dieses Objekt in eine andere Ebene zu "
 "verschieben"
-msgstr ""
+msgstr "Click on this symbol in order to move this object to another level."
 
 #: resources/resourcesVisual.inc.php:485
 msgid "Name"
@@ -177,23 +177,23 @@ msgstr "Multiline text field"
 
 #: resources/resourcesVisual.inc.php:639 resources/resourcesVisual.inc.php:778
 msgid "einzeiliges Textfeld"
-msgstr "Single text field"
+msgstr "Single line text field"
 
 #: resources/resourcesVisual.inc.php:642
 msgid "definiertes Auswahlfeld"
-msgstr "Defined selection field"
+msgstr ""
 
 #: resources/resourcesVisual.inc.php:653
 msgid "Eigenschaft löschen"
-msgstr "Delete character"
+msgstr "Delete property"
 
 #: resources/resourcesVisual.inc.php:658
 msgid "Löschen der Eigenschaft nicht möglich, Systemobjekt!"
-msgstr "Not possible to delete the character, system object!"
+msgstr "Not possible to delete the property, system object!"
 
 #: resources/resourcesVisual.inc.php:728
 msgid "Eigenschaft"
-msgstr "Character"
+msgstr "Property"
 
 #: resources/resourcesVisual.inc.php:731
 msgid "Art der Eigenschaft"
@@ -213,11 +213,11 @@ msgstr "Multiline text field"
 
 #: resources/resourcesVisual.inc.php:750 resources/resourcesVisual.inc.php:780
 msgid "Auswahlfeld"
-msgstr "Selection field"
+msgstr "Drop down menu"
 
 #: resources/resourcesVisual.inc.php:774
 msgid "Art:"
-msgstr ""
+msgstr "Type:"
 
 #: resources/resourcesVisual.inc.php:785
 msgid "Bezeichnung:"
@@ -229,7 +229,7 @@ msgstr "Options:"
 
 #: resources/resourcesVisual.inc.php:825
 msgid "diese Eigenschaft"
-msgstr "This character"
+msgstr "This property"
 
 #: resources/resourcesVisual.inc.php:885
 #: resources/resourcesVisual.inc.php:1311
@@ -249,11 +249,11 @@ msgstr "Description:"
 
 #: resources/resourcesVisual.inc.php:905
 msgid "Eigenschaften:"
-msgstr "Characters:"
+msgstr "Properties:"
 
 #: resources/resourcesVisual.inc.php:1058
 msgid "Sie erstellen eine neue Belegung"
-msgstr "Create a new allocation"
+msgstr "You are creating a new allocation"
 
 #: resources/resourcesVisual.inc.php:1071
 msgid ""
@@ -317,11 +317,11 @@ msgstr "Begin/end:"
 #: resources/resourcesVisual.inc.php:1135
 #: resources/lib/ScheduleWeek.class.php:243
 msgid "Uhr"
-msgstr ""
+msgstr "  "
 
 #: resources/resourcesVisual.inc.php:1143
 msgid "Wiederholung bis sp&auml;testens:"
-msgstr "Repetition until:"
+msgstr "Repetition until (latest possible date):"
 
 #: resources/resourcesVisual.inc.php:1154
 msgid "Ende der Vorlesungszeit"
@@ -341,11 +341,11 @@ msgstr "Enter another user (person or institute):"
 
 #: resources/resourcesVisual.inc.php:1181
 msgid "einen User (NutzerIn oder Einrichtung) eintragen:"
-msgstr ""
+msgstr "Enter a user (person or institute):"
 
 #: resources/resourcesVisual.inc.php:1184
 msgid "freie Eingabe zur Belegung:"
-msgstr "Free description for allocation:"
+msgstr "Free description of allocation:"
 
 #: resources/resourcesVisual.inc.php:1186
 msgid ""
@@ -354,6 +354,9 @@ msgid ""
 "selbstst&auml;ndig aufheben. Sie k&ouml;nnen die Belegung aber auch frei "
 "eingeben."
 msgstr ""
+"<b>Beware:</b> If you enter a person or institute, this user or authorised "
+"person can independently remove the allocation. You can also enter a free "
+"description of the allocation."
 
 #: resources/resourcesVisual.inc.php:1195
 msgid "Wiederholungsturnus:"
@@ -484,14 +487,14 @@ msgstr "Not allocated"
 #: resources/resourcesVisual.inc.php:1367
 #: resources/views/links_resources.inc.php:67
 msgid "Eigenschaften"
-msgstr "Characters"
+msgstr "Properties"
 
 #: resources/resourcesVisual.inc.php:1420
 msgid ""
 "Das Objekt wurde noch keinem Typ zugewiesen. Um Eigenschaften bearbeiten zu "
 "k&ouml;nnen, m&uuml;ssen Sie vorher einen Typ festlegen!"
 msgstr ""
-"The object has not been assigned a type. In order to edit the characters, "
+"The object has not been assigned a type. In order to edit the properties, "
 "you must first determine a type!"
 
 #: resources/resourcesVisual.inc.php:1465
@@ -554,7 +557,7 @@ msgstr "Allocation is from <b>%s</b> until <b>%s</b>, allocated by <b>%s</b>"
 
 #: resources/resourcesVisual.inc.php:1708
 msgid "Vorherige Woche anzeigen"
-msgstr "Display previous week"
+msgstr "Show previous week"
 
 #: resources/resourcesVisual.inc.php:1711
 msgid "Woche"
@@ -565,10 +568,9 @@ msgid "Nächste Woche anzeigen"
 msgstr "Show next week"
 
 #: resources/resourcesVisual.inc.php:1830
-msgid ""
-"folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
+msgid "folgende Eigenschaften soll die Ressource besitzen (leer bedeutet egal):"
 msgstr ""
-"The resource should include the following characters (empty means that it "
+"The resource should possess the following properties (empty means that it "
 "doesn't matter):"
 
 #: resources/resourcesVisual.inc.php:1940
@@ -657,7 +659,7 @@ msgstr "Search"
 
 #: resources/views/links_resources.inc.php:55
 msgid "Neue&nbsp;Hierarchieebene&nbsp;erzeugen"
-msgstr "Create&nbsp;a&nbsp;new&nbsp;Hierarchy&nbsp;level&nbsp;"
+msgstr "Create&nbsp;a&nbsp;new&nbsp;hierarchy&nbsp;level."
 
 #: resources/views/links_resources.inc.php:59
 msgid "Listenausgabe"
@@ -665,7 +667,7 @@ msgstr "List view"
 
 #: resources/views/links_resources.inc.php:69
 msgid "Eigenschaften&nbsp;bearbeiten"
-msgstr "Edit&nbsp;characters"
+msgstr "Edit&nbsp;properties"
 
 #: resources/views/links_resources.inc.php:70
 msgid "Rechte&nbsp;bearbeiten"
@@ -685,7 +687,7 @@ msgstr "Administer&nbsp;types"
 
 #: resources/views/links_resources.inc.php:82
 msgid "Eigenschaften&nbsp;verwalten"
-msgstr "Administer&nbsp;characters"
+msgstr "Administer&nbsp;properties"
 
 #: resources/views/links_resources.inc.php:85
 msgid "globale&nbsp;Rechte&nbsp;verwalten"
@@ -763,18 +765,17 @@ msgstr "The resource authorisation settings have been changed"
 
 #: resources/views/msgs_resources.inc.php:71
 msgid "Ressource verschoben"
-msgstr ""
+msgstr "Resource moved"
 
 #: resources/views/msgs_resources.inc.php:72
 msgid "Die Ressource wurde verschoben"
-msgstr ""
+msgstr "The resource has been moved"
 
 #: resources/views/msgs_resources.inc.php:75
 msgid ""
 "Bitte geben Sie eineN NutzerIn f&uuml;r die Belegung an, um diese Belegung "
 "zu speichern!"
-msgstr ""
-"Please enter a user for the allocation, in order to save this allocation!"
+msgstr "In order to save this allocation, please enter a user for the allocation!"
 
 #: resources/views/msgs_resources.inc.php:78
 msgid ""
@@ -786,19 +787,19 @@ msgstr ""
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Es existieren keine Ressourcen oder Ebenen, auf die Sie Zugriff haben."
-msgstr "There are no resources or levels to which you have access."
+msgstr "There are no resources or levels in existence to which you have access."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid ""
 "Um Ressourcen anzulegen, erzeugen Sie zun&auml;chst eine neue Ebene, indem "
 "sie &raquo;Neue Hierarchie erzeugen&laquo; anw&auml;hlen."
 msgstr ""
-"In order to set up resources, first create a new level, in which you the "
-"select &raquo;New Hierarchy&laquo;."
+"In order to set up resources, first create a new level, in which you then "
+"select &raquo;New hierarchy&laquo;."
 
 #: resources/views/msgs_resources.inc.php:81
 msgid "Anschließend k&ouml;nnen auf dieser Ebene Ressourcen anlegen"
-msgstr ""
+msgstr "Subsequently you can set up resources on this level."
 
 #: resources/views/msgs_resources.inc.php:84
 msgid ""
@@ -807,8 +808,7 @@ msgid ""
 msgstr ""
 
 #: resources/views/msgs_resources.inc.php:87
-msgid ""
-"Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
+msgid "Sie haben keine Ebene ausgew&auml;hlt. Daher kann keine Liste erzeugt werden."
 msgstr "You have not selected a level. Therefore no list can be created."
 
 #: resources/views/msgs_resources.inc.php:87
@@ -836,8 +836,7 @@ msgstr "You have not selected an object to display."
 msgid ""
 "Bitte geben Sie g&uuml;ltige Werte f&uuml;r Datum, Beginn und Ende der "
 "Belegung an!"
-msgstr ""
-"Please enter valid values for the date, begin and end of the allocation!"
+msgstr "Please enter valid values for the date, begin and end of the allocation!"
 
 #: resources/views/msgs_resources.inc.php:99
 msgid ""
@@ -859,37 +858,38 @@ msgstr "The start time may not be before the end time!"
 
 #: resources/views/msgs_resources.inc.php:108
 msgid "Die j&auml;hrliche Wiederholung darf maximal 10 Jahre dauern!"
-msgstr "The yearly repetition may take place for a maximum of 10 years!"
+msgstr "The yearly repetition may take place over a maximum of 10 years!"
 
 #: resources/views/msgs_resources.inc.php:111
 msgid "Die monatliche Wiederholung darf maximal 10 Jahre dauern!"
-msgstr ""
+msgstr "The monthly repetition may take place over a maximum of 10 years!"
 
 #: resources/views/msgs_resources.inc.php:114
 msgid ""
 "Die w&ouml;chentliche Wiederholung darf maximal 50 Mal wiederholt "
 "stattfinden!"
-msgstr ""
+msgstr "The weekly repetition may occur a maximum of 50 times!"
 
 #: resources/views/msgs_resources.inc.php:117
-msgid ""
-"Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
-msgstr ""
+msgid "Die t&auml;gliche Wiederholung darf maximal 100 Mal wiederholt stattfinden!"
+msgstr "The daily repetition may occur a maximum of 100 times!"
 
 #: resources/views/msgs_resources.inc.php:121
 msgid "Sie haben leider keine Berechtigung, diese Funktion zu benutzen!"
-msgstr ""
+msgstr "Unfortunately you do not have authorisation to use this function!"
 
 #: resources/views/page_intros.inc.php:49
 msgid ""
 "Auf dieser Seite k&ouml;nnen Sie durch alle Ressourcen bzw. Ebenen, auf die "
 "Sie Zugriff haben, navigieren und Ressourcen verwalten."
 msgstr ""
+"On this page you may navigate through all resources and levels to which "
+"you have access, and administer resources."
 
 #: resources/views/page_intros.inc.php:50
 #: resources/views/page_intros.inc.php:175
 msgid "&Uuml;bersicht der Ressourcen"
-msgstr ""
+msgstr "Resources overview"
 
 #: resources/views/page_intros.inc.php:53
 msgid ""
@@ -897,96 +897,103 @@ msgid ""
 "&uuml;ber ein Stichwort oder bestimmte Eigenschaften Ressourcen zu suchen "
 "oder sich durch die Ebenen zu navigieren."
 msgstr ""
+"Here you can search for resources. You may search using a keyword or "
+"a particular resource property. Alternatively you may navigate through "
+"the levels."
 
 #: resources/views/page_intros.inc.php:54
 msgid "Suche nach Ressourcen"
-msgstr ""
+msgstr "Search for resources"
 
 #: resources/views/page_intros.inc.php:63
 #, c-format
 msgid "Ressourcen &uuml;ber ihre %sEigenschaften%s suchen"
-msgstr ""
+msgstr "Search for resources via your %sproperties%s"
 
 #: resources/views/page_intros.inc.php:63
 #, c-format
 msgid "%sEbenen%s durchsuchen"
-msgstr ""
+msgstr "Search through %slevels%s"
 
 #: resources/views/page_intros.inc.php:75
 #, c-format
 msgid "Sie sehen alle Eintr&auml;ge in der Ebene <b>%s</b>"
-msgstr ""
+msgstr "You see all entries in the level <b>%s</b>."
 
 #: resources/views/page_intros.inc.php:76
 msgid "Bearbeiten und ausgeben von Listen"
-msgstr ""
+msgstr "Edit and export from lists"
 
 #: resources/views/page_intros.inc.php:78
 msgid "Ebene"
-msgstr ""
+msgstr "Level"
 
 #: resources/views/page_intros.inc.php:80
 #: resources/views/page_intros.inc.php:130
 msgid "Information:"
-msgstr ""
+msgstr "Information:"
 
 #: resources/views/page_intros.inc.php:83
 msgid "Untergeordnete Ebenen werden ausgegeben."
-msgstr ""
+msgstr "Sub-ordered levels will be shown."
 
 #: resources/views/page_intros.inc.php:83
 msgid "Untergeordnete Ebenen werden <u>nicht</u> ausgegeben."
-msgstr ""
+msgstr "Sub-ordered levels will <u>not</u> be shown. "
 
 #: resources/views/page_intros.inc.php:87
 #, c-format
 msgid "Ressourcen in untergeordneten Ebenen %snicht ausgeben%s."
-msgstr ""
+msgstr "%sDo not%s show resources in sub-ordered levels."
 
 #: resources/views/page_intros.inc.php:87
 #, c-format
 msgid "Ressourcen in untergeordneten Ebenen %s(mit) ausgeben%s"
-msgstr ""
+msgstr "%sShow (with)%s resources in sub-ordered levels."
 
 #: resources/views/page_intros.inc.php:94
 msgid "Hier k&ouml;nnen Sie Ressourcen-Belegungen bearbeiten und neue anlegen."
-msgstr ""
+msgstr "Here you can edit the resource allocation and create new allocations."
 
 #: resources/views/page_intros.inc.php:95
 msgid "Belegungen bearbeiten"
-msgstr ""
+msgstr "Edit allocations"
 
 #: resources/views/page_intros.inc.php:98
 msgid "Hier k&ouml;nnen Sie Ressourcen-Eigenschaften bearbeiten."
-msgstr ""
+msgstr "Here you can edit resource properties."
 
 #: resources/views/page_intros.inc.php:99
 #: resources/views/page_intros.inc.php:103
 #: resources/views/page_intros.inc.php:118
 msgid "Eigenschaften bearbeiten"
-msgstr ""
+msgstr "Edit properties"
 
 #: resources/views/page_intros.inc.php:102
 msgid ""
 "Hier k&ouml;nnen Sie Berechtigungen f&uuml;r den Zugriff auf die Ressource "
 "vergeben."
-msgstr ""
+msgstr "Here you can assign the authorisation for the resource access."
 
 #: resources/views/page_intros.inc.php:102
 msgid ""
 "<b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls f&uuml;r "
 "die Ressourcen, die der gew&auml;hlten Ressource untergeordnet sind!"
 msgstr ""
+"<b>Warning</b> All authorisations granted here, are also valid for all "
+"the resources which are sub-ordered under the selected resource! "
 
 #: resources/views/page_intros.inc.php:106
 msgid ""
 "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource anzeigen lassen "
 "und auf unterschiedliche Art darstellen lassen."
 msgstr ""
+"Here you can display the resource allocation times and represent "
+"different types."
 
 #: resources/views/page_intros.inc.php:107
 msgid "Belegungszeiten ausgeben"
-msgstr ""
+msgstr "Show allocation times"
 
 #: resources/views/page_intros.inc.php:113
 msgid ""
@@ -994,103 +1001,114 @@ msgid ""
 "Ger&auml;te oder Geb&auml;ude. Sie k&ouml;nnen jedem Typ beliebig viele "
 "Eigenschaften zuordnen."
 msgstr ""
+"Administer the resource types on this page, such as rooms, equipment or buildings. "
+"To every type you can assign several properties."
 
 #: resources/views/page_intros.inc.php:114
 msgid "Typen bearbeiten"
-msgstr ""
+msgstr "Edit types"
 
 #: resources/views/page_intros.inc.php:117
 msgid ""
 "Verwalten Sie auf dieser Seite die einzelnen Eigenschaften. Diese "
 "Eigenschaften k&ouml;nnen Sie beliebigen Ressourcen-Typen zuweisen."
 msgstr ""
+"On this page you can administer the different properties. "
+"These properties can be assigned to to different resource types."
 
 #: resources/views/page_intros.inc.php:121
 msgid ""
 "Verwalten Sie hier AdministratorInnen des Systems, die volle Rechte &uuml;"
 "ber alle Ressourcen erhalten."
 msgstr ""
+"Here you can administer the system administrators, who have "
+"full access to all resources.  "
 
 #: resources/views/page_intros.inc.php:122
 msgid "Ressourcen-AdministratorInnen bearbeiten"
-msgstr ""
+msgstr "Edit resource administrators"
 
 #: resources/views/page_intros.inc.php:127
 #, c-format
 msgid "Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."
-msgstr ""
+msgstr "On this page you can see all the %s allocated resources."
 
 #: resources/views/page_intros.inc.php:128
 msgid "Ressourcen&uuml;bersicht"
-msgstr ""
+msgstr "Resource overview"
 
 #: resources/views/page_intros.inc.php:133
 msgid ""
 "Als Teilnehmer der Veranstaltung haben Sie die M&ouml;glichkeit, diese "
 "Ressourcen frei zu belegen oder den Belegungsplan einzusehen."
 msgstr ""
+"As participant in the course, you may allocate these resources freely "
+"or open the allocation plan."
 
 #: resources/views/page_intros.inc.php:139
 #, c-format
 msgid "Hier sehen Sie detaillierte Informationen der Ressource %s"
-msgstr ""
+msgstr "Here you can see the detailed information for the resource %s."
 
 #: resources/views/page_intros.inc.php:141
 msgid "Ressourcendetails"
-msgstr ""
+msgstr "Resource details"
 
 #: resources/views/page_intros.inc.php:143
 msgid "Anzeige der Ressourceneigenschaften"
-msgstr ""
+msgstr "Show resource properties"
 
 #: resources/views/page_intros.inc.php:145
 msgid "Aktionen:"
-msgstr ""
+msgstr "Actions:"
 
 #: resources/views/page_intros.inc.php:148
 msgid "zur&uuml;ck zur Suche"
-msgstr ""
+msgstr "Back to search"
 
 #: resources/views/page_intros.inc.php:148
 msgid "zur&uuml;ck zur &Uuml;bersicht"
-msgstr ""
+msgstr "Back to overview"
 
 #: resources/views/page_intros.inc.php:151
 #, c-format
 msgid "%sBelegungsplan%s anzeigen"
-msgstr ""
+msgstr "Show %sAllocation plan%s."
 
 #: resources/views/page_intros.inc.php:153
 #, c-format
 msgid "Eine neue Belegung %serstellen%s"
-msgstr ""
+msgstr "%sCreate%s a new allocation"
 
 #: resources/views/page_intros.inc.php:159
 #, c-format
 msgid "Hier k&ouml;nnen Sie sich die Belegungszeiten der Ressource %s"
-msgstr ""
+msgstr "Here takes you to the allocation times of the resource %s"
 
 #: resources/views/page_intros.inc.php:160
 msgid "Ressourcenbelegung"
-msgstr ""
+msgstr "Resources allocation"
 
 #: resources/views/page_intros.inc.php:164
 #, c-format
 msgid "Bearbeiten von Belegungen der Ressource %s"
-msgstr ""
+msgstr "Edit the allocation of the resource %s"
 
 #: resources/views/page_intros.inc.php:169
 #, c-format
 msgid "Vergeben von Rechten auf die Ressource %s"
-msgstr ""
+msgstr "Assign access authorisation for the resource %s"
 
 #: resources/views/page_intros.inc.php:170
 #, c-format
 msgid "Vergeben von Berechtigungen - Objekt%s"
-msgstr ""
+msgstr "Assign authorisation - object %s"
 
 #: resources/views/page_intros.inc.php:174
 msgid ""
 "Sie befinden sich in der Ressourcenverwaltung von Stud.IP. Sie k&ouml;nnen "
 "hier R&auml;ume, Geb&auml;ude, Ger&auml;te und andere Ressourcen verwalten."
 msgstr ""
+"You are in the resource administration for Stud.IP. You can administer rooms, "
+"buildings, equipment and other resources here."
+
