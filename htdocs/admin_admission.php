@@ -261,7 +261,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					if (($cnt + $admin_admission_data["all_ratio"]) < 100)
 						$admin_admission_data["all_ratio"]=100 - $cnt;
 					if (($cnt + $admin_admission_data["all_ratio"]) > 100)
-						if ($cnt < 100)
+						if ($cnt <= 100)
 							$admin_admission_data["all_ratio"]=(100 - $cnt);
 						else 
 							$errormsg.=sprintf ("error§Die Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!§");	

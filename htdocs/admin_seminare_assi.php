@@ -634,7 +634,7 @@ if (($cmd_e_x) || ($add_studg_x) || ($sem_delete_studg)) {
 			if (($cnt + $sem_create_data["sem_all_ratio"]) < 100)
 				$sem_create_data["sem_all_ratio"]=100 - $cnt;
 			if (($cnt + $sem_create_data["sem_all_ratio"]) > 100)
-				if ($cnt < 100)
+				if ($cnt <= 100)
 					$sem_create_data["sem_all_ratio"]=(100 - $cnt);
 				else {
 					$errormsg.=sprintf ("error§Die Werte der einzelnen Kontigente &uuml;bersteigen 100%%. Bitte &auml;ndern Sie die Kontigente!§");	
