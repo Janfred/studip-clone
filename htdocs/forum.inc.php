@@ -587,7 +587,7 @@ function printposting ($forumposting) {
   		if ($forumposting["rate"]=="?")
   			$rtmp = 0;
   		else 
-  			$rtmp = $forumposting["rate"]-3;
+  			$rtmp = 6-$forumposting["rate"]-3;
   		$relevanz += $rtmp*5;
   		
   		$forumhead[] = "<font color=\"#007700\">".$objectviews."</font> / ";
