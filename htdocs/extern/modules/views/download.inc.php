@@ -55,7 +55,7 @@ foreach ($sort as $key => $position) {
 }
 if ($query_order) {
 	ksort($query_order, SORT_NUMERIC);
-	$query_order = " ORDER BY " . implode(",", $query_order);
+	$query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
 }
 
 // Daten holen
