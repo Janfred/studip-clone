@@ -40,8 +40,10 @@ while($db->next_record()){
 	echo "<td$style align=\"center\"><font size=\"-1\">";
 	echo $db->f("count");
 	echo "</font></td>\n";
-	if($loginfilenow[$db->f("Seminar_id")] == 0)
-		echo "<td$style align=\"center\"><font size=\"-1\">nicht besucht</font></td>\n";
+	if ($loginfilenow[$db->f("Seminar_id")] == 0) {
+		echo "<td$style align=\"center\"><font size=\"-1\">";
+		echo _("nicht besucht") . "</font></td>\n";
+	}
 	else{
 		echo "<td$style align=\"center\"><font size=\"-1\">";
 		echo date("d.m.Y", $loginfilenow[$db->f("Seminar_id")]);
@@ -70,11 +72,10 @@ echo "\n</form>\n";
 echo "</table>";
 echo "\n</td>\n";
 echo "<td class=\"blank\" width=\"10%\" valign=\"top\">\n";
-$info_content = array(array("kategorie" => "Information:",
+$info_content = array(array("kategorie" => _("Information:"),
 											"eintrag" => array(	
 												array("icon" => "pictures/ausruf_small.gif",
-															"text" => "Termine aus den ausgew&auml;hlten Veranstaltungen werden "
-																			."in Ihren Terminkalender &uuml;bernommen."
+															"text" => _("Termine aus den ausgew&auml;hlten Veranstaltungen werden in Ihren Terminkalender &uuml;bernommen.")
 											))));
 										
 print_infobox($info_content, "pictures/dates.jpg");

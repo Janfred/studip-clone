@@ -20,8 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Tabellenansicht der Termine eines Tages erzeugen
-function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,
-                        $compact = TRUE, $link_edit = FALSE, $title_length = 70, $height = 20, $padding = 6, $spacing = 1){
+function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,
+                        $compact = TRUE, $link_edit = FALSE, $title_length = 70,
+												$height = 20, $padding = 6, $spacing = 1) {
 	
 	global $atime;
 	$term = array();    // Array mit eingeordneten Terminen und Platzhaltern (mixed[])
@@ -189,7 +190,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 		
 		if($link_edit){
 			$link_edit_time = $zeile * $step + $start - 3600;
-			$link_edit_alt = strftime("neuer Termin um %R Uhr", $link_edit_time);
+			$link_edit_alt = strftime(_("neuer Termin um %R Uhr"), $link_edit_time);
 		}
 		
 		if($compact)
@@ -386,7 +387,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 		if($compact)
 			$tab[$zeile] .= "</tr>\n";
 		
-		// sonst zerlegt array_merge die Tabelle
+		// sonst zerlegt array_merge (siehe unten) die Tabelle
 		if(!isset($tab[$zeile]))
 			$tab[$zeile] = "";
 	
@@ -414,7 +415,7 @@ function createDayTable($day_obj, $start = 6, $end = 19, $step = 900, $precol = 
 	
 }
 
-function maxValue($term, $st){
+function maxValue ($term, $st) {
 	$max_value = 0;
 	for($i = 0;$i < sizeof($term);$i++){
 		if(is_object($term[$i]))
@@ -430,7 +431,8 @@ function maxValue($term, $st){
 }
 
 // Tabellenansicht der Termine fuer eine Woche
-function createWeekTable($week_obj, $start = 6, $end = 21, $step = 3600, $compact = TRUE, $link_edit = FALSE){
+function createWeekTable ($week_obj, $start = 6, $end = 21, $step = 3600,
+													$compact = TRUE, $link_edit = FALSE) {
 	$tab_arr = "";
 	$tab = "";
 	$max_columns = 0;
@@ -439,7 +441,8 @@ function createWeekTable($week_obj, $start = 6, $end = 21, $step = 3600, $compac
 	$length = ceil(125 / $week_obj->getType());
 	
 	for($i = 0;$i < $week_obj->type;$i++)
-		$tab_arr[$i] = createDayTable($week_obj->wdays[$i],$start,$end,$step,FALSE,FALSE,$link_edit,$length,20,4,1);
+		$tab_arr[$i] = createDayTable($week_obj->wdays[$i], $start, $end, $step, FALSE,
+												FALSE, $link_edit, $length, 20, 4, 1);
 		
 	// weekday and date as title for each column
 	for($i = 0;$i < $week_obj->getType();$i++){
@@ -477,7 +480,7 @@ function createWeekTable($week_obj, $start = 6, $end = 21, $step = 3600, $compac
 
 }
 
-function jumpTo($month, $day, $year, $colsp = 1){
+function jumpTo ($month, $day, $year, $colsp = 1) {
 	global $atime, $cmd;
 	
 	?>
@@ -498,7 +501,7 @@ function jumpTo($month, $day, $year, $colsp = 1){
 }
 
 // verwendet variable Parameterliste
-function includeMonth(){
+function includeMonth () {
 	global $RELATIVE_PATH_CALENDAR;
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
 	global $imt;
@@ -628,7 +631,7 @@ function includeMonth(){
 	return $ret;
 }
 
-function fit_title($title, $cols, $rows, $max_length, $end_str = "...", $pad = TRUE){
+function fit_title ($title, $cols, $rows, $max_length, $end_str = "...", $pad = TRUE) {
 	global $auth;
 	if($auth->auth["jscript"])
 		$max_length = $max_length * ($auth->auth["xres"] / 1024);

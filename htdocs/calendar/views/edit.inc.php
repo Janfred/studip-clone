@@ -5,7 +5,7 @@
 		
 if (!empty($err)) {
 	$error_sign = "<font color=\"#FF0000\" size=\"+2\"><b>&nbsp;*&nbsp;</b></font>";
-	$error_message = sprintf("Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s",
+	$error_message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s"),
 		$error_sign, $err_message);
 	my_info($error_message, "blank", 0);
 }
@@ -34,7 +34,7 @@ printf("<tr>\n<td class=\"%s\">\n", $css_switcher->getClass());
 
 echo "<p>\n<table border=\"0\" cellspacing=\"2\" cellpadding=\"2\">\n";
 echo "<tr valign=\"bottom\">\n";
-printf("<td><b>%s </b></td>", "Beginn:");
+echo "<td><b>" . _("Beginn:") . " </b></td>";
 echo "<td>am <input type=\"text\" name=\"start_day\" size=\"2\" maxlength=\"2\" value=\"$start_day\">";
 echo ".&nbsp;<input type=\"text\" name=\"start_month\" size=\"2\" maxlength=\"2\" value=\"$start_month\">";
 printf(".&nbsp;<input type=\"text\" name=\"start_year\" size=\"4\" maxlength=\"4\" value=\"%s\">&nbsp;%s&nbsp;<select name=\"start_h\" size=\"1\">",
@@ -62,13 +62,13 @@ for($i = 0;$i <= 55;$i += 5){
 		echo ">$i";
 }
 
-printf("</select> %s%s</td>", "Uhr", $err["start_time"] ? $error_sign : "");
+printf("</select> %s%s</td>", _("Uhr"), $err["start_time"] ? $error_sign : "");
 echo "</tr><tr valign=\"bottom\">";
-printf("<td><b>%s </b></td>", "Ende:");
+echo "<td><b>" . _("Ende:") . " </b></td>";
 echo "<td>am <input type=\"text\" name=\"end_day\" size=\"2\" maxlength=\"2\" value=\"$end_day\">";
 echo ".&nbsp;<input type=\"text\" name=\"end_month\" size=\"2\" maxlength=\"2\" value=\"$end_month\">";
-printf(".&nbsp;<input type=\"text\" name=\"end_year\" size=\"4\" maxlength=\"4\" value=\"%s\">&nbsp;%s&nbsp;<select name=\"end_h\" size=\"1\">",
-	$end_year, "um");
+echo ".&nbsp;<input type=\"text\" name=\"end_year\" size=\"4\" maxlength=\"4\" value=\"$end_year\">";
+echo "&nbsp;" . _("um") . "&nbsp;<select name=\"end_h\" size=\"1\">";
 
 for($i = 0;$i <= 23;$i++){
 	echo "<option";
@@ -92,25 +92,25 @@ for($i = 0;$i <= 55;$i += 5){
 		echo ">$i";
 }
 
-printf("</select> %s%s</td>", "Uhr", $err["end_time"] ? $error_sign : "");
+printf("</select> %s%s</td>", _("Uhr"), $err["end_time"] ? $error_sign : "");
 echo "\n</tr>\n</table>\n</p>\n</td>\n</tr>\n";
 
 $css_switcher->switchClass();
-printf("<tr><td class=\"%s\">", $css_switcher->getClass());
+echo "<tr><td class=\"" . $css_switcher->getClass() . "\">";
 echo "<p>\n<table border=\"0\" width=\"100%%\" cellpadding=\"2\" cellspacing=\"2\">";
-printf("<tr><td width=\"15%%\"><b>%s </b></td>", "Termin:");
-printf("<td width=\"85%%\"><input type=\"text\" name=\"txt\" size=\"50\" maxlength=\"255\" value=\"%s\"></input>",
-	$txt);
+echo "<tr><td width=\"15%\"><b>" . _("Termin:") . " </b></td>";
+echo "<td width=\"85%\">";
+echo "<input type=\"text\" name=\"txt\" size=\"50\" maxlength=\"255\" value=\"$txt\"></input>";
 printf("%s</td>\n", $err["titel"] ? $error_sign : "");
 echo"</tr><tr>\n";
-printf("<td width=\"15%%\"><b>%s </b></td>", "Beschreibung:");
+echo "<td width=\"15%%\"><b>" . _("Beschreibung:") . " </b></td>";
 echo "<td width=\"85%\"><textarea name=\"content\" cols=\"48\" rows=\"5\" wrap=\"virtual\">";
 echo $content;
 echo "</textarea></td>\n";
 echo "</tr>\n</table>\n</p>\n</td>\n</tr>\n<tr>";
 
 $css_switcher->switchClass();
-printf("<td class=\"%s\">", $css_switcher->getClass());
+echo "<td class=\"" . $css_switcher->getClass() . "\">";
 echo "\n<p>\n";
 echo "<table border=\"0\" width=\"";
 if (isset($atermin) && $atermin->getSeminarId())
@@ -118,7 +118,7 @@ if (isset($atermin) && $atermin->getSeminarId())
 else
 	echo "<table border=\"0\" width=\"80%\" cellpadding=\"2\" cellspacing=\"2\">";
 echo "<tr>\n<td>\n";
-printf("<b>%s </b>", "Kategorie:");
+echo "<b>" . _("Kategorie") . " </b>";
 echo "\n</td><td>\n";
 echo "<select name=\"cat\" size=\"1\">\n";
 
@@ -144,22 +144,28 @@ else {
 								<? if(isset($atermin) && $atermin->getSeminarId()) echo '<td>&nbsp</td>';
 										else{?>
 								<td>
-									<b>Sichtbarkeit: </b>
+									<b><? echo _("Sichtbarkeit:"); ?> </b>
 								</td><td>
-									<input type="radio" name="via" value="private"<? if($via == "private") echo " checked"; ?>>&nbsp;privat&nbsp;
-									<input type="radio" name="via" value="public"<? if($via == "public") echo " checked"; ?>>&nbsp;&ouml;ffentlich
+									<input type="radio" name="via" value="private"<?
+										if($via == "private")
+											echo " checked";
+										echo ">&nbsp;" . _("privat") . "&nbsp;"; ?>
+									<input type="radio" name="via" value="public"<?
+									if($via == "public")
+										echo " checked";
+									echo ">&nbsp;" . _("&ouml;ffentlich"); ?>
 								</td>
 								<? } ?>
 							</tr>
 								<td>
-									<b>Raum: </b>
+									<b><? echo _("Raum:"); ?> </b>
 								</td><td>
 									<input type="text" name="loc" size="30" maxlength="255" value="<? echo $loc; ?>">
 								</td>
 								<? if(isset($atermin) && $atermin->getSeminarId()) echo '<td>&nbsp</td>';
 										else{?>
 								<td>
-									<b>Priorit&auml;t: </b>
+									<b><? echo _("Priorit&auml;t:"); ?> </b>
 								</td><td>
 									<select name="priority" size="1">
 										<option value="1"<? if($priority == 1) echo " selected"; ?>>1
@@ -183,9 +189,19 @@ else {
 				<td class="<? echo $css_switcher->getClass(); ?>">
 				<p>
 					<table width="100%" border="0" cellpadding="2" cellspacing="2">
-						<tr><td width="30%"><input type="radio" name="type_d" value="dayly"<?if($type_d == "dayly" || $type_d == "") echo " checked"; ?>>&nbsp;<b>Alle</b>&nbsp;
-						<input type="text" name="lintervall_d" size="3" maxlength="3" value="<? echo $lintervall_d?$lintervall_d:1; ?>">&nbsp;Tage<? echo $err["lintervall_d"]?$error_sign:""; ?></td>
-						<td width="70%"><input type="radio" name="type_d" value="wdayly"<?if($type_d == "wdayly") echo " checked"; ?>>&nbsp;<b>Jeden Werktag</b></td>
+						<tr><td width="30%"><input type="radio" name="type_d" value="dayly"<?
+							if($type_d == "dayly" || $type_d == "")
+								echo " checked";
+							echo ">&nbsp;<b>" . _("Alle") . "</b>&nbsp;"; ?>
+						<input type="text" name="lintervall_d" size="3" maxlength="3" value="<?
+							echo $lintervall_d ? $lintervall_d : 1;
+							echo "\">&nbsp;" . _("Tage");
+							echo $err["lintervall_d"] ? $error_sign : "";
+							?></td>
+						<td width="70%"><input type="radio" name="type_d" value="wdayly"<?
+							if($type_d == "wdayly")
+								echo " checked";
+							echo ">&nbsp;<b>" . _("Jeden Werktag") ."</b></td>"; ?>
 						</tr>
 					</table>
 				</p>
@@ -201,9 +217,15 @@ else {
 				<td class="<? echo $css_switcher->getClass(); ?>">
 				<p>
 					<table width="100%" border="0" cellpadding="2" cellspacing="2">
-						<tr><td colspan="5"><b>Alle </b><input type="text" name="lintervall_w" size="3" maxlength="3" value="<? echo $lintervall_w?$lintervall_w:1; ?>"><b> Wochen</b><? echo $err["lintervall_w"]?$error_sign:""; ?></td>
-						</tr><tr>
-							<td rowspan="2" width="20%" align="center"><b>am:&nbsp;</b></td>
+						<tr><td colspan="5"><?
+							$out_1 = '<input type="text" name="lintervall_w" size="3" maxlength="3" value="';
+							$out_1 .= $lintervall_w ? $lintervall_w : 1;
+							$out_1 .= '">';
+							$out_2 = $err["lintervall_w"] ? $error_sign : "";
+							$out_2 .= "</td>\n</tr><tr>\n";
+							$out_2 .= '<td rowspan="2" width="20%" align="center">';
+							printf(_("<b>Alle </b>%s<b> Wochen</b>%s<b>am:&nbsp;</b>"), $out_1, $out_2);?>
+							</td>
 							<td width="20%"><input type="checkbox" name="wdays[]" value="1"<? if(in_array(1, $wdays)) echo " checked"; ?>><b>&nbsp;Montag</b></td>
 							<td width="20%"><input type="checkbox" name="wdays[]" value="2"<? if(in_array(2, $wdays)) echo " checked"; ?>><b>&nbsp;Dienstag</b></td>
 							<td width="20%"><input type="checkbox" name="wdays[]" value="3"<? if(in_array(3, $wdays)) echo " checked"; ?>><b>&nbsp;Mittwoch</b></td>

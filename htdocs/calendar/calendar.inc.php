@@ -161,26 +161,26 @@ if($source_page && ($cmd == "edit" || $cmd == "add" || $cmd == "delete")){
 switch($cmd){
 	case "showday":
 		$calendar_sess_control_data["view_prv"] = $cmd;
-		$title = "Mein pers&ouml;nlicher Terminkalender - Tagesansicht";
+		$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
 		break;
 	case "add":
 		switch($calendar_sess_control_data["view_prv"]){
 			case "showday":
-				$title = "Mein pers&ouml;nlicher Terminkalender - Tagesansicht";
+				$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
 				break;
 			case "showweek":
-				$title = "Mein pers&ouml;nlicher Terminkalender - Wochenansicht";
+				$title = _("Mein pers&ouml;nlicher Terminkalender - Wochenansicht");
 				break;
 			case "showmonth":
-				$title = "Mein pers&ouml;nlicher Terminkalender - Monatsansicht";
+				$title = _("Mein pers&ouml;nlicher Terminkalender - Monatsansicht");
 				break;
 			case "showyear":
-				$title = "Mein pers&ouml;nlicher Terminkalender - Jahresansicht";
+				$title = _("Mein pers&ouml;nlicher Terminkalender - Jahresansicht");
 		}
 		break;
 	case "del":
 		require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
-		$title = "Mein pers&ouml;nlicher Terminkalender - Tagesansicht";
+		$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
 		$atermin =& new DbCalendarEvent($termin_id);
 		$atermin->delete();
 		
@@ -197,19 +197,19 @@ switch($cmd){
 			$cmd = "showday";
 		break;
 	case "showweek":
-		$title = "Mein pers&ouml;nlicher Terminkalender - Wochenansicht";
+		$title = _("Mein pers&ouml;nlicher Terminkalender - Wochenansicht");
 		$calendar_sess_control_data["view_prv"] = $cmd;
 		break;
 	case "showmonth":
-		$title = "Mein pers&ouml;nlicher Terminkalender - Monatsansicht";
+		$title = _("Mein pers&ouml;nlicher Terminkalender - Monatsansicht");
 		$calendar_sess_control_data["view_prv"] = $cmd;
 		break;
 	case "showyear":
-		$title = "Mein pers&ouml;nlicher Terminkalender - Jahresansicht";
+		$title = _("Mein pers&ouml;nlicher Terminkalender - Jahresansicht");
 		$calendar_sess_control_data["view_prv"] = $cmd;
 		break;
 	case "bind":
-		$title = "Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden";
+		$title = _("Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden");
 		break;
 /*		case "import":
 		$title = "Mein pers&ouml;nlicher Terminkalender - Termine importieren";
@@ -245,9 +245,9 @@ switch($cmd){
 			}
 		}
 		if($termin_id)
-			$title = "Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten";
+			$title = _("Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten");
 		else
-			$title = "Mein pers&ouml;nlicher Terminkalender - Neuer Termin";
+			$title = _("Mein pers&ouml;nlicher Terminkalender - Neuer Termin");
 			
 		switch($mod){
 			case "SINGLE":
@@ -331,7 +331,7 @@ if($cmd == "add"){
 	// wenn alle Daten OK, dann Termin anlegen		
 	if(empty($err)){
 		include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
-		$atermin =& new DbCalendarEvent($start,$end,$txt,"SINGLE",$exp,$cat,$priority,$loc);		
+		$atermin =& new DbCalendarEvent($start, $end, $txt, "SINGLE", $exp, $cat, $priority, $loc);		
 		$atermin->setDescription($content);
 		if($via == "public")
 			$atermin->setType(-1);
@@ -423,7 +423,8 @@ if($cmd == "showday"){
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
 	$aday =& new DbCalendarDay($atime);
 	$aday->bindSeminarEvents($bind_seminare);
-	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"], TRUE, TRUE, FALSE, 70, 20, 3, 1);
+	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data["step_day"],
+							TRUE, TRUE, FALSE, 70, 20, 3, 1);
 	
 	include($RELATIVE_PATH_CALENDAR . "/views/day.inc.php");
 
@@ -456,8 +457,8 @@ if($cmd == "showweek"){
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
 	$aweek =& new DbCalendarWeek($atime, $calendar_user_control_data["type_week"]);
 	$aweek->bindSeminarEvents($bind_seminare);
-	$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data["step_week"]
-												, FALSE, $calendar_user_control_data["link_edit"]);
+	$tab = createWeekTable($aweek, $st, $et, $calendar_user_control_data["step_week"],
+												FALSE, $calendar_user_control_data["link_edit"]);
 	$rowspan = ceil(3600 / $calendar_user_control_data["step_week"]);
 	$height = ' height="20"';
 	if($aweek->getType() == 5)
@@ -537,7 +538,9 @@ if($cmd == "edit"){
 		$expire = 2114377200;
 		$cat = 1;
 		$via = "private";
-		$edit_mode_out = sprintf("<b>Termin erstellen f&uuml;r %s</b></td></tr>\n", ldate($atime));
+		$edit_mode_out = "<b>";
+		$edit_mode_out .= sprintf(_("Termin erstellen f&uuml;r %s"), ldate($atime));
+		$edit_mode_out .= "</b></td></tr>\n";
 	}
 	// call from different views to edit an event
 	else if($atermin && !$mod_prv){
@@ -606,17 +609,25 @@ if($cmd == "edit"){
 					$month_y1 = $repeat["month"];
 				}
 		}
+		$edit_mode_out = "<b>";
 		if($atermin->getSeminarId())
-			$edit_mode_out = sprintf("<b>Termin am %s</b>\n", ldate($atermin->getStart()));
+			$edit_mode_out .= sprintf(_("Termin am %s"), ldate($atermin->getStart()));
 		else
-			$edit_mode_out = sprintf("<b>Termin am %s bearbeiten</b>\n", ldate($atermin->getStart()));
+			$edit_mode_out .= sprintf(_("Termin am %s bearbeiten"), ldate($atermin->getStart()));
+		$edit_mode_out .= "</b>\n";
 	}
 	else if($mod_prv && $termin_id){
-		$edit_mode_out = sprintf("<b>Termin am %s bearbeiten</b>\n", ldate($atime));
+		$edit_mode_out = "<b>";
+		$edit_mode_out .= sprintf(_("Termin am %s bearbeiten"), ldate($atime));
+		$edit_mode_out .= "</b>\n";
 	}
 	else if($mod && $atime)
-		if(check_date($start_month, $start_day, $start_year))
-			$edit_mode_out = sprintf("<b>Termin erstellen am %s</b>\n", ldate(mktime(0,0,0,$start_month,$start_day,$start_year)));
+		if(check_date($start_month, $start_day, $start_year)) {
+			$edit_mode_out = "<b>";
+			$edit_mode_out .= sprintf(_("Termin erstellen am %s"),
+				ldate(mktime(0,0,0,$start_month,$start_day,$start_year)));
+			$edit_mode_out .= "</b>\n";
+		}
 	else{
 		page_close();
 		die;
