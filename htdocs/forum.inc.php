@@ -1271,11 +1271,11 @@ echo "</tr>";
 echo "</table><br>";
 
 
-/*
+
 echo DebugForum($forum);
 echo "<hr>";
 echo DebugForum($forumposting);
-*/
+
 
 if ($update)
 	echo "</form>\n";
