@@ -43,13 +43,35 @@ class ExternModuleLectures extends ExternModule {
 
 	var $field_names = array();
 	var $data_fields = array();
-	var $registered_elements = array("Body", "TableHeader", "TableGroup", "TableFooter");
+	var $registered_elements = array(
+			"Body" => "Body",
+			"TableHeader" => "TableHeader",
+			"InfoCountSem" => "TableGroup",
+			"Grouping" => "TableGroup",
+			"SemName" => "TableGroup",
+			"TimeLecturer" => "TableRowTwoColumns",
+			"SemLink" => "LinkInternSimple",
+			"LecturerLink" => "LinkInternSimple",
+			"TableFooter" => "TableFooter");
 	var $args = array();
 
 	/**
 	*
 	*/
 	function ExternModuleLectures () {}
+	
+	function setup () {
+		$this->elements["TimeLecturer"]->real_name = _("Zeile Zeiten(Termine)/Dozenten");
+		$this->elements["SemName"]->real_name = _("Zeile Veranstaltungsname");
+		$this->elements["InfoCountSem"]->real_name = _("Anzahl Veranstaltungen/Gruppierung");
+		$this->elements["TimeLecturer"]->headlines = array(_("Angaben zum HTML-Tag &lt;tr&gt;"),
+				_("Spalte mit Terminen/Zeiten &lt;td&gt;"),	_("Spalte mit Terminen/Zeiten &lt;font&gt;"),
+				_("Spalte mit Dozentennamen &lt;td&gt;"), _("Spalte mit Dozentennamen &lt;font&gt;"));
+		$this->elements["SemLink"]->link_module_type = 6;
+		$this->elements["SemLink"]->real_name = _("Link zum Modul Mitarbeiterdetails");
+		$this->elements["LecturerLink"]->link_module_type = 7;
+		$this->elements["LecturerLink"]->real_name = _("Link zum Modul Veranstaltungsdetails");
+	}
 	
 	function checkRangeId ($range_id) {
 		$range = get_object_type($range_id);
@@ -69,11 +91,11 @@ class ExternModuleLectures extends ExternModule {
 		}
 		
 		$start_item_id = get_start_item_id($this->config->range_id);
+		$group_by = $this->config->getValue("Main", "grouping");
 		$sem_browse_data = array("start_item_id" => $start_item_id, "level" => "ev",
-		"cmd" => "qs", "show_class" => "all", "group_by" => 1, "default_sem" => "all",
+		"cmd" => "qs", "show_class" => "all", "group_by" => $group_by, "default_sem" => "all",
 		"search_result" => Array(), "show_entries" => "level", "sem_status" => "", "sset" => "");
 		$browser =& new ExternSemBrowse($this->config, $sem_browse_data);
-	//	$browser->do_output();
 		$browser->print_result();
 		
 		if ($this->config->getValue("Main", "wholesite"))
