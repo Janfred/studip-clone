@@ -234,10 +234,10 @@ while ($db->next_record())
 			if ($data["end_stunde"] >=$global_end_time)
 				{
 				$tmp_row_span = ((($global_end_time - $data["start_stunde"])+1) *4)-1;
-				$tmp_row_span = $tmp_row_span - ($data["start_minute"] / 15);
+				$tmp_row_span = $tmp_row_span - (int)($data["start_minute"] / 15);
 				}
 			else 
-				$tmp_row_span = (($data["end_stunde"] - $data["start_stunde"]) * 4) + ($data["end_minute"] / 15);
+				$tmp_row_span = (($data["end_stunde"] - $data["start_stunde"]) * 4) + (int)($data["end_minute"] / 15);
 			
 			
 			//Dummy-Timestamps erzeugen. Der 5.8.2001 (ein Sonntag) wird als Grundlage verwendet.
@@ -246,7 +246,7 @@ while ($db->next_record())
 
 			$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 
-			$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"].($data["start_minute"] / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>htmlReady($db->f("Name")), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$db->f("Ort"), "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
+			$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"].(int)($data["start_minute"] / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>htmlReady($db->f("Name")), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$db->f("Ort"), "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE);
 			}
 		}
 	}
@@ -260,17 +260,18 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 	if (date("G", $mps["ende_time"]) >=$global_end_time)
 		{
 		$tmp_end_time = mktime($global_end_time+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
-		$tmp_row_span = ($tmp_end_time - $mps["start_time"]) /15/60;
+		$tmp_row_span = (int)(($tmp_end_time - $mps["start_time"]) /15/60);
 		}
-	else $tmp_row_span = ($mps["ende_time"] - $mps["start_time"])/15/60;
+	else $tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
 
 	//aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
 	$tmp_day=date("w", $mps["start_time"]);
 	if ($tmp_day==0) $tmp_day=7;
 	
-	$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"]).(date("i", $mps["start_time"]) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>"", "row_span"=>$tmp_row_span, "dozenten"=>"", "personal_sem"=>TRUE);
+	$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"]).(int)(date("i", $mps["start_time"]) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>"", "row_span"=>$tmp_row_span, "dozenten"=>"", "personal_sem"=>TRUE);
 	}
 
+echo serialize ($my_sems);
 
 //Array der Zellenbelegungen erzeugen
 if (is_array($my_sems)) 
