@@ -1,19 +1,19 @@
 <?
 
 function banner_show() {
-	$db=new DB_Seminar;
+	$db = new DB_Seminar;
 
-	$q="SELECT ad_id, priority, startdate, enddate FROM banner_ads";
+	$q = 'SELECT ad_id, priority, startdate, enddate FROM banner_ads WHERE priority > 0';
 	$db->query($q);
-	$sum=0;
+	$sum = 0;
 
 	// array that contains banner ids and an offset
 	// offsets start with 0 and increase by pow(2, priority)
 	// a random number between 0 and sum(pow(2,priorities)) is
 	// drawn and the banner with the highest offset smaller than
 	// this number is chosen
-	
-	$banners=array();
+
+	$banners = array();
 	$now = time();
 	// collect banners to consider 
 	// build banners array
@@ -39,28 +39,31 @@ function banner_show() {
 		$q="SELECT * FROM banner_ads WHERE ad_id='".$ad_id."'";
 		$db->query($q);
 		$db->next_record();
-		print "<table width=\"100%\" cellpadding=\"5\"><tr><td align=\"center\">";
-		$pic="<img src=\"./pictures/banner/".$db->f("banner_path")."\" border=0 alt=\"" . $db->f("alttext") ."\">";
-		switch ($db->f("target_type")) {
-			case "url":
-				$link="<a href=\"".$db->f("target")."\" target=\"_new\">".$pic."</a>";
+		print '<table width="100%" cellpadding="5"><tr><td align="center">';
+		$pic='<img src="pictures/banner/'.$db->f('banner_path').'" border=0 ' . tooltip($db->f('alttext')) .'">';
+		switch ($db->f('target_type')) {
+			case 'url':
+				$link='<a href="'.$db->f('target').'" target="_new">'.$pic.'</a>';
 				break;
-			case "seminar":
-				$link="<a href=\"details.php?sem_id=".$db->f("target")."\">".$pic."</a>";
+			case 'seminar':
+				$link='<a href="details.php?sem_id='.$db->f('target').'">'.$pic.'</a>';
 				break;
-			case "user":
-				$link="<a href=\"about.php?username=".$db->f("target")."\">".$pic."</a>";
+			case 'user':
+				$link='<a href="about.php?username='.$db->f('target').'">'.$pic.'</a>';
 				break;
-			case "none":
-				$link=$pic;
+			case 'inst':
+				$link='<a href="institut_main.php?auswahl='.$db->f('target').'">'.$pic.'</a>';
 				break;
-				
+			case 'none':
+				$link = $pic;
+				break;
+
 		}
 		print $link;
-		print "</td></tr></table>";
+		print '</td></tr></table>';
 
 		// update view counter
-		$q="UPDATE banner_ads SET views='". ($db->f("views")+1) . "' WHERE ad_id='" . $ad_id . "'";
+		$q = 'UPDATE banner_ads SET views=views+1 WHERE ad_id="' . $ad_id . '"';
 		$db->query($q);
 	}
 
