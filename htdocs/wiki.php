@@ -53,7 +53,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 checkObject(); // do we have an open object?
 checkObjectModule("wiki"); //are we allowed to use this module here?
-object_set_visit($SessSemName[1], "wiki");
+object_set_visit($SessSemName[1], "wiki", "last", object_get_visit($SessSemName[1], "sem"));
 
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");

@@ -42,18 +42,25 @@
 * @param	string	the user who visited the object - if not given, the actual user is used
 *
 */
-function object_set_visit($object_id, $type, $user_id = '') {
+function object_set_visit($object_id, $type, $mode = '', $time='', $user_id = '') {
 	global $user;
 	
-	$now = time();
+	if (!$time)
+		$time = time();
+		
 	if (!$user_id)
 		$user_id = $user->id;
-
-	$last_visit = object_get_visit($object_id, $type, FALSE, $user_id);
+		
+	if ($mode != "last")
+		$last_visit = object_get_visit($object_id, $type, FALSE, $user_id);
+	else {
+		$last_visit = $time;
+		$time = time();
+	}
 	
 	$db=new DB_Seminar;
 	$query = sprintf ("REPLACE INTO object_user_visits SET object_id = '%s', user_id ='%s', type='%s', visitdate='%s', last_visitdate = '%s'",
-				$object_id, $user_id, $type, $now, $last_visit);
+				$object_id, $user_id, $type, $time, $last_visit);
 	$db->query($query);
 	
 	return TRUE;

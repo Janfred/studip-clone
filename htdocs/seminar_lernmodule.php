@@ -38,7 +38,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule("ilias_connect");
-object_set_visit($SessSemName[1], "ilias_connect");
+object_set_visit($SessSemName[1], "ilias_connect", "last", object_get_visit($SessSemName[1], "sem"));
 
 if (isset($do_op) AND (($op_co_id == "") OR($op_co_inst == "") OR($seminar_id == "")))
 {

@@ -135,12 +135,7 @@ function openSem ($sem_id) {
 		else
 			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
 		$nr = $db->f("Seminar_id");
-		
 		$SessSemName["header_line"] = getHeaderLine ($sem_id);
-
-		$loginfilelast["$nr"] = $loginfilenow["$nr"];
-		$loginfilenow["$nr"] = time();
-		
 		object_set_visit($sem_id, "sem");
 	}
 }
@@ -184,13 +179,8 @@ function openInst ($inst_id) {
 		$SessSemName["is_fak"] = $db->f("is_fak");
 		$SessSemName["art_num"]=$db->f("type");
 		$SessSemName["fak"] = $db->f("fakultaets_id");
-		
 		$SessSemName["header_line"] = getHeaderLine ($inst_id);		
-		
 		$nr = $db->f("Institut_id");
-		$loginfilelast["$nr"] = $loginfilenow["$nr"];
-		$loginfilenow["$nr"] = time();
-	
 		object_set_visit($inst_id, "inst");
 	}
 }

@@ -78,7 +78,7 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule("documents");
-object_set_visit($SessSemName[1], "documents");
+object_set_visit($SessSemName[1], "documents", "last", object_get_visit($SessSemName[1], "sem"));
 
 include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
