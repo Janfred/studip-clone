@@ -22,49 +22,67 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 
 class reiter {
+	//Classes
 	var $classActive = "links1b";					//Klasse fuer Zellen, die Aktiv (=im Vordergrund) sind
 	var $classInactive="links1";					//Klasse fuer Zellen, die Inaktiv (=im Hintegrund) sind
+	//Pics
 	var $infoPic="pictures/info.gif";				//Bild das als Info Click/Alt-Text verwendet wird
 	var $toActiveTopkatPic="pictures/reiter1.jpg";	//Trenner fuer Reiter
 	var $toInactiveTopkatPic="pictures/reiter2.jpg";	//Trenner auf Inactive fuer Reiter
 	var $closerTopkatPic="pictures/reiter4.jpg";		//Closer fuer Reiter
+	var $closerInfo="";							//generic Closer for Info
 	var $activeBottomkatPic="pictures/forumrot.gif";			//Aktiver Pfeil
 	var $inactiveBottomkatPic="pictures/forumgrau.gif";		//Inaktiver Pfeil
 	var $bottomPic="pictures/reiter3.jpg";			//Unterer Abschluss
+	//Width's
+	var $infoWidth="";							//Width of the Infoarea
+	var $tableWidth="";						//Width of the whole table
+	//Settings
 	var $noAktiveBottomkat=FALSE;				//Wenn trotz bestimmtem View kein Unterktagorie markiert sein soll (wird durch "(view)" erreicht) 
-	
+	var $spacerInfoTopkat=FALSE;				//Should a spacer be used between Info and Topkat?
+	var $textAdd="&nbsp; &nbsp; ";				//a addition, which will be added before and after every text
+	var $katsAlign="left";						//how to align every kat
 	
 	function topkatStart() {
-		printf ("<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr>");
+		printf ("<table %s cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n<tr>", ($this->tableWidth) ? "width=\"$this->tableWidth\"" : "");
 		return;
 	}
 	
 	function info($tooltip,$addText,$closeToActive=FALSE) {
-		printf ("<td class=\"%s\" nowrap>&nbsp; <img align=\"absmiddle\" src=\"%s\" ", $this->classActive, $this->infoPic);
-		printf ("%s border=\"0\">&nbsp;", tooltip($tooltip, TRUE, TRUE));
+		printf ("<td class=\"%s\" %s nowrap>&nbsp; ", $this->classActive, ($this->infoWidth) ? "width=\"$this->infoWidth\"" : "");
+		if ($tooltip)
+			printf ("<img align=\"absmiddle\" src=\"%s\" %s border=\"0\">&nbsp;", $this->infoPic, tooltip($tooltip, TRUE, TRUE));
 		if ($addText)
-			printf ("%s", $addText);
-		if ($closeToActive)
+			printf ("<font class=\"%s\">%s</font>", $this->classActive, $addText);
+		if (($closeToActive) && ($this->toActiveTopkatPic))
 			printf ("&nbsp; <img src=\"%s\" align=absmiddle>", $this->toActiveTopkatPic);
-		else
+		elseif ($this->toInactiveTopkatPic)
 			printf ("&nbsp; <img src=\"%s\" align=absmiddle>", $this->toInactiveTopkatPic);
 		printf ("</td>\n");
+		if ($this->spacerInfoTopkat)
+			print ("<td> &nbsp; </td>");
+		if ($this->closerInfo)
+			printf ("<td><img src=\"%s\" align=absmiddle></td>", $this->closerInfo);
 		return;
 	}
 	
-	function topkat($text,$link,$active=FALSE, $target="", $close=FALSE) {
+	function topkat($text,$link,$width,$active=FALSE, $target="", $close=FALSE) {
 		if (($active) && (!$close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classActive, $this->classActive, $target, $link, $text, $this->toInactiveTopkatPic);
+			printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
+				$this->classActive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classActive, $target, $link, $this->textAdd, $text, $this->textAdd,  
+				($this->toInactiveTopkatPic) ? "<img src=\"$this->toInactiveTopkatPic\" align=absmiddle>" : "");
 		if ((!$active) && (!$close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classInactive, $this->classInactive, $target, $link, $text, $this->toActiveTopkatPic);
+			printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
+				$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classInactive, $target, $link, $this->textAdd, $text, $this->textAdd, 
+				($this->toActiveTopkatPic) ? "<img src=\"$this->toActiveTopkatPic\" align=absmiddle>" : "");
 		if (($active) && ($close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classActive, $this->classActive, $target, $link, $text, $this->closerTopkatPic);
+			printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
+				$this->classActive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classActive, $target, $link, $this->textAdd, $text, $this->textAdd, 
+				($this->closerTopkatPic) ? "<img src=\"$this->closerTopkatPic\" align=absmiddle>" : "");
 		if ((!$active) && ($close))
-			printf("<td class=\"%s\" align=\"right\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">&nbsp; &nbsp; %s&nbsp; &nbsp; </a><img src=\"%s\" align=absmiddle></td>\n",
-				$this->classInactive, $this->classInactive, $target, $link, $text, $this->closerTopkatPic);
+			printf("<td class=\"%s\" %s align=\"%s\" nowrap><a class=\"%s\" target=\"%s\" href=\"%s\">%s%s%s</a>%s</td>\n",
+				$this->classInactive, ($width) ? "width=\"$width\"" : "", $this->katsAlign, $this->classInactive, $target, $link, $this->textAdd, $text, $this->textAdd, 
+				($this->closerTopkatPic) ? "<img src=\"$this->closerTopkatPic\" align=absmiddle>" : "");
 		return;
 	}
 
@@ -126,23 +144,25 @@ class reiter {
 		reset($structure);
 		$this->topkatStart();
 		$a=current($structure);
-		if ($tooltip)
+		if (($tooltip) || ($addText))
 			$this->info($tooltip, $addText, $a["active"]);
 		for ($i=0; $i<$topKats; $i++) {
 			if ($i+1==$topKats)
 				$close=TRUE;
-			$this->topkat($a["name"], $a["link"], $a["active"], $a["target"], $close);
+			$this->topkat($a["name"], $a["link"], $a["width"],$a["active"], $a["target"], $close);
 			$a=next($structure);
 			}
 		$this->topkatCloseRow();
-		$this->bottomkatStart();
-		for ($i=0; $i<=$bottomKats; $i++) {
-			if ($a["topKat"]==$tmp_topKat) {
-				$this->bottomkat($a["name"], $a["link"], $a["active"], $a["target"]);
+		if ($bottomKats) {
+			$this->bottomkatStart();
+			for ($i=0; $i<=$bottomKats; $i++) {
+				if ($a["topKat"]==$tmp_topKat) {
+					$this->bottomkat($a["name"], $a["link"], $a["active"], $a["target"]);
+					}
+				$a=next($structure);				
 				}
-			$a=next($structure);				
-			}
-		$this->bottomkatCloseRow();
+			$this->bottomkatCloseRow();
+		}
 	}
 	
 	function setNoAktiveBottomkat($view) {
