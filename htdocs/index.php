@@ -85,7 +85,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("doz
 	<td width="90%" class="blank" valign="middle">
 		<table cellpadding=4>
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Meine Veranstaltungen</a><br />&nbsp; &nbsp; <font size=-1><a href="sem_portal.php">Veranstaltung hinzuf&uuml;gen</a></td></tr>
-		<tr><td class="blank"><a href="kalender.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size=-1><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
+		<tr><td class="blank"><a href="calendar/kalender.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size=-1><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
 		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size=-1><a href="edit_about.php?view=Daten">Benutzerdaten</a></td></tr>
 		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size=-1><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size=-1><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
@@ -142,7 +142,7 @@ ELSEIF ($auth->auth["perm"]=="dozent"){
 		<table cellpadding=4>
 		<tr><td class="blank"><a href="meine_seminare.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Meine Veranstaltungen</a></td></tr>
 		<tr><td class="blank"><a href="adminarea_start.php?list=TRUE"><img src="pictures/forumrot.gif" border=0>&nbsp;Veranstaltungs-Verwaltung</a><br />&nbsp; &nbsp; <font size=-1><a href="admin_seminare_assi.php?new_session=TRUE">neue Veranstaltung anlegen</a></font></td></tr>
-		<tr><td class="blank"><a href="kalender.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size=-1><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
+		<tr><td class="blank"><a href="calendar/kalender.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Terminkalender</a><br />&nbsp; &nbsp; <font size=-1><a href="mein_stundenplan.php">pers&ouml;nlicher Stundenplan</a></td></tr>
 		<tr><td class="blank"><a href="about.php"><img src="pictures/forumrot.gif" border=0>&nbsp;pers&ouml;nliche Homepage</a><br />&nbsp; &nbsp; <font size=-1><a href="edit_about.php?view=Daten">Benutzerdaten</a></td></tr>
 		<tr><td class="blank"><a href="auswahl_suche.php"><img src="pictures/forumrot.gif" border=0>&nbsp;Suchen</a><br />&nbsp; &nbsp; <font size=-1><a href="browse.php">Personensuche</a>&nbsp;/&nbsp;<font size=-1><a href="sem_portal.php">Veranstaltungsuche</a></td></tr>
 		<tr><td class="blank"><a href="help/index.php" target="_new"><img src="pictures/forumrot.gif" border=0>&nbsp;Hilfe</a></td></tr>
