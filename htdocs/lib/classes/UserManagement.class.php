@@ -35,22 +35,32 @@
 
 require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
 require_once $ABSOLUTE_PATH_STUDIP.("language.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("admission.inc.php");	// Enthaelt Funktionen zum Updaten der Wartelisten
+require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php"); 		// We need the uni name for emails
+require_once $ABSOLUTE_PATH_STUDIP.("admission.inc.php");	// remove user from waiting lists
+require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");	// remove documents of user
+require_once $ABSOLUTE_PATH_STUDIP.("statusgruppe.inc.php");	// remove user from statusgroups
+require_once $ABSOLUTE_PATH_STUDIP.("dates.inc.php");	// remove appointments of user
+require_once $ABSOLUTE_PATH_STUDIP.("messaging.inc.php");	// remove messages send or recieved by user
+require_once $ABSOLUTE_PATH_STUDIP.("contact.inc.php");	// remove user from adressbooks
+require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/DataFields.class.php");	// remove extra data of user
 require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+if ($RESOURCES_ENABLE) {
+	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
+}
 if ($ILIAS_CONNECT_ENABLE) {
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php");
+	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_user_functions.inc.php");
 }
 
 
 class UserManagement {
-	var $user_data = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle auth_user_md5 und user_info
-	var $msg = ""; //enthält evtl Fehlermeldungen
-	var $db;     //unsere Datenbankverbindung
-	var $db2;     //unsere Datenbankverbindung
-	var $validator;	// Klasse zum Ueberpruefen der Eingaben
-	var $smtp;		// Klasse fuer das Verschicken der Mails
-	var $hash_secret = "jdfiuwenxclka";  // Set this to something, just something different...
+	var $user_data = array();		// associative array, contains userdata from tables auth_user_md5 and user_info
+	var $msg = ""; 		// contains all messages
+	var $db;     			// database connection1
+	var $db2;     		// database connection2
+	var $validator;		// object used for checking input
+	var $smtp;				// object used for sending mails
+	var $hash_secret = "jdfiuwenxclka";  // set this to something, just something different...
 	
 	/**
 	* Constructor
@@ -63,9 +73,9 @@ class UserManagement {
 
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
-		$this->validator = new email_validation_class;	// Klasse zum Ueberpruefen der Eingaben
-		$this->validator->timeout = 10;									// Wie lange warten wir auf eine Antwort des Mailservers?
-		$this->smtp = new studip_smtp_class;						// Einstellungen fuer das Verschicken der Mails
+		$this->validator = new email_validation_class;
+		$this->validator->timeout = 10;					// How long do we wait for response of mailservers?
+		$this->smtp = new studip_smtp_class;
 		if ($user_id) {
 			$this->getFromDatabase($user_id);
 		}
@@ -167,12 +177,12 @@ class UserManagement {
 	* @return	bool Email-Adress valid and reachable?
 	*/
 	function checkMail($Email) {
-		// Adresse korrekt?
+		// Adress correkt?
 		if (!$this->validator->ValidateEmailAddress($Email)) {
 			$this->msg .= "error§" . _("E-Mail-Adresse syntaktisch falsch!") . "§";
 			return FALSE;
 		}
-		// E-Mail erreichbar?
+		// E-Mail reachable?
 		if (!$this->validator->ValidateEmailHost($Email)) {		 // Mailserver nicht erreichbar, ablehnen
 			$this->msg .= "error§" . _("Mailserver ist nicht erreichbar!") . "§";
 			return FALSE;
@@ -201,11 +211,11 @@ class UserManagement {
 						$this->db->query("SELECT Name, start_time, Schreibzugriff FROM seminare WHERE Seminar_id = '$sem'");
 						if ($this->db->num_rows()) {
 							$this->db->next_record();							
-							if ($this->db->f("Schreibzugriff") < 2) { // es gibt das Seminar und es ist kein Passwort gesetzt
+							if ($this->db->f("Schreibzugriff") < 2) { // seminar exists and no password is set
 								$this->db2->query("SELECT status FROM seminar_user WHERE Seminar_id = '$sem' AND user_id='".$this->user_data['auth_user_md5.user_id']."'");
-								if ($this->db2->num_rows()) { // Benutzer ist schon eingetragen
+								if ($this->db2->num_rows()) { // user has already subscribed
 									$this->db2->next_record();
-									if ($this->db2->f("status") == "user") { // wir können ihn hochstufen
+									if ($this->db2->f("status") == "user") { // we could uplift him
 										$this->db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$sem' AND user_id='".$this->user_data['auth_user_md5.user_id']."'");	
 										if ($this->user_data['auth_user_md5.user_id'] == $auth->auth["uid"]) {
 											$this->msg .= sprintf("msg§" . _("Ihnen wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $this->db->f("Name"));
@@ -213,7 +223,7 @@ class UserManagement {
 											$this->msg .= sprintf("msg§" . _("Der Person wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $this->db->f("Name"));
 										}
 									}
-								} else {  // Benutzer ist noch nicht eingetragen
+								} else {  // user has not subscribed until now, lets do it...
 									$group = select_group ($this->db->f("start_time"));
 									$this->db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$sem', '".$this->user_data['auth_user_md5.user_id']."', 'autor', '$group')");
 									if ($this->user_data['auth_user_md5.user_id'] == $auth->auth["uid"]) {
@@ -360,7 +370,7 @@ class UserManagement {
 			}
 		}
 
-		// aktiver Dozent?
+		// active dozent?
 		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
 		$this->db->next_record();
 		if ($this->db->f("count") && $newuser['auth_user_md5.perms'] != "dozent") {
@@ -423,9 +433,9 @@ class UserManagement {
 						"Subject: " . $subject),
 				$mailbody);
 		
-		// Hochstufung auf admin oder root?
+		// Upgrade to admin or root?
 		if ($newuser['auth_user_md5.perms'] == "admin" || $newuser['auth_user_md5.perms'] == "root") {
-			//Eintraege aus Veranstaltungen loeschen
+			// delete all seminar entries
 			$query = "SELECT seminar_id FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 			$query2 = "DELETE FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 			$this->db->query($query);
@@ -436,7 +446,7 @@ class UserManagement {
 					update_admission($this->db->f("seminar_id"));
 				}
 			}
-			//Eintraege aus Wartelisten loeschen
+			// delete all entries from waiting lists
 			$query = "SELECT seminar_id FROM admission_seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 			$query2 = "DELETE FROM admission_seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 			$this->db->query($query);
@@ -453,7 +463,7 @@ class UserManagement {
 			if (($db_ar = $this->db->affected_rows()) > 0) {
 				$this->msg .= "info§" . sprintf(_("%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."), $db_ar) . "§";
 			}
-			// Alle persoenlichen Termine dieses users löschen
+			// delete all private appointments of this user
 		 	if ($db_ar = delete_range_of_dates($this->user_data['auth_user_md5.user_id'], FALSE) > 0) {
 				$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Terminen gel&ouml;scht."), $db_ar) . "§";
 			}
@@ -545,4 +555,238 @@ class UserManagement {
 
 	}
 	
+
+	/**
+	* Delete an existing user from the database and tidy up
+	*
+	* @access	public
+	* @return	bool Removal successful?
+	*/
+	function deleteUser() {
+		global $perm, $auth;
+	
+		// Do we have permission to do so?
+		if (!$perm->have_perm("admin")) {
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung Accounts zu l&ouml;schen.") . "§";
+			return FALSE;
+		}
+
+		if (!$perm->have_perm("root")) {
+			if ($this->user_data['auth_user_md5.perms'] == "root") {
+				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu l&ouml;schen.") . "§";
+				return FALSE;
+			}
+			if ($perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin"){
+				$this->db->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a 
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id) 
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '" . $auth->auth["uid"] . "' AND c.inst_perms='admin') 
+							WHERE a.user_id ='" . $this->user_data['auth_user_md5.user_id'] . "' AND a.inst_perms = 'admin'");
+				$this->db->next_record();
+				if (!$this->db->f("admin_ok")) {
+					$this->msg .= "error§" . _("Sie haben keine Berechtigung diesen Admin-Account zu l&ouml;schen.") . "§";
+					return FALSE;
+				}
+			}
+		}
+
+		// active dozent?
+		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
+		$this->db->next_record();
+		if ($this->db->f("count")) {
+			$this->msg .= sprintf("error§" . _("Der Benutzer/die Benutzerin <b>%s</b> ist DozentIn in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
+			return FALSE;
+		}
+
+		// store user preferred language for sending mail
+		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
+			
+		// delete documents of this user
+		$temp_count = 0;
+		$query = "SELECT dokument_id FROM dokumente WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		while ($this->db->next_record()) {
+			if (delete_document($this->db->f("dokument_id")))
+				$temp_count ++;
+		}
+		if ($temp_count) {
+			$this->msg .= "info§" . sprintf(_("%s Dokumente gel&ouml;scht."), $temp_count) . "§";
+		}
+
+		// delete empty folders of this user
+		$temp_count = 0;
+		$query = "SELECT folder_id FROM folder WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "' ORDER BY mkdate DESC";
+		$this->db->query($query);
+		while ($this->db->next_record()) {
+			$query = "SELECT count(*) AS count FROM folder WHERE range_id = '".$this->db->f("folder_id")."'";
+			$this->db2->query($query);
+ 			$this->db2->next_record();
+			if (!$this->db2->f("count") && !doc_count($this->db->f("folder_id"))) {
+				$query = "DELETE FROM folder WHERE folder_id ='".$this->db->f("folder_id")."'";
+				$this->db2->query($query);
+				$temp_count += $this->db2->affected_rows();
+			}
+		}
+		if ($temp_count) {
+			$this->msg .= "info§" . sprintf(_("%s leere Ordner gel&ouml;scht."), $temp_count) . "§";
+		}
+		// folder left?
+		$query = "SELECT count(*) AS count FROM folder WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+ 		$this->db->next_record();
+		if ($this->db->f("count")) {
+			$this->msg .= sprintf("info§" . _("%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer BenutzerInnen enthalten.") . "§", $this->db->f("count"));
+		}
+
+		// kill all the ressources that are assigned to the user (and all the linked or subordinated stuff!)
+		if ($RESOURCES_ENABLE) {
+			$killAssign = new DeleteResourcesUser($this->user_data['auth_user_md5.user_id']);
+			$killAssign->delete();
+		}
+
+		// delete user from seminars (postings will be preserved)
+		$query = "DELETE FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		if (($db_ar = $this->db->affected_rows()) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Veranstaltungen gel&ouml;scht."), $db_ar) . "§";
+		}
+		
+		// delete user from waiting lists
+		$query2 = "SELECT seminar_id FROM admission_seminar_user where user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$query = "DELETE FROM admission_seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		$this->db2->query($query2);
+		if (($db_ar = $this->db->affected_rows()) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Wartelisten gel&ouml;scht."), $db_ar) . "§";
+		while ($this->db2->next_record()) 
+			update_admission($this->db2->f("seminar_id"));
+		}
+
+		// delete user from instituts
+		$query = "DELETE FROM user_inst WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		if (($db_ar = $this->db->affected_rows()) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."), $db_ar) . "§";
+		}
+
+		// delete user from Statusgruppen
+		if ($db_ar = RemovePersonFromAllStatusgruppen(get_username($this->user_data['auth_user_md5.user_id']))  > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht."), $db_ar) . "§";
+		}
+
+		// delete user from archiv
+		$query = "DELETE FROM archiv_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+	 	if (($db_ar = $this->db->affected_rows()) > 0) {
+		 	$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;scht."), $db_ar) . "§";
+ 		}
+
+		// delete links to all personal news from this user
+	 	$query = "DELETE FROM news_range WHERE range_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		if (($db_ar = $this->db->affected_rows()) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Verweise auf News gel&ouml;scht."), $db_ar) . "§";
+		}
+		// check news for unlinked entries
+	 	$query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
+		$this->db->query($query);
+		while ($this->db->next_record()) {	// this news are not linked any longer...
+		 	$query = "DELETE FROM news WHERE news_id = '" . $this->db->f("news_id") . "'";
+			$this->db2->query($query);
+		}
+		if (($db_ar = $this->db->num_rows()) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den News gel&ouml;scht."), $db_ar) . "§";
+		}
+
+		// delete 'Studiengaenge'
+		$query = "DELETE FROM user_studiengang WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		if (($db_ar = $this->db->affected_rows()) > 0)
+			$this->msg .= "info§" . sprintf(_("%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."), $db_ar) . "§";
+
+		// delete all private appointments of this user
+	 	if ($db_ar = delete_range_of_dates($this->user_data['auth_user_md5.user_id'], FALSE) > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus den Terminen gel&ouml;scht."), $db_ar) . "§";
+		}
+
+		// delete all messages send or received by this user
+		$messaging=new messaging;
+		$messaging->delete_all_messages($this->user_data['auth_user_md5.user_id']);
+			
+		// delete user from all foreign adressbooks and empty own adressbook
+		$buddykills = RemoveUserFromBuddys($this->user_data['auth_user_md5.user_id']);
+		if ($buddykills > 0) {
+			$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus Adressb&uuml;chern gel&ouml;scht."), $buddykills) . "§";
+		}
+		$msg = DeleteAdressbook($this->user_data['auth_user_md5.user_id']);
+		if ($msg) {
+			$this->msg .= "info§" . $msg . "§";
+		}
+
+ 		// delete all guestbook entrys
+		$query = "DELETE FROM guestbook WHERE range_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+	 	if (($db_ar = $this->db->affected_rows()) > 0) {
+		 	$this->msg .= "info§" . sprintf(_("%s Eintr&auml;ge aus dem Gästebuch gel&ouml;scht."), $db_ar) . "§";
+ 		}
+	 		
+		// delete the datafields
+		$DataFields = new DataFields($this->user_data['auth_user_md5.user_id']);
+		$DataFields->killAllEntries();				
+			
+		// delete all remaining user data
+		$query = "DELETE FROM kategorien WHERE range_id = '" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		$query = "DELETE FROM active_sessions WHERE sid = '" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		$query = "DELETE FROM user_info WHERE user_id= '" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+			
+		// delete picture
+		if(file_exists("./user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg")) {
+			if (unlink("./user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg"))
+				$this->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
+			else
+				$this->msg .= "error§" . _("Bild konnte nicht gel&ouml;scht werden.") . "§";
+		}
+
+		// delete ILIAS-Account (if it was automatically generated)
+		if ($ILIAS_CONNECT_ENABLE) {
+			$this_ilias_id = get_connected_user_id($this->user_data['auth_user_md5.user_id']);
+			if (($this_ilias_id) AND (is_created_user($this->user_data['auth_user_md5.user_id'])))
+				delete_ilias_user($this_ilias_id);
+		}
+			
+		// delete Stud.IP account
+		$query = "DELETE FROM auth_user_md5 WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		if (!$this->db->affected_rows()) {
+			$this->msg .= "error§<b>" . _("Fehlgeschlagen:") . "</b> " . $query . "§";
+     	return FALSE;
+		} else {
+			$this->msg .= "msg§" . sprintf(_("User \"%s\" gel&ouml;scht."), $this->user_data['auth_user_md5.username']) . "§";
+		}
+
+		// Can we reach the email?
+		if ($this->checkMail($this->user_data['auth_user_md5.Email'])) {
+			// include language-specific subject and mailbody
+			$Zeit=date("H:i:s, d.m.Y",time());
+			include_once("$ABSOLUTE_PATH_STUDIP"."locale/$user_language/LC_MAILS/delete_mail.inc.php");
+
+			// send mail
+			$this->smtp->SendMessage(
+					$this->smtp->env_from,
+					array($this->user_data['auth_user_md5.Email']),
+					array("From: " . $this->smtp->from,
+							"Reply-To:" . $this->smtp->abuse,
+							"To: " . $this->user_data['auth_user_md5.Email'],
+							"Subject: " . $subject),
+					$mailbody);
+		
+		}
+
+		unset($this->user_data);
+		return TRUE;
+
+	}
+
 }
