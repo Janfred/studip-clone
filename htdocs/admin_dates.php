@@ -701,8 +701,8 @@ if (!sizeof($term_data["turnus_data"])) {
 								$minute = $admin_dates_data["form_data"][$db->f("termin_id")]["minute"];
 								$end_stunde = $admin_dates_data["form_data"][$db->f("termin_id")]["end_stunde"];
 								$end_minute = $admin_dates_data["form_data"][$db->f("termin_id")]["end_minute"];
-								$t_titel = $admin_dates_data["form_data"][$db->f("termin_id")]["t_titel"];
-								$description = $admin_dates_data["form_data"][$db->f("termin_id")]["description"];
+								$t_titel = stripslashes($admin_dates_data["form_data"][$db->f("termin_id")]["t_titel"]);
+								$description = stripslashes($admin_dates_data["form_data"][$db->f("termin_id")]["description"]);
 								$insert_topic = $admin_dates_data["form_data"][$db->f("termin_id")]["insert_topic"];
 								$insert_folder = $admin_dates_data["form_data"][$db->f("termin_id")]["insert_folder"];
 								$art = $admin_dates_data["form_data"][$db->f("termin_id")]["art"];
