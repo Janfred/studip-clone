@@ -557,6 +557,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 	
 		if (!$term_metadata["art"])
 			{
+			echo $term_metadata["start_woche"];
 		?>
 					<tr <? $cssSw->switchClass() ?> rowspan=2>
 						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right" rowspan=2>
@@ -565,8 +566,8 @@ if (($uebernehmen_x) && (!$errormsg)) {
 						<td class="<? echo $cssSw->getClass() ?>"  colspan=2 align="left">
 							&nbsp;<font size=-1><b><?=_("Veranstaltungsbeginn")?></b></font><br /><br />
 							<font size=-1>&nbsp;<?=_("Bei einer regelm&auml;&szlig;igen Veranstaltung k&ouml;nnen Sie den ersten Termin entweder selbst eingeben oder automatisch berechnen lassen.") ?></font><br />
-							<br />&nbsp;<input type="IMAGE" name="nenter_start_termin" <? if ($term_metadata["start_woche"] == -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
-							<input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] == -1) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben">
+							<br />&nbsp;<input type="IMAGE" name="nenter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
+							<input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben">
 						</td>
 					</tr>
 		<?
