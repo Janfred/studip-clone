@@ -282,7 +282,8 @@ function GetMyScore() {
 	$age = $db->f("mkdate");
 	if ($age == 0) $age = 1011275740;
 	$age = (time()-$age)/31536000;
-	if ($age <1) $age = 1;
+	$age = 2 + log($age);
+	if ($age <1 ) $age = 1;
 		
 	if ($GLOBALS['VOTE_ENABLE']) {
 		$db->query("SELECT count(*) FROM vote WHERE range_id = '$user_id'");
@@ -307,7 +308,7 @@ function GetMyScore() {
 
 ///////////////////////// Die HOCHGEHEIME Formel:
 
-	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (5*($archiv+$seminare)) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
+	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (10*$archiv*$age) + (5*$seminare) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
 	$score = round($score/$age);
 	if(file_exists("./user/".$user_id.".jpg"))
 		$score *=10;
