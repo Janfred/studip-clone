@@ -72,7 +72,7 @@ switch ($resources_data["view"]) {
 	case "edit_object_perms":
 		if ($resources_data["structure_open"])
 			$page_intro="Vergeben von Rechten auf die Ressource <b>".$currentObject->getName()."</b> (".$currentObject->getCategory().").";
-		$title=$SessSemName["header_line"]." - Vergeben von Berechtigungen";
+		$title="Vergeben von Berechtigungen - Objekt: ".$currentObjectTitelAdd;
 	break;
 	//default
 	default:
