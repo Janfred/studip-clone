@@ -66,11 +66,11 @@ $perm->check("tutor");
 
 <?
 
-include "seminar_open.php"; 	//hier werden die sessions initialisiert
-include "header.php";   		//hier wird der "Kopf" nachgeladen
-include "links_admin.inc.php";	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; 	//hier werden die sessions initialisiert
+include "$ABSOLUTE_PATH_STUDIP/header.php";   		//hier wird der "Kopf" nachgeladen
+include "$ABSOLUTE_PATH_STUDIP/links_admin.inc.php";	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");		//Ausgaben
+require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");	//Ausgaben
 require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");	//Settings....
 require_once("$ABSOLUTE_PATH_STUDIP/functions.php");	//basale Funktionen
 require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");	//Darstellungsfunktionen
