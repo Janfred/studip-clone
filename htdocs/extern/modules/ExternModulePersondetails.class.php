@@ -45,9 +45,9 @@ class ExternModulePersondetails extends ExternModule {
 	var $data_fields = array("contact" => array("raum", "Telefon", "Fax", "Email",
 			"Home", "sprechzeiten"), "content" => array("head", "lebenslauf", "schwerp", "lehre",
 			"news", "termine", "publi", "kategorien"));
-	var $registered_elements = array("Body", "PersondetailsHeader", "Contact", "PersondetailsLectures",
-					"TableParagraph", "TableParagraphHeadline", "TableParagraphSubHeadline",
-					"TableParagraphText", "List", "LinkIntern", "StudipLink");
+	var $registered_elements = array("Body", "TableHeader", "PersondetailsHeader", "Contact",
+			"PersondetailsLectures", "TableParagraph", "TableParagraphHeadline",
+			"TableParagraphSubHeadline", "TableParagraphText", "List", "LinkIntern", "StudipLink");
 	var $args = array("username");
 
 	/**
@@ -83,6 +83,7 @@ class ExternModulePersondetails extends ExternModule {
 	function setup () {
 		$this->elements["LinkIntern"]->link_module_type = 4;
 		$this->elements["LinkIntern"]->real_name = _("Link zum Modul Veranstaltungsdetails");
+		$this->elements["TableHeader"]->real_name = _("Umschlieﬂende Tabelle");
 	}
 	
 	function checkRangeId ($range_id) {
