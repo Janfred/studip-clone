@@ -236,7 +236,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			
 				$content='';			
 				if ($db->f("description"))
-					$content.= formatReady($db->f("description"), TRUE, TRUE)."<br /><br />";
+					$content.= formatReady($db->f("description"), TRUE, FALSE)."<br /><br />";
 				else
 					$content.=_("Keine Beschreibung vorhanden") . "<br /><br />";
 
