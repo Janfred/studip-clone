@@ -80,3 +80,21 @@ INSERT INTO `evalanswer` VALUES ('39b98a5560d5dabaf67227e2895db8da', 'a68bd71190
 INSERT INTO `evalquestion` VALUES ('442e1e464e12498bd238a7767215a5a2', '0', 'multiplechoice', 0, 'Freitext-Einzeilig', 0);
 
 INSERT INTO `evalanswer` VALUES ('61ae27ab33c402316a3f1eb74e1c46ab', '442e1e464e12498bd238a7767215a5a2', 0, '', 1, 1, 0, 0);
+
+#
+# semester
+#
+
+INSERT INTO `semester_data` VALUES ('e106b4da1d587afabad769a46d013152', 'WS 2003/04', '', '', 1064959200, 1080770399, 1066600800, 1076281199);
+INSERT INTO `semester_data` VALUES ('e7e8b2ef44499876f765250eea79ed0b', 'SS 2004', '', '', 1080770400, 1096581599, 1081807200, 1090015199);
+INSERT INTO `semester_data` VALUES ('ec666c7cb2459aef4a3a51a997ca31c9', 'WS 2004/05', '', '', 1096581600, 1112306399, 1098050400, 1107557999);
+INSERT INTO `semester_data` VALUES ('cc448ebc6edf11b180d288629f5acdc3', 'SS 2005', '', '', 1112306400, 1128117599, 1113170400, 1121464799);
+
+#
+# holidays
+#
+
+INSERT INTO `semester_holiday` VALUES ('909092b07339bb9faa19c69941044b3c', '1', 'Weihnachtsferien 2003/2004', '', 1071874800, 1073257199);
+INSERT INTO `semester_holiday` VALUES ('c121c20d8bfb2381274fad682f401999', '1', 'Weihnachtsferien 2004/2005', '', 1103324400, 1104706799);
+
+    
