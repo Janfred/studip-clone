@@ -26,13 +26,13 @@ if (!isset($druck)) {  // Kopfzeile anzeigen
 	<table class="header" border="0" width="100%" cellspacing="0" cellpadding="0" bordercolor="#999999" height="25">
 		<tr>
 			<td class="header" width="33%" align="center">
-				<a href="index.php" target="_top"><font color="#FFFFFF" size="4"><b>Inhaltsverzeichnis</b></font></a>
+				<a href="index.php" target="_top"><font color="#FFFFFF" size="4"><b><?=_("Inhaltsverzeichnis")?></b></font></a>
 			</td>
 			<td class="header" width="33%" align="center">
-				<a href="index.php?druck=1<?if(isset($help_page)) echo "&help_page=".$help_page?>" target="_top"><font color="#FFFFFF" size="4"><b>Druckansicht</b></font></a>
+				<a href="index.php?druck=1<?if(isset($help_page)) echo "&help_page=".$help_page?>" target="_top"><font color="#FFFFFF" size="4"><b><?=_("Druckansicht")?></b></font></a>
 			</td>
-			<td class="header" width="33%" align="center">
-				<a href="../impressum.php"><img border="0" src="../pictures/logo2.gif" alt="Impressum"></a>
+			<td class="header" width="33%" align="center" valign="middle">
+				<a href="../impressum.php"><img border="0" src="../pictures/blank.gif" height="1" width="45"><br><img border="0" src="../pictures/logo2.gif" alt="<?=_("Impressum")?>" valign="middle"></a>
 			</td>
 		</tr>
 	</table><br>
