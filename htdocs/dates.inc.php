@@ -636,6 +636,33 @@ function get_semester($seminar_id, $start_sem_only=FALSE)
 	}
 
 
+function getCorrectedSemesterVorlesBegin ($semester_num) {
+	$semester = new SemesterData;
+	$all_semester = $semester->getAllSemesterData();
+	
+	$vorles_beginn=$all_semester[$semester_num]["vorles_beginn"];
+
+	//correct the vorles_beginn to match monday, if necessary
+	$dow = date("w", $vorles_beginn);
+
+	if ($dow <= 5)
+		$corr = ($dow -1) * -1;
+	elseif ($dow == 6)
+		$corr = 2;
+	elseif ($dow == 0)
+		$corr = 1;
+	else
+		$corr = 0;
+
+	if ($corr) {
+		$vorles_beginn_uncorrected = $vorles_beginn;
+		$vorles_beginn = mktime(date("G",$vorles_beginn), date("i",$vorles_beginn), 0, date("n",$vorles_beginn), date("j",$vorles_beginn)+$corr,  date("Y",$vorles_beginn));
+	}
+	
+	return $vorles_beginn;
+}			
+
+
 /*
 Die Funktion edit_dates veraendert den zu der Uebergebenen termin_id passenden Termin.
 Dazu wird die Beschreibung des Ordners angepasst, falls es einen gibt.
