@@ -60,6 +60,7 @@ function generate_password($length) {
 	require_once("config.inc.php"); // Wir brauchen den Namen der Uni
 	require_once("datei.inc.php"); // Wir brauchen die Funktionen zum Loeschen der folder
 	require_once("visual.inc.php");
+	$cssSw=new cssClassSwitcher;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
@@ -625,7 +626,7 @@ if (isset($details)) {
 			
 			<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-			<tr valign=top align=middle>
+			<tr valign=top align=middl e>
 				<td class="topic" colspan=2 align="left"><b>&nbsp;Ver&auml;ndern eines bestehenden Benutzers</b></td>
 			</tr>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
@@ -634,35 +635,35 @@ if (isset($details)) {
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?php echo $PHP_SELF ?>">
 				<tr>
-					<td><b>&nbsp;Benutzername:</b></td>
-					<td>&nbsp;<input type="text" name="username" size=24 maxlength=63 value="<?php $db->p("username") ?>"></td>
+					<td class="steel1"><b>&nbsp;Benutzername:</b></td>
+					<td class="steel1">&nbsp;<input type="text" name="username" size=24 maxlength=63 value="<?php $db->p("username") ?>"></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;globaler Status:&nbsp;</b></td>
-					<td><? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
+					<td class="steel1"><b>&nbsp;globaler Status:&nbsp;</b></td>
+					<td class="steel1"><? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;Vorname:</b></td>
-					<td>&nbsp;<input type="text" name="Vorname" size=24 maxlength=63 value="<?php $db->p("Vorname") ?>"></td>
+					<td class="steel1"><b>&nbsp;Vorname:</b></td>
+					<td class="steel1">&nbsp;<input type="text" name="Vorname" size=24 maxlength=63 value="<?php $db->p("Vorname") ?>"></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;Nachname:</b></td>
-					<td>&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value="<?php $db->p("Nachname") ?>"></td>
+					<td class="steel1"><b>&nbsp;Nachname:</b></td>
+					<td class="steel1">&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value="<?php $db->p("Nachname") ?>"></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;E-Mail:</b></td>
-					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="<?php $db->p("Email") ?>">&nbsp;</td>
+					<td class="steel1"><b>&nbsp;E-Mail:</b></td>
+					<td class="steel1">&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="<?php $db->p("Email") ?>">&nbsp;</td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;inaktiv seit:</b></td>
-					<td>&nbsp;<? echo $inactive ?></td>
+					<td class="steel1"><b>&nbsp;inaktiv seit:</b></td>
+					<td class="steel1">&nbsp;<? echo $inactive ?></td>
 				</tr>
 				<tr>
-					<td><b>&nbsp;registriert seit</b></td>
-					<td>&nbsp;<? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>
+					<td class="steel1"><b>&nbsp;registriert seit</b></td>
+					<td class="steel1">&nbsp;<? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>
 				</tr>
 				
-				<td colspan=2 align=center>&nbsp;
+				<td class="steel1" colspan=2 align=center>&nbsp;
 				<input type="hidden" name="u_id"	 value="<?php $db->p("user_id") ?>">
 				<?
 				if ($perm->have_perm("root") || 
@@ -681,7 +682,7 @@ if (isset($details)) {
 			<tr><td colspan=2 class="blank">&nbsp;</td></tr>
 			
 			<? // links to everywhere
-			print "<tr><td colspan=2 align=\"center\">";
+			print "<tr><td class=\"steel2\" colspan=2 align=\"center\">";
 				printf("&nbsp;pers&ouml;nliche Homepage <a href=\"about.php?username=%s\"><img src=\"pictures/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
 				printf("&nbsp;Nachricht an Benutzer <a href=\"sms.php?cmd=write&rec_uname=%s\"><img src=\"pictures/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
@@ -692,12 +693,12 @@ if (isset($details)) {
 			else
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst AS x LEFT JOIN user_inst AS y USING (Institut_id) LEFT JOIN Institute USING (Institut_id) WHERE x.user_id ='$temp_user_id' AND x.inst_perms != 'user' AND y.user_id = '$user->id' AND y.inst_perms = 'admin'");
 			if ($db2->num_rows()) {
-				print "<tr><td colspan=2 align=\"center\">";
+				print "<tr><td class=\"steel2\" colspan=2 align=\"center\">";
 				print "<b>&nbsp;Link zur Mitarbeiter-Verwaltung&nbsp;</b>";
 				print "</td></tr>\n";
 			}
 			while ($db2->next_record()) {
-				print "<tr><td colspan=2 align=\"center\">";
+				print "<tr><td class=\"steel2\" colspan=2 align=\"center\">";
 				printf ("&nbsp;%s <a href=\"inst_admin.php?details=%s&inst=%s\"><img src=\"pictures/admin.gif\" border=0 align=\"texttop\" alt=\"&Auml;ndern der Eintr&auml;ge des Benutzers im jeweiligen Institut\"></a>&nbsp;", htmlReady($db2->f("Name")), $db->f("username"), $db2->f("Institut_id"));
 				print "</td></tr>\n";
 			}	
@@ -761,7 +762,7 @@ if (isset($details)) {
 			print "</tr><tr><td class=\"blank\">&nbsp;</td></tr></table>";
 
 		} else { // wir haben ein Suchergebnis
-			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=1 class=blank cellpadding=2 width=\"100%\">";
+			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 class=blank cellpadding=2 width=\"100%\">";
 			print "<tr valign=\"top\" align=\"middle\">";
 				if ($db->num_rows() == 1)
 			 		print "<td colspan=7>Suchergebnis: Es wurde <b>";
@@ -790,13 +791,13 @@ if (isset($details)) {
 				}
 				?>
 				<tr valign=middle align=left>
-					<td><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a></td>
-					<td><?php $db->p("perms") ?></td>
-					<td><?php $db->p("Vorname") ?>&nbsp;</td>
-					<td><?php $db->p("Nachname") ?>&nbsp;</td>
-					<td><?php $db->p("Email")?></td>
-					<td><?php echo $inactive ?></td>
-					<td><? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>					
+					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a></td>
+					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("perms") ?></td>
+					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Vorname") ?>&nbsp;</td>
+					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Nachname") ?>&nbsp;</td>
+					<td class="<? echo $cssSw->getClass() ?>"><?php $db->p("Email")?></td>
+					<td class="<? echo $cssSw->getClass() ?>"><?php echo $inactive ?></td>
+					<td class="<? echo $cssSw->getClass() ?>"><? if ($db->f("mkdate")) echo date("d.m.y, G:i", $db->f("mkdate")); else echo "unbekannt"; ?></td>
 				</tr>
 				<?
 			endwhile;
