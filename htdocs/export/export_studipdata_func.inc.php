@@ -160,13 +160,13 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			$order = " seminare.Name";
 		break;
 		case "bereich":
-			$order = "bereiche.name, seminare.Name";
+			$order = "sem_tree.priority, seminare.Name";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "name";
 			$do_group = true;
 		break;
 		case "status":
-			$order = "seminare.status, bereiche.name, seminare.Name";
+			$order = "seminare.status, sem_tree.priority, seminare.Name";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "status";
 			$subgroup = "FIRSTGROUP";
@@ -175,7 +175,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			$do_subgroup = true;
 		break;
 		default:
-			$order = "bereiche.name, seminare.Name";
+			$order = "sem_tree.priority, seminare.Name";
 			$group = "FIRSTGROUP";
 			$group_tab_zelle = "name";
 			$do_group = true;
@@ -185,8 +185,8 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	if ($ex_sem_id != "all")
 		$addquery .= " AND seminare.Seminar_id = '" . $ex_sem_id . "' ";
 	$db->query('SELECT * FROM seminar_inst
-				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_bereich USING(Seminar_id) 
-				LEFT JOIN bereiche USING(bereich_id) 
+				LEFT JOIN seminare USING (Seminar_id) LEFT JOIN seminar_sem_tree USING(Seminar_id) 
+				LEFT JOIN sem_tree USING(sem_tree_id) 
 				WHERE seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
 				ORDER BY ' . $order);
 
