@@ -1021,9 +1021,9 @@ class EvalOverview {
       }
 
       } else if ( $eval->isTemplate() &&
-                $user->id   != $eval->getAuthorID () &&
-                  $evalAction != "copy_public_template" &&
-                  $evalAction != "search_showrange") {
+         $user->id   != $eval->getAuthorID () &&
+         $evalAction != "copy_public_template" &&
+         $evalAction != "search_showrange") {
 
          $sms = new messaging();
          $sms->insert_message (
@@ -1549,6 +1549,30 @@ class EvalOverview {
             else
                $safeguard .= $this->createSafeguard("ok", sprintf(_("Es wurden %s Bereiche gefunden, die den Suchbegriff <b>%s</b> enthalten."), sizeof($results), $search), $search);
             break;
+
+         case "check_abort_creation":
+
+          # check if the evaluation is new and not yet edited
+          $eval = &new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
+          $abort_creation = false;
+          if ($eval->getTitle(QUOTED) == _("Neue Evaluation") &&
+           $eval->getText(QUOTED) == "" ){
+           # the evaluationen may be not edited yet ... so continue checking
+           $eval = &new Evaluation ($evalID, NULL, EVAL_LOAD_ALL_CHILDREN);
+           $number_of_childs = $eval->getNumberChildren();
+           $child = $eval->getNextChild();
+           if ($number_of_childs == 1 &&
+            $child &&
+            $child->getTitle(QOUTED) == _("Erster Gruppierungsblock") &&
+            $child->getChildren() == NULL &&
+            $child->getText(QOUTED) == ""){
+            $abort_creation = true;
+            }
+           }
+
+           if ($abort_creation != true)
+              break;
+           # continue abort_creation
 
          case "abort_creation":
           $eval = &new Evaluation ($evalID, NULL, EVAL_LOAD_ALL_CHILDREN);

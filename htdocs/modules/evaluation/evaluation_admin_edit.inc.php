@@ -51,6 +51,21 @@ require_once (EVAL_FILE_EDIT_TREEVIEW);
 
 # ====================================================== end: including files #
 
+# define constancs ========================================================== #
+
+/**
+ * @const NEW_EVALUATION_TITLE  title of a new question block
+ * @access public
+ */
+define ("NEW_EVALUATION_TITLE", _("Neue Evaluation"));
+
+/**
+ * @const FIRST_ARRANGMENT_BLOCK_TITLE  title of a new arrangment block
+ * @access public
+ */
+define ("FIRST_ARRANGMENT_BLOCK_TITLE", _("Erster Gruppierungsblock"));
+
+# ====================================================== end: define constancs #
 
 $debug = "<pre class=\"steelgroup6\" style=\"font-size:10pt\">"
 	. "<pre class=\"steelgroup3\" style=\"font-size:10pt\"><font color=\"purple\">"
@@ -67,27 +82,27 @@ if ($_REQUEST["newButton_x"]){
 	
 	// create the first group
 	$group = &new EvaluationGroup();
-	$group->setTitle(_("Erster Gruppierungsblock"), QUOTED);
+	$group->setTitle(FIRST_ARRANGMENT_BLOCK_TITLE, QUOTED);
 	$group->setText("");
 	if ($group->isError ())
-   		return EvalCommon::showErrorReport ($group, _("Fehler beim Anlegen einer Gruppe"));
+		return EvalCommon::showErrorReport ($group, _("Fehler beim Anlegen einer Gruppe"));
 	
 	// create a new eval
-   	$eval = new Evaluation ();
+	$eval = new Evaluation ();
 	
 	$rangeID = $_REQUEST["rangeID"];
 	if ($rangeID == get_username ($user->id))
 		$rangeID = $user->id;
 
-   	$eval->setAuthorID ($user->id);
-   	$eval->setTitle (_("Neue Evaluation"));
+	$eval->setAuthorID ($user->id);
+	$eval->setTitle (NEW_EVALUATION_TITLE);
 	$eval->setAnonymous (YES);
 	$evalID = $eval->getObjectID();
 	$eval->addChild ($group);
 	$eval->save ();
 	
-   	if ($eval->isError ())
-   		return EvalCommon::showErrorReport ($eval, _("Fehler beim Anlegen einer Evaluation"));
+	if ($eval->isError ())
+		return EvalCommon::showErrorReport ($eval, _("Fehler beim Anlegen einer Evaluation"));
 			
 	$groupID = $group->getObjectID();
 	$evalID = $eval->getObjectID();
@@ -187,8 +202,8 @@ if ( $authorID != $user->id ) {
 		if ($user_perm < 7 )
 			$no_permisson++;
 	}
-   
-   	if ($no_permisson > 0){
+
+	if ($no_permisson > 0){
 	
 		if ( $no_permisson == 1 )
 			$no_permisson_msg = _("Sie haben in einem Bereich, in welchem diese Evaluation hängt, nicht aussreichene Rechte, um diese Eval zu bearbeiten.");

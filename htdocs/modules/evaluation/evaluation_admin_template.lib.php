@@ -987,11 +987,17 @@ class EvalTemplateGUI {
       $infoPreview =  array ("icon" => EVAL_PIC_PREVIEW,
               "text" => $previewLink);
 
+       $infoOverviewText = _("Zurück zur ")
+           . "<a href=\"admin_evaluation.php?page=overview"
+           .  "&check_abort_creation_button_x=1"
+           .  "&evalID=$evalID"
+           .  "&rangeID=$rangeID"
+           .  "\">"
+            . _("Evaluations-Verwaltung")
+            . "</a>";
+
       $infoOverview =  array ("icon" => EVAL_PIC_BACK,
-                "text" => _("Zurück zur ")
-                     . "<a href=\"admin_evaluation.php?page=overview&rangeID=$rangeID\">"
-                  . _("Evaluations-Verwaltung")
-                  . "</a>");
+                "text" => $infoOverviewText);
       if($command){
       $infobox = array (array ("kategorie" => _("Aktionen:"),
                 "eintrag"   => array ($infoPreview, $infoOverview) ));
