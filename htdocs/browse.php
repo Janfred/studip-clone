@@ -39,10 +39,10 @@ include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 $sess->register("browse_data");
 
 if ($send) {
-	$browse_data["Vorname"]=$Vorname;
-	$browse_data["Nachname"]=$Nachname;
-	$browse_data["inst_id"]=$inst_id;
-	$browse_data["sem_id"]=$sem_id;
+	$browse_data["Vorname"] = trim($Vorname);
+	$browse_data["Nachname"] = trim($Nachname);
+	$browse_data["inst_id"] = $inst_id;
+	$browse_data["sem_id"] = $sem_id;
 }
 
 
