@@ -365,7 +365,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 						. " border=\"0\"></a>&nbsp;";
 		}
 		if ($this->isParentAdmin($item_id) && $item_id !=$this->start_item_id && $item_id != "root"){
-				$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
+			$content .= "<a href=\"" . $this->getSelf("cmd=EditItem&item_id=$item_id") . "\">"
 			. "<img " .makeButton("bearbeiten","src") . tooltip(_("Dieses Element bearbeiten"))
 			. " border=\"0\"></a>&nbsp;";
 		
@@ -483,7 +483,7 @@ class StudipRangeTreeViewAdmin extends StudipRangeTreeView{
 	}
 		
 	function getSelf($param){
-		$url = $GLOBALS['PHP_SELF'] . "?" . DbView::get_uniqid();
+		$url = $GLOBALS['PHP_SELF'] . "?" . "foo=" . DbView::get_uniqid();
 		if ($this->mode)
 			$url .= "&mode=" . $this->mode;
 		if ($param)
