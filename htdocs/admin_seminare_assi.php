@@ -29,7 +29,7 @@ include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; 	//hier werden die sessions in
 require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php"; 		//Funktionen fuer Nachrichtenmeldungen
 require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; 		//wir brauchen die Seminar-Typen
 require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";  //Bereitstellung weiterer Daten
-require_once "$ABSOLUTE_PATH_STUDIP/functions.php";	//noch mehr Stuff
+require_once "$ABSOLUTE_PATH_STUDIP/functions.php";		//noch mehr Stuff
 require_once "$ABSOLUTE_PATH_STUDIP/forum.inc.php";		//damit wir Themen anlegen koennen
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";		//Aufbereitungsfunktionen
 require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";		//Terminfunktionen
@@ -802,7 +802,10 @@ if ($cmd_e_x)
 	//Ende der Anmeldung checken
 	if ($sem_create_data["sem_admission"]) {
 		if ($sem_create_data["sem_admission_date"] == -1) 
-			$errormsg.= sprintf ("error§"._("Bitte geben Sie einen Termin f&uuml;r das %s an!")."§", $end_date_name);
+			if ($sem_create_data["sem_admission"] == 1)
+				$errormsg.= "error§"._("Bitte geben Sie einen Termin f&uuml;r das Losdatum an!")."§";
+			else
+				$errormsg.= "error§"._("Bitte geben Sie einen Termin f&uuml;r das Enddatum der Kontingentierung an!")."§";
 		elseif ($sem_create_data["term_art"]==0){
 			$tmp_first_date=veranstaltung_beginn ($sem_create_data["term_art"], $sem_create_data["sem_start_time"], $sem_create_data["term_start_woche"], $sem_create_data["sem_start_termin"], $sem_create_data["metadata_termin"]["turnus_data"], "int");
 			if (($sem_create_data["sem_admission_date"] > $tmp_first_date) && ($tmp_first_date >0)){
