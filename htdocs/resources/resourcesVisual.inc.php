@@ -73,7 +73,7 @@ class ShowList extends ShowTreeRow{
 	
 	//private
 	function showListObject ($resource_id, $admin_buttons=FALSE) {
-		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES;
+		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF;
 	
 		//Object erstellen
 		$resObject=new ResourceObject($resource_id);
@@ -242,7 +242,7 @@ class ShowThread extends ShowTreeRow {
 	}
 
 	function showThreadLevel ($root_id, $level=0, $lines='') {
-		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES;
+		global $resources_data, $edit_structure_object, $RELATIVE_PATH_RESOURCES, $PHP_SELF;
 		
 		$db=new DB_Seminar;		
 		$db2=new DB_Seminar;		
