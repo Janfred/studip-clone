@@ -35,6 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 
+require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/extern_config.inc.php");
+
 /**
 * Returns all statusgruppen for the given range.
 *
@@ -269,6 +271,27 @@ function delete_config ($range_id, $config_id) {
 		return FALSE;
 	
 	return TRUE;
+}
+
+function delete_all_configs ($range_id) {
+	$db =& new DB_Seminar();
+	$query = "SELECT config_id FROM extern_config WHERE range_id='$range_id'";
+	$db->query($query);
+	$count_records = $db->num_rows();
+	$count_files = 0;
+	$config_ids = array();
+	while ($db->next_record()) {
+		if (@unlink($GLOBALS["EXTERN_CONFIG_FILE_PATH"] . $db->f("config_id") . ".cfg")) {
+			$count_files++;
+			$config_ids[] = $db->f("config_id");
+		}
+	}
+	if ($count_records) {
+		$query = "DELETE FROM extern_config WHERE range_id='$range_id'";
+		$db->query($query);
+	}
+	
+	return array("records" => $count_records, "files" => $count_files);
 }
 
 function get_config_info ($range_id, $config_id) {
