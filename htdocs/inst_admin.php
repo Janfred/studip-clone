@@ -33,6 +33,7 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 require_once("msg.inc.php"); //Ausgaberoutinen an den User
 require_once("config.inc.php"); //Grunddaten laden
 require_once("visual.inc.php"); //htmlReady
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 	
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -110,16 +111,17 @@ if (isset($details)) {
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Funktion in der Einrichtung:&nbsp;</b></td>
+				<td class="<? echo $cssSw->getClass() ?>" ><b>&nbsp;Gruppe / Funktion in der Einrichtung:&nbsp;</b></td>
 				<td class="<? echo $cssSw->getClass() ?>" >
 			<?	
 			$user_id = $db->f("user_id")	;
 			$query = "SELECT * FROM statusgruppe_user LEFT JOIN statusgruppen USING (statusgruppe_id) WHERE range_id ='$inst' AND user_id ='$user_id'";
 			$db2 ->query($query);	
+			$tmptxt = "";
 			while ($db2->next_record()) {
-				echo $db2->f("name")."&nbsp; ";
+				 $tmptxt .= $db2->f("name").", ";
 			}
-			
+			echo substr($tmptxt,0,-2);
 			
 			?>	
 			&nbsp; 
@@ -186,6 +188,8 @@ else {
 				else {
 					$db2->query("DELETE from user_inst WHERE Institut_id = '$ins_id' AND user_id = '$u_id'");
 					my_msg ("<b>$Fullname wurde aus der Einrichtung ausgetragen.</b>");
+					// raus aus allen Statusgruppen
+					RemovePersonStatusgruppeComplete (get_username($u_id), $ins_id);
 				}
 			} 
 
@@ -378,7 +382,7 @@ if ($inst_id != "" && $inst_id !="0") {
 			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=Vorname&inst_id=$inst_id\">Vorname</a></th>";
 			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=Nachname&inst_id=$inst_id\">Nachname</a></th>";
 			echo "<th width=\"15%\"><a href=\"inst_admin.php?sortby=inst_perms&inst_id=$inst_id\">Status </a></th>";
-			echo "<th width=\"15%\">Funktion</th>";
+			echo "<th width=\"15%\">Gruppe / Funktion</th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=raum&inst_id=$inst_id\">Raum Nr.</a></th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=sprechzeiten&inst_id=$inst_id\">Sprechzeit</a></th>";
 			echo "<th width=\"10%\"><a href=\"inst_admin.php?sortby=Telefon&inst_id=$inst_id\">Telefon</a></th>";
@@ -402,10 +406,11 @@ if ($inst_id != "" && $inst_id !="0") {
 				<td class="<? echo $cssSw->getClass() ?>" >&nbsp;<?php echo $db->f("inst_perms"); ?></td>
 				<td class="<? echo $cssSw->getClass() ?>"  align="left"><?
 				
-				
+				$tmptxt = "";
 				while ($db2->next_record()) {
-					 echo $db2->f("name")."&nbsp; ";
+					 $tmptxt .= $db2->f("name").", ";
 				}
+				echo substr($tmptxt,0,-2);
 				
 				?>
 				
