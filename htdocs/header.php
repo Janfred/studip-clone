@@ -51,10 +51,10 @@ function MakeToolbar($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cent
 	}
 	$toolbar = "<td class=\"toolbar\" align=\"$align\">";
 
-	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"30\"><br>"
+	$toolbar .= "<img border=\"0\" src=\"pictures/blank.gif\" height=\"1\" width=\"50\"><br>"
 			  ."<a class=\"toolbar\" href=\"$URL\" target=\"$target\"><img border=\"0\" src=\"$icon\" ".$tool."><br>"
 			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"6\" width=\"$size\"><br>"
-			  ."<b>$text</b></a><br>"
+			  ."<b><font size=\"2\">".$text."</font></b></a><br>"
 			  ."<img border=\"0\" src=\"pictures/blank.gif\" height=\"7\" width=\"30\">";
 	$toolbar .= "</td>\n";
 	return $toolbar;
@@ -133,7 +133,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		?>
 		<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr>
-		<td width="40%">
+		<td width="40%" class="toolbar">
 			<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 <?

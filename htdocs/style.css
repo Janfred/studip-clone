@@ -1,5 +1,5 @@
-A:visited {	color:#3333BB; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:link {	color:#3333BB; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;} 
+A:visited {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
+A:link {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;} 
 A:hover {	color: #FF3333; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
 A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
 
@@ -25,21 +25,22 @@ A:hover.tree {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica
 
 TD.links1b {background-image: url('pictures/steel1.jpg');}
 TD.links1 {background-image: url('pictures/fill2.gif');}
-TD.reiterunten {background: url('pictures/reiter3.jpg');}
+TD.reiterunten {background-image: url('pictures/reiter3.jpg');}
 
 table.header { background-image: url('pictures/fill1.gif');}
 
-table.toolbar { background-image: url('pictures/toolbarbg.gif');}
-TD.toolbar {background: url('pictures/toolbarbg.gif');}
+table.toolbar {background-image: url('pictures/toolbarbg.gif');}
+TD.toolbar {background-image: url('pictures/toolbarbg.gif');}
+
 
 A:link.toolbar {color: #91A2B6; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:9pt;}
 A:visited.toolbar {color: #91A2B6; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:9pt;}
 A:hover.toolbar {color: #EEEEEE;text-decoration: none;font-family: Arial, Helvetica, sans-serif ;font-size:9pt;}
 
 
-TD.topic {border:0px solid #000000; background: url('pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-TD.topicwrite {border:0px solid #000000; background: url('pictures/fill1write.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-TD.header {background: url('pictures/fill1.gif');}
+TD.topic {border:0px solid #000000; background-image: url('pictures/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+TD.topicwrite {border:0px solid #000000; background-image: url('pictures/fill1write.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+TD.header {background-image: url('pictures/fill1.gif');}
 TD.angemeldet {border-style: solid; border-color: #000000;  border-width: 1px;}
 TD.rahmen_white {border-style: solid; border-color: #000000;  border-width: 1px; background-color: #FFFFFF; background-image: url('pictures/blank.gif');}
 TD.rahmen_steel {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('pictures/steel1.jpg');}
