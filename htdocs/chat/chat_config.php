@@ -31,19 +31,25 @@
 // +---------------------------------------------------------------------------+
 
 /**
-* Shared Memory Key, must be unique
+* Shared Memory Key, must be unique  (used only with ChatShmServer)
 * @const CHAT_SHM_KEY
 */
 define("CHAT_SHM_KEY",98374);    //muss eindeutig sein!!!
 /**
-* Shared Memory Size, in Kbytes
+* Shared Memory Size, in Kbytes (used only with ChatShmServer)
 * @const CHAT_SHM_SIZE
 */
 define("CHAT_SHM_SIZE",512);     //in Kbyte
-
+/**
+* Name of file used for data storage (used only with ChatFileServer)
+* @const CHAT_FILE_NAME
+*/
 define("CHAT_FILE_NAME", "chat_data");
-define("CHAT_FILE_PATH", "/tmp");
-
+/**
+* path used for data storage (used only with ChatFileServer)
+* @const CHAT_FILE_NAME
+*/
+define("CHAT_FILE_PATH", $TMP_PATH);
 /**
 * Used for shm access, do not alter
 * @const CHAT_USER_KEY
@@ -58,7 +64,6 @@ define("CHAT_DETAIL_KEY",2);     //dito
 * max Number of entries in one chat room
 * @const CHAT_MAX_MSG
 */
-
 define("CHAT_MAX_MSG",50);
 /**
 * Time in seconds before chat user gets kicked
