@@ -2,11 +2,12 @@
 
 function xml_header()
 {
-global $UNI_NAME_CLEAN, $SEMESTER, $SEM_ID, $ex_type, $ex_sem;
+global $UNI_NAME_CLEAN, $SEMESTER, $SEM_ID, $ex_type, $ex_sem, $range_name;
 	$xml_tag_string = "<" . "?xml version=\"1.0\"?>\n";
 	//encoding=\"ISO-8859-1\" encoding=\"UTF-8\";
 //	$xml_tag_string .= "<!DOCTYPE StudIP SYSTEM \"http://goettingen.studip.de/studip.dtd\">\n";
 	$xml_tag_string .= "<studip";
+	if ($range_name != "") $xml_tag_string .= " range=\"" . $range_name . "\"";
 	if ($UNI_NAME_CLEAN != "") $xml_tag_string .= " uni=\"" . $UNI_NAME_CLEAN . "\"";
 	if ($ex_type !="veranstaltung") 
 		$xml_tag_string .= " zeitraum=\"" . $SEMESTER[$SEM_ID]["name"] . "\"";
