@@ -19,10 +19,10 @@ function event_save (&$this) {
 		
 		$query = "REPLACE calendar_events (event_id,range_id,autor_id,uid,start,end,"
 		    	  . "summary,description,class,categories,category_intern,priority,location,ts,linterval,"
-						. "sinterval,wdays,month,day,rtype,duration,expire,exceptions,mkdate,chdate) VALUES ";
+						. "sinterval,wdays,month,day,rtype,duration,count,expire,exceptions,mkdate,chdate) VALUES ";
 		
 		$query .= sprintf("('%s','%s','%s','%s',%s,%s,'%s','%s','%s','%s',%s,%s,'%s',%s,%s,%s,
-				'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
+				'%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s)",
 				$this->getId(), $this->getUserId(), $this->getUserId(),
 				$this->properties['UID'],
 				$this->properties['DTSTART'],
@@ -42,8 +42,9 @@ function event_save (&$this) {
 				$this->properties['RRULE']['day'],
 				$this->properties['RRULE']['rtype'],
 				$this->properties['RRULE']['duration'],
+				$this->properties['RRULE']['count'],
 				$this->properties['RRULE']['expire'],
-				$this->properties['EXCEPTIONS'],
+				$this->properties['EXDATE'],
 				$this->getMakeDate(), $this->getChangeDate());
 		
 		if($db->query($query)){
@@ -83,7 +84,7 @@ function event_restore ($id, &$this) {
 		$this->setProperty('DESCRIPTION',     $db->f('description'));
 		$this->setProperty('PRIORITY',        $db->f('priority'));
 		$this->setProperty('LOCATION',        $db->f('location'));
-		$this->setProperty('EXCEPTIONS',      $db->f('exceptions'));
+		$this->setProperty('EXDATE',          $db->f('exceptions'));
 		$this->setProperty('RRULE', array(
 				'ts'        => $db->f('ts'),
 				'linterval' => $db->f('linterval'),
@@ -93,6 +94,7 @@ function event_restore ($id, &$this) {
 				'day'       => $db->f('day'),
 				'rtype'     => $db->f('rtype'),
 				'duration'  => $db->f('duration'),
+				'count'     => $db->f('count'),
 				'expire'    => $db->f('expire')));
 		$this->setMakeDate($db->f('mkdate'));
 		$this->setChangeDate($db->f('chdate'));

@@ -19,17 +19,17 @@ function list_restore(&$this){
 	while ($db->next_record()) {
 		
 		$rep = array(
-				"ts"        => $db->f("ts"),
-				"linterval" => $db->f("linterval"),
-				"sinterval" => $db->f("sinterval"),
-				"wdays"     => $db->f("wdays"),
-				"month"     => $db->f("month"),
-				"day"       => $db->f("day"),
-				"rtype"     => $db->f("rtype"),
-				"duration"  => $db->f("duration"));
+				'ts'        => $db->f('ts'),
+				'linterval' => $db->f('linterval'),
+				'sinterval' => $db->f('sinterval'),
+				'wdays'     => $db->f('wdays'),
+				'month'     => $db->f('month'),
+				'day'       => $db->f('day'),
+				'rtype'     => $db->f('rtype'),
+				'duration'  => $db->f('duration'),
+				'count'     => $db->f('count'));
 		
-		$duration = $rep["duration"];
-		$expire = $db->f("expire");
+		$expire = $db->f('expire');
 		
 		switch ($rep["rtype"]) {
 			// Einzeltermin (die hat die Datenbank schon gefiltert)
@@ -114,7 +114,7 @@ function list_restore(&$this){
 					// brauche ersten Monat nach $start in dem der Termin wiederholt wird
 					$amonth = $month + (abs($month - date("n", $rep["ts"])) % $rep["linterval"]);
 					// ist Wiederholung am X. Wochentag des X. Monats...
-					if ($rep["day"] == "") {
+					if (!$rep["day"]) {
 						$adate = mktime(12,0,0,$amonth,1,$year,0) + ($rep["sinterval"] - $cor) * 604800;
 						$aday = strftime("%u",$adate);
 						$adate -= ($aday - $rep["wdays"]) * 86400;
@@ -141,12 +141,12 @@ function list_restore(&$this){
 					
 				while ($adate <= $expire && $adate <= $end && $adate >= $start) {
 					// verhindert die Anzeige an Tagen, die außerhalb des Monats liegen (am 29. bis 31.)
-					if ($rep["wdays"] == "" ? date("j", $adate) == $rep["day"] : TRUE)
+					if (!$rep["wdays"] ? date("j", $adate) == $rep["day"] : TRUE)
 						new_event($this, $db, $adate);
 					
 					$amonth += $rep["linterval"];
 					// wenn Termin am X. Wochentag des X. Monats, dann Berechnung hier wiederholen
-					if ($rep["day"] == "") {
+					if (!$rep["day"]) {
 						$adate = mktime(12, 0, 0, $amonth, 1, $year, 0) + ($rep["sinterval"] - 1) * 604800;
 						$aday = strftime("%u",$adate);
 						$adate -= ($aday - $rep["wdays"]) * 86400;
@@ -181,7 +181,7 @@ function list_restore(&$this){
 					$cor = 1;
 				
 				if ($rep["ts"] < $start) {
-					if ($rep["day"] == "") {
+					if (!$rep["day"]) {
 						$adate = mktime(12, 0, 0, $rep["month"], 1, $year, 0)
 								+ ($rep["sinterval"] - $cor) * 604800;
 						$aday = strftime("%u", $adate);
@@ -200,8 +200,8 @@ function list_restore(&$this){
 				else
 					$adate = $rep["ts"];
 				
-				if ($duration > 1) {
-					if ($rep["day"] == "") {
+				if ($rep['duration'] > 1) {
+					if (!$rep["day"]) {
 						$xdate = mktime(12, 0, 0, $rep["month"], 1, $year - 1, 0)
 								+ ($rep["sinterval"] - $cor) * 604800;
 						$aday = strftime("%u", $xdate);
@@ -216,7 +216,7 @@ function list_restore(&$this){
 					}
 					else {
 						$xdate = mktime(12, 0, 0, date("n", $adate), date("j", $adate), date("Y", $adate) - 1, 0)
-										+ ($duration - 1) * 86400;
+										+ ($rep['duration'] - 1) * 86400;
 					}
 					if ($xdate <= $end && $xdate >= $start && $xdate <= $expire)
 						new_event($this, $db, $xdate);
@@ -249,7 +249,7 @@ function new_event (&$this, $db, $date) {
 			'UID'             => $db->f('uid'),
 			'CREATED'         => $db->f('mkdate'),
 			'LAST-MODIFIED'   => $db->f('chdate'),
-			'EXCEPTIONS'      => $db->f('exceptions'),
+			'EXDATE'          => $db->f('exceptions'),
 			'RRULE'           => array(
 				 'ts'           => $db->f('ts'),
 				 'linterval'    => $db->f('linterval'),
@@ -259,6 +259,7 @@ function new_event (&$this, $db, $date) {
 				 'day'          => $db->f('day'),
 				 'rtype'        => $db->f('rtype'),
 				 'duration'     => $db->f('duration'),
+				 'count'        => $db->f('count'),
 				 'expire'       => $db->f('expire'))),
 			$db->f('event_id'));
 	

@@ -87,7 +87,7 @@ class CalendarDriver extends MysqlDriver {
 			$this->initialize('cal');
 			
 			$query = "SELECT $select_cal FROM calendar_events WHERE range_id = '$range_id' "
-					. "AND start BETWEEN $start AND $end";
+					. "AND start BETWEEN $start AND $end AND expire >= $start";
 			if ($exept !== NULL) {
 				$except = implode("','", $except);
 				$query .= " AND NOT IN '$except'";
@@ -101,19 +101,17 @@ class CalendarDriver extends MysqlDriver {
 				$query = "SELECT $select_sem "
 							 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 							 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-		      		 . "user_id = '{$user->id}' AND date_typ!=-1 AND date_typ!=-2 "
-							 . "AND date BETWEEN $start AND $end";
+		      		 . "user_id = '{$user->id}' AND date BETWEEN $start AND $end";
 			else if ($sem_ids != "") {
 				if (is_array($sem_ids))
 					$sem_ids = implode("','", $sem_ids);
 				$query = "SELECT $select_sem "
 							 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
 							 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-		       		 . "user_id = '%s' AND range_id IN ('$sem_ids') AND date_typ!=-1 "
-					 		 . "AND date_typ!=-2 AND date BETWEEN $start AND $end";
+		       		 . "user_id = '{$user->id}' AND range_id IN ('$sem_ids') AND "
+							 . "date BETWEEN $start AND $end";
 			}
 			$this->db['sem']->query($query);
-		//	echo $query;
 		}
 	}
 	
@@ -141,7 +139,10 @@ class CalendarDriver extends MysqlDriver {
 							'wdays'       => $this->db['cal']->f('wdays'),
 							'month'       => $this->db['cal']->f('month'),
 							'day'         => $this->db['cal']->f('day'),
-							'expire'      => $this->db['cal']->f('expire')),
+							'expire'      => $this->db['cal']->f('expire'),
+							'duration'    => $this->db['cal']->f('duration'),
+							'count'       => $this->db['cal']->f('count')),
+					'EXDATE'          => $this->db['cal']->f('exceptions'),
 					'CREATED'         => $this->db['cal']->f('mkdate'),
 					'LAST-MODIFIED'   => $this->db['cal']->f('chdate'),
 					'DTSTAMP'         => time());
@@ -222,7 +223,7 @@ class CalendarDriver extends MysqlDriver {
 			else
 				$mult = TRUE;
 			$query .= sprintf("('%s','%s','%s','%s',%s,%s,'%s','%s','%s','%s',%s,%s,'%s',%s,%s,%s,
-					'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
+					'%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s)",
 					$id, $user->id, $user->id,
 					$property_set['UID'],
 					$property_set['DTSTART'],
@@ -242,8 +243,9 @@ class CalendarDriver extends MysqlDriver {
 					(int) $property_set['RRULE']['day'],
 					$property_set['RRULE']['rtype'],
 					$property_set['RRULE']['duration'],
+					$property_set['RRULE']['count'],
 					$property_set['RRULE']['expire'],
-					$property_set['EXCEPTIONS'],
+					$property_set['EXDATE'],
 					$property_set['CREATED'],
 					$property_set['LAST-MODIFIED']);
 			
@@ -279,7 +281,7 @@ class CalendarDriver extends MysqlDriver {
 			else
 				$mult = TRUE;
 			$query .= sprintf("('%s','%s','%s','%s',%s,%s,'%s','%s','%s','%s',%s,%s,'%s',%s,%s,%s,
-					'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
+					'%s',%s,%s,'%s',%s,%s,%s,'%s',%s,%s)",
 					$object->getId(), $user->id, $user->id,
 					$object->properties['UID'],
 					$object->properties['DTSTART'],
@@ -299,8 +301,9 @@ class CalendarDriver extends MysqlDriver {
 					(int) $object->properties['RRULE']['day'],
 					$object->properties['RRULE']['rtype'],
 					$object->properties['RRULE']['duration'],
+					$object->properties['RRULE']['count'],
 					$object->properties['RRULE']['expire'],
-					$object->properties['EXCEPTIONS'],
+					$object->properties['EXDATE'],
 					$object->properties['CREATED'],
 					$object->properties['LAST-MODIFIED']);
 			

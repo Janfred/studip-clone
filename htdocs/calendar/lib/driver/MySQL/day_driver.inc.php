@@ -5,7 +5,7 @@ function day_save (&$events_save, &$events_delete) {
 	if (sizeof($this->events)) {
 		$query = "REPLACE calendar_events (event_id,range_id,autor_id,uid,summary,description,"
 		        . "start,end,class,categories,priority,location,ts,linterval,sinterval,wdays,"
-						. "month,day,rtype,duration,expire,exceptions,mkdate,chdate) VALUES";
+						. "month,day,rtype,duration,count,expire,exceptions,mkdate,chdate) VALUES";
 		
 		$sep = FALSE;
 		
@@ -19,7 +19,7 @@ function day_save (&$events_save, &$events_delete) {
 			$properties = $event->getProperty();
 			if ($sep1)
 				$values .= ",";
-			$values .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,%s,'%s',%s,%s,%s,
+			$values .= sprintf("('%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%s,%s,%s,'%s',%s,%s,%s,
 					'%s',%s,%s,'%s',%s,%s,'%s',%s,%s)",
 					$event->getId(), $event->getUserId(), $event->getUserId(),
 					$properties['UID'],
@@ -40,8 +40,9 @@ function day_save (&$events_save, &$events_delete) {
 					$properties['RRULE']['day'],
 					$properties['RRULE']['rtype'],
 					$properties['RRULE']['duration'],
+					$properties['RRULE']['count'],
 					$properties['RRULE']['expire'],
-					$properties['EXCEPTIONS'],
+					$properties['EXDATE'],
 					$mkdate, $chdate);
 			$sep = TRUE;
 		}
@@ -69,18 +70,6 @@ function day_restore (&$this) {
 	
 	$db = new DB_Seminar;
 	// die Abfrage grenzt das Trefferset weitgehend ein
-/*	$query = sprintf("SELECT termin_id,content,date,end_time,date_typ,expire,repeat,color,priority,raum"
-	       . " FROM termine WHERE range_id='%s' AND autor_id='%s' AND ((date BETWEEN %s AND %s OR "
-				 . "end_time BETWEEN %s AND %s) OR (%s BETWEEN date AND end_time) OR (date <= %s AND expire > %s AND"
-				 . " repeat REGEXP '(.+,,,.*%s.*,,,DAYLY)|(.+,.+,,,,,DAYLY)|"
-				 . "(.+,.+,,.*%s.*,,,WEEKLY)|(.+,.+,,,,%s,MONTHLY)|"
-				 . "(.+,.+,.+,%s,,,MONTHLY)|(.+,1,,,%s,%s,YEARLY)|"
-				 . "(.+,1,.+,%s,%s,,YEARLY)|(^.*,[^#]+$)'))"
-				 . " ORDER BY date ASC"
-				 , $this->user_id, $this->user_id, $this->getStart(), $this->getEnd(), $this->getStart()
-				 , $this->getEnd(), $this->getStart(), $this->getEnd(), $this->getStart(), $this->dow, $this->dow
-				 , $this->dom, $this->dow, $this->mon, $this->dom, $this->dow, $this->mon);
-*/	
 	$query = sprintf("SELECT * FROM calendar_events WHERE range_id='%s' AND((start BETWEEN %s AND %s "
 					. "OR end BETWEEN %s AND %s) OR (%s BETWEEN start AND end) OR (start <= %s AND expire > %s "
 					. "AND (rtype = 'DAILY' OR (rtype = 'WEEKLY' AND wdays LIKE '%%%s%%') OR (rtype = 'MONTHLY' "
@@ -183,7 +172,7 @@ function day_restore (&$this) {
 						// liegt dieser Tag nach der ersten Wiederholung und gehört der Monat zur Wiederholungsreihe?
 						if ($rep["ts"] < $this->ts + 1 && abs(date("n", $rep["ts"]) - $this->mon) % $rep["linterval"] == 0) {
 							// es ist ein Termin am X. Tag des Monats, den hat die Datenbankabfrage schon richtig erkannt
-							if ($rep["sinterval"] == "") {
+							if (!$rep["sinterval"]) {
 								createEvent($this, $db, 0);
 								break;
 							}
@@ -320,7 +309,7 @@ function day_restore (&$this) {
 						// liegt der Wiederholungstermin überhaupt in diesem Jahr?
 						if ($this->year == date("Y", $rep["ts"]) || ($this->year - date("Y", $rep["ts"])) % $rep["linterval"] == 0) {
 							// siehe "MONTHLY"
-							if ($rep["sinterval"] == "") {
+							if (!$rep["sinterval"]) {
 								createEvent($this, $db, 0);
 								break;
 							}
@@ -491,20 +480,26 @@ function day_restore (&$this) {
 	function createEvent (&$this, &$db, $time_range) {
 		switch ($time_range) {
 			case 0: // Einzeltermin
-				$start = mktime(date("G", $db->f("start")), date("i",$db->f("start")), 0, $this->mon, $this->dom, $this->year);
-				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0, $this->mon, $this->dom, $this->year);
+				$start = mktime(date("G", $db->f("start")), date("i",$db->f("start")), 0,
+						$this->mon, $this->dom, $this->year);
+				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0,
+						$this->mon, $this->dom, $this->year);
 				break;
 			case 1: // Start
-				$start = mktime(date("G", $db->f("start")), date("i", $db->f("start")), 0, $this->mon, $this->dom, $this->year);
-				$end = $this->getEnd();
+				$start = mktime(date("G", $db->f("start")), date("i", $db->f("start")), 0,
+						$this->mon, $this->dom, $this->year);
+				$end = $start + $db->f('end') - $db->f('start');
+				//$end = $this->getEnd();
 				break;
 			case 2: // Mitte
 				$start = $this->getStart();
 				$end = $this->getEnd();
 				break;
 			case 3: // Ende
-				$start = $this->getStart();
-				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0, $this->mon, $this->dom, $this->year);
+			//	$start = $this->getStart();
+				$end = mktime(date("G", $db->f("end")), date("i", $db->f("end")), 0,
+						$this->mon, $this->dom, $this->year);
+				$start = $end - ($db->f('end') - $db->f('start'));
 		}
 		$termin =& new CalendarEvent(array(
 				'DTSTART'         => $start,
@@ -516,7 +511,7 @@ function day_restore (&$this) {
 				'CATEGORIES'      => $db->f('categories'),
 				'STUDIP_CATEGORY' => $db->f('category_intern'),
 				'UID'             => $db->f('uid'),
-				'EXCEPTIONS'      => $db->f('exceptions'),
+				'EXDATE'          => $db->f('exceptions'),
 				'RRULE'           => array(
 						'ts'          => $db->f('ts'),
 						'linterval'   => $db->f('linterval'),
@@ -526,9 +521,9 @@ function day_restore (&$this) {
 						'day'         => $db->f('day'),
 						'rtype'       => $db->f('rtype'),
 						'duration'    => $db->f('duration'),
+						'count'       => $db->f('count'),
 						'expire'      => $db->f('expire'))),
 				$db->f('event_id'), $db->f('mkdate'), $db->f('chdate'));
-		
 		if ($time_range == 2)
 			$termin->setDayEvent(TRUE);
 		$this->events[] = $termin;
