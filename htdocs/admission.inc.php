@@ -90,7 +90,8 @@ function update_admission ($seminar_id, $send_message=TRUE) {
 				$count = 0;
 
 		//Studis auswaehlen, die jetzt aufsteigen koennen
-		$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count");
+		echo "SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' ORDER BY position LIMIT $count";
+		die;
 		while ($db3->next_record()) {
 			$group = select_group ($db->f("start_time"), $db3->f("user_id"));			
 			$db4->query("INSERT INTO seminar_user SET user_id = '".$db3->f("user_id")."', Seminar_id = '".$db->f("Seminar_id")."', status= 'autor', gruppe = '$group', admission_studiengang_id = '".$db3->f("studiengang_id")."', mkdate = '".time()."' ");
