@@ -39,10 +39,12 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
-$perm->check("tutor");
-
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
+{
+	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+	$perm->check("tutor");
+	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+}
 
 //$i_page = "meine_seminare.php";
 $EXPORT_ENABLE = TRUE;
@@ -79,7 +81,7 @@ if ($EXPORT_ENABLE)
 			}
 		}
 	}
-	if (($o_mode != "passthough") AND ($o_mode != "direct"))
+	if (($o_mode != "passthrough") AND ($o_mode != "direct"))
 	{
 		?> <script LANGUAGE="JavaScript">
 		function export_start()
@@ -133,6 +135,7 @@ if ($EXPORT_ENABLE)
 	
 	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
 		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_fop.inc.php");
+		
 	if (($export_error_num < 1) AND (!$start_done) AND ((!$xml_output_done) OR ($o_mode != "file")) AND (!$xslt_choose_done) AND (!$xslt_process_done))
 	{
 		$export_pagename = "Exportmodul - Fehler!";

@@ -23,7 +23,8 @@
 
 $FOP_ENABLE = true;
 
-$perm->check("tutor");
+if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
+	$perm->check("tutor");
 
 require_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/export_config.inc.php");   // Konfigurationsdatei
 

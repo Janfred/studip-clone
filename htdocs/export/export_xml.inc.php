@@ -21,7 +21,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-$perm->check("tutor");
+if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
+	$perm->check("tutor");
 
 $export_pagename = _("Datenexport");
 require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");   // Aktuelles Semester
