@@ -126,9 +126,8 @@ $cssSw->enableHover();
 $db = new DB_Seminar;
 
 // we are defintely not in an lexture or institute
-$SessSemName[0] = "";
-$SessSemName[1] = "";
-$links_admin_data ='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
+closeObject();
+$links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 // Start of Output
 include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
