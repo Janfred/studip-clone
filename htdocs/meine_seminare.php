@@ -112,8 +112,10 @@ function print_seminar_content($semid,$my_sem_values) {
 
 } // Ende function print_seminar_content
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");			 //hier werden die sessions initialisiert
 
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+
+// -- here you have to put initialisations for the current page
 require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");			 // Klarnamen fuer den Veranstaltungsstatus
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");			 // htmlReady fuer die Veranstaltungsnamen
 require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");			 // Semester-Namen fuer Admins
@@ -128,22 +130,11 @@ $SessSemName[0] = "";
 $SessSemName[1] = "";
 $links_admin_data ='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
-?>
+// Start of Output
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
 
-<html>
- <head>
-<!--
-// here i include my personal meta-tags; one of those might be useful:
-// <META HTTP-EQUIV="REFRESH" CONTENT="<?php print $auth->lifetime*60;?>; URL=logout.php">
--->
-  <title>Stud.IP</title>
-	<link rel="stylesheet" href="style.css" type="text/css">
- </head>
-<body>
-
-<? echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
-
-include ("$ABSOLUTE_PATH_STUDIP/header.php");				   //hier wird der "Kopf" nachgeladen
+echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
 if (!$perm->have_perm("root"))
 	include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");	   //hier wird die Navigation nachgeladen
@@ -249,12 +240,12 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 							}?>
 							<tr align="center" valign="top">
 									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="pictures/gruppe.gif" <? echo tooltip("Gruppe ändern") ?> border="0"></a></th>
-									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name">Name</a></th>
+									<th width="85%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=Name&view=<? echo $view ?>">Name</a></th>
 									<th width="10%"><b>Inhalt</b></th>
 									<? 
 									if ($view=="ext") { ?>
 										<th width="10%"><b>&nbsp;besucht&nbsp;</b></th>
-										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status">&nbsp;Status&nbsp;</a></th>
+										<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status&view=<? echo $view ?>">&nbsp;Status&nbsp;</a></th>
 										<th width="10%"><img src="pictures/nutzer.gif" alt="TeilnehmerInnen der Veranstaltung"></th>
 									<?	}?>
 									<th width="3%"><b>X&nbsp; </b></th>
