@@ -952,19 +952,17 @@ function printposting ($forumposting) {
   		if ($forum["view"] == "mixed") {		// etwas umständlich: Weg von der Themenansicht zum Folderflatview
   			$viewlink = "flatfolder";
   			$forum["flatviewstartposting"] = 0;
-  		}
-  			
-  	 	else
+  		} else {
   	 		$viewlink = "";
- 		if ($forumposting["openclose"] == "close") {
+  	 	}
+ 		
+ 		if ($forumposting["openclose"] == "close" || $forum["view"] == "mixed") {
   			$link =	$PHP_SELF."?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&view=".$viewlink;
   			if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
   				$link .= "&shrinkopen=".$forumposting["id"];
   			if ($forum["view"] != "mixed")
   				$link .= "#anker";
   		} else {
-  			if ($user->id != $forumposting["userid"])  // eigene Postings werden beim view nicht gezählt
-  				$objectviews = object_add_view($forumposting["id"]); // Anzahl der Views erhöhen
   			if ($forum["view"] == "tree" && $forumposting["type"] == "posting")
   				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker"; 
   			else
@@ -972,6 +970,11 @@ function printposting ($forumposting) {
 			if ($forumposting["neuauf"]==1 AND $forumposting["newold"]=="new")
 				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt	
   		}
+  		
+  	// Views hochzählen
+  	
+  		if ($forumposting["openclose"] == "open" && $user->id != $forumposting["userid"])  // eigene Postings werden beim view nicht gezählt
+  			$objectviews = object_add_view($forumposting["id"]); // Anzahl der Views erhöhen
   		
   	// Indexe
   		
