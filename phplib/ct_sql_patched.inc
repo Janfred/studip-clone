@@ -77,15 +77,26 @@ class CT_Sql {
     $now = date("YmdHis", time());
 
     # Fix for duplicate entry problem, works with mysql
-    $rquery = sprintf("replace into %s ( sid, name, val, changed ) values ('%s', '%s', '%s', '%s')",
+    $iquery = sprintf("insert ignore into %s ( sid, name, val, changed ) values ('%s', '%s', '%s', '%s')",
       $this->database_table,
       $id,
       $name,
       $str,
       $now);
-
-    $this->db->query($rquery);
-
+	  
+	$uquery = sprintf("update %s set val='%s', changed='%s' where sid='%s' and name='%s'",
+      $this->database_table,
+      $str,
+      $now,
+	  $id,
+      $name
+      );
+	  
+	  $this->db->query($uquery);
+	  
+	  if (!$this->db->affected_rows() && $this->ac_newid($id,$name)){
+		  $this->db->query($iquery);
+	  }
 
     return $ret;
   }
@@ -133,10 +144,10 @@ class CT_Sql {
   }
 
   function ac_newid($str, $name) {
-		$query = "SELECT DISTINCTROW sid FROM " . $this->database_table . " WHERE sid = '$str' AND name = '$name'";
+		$query = "SELECT  sid FROM " . $this->database_table . " WHERE sid = '$str' AND name = '$name'";
 		$this->db->query($query);
-		if ($this->db->affected_rows() == 0) {
-    	return $str;
+		if (!$this->db->next_record()) {
+			return $str;
 		} else {
 			return FALSE;
 		}
