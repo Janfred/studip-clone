@@ -177,8 +177,10 @@ class EditSettings {
 				<td class="<? echo $cssSw->getClass() ?>" width="10%" valign="middle" align="center">
 					<select name="change_root_user_perms[]">
 						<font size=-1><option <? ($this->db->f("perms")=="admin") ? printf ("selected") : printf (""); ?>>admin</option></font>
-						<font size=-1><option <? ($this->db->f("perms")=="tutor") ? printf ("selected") : printf (""); ?>>tutor</option></font>
-						<font size=-1><option <? ($this->db->f("perms")=="autor") ? printf ("selected"): printf (""); ?>>autor</option></font>
+						<?
+						/*<font size=-1><option <? ($this->db->f("perms")=="tutor") ? printf ("selected") : printf (""); ?>>tutor</option></font>
+						<font size=-1><option <? ($this->db->f("perms")=="autor") ? printf ("selected"): printf (""); ?>>autor</option></font>*/
+						?>
 					</select>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="10%" valign="middle" align="center">
@@ -518,7 +520,16 @@ class EditSettings {
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
 		<form method="POST" action="<?echo $PHP_SELF ?>?change_global_settings=TRUE">
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
+					<font size=-1><b><?=_("Zulassen von <i>Raum</i>anfragen")?></b><br /><br />
+					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_requests" <? print($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete R&auml;ume w&uuml;nschen.")?><br />
+					<br />				
+				</td>
+			</tr>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Blockierung der Belegung von <i>R&auml;umen</i>")?></b><br /><br />
@@ -603,15 +614,6 @@ class EditSettings {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
-					<font size=-1><b><?=_("Zulassen von <i>Raum</i>anfragen")?></b><br /><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="allow_requests" <? print($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) ? "checked" : ""; print ">&nbsp;"._("NutzerInnen k&ouml;nnen im Rahmen der Veranstaltungsverwaltung Raumeigenschaften und konkrete R&auml;ume w&uuml;nschen.")?><br />
-					<br />				
-				</td>
-			</tr>
-			<tr>
-				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp; 
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Optionen beim Bearbeiten von Anfragen")?></b><br /><br />
 					&nbsp;&nbsp;&nbsp;Anzahl der Belegungen, ab der R&auml;ume dennoch mit Einzelterminen passend belegt werden k&ouml;nnen: <input type="TEXT" size="5" maxlength="10" name="allow_single_assign_percentage" value="<? print($GLOBALS["RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE"]);?>" />%<br />
 					&nbsp;&nbsp;&nbsp;Anzahl ab der Einzeltermine gruppiert bearbeitet werden sollen: <input type="TEXT" size="3" maxlength="5" name="allow_single_date_grouping" value="<? print($GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]);?>" /><br />
@@ -624,7 +626,9 @@ class EditSettings {
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" align="left">
 					<font size=-1><b><?=_("Einordnung von <i>R&auml;umen</i> in Orga-Struktur")?></b><br /><br />
 					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_classify" <? print($GLOBALS["RESOURCES_ENABLE_ORGA_CLASSIFY"]) ? "checked" : ""; print ">&nbsp;"._("<i>R&auml;ume</i> k&ouml;nnen Fakult&auml;ten und Einrichtungen unabh&auml;ngig von Besitzerrechten zugeordnet werden.")?><br />
-					&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_admin_notice" <? print($GLOBALS["RESOURCES_ENABLE_ORGA_ADMIN_NOTICE"]) ? "checked" : ""; print ">&nbsp;"._("Bei <i>Raum</i>w&uuml;nschen von DozentInnen auf <i>R&auml;ume</i> fremder Einrichtungen und Fakult&auml;ten die Administratoren benachrichtigen. ")?><br />
+					<?
+					/*&nbsp;&nbsp;&nbsp;<input type="CHECKBOX" name="enable_orga_admin_notice" <? print($GLOBALS["RESOURCES_ENABLE_ORGA_ADMIN_NOTICE"]) ? "checked" : ""; print ">&nbsp;"._("Bei <i>Raum</i>w&uuml;nschen von DozentInnen auf <i>R&auml;ume</i> fremder Einrichtungen und Fakult&auml;ten die Administratoren benachrichtigen. ")?><br />*/
+					?>
 					<br />				
 				</td>
 			</tr>
