@@ -34,6 +34,9 @@
 // +---------------------------------------------------------------------------+
 
 require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
+require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+
 
 /*****************************************************************************
 AssignObject, zentrale Klasse der Objekte der Belegung
@@ -53,7 +56,25 @@ class AssignObject {
 	var $repeat_day_of_month;	//Wiederholungen an bestimmten Tag des Monats
 	var $repeat_week_of_month;	//Wiederholungen immer in dieser Woche des Monats
 	var $repeat_day_of_week;	//Wiederholungen immer an diesem Wochentag
-
+	
+	
+	function &Factory(){
+		static $assign_object_pool;
+		$argn = func_num_args();
+		if ($argn == 1){
+			if ( ($id = func_get_arg(0)) ){
+				if (is_object($assign_object_pool[$id])){
+					return $assign_object_pool[$id];
+				} else {
+					$assign_object_pool[$id] =& new AssignObject($id);
+					return $assign_object_pool[$id];
+				}
+			}
+		}
+		return new AssignObject(func_get_args());
+	}
+	
+	/*
 	//Konstruktor
 	function AssignObject($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin='', $end='', 
 						$repeat_end='', $repeat_quantity='', $repeat_interval='', $repeat_month_of_year='', $repeat_day_of_month='', 
@@ -91,7 +112,39 @@ class AssignObject {
 			$this->isNewObject =TRUE;
 		} 	
 	}
-
+	*/
+	
+	function AssignObject($argv) {
+		global $user;
+		
+		$this->user_id = $user->id;
+		$this->db = new DB_Seminar;
+		
+		if($argv && !is_array($argv)) {
+			$id = $argv;
+			if (!$this->restore($id)){
+				$this->isNewObject = true;
+			}
+		} else {
+			$this->id = $argv[0];
+			$this->resource_id = $argv[1];
+			$this->assign_user_id = $argv[2];
+			$this->user_free_name = $argv[3];
+			$this->begin = $argv[4];
+			$this->end = $argv[5];
+			$this->repeat_end = $argv[6];
+			$this->repeat_quantity = $argv[7];
+			$this->repeat_interval = $argv[8];
+			$this->repeat_month_of_year  = $argv[9];
+			$this->repeat_day_of_month = $argv[10];
+			$this->repeat_week_of_month = $argv[11];
+			$this->repeat_day_of_week = $argv[12];
+			if (!$this->id)
+				$this->createId();
+			$this->isNewObject =TRUE;
+		}
+	}
+	
 	function createId() {
 		$this->id = md5(uniqid("BartSimpson",1));
 	}
@@ -114,9 +167,9 @@ class AssignObject {
 		return $this->assign_user_id;
 	}
 
-	function getOwnerName($explain=FALSE, $id='') {
+	function GetOwnerName($explain=FALSE, $id='') {
 		global $TERMIN_TYP;
-
+		$db = new DB_Seminar();
 		if (!$id)
 			$id=$this->assign_user_id;
 			
@@ -130,30 +183,30 @@ class AssignObject {
 			case "inst":
 			case "fak":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);
-				$this->db->query($query);
-				if ($this->db->next_record())
+				$db->query($query);
+				if ($db->next_record())
 					if (!$explain)
-						return $this->db->f("Name");
+						return $db->f("Name");
 					else
-						return $this->db->f("Name")." ("._("Einrichtung").")";
+						return $db->f("Name")." ("._("Einrichtung").")";
 			break;
 			case "sem":
 				$query = sprintf("SELECT Name FROM seminare WHERE Seminar_id='%s' ",$id);
-				$this->db->query($query);
-				if ($this->db->next_record())
+				$db->query($query);
+				if ($db->next_record())
 					if (!$explain)
-						return $this->db->f("Name");
+						return $db->f("Name");
 					else
-						return $this->db->f("Name"). " ("._("Veranstaltung").")";	
+						return $db->f("Name"). " ("._("Veranstaltung").")";	
 			break;
 			case "date":
 				$query = sprintf("SELECT Name, content, date_typ FROM termine LEFT JOIN seminare ON (seminar_id = range_id) WHERE termin_id='%s' ",$id);
-				$this->db->query($query);
-				if ($this->db->next_record())
+				$db->query($query);
+				if ($db->next_record())
 					if (!$explain)
-						return $this->db->f("Name");
+						return $db->f("Name");
 					else
-						return $this->db->f("Name")." (".$TERMIN_TYP[$this->db->f("date_typ")]["name"].")";	
+						return $db->f("Name")." (".$TERMIN_TYP[$db->f("date_typ")]["name"].")";	
 			break;
 			case "global":
 			default:
