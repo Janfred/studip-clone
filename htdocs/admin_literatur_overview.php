@@ -74,6 +74,14 @@ if (isset($_GET['_catalog_id'])){
 if ($_REQUEST['cmd'] == 'markall' && is_array($_lit_data)){
 	$_check_list = array_keys($_lit_data);
 }
+if ($_REQUEST['cmd'] == 'open_all' && is_array($_lit_data)){
+	$_open = array_keys($_lit_data);
+	$_open = array_flip($_open);
+}
+if ($_REQUEST['cmd'] == 'close_all'){
+	$_anker_id = null;
+	$_open = null;
+}
 if ($_REQUEST['cmd'] == 'check' && is_array($_check_list) && is_array($_lit_data)){
 	foreach ($_check_list as $el){
 		$check = StudipLitSearch::CheckZ3950($_lit_data[$el]['accession_number'], $_check_plugin);
@@ -210,9 +218,10 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 					}
 					?>
 				</select>
-					<input style="vertical-align:middle" type="image" <?=makeButton('jetzttesten','src') . ' ' . tooltip(_("Alle markierten Einträge im ausgewählten Katalog suchen"))?> border="0">
+					<input style="vertical-align:middle" type="image" <?=makeButton('verfuegbarkeit','src') . ' ' . tooltip(_("Alle markierten Einträge im ausgewählten Katalog suchen"))?> border="0">
 					&nbsp;&nbsp;&nbsp;
 					<a href="<?=$PHP_SELF?>?cmd=markall"><img style="vertical-align:middle" <?=makeButton('alleauswaehlen','src') . ' ' . tooltip(_("Alle Einträge markieren"))?> border="0"></a>
+					<br>&nbsp;
 				</td>
 			</tr>
 		
@@ -259,6 +268,13 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 		}
 	}
 	if (is_array($_lit_data)){
+		echo "\n<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\"><tr><td class=\"steel1\">";
+		if (is_array($_open) && count($_open)){
+			echo "\n<a href=\"$PHP_SELF?cmd=close_all\" class=\"tree\"><img src=\"pictures/forumgraurunt2.gif\" border=\"0\" hspace=\"3\">" . _("Alle Einträge zuklappen") . "</a>";
+		} else {
+			echo "\n<a href=\"$PHP_SELF?cmd=open_all\" class=\"tree\"><img src=\"pictures/forumgrau2.gif\" border=\"0\" hspace=\"3\">" . _("Alle Einträge aufklappen") . "</a>";
+		}
+		echo "\n</td></tr></table>";
 		foreach ($_lit_data as $cid => $data){
 			$element->setValues($data);
 			if ($element->getValue('catalog_id')){
@@ -296,7 +312,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 					$estimated_p = 0;
 					$participants = 0;
 					$edit .= "<a href=\"$PHP_SELF?_catalog_id=" . $element->getValue("catalog_id") . "#anker\">"
-					. "<img " .makeButton("jetzttesten","src") . tooltip(_("Verfügbarkeit überprüfen"))
+					. "<img " .makeButton("verfuegbarkeit","src") . tooltip(_("Verfügbarkeit überprüfen"))
 					. " border=\"0\"></a>&nbsp;";
 					$edit .= "<a href=\"admin_lit_element.php?_catalog_id=" . $element->getValue("catalog_id") . "\">"
 					. "<img " .makeButton("details","src") . tooltip(_("Detailansicht dieses Eintrages ansehen."))
