@@ -82,7 +82,7 @@ if (($admin_inst_id) && ($admin_inst_id != "NULL")) {
 	$links_admin_data["referred_from"]="inst";
 }
 
-//Veranstaltung was selected but it is on his way to hell.... we close t at ths point 
+//Veranstaltung was selected but it is on his way to hell.... we close it at this point 
 if (($archive_kill) && ($SessSemName[1] == $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"])) {
 	//reset_all_data();
 	closeObject();
@@ -127,10 +127,11 @@ if ($i_view=="new")
 
 //here are all the pages/views listed, which require the search form for Einrichtungen
 if ($i_page == "admin_institut.php"
-		OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_inst")
-		OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_inst")
+		OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"] == "statusgruppe_inst")
+		OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"] == "literatur_inst")
 		OR $i_page == "inst_admin.php"
-		OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_inst")
+		OR ($i_page == "admin_news.php" AND $links_admin_data["view"] == "news_inst")
+		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_inst")
 		OR ($i_page == "admin_extern.php" AND $links_admin_data["view"] == "extern_inst")) {
 		
 	$view_mode="inst";
@@ -145,6 +146,7 @@ if ($i_page == "admin_seminare1.php"
 		OR ($i_page == "admin_literatur.php" AND $links_admin_data["view"]=="literatur_sem")
 		OR $i_page == "archiv_assi.php"
 		OR $i_page == "adminarea_start.php"
+		OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_sem")		
 		OR ($i_page == "admin_news.php" AND $links_admin_data["view"]=="news_sem")) {
 	
 	$view_mode="sem";
@@ -170,71 +172,6 @@ if ((!$SessSemName[1]) && ($list) && ($view_mode=="inst")) {
 		}
 	}
 }
-
-
-//Wenn Seminar_id gesetzt ist oder vorgewaehlt wurde, werden die spaeteren Seiten mit entsprechend gesetzten Werten aufgerufen
-if ($SessSemName["class"]=="sem") {
-	switch ($i_page) {
-		case "admin_admission.php": 
-			$seminar_id=$SessSemName[1];
-			break;
-		case "admin_dates.php": 
-			$range_id=$SessSemName[1];
-			break;
-		case "admin_metadates.php": 
-			$seminar_id=$SessSemName[1];
-			break;
-		case "admin_literatur.php":
-			if ($links_admin_data["view"]=="literatur_sem") {
-				$range_id=$SessSemName[1];
-				$ebene="sem";
-			}
-			break;
-		case "admin_statusgruppe.php":
-			if ($links_admin_data["view"]=="statusgruppe_sem") {
-				$range_id=$SessSemName[1];
-				$ebene="sem";
-			}
-			break;
-		case "archiv_assi.php": 
-			$archiv_sem[]="_id_".$SessSemName[1];
-			$archiv_sem[]="on";
-			break;
-		case "admin_seminare1.php": 
-			$s_id=$SessSemName[1];
-			if (!$s_command)
-				$s_command="edit";
-			break;
-	}
-}
-
-//Wenn Institut_id gesetzt ist oder vorgewaehlt wurde, werden die spaeteren Seiten mit entsprechend gesetzten Werten aufgerufen
-if ($SessSemName["class"]=="inst") {
-	switch ($i_page) {
-		case "admin_institut.php": 
-			$i_view=$SessSemName[1];
-			break;
-		case "inst_admin.php": 
-			$inst_id=$SessSemName[1];
-			break;
-		case "admin_literatur.php": 
-			if ($links_admin_data["view"]=="literatur_inst") {
-				$range_id=$SessSemName[1];
-				$ebene="inst";
-				}
-			break;
-		case "admin_statusgruppe.php": 
-			if ($links_admin_data["view"]=="statusgruppe_inst") {
-				$range_id=$SessSemName[1];
-				$ebene="inst";
-				}
-			break;
-		case "admin_extern.php":
-			$range_id = $SessSemName[1];
-			break;
-	}
-}
-
 
 //Reitersytem erzeugen
 $reiter=new reiter;
@@ -284,6 +221,7 @@ $structure["literatur_sem"]=array (topKat=>"veranstaltungen", name=>_("Literatur
 $structure["zugang"]=array (topKat=>"veranstaltungen", name=>_("Zugangsberechtigungen"), link=>"admin_admission.php?list=TRUE", active=>FALSE);
 $structure["statusgruppe_sem"]=array (topKat=>"veranstaltungen", name=>_("Gruppen&nbsp;/&nbsp;Funktionen"), link=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 $structure["news_sem"]=array (topKat=>"veranstaltungen", name=>_("News"), link=>"admin_news.php?view=news_sem", active=>FALSE);
+$structure["modules_sem"]=array (topKat=>"veranstaltungen", name=>_("Module"), link=>"admin_modules.php?view=modules_sem", active=>FALSE);
 if ($perm->have_perm("admin")) 
 	$structure["archiv"]=array (topKat=>"veranstaltungen", name=>_("archivieren"), link=>"archiv_assi.php?list=TRUE&new_session=TRUE", active=>FALSE);
 if ($perm->have_perm("dozent")) 
@@ -296,6 +234,7 @@ if ($perm->have_perm("admin")) {
 }	
 $structure["literatur_inst"]=array (topKat=>"einrichtungen", name=>_("Literatur"), link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 $structure["news_inst"]=array (topKat=>"einrichtungen", name=>_("News"), link=>"admin_news.php?view=news_inst", active=>FALSE);
+$structure["modules_inst"]=array (topKat=>"einrichtungen", name=>_("Module"), link=>"admin_modules.php?view=modules_inst", active=>FALSE);
 
 if ($EXTERN_ENABLE && $perm->have_perm("admin"))
 	$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
@@ -398,6 +337,12 @@ switch ($i_page) {
 			$reiter_view="statusgruppe_sem"; 
 		else
 			$reiter_view="statusgruppe_inst";
+	break;
+	case "admin_modules.php": 
+		if ($links_admin_data["topkat"] == "sem")
+			$reiter_view="modules_sem"; 
+		else
+			$reiter_view="modules_inst";
 	break;
 	case "admin_studiengang.php": 
 		$reiter_view="studiengang"; 
