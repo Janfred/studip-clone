@@ -1352,7 +1352,7 @@ elseif ((!$level) || ($level==1))
 							<?=_("Veranstaltungsnummer:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="30%">
-							&nbsp; <input type="text" name="sem_nummer" size=20 maxlength=255 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
+							&nbsp; <input type="text" name="sem_nummer" size=20 maxlength=32 value="<? echo  htmlReady(stripslashes($sem_create_data["sem_nummer"])) ?>">
 							<img  src="./pictures/info.gif" 
 								<? echo tooltip(_("Fall Sie eine eindeutige Veranstaltungsnummer für diese Veranstaltung kennen, geben Sie diese bitte hier ein."), TRUE, TRUE) ?>
 							>

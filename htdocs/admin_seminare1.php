@@ -423,7 +423,7 @@ if (($s_id) && (auth_check())) {
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right>Veranstaltungs-Nummer</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="VeranstaltungsNummer" size="20" maxlength="255" value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="VeranstaltungsNummer" size="20" maxlength="32" value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right>ECTS-Punkte</td>
