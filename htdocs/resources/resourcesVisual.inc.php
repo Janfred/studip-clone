@@ -1443,8 +1443,8 @@ class EditObject extends cssClasses {
 		
 		$ObjectPerms = new ResourcesObjectPerms($this->resObject->getId());
 		
-		$owner_perms = checkObjektAdminstrablePerms ($this->resObject->getOwnerId());
-		
+		$owner_perms = checkObjektAdministrablePerms ($this->resObject->getOwnerId());
+
 		if ($owner_perms)
 			$admin_perms = TRUE;
 		else

@@ -145,8 +145,9 @@ checkObjektAdminstrablePerms checks, if I have the chance to change
 the owner of the given object
 /*****************************************************************************/
 
-function checkObjektAdminstrablePerms ($resource_object_owner_id, $user_id='') {
+function checkObjektAdministrablePerms ($resource_object_owner_id, $user_id='') {
 	global $user, $perm, $my_perms;
+
 	if (!$user_id)
 		$user_id = $user->id;
 	
@@ -164,10 +165,12 @@ function checkObjektAdminstrablePerms ($resource_object_owner_id, $user_id='') {
 	//ok, we as a user aren't interesting...
 	unset ($my_objects[$user_id]);
 	if (sizeof ($my_objects)) {
-		if (($my_objects[$resource_object_owner_id]) || ($resource_object_owner_id == $user_id))
+		if (($my_objects[$resource_object_owner_id]["perms"] == "admin") || ($resource_object_owner_id == $user_id)) {
+			print_r($my_objects[$resource_object_owner_id]);
 			return TRUE;
-		else
+		} else {
 			return FALSE;
+		}
 	} else
 		return FALSE;
 }
