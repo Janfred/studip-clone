@@ -79,5 +79,7 @@ header("Content-Type: application/x-autologin");
 header("Content-Disposition: inline; filename=\"autologin_".$auth->auth["uname"].".rename_to_html\"");
 header("Pragma: no-cache");
 header("Expires: 0");
+header("cache-control: no-cache");
+
 ob_end_flush();
 ?>
