@@ -831,6 +831,22 @@ if (($form == 3) && ($jump_next_x))
 	else {
 		if ((($vor_stunde) && (!$vor_end_stunde)) || ((!$vor_stunde) && ($vor_end_stunde)))
 			$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der Vorbesprechung aus!")."§";	
+		
+		//check for room management: we dont allow the preliminary discussion matches a turnus date (in this case, a schedule schoudl be used!)
+		if ((!$sem_create_data["term_art"]) && ($RESOURCES_ENABLE)) {
+			$tmp_vor_day = date("w", $sem_create_data["sem_vor_termin"]);
+			echo $tmp_vor_day;
+			if ($tmp_vor_day == 0)
+				$tmp_vor_day = 7;
+			for ($i=0; $i<$sem_create_data["turnus_count"]; $i++) {
+				if (($sem_create_data["term_turnus_start_stunde"][$i] == $vor_stunde) &&
+					($sem_create_data["term_turnus_end_stunde"][$i] == $vor_end_stunde) &&
+					($sem_create_data["term_turnus_start_minute"][$i] == $vor_start_minute) &&
+					($sem_create_data["term_turnus_end_minute"][$i] == $vor_end_minute) &&
+					($sem_create_data["term_turnus_date"][$i] == $tmp_vor_day))
+					$errormsg=$errormsg."error§"._("Der Termin f&uuml;r die Vorbesprechung findet zu den gleichen Zeiten wie die Veranstaltung statt. Bitte legen Sie in diesem Fall einen Ablaufplan in einem sp&auml;teren Schritt an und &auml;nder einen Termin in den Typ \"Vorbesprechung\"")."§";
+			}
+		}
 	}
 	
 	if (!$errormsg)
@@ -1352,6 +1368,13 @@ if (($form == 6) && ($jump_next_x))
 				if ($RESOURCES_ENABLE && $db->affected_rows()) {
 					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
 					$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
+				}
+
+				//create a request
+				if (is_object($sem_create_data["resRequest"])) {
+					$sem_create_data["resRequest"]->copy();
+					$sem_create_data["resRequest"]->setTerminId($termin_id);
+					$sem_create_data["resRequest"]->store();
 				}
 			}
 			
