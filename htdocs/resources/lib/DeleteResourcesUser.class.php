@@ -43,7 +43,7 @@ class DeleteResourcesUser {
 	var $range_id;
 	
 	//Konstruktor
-	function DeleteResourcesUser ($range_id, $recurse = TRUE) {
+	function DeleteResourcesUser ($range_id) {
 		global $RELATIVE_PATH_RESOURCES;
 
 		$this->db = new DB_Seminar;
