@@ -239,6 +239,10 @@ if ($perm->have_perm("tutor")) {
 	$structure["einrichtungen"]=array (topKat=>"", name=>"Einrichtungen", link=>"admin_literatur.php?list=TRUE&view=literatur_inst", active=>FALSE);
 }
 
+if (/*($CHAT_ENABLE) || */ ($RESOURCES_ENABLE)) {
+	$structure["modules"]=array (topKat=>"", name=>"Tools", link=>"admin_modules_start.php", active=>FALSE);
+}
+
 if ($perm->have_perm("admin")) {
 	$structure["einrichtungen"]=array (topKat=>"", name=>"Einrichtungen", link=>"admin_institut.php?list=TRUE", active=>FALSE);
 	$structure["global"]=array (topKat=>"", name=>"globale Einstellungen", link=>"new_user_md5.php", active=>FALSE);
@@ -272,14 +276,18 @@ $structure["news_inst"]=array (topKat=>"einrichtungen", name=>"News", link=>"adm
 if ($perm->have_perm("root"))
 	$structure["new_inst"]=array (topKat=>"einrichtungen", name=>"neue Einrichtung", link=>"admin_institut.php?i_view=new", active=>FALSE);
 //
-if ($perm->have_perm("admin")) 		
+$structure["export"]=array (topKat=>"modules", name=>"Export", link=>"export.php", active=>FALSE);
+$structure["resources"]=array (topKat=>"modules", name=>"Ressourcenverwaltung", link=>"resources.php", active=>FALSE);
+//
+if ($perm->have_perm("admin")) {		
 	$structure["new_user"]=array (topKat=>"global", name=>"Benutzer", link=>"new_user_md5.php", active=>FALSE);
+	$structure["range_tree"]=array (topKat=>"global", name=>"Bereichsbaum", link=>"admin_range_tree.php", active=>FALSE);
+}
 if ($perm->have_perm("root")) {
 	$structure["fakultaet"]=array (topKat=>"global", name=>"Fakult&auml;ten", link=>"admin_fakultaet.php", active=>FALSE);
 	$structure["studiengang"]=array (topKat=>"global", name=>"Studieng&auml;nge", link=>"admin_studiengang.php", active=>FALSE);
 	$structure["fach"]=array (topKat=>"global", name=>"Studienf&auml;cher", link=>"admin_fach.php", active=>FALSE);
 	$structure["bereich"]=array (topKat=>"global", name=>"Bereiche", link=>"admin_bereich.php", active=>FALSE);
-	$structure["news_global"]=array (topKat=>"global", name=>"News", link=>"admin_news.php?view=news_global", active=>FALSE);
 	$structure["sessions"]=array (topKat=>"global", name=>"Sessions", link=>"view_sessions.php", active=>FALSE);
 	$structure["integrity"]=array (topKat=>"global", name=>"DB Integrit&auml;t", link=>"admin_db_integrity.php", active=>FALSE);
 }
@@ -348,8 +356,6 @@ switch ($i_page) {
 			$reiter_view="news_sem"; 
 		elseif ($links_admin_data["topkat"] == "inst")
 			$reiter_view="news_inst";
-		else
-			$reiter_view="news_global";
 	break;
 	case "admin_seminare1.php": 
 		$reiter_view="grunddaten_sem"; 
@@ -380,7 +386,13 @@ switch ($i_page) {
 	break;
 	case "inst_admin.php": 
 		$reiter_view="mitarbeiter"; 
-	break;	
+	break;
+	case "export.php": 
+		$reiter_view="export"; 
+	break;
+	case "admin_modules_start.php": 
+		$reiter_view="modules"; 
+	break;
 }
 
 $reiter->create($structure, $reiter_view, $tooltip, $addText);
