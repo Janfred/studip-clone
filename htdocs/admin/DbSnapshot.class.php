@@ -58,6 +58,14 @@ class DbSnapshot {
 	*/
 	var $result = array();
 	/**
+	* array to store metadata oh the result set
+	*
+	* 
+	* @access	private
+	* @var		array	$metaData
+	*/
+	var $metaData = array();
+	/**
 	* the number of fields in the result set
 	*
 	* 
@@ -120,6 +128,7 @@ class DbSnapshot {
 			}
 			$this->numFields = $this->dbResult->num_fields();
 			$this->numRows = count($this->result);
+			$this->metaData = $this->dbResult->metadata();
 			unset($this->dbResult);
 			$this->pos = false;
 			return true;
@@ -154,10 +163,8 @@ class DbSnapshot {
 		if(!$this->numRows)
 			$this->halt("No snapshot available or empty result!");
 		$ret = array();
-		$i = 1;
-		foreach ($this->result[0] as $key => $value) {
-			if ($i%2==0) $ret[] = $key;
-			++$i;
+		for ($i = 0; $i < $this->numFields; ++$i) {
+			$ret[] = $this->metaData[$i]['name'];
 		}
 		return $ret;
 	}

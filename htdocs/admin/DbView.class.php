@@ -91,13 +91,15 @@ class DbView {
 	* @access	public
 	* @param	mixed	$db	classname of used db abstraction or existing db object
 	*/
-	function DbView($db="") {
-		if(is_object($db))
+	function DbView($db = "") {
+		if(is_object($db)){
 			$this->db = $db;
-		else if($db!="")
+		} else if($db != ""){
 			$this->db = new $db;
-		else
+			$this->db_class_name = $db;
+		} else {
 			$this->db = new $this->db_class_name;
+		}
 		
 	}
 	
