@@ -118,7 +118,7 @@ $EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				//path to store 
 
 $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
 
-$WIKI_ENABLE = FALSE;									//Stud.IP module: Wiki-Web
+$WIKI_ENABLE = TRUE;									//Stud.IP module: Wiki-Web
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
