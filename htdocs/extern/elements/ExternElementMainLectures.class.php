@@ -236,7 +236,6 @@ class ExternElementMainLectures extends ExternElementMain {
 			// checked, the variable is not declared and it is necessary to set the
 			// variable to 0.
 			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-			echo "<br>hallo";
 				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
 				return FALSE;
 			}
