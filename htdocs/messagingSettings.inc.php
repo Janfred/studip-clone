@@ -332,17 +332,6 @@ function change_messaging_view() {
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
-					<td class="<? echo $cssSw->getClass() ?>">
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<?echo _("Buddies verwalten:");?>
-					</td>
-					<td class="<? echo $cssSw->getClass() ?>"><font size=-1>&nbsp;&nbsp;
-					<?
-					printf(_("Zum Verwalten Ihrer Buddies besuchen Sie bitte das %sAdressbuch%s."), "<a href=\"contact.php\">", "</a>");
-					?>
-					</font></td>
-				</tr>
-				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" width="20%">&nbsp;
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" width="80%"><br>&nbsp; 
