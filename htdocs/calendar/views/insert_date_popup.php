@@ -1,33 +1,63 @@
 <?
+/**
+* popup calendar for studip
+*
+* popup calendar for studip
+*
+* @author			Peter Tienel <pthienel@web.de>
+* @version			$Id$
+* @access			public
+* @module			insert_date_popup.ph
+*/
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// insert_date_popup.php
+// Copyright (c) 2004 Peter Tienel <pthienel@web.de>, Jens Schmelzer <jens.schmelzer@fh-jena.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 include ($ABSOLUTE_PATH_STUDIP . '/seminar_open.php'); // initialise Stud.IP-Session
+require_once ($ABSOLUTE_PATH_STUDIP. '/config.inc.php');
 
-$element_switch = (isset($_REQUEST['element_switch']))? $_REQUEST['element_switch']:0;
-$c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;
-$mcount = (isset($_REQUEST['mcount']))? $_REQUEST['mcount'] : 1;
-$ss = (isset($_REQUEST['ss']))? sprintf('%02d',$_REQUEST['ss']):'';
-$sm = (isset($_REQUEST['sm']))? sprintf('%02d',$_REQUEST['sm']):'';
-$es = (isset($_REQUEST['es']))? sprintf('%02d',$_REQUEST['es']):'';
-$em = (isset($_REQUEST['em']))? sprintf('%02d',$_REQUEST['em']):'';
+$element_switch = (isset($_REQUEST['element_switch']))? $_REQUEST['element_switch']:0; // Wert von 1 - 7 für Auswahl der Feldbezeichner
+$c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;                   // Zähler wenn mehrere gleiche Eingabefelder im Zielformular
+$mcount = (isset($_REQUEST['mcount']))? $_REQUEST['mcount'] : 1;    // Anzahl der anzuzeigenden Monate
+$ss = (isset($_REQUEST['ss']))? sprintf('%02d',$_REQUEST['ss']):''; // Startstunde
+$sm = (isset($_REQUEST['sm']))? sprintf('%02d',$_REQUEST['sm']):''; // Startminute
+$es = (isset($_REQUEST['es']))? sprintf('%02d',$_REQUEST['es']):''; // Endstunde
+$em = (isset($_REQUEST['em']))? sprintf('%02d',$_REQUEST['em']):''; // Endminute
 $q = ($ss !== '')? "&ss=$ss&sm=$sm&es=$es&em=$em":'';
 
-$zz = array (
-	array ('07','45','09','15'),
-	array ('09','30','11','00'),
-	array ('11','15','12','45'),
-	array ('13','30','15','00'),
-	array ('15','15','16','45'),
-	array ('17','00','18','30'),
-	array ('18','45','20','15')
-);
+// Array mit Standardzeiten vorhanden?
+if (isset($GLOBALS['TIME_PRESETS']) && is_array($GLOBALS['TIME_PRESETS']) && count($GLOBALS['TIME_PRESETS']) > 0) {
+	$zz = $GLOBALS['TIME_PRESETS'];
+	$preset_error = '';
+} else {
+	$zz = array();
+	$preset_error = _('Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben.');
+}
 
+// Array für javascript aufbereiten
 $jsarray = "zz = new Array();\n";
 for($z = 0; $z < count($zz); $z++) {
 	$jsarray .= "zz[$z] = new Array('".$zz[$z][0]."','".$zz[$z][1]."','".$zz[$z][2]."','".$zz[$z][3]."');\n";
 }
 $jsarray .= "zz[$z] = new Array('$ss','$sm','$es','$em');\n";
 
-switch ($element_switch){
+switch ($element_switch){  // Auswahl der Zielparameter
 	case 1:  // admin_dates.php Einzeltermin
 		$txt_day   = 'tag';
 		$txt_month = 'monat';
@@ -103,9 +133,11 @@ switch ($element_switch){
 		$kalender = true;
 
 }
+if ($preset_error != '') $zeiten = false;
+
 $title = _('Kalender');
 $resize = '';
-if ($zeiten && !$kalender) {
+if ($zeiten && !$kalender) {  // popup Fenster verkleinern wenn kein Kalender
 	$resize = 'window.resizeTo('.(($auth->auth["xres"] > 650)? 780 : 600).',150);'. "\n";
 	$resize .= 'window.moveBy(0,330);'."\n";
 }
@@ -199,6 +231,8 @@ if ($mcount > 3) {
 		}
 		echo '</tr></table></form>';
 		echo '</td></tr>', "\n";
+	} elseif($preset_error != '') {
+		echo '<tr><td class="blank" colspan="',$mcounth,'" align=center>', $preset_error, '</td></tr>', "\n";
 	}
 
 	// navigation arrows
@@ -219,7 +253,9 @@ if ($mcount > 3) {
 		echo '<td class="blank" colspan="',$mcounth,'" align="center">', $zeiten_buttons, "</td>\n";
 	}
 	echo '</tr></table>', "\n";
-} else {
+
+} else { // nur einen Monat anzeigen
+
 	echo includeMonth($atime, $PHP_SELF . '?element_switch='.$element_switch.'&c='.$c.'&atime=', 'NOKW', $js);
 }
 echo "</body>\n</html>";
