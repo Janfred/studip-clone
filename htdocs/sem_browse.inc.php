@@ -32,7 +32,7 @@ require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
 require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
 require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemSearch.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeView.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/StudipSemTreeViewSimple.class.php");
 
 
 //init classes
@@ -58,6 +58,8 @@ if ($sset) $sem_browse_data["sset"]=$sset;
 if ($cmd) $sem_browse_data["cmd"]=$cmd;
 if ($level) $sem_browse_data["level"]=$level;
 if ($group_by) $sem_browse_data["group_by"]=$group_by;
+if ($start_item_id) $sem_browse_data["start_item_id"] = $start_item_id;
+
 if (isset($_REQUEST[$search_obj->form_name . "_sem"])){
 	$sem_browse_data['default_sem'] = $_REQUEST[$search_obj->form_name . "_sem"];
 } elseif (!isset($sem_browse_data['default_sem'])){
@@ -90,12 +92,10 @@ if (($reset_all)  || $search_obj->new_search_button_clicked){
 
 if ($level==0) $sem_browse_data["extern"] == FALSE;
 //Zuruecksetzen
-if (($reset_all)  || $search_obj->new_search_button_clicked){
-	$tmp_cmd = $sem_browse_data["cmd"];	
-	$default_sem = $sem_browse_data["default_sem"];
-	$sem_browse_data = null;
-	$sem_browse_data["cmd"] = $tmp_cmd;	
-	$sem_browse_data["default_sem"] = $default_sem;
+if ($search_obj->sem_change_button_clicked && $_REQUEST[$search_obj->form_name . "_scope_choose"]){
+	$sem_browse_data["cmd"] = "qs";	
+	$sem_browse_data["level"] = "vv";
+	$sem_browse_data['sset'] = false;
 	$_marked_sem = array();
 }
 
@@ -104,7 +104,7 @@ if (!isset ($sem_browse_data["level"])) {
 }
 
 if ($sem_browse_data['level'] == "vv" || $level=="vv"){
-	$sem_tree = new StudipSemTreeView($_REQUEST['start_item_id'], (($sem_browse_data['default_sem'] == 'all') ? false : $sem_browse_data['default_sem']));
+	$sem_tree = new StudipSemTreeViewSimple($sem_browse_data["start_item_id"], (($sem_browse_data['default_sem'] == 'all') ? false : $sem_browse_data['default_sem']));
 	$sem_browse_data['cmd'] = "qs";
 	if ($level == "vv"){
 		$_open_items = null;
@@ -118,7 +118,10 @@ if ($_REQUEST['cmd'] == "show_sem_range"){
 		$args = array('sem_number' => $sem_browse_data['default_sem']);
 	}
 	$the_tree =& TreeAbstract::GetInstance("StudipSemTree",$args);
-	$sem_ids = $the_tree->getSemIds($_REQUEST['item_id'],true);
+	$tmp = explode("_",$_REQUEST['item_id']);
+	$item_id = $tmp[0];
+	$with_kids = isset($tmp[1]);
+	$sem_ids = $the_tree->getSemIds($item_id,$with_kids);
 	if (is_array($sem_ids)){
 		$_marked_sem = array_flip($sem_ids);
 	} else {

@@ -55,6 +55,8 @@ class StudipSemSearch {
 	
 	var $new_search_button_clicked = false;
 	
+	var $sem_change_button_clicked = false;
+	
 	var $attributes_default = array('style' => 'width:100%;');
 	
 	var $search_fields = array('title' => array('type' => 'text'),
@@ -90,6 +92,10 @@ class StudipSemSearch {
 		if(isset($_REQUEST[$form_name . "_new_search_x"])){
 			$this->new_search_button_clicked = true;
 		}
+		if(isset($_REQUEST[$form_name . "_sem_change_x"])){
+			$this->sem_change_button_clicked = true;
+		}
+		
 	}
 	
 	function getSearchField($name,$attributes = false,$default = false){

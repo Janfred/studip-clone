@@ -38,7 +38,8 @@ require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
 class StudipSemTree extends TreeAbstract {
 	
 	var $sem_dates = array();
-	var $sem_number = false;
+	var $sem_number = null;
+	var $enable_lonely_sem = true;
 	/**
 	* constructor
 	*
@@ -47,7 +48,7 @@ class StudipSemTree extends TreeAbstract {
 	*/ 
 	function StudipSemTree($args) {
 		$this->root_name = $GLOBALS['UNI_NAME_CLEAN'];
-				if ($args['sem_number']){
+		if (isset($args['sem_number']) ){
 			$this->sem_number = $args['sem_number'];
 		}
 		parent::TreeAbstract(); //calling the baseclass constructor 
@@ -63,7 +64,7 @@ class StudipSemTree extends TreeAbstract {
 	*/
 	function init(){
 		parent::init();
-		$this->view->params[0] = ($this->sem_number) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . "=" . $this->sem_number . ",b.seminar_id,NULL)"  : "b.seminar_id";
+		$this->view->params[0] = (isset($this->sem_number)) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . "=" . $this->sem_number . ",b.seminar_id,NULL)"  : "b.seminar_id";
 		$db = $this->view->get_query("view:SEM_TREE_GET_DATA");
 		$view = new DbView();
 		while ($db->next_record()){
@@ -85,7 +86,7 @@ class StudipSemTree extends TreeAbstract {
 			$this->view->params[0] = $this->getKidsKids($item_id);
 		}
 		$this->view->params[0][] = $item_id;
-		$this->view->params[1] = ($this->sem_number) ? " HAVING sem_number=" . $this->sem_number : " ";
+		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number=" . $this->sem_number : " ";
 		$ret = false;
 		$rs = $this->view->get_query("view:SEM_TREE_GET_SEMIDS");
 		while($rs->next_record()){
@@ -101,7 +102,7 @@ class StudipSemTree extends TreeAbstract {
 			$this->view->params[0] = $this->getKidsKids($item_id);
 		}
 		$this->view->params[0][] = $item_id;
-		$this->view->params[1] = ($this->sem_number) ? " HAVING sem_number=" . $this->sem_number : " ";
+		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number=" . $this->sem_number : " ";
 		return new DbSnapshot($this->view->get_query("view:SEM_TREE_GET_SEMDATA"));
 	}
 	
@@ -109,16 +110,16 @@ class StudipSemTree extends TreeAbstract {
 		if (!$institut_id = $this->tree_data[$item_id]['studip_object_id'])
 			return false;
 		$this->view->params[0] = $institut_id;
-		$this->view->params[1] = ($this->sem_number) ? " HAVING sem_number=" . $this->sem_number : " ";
+		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number=" . $this->sem_number : " ";
 		return new DbSnapshot($this->view->get_query("view:SEM_TREE_GET_LONELY_SEM_DATA"));
 	}
 	
 	function getNumEntries($item_id, $num_entries_from_kids = false){
 		if (!$this->tree_data[$item_id])
 			return false;
-		if ($this->tree_data[$item_id]["studip_object_id"] && !isset($this->tree_data[$item_id]["lonely_sem"])){
+		if ($this->enable_lonely_sem && $this->tree_data[$item_id]["studip_object_id"] && !isset($this->tree_data[$item_id]["lonely_sem"])){
 				$this->view->params[0] = $this->tree_data[$item_id]["studip_object_id"];
-				$this->view->params[1] = ($this->sem_number) ? " HAVING sem_number=" . $this->sem_number : " ";
+				$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number=" . $this->sem_number : " ";
 				$db2 = $this->view->get_query("view:SEM_TREE_GET_NUM_LONELY_SEM");
 				$db2->next_record();
 				$this->tree_data[$item_id]['entries'] += $db2->f(0);

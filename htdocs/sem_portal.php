@@ -144,7 +144,6 @@ if ($sem_portal["bereich"]=="Alle")
 
 IF ($view=="Alle") {
 	$show_class=FALSE;
-	$reset_all = true;
 }
 ELSE $show_class=$view;
 IF ($SEM_CLASS[$view]["show_browse"]==FALSE AND $view!="Alle") {
