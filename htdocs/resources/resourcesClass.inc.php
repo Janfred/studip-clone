@@ -722,6 +722,7 @@ class ResourcesUserRoomsList {
 		} elseif  ($perm->have_perm ("tutor")) {
 			$my_objects=search_administrable_objects();
 			$my_objects[$this->user_id]=TRUE;
+			$my_objects["all"]=TRUE;
 			$i=0;
 			$clause="(";
 			//load my objects
@@ -737,7 +738,7 @@ class ResourcesUserRoomsList {
 			while ($db->next_record()) {
 				$this->walkThread($db->f("resource_id"));
 			}
-			$query = sprintf ("SELECT resource_id FROM resources_user_resources WHERE user_id IN %s OR user_id = 'all' ", $clause);
+			$query = sprintf ("SELECT resource_id FROM resources_user_resources WHERE user_id IN %s ", $clause);
 			$db->query($query);
 			while ($db->next_record()) {
 				$this->walkThread($db->f("resource_id"));
