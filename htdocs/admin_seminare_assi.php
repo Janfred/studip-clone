@@ -1957,7 +1957,7 @@ if ($level==4)
 										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31> &nbsp; Passwort-Wiederholung:&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31>";
 								?>
 								<img  src="./pictures/info.gif" 
-									<? echo tooltip("Bitte geben Sie hier ein Passwort für die Veranstaltung sowie dasselbe Passwort nochmal zur Best&auml;tigung ein. Dieses wird von den Teilnehmer benötigt, um die Veranstaltung abonnieren zu können.", TRUE, TRUE) ?>
+									<? echo tooltip("Bitte geben Sie hier ein Passwort für die Veranstaltung sowie dasselbe Passwort nochmal zur Bestätigung ein. Dieses wird von den Teilnehmer benötigt, um die Veranstaltung abonnieren zu können.", TRUE, TRUE) ?>
 								>
 							</td>
 						</tr>
