@@ -144,7 +144,7 @@ if ($make_dates_x) {
 	$date_typ=1; //hier setzen wir den Typ, den automatisch generierte Termine haben sollen. "1" steht fuer Sitzungstermine.
 	$orig_stunde=date("G",$sstamp);
 	$tmp = $auth->auth["uname"];
-	$db2->query("SELECT start_time, duration_time, Ort FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
+	$db2->query("SELECT start_time, duration_time FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
 	$db2->next_record();
 	$author = get_fullname();
 
@@ -383,6 +383,9 @@ if (($edit_x) && (!$admin_dates_data["termin_id"]))
 	 		{
 		 	$t_id=$termin_id[$i];
 			$f_id=md5(uniqid($hash_secret));
+			if ($resource_id[$i] == "FALSE")
+				$resource_id[$i] = FALSE;
+				
 			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$i], $titel[$i],$description[$i], $topic_id[$i],$raum[$i], $resource_id[$i], $admin_dates_data["range_id"]);
 		 	$result.=$tmp_result["msg"];
 		 	
@@ -446,7 +449,7 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 //Ab hier Ausgaben....
 
 	//Bereich wurde ausgewaehlt (aus linksadmin) oder wir kommen aus dem Seminar Assistenten
-	$db->query("SELECT metadata_dates, Name, start_time, duration_time, Ort, status, Seminar_id FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
+	$db->query("SELECT metadata_dates, Name, start_time, duration_time, status, Seminar_id FROM seminare WHERE Seminar_id = '".$admin_dates_data["range_id"]."'");
 	$db->next_record();
 	if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME) 	
 		$tmp_typ = "Veranstaltung"; 
@@ -533,8 +536,6 @@ if (($kill_x) && ($admin_dates_data["range_id"]))
 
 		$db2->query("SELECT count(*) AS anzahl FROM termine WHERE range_id='".$admin_dates_data["range_id"]."' AND date_typ IN $typ_clause");
 		$db2->next_record();
-
-		$default_room=$db->f("Ort");
 
 	//Fenster zum Starten des Terminassistenten einblenden
 	if ((!$term_data["art"]) && (!$db2->f("anzahl"))) {
