@@ -1766,9 +1766,9 @@ if ($level==2)
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 						<?
 						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
-							echo "TutorInnen:";
+							echo _("TutorInnen:");
 						else
-							echo "Mitglieder: <br />";
+							echo _("Mitglieder:") . " <br />";
 						?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="40%">
