@@ -16,7 +16,7 @@ function link_seminar_modules($seminar_id)
 			$link_str[$i]["image"] .= "<a href=\"";
 			$link_str[$i]["image"] .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);
 			$link_str[$i]["image"] .= "\" target=\"_blank\">";
-			$link_str[$i]["image"] .= "<img src=\"./pictures/cont_blatt.gif\" border=0>";
+			$link_str[$i]["image"] .= "<img src=\"./pictures/icon-lern.gif\" border=0>";
 			$link_str[$i]["image"] .= "</a>";
 			$link_str[$i]["link"] .= "<a href=\"";
 			$link_str[$i]["link"] .= link_use_module($mod_array[$i]["inst"], $mod_array[$i]["id"]);

@@ -126,7 +126,7 @@ if ($ILIAS_CONNECT_ENABLE)
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
-			<td class="topic" colspan="3">&nbsp;<b><? echo _("Verbindung der Accounts von ILIAS- und Stud.IP-NutzerInnen");?></b>
+			<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif">&nbsp;<b><? echo _("Verbindung der Accounts von ILIAS- und Stud.IP-NutzerInnen");?></b>
 			</td>
 		</tr>
 		<tr>

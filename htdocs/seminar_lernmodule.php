@@ -80,7 +80,8 @@ if ($ILIAS_CONNECT_ENABLE)
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="3">&nbsp;<b>
+		<td class="topic" colspan="3">&nbsp;<img src="./pictures/icon-lern.gif">&nbsp;
+		<b>
 		<?   if ($view=="edit") 
 				echo _("Verbindung von Veranstaltungen und Lernmodulen"); 
 			else
