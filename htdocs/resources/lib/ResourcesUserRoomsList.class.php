@@ -73,18 +73,20 @@ class ResourcesUserRoomsList {
 	
 	//private
 	function walkThread ($resource_id) {
+		global $user;
+		
 		$db=new DB_Seminar;	
 		$db2=new DB_Seminar;
 		
 		if ($this->only_rooms)
-			$query = sprintf ("SELECT COUNT(resource_id) AS count FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' AND resources_objects.resource_id = '%s' ", $resource_id);
+			$query = sprintf ("SELECT resource_id, lockable FROM resources_categories LEFT JOIN resources_objects USING (category_id) WHERE resources_categories.is_room = '1' AND resources_objects.resource_id = '%s' ", $resource_id);
 		else
-			$query = sprintf ("SELECT COUNT(resource_id) AS count FROM resources_objects WHERE resources_objects.resource_id = '%s' ", $resource_id);		
+			$query = sprintf ("SELECT resource_id, lockable FROM resources_objects WHERE resources_objects.resource_id = '%s' ", $resource_id);		
 		$db->query($query);
 		$db->next_record();
 		$db->f("count");
 		
-		if ($db->f("count")) {
+		if  (($db->f("resource_id")) && (((isLockPeriod(time())) && (!$db->f("lockable"))) || (!isLockPeriod(time()) || (getGlobalsPerms($user->id) == "admin")))) {
 			if ($this->return_objects) {
 				$resource_object = new ResourceObject ($resource_id);
 				$this->resources[$resource_id] = $resource_object;

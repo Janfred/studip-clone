@@ -848,7 +848,7 @@ if ($edit_lock) {
 //edit locks
 if (($lock_sent_x)) {
 	if ($globalPerm == "admin") { //check for resources root or global root
-		require_once ($ABSOLUTE_PATH_STUDIP."calendar_func.inc.php"); //needed for extended checkdate
+		require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php"); //needed for extended checkdate
 		
 		foreach ($lock_id as $key=>$id) {
 			$illegal_begin = FALSE;

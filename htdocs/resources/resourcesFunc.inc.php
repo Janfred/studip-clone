@@ -82,23 +82,33 @@ function allowCreateRooms($user_id='') {
 *
 **/
 function getLockPeriod($timestamp='') {
+	static $cache;
+
+	if ($cache[$timestamp % 60]) {
+		return $cache[$timestamp % 60];
+	}
+
 	$db = new DB_Seminar;
 	
 	if (!$timestamp)
 		$timestamp = time();
 	
-	if (!get_config("RESOURCES_LOCKING_ACTIVE"))
+	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
+		$cache[$timestamp % 60] = FALSE;	
 		return FALSE;
-	else {
+	} else {
 		$query = sprintf ("SELECT lock_begin, lock_end FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp, $timestamp);
 		$db->query($query);
 		$db->next_record();
 		if ($db->nf()) {
 			$arr[0] = $db->f("lock_begin");
 			$arr[1] = $db->f("lock_end");
+			$cache[$timestamp % 60] = $arr;			
 			return $arr;
-		} else
+		} else {
+			$cache[$timestamp % 60] = FALSE;			
 			return FALSE;
+		}
 	}
 }
 
@@ -112,20 +122,30 @@ function getLockPeriod($timestamp='') {
 *
 **/
 function isLockPeriod($timestamp='') {
+	static $cache;
+	
+	if ($cache[$timestamp % 60]) {
+		return $cache[$timestamp % 60];
+	}
+	
 	$db = new DB_Seminar;
 	
 	if (!$timestamp)
 		$timestamp = time();
 	
-	if (!get_config("RESOURCES_LOCKING_ACTIVE"))
+	if (!$GLOBALS['RESOURCES_LOCKING_ACTIVE']) {
+		$cache[$timestamp % 60] = FALSE;
 		return FALSE;
-	else {
+	} else {
 		$query = sprintf ("SELECT * FROM resources_locks WHERE lock_begin <= '%s' AND lock_end >= '%s' ", $timestamp, $timestamp);
 		$db->query($query);
-		if ($db->nf())
+		if ($db->nf()) {
+			$cache[$timestamp % 60] = TRUE;
 			return TRUE;
-		else
+		} else {
+			$cache[$timestamp % 60] = FALSE;
 			return FALSE;
+		}
 	}
 }
 
