@@ -721,7 +721,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 								}
 								echo $lock_text;
 							} else {
-							?><input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
+							?><input type="IMAGE" name="nenter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("automatisch2", "src");  else print makeButton ("automatisch", "src") ?> border=0 value="automatisch">&nbsp; 
 							<input type="IMAGE" name="enter_start_termin" <? if ($term_metadata["start_woche"] != -1) print makeButton ("eingeben", "src");  else print makeButton ("eingeben2", "src") ?> border=0 value="eingeben"> <? } ?>
 						</td>
 					</tr>
