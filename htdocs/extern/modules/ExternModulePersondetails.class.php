@@ -85,8 +85,8 @@ class ExternModulePersondetails extends ExternModule {
 	
 	function setup () {
 		// extend $data_fields if generic datafields are set
-	//	$config_datafields = $this->config->getValue("Main", "genericdatafields");
-	//	$this->data_fields["content"] = array_merge($this->data_fields["content"], $config_datafields);
+		$config_datafields = $this->config->getValue("Main", "genericdatafields");
+		$this->data_fields["content"] = array_merge($this->data_fields["content"], $config_datafields);
 		
 		// setup module properties
 		$this->elements["LinkIntern"]->link_module_type = 4;
