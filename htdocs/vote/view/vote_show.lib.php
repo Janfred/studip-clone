@@ -731,7 +731,7 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
 
    $html .= "<div align=\"left\">\n";
    $html .= "<hr noshade=\"noshade\" size=\"1\">\n";
-   $html .= "<font color=\"#505050\" size=\"-1\">\n";
+   $html .= "<font size=\"-1\">\n";
 
    /* multiple choice? ----------------------------------------------------- */
    if ($vote->isMultipleChoice()) {
