@@ -117,7 +117,7 @@ switch ($view) {
 								"text"  => sprintf (_("%sEigenschaften%s anzeigen"), "<a href=\"$PHP_SELF?quick_view=view_details&quick_view_mode=".$view_mode."\">", "</a>"));
 		if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
 			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
+									"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?cancel_edit_assign=1&quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?cancel_edit_assign=1&quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
 
 		if ($view_mode == "search")
 			$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
@@ -215,7 +215,7 @@ switch ($view) {
 											"text"  =>sprintf (_("%sBelegungsplan%s anzeigen"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?quick_view=openobject_schedule&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?quick_view=view_schedule".(($view_mode == "no_nav") ? "&quick_view_mode=no_nav" : "")."\">", "</a>"));
 				if (($ActualObjectPerms->havePerm("autor")) && ($currentObject->getCategoryId()))
 					$infobox[0]["eintrag"][] = array ("icon" => "pictures/link_intern.gif",
-											"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
+											"text"  =>sprintf (_("Eine neue Belegung %serstellen%s"), ($view_mode == "oobj") ? "<a href=\"$PHP_SELF?cancel_edit_assign=1&quick_view=openobject_assign&quick_view_mode=".$view_mode."\">" : "<a href=\"$PHP_SELF?cancel_edit_assign=1&quick_view=edit_object_assign&quick_view_mode=".$view_mode."\">", "</a>"));
 			}
 			
 			if ($view_mode == "no_nav")
