@@ -85,7 +85,7 @@ class email_validation_class
 	
 	Function ValidateUsername($username)
 	{
-		return(ereg($this->username_regular_expression,$username)!=0);
+		return(strtolower($username) != 'studip' && ereg($this->username_regular_expression,$username)!=0);
 	}
 	
 	Function ValidatePassword($password)
