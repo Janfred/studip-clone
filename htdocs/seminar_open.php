@@ -52,7 +52,10 @@ function check_messaging_default() {
 		$my_messaging_settings['send_view'] = FALSE;	
 	if (!$my_messaging_settings['last_box_visit'])
 		$my_messaging_settings['last_box_visit'] = 1;	
-
+	if (!$my_messaging_settings['folder']['in'])
+		$my_messaging_settings['folder']['in'][0] = "dummy";
+	if (!$my_messaging_settings['folder']['out'])
+		$my_messaging_settings['folder']['out'][0] = "dummy";
 	}
 	
 // set default Values for schedule (timetable)	
