@@ -121,18 +121,24 @@ if ($archive_kill) {
     	in_archiv($s_id);
     
     ## Delete that Seminar.
-		## Alle Benutzer aus dem Seminar rauswerfen.
+		
+    ## Alle Benutzer aus dem Seminar rauswerfen.
     $query = "DELETE from seminar_user where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
       $liste .= "<li>" . sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentenInnen oder TutorenInnen archiviert."), $db_ar) . "</li>";
     }
-		## Alle Benutzer aus Wartelisten rauswerfen
+    
+    ## Alle Benutzer aus Wartelisten rauswerfen
     $query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
     $db->query($query);
 
-		## Alle beteiligten Institute rauswerfen
-	  $query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
+    ## Alle Eintraege aus Zuordnungen zu Studiengaenge rauswerfen
+    $query = "DELETE from admission_seminar_studiengang where seminar_id='$s_id'";
+    $db->query($query);
+
+    ## Alle beteiligten Institute rauswerfen
+    $query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
       $liste .= "<li>" . sprintf(_("%s Zuordnungen zu Einrichtungen archiviert."), $db_ar) . "</li>";
@@ -149,45 +155,57 @@ if ($archive_kill) {
 		if ($db_ar > 0) {
       $liste .= "<li>" . sprintf(_("%s Zuordnungen zu Bereichen archiviert."), $db_ar) . "</li>";
     }
-		## Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
+    
+    ## Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
     if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
       $liste .= "<li>" . sprintf(_("%s Veranstaltungstermine archiviert."), $db_ar) . "</li>";
     }
-		## Alle weiteren Postings zu diesem Seminar loeschen.
+
+    ## Alle weiteren Postings zu diesem Seminar loeschen.
     $query = "DELETE from px_topics where Seminar_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
       $liste .= "<li>" . sprintf(_("%s Postings archiviert."), $db_ar) . "</li>";
     }
-		## Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
+
+    ## Alle Dokumente im allgemeinen Ordner zu diesem Seminar loeschen.
     if (($db_ar = recursiv_folder_delete($s_id)) > 0) {
       $liste .= "<li>" . sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar) . "</li>";
     }
-		## Literatur zu diesem Seminar löschen
-	  $query = "DELETE FROM literatur where range_id='$s_id'";
+
+    ## Literatur zu diesem Seminar löschen
+    $query = "DELETE FROM literatur where range_id='$s_id'";
     $db->query($query);
     if (($db_ar = $db->affected_rows()) > 0) {
       $liste .= "<li>" . _("Literatur und Links der Veranstaltung archiviert.") . "</li>";
     }
-		## Alle News-Verweise auf dieses Seminar löschen
-	  $query = "DELETE FROM news_range where range_id='$s_id'";
+
+    ## Alle News-Verweise auf dieses Seminar löschen
+    $query = "DELETE FROM news_range where range_id='$s_id'";
     $db->query($query);
-		## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
-	  $query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
+
+    ## Die News durchsehen, ob es da jetzt verweiste Einträge gibt...
+    $query = "SELECT news.news_id FROM news LEFT OUTER JOIN news_range USING (news_id) where range_id IS NULL";
     $db->query($query);
-		While ($db->next_record()) {			  // Diese News hängen an nix mehr...
-			$tempNews_id = $db->f("news_id");
-		  $query = "DELETE FROM news where news_id = '$tempNews_id'";
-	    $db2->query($query);
-		}
+    while ($db->next_record()) {			  // Diese News hängen an nix mehr...
+	$tempNews_id = $db->f("news_id");
+	$query = "DELETE FROM news where news_id = '$tempNews_id'";
+	$db2->query($query);
+    }
     if (($db_ar = $db->num_rows()) > 0) {
     	$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
-		}
+    }
 		
     if ($liste)
-	    $msg .= "info§<font size=-1>$liste</font>§";
+	$msg .= "info§<font size=-1>$liste</font>§";
     
-		## und das Seminar loeschen.
+    //kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
+    if ($RESOURCES_ENABLE) {
+	$killAssign = new DeleteResourcesUser($s_id);
+	$killAssign->delete();
+    }
+
+    ## und das Seminar loeschen.
     $query = "DELETE FROM seminare where Seminar_id= '$s_id'";
     $db->query($query);
     if ($db->affected_rows() == 0) {
@@ -195,11 +213,6 @@ if ($archive_kill) {
       die;
     }
     
-		if ($RESOURCES_ENABLE) {
-			//kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
-			$killAssign = new DeleteResourcesUser($s_id);
-			$killAssign->delete();
-		}
     
     //Successful archived, if we are here
     $msg .= "msg§" . sprintf(_("Die Veranstaltung %s wurde erfolgreich archiviert und aus der Liste der aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung."), "<b>".htmlReady(stripslashes($tmp_name))."</b>") . "§";
