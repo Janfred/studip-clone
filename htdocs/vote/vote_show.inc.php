@@ -388,7 +388,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    
    /* Show text if no vote is available ------------------------------------ */
      if (empty ($activeVotes) AND empty ($stoppedVotes) AND
-       empty ($activeEvals) AND empty ($stoppedEvals)
+       empty ($activeEvals) 
       ) {
       echo VOTE_MESSAGE_EMPTY;
    }
