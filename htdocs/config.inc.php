@@ -44,7 +44,7 @@ $SOFTWARE_VERSION="0.9 rc 4";
     // der Name wird in der local.inc festgelegt
 $UNI_URL="http://www.uni-goettingen.de";
 $UNI_LOGOUT_ADD="Und hier geht's direkt zum <a href=\"http://studentenwerk.stud.uni-goettingen.de/mensa/mensen/alle_heute.php\"><b>Mensaplan</b></a>&nbsp;;-)";
-
+$UNI_CONTACT="goettingen@studip.de";
 
 //die IDs der Veranstaltungen, die beim Hochstufen auf autor eingetragen werden
 $AUTO_INSERT_SEM[1]="3f43debe372cfd7d4da6afa4ca40616f";
