@@ -86,13 +86,20 @@ if ($_the_clip_form->isClicked("clip_ok")){
 }
 
 $_msg .= $_the_clipboard->msg;
-	
+if (is_array($_the_treeview->msg)){
+	foreach ($_the_treeview->msg as $t_msg){
+		if (!$_msg || ($_msg && strpos($t_msg, $_msg)) === false){
+			$_msg .= $t_msg . "§";
+		}
+	}
+}
 ?>
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
 		<td class="topic" colspan="2"><b>&nbsp;<?=htmlReady($_the_tree->root_name) . " - " . _("Literaturlisten bearbeiten")?></b></td>
 	</tr>
+	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
 	<?
 if ($_msg)	{
@@ -121,7 +128,29 @@ $infobox[0] = array ("kategorie" => _("Information:"),
 									array("icon" => "pictures/blank.gif","text"  =>	_("Hier können Sie Literaturlisten erstellen / bearbeiten.")),
 									)
 					);
-$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Listen blabla") );
+					
+if (!$_the_tree->getNumKids('root')){
+	$infobox[0]["eintrag"][] = array("icon" => "pictures/ausruf_small.gif","text"  => _("Sie haben noch keine Listen angelegt!") );
+} else {
+	$lists = $_the_tree->getKids('root');
+	$list_count['visible'] = 0;
+	$list_count['visible_entries'] = 0;
+	$list_count['invisible'] = 0;
+	$list_count['invisible_entries'] = 0;
+	for ($i = 0; $i < count($lists); ++$i){
+		if ($_the_tree->tree_data[$lists[$i]]['visibility']){
+			++$list_count['visible'];
+			$list_count['visible_entries'] += $_the_tree->getNumKids($lists[$i]);
+		} else {
+			++$list_count['invisible'];
+			$list_count['invisible_entries'] += $_the_tree->getNumKids($lists[$i]);
+		}
+	}
+	$infobox[0]["eintrag"][] = array("icon" => "pictures/vote-icon-visible.gif",
+									"text"  => sprintf(_("%s öffentlich sichtbare Listen, insgesamt %s Eintr&auml;ge"),$list_count['visible'],$list_count['visible_entries']));
+	$infobox[0]["eintrag"][] = array("icon" => "pictures/vote-icon-invisible.gif",
+									"text" => sprintf(_("%s unsichtbare Listen, insgesamt %s Eintr&auml;ge"),$list_count['invisible'],$list_count['invisible_entries']) );
+}
 
 $infobox[1] = array ("kategorie" => _("Aktionen:"));
 $infobox[1]["eintrag"][] = array("icon" => "pictures/link_intern.gif","text"  => "<a href=\"lit_search.php\">" . _("Literatur suchen") . "</a>" );
