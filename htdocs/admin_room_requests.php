@@ -102,7 +102,7 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 	
 	//initialisations for room-requests
 	if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) {
-		$db->query("SELECT request_id FROM resources_requests WHERE seminar_id = '$seminar_id'".(($termin_id) ? " AND termin_id = '".$termin_id."'" : ""));
+		$db->query("SELECT request_id FROM resources_requests WHERE seminar_id = '$seminar_id' AND ".(($termin_id) ? "termin_id = '".$termin_id."'" : "termin_id = ''"));
 		$db->next_record();
 
 		if ($db->nf()) {
