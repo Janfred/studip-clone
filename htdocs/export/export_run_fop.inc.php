@@ -130,9 +130,6 @@ else
 		);
 		{
 			$infobox[1]["kategorie"] = "Aktionen:";
-				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/einst.gif",
-											"text"  => sprintf(_("Um die Ausgabe-Datei in ihrem Browser anzusehen, klicken Sie %s hier %s."), $link1, "</a>")
-										);
 				$infobox[1]["eintrag"][] = array (	"icon" => "pictures/nachricht1.gif" ,
 											"text"  => sprintf(_("Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."), $link2, "</a>")
 										);
