@@ -612,7 +612,7 @@ if (($RESOURCES_ENABLE) && ($resources_result)) {
 			if ($infobox) {
 			?>
 			<td class="blank" width="1%" valign="top">
-								<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "./locale/$_language_path/LC_PICTURES/hands07.jpg" : "pictures/schedules.jpg"); ?>
+								<? print_infobox ($infobox, ($admin_dates_data["assi"]) ? "./locale/$_language_path/LC_PICTURES/hands08.jpg" : "pictures/schedules.jpg"); ?>
 				<img src="pictures/blank.gif" width="270" height="1"/>
 			</td>
 			<?
