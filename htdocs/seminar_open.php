@@ -105,11 +105,11 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$db = new DB_Seminar();
 		if (is_array($loginfilenow)){
 			$tmp_sem_inst = array();
-			$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id IN('" . join("','",$loginfilenow) . "')");
+			$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id IN('" . join("','",array_keys($loginfilenow)) . "')");
 			while ($db->next_record()){
 				$tmp_sem_inst[$db->f(0)] = true;
 			}
-			$db->query("SELECT Institut_id FROM Institute WHERE Institut_id IN('" . join("','",$loginfilenow) . "')");
+			$db->query("SELECT Institut_id FROM Institute WHERE Institut_id IN('" . join("','",array_keys($loginfilenow)) . "')");
 			while ($db->next_record()){
 				$tmp_sem_inst[$db->f(0)] = true;
 			}
