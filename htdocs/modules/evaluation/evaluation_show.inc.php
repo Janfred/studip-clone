@@ -113,7 +113,7 @@ $mandatories = checkMandatoryItems( $eval );
 if( $votedNow ) {
     if( ! ( is_array($_POST["answers"]) ||
 	    /* clicked no answer */
-	    (is_array($_POST["freetexts"]) && implode($_POST["freetexts"]) != "")
+	    (is_array($_POST["freetexts"]) && implode("", $_POST["freetexts"]) != "")
 	    /* typed no freetext */
 	    )
 	) {
