@@ -151,6 +151,25 @@ $DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather n
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
 
 
+/*literature search plugins 
+----------------------------------------------------------------
+If you write your own plugin put it in studip-htdocs/lib/classes/lit_search_plugins 
+and enable it here. The name of the plugin is the classname excluding "StudipLitSearchPlugin". 
+If the catalog your plugin is designed for offers the possibility to create a link to an entry, you
+could provide the link here. Place templates for the needed attributes in curly braces. (see examples below)
+----------------------*/
+//standard plugin, searches in Stud.IP Database (table lit_catalog), you should leave this one enabled !
+$_lit_search_plugins[] = array('name' => "Studip", 'link' => '');
+
+//Plugins derived from Z3950Abstract, used for querying Z39.50 Servers
+//only activate these plugins, if your Version of PHP supports the YAZ extension!
+//$_lit_search_plugins[] = array('name' => "Gvk", 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+//$_lit_search_plugins[] = array('name' => "SUBGoeOpac", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+//$_lit_search_plugins[] = array('name' => "Rkgoe", 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+//$_lit_search_plugins[] = array('name' => "WisoFak", 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+//$_lit_search_plugins[] = array('name' => "FHHIOpac", 'link' => 'http://hidbs2.bib.uni-hildesheim.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+
+
 /*authentication plugins
 ----------------------------------------------------------------
 the following plugins are available:
@@ -231,6 +250,7 @@ $ALLOW_CHANGE_NAME = TRUE;				//if true, users are allowed to change their name
 $ENABLE_SELF_REGISTRATION = TRUE;			//should it be possible for an user to register himself
 
 //IDs of courses, in which users were entered when they were promoted to 'autor'
+//-----------------------------------------------------------------
 //$AUTO_INSERT_SEM[1]="<seminar_id>";
 //further courses can be added with their IDs here
 
