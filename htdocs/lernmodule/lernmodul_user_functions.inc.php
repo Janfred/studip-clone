@@ -11,26 +11,27 @@ function get_password_md5()
 		return false;
 }
 
-function get_studip_user($benutzername)
+function get_studip_user($ilias_id)
 {
 	global $auth, $username_prefix;
 	$db = New DB_Seminar;
-	$query_string = "SELECT studip_username FROM studip_ilias WHERE ilias_username = '$benutzername'";
+//	$query_string = "SELECT studip_user_id FROM studip_ilias WHERE ilias_user_id = '$ilias_id'";
+	$query_string = "SELECT auth_user_md5.username FROM studip_ilias, auth_user_md5 WHERE ilias_user_id = '$ilias_id' AND user_id = studip_user_id";
 	$db->query($query_string);
 	if ($db->next_record())
-		return $db->f("studip_username");
+		return $db->f("username");
 	else
 		return false;
 }
 
-function get_ilias_user($benutzername)
+function get_connected_user_id($studip_id)
 {
 	global $auth, $username_prefix;
 	$db = New DB_Seminar;
-	$query_string = "SELECT ilias_username FROM studip_ilias WHERE studip_username = '$benutzername'";
+	$query_string = "SELECT ilias_user_id FROM studip_ilias WHERE studip_user_id = '$studip_id'";
 	$db->query($query_string);
 	if ($db->next_record())
-		return $db->f("ilias_username");
+		return $db->f("ilias_user_id");
 	else
 		return false;
 }
@@ -50,7 +51,7 @@ function get_ilias_logindata()
 {
 	global $auth, $username_prefix;
 	$ilias_db = New DB_Ilias;
-	$ilias_db->query("SELECT * FROM benutzer WHERE benutzername='" . get_ilias_user(mysql_escape_string($auth->auth["uname"]))."'");
+	$ilias_db->query("SELECT * FROM benutzer WHERE id='" . mysql_escape_string(get_connected_user_id($auth->auth["uid"]))."'");
 	if ($ilias_db->next_record())
 		return "&acct_name=" . $ilias_db->f("benutzername") . "&u_id=" . $ilias_db->f("id") . "&u_pw=" . md5($ilias_db->f("passwort")) . "&set_lang=en";
 	else
@@ -128,12 +129,12 @@ function new_ilias_user($benutzername, $passwort, $geschlecht, $vorname, $nachna
 	return true;
 }
 
-function create_ilias_user($benutzername)
+function create_ilias_user($studip_id)
 {
 	global $auth, $username_prefix;
 	$creation_result = false;
 	$db = new DB_Seminar;
-	$query_string = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.username = '". $benutzername . "'";
+	$query_string = "SELECT * FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '". $studip_id . "'";
 	$db->query($query_string);
 	if ($db->next_record())
 	{
@@ -144,13 +145,13 @@ function create_ilias_user($benutzername)
 
 		if ($creation_result === true)
 		{
-			connect_users($db->f("username"), $username_prefix . $benutzername);
+			connect_users($studip_id, get_ilias_user_id($username_prefix . $db->f("username")));
 			return true;
 		}
 	}
 	return $creation_result;
 }
-
+/*
 function create_studip_user($benutzername)
 {
 	global $auth;
@@ -164,16 +165,16 @@ function create_studip_user($benutzername)
 	}
 	return false;
 }
-
-function connect_users($studipname, $iliasname)
+/**/
+function connect_users($studip_id, $ilias_id)
 {
 	$db = new DB_Seminar;
-	$query_string = "SELECT * FROM studip_ilias WHERE studip_username = '$studipname'";
+	$query_string = "SELECT * FROM studip_ilias WHERE studip_user_id = '$studip_id'";
 	$db->query($query_string);
 	if ($db->next_record())
-		$query_string = "UPDATE studip_ilias SET studip_username = '$studipname', ilias_username = '$iliasname' WHERE studip_username = '$studipname'";
+		$query_string = "UPDATE studip_ilias SET studip_user_id = '$studip_id', ilias_user_id = '$ilias_id' WHERE studip_user_id = '$studip_id'";
 	else
-		$query_string = "INSERT INTO studip_ilias (studip_username, ilias_username) VALUES ('$studipname', '$iliasname')";
+		$query_string = "INSERT INTO studip_ilias (studip_user_id, ilias_user_id) VALUES ('$studip_id', '$ilias_id')";
 	$db->query($query_string);
 	return true;
 }
@@ -229,10 +230,9 @@ function edit_ilias_user ($u_id, $benutzername, $passwort, $geschlecht, $vorname
 //	echo $query_string . "<br>";
 }
 
-function delete_ilias_user($benutzername)
+function delete_ilias_user($ilias_id)
 {
-	$u_id = get_ilias_user_id($benutzername);
-	if ($u_id == false)
+	if (get_studip_user($ilias_id) == false)
 	{
 		echo _("User wurde nicht gefunden.") . "<br>";
 		return false;
@@ -242,11 +242,11 @@ function delete_ilias_user($benutzername)
 		$ilias_db = New DB_Ilias;
 
 // Datenbankzugriff: OBJECT2
-		$query_string = "UPDATE object2 SET deleted=now(), recht=1 WHERE vri_id=$u_id AND vri_typ='user' AND vri_inst=1 AND own_typ='grp'";
+		$query_string = "UPDATE object2 SET deleted=now(), recht=1 WHERE vri_id=$ilias_id AND vri_typ='user' AND vri_inst=1 AND own_typ='grp'";
 		$ilias_db->query($query_string);
 
 // Datenbankzugriff: BENUTZER
-		$query_string = "DELETE FROM benutzer WHERE id=$u_id";
+		$query_string = "DELETE FROM benutzer WHERE id=$ilias_id";
 		$ilias_db->query($query_string);
 	}
 	return true;

@@ -40,7 +40,7 @@ function link_seminar_modules($seminar_id)
 			$mod_author = get_module_author($mod_array[$i]["inst"], $mod_array[$i]["id"]);
 			for ($i2=0; $i2<sizeof($mod_author); $i2 ++)
 			{
-				$mod_author[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["username"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
+				$mod_author[$i2] = "<a href=\"about.php?username=" . get_studip_user($mod_author[$i2]["id"]). "\">" . $mod_author[$i2]["fullname"] . "</a>";
 			}
 			$link_str[$i]["desc"] .= implode($mod_author, ", ");
 		}

@@ -43,7 +43,7 @@ function check_ilias_auth()
 	{
 		echo "<input type=\"hidden\" name=\"ilias_uname\" value=\"$ilias_uname\">";
 		echo "<input type=\"hidden\" name=\"ilias_pw\" value=\"$ilias_pw\">";
-		echo "<b>" . ("Authentifizierung f&uuml;r ILIAS war erfolgreich.") . "</b><br><br>";
+//		echo "<b>" . ("Authentifizierung f&uuml;r ILIAS war erfolgreich.") . "</b><br><br>";
 		return true;
 	}
  	if ($out == true)
@@ -98,15 +98,16 @@ if ($ILIAS_CONNECT_ENABLE)
 
 	if (isset($back_x))
 		unset($mode);
-	if (($mode == "s2i") AND ((get_ilias_user($auth->auth["uname"]) == false) OR isset($ja_x)))
+	$this_ilias_id = get_connected_user_id($auth->auth["uid"]);
+	if (($mode == "s2i") AND (($this_ilias_id == false) OR isset($ja_x)))
 	{
 		if (isset($ja2_x))
-			if (delete_ilias_user($username_prefix . $auth->auth["uname"]))
+			if (delete_ilias_user( $this_ilias_id))
 				$deleted_msg = _("Alter Account wurde gel&ouml;scht.");/**/
-		$creation_result = create_ilias_user($auth->auth["uname"]);
+		$creation_result = create_ilias_user($auth->auth["uid"]);
 	}
-	if ( (check_ilias_auth()) AND ($mode == "connect") AND ((get_ilias_user($auth->auth["uname"]) == false) OR isset($ja_x)))
-		$connect_result = connect_users($auth->auth["uname"], $ilias_uname, $overwrite);
+	if ( (check_ilias_auth()) AND ($mode == "connect") AND (($this_ilias_id == false) OR isset($ja_x)))
+		$connect_result = connect_users($auth->auth["uid"], get_ilias_user_id($ilias_uname));
 	$out = true;
 	
 	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
@@ -140,7 +141,7 @@ if ($ILIAS_CONNECT_ENABLE)
 			$infobox[1]["eintrag"][] = array (	"icon" => "pictures/icon-posting.gif" ,
 										"text"  => _("W&auml;hlen Sie eine Option.") );
 
-		if (get_ilias_user($auth->auth["uname"]) != false)
+		if ($this_ilias_id != false)
 			my_info( _("Ihrem Stud.IP-Account ist bereits ein ILIAS-Account zugeordnet. Diese Zuordnung k&ouml;nnen Sie nachtr&auml;glich noch &auml;ndern, dabei gehen allerdings die bereits in ILIAS gespeicherten Daten verloren.") );
 		else
 			my_info( _("<b>Ihr Stud.IP-Account ist bisher mit keinem ILIAS-Account verkn&uuml;pft</b>. Auf dieser Seite k&ouml;nnen Sie eine Zuordnung der Accounts herstellen. Die Zuordnung k&ouml;nnen Sie nachtr&auml;glich noch &auml;ndern, dabei gehen allerdings die bereits in ILIAS gespeicherten Daten verloren.") );
@@ -187,7 +188,7 @@ if ($ILIAS_CONNECT_ENABLE)
 				echo "</td></tr>";
 				if ($auth_mode == true)
 				{
-					if ((get_ilias_user($auth->auth["uname"]) != false) AND !isset($ja_x))
+					if ((get_connected_user_id($auth->auth["uid"]) != false) AND !isset($ja_x))
 					{	
 						my_info( _("Ihrem Stud.IP-Account wurde bereits ein ILIAS-Account zugeordnet. Wenn Sie fortfahren, wird diese Zuordnung &uuml;berschrieben und ein neuer Account angelegt. Soll die alte Zuordnung gel&ouml;scht werden?"));
 						?>
@@ -222,9 +223,9 @@ if ($ILIAS_CONNECT_ENABLE)
 				echo "</td></tr>";
 				if ($auth_mode == true)
 				{
-					if (get_ilias_user($auth->auth["uname"]) == $ilias_uname+1)
+					if (get_ilias_user_id($ilias_uname) == $this_ilias_id)
 						my_info( _("Dieser ILIAS-Account ist Ihrem Stud.IP-Account bereits zugeordnet."));
-					elseif ((get_ilias_user($auth->auth["uname"]) != false) AND !isset($ja_x))
+					elseif ((get_connected_user_id($auth->auth["uid"]) != false) AND !isset($ja_x))
 					{	
 						my_info( _("Dem Stud.IP-Account wurde bereits ein ILIAS-Account zugeordnet. Wenn Sie fortfahren, wird diese Zuordnung von ihrer neuen Eingabe &uuml;berschrieben. Soll der alte Eintrag gel&ouml;scht werden?"));
 						?>

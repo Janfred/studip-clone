@@ -27,7 +27,7 @@ function get_module_author($co_inst, $co_id)
 {
 	$module_author = false;
 	$ilias_db = New DB_Ilias;
-	$ilias_db -> query("SELECT DISTINCT benutzer.benutzername, benutzer.vorname, benutzer.nachname, benutzer.atitel ".
+	$ilias_db -> query("SELECT DISTINCT benutzer.id, benutzer.benutzername, benutzer.vorname, benutzer.nachname, benutzer.atitel ".
 			" FROM meta_author, benutzer".
 			" WHERE meta_author.typ = 'le' ".
 			" AND meta_author.id = '$co_id' ".
@@ -38,31 +38,32 @@ function get_module_author($co_inst, $co_id)
 	{
 		$module_author[$mcount]["fullname"] .= $ilias_db -> f("atitel") . " " . $ilias_db -> f("vorname") . " " . $ilias_db -> f("nachname");
 		$module_author[$mcount]["username"] .= $ilias_db -> f("benutzername");
+		$module_author[$mcount]["id"] .= $ilias_db -> f("id");
 		$mcount++;
 	}
 	return $module_author;
 }
 
-function get_user_modules($benutzername)
+function get_user_modules($studip_id)
 {
 	$mod_array = false;
 	$module_count = 0;
 	$db = New DB_Seminar;
-	$db->query("SELECT * FROM auth_user_md5  WHERE username ='$benutzername'");
+	$db->query("SELECT * FROM auth_user_md5  WHERE user_id ='$studip_id'");
 	if ($db->next_record())
 	{
 //		$firstname = $db->f("Vorname");
 //		$surname = $db->f("Nachname");
-		$ilias_user_id = get_ilias_user_id(get_ilias_user($benutzername));
+		$ilias_user_id = get_connected_user_id($studip_id);
 	}
 	else
 	{		
-		printf(_("Stud.IP-User '%s' wurde nicht gefunden.") . "<br>", $benutzername);
+		printf(_("Stud.IP-User wurde nicht gefunden.") . "<br>");
 		return false;
 	}
-	if (get_ilias_user($benutzername) == false)
+	if ($ilias_user_id == false)
 	{		
-		echo _("Sie sind nicht als User im angebundenen ILIAS-System eingetragen. Wenden Sie sich bitte an den/die AdministratorIn.") . "<br>";
+		echo _("Sie sind nicht als User im angebundenen ILIAS-System eingetragen.") . "<br>";
 		return false;
 	}
 //	echo $firstname . $surname . $ilias_user_id;
