@@ -35,22 +35,7 @@ function parse_header($header){
 	}
 	return $ret;
 }
-/*
-function url_ftp($url) {
-		$rc = eregi("^ftp://([a-z0-9\-\.]+)/(.*)", $url, $regs);
-		print join(" / ", $regs). "<br>";
-		list($url, $host, $path) = $regs;
-		$rc = eregi("(.*)/([^/]+)", $path, $regs);
-		$dir = $regs[1]; $file = $regs[2];
-		print join(" / ", $regs). "<br>";
-		$ftp = ftp_connect($host); 
-		$rc = ftp_login($ftp, "anonymous", "testbla@"); 
-		$size = round(ftp_size($ftp, $path)/1024);
-		ftp_quit($ftp);
-		print "..[$size]..";
-		return "$path [$size kb]";
-}
-*/
+
 function parse_link($link) {
 	global $name, $the_file_name, $the_link, $locationheader, $parsed_link;
 	if (substr($link,0,6) == "ftp://") {
@@ -166,7 +151,7 @@ function createTempFolder ($folder_id, $tmp_full_path, $perm_check = TRUE) {
 	$db = new DB_Seminar();
 
 	//copy all documents from this folder to the temporary folder
-	$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE range_id = '%s' %s ORDER BY name, filename", $folder_id, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
+	$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE range_id = '%s' %s AND url='' ORDER BY name, filename", $folder_id, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."'" : "");
 	$db->query($query);
 	while ($db->next_record()) {
 		$docs++;
