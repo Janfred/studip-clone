@@ -47,7 +47,7 @@ class ExternElementPersondetailsHeader extends ExternElement {
 				"picturetd_class", "picturetd_style", "contacttd_width", "contacttd_align",
 				"contacttd_valign", "contacttd_bgcolor", "contacttd_class", "contacttd_style",
 				"font_face", "font_size", "font_color", "font_class", "font_style", "img_align",
-				"img_border", "img_width", "img_height");
+				"img_border", "img_width", "img_height", "hidename");
 	
 	/**
 	* Constructor
@@ -69,7 +69,8 @@ class ExternElementPersondetailsHeader extends ExternElement {
 			"table_border" => "0",
 			"table_bordercolor" => "",
 			"table_cellpadding" => "0",
-			"table_cellspacing" => "0"
+			"table_cellspacing" => "0",
+			"hidename" => ""
 		);
 		
 		return $config;
@@ -90,21 +91,30 @@ class ExternElementPersondetailsHeader extends ExternElement {
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE, $anker);
 		
+		$headline = $edit_form->editHeadline(_("Allgemeine Angaben zum Element Seitenkopf/Bild"));
+		
+		$title = _("&Uuml;berschrift (Name) ausblenden:");
+		$info = _("Unterdrückt die Anzeige des Namens als Überschrift.");
+		$table .= $edit_form->editCheckboxGeneric("hidename", $title, $info, '1', '');
+		
+		$content_table = $edit_form->editContentTable($headline, $table);
+		$content_table .= $edit_form->editBlankContent();
+		
 		$attributes = array("table_width", "table_align", "table_border", "table_bgcolor",
 				"table_bordercolor", "table_cellpadding", "table_cellspacing", "table_class",
-				"table_style", "tr_class", "tr_style", "font_face", "font_size",
-				"font_color", "font_class", "font_style", "headlinetd_height", "headlinetd_align",
+				"table_style", "tr_class", "tr_style", "headlinetd_height", "headlinetd_align",
 				"headlinetd_valign", "headlinetd_bgcolor", "headlinetd_class", "headlinetd_style",
+				"font_face", "font_size", "font_color", "font_class", "font_style",
 				"picturetd_width", "picturetd_align", "picturetd_valign", "picturetd_bgcolor",
 				"picturetd_class", "picturetd_style", "contacttd_width", "contacttd_align",
 				"contacttd_valign", "contacttd_bgcolor", "contacttd_class", "contacttd_style",);
 		$headlines = array("table" => _("Tabelle Seitenkopf/Bild (HTML-Tag &lt;table&gt;)"),
 				"tr" => _("Tabellenzeile Name (HTML-Tag &lt;tr&gt;)"),
-				"font" => _("Schriftformatierung Name (HTML-Tag &lt;font&gt;)"),
 				"headlinetd" => _("Tabellenzelle Name (HTML-Tag &lt;td&gt;)"),
+				"font" => _("Schriftformatierung Name (HTML-Tag &lt;font&gt;)"),
 				"picturetd" => _("Tabellenzelle Bild (HTML-Tag &lt;td&gt;)"),
 				"contacttd" => _("Tabellenzelle Kontakt (HTML-Tag &lt;td&gt;)"));
-		$content_table = $edit_form->getEditFormContent($attributes, $headlines);
+		$content_table .= $edit_form->getEditFormContent($attributes, $headlines);
 		$content_table .= $edit_form->editBlankContent();
 		
 		$headline = $edit_form->editHeadline(_("Bild"));
@@ -186,12 +196,16 @@ class ExternElementPersondetailsHeader extends ExternElement {
 		
 		$out = "\n<tr><td width=\"100%\">\n";
 		$out .= $this->config->getTag($this->name, "table") . "\n";
-		$out .= $this->config->getTag($this->name, "tr");
-		$out .= "<td$colspan width=\"100%\"";
-		$out .= $this->config->getAttributes($this->name, "headlinetd") . ">";
-		$out .= $this->config->getTag($this->name, "font");
-		$out .= $args["content"]["name"];
-		$out .= "</font></td></tr>\n";
+		
+		// display name as headline
+		if (!$this->config->getValue($this->name, 'hidename')) {
+			$out .= $this->config->getTag($this->name, "tr");
+			$out .= "<td$colspan width=\"100%\"";
+			$out .= $this->config->getAttributes($this->name, "headlinetd") . ">";
+			$out .= $this->config->getTag($this->name, "font");
+			$out .= $args["content"]["name"];
+			$out .= "</font></td></tr>\n";
+		}
 		
 		if ($this->config->getValue($args["main_module"], "showimage")
 				|| $this->config->getValue($args["main_module"], "showcontact")) {
@@ -226,6 +240,19 @@ class ExternElementPersondetailsHeader extends ExternElement {
 		$out .= "</table>\n</td></tr>\n";
 		
 		return $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == "hidename") {
+			if (!isset($GLOBALS["HTTP_POST_VARS"]["PersondetailsHeader_$attribute"])) {
+				$GLOBALS["HTTP_POST_VARS"]["PersondetailsHeader_$attribute"] = 0;
+				return FALSE;
+			}
+				
+			return !($value == "1" || $value == "");
+		}
+		
+		return FALSE;
 	}
 	
 }
